@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "capistrano", "~> 3.2.0"
 gem "coffee-rails", "~> 4.0.0"
 gem "jbuilder", "~> 2.0"
 gem "jquery-rails"
