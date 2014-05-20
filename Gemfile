@@ -11,5 +11,6 @@ gem "slim-rails"
 gem "uglifier", ">= 1.3.0"
 
 group :development, :test do
-  gem "rspec-rails", "~> 3.0.0.beta"
+  gem "minitest"
+  gem "rspec-rails", "~> 2"
 end
