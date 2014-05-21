@@ -1,20 +1,15 @@
-# config valid only for Capistrano 3.1
 lock "3.2.1"
 
 set :application, "hellobar"
 set :repo_url, "git@github.com:PolymathicMedia/hellobar_new.git"
+set :deploy_to, "/mnt/deploy"
+set :linked_files, %w{config/database.yml}
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-set :deploy_to, "/mnt/deploy"
-
-# Default value for :linked_files is []
-# set :linked_files, %w{config/database.yml}
-
 # Default value for linked_dirs is []
 # set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
-
 
 namespace :deploy do
 
