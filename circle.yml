@@ -1,0 +1,13 @@
+## Customize deployment commands
+database:
+  override:
+    - mkdir -p config
+    - |
+      echo 'test:
+        host: localhost
+        username: ubuntu
+        database: circle_ruby_test
+        adapter: mysql2
+      ' > config/database.yml
+    - bundle exec rake db:create:all db:schema:load --trace
+    - bundle exec rake db:setup --trace
