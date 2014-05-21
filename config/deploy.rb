@@ -15,20 +15,24 @@ set :rails_env, "production"
 namespace :deploy do
   desc "Restart application"
   task :restart do
-    on roles(:web), in: :sequence, wait: 5 do
-      reload_nginx_config
-      restart_thin
+    on roles(:web) do
+      invoke "deploy:reload_nginx_config"
+      invoke "deploy:restart_thin"
     end
   end
 
   after :publishing, :restart
 
   task :reload_nginx_config do
-    # uses kill, but actually just reloads the config.
-    run "sudo kill -HUP `cat /mnt/deploy/shared/pids/nginx.pid` || sudo nginx -c /mnt/deploy/current/config/nginx/#{stage}.web.conf"
+    on roles(:web) do
+      # uses kill, but actually just reloads the config.
+      execute "sudo kill -HUP `cat /mnt/deploy/shared/pids/nginx.pid` || sudo nginx -c /mnt/deploy/current/config/nginx/#{fetch(:stage)}.web.conf"
+    end
   end
 
-  task :restart_thin, :roles=>:web do
-    run "cd #{latest_release} && bundle exec sudo thin restart -C config/thin/www.yml"
+  task :restart_thin do
+    on roles(:web) do
+      execute "cd #{release_path} && bundle exec sudo thin restart -C config/thin/www.yml"
+    end
   end
 end
