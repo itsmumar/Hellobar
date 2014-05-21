@@ -11,7 +11,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140519174141) do
+ActiveRecord::Schema.define(version: 20140520214010) do
+
+  create_table "bar_settings", force: true do |t|
+    t.boolean  "closable",           default: false
+    t.boolean  "hide_destination",   default: false
+    t.boolean  "open_in_new_window", default: false
+    t.boolean  "pushes_page_down",   default: false
+    t.boolean  "remains_at_top",     default: false
+    t.boolean  "show_border",        default: false
+    t.integer  "hide_after"
+    t.integer  "show_wait"
+    t.integer  "wiggle_wait"
+    t.string   "bar_color"
+    t.string   "border_color"
+    t.string   "button_color"
+    t.string   "font"
+    t.string   "link_color"
+    t.string   "link_style"
+    t.string   "link_text"
+    t.string   "message"
+    t.string   "size"
+    t.string   "tab_side"
+    t.string   "target"
+    t.string   "text_color"
+    t.string   "texture"
+    t.string   "thank_you_text"
+    t.integer  "bar_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "bar_settings", ["bar_id"], name: "index_bar_settings_on_bar_id", unique: true, using: :btree
+
+  create_table "bars", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "internal_dimensions", force: true do |t|
     t.integer "person_id",              null: false
