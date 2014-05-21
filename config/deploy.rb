@@ -4,6 +4,7 @@ set :application, "hellobar"
 set :repo_url, "git@github.com:PolymathicMedia/hellobar_new.git"
 set :deploy_to, "/mnt/deploy"
 set :linked_files, %w{config/database.yml}
+set :rails_env, "production"
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -31,5 +32,4 @@ namespace :deploy do
       # end
     end
   end
-
 end
