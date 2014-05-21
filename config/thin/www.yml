@@ -1,0 +1,10 @@
+---
+chdir : /mnt/deploy/current
+pid: /mnt/deploy/shared/pids/thin.pid
+socket: /var/run/thin.sock
+servers: 4
+onebyone: true
+environment: production
+daemonize: true
+tag: www
+wait: 120

@@ -13,23 +13,22 @@ set :rails_env, "production"
 # set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 namespace :deploy do
-
   desc "Restart application"
   task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      # execute :touch, release_path.join("tmp/restart.txt")
+    on roles(:web), in: :sequence, wait: 5 do
+      reload_nginx_config
+      restart_thin
     end
   end
 
   after :publishing, :restart
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, "cache:clear"
-      # end
-    end
+  task :reload_nginx_config do
+    # uses kill, but actually just reloads the config.
+    run "sudo kill -HUP `cat /mnt/deploy/shared/pids/nginx.pid` || sudo nginx -c /mnt/deploy/current/config/nginx/#{stage}.web.conf"
+  end
+
+  task :restart_thin, :roles=>:web do
+    run "cd #{latest_release} && bundle exec sudo thin restart -C config/thin/www.yml"
   end
 end
