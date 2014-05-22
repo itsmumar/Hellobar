@@ -1,0 +1,259 @@
+#hellobar_pusher{
+  height: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+#hellobar {
+  min-height: 30px;
+  height: auto;
+  text-align: center;
+  width: 100%;
+  _width:expression(eval(document.body.offsetWidth-20));
+  top: 0px;
+  left: 0px;
+  margin: 0 0;
+  padding: 0 0;
+  z-index: 5000;
+  position: absolute;
+}
+
+#hellobar.has_border {
+  border-bottom: 3px solid white;
+}
+
+#hellobar_pusher.large {
+  height: 50px;
+
+}
+
+#hellobar.large {
+  min-height: 50px;
+  height: auto;
+  font-size: 17px;
+  font-weight: 600;
+}
+#hellobar.large span {
+  font-size: 17px;
+}
+#hellobar.large a { line-height: 45px; }
+#hellobar.large a.hellobar_cta.hb-text { line-height: 48px; }
+#hellobar.large span { line-height: 25px; }
+#hellobar.large a.hellobar_logo { top: 10px; }
+#hellobar.large a.hellobar_logo img{ height: 29px; width: 48px;}
+#hellobar.large a.hellobar_arrow { top: 10px; }
+#hellobar.large a.hellobar_arrow img{ height: 29px; width: 28px;}
+#hellobar.large a.hellobar_cta.hb-button {padding: 6px 15px;}
+
+#hellobar.regular {
+  font-size: 14px;
+}
+#hellobar.regular span {
+  font-size: 14px;
+}
+#hellobar.regular a { line-height: 30px; }
+#hellobar.regular a.hellobar_cta.hb-text { line-height: 28px; }
+#hellobar.regular span { line-height: 20px; margin-top: 3px;}
+#hellobar.regular a.hellobar_logo { top: 4px; }
+#hellobar.regular a.hellobar_logo img { height: 21px; width: 33px;}
+#hellobar.regular a.hellobar_arrow { top: 4px; }
+#hellobar.regular a.hellobar_arrow img { height: 21px; width: 21px;}
+#hellobar.regular a.hellobar_cta.hb-button {padding: 2px 8px;}
+/* span & link */
+
+#hellobar {
+  white-space: normal;
+}
+#hellobar span{
+  margin-left: 50px;
+  margin-right: 20px;
+  margin-top: 13px;
+  display: inline-block;
+}
+
+#hellobar a{
+  margin-right: 30px;
+}
+#hellobar.large span{
+  margin-left: 65px;
+}
+#hellobar.large.mobile span, #hellobar.regular.mobile span{
+  margin-left: 10px;
+}
+
+#hellobar.large a{
+  margin-right: 65px;
+}
+
+#hellobar a.hellobar_cta.hb-text {
+    padding: 6px 15px;
+    border-radius: 4px;
+    color: #fff;
+    padding-left: 5px;
+    text-decoration: underline;
+    background: none !important;
+}
+#hellobar a:hover.hellobar_cta.hb-text {}
+
+#hellobar a img{
+  border: none;
+  padding: 0 0;
+  margin: 0 0;
+  background-color: transparent;
+}
+
+#hellobar a.hellobar_cta.hb-button {
+    border: 1px solid;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+    border-radius: 4px;
+    margin: 0 0;
+    margin-left: 10px;
+    text-decoration: none;
+    color: #fff;
+    white-space: nowrap;
+}
+
+/* logo & arrow */
+
+#hellobar.mobile a.hellobar_logo {
+  display: none;
+}
+#hellobar.mobile a.hellobar_arrow {
+  display: none;
+}
+
+#hellobar a.hellobar_logo {
+    position: absolute;
+    display: block;
+    left: 10px; right: auto;
+    opacity: 0.3;
+}
+#hellobar a.hellobar_arrow {
+    display: block;
+    position: absolute; right: 10px; left: auto;
+    opacity: 0.3;
+}
+
+#hellobar.left a.hellobar_logo{
+  right: 10px; left: auto;
+}
+#hellobar.left a.hellobar_arrow{
+  left: 10px; right: auto;
+}
+a:hover.hellobar_logo, a:hover.hellobar_arrow { opacity: 0.6; }
+
+
+#hellobar-shadow {
+  left: 0;
+  width: 100%;
+  height: 8px;
+  line-height: 8px;
+  background: url(https://s3.amazonaws.com/hb-assets/system/modules/hellobar/lib/sprite-8bit.png);
+  position: absolute;
+  margin-top: -3px;
+  display: none;
+}
+
+
+#hellobar.has_border #hellobar-shadow{
+  margin-top: 0px;
+}
+
+#hellobar input{
+  box-shadow: inset 1px 1px 3px #aaa;
+  border-radius: 4px;
+  border: none;
+  width: 150px;
+  margin-left: 10px;
+  vertical-align: middle;
+  padding: 3px 3px;
+  margin-bottom: 2px;
+  margin-top: 0px;
+}
+
+#hellobar.large input{
+  padding: 5px 5px;
+  margin-bottom: 5px;
+  margin-top: 0px;
+}
+
+#hellobar iframe {
+  vertical-align: middle;
+}
+
+#hellobar.large span.social-wrapper { white-space: nowrap; margin: 0; }
+#hellobar.large span.twitter-share-button-wrapper { width: 110px; }
+#hellobar.large span.twitter-follow-button-wrapper { width: 130px; }
+#hellobar.large span.fb-like-wrapper { width: 80px; }
+#hellobar.large span.linkedin-button-wrapper { width: 105px; }
+#hellobar.large span.g-plusone-wrapper { width: 110px; }
+#hellobar.large span.pinterest-pin-button-wrapper { width: 50px; }
+#hellobar.large span.pinterest-follow-button-wrapper { width: 100px; }
+
+#hellobar span.fb_iframe_widget,
+#hellobar span.fb_iframe_widget span {
+  margin: 0;
+  overflow: hidden
+}
+
+#hellobar span.fb_iframe_widget {
+  position: relative;
+  top: 4px;
+}
+
+#hellobar span.linkedin-button {
+  line-height: normal;
+  position: relative;
+  top: 5px;
+  margin: 0;
+}
+
+#hellobar span.linkedin-button span {
+  line-height: normal;
+  margin: 0;
+  font-size: 100%;
+}
+
+#hellobar div#___plusone_0,
+#hellobar div#___follow_0 {
+  vertical-align: middle !important;
+}
+
+#hellobar span.pinterest-pin-button {
+  position: relative;
+  top: 5px;
+  margin: 0;
+}
+
+#hellobar span.pinterest-pin-button a {
+  margin: 0;
+}
+
+#hellobar span.pinterest-follow-button {
+  position: relative;
+  top: -2px;
+  margin-left: 0;
+}
+
+#hellobar span.pinterest-follow-button a {
+  display: none;
+}
+
+#hellobar a.buffer-add-button {
+  width: 55px;
+  height: 20px;
+  display: inline-block;
+  overflow: hidden;
+  background-image: url(https://d389zggrogs7qo.cloudfront.net/images/buffer_button.png);
+  position: relative;
+  top: 4px;
+  margin-right: 0;
+}
+
+#hellobar a.buffer-add-button:hover {
+  background-position: 0 -20px;
+}
+
+.gc-bubbleDefault, .pls-container {
+   display: none !important;
+}

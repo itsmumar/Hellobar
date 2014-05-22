@@ -48,8 +48,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
-    crack (0.4.2)
-      safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
     erubis (2.7.0)
     execjs (2.0.2)
@@ -71,6 +69,7 @@ GEM
     mime-types (1.25.1)
     minitest (5.3.4)
     multi_json (1.10.0)
+    mustache (0.99.5)
     mysql2 (0.3.16)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -177,9 +176,12 @@ DEPENDENCIES
   capistrano-bundler (~> 1.1.2)
   capistrano-rails (~> 1.1)
   coffee-rails (~> 4.0.0)
+  cssmin (~> 1.0.3)
+  debugger
   jbuilder (~> 2.0)
   jquery-rails
   minitest
+  mustache (~> 0.99.5)
   mysql2
   pony
   pry

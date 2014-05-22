@@ -11,6 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20140521190721) do
 
   create_table "admin_login_attempts", force: true do |t|
@@ -41,6 +42,9 @@ ActiveRecord::Schema.define(version: 20140521190721) do
 
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
+=======
+ActiveRecord::Schema.define(version: 20140521152613) do
+>>>>>>> [#71799220] Script generation base with stubbed Rule script generation
 
   create_table "bar_settings", force: true do |t|
     t.boolean  "closable",           default: false
@@ -140,5 +144,22 @@ ActiveRecord::Schema.define(version: 20140521190721) do
   end
 
   add_index "internal_reports", ["name"], name: "index_internal_reports_on_name", using: :btree
+
+  create_table "rule_settings", force: true do |t|
+    t.datetime "end_date"
+    t.datetime "start_date"
+    t.text     "exclude_urls"
+    t.text     "include_urls"
+    t.integer  "rule_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rule_settings", ["rule_id"], name: "index_rule_settings_on_rule_id", unique: true, using: :btree
+
+  create_table "rules", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
