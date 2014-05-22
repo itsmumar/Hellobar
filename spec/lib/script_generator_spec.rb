@@ -59,7 +59,6 @@ describe ScriptGenerator, '#render' do
   end
 
   context 'when rules are present' do
-
     it 'simply returns true when eligibility is disabled'
     it 'has a start date constraint when present' do
       rule = mock 'rule', start_date: 1_000

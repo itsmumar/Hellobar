@@ -1,5 +1,9 @@
 require 'spec_helper'
 
+describe Bar do
+  it_behaves_like :embeddable_content
+end
+
 describe Bar, '#settings' do
   let(:bar) { Bar.new }
 
