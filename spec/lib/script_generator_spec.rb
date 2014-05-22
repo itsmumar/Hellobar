@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ScriptGenerator, '#render' do
-  let(:site) { mock 'site', id: '1337', rules: [] }
+  let(:site) { mock 'site', id: '1337', rules: [], embeddable_content: [] }
   let(:config) { mock 'config', hb_backend_host: 'backend_host' }
   let(:generator) { ScriptGenerator.new(site, config) }
 

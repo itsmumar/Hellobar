@@ -33,13 +33,14 @@ class ScriptGenerator < Mustache
     CSSMin.minify(file).to_json
   end
 
-  # TODO: populate correct hash
+  # TODO: only grab active content
   def templates
-    [
-      { name: 'name',
-        markup: '<html>'
+    site.embeddable_content.map do |content|
+      {
+        name: content.class.content_name,
+        markup: content_template(content)
       }
-    ]
+    end
   end
 
   def rules
@@ -69,21 +70,21 @@ class ScriptGenerator < Mustache
 
 private
 
-  def start_time_constraint(start_time)
-    # TODO: refactor JS
-    # "if(new Date().getTime() < Date.parse(#{start_time.utc})) return false;"
+  def content_template(content)
+    content_header << content_markup(content) << content_footer
   end
 
-  def end_time_constraint(end_time)
-    # TODO: refactor JS
-    # "if(new Date().getTime() > Date.parse(#{end_time.utc})) return false;"
+  def content_header
+    @content_header ||= File.read("#{Rails.root}/lib/script_generator/bar_header.html")
   end
 
-  def compress_content
-    #
+  def content_markup(content)
+    content_name = content.class.content_name
+
+    File.read("#{Rails.root}/lib/script_generator/bar_#{content_name}.html")
   end
 
-  def uglify_content
-    #
+  def content_footer
+    @content_footer ||= File.read("#{Rails.root}/lib/script_generator/bar_footer.html")
   end
 end
