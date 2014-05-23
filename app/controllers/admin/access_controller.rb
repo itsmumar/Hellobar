@@ -1,2 +1,121 @@
 class Admin::AccessController < ApplicationController
+  before_filter :require_admin, :only => [:reset_password, :do_reset_password, :logout_admin]
+  before_filter :redirect_admin, :only => :step1
+
+  def do_reset_password
+    if current_admin.password_hashed != current_admin.encrypt_password(params[:existing_password])
+      @error = "Your existing password is incorrect"
+    elsif params[:new_password] != params[:new_password_again]
+      @error = "Your new passwords did not match each other"
+    elsif !params[:new_password] or params[:new_password].length < Admin::MIN_PASSWORD_LENGTH
+      @error = "New password must be at least #{Admin::MIN_PASSWORD_LENGTH} chars"
+    elsif params[:new_password] == params[:existing_password]
+      @error = "New password must be different than existing password."
+    end
+
+    if @error
+      render :reset_password
+    else
+      current_admin.reset_password!(params[:new_password])
+      redirect_to admin_path
+    end
+  end
+
+  def logout_admin
+    current_admin.logout!
+    session.delete(:admin_token)
+    flash[:success] = "You are now logged out."
+
+    redirect_to admin_access_path
+  end
+
+  def process_step1
+    return redirect_to(admin_access_path) unless email = params[:login_email]
+
+    session[:admin_access_email] = email
+
+    unless Admin.any_validated_access_token?(access_token) || verify_recaptcha
+      return redirect_to(admin_access_path)
+    end
+
+    Admin.record_login_attempt(email, remote_ip, user_agent, access_cookie)
+
+    if admin = Admin.where(:email => email).first
+      process_login(admin)
+    else
+      # Always render step2 - this way attackers don't know if the login
+      # email is valid or not
+      render(:step2)
+    end
+  end
+
+  def process_step2
+    return redirect_to(admin_access_path) unless email = session[:admin_access_email]
+
+    @admin = Admin.where(:email => email).first
+
+    return render(:step2) unless @admin
+    return redirect_to(admin_locked_path) if @admin.locked?
+    return render(:validate_access_token) unless @admin.has_validated_access_token?(access_token)
+
+    if @admin.validate_login(access_token, params[:admin_password], params[:mobile_code])
+      # Successful login
+      session[:admin_token] = @admin.session_token
+      redirect_to admin_path
+    else
+      flash.now[:error] = "Invalid mobile code or password or too many attempts"
+      render :step2
+    end
+  end
+
+  def lockdown
+    if Admin.validate_lockdown(params[:email], params[:key], params[:timestamp].to_i)
+      Admin.lockdown!
+      render :text => "Admins have been successfully locked down"
+    else
+      render :text => "Admins could not be locked down"
+    end
+  end
+
+  def validate_access_token
+    return redirect_to(admin_access_path) unless email = params[:email]
+
+    admin = Admin.where(:email => email).first
+
+    return render(:step2) unless admin
+    return redirect_to(admin_locked_path) if admin.locked?
+
+    if admin.validate_access_token(access_token, params[:key], params[:timestamp].to_i)
+      process_login(admin)
+    else
+      render :validate_access_token
+    end
+  end
+
+  private
+
+  def process_login(admin)
+    return redirect_to(admin_locked_path) if admin.locked?
+
+    # If they have validated the access token then we
+    # can render step 2
+    if admin.has_validated_access_token?(access_token)
+      if admin.needs_mobile_code?(access_token)
+        admin.send_new_mobile_code!
+      end
+    else
+      admin.send_validate_access_token_email!(@access_token)
+      return render(:validate_access_token)
+    end
+
+    # Might get locked in the process of sending a new mobile code
+    # (exceeds attempts)
+    return redirect_to(admin_locked_path) if admin.locked?
+
+    render(:step2)
+  end
+
+  def redirect_admin
+    return redirect_to(admin_path) if current_admin
+  end
 end

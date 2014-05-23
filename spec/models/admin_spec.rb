@@ -78,7 +78,7 @@ describe Admin do
 
   describe "send_new_mobile_code!" do
     it "sends a mobile code" do
-      twilio = mock(:twilio)
+      twilio = double(:twilio)
       Twilio::REST::Client.stub_chain("new.account.sms.messages").and_return(twilio)
 
       twilio.should_receive(:create).with(

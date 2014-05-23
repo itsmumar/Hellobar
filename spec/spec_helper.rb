@@ -47,3 +47,7 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 end
+
+def stub_admin(admin)
+  controller.stub(:current_admin).and_return(admin)
+end

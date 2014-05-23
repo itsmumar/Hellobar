@@ -11,7 +11,7 @@ describe Bar, '#settings' do
   end
 
   it 'returns a new BarSetting instance if not present' do
-    new_instance = mock 'bar setting'
+    new_instance = double 'bar setting'
     BarSetting.should_receive(:new).and_return(new_instance)
 
     bar.settings.should == new_instance

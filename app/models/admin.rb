@@ -6,6 +6,7 @@ class Admin < ActiveRecord::Base
   MAX_SESSION_TIME = 4.hours
   MAX_TIME_BEFORE_NEEDS_NEW_PASSWORD = 90.days
   MAX_TIME_TO_VALIDATE_ACCESS_TOKEN = 15.minutes
+  MIN_PASSWORD_LENGTH = 8
   MOBILE_CODE_DIGITS = 6
   MOBILE_CODE_EXPIRY = 1.day
   SALT = "thisismyawesomesaltgoducks"
