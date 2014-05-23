@@ -1,0 +1,10 @@
+<div id="hb_msg_container">
+<span>
+  {{bar.message}}
+  <input id="hb_email" type="email" placeholder="Your Email"/>
+  <input id="hb_name" type="text" placeholder="Your Name" {{HB.t(bar.goal.data.collect_names) ? "" : "style='display:none'"}}/>
+</span>
+<a onclick="window.parent.HB.submitEmail(document.getElementById('hb_email'), document.getElementById('hb_name'), document.getElementById('hb_msg_container')); return false" href="#" class="hellobar_cta hb-{{bar.link_style}}" style="color: #{{bar.link_color}}; background-color: #{{bar.button_color}}; border-color: #{{bar.button_color}}">
+  {{bar.link_text}}
+</a>
+</div>

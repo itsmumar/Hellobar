@@ -17,9 +17,9 @@ if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
 {{#rules}}
   _hbq.push(function(){HB.addGoal(function(){
     {{> rule_eligibility}},
-    [{{#bars}}{{> bar_js}}{{/bars}}],
+    [{{#bars}}{{{bar_json}}}{{/bars}}],
     {{priority}},
-    {{metadata}}
+    {{{metadata}}}
   });
 {{/rules}}
 

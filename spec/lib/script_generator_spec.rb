@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ScriptGenerator, '#render' do
-  let(:site) { mock 'site', id: '1337', rules: [], embeddable_content: [] }
+  let(:site) { mock 'site', id: '1337', rules: [], bars: [] }
   let(:config) { mock 'config', hb_backend_host: 'backend_host' }
   let(:generator) { ScriptGenerator.new(site, config) }
 
@@ -134,39 +134,48 @@ describe ScriptGenerator, '#render' do
   end
 
   xit 'completely replicates the old script generation method' do
-    # need to setup the objects to replicate rockpillows.com site graph
     js_fixture = File.read("#{Rails.root}/spec/fixtures/generated_site_script.js")
 
-    generator.render.should == js_fixture
-  end
-end
+    # need to add a ton of bar settings!
+    # lets gsub and only test if remains_at_top is there
 
-describe ScriptGenerator, '#rule_start_date' do
-  let(:generator) { ScriptGenerator.new('site', 'config') }
-  let(:rule_setting) { RuleSetting.new }
+    # remains_at_top: true
+    # open_in_new_window: false
+    # pushes_page_down: true
+    # closable: false
+    # show_wait: 0
+    # hide_after: 0
+    # wiggle_wait: 0
+    # link_style: 'button'
+    # message: 'Get Rock Pillow giveaways and exclusive coupons'
+    # link_text: 'Yes! Send Me a Coupon'
+    # bar_color: '18adfe'
+    # text_color: 'ffffff'
+    # link_color: 'ffffff'
+    # border_color: 'ffffff'
+    # texture: 'none'
+    # show_border: false
+    # font: 'Helvetica,Arial,sans-serif'
+    # tab_side: 'right'
+    # button_color: "000000"
+    # size: "regular"
+    # thank_you_text: "Thank you for signing up!"
+    # id: 17460,
+    # target: null
+    # template_name": "CollectEmail"
 
-  it 'returns the start date as an integer if present' do
-    rule_setting.start_date = Time.parse('1985-11-05 01:20:00')
+    site = Site.new
+    rule = Rule.new site: site
+    setting = RuleSetting.new rule: rule
+    bar = Bar.new goal: 'CollectEmail', rule: rule
+    bar.stub :rule_setting => setting
+    rule.stub bars: [bar]
+    site.stub id: 14797, bars: [bar], rules: [rule]
 
-    generator.rule_start_date(rule_setting).should == rule_setting.start_date.to_i
-  end
+    generator = ScriptGenerator.new(site, config)
+    generated = generator.render.gsub(/\s/, '')
+    fixture = js_fixture.gsub(/\s/, '')
 
-  it 'returns nil if the start date is not present' do
-    generator.rule_start_date(rule_setting).should be_nil
-  end
-end
-
-describe ScriptGenerator, '#rule_end_date' do
-  let(:generator) { ScriptGenerator.new('site', 'config') }
-  let(:rule_setting) { RuleSetting.new }
-
-  it 'returns the end date as an integer if present' do
-    rule_setting.end_date = Time.parse('1985-10-26 01:20:00')
-
-    generator.rule_end_date(rule_setting).should == rule_setting.end_date.to_i
-  end
-
-  it 'returns nil if the end date is not present' do
-    generator.rule_end_date(rule_setting).should be_nil
+    generated.should == fixture
   end
 end
