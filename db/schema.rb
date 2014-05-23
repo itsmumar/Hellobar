@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140521190721) do
+ActiveRecord::Schema.define(version: 20140523042541) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
