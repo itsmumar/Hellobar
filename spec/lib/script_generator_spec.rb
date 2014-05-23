@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe ScriptGenerator, '#render' do
-  let(:site) { mock 'site', id: '1337', rules: [], bars: [] }
-  let(:config) { mock 'config', hb_backend_host: 'backend_host' }
+  let(:site) { double 'site', id: '1337', rules: [], bars: [] }
+  let(:config) { double 'config', hb_backend_host: 'backend_host' }
   let(:generator) { ScriptGenerator.new(site, config) }
 
   it 'renders the site it variable' do
@@ -49,8 +49,8 @@ describe ScriptGenerator, '#render' do
 
   context 'when templates are present' do
     it 'renders the setTemplate function on HB with the template name and markup' do
-      mock_template = { name: 'yey name', markup: 'yey markup' }
-      generator.stub templates: [mock_template]
+      double_template = { name: 'yey name', markup: 'yey markup' }
+      generator.stub templates: [double_template]
 
       expected_string = 'HB.setTemplate("yey name", "yey markup");'
 
@@ -59,9 +59,20 @@ describe ScriptGenerator, '#render' do
   end
 
   context 'when rules are present' do
-    it 'simply returns true when eligibility is disabled'
+    it 'does not return any eligibility rules when eligibility is disabled' do
+      generator = ScriptGenerator.new site, config, { :disable_eligibility => true }
+      rule = Rule.new
+      rule_setting = RuleSetting.new start_date: 1_000, end_date: 2_000, include_urls: ['url'], exclude_urls: ['other url']
+      rule.stub rule_setting: rule_setting
+      site.stub rules: [rule]
+
+      unexpected_pattern = /if \( \(new Date\(\)\)\.getTime\(\)\/(.*) return (.*);|HB.umatch(.*) return (.*);/
+
+      generator.render.should_not match(unexpected_pattern)
+    end
+
     it 'has a start date constraint when present' do
-      rule = mock 'rule', start_date: 1_000
+      rule = double 'rule', start_date: 1_000
       generator.stub rules: [rule]
 
       expected_string = 'if ( (new Date()).getTime()/1000 < 1000) return false;'
@@ -70,7 +81,7 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'does NOT have a start date constraint when not present' do
-      rule = mock 'rule', start_date: nil
+      rule = double 'rule', start_date: nil
       generator.stub rules: [rule]
 
       unexpected_string = /if \( \(new Date\(\)\)\.getTime\(\)\/1000 <(.*) return false;/
@@ -79,7 +90,7 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'has an end date constraint when present' do
-      rule = mock 'rule', end_date: 2_000
+      rule = double 'rule', end_date: 2_000
       generator.stub rules: [rule]
 
       expected_string = 'if ( (new Date()).getTime()/1000 > 2000) return false;'
@@ -88,7 +99,7 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'does NOT have a start date constraint when not present' do
-      rule = mock 'rule', end_date: nil
+      rule = double 'rule', end_date: nil
       generator.stub rules: [rule]
 
       unexpected_string = /if \( \(new Date\(\)\)\.getTime\(\)\/1000 >(.*)return false;/
@@ -97,7 +108,7 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'adds an exlusion constraint for all blacklisted URLs' do
-      rule = mock 'rule', exclude_urls: [{ url: 'http://amazing.com' }]
+      rule = double 'rule', exclude_urls: [{ url: 'http://amazing.com' }]
       generator.stub rules: [rule]
 
       expected_string = "if (HB.umatch(\"http://amazing.com\", document.location)) return false;"
@@ -106,7 +117,7 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'does NOT have exclusion constraints when no sites are blacklisted' do
-      rule = mock 'rule', exclude_urls: []
+      rule = double 'rule', exclude_urls: []
       generator.stub rules: [rule]
 
       expected_string = Regexp.new /HB.umatch(.*) return false;/
@@ -115,7 +126,7 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'adds an inclusion constraint for all whitelisted URLs' do
-      rule = mock 'rule', include_urls: [{ url: 'http://soamazing.com' }]
+      rule = double 'rule', include_urls: [{ url: 'http://soamazing.com' }]
       generator.stub rules: [rule]
 
       expected_string = "if (HB.umatch(\"http://soamazing.com\", document.location)) return true;"
@@ -124,7 +135,7 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'does NOT have inclusion constraints when no sites are whitelisted' do
-      rule = mock 'rule', include_urls: []
+      rule = double 'rule', include_urls: []
       generator.stub rules: [rule]
 
       expected_string = Regexp.new /HB.umatch(.*) return true;/

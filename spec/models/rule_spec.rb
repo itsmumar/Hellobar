@@ -11,7 +11,7 @@ describe Rule, '#settings' do
   end
 
   it 'returns a new RuleSetting instance if not present' do
-    new_instance = mock 'rule setting'
+    new_instance = double 'rule setting'
     RuleSetting.should_receive(:new).and_return(new_instance)
 
     rule.settings.should == new_instance
