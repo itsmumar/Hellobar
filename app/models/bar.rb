@@ -1,6 +1,5 @@
 class Bar < ActiveRecord::Base
-  has_many :rules
-  has_many :bars, through: :rules
+  belongs_to :rule
 
   has_one :bar_setting
 

@@ -1,6 +1,7 @@
 class Rule < ActiveRecord::Base
   belongs_to :site
-  belongs_to :bar
+
+  has_many :bars
 
   has_one :rule_setting
 

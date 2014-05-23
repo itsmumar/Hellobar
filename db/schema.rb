@@ -11,7 +11,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20140521190721) do
 
   create_table "admin_login_attempts", force: true do |t|
@@ -42,9 +41,6 @@ ActiveRecord::Schema.define(version: 20140521190721) do
 
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
-=======
-ActiveRecord::Schema.define(version: 20140523031542) do
->>>>>>> Add an index to goal on bars to make analytics grouped by goal easier
 
   create_table "bar_settings", force: true do |t|
     t.boolean  "closable",           default: false
@@ -78,12 +74,15 @@ ActiveRecord::Schema.define(version: 20140523031542) do
   add_index "bar_settings", ["bar_id"], name: "index_bar_settings_on_bar_id", unique: true, using: :btree
 
   create_table "bars", force: true do |t|
+    t.integer  "rule_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "goal",       null: false
+    t.string   "goal",           null: false
+    t.string   "target_segment"
   end
 
   add_index "bars", ["goal"], name: "index_bars_on_goal", using: :btree
+  add_index "bars", ["rule_id"], name: "index_bars_on_rule_id", using: :btree
 
   create_table "internal_dimensions", force: true do |t|
     t.integer "person_id",              null: false
@@ -161,13 +160,12 @@ ActiveRecord::Schema.define(version: 20140523031542) do
   add_index "rule_settings", ["rule_id"], name: "index_rule_settings_on_rule_id", unique: true, using: :btree
 
   create_table "rules", force: true do |t|
+    t.integer  "site_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "site_id",    null: false
-    t.integer  "bar_id",     null: false
   end
 
-  add_index "rules", ["site_id", "bar_id"], name: "index_rules_on_site_id_and_bar_id", unique: true, using: :btree
+  add_index "rules", ["site_id"], name: "index_rules_on_site_id", using: :btree
 
   create_table "sites", force: true do |t|
     t.datetime "created_at"
