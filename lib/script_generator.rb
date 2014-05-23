@@ -47,6 +47,8 @@ class ScriptGenerator < Mustache
     site.rules.map{|rule| hash_for_rule(rule) }
   end
 
+private
+
   def hash_for_rule(rule)
     {
       bars: bars_for_rule(rule),
@@ -56,8 +58,6 @@ class ScriptGenerator < Mustache
       metadata: metadata(rule)
     }.merge(eligibility_rules)
   end
-
-private
 
   def eligibility_rules
     if options[:disable_eligibility]
