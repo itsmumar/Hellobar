@@ -17,6 +17,7 @@ namespace :deploy do
   task :restart do
     on roles(:web) do
       invoke "deploy:reload_nginx_config"
+      invoke "deploy:restart_thin"
     end
   end
 
@@ -26,6 +27,12 @@ namespace :deploy do
     on roles(:web) do
       # uses kill, but actually just reloads the config.
       execute "sudo kill -HUP `cat /mnt/deploy/shared/pids/nginx.pid` || sudo nginx -c /mnt/deploy/current/config/nginx/#{fetch(:stage)}.web.conf"
+    end
+  end
+
+  task :restart_thin do
+    on roles(:web) do
+      execute "cd #{release_path} && bundle exec sudo thin restart -C config/thin/www.yml"
     end
   end
 end
