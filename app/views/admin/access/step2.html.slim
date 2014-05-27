@@ -1,1 +1,12 @@
-p Step 2
+h2 Enter Password
+
+= form_tag(admin_authenticate_path) do
+  - if !@admin or @admin.needs_mobile_code?(access_token)
+    p
+      label for="mobile_code" Mobile Code
+      input type="password" placeholder="Mobile Code" name="mobile_code"
+  p
+    label for="password" Password
+    input type="password" placeholder="Password" name="admin_password"
+
+  input type="submit" id="login_submit" value="Continue"

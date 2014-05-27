@@ -7,6 +7,9 @@ unless defined?(Hellobar::Settings)
     twilio_user
     twilio_password
     host
+    recaptcha_public_key
+    recaptcha_private_key
+    sendgrid_password
   )
 
   keys.each do |key|

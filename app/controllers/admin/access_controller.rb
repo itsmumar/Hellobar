@@ -104,7 +104,7 @@ class Admin::AccessController < ApplicationController
         admin.send_new_mobile_code!
       end
     else
-      admin.send_validate_access_token_email!(@access_token)
+      admin.send_validate_access_token_email!(access_token)
       return render(:validate_access_token)
     end
 
