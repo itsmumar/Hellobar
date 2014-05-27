@@ -32,7 +32,13 @@ namespace :deploy do
 
   task :restart_thin do
     on roles(:web) do
-      execute "cd #{release_path} && bundle exec sudo thin restart -C config/thin/www.yml"
+      execute "cd #{release_path} && sudo bundle exec thin restart -C config/thin/www.yml"
+    end
+  end
+
+  task :start_thin do
+    on roles(:web) do
+      execute "cd #{release_path} && sudo bundle exec thin start -C config/thin/www.yml"
     end
   end
 end
