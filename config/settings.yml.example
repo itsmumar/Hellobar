@@ -4,3 +4,5 @@ host: host
 recaptcha_public_key: recaptcha-public-key
 recaptcha_private_key: recaptcha-private-key
 sendgrid_password: sendgrid-password
+grand_central_api_key: grand-central-api-key
+grand_central_api_secret: grand-central-api-secret

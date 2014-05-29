@@ -10,6 +10,8 @@ unless defined?(Hellobar::Settings)
     recaptcha_public_key
     recaptcha_private_key
     sendgrid_password
+    grand_central_api_key
+    grand_central_api_secret
   )
 
   keys.each do |key|
