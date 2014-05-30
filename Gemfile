@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "avatar"
 gem "bootstrap-sass", "~> 3.1.1"
 gem "capistrano", "~> 3.1"
 gem "capistrano-bundler", "~> 1.1.2"

@@ -1,10 +1,15 @@
 .header-wrapper
   .container
-    ul#navigation
-      - if current_user
-        li= link_to "Log out", destroy_user_session_path, :method => :delete
-      - else
-        li= link_to "Log in", new_user_session_path
-        li= link_to "Sign up", new_user_registration_path
+    .row
+      .col-md-4
+        = link_to "<h1></h1>".html_safe, root_path
 
-    = link_to "<h1></h1>".html_safe, root_path
+      .col-md-8
+        - if current_user
+          ul#navigation.logged-in-nav
+            li.avatar= avatar_tag(current_user, {}, {:class => "img-circle"})
+            li= link_to "Log out", destroy_user_session_path, :method => :delete
+        - else
+          ul#navigation.logged-out-nav
+            li= link_to "Log in", new_user_session_path
+            li= link_to "Sign up", new_user_registration_path
