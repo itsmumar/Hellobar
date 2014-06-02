@@ -53,13 +53,11 @@ private
     {
       bars: bars_for_rule(rule),
       priority: 1, # seems to be hardcoded as 1 throughout WWW
-
-      # this was previously the Goal#id. How do backfill?
       metadata: metadata(rule)
-    }.merge(eligibility_rules)
+    }.merge(eligibility_rules(rule))
   end
 
-  def eligibility_rules
+  def eligibility_rules(rule)
     if options[:disable_eligibility]
       {}
     else
@@ -100,10 +98,22 @@ private
     end
   end
 
+  def bar_settings(bar)
+    settings = %w{ closable hide_destination open_in_new_window pushes_page_down remains_at_top show_border hide_after show_wait wiggle_wait bar_color border_color button_color font link_color link_style link_text message size tab_side target text_color texture thank_you_text }
+
+    bar.attributes.select{|key,val| settings.include?(key) }.merge({
+      id: bar.id,
+      target: bar.target_segment,
+      template_name: bar.goal
+    })
+  end
+
   def bars_for_rule(rule)
-    rule.bars.map do |bar|
+    bars = options[:bar_id] ? rule.bars.find(options[:bar_id]) : rule.bars
+
+    bars.map do |bar|
       {
-        bar_json: bar.public_attributes_with_settings.select{|k,v| v.present?} # guard against nil
+        bar_json: bar_settings(bar).select{|k,v| v.present? } # guard against nil
       }
     end
   end
@@ -113,6 +123,7 @@ private
   # we killed the type key, so ignore from old generated script files
   def metadata(rule)
     available_settings = rule.rule_setting.public_attributes.select{|k,v| v.present? }
+
     available_settings.merge(id: rule.id).with_indifferent_access
   end
 end

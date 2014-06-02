@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529134432) do
+ActiveRecord::Schema.define(version: 20140602192309) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -42,7 +42,12 @@ ActiveRecord::Schema.define(version: 20140529134432) do
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
 
-  create_table "bar_settings", force: true do |t|
+  create_table "bars", force: true do |t|
+    t.integer  "rule_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "goal",                               null: false
+    t.string   "target_segment"
     t.boolean  "closable",           default: false
     t.boolean  "hide_destination",   default: false
     t.boolean  "open_in_new_window", default: false
@@ -66,19 +71,6 @@ ActiveRecord::Schema.define(version: 20140529134432) do
     t.string   "text_color"
     t.string   "texture"
     t.string   "thank_you_text"
-    t.integer  "bar_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "bar_settings", ["bar_id"], name: "index_bar_settings_on_bar_id", unique: true, using: :btree
-
-  create_table "bars", force: true do |t|
-    t.integer  "rule_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "goal",           null: false
-    t.string   "target_segment"
   end
 
   add_index "bars", ["goal"], name: "index_bars_on_goal", using: :btree

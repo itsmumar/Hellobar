@@ -49,8 +49,8 @@ describe ScriptGenerator, '#render' do
 
   context 'when templates are present' do
     it 'renders the setTemplate function on HB with the template name and markup' do
-      double_template = { name: 'yey name', markup: 'yey markup' }
-      generator.stub templates: [double_template]
+      template = { name: 'yey name', markup: 'yey markup' }
+      generator.stub templates: [template]
 
       expected_string = 'HB.setTemplate("yey name", "yey markup");'
 
@@ -142,5 +142,40 @@ describe ScriptGenerator, '#render' do
 
       generator.render.should_not match(expected_string)
     end
+  end
+end
+
+describe ScriptGenerator, '#rules' do
+  let(:site) { double 'site', id: '1337', rules: [], bars: [] }
+  let(:config) { double 'config', hb_backend_host: 'backend_host' }
+  let(:generator) { ScriptGenerator.new(site, config) }
+
+  it 'returns the proper array of hashes for a sites rules' do
+    rule = Rule.new
+    rule.stub id: 1
+    rule.rule_setting = RuleSetting.new
+
+    site.stub rules: [rule]
+
+    expected_hash = {
+      bars: [],
+      priority: 1,
+      metadata: {"id" => 1},
+      start_date: nil,
+      end_date: nil,
+      exclude_urls: nil,
+      include_urls: nil
+    }
+
+    generator.rules.should == [expected_hash]
+  end
+
+  context 'when options are passed in' do
+    it 'returns the proper eligibility rules'
+    it 'doesnt return any eligibility rules when we are disabling eligibility'
+    it 'returns JSON for a single bar when bar_id is set'
+  end
+
+  context 'metadata' do
   end
 end
