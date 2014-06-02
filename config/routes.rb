@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   devise_for :users
   root "welcome#index"
 
+  resources :sites
+
   get "/admin", :to => "admin#index", :as => :admin
   namespace :admin do
     get "lockdown/:email/:key/:timestamp", :to => "access#lockdown", :constraints => {:email => /[^\/]+/}, :as => :lockdown

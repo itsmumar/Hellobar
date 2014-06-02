@@ -34,4 +34,8 @@ class ApplicationController < ActionController::Base
       redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path
     end
   end
+
+  def after_sign_in_path_for(resource)
+    sites_path
+  end
 end
