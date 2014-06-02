@@ -3,9 +3,6 @@ class Rule < ActiveRecord::Base
 
   has_many :bars
 
-  has_one :rule_setting
-
-  def settings
-    rule_setting || RuleSetting.new
-  end
+  serialize :exclude_urls
+  serialize :include_urls
 end

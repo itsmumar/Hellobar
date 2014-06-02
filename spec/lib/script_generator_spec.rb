@@ -61,9 +61,7 @@ describe ScriptGenerator, '#render' do
   context 'when rules are present' do
     it 'does not return any eligibility rules when eligibility is disabled' do
       generator = ScriptGenerator.new site, config, { :disable_eligibility => true }
-      rule = Rule.new
-      rule_setting = RuleSetting.new start_date: 1_000, end_date: 2_000, include_urls: ['url'], exclude_urls: ['other url']
-      rule.stub rule_setting: rule_setting
+      rule = Rule.new start_date: 1_000, end_date: 2_000, include_urls: ['url'], exclude_urls: ['other url']
       site.stub rules: [rule]
 
       unexpected_pattern = /if \( \(new Date\(\)\)\.getTime\(\)\/(.*) return (.*);|HB.umatch(.*) return (.*);/
@@ -151,16 +149,14 @@ describe ScriptGenerator, '#rules' do
   let(:generator) { ScriptGenerator.new(site, config) }
 
   it 'returns the proper array of hashes for a sites rules' do
-    rule = Rule.new
-    rule.stub id: 1
-    rule.rule_setting = RuleSetting.new
+    rule = Rule.new id: 1
 
     site.stub rules: [rule]
 
     expected_hash = {
       bars: [],
       priority: 1,
-      metadata: {"id" => 1},
+      metadata: { "id" => 1 },
       start_date: nil,
       end_date: nil,
       exclude_urls: nil,

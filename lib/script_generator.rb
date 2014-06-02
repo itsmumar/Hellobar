@@ -62,10 +62,10 @@ private
       {}
     else
       {
-        start_date: rule_start_date(rule.rule_setting),
-        end_date: rule_end_date(rule.rule_setting),
-        exclude_urls: rule.rule_setting.exclude_urls,
-        include_urls: rule.rule_setting.include_urls
+        start_date: rule_start_date(rule),
+        end_date: rule_end_date(rule),
+        exclude_urls: rule.exclude_urls,
+        include_urls: rule.include_urls
       }
     end
   end
@@ -86,15 +86,15 @@ private
     @content_footer ||= File.read("#{Rails.root}/lib/script_generator/bar_footer.html")
   end
 
-  def rule_start_date(rule_setting)
-    if rule_setting.start_date
-      rule_setting.start_date.to_i
+  def rule_start_date(rule)
+    if rule.start_date
+      rule.start_date.to_i
     end
   end
 
-  def rule_end_date(rule_setting)
-    if rule_setting.end_date
-      rule_setting.end_date.to_i
+  def rule_end_date(rule)
+    if rule.end_date
+      rule.end_date.to_i
     end
   end
 
@@ -106,6 +106,12 @@ private
       target: bar.target_segment,
       template_name: bar.goal
     })
+  end
+
+  def rule_settings(rule)
+    settings = %w{ end_date start_date exclude_urls include_urls id }
+
+    rule.attributes.select{|key, value| settings.include?(key) }
   end
 
   def bars_for_rule(rule)
@@ -122,8 +128,6 @@ private
   # ["url", "exclude_urls", "include_urls", "dates_timezone", "end_date", "start_date", "collect_names", "interaction", "interaction_description", "url_to_tweet", "pinterest_url", "pinterest_image_url", "pinterest_description", "message_to_tweet", "url_to_like", "url_to_share", "twitter_handle", "use_location_for_url", "url_to_plus_one", "pinterest_user_url", "pinterest_full_name", "buffer_message", "buffer_url"]
   # we killed the type key, so ignore from old generated script files
   def metadata(rule)
-    available_settings = rule.rule_setting.public_attributes.select{|k,v| v.present? }
-
-    available_settings.merge(id: rule.id).with_indifferent_access
+    rule_settings(rule).select{|k,v| v.present? }.with_indifferent_access
   end
 end
