@@ -115,7 +115,11 @@ private
     bars = if options[:bar_id]
       [rule.bars.find(options[:bar_id])]
     else
-      rule.bars
+      if options[:render_paused_bars]
+        rule.bars
+      else
+        rule.bars.active
+      end
     end
 
     bars.map{|bar| { bar_json: bar_settings(bar) }}

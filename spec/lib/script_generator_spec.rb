@@ -187,4 +187,46 @@ describe ScriptGenerator, '#rules' do
 
     generator.rules.should == [expected_hash]
   end
+
+  it 'renders all bar json when the render_paused_bars is true' do
+    rule = Rule.create
+    bar = Bar.create goal: 'email', rule: rule, paused: true
+    options = { render_paused_bars: true }
+    generator = ScriptGenerator.new(site, config, options)
+
+    site.stub rules: [rule]
+
+    expected_hash = {
+      bars: [{bar_json: { id: bar.id, template_name: bar.goal }}],
+      priority: 1,
+      metadata: { "id" => rule.id },
+      start_date: nil,
+      end_date: nil,
+      exclude_urls: nil,
+      include_urls: nil
+    }
+
+    generator.rules.should == [expected_hash]
+  end
+
+  it 'renders only active bar json by default' do
+    rule = Rule.create
+    paused = Bar.create goal: 'email', rule: rule, paused: true
+    active_bar = Bar.create goal: 'not paused', rule: rule, paused: false
+    generator = ScriptGenerator.new(site, config)
+
+    site.stub rules: [rule]
+
+    expected_hash = {
+      bars: [{bar_json: { id: active_bar.id, template_name: active_bar.goal }}],
+      priority: 1,
+      metadata: { "id" => rule.id },
+      start_date: nil,
+      end_date: nil,
+      exclude_urls: nil,
+      include_urls: nil
+    }
+
+    generator.rules.should == [expected_hash]
+  end
 end

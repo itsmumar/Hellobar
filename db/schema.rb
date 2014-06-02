@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140602210212) do
+ActiveRecord::Schema.define(version: 20140602213106) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20140602210212) do
     t.string   "text_color"
     t.string   "texture"
     t.string   "thank_you_text"
+    t.boolean  "paused",             default: false
   end
 
   add_index "bars", ["goal"], name: "index_bars_on_goal", using: :btree
