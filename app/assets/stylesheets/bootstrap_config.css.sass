@@ -1,1 +1,23 @@
+@import "variables"
+
+$brand-primary: $orange
+
+$btn-primary-color: #fff !default
+$btn-primary-bg: $brand-primary !default
+$btn-primary-border: darken($btn-primary-bg, 5%) !default
+
 @import "bootstrap"
+
+@mixin border-button($color)
+  color: $color
+  background-color: #fff
+  border-color: $color
+  border-width: 3px
+  font-weight: 700
+
+  &:hover, &:focus, &:active, &.active, .open > &.dropdown-toggle
+    color: darken($color, 10%)
+    border-color: darken($color, 10%)
+
+.btn-border-primary
+  @include border-button($btn-primary-bg)
