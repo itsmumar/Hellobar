@@ -8,7 +8,14 @@
         - if current_user
           ul#navigation.logged-in-nav
             li.avatar= avatar_tag(current_user, {}, {:class => "img-circle"})
-            li= link_to "Log out", destroy_user_session_path, :method => :delete
+            li Sexton H.
+            li.dropdown
+              div#navigation-dropdown.dropdown-toggle data-toggle="dropdown"
+                span.glyphicon.glyphicon-chevron-down
+              ul.dropdown-menu.dropdown-menu-right role="menu" aria-labelledby="navigation-dropdown"
+                li role="presentation"
+                  = link_to "Log out", destroy_user_session_path, :method => :delete, :role => "menuitem"
+
         - else
           ul#navigation.logged-out-nav
             li= link_to "Log in", new_user_session_path
