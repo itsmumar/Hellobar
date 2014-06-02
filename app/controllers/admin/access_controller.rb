@@ -1,4 +1,6 @@
 class Admin::AccessController < ApplicationController
+  layout "admin"
+
   before_filter :require_admin, :only => [:reset_password, :do_reset_password, :logout_admin]
   before_filter :redirect_admin, :only => :step1
 
