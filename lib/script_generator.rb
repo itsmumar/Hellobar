@@ -87,15 +87,11 @@ private
   end
 
   def rule_start_date(rule)
-    if rule.start_date
-      rule.start_date.to_i
-    end
+    rule.start_date.to_i if rule.start_date
   end
 
   def rule_end_date(rule)
-    if rule.end_date
-      rule.end_date.to_i
-    end
+    rule.end_date.to_i if rule.end_date
   end
 
   def bar_settings(bar)
@@ -105,7 +101,7 @@ private
       id: bar.id,
       target: bar.target_segment,
       template_name: bar.goal
-    })
+    }).select{|key, value| value.present? }
   end
 
   def rule_settings(rule)
@@ -114,14 +110,15 @@ private
     rule.attributes.select{|key, value| settings.include?(key) }
   end
 
+  # FIXME: if bar_id is present, bars will not be ennumerable
   def bars_for_rule(rule)
-    bars = options[:bar_id] ? rule.bars.find(options[:bar_id]) : rule.bars
-
-    bars.map do |bar|
-      {
-        bar_json: bar_settings(bar).select{|k,v| v.present? } # guard against nil
-      }
+    bars = if options[:bar_id]
+      [rule.bars.find(options[:bar_id])]
+    else
+      rule.bars
     end
+
+    bars.map{|bar| { bar_json: bar_settings(bar) }}
   end
 
   # Previous metadata keys. TODO: figure this out.

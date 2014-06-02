@@ -166,12 +166,25 @@ describe ScriptGenerator, '#rules' do
     generator.rules.should == [expected_hash]
   end
 
-  context 'when options are passed in' do
-    it 'returns the proper eligibility rules'
-    it 'doesnt return any eligibility rules when we are disabling eligibility'
-    it 'returns JSON for a single bar when bar_id is set'
-  end
+  it 'returns the proper hash when a single bar_id is passed as an option' do
+    rule = Rule.create
+    bar = Bar.create goal: 'email', rule: rule
+    options = { bar_id: bar.id }
 
-  context 'metadata' do
+    generator = ScriptGenerator.new(site, config, options)
+
+    site.stub rules: [rule]
+
+    expected_hash = {
+      bars: [{bar_json: { id: bar.id, template_name: bar.goal }}],
+      priority: 1,
+      metadata: { "id" => rule.id },
+      start_date: nil,
+      end_date: nil,
+      exclude_urls: nil,
+      include_urls: nil
+    }
+
+    generator.rules.should == [expected_hash]
   end
 end
