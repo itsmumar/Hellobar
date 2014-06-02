@@ -1,0 +1,35 @@
+@import "variables"
+
+body#with-sidebar
+  div.header-wrapper
+    margin-bottom: 0
+
+div#sidebar-container
+  height: 100%
+
+div#sidebar
+  height: 100%
+  background-color: $light-grey
+
+  ul
+    padding: 0
+    margin: 0
+
+    li
+      color: $dark-grey
+      display: block
+      width: 190px
+      padding: 10px 20px
+      position: relative
+      left: -15px
+
+      .glyphicon
+        padding-right: 20px
+        position: relative
+        top: 2px
+
+    li.active, li:hover
+      color: $darkest-grey
+      background-color: #fff
+      cursor: pointer
+

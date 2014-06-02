@@ -7,10 +7,10 @@ html
     = javascript_include_tag "application"
     = csrf_meta_tags
 
-  body
+  body#with-sidebar
     = render :partial => "shared/header"
 
-  div.container
+  div#sidebar-container.container
     div#sidebar.col-md-2
       = render :partial => "shared/sidebar"
     div.col-md-10
