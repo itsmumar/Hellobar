@@ -42,8 +42,8 @@ class Admin::AccessController < ApplicationController
 
     Admin.record_login_attempt(email, remote_ip, user_agent, access_cookie)
 
-    if admin = Admin.where(:email => email).first
-      process_login(admin)
+    if @admin = Admin.where(:email => email).first
+      process_login(@admin)
     else
       # Always render step2 - this way attackers don't know if the login
       # email is valid or not
