@@ -19,6 +19,10 @@ class SitesController < ApplicationController
     @site = Site.new
   end
 
+  def show
+    @site = current_user.sites.find(params[:id])
+  end
+
 
   private
 

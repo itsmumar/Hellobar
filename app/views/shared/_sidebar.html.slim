@@ -1,17 +1,18 @@
 ul
-  li
-    span.glyphicon.glyphicon-list-alt
-    | Summary
-  li.active
+  = sidebar_link_wrapper(:summary) do
+    li class="#{sidebar_link_class(:summary)}"
+      span.glyphicon.glyphicon-list-alt
+      | Summary
+  li class="#{sidebar_link_class(:manage)}"
     span.glyphicon.glyphicon-align-justify
     | Manage
-  li
+  li class="#{sidebar_link_class(:improve)}"
     span.glyphicon.glyphicon-signal
     | Improve
-  li
+  li class="#{sidebar_link_class(:contacts)}"
     span.glyphicon.glyphicon-envelope
     | Contacts
-  li
+  li class="#{sidebar_link_class(:feedback)}"
     span.glyphicon.glyphicon-comment
     | Feedback
 
