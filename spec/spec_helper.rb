@@ -52,5 +52,10 @@ RSpec.configure do |config|
 end
 
 def stub_admin(admin)
-  controller.stub(:current_admin).and_return(admin)
+  controller.stub :current_admin => admin
+end
+
+def stub_user(user)
+  request.env['warden'].stub :authenticate! => user
+  controller.stub :current_user => user
 end
