@@ -10,5 +10,6 @@ h1 Users
 - else
   - @users.each do |user|
     h3= user.email
+    p= link_to "Impersonate this user", admin_impersonate_user_path(user), :method => :post
 
   = paginate @users

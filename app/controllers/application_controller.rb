@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  helper_method :access_token, :current_admin
+  helper_method :access_token, :current_admin, :impersonated_user
 
   def access_token
     @access_token ||= Digest::SHA256.hexdigest(["hellobar", remote_ip, user_agent, access_cookie, "a776b"].join)
@@ -37,5 +37,17 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     sites_path
+  end
+
+  def current_user
+    impersonated_user || super
+  end
+
+  def authenticate_user!
+    impersonated_user ? true : super
+  end
+
+  def impersonated_user
+    current_admin && session[:impersonated_user] ? User.find_by_id(session[:impersonated_user]) : nil
   end
 end

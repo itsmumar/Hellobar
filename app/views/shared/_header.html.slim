@@ -15,6 +15,10 @@
               ul.dropdown-menu.dropdown-menu-right role="menu" aria-labelledby="navigation-dropdown"
                 li role="presentation"
                   = link_to "Log out", destroy_user_session_path, :method => :delete, :role => "menuitem"
+                - if impersonated_user
+                  li role="presentation"
+                    = link_to "Stop impersonating this user", admin_unimpersonate_user_path, :method => :delete, :role => "menuitem", :style => "color: red"
+
 
         - else
           ul#navigation.logged-out-nav
