@@ -1,0 +1,26 @@
+<span>
+  {{bar.message}}
+</span>
+
+<span class="social-wrapper pinterest-follow-button-wrapper">
+  <span class="pinterest-follow-button">
+    <a data-pin-do="buttonFollow" href="{{bar.goal.data.pinterest_user_url.replace(/^(?!http)/, 'http://')}}">{{bar.goal.data.pinterest_full_name}}</a>
+    <script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
+  </span>
+</span>
+
+<script>
+  function trackClick(event) {
+    var target = event.target || event.srcElement;
+
+    if (typeof(target.href) == 'string' && target.href.indexOf('pinterest.com') >= 0) {
+      parent.HB.goalPerformed()
+    }
+  }
+
+  if (document.addEventListener) {
+    document.addEventListener('click', trackClick, true);
+  } else if (document.attachEvent) {
+    document.attachEvent('onclick', trackClick);
+  }
+</script>

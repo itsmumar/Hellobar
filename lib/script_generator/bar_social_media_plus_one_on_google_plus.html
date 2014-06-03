@@ -1,0 +1,15 @@
+<span>
+  {{bar.message}}
+</span>
+
+<span class="social-wrapper g-plusone-wrapper">
+  <span class="g-plusone" data-href="{{(HB.t(bar.goal.data.use_location_for_url) ? window.parent.location.href : bar.goal.data.url_to_plus_one).replace(/^(?!http)/, 'http://')}}" data-callback="trackPlusOne" data-recommendations="false"></span>
+</span>
+
+<script>
+  function trackPlusOne(param) {
+    parent.HB.goalPerformed();
+  }
+</script>
+
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>

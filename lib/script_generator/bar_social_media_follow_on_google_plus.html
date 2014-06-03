@@ -1,0 +1,11 @@
+<span>
+  {{bar.message}}
+</span>
+
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+<span id="foobar" class="g-follow" data-href="{{bar.goal.data.google_plus_profile_url}}" data-rel="author"></span>
+
+<script>
+  // google doesn't provide any callbacks for the follow button. like most of these plugins, it gets built inside of an iframe with
+  // a src on a google domain. we can't place js events on elements inside of that iframe due to same-origin policy restrictions.
+</script>
