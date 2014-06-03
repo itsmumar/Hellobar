@@ -1,0 +1,10 @@
+h1 Create A New Site
+
+= form_for @site do |f|
+  .form-group
+    = f.label :url
+    = f.text_field :url, :class => "form-control"
+
+  .form-group
+    = f.submit "Create Site", :class => "btn btn-primary"
+

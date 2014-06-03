@@ -36,7 +36,11 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    sites_path
+    if current_user.sites.any?
+      site_path(current_user.sites.last)
+    else
+      new_site_path
+    end
   end
 
   def current_user
