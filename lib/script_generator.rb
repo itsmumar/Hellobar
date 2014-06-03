@@ -79,7 +79,7 @@ private
   end
 
   def content_template(goal)
-    (content_header << content_markup(goal) << content_footer).gsub('"', '\"')
+    (content_header << content_markup(goal) << content_footer)
   end
 
   def content_header

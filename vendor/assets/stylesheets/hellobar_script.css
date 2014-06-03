@@ -257,3 +257,18 @@ a:hover.hellobar_logo, a:hover.hellobar_arrow { opacity: 0.6; }
 .gc-bubbleDefault, .pls-container {
    display: none !important;
 }
+
+#hellobar.multiline a.hellobar_cta.hb-button {
+  margin-left: 0;
+}
+#hellobar.mobile a.hellobar_cta.hb-button {
+  margin-left: inherit;
+}
+
+#hellobar.multiline > span {
+  margin-right: 65px;
+}
+
+#hellobar.mobile > span {
+  margin-right: inherit;
+}

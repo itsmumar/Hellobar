@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20140603162125) do
     t.integer  "rule_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "goal",                               null: false
+    t.string   "goal",                                                         null: false
     t.string   "target_segment"
     t.boolean  "closable",           default: false
     t.boolean  "hide_destination",   default: false
@@ -54,23 +54,23 @@ ActiveRecord::Schema.define(version: 20140603162125) do
     t.boolean  "pushes_page_down",   default: false
     t.boolean  "remains_at_top",     default: false
     t.boolean  "show_border",        default: false
-    t.integer  "hide_after"
+    t.integer  "hide_after",         default: 0
     t.integer  "show_wait"
-    t.integer  "wiggle_wait"
-    t.string   "bar_color"
-    t.string   "border_color"
-    t.string   "button_color"
-    t.string   "font"
-    t.string   "link_color"
-    t.string   "link_style"
-    t.string   "link_text"
-    t.string   "message"
-    t.string   "size"
-    t.string   "tab_side"
+    t.integer  "wiggle_wait",        default: 0
+    t.string   "bar_color",          default: "eb593c"
+    t.string   "border_color",       default: "ffffff"
+    t.string   "button_color",       default: "000000"
+    t.string   "font",               default: "Helvetica,Arial,sans-serif"
+    t.string   "link_color",         default: "ffffff"
+    t.string   "link_style",         default: "button"
+    t.string   "link_text",          default: "Click Here"
+    t.string   "message",            default: "Hello. Add your message here."
+    t.string   "size",               default: "large"
+    t.string   "tab_side",           default: "right"
     t.string   "target"
-    t.string   "text_color"
-    t.string   "texture"
-    t.string   "thank_you_text"
+    t.string   "text_color",         default: "ffffff"
+    t.string   "texture",            default: "none"
+    t.string   "thank_you_text",     default: "Thank you for signing up!"
     t.boolean  "paused",             default: false
   end
 

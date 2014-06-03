@@ -52,7 +52,7 @@ describe ScriptGenerator, '#render' do
       template = { name: 'yey name', markup: 'yey markup' }
       generator.stub templates: [template]
 
-      expected_string = 'HB.setTemplate("yey name", "yey markup");'
+      expected_string = "HB.setTemplate(\"yey name\", 'yey markup');"
 
       generator.render.should include(expected_string)
     end
@@ -172,6 +172,7 @@ describe ScriptGenerator, '#rules' do
     options = { bar_id: bar.id }
 
     generator = ScriptGenerator.new(site, config, options)
+    generator.stub bar_settings: {id: bar.id, template_name: bar.goal}
 
     site.stub rules: [rule]
 
@@ -193,6 +194,7 @@ describe ScriptGenerator, '#rules' do
     bar = Bar.create goal: 'email', rule: rule, paused: true
     options = { render_paused_bars: true }
     generator = ScriptGenerator.new(site, config, options)
+    generator.stub bar_settings: { id: bar.id, template_name: bar.goal }
 
     site.stub rules: [rule]
 
@@ -214,6 +216,7 @@ describe ScriptGenerator, '#rules' do
     paused = Bar.create goal: 'email', rule: rule, paused: true
     active_bar = Bar.create goal: 'not paused', rule: rule, paused: false
     generator = ScriptGenerator.new(site, config)
+    generator.stub bar_settings: { id: active_bar.id, template_name: active_bar.goal }
 
     site.stub rules: [rule]
 
