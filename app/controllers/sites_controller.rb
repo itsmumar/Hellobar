@@ -1,5 +1,7 @@
 class SitesController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :load_site, :only => :show
+
   layout "with_sidebar"
 
   def create
@@ -19,14 +21,14 @@ class SitesController < ApplicationController
     @site = Site.new
   end
 
-  def show
-    @site = current_user.sites.find(params[:id])
-  end
-
 
   private
 
   def site_params
     params.require(:site).permit(:url)
+  end
+
+  def load_site
+    @site = current_user.sites.find(params[:id])
   end
 end

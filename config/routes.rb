@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   devise_for :users
   root "welcome#index"
 
-  resources :sites
+  resources :sites do
+    resources :site_elements
+  end
 
   get "/admin", :to => "admin#index", :as => :admin
   namespace :admin do

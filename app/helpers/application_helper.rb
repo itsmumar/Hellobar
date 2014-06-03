@@ -7,6 +7,8 @@ module ApplicationHelper
     active = case link
       when :summary
         params[:controller] == "sites" && params[:action] == "show"
+      when :manage
+        params[:controller] == "site_elements" && params[:action] == "index"
       else
         false
       end
@@ -20,6 +22,8 @@ module ApplicationHelper
     case link
     when :summary
       link_to(site_path(@site)){ yield block }
+    when :manage
+      link_to(site_site_elements_path(@site)){ yield block }
     else
       content
     end

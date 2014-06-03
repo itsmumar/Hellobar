@@ -10,7 +10,7 @@ class SiteMembership < ActiveRecord::Base
 
   def only_one_owner_per_site
     if site && role == "owner" && !site.owner.nil? && site.owner != user
-      self.errors.add(:base, "Sites can only have a single owner")
+      self.errors.add(:role, "cannot be owner; one already exists for this site")
     end
   end
 end
