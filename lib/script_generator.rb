@@ -10,6 +10,14 @@ class ScriptGenerator < Mustache
     @options = options
   end
 
+  def generate_script
+    if options[:compress]
+      Uglifier.new.compress(render)
+    else
+      render
+    end
+  end
+
   def site_id
     site.id
   end
@@ -53,7 +61,7 @@ private
     {
       bars: bars_for_rule(rule),
       priority: 1, # seems to be hardcoded as 1 throughout WWW
-      metadata: metadata(rule)
+      metadata: metadata(rule).to_json
     }.merge(eligibility_rules(rule))
   end
 
@@ -71,7 +79,7 @@ private
   end
 
   def content_template(goal)
-    (content_header << content_markup(goal) << content_footer).to_json
+    (content_header << content_markup(goal) << content_footer).gsub('"', '\"')
   end
 
   def content_header
@@ -122,7 +130,7 @@ private
       end
     end
 
-    bars.map{|bar| { bar_json: bar_settings(bar) }}
+    bars.map{|bar| { bar_json: bar_settings(bar).to_json }}
   end
 
   # Previous metadata keys. TODO: figure this out.

@@ -6,7 +6,7 @@ describe ScriptGenerator, '#render' do
   let(:generator) { ScriptGenerator.new(site, config) }
 
   it 'renders the site it variable' do
-    expected_string = "var HB_SITE_ID = \"#{site.id}\";"
+    expected_string = "var HB_SITE_ID = #{site.id};"
 
     generator.render.should include(expected_string)
   end
@@ -156,7 +156,7 @@ describe ScriptGenerator, '#rules' do
     expected_hash = {
       bars: [],
       priority: 1,
-      metadata: { "id" => 1 },
+      metadata: { "id" => 1 }.to_json,
       start_date: nil,
       end_date: nil,
       exclude_urls: nil,
@@ -176,9 +176,9 @@ describe ScriptGenerator, '#rules' do
     site.stub rules: [rule]
 
     expected_hash = {
-      bars: [{bar_json: { id: bar.id, template_name: bar.goal }}],
+      bars: [{bar_json: { id: bar.id, template_name: bar.goal }.to_json}],
       priority: 1,
-      metadata: { "id" => rule.id },
+      metadata: { "id" => rule.id }.to_json,
       start_date: nil,
       end_date: nil,
       exclude_urls: nil,
@@ -197,9 +197,9 @@ describe ScriptGenerator, '#rules' do
     site.stub rules: [rule]
 
     expected_hash = {
-      bars: [{bar_json: { id: bar.id, template_name: bar.goal }}],
+      bars: [{bar_json: { id: bar.id, template_name: bar.goal }.to_json}],
       priority: 1,
-      metadata: { "id" => rule.id },
+      metadata: { "id" => rule.id }.to_json,
       start_date: nil,
       end_date: nil,
       exclude_urls: nil,
@@ -218,9 +218,9 @@ describe ScriptGenerator, '#rules' do
     site.stub rules: [rule]
 
     expected_hash = {
-      bars: [{bar_json: { id: active_bar.id, template_name: active_bar.goal }}],
+      bars: [{bar_json: { id: active_bar.id, template_name: active_bar.goal }.to_json}],
       priority: 1,
-      metadata: { "id" => rule.id },
+      metadata: { "id" => rule.id }.to_json,
       start_date: nil,
       end_date: nil,
       exclude_urls: nil,
@@ -228,5 +228,28 @@ describe ScriptGenerator, '#rules' do
     }
 
     generator.rules.should == [expected_hash]
+  end
+end
+
+describe ScriptGenerator, '#generate_script' do
+  it 'does not compress the template if the compress option is not set' do
+    generator = ScriptGenerator.new('site', 'config')
+    generator.stub :render => 'template'
+
+    Uglifier.should_not_receive(:new)
+    generator.should_receive(:render)
+
+    generator.generate_script
+  end
+
+  it 'compresses the template when the compress option is true' do
+    generator = ScriptGenerator.new('site', 'config', { compress: true })
+    generator.stub :render => 'template'
+
+    uglifier = Uglifier.new
+    Uglifier.should_receive(:new).and_return(uglifier)
+    uglifier.should_receive(:compress).with('template')
+
+    generator.generate_script
   end
 end

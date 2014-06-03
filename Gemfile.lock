@@ -189,9 +189,9 @@ GEM
       multi_json (>= 1.3.0)
     tzinfo (1.1.0)
       thread_safe (~> 0.1)
-    uglifier (2.5.0)
+    uglifier (2.0.1)
       execjs (>= 0.3.0)
-      json (>= 1.8.0)
+      multi_json (~> 1.0, >= 1.0.2)
     vcr (2.9.0)
     warden (1.2.3)
       rack (>= 1.0)
@@ -229,6 +229,6 @@ DEPENDENCIES
   slim-rails
   thin
   twilio-ruby
-  uglifier (>= 1.3.0)
+  uglifier (= 2.0.1)
   vcr
   webmock

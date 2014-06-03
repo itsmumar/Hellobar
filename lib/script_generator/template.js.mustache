@@ -1,4 +1,4 @@
-var HB_SITE_ID = "{{site_id}}";
+var HB_SITE_ID = {{site_id}};
 
 HB_BACKEND_HOST = "{{hb_backend_host}}";
 
@@ -20,7 +20,7 @@ if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
     [{{#bars}}{{{bar_json}}}{{/bars}}],
     {{priority}},
     {{{metadata}}}
-  });
+  )});
 {{/rules}}
 
 _hbq = new HBQ();

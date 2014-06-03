@@ -22,7 +22,7 @@ gem "sass-rails", "~> 4.0.3"
 gem "slim-rails"
 gem "thin"
 gem "twilio-ruby"
-gem "uglifier", ">= 1.3.0"
+gem "uglifier", "2.0.1"
 
 group :development, :test do
   gem "debugger"
