@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   get "/admin", :to => "admin#index", :as => :admin
   namespace :admin do
+    resources :users, :only => [:index]
+
     get "lockdown/:email/:key/:timestamp", :to => "access#lockdown", :constraints => {:email => /[^\/]+/}, :as => :lockdown
     get "validate_access_token/:email/:key/:timestamp", :to => "access#validate_access_token", :constraints => {:email => /[^\/]+/}, :as => :validate_access_token
     get "logout", :to => "access#logout_admin", :as => :logout

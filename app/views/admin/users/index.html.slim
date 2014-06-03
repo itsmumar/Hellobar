@@ -1,0 +1,14 @@
+= form_tag "/admin/users", :method => :get, :id => "admin-users-search" do
+  = text_field_tag "q", "", :class => "form-control", :placeholder => "Search users"
+
+h1 Users
+
+- if @users.empty?
+  h3
+    i none found
+
+- else
+  - @users.each do |user|
+    h3= user.email
+
+  = paginate @users
