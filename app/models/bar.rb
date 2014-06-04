@@ -1,5 +1,5 @@
 class Bar < ActiveRecord::Base
-  belongs_to :rule
+  belongs_to :rule_set
 
   validates :goal, presence: true
 

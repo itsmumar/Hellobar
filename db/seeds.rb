@@ -1,7 +1,9 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+site = Site.create url: 'wearepolymathic.com'
+user = User.create email: 'test@email.com',
+                   password: 'password'
+
+user.sites << site
+
+rule_set = site.rule_sets.create
+rule = rule_set.rules.create
+bar = rule_set.bars.create goal: "CollectEmail"

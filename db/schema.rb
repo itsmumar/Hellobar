@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140604164852) do
+ActiveRecord::Schema.define(version: 20140604173511) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20140604164852) do
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
 
   create_table "bars", force: true do |t|
-    t.integer  "rule_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "goal",                                                         null: false
@@ -72,10 +71,11 @@ ActiveRecord::Schema.define(version: 20140604164852) do
     t.string   "texture",            default: "none"
     t.string   "thank_you_text",     default: "Thank you for signing up!"
     t.boolean  "paused",             default: false
+    t.integer  "rule_set_id"
   end
 
   add_index "bars", ["goal"], name: "index_bars_on_goal", using: :btree
-  add_index "bars", ["rule_id"], name: "index_bars_on_rule_id", using: :btree
+  add_index "bars", ["rule_set_id"], name: "index_bars_on_rule_set_id", using: :btree
 
   create_table "internal_dimensions", force: true do |t|
     t.integer "person_id",              null: false
@@ -140,17 +140,23 @@ ActiveRecord::Schema.define(version: 20140604164852) do
 
   add_index "internal_reports", ["name"], name: "index_internal_reports_on_name", using: :btree
 
-  create_table "rules", force: true do |t|
+  create_table "rule_sets", force: true do |t|
+    t.datetime "end_date"
+    t.datetime "start_date"
+    t.text     "include_urls"
+    t.text     "exclude_urls"
     t.integer  "site_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "end_date"
-    t.datetime "start_date"
-    t.text     "exclude_urls"
-    t.text     "include_urls"
   end
 
-  add_index "rules", ["site_id"], name: "index_rules_on_site_id", using: :btree
+  add_index "rule_sets", ["site_id"], name: "index_rule_sets_on_site_id", using: :btree
+
+  create_table "rules", force: true do |t|
+    t.integer "rule_set_id"
+  end
+
+  add_index "rules", ["rule_set_id"], name: "index_rules_on_rule_set_id", using: :btree
 
   create_table "site_memberships", force: true do |t|
     t.integer  "user_id"
