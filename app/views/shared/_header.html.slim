@@ -2,7 +2,10 @@
   .container
     .row
       .col-md-4
-        = link_to "<h1></h1>".html_safe, root_path
+        - if current_user && active_site
+          = link_to "<h1></h1>".html_safe, site_path(active_site)
+        - else
+          = link_to "<h1></h1>".html_safe, root_path
 
       .col-md-8
         - if current_user

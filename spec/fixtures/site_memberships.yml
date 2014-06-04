@@ -2,3 +2,7 @@ zombo:
   site: zombo
   user: joey
   role: owner
+horsebike:
+  site: horsebike
+  user: joey
+  role: owner

@@ -58,4 +58,6 @@ end
 def stub_user(user)
   request.env['warden'].stub :authenticate! => user
   controller.stub :current_user => user
+
+  return user
 end
