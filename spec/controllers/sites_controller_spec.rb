@@ -23,13 +23,13 @@ describe SitesController do
   end
 
   describe "GET show" do
-    it "sets active_site session value" do
+    it "sets current_site session value" do
       stub_user(@user)
       site = @user.sites.last
 
       get :show, :id => site
 
-      session[:active_site].should == site.id
+      session[:current_site].should == site.id
     end
   end
 end

@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  helper_method :access_token, :current_admin, :impersonated_user, :active_site
+  helper_method :access_token, :current_admin, :impersonated_user, :current_site
 
   def access_token
     @access_token ||= Digest::SHA256.hexdigest(["hellobar", remote_ip, user_agent, access_cookie, "a776b"].join)
@@ -55,9 +55,9 @@ class ApplicationController < ActionController::Base
     current_admin && session[:impersonated_user] ? User.find_by_id(session[:impersonated_user]) : nil
   end
 
-  def active_site
-    if current_user && session[:active_site]
-      current_user.sites.where(:id => session[:active_site]).first || current_user.sites.first
+  def current_site
+    if current_user && session[:current_site]
+      current_user.sites.where(:id => session[:current_site]).first || current_user.sites.first
     elsif current_user
       current_user.sites.first
     else

@@ -22,7 +22,7 @@ class SitesController < ApplicationController
   end
 
   def show
-    session[:active_site] = @site.id
+    session[:current_site] = @site.id
   end
 
 
