@@ -152,6 +152,7 @@ describe ScriptGenerator, '#rule_sets' do
     rule_set = RuleSet.new id: 1
 
     site.stub rule_sets: [rule_set]
+    site.stub bars: []
 
     expected_hash = {
       bars: [],
