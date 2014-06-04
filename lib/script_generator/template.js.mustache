@@ -14,13 +14,13 @@ if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
   HB.extCSS = {{{hellobar_container_css}}};
 }
 
-{{#rules}}
+{{#rule_sets}}
   _hbq.push(function(){HB.addGoal(function(){
     {{> rule_eligibility}},
     [{{#bars}}{{{bar_json}}}{{/bars}}],
     {{priority}},
     {{{metadata}}}
   )});
-{{/rules}}
+{{/rule_sets}}
 
 _hbq = new HBQ();

@@ -51,29 +51,29 @@ class ScriptGenerator < Mustache
     end
   end
 
-  def rules
-    site.rules.map{|rule| hash_for_rule(rule) }
+  def rule_sets
+    site.rule_sets.map{|rule_set| hash_for_rule_set(rule_set) }
   end
 
 private
 
-  def hash_for_rule(rule)
+  def hash_for_rule_set(rule_set)
     {
-      bars: bars_for_rule(rule),
+      bars: bars_for_rule_set(rule_set),
       priority: 1, # seems to be hardcoded as 1 throughout WWW
-      metadata: metadata(rule).to_json
-    }.merge(eligibility_rules(rule))
+      metadata: metadata(rule_set).to_json
+    }.merge(eligibility_rules(rule_set))
   end
 
-  def eligibility_rules(rule)
+  def eligibility_rules(rule_set)
     if options[:disable_eligibility]
       {}
     else
       {
-        start_date: rule_start_date(rule),
-        end_date: rule_end_date(rule),
-        exclude_urls: rule.exclude_urls,
-        include_urls: rule.include_urls
+        start_date: rule_set_start_date(rule_set),
+        end_date: rule_set_end_date(rule_set),
+        exclude_urls: rule_set.exclude_urls,
+        include_urls: rule_set.include_urls
       }
     end
   end
@@ -94,12 +94,12 @@ private
     @content_footer ||= File.read("#{Rails.root}/lib/script_generator/bar_footer.html")
   end
 
-  def rule_start_date(rule)
-    rule.start_date.to_i if rule.start_date
+  def rule_set_start_date(rule_set)
+    rule_set.start_date.to_i if rule_set.start_date
   end
 
-  def rule_end_date(rule)
-    rule.end_date.to_i if rule.end_date
+  def rule_set_end_date(rule_set)
+    rule_set.end_date.to_i if rule_set.end_date
   end
 
   def bar_settings(bar)
@@ -112,21 +112,21 @@ private
     }).select{|key, value| value.present? }
   end
 
-  def rule_settings(rule)
+  def rule_set_settings(rule_set)
     settings = %w{ end_date start_date exclude_urls include_urls id }
 
-    rule.attributes.select{|key, value| settings.include?(key) }
+    rule_set.attributes.select{|key, value| settings.include?(key) }
   end
 
   # FIXME: if bar_id is present, bars will not be ennumerable
-  def bars_for_rule(rule)
+  def bars_for_rule_set(rule_set)
     bars = if options[:bar_id]
-      [rule.bars.find(options[:bar_id])]
+      [rule_set.bars.find(options[:bar_id])]
     else
       if options[:render_paused_bars]
-        rule.bars
+        rule_set.bars
       else
-        rule.bars.active
+        rule_set.bars.active
       end
     end
 
@@ -136,7 +136,7 @@ private
   # Previous metadata keys. TODO: figure this out.
   # ["url", "exclude_urls", "include_urls", "dates_timezone", "end_date", "start_date", "collect_names", "interaction", "interaction_description", "url_to_tweet", "pinterest_url", "pinterest_image_url", "pinterest_description", "message_to_tweet", "url_to_like", "url_to_share", "twitter_handle", "use_location_for_url", "url_to_plus_one", "pinterest_user_url", "pinterest_full_name", "buffer_message", "buffer_url"]
   # we killed the type key, so ignore from old generated script files
-  def metadata(rule)
-    rule_settings(rule).select{|k,v| v.present? }.with_indifferent_access
+  def metadata(rule_set)
+    rule_set_settings(rule_set).select{|k,v| v.present? }.with_indifferent_access
   end
 end
