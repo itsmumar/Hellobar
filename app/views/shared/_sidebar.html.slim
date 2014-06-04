@@ -7,15 +7,18 @@ ul
     li class="#{sidebar_link_class(:manage)}"
       span.glyphicon.glyphicon-align-justify
       | Manage
-  li class="#{sidebar_link_class(:improve)}"
-    span.glyphicon.glyphicon-signal
-    | Improve
-  li class="#{sidebar_link_class(:contacts)}"
-    span.glyphicon.glyphicon-envelope
-    | Contacts
-  li class="#{sidebar_link_class(:feedback)}"
-    span.glyphicon.glyphicon-comment
-    | Feedback
+  = sidebar_link_wrapper(:improve) do
+    li class="#{sidebar_link_class(:improve)}"
+      span.glyphicon.glyphicon-signal
+      | Improve
+  = sidebar_link_wrapper(:contacts) do
+    li class="#{sidebar_link_class(:contacts)}"
+      span.glyphicon.glyphicon-envelope
+      | Contacts
+  = sidebar_link_wrapper(:feedback) do
+    li class="#{sidebar_link_class(:feedback)}"
+      span.glyphicon.glyphicon-comment
+      | Feedback
 
 hr
 

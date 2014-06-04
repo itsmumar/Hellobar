@@ -25,7 +25,7 @@ module ApplicationHelper
     when :manage
       link_to(site_site_elements_path(@site)){ yield block }
     else
-      content
+      capture(&block)
     end
   end
 end
