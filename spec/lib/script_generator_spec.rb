@@ -150,9 +150,8 @@ describe ScriptGenerator, '#rule_sets' do
 
   it 'returns the proper array of hashes for a sites rule_sets' do
     rule_set = RuleSet.new id: 1
-
     site.stub rule_sets: [rule_set]
-    site.stub bars: []
+    generator.stub bars_for_rule_set: []
 
     expected_hash = {
       bars: [],
