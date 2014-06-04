@@ -9,6 +9,7 @@
 
   .row > div // bootstrap "col" divs
     height: 75px
+    z-index: 10
 
     > ul // top-level nav uls: site selection, logged-in right nav, logged-out right nav
       margin: 0
@@ -21,16 +22,24 @@
         a
           color: #fff
 
-  ul.dropdown-menu
-    border-radius: 0
-    border: 1px solid $dark-grey
-    top: 60px
+  ul#sites-dropdown, ul#navigation
+    ul.dropdown-menu
+      background-color: white
+      border-radius: 0
+      border: 1px solid $dark-grey
+      top: 60px
 
-    li
-      font-size: 1em
-
-      a
+      li
+        font-size: 1em
         color: $dark-grey
+        padding-right: 0
+
+        a
+          color: $dark-grey
+
+      form.button_to
+        text-align: center
+        margin: 10px 0
 
   h1#logo
     @include vertical-align
@@ -46,6 +55,9 @@
 
     li
       padding-right: 25px
+
+      .glyphicon-globe
+        padding-right: 5px
 
   ul#navigation.logged-out
     @include vertical-align
