@@ -21,4 +21,15 @@ describe SitesController do
       @user.role_for_site(site).should == :owner
     end
   end
+
+  describe "GET show" do
+    it "sets active_site session value" do
+      stub_user(@user)
+      site = @user.sites.last
+
+      get :show, :id => site
+
+      session[:active_site].should == site.id
+    end
+  end
 end

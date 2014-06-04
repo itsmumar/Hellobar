@@ -21,6 +21,10 @@ class SitesController < ApplicationController
     @site = Site.new
   end
 
+  def show
+    session[:active_site] = @site.id
+  end
+
 
   private
 
