@@ -1,4 +1,5 @@
 @import "variables"
+@import "mixins"
 
 .header-wrapper
   background-color: $orange
@@ -6,43 +7,59 @@
   border-bottom: 2px solid $light-orange
   margin-bottom: 10px
 
-  h1
+  .row > div // bootstrap "col" divs
+    height: 75px
+
+    > ul // top-level nav uls: site selection, logged-in right nav, logged-out right nav
+      margin: 0
+      padding: 0
+
+      > li
+        display: inline-block
+        font-size: 1.2em
+
+        a
+          color: #fff
+
+  ul.dropdown-menu
+    border-radius: 0
+    border: 1px solid $dark-grey
+    top: 60px
+
+    li
+      font-size: 1em
+
+      a
+        color: $dark-grey
+
+  h1#logo
+    @include vertical-align
+    margin: 0
     background: image-url("hellobar_logo_white.svg") no-repeat
     background-size: 100%
     width: 150px
-    height: 45px
-    margin: 15px 0 5px
+    height: 42px
     display: inline-block
 
-  ul#navigation
-    text-align: right
-    margin-top: 20px
+  ul#sites-dropdown
+    @include vertical-align
 
     li
-      display: inline-block
-      margin-left: 20px
-      font-size: 1.2em
+      padding-right: 25px
 
-    a
-      color: #fff
+  ul#navigation.logged-out
+    @include vertical-align
+    float: right
 
-    li.avatar img
-      border: 3px solid #fff
-      height: 50px
-      margin-top: -3px
+  ul#navigation
+    float: right
 
-  ul#navigation.logged-in-nav
-    margin-top: 13px
+    li
+      padding-left: 25px
 
-    ul.dropdown-menu
-      border-radius: 0
-      border: 1px solid $dark-grey
-      top: 60px
+    li.avatar
+      padding-top: 13px
 
-      li
-        display: inherit
-        margin-left: 0
-        font-size: 1em
-
-        a
-          color: $dark-grey
+      img
+        border: 3px solid #fff
+        height: 50px
