@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140603162125) do
+ActiveRecord::Schema.define(version: 20140604164852) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(version: 20140603162125) do
   create_table "sites", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "url"
+    t.string   "url"
   end
 
   create_table "users", force: true do |t|
