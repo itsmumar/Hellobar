@@ -1,14 +1,15 @@
 ul#sites-dropdown
   li
     span.glyphicon.glyphicon-globe
-    = current_site.url
+    = display_url_for_site(current_site)
   li.dropdown
     div#navigation-dropdown.dropdown-toggle data-toggle="dropdown"
       span.glyphicon.glyphicon-chevron-down
 
     ul.dropdown-menu.dropdown-menu-right role="menu" aria-labelledby="sites-dropdown"
-      li role="presentation"
-        = link_to "Settings", "#"
+      - if current_site
+        li role="presentation"
+          = link_to "Settings", edit_site_path(current_site)
 
       - if (current_user.sites - [current_site]).any?
         li role="presentation" class="divider"
@@ -17,7 +18,7 @@ ul#sites-dropdown
 
         - (current_user.sites - [current_site]).each do |site|
           li role="presentation"
-            = link_to site.url, site_path(site)
+            = link_to display_url_for_site(site), site_path(site)
 
       li role="presentation"
         = button_to "Add New Site", new_site_path, :class => "btn btn-border-primary", :method => :get

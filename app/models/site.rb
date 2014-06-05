@@ -18,12 +18,6 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def display_url
-    URI.parse(url).host
-  rescue URI::InvalidURIError
-    url
-  end
-
 
   private
 

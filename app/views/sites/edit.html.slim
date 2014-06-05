@@ -1,4 +1,4 @@
-h1 Create A New Site
+h1= "Settings for #{display_url_for_site(@site)}"
 
 = form_for @site do |f|
   .form-group
@@ -12,5 +12,4 @@ h1 Create A New Site
         | Send me a weekly email digest of this site's performance
 
   .form-group
-    = f.submit "Create Site", :class => "btn btn-primary"
-
+    = f.submit "Save", :class => "btn btn-primary"

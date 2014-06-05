@@ -7,7 +7,7 @@ class UserController < ApplicationController
   def update
     if @user.update_attributes(user_params)
       sign_in @user, :bypass => true
-      flash[:success] = "Your settings have been updated"
+      flash[:success] = "Your settings have been updated."
       redirect_to current_site ? site_path(current_site) : new_site_path
     else
       flash.now[:error] = "There was a problem updating your settings."

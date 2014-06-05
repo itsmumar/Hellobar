@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140605161938) do
+ActiveRecord::Schema.define(version: 20140605195609) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(version: 20140605161938) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "url"
+    t.boolean  "opted_in_to_email_digest", default: true
   end
 
   create_table "users", force: true do |t|
