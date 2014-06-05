@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   devise_for :users
   root "welcome#index"
 
+  get "profile", :to => "user#edit", :as => :profile
+  resource :user, :controller => :user, :only => [:update]
+
   resources :sites do
     resources :site_elements
   end

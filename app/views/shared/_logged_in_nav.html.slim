@@ -1,14 +1,16 @@
 ul#navigation
   li.avatar= avatar_tag(current_user, {}, {:class => "img-circle"})
-  li Sexton H.
+  li= display_name_for_user(current_user)
   li.dropdown
     div#navigation-dropdown.dropdown-toggle data-toggle="dropdown"
       span.glyphicon.glyphicon-chevron-down
 
     ul.dropdown-menu.dropdown-menu-right role="menu" aria-labelledby="navigation-dropdown"
+      li role="presentation"
+        = link_to "User Settings", profile_path, :role => "menuitem"
       - if impersonated_user
         li role="presentation"
           = link_to "Stop impersonating this user", admin_unimpersonate_user_path, :method => :delete, :role => "menuitem", :style => "color: red"
       - else
         li role="presentation"
-          = link_to "Log out", destroy_user_session_path, :method => :delete, :role => "menuitem"
+          = link_to "Sign Out", destroy_user_session_path, :method => :delete, :role => "menuitem"

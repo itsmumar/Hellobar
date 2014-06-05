@@ -17,13 +17,13 @@ module ApplicationHelper
   end
 
   def sidebar_link_wrapper(link, &block)
-    return(capture(&block)) unless @site && @site.persisted?
+    return(capture(&block)) unless current_site
 
     case link
     when :summary
-      link_to(site_path(@site)){ yield block }
+      link_to(site_path(current_site)){ yield block }
     when :manage
-      link_to(site_site_elements_path(@site)){ yield block }
+      link_to(site_site_elements_path(current_site)){ yield block }
     else
       capture(&block)
     end

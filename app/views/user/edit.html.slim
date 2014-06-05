@@ -1,0 +1,25 @@
+h1 User Settings
+
+= form_for @user, :url => user_path do |f|
+  .form-group
+    = f.label :email
+    = f.text_field :email, :class => "form-control"
+
+  .form-group
+    = f.label :first_name
+    = f.text_field :first_name, :class => "form-control"
+
+  .form-group
+    = f.label :last_name
+    = f.text_field :last_name, :class => "form-control"
+
+  .form-group
+    = f.label :password, "Change password"
+    = f.password_field :password, :class => "form-control"
+
+  .form-group
+    = f.label :password_confirmation, "Change password (confirm)"
+    = f.password_field :password_confirmation, :class => "form-control"
+
+  .form-group
+    = f.submit "Save", :class => "btn btn-primary"
