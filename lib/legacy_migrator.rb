@@ -5,8 +5,7 @@ class LegacyMigrator
   extend DateTimeConverter
 
   class << self
-
-    def migrate(table)
+    def migrate
       ActiveRecord::Base.record_timestamps = false
 
       migrate_sites_and_users_and_memberships
