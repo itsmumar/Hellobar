@@ -3,7 +3,7 @@ lock "3.2.1"
 set :application, "hellobar"
 set :repo_url, "git@github.com:PolymathicMedia/hellobar_new.git"
 set :deploy_to, "/mnt/deploy"
-set :linked_files, %w{config/database.yml config/secrets.yml}
+set :linked_files, %w{config/database.yml config/secrets.yml config/settings.yml}
 set :rails_env, "production"
 
 # Default branch is :master
