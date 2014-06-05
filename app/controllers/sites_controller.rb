@@ -10,8 +10,10 @@ class SitesController < ApplicationController
     if @site.valid?
       @site.save!
       SiteMembership.create!(:site => @site, :user => current_user)
+      flash[:success] = "Your site was successfully created."
       redirect_to site_path(@site)
     else
+      flash.now[:error] = "There was a problem creating your site."
       render :action => :new
     end
   end

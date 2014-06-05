@@ -1,0 +1,11 @@
+- unless flash[:success].blank?
+  div.alert.alert-success.alert-dismissable
+    button type="button" class="close" data-dismiss="alert" aria-hidden="true"
+      | &times;
+    = flash[:success]
+
+- unless flash[:error].blank?
+  div.alert.alert-danger.alert-dismissable
+    button type="button" class="close" data-dismiss="alert" aria-hidden="true"
+      | &times;
+    = flash[:error]
