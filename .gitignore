@@ -9,5 +9,8 @@
 /log/*.log
 /tmp
 
+config/settings.yml
+config/database.yml
+
 # Ignore personal TODO lists
 TODO

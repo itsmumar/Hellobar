@@ -1,8 +1,0 @@
-twilio_user: AC6d1435728386da362f91db10f365c980
-twilio_password: 9379825dafc9d32b47a2749f8368791e
-host: 127.0.0.1
-recaptcha_public_key: 6LcyUusSAAAAAAnnE-fggSmOGfvp0ec9wefRyeCK
-recaptcha_private_key: 6LcyUusSAAAAALFSwjWGklAQQ1hxR6PeXx1ACR05
-sendgrid_password: 87JRvGnLr9y4
-grand_central_api_key: 81da5be2385b31cf8e3b0d7ec3cd3a70960bdc59
-grand_central_api_secret: 06e1e701bda487359bc926315e8473441981ba19
