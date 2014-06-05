@@ -1,5 +1,5 @@
 require_relative './legacy_migrator/legacy_model'
-require_relative './legacy_migrator/date_time_helper'
+require_relative './legacy_migrator/date_time_converter'
 
 class LegacyMigrator
   extend DateTimeConverter
