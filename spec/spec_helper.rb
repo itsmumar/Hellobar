@@ -61,3 +61,5 @@ def stub_user(user)
 
   return user
 end
+
+Hellobar::Settings[:host] = "http://hellobar.com"
