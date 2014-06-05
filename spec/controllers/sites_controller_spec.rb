@@ -17,7 +17,7 @@ describe SitesController do
 
       site = @user.sites.last
 
-      site.url.should == "zombo.com"
+      site.url.should == "http://zombo.com"
       @user.role_for_site(site).should == :owner
     end
   end

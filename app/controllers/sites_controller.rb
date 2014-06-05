@@ -10,11 +10,10 @@ class SitesController < ApplicationController
     if @site.valid?
       @site.save!
       SiteMembership.create!(:site => @site, :user => current_user)
+      redirect_to site_path(@site)
     else
-      render_action :new
+      render :action => :new
     end
-
-    redirect_to site_path(@site)
   end
 
   def new
