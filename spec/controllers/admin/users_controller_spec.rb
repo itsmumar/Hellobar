@@ -9,7 +9,7 @@ describe Admin::UsersController do
 
   describe "POST impersonate" do
     it "allows the admin to impersonate a user" do
-      stub_admin(@admin)
+      stub_current_admin(@admin)
 
       post :impersonate, :id => users(:joey)
 
@@ -19,7 +19,7 @@ describe Admin::UsersController do
 
   describe "DELETE unimpersonate" do
     it "allows the admin to stop impersonating a user" do
-      stub_admin(@admin)
+      stub_current_admin(@admin)
 
       post :impersonate, :id => users(:joey)
 

@@ -51,11 +51,11 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
 end
 
-def stub_admin(admin)
+def stub_current_admin(admin)
   controller.stub :current_admin => admin
 end
 
-def stub_user(user)
+def stub_current_user(user)
   request.env['warden'].stub :authenticate! => user
   controller.stub :current_user => user
 

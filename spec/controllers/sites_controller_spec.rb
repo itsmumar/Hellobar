@@ -9,7 +9,7 @@ describe SitesController do
 
   describe "POST create" do
     it "allows a logged-in user to create a new site and sets him as the owner" do
-      stub_user(@user)
+      stub_current_user(@user)
 
       lambda {
         post :create, :site => {:url => "zombo.com"}
@@ -24,7 +24,7 @@ describe SitesController do
 
   describe "GET show" do
     it "sets current_site session value" do
-      stub_user(@user)
+      stub_current_user(@user)
       site = @user.sites.last
 
       get :show, :id => site

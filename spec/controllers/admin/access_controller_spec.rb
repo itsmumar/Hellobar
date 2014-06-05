@@ -9,7 +9,7 @@ describe Admin::AccessController do
 
   describe "POST do_reset_password" do
     it "resets the password and redirects the admin with correct parameters" do
-      stub_admin(@admin)
+      stub_current_admin(@admin)
       @admin.should_receive(:reset_password!).with("newpass123")
 
       post :do_reset_password, :existing_password => "password", :new_password => "newpass123", :new_password_again => "newpass123"
@@ -18,7 +18,7 @@ describe Admin::AccessController do
     end
 
     it "errors if the admin doesn't know their existing password" do
-      stub_admin(@admin)
+      stub_current_admin(@admin)
       @admin.should_receive(:reset_password!).never
 
       post :do_reset_password, :existing_password => "iforgetmypassword", :new_password => "newpass123", :new_password_again => "newpass123"
@@ -29,7 +29,7 @@ describe Admin::AccessController do
 
   describe "GET logout" do
     it "logs the admin out" do
-      stub_admin(@admin)
+      stub_current_admin(@admin)
       @admin.should_receive(:logout!)
 
       get :logout_admin

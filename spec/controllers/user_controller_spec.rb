@@ -9,7 +9,7 @@ describe UserController do
 
   describe "PUT update" do
     it "allows the user to change their password" do
-      stub_user(@user)
+      stub_current_user(@user)
       original_hash = @user.encrypted_password
 
       put :update, :user => {:password => "asdfffff", :password_confirmation => "asdfffff"}
@@ -18,7 +18,7 @@ describe UserController do
     end
 
     it "allows the user to change other settings with blank password params" do
-      stub_user(@user)
+      stub_current_user(@user)
 
       put :update, :user => {:first_name => "Sexton", :last_name => "Hardcastle", :password => "", :password_confirmation => ""}
 
