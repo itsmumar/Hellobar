@@ -8,12 +8,6 @@ database:
         username: ubuntu
         database: circle_ruby_test
         adapter: mysql2
-
-legacy_test:
-  host: localhost
-  username: ubuntu
-  database: circule_ruby_test
-  adapter: mysql2
       ' > config/database.yml
     - bundle exec rake db:create:all db:schema:load --trace
     - bundle exec rake db:setup --trace
