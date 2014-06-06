@@ -3,11 +3,13 @@ require 'spec_helper'
 describe Site do
   fixtures :all
 
+  it_behaves_like "an object with a valid url"
+
   it "is able to access its owner" do
     sites(:zombo).owner.should == users(:joey)
   end
 
-  describe "url validation" do
+  describe "url formatting" do
     it "adds the protocol if not present" do
       site = Site.new(:url => "zombo.com")
       site.valid?
@@ -24,12 +26,6 @@ describe Site do
       site.url.should == "http://zombo.com"
     end
 
-    it "requires a url" do
-      site = Site.new(:url => "")
-      site.should_not be_valid
-      site.errors[:url].should include("can't be blank")
-    end
-
     it "removes the path, if provided" do
       urls = %w(
         zombo.com/welcometozombocom
@@ -41,21 +37,6 @@ describe Site do
         site = Site.new(:url => url)
         site.valid?
         site.url.should == "http://zombo.com"
-      end
-    end
-
-    it "requires a url with a valid format" do
-      urls = %w(
-        lololol
-        1234
-        me@notaurl.com
-        ftp://warez.dfnet.org
-      )
-
-      urls.each do |url|
-        site = Site.new(:url => url)
-        site.should_not be_valid
-        site.errors[:url].should include("is invalid")
       end
     end
 
