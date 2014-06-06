@@ -4,8 +4,7 @@ class Site < ActiveRecord::Base
   has_many :site_memberships, dependent: :destroy
   has_many :users, through: :site_memberships
 
-  before_validation :add_protocol_to_url, :unless => lambda {|s| s.url =~ /^http(s)?:\/\// || s.url.blank?}
-  before_validation :strip_path_from_url, :unless => lambda {|s| s.url.blank?}
+  before_validation :standardize_url
 
   validates_with UrlValidator, url_field: :url
 
@@ -24,12 +23,9 @@ class Site < ActiveRecord::Base
 
   private
 
-  def add_protocol_to_url
-    self.url = "http://#{url}"
-  end
+  def standardize_url
+    url = Addressable::URI.heuristic_parse(self.url)
 
-  def strip_path_from_url
-    match = /^(http(s)?:\/\/)?[\w\.]+/.match(url)
-    self.url = match ? match[0] : ""
+    self.url = "#{url.scheme}://#{url.normalized_host}"
   end
 end

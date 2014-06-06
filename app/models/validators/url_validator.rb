@@ -5,12 +5,12 @@ class UrlValidator < ActiveModel::Validator
 
     record.errors.add(field, "can't be blank") unless url.present?
 
-    uri = URI.parse(url)
+    uri = Addressable::URI.parse(url)
 
     if uri.scheme.blank? || uri.host.blank? || url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
       record.errors.add(field, "is invalid")
     end
-  rescue URI::InvalidURIError
+  rescue Addressable::URI::InvalidURIError
     record.errors.add(field, "is invalid")
   end
 end

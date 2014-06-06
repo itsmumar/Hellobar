@@ -23,6 +23,7 @@ gem "slim-rails"
 gem "thin"
 gem "twilio-ruby"
 gem "uglifier", "2.0.1"
+gem 'addressable', "~> 2.3.6", :require => 'addressable/uri'
 
 group :development, :test do
   gem "debugger"
