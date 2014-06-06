@@ -7,8 +7,7 @@ class Site < ActiveRecord::Base
   before_validation :add_protocol_to_url, :unless => lambda {|s| s.url =~ /^http(s)?:\/\// || s.url.blank?}
   before_validation :strip_path_from_url, :unless => lambda {|s| s.url.blank?}
 
-  validates :url, :presence => true
-  validate :url_format_is_valid
+  validates_with UrlValidator, url_field: :url
 
   def owner
     if membership = site_memberships.where(:role => "owner").first
