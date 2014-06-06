@@ -32,14 +32,4 @@ class Site < ActiveRecord::Base
     match = /^(http(s)?:\/\/)?[\w\.]+/.match(url)
     self.url = match ? match[0] : ""
   end
-
-  def url_format_is_valid
-    uri = URI.parse(url)
-
-    if uri.scheme.blank? || uri.host.blank? || uri.host !~ /^\w+\.\w/ || url !~ /^(http(s)?:\/\/)?[\w\.]+$/
-      self.errors.add(:url, "is invalid")
-    end
-  rescue URI::InvalidURIError
-    self.errors.add(:url, "is invalid")
-  end
 end
