@@ -40,6 +40,7 @@ shared_examples "an object with a valid url" do
       http://zombo.com
       http://horse.bike
       http://madam-e.ru
+      http://ec2-174-129-140-89.compute-1.amazonaws.com
     )
 
     urls.each do |url|
