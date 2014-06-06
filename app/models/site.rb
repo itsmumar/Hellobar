@@ -18,6 +18,10 @@ class Site < ActiveRecord::Base
     end
   end
 
+  def has_script_installed?
+    false
+  end
+
 
   private
 

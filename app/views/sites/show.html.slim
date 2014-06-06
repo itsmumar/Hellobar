@@ -1,1 +1,4 @@
-h1= display_url_for_site(@site)
+- if @site.has_script_installed?
+  h1= display_url_for_site(@site)
+- else
+  = render :partial => "sites/install.html.slim"

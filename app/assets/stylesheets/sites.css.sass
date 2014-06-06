@@ -1,6 +1,25 @@
-// Place all the styles related to the sites controller here.
-// They will automatically be included in application.css.
-// You can use Sass here: http://sass-lang.com/
+@import "variables"
+@import "mixins"
 
 form#new_site, form.edit_site
   width: 400px
+
+.installation-panel
+  .panel-default
+    @include border-radius(0)
+    border: 2px solid $light-grey
+
+    .panel-heading
+      background-color: white
+
+      a
+        color: $orange
+
+      .installation-glyph
+        float: left
+        color: $orange
+        font-size: 2em
+        margin-left: 4px
+
+    .panel-collapse .panel-body
+      border-top: 0
