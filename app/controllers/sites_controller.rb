@@ -1,6 +1,8 @@
 class SitesController < ApplicationController
+  include SitesHelper
+
   before_filter :authenticate_user!
-  before_filter :load_site, :only => [:show, :edit, :update, :wordpress_plugin]
+  before_filter :load_site, :only => [:show, :edit, :update, :email_developer]
 
   layout "with_sidebar"
 
@@ -34,6 +36,24 @@ class SitesController < ApplicationController
       flash.now[:error] = "There was a problem updating your settings."
       render :action => :edit
     end
+  end
+
+  def email_developer
+    if params[:developer_email].blank?
+      flash[:error] = "Please enter your developer's email address."
+    else
+      email_params = {
+        :site_url => display_url_for_site(@site),
+        :script_url => @site.script_url,
+        :user_email => current_user.email
+      }
+
+      MailerGateway.send_email("Contact Developer 2", params[:developer_email], email_params)
+
+      flash[:success] = "We've sent the installation instructions to your developer!"
+    end
+
+    redirect_to site_path(@site)
   end
 
 

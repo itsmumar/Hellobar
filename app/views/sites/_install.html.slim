@@ -73,7 +73,30 @@
             .row
               .col-md-1
               .col-md-11
-                | Content here
+                = form_tag site_email_developer_path(@site), :class => "form-inline", :method => :post do |f|
+                  div.form-group.developer-email
+                    label To:
+                    = text_field_tag :developer_email, "", :class => "form-control", :placeholder => "Your developer's email address"
+                  p
+                    | From: 
+                    code Hello Bar &lt;contact@hellobar.com&gt;
+
+                  p
+                    | Subject: 
+                    code= "Please install Hello Bar on #{display_url_for_site(@site)}"
+
+                  p
+                    code= "I just created a Hello Bar for #{display_url_for_site(@site)} and I've asked Hello Bar to email you the instructions for installing it. All you need to do is add the following bit of JavaScript at the end of each page (right before the closing </body> tag):"
+                  p
+                    code= "<script type=\"text/javascript\" src=\"//#{@site.script_url}\"></script>"
+                  p
+                    code= "If you have any questions don't hesitate to email Hello Bar support at support@hellobar.com, or e-mail me at #{current_user.email}."
+                  p
+                    code= "Thank you!"
+
+                  div.form-group.pull-right
+                    = submit_tag "Send", :class => "btn btn-success"
+
 
       div class="panel panel-default"
         div class="panel-heading"

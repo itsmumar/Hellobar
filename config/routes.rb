@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get "profile", :to => "user#edit", :as => :profile
   resource :user, :controller => :user, :only => [:update]
 
+  post "sites/:id/email_developer", :to => "sites#email_developer", :as => :site_email_developer
   resources :sites do
     resource :wordpress_plugin, :controller => :wordpress_plugin
     resources :site_elements
