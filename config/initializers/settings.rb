@@ -18,5 +18,18 @@ unless defined?(Hellobar::Settings)
     config[key.to_sym] = yaml[key] || ENV[key.upcase]
   end
 
+  dynamo_tables = %w(
+    email
+    bar_current
+    bar_prev
+    bar_over_time
+  )
+
+  config[:dynamo_tables] = {}
+
+  dynamo_tables.each do |table|
+    config[:dynamo_tables][table.to_sym] = yaml["dynamo_tables"].try(:[], table) || "test_#{table}"
+  end
+
   Hellobar::Settings = config
 end

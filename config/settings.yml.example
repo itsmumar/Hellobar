@@ -6,3 +6,10 @@ recaptcha_private_key: recaptcha-private-key
 sendgrid_password: sendgrid-password
 grand_central_api_key: grand-central-api-key
 grand_central_api_secret: grand-central-api-secret
+aws_access_key_id: aws-access-key-id
+aws_secret_access_key: aws-secret-access-key
+dynamo_tables:
+  email: "env_emails"
+  bar_current: "env_current"
+  bar_prev: "env_previous"
+  bar_over_time: "env_over_time"
