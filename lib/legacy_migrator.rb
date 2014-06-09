@@ -4,6 +4,10 @@ require_relative './legacy_migrator/date_time_converter'
 class LegacyMigrator
   extend DateTimeConverter
 
+  class User < ActiveRecord::Base
+    def password_required?; false; end
+  end
+
   class << self
     def migrate
       ActiveRecord::Base.record_timestamps = false
@@ -15,7 +19,9 @@ class LegacyMigrator
     end
 
     def migrate_sites_and_users_and_memberships
+      count = 0
       LegacySite.find_each do |legacy_site|
+        begin
         site = Site.create! id: legacy_site.legacy_site_id || legacy_site.id,
                             url: legacy_site.base_url,
                             created_at: legacy_site.created_at,
@@ -23,6 +29,12 @@ class LegacyMigrator
 
         create_user_and_membership legacy_site_id: site.id,
                                    account_id: legacy_site.account_id
+
+        count += 1
+        puts "Migrated #{count} sites" if count % 100 == 0
+        rescue ActiveRecord::RecordInvalid => e
+          raise e.inspect
+        end
       end
     end
 
@@ -45,7 +57,7 @@ class LegacyMigrator
             rule_set.bars << new_bar
           end
         else
-          Rails.logger.info "WTF: Site ID: #{legacy_goal.site_id} doesnt exist for Goal #{legacy_goal.id}"
+          Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal:#{legacy_goal.id}"
         end
       end
     end
@@ -57,26 +69,35 @@ class LegacyMigrator
       legacy_memberships = legacy_account.memberships
 
       if legacy_memberships.size != 1
-        Rails.logger.info "WTF: #{legacy_memberships.size} memberships for #{account_id}" if legacy_memberships.size != 1
+        Rails.logger.info "WTF:Legacy Membership has #{legacy_memberships.size} memberships for Account:#{account_id}" if legacy_memberships.size != 1
       else
         legacy_membership = legacy_memberships.first
         legacy_user = legacy_membership.user
 
-        user = User.create! id: legacy_user.legacy_user_id || legacy_user.id,
-                            email: legacy_user.email,
-                            encrypted_password: legacy_user.encrypted_password,
-                            reset_password_token: legacy_user.reset_password_token,
-                            reset_password_sent_at: legacy_user.reset_password_sent_at,
-                            remember_created_at: legacy_user.remember_created_at,
-                            sign_in_count: legacy_user.sign_in_count,
-                            current_sign_in_at: legacy_user.current_sign_in_at,
-                            last_sign_in_at: legacy_user.last_sign_in_at,
-                            current_sign_in_ip: legacy_user.current_sign_in_ip,
-                            last_sign_in_ip: legacy_user.last_sign_in_ip,
-                            created_at: legacy_user.original_created_at || legacy_user.created_at
+        if legacy_user
+          begin
+          user = User.create! id: legacy_user.legacy_user_id || legacy_user.id,
+                              email: legacy_user.email,
+                              encrypted_password: legacy_user.encrypted_password,
+                              reset_password_token: legacy_user.reset_password_token,
+                              reset_password_sent_at: legacy_user.reset_password_sent_at,
+                              remember_created_at: legacy_user.remember_created_at,
+                              sign_in_count: legacy_user.sign_in_count,
+                              current_sign_in_at: legacy_user.current_sign_in_at,
+                              last_sign_in_at: legacy_user.last_sign_in_at,
+                              current_sign_in_ip: legacy_user.current_sign_in_ip,
+                              last_sign_in_ip: legacy_user.last_sign_in_ip,
+                              created_at: legacy_user.original_created_at || legacy_user.created_at
 
-        SiteMembership.create! user_id: user.id,
-                               site_id: legacy_site_id
+          SiteMembership.create! user_id: user.id,
+                                 site_id: legacy_site_id
+
+          rescue ActiveRecord::RecordNotUnique => e
+            Rails.logger.info "WTF:Error creating New user:#{e}"
+          end
+        else
+          Rails.logger.info "WTF:No user found for Legacy Membership id:#{legacy_membership.id}"
+        end
       end
     end
 

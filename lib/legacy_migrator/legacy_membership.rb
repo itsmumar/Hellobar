@@ -2,7 +2,6 @@ class LegacyMigrator
   class LegacyMembership < LegacyModel
     self.table_name = 'memberships'
 
-    belongs_to :account
-    belongs_to :user
+    belongs_to :user, class_name: 'LegacyUser'
   end
 end
