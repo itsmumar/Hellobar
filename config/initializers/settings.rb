@@ -12,6 +12,8 @@ unless defined?(Hellobar::Settings)
     sendgrid_password
     grand_central_api_key
     grand_central_api_secret
+    aws_access_key_id
+    aws_secret_access_key
   )
 
   keys.each do |key|
