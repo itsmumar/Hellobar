@@ -39,7 +39,22 @@
             .row
               .col-md-1
               .col-md-11
-                | Content here
+                p
+                  | 1. Download Your Plugin
+                  br
+                  = button_to "#", :method => :get, :class => "btn btn-success" do
+                    span class='glyphicon glyphicon-file'
+                    |  Download
+
+                p
+                  | 2. Install Your Plugin
+                  br
+                  small= "Now you just need to install the .zip file you downloaded it by uploading it to your WordPress site. The plugin was preconfigured specifically for your site (#{@site.url}). After you install and activate there are no settings to adjust!"
+
+                p
+                  | Need More Help?
+                  br
+                  small= "Try reading these #{link_to "helpful instructions for installing plugins on WordPress", "http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation"}.".html_safe
 
       div class="panel panel-default"
         div class="panel-heading"
