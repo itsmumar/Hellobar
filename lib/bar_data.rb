@@ -194,8 +194,8 @@ module Hello
       def connect!(now=nil)
         return if Rails.env.development?
         @@dynamo_db = AWS::DynamoDB.new(
-          :access_key_id => Hellobar::Settings[:amazon_access_key_id],
-          :secret_access_key => Hellobar::Settings[:amazon_secret_access_key]
+          :access_key_id => Hellobar::Settings[:aws_access_key_id],
+          :secret_access_key => Hellobar::Settings[:aws_secret_access_key]
         )
 
         now = Time.current.utc unless now
