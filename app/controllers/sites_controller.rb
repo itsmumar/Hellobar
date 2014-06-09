@@ -1,6 +1,6 @@
 class SitesController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :load_site, :only => [:show, :edit, :update]
+  before_filter :load_site, :only => [:show, :edit, :update, :wordpress_plugin]
 
   layout "with_sidebar"
 

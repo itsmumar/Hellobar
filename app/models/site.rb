@@ -16,8 +16,14 @@ class Site < ActiveRecord::Base
     end
   end
 
+  # TODO: implement
   def has_script_installed?
     false
+  end
+
+  # TODO: implement
+  def script_url
+    "s3.amazonaws.com/bucket_name/script_name"
   end
 
 

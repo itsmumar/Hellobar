@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resource :user, :controller => :user, :only => [:update]
 
   resources :sites do
+    resource :wordpress_plugin, :controller => :wordpress_plugin
     resources :site_elements
   end
 

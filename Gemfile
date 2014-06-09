@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "addressable", "~> 2.3.6", :require => "addressable/uri"
 gem "avatar"
 gem "bootstrap-sass", "~> 3.1.1"
 gem "capistrano", "~> 3.1"
@@ -18,12 +19,13 @@ gem "psych"
 gem "rails", "4.1.1"
 gem "rb-readline"
 gem "recaptcha", :require => "recaptcha/rails"
+gem "render_anywhere"
 gem "sass-rails", "~> 4.0.3"
 gem "slim-rails"
 gem "thin"
 gem "twilio-ruby"
 gem "uglifier", "2.0.1"
-gem 'addressable', "~> 2.3.6", :require => 'addressable/uri'
+gem "zip"
 
 group :development, :test do
   gem "debugger"
