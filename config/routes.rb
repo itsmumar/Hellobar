@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     resources :site_elements
   end
 
-  %w(email_developer).each do |sub|
+  %w(email_developer generic_message).each do |sub|
     post "/contact_submissions/#{sub}", :to => "contact_submissions##{sub}", :as => "#{sub}_contact_submission"
   end
 

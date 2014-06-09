@@ -114,6 +114,17 @@
             .row
               .col-md-1
               .col-md-11
-                | Content here
+                p How can we help?
+                p Just fill out the form below and we'll get back to you as soon as we can.
+
+                = form_tag generic_message_contact_submission_path, :class => "form-inline", :method => :post do |f|
+                  = hidden_field_tag :site_id, @site.id
+                  = hidden_field_tag :return_to, site_path(@site)
+
+                  div.form-group.generic-message
+                    = text_area_tag :message, "", :class => "form-control"
+
+                  div.form-group.pull-right
+                    = submit_tag "Send", :class => "btn btn-success"
 
   .col-md-2
