@@ -73,7 +73,8 @@
             .row
               .col-md-1
               .col-md-11
-                = form_tag site_email_developer_path(@site), :class => "form-inline", :method => :post do |f|
+                = form_tag email_developer_contact_submission_path, :class => "form-inline", :method => :post do |f|
+                  = hidden_field_tag :site_id, @site.id
                   div.form-group.developer-email
                     label To:
                     = text_field_tag :developer_email, "", :class => "form-control", :placeholder => "Your developer's email address"

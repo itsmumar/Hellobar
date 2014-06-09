@@ -5,10 +5,13 @@ Rails.application.routes.draw do
   get "profile", :to => "user#edit", :as => :profile
   resource :user, :controller => :user, :only => [:update]
 
-  post "sites/:id/email_developer", :to => "sites#email_developer", :as => :site_email_developer
   resources :sites do
     resource :wordpress_plugin, :controller => :wordpress_plugin
     resources :site_elements
+  end
+
+  %w(email_developer).each do |sub|
+    post "/contact_submissions/#{sub}", :to => "contact_submissions##{sub}", :as => "#{sub}_contact_submission"
   end
 
   get "/admin", :to => "admin#index", :as => :admin
