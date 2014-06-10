@@ -2,11 +2,10 @@ class ScriptGenerator < Mustache
   self.template_path = "#{Rails.root}/lib/script_generator/"
   self.template_file = "#{Rails.root}/lib/script_generator/template.js.mustache"
 
-  attr_reader :site, :config, :options
+  attr_reader :site, :options
 
-  def initialize(site, config, options={})
+  def initialize(site, options={})
     @site = site
-    @config = config
     @options = options
   end
 
@@ -23,7 +22,7 @@ class ScriptGenerator < Mustache
   end
 
   def hb_backend_host
-    config.hb_backend_host
+    Hellobar::Settings[:tracking_host]
   end
 
   def hellobar_base_js

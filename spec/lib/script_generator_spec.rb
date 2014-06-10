@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe ScriptGenerator, '#render' do
   let(:site) { double 'site', id: '1337', rule_sets: [], bars: [] }
-  let(:config) { double 'config', hb_backend_host: 'backend_host' }
-  let(:generator) { ScriptGenerator.new(site, config) }
+  let(:generator) { ScriptGenerator.new(site) }
 
   it 'renders the site it variable' do
     expected_string = "var HB_SITE_ID = #{site.id};"
@@ -12,7 +11,8 @@ describe ScriptGenerator, '#render' do
   end
 
   it 'renders the backend host variable' do
-    expected_string = "HB_BACKEND_HOST = \"#{config.hb_backend_host}\";"
+    Hellobar::Settings.stub(:[]).with(:tracking_host).and_return("hi-there.hellobar.com")
+    expected_string = "HB_BACKEND_HOST = \"hi-there.hellobar.com\";"
 
     generator.render.should include(expected_string)
   end
@@ -60,7 +60,7 @@ describe ScriptGenerator, '#render' do
 
   context 'when rule_sets are present' do
     it 'does not return any eligibility rule_sets when eligibility is disabled' do
-      generator = ScriptGenerator.new site, config, { :disable_eligibility => true }
+      generator = ScriptGenerator.new(site, { :disable_eligibility => true })
       rule_set = RuleSet.new start_date: 1_000, end_date: 2_000, include_urls: ['url'], exclude_urls: ['other url']
       site.stub rule_sets: [rule_set]
 
@@ -145,8 +145,7 @@ end
 
 describe ScriptGenerator, '#rule_sets' do
   let(:site) { double 'site', id: '1337', rule_sets: [], bars: [] }
-  let(:config) { double 'config', hb_backend_host: 'backend_host' }
-  let(:generator) { ScriptGenerator.new(site, config) }
+  let(:generator) { ScriptGenerator.new(site) }
 
   it 'returns the proper array of hashes for a sites rule_sets' do
     rule_set = RuleSet.new id: 1
@@ -171,7 +170,7 @@ describe ScriptGenerator, '#rule_sets' do
     bar = Bar.create goal: 'email', rule_set: rule_set
     options = { bar_id: bar.id }
 
-    generator = ScriptGenerator.new(site, config, options)
+    generator = ScriptGenerator.new(site, options)
     generator.stub bar_settings: {id: bar.id, template_name: bar.goal}
 
     site.stub rule_sets: [rule_set]
@@ -193,7 +192,7 @@ describe ScriptGenerator, '#rule_sets' do
     rule_set = RuleSet.create
     bar = Bar.create goal: 'email', rule_set: rule_set, paused: true
     options = { render_paused_bars: true }
-    generator = ScriptGenerator.new(site, config, options)
+    generator = ScriptGenerator.new(site, options)
     generator.stub bar_settings: { id: bar.id, template_name: bar.goal }
 
     site.stub rule_sets: [rule_set]
@@ -215,7 +214,7 @@ describe ScriptGenerator, '#rule_sets' do
     rule_set = RuleSet.create
     paused = Bar.create goal: 'email', rule_set: rule_set, paused: true
     active_bar = Bar.create goal: 'not paused', rule_set: rule_set, paused: false
-    generator = ScriptGenerator.new(site, config)
+    generator = ScriptGenerator.new(site)
     generator.stub bar_settings: { id: active_bar.id, template_name: active_bar.goal }
 
     site.stub rule_sets: [rule_set]
@@ -236,7 +235,7 @@ end
 
 describe ScriptGenerator, '#generate_script' do
   it 'does not compress the template if the compress option is not set' do
-    generator = ScriptGenerator.new('site', 'config')
+    generator = ScriptGenerator.new('site')
     generator.stub :render => 'template'
 
     Uglifier.should_not_receive(:new)
@@ -246,7 +245,7 @@ describe ScriptGenerator, '#generate_script' do
   end
 
   it 'compresses the template when the compress option is true' do
-    generator = ScriptGenerator.new('site', 'config', { compress: true })
+    generator = ScriptGenerator.new('site', { compress: true })
     generator.stub :render => 'template'
 
     uglifier = Uglifier.new
