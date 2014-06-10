@@ -52,7 +52,7 @@ describe ScriptGenerator, '#render' do
       template = { name: 'yey name', markup: 'yey markup' }
       generator.stub templates: [template]
 
-      expected_string = "HB.setTemplate(\"yey name\", 'yey markup');"
+      expected_string = "HB.setTemplate(\"yey name\", yey markup);"
 
       generator.render.should include(expected_string)
     end

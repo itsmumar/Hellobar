@@ -7,7 +7,7 @@ HB_BACKEND_HOST = "{{hb_backend_host}}";
 if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
   HB = _HB;
   {{#templates}}
-    HB.setTemplate("{{name}}", '{{{markup}}}');
+    HB.setTemplate("{{name}}", {{{markup}}});
   {{/templates}}
 
   HB.addCSS({{{hellobar_base_css}}});

@@ -78,7 +78,11 @@ private
   end
 
   def content_template(goal)
-    (content_header << content_markup(goal) << content_footer)
+    ActiveSupport.escape_html_entities_in_json = false
+    content = (content_header << content_markup(goal) << content_footer).to_json
+    ActiveSupport.escape_html_entities_in_json = true
+
+    content
   end
 
   def content_header
