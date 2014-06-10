@@ -26,6 +26,10 @@ class Site < ActiveRecord::Base
     "s3.amazonaws.com/bucket_name/script_name"
   end
 
+  def script_content(compress = true)
+    ScriptGenerator.new(self, :compress => compress).generate_script
+  end
+
 
   private
 

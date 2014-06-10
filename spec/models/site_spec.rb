@@ -56,4 +56,23 @@ describe Site do
       end
     end
   end
+
+  describe "script_content" do
+    it "generates the contents of the script for a site" do
+      site = sites(:zombo)
+      script = site.script_content(false)
+
+      script.should =~ /HB_SITE_ID/
+      script.should include(site.bars.first.id.to_s)
+    end
+
+    it "generates the compressed contents of the script for a site" do
+      pending
+      site = sites(:zombo)
+      script = site.script_content
+
+      script.should =~ /HB_SITE_ID/
+      script.should include(site.bars.first.id.to_s)
+    end
+  end
 end
