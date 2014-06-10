@@ -67,7 +67,6 @@ describe Site do
     end
 
     it "generates the compressed contents of the script for a site" do
-      pending
       site = sites(:zombo)
       script = site.script_content
 
