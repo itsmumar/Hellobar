@@ -21,9 +21,13 @@ class Site < ActiveRecord::Base
     false
   end
 
-  # TODO: implement
   def script_url
-    "s3.amazonaws.com/bucket_name/script_name"
+    "s3.amazonaws.com/#{Hellobar::Settings[:s3_bucket]}/#{script_name}"
+  end
+
+  def script_name
+    raise "script_name requires ID" unless persisted?
+    "#{Digest::SHA1.hexdigest("bar#{id}cat")}.js"
   end
 
   def script_content(compress = true)
