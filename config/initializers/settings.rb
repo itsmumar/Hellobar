@@ -16,6 +16,7 @@ unless defined?(Hellobar::Settings)
     aws_secret_access_key
     s3_bucket
     tracking_host
+    env_name
   )
 
   keys.each do |key|

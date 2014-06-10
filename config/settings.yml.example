@@ -10,6 +10,7 @@ aws_access_key_id: aws-access-key-id
 aws_secret_access_key: aws-secret-access-key
 s3_bucket: scripts-test.hellobar.com
 tracking_host: hi-dev.hellobar.com
+env_name: env-name
 dynamo_tables:
   email: "env_emails"
   bar_current: "env_current"
