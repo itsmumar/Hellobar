@@ -1,4 +1,6 @@
 class Site < ActiveRecord::Base
+  include GuaranteedQueue::Delay
+
   has_many :rule_sets
   has_many :bars, through: :rule_sets
   has_many :site_memberships, dependent: :destroy
@@ -34,6 +36,13 @@ class Site < ActiveRecord::Base
     ScriptGenerator.new(self, :compress => compress).generate_script
   end
 
+  def generate_script
+    delay :generate_static_assets
+  end
+
+
+  private
+
   def generate_static_assets(options = {})
     update_attribute(:script_attempted_to_generate_at, Time.now)
 
@@ -44,9 +53,6 @@ class Site < ActiveRecord::Base
 
     update_attribute(:script_generated_at, Time.now)
   end
-
-
-  private
 
   def standardize_url
     url = Addressable::URI.heuristic_parse(self.url)

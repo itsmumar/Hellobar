@@ -85,7 +85,7 @@ describe Site do
       mock_storage.should_receive(:create_or_update_file_with_contents).with(script_name, script_content)
       Hello::AssetStorage.stub(:new => mock_storage)
 
-      site.generate_static_assets
+      site.generate_script
     end
   end
 end
