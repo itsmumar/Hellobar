@@ -34,6 +34,17 @@ class Site < ActiveRecord::Base
     ScriptGenerator.new(self, :compress => compress).generate_script
   end
 
+  def generate_static_assets(options = {})
+    update_attribute(:script_attempted_to_generate_at, Time.now)
+
+    Timeout::timeout(20) do
+      generated_script_content = script_content(true)
+      Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
+    end
+
+    update_attribute(:script_generated_at, Time.now)
+  end
+
 
   private
 

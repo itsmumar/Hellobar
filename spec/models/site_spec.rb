@@ -57,7 +57,7 @@ describe Site do
     end
   end
 
-  describe "script_content" do
+  describe "#script_content" do
     it "generates the contents of the script for a site" do
       site = sites(:zombo)
       script = site.script_content(false)
@@ -72,6 +72,20 @@ describe Site do
 
       script.should =~ /HB_SITE_ID/
       script.should include(site.bars.first.id.to_s)
+    end
+  end
+
+  describe "#generate_static_assets" do
+    it "generates and uploads the script content for a site" do
+      site = sites(:zombo)
+      script_content = site.script_content(true)
+      script_name = site.script_name
+
+      mock_storage = double("asset_storage")
+      mock_storage.should_receive(:create_or_update_file_with_contents).with(script_name, script_content)
+      Hello::AssetStorage.stub(:new => mock_storage)
+
+      site.generate_static_assets
     end
   end
 end
