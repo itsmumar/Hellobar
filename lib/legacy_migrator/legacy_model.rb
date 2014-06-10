@@ -1,7 +1,7 @@
 class LegacyMigrator
   class LegacyModel < ActiveRecord::Base
     self.abstract_class = true
-    establish_connection "legacy_#{Rails.env}".to_sym
+    establish_connection Rails.env.test? ? :test : "legacy_#{Rails.env}".to_sym
   end
 end
 
