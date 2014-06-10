@@ -14,6 +14,7 @@ unless defined?(Hellobar::Settings)
     grand_central_api_secret
     aws_access_key_id
     aws_secret_access_key
+    s3_bucket
   )
 
   keys.each do |key|

@@ -64,3 +64,5 @@ def stub_current_user(user)
 end
 
 Hellobar::Settings[:host] = "http://hellobar.com"
+
+Fog.mock!
