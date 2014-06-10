@@ -1,7 +1,12 @@
 class LegacyMigrator
   class LegacyModel < ActiveRecord::Base
     self.abstract_class = true
-    establish_connection Rails.env.test? ? :test : "legacy_#{Rails.env}".to_sym
+
+    begin
+      establish_connection "legacy_#{Rails.env}".to_sym
+    rescue ActiveRecord::AdapterNotSpecified
+      Rails.logger.warn "database legacy_#{Rails.env} does not exist"
+    end
   end
 end
 
