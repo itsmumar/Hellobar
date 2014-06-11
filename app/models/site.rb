@@ -8,6 +8,8 @@ class Site < ActiveRecord::Base
 
   before_validation :standardize_url
 
+  after_commit :generate_script
+
   validates_with UrlValidator, url_field: :url
 
   def owner
