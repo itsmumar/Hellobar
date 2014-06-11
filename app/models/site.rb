@@ -47,6 +47,10 @@ class Site < ActiveRecord::Base
     delay :generate_blank_static_assets
   end
 
+  def get_all_time_data
+    @all_time_data ||= Hello::BarData.get_all_time_data(id)
+  end
+
   private
 
   def generate_static_assets(options = {})

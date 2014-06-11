@@ -161,7 +161,7 @@ module Hello
       end
 
       def check_connection
-        if @@connected_at
+        if defined?(@@connected_at)
           now = Time.current.utc
           if now - @@connected_at > 60*60 # Been an hour since we connected
             connect!(now)
@@ -177,7 +177,6 @@ module Hello
       end
 
       def get_table_name(key)
-        return if Rails.env.development?
         table_name = Hellobar::Settings[:dynamo_tables][key.to_sym]
         raise "No table named #{key} in tables #{Hellobar::Settings[:dynamo_tables].keys.inspect}" unless table_name
         {
@@ -192,7 +191,6 @@ module Hello
       end
 
       def connect!(now=nil)
-        return if Rails.env.development?
         @@dynamo_db = AWS::DynamoDB.new(
           :access_key_id => Hellobar::Settings[:aws_access_key_id],
           :secret_access_key => Hellobar::Settings[:aws_secret_access_key]
