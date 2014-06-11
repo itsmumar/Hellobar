@@ -47,7 +47,6 @@ class Site < ActiveRecord::Base
     delay :generate_blank_static_assets
   end
 
-
   private
 
   def generate_static_assets(options = {})
