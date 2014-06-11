@@ -88,4 +88,14 @@ describe Site do
       site.generate_script
     end
   end
+
+  it "blanks-out the site script when destroyed" do
+    site = sites(:zombo)
+
+    mock_storage = double("asset_storage")
+    mock_storage.should_receive(:create_or_update_file_with_contents).with(site.script_name, "")
+    Hello::AssetStorage.stub(:new => mock_storage)
+
+    site.destroy
+  end
 end

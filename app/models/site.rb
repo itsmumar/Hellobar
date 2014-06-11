@@ -9,6 +9,7 @@ class Site < ActiveRecord::Base
   before_validation :standardize_url
 
   after_commit :generate_script
+  before_destroy :blank_out_script
 
   validates_with UrlValidator, url_field: :url
 
@@ -42,6 +43,10 @@ class Site < ActiveRecord::Base
     delay :generate_static_assets
   end
 
+  def blank_out_script
+    delay :generate_blank_static_assets
+  end
+
 
   private
 
@@ -49,11 +54,15 @@ class Site < ActiveRecord::Base
     update_attribute(:script_attempted_to_generate_at, Time.now)
 
     Timeout::timeout(20) do
-      generated_script_content = script_content(true)
+      generated_script_content = options[:script_content] || script_content(true)
       Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
     end
 
     update_attribute(:script_generated_at, Time.now)
+  end
+
+  def generate_blank_static_assets
+    generate_static_assets(:script_content => "")
   end
 
   def standardize_url
