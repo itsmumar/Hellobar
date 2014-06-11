@@ -37,6 +37,7 @@ group :development, :test do
   gem "minitest"
   gem "pry"
   gem "rspec-rails", "~> 2.14"
+  gem "autotest-rails"
 end
 
 group :test do
