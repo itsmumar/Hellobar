@@ -134,4 +134,61 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
 end
 
 describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
+  let(:start_date) { '2013-12-01' }
+  let(:end_date) { '2014-06-05' }
+  let(:legacy_goal) { LegacyMigrator::LegacyGoal.new id: 12345, site_id: legacy_site.id, data_json: { 'start_date' => start_date, 'end_date' => end_date, 'dates_timezone' => '(GMT-06:00) Central Time (US & Canada)' }, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic" }
+  let(:legacy_site) { double 'legacy_site', id: 123 }
+  let(:bar_settings) { { 'message' => 'goes here' } }
+  let(:legacy_bar) { double 'legacy_bar', legacy_bar_id: 123, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: 'legacy_goal.id', settings_json: bar_settings }
+
+  before do
+    Site.stub :exists? => true
+    legacy_goal.stub bars: [legacy_bar]
+    LegacyMigrator::LegacyGoal.should_receive(:find_each).and_yield(legacy_goal)
+  end
+
+  it 'doesnt create a new ruleset if the goal belongs to a site that doesnt exist' do
+    Site.stub :exists? => false
+
+    expect {
+      LegacyMigrator.migrate_goals_to_rule_sets
+    }.to_not change(RuleSet, :count)
+  end
+
+  it 'creates a new rule set with the proper attributes' do
+    expect {
+      LegacyMigrator.migrate_goals_to_rule_sets
+    }.to change(RuleSet, :count).by(1)
+
+    rule_set = RuleSet.find(legacy_goal.id)
+
+    rule_set.id.should == legacy_goal.id
+    rule_set.site_id.should == legacy_site.id
+    rule_set.start_date.to_s.should == DateTime.parse(start_date + " 00:00:00 (GMT-06:00) Central Time (US & Canada)").to_time.utc.to_s
+    rule_set.end_date.to_s.should == DateTime.parse(end_date + " 23:59:59 (GMT-06:00) Central Time (US & Canada)").to_time.utc.to_s
+    rule_set.include_urls.should == legacy_goal.data_json['include_urls']
+    rule_set.exclude_urls.should == legacy_goal.data_json['exclude_urls']
+    rule_set.created_at.to_s.should == legacy_goal.created_at.to_s
+    rule_set.updated_at.to_s.should == legacy_goal.updated_at.to_s
+  end
+
+  it 'creates a new bar for every legacy bar that exists' do
+    expect {
+      LegacyMigrator.migrate_goals_to_rule_sets
+    }.to change(Bar, :count).by(1)
+  end
+
+  it 'associates all newly created bars with the new rule set' do
+    LegacyMigrator.migrate_goals_to_rule_sets
+
+    RuleSet.find(legacy_goal.id).bars.count.should == 1
+  end
+
+  it 'standardizes the legacy goal type' do
+    LegacyMigrator.migrate_goals_to_rule_sets
+
+    bar = RuleSet.find(legacy_goal.id).bars.first
+
+    bar.goal.should == 'DirectTraffic'
+  end
 end

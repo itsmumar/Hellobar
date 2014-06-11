@@ -4,10 +4,6 @@ require_relative './legacy_migrator/date_time_converter'
 class LegacyMigrator
   extend DateTimeConverter
 
-  class ::User < ActiveRecord::Base
-    def password_required?; false; end
-  end
-
   class << self
     def migrate
       ActiveRecord::Base.record_timestamps = false
@@ -46,15 +42,15 @@ class LegacyMigrator
     # - NOT CURRENTLY IMPORTING FROM DATA_JSON:
     #   - ["url", "collect_names", "interaction", "interaction_description", "url_to_tweet", "pinterest_url", "pinterest_image_url", "pinterest_description", "message_to_tweet", "url_to_like", "url_to_share", "twitter_handle", "use_location_for_url", "url_to_plus_one", "pinterest_user_url", "pinterest_full_name", "buffer_message", "buffer_url"]
       LegacyGoal.find_each do |legacy_goal|
-        if ::Site.exist?(legacy_goal.site_id)
-          rule_set = ::RuleSet.create id: legacy_goal.id,
-                                      site_id: legacy_goal.site_id,
-                                      start_date: convert_start_date(legacy_goal.data_json['start_date'], legacy_goal.data_json['dates_timezone']),
-                                      end_date: convert_end_date(legacy_goal.data_json['end_date'], legacy_goal.data_json['dates_timezone']),
-                                      include_urls: legacy_goal.data_json['include_urls'],
-                                      exclude_urls: legacy_goal.data_json['exclude_urls'],
-                                      created_at: legacy_goal.created_at,
-                                      updated_at: legacy_goal.updated_at
+        if ::Site.exists?(legacy_goal.site_id)
+          rule_set = ::RuleSet.create! id: legacy_goal.id,
+                                       site_id: legacy_goal.site_id,
+                                       start_date: convert_start_time(legacy_goal.data_json['start_date'], legacy_goal.data_json['dates_timezone']),
+                                       end_date: convert_end_time(legacy_goal.data_json['end_date'], legacy_goal.data_json['dates_timezone']),
+                                       include_urls: legacy_goal.data_json['include_urls'],
+                                       exclude_urls: legacy_goal.data_json['exclude_urls'],
+                                       created_at: legacy_goal.created_at,
+                                       updated_at: legacy_goal.updated_at
 
           create_bars(legacy_goal.bars, legacy_goal.type).each do |new_bar|
             rule_set.bars << new_bar
@@ -79,6 +75,9 @@ class LegacyMigrator
 
         if legacy_user && !::User.exists?(legacy_user.id_to_migrate)
           begin
+            # disable password requirement for import
+            User.send(:define_method, :password_required?) { false }
+
             user = ::User.create! id: legacy_user.id_to_migrate,
                                   email: legacy_user.email,
                                   encrypted_password: legacy_user.encrypted_password,
@@ -109,7 +108,7 @@ class LegacyMigrator
       legacy_bars.map do |legacy_bar|
         ::Bar.create! id: legacy_bar.legacy_bar_id || legacy_bar.id,
                       paused: !legacy_bar.active?,
-                      goal: goal,
+                      goal: goal.split('::').last,
                       created_at: legacy_bar.created_at,
                       updated_at: legacy_bar.updated_at,
                       target_segment: legacy_bar.target_segment,
