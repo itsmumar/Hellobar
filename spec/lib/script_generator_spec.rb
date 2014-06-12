@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ScriptGenerator, '#render' do
-  let(:site) { double 'site', id: '1337', rule_sets: [], bars: [] }
+  let(:site) { double 'site', id: '1337', rule_sets: [], bars: double('bars', active: []) }
   let(:generator) { ScriptGenerator.new(site) }
 
   it 'renders the site it variable' do

@@ -42,7 +42,7 @@ class ScriptGenerator < Mustache
   end
 
   def templates
-    site.bars.map do |bar|
+    site.bars.active.map do |bar|
       {
         name: bar.goal,
         markup: content_template(bar.goal)
