@@ -1,7 +1,7 @@
 class SiteElementsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :load_site
-  before_filter :load_site_element, :only => [:edit, :update]
+  before_filter :load_site_element, :only => [:edit, :update, :destroy]
 
   layout "with_sidebar"
 
@@ -30,6 +30,12 @@ class SiteElementsController < ApplicationController
       flash.now[:error] = "There was a problem updating your bar."
       render :action => :edit
     end
+  end
+
+  def destroy
+    @site_element.destroy
+    flash[:success] = "Your bar was successfully deleted."
+    redirect_to site_site_elements_path(:site_id => @site)
   end
 
 

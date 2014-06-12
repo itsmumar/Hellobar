@@ -5,6 +5,7 @@ div.row
     = simple_form_for @site_element, :as => :site_element, :url => site_site_element_path(@site_element, :site_id => @site) do |f|
       = f.input :rule_set_id, :collection => @site.rule_sets, :label => "Who should see this?", :include_blank => false
       = f.input :goal, :collection => [["Drive Traffic", "drive_traffic"], ["Collect Email", "collect_email"]], :include_blank => false
+      p.float-right= link_to "delete", site_site_element_path(@site_element, :site_id => @site), :method => :delete
       = f.button :submit, "Save", :class => "btn-primary"
 
   div.col-md-7
