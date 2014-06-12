@@ -2,7 +2,7 @@ class SitesController < ApplicationController
   include SitesHelper
 
   before_filter :authenticate_user!
-  before_filter :load_site, :only => [:show, :edit, :update, :email_developer]
+  before_filter :load_site, :only => [:show, :edit, :update, :email_developer, :destroy]
 
   layout "with_sidebar"
 
@@ -39,6 +39,13 @@ class SitesController < ApplicationController
       flash.now[:error] = "There was a problem updating your settings."
       render :action => :edit
     end
+  end
+
+  def destroy
+    @site.destroy
+    flash[:success] = "Your site has been successfully deleted"
+
+    redirect_to(current_site ? site_path(current_site) : new_site_path)
   end
 
   private

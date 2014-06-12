@@ -1,15 +1,7 @@
 h1= "Settings for #{display_url_for_site(@site)}"
 
-= form_for @site do |f|
-  .form-group
-    = f.label :url
-    = f.text_field :url, :class => "form-control"
-
-  .form-group
-    .checkbox
-      label
-        = f.check_box :opted_in_to_email_digest
-        | Send me a weekly email digest of this site's performance
-
-  .form-group
-    = f.submit "Save", :class => "btn btn-primary"
+= simple_form_for @site do |f|
+  = f.input :url
+  = f.input :opted_in_to_email_digest, as: :boolean, inline_label: "Send me a weekly email digest of this site's performance", label: false
+  p.float-right= link_to "delete", site_path(@site), :method => :delete
+  = f.button :submit, "Save", :class => "btn-primary"
