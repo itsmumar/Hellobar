@@ -9,9 +9,8 @@ class SitesController < ApplicationController
   def create
     @site = Site.new(site_params)
 
-    if @site.valid?
-      @site.save!
-
+    if @site.save
+      @site.rule_sets.create name: "Everyone"
       SiteMembership.create!(:site => @site, :user => current_user)
 
       @site.create_default_rule_set
