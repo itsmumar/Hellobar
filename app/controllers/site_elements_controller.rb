@@ -14,6 +14,7 @@ class SiteElementsController < ApplicationController
 
     if @site_element.valid?
       @site_element.save!
+      @site.generate_script
       flash[:success] = "Your bar was successfully created."
       redirect_to site_site_elements_path(:site_id => @site)
     else
@@ -24,6 +25,7 @@ class SiteElementsController < ApplicationController
 
   def update
     if @site_element.update_attributes(site_element_params)
+      @site.generate_script
       flash[:success] = "Your bar was successfully updated."
       redirect_to site_site_elements_path(:site_id => @site)
     else
@@ -34,6 +36,7 @@ class SiteElementsController < ApplicationController
 
   def destroy
     @site_element.destroy
+    @site.generate_script
     flash[:success] = "Your bar was successfully deleted."
     redirect_to site_site_elements_path(:site_id => @site)
   end
