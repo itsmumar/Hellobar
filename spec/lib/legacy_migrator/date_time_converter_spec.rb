@@ -6,6 +6,10 @@ describe LegacyMigrator::DateTimeConverter do
   end
 
   context '#convert_start_time' do
+    it 'returns nil if start time is blank' do
+      SexyTime.convert_start_time('', '').should be_blank
+    end
+
     it 'converts start time properly' do
       date_string = "2014-12-25"
       timezone = "(GMT-05:00) Eastern Time (US & Canada)"
@@ -35,6 +39,10 @@ describe LegacyMigrator::DateTimeConverter do
   end
 
   context '#convert_end_time' do
+    it 'returns nil if end time is blank' do
+      SexyTime.convert_end_time('', '').should be_blank
+    end
+
     it 'converts end time properly' do
       date_string = "2014-12-25"
       timezone = "(GMT-05:00) Eastern Time (US & Canada)"
