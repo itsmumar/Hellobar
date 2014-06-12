@@ -12,6 +12,7 @@ class SitesController < ApplicationController
     if @site.valid?
       @site.save!
       SiteMembership.create!(:site => @site, :user => current_user)
+      @site.generate_script
       flash[:success] = "Your site was successfully created."
       redirect_to site_path(@site)
     else

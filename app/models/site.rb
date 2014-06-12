@@ -8,7 +8,6 @@ class Site < ActiveRecord::Base
 
   before_validation :standardize_url
 
-  after_commit :generate_script
   after_create :create_default_rule_set
   before_destroy :blank_out_script
 
