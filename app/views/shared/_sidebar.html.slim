@@ -22,4 +22,5 @@ ul
 
 hr
 
-= button_to "Create New", "", :class => "btn btn-border-primary btn-lg btn-block"
+- if current_site
+  = button_to "Create New", new_site_site_element_path(:site_id => current_site), :class => "btn btn-border-primary btn-lg btn-block", :method => :get

@@ -1,1 +1,12 @@
 h1= display_url_for_site(@site)
+
+- @site.rule_sets.each do |rule_set|
+  h3= "Rule set: #{rule_set.name.blank? ? "(no name)" : rule_set.name}"
+
+  - if rule_set.bars.empty?
+    p= "(no bars)"
+
+  - else
+    ul
+      - rule_set.bars.each do |bar|
+        li= link_to "Bar #{bar.id}", edit_site_site_element_path(bar, :site_id => @site)
