@@ -11,9 +11,12 @@ class SitesController < ApplicationController
 
     if @site.valid?
       @site.save!
-      @site.rule_sets.create name: "Everyone"
+
       SiteMembership.create!(:site => @site, :user => current_user)
+
+      @site.create_default_rule_set
       @site.generate_script
+
       flash[:success] = "Your site was successfully created."
       redirect_to site_path(@site)
     else
