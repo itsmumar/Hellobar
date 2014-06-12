@@ -1,4 +1,12 @@
 - if @site.has_script_installed?
   h1= display_url_for_site(@site)
+  ul
+    - @site.bars.each do |bar|
+      li
+        = "Bar: #{bar.id}"
+        ul
+          li= pluralize(bar.total_views, "view")
+          li= pluralize(bar.total_conversions, "conversions")
+
 - else
   = render :partial => "sites/install.html.slim"
