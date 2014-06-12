@@ -24,6 +24,20 @@ describe SitesController do
       site.url.should == "http://zombo.com"
       @user.role_for_site(site).should == :owner
     end
+
+    it 'creates a site with a rule set' do
+      stub_current_user(@user)
+
+      mock_storage = double("asset_storage")
+      mock_storage.should_receive(:create_or_update_file_with_contents)
+      Hello::AssetStorage.stub(:new => mock_storage)
+
+      post :create, :site => {:url => "zombo.com"}
+
+      site = @user.sites.last
+
+      site.rule_sets.size.should == 1
+    end
   end
 
   describe "GET show" do

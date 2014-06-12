@@ -8,7 +8,6 @@ class Site < ActiveRecord::Base
 
   before_validation :standardize_url
 
-  after_create :create_default_rule_set
   before_destroy :blank_out_script
 
   validates_with UrlValidator, url_field: :url
@@ -55,14 +54,7 @@ class Site < ActiveRecord::Base
     @all_time_data ||= Hello::BarData.get_all_time_data(id)
   end
 
-
   private
-
-  def create_default_rule_set
-    if rule_sets.empty?
-      rule_sets << RuleSet.create!(:name => "Everyone")
-    end
-  end
 
   def generate_static_assets(options = {})
     update_attribute(:script_attempted_to_generate_at, Time.now)

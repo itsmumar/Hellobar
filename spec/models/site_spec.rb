@@ -116,10 +116,4 @@ describe Site do
       @site.script_installed_at.should_not be_nil
     end
   end
-
-  it "sets up a default rule set after creation" do
-    site = Site.create!(:url => "joemaps.com")
-    site.rule_sets.size.should == 1
-    site.rule_sets.first.name.should == "Everyone"
-  end
 end

@@ -11,6 +11,7 @@ class SitesController < ApplicationController
 
     if @site.valid?
       @site.save!
+      @site.rule_sets.create name: "Everyone"
       SiteMembership.create!(:site => @site, :user => current_user)
       @site.generate_script
       flash[:success] = "Your site was successfully created."
@@ -38,7 +39,6 @@ class SitesController < ApplicationController
       render :action => :edit
     end
   end
-
 
   private
 
