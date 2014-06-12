@@ -21,9 +21,13 @@ class Site < ActiveRecord::Base
     end
   end
 
-  # TODO: implement
   def has_script_installed?
-    false
+    if script_installed_at.nil? && bars.any?{|b| b.total_views > 0}
+      update_attribute(:script_installed_at, Time.current)
+      InternalEvent.create(:timestamp => script_installed_at.to_i, :target_type => "user", :target_id => owner.try(:id), :name => "Received Data")
+    end
+
+    script_installed_at.present?
   end
 
   def script_url
@@ -50,6 +54,7 @@ class Site < ActiveRecord::Base
   def get_all_time_data
     @all_time_data ||= Hello::BarData.get_all_time_data(id)
   end
+
 
   private
 

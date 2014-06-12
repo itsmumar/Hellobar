@@ -3,10 +3,14 @@ require 'spec_helper'
 describe Site do
   fixtures :all
 
+  before(:each) do
+    @site = sites(:zombo)
+  end
+
   it_behaves_like "an object with a valid url"
 
   it "is able to access its owner" do
-    sites(:zombo).owner.should == users(:joey)
+    @site.owner.should == users(:joey)
   end
 
   describe "url formatting" do
@@ -59,43 +63,57 @@ describe Site do
 
   describe "#script_content" do
     it "generates the contents of the script for a site" do
-      site = sites(:zombo)
-      script = site.script_content(false)
+      script = @site.script_content(false)
 
       script.should =~ /HB_SITE_ID/
-      script.should include(site.bars.first.id.to_s)
+      script.should include(@site.bars.first.id.to_s)
     end
 
     it "generates the compressed contents of the script for a site" do
-      site = sites(:zombo)
-      script = site.script_content
+      script = @site.script_content
 
       script.should =~ /HB_SITE_ID/
-      script.should include(site.bars.first.id.to_s)
+      script.should include(@site.bars.first.id.to_s)
     end
   end
 
   describe "#generate_static_assets" do
     it "generates and uploads the script content for a site" do
-      site = sites(:zombo)
-      script_content = site.script_content(true)
-      script_name = site.script_name
+      script_content = @site.script_content(true)
+      script_name = @site.script_name
 
       mock_storage = double("asset_storage")
       mock_storage.should_receive(:create_or_update_file_with_contents).with(script_name, script_content)
       Hello::AssetStorage.stub(:new => mock_storage)
 
-      site.generate_script
+      @site.generate_script
     end
   end
 
   it "blanks-out the site script when destroyed" do
-    site = sites(:zombo)
-
     mock_storage = double("asset_storage")
-    mock_storage.should_receive(:create_or_update_file_with_contents).with(site.script_name, "")
+    mock_storage.should_receive(:create_or_update_file_with_contents).with(@site.script_name, "")
     Hello::AssetStorage.stub(:new => mock_storage)
 
-    site.destroy
+    @site.destroy
+  end
+
+  describe "#has_script_installed?" do
+    it "is true if script_installed_at is set" do
+      @site.script_installed_at = 1.day.ago
+      @site.has_script_installed?.should be_true
+    end
+
+    it "is false if no bars have views" do
+      @site.stub(:bars => [double("bar", :total_views => 0)])
+      @site.has_script_installed?.should be_false
+      @site.script_installed_at.should be_nil
+    end
+
+    it "is true and sets script_installed_at if at least one bar has been viewed" do
+      @site.stub(:bars => [double("bar", :total_views => 1)])
+      @site.has_script_installed?.should be_true
+      @site.script_installed_at.should_not be_nil
+    end
   end
 end
