@@ -9,4 +9,10 @@ h1= display_url_for_site(@site)
   - else
     ul
       - rule_set.bars.each do |bar|
-        li= link_to "Bar #{bar.id}", edit_site_site_element_path(bar, :site_id => @site)
+        li
+          = link_to "Bar #{bar.id}", edit_site_site_element_path(bar, :site_id => @site)
+          |  - 
+          - if bar.paused?
+            = link_to "unpause", site_unpause_site_element_path(bar, :site_id => @site), :method => :put
+          - else
+            = link_to "pause", site_pause_site_element_path(bar, :site_id => @site), :method => :put

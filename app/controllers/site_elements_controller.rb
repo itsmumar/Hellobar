@@ -1,7 +1,7 @@
 class SiteElementsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :load_site
-  before_filter :load_site_element, :only => [:edit, :update, :destroy]
+  before_filter :load_site_element, :only => [:edit, :update, :destroy, :pause, :unpause]
 
   layout "with_sidebar"
 
@@ -41,6 +41,15 @@ class SiteElementsController < ApplicationController
     redirect_to site_site_elements_path(:site_id => @site)
   end
 
+  def pause
+    @site_element.update_attribute(:paused, true)
+    redirect_to site_site_elements_path(:site_id => @site)
+  end
+
+  def unpause
+    @site_element.update_attribute(:paused, false)
+    redirect_to site_site_elements_path(:site_id => @site)
+  end
 
   private
 

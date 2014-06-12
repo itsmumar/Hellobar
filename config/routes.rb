@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   resources :sites do
     resource :wordpress_plugin, :controller => :wordpress_plugin
+
+    put "site_elements/:id/pause", :to => "site_elements#pause", :as => :pause_site_element
+    put "site_elements/:id/unpause", :to => "site_elements#unpause", :as => :unpause_site_element
     resources :site_elements
   end
 
