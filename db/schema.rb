@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140610152141) do
+ActiveRecord::Schema.define(version: 20140612161007) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(version: 20140610152141) do
     t.integer  "site_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
   end
 
   add_index "rule_sets", ["site_id"], name: "index_rule_sets_on_site_id", using: :btree
