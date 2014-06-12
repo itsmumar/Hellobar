@@ -4,5 +4,7 @@ class LegacyMigrator
     self.inheritance_column = nil
 
     has_many :bars, class_name: 'LegacyMigrator::LegacyBar', foreign_key: 'goal_id'
+
+    serialize :settings_json, JSON
   end
 end
