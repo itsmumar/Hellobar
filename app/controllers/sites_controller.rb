@@ -12,7 +12,7 @@ class SitesController < ApplicationController
     if @site.save
       SiteMembership.create!(:site => @site, :user => current_user)
 
-      @site.rule_sets.create! name: "Everyone"
+      @site.create_default_rule_set
       @site.generate_script
 
       flash[:success] = "Your site was successfully created."

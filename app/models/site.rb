@@ -54,6 +54,10 @@ class Site < ActiveRecord::Base
     @all_time_data ||= Hello::BarData.get_all_time_data(id)
   end
 
+  def create_default_rule_set
+    rule_sets.create!(:name => "Everyone") if rule_sets.empty?
+  end
+
   private
 
   def generate_static_assets(options = {})
