@@ -8,6 +8,8 @@ class Bar < ActiveRecord::Base
 
   delegate :site, to: :rule_set, allow_nil: true
 
+  GOAL_TYPES = %w{ DirectTraffic CollectEmail }
+
   def total_views
     return 0 unless site
 

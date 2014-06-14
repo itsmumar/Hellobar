@@ -8,12 +8,12 @@ html
     = csrf_meta_tags
 
   body#with-sidebar
-    = render :partial => "shared/header"
+    = render "shared/header"
 
   div#sidebar-container.container
     div.row
       div#sidebar.col-md-2
-        = render :partial => "shared/sidebar"
+        = render "shared/sidebar"
       div.col-md-10
-        = render :partial => "shared/notices"
+        = render "shared/notices"
         = yield
