@@ -58,7 +58,7 @@ private
 
   def hash_for_rule_set(rule_set)
     {
-      bars: bars_for_rule_set(rule_set),
+      bar_json: bars_for_rule_set(rule_set).to_json,
       priority: 1, # seems to be hardcoded as 1 throughout WWW
       metadata: metadata(rule_set).to_json
     }.merge(eligibility_rules(rule_set))
@@ -133,7 +133,7 @@ private
       end
     end
 
-    bars.map{|bar| { bar_json: bar_settings(bar).to_json }}
+    bars.map{|bar| bar_settings(bar) }
   end
 
   # Previous metadata keys. TODO: figure this out.

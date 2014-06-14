@@ -153,7 +153,7 @@ describe ScriptGenerator, '#rule_sets' do
     generator.stub bars_for_rule_set: []
 
     expected_hash = {
-      bars: [],
+      bar_json: [].to_json,
       priority: 1,
       metadata: { "id" => 1 }.to_json,
       start_date: nil,
@@ -176,7 +176,7 @@ describe ScriptGenerator, '#rule_sets' do
     site.stub rule_sets: [rule_set]
 
     expected_hash = {
-      bars: [{bar_json: { id: bar.id, template_name: bar.goal }.to_json}],
+      bar_json: [{ id: bar.id, template_name: bar.goal }].to_json,
       priority: 1,
       metadata: { "id" => rule_set.id }.to_json,
       start_date: nil,
@@ -198,7 +198,7 @@ describe ScriptGenerator, '#rule_sets' do
     site.stub rule_sets: [rule_set]
 
     expected_hash = {
-      bars: [{bar_json: { id: bar.id, template_name: bar.goal }.to_json}],
+      bar_json: [{ id: bar.id, template_name: bar.goal }].to_json,
       priority: 1,
       metadata: { "id" => rule_set.id }.to_json,
       start_date: nil,
@@ -220,7 +220,7 @@ describe ScriptGenerator, '#rule_sets' do
     site.stub rule_sets: [rule_set]
 
     expected_hash = {
-      bars: [{bar_json: { id: active_bar.id, template_name: active_bar.goal }.to_json}],
+      bar_json: [{ id: active_bar.id, template_name: active_bar.goal }].to_json,
       priority: 1,
       metadata: { "id" => rule_set.id }.to_json,
       start_date: nil,
