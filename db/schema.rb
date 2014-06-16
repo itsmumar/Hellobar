@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140616220252) do
+ActiveRecord::Schema.define(version: 20140616221405) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -73,7 +73,6 @@ ActiveRecord::Schema.define(version: 20140616220252) do
     t.boolean  "paused",                          default: false
     t.integer  "rule_set_id"
     t.text     "settings"
-    t.string   "url"
   end
 
   add_index "bars", ["bar_type"], name: "index_bars_on_bar_type", using: :btree
