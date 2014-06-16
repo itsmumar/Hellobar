@@ -52,7 +52,7 @@ class LegacyMigrator
                                        created_at: legacy_goal.created_at,
                                        updated_at: legacy_goal.updated_at
 
-          create_bars(legacy_goal.bars, legacy_goal.type).each do |new_bar|
+          create_bars(legacy_goal.bars, legacy_goal).each do |new_bar|
             rule_set.bars << new_bar
           end
         else
@@ -108,7 +108,7 @@ class LegacyMigrator
       legacy_bars.map do |legacy_bar|
         ::Bar.create! id: legacy_bar.legacy_bar_id || legacy_bar.id,
                       paused: !legacy_bar.active?,
-                      bar_type: goal.split('::').last,
+                      bar_type: determine_bar_type(goal),
                       created_at: legacy_bar.created_at,
                       updated_at: legacy_bar.updated_at,
                       target_segment: legacy_bar.target_segment,
@@ -136,6 +136,17 @@ class LegacyMigrator
                       text_color: legacy_bar.settings_json['text_color'],
                       texture: legacy_bar.settings_json['texture'],
                       thank_you_text: legacy_bar.settings_json['thank_you_text']
+      end
+    end
+
+    def determine_bar_type(legacy_goal)
+      case legacy_goal.type
+      when "Goals::DirectTraffic"
+        "traffic"
+      when "Goals::CollectEmail"
+        "email"
+      when "Goals::SocialMedia"
+        "social/#{legacy_goal.settings_json["interaction"]}"
       end
     end
   end

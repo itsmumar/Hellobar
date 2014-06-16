@@ -1,3 +1,3 @@
 zombo_one:
   rule_set: zombo
-  bar_type: direct_traffic
+  bar_type: traffic

@@ -212,8 +212,8 @@ describe ScriptGenerator, '#rule_sets' do
 
   it 'renders only active bar json by default' do
     rule_set = RuleSet.create
-    paused = Bar.create bar_type: 'email', rule_set: rule_set, paused: true
-    active_bar = Bar.create bar_type: 'not paused', rule_set: rule_set, paused: false
+    paused = Bar.create! bar_type: 'email', rule_set: rule_set, paused: true
+    active_bar = Bar.create! bar_type: 'traffic', rule_set: rule_set, paused: false
     generator = ScriptGenerator.new(site)
     generator.stub bar_settings: { id: active_bar.id, template_name: active_bar.bar_type }
 

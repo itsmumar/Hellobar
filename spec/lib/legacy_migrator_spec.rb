@@ -189,6 +189,6 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
 
     bar = RuleSet.find(legacy_goal.id).bars.first
 
-    bar.bar_type.should == 'DirectTraffic'
+    bar.bar_type.should == 'traffic'
   end
 end
