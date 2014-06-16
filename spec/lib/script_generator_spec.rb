@@ -167,16 +167,16 @@ describe ScriptGenerator, '#rule_sets' do
 
   it 'returns the proper hash when a single bar_id is passed as an option' do
     rule_set = RuleSet.create
-    bar = Bar.create goal: 'email', rule_set: rule_set
+    bar = Bar.create bar_type: 'email', rule_set: rule_set
     options = { bar_id: bar.id }
 
     generator = ScriptGenerator.new(site, options)
-    generator.stub bar_settings: {id: bar.id, template_name: bar.goal}
+    generator.stub bar_settings: {id: bar.id, template_name: bar.bar_type}
 
     site.stub rule_sets: [rule_set]
 
     expected_hash = {
-      bar_json: [{ id: bar.id, template_name: bar.goal }].to_json,
+      bar_json: [{ id: bar.id, template_name: bar.bar_type }].to_json,
       priority: 1,
       metadata: { "id" => rule_set.id }.to_json,
       start_date: nil,
@@ -190,15 +190,15 @@ describe ScriptGenerator, '#rule_sets' do
 
   it 'renders all bar json when the render_paused_bars is true' do
     rule_set = RuleSet.create
-    bar = Bar.create goal: 'email', rule_set: rule_set, paused: true
+    bar = Bar.create bar_type: 'email', rule_set: rule_set, paused: true
     options = { render_paused_bars: true }
     generator = ScriptGenerator.new(site, options)
-    generator.stub bar_settings: { id: bar.id, template_name: bar.goal }
+    generator.stub bar_settings: { id: bar.id, template_name: bar.bar_type }
 
     site.stub rule_sets: [rule_set]
 
     expected_hash = {
-      bar_json: [{ id: bar.id, template_name: bar.goal }].to_json,
+      bar_json: [{ id: bar.id, template_name: bar.bar_type }].to_json,
       priority: 1,
       metadata: { "id" => rule_set.id }.to_json,
       start_date: nil,
@@ -212,15 +212,15 @@ describe ScriptGenerator, '#rule_sets' do
 
   it 'renders only active bar json by default' do
     rule_set = RuleSet.create
-    paused = Bar.create goal: 'email', rule_set: rule_set, paused: true
-    active_bar = Bar.create goal: 'not paused', rule_set: rule_set, paused: false
+    paused = Bar.create bar_type: 'email', rule_set: rule_set, paused: true
+    active_bar = Bar.create bar_type: 'not paused', rule_set: rule_set, paused: false
     generator = ScriptGenerator.new(site)
-    generator.stub bar_settings: { id: active_bar.id, template_name: active_bar.goal }
+    generator.stub bar_settings: { id: active_bar.id, template_name: active_bar.bar_type }
 
     site.stub rule_sets: [rule_set]
 
     expected_hash = {
-      bar_json: [{ id: active_bar.id, template_name: active_bar.goal }].to_json,
+      bar_json: [{ id: active_bar.id, template_name: active_bar.bar_type }].to_json,
       priority: 1,
       metadata: { "id" => rule_set.id }.to_json,
       start_date: nil,

@@ -108,7 +108,7 @@ class LegacyMigrator
       legacy_bars.map do |legacy_bar|
         ::Bar.create! id: legacy_bar.legacy_bar_id || legacy_bar.id,
                       paused: !legacy_bar.active?,
-                      goal: goal.split('::').last,
+                      bar_type: goal.split('::').last,
                       created_at: legacy_bar.created_at,
                       updated_at: legacy_bar.updated_at,
                       target_segment: legacy_bar.target_segment,

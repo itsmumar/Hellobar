@@ -44,8 +44,8 @@ class ScriptGenerator < Mustache
   def templates
     site.bars.active.map do |bar|
       {
-        name: bar.goal,
-        markup: content_template(bar.goal)
+        name: bar.bar_type,
+        markup: content_template(bar.bar_type)
       }
     end
   end
@@ -77,9 +77,9 @@ private
     end
   end
 
-  def content_template(goal)
+  def content_template(bar_type)
     ActiveSupport.escape_html_entities_in_json = false
-    content = (content_header << content_markup(goal) << content_footer).to_json
+    content = (content_header << content_markup(bar_type) << content_footer).to_json
     ActiveSupport.escape_html_entities_in_json = true
 
     content
@@ -89,8 +89,8 @@ private
     @content_header ||= File.read("#{Rails.root}/lib/script_generator/bar_header.html")
   end
 
-  def content_markup(goal)
-    File.read("#{Rails.root}/lib/script_generator/bar_#{goal.underscore}.html")
+  def content_markup(bar_type)
+    File.read("#{Rails.root}/lib/script_generator/bar_#{bar_type.underscore}.html")
   end
 
   def content_footer
@@ -111,7 +111,7 @@ private
     bar.attributes.select{|key,val| settings.include?(key) }.merge({
       id: bar.id,
       target: bar.target_segment,
-      template_name: bar.goal
+      template_name: bar.bar_type
     }).select{|key, value| value.present? }
   end
 

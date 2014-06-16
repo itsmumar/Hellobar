@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140612220705) do
+ActiveRecord::Schema.define(version: 20140616130052) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20140612220705) do
   create_table "bars", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "goal",                                                                      null: false
+    t.string   "bar_type",                                                                  null: false
     t.string   "target_segment"
     t.boolean  "closable",                        default: false
     t.boolean  "hide_destination",                default: false
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20140612220705) do
     t.integer  "rule_set_id"
   end
 
-  add_index "bars", ["goal"], name: "index_bars_on_goal", using: :btree
+  add_index "bars", ["bar_type"], name: "index_bars_on_bar_type", using: :btree
   add_index "bars", ["rule_set_id"], name: "index_bars_on_rule_set_id", using: :btree
 
   create_table "internal_dimensions", force: true do |t|

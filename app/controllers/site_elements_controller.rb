@@ -63,6 +63,6 @@ class SiteElementsController < ApplicationController
   end
 
   def site_element_params
-    params.require(:site_element).permit(:rule_set_id, :goal)
+    params.require(:site_element).permit(:rule_set_id, :bar_type)
   end
 end
