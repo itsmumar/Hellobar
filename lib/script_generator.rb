@@ -137,7 +137,7 @@ private
   end
 
   # Previous metadata keys. TODO: figure this out.
-  # ["url", "exclude_urls", "include_urls", "dates_timezone", "end_date", "start_date", "collect_names", "interaction", "interaction_description", "url_to_tweet", "pinterest_url", "pinterest_image_url", "pinterest_description", "message_to_tweet", "url_to_like", "url_to_share", "twitter_handle", "use_location_for_url", "url_to_plus_one", "pinterest_user_url", "pinterest_full_name", "buffer_message", "buffer_url"]
+  # ["buffer_message", "buffer_url", "collect_names", "dates_timezone", "end_date", "exclude_urls", "include_urls", "interaction", "message_to_tweet", "pinterest_description", "pinterest_full_name", "pinterest_image_url", "pinterest_url", "pinterest_user_url", "start_date", "twitter_handle", "url", "url_to_like", "url_to_plus_one", "url_to_share", "url_to_tweet", "use_location_for_url"]
   # we killed the type key, so ignore from old generated script files
   def metadata(rule_set)
     rule_set_settings(rule_set).select{|k,v| v.present? }.with_indifferent_access
