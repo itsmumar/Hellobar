@@ -90,7 +90,7 @@ private
   end
 
   def content_markup(bar_type)
-    File.read("#{Rails.root}/lib/script_generator/bar_#{bar_type.underscore}.html")
+    File.read("#{Rails.root}/lib/script_generator/bar_#{bar_type.gsub("/", "_").underscore}.html")
   end
 
   def content_footer

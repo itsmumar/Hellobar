@@ -1,3 +1,9 @@
-zombo_one:
+zombo_traffic:
   rule_set: zombo
   bar_type: traffic
+zombo_email:
+  rule_set: zombo
+  bar_type: email
+zombo_twitter:
+  rule_set: zombo
+  bar_type: social/tweet_on_twitter
