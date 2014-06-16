@@ -146,7 +146,7 @@ class LegacyMigrator
       when "Goals::CollectEmail"
         "email"
       when "Goals::SocialMedia"
-        "social/#{legacy_goal.settings_json["interaction"]}"
+        "social/#{legacy_goal.data_json["interaction"]}"
       end
     end
   end

@@ -191,4 +191,16 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
 
     bar.bar_type.should == 'traffic'
   end
+
+  it 'standardizes the legacy goal type for social bars' do
+    legacy_goal.stub(:type => "Goals::SocialMedia")
+    legacy_goal.stub(:data_json => {"interaction" => "tweet_on_twitter"})
+
+    LegacyMigrator.migrate_goals_to_rule_sets
+
+    bar = RuleSet.find(legacy_goal.id).bars.first
+
+
+    bar.bar_type.should == 'social/tweet_on_twitter'
+  end
 end
