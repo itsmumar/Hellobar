@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :access_token, :current_admin, :impersonated_user, :current_site
 
+  before_filter :record_tracking_param
+
   def access_token
     @access_token ||= Digest::SHA256.hexdigest(["hellobar", remote_ip, user_agent, access_cookie, "a776b"].join)
   end
@@ -63,5 +65,9 @@ class ApplicationController < ActionController::Base
     else
       nil
     end
+  end
+
+  def record_tracking_param
+    Hello::TrackingParam.track(params[:trk]) if params[:trk]
   end
 end

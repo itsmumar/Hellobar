@@ -34,4 +34,14 @@ describe ApplicationController do
       controller.current_site.should be_nil
     end
   end
+
+  describe "record_tracking_param" do
+    it "records the tracking param" do
+      controller.stub(:params => {:trk => "asdf"})
+
+      Hello::TrackingParam.should_receive(:track).with("asdf")
+
+      controller.record_tracking_param
+    end
+  end
 end

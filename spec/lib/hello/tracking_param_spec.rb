@@ -17,4 +17,13 @@ describe Hello::TrackingParam do
     tracker = "MTIvLy9vcGVuLy8vRHJpcCAxLy8vMDk0MDhmZjk%3D"
     Hello::TrackingParam.decode_tracker(tracker).should == ["12", "open", "Drip 1"]
   end
+
+  describe "::track" do
+    it "decodes and records a tracking parameters" do
+      tracker = Hello::TrackingParam.encode_tracker("1", "click", "some url")
+      Hello::Tracking.should_receive(:track_event).with("user", "1", "Clicked link: some url")
+
+      Hello::TrackingParam.track(tracker)
+    end
+  end
 end

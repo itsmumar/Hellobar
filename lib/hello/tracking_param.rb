@@ -17,5 +17,19 @@ module Hello
         raise "Cannot decode tracker: signature does not match"
       end
     end
+
+    def self.track(tracker)
+      user_id, tracker_action, tracker_data = decode_tracker(tracker)
+
+      case tracker_action
+      when "click"
+        Hello::Tracking.track_event("user", user_id, "Clicked link: #{tracker_data}")
+      when "open"
+        Hello::Tracking.track_event("user", user_id, "Opened email: #{tracker_data}")
+      end
+    rescue => e
+      Raven.capture_exception(e)
+      Rails.logger.error("Error recording tracker: #{tracker}")
+    end
   end
 end
