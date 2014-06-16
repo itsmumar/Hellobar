@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140616130052) do
+ActiveRecord::Schema.define(version: 20140616220252) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -72,6 +72,8 @@ ActiveRecord::Schema.define(version: 20140616130052) do
     t.string   "thank_you_text",                  default: "Thank you for signing up!"
     t.boolean  "paused",                          default: false
     t.integer  "rule_set_id"
+    t.text     "settings"
+    t.string   "url"
   end
 
   add_index "bars", ["bar_type"], name: "index_bars_on_bar_type", using: :btree
@@ -149,6 +151,7 @@ ActiveRecord::Schema.define(version: 20140616130052) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+    t.integer  "priority"
   end
 
   add_index "rule_sets", ["site_id"], name: "index_rule_sets_on_site_id", using: :btree
