@@ -136,7 +136,7 @@ end
 describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
   let(:start_date) { '2013-12-01' }
   let(:end_date) { '2014-06-05' }
-  let(:legacy_goal) { double 'legacy_goal', id: 12345, site_id: legacy_site.id, data_json: { 'start_date' => start_date, 'end_date' => end_date, 'dates_timezone' => '(GMT-06:00) Central Time (US & Canada)' }, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic" }
+  let(:legacy_goal) { double 'legacy_goal', id: 12345, site_id: legacy_site.id, data_json: { 'start_date' => start_date, 'end_date' => end_date, 'dates_timezone' => '(GMT-06:00) Central Time (US & Canada)' }, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
   let(:legacy_site) { double 'legacy_site', id: 123 }
   let(:bar_settings) { { 'message' => 'goes here' } }
   let(:legacy_bar) { double 'legacy_bar', legacy_bar_id: 123, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: 'legacy_goal.id', settings_json: bar_settings }

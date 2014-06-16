@@ -49,6 +49,7 @@ class LegacyMigrator
                                        end_date: convert_end_time(legacy_goal.data_json['end_date'], legacy_goal.data_json['dates_timezone']),
                                        include_urls: legacy_goal.data_json['include_urls'],
                                        exclude_urls: legacy_goal.data_json['exclude_urls'],
+                                       priority: legacy_goal.priority,
                                        created_at: legacy_goal.created_at,
                                        updated_at: legacy_goal.updated_at
 
