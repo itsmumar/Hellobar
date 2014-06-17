@@ -14,7 +14,7 @@ describe Users::SessionsController do
       controller.current_user.should == users(:joey)
     end
 
-    it "should redirect if trying to sign in with an email that's already in the wordpress database" do
+    it "should redirect if trying to sign in with an email that's in the wordpress database" do
       Hello::WordpressUser.should_receive(:email_exists?).with("user@website.com").and_return(true)
 
       post :create, :user => {:email => "user@website.com", :password => "asdfasdf"}

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => {:sessions => "users/sessions"}
+  devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords"}
   root "welcome#index"
 
   get "profile", :to => "user#edit", :as => :profile
