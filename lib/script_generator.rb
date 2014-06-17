@@ -68,8 +68,8 @@ private
     if options[:disable_eligibility]
       {}
     else
-      date_condition = rule.conditions.where(type: 'DateCondition').first || Condition.new(value: {})
-      url_condition = rule.conditions.where(type: 'UrlCondition').first || Condition.new(value: {})
+      date_condition = rule.conditions.where(segment: 'DateCondition').first || Condition.new(value: {})
+      url_condition = rule.conditions.where(segment: 'UrlCondition').first || Condition.new(value: {})
 
       {
         start_date: condition_start_date(date_condition),

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140617194829) do
+ActiveRecord::Schema.define(version: 20140617200338) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -80,8 +80,8 @@ ActiveRecord::Schema.define(version: 20140617194829) do
 
   create_table "conditions", force: true do |t|
     t.integer "rule_id"
-    t.string  "type",     null: false
-    t.string  "operator", null: false
+    t.string  "segment", null: false
+    t.string  "operand", null: false
     t.text    "value"
   end
 
