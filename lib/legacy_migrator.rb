@@ -105,14 +105,14 @@ class LegacyMigrator
       end
     end
 
-    def create_bars(legacy_bars, goal)
+    def create_bars(legacy_bars, legacy_goal)
       legacy_bars.map do |legacy_bar|
         social_setting_keys = ["buffer_message", "buffer_url", "collect_names", "link_url", "message_to_tweet", "pinterest_description", "pinterest_full_name", "pinterest_image_url", "pinterest_url", "pinterest_user_url", "twitter_handle", "url", "url_to_like", "url_to_plus_one", "url_to_share", "url_to_tweet", "use_location_for_url"]
-        social_settings = legacy_bar.settings_json.select{|key, value| social_setting_keys.include?(key) && value.present? }
+        social_settings = legacy_goal.data_json.select{|key, value| social_setting_keys.include?(key) && value.present? }
 
         ::Bar.create! id: legacy_bar.legacy_bar_id || legacy_bar.id,
                       paused: !legacy_bar.active?,
-                      bar_type: determine_bar_type(goal),
+                      bar_type: determine_bar_type(legacy_goal),
                       created_at: legacy_bar.created_at,
                       updated_at: legacy_bar.updated_at,
                       target_segment: legacy_bar.target_segment,
