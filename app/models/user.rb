@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
   delegate :url_helpers, to: "Rails.application.routes"
 
+  validate :email_does_not_exist_in_wordpress
+
   def send_devise_notification(notification, *args)
     host = ActionMailer::Base.default_url_options[:host]
 
@@ -21,5 +23,11 @@ class User < ActiveRecord::Base
     else
       nil
     end
+  end
+
+  private
+
+  def email_does_not_exist_in_wordpress
+    errors.add(:email, "has already been taken") if Hello::WordpressUser.email_exists?(email)
   end
 end
