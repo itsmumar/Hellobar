@@ -3,5 +3,5 @@
 </span>
 
 <span class="social-wrapper buffer-add-button-wrapper">
-  <a href="http://bufferapp.com/add/?url={{encodeURIComponent((HB.t(bar.goal.data.use_location_for_url) ? window.parent.location.href : bar.goal.data.buffer_url).replace(/^(?!http)/, 'http://'))}}&text={{encodeURIComponent(bar.goal.data.buffer_message)}}" class="buffer-add-button" target="_blank" onclick="window.parent.HB.trackClick(this)"></a>
+  <a href="http://bufferapp.com/add/?url={{encodeURIComponent((HB.t(bar.settings.use_location_for_url) ? window.parent.location.href : bar.settings.buffer_url).replace(/^(?!http)/, 'http://'))}}&text={{encodeURIComponent(bar.settings.buffer_message)}}" class="buffer-add-button" target="_blank" onclick="window.parent.HB.trackClick(this)"></a>
 </span>

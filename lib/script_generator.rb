@@ -111,7 +111,8 @@ private
     bar.attributes.select{|key,val| settings.include?(key) }.merge({
       id: bar.id,
       target: bar.target_segment,
-      template_name: bar.bar_type
+      template_name: bar.bar_type,
+      settings: bar.settings
     }).select{|key, value| value.present? }
   end
 
