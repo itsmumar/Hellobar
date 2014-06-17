@@ -8,6 +8,7 @@ Bundler.require(*Rails.groups)
 
 module Hellobar
   class Application < Rails::Application
+    config.autoload_paths += %W(#{config.root}/app/models/rule/)
     config.autoload_paths += %W(#{config.root}/app/models/validators)
     config.sass.preferred_syntax = :sass
     config.action_mailer.default_url_options = { host: "www.hellobar.com" }

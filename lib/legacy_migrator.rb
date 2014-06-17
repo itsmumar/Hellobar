@@ -43,13 +43,13 @@ class LegacyMigrator
         if ::Site.exists?(legacy_goal.site_id)
           rule_set = ::RuleSet.create! id: legacy_goal.id,
                                        site_id: legacy_goal.site_id,
-                                       start_date: convert_start_time(legacy_goal.data_json['start_date'], legacy_goal.data_json['dates_timezone']),
-                                       end_date: convert_end_time(legacy_goal.data_json['end_date'], legacy_goal.data_json['dates_timezone']),
-                                       include_urls: legacy_goal.data_json['include_urls'],
-                                       exclude_urls: legacy_goal.data_json['exclude_urls'],
                                        priority: legacy_goal.priority,
                                        created_at: legacy_goal.created_at,
                                        updated_at: legacy_goal.updated_at
+
+          create_rules(rule_set, legacy_goal).each do |new_rule|
+            rule_set.rules << new_rule
+          end
 
           create_bars(legacy_goal.bars, legacy_goal).each do |new_bar|
             rule_set.bars << new_bar
@@ -104,6 +104,27 @@ class LegacyMigrator
           Rails.logger.info "WTF:No user found for Legacy Membership id:#{legacy_membership.id}"
         end
       end
+    end
+
+    def create_rules(rule_set, legacy_goal)
+      new_rules = []
+
+      start_date = convert_start_time(legacy_goal.data_json['start_date'], legacy_goal.data_json['dates_timezone'])
+      end_date = convert_end_time(legacy_goal.data_json['end_date'], legacy_goal.data_json['dates_timezone'])
+      include_urls = legacy_goal.data_json['include_urls']
+      exclude_urls = legacy_goal.data_json['exclude_urls']
+
+      if [start_date, end_date].any?(&:present?)
+        new_rules << DateRule.create!({ operator: 'EQ',
+                                        value: { 'start_date' => start_date, 'end_date' => end_date } })
+      end
+
+      if [include_urls, exclude_urls].any?(&:present?)
+        new_rules << UrlRule.create!({ operator: 'EQ',
+                                       value: { 'include_urls' => include_urls, 'exclude_urls' => exclude_urls }})
+      end
+
+      new_rules
     end
 
     def create_bars(legacy_bars, legacy_goal)

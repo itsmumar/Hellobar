@@ -136,7 +136,7 @@ end
 describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
   let(:start_date) { '2013-12-01' }
   let(:end_date) { '2014-06-05' }
-  let(:legacy_goal) { double 'legacy_goal', id: 12345, site_id: legacy_site.id, data_json: { 'start_date' => start_date, 'end_date' => end_date, 'dates_timezone' => '(GMT-06:00) Central Time (US & Canada)', 'buffer_message' => 'such buffer. wow.' }, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
+  let(:legacy_goal) { double 'legacy_goal', id: 12345, site_id: legacy_site.id, data_json: {}, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
   let(:legacy_site) { double 'legacy_site', id: 123 }
   let(:bar_settings) { { 'message' => 'goes here' } }
   let(:legacy_bar) { double 'legacy_bar', legacy_bar_id: 123, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: 'legacy_goal.id', settings_json: bar_settings }
@@ -164,10 +164,6 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
 
     rule_set.id.should == legacy_goal.id
     rule_set.site_id.should == legacy_site.id
-    rule_set.start_date.to_s.should == DateTime.parse(start_date + " 00:00:00 (GMT-06:00) Central Time (US & Canada)").to_time.utc.to_s
-    rule_set.end_date.to_s.should == DateTime.parse(end_date + " 23:59:59 (GMT-06:00) Central Time (US & Canada)").to_time.utc.to_s
-    rule_set.include_urls.should == legacy_goal.data_json['include_urls']
-    rule_set.exclude_urls.should == legacy_goal.data_json['exclude_urls']
     rule_set.created_at.to_s.should == legacy_goal.created_at.to_time.utc.to_s
     rule_set.updated_at.to_s.should == legacy_goal.updated_at.to_time.utc.to_s
   end
@@ -204,10 +200,74 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
   end
 
   it 'copies over legacy goal social settings to bar' do
+    legacy_goal.stub data_json: { 'buffer_message' => 'such buffer. wow.' }
+
     LegacyMigrator.migrate_goals_to_rule_sets
 
     bar = RuleSet.find(legacy_goal.id).bars.first
 
     bar.settings.should == { 'buffer_message' => 'such buffer. wow.' }
+  end
+
+  it 'creates a new DateRule if start_date is specified' do
+    legacy_goal.stub data_json: { 'start_date' => start_date }
+
+    expect {
+      LegacyMigrator.migrate_goals_to_rule_sets
+    }.to change(Rule, :count).by(1)
+  end
+
+  it 'creates a new DateRule if end_date is specified' do
+    legacy_goal.stub data_json: { 'end_date' => end_date }
+
+    expect {
+      LegacyMigrator.migrate_goals_to_rule_sets
+    }.to change(Rule, :count).by(1)
+  end
+
+  it 'creates a new DateRule with the proper values when both start_date and end_date are specified' do
+    legacy_goal.stub data_json: { 'start_date' => start_date, 'end_date' => end_date }
+
+    LegacyMigrator.migrate_goals_to_rule_sets
+
+    rule = RuleSet.find(legacy_goal.id).rules.first
+
+    rule.value.should == { 'start_date' => DateTime.parse(start_date + " 00:00:00"), 'end_date' => DateTime.parse(end_date + " 23:59:59") }
+  end
+
+  it 'creates a new UrlRule if include_urls is specified' do
+    legacy_goal.stub data_json: { 'include_urls' => ['http://url.com'] }
+
+    expect {
+      LegacyMigrator.migrate_goals_to_rule_sets
+    }.to change(Rule, :count).by(1)
+  end
+
+  it 'creates a new UrlRule if exclude_urls is specified' do
+    legacy_goal.stub data_json: { 'exclude_urls' => ['http://url.com'] }
+
+    expect {
+      LegacyMigrator.migrate_goals_to_rule_sets
+    }.to change(Rule, :count).by(1)
+  end
+
+  it 'creates a new UrlRule if both exclude_urls and are specified' do
+    data = { 'exclude_urls' => ['http://include.com'], 'include_urls' => ['http://exclude.com'] }
+    legacy_goal.stub data_json: data
+
+    LegacyMigrator.migrate_goals_to_rule_sets
+
+    rule = RuleSet.find(legacy_goal.id).rules.first
+
+    rule.value.should == data
+  end
+
+  it 'creates both a DateRule and UrlRule if start_date and include_urls are specified' do
+    data = { 'exclude_urls' => ['http://include.com'], 'include_urls' => ['http://exclude.com'], 'start_date' => '01/01/2001', 'end_date' => '12/12/2012' }
+    legacy_goal.stub data_json: data
+
+    expect {
+      LegacyMigrator.migrate_goals_to_rule_sets
+    }.to change(Rule, :count).by(2)
   end
 end

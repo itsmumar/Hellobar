@@ -61,7 +61,10 @@ describe ScriptGenerator, '#render' do
   context 'when rule_sets are present' do
     it 'does not return any eligibility rule_sets when eligibility is disabled' do
       generator = ScriptGenerator.new(site, { :disable_eligibility => true })
-      rule_set = RuleSet.new start_date: 1_000, end_date: 2_000, include_urls: ['url'], exclude_urls: ['other url']
+      rule_set = RuleSet.new
+      date_rule = DateRule.new value: { 'start_date' => 1_000, 'end_date' => 2_000 }
+      url_rule = UrlRule.new value: { 'include_urls' => ['http://good.com'], 'exclude_urls' => ['http://other.com'] }
+      rule_set.stub rules: [date_rule, url_rule]
       site.stub rule_sets: [rule_set]
 
       unexpected_pattern = /if \( \(new Date\(\)\)\.getTime\(\)\/(.*) return (.*);|HB.umatch(.*) return (.*);/

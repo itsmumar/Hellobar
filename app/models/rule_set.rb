@@ -3,7 +3,4 @@ class RuleSet < ActiveRecord::Base
 
   has_many :bars
   has_many :rules
-
-  serialize :exclude_urls
-  serialize :include_urls
 end
