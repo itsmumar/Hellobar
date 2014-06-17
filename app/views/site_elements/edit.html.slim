@@ -3,7 +3,7 @@ div.row
     h1= "Edit Bar #{@site_element.id}"
 
     = simple_form_for @site_element, :as => :site_element, :url => site_site_element_path(@site_element, :site_id => @site) do |f|
-      = f.input :rule_set_id, :collection => @site.rule_sets, :label => "Who should see this?", :include_blank => false
+      = f.input :rule_id, :collection => @site.rules, :label => "Who should see this?", :include_blank => false
       = f.input :bar_type, :collection => [["Direct Traffic", "direct_traffic"], ["Collect Email", "collect_email"]], :include_blank => false
       p.float-right= link_to "delete", site_site_element_path(@site_element, :site_id => @site), :method => :delete
       = f.button :submit, "Save", :class => "btn-primary"

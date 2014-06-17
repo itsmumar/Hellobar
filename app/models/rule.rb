@@ -1,4 +1,4 @@
-class RuleSet < ActiveRecord::Base
+class Rule < ActiveRecord::Base
   belongs_to :site
 
   has_many :bars

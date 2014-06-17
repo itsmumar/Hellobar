@@ -7,7 +7,7 @@ describe Bar do
     bar = bars(:zombo_traffic)
     bar.site.should == sites(:zombo)
 
-    bar.rule_set = nil
+    bar.rule = nil
     bar.site.should be_nil
   end
 end

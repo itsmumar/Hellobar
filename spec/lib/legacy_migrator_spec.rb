@@ -133,7 +133,7 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
   end
 end
 
-describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
+describe LegacyMigrator, '.migrate_goals_to_rules' do
   let(:start_date) { '2013-12-01' }
   let(:end_date) { '2014-06-05' }
   let(:legacy_goal) { double 'legacy_goal', id: 12345, site_id: legacy_site.id, data_json: {}, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
@@ -151,39 +151,39 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
     Site.stub :exists? => false
 
     expect {
-      LegacyMigrator.migrate_goals_to_rule_sets
-    }.to_not change(RuleSet, :count)
+      LegacyMigrator.migrate_goals_to_rules
+    }.to_not change(Rule, :count)
   end
 
   it 'creates a new rule set with the proper attributes' do
     expect {
-      LegacyMigrator.migrate_goals_to_rule_sets
-    }.to change(RuleSet, :count).by(1)
+      LegacyMigrator.migrate_goals_to_rules
+    }.to change(Rule, :count).by(1)
 
-    rule_set = RuleSet.find(legacy_goal.id)
+    rule = Rule.find(legacy_goal.id)
 
-    rule_set.id.should == legacy_goal.id
-    rule_set.site_id.should == legacy_site.id
-    rule_set.created_at.to_s.should == legacy_goal.created_at.to_time.utc.to_s
-    rule_set.updated_at.to_s.should == legacy_goal.updated_at.to_time.utc.to_s
+    rule.id.should == legacy_goal.id
+    rule.site_id.should == legacy_site.id
+    rule.created_at.to_s.should == legacy_goal.created_at.to_time.utc.to_s
+    rule.updated_at.to_s.should == legacy_goal.updated_at.to_time.utc.to_s
   end
 
   it 'creates a new bar for every legacy bar that exists' do
     expect {
-      LegacyMigrator.migrate_goals_to_rule_sets
+      LegacyMigrator.migrate_goals_to_rules
     }.to change(Bar, :count).by(1)
   end
 
   it 'associates all newly created bars with the new rule set' do
-    LegacyMigrator.migrate_goals_to_rule_sets
+    LegacyMigrator.migrate_goals_to_rules
 
-    RuleSet.find(legacy_goal.id).bars.count.should == 1
+    Rule.find(legacy_goal.id).bars.count.should == 1
   end
 
   it 'standardizes the legacy goal type' do
-    LegacyMigrator.migrate_goals_to_rule_sets
+    LegacyMigrator.migrate_goals_to_rules
 
-    bar = RuleSet.find(legacy_goal.id).bars.first
+    bar = Rule.find(legacy_goal.id).bars.first
 
     bar.bar_type.should == 'traffic'
   end
@@ -192,9 +192,9 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
     legacy_goal.stub(:type => "Goals::SocialMedia")
     legacy_goal.stub(:data_json => {"interaction" => "tweet_on_twitter"})
 
-    LegacyMigrator.migrate_goals_to_rule_sets
+    LegacyMigrator.migrate_goals_to_rules
 
-    bar = RuleSet.find(legacy_goal.id).bars.first
+    bar = Rule.find(legacy_goal.id).bars.first
 
     bar.bar_type.should == 'social/tweet_on_twitter'
   end
@@ -202,9 +202,9 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
   it 'copies over legacy goal social settings to bar' do
     legacy_goal.stub data_json: { 'buffer_message' => 'such buffer. wow.' }
 
-    LegacyMigrator.migrate_goals_to_rule_sets
+    LegacyMigrator.migrate_goals_to_rules
 
-    bar = RuleSet.find(legacy_goal.id).bars.first
+    bar = Rule.find(legacy_goal.id).bars.first
 
     bar.settings.should == { 'buffer_message' => 'such buffer. wow.' }
   end
@@ -213,7 +213,7 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
     legacy_goal.stub data_json: { 'start_date' => start_date }
 
     expect {
-      LegacyMigrator.migrate_goals_to_rule_sets
+      LegacyMigrator.migrate_goals_to_rules
     }.to change(Condition, :count).by(1)
   end
 
@@ -221,16 +221,16 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
     legacy_goal.stub data_json: { 'end_date' => end_date }
 
     expect {
-      LegacyMigrator.migrate_goals_to_rule_sets
+      LegacyMigrator.migrate_goals_to_rules
     }.to change(Condition, :count).by(1)
   end
 
   it 'creates a new DateRule with the proper values when both start_date and end_date are specified' do
     legacy_goal.stub data_json: { 'start_date' => start_date, 'end_date' => end_date }
 
-    LegacyMigrator.migrate_goals_to_rule_sets
+    LegacyMigrator.migrate_goals_to_rules
 
-    condition = RuleSet.find(legacy_goal.id).conditions.first
+    condition = Rule.find(legacy_goal.id).conditions.first
 
     condition.value.should == { 'start_date' => DateTime.parse(start_date + " 00:00:00"), 'end_date' => DateTime.parse(end_date + " 23:59:59") }
   end
@@ -239,7 +239,7 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
     legacy_goal.stub data_json: { 'include_urls' => ['http://url.com'] }
 
     expect {
-      LegacyMigrator.migrate_goals_to_rule_sets
+      LegacyMigrator.migrate_goals_to_rules
     }.to change(Condition, :count).by(1)
   end
 
@@ -247,7 +247,7 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
     legacy_goal.stub data_json: { 'exclude_urls' => ['http://url.com'] }
 
     expect {
-      LegacyMigrator.migrate_goals_to_rule_sets
+      LegacyMigrator.migrate_goals_to_rules
     }.to change(Condition, :count).by(1)
   end
 
@@ -255,9 +255,9 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
     data = { 'exclude_urls' => ['http://include.com'], 'include_urls' => ['http://exclude.com'] }
     legacy_goal.stub data_json: data
 
-    LegacyMigrator.migrate_goals_to_rule_sets
+    LegacyMigrator.migrate_goals_to_rules
 
-    condition = RuleSet.find(legacy_goal.id).conditions.first
+    condition = Rule.find(legacy_goal.id).conditions.first
 
     condition.value.should == data
   end
@@ -267,7 +267,7 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
     legacy_goal.stub data_json: data
 
     expect {
-      LegacyMigrator.migrate_goals_to_rule_sets
+      LegacyMigrator.migrate_goals_to_rules
     }.to change(Condition, :count).by(2)
   end
 end

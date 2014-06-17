@@ -50,26 +50,26 @@ class ScriptGenerator < Mustache
     end
   end
 
-  def rule_sets
-    site.rule_sets.map{|rule_set| hash_for_rule_set(rule_set) }
+  def rules
+    site.rules.map{|rule| hash_for_rule(rule) }
   end
 
 private
 
-  def hash_for_rule_set(rule_set)
+  def hash_for_rule(rule)
     {
-      bar_json: bars_for_rule_set(rule_set).to_json,
+      bar_json: bars_for_rule(rule).to_json,
       priority: 1, # seems to be hardcoded as 1 throughout WWW
-      metadata: metadata(rule_set).to_json
-    }.merge(eligibility_rules(rule_set))
+      metadata: metadata(rule).to_json
+    }.merge(eligibility_rules(rule))
   end
 
-  def eligibility_rules(rule_set)
+  def eligibility_rules(rule)
     if options[:disable_eligibility]
       {}
     else
-      date_condition = rule_set.conditions.where(type: 'DateCondition').first || Condition.new(value: {})
-      url_condition = rule_set.conditions.where(type: 'UrlCondition').first || Condition.new(value: {})
+      date_condition = rule.conditions.where(type: 'DateCondition').first || Condition.new(value: {})
+      url_condition = rule.conditions.where(type: 'UrlCondition').first || Condition.new(value: {})
 
       {
         start_date: condition_start_date(date_condition),
@@ -119,28 +119,28 @@ private
     }).select{|key, value| value.present? }
   end
 
-  def rule_set_settings(rule_set)
+  def rule_settings(rule)
     settings = %w{ end_date start_date exclude_urls include_urls id }
 
-    rule_set.attributes.select{|key, value| settings.include?(key) && value.present? }
+    rule.attributes.select{|key, value| settings.include?(key) && value.present? }
   end
 
   # FIXME: if bar_id is present, bars will not be ennumerable
-  def bars_for_rule_set(rule_set)
+  def bars_for_rule(rule)
     bars = if options[:bar_id]
-      [rule_set.bars.find(options[:bar_id])]
+      [rule.bars.find(options[:bar_id])]
     else
       if options[:render_paused_bars]
-        rule_set.bars
+        rule.bars
       else
-        rule_set.bars.active
+        rule.bars.active
       end
     end
 
     bars.map{|bar| bar_settings(bar) }
   end
 
-  def metadata(rule_set)
-    rule_set_settings(rule_set).select{|k,v| v.present? }.with_indifferent_access
+  def metadata(rule)
+    rule_settings(rule).select{|k,v| v.present? }.with_indifferent_access
   end
 end

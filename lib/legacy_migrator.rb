@@ -9,7 +9,7 @@ class LegacyMigrator
       ActiveRecord::Base.record_timestamps = false
 
       migrate_sites_and_users_and_memberships
-      migrate_goals_to_rule_sets
+      migrate_goals_to_rules
 
       ActiveRecord::Base.record_timestamps = true
     end
@@ -37,26 +37,26 @@ class LegacyMigrator
       end
     end
 
-    def migrate_goals_to_rule_sets
+    def migrate_goals_to_rules
       count = 0
       LegacyGoal.find_each do |legacy_goal|
         if ::Site.exists?(legacy_goal.site_id)
-          rule_set = ::RuleSet.create! id: legacy_goal.id,
-                                       site_id: legacy_goal.site_id,
-                                       priority: legacy_goal.priority,
-                                       created_at: legacy_goal.created_at,
-                                       updated_at: legacy_goal.updated_at
+          rule = ::Rule.create! id: legacy_goal.id,
+                                site_id: legacy_goal.site_id,
+                                priority: legacy_goal.priority,
+                                created_at: legacy_goal.created_at,
+                                updated_at: legacy_goal.updated_at
 
-          create_conditions(rule_set, legacy_goal).each do |new_condition|
-            rule_set.conditions << new_condition
+          create_conditions(rule, legacy_goal).each do |new_condition|
+            rule.conditions << new_condition
           end
 
           create_bars(legacy_goal.bars, legacy_goal).each do |new_bar|
-            rule_set.bars << new_bar
+            rule.bars << new_bar
           end
 
           count += 1
-          puts "Migrated #{count} goals to rule sets" if count % 100 == 0
+          puts "Migrated #{count} goals to rules" if count % 100 == 0
         else
           Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal:#{legacy_goal.id}"
         end
@@ -106,7 +106,7 @@ class LegacyMigrator
       end
     end
 
-    def create_conditions(rule_set, legacy_goal)
+    def create_conditions(rule, legacy_goal)
       new_conditions = []
 
       start_date = convert_start_time(legacy_goal.data_json['start_date'], legacy_goal.data_json['dates_timezone'])
@@ -138,7 +138,7 @@ class LegacyMigrator
                       created_at: legacy_bar.created_at,
                       updated_at: legacy_bar.updated_at,
                       target_segment: legacy_bar.target_segment,
-                      rule_set_id: legacy_bar.goal_id,
+                      rule_id: legacy_bar.goal_id,
                       closable: legacy_bar.settings_json['closable'],
                       hide_destination: legacy_bar.settings_json['hide_destination'],
                       open_in_new_window: legacy_bar.settings_json['open_in_new_window'],

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ScriptGenerator, '#render' do
-  let(:site) { double 'site', id: '1337', rule_sets: [], bars: double('bars', active: []) }
+  let(:site) { double 'site', id: '1337', rules: [], bars: double('bars', active: []) }
   let(:generator) { ScriptGenerator.new(site) }
 
   it 'renders the site it variable' do
@@ -58,14 +58,14 @@ describe ScriptGenerator, '#render' do
     end
   end
 
-  context 'when rule_sets are present' do
-    it 'does not return any eligibility rule_sets when eligibility is disabled' do
+  context 'when rules are present' do
+    it 'does not return any eligibility rules when eligibility is disabled' do
       generator = ScriptGenerator.new(site, { :disable_eligibility => true })
-      rule_set = RuleSet.new
+      rule = Rule.new
       date_condition = DateCondition.new value: { 'start_date' => 1_000, 'end_date' => 2_000 }
       url_condition = UrlCondition.new value: { 'include_urls' => ['http://good.com'], 'exclude_urls' => ['http://other.com'] }
-      rule_set.stub conditions: [date_condition, url_condition]
-      site.stub rule_sets: [rule_set]
+      rule.stub conditions: [date_condition, url_condition]
+      site.stub rules: [rule]
 
       unexpected_pattern = /if \( \(new Date\(\)\)\.getTime\(\)\/(.*) return (.*);|HB.umatch(.*) return (.*);/
 
@@ -73,8 +73,8 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'has a start date constraint when present' do
-      rule_set = double 'rule_set', start_date: 1_000
-      generator.stub rule_sets: [rule_set]
+      rule = double 'rule', start_date: 1_000
+      generator.stub rules: [rule]
 
       expected_string = 'if ( (new Date()).getTime()/1000 < 1000) return false;'
 
@@ -82,8 +82,8 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'does NOT have a start date constraint when not present' do
-      rule_set = double 'rule_set', start_date: nil
-      generator.stub rule_sets: [rule_set]
+      rule = double 'rule', start_date: nil
+      generator.stub rules: [rule]
 
       unexpected_string = /if \( \(new Date\(\)\)\.getTime\(\)\/1000 <(.*) return false;/
 
@@ -91,8 +91,8 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'has an end date constraint when present' do
-      rule_set = double 'rule_set', end_date: 2_000
-      generator.stub rule_sets: [rule_set]
+      rule = double 'rule', end_date: 2_000
+      generator.stub rules: [rule]
 
       expected_string = 'if ( (new Date()).getTime()/1000 > 2000) return false;'
 
@@ -100,8 +100,8 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'does NOT have a start date constraint when not present' do
-      rule_set = double 'rule_set', end_date: nil
-      generator.stub rule_sets: [rule_set]
+      rule = double 'rule', end_date: nil
+      generator.stub rules: [rule]
 
       unexpected_string = /if \( \(new Date\(\)\)\.getTime\(\)\/1000 >(.*)return false;/
 
@@ -109,8 +109,8 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'adds an exlusion constraint for all blacklisted URLs' do
-      rule_set = double 'rule_set', exclude_urls: [{ url: 'http://amazing.com' }]
-      generator.stub rule_sets: [rule_set]
+      rule = double 'rule', exclude_urls: [{ url: 'http://amazing.com' }]
+      generator.stub rules: [rule]
 
       expected_string = "if (HB.umatch(\"http://amazing.com\", document.location)) return false;"
 
@@ -118,8 +118,8 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'does NOT have exclusion constraints when no sites are blacklisted' do
-      rule_set = double 'rule_set', exclude_urls: []
-      generator.stub rule_sets: [rule_set]
+      rule = double 'rule', exclude_urls: []
+      generator.stub rules: [rule]
 
       expected_string = Regexp.new /HB.umatch(.*) return false;/
 
@@ -127,8 +127,8 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'adds an inclusion constraint for all whitelisted URLs' do
-      rule_set = double 'rule_set', include_urls: [{ url: 'http://soamazing.com' }]
-      generator.stub rule_sets: [rule_set]
+      rule = double 'rule', include_urls: [{ url: 'http://soamazing.com' }]
+      generator.stub rules: [rule]
 
       expected_string = "if (HB.umatch(\"http://soamazing.com\", document.location)) return true;"
 
@@ -136,8 +136,8 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'does NOT have inclusion constraints when no sites are whitelisted' do
-      rule_set = double 'rule_set', include_urls: []
-      generator.stub rule_sets: [rule_set]
+      rule = double 'rule', include_urls: []
+      generator.stub rules: [rule]
 
       expected_string = Regexp.new /HB.umatch(.*) return true;/
 
@@ -146,14 +146,14 @@ describe ScriptGenerator, '#render' do
   end
 end
 
-describe ScriptGenerator, '#rule_sets' do
-  let(:site) { double 'site', id: '1337', rule_sets: [], bars: [] }
+describe ScriptGenerator, '#rules' do
+  let(:site) { double 'site', id: '1337', rules: [], bars: [] }
   let(:generator) { ScriptGenerator.new(site) }
 
-  it 'returns the proper array of hashes for a sites rule_sets' do
-    rule_set = RuleSet.new id: 1
-    site.stub rule_sets: [rule_set]
-    generator.stub bars_for_rule_set: []
+  it 'returns the proper array of hashes for a sites rules' do
+    rule = Rule.new id: 1
+    site.stub rules: [rule]
+    generator.stub bars_for_rule: []
 
     expected_hash = {
       bar_json: [].to_json,
@@ -165,74 +165,74 @@ describe ScriptGenerator, '#rule_sets' do
       include_urls: nil
     }
 
-    generator.rule_sets.should == [expected_hash]
+    generator.rules.should == [expected_hash]
   end
 
   it 'returns the proper hash when a single bar_id is passed as an option' do
-    rule_set = RuleSet.create
-    bar = Bar.create bar_type: 'email', rule_set: rule_set
+    rule = Rule.create
+    bar = Bar.create bar_type: 'email', rule: rule
     options = { bar_id: bar.id }
 
     generator = ScriptGenerator.new(site, options)
     generator.stub bar_settings: {id: bar.id, template_name: bar.bar_type}
 
-    site.stub rule_sets: [rule_set]
+    site.stub rules: [rule]
 
     expected_hash = {
       bar_json: [{ id: bar.id, template_name: bar.bar_type }].to_json,
       priority: 1,
-      metadata: { "id" => rule_set.id }.to_json,
+      metadata: { "id" => rule.id }.to_json,
       start_date: nil,
       end_date: nil,
       exclude_urls: nil,
       include_urls: nil
     }
 
-    generator.rule_sets.should == [expected_hash]
+    generator.rules.should == [expected_hash]
   end
 
   it 'renders all bar json when the render_paused_bars is true' do
-    rule_set = RuleSet.create
-    bar = Bar.create bar_type: 'email', rule_set: rule_set, paused: true
+    rule = Rule.create
+    bar = Bar.create bar_type: 'email', rule: rule, paused: true
     options = { render_paused_bars: true }
     generator = ScriptGenerator.new(site, options)
     generator.stub bar_settings: { id: bar.id, template_name: bar.bar_type, settings: { buffer_url: 'url' }}
 
-    site.stub rule_sets: [rule_set]
+    site.stub rules: [rule]
 
     expected_hash = {
       bar_json: [{ id: bar.id, template_name: bar.bar_type, settings: { buffer_url: 'url' }}].to_json,
       priority: 1,
-      metadata: { "id" => rule_set.id }.to_json,
+      metadata: { "id" => rule.id }.to_json,
       start_date: nil,
       end_date: nil,
       exclude_urls: nil,
       include_urls: nil
     }
 
-    generator.rule_sets.should == [expected_hash]
+    generator.rules.should == [expected_hash]
   end
 
   it 'renders only active bar json by default' do
-    rule_set = RuleSet.create
-    paused = Bar.create! bar_type: 'email', rule_set: rule_set, paused: true
-    active_bar = Bar.create! bar_type: 'traffic', rule_set: rule_set, paused: false
+    rule = Rule.create
+    paused = Bar.create! bar_type: 'email', rule: rule, paused: true
+    active_bar = Bar.create! bar_type: 'traffic', rule: rule, paused: false
     generator = ScriptGenerator.new(site)
     generator.stub bar_settings: { id: active_bar.id, template_name: active_bar.bar_type }
 
-    site.stub rule_sets: [rule_set]
+    site.stub rules: [rule]
 
     expected_hash = {
       bar_json: [{ id: active_bar.id, template_name: active_bar.bar_type }].to_json,
       priority: 1,
-      metadata: { "id" => rule_set.id }.to_json,
+      metadata: { "id" => rule.id }.to_json,
       start_date: nil,
       end_date: nil,
       exclude_urls: nil,
       include_urls: nil
     }
 
-    generator.rule_sets.should == [expected_hash]
+    generator.rules.should == [expected_hash]
   end
 end
 

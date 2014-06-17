@@ -1,8 +1,8 @@
 class Site < ActiveRecord::Base
   include GuaranteedQueue::Delay
 
-  has_many :rule_sets
-  has_many :bars, through: :rule_sets
+  has_many :rules
+  has_many :bars, through: :rules
   has_many :site_memberships, dependent: :destroy
   has_many :users, through: :site_memberships
 
@@ -54,8 +54,8 @@ class Site < ActiveRecord::Base
     @all_time_data ||= Hello::BarData.get_all_time_data(id)
   end
 
-  def create_default_rule_set
-    rule_sets.create!(:name => "Everyone") if rule_sets.empty?
+  def create_default_rule
+    rules.create!(:name => "Everyone") if rules.empty?
   end
 
   private

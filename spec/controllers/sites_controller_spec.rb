@@ -36,7 +36,7 @@ describe SitesController do
 
       site = @user.sites.last
 
-      site.rule_sets.size.should == 1
+      site.rules.size.should == 1
     end
   end
 

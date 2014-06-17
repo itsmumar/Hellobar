@@ -164,11 +164,11 @@ describe Hello::EmailDigest do
 
       @url = ""
       @site = sites(:polymathic)
-      @site.create_default_rule_set
+      @site.create_default_rule
     end
 
     it "suggests creation of a social bar if there aren't any" do
-      @site.rule_sets.first.bars = [
+      @site.rules.first.bars = [
         Bar.new.tap{|b| b.bar_type = "traffic"},
         Bar.new.tap{|b| b.bar_type = "email"}
       ]
@@ -177,7 +177,7 @@ describe Hello::EmailDigest do
     end
 
     it "suggests creation of an email bar if there aren't any" do
-      @site.rule_sets.first.bars = [
+      @site.rules.first.bars = [
         Bar.new.tap{|b| b.bar_type = "traffic"},
         Bar.new.tap{|b| b.bar_type = "social/tweet_on_twitter"}
       ]
@@ -186,7 +186,7 @@ describe Hello::EmailDigest do
     end
 
     it "suggests creation of a traffic bar if there aren't any" do
-      @site.rule_sets.first.bars = [
+      @site.rules.first.bars = [
         Bar.new.tap{|b| b.bar_type = "social/tweet_on_twitter"},
         Bar.new.tap{|b| b.bar_type = "email"}
       ]
@@ -195,7 +195,7 @@ describe Hello::EmailDigest do
     end
 
     it "suggests creation of a second bar of the worst-performing type, if at least one of each bar already exists" do
-      @site.rule_sets.first.bars = [
+      @site.rules.first.bars = [
         Bar.new.tap{|b| b.bar_type = "social/follow_on_twitter"},
         Bar.new.tap{|b| b.bar_type = "email"},
         Bar.new.tap{|b| b.bar_type = "traffic"}
@@ -205,7 +205,7 @@ describe Hello::EmailDigest do
     end
 
     it "uses dynamic bar units in 'worst-performing' CTA" do
-      @site.rule_sets.first.bars = [
+      @site.rules.first.bars = [
         Bar.new.tap{|b| b.bar_type = "social/follow_on_twitter"},
         Bar.new.tap{|b| b.bar_type = "email"},
         Bar.new.tap{|b| b.bar_type = "traffic"}

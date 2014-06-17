@@ -12,14 +12,14 @@ class Bar < ActiveRecord::Base
     social/share_on_buffer
   }
 
-  belongs_to :rule_set
+  belongs_to :rule
 
   validates :bar_type, presence: true, inclusion: { in: BAR_TYPES }
 
   scope :paused, -> { where(paused: true) }
   scope :active, -> { where(paused: false) }
 
-  delegate :site, to: :rule_set, allow_nil: true
+  delegate :site, to: :rule, allow_nil: true
 
   serialize :settings, Hash
 

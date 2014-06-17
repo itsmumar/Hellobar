@@ -59,10 +59,10 @@ class SiteElementsController < ApplicationController
 
   def load_site_element
     @site_element = Bar.find(params[:id])
-    raise ActiveRecord::RecordNotFound unless @site_element.rule_set.try(:site) == @site
+    raise ActiveRecord::RecordNotFound unless @site_element.rule.try(:site) == @site
   end
 
   def site_element_params
-    params.require(:site_element).permit(:rule_set_id, :bar_type)
+    params.require(:site_element).permit(:rule_id, :bar_type)
   end
 end
