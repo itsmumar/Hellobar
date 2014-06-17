@@ -6,7 +6,7 @@ class Bar < ActiveRecord::Base
     social/follow_on_twitter
     social/like_on_facebook
     social/share_on_linkedin
-    social/plue_one_on_google_plus
+    social/plus_one_on_google_plus
     social/pin_on_pinterest
     social/follow_on_pinterest
     social/share_on_buffer
