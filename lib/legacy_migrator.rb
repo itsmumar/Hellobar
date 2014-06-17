@@ -38,9 +38,7 @@ class LegacyMigrator
     end
 
     def migrate_goals_to_rule_sets
-    # - What to do with :name and :type?
-    # - NOT CURRENTLY IMPORTING FROM DATA_JSON:
-    #   - ["url", "collect_names", "interaction", "interaction_description", "url_to_tweet", "pinterest_url", "pinterest_image_url", "pinterest_description", "message_to_tweet", "url_to_like", "url_to_share", "twitter_handle", "use_location_for_url", "url_to_plus_one", "pinterest_user_url", "pinterest_full_name", "buffer_message", "buffer_url"]
+      count = 0
       LegacyGoal.find_each do |legacy_goal|
         if ::Site.exists?(legacy_goal.site_id)
           rule_set = ::RuleSet.create! id: legacy_goal.id,
@@ -56,6 +54,9 @@ class LegacyMigrator
           create_bars(legacy_goal.bars, legacy_goal).each do |new_bar|
             rule_set.bars << new_bar
           end
+
+          count += 1
+          puts "Migrated #{count} goals to rule sets" if count % 100 == 0
         else
           Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal:#{legacy_goal.id}"
         end
@@ -107,8 +108,8 @@ class LegacyMigrator
 
     def create_bars(legacy_bars, legacy_goal)
       legacy_bars.map do |legacy_bar|
-        social_setting_keys = ["buffer_message", "buffer_url", "collect_names", "link_url", "message_to_tweet", "pinterest_description", "pinterest_full_name", "pinterest_image_url", "pinterest_url", "pinterest_user_url", "twitter_handle", "url", "url_to_like", "url_to_plus_one", "url_to_share", "url_to_tweet", "use_location_for_url"]
-        social_settings = legacy_goal.data_json.select{|key, value| social_setting_keys.include?(key) && value.present? }
+        setting_keys = ["buffer_message", "buffer_url", "collect_names", "link_url", "message_to_tweet", "pinterest_description", "pinterest_full_name", "pinterest_image_url", "pinterest_url", "pinterest_user_url", "twitter_handle", "url", "url_to_like", "url_to_plus_one", "url_to_share", "url_to_tweet", "use_location_for_url"]
+        settings_to_migrate = legacy_goal.data_json.select{|key, value| setting_keys.include?(key) && value.present? }
 
         ::Bar.create! id: legacy_bar.legacy_bar_id || legacy_bar.id,
                       paused: !legacy_bar.active?,
@@ -140,7 +141,7 @@ class LegacyMigrator
                       text_color: legacy_bar.settings_json['text_color'],
                       texture: legacy_bar.settings_json['texture'],
                       thank_you_text: legacy_bar.settings_json['thank_you_text'],
-                      settings: social_settings
+                      settings: settings_to_migrate
       end
     end
 

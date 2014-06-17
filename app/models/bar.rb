@@ -21,7 +21,7 @@ class Bar < ActiveRecord::Base
 
   delegate :site, to: :rule_set, allow_nil: true
 
-  serialize :settings
+  serialize :settings, Hash
 
   def total_views
     return 0 unless site

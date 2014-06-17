@@ -193,12 +193,12 @@ describe ScriptGenerator, '#rule_sets' do
     bar = Bar.create bar_type: 'email', rule_set: rule_set, paused: true
     options = { render_paused_bars: true }
     generator = ScriptGenerator.new(site, options)
-    generator.stub bar_settings: { id: bar.id, template_name: bar.bar_type }
+    generator.stub bar_settings: { id: bar.id, template_name: bar.bar_type, settings: { buffer_url: 'url' }}
 
     site.stub rule_sets: [rule_set]
 
     expected_hash = {
-      bar_json: [{ id: bar.id, template_name: bar.bar_type }].to_json,
+      bar_json: [{ id: bar.id, template_name: bar.bar_type, settings: { buffer_url: 'url' }}].to_json,
       priority: 1,
       metadata: { "id" => rule_set.id }.to_json,
       start_date: nil,
