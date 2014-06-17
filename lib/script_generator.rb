@@ -68,14 +68,14 @@ private
     if options[:disable_eligibility]
       {}
     else
-      date_rule = rule_set.rules.where(type: 'DateRule').first || Rule.new(value: {})
-      url_rule = rule_set.rules.where(type: 'UrlRule').first || Rule.new(value: {})
+      date_condition = rule_set.conditions.where(type: 'DateCondition').first || Condition.new(value: {})
+      url_condition = rule_set.conditions.where(type: 'UrlCondition').first || Condition.new(value: {})
 
       {
-        start_date: rule_start_date(date_rule),
-        end_date: rule_end_date(date_rule),
-        exclude_urls: url_rule.value['exclude_urls'],
-        include_urls: url_rule.value['include_urls']
+        start_date: condition_start_date(date_condition),
+        end_date: condition_end_date(date_condition),
+        exclude_urls: url_condition.value['exclude_urls'],
+        include_urls: url_condition.value['include_urls']
       }
     end
   end
@@ -100,12 +100,12 @@ private
     @content_footer ||= File.read("#{Rails.root}/lib/script_generator/bar_footer.html")
   end
 
-  def rule_start_date(rule)
-    rule.value['start_date'].to_i if rule.value['start_date']
+  def condition_start_date(condition)
+    condition.value['start_date'].to_i if condition.value['start_date']
   end
 
-  def rule_end_date(rule)
-    rule.value['end_date'].to_i if rule.value['end_date']
+  def condition_end_date(condition)
+    condition.value['end_date'].to_i if condition.value['end_date']
   end
 
   def bar_settings(bar)

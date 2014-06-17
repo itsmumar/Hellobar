@@ -2,5 +2,5 @@ class RuleSet < ActiveRecord::Base
   belongs_to :site
 
   has_many :bars
-  has_many :rules
+  has_many :conditions
 end

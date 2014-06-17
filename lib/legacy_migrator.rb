@@ -47,8 +47,8 @@ class LegacyMigrator
                                        created_at: legacy_goal.created_at,
                                        updated_at: legacy_goal.updated_at
 
-          create_rules(rule_set, legacy_goal).each do |new_rule|
-            rule_set.rules << new_rule
+          create_conditions(rule_set, legacy_goal).each do |new_condition|
+            rule_set.conditions << new_condition
           end
 
           create_bars(legacy_goal.bars, legacy_goal).each do |new_bar|
@@ -106,8 +106,8 @@ class LegacyMigrator
       end
     end
 
-    def create_rules(rule_set, legacy_goal)
-      new_rules = []
+    def create_conditions(rule_set, legacy_goal)
+      new_conditions = []
 
       start_date = convert_start_time(legacy_goal.data_json['start_date'], legacy_goal.data_json['dates_timezone'])
       end_date = convert_end_time(legacy_goal.data_json['end_date'], legacy_goal.data_json['dates_timezone'])
@@ -115,16 +115,16 @@ class LegacyMigrator
       exclude_urls = legacy_goal.data_json['exclude_urls']
 
       if [start_date, end_date].any?(&:present?)
-        new_rules << DateRule.create!({ operator: 'EQ',
-                                        value: { 'start_date' => start_date, 'end_date' => end_date } })
+        new_conditions << DateCondition.create!({ operator: 'EQ',
+                                                  value: { 'start_date' => start_date, 'end_date' => end_date } })
       end
 
       if [include_urls, exclude_urls].any?(&:present?)
-        new_rules << UrlRule.create!({ operator: 'EQ',
-                                       value: { 'include_urls' => include_urls, 'exclude_urls' => exclude_urls }})
+        new_conditions << UrlCondition.create!({ operator: 'EQ',
+                                                 value: { 'include_urls' => include_urls, 'exclude_urls' => exclude_urls }})
       end
 
-      new_rules
+      new_conditions
     end
 
     def create_bars(legacy_bars, legacy_goal)

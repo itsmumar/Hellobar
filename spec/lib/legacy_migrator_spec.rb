@@ -209,12 +209,12 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
     bar.settings.should == { 'buffer_message' => 'such buffer. wow.' }
   end
 
-  it 'creates a new DateRule if start_date is specified' do
+  it 'creates a new DateCondition if start_date is specified' do
     legacy_goal.stub data_json: { 'start_date' => start_date }
 
     expect {
       LegacyMigrator.migrate_goals_to_rule_sets
-    }.to change(Rule, :count).by(1)
+    }.to change(Condition, :count).by(1)
   end
 
   it 'creates a new DateRule if end_date is specified' do
@@ -222,7 +222,7 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
 
     expect {
       LegacyMigrator.migrate_goals_to_rule_sets
-    }.to change(Rule, :count).by(1)
+    }.to change(Condition, :count).by(1)
   end
 
   it 'creates a new DateRule with the proper values when both start_date and end_date are specified' do
@@ -230,9 +230,9 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
 
     LegacyMigrator.migrate_goals_to_rule_sets
 
-    rule = RuleSet.find(legacy_goal.id).rules.first
+    condition = RuleSet.find(legacy_goal.id).conditions.first
 
-    rule.value.should == { 'start_date' => DateTime.parse(start_date + " 00:00:00"), 'end_date' => DateTime.parse(end_date + " 23:59:59") }
+    condition.value.should == { 'start_date' => DateTime.parse(start_date + " 00:00:00"), 'end_date' => DateTime.parse(end_date + " 23:59:59") }
   end
 
   it 'creates a new UrlRule if include_urls is specified' do
@@ -240,7 +240,7 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
 
     expect {
       LegacyMigrator.migrate_goals_to_rule_sets
-    }.to change(Rule, :count).by(1)
+    }.to change(Condition, :count).by(1)
   end
 
   it 'creates a new UrlRule if exclude_urls is specified' do
@@ -248,7 +248,7 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
 
     expect {
       LegacyMigrator.migrate_goals_to_rule_sets
-    }.to change(Rule, :count).by(1)
+    }.to change(Condition, :count).by(1)
   end
 
   it 'creates a new UrlRule if both exclude_urls and are specified' do
@@ -257,9 +257,9 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
 
     LegacyMigrator.migrate_goals_to_rule_sets
 
-    rule = RuleSet.find(legacy_goal.id).rules.first
+    condition = RuleSet.find(legacy_goal.id).conditions.first
 
-    rule.value.should == data
+    condition.value.should == data
   end
 
   it 'creates both a DateRule and UrlRule if start_date and include_urls are specified' do
@@ -268,6 +268,6 @@ describe LegacyMigrator, '.migrate_goals_to_rule_sets' do
 
     expect {
       LegacyMigrator.migrate_goals_to_rule_sets
-    }.to change(Rule, :count).by(2)
+    }.to change(Condition, :count).by(2)
   end
 end

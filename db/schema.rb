@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140617174822) do
+ActiveRecord::Schema.define(version: 20140617193452) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -77,6 +77,15 @@ ActiveRecord::Schema.define(version: 20140617174822) do
 
   add_index "bars", ["bar_type"], name: "index_bars_on_bar_type", using: :btree
   add_index "bars", ["rule_set_id"], name: "index_bars_on_rule_set_id", using: :btree
+
+  create_table "conditions", force: true do |t|
+    t.integer "rule_set_id"
+    t.string  "type",        null: false
+    t.string  "operator",    null: false
+    t.text    "value"
+  end
+
+  add_index "conditions", ["rule_set_id"], name: "index_conditions_on_rule_set_id", using: :btree
 
   create_table "internal_dimensions", force: true do |t|
     t.integer "person_id",              null: false
@@ -150,15 +159,6 @@ ActiveRecord::Schema.define(version: 20140617174822) do
   end
 
   add_index "rule_sets", ["site_id"], name: "index_rule_sets_on_site_id", using: :btree
-
-  create_table "rules", force: true do |t|
-    t.integer "rule_set_id"
-    t.string  "type",        null: false
-    t.string  "operator",    null: false
-    t.text    "value"
-  end
-
-  add_index "rules", ["rule_set_id"], name: "index_rules_on_rule_set_id", using: :btree
 
   create_table "site_memberships", force: true do |t|
     t.integer  "user_id"
