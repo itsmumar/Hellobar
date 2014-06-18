@@ -118,7 +118,7 @@ private
       target: bar.target_segment,
       template_name: bar.bar_type,
       settings: bar.settings
-    }).select{|key, value| value.present? }
+    }).select{|key, value| !value.nil? || !value == '' }
   end
 
   def rule_settings(rule)
