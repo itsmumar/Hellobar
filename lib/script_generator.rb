@@ -44,7 +44,7 @@ class ScriptGenerator < Mustache
   def templates
     site.bars.active.map do |bar|
       {
-        name: bar.bar_type.camelcase,
+        name: bar.bar_type,
         markup: content_template(bar.bar_type)
       }
     end
