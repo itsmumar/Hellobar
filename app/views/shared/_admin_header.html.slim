@@ -6,6 +6,6 @@
 
       .col-md-8
         - if current_admin
-          ul#navigation.logged-out-nav
+          ul#navigation.admin
             li= link_to "Users", admin_users_path
             li= link_to "Log out", admin_logout_path

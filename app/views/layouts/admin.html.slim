@@ -10,5 +10,6 @@ html
   body
     = render :partial => "shared/admin_header"
 
-  div.container
-    = yield
+    div.container
+      = render "shared/notices"
+      = yield

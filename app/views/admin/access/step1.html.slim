@@ -1,10 +1,17 @@
-h2 Admin
+div.row
+  div.col-md-4
+  div.col-md-4
+    h1 Admin
 
-= form_tag("/admin/access", class: "new_admin") do |f|
-  input type="email" name="login_email" placeholder="E-mail address"
+    = simple_form_for :new_admin, {:url => "/admin/access"} do |f|
+      = f.input :login_email, :label => "Email address", :input_html => {:name => :login_email}
 
-  - unless Admin.any_validated_access_token?(access_token)
-    div= recaptcha_tags
-    p If you have Disconnect extension for Chrome or Firefox, please disable it and reload to log in.
+      - unless Admin.any_validated_access_token?(access_token)
+        div= recaptcha_tags
+        p
+          br
+          small If you have Disconnect extension for Chrome or Firefox, please disable it and reload to log in.
 
-  input type="submit" id="login_submit" value="Continue"
+      = f.button :submit, "Continue", :class => "btn btn-primary"
+
+  div.col-md-4

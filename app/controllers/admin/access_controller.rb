@@ -16,6 +16,7 @@ class Admin::AccessController < ApplicationController
     end
 
     if @error
+      flash.now[:error] = @error
       render :reset_password
     else
       current_admin.reset_password!(params[:new_password])
