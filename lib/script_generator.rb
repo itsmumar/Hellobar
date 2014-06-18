@@ -42,10 +42,12 @@ class ScriptGenerator < Mustache
   end
 
   def templates
-    site.bars.active.map do |bar|
+    site.bars.active.group_by(&:bar_type).map do |type, bars|
+      bar_for_template = bars.first
+
       {
-        name: bar.bar_type,
-        markup: content_template(bar.bar_type)
+        name: bar_for_template.bar_type,
+        markup: content_template(bar_for_template.bar_type)
       }
     end
   end

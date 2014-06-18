@@ -56,6 +56,25 @@ describe ScriptGenerator, '#render' do
 
       generator.render.should include(expected_string)
     end
+
+    it 'renders only the setTemplate definition and 1 call per bar type' do
+      bar = double 'bar', bar_type: 'traffic'
+      site.stub bars: double('bars', active: [bar, bar])
+
+      generator = ScriptGenerator.new site
+
+      generator.render.scan('setTemplate').size.should == 2
+    end
+
+    it 'renders the setTemplate definition and 1 call per bar type for multiple types' do
+      traffic_bar = double 'bar', bar_type: 'traffic'
+      email_bar = double 'bar', bar_type: 'email'
+      site.stub bars: double('bars', active: [traffic_bar, email_bar])
+
+      generator = ScriptGenerator.new site
+
+      generator.render.scan('setTemplate').size.should == 3
+    end
   end
 
   context 'when rules are present' do
