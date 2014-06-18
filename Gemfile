@@ -30,6 +30,7 @@ gem "thin"
 gem "twilio-ruby"
 gem "uglifier", "2.0.1"
 gem "unf"
+gem "whenever"
 gem "zip"
 
 group :development, :test do
