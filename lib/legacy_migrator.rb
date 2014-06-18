@@ -44,6 +44,7 @@ class LegacyMigrator
           rule = ::Rule.create! id: legacy_goal.id,
                                 site_id: legacy_goal.site_id,
                                 priority: legacy_goal.priority,
+                                match: Rule::MATCH_ON[:all],
                                 created_at: legacy_goal.created_at,
                                 updated_at: legacy_goal.updated_at
 
