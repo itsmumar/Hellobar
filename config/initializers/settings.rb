@@ -17,6 +17,7 @@ unless defined?(Hellobar::Settings)
     s3_bucket
     tracking_host
     env_name
+    process_synchronously
   )
 
   keys.each do |key|
