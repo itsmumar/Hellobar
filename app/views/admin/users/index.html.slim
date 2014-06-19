@@ -1,15 +1,34 @@
-= form_tag "/admin/users", :method => :get, :id => "admin-users-search" do
-  = text_field_tag "q", "", :class => "form-control", :placeholder => "Search users"
+div.row
+  div.col-md-12
 
-h1 Users
+    = form_tag "/admin/users", :method => :get, :id => "admin-users-search" do
+      = text_field_tag "q", "", :class => "form-control", :placeholder => "Search users"
 
-- if @users.empty?
-  h3
-    i none found
+    h1 Users
 
-- else
-  - @users.each do |user|
-    h3= user.email
-    p= link_to "Impersonate this user", admin_impersonate_user_path(user), :method => :post
+    - if @users.empty?
+      h3
+        i none found
 
-  = paginate @users
+    - else
+      table.table
+        tr
+          th Email
+          th Sites
+          th Registered
+          th Logins
+          th Last login
+          th
+
+        - @users.each do |user|
+          tr
+            td= user.email
+            td
+              - user.sites.each do |site|
+                = "#{display_url_for_site(site)} (#{user.role_for_site(site)})#{site == user.sites.last ? '' : '<br>'}".html_safe
+            td= user.created_at.strftime("%b %d, %Y")
+            td= user.sign_in_count
+            td= user.last_sign_in_at.strftime("%b %d, %Y at %l:%M %p")
+            td= link_to "impersonate", admin_impersonate_user_path(user), :method => :post
+
+      = paginate @users
