@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140619161755) do
+ActiveRecord::Schema.define(version: 20140619214623) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -179,6 +179,8 @@ ActiveRecord::Schema.define(version: 20140619161755) do
     t.datetime "script_generated_at"
     t.datetime "script_attempted_to_generate_at"
   end
+
+  add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
