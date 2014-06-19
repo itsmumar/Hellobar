@@ -14,3 +14,6 @@ config/database.yml
 
 # Ignore personal TODO lists
 TODO
+
+# Ignore any SQL dumpfiles
+db/*_dump.sql
