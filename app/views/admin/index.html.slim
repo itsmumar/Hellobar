@@ -1,0 +1,6 @@
+div.row
+  div.col-md-12
+    - @optimizely_experiments.each do |experiment|
+      = render_signup_kpis(experiment, title: experiment)
+    = render_email_digest_kpis("installed_email_digest", title: "Email Digest: Installed Version")
+    = render_email_digest_kpis("not_installed_email_digest", title: "Email Digest: Not Installed Version")

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140617200338) do
+ActiveRecord::Schema.define(version: 20140619161755) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20140617200338) do
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
 
-  create_table "internal_dimensions", force: true do |t|
+  create_table "internal_dimensions", id: false, force: true do |t|
     t.integer "person_id",              null: false
     t.string  "name",      default: "", null: false
     t.string  "value"
@@ -109,7 +109,6 @@ ActiveRecord::Schema.define(version: 20140617200338) do
   create_table "internal_people", force: true do |t|
     t.string  "visitor_id",                limit: 40
     t.integer "user_id"
-    t.integer "account_id"
     t.integer "first_visited_at"
     t.integer "signed_up_at"
     t.integer "completed_registration_at"
@@ -118,13 +117,12 @@ ActiveRecord::Schema.define(version: 20140617200338) do
     t.integer "received_data_at"
   end
 
-  add_index "internal_people", ["account_id"], name: "index_internal_people_on_account_id", using: :btree
   add_index "internal_people", ["first_visited_at"], name: "index_internal_people_on_first_visited_at", using: :btree
   add_index "internal_people", ["signed_up_at"], name: "index_internal_people_on_signed_up_at", using: :btree
   add_index "internal_people", ["user_id"], name: "index_internal_people_on_user_id", using: :btree
   add_index "internal_people", ["visitor_id"], name: "index_internal_people_on_visitor_id", using: :btree
 
-  create_table "internal_processing", force: true do |t|
+  create_table "internal_processing", id: false, force: true do |t|
     t.integer "last_updated_at",                null: false
     t.integer "last_event_processed",           null: false
     t.integer "last_prop_processed",            null: false
