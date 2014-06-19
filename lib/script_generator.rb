@@ -112,7 +112,7 @@ private
 
   def content_template(bar_type)
     ActiveSupport.escape_html_entities_in_json = false
-    content = (content_header << content_markup(bar_type) << content_footer).to_json
+    content = (content_header + content_markup(bar_type) + content_footer).to_json
     ActiveSupport.escape_html_entities_in_json = true
 
     content
