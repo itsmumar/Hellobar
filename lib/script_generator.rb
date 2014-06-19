@@ -160,6 +160,6 @@ private
   end
 
   def metadata(rule)
-    rule_settings(rule).select{|k,v| v.present? }.with_indifferent_access
+    rule_settings(rule).select{|key,value| value.present? }.with_indifferent_access
   end
 end
