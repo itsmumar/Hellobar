@@ -145,7 +145,6 @@ private
     rule.attributes.select{|key, value| settings.include?(key) && value.present? }
   end
 
-  # FIXME: if bar_id is present, bars will not be ennumerable
   def bars_for_rule(rule)
     bars = if options[:bar_id]
       [rule.bars.find(options[:bar_id])]
