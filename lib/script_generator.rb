@@ -94,11 +94,11 @@ private
 
   def date_conditions(condition)
     if condition.value.has_key?('start_date') && condition.value.has_key?('end_date')
-      "((new Date()).getTime()/1000 > #{condition.value['start_date']}) && ((new Date()).getTime()/1000 < #{condition.value['end_date']})"
+      "((new Date()).getTime()/1000 > #{condition.value['start_date'].to_i}) && ((new Date()).getTime()/1000 < #{condition.value['end_date'].to_i})"
     elsif condition.value.has_key?('start_date')
-      "((new Date()).getTime()/1000 > #{condition.value['start_date']})"
+      "((new Date()).getTime()/1000 > #{condition.value['start_date'].to_i})"
     elsif condition.value.has_key?('end_date')
-      "((new Date()).getTime()/1000 < #{condition.value['end_date']})"
+      "((new Date()).getTime()/1000 < #{condition.value['end_date'].to_i})"
     end
   end
 
@@ -126,14 +126,6 @@ private
 
   def content_footer
     @content_footer ||= File.read("#{Rails.root}/lib/script_generator/bar_footer.html")
-  end
-
-  def condition_start_date(condition)
-    condition.value['start_date'].to_i if condition.value['start_date']
-  end
-
-  def condition_end_date(condition)
-    condition.value['end_date'].to_i if condition.value['end_date']
   end
 
   def bar_settings(bar)
