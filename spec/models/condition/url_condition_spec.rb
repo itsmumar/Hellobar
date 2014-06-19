@@ -21,3 +21,20 @@ describe UrlCondition, '.create_exclude_url' do
     UrlCondition.create_exclude_url(url)
   end
 end
+
+describe UrlCondition, '#url' do
+  it 'returns the include_url if present' do
+    condition = UrlCondition.new value: { 'include_url' => 'include' }
+
+    condition.url.should == 'include'
+  end
+
+  it 'returns the exclude_url if present' do
+    condition = UrlCondition.new value: { 'exclude_url' => 'exclude' }
+
+    condition.url.should == 'exclude'
+  end
+  it 'returns nil when neither include_url nor exclude_url are present' do
+    UrlCondition.new.url.should be_nil
+  end
+end

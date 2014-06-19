@@ -70,16 +70,44 @@ private
     if options[:disable_eligibility]
       {}
     else
-      date_condition = rule.conditions.where(segment: 'DateCondition').first || Condition.new(value: {})
-      url_condition = rule.conditions.where(segment: 'UrlCondition').first || Condition.new(value: {})
-
       {
-        start_date: condition_start_date(date_condition),
-        end_date: condition_end_date(date_condition),
-        exclude_urls: url_condition.value['exclude_urls'],
-        include_urls: url_condition.value['include_urls']
+        rule_eligibility: condition_string(rule.match, rule.conditions)
       }
     end
+  end
+
+  def condition_string(match, conditions)
+    join_operator = match == Rule::MATCH_ON[:all] ? '&&' : '||'
+
+    string = conditions.map do |condition|
+      if condition.kind_of?(DateCondition)
+        date_conditions(condition)
+      elsif condition.kind_of?(UrlCondition)
+        url_conditions(condition)
+      end
+    end.join(join_operator)
+
+    if string.present?
+      "return #{string};}"
+    else
+      'return true;}'
+    end
+  end
+
+  def date_conditions(condition)
+    if condition.value.has_key?('start_date') && condition.value.has_key?('end_date')
+      "((new Date()).getTime()/1000 > #{condition.value['start_date']}) && ((new Date()).getTime()/1000 < #{condition.value['end_date']})"
+    elsif condition.value.has_key?('start_date')
+      "((new Date()).getTime()/1000 > #{condition.value['start_date']})"
+    elsif condition.value.has_key?('end_date')
+      "((new Date()).getTime()/1000 < #{condition.value['end_date']})"
+    end
+  end
+
+  def url_conditions(condition)
+    bang = condition.value.has_key?('include_url') ? '' : '!'
+
+    "(#{bang}HB.umatch(\"#{condition.url}\", document.location))"
   end
 
   def content_template(bar_type)

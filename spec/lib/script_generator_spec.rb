@@ -82,83 +82,91 @@ describe ScriptGenerator, '#render' do
       generator = ScriptGenerator.new(site, { :disable_eligibility => true })
       rule = Rule.new
       date_condition = DateCondition.new value: { 'start_date' => 1_000, 'end_date' => 2_000 }
-      url_condition = UrlCondition.new value: { 'include_urls' => ['http://good.com'], 'exclude_urls' => ['http://other.com'] }
+      url_condition = UrlCondition.new value: { 'include_url' => 'http://good.com', 'exclude_url' => 'http://other.com' }
       rule.stub conditions: [date_condition, url_condition]
       site.stub rules: [rule]
 
-      unexpected_pattern = /if \( \(new Date\(\)\)\.getTime\(\)\/(.*) return (.*);|HB.umatch(.*) return (.*);/
+      unexpected_pattern = /\(new Date\(\)\)\.getTime\(\)\/(.*)|HB.umatch(.*);/
 
       generator.render.should_not match(unexpected_pattern)
     end
 
     it 'has a start date constraint when present' do
-      rule = double 'rule', start_date: 1_000
-      generator.stub rules: [rule]
+      rule = Rule.new
+      condition = DateCondition.new value: { 'start_date' => 1_000 }
+      rule.stub conditions: [condition]
+      site.stub rules: [rule]
 
-      expected_string = 'if ( (new Date()).getTime()/1000 < 1000) return false;'
+      expected_string = '(new Date()).getTime()/1000 > 1000)'
 
       generator.render.should include(expected_string)
     end
 
     it 'does NOT have a start date constraint when not present' do
-      rule = double 'rule', start_date: nil
-      generator.stub rules: [rule]
+      rule = Rule.new
+      site.stub rules: [rule]
 
-      unexpected_string = /if \( \(new Date\(\)\)\.getTime\(\)\/1000 <(.*) return false;/
+      unexpected_string = /\(new Date\(\)\)\.getTime\(\)\/1000/
 
       generator.render.should_not match(unexpected_string)
     end
 
     it 'has an end date constraint when present' do
-      rule = double 'rule', end_date: 2_000
-      generator.stub rules: [rule]
+      rule = Rule.new
+      condition = DateCondition.new value: { 'end_date' => 20_000 }
+      rule.stub conditions: [condition]
+      site.stub rules: [rule]
 
-      expected_string = 'if ( (new Date()).getTime()/1000 > 2000) return false;'
+      expected_string = '(new Date()).getTime()/1000 < 20000)'
 
       generator.render.should include(expected_string)
     end
 
     it 'does NOT have a start date constraint when not present' do
-      rule = double 'rule', end_date: nil
-      generator.stub rules: [rule]
+      rule = Rule.new
+      site.stub rules: [rule]
 
-      unexpected_string = /if \( \(new Date\(\)\)\.getTime\(\)\/1000 >(.*)return false;/
+      unexpected_string = /\(new Date\(\)\)\.getTime\(\)\//
 
       generator.render.should_not match(unexpected_string)
     end
 
     it 'adds an exlusion constraint for all blacklisted URLs' do
-      rule = double 'rule', exclude_urls: [{ url: 'http://amazing.com' }]
-      generator.stub rules: [rule]
+      rule = Rule.new
+      conditions = [UrlCondition.new(value: { 'exclude_url' => 'http://soamazing.com' })]
+      rule.stub bars: double('bars', active: []), attributes: {}, conditions: conditions
+      site.stub rules: [rule]
 
-      expected_string = "if (HB.umatch(\"http://amazing.com\", document.location)) return false;"
+      expected_string = "(!HB.umatch(\"http://soamazing.com\", document.location))"
 
       generator.render.should include(expected_string)
     end
 
     it 'does NOT have exclusion constraints when no sites are blacklisted' do
-      rule = double 'rule', exclude_urls: []
-      generator.stub rules: [rule]
+      rule = Rule.new
+      site.stub rules: [rule]
 
-      expected_string = Regexp.new /HB.umatch(.*) return false;/
+      expected_string = Regexp.new /HB.umatch(.*)/
 
       generator.render.should_not match(expected_string)
     end
 
     it 'adds an inclusion constraint for all whitelisted URLs' do
-      rule = double 'rule', include_urls: [{ url: 'http://soamazing.com' }]
-      generator.stub rules: [rule]
+      rule = Rule.new
+      conditions = [UrlCondition.new(value: { 'include_url' => 'http://soamazing.com' })]
+      rule.stub conditions: conditions
+      site.stub rules: [rule]
 
-      expected_string = "if (HB.umatch(\"http://soamazing.com\", document.location)) return true;"
+      expected_string = "(HB.umatch(\"http://soamazing.com\", document.location));"
 
       generator.render.should include(expected_string)
     end
 
     it 'does NOT have inclusion constraints when no sites are whitelisted' do
-      rule = double 'rule', include_urls: []
+      rule = Rule.new
       generator.stub rules: [rule]
 
-      expected_string = Regexp.new /HB.umatch(.*) return true;/
+      expected_string = Regexp.new /HB.umatch(.*)/
 
       generator.render.should_not match(expected_string)
     end
@@ -178,10 +186,7 @@ describe ScriptGenerator, '#rules' do
       bar_json: [].to_json,
       priority: 1,
       metadata: { "id" => 1 }.to_json,
-      start_date: nil,
-      end_date: nil,
-      exclude_urls: nil,
-      include_urls: nil
+      rule_eligibility: 'return true;}'
     }
 
     generator.rules.should == [expected_hash]
@@ -201,10 +206,7 @@ describe ScriptGenerator, '#rules' do
       bar_json: [{ id: bar.id, template_name: bar.bar_type }].to_json,
       priority: 1,
       metadata: { "id" => rule.id }.to_json,
-      start_date: nil,
-      end_date: nil,
-      exclude_urls: nil,
-      include_urls: nil
+      rule_eligibility: 'return true;}'
     }
 
     generator.rules.should == [expected_hash]
@@ -223,10 +225,7 @@ describe ScriptGenerator, '#rules' do
       bar_json: [{ id: bar.id, template_name: bar.bar_type, settings: { buffer_url: 'url' }}].to_json,
       priority: 1,
       metadata: { "id" => rule.id }.to_json,
-      start_date: nil,
-      end_date: nil,
-      exclude_urls: nil,
-      include_urls: nil
+      rule_eligibility: 'return true;}'
     }
 
     generator.rules.should == [expected_hash]
@@ -245,10 +244,7 @@ describe ScriptGenerator, '#rules' do
       bar_json: [{ id: active_bar.id, template_name: active_bar.bar_type }].to_json,
       priority: 1,
       metadata: { "id" => rule.id }.to_json,
-      start_date: nil,
-      end_date: nil,
-      exclude_urls: nil,
-      include_urls: nil
+      rule_eligibility: 'return true;}'
     }
 
     generator.rules.should == [expected_hash]

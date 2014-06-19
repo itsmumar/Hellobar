@@ -11,4 +11,8 @@ class UrlCondition < Condition
     UrlCondition.create operand: Condition::OPERANDS[:excludes],
                         value: { 'exclude_url' => url }
   end
+
+  def url
+    value['include_url'] || value['exclude_url']
+  end
 end
