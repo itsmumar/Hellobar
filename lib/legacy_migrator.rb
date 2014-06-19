@@ -115,14 +115,19 @@ class LegacyMigrator
       include_urls = legacy_goal.data_json['include_urls']
       exclude_urls = legacy_goal.data_json['exclude_urls']
 
-      if [start_date, end_date].any?(&:present?)
-        new_conditions << DateCondition.create!({ operand: '=',
-                                                  value: { 'start_date' => start_date, 'end_date' => end_date } })
+      date_condition = DateCondition.create_from_params(start_date, end_date)
+      new_conditions << date_condition if date_condition
+
+      if include_urls.present?
+        include_urls.each do |include_url|
+          new_conditions << UrlCondition.create_include_url(include_url)
+        end
       end
 
-      if [include_urls, exclude_urls].any?(&:present?)
-        new_conditions << UrlCondition.create!({ operand: '=',
-                                                 value: { 'include_urls' => include_urls, 'exclude_urls' => exclude_urls }})
+      if exclude_urls.present?
+        exclude_urls.each do |exclude_url|
+          new_conditions << UrlCondition.create_exclude_url(exclude_url)
+        end
       end
 
       new_conditions

@@ -252,22 +252,23 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
   end
 
   it 'creates a new UrlRule if both exclude_urls and are specified' do
-    data = { 'exclude_urls' => ['http://include.com'], 'include_urls' => ['http://exclude.com'] }
+    data = { 'exclude_urls' => ['http://exclude.com'], 'include_urls' => ['http://include.com'] }
     legacy_goal.stub data_json: data
 
     LegacyMigrator.migrate_goals_to_rules
 
-    condition = Rule.find(legacy_goal.id).conditions.first
+    conditions = Rule.find(legacy_goal.id).conditions
 
-    condition.value.should == data
+    conditions.find{|condition| condition.value.has_key?('include_url') }.value.should == { 'include_url' => 'http://include.com' }
+    conditions.find{|condition| condition.value.has_key?('exclude_url') }.value.should == { 'exclude_url' => 'http://exclude.com' }
   end
 
-  it 'creates both a DateRule and UrlRule if start_date and include_urls are specified' do
-    data = { 'exclude_urls' => ['http://include.com'], 'include_urls' => ['http://exclude.com'], 'start_date' => '01/01/2001', 'end_date' => '12/12/2012' }
+  it 'creates both a DateRule and a UrlRule for every url present when start_date and include_urls are specified' do
+    data = { 'exclude_urls' => ['http://include.com', 'http://another.com'], 'include_urls' => ['http://exclude.com'], 'start_date' => '01/01/2001', 'end_date' => '12/12/2012' }
     legacy_goal.stub data_json: data
 
     expect {
       LegacyMigrator.migrate_goals_to_rules
-    }.to change(Condition, :count).by(2)
+    }.to change(Condition, :count).by(4)
   end
 end
