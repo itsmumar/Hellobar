@@ -43,11 +43,13 @@ class SiteElementsController < ApplicationController
 
   def pause
     @site_element.update_attribute(:paused, true)
+    @site.generate_script
     redirect_to site_site_elements_path(:site_id => @site)
   end
 
   def unpause
     @site_element.update_attribute(:paused, false)
+    @site.generate_script
     redirect_to site_site_elements_path(:site_id => @site)
   end
 
