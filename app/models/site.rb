@@ -55,7 +55,10 @@ class Site < ActiveRecord::Base
   end
 
   def create_default_rule
-    rules.create!(:name => "Everyone") if rules.empty?
+    return unless rules.empty?
+
+    rules.create!(:name => "Everyone",
+                  :match => Rule::MATCH_ON[:all])
   end
 
   private
