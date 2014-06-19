@@ -39,6 +39,7 @@ group :development, :test do
   gem "pry"
   gem "rspec-rails", "~> 2.14"
   gem "autotest-rails"
+  gem "metric_fu"
 end
 
 group :test do
