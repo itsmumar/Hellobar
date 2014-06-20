@@ -133,11 +133,22 @@ describe ScriptGenerator, '#render' do
 
     it 'adds an exlusion constraint for all blacklisted URLs' do
       rule = Rule.new
-      conditions = [UrlCondition.new(value: { 'exclude_url' => 'http://soamazing.com' })]
+      conditions = [UrlCondition.new(value: { 'exclude_url' => '/signup' })]
       rule.stub bars: double('bars', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
-      expected_string = "(!HB.umatch(\"http://soamazing.com\", document.location))"
+      expected_string = "(!HB.umatch(\"/signup\", document.location))"
+
+      generator.render.should include(expected_string)
+    end
+
+    it 'converts excluded urls to paths' do
+      rule = Rule.new
+      conditions = [UrlCondition.new(value: { 'exclude_url' => 'http://soamazing.com/signup' })]
+      rule.stub bars: double('bars', active: []), attributes: {}, conditions: conditions
+      site.stub rules: [rule]
+
+      expected_string = "(!HB.umatch(\"/signup\", document.location))"
 
       generator.render.should include(expected_string)
     end
@@ -153,11 +164,11 @@ describe ScriptGenerator, '#render' do
 
     it 'adds an inclusion constraint for all whitelisted URLs' do
       rule = Rule.new
-      conditions = [UrlCondition.new(value: { 'include_url' => 'http://soamazing.com' })]
+      conditions = [UrlCondition.new(value: { 'include_url' => '/signup' })]
       rule.stub conditions: conditions
       site.stub rules: [rule]
 
-      expected_string = "(HB.umatch(\"http://soamazing.com\", document.location));"
+      expected_string = "(HB.umatch(\"/signup\", document.location));"
 
       generator.render.should include(expected_string)
     end

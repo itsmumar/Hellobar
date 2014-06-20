@@ -105,7 +105,15 @@ private
   def url_conditions(condition)
     bang = condition.value.has_key?('include_url') ? '' : '!'
 
-    "(#{bang}HB.umatch(\"#{condition.url}\", document.location))"
+    "(#{bang}HB.umatch(\"#{path_for_url(condition.url)}\", document.location))"
+  end
+
+  def path_for_url(url)
+    path = Addressable::URI.heuristic_parse(url).path
+    path.gsub!(/\/+$/, "") # strip trailing slashes
+    path.blank? ? "/" : path
+  rescue Addressable::URI::InvalidURIError
+    url
   end
 
   def content_template(bar_type)
