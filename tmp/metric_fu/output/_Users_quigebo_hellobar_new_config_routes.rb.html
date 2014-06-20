@@ -1,0 +1,619 @@
+<html>
+  <head>
+    <style>
+      table { background: #fff; color: #000; }
+.ruby .normal { color: #000; }
+.ruby .comment { color: #005; font-style: italic; }
+.ruby .keyword { color: #A44; font-weight: bold; }
+.ruby .method { color: #44f; }
+.ruby .class { color: #b1713d; }
+.ruby .module { color: #050; }
+.ruby .punct { color: #668; font-weight: bold; }
+.ruby .symbol { color: #00f; }
+.ruby .string { color: #4a4; }
+.ruby .char { color: #F07; }
+.ruby .ident { color: #000; }
+.ruby .constant { color: #b1713d; }
+.ruby .regex { color: #B66; background: #FEF; }
+.ruby .number { color: #F99; }
+.ruby .attribute { color: #f84; }
+.ruby .global { color: #7FB; }
+.ruby .expr { color: #227; }
+.ruby .escape { color: #277; }
+    </style>
+    <title>Analyzed File Report</title>
+  </head>
+  <body>
+    <table cellpadding='0' cellspacing='0' class='ruby'>
+      
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span class="constant">Rails</span>.application.routes.draw <span class="keyword">do</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n2" name="n2">2</a></span>  devise_for <span class="symbol">:users</span>, <span class="symbol">:controllers</span> =&gt; {<span class="symbol">:sessions</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">users/sessions</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:passwords</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">users/passwords</span><span class="delimiter">&quot;</span></span>}
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n3" name="n3">3</a></span>  root <span class="string"><span class="delimiter">&quot;</span><span class="content">welcome#index</span><span class="delimiter">&quot;</span></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n4" name="n4">4</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n5" name="n5">5</a></span>  get <span class="string"><span class="delimiter">&quot;</span><span class="content">profile</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">user#edit</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:as</span> =&gt; <span class="symbol">:profile</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n6" name="n6">6</a></span>  resource <span class="symbol">:user</span>, <span class="symbol">:controller</span> =&gt; <span class="symbol">:user</span>, <span class="symbol">:only</span> =&gt; [<span class="symbol">:update</span>]
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n7" name="n7">7</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+             <ul>
+               
+                 <li>restrict auto-generated routes sites (except: [:edit, :index]) &raquo; rails_best_practices</li>
+               
+            </ul>
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n8" name="n8">8</a></span>  resources <span class="symbol">:sites</span> <span class="keyword">do</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+             <ul>
+               
+                 <li>restrict auto-generated routes sites/wordpress_plugin (only: [:show]) &raquo; rails_best_practices</li>
+               
+            </ul>
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    resource <span class="symbol">:wordpress_plugin</span>, <span class="symbol">:controller</span> =&gt; <span class="symbol">:wordpress_plugin</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n11" name="n11">11</a></span>    put <span class="string"><span class="delimiter">&quot;</span><span class="content">site_elements/:id/pause</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">site_elements#pause</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:as</span> =&gt; <span class="symbol">:pause_site_element</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n12" name="n12">12</a></span>    put <span class="string"><span class="delimiter">&quot;</span><span class="content">site_elements/:id/unpause</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">site_elements#unpause</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:as</span> =&gt; <span class="symbol">:unpause_site_element</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+             <ul>
+               
+                 <li>restrict auto-generated routes sites/site_elements (except: [:show, :edit, :index]) &raquo; rails_best_practices</li>
+               
+            </ul>
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n13" name="n13">13</a></span>    resources <span class="symbol">:site_elements</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n14" name="n14">14</a></span>  <span class="keyword">end</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n15" name="n15">15</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n16" name="n16">16</a></span>  <span class="string"><span class="delimiter">%w(</span><span class="content">email_developer generic_message</span><span class="delimiter">)</span></span>.each <span class="keyword">do</span> |sub|
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n17" name="n17">17</a></span>    post <span class="string"><span class="delimiter">&quot;</span><span class="content">/contact_submissions/</span><span class="inline"><span class="inline-delimiter">#{</span>sub<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">contact_submissions#</span><span class="inline"><span class="inline-delimiter">#{</span>sub<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>, <span class="symbol">:as</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span>sub<span class="inline-delimiter">}</span></span><span class="content">_contact_submission</span><span class="delimiter">&quot;</span></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n18" name="n18">18</a></span>  <span class="keyword">end</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n19" name="n19">19</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>  get <span class="string"><span class="delimiter">&quot;</span><span class="content">/admin</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">admin#index</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:as</span> =&gt; <span class="symbol">:admin</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n21" name="n21">21</a></span>  namespace <span class="symbol">:admin</span> <span class="keyword">do</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n22" name="n22">22</a></span>    resources <span class="symbol">:users</span>, <span class="symbol">:only</span> =&gt; [<span class="symbol">:index</span>]
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n23" name="n23">23</a></span>    post <span class="string"><span class="delimiter">&quot;</span><span class="content">users/:id/impersonate</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">users#impersonate</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:as</span> =&gt; <span class="symbol">:impersonate_user</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n24" name="n24">24</a></span>    delete <span class="string"><span class="delimiter">&quot;</span><span class="content">users/unimpersonate</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">users#unimpersonate</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:as</span> =&gt; <span class="symbol">:unimpersonate_user</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n25" name="n25">25</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n26" name="n26">26</a></span>    get <span class="string"><span class="delimiter">&quot;</span><span class="content">lockdown/:email/:key/:timestamp</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">access#lockdown</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:constraints</span> =&gt; {<span class="symbol">:email</span> =&gt; <span class="regexp"><span class="delimiter">/</span><span class="content">[^</span><span class="char">\/</span><span class="content">]+</span><span class="delimiter">/</span></span>}, <span class="symbol">:as</span> =&gt; <span class="symbol">:lockdown</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n27" name="n27">27</a></span>    get <span class="string"><span class="delimiter">&quot;</span><span class="content">validate_access_token/:email/:key/:timestamp</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">access#validate_access_token</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:constraints</span> =&gt; {<span class="symbol">:email</span> =&gt; <span class="regexp"><span class="delimiter">/</span><span class="content">[^</span><span class="char">\/</span><span class="content">]+</span><span class="delimiter">/</span></span>}, <span class="symbol">:as</span> =&gt; <span class="symbol">:validate_access_token</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n28" name="n28">28</a></span>    get <span class="string"><span class="delimiter">&quot;</span><span class="content">logout</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">access#logout_admin</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:as</span> =&gt; <span class="symbol">:logout</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n29" name="n29">29</a></span>    get <span class="string"><span class="delimiter">&quot;</span><span class="content">reset_password</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">access#reset_password</span><span class="delimiter">&quot;</span></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n30" name="n30">30</a></strong></span>    post <span class="string"><span class="delimiter">&quot;</span><span class="content">reset_password</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">access#do_reset_password</span><span class="delimiter">&quot;</span></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n31" name="n31">31</a></span>    get <span class="string"><span class="delimiter">&quot;</span><span class="content">access</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">access#step1</span><span class="delimiter">&quot;</span></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n32" name="n32">32</a></span>    post <span class="string"><span class="delimiter">&quot;</span><span class="content">access/authenticate</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">access#process_step2</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:as</span> =&gt; <span class="symbol">:authenticate</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n33" name="n33">33</a></span>    post <span class="string"><span class="delimiter">&quot;</span><span class="content">access</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">access#process_step1</span><span class="delimiter">&quot;</span></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n34" name="n34">34</a></span>    get <span class="string"><span class="delimiter">&quot;</span><span class="content">locked</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:to</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">access#locked</span><span class="delimiter">&quot;</span></span>, <span class="symbol">:as</span> =&gt; <span class="symbol">:locked</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n35" name="n35">35</a></span>  <span class="keyword">end</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n36" name="n36">36</a></span><span class="keyword">end</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+    </table>
+  </body>
+</html>

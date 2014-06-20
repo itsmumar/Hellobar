@@ -1,0 +1,3254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <meta content='en' http-equiv='Content-Language' />
+    <title>metrics</title>
+    <style>
+    /*
+Copyright (c) 2008, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 2.5.2
+*/
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym {border:0;font-variant:normal;}sup {vertical-align:text-top;}sub {vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
+
+    /* --------------------------------------------------------------
+
+   buttons.css
+   * Gives you some great CSS-only buttons.
+
+   Created by Kevin Hale [particletree.com]
+   * particletree.com/features/rediscovering-the-button-element
+
+   See Readme.txt in this folder for instructions.
+
+-------------------------------------------------------------- */
+
+button {
+  display:block;
+  float:left;
+  margin:0 0.583em 0.667em 0;
+  padding:5px 10px 5px 7px;   /* Links */
+
+  border:1px solid #dedede;
+  border-top:1px solid #eee;
+  border-left:1px solid #eee;
+
+  background-color:#f5f5f5;
+  font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+  font-size:100%;
+  line-height:130%;
+  text-decoration:none;
+  font-weight:bold;
+  color:#565656;
+  cursor:pointer;
+}
+button {
+  width:auto;
+  overflow:visible;
+  padding:4px 10px 3px 7px;   /* IE6 */
+}
+button[type] {
+  padding:4px 10px 4px 7px;   /* Firefox */
+  line-height:17px;           /* Safari */
+}
+*:first-child+html button[type] {
+  padding:4px 10px 3px 7px;   /* IE7 */
+}
+button img {
+  margin:0 3px -3px 0 !important;
+  padding:0;
+  border:none;
+  width:16px;
+  height:16px;
+  float:none;
+}
+
+
+/* Button colors
+-------------------------------------------------------------- */
+
+/* Standard */
+button:hover {
+  background-color:#dff4ff;
+  border:1px solid #c2e1ef;
+  color:#336699;
+}
+
+/* Positive */
+body .positive {
+  color:#529214;
+}
+button.positive:hover {
+  background-color:#E6EFC2;
+  border:1px solid #C6D880;
+  color:#529214;
+}
+
+/* Negative */
+body .negative {
+  color:#d12f19;
+}
+button.negative:hover {
+  background:#fbe3e4;
+  border:1px solid #fbc2c4;
+  color:#d12f19;
+}
+
+    html {
+  background-color: #e0e0e0; }
+
+body {
+  font-size: 100%;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  color: #333333; }
+
+a {
+  color: #ed1556;
+  text-decoration: none; }
+  a:hover {
+    color: #ffffff;
+    background-color: #ed1556; }
+
+#header, #content, #footer {
+  margin: 0 auto;
+  background: #eeeeee;
+  padding: 0 2em;
+  z-index: 0;
+  position: relative;
+  font-size: 1em; }
+
+#header {
+  background: #ffffff; }
+  #header h1 {
+    font-weight: bold;
+    font-size: 1.5em; }
+  #header address.watermark {
+    position: absolute;
+    font-weight: bold;
+    right: 3em;
+    top: 0;
+    font-size: .75em;
+    color: #cccccc; }
+    #header address.watermark a {
+      color: #cccccc;
+      font-weight: bold;
+      font-size: 2em; }
+      #header address.watermark a:hover {
+        background: transparent;
+        color: #aaaaaa; }
+
+#content {
+  padding-top: 1em;
+  padding-bottom: 2em; }
+  #content strong {
+    font-weight: bold; }
+  #content em {
+    font-style: italic; }
+  #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 {
+    color: #4e4e4e; }
+  #content h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: .75em;
+    padding: .25em 0;
+    line-height: 1.2;
+    border-bottom: 1px solid #c0c0c0; }
+  #content h2 {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 1em 0 .2em; }
+  #content h3 {
+    font-weight: bold;
+    font-size: 1.25em;
+    margin: .25em 0; }
+  #content h4, #content h5, #content h6 {
+    font-weight: bold;
+    margin-top: .5em; }
+  #content code, #content pre, #content textarea, #content input {
+    font-family: Monaco, Deja Vu Sans Mono, Inconsolata, Consolas, monospace; }
+  #content form p {
+    margin-top: 1em;
+    position: relative; }
+    #content form p.checkbox label {
+      margin-top: 0 !important; }
+  #content form input.text, #content form textarea {
+    width: 30em;
+    padding: .2em .4em;
+    color: #4e4e4e; }
+  #content form input.text {
+    height: 1.4em; }
+  #content form label {
+    float: left;
+    display: block;
+    margin-top: .5em;
+    width: 8em;
+    margin-right: .75em; }
+  #content form .with_errors label {
+    background: red;
+    color: white;
+    position: relative;
+    top: -.7em; }
+  #content form .with_errors.required label {
+    position: static;
+    margin-right: .25em;
+    padding: 0 .2em; }
+  #content form .with_errors input, #content form .with_errors textarea {
+    border: 2px solid #f22;
+    background: #fee;
+    color: #222222; }
+  #content form .required label {
+    float: none;
+    display: block;
+    width: auto;
+    position: relative;
+    font-weight: bold;
+    margin-top: 1em;
+    text-indent: -.65em; }
+    #content form .required label:before {
+      content: "* ";
+      color: #ed1556; }
+  #content form .required input.text {
+    width: 25.6em;
+    font-size: 24px;
+    font-weight: bold; }
+  #content form .normal {
+    margin-top: 2em; }
+  #content form h2.notifier label {
+    float: none;
+    width: auto;
+    margin-right: 0; }
+    #content form h2.notifier label .warning {
+      font-size: .5em;
+      font-weight: normal;
+      color: #999999; }
+  #content form fieldset {
+    padding-bottom: 1em;
+    margin-left: 1.35em;
+    border-bottom: 1px solid #c0c0c0;
+    margin-bottom: 1em; }
+    #content form fieldset h3 {
+      margin-top: 1em;
+      margin-bottom: 0; }
+    #content form fieldset p.normal {
+      margin-top: 1em; }
+    #content form fieldset p label {
+      width: 6.7em; }
+  #content form p.submit {
+    margin-top: 2em; }
+    #content form p.submit:after {
+      display: block;
+      clear: both;
+      float: none;
+      content: ".";
+      text-indent: -9999em;
+      text-align: left; }
+    #content form p.submit.destroy button,     #content form p.submit.manual-build button {
+      float: none;
+      display: inline; }
+    #content form p.submit.manual-build button {
+      margin-right: 0; }
+  #content #build form, #content #last_build form {
+    font-size: .75em; }
+    #content #build form p.submit,     #content #last_build form p.submit {
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      right: .5em;
+      top: 1.25em; }
+  #content .blank_slate p,   #content .error p {
+    position: relative;
+    top: .3em; }
+  #content .blank_slate h1,   #content .error h1 {
+    border-width: 0;
+    margin: 0;
+    padding: 0; }
+    #content .blank_slate h1 button,     #content .error h1 button {
+      float: none;
+      border: 0 none;
+      background: transparent;
+      display: inline;
+      color: #ed1556;
+      padding: 0.25em 0;
+      margin: 0; }
+      #content .blank_slate h1 button:hover,       #content .error h1 button:hover {
+        background: #ed1556;
+        color: #ffffff; }
+  #content .error dt {
+    margin-top: 1.4em;
+    margin-bottom: .3em;
+    font-size: 1.75em;
+    font-family: Georgia, Times New Roman, serif; }
+  #content .error dd {
+    line-height: 1.4; }
+  #content .error .backtrace {
+    margin: 1em 0;
+    overflow: scroll;
+    height: 30em;
+    border: 1px solid #c0c0c0;
+    line-height: 1.6; }
+  #content #projects {
+    margin: 1em 0 2em;
+    border-top: 1px solid #c0c0c0; }
+    #content #projects li {
+      position: relative;
+      border-bottom: 1px solid #c0c0c0; }
+      #content #projects li.odd {
+        background: #e6e6e6; }
+      #content #projects li.building {
+        background: transparent url(/spinner.gif) no-repeat scroll right; }
+      #content #projects li a {
+        font-size: 2em;
+        padding: .25em;
+        line-height: 1.2;
+        font-weight: bold;
+        display: block; }
+        #content #projects li a.success {
+          color: #337022; }
+        #content #projects li a.failed {
+          color: #ff1100; }
+      #content #projects li .meta {
+        position: absolute;
+        right: .6em;
+        top: 1.5em;
+        font-size: 0.8em;
+        color: #999999;
+        text-align: right; }
+      #content #projects li.building .meta {
+        right: 1.6em; }
+      #content #projects li.success .meta {
+        color: #337022; }
+      #content #projects li.failed .meta {
+        color: #ff1100; }
+  #content #previous_builds li a {
+    display: block;
+    padding: .25em;
+    margin-bottom: .25em;
+    border-width: 1px;
+    border-style: solid; }
+    #content #previous_builds li a strong {
+      font-size: 1.3em; }
+    #content #previous_builds li a .attribution {
+      font-size: .9em; }
+  #content #projects li.success a,   #content #previous_builds li.success a {
+    background-color: #bbf8aa;
+    border-color: #99d688;
+    color: #337022; }
+    #content #projects li.success a .attribution,     #content #previous_builds li.success a .attribution {
+      color: #77b466; }
+    #content #projects li.success a:hover,     #content #previous_builds li.success a:hover {
+      background-color: #ddffcc; }
+  #content #projects li.failed a,   #content #previous_builds li.failed a {
+    background-color: #ffbbaa;
+    border-color: #dd9988;
+    color: #ff1100; }
+    #content #projects li.failed a .attribution,     #content #previous_builds li.failed a .attribution {
+      color: #bb7766; }
+    #content #projects li.failed a:hover,     #content #previous_builds li.failed a:hover {
+      background-color: #ffddcc; }
+  #content #build, #content #last_build {
+    position: relative; }
+    #content #build h1, #content #build blockquote,     #content #last_build h1, #content #last_build blockquote {
+      border-width: 0 1px;
+      border-style: solid; }
+    #content #build h1,     #content #last_build h1 {
+      border-top-width: 1px; }
+    #content #build blockquote,     #content #last_build blockquote {
+      bottom-bottom-width: 1px;
+      line-height: 1.4; }
+    #content #build.success h1, #content #build.success blockquote,     #content #last_build.success h1, #content #last_build.success blockquote {
+      background-color: #bbf8aa;
+      border-color: #99d688 #ccffbb #ccffbb #99d688; }
+    #content #build.success h1,     #content #last_build.success h1 {
+      color: #337022; }
+    #content #build.success .meta,     #content #last_build.success .meta {
+      color: #77b466; }
+    #content #build.failed h1, #content #build.failed blockquote,     #content #last_build.failed h1, #content #last_build.failed blockquote {
+      background-color: #ffbbaa;
+      border-color: #dd9988 #ffccbb #ffccbb #dd9988; }
+    #content #build.failed h1,     #content #last_build.failed h1 {
+      color: #ff1100; }
+    #content #build.failed .meta,     #content #last_build.failed .meta {
+      color: #bb7766; }
+    #content #build h1,     #content #last_build h1 {
+      margin-top: .5em;
+      margin-bottom: 0;
+      padding: .25em;
+      color: #337022; }
+    #content #build blockquote,     #content #last_build blockquote {
+      padding: .75em;
+      margin-bottom: 2em; }
+      #content #build blockquote .meta,       #content #last_build blockquote .meta {
+        margin-top: 1em;
+        display: block;
+        font-size: .9em; }
+    #content #build pre.output,     #content #last_build pre.output {
+      background: #111;
+      color: #fff;
+      padding: .5em;
+      overflow: auto;
+      max-height: 50em;
+      font-size: .825em; }
+      #content #build pre.output .color30,       #content #last_build pre.output .color30 {
+        color: #333; }
+      #content #build pre.output .color31,       #content #last_build pre.output .color31 {
+        color: #e33; }
+      #content #build pre.output .color32,       #content #last_build pre.output .color32 {
+        color: #3e3; }
+      #content #build pre.output .color33,       #content #last_build pre.output .color33 {
+        color: #ee3; }
+      #content #build pre.output .color34,       #content #last_build pre.output .color34 {
+        color: #33e; }
+      #content #build pre.output .color35,       #content #last_build pre.output .color35 {
+        color: #e3e; }
+      #content #build pre.output .color36,       #content #last_build pre.output .color36 {
+        color: #3ee; }
+      #content #build pre.output .color37,       #content #last_build pre.output .color37 {
+        color: #fff; }
+  #content #push_path {
+    display: block;
+    margin-top: 1em;
+    margin-left: 2em; }
+  #content div#graph {
+    width: 100%;
+    height: 600px; }
+
+a.success {
+  color: #bbf8aa; }
+  a.success:hover {
+    background-color: #bbf8aa;
+    color: white; }
+a.failed {
+  color: #ffbbaa; }
+  a.failed:hover {
+    background-color: #ffbbaa;
+    color: white; }
+
+#footer {
+  padding: 1.5em 2.5em;
+  border-top: 1px solid #ccc;
+  font-size: .8em;
+  color: #666;
+  text-align: right; }
+  #footer strong {
+    font-weight: bold; }
+
+    table {
+  margin-top: 20px;
+  border-collapse: collapse;
+  border: 1px solid #666;
+  background: #fff;
+  margin-bottom: 20px;
+}
+
+table tr.light {
+   background: #fff;
+}
+
+table tr.dark {
+  background: #f9f9f9;
+}
+
+table tr:hover {
+  background: #FFFFC0;
+}
+
+table td, table th {
+  padding: 4px;
+  font-size: 11px;
+}
+table th {
+  text-align: center;
+  color: #337022;
+  background: #DDFFCC;
+  font-weight: bold;
+  border: #99D688 1px solid;
+}
+
+table td {
+  border: #d0d0d0 1px solid;
+}
+
+table td.score {
+  text-align: right;
+}
+
+.warning {
+  background: yellow;
+}
+
+    .bluff-tooltip {
+  background: #fff;
+  border: 1px solid #d1edf5;
+  padding: 8px 8px 6px;
+}
+.bluff-tooltip .color {
+  display: block;
+  height: 4px;
+  width: 30px;
+  margin: 0 0 4px;
+  overflow: hidden;
+}
+.bluff-tooltip .data {
+  font-weight: bold;
+}
+    </style>
+    <link REL="SHORTCUT ICON" HREF="/favicon.ico">
+    <script language="javascript" src="utils.js" type="text/javascript"></script>
+    <script language="javascript" src="js-class.js" type="text/javascript"></script>
+    <script language="javascript" src="bluff-min.js" type="text/javascript"></script>
+    <script language="javascript" src="excanvas.js" type="text/javascript"></script>
+    <script language="javascript" src="standalone-framework.js" type="text/javascript"></script>
+    <script language="javascript" src="highcharts.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id='header'>
+      <h1><a href="/">metrics</a> | <a href="index.html">hellobar_new</a></h1>
+      <address class='watermark'>
+        built with
+        <a href='https://github.com/metricfu/metric_fu'>MetricFu</a>
+      </address>
+    </div>
+    <div id='content'>
+      <h3>Cane Results</h3>
+
+<p><a href='https://github.com/square/cane'>Cane</a> reports code quality threshold violations.</p>
+
+<div id="graph_container"></div>
+<script language="javascript" src="cane.js?1403291240" type="text/javascript"></script>
+
+
+<h3>Methods exceeding allowed Abc complexity (25)</h3>
+<table>
+  <tr>
+    <th>File</th>
+    <th>Method</th>
+    <th>Complexity</th>
+  </tr>
+  
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb</td>
+      <td>EmailDigest#bar_metrics_for_site</td>
+      <td>41</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb</td>
+      <td>AdminHelper#render_email_drip_kpis</td>
+      <td>40</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb</td>
+      <td>LegacyMigrator#create_bars</td>
+      <td>39</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb</td>
+      <td>Hello::InternalAnalytics#process_props</td>
+      <td>37</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb</td>
+      <td>Hello::InternalAnalytics#merge_people</td>
+      <td>35</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb</td>
+      <td>LegacyMigrator#create_user_and_membership</td>
+      <td>31</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb</td>
+      <td>Hello::InternalAnalytics#process_visitor_user_ids</td>
+      <td>30</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/grand_central_api.rb</td>
+      <td>GrandCentralApi#request</td>
+      <td>29</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb</td>
+      <td>AdminHelper#render_email_digest_kpis</td>
+      <td>28</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb</td>
+      <td>Hello::BarData#get_bar_data</td>
+      <td>26</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb</td>
+      <td>Hello::BarData#get_segment_data</td>
+      <td>25</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb</td>
+      <td>LegacyMigrator#migrate_goals_to_rules</td>
+      <td>22</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb</td>
+      <td>Hello::BarData#query_over_time_data</td>
+      <td>21</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb</td>
+      <td>Hello::BarData#connect!</td>
+      <td>20</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb</td>
+      <td>EmailDigest#site_metrics</td>
+      <td>20</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb</td>
+      <td>EmailDigest#create_bar_cta</td>
+      <td>20</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/internal_report.rb</td>
+      <td>InternalReport#generate_kpis_from_sql</td>
+      <td>19</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb</td>
+      <td>LegacyMigrator#create_conditions</td>
+      <td>19</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/asset_storage.rb</td>
+      <td>Hello::AssetStorage#create_or_update_file_with_contents</td>
+      <td>18</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb</td>
+      <td>Admin#set_valid_access_token</td>
+      <td>17</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/internal_report.rb</td>
+      <td>InternalReport#generate_email_digest_metrics</td>
+      <td>17</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb</td>
+      <td>AdminHelper#render_signup_kpis</td>
+      <td>17</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb</td>
+      <td>Hello::InternalAnalytics#process_events</td>
+      <td>17</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/script_generator.rb</td>
+      <td>ScriptGenerator#date_conditions</td>
+      <td>17</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb</td>
+      <td>AdminHelper#render_post_signup_kpis</td>
+      <td>16</td>
+    </tr>
+    
+  
+</table>
+
+
+<h3>Lines violating style requirements (375)</h3>
+<table>
+  <tr>
+    <th>File</th>
+    <th>Description</th>
+  </tr>
+  
+  
+    <tr class='light'>
+      <td>app/controllers/admin/access_controller.rb:4</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/admin/access_controller.rb:8</td>
+      <td>Line is >80 characters (98)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/admin/access_controller.rb:12</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/admin/access_controller.rb:13</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/admin/access_controller.rb:56</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/admin/access_controller.rb:62</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/admin/access_controller.rb:64</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/admin/access_controller.rb:75</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/admin/access_controller.rb:91</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/admin_controller.rb:6</td>
+      <td>Line is >80 characters (123)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/application_controller.rb:9</td>
+      <td>Line is >80 characters (112)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/application_controller.rb:14</td>
+      <td>Line is >80 characters (123)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/application_controller.rb:29</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/application_controller.rb:36</td>
+      <td>Line is >80 characters (104)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/application_controller.rb:57</td>
+      <td>Line is >80 characters (101)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/application_controller.rb:62</td>
+      <td>Line is >80 characters (95)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/contact_submissions_controller.rb:17</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/contact_submissions_controller.rb:18</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/contact_submissions_controller.rb:37</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/site_elements_controller.rb:4</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/site_elements_controller.rb:64</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/sites_controller.rb:5</td>
+      <td>Line is >80 characters (88)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/user_controller.rb:31</td>
+      <td>Line is >80 characters (100)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/wordpress_plugin_controller.rb:9</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:15</td>
+      <td>Line is >80 characters (98)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:27</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:35</td>
+      <td>Line is >80 characters (94)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:43</td>
+      <td>Line is >80 characters (115)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:44</td>
+      <td>Line is >80 characters (125)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:46</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:65</td>
+      <td>Line is >80 characters (106)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:66</td>
+      <td>Line is >80 characters (103)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:84</td>
+      <td>Line is >80 characters (115)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:85</td>
+      <td>Line is >80 characters (125)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:101</td>
+      <td>Line is >80 characters (106)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:137</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:144</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:154</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:164</td>
+      <td>Line is >80 characters (140)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:165</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:170</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:171</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:173</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:175</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:193</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:203</td>
+      <td>Line is >80 characters (140)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:204</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:210</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:215</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:222</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/admin_helper.rb:242</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:245</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:19</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:33</td>
+      <td>Line is >80 characters (98)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:61</td>
+      <td>Line is >80 characters (100)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:65</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:78</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:82</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:85</td>
+      <td>Line is >80 characters (95)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:102</td>
+      <td>Line is >80 characters (129)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:111</td>
+      <td>Line is >80 characters (86)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:116</td>
+      <td>Line is >80 characters (172)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:117</td>
+      <td>Line is >80 characters (154)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:122</td>
+      <td>Line is >80 characters (101)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:124</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:128</td>
+      <td>Line is >80 characters (99)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:136</td>
+      <td>Line is >80 characters (94)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:137</td>
+      <td>Line is >80 characters (105)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:138</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:140</td>
+      <td>Line is >80 characters (121)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:149</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:152</td>
+      <td>Line is >80 characters (109)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:167</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:175</td>
+      <td>Line is >80 characters (86)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:177</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:202</td>
+      <td>Line is >80 characters (171)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:207</td>
+      <td>Line is >80 characters (117)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:215</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:224</td>
+      <td>Line is >80 characters (139)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/admin.rb:232</td>
+      <td>Line is >80 characters (95)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:265</td>
+      <td>Line is >80 characters (94)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/internal_prop.rb:8</td>
+      <td>Line is >80 characters (120)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/internal_report.rb:44</td>
+      <td>Line is >80 characters (95)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/internal_report.rb:45</td>
+      <td>Line is >80 characters (105)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/internal_report.rb:49</td>
+      <td>Line is >80 characters (111)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/internal_report.rb:65</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/internal_report.rb:74</td>
+      <td>Line is >80 characters (109)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/internal_report.rb:78</td>
+      <td>Line is >80 characters (152)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/internal_report.rb:98</td>
+      <td>Line is >80 characters (94)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/internal_report.rb:101</td>
+      <td>Line is >80 characters (157)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/internal_report.rb:105</td>
+      <td>Line is >80 characters (104)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/internal_report.rb:106</td>
+      <td>Line is >80 characters (98)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/internal_report.rb:120</td>
+      <td>Line is >80 characters (174)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/internal_report.rb:130</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/internal_report.rb:132</td>
+      <td>Line is >80 characters (124)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/internal_report.rb:144</td>
+      <td>Line is >80 characters (163)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/mailer_gateway.rb:3</td>
+      <td>Line is >80 characters (145)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/site.rb:26</td>
+      <td>Line is >80 characters (146)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/site.rb:70</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/site.rb:71</td>
+      <td>Line is >80 characters (104)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/site_membership.rb:13</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/user.rb:5</td>
+      <td>Line is >80 characters (104)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/user.rb:15</td>
+      <td>Line is >80 characters (108)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/user.rb:16</td>
+      <td>Line is >80 characters (101)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/user.rb:31</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/validators/url_validator.rb:10</td>
+      <td>Line is >80 characters (183)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/grand_central_api.rb:90</td>
+      <td>Line is >80 characters (101)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/grand_central_api.rb:125</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/asset_storage.rb:10</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/asset_storage.rb:11</td>
+      <td>Line is >80 characters (101)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/asset_storage.rb:22</td>
+      <td>Line is >80 characters (101)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:11</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb:33</td>
+      <td>Line is >80 characters (102)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:45</td>
+      <td>Line is >80 characters (101)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb:46</td>
+      <td>Line is >80 characters (105)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:47</td>
+      <td>Line is >80 characters (105)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb:48</td>
+      <td>Line is >80 characters (104)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:62</td>
+      <td>Line is >80 characters (105)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb:64</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:85</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb:88</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:101</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb:113</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:130</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb:138</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:181</td>
+      <td>Line is >80 characters (116)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb:222</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:230</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb:236</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:256</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb:7</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb:11</td>
+      <td>Line is >80 characters (115)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb:37</td>
+      <td>Line is >80 characters (131)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb:40</td>
+      <td>Line is >80 characters (119)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb:56</td>
+      <td>Line is >80 characters (155)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb:58</td>
+      <td>Line is >80 characters (162)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb:60</td>
+      <td>Line is >80 characters (152)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb:62</td>
+      <td>Line is >80 characters (86)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb:63</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb:67</td>
+      <td>Line is >80 characters (238)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb:74</td>
+      <td>Line is >80 characters (102)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb:80</td>
+      <td>Line is >80 characters (140)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb:83</td>
+      <td>Line is >80 characters (111)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb:87</td>
+      <td>Line is >80 characters (111)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb:93</td>
+      <td>Line is >80 characters (127)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb:96</td>
+      <td>Line is >80 characters (108)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/email_digest.rb:99</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb:100</td>
+      <td>Line is >80 characters (103)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:8</td>
+      <td>Line is >80 characters (160)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:15</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:22</td>
+      <td>Line is >80 characters (256)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:24</td>
+      <td>Line is >80 characters (169)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:30</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:48</td>
+      <td>Line is >80 characters (156)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:49</td>
+      <td>Line is >80 characters (109)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:62</td>
+      <td>Line is >80 characters (165)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:63</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:64</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:79</td>
+      <td>Line is >80 characters (153)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:83</td>
+      <td>Line is >80 characters (131)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:91</td>
+      <td>Line is >80 characters (140)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:92</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:127</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:129</td>
+      <td>Line is >80 characters (112)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:141</td>
+      <td>Line is >80 characters (122)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:142</td>
+      <td>Line is >80 characters (177)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:143</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:145</td>
+      <td>Line is >80 characters (112)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:169</td>
+      <td>Line is >80 characters (180)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:172</td>
+      <td>Line is >80 characters (112)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:180</td>
+      <td>Line is >80 characters (100)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:182</td>
+      <td>Line is >80 characters (99)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:186</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:189</td>
+      <td>Line is >80 characters (178)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:190</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/internal_analytics.rb:191</td>
+      <td>Line is >80 characters (216)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/tracking/internal_stats_harvester.rb:16</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/tracking/internal_stats_harvester.rb:17</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/tracking/internal_stats_harvester.rb:18</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/tracking/internal_stats_harvester.rb:19</td>
+      <td>Line is >80 characters (86)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/tracking/internal_stats_harvester.rb:35</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/tracking/internal_stats_harvester.rb:40</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/tracking/internal_stats_harvester.rb:56</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/tracking/internal_stats_harvester.rb:67</td>
+      <td>Line contains trailing whitespace</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/tracking.rb:37</td>
+      <td>Line is >80 characters (112)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/tracking.rb:41</td>
+      <td>Line is >80 characters (122)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/tracking_param.rb:26</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/tracking_param.rb:28</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/wordpress_user.rb:13</td>
+      <td>Line is >80 characters (98)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/wordpress_user.rb:15</td>
+      <td>Line is >80 characters (88)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator/legacy_account.rb:5</td>
+      <td>Line is >80 characters (100)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator/legacy_goal.rb:6</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:23</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:25</td>
+      <td>Line is >80 characters (101)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:62</td>
+      <td>Line is >80 characters (109)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:69</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:74</td>
+      <td>Line is >80 characters (150)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:86</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:87</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:88</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:89</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:91</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:93</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:95</td>
+      <td>Line is >80 characters (104)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:105</td>
+      <td>Line is >80 characters (96)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:113</td>
+      <td>Line is >80 characters (115)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:114</td>
+      <td>Line is >80 characters (109)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:138</td>
+      <td>Line is >80 characters (329)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:139</td>
+      <td>Line is >80 characters (118)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:149</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:150</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:151</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator.rb:152</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:170</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/script_generator.rb:33</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/script_generator.rb:39</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/script_generator.rb:96</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/script_generator.rb:97</td>
+      <td>Line is >80 characters (148)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/script_generator.rb:113</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/script_generator.rb:120</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/script_generator.rb:124</td>
+      <td>Line is >80 characters (98)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/script_generator.rb:128</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/script_generator.rb:132</td>
+      <td>Line is >80 characters (278)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/script_generator.rb:145</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/script_generator.rb:163</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/wordpress_plugin.rb:14</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/controllers/admin/access_controller_spec.rb:15</td>
+      <td>Line is >80 characters (131)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/controllers/admin/access_controller_spec.rb:24</td>
+      <td>Line is >80 characters (140)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/controllers/admin/access_controller_spec.rb:103</td>
+      <td>Line is >80 characters (88)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/controllers/application_controller_spec.rb:25</td>
+      <td>Line is >80 characters (106)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/controllers/contact_submissions_controller_spec.rb:17</td>
+      <td>Line is >80 characters (98)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/controllers/contact_submissions_controller_spec.rb:37</td>
+      <td>Line is >80 characters (104)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/controllers/contact_submissions_controller_spec.rb:39</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/controllers/contact_submissions_controller_spec.rb:57</td>
+      <td>Line is >80 characters (104)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/controllers/sites_controller_spec.rb:11</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/controllers/user_controller_spec.rb:15</td>
+      <td>Line is >80 characters (91)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/controllers/user_controller_spec.rb:23</td>
+      <td>Line is >80 characters (128)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/controllers/users/passwords_controller_spec.rb:14</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/controllers/users/passwords_controller_spec.rb:19</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/controllers/users/passwords_controller_spec.rb:20</td>
+      <td>Line is >80 characters (99)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/controllers/users/sessions_controller_spec.rb:13</td>
+      <td>Line is >80 characters (86)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/controllers/users/sessions_controller_spec.rb:17</td>
+      <td>Line is >80 characters (95)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/controllers/users/sessions_controller_spec.rb:18</td>
+      <td>Line is >80 characters (99)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/controllers/users/sessions_controller_spec.rb:20</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:9</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:10</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:11</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:12</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:13</td>
+      <td>Line is >80 characters (91)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:14</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:15</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:16</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:33</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:35</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:36</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:37</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:38</td>
+      <td>Line is >80 characters (94)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:39</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:40</td>
+      <td>Line is >80 characters (86)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:41</td>
+      <td>Line is >80 characters (95)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:42</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:43</td>
+      <td>Line is >80 characters (96)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:44</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:51</td>
+      <td>Line is >80 characters (86)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:52</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:53</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:54</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:55</td>
+      <td>Line is >80 characters (96)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:56</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:57</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/helpers/email_digest_helper_spec.rb:58</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/helpers/email_digest_helper_spec.rb:64</td>
+      <td>Line is >80 characters (96)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:8</td>
+      <td>Line is >80 characters (88)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:11</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:16</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:19</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:23</td>
+      <td>Line is >80 characters (88)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:24</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:43</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:45</td>
+      <td>Line is >80 characters (95)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:57</td>
+      <td>Line is >80 characters (95)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:68</td>
+      <td>Line is >80 characters (96)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:69</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:70</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:84</td>
+      <td>Line is >80 characters (111)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:86</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:87</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:97</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:98</td>
+      <td>Line is >80 characters (103)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:103</td>
+      <td>Line is >80 characters (96)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:104</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:105</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:116</td>
+      <td>Line is >80 characters (103)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:132</td>
+      <td>Line is >80 characters (94)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:133</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:142</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:144</td>
+      <td>Line is >80 characters (95)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:145</td>
+      <td>Line is >80 characters (94)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:176</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:185</td>
+      <td>Line is >80 characters (91)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:194</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:197</td>
+      <td>Line is >80 characters (118)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/email_digest_spec.rb:204</td>
+      <td>Line is >80 characters (105)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/email_digest_spec.rb:214</td>
+      <td>Line is >80 characters (93)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/tracking_param_spec.rb:12</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/hello/tracking_param_spec.rb:18</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/hello/tracking_param_spec.rb:24</td>
+      <td>Line is >80 characters (94)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator/date_time_converter_spec.rb:19</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator/date_time_converter_spec.rb:28</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator/date_time_converter_spec.rb:37</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator/date_time_converter_spec.rb:52</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator/date_time_converter_spec.rb:61</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator/date_time_converter_spec.rb:70</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:4</td>
+      <td>Line is >80 characters (307)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:8</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:16</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:33</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:41</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:47</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:48</td>
+      <td>Line is >80 characters (165)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:51</td>
+      <td>Line is >80 characters (86)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:52</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:86</td>
+      <td>Line is >80 characters (82)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:97</td>
+      <td>Line is >80 characters (81)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:107</td>
+      <td>Line is >80 characters (98)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:108</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:139</td>
+      <td>Line is >80 characters (198)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:142</td>
+      <td>Line is >80 characters (224)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:150</td>
+      <td>Line is >80 characters (85)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:228</td>
+      <td>Line is >80 characters (103)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:229</td>
+      <td>Line is >80 characters (86)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:235</td>
+      <td>Line is >80 characters (144)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:255</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:262</td>
+      <td>Line is >80 characters (131)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:263</td>
+      <td>Line is >80 characters (131)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/legacy_migrator_spec.rb:266</td>
+      <td>Line is >80 characters (116)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/legacy_migrator_spec.rb:267</td>
+      <td>Line is >80 characters (177)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/script_generator_spec.rb:4</td>
+      <td>Line is >80 characters (87)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/script_generator_spec.rb:14</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/script_generator_spec.rb:21</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/script_generator_spec.rb:28</td>
+      <td>Line is >80 characters (91)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/script_generator_spec.rb:37</td>
+      <td>Line is >80 characters (102)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/script_generator_spec.rb:51</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/script_generator_spec.rb:69</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/script_generator_spec.rb:84</td>
+      <td>Line is >80 characters (94)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/script_generator_spec.rb:85</td>
+      <td>Line is >80 characters (121)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/script_generator_spec.rb:136</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/script_generator_spec.rb:137</td>
+      <td>Line is >80 characters (88)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/script_generator_spec.rb:140</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/script_generator_spec.rb:156</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/script_generator_spec.rb:160</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/script_generator_spec.rb:220</td>
+      <td>Line is >80 characters (108)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/script_generator_spec.rb:225</td>
+      <td>Line is >80 characters (102)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/lib/script_generator_spec.rb:239</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/lib/script_generator_spec.rb:244</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/models/admin_spec.rb:22</td>
+      <td>Line is >80 characters (96)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/models/admin_spec.rb:30</td>
+      <td>Line is >80 characters (105)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/models/admin_spec.rb:47</td>
+      <td>Line is >80 characters (95)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/models/admin_spec.rb:64</td>
+      <td>Line is >80 characters (103)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/models/admin_spec.rb:74</td>
+      <td>Line is >80 characters (99)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/models/admin_spec.rb:82</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/models/admin_spec.rb:108</td>
+      <td>Line is >80 characters (89)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/models/admin_spec.rb:130</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/models/admin_spec.rb:139</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/models/admin_spec.rb:143</td>
+      <td>Line is >80 characters (90)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/models/admin_spec.rb:149</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/models/condition/date_condition_spec.rb:4</td>
+      <td>Line is >80 characters (83)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/models/condition/url_condition_spec.rb:8</td>
+      <td>Line is >80 characters (88)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/models/condition/url_condition_spec.rb:19</td>
+      <td>Line is >80 characters (88)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/models/site_membership_spec.rb:7</td>
+      <td>Line is >80 characters (103)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/models/site_spec.rb:86</td>
+      <td>Line is >80 characters (105)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/models/site_spec.rb:95</td>
+      <td>Line is >80 characters (97)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/models/site_spec.rb:113</td>
+      <td>Line is >80 characters (84)</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>spec/models/user_spec.rb:5</td>
+      <td>Line is >80 characters (92)</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>spec/spec_helper.rb:21</td>
+      <td>Line is >80 characters (133)</td>
+    </tr>
+    
+  
+</table>
+
+
+
+<h3>Class definitions requiring comments (44)</h3>
+<table>
+  <tr>
+    <th>File</th>
+    <th>Class</th>
+  </tr>
+  
+  
+    <tr class='light'>
+      <td>app/controllers/admin/access_controller.rb:1</td>
+      <td>Admin::AccessController</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/admin/users_controller.rb:1</td>
+      <td>Admin::UsersController</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/admin_controller.rb:1</td>
+      <td>AdminController</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/application_controller.rb:1</td>
+      <td>ApplicationController</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/contact_submissions_controller.rb:1</td>
+      <td>ContactSubmissionsController</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/site_elements_controller.rb:1</td>
+      <td>SiteElementsController</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/sites_controller.rb:1</td>
+      <td>SitesController</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/user_controller.rb:1</td>
+      <td>UserController</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/users/passwords_controller.rb:1</td>
+      <td>Users::PasswordsController</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/controllers/users/sessions_controller.rb:1</td>
+      <td>Users::SessionsController</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/controllers/wordpress_plugin_controller.rb:1</td>
+      <td>WordpressPluginController</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/admin_helper.rb:1</td>
+      <td>AdminHelper</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/application_helper.rb:3</td>
+      <td>ApplicationHelper</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/email_digest_helper.rb:1</td>
+      <td>EmailDigestHelper</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/helpers/sites_helper.rb:1</td>
+      <td>SitesHelper</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/helpers/user_helper.rb:1</td>
+      <td>UserHelper</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/admin.rb:1</td>
+      <td>Admin</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/bar.rb:1</td>
+      <td>Bar</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/condition/date_condition.rb:1</td>
+      <td>DateCondition</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/condition/url_condition.rb:1</td>
+      <td>UrlCondition</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/internal_prop.rb:4</td>
+      <td>HasInternalProps</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/internal_report.rb:1</td>
+      <td>InternalReport</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/mailer_gateway.rb:1</td>
+      <td>MailerGateway</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/site.rb:1</td>
+      <td>Site</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/site_membership.rb:1</td>
+      <td>SiteMembership</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>app/models/user.rb:1</td>
+      <td>User</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>app/models/validators/url_validator.rb:1</td>
+      <td>UrlValidator</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/grand_central_api.rb:16</td>
+      <td>GrandCentralApi</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/asset_storage.rb:5</td>
+      <td>AssetStorage</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/bar_data.rb:5</td>
+      <td>SegmentData</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/bar_data.rb:28</td>
+      <td>BarData</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/email_digest.rb:1</td>
+      <td>Hello::EmailDigest</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/internal_analytics.rb:2</td>
+      <td>InternalAnalytics</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/tracking.rb:4</td>
+      <td>InternalLogger</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/tracking.rb:44</td>
+      <td>EventEndpoint</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/tracking.rb:64</td>
+      <td>PropEndpoint</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/hello/tracking_param.rb:2</td>
+      <td>TrackingParam</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/hello/wordpress_user.rb:2</td>
+      <td>WordpressUser</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator/date_time_converter.rb:2</td>
+      <td>DateTimeConverter</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator/legacy_goal.rb:2</td>
+      <td>LegacyGoal</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/legacy_migrator/legacy_user.rb:2</td>
+      <td>LegacyUser</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/legacy_migrator.rb:4</td>
+      <td>LegacyMigrator</td>
+    </tr>
+    
+  
+    <tr class='light'>
+      <td>lib/script_generator.rb:1</td>
+      <td>ScriptGenerator</td>
+    </tr>
+    
+  
+    <tr class='dark'>
+      <td>lib/wordpress_plugin.rb:1</td>
+      <td>WordpressPlugin</td>
+    </tr>
+    
+  
+</table>
+
+
+
+<p>Generated on 2014-06-20 14:07:20 -0500</p>
+
+    </div>
+
+    
+    <script language="javascript" src="bluff_graph.js" type="text/javascript"></script>
+  </body>
+</html>

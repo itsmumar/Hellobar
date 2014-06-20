@@ -7,7 +7,8 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
-/tmp
+tmp/
+!tmp/metric_fu/ # lets keep tabs on metrics
 
 config/settings.yml
 config/database.yml
