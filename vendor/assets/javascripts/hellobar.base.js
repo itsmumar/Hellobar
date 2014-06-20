@@ -65,7 +65,13 @@ var HBQ = function()
           HB.e.container.style.height = (HB.e.bar.clientHeight+8)+"px"; 
         // Adjust the pusher
         if ( HB.e.pusher )
-          HB.e.pusher.style.height = (HB.e.bar.clientHeight+(HB.t(HB.currentBar.show_border) ? 3 : 0))+"px"; 
+          HB.e.pusher.style.height = (HB.e.bar.clientHeight+(HB.t(HB.currentBar.show_border) ? 3 : 0))+"px";
+        // Add multiline class
+        if ( HB.e.bar.clientHeight > 50 ) {
+          HB.addClass(HB.e.bar, "multiline");
+        } else {
+          HB.removeClass(HB.e.bar, "multiline");
+        }
       }
 
       // Update the CSS class based on the width
@@ -119,7 +125,9 @@ var _HB = {
   addClass: function(element, className)
   {
     element = HB.$(element);
-    element.className += " "+className;
+    if (element.className.indexOf(className) < 0) {
+      element.className += " "+className;
+    }
   },
 
   // Remove the CSS class name from the element

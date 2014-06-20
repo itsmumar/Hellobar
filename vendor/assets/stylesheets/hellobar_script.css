@@ -259,16 +259,28 @@ a:hover.hellobar_logo, a:hover.hellobar_arrow { opacity: 0.6; }
 }
 
 #hellobar.multiline a.hellobar_cta.hb-button {
-  margin-left: 0;
+  margin-left: 10px;
 }
 #hellobar.mobile a.hellobar_cta.hb-button {
   margin-left: inherit;
 }
 
-#hellobar.multiline > span {
+/* Display forms not-inline on mobile */
+#hellobar.mobile #hb_email, #hellobar.mobile #hb_name {
+	width: 80%; margin-right: 2.5%;
+}
+#hellobar.mobile #hb_email{
+	margin-top: 10px
+}
+
+#hellobar > div {
+  margin-right: 58px;
+}
+
+#hellobar.multiline > div {
   margin-right: 65px;
 }
 
-#hellobar.mobile > span {
+#hellobar.mobile > div {
   margin-right: inherit;
 }
