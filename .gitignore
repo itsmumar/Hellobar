@@ -9,6 +9,7 @@
 /log/*.log
 tmp/
 !tmp/metric_fu/ # lets keep tabs on metrics
+!tmp/metric_fu/**/*
 
 config/settings.yml
 config/database.yml

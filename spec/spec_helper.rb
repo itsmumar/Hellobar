@@ -3,6 +3,22 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
+require 'simplecov'
+require 'metric_fu/metrics/rcov/simplecov_formatter'
+
+# All metrics should be in the same dir. YOU MADE ME DO THIS, METRIC_FU!
+SimpleCov::Formatter::MetricFu.send(:define_method, :coverage_file_path) do
+  File.join(SimpleCov.root, 'tmp', 'metric_fu', 'coverage', output_file_name)
+end
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::MetricFu
+]
+
+SimpleCov.coverage_dir('tmp/metric_fu/coverage/')
+
+SimpleCov.start
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

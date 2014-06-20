@@ -1802,11 +1802,9 @@
            
              <ul>
                
-                 <li>Score of 3.50 &raquo; flog</li>
+                 <li>Score of 4.62 &raquo; flog</li>
                
                  <li>Complexity 2 &raquo; saikuro</li>
-               
-                 <li>UtilityFunction - doesn't depend on instance state &raquo; reek</li>
                
                  <li>FeatureEnvy - refers to condition more than self &raquo; reek</li>
                
@@ -1863,7 +1861,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n108" name="n108">108</a></span>    <span class="string"><span class="delimiter">&quot;</span><span class="content">(</span><span class="inline"><span class="inline-delimiter">#{</span>bang<span class="inline-delimiter">}</span></span><span class="content">HB.umatch(</span><span class="char">\&quot;</span><span class="inline"><span class="inline-delimiter">#{</span>condition.url<span class="inline-delimiter">}</span></span><span class="char">\&quot;</span><span class="content">, document.location))</span><span class="delimiter">&quot;</span></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n108" name="n108">108</a></span>    <span class="string"><span class="delimiter">&quot;</span><span class="content">(</span><span class="inline"><span class="inline-delimiter">#{</span>bang<span class="inline-delimiter">}</span></span><span class="content">HB.umatch(</span><span class="char">\&quot;</span><span class="inline"><span class="inline-delimiter">#{</span>path_for_url(condition.url)<span class="inline-delimiter">}</span></span><span class="char">\&quot;</span><span class="content">, document.location))</span><span class="delimiter">&quot;</span></span>
 </pre></div>
 </div>
 
@@ -1908,16 +1906,20 @@
            
              <ul>
                
-                 <li>Score of 8.73 &raquo; flog</li>
+                 <li>Score of 5.59 &raquo; flog</li>
                
-                 <li>Complexity 1 &raquo; saikuro</li>
+                 <li>Complexity 3 &raquo; saikuro</li>
+               
+                 <li>UtilityFunction - doesn't depend on instance state &raquo; reek</li>
+               
+                 <li>FeatureEnvy - refers to path more than self &raquo; reek</li>
                
             </ul>
           
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n111" name="n111">111</a></span>  <span class="keyword">def</span> <span class="function">content_template</span>(bar_type)
+  <div class="code"><pre><span class="line-numbers"><a href="#n111" name="n111">111</a></span>  <span class="keyword">def</span> <span class="function">path_for_url</span>(url)
 </pre></div>
 </div>
 
@@ -1933,7 +1935,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n112" name="n112">112</a></span>    <span class="constant">ActiveSupport</span>.escape_html_entities_in_json = <span class="predefined-constant">false</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n112" name="n112">112</a></span>    path = <span class="constant">Addressable</span>::<span class="constant">URI</span>.heuristic_parse(url).path
 </pre></div>
 </div>
 
@@ -1949,7 +1951,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n113" name="n113">113</a></span>    content = (content_header + content_markup(bar_type) + content_footer).to_json
+  <div class="code"><pre><span class="line-numbers"><a href="#n113" name="n113">113</a></span>    path.gsub!(<span class="regexp"><span class="delimiter">/</span><span class="char">\/</span><span class="content">+$</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>) <span class="comment"># strip trailing slashes</span>
 </pre></div>
 </div>
 
@@ -1965,7 +1967,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n114" name="n114">114</a></span>    <span class="constant">ActiveSupport</span>.escape_html_entities_in_json = <span class="predefined-constant">true</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n114" name="n114">114</a></span>    path.blank? ? <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span> : path
 </pre></div>
 </div>
 
@@ -1981,7 +1983,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n115" name="n115">115</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n115" name="n115">115</a></span>  <span class="keyword">rescue</span> <span class="constant">Addressable</span>::<span class="constant">URI</span>::<span class="constant">InvalidURIError</span>
 </pre></div>
 </div>
 
@@ -1997,7 +1999,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n116" name="n116">116</a></span>    content
+  <div class="code"><pre><span class="line-numbers"><a href="#n116" name="n116">116</a></span>    url
 </pre></div>
 </div>
 
@@ -2042,7 +2044,7 @@
            
              <ul>
                
-                 <li>Score of 2.42 &raquo; flog</li>
+                 <li>Score of 8.73 &raquo; flog</li>
                
                  <li>Complexity 1 &raquo; saikuro</li>
                
@@ -2051,7 +2053,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n119" name="n119">119</a></span>  <span class="keyword">def</span> <span class="function">content_header</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n119" name="n119">119</a></span>  <span class="keyword">def</span> <span class="function">content_template</span>(bar_type)
 </pre></div>
 </div>
 
@@ -2067,7 +2069,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n120" name="n120">120</a></strong></span>    <span class="instance-variable">@content_header</span> ||= <span class="constant">File</span>.read(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="constant">Rails</span>.root<span class="inline-delimiter">}</span></span><span class="content">/lib/script_generator/bar_header.html</span><span class="delimiter">&quot;</span></span>)
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n120" name="n120">120</a></strong></span>    <span class="constant">ActiveSupport</span>.escape_html_entities_in_json = <span class="predefined-constant">false</span>
 </pre></div>
 </div>
 
@@ -2083,7 +2085,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n121" name="n121">121</a></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n121" name="n121">121</a></span>    content = (content_header + content_markup(bar_type) + content_footer).to_json
 </pre></div>
 </div>
 
@@ -2099,33 +2101,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n122" name="n122">122</a></span>
-</pre></div>
-</div>
-
-          </td>
-         </tr>
-         
-        
-        <tr>
-          <td valign='top'>
-           
-             <ul>
-               
-                 <li>Score of 4.80 &raquo; flog</li>
-               
-                 <li>Complexity 1 &raquo; saikuro</li>
-               
-                 <li>UtilityFunction - doesn't depend on instance state &raquo; reek</li>
-               
-                 <li>FeatureEnvy - refers to bar_type more than self &raquo; reek</li>
-               
-            </ul>
-          
-          </td>
-          <td valign='top'>
-            <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n123" name="n123">123</a></span>  <span class="keyword">def</span> <span class="function">content_markup</span>(bar_type)
+  <div class="code"><pre><span class="line-numbers"><a href="#n122" name="n122">122</a></span>    <span class="constant">ActiveSupport</span>.escape_html_entities_in_json = <span class="predefined-constant">true</span>
 </pre></div>
 </div>
 
@@ -2141,7 +2117,23 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n124" name="n124">124</a></span>    <span class="constant">File</span>.read(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="constant">Rails</span>.root<span class="inline-delimiter">}</span></span><span class="content">/lib/script_generator/bar_</span><span class="inline"><span class="inline-delimiter">#{</span>bar_type.gsub(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>).underscore<span class="inline-delimiter">}</span></span><span class="content">.html</span><span class="delimiter">&quot;</span></span>)
+  <div class="code"><pre><span class="line-numbers"><a href="#n123" name="n123">123</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n124" name="n124">124</a></span>    content
 </pre></div>
 </div>
 
@@ -2195,7 +2187,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n127" name="n127">127</a></span>  <span class="keyword">def</span> <span class="function">content_footer</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n127" name="n127">127</a></span>  <span class="keyword">def</span> <span class="function">content_header</span>
 </pre></div>
 </div>
 
@@ -2211,7 +2203,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n128" name="n128">128</a></span>    <span class="instance-variable">@content_footer</span> ||= <span class="constant">File</span>.read(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="constant">Rails</span>.root<span class="inline-delimiter">}</span></span><span class="content">/lib/script_generator/bar_footer.html</span><span class="delimiter">&quot;</span></span>)
+  <div class="code"><pre><span class="line-numbers"><a href="#n128" name="n128">128</a></span>    <span class="instance-variable">@content_header</span> ||= <span class="constant">File</span>.read(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="constant">Rails</span>.root<span class="inline-delimiter">}</span></span><span class="content">/lib/script_generator/bar_header.html</span><span class="delimiter">&quot;</span></span>)
 </pre></div>
 </div>
 
@@ -2256,6 +2248,150 @@
            
              <ul>
                
+                 <li>Score of 4.80 &raquo; flog</li>
+               
+                 <li>Complexity 1 &raquo; saikuro</li>
+               
+                 <li>UtilityFunction - doesn't depend on instance state &raquo; reek</li>
+               
+                 <li>FeatureEnvy - refers to bar_type more than self &raquo; reek</li>
+               
+            </ul>
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n131" name="n131">131</a></span>  <span class="keyword">def</span> <span class="function">content_markup</span>(bar_type)
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n132" name="n132">132</a></span>    <span class="constant">File</span>.read(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="constant">Rails</span>.root<span class="inline-delimiter">}</span></span><span class="content">/lib/script_generator/bar_</span><span class="inline"><span class="inline-delimiter">#{</span>bar_type.gsub(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>).underscore<span class="inline-delimiter">}</span></span><span class="content">.html</span><span class="delimiter">&quot;</span></span>)
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n133" name="n133">133</a></span>  <span class="keyword">end</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n134" name="n134">134</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+             <ul>
+               
+                 <li>Score of 2.42 &raquo; flog</li>
+               
+                 <li>Complexity 1 &raquo; saikuro</li>
+               
+            </ul>
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n135" name="n135">135</a></span>  <span class="keyword">def</span> <span class="function">content_footer</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n136" name="n136">136</a></span>    <span class="instance-variable">@content_footer</span> ||= <span class="constant">File</span>.read(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="constant">Rails</span>.root<span class="inline-delimiter">}</span></span><span class="content">/lib/script_generator/bar_footer.html</span><span class="delimiter">&quot;</span></span>)
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n137" name="n137">137</a></span>  <span class="keyword">end</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n138" name="n138">138</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+             <ul>
+               
                  <li>Score of 17.87 &raquo; flog</li>
                
                  <li>Complexity 3 &raquo; saikuro</li>
@@ -2271,7 +2407,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n131" name="n131">131</a></span>  <span class="keyword">def</span> <span class="function">bar_settings</span>(bar)
+  <div class="code"><pre><span class="line-numbers"><a href="#n139" name="n139">139</a></span>  <span class="keyword">def</span> <span class="function">bar_settings</span>(bar)
 </pre></div>
 </div>
 
@@ -2287,135 +2423,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n132" name="n132">132</a></span>    settings = <span class="string"><span class="delimiter">%w{</span><span class="content"> closable hide_destination open_in_new_window pushes_page_down remains_at_top show_border hide_after show_wait wiggle_wait bar_color border_color button_color font link_color link_style link_text message size tab_side target text_color texture thank_you_text </span><span class="delimiter">}</span></span>
-</pre></div>
-</div>
-
-          </td>
-         </tr>
-         
-        
-        <tr>
-          <td valign='top'>
-           
-              &nbsp;
-          
-          </td>
-          <td valign='top'>
-            <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n133" name="n133">133</a></span>
-</pre></div>
-</div>
-
-          </td>
-         </tr>
-         
-        
-        <tr>
-          <td valign='top'>
-           
-              &nbsp;
-          
-          </td>
-          <td valign='top'>
-            <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n134" name="n134">134</a></span>    bar.attributes.select{|key,val| settings.include?(key) }.merge({
-</pre></div>
-</div>
-
-          </td>
-         </tr>
-         
-        
-        <tr>
-          <td valign='top'>
-           
-              &nbsp;
-          
-          </td>
-          <td valign='top'>
-            <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n135" name="n135">135</a></span>      <span class="key">id</span>: bar.id,
-</pre></div>
-</div>
-
-          </td>
-         </tr>
-         
-        
-        <tr>
-          <td valign='top'>
-           
-              &nbsp;
-          
-          </td>
-          <td valign='top'>
-            <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n136" name="n136">136</a></span>      <span class="key">target</span>: bar.target_segment,
-</pre></div>
-</div>
-
-          </td>
-         </tr>
-         
-        
-        <tr>
-          <td valign='top'>
-           
-              &nbsp;
-          
-          </td>
-          <td valign='top'>
-            <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n137" name="n137">137</a></span>      <span class="key">template_name</span>: bar.bar_type,
-</pre></div>
-</div>
-
-          </td>
-         </tr>
-         
-        
-        <tr>
-          <td valign='top'>
-           
-              &nbsp;
-          
-          </td>
-          <td valign='top'>
-            <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n138" name="n138">138</a></span>      <span class="key">settings</span>: bar.settings
-</pre></div>
-</div>
-
-          </td>
-         </tr>
-         
-        
-        <tr>
-          <td valign='top'>
-           
-              &nbsp;
-          
-          </td>
-          <td valign='top'>
-            <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n139" name="n139">139</a></span>    }).select{|key, value| !value.nil? || !value == <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> }
-</pre></div>
-</div>
-
-          </td>
-         </tr>
-         
-        
-        <tr>
-          <td valign='top'>
-           
-              &nbsp;
-          
-          </td>
-          <td valign='top'>
-            <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n140" name="n140">140</a></strong></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n140" name="n140">140</a></strong></span>    settings = <span class="string"><span class="delimiter">%w{</span><span class="content"> closable hide_destination open_in_new_window pushes_page_down remains_at_top show_border hide_after show_wait wiggle_wait bar_color border_color button_color font link_color link_style link_text message size tab_side target text_color texture thank_you_text </span><span class="delimiter">}</span></span>
 </pre></div>
 </div>
 
@@ -2432,6 +2440,134 @@
           <td valign='top'>
             <div class="CodeRay">
   <div class="code"><pre><span class="line-numbers"><a href="#n141" name="n141">141</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n142" name="n142">142</a></span>    bar.attributes.select{|key,val| settings.include?(key) }.merge({
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n143" name="n143">143</a></span>      <span class="key">id</span>: bar.id,
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n144" name="n144">144</a></span>      <span class="key">target</span>: bar.target_segment,
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n145" name="n145">145</a></span>      <span class="key">template_name</span>: bar.bar_type,
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n146" name="n146">146</a></span>      <span class="key">settings</span>: bar.settings
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n147" name="n147">147</a></span>    }).select{|key, value| !value.nil? || !value == <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> }
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n148" name="n148">148</a></span>  <span class="keyword">end</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n149" name="n149">149</a></span>
 </pre></div>
 </div>
 
@@ -2461,7 +2597,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n142" name="n142">142</a></span>  <span class="keyword">def</span> <span class="function">rule_settings</span>(rule)
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n150" name="n150">150</a></strong></span>  <span class="keyword">def</span> <span class="function">rule_settings</span>(rule)
 </pre></div>
 </div>
 
@@ -2477,7 +2613,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n143" name="n143">143</a></span>    settings = <span class="string"><span class="delimiter">%w{</span><span class="content"> end_date start_date exclude_urls include_urls id </span><span class="delimiter">}</span></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n151" name="n151">151</a></span>    settings = <span class="string"><span class="delimiter">%w{</span><span class="content"> end_date start_date exclude_urls include_urls id </span><span class="delimiter">}</span></span>
 </pre></div>
 </div>
 
@@ -2493,7 +2629,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n144" name="n144">144</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n152" name="n152">152</a></span>
 </pre></div>
 </div>
 
@@ -2509,7 +2645,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n145" name="n145">145</a></span>    rule.attributes.select{|key, value| settings.include?(key) &amp;&amp; value.present? }
+  <div class="code"><pre><span class="line-numbers"><a href="#n153" name="n153">153</a></span>    rule.attributes.select{|key, value| settings.include?(key) &amp;&amp; value.present? }
 </pre></div>
 </div>
 
@@ -2525,7 +2661,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n146" name="n146">146</a></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n154" name="n154">154</a></span>  <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -2541,7 +2677,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n147" name="n147">147</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n155" name="n155">155</a></span>
 </pre></div>
 </div>
 
@@ -2567,7 +2703,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n148" name="n148">148</a></span>  <span class="keyword">def</span> <span class="function">bars_for_rule</span>(rule)
+  <div class="code"><pre><span class="line-numbers"><a href="#n156" name="n156">156</a></span>  <span class="keyword">def</span> <span class="function">bars_for_rule</span>(rule)
 </pre></div>
 </div>
 
@@ -2583,7 +2719,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n149" name="n149">149</a></span>    bars = <span class="keyword">if</span> options[<span class="symbol">:bar_id</span>]
+  <div class="code"><pre><span class="line-numbers"><a href="#n157" name="n157">157</a></span>    bars = <span class="keyword">if</span> options[<span class="symbol">:bar_id</span>]
 </pre></div>
 </div>
 
@@ -2599,7 +2735,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n150" name="n150">150</a></strong></span>      [rule.bars.find(options[<span class="symbol">:bar_id</span>])]
+  <div class="code"><pre><span class="line-numbers"><a href="#n158" name="n158">158</a></span>      [rule.bars.find(options[<span class="symbol">:bar_id</span>])]
 </pre></div>
 </div>
 
@@ -2615,7 +2751,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n151" name="n151">151</a></span>    <span class="keyword">else</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n159" name="n159">159</a></span>    <span class="keyword">else</span>
 </pre></div>
 </div>
 
@@ -2631,7 +2767,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n152" name="n152">152</a></span>      <span class="keyword">if</span> options[<span class="symbol">:render_paused_bars</span>]
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n160" name="n160">160</a></strong></span>      <span class="keyword">if</span> options[<span class="symbol">:render_paused_bars</span>]
 </pre></div>
 </div>
 
@@ -2647,7 +2783,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n153" name="n153">153</a></span>        rule.bars
+  <div class="code"><pre><span class="line-numbers"><a href="#n161" name="n161">161</a></span>        rule.bars
 </pre></div>
 </div>
 
@@ -2663,7 +2799,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n154" name="n154">154</a></span>      <span class="keyword">else</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n162" name="n162">162</a></span>      <span class="keyword">else</span>
 </pre></div>
 </div>
 
@@ -2679,7 +2815,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n155" name="n155">155</a></span>        rule.bars.active
+  <div class="code"><pre><span class="line-numbers"><a href="#n163" name="n163">163</a></span>        rule.bars.active
 </pre></div>
 </div>
 
@@ -2695,7 +2831,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n156" name="n156">156</a></span>      <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n164" name="n164">164</a></span>      <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -2711,7 +2847,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n157" name="n157">157</a></span>    <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n165" name="n165">165</a></span>    <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -2727,7 +2863,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n158" name="n158">158</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n166" name="n166">166</a></span>
 </pre></div>
 </div>
 
@@ -2743,7 +2879,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n159" name="n159">159</a></span>    bars.map{|bar| bar_settings(bar) }
+  <div class="code"><pre><span class="line-numbers"><a href="#n167" name="n167">167</a></span>    bars.map{|bar| bar_settings(bar) }
 </pre></div>
 </div>
 
@@ -2759,7 +2895,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n160" name="n160">160</a></strong></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n168" name="n168">168</a></span>  <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -2775,7 +2911,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n161" name="n161">161</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n169" name="n169">169</a></span>
 </pre></div>
 </div>
 
@@ -2797,7 +2933,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n162" name="n162">162</a></span>  <span class="keyword">def</span> <span class="function">metadata</span>(rule)
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n170" name="n170">170</a></strong></span>  <span class="keyword">def</span> <span class="function">metadata</span>(rule)
 </pre></div>
 </div>
 
@@ -2813,7 +2949,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n163" name="n163">163</a></span>    rule_settings(rule).select{|key,value| value.present? }.with_indifferent_access
+  <div class="code"><pre><span class="line-numbers"><a href="#n171" name="n171">171</a></span>    rule_settings(rule).select{|key,value| value.present? }.with_indifferent_access
 </pre></div>
 </div>
 
@@ -2829,7 +2965,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n164" name="n164">164</a></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n172" name="n172">172</a></span>  <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -2845,7 +2981,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n165" name="n165">165</a></span><span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n173" name="n173">173</a></span><span class="keyword">end</span>
 </pre></div>
 </div>
 

@@ -516,7 +516,7 @@ table td.score {
 <p><a href="http://github.com/troessner/reek">Reek</a> detects common code smells in ruby code.</p>
 
 <div id="graph_container"></div>
-<script language="javascript" src="reek.js?1403291241" type="text/javascript"></script>
+<script language="javascript" src="reek.js?1403294772" type="text/javascript"></script>
 
 <table>
   <tr>
@@ -7159,6 +7159,34 @@ table td.score {
       <tr class='light'>
         <td><a href='file:///Users/quigebo/hellobar_new/lib/script_generator.rb'>lib/script_generator.rb</a></td>
         <td>
+          ScriptGenerator#path_for_url
+        </td>
+        <td>
+          doesn't depend on instance state
+        </td>
+        <td>
+          UtilityFunction
+        </td>
+      </tr>
+      
+    
+      <tr class='dark'>
+        <td><a href='file:///Users/quigebo/hellobar_new/lib/script_generator.rb'>lib/script_generator.rb</a></td>
+        <td>
+          ScriptGenerator#path_for_url
+        </td>
+        <td>
+          refers to path more than self
+        </td>
+        <td>
+          FeatureEnvy
+        </td>
+      </tr>
+      
+    
+      <tr class='light'>
+        <td><a href='file:///Users/quigebo/hellobar_new/lib/script_generator.rb'>lib/script_generator.rb</a></td>
+        <td>
           ScriptGenerator#rule_settings
         </td>
         <td>
@@ -7218,20 +7246,6 @@ table td.score {
           ScriptGenerator#url_conditions
         </td>
         <td>
-          doesn't depend on instance state
-        </td>
-        <td>
-          UtilityFunction
-        </td>
-      </tr>
-      
-    
-      <tr class='dark'>
-        <td><a href='file:///Users/quigebo/hellobar_new/lib/script_generator.rb'>lib/script_generator.rb</a></td>
-        <td>
-          ScriptGenerator#url_conditions
-        </td>
-        <td>
           refers to condition more than self
         </td>
         <td>
@@ -7242,7 +7256,7 @@ table td.score {
     
   
     
-      <tr class='light'>
+      <tr class='dark'>
         <td><a href='file:///Users/quigebo/hellobar_new/lib/wordpress_plugin.rb'>lib/wordpress_plugin.rb</a></td>
         <td>
           WordpressPlugin
@@ -7260,7 +7274,7 @@ table td.score {
 
 </table>
 
-<p>Generated on 2014-06-20 14:07:21 -0500</p>
+<p>Generated on 2014-06-20 15:06:12 -0500</p>
 
     </div>
 

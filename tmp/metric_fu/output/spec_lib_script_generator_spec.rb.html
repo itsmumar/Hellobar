@@ -2195,7 +2195,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n136" name="n136">136</a></span>      conditions = [<span class="constant">UrlCondition</span>.new(<span class="key">value</span>: { <span class="string"><span class="delimiter">'</span><span class="content">exclude_url</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">http://soamazing.com</span><span class="delimiter">'</span></span> })]
+  <div class="code"><pre><span class="line-numbers"><a href="#n136" name="n136">136</a></span>      conditions = [<span class="constant">UrlCondition</span>.new(<span class="key">value</span>: { <span class="string"><span class="delimiter">'</span><span class="content">exclude_url</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">/signup</span><span class="delimiter">'</span></span> })]
 </pre></div>
 </div>
 
@@ -2259,7 +2259,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n140" name="n140">140</a></strong></span>      expected_string = <span class="string"><span class="delimiter">&quot;</span><span class="content">(!HB.umatch(</span><span class="char">\&quot;</span><span class="content">http://soamazing.com</span><span class="char">\&quot;</span><span class="content">, document.location))</span><span class="delimiter">&quot;</span></span>
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n140" name="n140">140</a></strong></span>      expected_string = <span class="string"><span class="delimiter">&quot;</span><span class="content">(!HB.umatch(</span><span class="char">\&quot;</span><span class="content">/signup</span><span class="char">\&quot;</span><span class="content">, document.location))</span><span class="delimiter">&quot;</span></span>
 </pre></div>
 </div>
 
@@ -2339,7 +2339,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n145" name="n145">145</a></span>    it <span class="string"><span class="delimiter">'</span><span class="content">does NOT have exclusion constraints when no sites are blacklisted</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n145" name="n145">145</a></span>    it <span class="string"><span class="delimiter">'</span><span class="content">converts excluded urls to paths</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -2371,7 +2371,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n147" name="n147">147</a></span>      site.stub <span class="key">rules</span>: [rule]
+  <div class="code"><pre><span class="line-numbers"><a href="#n147" name="n147">147</a></span>      conditions = [<span class="constant">UrlCondition</span>.new(<span class="key">value</span>: { <span class="string"><span class="delimiter">'</span><span class="content">exclude_url</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">http://soamazing.com/signup</span><span class="delimiter">'</span></span> })]
 </pre></div>
 </div>
 
@@ -2387,7 +2387,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n148" name="n148">148</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n148" name="n148">148</a></span>      rule.stub <span class="key">bars</span>: double(<span class="string"><span class="delimiter">'</span><span class="content">bars</span><span class="delimiter">'</span></span>, <span class="key">active</span>: []), <span class="key">attributes</span>: {}, <span class="key">conditions</span>: conditions
 </pre></div>
 </div>
 
@@ -2403,7 +2403,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n149" name="n149">149</a></span>      expected_string = <span class="constant">Regexp</span>.new <span class="regexp"><span class="delimiter">/</span><span class="content">HB.umatch(.*)</span><span class="delimiter">/</span></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n149" name="n149">149</a></span>      site.stub <span class="key">rules</span>: [rule]
 </pre></div>
 </div>
 
@@ -2435,7 +2435,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n151" name="n151">151</a></span>      generator.render.should_not match(expected_string)
+  <div class="code"><pre><span class="line-numbers"><a href="#n151" name="n151">151</a></span>      expected_string = <span class="string"><span class="delimiter">&quot;</span><span class="content">(!HB.umatch(</span><span class="char">\&quot;</span><span class="content">/signup</span><span class="char">\&quot;</span><span class="content">, document.location))</span><span class="delimiter">&quot;</span></span>
 </pre></div>
 </div>
 
@@ -2451,7 +2451,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n152" name="n152">152</a></span>    <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n152" name="n152">152</a></span>
 </pre></div>
 </div>
 
@@ -2467,7 +2467,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n153" name="n153">153</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n153" name="n153">153</a></span>      generator.render.should include(expected_string)
 </pre></div>
 </div>
 
@@ -2483,7 +2483,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n154" name="n154">154</a></span>    it <span class="string"><span class="delimiter">'</span><span class="content">adds an inclusion constraint for all whitelisted URLs</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n154" name="n154">154</a></span>    <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -2499,7 +2499,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n155" name="n155">155</a></span>      rule = <span class="constant">Rule</span>.new
+  <div class="code"><pre><span class="line-numbers"><a href="#n155" name="n155">155</a></span>
 </pre></div>
 </div>
 
@@ -2515,7 +2515,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n156" name="n156">156</a></span>      conditions = [<span class="constant">UrlCondition</span>.new(<span class="key">value</span>: { <span class="string"><span class="delimiter">'</span><span class="content">include_url</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">http://soamazing.com</span><span class="delimiter">'</span></span> })]
+  <div class="code"><pre><span class="line-numbers"><a href="#n156" name="n156">156</a></span>    it <span class="string"><span class="delimiter">'</span><span class="content">does NOT have exclusion constraints when no sites are blacklisted</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -2531,7 +2531,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n157" name="n157">157</a></span>      rule.stub <span class="key">conditions</span>: conditions
+  <div class="code"><pre><span class="line-numbers"><a href="#n157" name="n157">157</a></span>      rule = <span class="constant">Rule</span>.new
 </pre></div>
 </div>
 
@@ -2579,7 +2579,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n160" name="n160">160</a></strong></span>      expected_string = <span class="string"><span class="delimiter">&quot;</span><span class="content">(HB.umatch(</span><span class="char">\&quot;</span><span class="content">http://soamazing.com</span><span class="char">\&quot;</span><span class="content">, document.location));</span><span class="delimiter">&quot;</span></span>
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n160" name="n160">160</a></strong></span>      expected_string = <span class="constant">Regexp</span>.new <span class="regexp"><span class="delimiter">/</span><span class="content">HB.umatch(.*)</span><span class="delimiter">/</span></span>
 </pre></div>
 </div>
 
@@ -2611,7 +2611,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n162" name="n162">162</a></span>      generator.render.should include(expected_string)
+  <div class="code"><pre><span class="line-numbers"><a href="#n162" name="n162">162</a></span>      generator.render.should_not match(expected_string)
 </pre></div>
 </div>
 
@@ -2659,7 +2659,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n165" name="n165">165</a></span>    it <span class="string"><span class="delimiter">'</span><span class="content">does NOT have inclusion constraints when no sites are whitelisted</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n165" name="n165">165</a></span>    it <span class="string"><span class="delimiter">'</span><span class="content">adds an inclusion constraint for all whitelisted URLs</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -2691,7 +2691,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n167" name="n167">167</a></span>      generator.stub <span class="key">rules</span>: [rule]
+  <div class="code"><pre><span class="line-numbers"><a href="#n167" name="n167">167</a></span>      conditions = [<span class="constant">UrlCondition</span>.new(<span class="key">value</span>: { <span class="string"><span class="delimiter">'</span><span class="content">include_url</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">/signup</span><span class="delimiter">'</span></span> })]
 </pre></div>
 </div>
 
@@ -2707,7 +2707,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n168" name="n168">168</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n168" name="n168">168</a></span>      rule.stub <span class="key">conditions</span>: conditions
 </pre></div>
 </div>
 
@@ -2723,7 +2723,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n169" name="n169">169</a></span>      expected_string = <span class="constant">Regexp</span>.new <span class="regexp"><span class="delimiter">/</span><span class="content">HB.umatch(.*)</span><span class="delimiter">/</span></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n169" name="n169">169</a></span>      site.stub <span class="key">rules</span>: [rule]
 </pre></div>
 </div>
 
@@ -2755,7 +2755,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n171" name="n171">171</a></span>      generator.render.should_not match(expected_string)
+  <div class="code"><pre><span class="line-numbers"><a href="#n171" name="n171">171</a></span>      expected_string = <span class="string"><span class="delimiter">&quot;</span><span class="content">(HB.umatch(</span><span class="char">\&quot;</span><span class="content">/signup</span><span class="char">\&quot;</span><span class="content">, document.location));</span><span class="delimiter">&quot;</span></span>
 </pre></div>
 </div>
 
@@ -2771,7 +2771,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n172" name="n172">172</a></span>    <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n172" name="n172">172</a></span>
 </pre></div>
 </div>
 
@@ -2787,7 +2787,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n173" name="n173">173</a></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n173" name="n173">173</a></span>      generator.render.should include(expected_string)
 </pre></div>
 </div>
 
@@ -2803,7 +2803,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n174" name="n174">174</a></span><span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n174" name="n174">174</a></span>    <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -2835,7 +2835,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n176" name="n176">176</a></span>describe <span class="constant">ScriptGenerator</span>, <span class="string"><span class="delimiter">'</span><span class="content">#rules</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n176" name="n176">176</a></span>    it <span class="string"><span class="delimiter">'</span><span class="content">does NOT have inclusion constraints when no sites are whitelisted</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -2851,7 +2851,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n177" name="n177">177</a></span>  let(<span class="symbol">:site</span>) { double <span class="string"><span class="delimiter">'</span><span class="content">site</span><span class="delimiter">'</span></span>, <span class="key">id</span>: <span class="string"><span class="delimiter">'</span><span class="content">1337</span><span class="delimiter">'</span></span>, <span class="key">rules</span>: [], <span class="key">bars</span>: [] }
+  <div class="code"><pre><span class="line-numbers"><a href="#n177" name="n177">177</a></span>      rule = <span class="constant">Rule</span>.new
 </pre></div>
 </div>
 
@@ -2867,7 +2867,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n178" name="n178">178</a></span>  let(<span class="symbol">:generator</span>) { <span class="constant">ScriptGenerator</span>.new(site) }
+  <div class="code"><pre><span class="line-numbers"><a href="#n178" name="n178">178</a></span>      generator.stub <span class="key">rules</span>: [rule]
 </pre></div>
 </div>
 
@@ -2899,7 +2899,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n180" name="n180">180</a></strong></span>  it <span class="string"><span class="delimiter">'</span><span class="content">returns the proper array of hashes for a sites rules</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n180" name="n180">180</a></strong></span>      expected_string = <span class="constant">Regexp</span>.new <span class="regexp"><span class="delimiter">/</span><span class="content">HB.umatch(.*)</span><span class="delimiter">/</span></span>
 </pre></div>
 </div>
 
@@ -2915,7 +2915,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n181" name="n181">181</a></span>    rule = <span class="constant">Rule</span>.new <span class="key">id</span>: <span class="integer">1</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n181" name="n181">181</a></span>
 </pre></div>
 </div>
 
@@ -2931,7 +2931,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n182" name="n182">182</a></span>    site.stub <span class="key">rules</span>: [rule]
+  <div class="code"><pre><span class="line-numbers"><a href="#n182" name="n182">182</a></span>      generator.render.should_not match(expected_string)
 </pre></div>
 </div>
 
@@ -2947,7 +2947,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n183" name="n183">183</a></span>    generator.stub <span class="key">bars_for_rule</span>: []
+  <div class="code"><pre><span class="line-numbers"><a href="#n183" name="n183">183</a></span>    <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -2963,7 +2963,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n184" name="n184">184</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n184" name="n184">184</a></span>  <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -2979,7 +2979,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n185" name="n185">185</a></span>    expected_hash = {
+  <div class="code"><pre><span class="line-numbers"><a href="#n185" name="n185">185</a></span><span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -2995,7 +2995,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n186" name="n186">186</a></span>      <span class="key">bar_json</span>: [].to_json,
+  <div class="code"><pre><span class="line-numbers"><a href="#n186" name="n186">186</a></span>
 </pre></div>
 </div>
 
@@ -3011,7 +3011,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n187" name="n187">187</a></span>      <span class="key">priority</span>: <span class="integer">1</span>,
+  <div class="code"><pre><span class="line-numbers"><a href="#n187" name="n187">187</a></span>describe <span class="constant">ScriptGenerator</span>, <span class="string"><span class="delimiter">'</span><span class="content">#rules</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -3027,7 +3027,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n188" name="n188">188</a></span>      <span class="key">metadata</span>: { <span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> =&gt; <span class="integer">1</span> }.to_json,
+  <div class="code"><pre><span class="line-numbers"><a href="#n188" name="n188">188</a></span>  let(<span class="symbol">:site</span>) { double <span class="string"><span class="delimiter">'</span><span class="content">site</span><span class="delimiter">'</span></span>, <span class="key">id</span>: <span class="string"><span class="delimiter">'</span><span class="content">1337</span><span class="delimiter">'</span></span>, <span class="key">rules</span>: [], <span class="key">bars</span>: [] }
 </pre></div>
 </div>
 
@@ -3043,7 +3043,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n189" name="n189">189</a></span>      <span class="key">rule_eligibility</span>: <span class="string"><span class="delimiter">'</span><span class="content">return true;}</span><span class="delimiter">'</span></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n189" name="n189">189</a></span>  let(<span class="symbol">:generator</span>) { <span class="constant">ScriptGenerator</span>.new(site) }
 </pre></div>
 </div>
 
@@ -3059,7 +3059,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n190" name="n190">190</a></strong></span>    }
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n190" name="n190">190</a></strong></span>
 </pre></div>
 </div>
 
@@ -3075,7 +3075,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n191" name="n191">191</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n191" name="n191">191</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">returns the proper array of hashes for a sites rules</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -3091,7 +3091,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n192" name="n192">192</a></span>    generator.rules.should == [expected_hash]
+  <div class="code"><pre><span class="line-numbers"><a href="#n192" name="n192">192</a></span>    rule = <span class="constant">Rule</span>.new <span class="key">id</span>: <span class="integer">1</span>
 </pre></div>
 </div>
 
@@ -3107,7 +3107,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n193" name="n193">193</a></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n193" name="n193">193</a></span>    site.stub <span class="key">rules</span>: [rule]
 </pre></div>
 </div>
 
@@ -3123,7 +3123,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n194" name="n194">194</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n194" name="n194">194</a></span>    generator.stub <span class="key">bars_for_rule</span>: []
 </pre></div>
 </div>
 
@@ -3139,7 +3139,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n195" name="n195">195</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">returns the proper hash when a single bar_id is passed as an option</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n195" name="n195">195</a></span>
 </pre></div>
 </div>
 
@@ -3155,7 +3155,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n196" name="n196">196</a></span>    rule = <span class="constant">Rule</span>.create
+  <div class="code"><pre><span class="line-numbers"><a href="#n196" name="n196">196</a></span>    expected_hash = {
 </pre></div>
 </div>
 
@@ -3171,7 +3171,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n197" name="n197">197</a></span>    bar = <span class="constant">Bar</span>.create <span class="key">bar_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">email</span><span class="delimiter">'</span></span>, <span class="key">rule</span>: rule
+  <div class="code"><pre><span class="line-numbers"><a href="#n197" name="n197">197</a></span>      <span class="key">bar_json</span>: [].to_json,
 </pre></div>
 </div>
 
@@ -3187,7 +3187,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n198" name="n198">198</a></span>    options = { <span class="key">bar_id</span>: bar.id }
+  <div class="code"><pre><span class="line-numbers"><a href="#n198" name="n198">198</a></span>      <span class="key">priority</span>: <span class="integer">1</span>,
 </pre></div>
 </div>
 
@@ -3203,7 +3203,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n199" name="n199">199</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n199" name="n199">199</a></span>      <span class="key">metadata</span>: { <span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> =&gt; <span class="integer">1</span> }.to_json,
 </pre></div>
 </div>
 
@@ -3219,7 +3219,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n200" name="n200">200</a></strong></span>    generator = <span class="constant">ScriptGenerator</span>.new(site, options)
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n200" name="n200">200</a></strong></span>      <span class="key">rule_eligibility</span>: <span class="string"><span class="delimiter">'</span><span class="content">return true;}</span><span class="delimiter">'</span></span>
 </pre></div>
 </div>
 
@@ -3235,7 +3235,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n201" name="n201">201</a></span>    generator.stub <span class="key">bar_settings</span>: {<span class="key">id</span>: bar.id, <span class="key">template_name</span>: bar.bar_type}
+  <div class="code"><pre><span class="line-numbers"><a href="#n201" name="n201">201</a></span>    }
 </pre></div>
 </div>
 
@@ -3267,7 +3267,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n203" name="n203">203</a></span>    site.stub <span class="key">rules</span>: [rule]
+  <div class="code"><pre><span class="line-numbers"><a href="#n203" name="n203">203</a></span>    generator.rules.should == [expected_hash]
 </pre></div>
 </div>
 
@@ -3283,7 +3283,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n204" name="n204">204</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n204" name="n204">204</a></span>  <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -3299,7 +3299,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n205" name="n205">205</a></span>    expected_hash = {
+  <div class="code"><pre><span class="line-numbers"><a href="#n205" name="n205">205</a></span>
 </pre></div>
 </div>
 
@@ -3315,7 +3315,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n206" name="n206">206</a></span>      <span class="key">bar_json</span>: [{ <span class="key">id</span>: bar.id, <span class="key">template_name</span>: bar.bar_type }].to_json,
+  <div class="code"><pre><span class="line-numbers"><a href="#n206" name="n206">206</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">returns the proper hash when a single bar_id is passed as an option</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -3331,7 +3331,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n207" name="n207">207</a></span>      <span class="key">priority</span>: <span class="integer">1</span>,
+  <div class="code"><pre><span class="line-numbers"><a href="#n207" name="n207">207</a></span>    rule = <span class="constant">Rule</span>.create
 </pre></div>
 </div>
 
@@ -3347,7 +3347,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n208" name="n208">208</a></span>      <span class="key">metadata</span>: { <span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> =&gt; rule.id }.to_json,
+  <div class="code"><pre><span class="line-numbers"><a href="#n208" name="n208">208</a></span>    bar = <span class="constant">Bar</span>.create <span class="key">bar_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">email</span><span class="delimiter">'</span></span>, <span class="key">rule</span>: rule
 </pre></div>
 </div>
 
@@ -3363,7 +3363,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n209" name="n209">209</a></span>      <span class="key">rule_eligibility</span>: <span class="string"><span class="delimiter">'</span><span class="content">return true;}</span><span class="delimiter">'</span></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n209" name="n209">209</a></span>    options = { <span class="key">bar_id</span>: bar.id }
 </pre></div>
 </div>
 
@@ -3379,7 +3379,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n210" name="n210">210</a></strong></span>    }
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n210" name="n210">210</a></strong></span>
 </pre></div>
 </div>
 
@@ -3395,7 +3395,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n211" name="n211">211</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n211" name="n211">211</a></span>    generator = <span class="constant">ScriptGenerator</span>.new(site, options)
 </pre></div>
 </div>
 
@@ -3411,7 +3411,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n212" name="n212">212</a></span>    generator.rules.should == [expected_hash]
+  <div class="code"><pre><span class="line-numbers"><a href="#n212" name="n212">212</a></span>    generator.stub <span class="key">bar_settings</span>: {<span class="key">id</span>: bar.id, <span class="key">template_name</span>: bar.bar_type}
 </pre></div>
 </div>
 
@@ -3427,7 +3427,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n213" name="n213">213</a></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n213" name="n213">213</a></span>
 </pre></div>
 </div>
 
@@ -3443,7 +3443,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n214" name="n214">214</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n214" name="n214">214</a></span>    site.stub <span class="key">rules</span>: [rule]
 </pre></div>
 </div>
 
@@ -3459,7 +3459,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n215" name="n215">215</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">renders all bar json when the render_paused_bars is true</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n215" name="n215">215</a></span>
 </pre></div>
 </div>
 
@@ -3475,7 +3475,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n216" name="n216">216</a></span>    rule = <span class="constant">Rule</span>.create
+  <div class="code"><pre><span class="line-numbers"><a href="#n216" name="n216">216</a></span>    expected_hash = {
 </pre></div>
 </div>
 
@@ -3491,7 +3491,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n217" name="n217">217</a></span>    bar = <span class="constant">Bar</span>.create <span class="key">bar_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">email</span><span class="delimiter">'</span></span>, <span class="key">rule</span>: rule, <span class="key">paused</span>: <span class="predefined-constant">true</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n217" name="n217">217</a></span>      <span class="key">bar_json</span>: [{ <span class="key">id</span>: bar.id, <span class="key">template_name</span>: bar.bar_type }].to_json,
 </pre></div>
 </div>
 
@@ -3507,7 +3507,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n218" name="n218">218</a></span>    options = { <span class="key">render_paused_bars</span>: <span class="predefined-constant">true</span> }
+  <div class="code"><pre><span class="line-numbers"><a href="#n218" name="n218">218</a></span>      <span class="key">priority</span>: <span class="integer">1</span>,
 </pre></div>
 </div>
 
@@ -3523,7 +3523,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n219" name="n219">219</a></span>    generator = <span class="constant">ScriptGenerator</span>.new(site, options)
+  <div class="code"><pre><span class="line-numbers"><a href="#n219" name="n219">219</a></span>      <span class="key">metadata</span>: { <span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> =&gt; rule.id }.to_json,
 </pre></div>
 </div>
 
@@ -3539,7 +3539,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n220" name="n220">220</a></strong></span>    generator.stub <span class="key">bar_settings</span>: { <span class="key">id</span>: bar.id, <span class="key">template_name</span>: bar.bar_type, <span class="key">settings</span>: { <span class="key">buffer_url</span>: <span class="string"><span class="delimiter">'</span><span class="content">url</span><span class="delimiter">'</span></span> }}
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n220" name="n220">220</a></strong></span>      <span class="key">rule_eligibility</span>: <span class="string"><span class="delimiter">'</span><span class="content">return true;}</span><span class="delimiter">'</span></span>
 </pre></div>
 </div>
 
@@ -3555,7 +3555,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n221" name="n221">221</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n221" name="n221">221</a></span>    }
 </pre></div>
 </div>
 
@@ -3571,7 +3571,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n222" name="n222">222</a></span>    site.stub <span class="key">rules</span>: [rule]
+  <div class="code"><pre><span class="line-numbers"><a href="#n222" name="n222">222</a></span>
 </pre></div>
 </div>
 
@@ -3587,7 +3587,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n223" name="n223">223</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n223" name="n223">223</a></span>    generator.rules.should == [expected_hash]
 </pre></div>
 </div>
 
@@ -3603,7 +3603,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n224" name="n224">224</a></span>    expected_hash = {
+  <div class="code"><pre><span class="line-numbers"><a href="#n224" name="n224">224</a></span>  <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -3619,7 +3619,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n225" name="n225">225</a></span>      <span class="key">bar_json</span>: [{ <span class="key">id</span>: bar.id, <span class="key">template_name</span>: bar.bar_type, <span class="key">settings</span>: { <span class="key">buffer_url</span>: <span class="string"><span class="delimiter">'</span><span class="content">url</span><span class="delimiter">'</span></span> }}].to_json,
+  <div class="code"><pre><span class="line-numbers"><a href="#n225" name="n225">225</a></span>
 </pre></div>
 </div>
 
@@ -3635,7 +3635,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n226" name="n226">226</a></span>      <span class="key">priority</span>: <span class="integer">1</span>,
+  <div class="code"><pre><span class="line-numbers"><a href="#n226" name="n226">226</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">renders all bar json when the render_paused_bars is true</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -3651,7 +3651,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n227" name="n227">227</a></span>      <span class="key">metadata</span>: { <span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> =&gt; rule.id }.to_json,
+  <div class="code"><pre><span class="line-numbers"><a href="#n227" name="n227">227</a></span>    rule = <span class="constant">Rule</span>.create
 </pre></div>
 </div>
 
@@ -3667,7 +3667,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n228" name="n228">228</a></span>      <span class="key">rule_eligibility</span>: <span class="string"><span class="delimiter">'</span><span class="content">return true;}</span><span class="delimiter">'</span></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n228" name="n228">228</a></span>    bar = <span class="constant">Bar</span>.create <span class="key">bar_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">email</span><span class="delimiter">'</span></span>, <span class="key">rule</span>: rule, <span class="key">paused</span>: <span class="predefined-constant">true</span>
 </pre></div>
 </div>
 
@@ -3683,7 +3683,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n229" name="n229">229</a></span>    }
+  <div class="code"><pre><span class="line-numbers"><a href="#n229" name="n229">229</a></span>    options = { <span class="key">render_paused_bars</span>: <span class="predefined-constant">true</span> }
 </pre></div>
 </div>
 
@@ -3699,7 +3699,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n230" name="n230">230</a></strong></span>
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n230" name="n230">230</a></strong></span>    generator = <span class="constant">ScriptGenerator</span>.new(site, options)
 </pre></div>
 </div>
 
@@ -3715,7 +3715,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n231" name="n231">231</a></span>    generator.rules.should == [expected_hash]
+  <div class="code"><pre><span class="line-numbers"><a href="#n231" name="n231">231</a></span>    generator.stub <span class="key">bar_settings</span>: { <span class="key">id</span>: bar.id, <span class="key">template_name</span>: bar.bar_type, <span class="key">settings</span>: { <span class="key">buffer_url</span>: <span class="string"><span class="delimiter">'</span><span class="content">url</span><span class="delimiter">'</span></span> }}
 </pre></div>
 </div>
 
@@ -3731,7 +3731,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n232" name="n232">232</a></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n232" name="n232">232</a></span>
 </pre></div>
 </div>
 
@@ -3747,7 +3747,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n233" name="n233">233</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n233" name="n233">233</a></span>    site.stub <span class="key">rules</span>: [rule]
 </pre></div>
 </div>
 
@@ -3763,7 +3763,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n234" name="n234">234</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">renders only active bar json by default</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n234" name="n234">234</a></span>
 </pre></div>
 </div>
 
@@ -3779,7 +3779,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n235" name="n235">235</a></span>    rule = <span class="constant">Rule</span>.create
+  <div class="code"><pre><span class="line-numbers"><a href="#n235" name="n235">235</a></span>    expected_hash = {
 </pre></div>
 </div>
 
@@ -3795,7 +3795,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n236" name="n236">236</a></span>    paused = <span class="constant">Bar</span>.create! <span class="key">bar_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">email</span><span class="delimiter">'</span></span>, <span class="key">rule</span>: rule, <span class="key">paused</span>: <span class="predefined-constant">true</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n236" name="n236">236</a></span>      <span class="key">bar_json</span>: [{ <span class="key">id</span>: bar.id, <span class="key">template_name</span>: bar.bar_type, <span class="key">settings</span>: { <span class="key">buffer_url</span>: <span class="string"><span class="delimiter">'</span><span class="content">url</span><span class="delimiter">'</span></span> }}].to_json,
 </pre></div>
 </div>
 
@@ -3811,7 +3811,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n237" name="n237">237</a></span>    active_bar = <span class="constant">Bar</span>.create! <span class="key">bar_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">traffic</span><span class="delimiter">'</span></span>, <span class="key">rule</span>: rule, <span class="key">paused</span>: <span class="predefined-constant">false</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n237" name="n237">237</a></span>      <span class="key">priority</span>: <span class="integer">1</span>,
 </pre></div>
 </div>
 
@@ -3827,7 +3827,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n238" name="n238">238</a></span>    generator = <span class="constant">ScriptGenerator</span>.new(site)
+  <div class="code"><pre><span class="line-numbers"><a href="#n238" name="n238">238</a></span>      <span class="key">metadata</span>: { <span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> =&gt; rule.id }.to_json,
 </pre></div>
 </div>
 
@@ -3843,7 +3843,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n239" name="n239">239</a></span>    generator.stub <span class="key">bar_settings</span>: { <span class="key">id</span>: active_bar.id, <span class="key">template_name</span>: active_bar.bar_type }
+  <div class="code"><pre><span class="line-numbers"><a href="#n239" name="n239">239</a></span>      <span class="key">rule_eligibility</span>: <span class="string"><span class="delimiter">'</span><span class="content">return true;}</span><span class="delimiter">'</span></span>
 </pre></div>
 </div>
 
@@ -3859,7 +3859,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n240" name="n240">240</a></strong></span>
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n240" name="n240">240</a></strong></span>    }
 </pre></div>
 </div>
 
@@ -3875,7 +3875,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n241" name="n241">241</a></span>    site.stub <span class="key">rules</span>: [rule]
+  <div class="code"><pre><span class="line-numbers"><a href="#n241" name="n241">241</a></span>
 </pre></div>
 </div>
 
@@ -3891,7 +3891,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n242" name="n242">242</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n242" name="n242">242</a></span>    generator.rules.should == [expected_hash]
 </pre></div>
 </div>
 
@@ -3907,7 +3907,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n243" name="n243">243</a></span>    expected_hash = {
+  <div class="code"><pre><span class="line-numbers"><a href="#n243" name="n243">243</a></span>  <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -3923,7 +3923,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n244" name="n244">244</a></span>      <span class="key">bar_json</span>: [{ <span class="key">id</span>: active_bar.id, <span class="key">template_name</span>: active_bar.bar_type }].to_json,
+  <div class="code"><pre><span class="line-numbers"><a href="#n244" name="n244">244</a></span>
 </pre></div>
 </div>
 
@@ -3939,7 +3939,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n245" name="n245">245</a></span>      <span class="key">priority</span>: <span class="integer">1</span>,
+  <div class="code"><pre><span class="line-numbers"><a href="#n245" name="n245">245</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">renders only active bar json by default</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -3955,7 +3955,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n246" name="n246">246</a></span>      <span class="key">metadata</span>: { <span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> =&gt; rule.id }.to_json,
+  <div class="code"><pre><span class="line-numbers"><a href="#n246" name="n246">246</a></span>    rule = <span class="constant">Rule</span>.create
 </pre></div>
 </div>
 
@@ -3971,7 +3971,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n247" name="n247">247</a></span>      <span class="key">rule_eligibility</span>: <span class="string"><span class="delimiter">'</span><span class="content">return true;}</span><span class="delimiter">'</span></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n247" name="n247">247</a></span>    paused = <span class="constant">Bar</span>.create! <span class="key">bar_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">email</span><span class="delimiter">'</span></span>, <span class="key">rule</span>: rule, <span class="key">paused</span>: <span class="predefined-constant">true</span>
 </pre></div>
 </div>
 
@@ -3987,7 +3987,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n248" name="n248">248</a></span>    }
+  <div class="code"><pre><span class="line-numbers"><a href="#n248" name="n248">248</a></span>    active_bar = <span class="constant">Bar</span>.create! <span class="key">bar_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">traffic</span><span class="delimiter">'</span></span>, <span class="key">rule</span>: rule, <span class="key">paused</span>: <span class="predefined-constant">false</span>
 </pre></div>
 </div>
 
@@ -4003,7 +4003,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n249" name="n249">249</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n249" name="n249">249</a></span>    generator = <span class="constant">ScriptGenerator</span>.new(site)
 </pre></div>
 </div>
 
@@ -4019,7 +4019,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n250" name="n250">250</a></strong></span>    generator.rules.should == [expected_hash]
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n250" name="n250">250</a></strong></span>    generator.stub <span class="key">bar_settings</span>: { <span class="key">id</span>: active_bar.id, <span class="key">template_name</span>: active_bar.bar_type }
 </pre></div>
 </div>
 
@@ -4035,7 +4035,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n251" name="n251">251</a></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n251" name="n251">251</a></span>
 </pre></div>
 </div>
 
@@ -4051,7 +4051,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n252" name="n252">252</a></span><span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n252" name="n252">252</a></span>    site.stub <span class="key">rules</span>: [rule]
 </pre></div>
 </div>
 
@@ -4083,7 +4083,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n254" name="n254">254</a></span>describe <span class="constant">ScriptGenerator</span>, <span class="string"><span class="delimiter">'</span><span class="content">#generate_script</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n254" name="n254">254</a></span>    expected_hash = {
 </pre></div>
 </div>
 
@@ -4099,7 +4099,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n255" name="n255">255</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">does not compress the template if the compress option is not set</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n255" name="n255">255</a></span>      <span class="key">bar_json</span>: [{ <span class="key">id</span>: active_bar.id, <span class="key">template_name</span>: active_bar.bar_type }].to_json,
 </pre></div>
 </div>
 
@@ -4115,7 +4115,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n256" name="n256">256</a></span>    generator = <span class="constant">ScriptGenerator</span>.new(<span class="string"><span class="delimiter">'</span><span class="content">site</span><span class="delimiter">'</span></span>)
+  <div class="code"><pre><span class="line-numbers"><a href="#n256" name="n256">256</a></span>      <span class="key">priority</span>: <span class="integer">1</span>,
 </pre></div>
 </div>
 
@@ -4131,7 +4131,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n257" name="n257">257</a></span>    generator.stub <span class="symbol">:render</span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">template</span><span class="delimiter">'</span></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n257" name="n257">257</a></span>      <span class="key">metadata</span>: { <span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> =&gt; rule.id }.to_json,
 </pre></div>
 </div>
 
@@ -4147,7 +4147,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n258" name="n258">258</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n258" name="n258">258</a></span>      <span class="key">rule_eligibility</span>: <span class="string"><span class="delimiter">'</span><span class="content">return true;}</span><span class="delimiter">'</span></span>
 </pre></div>
 </div>
 
@@ -4163,7 +4163,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n259" name="n259">259</a></span>    <span class="constant">Uglifier</span>.should_not_receive(<span class="symbol">:new</span>)
+  <div class="code"><pre><span class="line-numbers"><a href="#n259" name="n259">259</a></span>    }
 </pre></div>
 </div>
 
@@ -4179,7 +4179,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n260" name="n260">260</a></strong></span>    generator.should_receive(<span class="symbol">:render</span>)
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n260" name="n260">260</a></strong></span>
 </pre></div>
 </div>
 
@@ -4195,7 +4195,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n261" name="n261">261</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n261" name="n261">261</a></span>    generator.rules.should == [expected_hash]
 </pre></div>
 </div>
 
@@ -4211,7 +4211,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n262" name="n262">262</a></span>    generator.generate_script
+  <div class="code"><pre><span class="line-numbers"><a href="#n262" name="n262">262</a></span>  <span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -4227,7 +4227,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n263" name="n263">263</a></span>  <span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n263" name="n263">263</a></span><span class="keyword">end</span>
 </pre></div>
 </div>
 
@@ -4259,7 +4259,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n265" name="n265">265</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">compresses the template when the compress option is true</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n265" name="n265">265</a></span>describe <span class="constant">ScriptGenerator</span>, <span class="string"><span class="delimiter">'</span><span class="content">#generate_script</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -4275,7 +4275,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n266" name="n266">266</a></span>    generator = <span class="constant">ScriptGenerator</span>.new(<span class="string"><span class="delimiter">'</span><span class="content">site</span><span class="delimiter">'</span></span>, { <span class="key">compress</span>: <span class="predefined-constant">true</span> })
+  <div class="code"><pre><span class="line-numbers"><a href="#n266" name="n266">266</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">does not compress the template if the compress option is not set</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
 </pre></div>
 </div>
 
@@ -4291,7 +4291,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n267" name="n267">267</a></span>    generator.stub <span class="symbol">:render</span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">template</span><span class="delimiter">'</span></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n267" name="n267">267</a></span>    generator = <span class="constant">ScriptGenerator</span>.new(<span class="string"><span class="delimiter">'</span><span class="content">site</span><span class="delimiter">'</span></span>)
 </pre></div>
 </div>
 
@@ -4307,7 +4307,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n268" name="n268">268</a></span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n268" name="n268">268</a></span>    generator.stub <span class="symbol">:render</span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">template</span><span class="delimiter">'</span></span>
 </pre></div>
 </div>
 
@@ -4323,7 +4323,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n269" name="n269">269</a></span>    uglifier = <span class="constant">Uglifier</span>.new
+  <div class="code"><pre><span class="line-numbers"><a href="#n269" name="n269">269</a></span>
 </pre></div>
 </div>
 
@@ -4339,7 +4339,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><strong><a href="#n270" name="n270">270</a></strong></span>    <span class="constant">Uglifier</span>.should_receive(<span class="symbol">:new</span>).and_return(uglifier)
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n270" name="n270">270</a></strong></span>    <span class="constant">Uglifier</span>.should_not_receive(<span class="symbol">:new</span>)
 </pre></div>
 </div>
 
@@ -4355,7 +4355,7 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n271" name="n271">271</a></span>    uglifier.should_receive(<span class="symbol">:compress</span>).with(<span class="string"><span class="delimiter">'</span><span class="content">template</span><span class="delimiter">'</span></span>)
+  <div class="code"><pre><span class="line-numbers"><a href="#n271" name="n271">271</a></span>    generator.should_receive(<span class="symbol">:render</span>)
 </pre></div>
 </div>
 
@@ -4419,7 +4419,183 @@
           </td>
           <td valign='top'>
             <div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n275" name="n275">275</a></span><span class="keyword">end</span>
+  <div class="code"><pre><span class="line-numbers"><a href="#n275" name="n275">275</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n276" name="n276">276</a></span>  it <span class="string"><span class="delimiter">'</span><span class="content">compresses the template when the compress option is true</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n277" name="n277">277</a></span>    generator = <span class="constant">ScriptGenerator</span>.new(<span class="string"><span class="delimiter">'</span><span class="content">site</span><span class="delimiter">'</span></span>, { <span class="key">compress</span>: <span class="predefined-constant">true</span> })
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n278" name="n278">278</a></span>    generator.stub <span class="symbol">:render</span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">template</span><span class="delimiter">'</span></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n279" name="n279">279</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><strong><a href="#n280" name="n280">280</a></strong></span>    uglifier = <span class="constant">Uglifier</span>.new
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n281" name="n281">281</a></span>    <span class="constant">Uglifier</span>.should_receive(<span class="symbol">:new</span>).and_return(uglifier)
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n282" name="n282">282</a></span>    uglifier.should_receive(<span class="symbol">:compress</span>).with(<span class="string"><span class="delimiter">'</span><span class="content">template</span><span class="delimiter">'</span></span>)
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n283" name="n283">283</a></span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n284" name="n284">284</a></span>    generator.generate_script
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n285" name="n285">285</a></span>  <span class="keyword">end</span>
+</pre></div>
+</div>
+
+          </td>
+         </tr>
+         
+        
+        <tr>
+          <td valign='top'>
+           
+              &nbsp;
+          
+          </td>
+          <td valign='top'>
+            <div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n286" name="n286">286</a></span><span class="keyword">end</span>
 </pre></div>
 </div>
 
