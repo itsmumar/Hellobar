@@ -103,9 +103,9 @@ private
   end
 
   def url_conditions(condition)
-    bang = condition.value.has_key?('include_url') ? '' : '!'
+    bang = condition.include_url? ? '' : '!'
 
-    "(#{bang}HB.umatch(\"#{path_for_url(condition.url)}\", document.location))"
+    "(#{bang}HB.umatch(\"#{path_for_url(condition.value)}\", document.location))"
   end
 
   def path_for_url(url)

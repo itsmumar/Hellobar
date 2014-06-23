@@ -81,8 +81,8 @@ describe ScriptGenerator, '#render' do
     it 'does not return any eligibility rules when eligibility is disabled' do
       generator = ScriptGenerator.new(site, { :disable_eligibility => true })
       rule = Rule.new
-      date_condition = DateCondition.new value: { 'start_date' => 1_000, 'end_date' => 2_000 }
-      url_condition = UrlCondition.new value: { 'include_url' => 'http://good.com', 'exclude_url' => 'http://other.com' }
+      date_condition = DateCondition.new value: { 'start_date' => 1_000, 'end_date' => 2_000 }, operand: Condition::OPERANDS[:is_after]
+      url_condition = UrlCondition.new value: 'http://good.com', operand: Condition::OPERANDS[:is]
       rule.stub conditions: [date_condition, url_condition]
       site.stub rules: [rule]
 
@@ -93,7 +93,7 @@ describe ScriptGenerator, '#render' do
 
     it 'has a start date constraint when present' do
       rule = Rule.new
-      condition = DateCondition.new value: { 'start_date' => 1_000 }
+      condition = DateCondition.new value: { 'start_date' => 1_000 }, operand: Condition::OPERANDS[:is_after]
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
@@ -113,7 +113,7 @@ describe ScriptGenerator, '#render' do
 
     it 'has an end date constraint when present' do
       rule = Rule.new
-      condition = DateCondition.new value: { 'end_date' => 20_000 }
+      condition = DateCondition.new value: { 'end_date' => 20_000 }, operand: Condition::OPERANDS[:is_before]
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
@@ -133,7 +133,7 @@ describe ScriptGenerator, '#render' do
 
     it 'adds an exlusion constraint for all blacklisted URLs' do
       rule = Rule.new
-      conditions = [UrlCondition.new(value: { 'exclude_url' => '/signup' })]
+      conditions = [UrlCondition.new(value: '/signup', operand: Condition::OPERANDS[:excludes] )]
       rule.stub bars: double('bars', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
@@ -144,7 +144,7 @@ describe ScriptGenerator, '#render' do
 
     it 'converts excluded urls to paths' do
       rule = Rule.new
-      conditions = [UrlCondition.new(value: { 'exclude_url' => 'http://soamazing.com/signup' })]
+      conditions = [UrlCondition.new(value: 'http://soamazing.com/signup', operand: Condition::OPERANDS[:excludes])]
       rule.stub bars: double('bars', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
@@ -164,7 +164,7 @@ describe ScriptGenerator, '#render' do
 
     it 'adds an inclusion constraint for all whitelisted URLs' do
       rule = Rule.new
-      conditions = [UrlCondition.new(value: { 'include_url' => '/signup' })]
+      conditions = [UrlCondition.new(value: '/signup', operand: Condition::OPERANDS[:includes] )]
       rule.stub conditions: conditions
       site.stub rules: [rule]
 

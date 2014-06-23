@@ -5,7 +5,7 @@ describe UrlCondition, '.create_include_url' do
     url = 'http://googley.com'
 
     UrlCondition.should_receive(:create).
-      with({ operand: Condition::OPERANDS[:includes], value: { 'include_url' => url } })
+      with({ operand: Condition::OPERANDS[:includes], value: url })
 
     UrlCondition.create_include_url(url)
   end
@@ -16,25 +16,20 @@ describe UrlCondition, '.create_exclude_url' do
     url = 'http://moogley.com'
 
     UrlCondition.should_receive(:create).
-      with({ operand: Condition::OPERANDS[:excludes], value: { 'exclude_url' => url } })
+      with({ operand: Condition::OPERANDS[:excludes], value: url })
 
     UrlCondition.create_exclude_url(url)
   end
 end
 
-describe UrlCondition, '#url' do
-  it 'returns the include_url if present' do
-    condition = UrlCondition.new value: { 'include_url' => 'include' }
+describe UrlCondition, '#include_url?' do
+  it 'returns true when the operator is includes' do
+    condition = UrlCondition.new operand: Condition::OPERANDS[:includes]
 
-    condition.url.should == 'include'
+    condition.should be_include_url
   end
 
-  it 'returns the exclude_url if present' do
-    condition = UrlCondition.new value: { 'exclude_url' => 'exclude' }
-
-    condition.url.should == 'exclude'
-  end
-  it 'returns nil when neither include_url nor exclude_url are present' do
-    UrlCondition.new.url.should be_nil
+  it 'returns false when the operator is not includes' do
+    UrlCondition.new.should_not be_include_url
   end
 end
