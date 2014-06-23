@@ -1,5 +1,6 @@
 require "./config/initializers/settings"
 
+require "./lib/hello/ab_testing"
 require "./lib/hello/asset_storage"
 require "./lib/hello/bar_data"
 require "./lib/hello/email_digest"
