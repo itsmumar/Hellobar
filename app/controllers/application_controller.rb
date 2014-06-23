@@ -1,7 +1,9 @@
 class ApplicationController < ActionController::Base
+  include Hello::ABTesting
+
   protect_from_forgery with: :exception
 
-  helper_method :access_token, :current_admin, :impersonated_user, :current_site
+  helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id
 
   before_filter :record_tracking_param
 

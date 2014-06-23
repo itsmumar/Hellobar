@@ -8,7 +8,8 @@ html
     = csrf_meta_tags
 
   body
-    = render :partial => "shared/header"
+    = render "shared/optimizely"
+    = render "shared/header"
 
     div.container
       = yield

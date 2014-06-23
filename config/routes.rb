@@ -33,4 +33,9 @@ Rails.application.routes.draw do
     post "access", :to => "access#process_step1"
     get "locked", :to => "access#locked", :as => :locked
   end
+
+  post "/user/:user_id/did/:event" => Hello::Tracking.create_events_endpoint()
+  post "/visitor/:visitor_id/did/:event" => Hello::Tracking.create_events_endpoint()
+  post "/user/:user_id/has/:prop_name/of/:prop_value" => Hello::Tracking.create_props_endpoint()
+  post "/visitor/:visitor_id/has/:prop_name/of/:prop_value" => Hello::Tracking.create_props_endpoint()
 end
