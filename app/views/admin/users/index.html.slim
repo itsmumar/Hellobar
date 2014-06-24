@@ -28,7 +28,7 @@ div.row
                 = "#{display_url_for_site(site)} (#{user.role_for_site(site)})#{site == user.sites.last ? '' : '<br>'}".html_safe
             td= user.created_at.strftime("%b %d, %Y")
             td= user.sign_in_count
-            td= user.last_sign_in_at.strftime("%b %d, %Y at %l:%M %p")
+            td= user.last_sign_in_at.try(:strftime, "%b %d, %Y at %l:%M %p")
             td= link_to "impersonate", admin_impersonate_user_path(user), :method => :post
 
       = paginate @users
