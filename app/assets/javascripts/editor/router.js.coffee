@@ -1,9 +1,15 @@
 HelloBar.Router.map ->
   
-  @route 'home', { path: '/' }
+  @resource 'settings', ->
+    @route 'emails'
+    @route 'social'
+    @route 'cilck'
+    @route 'feedback'
 
-  @route 'settings'
   @route 'style'
+
   @route 'colors'
+  
   @route 'text'
+  
   @route 'targeting'

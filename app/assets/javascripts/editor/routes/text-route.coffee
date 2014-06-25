@@ -1,1 +1,0 @@
-HelloBar.TextRoute = Ember.Route.extend()

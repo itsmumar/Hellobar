@@ -44,15 +44,15 @@
   </nav>
 
   <div class="step-wrapper">
-    {{ outlet }}
+    {{outlet}}
     {{view HelloBar.StepNavigationView step=currentStep prev=prevRoute next=nextRoute}}
   </div>
 
   <div class="preview-wrapper">
-    {{ render 'preview' preview }}
+    {{render 'preview' preview}}
   </div>
 </div>
 
 <div {{bind-attr class="isModal :modal-wrapper"}}>
-  {{ outlet 'modal' }}
+  {{outlet 'modal'}}
 </div>
