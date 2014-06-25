@@ -1,12 +1,20 @@
-div.row
-  div.col-md-5
-    h1= "Edit Bar #{@site_element.id}"
+#ember-root
 
-    = simple_form_for @site_element, :as => :site_element, :url => site_site_element_path(@site_element, :site_id => @site) do |f|
-      = f.input :rule_id, :collection => @site.rules, :label => "Who should see this?", :include_blank => false
-      = f.input :bar_type, :collection => Bar::BAR_TYPES.map{|bt| [bt.titleize, bt]}, :include_blank => false
-      = f.input :message
-      p.float-right= link_to "delete", site_site_element_path(@site_element, :site_id => @site), :method => :delete
-      = f.button :submit, "Save", :class => "btn-primary"
+/ div.row
+/   div.col-md-5
+/     h1= "Edit Bar #{@site_element.id}"
 
-  div.col-md-7
+/     = simple_form_for @site_element, :as => :site_element, :url => site_site_element_path(@site_element, :site_id => @site) do |f|
+/       = f.input :rule_id, :collection => @site.rules, :label => "Who should see this?", :include_blank => false
+/       = f.input :bar_type, :collection => Bar::BAR_TYPES.map{|bt| [bt.titleize, bt]}, :include_blank => false
+/       = f.input :message
+/       p.float-right= link_to "delete", site_site_element_path(@site_element, :site_id => @site), :method => :delete
+/       = f.button :submit, "Save", :class => "btn-primary"
+
+/   div.col-md-7
+
+javascript:
+  var script = document.createElement('script')
+  script.type = 'text/javascript'
+  script.src = '<%= asset_url("editor/application.js").gsub(/^https?:/, '') %>'
+  document.getElementsByTagName('head')[0].appendChild(script)

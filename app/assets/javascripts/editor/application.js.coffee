@@ -1,8 +1,8 @@
 #= require jquery
-#= require handlebars
+#= require jquery_ujs
 
+#= require handlebars
 #= require ember
-#= require ember-data
 
 #= require_self
 #= require ./store
@@ -18,4 +18,5 @@
 
 #-----------  Application Initiation  -----------#
 
-window.HelloBar = Ember.Application.create()
+window.HelloBar = Ember.Application.create
+  rootElement: "#ember-root"

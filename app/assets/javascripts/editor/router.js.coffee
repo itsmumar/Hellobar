@@ -1,5 +1,9 @@
-# For more information see: http://emberjs.com/guides/routing/
+HelloBar.Router.map ->
+  
+  @route 'home', { path: '/' }
 
-HelloBar.Router.map ()->
-  # @resource('posts')
-
+  @route 'settings'
+  @route 'style'
+  @route 'colors'
+  @route 'text'
+  @route 'targeting'

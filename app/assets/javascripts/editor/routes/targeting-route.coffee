@@ -1,0 +1,1 @@
+HelloBar.TargetingRoute = Ember.Route.extend()

@@ -3,7 +3,7 @@ class SiteElementsController < ApplicationController
   before_filter :load_site
   before_filter :load_site_element, :only => [:edit, :update, :destroy, :pause, :unpause]
 
-  layout "with_sidebar"
+  layout :determine_layout
 
   def new
     @site_element = Bar.new
@@ -57,6 +57,10 @@ class SiteElementsController < ApplicationController
 
   def load_site
     @site = current_user.sites.find(params[:site_id])
+  end
+
+  def determine_layout
+    %w(edit).include?(action_name) ? "ember" : "with_sidebar"
   end
 
   def load_site_element

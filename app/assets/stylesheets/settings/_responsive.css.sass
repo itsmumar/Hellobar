@@ -1,0 +1,14 @@
+/*-----------  Responsive States  -----------*/
+
+$mobileBreak : 25em
+$middleBreak : 35em
+$tabletBreak : 50em
+
+/*-----------  Gridle Settings  -----------*/
+
+@include gridle_register_state('mobile', null , $mobileBreak, false)
+@include gridle_register_state('middle', $mobileBreak , $middleBreak, false)
+@include gridle_register_state('tablet', $mobileBreak , $tabletBreak, false)
+
+@include gridle_register_state('handheld',  null, $tabletBreak, false)
+@include gridle_register_state('full',  $tabletBreak, null, false)

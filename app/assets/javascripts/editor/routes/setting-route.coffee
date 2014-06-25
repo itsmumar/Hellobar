@@ -1,0 +1,1 @@
+HelloBar.SettingsRoute = Ember.Route.extend()

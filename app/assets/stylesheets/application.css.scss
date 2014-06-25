@@ -1,0 +1,32 @@
+//-----------  External Libraries  -----------//
+
+@import 'bourbon';                  // Mixin Library (http://bourbon.io)
+@import 'gridle/gridle';            // Grid & Responsive Mixins (http://gridle.org)
+// @import 'normalize-css/normalize';  // CSS Normalization & Resets (http://necolas.github.io/normalize.css)
+// @import 'font-awesome';             // Scalable Font Icons (http://fortawesome.github.io/Font-Awesome/)
+
+//-----------  Application Settings  -----------//
+
+@import 'settings/variables';       // Global Variables & Settings
+@import 'settings/responsive';      // Responsive Breakpoints & Settings
+
+@import 'settings/fonts';           // Custom Font & Typeface Settings & Mixins
+@import 'settings/mixins';          // Additional Custom Mixins
+@import 'settings/structure';       // Structural Mixins
+
+//-----------  Custom Components  -----------//
+
+// @import 'components/*';             // Custom Reuseable Components
+
+//-----------  HTML & Custom Elements  -----------//
+
+// @import 'elements/*';               // HTML Elements (Grouped according to https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/HTML5_element_list)
+
+//-----------  Page Layouts  -----------//
+
+@import 'layouts/common';           // Common Layout Blocks
+@import 'layouts/document';         // Document Layouts
+
+@import 'layouts/global/*';         // Global Layouts
+@import 'layouts/pages/*';          // Static Pages (Home, About Us, etc)
+@import 'layouts/devise/*';         // User Account Pages

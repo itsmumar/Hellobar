@@ -1,0 +1,1 @@
+HelloBar.ApplicationController = Ember.Controller.extend()
