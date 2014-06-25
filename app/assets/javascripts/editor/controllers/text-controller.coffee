@@ -1,4 +1,4 @@
-HelloBar.TextController = Ember.Controller.extend
+HelloBar.TextController = HelloBar.StepController.extend
 
   #-----------  Setp Settings  -----------#
 

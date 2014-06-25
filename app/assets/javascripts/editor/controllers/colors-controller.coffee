@@ -1,4 +1,4 @@
-HelloBar.ColorsController = Ember.Controller.extend
+HelloBar.ColorsController = HelloBar.StepController.extend
 
   #-----------  Setp Settings  -----------#
 

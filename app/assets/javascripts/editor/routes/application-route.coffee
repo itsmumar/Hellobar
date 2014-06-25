@@ -1,1 +1,4 @@
-HelloBar.ApplicationRoute = Ember.Route.extend()
+HelloBar.ApplicationRoute = Ember.Route.extend
+
+  redirect: ->
+    @transitionTo('settings')

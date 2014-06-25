@@ -8,9 +8,9 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   #-----------  Step Tracking  -----------#
 
-  currentStep: 0
   prevRoute: null 
   nextRoute: null
+  currentStep: false
 
   #-----------  Actions  -----------#
 

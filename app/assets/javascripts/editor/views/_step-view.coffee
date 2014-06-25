@@ -1,0 +1,1 @@
+Hellobar.StepView = Ember.View.extend()
