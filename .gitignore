@@ -9,6 +9,9 @@
 /log/*.log
 /tmp
 
+*.sublime-*
+npm-debug.log
+
 config/settings.yml
 config/database.yml
 
