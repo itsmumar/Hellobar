@@ -20,3 +20,16 @@
 
 window.HelloBar = Ember.Application.create
   rootElement: "#ember-root"
+
+#-----------  Set Application Height  -----------#
+
+$ ->
+
+  setHeight = ->
+    height = $(window).height() - $('.header-wrapper').height()
+    $('#ember-root').height(height)
+
+  $(window).resize ->
+    setHeight()
+
+  setHeight()

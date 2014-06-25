@@ -1,5 +1,8 @@
 HelloBar.ApplicationController = Ember.Controller.extend
 
+  queryPrams: ['modal']
+  modal: null
+  
   #-----------  Default State Settings  -----------#
 
   isModal: false

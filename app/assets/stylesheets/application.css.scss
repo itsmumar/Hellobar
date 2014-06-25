@@ -16,11 +16,11 @@
 
 //-----------  Custom Components  -----------//
 
-// @import 'components/*';             // Custom Reuseable Components
+@import 'components/*';             // Custom Reuseable Components
 
 //-----------  HTML & Custom Elements  -----------//
 
-// @import 'elements/*';               // HTML Elements (Grouped according to https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/HTML5_element_list)
+@import 'elements/*';               // HTML Elements (Grouped according to https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/HTML5_element_list)
 
 //-----------  Page Layouts  -----------//
 
@@ -30,3 +30,5 @@
 @import 'layouts/global/*';         // Global Layouts
 @import 'layouts/pages/*';          // Static Pages (Home, About Us, etc)
 @import 'layouts/devise/*';         // User Account Pages
+
+@import 'layouts/editor/*';         // Editor Application
