@@ -13,3 +13,9 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
     {id: 2, text: 'My own Google spreadsheet'}
     {id: 3, text: 'In da\' cloud, man'}
   ]
+
+  #-----------  Email Settings Modal  -----------#
+
+  emailSync: (->
+    @send('triggerModal', 'sync') if @get('storageSelection.id') == 3
+  ).observes('storageSelection')

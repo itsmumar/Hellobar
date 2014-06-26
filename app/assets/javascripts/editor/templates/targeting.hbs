@@ -7,7 +7,7 @@
   optionValuePath='content.id'
   optionLabelPath='content.text'
 }}
-<small>Show this bar to visitors on /signup. with a country of America. <a href="">Edit.</a></small>
+<small>Show this bar to visitors on /signup. with a country of America. <a {{action 'triggerModal' 'A/B'}}>Edit.</a></small>
 
 <label>Who should they see this?</label>
 {{view Ember.Select

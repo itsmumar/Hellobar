@@ -1,0 +1,38 @@
+/*-----------  Editor Modal  -----------*/
+
+$modalSpeed: 0.33s
+
+.modal-wrapper
+  left: 0
+  top: -100%
+  width: 100%
+  height: 100%
+  z-index: 2000
+  position: fixed
+  overflow-x: auto
+  overflow-y: scroll
+  padding: 3.33em 0.67em
+  background-color: rgba(0,0,0,0)
+  @include transition(top 0 $modalSpeed, background-color $modalSpeed)
+
+  .modal-block
+    opacity: 0
+    width: auto
+    margin: auto
+    padding: 2em
+    max-width: 40em
+    margin-top: -10em
+    border-radius: $radius
+    background-color: $white
+    box-shadow: $shadowSubtle
+    @include transition(margin-top $modalSpeed, opacity $modalSpeed/2 $modalSpeed/2)
+
+  &.show-modal
+    top: 0
+    background-color: rgba(0,0,0,0.33)
+    @include transition(top 0, background-color $modalSpeed)
+
+    .modal-block
+      opacity: 1
+      margin-top: 0
+      @include transition(margin-top $modalSpeed, opacity $modalSpeed)

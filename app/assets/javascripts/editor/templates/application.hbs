@@ -63,6 +63,8 @@
   </div>
 </div>
 
-<div class="modal-wrapper">
-  {{outlet 'modal'}}
+<div {{bind-attr class="modal:show-modal :modal-wrapper"}} {{action 'toggleModal'}}>
+  <div class="modal-block">
+    {{outlet 'modal'}}
+  </div>
 </div>

@@ -1,13 +1,13 @@
 HelloBar.ApplicationController = Ember.Controller.extend
-
-  queryPrams: ['modal']
-  modal: null
   
-  #-----------  Default State Settings  -----------#
+  #-----------  Modal Triggers  -----------#
 
-  isModal: false
-  isMobile: false
-  isFullscreen: false
+  queryParams: ['modal']
+  modal: null
+
+  toggleModal: (->
+    @toggleProperty('isModal')
+  ).observes('modal')
 
   #-----------  Step Tracking  -----------#
 
@@ -15,11 +15,12 @@ HelloBar.ApplicationController = Ember.Controller.extend
   nextRoute: null
   currentStep: false
 
-  #-----------  Actions  -----------#
+  #-----------  State Default & Actions  -----------#
+
+  isMobile: false
+  isFullscreen: false
 
   actions:
-
-    #-----------  Toggle Actions  -----------#
 
     toggleFullscreen: ->
       @toggleProperty('isFullscreen')
@@ -28,6 +29,10 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
     toggleMobile: ->
       @toggleProperty('isMobile')
+      false
+
+    toggleModal: ->
+      @set('modal', null)
       false
 
     #-----------  Trigger Actions  -----------#
