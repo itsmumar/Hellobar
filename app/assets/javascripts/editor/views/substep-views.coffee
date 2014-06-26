@@ -11,3 +11,7 @@ HelloBar.SettingsFeedbackView = HelloBar.StepView.extend()
 
 HelloBar.StyleBarView         = HelloBar.StepView.extend()
 HelloBar.StylePopupView       = HelloBar.StepView.extend()
+
+HelloBar.TargetingLeavingView = HelloBar.StepView.extend()
+HelloBar.TargetingScrollview  = HelloBar.StepView.extend()
+HelloBar.TargetingDelayView   = HelloBar.StepView.extend()

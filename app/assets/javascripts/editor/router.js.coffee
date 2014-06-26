@@ -14,4 +14,8 @@ HelloBar.Router.map ->
   
   @route 'text'
   
-  @route 'targeting'
+  @resource 'targeting', ->
+    @route 'immediately'
+    @route 'leaving'
+    @route 'scroll'
+    @route 'delay'

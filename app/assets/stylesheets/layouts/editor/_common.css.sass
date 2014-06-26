@@ -88,6 +88,8 @@ $stepWidth : 22.5em
       /*-----------  Step Links  -----------*/
 
       .step-link-wrapper
+        margin-bottom: -1em
+        @include transition()
 
         .step-link-block
           display: block
@@ -100,6 +102,8 @@ $stepWidth : 22.5em
           @include inline-block()
 
         &.is-selected
+          padding-bottom: 1.5em
+          border-bottom: $borderLight
 
           .step-link-block:not(.active)
             max-height: 0
@@ -108,9 +112,7 @@ $stepWidth : 22.5em
             opacity: 1
 
       .substep
-        margin-top: 1.5em
-        padding-top: 1.5em
-        border-top: $borderLight
+        margin-top: 1.67em
 
       /*-----------  Step Navigations  -----------*/
 

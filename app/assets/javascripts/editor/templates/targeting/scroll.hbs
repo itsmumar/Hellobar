@@ -1,0 +1,14 @@
+<label>Show after:</label>
+
+<label>
+  {{view Ember.Checkbox checked=isScroll}}
+  {{view Ember.TextField value=scrollPercentage placeholder="10"}}
+  % Page scroll
+</label>
+<label>
+  {{view Ember.Checkbox checked=isElement}}
+  {{view Ember.TextField value=elementTarget placeholder=".sidemenu"}}
+  Element appearrs
+  <small>ADVANCED</small>
+</label>
+{{!-- ^ will likely need to be a component... --}}

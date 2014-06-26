@@ -1,1 +1,20 @@
 <div class="step-title">Targeting</div>
+
+<label>Who should see this?</label>
+{{view Ember.Select
+  content=whoOptions
+  selection=whoSelection
+  optionValuePath='content.id'
+  optionLabelPath='content.text'
+}}
+<small>Show this bar to visitors on /signup. with a country of America. <a href="">Edit.</a></small>
+
+<label>Who should they see this?</label>
+{{view Ember.Select
+  content=whenOptions
+  selection=whenSelection
+  optionValuePath='content.route'
+  optionLabelPath='content.text'
+}}
+
+{{outlet}}

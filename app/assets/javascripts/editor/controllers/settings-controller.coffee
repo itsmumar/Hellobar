@@ -6,7 +6,7 @@ HelloBar.SettingsController = Ember.Controller.extend
   prevStep: false
   nextStep: 'style'
 
-  #-----------  Settings Selection  -----------#
+  #-----------  Sub-Step Selection  -----------#
 
   routeForwarding: false
 
