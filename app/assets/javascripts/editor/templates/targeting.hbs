@@ -2,17 +2,17 @@
 
 <label>Who should see this?</label>
 {{view Ember.Select
-  content=whoOptions
-  selection=whoSelection
+  content=content.whoOptions
+  selection=content.whoSelection
   optionValuePath='content.id'
   optionLabelPath='content.text'
 }}
-<small>Show this bar to visitors on /signup. with a country of America. <a {{action 'triggerModal' 'A/B'}}>Edit.</a></small>
+<small>Show this bar to visitors on /signup. with a country of America. <a {{action 'triggerModal' 'ab'}}>Edit.</a></small>
 
 <label>Who should they see this?</label>
 {{view Ember.Select
-  content=whenOptions
-  selection=whenSelection
+  content=content.whenOptions
+  selection=content.whenSelection
   optionValuePath='content.route'
   optionLabelPath='content.text'
 }}

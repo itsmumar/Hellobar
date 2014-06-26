@@ -4,13 +4,13 @@ HelloBar.SettingsStepRoute = Ember.Route.extend
 
   model: ->
     @parentRoute = @routeName.split('.')[0]
-   
+
     @modelFor(@parentRoute)
 
   # Sets suto-forwarding on the parent step upon selection
 
   setupController: (controller, model) ->
-    @_super()
+    @_super(controller, model)
 
     @controllerFor(@parentRoute).set('routeForwarding', @routeName)
 

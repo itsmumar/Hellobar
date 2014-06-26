@@ -1,27 +1,27 @@
 <div class="step-title">Colors</div>
 
 <label>Background</label>
-{{view Ember.TextField value=backgroundColor placeholder="#4F4F4F"}}
+{{view Ember.TextField value=content.backgroundColor placeholder="#4F4F4F"}}
 {{!-- ^ will likely need to be a component... --}}
 
 <label>Text</label>
-{{view Ember.TextField value=textColor placeholder="#4F4F4F"}}
+{{view Ember.TextField value=content.textColor placeholder="#4F4F4F"}}
 {{!-- ^ will likely need to be a component... --}}
 
 <label>Button Text</label>
-{{view Ember.TextField value=buttonTextColor placeholder="#4F4F4F"}}
+{{view Ember.TextField value=content.buttonTextColor placeholder="#4F4F4F"}}
 {{!-- ^ will likely need to be a component... --}}
 
 <label>Button</label>
-{{view Ember.TextField value=buttonColor placeholder="#4F4F4F"}}
+{{view Ember.TextField value=content.buttonColor placeholder="#4F4F4F"}}
 {{!-- ^ will likely need to be a component... --}}
 
 <h6>OR</h6>
 
 <label>Theme</label>
 {{view Ember.Select
-  content=themeOptions
-  selection=themeSelection
+  content=content.themeOptions
+  selection=content.themeSelection
   optionValuePath='content.id'
   optionLabelPath='content.text'
 }}

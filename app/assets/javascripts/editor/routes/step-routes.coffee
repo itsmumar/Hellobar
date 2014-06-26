@@ -6,7 +6,7 @@ HelloBar.StepRoute = Ember.Route.extend
   
   model: ->
     model = @routeName[0].toUpperCase() + @routeName.slice(1) + "Model"
-    HelloBar[model].create()
+    HelloBar[model]
 
   # Updates the current step in the application controller. Currently
   # being used to keep the step navigation component tracking correctly.
@@ -14,7 +14,7 @@ HelloBar.StepRoute = Ember.Route.extend
   # chosen.
 
   setupController: (controller, model) ->
-    @_super()
+    @_super(controller, model)
 
     @controllerFor('application').setProperties
       isFullscreen : false

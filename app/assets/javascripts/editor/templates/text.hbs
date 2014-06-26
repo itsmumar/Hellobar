@@ -1,17 +1,17 @@
 <div class="step-title">Text and Content</div>
 
 <label>Bar text</label>
-{{view Ember.TextField value=barText placeholder="Subscribe to our mailing list"}}
+{{view Ember.TextField value=content.barText placeholder="Subscribe to our mailing list"}}
 {{!-- ^ will likely need to be a component... --}}
 
 <label>Line text</label>
-{{view Ember.TextField value=lineText placeholder="OK!"}}
+{{view Ember.TextField value=content.lineText placeholder="OK!"}}
 {{!-- ^ will likely need to be a component... --}}
 
 <label>Font family</label>
 {{view Ember.Select
-  content=fontOptions
-  selection=fontSelection
+  content=content.fontOptions
+  selection=content.fontSelection
   optionValuePath='content.id'
   optionLabelPath='content.text'
 }}

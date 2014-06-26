@@ -2,12 +2,12 @@
 
 <label>
   {{view Ember.Checkbox checked=isScroll}}
-  {{view Ember.TextField value=scrollPercentage placeholder="10"}}
+  {{view Ember.TextField value=content.scrollPercentage placeholder="10"}}
   % Page scroll
 </label>
 <label>
   {{view Ember.Checkbox checked=isElement}}
-  {{view Ember.TextField value=elementTarget placeholder=".sidemenu"}}
+  {{view Ember.TextField value=content.elementTarget placeholder=".sidemenu"}}
   Element appearrs
   <small>ADVANCED</small>
 </label>
