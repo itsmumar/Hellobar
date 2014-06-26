@@ -14,3 +14,7 @@ HelloBar.SettingsFeedbackRoute = HelloBar.SettingsStepRoute.extend()
 
 HelloBar.StyleBarRoute         = HelloBar.SettingsStepRoute.extend()
 HelloBar.StylePopupRoute       = HelloBar.SettingsStepRoute.extend()
+
+HelloBar.TargetingLeavingRoute = HelloBar.SettingsStepRoute.extend()
+HelloBar.TargetingScrollRoute  = HelloBar.SettingsStepRoute.extend()
+HelloBar.TargetingDelayRoute   = HelloBar.SettingsStepRoute.extend()
