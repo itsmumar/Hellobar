@@ -70,7 +70,7 @@ $stepWidth : 22.5em
       width: $stepWidth
       border-right: $border
       padding: 0 2em 2em
-      @include transition(0.33s)
+      @include transition(0.5s)
       @include flex(0 1 auto)
 
       .step-title
@@ -141,6 +141,7 @@ $stepWidth : 22.5em
     /*-----------  Preview  -----------*/
 
     .preview-wrapper
+      @include striped-bg($grayLighter)
       @include flex(1 0 auto)
 
   /*-----------  Alternate States  -----------*/

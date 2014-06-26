@@ -1,5 +1,11 @@
 {{!-- {{view HelloBar.BarPreviewView content=bar}} --}}
 
+{{#if isMobile}}
+  <h1 style="margin: 2em 0; text-align: center">...fuckin' mobilé, 'bay...</h1>
+{{else}}
+  <h1 style="margin: 2em 0; text-align: center">...</h1>
+{{/if}}
+
 {{#if hasPreview}}
   {{!-- Site Preview --}}
 {{else}}

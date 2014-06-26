@@ -1,4 +1,6 @@
 HelloBar.Router.map ->
+
+  @route 'home', {path: '/'}
   
   @resource 'settings', ->
     @route 'emails'
