@@ -1,7 +1,7 @@
-HelloBar.SettingsController = HelloBar.StepController.extend
+HelloBar.SettingsController = Ember.Controller.extend
 
   #-----------  Setp Settings  -----------#
 
   step: 1
-  prevStep: null
+  prevStep: false
   nextStep: 'style'

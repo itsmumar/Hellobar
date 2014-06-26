@@ -1,0 +1,18 @@
+/*-----------  Buttons  -----------*/
+
+.button
+  color: $white
+  cursor: pointer
+  padding: 0.5em 1.33em
+  border-radius: $radius
+  background-color: $green
+  @include inline-block()
+  @include transition()
+
+  &:hover
+    color: $white
+    background-color: darken($green, 20%)
+
+  &[disabled]
+    cursor: not-allowed
+    background-color: $gray

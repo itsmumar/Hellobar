@@ -23,9 +23,12 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
     toggleFullscreen: ->
       @toggleProperty('isFullscreen')
+      console.log 'full'
+      false
 
     toggleMobile: ->
       @toggleProperty('isMobile')
+      false
 
     #-----------  Trigger Actions  -----------#
 

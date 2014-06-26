@@ -1,51 +1,61 @@
-<div {{bind-attr class="isFullscreen isMobile :editor-wrapper"}}>
-  <nav class="links-wrapper">
-    <ul class="step-links">
-      <li>
-        {{#link-to 'settings'}}<i clas="icon-settings">Se</i>{{/link-to}}
-        <div class="hover-tip">Settings</div>
-      </li>
-      <li>
-        {{#link-to 'style'}}<i clas="icon-style">St</i>{{/link-to}}
-        <div class="hover-tip">Style</div>
-      </li>
-      <li>
-        {{#link-to 'colors'}}<i clas="icon-colors">Co</i>{{/link-to}}
-        <div class="hover-tip">Colors</div>
-      </li>
-      <li>
-        {{#link-to 'text'}}<i clas="icon-text">Tex</i>{{/link-to}}
-        <div class="hover-tip">Text & Content</div>
-      </li>
-      <li>
-        {{#link-to 'targeting'}}<i clas="icon-targeting">Ta</i>{{/link-to}}
-        <div class="hover-tip">Targeting</div>
-      </li>
-    </ul>
+<nav class="links-wrapper">
+  <ul class="step-links">
+    <li>
+      {{#link-to 'settings'}}<i clas="icon-settings">Se</i>{{/link-to}}
+      <div class="hover-tip">Settings</div>
+    </li>
+    <li>
+      {{#link-to 'style'}}<i clas="icon-style">St</i>{{/link-to}}
+      <div class="hover-tip">Style</div>
+    </li>
+    <li>
+      {{#link-to 'colors'}}<i clas="icon-colors">Co</i>{{/link-to}}
+      <div class="hover-tip">Colors</div>
+    </li>
+    <li>
+      {{#link-to 'text'}}<i clas="icon-text">Tex</i>{{/link-to}}
+      <div class="hover-tip">Text & Content</div>
+    </li>
+    <li>
+      {{#link-to 'targeting'}}<i clas="icon-targeting">Ta</i>{{/link-to}}
+      <div class="hover-tip">Targeting</div>
+    </li>
+  </ul>
 
-    <ul class="action-links">
-      <li {{action 'toggleFullscreen'}} class="toggle-fullscreen">
-        <i clas="icon-arrow">-></i>
-      </li>
-      <li {{action 'toggleMobile'}} class="toggle-mobile">
+  <ul class="action-links">
+    <li>
+      <a {{action 'toggleFullscreen'}} class="toggle-fullscreen">
+        <i clas="icon-arrow"><</i>
+      </a>
+    </li>
+    <li>
+      <a {{action 'toggleMobile'}} class="toggle-mobile">
         <i clas="icon-desktop">De</i>
         <i clas="icon-mobile">Mo</i>
-      </li>
-      <li {{action 'triggerComment'}} class="trigger-comment">
+      </a>
+    </li>
+    <li>
+      <a {{action 'triggerComment'}} class="trigger-comment">
         <i clas="icon-comment"><></i>
-      </li>
-      <li {{action 'triggerFAQ'}} class="trigger-faq">
+      </a>
+    </li>
+    <li>
+      <a {{action 'triggerFAQ'}} class="trigger-faq">
         <i clas="icon-faq">??</i>
-      </li>
-      <li {{action 'triggerClose'}} class="trigger-close">
-        <i clas="icon-faq">--</i>
-      </li>
-    </ul>
-  </nav>
+      </a>
+    </li>
+    <li>
+      <a {{action 'triggerClose'}} class="trigger-close">
+        <i clas="icon-faq">X</i>
+      </a>
+    </li>
+  </ul>
+</nav>
 
+<div class="viewport-wrapper">
   <div class="step-wrapper">
     {{outlet}}
-    {{view HelloBar.StepNavigationView step=currentStep prev=prevRoute next=nextRoute}}
+    {{step-navigation current=currentStep prev=prevRoute next=nextRoute}}
   </div>
 
   <div class="preview-wrapper">
@@ -53,6 +63,6 @@
   </div>
 </div>
 
-<div {{bind-attr class="isModal :modal-wrapper"}}>
+<div class="modal-wrapper">
   {{outlet 'modal'}}
 </div>

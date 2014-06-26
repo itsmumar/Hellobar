@@ -1,7 +1,7 @@
-HelloBar.TargetingController = HelloBar.StepController.extend
+HelloBar.TargetingController = Ember.Controller.extend
 
   #-----------  Setp Settings  -----------#
 
   step: 5
   prevStep: 'text'
-  nextStep: null
+  nextStep: false

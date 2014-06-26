@@ -1,1 +1,0 @@
-HelloBar.BarPreviewView = Ember.View.extend()

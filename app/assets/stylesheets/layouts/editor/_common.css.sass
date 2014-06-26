@@ -1,45 +1,126 @@
 /*-----------  Editor  -----------*/
 
-#ember-root
+$linkWidth : 3.5em
+$stepWidth : 22.5em
 
-  > .ember-view
-    width: 100%
-    height: 100%
-    position: relative    
+.editor-wrapper
+  width: 100%
+  height: 100%
+  position: relative
 
-  .editor-wrapper
-    width: 100%
-    height: 100%
+  > [class*='-wrapper']
     overflow-y: auto
     overflow-x: hidden
-    position: relative
-    padding-left: 4.5em
-    background-color: $white
 
-    > [class*='-wrapper']
-      overflow-y: auto
-      overflow-x: hidden
+  /*-----------  Sidebar Links  -----------*/
 
-    /*-----------  Sidebar Links  -----------*/
+  .links-wrapper
+    top: 0
+    left: 0
+    height: 100%
+    z-index: 1000
+    position: absolute
+    border-right: $border
+    background-color: $grayLighter
+
+    li
+      text-align: center
+
+      a
+        color: $gray
+        display: block
+        width: $linkWidth
+        line-height: $linkWidth
+
+        &:hover
+          color: $red
+
+        &.active
+          color: $red
+          background-color: $white
+
+        i
+          width: 100%
+          cursor: pointer
+          font-size: 1.15em
+
+      .hover-tip
+        display: none
+
+    .step-links
+      padding: 3em 0
+
+    .action-links
+      padding-bottom: 1.5em
   
-    .links-wrapper
-      top: 0
-      left: 0
-      width: 4.5em
-      height: 100%
-      position: absolute
-      border-right: $border
-      background-color: $grayLighter
+  /*-----------  Main Viewport  -----------*/
+
+  .viewport-wrapper
+    width: 100%
+    height: 100%
+    padding-left: $linkWidth * 1.075
+    @include justify-content(space-between)
+    @include align-items(stretch)
+    @include flex-flow(row nowrap)
+    @include display(flex)    
 
     /*-----------  Steps/Pages  -----------*/
-  
+
     .step-wrapper
-      padding: 2em
+      width: $stepWidth
       border-right: $border
+      padding: 0 2em 2em
+      @include transition(0.33s)
+      @include flex(0 1 auto)
+
+      .step-title
+        color: $red
+        font-size: 1.15em
+        text-align: center
+        line-height: 2.65em
+        letter-spacing: 0.05em
+        margin: 0 -0.75em 1.5em
+        text-transform: uppercase
+        font-weight: $fontWeightNormal
+        border-bottom: 1px solid $grayLight
+        @include antialiased()
+
+      .step-navigation
+        margin-top: 1.5em
+        @include justify-content(space-between)
+        @include align-items(center)
+        @include flex-flow(row nowrap)
+        @include display(flex)    
+
+        .nav-dot
+          width: 10px
+          height: 10px
+          border-radius: 1em 
+          background-color: $gray   
+
+          &.past
+            background-color: $green
+
+          &.active
+            width: 13px
+            height: 13px
+            border: 2px solid $green
+            background-color: $white
 
     /*-----------  Preview  -----------*/
-  
+
     .preview-wrapper
+      @include flex(1 0 auto)
+
+  /*-----------  Alternate States  -----------*/
+
+  &.is-fullscreen
+
+    .toggle-fullscreen
+      @include transform(rotate(-180deg))
+
+    .step-wrapper
+      margin-left: -$stepWidth
 
   /*-----------  Editor Modals  -----------*/
   
