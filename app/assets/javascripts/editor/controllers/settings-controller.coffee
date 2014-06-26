@@ -8,6 +8,9 @@ HelloBar.SettingsController = Ember.Controller.extend
 
   #-----------  Sub-Step Selection  -----------#
 
+  # Sets a property which tells the route to forward to a previously
+  # selected child route (ie. sub-step)
+
   routeForwarding: false
 
   actions:
