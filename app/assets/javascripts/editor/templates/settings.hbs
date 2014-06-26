@@ -1,3 +1,31 @@
 <div class="step-title">Settings</div>
 
+<div {{bind-attr class="routeForwarding:is-selected :step-link-wrapper"}}>
+  {{#link-to 'settings.emails' class='step-link-block'}}
+    <i class="icon-email"></i>
+    <h6>Collect Email</h6>
+    <p>Use your Hello Bar to collect visitors' email addresses</p>
+  {{/link-to}}
+
+  {{#link-to 'settings.social' class='step-link-block'}}
+    <i class="icon-social"></i>
+    <h6>Social</h6>
+    <p>Point visitors to your social media channels</p>
+  {{/link-to}}
+
+  {{#link-to 'settings.click' class='step-link-block'}}
+    <i class="icon-arrow"></i>
+    <h6>Click Link</h6>
+    <p>Use your Hello Bar to drive more trafficto a specific URL</p>
+  {{/link-to}}
+
+  {{#link-to 'settings.feedback' class='step-link-block'}}
+    <i class="icon-feedback"></i>
+    <h6>Feedback</h6>
+    <p>Use your Hello Bar to collect feedback form your visitors</p>
+  {{/link-to}}
+
+  <a {{action 'changeSettings'}} class="change-selection">< Change Goals</a>
+</div>
+
 {{outlet}}

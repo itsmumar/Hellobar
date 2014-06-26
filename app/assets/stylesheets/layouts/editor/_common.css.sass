@@ -81,9 +81,38 @@ $stepWidth : 22.5em
         letter-spacing: 0.05em
         margin: 0 -0.75em 1.5em
         text-transform: uppercase
+        border-bottom: $borderLight
         font-weight: $fontWeightNormal
-        border-bottom: 1px solid $grayLight
         @include antialiased()
+
+      /*-----------  Step Links  -----------*/
+
+      .step-link-wrapper
+
+        .step-link-block
+          display: block
+          overflow: hidden
+          max-height: 6em
+          @include transition()
+
+        .change-selection
+          opacity: 0
+          @include inline-block()
+
+        &.is-selected
+
+          .step-link-block:not(.active)
+            max-height: 0
+
+          .change-selection
+            opacity: 1
+
+      .substep
+        margin-top: 1.5em
+        padding-top: 1.5em
+        border-top: $borderLight
+
+      /*-----------  Step Navigations  -----------*/
 
       .step-navigation
         margin-top: 1.5em

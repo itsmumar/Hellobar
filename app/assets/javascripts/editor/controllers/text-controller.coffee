@@ -1,6 +1,6 @@
 HelloBar.TextController = Ember.Controller.extend
 
-  #-----------  Setp Settings  -----------#
+  #-----------  Step Settings  -----------#
 
   step: 4
   prevStep: 'colors'

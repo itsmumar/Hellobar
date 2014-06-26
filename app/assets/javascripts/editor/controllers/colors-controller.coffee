@@ -1,6 +1,6 @@
 HelloBar.ColorsController = Ember.Controller.extend
 
-  #-----------  Setp Settings  -----------#
+  #-----------  Step Settings  -----------#
 
   step: 3
   prevStep: 'style'

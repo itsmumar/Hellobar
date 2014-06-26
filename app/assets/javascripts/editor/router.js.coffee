@@ -3,10 +3,12 @@ HelloBar.Router.map ->
   @resource 'settings', ->
     @route 'emails'
     @route 'social'
-    @route 'cilck'
+    @route 'click'
     @route 'feedback'
 
-  @route 'style'
+  @resource 'style', ->
+    @route 'bar'
+    @route 'popup'
 
   @route 'colors'
   

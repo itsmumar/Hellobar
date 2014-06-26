@@ -1,0 +1,8 @@
+<label>Would you like your visitors to..</label>
+{{view Ember.Select
+  content=socialOptions
+  selection=socialSelection
+  optionValuePath='content.id'
+  optionLabelPath='content.text'
+}}
+{{!-- ^ will likely need to be a component... --}}

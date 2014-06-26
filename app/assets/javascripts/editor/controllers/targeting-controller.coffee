@@ -1,6 +1,6 @@
 HelloBar.TargetingController = Ember.Controller.extend
 
-  #-----------  Setp Settings  -----------#
+  #-----------  Step Settings  -----------#
 
   step: 5
   prevStep: 'text'
