@@ -8,9 +8,9 @@ $stepWidth : 22.5em
   height: 100%
   position: relative
 
-  > [class*='-wrapper']
-    overflow-y: auto
-    overflow-x: hidden
+  // > [class*='-wrapper']
+  //   overflow-y: auto
+  //   overflow-x: hidden
 
   /*-----------  Sidebar Links  -----------*/
 
@@ -26,18 +26,21 @@ $stepWidth : 22.5em
     li
       display: block
       text-align: center
+      position: relative
 
       a
         color: $gray
         display: block
         width: $linkWidth
         line-height: $linkWidth
+        background-color: $grayLighter
 
         &:hover
           color: $red
 
         &.active
           color: $red
+          pointer-events: none
           background-color: $white
 
         i
@@ -48,13 +51,36 @@ $stepWidth : 22.5em
           @include inline-block()
 
       .hover-tip
-        display: none
+        top: 28%
+        left: 100%
+        opacity: 0
+        color: $white
+        font-size: 0.7em
+        position: absolute
+        white-space: nowrap
+        letter-spacing: 0.03em
+        border-radius: $radius
+        background: $grayDarkest
+        font-weight: $fontWeightBold
+        padding: 0.2em 1.33em 0.25em 0.75em
+        @include left-arrow(0.67em, $grayDarkest)
+        @include transition(0.5s)
+        @include antialiased()
+
+      &:hover
+
+        .hover-tip
+          left: 133%
+          opacity: 1
 
     .step-links
       padding: 3em 0
 
     .action-links
       padding-bottom: 1.5em
+
+      li
+        overflow: hidden
 
       .toggle-mobile,
       .toggle-fullscreen
