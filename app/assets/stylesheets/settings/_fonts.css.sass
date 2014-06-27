@@ -1,3 +1,5 @@
+@charset 'UTF-8'
+
 /*-----------  Weight Corrections  -----------*/
 
 @mixin antialiased($type: antialiased)
@@ -6,40 +8,155 @@
 /*-----------  Custom Icon Font  -----------*/
 
 @font-face
-  font-family: 'helobar'
-  src: url('/fonts/hellobar.eot?3848211')
-  src: url('/fonts/hellobar.eot?3848211#iefix') format("embedded-opentype"), url('/fonts/hellobar.woff?3848211') format("woff"), url('/fonts/hellobar.ttf?3848211') format("truetype"), url('/fonts/hellobar.svg?3848211#meterhero') format("svg")
+  font-family: "hellobar"
+  src: url("/fonts/hellobar.eot")
+  src: url("/fonts/hellobar.eot?#iefix") format("embedded-opentype"), url("/fonts/hellobar.woff") format("woff"), url("/fonts/hellobar.ttf") format("truetype"), url("/fonts/hellobar.svg#hellobar") format("svg")
   font-weight: normal
   font-style: normal
 
-[class^="icon-"]:before,
-[class*=" icon-"]:before
-  width: 1em
+
+[data-icon]:before
+  font-family: "hellobar" !important
+  content: attr(data-icon)
+  font-style: normal !important
+  font-weight: normal !important
+  font-variant: normal !important
+  text-transform: none !important
   speak: none
-  text-align: center
-  font-style: normal
-  font-weight: normal
-  display: inline-block
-  font-family: 'hellobar'
-  text-decoration: inherit
+  line-height: 1
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
 
-.icon-up:before
-  content: '\e800'
-.icon-down:before
-  content: '\e801'
-.icon-settings:before
-  content: '\e803'
+[class^="icon-"]:before, [class*=" icon-"]:before
+  font-family: "hellobar" !important
+  font-style: normal !important
+  font-weight: normal !important
+  font-variant: normal !important
+  text-transform: none !important
+  speak: none
+  line-height: 1
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+.icon-abtest:before
+  content: "a"
+
+.icon-wordpress:before
+  content: "b"
+
+.icon-dropdown:before
+  content: "c"
+
+.icon-noload:before
+  content: "d"
+
+.icon-notification:before
+  content: "e"
+
+.icon-views:before
+  content: "f"
+
+.icon-arrow-thick:before
+  content: "g"
+
+.icon-arrow:before
+  content: "h"
+
+.icon-export:before
+  content: "i"
+
 .icon-edit:before
-  content: '\e804'
-.icon-comment:before
-  content: '\e805'
-.icon-share:before
-  content: '\e806'
-.icon-water:before
-  content: '\e807'
-.icon-gas:before
-  content: '\e808'
-.icon-loading:before
-  content: '\e809'
-.icon-electric:before
-  content: '\e80a'
+  content: "j"
+
+.icon-notification-alert:before
+  content: "k"
+
+.icon-opportunity:before
+  content: "l"
+
+.icon-eyedropper:before
+  content: "m"
+
+.icon-bar:before
+  content: "n"
+
+.icon-badge:before
+  content: "o"
+
+.icon-feedback:before
+  content: "p"
+
+.icon-play:before
+  content: "q"
+
+.icon-settings:before
+  content: "r"
+
+.icon-forwardarrow:before
+  content: "s"
+
+.icon-calendar:before
+  content: "t"
+
+.icon-clicks:before
+  content: "u"
+
+.icon-gear:before
+  content: "v"
+
+.icon-style:before
+  content: "w"
+
+.icon-improve:before
+  content: "x"
+
+.icon-social:before
+  content: "y"
+
+.icon-close:before
+  content: "z"
+
+.icon-color:before
+  content: "A"
+
+.icon-installmyself:before
+  content: "B"
+
+.icon-summary:before
+  content: "C"
+
+.icon-support:before
+  content: "D"
+
+.icon-magnifyingglass:before
+  content: "E"
+
+.icon-contacts:before
+  content: "F"
+
+.icon-content:before
+  content: "G"
+
+.icon-desktop:before
+  content: "H"
+
+.icon-manage:before
+  content: "I"
+
+.icon-sync:before
+  content: "J"
+
+.icon-tip:before
+  content: "K"
+
+.icon-mobile:before
+  content: "L"
+
+.icon-modal:before
+  content: "M"
+
+.icon-trash:before
+  content: "N"
+
+.icon-download:before
+  content: "O"

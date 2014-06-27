@@ -24,6 +24,7 @@ $stepWidth : 22.5em
     background-color: $grayLighter
 
     li
+      display: block
       text-align: center
 
       a
@@ -42,7 +43,9 @@ $stepWidth : 22.5em
         i
           width: 100%
           cursor: pointer
-          font-size: 1.15em
+          font-size: 1.67em
+          margin-bottom: -0.25em
+          @include inline-block()
 
       .hover-tip
         display: none
@@ -52,6 +55,23 @@ $stepWidth : 22.5em
 
     .action-links
       padding-bottom: 1.5em
+
+      .toggle-mobile,
+      .toggle-fullscreen
+        @include clearfix()
+
+        a
+          width: 200%
+          margin-left: -100%
+          @include transition(0.25s)
+
+          i
+            width: 50%
+            float: left
+
+      .toggle-fullscreen a i:first-child
+        margin-top: -6px
+        @include transform(rotate(180deg))
   
   /*-----------  Main Viewport  -----------*/
 
@@ -148,11 +168,16 @@ $stepWidth : 22.5em
 
   &.is-fullscreen
 
-    .toggle-fullscreen
-      @include transform(rotate(-180deg))
+    .toggle-fullscreen a
+      margin-left: 0% !important
 
     .step-wrapper
       margin-left: -$stepWidth
+
+  &.is-mobile
+
+    .toggle-mobile a
+      margin-left: 0% !important
 
   /*-----------  Editor Modals  -----------*/
   

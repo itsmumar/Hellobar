@@ -1,42 +1,43 @@
 <nav class="links-wrapper">
   <ul class="step-links">
     <li>
-      {{#link-to 'settings'}}<i clas="icon-settings">Se</i>{{/link-to}}
+      {{#link-to 'settings'}}<i class="icon-settings"></i>{{/link-to}}
       <div class="hover-tip">Settings</div>
     </li>
     <li>
-      {{#link-to 'style'}}<i clas="icon-style">St</i>{{/link-to}}
+      {{#link-to 'style'}}<i class="icon-style"></i>{{/link-to}}
       <div class="hover-tip">Style</div>
     </li>
     <li>
-      {{#link-to 'colors'}}<i clas="icon-colors">Co</i>{{/link-to}}
+      {{#link-to 'colors'}}<i class="icon-color"></i>{{/link-to}}
       <div class="hover-tip">Colors</div>
     </li>
     <li>
-      {{#link-to 'text'}}<i clas="icon-text">Tx</i>{{/link-to}}
+      {{#link-to 'text'}}<i class="icon-content"></i>{{/link-to}}
       <div class="hover-tip">Text & Content</div>
     </li>
     <li>
-      {{#link-to 'targeting'}}<i clas="icon-targeting">Ta</i>{{/link-to}}
+      {{#link-to 'targeting'}}<i class="icon-views"></i>{{/link-to}}
       <div class="hover-tip">Targeting</div>
     </li>
   </ul>
 
   <ul class="action-links">
-    <li>
-      <a {{action 'toggleFullscreen'}} class="toggle-fullscreen">
-        <i clas="icon-arrow"><</i>
+    <li class="toggle-fullscreen">
+      <a {{action 'toggleFullscreen'}}>
+        <i class="icon-arrow"></i>
+        <i class="icon-arrow"></i>
       </a>
     </li>
-    <li>
-      <a {{action 'toggleMobile'}} class="toggle-mobile">
-        <i clas="icon-desktop">De</i>
-        <i clas="icon-mobile">Mo</i>
+    <li class="toggle-mobile">
+      <a {{action 'toggleMobile'}}>
+        <i class="icon-mobile"></i>
+        <i class="icon-desktop"></i>
       </a>
     </li>
-    <li><a><i clas="icon-comment"><></i></a></li>
-    <li><a><i clas="icon-faq">??</i></a></li>
-    <li><a><i clas="icon-close">X</i></a></li>
+    <li><a><i class="icon-feedback"></i></a></li>
+    <li><a><i class="icon-support"></i></a></li>
+    <li><a><i class="icon-close"></i></a></li>
   </ul>
 </nav>
 
