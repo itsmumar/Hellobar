@@ -88,4 +88,81 @@
     select
       padding-right: 18px
 
+  /*-----------  Toggle Switches -----------*/
+
+  .toggle-switch
+    padding: 2px
+    float: right
+    cursor: pointer
+    margin-top: -4px
+    border-radius: $radius
+    background-color: $white
+    border: 1px solid $grayLight
+    @include user-select(none)
+    @include inline-block()
+    @include transition()
+
+    span
+      color: $grayLight
+      text-align: center
+      line-height: 1.25rem
+      text-transform: uppercase
+      @include transition()
+
+      &.toggle-on
+        opacity: 0
+        float: left
+        margin-left: 2px
+        font-size: 0.75em
+
+      &.toggle-off
+        opacity: 1
+        float: right
+        margin-top: 1px
+        font-size: 0.7em
+        margin-right: 2px
+
+    .toggle-floater
+      width: 1.45em
+      height: 1.45em
+      margin-left: 0
+      margin-right: 1.75em
+      border-radius: $radius
+      background-color: $grayLight
+      @include transition(0.2s)
+
+    &:hover
+      border-color: $gray
+      box-shadow: inset $shadowSubtle
+
+      span
+        color: $gray
     
+      .toggle-floater
+        box-shadow: $shadowSubtle
+        background-color: $gray
+    
+    &.is-selected
+      border-color: $green
+      background-color: $green
+
+      span
+        color: $white
+
+        &.toggle-on
+          opacity: 1
+
+        &.toggle-off
+          opacity: 0
+
+      .toggle-floater
+        margin-right: 0
+        margin-left: 1.75em
+        background-color: $white
+    
+      &:hover
+        box-shadow: inset $shadow
+      
+        .toggle-floater
+          box-shadow: $shadow
+

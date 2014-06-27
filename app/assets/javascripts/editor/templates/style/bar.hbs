@@ -8,15 +8,15 @@
 {{!-- ^ will likely need to be a component... --}}
 
 <label>Hello Bar branding
-  {{view Ember.Checkbox checked=content.barIsBranded}}
+  {{toggle-switch switch=content.barIsBranded}}
 </label>
 
 <label>Animations
-  {{view Ember.Checkbox checked=content.barIsAnimated}}
+  {{toggle-switch switch=content.barIsAnimated}}
 </label>
 
 <label>Allow to hide bar
-  {{view Ember.Checkbox checked=content.barIsHidable}}
+  {{toggle-switch switch=content.barIsHidable}}
 </label>
 
 <label>Placement</label>

@@ -10,11 +10,11 @@
 {{!-- ^ will likely need to be a component... --}}
 
 <label>Hello Bar branding
-  {{view Ember.Checkbox checked=content.popupIsBranded}}
+  {{toggle-switch switch=content.popupIsBranded}}
 </label>
 
 <label>Animations
-  {{view Ember.Checkbox checked=content.popupIsAnimated}}
+  {{toggle-switch switch=content.popupIsAnimated}}
 </label>
 
 <label>Placement</label>
