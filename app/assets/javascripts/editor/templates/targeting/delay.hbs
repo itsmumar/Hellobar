@@ -1,9 +1,11 @@
 <label><span>Start after:</span>
   {{view Ember.TextField value=content.delayValue placeholder="3"}}
-  {{view Ember.Select
-    content=content.unitsOptions
-    selection=content.unitsSelections
-    optionValuePath='content.id'
-    optionLabelPath='content.text'
-  }}
+  <div class="select-wrapper">
+    {{view Ember.Select
+      content=content.unitsOptions
+      selection=content.unitsSelections
+      optionValuePath='content.id'
+      optionLabelPath='content.text'
+    }}
+  </div>
 </label>

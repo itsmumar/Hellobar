@@ -1,0 +1,147 @@
+/*-----------  Editor Steps/Pages  -----------*/
+
+.editor-wrapper .step-wrapper
+  width: $stepWidth
+  border-right: $border
+  padding: 0 2em 2em
+  @include transition(0.5s)
+  @include flex(0 1 auto)
+
+  .step-title
+    color: $red
+    font-size: 1.15em
+    text-align: center
+    line-height: 2.65em
+    letter-spacing: 0.05em
+    margin: 0 -0.75em 1.5em
+    text-transform: uppercase
+    border-bottom: $borderLight
+    font-weight: $fontWeightNormal
+    @include antialiased()
+
+  p
+    padding-right: 15%
+
+  /*-----------  Step Links  -----------*/
+
+  .step-link-wrapper
+    margin-bottom: -1em
+    @include transition()
+
+    .step-link-block
+      opacity: 1
+      display: block
+      overflow: hidden
+      max-height: 5.5em
+      margin-bottom: 0.67em
+      @include transition(0.67s)
+      @include clearfix()
+
+      i
+        float: left
+        font-size: 1.75em
+        @include transition()
+
+      h6, p
+        width: 82%
+        float: right
+
+      h6
+        padding-bottom: 0.25em
+
+    .change-selection
+      opacity: 0
+      color: $gray
+      font-size: 0.75em
+      padding-left: 18%
+      text-transform: uppercase
+      @include inline-block()
+
+      i
+        font-size: 0.85em
+        margin-right: 0.33em
+
+    &.is-selected
+      padding-bottom: 1.5em
+      border-bottom: $borderLight
+
+      .step-link-block:not(.active)
+        opacity: 0
+        max-height: 0
+        margin-bottom: 0
+
+      .step-link-block.active
+        margin-bottom: -0.67em
+
+      .change-selection
+        opacity: 1
+
+        &:hover
+          color: $red
+
+  .substep
+    margin-top: 2.5em
+
+  /*-----------  Step Navigations  -----------*/
+
+  .step-navigation
+    margin-top: 3em
+    @include justify-content(space-between)
+    @include align-items(center)
+    @include flex-flow(row nowrap)
+    @include display(flex)    
+
+    .nav-dot
+      width: 10px
+      height: 10px
+      border-radius: 1em 
+      background-color: $gray
+
+      &.past
+        background-color: $green
+
+      &.active
+        width: 13px
+        height: 13px
+        border: 2px solid $green
+        background-color: $white
+
+  /*-----------  Step: Settings  -----------*/
+
+  .settings.ember-view
+    
+    .step-link-block
+
+      .icon-contacts
+        color: $green
+        margin-top: -5px
+
+      .icon-social
+        color: $blue
+
+      .icon-clicks
+        color: $yellow
+
+      .icon-feedback
+        color: $purple
+
+  /*-----------  Step: Style  -----------*/
+
+  .style.ember-view
+    
+    .step-link-block
+
+      .icon-bar,
+      .icon-modal
+        color: $grayDark
+        font-size: 2em
+
+      .icon-bar
+        margin-top: -10px
+
+  /*-----------  Step: Targeting  -----------*/
+
+  .targeting.ember-view
+    
+    .substep
+      margin-top: 0.33em

@@ -1,20 +1,24 @@
 <div class="step-title">Targeting</div>
 
 <label>Who should see this?</label>
-{{view Ember.Select
-  content=content.whoOptions
-  selection=content.whoSelection
-  optionValuePath='content.id'
-  optionLabelPath='content.text'
-}}
-<small>Show this bar to visitors on /signup. with a country of America. <a {{action 'triggerModal' 'ab'}}>Edit.</a></small>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=content.whoOptions
+    selection=content.whoSelection
+    optionValuePath='content.id'
+    optionLabelPath='content.text'
+  }}
+</div>
+<p>Show this bar to visitors on /signup. with a country of America. <a {{action 'triggerModal' 'ab'}}>Edit.</a></p>
 
 <label>Who should they see this?</label>
-{{view Ember.Select
-  content=content.whenOptions
-  selection=content.whenSelection
-  optionValuePath='content.route'
-  optionLabelPath='content.text'
-}}
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=content.whenOptions
+    selection=content.whenSelection
+    optionValuePath='content.route'
+    optionLabelPath='content.text'
+  }}
+</div>
 
 {{outlet}}

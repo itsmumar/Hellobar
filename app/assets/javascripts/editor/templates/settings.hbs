@@ -2,7 +2,7 @@
 
 <div {{bind-attr class="routeForwarding:is-selected :step-link-wrapper"}}>
   {{#link-to 'settings.emails' class='step-link-block'}}
-    <i class="icon-email"></i>
+    <i class="icon-contacts"></i>
     <h6>Collect Email</h6>
     <p>Use your Hello Bar to collect visitors' email addresses</p>
   {{/link-to}}
@@ -14,7 +14,7 @@
   {{/link-to}}
 
   {{#link-to 'settings.click' class='step-link-block'}}
-    <i class="icon-arrow"></i>
+    <i class="icon-clicks"></i>
     <h6>Click Link</h6>
     <p>Use your Hello Bar to drive more trafficto a specific URL</p>
   {{/link-to}}
@@ -25,7 +25,10 @@
     <p>Use your Hello Bar to collect feedback form your visitors</p>
   {{/link-to}}
 
-  <a {{action 'changeSettings'}} class="change-selection">< Change Goals</a>
+  <a {{action 'changeSettings'}} class="change-selection">
+    <i class="icon-arrow-thick"></i>
+    Change Goal
+  </a>
 </div>
 
 {{outlet}}

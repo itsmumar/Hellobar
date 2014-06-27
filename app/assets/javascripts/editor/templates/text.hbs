@@ -9,10 +9,12 @@
 {{!-- ^ will likely need to be a component... --}}
 
 <label>Font family</label>
-{{view Ember.Select
-  content=content.fontOptions
-  selection=content.fontSelection
-  optionValuePath='content.id'
-  optionLabelPath='content.text'
-}}
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=content.fontOptions
+    selection=content.fontSelection
+    optionValuePath='content.id'
+    optionLabelPath='content.text'
+  }}
+</div>
 {{!-- ^ will likely need to be a component... --}}

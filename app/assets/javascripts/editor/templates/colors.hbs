@@ -19,10 +19,12 @@
 <h6>OR</h6>
 
 <label>Theme</label>
-{{view Ember.Select
-  content=content.themeOptions
-  selection=content.themeSelection
-  optionValuePath='content.id'
-  optionLabelPath='content.text'
-}}
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=content.themeOptions
+    selection=content.themeSelection
+    optionValuePath='content.id'
+    optionLabelPath='content.text'
+  }}
+</div>
 {{!-- ^ will likely need to be a component... --}}

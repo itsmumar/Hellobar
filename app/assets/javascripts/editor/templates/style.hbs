@@ -8,12 +8,15 @@
   {{/link-to}}
 
   {{#link-to 'style.popup' class='step-link-block'}}
-    <i class="icon-popup"></i>
+    <i class="icon-modal"></i>
     <h6>PopUp</h6>
     <p>Show a window on your site highlighting your content</p>
   {{/link-to}}
 
-  <a {{action 'changeStyle'}} class="change-selection">< Change Style</a>
+  <a {{action 'changeStyle'}} class="change-selection">
+    <i class="icon-arrow-thick"></i>
+    Change Style
+  </a>
 </div>
 
 {{outlet}}
