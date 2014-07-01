@@ -10,6 +10,8 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
     'background-color:#' + @get('color')
   ).property('color')
 
+  #-----------  Hex-to-RGB Conversion  -----------#
+
   rgbObject: (->
     hex = @get('color')
     shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
@@ -24,6 +26,20 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
     }
   ).property('color')
 
+  #-----------  Push 'Recent' Changes to Controller  -----------#
+
+  updateRecent: ( ()->
+    color = @get('color')
+    recent = @get('recentColors')
+
+    recent.shiftObject() unless recent.length < 3
+    recent.pushObject(color)
+
+    @set('recentColors', recent)
+  ).observes('color')
+
+  #-----------  Component State Switching  -----------#
+
   actions:
 
     toggleFocus: ->
@@ -36,8 +52,9 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
 
     toggleSelecting: ->
       @toggleProperty('isSelecting')
-      
 
+
+#-----------  Color Preview Child Views  -----------#
 
 HelloBar.ColorPreview = Ember.View.extend
 

@@ -4,6 +4,8 @@ HelloBar.ToggleSwitchComponent = Ember.Component.extend
   classNameBindings: ['switch:is-selected']
   attributeBindings: ['tabindex']
 
+  #-----------  Trigger Changes  -----------#
+
   init: ->
     @_super()
     @on('change', @, @_elementValueDidChange)
@@ -11,6 +13,7 @@ HelloBar.ToggleSwitchComponent = Ember.Component.extend
   mouseDown: ->
     @_elementValueDidChange()
 
+  #-----------  Persist Changes to Model  -----------#
+
   _elementValueDidChange: ->
-    console.log 'nong'
     @toggleProperty('switch')
