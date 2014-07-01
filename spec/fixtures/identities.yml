@@ -1,0 +1,4 @@
+mailchimp:
+  site: zombo
+  provider: mailchimp
+  credentials: "{\"token\": \"key\"}"

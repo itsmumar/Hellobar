@@ -51,6 +51,16 @@ ActiveRecord::Schema.define(version: 20140704174509) do
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
 
+  create_table "identities", force: true do |t|
+    t.integer  "site_id"
+    t.string   "provider"
+    t.text     "credentials"
+    t.text     "extra"
+    t.text     "embed_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "internal_dimensions", id: false, force: true do |t|
     t.integer "person_id",              null: false
     t.string  "name",      default: "", null: false

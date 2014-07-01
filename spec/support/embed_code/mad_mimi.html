@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>  
+ 
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--> 
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--> 
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--> 
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--> 
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->  
+<head><script type="text/javascript">var NREUMQ=NREUMQ||[];NREUMQ.push(["mark","firstbyte",new Date().getTime()]);</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    
+  <link href="https://d1lggihq2bt4jo.cloudfront.net/stylesheets/webform.css?1395334282" media="screen" rel="stylesheet" type="text/css" />
+<link href="https://d2vnkn0bfhsarv.cloudfront.net/stylesheets/webform_iframe.css?1395334282" media="screen" rel="stylesheet" type="text/css" />
+<link href="https://d1lggihq2bt4jo.cloudfront.net/stylesheets/buttons.css?1395334282" media="screen" rel="stylesheet" type="text/css" />
+<link href="https://d2vnkn0bfhsarv.cloudfront.net/stylesheets/checkboxes_and_radios.css?1395334282" media="screen" rel="stylesheet" type="text/css" />
+<link href="https://d2vnkn0bfhsarv.cloudfront.net/stylesheets/dropdowns.css?1395334282" media="screen" rel="stylesheet" type="text/css" />
+<link href="https://d2vnkn0bfhsarv.cloudfront.net/stylesheets/forms.css?1395334282" media="screen" rel="stylesheet" type="text/css" />
+<link href="https://d2vnkn0bfhsarv.cloudfront.net/stylesheets/type.css?1395334282" media="screen" rel="stylesheet" type="text/css" />
+  <script src="https://d1lggihq2bt4jo.cloudfront.net/scripts/modernizr.min.js?1357739113" type="text/javascript"></script>
+  <script src="https://d1lggihq2bt4jo.cloudfront.net/scripts/basic_dropdown.js?1393247730" type="text/javascript"></script>
+  <title>Mad Mimi Email Marketing</title>
+  <!--[if IE 8 ]><link href="https://d1lggihq2bt4jo.cloudfront.net/stylesheets/ie8.css?1395334282" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
+
+  </head>
+  <body>
+    
+
+<div class="mimi_webform_container">
+  <div class="mimi_webform with_bg">
+
+    
+        <div class="mimi_webform_header mimi_webform_logo ui_light" style='background-color:#DCDCDC; width:396px;'>
+          
+            <h1 style="">Polymathic</h1>
+          
+        </div>
+    
+    <form action="https://madmimi.com/signups/subscribe/103242" id="mad_mimi_signup_form" method="post" style="width:396px;" target="_blank">
+  <fieldset>
+    
+      
+      
+        <div class='mimi_field text required' style='width:356px;height:65px;'>
+  <label for='signup_email'>Email</label>
+  <input id='signup_email' name='signup[email]' type='text' data-required-field='This field is required' placeholder='you@example.com' class='required'>
+  <span class='mimi_funk'></span>
+</div>
+
+      
+    
+    
+
+    <div class='mimi_field action' style='width:356px;height:35px;'>
+  <input type='submit' class='submit' value='Subscribe' id='webform_submit_button' data-default-text='Subscribe' data-submitting-text='Sending…' data-invalid-text='↑ You forgot some required fields' data-choose-list='↑ Choose a list'>
+</div>
+
+  </fieldset>
+</form>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var form = document.getElementById('mad_mimi_signup_form'),
+      submit = document.getElementById('webform_submit_button'),
+      validEmail = /.+@.+\..+/,
+      isValid;
+      
+  form.onsubmit = function(event) {
+    validate();
+    if(!isValid) {
+      revalidateOnChange();
+      return false;
+    }
+  };
+  
+  function validate() {
+    isValid = true;
+    emailValidation();
+    fieldAndListValidation();
+    updateFormAfterValidation();
+  }
+
+  function emailValidation() {
+    var email = document.getElementById('signup_email');
+    if(!validEmail.test(email.value)) {
+      textFieldError(email);
+      isValid = false;
+    } else {
+      removeTextFieldError(email);
+    }
+  }
+
+  function fieldAndListValidation() {
+    var fields = form.querySelectorAll('.mimi_field.required');
+    for(var i = 0; i < fields.length; ++i) {
+      var field = fields[i],
+          type  = fieldType(field);
+      if(type == 'checkboxes' || type == 'radio_buttons') {
+        checkboxAndRadioValidation(field);
+      } else {
+        textAndDropdownValidation(field, type);
+      }
+    }
+  }
+
+  function fieldType(field) {
+    var type = field.querySelectorAll('.field_type');
+    if(type.length > 0) {
+      return type[0].getAttribute('data-field-type');
+    } else if(field.className.indexOf('checkgroup') >= 0) {
+      return 'checkboxes';
+    } else {
+      return 'text_field';
+    }
+  }
+
+  function checkboxAndRadioValidation(field) {
+    var inputs   = field.getElementsByTagName('input'),
+        selected = false;
+    for(var i = 0; i < inputs.length; ++i) {
+      var input = inputs[i];
+      if((input.type == 'checkbox' || input.type == 'radio') && input.checked) selected = true;
+    }
+    if(selected) {
+      field.className = field.className.replace(/ invalid/g, '');
+    } else {
+      if(field.className.indexOf('invalid') == -1) field.className += ' invalid';
+      isValid = false;
+    }
+  }
+
+  function textAndDropdownValidation(field, type) {
+    var inputs = field.getElementsByTagName('input');
+    for(var i = 0; i < inputs.length; ++i) {
+      var input = inputs[i];
+      if(input.name.indexOf('signup') >= 0) {
+        if(type == 'text_field') {
+          textValidation(input);
+        } else {
+          dropdownValidation(field, input);
+        }
+      }
+    }
+    htmlEmbedDropdownValidation(field);
+  }
+
+  function textValidation(input) {
+    if(input.id == 'signup_email') return;
+    var val = input.value;
+    if(val == '') {
+      textFieldError(input);
+      isValid = false;
+      return;
+    } else {
+      removeTextFieldError(input)
+    }
+  }
+
+  function dropdownValidation(field, input) {
+    var val = input.value;
+    if(val == '') {
+      if(field.className.indexOf('invalid') == -1) field.className += ' invalid';
+      onSelectCallback(input);
+      isValid = false;
+      return;
+    } else {
+      field.className = field.className.replace(/ invalid/g, '');
+    }
+  }
+
+  function htmlEmbedDropdownValidation(field) {
+    var dropdowns = field.querySelectorAll('.mimi_html_dropdown');
+    for(var i = 0; i < dropdowns.length; ++i) {
+      var dropdown = dropdowns[i],
+          val      = dropdown.value;
+      if(val == '') {
+        if(field.className.indexOf('invalid') == -1) field.className += ' invalid';
+        isValid = false;
+        dropdown.onchange = validate;
+        return;
+      } else {
+        field.className = field.className.replace(/ invalid/g, '');
+      }
+    }
+  }
+
+  function textFieldError(input) {
+    input.className   = 'required invalid';
+    input.placeholder = input.getAttribute('data-required-field');
+  }
+
+  function removeTextFieldError(input) {
+    input.className   = 'required';
+    input.placeholder = '';
+  }
+
+  function onSelectCallback(input) {
+    if(typeof Widget != 'undefined' && Widget.BasicDropdown != undefined) {
+      var dropdownEl = input.parentNode,
+          instances  = Widget.BasicDropdown.instances;
+      for(var i = 0; i < instances.length; ++i) {
+        var instance = instances[i];
+        if(instance.wrapperEl == dropdownEl) {
+          instance.onSelect = validate;
+        }
+      }
+    }
+  }
+
+  function updateFormAfterValidation() {
+    form.className   = isValid ? '' : 'mimi_invalid';
+    submit.value     = submitButtonText();
+    submit.disabled  = !isValid;
+    submit.className = isValid ? 'submit' : 'disabled';
+  }
+
+  function submitButtonText() {
+    var invalidFields = document.querySelectorAll('.invalid'),
+        text;
+    if(isValid || invalidFields == undefined) {
+      text = submit.getAttribute('data-default-text');
+    } else {
+      if(invalidFields.length > 1 || invalidFields[0].className.indexOf('checkgroup') == -1) {
+        text = submit.getAttribute('data-invalid-text');
+      } else {
+        text = submit.getAttribute('data-choose-list');
+      }
+    }
+    return text;
+  }
+
+  function revalidateOnChange() {
+    var fields = form.querySelectorAll(".mimi_field.required");
+    for(var i = 0; i < fields.length; ++i) {
+      var inputs = fields[i].getElementsByTagName('input');
+      for(var j = 0; j < inputs.length; ++j) {
+        inputs[j].onchange = validate;
+      }
+    }
+  }
+})();
+</script>
+
+<script type="text/javascript">
+(function() {
+  document.onclick = function(e) {
+    var focus = document.getElementsByClassName('mimi_field focus');
+    if(focus.length > 0) {
+      for(var i = 0; i < focus.length; ++i) {
+        focus[i].className = focus[i].className.replace(/ focus/g, '');
+      }
+    }
+
+    var mimiField = findMimiField(e.target);
+    if(mimiField) {
+      if(mimiField.querySelectorAll('.combo_input').length == 0) { /* skip if editing options */
+        mimiField.className += ' focus';
+      }
+    }
+  };
+
+  function findMimiField(elem) {
+    var mimiField = elem.parentNode;
+    while(mimiField.className != undefined && mimiField.className.indexOf('mimi_field') == -1) {
+      mimiField = mimiField.parentNode;
+    }
+    if(mimiField.nodeType == Node.ELEMENT_NODE) {
+      return mimiField;
+    } else {
+      return null;
+    }
+  }
+ })();
+</script>
+
+
+  <script type="text/javascript">if (!NREUMQ.f) { NREUMQ.f=function() {
+NREUMQ.push(["load",new Date().getTime()]);
+var e=document.createElement("script");
+e.type="text/javascript";
+e.src=(("http:"===document.location.protocol)?"http:":"https:") + "//" +
+  "js-agent.newrelic.com/nr-100.js";
+document.body.appendChild(e);
+if(NREUMQ.a)NREUMQ.a();
+};
+NREUMQ.a=window.onload;window.onload=NREUMQ.f;
+};
+NREUMQ.push(["nrfj","beacon-3.newrelic.com","f43160eaa5","5575","cQxbQBEOXw0HSh1KXVUNQEQQTloHEFlfXA==",11,425,new Date().getTime(),"","","","",""]);</script></body>
+</html>

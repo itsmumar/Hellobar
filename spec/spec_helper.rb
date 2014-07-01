@@ -38,6 +38,14 @@ VCR.configure do |c|
 end
 
 RSpec.configure do |config|
+  config.around(:each) do |example|
+    name = example.metadata[:full_description].split(/\s+/, 2).join("/").underscore.gsub(/[^\w\/]+/, "_")
+
+    VCR.use_cassette(name) do
+      example.run
+    end
+  end
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -66,6 +74,7 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.include Devise::TestHelpers, type: :controller
+  config.include EmbedCodeFileHelper
 end
 
 def stub_current_admin(admin)

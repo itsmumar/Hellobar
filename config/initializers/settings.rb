@@ -19,6 +19,15 @@ unless defined?(Hellobar::Settings)
     env_name
     process_synchronously
     store_site_scripts_locally
+    aweber_app_id
+    aweber_consumer_secret
+    aweber_consumer_key
+    createsend_client_id
+    createsend_secret
+    constantcontact_app_key
+    constantcontact_app_secret
+    mailchimp_client_id
+    mailchimp_secret
   )
 
   keys.each do |key|
@@ -37,6 +46,68 @@ unless defined?(Hellobar::Settings)
   dynamo_tables.each do |table|
     config[:dynamo_tables][table.to_sym] = yaml["dynamo_tables"].try(:[], table) || "test_#{table}"
   end
+
+  config[:identity_providers] = {
+    :aweber => {
+      :key => :aweber,
+      :type => :email,
+      :name => 'AWeber',
+      :app_id => config[:aweber_app_id],
+      :consumer_secret => config[:aweber_consumer_secret],
+      :consumer_key => config[:aweber_consumer_key]
+    },
+    :createsend => {
+      :key => :createsend,
+      :type => :email,
+      :name => 'Campaign Monitor',
+      :client_id => config[:createsend_client_id],
+      :secret => config[:createsend_secret]
+    },
+    :constantcontact => {
+      :key => :constantcontact,
+      :type => :email,
+      :name => 'Constant Contact',
+      :app_key => config[:constantcontact_app_key],
+      :app_secret => config[:constantcontact_app_secret]
+    },
+    :mailchimp => {
+      :key => :mailchimp,
+      :type => :email,
+      :name => 'MailChimp',
+      :client_id => config[:mailchimp_client_id],
+      :secret => config[:mailchimp_secret]
+    },
+    :get_response => {
+      :key => :get_response,
+      :type => :email,
+      :name => "GetResponse",
+      :requires_embed_code => true
+    },
+    :icontact => {
+      :key => :icontact,
+      :type => :email,
+      :name => "iContact",
+      :requires_embed_code => true
+    },
+    :mad_mimi => {
+      :key => :mad_mimi,
+      :type => :email,
+      :name => "Mad Mimi",
+      :requires_embed_code => true
+    },
+    :my_emma => {
+      :key => :my_emma,
+      :type => :email,
+      :name => "MyEmma",
+      :requires_embed_code => true
+    },
+    :vertical_response => {
+      :key => :vertical_response,
+      :type => :email,
+      :name => "VerticalResponse",
+      :requires_embed_code => true
+    }
+  }
 
   Hellobar::Settings = config
 end
