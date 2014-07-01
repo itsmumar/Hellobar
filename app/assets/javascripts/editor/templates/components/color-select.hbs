@@ -28,18 +28,18 @@
     <div class="color-picker">
       <div class="gradient-block"></div>
       
-      <a class="eyedrop-button">
+      <a class="eyedrop-button" {{action 'toggleSelecting'}}>
         <i class="icon-eyedropper"></i>
       </a>
 
       <div class="rgb-block">
-        <h6>R</h6>
+        <h6>R</h6><span>{{ rgbObject.r }}</span>
       </div>
       <div class="rgb-block">
-        <h6>G</h6>
+        <h6>G</h6><span>{{ rgbObject.g }}</span>
       </div>
       <div class="rgb-block">
-        <h6>B</h6>
+        <h6>B</h6><span>{{ rgbObject.b }}</span>
       </div>
     </div>
   </div>

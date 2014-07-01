@@ -157,27 +157,49 @@
             color: $gray
             line-height: 1.67em
 
-        .eyedrop-button
-          width: 22%
-          color: $green
-          text-align: center
-          border-radius: $radius
-          border: 1px solid $green
-          @include inline-block()
+        .color-picker
+          padding-top: 0.33em
+          @include clearfix()
 
-          i:before
-            line-height: 2em
+          .gradient-block
+            width: 72%
+            float: left
+            height: 9.67em
+            border: 1px solid $gray
 
-        .rgb-block
-          padding: 0.25em 0.5em
-          border-radius: $radius
-          border: 1px solid $grayLight
+          .eyedrop-button
+            width: 22%
+            float: right
+            color: $grayDark
+            margin-bottom: 1em
+            text-align: center
+            border-radius: $radius
+            border: 1px solid $grayLight
+            @include inline-block()
+
+            i:before
+              line-height: 2em
+
+            &:hover
+              color: $grayDarker
+              border-color: $gray
+
+          .rgb-block
+            width: 22%
+            float: right
+            margin-top: 0.25em
+            padding: 0.25em 0.5em
+            border-radius: $radius
+            border: 1px solid $grayLight
+
+            h6
+              @include inline-block()
 
     &.in-focus
 
       .color-select-wrapper
         z-index: 900
-        max-height: 15em
+        max-height: 20em
         box-shadow: $shadowSubtle
     
         &:before
@@ -185,6 +207,12 @@
 
         .color-dropdown
           opacity: 1
+
+    &.is-selecting
+
+      .eyedrop-button
+        color: $green !important
+        border-color: $green !important
 
   /*-----------  Toggle Switches -----------*/
 
