@@ -23,7 +23,7 @@
   $textInputPadding: 0.25em 0.67em 0.33em
 
   select,
-  textarea, 
+  textarea,
   input:not([type=submit]):not([type=file]):not([type=button]):not([type=radio]):not([type=checkbox]):not([type=color])
     width: 100%
     color: $gray
@@ -59,11 +59,8 @@
     color: $grayDark
     position: relative
 
-    *
-      cursor: pointer
-      background-color: $white
-
     select
+      cursor: pointer
       color: $grayDarker
       padding: 0.45em 0.67em 0.5em
 
@@ -72,8 +69,8 @@
 
     &:before
       right: 1rem
+      top: 0.67rem
       content: 'c'
-      bottom: 0.5rem
       font-size: 0.75em
       color: $grayDarker
       position: absolute
@@ -87,6 +84,107 @@
   @media screen and (-webkit-min-device-pixel-ratio:0)
     select
       padding-right: 18px
+
+  /*-----------  Color Select  -----------*/
+
+  .color-select
+    position: relative
+    @include user-select(none)
+    
+    .color-select-spacer
+      height: 2.67em
+      display: block
+
+    .color-select-wrapper
+      top: 0
+      left: 0
+      width: 100%
+      padding: 0.33em
+      overflow: hidden
+      font-size: 0.85em
+      max-height: 2.67em
+      position: absolute
+      margin: 0.75em auto
+      border: 1px solid $gray
+      background-color: $white
+      @include transition(0.05s ease-in-out)
+      @extend .select-wrapper
+
+      .color-select-block
+        cursor: pointer
+        line-height: 1.85em
+        padding-bottom: 0.5em
+        text-transform: uppercase
+
+        .color-preview
+          width: 2.5em
+          height: 1.75em
+          margin-right: 0.67em
+          border: 1px solid $gray
+          @include inline-block()
+
+      .color-dropdown
+        width: 95%
+        opacity: 0
+        margin: 0 auto
+        padding: 0.67em 0
+        border-top: 1px solid $grayLight
+        @include transition(0.25s ease-in-out)
+
+        .color-preview-row
+          @include clearfix()
+
+          ul
+            width: 72%
+            margin-bottom: 0.5em
+            cursor: url('eyedropper.svg') 0 18, auto
+            @include justify-content(space-between)
+            @include align-items(stretch)
+            @include flex-flow(row nowrap)
+            @include display(flex)    
+
+
+            .color-preview
+              width: 22%
+              height: 1.1em
+              border-radius: $radius
+              border: 1px solid $gray
+              @include inline-block()
+
+          small
+            width: 22%
+            float: right
+            color: $gray
+            line-height: 1.67em
+
+        .eyedrop-button
+          width: 22%
+          color: $green
+          text-align: center
+          border-radius: $radius
+          border: 1px solid $green
+          @include inline-block()
+
+          i:before
+            line-height: 2em
+
+        .rgb-block
+          padding: 0.25em 0.5em
+          border-radius: $radius
+          border: 1px solid $grayLight
+
+    &.in-focus
+
+      .color-select-wrapper
+        z-index: 900
+        max-height: 15em
+        box-shadow: $shadowSubtle
+    
+        &:before
+          @include transform(rotate(-180deg))
+
+        .color-dropdown
+          opacity: 1
 
   /*-----------  Toggle Switches -----------*/
 

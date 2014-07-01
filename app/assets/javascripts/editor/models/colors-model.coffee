@@ -2,10 +2,10 @@ HelloBar.ColorsModel = Ember.Object.create
   
   #-----------  Responses  -----------#
 
-  backgroundColor: null
-  textColor: null
-  buttonTextColor: null
-  buttonColor: null
+  backgroundColor: 'def1ff'
+  textColor: '4f4f4f'
+  buttonTextColor: 'ffffff'
+  buttonColor: '4f4f4f'
 
   themeSelection: null
 
