@@ -24,7 +24,7 @@
   mouseMoveCallback: function(color,evt) { },
   mouseOutCallback: function(color,evt) { },
   selector: $('#_____'),  // unlikely
-  hoverwidth: 12
+  hoverwidth: 15
     };
     
     defaults.selector.length = 0;  // make sure to have a default empty selector
@@ -58,7 +58,7 @@
   // generate div for hover color floater
  
         $('body').append('<div style="width:'+config.hoverwidth
-       +'px; height:'+config.hoverwidth+'px; border: 1px solid #000; display:none"></div>');
+       +'px; height:'+config.hoverwidth+'px; border-radius: 3px; border: 1px solid #cecece; display:none"></div>');
   hoverchip = $('body').children().last();
 
   if (config.selector && config.selector.length)
@@ -158,8 +158,8 @@
   hoverchip.css({
     'background-color': '#' + color.rgbhex,
         'position': 'absolute',
-        'top': evt.pageY - 15,
-        'left': evt.pageX + 10
+        'top': evt.pageY - 33,
+        'left': evt.pageX + 25
         }).show();
   // callback disabled for now 
   //config.mouseMoveCallback(color,evt);
