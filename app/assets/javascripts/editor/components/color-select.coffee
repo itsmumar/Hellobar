@@ -26,14 +26,24 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
     }
   ).property('color')
 
+  #-----------  Initialize Dropper  -----------#
+
+  eyeDropper: ( () ->
+    return $.fn.dropperredux({}) unless @get('isSelecting')
+
+    $.fn.dropperredux
+      selector: $('.preview-wrapper img')
+      clickCallback: (color) =>
+        @set('color', color.rgbhex)
+  ).observes('isSelecting').on('didInsertElement')
+
   #-----------  Push 'Recent' Changes to Controller  -----------#
 
-  updateRecent: ( ()->
-    color = @get('color')
+  updateRecent: ( () ->
     recent = @get('recentColors')
 
     recent.shiftObject() unless recent.length < 3
-    recent.pushObject(color)
+    recent.pushObject(@get('color'))
 
     @set('recentColors', recent)
   ).observes('color')

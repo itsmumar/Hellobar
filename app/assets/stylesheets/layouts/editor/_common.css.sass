@@ -112,11 +112,25 @@ $stepWidth : 22.5em
     @include flex-flow(row nowrap)
     @include display(flex)    
 
+    /*-----------  Steps  -----------*/
+
+    .step-wrapper
+      width: $stepWidth
+      padding: 0 2em 2em
+      border-right: $border
+      @include transition(0.25s)
+      @include flex(1 0 auto)
+
     /*-----------  Preview  -----------*/
 
     .preview-wrapper
-      @include striped-bg($grayLighter)
-      @include flex(1 0 auto)
+      overflow: hidden
+      @include flex(0 1 auto)
+
+      img,
+      canvas
+        height: auto
+        max-width: 100%
 
   /*-----------  Alternate States  -----------*/
 
