@@ -43,6 +43,7 @@ class LegacyMigrator
         if ::Site.exists?(legacy_goal.site_id)
           rule = ::Rule.create! id: legacy_goal.id,
                                 site_id: legacy_goal.site_id,
+                                name: 'Everyone', # or /URL? TODO
                                 priority: legacy_goal.priority,
                                 match: Rule::MATCH_ON[:all],
                                 created_at: legacy_goal.created_at,
