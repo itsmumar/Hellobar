@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "active_model_serializers"
 gem "addressable", "~> 2.3.6", :require => "addressable/uri"
 gem "avatar"
 gem "aws-sdk", "1.33.0"

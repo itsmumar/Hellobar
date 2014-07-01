@@ -1,9 +1,15 @@
 class SiteElementsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :load_site
-  before_filter :load_site_element, :only => [:edit, :update, :destroy, :pause, :unpause]
+  before_filter :load_site_element, :only => [:show, :edit, :update, :destroy, :pause, :unpause]
 
   layout :determine_layout
+
+  def show
+    respond_to do |format|
+      format.json { render :json => @site_element, :serializer => SiteElementSerializer }
+    end
+  end
 
   def new
     @site_element = Bar.new
