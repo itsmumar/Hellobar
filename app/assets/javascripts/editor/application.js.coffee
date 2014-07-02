@@ -1,6 +1,9 @@
 #= require jquery
 #= require jquery_ujs
+
+#= require color_thief
 #= require jquery_dropper
+#= require jquery_minicolors
 
 #= require handlebars
 #= require ember

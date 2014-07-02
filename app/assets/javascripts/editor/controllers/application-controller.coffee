@@ -1,5 +1,21 @@
 HelloBar.ApplicationController = Ember.Controller.extend
   
+  #-----------  Step Tracking  -----------#
+
+  # Tracks global step tracking 
+  # (primarily observed by the step-navigation component)
+
+  prevRoute: null 
+  nextRoute: null
+  currentStep: false
+
+  #-----------  Color Palette  -----------#
+
+  # Generates color palette from screengrab
+  # (primarily observed by the color-picker component)
+
+  colorPalette: []
+
   #-----------  Modal Triggers  -----------#
 
   # Query params are managed by the controller (and no the router)
@@ -12,15 +28,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
   toggleModal: (->
     @toggleProperty('isModal')
   ).observes('modal')
-
-  #-----------  Step Tracking  -----------#
-
-  # Tracks global step tracking 
-  # (primarily observed by the step-navigation-component)
-
-  prevRoute: null 
-  nextRoute: null
-  currentStep: false
 
   #-----------  State Default & Actions  -----------#
 

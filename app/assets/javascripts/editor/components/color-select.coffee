@@ -26,7 +26,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
     }
   ).property('color')
 
-  #-----------  Initialize Dropper  -----------#
+  #-----------  Wrap Eye-Dropper  -----------#
 
   eyeDropper: ( () ->
     return $.fn.dropperredux({}) unless @get('isSelecting')
@@ -36,6 +36,21 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
       clickCallback: (color) =>
         @set('color', color.rgbhex)
   ).observes('isSelecting').on('didInsertElement')
+
+  #-----------  Wrap Color Gradient  -----------#
+
+  miniColors: ( () ->
+    @$('.gradient-block').minicolors
+      inline: true
+      theme: 'default'
+      defaultValue: @get('color')
+      change: (hex, opacity) =>
+        @set('color', hex.substring(1))
+  ).on('didInsertElement')
+
+  miniColorsListener: ( () ->
+    @$('.gradient-block').minicolors('value', @get('color'))
+  ).observes('color')
 
   #-----------  Push 'Recent' Changes to Controller  -----------#
 

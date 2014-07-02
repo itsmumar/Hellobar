@@ -107,7 +107,7 @@
       margin: 0.75em auto
       border: 1px solid $gray
       background-color: $white
-      @include transition(0.05s ease-in-out)
+      @include transition(0.15s ease-in-out)
       @extend .select-wrapper
 
       .color-select-block
@@ -135,7 +135,7 @@
           @include clearfix()
 
           ul
-            width: 72%
+            width: 69%
             margin-bottom: 0.5em
             cursor: url('eyedropper.svg') 0 18, auto
             @include justify-content(space-between)
@@ -152,7 +152,7 @@
               @include inline-block()
 
           small
-            width: 22%
+            width: 25%
             float: right
             color: $gray
             line-height: 1.67em
@@ -162,17 +162,20 @@
           @include clearfix()
 
           .gradient-block
-            width: 72%
+            width: 69%
             float: left
             height: 9.67em
             border: 1px solid $gray
 
+          .minicolors
+            float: left
+
           .eyedrop-button
-            width: 22%
+            width: 25%
             float: right
             color: $grayDark
-            margin-bottom: 1em
             text-align: center
+            margin-bottom: 2.65em
             border-radius: $radius
             border: 1px solid $grayLight
             @include inline-block()
@@ -185,7 +188,7 @@
               border-color: $gray
 
           .rgb-block
-            width: 22%
+            width: 25%
             float: right
             margin-top: 0.25em
             padding: 0.25em 0.5em
@@ -199,7 +202,7 @@
 
       .color-select-wrapper
         z-index: 900
-        max-height: 20em
+        max-height: 21em
         box-shadow: $shadowSubtle
     
         &:before
