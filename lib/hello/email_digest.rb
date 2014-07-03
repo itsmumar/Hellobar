@@ -39,7 +39,7 @@ module Hello::EmailDigest
 
       {:social => /^social/, :email => /^email/, :traffic => /^traffic/, :total => /./}.each do |key, bar_type_pattern|
         bar_type_data = bar_data.select do |bd|
-          bar = Bar.find_by_id(bd.bar_id)
+          bar = SiteElement.find_by_id(bd.bar_id)
           bar && bar.bar_type =~ bar_type_pattern
         end
 
@@ -50,18 +50,18 @@ module Hello::EmailDigest
     end
 
     def create_bar_cta(site, metrics, url)
-      bars = site.bars
+      site_elements = site.site_elements
 
-      if !bars.any?{|b| b.bar_type =~ /^social/}
+      if !site_elements.any?{|b| b.bar_type =~ /^social/}
         "Use different types of bars to help you reach other goals, like gaining followers on Twitter. <a href='#{url}'>Start testing social bars now</a>."
-      elsif !bars.any?{|b| b.bar_type =~ /^traffic/}
+      elsif !site_elements.any?{|b| b.bar_type =~ /^traffic/}
         "Use different types of bars to help you reach other goals, like driving traffic to important pages. <a href='#{url}'>Start testing traffic bars now</a>."
-      elsif !bars.any?{|b| b.bar_type =~ /^email/}
+      elsif !site_elements.any?{|b| b.bar_type =~ /^email/}
         "Use different types of bars to help you reach other goals, like collecting email addresses. <a href='#{url}'>Start testing email bars now</a>."
       else
         bar_types = {:social => /^social/, :email => /^email/, :traffic => /^traffic/}
         worst_type = bar_types.keys.sort_by{|a| metrics[a][:conversion][:n]}.first
-        worst_bars = bars.select{|b| b.bar_type =~ bar_types[worst_type]}
+        worst_bars = site_elements.select{|b| b.bar_type =~ bar_types[worst_type]}
         conversion_noun = bar_activity_units(worst_bars, :plural => true)
 
         "Your #{worst_type} bars have the lowest conversion rate. Try creating a variation on your existing #{worst_type} bars to see if you can get more #{conversion_noun}. <a href='#{url}'>Start testing more #{worst_type} bars now</a>."

@@ -171,19 +171,19 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
   it 'creates a new bar for every legacy bar that exists' do
     expect {
       LegacyMigrator.migrate_goals_to_rules
-    }.to change(Bar, :count).by(1)
+    }.to change(SiteElement, :count).by(1)
   end
 
   it 'associates all newly created bars with the new rule set' do
     LegacyMigrator.migrate_goals_to_rules
 
-    Rule.find(legacy_goal.id).bars.count.should == 1
+    Rule.find(legacy_goal.id).site_elements.count.should == 1
   end
 
   it 'standardizes the legacy goal type' do
     LegacyMigrator.migrate_goals_to_rules
 
-    bar = Rule.find(legacy_goal.id).bars.first
+    bar = Rule.find(legacy_goal.id).site_elements.first
 
     bar.bar_type.should == 'traffic'
   end
@@ -194,7 +194,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
 
     LegacyMigrator.migrate_goals_to_rules
 
-    bar = Rule.find(legacy_goal.id).bars.first
+    bar = Rule.find(legacy_goal.id).site_elements.first
 
     bar.bar_type.should == 'social/tweet_on_twitter'
   end
@@ -204,7 +204,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
 
     LegacyMigrator.migrate_goals_to_rules
 
-    bar = Rule.find(legacy_goal.id).bars.first
+    bar = Rule.find(legacy_goal.id).site_elements.first
 
     bar.settings.should == { 'buffer_message' => 'such buffer. wow.' }
   end

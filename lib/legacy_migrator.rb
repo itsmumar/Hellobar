@@ -53,8 +53,8 @@ class LegacyMigrator
             rule.conditions << new_condition
           end
 
-          create_bars(legacy_goal.bars, legacy_goal).each do |new_bar|
-            rule.bars << new_bar
+          create_site_elements(legacy_goal.bars, legacy_goal).each do |new_bar|
+            rule.site_elements << new_bar
           end
 
           count += 1
@@ -134,12 +134,12 @@ class LegacyMigrator
       new_conditions
     end
 
-    def create_bars(legacy_bars, legacy_goal)
+    def create_site_elements(legacy_bars, legacy_goal)
       legacy_bars.map do |legacy_bar|
         setting_keys = ["buffer_message", "buffer_url", "collect_names", "link_url", "message_to_tweet", "pinterest_description", "pinterest_full_name", "pinterest_image_url", "pinterest_url", "pinterest_user_url", "twitter_handle", "url", "url_to_like", "url_to_plus_one", "url_to_share", "url_to_tweet", "use_location_for_url"]
         settings_to_migrate = legacy_goal.data_json.select{|key, value| setting_keys.include?(key) && value.present? }
 
-        ::Bar.create! id: legacy_bar.legacy_bar_id || legacy_bar.id,
+        ::SiteElement.create! id: legacy_bar.legacy_bar_id || legacy_bar.id,
                       paused: !legacy_bar.active?,
                       bar_type: determine_bar_type(legacy_goal),
                       created_at: legacy_bar.created_at,

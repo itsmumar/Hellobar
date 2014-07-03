@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ScriptGenerator, '#render' do
-  let(:site) { double 'site', id: '1337', rules: [], bars: double('bars', active: []) }
+  let(:site) { double 'site', id: '1337', rules: [], site_elements: double('site_elements', active: []) }
   let(:generator) { ScriptGenerator.new(site) }
 
   it 'renders the site it variable' do
@@ -59,7 +59,7 @@ describe ScriptGenerator, '#render' do
 
     it 'renders only the setTemplate definition and 1 call per bar type' do
       bar = double 'bar', bar_type: 'traffic'
-      site.stub bars: double('bars', active: [bar, bar])
+      site.stub site_elements: double('site_elements', active: [bar, bar])
 
       generator = ScriptGenerator.new site
 
@@ -69,7 +69,7 @@ describe ScriptGenerator, '#render' do
     it 'renders the setTemplate definition and 1 call per bar type for multiple types' do
       traffic_bar = double 'bar', bar_type: 'traffic'
       email_bar = double 'bar', bar_type: 'email'
-      site.stub bars: double('bars', active: [traffic_bar, email_bar])
+      site.stub site_elements: double('site_elements', active: [traffic_bar, email_bar])
 
       generator = ScriptGenerator.new site
 
@@ -134,7 +134,7 @@ describe ScriptGenerator, '#render' do
     it 'adds an exlusion constraint for all blacklisted URLs' do
       rule = Rule.new
       conditions = [UrlCondition.new(value: '/signup', operand: Condition::OPERANDS[:excludes] )]
-      rule.stub bars: double('bars', active: []), attributes: {}, conditions: conditions
+      rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
       expected_string = "(!HB.umatch(\"/signup\", document.location))"
@@ -145,7 +145,7 @@ describe ScriptGenerator, '#render' do
     it 'converts excluded urls to paths' do
       rule = Rule.new
       conditions = [UrlCondition.new(value: 'http://soamazing.com/signup', operand: Condition::OPERANDS[:excludes])]
-      rule.stub bars: double('bars', active: []), attributes: {}, conditions: conditions
+      rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
       expected_string = "(!HB.umatch(\"/signup\", document.location))"
@@ -185,13 +185,13 @@ describe ScriptGenerator, '#render' do
 end
 
 describe ScriptGenerator, '#rules' do
-  let(:site) { double 'site', id: '1337', rules: [], bars: [] }
+  let(:site) { double 'site', id: '1337', rules: [], site_elements: [] }
   let(:generator) { ScriptGenerator.new(site) }
 
   it 'returns the proper array of hashes for a sites rules' do
     rule = Rule.new id: 1
     site.stub rules: [rule]
-    generator.stub bars_for_rule: []
+    generator.stub site_elements_for_rule: []
 
     expected_hash = {
       bar_json: [].to_json,
@@ -205,11 +205,11 @@ describe ScriptGenerator, '#rules' do
 
   it 'returns the proper hash when a single bar_id is passed as an option' do
     rule = Rule.create
-    bar = Bar.create bar_type: 'email', rule: rule
+    bar = SiteElement.create bar_type: 'email', rule: rule
     options = { bar_id: bar.id }
 
     generator = ScriptGenerator.new(site, options)
-    generator.stub bar_settings: {id: bar.id, template_name: bar.bar_type}
+    generator.stub site_element_settings: {id: bar.id, template_name: bar.bar_type}
 
     site.stub rules: [rule]
 
@@ -223,12 +223,12 @@ describe ScriptGenerator, '#rules' do
     generator.rules.should == [expected_hash]
   end
 
-  it 'renders all bar json when the render_paused_bars is true' do
+  it 'renders all bar json when the render_paused_site_elements is true' do
     rule = Rule.create
-    bar = Bar.create bar_type: 'email', rule: rule, paused: true
-    options = { render_paused_bars: true }
+    bar = SiteElement.create bar_type: 'email', rule: rule, paused: true
+    options = { render_paused_site_elements: true }
     generator = ScriptGenerator.new(site, options)
-    generator.stub bar_settings: { id: bar.id, template_name: bar.bar_type, settings: { buffer_url: 'url' }}
+    generator.stub site_element_settings: { id: bar.id, template_name: bar.bar_type, settings: { buffer_url: 'url' }}
 
     site.stub rules: [rule]
 
@@ -244,10 +244,10 @@ describe ScriptGenerator, '#rules' do
 
   it 'renders only active bar json by default' do
     rule = Rule.create
-    paused = Bar.create! bar_type: 'email', rule: rule, paused: true
-    active_bar = Bar.create! bar_type: 'traffic', rule: rule, paused: false
+    paused = SiteElement.create! bar_type: 'email', rule: rule, paused: true
+    active_bar = SiteElement.create! bar_type: 'traffic', rule: rule, paused: false
     generator = ScriptGenerator.new(site)
-    generator.stub bar_settings: { id: active_bar.id, template_name: active_bar.bar_type }
+    generator.stub site_element_settings: { id: active_bar.id, template_name: active_bar.bar_type }
 
     site.stub rules: [rule]
 

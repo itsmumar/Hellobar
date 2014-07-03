@@ -7,16 +7,16 @@ class SiteElementsController < ApplicationController
 
   def show
     respond_to do |format|
-      format.json { render :json => @site_element, :serializer => SiteElementSerializer }
+      format.json { render :json => @site_element }
     end
   end
 
   def new
-    @site_element = Bar.new
+    @site_element = SiteElement.new
   end
 
   def create
-    @site_element = Bar.new(site_element_params)
+    @site_element = SiteElement.new(site_element_params)
 
     if @site_element.valid?
       @site_element.save!
@@ -70,7 +70,7 @@ class SiteElementsController < ApplicationController
   end
 
   def load_site_element
-    @site_element = @site.bars.find(params[:id])
+    @site_element = @site.site_elements.find(params[:id])
   end
 
   def site_element_params

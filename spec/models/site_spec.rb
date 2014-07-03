@@ -66,14 +66,14 @@ describe Site do
       script = @site.script_content(false)
 
       script.should =~ /HB_SITE_ID/
-      script.should include(@site.bars.first.id.to_s)
+      script.should include(@site.site_elements.first.id.to_s)
     end
 
     it "generates the compressed contents of the script for a site" do
       script = @site.script_content
 
       script.should =~ /HB_SITE_ID/
-      script.should include(@site.bars.first.id.to_s)
+      script.should include(@site.site_elements.first.id.to_s)
     end
   end
 
@@ -104,14 +104,14 @@ describe Site do
       @site.has_script_installed?.should be_true
     end
 
-    it "is false if no bars have views" do
-      @site.stub(:bars => [double("bar", :total_views => 0)])
+    it "is false if no site_elements have views" do
+      @site.stub(:site_elements => [double("bar", :total_views => 0)])
       @site.has_script_installed?.should be_false
       @site.script_installed_at.should be_nil
     end
 
-    it "is true and sets script_installed_at if at least one bar has been viewed" do
-      @site.stub(:bars => [double("bar", :total_views => 1)])
+    it "is true and sets script_installed_at if at least one site_element has been viewed" do
+      @site.stub(:site_elements => [double("bar", :total_views => 1)])
       @site.has_script_installed?.should be_true
       @site.script_installed_at.should_not be_nil
     end

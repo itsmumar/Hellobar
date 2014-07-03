@@ -42,7 +42,7 @@ class ScriptGenerator < Mustache
   end
 
   def templates
-    site.bars.active.group_by(&:bar_type).map do |type, bars|
+    site.site_elements.active.group_by(&:bar_type).map do |type, site_elements|
       {
         name: type,
         markup: content_template(type)
@@ -58,7 +58,7 @@ private
 
   def hash_for_rule(rule)
     {
-      bar_json: bars_for_rule(rule).to_json,
+      bar_json: site_elements_for_rule(rule).to_json,
       priority: 1, # seems to be hardcoded as 1 throughout WWW
       metadata: metadata(rule).to_json
     }.merge(eligibility_rules(rule))
@@ -136,14 +136,14 @@ private
     @content_footer ||= File.read("#{Rails.root}/lib/script_generator/bar_footer.html")
   end
 
-  def bar_settings(bar)
+  def site_element_settings(site_element)
     settings = %w{ closable hide_destination open_in_new_window pushes_page_down remains_at_top show_border hide_after show_wait wiggle_wait bar_color border_color button_color font link_color link_style link_text message size tab_side target text_color texture thank_you_text }
 
-    bar.attributes.select{|key,val| settings.include?(key) }.merge({
-      id: bar.id,
-      target: bar.target_segment,
-      template_name: bar.bar_type,
-      settings: bar.settings
+    site_element.attributes.select{|key,val| settings.include?(key) }.merge({
+      id: site_element.id,
+      target: site_element.target_segment,
+      template_name: site_element.bar_type,
+      settings: site_element.settings
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
@@ -153,18 +153,18 @@ private
     rule.attributes.select{|key, value| settings.include?(key) && value.present? }
   end
 
-  def bars_for_rule(rule)
-    bars = if options[:bar_id]
-      [rule.bars.find(options[:bar_id])]
+  def site_elements_for_rule(rule)
+    site_elements = if options[:bar_id]
+      [rule.site_elements.find(options[:bar_id])]
     else
-      if options[:render_paused_bars]
-        rule.bars
+      if options[:render_paused_site_elements]
+        rule.site_elements
       else
-        rule.bars.active
+        rule.site_elements.active
       end
     end
 
-    bars.map{|bar| bar_settings(bar) }
+    site_elements.map{|element| site_element_settings(element) }
   end
 
   def metadata(rule)

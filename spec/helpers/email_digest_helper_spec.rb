@@ -4,16 +4,16 @@ describe EmailDigestHelper do
   describe "bar_activity_units" do
     before(:each) do
       @bars = {
-        :traffic =>                 Bar.new(:bar_type => "traffic"),
-        :email =>                   Bar.new(:bar_type => "email"),
-        :tweet_on_twitter =>        Bar.new(:bar_type => "social/tweet_on_twitter"),
-        :follow_on_twitter =>       Bar.new(:bar_type => "social/follow_on_twitter"),
-        :like_on_facebook =>        Bar.new(:bar_type => "social/like_on_facebook"),
-        :share_on_linkedin =>       Bar.new(:bar_type => "social/share_on_linkedin"),
-        :plus_one_on_google_plus => Bar.new(:bar_type => "social/plus_one_on_google_plus"),
-        :pin_on_pinterest =>        Bar.new(:bar_type => "social/pin_on_pinterest"),
-        :follow_on_pinterest =>     Bar.new(:bar_type => "social/follow_on_pinterest"),
-        :share_on_buffer =>         Bar.new(:bar_type => "social/share_on_buffer")
+        :traffic =>                 SiteElement.new(:bar_type => "traffic"),
+        :email =>                   SiteElement.new(:bar_type => "email"),
+        :tweet_on_twitter =>        SiteElement.new(:bar_type => "social/tweet_on_twitter"),
+        :follow_on_twitter =>       SiteElement.new(:bar_type => "social/follow_on_twitter"),
+        :like_on_facebook =>        SiteElement.new(:bar_type => "social/like_on_facebook"),
+        :share_on_linkedin =>       SiteElement.new(:bar_type => "social/share_on_linkedin"),
+        :plus_one_on_google_plus => SiteElement.new(:bar_type => "social/plus_one_on_google_plus"),
+        :pin_on_pinterest =>        SiteElement.new(:bar_type => "social/pin_on_pinterest"),
+        :follow_on_pinterest =>     SiteElement.new(:bar_type => "social/follow_on_pinterest"),
+        :share_on_buffer =>         SiteElement.new(:bar_type => "social/share_on_buffer")
       }
     end
 
@@ -59,7 +59,7 @@ describe EmailDigestHelper do
     end
 
     it "consolidates multiple bar types into a unit that makes sense for all" do
-      other_traffic_bar = Bar.new(:bar_type => "traffic")
+      other_traffic_bar = SiteElement.new(:bar_type => "traffic")
       bar_activity_units([other_traffic_bar, @bars[:traffic]]).should == "click"
       bar_activity_units([other_traffic_bar, @bars[:traffic], @bars[:email]]).should == "action"
     end

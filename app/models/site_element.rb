@@ -1,4 +1,4 @@
-class Bar < ActiveRecord::Base
+class SiteElement < ActiveRecord::Base
   BAR_TYPES = %w{
     traffic
     email

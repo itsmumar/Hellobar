@@ -1,0 +1,13 @@
+div.site-element-row.clearfix style="border-left: 4px solid ##{site_element.bar_color}"
+  div.site-element-row-inner.clearfix
+    div.site-element-col.col-bar-message
+      = site_element.message
+    div.site-element-col.col-age
+      = site_element_age(site_element)
+    div.site-element-col.col-edit
+      = link_to "edit", edit_site_site_element_path(site_element, :site_id => @site)
+    div.site-element-col.col-pause
+      - if site_element.paused?
+        = link_to "unpause", site_unpause_site_element_path(site_element, :site_id => @site), :method => :put
+      - else
+        = link_to "pause", site_pause_site_element_path(site_element, :site_id => @site), :method => :put

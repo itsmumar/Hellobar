@@ -2,7 +2,7 @@ class Site < ActiveRecord::Base
   include GuaranteedQueue::Delay
 
   has_many :rules
-  has_many :bars, through: :rules
+  has_many :site_elements, through: :rules
   has_many :site_memberships, dependent: :destroy
   has_many :users, through: :site_memberships
 
@@ -21,7 +21,7 @@ class Site < ActiveRecord::Base
   end
 
   def has_script_installed?
-    if script_installed_at.nil? && bars.any?{|b| b.total_views > 0}
+    if script_installed_at.nil? && site_elements.any?{|b| b.total_views > 0}
       update_attribute(:script_installed_at, Time.current)
       InternalEvent.create(:timestamp => script_installed_at.to_i, :target_type => "user", :target_id => owner.try(:id), :name => "Received Data")
     end

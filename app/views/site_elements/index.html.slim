@@ -3,9 +3,9 @@ h1= display_url_for_site(@site)
 - @site.rules.each do |rule|
   h3= "Rule set: #{rule.name.blank? ? "(no name)" : rule.name}"
 
-  - if rule.bars.empty?
-    p= "(no bars)"
+  - if rule.site_elements.empty?
+    p= "(no site elements)"
 
   - else
-    - rule.bars.each do |bar|
-      = render "site_elements/bar", {:bar => bar}
+    - rule.site_elements.each do |site_element|
+      = render "site_elements/site_element", {:site_element => site_element}
