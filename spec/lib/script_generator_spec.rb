@@ -58,7 +58,7 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'renders only the setTemplate definition and 1 call per bar type' do
-      bar = double 'bar', bar_type: 'traffic'
+      bar = double 'bar', element_subtype: 'traffic'
       site.stub site_elements: double('site_elements', active: [bar, bar])
 
       generator = ScriptGenerator.new site
@@ -67,8 +67,8 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'renders the setTemplate definition and 1 call per bar type for multiple types' do
-      traffic_bar = double 'bar', bar_type: 'traffic'
-      email_bar = double 'bar', bar_type: 'email'
+      traffic_bar = double 'bar', element_subtype: 'traffic'
+      email_bar = double 'bar', element_subtype: 'email'
       site.stub site_elements: double('site_elements', active: [traffic_bar, email_bar])
 
       generator = ScriptGenerator.new site
@@ -205,16 +205,16 @@ describe ScriptGenerator, '#rules' do
 
   it 'returns the proper hash when a single bar_id is passed as an option' do
     rule = Rule.create
-    bar = SiteElement.create bar_type: 'email', rule: rule
+    bar = SiteElement.create element_subtype: 'email', rule: rule
     options = { bar_id: bar.id }
 
     generator = ScriptGenerator.new(site, options)
-    generator.stub site_element_settings: {id: bar.id, template_name: bar.bar_type}
+    generator.stub site_element_settings: {id: bar.id, template_name: bar.element_subtype}
 
     site.stub rules: [rule]
 
     expected_hash = {
-      bar_json: [{ id: bar.id, template_name: bar.bar_type }].to_json,
+      bar_json: [{ id: bar.id, template_name: bar.element_subtype }].to_json,
       priority: 1,
       metadata: { "id" => rule.id }.to_json,
       rule_eligibility: 'return true;}'
@@ -225,15 +225,15 @@ describe ScriptGenerator, '#rules' do
 
   it 'renders all bar json when the render_paused_site_elements is true' do
     rule = Rule.create
-    bar = SiteElement.create bar_type: 'email', rule: rule, paused: true
+    bar = SiteElement.create element_subtype: 'email', rule: rule, paused: true
     options = { render_paused_site_elements: true }
     generator = ScriptGenerator.new(site, options)
-    generator.stub site_element_settings: { id: bar.id, template_name: bar.bar_type, settings: { buffer_url: 'url' }}
+    generator.stub site_element_settings: { id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' }}
 
     site.stub rules: [rule]
 
     expected_hash = {
-      bar_json: [{ id: bar.id, template_name: bar.bar_type, settings: { buffer_url: 'url' }}].to_json,
+      bar_json: [{ id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' }}].to_json,
       priority: 1,
       metadata: { "id" => rule.id }.to_json,
       rule_eligibility: 'return true;}'
@@ -244,15 +244,15 @@ describe ScriptGenerator, '#rules' do
 
   it 'renders only active bar json by default' do
     rule = Rule.create
-    paused = SiteElement.create! bar_type: 'email', rule: rule, paused: true
-    active_bar = SiteElement.create! bar_type: 'traffic', rule: rule, paused: false
+    paused = SiteElement.create! element_subtype: 'email', rule: rule, paused: true
+    active_bar = SiteElement.create! element_subtype: 'traffic', rule: rule, paused: false
     generator = ScriptGenerator.new(site)
-    generator.stub site_element_settings: { id: active_bar.id, template_name: active_bar.bar_type }
+    generator.stub site_element_settings: { id: active_bar.id, template_name: active_bar.element_subtype }
 
     site.stub rules: [rule]
 
     expected_hash = {
-      bar_json: [{ id: active_bar.id, template_name: active_bar.bar_type }].to_json,
+      bar_json: [{ id: active_bar.id, template_name: active_bar.element_subtype }].to_json,
       priority: 1,
       metadata: { "id" => rule.id }.to_json,
       rule_eligibility: 'return true;}'

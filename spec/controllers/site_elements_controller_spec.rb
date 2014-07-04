@@ -14,7 +14,7 @@ describe SiteElementsController do
 
       json["site_element"]["id"].should == element.id
       json["site_element"]["message"].should == element.message
-      json["site_element"]["bar_color"].should == element.bar_color
+      json["site_element"]["background_color"].should == element.background_color
     end
   end
 end

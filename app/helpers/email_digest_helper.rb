@@ -1,7 +1,7 @@
 module EmailDigestHelper
-  def bar_activity_units(bars, opts = {})
-    units = [*bars].map do |bar|
-      case bar.bar_type
+  def element_activity_units(elements, opts = {})
+    units = [*elements].map do |element|
+      case element.element_subtype
       when "traffic"
         {:unit => "click"}
       when "email"

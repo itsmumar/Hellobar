@@ -42,7 +42,7 @@ class ScriptGenerator < Mustache
   end
 
   def templates
-    site.site_elements.active.group_by(&:bar_type).map do |type, site_elements|
+    site.site_elements.active.group_by(&:element_subtype).map do |type, site_elements|
       {
         name: type,
         markup: content_template(type)
@@ -116,9 +116,9 @@ private
     url
   end
 
-  def content_template(bar_type)
+  def content_template(element_subtype)
     ActiveSupport.escape_html_entities_in_json = false
-    content = (content_header + content_markup(bar_type) + content_footer).to_json
+    content = (content_header + content_markup(element_subtype) + content_footer).to_json
     ActiveSupport.escape_html_entities_in_json = true
 
     content
@@ -128,8 +128,8 @@ private
     @content_header ||= File.read("#{Rails.root}/lib/script_generator/bar_header.html")
   end
 
-  def content_markup(bar_type)
-    File.read("#{Rails.root}/lib/script_generator/bar_#{bar_type.gsub("/", "_").underscore}.html")
+  def content_markup(element_subtype)
+    File.read("#{Rails.root}/lib/script_generator/bar_#{element_subtype.gsub("/", "_").underscore}.html")
   end
 
   def content_footer
@@ -137,12 +137,12 @@ private
   end
 
   def site_element_settings(site_element)
-    settings = %w{ closable hide_destination open_in_new_window pushes_page_down remains_at_top show_border hide_after show_wait wiggle_wait bar_color border_color button_color font link_color link_style link_text message size tab_side target text_color texture thank_you_text }
+    settings = %w{ closable hide_destination open_in_new_window pushes_page_down remains_at_top show_border hide_after show_wait wiggle_wait background_color border_color button_color font link_color link_style link_text message size tab_side target text_color texture thank_you_text }
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       id: site_element.id,
       target: site_element.target_segment,
-      template_name: site_element.bar_type,
+      template_name: site_element.element_subtype,
       settings: site_element.settings
     }).select{|key, value| !value.nil? || !value == '' }
   end

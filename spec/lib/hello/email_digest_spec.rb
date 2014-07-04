@@ -169,8 +169,8 @@ describe Hello::EmailDigest do
 
     it "suggests creation of a social bar if there aren't any" do
       @site.rules.first.site_elements = [
-        SiteElement.new.tap{|b| b.bar_type = "traffic"},
-        SiteElement.new.tap{|b| b.bar_type = "email"}
+        SiteElement.new.tap{|b| b.element_subtype = "traffic"},
+        SiteElement.new.tap{|b| b.element_subtype = "email"}
       ]
 
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /gaining followers/
@@ -178,8 +178,8 @@ describe Hello::EmailDigest do
 
     it "suggests creation of an email bar if there aren't any" do
       @site.rules.first.site_elements = [
-        SiteElement.new.tap{|b| b.bar_type = "traffic"},
-        SiteElement.new.tap{|b| b.bar_type = "social/tweet_on_twitter"}
+        SiteElement.new.tap{|b| b.element_subtype = "traffic"},
+        SiteElement.new.tap{|b| b.element_subtype = "social/tweet_on_twitter"}
       ]
 
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /collecting email/
@@ -187,8 +187,8 @@ describe Hello::EmailDigest do
 
     it "suggests creation of a traffic bar if there aren't any" do
       @site.rules.first.site_elements = [
-        SiteElement.new.tap{|b| b.bar_type = "social/tweet_on_twitter"},
-        SiteElement.new.tap{|b| b.bar_type = "email"}
+        SiteElement.new.tap{|b| b.element_subtype = "social/tweet_on_twitter"},
+        SiteElement.new.tap{|b| b.element_subtype = "email"}
       ]
 
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /driving traffic/
@@ -196,9 +196,9 @@ describe Hello::EmailDigest do
 
     it "suggests creation of a second bar of the worst-performing type, if at least one of each bar already exists" do
       @site.rules.first.site_elements = [
-        SiteElement.new.tap{|b| b.bar_type = "social/follow_on_twitter"},
-        SiteElement.new.tap{|b| b.bar_type = "email"},
-        SiteElement.new.tap{|b| b.bar_type = "traffic"}
+        SiteElement.new.tap{|b| b.element_subtype = "social/follow_on_twitter"},
+        SiteElement.new.tap{|b| b.element_subtype = "email"},
+        SiteElement.new.tap{|b| b.element_subtype = "traffic"}
       ]
 
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /Start testing more social bars/
@@ -206,9 +206,9 @@ describe Hello::EmailDigest do
 
     it "uses dynamic bar units in 'worst-performing' CTA" do
       @site.rules.first.site_elements = [
-        SiteElement.new.tap{|b| b.bar_type = "social/follow_on_twitter"},
-        SiteElement.new.tap{|b| b.bar_type = "email"},
-        SiteElement.new.tap{|b| b.bar_type = "traffic"}
+        SiteElement.new.tap{|b| b.element_subtype = "social/follow_on_twitter"},
+        SiteElement.new.tap{|b| b.element_subtype = "email"},
+        SiteElement.new.tap{|b| b.element_subtype = "traffic"}
       ]
 
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /get more followers/

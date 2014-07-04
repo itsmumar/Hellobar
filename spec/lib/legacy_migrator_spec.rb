@@ -185,7 +185,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
 
     bar = Rule.find(legacy_goal.id).site_elements.first
 
-    bar.bar_type.should == 'traffic'
+    bar.element_subtype.should == 'traffic'
   end
 
   it 'standardizes the legacy goal type for social bars' do
@@ -196,7 +196,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
 
     bar = Rule.find(legacy_goal.id).site_elements.first
 
-    bar.bar_type.should == 'social/tweet_on_twitter'
+    bar.element_subtype.should == 'social/tweet_on_twitter'
   end
 
   it 'copies over legacy goal social settings to bar' do

@@ -1,9 +1,9 @@
 zombo_traffic:
   rule: zombo
-  bar_type: traffic
+  element_subtype: traffic
 zombo_email:
   rule: zombo
-  bar_type: email
+  element_subtype: email
 zombo_twitter:
   rule: zombo
-  bar_type: social/tweet_on_twitter
+  element_subtype: social/tweet_on_twitter

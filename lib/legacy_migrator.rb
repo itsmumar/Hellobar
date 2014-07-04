@@ -141,7 +141,7 @@ class LegacyMigrator
 
         ::SiteElement.create! id: legacy_bar.legacy_bar_id || legacy_bar.id,
                       paused: !legacy_bar.active?,
-                      bar_type: determine_bar_type(legacy_goal),
+                      element_subtype: determine_element_subtype(legacy_goal),
                       created_at: legacy_bar.created_at,
                       updated_at: legacy_bar.updated_at,
                       target_segment: legacy_bar.target_segment,
@@ -155,7 +155,7 @@ class LegacyMigrator
                       hide_after: legacy_bar.settings_json['hide_after'],
                       show_wait: legacy_bar.settings_json['show_wait'],
                       wiggle_wait: legacy_bar.settings_json['wiggle_wait'],
-                      bar_color: legacy_bar.settings_json['bar_color'],
+                      background_color: legacy_bar.settings_json['bar_color'],
                       border_color: legacy_bar.settings_json['border_color'],
                       button_color: legacy_bar.settings_json['button_color'],
                       font: legacy_bar.settings_json['font'],
@@ -173,7 +173,7 @@ class LegacyMigrator
       end
     end
 
-    def determine_bar_type(legacy_goal)
+    def determine_element_subtype(legacy_goal)
       case legacy_goal.type
       when "Goals::DirectTraffic"
         "traffic"

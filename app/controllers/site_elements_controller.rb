@@ -74,6 +74,6 @@ class SiteElementsController < ApplicationController
   end
 
   def site_element_params
-    params.require(:site_element).permit(:rule_id, :bar_type, :message)
+    params.require(:site_element).permit(:rule_id, :element_subtype, :message)
   end
 end

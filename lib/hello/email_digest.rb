@@ -37,13 +37,13 @@ module Hello::EmailDigest
       bar_data = Hello::BarData.get_over_time_data(site.id, 14.days.ago.strftime("%Y%m%d").to_i, 1.day.ago.strftime("%Y%m%d").to_i)
       metrics = {}
 
-      {:social => /^social/, :email => /^email/, :traffic => /^traffic/, :total => /./}.each do |key, bar_type_pattern|
-        bar_type_data = bar_data.select do |bd|
+      {:social => /^social/, :email => /^email/, :traffic => /^traffic/, :total => /./}.each do |key, element_subtype_pattern|
+        element_subtype_data = bar_data.select do |bd|
           bar = SiteElement.find_by_id(bd.bar_id)
-          bar && bar.bar_type =~ bar_type_pattern
+          bar && bar.element_subtype =~ element_subtype_pattern
         end
 
-        metrics[key] = bar_metrics_for_site(site, bar_type_data)
+        metrics[key] = bar_metrics_for_site(site, element_subtype_data)
       end
 
       return metrics
@@ -52,17 +52,17 @@ module Hello::EmailDigest
     def create_bar_cta(site, metrics, url)
       site_elements = site.site_elements
 
-      if !site_elements.any?{|b| b.bar_type =~ /^social/}
+      if !site_elements.any?{|b| b.element_subtype =~ /^social/}
         "Use different types of bars to help you reach other goals, like gaining followers on Twitter. <a href='#{url}'>Start testing social bars now</a>."
-      elsif !site_elements.any?{|b| b.bar_type =~ /^traffic/}
+      elsif !site_elements.any?{|b| b.element_subtype =~ /^traffic/}
         "Use different types of bars to help you reach other goals, like driving traffic to important pages. <a href='#{url}'>Start testing traffic bars now</a>."
-      elsif !site_elements.any?{|b| b.bar_type =~ /^email/}
+      elsif !site_elements.any?{|b| b.element_subtype =~ /^email/}
         "Use different types of bars to help you reach other goals, like collecting email addresses. <a href='#{url}'>Start testing email bars now</a>."
       else
-        bar_types = {:social => /^social/, :email => /^email/, :traffic => /^traffic/}
-        worst_type = bar_types.keys.sort_by{|a| metrics[a][:conversion][:n]}.first
-        worst_bars = site_elements.select{|b| b.bar_type =~ bar_types[worst_type]}
-        conversion_noun = bar_activity_units(worst_bars, :plural => true)
+        element_subtypes = {:social => /^social/, :email => /^email/, :traffic => /^traffic/}
+        worst_type = element_subtypes.keys.sort_by{|a| metrics[a][:conversion][:n]}.first
+        worst_bars = site_elements.select{|b| b.element_subtype =~ element_subtypes[worst_type]}
+        conversion_noun = element_activity_units(worst_bars, :plural => true)
 
         "Your #{worst_type} bars have the lowest conversion rate. Try creating a variation on your existing #{worst_type} bars to see if you can get more #{conversion_noun}. <a href='#{url}'>Start testing more #{worst_type} bars now</a>."
       end
