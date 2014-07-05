@@ -36,6 +36,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   isMobile: false
   isFullscreen: false
+  saveSubmitted: false
 
   actions:
 
@@ -52,3 +53,16 @@ HelloBar.ApplicationController = Ember.Controller.extend
       @set('modal', null)
       false
 
+    saveSiteElement: ->
+      controller = this
+      controller.toggleProperty('saveSubmitted')
+
+      Ember.$.ajax
+        type: "PUT"
+        url: "/sites/#{window.siteID}/site_elements/#{window.barID}.json"
+        contentType: "application/json"
+        data: JSON.stringify(@get("model"))
+        success: ->
+          window.location = "/sites/#{window.siteID}/site_elements"
+        error: ->
+          controller.toggleProperty('saveSubmitted')
