@@ -1,8 +1,8 @@
 <label>What do you want to collect from visitors?</label>
 <div class="select-wrapper">
   {{view Ember.Select
-    content=content.collectionOptions
-    selection=content.collectionSelection
+    content=collectionOptions
+    selection=model.collection_selection
     optionValuePath='content.id'
     optionLabelPath='content.text'
   }}
@@ -11,8 +11,8 @@
 <label>Where do you want the emails stored?</label>
 <div class="select-wrapper">
   {{view Ember.Select
-    content=content.storageOptions
-    selection=content.storageSelection
+    content=storageOptions
+    selection=model.storage_selection
     optionValuePath='content.id'
     optionLabelPath='content.text'
   }}
