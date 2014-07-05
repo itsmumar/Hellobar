@@ -1,8 +1,8 @@
 <label>Theme</label>
 <div class="select-wrapper">
   {{view Ember.Select
-    content=content.themeOptions
-    selection=content.popupThemeSelection
+    content=themeOptions
+    selection=model.popupThemeSelection
     optionValuePath='content.id'
     optionLabelPath='content.text'
   }}
@@ -10,18 +10,18 @@
 {{!-- ^ will likely need to be a component... --}}
 
 <label>Hello Bar branding
-  {{toggle-switch switch=content.popupIsBranded}}
+  {{toggle-switch switch=model.popupIsBranded}}
 </label>
 
 <label>Animations
-  {{toggle-switch switch=content.popupIsAnimated}}
+  {{toggle-switch switch=model.popupIsAnimated}}
 </label>
 
 <label>Placement</label>
 <div class="select-wrapper">
   {{view Ember.Select
-    content=content.placementOptions
-    selection=content.popupPlacementSelection
+    content=placementOptions
+    selection=model.popupPlacementSelection
     optionValuePath='content.id'
     optionLabelPath='content.text'
   }}

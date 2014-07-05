@@ -1,28 +1,28 @@
 <label>Theme</label>
 {{view Ember.Select
-  content=content.themeOptions
-  selection=content.barThemeSelection
+  content=themeOptions
+  selection=model.barThemeSelection
   optionValuePath='content.id'
   optionLabelPath='content.text'
 }}
 {{!-- ^ will likely need to be a component... --}}
 
 <label>Hello Bar branding
-  {{toggle-switch switch=content.barIsBranded}}
+  {{toggle-switch switch=model.barIsBranded}}
 </label>
 
 <label>Animations
-  {{toggle-switch switch=content.barIsAnimated}}
+  {{toggle-switch switch=model.barIsAnimated}}
 </label>
 
 <label>Allow to hide bar
-  {{toggle-switch switch=content.barIsHidable}}
+  {{toggle-switch switch=model.barIsHidable}}
 </label>
 
 <label>Placement</label>
 {{view Ember.Select
-  content=content.placementOptions
-  selection=content.barPlacementSelection
+  content=placementOptions
+  selection=model.barPlacementSelection
   optionValuePath='content.id'
   optionLabelPath='content.text'
 }}
