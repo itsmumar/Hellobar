@@ -5,7 +5,10 @@ class SiteElementSerializer < ActiveModel::Serializer
     :element_subtype, :link_url,
 
     # text
-    :message, :link_text, :font
+    :message, :link_text, :font,
+
+    # colors
+    :background_color, :border_color, :button_color, :link_color, :text_color
 
   def link_url
     object.settings["url"]
