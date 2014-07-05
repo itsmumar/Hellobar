@@ -12,9 +12,9 @@ describe SiteElementsController do
 
       json = JSON.parse(response.body)
 
-      json["site_element"]["id"].should == element.id
-      json["site_element"]["message"].should == element.message
-      json["site_element"]["background_color"].should == element.background_color
+      json["id"].should == element.id
+      json["message"].should == element.message
+      json["background_color"].should == element.background_color
     end
   end
 end

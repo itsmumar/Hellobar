@@ -1,3 +1,9 @@
 class SiteElementSerializer < ActiveModel::Serializer
-  attributes :id, :message, :background_color
+  attributes :id,
+
+    # settings
+    :element_subtype,
+
+    # text
+    :message, :link_text, :font
 end
