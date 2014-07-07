@@ -1,0 +1,15 @@
+<%-
+unless current_user
+  @user = User.create!(email: "test@test.com", password: "asdfasdf", password_confirmation: "asdfasdf")
+  sign_in(@user)
+  @site = @user.sites.create(site: "www.asdf.com")
+  @rule = Rule.create
+  @site_element = @site.site_elements.create(element_subtype: 'email', rule: @rule)
+else
+  @site = current_user.sites.first
+  @site_element = @site.site_elements.first
+end
+
+%>
+<%= render template: "layouts/ember" %>
+<%= render file: "site_elements/edit" %>
