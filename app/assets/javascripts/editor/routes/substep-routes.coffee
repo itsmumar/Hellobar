@@ -3,9 +3,7 @@ HelloBar.SettingsStepRoute = Ember.Route.extend
   # Tells the sub-steps to use the model associated w/ it's parent step
 
   model: ->
-    @parentRoute = @routeName.split('.')[0]
-
-    @modelFor(@parentRoute)
+    @modelFor('application')
 
   # Sets suto-forwarding on the parent step upon selection
 
