@@ -12,9 +12,9 @@
 <div class="select-wrapper">
   {{view Ember.Select
     content=fontOptions
-    selection=model.font
-    optionValuePath='content.id'
-    optionLabelPath='content.text'
+    value=model.font
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
   }}
 </div>
 {{!-- ^ will likely need to be a component... --}}
