@@ -1,12 +1,9 @@
 HelloBar.StepRoute = Ember.Route.extend
 
-  # Normally, you would set the model independantly on every route. 
-  # In this case, however, since the model names folow the convention
-  # of the step-route names, I'm obviscating it for all step routes
-  
+  # All step routes simply use the model loaded the the ApplicationRoute
+
   model: ->
-    model = @routeName[0].toUpperCase() + @routeName.slice(1) + "Model"
-    HelloBar[model]
+    @modelFor("application")
 
   # Updates the current step in the application controller. Currently
   # being used to keep the step navigation component tracking correctly.

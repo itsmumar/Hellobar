@@ -6,9 +6,7 @@ class SiteElementsController < ApplicationController
   layout :determine_layout
 
   def show
-    respond_to do |format|
-      format.json { render :json => @site_element }
-    end
+    render :json => @site_element
   end
 
   def new
@@ -32,11 +30,9 @@ class SiteElementsController < ApplicationController
   def update
     if @site_element.update_attributes(site_element_params)
       @site.generate_script
-      flash[:success] = "Your bar was successfully updated."
-      redirect_to site_site_elements_path(:site_id => @site)
+      render :json => @site_element
     else
-      flash.now[:error] = "There was a problem updating your bar."
-      render :action => :edit
+      render :json => @site_element.errors, :status => :unprocessable_entity
     end
   end
 
@@ -74,6 +70,6 @@ class SiteElementsController < ApplicationController
   end
 
   def site_element_params
-    params.require(:site_element).permit(:rule_id, :element_subtype, :message)
+    params.require(:site_element).permit(:rule_id, :element_subtype, :message, :background_color, :border_color, :button_color, :font, :link_color, :link_text, :text_color)
   end
 end

@@ -1,5 +1,11 @@
 HelloBar.ColorsController = Ember.Controller.extend
 
+  themeOptions: [
+    {id: 1, text: 'Theme 1'}
+    {id: 2, text: 'Theme 2'}
+    {id: 3, text: 'Theme 3'}
+  ]
+
   #-----------  Step Settings  -----------#
 
   step: 3

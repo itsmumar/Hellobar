@@ -1,8 +1,8 @@
 <label>Would you like your visitors to..</label>
 <div class="select-wrapper">
   {{view Ember.Select
-    content=content.socialOptions
-    selection=content.socialSelection
+    content=socialOptions
+    selection=model.element_subtype
     optionValuePath='content.id'
     optionLabelPath='content.text'
   }}

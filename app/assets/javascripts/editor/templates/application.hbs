@@ -45,6 +45,12 @@
   <div class="step-wrapper">
     {{outlet}}
     {{step-navigation current=currentStep prev=prevRoute next=nextRoute}}
+
+    {{#if saveSubmitted}}
+      <a disabled class="button save-button">Saving</a>
+    {{else}}
+      <a class="button save-button" {{action "saveSiteElement"}}>Save</a>
+    {{/if}}
   </div>
 
   <div class="preview-wrapper">

@@ -36,12 +36,12 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   isMobile: false
   isFullscreen: false
+  saveSubmitted: false
 
   actions:
 
     toggleFullscreen: ->
       @toggleProperty('isFullscreen')
-      console.log 'full'
       false
 
     toggleMobile: ->
@@ -52,3 +52,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
       @set('modal', null)
       false
 
+    saveSiteElement: ->
+      @toggleProperty('saveSubmitted')
+      true

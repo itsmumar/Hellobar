@@ -1,22 +1,22 @@
 <div class="step-title">Colors</div>
 
 <label>Background</label>
-{{color-select color=content.backgroundColor siteColors=siteColors recentColors=recentColors}}
+{{color-select color=model.background_color siteColors=siteColors recentColors=recentColors}}
 
 <label>Text</label>
-{{color-select color=content.textColor siteColors=siteColors recentColors=recentColors}}
+{{color-select color=model.text_color siteColors=siteColors recentColors=recentColors}}
 
 <label>Button Text</label>
-{{color-select color=content.buttonTextColor siteColors=siteColors recentColors=recentColors}}
+{{color-select color=model.link_color siteColors=siteColors recentColors=recentColors}}
 
 <label>Button</label>
-{{color-select color=content.buttonColor siteColors=siteColors recentColors=recentColors}}
+{{color-select color=model.button_color siteColors=siteColors recentColors=recentColors}}
 
 <label>Theme</label>
 <div class="select-wrapper">
   {{view Ember.Select
-    content=content.themeOptions
-    selection=content.themeSelection
+    content=themeOptions
+    selection=model.theme_selection
     optionValuePath='content.id'
     optionLabelPath='content.text'
   }}

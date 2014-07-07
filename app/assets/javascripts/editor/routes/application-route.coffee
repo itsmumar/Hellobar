@@ -11,3 +11,14 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
     triggerModal: (modal) ->
       @transitionTo @controller.currentPath, {queryParams: {modal: modal}}
+
+    saveSiteElement: ->
+      Ember.$.ajax
+        type: "PUT"
+        url: "/sites/#{window.siteID}/site_elements/#{window.barID}.json"
+        contentType: "application/json"
+        data: JSON.stringify(@currentModel)
+        success: =>
+          window.location = "/sites/#{window.siteID}/site_elements"
+        error: =>
+          @controller.toggleProperty('saveSubmitted')
