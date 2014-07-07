@@ -42,7 +42,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
     toggleFullscreen: ->
       @toggleProperty('isFullscreen')
-      console.log 'full'
       false
 
     toggleMobile: ->
@@ -54,15 +53,5 @@ HelloBar.ApplicationController = Ember.Controller.extend
       false
 
     saveSiteElement: ->
-      controller = this
-      controller.toggleProperty('saveSubmitted')
-
-      Ember.$.ajax
-        type: "PUT"
-        url: "/sites/#{window.siteID}/site_elements/#{window.barID}.json"
-        contentType: "application/json"
-        data: JSON.stringify(@get("model"))
-        success: ->
-          window.location = "/sites/#{window.siteID}/site_elements"
-        error: ->
-          controller.toggleProperty('saveSubmitted')
+      @toggleProperty('saveSubmitted')
+      true
