@@ -10,7 +10,8 @@ HelloBar.SettingsStepRoute = Ember.Route.extend
   setupController: (controller, model) ->
     @_super(controller, model)
 
-    @controllerFor(@parentRoute).set('routeForwarding', @routeName)
+    parentRoute = @routeName.split('.')[0]
+    @controllerFor(parentRoute).set('routeForwarding', @routeName)
 
 
 #-----------  Setup Sub-Step Routes  -----------#
