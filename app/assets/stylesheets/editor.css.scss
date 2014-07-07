@@ -2,6 +2,7 @@
 
 @import 'bourbon';                  // Mixin Library (http://bourbon.io)
 @import 'normalize';                // CSS Normalization & Resets (http://necolas.github.io/normalize.css)
+@import 'jquery_minicolors';        // Color Picker (http://labs.abeautifulsite.net/jquery-minicolors/)
 
 //-----------  Application Settings  -----------//
 
@@ -19,9 +20,4 @@
 
 //-----------  Page Layouts  -----------//
 
-@import 'layouts/common';           // Common Layout Blocks
-@import 'layouts/document';         // Document Layouts
-
-@import 'layouts/global/*';         // Global Layouts
-@import 'layouts/pages/*';          // Static Pages (Home, About Us, etc)
-@import 'layouts/devise/*';         // User Account Pages
+@import 'layouts/editor/*';         // Editor Application

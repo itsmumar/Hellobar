@@ -1,26 +1,27 @@
-ul
-  = sidebar_link_wrapper(:summary) do
-    li class="#{sidebar_link_class(:summary)}"
-      span.glyphicon.glyphicon-list-alt
-      | Summary
-  = sidebar_link_wrapper(:manage) do
-    li class="#{sidebar_link_class(:manage)}"
-      span.glyphicon.glyphicon-align-justify
-      | Manage
-  = sidebar_link_wrapper(:improve) do
-    li class="#{sidebar_link_class(:improve)}"
-      span.glyphicon.glyphicon-signal
-      | Improve
-  = sidebar_link_wrapper(:contacts) do
-    li class="#{sidebar_link_class(:contacts)}"
-      span.glyphicon.glyphicon-envelope
-      | Contacts
-  = sidebar_link_wrapper(:feedback) do
-    li class="#{sidebar_link_class(:feedback)}"
-      span.glyphicon.glyphicon-comment
-      | Feedback
+nav
+  ul
+    = sidebar_link_wrapper(:summary) do
+      li class="#{sidebar_link_class(:summary)}"
+        span.glyphicon.glyphicon-list-alt
+        | Summary
+    = sidebar_link_wrapper(:manage) do
+      li class="#{sidebar_link_class(:manage)}"
+        span.glyphicon.glyphicon-align-justify
+        | Manage
+    = sidebar_link_wrapper(:improve) do
+      li class="#{sidebar_link_class(:improve)}"
+        span.glyphicon.glyphicon-signal
+        | Improve
+    = sidebar_link_wrapper(:contacts) do
+      li class="#{sidebar_link_class(:contacts)}"
+        span.glyphicon.glyphicon-envelope
+        | Contacts
+    = sidebar_link_wrapper(:feedback) do
+      li class="#{sidebar_link_class(:feedback)}"
+        span.glyphicon.glyphicon-comment
+        | Feedback
 
-hr
+  - if current_site
+    = button_to "Create New", new_site_site_element_path(:site_id => current_site), :class => "btn btn-border-primary btn-lg btn-block", :method => :get
 
-- if current_site
-  = button_to "Create New", new_site_site_element_path(:site_id => current_site), :class => "btn btn-border-primary btn-lg btn-block", :method => :get
+.
