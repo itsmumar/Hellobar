@@ -80,5 +80,6 @@ def stub_current_user(user)
 end
 
 Hellobar::Settings[:host] = "http://hellobar.com"
+Hellobar::Settings[:store_site_scripts_locally] = false
 
 Fog.mock!

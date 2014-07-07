@@ -30,7 +30,11 @@ class Site < ActiveRecord::Base
   end
 
   def script_url
-    "s3.amazonaws.com/#{Hellobar::Settings[:s3_bucket]}/#{script_name}"
+    if Hellobar::Settings[:store_site_scripts_locally]
+      "generated_scripts/#{script_name}"
+    else
+      "s3.amazonaws.com/#{Hellobar::Settings[:s3_bucket]}/#{script_name}"
+    end
   end
 
   def script_name
@@ -68,7 +72,12 @@ class Site < ActiveRecord::Base
 
     Timeout::timeout(20) do
       generated_script_content = options[:script_content] || script_content(true)
-      Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
+
+      if Hellobar::Settings[:store_site_scripts_locally]
+        File.open(File.join(Rails.root, "public/generated_scripts/", script_name), "w") { |f| f.puts(generated_script_content) }
+      else
+        Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
+      end
     end
 
     update_attribute(:script_generated_at, Time.now)

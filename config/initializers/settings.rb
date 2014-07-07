@@ -18,6 +18,7 @@ unless defined?(Hellobar::Settings)
     tracking_host
     env_name
     process_synchronously
+    store_site_scripts_locally
   )
 
   keys.each do |key|
