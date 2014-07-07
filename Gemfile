@@ -43,9 +43,9 @@ group :development, :test do
   gem "minitest"
   gem "pry"
   gem "rspec-rails", "~> 2.14"
-  gem "autotest-rails"
   gem "metric_fu"
   gem 'simplecov'
+  gem "teaspoon", "~> 0.8.0"
 end
 
 group :test do
