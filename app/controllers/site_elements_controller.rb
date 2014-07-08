@@ -70,6 +70,6 @@ class SiteElementsController < ApplicationController
   end
 
   def site_element_params
-    params.require(:site_element).permit(:rule_id, :element_subtype, :message, :background_color, :border_color, :button_color, :font, :link_color, :link_text, :text_color)
+    params.require(:site_element).permit(:rule_id, :element_subtype, :message, :background_color, :border_color, :button_color, :font, :link_color, :link_text, :text_color, {:settings => [:url]})
   end
 end
