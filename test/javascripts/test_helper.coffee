@@ -13,13 +13,12 @@
 Teaspoon.defer = true
 setTimeout(
   ->
-    Teaspoon.hook("fixtures")
-
     # Inject QUnit
     HelloBar.setupForTesting()
     HelloBar.injectTestHelpers()
     Teaspoon.execute()
-  , 1000
+  , 2000
+  # If you don't wait long enough, Ember won't be loaded up. 2 seconds minimum.
 )
 
 #

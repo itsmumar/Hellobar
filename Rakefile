@@ -7,6 +7,7 @@ Rails.application.load_tasks
 
 task :set_test_env do
   Rails.env = "test"
+  ENV['RAILS_ENV'] = "test"
 end
 
 Rake::Task[:teaspoon].clear_prerequisites
