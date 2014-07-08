@@ -20,8 +20,26 @@ describe Rule do
   end
 
   describe 'accepting nested condition attributes' do
-    it 'builds out a "before" date condition properly'
-    it 'builds out an "after" date condition properly'
+    fixtures :rules, :sites, :conditions
+
+    let(:rule) { rules(:zombo) }
+    let(:site) { site(:zombo) }
+
+    before do
+      expect(rule).to be_present
+      expect(rule.conditions).to be_empty
+    end
+
+    it 'builds out a "before" date condition properly' do
+      condition = conditions(:date_before)
+      expect(condition.value.class).to eq(Hash)
+    end
+
+    it 'builds out an "after" date condition properly' do
+      condition = conditions(:date_after)
+    end
     it 'builds out a "between" date condition properly'
+
+    it 'builds out a URL condition with a string'
   end
 end
