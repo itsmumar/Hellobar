@@ -6,6 +6,8 @@ end
 
 Teaspoon.configure do |config|
 
+  raise 'You need to run $ teaspoon or $ rake teaspoon in :test env.' unless Rails.env.test?
+
   # Determines where the Teaspoon routes will be mounted. Changing this to "/jasmine" would allow you to browse to
   # `http://localhost:3000/jasmine` to run your tests.
   #config.mount_at = "/teaspoon"
