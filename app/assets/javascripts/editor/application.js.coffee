@@ -15,6 +15,7 @@
 #= require_tree ./views
 #= require_tree ./helpers
 #= require_tree ./components
+#= require ./routes/step-routes
 #= require_tree ./routes
 #= require_tree ./templates
 
