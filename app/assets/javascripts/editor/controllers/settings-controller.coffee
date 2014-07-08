@@ -8,9 +8,6 @@ HelloBar.SettingsController = Ember.Controller.extend
 
   #-----------  Sub-Step Selection  -----------#
 
-  # Sets a property which tells the route to forward to a previously
-  # selected child route (ie. sub-step)
-
   setSubtype: (->
     switch @get("routeForwarding")
       when "settings.emails"
@@ -20,6 +17,9 @@ HelloBar.SettingsController = Ember.Controller.extend
       when "settings.social"
         @set("model.element_subtype", "social/tweet_on_twitter")
   ).observes('routeForwarding')
+
+  # Sets a property which tells the route to forward to a previously
+  # selected child route (ie. sub-step)
 
   routeForwarding: false
 
