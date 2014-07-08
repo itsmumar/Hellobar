@@ -1,7 +1,11 @@
 # Teaspoon includes some support files, but you can use anything from your own support path too.
 # require support/sinon
 # require support/your-support-file
-#
+
+#= require support/jquery
+#= require support/jquery.mockjax
+#= require support/ajax_mocks
+
 # PhantomJS (Teaspoons default driver) doesn't have support for Function.prototype.bind, which has caused confusion.
 # Use this polyfill to avoid the confusion.
 #= require support/bind-poly
@@ -11,11 +15,15 @@
 # Teaspoon.execute() after everything has been loaded. Simple example of a timeout:
 #
 Teaspoon.defer = true
-setTimeout (->
-  HelloBar.setupForTesting()
-  HelloBar.injectTestHelpers()
-  Teaspoon.execute()
-  ), 1000
+setTimeout(
+  ->
+    Teaspoon.hook("fixtures")
+    HelloBar.setupForTesting()
+    HelloBar.injectTestHelpers()
+    Teaspoon.execute()
+  , 1000
+)
+
 #
 # Matching files
 # By default Teaspoon will look for files that match _test.{js,js.coffee,.coffee}. Add a filename_test.js file in your
