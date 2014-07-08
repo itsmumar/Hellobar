@@ -4,6 +4,10 @@ unless defined?(Rails)
   require File.expand_path("../../config/environment", __FILE__)
 end
 
+unless Rails.env.test?
+  raise 'Teaspoon must be run in Test env'
+end
+
 Teaspoon.configure do |config|
 
   raise 'You need to run $ teaspoon or $ rake teaspoon in :test env.' unless Rails.env.test?
