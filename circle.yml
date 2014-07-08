@@ -11,3 +11,9 @@ database:
       ' > config/database.yml
     - bundle exec rake db:create:all db:schema:load --trace
     - bundle exec rake db:setup --trace
+
+test:
+  override:
+    - bundle exec rake spec:
+        environment:
+          RAILS_ENV: test
