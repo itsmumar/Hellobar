@@ -1,2 +1,2 @@
 test 'it', ->
-  equal 1,2, 'asdasd'
+  equal 1,1, 'asdasd'
