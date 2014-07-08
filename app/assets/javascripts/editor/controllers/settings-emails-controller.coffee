@@ -1,9 +1,8 @@
 HelloBar.SettingsEmailsController = Ember.Controller.extend
 
   collectionOptions: [
-    {id: 1, text: 'Just email addressses'}
-    {id: 2, text: 'Just names & locations'}
-    {id: 3, text: 'Names, locaitons & emails'}
+    {value: 0, label: 'Just email addresses'}
+    {value: 1, label: 'Names and email addresses'}
   ]
 
   storageOptions: [

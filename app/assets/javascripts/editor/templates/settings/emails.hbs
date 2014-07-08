@@ -2,9 +2,9 @@
 <div class="select-wrapper">
   {{view Ember.Select
     content=collectionOptions
-    selection=model.collection_selection
-    optionValuePath='content.id'
-    optionLabelPath='content.text'
+    value=model.settings.collect_names
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
   }}
 </div>
 
