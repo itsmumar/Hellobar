@@ -18,4 +18,10 @@ describe Rule do
       rule.to_sentence.should == "URL includes zombo.com, URL does not include zombo.com/foo, and date is after 7/6"
     end
   end
+
+  describe 'accepting nested condition attributes' do
+    it 'builds out a "before" date condition properly'
+    it 'builds out an "after" date condition properly'
+    it 'builds out a "between" date condition properly'
+  end
 end

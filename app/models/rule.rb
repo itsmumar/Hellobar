@@ -9,6 +9,8 @@ class Rule < ActiveRecord::Base
   has_many :site_elements
   has_many :conditions
 
+  accepts_nested_attributes_for :conditions, allow_destroy: true
+
   validates :site, association_exists: true
 
   def to_sentence

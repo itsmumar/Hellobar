@@ -9,6 +9,10 @@ class SiteElementsController < ApplicationController
     render :json => @site_element
   end
 
+  def index
+    @rules = @site.rules.includes(:conditions)
+  end
+
   def new
     @site_element = SiteElement.new
   end

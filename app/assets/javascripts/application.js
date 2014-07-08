@@ -19,4 +19,5 @@
 //= require admin_metrics
 //= require internal_tracking
 //= require optimizely_tracking
+//= require rules
 //= require_self
