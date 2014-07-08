@@ -1,11 +1,11 @@
 HelloBar.SettingsSocialController  = Ember.Controller.extend
   socialOptions: [
-    {id: 1, text: 'Tweet on Twitter'}
-    {id: 2, text: 'Follow on Twitter'}
-    {id: 3, text: 'Like on Facebook'}
-    {id: 4, text: 'Share on LinkedIn'}
-    {id: 5, text: '+1 on Google+'}
-    {id: 6, text: 'Pin on Pinterest'}
-    {id: 7, text: 'Follow on Pinterest'}
-    {id: 8, text: 'Share on Buffer'}
+    {value: "social/tweet_on_twitter", label: 'Tweet on Twitter'}
+    {value: "social/follow_on_twitter", label: 'Follow on Twitter'}
+    {value: "social/like_on_facebook", label: 'Like on Facebook'}
+    {value: "social/share_on_linkedin", label: 'Share on LinkedIn'}
+    {value: "social/plus_one_on_google_plus", label: '+1 on Google+'}
+    {value: "social/pin_on_pinterest", label: 'Pin on Pinterest'}
+    {value: "social/follow_on_pinterest", label: 'Follow on Pinterest'}
+    {value: "social/share_on_buffer", label: 'Share on Buffer'}
   ]

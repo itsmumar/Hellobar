@@ -2,9 +2,9 @@
 <div class="select-wrapper">
   {{view Ember.Select
     content=socialOptions
-    selection=model.element_subtype
-    optionValuePath='content.id'
-    optionLabelPath='content.text'
+    value=model.element_subtype
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
   }}
 </div>
 {{!-- ^ will likely need to be a component... --}}
