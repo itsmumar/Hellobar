@@ -1,0 +1,25 @@
+/*-----------  Dropdowns  -----------*/
+
+.dropdown-wrapper
+  position: relative
+
+  > i, 
+  > a
+    cursor: pointer
+
+  .dropdown-block
+    opacity: 0
+    padding: 1em
+    margin-top: -2em
+    position: absolute
+    pointer-events: none
+    border: 1px solid $gray
+    background-color: $white
+    @include transition()
+
+  &:hover
+
+    .dropdown-block
+      opacity: 1
+      margin-top: 0
+      pointer-events: auto

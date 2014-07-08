@@ -1,22 +1,35 @@
-.header-wrapper
-  .container
-    .row
-      .col-md-2
-        - if current_user && current_site
-          = link_to site_path(current_site) do
-            h1#logo
-        - else
-          = link_to root_path do
-            h1#logo
+.header-logo-block
+  - if current_user && current_site
+    = link_to 'HelloBar', site_path(current_site)
+  - else
+    = link_to 'HelloBar', root_path
 
-      .col-md-5
-        - if current_user && current_site
-          = render :partial => "shared/sites_dropdown"
 
-      .col-md-5
-        - if current_user
-          = render :partial => "shared/logged_in_nav"
-        - else
-          ul#navigation.logged-out
-            li= link_to "Sign in", new_user_session_path
-            li= link_to "Sign up", new_user_registration_path
+- if current_user && current_site
+  .header-nav-wrapper
+    h5 current_site
+
+    .dropdown-wrapper
+      i.icon-dropdown
+      .dropdown-block
+        = link_to 'Settings', edit_site_path(current_site)
+        h6 Sites
+        ul
+          - (current_user.sites - [current_site]).each do |site|
+            li.site-block
+              = link_to display_url_for_site(site), site_path(site)
+
+.header-user-wrapper  
+
+
+      / .col-md-5
+      /   - if current_user && current_site
+      /     = render :partial => "shared/sites_dropdown"
+
+      / .col-md-5
+      /   - if current_user
+      /     = render :partial => "shared/logged_in_nav"
+      /   - else
+      /     ul#navigation.logged-out
+      /       li= link_to "Sign in", new_user_session_path
+      /       li= link_to "Sign up", new_user_registration_path

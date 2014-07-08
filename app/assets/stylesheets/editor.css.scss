@@ -20,4 +20,7 @@
 
 //-----------  Page Layouts  -----------//
 
+@import 'layouts/common';           // Common Layout Blocks
+@import 'layouts/document';         // Document Layouts
+
 @import 'layouts/editor/*';         // Editor Application
