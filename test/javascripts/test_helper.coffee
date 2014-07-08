@@ -2,10 +2,6 @@
 # require support/sinon
 # require support/your-support-file
 
-#= require support/jquery
-#= require support/jquery.mockjax
-#= require support/ajax_mocks
-
 # PhantomJS (Teaspoons default driver) doesn't have support for Function.prototype.bind, which has caused confusion.
 # Use this polyfill to avoid the confusion.
 #= require support/bind-poly
@@ -18,6 +14,8 @@ Teaspoon.defer = true
 setTimeout(
   ->
     Teaspoon.hook("fixtures")
+
+    # Inject QUnit
     HelloBar.setupForTesting()
     HelloBar.injectTestHelpers()
     Teaspoon.execute()

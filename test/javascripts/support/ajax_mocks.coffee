@@ -5,8 +5,8 @@ $.mockjax({
   response: (settings) ->
     siteID = settings.urlParams.siteID
     siteElementID = settings.urlParams.siteElementID
-    {  
-      id: 1
+    this.responseText =  
+      id: siteID
       element_subtype: "traffic"
       link_url: null
       message: "Hello. Add your message here."
@@ -17,5 +17,4 @@ $.mockjax({
       button_color: "000000"
       link_color: "ffffff"
       text_color: "ffffff"
-    }
 })

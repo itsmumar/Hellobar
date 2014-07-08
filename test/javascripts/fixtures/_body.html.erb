@@ -2,5 +2,12 @@
   @site = OpenStruct.new(:id => 1)
   @site_element = OpenStruct.new(:id => 1)
 %>
+
 <%= render template: "layouts/ember" %>
 <%= render file: "site_elements/edit" %>
+
+<script>
+jQuery = Ember.$;
+</script>
+<%= javascript_include_tag 'support/jquery.mockjax' %>
+<%= javascript_include_tag 'support/ajax_mocks' %>
