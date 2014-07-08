@@ -1,11 +1,4 @@
-div.row
-  div.col-md-5
-    h1 New Site Element
+#ember-root
 
-    = simple_form_for @site_element, :url => site_site_elements_path(:site_id => @site) do |f|
-      = f.input :rule_id, :collection => @site.rules, :label => "Who should see this?", :include_blank => false
-      = f.input :element_subtype, :collection => SiteElement::BAR_TYPES.map{|type| [type.titlecase, type]}, :include_blank => false
-      = f.input :message
-      = f.button :submit, "Create", :class => "btn-primary"
-
-  div.col-md-7
+javascript:
+  var siteID = #{@site.id}

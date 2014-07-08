@@ -1,9 +1,12 @@
 HelloBar.ApplicationRoute = Ember.Route.extend
 
   model: ->
-    Ember.$.getJSON("/sites/#{window.siteID}/site_elements/#{window.barID}.json")
+    if window.barID
+      Ember.$.getJSON("/sites/#{window.siteID}/site_elements/#{window.barID}.json")
+    else
+      Ember.$.getJSON("/sites/#{window.siteID}/site_elements/new.json")
 
-  # Actions bubble up the routers from most specific to least specific. 
+  # Actions bubble up the routers from most specific to least specific.
   # In order to catch all the actions (beacuse they happen in different
   # routes), the action catch was places in the top-most application route.
 
@@ -13,9 +16,16 @@ HelloBar.ApplicationRoute = Ember.Route.extend
       @transitionTo @controller.currentPath, {queryParams: {modal: modal}}
 
     saveSiteElement: ->
+      if window.barID
+        url = "/sites/#{window.siteID}/site_elements/#{window.barID}.json"
+        method = "PUT"
+      else
+        url = "/sites/#{window.siteID}/site_elements.json"
+        method = "POST"
+
       Ember.$.ajax
-        type: "PUT"
-        url: "/sites/#{window.siteID}/site_elements/#{window.barID}.json"
+        type: method
+        url: url
         contentType: "application/json"
         data: JSON.stringify(@currentModel)
         success: =>

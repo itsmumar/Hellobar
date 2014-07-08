@@ -14,7 +14,12 @@ class SiteElementsController < ApplicationController
   end
 
   def new
-    @site_element = SiteElement.new
+    @site_element = SiteElement.new(:rule => @site.rules.first)
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => @site_element }
+    end
   end
 
   def create
@@ -23,11 +28,9 @@ class SiteElementsController < ApplicationController
     if @site_element.valid?
       @site_element.save!
       @site.generate_script
-      flash[:success] = "Your bar was successfully created."
-      redirect_to site_site_elements_path(:site_id => @site)
+      render :json => @site_element
     else
-      flash.now[:error] = "There was a problem creating your bar."
-      render :action => :new
+      render :json => @site_element.errors, :status => :unprocessable_entity
     end
   end
 
@@ -66,7 +69,7 @@ class SiteElementsController < ApplicationController
   end
 
   def determine_layout
-    %w(edit).include?(action_name) ? "ember" : "with_sidebar"
+    %w(new edit).include?(action_name) ? "ember" : "with_sidebar"
   end
 
   def load_site_element
