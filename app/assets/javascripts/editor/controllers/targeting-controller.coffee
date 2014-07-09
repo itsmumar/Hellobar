@@ -1,14 +1,12 @@
 HelloBar.TargetingController = Ember.Controller.extend
 
-  whoOptions: [
-    {id: 1, text: 'Everyone'}
-    {id: 2, text: '/signup'}
-    {id: 3, text: '/new'}
-    {id: 4, text: '/new'}
-    {id: 5, text: 'Only visitors on certain pages'}
-    {id: 6, text: 'Only visitors during certain dates'}
-    {id: 7, text: 'Other...'}
-  ]
+  ruleOptions: ( ->
+    rules = @get("model.site.rules").map (rule) ->
+      {id: rule.id, text: rule.name}
+
+    rules.push({id: 0, text: "Other..."})
+    rules
+  ).property()
 
   whenOptions: [
     {route: null,                text: 'Show immediately'}

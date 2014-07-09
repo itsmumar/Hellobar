@@ -3,8 +3,8 @@
 <label>Who should see this?</label>
 <div class="select-wrapper">
   {{view Ember.Select
-    content=whoOptions
-    selection=model.whoSelection
+    content=ruleOptions
+    value=model.rule_id
     optionValuePath='content.id'
     optionLabelPath='content.text'
   }}

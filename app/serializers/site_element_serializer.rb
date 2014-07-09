@@ -1,5 +1,5 @@
 class SiteElementSerializer < ActiveModel::Serializer
-  attributes :id, :site,
+  attributes :id, :site, :rule_id,
 
     # settings
     :element_subtype, :settings,
@@ -16,6 +16,7 @@ class SiteElementSerializer < ActiveModel::Serializer
       :url => object.site.url,
       :rules => object.site.rules.map do |rule|
         {
+          :id => rule.id,
           :name => rule.name.blank? ? "rule ##{rule.id}" : rule.name,
           :conditions => rule.to_sentence
         }
