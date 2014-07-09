@@ -10,7 +10,7 @@ class Site < ActiveRecord::Base
 
   before_destroy :blank_out_script
 
-  validates_with UrlValidator, url_field: :url
+  validates :url, url: true
 
   def owner
     if membership = site_memberships.where(:role => "owner").first

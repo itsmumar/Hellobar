@@ -59,6 +59,18 @@ describe Site do
         site.errors[:url].should be_empty
       end
     end
+
+    it "is invalid without a properly-formatted url" do
+      site = Site.new(:url => "my great website dot com")
+      site.should_not be_valid
+      site.errors[:url].should_not be_empty
+    end
+
+    it "is invalid without a url" do
+      site = Site.new(:url => "")
+      site.should_not be_valid
+      site.errors[:url].should_not be_empty
+    end
   end
 
   describe "#script_content" do

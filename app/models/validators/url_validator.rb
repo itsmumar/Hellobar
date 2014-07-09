@@ -1,16 +1,13 @@
-class UrlValidator < ActiveModel::Validator
-  def validate(record)
-    field = options[:url_field]
-    url = record.public_send(field)
+class URLValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    record.errors.add(attribute, "can't be blank") unless value.present?
 
-    record.errors.add(field, "can't be blank") unless url.present?
-
-    uri = Addressable::URI.parse(url)
+    uri = Addressable::URI.parse(value)
 
     if !%w{http https}.include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
-      record.errors.add(field, "is invalid")
+      record.errors.add(attribute, "is invalid")
     end
   rescue Addressable::URI::InvalidURIError
-    record.errors.add(field, "is invalid")
+    record.errors.add(attribute, "is invalid")
   end
 end

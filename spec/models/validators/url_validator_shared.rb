@@ -6,7 +6,7 @@ shared_examples "an object with a valid url" do
 
     attr_accessor :url
 
-    validates_with UrlValidator, url_field: :url
+    validates :url, url: true
   end
 
   let(:webby) { WebClass.new }
