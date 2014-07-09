@@ -4,7 +4,7 @@
 require File.expand_path('../config/application', __FILE__)
 
 Rails.application.load_tasks
-Rake::Task[:teaspoon].clear
+Rake::Task[:teaspoon].clear if defined?(Teaspoon)
 
 task :teaspoon do
   puts "[!] Overrode teaspoon default task to force test env.\nExecuting `RAILS_ENV=test bundle exec teaspoon`"
