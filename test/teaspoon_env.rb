@@ -6,11 +6,6 @@ end
 
 Teaspoon.configure do |config|
 
-  db = ActiveRecord::Base.connection.instance_variable_get("@connection").instance_variable_get("@query_options")[:database]
-  unless db =~ /test$/
-    raise 'Non-test database was about to be used'
-  end
-
   # Determines where the Teaspoon routes will be mounted. Changing this to "/jasmine" would allow you to browse to
   # `http://localhost:3000/jasmine` to run your tests.
   #config.mount_at = "/teaspoon"
