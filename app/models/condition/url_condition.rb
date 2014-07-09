@@ -14,4 +14,13 @@ class UrlCondition < Condition
   def include_url?
     operand == Condition::OPERANDS[:includes]
   end
+
+  def to_sentence
+    case operand
+    when OPERANDS[:includes]
+      "URL includes #{value}"
+    when OPERANDS[:excludes]
+      "URL does not include #{value}"
+    end
+  end
 end

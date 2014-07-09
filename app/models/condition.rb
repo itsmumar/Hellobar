@@ -14,4 +14,8 @@ class Condition < ActiveRecord::Base
   belongs_to :rule
 
   validates :rule, association_exists: true
+
+  def to_sentence
+    "#{segment} #{operand} #{value}"
+  end
 end

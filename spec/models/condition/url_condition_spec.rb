@@ -33,3 +33,13 @@ describe UrlCondition, '#include_url?' do
     UrlCondition.new.should_not be_include_url
   end
 end
+
+describe UrlCondition, '#to_sentence' do
+  it "converts exclude url conditions to sentences" do
+    UrlCondition.exclude_url("zombo.com").to_sentence.should == "URL does not include zombo.com"
+  end
+
+  it "converts include url conditions to sentences" do
+    UrlCondition.include_url("zombo.com").to_sentence.should == "URL includes zombo.com"
+  end
+end

@@ -20,4 +20,15 @@ class DateCondition < Condition
 
     new(operand: operand, value: value)
   end
+
+  def to_sentence
+    case operand
+    when OPERANDS[:is_between]
+      "date is between #{value['start_date']} and #{value['end_date']}"
+    when OPERANDS[:is_after]
+      "date is after #{value['start_date']}"
+    when OPERANDS[:is_before]
+      "date is before #{value['end_date']}"
+    end
+  end
 end

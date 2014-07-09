@@ -29,3 +29,17 @@ describe DateCondition, '::from_params' do
     DateCondition.from_params('', '').should be_nil
   end
 end
+
+describe DateCondition, '#to_sentence' do
+  it "converts 'is between' conditions to sentences" do
+    DateCondition.from_params('7/6', '7/13').to_sentence.should == "date is between 7/6 and 7/13"
+  end
+
+  it "converts 'is before' conditions to sentences" do
+    DateCondition.from_params('', '7/13').to_sentence.should == "date is before 7/13"
+  end
+
+  it "converts 'is after' conditions to sentences" do
+    DateCondition.from_params('7/6', '').to_sentence.should == "date is after 7/6"
+  end
+end
