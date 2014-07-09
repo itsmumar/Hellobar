@@ -1,6 +1,8 @@
 class Condition < ActiveRecord::Base
   self.inheritance_column = 'segment'
 
+  SEGMENTS = %w{ country device date url }
+
   OPERANDS = {
     is_after: 'is after',
     is_before: 'is before',

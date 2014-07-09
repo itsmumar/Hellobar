@@ -1,11 +1,53 @@
 h1= display_url_for_site(@site)
 
-- @site.rules.each do |rule|
-  h3= "Rule set: #{rule.name.blank? ? "(no name)" : rule.name}"
+- @rules.each do |rule|
+  .row
+    .col-md-11
+      h3= "Rule set: #{rule.name.blank? ? "(no name)" : rule.name}"
+    .col-md-1= link_to image_tag('http://png-1.findicons.com/files/icons/770/token_dark/128/gear.png', size: '32x32'), '#', class: 'edit-rule', 'data-rule-id' => rule.id
 
-  - if rule.site_elements.empty?
-    p= "(no site elements)"
+  .row
+    .col-md-12
+      - if rule.site_elements.empty?
+        p= "(no site elements)"
 
-  - else
-    - rule.site_elements.each do |site_element|
-      = render "site_elements/site_element", {:site_element => site_element}
+      - else
+        - rule.site_elements.each do |site_element|
+          = render "site_elements/site_element", { :site_element => site_element }
+
+  .modal-wrapper
+    .modal-block
+      = simple_form_for [@site, rule], defaults: { label: false }, html: { class: 'form-inline', id: "rule-#{rule.id}" } do |rule_form|
+        .row
+          .col-md-12
+            h1 New Rule
+
+        .row
+          .col-md-12
+            span Show
+            = rule_form.input :priority, as: :integer
+            span % of people who match
+            = rule_form.input :match, collection: Rule::MATCH_ON
+            span of the following conditions.
+
+        = rule_form.simple_fields_for :conditions, defaults: { label: false }, html: { class: 'form-inline' } do |condition_form|
+          .row.condition
+            .col-md-10
+              = condition_form.input :segment, as: :hidden
+              = condition_form.input :operand, as: :hidden
+              = condition_form.input :value, as: :hidden
+            .col-md-2
+              = link_to '-', '#', class: 'remove'
+              = link_to '+', '#', class: 'add'
+
+      footer
+        | *Cancel *Save
+
+script type="text/template" class="new-condition"
+  = form_tag 'replace_me' do
+    .row.condition
+      .col-md-10
+        / segment, operand, and value inputs
+      .col-md-2
+        = link_to '-', '#', class: 'remove'
+        = link_to '+', '#', class: 'add'
