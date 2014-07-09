@@ -2,11 +2,18 @@ HelloBar.TargetingController = Ember.Controller.extend
 
   ruleOptions: ( ->
     rules = @get("model.site.rules").map (rule) ->
-      {id: rule.id, text: rule.name}
+      {id: rule.id, text: rule.name, description: rule.conditions}
 
-    rules.push({id: 0, text: "Other..."})
+    rules.push({id: 0, text: "Other...", description: "?"})
     rules
   ).property()
+
+  selectedRuleDescription: ( ->
+    filtered = @get("ruleOptions").filter (x) =>
+      x.id == @get("model.rule_id")
+
+    filtered[0].description
+  ).property("model.rule_id")
 
   whenOptions: [
     {route: null,                text: 'Show immediately'}
