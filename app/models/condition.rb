@@ -12,4 +12,6 @@ class Condition < ActiveRecord::Base
   }
 
   belongs_to :rule
+
+  validates :rule, association_exists: true
 end

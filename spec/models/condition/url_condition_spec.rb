@@ -1,24 +1,24 @@
 require 'spec_helper'
 
-describe UrlCondition, '.create_include_url' do
+describe UrlCondition, '::include_url' do
   it 'creates the correct url condition with the correct operand' do
     url = 'http://googley.com'
 
-    UrlCondition.should_receive(:create).
+    UrlCondition.should_receive(:new).
       with({ operand: Condition::OPERANDS[:includes], value: url })
 
-    UrlCondition.create_include_url(url)
+    UrlCondition.include_url(url)
   end
 end
 
-describe UrlCondition, '.create_exclude_url' do
+describe UrlCondition, '::exclude_url' do
   it 'creates the correct url condition with the correct operand' do
     url = 'http://moogley.com'
 
-    UrlCondition.should_receive(:create).
+    UrlCondition.should_receive(:new).
       with({ operand: Condition::OPERANDS[:excludes], value: url })
 
-    UrlCondition.create_exclude_url(url)
+    UrlCondition.exclude_url(url)
   end
 end
 

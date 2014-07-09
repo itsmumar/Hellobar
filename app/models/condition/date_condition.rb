@@ -2,7 +2,7 @@ class DateCondition < Condition
   # { start_date: <DateTime>, end_date: <DateTime> }
   serialize :value, Hash
 
-  def self.create_from_params(start_date, end_date)
+  def self.from_params(start_date, end_date)
     return unless [start_date, end_date].any?(&:present?)
 
     if [start_date, end_date].all?(&:present?)
@@ -14,9 +14,10 @@ class DateCondition < Condition
     elsif end_date.present?
       operand = Condition::OPERANDS[:is_before]
       value = { 'end_date' => end_date }
+    else
+      return nil
     end
 
-    create operand: operand,
-           value: value
+    new(operand: operand, value: value)
   end
 end
