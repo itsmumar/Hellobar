@@ -185,7 +185,9 @@ describe ScriptGenerator, '#render' do
 end
 
 describe ScriptGenerator, '#rules' do
-  let(:site) { double 'site', id: '1337', rules: [], site_elements: [] }
+  fixtures :all
+
+  let(:site) { sites(:zombo) }
   let(:generator) { ScriptGenerator.new(site) }
 
   it 'returns the proper array of hashes for a sites rules' do
@@ -204,8 +206,8 @@ describe ScriptGenerator, '#rules' do
   end
 
   it 'returns the proper hash when a single bar_id is passed as an option' do
-    rule = Rule.create
-    bar = SiteElement.create element_subtype: 'email', rule: rule
+    rule = Rule.create! site: site
+    bar = SiteElement.create! element_subtype: 'email', rule: rule
     options = { bar_id: bar.id }
 
     generator = ScriptGenerator.new(site, options)
@@ -224,8 +226,8 @@ describe ScriptGenerator, '#rules' do
   end
 
   it 'renders all bar json when the render_paused_site_elements is true' do
-    rule = Rule.create
-    bar = SiteElement.create element_subtype: 'email', rule: rule, paused: true
+    rule = Rule.create! site: site
+    bar = SiteElement.create! element_subtype: 'email', rule: rule, paused: true
     options = { render_paused_site_elements: true }
     generator = ScriptGenerator.new(site, options)
     generator.stub site_element_settings: { id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' }}
@@ -243,7 +245,7 @@ describe ScriptGenerator, '#rules' do
   end
 
   it 'renders only active bar json by default' do
-    rule = Rule.create
+    rule = Rule.create! site: site
     paused = SiteElement.create! element_subtype: 'email', rule: rule, paused: true
     active_bar = SiteElement.create! element_subtype: 'traffic', rule: rule, paused: false
     generator = ScriptGenerator.new(site)

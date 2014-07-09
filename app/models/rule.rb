@@ -8,4 +8,6 @@ class Rule < ActiveRecord::Base
 
   has_many :site_elements
   has_many :conditions
+
+  validates :site, association_exists: true
 end

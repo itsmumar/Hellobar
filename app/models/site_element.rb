@@ -15,6 +15,7 @@ class SiteElement < ActiveRecord::Base
   belongs_to :rule
 
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES }
+  validates :rule, association_exists: true
 
   scope :paused, -> { where(paused: true) }
   scope :active, -> { where(paused: false) }
