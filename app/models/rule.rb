@@ -10,4 +10,8 @@ class Rule < ActiveRecord::Base
   has_many :conditions
 
   validates :site, association_exists: true
+
+  def to_sentence
+    conditions.empty? ? "everyone" : conditions.map(&:to_sentence).to_sentence
+  end
 end
