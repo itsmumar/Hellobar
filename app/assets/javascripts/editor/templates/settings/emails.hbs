@@ -7,13 +7,3 @@
     optionLabelPath='content.label'
   }}
 </div>
-
-<label>Where do you want the emails stored?</label>
-<div class="select-wrapper">
-  {{view Ember.Select
-    content=storageOptions
-    selection=model.storage_selection
-    optionValuePath='content.id'
-    optionLabelPath='content.text'
-  }}
-</div>
