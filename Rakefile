@@ -8,7 +8,7 @@ Rake::Task[:teaspoon].clear if defined?(Teaspoon)
 
 task :teaspoon do
   puts "[!] Overrode teaspoon default task to force test env.\nExecuting `RAILS_ENV=test bundle exec teaspoon`"
-  system 'RAILS_ENV=test bundle exec teaspoon'
+  exit system('RAILS_ENV=test bundle exec teaspoon')
 end
 
 task default: [:spec, :teaspoon]
