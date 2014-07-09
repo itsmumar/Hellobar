@@ -9,3 +9,5 @@ HelloBar.SettingsSocialController  = Ember.Controller.extend
     {value: "social/follow_on_pinterest", label: 'Follow on Pinterest'}
     {value: "social/share_on_buffer", label: 'Share on Buffer'}
   ]
+
+  selectedSocialSubtype: Ember.computed.alias("model.element_subtype")
