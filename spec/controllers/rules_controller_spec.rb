@@ -32,7 +32,7 @@ describe RulesController do
       expect(response).to be_success
 
       json = JSON.parse(response.body)
-      expect(json.keys).to match_array %w(id site_id updated_at created_at name priority match conditions)
+      expect(json.keys).to match_array %w(id site_id name priority match conditions)
     end
   end
 

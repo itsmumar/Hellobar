@@ -21,12 +21,6 @@ class Condition < ActiveRecord::Base
     "#{segment} #{operand} #{value}"
   end
 
-  def as_json options={}
-    super.merge(segment: short_segment)
-  end
-
-  private
-
   def short_segment
     segment.gsub(/Condition$/, '').underscore.downcase
   end

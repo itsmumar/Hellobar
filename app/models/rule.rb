@@ -16,8 +16,4 @@ class Rule < ActiveRecord::Base
   def to_sentence
     conditions.empty? ? "everyone" : conditions.map(&:to_sentence).to_sentence
   end
-
-  def as_json options={}
-    super.merge(conditions: conditions)
-  end
 end
