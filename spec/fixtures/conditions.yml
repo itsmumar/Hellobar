@@ -1,18 +1,28 @@
 date_between:
   segment: DateCondition
-  operand: is_between
+  operand: is between
   value:
-    start_date: !!2001-12-15T02:59:43.1Z
-    end_date: !!2020-12-15T02:59:43.1Z
+    start_date: <%= Date.current - 1.day %>
+    end_date: <%= Date.current + 1.day %>
 
 date_before:
   segment: DateCondition
-  operand: is_before
+  operand: is before
   value:
-    end_date: !!2020-12-15T02:59:43.1Z
+    end_date: <%= Date.current + 1.day %>
 
 date_after:
   segment: DateCondition
-  operand: is_after
+  operand: is after
   value:
-    start_date: !!2001-12-15T02:59:43.1Z
+    start_date: <%= Date.current - 1.day %>
+
+url_includes:
+  segment: UrlCondition
+  operand: includes
+  value: /asdf
+
+url_excludes:
+  segment: UrlCondition
+  operand: excludes
+  value: /asdf
