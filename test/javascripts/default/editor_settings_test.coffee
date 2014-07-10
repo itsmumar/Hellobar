@@ -3,7 +3,6 @@ module 'editor settings',
     @route = getModule('route:application')
     ok @route.currentModel
     visit 'settings'
-  teardown: -> # HelloBar.reset()
 
 test 'it should launch ember immediately', ->
   equal find(".editor-wrapper.ember-view").length, 1, "Ember view should be present"
