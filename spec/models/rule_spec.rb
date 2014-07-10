@@ -23,7 +23,7 @@ describe Rule do
     fixtures :rules, :sites, :conditions
 
     let(:rule) { rules(:zombo) }
-    let(:site) { site(:zombo) }
+    let(:site) { sites(:zombo) }
 
     before do
       expect(rule).to be_present

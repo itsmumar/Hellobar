@@ -55,6 +55,10 @@ class ApplicationController < ActionController::Base
     impersonated_user ? true : super
   end
 
+  def authenticate_user_json!
+    render json: { error: "authentication required" }, status: :forbidden unless current_user
+  end
+
   def impersonated_user
     current_admin && session[:impersonated_user] ? User.find_by_id(session[:impersonated_user]) : nil
   end
