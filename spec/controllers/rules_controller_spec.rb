@@ -95,12 +95,12 @@ describe RulesController do
     end
 
     describe 'succeed as owner' do
-      it 'should add a new one' do
-        stub_current_user users(:joey)
+      it 'should add a new rule with conditions' do
+        stub_current_user(site.owner)
         expect do
           put :update, site_id: site, id: rule, rule: {
             name: "new rule name",
-            conditions_attributes: conditions_attributes
+            conditions_attributes: [conditions(:date_between).attributes]
           }
         end.to change { Rule.count }.by(0)
         expect(response).to be_success
@@ -122,12 +122,36 @@ describe RulesController do
           }])
         end
       end
+
+      it 'should add a new rule with url condition' do
+        stub_current_user(site.owner)
+        put :update, site_id: site, id: rule, rule: {
+          name: "new rule name",
+          conditions_attributes: [conditions(:url_includes).attributes]
+        }
+        JSON.parse(response.body).tap do |rule_obj|          
+          id = rule_obj['conditions'].first['id']
+          expect(rule_obj['conditions']).to eq([{
+            "id" => id,
+            "rule_id" => rule.id,
+            "segment" => "url",
+            "operand" => "includes",
+            "value" => "/asdf"
+          }])
+        end
+      end
+
+      it 'should two rules at once' do
+        stub_current_user(site.owner)
+        put :update, site_id: site, id: rule, rule: {
+          name: "new rule name",
+          conditions_attributes: [conditions(:url_includes).attributes, conditions(:date_before).attributes]
+        }
+        JSON.parse(response.body).tap do |rule_obj|          
+          segments = rule_obj['conditions'].collect {|c| c['segment'] }
+          expect(segments).to match_array %w(date url)
+        end
+      end
     end
-  end
-
-  private
-
-  def conditions_attributes
-    [conditions(:date_between).attributes]
   end
 end
