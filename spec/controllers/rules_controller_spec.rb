@@ -1,8 +1,12 @@
 require 'spec_helper'
 
-UNPROCESSABLE_ENTITY = 422
+UNAUTHORIZED = "401"
 
 describe RulesController do
+  before do
+    request.env["HTTP_ACCEPT"] = 'application/json'
+  end
+
   fixtures :rules, :sites, :conditions
   
   let(:rule) { rules(:zombo) }
@@ -13,7 +17,7 @@ describe RulesController do
 
     it 'should fail when not logged in' do
       get :show, site_id: 1, id: rule
-      expect(response).to be_forbidden
+      expect(response.code).to eq UNAUTHORIZED
     end
 
     it 'should fail when not owner' do
@@ -35,7 +39,7 @@ describe RulesController do
   describe 'POST :create' do
     it 'should fail when not logged in' do
       post :create, site_id: 1, rule: {}
-      expect(response).to be_forbidden
+      expect(response.code).to eq UNAUTHORIZED
     end
 
     it 'should succeed when not logged in' do
@@ -59,7 +63,7 @@ describe RulesController do
 
     it 'should fail when not logged in' do
       delete :destroy, site_id: site, id: rule
-      expect(response).to be_forbidden
+      expect(response.code).to eq UNAUTHORIZED
     end
 
     it 'should fail when not site owner' do
@@ -83,7 +87,7 @@ describe RulesController do
 
     it 'should fail when not logged in' do
       put :update, site_id: site, id: rule
-      expect(response).to be_forbidden
+      expect(response.code).to eq UNAUTHORIZED
     end
 
     it 'should fail when not site owner' do
