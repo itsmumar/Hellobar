@@ -4,12 +4,12 @@ $.mockjax({
   contentType: 'text/json'
   response: (settings) ->
     <%
-      r = Rule.new
-      r.site = Site.new
-      s = SiteElement.new
-      s.rule = r
+      rule = Rule.new
+      rule.site = Site.new
+      site = SiteElement.new
+      site.rule = rule
     %>
-    siteElement = <%= SiteElementSerializer.new(s).to_json %>
+    siteElement = <%= SiteElementSerializer.new(site).to_json %>
     siteElement.id = settings.urlParams.siteElementID
     siteElement.site.id = settings.urlParams.siteID
     
