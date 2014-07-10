@@ -100,7 +100,7 @@ describe RulesController do
         expect do
           put :update, site_id: site, id: rule, rule: {
             name: "new rule name",
-            conditions_attributes: [conditions(:date_between).attributes]
+            conditions_attributes: [ condition_hash(:date_between) ]
           }
         end.to change { Rule.count }.by(0)
         expect(response).to be_success
@@ -127,7 +127,7 @@ describe RulesController do
         stub_current_user(site.owner)
         put :update, site_id: site, id: rule, rule: {
           name: "new rule name",
-          conditions_attributes: [conditions(:url_includes).attributes]
+          conditions_attributes: [condition_hash(:url_includes)]
         }
         JSON.parse(response.body).tap do |rule_obj|          
           id = rule_obj['conditions'].first['id']
@@ -145,13 +145,36 @@ describe RulesController do
         stub_current_user(site.owner)
         put :update, site_id: site, id: rule, rule: {
           name: "new rule name",
-          conditions_attributes: [conditions(:url_includes).attributes, conditions(:date_before).attributes]
+          conditions_attributes: [
+            condition_hash(:url_includes),
+            condition_hash(:date_before)
+          ]
         }
         JSON.parse(response.body).tap do |rule_obj|          
           segments = rule_obj['conditions'].collect {|c| c['segment'] }
           expect(segments).to match_array %w(date url)
         end
       end
+
+      it 'should be able to destroy individual conditions with destroyable' do
+        stub_current_user(site.owner)
+
+        # add a rule to remove
+        rule.conditions << conditions(:url_includes)
+        condition = rule.reload.conditions.first
+
+        # remove it
+        put :update, site_id: site, id: rule, rule: {
+          conditions_attributes: [{id: condition.id, _destroy: 1}]
+        }
+        expect { condition.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
     end
+  end
+
+  private
+
+  def condition_hash key
+    conditions(key).attributes.tap {|h| h.delete('id') }
   end
 end

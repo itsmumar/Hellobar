@@ -22,7 +22,7 @@ class RulesController < ApplicationController
 
     # PermittedParameters doesn't allow wildcard hashes
     conditions_attrs = params.require(:rule)[:conditions_attributes].collect do |condition|
-      condition.slice(:segment, :operand, :value)
+      condition.slice(:id, :segment, :operand, :value, :_destroy)
     end
     rule_attrs = params.require(:rule)
                         .permit(:name, :priority, :match)
