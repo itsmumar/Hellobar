@@ -4,21 +4,21 @@ class RulesController < ApplicationController
   before_filter :load_site
 
   def show
-    @rule = @site.rules.find(params[:id])
-    render :json => @rule
+    rule = @site.rules.find(params[:id])
+    render :json => rule
   end
 
   def create
-    @rule = @site.rules.new params.require(:rule).permit(:name, :priority, :match)
-    if @rule.save
-      render :json => @rule
+    rule = @site.rules.new params.require(:rule).permit(:name, :priority, :match)
+    if rule.save
+      render :json => rule
     else
-      render :json => @rule.errors, :status => :unprocessable_entity
+      render :json => rule.errors, :status => :unprocessable_entity
     end
   end
 
   def update
-    @rule = @site.rules.find(params[:id])
+    rule = @site.rules.find(params[:id])
 
     # PermittedParameters doesn't allow wildcard hashes
     conditions_attrs = params.require(:rule)[:conditions_attributes].collect do |condition|
@@ -27,19 +27,19 @@ class RulesController < ApplicationController
     rule_attrs = params.require(:rule)
                         .permit(:name, :priority, :match)
                         .merge(conditions_attributes: conditions_attrs)
-    if @rule.update_attributes rule_attrs.permit!
-      render :json => @rule
+    if rule.update_attributes rule_attrs.permit!
+      render :json => rule
     else
-      render :json => @rule.errors, :status => :unprocessable_entity
+      render :json => rule.errors, :status => :unprocessable_entity
     end
   end
 
   def destroy
-    @rule = @site.rules.find(params[:id])
-    if @rule.destroy
-      render :json => @rule
+    rule = @site.rules.find(params[:id])
+    if rule.destroy
+      render :json => rule
     else
-      render :json => @rule.errors, :status => :unprocessable_entity
+      render :json => rule.errors, :status => :unprocessable_entity
     end
   end
 
