@@ -1,0 +1,17 @@
+$.mockjax({
+  url: /^\/sites\/([\d]+)\/site_elements\/([\d\-]+)\.json$/
+  urlParams: ['siteID', 'siteElementID']
+  contentType: 'text/json'
+  response: (settings) ->
+    <%
+      r = Rule.new
+      r.site = Site.new
+      s = SiteElement.new
+      s.rule = r
+    %>
+    siteElement = <%= SiteElementSerializer.new(s).to_json %>
+    siteElement.id = settings.urlParams.siteElementID
+    siteElement.site.id = settings.urlParams.siteID
+    
+    this.responseText = siteElement
+})

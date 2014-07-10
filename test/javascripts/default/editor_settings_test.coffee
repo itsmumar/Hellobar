@@ -49,14 +49,10 @@ test 'it should be able to choose a social goal', ->
       # 2. fill in tweet message
       fillIn(findLabeled("Message to tweet"), "Yo! This is my tweet").andThen =>
 
-        debugger
-
         # verify model was modified
         equal "Yo! This is my tweet",
               route.currentModel.settings.message_to_tweet,
               "Tweet was not changed on model"
-
-        debugger
 
         # 3. fill in tweet url
         fillIn(findLabeled("URL to tweet"), "post-that-shit.com").andThen =>
@@ -64,8 +60,6 @@ test 'it should be able to choose a social goal', ->
           equal "post-that-shit.com",
                 route.currentModel.settings.url_to_tweet,
                 "Tweet URL was not changed on model"
-
-          debugger
 
           # 4. click next
           clickOn("Next").andThen =>
