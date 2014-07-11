@@ -53,7 +53,7 @@ class Identity < ActiveRecord::Base
     self.class.provider_configs.find {|p| p[:key] == provider.to_sym }
   end
 
-  def as_json options=nil
+  def as_json(options = nil)
     extra['raw_info'].select! {|k,v| %w(user_id username).include? k } if extra['raw_info']
     extra['lists'] = extra['lists'].try(:collect) {|h| h.select {|k,v| %w(id web_id name).include? k } }
     super
