@@ -11,14 +11,3 @@
 
 <label>Button</label>
 {{color-select color=model.button_color siteColors=siteColors recentColors=recentColors}}
-
-<label>Theme</label>
-<div class="select-wrapper">
-  {{view Ember.Select
-    content=themeOptions
-    selection=model.theme_selection
-    optionValuePath='content.id'
-    optionLabelPath='content.text'
-  }}
-</div>
-{{!-- ^ will likely need to be a component... --}}

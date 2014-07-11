@@ -1,12 +1,3 @@
-<label>Theme</label>
-{{view Ember.Select
-  content=themeOptions
-  selection=model.barThemeSelection
-  optionValuePath='content.id'
-  optionLabelPath='content.text'
-}}
-{{!-- ^ will likely need to be a component... --}}
-
 <label>Hello Bar branding
   {{toggle-switch switch=model.barIsBranded}}
 </label>
