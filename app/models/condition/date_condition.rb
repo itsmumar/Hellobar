@@ -14,8 +14,6 @@ class DateCondition < Condition
     elsif end_date.present?
       operand = Condition::OPERANDS[:is_before]
       value = { 'end_date' => end_date }
-    else
-      return nil
     end
 
     new(operand: operand, value: value.with_indifferent_access)
