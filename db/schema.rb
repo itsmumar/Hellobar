@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140704174509) do
+ActiveRecord::Schema.define(version: 20140711152912) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -136,32 +136,26 @@ ActiveRecord::Schema.define(version: 20140704174509) do
   create_table "site_elements", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "element_subtype",                                                           null: false
+    t.string   "element_subtype",                                                         null: false
     t.string   "target_segment"
-    t.boolean  "closable",                        default: false
-    t.boolean  "hide_destination",                default: false
-    t.boolean  "open_in_new_window",              default: false
-    t.boolean  "pushes_page_down",                default: false
-    t.boolean  "remains_at_top",                  default: false
-    t.boolean  "show_border",                     default: false
-    t.integer  "hide_after",                      default: 0
+    t.boolean  "closable",                      default: false
+    t.boolean  "show_border",                   default: false
+    t.integer  "hide_after",                    default: 0
     t.integer  "show_wait"
-    t.integer  "wiggle_wait",                     default: 0
-    t.string   "background_color",                default: "eb593c"
-    t.string   "border_color",                    default: "ffffff"
-    t.string   "button_color",                    default: "000000"
-    t.string   "font",                            default: "Helvetica,Arial,sans-serif"
-    t.string   "link_color",                      default: "ffffff"
-    t.string   "link_style",                      default: "button"
-    t.string   "link_text",          limit: 5000, default: "Click Here"
-    t.string   "message",            limit: 5000, default: "Hello. Add your message here."
-    t.string   "size",                            default: "large"
-    t.string   "tab_side",                        default: "right"
+    t.string   "background_color",              default: "eb593c"
+    t.string   "border_color",                  default: "ffffff"
+    t.string   "button_color",                  default: "000000"
+    t.string   "font",                          default: "Helvetica,Arial,sans-serif"
+    t.string   "link_color",                    default: "ffffff"
+    t.string   "link_style",                    default: "button"
+    t.string   "link_text",        limit: 5000, default: "Click Here"
+    t.string   "message",          limit: 5000, default: "Hello. Add your message here."
+    t.string   "size",                          default: "large"
     t.string   "target"
-    t.string   "text_color",                      default: "ffffff"
-    t.string   "texture",                         default: "none"
-    t.string   "thank_you_text",                  default: "Thank you for signing up!"
-    t.boolean  "paused",                          default: false
+    t.string   "text_color",                    default: "ffffff"
+    t.string   "texture",                       default: "none"
+    t.string   "thank_you_text",                default: "Thank you for signing up!"
+    t.boolean  "paused",                        default: false
     t.integer  "rule_id"
     t.text     "settings"
   end

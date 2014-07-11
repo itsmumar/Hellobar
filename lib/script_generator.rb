@@ -137,13 +137,19 @@ private
   end
 
   def site_element_settings(site_element)
-    settings = %w{ closable hide_destination open_in_new_window pushes_page_down remains_at_top show_border hide_after show_wait wiggle_wait background_color border_color button_color font link_color link_style link_text message size tab_side target text_color texture thank_you_text }
+    settings = %w{ closable show_border hide_after show_wait background_color border_color button_color font link_color link_style link_text message size target text_color texture thank_you_text }
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       id: site_element.id,
       target: site_element.target_segment,
       template_name: site_element.element_subtype,
-      settings: site_element.settings
+      settings: site_element.settings,
+      hide_destination: true,
+      open_in_new_window: false,
+      pushes_page_down: true,
+      remains_at_top: true,
+      wiggle_wait: 0,
+      tab_side: "right"
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
