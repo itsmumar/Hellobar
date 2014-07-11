@@ -43,6 +43,11 @@ gem "unf",                      "~> 0.1.4"
 gem "whenever",                 "~> 0.9.2"
 gem "zip",                      "~> 2.0.2"
 
+group :development do
+  gem "better_errors"
+  gem "binding_of_caller"
+end
+
 group :development, :test do
   gem "debugger"
   gem "minitest"
