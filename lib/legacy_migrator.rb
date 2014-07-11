@@ -162,7 +162,6 @@ class LegacyMigrator
                       target: legacy_bar.settings_json['target'],
                       text_color: legacy_bar.settings_json['text_color'],
                       texture: legacy_bar.settings_json['texture'],
-                      thank_you_text: legacy_bar.settings_json['thank_you_text'],
                       settings: settings_to_migrate
       end
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140711152912) do
+ActiveRecord::Schema.define(version: 20140711164938) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -154,7 +154,6 @@ ActiveRecord::Schema.define(version: 20140711152912) do
     t.string   "target"
     t.string   "text_color",                    default: "ffffff"
     t.string   "texture",                       default: "none"
-    t.string   "thank_you_text",                default: "Thank you for signing up!"
     t.boolean  "paused",                        default: false
     t.integer  "rule_id"
     t.text     "settings"

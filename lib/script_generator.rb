@@ -137,7 +137,7 @@ private
   end
 
   def site_element_settings(site_element)
-    settings = %w{ closable show_border hide_after show_wait background_color border_color button_color font link_color link_style link_text message size target text_color texture thank_you_text }
+    settings = %w{ closable show_border hide_after show_wait background_color border_color button_color font link_color link_style link_text message size target text_color texture }
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       id: site_element.id,
@@ -149,7 +149,8 @@ private
       pushes_page_down: true,
       remains_at_top: true,
       wiggle_wait: 0,
-      tab_side: "right"
+      tab_side: "right",
+      thank_you_text: "Thank you for signing up!"
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
