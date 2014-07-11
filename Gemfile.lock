@@ -394,7 +394,7 @@ DEPENDENCIES
   avatar (~> 0.2.0)
   aweber (~> 1.6.1)
   aws-sdk (= 1.33.0)
-  better_errors
+  better_errors (~> 1.1)
   binding_of_caller
   bootstrap-sass (~> 3.1.1)
   bourbon (~> 3.2.0)
