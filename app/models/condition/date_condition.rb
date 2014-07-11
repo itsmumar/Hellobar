@@ -18,7 +18,7 @@ class DateCondition < Condition
       return nil
     end
 
-    new(operand: operand, value: value)
+    new(operand: operand, value: value.with_indifferent_access)
   end
 
   def to_sentence

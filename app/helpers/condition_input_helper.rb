@@ -1,14 +1,14 @@
 module ConditionInputHelper
   def self.start_date_field(simple_form)
     value = simple_form.object.kind_of?(DateCondition) ? simple_form.object.value[:start_date] : nil
-    name = "#{simple_form.input(:value).match(/name\="(.+)"/)[1]}['start_date']"
+    name = "#{simple_form.input(:value).match(/name\="(.+)"/)[1]}[start_date]"
 
     simple_form.date_field :value, { name: name, value: value, disabled: true, class: 'start_date value' }
   end
 
   def self.end_date_field(simple_form)
     value = simple_form.object.kind_of?(DateCondition) ? simple_form.object.value[:end_date] : nil
-    name = "#{simple_form.input(:value).match(/name\="(.+)"/)[1]}['end_date']"
+    name = "#{simple_form.input(:value).match(/name\="(.+)"/)[1]}[end_date]"
 
     simple_form.date_field :value, { name: name, value: value, disabled: true, class: 'end_date value' }
   end
