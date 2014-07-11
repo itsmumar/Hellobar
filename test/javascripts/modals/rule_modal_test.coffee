@@ -16,6 +16,14 @@ test 'RuleModal.constructor', ->
 
     equal $dom.hasClass('show-modal'), false, 'binds the escape key to close the modal'
 
+  test 'RuleModal binds to the cancel anchor to close the modal', ->
+    $dom = $('<div class="show-modal"><a class="cancel">DIE</a></div>')
+    modal = new RuleModal($dom)
+
+    $($dom).find('a.cancel').click()
+
+    equal $dom.hasClass('show-modal'), false, 'binds the cancel anchor to close the modal'
+
 test 'RuleModal.open()', ->
   $dom = $('<div"></div>')
   modal = new RuleModal($dom)

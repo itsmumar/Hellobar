@@ -1,6 +1,7 @@
 class @RuleModal
   constructor: (@$modal) ->
     @_bindEscape(@close)
+    @_bindClickOnClose(@close)
 
   open: ->
     @_renderContent()
@@ -93,6 +94,8 @@ class @RuleModal
     #
 
   _bindClickOnClose: (callback) ->
+    @$modal.find('a.cancel').on 'click', (event) =>
+      callback.call(@)
 
   # isConflicted
   #   -
