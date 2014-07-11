@@ -21,7 +21,7 @@ class RulesController < ApplicationController
     rule = @site.rules.find(params[:id])
 
     # PermittedParameters doesn't allow wildcard hashes
-    conditions_attrs = params.require(:rule)[:conditions_attributes].collect do |condition|
+    conditions_attrs = params.require(:rule)[:conditions_attributes].map do |index, condition|
       condition.slice(:id, :segment, :operand, :value, :_destroy)
     end
     rule_attrs = params.require(:rule)

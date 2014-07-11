@@ -55,8 +55,9 @@ h1= display_url_for_site(@site)
             .col-md-2.actions
             = link_to '+', '#', class: 'add'
 
-      footer
-        | *Cancel *Save
+        footer
+          = button_tag 'Cancel', class: 'cancel btn btn-default'
+          = button_tag 'Save', class: 'save btn btn-success'
 
 script type="text/template" id="new-condition"
   .col-md-10
