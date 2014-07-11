@@ -105,7 +105,7 @@ describe RulesController do
           put :update, site_id: site, id: rule, rule: {
             name: "new rule name",
             conditions_attributes: {
-              "0" => condition_hash(:date_between)
+              :"0" => condition_hash(:date_between)
             }
           }
         end.to change { Rule.count }.by(0)
@@ -134,7 +134,7 @@ describe RulesController do
         put :update, site_id: site, id: rule, rule: {
           name: "new rule name",
           conditions_attributes: {
-            "0" => condition_hash(:url_includes)
+            :"0" => condition_hash(:url_includes)
           }
         }
         JSON.parse(response.body).tap do |rule_obj|          
@@ -154,8 +154,8 @@ describe RulesController do
         put :update, site_id: site, id: rule, rule: {
           name: "new rule name",
           conditions_attributes: {
-            "0" => condition_hash(:url_includes),
-            "1" => condition_hash(:date_before)
+            :"0" => condition_hash(:url_includes),
+            :"1" => condition_hash(:date_before)
           }
         }
         JSON.parse(response.body).tap do |rule_obj|          
@@ -174,7 +174,7 @@ describe RulesController do
         # remove it
         put :update, site_id: site, id: rule, rule: {
           conditions_attributes: {
-            "0" => { id: condition.id, _destroy: 1}
+            :"0" => { id: condition.id, _destroy: 1}
           }
         }
         expect { condition.reload }.to raise_error ActiveRecord::RecordNotFound
