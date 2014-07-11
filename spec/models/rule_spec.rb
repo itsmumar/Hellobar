@@ -20,8 +20,57 @@ describe Rule do
   end
 
   describe 'accepting nested condition attributes' do
-    it 'builds out a "before" date condition properly'
-    it 'builds out an "after" date condition properly'
-    it 'builds out a "between" date condition properly'
+    fixtures :rules, :sites, :conditions
+
+    let(:rule) { rules(:zombo) }
+    let(:site) { sites(:zombo) }
+
+    before do
+      expect(rule).to be_present
+      expect(rule.conditions).to be_empty
+    end
+
+    it 'builds out a "before" date condition properly' do
+      condition = conditions(:date_before)
+      expect(condition.value.class).to eq(Hash)
+      condition.value.tap do |hash|
+        expect(hash['start_date']).to be_nil
+        expect(hash['end_date']).to eq DateTime.current.midnight + 1.day
+      end
+      expect(condition.to_sentence).to eq "date is before #{Date.current + 1.day}"
+    end
+
+    it 'builds out an "after" date condition properly' do
+      condition = conditions(:date_after)
+      expect(condition.value.class).to eq(Hash)
+      condition.value.tap do |hash|
+        expect(hash['end_date']).to be_nil
+        expect(hash['start_date']).to eq DateTime.current.midnight - 1.day
+      end
+      expect(condition.to_sentence).to eq "date is after #{Date.current - 1.day}"
+    end
+
+    it 'builds out a "between" date condition properly' do
+      condition = conditions(:date_between)
+      expect(condition.value.class).to eq(Hash)
+      condition.value.tap do |hash|
+        expect(hash['start_date']).to eq Date.current - 1.day
+        expect(hash['end_date']).to eq Date.current + 1.day
+      end
+    end
+
+    it 'builds out a URL condition with a string' do
+      condition = conditions(:url_includes)
+      expect(condition.value.class).to eq(String)
+      expect(condition.value).to eq("/asdf")
+      expect(condition.to_sentence).to eq "URL includes /asdf"
+    end
+
+    it 'builds out a URL condition with a string' do
+      condition = conditions(:url_excludes)
+      expect(condition.value.class).to eq(String)
+      expect(condition.value).to eq("/asdf")
+      expect(condition.to_sentence).to eq "URL does not include /asdf"
+    end
   end
 end

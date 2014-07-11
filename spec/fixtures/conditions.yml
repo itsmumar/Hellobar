@@ -1,0 +1,28 @@
+date_between:
+  segment: DateCondition
+  operand: is between
+  value:
+    start_date: <%= Date.current - 1.day %>
+    end_date: <%= Date.current + 1.day %>
+
+date_before:
+  segment: DateCondition
+  operand: is before
+  value:
+    end_date: <%= Date.current + 1.day %>
+
+date_after:
+  segment: DateCondition
+  operand: is after
+  value:
+    start_date: <%= Date.current - 1.day %>
+
+url_includes:
+  segment: UrlCondition
+  operand: includes
+  value: /asdf
+
+url_excludes:
+  segment: UrlCondition
+  operand: excludes
+  value: /asdf

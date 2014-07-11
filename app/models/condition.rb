@@ -20,4 +20,8 @@ class Condition < ActiveRecord::Base
   def to_sentence
     "#{segment} #{operand} #{value}"
   end
+
+  def short_segment
+    segment.gsub(/Condition$/, '').underscore.downcase
+  end
 end
