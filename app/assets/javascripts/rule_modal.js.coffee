@@ -1,17 +1,20 @@
 class @RuleModal
   constructor: (@$modal) ->
-    @_bindCloseEvents(@close)
+    @_bindInteractions()
 
   open: ->
     @_renderContent()
-    @_bindSubmit()
-    @_bindAddCondition()
-    @_bindRemoveCondition()
     @$modal.addClass('show-modal')
 
   close: ->
     @$modal.removeClass('show-modal')
            .off() # unbind all modal events
+
+  _bindInteractions: ->
+    @_bindCloseEvents(@close)
+    @_bindSubmit()
+    @_bindAddCondition()
+    @_bindRemoveCondition()
 
   _renderValue: ($condition) ->
       $condition.find('.value').hide() # hide the values by default
@@ -81,13 +84,13 @@ class @RuleModal
         success: (data, status, xhr) ->
           modal.close()
         error: (xhr, status, error) ->
-          alert 'Something went wrong: ' + error
+          console.log "Something went wrong: #{error}"
 
   _addCondition: ->
     nextIndex = @$modal.find('.conditions').length
-    # update the names on the input values to be submitted properly
     templateHTML = $('script#new-condition').html()
     $template = $(templateHTML)
+    # update the names on the elements to be submitted properly
     $template.find('[name="segment"]')
              .attr('name', "rule[conditions_attributes][#{nextIndex}][segment]")
     $template.find('[name="operand"]')
@@ -115,10 +118,10 @@ class @RuleModal
     $(document).on 'keyup', (event) =>
       callback.call(this) if event.keyCode == 27
 
-  _bindClickOutsideTarget: (callback) ->
-    @$modal.on 'click', (event) =>
-      callback.call(this) if $(event.target).hasClass('modal-wrapper')
-
   _bindClickOnClose: (callback) ->
     @$modal.find('a.cancel').on 'click', (event) =>
       callback.call(this)
+
+  _bindClickOutsideTarget: (callback) ->
+    @$modal.on 'click', (event) =>
+      callback.call(this) if $(event.target).hasClass('modal-wrapper')
