@@ -41,11 +41,11 @@ test 'RuleModal.close()', ->
   equal $dom.hasClass('show-modal'), false, 'removes the correct class when closing the modal'
 
 # returns the class name we need to fetch
-test 'RuleModal.valueClass(condition)', ->
+test 'RuleModal.valueClass(segment, operand)', ->
   $modal = $('<div></div>')
   modal = new RuleModal($modal)
 
-  equal modal.valueClass('DateCondition', 'is_before'), '.end_date.value'
-  equal modal.valueClass('DateCondition', 'is_after'), '.start_date.value'
-  equal modal.valueClass('DateCondition', 'is_between'), '.start_date.value, .end_date.value'
-  equal modal.valueClass('UrlCondition', 'anything'), '.url.value'
+  equal modal._valueClass('DateCondition', 'is_before'), '.end_date.value'
+  equal modal._valueClass('DateCondition', 'is_after'), '.start_date.value'
+  equal modal._valueClass('DateCondition', 'is_between'), '.start_date.value, .end_date.value'
+  equal modal._valueClass('UrlCondition', 'anything'), '.url.value'

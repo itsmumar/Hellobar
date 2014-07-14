@@ -62,13 +62,14 @@ h1= display_url_for_site(@site)
           = button_tag 'Save', class: 'save btn btn-success'
 
 script type="text/template" id="new-condition"
-  .row.condition
-    .col-md-10
-      .form-group.select.optional.rule_conditions_segment
-        = select_tag :segment, options_for_select(Condition::SEGMENTS.invert), class: 'select optional form-control'
-      .form-group.select.optional.rule_conditions_segment
-        = select_tag :operand, options_for_select(Condition::OPERANDS.invert), class: 'select optional form-control'
-      = text_field_tag :value
-    .col-md-2.actions
-      = link_to '-', '#', class: 'remove'
-      = link_to '+', '#', class: 'add'
+  .placeholder
+    .row.condition
+      .col-md-10
+        .form-group.select.optional.rule_conditions_segment
+          = select_tag :segment, options_for_select(Condition::SEGMENTS.invert), class: 'select optional form-control'
+        .form-group.select.optional.rule_conditions_segment
+          = select_tag :operand, options_for_select(Condition::OPERANDS.invert), class: 'select optional form-control'
+        = text_field_tag :value
+      .col-md-2.actions
+        = link_to '-', '#', class: 'remove'
+        = link_to '+', '#', class: 'add'
