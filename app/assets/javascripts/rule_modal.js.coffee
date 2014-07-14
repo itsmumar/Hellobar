@@ -14,8 +14,19 @@ class @RuleModal
     @$modal.removeClass('show-modal')
     @$modal.off() # unbind all modal events
 
+  valueClass: (segment, operand) ->
+    if segment == 'UrlCondition'
+      '.url.value'
+    else if segment == 'DateCondition'
+      if operand == 'is_before'
+        '.end_date.value'
+      else if operand == 'is_after'
+        '.start_date.value'
+      else if operand == 'is_between'
+        '.start_date.value, .end_date.value'
+
   _renderContent: ->
-    @$modal.find('.condition').each (index, condition) ->
+    @$modal.find('.condition').each (index, condition) =>
       $condition = $(condition)
       # TODO: DONT HIDE THE SEGMENT OR OPERAND
       $condition.find('.value').hide()
@@ -37,56 +48,28 @@ class @RuleModal
                   .show()
         # show the condition
       else if segmentValue == 'DateCondition'
-        # TODO: GET RID OF THE UNNECESSARY OPERANDS FOR DATE!!!
         operandValue = $condition.find('.rule_conditions_operand .select').val()
 
-        if operandValue == 'is_after'
-          rawStartDate = $condition.find('.start_date')
-                                   .prop('disabled', false)
-                                   .show()
-                                   .attr('value')
+        elementsToShow = @valueClass(segmentValue, operandValue)
+        $condition.find(elementsToShow)
+                  .prop('disabled', false)
+                  .show()
 
-          # TODO: PULL INTO DATE PARSING / DISPLAYING UTILITY CLASS
-          date = new Date(rawStartDate)
-          paddedMonth = "0#{date.getMonth()+1}".slice(-2)
-          paddedDate = "0#{date.getDate()}".slice(-2)
+        rawStartDate = $condition.find('.start_date').attr('value')
+        rawEndDate = $condition.find('.end_date').attr('value')
 
-          dateString = "#{date.getFullYear()}-#{paddedMonth}-#{paddedDate}"
-          # /TODO
-
-          $condition.find('.start_date').val(dateString)
-        else if operandValue == 'is_before'
-          rawEndDate = $condition.find('.end_date')
-                                   .prop('disabled', false)
-                                   .show()
-                                   .attr('value')
-
-          date = new Date(rawEndDate)
-          paddedMonth = "0#{date.getMonth()+1}".slice(-2)
-          paddedDate = "0#{date.getDate()}".slice(-2)
-
-          dateString = "#{date.getFullYear()}-#{paddedMonth}-#{paddedDate}"
-
-          $condition.find('.end_date').val(dateString)
-        else if operandValue == 'is_between'
-          $condition.find('.start_date, .end_date')
-                    .prop('disabled', false)
-                    .show()
-
-          rawStartDate = $condition.find('.start_date').attr('value')
-          rawEndDate = $condition.find('.end_date').attr('value')
-
+        if rawStartDate
           startDate = new Date(rawStartDate)
           paddedStartMonth = "0#{startDate.getMonth()+1}".slice(-2)
           paddedStartDate = "0#{startDate.getDate()}".slice(-2)
           startDateString = "#{startDate.getFullYear()}-#{paddedStartMonth}-#{paddedStartDate}"
+          $condition.find('.start_date').val(startDateString)
 
+        if rawEndDate
           endDate = new Date(rawEndDate)
           paddedEndMonth = "0#{endDate.getMonth()+1}".slice(-2)
           paddedEndDate = "0#{endDate.getDate()}".slice(-2)
           endDateString = "#{endDate.getFullYear()}-#{paddedEndMonth}-#{paddedEndDate}"
-
-          $condition.find('.start_date').val(startDateString)
           $condition.find('.end_date').val(endDateString)
 
   _bindSubmit: ->
