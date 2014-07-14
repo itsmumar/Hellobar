@@ -42,16 +42,18 @@ class ScriptGenerator < Mustache
   end
 
   def templates
-    site.site_elements.active.group_by(&:element_subtype).map do |type, site_elements|
+    template_names = options[:templates] || site.site_elements.active.map.map(&:element_subtype).uniq
+
+    template_names.map do |name|
       {
-        name: type,
-        markup: content_template(type)
+        name: name,
+        markup: content_template(name)
       }
     end
   end
 
   def rules
-    site.rules.map{|rule| hash_for_rule(rule) }
+    options[:rules] || site.rules.map{|rule| hash_for_rule(rule) }
   end
 
 private

@@ -50,4 +50,19 @@ describe SitesController do
       session[:current_site].should == site.id
     end
   end
+
+  describe "GET preview_script" do
+    it "returns a version of the site script for use in the editor live preview" do
+      stub_current_user(@user)
+      site = @user.sites.last
+
+      get :preview_script, :id => site
+
+      response.should be_success
+
+      SiteElement::BAR_TYPES.each do |template|
+        response.body.should include("HB.setTemplate(\"#{template}\"")
+      end
+    end
+  end
 end

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     resources :site_elements
     resources :rules
   end
+  get "sites/:id/preview_script", :to => "sites#preview_script", :as => :preview_script
 
   %w(email_developer generic_message).each do |sub|
     post "/contact_submissions/#{sub}", :to => "contact_submissions##{sub}", :as => "#{sub}_contact_submission"

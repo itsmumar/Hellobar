@@ -2,9 +2,11 @@ class SitesController < ApplicationController
   include SitesHelper
 
   before_filter :authenticate_user!
-  before_filter :load_site, :only => [:show, :edit, :update, :email_developer, :destroy]
+  before_filter :load_site, :only => [:show, :edit, :update, :destroy, :preview_script]
 
-  layout "with_sidebar"
+  skip_before_filter :verify_authenticity_token, :only => :preview_script
+
+  layout :determine_layout
 
   def create
     @site = Site.new(site_params)
@@ -48,6 +50,12 @@ class SitesController < ApplicationController
     redirect_to(current_site ? site_path(current_site) : new_site_path)
   end
 
+  # a version of the site's script with all templates, no elements and no rules, for use in the editor live preview
+  def preview_script
+    generator = ScriptGenerator.new(@site, :templates => SiteElement::BAR_TYPES, :rules => [])
+    render :js => generator.generate_script
+  end
+
   private
 
   def site_params
@@ -56,5 +64,9 @@ class SitesController < ApplicationController
 
   def load_site
     @site = current_user.sites.find(params[:id])
+  end
+
+  def determine_layout
+    params[:action] == "preview_script" ? false : "with_sidebar"
   end
 end
