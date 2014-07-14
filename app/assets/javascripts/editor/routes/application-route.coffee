@@ -3,6 +3,8 @@ HelloBar.ApplicationRoute = Ember.Route.extend
   model: ->
     if window.barID
       Ember.$.getJSON("/sites/#{window.siteID}/site_elements/#{window.barID}.json")
+    else if window.elementToCopyID
+      Ember.$.getJSON("/sites/#{window.siteID}/site_elements/#{window.elementToCopyID}.json")
     else
       Ember.$.getJSON("/sites/#{window.siteID}/site_elements/new.json")
 

@@ -2,3 +2,7 @@
 
 javascript:
   var siteID = #{@site.id}
+
+- unless params[:element_to_copy_id].blank?
+  javascript:
+    var elementToCopyID = #{params[:element_to_copy_id]}

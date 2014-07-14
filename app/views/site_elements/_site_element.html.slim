@@ -11,3 +11,5 @@ div.site-element-row.clearfix style="border-left: 4px solid ##{site_element.back
         = link_to "unpause", site_unpause_site_element_path(site_element, :site_id => @site), :method => :put
       - else
         = link_to "pause", site_pause_site_element_path(site_element, :site_id => @site), :method => :put
+    div
+      = link_to "add variation", new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element)
