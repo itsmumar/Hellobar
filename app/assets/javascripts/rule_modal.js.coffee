@@ -70,6 +70,9 @@ class @RuleModal
       $condition = $(condition)
       @_renderValue($condition)
 
+      $condition.on 'change', '.form-control', =>
+        @_renderValue($condition)
+
   _bindSubmit: ->
     modal = this
 
