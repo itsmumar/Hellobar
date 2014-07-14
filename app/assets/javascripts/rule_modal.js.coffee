@@ -5,6 +5,9 @@ class @RuleModal
 
   open: ->
     @_renderContent()
+    @_bindSubmit()
+    @_bindAddCondition()
+    @_bindRemoveCondition()
     @$modal.addClass('show-modal')
 
   close: ->
@@ -85,6 +88,33 @@ class @RuleModal
 
           $condition.find('.start_date').val(startDateString)
           $condition.find('.end_date').val(endDateString)
+
+  _bindSubmit: ->
+    modal = this
+
+    @$modal.find('form').on 'submit', (event) ->
+      event.preventDefault()
+
+      $.ajax
+        dataType: 'json'
+        url: @action
+        type: @method
+        data: $(this).serialize()
+        success: (data, status, xhr) ->
+          modal.close()
+        error: (xhr, status, error) ->
+          alert 'Something went wrong: ' + error
+
+  _bindAddCondition: ->
+    @$modal.on 'click', '.add', (event) =>
+      template = $('script#new-condition').html()
+      @$modal.find('.conditions').append(template)
+
+  _bindRemoveCondition: ->
+    @$modal.on 'click', '.remove', (event) ->
+      $condition = $(this).parents('.condition:first')
+      $condition.find('.rule_conditions__destroy input').val(true)
+      $condition.hide()
 
   _bindEscape: (callback) ->
     $(document).on 'keyup', (event) =>
