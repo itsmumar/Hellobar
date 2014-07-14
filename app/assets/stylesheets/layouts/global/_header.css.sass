@@ -21,13 +21,22 @@ $headerHeight: 5em
       height: 100%
       display: block
 
+  .header-nav-wrapper,
+  .header-user-wrapper
+
+    > *
+      @include inline-block()
+
   .header-nav-wrapper
     float: left
-    line-height: $headerHeight
 
   .header-user-wrapper
     float: right
-    line-height: $headerHeight
+
+    i.icon-notification,
+    i.icon-notification-alert
+      font-size: 2.33em
+
 
   /*-----------  Dropdowns  -----------*/
 

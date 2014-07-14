@@ -2,23 +2,23 @@ nav
   ul
     = sidebar_link_wrapper(:summary) do
       li class="#{sidebar_link_class(:summary)}"
-        span.glyphicon.glyphicon-list-alt
+        i.icon-summary
         | Summary
     = sidebar_link_wrapper(:manage) do
       li class="#{sidebar_link_class(:manage)}"
-        span.glyphicon.glyphicon-align-justify
+        i.icon-manage
         | Manage
     = sidebar_link_wrapper(:improve) do
       li class="#{sidebar_link_class(:improve)}"
-        span.glyphicon.glyphicon-signal
+        i.icon-improve
         | Improve
     = sidebar_link_wrapper(:contacts) do
       li class="#{sidebar_link_class(:contacts)}"
-        span.glyphicon.glyphicon-envelope
+        i.icon-contacts
         | Contacts
     = sidebar_link_wrapper(:feedback) do
       li class="#{sidebar_link_class(:feedback)}"
-        span.glyphicon.glyphicon-comment
+        i.icon-feedback
         | Feedback
 
   - if current_site

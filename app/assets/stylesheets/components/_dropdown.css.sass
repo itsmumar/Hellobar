@@ -2,24 +2,44 @@
 
 .dropdown-wrapper
   position: relative
+  @include inline-block()
 
-  > i, 
-  > a
+  > a,
+  > i
     cursor: pointer
+    padding: 0 1.5rem
 
   .dropdown-block
+    right: 0
     opacity: 0
-    padding: 1em
-    margin-top: -2em
+    padding: 1rem
+    margin-top: -1rem
+    padding-top: 1rem
     position: absolute
     pointer-events: none
     border: 1px solid $gray
     background-color: $white
-    @include transition()
+    @include transition(0.25s)
+
+    &:after
+      content: ''
+      width: 0
+      height: 0
+      right: 1rem
+      top: -0.67rem
+      z-index: 10
+      margin: 0 auto
+      display: block
+      position: absolute
+      background-color: transparent
+      border-left: 0.75rem solid rgba(255, 255, 255, 0)
+      border-right: 0.75rem solid rgba(255, 255, 255, 0)
+      border-bottom: 0.67rem solid $grayLighter
+      -moz-transform: scale(1.01)
 
   &:hover
-
+  
     .dropdown-block
       opacity: 1
-      margin-top: 0
+      margin-top: 0.67rem
       pointer-events: auto
