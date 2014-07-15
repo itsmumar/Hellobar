@@ -772,14 +772,12 @@ var _HB = {
   },
 
   // Injects the specified element into the #hellobar-preview-container element, or at the top of the body tag
-  injectIntoContainer:function(element)
+  injectAtTop:function(element)
   {
-    container = HB.$("#hellobar-preview-container") || document.body
-
-    if (container.children[0] )
-      container.insertBefore(element, container.children[0]);
+    if ( document.body.children[0] )
+      document.body.insertBefore(element,document.body.children[0]);
     else
-      container.appendChild(element);
+      document.body.appendChild(element);
   },
 
   // Injects the specified HTML for the given bar into the page
@@ -806,7 +804,7 @@ var _HB = {
       HB.p = document.createElement("div");
       HB.p.id="hellobar_pusher";
       HB.p.className = bar.size;
-      HB.injectIntoContainer(HB.p);
+      HB.injectAtTop(HB.p);
     }
     // Check if we have any external CSS to add
     if ( HB.extCSS )
@@ -829,7 +827,7 @@ var _HB = {
       head.appendChild(HB.extCSSStyle);
     }
     // Inject the container into the DOM
-    HB.injectIntoContainer(HB.w);
+    HB.injectAtTop(HB.w);
     // Render the bar in the container.
     var d = HB.w.contentWindow.document;
     d.open();

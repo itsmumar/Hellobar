@@ -12,6 +12,7 @@ $.mockjax({
     siteElement = <%= SiteElementSerializer.new(site).to_json %>
     siteElement.id = settings.urlParams.siteElementID
     siteElement.site.id = settings.urlParams.siteID
-    
+    siteElement.element_subtype = "traffic"
+
     this.responseText = siteElement
 })
