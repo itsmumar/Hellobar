@@ -95,13 +95,21 @@ private
   end
 
   def date_conditions(condition)
-    if condition.value.has_key?('start_date') && condition.value.has_key?('end_date')
-      "((new Date()).getTime()/1000 > #{condition.value['start_date'].to_i}) && ((new Date()).getTime()/1000 < #{condition.value['end_date'].to_i})"
-    elsif condition.value.has_key?('start_date')
-      "((new Date()).getTime()/1000 > #{condition.value['start_date'].to_i})"
-    elsif condition.value.has_key?('end_date')
-      "((new Date()).getTime()/1000 < #{condition.value['end_date'].to_i})"
+    start_date = condition.value['start_date']
+    end_date = condition.value['end_date']
+    tz = condition.value['timezone']
+
+    conditions = Array.new.tap do |array|
+      if start_date
+        array << %{(#{current_date(tz)} >= "#{sortable_date(tz, start_date)}")}
+      end
+
+      if end_date
+        array << %{(#{current_date(tz)} <= "#{sortable_date(tz, end_date)}")}
+      end
     end
+
+    conditions.join('&&')
   end
 
   def url_conditions(condition)
@@ -179,5 +187,22 @@ private
 
   def metadata(rule)
     rule_settings(rule).select{|key,value| value.present? }.with_indifferent_access
+  end
+
+  # Call with either a timezone (will render the current date; tz of nil will default to current user);
+  # or a date and a timezone (will use date in that timezone's offset).
+  #
+  # Output: 2001/01/01 000
+  def sortable_date tz=nil, date=nil
+    date ||= Time.zone.now.in_time_zone(tz)
+
+    date.strftime("%Y/%m/%d")
+  end
+
+  def current_date tz=nil
+    offset = Time.zone.now.in_time_zone(tz).utc_offset    
+    offset /= 60 # ruby is in seconds, javascript is in minutes
+
+    "dateWithOffset(#{offset})"
   end
 end

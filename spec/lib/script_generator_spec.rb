@@ -93,11 +93,11 @@ describe ScriptGenerator, '#render' do
 
     it 'has a start date constraint when present' do
       rule = Rule.new
-      condition = DateCondition.new value: { 'start_date' => 1_000 }, operand: Condition::OPERANDS[:is_after]
+      condition = DateCondition.new value: { 'start_date' => Date.new(2000, 01, 01) }, operand: Condition::OPERANDS[:is_after]
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
-      expected_string = '(new Date()).getTime()/1000 > 1000)'
+      expected_string = '(dateWithOffset(0) >= "2000/01/01 000")'
 
       generator.render.should include(expected_string)
     end
@@ -129,6 +129,36 @@ describe ScriptGenerator, '#render' do
       unexpected_string = /\(new Date\(\)\)\.getTime\(\)\//
 
       generator.render.should_not match(unexpected_string)
+    end
+
+    describe 'compare dates with timezones' do
+      let(:rule) { Rule.new }
+      before(:all) do
+        Timecop.freeze(Time.zone.local(2000))
+        expect( Time.zone.now.to_s ).to eq "2000-01-01 00:00:00 UTC"
+      end
+      after(:all) { Timecop.return }
+
+      it 'outputs correct javascript when timezone nil' do
+        condition = DateCondition.new value: { 'start_date' => Date.new(2000, 01, 01), 'timezone' => nil }, operand: Condition::OPERANDS[:is_after]
+        rule.stub conditions: [condition]
+        site.stub rules: [rule]
+
+        expected_string = '(dateWithOffset(0) >= "2000/01/01")'
+
+        generator.render.should include(expected_string)
+      end
+
+      it 'correctly compares dates when timezone is prescribed in condition' do
+        rule = Rule.new
+        condition = DateCondition.new value: { 'start_date' => Date.new(2000, 01, 01), 'timezone' => 'America/Chicago' }, operand: Condition::OPERANDS[:is_after]
+        rule.stub conditions: [condition]
+        site.stub rules: [rule]
+
+        expected_string = '(dateWithOffset(-360) >= "2000/01/01")'
+
+        generator.render.should include(expected_string)
+      end
     end
 
     it 'adds an exlusion constraint for all blacklisted URLs' do
@@ -284,5 +314,58 @@ describe ScriptGenerator, '#generate_script' do
     uglifier.should_receive(:compress).with('template')
 
     generator.generate_script
+  end
+end
+
+describe ScriptGenerator, '#js_date' do
+  fixtures :sites
+
+  let(:site) { sites(:zombo) }
+  let(:generator) { ScriptGenerator.new(site) }
+
+  before do
+    Time.zone = "UTC"
+    # freeze time at the new millenium baby
+    Timecop.freeze( Time.zone.local(2000) )
+
+    # these tests all live in UTC
+    expect(Time.current.to_s).to eq "2000-01-01 00:00:00 UTC"
+  end
+
+  after(:all) { Time.zone = "UTC" }
+
+  it 'should handle western hemisphere timezones' do
+    expect( Time.zone.name ).to eq "UTC"
+    # Ball just dropped in London
+    expect( generator.send(:sortable_date) ).to eq "2000/01/01"
+    # Chicago's still eating dinner, in the past by 6 hours
+    expect( Time.zone.now.in_time_zone("America/Chicago").to_s ).to eq "1999-12-31 18:00:00 -0600"
+    expect( generator.send(:sortable_date, "America/Chicago") ).to eq "1999/12/31"
+    expect( generator.send(:current_date, "America/Chicago") ).to eq "dateWithOffset(-360)"
+  end
+
+  it 'should handle eastern hemisphere timezones' do
+    Time.zone = "Hawaii"
+    Timecop.freeze( Time.zone.local(2000, 01, 01, 12, 00, 00) )
+    expect( Time.zone.name ).to eq "Hawaii"
+    expect( Time.zone.now.to_s ).to eq "2000-01-01 12:00:00 -1000"
+    # Noon on January 1st in Hawaii
+    expect( generator.send(:sortable_date) ).to eq "2000/01/01"
+    # China is already in the next day
+    expect( generator.send(:sortable_date, "Asia/Shanghai") ).to eq "2000/01/02"
+    expect( generator.send(:current_date, "Asia/Shanghai") ).to eq "dateWithOffset(480)"
+  end
+
+  it 'should not add daylight savings time in Arizonan timezones' do
+    # On 2001/07/01, Arizona didn't have daylight savings time in effect
+    Time.zone = "America/Denver"
+    Timecop.freeze( Time.zone.local(2000, 7, 1) )
+    expect(Time.current.to_s).to eq "2000-07-01 00:00:00 -0600"
+    # Denver is in MDT
+    expect( generator.send(:sortable_date, "America/Denver") ).to eq "2000/07/01"
+    expect( generator.send(:current_date, "America/Denver" ) ).to eq "dateWithOffset(-360)"
+    # Arizona turns to midnight an hour later in the summer since it's in MST year-round
+    expect( generator.send(:sortable_date, "America/Phoenix") ).to eq "2000/06/30"
+    expect( generator.send(:current_date, "America/Phoenix" ) ).to eq "dateWithOffset(-420)"
   end
 end

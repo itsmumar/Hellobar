@@ -1109,5 +1109,29 @@ var _HB = {
         element.style.left = Math.round(x)+"px";
       }, 5);
     })(HB.$(element));
+  },
+
+  // Returns UTC time, optionally with an offset
+  utcWithOffset: function(offset) {
+    var now = new Date();
+    var utc = new Date(now.getUTCFullYear(),
+                    now.getUTCMonth(),
+                    now.getUTCDate(),
+                    now.getUTCHours(),
+                    now.getUTCMinutes(),
+                    now.getUTCSeconds());
+    if (typeof offset === "undefined") offset = 0;
+    return new Date(utc.getTime() + (offset * 60000));
+  },
+
+  // Returns current date as YYYY/MM/DD, which is lexicographically sortable.
+  //
+  // Calling as dateWithOffset(utcWithOffset(-360)) will give the current date
+  // date from the perspective of someone 6 hours behind UTC.
+  dateWithOffset: function(date) {
+    if (typeof date === "undefined") date = utcWithOffset();
+    var m = date.getMonth() + 1;
+    var _zeropad = function(s) { return s.toString().length == 1 ? "0" + s : s; }
+    return date.getFullYear() + "/" + _zeropad(m) + "/" + _zeropad(date.getDate());
   }
 };
