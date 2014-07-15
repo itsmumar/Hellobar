@@ -8,7 +8,10 @@ class SiteElementSerializer < ActiveModel::Serializer
     :message, :link_text, :font,
 
     # colors
-    :background_color, :border_color, :button_color, :link_color, :text_color
+    :background_color, :border_color, :button_color, :link_color, :text_color,
+
+    # other
+    :link_style, :size
 
   def site
     {

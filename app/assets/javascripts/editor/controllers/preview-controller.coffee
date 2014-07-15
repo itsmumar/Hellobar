@@ -4,6 +4,6 @@ HelloBar.PreviewController = Ember.Controller.extend
 
   isMobile: Ember.computed.alias('controllers.application.isMobile')
 
-  #-----------  Default State Settings  -----------#
-
-  hasPreview: false
+  updatePreview: ( ->
+    this.get("controllers.application").renderPreview()
+  ).observes("isMobile")

@@ -22,6 +22,8 @@
 
 #= require ./router
 
+#= require ./hellobar_overrides
+
 #-----------  Application Initiation  -----------#
 
 window.HelloBar = Ember.Application.create

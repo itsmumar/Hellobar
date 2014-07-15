@@ -1,13 +1,7 @@
-{{!-- {{view HelloBar.BarPreviewView content=bar}} --}}
-
 {{#if isMobile}}
+  <div id="hellobar-preview-container"></div>
   <h1 style="margin: 2em 0; text-align: center">...fuckin' mobilé, 'bay...</h1>
 {{else}}
-  <h1 style="margin: 2em 0; text-align: center">...</h1>
-{{/if}}
-
-{{#if hasPreview}}
-  {{!-- Site Preview --}}
-{{else}}
-  <div class="no-preview-wrapper"></div>
+  <div id="hellobar-preview-container"></div>
+  <img src="/assets/screenshot.png" />
 {{/if}}
