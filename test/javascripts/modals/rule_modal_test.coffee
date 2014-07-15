@@ -59,3 +59,22 @@ test 'RuleModal interactions', ->
 
     $dom.click()
     equal $dom.hasClass('show-modal'), false, 'closes the modal like a FINAL LEVEL BOSS'
+
+  asyncTest 'RuleModal closes the modal on a successful form submission event', (assert) ->
+    $dom = $('<div class="modal-wrapper show-modal"><form action="url" method="post"></form></div>')
+    $form = $dom.find('form')
+    modal = new RuleModal($dom)
+
+    $.mockjax(
+      url: $form[0].action
+      type: 'post'
+      status: 200
+      responseText: '{}'
+    )
+
+    $form.submit()
+
+    setTimeout (->
+      assert.equal $($dom).hasClass('show-modal'), false, 'closes the modal after form submission'
+      QUnit.start()
+    ), 1000
