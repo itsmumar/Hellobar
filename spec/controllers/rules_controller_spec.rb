@@ -49,7 +49,7 @@ describe RulesController do
         priority: 1
       }
       expect(response).to be_success
-      
+
       JSON.parse(response.body).tap do |rule|
         expect(rule['site_id']).to eq site.id
         expect(rule['name']).to eq 'rule name'
@@ -104,14 +104,16 @@ describe RulesController do
         expect do
           put :update, site_id: site, id: rule, rule: {
             name: "new rule name",
-            conditions_attributes: [ condition_hash(:date_between) ]
+            conditions_attributes: {
+              :"0" => condition_hash(:date_between)
+            }
           }
         end.to change { Rule.count }.by(0)
         expect(response).to be_success
 
         JSON.parse(response.body).tap do |rule_obj|
           expect(rule_obj['name']).to eq "new rule name"
-          
+
           id = rule_obj['conditions'].first['id']
 
           expect(rule_obj['conditions']).to eq([{
@@ -131,7 +133,9 @@ describe RulesController do
         stub_current_user(site.owner)
         put :update, site_id: site, id: rule, rule: {
           name: "new rule name",
-          conditions_attributes: [condition_hash(:url_includes)]
+          conditions_attributes: {
+            :"0" => condition_hash(:url_includes)
+          }
         }
         JSON.parse(response.body).tap do |rule_obj|          
           id = rule_obj['conditions'].first['id']
@@ -149,10 +153,10 @@ describe RulesController do
         stub_current_user(site.owner)
         put :update, site_id: site, id: rule, rule: {
           name: "new rule name",
-          conditions_attributes: [
-            condition_hash(:url_includes),
-            condition_hash(:date_before)
-          ]
+          conditions_attributes: {
+            :"0" => condition_hash(:url_includes),
+            :"1" => condition_hash(:date_before)
+          }
         }
         JSON.parse(response.body).tap do |rule_obj|          
           segments = rule_obj['conditions'].collect {|c| c['segment'] }
@@ -169,7 +173,9 @@ describe RulesController do
 
         # remove it
         put :update, site_id: site, id: rule, rule: {
-          conditions_attributes: [{id: condition.id, _destroy: 1}]
+          conditions_attributes: {
+            :"0" => { id: condition.id, _destroy: 1}
+          }
         }
         expect { condition.reload }.to raise_error ActiveRecord::RecordNotFound
       end
@@ -178,7 +184,7 @@ describe RulesController do
 
   private
 
-  def condition_hash key
+  def condition_hash(key)
     conditions(key).attributes.tap {|h| h.delete('id') }
   end
 end

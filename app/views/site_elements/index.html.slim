@@ -30,24 +30,46 @@ h1= display_url_for_site(@site)
             = rule_form.input :match, collection: Rule::MATCH_ON
             span of the following conditions.
 
-        = rule_form.simple_fields_for :conditions, defaults: { label: false }, html: { class: 'form-inline' } do |condition_form|
-          .row.condition
-            .col-md-10
-              = condition_form.input :segment, as: :hidden
-              = condition_form.input :operand, as: :hidden
-              = condition_form.input :value, as: :hidden
-            .col-md-2
-              = link_to '-', '#', class: 'remove'
+        .conditions
+          - if rule_form.object.conditions.present?
+            = rule_form.simple_fields_for :conditions, defaults: { label: false } do |condition_form|
+              .row.condition
+                .col-md-10
+                  = condition_form.input :segment, collection: Condition::SEGMENTS.invert
+                  = condition_form.input :operand, collection: Condition::OPERANDS.invert
+
+                  = ConditionInputHelper.start_date_field(condition_form)
+                  = ConditionInputHelper.end_date_field(condition_form)
+                  = ConditionInputHelper.url_field(condition_form)
+                  = ConditionInputHelper.country_field(condition_form)
+                  = ConditionInputHelper.device_field(condition_form)
+                  = condition_form.input :_destroy, as: :hidden
+
+                .col-md-2.actions
+                  = link_to '-', '#', class: 'remove'
+                  = link_to '+', '#', class: 'add'
+          - else
+            span.bg-warning
+              .col-md-10
+                | There are no condition yet, so this rule matches 
+                strong everyone.
+                | To only match certain people click the blue &#8220;+&#8221; button.
+              .col-md-2.actions
               = link_to '+', '#', class: 'add'
 
-      footer
-        | *Cancel *Save
+        footer
+          = link_to 'Cancel', '#', class: 'cancel btn btn-default'
+          = button_tag 'Save', class: 'save btn btn-success'
 
-script type="text/template" class="new-condition"
-  = form_tag 'replace_me' do
+script type="text/template" id="new-condition"
+  .placeholder
     .row.condition
       .col-md-10
-        / segment, operand, and value inputs
-      .col-md-2
+        .form-group.select.optional.rule_conditions_segment
+          = select_tag :segment, options_for_select(Condition::SEGMENTS.invert), class: 'select optional form-control'
+        .form-group.select.optional.rule_conditions_segment
+          = select_tag :operand, options_for_select(Condition::OPERANDS.invert), class: 'select optional form-control'
+        = text_field_tag :value
+      .col-md-2.actions
         = link_to '-', '#', class: 'remove'
         = link_to '+', '#', class: 'add'

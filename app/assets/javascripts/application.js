@@ -13,11 +13,13 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
+//= require zeropad.jquery
 
 // Couldn't get 'require_tree .' to ignore the dashboard directory, so I opted to indivdually list the local js assets you needed here
 
 //= require admin_metrics
 //= require internal_tracking
 //= require optimizely_tracking
+//= require rule_modal
 //= require rules
 //= require_self
