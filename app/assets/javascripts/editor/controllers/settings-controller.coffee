@@ -4,7 +4,7 @@ HelloBar.SettingsController = Ember.Controller.extend
 
   step: 1
   prevStep: false
-  nextStep: 'style'
+  nextStep: 'style.bar'
 
   #-----------  Sub-Step Selection  -----------#
 

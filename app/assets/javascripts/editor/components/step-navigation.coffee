@@ -3,7 +3,7 @@ HelloBar.StepNavigationComponent = Ember.Component.extend
   tagName: 'nav'
   classNames: ['step-navigation']
 
-  routes: ['settings', 'style', 'colors', 'text', 'targeting']
+  routes: ['settings', 'style.bar', 'colors', 'text', 'targeting']
 
   routeLinks: (->
     $.map @get('routes'), (route, i) =>
