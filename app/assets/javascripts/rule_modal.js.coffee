@@ -40,17 +40,21 @@ class @RuleModal
         rawStartDate = $condition.find('.start_date').attr('value')
         rawEndDate = $condition.find('.end_date').attr('value')
 
+        # date parsing requires slashes
+        rawStartDate = rawStartDate.replace(/\-/g, '/') if rawStartDate
+        rawEndDate = rawEndDate.replace(/\-/g, '/') if rawEndDate
+
         if rawStartDate
           startDate = new Date(rawStartDate)
-          paddedStartMonth = "0#{startDate.getMonth()+1}".slice(-2)
-          paddedStartDate = "0#{startDate.getDate()}".slice(-2)
+          paddedStartMonth = $.zeropad startDate.getMonth() + 1
+          paddedStartDate = $.zeropad startDate.getDate()
           startDateString = "#{startDate.getFullYear()}-#{paddedStartMonth}-#{paddedStartDate}"
           $condition.find('.start_date').val(startDateString)
 
         if rawEndDate
           endDate = new Date(rawEndDate)
-          paddedEndMonth = "0#{endDate.getMonth()+1}".slice(-2)
-          paddedEndDate = "0#{endDate.getDate()}".slice(-2)
+          paddedEndMonth = $.zeropad endDate.getMonth() + 1
+          paddedEndDate = $.zeropad endDate.getDate()
           endDateString = "#{endDate.getFullYear()}-#{paddedEndMonth}-#{paddedEndDate}"
           $condition.find('.end_date').val(endDateString)
 
