@@ -101,11 +101,11 @@ private
 
     conditions = Array.new.tap do |array|
       if start_date
-        array << %{(HB.comparableDate(#{"auto" if tz}) >= "#{comparable_date(tz, start_date)}")}
+        array << %{(HB.comparableDate(#{'"auto"' unless tz}) >= "#{comparable_date(tz, start_date)}")}
       end
 
       if end_date
-        array << %{(HB.comparableDate(#{"auto" if tz}) <= "#{comparable_date(tz, end_date)}")}
+        array << %{(HB.comparableDate(#{'"auto"' unless tz}) <= "#{comparable_date(tz, end_date)}")}
       end
     end
 

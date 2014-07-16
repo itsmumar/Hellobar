@@ -133,18 +133,19 @@ describe ScriptGenerator, '#render' do
 
     describe 'compare dates with timezones' do
       let(:rule) { Rule.new }
-      before(:all) do
+      before do
+        Time.zone = "UTC"
         Timecop.freeze(Time.zone.local(2000))
         expect( Time.zone.now.to_s ).to eq "2000-01-01 00:00:00 UTC"
       end
-      after(:all) { Timecop.return }
+      after { Timecop.return }
 
       it 'outputs correct javascript when timezone nil' do
         condition = DateCondition.new value: { 'start_date' => Date.new(2000, 01, 01), 'timezone' => nil }, operand: Condition::OPERANDS[:is_after]
         rule.stub conditions: [condition]
         site.stub rules: [rule]
 
-        expected_string = '(HB.comparableDate("auto") >= 2000/01/01")'
+        expected_string = '(HB.comparableDate("auto") >= "2000/01/01")'
 
         generator.render.should include(expected_string)
       end
@@ -333,7 +334,7 @@ describe ScriptGenerator, '#js_date' do
     expect(Time.current.to_s).to eq "2000-01-01 00:00:00 UTC"
   end
 
-  after(:all) { Time.zone = "UTC" }
+  after { Timecop.return }
 
   it 'should handle western hemisphere timezones' do
     expect( Time.zone.name ).to eq "UTC"

@@ -42,13 +42,21 @@ test 'comparableDates are fully sortable with a plain Array.sort()', ->
 test 'comparableDates will compare to dates without timezones', ->
   clock = sinon.useFakeTimers(utcMillenium().getTime())
 
-  strictEqual _HB.comparableDate('auto'), "2000/01/01", "Auto mode should leave offset off"
+  # Again, we cannot manually change the test browser's offset.
+  if currentTestBrowserOffset() > 0
+    baselineDate = "1999/12/31"
+    nextDate = "2000/01/01"
+  else
+    baselineDate = "2000/01/01"
+    nextDate = "2000/01/02"
 
-  ok _HB.comparableDate('auto') >= "2000/01/01"
-  ok _HB.comparableDate('auto') < "2000/01/02"
+  strictEqual _HB.comparableDate('auto'), baselineDate, "Auto mode should leave offset off"
 
-  ok !(_HB.comparableDate('auto') >= "2000/01/02")
-  ok !(_HB.comparableDate('auto') < "2000/01/01")
+  ok _HB.comparableDate('auto') >= baselineDate, "We're already on the baseline date"
+  ok _HB.comparableDate('auto') < nextDate, "We are not yet on the next day"
+
+  ok !(_HB.comparableDate('auto') >= nextDate), "We are not yet past the next date (nor on it)"
+  ok !(_HB.comparableDate('auto') < baselineDate), "We are not less than the base date (we are on it)"
 
   clock.restore()
 
@@ -64,5 +72,3 @@ test 'several compares', ->
   ok _HB.comparableDate() < "2010/02/03 +#{invalidAfterOffset}", "locally, it should not yet be 2010/02/03" # in chicago, 7.00
 
   clock.restore()
-
-
