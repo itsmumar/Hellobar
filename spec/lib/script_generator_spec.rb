@@ -319,7 +319,7 @@ describe ScriptGenerator, '#generate_script' do
   end
 end
 
-describe ScriptGenerator, '#js_date' do
+describe ScriptGenerator, '#comparable_date' do
   fixtures :sites
 
   let(:site) { sites(:zombo) }
@@ -365,5 +365,51 @@ describe ScriptGenerator, '#js_date' do
     expect( generator.send(:comparable_date, "America/Denver") ).to eq "2000/07/01 +06.00"
     # Arizona turns to midnight an hour later in the summer since it's in MST year-round
     expect( generator.send(:comparable_date, "America/Phoenix") ).to eq "2000/07/01 +05.00"
+  end
+end
+
+describe ScriptGenerator, 'date compares work in all timezones' do
+  let(:site) { double 'site', id: '1337', rules: [], site_elements: double('site_elements', active: []) }
+  let(:generator) { ScriptGenerator.new(site) }
+  let(:rule) { site.rules.create }
+
+  context 'without timezone given' do
+    let(:condition) {
+      cond = DateCondition.new(value: { 'start_date' => Date.new(2000, 1, 1), 'timezone' => 'America/San_Francisco' }, operand: Condition::OPERANDS[:is_after])
+      cond.tap { rule.conditions << cond }
+    }
+
+    it 'is on the date east of zone' do
+      #sinon = 'sinon.useFakeTimers(new Date(2000, 0, 1).getTime());'
+      expect(phantom(sinon, 'new Date()', "TZ=America/Chicago")).to eq "Saturday Jan 01 2000 00:00:00 GMT-0600 (CST)"
+      result = phantom(sinon, '_HB.comparableDate() >= "2000/01/01 +04.00"', "TZ=America/Chicago")
+      expect(result).to eq "true" # will always return as a string, it's console output
+
+      result = phantom(sinon, '_HB.comparableDate() <= "2000/01/01 +20.00"', "TZ=America/Chicago")
+      expect(result).to eq "false" # will always return as a string, it's console output
+    end
+
+    it 'is not on the date west of zone' do
+
+    end
+  end
+
+  context 'with timezone given' do
+    it 'passes condition in western hemisphere' do
+
+    end
+
+    it 'passes condition in eastern hemisphere' do
+
+    end
+  end
+
+  private
+
+  def phantom before, js, phantom_options
+    path = Rails.root.join('tmp/base.js')
+    content = generator.render + before + "\nconsole.log(#{js});\n" + "phantom.exit();"
+    File.write(path, content)
+    `#{phantom_options} phantomjs #{path}`.rstrip.tap { FileUtils.rm(path) }
   end
 end
