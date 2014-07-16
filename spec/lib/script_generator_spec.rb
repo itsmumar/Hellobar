@@ -97,7 +97,7 @@ describe ScriptGenerator, '#render' do
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
-      expected_string = '(dateWithOffset(0) >= "2000/01/01 000")'
+      expected_string = '(HB.comparableDate("auto") >= "2000/01/01")'
 
       generator.render.should include(expected_string)
     end
@@ -113,11 +113,11 @@ describe ScriptGenerator, '#render' do
 
     it 'has an end date constraint when present' do
       rule = Rule.new
-      condition = DateCondition.new value: { 'end_date' => 20_000 }, operand: Condition::OPERANDS[:is_before]
+      condition = DateCondition.new value: { 'end_date' => Date.new(2015, 01, 01) }, operand: Condition::OPERANDS[:is_before]
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
-      expected_string = '(new Date()).getTime()/1000 < 20000)'
+      expected_string = '(HB.comparableDate("auto") <= "2015/01/01")'
 
       generator.render.should include(expected_string)
     end
@@ -144,7 +144,7 @@ describe ScriptGenerator, '#render' do
         rule.stub conditions: [condition]
         site.stub rules: [rule]
 
-        expected_string = '(dateWithOffset(0) >= "2000/01/01")'
+        expected_string = '(HB.comparableDate("auto") >= 2000/01/01")'
 
         generator.render.should include(expected_string)
       end
@@ -155,7 +155,8 @@ describe ScriptGenerator, '#render' do
         rule.stub conditions: [condition]
         site.stub rules: [rule]
 
-        expected_string = '(dateWithOffset(-360) >= "2000/01/01")'
+        # comparableDate() would return 2000/01/01 +06.00
+        expected_string = '(HB.comparableDate() >= "2000/01/01 +06.00")'
 
         generator.render.should include(expected_string)
       end
@@ -337,11 +338,10 @@ describe ScriptGenerator, '#js_date' do
   it 'should handle western hemisphere timezones' do
     expect( Time.zone.name ).to eq "UTC"
     # Ball just dropped in London
-    expect( generator.send(:sortable_date) ).to eq "2000/01/01"
+    expect( generator.send(:comparable_date) ).to eq "2000/01/01"
     # Chicago's still eating dinner, in the past by 6 hours
     expect( Time.zone.now.in_time_zone("America/Chicago").to_s ).to eq "1999-12-31 18:00:00 -0600"
-    expect( generator.send(:sortable_date, "America/Chicago") ).to eq "1999/12/31"
-    expect( generator.send(:current_date, "America/Chicago") ).to eq "dateWithOffset(-360)"
+    expect( generator.send(:comparable_date, "America/Chicago") ).to eq "2000/01/01 +06.00"
   end
 
   it 'should handle eastern hemisphere timezones' do
@@ -350,10 +350,9 @@ describe ScriptGenerator, '#js_date' do
     expect( Time.zone.name ).to eq "Hawaii"
     expect( Time.zone.now.to_s ).to eq "2000-01-01 12:00:00 -1000"
     # Noon on January 1st in Hawaii
-    expect( generator.send(:sortable_date) ).to eq "2000/01/01"
-    # China is already in the next day
-    expect( generator.send(:sortable_date, "Asia/Shanghai") ).to eq "2000/01/02"
-    expect( generator.send(:current_date, "Asia/Shanghai") ).to eq "dateWithOffset(480)"
+    expect( generator.send(:comparable_date) ).to eq "2000/01/01"
+    # China is already in the next day, but it should lock to UTC date
+    expect( generator.send(:comparable_date, "Asia/Shanghai") ).to eq "2000/01/01 +20.00"
   end
 
   it 'should not add daylight savings time in Arizonan timezones' do
@@ -362,10 +361,8 @@ describe ScriptGenerator, '#js_date' do
     Timecop.freeze( Time.zone.local(2000, 7, 1) )
     expect(Time.current.to_s).to eq "2000-07-01 00:00:00 -0600"
     # Denver is in MDT
-    expect( generator.send(:sortable_date, "America/Denver") ).to eq "2000/07/01"
-    expect( generator.send(:current_date, "America/Denver" ) ).to eq "dateWithOffset(-360)"
+    expect( generator.send(:comparable_date, "America/Denver") ).to eq "2000/07/01 +06.00"
     # Arizona turns to midnight an hour later in the summer since it's in MST year-round
-    expect( generator.send(:sortable_date, "America/Phoenix") ).to eq "2000/06/30"
-    expect( generator.send(:current_date, "America/Phoenix" ) ).to eq "dateWithOffset(-420)"
+    expect( generator.send(:comparable_date, "America/Phoenix") ).to eq "2000/07/01 +05.00"
   end
 end

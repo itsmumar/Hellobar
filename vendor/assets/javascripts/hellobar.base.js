@@ -1111,27 +1111,60 @@ var _HB = {
     })(HB.$(element));
   },
 
-  // Returns UTC time, optionally with an offset
-  utcWithOffset: function(offset) {
+  // Returns UTC time (you must ignore the timezone attached, as it will be local)
+  utc: function() {
     var now = new Date();
-    var utc = new Date(now.getUTCFullYear(),
+    return new Date(now.getUTCFullYear(),
                     now.getUTCMonth(),
                     now.getUTCDate(),
                     now.getUTCHours(),
                     now.getUTCMinutes(),
                     now.getUTCSeconds());
-    if (typeof offset === "undefined") offset = 0;
-    return new Date(utc.getTime() + (offset * 60000));
   },
 
-  // Returns current date as YYYY/MM/DD, which is lexicographically sortable.
+  // Returns current date as YYYY/MM/DD +Z.ZZ, which is lexicographically sortable.
+  // Z.ZZ refers to the offset from the International Date line, but inverted.
+  // The latest time zones (Hawaii, for example) have the smallest offset,
+  // so they are always less than the later timezones.
   //
-  // Calling as dateWithOffset(utcWithOffset(-360)) will give the current date
-  // date from the perspective of someone 6 hours behind UTC.
-  dateWithOffset: function(date) {
-    if (typeof date === "undefined") date = utcWithOffset();
+  // Generally, UTC is +-0. Here, UTC is +12.00. To find a TZ's offset under these rules, add 12.
+  // Chicago would be +6.00 (outside of DST, when it is +7.00).
+  // SF is +4.00 (+5.00 in DST).
+  // Half hour time zones would be +5.50 - this is a fractional hour, not a time.
+  //
+  // Pass the optional argument as false to ignore the offset,
+  // which should be used in "Detect user timezone" mode.
+  comparableDate: function(mode) {
+    if (typeof mode === "undefined") mode = null;
+    switch (mode) {
+      case "auto":
+        return this.ymd(new Date());
+      default:
+        var utc = this.utc();
+        return this.ymd(utc) + " +" + this.comparableOffset()
+    }
+    throw('You have passed an invalid mode');
+  },
+
+  comparableOffset: function(offset) {
+    if (typeof offset === "undefined") offset = (new Date()).getTimezoneOffset();
+    offset = (offset * -1) + 720;
+    offset = (offset / 60).toFixed(2);
+    return this.zeropad(offset, 5);
+  },
+
+  ymd: function(date) {
+    if (typeof date === "undefined") date = new Date();
     var m = date.getMonth() + 1;
-    var _zeropad = function(s) { return s.toString().length == 1 ? "0" + s : s; }
-    return date.getFullYear() + "/" + _zeropad(m) + "/" + _zeropad(date.getDate());
+    return date.getFullYear() + "/" + this.zeropad(m) + "/" + this.zeropad(date.getDate());
+  },
+
+  // Copied from zeropad.jquery.js
+  zeropad: function(string, length) {
+    // default to 2
+    string = string.toString();
+    if (typeof length === "undefined" && string.length == 1) length = 2;
+    length = length || string.length;
+    return string.length >= length ? string : this.zeropad("0" + string, length);
   }
 };

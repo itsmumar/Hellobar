@@ -101,11 +101,11 @@ private
 
     conditions = Array.new.tap do |array|
       if start_date
-        array << %{(#{current_date(tz)} >= "#{sortable_date(tz, start_date)}")}
+        array << %{(HB.comparableDate(#{"auto" if tz}) >= "#{comparable_date(tz, start_date)}")}
       end
 
       if end_date
-        array << %{(#{current_date(tz)} <= "#{sortable_date(tz, end_date)}")}
+        array << %{(HB.comparableDate(#{"auto" if tz}) <= "#{comparable_date(tz, end_date)}")}
       end
     end
 
@@ -192,17 +192,21 @@ private
   # Call with either a timezone (will render the current date; tz of nil will default to current user);
   # or a date and a timezone (will use date in that timezone's offset).
   #
-  # Output: 2001/01/01 000
-  def sortable_date tz=nil, date=nil
-    date ||= Time.zone.now.in_time_zone(tz)
+  # Output: 2001/01/01 +00.00
+  def comparable_date tz=nil, date=nil
+    date ||= Time.zone.now.in_time_zone("UTC")
+    offset = Time.zone.now.in_time_zone(tz).utc_offset
 
-    date.strftime("%Y/%m/%d")
+    date.strftime("%Y/%m/%d").tap do |str|
+      str << " +" + comparable_offset(offset) if tz
+    end
   end
 
-  def current_date tz=nil
-    offset = Time.zone.now.in_time_zone(tz).utc_offset    
-    offset /= 60 # ruby is in seconds, javascript is in minutes
+  # Returns our comparable format - 00.00
+  def comparable_offset offset
+    offset /= 60 * 60 # ruby offsets are in seconds, convert to hours.
+    offset += 12 # add the correct number of hours.
 
-    "dateWithOffset(#{offset})"
+    ("%00.02f" % offset).rjust(5, "0")
   end
 end
