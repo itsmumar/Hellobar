@@ -88,16 +88,47 @@ test 'RuleModal interactions', ->
     $form = $dom.find('form')
     modal = new RuleModal($dom)
 
-    $.mockjax(
+    $.mockjax
       url: $form[0].action
       type: 'post'
       status: 200
       responseText: '{}'
-    )
 
     $form.submit()
 
     setTimeout (->
-      assert.equal $($dom).hasClass('show-modal'), false, 'closes the modal after form submission'
-      QUnit.start()
+      equal $($dom).hasClass('show-modal'), false, 'closes the modal after form submission'
+      start()
     ), 500
+
+test 'filtering out operands', ->
+  test '_validOperands()', ->
+    $dom = $('<div></div>')
+    modal = new RuleModal($dom)
+
+    deepEqual modal._validOperands('CountryCondition'), ['is', 'is_not'], 'has a valid value for country'
+    deepEqual modal._validOperands('DeviceCondition'), ['is', 'is_not'], 'has a valid value for device'
+    deepEqual modal._validOperands('DateCondition'), ['is_before', 'is_after', 'is_between'], 'has a valid value for date'
+    deepEqual modal._validOperands('UrlCondition'), ['includes', 'excludes'], 'has a valid value for url'
+
+  test '_filteredOperands(segment)', ->
+    $dom = $('<div></div>')
+    modal = new RuleModal($dom)
+    isOption = '<option value="is"></option>'
+    isNotOption = '<option value="is_not"></option>'
+
+    modal.newConditionTemplate = ->
+      template =  "<div class='placeholder'>"
+      template +=   "<div id='operand'>#{isOption}</div>"
+      template += "</div>"
+
+    equal modal.filteredOperands('CountryCondition').val(), $(isOption).val()
+
+    modal.newConditionTemplate = ->
+      template =  "<div class='placeholder'>"
+      template +=   "<div id='operand'>#{isOption}#{isNotOption}</div>"
+      template += "</div>"
+
+    expectedValue = modal.filteredOperands("CountryCondition").map -> @value
+
+    deepEqual $.makeArray(expectedValue), ["is", "is_not"], 'it pulls all option elements that match'

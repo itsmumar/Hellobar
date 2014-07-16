@@ -67,7 +67,7 @@ script type="text/template" id="new-condition"
       .col-md-10
         .form-group.select.optional.rule_conditions_segment
           = select_tag :segment, options_for_select(Condition::SEGMENTS.invert), class: 'select optional form-control'
-        .form-group.select.optional.rule_conditions_segment
+        .form-group.select.optional.rule_conditions_operand
           = select_tag :operand, options_for_select(Condition::OPERANDS.invert), class: 'select optional form-control'
         = text_field_tag :value
       .col-md-2.actions

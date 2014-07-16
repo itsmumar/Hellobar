@@ -1,4 +1,7 @@
 class @RuleModal
+  newConditionTemplate: ->
+    $('script#new-condition').html()
+
   constructor: (@$modal) ->
     @_bindInteractions()
 
@@ -23,7 +26,7 @@ class @RuleModal
       valueId = $value.find('input').attr('id')
       valueName = $value.find('input').attr('name')
 
-      if $.inArray(segmentValue, ['CountryCondition', 'DeviceSegment']) == 1
+      if $.inArray(segmentValue, ['CountryCondition', 'DeviceSegment']) != -1
         $value.replaceWith('<span>We dont support this yet</span>')
       else if segmentValue == 'UrlCondition'
         $condition.find('.url')
@@ -77,6 +80,23 @@ class @RuleModal
       $condition.on 'change', '.form-control', =>
         @_renderValue($condition)
 
+  filteredOperands: (segment) ->
+    conditionTemplate = @newConditionTemplate()
+    validOperands = @_validOperands(segment)
+
+    $(conditionTemplate).find('#operand option')
+                        .filter ->
+                          $.inArray(@value, validOperands) != -1
+
+  _validOperands: (segment) ->
+    @_operandMapping[segment]
+
+  _operandMapping:
+    'CountryCondition': ['is', 'is_not']
+    'DeviceCondition': ['is', 'is_not']
+    'DateCondition': ['is_before', 'is_after', 'is_between']
+    'UrlCondition': ['includes', 'excludes']
+
   _bindSubmit: ->
     modal = this
 
@@ -95,7 +115,7 @@ class @RuleModal
 
   _addCondition: ->
     nextIndex = @$modal.find('.conditions').length
-    templateHTML = $('script#new-condition').html()
+    templateHTML = @newConditionTemplate()
     $template = $(templateHTML)
     # update the names on the elements to be submitted properly
     $template.find('[name="segment"]')
