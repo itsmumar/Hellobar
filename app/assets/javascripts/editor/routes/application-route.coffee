@@ -34,3 +34,6 @@ HelloBar.ApplicationRoute = Ember.Route.extend
           window.location = "/sites/#{window.siteID}/site_elements"
         error: =>
           @controller.toggleProperty('saveSubmitted')
+
+    closeEditor: ->
+      window.location = "/sites/#{window.siteID}/site_elements"
