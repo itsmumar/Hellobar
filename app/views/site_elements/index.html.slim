@@ -15,9 +15,9 @@ h1= display_url_for_site(@site)
         - rule.site_elements.each do |site_element|
           = render "site_elements/site_element", { :site_element => site_element }
 
-  .modal-wrapper
+  .modal-wrapper.rule-modal
     .modal-block
-      = simple_form_for [@site, rule], defaults: { label: false }, html: { class: 'form-inline', id: "rule-#{rule.id}" } do |rule_form|
+      = simple_form_for [@site, rule], defaults: { label: false }, html: { class: 'form-inline rule-modal', id: "rule-#{rule.id}" } do |rule_form|
         .row
           .col-md-12
             h1 New Rule
@@ -30,7 +30,7 @@ h1= display_url_for_site(@site)
             = rule_form.input :match, collection: Rule::MATCH_ON
             span of the following conditions.
 
-        .conditions
+        .conditions.group
           - if rule_form.object.conditions.present?
             = rule_form.simple_fields_for :conditions, defaults: { label: false } do |condition_form|
               .row.condition
@@ -46,8 +46,8 @@ h1= display_url_for_site(@site)
                   = condition_form.input :_destroy, as: :hidden
 
                 .col-md-2.actions
-                  = link_to '-', '#', class: 'remove'
-                  = link_to '+', '#', class: 'add'
+                  = link_to raw("&#45;"), '#', class: 'remove'
+                  = link_to raw('&#43;'), '#', class: 'add'
           - else
             span.bg-warning
               .col-md-10
@@ -58,8 +58,11 @@ h1= display_url_for_site(@site)
               = link_to '+', '#', class: 'add'
 
         footer
-          = link_to 'Cancel', '#', class: 'cancel btn btn-default'
-          = button_tag 'Save', class: 'save btn btn-success'
+          .row
+            .col-md-2
+              = link_to 'Cancel', '#', class: 'cancel btn btn-default'
+            .col-md-2.col-md-offset-8
+              = button_tag 'Save', class: 'save btn btn-success'
 
 script type="text/template" id="new-condition"
   .placeholder
