@@ -1127,42 +1127,37 @@ var _HB = {
     return new Date(this.utc().getTime() + ((86400/2) * 1000));
   },
 
-  // Returns current date as YYYY/MM/DD +Z.ZZ, which is lexicographically sortable.
-  // Z.ZZ refers to the offset from the International Date line, but inverted.
+  // Returns current date as YYYY/MM/DD +ZZ:ZZ, which is lexicographically sortable.
+  // ZZ:ZZ refers to the offset from the International Date line, but inverted.
   // The latest time zones (Hawaii, for example) have the smallest offset,
   // so they are always less than the later timezones.
   //
   // Generally, UTC is +-0. Here, UTC is +12.00. To find a TZ's offset under these rules, add 12.
-  // Chicago would be +6.00 (outside of DST, when it is +7.00).
-  // SF is +4.00 (+5.00 in DST).
-  // Half hour time zones would be +5.50 - this is a fractional hour, not a time.
+  // Chicago would be +06:00 (outside of DST, when it is +07:00).
+  // SF is +04:00 (+05:00 in DST).
+  // Half hour time zones would be +05:30.
   //
-  // Pass the optional argument as false to ignore the offset,
-  // which should be used in "Detect user timezone" mode.
-  comparableDate: function(mode) {
-    if (typeof mode === "undefined") mode = null;
-    switch (mode) {
-      case "auto":
-        return this.ymd(new Date());
-      default:
-        var idl = this.idl();
-        return this.ymd(idl) + " +" + this.comparableOffset();
+  // Passing no argument leads to "Detect user timezone" mode, as does "auto".
+  // Pass an integer offset in hours otherwise, from 0 to 23.
+  comparableDate: function(targetOffset) {
+    if (typeof targetOffset === "undefined") offset = "auto";
+    if (targetOffset === "auto") {
+      return this.ymd(new Date());
+    } else {
+      var localOffset = (new Date()).getTimezoneOffset();
+      var diff = targetOffset * 60 - localOffset;
+      console.log('difference from local offset ' + localOffset + ' to target offset of ' + targetOffset + ' is ' + diff + ', resulting in ' + this.comparableOffset(diff));
+      var idl = this.idl();      
+      return this.ymd(idl) + " +" + this.comparableOffset(diff);
     }
-    throw('You have passed an invalid mode');
   },
 
   comparableOffset: function(offset) {
     if (typeof offset === "undefined") offset = (new Date()).getTimezoneOffset();
     offset = (offset * -1) + 720;
-    offset = (offset / 60).toFixed(2);
-    return this.zeropad(offset, 5) + this.comparableSuffix();
-  },
-
-  // Returns
-  comparableSuffix: function() {
-    var idl = this.idl();
-    var internationalDate = this.ymd(idl);
-    return (this.ymd() === internationalDate) ? "!" : "";
+    var hours = Math.floor(offset / 60);
+    var minutes = offset % 60;
+    return this.zeropad(hours) + ":" + this.zeropad(minutes);
   },
 
   ymd: function(date) {

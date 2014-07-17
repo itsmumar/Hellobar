@@ -7,6 +7,7 @@ module 'hellobar_base',
 # you can't easily create a date in a specific timezone.
 localMillenium = -> new Date(2000, 0, 1)
 currentTestBrowserOffset = (date=new Date) -> date.getTimezoneOffset()
+adjustedOffset = (hours, date=new Date) -> (date.getTimezoneOffset() - (hours * 60))
 utcMillenium = -> new Date(localMillenium().getTime() - ( currentTestBrowserOffset(localMillenium()) * 60000))
 
 test 'idl dates string representation is what is expected', ->
@@ -16,29 +17,17 @@ test 'idl dates string representation is what is expected', ->
   y = now.getUTCFullYear()
   m = _HB.zeropad(now.getUTCMonth()+1)
   d = _HB.zeropad(now.getUTCDate())
-  utcStringDate = "#{y}/#{m}/#{d} +#{_HB.comparableOffset()}"
-  strictEqual _HB.comparableDate(), utcStringDate, "#{_HB.comparableDate()} and #{utcStringDate} dates aren't equal"
+  utcStringDate = "#{y}/#{m}/#{d} +#{_HB.comparableOffset(adjustedOffset(12))}"
+  strictEqual _HB.comparableDate(12), utcStringDate, "#{_HB.comparableDate(12)} and #{utcStringDate} dates aren't equal"
 
-  clock.restore()
-
-test 'dates string representation lacks bang before midnight', ->
-  currentOffset = _HB.comparableOffset currentTestBrowserOffset(localMillenium())
-
-  clock = sinon.useFakeTimers(localMillenium().getTime())
-  strictEqual _HB.comparableDate(), "2000/01/01 +#{currentOffset}!", "#{_HB.comparableDate()} did not have bang"
-  oneHourBefore = new Date( localMillenium().getTime() - (60000 * 60))
-  clock.restore()
-
-  clock = sinon.useFakeTimers(oneHourBefore.getTime())
-  strictEqual _HB.comparableDate(), "2000/01/01 +#{currentOffset}", "#{_HB.comparableDate()} #{currentOffset}" # does not have bang
   clock.restore()
 
 test 'comparableDate can be compared with GMT', ->
   clock = sinon.useFakeTimers(utcMillenium().getTime())
 
-  dateString = _HB.comparableDate()
-  currentOffset = _HB.comparableOffset currentTestBrowserOffset()
-  strictEqual dateString, "2000/01/01 +#{currentOffset}", "#{dateString} was unexpected"
+  dateString = _HB.comparableDate(12)
+  adjustedOffset = _HB.comparableOffset(currentTestBrowserOffset() - (12 * 60))
+  strictEqual dateString, "2000/01/01 +#{adjustedOffset}", "#{dateString} was unexpected, expected 2000/01/01 +#{adjustedOffset}"
 
   clock.restore()
   
@@ -47,11 +36,11 @@ test 'zeropad behaves correctly', ->
   equal _HB.zeropad(5), "05"
 
 test 'comparableDates are fully sortable with a plain Array.sort()', ->
-  correct = [ '2001/01/01 +06.25', '2002/08/02 +04.00', '2002/08/02 +12.00',
-              '2003/01/01 +06.25', '2003/01/01 +09.25', '2003/01/02 +00.00' ]
+  correct = [ '2001/01/01 +06:15', '2002/08/02 +04:00', '2002/08/02 +12:00',
+              '2003/01/01 +06:15', '2003/01/01 +09:15', '2003/01/02 +00:00' ]
 
-  testOrder = [ '2003/01/02 +00.00', '2003/01/01 +09.25', '2002/08/02 +04.00',
-                '2003/01/01 +06.25', '2001/01/01 +06.25', '2002/08/02 +12.00' ]
+  testOrder = [ '2003/01/02 +00:00', '2003/01/01 +09:15', '2002/08/02 +04:00',
+                '2003/01/01 +06:15', '2001/01/01 +06:15', '2002/08/02 +12:00' ]
 
   deepEqual testOrder.sort(), correct, "Array.sort didn't work"
 
@@ -92,3 +81,8 @@ test 'several compares', ->
   ok _HB.comparableDate() < "2010/02/04 +#{invalidAfterOffset}", "locally, it should not yet be 2010/02/03"
 
   clock.restore()
+
+test 'comparableOffset works right', ->
+  equal _HB.comparableOffset(360), "06:00"
+  equal _HB.comparableOffset(-360), "18:00"
+  equal _HB.comparableOffset(-390), "18:30"
