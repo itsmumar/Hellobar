@@ -1,0 +1,50 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://dynamodb.us-east-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: '{"TableName":"test_emails"}'
+    headers:
+      Content-Type:
+      - application/x-amz-json-1.0
+      Accept-Encoding:
+      - ''
+      X-Amz-Target:
+      - DynamoDB_20111205.DescribeTable
+      Content-Length:
+      - '27'
+      User-Agent:
+      - aws-sdk-ruby/1.33.0 ruby/2.1.1 x86_64-darwin12.0
+      X-Amz-Date:
+      - 20140717T195912Z
+      X-Amz-Content-Sha256:
+      - 6e2125669fa9cc1aefa8ec4099bf32311b22f05d9068386cd08acea802eeff1b
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAIZQQZ3QVHFC25PUA/20140717/us-east-1/dynamodb/aws4_request,
+        SignedHeaders=content-length;content-type;host;user-agent;x-amz-content-sha256;x-amz-date;x-amz-target,
+        Signature=72418b553c67503d729ade8cfb30c2352111b725bdd0785f4ffbc169e567d9d2
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amzn-Requestid:
+      - NEELFUSTRGGQAL85EL1TOUT5TFVV4KQNSO5AEMVJF66Q9ASUAAJG
+      X-Amz-Crc32:
+      - '1230326876'
+      Content-Type:
+      - application/x-amz-json-1.0
+      Content-Length:
+      - '377'
+      Date:
+      - Thu, 17 Jul 2014 19:59:11 GMT
+    body:
+      encoding: UTF-8
+      string: '{"Table":{"CreationDateTime":1.381899086769E9,"ItemCount":2,"KeySchema":{"HashKeyElement":{"AttributeName":"goal_id","AttributeType":"N"},"RangeKeyElement":{"AttributeName":"timestamp","AttributeType":"N"}},"ProvisionedThroughput":{"NumberOfDecreasesToday":0,"ReadCapacityUnits":20,"WriteCapacityUnits":40},"TableName":"test_emails","TableSizeBytes":77,"TableStatus":"ACTIVE"}}'
+    http_version: 
+  recorded_at: Thu, 17 Jul 2014 19:59:12 GMT
+recorded_with: VCR 2.9.0

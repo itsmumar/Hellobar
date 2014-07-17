@@ -1,6 +1,17 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
+require "vcr"
+
+VCR.configure do |c|
+  c.ignore_localhost = true
+  c.cassette_library_dir = "spec/cassettes"
+  c.hook_into :webmock
+  c.default_cassette_options = {:record => :none} # *TEMPORARILY* set to :new_episodes if you add a spec that makes a network request
+end
+
+VCR.use_cassette('bootstrap') do
+  require File.expand_path("../../config/environment", __FILE__)
+end
+
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'simplecov'
@@ -29,13 +40,6 @@ Dir[Rails.root.join("spec/models/validators/**/*.rb")].each { |f| require f }
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
-
-VCR.configure do |c|
-  c.ignore_localhost = true
-  c.cassette_library_dir = "spec/cassettes"
-  c.hook_into :webmock
-  c.default_cassette_options = {:record => :none} # *TEMPORARILY* set to :new_episodes if you add a spec that makes a network request
-end
 
 RSpec.configure do |config|
   config.around(:each) do |example|
