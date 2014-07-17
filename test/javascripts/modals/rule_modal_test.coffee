@@ -52,83 +52,85 @@ test 'RuleModal._renderValue($condition)', (assert) ->
   equal $modal.find('input[name*=start_date]').val(), "2014-07-16", "Date was not rendered, was #{$modal.find('input[name*=start_date]').val()}"
   equal $modal.find('select[name*=operand]').val(), "is_after", "Is after must be rendered"
 
-test 'RuleModal interactions', ->
-  test 'RuleModal binds to escape keypress closes the modal', ->
-    $dom = $('<div class="show-modal"></div>')
-    modal = new RuleModal($dom)
+module 'RuleModal interactions'
 
-    escapePress = $.Event('keyup')
-    escapePress.keyCode = 27
-    $(document).trigger(escapePress)
+test 'RuleModal binds to escape keypress closes the modal', ->
+  $dom = $('<div class="show-modal"></div>')
+  modal = new RuleModal($dom)
 
-    equal $dom.hasClass('show-modal'), false, 'binds the escape key to close the modal'
+  escapePress = $.Event('keyup')
+  escapePress.keyCode = 27
+  $(document).trigger(escapePress)
 
-  test 'RuleModal binds to the cancel anchor to close the modal', ->
-    $dom = $('<div class="show-modal"><a class="cancel">DIE</a></div>')
-    modal = new RuleModal($dom)
+  equal $dom.hasClass('show-modal'), false, 'binds the escape key to close the modal'
 
-    $dom.find('a.cancel').click()
+test 'RuleModal binds to the cancel anchor to close the modal', ->
+  $dom = $('<div class="show-modal"><a class="cancel">DIE</a></div>')
+  modal = new RuleModal($dom)
 
-    equal $dom.hasClass('show-modal'), false, 'binds the cancel anchor to close the modal'
+  $dom.find('a.cancel').click()
 
-  test 'RuleModal closing based on where the user clicks', ->
-    $dom = $('<div class="modal-wrapper show-modal"><div class="modal-block"></div></div>')
-    modal = new RuleModal($dom)
+  equal $dom.hasClass('show-modal'), false, 'binds the cancel anchor to close the modal'
 
-    $dom.find('.modal-block').click()
-    equal $dom.hasClass('show-modal'), true, 'keeps the modal open like a BOSS'
+test 'RuleModal closing based on where the user clicks', ->
+  $dom = $('<div class="modal-wrapper show-modal"><div class="modal-block"></div></div>')
+  modal = new RuleModal($dom)
 
-    $dom.click()
-    equal $dom.hasClass('show-modal'), false, 'closes the modal like a FINAL LEVEL BOSS'
+  $dom.find('.modal-block').click()
+  equal $dom.hasClass('show-modal'), true, 'keeps the modal open like a BOSS'
 
-  asyncTest 'RuleModal closes the modal on a successful form submission event', (assert) ->
-    expect(2)
+  $dom.click()
+  equal $dom.hasClass('show-modal'), false, 'closes the modal like a FINAL LEVEL BOSS'
 
-    $dom = $('<div class="modal-wrapper show-modal"><form action="url" method="post"></form></div>')
-    $form = $dom.find('form')
-    modal = new RuleModal($dom)
+asyncTest 'RuleModal closes the modal on a successful form submission event', (assert) ->
+  expect(1)
 
-    $.mockjax
-      url: $form[0].action
-      type: 'post'
-      status: 200
-      responseText: '{}'
+  $dom = $('<div class="modal-wrapper show-modal"><form action="url" method="post"></form></div>')
+  $form = $dom.find('form')
+  modal = new RuleModal($dom)
 
-    $form.submit()
+  $.mockjax
+    url: $form[0].action
+    type: 'post'
+    status: 200
+    responseText: '{}'
 
-    setTimeout (->
-      equal $($dom).hasClass('show-modal'), false, 'closes the modal after form submission'
-      start()
-    ), 500
+  $form.submit()
 
-test 'filtering out operands', ->
-  test '_validOperands()', ->
-    $dom = $('<div></div>')
-    modal = new RuleModal($dom)
+  setTimeout (->
+    equal $($dom).hasClass('show-modal'), false, 'closes the modal after form submission'
+    start()
+  ), 500
 
-    deepEqual modal._validOperands('CountryCondition'), ['is', 'is_not'], 'has a valid value for country'
-    deepEqual modal._validOperands('DeviceCondition'), ['is', 'is_not'], 'has a valid value for device'
-    deepEqual modal._validOperands('DateCondition'), ['is_before', 'is_after', 'is_between'], 'has a valid value for date'
-    deepEqual modal._validOperands('UrlCondition'), ['includes', 'excludes'], 'has a valid value for url'
+module 'RuleModal filtering out operands'
 
-  test '_filteredOperands(segment)', ->
-    $dom = $('<div></div>')
-    modal = new RuleModal($dom)
-    isOption = '<option value="is"></option>'
-    isNotOption = '<option value="is_not"></option>'
+test '_validOperands()', ->
+  $dom = $('<div></div>')
+  modal = new RuleModal($dom)
 
-    modal.newConditionTemplate = ->
-      template =  "<div class='placeholder'>"
-      template +=   "<div id='operand'>#{isOption}</div>"
-      template += "</div>"
+  deepEqual modal._validOperands('CountryCondition'), ['is', 'is_not'], 'has a valid value for country'
+  deepEqual modal._validOperands('DeviceCondition'), ['is', 'is_not'], 'has a valid value for device'
+  deepEqual modal._validOperands('DateCondition'), ['is_before', 'is_after', 'is_between'], 'has a valid value for date'
+  deepEqual modal._validOperands('UrlCondition'), ['includes', 'excludes'], 'has a valid value for url'
 
-    equal modal.filteredOperands('CountryCondition').val(), $(isOption).val()
+test '_filteredOperands(segment)', ->
+  $dom = $('<div></div>')
+  modal = new RuleModal($dom)
+  isOption = '<option value="is"></option>'
+  isNotOption = '<option value="is_not"></option>'
 
-    modal.newConditionTemplate = ->
-      template =  "<div class='placeholder'>"
-      template +=   "<div id='operand'>#{isOption}#{isNotOption}</div>"
-      template += "</div>"
+  modal.newConditionTemplate = ->
+    template =  "<div class='placeholder'>"
+    template +=   "<div id='operand'>#{isOption}</div>"
+    template += "</div>"
 
-    expectedValue = modal.filteredOperands("CountryCondition").map -> @value
+  equal modal.filteredOperands('CountryCondition').val(), $(isOption).val()
 
-    deepEqual $.makeArray(expectedValue), ["is", "is_not"], 'it pulls all option elements that match'
+  modal.newConditionTemplate = ->
+    template =  "<div class='placeholder'>"
+    template +=   "<div id='operand'>#{isOption}#{isNotOption}</div>"
+    template += "</div>"
+
+  expectedValue = modal.filteredOperands("CountryCondition").map -> @value
+
+  deepEqual $.makeArray(expectedValue), ["is", "is_not"], 'it pulls all option elements that match'
