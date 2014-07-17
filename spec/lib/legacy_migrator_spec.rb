@@ -273,30 +273,6 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
   end
 end
 
-describe LegacyMigrator, ".migrate_goals_to_contact_lists" do
-  let(:legacy_email_goal) { double "legacy_email_goal", id: 12345, site_id: legacy_site.id, data_json: {}, created_at: Time.parse("2000-01-31"), updated_at: Time.now, type: "Goals::CollectEmail", priority: 1 }
-  let(:legacy_traffic_goal) { double "legacy_traffic_goal", id: 12346, site_id: legacy_site.id, data_json: {}, created_at: Time.parse("2000-01-31"), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
-  let(:legacy_site) { double "legacy_site", id: 123 }
-
-  before do
-    Site.stub :exists? => true
-    LegacyMigrator::LegacyGoal.should_receive(:find_each).and_yield(legacy_email_goal).and_yield(legacy_traffic_goal)
-  end
-
-  it "creates a contact list only for CollectEmail goals" do
-    expect {
-      LegacyMigrator.migrate_goals_to_contact_lists
-    }.to change(ContactList, :count).by(1)
-
-    ContactList.find_by_id(legacy_email_goal.id).should_not be_nil
-  end
-
-  it "associates contact lists with the proper sites" do
-    ContactList.should_receive(:create!).with(hash_including(:site_id => legacy_email_goal.site_id))
-    LegacyMigrator.migrate_goals_to_contact_lists
-  end
-end
-
 describe LegacyMigrator, ".migrate_identities" do
   let(:legacy_id) { double "legacy_id", id: 12345, site_id: legacy_site.id, created_at: Time.parse("2000-01-31"), updated_at: Time.now, provider: "provider", credentials: "credentials", extra: "extra", embed_code: "embed_code" }
   let(:legacy_site) { double "legacy_site", id: 123 }
@@ -322,26 +298,51 @@ describe LegacyMigrator, ".migrate_identities" do
   end
 end
 
-describe LegacyMigrator, ".migrate_identity_integrations_to_contact_lists" do
-  let(:legacy_id_int) { double "legacy_id_int", id: 12345, integrable_id: contact_list.id, identity_id: legacy_id.id, data: "data", :last_synced_at => 1.week.ago, :created_at => 2.weeks.ago, :updated_at => 1.day.ago }
-  let(:legacy_id) { double "legacy_id", id: 123 }
-  let(:contact_list) { double "contact_list", id: 1234 }
+describe LegacyMigrator, ".migrate_goals_to_contact_lists" do
+  let(:legacy_email_goal) { double "legacy_email_goal", id: 12345, site_id: legacy_site.id, data_json: {}, created_at: Time.parse("2000-01-31"), updated_at: Time.now, type: "Goals::CollectEmail", priority: 1 }
+  let(:legacy_traffic_goal) { double "legacy_traffic_goal", id: 12346, site_id: legacy_site.id, data_json: {}, created_at: Time.parse("2000-01-31"), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
+  let(:legacy_site) { double "legacy_site", id: 123 }
+  let(:legacy_id_int) { double "legacy_id_int", id: 123, identity_id: 4113, data: {"remote_name" => "list name"}, last_synced_at: 1.week.ago, created_at: 1.month.ago, updated_at: 1.day.ago }
 
   before do
-    ContactList.stub(:find_by_id).with(contact_list.id).and_return(contact_list)
-    LegacyMigrator::LegacyIdentityIntegration.should_receive(:find_each).and_yield(legacy_id_int)
-    Identity.stub(:exists?).with(legacy_id.id).and_return(true)
+    Site.stub :exists? => true
+    LegacyMigrator::LegacyGoal.should_receive(:find_each).and_yield(legacy_email_goal).and_yield(legacy_traffic_goal)
+    LegacyMigrator::LegacyIdentityIntegration.stub :where => []
   end
 
-  it "migrates all attributes from legacy identity integration" do
-    contact_list.should_receive(:update_attributes).with(
+  it "creates a contact list only for CollectEmail goals" do
+    expect {
+      LegacyMigrator.migrate_contact_lists
+    }.to change(ContactList, :count).by(1)
+
+    ContactList.find_by_id(legacy_email_goal.id).should_not be_nil
+  end
+
+  it "creates the property attributes for goals without a LegacyIdentityIntegration" do
+    ContactList.should_receive(:create!).with(hash_including(
+      id: legacy_email_goal.id,
+      site_id: legacy_email_goal.site_id,
+      name: "List #{legacy_email_goal.id}",
+      created_at: legacy_email_goal.created_at,
+      updated_at: legacy_email_goal.updated_at
+    ))
+
+    LegacyMigrator.migrate_contact_lists
+  end
+
+  it "creates the property attributes for goals without a LegacyIdentityIntegration" do
+    LegacyMigrator::LegacyIdentityIntegration.stub :where => [legacy_id_int]
+    Identity.stub :exists? => true
+
+    ContactList.should_receive(:create!).with(hash_including(
       identity_id: legacy_id_int.identity_id,
       data: legacy_id_int.data,
+      name: legacy_id_int.data["remote_name"],
       last_synced_at: legacy_id_int.last_synced_at,
       created_at: legacy_id_int.created_at,
       updated_at: legacy_id_int.updated_at
-    )
+    ))
 
-    LegacyMigrator.migrate_identity_integrations_to_contact_lists
+    LegacyMigrator.migrate_contact_lists
   end
 end
