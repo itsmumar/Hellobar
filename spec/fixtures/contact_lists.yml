@@ -1,0 +1,4 @@
+zombo:
+  id: 1
+  site: zombo
+  data: <%= {"remote_id" => "1", "remote_name" => "test"}.to_yaml.inspect %>
