@@ -176,9 +176,9 @@ class @RuleModal
 
   _toggleNoConditionMessage: ->
     if @$modal.find('.condition:visible').length == 0
-      $('span.bg-warning').removeClass('hidden')
+      $('.new-condition-message').removeClass('hidden')
     else
-      $('span.bg-warning').addClass('hidden')
+      $('.new-condition-message').addClass('hidden')
 
   _bindCloseEvents: (callback) ->
     @_bindEscape(callback)

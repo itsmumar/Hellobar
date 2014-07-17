@@ -47,13 +47,14 @@ h1= display_url_for_site(@site)
               .col-md-2.actions
                 = link_to raw("&#45;"), '#', class: 'remove'
                 = link_to raw('&#43;'), '#', class: 'add'
-          span.bg-warning.hidden
+          .new-condition-message.hidden.row
             .col-md-10
-              | There are no condition yet, so this rule matches 
-              strong everyone.
-              | To only match certain people click the blue &#8220;+&#8221; button.
+              p
+                | There are no condition yet, so this rule matches 
+                strong everyone. 
+                | To only match certain people click the blue &#8220;+&#8221; button.
             .col-md-2.actions
-            = link_to '+', '#', class: 'add'
+              = link_to raw('&#43;'), '#', class: 'add'
 
         footer
           .row
@@ -72,5 +73,5 @@ script type="text/template" id="new-condition"
           = select_tag :operand, options_for_select(Condition::OPERANDS.invert), class: 'select optional form-control'
         = text_field_tag :value
       .col-md-2.actions
-        = link_to '-', '#', class: 'remove'
-        = link_to '+', '#', class: 'add'
+        = link_to raw("&#45;"), '#', class: 'remove'
+        = link_to raw('&#43;'), '#', class: 'add'
