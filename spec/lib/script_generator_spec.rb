@@ -339,10 +339,13 @@ describe ScriptGenerator, '#comparable_date' do
   it 'should handle western hemisphere timezones' do
     expect( Time.zone.name ).to eq "UTC"
     # Ball just dropped in London
-    expect( generator.send(:comparable_date) ).to eq "2000/01/01"
-    # Chicago's still eating dinner, in the past by 6 hours
+    cond = DateCondition.new(value: { 'start_date' => Date.new(2000, 1, 1), 'timezone' => 'UTC' }, operand: Condition::OPERANDS[:is_after])
+    expect( cond.comparable_start_date ).to eq "2000/01/01 +12.00"
+
+    # Chicago's still eating dinner, in the 'past' by 6 hours
+    cond = DateCondition.new(value: { 'start_date' => Date.new(2000, 1, 1), 'timezone' => 'America/Chicago' }, operand: Condition::OPERANDS[:is_after])
     expect( Time.zone.now.in_time_zone("America/Chicago").to_s ).to eq "1999-12-31 18:00:00 -0600"
-    expect( generator.send(:comparable_date, "America/Chicago") ).to eq "2000/01/01 +06.00"
+    expect( cond.comparable_start_date ).to eq "2000/01/01 +06.00"
   end
 
   it 'should handle eastern hemisphere timezones' do
@@ -350,10 +353,14 @@ describe ScriptGenerator, '#comparable_date' do
     Timecop.freeze( Time.zone.local(2000, 01, 01, 12, 00, 00) )
     expect( Time.zone.name ).to eq "Hawaii"
     expect( Time.zone.now.to_s ).to eq "2000-01-01 12:00:00 -1000"
+
     # Noon on January 1st in Hawaii
-    expect( generator.send(:comparable_date) ).to eq "2000/01/01"
+    cond = DateCondition.new(value: { 'start_date' => Date.new(2000, 1, 1), 'timezone' => 'Hawaii' }, operand: Condition::OPERANDS[:is_after])
+    expect( cond.comparable_start_date ).to eq "2000/01/01 +02.00"
+
     # China is already in the next day, but it should lock to UTC date
-    expect( generator.send(:comparable_date, "Asia/Shanghai") ).to eq "2000/01/01 +20.00"
+    cond = DateCondition.new(value: { 'start_date' => Date.new(2000, 1, 1), 'timezone' => 'Asia/Shanghai' }, operand: Condition::OPERANDS[:is_after])
+    expect( cond.comparable_start_date ).to eq "2000/01/01 +20.00"
   end
 
   it 'should not add daylight savings time in Arizonan timezones' do
@@ -361,55 +368,109 @@ describe ScriptGenerator, '#comparable_date' do
     Time.zone = "America/Denver"
     Timecop.freeze( Time.zone.local(2000, 7, 1) )
     expect(Time.current.to_s).to eq "2000-07-01 00:00:00 -0600"
+
     # Denver is in MDT
-    expect( generator.send(:comparable_date, "America/Denver") ).to eq "2000/07/01 +06.00"
+    cond = DateCondition.new(value: { 'start_date' => Date.new(2000, 7, 1), 'timezone' => 'America/Denver' }, operand: Condition::OPERANDS[:is_after])
+    expect( cond.comparable_start_date ).to eq "2000/07/01 +06.00"
     # Arizona turns to midnight an hour later in the summer since it's in MST year-round
-    expect( generator.send(:comparable_date, "America/Phoenix") ).to eq "2000/07/01 +05.00"
+    cond = DateCondition.new(value: { 'start_date' => Date.new(2000, 7, 1), 'timezone' => 'America/Phoenix' }, operand: Condition::OPERANDS[:is_after])
+    expect( cond.comparable_start_date ).to eq "2000/07/01 +05.00"
   end
 end
 
 describe ScriptGenerator, 'date compares work in all timezones' do
-  let(:site) { double 'site', id: '1337', rules: [], site_elements: double('site_elements', active: []) }
+  let(:site) { double 'site', id: '1337', rules: [Rule.new], site_elements: double('site_elements', active: []) }
   let(:generator) { ScriptGenerator.new(site) }
-  let(:rule) { site.rules.create }
+  let(:rule) { site.rules.first }
 
-  context 'without timezone given' do
+  context 'with timezone given in western hemisphere' do
     let(:condition) {
-      cond = DateCondition.new(value: { 'start_date' => Date.new(2000, 1, 1), 'timezone' => 'America/San_Francisco' }, operand: Condition::OPERANDS[:is_after])
+      cond = DateCondition.new(value: { 'start_date' => Date.new(2000, 1, 1), 'timezone' => 'America/Denver' }, operand: Condition::OPERANDS[:is_after])
       cond.tap { rule.conditions << cond }
     }
+    let(:sinon) { 'sinon.useFakeTimers(new Date(2000, 0, 1).getTime());' }
 
-    it 'is on the date east of zone' do
-      #sinon = 'sinon.useFakeTimers(new Date(2000, 0, 1).getTime());'
-      expect(phantom(sinon, 'new Date()', "TZ=America/Chicago")).to eq "Saturday Jan 01 2000 00:00:00 GMT-0600 (CST)"
-      result = phantom(sinon, '_HB.comparableDate() >= "2000/01/01 +04.00"', "TZ=America/Chicago")
+    it 'returns correctly for timezones' do
+      # the date in denver is our target
+      expect(phantom("TZ=America/Denver", sinon, 'new Date()')).to eq "Sat Jan 01 2000 00:00:00 GMT-0700 (MST)"
+      expect(phantom("TZ=America/Denver", sinon, '_HB.comparableDate()')).to eq "2000/01/01 +05.00"
+
+      target = condition.comparable_start_date
+      expect(target).to eq "2000/01/01 +05.00"
+      
+      # It is on the date (2000/01/01) in Chicago; condition not met with >= time.
+      result = phantom("TZ=America/Chicago", sinon, %{_HB.comparableDate() >= "#{target}"})
       expect(result).to eq "true" # will always return as a string, it's console output
 
-      result = phantom(sinon, '_HB.comparableDate() <= "2000/01/01 +20.00"', "TZ=America/Chicago")
-      expect(result).to eq "false" # will always return as a string, it's console output
-    end
-
-    it 'is not on the date west of zone' do
-
+      # It is not on the date west of zone in Los Angeles; condition not met with <= time.
+      expect(phantom("TZ=America/Los_Angeles", sinon, 'new Date()')).to eq "Sat Jan 01 2000 00:00:00 GMT-0800 (PST)"
+      expect(phantom("TZ=America/Los_Angeles", sinon, '_HB.comparableDate()')).to eq "2000/01/01 +04.00"
+      expect(phantom("TZ=America/Los_Angeles", sinon, %{_HB.comparableDate() >= "#{target}"})).to eq "true"
     end
   end
 
-  context 'with timezone given' do
-    it 'passes condition in western hemisphere' do
+  context 'with timezone given in eastern hemisphere' do
+    let(:condition) {
+      cond = DateCondition.new(value: { 'start_date' => Date.new(2000, 1, 1), 'timezone' => 'Asia/Tokyo' }, operand: Condition::OPERANDS[:is_after])
+      cond.tap { rule.conditions << cond }
+    }
+    let(:sinon) { 'sinon.useFakeTimers(new Date(2000, 0, 1).getTime());' }
 
+    it 'returns correctly for timezones in eastern hemisphere' do
+      # the date in japan is our target
+      expect(phantom("TZ=Asia/Tokyo", sinon, 'new Date()')).to eq "Sat Jan 01 2000 00:00:00 GMT+0900 (JST)"
+      expect(phantom("TZ=Asia/Tokyo", sinon, '_HB.comparableDate()')).to eq "2000/01/01 +21.00"
+
+      target = condition.comparable_start_date
+      expect(target).to eq "2000/01/01 +21.00"
+
+      # It is on the date (2000/01/01) in Tokyo; condition not met with >= time.
+      result = phantom("TZ=Asia/Tokyo", sinon, %{_HB.comparableDate() >= "#{target}"})
+      expect(result).to eq "true" # will always return as a string, it's console output
+
+      # It is not on the date west of zone in Los Angeles; condition not met with <= time.
+      expect(phantom("TZ=Asia/Shanghai", sinon, 'new Date()')).to eq "Sat Jan 01 2000 00:00:00 GMT+0800 (CST)"
+      expect(phantom("TZ=Asia/Shanghai", sinon, '_HB.comparableDate()')).to eq "2000/01/01 +20.00"
+      expect(phantom("TZ=Asia/Shanghai", sinon, %{_HB.comparableDate() <= "#{target}"})).to eq "true"
     end
+  end
 
-    it 'passes condition in eastern hemisphere' do
+  context 'condition does not pass at 11:59, does pass at midnight' do
+    let(:fail_time) { 'sinon.useFakeTimers(new Date(1999, 11, 31, 23, 59, 59).getTime());' }
+    let(:pass_time) { 'sinon.useFakeTimers(new Date(2000, 0, 1, 0, 0, 0).getTime());' }
 
+    it 'with correct status' do
+      expect(phantom("TZ=America/New_York", fail_time, 'new Date()')).to eq "Fri Dec 31 1999 23:59:59 GMT-0500 (EST)"
+      expect(phantom("TZ=America/New_York", fail_time, '_HB.comparableDate()')).to eq "2000/01/01 +07.00"
+      expect(phantom("TZ=America/New_York", pass_time, 'new Date()')).to eq "Sat Jan 01 2000 00:00:00 GMT-0500 (EST)"
+      expect(phantom("TZ=America/New_York", pass_time, '_HB.comparableDate()')).to eq "2000/01/01 +07.00"
+
+      # we want to show new yorkers a midnight hello bar
+      condition = DateCondition.new(value: { 'start_date' => Date.new(2000, 1, 1), 'timezone' => 'America/New_York' }, operand: Condition::OPERANDS[:is_after])
+      rule.conditions = [ condition ]
+
+      generator.render.should include 'HB.comparableDate() >= "2000/01/01 +07.00"'
+
+      expect(phantom("TZ=America/New_York", fail_time, 'HB.comparableDate() >= "2000/01/01 +07.00"')).to eq "false"
+      expect(phantom("TZ=America/New_York", pass_time, 'HB.comparableDate() >= "2000/01/01 +07.00"')).to eq "true"
     end
   end
 
   private
 
-  def phantom before, js, phantom_options
+  # Accepts either js to execute as a string or a block (or a &:proc)
+  # ex. env = TZ=America/Los_Angeles
+  # ex. before = $ = jQuery;
+  def phantom env, before, js=nil, &block
+    js ||= block.call()
     path = Rails.root.join('tmp/base.js')
-    content = generator.render + before + "\nconsole.log(#{js});\n" + "phantom.exit();"
-    File.write(path, content)
-    `#{phantom_options} phantomjs #{path}`.rstrip.tap { FileUtils.rm(path) }
+    File.open(path, 'w+') do |f|
+      f.write File.readlines(Rails.root.join('vendor/assets/javascripts/sinon.js')).join("")
+      f.write generator.render
+      f.write before
+      f.write "\nconsole.log(#{js});\n"
+      f.write "phantom.exit();"
+    end
+    `#{env} phantomjs #{path}`.rstrip.tap { FileUtils.rm(path) }
   end
 end

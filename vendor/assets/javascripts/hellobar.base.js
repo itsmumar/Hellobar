@@ -1122,6 +1122,11 @@ var _HB = {
                     now.getUTCSeconds());
   },
 
+  // Returns time at International Date Line cross (i.e. the first second it is a new day, or UTC+12 hours).
+  idl: function() {
+    return new Date(this.utc().getTime() + ((86400/2) * 1000));
+  },
+
   // Returns current date as YYYY/MM/DD +Z.ZZ, which is lexicographically sortable.
   // Z.ZZ refers to the offset from the International Date line, but inverted.
   // The latest time zones (Hawaii, for example) have the smallest offset,
@@ -1140,8 +1145,8 @@ var _HB = {
       case "auto":
         return this.ymd(new Date());
       default:
-        var utc = this.utc();
-        return this.ymd(utc) + " +" + this.comparableOffset()
+        var idl = this.idl();
+        return this.ymd(idl) + " +" + this.comparableOffset()
     }
     throw('You have passed an invalid mode');
   },

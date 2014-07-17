@@ -95,17 +95,14 @@ private
   end
 
   def date_conditions(condition)
-    start_date = condition.value['start_date']
-    end_date = condition.value['end_date']
     tz = condition.value['timezone']
-
     conditions = Array.new.tap do |array|
-      if start_date
-        array << %{(HB.comparableDate(#{'"auto"' unless tz}) >= "#{comparable_date(tz, start_date)}")}
+      if start_date = condition.comparable_start_date
+        array << %{(HB.comparableDate(#{'"auto"' unless tz}) >= "#{start_date}")}
       end
 
-      if end_date
-        array << %{(HB.comparableDate(#{'"auto"' unless tz}) <= "#{comparable_date(tz, end_date)}")}
+      if end_date = condition.comparable_end_date
+        array << %{(HB.comparableDate(#{'"auto"' unless tz}) <= "#{end_date}")}
       end
     end
 
@@ -187,26 +184,5 @@ private
 
   def metadata(rule)
     rule_settings(rule).select{|key,value| value.present? }.with_indifferent_access
-  end
-
-  # Call with either a timezone (will render the current date; tz of nil will default to current user);
-  # or a date and a timezone (will use date in that timezone's offset).
-  #
-  # Output: 2001/01/01 +00.00
-  def comparable_date tz=nil, date=nil
-    date ||= Time.zone.now.in_time_zone("UTC")
-    offset = Time.zone.now.in_time_zone(tz).utc_offset
-
-    date.strftime("%Y/%m/%d").tap do |str|
-      str << " +" + comparable_offset(offset) if tz
-    end
-  end
-
-  # Returns our comparable format - 00.00
-  def comparable_offset offset
-    offset /= 60 * 60 # ruby offsets are in seconds, convert to hours.
-    offset += 12 # add the correct number of hours.
-
-    ("%00.02f" % offset).rjust(5, "0")
   end
 end
