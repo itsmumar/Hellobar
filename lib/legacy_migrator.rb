@@ -10,6 +10,7 @@ class LegacyMigrator
 
       migrate_sites_and_users_and_memberships
       migrate_goals_to_rules
+      migrate_identities
       migrate_goals_to_contact_lists
 
       ActiveRecord::Base.record_timestamps = true
@@ -80,6 +81,27 @@ class LegacyMigrator
           puts "Migrated #{count} goals to contact lists" if count % 100 == 0
         else
           Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal:#{legacy_goal.id}"
+        end
+      end
+    end
+
+    def migrate_identities
+      count = 0
+      LegacyIdentity.find_each do |legacy_id|
+        if ::Site.exists?(legacy_id.site_id)
+          ::Identity.create! id: legacy_id.id,
+                             site_id: legacy_id.site_id,
+                             provider: legacy_id.provider,
+                             credentials: legacy_id.credentials,
+                             extra: legacy_id.extra,
+                             embed_code: legacy_id.embed_code,
+                             created_at: legacy_id.created_at,
+                             updated_at: legacy_id.updated_at
+
+          count += 1
+          puts "Migrated #{count} identities" if count % 100 == 0
+        else
+          Rails.logger.info "WTF:Legacy Site: #{legacy_id.site_id} doesnt exist for Identity: #{legacy_id.id}"
         end
       end
     end

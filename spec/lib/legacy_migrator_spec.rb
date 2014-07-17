@@ -296,3 +296,33 @@ describe LegacyMigrator, ".migrate_goals_to_contact_lists" do
     LegacyMigrator.migrate_goals_to_contact_lists
   end
 end
+
+describe LegacyMigrator, ".migrate_identities" do
+  let(:legacy_id) { double "legacy_id", id: 12345, site_id: legacy_site.id, created_at: Time.parse("2000-01-31"), updated_at: Time.now, provider: "provider", credentials: "credentials", extra: "extra", embed_code: "embed_code" }
+  let(:legacy_site) { double "legacy_site", id: 123 }
+
+  before do
+    Site.stub :exists? => true
+    LegacyMigrator::LegacyIdentity.should_receive(:find_each).and_yield(legacy_id)
+  end
+
+  it "associates identities with the proper sites" do
+    Identity.should_receive(:create!).with(hash_including(:site_id => legacy_id.site_id))
+    LegacyMigrator.migrate_identities
+  end
+
+  it "migrates all attributes from legacy identity" do
+    Identity.should_receive(:create!).with(
+      id: legacy_id.id,
+      site_id: legacy_id.site_id,
+      provider: legacy_id.provider,
+      credentials: legacy_id.credentials,
+      extra: legacy_id.extra,
+      embed_code: legacy_id.embed_code,
+      created_at: legacy_id.created_at,
+      updated_at: legacy_id.updated_at
+    )
+
+    LegacyMigrator.migrate_identities
+  end
+end
