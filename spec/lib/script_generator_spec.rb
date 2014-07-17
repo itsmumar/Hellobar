@@ -156,8 +156,8 @@ describe ScriptGenerator, '#render' do
         rule.stub conditions: [condition]
         site.stub rules: [rule]
 
-        # comparableDate() would return 2000/01/01 +06.00
-        expected_string = '(HB.comparableDate() >= "2000/01/01 +06.00")'
+        # comparableDate() would return 2000/01/01 +06:00
+        expected_string = '(HB.comparableDate() >= "2000/01/01 +06:00")'
 
         generator.render.should include(expected_string)
       end
