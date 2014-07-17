@@ -35,8 +35,8 @@ h1= display_url_for_site(@site)
             = rule_form.simple_fields_for :conditions, defaults: { label: false } do |condition_form|
               .row.condition
                 .col-md-10
-                  = condition_form.input :segment, collection: Condition::SEGMENTS.invert
-                  = condition_form.input :operand, collection: Condition::OPERANDS.invert
+                  = condition_form.input :segment, collection: Condition::SEGMENTS.invert, include_blank: false
+                  = condition_form.input :operand, collection: Condition::OPERANDS.invert, include_blank: false
 
                   = ConditionInputHelper.start_date_field(condition_form)
                   = ConditionInputHelper.end_date_field(condition_form)

@@ -26,8 +26,14 @@ class @RuleModal
       valueId = $value.find('input').attr('id')
       valueName = $value.find('input').attr('name')
 
-      if $.inArray(segmentValue, ['CountryCondition', 'DeviceSegment']) != -1
-        $value.replaceWith('<span>We dont support this yet</span>')
+      if segmentValue == 'CountryCondition'
+        $condition.find('.country')
+                  .prop('disabled', false)
+                  .show()
+      else if segmentValue == 'DeviceCondition'
+        $condition.find('.device')
+                  .prop('disabled', false)
+                  .show()
       else if segmentValue == 'UrlCondition'
         $condition.find('.url')
                   .prop('disabled', false)
@@ -75,10 +81,32 @@ class @RuleModal
   _renderContent: ->
     @$modal.find('.condition').each (index, condition) =>
       $condition = $(condition)
+      @_renderOperand($condition)
       @_renderValue($condition)
 
       $condition.on 'change', '.form-control', =>
+        @_renderOperand($condition)
         @_renderValue($condition)
+
+  _renderOperand: ($condition) ->
+    segment = $condition.find('.rule_conditions_segment select').val()
+    operands = @filteredOperands(segment)
+    $operand = $condition.find('.rule_conditions_operand')
+
+    # TODO: GENERIC FUNCTION THAT HANDLES REBUILDING / SELECTING OPTION FROM SELECT ELEMENT
+    previousValue = $operand.find('select :selected').val()
+    selectedOption = operands.filter(->
+      @value == previousValue
+    )
+
+    if selectedOption[0]
+      selectedValue = selectedOption[0].value
+    else
+      selectedValue = operands[0].value
+
+    $operand.find('select').html(operands)
+                           .val(selectedValue)
+    # TODO: GENERIC FUNCTION THAT HANDLES REBUILDING / SELECTING OPTION FROM SELECT ELEMENT
 
   filteredOperands: (segment) ->
     conditionTemplate = @newConditionTemplate()

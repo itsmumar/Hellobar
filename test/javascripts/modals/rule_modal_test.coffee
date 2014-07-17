@@ -32,7 +32,6 @@ test 'RuleModal._valueClass(segment, operand)', ->
   equal modal._valueClass('UrlCondition', 'anything'), '.url.value'
 
 test 'RuleModal._renderValue($condition)', (assert) ->
-
   $modal = $('<div class="conditions"><div class="row condition"><div class="col-md-10"><div class="form-group select optional rule_conditions_segment"><div><select class="select optional form-control" id="rule_conditions_attributes_0_segment" name="rule[conditions_attributes][0][segment]"><option value=""></option>
 <option value="CountryCondition">country</option>
 <option value="DeviceCondition">device</option>
@@ -46,6 +45,7 @@ test 'RuleModal._renderValue($condition)', (assert) ->
 <option value="includes">includes</option>
 <option value="excludes">excludes</option></select></div></div><input class="start_date value" disabled="disabled" id="rule_conditions_attributes_0_value" name="rule[conditions_attributes][0][value][start_date]" type="date" value="2014-07-16"><input class="end_date value" disabled="disabled" id="rule_conditions_attributes_0_value" name="rule[conditions_attributes][0][value][end_date]" type="date"><input class="url value" disabled="disabled" id="rule_conditions_attributes_0_value" name="rule[conditions_attributes][0][value]" type="text"><div class="form-group hidden rule_conditions__destroy"><div><input class="hidden form-control" id="rule_conditions_attributes_0__destroy" name="rule[conditions_attributes][0][_destroy]" type="hidden" value="false"></div></div></div><div class="col-md-2 actions"><a class="remove" href="#">-</a><a class="add" href="#">+</a></div></div><input id="rule_conditions_attributes_0_id" name="rule[conditions_attributes][0][id]" type="hidden" value="1"></div>')
   modal = new RuleModal($modal)
+  modal.filteredOperands = -> [$('<option value="is_after"></option>')[0]]
   modal.open()
 
   equal $modal.find('input[name*=end_date]').css('display'), "none", "end_date must be hidden"

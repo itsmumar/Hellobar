@@ -26,12 +26,12 @@ module ConditionInputHelper
   def self.country_field(simple_form)
     value = simple_form.object.kind_of?(CountryCondition) ? simple_form.object.value : nil
 
-    simple_form.input_field :value, collection: ['USA', 'USA', 'USA'], value: value, disabled: true, class: 'country value'
+    simple_form.input_field :value, collection: ['USA', 'USA', 'USA'], value: value, disabled: true, class: 'country value form-control', include_blank: false
   end
 
   def self.device_field(simple_form)
     value = simple_form.object.kind_of?(DeviceCondition) ? simple_form.object.value : nil
 
-    simple_form.input_field :value, collection: ['Desktop', 'Mobile'], value: value, disabled: true, class: 'device value'
+    simple_form.input_field :value, collection: ['Desktop', 'Mobile'], value: value, disabled: true, class: 'device value form-control', include_blank: false
   end
 end
