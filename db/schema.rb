@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140711164938) do
+ActiveRecord::Schema.define(version: 20140717134939) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -50,6 +50,19 @@ ActiveRecord::Schema.define(version: 20140711164938) do
   end
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
+
+  create_table "contact_lists", force: true do |t|
+    t.integer  "site_id"
+    t.integer  "identity_id"
+    t.string   "name"
+    t.text     "data"
+    t.datetime "last_synced_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contact_lists", ["identity_id"], name: "index_contact_lists_on_identity_id", using: :btree
+  add_index "contact_lists", ["site_id"], name: "index_contact_lists_on_site_id", using: :btree
 
   create_table "identities", force: true do |t|
     t.integer  "site_id"

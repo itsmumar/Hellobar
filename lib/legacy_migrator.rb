@@ -10,6 +10,7 @@ class LegacyMigrator
 
       migrate_sites_and_users_and_memberships
       migrate_goals_to_rules
+      migrate_goals_to_contact_lists
 
       ActiveRecord::Base.record_timestamps = true
     end
@@ -59,6 +60,24 @@ class LegacyMigrator
 
           count += 1
           puts "Migrated #{count} goals to rules" if count % 100 == 0
+        else
+          Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal:#{legacy_goal.id}"
+        end
+      end
+    end
+
+    def migrate_goals_to_contact_lists
+      count = 0
+      LegacyGoal.find_each do |legacy_goal|
+        next unless legacy_goal.type == "Goals::CollectEmail"
+
+        if ::Site.exists?(legacy_goal.site_id)
+          ::ContactList.create! id: legacy_goal.id,
+                                site_id: legacy_goal.site_id,
+                                name: "List #{legacy_goal.id}"
+
+          count += 1
+          puts "Migrated #{count} goals to contact lists" if count % 100 == 0
         else
           Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal:#{legacy_goal.id}"
         end

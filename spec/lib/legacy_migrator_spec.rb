@@ -147,7 +147,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
     LegacyMigrator::LegacyGoal.should_receive(:find_each).and_yield(legacy_goal)
   end
 
-  it 'doesnt create a new ruleset if the goal belongs to a site that doesnt exist' do
+  it 'doesnt create a new rule if the goal belongs to a site that doesnt exist' do
     Site.stub :exists? => false
 
     expect {
@@ -270,5 +270,29 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
     expect {
       LegacyMigrator.migrate_goals_to_rules
     }.to change(Condition, :count).by(4)
+  end
+end
+
+describe LegacyMigrator, ".migrate_goals_to_contact_lists" do
+  let(:legacy_email_goal) { double "legacy_email_goal", id: 12345, site_id: legacy_site.id, data_json: {}, created_at: Time.parse("2000-01-31"), updated_at: Time.now, type: "Goals::CollectEmail", priority: 1 }
+  let(:legacy_traffic_goal) { double "legacy_traffic_goal", id: 12346, site_id: legacy_site.id, data_json: {}, created_at: Time.parse("2000-01-31"), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
+  let(:legacy_site) { double "legacy_site", id: 123 }
+
+  before do
+    Site.stub :exists? => true
+    LegacyMigrator::LegacyGoal.should_receive(:find_each).and_yield(legacy_email_goal).and_yield(legacy_traffic_goal)
+  end
+
+  it "creates a contact list only for CollectEmail goals" do
+    expect {
+      LegacyMigrator.migrate_goals_to_contact_lists
+    }.to change(ContactList, :count).by(1)
+
+    ContactList.find_by_id(legacy_email_goal.id).should_not be_nil
+  end
+
+  it "associates contact lists with the proper sites" do
+    ContactList.should_receive(:create!).with(hash_including(:site_id => legacy_email_goal.site_id))
+    LegacyMigrator.migrate_goals_to_contact_lists
   end
 end

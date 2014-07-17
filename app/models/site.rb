@@ -6,6 +6,7 @@ class Site < ActiveRecord::Base
   has_many :site_memberships, dependent: :destroy
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
+  has_many :contact_lists, dependent: :destroy
 
   before_validation :standardize_url
 
