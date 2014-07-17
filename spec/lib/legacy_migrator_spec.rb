@@ -306,11 +306,6 @@ describe LegacyMigrator, ".migrate_identities" do
     LegacyMigrator::LegacyIdentity.should_receive(:find_each).and_yield(legacy_id)
   end
 
-  it "associates identities with the proper sites" do
-    Identity.should_receive(:create!).with(hash_including(:site_id => legacy_id.site_id))
-    LegacyMigrator.migrate_identities
-  end
-
   it "migrates all attributes from legacy identity" do
     Identity.should_receive(:create!).with(
       id: legacy_id.id,
@@ -324,5 +319,29 @@ describe LegacyMigrator, ".migrate_identities" do
     )
 
     LegacyMigrator.migrate_identities
+  end
+end
+
+describe LegacyMigrator, ".migrate_identity_integrations_to_contact_lists" do
+  let(:legacy_id_int) { double "legacy_id_int", id: 12345, integrable_id: contact_list.id, identity_id: legacy_id.id, data: "data", :last_synced_at => 1.week.ago, :created_at => 2.weeks.ago, :updated_at => 1.day.ago }
+  let(:legacy_id) { double "legacy_id", id: 123 }
+  let(:contact_list) { double "contact_list", id: 1234 }
+
+  before do
+    ContactList.stub(:find_by_id).with(contact_list.id).and_return(contact_list)
+    LegacyMigrator::LegacyIdentityIntegration.should_receive(:find_each).and_yield(legacy_id_int)
+    Identity.stub(:exists?).with(legacy_id.id).and_return(true)
+  end
+
+  it "migrates all attributes from legacy identity integration" do
+    contact_list.should_receive(:update_attributes).with(
+      identity_id: legacy_id_int.identity_id,
+      data: legacy_id_int.data,
+      last_synced_at: legacy_id_int.last_synced_at,
+      created_at: legacy_id_int.created_at,
+      updated_at: legacy_id_int.updated_at
+    )
+
+    LegacyMigrator.migrate_identity_integrations_to_contact_lists
   end
 end

@@ -12,6 +12,7 @@ class LegacyMigrator
       migrate_goals_to_rules
       migrate_identities
       migrate_goals_to_contact_lists
+      migrate_identity_integrations_to_contact_lists
 
       ActiveRecord::Base.record_timestamps = true
     end
@@ -102,6 +103,28 @@ class LegacyMigrator
           puts "Migrated #{count} identities" if count % 100 == 0
         else
           Rails.logger.info "WTF:Legacy Site: #{legacy_id.site_id} doesnt exist for Identity: #{legacy_id.id}"
+        end
+      end
+    end
+
+    def migrate_identity_integrations_to_contact_lists
+      count = 0
+      LegacyIdentityIntegration.find_each do |legacy_id_int|
+        if contact_list = ::ContactList.find_by_id(legacy_id_int.integrable_id)
+          if ::Identity.exists?(legacy_id_int.identity_id)
+            contact_list.update_attributes identity_id: legacy_id_int.identity_id,
+                                           data: legacy_id_int.data,
+                                           last_synced_at: legacy_id_int.last_synced_at,
+                                           created_at: legacy_id_int.created_at,
+                                           updated_at: legacy_id_int.updated_at
+
+            count += 1
+            puts "Migrated #{count} identity integrations" if count % 100 == 0
+          else
+            Rails.logger.info "WTF: Identity: #{legacy_id_int.identity_id} doesnt exist for IdentityIntegration: #{legacy_id_int.id}"
+          end
+        else
+          Rails.logger.info "WTF: ContactList: #{legacy_id_int.integrable_id} doesnt exist for IdentityIntegration: #{legacy_id_int.id}"
         end
       end
     end
