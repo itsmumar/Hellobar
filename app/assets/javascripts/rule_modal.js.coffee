@@ -79,14 +79,17 @@ class @RuleModal
         '.start_date.value, .end_date.value'
 
   _renderContent: ->
-    @$modal.find('.condition').each (index, condition) =>
-      $condition = $(condition)
-      @_renderOperand($condition)
-      @_renderValue($condition)
+    ruleModal = this
 
-      $condition.on 'change', '.form-control', =>
-        @_renderOperand($condition)
-        @_renderValue($condition)
+    @$modal.find('.condition').each ->
+      $condition = $(this)
+      ruleModal._renderOperand($condition)
+      ruleModal._renderValue($condition)
+
+    @$modal.on 'change', '.form-control', ->
+      $condition = $(this).parents('.condition:first')
+      ruleModal._renderOperand($condition)
+      ruleModal._renderValue($condition)
 
   _renderOperand: ($condition) ->
     segment = $condition.find('.rule_conditions_segment select').val()
@@ -152,6 +155,7 @@ class @RuleModal
              .attr('name', "rule[conditions_attributes][#{nextIndex}][operand]")
     $template.find('[name="value"]')
              .attr('name', "rule[conditions_attributes][#{nextIndex}][value]")
+    @_renderOperand($template)
     @$modal.find('.conditions').append($template.html())
 
   _bindAddCondition: ->
