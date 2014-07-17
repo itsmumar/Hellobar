@@ -19,6 +19,37 @@ class @RuleModal
     @_bindAddCondition()
     @_bindRemoveCondition()
 
+  _renderContent: ->
+    ruleModal = this
+
+    @$modal.find('.condition').each ->
+      $condition = $(this)
+      ruleModal._renderOperand($condition)
+      ruleModal._renderValue($condition)
+
+    @$modal.on 'change', '.form-control', ->
+      $condition = $(this).parents('.condition:first')
+      ruleModal._renderOperand($condition)
+      ruleModal._renderValue($condition)
+
+  _renderOperand: ($condition) ->
+    segment = $condition.find('.rule_conditions_segment select').val()
+    operands = @filteredOperands(segment)
+    $operand = $condition.find('.rule_conditions_operand')
+
+    previousValue = $operand.find('select :selected').val()
+    selectedOption = operands.filter(->
+      @value == previousValue
+    )
+
+    if selectedOption[0]
+      selectedValue = selectedOption[0].value
+    else
+      selectedValue = operands[0].value
+
+    $operand.find('select').html(operands)
+                           .val(selectedValue)
+
   _renderValue: ($condition) ->
       $condition.find('.value').hide() # hide the values by default
       $value = $condition.find('.rule_conditions_value')
@@ -78,39 +109,6 @@ class @RuleModal
       else if operand == 'is_between'
         '.start_date.value, .end_date.value'
 
-  _renderContent: ->
-    ruleModal = this
-
-    @$modal.find('.condition').each ->
-      $condition = $(this)
-      ruleModal._renderOperand($condition)
-      ruleModal._renderValue($condition)
-
-    @$modal.on 'change', '.form-control', ->
-      $condition = $(this).parents('.condition:first')
-      ruleModal._renderOperand($condition)
-      ruleModal._renderValue($condition)
-
-  _renderOperand: ($condition) ->
-    segment = $condition.find('.rule_conditions_segment select').val()
-    operands = @filteredOperands(segment)
-    $operand = $condition.find('.rule_conditions_operand')
-
-    # TODO: GENERIC FUNCTION THAT HANDLES REBUILDING / SELECTING OPTION FROM SELECT ELEMENT
-    previousValue = $operand.find('select :selected').val()
-    selectedOption = operands.filter(->
-      @value == previousValue
-    )
-
-    if selectedOption[0]
-      selectedValue = selectedOption[0].value
-    else
-      selectedValue = operands[0].value
-
-    $operand.find('select').html(operands)
-                           .val(selectedValue)
-    # TODO: GENERIC FUNCTION THAT HANDLES REBUILDING / SELECTING OPTION FROM SELECT ELEMENT
-
   filteredOperands: (segment) ->
     conditionTemplate = @newConditionTemplate()
     validOperands = @_validOperands(segment)
@@ -119,8 +117,7 @@ class @RuleModal
                         .filter ->
                           $.inArray(@value, validOperands) != -1
 
-  _validOperands: (segment) ->
-    @_operandMapping[segment]
+  _validOperands: (segment) -> @_operandMapping[segment]
 
   _operandMapping:
     'CountryCondition': ['is', 'is_not']
@@ -144,10 +141,24 @@ class @RuleModal
         error: (xhr, status, error) ->
           console.log "Something went wrong: #{error}"
 
+  _bindAddCondition: ->
+    @$modal.on 'click', '.add', (event) =>
+      @_addCondition()
+      @_toggleNoConditionMessage()
+
+  _bindRemoveCondition: ->
+    ruleModal = this
+
+    @$modal.on 'click', '.remove', (event) ->
+      $condition = $(this).parents('.condition:first')
+      ruleModal._removeCondition($condition)
+      ruleModal._toggleNoConditionMessage()
+
   _addCondition: ->
     nextIndex = @$modal.find('.conditions').length
     templateHTML = @newConditionTemplate()
     $template = $(templateHTML)
+
     # update the names on the elements to be submitted properly
     $template.find('[name="segment"]')
              .attr('name', "rule[conditions_attributes][#{nextIndex}][segment]")
@@ -155,18 +166,19 @@ class @RuleModal
              .attr('name', "rule[conditions_attributes][#{nextIndex}][operand]")
     $template.find('[name="value"]')
              .attr('name', "rule[conditions_attributes][#{nextIndex}][value]")
+
     @_renderOperand($template)
     @$modal.find('.conditions').append($template.html())
 
-  _bindAddCondition: ->
-    @$modal.on 'click', '.add', (event) =>
-      @_addCondition()
+  _removeCondition: ($condition) ->
+    $condition.find('.rule_conditions__destroy input').val(true)
+    $condition.hide()
 
-  _bindRemoveCondition: ->
-    @$modal.on 'click', '.remove', (event) ->
-      $condition = $(this).parents('.condition:first')
-      $condition.find('.rule_conditions__destroy input').val(true)
-      $condition.hide()
+  _toggleNoConditionMessage: ->
+    if @$modal.find('.condition:visible').length == 0
+      $('span.bg-warning').removeClass('hidden')
+    else
+      $('span.bg-warning').addClass('hidden')
 
   _bindCloseEvents: (callback) ->
     @_bindEscape(callback)
