@@ -1,19 +1,7 @@
-require "vcr"
-
-VCR.configure do |c|
-  c.ignore_localhost = true
-  c.cassette_library_dir = "spec/cassettes"
-  c.hook_into :webmock
-  c.default_cassette_options = {:record => :none} # *TEMPORARILY* set to :new_episodes if you add a spec that makes a network request
-end
-
 # Set RAILS_ROOT and load the environment if it's not already loaded.
 unless defined?(Rails)
   ENV["RAILS_ROOT"] = File.expand_path("../../", __FILE__)
-
-  VCR.use_cassette('bootstrap') do
-    require File.expand_path("../../config/environment", __FILE__)
-  end
+  require File.expand_path("../../config/environment", __FILE__)
 end
 
 Teaspoon.configure do |config|
