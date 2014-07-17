@@ -6,16 +6,32 @@ module 'hellobar_base',
 
 # you can't easily create a date in a specific timezone.
 localMillenium = -> new Date(2000, 0, 1)
-currentTestBrowserOffset = -> (new Date()).getTimezoneOffset()
-utcMillenium = -> new Date(localMillenium().getTime() - ( currentTestBrowserOffset() * 60000))
+currentTestBrowserOffset = (date=new Date) -> date.getTimezoneOffset()
+utcMillenium = -> new Date(localMillenium().getTime() - ( currentTestBrowserOffset(localMillenium()) * 60000))
 
-test 'utc dates string representation is what is expected', ->
+test 'idl dates string representation is what is expected', ->
+  clock = sinon.useFakeTimers(utcMillenium().getTime())
+
   now = new Date()
   y = now.getUTCFullYear()
   m = _HB.zeropad(now.getUTCMonth()+1)
   d = _HB.zeropad(now.getUTCDate())
   utcStringDate = "#{y}/#{m}/#{d} +#{_HB.comparableOffset()}"
   strictEqual _HB.comparableDate(), utcStringDate, "#{_HB.comparableDate()} and #{utcStringDate} dates aren't equal"
+
+  clock.restore()
+
+test 'dates string representation lacks bang before midnight', ->
+  currentOffset = _HB.comparableOffset currentTestBrowserOffset(localMillenium())
+
+  clock = sinon.useFakeTimers(localMillenium().getTime())
+  strictEqual _HB.comparableDate(), "2000/01/01 +#{currentOffset}!", "#{_HB.comparableDate()} did not have bang"
+  oneHourBefore = new Date( localMillenium().getTime() - (60000 * 60))
+  clock.restore()
+
+  clock = sinon.useFakeTimers(oneHourBefore.getTime())
+  strictEqual _HB.comparableDate(), "2000/01/01 +#{currentOffset}", "#{_HB.comparableDate()} #{currentOffset}" # does not have bang
+  clock.restore()
 
 test 'comparableDate can be compared with GMT', ->
   clock = sinon.useFakeTimers(utcMillenium().getTime())
@@ -62,13 +78,17 @@ test 'comparableDates will compare to dates without timezones', ->
 
 test 'several compares', ->
   # there's no way to avoid local timezone being set in browser.
-  clock = sinon.useFakeTimers(new Date(2010, 1, 3, 12, 0, 0).getTime())
+  randomDayInFebruary = new Date(2010, 1, 3, 12, 0, 0)
+  clock = sinon.useFakeTimers(randomDayInFebruary.getTime())
   equal new Date().toDateString(), "Wed Feb 03 2010", "sinon isn't working"
 
-  validAfterOffset = _HB.comparableOffset currentTestBrowserOffset()
-  invalidAfterOffset = _HB.comparableOffset currentTestBrowserOffset() - 60
+  validAfterOffset = _HB.comparableOffset currentTestBrowserOffset(randomDayInFebruary)
+  invalidAfterOffset = _HB.comparableOffset currentTestBrowserOffset(randomDayInFebruary) - 60
 
-  ok _HB.comparableDate() >= "2010/02/03 +#{validAfterOffset}", "locally, it should be past 2010/02/03"
-  ok _HB.comparableDate() < "2010/02/03 +#{invalidAfterOffset}", "locally, it should not yet be 2010/02/03" # in chicago, 7.00
+  # the international day is already the 4th
+  strictEqual _HB.ymd(_HB.idl()), "2010/02/04"
+
+  ok _HB.comparableDate() >= "2010/02/04 +#{validAfterOffset}", "locally, it should be past 2010/02/03"
+  ok _HB.comparableDate() < "2010/02/04 +#{invalidAfterOffset}", "locally, it should not yet be 2010/02/03"
 
   clock.restore()

@@ -1146,7 +1146,7 @@ var _HB = {
         return this.ymd(new Date());
       default:
         var idl = this.idl();
-        return this.ymd(idl) + " +" + this.comparableOffset()
+        return this.ymd(idl) + " +" + this.comparableOffset();
     }
     throw('You have passed an invalid mode');
   },
@@ -1155,7 +1155,14 @@ var _HB = {
     if (typeof offset === "undefined") offset = (new Date()).getTimezoneOffset();
     offset = (offset * -1) + 720;
     offset = (offset / 60).toFixed(2);
-    return this.zeropad(offset, 5);
+    return this.zeropad(offset, 5) + this.comparableSuffix();
+  },
+
+  // Returns
+  comparableSuffix: function() {
+    var idl = this.idl();
+    var internationalDate = this.ymd(idl);
+    return (this.ymd() === internationalDate) ? "!" : "";
   },
 
   ymd: function(date) {
