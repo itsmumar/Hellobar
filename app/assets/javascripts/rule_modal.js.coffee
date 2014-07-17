@@ -34,20 +34,20 @@ class @RuleModal
 
   _renderOperand: ($condition) ->
     segment = $condition.find('.rule_conditions_segment select').val()
-    operands = @filteredOperands(segment)
+    operandHTML = @filteredOperands(segment)
     $operand = $condition.find('.rule_conditions_operand')
 
     previousValue = $operand.find('select :selected').val()
-    selectedOption = operands.filter(->
+    selectedOption = operandHTML.filter(->
       @value == previousValue
     )
 
     if selectedOption[0]
       selectedValue = selectedOption[0].value
     else
-      selectedValue = operands[0].value
+      selectedValue = operandHTML[0].value
 
-    $operand.find('select').html(operands)
+    $operand.find('select').html(operandHTML)
                            .val(selectedValue)
 
   _renderValue: ($condition) ->

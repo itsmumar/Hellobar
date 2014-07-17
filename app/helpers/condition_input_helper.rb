@@ -7,20 +7,20 @@ module ConditionInputHelper
     value = simple_form.object.kind_of?(DateCondition) ? simple_form.object.value[:start_date] : nil
     name = "#{build_date_name(simple_form)}[start_date]"
 
-    simple_form.date_field :value, { name: name, value: value, disabled: true, class: 'start_date value' }
+    simple_form.date_field :value, { name: name, value: value, disabled: true, class: 'start_date value form-control' }
   end
 
   def self.end_date_field(simple_form)
     value = simple_form.object.kind_of?(DateCondition) ? simple_form.object.value[:end_date] : nil
     name = "#{build_date_name(simple_form)}[end_date]"
 
-    simple_form.date_field :value, { name: name, value: value, disabled: true, class: 'end_date value' }
+    simple_form.date_field :value, { name: name, value: value, disabled: true, class: 'end_date value form-control' }
   end
 
   def self.url_field(simple_form)
     value = simple_form.object.kind_of?(UrlCondition) ? simple_form.object.value : nil
 
-    simple_form.text_field :value, { value: value, disabled: true, class: 'url value' }
+    simple_form.text_field :value, { value: value, disabled: true, class: 'url value form-control' }
   end
 
   def self.country_field(simple_form)
