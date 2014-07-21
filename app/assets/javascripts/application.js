@@ -20,6 +20,7 @@
 //= require admin_metrics
 //= require internal_tracking
 //= require optimizely_tracking
-//= require rule_modal
+//= require modal
+//= require_tree ./modals
 //= require rules
 //= require_self

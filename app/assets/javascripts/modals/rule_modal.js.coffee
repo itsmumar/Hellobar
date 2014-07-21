@@ -1,20 +1,16 @@
-class @RuleModal
+class @RuleModal extends Modal
   newConditionTemplate: ->
     $('script#new-condition').html()
 
   constructor: (@$modal) ->
     @_bindInteractions()
+    super
 
   open: ->
     @_renderContent()
-    @$modal.addClass('show-modal')
-
-  close: ->
-    @$modal.removeClass('show-modal')
-           .off() # unbind all modal events
+    super
 
   _bindInteractions: ->
-    @_bindCloseEvents(@close)
     @_bindSubmit()
     @_bindAddCondition()
     @_bindRemoveCondition()
@@ -183,20 +179,3 @@ class @RuleModal
       $('.new-condition-message').removeClass('hidden')
     else
       $('.new-condition-message').addClass('hidden')
-
-  _bindCloseEvents: (callback) ->
-    @_bindEscape(callback)
-    @_bindClickOnClose(callback)
-    @_bindClickOutsideTarget(callback)
-
-  _bindEscape: (callback) ->
-    $(document).on 'keyup', (event) =>
-      callback.call(this) if event.keyCode == 27
-
-  _bindClickOnClose: (callback) ->
-    @$modal.find('a.cancel').on 'click', (event) =>
-      callback.call(this)
-
-  _bindClickOutsideTarget: (callback) ->
-    @$modal.on 'click', (event) =>
-      callback.call(this) if $(event.target).hasClass('modal-wrapper')
