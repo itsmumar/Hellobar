@@ -1,3 +1,3 @@
 class CountryCondition < Condition
-  serialize :value, String
+  serialize :value
 end

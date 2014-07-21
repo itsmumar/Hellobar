@@ -1,3 +1,3 @@
 class DeviceCondition < Condition
-  serialize :value, String
+  serialize :value
 end

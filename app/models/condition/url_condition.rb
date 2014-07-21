@@ -1,5 +1,5 @@
 class UrlCondition < Condition
-  serialize :value, String
+  serialize :value
 
   def self.include_url(url)
     UrlCondition.new operand: Condition::OPERANDS[:includes],

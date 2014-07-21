@@ -27,7 +27,7 @@ class @RuleModal
       ruleModal._renderOperand($condition)
       ruleModal._renderValue($condition)
 
-    @$modal.on 'change', '.form-control', ->
+    @$modal.on 'change', '.segment, .operand', ->
       $condition = $(this).parents('.condition:first')
       ruleModal._renderOperand($condition)
       ruleModal._renderValue($condition)
@@ -51,7 +51,9 @@ class @RuleModal
                            .val(selectedValue)
 
   _renderValue: ($condition) ->
-      $condition.find('.value').hide() # hide the values by default
+      $condition.find('.value')
+                .hide()                 # hide the values by default
+                .prop('disabled', true) # disable the values by default
       $value = $condition.find('.rule_conditions_value')
       segmentValue = $condition.find('.rule_conditions_segment .select').val()
       valueId = $value.find('input').attr('id')
@@ -155,7 +157,7 @@ class @RuleModal
       ruleModal._toggleNoConditionMessage()
 
   _addCondition: ->
-    nextIndex = @$modal.find('.conditions').length
+    nextIndex = @$modal.find('.condition').length
     templateHTML = @newConditionTemplate()
     $template = $(templateHTML)
 
@@ -166,7 +168,9 @@ class @RuleModal
              .attr('name', "rule[conditions_attributes][#{nextIndex}][operand]")
     $template.find('[name="value"]')
              .attr('name', "rule[conditions_attributes][#{nextIndex}][value]")
+    $template.find('.value').hide()
 
+    @_renderValue($template)
     @_renderOperand($template)
     @$modal.find('.conditions').append($template.html())
 
