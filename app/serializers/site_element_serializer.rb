@@ -28,7 +28,7 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site_preview_image
-    css_url = "http://edge.hellobar.com/stylesheets/hide_bar.css" # TODO: generate this dynamically without breaking CI
+    css_url = "http://#{Hellobar::Settings[:host]}/stylesheets/hide_bar.css"
     params = "?url=#{object.site.url}&custom_css_url=#{css_url}"
     token = Digest::MD5.hexdigest("#{params}SC10DF8C7E0FE8")
     "https://api.url2png.com/v6/P52EBC321291EF/#{token}/png/#{params}"
