@@ -53,8 +53,6 @@ asyncTest 'RuleModal closes the modal on a successful form submission event', (a
     start()
   ), 500
 
-test 'removing a new condition', ->
-
 module 'RuleModal filtering out operands'
 
 test '_validOperands()', ->
