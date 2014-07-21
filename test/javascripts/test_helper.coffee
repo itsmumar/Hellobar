@@ -15,6 +15,10 @@ setTimeout(
     # Inject QUnit
     HelloBar.setupForTesting()
     HelloBar.injectTestHelpers()
+
+    Ember.run.debounce = (context, myFunction, timeout) ->
+      myFunction.call(context)
+
     Teaspoon.execute()
   , 2000
   # If you don't wait long enough, Ember won't be loaded up. 2 seconds minimum.

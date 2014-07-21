@@ -35,6 +35,10 @@ HelloBar.ApplicationController = Ember.Controller.extend
   # Render the element in the preview pane whenever style-affecting attributes change
 
   renderPreview: ( ->
+    Ember.run.debounce(this, @doRenderPreview, 500)
+  ).observes("model.element_subtype", "model.message", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url")
+
+  doRenderPreview: ( ->
     previewElement = $.extend({}, @get("model"),
       template_name: @get("model.element_subtype") or "traffic"
       hide_destination: true
@@ -44,10 +48,11 @@ HelloBar.ApplicationController = Ember.Controller.extend
       wiggle_wait: 0
       tab_side: "right"
       thank_you_text: "Thank you for signing up!"
+      show_border: false
     )
 
     HB.render(previewElement)
-  ).observes("model.element_subtype", "model.message", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url")
+  )
 
   #-----------  State Default & Actions  -----------#
 
