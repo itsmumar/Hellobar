@@ -2,6 +2,7 @@
   <div id="hellobar-preview-container"></div>
   <h1 style="margin: 2em 0; text-align: center">...fuckin' mobilé, 'bay...</h1>
 {{else}}
-  <div id="hellobar-preview-container"></div>
-  <img {{bind-attr src='model.site_preview_image'}} />
+  <div id="hellobar-preview-container">
+    <img {{bind-attr src='model.site_preview_image'}} />
+  </div>
 {{/if}}
