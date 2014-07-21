@@ -28,7 +28,8 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site_preview_image
-    params = "?url=#{object.site.url}"
+    css_url = "#{root_url.gsub(/\/$/, "")}/stylesheets/hide_bar.css"
+    params = "?url=#{object.site.url}&custom_css=#{css_url}"
     token = Digest::MD5.hexdigest("#{params}SC10DF8C7E0FE8")
     "https://api.url2png.com/v6/P52EBC321291EF/#{token}/png/#{params}"
   end
