@@ -11,7 +11,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :background_color, :border_color, :button_color, :link_color, :text_color,
 
     # other
-    :link_style, :size
+    :link_style, :size, :site_preview_image
 
   def site
     {
@@ -25,5 +25,11 @@ class SiteElementSerializer < ActiveModel::Serializer
         }
       end
     }
+  end
+
+  def site_preview_image
+    params = "?url=#{object.site.url}"
+    token = Digest::MD5.hexdigest("#{params}SC10DF8C7E0FE8")
+    "https://api.url2png.com/v6/P52EBC321291EF/#{token}/png/#{params}"
   end
 end
