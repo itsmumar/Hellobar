@@ -36,7 +36,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   renderPreview: ( ->
     previewElement = $.extend({}, @get("model"),
-      template_name: @get("model.element_subtype")
+      template_name: @get("model.element_subtype") or "traffic"
       hide_destination: true
       open_in_new_window: false
       pushes_page_down: true
