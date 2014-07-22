@@ -7,30 +7,9 @@ module 'hellobar_base',
 # you can't easily create a date in a specific timezone.
 localMillenium = -> new Date(2000, 0, 1)
 currentTestBrowserOffset = (date=new Date) -> date.getTimezoneOffset()
-adjustedOffset = (hours, date=new Date) -> (date.getTimezoneOffset() - (hours * 60))
+adjustedOffset = (hours, date=new Date) -> Math.abs(date.getTimezoneOffset() - (Math.floor(hours) * 60))
 utcMillenium = -> new Date(localMillenium().getTime() - ( currentTestBrowserOffset(localMillenium()) * 60000))
 
-test 'idl dates string representation is what is expected', ->
-  clock = sinon.useFakeTimers(utcMillenium().getTime())
-
-  now = new Date()
-  y = now.getUTCFullYear()
-  m = _HB.zeropad(now.getUTCMonth()+1)
-  d = _HB.zeropad(now.getUTCDate())
-  utcStringDate = "#{y}/#{m}/#{d} +#{_HB.comparableOffset(adjustedOffset(12))}"
-  strictEqual _HB.comparableDate(12), utcStringDate, "#{_HB.comparableDate(12)} and #{utcStringDate} dates aren't equal"
-
-  clock.restore()
-
-test 'comparableDate can be compared with GMT', ->
-  clock = sinon.useFakeTimers(utcMillenium().getTime())
-
-  dateString = _HB.comparableDate(12)
-  adjustedOffset = _HB.comparableOffset(currentTestBrowserOffset() - (12 * 60))
-  strictEqual dateString, "2000/01/01 +#{adjustedOffset}", "#{dateString} was unexpected, expected 2000/01/01 +#{adjustedOffset}"
-
-  clock.restore()
-  
 test 'zeropad behaves correctly', ->
   equal _HB.zeropad("5"), "05"
   equal _HB.zeropad(5), "05"
@@ -65,24 +44,12 @@ test 'comparableDates will compare to dates without timezones', ->
 
   clock.restore()
 
-test 'several compares', ->
-  # there's no way to avoid local timezone being set in browser.
-  randomDayInFebruary = new Date(2010, 1, 3, 12, 0, 0)
-  clock = sinon.useFakeTimers(randomDayInFebruary.getTime())
-  equal new Date().toDateString(), "Wed Feb 03 2010", "sinon isn't working"
+test 'comparableDate works right', ->
+  clock = sinon.useFakeTimers(utcMillenium().getTime())
 
-  validAfterOffset = _HB.comparableOffset currentTestBrowserOffset(randomDayInFebruary)
-  invalidAfterOffset = _HB.comparableOffset currentTestBrowserOffset(randomDayInFebruary) - 60
-
-  # the international day is already the 4th
-  strictEqual _HB.ymd(_HB.idl()), "2010/02/04"
-
-  ok _HB.comparableDate() >= "2010/02/04 +#{validAfterOffset}", "locally, it should be past 2010/02/03"
-  ok _HB.comparableDate() < "2010/02/04 +#{invalidAfterOffset}", "locally, it should not yet be 2010/02/03"
+  # only positive offsets allowed now
+  equal _HB.comparableDate(+6).split('+')[1], "#{_HB.zeropad(adjustedOffset(6)/60)}:00"
+  equal _HB.comparableDate(+18).split('+')[1], "#{_HB.zeropad(adjustedOffset(18)/60)}:00"
+  equal _HB.comparableDate(+18.5).split('+')[1], "#{_HB.zeropad(adjustedOffset(18.5)/60)}:30", "#{_HB.comparableDate(18.5).split('+')[1]} wasn't #{_HB.zeropad(adjustedOffset(18.5)/60)}:30"
 
   clock.restore()
-
-test 'comparableOffset works right', ->
-  equal _HB.comparableOffset(360), "06:00"
-  equal _HB.comparableOffset(-360), "18:00"
-  equal _HB.comparableOffset(-390), "18:30"

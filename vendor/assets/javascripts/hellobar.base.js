@@ -1,4 +1,4 @@
-// We use a variable called _hbq which is defined as just an empty array on the
+  // We use a variable called _hbq which is defined as just an empty array on the
 // user's page in the embed script (ensuring that it is present). This allows users
 // to push function calls into the _hbq array, e.g.:
 //
@@ -1154,13 +1154,8 @@ var _HB = {
       var offsetMS = (targetOffset - baseOffset) * 60000;
 
       convertedTime = new Date(this.utc().getTime() + offsetMS);
-
-      var offsetMinutes = targetOffset % 60;
-
-      var hours = convertedTime.getHours();
-      var minutes = convertedTime.getMinutes() + offsetMinutes;
       
-      return this.ymd(idl) + " +" + this.zeropad(hours) + ":" + this.zeropad(minutes);
+      return this.ymd(idl) + " +" + this.zeropad(convertedTime.getHours()) + ":" + this.zeropad(convertedTime.getMinutes());
     }
   },
 
