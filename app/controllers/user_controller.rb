@@ -1,6 +1,4 @@
 class UserController < ApplicationController
-  layout "with_sidebar"
-
   before_filter :authenticate_user!
   before_filter :load_user, :only => [:edit, :update]
 

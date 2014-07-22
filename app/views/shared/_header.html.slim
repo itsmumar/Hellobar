@@ -7,57 +7,46 @@
 
 - if current_user && current_site
   .header-nav-wrapper
-    h5= current_site.url.gsub(/https?:\/\//, '')
+    img.site-avatar src=""
+    span.site-name= display_url_for_site(current_site)
 
     .dropdown-wrapper
       i.icon-dropdown
       .dropdown-block
-        = link_to 'Settings', (current_user ? edit_site_path(current_site) : root_path)
-        - if current_user
-          h6 Sites
-          ul
-            - (current_user.sites - [current_site]).each do |site|
-              li.site-block
-                = link_to display_url_for_site(site), site_path(site)
-
-.header-user-wrapper  
-
-  .button
-    | Upgrade to Pro
-
-  .dropdown-wrapper
-    i.icon-notification
-    .dropdown-block
-      = link_to 'Settings', (current_user ? edit_site_path(current_site) : root_path)
-      - if current_user
-        h6 Sites
+        = active_link_to 'Settings', (current_user ? edit_site_path(current_site) : root_path)
+        h6 Switch Sites
         ul
           - (current_user.sites - [current_site]).each do |site|
-            li.site-block
-              = link_to display_url_for_site(site), site_path(site)
+            li
+              img.site-avatar src=""
+              = active_link_to display_url_for_site(site), site_path(site)
 
-  .user-avatar
-    h6 Annie P.
+        = button_to "Add New Site", new_site_path, :class => "button", :method => :get
 
-  .dropdown-wrapper
-    i.icon-dropdown
-    .dropdown-block
-      = link_to 'Settings', (current_user ? edit_site_path(current_site) : root_path)
-      - if current_user
-        h6 Sites
-        ul
-          - (current_user.sites - [current_site]).each do |site|
-            li.site-block
-              = link_to display_url_for_site(site), site_path(site)
+  .header-user-wrapper  
 
-      / .col-md-5
-      /   - if current_user && current_site
-      /     = render :partial => "shared/sites_dropdown"
+    .button
+      | Upgrade to Pro
 
-      / .col-md-5
-      /   - if current_user
-      /     = render :partial => "shared/logged_in_nav"
-      /   - else
-      /     ul#navigation.logged-out
-      /       li= link_to "Sign in", new_user_session_path
-      /       li= link_to "Sign up", new_user_registration_path
+    .dropdown-wrapper
+      i.icon-notification
+      /   i.icon-notification-alert
+      /   .dropdown-block
+      /     h6 Notifications
+      /     small
+      /       | (no notifications)
+
+    img.user-avatar src=""
+    span.user-name Annie P.
+
+    .dropdown-wrapper
+      i.icon-dropdown
+      .dropdown-block
+        = active_link_to 'User Settings', profile_path()
+        = content_tag 'a', 'Access Controls'
+        = content_tag 'a', 'Payment Info'
+        = content_tag 'a', 'Upgrade to Pro'
+        - if impersonated_user
+          = active_link_to "Stop Impersonation", admin_unimpersonate_user_path, :method => :delete
+        - else          
+          = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete

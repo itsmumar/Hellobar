@@ -1,27 +1,24 @@
-nav
+- if current_site
   ul
-    = sidebar_link_wrapper(:summary) do
-      li class="#{sidebar_link_class(:summary)}"
+    li
+      = active_link_to site_path(current_site), :active => :exclusive do
         i.icon-summary
         | Summary
-    = sidebar_link_wrapper(:manage) do
-      li class="#{sidebar_link_class(:manage)}"
+    li
+      = active_link_to site_site_elements_path(current_site) do
         i.icon-manage
         | Manage
-    = sidebar_link_wrapper(:improve) do
-      li class="#{sidebar_link_class(:improve)}"
+    li
+      = content_tag 'a' do
         i.icon-improve
         | Improve
-    = sidebar_link_wrapper(:contacts) do
-      li class="#{sidebar_link_class(:contacts)}"
+    li
+      = content_tag 'a' do
         i.icon-contacts
         | Contacts
-    = sidebar_link_wrapper(:feedback) do
-      li class="#{sidebar_link_class(:feedback)}"
+    li
+      = content_tag 'a' do
         i.icon-feedback
         | Feedback
 
-  - if current_site
-    = button_to "Create New", new_site_site_element_path(:site_id => current_site), :class => "btn btn-border-primary btn-lg btn-block", :method => :get
-
-.
+  = button_to "Create New", new_site_site_element_path(:site_id => current_site), :class => "button", :method => :get

@@ -1,15 +1,20 @@
 /*-----------  Anchors (links)  -----------*/
 
 a
-  cursor: pointer
   text-decoration: none
   @include transition()
 
   &:hover
     text-decoration: none
 
+  &[href]
+    cursor: pointer
+
   &[disabled]
     cursor: not-allowed
+
+  &.active
+    cursor: default
 
 /*-----------  Headers  -----------*/
 

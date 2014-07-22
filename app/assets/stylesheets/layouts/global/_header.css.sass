@@ -1,7 +1,5 @@
 /*-----------  Header  -----------*/
 
-$headerHeight: 5rem
-
 .global-header
   background-color: $red
   @include clearfix()
@@ -12,7 +10,7 @@ $headerHeight: 5rem
     height: $headerHeight
     background-repeat: no-repeat
     background-position: center center
-    background-size: auto $headerHeight/1.75
+    background-size: auto $headerHeight/1.85
     background-image: image-url('hellobar_logo_white.svg')
 
     a
@@ -32,14 +30,45 @@ $headerHeight: 5rem
     float: left
     padding-left: 1.5em
 
+    .site-avatar
+      width: 1.75em
+      height: 1.75em
+      margin-right: 1em
+
+    .site-name
+      color: $white
+      font-size: 1.15em
+      @include antialiased()
+
+    .dropdown-block
+      min-width: 15em
+
+      form
+        margin-top: 1em
+        text-align: center
+
+      .button
+        font-size: 0.67em
+
   .header-user-wrapper
     float: right
     padding-right: 1.5em
 
+    .user-avatar
+      width: 3em
+      height: 3em
+      margin-left: 0.75em
+      margin-right: 1.5em
+      border-radius: 20em
+      border: 2px solid $white
+
+    .user-name
+      color: $white
+      font-size: 1.15em
+      @include antialiased()
+
     .button
-      color: $red
-      font-size: 0.85em
-      background-color: $white
+      font-size: 0.8em
       text-transform: uppercase
 
     i.icon-notification,
@@ -53,19 +82,21 @@ $headerHeight: 5rem
 
     > a,
     > i
+      top: 2px
       color: $white
+      position: relative
       line-height: $headerHeight
 
     .dropdown-block
       margin-top: 0
       padding-top: 1rem
-      background-color: $grayLighter
+      background-color: $grayLightest
 
       *
         line-height: normal !important
 
       &:after
-        border-bottom-color: $grayLighter
+        border-bottom-color: $grayLightest
 
     &:hover,
     &.activated
