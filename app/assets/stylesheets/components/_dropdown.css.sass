@@ -9,37 +9,55 @@
     cursor: pointer
     padding: 0 1.5rem
 
+  &:before
+    right: 0
+    width: 250%
+    height: 2rem
+    bottom: -2rem
+    display: block
+    position: absolute
+
   .dropdown-block
     right: 0
     opacity: 0
-    padding: 1rem
-    margin-top: -1rem
-    padding-top: 1rem
     position: absolute
+    margin-top: -1.5rem
     pointer-events: none
     border: 1px solid $gray
     background-color: $white
+    padding: 0.33rem 1rem 1rem
     @include transition(0.25s)
 
+    &:before,
     &:after
       content: ''
       width: 0
       height: 0
-      right: 1rem
-      top: -0.67rem
-      z-index: 10
+      top: -9px
+      right: 15px
       margin: 0 auto
       display: block
       position: absolute
       background-color: transparent
-      border-left: 0.75rem solid rgba(255, 255, 255, 0)
-      border-right: 0.75rem solid rgba(255, 255, 255, 0)
-      border-bottom: 0.67rem solid $grayLighter
+      border-left: 12px solid rgba(255, 255, 255, 0)
+      border-right: 12px solid rgba(255, 255, 255, 0)
+      border-bottom: 10px solid rgba(255, 255, 255, 0)
       -moz-transform: scale(1.01)
 
-  &:hover
-  
+    &:before
+      margin-top: -1px
+      border-bottom-color: $gray
+
+    &:after
+      border-bottom-color: $white
+
+  &:hover,
+  &.activated
+
+    &:before
+      content: ''
+
     .dropdown-block
       opacity: 1
-      margin-top: 0.67rem
+      margin-top: 0
       pointer-events: auto

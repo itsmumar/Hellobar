@@ -24,22 +24,9 @@
   white-space: nowrap
   text-overflow: ellipsis  
 
-/*-----------  Arrows  -----------*/
+/*-----------  Vertical Alignment  -----------*/
 
-@mixin left-arrow($height: 1em, $color: $grayLighter)
-  &:after
-    content: ''
-    width: 0
-    height: 0
-    z-index: 10
-    margin: 0 auto
-    display: block
-    position: absolute
-    left: -$height * 0.9
-    top: calc(50% - #{$height})
-    background-color: transparent
-    border-top: $height solid rgba(255, 255, 255, 0)
-    border-bottom: $height solid rgba(255, 255, 255, 0)
-    border-right: $height solid $color
-    -moz-transform: scale(1.01)
-    @include transition()
+@mixin vertical-align()
+  top: 50%
+  position: relative
+  @include transform(translateY(-50%))

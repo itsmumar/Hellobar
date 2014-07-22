@@ -7,17 +7,18 @@
 
 - if current_user && current_site
   .header-nav-wrapper
-    h5= current_site.url
+    h5= current_site.url.gsub(/https?:\/\//, '')
 
     .dropdown-wrapper
       i.icon-dropdown
       .dropdown-block
-        = link_to 'Settings', edit_site_path(current_site)
-        h6 Sites
-        ul
-          - (current_user.sites - [current_site]).each do |site|
-            li.site-block
-              = link_to display_url_for_site(site), site_path(site)
+        = link_to 'Settings', (current_user ? edit_site_path(current_site) : root_path)
+        - if current_user
+          h6 Sites
+          ul
+            - (current_user.sites - [current_site]).each do |site|
+              li.site-block
+                = link_to display_url_for_site(site), site_path(site)
 
 .header-user-wrapper  
 
@@ -27,12 +28,13 @@
   .dropdown-wrapper
     i.icon-notification
     .dropdown-block
-      = link_to 'Settings', edit_site_path(current_site)
-      h6 Sites
-      ul
-        - (current_user.sites - [current_site]).each do |site|
-          li.site-block
-            = link_to display_url_for_site(site), site_path(site)
+      = link_to 'Settings', (current_user ? edit_site_path(current_site) : root_path)
+      - if current_user
+        h6 Sites
+        ul
+          - (current_user.sites - [current_site]).each do |site|
+            li.site-block
+              = link_to display_url_for_site(site), site_path(site)
 
   .user-avatar
     h6 Annie P.
@@ -40,14 +42,13 @@
   .dropdown-wrapper
     i.icon-dropdown
     .dropdown-block
-      = link_to 'Settings', edit_site_path(current_site)
-      h6 Sites
-      ul
-        - (current_user.sites - [current_site]).each do |site|
-          li.site-block
-            = link_to display_url_for_site(site), site_path(site)
-
-
+      = link_to 'Settings', (current_user ? edit_site_path(current_site) : root_path)
+      - if current_user
+        h6 Sites
+        ul
+          - (current_user.sites - [current_site]).each do |site|
+            li.site-block
+              = link_to display_url_for_site(site), site_path(site)
 
       / .col-md-5
       /   - if current_user && current_site

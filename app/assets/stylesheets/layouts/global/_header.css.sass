@@ -1,6 +1,6 @@
 /*-----------  Header  -----------*/
 
-$headerHeight: 5em
+$headerHeight: 5rem
 
 .global-header
   background-color: $red
@@ -23,20 +23,29 @@ $headerHeight: 5em
 
   .header-nav-wrapper,
   .header-user-wrapper
+    height: $headerHeight
 
-    > *
+    > *:not(.button)
       @include inline-block()
 
   .header-nav-wrapper
     float: left
+    padding-left: 1.5em
 
   .header-user-wrapper
     float: right
+    padding-right: 1.5em
+
+    .button
+      color: $red
+      font-size: 0.85em
+      background-color: $white
+      text-transform: uppercase
 
     i.icon-notification,
     i.icon-notification-alert
       font-size: 2.33em
-
+      margin-right: -0.67rem
 
   /*-----------  Dropdowns  -----------*/
 
@@ -45,6 +54,22 @@ $headerHeight: 5em
     > a,
     > i
       color: $white
+      line-height: $headerHeight
 
     .dropdown-block
+      margin-top: 0
+      padding-top: 1rem
       background-color: $grayLighter
+
+      *
+        line-height: normal !important
+
+      &:after
+        border-bottom-color: $grayLighter
+
+    &:hover,
+    &.activated
+
+      .dropdown-block
+        margin-top: 1.15rem !important
+
