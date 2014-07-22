@@ -11,7 +11,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :background_color, :border_color, :button_color, :link_color, :text_color,
 
     # other
-    :link_style, :size, :site_preview_image
+    :link_style, :size, :site_preview_image, :site_preview_image_mobile
 
   def site
     {
@@ -28,8 +28,16 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site_preview_image
+    url2png("?url=#{object.site.url}")
+  end
+
+  def site_preview_image_mobile
+    url2png("?url=#{object.site.url}&viewport=320x568")
+  end
+
+  def url2png(params)
     css_url = "http://#{Hellobar::Settings[:host]}/stylesheets/hide_bar.css"
-    params = "?url=#{object.site.url}&custom_css_url=#{css_url}"
+    params += "&custom_css_url=#{css_url}"
     token = Digest::MD5.hexdigest("#{params}SC10DF8C7E0FE8")
     "https://api.url2png.com/v6/P52EBC321291EF/#{token}/png/#{params}"
   end
