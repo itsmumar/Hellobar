@@ -25,12 +25,12 @@ module ComparableDate
     comparable_date(value['timezone'], end_date)
   end
 
-  # Call with either a timezone (will render the current date; tz of nil will default to current user);
+  # Call with either a timezone (will render the current date; tz of nil will default to current user's timezone);
   # or a date and a timezone (will use date in that timezone's offset).
   #
   # Output: 2001/01/01 +00:00
   def comparable_date tz=nil, date=nil
-    date ||= Time.zone.now.in_time_zone("UTC")
+    date ||= Time.now.utc
     offset = date.in_time_zone(tz).utc_offset
 
     date.strftime("%Y/%m/%d").tap do |str|
@@ -40,12 +40,17 @@ module ComparableDate
 
   # Returns our comparable format - 00:00
   def comparable_offset offset, time=nil
-    offset /= 60 * 60 # ruby offsets are in seconds, convert to hours.
+    offset /= 60 # ruby offsets are in seconds, convert to minutes;
+    
+    # get remainder for fractional timezones
+    remainder = offset % 60
+
+    offset /= 60 # convert to hours;
     offset += 12 # add the correct number of hours.
 
-    time ||= Time.zone.now
-    hours = time.hour + offset
-    minutes = time.min
+    time ||= Time.now.utc
+    hours = offset
+    minutes = remainder
 
     ("%02d" % hours) + ":" + ("%02d" % minutes)
   end

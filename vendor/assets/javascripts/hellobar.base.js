@@ -1140,24 +1140,28 @@ var _HB = {
   // Passing no argument leads to "Detect user timezone" mode, as does "auto".
   // Pass an integer offset in hours otherwise, from 0 to 23.
   comparableDate: function(targetOffset) {
-    if (typeof targetOffset === "undefined") offset = "auto";
+    if (typeof targetOffset === "undefined") targetOffset = "auto";
     if (targetOffset === "auto") {
       return this.ymd(new Date());
     } else {
-      var localOffset = (new Date()).getTimezoneOffset();
-      var diff = targetOffset * 60 - localOffset;
-      console.log('difference from local offset ' + localOffset + ' to target offset of ' + targetOffset + ' is ' + diff + ', resulting in ' + this.comparableOffset(diff));
-      var idl = this.idl();      
-      return this.ymd(idl) + " +" + this.comparableOffset(diff);
-    }
-  },
+      var idl = this.idl(),
+          time = new Date();
 
-  comparableOffset: function(offset) {
-    if (typeof offset === "undefined") offset = (new Date()).getTimezoneOffset();
-    offset = (offset * -1) + 720;
-    var hours = Math.floor(offset / 60);
-    var minutes = offset % 60;
-    return this.zeropad(hours) + ":" + this.zeropad(minutes);
+      targetOffset *= 60; // We're working with minutes in this function
+
+      var baseOffset = time.getTimezoneOffset();
+
+      var offsetMS = (targetOffset - baseOffset) * 60000;
+
+      convertedTime = new Date(this.utc().getTime() + offsetMS);
+
+      var offsetMinutes = targetOffset % 60;
+
+      var hours = convertedTime.getHours();
+      var minutes = convertedTime.getMinutes() + offsetMinutes;
+      
+      return this.ymd(idl) + " +" + this.zeropad(hours) + ":" + this.zeropad(minutes);
+    }
   },
 
   ymd: function(date) {
