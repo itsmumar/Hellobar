@@ -20,13 +20,15 @@ class @RuleModal extends Modal
 
     @$modal.find('.condition').each ->
       $condition = $(this)
-      ruleModal._renderOperand($condition)
-      ruleModal._renderValue($condition)
+      ruleModal._renderCondition($condition)
 
     @$modal.on 'change', '.segment, .operand', ->
       $condition = $(this).parents('.condition:first')
-      ruleModal._renderOperand($condition)
-      ruleModal._renderValue($condition)
+      ruleModal._renderCondition($condition)
+
+  _renderCondition: ($condition) ->
+    @_renderOperand($condition)
+    @_renderValue($condition)
 
   _renderOperand: ($condition) ->
     segment = $condition.find('.rule_conditions_segment select').val()
@@ -155,20 +157,19 @@ class @RuleModal extends Modal
   _addCondition: ->
     nextIndex = @$modal.find('.condition').length
     templateHTML = @newConditionTemplate()
-    $template = $(templateHTML)
+    $condition = $(templateHTML)
 
     # update the names on the elements to be submitted properly
-    $template.find('[name="segment"]')
+    $condition.find('[name="segment"]')
              .attr('name', "rule[conditions_attributes][#{nextIndex}][segment]")
-    $template.find('[name="operand"]')
+    $condition.find('[name="operand"]')
              .attr('name', "rule[conditions_attributes][#{nextIndex}][operand]")
-    $template.find('[name="value"]')
+    $condition.find('[name="value"]')
              .attr('name', "rule[conditions_attributes][#{nextIndex}][value]")
-    $template.find('.value').hide()
+    $condition.find('.value').hide()
 
-    @_renderValue($template)
-    @_renderOperand($template)
-    @$modal.find('.conditions').append($template.html())
+    @_renderCondition($condition)
+    @$modal.find('.conditions').append($condition.html())
 
   _removeCondition: ($condition) ->
     $condition.find('.rule_conditions__destroy input').val(true)

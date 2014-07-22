@@ -1,6 +1,74 @@
 #= require modal
 #= require modals/rule_modal
 
+module 'RuleModal.open',
+  setup: ->
+    segments =  "<div class='rule_conditions_segment'>"
+    segments +=   '<select class="segment">'
+    segments +=     '<option value="CountryCondition"></option>'
+    segments +=     '<option value="DeviceCondition"></option>'
+    segments +=     '<option value="DateCondition"></option>'
+    segments +=     '<option value="UrlCondition"></option>'
+    segments +=   '</select>'
+    segments += "</div>"
+
+    operands =  "<div class='rule_conditions_operand'>"
+    operands +=   "<select id='operand' class='operand'>"
+    operands +=     "<option value='is'></option>"
+    operands +=     "<option value='is_not'></option>"
+    operands +=     "<option value='is_before'></option>"
+    operands +=     "<option value='is_after'></option>"
+    operands +=     "<option value='is_between'></option>"
+    operands +=     "<option value='includes'></option>"
+    operands +=     "<option value='excludes'></option>"
+    operands +=   "</select>"
+    operands += "</div>"
+
+    condition =  "<div class='condition'>"
+    condition +=   "#{segments}"
+    condition +=   "#{operands}"
+    condition += "</div>"
+    $modal = $("<div>#{condition}</div>").clone()
+    @modal = new RuleModal($modal)
+    @modal.newConditionTemplate = ->
+      $modal.html()
+
+test 'rendering the correct operand for CountryCondition', ->
+  expect(1)
+
+  @modal.$modal.find('.rule_conditions_segment select').val('CountryCondition')
+  operands = @modal.open().find('.rule_conditions_operand option').map ->
+    @value
+
+  deepEqual $.makeArray(operands), ['is', 'is_not'], 'filters the correct operands for CountryCondition'
+
+test 'rendering the correct operand for DeviceCondition', ->
+  expect(1)
+
+  @modal.$modal.find('.rule_conditions_segment select').val('DeviceCondition')
+  operands = @modal.open().find('.rule_conditions_operand option').map ->
+    @value
+
+  deepEqual $.makeArray(operands), ['is', 'is_not'], 'filteres the correct operands for DeviceCondition'
+
+test 'rendering the correct operand for DateCondition', ->
+  expect(1)
+
+  @modal.$modal.find('.rule_conditions_segment select').val('DateCondition')
+  operands = @modal.open().find('.rule_conditions_operand option').map ->
+    @value
+
+  deepEqual $.makeArray(operands), ['is_before', 'is_after', 'is_between'], 'filteres the correct operands for DateCondition'
+
+test 'rendering the correct operand for UrlCondition', ->
+  expect(1)
+
+  @modal.$modal.find('.rule_conditions_segment select').val('UrlCondition')
+  operands = @modal.open().find('.rule_conditions_operand option').map ->
+    @value
+
+  deepEqual $.makeArray(operands), ['includes', 'excludes'], 'filteres the correct operands for UrlCondition'
+
 test 'RuleModal._valueClass(segment, operand)', ->
   $modal = $('<div></div>')
   modal = new RuleModal($modal)
@@ -34,8 +102,6 @@ test 'RuleModal._renderValue($condition)', (assert) ->
 module 'RuleModal interactions'
 
 asyncTest 'RuleModal closes the modal on a successful form submission event', (assert) ->
-  expect(1)
-
   $dom = $('<div class="modal-wrapper show-modal"><form action="url" method="post"></form></div>')
   $form = $dom.find('form')
   modal = new RuleModal($dom)
