@@ -1,12 +1,16 @@
 - if @site.has_script_installed?
-  h1= display_url_for_site(@site)
-  ul
-    - @site.site_elements.each do |element|
-      li
-        = "Bar: #{element.id}"
-        ul
-          li= pluralize(element.total_views, "view")
-          li= pluralize(element.total_conversions, "conversions")
+
+  .statistics-page
+    h1= display_url_for_site(@site)
+    ul
+      - @site.site_elements.each do |element|
+        li
+          = "Bar: #{element.id}"
+          ul
+            li= pluralize(element.total_views, "view")
+            li= pluralize(element.total_conversions, "conversions")
 
 - else
-  = render :partial => "sites/install.html.slim"
+ 
+  .installation-page
+    = render :partial => "sites/install.html.slim"

@@ -5,11 +5,16 @@
   outline: none
   cursor: pointer
   padding: 0.55em 1.25em
-  border-radius: $radius
+  border-radius: $radiusSm
   border: 2px solid $red
   background-color: $white
   @include inline-block()
   @include transition()
+
+  i
+    line-height: 100%
+    vertical-align: middle
+    margin: 0 0.67em 0 -0.33em
 
   &:hover
     color: light
@@ -17,3 +22,14 @@
   &[disabled]
     cursor: not-allowed
     background-color: $gray
+
+/*-----------  Alternate  -----------*/
+
+%green-button
+  color: $white
+  font-size: 0.95em
+  background-color: $green
+  border: 0 solid transparent
+
+  &:hover
+    background-color: darken($green, 15%)

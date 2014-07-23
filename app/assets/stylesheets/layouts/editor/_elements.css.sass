@@ -17,13 +17,7 @@
   /*-----------  Buttons  -----------*/
 
   .button
-    color: $white
-    font-size: 0.95em
-    background-color: $green
-    border: 0 solid transparent
-
-    &:hover
-      background-color: darken($green, 15%)
+    @extend %green-button
 
   /*-----------  Color Select  -----------*/
 
@@ -87,7 +81,7 @@
             .color-preview
               width: 22%
               height: 1.1em
-              border-radius: $radius
+              border-radius: $radiusSm
               border: 1px solid $gray
               @include inline-block()
 
@@ -117,7 +111,7 @@
             color: $grayDark
             text-align: center
             margin-bottom: 2.65em
-            border-radius: $radius
+            border-radius: $radiusSm
             border: 1px solid $grayLight
             @include inline-block()
 
@@ -133,7 +127,7 @@
             float: right
             margin-top: 0.25em
             padding: 0.25em 0.5em
-            border-radius: $radius
+            border-radius: $radiusSm
             border: 1px solid $grayLight
 
             h6
@@ -168,7 +162,7 @@
     float: right
     cursor: pointer
     margin-top: -4px
-    border-radius: $radius
+    border-radius: $radiusSm
     background-color: $white
     border: 1px solid $grayLight
     @include user-select(none)
@@ -199,8 +193,8 @@
       width: 1.45em
       height: 1.45em
       margin-left: 0
+      border-radius: 2px
       margin-right: 1.75em
-      border-radius: $radius
       background-color: $grayLight
       @include transition(0.2s)
 
