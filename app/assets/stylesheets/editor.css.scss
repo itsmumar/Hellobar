@@ -6,7 +6,8 @@
 
 //-----------  Application Settings  -----------//
 
-@import 'settings/variables';       // Global Variables & Settings
+@import 'settings/variables';       // Global Variables & Settings 
+@import 'settings/editor';          // Editor Specific Variable Overwrites
 @import 'settings/mixins';          // Additional Custom Mixins
 @import 'settings/fonts';           // Custom Font & Typeface Settings & Mixins
 

@@ -18,6 +18,18 @@
     font-size: 0.85em
     margin-top: 1.5em
 
+  /*-----------  Buttons  -----------*/
+
+  .button
+    color: $white
+    font-size: 0.95em
+    padding: 0.45em 1.33em
+    background-color: $green
+    border: 0 solid transparent
+
+    &:hover
+      background-color: darken($green, 15%)
+
   /*-----------  Text Inputs  -----------*/
 
   $textInputPadding: 0.25em 0.67em 0.33em
@@ -173,6 +185,7 @@
           .eyedrop-button
             width: 25%
             float: right
+            cursor: pointer
             color: $grayDark
             text-align: center
             margin-bottom: 2.65em
@@ -196,7 +209,10 @@
             border: 1px solid $grayLight
 
             h6
-              @include inline-block()
+              @include inline-block(inherit)
+
+            span
+              float: right
 
     &.in-focus
 

@@ -144,7 +144,11 @@
   /*-----------  Save Button  -----------*/
 
   .save-button
-    display: block
     width: 40%
-    text-align: center
     margin: 0 auto
+    display: block
+    text-align: center
+    background-color: $red
+
+    &:hover
+      background-color: darken($red, 15%)
