@@ -1,0 +1,30 @@
+h5 Recent Activity
+
+.activity-wrapper
+  
+  .activity-block.email
+    p
+      strong The email bar you created yesterday
+      |  has already resulted in 20 additional emails collected to your MailChimp account. We don't have enough data to know if this is a significant increase in signups.
+
+  .activity-block.email
+    p
+      strong The email bar you created yesterday
+      |  has already resulted in 20 additional emails collected to your MailChimp account. We don't have enough data to know if this is a significant increase in signups.
+
+  .activity-block.email
+    p
+      strong The email bar you created yesterday
+      |  has already resulted in 20 additional emails collected to your MailChimp account. We don't have enough data to know if this is a significant increase in signups.
+
+h5 Lifetime Totals
+
+
+h1= display_url_for_site(@site)
+ul
+  - @site.site_elements.each do |element|
+    li
+      = "Bar: #{element.id}"
+      ul
+        li= pluralize(element.total_views, "view")
+        li= pluralize(element.total_conversions, "conversions")
