@@ -1,8 +1,4 @@
 HelloBar.StyleController = Ember.Controller.extend
-  placementOptions: [
-    {id: 1, text: 'Top'}
-    {id: 2, text: 'Bottom'}
-  ]
 
   #-----------  Step Settings  -----------#
 

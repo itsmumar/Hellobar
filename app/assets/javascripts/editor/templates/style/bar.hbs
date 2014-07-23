@@ -2,18 +2,6 @@
   {{toggle-switch switch=model.barIsBranded}}
 </label>
 
-<label>Animations
-  {{toggle-switch switch=model.barIsAnimated}}
-</label>
-
 <label>Allow to hide bar
   {{toggle-switch switch=model.closable}}
 </label>
-
-<label>Placement</label>
-{{view Ember.Select
-  content=placementOptions
-  selection=model.barPlacementSelection
-  optionValuePath='content.id'
-  optionLabelPath='content.text'
-}}
