@@ -11,7 +11,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :background_color, :border_color, :button_color, :link_color, :text_color,
 
     # other
-    :link_style, :size, :site_preview_image, :site_preview_image_mobile
+    :link_style, :size, :site_preview_image, :site_preview_image_mobile, :closable
 
   def site
     {
