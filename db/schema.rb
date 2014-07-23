@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140717134939) do
+ActiveRecord::Schema.define(version: 20140723190721) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -170,6 +170,7 @@ ActiveRecord::Schema.define(version: 20140717134939) do
     t.boolean  "paused",                        default: false
     t.integer  "rule_id"
     t.text     "settings"
+    t.boolean  "show_branding",                 default: true
   end
 
   add_index "site_elements", ["element_subtype"], name: "index_site_elements_on_element_subtype", using: :btree
