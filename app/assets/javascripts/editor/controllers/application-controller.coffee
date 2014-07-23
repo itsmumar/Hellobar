@@ -52,6 +52,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     )
 
     HB.render(previewElement)
+    HB.isMobileWidth = "changed"
   )
 
   #-----------  State Default & Actions  -----------#
