@@ -1,9 +1,11 @@
-{{#if isMobile}}
-  <div id="hellobar-preview-container">
+<div id="hellobar-preview-container" {{bind-attr class="isMobile:hellobar-preview-container-mobile"}}>
+  <div id="preview-image-loading">
+    Site preview loading...
+  </div>
+
+  {{#if isMobile}}
     <img {{bind-attr src='model.site_preview_image_mobile'}} />
-  </div>
-{{else}}
-  <div id="hellobar-preview-container">
+  {{else}}
     <img {{bind-attr src='model.site_preview_image'}} />
-  </div>
-{{/if}}
+  {{/if}}
+</div>
