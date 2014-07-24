@@ -4,11 +4,12 @@ html
     title Hello Bar
     link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css"
 
+    - if defined?(preview_script_path)
+      = javascript_include_tag preview_script_path(@site)
+
     = stylesheet_link_tag    "editor", :media => "all"
     = javascript_include_tag "editor/application"
 
-    - if defined?(preview_script_path)
-      = javascript_include_tag preview_script_path(@site)
 
     = csrf_meta_tags
 
