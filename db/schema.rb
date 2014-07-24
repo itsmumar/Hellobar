@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140723190721) do
+ActiveRecord::Schema.define(version: 20140723193736) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -43,10 +43,12 @@ ActiveRecord::Schema.define(version: 20140723190721) do
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
 
   create_table "conditions", force: true do |t|
-    t.integer "rule_id"
-    t.string  "segment", null: false
-    t.string  "operand", null: false
-    t.text    "value"
+    t.integer  "rule_id"
+    t.string   "segment",    null: false
+    t.string   "operand",    null: false
+    t.text     "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
