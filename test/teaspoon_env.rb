@@ -4,6 +4,10 @@ unless defined?(Rails)
   require File.expand_path("../../config/environment", __FILE__)
 end
 
+def site_rule_path(*args)
+  '/'
+end
+
 Teaspoon.configure do |config|
 
   # Determines where the Teaspoon routes will be mounted. Changing this to "/jasmine" would allow you to browse to

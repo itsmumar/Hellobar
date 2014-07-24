@@ -1,6 +1,7 @@
 <%-
-  @site = OpenStruct.new(:id => 1)
-  @site_element = OpenStruct.new(:id => 1)
+  @site = Site.first
+  @site_element = SiteElement.first
+  @site_element.rule = Rule.first
 %>
 
 <%= render template: "layouts/ember" %>
