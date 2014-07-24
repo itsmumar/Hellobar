@@ -51,12 +51,12 @@ end
 
 group :development, :test do
   gem "debugger"
+  gem "metric_fu"
   gem "minitest"
   gem "pry"
   gem "rspec-rails", "~> 2.14"
-  gem "metric_fu"
-  gem 'simplecov', '~> 0.7.1'
   gem "teaspoon", "~> 0.8.0"
+  gem 'simplecov', '~> 0.7.1'
 end
 
 group :test do
