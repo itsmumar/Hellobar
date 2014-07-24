@@ -2,7 +2,7 @@
 
 .editor-wrapper
 
-  h6, label
+  h6
     font-size: 0.95em
     line-height: 133%
     color: $grayDarkest
@@ -14,76 +14,10 @@
     line-height: 150%
     letter-spacing: 0.02em
 
-  label
-    font-size: 0.85em
-    margin-top: 1.5em
+  /*-----------  Buttons  -----------*/
 
-  /*-----------  Text Inputs  -----------*/
-
-  $textInputPadding: 0.25em 0.67em 0.33em
-
-  select,
-  textarea,
-  input:not([type=submit]):not([type=file]):not([type=button]):not([type=radio]):not([type=checkbox]):not([type=color])
-    width: 100%
-    color: $gray
-    display: block
-    border-radius: 0
-    font-size: 0.85em
-    margin: 0.75em auto
-    border: 1px solid $gray
-    padding: $textInputPadding
-    @include box-shadow(none)
-    @include appearance(none)
-    @include transition()
-
-    &:focus
-      outline: none
-      color: $grayDarker
-
-    &:disabled
-      background-color: #f7f7f7
-
-  textarea, 
-  input:not([type=submit]):not([type=file]):not([type=button]):not([type=radio]):not([type=checkbox]):not([type=color])
-
-    @include placeholder 
-      color: lighten($gray, 5%)
-
-  textarea
-    min-height: 6em      
-
-  /*-----------  Select Dropdowns  -----------*/
-
-  .select-wrapper
-    color: $grayDark
-    position: relative
-
-    select
-      cursor: pointer
-      color: $grayDarker
-      padding: 0.45em 0.67em 0.5em
-
-    label
-      position: relative
-
-    &:before
-      right: 1rem
-      top: 0.67rem
-      content: 'c'
-      font-size: 0.75em
-      color: $grayDarker
-      position: absolute
-      pointer-events: none
-      font-family: 'hellobar'
-      @include transition()
-
-    &:hover:before
-      color: $grayDarkest
-
-  @media screen and (-webkit-min-device-pixel-ratio:0)
-    select
-      padding-right: 18px
+  .button
+    @extend %green-button
 
   /*-----------  Color Select  -----------*/
 
@@ -147,7 +81,7 @@
             .color-preview
               width: 22%
               height: 1.1em
-              border-radius: $radius
+              border-radius: $radiusSm
               border: 1px solid $gray
               @include inline-block()
 
@@ -173,10 +107,11 @@
           .eyedrop-button
             width: 25%
             float: right
+            cursor: pointer
             color: $grayDark
             text-align: center
             margin-bottom: 2.65em
-            border-radius: $radius
+            border-radius: $radiusSm
             border: 1px solid $grayLight
             @include inline-block()
 
@@ -192,11 +127,14 @@
             float: right
             margin-top: 0.25em
             padding: 0.25em 0.5em
-            border-radius: $radius
+            border-radius: $radiusSm
             border: 1px solid $grayLight
 
             h6
-              @include inline-block()
+              @include inline-block(inherit)
+
+            span
+              float: right
 
     &.in-focus
 
@@ -224,7 +162,7 @@
     float: right
     cursor: pointer
     margin-top: -4px
-    border-radius: $radius
+    border-radius: $radiusSm
     background-color: $white
     border: 1px solid $grayLight
     @include user-select(none)
@@ -255,8 +193,8 @@
       width: 1.45em
       height: 1.45em
       margin-left: 0
+      border-radius: 2px
       margin-right: 1.75em
-      border-radius: $radius
       background-color: $grayLight
       @include transition(0.2s)
 
@@ -295,11 +233,3 @@
         .toggle-floater
           box-shadow: $shadow
 
-
-  /*-----------  Labels  -----------*/
-
-  label
-    @include transition()
-
-    &.disabled
-      color: $gray

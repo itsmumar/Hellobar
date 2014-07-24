@@ -1,25 +1,35 @@
 /*-----------  Buttons  -----------*/
 
 .button
-  color: $white
+  color: $red
+  outline: none
   cursor: pointer
-  padding: 0.5em 1.33em
-  border-radius: $radius
-  background-color: $green
+  padding: 0.45em 1.25em
+  border-radius: $radiusSm
+  border: 2px solid $red
+  background-color: $white
   @include inline-block()
   @include transition()
 
+  i
+    line-height: 100%
+    vertical-align: middle
+    margin: 0 0.67em 0 -0.33em
+
   &:hover
-    color: $white
-    background-color: darken($green, 20%)
+    color: light
 
   &[disabled]
     cursor: not-allowed
     background-color: $gray
 
-.button.save-button
-  background-color: $orange
+/*-----------  Alternate  -----------*/
 
-  &[disabled]
-    cursor: not-allowed
-    background-color: $gray
+%green-button
+  color: $white
+  font-size: 0.95em
+  background-color: $green
+  border: 0 solid transparent
+
+  &:hover
+    background-color: darken($green, 15%)

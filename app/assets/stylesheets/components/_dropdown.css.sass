@@ -1,0 +1,121 @@
+/*-----------  Dropdowns  -----------*/
+
+.dropdown-wrapper
+  position: relative
+  @include inline-block()
+
+  > a,
+  > i
+    cursor: pointer
+    padding: 0 1.5rem
+
+  &:before
+    right: 0
+    width: 250%
+    height: 3rem
+    display: block
+    bottom: -1.5rem
+    position: absolute
+
+  .dropdown-block
+    right: 0
+    opacity: 0
+    min-width: 12rem
+    position: absolute
+    margin-top: -1.5rem
+    pointer-events: none
+    background-color: $white
+    border: 1px solid $grayLight
+    padding: 0.33rem 1rem 1rem
+    @include transition(0.25s)
+
+    &:before,
+    &:after
+      content: ''
+      width: 0
+      height: 0
+      top: -9px
+      right: 15px
+      margin: 0 auto
+      display: block
+      position: absolute
+      background-color: transparent
+      border-left: 12px solid rgba(255, 255, 255, 0)
+      border-right: 12px solid rgba(255, 255, 255, 0)
+      border-bottom: 10px solid rgba(255, 255, 255, 0)
+      -moz-transform: scale(1.01)
+
+    &:before
+      margin-top: -1px
+      border-bottom-color: $grayLight
+
+    &:after
+      border-bottom-color: $white
+
+  /*-----------  Animations  -----------*/
+
+  &:hover,
+  &.activated
+
+    &:before
+      content: ''
+
+    .dropdown-block
+      opacity: 1
+      margin-top: 0
+      pointer-events: auto
+
+  /*-----------  Dropdown Elements  -----------*/
+
+  .dropdown-block
+  
+    h6
+      color: $gray
+      font-size: 0.85rem
+      padding-bottom: 0.25rem
+      margin: 0.5rem 0 0.75rem 0
+      text-transform: uppercase
+      border-bottom: 1px solid $grayLight
+
+    a
+      color: $gray
+      display: block
+      margin: 0 -1rem
+      font-size: 0.85em
+      padding: 0.5rem 1rem
+      @include ellipsis()
+
+      &:hover,
+        color: $red
+
+      &.active
+        color: $black
+        background-color: $white
+
+    > a
+    
+      &:first-child
+        margin-top: -1rem
+        padding-top: 0.75rem
+
+        &.active
+          padding-top: 0.5rem
+
+      &:last-child
+        margin-bottom: -1rem
+        padding-bottom: 0.75rem
+
+        &.active
+          padding-top: 0.5rem
+
+    ul 
+
+      li
+        @include ellipsis()
+
+        > [class*='avatar']
+          float: left
+
+        a
+          padding: 0 0 0 1rem
+          @include inline-block()

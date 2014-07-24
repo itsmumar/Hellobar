@@ -67,6 +67,6 @@ class SitesController < ApplicationController
   end
 
   def determine_layout
-    params[:action] == "preview_script" ? false : "with_sidebar"
+    params[:action] == "preview_script" ? false : "application"
   end
 end

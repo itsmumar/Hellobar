@@ -2,10 +2,12 @@
 
 @import 'bourbon';                  // Mixin Library (http://bourbon.io)
 @import 'normalize';                // CSS Normalization & Resets (http://necolas.github.io/normalize.css)
+@import 'jquery_minicolors';        // Color Picker (http://labs.abeautifulsite.net/jquery-minicolors/)
 
 //-----------  Application Settings  -----------//
 
-@import 'settings/variables';       // Global Variables & Settings
+@import 'settings/variables';       // Global Variables & Settings 
+@import 'settings/editor';          // Editor Specific Variable Overwrites
 @import 'settings/mixins';          // Additional Custom Mixins
 @import 'settings/fonts';           // Custom Font & Typeface Settings & Mixins
 
@@ -22,8 +24,4 @@
 @import 'layouts/common';           // Common Layout Blocks
 @import 'layouts/document';         // Document Layouts
 
-@import 'layouts/global/*';         // Global Layouts
-@import 'layouts/pages/*';          // Static Pages (Home, About Us, etc)
-@import 'layouts/devise/*';         // User Account Pages
-
-@import 'layouts/summary/*';        // Site Summary Pages
+@import 'layouts/editor/*';         // Editor Application

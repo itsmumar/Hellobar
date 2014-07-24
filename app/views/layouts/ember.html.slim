@@ -4,13 +4,16 @@ html
     title Hello Bar
     link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css"
 
-    = stylesheet_link_tag    "tmp/application", "application", :media => "all"
+    = stylesheet_link_tag    "editor", :media => "all"
+    = javascript_include_tag "editor/application"
+
     - if defined?(preview_script_path)
       = javascript_include_tag preview_script_path(@site)
-    = javascript_include_tag "editor/application"
+
     = csrf_meta_tags
 
   body
+
     javascript:
       HB_DNT = 1
 

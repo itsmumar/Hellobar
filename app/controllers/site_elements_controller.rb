@@ -69,7 +69,7 @@ class SiteElementsController < ApplicationController
   end
 
   def determine_layout
-    %w(new edit).include?(action_name) ? "ember" : "with_sidebar"
+    %w(new edit).include?(action_name) ? "ember" : "application"
   end
 
   def load_site_element

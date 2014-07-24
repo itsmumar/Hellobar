@@ -2,3 +2,78 @@
 
 label
   display: block
+  font-size: 0.85em
+  margin-top: 1.5em
+  line-height: 133%
+  color: $grayDarker
+  letter-spacing: 0.02em
+  @include transition()
+
+  &.disabled
+    color: $gray
+
+/*-----------  Text Inputs  -----------*/
+
+select,
+textarea,
+input:not([type=submit]):not([type=file]):not([type=button]):not([type=radio]):not([type=checkbox]):not([type=color])
+  width: 100%
+  color: $gray
+  display: block
+  border-radius: 0
+  font-size: 0.85em
+  margin: 0.75em auto
+  padding: 0.45em 0.67em
+  border: 1px solid $gray
+  @include box-shadow(none)
+  @include appearance(none)
+  @include transition()
+
+  &:focus
+    outline: none
+    color: $grayDarker
+
+  &:disabled
+    background-color: #f7f7f7
+
+textarea, 
+input:not([type=submit]):not([type=file]):not([type=button]):not([type=radio]):not([type=checkbox]):not([type=color])
+
+  @include placeholder 
+    color: lighten($gray, 5%)
+
+textarea
+  min-height: 6em      
+
+/*-----------  Select Dropdowns  -----------*/
+
+.select-wrapper
+  color: $grayDark
+  position: relative
+
+  select
+    cursor: pointer
+    color: $grayDarker
+    padding: 0.45em 0.67em 0.5em
+
+  label
+    position: relative
+
+  &:before
+    right: 1rem
+    top: 0.67rem
+    content: 'c'
+    font-size: 0.75em
+    color: $grayDarker
+    position: absolute
+    pointer-events: none
+    font-family: 'hellobar'
+    @include transition()
+
+  &:hover:before
+    color: $grayDarker
+
+@media screen and (-webkit-min-device-pixel-ratio:0)
+  select
+    padding-right: 18px
+

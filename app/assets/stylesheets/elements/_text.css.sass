@@ -1,48 +1,66 @@
 /*-----------  Anchors (links)  -----------*/
 
 a
-  cursor: pointer
   text-decoration: none
   @include transition()
 
   &:hover
     text-decoration: none
 
+  &[href]
+    cursor: pointer
+
   &[disabled]
     cursor: not-allowed
+
+  &.active
+    cursor: default
 
 /*-----------  Headers  -----------*/
 
 h1, h2, h3, h4, h5, h6, legend
   margin: 0
-  color: $grayDark
+  color: $red
   line-height: 100%
-  text-transform: uppercase
   font-weight: $fontWeightNormal
   @include antialiased()
 
 h1
-  font-size: 3.75em
+  font-size: 3em
+  letter-spacing: -0.025em
+  font-weight: $fontWeightLight
 
 h2 
   font-size: 2.75em
+  text-transform: uppercase
 
 h3, legend
   font-size: 2.5em
+  text-transform: uppercase
 
 h4
   font-size: 1.75em
+  text-transform: uppercase
 
 h5
   font-size: 1.25em
+  margin-bottom: 1.25em
+  text-transform: uppercase
 
 h6
   font-size: 1em
-  text-transform: none
+
+/*-----------  Paragraphs  -----------*/
+
+p
+  margin-top: 0
+  line-height: 150%
+  @include antialiased()
 
 /*-----------  Lists  -----------*/
 
 ul
+  margin: 0
   padding: 0
 
   li

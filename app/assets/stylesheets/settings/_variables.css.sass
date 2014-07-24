@@ -1,51 +1,62 @@
 /*-----------  Colors  -----------*/
 
-$white         : rgb(255, 255, 255)
-$black         : rgb(  0,   0,   0)
+$white        : rgb(255, 255, 255)
 
-$grayLighter   : rgb(239, 239, 239)
-$grayLight     : rgb(231, 231, 231)
-$gray          : rgb(206, 206, 206)
-$grayDark      : rgb(181, 181, 181)
-$grayDarker    : darken($grayDark, 10%)
-$grayDarkest   : darken($grayDark, 33%)
+$grayLightest : rgb(246, 246, 246)
+$grayLighter  : rgb(226, 226, 226)
+$grayLight    : rgb(198, 198, 198)
+$gray         : rgb(132, 132, 132)
+$grayDark     : rgb(102, 102, 102)
+$grayDarker   : rgb( 79,  79,  79)
 
-$blue          : rgb(111, 213, 234)
+$black        : $grayDarker
 
-$green         : rgb( 96, 205, 118)
+$blueLighter  : rgb(238, 247, 253)
+$blueLight    : rgb( 60, 212, 217)
+$blue         : rgb( 69, 180, 214)
 
-$purple        : rgb(194, 100, 208)
+$green        : rgb( 84, 211, 136)
 
-$yellow        : rgb(255, 194,   0)
+$purple       : rgb(157,  83, 188)
 
-$orange        : rgb(235,  89,  60)
+$yellow       : rgb(255, 191,  31)
 
-$red           : rgb(216,  78,  51)
+$orange       : rgb(235,  89,  60)
+
+$red          : rgb(237,  87,  52)
 
 /*-----------  Sizing  -----------*/
 
-$emBase       : 15px
+$emBase       : 14px
 
-$maxWidth     : 75em
+$maxWidth     : 67em
 $smallWidth   : 32em
+
+$sidebarWidth : 13em
+$headerHeight : 4.25rem
 
 $gutter       : 2em
 $gutterSm     : $gutter / 1.75
 $gutterLg     : $gutter * 1.75
 
+$blockPadding : 0.75em 1.15em
+
 /*-----------  Styling Defaults  -----------*/
 
-$radius       : 3px
+$radiusSm     : 3px
+$radiusLg     : 5px
 
 $border       : 1px solid $gray
 $borderLight  : 1px solid $grayLight
 
-$shadow       : 0.33em 0.33em 1em rgba($grayDarker, 0.33)
-$shadowSubtle : 0 0 1em rgba($grayDarker, 0.25)
+$shadow       : 0.33em 0.33em 1em rgba($grayDarker, 0.15)
+$shadowSubtle : 0.33em 0.33em 1em rgba($grayDarker, 0.08)
+
+$modalSpeed   : 0.33s
 
 /*-----------  Fonts  -----------*/
 
 $fontFamily       : 'Open Sans', sans-serif
-$fontWeightLight  : 300
+$fontWeightLight  : 400
 $fontWeightNormal : 600
 $fontWeightBold   : 700

@@ -1,0 +1,49 @@
+/*-----------  Reveals  -----------*/
+
+.reveal-wrapper
+  cursor: pointer
+  overflow: hidden
+  margin-top: 0.75em
+  border-radius: $radiusLg
+  padding: 0.75em 1.15em 0
+  border: 2px solid $grayLightest
+  @include transition()
+
+  > i
+    color: $red
+    float: left
+    font-size: 3em
+    margin-right: 1rem
+
+  .reveal-title
+    color: $red
+    font-size: 1.25em
+    @include antialiased()
+
+  p
+    color: $gray
+
+  .reveal-block
+    clear: both
+    max-height: 0em
+    overflow: hidden
+    padding: 0 0 0 4em
+    @include transition(ease 0.33s)
+
+    .button
+      @extend %green-button
+
+  /*-----------  Animations  -----------*/
+
+  &:hover,
+  &.activated
+    box-shadow: $shadowSubtle
+    border-color: $grayLighter
+
+  &.activated
+    cursor: default
+
+    .reveal-block
+      max-height: 32em
+      padding-top: 1em
+      padding-bottom: 1.25em

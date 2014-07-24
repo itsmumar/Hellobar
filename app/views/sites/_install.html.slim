@@ -1,130 +1,162 @@
-.row
-  .col-md-2
-  .col-md-8
-    .center
-      h1 Install Hello Bar Script
-      p
-        small Once the script is installed, your dashboard will begin populating data all about your bars and visitors. This only needs to be done once per site.
+header
+  h1 Install Hello Bar Script
 
-    div class="panel-group installation-panel" id="accordion"
-      div class="panel panel-default"
-        div class="panel-heading"
-          .row
-            .col-md-1.center
-              span.glyphicon.glyphicon-wrench.installation-glyph
-            .col-md-11
-              h4 class="panel-title"
-                a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
-                  | I can install code myself
-              small If you know HTML and can edit your site, our install only takes on line of code.
-        div id="collapseOne" class="panel-collapse collapse"
-          div class="panel-body"
-            .row
-              .col-md-1
-              .col-md-11
-                p To install Hello Bar, copy and paste the following code right before your closing </body> tag.
-                pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\"></script>"
-                p That's it! You'll never need to update the code on your site again.
+  p Once the script is installed, your dashboard will begin populating data all about your bars and visitors. This only needs to be done once per site.
 
-      div class="panel panel-default"
-        div class="panel-heading"
-          .row
-            .col-md-1.center
-              span.glyphicon.glyphicon-globe.installation-glyph
-            .col-md-11
-              h4 class="panel-title"
-                a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
-                  | I use WordPress
-              small If you use WordPress you'll love our zero-configuration custom plugin. Just download, install and you're done.
-        div id="collapseTwo" class="panel-collapse collapse"
-          div class="panel-body"
-            .row
-              .col-md-1
-              .col-md-11
-                p
-                  | 1. Download Your Plugin
-                  br
-                  = button_to site_wordpress_plugin_path(@site), :method => :get, :class => "btn btn-success" do
-                    span class='glyphicon glyphicon-file'
-                    |  Download
+h5 Installation Methods
 
-                p
-                  | 2. Install Your Plugin
-                  br
-                  small= "Now you just need to install the .zip file you downloaded it by uploading it to your WordPress site. The plugin was preconfigured specifically for your site (#{@site.url}). After you install and activate there are no settings to adjust!"
+.reveal-wrapper
+  i.icon-installmyself
+  .reveal-title I can install code myself
+  p If you know HTML and can edit your site, our install only takes on line of code.
 
-                p
-                  | Need More Help?
-                  br
-                  small= "Try reading these #{link_to "helpful instructions for installing plugins on WordPress", "http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation"}.".html_safe
+  .reveal-block
+    p To install Hello Bar, copy and paste the following code right before your closing </body> tag.
+    pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\"></script>"
+    p That's it! You'll never need to update the code on your site again.
 
-      div class="panel panel-default"
-        div class="panel-heading"
-          .row
-            .col-md-1.center
-              span.glyphicon.glyphicon-envelope.installation-glyph
-            .col-md-11
-              h4 class="panel-title"
-                a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
-                  | Email my Web Developer
-              small If someone else manages your website we can email them the instructions for you.
-        div id="collapseThree" class="panel-collapse collapse"
-          div class="panel-body"
-            .row
-              .col-md-1
-              .col-md-11
-                = form_tag email_developer_contact_submission_path, :class => "form-inline", :method => :post do |f|
-                  = hidden_field_tag :site_id, @site.id
-                  div.form-group.developer-email
-                    label To:
-                    = text_field_tag :developer_email, "", :class => "form-control", :placeholder => "Your developer's email address"
-                  p
-                    | From: 
-                    code Hello Bar &lt;contact@hellobar.com&gt;
+.reveal-wrapper
+  i.icon-wordpress
+  .reveal-title I use WordPress
+  p If you use WordPress you'll love our zero-configuration custom plugin. Just download, install and you're done.
+  
+  .reveal-block
+    p 1. Download Your Plugin
+    = button_to site_wordpress_plugin_path(@site), :method => :get, :class => "button" do
+      i.icon-download
+      span Download
 
-                  p
-                    | Subject: 
-                    code= "Please install Hello Bar on #{display_url_for_site(@site)}"
+    p 2. Install Your Plugin
+    p= "Now you just need to install the .zip file you downloaded it by uploading it to your WordPress site. The plugin was preconfigured specifically for your site (#{@site.url}). After you install and activate there are no settings to adjust!"
 
-                  p
-                    code= "I just created a Hello Bar for #{display_url_for_site(@site)} and I've asked Hello Bar to email you the instructions for installing it. All you need to do is add the following bit of JavaScript at the end of each page (right before the closing </body> tag):"
-                  p
-                    code= "<script type=\"text/javascript\" src=\"//#{@site.script_url}\"></script>"
-                  p
-                    code= "If you have any questions don't hesitate to email Hello Bar support at support@hellobar.com, or e-mail me at #{current_user.email}."
-                  p
-                    code= "Thank you!"
+    p Need More Help?
+    p= "Try reading these #{link_to "helpful instructions for installing plugins on WordPress", "http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation"}.".html_safe
 
-                  div.form-group.pull-right
-                    = submit_tag "Send", :class => "btn btn-success"
+.reveal-wrapper
+  i.icon-contacts
+  .reveal-title Email my Web Developer
+  p If someone else manages your website, we can email them the instructions for you.
+
+  .reveal-block
+    = form_tag email_developer_contact_submission_path, :method => :post do |f|
+      = hidden_field_tag :site_id, @site.id
+      label To:
+      = text_field_tag :developer_email, "", :placeholder => "Your developer's email address"
+      label From: 
+      pre Hello Bar &lt;contact@hellobar.com&gt;
+
+      label Subject: 
+      pre= "Please install Hello Bar on #{display_url_for_site(@site)}"
+
+      pre= "I just created a Hello Bar for #{display_url_for_site(@site)} and I've asked Hello Bar to email you the instructions for installing it. All you need to do is add the following bit of JavaScript at the end of each page (right before the closing </body> tag):"
+
+      pre= "<script type=\"text/javascript\" src=\"//#{@site.script_url}\"></script>"
+      
+      pre= "If you have any questions don't hesitate to email Hello Bar support at support@hellobar.com, or e-mail me at #{current_user.email}."
+      
+      pre= "Thank you!"
+
+      = submit_tag "Send", :class => "button"
+
+.reveal-wrapper
+  i.icon-support
+  .reveal-title I need help!
+  p Still not sure what to do? Let us help!
+
+  .reveal-block
+    p How can we help?
+    p Just fill out the form below and we'll get back to you as soon as we can.
+
+    = form_tag generic_message_contact_submission_path, :method => :post do |f|
+      = hidden_field_tag :site_id, @site.id
+      = hidden_field_tag :return_to, site_path(@site)
+
+      = text_area_tag :message, ""
+
+      = submit_tag "Send", :class => "button"
 
 
-      div class="panel panel-default"
-        div class="panel-heading"
-          .row
-            .col-md-1.center
-              span.glyphicon.glyphicon-question-sign.installation-glyph
-            .col-md-11
-              h4 class="panel-title"
-                a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
-                  | I need help!
-              small Still not sure what to do? Let us help!
-        div id="collapseFour" class="panel-collapse collapse"
-          div class="panel-body"
-            .row
-              .col-md-1
-              .col-md-11
-                p How can we help?
-                p Just fill out the form below and we'll get back to you as soon as we can.
+/   div class="panel-group installation-panel" id="accordion"
+/     div class="panel panel-default"
+/       div class="panel-heading"
+/         .row
+/           .col-md-1.center
+/             span.glyphicon.glyphicon-wrench.installation-glyph
+/           .col-md-11
+/             h4 class="panel-title"
+/               a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+/                 | I can install code myself
+/             small If you know HTML and can edit your site, our install only takes on line of code.
+/       div id="collapseOne" class="panel-collapse collapse"
+/         div class="panel-body"
+/           .row
+/             .col-md-1
+/             .col-md-11
+/               p To install Hello Bar, copy and paste the following code right before your closing </body> tag.
+/               pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\"></script>"
+/               p That's it! You'll never need to update the code on your site again.
 
-                = form_tag generic_message_contact_submission_path, :class => "form-inline", :method => :post do |f|
-                  = hidden_field_tag :site_id, @site.id
-                  = hidden_field_tag :return_to, site_path(@site)
+/     div class="panel panel-default"
+/       div class="panel-heading"
+/         .row
+/           .col-md-1.center
+/             span.glyphicon.glyphicon-globe.installation-glyph
+/           .col-md-11
+/             h4 class="panel-title"
+/               a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+/                 | I use WordPress
+/             small If you use WordPress you'll love our zero-configuration custom plugin. Just download, install and you're done.
+/       div id="collapseTwo" class="panel-collapse collapse"
+/         div class="panel-body"
+/           .row
+/             .col-md-1
+/             .col-md-11
+/               p
+/                 | 1. Download Your Plugin
+/                 br
+/                 = button_to site_wordpress_plugin_path(@site), :method => :get, :class => "btn btn-success" do
+/                   span class='glyphicon glyphicon-file'
+/                   |  Download
 
-                  div.form-group.generic-message
-                    = text_area_tag :message, "", :class => "form-control"
+/               p
+/                 | 2. Install Your Plugin
+/                 br
+/                 small= "Now you just need to install the .zip file you downloaded it by uploading it to your WordPress site. The plugin was preconfigured specifically for your site (#{@site.url}). After you install and activate there are no settings to adjust!"
 
-                  div.form-group.pull-right
-                    = submit_tag "Send", :class => "btn btn-success"
+/               p
+/                 | Need More Help?
+/                 br
+/                 small= "Try reading these #{link_to "helpful instructions for installing plugins on WordPress", "http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation"}.".html_safe
 
-  .col-md-2
+/     div class="panel panel-default"
+/       div class="panel-heading"
+/         .row
+/           .col-md-1.center
+/             span.glyphicon.glyphicon-envelope.installation-glyph
+/           .col-md-11
+/             h4 class="panel-title"
+/               a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
+/                 | Email my Web Developer
+/             small If someone else manages your website we can email them the instructions for you.
+/       div id="collapseThree" class="panel-collapse collapse"
+/         div class="panel-body"
+/           .row
+/             .col-md-1
+/             .col-md-11
+/     div class="panel panel-default"
+/       div class="panel-heading"
+/         .row
+/           .col-md-1.center
+/             span.glyphicon.glyphicon-question-sign.installation-glyph
+/           .col-md-11
+/             h4 class="panel-title"
+/               a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
+/                 | I need help!
+/             small Still not sure what to do? Let us help!
+/       div id="collapseFour" class="panel-collapse collapse"
+/         div class="panel-body"
+/           .row
+/             .col-md-1
+/             .col-md-11
+
+/ .col-md-2

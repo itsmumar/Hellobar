@@ -1,3 +1,108 @@
 /*-----------  Header  -----------*/
 
 .global-header
+  background-color: $red
+  @include clearfix()
+
+  .header-logo-block
+    float: left
+    width: $sidebarWidth
+    height: $headerHeight
+    background-repeat: no-repeat
+    background-position: center center
+    background-size: auto $headerHeight/1.95
+    background-image: image-url('hellobar_logo_white.svg')
+
+    a
+      opacity: 0
+      width: 100%
+      height: 100%
+      display: block
+
+  .header-nav-wrapper,
+  .header-user-wrapper
+    height: $headerHeight
+
+    > *:not(.button)
+      @include inline-block()
+
+  .header-nav-wrapper
+    float: left
+    padding-left: 0.85em
+
+    .site-avatar
+      width: 1.5em
+      height: 1.5em
+      margin-right: 1em
+
+    .site-name
+      color: $white
+      font-size: 1.15em
+      @include antialiased()
+
+    .dropdown-block
+      min-width: 15em
+
+      form
+        margin-top: 1em
+        text-align: center
+
+      .button
+        font-size: 0.75em
+
+  .header-user-wrapper
+    float: right
+    padding-right: 1.5em
+
+    .user-avatar
+      width: 2.5em
+      height: 2.5em
+      margin: 0 0.75em
+      border-radius: 10em
+      border: 2px solid $white
+
+    .user-name
+      color: $white
+      font-size: 1.15em
+      @include antialiased()
+
+    .button
+      font-size: 0.67em
+      font-weight: bold
+      border-radius: $radiusLg
+      letter-spacing: -0.033em
+      text-transform: uppercase
+
+    i.icon-notification,
+    i.icon-notification-alert
+      font-size: 2.33em
+      margin-right: -0.67rem
+
+  /*-----------  Dropdowns  -----------*/
+
+  .dropdown-wrapper
+
+    > a,
+    > i
+      top: 2px
+      color: $white
+      position: relative
+      line-height: $headerHeight
+
+    .dropdown-block
+      margin-top: 0
+      padding-top: 1rem
+      background-color: $grayLightest
+
+      *
+        line-height: normal !important
+
+      &:after
+        border-bottom-color: $grayLightest
+
+    &:hover,
+    &.activated
+
+      .dropdown-block
+        margin-top: 1.15rem !important
+

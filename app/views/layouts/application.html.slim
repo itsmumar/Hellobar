@@ -4,13 +4,20 @@ html
     title Hello Bar
     link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css"
     
-    = stylesheet_link_tag    "tmp/application", :media => "all"
+    = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
     = csrf_meta_tags
 
   body
     = render "shared/optimizely"
-    = render "shared/header"
 
-    div.container
-      = yield
+    header.global-header
+      = render "shared/header"
+
+    .global-wrapper
+
+      nav.global-sidebar
+        = render "shared/sidebar"
+  
+      .global-content id=page_id
+        == yield
