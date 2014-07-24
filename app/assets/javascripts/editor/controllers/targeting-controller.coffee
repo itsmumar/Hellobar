@@ -8,11 +8,11 @@ HelloBar.TargetingController = Ember.Controller.extend
     rules
   ).property()
 
-  selectedRuleDescription: ( ->
-    filtered = @get("ruleOptions").filter (x) =>
-      x.id == @get("model.rule_id")
+  selectedRule: (->
+    filtered = @get("ruleOptions").filter (rule) =>
+      rule.id == @get("model.rule_id")
 
-    filtered[0].description
+    filtered[0]
   ).property("model.rule_id")
 
   whenOptions: [
