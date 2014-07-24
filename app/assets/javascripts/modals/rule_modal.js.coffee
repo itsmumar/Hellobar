@@ -144,7 +144,7 @@ class @RuleModal extends Modal
   _bindAddCondition: ->
     @$modal.on 'click', '.add', (event) =>
       @_addCondition()
-      @_toggleNoConditionMessage()
+      @_toggleNewConditionMessage()
 
   _bindRemoveCondition: ->
     ruleModal = this
@@ -152,7 +152,7 @@ class @RuleModal extends Modal
     @$modal.on 'click', '.remove', (event) ->
       $condition = $(this).parents('.condition:first')
       ruleModal._removeCondition($condition)
-      ruleModal._toggleNoConditionMessage()
+      ruleModal._toggleNewConditionMessage()
 
   _addCondition: ->
     nextIndex = @$modal.find('.condition').length
@@ -175,7 +175,7 @@ class @RuleModal extends Modal
     $condition.find('.rule_conditions__destroy input').val(true)
     $condition.hide()
 
-  _toggleNoConditionMessage: ->
+  _toggleNewConditionMessage: ->
     if @$modal.find('.condition:visible').length == 0
       $('.new-condition-message').removeClass('hidden')
     else
