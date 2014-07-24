@@ -19,6 +19,8 @@
 #= require ./routes/step-routes
 #= require_tree ./routes
 #= require_tree ./templates
+#= require ./../modal
+#= require_tree ./../modals
 
 #= require ./router
 

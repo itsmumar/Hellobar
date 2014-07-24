@@ -14,8 +14,12 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
   actions:
 
-    triggerModal: (modal) ->
-      @transitionTo @controller.currentPath, {queryParams: {modal: modal}}
+    triggerModal: (ruleData) ->
+      ruleId = ruleData.id
+      $form = $("form#rule-#{ruleId}")
+      $modal = $form.parents('.modal-wrapper:first')
+
+      new RuleModal($modal).open()
 
     saveSiteElement: ->
       if window.barID

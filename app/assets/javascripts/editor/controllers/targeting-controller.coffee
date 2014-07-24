@@ -2,7 +2,7 @@ HelloBar.TargetingController = Ember.Controller.extend
 
   ruleOptions: ( ->
     rules = @get("model.site.rules").map (rule) ->
-      {id: rule.id, text: rule.name, description: rule.conditions}
+      {id: rule.id, text: rule.name, description: rule.description}
 
     rules.push({id: 0, text: "Other...", description: "?"})
     rules

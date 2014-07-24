@@ -1,5 +1,7 @@
 #ember-root
 
+= render 'shared/rule_modal', site: @site, rule: @site_element.rule
+
 javascript:
-  var barID = #{@site_element.id}
-  var siteID = #{@site.id}
+  var barID = #{@site_element.id};
+  var siteID = #{@site.id};

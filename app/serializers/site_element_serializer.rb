@@ -1,5 +1,5 @@
 class SiteElementSerializer < ActiveModel::Serializer
-  attributes :id, :site, :rule_id,
+  attributes :id, :site, :rule_id, :rule,
 
     # settings
     :element_subtype, :settings,
@@ -16,6 +16,10 @@ class SiteElementSerializer < ActiveModel::Serializer
     # other
     :link_style, :size, :site_preview_image, :site_preview_image_mobile
 
+  def rule
+    RuleSerializer.new(object.rule)
+  end
+
   def site
     {
       :id => object.site.id,
@@ -24,7 +28,8 @@ class SiteElementSerializer < ActiveModel::Serializer
         {
           :id => rule.id,
           :name => rule.name.blank? ? "rule ##{rule.id}" : rule.name,
-          :conditions => rule.to_sentence
+          :description => rule.to_sentence,
+          :conditions => rule.conditions.map{|c| ConditionSerializer.new(c) }
         }
       end
     }
