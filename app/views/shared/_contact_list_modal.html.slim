@@ -1,0 +1,11 @@
+.modal-wrapper.contact-list-modal
+  .modal-block
+    h4 New Contact List
+    hr
+
+    = simple_form_for ContactList.new, :url => site_contact_lists_path(@site) do |f|
+      = f.input :name
+
+      hr
+
+      = f.submit "Done"

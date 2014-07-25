@@ -52,6 +52,14 @@ class ContactList < ActiveRecord::Base
     sync(immediate: true)
   end
 
+  def subscribers
+    @subscribers ||= Hello::EmailData.get_all_emails(id).sort_by{|s| s[:created_at]}.reverse
+  end
+
+  def num_subscribers
+    @num_subscribers ||= Hello::EmailData.num_emails(id)
+  end
+
   protected
 
   def subscribe_all_emails_to_list!

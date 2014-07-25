@@ -1,3 +1,5 @@
+= render "shared/contact_list_modal"
+
 h1 Contacts
 
 - if @contact_lists.any?
@@ -7,9 +9,12 @@ h1 Contacts
       th Email Service
       th Contacts
       th Date Created
-    - @contact_list.each do |list|
+    - @contact_lists.each do |list|
       tr
         td= list.name
         td
-        td
-        td= list.created_at
+        td= list.num_subscribers
+        td= list.created_at.strftime("%-m-%-d-%Y")
+
+p
+  button#new-contact-list New Contact List

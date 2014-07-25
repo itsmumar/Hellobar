@@ -22,6 +22,7 @@
 #= require optimizely_tracking
 #= require modal
 #= require_tree ./modals
+#= require contact_lists
 #= require rules
 #= require_self
 
