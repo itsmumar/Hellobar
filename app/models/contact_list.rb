@@ -27,6 +27,8 @@ class ContactList < ActiveRecord::Base
 
   after_destroy :sync
 
+  validates :name, :presence => true
+
   def syncable?
     identity && data && data["remote_name"] && data["remote_id"]
   end
