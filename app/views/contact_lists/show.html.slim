@@ -3,6 +3,8 @@ hr
 
 h2= @contact_list.name
 
+= button_to "Export CSV", site_contact_list_path(@site, @contact_list, :format => :csv), :method => :get
+
 - if @subscribers.any?
   table
     tr

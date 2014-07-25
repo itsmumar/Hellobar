@@ -62,6 +62,26 @@ class ContactList < ActiveRecord::Base
     @num_subscribers ||= Hello::EmailData.num_emails(id)
   end
 
+  def to_csv
+    CSV.generate do |csv|
+      headers = [
+        "Email",
+        "Name",
+        "Timestamp"
+      ]
+
+      csv << headers
+
+      subscribers.each do |subscriber|
+        csv << [
+          subscriber[:email],
+          subscriber[:name],
+          subscriber[:created_at]
+        ]
+      end
+    end
+  end
+
   protected
 
   def subscribe_all_emails_to_list!
