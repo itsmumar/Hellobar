@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     put "site_elements/:id/unpause", :to => "site_elements#unpause", :as => :unpause_site_element
     resources :site_elements
     resources :rules
+    resources :contact_lists
   end
   get "sites/:id/preview_script", :to => "sites#preview_script", :as => :preview_script
 

@@ -1,0 +1,15 @@
+h1 Contacts
+
+- if @contact_lists.any?
+  table
+    tr
+      th List
+      th Email Service
+      th Contacts
+      th Date Created
+    - @contact_list.each do |list|
+      tr
+        td= list.name
+        td
+        td
+        td= list.created_at
