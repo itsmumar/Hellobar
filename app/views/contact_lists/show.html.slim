@@ -1,0 +1,16 @@
+h1= link_to "Contacts", site_contact_lists_path(@site)
+hr
+
+h2= @contact_list.name
+
+- if @subscribers.any?
+  table
+    tr
+      th Email
+      th Name
+      th Date Subscribed
+    - @subscribers.each do |subscriber|
+      tr
+        td= subscriber[:email]
+        td= subscriber[:name]
+        td= subscriber[:created_at].strftime("%-m-%-d-%Y")
