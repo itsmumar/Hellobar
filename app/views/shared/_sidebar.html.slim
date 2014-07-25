@@ -16,9 +16,5 @@
       = active_link_to site_contact_lists_path(current_site) do
         i.icon-contacts
         | Contacts
-    li
-      = content_tag 'a' do
-        i.icon-feedback
-        | Feedback
 
   = button_to "Create New", new_site_site_element_path(:site_id => current_site), :class => "button", :method => :get
