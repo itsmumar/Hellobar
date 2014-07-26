@@ -44,10 +44,14 @@ describe RulesController do
 
     it 'should succeed when not logged in' do
       stub_current_user(site.owner)
-      post :create, site_id: site, rule: {
-        name: 'rule name',
-        priority: 1
-      }
+
+      expect {
+        post :create, site_id: site, rule: {
+          name: 'rule name',
+          priority: 1
+        }
+      }.to change(Rule, :count).by(1)
+
       expect(response).to be_success
 
       JSON.parse(response.body).tap do |rule|
@@ -87,6 +91,7 @@ describe RulesController do
 
     it 'should fail when not logged in' do
       put :update, site_id: site, id: rule
+
       expect(response.code).to eq UNAUTHORIZED
     end
 
@@ -95,12 +100,14 @@ describe RulesController do
 
       stub_current_user users(:wootie)
       put :update, site_id: site, id: rule, rule: {}
+
       expect(response).to be_forbidden
     end
 
     describe 'succeed as owner' do
-      it 'should add a new rule with conditions' do
+      it 'should update a rule with new conditions' do
         stub_current_user(site.owner)
+
         expect do
           put :update, site_id: site, id: rule, rule: {
             name: "new rule name",
@@ -108,7 +115,8 @@ describe RulesController do
               :"0" => condition_hash(:date_between)
             }
           }
-        end.to change { Rule.count }.by(0)
+        end.to change { Condition.count }.by(1)
+
         expect(response).to be_success
 
         JSON.parse(response.body).tap do |rule_obj|
@@ -132,7 +140,7 @@ describe RulesController do
       it 'should properly update the rule when condition attributes are not passed' do
         stub_current_user(site.owner)
 
-        put :update, site_id: site, id: rule, rule: { name: "NO CONDITIONS!" }
+        put :update, site_id: site, id: rule.id, rule: { name: "NO CONDITIONS!" }
         rule.reload
 
         rule.name.should == 'NO CONDITIONS!'
@@ -140,13 +148,15 @@ describe RulesController do
 
       it 'should add a new rule with url condition' do
         stub_current_user(site.owner)
+
         put :update, site_id: site, id: rule, rule: {
           name: "new rule name",
           conditions_attributes: {
             :"0" => condition_hash(:url_includes)
           }
         }
-        JSON.parse(response.body).tap do |rule_obj|          
+
+        JSON.parse(response.body).tap do |rule_obj|
           id = rule_obj['conditions'].first['id']
           expect(rule_obj['conditions']).to eq([{
             "id" => id,
@@ -160,6 +170,7 @@ describe RulesController do
 
       it 'should two rules at once' do
         stub_current_user(site.owner)
+
         put :update, site_id: site, id: rule, rule: {
           name: "new rule name",
           conditions_attributes: {
@@ -167,6 +178,7 @@ describe RulesController do
             :"1" => condition_hash(:date_before)
           }
         }
+
         JSON.parse(response.body).tap do |rule_obj|          
           segments = rule_obj['conditions'].collect {|c| c['segment'] }
           expect(segments).to match_array %w(date url)
@@ -183,7 +195,7 @@ describe RulesController do
         # remove it
         put :update, site_id: site, id: rule, rule: {
           conditions_attributes: {
-            :"0" => { id: condition.id, _destroy: 1}
+            :"0" => { id: condition.id, _destroy: 1 }
           }
         }
         expect { condition.reload }.to raise_error ActiveRecord::RecordNotFound

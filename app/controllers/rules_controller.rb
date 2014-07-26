@@ -21,18 +21,8 @@ class RulesController < ApplicationController
   def update
     rule = @site.rules.find(params[:id])
 
-    # PermittedParameters doesn't allow wildcard hashes
-    conditions_attrs = if params[:rule][:conditions_attributes]
-      conditions_attrs = params.require(:rule)[:conditions_attributes].map do |index, condition|
-        condition.slice(:id, :segment, :operand, :value, :_destroy)
-      end
-    else
-      []
-    end
-
-    rule_attrs = params.require(:rule)
-                       .permit(:name, :priority, :match)
-                       .merge(conditions_attributes: conditions_attrs)
+    conditions_attrs = [:id, :rule_id, :segment, :operand, :_destroy, { :value => [:start_date, :end_date] }, :value]
+    rule_attrs = params.require(:rule).permit(:name, :priority, :match, :conditions_attributes => conditions_attrs)
 
     if rule.update_attributes rule_attrs.permit!
       render :json => rule
