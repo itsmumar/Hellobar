@@ -22,7 +22,8 @@ class RulesController < ApplicationController
     rule = @site.rules.find(params[:id])
 
     conditions_attrs = [:id, :rule_id, :segment, :operand, :_destroy, { :value => [:start_date, :end_date] }, :value]
-    rule_attrs = params.require(:rule).permit(:name, :priority, :match, :conditions_attributes => conditions_attrs)
+    rule_attrs = params.require(:rule)
+                       .permit(:name, :priority, :match, :conditions_attributes => conditions_attrs)
 
     if rule.update_attributes rule_attrs.permit!
       render :json => rule
