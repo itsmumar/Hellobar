@@ -3,9 +3,44 @@
     h4 New Contact List
     hr
 
-    = simple_form_for ContactList.new, :url => site_contact_lists_path(@site) do |f|
-      = f.input :name
+    .provider-instructions-block
+      p
+        | To integrate with 
+        span.provider-name
+        |  you'll need:
 
-      hr
+        ol
+          li
+            | Your 
+            span.provider-name
+            |  username and password
+          li
+            | To have an existing list with 
+            span.provider-name
+            |  to sync to
 
-      = f.submit "Done"
+      p
+        a.do-this-later I'll do this later
+        a.button I'm ready
+
+    .provider-instructions-nevermind-block
+      p No worries!
+      p We'll store all of your contacts in Hello Bar for now.
+      p
+        | Syncing with 
+        span.provider-name
+        |  can be set up any time via the contacts area, or by editing a contacts list.
+
+
+    .name-and-provider-block
+      = simple_form_for ContactList.new, :url => site_contact_lists_path(@site) do |f|
+        = f.input :name
+        = f.label :provider, "Where do you want your contacts stored?"
+        = f.select :provider, options_for_provider_select
+        p
+          small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
+
+
+    hr
+    a.button Done
+    a.cancel.button Cancel

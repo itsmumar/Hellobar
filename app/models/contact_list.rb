@@ -20,6 +20,8 @@ class ContactList < ActiveRecord::Base
     "404 Resource Not Found"
   ]
 
+  attr_accessor :provider
+
   belongs_to :site
   belongs_to :identity
 
