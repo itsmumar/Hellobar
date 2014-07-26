@@ -1,6 +1,7 @@
 #ember-root
 
-= render 'shared/rule_modal', site: @site, rule: @site_element.rule
+- @rules.each do |rule|
+  = render 'shared/rule_modal', site: @site, rule: rule
 
 javascript:
   var siteID = #{@site.id}

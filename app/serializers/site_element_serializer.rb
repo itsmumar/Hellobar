@@ -27,7 +27,7 @@ class SiteElementSerializer < ActiveModel::Serializer
       :rules => object.site.rules.map do |rule|
         {
           :id => rule.id,
-          :name => rule.name.blank? ? "rule ##{rule.id}" : rule.name,
+          :name => rule.name,
           :description => rule.to_sentence,
           :conditions => rule.conditions.map{|c| ConditionSerializer.new(c) }
         }

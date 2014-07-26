@@ -14,12 +14,19 @@ class SiteElementsController < ApplicationController
   end
 
   def new
+    @rules = @site.rules.all
+    @rules << Rule.new(:id => 0)
     @site_element = SiteElement.new(:rule => @site.rules.first)
 
     respond_to do |format|
       format.html
       format.json { render :json => @site_element }
     end
+  end
+
+  def edit
+    @rules = @site.rules.all
+    @rules << Rule.new(:id => 0)
   end
 
   def create
