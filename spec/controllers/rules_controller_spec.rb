@@ -8,7 +8,7 @@ describe RulesController do
   end
 
   fixtures :rules, :sites, :conditions
-  
+
   let(:rule) { rules(:zombo) }
   let(:site) { sites(:zombo) }
 
@@ -127,6 +127,15 @@ describe RulesController do
             }
           }])
         end
+      end
+
+      it 'should properly update the rule when condition attributes are not passed' do
+        stub_current_user(site.owner)
+
+        put :update, site_id: site, id: rule, rule: { name: "NO CONDITIONS!" }
+        rule.reload
+
+        rule.name.should == 'NO CONDITIONS!'
       end
 
       it 'should add a new rule with url condition' do
