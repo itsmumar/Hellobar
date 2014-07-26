@@ -144,6 +144,8 @@ class @RuleModal extends Modal
 
   _bindAddCondition: ->
     @$modal.on 'click', '.add', (event) =>
+      event.preventDefault()
+
       @_addCondition()
       @_toggleNewConditionMessage()
 
@@ -151,6 +153,8 @@ class @RuleModal extends Modal
     ruleModal = this
 
     @$modal.on 'click', '.remove', (event) ->
+      event.preventDefault()
+
       $condition = $(this).parents('.condition:first')
       ruleModal._removeCondition($condition)
       ruleModal._toggleNewConditionMessage()
