@@ -11,6 +11,8 @@ class @Modal
   close: ->
     @$modal.removeClass('show-modal')
            .off() # unbind all modal events
+           .find("*")
+           .off() # unbind all child events
 
   _bindCloseEvents: (callback) ->
     @_bindEscape(callback)
