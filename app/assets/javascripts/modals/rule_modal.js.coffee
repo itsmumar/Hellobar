@@ -161,11 +161,15 @@ class @RuleModal extends Modal
 
     # update the names on the elements to be submitted properly
     $condition.find('[name="segment"]')
-             .attr('name', "rule[conditions_attributes][#{nextIndex}][segment]")
+              .attr('name', "rule[conditions_attributes][#{nextIndex}][segment]")
     $condition.find('[name="operand"]')
-             .attr('name', "rule[conditions_attributes][#{nextIndex}][operand]")
+              .attr('name', "rule[conditions_attributes][#{nextIndex}][operand]")
     $condition.find('[name="value"]')
-             .attr('name', "rule[conditions_attributes][#{nextIndex}][value]")
+              .attr('name', "rule[conditions_attributes][#{nextIndex}][value]")
+    $condition.find('input.start_date')
+              .attr('name', "rule[conditions_attributes][#{nextIndex}][value][start_date]")
+    $condition.find('input.end_date')
+              .attr('name', "rule[conditions_attributes][#{nextIndex}][value][end_date]")
     $condition.find('.value').hide()
 
     @_renderCondition($condition)
