@@ -12,6 +12,12 @@ class Rule < ActiveRecord::Base
   accepts_nested_attributes_for :conditions, allow_destroy: true
 
   validates :site, association_exists: true
+  validates :priority, numericality: {
+                         only_integer: true,
+                         greater_than_or_equal_to: 1,
+                         less_than_or_equal_to: 100
+                       },
+                       if: "priority.present?"
 
   def name
     read_attribute(:name) || "rule ##{id}"

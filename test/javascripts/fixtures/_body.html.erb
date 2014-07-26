@@ -1,7 +1,8 @@
 <%-
+  # stubbing the controller action!!
   @site = Site.first
   @site_element = SiteElement.first
-  @site_element.rule = Rule.first
+  @rules = @site.rules.all
 %>
 
 <%= render template: "layouts/ember" %>

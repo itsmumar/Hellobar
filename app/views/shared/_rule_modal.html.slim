@@ -3,12 +3,12 @@
     = simple_form_for [site, rule], defaults: { label: false }, html: { class: 'form-inline rule-modal', id: "rule-#{rule.id}" } do |rule_form|
       .row
         .col-md-12
-          h1 New Rule
+          h1= rule.persisted? ? 'Edit Rule' : 'New Rule'
 
       .row
         .col-md-12
           span Show
-          = rule_form.input :priority, as: :integer
+          = rule_form.input :priority, as: :integer, input_html: { min: 1, max: 100 }
           span % of people who match
           = rule_form.input :match, collection: Rule::MATCH_ON
           span of the following conditions.
@@ -38,6 +38,10 @@
               | To only match certain people click the blue &#8220;+&#8221; button.
           .col-md-2.actions
             = link_to raw('&#43;'), '#', class: 'add'
+
+      .row
+        .col-md-2
+          = rule_form.input :name, label: "Name:"
 
       footer
         .row
