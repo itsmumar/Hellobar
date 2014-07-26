@@ -29,6 +29,7 @@ class @RuleModal extends Modal
   _renderCondition: ($condition) ->
     @_renderOperand($condition)
     @_renderValue($condition)
+    @_toggleNewConditionMessage()
 
   _renderOperand: ($condition) ->
     segment = $condition.find('.rule_conditions_segment select').val()
@@ -181,6 +182,6 @@ class @RuleModal extends Modal
 
   _toggleNewConditionMessage: ->
     if @$modal.find('.condition:visible').length == 0
-      $('.new-condition-message').removeClass('hidden')
+      $('.new-condition-message').show()
     else
-      $('.new-condition-message').addClass('hidden')
+      $('.new-condition-message').hide()
