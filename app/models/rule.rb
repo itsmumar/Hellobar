@@ -13,6 +13,10 @@ class Rule < ActiveRecord::Base
 
   validates :site, association_exists: true
 
+  def name
+    read_attribute(:name) || "rule ##{id}"
+  end
+
   def to_sentence
     conditions.empty? ? "everyone" : conditions.map(&:to_sentence).to_sentence
   end
