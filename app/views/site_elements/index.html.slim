@@ -3,7 +3,7 @@ h1= display_url_for_site(@site)
 - @rules.each do |rule|
   .row
     .col-md-11
-      h3= "Rule set: #{rule.name.blank? ? "(no name)" : rule.name}"
+      h3.rule id="#{rule.id}"= "Rule set: #{rule.name.blank? ? "(no name)" : rule.name}"
     .col-md-1= link_to image_tag('http://png-1.findicons.com/files/icons/770/token_dark/128/gear.png', size: '32x32'), '#', class: 'edit-rule', 'data-rule-id' => rule.id
 
   .row

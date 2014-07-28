@@ -15,11 +15,32 @@ HelloBar.ApplicationRoute = Ember.Route.extend
   actions:
 
     triggerModal: (ruleData) ->
+      route = this
       ruleId = ruleData.id
       $form = $("form#rule-#{ruleId}")
       $modal = $form.parents('.modal-wrapper:first')
 
-      new RuleModal($modal).open()
+      ruleToUpdate = @controller.get('model.site.rules').find (rule) ->
+        rule.id == ruleData.id
+
+      options =
+        successCallback: ->
+          ruleData = this
+
+          ruleIds = route.controller.get('model.site.rules').map (rule) -> rule.id
+
+          updatedRules = if ruleIds.contains(ruleData.id)
+            route.controller.get('model.site.rules').map (rule) ->
+              return rule unless rule.id == ruleData.id
+              return ruleData
+          else
+            rules = route.controller.get('model.site.rules').map (rule) -> rule
+            rules.push(ruleData)
+            rules
+
+          route.controller.set('model.site.rules', updatedRules)
+
+      new RuleModal($modal, options).open()
 
     saveSiteElement: ->
       if window.barID

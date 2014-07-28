@@ -2,7 +2,7 @@ class @RuleModal extends Modal
   newConditionTemplate: ->
     $('script#new-condition').html()
 
-  constructor: (@$modal) ->
+  constructor: (@$modal, @options={}) ->
     @_bindInteractions()
     super
 
@@ -25,6 +25,8 @@ class @RuleModal extends Modal
     @$modal.on 'change', '.segment, .operand', ->
       $condition = $(this).parents('.condition:first')
       ruleModal._renderCondition($condition)
+
+    @_toggleNewConditionMessage()
 
   _renderCondition: ($condition) ->
     @_renderOperand($condition)
@@ -138,8 +140,10 @@ class @RuleModal extends Modal
         type: @method
         data: $(this).serialize()
         success: (data, status, xhr) ->
+          modal.options.successCallback.call(data) if modal.options.successCallback
           modal.close()
         error: (xhr, status, error) ->
+          # all errors should get reported within the modal!
           console.log "Something went wrong: #{error}"
 
   _bindAddCondition: ->
