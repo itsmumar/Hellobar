@@ -1,46 +1,37 @@
-.modal-wrapper.contact-list-modal
-  .modal-block
-    h4 New Contact List
-    hr
+script id="contact-list-modal-template" type="text/x-handlebars-template"
+  .modal-wrapper.contact-list-modal
+    .modal-block
+      h4 New Contact List
+      hr
 
-    .provider-instructions-block
-      p
-        | To integrate with 
-        span.provider-name
-        |  you'll need:
+      .provider-instructions-block
+      .provider-instructions-nevermind-block
+      .name-and-provider-block
 
-        ol
-          li
-            | Your 
-            span.provider-name
-            |  username and password
-          li
-            | To have an existing list with 
-            span.provider-name
-            |  to sync to
+      hr
+      a.button Done
+      a.cancel.button Cancel
 
-      p
-        a.do-this-later I'll do this later
-        a.button I'm ready
+script id="contact-list-modal-provider-instructions-template" type="text/x-handlebars-template"
+  p To integrate with {{providerName}} you'll need:
 
-    .provider-instructions-nevermind-block
-      p No worries!
-      p We'll store all of your contacts in Hello Bar for now.
-      p
-        | Syncing with 
-        span.provider-name
-        |  can be set up any time via the contacts area, or by editing a contacts list.
+  ol
+    li Your {{providerName}} username and password
+    li To have an existing list with {{providerName}} to sync to
 
+  p
+    a.do-this-later I'll do this later
+    a.button I'm ready
 
-    .name-and-provider-block
-      = simple_form_for ContactList.new, :url => site_contact_lists_path(@site) do |f|
-        = f.input :name
-        = f.label :provider, "Where do you want your contacts stored?"
-        = f.select :provider, options_for_provider_select
-        p
-          small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
+script id="contact-list-modal-provider-instructions-nevermind-template" type="text/x-handlebars-template"
+  p No worries!
+  p We'll store all of your contacts in Hello Bar for now.
+  p Syncing with {{providerName}} can be set up any time via the contacts area, or by editing a contacts list.
 
-
-    hr
-    a.button Done
-    a.cancel.button Cancel
+script id="contact-list-modal-name-and-provider-template" type="text/x-handlebars-template"
+  = simple_form_for ContactList.new, :url => site_contact_lists_path(@site) do |f|
+    = f.input :name
+    = f.label :provider, "Where do you want your contacts stored?"
+    = f.select :provider, options_for_provider_select
+    p
+      small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
