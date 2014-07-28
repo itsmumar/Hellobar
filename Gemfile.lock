@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/colinyoung/guaranteed_queue.git
-  revision: aa2d5a125b025270d752ede5374a26c4f75c0376
+  revision: 3addd17be9647ec68ff0b0ec4df70e2037a4b17f
   specs:
     guaranteed_queue (0.0.1)
       aws-sdk
@@ -235,7 +235,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
-    nokogiri (1.6.2.1)
+    nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
     oauth (0.4.7)
     orm_adapter (0.5.0)
