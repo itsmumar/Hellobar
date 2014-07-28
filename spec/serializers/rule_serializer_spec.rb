@@ -18,6 +18,7 @@ describe RuleSerializer do
       name: rule.name,
       match: rule.match,
       priority: rule.priority,
+      description: rule.to_sentence,
 
       conditions: [{
         id: condition.id,
