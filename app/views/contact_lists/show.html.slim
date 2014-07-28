@@ -1,9 +1,12 @@
+= render "shared/contact_list_modal"
+
 h1= link_to "Contacts", site_contact_lists_path(@site)
 hr
 
 h2= @contact_list.name
 
 = button_to "Export CSV", site_contact_list_path(@site, @contact_list, :format => :csv), :method => :get
+button.edit-contact-list data-site-id="#{@site.id}" data-contact-list-id="#{@contact_list.id}" Edit
 
 - if @subscribers.any?
   table

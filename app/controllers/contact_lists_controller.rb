@@ -17,7 +17,8 @@ class ContactListsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { send_data @contact_list.to_csv }
+      format.csv  { send_data @contact_list.to_csv }
+      format.json { render :json => @contact_list }
     end
   end
 

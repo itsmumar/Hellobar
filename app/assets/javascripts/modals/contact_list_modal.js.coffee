@@ -1,8 +1,12 @@
 class @ContactListModal extends Modal
-  constructor: ->
+  constructor: (options = {}) ->
     @_initializeTemplates()
     @_initializeBlocks()
     @_renderBlock("nameAndProvider")
+
+    if options.load
+      @_loadContactList(options.id, options.site_id)
+
     @_bindInteractions(@$modal)
     super(@$modal)
 
@@ -54,3 +58,9 @@ class @ContactListModal extends Modal
     @_bindInteractions(block)
 
     block
+
+  _loadContactList: (id, site_id) ->
+    url = "/sites/#{site_id}/contact_lists/#{id}.json"
+
+    $.get url, (data) =>
+      @$modal.find("#contact_list_name").val(data.name)
