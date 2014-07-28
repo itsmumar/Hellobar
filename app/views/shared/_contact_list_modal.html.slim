@@ -29,7 +29,7 @@ script id="contact-list-modal-provider-instructions-nevermind-template" type="te
   p Syncing with {{providerName}} can be set up any time via the contacts area, or by editing a contacts list.
 
 script id="contact-list-modal-name-and-provider-template" type="text/x-handlebars-template"
-  = simple_form_for ContactList.new, :url => site_contact_lists_path(@site) do |f|
+  = simple_form_for ContactList.new, :url => "" do |f|
     = f.input :name
     = f.label :provider, "Where do you want your contacts stored?"
     = f.select :provider, options_for_provider_select

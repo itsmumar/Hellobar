@@ -6,6 +6,9 @@ class @ContactListModal extends Modal
     @_bindInteractions(@$modal)
     super(@$modal)
 
+  close: ->
+    @$modal.remove()
+
   _initializeTemplates: ->
     @templates =
       main: Handlebars.compile($("#contact-list-modal-template").html())
