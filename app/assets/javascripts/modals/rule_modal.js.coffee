@@ -128,11 +128,20 @@ class @RuleModal extends Modal
     'DateCondition': ['is_before', 'is_after', 'is_between']
     'UrlCondition': ['includes', 'excludes']
 
+  _renderAlert: (content) ->
+    template = Handlebars.compile($('script#alert-template').html())
+    alert = template({type: 'error', content: content})
+    @$modal.find('.modal-block').prepend(alert)
+
+  _removeAlert: ->
+    @$modal.find('.alert').remove()
+
   _bindSubmit: ->
     modal = this
 
     @$modal.find('form').on 'submit', (event) ->
       event.preventDefault()
+      modal._removeAlert()
 
       $.ajax
         dataType: 'json'
@@ -143,8 +152,15 @@ class @RuleModal extends Modal
           modal.options.successCallback.call(data) if modal.options.successCallback
           modal.close()
         error: (xhr, status, error) ->
-          # all errors should get reported within the modal!
           console.log "Something went wrong: #{error}"
+
+          content = ''
+
+          for key in Object.keys(xhr.responseJSON)
+            content += "#{key} #{xhr.responseJSON[key].join()}"
+            content += "<br />"
+
+          modal._renderAlert(content)
 
   _bindAddCondition: ->
     @$modal.on 'click', '.add', (event) =>
