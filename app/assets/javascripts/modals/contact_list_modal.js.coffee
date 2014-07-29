@@ -61,18 +61,29 @@ class @ContactListModal extends Modal
       @_doSubmit(e)
 
   _doSubmit: (e) ->
+    @_clearErrors()
+    submitButton = @$modal.find("a.submit")
+    submitButton.attr("disabled", true)
     formData = @$modal.find("form.contact_list").serialize()
 
     if @options.create
       $.post "/sites/#{@options.site_id}/contact_lists.json", formData, (data) =>
-        @options.success(data)
+        if data.errors.length > 0
+          @_showErrors(data.errors)
+          submitButton.attr("disabled", false)
+        else
+          @options.success(data)
 
     else
       $.ajax "/sites/#{@options.site_id}/contact_lists/#{@options.id}.json",
         type: "PUT"
         data: formData
         success: (data) =>
-          @options.success(data)
+          if data.errors.length > 0
+            @_showErrors(data.errors)
+            submitButton.attr("disabled", false)
+          else
+            @options.success(data)
 
   _renderBlock: (name, context) ->
     block = @blocks[name].html(@templates[name](context))
@@ -85,3 +96,11 @@ class @ContactListModal extends Modal
 
     $.get url, (data) =>
       @$modal.find("#contact_list_name").val(data.name)
+
+  _showErrors: (errors) ->
+    html = "<div class=\"alert\">#{errors.reduce (a, b) -> "#{a}<br>#{b}"}</div>"
+    @$modal.find(".modal-block").prepend(html)
+
+  _clearErrors: ->
+    @$modal.find(".alert").remove()
+
