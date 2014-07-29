@@ -3,10 +3,7 @@ class @ContactListModal extends Modal
     @_initializeTemplates()
     @_initializeBlocks()
     @_renderBlock("nameAndProvider")
-
-    if @options.load
-      @_loadContactList(@options.id, @options.site_id)
-
+    @_loadContactList() if @options.loadURL
     @_bindInteractions(@$modal)
     super(@$modal)
 
@@ -66,24 +63,15 @@ class @ContactListModal extends Modal
     submitButton.attr("disabled", true)
     formData = @$modal.find("form.contact_list").serialize()
 
-    if @options.create
-      $.post "/sites/#{@options.site_id}/contact_lists.json", formData, (data) =>
+    $.ajax @options.saveURL,
+      type: @options.saveMethod
+      data: formData
+      success: (data) =>
         if data.errors.length > 0
           @_showErrors(data.errors)
           submitButton.attr("disabled", false)
         else
           @options.success(data)
-
-    else
-      $.ajax "/sites/#{@options.site_id}/contact_lists/#{@options.id}.json",
-        type: "PUT"
-        data: formData
-        success: (data) =>
-          if data.errors.length > 0
-            @_showErrors(data.errors)
-            submitButton.attr("disabled", false)
-          else
-            @options.success(data)
 
   _renderBlock: (name, context) ->
     block = @blocks[name].html(@templates[name](context))
@@ -91,10 +79,8 @@ class @ContactListModal extends Modal
 
     block
 
-  _loadContactList: (id, site_id) ->
-    url = "/sites/#{site_id}/contact_lists/#{id}.json"
-
-    $.get url, (data) =>
+  _loadContactList: ->
+    $.get @options.loadURL, (data) =>
       @$modal.find("#contact_list_name").val(data.name)
 
   _showErrors: (errors) ->
@@ -103,4 +89,3 @@ class @ContactListModal extends Modal
 
   _clearErrors: ->
     @$modal.find(".alert").remove()
-

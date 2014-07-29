@@ -1,17 +1,24 @@
 $ ->
   $("button#new-contact-list").click (e) ->
     site_id = $(e.target).data("site-id")
-    create = true
-    success = (data) ->
-      window.location = "/sites/#{site_id}/contact_lists/#{data.id}"
 
-    new ContactListModal({site_id, create, success}).open()
+    options =
+      saveURL: "/sites/#{site_id}/contact_lists.json"
+      saveMethod: "POST"
+      success: (data) ->
+        window.location = "/sites/#{site_id}/contact_lists/#{data.id}"
+
+    new ContactListModal(options).open()
 
   $("button#edit-contact-list").click (e) ->
     id = $(e.target).data("contact-list-id")
     site_id = $(e.target).data("site-id")
-    load = true
-    success = (data) ->
-      window.location = "/sites/#{site_id}/contact_lists/#{id}"
 
-    new ContactListModal({id, site_id, load, success}).open()
+    options =
+      loadURL: "/sites/#{site_id}/contact_lists/#{id}.json"
+      saveURL: "/sites/#{site_id}/contact_lists/#{id}.json"
+      saveMethod: "PUT"
+      success: (data) ->
+        window.location = "/sites/#{site_id}/contact_lists/#{id}"
+
+    new ContactListModal(options).open()
