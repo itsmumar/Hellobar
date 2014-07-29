@@ -1,11 +1,11 @@
 class @ContactListModal extends Modal
-  constructor: (options = {}) ->
+  constructor: (@options = {}) ->
     @_initializeTemplates()
     @_initializeBlocks()
     @_renderBlock("nameAndProvider")
 
-    if options.load
-      @_loadContactList(options.id, options.site_id)
+    if @options.load
+      @_loadContactList(@options.id, @options.site_id)
 
     @_bindInteractions(@$modal)
     super(@$modal)
@@ -32,6 +32,7 @@ class @ContactListModal extends Modal
   _bindInteractions: (object) ->
     @_bindProviderSelect(object)
     @_bindDoThisLater(object)
+    @_bindSubmit(object)
 
   _bindProviderSelect: (object) ->
     modal = this
@@ -46,12 +47,32 @@ class @ContactListModal extends Modal
       modal._renderBlock("instructions", context).show()
 
   _bindDoThisLater: (object) ->
-    modal = this
+    object.find("a.do-this-later").click (e) =>
+      @blocks.instructions.hide()
+      @blocks.nevermind.show()
+      @$modal.find("#contact_list_provider").val(0)
 
-    object.find("a.do-this-later").click (e) ->
-      modal.blocks.instructions.hide()
-      modal.blocks.nevermind.show()
-      modal.$modal.find("#contact_list_provider").val(0)
+  _bindSubmit: (object) ->
+    object.find("a.submit").click (e) =>
+      @_doSubmit(e)
+
+    object.find("form.contact_list").submit (e) =>
+      e.preventDefault()
+      @_doSubmit(e)
+
+  _doSubmit: (e) ->
+    formData = @$modal.find("form.contact_list").serialize()
+
+    if @options.create
+      $.post "/sites/#{@options.site_id}/contact_lists.json", formData, (data) =>
+        @options.success(data)
+
+    else
+      $.ajax "/sites/#{@options.site_id}/contact_lists/#{@options.id}.json",
+        type: "PUT"
+        data: formData
+        success: (data) =>
+          @options.success(data)
 
   _renderBlock: (name, context) ->
     block = @blocks[name].html(@templates[name](context))
