@@ -14,10 +14,11 @@ html
     = csrf_meta_tags
 
   body
-
     = render "shared/contact_list_modal"
 
     javascript:
       HB_DNT = 1
 
     = yield
+
+    = render 'shared/alert_template'
