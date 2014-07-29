@@ -39,6 +39,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
             rules
 
           route.controller.set('model.site.rules', updatedRules)
+          route.controller.set('model.rule_id', ruleData.id)
 
       new RuleModal($modal, options).open()
 
