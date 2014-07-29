@@ -10,7 +10,7 @@
           span Show
           = rule_form.input :priority, as: :integer, input_html: { min: 1, max: 100 }
           span % of people who match
-          = rule_form.input :match, collection: Rule::MATCH_ON
+          = rule_form.input :match, collection: Rule::MATCH_ON, include_blank: false
           span of the following conditions.
 
       .conditions.group
