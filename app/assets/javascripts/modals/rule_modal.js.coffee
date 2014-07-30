@@ -34,29 +34,27 @@ class @RuleModal extends Modal
     @_toggleNewConditionMessage()
 
   _renderOperand: ($condition) ->
-    segment = $condition.find('.rule_conditions_segment select').val()
+    segment = $condition.find('select.segment').val()
     operandHTML = @filteredOperands(segment)
-    $operand = $condition.find('.rule_conditions_operand')
+    $operand = $condition.find('select.operand')
 
-    previousValue = $operand.find('select :selected').val()
-    selectedOption = operandHTML.filter(->
-      @value == previousValue
-    )
+    previousValue = $operand.val()
+    selectedOption = operandHTML.filter -> @value == previousValue
 
     if selectedOption[0]
       selectedValue = selectedOption[0].value
     else
       selectedValue = operandHTML[0].value
 
-    $operand.find('select').html(operandHTML)
-                           .val(selectedValue)
+    $operand.html(operandHTML)
+            .val(selectedValue)
 
   _renderValue: ($condition) ->
       $condition.find('.value')
                 .hide()                 # hide the values by default
                 .prop('disabled', true) # disable the values by default
       $value = $condition.find('.rule_conditions_value')
-      segmentValue = $condition.find('.rule_conditions_segment .select').val()
+      segmentValue = $condition.find('select.segment').val()
       valueId = $value.find('input').attr('id')
       valueName = $value.find('input').attr('name')
 
@@ -73,7 +71,7 @@ class @RuleModal extends Modal
                   .prop('disabled', false)
                   .show()
       else if segmentValue == 'DateCondition'
-        operandValue = $condition.find('.rule_conditions_operand .select').val()
+        operandValue = $condition.find('select.operand').val()
 
         elementsToShow = @_valueClass(segmentValue, operandValue)
         $condition.find(elementsToShow)

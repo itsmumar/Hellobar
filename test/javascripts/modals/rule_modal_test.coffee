@@ -36,8 +36,8 @@ module 'RuleModal.open',
 test 'rendering the correct operand for CountryCondition', ->
   expect(1)
 
-  @modal.$modal.find('.rule_conditions_segment select').val('CountryCondition')
-  operands = @modal.open().find('.rule_conditions_operand option').map ->
+  @modal.$modal.find('select.segment').val('CountryCondition')
+  operands = @modal.open().find('select.operand option').map ->
     @value
 
   deepEqual $.makeArray(operands), ['is', 'is_not'], 'filters the correct operands for CountryCondition'

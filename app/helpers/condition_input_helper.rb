@@ -2,46 +2,46 @@ module ConditionInputHelper
   extend ActionView::Helpers::TagHelper
   extend ActionView::Helpers::FormTagHelper
 
-  def self.build_date_name(simple_form)
-    "#{simple_form.input(:value).match(/name\="(.+)"/)[1]}"
+  def self.build_date_name(condition_form)
+    "#{condition_form.input(:value).match(/name\="(.+)"/)[1]}"
   end
 
-  def self.start_date_field(simple_form=nil)
-    return date_field_tag :value, nil, disabled: true, class: 'start_date value form-control' unless simple_form
+  def self.start_date_field(condition_form=nil)
+    return date_field_tag :value, nil, disabled: true, class: 'start_date value form-control' unless condition_form
 
-    value = simple_form.object.kind_of?(DateCondition) ? simple_form.object.value[:start_date] : nil
-    name = "#{build_date_name(simple_form)}[start_date]"
+    value = condition_form.object.kind_of?(DateCondition) ? condition_form.object.value[:start_date] : nil
+    name = "#{build_date_name(condition_form)}[start_date]"
 
-    simple_form.date_field :value, { name: name, value: value, disabled: true, class: 'start_date value form-control' }
+    condition_form.date_field :value, { name: name, value: value, disabled: true, class: 'start_date value form-control' }
   end
 
-  def self.end_date_field(simple_form=nil)
-    return date_field_tag :value, nil, disabled: true, clas: 'end_date value form-control' unless simple_form
+  def self.end_date_field(condition_form=nil)
+    return date_field_tag :value, nil, disabled: true, clas: 'end_date value form-control' unless condition_form
 
-    value = simple_form.object.kind_of?(DateCondition) ? simple_form.object.value[:end_date] : nil
-    name = "#{build_date_name(simple_form)}[end_date]"
+    value = condition_form.object.kind_of?(DateCondition) ? condition_form.object.value[:end_date] : nil
+    name = "#{build_date_name(condition_form)}[end_date]"
 
-    simple_form.date_field :value, { name: name, value: value, disabled: true, class: 'end_date value form-control' }
+    condition_form.date_field :value, { name: name, value: value, disabled: true, class: 'end_date value form-control' }
   end
 
-  def self.url_field(simple_form=nil)
-    return text_field_tag :value, nil, disabled: true, class: 'url value form-control' unless simple_form
-    value = simple_form.object.kind_of?(UrlCondition) ? simple_form.object.value : nil
+  def self.url_field(condition_form=nil)
+    return text_field_tag :value, nil, disabled: true, class: 'url value form-control' unless condition_form
+    value = condition_form.object.kind_of?(UrlCondition) ? condition_form.object.value : nil
 
-    simple_form.text_field :value, { value: value, disabled: true, class: 'url value form-control' }
+    condition_form.text_field :value, { value: value, disabled: true, class: 'url value form-control' }
   end
 
-  def self.country_field(simple_form=nil)
-    return select_tag :value, nil, disabled: true, class: 'country value form-control', include_blank: false unless simple_form
-    value = simple_form.object.kind_of?(CountryCondition) ? simple_form.object.value : nil
+  def self.country_field(condition_form=nil)
+    return select_tag :value, nil, disabled: true, class: 'country value form-control', include_blank: false unless condition_form
+    value = condition_form.object.kind_of?(CountryCondition) ? condition_form.object.value : nil
 
-    simple_form.input_field :value, collection: ['USA', 'USA', 'USA'], value: value, disabled: true, class: 'country value form-control', include_blank: false
+    condition_form.input_field :value, collection: ['USA', 'USA', 'USA'], value: value, disabled: true, class: 'country value form-control', include_blank: false
   end
 
-  def self.device_field(simple_form=nil)
-    return select_tag :value, nil, disabled: true, class: 'device value form-control', include_blank: false unless simple_form
-    value = simple_form.object.kind_of?(DeviceCondition) ? simple_form.object.value : nil
+  def self.device_field(condition_form=nil)
+    return select_tag :value, nil, disabled: true, class: 'device value form-control', include_blank: false unless condition_form
+    value = condition_form.object.kind_of?(DeviceCondition) ? condition_form.object.value : nil
 
-    simple_form.input_field :value, collection: ['Desktop', 'Mobile'], value: value, disabled: true, class: 'device value form-control', include_blank: false
+    condition_form.input_field :value, collection: ['Desktop', 'Mobile'], value: value, disabled: true, class: 'device value form-control', include_blank: false
   end
 end
