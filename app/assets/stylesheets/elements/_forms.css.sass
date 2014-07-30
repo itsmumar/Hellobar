@@ -45,6 +45,11 @@ input:not([type=submit]):not([type=file]):not([type=button]):not([type=radio]):n
 textarea
   min-height: 6em      
 
+span > input,
+span > select,
+span > textarea
+  @include inline-block()
+
 /*-----------  Select Dropdowns  -----------*/
 
 .select-wrapper

@@ -5,11 +5,11 @@
   top: -100%
   width: 100%
   height: 100%
+  padding: 3.33em
   z-index: 100000
   position: fixed
   overflow-x: auto
   overflow-y: scroll
-  padding: 3.33em 0.67em
   background-color: rgba(0,0,0,0)
   @include transition(top 0 $modalSpeed, background-color $modalSpeed)
 
@@ -17,13 +17,27 @@
     opacity: 0
     width: auto
     margin: auto
-    padding: 2em
-    max-width: 40em
+    max-width: 55em
     margin-top: -10em
-    border-radius: $radiusLg
+    padding: 1.75em 5em 3em
+    border-radius: $radiusSm
     background-color: $white
     box-shadow: $shadowSubtle
     @include transition(margin-top $modalSpeed, opacity $modalSpeed/2 $modalSpeed/2)
+
+    .alert
+      margin-bottom: 1.5em
+
+    > header
+      text-align: center
+      margin: 0 -2.5em 1.5em
+      padding: 0 2.5em 1.5em
+      border-bottom: 1px solid $grayLighter
+
+      h1, h2, h3, h4, h5, h6
+        margin: 0
+
+  /*-----------  Animations  -----------*/
 
   &.show-modal
     top: 0
@@ -34,9 +48,3 @@
       opacity: 1
       margin-top: 0
       @include transition(margin-top $modalSpeed, opacity $modalSpeed)
-
-  &.rule-modal .modal-block
-    max-width: 950px
-
-  .modal-block .alert
-    margin-bottom: 20px

@@ -20,13 +20,15 @@
   .dropdown-block
     right: 0
     opacity: 0
+    padding: 1rem
+    font-size: 1rem
     min-width: 12rem
+    text-align: left
+    margin-top: 1.5rem
     position: absolute
-    margin-top: -1.5rem
     pointer-events: none
     background-color: $white
     border: 1px solid $grayLight
-    padding: 0.33rem 1rem 1rem
     @include transition(0.25s)
 
     &:before,
@@ -62,7 +64,8 @@
 
     .dropdown-block
       opacity: 1
-      margin-top: 0
+      z-index: 5000
+      margin-top: 1rem
       pointer-events: auto
 
   /*-----------  Dropdown Elements  -----------*/
@@ -92,7 +95,14 @@
         color: $black
         background-color: $white
 
+      > i
+        color: $grayLight
+        margin-right: 0.67rem
+        vertical-align: middle
+        @include transition()
+
     > a
+      cursor: pointer
     
       &:first-child
         margin-top: -1rem
@@ -107,6 +117,9 @@
 
         &.active
           padding-top: 0.5rem
+
+      &:hover i
+        color: $red
 
     ul 
 

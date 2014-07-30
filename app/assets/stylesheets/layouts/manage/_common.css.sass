@@ -1,0 +1,151 @@
+/*-----------  Manage Dashboard  -----------*/
+
+#site_elements-index
+
+  .rules-wrapper
+    width: 100%
+    border-spacing: 0 0.75em
+    border-collapse: separate
+
+    tr
+
+      th, td
+        text-align: center
+        margin-bottom: 0.67em
+
+        &:nth-child(1)
+          text-align: left
+          padding-left: 1.5rem
+
+      /*-----------  Table Headers  -----------*/
+      
+      th
+        padding: 1em 0 0.67em
+        font-weight: normal      
+
+      th:not([colspan])
+        font-size: 0.75em
+        color: $grayLighter
+        text-transform: uppercase
+        border-bottom: 1px solid $grayLighter
+
+      th[colspan]
+        color: $red
+        position: relative
+        padding-left: 0 !important
+        border-bottom: 2px solid $red
+
+        h4
+          margin: 0 0.5em 0 0
+          @include inline-block(baseline)
+
+        .dropdown-wrapper
+          right: -0.75em
+          bottom: 0.33em
+          position: absolute
+
+          > i
+            font-size: 1.15em
+
+          .dropdown-block
+            border-color: $red
+
+            &:before
+              border-bottom-color: $red
+
+      /*-----------  Site Element Rows  -----------*/
+
+      &.site-element-block
+        border-color: $grayLighter
+
+        td
+          color: $gray
+          font-size: 1.5em
+          min-width: 5.5rem
+          padding: 0.25rem 0
+          border-style: solid
+          border-color: inherit
+          border-top-width: 1px
+          border-left-width: 0px
+          border-right-width: 0px
+          border-bottom-width: 1px
+          @include antialiased()
+
+          > i
+            color: $grayLight
+            font-size: 1.5em
+            vertical-align: bottom
+
+          &:nth-child(1)
+            width: 100%
+            font-size: 1em
+            color: $grayDark
+            position: relative
+            padding-left: 1.67rem
+
+            .psudo-border
+              left: 0
+              top: -1px
+              width: 5px
+              height: 105%
+              position: absolute
+
+          &:nth-child(2)
+            min-width: 6rem
+
+            small
+              display: block
+              color: $grayLight
+              font-size: 0.45em
+              margin-top: -0.25em
+              text-transform: uppercase
+
+          &:nth-child(3)
+            background-color: $blueLighter
+
+            .icon-contacts
+              color: $green
+
+            .icon-social
+              color: $blue
+
+            .icon-clicks
+              color: $yellow
+
+          &:nth-child(7)
+            min-width: 6rem   
+            font-weight: bold       
+
+          &:nth-child(8)
+            min-width: 7rem
+            border-right-width: 1px
+            background-color: $grayLightest
+
+            > i,
+            .dropdown-wrapper > i
+              color: $grayLight
+              font-size: 0.85em
+              vertical-align: sub
+
+            .dropdown-wrapper
+              margin-right: -1.33rem
+
+              > i
+                padding-left: 1.25rem
+
+      /*-----------  Suggestion Rows  -----------*/
+
+      &.suggestion-block
+
+        td
+          color: $gray
+          height: 3.4rem
+          font-size: 0.95em
+          text-align: center
+          letter-spacing: 0.033em
+          border: 1px dashed $grayLight
+
+          a
+            color: $blueLight
+            margin-right: 0.33em
+            border-bottom: 1px solid $blueLight

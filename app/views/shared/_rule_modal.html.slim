@@ -1,9 +1,11 @@
-.modal-wrapper.rule-modal
+.modal-wrapper
+
   .modal-block
-    = simple_form_for [site, rule], defaults: { label: false }, html: { class: 'form-inline rule-modal', id: "rule-#{rule.id}" } do |rule_form|
-      .row
-        .col-md-12
-          h1= rule.persisted? ? 'Edit Rule' : 'New Rule'
+
+    header
+      h5= rule.persisted? ? 'Edit Rule' : 'New Rule'
+
+    = simple_form_for [site, rule], defaults: {label: false}, html: {class: 'form-inline rule-modal', id: "rule-#{rule.id}"} do |rule_form|
 
       .row
         .col-md-12
@@ -12,6 +14,13 @@
           span % of people who match
           = rule_form.select :match, Rule::MATCH_ON, include_blank: false, class: 'select optional form-control'
           span of the following conditions.
+
+      p
+        | Show
+        span= rule_form.input :priority, as: :integer, input_html: { min: 1, max: 100 }
+        | % of people who match
+        span= rule_form.input :match, collection: Rule::MATCH_ON, include_blank: false
+        | of the following conditions.
 
       .conditions.group
         = rule_form.fields_for :conditions do |condition_form|
@@ -49,6 +58,8 @@
             = link_to 'Cancel', '#', class: 'cancel btn btn-default'
           .col-md-2.col-md-offset-8
             = button_tag 'Save', class: 'save btn btn-success'
+
+/-----------  JS Templates  -----------/
 
 script type="text/template" id="new-condition"
   .placeholder

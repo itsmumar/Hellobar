@@ -14,6 +14,6 @@ module SiteElementsHelper
       units = [(age / 1.year).to_i, "year"]
     end
 
-    "#{pluralize(units[0], units[1]).gsub(/\d+/){ |num| "<span>#{num}</span><br>"}} old".html_safe
+    "#{units[0]} <small>#{units[1].pluralize(units[0])} old</small>".html_safe
   end
 end

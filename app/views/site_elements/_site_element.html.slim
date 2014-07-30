@@ -1,15 +1,52 @@
-div.site-element-row.clearfix style="border-left: 4px solid ##{site_element.background_color}"
-  div.site-element-row-inner.clearfix
-    div.site-element-col.col-bar-message
-      = site_element.message
-    div.site-element-col.col-age
-      = site_element_age(site_element)
-    div.site-element-col.col-edit
-      = link_to "edit", edit_site_site_element_path(site_element, :site_id => @site)
-    div.site-element-col.col-pause
-      - if site_element.paused?
-        = link_to "unpause", site_unpause_site_element_path(site_element, :site_id => @site), :method => :put
-      - else
-        = link_to "pause", site_pause_site_element_path(site_element, :site_id => @site), :method => :put
-    div
-      = link_to "add variation", new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element)
+tr.site-element-block 
+  td 
+    .psudo-border style="background-color: ##{site_element.background_color}"
+    = site_element.message
+  td
+    = site_element_age(site_element)
+  td
+    i.icon-contacts
+  td
+    i.icon-bar
+  td
+    | 83
+  td
+    | 5
+  td
+    | 4.3%
+  td
+    i.icon-abtest
+    .dropdown-wrapper
+      i.icon-settings
+      .dropdown-block
+        = content_tag 'a' do
+          i.icon-edit
+          | Access Controls
+
+        = content_tag 'a' do
+          i.icon-edit
+          | Create Variation
+
+        = content_tag 'a' do
+          i.icon-edit
+          | Pause
+
+        = content_tag 'a' do
+          i.icon-edit
+          | Remove
+
+/ div.site-element-row.clearfix style="border-left: 4px solid ##{site_element.background_color}"
+/   div.site-element-row-inner.clearfix
+/     div.site-element-col.col-bar-message
+/       = site_element.message
+/     div.site-element-col.col-age
+/       = site_element_age(site_element)
+/     div.site-element-col.col-edit
+/       = link_to "edit", edit_site_site_element_path(site_element, :site_id => @site)
+/     div.site-element-col.col-pause
+/       - if site_element.paused?
+/         = link_to "unpause", site_unpause_site_element_path(site_element, :site_id => @site), :method => :put
+/       - else
+/         = link_to "pause", site_pause_site_element_path(site_element, :site_id => @site), :method => :put
+/     div
+/       = link_to "add variation", new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element)

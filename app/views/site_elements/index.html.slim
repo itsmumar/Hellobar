@@ -1,18 +1,48 @@
-h1= display_url_for_site(@site)
+.rule-filters
 
-- @rules.each do |rule|
-  .row
-    .col-md-11
-      h3.rule id="#{rule.id}"= "Rule set: #{rule.name.blank? ? "(no name)" : rule.name}"
-    .col-md-1= link_to image_tag('http://png-1.findicons.com/files/icons/770/token_dark/128/gear.png', size: '32x32'), '#', class: 'edit-rule', 'data-rule-id' => rule.id
+table.rules-wrapper
+  thead
+    tr
+      th Text
+      th Age
+      th Type
+      th Style
+      th Views
+      th Converstions
+      th %
+      th 
+  tbody
+    - @rules.each do |rule|
+      tr.rule-block
+        th colspan='9'
+          h4= "/#{rule.name.blank? ? "(no name)" : rule.name}"
+          span Something goes here
 
-  .row
-    .col-md-12
+          .dropdown-wrapper
+            i.icon-settings
+            .dropdown-block
+              = link_to '#', class: 'edit-rule', 'data-rule-id' => rule.id do
+                i.icon-edit
+                | Edit
+
+              = content_tag 'a' do
+                i.icon-trash
+                = "Remove this and #{rule.site_elements.count} bars/modals"
+
       - if rule.site_elements.empty?
-        p= "(no site elements)"
+        tr.rule-block
+          td colspan='9'
+            small (No Site Elements)
 
       - else
         - rule.site_elements.each do |site_element|
           = render "site_elements/site_element", { :site_element => site_element }
 
+      tr.suggestion-block
+        td colspan='9'
+          | Every week, 2,300 people use youe Hello Bar. 
+          a Create something new
+          | to better utilize these users!
+
+- @rules.each do |rule|
   = render 'shared/rule_modal', site: @site, rule: rule
