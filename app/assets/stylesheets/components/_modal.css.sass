@@ -15,9 +15,8 @@
 
   .modal-block
     opacity: 0
-    width: auto
+    width: 55em
     margin: auto
-    max-width: 55em
     margin-top: -10em
     padding: 1.75em 5em 3em
     border-radius: $radiusSm
@@ -30,12 +29,16 @@
 
     > header
       text-align: center
-      margin: 0 -2.5em 1.5em
+      margin: 0 -2.5em 2em
       padding: 0 2.5em 1.5em
       border-bottom: 1px solid $grayLighter
 
       h1, h2, h3, h4, h5, h6
         margin: 0
+
+    > footer
+      margin-top: 2em
+      @include clearfix()
 
   /*-----------  Animations  -----------*/
 

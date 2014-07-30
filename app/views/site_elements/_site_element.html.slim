@@ -19,9 +19,9 @@ tr.site-element-block
     .dropdown-wrapper
       i.icon-settings
       .dropdown-block
-        = content_tag 'a' do
+        = link_to edit_site_site_element_path(site_element, :site_id => @site) do
           i.icon-edit
-          | Access Controls
+          | Edit
 
         = content_tag 'a' do
           i.icon-edit

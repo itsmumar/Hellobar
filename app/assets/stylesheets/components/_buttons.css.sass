@@ -23,13 +23,22 @@
     cursor: not-allowed
     background-color: $gray
 
-/*-----------  Alternate  -----------*/
+/*-----------  Green Alternative  -----------*/
 
 %green-button
   color: $white
-  font-size: 0.95em
   background-color: $green
   border: 0 solid transparent
 
   &:hover
     background-color: darken($green, 15%)
+
+/*-----------  Gray Alternative  -----------*/
+
+%gray-button
+  color: $white
+  background-color: $grayLight
+  border: 0 solid transparent
+
+  &:hover
+    background-color: darken($grayLight, 15%)

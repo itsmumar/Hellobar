@@ -1,0 +1,75 @@
+/*-----------  Rule Modal  -----------*/
+
+#site_elements-index .modal-block
+
+  form 
+
+    > p
+
+      input
+        width: 4em
+
+      .select-wrapper select
+        width: 6em
+
+    > label
+      width: 9%
+      margin: 0
+      color: $gray
+      font-size: 1em
+      @include inline-block()
+
+    > input
+      width: 91%
+      @include inline-block()
+
+  footer
+
+    a.button
+      float: left
+      @extend %gray-button
+
+    button.button
+      float: right
+      @extend %green-button      
+
+  /*-----------  Conditions Wrapper  -----------*/
+  
+  .conditions-wrapper
+    padding: 1em 1.25em
+    margin-bottom: 0.5em
+    border-radius: $radiusSm
+    background-color: $grayLightest
+
+    .condition-block
+
+      .condition-ruleset
+        width: 80%
+        @include inline-block()
+
+      .condition-actions
+        width: 20%
+        text-align: right
+        @include inline-block()
+
+        a
+          width: 1.67em
+          color: $white
+          font-size: 1.5em
+          text-align: center
+          line-height: 1.67em
+          margin-left: 0.25em
+          border-radius: $radiusSm
+          @include inline-block()
+
+          &.condition-remove
+            background-color: $gray
+
+            &:hover
+              background-color: darken($gray, 15%)
+
+          &.condition-add
+            background-color: $blue
+
+            &:hover
+              background-color: darken($blue, 15%)

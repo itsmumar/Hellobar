@@ -8,6 +8,7 @@
     border-collapse: separate
 
     tr
+      height: 4rem
 
       th, td
         text-align: center
@@ -20,8 +21,8 @@
       /*-----------  Table Headers  -----------*/
       
       th
-        padding: 1em 0 0.67em
         font-weight: normal      
+        padding: 1.67em 0 0.67em
 
       th:not([colspan])
         font-size: 0.75em
@@ -34,6 +35,7 @@
         position: relative
         padding-left: 0 !important
         border-bottom: 2px solid $red
+        @include antialiased()
 
         h4
           margin: 0 0.5em 0 0
@@ -62,7 +64,6 @@
           color: $gray
           font-size: 1.5em
           min-width: 5.5rem
-          padding: 0.25rem 0
           border-style: solid
           border-color: inherit
           border-top-width: 1px
@@ -139,7 +140,6 @@
 
         td
           color: $gray
-          height: 3.4rem
           font-size: 0.95em
           text-align: center
           letter-spacing: 0.033em

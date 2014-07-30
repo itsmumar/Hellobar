@@ -48,18 +48,22 @@ textarea
 span > input,
 span > select,
 span > textarea
-  @include inline-block()
+  display: inline !important
+  margin: 0 0.5em !important
+  vertical-align: middle
 
 /*-----------  Select Dropdowns  -----------*/
 
 .select-wrapper
   color: $grayDark
   position: relative
+  background-color: $white
 
   select
     cursor: pointer
     color: $grayDarker
     padding: 0.45em 0.67em 0.5em
+    background-color: $white
 
   label
     position: relative
@@ -77,6 +81,10 @@ span > textarea
 
   &:hover:before
     color: $grayDarker
+
+span.select-wrapper:before
+  top: 0.033rem
+  right: 1.25rem
 
 @media screen and (-webkit-min-device-pixel-ratio:0)
   select
