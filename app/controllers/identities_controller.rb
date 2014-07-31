@@ -9,12 +9,11 @@ class IdentitiesController < ApplicationController
   end
 
   def create
-    binding.pry
     identity = Identity.find_or_initialize_by_site_id_and_provider(@site.id, params[:provider])
 
     if @site and identity.persisted?
       flash[:error] = "Please disconnect your #{identity.provider_config[:name]} before adding a new one."
-      return redirect_to site_settings_path(@site)
+      return redirect_to site_contact_lists_path(@site)
     end
 
     identity.credentials = env['omniauth.auth']['credentials']
@@ -27,7 +26,7 @@ class IdentitiesController < ApplicationController
     end
 
     # TODO: how to redirect here?
-    redirect_to root_path
+    redirect_to site_contact_lists_path(@site)
   end
 
   private

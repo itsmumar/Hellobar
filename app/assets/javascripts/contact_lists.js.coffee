@@ -3,6 +3,7 @@ $ ->
     site_id = $(e.target).data("site-id")
 
     options =
+      siteID: site_id
       saveURL: "/sites/#{site_id}/contact_lists.json"
       saveMethod: "POST"
       success: (data) ->
@@ -15,6 +16,7 @@ $ ->
     site_id = $(e.target).data("site-id")
 
     options =
+      siteID: site_id
       loadURL: "/sites/#{site_id}/contact_lists/#{id}.json"
       saveURL: "/sites/#{site_id}/contact_lists/#{id}.json"
       saveMethod: "PUT"

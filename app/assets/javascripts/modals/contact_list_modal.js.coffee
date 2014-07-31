@@ -1,10 +1,13 @@
 class @ContactListModal extends Modal
   constructor: (@options = {}) ->
+    @options.window ||= window
+
     @_initializeTemplates()
     @_initializeBlocks()
     @_renderBlock("nameAndProvider")
     @_loadContactList() if @options.loadURL
     @_bindInteractions(@$modal)
+
     super(@$modal)
 
   close: ->
@@ -29,6 +32,7 @@ class @ContactListModal extends Modal
   _bindInteractions: (object) ->
     @_bindProviderSelect(object)
     @_bindDoThisLater(object)
+    @_bindOauthButton(object)
     @_bindSubmit(object)
 
   _bindProviderSelect: (object) ->
@@ -48,6 +52,11 @@ class @ContactListModal extends Modal
       @blocks.instructions.hide()
       @blocks.nevermind.show()
       @$modal.find("#contact_list_provider").val(0)
+
+  _bindOauthButton: (object) ->
+    object.find("a.start-oauth").click (e) =>
+      provider = @$modal.find("#contact_list_provider").val()
+      @options.window.location = "/sites/#{@options.siteID}/identities/new/?provider=#{provider}"
 
   _bindSubmit: (object) ->
     object.find("a.submit").click (e) =>

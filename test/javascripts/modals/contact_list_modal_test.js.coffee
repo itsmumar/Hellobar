@@ -3,7 +3,11 @@
 
 module "ContactListModal.open",
   setup: ->
-    @modal = new ContactListModal()
+    @modal = new ContactListModal(
+      siteID: 123
+      window: {location: ""}
+    )
+
     @modal.open()
 
 test "inserts the modal html", ->
@@ -20,8 +24,13 @@ test "selecting \"I'll do this later\" sets the provider select back to 0 and re
   expect(2)
 
   @modal.$modal.find("#contact_list_provider").val("mailchimp").change()
-  modal = @modal
 
-  click(@modal.$modal.find(".do-this-later")).andThen ->
-    equal modal.$modal.find("#contact_list_provider").val(), "0"
-    includes find(modal.$modal).text(), "No worries!", "Provider instructions not reset"
+  click(@modal.$modal.find(".do-this-later")).andThen =>
+    equal @modal.$modal.find("#contact_list_provider").val(), "0"
+    includes find(@modal.$modal).text(), "No worries!", "Provider instructions not reset"
+
+test "selecting \"I'm ready\" redirects to the correct URL to begin the oauth handshake", ->
+  @modal.$modal.find("#contact_list_provider").val("mailchimp").change()
+
+  click(@modal.$modal.find(".start-oauth")).andThen =>
+    includes @modal.options.window.location, "/sites/123/identities/new/?provider=mailchimp"
