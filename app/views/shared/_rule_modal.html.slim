@@ -5,7 +5,7 @@
     header
       h5= rule.persisted? ? 'Edit Rule' : 'New Rule'
 
-    = simple_form_for [site, rule], defaults: {label: false}, html: {class: 'form-inline rule-modal', id: "rule-#{rule.id}"} do |rule_form|
+    = simple_form_for [site, rule], defaults: { label: false }, html: {class: 'form-inline rule-modal', id: "rule-#{rule.id}"} do |rule_form|
 
       p
         | Show
@@ -22,18 +22,19 @@
               = condition_form.select :segment, Condition::SEGMENTS.invert, { include_blank: false }, { class: 'condition-segment' }
               = condition_form.select :operand, Condition::OPERANDS.invert, { include_blank: false }, { class: 'condition-operand' }
 
-              = ConditionInputHelper.start_date_field(condition_form)
-              = ConditionInputHelper.end_date_field(condition_form)
-              = ConditionInputHelper.url_field(condition_form)
-              = ConditionInputHelper.country_field(condition_form)
-              = ConditionInputHelper.device_field(condition_form)
-              = condition_form.hidden_field :_destroy
+              .grab-here
+                = ConditionInputHelper.start_date_field(condition_form)
+                = ConditionInputHelper.end_date_field(condition_form)
+                = ConditionInputHelper.url_field(condition_form)
+                = ConditionInputHelper.country_field(condition_form)
+                = ConditionInputHelper.device_field(condition_form)
+              = condition_form.hidden_field :_destroy, class: 'destroy'
 
             .condition-actions
               = link_to raw("&#45;"), '#', class: 'condition-remove'
               = link_to raw('&#43;'), '#', class: 'condition-add'
 
-        .condition-block
+        .condition-block.no-condition-message
           .condition-ruleset
             small
               | There are no conditions yet, so this rule matches 
@@ -47,25 +48,25 @@
       = rule_form.label :name
       = rule_form.text_field :name
 
-    footer
-      = link_to 'Cancel', '#', class: 'button'
-      = button_tag 'Save', class: 'button'
+      footer
+        = link_to 'Cancel', '#', class: 'button'
+        = button_tag 'Save', class: 'button'
 
 /-----------  JS Templates  -----------/
 
 script type="text/template" id="new-condition"
   .placeholder
-    .row.condition
-      .col-md-10
+    .condition-block
+      .condition-ruleset
         .form-group.select.optional.rule_conditions_segment
-          = select_tag :segment, options_for_select(Condition::SEGMENTS.invert), class: 'segment'
+          = select_tag :segment, options_for_select(Condition::SEGMENTS.invert), class: 'condition-segment'
         .form-group.select.optional.rule_conditions_operand
-          = select_tag :operand, options_for_select(Condition::OPERANDS.invert), class: 'operand'
+          = select_tag :operand, options_for_select(Condition::OPERANDS.invert), class: 'condition-operand'
         = date_field_tag :value, nil, class: 'start_date value form-control', disabled: true
         = date_field_tag :value, nil, class: 'end_date value form-control', disabled: true
         = text_field_tag :value, nil, class: 'url value form-control', disabled: true
         = select_tag :value, options_for_select(['USA', 'USA', 'USA']), include_blank: false, class: 'country value', disabled: true
         = select_tag :value, options_for_select(['Desktop', 'Mobile']), include_blank: false, class: 'device value', disabled: true
-      .col-md-2.actions
-        = link_to raw("&#45;"), '#', class: 'remove'
-        = link_to raw('&#43;'), '#', class: 'add'
+      .condition-actions
+        = link_to raw("&#45;"), '#', class: 'condition-remove'
+        = link_to raw('&#43;'), '#', class: 'condition-add'
