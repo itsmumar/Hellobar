@@ -1,0 +1,124 @@
+/*-----------  Overview Blocks  -----------*/
+
+.overviews-wrapper
+  margin: 1em 0
+  @include justify-content(space-between)
+  @include align-content(stretch)
+  @include align-items(stretch)
+  @include flex-flow(row wrap)
+  @include display(flex)
+
+  .overview-block
+    width: 19%
+    cursor: pointer
+    border: 2px solid $grayLightest
+    @include justify-content(space-between)
+    @include align-content(stretch)
+    @include align-items(center)
+    @include flex-flow(row wrap)
+    @include display(flex)
+    @include transition()
+
+    > i
+      width: 33%
+      color: $white
+      font-size: 2.5em
+      line-height: 2em
+      margin: -2px 0 -1px -2px
+      padding: 0.33em 0 0.25em
+      @include inline-block()
+
+    .overview-content
+      width: 66%
+      color: $gray
+      font-size: 2em
+      padding: 0 0.33em
+      @include inline-block()
+      @include antialiased()
+
+      small
+        display: block
+        color: $grayLight
+        font-size: 0.4em
+        margin-top: -0.25em
+        text-transform: uppercase
+
+      a
+        font-size: 1rem
+        color: $blueLight
+        text-align: center
+        text-decoration: underline
+        @include inline-block()
+
+    &:hover,
+    &.activated
+      box-shadow: $shadowSubtle
+
+    /*-----------  Block Types  -----------*/
+    
+    &.views 
+      
+      i
+        background-color: $red
+
+      &:hover,
+      &.activated
+        border-color: $red      
+
+    &.emails 
+      
+      i
+        background-color: $green
+
+      &:hover,
+      &.activated
+        border-color: $green   
+
+    &.clicks 
+      
+      i
+        background-color: $yellow
+
+      &:hover,
+      &.activated
+        border-color: $yellow   
+
+    &.social 
+      
+      i
+        background-color: $blue
+
+      &:hover,
+      &.activated
+        border-color: $blue   
+
+    &.feedback 
+      
+      i
+        background-color: $purple
+
+      &:hover,
+      &.activated
+        border-color: $purple   
+
+    &.disabled
+      border-style: dashed
+
+      &:hover,
+      &.activated
+        box-shadow: none
+
+        &.views
+          border-color: lighten($red, 33%)
+
+        &.emails
+          border-color: lighten($green, 33%)
+
+        &.clicks
+          border-color: lighten($yellow, 33%)
+
+        &.social
+          border-color: lighten($blue, 33%)
+
+        &.feedback
+          border-color: lighten($purple, 33%)

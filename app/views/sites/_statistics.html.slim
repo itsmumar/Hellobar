@@ -19,12 +19,33 @@ h5 Recent Activity
 
 h5 Lifetime Totals
 
+.overviews-wrapper
 
-h1= display_url_for_site(@site)
-ul
-  - @site.site_elements.each do |element|
-    li
-      = "Bar: #{element.id}"
-      ul
-        li= pluralize(element.total_views, "view")
-        li= pluralize(element.total_conversions, "conversions")
+  .overview-block.views
+    i.icon-views
+    .overview-content
+      | 1,245
+      small views
+
+  .overview-block.emails.activated
+    i.icon-contacts
+    .overview-content
+      | 7,582
+      small emails collected
+
+  .overview-block.clicks.disabled
+    i.icon-clicks
+    .overview-content
+      a Direct Visitor Traffic
+
+  .overview-block.social.disabled
+    i.icon-social
+    .overview-content
+      a Get More Social Activity
+
+  .overview-block.feedback.disabled
+    i.icon-feedback
+    .overview-content
+      a Get More Feedback
+
+.chartong-wrapper
