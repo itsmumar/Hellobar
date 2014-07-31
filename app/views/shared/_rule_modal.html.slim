@@ -22,12 +22,11 @@
               = condition_form.select :segment, Condition::SEGMENTS.invert, { include_blank: false }, { class: 'condition-segment' }
               = condition_form.select :operand, Condition::OPERANDS.invert, { include_blank: false }, { class: 'condition-operand' }
 
-              .grab-here
-                = ConditionInputHelper.start_date_field(condition_form)
-                = ConditionInputHelper.end_date_field(condition_form)
-                = ConditionInputHelper.url_field(condition_form)
-                = ConditionInputHelper.country_field(condition_form)
-                = ConditionInputHelper.device_field(condition_form)
+              = ConditionInputHelper.start_date_field(condition_form)
+              = ConditionInputHelper.end_date_field(condition_form)
+              = ConditionInputHelper.url_field(condition_form)
+              = ConditionInputHelper.country_field(condition_form)
+              = ConditionInputHelper.device_field(condition_form)
               = condition_form.hidden_field :_destroy, class: 'destroy'
 
             .condition-actions
