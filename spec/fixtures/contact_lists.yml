@@ -2,4 +2,5 @@ zombo:
   id: 1
   name: zombo list
   site: zombo
+  identity: mailchimp
   data: <%= {"remote_id" => "1", "remote_name" => "test"}.to_yaml.inspect %>

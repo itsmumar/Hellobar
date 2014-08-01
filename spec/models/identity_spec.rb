@@ -23,12 +23,6 @@ describe Identity do
       returned_identity.should == @identity
     end
 
-    it "should use an active scope to find existing identities" do
-      identities = @site.identities.active
-      identities.count.should == 1
-      identities.first.should == @identity
-    end
-
     it "uses the provider name to get the API client class" do
       identity = Identity.new(:provider => "mailchimp")
       identity.service_provider.should be_an_instance_of ServiceProviders::MailChimp

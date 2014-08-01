@@ -30,7 +30,7 @@ class ContactListsController < ApplicationController
   private
 
   def contact_list_params
-    params.require(:contact_list).permit(:name)
+    params.require(:contact_list).permit(:name, :provider)
   end
 
   def load_site

@@ -27,9 +27,22 @@ class ContactList < ActiveRecord::Base
 
   serialize :data, Hash
 
-  after_destroy :sync
+  before_validation :set_identity
 
   validates :name, :presence => true
+  validates :site, :association_exists => true
+  validate :provider_credentials_exist, :if => :provider_set?
+
+  def self.sync_all!
+    all.each do |list|
+      begin
+        list.sync! if list.syncable?
+      rescue => e
+        # if something goes wrong, we want to know about it, but we don't want to prevent other lists from syncing
+        Raven.capture_exception(e)
+      end
+    end
+  end
 
   def syncable?
     identity && data && data["remote_name"] && data["remote_id"]
@@ -84,6 +97,14 @@ class ContactList < ActiveRecord::Base
     end
   end
 
+  def provider_set?
+    ![nil, "", 0, "0"].include?(provider)
+  end
+
+  def set_identity
+    self.identity = site.identities.where(:provider => provider).first if provider_set?
+  end
+
   protected
 
   def subscribe_all_emails_to_list!
@@ -104,14 +125,9 @@ class ContactList < ActiveRecord::Base
     end
   end
 
-  def self.sync_all!
-    all.each do |list|
-      begin
-        list.sync! if list.syncable?
-      rescue => e
-        # if something goes wrong, we want to know about it, but we don't want to prevent other lists from syncing
-        Raven.capture_exception(e)
-      end
-    end
+  private
+
+  def provider_credentials_exist
+    errors.add(:provider, "credentials have not been set yet") unless identity && identity.provider == provider
   end
 end

@@ -2,3 +2,7 @@ mailchimp:
   site: zombo
   provider: mailchimp
   credentials: "{\"token\": \"key\"}"
+constantcontact:
+  site: zombo
+  provider: constantcontact
+  credentials: "{\"token\": \"key\"}"

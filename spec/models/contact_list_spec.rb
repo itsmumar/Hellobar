@@ -17,6 +17,35 @@ describe ContactList do
     ])
   end
 
+  describe "associated identity" do
+    it "should use #provider on creation to find the correct identity" do
+      list = ContactList.create!(
+        :site => sites(:zombo),
+        :name => "my list",
+        :provider => "mailchimp"
+      )
+
+      list.identity.should == identities(:mailchimp)
+    end
+
+    it "should use #provider on edit to find the correct identity" do
+      list = contact_lists(:zombo)
+      list.update_attribute(:identity, identities(:mailchimp))
+
+      list.provider = "constantcontact"
+      list.save
+      list.identity.should == identities(:constantcontact)
+    end
+
+    it "should not be valid if #provider does not match an existing identity" do
+      list = contact_lists(:zombo)
+      list.provider = "notanesp"
+
+      list.should_not be_valid
+      list.errors.messages[:provider].should include("credentials have not been set yet")
+    end
+  end
+
   it "should run email integrable sync correctly" do
     contact_list.save!
     contact_list.last_synced_at.should be_nil
