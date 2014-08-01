@@ -1,0 +1,69 @@
+/*-----------  Pages  -----------*/
+
+[id^="pages-"]
+  text-align: center
+  
+  .logo-block
+    margin-left: auto
+    margin-right: auto
+    background-position: center center
+    background-image: image-url('hellobar_logo_red.svg')
+
+  h1
+    margin: 1.75em auto 0.5em
+
+  h2
+    color: $black
+    text-transform: none
+    @include antialiased()
+
+    small
+      color: $gray
+      font-size: 0.67em
+
+  p
+    width: 50%
+    margin-left: auto
+    margin-right: auto
+
+  ol, ul
+    text-align: left
+
+    li
+      margin-top: 1em
+      line-height: 155%
+
+    strong
+      color: $black
+      margin-bottom: 0.5em
+
+  /*-----------  Marketing  -----------*/
+
+  .marketing-wrapper
+    margin: 3em 0 1.5em
+    @include justify-content(space-between)
+    @include align-content(stretch)
+    @include align-items(stretch)
+    @include flex-flow(row wrap)
+    @include display(flex)
+
+    .marketing-block
+      width: 47.5%
+      margin: 2em 0 1em
+
+      img
+        width: 100%
+        height: auto
+        padding: 2.5em
+        border-radius: $radiusSm
+        border: 1px solid $grayLighter
+
+      h5
+        margin: 0.5em 0 0.33em
+        font-size: 1.5em
+        text-transform: none
+        @include antialiased()
+
+      p
+        width: 100%
+        font-size: 1em

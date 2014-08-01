@@ -4,6 +4,7 @@
 
   .rules-wrapper
     width: 100%
+    max-width: 100%
     border-spacing: 0 0.75em
     border-collapse: separate
 
@@ -83,6 +84,7 @@
             color: $grayDark
             position: relative
             padding-left: 1.67rem
+            @include ellipsis()
 
             .psudo-border
               left: 0
@@ -148,4 +150,4 @@
           a
             color: $blueLight
             margin-right: 0.33em
-            border-bottom: 1px solid $blueLight
+            text-decoration: underline

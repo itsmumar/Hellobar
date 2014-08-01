@@ -21,8 +21,6 @@
 
 @import 'layouts/common';           // Common Layout Blocks
 @import 'layouts/document';         // Document Layouts
-@import 'layouts/global/*';         // Global Layouts
+@import 'layouts/global/footer';    // Global Footer
 
-@import 'layouts/devise/*';         // User Account Pages
-@import 'layouts/summary/*';        // Site Summary Pages
-@import 'layouts/manage/*';         // Rules / Site Elements Management Pages
+@import 'layouts/pages/*';          // Static Pages (Home, About Us, etc)

@@ -1,0 +1,60 @@
+/*-----------  Static Pages  -----------*/
+
+[id^="pages-"],
+[id^="welcome-"]
+  min-height: 100%
+  padding: 5em 5em 7em
+  
+  .logo-block
+    width: 15em
+    height: 4em
+    margin-bottom: 4em
+    background-size: auto 100%
+    background-repeat: no-repeat
+
+    a
+      opacity: 0
+      width: 100%
+      height: 100%
+      display: block
+
+  h1 
+    line-height: 125%
+
+  p
+    font-size: 1.15em
+
+  /*-----------  Quickstart  -----------*/
+
+  .quickstart-wrapper
+    padding: 2.15em 2.33em
+    border-radius: $radiusLg
+    @include clearfix()
+
+    input, 
+    button
+      margin: 0 !important
+      padding-top: 0 !important
+      padding-bottom: 0 !important
+      padding: 0.75em 1em !important
+      border-style: solid !important
+      border-width: 2px !important
+
+    input
+      float: left
+      width: 67% !important
+      color: $red !important
+      border-radius: $radiusSm 0 0 $radiusSm !important
+      @include placeholder
+        color: $red !important
+
+    button
+      float: right
+      width: 33% !important
+      color: $white !important
+      background-color: $red !important
+      border-radius: 0 $radiusSm $radiusSm 0 !important
+      @include transition()
+
+      &:hover
+        background-color: darken($red, 5%) !important

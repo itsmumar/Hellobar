@@ -1,0 +1,38 @@
+/*-----------  Footer  -----------*/
+
+.global-footer
+  text-align: center
+  margin-top: -4.15rem
+  background-color: $grayLightest
+
+  a, span
+    line-height: 4rem
+
+  a
+    color: $red
+    margin-right: 1.25em
+    text-transform: uppercase
+
+    &:hover
+      color: darken($red, 15%)
+
+    &.active
+      font-weight: bold
+
+  span
+    color: $gray
+    font-size: 0.85em
+    @include antialiased()
+
+  /*-----------  Welcome Page Alternative  -----------*/
+
+  &.welcome
+    background-color: $red
+    border-top: 1px solid rgba($white, 0.25)
+
+    span
+      color: $grayLight
+
+    a
+      color: $white
+      @include antialiased()
