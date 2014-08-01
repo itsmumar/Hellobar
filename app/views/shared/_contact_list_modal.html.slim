@@ -7,10 +7,16 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
       .provider-instructions-block
       .provider-instructions-nevermind-block
       .name-and-provider-block
-        = simple_form_for :contact_list, :url => "" do |f|
-          = f.input :name
-          = f.label :provider, "Where do you want your contacts stored?"
-          = f.select :provider, options_for_provider_select
+        form
+          label for="contact_list_name" Name
+          input type="text" id="contact_list_name" name="contact_list[name]"
+
+          label for="contact_list_provider" Where do you want your contacts stored?
+          select id="contact_list_provider" name="contact_list[provider]"
+            = options_for_provider_select.each do |option|
+              option value="#{option[1]}"
+                = option[0]
+
           p
             small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
           .remote-list-select-block
