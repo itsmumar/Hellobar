@@ -1,4 +1,4 @@
-$.mockjax({
+$.mockjax
   url: /^\/sites\/([\d]+)\/site_elements\/([\d\-]+)\.json$/
   urlParams: ['siteID', 'siteElementID']
   contentType: 'text/json'
@@ -15,4 +15,17 @@ $.mockjax({
     siteElement.element_subtype = "traffic"
 
     this.responseText = siteElement
-})
+
+$.mockjax
+  url: /^\/sites\/([\d]+)\/identities\/([\w]+)\.json$/
+  urlParams: ['siteID', 'provider']
+  contentType: 'text/json'
+  response: (settings) ->
+    if settings.urlParams.provider == "mailchimp"
+      this.responseText = JSON.stringify({
+        id: 1
+        site_id: settings.urlParams.siteID
+        lists: [{id: 1, name: "my cool list"}]
+      })
+    else
+      this.responseText = {}

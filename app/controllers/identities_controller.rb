@@ -3,9 +3,14 @@ class IdentitiesController < ApplicationController
 
   def new
     # TODO: store any unpersisted contact list attributes so that they can be picked up after oauth
-    # anything sent to the oauth path in query params will be present in the callback in env['omniauth.params']
+    # anything sent to the oauth path in query params will be present in the callback in env["omniauth.params"]
 
     redirect_to "/auth/#{params[:provider]}/?site_id=#{@site.id}"
+  end
+
+  def show
+    @identity = @site.identities.where(:provider => params[:id]).first
+    render :json => @identity
   end
 
   def create
@@ -16,8 +21,8 @@ class IdentitiesController < ApplicationController
       return redirect_to site_contact_lists_path(@site)
     end
 
-    identity.credentials = env['omniauth.auth']['credentials']
-    identity.extra = env['omniauth.auth']['extra']
+    identity.credentials = env["omniauth.auth"]["credentials"]
+    identity.extra = env["omniauth.auth"]["extra"]
 
     if identity.save
       flash[:notice] = "We've successfully connected your #{identity.provider_config[:name]} account."
@@ -32,6 +37,6 @@ class IdentitiesController < ApplicationController
   private
 
   def load_site
-    @site = current_user.sites.find(params[:site_id] || env['omniauth.params']['site_id'])
+    @site = current_user.sites.find(params[:site_id] || env["omniauth.params"]["site_id"])
   end
 end
