@@ -1,14 +1,12 @@
-div.row
-  div.col-md-4
-  div.col-md-4
-    h1 Sign in
+= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
 
-    = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-      = f.input :email
-      = f.input :password
+  h1 Sign In
 
-      p.float-right= render "devise/shared/links"
+  = f.input_field :email, :placeholder => 'Your Email'
+  = f.input_field :password, :placeholder => 'Password'
 
-      = f.input :remember_me, as: :boolean, inline_label: true, label: false
-      = f.button :submit, "Sign in", :class => "btn btn-primary"
-  div.col-md-4
+  = f.input_field :remember_me, as: :boolean, inline_label: true, label: false
+  = f.button :submit, "Sign in", :class => "button"
+
+  .devise-links
+    = render "devise/shared/links"

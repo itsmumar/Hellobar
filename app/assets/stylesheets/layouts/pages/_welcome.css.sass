@@ -1,12 +1,18 @@
 /*-----------  Welcome  -----------*/
 
 #welcome-index
+  text-align: left
   background-color: $red
 
   *
     color: $white
 
+  .bounds-wrapper
+    border-right: 10em solid transparent
+
   .logo-block
+    height: 3.85em
+    margin-left: 0
     pointer-events: none
     background-position: left center
     background-image: image-url('hellobar_logo_white.svg')
@@ -14,7 +20,7 @@
   .button  
     top: 0
     right: 0
-    font-size: 1.5em
+    font-size: 1.33em
     position: absolute
     @extend %inverted-button
 
@@ -22,17 +28,22 @@
     margin-top: 2em
 
   p
-    width: 67%
+    width: 85%
     margin: 1em 0
 
   /*-----------  Quickstart  -----------*/
 
   .quickstart-wrapper
-    width: 90%
+    width: 100%
     margin: 3em -2.33em
     background-color: rgba($white, 0.15)
 
     input, 
     button
-      font-size: 1.25em
-      border-color: $white
+      border-color: $white !important
+
+    input
+      width: 67% !important
+
+    button
+      width: 33% !important

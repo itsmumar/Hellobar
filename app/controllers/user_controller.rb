@@ -2,6 +2,8 @@ class UserController < ApplicationController
   before_filter :authenticate_user!
   before_filter :load_user, :only => [:edit, :update]
 
+  layout :determine_layout
+
   def update
     if @user.update_attributes(user_params)
       sign_in @user, :bypass => true
@@ -18,6 +20,10 @@ class UserController < ApplicationController
 
   def load_user
     @user = current_user
+  end
+
+  def determine_layout
+    %w(new edit).include?(action_name) ? "ember" : "application"
   end
 
   def user_params

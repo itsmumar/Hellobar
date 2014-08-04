@@ -1,16 +1,22 @@
 /*-----------  Static Pages  -----------*/
 
 [id^="pages-"],
-[id^="welcome-"]
+[id^="welcome-"],
+[id^="sessions-"]
   min-height: 100%
+  text-align: center
   padding: 5em 5em 7em
   
   .logo-block
     width: 15em
-    height: 4em
+    height: 3.33em
+    margin-left: auto
+    margin-right: auto
     margin-bottom: 4em
     background-size: auto 100%
     background-repeat: no-repeat
+    background-position: center center
+    background-image: image-url('hellobar_logo_red.svg')
 
     a
       opacity: 0
@@ -20,38 +26,100 @@
 
   h1 
     line-height: 125%
+    margin: 1.75em auto 0.5em
+
+  h2
+    color: $black
+    text-transform: none
+    @include antialiased()
+
+    small
+      color: $gray
+      font-size: 0.67em
 
   p
     font-size: 1.15em
+    margin-left: auto
+    margin-right: auto
+
+  ol, ul
+    text-align: left
+
+    li
+      margin-top: 1em
+      line-height: 155%
+
+    strong
+      color: $black
+      margin-bottom: 0.5em
+
+  /*-----------  Marketing  -----------*/
+
+  .marketing-wrapper
+    margin: 3em 0 1.5em
+    @include justify-content(space-between)
+    @include align-content(stretch)
+    @include align-items(stretch)
+    @include flex-flow(row wrap)
+    @include display(flex)
+
+    .marketing-block
+      width: 47.5%
+      margin: 2em 0 1em
+
+      img
+        width: 100%
+        height: auto
+        padding: 2.5em
+        border-radius: $radiusSm
+        border: 1px solid $grayLighter
+
+      h5
+        margin: 0.5em 0 0.33em
+        font-size: 1.5em
+        text-transform: none
+        @include antialiased()
+
+      p
+        width: 100%
+        font-size: 1em
 
   /*-----------  Quickstart  -----------*/
 
   .quickstart-wrapper
+    width: 67%
+    margin: 1em auto
     padding: 2.15em 2.33em
     border-radius: $radiusLg
+    background-color: $grayLightest
     @include clearfix()
 
     input, 
     button
       margin: 0 !important
       padding-top: 0 !important
+      font-size: 1.25em !important
       padding-bottom: 0 !important
+      border-width: 2px !important
+      border-color: $red !important
       padding: 0.75em 1em !important
       border-style: solid !important
-      border-width: 2px !important
 
     input
       float: left
-      width: 67% !important
+      width: 62% !important
       color: $red !important
+      border-right-width: 0px !important
       border-radius: $radiusSm 0 0 $radiusSm !important
       @include placeholder
         color: $red !important
 
     button
       float: right
-      width: 33% !important
+      width: 38% !important
       color: $white !important
+      padding-left: 0 !important
+      padding-right: 0 !important
       background-color: $red !important
       border-radius: 0 $radiusSm $radiusSm 0 !important
       @include transition()

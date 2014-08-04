@@ -20,5 +20,9 @@ module Hellobar
 
     config.handlebars.precompile = false
     config.handlebars.templates_root = 'editor/templates'
+
+    config.to_prepare do
+        Devise::SessionsController.layout proc{ |controller| action_name == 'new' ? 'static' : 'application' }
+    end
   end
 end
