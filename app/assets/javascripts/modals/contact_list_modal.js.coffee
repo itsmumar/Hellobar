@@ -42,20 +42,7 @@ class @ContactListModal extends Modal
     modal = this
 
     object.find("#contact_list_provider").change (e) ->
-      value = $(this).val()
-      label = $(this).find("option:selected").text()
-
-      $.get "/sites/#{modal.options.siteID}/identities/#{value}.json", (data) =>
-        if data # an identity was found for the selected provider
-          modal.blocks.instructions.hide()
-          modal.blocks.nevermind.hide()
-          modal._renderBlock("remoteListSelect", {providerName: label, lists: data.lists}).show()
-        else # no identity found
-          context = {providerName: label}
-
-          modal._renderBlock("nevermind", context).hide()
-          modal._renderBlock("instructions", context).show()
-          modal.blocks.remoteListSelect.hide()
+      modal._loadRemoteLists(this)
 
   _bindDoThisLater: (object) ->
     object.find("a.do-this-later").click (e) =>
@@ -101,7 +88,26 @@ class @ContactListModal extends Modal
   _loadContactList: ->
     $.get @options.loadURL, (data) =>
       @_setFormValues(data)
+      @_loadRemoteLists()
       # todo: set remote list if chosen
+
+  _loadRemoteLists: (select = null) ->
+    select ||= @$modal.find("#contact_list_provider")
+
+    value = $(select).val()
+    label = $(select).find("option:selected").text()
+
+    $.get "/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
+      if data # an identity was found for the selected provider
+        @blocks.instructions.hide()
+        @blocks.nevermind.hide()
+        @_renderBlock("remoteListSelect", {providerName: label, lists: data.lists}).show()
+      else # no identity found
+        context = {providerName: label}
+
+        @_renderBlock("nevermind", context).hide()
+        @_renderBlock("instructions", context).show()
+        @blocks.remoteListSelect.hide()
 
   _showErrors: (errors) ->
     html = "<div class=\"alert\">#{errors.reduce (a, b) -> "#{a}<br>#{b}"}</div>"

@@ -41,7 +41,7 @@ asyncTest "selecting a provider with a stored identity renders a dropdown of tha
   expect(1)
 
   @modal.$modal.on "ajax-complete", =>
-    equal @modal.$modal.find("#contact_list_remote_list_id").find("option:selected").text(), "my cool list"
+    equal @modal.$modal.find("#contact_list_remote_list_id option:selected").text(), "my cool list"
     QUnit.start()
 
   @modal.$modal.find("#contact_list_provider").val("mailchimp").change()
@@ -80,14 +80,27 @@ module "ContactListModal.open for edit",
     $(document).ajaxComplete =>
       @modal.$modal.trigger("ajax-complete")
 
+    $(document).ajaxStop =>
+      @modal.$modal.trigger("ajax-stop")
+
   teardown: ->
     @modal.$modal.unbind("ajax-complete")
+    @modal.$modal.unbind("ajax-stop")
 
 asyncTest "populates the name of the contact list in the form", ->
   expect(1)
 
   @modal.$modal.on "ajax-complete", =>
     equal @modal.$modal.find("form #contact_list_name").val(), "Contact List Name"
+    QUnit.start()
+
+  @modal.open()
+
+asyncTest "loads the remote list select if a provider with stored credentials is loaded", ->
+  expect(1)
+
+  @modal.$modal.on "ajax-stop", =>
+    includes @modal.$modal.find("#contact_list_remote_list_id").text(), "my cool list"
     QUnit.start()
 
   @modal.open()
