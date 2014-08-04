@@ -42,7 +42,7 @@ class @ContactListModal extends Modal
     modal = this
 
     object.find("#contact_list_provider").change (e) ->
-      modal._loadRemoteLists(this)
+      modal._loadRemoteLists(select: this)
 
   _bindDoThisLater: (object) ->
     object.find("a.do-this-later").click (e) =>
@@ -99,10 +99,9 @@ class @ContactListModal extends Modal
   _loadContactList: ->
     $.get @options.loadURL, (data) =>
       @_setFormValues(data)
-      @_loadRemoteLists()
-      # todo: set remote list if chosen
+      @_loadRemoteLists(listData: data)
 
-  _loadRemoteLists: (select = null) ->
+  _loadRemoteLists: ({listData, select}) ->
     select ||= @$modal.find("#contact_list_provider")
 
     value = $(select).val()
@@ -113,6 +112,10 @@ class @ContactListModal extends Modal
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
         @_renderBlock("remoteListSelect", {providerName: label, lists: data.lists}).show()
+
+        if listData && listData.data && listData.data.remote_id
+          @$modal.find("#contact_list_remote_list_id").val(listData.data.remote_id)
+
       else # no identity found
         context = {providerName: label}
 

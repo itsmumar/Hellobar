@@ -122,3 +122,14 @@ asyncTest "loads the remote list select if a provider with stored credentials is
     QUnit.start()
 
   @modal.open()
+
+asyncTest "selects the persisted remote list if present", ->
+  expect(2)
+
+  @modal.$modal.on "ajax-stop", =>
+    equal @modal.$modal.find("#contact_list_remote_list_id").val(), "2"
+    equal @modal.$modal.find("#contact_list_remote_list_id option:selected").text(), "my other cool list"
+
+    QUnit.start()
+
+  @modal.open()

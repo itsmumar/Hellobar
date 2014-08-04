@@ -1,5 +1,5 @@
 class ContactListSerializer < ActiveModel::Serializer
-  attributes :id, :site_id, :name, :errors, :provider
+  attributes :id, :site_id, :name, :errors, :provider, :data
 
   def errors
     object.errors.full_messages
