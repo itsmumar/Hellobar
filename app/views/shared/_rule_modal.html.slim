@@ -21,25 +21,25 @@
             .condition-ruleset
               .select-wrapper.optional.rule_conditions_segment
                 = condition_form.select :segment, Condition::SEGMENTS.invert, { include_blank: false }, { class: 'condition-segment' }
-      
+
               .select-wrapper.optional.rule_conditions_operand
                 = condition_form.select :operand, Condition::OPERANDS.invert, { include_blank: false }, { class: 'condition-operand' }
 
               .rule_conditions_choices
-             
+
                 .choice-wrapper.date-choice
                   = ConditionInputHelper.start_date_field(condition_form)
                   = ConditionInputHelper.end_date_field(condition_form)
-  
+
                 .choice-wrapper.url-choice
                   = ConditionInputHelper.url_field(condition_form)
-        
+
                 .choice-wrapper.select-wrapper.country-choice
                   = ConditionInputHelper.country_field(condition_form)
-        
+
                 .choice-wrapper.select-wrapper.device-choice
                   = ConditionInputHelper.device_field(condition_form)
-        
+
               = condition_form.hidden_field :_destroy, class: 'destroy'
 
             .condition-actions
@@ -70,29 +70,26 @@ script type="text/template" id="new-condition"
   .placeholder
     .condition-block
       .condition-ruleset
-       
         .select-wrapper.optional.rule_conditions_segment
           = select_tag :segment, options_for_select(Condition::SEGMENTS.invert), class: 'condition-segment'
-       
+
         .select-wrapper.optional.rule_conditions_operand
           = select_tag :operand, options_for_select(Condition::OPERANDS.invert), class: 'condition-operand'
 
         .rule_conditions_choices
-       
           .choice-wrapper.date-choice
             = date_field_tag :value, nil, class: 'start_date value', disabled: true
-           
             = date_field_tag :value, nil, class: 'end_date value', disabled: true
-         
+
           .choice-wrapper.url-choice
             = text_field_tag :value, nil, class: 'url value', disabled: true, :placeholder => 'something...'
 
           .choice-wrapper.select-wrapper.country-choice
             = select_tag :value, options_for_select(['USA', 'USA', 'USA']), include_blank: false, class: 'country value', disabled: true
-         
+
           .choice-wrapper.select-wrapper.device-choice
             = select_tag :value, options_for_select(['Desktop', 'Mobile']), include_blank: false, class: 'device value', disabled: true
-      
+
       .condition-actions
         = link_to raw("&#45;"), '#', class: 'condition-remove'
         = link_to raw('&#43;'), '#', class: 'condition-add'

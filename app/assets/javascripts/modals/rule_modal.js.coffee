@@ -51,7 +51,7 @@ class @RuleModal extends Modal
   _renderValue: ($condition) ->
     $condition.find('.choice-wrapper').hide()        # hide the selections by default
     $condition.find('.value').prop('disabled', true) # disable the values by default
-    
+
     segmentValue = $condition.find('select.condition-segment').val()
 
     if segmentValue == 'CountryCondition'
@@ -115,6 +115,9 @@ class @RuleModal extends Modal
       '.start_date.value'
     else if operand == 'is_between'
       '.start_date.value, .end_date.value'
+    else
+      console.log "Invalid operand: #{operand} selected for date"
+      ''
 
   filteredOperands: (segment) ->
     conditionTemplate = @newConditionTemplate()
