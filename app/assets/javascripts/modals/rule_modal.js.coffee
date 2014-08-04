@@ -49,30 +49,43 @@ class @RuleModal extends Modal
             .val(selectedValue)
 
   _renderValue: ($condition) ->
-    $condition.find('.value')
-              .hide()                 # hide the values by default
-              .prop('disabled', true) # disable the values by default
+    $condition.find('.choice-wrapper').hide()        # hide the selections by default
+    $condition.find('.value').prop('disabled', true) # disable the values by default
+    
     segmentValue = $condition.find('select.condition-segment').val()
 
     if segmentValue == 'CountryCondition'
-      $condition.find('.country')
-                .prop('disabled', false)
+      $condition.find('.country-choice')
                 .show()
+                .find('.value')
+                .prop('disabled', false)
     else if segmentValue == 'DeviceCondition'
-      $condition.find('.device')
-                .prop('disabled', false)
+      $condition.find('.device-choice')
                 .show()
+                .find('.value')
+                .prop('disabled', false)
     else if segmentValue == 'UrlCondition'
-      $condition.find('.url')
-                .prop('disabled', false)
+      $condition.find('.url-choice')
                 .show()
+                .find('.value')
+                .prop('disabled', false)
     else if segmentValue == 'DateCondition'
+      $condition.find('.date-choice')
+                .show()
+                .find('.value')
+                .hide()
+
       operandValue = $condition.find('select.condition-operand').val()
 
       datesToShow = @_dateClasses(operandValue)
       $condition.find(datesToShow)
                 .prop('disabled', false)
                 .show()
+
+      if datesToShow.indexOf(',') == -1
+        $condition.find('.and-interjection').remove()
+      else
+        $condition.find('.start_date').after('<span class="and-interjection">and</span>')
 
       rawStartDate = $condition.find('.start_date').val()
       rawEndDate = $condition.find('.end_date').val()
@@ -186,7 +199,7 @@ class @RuleModal extends Modal
               .attr('name', "rule[conditions_attributes][#{nextIndex}][value][start_date]")
     $condition.find('input.end_date')
               .attr('name', "rule[conditions_attributes][#{nextIndex}][value][end_date]")
-    $condition.find('.value').hide()
+    $condition.find('.choice-wrapper').hide()
 
     @_renderCondition($condition)
     @$modal.find('.conditions-wrapper').append($condition.html())

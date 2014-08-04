@@ -57,15 +57,29 @@ script type="text/template" id="new-condition"
   .placeholder
     .condition-block
       .condition-ruleset
-        .form-group.select.optional.rule_conditions_segment
+       
+        .select-wrapper.optional.rule_conditions_segment
           = select_tag :segment, options_for_select(Condition::SEGMENTS.invert), class: 'condition-segment'
-        .form-group.select.optional.rule_conditions_operand
+       
+        .select-wrapper.optional.rule_conditions_operand
           = select_tag :operand, options_for_select(Condition::OPERANDS.invert), class: 'condition-operand'
-        = date_field_tag :value, nil, class: 'start_date value form-control', disabled: true
-        = date_field_tag :value, nil, class: 'end_date value form-control', disabled: true
-        = text_field_tag :value, nil, class: 'url value form-control', disabled: true
-        = select_tag :value, options_for_select(['USA', 'USA', 'USA']), include_blank: false, class: 'country value', disabled: true
-        = select_tag :value, options_for_select(['Desktop', 'Mobile']), include_blank: false, class: 'device value', disabled: true
+
+        .rule_conditions_choices
+       
+          .choice-wrapper.date-choice
+            = date_field_tag :value, nil, class: 'start_date value', disabled: true
+           
+            = date_field_tag :value, nil, class: 'end_date value', disabled: true
+         
+          .choice-wrapper.url-choice
+            = text_field_tag :value, nil, class: 'url value', disabled: true, :placeholder => 'something...'
+
+          .choice-wrapper.select-wrapper.country-choice
+            = select_tag :value, options_for_select(['USA', 'USA', 'USA']), include_blank: false, class: 'value', disabled: true
+         
+          .choice-wrapper.select-wrapper.device-choice
+            = select_tag :value, options_for_select(['Desktop', 'Mobile']), include_blank: false, class: 'value', disabled: true
+      
       .condition-actions
         = link_to raw("&#45;"), '#', class: 'condition-remove'
         = link_to raw('&#43;'), '#', class: 'condition-add'

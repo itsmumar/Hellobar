@@ -24,6 +24,8 @@
       @include inline-block()
 
   footer
+    margin-top: 2em
+    @include clearfix()
 
     a.button
       float: left
@@ -36,19 +38,59 @@
   /*-----------  Conditions Wrapper  -----------*/
   
   .conditions-wrapper
-    padding: 1em 1.25em
+    padding: 1px 0
     margin-bottom: 0.67em
     border-radius: $radiusSm
     background-color: $grayLightest
 
     .condition-block
+      margin: 1em 1.25em
 
       .condition-ruleset
-        width: 80%
+        width: 85%
         @include inline-block()
 
+        input,
+        select
+          margin: 0
+
+        .rule_conditions_segment,
+        .rule_conditions_operand
+          margin-right: 2%
+          @include inline-block()
+
+        .rule_conditions_segment
+          width: 22%
+
+          select
+            text-transform: capitalize
+
+        .rule_conditions_operand
+          width: 22%
+
+        .rule_conditions_choices
+          width: 52%
+          text-align: left
+          @include inline-block()
+
+          .select-wrapper
+            width: 67%
+
+          input[type='date']
+            width: 40%
+            @include transition(margin-left 0)
+            @include inline-block()
+
+          input[type='date']:not([disabled]) ~ input[type='date']:not([disabled])
+            margin-left: 4%
+
+          .and-interjection
+            color: $gray
+            margin-left: 4%
+            font-size: 0.85em
+
       .condition-actions
-        width: 20%
+        width: 15%
         text-align: right
         @include inline-block()
 
@@ -63,10 +105,10 @@
           @include inline-block()
 
           &.condition-remove
-            background-color: $gray
+            background-color: $grayLight
 
             &:hover
-              background-color: darken($gray, 15%)
+              background-color: darken($grayLight, 15%)
 
           &.condition-add
             background-color: $blue
