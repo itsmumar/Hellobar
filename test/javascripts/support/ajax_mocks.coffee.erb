@@ -31,3 +31,15 @@ $.mockjax
       })
     else
       this.responseText = {}
+
+$.mockjax
+  url: /^\/sites\/([\d]+)\/contact_lists\/([\w]+)\.json$/
+  urlParams: ['siteID', 'contactListID']
+  contentType: 'text/json'
+  response: (settings) ->
+    this.responseText = JSON.stringify({
+      id: settings.urlParams.contactListID
+      site_id: settings.urlParams.siteID
+      name: "Contact List Name"
+      provider: "mailchimp"
+    })

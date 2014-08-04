@@ -4,13 +4,17 @@ class @ContactListModal extends Modal
 
     @_initializeTemplates()
     @_initializeBlocks()
-    @_loadContactList() if @options.loadURL
-    @_bindInteractions(@$modal)
 
     super(@$modal)
 
   close: ->
     @$modal.remove()
+
+  open: ->
+    @_loadContactList() if @options.loadURL
+    @_bindInteractions(@$modal)
+
+    super
 
   _initializeTemplates: ->
     @templates =

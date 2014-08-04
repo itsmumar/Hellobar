@@ -16,7 +16,6 @@ module "ContactListModal.open",
   teardown: ->
     @modal.$modal.unbind("ajax-complete")
 
-
 test "inserts the modal html", ->
   includes find(@modal.$modal).text(), "sync with an email service", "Modal HTML was not rendered"
 
@@ -68,3 +67,27 @@ asyncTest "selecting \"I'll do this later\" sets the provider select back to 0 a
     QUnit.start()
 
   @modal.$modal.find("#contact_list_provider").val("aweber").change()
+
+
+module "ContactListModal.open for edit",
+  setup: ->
+    @modal = new ContactListModal(
+      siteID: 123
+      window: {location: ""}
+      loadURL: "/sites/123/contact_lists/1.json"
+    )
+
+    $(document).ajaxComplete =>
+      @modal.$modal.trigger("ajax-complete")
+
+  teardown: ->
+    @modal.$modal.unbind("ajax-complete")
+
+asyncTest "populates the name of the contact list in the form", ->
+  expect(1)
+
+  @modal.$modal.on "ajax-complete", =>
+    equal @modal.$modal.find("form #contact_list_name").val(), "Contact List Name"
+    QUnit.start()
+
+  @modal.open()
