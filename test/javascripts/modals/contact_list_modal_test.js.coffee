@@ -103,6 +103,7 @@ module "ContactListModal.open for edit",
   teardown: ->
     @modal.$modal.unbind("ajax-complete")
     @modal.$modal.unbind("ajax-stop")
+    @modal.close()
 
 asyncTest "populates the name of the contact list in the form", ->
   expect(1)
