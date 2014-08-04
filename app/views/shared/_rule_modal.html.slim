@@ -88,10 +88,10 @@ script type="text/template" id="new-condition"
             = text_field_tag :value, nil, class: 'url value', disabled: true, :placeholder => 'something...'
 
           .choice-wrapper.select-wrapper.country-choice
-            = select_tag :value, options_for_select(['USA', 'USA', 'USA']), include_blank: false, class: 'value', disabled: true
+            = select_tag :value, options_for_select(['USA', 'USA', 'USA']), include_blank: false, class: 'country value', disabled: true
          
           .choice-wrapper.select-wrapper.device-choice
-            = select_tag :value, options_for_select(['Desktop', 'Mobile']), include_blank: false, class: 'value', disabled: true
+            = select_tag :value, options_for_select(['Desktop', 'Mobile']), include_blank: false, class: 'device value', disabled: true
       
       .condition-actions
         = link_to raw("&#45;"), '#', class: 'condition-remove'

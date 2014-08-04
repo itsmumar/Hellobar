@@ -1,0 +1,20 @@
+/*-----------  User Profile  -----------*/
+
+#user-edit
+
+  form
+    width: 22.75%
+    margin-right: 3%
+    @include inline-block(top)
+
+    &.avatar-form
+      padding: 1.5em
+      text-align: center
+      border-radius: $radiusSm
+      border: 1px solid $grayLighter
+
+    &.personal-form .button
+      @extend %green-button
+
+    &.password-form .button
+      @extend %gray-button      

@@ -1,25 +1,28 @@
-h1 User Settings
+nav.tabs-wrapper
+  = active_link_to 'You', profile_path()
+  a disabled='true' Team
+  = active_link_to 'Site', edit_site_path(current_site)
+  
+= form_for @user, :url => user_path, :html => {:class => 'avatar-form'} do |f|
+  h3 avatar
 
-= form_for @user, :url => user_path do |f|
-  .form-group
-    = f.label :email
-    = f.text_field :email, :class => "form-control"
+= form_for @user, :url => user_path, :html => {:class => 'personal-form'} do |f|
+  = f.label :email
+  = f.text_field :email
 
-  .form-group
-    = f.label :first_name
-    = f.text_field :first_name, :class => "form-control"
+  = f.label :first_name
+  = f.text_field :first_name
 
-  .form-group
-    = f.label :last_name
-    = f.text_field :last_name, :class => "form-control"
+  = f.label :last_name
+  = f.text_field :last_name
 
-  .form-group
-    = f.label :password, "Change password"
-    = f.password_field :password, :class => "form-control"
+  = f.submit "Save & Update", :class => "button"
 
-  .form-group
-    = f.label :password_confirmation, "Change password (confirm)"
-    = f.password_field :password_confirmation, :class => "form-control"
+= form_for @user, :url => user_path, :html => {:class => 'password-form'} do |f|
+  = f.label :password, "Change password"
+  = f.password_field :password
 
-  .form-group
-    = f.submit "Save", :class => "btn btn-primary"
+  = f.label :password_confirmation, "Change password (confirm)"
+  = f.password_field :password_confirmation
+
+  = f.submit "Change Password", :class => "button"
