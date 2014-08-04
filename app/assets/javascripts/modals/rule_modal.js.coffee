@@ -85,7 +85,7 @@ class @RuleModal extends Modal
       if datesToShow.indexOf(',') == -1
         $condition.find('.and-interjection').remove()
       else
-        $condition.find('.start_date').after('<span class="and-interjection">and</span>')
+        $condition.find('.start_date').after('<span class="and-interjection">and</span>') unless $condition.find('.and-interjection').length
 
       rawStartDate = $condition.find('.start_date').val()
       rawEndDate = $condition.find('.end_date').val()

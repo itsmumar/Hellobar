@@ -1,0 +1,22 @@
+/*-----------  Navigation Tabs  -----------*/
+
+.tabs-wrapper
+  margin-bottom: 2em
+  border-bottom: 2px solid $grayLighter
+
+  a
+    color: $grayLighter
+    font-size: 1.25em
+    margin-right: 1.75em
+    margin-bottom: -2px
+    padding-bottom: 0.5em
+    text-transform: uppercase
+    border-bottom: 2px solid transparent
+    @include inline-block()
+
+    &:hover
+      color: $grayLight
+
+    &.active
+      color: $red
+      border-bottom-color: $red

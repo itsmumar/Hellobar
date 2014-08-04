@@ -1,7 +1,13 @@
-h1= "Settings for #{display_url_for_site(@site)}"
+nav.tabs-wrapper
+  = active_link_to 'You', profile_path()
+  a disabled='true' Team
+  = active_link_to 'Site', edit_site_path(current_site)
 
 = simple_form_for @site do |f|
+
   = f.input :url
-  = f.input :opted_in_to_email_digest, as: :boolean, inline_label: "Send me a weekly email digest of this site's performance", label: false
-  p.float-right= link_to "delete", site_path(@site), :method => :delete
-  = f.button :submit, "Save", :class => "btn-primary"
+  = f.input :opted_in_to_email_digest, as: :boolean, inline_label: "Send me a weekly email digest of this site's performance", label: 'Email Digest'
+
+  footer
+    = f.button :submit, "Save & Update", :class => "button"
+    = link_to "Delete Site", site_path(@site), :method => :delete, :class => "button", data: { confirm: "Historical data will be deleted and you will not be able to recover it after this. Are you sure you wish to delete this site?" }

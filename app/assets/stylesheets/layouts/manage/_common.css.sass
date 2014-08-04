@@ -11,6 +11,9 @@
     tr
       height: 4rem
 
+      &:first-child
+        height: auto
+
       th, td
         text-align: center
         margin-bottom: 0.67em
@@ -28,6 +31,7 @@
       th:not([colspan])
         font-size: 0.75em
         color: $grayLighter
+        padding-top: 0 !important
         text-transform: uppercase
         border-bottom: 1px solid $grayLighter
 

@@ -19,14 +19,27 @@
         = rule_form.fields_for :conditions do |condition_form|
           .condition-block
             .condition-ruleset
-              = condition_form.select :segment, Condition::SEGMENTS.invert, { include_blank: false }, { class: 'condition-segment' }
-              = condition_form.select :operand, Condition::OPERANDS.invert, { include_blank: false }, { class: 'condition-operand' }
+              .select-wrapper.optional.rule_conditions_segment
+                = condition_form.select :segment, Condition::SEGMENTS.invert, { include_blank: false }, { class: 'condition-segment' }
+      
+              .select-wrapper.optional.rule_conditions_operand
+                = condition_form.select :operand, Condition::OPERANDS.invert, { include_blank: false }, { class: 'condition-operand' }
 
-              = ConditionInputHelper.start_date_field(condition_form)
-              = ConditionInputHelper.end_date_field(condition_form)
-              = ConditionInputHelper.url_field(condition_form)
-              = ConditionInputHelper.country_field(condition_form)
-              = ConditionInputHelper.device_field(condition_form)
+              .rule_conditions_choices
+             
+                .choice-wrapper.date-choice
+                  = ConditionInputHelper.start_date_field(condition_form)
+                  = ConditionInputHelper.end_date_field(condition_form)
+  
+                .choice-wrapper.url-choice
+                  = ConditionInputHelper.url_field(condition_form)
+        
+                .choice-wrapper.select-wrapper.country-choice
+                  = ConditionInputHelper.country_field(condition_form)
+        
+                .choice-wrapper.select-wrapper.device-choice
+                  = ConditionInputHelper.device_field(condition_form)
+        
               = condition_form.hidden_field :_destroy, class: 'destroy'
 
             .condition-actions
