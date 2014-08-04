@@ -67,17 +67,28 @@ class @ContactListModal extends Modal
     @_clearErrors()
     submitButton = @$modal.find("a.submit")
     submitButton.attr("disabled", true)
-    formData = @$modal.find("form.contact_list").serialize()
+    formData = @_getFormData()
 
     $.ajax @options.saveURL,
       type: @options.saveMethod
-      data: formData
+      data: {contact_list: formData}
       success: (data) =>
         if data.errors.length > 0
           @_showErrors(data.errors)
           submitButton.attr("disabled", false)
         else
           @options.success(data)
+
+  _getFormData: ->
+    remoteListSelect = @$modal.find("#contact_list_remote_list_id")
+
+    {
+      name: @$modal.find("form #contact_list_name").val()
+      provider: @$modal.find("form #contact_list_provider").val()
+      data:
+        remote_id: $(remoteListSelect).val()
+        remote_name: $(remoteListSelect).find("option:selected").text()
+    }
 
   _renderBlock: (name, context, bind = true) ->
     block = @blocks[name].html(@templates[name](context))

@@ -47,6 +47,22 @@ asyncTest "selecting a provider with a stored identity renders a dropdown of tha
 
   @modal.$modal.find("#contact_list_provider").val("mailchimp").change()
 
+asyncTest "form data is serialized correctly", ->
+  expect(4)
+
+  @modal.$modal.on "ajax-complete", =>
+    @modal.$modal.find("#contact_list_remote_list_id").val("2").change()
+    @modal.$modal.find("#contact_list_name").val("my new contact list").change()
+    formData = @modal._getFormData()
+
+    equal formData.name, "my new contact list"
+    equal formData.provider, "mailchimp"
+    equal formData.data.remote_id, "2"
+    equal formData.data.remote_name, "my other cool list"
+
+    QUnit.start()
+
+  @modal.$modal.find("#contact_list_provider").val("mailchimp").change()
 
 asyncTest "selecting \"I'm ready\" redirects to the correct URL to begin the oauth handshake", ->
   expect(1)
