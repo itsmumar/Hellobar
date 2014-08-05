@@ -107,6 +107,12 @@ class @ContactListModal extends Modal
     value = $(select).val()
     label = $(select).find("option:selected").text()
 
+    if value == "0" # user selected "in Hello Bar only"
+      @blocks.instructions.hide()
+      @blocks.nevermind.hide()
+      @blocks.remoteListSelect.hide()
+      return
+
     $.get "/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
       if data # an identity was found for the selected provider
         @blocks.instructions.hide()

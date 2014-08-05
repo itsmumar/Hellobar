@@ -29,6 +29,16 @@ asyncTest "selecting a provider with no stored identities renders the provider i
 
   @modal.$modal.find("#contact_list_provider").val("aweber").change()
 
+asyncTest "selecting \"in hello bar only\" does not render instructions", ->
+  expect(1)
+
+  @modal.$modal.on "ajax-complete", =>
+    @modal.$modal.find("#contact_list_provider").val("0").change()
+    ok @modal.blocks.instructions.is(":hidden"), "Provider instructions were rendered"
+    QUnit.start()
+
+  @modal.$modal.find("#contact_list_provider").val("aweber").change()
+
 asyncTest "selecting a provider with a stored identity does not render the provider instructions", ->
   expect(1)
 
