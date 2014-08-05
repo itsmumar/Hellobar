@@ -58,9 +58,9 @@ module Hello
       end
 
       def get_factory_emails
-        [ { created_at: Time.now-1.day, email: 'test1@hellobar.com', name: 'Hellobar Test'},
-          { created_at: Time.now-2.days, email: 'test2@hellobar.com', name: 'Hellobar Test2'},
-          { created_at: Time.now-2.days, email: 'test3@hellobar.com', name: 'Hellobar Test3'} ]
+        [ { created_at: (Time.now-1.day).to_i, email: 'test1@hellobar.com', name: 'Hellobar Test'},
+          { created_at: (Time.now-2.days).to_i, email: 'test2@hellobar.com', name: 'Hellobar Test2'},
+          { created_at: (Time.now-5.days).to_i, email: 'test3@hellobar.com', name: 'Hellobar Test3'} ]
       end
 
       def num_emails(goal_id)
