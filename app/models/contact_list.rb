@@ -102,7 +102,7 @@ class ContactList < ActiveRecord::Base
   end
 
   def set_identity
-    self.identity = site.identities.where(:provider => provider).first if provider_set?
+    self.identity = provider_set? ? site.identities.where(:provider => provider).first : nil
   end
 
   protected

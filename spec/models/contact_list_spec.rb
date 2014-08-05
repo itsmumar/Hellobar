@@ -44,6 +44,14 @@ describe ContactList do
       list.should_not be_valid
       list.errors.messages[:provider].should include("credentials have not been set yet")
     end
+
+    it "should clear the identity if provider is \"0\"" do
+      list = contact_lists(:zombo)
+      list.identity.should_not be_blank
+
+      list.update_attributes(:provider => "0")
+      list.identity.should be_blank
+    end
   end
 
   it "should run email integrable sync correctly" do
