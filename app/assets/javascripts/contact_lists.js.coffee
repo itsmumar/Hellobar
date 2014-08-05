@@ -1,35 +1,40 @@
 $ ->
   siteID = location.pathname.match(/sites\/(\d+)/)[1]
+  contactListID = (location.pathname.match(/contact_lists\/(\d+)/) || [])[1]
+
+  baseOptions =
+    id: contactListID
+    siteID: siteID
+    success: (data) ->
+      window.location = "/sites/#{siteID}/contact_lists/#{data.id}"
 
   $("button#new-contact-list").click (e) ->
     options =
-      siteID: siteID
       saveURL: "/sites/#{siteID}/contact_lists.json"
       saveMethod: "POST"
-      success: (data) ->
-        window.location = "/sites/#{siteID}/contact_lists/#{data.id}"
 
-    new ContactListModal(options).open()
+    new ContactListModal($.extend(baseOptions, options)).open()
 
   $("button#edit-contact-list").click (e) ->
-    id = $(e.target).data("contact-list-id")
-
     options =
-      siteID: siteID
-      loadURL: "/sites/#{siteID}/contact_lists/#{id}.json"
-      saveURL: "/sites/#{siteID}/contact_lists/#{id}.json"
+      loadURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
+      saveURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
       saveMethod: "PUT"
-      success: (data) ->
-        window.location = "/sites/#{siteID}/contact_lists/#{id}"
 
-    new ContactListModal(options).open()
+    window.foo = $.extend(baseOptions, options)
+
+    new ContactListModal($.extend(baseOptions, options)).open()
 
   if window.location.search.match(/inflight_contact_list\=true/)
-    options =
-      siteID: siteID
-      loadURL: "/sites/#{siteID}/contact_lists/inflight.json"
-      saveMethod: "POST"
-      success: (data) ->
-        window.location = "/sites/#{siteID}/contact_lists/#{data.id}"
+    if contactListID
+      options =
+        saveURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
+        saveMethod: "PUT"
+    else
+      options =
+        saveURL: "/sites/#{siteID}/contact_lists.json"
+        saveMethod: "POST"
 
-    new ContactListModal(options).open()
+    options["loadURL"] = "/sites/#{siteID}/contact_lists/inflight.json"
+
+    new ContactListModal($.extend(baseOptions, options)).open()

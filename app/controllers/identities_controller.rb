@@ -28,7 +28,13 @@ class IdentitiesController < ApplicationController
       flash[:error] = "There was a problem connecting your #{identity.provider_config[:name]} account. Please try again later."
     end
 
-    redirect_to site_contact_lists_path(@site, :inflight_contact_list => true)
+    contact_list_id = session["inflight_contact_list_params"]["id"]
+
+    if contact_list_id.blank?
+      redirect_to site_contact_lists_path(@site, :inflight_contact_list => true)
+    else
+      redirect_to site_contact_list_path(@site, contact_list_id, :inflight_contact_list => true)
+    end
   end
 
   private

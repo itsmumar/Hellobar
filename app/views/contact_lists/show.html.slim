@@ -6,7 +6,7 @@ hr
 h2= @contact_list.name
 
 = button_to "Export CSV", site_contact_list_path(@site, @contact_list, :format => :csv), :method => :get
-button#edit-contact-list data-contact-list-id="#{@contact_list.id}" Edit
+button#edit-contact-list Edit
 
 - if @subscribers.any?
   table
