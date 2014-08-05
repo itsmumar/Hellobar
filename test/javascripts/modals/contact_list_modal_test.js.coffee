@@ -20,6 +20,9 @@ module "ContactListModal.open",
 test "inserts the modal html", ->
   includes find(@modal.$modal).text(), "sync with an email service", "Modal HTML was not rendered"
 
+test "header is \"New Contact List\" when creating a new list", ->
+  includes find(@modal.$modal).text(), "New Contact List", "\"New Contact List\" not found in modal"
+
 asyncTest "selecting a provider with no stored identities renders the provider instructions", ->
   expect(1)
 
@@ -102,6 +105,7 @@ asyncTest "selecting \"I'll do this later\" sets the provider select back to 0 a
 module "ContactListModal.open for edit",
   setup: ->
     @modal = new ContactListModal(
+      id: 1
       siteID: 123
       window: {location: ""}
       loadURL: "/sites/123/contact_lists/1.json"
@@ -117,6 +121,9 @@ module "ContactListModal.open for edit",
     @modal.$modal.unbind("ajax-complete")
     @modal.$modal.unbind("ajax-stop")
     @modal.close()
+
+test "header is \"Edit Contact List\" when editing", ->
+  includes find(@modal.$modal).text(), "Edit Contact List", "\"Edit Contact List\" not found in modal"
 
 asyncTest "populates the name of the contact list in the form", ->
   expect(1)

@@ -23,7 +23,7 @@ class @ContactListModal extends Modal
       nevermind: Handlebars.compile($("#contact-list-modal-provider-instructions-nevermind-template").html())
       remoteListSelect: Handlebars.compile($("#contact-list-modal-remote-list-select-template").html())
 
-    @$modal = $(@templates.main())
+    @$modal = $(@templates.main({header: if @options.id then "Edit Contact List" else "New Contact List"}))
     @$modal.appendTo($("body"))
 
   _initializeBlocks: ->
