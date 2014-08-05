@@ -3,7 +3,7 @@ class Identity < ActiveRecord::Base
 
   belongs_to :site
 
-  has_many :contact_lists, dependent: :destroy
+  has_many :contact_lists
 
   # credentials and extra are populated by the third party service at the end of the OAuth flow
   serialize :credentials, JSON
