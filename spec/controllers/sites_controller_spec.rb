@@ -8,6 +8,35 @@ describe SitesController do
   end
 
   describe "POST create" do
+    it "creates a new temporary user and logs them in if not currently logged in" do
+      mock_storage = double 'asset_storage'
+      mock_storage.should_receive :create_or_update_file_with_contents
+      Hello::AssetStorage.stub new: mock_storage
+
+      lambda {
+        post :create, :site => { url: 'temporary-site.com' }
+      }.should change(User, :count).by(1)
+
+      temp_user = User.last
+      temp_user.status.should == User::TEMPORARY_STATUS
+      controller.current_user.should == temp_user
+    end
+
+    it "allows a non-logged-in user to create a new site and sets them as the owner" do
+      temp_user = User.new
+      User.stub generate_temporary_user: temp_user
+
+      mock_storage = double 'asset_storage'
+      mock_storage.should_receive :create_or_update_file_with_contents
+      Hello::AssetStorage.stub new: mock_storage
+
+      lambda {
+        post :create, :site => { url: 'temporary-site.com' }
+      }.should change(Site, :count).by(1)
+
+      temp_user.sites.should include(Site.last)
+    end
+
     it "allows a logged-in user to create a new site and sets him as the owner" do
       stub_current_user(@user)
 

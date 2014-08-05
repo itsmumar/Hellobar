@@ -1,10 +1,11 @@
 class SitesController < ApplicationController
   include SitesHelper
 
-  before_filter :authenticate_user!
-  before_filter :load_site, :only => [:show, :edit, :update, :destroy, :preview_script]
+  before_action :generate_temporary_logged_in_user, only: :create
+  before_action :authenticate_user!
+  before_action :load_site, :only => [:show, :edit, :update, :destroy, :preview_script]
 
-  skip_before_filter :verify_authenticity_token, :only => :preview_script
+  skip_before_action :verify_authenticity_token, :only => :preview_script
 
   layout :determine_layout
 
@@ -68,5 +69,13 @@ class SitesController < ApplicationController
 
   def determine_layout
     params[:action] == "preview_script" ? false : "application"
+  end
+
+  def generate_temporary_logged_in_user
+    unless current_user
+      @user = User.generate_temporary_user
+
+      sign_in @user
+    end
   end
 end
