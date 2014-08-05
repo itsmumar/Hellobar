@@ -8,6 +8,10 @@ def site_rule_path(*args)
   '/'
 end
 
+def site_rules_path(*args)
+  '/'
+end
+
 include ContactListsHelper
 
 Teaspoon.configure do |config|

@@ -163,9 +163,12 @@ class @RuleModal extends Modal
 
           content = ''
 
-          for key in Object.keys(xhr.responseJSON)
-            content += "#{key} #{xhr.responseJSON[key].join()}"
-            content += "<br />"
+          if xhr.responseJSON
+            for key in Object.keys(xhr.responseJSON)
+              content += "#{key} #{xhr.responseJSON[key].join()}"
+              content += "<br />"
+          else
+            content = error
 
           modal._renderAlert(content)
 

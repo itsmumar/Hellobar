@@ -3,6 +3,7 @@
   @site = Site.first
   @site_element = SiteElement.first
   @rules = @site.rules.all
+  @rules << Rule.new(id: 0)
 %>
 
 <%= render template: "layouts/ember" %>

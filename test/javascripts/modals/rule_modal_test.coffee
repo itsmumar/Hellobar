@@ -127,6 +127,7 @@ test 'RuleModal._renderValue($condition)', (assert) ->
   equal $condition.find('.end_date').prop('disabled'), true, 'it disables the end_date value when the segment is UrlCondition'
 
   $condition.find('select.condition-segment').val('DateCondition')
+  $condition.find('select.condition-operand').val('is_before')
   modal._renderValue($condition)
   equal $condition.find('.country').prop('disabled'), true, 'it disables the country value when the segment is DateCondition'
   equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is DateCondition'

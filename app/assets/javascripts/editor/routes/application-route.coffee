@@ -34,6 +34,9 @@ HelloBar.ApplicationRoute = Ember.Route.extend
               return rule unless rule.id == ruleData.id
               return ruleData
           else
+            $form.find('.condition').remove() # remove any conditions
+            $form.find('.form-control').val(null) # clear Rule Modal form values
+
             rules = route.controller.get('model.site.rules').map (rule) -> rule
             rules.push(ruleData)
             rules

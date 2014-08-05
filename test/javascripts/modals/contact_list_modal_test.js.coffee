@@ -15,6 +15,7 @@ module "ContactListModal.open",
 
   teardown: ->
     @modal.$modal.unbind("ajax-complete")
+    @modal.close()
 
 test "inserts the modal html", ->
   includes find(@modal.$modal).text(), "sync with an email service", "Modal HTML was not rendered"
