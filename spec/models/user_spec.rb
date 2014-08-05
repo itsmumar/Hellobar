@@ -18,3 +18,13 @@ describe User, 'as a valid object' do
     user.errors.messages[:email].should include('has already been taken')
   end
 end
+
+describe User, '.generate_temporary_user' do
+  it 'creates a user with a random email and password' do
+    expect {
+      User.generate_temporary_user
+    }.to change(User, :count).by(1)
+
+    User.last.status.should == User::TEMPORARY_STATUS
+  end
+end

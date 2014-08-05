@@ -5,7 +5,24 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
   delegate :url_helpers, to: "Rails.application.routes"
 
-  validate :uniqueness_of_email
+  validate :email_does_not_exist_in_wordpress
+  validates :email, uniqueness: true
+
+  ACTIVE_STATUS = 'active'
+  TEMPORARY_STATUS = 'temporary'
+
+  # returns a user with a random email and password
+  def self.generate_temporary_user
+    timestamp = Time.now.to_i
+
+    new_user = User.create email: "hello-#{timestamp}-#{rand(timestamp)}@hellobar.com", password: Digest::SHA1.hexdigest("hello-#{timestamp}-me"), status: TEMPORARY_STATUS
+
+    until new_user.valid?
+      generate_temporary_user
+    end
+
+    new_user
+  end
 
   def send_devise_notification(notification, *args)
     host = ActionMailer::Base.default_url_options[:host]
@@ -26,12 +43,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-  def uniqueness_of_email
-    email_does_not_exist_in_wordpress
-
-    errors.add(:email, 'has already been taken') if User.exists?(email: email)
-  end
 
   def email_does_not_exist_in_wordpress
     errors.add(:email, "has already been taken") if Hello::WordpressUser.email_exists?(email)
