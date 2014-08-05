@@ -52,8 +52,8 @@ class @ContactListModal extends Modal
 
   _bindOauthButton: (object) ->
     object.find("a.start-oauth").click (e) =>
-      provider = @$modal.find("#contact_list_provider").val()
-      @options.window.location = "/sites/#{@options.siteID}/identities/new/?provider=#{provider}"
+      params = $.param({contact_list: @_getFormData()})
+      @options.window.location = "/sites/#{@options.siteID}/identities/new/?#{params}"
 
   _bindSubmit: (object) ->
     object.find("a.submit").click (e) =>

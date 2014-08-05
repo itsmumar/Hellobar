@@ -2,10 +2,8 @@ class IdentitiesController < ApplicationController
   before_filter :load_site
 
   def new
-    # TODO: store any unpersisted contact list attributes so that they can be picked up after oauth
-    # anything sent to the oauth path in query params will be present in the callback in env["omniauth.params"]
-
-    redirect_to "/auth/#{params[:provider]}/?site_id=#{@site.id}"
+    session[:inflight_contact_list_params] = params[:contact_list]
+    redirect_to "/auth/#{params[:contact_list][:provider]}/?site_id=#{@site.id}"
   end
 
   def show
@@ -30,8 +28,7 @@ class IdentitiesController < ApplicationController
       flash[:error] = "There was a problem connecting your #{identity.provider_config[:name]} account. Please try again later."
     end
 
-    # TODO: how to redirect here?
-    redirect_to site_contact_lists_path(@site)
+    redirect_to site_contact_lists_path(@site, :inflight_contact_list => true)
   end
 
   private

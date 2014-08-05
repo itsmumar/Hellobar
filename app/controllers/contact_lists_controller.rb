@@ -27,6 +27,10 @@ class ContactListsController < ApplicationController
     render :json => @contact_list
   end
 
+  def inflight
+    render :json => session[:inflight_contact_list_params]
+  end
+
   private
 
   def contact_list_params

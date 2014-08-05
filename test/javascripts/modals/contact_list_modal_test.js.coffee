@@ -65,11 +65,14 @@ asyncTest "form data is serialized correctly", ->
   @modal.$modal.find("#contact_list_provider").val("mailchimp").change()
 
 asyncTest "selecting \"I'm ready\" redirects to the correct URL to begin the oauth handshake", ->
-  expect(1)
+  expect(2)
 
   @modal.$modal.on "ajax-complete", =>
     @modal.$modal.find(".start-oauth").click()
-    includes @modal.options.window.location, "/sites/123/identities/new/?provider=aweber"
+
+    includes @modal.options.window.location, "/sites/123/identities/new"
+    includes @modal.options.window.location, "contact_list%5Bprovider%5D=aweber"
+
     QUnit.start()
 
   @modal.$modal.find("#contact_list_provider").val("aweber").change()
