@@ -44,8 +44,8 @@ HelloBar.TargetingController = Ember.Controller.extend
   changeTargeting: (->
     if @get('content.whenSelection.route')
       @set('routeForwarding', @get('content.whenSelection.route'))
-      @transitionToRoute(@get('content.whenSelection.route'))
+      @replaceRoute(@get('content.whenSelection.route'))
     else 
       @set('routeForwarding', false)
-      @transitionToRoute('targeting')
+      @replaceRoute('targeting')
   ).observes('content.whenSelection').on('init')

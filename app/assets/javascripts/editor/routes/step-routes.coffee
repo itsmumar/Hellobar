@@ -19,7 +19,7 @@ HelloBar.StepRoute = Ember.Route.extend
       prevRoute    : controller.prevStep
       nextRoute    : controller.nextStep
 
-    @transitionTo(controller.routeForwarding) unless !controller.routeForwarding
+    @replaceWith(controller.routeForwarding) unless !controller.routeForwarding
 
 
 #-----------  Setup Step Routes  -----------#

@@ -17,7 +17,7 @@ HelloBar.StyleController = Ember.Controller.extend
 
     changeStyle: ->
       @set('routeForwarding', false)
-      @transitionToRoute('style')
+      @replaceRoute('style')
       false
 
 HelloBar.StyleBarController = HelloBar.StyleController.extend()
