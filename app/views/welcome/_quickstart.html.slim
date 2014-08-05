@@ -1,3 +1,4 @@
 .quickstart-wrapper
-  input type="url" placeholder="Your website URL"
-  button type="submit" Create Your First Bar
+  = form_tag sites_path do
+    input type="url" name="site[url]" placeholder="Your website URL"
+    button type="submit" Create Your First Bar
