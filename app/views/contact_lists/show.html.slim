@@ -5,6 +5,8 @@ hr
 
 h2= @contact_list.name
 
+p= contact_list_sync_details(@contact_list)
+
 = button_to "Export CSV", site_contact_list_path(@site, @contact_list, :format => :csv), :method => :get
 button#edit-contact-list Edit
 

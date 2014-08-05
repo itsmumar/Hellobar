@@ -3,4 +3,13 @@ module ContactListsHelper
     providers = Hellobar::Settings[:identity_providers].values.select{|v| v[:type] == :email && !v[:requires_embed_code]}
     [["In Hello Bar only", 0]] + providers.map{|v| [v[:name], v[:key]]}
   end
+
+  def contact_list_sync_details(contact_list)
+    if contact_list.identity && contact_list.data["remote_name"]
+      provider = Hellobar::Settings[:identity_providers][contact_list.identity.provider.to_sym][:name]
+      "Syncing contacts with #{provider} list \"#{contact_list.data["remote_name"]}\""
+    else
+      "Storing contacts in Hello Bar only"
+    end
+  end
 end
