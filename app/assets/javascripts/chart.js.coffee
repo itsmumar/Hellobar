@@ -12,8 +12,11 @@ class @Chart
     # ----- FIXTURES (remove when live) -----
     unless @url
       setTimeout ( =>
+        if Math.random() >= 0.1
+          @_renderData(@_fixtureData())
+        else        
+          @_failedAttempt()
         @$el.removeClass('loading')
-        @_renderData(@_fixtureData())
       ), 2000
       return false
     # ----- END FIXTURES -----
@@ -83,7 +86,7 @@ class @Chart
         showFirstLabel: false
       ]
 
-  _failedAttempt: (data) ->
+  _failedAttempt: ->
     @$el.addClass('failed')
 
   # ----- FIXTURES (remove when live) -----
