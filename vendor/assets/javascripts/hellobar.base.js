@@ -331,7 +331,7 @@ var _HB = {
   {
     if ( email )
     {
-      var params = ["g="+HB.gi, "e="+encodeURIComponent(email)];
+      var params = ["g="+HB.cli, "e="+encodeURIComponent(email)];
       if ( name )
         params.push("n="+encodeURIComponent(name));
 
@@ -877,7 +877,7 @@ var _HB = {
         if ( goal.bars && goal.bars.length > 0 && goal.bars[0])
         {
           HB.currentGoal = goal;
-          HB.gi = goal.data.id;
+          HB.cli = goal.contact_list_id;
           // Check to see if the user is eligible for any bars
           var eligibleBars = [];
           for(var j=0;j<goal.bars.length;j++)
@@ -913,7 +913,7 @@ var _HB = {
           {
             // No match
             HB.currentGoal = null;
-            HB.gi = null;
+            HB.cli = null;
           }
         }
       }
