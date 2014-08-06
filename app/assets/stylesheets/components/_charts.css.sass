@@ -1,6 +1,6 @@
 /*-----------  Overview Blocks  -----------*/
 
-.overviews-wrapper
+.chart-wrapper
   margin: 1em 0
   @include justify-content(space-between)
   @include align-content(stretch)
@@ -8,7 +8,7 @@
   @include flex-flow(row wrap)
   @include display(flex)
 
-  .overview-block
+  .chart-block
     width: 19%
     cursor: pointer
     border: 2px solid $grayLightest
@@ -33,7 +33,7 @@
         text-align: center
         @include inline-block()
 
-    .overview-content
+    .chart-overview
       width: 66%
       color: $gray
       font-size: 2em
@@ -54,10 +54,6 @@
         text-align: center
         text-decoration: underline
         @include inline-block()
-
-    &:hover,
-    &.activated
-      box-shadow: $shadowSubtle
 
     /*-----------  Block Types  -----------*/
     
@@ -116,12 +112,15 @@
       &.activated
         border-color: $purple   
 
-    &.disabled
+    &.activated
+      cursor: default
+
+    &:not([data-chart])
+      cursor: default
       border-style: dashed
 
       &:hover,
       &.activated
-        box-shadow: none
 
         &.views
           border-color: lighten($red, 33%)
@@ -137,3 +136,116 @@
 
         &.feedback
           border-color: lighten($purple, 33%)
+
+/*-----------  Overview Blocks  -----------*/
+
+#amchart
+  width: 100%
+  height: 20em
+  position: relative
+  border: 2px solid $grayLightest
+  @include transition(0.5s)
+
+  &:before
+    top: 0
+    left: 0
+    opacity: 0
+    width: 100%
+    height: 100%
+    z-index: 75
+    content: ''
+    position: absolute
+    pointer-events: none
+    background-color: $white
+    @include transition(0.5s)
+
+  &:after
+    top: 45%
+    left: 47%
+    opacity: 0
+    content: 'I'
+    z-index: 100
+    font-size: 2.5em
+    position: absolute
+    pointer-events: none
+    font-family: 'hellobar'
+    @include transition(0.5s)
+
+  > div
+    z-index: 50
+
+    a[href="http://www.amcharts.com/javascript-charts/"]
+      display: none !important
+
+    i[class^='icon-']
+      top: 0px
+      position: relative
+      margin-right: 0.67em
+
+      &:before
+        font-size: 1.25em
+        vertical-align: sub
+
+    i.icon-views
+      top: 2px
+
+      &:before
+        font-size: 1.5em
+
+  &.views:after
+    color: lighten($red, 25%)
+
+  &.emails:after
+    color: lighten($green, 25%)
+
+  &.clicks:after
+    color: lighten($yellow, 25%)
+
+  &.social:after
+    color: lighten($blue, 25%)
+
+  &.feedback:after
+    color: lighten($purple, 25%)
+
+  /*-----------  Loading State  -----------*/
+  
+  &.loading
+
+    &:before
+      opacity: 1
+
+    &:after
+      opacity: 1
+      @include animation(spin 2s infinite ease-in-out)
+
+    &.views
+      border-color: lighten($red, 42%)
+
+    &.emails
+      border-color: lighten($green, 36%)
+
+    &.clicks
+      border-color: lighten($yellow, 40%)
+
+    &.social
+      border-color: lighten($blue, 42%)
+
+    &.feedback
+      border-color: lighten($purple, 42%)
+
+  /*-----------  Failed State  -----------*/
+  
+  &.failed
+
+    &:before
+      opacity: 0.85
+
+    &:after
+      left: 0
+      opacity: 1
+      color: $red
+      width: 100%
+      font-size: 1.25em
+      text-align: center
+      content: '...error loading data...'
+      font-family: "Open Sans", sans-serif

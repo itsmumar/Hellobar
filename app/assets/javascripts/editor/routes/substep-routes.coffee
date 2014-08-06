@@ -13,7 +13,7 @@ HelloBar.SettingsStepRoute = Ember.Route.extend
     parentRoute = @routeName.split('.')[0]
     @controllerFor(parentRoute).set('routeForwarding', @routeName)
 
-  # Called whenever the application leaves this route. Used  here to 
+  # Called whenever the application leaves this route. Used here to 
   # deconsturct some things when the app transtitions to a parent step
   # due to the use of the back button
 

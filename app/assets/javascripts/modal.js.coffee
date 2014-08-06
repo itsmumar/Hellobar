@@ -1,4 +1,5 @@
 class @Modal
+  
   # $modal: jQuery selector of the .modal-wrapper
   constructor: (@$modal) ->
     @_bindCloseEvents(@close)

@@ -5,6 +5,14 @@
 @mixin antialiased($type: antialiased)
   @include prefixer(font-smoothing, $type, webkit moz ms o spec)
 
+/*-----------  Animations  -----------*/
+
+@include keyframes(spin)
+  from
+    @include transform(rotate(0deg))
+  to 
+    @include transform(rotate(-360deg))
+
 /*-----------  Custom Icon Font  -----------*/
 
 @font-face

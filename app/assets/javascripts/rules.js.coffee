@@ -1,4 +1,5 @@
 $ ->
+  
   $('body').on 'click', '.edit-rule', (event) ->
     ruleId = $(this).attr('data-rule-id')
     $form = $("form#rule-#{ruleId}")
