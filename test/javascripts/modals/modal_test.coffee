@@ -27,6 +27,7 @@ module 'Modal interactions'
 test 'Modal binds to escape keypress closes the modal', ->
   $dom = $('<div class="show-modal"></div>')
   modal = new Modal($dom)
+  modal.open()
 
   escapePress = $.Event('keyup')
   escapePress.keyCode = 27
@@ -37,6 +38,7 @@ test 'Modal binds to escape keypress closes the modal', ->
 test 'Modal binds to the cancel anchor to close the modal', ->
   $dom = $('<div class="show-modal"><a class="cancel">DIE</a></div>')
   modal = new Modal($dom)
+  modal.open()
 
   $dom.find('a.cancel').click()
 
@@ -45,6 +47,7 @@ test 'Modal binds to the cancel anchor to close the modal', ->
 test 'Modal closing based on where the user clicks', ->
   $dom = $('<div class="modal-wrapper show-modal"><div class="modal-block"></div></div>')
   modal = new Modal($dom)
+  modal.open()
 
   $dom.find('.modal-block').click()
   equal $dom.hasClass('show-modal'), true, 'keeps the modal open like a BOSS'

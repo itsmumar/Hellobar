@@ -2,10 +2,10 @@ class @Modal
   
   # $modal: jQuery selector of the .modal-wrapper
   constructor: (@$modal) ->
-    @_bindCloseEvents(@close)
 
   # renders the modal via CSS
   open: ->
+    @_bindCloseEvents(@close)
     @$modal.addClass('show-modal')
 
   # closes the modal via CSS and disables all event bindings
