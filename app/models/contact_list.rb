@@ -25,6 +25,8 @@ class ContactList < ActiveRecord::Base
   belongs_to :site
   belongs_to :identity
 
+  has_many :site_elements
+
   serialize :data, Hash
 
   before_validation :set_identity

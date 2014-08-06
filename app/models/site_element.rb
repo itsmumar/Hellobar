@@ -13,6 +13,7 @@ class SiteElement < ActiveRecord::Base
   }
 
   belongs_to :rule
+  belongs_to :contact_list
 
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES }
   validates :rule, association_exists: true
