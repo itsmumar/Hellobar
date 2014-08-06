@@ -1,5 +1,5 @@
 class SiteElementSerializer < ActiveModel::Serializer
-  attributes :id, :site, :rule_id, :rule,
+  attributes :id, :site, :rule_id, :rule, :contact_list_id,
 
     # settings
     :element_subtype, :settings,
@@ -30,6 +30,12 @@ class SiteElementSerializer < ActiveModel::Serializer
           :name => rule.name,
           :description => rule.to_sentence,
           :conditions => rule.conditions.map{|c| ConditionSerializer.new(c) }
+        }
+      end,
+      :contact_lists => object.site.contact_lists.map do |list|
+        {
+          :id => list.id,
+          :name => list.name
         }
       end
     }

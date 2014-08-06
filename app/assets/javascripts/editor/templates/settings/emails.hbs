@@ -7,3 +7,14 @@
     optionLabelPath='content.label'
   }}
 </div>
+
+<label>Which contact list would you like your emails stored in?</label>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=contactListOptions
+    value=model.contact_list_id
+    optionValuePath='content.id'
+    optionLabelPath='content.name'
+    prompt="Please select a list"
+  }}
+</div>
