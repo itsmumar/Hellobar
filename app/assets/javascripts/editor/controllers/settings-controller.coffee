@@ -27,5 +27,5 @@ HelloBar.SettingsController = Ember.Controller.extend
 
     changeSettings: ->
       @set('routeForwarding', false)
-      @replaceRoute('settings')
+      @transitionToRoute('settings')
       false

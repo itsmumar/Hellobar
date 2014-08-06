@@ -1,4 +1,5 @@
 HelloBar.SettingsRoute = HelloBar.StepRoute.extend
+
   setupController: (controller, model) ->
     if /^social/.test model.element_subtype
       controller.routeForwarding = "settings.social"
