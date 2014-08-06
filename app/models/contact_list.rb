@@ -108,6 +108,8 @@ class ContactList < ActiveRecord::Base
   protected
 
   def subscribe_all_emails_to_list!
+    return unless syncable?
+
     timestamp = last_synced_at || Time.at(0) # sync from last sync, or for all time
     Rails.logger.info "Syncing emails later than #{timestamp}"
 
