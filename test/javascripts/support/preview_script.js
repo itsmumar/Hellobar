@@ -881,7 +881,7 @@ var _HB = {
         if ( goal.bars && goal.bars.length > 0 && goal.bars[0])
         {
           HB.currentGoal = goal;
-          HB.cli = contact_list_id;
+          HB.cli = goal.contact_list_id;
           // Check to see if the user is eligible for any bars
           var eligibleBars = [];
           for(var j=0;j<goal.bars.length;j++)
