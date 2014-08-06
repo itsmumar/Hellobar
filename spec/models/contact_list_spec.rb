@@ -57,6 +57,7 @@ describe ContactList do
   it "should run email integrable sync correctly" do
     contact_list.save!
     contact_list.last_synced_at.should be_nil
+    contact_list.stub(:syncable? => true)
 
     @mock_service_provider.should_receive(:batch_subscribe)
 
