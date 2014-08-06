@@ -48,5 +48,5 @@
         = content_tag 'a', 'Upgrade to Pro'
         - if impersonated_user
           = active_link_to "Stop Impersonation", admin_unimpersonate_user_path, :method => :delete
-        - else          
+        - else
           = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete

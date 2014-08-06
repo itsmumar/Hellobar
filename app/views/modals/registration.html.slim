@@ -1,0 +1,26 @@
+.modal-wrapper
+  .modal-block
+    header
+      h5 Getting close!
+
+    .alert.notice
+      p Fill out the form below to create your account.
+
+    form accept-charset="UTF-8" action="/user" method="POST"
+      div style="display:none"
+        input name="utf8" type="hidden" value="✓"
+        input name="user[status]" type="hidden" value="active"
+        input name="_method" type="hidden" value="patch"
+        input name="authenticity_token" type="hidden" value=form_authenticity_token
+
+      label for="user[email]" Email:
+      input name="user[email]" placeholder="name@email.com" type="email"
+
+      label for="user[password]" Password:
+      input name="user[password]" type="password"
+
+      label for="user[password_confirmation]" Password confirmation:
+      input name="user[password_confirmation]" type="password"
+
+      button type="submit"
+        | Create My Account

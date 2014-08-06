@@ -13,7 +13,6 @@ class UserController < ApplicationController
     end
   end
 
-
   private
 
   def load_user
@@ -26,6 +25,6 @@ class UserController < ApplicationController
       params[:user].delete(:password_confirmation)
     end
 
-    params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
+    params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation, :status)
   end
 end

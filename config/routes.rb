@@ -17,6 +17,11 @@ Rails.application.routes.draw do
     get "contact_lists/inflight", :to => "contact_lists#inflight", :as => :inflight_contact_list
     resources :contact_lists
   end
+
+  namespace :modals do
+    get :registration
+  end
+
   get "sites/:id/preview_script", :to => "sites#preview_script", :as => :preview_script
 
   get "/auth/:provider/callback", :to => "identities#create"
@@ -46,7 +51,7 @@ Rails.application.routes.draw do
   post "/visitor/:visitor_id/did/:event" => Hello::Tracking.create_events_endpoint()
   post "/user/:user_id/has/:prop_name/of/:prop_value" => Hello::Tracking.create_props_endpoint()
   post "/visitor/:visitor_id/has/:prop_name/of/:prop_value" => Hello::Tracking.create_props_endpoint()
-  
+
   get '/use-cases' => 'pages#use_cases'
   get '/terms-of-use' => 'pages#terms_of_use'
   get '/privacy-policy' => 'pages#privacy_policy'
