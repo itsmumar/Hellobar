@@ -7,17 +7,17 @@ module 'editor settings',
 test 'it should launch ember immediately', ->
   equal find(".editor-wrapper.ember-view").length, 1, "Ember view should be present"
   equal find("ul.step-links").length, 1, "Side links were not present"
-  equal find("ul.action-links li:last-child .icon-close").length, 1, "Logout link (x) wasn't present"
+  equal find("ul.action-links .icon-close").length, 1, "Logout link (x) wasn't present"
 
 test 'it should be on settings page by default', ->
   equal find(".step-title").text(), "Settings", "Settings tab was not the launch tab"
 
-test 'it should be able to change goal', ->  
+test 'it should be able to change goal', ->
   equal find(".step-title").text(), "Settings", "Settings tab was not the launch tab"
   click(find('.change-selection')).andThen =>
     equal find(".step-link-block").length, 3, "Should be 3 goal types"
 
-test 'it should be able to choose an email goal', ->  
+test 'it should be able to choose an email goal', ->
   click(find('.change-selection')).andThen =>
     clickOn('Collect Email', '.step-link-wrapper').andThen =>
       includes find('.substep').text(),
@@ -63,6 +63,12 @@ test 'it should be able to choose a social goal', ->
           # 4. click next
           clickOn("Next").andThen =>
             equal find(".step-title").text(), "Style", "Should have progressed"
+
+test 'a user can exit the editor when active', ->
+  equal find(".icon-close").length, 1, 'renders the editor close button'
+
+test 'it hides the exit editor button if a temporary user', ->
+  equal find(".icon-close").length, 0, 'does not render the editor close button'
 
 test 'it should be able to create a new rules', ->
   $.mockjax

@@ -10,7 +10,6 @@ html
     = stylesheet_link_tag    "editor", :media => "all"
     = javascript_include_tag "editor/application"
 
-
     = csrf_meta_tags
 
   body
@@ -18,10 +17,8 @@ html
 
     javascript:
       HB_DNT = 1
+      var currentUser = #{{UserSerializer.new(current_user).to_json}};
 
     = yield
 
     = render 'shared/alert_template'
-
-javascript:
-  var currentUser = #{{UserSerializer.new(current_user).to_json}};
