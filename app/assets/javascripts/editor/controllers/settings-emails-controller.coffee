@@ -5,11 +5,11 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
     {value: 1, label: 'Names and email addresses'}
   ]
 
-  setContactListOptions: (->
+  contactListOptions: (->
     lists = @get("model.site.contact_lists").slice(0)
     lists.push({id: 0, name: "New contact list..."})
-    @set("contactListOptions", lists)
-  ).observes("model.site.contact_lists")
+    lists
+  ).property("model.site.contact_lists")
 
   popNewContactListModal: (->
     if @get("model.contact_list_id") == 0
@@ -18,10 +18,9 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
         saveURL: "/sites/#{siteID}/contact_lists.json"
         saveMethod: "POST"
         success: (data, modal) =>
-          lists = @get("model.site.contact_lists")
+          lists = @get("model.site.contact_lists").slice(0)
           lists.push({id: data.id, name: data.name})
           @set("model.site.contact_lists", lists)
-          @setContactListOptions() # for some reason this is necessary
           @set("model.contact_list_id", data.id)
           modal.$modal.remove()
         close: (modal) =>
@@ -29,3 +28,30 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
 
       new ContactListModal(options).open()
   ).observes("model.contact_list_id")
+
+  showEditContactListLink: (->
+    id = @get("model.contact_list_id")
+    id && id != 0
+  ).property("model.contact_list_id")
+
+
+  actions:
+
+    popEditContactListModal: (id) ->
+      options =
+        id: id
+        siteID: window.siteID
+        loadURL: "/sites/#{siteID}/contact_lists/#{id}.json"
+        saveURL: "/sites/#{siteID}/contact_lists/#{id}.json"
+        saveMethod: "PUT"
+        success: (data, modal) =>
+          lists = @get("model.site.contact_lists").map (list) ->
+            {id: list.id, name: if list.id == id then data.name else list.name}
+          @set("model.site.contact_lists", lists)
+
+          # TODO: figure out why selected option in contact list dropdown resets here. it should stay on the selected list that was just edited
+          #       is there a better way to `set` a single item in an array?
+
+          modal.close()
+
+      new ContactListModal(options).open()

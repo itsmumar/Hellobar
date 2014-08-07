@@ -18,3 +18,9 @@
     prompt="Please select a list"
   }}
 </div>
+
+{{#if showEditContactListLink}}
+  <p>
+    <a {{action "popEditContactListModal" model.contact_list_id}}>Edit this list</a>
+  </p>
+{{/if}}
