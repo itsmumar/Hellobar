@@ -19,7 +19,8 @@ class SitesController < ApplicationController
       @site.generate_script
 
       flash[:success] = "Your site was successfully created."
-      redirect_to site_path(@site)
+
+      redirect_to next_step
     else
       flash.now[:error] = "There was a problem creating your site."
       render :action => :new
@@ -76,6 +77,15 @@ class SitesController < ApplicationController
       @user = User.generate_temporary_user
 
       sign_in @user
+    end
+  end
+
+  def next_step
+    # if coming from the root url '/', go to the editor
+    if request.referrer == root_url
+      new_site_site_element_path(@site)
+    else # Site#show
+      site_path(@site)
     end
   end
 end

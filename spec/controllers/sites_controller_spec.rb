@@ -67,6 +67,30 @@ describe SitesController do
 
       site.rules.size.should == 1
     end
+
+    it 'redirects to the editor if the user came from the root path' do
+      request.stub referrer: root_url
+
+      mock_storage = double 'asset_storage'
+      mock_storage.should_receive :create_or_update_file_with_contents
+      Hello::AssetStorage.stub new: mock_storage
+
+      post :create, :site => { url: 'temporary-site.com' }
+
+      response.should redirect_to new_site_site_element_path(Site.last)
+    end
+
+    it 'redirects to the site if the user did not come from the root path' do
+      request.stub referrer: 'NOT THE ROOT URL'
+
+      mock_storage = double 'asset_storage'
+      mock_storage.should_receive :create_or_update_file_with_contents
+      Hello::AssetStorage.stub new: mock_storage
+
+      post :create, :site => { url: 'temporary-site.com' }
+
+      response.should redirect_to site_path(Site.last)
+    end
   end
 
   describe "GET show" do
