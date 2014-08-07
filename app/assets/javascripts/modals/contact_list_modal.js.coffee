@@ -8,6 +8,7 @@ class @ContactListModal extends Modal
     super(@$modal)
 
   close: ->
+    @options.close(this) if @options.close
     @$modal.remove()
 
   open: ->

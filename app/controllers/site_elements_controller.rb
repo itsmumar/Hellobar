@@ -16,7 +16,7 @@ class SiteElementsController < ApplicationController
   def new
     @rules = @site.rules.all
     @rules << Rule.new(:id => 0)
-    @site_element = SiteElement.new(:rule => @site.rules.first)
+    @site_element = @site.site_elements.new(:rule => @site.rules.first)
 
     respond_to do |format|
       format.html

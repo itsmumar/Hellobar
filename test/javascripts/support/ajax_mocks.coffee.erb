@@ -6,12 +6,12 @@ $.mockjax
   contentType: 'text/json'
   response: (settings) ->
     <%
-      rule = Rule.new
-      rule.site = Site.new
-      site = SiteElement.new
-      site.rule = rule
+      site = Site.new
+      element = site.site_elements.new
+      rule = Rule.new(:site => site)
+      element.rule = rule
     %>
-    siteElement = <%= SiteElementSerializer.new(site).to_json %>
+    siteElement = <%= SiteElementSerializer.new(element).to_json %>
     siteElement.id = settings.urlParams.siteElementID
     siteElement.site.id = settings.urlParams.siteID
     siteElement.element_subtype = "traffic"

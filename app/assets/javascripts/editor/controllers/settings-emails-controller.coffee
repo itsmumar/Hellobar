@@ -6,7 +6,7 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   ]
 
   setContactListOptions: (->
-    lists = @get("model..site.contact_lists").slice(0)
+    lists = @get("model.site.contact_lists").slice(0)
     lists.push({id: 0, name: "New contact list..."})
     @set("contactListOptions", lists)
   ).observes("model.site.contact_lists")
@@ -18,12 +18,14 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
         saveURL: "/sites/#{siteID}/contact_lists.json"
         saveMethod: "POST"
         success: (data, modal) =>
-          lists = @get("model.contact_lists")
+          lists = @get("model.site.contact_lists")
           lists.push({id: data.id, name: data.name})
           @set("model.site.contact_lists", lists)
           @setContactListOptions() # for some reason this is necessary
           @set("model.contact_list_id", data.id)
-          modal.close()
+          modal.$modal.remove()
+        close: (modal) =>
+          @set("model.contact_list_id", null)
 
       new ContactListModal(options).open()
   ).observes("model.contact_list_id")
