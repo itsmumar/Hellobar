@@ -5,7 +5,7 @@ $ ->
   baseOptions =
     id: contactListID
     siteID: siteID
-    success: (data) ->
+    success: (data, modal) ->
       window.location = "/sites/#{siteID}/contact_lists/#{data.id}"
 
   $("button#new-contact-list").click (e) ->

@@ -77,7 +77,7 @@ class @ContactListModal extends Modal
           @_showErrors(data.errors)
           submitButton.attr("disabled", false)
         else
-          @options.success(data)
+          @options.success(data, this)
 
   _getFormData: ->
     remoteListSelect = @$modal.find("#contact_list_remote_list_id")
