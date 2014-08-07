@@ -1,5 +1,9 @@
 HelloBar.ApplicationController = Ember.Controller.extend
-  
+
+  #-----------  User  -----------#
+  currentUser: ( -> window.currentUser ).property()
+  isTemporaryUser: ( -> @get('currentUser') and @get('currentUser').status is 'temporary' ).property('currentUser')
+
   #-----------  Step Tracking  -----------#
 
   # Tracks global step tracking 
@@ -63,7 +67,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
   isMobile: false
   isFullscreen: false
   saveSubmitted: false
-  isTemporaryUser: window.currentUser && window.currentUser.status == 'temporary'
 
   actions:
     toggleFullscreen: ->

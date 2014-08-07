@@ -2,6 +2,8 @@ module 'editor settings',
   setup: ->
     @route = getModule('route:application')
     ok @route.currentModel
+    Ember.run =>
+      @route.controller.set('currentUser', {status: 'active'})
     visit 'settings'
 
 test 'it should launch ember immediately', ->
@@ -68,6 +70,8 @@ test 'a user can exit the editor when active', ->
   equal find(".icon-close").length, 1, 'renders the editor close button'
 
 test 'it hides the exit editor button if a temporary user', ->
+  Ember.run =>
+    @route.controller.set('currentUser', {status: 'temporary'})
   equal find(".icon-close").length, 0, 'does not render the editor close button'
 
 test 'it should be able to create a new rules', ->
