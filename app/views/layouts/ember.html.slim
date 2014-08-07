@@ -22,3 +22,6 @@ html
     = yield
 
     = render 'shared/alert_template'
+
+javascript:
+  var currentUser = #{{UserSerializer.new(current_user).to_json}};

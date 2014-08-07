@@ -63,6 +63,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
   isMobile: false
   isFullscreen: false
   saveSubmitted: false
+  isTemporaryUser: window.currentUser && window.currentUser.status == 'temporary'
 
   actions:
     toggleFullscreen: ->
