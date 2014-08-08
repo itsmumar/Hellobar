@@ -15,11 +15,14 @@ Ember.Test.registerHelper 'findLabeled', (app, labelText, scope="", errorMessage
   label = Ember.$(selector)
   if inputID = label.attr('for')
     Ember.$(inputID)
-  else if toggle = label.find('.toggle-switch')
+  else if (toggle = label.find('.toggle-switch')).length > 0
     toggle
   else
     bestCandidate = label.next()
-    if bestCandidate.is('input, select, textarea')
+    if bestCandidate.is('input, select, textarea, .ember-view.color-select')
       bestCandidate
     else
       bestCandidate.find('input, select, textarea')
+
+Ember.Test.registerHelper 'hbFrame', (app) ->
+  find("iframe#hellobar_container").contents()

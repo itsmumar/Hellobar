@@ -8,7 +8,7 @@ styleTab = -> find(".step-links li a[href^='#/style']")
 test "it should change to tab", ->
   visit "settings" # reset
   click(styleTab()).andThen =>
-    equal find(".step-link-block h6").text(), "Bar", "Tab did not switch to bar"
+    equal find(".step-title").text(), "Bar", "Tab did not switch to bar"
 
 test "it should offer a switch for Hello Bar branding", ->
   click(styleTab()).andThen =>
