@@ -95,13 +95,18 @@ private
   end
 
   def date_conditions(condition)
-    if condition.value.has_key?('start_date') && condition.value.has_key?('end_date')
-      "((new Date()).getTime()/1000 > #{condition.value['start_date'].to_i}) && ((new Date()).getTime()/1000 < #{condition.value['end_date'].to_i})"
-    elsif condition.value.has_key?('start_date')
-      "((new Date()).getTime()/1000 > #{condition.value['start_date'].to_i})"
-    elsif condition.value.has_key?('end_date')
-      "((new Date()).getTime()/1000 < #{condition.value['end_date'].to_i})"
+    tz = condition.value['timezone']
+    conditions = Array.new.tap do |array|
+      if start_date = condition.comparable_start_date
+        array << %{(HB.comparableDate(#{'"auto"' unless tz}) >= "#{start_date}")}
+      end
+
+      if end_date = condition.comparable_end_date
+        array << %{(HB.comparableDate(#{'"auto"' unless tz}) <= "#{end_date}")}
+      end
     end
+
+    conditions.join('&&')
   end
 
   def url_conditions(condition)

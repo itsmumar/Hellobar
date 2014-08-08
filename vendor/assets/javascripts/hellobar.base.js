@@ -1,4 +1,4 @@
-// We use a variable called _hbq which is defined as just an empty array on the
+  // We use a variable called _hbq which is defined as just an empty array on the
 // user's page in the embed script (ensuring that it is present). This allows users
 // to push function calls into the _hbq array, e.g.:
 //
@@ -1109,5 +1109,68 @@ var _HB = {
         element.style.left = Math.round(x)+"px";
       }, 5);
     })(HB.$(element));
+  },
+
+  // Returns UTC time (you must ignore the timezone attached, as it will be local)
+  utc: function() {
+    var now = new Date();
+    return new Date(now.getUTCFullYear(),
+                    now.getUTCMonth(),
+                    now.getUTCDate(),
+                    now.getUTCHours(),
+                    now.getUTCMinutes(),
+                    now.getUTCSeconds());
+  },
+
+  // Returns time at International Date Line cross (i.e. the first second it is a new day, or UTC+12 hours).
+  idl: function() {
+    return new Date(this.utc().getTime() + ((86400/2) * 1000));
+  },
+
+  // Returns current date as YYYY/MM/DD +ZZ:ZZ, which is lexicographically sortable.
+  // ZZ:ZZ refers to the offset from the International Date line, but inverted.
+  // The latest time zones (Hawaii, for example) have the smallest offset,
+  // so they are always less than the later timezones.
+  //
+  // Generally, UTC is +-0. Here, UTC is +12.00. To find a TZ's offset under these rules, add 12.
+  // Chicago would be +06:00 (outside of DST, when it is +07:00).
+  // SF is +04:00 (+05:00 in DST).
+  // Half hour time zones would be +05:30.
+  //
+  // Passing no argument leads to "Detect user timezone" mode, as does "auto".
+  // Pass an integer offset in hours otherwise, from 0 to 23.
+  comparableDate: function(targetOffset) {
+    if (typeof targetOffset === "undefined") targetOffset = "auto";
+    if (targetOffset === "auto") {
+      return this.ymd(new Date());
+    } else {
+      var idl = this.idl(),
+          time = new Date();
+
+      targetOffset *= 60; // We're working with minutes in this function
+
+      var baseOffset = time.getTimezoneOffset();
+
+      var offsetMS = (targetOffset - baseOffset) * 60000;
+
+      convertedTime = new Date(this.utc().getTime() + offsetMS);
+      
+      return this.ymd(idl) + " +" + this.zeropad(convertedTime.getHours()) + ":" + this.zeropad(convertedTime.getMinutes());
+    }
+  },
+
+  ymd: function(date) {
+    if (typeof date === "undefined") date = new Date();
+    var m = date.getMonth() + 1;
+    return date.getFullYear() + "/" + this.zeropad(m) + "/" + this.zeropad(date.getDate());
+  },
+
+  // Copied from zeropad.jquery.js
+  zeropad: function(string, length) {
+    // default to 2
+    string = string.toString();
+    if (typeof length === "undefined" && string.length == 1) length = 2;
+    length = length || string.length;
+    return string.length >= length ? string : this.zeropad("0" + string, length);
   }
 };
