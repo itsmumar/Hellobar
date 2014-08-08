@@ -15,6 +15,8 @@ Ember.Test.registerHelper 'findLabeled', (app, labelText, scope="", errorMessage
   label = Ember.$(selector)
   if inputID = label.attr('for')
     Ember.$(inputID)
+  else if toggle = label.find('.toggle-switch')
+    toggle
   else
     bestCandidate = label.next()
     if bestCandidate.is('input, select, textarea')
