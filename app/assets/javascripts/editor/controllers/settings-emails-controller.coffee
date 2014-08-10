@@ -45,12 +45,8 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
         saveURL: "/sites/#{siteID}/contact_lists/#{id}.json"
         saveMethod: "PUT"
         success: (data, modal) =>
-          lists = @get("model.site.contact_lists").map (list) ->
-            {id: list.id, name: if list.id == id then data.name else list.name}
-          @set("model.site.contact_lists", lists)
-
-          # TODO: figure out why selected option in contact list dropdown resets here. it should stay on the selected list that was just edited
-          #       is there a better way to `set` a single item in an array?
+          @get("model.site.contact_lists").forEach (list) ->
+            Ember.set(list, "name", data.name) if list.id == data.id
 
           modal.close()
 
