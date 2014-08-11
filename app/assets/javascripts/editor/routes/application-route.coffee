@@ -1,7 +1,11 @@
 HelloBar.ApplicationRoute = Ember.Route.extend
 
   model: ->
-    if window.barID
+    if localStorage["stashedEditorModel"]
+      model = JSON.parse(localStorage["stashedEditorModel"])
+      localStorage.removeItem("stashedEditorModel")
+      model
+    else if window.barID
       Ember.$.getJSON("/sites/#{window.siteID}/site_elements/#{window.barID}.json")
     else if window.elementToCopyID
       Ember.$.getJSON("/sites/#{window.siteID}/site_elements/#{window.elementToCopyID}.json")
