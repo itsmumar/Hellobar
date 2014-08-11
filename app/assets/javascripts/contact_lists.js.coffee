@@ -21,8 +21,6 @@ $ ->
       saveURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
       saveMethod: "PUT"
 
-    window.foo = $.extend(baseOptions, options)
-
     new ContactListModal($.extend(baseOptions, options)).open()
 
   if localStorage["stashedContactList"]

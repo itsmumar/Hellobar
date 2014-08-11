@@ -12,7 +12,7 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   ).property("model.site.contact_lists")
 
   popNewContactListModal: (->
-    if @get("model.contact_list_id") == 0
+    if @get("model.contact_list_id") == 0 && $(".contact-list-modal:visible").length == 0
       options =
         siteID: window.siteID
         saveURL: "/sites/#{siteID}/contact_lists.json"

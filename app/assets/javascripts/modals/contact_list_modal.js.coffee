@@ -56,9 +56,9 @@ class @ContactListModal extends Modal
     object.find("a.start-oauth").click (e) =>
       # stash the model so that it can be reloaded by the ember app
       localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
-      localStorage["stashedContactList"] = JSON.stringify(@_getFormData())
+      localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
 
-      @options.window.location = "/sites/#{@options.siteID}/identities/new"
+      @options.window.location = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
 
   _bindSubmit: (object) ->
     object.find("a.submit").click (e) =>

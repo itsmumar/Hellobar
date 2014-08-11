@@ -2,7 +2,7 @@ class IdentitiesController < ApplicationController
   before_filter :load_site
 
   def new
-    redirect_to "/auth/#{params[:contact_list][:provider]}/?site_id=#{@site.id}&redirect_to=#{request.referrer}"
+    redirect_to "/auth/#{params[:provider]}/?site_id=#{@site.id}&redirect_to=#{request.referrer}"
   end
 
   def show
