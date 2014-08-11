@@ -30,14 +30,9 @@
 
     .dropdown-wrapper
       i.icon-notification
-      /   i.icon-notification-alert
-      /   .dropdown-block
-      /     h6 Notifications
-      /     small
-      /       | (no notifications)
 
     img.user-avatar src=""
-    span.user-name Annie P.
+    span.user-name= display_name_for_user(current_user)
 
     .dropdown-wrapper
       i.icon-dropdown
