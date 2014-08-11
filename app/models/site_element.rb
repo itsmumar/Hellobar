@@ -38,4 +38,10 @@ class SiteElement < ActiveRecord::Base
     this_data = site.get_all_time_data.detect{|b| b.bar_id.to_i == self.id.to_i}
     this_data.try(:conversions) || 0
   end
+
+  def toggle_paused!
+    new_pause_state = !paused?
+
+    update_attribute :paused, new_pause_state
+  end
 end

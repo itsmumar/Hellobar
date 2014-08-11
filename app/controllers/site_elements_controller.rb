@@ -1,7 +1,7 @@
 class SiteElementsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :load_site
-  before_filter :load_site_element, :only => [:show, :edit, :update, :destroy, :pause, :unpause]
+  before_filter :load_site_element, :only => [:show, :edit, :update, :destroy, :toggle_paused]
 
   layout :determine_layout
 
@@ -57,16 +57,14 @@ class SiteElementsController < ApplicationController
     redirect_to site_site_elements_path(:site_id => @site)
   end
 
-  def pause
-    @site_element.update_attribute(:paused, true)
+  def toggle_paused
+    @site_element.toggle_paused!
     @site.generate_script
-    redirect_to site_site_elements_path(:site_id => @site)
-  end
 
-  def unpause
-    @site_element.update_attribute(:paused, false)
-    @site.generate_script
-    redirect_to site_site_elements_path(:site_id => @site)
+    respond_to do |format|
+      format.js { head :ok }
+      format.html { redirect_to site_site_elements_path(:site_id => @site) }
+    end
   end
 
   private
