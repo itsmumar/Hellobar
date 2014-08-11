@@ -13,6 +13,7 @@ class @ContactListModal extends Modal
 
   open: ->
     @_loadContactList() if @options.loadURL
+    @_populateContactList() if @options.contactList
     @_bindInteractions(@$modal)
 
     super
@@ -101,6 +102,10 @@ class @ContactListModal extends Modal
     $.get @options.loadURL, (data) =>
       @_setFormValues(data)
       @_loadRemoteLists(listData: data)
+
+  _populateContactList: ->
+    @_setFormValues(@options.contactList)
+    @_loadRemoteLists(listData: @options.contactList)
 
   _loadRemoteLists: ({listData, select}) ->
     select ||= @$modal.find("#contact_list_provider")
