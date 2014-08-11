@@ -26,15 +26,16 @@ $ ->
     new ContactListModal($.extend(baseOptions, options)).open()
 
   if window.location.search.match(/inflight_contact_list\=true/)
-    if contactListID
-      options =
-        saveURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
-        saveMethod: "PUT"
-    else
-      options =
-        saveURL: "/sites/#{siteID}/contact_lists.json"
-        saveMethod: "POST"
+    $.get "/sites/#{siteID}/contact_lists/inflight.json", (data) =>
+      if data.id
+        options =
+          saveURL: "/sites/#{siteID}/contact_lists/#{data.id}.json"
+          saveMethod: "PUT"
+      else
+        options =
+          saveURL: "/sites/#{siteID}/contact_lists.json"
+          saveMethod: "POST"
 
-    options["loadURL"] = "/sites/#{siteID}/contact_lists/inflight.json"
+      options["contactList"] = data
 
-    new ContactListModal($.extend(baseOptions, options)).open()
+      new ContactListModal($.extend(baseOptions, options)).open()
