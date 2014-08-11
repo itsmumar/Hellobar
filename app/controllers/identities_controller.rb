@@ -14,7 +14,7 @@ class IdentitiesController < ApplicationController
   def create
     identity = Identity.find_or_initialize_by_site_id_and_provider(@site.id, params[:provider])
 
-    if @site and identity.persisted?
+    if @site && identity.persisted?
       flash[:error] = "Please disconnect your #{identity.provider_config[:name]} before adding a new one."
       return redirect_to site_contact_lists_path(@site)
     end
