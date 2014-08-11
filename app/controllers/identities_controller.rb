@@ -2,8 +2,7 @@ class IdentitiesController < ApplicationController
   before_filter :load_site
 
   def new
-    session[:inflight_contact_list_params] = params[:contact_list]
-    redirect_to "/auth/#{params[:contact_list][:provider]}/?site_id=#{@site.id}"
+    redirect_to "/auth/#{params[:contact_list][:provider]}/?site_id=#{@site.id}&redirect_to=#{request.referrer}"
   end
 
   def show
@@ -28,13 +27,7 @@ class IdentitiesController < ApplicationController
       flash[:error] = "There was a problem connecting your #{identity.provider_config[:name]} account. Please try again later."
     end
 
-    contact_list_id = session["inflight_contact_list_params"]["id"]
-
-    if contact_list_id.blank?
-      redirect_to site_contact_lists_path(@site, :inflight_contact_list => true)
-    else
-      redirect_to site_contact_list_path(@site, contact_list_id, :inflight_contact_list => true)
-    end
+    redirect_to env["omniauth.params"]["redirect_to"]
   end
 
   private
