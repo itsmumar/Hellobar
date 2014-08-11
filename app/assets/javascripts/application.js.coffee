@@ -22,7 +22,7 @@
 #= require contact_lists
 #= require summary
 #= require sites_controller
-#= require rules
+#= require site_elements_controller
 #= require_self
 
 $ ->
