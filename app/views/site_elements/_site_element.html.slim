@@ -1,4 +1,4 @@
-tr.site-element-block 
+tr.site-element-block class="#{site_element.paused? ? 'paused' : ''}"
   td 
     .psudo-border style="background-color: ##{site_element.background_color}"
     = site_element.message
@@ -27,26 +27,10 @@ tr.site-element-block
           i.icon-edit
           | Create Variation
 
-        = content_tag 'a' do
+        = content_tag 'a', class: 'toggle-pause', "data-element-id" => site_element.id, "data-site-id" => @site.id do
           i.icon-edit
-          | Pause
+          = site_element.paused? ? 'Unpause' : 'Pause'
 
         = content_tag 'a' do
           i.icon-edit
           | Remove
-
-/ div.site-element-row.clearfix style="border-left: 4px solid ##{site_element.background_color}"
-/   div.site-element-row-inner.clearfix
-/     div.site-element-col.col-bar-message
-/       = site_element.message
-/     div.site-element-col.col-age
-/       = site_element_age(site_element)
-/     div.site-element-col.col-edit
-/       = link_to "edit", edit_site_site_element_path(site_element, :site_id => @site)
-/     div.site-element-col.col-pause
-/       - if site_element.paused?
-/         = link_to "unpause", site_unpause_site_element_path(site_element, :site_id => @site), :method => :put
-/       - else
-/         = link_to "pause", site_pause_site_element_path(site_element, :site_id => @site), :method => :put
-/     div
-/       = link_to "add variation", new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element)

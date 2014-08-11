@@ -84,6 +84,12 @@ private
         date_conditions(condition)
       elsif condition.kind_of?(UrlCondition)
         url_conditions(condition)
+      elsif condition.kind_of?(CountryCondition)
+        # TODO: how do we get the current users country
+      elsif condition.kind_of?(DeviceCondition)
+        # TODO: how do we get the current users device?
+      else
+        raise "unhandled condition type: #{condition.segment}"
       end
     end.join(join_operator)
 
