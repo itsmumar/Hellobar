@@ -54,7 +54,11 @@ class SiteElementsController < ApplicationController
     @site_element.destroy
     @site.generate_script
     flash[:success] = "Your bar was successfully deleted."
-    redirect_to site_site_elements_path(:site_id => @site)
+
+    respond_to do |format|
+      format.js { head :ok }
+      format.html { redirect_to site_site_elements_path(:site_id => @site) }
+    end
   end
 
   def toggle_paused

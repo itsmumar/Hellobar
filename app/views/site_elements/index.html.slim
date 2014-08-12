@@ -28,9 +28,11 @@ table.rules-wrapper
                 i.icon-edit
                 | Edit
 
-              = content_tag 'a' do
+              = content_tag 'a', class: 'remove-rule' do
                 i.icon-trash
-                = "Remove this and #{rule.site_elements.count} bars/modals"
+                | Remove this and 
+                span= rule.site_elements.count
+                |  bars/modals
 
       - if rule.site_elements.empty?
         tr.rule-block

@@ -31,6 +31,6 @@ tr.site-element-block class="#{site_element.paused? ? 'paused' : ''}"
           i.icon-edit
           = site_element.paused? ? 'Unpause' : 'Pause'
 
-        = content_tag 'a' do
+        = content_tag 'a', class: 'delete-element', "data-element-id" => site_element.id, "data-site-id" => @site.id do
           i.icon-edit
           | Remove
