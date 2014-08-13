@@ -22,9 +22,8 @@ asyncTest "can change the font-family", ->
   click(textTab()).andThen =>
     select = findLabeled("Font family")
     option = $(select).find('option[value^="Georgia"]')[0]
-    $(option).prop('selected', true)
-    setTimeout ( ->
-      equal hbFrame().find(".hb-button").css('font-family'), "Georgia", "Button font did not change"
-      equal hbFrame().find("#hb_msg_container span").css('font-family'), "Georgia", "Message font did not change"
-      QUnit.start()
-    ), 500
+    $(option).prop('selected', true).trigger('change')
+    debounce (done) ->
+      equal hbFrame().find(".hb-button").css('font-family'), "Georgia, serif", "Button font did not change"
+      equal hbFrame().find("#hb_msg_container span").css('font-family'), "Georgia, serif", "Message font did not change"
+      done()
