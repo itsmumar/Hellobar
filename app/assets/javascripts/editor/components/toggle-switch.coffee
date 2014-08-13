@@ -10,7 +10,7 @@ HelloBar.ToggleSwitchComponent = Ember.Component.extend
     @_super()
     @on('change', @, @_elementValueDidChange)
 
-  mouseDown: ->
+  click: ->
     @_elementValueDidChange()
 
   #-----------  Persist Changes to Model  -----------#
