@@ -21,11 +21,9 @@ asyncTest "switch for Hello Bar branding toggles off", ->
     click(findLabeled("Hello Bar branding")).andThen =>
       setTimeout ( ->
         logo = find("iframe#hellobar_container").contents().find(".hellobar_logo")
-        binding.pry
         equal logo.is(":visible"), false, "Logo should be hidden and is not"
         QUnit.start()
       ), 2000
-
 
 test "it should offer a switch for Allow to hide bar", ->
   click(styleTab()).andThen =>
