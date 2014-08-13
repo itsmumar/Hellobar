@@ -110,3 +110,5 @@ test 'it should be able to create a new rules', ->
     $modal.find('.condition-segment').val('UrlCondition').trigger('change')
     equal $modal.find('.device.value:visible').length, 0, 'device is hidden'
     equal $modal.find('.url.value:visible').length, 1, 'url is shown when selected'
+
+    $modal.remove()
