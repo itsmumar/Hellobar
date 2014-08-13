@@ -163,10 +163,9 @@ asyncTest 'RuleModal closes the modal on a successful form submission event', (a
 
   $form.submit()
 
-  setTimeout (->
+  debounce (done) ->
     equal $($dom).hasClass('show-modal'), false, 'closes the modal after form submission'
-    start()
-  ), 500
+    done()
 
 module 'RuleModal filtering out operands'
 

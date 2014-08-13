@@ -26,3 +26,8 @@ Ember.Test.registerHelper 'findLabeled', (app, labelText, scope="", errorMessage
 
 Ember.Test.registerHelper 'hbFrame', (app) ->
   find("iframe#hellobar_container").contents()
+
+Ember.Test.registerHelper 'debounce', (app, func) ->
+  setTimeout ( =>
+    func.call this, -> QUnit.start()
+  ), 250
