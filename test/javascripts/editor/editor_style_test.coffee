@@ -8,7 +8,7 @@ styleTab = -> find(".step-links li a[href^='#/style']")
 test "it should change to tab", ->
   visit "settings" # reset
   click(styleTab()).andThen =>
-    equal find(".step-title").text(), "Bar", "Tab did not switch to bar"
+    equal find(".step-title").text(), "Style", "Tab did not switch to Style"
 
 test "it should offer a switch for Hello Bar branding", ->
   click(styleTab()).andThen =>
@@ -21,6 +21,7 @@ asyncTest "switch for Hello Bar branding toggles off", ->
     click(findLabeled("Hello Bar branding")).andThen =>
       setTimeout ( ->
         logo = find("iframe#hellobar_container").contents().find(".hellobar_logo")
+        binding.pry
         equal logo.is(":visible"), false, "Logo should be hidden and is not"
         QUnit.start()
       ), 2000
