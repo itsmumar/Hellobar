@@ -2,6 +2,8 @@ module "editor targeting",
   setup: ->
     @route = getModule("route:application")
     visit "targeting"
+  teardown: ->
+    visit "settings"
 
 targetingTab = -> find(".step-links li a[href^='#/targeting']")
 

@@ -1,6 +1,7 @@
 module "editor text and content",
   setup: ->
     @route = getModule("route:application")
+    Ember.run => @route.controller.set("model.element_subtype", "traffic")
     visit "text"
 
 textTab = -> find(".step-links li a[href^='#/text']")
