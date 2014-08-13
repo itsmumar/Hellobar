@@ -1,3 +1,9 @@
+module 'editor setup tests',
+  setup: ->
+    @route = getModule("route:application")
+    Ember.run =>
+      @route.controller.set('currentUser', {status: 'active'})
+
 test 'it should launch ember immediately', ->
   equal find(".editor-wrapper.ember-view").length, 1, "Ember view should be present"
   equal find("ul.step-links").length, 1, "Side links were not present"
