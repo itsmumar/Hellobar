@@ -48,7 +48,7 @@ describe Rule, 'accepting nested condition attributes' do
     expect(condition.value.class).to eq(Hash)
     condition.value.tap do |hash|
       expect(hash['start_date']).to be_nil
-      expect(hash['end_date']).to eq DateTime.current.midnight + 1.day
+      expect(hash['end_date']).to eq Date.current + 1.day
     end
     expect(condition.to_sentence).to eq "date is before #{Date.current + 1.day}"
   end
@@ -58,7 +58,7 @@ describe Rule, 'accepting nested condition attributes' do
     expect(condition.value.class).to eq(Hash)
     condition.value.tap do |hash|
       expect(hash['end_date']).to be_nil
-      expect(hash['start_date']).to eq DateTime.current.midnight - 1.day
+      expect(hash['start_date']).to eq Date.current - 1.day
     end
     expect(condition.to_sentence).to eq "date is after #{Date.current - 1.day}"
   end
