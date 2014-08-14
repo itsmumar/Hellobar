@@ -44,7 +44,7 @@ class @ContactListModal extends Modal
     modal = this
 
     object.find("#contact_list_provider").change (e) ->
-      modal._loadRemoteLists(select: this)
+      modal._loadRemoteLists(select: this, listData: {double_optin: true})
 
   _bindDoThisLater: (object) ->
     object.find("a.do-this-later").click (e) =>
@@ -90,6 +90,7 @@ class @ContactListModal extends Modal
     {
       name: @$modal.find("form #contact_list_name").val()
       provider: @$modal.find("form #contact_list_provider").val()
+      double_optin: if @$modal.find("form #contact_list_double_optin").prop("checked") then "1" else "0"
       data:
         remote_id: $(remoteListSelect).val()
         remote_name: $(remoteListSelect).find("option:selected").text()
@@ -126,10 +127,12 @@ class @ContactListModal extends Modal
       if data # an identity was found for the selected provider
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
-        @_renderBlock("remoteListSelect", {providerName: label, lists: data.lists}).show()
+        @_renderBlock("remoteListSelect", {providerName: label, identity: data}).show()
 
-        if listData && listData.data && listData.data.remote_id
-          @$modal.find("#contact_list_remote_list_id").val(listData.data.remote_id)
+        if listData
+          window.foo = listData
+          @$modal.find("#contact_list_remote_list_id").val(listData.data.remote_id) if listData.data && listData.data.remote_id
+          @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 
       else # no identity found
         context = {providerName: label}
@@ -148,3 +151,4 @@ class @ContactListModal extends Modal
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)
     @$modal.find("#contact_list_provider").val(data.provider || "0")
+    @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin

@@ -30,7 +30,7 @@ class ContactListsController < ApplicationController
   private
 
   def contact_list_params
-    params.require(:contact_list).permit(:name, :provider, {:data => [:remote_id, :remote_name]})
+    params.require(:contact_list).permit(:name, :provider, {:data => [:remote_id, :remote_name]}, :double_optin)
   end
 
   def load_site

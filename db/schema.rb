@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140813140628) do
+ActiveRecord::Schema.define(version: 20140814182417) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20140813140628) do
     t.datetime "last_synced_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "double_optin",   default: true
   end
 
   add_index "contact_lists", ["identity_id"], name: "index_contact_lists_on_identity_id", using: :btree

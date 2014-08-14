@@ -75,7 +75,8 @@ unless defined?(Hellobar::Settings)
       :type => :email,
       :name => 'MailChimp',
       :client_id => config[:mailchimp_client_id],
-      :secret => config[:mailchimp_secret]
+      :secret => config[:mailchimp_secret],
+      :supports_double_optin => true
     },
     :get_response => {
       :key => :get_response,
