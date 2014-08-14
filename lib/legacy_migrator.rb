@@ -48,8 +48,8 @@ class LegacyMigrator
                                 name: 'Everyone', # or /URL? TODO
                                 priority: legacy_goal.priority,
                                 match: Rule::MATCH_ON[:all],
-                                created_at: legacy_goal.created_at,
-                                updated_at: legacy_goal.updated_at
+                                created_at: legacy_goal.created_at.utc,
+                                updated_at: legacy_goal.updated_at.utc
 
           create_conditions(rule, legacy_goal).each do |new_condition|
             rule.conditions << new_condition
