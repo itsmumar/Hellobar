@@ -21,20 +21,21 @@ $ ->
       saveURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
       saveMethod: "PUT"
 
-    window.foo = $.extend(baseOptions, options)
-
     new ContactListModal($.extend(baseOptions, options)).open()
 
-  if window.location.search.match(/inflight_contact_list\=true/)
-    if contactListID
+  if localStorage["stashedContactList"]
+    contactList = JSON.parse(localStorage["stashedContactList"])
+    localStorage.removeItem("stashedContactList")
+
+    if contactList.id
       options =
-        saveURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
+        saveURL: "/sites/#{siteID}/contact_lists/#{contactList.id}.json"
         saveMethod: "PUT"
     else
       options =
         saveURL: "/sites/#{siteID}/contact_lists.json"
         saveMethod: "POST"
 
-    options["loadURL"] = "/sites/#{siteID}/contact_lists/inflight.json"
+    options["contactList"] = contactList
 
     new ContactListModal($.extend(baseOptions, options)).open()

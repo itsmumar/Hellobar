@@ -12,11 +12,12 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   ).property("model.site.contact_lists")
 
   popNewContactListModal: (->
-    if @get("model.contact_list_id") == 0
+    if @get("model.contact_list_id") == 0 && $(".contact-list-modal:visible").length == 0
       options =
         siteID: window.siteID
         saveURL: "/sites/#{siteID}/contact_lists.json"
         saveMethod: "POST"
+        editorModel: @get("model")
         success: (data, modal) =>
           lists = @get("model.site.contact_lists").slice(0)
           lists.push({id: data.id, name: data.name})
@@ -40,10 +41,11 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
     popEditContactListModal: (id) ->
       options =
         id: id
-        siteID: window.siteID
+        siteID: siteID
         loadURL: "/sites/#{siteID}/contact_lists/#{id}.json"
         saveURL: "/sites/#{siteID}/contact_lists/#{id}.json"
         saveMethod: "PUT"
+        editorModel: @get("model")
         success: (data, modal) =>
           @get("model.site.contact_lists").forEach (list) ->
             Ember.set(list, "name", data.name) if list.id == data.id

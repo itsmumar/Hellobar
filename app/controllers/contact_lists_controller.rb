@@ -27,14 +27,6 @@ class ContactListsController < ApplicationController
     render :json => @contact_list
   end
 
-  def inflight
-    if session[:inflight_contact_list_params].blank?
-      render :json => {}, :status => 404
-    else
-      render :json => session.delete(:inflight_contact_list_params)
-    end
-  end
-
   private
 
   def contact_list_params

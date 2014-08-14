@@ -12,8 +12,6 @@ Rails.application.routes.draw do
     resources :site_elements
     resources :rules
     resources :identities
-
-    get "contact_lists/inflight", :to => "contact_lists#inflight", :as => :inflight_contact_list
     resources :contact_lists
   end
 

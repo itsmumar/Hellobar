@@ -78,13 +78,11 @@ asyncTest "form data is serialized correctly", ->
   @modal.$modal.find("#contact_list_provider").val("mailchimp").change()
 
 asyncTest "selecting \"I'm ready\" redirects to the correct URL to begin the oauth handshake", ->
-  expect(2)
+  expect(1)
 
   @modal.$modal.on "ajax-complete", =>
     @modal.$modal.find(".start-oauth").click()
-
     includes @modal.options.window.location, "/sites/123/identities/new"
-    includes @modal.options.window.location, "contact_list%5Bprovider%5D=aweber"
 
     QUnit.start()
 
@@ -102,7 +100,7 @@ asyncTest "selecting \"I'll do this later\" sets the provider select back to 0 a
   @modal.$modal.find("#contact_list_provider").val("aweber").change()
 
 
-module "ContactListModal.open for edit",
+module "ContactListModal.open for edit via AJAX",
   setup: ->
     @modal = new ContactListModal(
       id: 1
@@ -153,3 +151,25 @@ asyncTest "selects the persisted remote list if present", ->
     QUnit.start()
 
   @modal.open()
+
+module "ContactListModal.open for edit via provided JavaScript object",
+  setup: ->
+    @modal = new ContactListModal(
+      siteID: 123
+      window: {location: ""}
+      contactList:
+        id: 1
+        name: "my great contact list"
+        provider: "0"
+    )
+
+    $(document).ajaxComplete =>
+      @modal.$modal.trigger("ajax-complete")
+
+  teardown: ->
+    @modal.$modal.unbind("ajax-complete")
+    @modal.close()
+
+test "populates the name of the contact list in the form", ->
+  @modal.open()
+  equal @modal.$modal.find("form #contact_list_name").val(), "my great contact list"

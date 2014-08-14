@@ -13,6 +13,7 @@ class @ContactListModal extends Modal
 
   open: ->
     @_loadContactList() if @options.loadURL
+    @_populateContactList() if @options.contactList
     @_bindInteractions(@$modal)
 
     super
@@ -53,8 +54,11 @@ class @ContactListModal extends Modal
 
   _bindOauthButton: (object) ->
     object.find("a.start-oauth").click (e) =>
-      params = $.param({contact_list: $.extend({id: @options.id}, @_getFormData())})
-      @options.window.location = "/sites/#{@options.siteID}/identities/new/?#{params}"
+      # stash the model so that it can be reloaded by the ember app
+      localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
+      localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
+
+      @options.window.location = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
 
   _bindSubmit: (object) ->
     object.find("a.submit").click (e) =>
@@ -101,6 +105,10 @@ class @ContactListModal extends Modal
     $.get @options.loadURL, (data) =>
       @_setFormValues(data)
       @_loadRemoteLists(listData: data)
+
+  _populateContactList: ->
+    @_setFormValues(@options.contactList)
+    @_loadRemoteLists(listData: @options.contactList)
 
   _loadRemoteLists: ({listData, select}) ->
     select ||= @$modal.find("#contact_list_provider")
