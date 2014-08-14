@@ -13,8 +13,6 @@ class ContactListsController < ApplicationController
   end
 
   def show
-    @subscribers = @contact_list.subscribers
-
     respond_to do |format|
       format.html
       format.csv  { send_data @contact_list.to_csv }

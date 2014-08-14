@@ -10,13 +10,13 @@ p= contact_list_sync_details(@contact_list)
 = button_to "Export CSV", site_contact_list_path(@site, @contact_list, :format => :csv), :method => :get
 button#edit-contact-list Edit
 
-- if @subscribers.any?
+- if @contact_list.subscribers.any?
   table
     tr
       th Email
       th Name
       th Date Subscribed
-    - @subscribers.each do |subscriber|
+    - @contact_list.subscribers.each do |subscriber|
       tr
         td= subscriber[:email]
         td= subscriber[:name]
