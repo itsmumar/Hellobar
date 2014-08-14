@@ -116,7 +116,7 @@ class ContactList < ActiveRecord::Base
     Rails.logger.info "Syncing emails later than #{timestamp}"
 
     Hello::EmailData.get_emails_since(id, timestamp.to_i).in_groups_of(1000).collect do |group|
-      service_provider.batch_subscribe(data["remote_id"], group.compact) unless group.compact.empty?
+      service_provider.batch_subscribe(data["remote_id"], group.compact, double_optin) unless group.compact.empty?
     end
 
     update_column :last_synced_at, Time.now

@@ -22,7 +22,7 @@ class ServiceProviders::AWeber < ServiceProvider
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
-  def batch_subscribe(list_id, subscribers)
+  def batch_subscribe(list_id, subscribers, double_optin = true)
     # AWeber does not provider a batch subscribe operation, so we have do this one-by-one
     subscribers.each do |subscriber|
       begin

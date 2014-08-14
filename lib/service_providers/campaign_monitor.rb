@@ -19,7 +19,7 @@ class ServiceProviders::CampaignMonitor < ServiceProvider
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
-  def batch_subscribe(list_id, subscribers)
+  def batch_subscribe(list_id, subscribers, double_optin = true)
     subscribers = subscribers.map{|s| {'EmailAddress' => s[:email], 'Name' => s[:name]}}
     CreateSend::Subscriber.import(@auth, list_id, subscribers, true)
   end

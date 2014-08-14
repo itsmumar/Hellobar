@@ -68,7 +68,8 @@ unless defined?(Hellobar::Settings)
       :type => :email,
       :name => 'Constant Contact',
       :app_key => config[:constantcontact_app_key],
-      :app_secret => config[:constantcontact_app_secret]
+      :app_secret => config[:constantcontact_app_secret],
+      :supports_double_optin => true
     },
     :mailchimp => {
       :key => :mailchimp,

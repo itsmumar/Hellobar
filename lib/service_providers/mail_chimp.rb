@@ -7,8 +7,6 @@ class ServiceProviders::MailChimp < ServiceProvider
       raise "Site does not have a stored MailChimp identity" unless identity
     end
 
-    @site = identity.site
-
     unless Rails.env.test?
       @client = Gibbon::API.new(identity.credentials['token'], :api_endpoint => identity.extra['metadata']['api_endpoint'])
     end
@@ -18,8 +16,8 @@ class ServiceProviders::MailChimp < ServiceProvider
     @lists ||= @client.lists.list['data']
   end
 
-  def subscribe(list_id, email, name = nil)
-    opts = {:id => list_id, :email => {:email => email}, :double_optin => !!@site.try(:double_opt_in)}
+  def subscribe(list_id, email, name = nil, double_optin = true)
+    opts = {:id => list_id, :email => {:email => email}, :double_optin => double_optin}
 
     if name
       split = name.split(' ', 2)
@@ -33,7 +31,7 @@ class ServiceProviders::MailChimp < ServiceProvider
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
-  def batch_subscribe(list_id, subscribers)
+  def batch_subscribe(list_id, subscribers, double_optin = true)
     subscribers.in_groups_of(1000).collect do |group|
       group.compact!
       log "Sending #{group.size} emails to remote service."
@@ -48,7 +46,7 @@ class ServiceProviders::MailChimp < ServiceProvider
       end
 
       next mock_result(batch) unless @client
-      @client.lists.batch_subscribe({:id => list_id, :batch => batch, :double_optin => !!@site.try(:double_opt_in)}).tap do |result|
+      @client.lists.batch_subscribe({:id => list_id, :batch => batch, :double_optin => double_optin}).tap do |result|
         log result
       end
     end
