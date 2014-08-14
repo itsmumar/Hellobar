@@ -6,10 +6,6 @@ class ServiceProviders::MailChimp < ServiceProvider
       identity = opts[:site].identities.where(:provider => 'mailchimp').first
       raise "Site does not have a stored MailChimp identity" unless identity
     end
-
-    unless Rails.env.test?
-      @client = Gibbon::API.new(identity.credentials['token'], :api_endpoint => identity.extra['metadata']['api_endpoint'])
-    end
   end
 
   def lists
@@ -24,7 +20,6 @@ class ServiceProviders::MailChimp < ServiceProvider
       opts[:merge_vars] = {:FNAME => split[0], :LNAME => split[1]}
     end
 
-    return mock_result(batch) unless @client
     @client.lists.subscribe(opts).tap do |result|
       log result
     end
@@ -45,7 +40,6 @@ class ServiceProviders::MailChimp < ServiceProvider
         end
       end
 
-      next mock_result(batch) unless @client
       @client.lists.batch_subscribe({:id => list_id, :batch => batch, :double_optin => double_optin}).tap do |result|
         log result
       end
@@ -63,11 +57,5 @@ class ServiceProviders::MailChimp < ServiceProvider
     end
 
     super message
-  end
-
-  private
-
-  def mock_result batch
-    { 'add_count' => batch.size, 'update_count' => 0, 'error_count' => 0, 'errors' => [] }
   end
 end
