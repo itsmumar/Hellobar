@@ -68,4 +68,6 @@ group :test do
   gem "timecop"
   gem "vcr"
   gem "webmock"
+  gem "zonebie", "~> 0.5.1"
+  gem "database_cleaner", '~> 1.3'
 end

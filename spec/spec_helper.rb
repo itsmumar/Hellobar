@@ -5,6 +5,9 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'simplecov'
 require 'metric_fu/metrics/rcov/simplecov_formatter'
+require 'database_cleaner'
+
+Zonebie.set_random_timezone
 
 # All metrics should be in the same dir. YOU MADE ME DO THIS, METRIC_FU!
 SimpleCov::Formatter::MetricFu.send(:define_method, :coverage_file_path) do
@@ -38,6 +41,7 @@ VCR.configure do |c|
 end
 
 RSpec.configure do |config|
+  # ## VCR
   config.around(:each) do |example|
     name = example.metadata[:full_description].split(/\s+/, 2).join("/").underscore.gsub(/[^\w\/]+/, "_")
 
@@ -60,7 +64,7 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of

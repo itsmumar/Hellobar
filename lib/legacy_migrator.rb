@@ -25,8 +25,8 @@ class LegacyMigrator
                               script_installed_at: legacy_site.script_installed_at,
                               script_generated_at: legacy_site.generated_script,
                               script_attempted_to_generate_at: legacy_site.attempted_generate_script,
-                              created_at: legacy_site.created_at,
-                              updated_at: legacy_site.updated_at
+                              created_at: legacy_site.created_at.utc,
+                              updated_at: legacy_site.updated_at.utc
 
         create_user_and_membership legacy_site_id: site.id,
                                    account_id: legacy_site.account_id
@@ -48,8 +48,8 @@ class LegacyMigrator
                                 name: 'Everyone', # or /URL? TODO
                                 priority: legacy_goal.priority,
                                 match: Rule::MATCH_ON[:all],
-                                created_at: legacy_goal.created_at,
-                                updated_at: legacy_goal.updated_at
+                                created_at: legacy_goal.created_at.utc,
+                                updated_at: legacy_goal.updated_at.utc
 
           create_conditions(rule, legacy_goal).each do |new_condition|
             rule.conditions << new_condition
