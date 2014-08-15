@@ -82,8 +82,8 @@ class LegacyMigrator
           id: legacy_goal.id,
           site_id: legacy_goal.site_id,
           name: "List #{legacy_goal.id}",
-          created_at: legacy_goal.created_at,
-          updated_at: legacy_goal.updated_at
+          created_at: legacy_goal.created_at.utc,
+          updated_at: legacy_goal.updated_at.utc
         }
 
         if legacy_id_int = LegacyIdentityIntegration.where(:integrable_id => legacy_goal.id).first
@@ -207,8 +207,8 @@ class LegacyMigrator
         ::SiteElement.create! id: legacy_bar.legacy_bar_id || legacy_bar.id,
                       paused: !legacy_bar.active?,
                       element_subtype: determine_element_subtype(legacy_goal),
-                      created_at: legacy_bar.created_at,
-                      updated_at: legacy_bar.updated_at,
+                      created_at: legacy_bar.created_at.utc,
+                      updated_at: legacy_bar.updated_at.utc,
                       target_segment: legacy_bar.target_segment,
                       rule_id: legacy_bar.goal_id,
                       closable: legacy_bar.settings_json['closable'],
