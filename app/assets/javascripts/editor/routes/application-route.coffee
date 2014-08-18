@@ -100,8 +100,10 @@ HelloBar.ApplicationRoute = Ember.Route.extend
         data: JSON.stringify(@currentModel)
         success: =>
           window.location = "/sites/#{window.siteID}/site_elements"
-        error: =>
+        error: (data) =>
           @controller.toggleProperty('saveSubmitted')
+          @controller.set("model.errors", data.responseJSON.errors)
+          new EditorErrorsModal(errors: data.responseJSON.full_messages).open()
 
     closeEditor: ->
       window.location = "/sites/#{window.siteID}/site_elements"

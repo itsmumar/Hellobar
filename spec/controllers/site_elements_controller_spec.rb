@@ -27,7 +27,7 @@ describe SiteElementsController do
       post :create, :site_id => site, :site_element => {:element_subtype => "traffic", :rule_id => 0}
 
       json = JSON.parse(response.body)
-      json["rule"].should == ["can't be blank"]
+      json["errors"]["rule"].should == ["can't be blank"]
     end
   end
 end
