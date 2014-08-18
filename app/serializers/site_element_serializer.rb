@@ -76,6 +76,11 @@ class SiteElementSerializer < ActiveModel::Serializer
         next
       end
 
+      if attribute == :contact_list && errors.include?("can't be blank")
+        messages << "You must select a contact list to sync with in the \"settings\" section"
+        next
+      end
+
       errors.each do |error|
         messages << object.errors.full_message(attribute, error)
       end
