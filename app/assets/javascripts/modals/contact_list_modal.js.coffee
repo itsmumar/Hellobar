@@ -37,10 +37,10 @@ class @ContactListModal extends Modal
       nevermind: @$modal.find(".provider-instructions-nevermind-block")
       remoteListSelect: @$modal.find(".remote-list-select-block")
 
-  _bindInteractions: (object) ->
+  _bindInteractions: (object, context) ->
     @_bindProviderSelect(object)
     @_bindDoThisLater(object)
-    @_bindOauthButton(object)
+    @_bindConnectButton(object, context)
     @_bindSubmit(object)
 
   _bindProviderSelect: (object) ->
@@ -55,13 +55,18 @@ class @ContactListModal extends Modal
       @blocks.nevermind.show()
       @$modal.find("#contact_list_provider").val(0)
 
-  _bindOauthButton: (object) ->
-    object.find("a.start-oauth").click (e) =>
-      # stash the model so that it can be reloaded by the ember app
-      localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
-      localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
+  _bindConnectButton: (object, context) ->
+    object.find("a.start-connect").click (e) =>
+      @_clearErrors()
+      
+      if context.requiresEmbedCode
+        @_collectEmbedCode(context)
+      else
+        # stash the model so that it can be reloaded by the ember app
+        localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
+        localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
 
-      @options.window.location = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
+        @options.window.location = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
 
   _bindSubmit: (object) ->
     object.find("a.submit").click (e) =>
@@ -101,7 +106,7 @@ class @ContactListModal extends Modal
 
   _renderBlock: (name, context, bind = true) ->
     block = @blocks[name].html(@templates[name](context))
-    @_bindInteractions(block) if bind
+    @_bindInteractions(block, context) if bind
 
     block
 
@@ -118,7 +123,9 @@ class @ContactListModal extends Modal
     select ||= @$modal.find("#contact_list_provider")
 
     value = $(select).val()
-    label = $(select).find("option:selected").text()
+    option = $(select).find("option:selected")
+    label = option.text()
+    defaultContext = { provider: value, providerName: label, requiresEmbedCode: option.data('requiresEmbedCode') }
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.instructions.hide()
@@ -130,7 +137,7 @@ class @ContactListModal extends Modal
       if data # an identity was found for the selected provider
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
-        @_renderBlock("remoteListSelect", {providerName: label, identity: data}).show()
+        @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if listData
           window.foo = listData
@@ -138,11 +145,26 @@ class @ContactListModal extends Modal
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 
       else # no identity found
-        context = {providerName: label}
-
-        @_renderBlock("nevermind", context).hide()
-        @_renderBlock("instructions", context).show()
+        @_renderBlock("nevermind", defaultContext).hide()
+        @_renderBlock("instructions", defaultContext).show()
         @blocks.remoteListSelect.hide()
+
+  _collectEmbedCode: (context) ->
+    # TODO - actual form for collection
+    embedCode = prompt("Paste your embed code")
+
+    $.ajax(
+      url: "/sites/#{@options.siteID}/identities/#{context.provider}"
+      dataType: "json"
+      method: "POST"
+    ).success(
+      (data) =>
+        @_loadRemoteLists()
+    ).fail(
+      (data) =>
+        data.errors = ["Embed code was invalid"] unless data.errors?
+        @_showErrors(data.errors)
+    )
 
   _showErrors: (errors) ->
     html = "<div class=\"alert\">#{errors.reduce (a, b) -> "#{a}<br>#{b}"}</div>"
