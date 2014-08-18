@@ -1,0 +1,17 @@
+<script id="editor-errors-modal-template" type="text/x-handlebars-template">
+  <div class="modal-wrapper editor-errors-modal">
+    <div class="modal-block">
+      <h4>Sorry, We Encountered Some Errors</h4>
+      <hr>
+
+      <ul>
+        {{#each errors}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+
+      <hr>
+      <a class="button cancel">OK</a>
+    </div>
+  </div>
+</script>
