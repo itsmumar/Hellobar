@@ -4,6 +4,7 @@ zombo_traffic:
 zombo_email:
   rule: zombo
   element_subtype: email
+  contact_list: zombo
 zombo_twitter:
   rule: zombo
   element_subtype: social/tweet_on_twitter

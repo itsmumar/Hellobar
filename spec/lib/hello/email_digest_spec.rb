@@ -170,7 +170,7 @@ describe Hello::EmailDigest do
     it "suggests creation of a social bar if there aren't any" do
       @site.rules.first.site_elements = [
         SiteElement.new.tap{|b| b.element_subtype = "traffic"},
-        SiteElement.new.tap{|b| b.element_subtype = "email"}
+        SiteElement.new.tap{|b| b.element_subtype = "email"; b.contact_list = contact_lists(:zombo)}
       ]
 
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /gaining followers/
@@ -188,7 +188,7 @@ describe Hello::EmailDigest do
     it "suggests creation of a traffic bar if there aren't any" do
       @site.rules.first.site_elements = [
         SiteElement.new.tap{|b| b.element_subtype = "social/tweet_on_twitter"},
-        SiteElement.new.tap{|b| b.element_subtype = "email"}
+        SiteElement.new.tap{|b| b.element_subtype = "email"; b.contact_list = contact_lists(:zombo)}
       ]
 
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /driving traffic/
@@ -197,7 +197,7 @@ describe Hello::EmailDigest do
     it "suggests creation of a second bar of the worst-performing type, if at least one of each bar already exists" do
       @site.rules.first.site_elements = [
         SiteElement.new.tap{|b| b.element_subtype = "social/follow_on_twitter"},
-        SiteElement.new.tap{|b| b.element_subtype = "email"},
+        SiteElement.new.tap{|b| b.element_subtype = "email"; b.contact_list = contact_lists(:zombo)},
         SiteElement.new.tap{|b| b.element_subtype = "traffic"}
       ]
 
@@ -207,7 +207,7 @@ describe Hello::EmailDigest do
     it "uses dynamic bar units in 'worst-performing' CTA" do
       @site.rules.first.site_elements = [
         SiteElement.new.tap{|b| b.element_subtype = "social/follow_on_twitter"},
-        SiteElement.new.tap{|b| b.element_subtype = "email"},
+        SiteElement.new.tap{|b| b.element_subtype = "email"; b.contact_list = contact_lists(:zombo)},
         SiteElement.new.tap{|b| b.element_subtype = "traffic"}
       ]
 

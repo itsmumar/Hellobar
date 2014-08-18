@@ -18,6 +18,8 @@ class SiteElement < ActiveRecord::Base
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES }
   validates :rule, association_exists: true
 
+  validate :contact_list_is_present, if: Proc.new {|se| se.element_subtype == "email"}
+
   scope :paused, -> { where(paused: true) }
   scope :active, -> { where(paused: false) }
 
@@ -43,5 +45,13 @@ class SiteElement < ActiveRecord::Base
     new_pause_state = !paused?
 
     update_attribute :paused, new_pause_state
+  end
+
+  private
+
+  def contact_list_is_present
+    if contact_list.nil? && (contact_list_id.blank? || contact_list_id == 0)
+      errors.add(:contact_list, "can't be blank")
+    end
   end
 end

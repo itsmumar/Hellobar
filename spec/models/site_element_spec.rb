@@ -10,24 +10,36 @@ describe SiteElement do
     bar.rule = nil
     bar.site.should be_nil
   end
-end
 
-describe SiteElement, '#toggle_paused!' do
-  fixtures :site_elements
+  it "requires a contact list if element_subtype is \"email\"" do
+    element = site_elements(:zombo_traffic)
+    element.should be_valid
 
-  let(:site_element) { site_elements(:zombo_traffic) }
+    element.element_subtype = "email"
+    element.should_not be_valid
+    element.errors[:contact_list].should == ["can't be blank"]
 
-  it 'toggles an element from paused to unpaused' do
-    expect {
-      site_element.toggle_paused!
-    }.to change(site_element, :paused?).from(false).to(true)
+    element.contact_list = contact_lists(:zombo)
+    element.should be_valid
   end
 
-  it 'toggles an element from unpaused to paused' do
-    site_element.update_attribute :paused, true
+  describe '#toggle_paused!' do
+    fixtures :site_elements
 
-    expect {
-      site_element.toggle_paused!
-    }.to change(site_element, :paused?).from(true).to(false)
+    let(:site_element) { site_elements(:zombo_traffic) }
+
+    it 'toggles an element from paused to unpaused' do
+      expect {
+        site_element.toggle_paused!
+      }.to change(site_element, :paused?).from(false).to(true)
+    end
+
+    it 'toggles an element from unpaused to paused' do
+      site_element.update_attribute :paused, true
+
+      expect {
+        site_element.toggle_paused!
+      }.to change(site_element, :paused?).from(true).to(false)
+    end
   end
 end
