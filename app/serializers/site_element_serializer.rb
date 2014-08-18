@@ -1,5 +1,5 @@
 class SiteElementSerializer < ActiveModel::Serializer
-  attributes :id, :site, :rule_id, :rule, :contact_list_id,
+  attributes :id, :site, :rule_id, :rule, :contact_list_id, :errors, :full_error_messages,
 
     # settings
     :element_subtype, :settings,
@@ -54,5 +54,33 @@ class SiteElementSerializer < ActiveModel::Serializer
     params += "&custom_css_url=#{css_url}"
     token = Digest::MD5.hexdigest("#{params}SC10DF8C7E0FE8")
     "https://api.url2png.com/v6/P52EBC321291EF/#{token}/png/#{params}"
+  end
+
+  def errors
+    object.errors.to_hash
+  end
+
+  def full_error_messages
+    messages = []
+
+    object.errors.keys.each do |attribute|
+      errors = object.errors[attribute]
+
+      if attribute == :element_subtype && errors.include?("can't be blank")
+        messages << "You must select a type in the \"settings\" section"
+        next
+      end
+
+      if attribute == :rule && errors.include?("can't be blank")
+        messages << "You must select who will see this in the \"targeting\" section"
+        next
+      end
+
+      errors.each do |error|
+        messages << object.errors.full_message(attribute, error)
+      end
+    end
+
+    messages
   end
 end

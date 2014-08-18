@@ -37,7 +37,7 @@ class SiteElementsController < ApplicationController
       @site.generate_script
       render :json => @site_element
     else
-      render :json => @site_element, :serializer => SiteElementErrorSerializer, :status => :unprocessable_entity
+      render :json => @site_element, :status => :unprocessable_entity
     end
   end
 
@@ -46,7 +46,7 @@ class SiteElementsController < ApplicationController
       @site.generate_script
       render :json => @site_element
     else
-      render :json => @site_element, :serializer => SiteElementErrorSerializer, :status => :unprocessable_entity
+      render :json => @site_element, :status => :unprocessable_entity
     end
   end
 

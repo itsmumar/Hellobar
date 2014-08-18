@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SiteElementErrorSerializer do
+describe SiteElementSerializer do
   fixtures :all
 
   let(:element) { site_elements(:zombo_traffic) }
@@ -9,7 +9,7 @@ describe SiteElementErrorSerializer do
     element.element_subtype = nil
     element.valid?
 
-    serializer = SiteElementErrorSerializer.new(element)
-    serializer.as_json[:full_messages].should == ["You must select a type in the \"settings\" section"]
+    serializer = SiteElementSerializer.new(element)
+    serializer.as_json[:full_error_messages].should == ["You must select a type in the \"settings\" section"]
   end
 end
