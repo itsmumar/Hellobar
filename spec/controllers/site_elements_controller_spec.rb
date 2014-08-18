@@ -17,4 +17,17 @@ describe SiteElementsController do
       json["background_color"].should == element.background_color
     end
   end
+
+  describe "POST create" do
+    it "sets the correct error if a rule is not provided" do
+      Site.any_instance.stub(:generate_script => true)
+      site = sites(:zombo)
+      stub_current_user(site.owner)
+
+      post :create, :site_id => site, :site_element => {:element_subtype => "traffic", :rule_id => 0}
+
+      json = JSON.parse(response.body)
+      json["rule"].should == ["cannot be blank"]
+    end
+  end
 end

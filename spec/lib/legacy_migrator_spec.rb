@@ -139,7 +139,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
   let(:legacy_goal) { double 'legacy_goal', id: 12345, site_id: legacy_site.id, data_json: {}, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
   let(:legacy_site) { double 'legacy_site', id: 123 }
   let(:bar_settings) { { 'message' => 'goes here' } }
-  let(:legacy_bar) { double 'legacy_bar', legacy_bar_id: 123, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: 'legacy_goal.id', settings_json: bar_settings }
+  let(:legacy_bar) { double 'legacy_bar', legacy_bar_id: 123, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: legacy_goal.id, settings_json: bar_settings }
 
   before do
     Site.stub :exists? => true
