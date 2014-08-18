@@ -21,6 +21,8 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site
+    return {} unless object.site
+
     {
       :id => object.site.id,
       :url => object.site.url,
@@ -42,11 +44,11 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site_preview_image
-    url2png("?url=#{object.site.url}")
+    object.site ? url2png("?url=#{object.site.url}") : ""
   end
 
   def site_preview_image_mobile
-    url2png("?url=#{object.site.url}&viewport=320x568")
+    object.site ? url2png("?url=#{object.site.url}&viewport=320x568") : ""
   end
 
   def url2png(params)

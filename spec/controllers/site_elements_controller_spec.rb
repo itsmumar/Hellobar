@@ -24,7 +24,7 @@ describe SiteElementsController do
       site = sites(:zombo)
       stub_current_user(site.owner)
 
-      post :create, :site_id => site, :site_element => {:element_subtype => "traffic", :rule_id => 0}
+      post :create, :site_id => site.id, :site_element => {:element_subtype => "traffic", :rule_id => 0}
 
       json = JSON.parse(response.body)
       json["errors"]["rule"].should == ["can't be blank"]
