@@ -164,8 +164,8 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
 
     rule.id.should == legacy_goal.id
     rule.site_id.should == legacy_site.id
-    rule.created_at.to_s.should == legacy_goal.created_at.to_time.utc.to_s
-    rule.updated_at.to_s.should == legacy_goal.updated_at.to_time.utc.to_s
+    rule.created_at.to_time.utc.to_s.should == legacy_goal.created_at.to_time.utc.to_s
+    rule.updated_at.to_time.utc.to_s.should == legacy_goal.updated_at.to_time.utc.to_s
   end
 
   it 'creates a new bar for every legacy bar that exists' do
