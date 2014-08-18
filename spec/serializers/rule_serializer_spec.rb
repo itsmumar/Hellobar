@@ -14,7 +14,7 @@ describe RuleSerializer do
 
     expect(serializer.as_json).to eq({
       id: rule.id,
-      site_id: rule.site.id,
+      site_id: rule.site_id,
       name: rule.name,
       match: rule.match,
       priority: rule.priority,
