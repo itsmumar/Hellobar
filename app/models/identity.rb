@@ -62,13 +62,18 @@ class Identity < ActiveRecord::Base
   end
 
   def service_provider
-    @service_provider ||= begin
-      ServiceProviders.const_get(provider_config[:name].gsub(' ', '').classify, false).new(:identity => self)
-    rescue NameError
-      ServiceProviders::EmbedCodeProvider.new(:identity => self) if provider_config[:requires_embed_code]
+    return @service_provider if @service_provider
+
+    const_name = provider_config[:name].gsub(' ', '').classify
+
+    if ServiceProviders.const_defined?(const_name, false)
+      @service_provider = ServiceProviders.const_get(const_name, false).new(:identity => self)
+    elsif provider_config[:requires_embed_code]
+      @service_provider = ServiceProviders::EmbedCodeProvider.new(:identity => self)
+    else
+      nil
     end
   end
-  delegate :client, to: :service_provider
 
   def destroy_and_notify_user
     if user = site.owner
