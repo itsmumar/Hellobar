@@ -2,7 +2,7 @@
 
   h1 Sign In
 
-  = f.input_field :email, :placeholder => 'Your Email'
+  = f.input_field :email, :placeholder => 'Your Email', autofocus: true
   = f.input_field :password, :placeholder => 'Password'
 
   = f.input_field :remember_me, as: :boolean, inline_label: true, label: false
