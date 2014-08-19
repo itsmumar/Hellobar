@@ -24,7 +24,9 @@ describe Identity do
     end
 
     it "uses the provider name to get the API client class" do
-      identity = Identity.new(:provider => "mailchimp")
+      Gibbon::API.stubs(:new => double("gibbon"))
+
+      identity = Identity.new(:provider => "mailchimp", :extra => {"metadata" => {}}, :credentials => {})
       identity.service_provider.should be_an_instance_of ServiceProviders::MailChimp
 
       identity = Identity.new(:provider => "aweber", :credentials => {})
