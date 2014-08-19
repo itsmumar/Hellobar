@@ -1,6 +1,6 @@
 tr.site-element-block class="#{site_element.paused? ? 'paused' : ''}"
-  td 
-    .psudo-border style="background-color: ##{site_element.background_color}"
+  td.color-flag style="background-color: ##{site_element.background_color}"
+  td
     = site_element.message
   td
     = site_element_age(site_element)

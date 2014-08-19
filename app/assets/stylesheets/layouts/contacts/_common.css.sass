@@ -1,0 +1,22 @@
+/*-----------  Conacts Dashboard  -----------*/
+
+[id^="contact_lists-"]
+
+  table
+
+    td
+
+      img
+        width: 2em
+        height: auto
+
+    th:last-of-type:after
+      content: 'q'
+      font-size: 0.5em
+      margin-left: 1.5em
+      font-family: 'hellobar'
+      @include transform(rotate(90deg))
+      @include inline-block()
+
+    td:last-of-type
+      width: 13em

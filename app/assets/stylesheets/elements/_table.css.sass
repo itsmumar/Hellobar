@@ -1,0 +1,43 @@
+/*-----------  Tables  -----------*/
+
+table
+  width: 100%
+  max-width: 100%
+  margin: 1em auto
+  border-collapse: collapse
+  
+  tr
+
+    th,
+    td
+      color: $gray
+      text-align: left
+      padding: 1.05em 1.33em
+
+    th
+      font-size: 0.85em
+      font-weight: normal
+
+    td
+      font-size: 0.9em
+      border-top: 1px solid $grayLighter
+      border-bottom: 1px solid $grayLighter      
+
+      &:first-of-type
+        border-left: 1px solid $grayLighter      
+
+      &:last-of-type
+        border-right: 1px solid $grayLighter   
+
+      &.color-flag
+        margin: 0 !important
+        padding: 0 !important
+        border: none !important
+        width: 0.33em !important
+        min-width: 0.33em !important
+
+      > a
+        color: $red
+
+        &:hover
+          color: darken($red, 5%)

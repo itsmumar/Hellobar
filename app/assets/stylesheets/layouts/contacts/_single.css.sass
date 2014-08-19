@@ -1,0 +1,51 @@
+/*-----------  Conacts Group  -----------*/
+
+#contact_lists-show
+
+  .service-block
+    padding: 0.75em 1.33em
+    border: 1px solid $grayLighter
+    @include justify-content(space-between)
+    @include align-content(stretch)
+    @include align-items(center)
+    @include flex-flow(row nowrap)
+    @include display(flex)
+    @include clearfix()
+
+    .service-icon
+      width: 6.5em
+      margin-right: 1.33em
+      padding: 0.5em 1.67em 0.5em 0.33em
+      border-right: 1px solid $grayLighter
+
+    .service-description
+      width: 100%
+      @include ellipsis()
+
+      small
+        color: $gray
+        display: block
+
+      span
+        color: $grayDark
+
+    .service-actions
+      width: 25em
+      text-align: right
+
+      form
+        margin-top: -1px
+        @include inline-block()
+
+      .button
+        font-size: 0.85em
+        margin-left: 0.5em
+        @extend %gray-inverted-button
+
+  /*-----------  Table  -----------*/
+
+  table
+
+    td:first-of-type
+      width: 4em
+

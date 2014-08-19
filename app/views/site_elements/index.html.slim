@@ -6,6 +6,7 @@ nav.tabs-wrapper
 table.rules-wrapper
   thead
     tr
+      th.color-flag
       th Text
       th Age
       th Type
@@ -17,7 +18,7 @@ table.rules-wrapper
   tbody
     - @rules.each do |rule|
       tr.rule-block
-        th colspan='9'
+        th.page-header colspan='9'
           h4= "/#{rule.name.blank? ? "(no name)" : rule.name}"
           span= rule.to_sentence
 
@@ -31,20 +32,21 @@ table.rules-wrapper
               = content_tag 'a', class: 'remove-rule' do
                 i.icon-trash
                 | Remove this and 
-                span= rule.site_elements.count
+                br
+                = rule.site_elements.count
                 |  bars/modals
 
       - if rule.site_elements.empty?
         tr.rule-block
-          td colspan='9'
+          th.page-header colspan='9'
             small (No Site Elements)
 
       - else
         - rule.site_elements.each do |site_element|
           = render "site_elements/site_element", { :site_element => site_element }
 
-      tr.suggestion-block
-        td colspan='9'
+      tr
+        td.temporary-block colspan='9'
           | Every week, 2,300 people use your Hello Bar. 
           a Create something new
           | to better utilize these users!

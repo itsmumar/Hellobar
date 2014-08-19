@@ -5,3 +5,53 @@
   margin-left: auto
   margin-right: auto
   position: relative
+
+/*-----------  Page Header  -----------*/
+
+.page-header
+  color: $red
+  position: relative
+  margin-bottom: 2em
+  padding-bottom: 0.5em
+  padding-left: 0 !important
+  text-align: left !important
+  border-bottom: 2px solid $red
+  
+  h1, h2, h3, h4, h5, h6
+    margin-top: 0
+    margin-bottom: 0
+    @include inline-block(baseline)
+
+  span
+    margin-left: 0.75em
+
+  .dropdown-wrapper
+
+    .dropdown-block
+      border-color: $red
+
+  &.alt
+    border-color: $grayLighter
+
+    *
+      color: $grayLighter
+
+    .dropdown-wrapper
+
+      .dropdown-block
+        border-color: $grayLighter
+
+/*-----------  Temporary Block  -----------*/
+
+.temporary-block
+  color: $gray
+  padding: 2.25em
+  margin-left: auto
+  margin-right: auto
+  max-width: $blockWidth
+  border-radius: $radiusLg
+  text-align: center !important
+  border: 1px dashed $grayLighter
+
+  .button
+    @extend %green-button

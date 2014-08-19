@@ -1,8 +1,10 @@
 = render "shared/contact_list_modal"
 
-h1 Contacts
-
 - if @contact_lists.any?
+
+  .page-header
+    h5 Contacts
+
   table
     tr
       th List
@@ -12,9 +14,16 @@ h1 Contacts
     - @contact_lists.each do |list|
       tr
         td= link_to list.name, site_contact_list_path(@site, list)
-        td
+        td= image_tag 'mailchimp.png'
         td= list.num_subscribers
         td= list.created_at.strftime("%-m-%-d-%Y")
 
-p
-  button#new-contact-list New Contact List
+  .button New Contact List
+
+- else
+  
+  .temporary-block
+    h5 Grow you email lists
+    strong Did you know that Hello Bar can collect email addresses for you?
+    p We can even sync them to MailChimp automatically!
+    .button Start Collecting Emails

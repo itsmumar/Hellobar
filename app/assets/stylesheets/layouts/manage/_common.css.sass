@@ -1,6 +1,6 @@
 /*-----------  Manage Dashboard  -----------*/
 
-#site_elements-index
+[id^="site_elements-"]
 
   .rules-wrapper
     width: 100%
@@ -15,17 +15,17 @@
         height: auto
 
       th, td
+        font-size: 1em
         text-align: center
         margin-bottom: 0.67em
 
-        &:nth-child(1)
+        &:nth-child(2)
           text-align: left
-          padding-left: 1.5rem
+          padding-left: 1.33rem
 
       /*-----------  Table Headers  -----------*/
       
       th
-        font-weight: normal      
         padding: 1.67em 0 0.67em
 
       th:not([colspan])
@@ -36,15 +36,6 @@
         border-bottom: 1px solid $grayLighter
 
       th[colspan]
-        color: $red
-        position: relative
-        padding-left: 0 !important
-        border-bottom: 2px solid $red
-        @include antialiased()
-
-        h4
-          margin: 0 0.5em 0 0
-          @include inline-block(baseline)
 
         .dropdown-wrapper
           right: -0.75em
@@ -53,12 +44,6 @@
 
           > i
             font-size: 1.15em
-
-          .dropdown-block
-            border-color: $red
-
-            &:before
-              border-bottom-color: $red
 
       /*-----------  Site Element Rows  -----------*/
 
@@ -69,7 +54,7 @@
           background-color: $grayLightest
 
         td
-          color: $gray
+          padding: 0
           font-size: 1.5em
           min-width: 5.5rem
           border-style: solid
@@ -85,7 +70,7 @@
             font-size: 1.5em
             vertical-align: bottom
 
-          &:nth-child(1)
+          &:nth-child(2)
             width: 100%
             font-size: 1em
             color: $grayDark
@@ -93,14 +78,7 @@
             padding-left: 1.67rem
             @include ellipsis()
 
-            .psudo-border
-              left: 0
-              top: -1px
-              width: 5px
-              height: 105%
-              position: absolute
-
-          &:nth-child(2)
+          &:nth-child(3)
             min-width: 6rem
 
             small
@@ -110,7 +88,7 @@
               margin-top: -0.25em
               text-transform: uppercase
 
-          &:nth-child(3)
+          &:nth-child(4)
             background-color: $blueLighter
 
             .icon-contacts
@@ -122,11 +100,11 @@
             .icon-clicks
               color: $yellow
 
-          &:nth-child(7)
+          &:nth-child(8)
             min-width: 6rem   
             font-weight: bold       
 
-          &:nth-child(8)
+          &:nth-child(9)
             min-width: 7rem
             border-right-width: 1px
             background-color: $grayLightest
@@ -145,16 +123,13 @@
 
       /*-----------  Suggestion Rows  -----------*/
 
-      &.suggestion-block
+      .temporary-block
+        padding: 1.15em
+        letter-spacing: 0.033em
+        border-left-style: dashed
+        border-right-style: dashed
 
-        td
-          color: $gray
-          font-size: 0.95em
-          text-align: center
-          letter-spacing: 0.033em
-          border: 1px dashed $grayLight
-
-          a
-            color: $blueLight
-            margin-right: 0.33em
-            text-decoration: underline
+        a
+          color: $blueLight
+          margin-right: 0.33em
+          text-decoration: underline
