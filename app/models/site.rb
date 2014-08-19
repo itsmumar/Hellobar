@@ -9,10 +9,13 @@ class Site < ActiveRecord::Base
   has_many :contact_lists, dependent: :destroy
 
   before_validation :standardize_url
+  before_validation :generate_read_write_keys
 
   before_destroy :blank_out_script
 
   validates :url, url: true
+  validates :read_key, presence: true, uniqueness: true
+  validates :write_key, presence: true, uniqueness: true
 
   def owner
     if membership = site_memberships.where(:role => "owner").first
@@ -93,5 +96,10 @@ class Site < ActiveRecord::Base
     url = Addressable::URI.heuristic_parse(self.url)
 
     self.url = "#{url.scheme}://#{url.normalized_host}"
+  end
+
+  def generate_read_write_keys
+    self.read_key = SecureRandom.uuid if self.read_key.blank?
+    self.write_key = SecureRandom.uuid if self.write_key.blank?
   end
 end
