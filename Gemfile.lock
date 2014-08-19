@@ -340,6 +340,7 @@ GEM
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
+    ruby-hmac (0.4.0)
     ruby-progressbar (1.5.1)
     ruby2ruby (2.0.8)
       ruby_parser (~> 3.1)
@@ -479,6 +480,7 @@ DEPENDENCIES
   recaptcha (~> 0.3.6)
   render_anywhere (~> 0.0.9)
   rspec-rails (~> 2.14)
+  ruby-hmac
   sass-rails (~> 4.0.3)
   sentry-raven (~> 0.9)
   simple_form (= 3.1.0.rc1)
