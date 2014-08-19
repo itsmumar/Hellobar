@@ -6,6 +6,8 @@ class ServiceProviders::MailChimp < ServiceProvider
       identity = opts[:site].identities.where(:provider => 'mailchimp').first
       raise "Site does not have a stored MailChimp identity" unless identity
     end
+
+    @client = Gibbon::API.new(identity.credentials['token'], :api_endpoint => identity.extra['metadata']['api_endpoint'])
   end
 
   def lists
