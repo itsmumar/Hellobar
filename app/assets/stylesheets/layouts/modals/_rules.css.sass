@@ -49,8 +49,9 @@
         @include inline-block()
 
         input,
-        select
-          margin: 0
+        .select-wrapper
+          margin-top: 0 !important
+          margin-bottom: 0 !important
 
         .rule_conditions_segment,
         .rule_conditions_operand
@@ -73,17 +74,19 @@
 
           .select-wrapper
             width: 67%
+            margin-left: 0 !important
 
           input
-            width: 96%
+            margin-top: -1px !important
 
-          input[type='date']
-            width: 40%
-            margin-top: -1px
-            padding-top: 0.375em
-            padding-bottom: 0.375em
-            @include transition(margin-left 0)
-            @include inline-block()
+            &[type='date']
+              width: 40%
+              padding-top: 0.375em
+              padding-bottom: 0.375em
+              @include transition(margin-left 0)
+
+            &:not([type='date'])
+              width: 96% !important
 
           input[type='date']:not([disabled]) ~ input[type='date']:not([disabled])
             margin-left: 4%
