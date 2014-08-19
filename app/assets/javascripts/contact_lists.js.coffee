@@ -8,14 +8,14 @@ $ ->
     success: (data, modal) ->
       window.location = "/sites/#{siteID}/contact_lists/#{data.id}"
 
-  $("button#new-contact-list").click (e) ->
+  $("#new-contact-list").click (e) ->
     options =
       saveURL: "/sites/#{siteID}/contact_lists.json"
       saveMethod: "POST"
 
     new ContactListModal($.extend(baseOptions, options)).open()
 
-  $("button#edit-contact-list").click (e) ->
+  $("#edit-contact-list").click (e) ->
     options =
       loadURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
       saveURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"

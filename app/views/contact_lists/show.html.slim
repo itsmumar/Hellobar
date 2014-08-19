@@ -21,7 +21,7 @@
     span= contact_list_sync_details(@contact_list)
 
   .service-actions
-    a.button Edit
+    a#edit-contact-list.button Edit
     = button_to "Export CSV", site_contact_list_path(@site, @contact_list, :format => :csv), :method => :get, :class => 'button'
 
 - if @contact_list.subscribers.any?
