@@ -1,4 +1,6 @@
 class ServiceProviders::CampaignMonitor < ServiceProvider
+  provider_key :createsend
+  
   def initialize(opts = {})
     if opts[:identity]
       identity = opts[:identity]

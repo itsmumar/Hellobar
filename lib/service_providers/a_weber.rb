@@ -1,4 +1,6 @@
 class ServiceProviders::AWeber < ServiceProvider
+  provider_key :aweber
+  
   def initialize(opts = {})
     if opts[:identity]
       identity = opts[:identity]
