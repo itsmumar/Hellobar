@@ -16,4 +16,15 @@ module SiteElementsHelper
 
     "#{units[0]} <small>#{units[1].pluralize(units[0])} old</small>".html_safe
   end
+
+  def icon_class_for_element(element)
+    case element.element_subtype
+    when "email"
+      "icon-contacts"
+    when /social\//
+      "icon-social"
+    when "traffic"
+      "icon-clicks"
+    end
+  end
 end
