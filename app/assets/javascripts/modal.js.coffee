@@ -10,10 +10,11 @@ class @Modal
 
   # closes the modal via CSS and disables all event bindings
   close: ->
-    @$modal.removeClass("show-modal #{@modalName}-modal")
+    @$modal.removeClass('show-modal')
            .off() # unbind all modal events
            .find("*")
            .off() # unbind all child events
+           .delay(330).removeClass("#{@modalName}-modal")
 
   _bindCloseEvents: (callback) ->
     @_bindEscape(callback)

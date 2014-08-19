@@ -1,0 +1,30 @@
+/*-----------  Account Prompt  -----------*/
+
+.account-prompt
+  text-align: center
+  margin-top: -2.5em
+  margin-bottom: 2.5em
+  padding: 1.05em 1.33em
+  background-color: $blueLighter
+  border-radius: 0 0 $radiusLg $radiusLg
+
+  *
+    color: $blue
+
+  span
+    font-size: 1.15em
+
+  input
+    width: 25% !important
+    margin: 0 0 0 1em !important
+    display: inline-block !important
+    border-radius: $radiusSm !important
+    border-color: $grayLighter !important
+
+    @include placeholder 
+      color: $grayLighter !important
+
+  .button
+    margin-left: 1em
+    font-size: 0.75em !important
+    @extend %blue-button

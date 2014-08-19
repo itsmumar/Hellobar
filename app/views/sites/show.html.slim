@@ -1,4 +1,11 @@
 - if @site.has_script_installed?
-  .statistics-page= render "sites/statistics"
+  
+  .statistics-page
+    = render "sites/statistics"
+
 - else
-  .installation-page= render "sites/install"
+
+  = render "shared/account_prompt"
+
+  .installation-page
+    = render "sites/install"
