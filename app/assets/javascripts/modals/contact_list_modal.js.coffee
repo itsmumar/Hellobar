@@ -1,4 +1,7 @@
 class @ContactListModal extends Modal
+
+  modalName: 'contact-list'
+
   constructor: (@options = {}) ->
     @options.window ||= window
 

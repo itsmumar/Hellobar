@@ -1,4 +1,7 @@
 class @RuleModal extends Modal
+
+  modalName: 'rules'
+
   newConditionTemplate: ->
     $('script#new-condition').html()
 

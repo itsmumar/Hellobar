@@ -6,11 +6,11 @@ class @Modal
   # renders the modal via CSS
   open: ->
     @_bindCloseEvents(@close)
-    @$modal.addClass('show-modal')
+    @$modal.addClass("show-modal #{@modalName}-modal")
 
   # closes the modal via CSS and disables all event bindings
   close: ->
-    @$modal.removeClass('show-modal')
+    @$modal.removeClass("show-modal #{@modalName}-modal")
            .off() # unbind all modal events
            .find("*")
            .off() # unbind all child events

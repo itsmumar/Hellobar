@@ -1,16 +1,14 @@
 /*-----------  Rule Modal  -----------*/
 
-#site_elements-index .modal-block
+.rules-modal
 
   form 
 
     > p
 
-      input
-        width: 4em
-
+      input[type='number'],
       .select-wrapper select
-        width: 5.5em
+        width: 5.5em !important
 
     > label
       width: 9%
@@ -20,8 +18,8 @@
       @include inline-block()
 
     > input
-      width: 91%
-      @include inline-block()
+      width: 91% !important
+      display: inline-block !important
 
   footer
     margin-top: 2em

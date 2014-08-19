@@ -1,5 +1,8 @@
 class @RegistrationModal extends Modal
+
   $modal: null # will retreive content for this on open()
+
+  modalName: 'registration'
 
   fetchModal: ->
     $.get('/modals/registration')
