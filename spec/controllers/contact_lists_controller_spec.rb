@@ -162,7 +162,7 @@ describe ContactListsController, type: :controller do
     end
 
     context 'embed_code esp' do
-      let(:contact_list) { contact_lists(:zombo_esp) }
+      let(:contact_list) { contact_lists(:embed_code) }
       let(:contact_list_params) do
         {
           data: { embed_code: "asdf" }
