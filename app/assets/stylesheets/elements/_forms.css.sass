@@ -46,7 +46,6 @@ textarea
   min-height: 6em      
 
 span > input,
-span > select,
 span > textarea
   display: inline !important
   margin: 0 0.5em !important
@@ -85,9 +84,17 @@ span > textarea
   &:hover:before
     color: $grayDarker
 
-span.select-wrapper:before
-  top: 0.033rem
-  right: 1.25rem
+span.select-wrapper
+  margin: 0 0.5em !important
+  
+  &:before
+    top: 0.033rem
+    right: 1.25rem
+
+  select
+    width: inherit
+    display: inline !important
+    vertical-align: middle
 
 @media screen and (-webkit-min-device-pixel-ratio:0)
   select

@@ -14,6 +14,13 @@ table
       text-align: left
       padding: 1.05em 1.33em
 
+      &.color-flag
+        margin: 0 !important
+        padding: 0 !important
+        border: none !important
+        width: 0.33em !important
+        min-width: 0.33em !important
+
     th
       font-size: 0.85em
       font-weight: normal
@@ -29,15 +36,62 @@ table
       &:last-of-type
         border-right: 1px solid $grayLighter   
 
-      &.color-flag
-        margin: 0 !important
-        padding: 0 !important
-        border: none !important
-        width: 0.33em !important
-        min-width: 0.33em !important
+      > p
+        margin: 0
+        font-size: 1.05em
+        color: $grayDarker
+        @include inline-block()
+        @include ellipsis()
 
       > a
         color: $red
 
         &:hover
           color: darken($red, 5%)
+
+      .num
+        font-size: 1.5em
+        min-width: 5.5rem
+        @include antialiased()
+
+        small
+          display: block
+          color: $grayLight
+          font-size: 0.45em
+          margin-top: -0.25em
+          text-transform: uppercase
+
+    &.see-more
+      border: none
+
+      td
+        border: none
+        position: relative
+        text-align: center
+
+        &:before
+          top: 50%
+          left: 0
+          content: ''
+          width: 100%
+          position: absolute
+          border-top: 1px solid $grayLightest
+
+        > a
+          padding: 0 1em
+          color: $blueLight
+          position: relative
+          background-color: $white
+          text-decoration: underline
+
+          &:hover
+            color: darken($blueLight, 5%)
+
+        a:after
+          color: $gray
+          content: 'q'
+          font-size: 0.5em
+          margin-left: 1.5em
+          font-family: 'hellobar'
+          @include transform(rotate(90deg))
+          @include inline-block()

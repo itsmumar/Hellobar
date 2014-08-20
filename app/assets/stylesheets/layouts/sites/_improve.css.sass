@@ -1,0 +1,141 @@
+/*-----------  Site Improve  -----------*/
+
+#sites-improve
+
+  h5
+    margin-top: 5em
+
+  .tip
+    font-weight: bold
+
+    &:before
+      content: 'J'
+      color: $yellow
+      font-size: 0.8em
+      font-weight: normal
+      margin-right: 0.5em
+      font-family: 'hellobar'
+
+  /*-----------  Charting  -----------*/
+
+  .chart-wrapper
+
+    .chart-block:not(.activated)
+      border-color: $grayLighter
+
+      *
+        color: $grayLighter
+        @include transition()
+
+      i
+        color: $white
+        background-color: $grayLighter
+
+      &:hover
+        border-color: $grayLight
+
+        *
+          color: $grayLight
+
+        i
+          color: $white
+          background-color: $grayLight
+
+        a
+          color: $blueLight
+
+  /*-----------  General Tables  -----------*/
+
+  table
+
+    th, td
+
+      &:not(:nth-child(2))
+        text-align: center
+
+    th
+      font-size: 0.8em
+      text-transform: uppercase
+      color: $grayLight !important
+
+    td
+      padding-top: 0.75em
+      padding-bottom: 0.75em
+
+      .button
+        float: right
+        @extend %green-button
+
+  /*-----------  Other Table  -----------*/
+
+  table:not(.top-performing)
+
+    th, td
+
+      &:first-of-type
+        width: 2em
+        border-left: none
+
+      &:last-of-type
+        border-right: none
+
+    td[colspan]
+      color: $purple
+      font-size: 0.85em
+      text-align: center
+      letter-spacing: 0.033em
+      background-color: $grayLightest
+
+      .select-wrapper
+        width: 4em
+
+        &:before
+          top: 1.15em
+          right: 1.5em
+          content: 'q'
+          color: $purple
+          font-size: 0.5em
+          font-family: 'hellobar'
+          @include transform(rotate(90deg))
+
+        select
+          color: $purple
+          border-color: $grayLight
+          border-radius: $radiusSm
+
+  /*-----------  Top Performing Table  -----------*/
+
+  table.top-performing
+    border-spacing: 0 0.75em
+    border-collapse: separate
+
+    th, td
+
+      [class^='icon-']
+        line-height: 0
+        color: $grayLighter
+        margin-left: 0.5em
+        vertical-align: middle
+
+      .icon-magnifyingglass
+        font-size: 1.33em
+
+      .icon-bar,
+      .icon-modal
+        margin: 0
+        font-size: 3em
+
+      .icon-badge
+        font-size: 2.25em
+        position: absolute
+
+        &.first
+          color: $purple
+
+    th
+      padding-top: 0
+      padding-bottom: 0
+
+
+
+

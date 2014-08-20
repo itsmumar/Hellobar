@@ -1,19 +1,19 @@
 tr.site-element-block class="#{site_element.paused? ? 'paused' : ''}"
   td.color-flag style="background-color: ##{site_element.background_color}"
   td
-    = site_element.message
+    p= site_element.message
   td
-    = site_element_age(site_element)
+    span.num= site_element_age(site_element)
   td
     i class="#{icon_class_for_element(site_element)}"
   td
     i.icon-bar
   td
-    | 83
+    span.num 83
   td
-    | 5
+    span.num 5
   td
-    | 4.3%
+    span.num 4.3%
   td
     i.icon-abtest
     .dropdown-wrapper
