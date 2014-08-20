@@ -16,7 +16,7 @@ class ContactListsController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.csv  { send_data @contact_list.to_csv }
+      format.csv  { redirect_to contact_list_csv_url(@contact_list) }
       format.json { render :json => @contact_list }
     end
   end
@@ -38,5 +38,11 @@ class ContactListsController < ApplicationController
 
   def load_contact_list
     @contact_list = @site.contact_lists.find(params[:id])
+  end
+
+  def contact_list_csv_url(list)
+    path, params = Hello::DataAPIHelper::RequestParts.get_contacts(list.site_id, list.id, list.site.read_key, nil, nil, {"f" => "c"})
+    path_with_params = Hello::DataAPIHelper.url_for(path, params)
+    URI.join(Hellobar::Settings[:data_api_url], path_with_params).to_s
   end
 end

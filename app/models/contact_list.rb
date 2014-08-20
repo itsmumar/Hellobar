@@ -85,26 +85,6 @@ class ContactList < ActiveRecord::Base
     @num_subscribers = data ? data[id.to_s] : 0
   end
 
-  def to_csv
-    CSV.generate do |csv|
-      headers = [
-        "Email",
-        "Name",
-        "Timestamp"
-      ]
-
-      csv << headers
-
-      subscribers.each do |subscriber|
-        csv << [
-          subscriber[:email],
-          subscriber[:name],
-          subscriber[:created_at]
-        ]
-      end
-    end
-  end
-
   def provider_set?
     ![nil, "", 0, "0"].include?(provider)
   end
