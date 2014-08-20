@@ -100,11 +100,11 @@ class ContactList < ActiveRecord::Base
 
   def set_identity
     # Updating an established contact list, removing its identity
-    return self.identity = nil if EMPTY_PROVIDER_VALUES.compact.include?(provider) && persisted?
+    return self.identity ||= nil unless provider.present?
 
-    return self.identity ||= nil unless provider_set?
-
-    self.identity = if embed_code?
+    self.identity = if !provider_set?
+      nil # Don't create an invalid provider
+    elsif embed_code?
       site.identities.find_or_create_by(provider: provider)
     else
       site.identities.find_by(provider: provider)
