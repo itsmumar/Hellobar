@@ -30,12 +30,18 @@ describe ContactListsController, type: :controller do
     site.contact_lists = [ contact_list ]
     allow_any_instance_of(Identity).to receive(:credentials).and_return("token" => "test")
     allow_any_instance_of(Identity).to receive(:extra).and_return("metadata" => { "api_endpoint" => "test" })
-    allow(Hello::EmailData).to receive(:get_emails).and_return { [] }
-    allow(Hello::EmailData).to receive(:num_emails).and_return { subscribers.count }
   end
 
   describe "GET 'index'" do
     render_views
+
+    let(:data_api_response) do
+      { contact_list.id => 1 }
+    end
+
+    before do
+      expect(Hello::DataAPI).to receive(:contact_list_totals).and_return { data_api_response }.at_least(1).times
+    end
 
     subject { get :index, site_id: site }
     it { should be_success }
@@ -44,6 +50,14 @@ describe ContactListsController, type: :controller do
 
   describe "GET 'show'" do
     render_views
+
+    let(:data_api_response) do
+      { contact_list.id => 1 }
+    end
+
+    before do
+      expect(Hello::DataAPI).to receive(:get_contacts).and_return { data_api_response }.at_least(1).times
+    end
 
     subject { get :show, site_id: site, id: contact_list }
     it { should be_success }
