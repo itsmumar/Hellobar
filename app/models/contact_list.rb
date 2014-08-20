@@ -47,7 +47,13 @@ class ContactList < ActiveRecord::Base
   end
 
   def syncable?
-    identity && data && data["remote_name"] && data["remote_id"]
+    return false unless identity && data
+
+    if oauth?
+      data["remote_name"] && data["remote_id"]
+    elsif embed_code?
+      data["embed_code"]
+    end
   end
 
   def service_provider
@@ -90,7 +96,21 @@ class ContactList < ActiveRecord::Base
   end
 
   def set_identity
-    self.identity = provider_set? ? site.identities.where(:provider => provider).first : nil
+    return self.identity = nil unless provider_set?
+
+    self.identity = if embed_code?
+      site.identities.find_or_create_by(provider: provider)
+    else
+      site.identities.find_by(provider: provider)
+    end
+  end
+
+  def oauth?
+    data["embed_code"].nil?
+  end
+
+  def embed_code?
+    !oauth?
   end
 
   protected

@@ -94,7 +94,7 @@ asyncTest "selecting \"I'm ready\" redirects to the correct URL to begin the oau
   expect(1)
 
   @modal.$modal.on "ajax-complete", =>
-    @modal.$modal.find(".start-connect").click()
+    @modal.$modal.find(".ready.button").click()
     includes @modal.options.window.location, "/sites/123/identities/new"
 
     QUnit.start()

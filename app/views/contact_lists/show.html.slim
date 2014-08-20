@@ -14,10 +14,10 @@
 
 .service-block
   .service-icon 
-    = image_tag 'mailchimp.png'
+    = image_tag contact_list_image(list)
 
   .service-description
-    small You are syncing contacts with
+    small You are syncing contacts now
     span= contact_list_sync_details(@contact_list)
 
   .service-actions

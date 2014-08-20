@@ -6,10 +6,13 @@ module ContactListsHelper
 
   def contact_list_sync_details(contact_list)
     if contact_list.identity && contact_list.data["remote_name"]
-      provider = Hellobar::Settings[:identity_providers][contact_list.identity.provider.to_sym][:name]
-      "Syncing contacts with #{provider} list \"#{contact_list.data["remote_name"]}\""
+      "Syncing contacts with #{contact_list.service_provider.name} list \"#{contact_list.data["remote_name"]}\""
     else
       "Storing contacts in Hello Bar only"
     end
+  end
+
+  def contact_list_image(contact_list)
+    (contact_list.service_provider ? contact_list.service_provider.provider_key : "hellobar") + ".png"
   end
 end

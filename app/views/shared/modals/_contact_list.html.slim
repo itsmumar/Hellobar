@@ -29,16 +29,26 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |
   | <ol>
   |  {{#if requiresEmbedCode}}
-  |    <li>Your embed code from {{providerName}}</li>  
+  |    <li>Your embed code from {{providerName}}</li>
   |  {{else}}
   |    <li>Your {{providerName}} username and password</li>  
   |  {{/if}}
   |  <li>To have an existing list with {{providerName}} to sync to</li>
+  | </ol>
+  |
+  | {{#if requiresEmbedCode}}
+  |
+  | <label for="contact_list_embed_code">Paste your embed code below, then click Done.</label>
+  | <textarea id="contact_list_embed_code" name="contact_list[data][embed_code]"></textarea>
+  |
+  | {{else}}
   |
   | <p>
   |   <a class="do-this-later">I'll do this later</a>
-  |   <a class="start-connect button">I'm ready</a>
+  |   <a class="ready button">I'm ready</a>
   | </p>
+  |
+  | {{/if}}
 
 script id="contact-list-modal-provider-instructions-nevermind-template" type="text/x-handlebars-template"
   p No worries!
