@@ -1,4 +1,4 @@
-= render "shared/contact_list_modal"
+= render "shared/modals/contact_list"
 
 - if @contact_lists.any?
 
@@ -18,7 +18,8 @@
         td= @contact_list_totals[list.id.to_s] || 0
         td= list.created_at.strftime("%-m-%-d-%Y")
 
-  #new-contact-list.button New Contact List
+  = link_to '#', class: 'button' do
+    | New Contact List
 
 - else
   
