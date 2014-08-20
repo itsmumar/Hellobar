@@ -20,6 +20,8 @@ class ContactList < ActiveRecord::Base
     "404 Resource Not Found"
   ]
 
+  EMPTY_PROVIDER_VALUES = [ nil, "", 0, "0" ]
+
   attr_accessor :provider
 
   belongs_to :site
@@ -34,6 +36,7 @@ class ContactList < ActiveRecord::Base
   validates :name, :presence => true
   validates :site, :association_exists => true
   validate :provider_credentials_exist, :if => :provider_set?
+  validate :embed_code_exists, :if => :embed_code?
 
   def self.sync_all!
     all.each do |list|
@@ -92,10 +95,13 @@ class ContactList < ActiveRecord::Base
   end
 
   def provider_set?
-    ![nil, "", 0, "0"].include?(provider)
+    !EMPTY_PROVIDER_VALUES.include?(provider)
   end
 
   def set_identity
+    # Updating an established contact list, removing its identity
+    return self.identity = nil if EMPTY_PROVIDER_VALUES.compact.include?(provider) && persisted?
+
     return self.identity ||= nil unless provider_set?
 
     self.identity = if embed_code?
@@ -106,11 +112,15 @@ class ContactList < ActiveRecord::Base
   end
 
   def oauth?
-    data["embed_code"].nil?
+    identity.service_provider.oauth?
+  rescue
+    true # by default, providers are oauth
   end
 
   def embed_code?
-    !oauth?
+    identity.service_provider.embed_code?
+  rescue
+    false
   end
 
   protected
@@ -139,5 +149,9 @@ class ContactList < ActiveRecord::Base
 
   def provider_credentials_exist
     errors.add(:provider, "credentials have not been set yet") unless identity && identity.provider == provider
+  end
+
+  def embed_code_exists
+    errors.add(:base, "Embed code cannot be blank") unless data[:embed_code]
   end
 end

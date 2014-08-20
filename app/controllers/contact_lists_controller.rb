@@ -10,7 +10,7 @@ class ContactListsController < ApplicationController
 
   def create
     @contact_list = @site.contact_lists.create(contact_list_params)
-    render :json => @contact_list
+    render :json => @contact_list, :status => @contact_list.persisted? ? :created : :bad_request
   end
 
   def show

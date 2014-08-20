@@ -13,6 +13,18 @@ class ServiceProvider
     klass = self.class.name.demodulize
     Hellobar::Settings[:identity_providers].values.find { |v| v[:service_provider_class] == klass || v[:name] == klass }
   end
+
+  def name
+    settings[:name]
+  end
+
+  def embed_code?
+    settings[:requires_embed_code] === true
+  end
+
+  def oauth?
+    !embed_code?
+  end
 end
 
 module ServiceProviders

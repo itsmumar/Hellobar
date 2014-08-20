@@ -50,6 +50,84 @@ describe ContactListsController, type: :controller do
     its(:body) { should include "Syncing contacts with #{contact_list.provider}" }
   end
 
+  describe "POST 'create'" do
+    let!(:created_contact_list) do
+      expect do
+        response = post :create, site_id: site, contact_list: contact_list_params
+        expect(response.status).to eq 201
+      end.to change { ContactList.count }.by 1
+
+      ContactList.last.tap do |list|
+        expect(list).not_to eq(contact_list)
+      end
+    end
+
+    subject { created_contact_list }
+
+    context 'oauth esp' do
+      let(:contact_list_params) do
+        {
+          provider: "mailchimp",
+          name: "My contact list",
+          data: { remote_id: "1234", remote_name: "MailChimp Test" }
+        }
+      end
+
+      its(:name) { should == "My contact list" }
+      it 'should add data' do
+        expect(subject.data['remote_id']).to eq "1234"
+        expect(subject.data['remote_name']).to eq "MailChimp Test"
+      end
+      it 'adds provider name' do
+        expect(subject.service_provider.name).to eq "MailChimp"
+      end
+    end
+
+    context 'oauth esp with no identity' do
+      before { site.identities.destroy_all }
+
+      let(:contact_list_params) do
+        {
+          provider: "mailchimp",
+          name: "My contact list",
+          data: { remote_id: "1234", remote_name: "Campaign Monitor Test" }
+        }
+      end
+
+      it 'should fail' do
+        expect do
+          response = post :create, site_id: site, contact_list: contact_list_params
+          expect(response.status).to eq 400
+        end.to change { ContactList.count }.by 0
+      end
+    end
+
+    context 'embed code esp' do
+      let(:contact_list_params) do
+        {
+          provider: "mad_mimi",
+          name: "My embed code contact list",
+          data: { embed_code: '<script type="text/javascript"></script>' }
+        }
+      end
+
+      its(:name) { should == "My embed code contact list" }
+      it 'should add data' do
+        expect(subject.data['embed_code']).to eq '<script type="text/javascript"></script>'
+      end
+
+      context 'embed code is blank' do
+        before { contact_list_params[:data].delete(:embed_code) }
+        it 'should fail' do
+          expect do
+            response = post :create, site_id: site, contact_list: contact_list_params
+            expect(response.status).to eq 400
+          end.to change { ContactList.count }.by 0
+        end
+      end
+    end
+  end
+
   describe "PUT 'update'" do
     let!(:updated_contact_list) do
       put :update, site_id: site, id: contact_list, contact_list: contact_list_params
