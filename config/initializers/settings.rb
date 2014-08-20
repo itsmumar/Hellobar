@@ -28,11 +28,14 @@ unless defined?(Hellobar::Settings)
     constantcontact_app_secret
     mailchimp_client_id
     mailchimp_secret
+    data_api_url
   )
 
   keys.each do |key|
     config[key.to_sym] = yaml[key] || ENV[key.upcase]
   end
+
+  config[:data_api_url] ||= "http://mock-hi.hellobar.com"
 
   dynamo_tables = %w(
     email
