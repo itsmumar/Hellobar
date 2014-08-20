@@ -72,7 +72,10 @@ class ContactList < ActiveRecord::Base
   end
 
   def subscribers
-    @subscribers ||= Hello::DataAPI.get_contacts(self) || []
+    return @subscribers if @subscribers
+
+    data = Hello::DataAPI.get_contacts(self)
+    @subscribers = data ? data.map{|d| {:email => d[0], :name => d[1]}} : []
   end
 
   def num_subscribers

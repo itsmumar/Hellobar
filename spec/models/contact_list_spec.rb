@@ -147,7 +147,7 @@ describe ContactList do
   describe "#subscribers" do
     it "gets subscribers from the data API" do
       Hello::DataAPI.stub(:get_contacts => [["person@gmail.com", "Per Son"]])
-      contact_list.subscribers.should == [["person@gmail.com", "Per Son"]]
+      contact_list.subscribers.should == [{:email => "person@gmail.com", :name => "Per Son"}]
     end
 
     it "defaults to [] if data API returns nil" do
