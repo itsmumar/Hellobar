@@ -44,9 +44,45 @@ describe ContactListsController, type: :controller do
 
   describe "GET 'show'" do
     render_views
-    
+
     subject { get :show, site_id: site, id: contact_list }
     it { should be_success }
     its(:body) { should include "Syncing contacts with #{contact_list.provider}" }
+  end
+
+  describe "PUT 'update'" do
+    let!(:updated_contact_list) do
+      put :update, site_id: site, id: contact_list, contact_list: contact_list_params
+      contact_list.reload
+    end
+
+    context 'oauth esp' do
+      let(:contact_list_params) do
+        {
+          data: { remote_id: "2", remote_name: "test2" }
+        }
+      end
+
+      it 'should have updated the remote id and name' do
+        expect(contact_list.data['remote_id']).to eq("2")
+        expect(contact_list.data['remote_name']).to eq("test2")
+      end
+    end
+
+    context 'embed_code esp' do
+      let(:contact_list) { contact_lists(:zombo_esp) }
+      let(:contact_list_params) do
+        {
+          data: { embed_code: "asdf" }
+        }
+      end
+
+      it 'keeps the service provider' do
+        expect(contact_list.service_provider.name).to eq "Mad Mimi"
+      end
+      it 'changes the embed code' do
+        expect(contact_list.data['embed_code']).to eq "asdf"
+      end
+    end
   end
 end

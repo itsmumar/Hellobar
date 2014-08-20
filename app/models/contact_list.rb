@@ -96,7 +96,7 @@ class ContactList < ActiveRecord::Base
   end
 
   def set_identity
-    return self.identity = nil unless provider_set?
+    return self.identity ||= nil unless provider_set?
 
     self.identity = if embed_code?
       site.identities.find_or_create_by(provider: provider)
