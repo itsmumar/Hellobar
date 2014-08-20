@@ -15,7 +15,7 @@
       tr
         td= link_to list.name, site_contact_list_path(@site, list)
         td= image_tag 'mailchimp.png'
-        td= list.num_subscribers
+        td= @contact_list_totals[list.id.to_s] || 0
         td= list.created_at.strftime("%-m-%-d-%Y")
 
   #new-contact-list.button New Contact List

@@ -5,6 +5,7 @@ class ContactListsController < ApplicationController
 
   def index
     @contact_lists = @site.contact_lists
+    @contact_list_totals = Hello::DataAPI.contact_list_totals(@site, @contact_lists) || {}
   end
 
   def create
