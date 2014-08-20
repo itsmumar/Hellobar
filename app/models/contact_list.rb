@@ -72,11 +72,14 @@ class ContactList < ActiveRecord::Base
   end
 
   def subscribers
-    @subscribers ||= Hello::EmailData.get_all_emails(id).sort_by{|s| s[:created_at]}.reverse
+    @subscribers ||= Hello::DataAPI.get_contacts(self) || []
   end
 
   def num_subscribers
-    @num_subscribers ||= Hello::EmailData.num_emails(id)
+    return @num_subscribers if @num_subscribers
+
+    data = Hello::DataAPI.contact_list_totals(site, [self])
+    @num_subscribers = data ? data[id.to_s] : 0
   end
 
   def to_csv

@@ -2,7 +2,6 @@ AmCharts.ready ->
 
   # Render appropriate chart on click
   $('body').on 'click', '.chart-block[data-chart]:not(.activated)', (event) ->
-    
     # Don't allow clikcing during loading
     return false if $('#amchart').hasClass('loading')
 

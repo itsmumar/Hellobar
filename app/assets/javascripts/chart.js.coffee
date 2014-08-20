@@ -14,7 +14,7 @@ class @Chart
       setTimeout ( =>
         if Math.random() >= 0.1
           @_renderData(@_fixtureData())
-        else        
+        else
           @_failedAttempt()
         @$el.removeClass('loading')
       ), 2000

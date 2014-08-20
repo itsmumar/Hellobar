@@ -143,4 +143,28 @@ describe ContactList do
       end
     end
   end
+
+  describe "#subscribers" do
+    it "gets subscribers from the data API" do
+      Hello::DataAPI.stub(:get_contacts => [["person@gmail.com", "Per Son"]])
+      contact_list.subscribers.should == [["person@gmail.com", "Per Son"]]
+    end
+
+    it "defaults to [] if data API returns nil" do
+      Hello::DataAPI.stub(:get_contacts => nil)
+      contact_list.subscribers.should == []
+    end
+  end
+
+  describe "#num_subscribers" do
+    it "gets number of subscribers from the data API" do
+      Hello::DataAPI.stub(:contact_list_totals => {contact_list.id.to_s => 5})
+      contact_list.num_subscribers.should == 5
+    end
+
+    it "defaults to 0 if data API returns nil" do
+      Hello::DataAPI.stub(:contact_list_totals => nil)
+      contact_list.num_subscribers.should == 0
+    end
+  end
 end
