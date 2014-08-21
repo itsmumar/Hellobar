@@ -100,7 +100,7 @@ class ContactList < ActiveRecord::Base
 
   def set_identity
     # Updating an established contact list, removing its identity
-    return self.identity ||= nil unless provider.present?
+    return unless provider.present?
 
     self.identity = if !provider_set?
       nil # Don't create an invalid provider
