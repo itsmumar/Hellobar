@@ -186,4 +186,13 @@ describe ContactList do
       contact_list.num_subscribers.should == 0
     end
   end
+
+  describe "#data" do
+    it "drops nil values in data" do
+      contact_list.data = { "remote_name" => "", "remote_id" => 1}
+      contact_list.identity = nil
+      contact_list.save
+      contact_list.data['remote_name'].should be_nil
+    end
+  end
 end

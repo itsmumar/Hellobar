@@ -31,7 +31,7 @@ class ContactList < ActiveRecord::Base
 
   serialize :data, Hash
 
-  before_validation :set_identity
+  before_validation :set_identity, :reject_empty_data_values
 
   validates :name, :presence => true
   validates :site, :association_exists => true
@@ -148,5 +148,10 @@ class ContactList < ActiveRecord::Base
 
   def embed_code_exists
     errors.add(:base, "Embed code cannot be blank") unless data[:embed_code]
+  end
+
+  def reject_empty_data_values
+    return unless data
+    self.data = data.delete_if { |k,v| v.blank? }
   end
 end
