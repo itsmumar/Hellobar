@@ -21,6 +21,6 @@ module ContactListsHelper
   end
 
   def contact_list_image_key(contact_list)
-    contact_list.service_provider ? contact_list.service_provider.provider_key : "hellobar"
+    contact_list.service_provider ? contact_list.service_provider.key : "hellobar"
   end
 end
