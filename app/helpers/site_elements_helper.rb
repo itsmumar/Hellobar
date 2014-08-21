@@ -40,7 +40,7 @@ module SiteElementsHelper
     if metrics.nil? || metrics[0][1] == 0
       percentage = 0.0
     else
-      percentage = metrics[0][0] * 1.0 / metrics[0][1]
+      percentage = metrics[0][1] * 1.0 / metrics[0][0]
     end
 
 
