@@ -1,17 +1,26 @@
 class ServiceProvider
   attr_accessor :client
 
+  class << self
+    def [](name)
+      Hashie::Mash.new providers[name.to_sym]
+    end
+
+    def providers
+      Hellobar::Settings[:identity_providers]
+    end
+  end
+
   def log message
     $stdout.puts "#{Time.current} [#{self.class.name}] " + message
   end
 
-  def self.[] name
-  	Hashie::Mash.new Hellobar::Settings[:identity_providers][name.to_sym]
+  def settings
+    config[:settings] 
   end
 
-  def settings
-    klass = self.class.name.demodulize
-    Hellobar::Settings[:identity_providers].values.find { |v| v[:service_provider_class] == klass || v[:name] == klass }
+  def key
+    config[:key]
   end
 
   def name
@@ -24,6 +33,19 @@ class ServiceProvider
 
   def oauth?
     !embed_code?
+  end
+
+  private
+
+  def config
+    key, value = self.class.providers.find(&method(:current_provider?))
+    { key: key, settings: value }
+  end
+
+  def current_provider?(array)
+    key, value = *array
+    klass = self.class.name.demodulize
+    value[:service_provider_class] == klass || value[:name] == klass
   end
 end
 

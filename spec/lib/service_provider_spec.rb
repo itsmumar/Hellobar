@@ -6,6 +6,7 @@ describe "service providers" do
   describe ServiceProviders::AWeber do
     subject { described_class.new(identity: identity) }
     its(:name) { should == "AWeber" }
+    its(:key) { should == :aweber }
   end
 
   describe ServiceProviders::CampaignMonitor do
@@ -13,6 +14,7 @@ describe "service providers" do
     before { expect_any_instance_of(described_class).to receive(:initialize_client).and_return(client) }
     subject { described_class.new(identity: identity) }
     its(:name) { should == "Campaign Monitor" }
+    its(:key) { should == :createsend }
   end
 
   describe ServiceProviders::ConstantContact do
@@ -21,35 +23,42 @@ describe "service providers" do
     end
     subject { described_class.new(identity: identity) }
     its(:name) { should == "Constant Contact" }
+    its(:key) { should == :constantcontact }
   end
 
   describe ServiceProviders::GetResponse do
     subject { described_class.new(identity: identity) }
     its(:name) { should == "GetResponse" }
+    its(:key) { should == :get_response }
   end
 
   describe ServiceProviders::IContact do
     subject { described_class.new(identity: identity) }
     its(:name) { should == "iContact" }
+    its(:key) { should == :icontact }
   end
 
   describe ServiceProviders::MadMimi do
     subject { described_class.new(identity: identity) }
     its(:name) { should == "Mad Mimi" }
+    its(:key) { should == :mad_mimi }
   end
 
   describe ServiceProviders::MailChimp do
     subject { described_class.new(identity: identity) }
     its(:name) { should == "MailChimp" }
+    its(:key) { should == :mailchimp }
   end
 
   describe ServiceProviders::MyEmma do
     subject { described_class.new(identity: identity) }
     its(:name) { should == "MyEmma" }
+    its(:key) { should == :my_emma }
   end
 
   describe ServiceProviders::VerticalResponse do
     subject { described_class.new(identity: identity) }
     its(:name) { should == "VerticalResponse" }
+    its(:key) { should == :vertical_response }
   end
 end
