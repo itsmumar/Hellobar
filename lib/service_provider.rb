@@ -32,7 +32,7 @@ class ServiceProvider
   end
 
   def oauth?
-    !embed_code?
+    settings[:oauth] === true
   end
 
   private
