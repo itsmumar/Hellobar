@@ -99,7 +99,6 @@ class ContactList < ActiveRecord::Base
   end
 
   def set_identity
-    # Updating an established contact list, removing its identity
     return unless provider.present?
 
     self.identity = if !provider_set?
@@ -112,15 +111,11 @@ class ContactList < ActiveRecord::Base
   end
 
   def oauth?
-    identity.service_provider.oauth?
-  rescue
-    true # by default, providers are oauth
+    identity && identity.service_provider_class.oauth?
   end
 
   def embed_code?
-    identity.service_provider.embed_code?
-  rescue
-    false
+    identity && identity.service_provider_class.embed_code?
   end
 
   protected

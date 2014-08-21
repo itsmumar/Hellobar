@@ -40,6 +40,8 @@ describe ContactList do
     it "should not be valid if #provider does not match an existing identity" do
       list = contact_lists(:zombo)
       list.provider = "notanesp"
+      list.stub(:service_provider_class).and_return(ServiceProvider)
+      list.identity.provider = 'mailchimp'
 
       list.should_not be_valid
       list.errors.messages[:provider].should include("credentials have not been set yet")
@@ -55,6 +57,7 @@ describe ContactList do
   end
 
   it "should run email integrable sync correctly" do
+    contact_list.identity.provider = 'mailchimp'
     contact_list.save!
     contact_list.last_synced_at.should be_nil
     contact_list.stub(:syncable? => true)
@@ -86,6 +89,10 @@ describe ContactList do
     end
 
     describe "for mailchimp" do
+      before do
+        allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::MailChimp)
+      end
+
       it "if someone has an invalid list stored, delete the identity and notify them" do
         @mock_service_provider.should_receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new("MailChimp API Error: Invalid MailChimp List ID"))
         contact_list.identity.should_receive :destroy_and_notify_user
@@ -109,6 +116,10 @@ describe ContactList do
     end
 
     describe "for campaign monitor" do
+      before do
+        allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::CampaignMonitor)
+      end
+
       it "if someone has revoked our access, delete the identity and notify them" do
         @mock_service_provider.should_receive(:batch_subscribe).and_raise(CreateSend::RevokedOAuthToken.new(Hashie::Mash.new(:Code => 122, :Message => "Revoked OAuth Token")))
         contact_list.identity.should_receive :destroy_and_notify_user
@@ -118,6 +129,10 @@ describe ContactList do
     end
 
     describe "for aweber" do
+      before do
+        allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::AWeber)
+      end
+
       it "if someone has an invalid list stored, delete the identity and notify them" do
         @mock_service_provider.should_receive(:batch_subscribe).and_raise(URI::InvalidURIError.new("bad URI(is not URI?):"))
         contact_list.identity.should_receive :destroy_and_notify_user
@@ -134,6 +149,10 @@ describe ContactList do
     end
 
     describe "for constantcontact" do
+      before do
+        allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::ConstantContact)
+      end
+
       it "if someone has an invalid list stored, delete the identity and notify them" do
         response = OpenStruct.new(:code => 404, :body => "404 Resource Not Found")
         @mock_service_provider.should_receive(:batch_subscribe).and_raise(RestClient::ResourceNotFound.new(response))

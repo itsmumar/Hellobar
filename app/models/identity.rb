@@ -70,10 +70,12 @@ class Identity < ActiveRecord::Base
   end
 
   def service_provider
-    return @service_provider if @service_provider
+    @service_provider ||= service_provider_class.new(:identity => self)
+  end
 
+  def service_provider_class
     const_name = provider_config[:service_provider_class] || provider_config[:name]
-    @service_provider = ServiceProviders.const_get(const_name, false).new(:identity => self)
+    ServiceProviders.const_get(const_name, false)
   end
 
   def destroy_and_notify_user
