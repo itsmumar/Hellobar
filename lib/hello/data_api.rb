@@ -7,6 +7,30 @@ module Hello::DataAPI
       get(path, params)
     end
 
+    def lifetime_totals_by_type(site, site_elements, num_days = 1)
+      data = Hello::DataAPI.lifetime_totals(site, site.site_elements, num_days) || {}
+
+      {:total => [0, 0], :email => [0, 0], :social => [0, 0], :traffic => [0, 0]}.tap do |totals|
+        data.each do |k, v|
+          if element = site.site_elements.find(k)
+            views, conversions = v[0]
+
+            totals[:total][0] += views
+            totals[:total][1] += conversions
+
+            key = case element.element_subtype
+                  when "email" then :email
+                  when "traffic" then :traffic
+                  when /social\// then :social
+                  end
+
+            totals[key][0] += views
+            totals[key][1] += conversions
+          end
+        end
+      end
+    end
+
     def contact_list_totals(site, contact_lists)
       path, params = Hello::DataAPIHelper::RequestParts.contact_list_totals(site.id, contact_lists.map(&:id), site.read_key)
       get(path, params)

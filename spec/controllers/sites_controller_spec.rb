@@ -103,26 +103,6 @@ describe SitesController do
 
       session[:current_site].should == site.id
     end
-
-    it "rolls up lifetime totals by site element type" do
-      site = sites(:zombo)
-      stub_current_user(site.owner)
-
-      Hello::DataAPI.should_receive(:lifetime_totals).and_return({
-        site_elements(:zombo_traffic).id.to_s => [[2, 1]],
-        site_elements(:zombo_email).id.to_s =>   [[4, 3]],
-        site_elements(:zombo_twitter).id.to_s => [[6, 5]]
-      })
-
-      get :show, :id => site
-
-      assigns(:totals).should == {
-        :total =>   [12, 9],
-        :traffic => [2, 1],
-        :email =>   [4, 3],
-        :social =>  [6, 5]
-      }
-    end
   end
 
   describe "GET preview_script" do
