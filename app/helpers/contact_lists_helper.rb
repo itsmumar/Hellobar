@@ -5,15 +5,17 @@ module ContactListsHelper
   end
 
   def contact_list_sync_details(contact_list)
-    if contact_list.identity && contact_list.data["remote_name"]
+    if contact_list.data["remote_name"]
       "Syncing contacts with #{contact_list.service_provider.name} list \"#{contact_list.data["remote_name"]}\""
+    elsif contact_list.identity
+      "Syncing contacts with #{contact_list.service_provider.name}"
     else
       "Storing contacts in Hello Bar only"
     end
   end
 
-  def contact_list_provider(contact_list)
-    contact_list.service_provider.name
+  def contact_list_provider_name(contact_list)
+    contact_list.service_provider.try(:name) || "Hello Bar"
   end
 
   def contact_list_image(contact_list)

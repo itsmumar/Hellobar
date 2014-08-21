@@ -15,7 +15,7 @@
       tr
         td= link_to list.name, site_contact_list_path(@site, list)
         td
-          span = contact_list_provider(list) 
+          span = contact_list_provider_name(list) 
           = image_tag contact_list_image(list)
         td= @contact_list_totals[list.id.to_s] || 0
         td= list.created_at.strftime("%-m-%-d-%Y")
