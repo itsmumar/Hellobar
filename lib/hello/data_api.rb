@@ -9,26 +9,28 @@ module Hello::DataAPI
 
     def lifetime_totals_by_type(site, site_elements, num_days = 1)
       data = Hello::DataAPI.lifetime_totals(site, site.site_elements, num_days) || {}
+      totals = {:total => [], :email => [], :social => [], :traffic => []}
+      elements = site.site_elements.where(:id => data.keys)
 
-      {:total => [0, 0], :email => [0, 0], :social => [0, 0], :traffic => [0, 0]}.tap do |totals|
-        data.each do |k, v|
-          if element = site.site_elements.find(k)
-            views, conversions = v[0]
+      return totals if data == {}
 
-            totals[:total][0] += views
-            totals[:total][1] += conversions
+      ids = {
+        :total => data.keys,
+        :email => elements.select{|e| e.element_subtype == "email"}.map{|e| e.id.to_s},
+        :traffic => elements.select{|e| e.element_subtype == "traffic"}.map{|e| e.id.to_s},
+        :social => elements.select{|e| e.element_subtype =~ /social\//}.map{|e| e.id.to_s}
+      }
 
-            key = case element.element_subtype
-                  when "email" then :email
-                  when "traffic" then :traffic
-                  when /social\// then :social
-                  end
+      data.values.first.count.times do |i|
+        totals[:total] << data.inject([0, 0]){|m, d| [m[0] + d[1][i][0], m[1] + d[1][i][1]]}
 
-            totals[key][0] += views
-            totals[key][1] += conversions
-          end
+        [:email, :traffic, :social].each do |key|
+          type_data = data.select{|k, v| ids[key].include?(k)}
+          totals[key] << type_data.inject([0, 0]){|m, d| [m[0] + d[1][i][0], m[1] + d[1][i][1]]}
         end
       end
+
+      totals
     end
 
     def contact_list_totals(site, contact_lists)

@@ -8,3 +8,6 @@ zombo_email:
 zombo_twitter:
   rule: zombo
   element_subtype: social/tweet_on_twitter
+zombo_facebook:
+  rule: zombo
+  element_subtype: social/like_on_facebook

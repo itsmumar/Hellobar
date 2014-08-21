@@ -15,10 +15,10 @@ describe Hello::DataAPI do
     result = Hello::DataAPI.lifetime_totals_by_type(site, site.site_elements)
 
     result.should == {
-      :total =>   [12, 9],
-      :traffic => [2, 1],
-      :email =>   [4, 3],
-      :social =>  [6, 5]
+      :total =>   [[12, 9]],
+      :traffic => [[2, 1]],
+      :email =>   [[4, 3]],
+      :social =>  [[6, 5]]
     }
   end
 end
