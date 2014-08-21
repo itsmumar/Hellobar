@@ -23,7 +23,7 @@ h5 Lifetime Totals
 
 .chart-wrapper
 
-  - if @totals[:total].empty?
+  - if @totals[:total].empty? || @totals[:total][0] == [0,0]
     .chart-block.views
       i.icon-views
       .chart-overview= link_to "Get More Views", new_site_site_element_path(@site)
@@ -31,10 +31,10 @@ h5 Lifetime Totals
     .chart-block.views data-chart='views'
       i.icon-views
       .chart-overview
-        = @totals[:total][0]
+        = @totals[:total][0][0]
         small views
 
-  - if @totals[:email].empty?
+  - if @totals[:email].empty? || @totals[:email][0] == [0,0]
     .chart-block.emails
       i.icon-contacts
       .chart-overview= link_to "Get More Emails", new_site_site_element_path(@site, :anchor => "/settings/emails")
@@ -42,10 +42,10 @@ h5 Lifetime Totals
     .chart-block.emails data-chart='emails'
       i.icon-contacts
       .chart-overview
-        = @totals[:email][1]
+        = @totals[:email][0][1]
         small emails collected
 
-  - if @totals[:traffic].empty?
+  - if @totals[:traffic].empty? || @totals[:traffic][0] == [0,0]
     .chart-block.clicks
       i.icon-clicks
       .chart-overview= link_to "Get More Traffic", new_site_site_element_path(@site, :anchor => "/settings/click")
@@ -53,10 +53,10 @@ h5 Lifetime Totals
     .chart-block.emails data-chart='clicks'
       i.icon-clicks
       .chart-overview
-        = @totals[:traffic][1]
+        = @totals[:traffic][0][1]
         small clicks
 
-  - if @totals[:social].empty?
+  - if @totals[:social].empty? || @totals[:social][0] == [0,0]
     .chart-block.social
       i.icon-social
       .chart-overview= link_to "Get More Social Activity", new_site_site_element_path(@site, :anchor => "/settings/social")
@@ -64,5 +64,5 @@ h5 Lifetime Totals
     .chart-block.social data-chart='social'
       i.icon-social
       .chart-overview
-        = @totals[:social][1]
+        = @totals[:social][0][1]
         small social conversions
