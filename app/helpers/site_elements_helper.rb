@@ -27,4 +27,23 @@ module SiteElementsHelper
       "icon-clicks"
     end
   end
+
+  def site_element_views(metrics)
+    metrics ? metrics[0] : 0
+  end
+
+  def site_element_conversions(metrics)
+    metrics ? metrics[1] : 0
+  end
+
+  def site_element_conversion_percentage(metrics)
+    if metrics.nil? || metrics[1] == 0
+      percentage = 0.0
+    else
+      percentage = metrics[0] * 1.0 / metrics[1]
+    end
+
+
+    "#{(percentage * 100).round(1)}%"
+  end
 end

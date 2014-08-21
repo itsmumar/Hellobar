@@ -9,11 +9,11 @@ tr.site-element-block class="#{site_element.paused? ? 'paused' : ''}"
   td
     i.icon-bar
   td
-    span.num 83
+    span.num= site_element_views(metrics)
   td
-    span.num 5
+    span.num= site_element_conversions(metrics)
   td
-    span.num 4.3%
+    span.num= site_element_conversion_percentage(metrics)
   td
     i.icon-abtest
     .dropdown-wrapper
