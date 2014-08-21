@@ -111,11 +111,11 @@ class ContactList < ActiveRecord::Base
   end
 
   def oauth?
-    identity && identity.service_provider_class.oauth?
+    service_provider_class.try(:oauth?)
   end
 
   def embed_code?
-    identity && identity.service_provider_class.embed_code?
+    service_provider_class.try(:embed_code?)
   end
 
   protected
@@ -153,5 +153,13 @@ class ContactList < ActiveRecord::Base
   def reject_empty_data_values
     return unless data
     self.data = data.delete_if { |k,v| v.blank? }
+  end
+
+  def service_provider_class
+    if identity
+      identity.service_provider_class
+    elsif provider_set?
+      ServiceProvider[provider.to_sym]
+    end
   end
 end

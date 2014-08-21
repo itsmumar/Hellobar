@@ -3,7 +3,9 @@ class ServiceProvider
 
   class << self
     def [](name)
-      Hashie::Mash.new providers[name.to_sym]
+      provider_config = all_providers[name.to_sym]
+      const_name = provider_config[:service_provider_class] || provider_config[:name]
+      ServiceProviders.const_get(const_name, false)
     end
 
     def all_providers
