@@ -31,13 +31,14 @@ class ContactList < ActiveRecord::Base
 
   serialize :data, Hash
 
-  before_validation :set_identity, :reject_empty_data_values
+  before_validation :set_identity, :reject_empty_data_values, :clean_embed_code
 
   validates :name, :presence => true
   validates :site, :association_exists => true
   validate :provider_valid, :if => :provider_set?
   validate :provider_credentials_exist, :if => :provider_set?
   validate :embed_code_exists, :if => :embed_code?
+  validate :embed_code_valid, :if => :embed_code?
 
   def self.sync_all!
     all.each do |list|
@@ -117,6 +118,10 @@ class ContactList < ActiveRecord::Base
 
   def embed_code?
     service_provider_class.try(:embed_code?)
+  end
+
+  def embed_code
+    data[:embed_code]
   end
 
   protected

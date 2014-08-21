@@ -50,11 +50,6 @@ class Identity < ActiveRecord::Base
     end
   end
 
-  def embed_code_valid?
-    return false if embed_code.blank?
-    service_provider.embed_code_valid?
-  end
-
   def type
     provider_settings[:type]
   end
@@ -84,13 +79,5 @@ class Identity < ActiveRecord::Base
     end
 
     self.destroy
-  end
-
-  private
-
-  def cleanse_embed_code
-    return unless embed_code
-    self.embed_code = embed_code.tr("“”‘’", %{""''})
-                                .gsub(/\P{ASCII}/, '')
   end
 end
