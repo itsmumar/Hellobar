@@ -37,8 +37,8 @@ class ContactList < ActiveRecord::Base
   validates :site, :association_exists => true
   validate :provider_valid, :if => :provider_set?
   validate :provider_credentials_exist, :if => :provider_set?
-  validate :embed_code_exists, :if => :embed_code?
-  validate :embed_code_valid, :if => :embed_code?
+  validate :embed_code_exists?, :if => :embed_code?
+  validate :embed_code_valid?, :if => :embed_code?
 
   def self.sync_all!
     all.each do |list|
@@ -121,7 +121,7 @@ class ContactList < ActiveRecord::Base
   end
 
   def embed_code
-    data[:embed_code]
+    data['embed_code']
   end
 
   protected
@@ -156,13 +156,23 @@ class ContactList < ActiveRecord::Base
     errors.add(:provider, "credentials have not been set yet") unless identity && identity.provider == provider
   end
 
-  def embed_code_exists
-    errors.add(:base, "Embed code cannot be blank") unless data[:embed_code]
+  def clean_embed_code
+    return unless embed_code && identity
+    self.data['embed_code'] = identity.service_provider.clean_embed_code(embed_code)
   end
 
   def reject_empty_data_values
     return unless data
     self.data = data.delete_if { |k,v| v.blank? }
+  end
+  
+  def embed_code_exists?
+    errors.add(:base, "Embed code cannot be blank") unless embed_code
+  end
+
+  def embed_code_valid?
+    return false if embed_code.blank? || identity.nil?
+    identity.service_provider.embed_code_valid?(embed_code)
   end
 
   def service_provider_class

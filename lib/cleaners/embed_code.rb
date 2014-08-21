@@ -8,12 +8,12 @@ module Cleaners::EmbedCode
 
   protected
 
+  # Args:
+  # embed_code, method_to_call1, method_to_call2, etc.
   def clean(*args)
-    args.unshift.tap do |embed_code|
-      args.each do |method|
-        embed_code = method.call(embed_code)
-      end
-    end
+    args.inject do |cleaned, method|
+      self.send(method, cleaned) # On first run thru block, cleaned = embed_code
+    end 
   end
 
   private
