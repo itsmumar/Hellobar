@@ -2,8 +2,8 @@ require "./lib/hello/data_api_helper"
 
 module Hello::DataAPI
   class << self
-    def lifetime_totals(site, site_elements)
-      path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, site_elements.map(&:id), site.read_key)
+    def lifetime_totals(site, site_elements, num_days = 1)
+      path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, site_elements.map(&:id), site.read_key, num_days)
       get(path, params)
     end
 

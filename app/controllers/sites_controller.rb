@@ -33,6 +33,7 @@ class SitesController < ApplicationController
 
   def show
     session[:current_site] = @site.id
+    @totals = get_rolled_up_totals(@site)
   end
 
   def update
@@ -86,6 +87,30 @@ class SitesController < ApplicationController
       new_site_site_element_path(@site)
     else # Site#show
       site_path(@site)
+    end
+  end
+
+  def get_rolled_up_totals(site)
+    data = Hello::DataAPI.lifetime_totals(site, site.site_elements) || {}
+
+    {:total => [0, 0], :email => [0, 0], :social => [0, 0], :traffic => [0, 0]}.tap do |totals|
+      data.each do |k, v|
+        if element = site.site_elements.find(k)
+          views, conversions = v[0]
+
+          totals[:total][0] += views
+          totals[:total][1] += conversions
+
+          key = case element.element_subtype
+                when "email" then :email
+                when "traffic" then :traffic
+                when /social\// then :social
+                end
+
+          totals[key][0] += views
+          totals[key][1] += conversions
+        end
+      end
     end
   end
 end

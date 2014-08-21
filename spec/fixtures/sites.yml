@@ -1,6 +1,12 @@
 zombo:
   url: http://zombo.com
+  read_key: asdf
+  write_key: asdf
 horsebike:
   url: http://horse.bike
+  read_key: asdf
+  write_key: asdf
 polymathic:
   url: http://wearepolymathic.me
+  read_key: asdf
+  write_key: asdf

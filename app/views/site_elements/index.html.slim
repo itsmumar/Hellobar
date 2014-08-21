@@ -43,7 +43,7 @@ table.rules-wrapper
 
       - else
         - rule.site_elements.each do |site_element|
-          = render "site_elements/site_element", { :site_element => site_element, :metrics => @metrics[site_element.id.to_s] }
+          = render "site_elements/site_element", { :site_element => site_element, :totals => @totals[site_element.id.to_s] }
 
       tr
         td.temporary-block colspan='9'
