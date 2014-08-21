@@ -1,6 +1,4 @@
 class ServiceProviders::MailChimp < ServiceProvider
-  provider_key :mailchimp
-  
   def initialize(opts = {})
     if opts[:identity]
       identity = opts[:identity]

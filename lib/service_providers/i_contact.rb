@@ -1,7 +1,5 @@
 module ServiceProviders
   class IContact < EmbedCodeProvider
-    provider_key :icontact
-
     def list_url
       nil
     end

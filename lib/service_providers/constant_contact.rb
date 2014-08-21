@@ -1,6 +1,4 @@
 class ServiceProviders::ConstantContact < ServiceProvider
-  provider_key :constantcontact
-
   def initialize(opts = {})
     if opts[:identity]
       identity = opts[:identity]
