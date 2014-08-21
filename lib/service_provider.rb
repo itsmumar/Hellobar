@@ -11,7 +11,7 @@ class ServiceProvider
 
   def settings
     klass = self.class.name.demodulize
-    Hellobar::Settings[:identity_providers].values.find{|v| v[:name] == klass || v[:service_provider_class] == klass}
+    Hellobar::Settings[:identity_providers].values.find { |v| v[:service_provider_class] == klass || v[:name] == klass }
   end
 end
 
