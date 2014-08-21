@@ -52,7 +52,6 @@ unless defined?(Hellobar::Settings)
 
   config[:identity_providers] = {
     :aweber => {
-      :key => :aweber,
       :type => :email,
       :name => 'AWeber',
       :app_id => config[:aweber_app_id],
@@ -60,22 +59,21 @@ unless defined?(Hellobar::Settings)
       :consumer_key => config[:aweber_consumer_key]
     },
     :createsend => {
-      :key => :createsend,
       :type => :email,
+      :service_provider_class => "CampaignMonitor",
       :name => 'Campaign Monitor',
       :client_id => config[:createsend_client_id],
       :secret => config[:createsend_secret]
     },
     :constantcontact => {
-      :key => :constantcontact,
       :type => :email,
+      :service_provider_class => "ConstantContact",
       :name => 'Constant Contact',
       :app_key => config[:constantcontact_app_key],
       :app_secret => config[:constantcontact_app_secret],
       :supports_double_optin => true
     },
     :mailchimp => {
-      :key => :mailchimp,
       :type => :email,
       :name => 'MailChimp',
       :client_id => config[:mailchimp_client_id],
@@ -83,31 +81,28 @@ unless defined?(Hellobar::Settings)
       :supports_double_optin => true
     },
     :get_response => {
-      :key => :get_response,
       :type => :email,
       :name => "GetResponse",
       :requires_embed_code => true
     },
     :icontact => {
-      :key => :icontact,
       :type => :email,
+      :service_provider_class => "IContact",
       :name => "iContact",
       :requires_embed_code => true
     },
     :mad_mimi => {
-      :key => :mad_mimi,
       :type => :email,
+      :service_provider_class => "MadMimi",
       :name => "Mad Mimi",
       :requires_embed_code => true
     },
     :my_emma => {
-      :key => :my_emma,
       :type => :email,
       :name => "MyEmma",
       :requires_embed_code => true
     },
     :vertical_response => {
-      :key => :vertical_response,
       :type => :email,
       :name => "VerticalResponse",
       :requires_embed_code => true

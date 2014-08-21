@@ -20,6 +20,14 @@ class Identity < ActiveRecord::Base
 
   before_save :cleanse_embed_code
 
+  def self.find_or_initialize_by_site_id_and_provider(site_id, provider)
+    if identity = Identity.where(:site_id => site_id, :provider => provider).first
+      identity
+    else
+      Identity.new(:site_id => site_id, :provider => provider)
+    end
+  end
+
   # When an activity is active, it is saved, credentials are present, and it is being used.
   # Sites should only allow one active identity at a time for each type.
   def active?
@@ -48,11 +56,11 @@ class Identity < ActiveRecord::Base
   end
 
   def type
-    Hellobar::Settings[:identity_providers][provider.to_sym][:type]
+    provider_config[:type]
   end
 
   def provider_config
-    self.class.provider_configs.find {|p| p[:key] == provider.to_sym }
+    Hellobar::Settings[:identity_providers][provider.to_sym]
   end
 
   def as_json(options = nil)
@@ -64,15 +72,8 @@ class Identity < ActiveRecord::Base
   def service_provider
     return @service_provider if @service_provider
 
-    const_name = provider_config[:name].gsub(' ', '').classify
-
-    if ServiceProviders.const_defined?(const_name, false)
-      @service_provider = ServiceProviders.const_get(const_name, false).new(:identity => self)
-    elsif provider_config[:requires_embed_code]
-      @service_provider = ServiceProviders::EmbedCodeProvider.new(:identity => self)
-    else
-      nil
-    end
+    const_name = provider_config[:service_provider_class] || provider_config[:name]
+    @service_provider = ServiceProviders.const_get(const_name, false).new(:identity => self)
   end
 
   def destroy_and_notify_user
@@ -81,20 +82,6 @@ class Identity < ActiveRecord::Base
     end
 
     self.destroy
-  end
-
-  class << self
-    def find_or_initialize_by_site_id_and_provider(site_id, provider)
-      if identity = Identity.where(:site_id => site_id, :provider => provider).first
-        identity
-      else
-        Identity.new(:site_id => site_id, :provider => provider)
-      end
-    end
-
-    def provider_configs(type = nil)
-      Hellobar::Settings[:identity_providers].values.select{|v| type.nil? || v[:type] == type}
-    end
   end
 
   private
