@@ -8,3 +8,9 @@ zombo2:
   id: 2
   name: another zombo list
   site: zombo
+embed_code:
+  id: 3
+  name: embed code list
+  site: zombo
+  identity: mad_mimi
+  data: <%= {"embed_code" => "test embed code" }.to_yaml.inspect %>

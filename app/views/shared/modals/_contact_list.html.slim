@@ -13,9 +13,8 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
 
           label for="contact_list_provider" Where do you want your contacts stored?
           select id="contact_list_provider" name="contact_list[provider]"
-            = options_for_provider_select.each do |option|
-              option value="#{option[1]}"
-                = option[0]
+            - options_for_provider_select.each do |text, value, data|
+              = content_tag :option, text, value: value, data: data
 
           p
             small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
@@ -26,15 +25,30 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
       a.button.cancel Cancel
 
 script id="contact-list-modal-provider-instructions-template" type="text/x-handlebars-template"
-  p To integrate with {{providerName}} you'll need:
-
-  ol
-    li Your {{providerName}} username and password
-    li To have an existing list with {{providerName}} to sync to
-
-  p
-    a.do-this-later I'll do this later
-    a.start-oauth.button I'm ready
+  | <p>To integrate with {{providerName}} you'll need:</p>
+  |
+  | <ol>
+  |  {{#if requiresEmbedCode}}
+  |    <li>Your embed code from {{providerName}}</li>
+  |  {{else}}
+  |    <li>Your {{providerName}} username and password</li>  
+  |  {{/if}}
+  |  <li>To have an existing list with {{providerName}} to sync to</li>
+  | </ol>
+  |
+  | {{#if requiresEmbedCode}}
+  |
+  | <label for="contact_list_embed_code">Paste your embed code below, then click Done.</label>
+  | <textarea id="contact_list_embed_code" name="contact_list[data][embed_code]"></textarea>
+  |
+  | {{else}}
+  |
+  | <p>
+  |   <a class="do-this-later">I'll do this later</a>
+  |   <a class="ready button">I'm ready</a>
+  | </p>
+  |
+  | {{/if}}
 
 script id="contact-list-modal-provider-instructions-nevermind-template" type="text/x-handlebars-template"
   p No worries!

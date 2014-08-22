@@ -40,7 +40,7 @@ class @ContactListModal extends Modal
   _bindInteractions: (object) ->
     @_bindProviderSelect(object)
     @_bindDoThisLater(object)
-    @_bindOauthButton(object)
+    @_bindReadyButton(object)
     @_bindSubmit(object)
 
   _bindProviderSelect: (object) ->
@@ -55,8 +55,10 @@ class @ContactListModal extends Modal
       @blocks.nevermind.show()
       @$modal.find("#contact_list_provider").val(0)
 
-  _bindOauthButton: (object) ->
-    object.find("a.start-oauth").click (e) =>
+  _bindReadyButton: (object) ->
+    object.find("a.ready").click (e) =>
+      @_clearErrors()
+      
       # stash the model so that it can be reloaded by the ember app
       localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
       localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
@@ -97,6 +99,7 @@ class @ContactListModal extends Modal
       data:
         remote_id: $(remoteListSelect).val()
         remote_name: $(remoteListSelect).find("option:selected").text()
+        embed_code: $('#contact_list_embed_code').val()
     }
 
   _renderBlock: (name, context, bind = true) ->
@@ -118,7 +121,9 @@ class @ContactListModal extends Modal
     select ||= @$modal.find("#contact_list_provider")
 
     value = $(select).val()
-    label = $(select).find("option:selected").text()
+    option = $(select).find("option:selected")
+    label = option.text()
+    defaultContext = { provider: value, providerName: label, requiresEmbedCode: option.data('requiresEmbedCode') }
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.instructions.hide()
@@ -130,7 +135,7 @@ class @ContactListModal extends Modal
       if data # an identity was found for the selected provider
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
-        @_renderBlock("remoteListSelect", {providerName: label, identity: data}).show()
+        @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if listData
           window.foo = listData
@@ -138,10 +143,8 @@ class @ContactListModal extends Modal
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 
       else # no identity found
-        context = {providerName: label}
-
-        @_renderBlock("nevermind", context).hide()
-        @_renderBlock("instructions", context).show()
+        @_renderBlock("nevermind", defaultContext).hide()
+        @_renderBlock("instructions", defaultContext).show()
         @blocks.remoteListSelect.hide()
 
   _showErrors: (errors) ->

@@ -10,7 +10,7 @@ class ContactListsController < ApplicationController
 
   def create
     @contact_list = @site.contact_lists.create(contact_list_params)
-    render :json => @contact_list
+    render :json => @contact_list, :status => @contact_list.persisted? ? :created : :bad_request
   end
 
   def show
@@ -29,7 +29,7 @@ class ContactListsController < ApplicationController
   private
 
   def contact_list_params
-    params.require(:contact_list).permit(:name, :provider, {:data => [:remote_id, :remote_name]}, :double_optin)
+    params.require(:contact_list).permit(:name, :provider, {:data => [:remote_id, :remote_name, :embed_code]}, :double_optin)
   end
 
   def load_site

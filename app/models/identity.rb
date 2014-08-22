@@ -35,7 +35,7 @@ class Identity < ActiveRecord::Base
   end
 
   def filled_out?
-    if provider_config[:requires_embed_code]
+    if provider_settings[:requires_embed_code]
       !embed_code.nil? and embed_code.length > 0
     else
       credentials.present?
@@ -43,7 +43,7 @@ class Identity < ActiveRecord::Base
   end
 
   def working?
-    if provider_config[:requires_embed_code]
+    if provider_settings[:requires_embed_code]
       embed_code_valid?
     else
       credentials.present? # we later need to know if these credentials actually work/sync
@@ -56,12 +56,13 @@ class Identity < ActiveRecord::Base
   end
 
   def type
-    provider_config[:type]
+    provider_settings[:type]
   end
 
-  def provider_config
-    Hellobar::Settings[:identity_providers][provider.to_sym]
+  def provider_settings
+    service_provider_class.settings
   end
+  alias :provider_config :provider_settings
 
   def as_json(options = nil)
     extra['raw_info'].select! {|k,v| %w(user_id username).include? k } if extra['raw_info']
@@ -70,15 +71,16 @@ class Identity < ActiveRecord::Base
   end
 
   def service_provider
-    return @service_provider if @service_provider
+    @service_provider ||= service_provider_class.new(:identity => self)
+  end
 
-    const_name = provider_config[:service_provider_class] || provider_config[:name]
-    @service_provider = ServiceProviders.const_get(const_name, false).new(:identity => self)
+  def service_provider_class
+    ServiceProvider[provider.to_sym]
   end
 
   def destroy_and_notify_user
     if user = site.owner
-      MailerGateway.send_email("Integration Sync Error", user.email, {:integration_name => provider_config[:name], :link => site_contact_lists_url(site, :host => Hellobar::Settings[:host])})
+      MailerGateway.send_email("Integration Sync Error", user.email, {:integration_name => provider_settings[:name], :link => site_contact_lists_url(site, :host => Hellobar::Settings[:host])})
     end
 
     self.destroy

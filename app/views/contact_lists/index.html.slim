@@ -14,12 +14,13 @@
     - @contact_lists.each do |list|
       tr
         td= link_to list.name, site_contact_list_path(@site, list)
-        td= image_tag 'mailchimp.png'
+        td
+          span = contact_list_provider_name(list) 
+          = image_tag contact_list_image(list)
         td= @contact_list_totals[list.id.to_s] || 0
         td= list.created_at.strftime("%-m-%-d-%Y")
 
-  = link_to '#', class: 'button' do
-    | New Contact List
+  #new-contact-list.button New Contact List
 
 - else
   
@@ -27,4 +28,4 @@
     h5 Grow you email lists
     strong Did you know that Hello Bar can collect email addresses for you?
     p We can even sync them to MailChimp automatically!
-    .button Start Collecting Emails
+    .button#new-contact-list Start Collecting Emails

@@ -24,13 +24,26 @@ test "header is \"New Contact List\" when creating a new list", ->
   includes find(@modal.$modal).text(), "New Contact List", "\"New Contact List\" not found in modal"
 
 asyncTest "selecting a provider with no stored identities renders the provider instructions", ->
-  expect(1)
+  expect(2)
 
   @modal.$modal.on "ajax-complete", =>
-    includes find(@modal.$modal).text(), "To integrate with AWeber you'll need", "Provider instructions not rendered"
+    text = find(@modal.$modal).text()
+    includes text, "To integrate with AWeber you'll need", "Provider instructions not rendered"
+    includes text, "Your AWeber username and password", "Provider instructions not rendered correctly"
     QUnit.start()
 
   @modal.$modal.find("#contact_list_provider").val("aweber").change()
+
+asyncTest "selecting an embed provider with no stored identities renders the provider instructions", ->
+  expect(2)
+
+  @modal.$modal.on "ajax-complete", =>
+    text = find(@modal.$modal).text()
+    includes text, "To integrate with Mad Mimi you'll need", "Provider instructions not rendered"
+    includes text, "Your embed code from Mad Mimi", "Provider instructions not rendered correctly"
+    QUnit.start()
+
+  @modal.$modal.find("#contact_list_provider").val("mad_mimi").change()
 
 asyncTest "selecting \"in hello bar only\" does not render instructions", ->
   expect(1)
@@ -81,7 +94,7 @@ asyncTest "selecting \"I'm ready\" redirects to the correct URL to begin the oau
   expect(1)
 
   @modal.$modal.on "ajax-complete", =>
-    @modal.$modal.find(".start-oauth").click()
+    @modal.$modal.find(".ready.button").click()
     includes @modal.options.window.location, "/sites/123/identities/new"
 
     QUnit.start()

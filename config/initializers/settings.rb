@@ -56,14 +56,16 @@ unless defined?(Hellobar::Settings)
       :name => 'AWeber',
       :app_id => config[:aweber_app_id],
       :consumer_secret => config[:aweber_consumer_secret],
-      :consumer_key => config[:aweber_consumer_key]
+      :consumer_key => config[:aweber_consumer_key],
+      :oauth => true
     },
     :createsend => {
       :type => :email,
       :service_provider_class => "CampaignMonitor",
       :name => 'Campaign Monitor',
       :client_id => config[:createsend_client_id],
-      :secret => config[:createsend_secret]
+      :secret => config[:createsend_secret],
+      :oauth => true
     },
     :constantcontact => {
       :type => :email,
@@ -71,14 +73,16 @@ unless defined?(Hellobar::Settings)
       :name => 'Constant Contact',
       :app_key => config[:constantcontact_app_key],
       :app_secret => config[:constantcontact_app_secret],
-      :supports_double_optin => true
+      :supports_double_optin => true,
+      :oauth => true
     },
     :mailchimp => {
       :type => :email,
       :name => 'MailChimp',
       :client_id => config[:mailchimp_client_id],
       :secret => config[:mailchimp_secret],
-      :supports_double_optin => true
+      :supports_double_optin => true,
+      :oauth => true
     },
     :get_response => {
       :type => :email,

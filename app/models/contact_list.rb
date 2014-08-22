@@ -20,6 +20,8 @@ class ContactList < ActiveRecord::Base
     "404 Resource Not Found"
   ]
 
+  EMPTY_PROVIDER_VALUES = [ nil, "", 0, "0" ]
+
   attr_accessor :provider
 
   belongs_to :site
@@ -29,11 +31,13 @@ class ContactList < ActiveRecord::Base
 
   serialize :data, Hash
 
-  before_validation :set_identity
+  before_validation :set_identity, :reject_empty_data_values
 
   validates :name, :presence => true
   validates :site, :association_exists => true
+  validate :provider_valid, :if => :provider_set?
   validate :provider_credentials_exist, :if => :provider_set?
+  validate :embed_code_exists, :if => :embed_code?
 
   def self.sync_all!
     all.each do |list|
@@ -47,7 +51,13 @@ class ContactList < ActiveRecord::Base
   end
 
   def syncable?
-    identity && data && data["remote_name"] && data["remote_id"]
+    return false unless identity && data
+
+    if oauth?
+      data["remote_name"] && data["remote_id"]
+    elsif embed_code?
+      data["embed_code"]
+    end
   end
 
   def service_provider
@@ -86,11 +96,27 @@ class ContactList < ActiveRecord::Base
   end
 
   def provider_set?
-    ![nil, "", 0, "0"].include?(provider)
+    !EMPTY_PROVIDER_VALUES.include?(provider)
   end
 
   def set_identity
-    self.identity = provider_set? ? site.identities.where(:provider => provider).first : nil
+    return unless provider.present?
+
+    self.identity = if !provider_set? || service_provider_class.nil?
+      nil # Don't create an invalid provider
+    elsif embed_code?
+      site.identities.find_or_create_by(provider: provider)
+    else
+      site.identities.find_by(provider: provider)
+    end
+  end
+
+  def oauth?
+    service_provider_class.try(:oauth?)
+  end
+
+  def embed_code?
+    service_provider_class.try(:embed_code?)
   end
 
   protected
@@ -117,7 +143,28 @@ class ContactList < ActiveRecord::Base
 
   private
 
+  def provider_valid
+    errors.add(:provider, "is not valid") unless provider_set? && identity.try(:provider)
+  end
+
   def provider_credentials_exist
     errors.add(:provider, "credentials have not been set yet") unless identity && identity.provider == provider
+  end
+
+  def embed_code_exists
+    errors.add(:base, "Embed code cannot be blank") unless data[:embed_code]
+  end
+
+  def reject_empty_data_values
+    return unless data
+    self.data = data.delete_if { |k,v| v.blank? }
+  end
+
+  def service_provider_class
+    if identity
+      identity.service_provider_class
+    elsif provider_set?
+      ServiceProvider[provider.to_sym]
+    end
   end
 end

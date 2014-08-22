@@ -6,3 +6,7 @@ constantcontact:
   site: zombo
   provider: constantcontact
   credentials: "{\"token\": \"key\"}"
+mad_mimi:
+  site: zombo
+  provider: mad_mimi
+  credentials: "{\"token\": \"key\"}"
