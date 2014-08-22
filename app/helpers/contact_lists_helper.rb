@@ -5,7 +5,7 @@ module ContactListsHelper
   end
 
   def contact_list_sync_details(contact_list)
-    if contact_list.data["remote_name"] && !contact_list.data["remote_name"].blank?
+    if contact_list.data["remote_name"].present?
       "Syncing contacts with #{contact_list.service_provider.name} list \"#{contact_list.data["remote_name"]}\""
     elsif contact_list.identity
       "Syncing contacts with #{contact_list.service_provider.name}"
