@@ -48,119 +48,126 @@ describe Identity do
   end
 
   describe "embed code service provider" do
-    let(:id) { @site.identities.new }
-
-    it "works with Mad Mimi" do
-      id.provider = 'mad_mimi'
-      id.embed_code = embed_code_file_for 'mad_mimi'
-
-      id.service_provider.list_url.should == 'https://madmimi.com/signups/join/103242'
-      id.service_provider.action_url.should == 'https://madmimi.com/signups/subscribe/103242'
-      id.service_provider.list_id.should == '103242'
-
-      id.service_provider.params.any? {|item| item[:name] == 'signup[email]' }.should == true
-      id.service_provider.email_param.should == 'signup[email]'
-      id.service_provider.name_param.should == 'signup[name]'
-      id.service_provider.required_params.should be_empty
+    let(:contact_list) do
+      contact_lists(:embed_code).tap {|c| c.identity = nil }
+    end
+    let(:file_name) { (file rescue provider) }
+    
+    let(:service_provider) do
+      contact_list.provider = provider
+      contact_list.embed_code = embed_code_file_for(file_name)
+      contact_list.send(:set_identity)
+      contact_list.service_provider
     end
 
-    it "works with GetResponse html mode" do
-      id.provider = 'get_response'
-      id.embed_code = embed_code_file_for 'get_response'
+    context "madmimi" do
+      let(:provider) { "mad_mimi" }
+      it "works" do
+        service_provider.list_url.should == 'https://madmimi.com/signups/join/103242'
+        service_provider.action_url.should == 'https://madmimi.com/signups/subscribe/103242'
+        service_provider.list_id.should == '103242'
 
-      id.service_provider.list_url.should == 'https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=1324102'
-      id.service_provider.action_url.should == 'https://app.getresponse.com/add_contact_webform.html?u=G91K' # same for getresponse
-      id.service_provider.email_param.should == 'email'
-      id.service_provider.name_param.should == 'name'
-    end
-
-    it "works with GetResponse JS mode" do
-      id.provider = 'get_response'
-      id.embed_code = embed_code_file_for 'get_response_js'
-
-      id.service_provider.class.should == ServiceProviders::GetResponse
-
-      id.service_provider.list_url.should == 'https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=2350002'
-      id.service_provider.action_url.should match /https?:\/\/app\.getresponse\.com\/add_contact_webform\.html\?u=G91K/ # same for getresponse
-      id.service_provider.email_param.should == 'email'
-      id.service_provider.name_param.should == 'name'
-    end
-
-    it "works with VerticalResponse" do
-      id.provider = 'vertical_response'
-      id.embed_code = embed_code_file_for 'vertical_response'
-
-      id.service_provider.email_param.should == 'email_address'
-      id.service_provider.name_params.should == ['first_name', 'last_name']
-      id.service_provider.required_params.should be_empty
-    end
-
-    it "works with iContact automatic" do
-      id.provider = 'icontact'
-      id.embed_code = embed_code_file_for 'icontact'
-
-      id.service_provider.class.should == ServiceProviders::IContact
-
-      id.service_provider.list_url.should == nil
-      id.service_provider.action_url.should == 'http://app.icontact.com/icp/signup.php'
-      id.service_provider.email_param.should == 'fields_email'
-      id.service_provider.name_params.should == ['fields_fname', 'fields_lname']
-      id.service_provider.required_params.should == {
-        'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
-        'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',
-        'listid' => '10108',
-        'specialid:10108' => 'O2D3',
-        'clientid' => '1450422',
-        'formid' => '564',
-        'reallistid' => '1',
-        'doubleopt' => '0',
-        'Submit' => 'Submit'
-      }
-      -> { id.service_provider.name_param}.should raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
-    end
-
-    it "works with iContact manual" do
-      id.provider = 'icontact'
-      id.embed_code = embed_code_file_for 'icontact_manual'
-
-      id.service_provider.class.should == ServiceProviders::IContact
-
-      id.service_provider.list_url.should == nil
-      id.service_provider.action_url.should == 'https://app.icontact.com/icp/signup.php'
-      id.service_provider.email_param.should == 'fields_email'
-      id.service_provider.name_params.should == ['fields_fname', 'fields_lname']
-      id.service_provider.required_params.should == {
-        'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
-        'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',
-        'listid' => '10108',
-        'specialid:10108' => 'O2D3',
-        'clientid' => '1450422',
-        'formid' => '564',
-        'reallistid' => '1',
-        'doubleopt' => '0',
-        'Submit' => 'Submit'
-      }
-      -> { id.service_provider.name_param}.should raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
-    end
-
-    %w(my_emma my_emma_js my_emma_iframe my_emma_popup).each do |file|
-      it "works with My Emma #{file}".strip do
-        id.provider = 'my_emma'
-        id.embed_code = embed_code_file_for file
-
-        id.service_provider.list_url.should == 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a'
-        id.service_provider.action_url.should == id.service_provider.list_url # same for my emma
-        id.service_provider.email_param.should == 'email'
-        id.service_provider.required_params.keys.should include 'prev_member_email'
+        service_provider.params.any? {|item| item[:name] == 'signup[email]' }.should == true
+        service_provider.email_param.should == 'signup[email]'
+        service_provider.name_param.should == 'signup[name]'
+        service_provider.required_params.should be_empty
       end
     end
 
-    it 'replaces curly quotes' do
-      id.provider = 'get_response'
-      id.embed_code         = "<form action=”https://app.getresponse.com/add_subscriber.html” accept-charset=”utf-8” method=”post”>"
-      id.save!
-      id.reload
-      id.embed_code.should == '<form action="https://app.getresponse.com/add_subscriber.html" accept-charset="utf-8" method="post">'
+    context "getresponse html mode" do
+      let(:provider) { "get_response" }
+      it "works" do
+        service_provider.list_url.should == 'https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=1324102'
+        service_provider.action_url.should == 'https://app.getresponse.com/add_contact_webform.html?u=G91K' # same for getresponse
+        service_provider.email_param.should == 'email'
+        service_provider.name_param.should == 'name'
+      end
     end
+
+    context "getresponse JS mode" do
+      let(:provider) { "get_response" }
+      let(:file) { "get_response_js" }
+      it "works" do
+        service_provider.class.should == ServiceProviders::GetResponse
+
+        service_provider.list_url.should == 'https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=2350002'
+        service_provider.action_url.should match /https?:\/\/app\.getresponse\.com\/add_contact_webform\.html\?u=G91K/ # same for getresponse
+        service_provider.email_param.should == 'email'
+        service_provider.name_param.should == 'name'
+      end
+    end
+
+    context "VerticalResponse" do
+      let(:provider) { "vertical_response" }
+      it "works" do
+        service_provider.email_param.should == 'email_address'
+        service_provider.name_params.should == ['first_name', 'last_name']
+        service_provider.required_params.should be_empty
+      end
+    end
+
+    context "iContact automatic" do
+      let(:provider) { "icontact" }
+      it "works" do
+        service_provider.class.should == ServiceProviders::IContact
+
+        service_provider.list_url.should == nil
+        service_provider.action_url.should == 'http://app.icontact.com/icp/signup.php'
+        service_provider.email_param.should == 'fields_email'
+        service_provider.name_params.should == ['fields_fname', 'fields_lname']
+        service_provider.required_params.should == {
+          'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
+          'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',
+          'listid' => '10108',
+          'specialid:10108' => 'O2D3',
+          'clientid' => '1450422',
+          'formid' => '564',
+          'reallistid' => '1',
+          'doubleopt' => '0',
+          'Submit' => 'Submit'
+        }
+        -> { service_provider.name_param}.should raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
+      end
+    end
+
+    context "iContact automatic" do
+      let(:provider) { "icontact" }
+      let(:file) { "icontact_manual" }
+      it "works" do
+        service_provider.class.should == ServiceProviders::IContact
+
+        service_provider.list_url.should == nil
+        service_provider.action_url.should == 'https://app.icontact.com/icp/signup.php'
+        service_provider.email_param.should == 'fields_email'
+        service_provider.name_params.should == ['fields_fname', 'fields_lname']
+        service_provider.required_params.should == {
+          'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
+          'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',
+          'listid' => '10108',
+          'specialid:10108' => 'O2D3',
+          'clientid' => '1450422',
+          'formid' => '564',
+          'reallistid' => '1',
+          'doubleopt' => '0',
+          'Submit' => 'Submit'
+        }
+        -> { service_provider.name_param}.should raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
+      end
+    end
+
+    context "my emma" do
+      let(:provider) { "my_emma" }
+
+      %w(my_emma my_emma_js my_emma_iframe my_emma_popup).each do |file|
+        let(:file) { file }
+        it "works with My Emma #{file}".strip do
+          service_provider.list_url.should == 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a'
+          service_provider.action_url.should == service_provider.list_url # same for my emma
+          service_provider.email_param.should == 'email'
+          service_provider.required_params.keys.should include 'prev_member_email'
+        end
+      end
+    end
+
   end
 end
