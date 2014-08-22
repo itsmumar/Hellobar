@@ -168,6 +168,12 @@ describe Identity do
         end
       end
     end
+  end
 
+
+  describe "#embed_code=" do
+    it "should raise error" do
+      expect { @identity.embed_code = "asdf" }.to raise_error NoMethodError
+    end
   end
 end
