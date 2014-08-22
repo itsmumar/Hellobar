@@ -7,14 +7,12 @@ describe RulesController do
     request.env["HTTP_ACCEPT"] = 'application/json'
   end
 
-  fixtures :rules, :sites, :conditions
+  fixtures :all
 
   let(:rule) { rules(:zombo) }
   let(:site) { sites(:zombo) }
 
   describe 'GET :show' do
-    fixtures :users
-
     it 'should fail when not logged in' do
       get :show, site_id: 1, id: rule
       expect(response.code).to eq UNAUTHORIZED
@@ -63,8 +61,6 @@ describe RulesController do
   end
 
   describe 'DELETE :destroy' do
-    fixtures :users
-
     it 'should fail when not logged in' do
       delete :destroy, site_id: site, id: rule
       expect(response.code).to eq UNAUTHORIZED
@@ -87,8 +83,6 @@ describe RulesController do
   end
 
   describe 'PUT :update' do
-    fixtures :users, :conditions
-
     it 'should fail when not logged in' do
       put :update, site_id: site, id: rule
 

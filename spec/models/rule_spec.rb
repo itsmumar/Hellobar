@@ -33,7 +33,7 @@ describe Rule, "#to_sentence" do
 end
 
 describe Rule, 'accepting nested condition attributes' do
-  fixtures :rules, :sites, :conditions
+  fixtures :all
 
   let(:rule) { rules(:zombo) }
   let(:site) { sites(:zombo) }

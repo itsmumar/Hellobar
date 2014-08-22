@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ConditionSerializer do
 
-  fixtures :conditions
+  fixtures :all
 
   let(:condition) { conditions(:date_between) }
   let(:c) { condition }

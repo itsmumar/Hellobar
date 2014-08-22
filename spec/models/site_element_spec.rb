@@ -24,8 +24,6 @@ describe SiteElement do
   end
 
   describe '#toggle_paused!' do
-    fixtures :site_elements
-
     let(:site_element) { site_elements(:zombo_traffic) }
 
     it 'toggles an element from paused to unpaused' do

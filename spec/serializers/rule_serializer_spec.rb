@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 describe RuleSerializer do
-
-  fixtures :rules, :conditions
+  fixtures :all
 
   let(:rule) { rules(:zombo) }
 

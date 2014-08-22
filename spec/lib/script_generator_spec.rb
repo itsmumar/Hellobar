@@ -321,7 +321,7 @@ describe ScriptGenerator, '#generate_script' do
 end
 
 describe ScriptGenerator, '#comparable_date' do
-  fixtures :sites
+  fixtures :all
 
   let(:site) { sites(:zombo) }
   let(:generator) { ScriptGenerator.new(site) }
