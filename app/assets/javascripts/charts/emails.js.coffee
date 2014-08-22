@@ -1,8 +1,8 @@
 class @EmailsChart extends Chart
 
-  url   : false
-  type  : 'emails'
-  color : '#54d388'
+  type        : 'emails'
+  chart_data  : 'emails'
+  color       : '#54d388'
 
   text  : 'emails'
   icon  : 'icon-contacts'

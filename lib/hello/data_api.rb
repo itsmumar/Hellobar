@@ -7,7 +7,7 @@ module Hello::DataAPI
       get(path, params)
     end
 
-    def lifetime_totals_by_type(site, site_elements, num_days = 1)
+    def lifetime_totals_by_type(site, site_elements, num_days = 30)
       data = Hello::DataAPI.lifetime_totals(site, site.site_elements, num_days) || {}
       totals = {:total => [], :email => [], :social => [], :traffic => []}
       elements = site.site_elements.where(:id => data.keys)

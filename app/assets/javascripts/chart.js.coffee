@@ -1,6 +1,6 @@
 class @Chart
 
-  constructor: ->
+  constructor: (@options = {}) ->
     @_setupChart()
     @_fetchData()
 
@@ -9,23 +9,14 @@ class @Chart
     @$el.removeClass().addClass(@type + ' loading')
 
   _fetchData: ->
-    # ----- FIXTURES (remove when live) -----
-    unless @url
-      setTimeout ( =>
-        if Math.random() >= 0.1
-          @_renderData(@_fixtureData())
-        else
-          @_failedAttempt()
+    $.ajax("/sites/#{@options.siteID}/chart_data.json?type=#{@chart_data}").done((data) =>
+        @_renderData(data)
+        return
+      ).fail(=>
+        @_failedAttempt()
+      ).always(=>
         @$el.removeClass('loading')
-      ), 2000
-      return false
-    # ----- END FIXTURES -----
-
-    $.ajax(@url)
-      .done(@_renderData(data))
-      .fail(@_failedAttempt(data))
-      .always =>
-        @$el.removeClass('loading')
+      )
 
   _renderData: (data) ->
     @chart = AmCharts.makeChart "amchart",

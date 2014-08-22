@@ -3,7 +3,7 @@ class SitesController < ApplicationController
 
   before_action :generate_temporary_logged_in_user, only: :create
   before_action :authenticate_user!
-  before_action :load_site, :only => [:show, :edit, :update, :destroy, :preview_script]
+  before_action :load_site, :only => [:show, :edit, :update, :destroy, :preview_script, :chart_data]
 
   skip_before_action :verify_authenticity_token, :only => :preview_script
 
@@ -57,6 +57,21 @@ class SitesController < ApplicationController
   def preview_script
     generator = ScriptGenerator.new(@site, :templates => SiteElement::BAR_TYPES, :rules => [])
     render :js => generator.generate_script
+  end
+
+  def chart_data
+    raw_data = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements).try(:[], params[:type].to_sym) || []
+    series = raw_data.map{|d| d[params[:type] == "total" ? 0 : 1]}
+    days = [7, series.count].min
+
+    series_with_dates = (0..days-1).to_a.reverse.map do |i|
+      {
+        :date => (Date.today - i.days).strftime("%-m/%d"),
+        :value => series[i]
+      }
+    end
+
+    render :json => series_with_dates, :root => false
   end
 
   private

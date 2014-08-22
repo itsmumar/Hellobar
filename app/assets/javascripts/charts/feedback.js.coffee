@@ -1,9 +1,8 @@
 class @FeedbackChart extends Chart
 
-  url   : false
-  type  : 'feedback'
-  color : '#9d53bc'
+  type        : 'feedback'
+  chart_data  : 'feedback'
+  color       : '#9d53bc'
 
   text  : 'responses'
   icon  : 'icon-feedback'
-  

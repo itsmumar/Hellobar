@@ -1,8 +1,8 @@
 class @ClicksChart extends Chart
 
-  url   : false
-  type  : 'clicks'
-  color : '#ffbf1f'
+  type       : 'clicks'
+  chart_data : 'traffic'
+  color      : '#ffbf1f'
 
   text  : 'clicks'
   icon  : 'icon-clicks'

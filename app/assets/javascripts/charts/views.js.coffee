@@ -1,8 +1,8 @@
 class @ViewsChart extends Chart
 
-  url   : false
-  type  : 'views'
-  color : '#e8562a'
+  type        : 'views'
+  chart_data  : 'total'
+  color       : '#e8562a'
 
   text  : 'views'
   icon  : 'icon-views'
