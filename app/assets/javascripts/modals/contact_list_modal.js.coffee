@@ -132,7 +132,7 @@ class @ContactListModal extends Modal
       return
 
     $.get "/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
-      if data # an identity was found for the selected provider
+      if data and data.lists # an identity was found for the selected provider
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
         @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
