@@ -33,19 +33,11 @@ class Identity < ActiveRecord::Base
   end
 
   def filled_out?
-    if provider_settings[:requires_embed_code]
-      !embed_code.nil? and embed_code.length > 0
-    else
-      credentials.present?
-    end
+    credentials.present?
   end
 
   def working?
-    if provider_settings[:requires_embed_code]
-      embed_code_valid?
-    else
-      credentials.present? # we later need to know if these credentials actually work/sync
-    end
+    credentials.present? # we later need to know if these credentials actually work/sync
   end
 
   def type
