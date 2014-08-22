@@ -68,9 +68,9 @@ class SitesController < ApplicationController
     series = raw_data.map{|d| d[params[:type] == "total" ? 0 : 1]}
     days = [params[:days].to_i, series.count].min
 
-    series_with_dates = (0..days-1).to_a.reverse.map do |i|
+    series_with_dates = (0..days-1).map do |i|
       {
-        :date => (Date.today - i.days).strftime("%-m/%d"),
+        :date => (Date.today - days + i + 1).strftime("%-m/%d"),
         :value => series[i]
       }
     end
