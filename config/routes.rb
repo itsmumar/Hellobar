@@ -6,8 +6,6 @@ Rails.application.routes.draw do
   resource :user, :controller => :user, :only => [:update]
 
   resources :sites do
-    get "improve", to: "sites#improve", as: :improve
-
     resource :wordpress_plugin, :controller => :wordpress_plugin
 
     put "site_elements/:id/toggle_paused", to: "site_elements#toggle_paused", as: :site_element_toggle_paused
@@ -21,6 +19,7 @@ Rails.application.routes.draw do
     get :registration
   end
 
+  get "sites/:id/improve", :to => "sites#improve", :as => :site_improve
   get "sites/:id/preview_script", :to => "sites#preview_script", :as => :preview_script
   get "sites/:id/chart_data", to: "sites#chart_data", as: :chart_data
 

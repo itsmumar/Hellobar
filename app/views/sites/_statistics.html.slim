@@ -22,47 +22,7 @@ table.activity-wrapper
 h5 Lifetime Totals
 
 .chart-wrapper
-
-  - if @totals[:total].empty? || @totals[:total][0] == [0,0]
-    .chart-block.views
-      i.icon-views
-      .chart-overview= link_to "Get More Views", new_site_site_element_path(@site)
-  - else
-    .chart-block.views data-chart='views' data-site-id="#{@site.id}"
-      i.icon-views
-      .chart-overview
-        = @totals[:total][0][0]
-        small views
-
-  - if @totals[:email].empty? || @totals[:email][0] == [0,0]
-    .chart-block.emails
-      i.icon-contacts
-      .chart-overview= link_to "Get More Emails", new_site_site_element_path(@site, :anchor => "/settings/emails")
-  - else
-    .chart-block.emails data-chart='emails' data-site-id="#{@site.id}"
-      i.icon-contacts
-      .chart-overview
-        = @totals[:email][0][1]
-        small emails collected
-
-  - if @totals[:traffic].empty? || @totals[:traffic][0] == [0,0]
-    .chart-block.clicks
-      i.icon-clicks
-      .chart-overview= link_to "Get More Traffic", new_site_site_element_path(@site, :anchor => "/settings/click")
-  - else
-    .chart-block.emails data-chart='clicks' data-site-id="#{@site.id}"
-      i.icon-clicks
-      .chart-overview
-        = @totals[:traffic][0][1]
-        small clicks
-
-  - if @totals[:social].empty? || @totals[:social][0] == [0,0]
-    .chart-block.social
-      i.icon-social
-      .chart-overview= link_to "Get More Social Activity", new_site_site_element_path(@site, :anchor => "/settings/social")
-  - else
-    .chart-block.social data-chart='social' data-site-id="#{@site.id}"
-      i.icon-social
-      .chart-overview
-        = @totals[:social][0][1]
-        small social conversions
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :total, chart: "views", icon: "views", days: 7}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :email, chart: "emails", icon: "contacts", days: 7}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: 7}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: 7}

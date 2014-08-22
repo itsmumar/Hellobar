@@ -9,7 +9,7 @@ class @Chart
     @$el.removeClass().addClass(@type + ' loading')
 
   _fetchData: ->
-    $.ajax("/sites/#{@options.siteID}/chart_data.json?type=#{@chart_data}").done((data) =>
+    $.ajax("/sites/#{@options.siteID}/chart_data.json?type=#{@chart_data_type}&days=#{@options.numDays}").done((data) =>
         @_renderData(data)
         return
       ).fail(=>
@@ -79,17 +79,3 @@ class @Chart
 
   _failedAttempt: ->
     @$el.addClass('failed')
-
-  # ----- FIXTURES (remove when live) -----
-  _fixtureData: ->
-    data = []
-    for i in [8..0] by -1
-      min = 250*(9-i)
-      max = 1000*(9-i) 
-      
-      data.push
-        date: moment().clone().subtract('days', i).format('ddd')
-        value: Math.floor(Math.random() * (max - min)) + min
-
-    return data
-  # ----- END FIXTURES -----

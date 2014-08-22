@@ -1,26 +1,8 @@
 .chart-wrapper
-
-  .chart-block.views data-chart='views'
-    i.icon-views
-    .chart-overview
-      | 1,245
-      small views
-
-  .chart-block.emails data-chart='emails'
-    i.icon-contacts
-    .chart-overview
-      | 7,582
-      small emails collected
-
-  .chart-block.clicks
-    i.icon-clicks
-    .chart-overview
-      a Direct Visitor Traffic
-
-  .chart-block.social
-    i.icon-social
-    .chart-overview
-      a Get More Social Activity
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :total, chart: "views", icon: "views", days: 30}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :email, chart: "emails", icon: "contacts", days: 30}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: 30}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: 30}
 
 h5 Poor conversion, but lots of visits
 p The following people aren't very likely to send you feedback, but you get lots of them coming to your site. They represent one of the best opportunities for improvement.

@@ -14,12 +14,14 @@ AmCharts.ready ->
 
     # Render appropriate chart
     siteID = $(@).attr('data-site-id')
+    numDays = $(@).attr('data-num-days')
+
     switch $(@).attr('data-chart')
-      when 'views'    then new ViewsChart(siteID: siteID)
-      when 'emails'   then new EmailsChart(siteID: siteID)
-      when 'clicks'   then new ClicksChart(siteID: siteID)
-      when 'social'   then new SocialChart(siteID: siteID)
-      when 'feedback' then new FeedbackChart(siteID: siteID)
+      when 'views'    then new ViewsChart({siteID, numDays})
+      when 'emails'   then new EmailsChart({siteID, numDays})
+      when 'clicks'   then new ClicksChart({siteID, numDays})
+      when 'social'   then new SocialChart({siteID, numDays})
+      when 'feedback' then new FeedbackChart({siteID, numDays})
 
   # Trigger default chart when applicatble
   $('.chart-wrapper .chart-block').first().trigger('click') if $('.chart-wrapper .chart-block').length 

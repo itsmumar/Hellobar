@@ -1,0 +1,28 @@
+- if totals[type].empty? || totals[type][0] == [0,0]
+  div class="chart-block #{chart}"
+    i class="icon-#{icon}"
+    .chart-overview
+      - case type
+      - when :total
+        = link_to "Get More Views", new_site_site_element_path(site)
+      - when :email
+        = link_to "Get More Emails", new_site_site_element_path(site, :anchor => "/settings/emails")
+      - when :traffic
+        = link_to "Get More Traffic", new_site_site_element_path(site, :anchor => "/settings/click")
+      - when :social
+        = link_to "Get More Social Activity", new_site_site_element_path(site, :anchor => "/settings/social")
+
+- else
+  div class="chart-block #{chart}" data-chart='#{chart}' data-site-id="#{site.id}" data-num-days="#{days}"
+    i class="icon-#{icon}"
+    .chart-overview
+      = totals[type][0][type == :total ? 0 : 1]
+      - case type
+      - when :total
+        small views
+      - when :email
+        small emails collected
+      - when :traffic
+        small clicks
+      - when :social
+        small social conversions
