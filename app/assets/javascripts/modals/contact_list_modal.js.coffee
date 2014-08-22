@@ -88,6 +88,9 @@ class @ContactListModal extends Modal
           submitButton.attr("disabled", false)
         else
           @options.success(data, this)
+      error: (response) =>
+        contactList = JSON.parse(response.responseText)
+        @_showErrors(contactList.errors)
 
   _getFormData: ->
     remoteListSelect = @$modal.find("#contact_list_remote_list_id")
@@ -155,6 +158,7 @@ class @ContactListModal extends Modal
   _showErrors: (errors) ->
     html = "<div class=\"alert\">#{errors.reduce (a, b) -> "#{a}<br>#{b}"}</div>"
     @$modal.find(".modal-block").prepend(html)
+    @$modal.find("a.submit").removeAttr("disabled")
 
   _clearErrors: ->
     @$modal.find(".alert").remove()
