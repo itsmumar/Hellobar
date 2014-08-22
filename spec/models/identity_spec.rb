@@ -8,9 +8,9 @@ describe Identity do
     @identity = identities(:mailchimp)
   end
 
-  describe "find_or_initialize_by_site_id_and_provider" do
+  describe "initialization" do
     it "initializes a new identity if none exists for a site and provider combination" do
-      identity = Identity.find_or_initialize_by_site_id_and_provider(@site.id, 'aweber')
+      identity = Identity.where(site_id: @site.id, provider: 'aweber').first_or_initialize
 
       identity.site_id.should == @site.id
       identity.provider.should == 'aweber'
@@ -18,7 +18,7 @@ describe Identity do
     end
 
     it "loads an existing identity if one exists for a site and provider combination" do
-      returned_identity = Identity.find_or_initialize_by_site_id_and_provider(@identity.site_id, @identity.provider)
+      returned_identity = Identity.where(site_id: @identity.site_id, provider: @identity.provider).first_or_initialize
 
       returned_identity.should == @identity
     end

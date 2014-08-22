@@ -18,14 +18,6 @@ class Identity < ActiveRecord::Base
   scope :by_type, ->(type) {where(:provider => Hellobar::Settings[:identity_providers].select{|k, v| v[:type] == type}.map{|k, v| k.to_s})}
   scope :active, -> { where('credentials IS NOT NULL') }
 
-  def self.find_or_initialize_by_site_id_and_provider(site_id, provider)
-    if identity = Identity.where(:site_id => site_id, :provider => provider).first
-      identity
-    else
-      Identity.new(:site_id => site_id, :provider => provider)
-    end
-  end
-
   # When an activity is active, it is saved, credentials are present, and it is being used.
   # Sites should only allow one active identity at a time for each type.
   def active?
