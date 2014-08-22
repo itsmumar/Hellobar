@@ -13,4 +13,4 @@ embed_code:
   name: embed code list
   site: zombo
   identity: mad_mimi
-  data: <%= {"embed_code" => "test embed code" }.to_yaml.inspect %>
+  data: <%= {"embed_code" => "<form></form>" }.to_yaml.inspect %>

@@ -1,12 +1,15 @@
 require 'spec_helper'
 
 describe Cleaners::EmbedCode do
-  fixtures :contact_lists, :identities
+  fixtures :all
 
   subject { contact_lists(:embed_code) }
   let(:embed_code) { "Test embed code" }
+
   before do
+    subject.provider = 'mad_mimi'
     subject.data['embed_code'] = embed_code
+    expect(subject.service_provider).not_to be_nil
     subject.save!
   end
 

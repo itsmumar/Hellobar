@@ -57,13 +57,13 @@ class ContactList < ActiveRecord::Base
     if oauth?
       data["remote_name"] && data["remote_id"]
     elsif embed_code?
-      data["embed_code"]
+      data["embed_code"].present?
     end
   end
 
   def service_provider
     return nil unless syncable?
-    @provider ||= identity.service_provider(contact_list: self)
+    @service_provider ||= identity.service_provider(contact_list: self)
   end
 
   def sync(options = {})
@@ -161,8 +161,8 @@ class ContactList < ActiveRecord::Base
   end
 
   def clean_embed_code
-    return unless embed_code && identity
-    self.data['embed_code'] = service_provider.clean_embed_code(embed_code)
+    return unless embed_code && identity && embed_code.present?
+    self.embed_code = service_provider.clean_embed_code(embed_code)
   end
 
   def reject_empty_data_values
