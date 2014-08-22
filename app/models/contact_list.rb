@@ -63,7 +63,7 @@ class ContactList < ActiveRecord::Base
 
   def service_provider
     return nil unless syncable?
-    @provider ||= identity.service_provider
+    @provider ||= identity.service_provider(contact_list: self)
   end
 
   def sync(options = {})
@@ -120,6 +120,10 @@ class ContactList < ActiveRecord::Base
     service_provider_class.try(:embed_code?)
   end
 
+  def embed_code=(embed_code)
+    data['embed_code'] = embed_code
+  end
+
   def embed_code
     data['embed_code']
   end
@@ -158,7 +162,7 @@ class ContactList < ActiveRecord::Base
 
   def clean_embed_code
     return unless embed_code && identity
-    self.data['embed_code'] = identity.service_provider.clean_embed_code(embed_code)
+    self.data['embed_code'] = service_provider.clean_embed_code(embed_code)
   end
 
   def reject_empty_data_values
@@ -171,8 +175,8 @@ class ContactList < ActiveRecord::Base
   end
 
   def embed_code_valid?
-    return false if embed_code.blank? || identity.nil?
-    identity.service_provider.embed_code_valid?(embed_code)
+    return false if embed_code.blank? || service_provider.nil?
+    service_provider.embed_code_valid?
   end
 
   def service_provider_class

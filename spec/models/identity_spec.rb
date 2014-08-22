@@ -45,22 +45,6 @@ describe Identity do
         @identity.destroy_and_notify_user
       end
     end
-
-    describe "identity embed code" do
-      it "should be valid" do
-        identity = @site.identities.new(provider: 'mad_mimi', embed_code: "asdf")
-        identity.embed_code_valid?.should == false
-
-        identity = @site.identities.new(provider: 'mad_mimi', embed_code: "<<asdfasdf>>>")
-        identity.embed_code_valid?.should == false
-
-        identity = @site.identities.new(provider: 'mad_mimi', embed_code: "<form></form>")
-        identity.embed_code_valid?.should == true
-
-        identity = @site.identities.new(provider: 'mad_mimi', embed_code: "<from></from>")
-        identity.embed_code_valid?.should == false
-      end
-    end
   end
 
   describe "embed code service provider" do

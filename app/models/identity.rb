@@ -65,8 +65,8 @@ class Identity < ActiveRecord::Base
     super
   end
 
-  def service_provider
-    @service_provider ||= service_provider_class.new(:identity => self)
+  def service_provider(contact_list:)
+    @service_provider ||= service_provider_class.new(:identity => self, :contact_list => contact_list)
   end
 
   def service_provider_class
