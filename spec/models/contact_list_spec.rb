@@ -40,11 +40,10 @@ describe ContactList do
     it "should not be valid if #provider does not match an existing identity" do
       list = contact_lists(:zombo)
       list.provider = "notanesp"
-      list.stub(:service_provider_class).and_return(ServiceProvider)
-      list.identity.provider = 'mailchimp'
+      list.identity = nil
 
       list.should_not be_valid
-      list.errors.messages[:provider].should include("credentials have not been set yet")
+      list.errors.messages[:provider].should include("is not valid")
     end
 
     it "should clear the identity if provider is \"0\"" do

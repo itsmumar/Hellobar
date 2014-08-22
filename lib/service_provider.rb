@@ -4,6 +4,7 @@ class ServiceProvider
   class << self
     def [](name)
       provider_config = all_providers[name.to_sym]
+      return nil unless provider_config # invalid provider
       const_name = provider_config[:service_provider_class] || provider_config[:name]
       ServiceProviders.const_get(const_name, false)
     end

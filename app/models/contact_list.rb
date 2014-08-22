@@ -35,6 +35,7 @@ class ContactList < ActiveRecord::Base
 
   validates :name, :presence => true
   validates :site, :association_exists => true
+  validate :provider_valid, :if => :provider_set?
   validate :provider_credentials_exist, :if => :provider_set?
   validate :embed_code_exists, :if => :embed_code?
 
@@ -101,7 +102,7 @@ class ContactList < ActiveRecord::Base
   def set_identity
     return unless provider.present?
 
-    self.identity = if !provider_set?
+    self.identity = if !provider_set? || service_provider_class.nil?
       nil # Don't create an invalid provider
     elsif embed_code?
       site.identities.find_or_create_by(provider: provider)
@@ -141,6 +142,10 @@ class ContactList < ActiveRecord::Base
   end
 
   private
+
+  def provider_valid
+    errors.add(:provider, "is not valid") unless provider_set? && identity.try(:provider)
+  end
 
   def provider_credentials_exist
     errors.add(:provider, "credentials have not been set yet") unless identity && identity.provider == provider
