@@ -1,5 +1,5 @@
 class IdentitySerializer < ActiveModel::Serializer
-  attributes :id, :site_id, :provider, :lists, :supports_double_optin
+  attributes :id, :site_id, :provider, :lists, :supports_double_optin, :embed_code, :oauth
 
   delegate :service_provider, to: :object
 
@@ -10,6 +10,14 @@ class IdentitySerializer < ActiveModel::Serializer
   end
 
   def supports_double_optin
-    !!Hellobar::Settings[:identity_providers][object.provider.to_sym][:supports_double_optin]
+    service_provider.class.settings[:supports_double_optin]
+  end
+
+  def embed_code
+    service_provider.embed_code?
+  end
+
+  def oauth
+    service_provider.oauth?
   end
 end

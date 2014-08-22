@@ -109,9 +109,10 @@ class @ContactListModal extends Modal
     block
 
   _loadContactList: ->
-    $.get @options.loadURL, (data) =>
-      @_setFormValues(data)
-      @_loadRemoteLists(listData: data)
+    $.get @options.loadURL, (contactList) =>
+      @options.contactList = $.extend(@options.contactList, data: contactList.data, name: contactList.name, id: contactList.id)
+      @_setFormValues(contactList)
+      @_loadRemoteLists(listData: contactList)
 
   _populateContactList: ->
     @_setFormValues(@options.contactList)
@@ -123,7 +124,11 @@ class @ContactListModal extends Modal
     value = $(select).val()
     option = $(select).find("option:selected")
     label = option.text()
-    defaultContext = { provider: value, providerName: label, requiresEmbedCode: option.data('requiresEmbedCode') }
+    defaultContext = 
+      provider: value
+      providerName: label
+      requiresEmbedCode: option.data('requiresEmbedCode')
+      contactList: @options.contactList
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.instructions.hide()
@@ -142,7 +147,7 @@ class @ContactListModal extends Modal
           @$modal.find("#contact_list_remote_list_id").val(listData.data.remote_id) if listData.data && listData.data.remote_id
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 
-      else # no identity found
+      else # no identity found, or an embed provider
         @_renderBlock("nevermind", defaultContext).hide()
         @_renderBlock("instructions", defaultContext).show()
         @blocks.remoteListSelect.hide()

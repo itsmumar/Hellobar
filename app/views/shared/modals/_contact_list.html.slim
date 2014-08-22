@@ -39,7 +39,7 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   | {{#if requiresEmbedCode}}
   |
   | <label for="contact_list_embed_code">Paste your embed code below, then click Done.</label>
-  | <textarea id="contact_list_embed_code" name="contact_list[data][embed_code]"></textarea>
+  | <textarea id="contact_list_embed_code" name="contact_list[data][embed_code]">{{contactList.data.embed_code}}</textarea>
   |
   | {{else}}
   |
