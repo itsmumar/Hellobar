@@ -1,18 +1,18 @@
 GIT
-  remote: git://github.com/floomoon/omniauth-mailchimp.git
-  revision: 239e08d3297cf637b5b0b77b419fdc8461239378
-  specs:
-    omniauth-mailchimp (1.0.3)
-      omniauth (~> 1.0)
-      omniauth-oauth2
-
-GIT
   remote: git://github.com/colinyoung/guaranteed_queue.git
   revision: 3addd17be9647ec68ff0b0ec4df70e2037a4b17f
   specs:
     guaranteed_queue (0.0.1)
       aws-sdk
       colorize
+
+GIT
+  remote: git://github.com/floomoon/omniauth-mailchimp.git
+  revision: 239e08d3297cf637b5b0b77b419fdc8461239378
+  specs:
+    omniauth-mailchimp (1.0.3)
+      omniauth (~> 1.0)
+      omniauth-oauth2
 
 GEM
   remote: https://rubygems.org/
