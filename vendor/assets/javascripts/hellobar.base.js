@@ -287,10 +287,38 @@ var _HB = {
     HB.conversion(function(){element.target == "_blank" ?  window.open(url) : document.location = url;});
   },
 
+  // Returns the conversion key used in the cookies to determine if this
+  // conversion has already happened or not
+  getConversionKey: function(bar)
+  {
+    switch(bar.type)
+    {
+      case "email":
+        return "ec";
+      case "social-facebook-like":
+        return "fl";
+      case "link":
+        // Need to make sure this is unique per URL
+        // getShortestKey returns either the raw URL or
+        // a SHA1 hash of the URL - whichever is shorter
+        return "l-"+HB.getShortestKeyForURL(bar.url);
+    }
+  },
+
+  // Returns the shortest possible key for the given URL,
+  // which may be a SHA1 hash of the url
+  getShortestKeyForURL: function(url)
+  {
+    // If the URL is on the same domain strip it to the path
+    // If the URL is shorter than 40 chars just return it
+    // Otherwise return a SHA1 hash of the URL
+  },
+
   // Called when a conversion happens (e.g. link clicked, email form filled out)
   conversion: function(callback)
   {
-    HB.setBarAttr(HB.bi, "nc", (HB.getBarAttr(HB.bi, "nc") || 0)+1);
+    var conversion_Key = HB.getConversionKey(HB.currentBar);
+    HB.setUserAttr(conversionKey, (HB.getUserAttr(conversionKey) || 0)+1);
     HB.trigger("conversion", HB.currentBar);
     HB.s("c?b="+HB.bi, HB.attributeParams(), callback);
   },
@@ -492,28 +520,6 @@ var _HB = {
     HB.saveCookies();
   },
 
-  // Gets the bar attribute from HB.cookies specified by the barID and key
-  getBarAttr: function(barID, key)
-  {
-    // Ensure barID is a string
-    barID = barID+"";
-    if ( !HB.cookies.bars[barID] )
-      return null;
-    return HB.cookies.bars[barID][key];
-  },
-
-  // Sets the bar attribute specified by the key and barID to the value in HB.cookies
-  // Also updates the cookies via HB.saveCookies
-  setBarAttr: function(barID, key, value)
-  {
-    // Ensure barID is a string
-    barID = barID+"";
-    if ( !HB.cookies.bars[barID] )
-      HB.cookies.bars[barID] = {};
-    HB.cookies.bars[barID][key] = value;
-    HB.saveCookies();
-  },
-
   // Gets a cookie
   gc: function(name)
   {
@@ -710,29 +716,7 @@ var _HB = {
   // Called when the bar is viewed
   viewed: function()
   {
-    var nowDate = new Date();
-    var now = Math.round(nowDate.getTime()/1000);
-    var day = 24*60*60;
-    var currentBar
-
-    // Track first view and most recent view and time since
-    // last view
-    if (!HB.getBarAttr(HB.bi, "fv"))
-        HB.setBarAttr(HB.bi, "fv", now);
-    // Get the previous view
-    var previousView = HB.getBarAttr(HB.bi, "lv");
-
-    // Set the time since the last view as the number
-    // of days
-    if ( previousView )
-      HB.setBarAttr(HB.bi, "ls", Math.round((now-previousView)/day));
-    HB.setBarAttr(HB.bi, "lv", now);
-
-    // Set the total time seeing bar in number of days
-    HB.setBarAttr(HB.bi, "lf", Math.round((now-HB.getBarAttr(HB.bi, "fv"))/day));
-
     // Track number of views
-    HB.setBarAttr(HB.bi, "nv", (HB.getBarAttr(HB.bi, "nv") || 0)+1);
     HB.s("v?b="+HB.bi, HB.attributeParams());
     // Trigger bar shown event
     HB.trigger("barShown", HB.currentBar);
@@ -926,44 +910,6 @@ var _HB = {
   // same bar again for consistency and to save a server trip.
   pickBestBar: function(bars)
   {
-    var barIDs = [];
-    var mostViewedBar;
-
-    // We need to check to see if we've already shown a user one of these
-    // bars. If so we should save the server trip and just show them the
-    // same bar again.
-    for(var i=0;i<bars.length;i++)
-    {
-      var barID = bars[i].id;
-      var numViews = HB.getBarAttr(barID, "nv") || 0;
-      if ( numViews > 0 && (!mostViewedBar || numViews > mostViewedBar.views))
-        mostViewedBar = {views: numViews, bar: bars[i]};
-      barIDs.push(barID);
-    }
-    // If we found a match return it;
-    if ( mostViewedBar )
-      return HB.render(mostViewedBar.bar);
-    // Send a request to the server. However, if we don't get a response in time
-    // we just need to show a random bar (and be sure to ignore the response later)
-    HB.g("b?b="+barIDs.join(","), HB.attributeParams(), function(result){
-      if ( result )
-      {
-        // Render the selected bar
-        for(var j=0;j<bars.length;j++)
-        {
-          if ( bars[j].id == result )
-          {
-            HB.render(bars[j]);
-            return;
-          }
-        }
-      }
-      // Either couldn't find the resulting bar or there was no result (possibly
-      // due to server time out), so pick a random bar and use it instead.
-      var choice = Math.floor((Math.random()*bars.length))
-      var bar = bars[choice];
-      HB.render(bar);
-    });
   },
 
   // This just sets the default segments/tracking data for the user
