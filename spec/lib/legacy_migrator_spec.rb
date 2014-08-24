@@ -289,7 +289,6 @@ describe LegacyMigrator, ".migrate_identities" do
       provider: legacy_id.provider,
       credentials: legacy_id.credentials,
       extra: legacy_id.extra,
-      embed_code: legacy_id.embed_code,
       created_at: legacy_id.created_at,
       updated_at: legacy_id.updated_at
     )
@@ -302,7 +301,8 @@ describe LegacyMigrator, ".migrate_goals_to_contact_lists" do
   let(:legacy_email_goal) { double "legacy_email_goal", id: 12345, site_id: legacy_site.id, data_json: {}, created_at: Time.parse("2000-01-31"), updated_at: Time.now, type: "Goals::CollectEmail", priority: 1 }
   let(:legacy_traffic_goal) { double "legacy_traffic_goal", id: 12346, site_id: legacy_site.id, data_json: {}, created_at: Time.parse("2000-01-31"), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
   let(:legacy_site) { double "legacy_site", id: 123 }
-  let(:legacy_id_int) { double "legacy_id_int", id: 123, identity_id: 4113, data: {"remote_name" => "list name"}, last_synced_at: 1.week.ago, created_at: 1.month.ago, updated_at: 1.day.ago }
+  let(:legacy_identity) { double "identity", embed_code: "old embed code" }
+  let(:legacy_id_int) { double "legacy_id_int", id: 123, identity_id: 4113, data: {"remote_name" => "list name"}, last_synced_at: 1.week.ago, created_at: 1.month.ago, updated_at: 1.day.ago, identity: legacy_identity }
 
   before do
     Site.stub :exists? => true
@@ -336,7 +336,7 @@ describe LegacyMigrator, ".migrate_goals_to_contact_lists" do
 
     ContactList.should_receive(:create!).with(hash_including(
       identity_id: legacy_id_int.identity_id,
-      data: legacy_id_int.data,
+      data: legacy_id_int.data.merge(embed_code: legacy_identity.embed_code),
       name: legacy_id_int.data["remote_name"],
       last_synced_at: legacy_id_int.last_synced_at,
       created_at: legacy_id_int.created_at,

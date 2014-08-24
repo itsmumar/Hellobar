@@ -92,9 +92,11 @@ class LegacyMigrator
             next
           end
 
+          identity = legacy_id_int.identity
+
           params.merge!(
             identity_id: legacy_id_int.identity_id,
-            data: legacy_id_int.data,
+            data: legacy_id_int.data.merge(embed_code: identity.embed_code),
             name: legacy_id_int.data["remote_name"],
             last_synced_at: legacy_id_int.last_synced_at,
             created_at: legacy_id_int.created_at,
@@ -118,7 +120,6 @@ class LegacyMigrator
                              provider: legacy_id.provider,
                              credentials: legacy_id.credentials,
                              extra: legacy_id.extra,
-                             embed_code: legacy_id.embed_code,
                              created_at: legacy_id.created_at,
                              updated_at: legacy_id.updated_at
 
