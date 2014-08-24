@@ -32,7 +32,7 @@ var HBQ = function()
   // of the window is less than or equal to 640 pixels we set the flag isMobileWidth to true.
   // Note: we are not actually detecting a mobile device - just the width of the window. 
   // If isMobileWidth is true we add an additional "mobile" CSS class which is used to 
-  // adjust the style of the bar.
+  // adjust the style of the content.
   // To accomplish all of this we set up an interval to monitor the size of everything:
   HB.isMobileWidth = false;
   var mobileDeviceInterval = setInterval(function(){
@@ -47,42 +47,42 @@ var HBQ = function()
       pusher: HB.$("#hellobar_pusher")
     };
     if (containerDocument) {
-      HB.e.bar = containerDocument.getElementById("hellobar");
+      HB.e.content = containerDocument.getElementById("hellobar");
       HB.e.shadow = containerDocument.getElementById("hellobar-shadow");
     }
-    // Monitor bar height to update HTML/CSS
-    if ( HB.e.bar )
+    // Monitor content height to update HTML/CSS
+    if ( HB.e.content )
     {
-      if ( HB.e.bar.clientHeight )
+      if ( HB.e.content.clientHeight )
       {
         // Adjust the shadow offset
         if ( HB.e.shadow ) {
-          HB.e.shadow.style.top = (HB.e.bar.clientHeight+(HB.currentBar.show_border ? 0 : -1))+"px";
+          HB.e.shadow.style.top = (HB.e.content.clientHeight+(HB.currentContent.show_border ? 0 : -1))+"px";
           HB.e.shadow.style.display = "block";
         }
         // Adjust the container height
         if ( HB.e.container )
-          HB.e.container.style.height = (HB.e.bar.clientHeight+8)+"px"; 
+          HB.e.container.style.height = (HB.e.content.clientHeight+8)+"px"; 
         // Adjust the pusher
         if ( HB.e.pusher )
-          HB.e.pusher.style.height = (HB.e.bar.clientHeight+(HB.t(HB.currentBar.show_border) ? 3 : 0))+"px";
+          HB.e.pusher.style.height = (HB.e.content.clientHeight+(HB.t(HB.currentContent.show_border) ? 3 : 0))+"px";
         // Add multiline class
-        if ( HB.e.bar.clientHeight > 50 ) {
-          HB.addClass(HB.e.bar, "multiline");
+        if ( HB.e.content.clientHeight > 50 ) {
+          HB.addClass(HB.e.content, "multiline");
         } else {
-          HB.removeClass(HB.e.bar, "multiline");
+          HB.removeClass(HB.e.content, "multiline");
         }
       }
 
       // Update the CSS class based on the width
       var origValue = HB.isMobileWidth;
-      HB.isMobileWidth = (HB.e.bar.clientWidth <= 640 );
+      HB.isMobileWidth = (HB.e.content.clientWidth <= 640 );
       if ( origValue == HB.isMobileWidth )
         return;
       if ( HB.isMobileWidth )
-        HB.addClass(HB.e.bar, "mobile");
+        HB.addClass(HB.e.content, "mobile");
       else
-        HB.removeClass(HB.e.bar, "mobile");
+        HB.removeClass(HB.e.content, "mobile");
     } 
     
   }, 50); // Check every 50ms
@@ -103,7 +103,7 @@ HBQ.prototype.push = function()
   }
 }
 // Keep everything within the HB namespace
-// **Special case: If a user includes multiple bars, to avoid overwriting the first bar and causing errors,
+// **Special case: If a user includes multiple contentItems, to avoid overwriting the first content and causing errors,
 // we manually set _HB to HB later before pushing rules.
 var _HB = {
   // Returns the element or looks it up via getElementById
@@ -189,13 +189,13 @@ var _HB = {
     return HB.n(srcPattern, true) == HB.n(url, true); 
   },
 
-  // Returns the standard bar params used for communicating with the backend server
+  // Returns the standard content params used for communicating with the backend server
   attributeParams: function()
   {
     return "a="+encodeURIComponent("all:all|"+HB.serializeCookies(HB.cookies));
   },
 
-  // Sends data to the tracking server (e.g. which bars viewed, if a rule was performed, etc)
+  // Sends data to the tracking server (e.g. which contentItems viewed, if a rule was performed, etc)
   s: function(url, paramString, callback)
   {
     if ( typeof(HB_DNT) != "undefined" || typeof(HB_SITE_ID) == "undefined")
@@ -231,7 +231,7 @@ var _HB = {
     img.src = HB.hi(url);
   },
 
-  // Gets data from the tracking server such as what bar variation to render from a set of bars
+  // Gets data from the tracking server such as what content variation to render from a set of contentItems
   g: function(url, paramString, callback)
   {
     var script = document.createElement('script');
@@ -289,9 +289,9 @@ var _HB = {
 
   // Returns the conversion key used in the cookies to determine if this
   // conversion has already happened or not
-  getConversionKey: function(bar)
+  getConversionKey: function(content)
   {
-    switch(bar.type)
+    switch(content.type)
     {
       case "email":
         return "ec";
@@ -301,7 +301,7 @@ var _HB = {
         // Need to make sure this is unique per URL
         // getShortestKey returns either the raw URL or
         // a SHA1 hash of the URL - whichever is shorter
-        return "l-"+HB.getShortestKeyForURL(bar.url);
+        return "l-"+HB.getShortestKeyForURL(content.url);
     }
   },
 
@@ -317,23 +317,23 @@ var _HB = {
   // Called when a conversion happens (e.g. link clicked, email form filled out)
   conversion: function(callback)
   {
-    var conversion_Key = HB.getConversionKey(HB.currentBar);
+    var conversion_Key = HB.getConversionKey(HB.currentContent);
     HB.setUserData(conversionKey, (HB.getUserData(conversionKey) || 0)+1);
-    HB.trigger("conversion", HB.currentBar);
+    HB.trigger("conversion", HB.currentContent);
     HB.s("c?b="+HB.bi, HB.attributeParams(), callback);
   },
 
-  // This takes the the email field, name field, and target bar DOM element.
+  // This takes the the email field, name field, and target content DOM element.
   // It then checks the validity of the fields and if valid it records the 
-  // email and then sets the message in the bar to "Thank you". If invalid it
+  // email and then sets the message in the content to "Thank you". If invalid it
   // shakes the email field
-  submitEmail: function(emailField, nameField, targetBar)
+  submitEmail: function(emailField, nameField, targetContent)
   {
     HB.validateEmail(
       emailField.value,
       nameField.value,
       function(){
-        targetBar.innerHTML='<span>Thank you!</span>';
+        targetContent.innerHTML='<span>Thank you!</span>';
         HB.recordEmail(emailField.value, nameField.value, function(){
           // Successfully saved
         });
@@ -373,8 +373,8 @@ var _HB = {
   // Serialzied the cookies object into a string that can be stored in a cookie. The 
   // cookies object should be in the form:
   // {
-  //   bars: {
-  //     bar_id: {
+  //   contentItems: {
+  //     content_id: {
   //       first_view: timestamp,
   //       last_view: timestamp,
   //       num_views: count,
@@ -401,17 +401,17 @@ var _HB = {
       result += HB.serializeCookieValues(cookies.user);
     }
     result += "^";
-    if ( cookies.bars )
+    if ( cookies.contentItems )
     {
-      for(var barID in cookies.bars)
+      for(var contentID in cookies.contentItems)
       {
-        result += barID+"|"+HB.serializeCookieValues(cookies.bars[barID])+"^";
+        result += contentID+"|"+HB.serializeCookieValues(cookies.contentItems[contentID])+"^";
       }
     }
     return result;
   },
 
-  // Called by serializeCookies. Takes a hash (either user or bar) and
+  // Called by serializeCookies. Takes a hash (either user or content) and
   // serializes it into a string
   serializeCookieValues: function(hash)
   {
@@ -440,28 +440,28 @@ var _HB = {
   {
     var results = {};
     if ( !input )
-      return {user:{}, bars:{}};
+      return {user:{}, contentItems:{}};
     var parts = input.split("^");
 
     // Parse out the user uwhich is the first argument
     results.user = HB.parseCookieValues(parts[0]);
-    // Parse out all the bars
-    results.bars = {};
+    // Parse out all the contentItems
+    results.contentItems = {};
     for(var i=1;i<parts.length;i++)
     {
       if ( parts[i] ) // Ignore empty parts
       {
-        var barData = parts[i].split("|");
-        var barID = barData[0];
-        var barValues = barData.slice(1, barData.length);
+        var contentData = parts[i].split("|");
+        var contentID = contentData[0];
+        var contentValues = contentData.slice(1, contentData.length);
 
-        results.bars[barID] = HB.parseCookieValues(barValues.join("|"));
+        results.contentItems[contentID] = HB.parseCookieValues(contentValues.join("|"));
       }
     }
     return results;
   },
 
-  // Called by parseCookies. Takes a string (either user or bar) and
+  // Called by parseCookies. Takes a string (either user or content) and
   // parses it into a hash
   parseCookieValues: function(string)
   {
@@ -486,12 +486,12 @@ var _HB = {
   },
 
   // Loads the cookies from the browser cookies into global hash HB.cookies
-  // in the format of {bars: {id:{...}, id2:{...}}, user:{...}}
+  // in the format of {contentItems: {id:{...}, id2:{...}}, user:{...}}
   loadCookies: function()
   {
     // Don't let any cookies get set without a site ID
     if ( typeof(HB_SITE_ID) == "undefined")
-      HB.cookies = {bars:{}, user:{}};
+      HB.cookies = {contentItems:{}, user:{}};
     else
       HB.cookies = HB.parseCookies(HB.gc("hb_"+HB_SITE_ID));
   },
@@ -520,25 +520,25 @@ var _HB = {
     HB.saveCookies();
   },
 
-  // Gets the bar attribute from HB.cookies specified by the barID and key
-  getBarData: function(barID, key)
+  // Gets the content attribute from HB.cookies specified by the contentID and key
+  getContentData: function(contentID, key)
   {
-    // Ensure barID is a string
-    barID = barID+"";
-    if ( !HB.cookies.bars[barID] )
+    // Ensure contentID is a string
+    contentID = contentID+"";
+    if ( !HB.cookies.contentItems[contentID] )
       return null;
-    return HB.cookies.bars[barID][key];
+    return HB.cookies.contentItems[contentID][key];
   },
 
-  // Sets the bar attribute specified by the key and barID to the value in HB.cookies
+  // Sets the content attribute specified by the key and contentID to the value in HB.cookies
   // Also updates the cookies via HB.saveCookies
-  setBarData: function(barID, key, value)
+  setContentData: function(contentID, key, value)
   {
-    // Ensure barID is a string
-    barID = barID+"";
-    if ( !HB.cookies.bars[barID] )
-      HB.cookies.bars[barID] = {};
-    HB.cookies.bars[barID][key] = value;
+    // Ensure contentID is a string
+    contentID = contentID+"";
+    if ( !HB.cookies.contentItems[contentID] )
+      HB.cookies.contentItems[contentID] = {};
+    HB.cookies.contentItems[contentID][key] = value;
     HB.saveCookies();
   },
 
@@ -619,51 +619,51 @@ var _HB = {
     HB.templateHTML[type] = html;
   },
 
-  // Returns the template HTML for the given bar. Most of the time the same
-  // template will be returned for the same bar. The values in {{}} are replaced with
-  // the values from the bar
+  // Returns the template HTML for the given content. Most of the time the same
+  // template will be returned for the same content. The values in {{}} are replaced with
+  // the values from the content
   //
   // By default this just returns the HB.templateHTML variable for the given rule type
-  getTemplate: function(bar)
+  getTemplate: function(content)
   {
-    return HB.templateHTML[bar.template_name];
+    return HB.templateHTML[content.template_name];
   },
 
-  // Called before rendering. This lets you modify bar attributes.
-  // NOTE: bar is already a copy of the original bar so it can be 
+  // Called before rendering. This lets you modify content attributes.
+  // NOTE: content is already a copy of the original content so it can be 
   // safely modified.
-  prerender: function(bar)
+  prerender: function(content)
   {
-    return this.sanitize(bar);
+    return this.sanitize(content);
   },
 
-  // Takes each string value in the bar and escapes HTML < > chars
+  // Takes each string value in the content and escapes HTML < > chars
   // with the matching symbol
-  sanitize: function(bar){
-    for (var k in bar){
-      if (bar.hasOwnProperty(k) && bar[k] && bar[k].replace)
-        bar[k] = bar[k].replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  sanitize: function(content){
+    for (var k in content){
+      if (content.hasOwnProperty(k) && content[k] && content[k].replace)
+        content[k] = content[k].replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
-    return bar;
+    return content;
   },
 
-  // Renders the html template for the bar by calling HB.parseTemplateVar for
+  // Renders the html template for the content by calling HB.parseTemplateVar for
   // each {{...}} entry in the template
-  renderTemplate: function(html, bar)
+  renderTemplate: function(html, content)
   {
     return html.replace(/\{\{(.*?)\}\}/g, function(match, value){
-      return HB.parseTemplateVar(value, bar);
+      return HB.parseTemplateVar(value, content);
     });
   },
 
   // Parses the value passed in in {{...}} for a template (which basically does an eval on it)
-  parseTemplateVar: function(value, bar)
+  parseTemplateVar: function(value, content)
   {
     try{value = eval(value)}catch(e){}
     return (value === undefined ? "" : value);
   },
 
-  // This lets users set a callback for a Hello Bar event specified by eventName (e.g. "barShown")
+  // This lets users set a callback for a Hello Bar event specified by eventName (e.g. "contentItemshown")
   on: function(eventName, callback)
   {
     if (!HB.eventCallbacks)
@@ -673,7 +673,7 @@ var _HB = {
     HB.eventCallbacks[eventName].push(callback);
   },
 
-  // This is called internally to trigger a Hello Bar event (e.g. "barShown")
+  // This is called internally to trigger a Hello Bar event (e.g. "contentItemshown")
   // Although it may look like no arguments are passed to trigger that is not true.
   // The first argument is the event name and all subsequent arguments are passed to
   // any callbacks on that event. So HB.trigger("foo", 1, 2) will pass the arguments (1,2)
@@ -703,30 +703,30 @@ var _HB = {
     }
   },
   
-  // Renders the bar
-  render: function(barToRender)
+  // Renders the content
+  render: function(contentToRender)
   {
-    var barCopy = {};
-    // Make a copy of the bar
-    for(var k in barToRender)
+    var contentCopy = {};
+    // Make a copy of the content
+    for(var k in contentToRender)
     {
-      barCopy[k] = barToRender[k];
+      contentCopy[k] = contentToRender[k];
     }
     // Call prerender
-    var bar = HB.prerender(barCopy);
-    HB.currentBar = bar;
-    HB.bi = bar.id;
+    var content = HB.prerender(contentCopy);
+    HB.currentContent = content;
+    HB.bi = content.id;
     // If there is a #nohb in the has we don't render anything
     if ( document.location.hash == "#nohb" )
       return;
     // Replace all the templated variables
-    var html = HB.renderTemplate(this.getTemplate(bar)+"", bar);
+    var html = HB.renderTemplate(this.getTemplate(content)+"", content);
     // Once the dom is ready we inject the html returned from renderTemplate
     HB.domReady(function(){
       // Set an arbitrary timeout to prevent some rendering
       // conflicts with certain sites
       setTimeout(function(){
-        HB.injectBarHTML(html, bar);
+        HB.injectContentHTML(html, content);
         // Track the view
         HB.viewed();
         // Monitor zoom scale events
@@ -735,13 +735,13 @@ var _HB = {
     });
   },
 
-  // Called when the bar is viewed
+  // Called when the content is viewed
   viewed: function()
   {
     // Track number of views
     HB.s("v?b="+HB.bi, HB.attributeParams());
-    // Trigger bar shown event
-    HB.trigger("barShown", HB.currentBar);
+    // Trigger content shown event
+    HB.trigger("contentItemshown", HB.currentContent);
   },
 
   hideOnZoom: function() {
@@ -782,8 +782,8 @@ var _HB = {
       document.body.appendChild(element);
   },
 
-  // Injects the specified HTML for the given bar into the page
-  injectBarHTML: function(html, bar)
+  // Injects the specified HTML for the given content into the page
+  injectContentHTML: function(html, content)
   {
     // Remove the containing iframe element if it exists
     if ( HB.w )
@@ -794,18 +794,18 @@ var _HB = {
     HB.w.id = "hellobar_container";
     HB.w.name = "hellobar_container";
     // Set any necessary CSS classes
-    HB.w.className = bar.size+(HB.t(bar.remains_at_top) ? " remains_at_top" : "");
+    HB.w.className = content.size+(HB.t(content.remains_at_top) ? " remains_at_top" : "");
     HB.w.scrolling = "no";
     // Remove the pusher if it exists
     if ( HB.p )
       HB.p.parentNode.removeChild(HB.p);
     HB.p = null;
     // Create the pusher (which pushes the page down) if needed
-    if ( HB.t(bar.pushes_page_down) )
+    if ( HB.t(content.pushes_page_down) )
     {
       HB.p = document.createElement("div");
       HB.p.id="hellobar_pusher";
-      HB.p.className = bar.size;
+      HB.p.className = content.size;
       HB.injectAtTop(HB.p);
     }
     // Check if we have any external CSS to add
@@ -830,7 +830,7 @@ var _HB = {
     }
     // Inject the container into the DOM
     HB.injectAtTop(HB.w);
-    // Render the bar in the container.
+    // Render the content in the container.
     var d = HB.w.contentWindow.document;
     d.open();
     d.write((HB.css || "")+html);
@@ -838,28 +838,28 @@ var _HB = {
   },
 
   // Adds a rule to the list of rules. The method is a function that returns true if the given
-  // visitor is eligible for the rule. The bars is the list of bars for the given rule. Priority
+  // visitor is eligible for the rule. The contentItems is the list of contentItems for the given rule. Priority
   // is a numeric value and metadata is a hash of settings for the rule.
-  addRule: function(method, bars, priority, metadata)
+  addRule: function(method, contentItems, priority, metadata)
   {
-    // First check to see if bars is an array, and make it one if it is not
-    if (Object.prototype.toString.call(bars) !== "[object Array]")
-      bars = [bars];
+    // First check to see if contentItems is an array, and make it one if it is not
+    if (Object.prototype.toString.call(contentItems) !== "[object Array]")
+      contentItems = [contentItems];
     if ( !priority )
       priority = 0;
     // Create the rule
-    var rule = {method: method, bars: bars, priority: priority, data: metadata};
+    var rule = {method: method, contentItems: contentItems, priority: priority, data: metadata};
     HB.rules.push(rule);
-    // Set the rule on all of the bars
-    for(var i=0;i<bars.length;i++)
+    // Set the rule on all of the contentItems
+    for(var i=0;i<contentItems.length;i++)
     {
-      bars[i].rule = rule;
+      contentItems[i].rule = rule;
     }
   },
 
   // applyRules scans through all the rules added via addRule and finds the
   // highest priority rule the visitor is eligible for. Once found it sends
-  // all the eligible bars to the backend server which then returns with which
+  // all the eligible contentItems to the backend server which then returns with which
   // variation to show.
   applyRules: function()
   {
@@ -879,40 +879,40 @@ var _HB = {
       if ( rule.method() ) // Did the method return true?
       {
         // Found a match
-        // If there is bar then render it
-        if ( rule.bars && rule.bars.length > 0 && rule.bars[0])
+        // If there is content then render it
+        if ( rule.contentItems && rule.contentItems.length > 0 && rule.contentItems[0])
         {
           HB.currentRule = rule;
           HB.cli = rule.contact_list_id;
-          // Check to see if the user is eligible for any bars
-          var eligibleBars = [];
-          for(var j=0;j<rule.bars.length;j++)
+          // Check to see if the user is eligible for any contentItems
+          var eligiblecontentItems = [];
+          for(var j=0;j<rule.contentItems.length;j++)
           {
-            var bar = rule.bars[j];
-            bar.rule = rule;
-            if ( !bar.target ) {
-              eligibleBars.push(bar); // If there is no target it is eligible for everyone
+            var content = rule.contentItems[j];
+            content.rule = rule;
+            if ( !content.target ) {
+              eligiblecontentItems.push(content); // If there is no target it is eligible for everyone
             }
             else
             {
-              // Check to see if the segment matches if this is a targeted bar
-              var parts = bar.target.split(":");
+              // Check to see if the segment matches if this is a targeted content
+              var parts = content.target.split(":");
               var key = parts[0];
               var value = parts.slice(1,parts.length).join(":");
               if ( (typeof HB_ALLOW_ALL !== "undefined" && HB_ALLOW_ALL) || (HB.getUserData(key) || "").toLowerCase() == value.toLowerCase())
-                eligibleBars.push(bar);
+                eligiblecontentItems.push(content);
             }
           }
-          // See if we have just one eligible bar in which case render it
-          if ( eligibleBars.length == 1 )
+          // See if we have just one eligible content in which case render it
+          if ( eligiblecontentItems.length == 1 )
           {
-            HB.render(eligibleBars[0]);
+            HB.render(eligiblecontentItems[0]);
             return true;
           }
-          else if ( eligibleBars.length > 1 )
+          else if ( eligiblecontentItems.length > 1 )
           {
-            // We need to ask the server which bar is the best. 
-            HB.pickBestBar(eligibleBars);
+            // We need to ask the server which content is the best. 
+            HB.pickBestContent(eligiblecontentItems);
             return true;
           }
           else
@@ -926,11 +926,11 @@ var _HB = {
     }
   },
 
-  // This takes an array of bars and sends them to the backend server
-  // which will then determine which bar to show. However, if we have
-  // already shown a user one of these bars before we just show them the
-  // same bar again for consistency and to save a server trip.
-  pickBestBar: function(bars)
+  // This takes an array of contentItems and sends them to the backend server
+  // which will then determine which content to show. However, if we have
+  // already shown a user one of these contentItems before we just show them the
+  // same content again for consistency and to save a server trip.
+  pickBestContent: function(contentItems)
   {
   },
 
