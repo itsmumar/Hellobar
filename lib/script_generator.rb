@@ -76,7 +76,19 @@ private
   end
   
   def conditions_for_rule(rule)
-    rule.conditions
+    rule.conditions.map{|c| condition_settings(c)}
+  end
+
+  def condition_settings(condition)
+    result = {}
+    {
+      segment: :short_segment,
+      operand: nil,
+      value: nil
+    }.each do |key, method|
+      result[key] = condition.send(method || key)
+    end
+    return result
   end
 
   def eligibility_rules(rule)
