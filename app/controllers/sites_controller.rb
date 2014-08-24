@@ -3,9 +3,9 @@ class SitesController < ApplicationController
 
   before_action :generate_temporary_logged_in_user, only: :create
   before_action :authenticate_user!
-  before_action :load_site, :only => [:show, :edit, :update, :destroy, :preview_script, :improve, :chart_data]
+  before_action :load_site, :only => [:show, :edit, :update, :destroy, :preview_script, :script, :improve, :chart_data]
 
-  skip_before_action :verify_authenticity_token, :only => :preview_script
+  skip_before_action :verify_authenticity_token, :only => [:preview_script, :script]
 
   layout :determine_layout
 
@@ -61,6 +61,11 @@ class SitesController < ApplicationController
   def preview_script
     generator = ScriptGenerator.new(@site, :templates => SiteElement::BAR_TYPES, :rules => [])
     render :js => generator.generate_script
+  end
+
+  # Returns the site's script
+  def script
+    render :js => @site.script_content(params[:no_compress].to_i == 1)
   end
 
   def chart_data

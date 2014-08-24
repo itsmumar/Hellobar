@@ -15,12 +15,7 @@ if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
 }
 
 {{#rules}}
-  _hbq.push(function(){HB.addRule(function(){
-    {{{rule_eligibility}}},
-    {{{bar_json}}},
-    {{priority}},
-    {{{metadata}}}
-  )});
+  _hbq.push(function(){HB.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}})});
 {{/rules}}
 
 _hbq = new HBQ();
