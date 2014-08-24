@@ -318,7 +318,7 @@ var _HB = {
   conversion: function(callback)
   {
     var conversion_Key = HB.getConversionKey(HB.currentBar);
-    HB.setUserAttr(conversionKey, (HB.getUserAttr(conversionKey) || 0)+1);
+    HB.setUserData(conversionKey, (HB.getUserData(conversionKey) || 0)+1);
     HB.trigger("conversion", HB.currentBar);
     HB.s("c?b="+HB.bi, HB.attributeParams(), callback);
   },
@@ -505,14 +505,14 @@ var _HB = {
   },
 
   // Gets the user attribute specified by the key or returns null
-  getUserAttr: function(key)
+  getUserData: function(key)
   {
     return HB.cookies.user[key];
   },
 
   // Sets the user attribute specified by the key to the value in the HB.cookies hash
   // Also updates the cookies via HB.saveCookies
-  setUserAttr: function(key, value, skipEmptyValue)
+  setUserData: function(key, value, skipEmptyValue)
   {
     if ( skipEmptyValue && !value) // This allows us to only conditionally set values
       return;
@@ -521,7 +521,7 @@ var _HB = {
   },
 
   // Gets the bar attribute from HB.cookies specified by the barID and key
-  getBarAttr: function(barID, key)
+  getBarData: function(barID, key)
   {
     // Ensure barID is a string
     barID = barID+"";
@@ -532,7 +532,7 @@ var _HB = {
 
   // Sets the bar attribute specified by the key and barID to the value in HB.cookies
   // Also updates the cookies via HB.saveCookies
-  setBarAttr: function(barID, key, value)
+  setBarData: function(barID, key, value)
   {
     // Ensure barID is a string
     barID = barID+"";
@@ -899,7 +899,7 @@ var _HB = {
               var parts = bar.target.split(":");
               var key = parts[0];
               var value = parts.slice(1,parts.length).join(":");
-              if ( (typeof HB_ALLOW_ALL !== "undefined" && HB_ALLOW_ALL) || (HB.getUserAttr(key) || "").toLowerCase() == value.toLowerCase())
+              if ( (typeof HB_ALLOW_ALL !== "undefined" && HB_ALLOW_ALL) || (HB.getUserData(key) || "").toLowerCase() == value.toLowerCase())
                 eligibleBars.push(bar);
             }
           }
@@ -944,22 +944,22 @@ var _HB = {
 
     // Track first visit and most recent visit and time since
     // last visit
-    if (!HB.getUserAttr("fv"))
-        HB.setUserAttr("fv", now);
+    if (!HB.getUserData("fv"))
+        HB.setUserData("fv", now);
     // Get the previous visit
-    var previousVisit = HB.getUserAttr("lv");
+    var previousVisit = HB.getUserData("lv");
 
     // Set the time since the last visit as the number
     // of days
     if ( previousVisit )
-      HB.setUserAttr("ls", Math.round((now-previousVisit)/day));
-    HB.setUserAttr("lv", now);
+      HB.setUserData("ls", Math.round((now-previousVisit)/day));
+    HB.setUserData("lv", now);
 
     // Set the life of the visitor in number of days
-    HB.setUserAttr("lf", Math.round((now-HB.getUserAttr("fv"))/day));
+    HB.setUserData("lf", Math.round((now-HB.getUserData("fv"))/day));
 
     // Track number of user visits
-    HB.setUserAttr("nv", (HB.getUserAttr("nv") || 0)+1);
+    HB.setUserData("nv", (HB.getUserData("nv") || 0)+1);
 
     // Set referrer if it is from a different domain (don't count internal referrers)
     if ( document.referrer )
@@ -972,12 +972,12 @@ var _HB = {
       {
         // This is an external referrer
         // Set the original referrer if not set
-        if ( !HB.getUserAttr("or" ))
-          HB.setUserAttr("or", referrer);
+        if ( !HB.getUserData("or" ))
+          HB.setUserData("or", referrer);
         // Set the full referrer
-        HB.setUserAttr("rf", referrer);
+        HB.setUserData("rf", referrer);
         // Set the referrer domain
-        HB.setUserAttr("rd", referrerDomain);
+        HB.setUserData("rd", referrerDomain);
 
         // Check for search terms
         var referrerQueryParts = referrer.split("?")[1];
@@ -998,31 +998,31 @@ var _HB = {
           // Check for search terms
           var search = params['query'] || params['q'] || params['search'];
           if ( search )
-            HB.setUserAttr("st", search);
+            HB.setUserData("st", search);
           // Check for UTM variables and set them if present
-          HB.setUserAttr('ad_so', params['utm_source'], true);
-          HB.setUserAttr('ad_ca', params['utm_campaign'], true);
-          HB.setUserAttr('ad_me', params['utm_medium'], true);
-          HB.setUserAttr('ad_co', params['utm_content'], true);
-          HB.setUserAttr('ad_te', params['utm_term'], true);
+          HB.setUserData('ad_so', params['utm_source'], true);
+          HB.setUserData('ad_ca', params['utm_campaign'], true);
+          HB.setUserData('ad_me', params['utm_medium'], true);
+          HB.setUserData('ad_co', params['utm_content'], true);
+          HB.setUserData('ad_te', params['utm_term'], true);
         }
       }
     }
     // Set the page URL
-    HB.setUserAttr("pu", (document.location+"").split("#")[0]);
+    HB.setUserData("pu", (document.location+"").split("#")[0]);
     // Set the date
-    HB.setUserAttr("dt", nowDate.getUTCFullYear()+"-"+(nowDate.getUTCMonth()+1)+"-"+nowDate.getUTCDate());
+    HB.setUserData("dt", nowDate.getUTCFullYear()+"-"+(nowDate.getUTCMonth()+1)+"-"+nowDate.getUTCDate());
     // Set the timestamp - this can be used for filtering
-    HB.setUserAttr("ts", now);
+    HB.setUserData("ts", now);
 
     // Detect the device
     var ua = navigator.userAgent;
     if (ua.match(/(mobi|phone|ipod|blackberry|docomo)/i))
-      HB.setUserAttr("dv", "mobile");
+      HB.setUserData("dv", "mobile");
     else if (ua.match(/(ipad|kindle|android)/i))
-      HB.setUserAttr("dv", "tablet");
+      HB.setUserData("dv", "tablet");
     else
-      HB.setUserAttr("dv", "computer");
+      HB.setUserData("dv", "computer");
   },
 
   // This code returns the root domain of the current site so "www.yahoo.co.jp" will return "yahoo.co.jp" and "blog.kissmetrics.com
