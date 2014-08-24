@@ -12,8 +12,8 @@
 if (typeof(_hbq) == 'undefined'){_hbq=[];}
 var HBQ = function()
 {
-  // Initialize the goals array so it can be pushed into
-  HB.goals = [];
+  // Initialize the rules array so it can be pushed into
+  HB.rules = [];
   // Need to load the serialized cookies
   HB.loadCookies();
   // Once initialized replace the existing data with it
@@ -24,8 +24,8 @@ var HBQ = function()
   }
   // Set all the default tracking trackings
   HB.setDefaultSegments();
-  // Apply the goals
-  HB.applyGoals();
+  // Apply the rules
+  HB.applyRules();
   
   // As the user readjust the window size we need to adjust the size of the containing
   // iframe. We do this by checking the the size of the inner div. If the the width
@@ -104,7 +104,7 @@ HBQ.prototype.push = function()
 }
 // Keep everything within the HB namespace
 // **Special case: If a user includes multiple bars, to avoid overwriting the first bar and causing errors,
-// we manually set _HB to HB later before pushing goals.
+// we manually set _HB to HB later before pushing rules.
 var _HB = {
   // Returns the element or looks it up via getElementById
   $: function(idOrElement)
@@ -195,7 +195,7 @@ var _HB = {
     return "a="+encodeURIComponent("all:all|"+HB.serializeCookies(HB.cookies));
   },
 
-  // Sends data to the tracking server (e.g. which bars viewed, if a goal was performed, etc)
+  // Sends data to the tracking server (e.g. which bars viewed, if a rule was performed, etc)
   s: function(url, paramString, callback)
   {
     if ( typeof(HB_DNT) != "undefined" || typeof(HB_SITE_ID) == "undefined")
@@ -280,18 +280,18 @@ var _HB = {
     return (document.location.protocol == "https:" ? "https" : "http")+ "://"+HB_BACKEND_HOST+"/"+url;
   },
 
-  // Recoards the goal being formed when the visitor clicks the specified element
+  // Recoards the rule being formed when the visitor clicks the specified element
   trackClick: function(element)
   {
     var url = element.href;
-    HB.goalPerformed(function(){element.target == "_blank" ?  window.open(url) : document.location = url;});
+    HB.conversion(function(){element.target == "_blank" ?  window.open(url) : document.location = url;});
   },
 
-  // Called when the goal is perfomed (e.g. link clicked, email form filled out)
-  goalPerformed: function(callback)
+  // Called when a conversion happens (e.g. link clicked, email form filled out)
+  conversion: function(callback)
   {
     HB.setBarAttr(HB.bi, "nc", (HB.getBarAttr(HB.bi, "nc") || 0)+1);
-    HB.trigger("goalPerformed", HB.currentBar);
+    HB.trigger("conversion", HB.currentBar);
     HB.s("c?b="+HB.bi, HB.attributeParams(), callback);
   },
 
@@ -326,7 +326,7 @@ var _HB = {
       failCallback();
   },
 
-  // Called to record an email for the goal without validation (also used by submitEmail)
+  // Called to record an email for the rule without validation (also used by submitEmail)
   recordEmail: function(email, name, callback)
   {
     if ( email )
@@ -337,8 +337,8 @@ var _HB = {
 
       params.push("q=y"); // only in staging
 
-      // Record the email address and then track that the goal was performed
-      HB.s("e", params.join("&"), function(){HB.goalPerformed(callback)});
+      // Record the email address and then track that the rule was performed
+      HB.s("e", params.join("&"), function(){HB.conversion(callback)});
     }
 
   },
@@ -595,7 +595,7 @@ var _HB = {
   // template will be returned for the same bar. The values in {{}} are replaced with
   // the values from the bar
   //
-  // By default this just returns the HB.templateHTML variable for the given goal type
+  // By default this just returns the HB.templateHTML variable for the given rule type
   getTemplate: function(bar)
   {
     return HB.templateHTML[bar.template_name];
@@ -831,34 +831,34 @@ var _HB = {
     d.close();
   },
 
-  // Adds a goal to the list of goals. The method is a function that returns true if the given
-  // visitor is eligible for the goal. The bars is the list of bars for the given goal. Priority
-  // is a numeric value and metadata is a hash of settings for the goal.
-  addGoal: function(method, bars, priority, metadata)
+  // Adds a rule to the list of rules. The method is a function that returns true if the given
+  // visitor is eligible for the rule. The bars is the list of bars for the given rule. Priority
+  // is a numeric value and metadata is a hash of settings for the rule.
+  addRule: function(method, bars, priority, metadata)
   {
     // First check to see if bars is an array, and make it one if it is not
     if (Object.prototype.toString.call(bars) !== "[object Array]")
       bars = [bars];
     if ( !priority )
       priority = 0;
-    // Create the goal
-    var goal = {method: method, bars: bars, priority: priority, data: metadata};
-    HB.goals.push(goal);
-    // Set the goal on all of the bars
+    // Create the rule
+    var rule = {method: method, bars: bars, priority: priority, data: metadata};
+    HB.rules.push(rule);
+    // Set the rule on all of the bars
     for(var i=0;i<bars.length;i++)
     {
-      bars[i].goal = goal;
+      bars[i].rule = rule;
     }
   },
 
-  // applyGoals scans through all the goals added via addGoal and finds the
-  // highest priority goal the visitor is eligible for. Once found it sends
+  // applyRules scans through all the rules added via addRule and finds the
+  // highest priority rule the visitor is eligible for. Once found it sends
   // all the eligible bars to the backend server which then returns with which
   // variation to show.
-  applyGoals: function()
+  applyRules: function()
   {
-    // Sort the goals
-    HB.goals.sort(function(a,b){
+    // Sort the rules
+    HB.rules.sort(function(a,b){
       if ( a.priority > b.priority )
         return 1;
       else if ( a.priority < b.priority )
@@ -866,24 +866,24 @@ var _HB = {
       else
         return 0;
     });
-    // Determine the first goal the visitor is eligible for
-    for(var i=0;i<HB.goals.length;i++)
+    // Determine the first rule the visitor is eligible for
+    for(var i=0;i<HB.rules.length;i++)
     {
-      var goal = HB.goals[i];
-      if ( goal.method() ) // Did the method return true?
+      var rule = HB.rules[i];
+      if ( rule.method() ) // Did the method return true?
       {
         // Found a match
         // If there is bar then render it
-        if ( goal.bars && goal.bars.length > 0 && goal.bars[0])
+        if ( rule.bars && rule.bars.length > 0 && rule.bars[0])
         {
-          HB.currentGoal = goal;
-          HB.cli = goal.contact_list_id;
+          HB.currentRule = rule;
+          HB.cli = rule.contact_list_id;
           // Check to see if the user is eligible for any bars
           var eligibleBars = [];
-          for(var j=0;j<goal.bars.length;j++)
+          for(var j=0;j<rule.bars.length;j++)
           {
-            var bar = goal.bars[j];
-            bar.goal = goal;
+            var bar = rule.bars[j];
+            bar.rule = rule;
             if ( !bar.target ) {
               eligibleBars.push(bar); // If there is no target it is eligible for everyone
             }
@@ -912,7 +912,7 @@ var _HB = {
           else
           {
             // No match
-            HB.currentGoal = null;
+            HB.currentRule = null;
             HB.cli = null;
           }
         }
