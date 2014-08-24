@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   get "sites/:id/improve", :to => "sites#improve", :as => :site_improve
   get "sites/:id/preview_script", :to => "sites#preview_script", :as => :preview_script
+  get "sites/:id/script", :to => "sites#script", :as => :script
   get "sites/:id/chart_data", to: "sites#chart_data", as: :chart_data
 
   get "/auth/:provider/callback", :to => "identities#create"

@@ -1,6 +1,11 @@
 class ScriptGenerator < Mustache
-  self.template_path = "#{Rails.root}/lib/script_generator/"
-  self.template_file = "#{Rails.root}/lib/script_generator/template.js.mustache"
+  class << self
+    def load_templates
+      self.template_path = "#{Rails.root}/lib/script_generator/"
+      self.template_file = "#{Rails.root}/lib/script_generator/template.js.mustache"
+    end
+  end
+  load_templates
 
   attr_reader :site, :options
 
@@ -10,6 +15,10 @@ class ScriptGenerator < Mustache
   end
 
   def generate_script
+    if Rails.env.development?
+      # Re-read the template
+      ScriptGenerator.load_templates
+    end
     if options[:compress]
       Uglifier.new.compress(render)
     else
@@ -60,10 +69,14 @@ private
 
   def hash_for_rule(rule)
     {
-      bar_json: site_elements_for_rule(rule).to_json,
-      priority: 1, # seems to be hardcoded as 1 throughout WWW
-      metadata: metadata(rule).to_json
-    }.merge(eligibility_rules(rule))
+      match: rule.match,
+      conditions: conditions_for_rule(rule).to_json,
+      site_elements: site_elements_for_rule(rule).to_json
+    }
+  end
+  
+  def conditions_for_rule(rule)
+    rule.conditions
   end
 
   def eligibility_rules(rule)
