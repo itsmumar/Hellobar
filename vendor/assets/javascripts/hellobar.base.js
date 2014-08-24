@@ -520,6 +520,28 @@ var _HB = {
     HB.saveCookies();
   },
 
+  // Gets the bar attribute from HB.cookies specified by the barID and key
+  getBarAttr: function(barID, key)
+  {
+    // Ensure barID is a string
+    barID = barID+"";
+    if ( !HB.cookies.bars[barID] )
+      return null;
+    return HB.cookies.bars[barID][key];
+  },
+
+  // Sets the bar attribute specified by the key and barID to the value in HB.cookies
+  // Also updates the cookies via HB.saveCookies
+  setBarAttr: function(barID, key, value)
+  {
+    // Ensure barID is a string
+    barID = barID+"";
+    if ( !HB.cookies.bars[barID] )
+      HB.cookies.bars[barID] = {};
+    HB.cookies.bars[barID][key] = value;
+    HB.saveCookies();
+  },
+
   // Gets a cookie
   gc: function(name)
   {
