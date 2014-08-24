@@ -91,69 +91,6 @@ private
     return result
   end
 
-  def eligibility_rules(rule)
-    if options[:disable_eligibility]
-      {}
-    else
-      {
-        rule_eligibility: condition_string(rule.match, rule.conditions)
-      }
-    end
-  end
-
-  def condition_string(match, conditions)
-    join_operator = match == Rule::MATCH_ON[:all] ? '&&' : '||'
-
-    string = conditions.map do |condition|
-      if condition.kind_of?(DateCondition)
-        date_conditions(condition)
-      elsif condition.kind_of?(UrlCondition)
-        url_conditions(condition)
-      elsif condition.kind_of?(CountryCondition)
-        # TODO: how do we get the current users country
-      elsif condition.kind_of?(DeviceCondition)
-        # TODO: how do we get the current users device?
-      else
-        raise "unhandled condition type: #{condition.segment}"
-      end
-    end.join(join_operator)
-
-    if string.present?
-      "return #{string};}"
-    else
-      'return true;}'
-    end
-  end
-
-  def date_conditions(condition)
-    tz = condition.value['timezone']
-    conditions = Array.new.tap do |array|
-      if start_date = condition.comparable_start_date
-        array << %{(HB.comparableDate(#{'"auto"' unless tz}) >= "#{start_date}")}
-      end
-
-      if end_date = condition.comparable_end_date
-        array << %{(HB.comparableDate(#{'"auto"' unless tz}) <= "#{end_date}")}
-      end
-    end
-
-    conditions.join('&&')
-  end
-
-  def url_conditions(condition)
-    bang = condition.include_url? ? '' : '!'
-
-    "(#{bang}HB.umatch(\"#{path_for_url(condition.value)}\", document.location))"
-  end
-
-  def path_for_url(url)
-    path = Addressable::URI.heuristic_parse(url).path
-    path.gsub!(/\/+$/, "") # strip trailing slashes
-    path.blank? ? "/" : path
-  rescue Addressable::URI::InvalidURIError
-    url
-  end
-
   def content_template(element_subtype)
     ActiveSupport.escape_html_entities_in_json = false
     content = (content_header + content_markup(element_subtype) + content_footer).to_json
@@ -193,12 +130,6 @@ private
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
-  def rule_settings(rule)
-    settings = %w{ end_date start_date exclude_urls include_urls id }
-
-    rule.attributes.select{|key, value| settings.include?(key) && value.present? }
-  end
-
   def site_elements_for_rule(rule)
     site_elements = if options[:bar_id]
       [rule.site_elements.find(options[:bar_id])]
@@ -211,9 +142,5 @@ private
     end
 
     site_elements.map{|element| site_element_settings(element) }
-  end
-
-  def metadata(rule)
-    rule_settings(rule).select{|key,value| value.present? }.with_indifferent_access
   end
 end
