@@ -79,7 +79,7 @@ module Hello::DataAPI
     end
 
     def get_contacts(contact_list, from_timestamp = nil, cache_options = {})
-      cache_key = "hello:data-api:#{site.id}:contact_list-#{contact_list.id}:from#{from_timestamp}"
+      cache_key = "hello:data-api:#{contact_list.site_id}:contact_list-#{contact_list.id}:from#{from_timestamp}"
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
