@@ -29,11 +29,11 @@ module SiteElementsHelper
   end
 
   def site_element_views(metrics)
-    metrics ? metrics.last[0] : 0
+    number_with_delimiter(metrics ? metrics.last[0] : 0)
   end
 
   def site_element_conversions(metrics)
-    metrics ? metrics.last[1] : 0
+    number_with_delimiter(metrics ? metrics.last[1] : 0)
   end
 
   def site_element_conversion_percentage(metrics)
