@@ -3,7 +3,7 @@ require "./lib/hello/data_api_helper"
 
 module Hello::DataAPI
   class << self
-    def lifetime_totals(site, site_elements, num_days = 1)
+    def lifetime_totals(site, site_elements, num_days = 1, cache_options = {})
       if Hellobar::Settings[:fake_data_api]
         return {}.tap do |hash|
           site_elements.each do |el|
@@ -17,8 +17,15 @@ module Hello::DataAPI
         end
       end
 
-      path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, site_elements.map(&:id), site.read_key, num_days)
-      get(path, params)
+      site_element_ids = site_elements.map(&:id).sort
+
+      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.join('-')}:lifetime_totals:#{num_days}days"
+      cache_options[:expires_in] = 10.minutes
+
+      Rails.cache.fetch cache_key, cache_options do
+        path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, site_element_ids, site.read_key, num_days)
+        get(path, params)
+      end
     end
 
     def lifetime_totals_by_type(site, site_elements, num_days = 30)
@@ -47,19 +54,38 @@ module Hello::DataAPI
       totals
     end
 
-    def contact_list_totals(site, contact_lists)
-      path, params = Hello::DataAPIHelper::RequestParts.contact_list_totals(site.id, contact_lists.map(&:id), site.read_key)
-      get(path, params)
+    def contact_list_totals(site, contact_lists, cache_options = {})
+      contact_list_ids = contact_lists.map(&:id).sort
+
+      cache_key = "hello:data-api:#{site.id}:#{contact_list_ids.join('-')}:contact_list_totals"
+      cache_options[:expires_in] = 10.minutes
+
+      Rails.cache.fetch cache_key, cache_options do
+        path, params = Hello::DataAPIHelper::RequestParts.contact_list_totals(site.id, contact_list_ids, site.read_key)
+        get(path, params)
+      end
     end
 
-    def suggested_opportunities(site, site_elements)
-      path, params = Hello::DataAPIHelper::RequestParts.suggested_opportunities(site.id, site_elements.map(&:id), site.read_key)
-      get(path, params)
+    def suggested_opportunities(site, site_elements, cache_options = {})
+      site_element_ids = site_elements.map(&:id).sort
+
+      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.join('-')}:suggested_opportunities"
+      cache_options[:expires_in] = 10.minutes
+
+      Rails.cache.fetch cache_key, cache_options do
+        path, params = Hello::DataAPIHelper::RequestParts.suggested_opportunities(site.id, site_element_ids, site.read_key)
+        get(path, params)
+      end
     end
 
-    def get_contacts(contact_list, from_timestamp = nil)
-      path, params = Hello::DataAPIHelper::RequestParts.get_contacts(contact_list.site_id, contact_list.id, contact_list.site.read_key, nil, from_timestamp)
-      get(path, params)
+    def get_contacts(contact_list, from_timestamp = nil, cache_options = {})
+      cache_key = "hello:data-api:#{contact_list.site_id}:contact_list-#{contact_list.id}:from#{from_timestamp}"
+      cache_options[:expires_in] = 10.minutes
+
+      Rails.cache.fetch cache_key, cache_options do
+        path, params = Hello::DataAPIHelper::RequestParts.get_contacts(contact_list.site_id, contact_list.id, contact_list.site.read_key, nil, from_timestamp)
+        get(path, params)
+      end
     end
 
     def get(path, params)

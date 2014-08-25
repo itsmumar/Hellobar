@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Hello::DataAPI do
+describe Hello::DataAPI, '.lifetime_totals_by_type' do
   fixtures :all
 
   it "rolls up lifetime totals by site element type" do
