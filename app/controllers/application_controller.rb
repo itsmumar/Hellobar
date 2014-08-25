@@ -39,6 +39,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_no_user
+    if current_user
+      first_site = current_user.sites.first
+
+      redirect_to site_path(first_site)
+    end
+  end
+
   def after_sign_in_path_for(resource)
     if current_user.sites.any?
       site_path(current_user.sites.last)
