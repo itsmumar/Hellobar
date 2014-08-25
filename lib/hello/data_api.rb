@@ -17,11 +17,13 @@ module Hello::DataAPI
         end
       end
 
-      cache_key = "hello:data-api:#{site.id}:lifetime_totals:#{num_days}days"
+      site_element_ids = site_elements.map(&:id).sort
 
-      Rails.cache.delete(cache_key) if cache_options[:bust_cache]
-      Rails.cache.fetch cache_key, expires_in: 10.minutes do
-        path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, site_elements.map(&:id), site.read_key, num_days)
+      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.join('-')}:lifetime_totals:#{num_days}days"
+      cache_options[:expires_in] = 10.minutes
+
+      Rails.cache.fetch cache_key, cache_options do
+        path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, site_element_ids, site.read_key, num_days)
         get(path, params)
       end
     end
@@ -33,55 +35,54 @@ module Hello::DataAPI
 
       return totals if data == {}
 
-      cache_key = "hello:data-api:#{site.id}:lifetime_totals_by_type:#{num_days}days"
+      ids = {
+        :total => data.keys,
+        :email => elements.select{|e| e.element_subtype == "email"}.map{|e| e.id.to_s},
+        :traffic => elements.select{|e| e.element_subtype == "traffic"}.map{|e| e.id.to_s},
+        :social => elements.select{|e| e.element_subtype =~ /social\//}.map{|e| e.id.to_s}
+      }
 
-      Rails.cache.delete(cache_key) if cache_options[:bust_cache]
-      Rails.cache.fetch cache_key, expires_in: 10.minutes do
-        ids = {
-          :total => data.keys,
-          :email => elements.select{|e| e.element_subtype == "email"}.map{|e| e.id.to_s},
-          :traffic => elements.select{|e| e.element_subtype == "traffic"}.map{|e| e.id.to_s},
-          :social => elements.select{|e| e.element_subtype =~ /social\//}.map{|e| e.id.to_s}
-        }
+      data.values.first.count.times do |i|
+        totals[:total] << data.inject([0, 0]){|m, d| [m[0] + d[1][i][0], m[1] + d[1][i][1]]}
 
-        data.values.first.count.times do |i|
-          totals[:total] << data.inject([0, 0]){|m, d| [m[0] + d[1][i][0], m[1] + d[1][i][1]]}
-
-          [:email, :traffic, :social].each do |key|
-            type_data = data.select{|k, v| ids[key].include?(k)}
-            totals[key] << type_data.inject([0, 0]){|m, d| [m[0] + d[1][i][0], m[1] + d[1][i][1]]}
-          end
+        [:email, :traffic, :social].each do |key|
+          type_data = data.select{|k, v| ids[key].include?(k)}
+          totals[key] << type_data.inject([0, 0]){|m, d| [m[0] + d[1][i][0], m[1] + d[1][i][1]]}
         end
-
-        totals
       end
+
+      totals
     end
 
     def contact_list_totals(site, contact_lists, cache_options = {})
-      cache_key = "hello:data-api:#{site.id}:contact_list_totals"
+      contact_list_ids = contact_lists.map(&:id).sort
 
-      Rails.cache.delete(cache_key) if cache_options[:bust_cache]
-      Rails.cache.fetch cache_key, expires_in: 10.minutes do
-        path, params = Hello::DataAPIHelper::RequestParts.contact_list_totals(site.id, contact_lists.map(&:id), site.read_key)
+      cache_key = "hello:data-api:#{site.id}:#{contact_list_ids.join('-')}:contact_list_totals"
+      cache_options[:expires_in] = 10.minutes
+
+      Rails.cache.fetch cache_key, cache_options do
+        path, params = Hello::DataAPIHelper::RequestParts.contact_list_totals(site.id, contact_list_ids, site.read_key)
         get(path, params)
       end
     end
 
     def suggested_opportunities(site, site_elements, cache_options = {})
-      cache_key = "hello:data-api:#{site.id}:suggested_opportunities"
+      site_element_ids = site_elements.map(&:id).sort
 
-      Rails.cache.delete(cache_key) if cache_options[:bust_cache]
-      Rails.cache.fetch cache_key, expires_in: 10.minutes do
-        path, params = Hello::DataAPIHelper::RequestParts.suggested_opportunities(site.id, site_elements.map(&:id), site.read_key)
+      cache_key = "hello:data-api:#{site.id}:suggested_opportunities"
+      cache_options[:expires_in] = 10.minutes
+
+      Rails.cache.fetch cache_key, cache_options do
+        path, params = Hello::DataAPIHelper::RequestParts.suggested_opportunities(site.id, site_element_ids, site.read_key)
         get(path, params)
       end
     end
 
     def get_contacts(contact_list, from_timestamp = nil, cache_options = {})
       cache_key = "hello:data-api:#{site.id}:contact_list:from#{from_timestamp}"
+      cache_options[:expires_in] = 10.minutes
 
-      Rails.cache.delete(cache_key) if cache_options[:bust_cache]
-      Rails.cache.fetch cache_key, expires_in: 10.minutes do
+      Rails.cache.fetch cache_key, cache_options do
         path, params = Hello::DataAPIHelper::RequestParts.get_contacts(contact_list.site_id, contact_list.id, contact_list.site.read_key, nil, from_timestamp)
         get(path, params)
       end
