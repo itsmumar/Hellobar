@@ -29,18 +29,18 @@ module SiteElementsHelper
   end
 
   def site_element_views(metrics)
-    metrics ? metrics[0][0] : 0
+    metrics ? metrics.last[0] : 0
   end
 
   def site_element_conversions(metrics)
-    metrics ? metrics[0][1] : 0
+    metrics ? metrics.last[1] : 0
   end
 
   def site_element_conversion_percentage(metrics)
-    if metrics.nil? || metrics[0][1] == 0
+    if metrics.nil? || metrics.last[1] == 0
       percentage = 0.0
     else
-      percentage = metrics[0][1] * 1.0 / metrics[0][0]
+      percentage = metrics.last[1] * 1.0 / metrics.last[0]
     end
 
 
