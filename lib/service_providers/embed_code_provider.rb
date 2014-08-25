@@ -12,7 +12,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProvider
   end
 
   def embed_code_valid?
-    html.css('form').first.present?
+    embed_code.present? && html.css('form').first.present?
   end
 
   def list_name

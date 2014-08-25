@@ -167,8 +167,7 @@ class ContactList < ActiveRecord::Base
   end
 
   def embed_code_valid?
-    return false if data['embed_code'].blank? || service_provider.nil?
-    service_provider.embed_code_valid?
+    service_provider && service_provider.embed_code_valid?
   end
 
   def service_provider_class
