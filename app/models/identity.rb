@@ -48,11 +48,7 @@ class Identity < ActiveRecord::Base
   end
 
   def service_provider(options={})
-    contact_list = options[:contact_list]
-    if !contact_list.is_a?(ContactList) and service_provider_class.embed_code?
-      fail ArgumentError, ":contact_list is required for embed code identities"
-    end
-    @service_provider ||= service_provider_class.new(:identity => self, :contact_list => contact_list)
+    @service_provider ||= service_provider_class.new(:identity => self, :contact_list => options[:contact_list])
   end
 
   def service_provider_class
