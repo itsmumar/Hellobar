@@ -195,3 +195,32 @@ describe ContactList do
     end
   end
 end
+
+describe ContactList, "embed code" do
+  fixtures :contact_lists, :identities, :sites
+
+  subject { contact_lists(:embed_code) }
+
+  before { subject.data['embed_code'] = embed_code }
+
+  context "invalid" do
+    let(:embed_code) { "asdf" }
+    its(:data) { should == { 'embed_code' => 'asdf' } }
+    its(:embed_code_valid?) { should == false }
+  end
+
+  context "invalid" do
+    let(:embed_code) { "<<asdfasdf>>>" }
+    its(:embed_code_valid?) { should == false }
+  end
+
+  context "invalid" do
+    let(:embed_code) { "<from></from>" }
+    its(:embed_code_valid?) { should == false }
+  end
+
+  context "valid" do
+    let(:embed_code) { "<form></form>" }
+    its(:embed_code_valid?) { should == true }
+  end
+end
