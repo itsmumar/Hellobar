@@ -38,6 +38,7 @@ class SitesController < ApplicationController
 
   def improve
     @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements)
+    @suggestions = Hello::DataAPI.suggested_opportunities(@site, @site.site_elements) || []
   end
 
   def update
