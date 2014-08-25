@@ -8,6 +8,9 @@ class @ContactListModal extends Modal
     @_initializeTemplates()
     @_initializeBlocks()
 
+    @$modal.on 'load',   -> $(this).addClass('loading')
+    @$modal.on 'complete', -> $(this).removeClass('loading').finish()
+
     super(@$modal)
 
   close: ->
@@ -139,7 +142,11 @@ class @ContactListModal extends Modal
       @blocks.remoteListSelect.hide()
       return
 
+    @$modal.trigger 'load'
+
     $.get "/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
+      @$modal.trigger 'complete'
+
       if data and data.lists # an identity was found for the selected provider
         @blocks.instructions.hide()
         @blocks.nevermind.hide()

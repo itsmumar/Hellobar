@@ -12,7 +12,7 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
           input type="text" id="contact_list_name" name="contact_list[name]"
 
           label for="contact_list_provider" Where do you want your contacts stored?
-          select id="contact_list_provider" name="contact_list[provider]"
+          select id="contact_list_provider" name="contact_list[provider]" class="displays-loading"
             - options_for_provider_select.each do |text, value, data|
               = content_tag :option, text, value: value, data: data
 
