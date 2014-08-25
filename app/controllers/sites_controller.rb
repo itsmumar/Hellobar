@@ -39,6 +39,10 @@ class SitesController < ApplicationController
   def improve
     @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements)
     @suggestions = Hello::DataAPI.suggested_opportunities(@site, @site.site_elements) || []
+    @top_performers = (Hello::DataAPI.lifetime_totals(@site, @site.site_elements, 1) || []).sort_by do |element|
+      views, conversions = element[1].last
+      views == 0 ? 0 : conversions * 1.0 / views
+    end.reverse[0, 6]
   end
 
   def update
