@@ -201,11 +201,11 @@ describe ContactList, "embed code" do
 
   subject { contact_lists(:embed_code) }
 
-  before { subject.embed_code = embed_code }
+  before { subject.data['embed_code'] = embed_code }
 
   context "invalid" do
     let(:embed_code) { "asdf" }
-    its(:embed_code) { should == "asdf" }
+    its(:data) { should == { 'embed_code' => 'asdf' } }
     its(:embed_code_valid?) { should == false }
   end
 

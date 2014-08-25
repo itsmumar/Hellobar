@@ -120,14 +120,6 @@ class ContactList < ActiveRecord::Base
     service_provider_class.try(:embed_code?)
   end
 
-  def embed_code=(embed_code)
-    data['embed_code'] = embed_code
-  end
-
-  def embed_code
-    data['embed_code']
-  end
-
   protected
 
   def subscribe_all_emails_to_list!
@@ -161,8 +153,8 @@ class ContactList < ActiveRecord::Base
   end
 
   def clean_embed_code
-    return unless embed_code && identity && embed_code.present?
-    self.embed_code = service_provider.clean_embed_code(embed_code)
+    return unless data['embed_code'] && identity
+    self.data['embed_code'] = service_provider.clean_embed_code(data['embed_code'])
   end
 
   def reject_empty_data_values
@@ -171,11 +163,11 @@ class ContactList < ActiveRecord::Base
   end
   
   def embed_code_exists?
-    errors.add(:base, "Embed code cannot be blank") unless embed_code
+    errors.add(:base, "Embed code cannot be blank") unless data['embed_code'].present?
   end
 
   def embed_code_valid?
-    return false if embed_code.blank? || service_provider.nil?
+    return false if data['embed_code'].blank? || service_provider.nil?
     service_provider.embed_code_valid?
   end
 

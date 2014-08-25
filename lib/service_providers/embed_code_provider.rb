@@ -2,8 +2,6 @@ class ServiceProviders::EmbedCodeProvider < ServiceProvider
 
   class FirstAndLastNameRequired < StandardError; end
 
-  delegate :embed_code, to: :contact_list
-
   URL_REGEX = /^(?:https?:\/\/|\/\/)/
 
   attr_reader :identity, :contact_list
@@ -23,6 +21,10 @@ class ServiceProviders::EmbedCodeProvider < ServiceProvider
 
   def list_id
     list_url.split('/').last
+  end
+
+  def embed_code
+    contact_list.data['embed_code']
   end
 
   def embed_url

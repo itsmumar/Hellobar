@@ -15,6 +15,6 @@ describe Cleaners::EmbedCode do
 
   context 'curly quotes' do
     let(:embed_code) { '“I want to go to the gym”, he said.' }
-    its(:embed_code) { should == '"I want to go to the gym", he said.' }
+    its(:data) { should == {'embed_code' => '"I want to go to the gym", he said.' } }
   end
 end
