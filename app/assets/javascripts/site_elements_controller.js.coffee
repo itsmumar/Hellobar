@@ -1,5 +1,26 @@
 $ ->
 
+  # filter the site elements on the page
+  $('body').on 'click', 'a.element-filter', (event) ->
+    event.preventDefault()
+    $anchor = $(this)
+    href = $anchor.attr('href')
+
+    # unset the current active filter
+    $('a.element-filter').removeClass('active')
+
+    if href == '#active'
+      $('tr.site-element-block:not(.active)').hide()
+      $('tr.site-element-block.active').show()
+    else if href == '#paused'
+      $('tr.site-element-block:not(.paused)').hide()
+      $('tr.site-element-block.paused').show()
+    else if href == '#all'
+      $('tr.site-element-block').show()
+
+    # set the current active anchor
+    $anchor.addClass('active')
+
   $('body').on 'click', '.edit-rule', (event) ->
     event.preventDefault()
 
