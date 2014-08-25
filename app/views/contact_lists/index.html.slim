@@ -27,7 +27,7 @@
   .temporary-block
     h5 Grow your email lists
     strong Did you know that Hello Bar can collect email addresses for you?
-    - if site_element_subtypes(current_site).include?("email")
+    - if site_element_subtypes_for_site(current_site).include?("email")
       p We can even sync them to providers like MailChimp automatically!
       .button#new-contact-list Start Collecting Emails
     - else
