@@ -47,6 +47,11 @@ class SiteElement < ActiveRecord::Base
     update_attribute :paused, new_pause_state
   end
 
+  def short_subtype
+    match = element_subtype.match(/(\w+)/)
+    match ? match[0] : nil
+  end
+
   private
 
   def contact_list_is_present

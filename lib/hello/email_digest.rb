@@ -2,6 +2,7 @@ module Hello::EmailDigest
   class << self
     include Hellobar::Application.routes.url_helpers
     include EmailDigestHelper
+    include SiteElementsHelper
 
     def installed_sites
       Site.where("script_installed_at IS NOT NULL").select{|s| s.send_email_digest?}
@@ -62,7 +63,7 @@ module Hello::EmailDigest
         element_subtypes = {:social => /^social/, :email => /^email/, :traffic => /^traffic/}
         worst_type = element_subtypes.keys.sort_by{|a| metrics[a][:conversion][:n]}.first
         worst_bars = site_elements.select{|b| b.element_subtype =~ element_subtypes[worst_type]}
-        conversion_noun = element_activity_units(worst_bars, :plural => true)
+        conversion_noun = site_element_activity_units(worst_bars, :plural => true)
 
         "Your #{worst_type} bars have the lowest conversion rate. Try creating a variation on your existing #{worst_type} bars to see if you can get more #{conversion_noun}. <a href='#{url}'>Start testing more #{worst_type} bars now</a>."
       end
