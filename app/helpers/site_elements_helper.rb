@@ -28,6 +28,11 @@ module SiteElementsHelper
     end
   end
 
+  def site_element_subtypes_for_site(site)
+    return [] unless site
+    site.site_elements.collect(&:element_subtype)
+  end
+
   def site_element_views(metrics)
     metrics ? metrics[0][0] : 0
   end
