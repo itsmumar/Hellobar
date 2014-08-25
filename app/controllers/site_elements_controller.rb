@@ -1,7 +1,7 @@
 class SiteElementsController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :load_site
-  before_filter :load_site_element, :only => [:show, :edit, :update, :destroy, :toggle_paused]
+  before_action :authenticate_user!
+  before_action :load_site
+  before_action :load_site_element, :only => [:show, :edit, :update, :destroy, :toggle_paused]
 
   layout :determine_layout
 

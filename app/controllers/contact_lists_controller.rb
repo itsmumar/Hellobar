@@ -1,7 +1,7 @@
 class ContactListsController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :load_site
-  before_filter :load_contact_list, :only => [:show, :update]
+  before_action :authenticate_user!
+  before_action :load_site
+  before_action :load_contact_list, :only => [:show, :update]
 
   def index
     @contact_lists = @site.contact_lists

@@ -1,8 +1,8 @@
 class Admin::AccessController < ApplicationController
   layout "admin"
 
-  before_filter :require_admin, :only => [:reset_password, :do_reset_password, :logout_admin]
-  before_filter :redirect_admin, :only => :step1
+  before_action :require_admin, :only => [:reset_password, :do_reset_password, :logout_admin]
+  before_action :redirect_admin, :only => :step1
 
   def do_reset_password
     if current_admin.password_hashed != current_admin.encrypt_password(params[:existing_password])
