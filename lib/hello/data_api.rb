@@ -1,8 +1,22 @@
+require "./config/initializers/settings"
 require "./lib/hello/data_api_helper"
 
 module Hello::DataAPI
   class << self
     def lifetime_totals(site, site_elements, num_days = 1)
+      if Hellobar::Settings[:fake_data_api]
+        return {}.tap do |hash|
+          site_elements.each do |el|
+            hash[el.id.to_s] = [[rand(100) + 100, rand(100)]]
+
+            (num_days - 1).times do
+              last = hash[el.id.to_s].last
+              hash[el.id.to_s] << [last[0] + rand(100) + 100, last[1] + rand(100)]
+            end
+          end
+        end
+      end
+
       path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, site_elements.map(&:id), site.read_key, num_days)
       get(path, params)
     end
