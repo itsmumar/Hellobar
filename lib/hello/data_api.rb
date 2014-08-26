@@ -12,18 +12,7 @@ module Hello::DataAPI
     # => {"123" => [[10, 3], [15, 4]]}
     #
     def lifetime_totals(site, site_elements, num_days = 1, cache_options = {})
-      if Hellobar::Settings[:fake_data_api]
-        return {}.tap do |hash|
-          site_elements.each do |el|
-            hash[el.id.to_s] = [[rand(100) + 100, rand(100)]]
-
-            (num_days - 1).times do
-              last = hash[el.id.to_s].last
-              hash[el.id.to_s] << [last[0] + rand(100) + 100, last[1] + rand(100)]
-            end
-          end
-        end
-      end
+      return fake_lifetime_totals(site, site_elements, num_days) if Hellobar::Settings[:fake_data_api]
 
       site_element_ids = site_elements.map(&:id).sort
 
@@ -33,6 +22,19 @@ module Hello::DataAPI
       Rails.cache.fetch cache_key, cache_options do
         path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, site_element_ids, site.read_key, num_days)
         get(path, params)
+      end
+    end
+
+    def fake_lifetime_totals(site, site_elements, num_days = 1)
+      {}.tap do |hash|
+        site_elements.each do |el|
+          hash[el.id.to_s] = [[rand(100) + 100, rand(100)]]
+
+          (num_days - 1).times do
+            last = hash[el.id.to_s].last
+            hash[el.id.to_s] << [last[0] + rand(100) + 100, last[1] + rand(100)]
+          end
+        end
       end
     end
 
@@ -110,6 +112,8 @@ module Hello::DataAPI
     #    }
     #
     def suggested_opportunities(site, site_elements, cache_options = {})
+      return fake_suggested_opportunities(site, site_elements) if Hellobar::Settings[:fake_data_api]
+
       site_element_ids = site_elements.map(&:id).sort
 
       cache_key = "hello:data-api:#{site.id}:#{site_element_ids.join('-')}:suggested_opportunities"
@@ -119,6 +123,14 @@ module Hello::DataAPI
         path, params = Hello::DataAPIHelper::RequestParts.suggested_opportunities(site.id, site_element_ids, site.read_key)
         get(path, params)
       end
+    end
+
+    def fake_suggested_opportunities(site, site_elements)
+      {
+        "high traffic, low conversion" =>  [["co:USA", 100, 1], ["dv:Mobile", 200, 2], ["rf:http://zombo.com", 130, 4]],
+        "low traffic, high conversion" =>  [["co:Russia", 10, 9], ["dv:Desktop", 22, 20], ["pu:http://zombo.com/signup", 5, 4]],
+        "high traffic, high conversion" => [["co:China", 100, 30], ["ad_so:Google AdWords", 200, 55], ["co:Canada", 430, 120]]
+      }
     end
 
     # Return name, email and timestamp of subscribers for a contact list
