@@ -12,7 +12,7 @@ module SiteElementsHelper
         {:unit => "follower", :verb => "gained"}
       when "social/like_on_facebook"
         {:unit => "like"}
-      when "social/share_on_linkedin"
+      when "social/share_on_linkedin", "social/share_on_buffer"
         {:unit => "share"}
       when "social/plus_one_on_google_plus"
         {:unit => "plus one"}
@@ -20,8 +20,6 @@ module SiteElementsHelper
         {:unit => "pin"}
       when "social/follow_on_pinterest"
         {:unit => "follower", :verb => "gained"}
-      when "social/share_on_buffer"
-        {:unit => "share"}
       end
     end
 
