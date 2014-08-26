@@ -148,9 +148,6 @@ class LegacyMigrator
             # disable password requirement for import
             User.send(:define_method, :password_required?) { false }
 
-            # disable Wordpress validation for import
-            User.send(:define_method, :email_does_not_exist_in_wordpress) { true }
-
             user = ::User.create! id: legacy_user.id_to_migrate,
                                   email: legacy_user.email,
                                   encrypted_password: legacy_user.encrypted_password,
