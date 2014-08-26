@@ -30,7 +30,7 @@ $ ->
 
     options =
       successCallback: ->
-        $(".rule##{@id}").text("Rule set: #{@name}")
+        $(".rule-block#rule-id-#{@id} h4").text("/#{@name}")
 
     new RuleModal($modal, options).open()
 

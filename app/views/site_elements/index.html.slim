@@ -17,7 +17,7 @@ table.rules-wrapper
       th 
   tbody
     - @rules.each do |rule|
-      tr.rule-block
+      tr.rule-block id="rule-id-#{rule.id}"
         th.page-header colspan='9'
           h4= "/#{rule.name.blank? ? "(no name)" : rule.name}"
           span= rule.to_sentence
