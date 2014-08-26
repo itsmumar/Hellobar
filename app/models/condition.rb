@@ -16,7 +16,7 @@ class Condition < ActiveRecord::Base
     is_not: 'is not',
     includes: 'includes',
     excludes: 'excludes'
-  }
+  }.with_indifferent_access
 
   belongs_to :rule
 

@@ -30,7 +30,9 @@ $ ->
 
     options =
       successCallback: ->
-        $(".rule-block#rule-id-#{@id} h4").text("/#{@name}")
+        $ruleContent = $(".rule-block#rule-id-#{@id}")
+        $ruleContent.find("h4").text("/#{@name}")
+        $ruleContent.find("span").text(@description)
 
     new RuleModal($modal, options).open()
 

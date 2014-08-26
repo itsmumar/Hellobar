@@ -1,19 +1,19 @@
 date_between:
   segment: DateCondition
-  operand: is between
+  operand: is_between
   value:
     start_date: <%= Date.current - 1.day %>
     end_date: <%= Date.current + 1.day %>
 
 date_before:
   segment: DateCondition
-  operand: is before
+  operand: is_before
   value:
     end_date: <%= Date.current + 1.day %>
 
 date_after:
   segment: DateCondition
-  operand: is after
+  operand: is_after
   value:
     start_date: <%= Date.current - 1.day %>
 

@@ -122,7 +122,7 @@ describe RulesController do
             "id" => id,
             "rule_id" => rule.id,
             "segment" => "date",
-            "operand" => "is between",
+            "operand" => "is_between",
             "value" => {
               "start_date" => (Date.current - 1.day).strftime("%Y-%m-%d"),
               "end_date" => (Date.current + 1.day).strftime("%Y-%m-%d")
