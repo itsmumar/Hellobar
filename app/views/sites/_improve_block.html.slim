@@ -1,6 +1,14 @@
 h5= suggestion[0]
-p The following people aren't very likely to send you feedback, but you get lots of them coming to your site. They represent one of the best opportunities for improvement.
-p.tip TIP: You should create targeted content for these people to see if you can get them to convert at a higher rate.
+- case suggestion[0]
+- when "high traffic, low conversion"
+  p The following people aren't very likely to convert, but you get lots of them coming to your site. They represent one of your best opportunities for improvement.
+  p.tip TIP: You should create targeted content for these people to see if you can get them to convert at a higher rate.
+- when "low traffic, high conversion"
+  p The following people are very likely to convert, but you don't get very many of them. If you could get more of them to your site you would probably get some good growth.
+  p.tip TIP: You should see if you can buy more advertisements, or improve your search engine results for the following people.
+- when "high traffic, high conversion"
+  p You get a lot of the people below coming to your site and they are the most likely to convert. You might consider them your best customers.
+  p.tip TIP: You should keep trying to get more of these people to visit and make sure you have good targeted content for them.
 
 table
   tr
