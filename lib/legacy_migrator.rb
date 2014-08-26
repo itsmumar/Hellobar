@@ -143,7 +143,7 @@ class LegacyMigrator
         legacy_membership = legacy_memberships.first
         legacy_user = legacy_membership.user
 
-        if legacy_user && !::User.exists?(legacy_user.id_to_migrate)
+        if legacy_user && !::User.exists?(legacy_user.id_to_migrate) && !::Hello::WordpressUser.email_exists?(legacy_user.email)
           begin
             # disable password requirement for import
             User.send(:define_method, :password_required?) { false }

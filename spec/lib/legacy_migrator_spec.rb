@@ -72,6 +72,14 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
       }.to_not change(User, :count)
     end
 
+    it 'skips creating a user if a legacy Wordpress user exists' do
+      Hello::WordpressUser.stub email_exists?: true
+
+      expect {
+        LegacyMigrator.migrate_sites_and_users_and_memberships
+      }.to_not change(User, :count)
+    end
+
     it 'skips creating a site membership if no legacy user can be found' do
       legacy_membership.stub user: nil
 
