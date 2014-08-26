@@ -10,4 +10,15 @@ describe SitesHelper do
       helper.display_url_for_site(site).should == "cs.horse.bike"
     end
   end
+
+  describe "segment_description" do
+    it "correctly expands short segment strings into humanized descriptions" do
+      segment_description("co:USA").should == "Country is USA"
+      segment_description("dv:Mobile").should == "Device is Mobile"
+    end
+
+    it "correctly expands short segment strings when value contains a colin" do
+      segment_description("rf:http://zombo.com").should == "Referrer URL is http://zombo.com"
+    end
+  end
 end

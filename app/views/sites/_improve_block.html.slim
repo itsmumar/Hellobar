@@ -21,11 +21,11 @@ table
     tr
       td= i + 1
       td
-        p= segment[0]
+        p= segment_description(segment[0])
       td
         span.num= number_with_delimiter(segment[1])
       td
-        span.num= number_to_percentage(segment[1] * 1.0 / segment[2], precision: 1)
+        span.num= segment[1] == 0 ? "0.0%" : number_to_percentage(segment[2] * 100.0 / segment[1], precision: 1)
       td
         .button Create targeted content
 
