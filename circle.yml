@@ -17,3 +17,9 @@ test:
     - bundle exec rake:
         environment:
           RAILS_ENV: test
+
+deployment:
+  edge:
+    branch: master
+    commands:
+      - bundle exec cap edge deploy
