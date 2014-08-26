@@ -48,8 +48,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def short_subtype
-    match = element_subtype.match(/(\w+)/)
-    match ? match[0] : nil
+    element_subtype[/(\w+)/]
   end
 
   private
