@@ -23,7 +23,7 @@ class Condition < ActiveRecord::Base
   validates :rule, association_exists: true
 
   def to_sentence
-    "#{segment} #{operand} #{value}"
+    "#{SEGMENTS[segment]} #{OPERANDS[operand]} #{value}"
   end
 
   def short_segment
