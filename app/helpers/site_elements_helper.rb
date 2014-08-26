@@ -90,12 +90,38 @@ module SiteElementsHelper
 
     message = "<strong>The #{element.short_subtype} bar you added #{time_ago_in_words(element.created_at)} ago</strong>"
 
+    # how many conversions has this site element resulted in?
     if conversions == 0
       conversion_description = site_element_activity_units([element], :plural => true, :verb => true)
       return "#{message} hasn't resulted in any #{conversion_description} yet.".html_safe
     else
       conversion_description = site_element_activity_units([element], :plural => conversions > 1, :verb => true)
       message << " has already resulted in #{number_with_delimiter(conversions)} #{conversion_description}."
+    end
+
+    elements_in_group = element.site.site_elements.where.not(:id => element.id).select{ |e| e.short_subtype == element.short_subtype }
+
+    # how is this site element converting relative to others with the same subtype?
+    unless elements_in_group.empty?
+      group_views, group_conversions = elements_in_group.inject([0, 0]) do |sum, group_element|
+        metrics = totals[group_element.id.to_s].try(:last) || [0, 0]
+        [sum[0] + metrics[0], sum[1] + metrics[1]]
+      end
+
+      conversion_rate = conversions * 1.0 / views
+      group_conversion_rate = group_conversions * 1.0 / group_views
+
+      message << " Currently this bar is converting"
+
+      if conversion_rate > group_conversion_rate
+        difference = conversion_rate / group_conversion_rate
+        message << " #{number_to_percentage(difference * 100, :precision => 1)} better"
+      else
+        difference = group_conversion_rate / conversion_rate
+        message << " #{number_to_percentage(difference * 100, :precision => 1)} worse"
+      end
+
+      message << " than your other #{element.short_subtype} bars."
     end
 
     message.html_safe

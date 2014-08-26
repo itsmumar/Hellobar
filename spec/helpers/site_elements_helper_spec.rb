@@ -90,6 +90,16 @@ describe SiteElementsHelper do
       element = site_elements(:zombo_facebook)
       recent_activity_message(element, {element.id.to_s => [[10, 5]]}).should =~ /resulted in 5 likes/
     end
+
+    it "shows the conversion rate relative to other elements of the same type" do
+      element = site_elements(:zombo_twitter)
+      totals = {
+        element.id.to_s => [[10, 5]],
+        site_elements(:zombo_facebook).id.to_s => [[10, 1]]
+      }
+
+      recent_activity_message(element, totals).should =~ /converting 500\.0% better than your other social bars/
+    end
   end
 
   describe "site_element_activity_units" do
