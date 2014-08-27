@@ -7,11 +7,11 @@ tr class="#{'more-top-performers' if index > 2}"
   td
     i class="site-element-type #{icon_class_for_element(element)}"
   td
-    span.num= site_element_views(totals)
+    span.num= number_with_delimiter(element.total_views)
   td
-    span.num= site_element_conversions(totals)
+    span.num= number_with_delimiter(element.total_conversions)
   td
-    span.num= site_element_conversion_percentage(totals)
+    span.num= number_to_percentage(element.conversion_percentage * 100, precision: 1)
     - if index < 3
       i class="icon-badge #{'first' if index == 0}"
         span.icon-num= index + 1

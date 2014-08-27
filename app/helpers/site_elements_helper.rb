@@ -65,24 +65,6 @@ module SiteElementsHelper
     site.site_elements.collect(&:element_subtype)
   end
 
-  def site_element_views(metrics)
-    number_with_delimiter(metrics ? metrics.last[0] : 0)
-  end
-
-  def site_element_conversions(metrics)
-    number_with_delimiter(metrics ? metrics.last[1] : 0)
-  end
-
-  def site_element_conversion_percentage(metrics)
-    if metrics.nil? || metrics.last[1] == 0
-      percentage = 0.0
-    else
-      percentage = metrics.last[1] * 1.0 / metrics.last[0]
-    end
-
-    "#{(percentage * 100).round(1)}%"
-  end
-
   def recent_activity_message(element, totals)
     views, conversions = totals[element.id.to_s].try(:last) || [0, 0]
 
