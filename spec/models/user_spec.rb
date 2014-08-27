@@ -28,3 +28,19 @@ describe User, '.generate_temporary_user' do
     User.last.status.should == User::TEMPORARY_STATUS
   end
 end
+
+describe User, '#active?' do
+  let(:user) { User.new }
+
+  it 'returns true when the user is active' do
+    user.status = User::ACTIVE_STATUS
+
+    user.should be_active
+  end
+
+  it 'returns false when the user is not active' do
+    user.status = 'something else'
+
+    user.should_not be_active
+  end
+end
