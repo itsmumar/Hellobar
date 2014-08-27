@@ -34,9 +34,8 @@ class SitesController < ApplicationController
   def show
     session[:current_site] = @site.id
 
-    @totals_by_type = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements)
-    @totals = Hello::DataAPI.lifetime_totals(@site, @site.site_elements)
-    @recent_elements = @site.site_elements.where("site_elements.created_at > ?", 2.weeks.ago)
+    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements)
+    @recent_elements = @site.site_elements.where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC")
   end
 
   def improve

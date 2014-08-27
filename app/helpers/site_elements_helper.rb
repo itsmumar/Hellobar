@@ -65,8 +65,8 @@ module SiteElementsHelper
     site.site_elements.collect(&:element_subtype)
   end
 
-  def recent_activity_message(element, totals)
-    views, conversions = totals[element.id.to_s].try(:last) || [0, 0]
+  def recent_activity_message(element)
+    views, conversions = element.total_views, element.total_conversions
 
     message = "<strong>The #{element.short_subtype} bar you added #{time_ago_in_words(element.created_at)} ago</strong>"
 
@@ -84,8 +84,7 @@ module SiteElementsHelper
     # how is this site element converting relative to others with the same subtype?
     unless elements_in_group.empty?
       group_views, group_conversions = elements_in_group.inject([0, 0]) do |sum, group_element|
-        metrics = totals[group_element.id.to_s].try(:last) || [0, 0]
-        [sum[0] + metrics[0], sum[1] + metrics[1]]
+        [sum[0] + group_element.total_views, sum[1] + group_element.total_conversions]
       end
 
       conversion_rate = conversions * 1.0 / views

@@ -50,60 +50,75 @@ describe SiteElementsHelper do
   end
 
   describe "#recent_activity_message" do
-    it "returns the right message if element has no conversion data yet" do
-      element = site_elements(:zombo_traffic)
-      message = recent_activity_message(element, {})
-      message.should =~ /hasn't resulted in any clicks yet/
+    context "with no conversions" do
+      it "uses the right noun to describe conversions for traffic elements" do
+        element = site_elements(:zombo_traffic)
+        element.stub(:total_conversions => 0, :total_views => 0)
+        recent_activity_message(element).should =~ /hasn't resulted in any clicks yet/
+      end
+
+      it "uses the right noun to describe conversions for email elements" do
+        element = site_elements(:zombo_email)
+        element.stub(:total_conversions => 0, :total_views => 0)
+        recent_activity_message(element).should =~ /hasn't resulted in any emails collected yet/
+      end
+
+      it "uses the right noun to describe conversions for twitter elements" do
+        element = site_elements(:zombo_twitter)
+        element.stub(:total_conversions => 0, :total_views => 0)
+        recent_activity_message(element).should =~ /hasn't resulted in any tweets yet/
+      end
+
+      it "uses the right noun to describe conversions for facebook elements" do
+        element = site_elements(:zombo_facebook)
+        element.stub(:total_conversions => 0, :total_views => 0)
+        recent_activity_message(element).should =~ /hasn't resulted in any likes yet/
+      end
     end
 
-    it "returns the right message if element has 0 conversions" do
-      element = site_elements(:zombo_traffic)
-      totals = {element.id.to_s => [[5, 0]]}
-      message = recent_activity_message(element, totals)
-      message.should =~ /hasn't resulted in any clicks yet/
-    end
-
-    it "uses the right noun to describe conversions, depending on subtype" do
-      element = site_elements(:zombo_traffic)
-      recent_activity_message(element, {}).should =~ /in any clicks yet/
-
-      element = site_elements(:zombo_email)
-      recent_activity_message(element, {}).should =~ /in any emails collected yet/
-
-      element = site_elements(:zombo_twitter)
-      recent_activity_message(element, {}).should =~ /in any tweets yet/
-
-      element = site_elements(:zombo_facebook)
-      recent_activity_message(element, {}).should =~ /in any likes yet/
-    end
 
     it "doesn't pluralize when there was only one conversion" do
       element = site_elements(:zombo_email)
-      recent_activity_message(element, {element.id.to_s => [[10, 1]]}).should =~ /resulted in 1 email collected/
+      element.stub(:total_conversions => 1, :total_views => 1)
+      recent_activity_message(element).should =~ /resulted in 1 email collected/
     end
 
-    it "returns the right message when there are conversions" do
-      element = site_elements(:zombo_traffic)
-      recent_activity_message(element, {element.id.to_s => [[10, 5]]}).should =~ /resulted in 5 clicks/
+    context "with multiple conversions" do
+      it "returns the correct message for traffic elements" do
+        element = site_elements(:zombo_traffic)
+        element.stub(:total_conversions => 5, :total_views => 5)
+        recent_activity_message(element).should =~ /resulted in 5 clicks/
+      end
 
-      element = site_elements(:zombo_email)
-      recent_activity_message(element, {element.id.to_s => [[10, 5]]}).should =~ /resulted in 5 emails collected/
+      it "returns the correct message for email elements" do
+        element = site_elements(:zombo_email)
+        element.stub(:total_conversions => 5, :total_views => 5)
+        recent_activity_message(element).should =~ /resulted in 5 emails collected/
+      end
 
-      element = site_elements(:zombo_twitter)
-      recent_activity_message(element, {element.id.to_s => [[10, 5]]}).should =~ /resulted in 5 tweets/
+      it "returns the correct message for twitter elements" do
+        Hello::DataAPI.stub(:lifetime_totals => {})
+        element = site_elements(:zombo_twitter)
+        element.stub(:total_conversions => 5, :total_views => 5)
+        recent_activity_message(element).should =~ /resulted in 5 tweets/
+      end
 
-      element = site_elements(:zombo_facebook)
-      recent_activity_message(element, {element.id.to_s => [[10, 5]]}).should =~ /resulted in 5 likes/
+      it "returns the correct message for facebook elements" do
+        Hello::DataAPI.stub(:lifetime_totals => {})
+        element = site_elements(:zombo_facebook)
+        element.stub(:total_conversions => 5, :total_views => 5)
+        recent_activity_message(element).should =~ /resulted in 5 likes/
+      end
     end
 
     it "shows the conversion rate relative to other elements of the same type" do
       element = site_elements(:zombo_twitter)
-      totals = {
+      Hello::DataAPI.stub(:lifetime_totals => {
         element.id.to_s => [[10, 5]],
         site_elements(:zombo_facebook).id.to_s => [[10, 1]]
-      }
+      })
 
-      recent_activity_message(element, totals).should =~ /converting 500\.0% better than your other social bars/
+      recent_activity_message(element).should =~ /converting 500\.0% better than your other social bars/
     end
   end
 
