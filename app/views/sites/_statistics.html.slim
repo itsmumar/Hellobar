@@ -19,3 +19,5 @@ h5 Lifetime Totals
   = render "sites/chart_block", {site: @site, totals: @totals, type: :email, chart: "emails", icon: "contacts", days: 7}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: 7}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: 7}
+
+span.view-more= link_to 'View More', site_improve_path(@site)

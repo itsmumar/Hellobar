@@ -24,4 +24,4 @@ AmCharts.ready ->
       when 'feedback' then new FeedbackChart({siteID, numDays})
 
   # Trigger default chart when applicatble
-  $('.chart-wrapper .chart-block').first().trigger('click') if $('.chart-wrapper .chart-block').length 
+  $('.chart-wrapper .chart-block').first().trigger('click') if $('.chart-wrapper .chart-block').length
