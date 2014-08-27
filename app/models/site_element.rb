@@ -28,17 +28,11 @@ class SiteElement < ActiveRecord::Base
   serialize :settings, Hash
 
   def total_views
-    return 0 unless site
-
-    this_data = site.get_all_time_data.detect{|b| b.bar_id.to_i == self.id.to_i}
-    this_data.try(:views) || 0
+    total_views_and_conversions[0]
   end
 
   def total_conversions
-    return 0 unless site
-
-    this_data = site.get_all_time_data.detect{|b| b.bar_id.to_i == self.id.to_i}
-    this_data.try(:conversions) || 0
+    total_views_and_conversions[1]
   end
 
   def toggle_paused!
@@ -52,6 +46,18 @@ class SiteElement < ActiveRecord::Base
   end
 
   private
+
+  def total_views_and_conversions
+    return [0, 0] unless site
+
+    data = site.get_all_time_data
+
+    if data.nil? || data[id.to_s].nil?
+      [0, 0]
+    else
+      data[id.to_s].last
+    end
+  end
 
   def contact_list_is_present
     if contact_list.nil? && (contact_list_id.blank? || contact_list_id == 0)

@@ -60,7 +60,7 @@ class Site < ActiveRecord::Base
   end
 
   def get_all_time_data
-    @all_time_data ||= Hello::BarData.get_all_time_data(id)
+    @all_time_data ||= Hello::DataAPI.lifetime_totals(self, site_elements, 1)
   end
 
   def create_default_rule
