@@ -47,6 +47,10 @@ class SiteElement < ActiveRecord::Base
     update_attribute :paused, new_pause_state
   end
 
+  def short_subtype
+    element_subtype[/(\w+)/]
+  end
+
   private
 
   def contact_list_is_present
