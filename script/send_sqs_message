@@ -4,7 +4,7 @@ require 'yaml'
 require 'aws-sdk'
 
 STAGES = %w(edge staging production)
-BASEDIR = File.expand_path(File.dirname(__FILE__)).gsub('/bin', '')
+BASEDIR = File.expand_path(File.dirname(__FILE__)).gsub('/script', '')
 SETTINGS = YAML.load_file(BASEDIR + '/config/settings.yml')
 
 def die!(message)
