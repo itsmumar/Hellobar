@@ -77,6 +77,11 @@ describe SiteElementsHelper do
       recent_activity_message(element, {}).should =~ /in any likes yet/
     end
 
+    it "doesn't pluralize when there was only one conversion" do
+      element = site_elements(:zombo_email)
+      recent_activity_message(element, {element.id.to_s => [[10, 1]]}).should =~ /resulted in 1 email collected/
+    end
+
     it "returns the right message when there are conversions" do
       element = site_elements(:zombo_traffic)
       recent_activity_message(element, {element.id.to_s => [[10, 5]]}).should =~ /resulted in 5 clicks/
