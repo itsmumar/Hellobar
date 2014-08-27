@@ -35,6 +35,10 @@ class SiteElement < ActiveRecord::Base
     total_views_and_conversions[1]
   end
 
+  def conversion_percentage
+    total_views == 0 ? 0 : total_conversions * 1.0 / total_views
+  end
+
   def toggle_paused!
     new_pause_state = !paused?
 

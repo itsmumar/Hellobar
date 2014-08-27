@@ -11,7 +11,6 @@ class SiteElementsController < ApplicationController
 
   def index
     @rules = @site.rules.includes(:conditions)
-    @totals = Hello::DataAPI.lifetime_totals(@site, @site.site_elements) || {}
   end
 
   def new
