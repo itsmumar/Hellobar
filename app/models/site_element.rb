@@ -50,7 +50,7 @@ class SiteElement < ActiveRecord::Base
   def total_views_and_conversions
     return [0, 0] unless site
 
-    data = site.get_all_time_data
+    data = site.lifetime_totals
 
     if data.nil? || data[id.to_s].nil?
       [0, 0]
