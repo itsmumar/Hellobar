@@ -41,9 +41,9 @@ describe Hello::EmailDigest do
     end
 
     it "does not include lift unless the script has been installed for two full weeks" do
-      Hello::BarData.should_receive(:get_over_time_data).and_return([
-        Hello::BarData.new(@site.id, @social_bar.id, 1.day.ago.strftime("%Y%m%d").to_i, 12, 11)
-      ])
+      Hello::DataAPI.stub(:lifetime_totals => {
+        @social_bar.id.to_s => [[12, 11]]
+      })
 
       data = Hello::EmailDigest.site_metrics(@site)
 
@@ -53,22 +53,22 @@ describe Hello::EmailDigest do
     end
 
     it "does not include data for bar types that haven't been created" do
-      Hello::BarData.should_receive(:get_over_time_data).and_return([
-        Hello::BarData.new(@site.id, @social_bar.id, 1.day.ago.strftime("%Y%m%d").to_i, 12, 11)
-      ])
+      Hello::DataAPI.stub(:lifetime_totals => {
+        @social_bar.id.to_s => [[12, 11]]
+      })
 
       data = Hello::EmailDigest.site_metrics(@site)
 
-      data[:traffic].should == nil
-      data[:email].should == nil
+      data[:social].should_not be_nil
+      data[:traffic].should be_nil
+      data[:email].should be_nil
     end
 
     it "separates statistics by bar type" do
-      Hello::BarData.should_receive(:get_over_time_data).and_return([
-        Hello::BarData.new(@site.id, @social_bar.id, 1.day.ago.strftime("%Y%m%d").to_i, 12, 11),
-        Hello::BarData.new(@site.id, @traffic_bar.id, 1.day.ago.strftime("%Y%m%d").to_i, 34, 33),
-        Hello::BarData.new(@site.id, @traffic_bar.id, 2.days.ago.strftime("%Y%m%d").to_i, 56, 55)
-      ])
+      Hello::DataAPI.stub(:lifetime_totals => {
+        @social_bar.id.to_s => [[12, 11]],
+        @traffic_bar.id.to_s => [[56, 55], [34, 33]]
+      })
 
       data = Hello::EmailDigest.site_metrics(@site)
 
@@ -82,10 +82,9 @@ describe Hello::EmailDigest do
     end
 
     it "includes lift data if the script has been installed for two full weeks and there is enough bar data" do
-      Hello::BarData.should_receive(:get_over_time_data).and_return([
-        Hello::BarData.new(@site.id, @traffic_bar.id, 1.day.ago.strftime("%Y%m%d").to_i, 34, 33),
-        Hello::BarData.new(@site.id, @traffic_bar.id, 9.days.ago.strftime("%Y%m%d").to_i, 56, 55)
-      ])
+      Hello::DataAPI.stub(:lifetime_totals => {
+        @traffic_bar.id.to_s => [[56, 55], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [34, 33]]
+      })
 
       @site.script_installed_at = 15.days.ago
       data = Hello::EmailDigest.site_metrics(@site)
@@ -99,11 +98,10 @@ describe Hello::EmailDigest do
     end
 
     it "totals this week's data" do
-      Hello::BarData.should_receive(:get_over_time_data).and_return([
-        Hello::BarData.new(@site.id, @social_bar.id, 1.day.ago.strftime("%Y%m%d").to_i, 12, 11),
-        Hello::BarData.new(@site.id, @traffic_bar.id, 1.day.ago.strftime("%Y%m%d").to_i, 34, 33),
-        Hello::BarData.new(@site.id, @traffic_bar.id, 8.days.ago.strftime("%Y%m%d").to_i, 56, 55)
-      ])
+      Hello::DataAPI.stub(:lifetime_totals => {
+        @social_bar.id.to_s => [[12, 11]],
+        @traffic_bar.id.to_s => [[56, 55], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [34, 33]]
+      })
 
       @site.script_installed_at = 15.days.ago
       data = Hello::EmailDigest.site_metrics(@site)
@@ -117,7 +115,7 @@ describe Hello::EmailDigest do
     end
 
     it "handles no bar data" do
-      Hello::BarData.should_receive(:get_over_time_data).and_return([])
+      Hello::DataAPI.stub(:lifetime_totals => {})
 
       data = Hello::EmailDigest.site_metrics(@site)
 
@@ -128,10 +126,10 @@ describe Hello::EmailDigest do
     end
 
     it "works when there's data for last week but not this week" do
-      Hello::BarData.should_receive(:get_over_time_data).and_return([
-        Hello::BarData.new(@site.id, @email_bar.id, 8.days.ago.strftime("%Y%m%d").to_i, 0, 0),
-        Hello::BarData.new(@site.id, @traffic_bar.id, 8.days.ago.strftime("%Y%m%d").to_i, 56, 55)
-      ])
+      Hello::DataAPI.stub(:lifetime_totals => {
+        @email_bar.id.to_s => [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
+        @traffic_bar.id.to_s => [[56, 55], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+      })
 
       @site.script_installed_at = 15.days.ago
       data = Hello::EmailDigest.site_metrics(@site)
@@ -140,10 +138,9 @@ describe Hello::EmailDigest do
     end
 
     it "computes lift totals correctly if there were no conversions last week" do
-      Hello::BarData.should_receive(:get_over_time_data).and_return([
-        Hello::BarData.new(@site.id, @email_bar.id, 8.days.ago.strftime("%Y%m%d").to_i, 10, 0),
-        Hello::BarData.new(@site.id, @email_bar.id, 1.days.ago.strftime("%Y%m%d").to_i, 10, 4)
-      ])
+      Hello::DataAPI.stub(:lifetime_totals => {
+        @email_bar.id.to_s => [[10, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [10, 4]]
+      })
 
       @site.script_installed_at = 15.days.ago
       data = Hello::EmailDigest.site_metrics(@site)
