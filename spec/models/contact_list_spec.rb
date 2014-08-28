@@ -65,9 +65,8 @@ describe ContactList do
     contact_list.last_synced_at.should be_nil
     contact_list.stub(:syncable? => true)
 
-    @mock_service_provider.should_receive(:batch_subscribe)
-
-    contact_list.send :subscribe_all_emails_to_list!
+    expect(contact_list.service_provider).to receive(:batch_subscribe)
+    contact_list.send :subscribe_all_emails_to_list! # uses SP#sync_all!
 
     contact_list.last_synced_at.should_not be_nil
   end
