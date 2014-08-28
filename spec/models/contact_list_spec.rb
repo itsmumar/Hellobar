@@ -4,17 +4,21 @@ describe ContactList do
   fixtures :all
 
   let(:site) { sites(:zombo) }
-  let(:identity) { Identity.new(:site => site, :provider => 'email') }
+  let(:provider) { 'email' }
+  let(:identity) { Identity.new(:site => site, :provider => provider) }
   let(:contact_list) { contact_lists(:zombo).tap{|c| c.identity = identity} }
   let(:service_provider) { contact_list.service_provider }
 
   before do
-    identity.stub(:service_provider_class).and_return(ServiceProviders::Email)
-    ServiceProviders::Email.stub(:settings).and_return({
-      oauth: false
-    })
-    contact_list.stub(:syncable? => true)
-    expect(service_provider).to be_a(ServiceProviders::Email)
+    if identity.provider == 'email'
+      identity.stub(:service_provider_class).and_return(ServiceProviders::Email)
+      ServiceProviders::Email.stub(:settings).and_return({
+        oauth: false
+      })
+      contact_list.stub(:syncable? => true)
+      expect(service_provider).to be_a(ServiceProviders::Email)
+    end
+    
     Hello::DataAPI.stub(:get_contacts).and_return([
       ["test1@hellobar.com", "", 1384807897],
       ["test2@hellobar.com", "", 1384807898]
@@ -59,7 +63,7 @@ describe ContactList do
     end
   end
 
-  it "should run email integrable sync correctly" do
+  it "should run email sync_all! correctly" do
     contact_list.identity.provider = 'mailchimp'
     contact_list.save!
     contact_list.last_synced_at.should be_nil
@@ -69,6 +73,45 @@ describe ContactList do
     contact_list.send :subscribe_all_emails_to_list! # uses SP#sync_all!
 
     contact_list.last_synced_at.should_not be_nil
+  end
+
+  describe "sync_one!" do
+    before do
+      contact_list.save!
+      contact_list.last_synced_at.should be_nil
+      contact_list.stub(:syncable? => true)
+    end
+
+    context "oauth provider" do
+      let(:provider) { 'mailchimp' }
+      let(:credentials) { { 'token' => 'asdf' } }
+      let(:extra) { { 'metadata' => { 'api_endpoint' => 'asdf' } } }
+
+      before do
+        expect_any_instance_of(Identity).to receive(:credentials).and_return(credentials)
+        expect_any_instance_of(Identity).to receive(:extra).and_return(extra)
+      end
+
+      it "should raise error" do
+        expect do
+          expect(contact_list.service_provider).to be_oauth
+          contact_list.service_provider.sync_one! "email@email.com", "Test Testerson"
+        end.to raise_error NotImplementedError, /OAuth providers do not yet implement sync_one\!/
+      end
+    end
+
+    context "embed code provider" do
+      let(:provider) { 'mad_mimi' }
+      let(:contact_list) { contact_lists(:embed_code).tap{|c| c.identity = identity} }
+
+      it "should sync" do
+        expect(contact_list.service_provider).to be_a(ServiceProviders::MadMimi)
+        expect(contact_list.service_provider).to be_embed_code
+        contact_list.service_provider.sync_one! "email@email.com", "Test Testerson"
+
+        expect(contact_list.last_synced_at).not_to be_nil
+      end
+    end
   end
 
   it "should queue all jobs when running sync_all!" do

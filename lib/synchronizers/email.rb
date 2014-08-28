@@ -28,12 +28,12 @@ module Synchronizers::Email
     timestamp = contact_list.last_synced_at || Time.at(0) # sync from last sync, or for all time
     Rails.logger.info "Syncing emails later than #{timestamp}"
 
-    Hello::DataAPI.get_contacts(self, timestamp.to_i, force: true).in_groups_of(1000).collect do |group|
-      group = group.compact.map{ |g| {:email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2]} }
-      batch_subscribe(data["remote_id"], group.compact, double_optin) unless group.compact.empty?
+    sync do
+      Hello::DataAPI.get_contacts(self, timestamp.to_i, force: true).in_groups_of(1000).collect do |group|
+        group = group.compact.map{ |g| {:email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2]} }
+        batch_subscribe(contact_list.data["remote_id"], group.compact, contact_list.double_optin) unless group.compact.empty?
+      end
     end
-
-    contact_list.update_column :last_synced_at, Time.now
   rescue *ESP_ERROR_CLASSES => e
     if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
       Raven.capture_exception(e)
@@ -44,7 +44,9 @@ module Synchronizers::Email
   end
 
   # Extracted from embed_code_provider#subscribe!
-  def sync_one!(item, name, options={})
+  def sync_one!(email, name, options={})
+    raise NotImplementedError, "OAuth providers do not yet implement sync_one!" if oauth?
+
     name_params_hash = if name_params.empty?
       {}
     elsif name_params.count > 1
@@ -63,6 +65,15 @@ module Synchronizers::Email
     params.merge!(email_param => email)
     params.merge! name_params_hash
 
-    HTTParty.post(action_url, body: params)
+    sync do
+      HTTParty.post(action_url, body: params)
+    end
+  end
+
+  private
+
+  def sync
+    yield
+    contact_list.update_column :last_synced_at, Time.now
   end
 end
