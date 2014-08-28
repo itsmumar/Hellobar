@@ -1,4 +1,4 @@
-class ServiceProviders::MailChimp < ServiceProvider
+class ServiceProviders::MailChimp < ServiceProviders::Email
   def initialize(opts = {})
     if opts[:identity]
       identity = opts[:identity]

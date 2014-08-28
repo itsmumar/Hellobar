@@ -124,8 +124,7 @@ class ContactList < ActiveRecord::Base
 
   def subscribe_all_emails_to_list!
     return unless syncable?
-
-    Synchronizers::Email.using_contact_list(contact_list).sync_all!
+    service_provider.sync_all!
   end
 
   private

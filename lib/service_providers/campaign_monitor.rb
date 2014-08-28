@@ -1,4 +1,4 @@
-class ServiceProviders::CampaignMonitor < ServiceProvider
+class ServiceProviders::CampaignMonitor < ServiceProviders::Email
   def initialize(opts = {})
     if opts[:identity]
       identity = opts[:identity]

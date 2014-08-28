@@ -3,15 +3,7 @@ end
 
 module Synchronizers::Email < Synchronizer
 
-  def self.using_contact_list(contact_list)
-    new(syncable: contact_list)
-  end
-
-  def initialize(syncable:)
-    @syncable = syncable
-  end
-
-  # extracted from contact_list#subscribe_all_emails_to_list!
+  # Extracted from contact_list#subscribe_all_emails_to_list!
   def sync_all!
     return unless syncable?
 
@@ -33,7 +25,7 @@ module Synchronizers::Email < Synchronizer
     end
   end
 
-  # extracted from embed_code_provider#subscribe!
+  # Extracted from embed_code_provider#subscribe!
   def sync_one!(item, name, options={})
     name_params_hash = if name_params.empty?
       {}

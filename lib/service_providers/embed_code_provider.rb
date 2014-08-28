@@ -1,4 +1,4 @@
-class ServiceProviders::EmbedCodeProvider < ServiceProvider
+class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
 
   class FirstAndLastNameRequired < StandardError; end
 
