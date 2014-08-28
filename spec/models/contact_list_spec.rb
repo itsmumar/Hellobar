@@ -11,9 +11,9 @@ describe ContactList do
     @mock_service_provider = double("service provider", :lists => [{"id" => "1"}])
     contact_list.stub(:service_provider).and_return(@mock_service_provider)
 
-    Hello::EmailData.stub(:get_emails_since).and_return([
-      {:created_at=>1384807897, :email=>"test1@hellobar.com", :name=>nil},
-      {:created_at=>1384807898, :email=>"test2@hellobar.com", :name=>nil}
+    Hello::DataAPI.stub(:get_contacts).and_return([
+      ["test1@hellobar.com", "", 1384807897],
+      ["test2@hellobar.com", "", 1384807898]
     ])
   end
 
@@ -84,7 +84,7 @@ describe ContactList do
 
   describe "email syncing errors" do
     before do
-      Hello::EmailData.stub(:get_emails_since).and_return([:foo, :bar])
+      Hello::DataAPI.stub(:get_contacts).and_return([:foo, :bar])
     end
 
     describe "for mailchimp" do
