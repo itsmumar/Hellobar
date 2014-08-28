@@ -9,7 +9,7 @@ class RulesController < ApplicationController
   end
 
   def create
-    rule = @site.rules.new params.require(:rule).permit(:name, :priority, :match)
+    rule = @site.rules.new rule_params.permit!
 
     if rule.save
       render :json => rule
@@ -21,11 +21,7 @@ class RulesController < ApplicationController
   def update
     rule = @site.rules.find(params[:id])
 
-    conditions_attrs = [:id, :rule_id, :segment, :operand, :_destroy, { :value => [:start_date, :end_date] }, :value]
-    rule_attrs = params.require(:rule)
-                       .permit(:name, :priority, :match, :conditions_attributes => conditions_attrs)
-
-    if rule.update_attributes rule_attrs.permit!
+    if rule.update_attributes rule_params.permit!
       render :json => rule
     else
       render :json => rule.errors, :status => :unprocessable_entity
@@ -52,5 +48,14 @@ class RulesController < ApplicationController
     else
       render :json => { error: "forbidden" }, :status => :forbidden
     end
+  end
+
+  def rule_params
+    params.require(:rule)
+          .permit(:name, :priority, :match, :conditions_attributes => conditions_attrs)
+  end
+
+  def conditions_attrs
+    [:id, :rule_id, :segment, :operand, :_destroy, { :value => [:start_date, :end_date] }, :value]
   end
 end
