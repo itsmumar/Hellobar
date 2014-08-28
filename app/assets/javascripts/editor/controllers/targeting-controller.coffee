@@ -15,46 +15,6 @@ HelloBar.TargetingController = Ember.Controller.extend
     filtered[0]
   ).property("model.rule_id", "model.site.rules")
 
-  triggerModal: (ruleData) ->
-    controller = this
-    ruleId = ruleData.id
-    $form = $("form#rule-#{ruleId}")
-    $modal = $form.parents('.modal-wrapper:first')
-
-    ruleToUpdate = controller.get('model.site.rules').find (rule) ->
-      rule.id == ruleData.id
-
-    options =
-      successCallback: ->
-        ruleData = this
-        # why dont newly created rules have conditions?
-
-        ruleIds = controller.get('model.site.rules').map (rule) -> rule.id
-
-        updatedRules = if ruleIds.contains(ruleData.id)
-          controller.get('model.site.rules').map (rule) ->
-            return rule unless rule.id == ruleData.id
-            return ruleData
-        else
-          $form.find('.condition').remove() # remove any conditions
-          $form.find('.form-control').val(null) # clear Rule Modal form values
-
-          rules = controller.get('model.site.rules').map (rule) -> rule
-          rules.push(ruleData)
-          rules
-
-        controller.set('model.site.rules', updatedRules)
-        controller.set('model.rule_id', ruleData.id)
-
-    new RuleModal($modal, options).open()
-
-  popNewRuleModal: (->
-    ruleId = @get('model.rule_id')
-
-    if ruleId == 0
-      @triggerModal({ id: ruleId })
-  ).observes("model.rule_id")
-
   whenOptions: [
     {route: null,                text: 'Show immediately'}
     {route: 'targeting.leaving', text: 'When a visitor is leaving'}
