@@ -4,7 +4,7 @@ nav.tabs-wrapper
   = active_link_to 'Site', edit_site_path(current_site)
   
 = form_for @user, :url => user_path, :html => {:class => 'avatar-form'} do |f|
-  img.user-avatar src= avatar_url_for(@user)
+  img.user-avatar src= avatar_url_for(@user, :size => 300)
 
 = form_for @user, :url => user_path, :html => {:class => 'personal-form'} do |f|
   = f.label :email
