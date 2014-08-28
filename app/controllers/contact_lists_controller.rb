@@ -23,7 +23,7 @@ class ContactListsController < ApplicationController
 
   def update
     status = @contact_list.update_attributes(contact_list_params)
-    render :json => @contact_list, :status => status ? :success : :bad_request
+    render :json => @contact_list, :status => status ? :ok : :bad_request
   end
 
   private
