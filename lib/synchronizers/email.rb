@@ -3,6 +3,24 @@ require 'synchronizer'
 module Synchronizers::Email
   extend Synchronizer
 
+  EPS_ERROR_CLASSES = [
+    Gibbon::MailChimpError,
+    CreateSend::RevokedOAuthToken,
+    URI::InvalidURIError,
+    ArgumentError,
+    RestClient::ResourceNotFound
+  ]
+
+  EPS_NONTRANSIENT_ERRORS = [
+    "Invalid MailChimp List ID",
+    "Invalid Mailchimp API Key",
+    "This account has been deactivated",
+    "122: Revoked OAuth Token",
+    "bad URI",
+    "bad value for range",
+    "404 Resource Not Found"
+  ]
+
   # Extracted from contact_list#subscribe_all_emails_to_list!
   def sync_all!
     return unless contact_list.syncable?

@@ -2,24 +2,6 @@ class ContactList < ActiveRecord::Base
   include GuaranteedQueue::Delay
   include DeserializeWithErrors
 
-  EPS_ERROR_CLASSES = [
-    Gibbon::MailChimpError,
-    CreateSend::RevokedOAuthToken,
-    URI::InvalidURIError,
-    ArgumentError,
-    RestClient::ResourceNotFound
-  ]
-
-  EPS_NONTRANSIENT_ERRORS = [
-    "Invalid MailChimp List ID",
-    "Invalid Mailchimp API Key",
-    "This account has been deactivated",
-    "122: Revoked OAuth Token",
-    "bad URI",
-    "bad value for range",
-    "404 Resource Not Found"
-  ]
-
   EMPTY_PROVIDER_VALUES = [ nil, "", 0, "0" ]
 
   attr_accessor :provider
