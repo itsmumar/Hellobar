@@ -88,7 +88,7 @@ class @ContactListModal extends Modal
       success: (data) =>
         @options.success(data, this)
       error: (response) =>
-        contactList = JSON.parse(response.responseText)
+        contactList = response.responseJSON
         @_showErrors(contactList.errors)
         @$modal.find("a.submit").removeAttr("disabled")
 
