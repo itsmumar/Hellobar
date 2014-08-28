@@ -1,7 +1,7 @@
-module Synchronizers
-end
+require 'synchronizer'
 
-module Synchronizers::Email < Synchronizer
+module Synchronizers::Email
+  extend Synchronizer
 
   # Extracted from contact_list#subscribe_all_emails_to_list!
   def sync_all!

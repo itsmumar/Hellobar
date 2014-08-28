@@ -1,9 +1,14 @@
-class Synchronizer
+module Synchronizer
+  NoMethodMessage = "You must require a specific synchronizer (such as Synchronizers::Email) that implements "
+
   def sync_all!
-    fail NoMethodError, "You must define #sync_all! method in a subclass."
+    fail NoMethodError, NoMethodMessage + "#sync_all!"
   end
 
   def sync_one!(item, name, options={})
-    fail NoMethodError, "You must define #sync_one! in a subclass."
+    fail NoMethodError, NoMethodMessage + "#sync_one!"
   end
+end
+
+module Synchronizers
 end
