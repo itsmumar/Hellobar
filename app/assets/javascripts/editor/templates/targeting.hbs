@@ -6,10 +6,10 @@
     content=ruleOptions
     value=model.rule_id
     optionValuePath='content.id'
-    optionLabelPath='content.text'
+    optionLabelPath='content.name'
   }}
 </div>
-<p>Show this bar to {{selectedRule.description}}. <a class="edit-rule" {{action 'triggerModal' selectedRule}}>Edit.</a></p>
+<p>Show this bar to {{selectedRule.description}}. <a class="edit-rule" {{action 'openRuleModal' selectedRule}}>Edit.</a></p>
 
 <label>When should they see this?</label>
 <div class="select-wrapper">

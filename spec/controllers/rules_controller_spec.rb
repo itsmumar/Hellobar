@@ -58,6 +58,27 @@ describe RulesController do
         expect(rule['priority']).to eq 1
       end
     end
+
+    it 'should be able to create rules with conditions' do
+      stub_current_user(site.owner)
+
+      rule_name = "accepting rule and conditions from create"
+
+      post :create, site_id: site, rule: {
+        name: rule_name,
+        priority: "10",
+        match: "all",
+        conditions_attributes: {
+          "1" => {
+            "segment"=>"CountryCondition", "operand"=>"is", "value"=>"USA"}
+        },
+      }
+
+      rule = Rule.last
+
+      rule.name.should == rule_name
+      rule.conditions.size.should == 1
+    end
   end
 
   describe 'DELETE :destroy' do
