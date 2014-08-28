@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+require 'aws-sdk'
+
+STAGES = %w(edge staging production)
+BASEDIR = File.expand_path(File.dirname(__FILE__)).gsub('/script', '')
+SETTINGS = YAML.load_file(BASEDIR + '/config/settings.yml')
+
+def die!(message)
+  puts "Usage: send_sqs_message [stage] [command]\n" + message
+  exit!
+end
+
+# Sends a message to SQS without loading Rails environment
+stage, message = *ARGV
+die!("Stage is required to be one of #{STAGES}") unless STAGES.include?(stage)
+die!("Command not present!") unless message && message.length > 0
+
+key = SETTINGS['aws_access_key_id']
+secret = SETTINGS['aws_secret_access_key']
+
+sqs = AWS::SQS.new(access_key_id: key, secret_access_key: secret)
+queue = sqs.queues.find {|q| q.url.include?(stage) }
+
+puts "Sending #{message} to #{queue.url}"
+queue.send_message(message)
