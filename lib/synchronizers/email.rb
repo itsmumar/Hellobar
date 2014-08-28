@@ -3,7 +3,7 @@ require 'synchronizer'
 module Synchronizers::Email
   extend Synchronizer
 
-  EPS_ERROR_CLASSES = [
+  ESP_ERROR_CLASSES = [
     Gibbon::MailChimpError,
     CreateSend::RevokedOAuthToken,
     URI::InvalidURIError,
@@ -11,7 +11,7 @@ module Synchronizers::Email
     RestClient::ResourceNotFound
   ]
 
-  EPS_NONTRANSIENT_ERRORS = [
+  ESP_NONTRANSIENT_ERRORS = [
     "Invalid MailChimp List ID",
     "Invalid Mailchimp API Key",
     "This account has been deactivated",
@@ -34,8 +34,8 @@ module Synchronizers::Email
     end
 
     update_column :last_synced_at, Time.now
-  rescue *EPS_ERROR_CLASSES => e
-    if EPS_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
+  rescue *ESP_ERROR_CLASSES => e
+    if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
       Raven.capture_exception(e)
       self.identity.destroy_and_notify_user
     else
