@@ -35,6 +35,24 @@ module Synchronizers::Email < Synchronizer
 
   # extracted from embed_code_provider#subscribe!
   def sync_one!(item, name, options={})
+    name_params_hash = if name_params.empty?
+      {}
+    elsif name_params.count > 1
+      names = name.split(' ')
+      params = name_params.find {|p| p.match(/first|fname/) }, name_params.find {|p| p.match(/last|lname/) }
+
+      {
+        params.first => names.first,
+        params.last => names.last
+      }
+    else
+      { name_param => name }
+    end
+
+    params = required_params
+    params.merge!(email_param => email)
+    params.merge! name_params_hash
+
     HTTParty.post(action_url, body: params)
   end
 end
