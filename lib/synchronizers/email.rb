@@ -25,7 +25,7 @@ module Synchronizers::Email
   def sync_all!
     return unless contact_list.syncable?
     
-    timestamp = last_synced_at || Time.at(0) # sync from last sync, or for all time
+    timestamp = contact_list.last_synced_at || Time.at(0) # sync from last sync, or for all time
     Rails.logger.info "Syncing emails later than #{timestamp}"
 
     Hello::DataAPI.get_contacts(self, timestamp.to_i, force: true).in_groups_of(1000).collect do |group|
@@ -33,11 +33,11 @@ module Synchronizers::Email
       batch_subscribe(data["remote_id"], group.compact, double_optin) unless group.compact.empty?
     end
 
-    update_column :last_synced_at, Time.now
+    contact_list.update_column :last_synced_at, Time.now
   rescue *ESP_ERROR_CLASSES => e
     if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
       Raven.capture_exception(e)
-      self.identity.destroy_and_notify_user
+      identity.destroy_and_notify_user
     else
       raise e
     end
