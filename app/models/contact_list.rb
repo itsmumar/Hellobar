@@ -106,8 +106,8 @@ class ContactList < ActiveRecord::Base
   protected
 
   def subscribe_all_emails_to_list!
-    return unless syncable?
-    service_provider.sync_all!
+    raise "ContactList#subscribe_all_emails_to_list! is deprecated in favor of ContactList#sync_all!. Please use that instead."
+    sync_all!
   end
 
   private
