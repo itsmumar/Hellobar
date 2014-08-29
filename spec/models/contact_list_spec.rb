@@ -69,8 +69,8 @@ describe ContactList do
     contact_list.last_synced_at.should be_nil
     contact_list.stub(:syncable? => true)
 
-    expect(contact_list.service_provider).to receive(:batch_subscribe)
-    contact_list.send :subscribe_all_emails_to_list! # calls #sync_all!
+    expect(service_provider).to receive(:batch_subscribe)
+    contact_list.send :sync_all! # calls #sync_all!
 
     contact_list.last_synced_at.should_not be_nil
   end
@@ -93,9 +93,9 @@ describe ContactList do
       end
 
       it "should raise error" do
+        expect(contact_list.service_provider).to be_oauth
         expect do
-          expect(contact_list.service_provider).to be_oauth
-          contact_list.service_provider.sync_one! "email@email.com", "Test Testerson"
+          contact_list.sync_one! "email@email.com", "Test Testerson"
         end.to raise_error NotImplementedError, /OAuth providers do not yet implement sync_one\!/
       end
     end
@@ -103,10 +103,11 @@ describe ContactList do
     context "embed code provider" do
       let(:provider) { 'mad_mimi' }
       let(:contact_list) { contact_lists(:embed_code).tap{|c| c.identity = identity} }
+      let(:service_provider) { contact_list.service_provider }
 
       it "should sync" do
-        expect(contact_list.service_provider).to be_a(ServiceProviders::MadMimi)
-        expect(contact_list.service_provider).to be_embed_code
+        expect(service_provider).to be_a(ServiceProviders::MadMimi)
+        expect(service_provider).to be_embed_code
         contact_list.sync_one! "email@email.com", "Test Testerson"
 
         expect(contact_list.last_synced_at).not_to be_nil
@@ -134,6 +135,8 @@ describe ContactList do
       contact_list.stub(:syncable? => true)
     end
 
+    after { contact_list.sync! }
+
     describe "for mailchimp" do
       before do
         allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::MailChimp)
@@ -142,22 +145,16 @@ describe ContactList do
       it "if someone has an invalid list stored, delete the identity and notify them" do
         contact_list.should_receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new("MailChimp API Error: Invalid MailChimp List ID"))
         contact_list.identity.should_receive :destroy_and_notify_user
-
-        contact_list.send :subscribe_all_emails_to_list!
       end
 
       it "if someone's token is no longer valid, delete the identity and notify them" do
         contact_list.should_receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new("MailChimp API Error: Invalid Mailchimp API Key"))
         contact_list.identity.should_receive :destroy_and_notify_user
-
-        contact_list.send :subscribe_all_emails_to_list!
       end
 
       it "if someone has deleted their account, delete the identity and notify them" do
         contact_list.should_receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new("MailChimp API Error: This account has been deactivated"))
         contact_list.identity.should_receive :destroy_and_notify_user
-
-        contact_list.send :subscribe_all_emails_to_list!
       end
     end
 
@@ -169,8 +166,6 @@ describe ContactList do
       it "if someone has revoked our access, delete the identity and notify them" do
         contact_list.should_receive(:batch_subscribe).and_raise(CreateSend::RevokedOAuthToken.new(Hashie::Mash.new(:Code => 122, :Message => "Revoked OAuth Token")))
         contact_list.identity.should_receive :destroy_and_notify_user
-
-        contact_list.send :subscribe_all_emails_to_list!
       end
     end
 
@@ -182,15 +177,11 @@ describe ContactList do
       it "if someone has an invalid list stored, delete the identity and notify them" do
         contact_list.should_receive(:batch_subscribe).and_raise(URI::InvalidURIError.new("bad URI(is not URI?):"))
         contact_list.identity.should_receive :destroy_and_notify_user
-
-        contact_list.send :subscribe_all_emails_to_list!
       end
 
       it "if someone's token is no longer valid, or they have deleted their account, delete the identity and notify them" do
         contact_list.should_receive(:batch_subscribe).and_raise(ArgumentError.new("bad value for range"))
         contact_list.identity.should_receive :destroy_and_notify_user
-
-        contact_list.send :subscribe_all_emails_to_list!
       end
     end
 
@@ -203,8 +194,6 @@ describe ContactList do
         response = OpenStruct.new(:code => 404, :body => "404 Resource Not Found")
         contact_list.should_receive(:batch_subscribe).and_raise(RestClient::ResourceNotFound.new(response))
         contact_list.identity.should_receive :destroy_and_notify_user
-
-        contact_list.send :subscribe_all_emails_to_list!
       end
     end
   end

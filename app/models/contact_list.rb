@@ -55,9 +55,9 @@ class ContactList < ActiveRecord::Base
     options.reverse_merge! immediate: false
 
     if options[:immediate]
-      subscribe_all_emails_to_list!
+      sync_all!
     else
-      delay :subscribe_all_emails_to_list!
+      delay :sync_all!
     end
   end
 
@@ -101,13 +101,6 @@ class ContactList < ActiveRecord::Base
 
   def embed_code?
     service_provider_class.try(:embed_code?)
-  end
-
-  protected
-
-  def subscribe_all_emails_to_list!
-    raise "ContactList#subscribe_all_emails_to_list! is deprecated in favor of ContactList#sync_all!. Please use that instead."
-    sync_all!
   end
 
   private
