@@ -1,5 +1,3 @@
-require "./config/initializers/settings"
-
 PREFIX ="/mnt/deploy/current/log/"
 set :output, { standard: PREFIX + "cron.log", error: PREFIX + "cron.error.log" }
 
