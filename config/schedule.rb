@@ -8,5 +8,5 @@ every 20.minutes, :roles => [:web] do
 end
 
 every 15.minutes, :roles => [:web] do
-  script "send_sqs_message #{Hellobar::Settings[:env_name]} 'contact_list:sync_all!'" 
+  script "send_sqs_message #{ENV["RAILS_ENV"]} 'contact_list:sync_all!'"
 end
