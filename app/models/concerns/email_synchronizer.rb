@@ -1,6 +1,6 @@
 require 'synchronizer'
 
-module Synchronizers::Email
+module EmailSynchronizer
   extend Synchronizer
 
   ESP_ERROR_CLASSES = [

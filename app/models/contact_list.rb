@@ -1,6 +1,7 @@
 class ContactList < ActiveRecord::Base
   include GuaranteedQueue::Delay
   include DeserializeWithErrors
+  include EmailSynchronizer
 
   EMPTY_PROVIDER_VALUES = [ nil, "", 0, "0" ]
 
