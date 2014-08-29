@@ -15,7 +15,7 @@ tr.site-element-block class="#{site_element.paused? ? 'paused' : ''}"
   td
     span.num= number_to_percentage(site_element.conversion_percentage * 100, precision: 1)
   td
-    i.icon-abtest
+    = ab_test_icon(site_element)
     .dropdown-wrapper
       i.icon-settings
       .dropdown-block

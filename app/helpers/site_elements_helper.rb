@@ -105,4 +105,20 @@ module SiteElementsHelper
 
     message.html_safe
   end
+
+  def ab_test_icon(site_element)
+    elements_in_group = site_element.site.site_elements.active.order("created_at ASC").select{ |se| se.short_subtype == site_element.short_subtype }
+    index = elements_in_group.index(site_element)
+
+    return "<i class='icon-abtest'></i>".html_safe if index.nil? # site element is paused, or something wacky is going on
+
+    letter = ("A".."Z").to_a[index]
+    color = case site_element.short_subtype
+            when "social" then "blue"
+            when "traffic" then "yellow"
+            when "email" then "green"
+            end
+
+    "<i class='icon-tip icon-ab-#{color}'><span class='icon-num'>#{letter}</span></i>".html_safe
+  end
 end
