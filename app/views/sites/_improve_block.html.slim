@@ -1,3 +1,6 @@
+- total_views = suggestion[1].sum{|s| s[1]}
+- total_conversions = suggestion[1].sum{|s| s[2]}
+
 h5= suggestion[0]
 - case suggestion[0]
 - when "high traffic, low conversion"
@@ -29,13 +32,14 @@ table
       td
         .button Create targeted content
 
-  tr
-    td colspan="5"
-      | If you could improve conversion rates by
-      span.select-wrapper
-        select
-          option 10%
-          option 20%
-      | on each of these groups of people you would collect an extra 
-      strong 634 
-      | feedback/week
+  - unless total_views == 0 || total_conversions == 0
+    tr.improve-calculator data-views="#{total_views}" data-conversions="#{total_conversions}"
+      td colspan="5"
+        | If you could improve conversion rates by
+        span.select-wrapper
+          select
+            option 10%
+            option 20%
+        | on each of these groups of people you would get an extra 
+        span.calculator-results ?
+        |  conversions per week.

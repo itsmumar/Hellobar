@@ -21,6 +21,7 @@
 
 #= require contact_lists
 #= require summary
+#= require improve
 #= require sites_controller
 #= require site_elements_controller
 #= require_self
