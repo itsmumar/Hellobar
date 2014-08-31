@@ -50,9 +50,7 @@ module EmailSynchronizer
   def sync_one!(email, name, options={})
     raise NotImplementedError, "OAuth providers do not yet implement sync_one!" if oauth?
 
-    name_params_hash = if name_params.empty?
-      {}
-    elsif name_params.count > 1
+    name_params_hash = if name_params.count > 1
       names = name.split(' ')
       params = name_params.find {|p| p.match(/first|fname/) }, name_params.find {|p| p.match(/last|lname/) }
 
@@ -60,13 +58,15 @@ module EmailSynchronizer
         params.first => names.first,
         params.last => names.last
       }
-    else
+    elsif name_params.count == 1
       { name_param => name }
+    else
+      {}
     end
 
     params = required_params
     params.merge!(email_param => email)
-    params.merge! name_params_hash
+    params.merge!(name_params_hash)
 
     perform_sync do
       HTTParty.post(action_url, body: params)
