@@ -92,11 +92,10 @@ describe ContactList do
         expect_any_instance_of(Identity).to receive(:extra).and_return(extra)
       end
 
-      it "should raise error" do
+      it "should not raise error" do
         expect(contact_list.service_provider).to be_oauth
-        expect do
-          contact_list.sync_one! "email@email.com", "Test Testerson"
-        end.to raise_error NotImplementedError, /OAuth providers do not yet implement sync_one\!/
+        expect(contact_list.service_provider).to receive(:subscribe)
+        contact_list.sync_one! "email@email.com", "Test Testerson"
       end
     end
 

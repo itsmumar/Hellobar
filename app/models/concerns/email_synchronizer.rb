@@ -51,12 +51,14 @@ module EmailSynchronizer
       if oauth?
         subscribe(data["remote_id"], email, name, double_optin)
       else
-        params = service_provider.subscribe_params(email, name, double_optin)
+        params = subscribe_params(email, name, double_optin)
         HTTParty.post(action_url, body: params)
       end
     end
   end
 
+  delegate :subscribe, to: :service_provider
+  delegate :subscribe_params, to: :service_provider
   delegate :action_url, to: :service_provider
 
   private
