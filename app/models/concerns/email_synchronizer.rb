@@ -44,39 +44,19 @@ module EmailSynchronizer
   end
 
   delegate :batch_subscribe, to: :service_provider
-  delegate :subscribe, to: :service_provider
 
   # Extracted from embed_code_provider#subscribe!
   def sync_one!(email, name, options={})
-    raise NotImplementedError, "OAuth providers do not yet implement sync_one!" if oauth?
-
-    name_params_hash = if name_params.count > 1
-      names = name.split(' ')
-      params = name_params.find {|p| p.match(/first|fname/) }, name_params.find {|p| p.match(/last|lname/) }
-
-      {
-        params.first => names.first,
-        params.last => names.last
-      }
-    elsif name_params.count == 1
-      { name_param => name }
-    else
-      {}
-    end
-
-    params = required_params
-    params.merge!(email_param => email)
-    params.merge!(name_params_hash)
-
     perform_sync do
-      HTTParty.post(action_url, body: params)
+      if oauth?
+        subscribe(data["remote_id"], email, name, double_optin)
+      else
+        params = service_provider.subscribe_params(email, name, double_optin)
+        HTTParty.post(action_url, body: params)
+      end
     end
   end
 
-  delegate :name_params, to: :service_provider
-  delegate :required_params, to: :service_provider
-  delegate :email_param, to: :service_provider
-  delegate :name_param, to: :service_provider
   delegate :action_url, to: :service_provider
 
   private

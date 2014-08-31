@@ -86,6 +86,27 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     end.compact || []
   end
 
+  def subscribe_params(email, name, double_optin = true)
+    name_params_hash = if name_params.count > 1
+      names = name.split(' ')
+      params = name_params.find {|p| p.match(/first|fname/) }, name_params.find {|p| p.match(/last|lname/) }
+
+      {
+        params.first => names.first,
+        params.last => names.last
+      }
+    elsif name_params.count == 1
+      { name_param => name }
+    else
+      {}
+    end
+
+    required_params.tap do |params|
+      params.merge!(email_param => email)
+      params.merge!(name_params_hash)
+    end
+  end
+
   private
 
    def html
