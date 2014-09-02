@@ -16,12 +16,27 @@ AmCharts.ready ->
     siteID = $(@).attr('data-site-id')
     numDays = $(@).attr('data-num-days')
 
-    switch $(@).attr('data-chart')
+    window.CurrentChart = $(this).attr('data-chart')
+
+    UrlParams.updateParam('chart', window.CurrentChart)
+
+    switch window.CurrentChart
       when 'views'    then new ViewsChart({siteID, numDays})
       when 'emails'   then new EmailsChart({siteID, numDays})
       when 'clicks'   then new ClicksChart({siteID, numDays})
       when 'social'   then new SocialChart({siteID, numDays})
       when 'feedback' then new FeedbackChart({siteID, numDays})
 
-  # Trigger default chart when applicatble
-  $('.chart-wrapper .chart-block').first().trigger('click') if $('.chart-wrapper .chart-block').length
+  # Trigger current chart or default when applicatble
+  if $('.chart-wrapper .chart-block').length && typeof(window.CurrentChart) == "undefined"
+    $(".chart-wrapper .chart-block").first().click()
+  else
+    $(".chart-wrapper .chart-block.#{CurrentChart}").click()
+
+  $('body').on 'click', '.view-more', (event) ->
+    event.preventDefault()
+
+    window.location = "#{event.target.href}?chart=#{window.CurrentChart}"
+
+$ ->
+  window.CurrentChart = UrlParams.fetch('chart')
