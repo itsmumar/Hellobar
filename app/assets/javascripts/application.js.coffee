@@ -6,6 +6,7 @@
 #= require moment
 #= require amcharts/amcharts
 #= require amcharts/serial
+#= require lib/url_params
 
 # Couldn't get 'require_tree .' to ignore the dashboard directory, so I opted to indivdually list the local js assets you needed here
 
