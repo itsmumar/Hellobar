@@ -18,6 +18,8 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    abanalyzer (0.1.0)
+      statistics2 (>= 0.54)
     actionmailer (4.1.5)
       actionpack (= 4.1.5)
       actionview (= 4.1.5)
@@ -393,6 +395,7 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
       term-ansicolor
+    statistics2 (0.54)
     teaspoon (0.8.0)
       railties (>= 3.2.5, < 5)
     temple (0.6.7)
@@ -440,6 +443,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  abanalyzer
   active_link_to (~> 1.0.2)
   active_model_serializers (~> 0.8.1)
   addressable (~> 2.3.6)

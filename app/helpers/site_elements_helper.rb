@@ -101,6 +101,13 @@ module SiteElementsHelper
       end
 
       message << " than your other #{element.short_subtype} bars."
+
+      # is the result significant or not?
+      if difference_is_significant?([element] + elements_in_group)
+        message << " This result is statistically significant."
+      else
+        message << " We don't have enough data to know if this is significant."
+      end
     end
 
     message.html_safe
@@ -120,5 +127,20 @@ module SiteElementsHelper
             end
 
     "<i class='icon-tip icon-ab-#{color}'><span class='icon-num'>#{letter}</span></i>".html_safe
+  end
+
+  def difference_is_significant?(elements)
+    values = {}
+
+    elements.each_with_index do |element, i|
+      values[element.id] = {
+        :views => element.total_views,
+        :conversions => element.total_conversions
+      }
+    end
+
+    ABAnalyzer::ABTest.new(values).different?
+  rescue ABAnalyzer::InsufficientDataError
+    false
   end
 end
