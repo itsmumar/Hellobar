@@ -29,21 +29,19 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
   def batch_subscribe(list_id, subscribers, double_optin = true)
-    subscribers.in_groups_of(1000).collect do |group|
-      log "Sending #{group.size} emails to remote service."
+    log "Sending #{group.size} emails to remote service."
 
-      batch = group.map do |subscriber|
-        {:EMAIL => {:email => subscriber[:email]}}.tap do |entry|
-          if subscriber[:name]
-            split = subscriber[:name].split(' ', 2)
-            entry[:merge_vars] = {:FNAME => split[0], :LNAME => split[1], :CREATEDAT => subscriber[:created_at]}
-          end
+    batch = group.map do |subscriber|
+      {:EMAIL => {:email => subscriber[:email]}}.tap do |entry|
+        if subscriber[:name]
+          split = subscriber[:name].split(' ', 2)
+          entry[:merge_vars] = {:FNAME => split[0], :LNAME => split[1], :CREATEDAT => subscriber[:created_at]}
         end
       end
+    end
 
-      @client.lists.batch_subscribe({:id => list_id, :batch => batch, :double_optin => double_optin}).tap do |result|
-        log result
-      end
+    @client.lists.batch_subscribe({:id => list_id, :batch => batch, :double_optin => double_optin}).tap do |result|
+      log result
     end
   end
 
