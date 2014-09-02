@@ -27,10 +27,27 @@ describe "contact_list:sync_one" do
     expect { perform! }.to change { contact_list.last_synced_at }.from(NilClass).to(Time)
   end
 
+  it 'should require an email' do
+    expect_any_instance_of(ContactList).not_to receive(:sync_one!)
+    user[:email] = nil
+    expect { perform! }.to raise_error, "Cannot sync without email present"
+  end
+
+  it 'should require a contact_list_id' do
+    expect_any_instance_of(ContactList).not_to receive(:sync_one!)
+    expect { perform!(nil) }.to raise_error ActiveRecord::RecordNotFound, "Couldn't find ContactList without an ID"
+  end
+
+  it 'should not require a name' do
+    expect_any_instance_of(ContactList).to receive(:sync_one!).with("test.testerson@example.com", nil)
+    user[:name] = nil
+    perform!
+  end
+
   private
 
-  def perform!
-    subject.invoke(contact_list.id, user[:email], user[:name])
+  def perform!(contact_list_id = contact_list.id, email = user[:email], name = user[:name])
+    subject.invoke(contact_list_id, email, name)
     contact_list.reload
   end
 end
