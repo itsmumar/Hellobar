@@ -1,4 +1,4 @@
-class ServiceProviders::EmbedCodeProvider < ServiceProvider
+class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
 
   class FirstAndLastNameRequired < StandardError; end
 
@@ -86,11 +86,8 @@ class ServiceProviders::EmbedCodeProvider < ServiceProvider
     end.compact || []
   end
 
-  # Issue request to remove server
-  def subscribe! email, name
-    name_params_hash = if name_params.empty?
-      {}
-    elsif name_params.count > 1
+  def subscribe_params(email, name, double_optin = true)
+    name_params_hash = if name_params.count > 1
       names = name.split(' ')
       params = name_params.find {|p| p.match(/first|fname/) }, name_params.find {|p| p.match(/last|lname/) }
 
@@ -98,15 +95,16 @@ class ServiceProviders::EmbedCodeProvider < ServiceProvider
         params.first => names.first,
         params.last => names.last
       }
-    else
+    elsif name_params.count == 1
       { name_param => name }
+    else
+      {}
     end
 
-    params = required_params
-    params.merge!(email_param => email)
-    params.merge! name_params_hash
-
-    HTTParty.post(action_url, body: params)
+    required_params.tap do |params|
+      params.merge!(email_param => email)
+      params.merge!(name_params_hash)
+    end
   end
 
   private

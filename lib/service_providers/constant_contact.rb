@@ -1,4 +1,4 @@
-class ServiceProviders::ConstantContact < ServiceProvider
+class ServiceProviders::ConstantContact < ServiceProviders::Email
   def initialize(opts = {})
     if opts[:identity]
       identity = opts[:identity]

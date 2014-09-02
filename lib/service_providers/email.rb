@@ -1,0 +1,8 @@
+class ServiceProviders::Email < ServiceProvider
+  attr_reader :contact_list, :identity
+
+  def initialize(opts = {})
+    @contact_list = opts[:contact_list]
+    @identity = opts[:identity]
+  end
+end

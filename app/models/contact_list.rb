@@ -1,24 +1,7 @@
 class ContactList < ActiveRecord::Base
   include GuaranteedQueue::Delay
   include DeserializeWithErrors
-
-  EPS_ERROR_CLASSES = [
-    Gibbon::MailChimpError,
-    CreateSend::RevokedOAuthToken,
-    URI::InvalidURIError,
-    ArgumentError,
-    RestClient::ResourceNotFound
-  ]
-
-  EPS_NONTRANSIENT_ERRORS = [
-    "Invalid MailChimp List ID",
-    "Invalid Mailchimp API Key",
-    "This account has been deactivated",
-    "122: Revoked OAuth Token",
-    "bad URI",
-    "bad value for range",
-    "404 Resource Not Found"
-  ]
+  include EmailSynchronizer
 
   EMPTY_PROVIDER_VALUES = [ nil, "", 0, "0" ]
 
@@ -72,9 +55,9 @@ class ContactList < ActiveRecord::Base
     options.reverse_merge! immediate: false
 
     if options[:immediate]
-      subscribe_all_emails_to_list!
+      sync_all!
     else
-      delay :subscribe_all_emails_to_list!
+      delay :sync_all!
     end
   end
 
@@ -118,29 +101,6 @@ class ContactList < ActiveRecord::Base
 
   def embed_code?
     service_provider_class.try(:embed_code?)
-  end
-
-  protected
-
-  def subscribe_all_emails_to_list!
-    return unless syncable?
-
-    timestamp = last_synced_at || Time.at(0) # sync from last sync, or for all time
-    Rails.logger.info "Syncing emails later than #{timestamp}"
-
-    Hello::DataAPI.get_contacts(self, timestamp.to_i, force: true).in_groups_of(1000).collect do |group|
-      group = group.compact.map{ |g| {:email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2]} }
-      service_provider.batch_subscribe(data["remote_id"], group.compact, double_optin) unless group.compact.empty?
-    end
-
-    update_column :last_synced_at, Time.now
-  rescue *EPS_ERROR_CLASSES => e
-    if EPS_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
-      Raven.capture_exception(e)
-      self.identity.destroy_and_notify_user
-    else
-      raise e
-    end
   end
 
   private
