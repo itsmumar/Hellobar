@@ -29,9 +29,9 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
   def batch_subscribe(list_id, subscribers, double_optin = true)
-    log "Sending #{group.size} emails to remote service."
+    log "Sending #{subscribers.size} emails to remote service."
 
-    batch = group.map do |subscriber|
+    batch = subscribers.map do |subscriber|
       {:EMAIL => {:email => subscriber[:email]}}.tap do |entry|
         if subscriber[:name]
           split = subscriber[:name].split(' ', 2)
