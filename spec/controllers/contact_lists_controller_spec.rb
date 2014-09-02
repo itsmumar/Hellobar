@@ -30,6 +30,7 @@ describe ContactListsController, type: :controller do
     site.contact_lists = [ contact_list ]
     allow_any_instance_of(Identity).to receive(:credentials).and_return("token" => "test")
     allow_any_instance_of(Identity).to receive(:extra).and_return("metadata" => { "api_endpoint" => "test" })
+    Hello::DataAPI.stub(:get_contacts).and_return([])
   end
 
   describe "GET 'index'" do
