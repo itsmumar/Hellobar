@@ -23,6 +23,8 @@ class ContactList < ActiveRecord::Base
   validate :embed_code_exists?, :if => :embed_code?
   validate :embed_code_valid?, :if => :embed_code?
 
+  after_save :sync, :if => :data_changed?
+
   def self.sync_all!
     all.each do |list|
       begin

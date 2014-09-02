@@ -17,6 +17,7 @@ describe ContactList do
       })
       contact_list.stub(:syncable? => true)
       expect(service_provider).to be_a(ServiceProviders::Email)
+      service_provider.stub(:batch_subscribe).and_return(nil)
     end
     
     Hello::DataAPI.stub(:get_contacts).and_return([
@@ -232,7 +233,7 @@ describe ContactList do
 end
 
 describe ContactList, "embed code" do
-  fixtures :contact_lists, :identities, :sites
+  fixtures :all
 
   subject { contact_lists(:embed_code) }
 
@@ -257,5 +258,17 @@ describe ContactList, "embed code" do
   context "valid" do
     let(:embed_code) { "<form></form>" }
     its(:embed_code_valid?) { should == true }
+  end
+end
+
+describe ContactList, "sync!" do
+  fixtures :all
+
+  subject { contact_lists(:embed_code) }
+
+  context "embed_code changed" do
+    after { subject.update_attribute :data, { "embed_code" => "new embed code" } }
+    it { should receive(:sync) }
+    it { should receive(:sync_all!) } # this one via `delay`
   end
 end
