@@ -93,20 +93,22 @@ module SiteElementsHelper
       message << " Currently this bar is converting"
 
       if conversion_rate > group_conversion_rate
-        difference = conversion_rate / group_conversion_rate
-        message << " #{number_to_percentage(difference * 100, :precision => 1)} better"
+        lift = (conversion_rate - group_conversion_rate) / group_conversion_rate
+        message << " #{number_to_percentage(lift * 100, :precision => 1)} better than"
+      elsif group_conversion_rate > conversion_rate
+        lift = (group_conversion_rate - conversion_rate) / conversion_rate
+        message << " #{number_to_percentage(lift * 100, :precision => 1)} worse than"
       else
-        difference = group_conversion_rate / conversion_rate
-        message << " #{number_to_percentage(difference * 100, :precision => 1)} worse"
+        message << " exactly as well as"
       end
 
-      message << " than your other #{element.short_subtype} bars."
+      message << " your other #{element.short_subtype} bars."
 
       # is the result significant or not?
       if difference_is_significant?([element] + elements_in_group)
         message << " This result is statistically significant."
       else
-        message << " We don't have enough data to know if this is significant."
+        message << " We don't have enough data yet to know if this is significant."
       end
     end
 
