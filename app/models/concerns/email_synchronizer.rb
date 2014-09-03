@@ -25,11 +25,10 @@ module EmailSynchronizer
   def sync_all!
     return unless syncable?
     
-    timestamp = last_synced_at || Time.at(0) # sync from last sync, or for all time
-    Rails.logger.info "Syncing emails later than #{timestamp}"
+    Rails.logger.info "Syncing all emails for contact_list #{self.id}"
 
     perform_sync do
-      contacts = Hello::DataAPI.get_contacts(self, timestamp.to_i, force: true)
+      contacts = Hello::DataAPI.get_contacts(self, Time.at(0), force: true)
       contacts.in_groups_of(1000, false).each do |group|
         group = group.map{ |g| {:email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2]} }
         batch_subscribe(data["remote_id"], group, double_optin)
