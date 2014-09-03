@@ -6,11 +6,15 @@ class Admin::UsersController < ApplicationController
   def index
     if params[:q].blank?
       users = User.all
+      sites = []
     else
       users = User.where("email like ?", "%#{params[:q]}%").all
+      sites = Site.where("url like ?", "%#{params[:q]}%").all
     end
 
-    @users = users.page(params[:page])
+    users += sites.map{|s| s.users}.flatten
+
+    @users = Kaminari.paginate_array(users).page(params[:page]).per(24)
   end
 
   def impersonate
