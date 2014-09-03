@@ -9,9 +9,8 @@ describe SitesController do
 
   describe "POST create" do
     before do
-      mock_storage = double('asset_storage')
-      mock_storage.should_receive(:create_or_update_file_with_contents)
-      Hello::AssetStorage.stub(new: mock_storage)
+      mock_storage = double('asset_storage', :create_or_update_file_with_contents => true)
+      Hello::AssetStorage.stub(:new => mock_storage)
     end
 
     context "when no user is logged-in" do
@@ -40,6 +39,13 @@ describe SitesController do
         post :create, :site => { url: 'temporary-site.com' }
 
         response.should redirect_to new_site_site_element_path(Site.last)
+      end
+
+      it "redirects to the landing page with an error if site is not valid" do
+        post :create, :site => { url: 'not a url lol' }
+
+        response.should redirect_to root_path
+        flash[:error].should =~ /not valid/
       end
     end
 

@@ -2,3 +2,5 @@
   = form_tag sites_path do
     input type="text" name="site[url]" placeholder="Your website URL"
     button type="submit" Create Your First Bar
+  - if flash[:error]
+    .error= flash[:error]

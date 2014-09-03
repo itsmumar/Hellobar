@@ -102,7 +102,7 @@ class SitesController < ApplicationController
 
       redirect_to new_site_site_element_path(@site)
     else
-      flash[:error] = "There was a problem creating your site."
+      flash[:error] = "Your URL is not valid. Please double-check it and try again."
       redirect_to root_path
     end
   end
