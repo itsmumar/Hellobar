@@ -1,8 +1,7 @@
 class SitesController < ApplicationController
   include SitesHelper
 
-  before_action :generate_temporary_logged_in_user, only: :create
-  before_action :authenticate_user!
+  before_action :authenticate_user!, :except => :create
   before_action :load_site, :only => [:show, :edit, :update, :destroy, :preview_script, :improve, :chart_data]
 
   skip_before_action :verify_authenticity_token, :only => :preview_script
@@ -12,18 +11,10 @@ class SitesController < ApplicationController
   def create
     @site = Site.new(site_params)
 
-    if @site.save
-      SiteMembership.create!(:site => @site, :user => current_user)
-
-      @site.create_default_rule
-      @site.generate_script
-
-      flash[:success] = "Your site was successfully created."
-
-      redirect_to next_step
+    if current_user
+      create_for_logged_in_user
     else
-      flash.now[:error] = "There was a problem creating your site."
-      render :action => :new
+      create_for_temporary_user
     end
   end
 
@@ -97,19 +88,38 @@ class SitesController < ApplicationController
   end
 
   def generate_temporary_logged_in_user
-    unless current_user
-      @user = User.generate_temporary_user
+    sign_in User.generate_temporary_user
+  end
 
-      sign_in @user
+  def create_for_temporary_user
+    if @site.save
+      generate_temporary_logged_in_user
+
+      SiteMembership.create!(:site => @site, :user => current_user)
+
+      @site.create_default_rule
+      @site.generate_script
+
+      redirect_to new_site_site_element_path(@site)
+    else
+      flash[:error] = "There was a problem creating your site."
+      redirect_to root_path
     end
   end
 
-  def next_step
-    # if coming from the root url '/', go to the editor
-    if request.referrer == root_url
-      new_site_site_element_path(@site)
-    else # Site#show
-      site_path(@site)
+  def create_for_logged_in_user
+    if @site.save
+      SiteMembership.create!(:site => @site, :user => current_user)
+
+      @site.create_default_rule
+      @site.generate_script
+
+      flash[:success] = "Your site was successfully created."
+
+      redirect_to site_path(@site)
+    else
+      flash.now[:error] = "There was a problem creating your site."
+      render :action => :new
     end
   end
 end
