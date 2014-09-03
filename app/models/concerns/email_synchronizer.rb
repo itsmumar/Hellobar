@@ -64,7 +64,8 @@ module EmailSynchronizer
   private
 
   def perform_sync
+    # run something immediately before sync 
     yield
-    update_column :last_synced_at, Time.now
+    # run something immediately after sync 
   end
 end

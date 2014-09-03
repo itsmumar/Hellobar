@@ -98,7 +98,6 @@ class LegacyMigrator
             identity_id: legacy_id_int.identity_id,
             data: legacy_id_int.data.merge(embed_code: identity.embed_code),
             name: legacy_id_int.data["remote_name"],
-            last_synced_at: legacy_id_int.last_synced_at,
             created_at: legacy_id_int.created_at,
             updated_at: legacy_id_int.updated_at
           )

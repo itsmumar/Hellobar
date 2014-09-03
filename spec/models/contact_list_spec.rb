@@ -67,19 +67,15 @@ describe ContactList do
   it "should run email sync_all! correctly" do
     contact_list.identity.provider = 'mailchimp'
     contact_list.save!
-    contact_list.last_synced_at.should be_nil
     contact_list.stub(:syncable? => true)
 
     expect(service_provider).to receive(:batch_subscribe)
     contact_list.send :sync_all! # calls #sync_all!
-
-    contact_list.last_synced_at.should_not be_nil
   end
 
   describe "sync_one!" do
     before do
       contact_list.save!
-      contact_list.last_synced_at.should be_nil
       contact_list.stub(:syncable? => true)
     end
 
@@ -94,8 +90,8 @@ describe ContactList do
       end
 
       it "should not raise error" do
-        expect(contact_list.service_provider).to be_oauth
-        expect(contact_list.service_provider).to receive(:subscribe)
+        expect(service_provider).to be_oauth
+        expect(service_provider).to receive(:subscribe)
         contact_list.sync_one! "email@email.com", "Test Testerson"
       end
     end
@@ -104,13 +100,13 @@ describe ContactList do
       let(:provider) { 'mad_mimi' }
       let(:contact_list) { contact_lists(:embed_code).tap{|c| c.identity = identity} }
       let(:service_provider) { contact_list.service_provider }
+      let(:double_optin) { ContactList.new.double_optin }
 
       it "should sync" do
         expect(service_provider).to be_a(ServiceProviders::MadMimi)
         expect(service_provider).to be_embed_code
+        expect(service_provider).to receive(:subscribe_params).with("email@email.com", "Test Testerson", double_optin)
         contact_list.sync_one! "email@email.com", "Test Testerson"
-
-        expect(contact_list.last_synced_at).not_to be_nil
       end
     end
   end
