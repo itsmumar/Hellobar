@@ -42,6 +42,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def temporary?
+    status == TEMPORARY_STATUS
+  end
+
   private
 
   def email_does_not_exist_in_wordpress

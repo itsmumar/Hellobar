@@ -41,9 +41,11 @@ class ApplicationController < ActionController::Base
 
   def require_no_user
     if current_user
-      first_site = current_user.sites.first
-
-      redirect_to site_path(first_site)
+      if current_user.temporary? && current_user.sites.none? { |s| s.site_elements.any? }
+        redirect_to new_site_site_element_path(current_user.sites.last)
+      else
+        redirect_to site_path(current_user.sites.last)
+      end
     end
   end
 

@@ -93,10 +93,10 @@ describe ApplicationController, '#require_no_user' do
     def index; render nothing: true; end
   end
 
-  it 'redirects a logged in user to the dashboard of their first site' do
+  it 'redirects a logged in user to the dashboard of their most recent site' do
     user = users(:joey)
     controller.stub current_user: user
-    dashboard_path = site_path(user.sites.first)
+    dashboard_path = site_path(user.sites.last)
 
     get :index
 

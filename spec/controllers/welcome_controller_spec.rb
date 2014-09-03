@@ -5,7 +5,7 @@ describe WelcomeController, '#index' do
 
   it 'redirects a logged in user to their dashboard' do
     user = users(:joey)
-    site = user.sites.first
+    site = user.sites.last
 
     controller.stub current_user: user
 
