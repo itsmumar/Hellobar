@@ -14,12 +14,13 @@
       i.icon-dropdown
       .dropdown-block
         = active_link_to 'Settings', (current_user ? edit_site_path(current_site) : root_path)
-        h6 Switch Sites
-        ul
-          - (current_user.sites - [current_site]).each do |site|
-            li
-              img.site-avatar src=""
-              = active_link_to display_url_for_site(site), site_path(site)
+        - if current_user.sites.count > 1
+          h6 Switch Sites
+          ul
+            - (current_user.sites - [current_site]).each do |site|
+              li
+                img.site-avatar src=""
+                = active_link_to display_url_for_site(site), site_path(site)
 
         = button_to "Add New Site", new_site_path, :class => "button", :method => :get
 
