@@ -26,17 +26,11 @@ HelloBar.ApplicationController = Ember.Controller.extend
   # This defines the acceptable params and toggles the modal property 
   # used to trigger the modal visibility.
 
-  queryParams: ['modal', 'rule_id']
   modal: null
-  rule_id: null
 
   toggleModal: (->
     @toggleProperty('isModal')
   ).observes('modal')
-
-  setRuleID: (->
-    @set("model.rule_id", parseInt(@get("rule_id")))
-  ).observes("rule_id")
 
 
   #-----------  Element Preview  -----------#
@@ -69,9 +63,16 @@ HelloBar.ApplicationController = Ember.Controller.extend
   # Tracks global application states & catches actions
   # (primarily observed by the application-view)
 
+  queryParams: ['modal', 'rule_id']
   isMobile: false
   isFullscreen: false
   saveSubmitted: false
+  rule_id: null
+
+  setRuleID: (->
+    @set("model.rule_id", parseInt(@get("rule_id")))
+  ).observes("rule_id")
+
 
   actions:
     toggleFullscreen: ->
