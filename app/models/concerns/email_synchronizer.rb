@@ -34,13 +34,6 @@ module EmailSynchronizer
         batch_subscribe(data["remote_id"], group, double_optin)
       end
     end
-  rescue *ESP_ERROR_CLASSES => e
-    if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
-      Raven.capture_exception(e)
-      identity.destroy_and_notify_user
-    else
-      raise e
-    end
   end
 
   delegate :batch_subscribe, to: :service_provider
@@ -64,8 +57,14 @@ module EmailSynchronizer
   private
 
   def perform_sync
-    # run something immediately before sync 
+    # run something immediately before sync
     yield
     # run something immediately after sync 
+  rescue *ESP_ERROR_CLASSES => e
+    if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
+      Raven.capture_exception(e)
+    else
+      raise e
+    end
   end
 end
