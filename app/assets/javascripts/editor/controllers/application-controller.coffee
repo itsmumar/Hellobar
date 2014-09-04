@@ -26,12 +26,17 @@ HelloBar.ApplicationController = Ember.Controller.extend
   # This defines the acceptable params and toggles the modal property 
   # used to trigger the modal visibility.
 
-  queryParams: ['modal']
+  queryParams: ['modal', 'rule_id']
   modal: null
+  rule_id: null
 
   toggleModal: (->
     @toggleProperty('isModal')
   ).observes('modal')
+
+  setRuleID: (->
+    @set("model.rule_id", parseInt(@get("rule_id")))
+  ).observes("rule_id")
 
 
   #-----------  Element Preview  -----------#

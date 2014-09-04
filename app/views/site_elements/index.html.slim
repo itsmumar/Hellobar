@@ -33,18 +33,12 @@ table.rules-wrapper
                 i.icon-trash
                 = "Remove this and #{pluralize(rule.site_elements.count, "bar")}"
 
-      - if rule.site_elements.empty?
-        tr.rule-block
-          th.page-header colspan='9'
-            small (No Site Elements)
-
-      - else
-        - rule.site_elements.each do |site_element|
-          = render "site_elements/site_element", { :site_element => site_element }
+      - rule.site_elements.each do |site_element|
+        = render "site_elements/site_element", { :site_element => site_element }
 
       tr
         td.temporary-block.suggestion-block colspan='9'
-          = link_to "A/B test a new bar for this rule to maximize your conversions.", new_site_site_element_path(@site)
+          = link_to "A/B test a new bar for this rule to maximize your conversions.", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
 
 - @rules.each do |rule|
   = render 'shared/modals/rules', site: @site, rule: rule
