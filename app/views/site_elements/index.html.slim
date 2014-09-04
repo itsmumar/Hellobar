@@ -31,10 +31,7 @@ table.rules-wrapper
 
               = content_tag 'a', class: 'remove-rule' do
                 i.icon-trash
-                | Remove this and 
-                br
-                = rule.site_elements.count
-                |  bars
+                = "Remove this and #{pluralize(rule.site_elements.count, "bar")}"
 
       - if rule.site_elements.empty?
         tr.rule-block
@@ -46,10 +43,8 @@ table.rules-wrapper
           = render "site_elements/site_element", { :site_element => site_element }
 
       tr
-        td.temporary-block colspan='9'
-          | Every week, 2,300 people use your Hello Bar. 
-          a Create something new
-          | to better utilize these users!
+        td.temporary-block.suggestion-block colspan='9'
+          = link_to "A/B test a new bar for this rule to maximize your conversions.", new_site_site_element_path(@site)
 
 - @rules.each do |rule|
   = render 'shared/modals/rules', site: @site, rule: rule
