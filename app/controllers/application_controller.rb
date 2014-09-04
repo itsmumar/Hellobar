@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id
 
   before_action :record_tracking_param
+  after_action :store_last_requested_path
 
   def access_token
     @access_token ||= Digest::SHA256.hexdigest(["hellobar", remote_ip, user_agent, access_cookie, "a776b"].join)
@@ -81,5 +82,14 @@ class ApplicationController < ActionController::Base
 
   def record_tracking_param
     Hello::TrackingParam.track(params[:trk]) if params[:trk]
+  end
+
+  def store_last_requested_path
+    # used primarily to detect page refreshes
+    session[:last_requested_path] = request.path if request.format == :html
+  end
+
+  def is_page_refresh?
+    request.path == session[:last_requested_path]
   end
 end

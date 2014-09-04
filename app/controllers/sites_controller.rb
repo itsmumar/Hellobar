@@ -25,12 +25,12 @@ class SitesController < ApplicationController
   def show
     session[:current_site] = @site.id
 
-    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements)
+    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, 30, :force => is_page_refresh?)
     @recent_elements = @site.site_elements.where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC")
   end
 
   def improve
-    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements)
+    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, 30, :force => is_page_refresh?)
     @suggestions = Hello::DataAPI.suggested_opportunities(@site, @site.site_elements) || []
     @top_performers = @site.site_elements.sort_by{|e| -1 * e.conversion_percentage}[0, 6]
   end
