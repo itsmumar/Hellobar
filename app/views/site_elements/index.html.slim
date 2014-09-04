@@ -38,7 +38,10 @@ table.rules-wrapper
 
       tr
         td.temporary-block.suggestion-block colspan='9'
-          = link_to "A/B test a new bar for this rule to maximize your conversions.", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
+          - if rule.site_elements.empty?
+            = link_to "Create a bar for this rule", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
+          - else
+            = link_to "A/B test a new bar for this rule to maximize your conversions", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
 
 - @rules.each do |rule|
   = render 'shared/modals/rules', site: @site, rule: rule
