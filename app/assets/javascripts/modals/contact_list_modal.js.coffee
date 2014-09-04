@@ -61,7 +61,7 @@ class @ContactListModal extends Modal
   _bindReadyButton: (object) ->
     object.find("a.ready").click (e) =>
       @_clearErrors()
-      
+
       # stash the model so that it can be reloaded by the ember app
       localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
       localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))

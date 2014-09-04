@@ -80,7 +80,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     # is not null or undefined before the change, we avoid setting the flag until the property has had an initial value set.
 
     @set("modelIsDirty", true) if !!@get(keyName)
-  ).observesBefore("model.element_subtype", "model.message", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.closable", "model.show_branding", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url")
+  ).observesBefore("model.element_subtype", "model.message", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.closable", "model.show_branding", "model.settings.url", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url", "model.contact_list_id")
 
   actions:
     toggleFullscreen: ->
@@ -104,3 +104,16 @@ HelloBar.ApplicationController = Ember.Controller.extend
         modal.open()
 
       true
+
+    closeEditor: ->
+      dashboardURL = "/sites/#{window.siteID}/site_elements"
+
+      if @get("modelIsDirty")
+        options =
+          dashboardURL: dashboardURL
+          doSave: =>
+            @send("saveSiteElement")
+
+        new UnsavedChangesModal(options).open()
+      else
+        window.location = dashboardURL
