@@ -214,8 +214,6 @@ class LegacyMigrator
                       rule_id: legacy_bar.goal_id,
                       closable: legacy_bar.settings_json['closable'],
                       show_border: legacy_bar.settings_json['show_border'],
-                      hide_after: legacy_bar.settings_json['hide_after'],
-                      show_wait: legacy_bar.settings_json['show_wait'],
                       background_color: legacy_bar.settings_json['bar_color'],
                       border_color: legacy_bar.settings_json['border_color'],
                       button_color: legacy_bar.settings_json['button_color'],
