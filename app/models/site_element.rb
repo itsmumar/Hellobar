@@ -12,11 +12,19 @@ class SiteElement < ActiveRecord::Base
     social/share_on_buffer
   }
 
+  DISPLAY_WHEN_OPTIONS = %w{
+    immediately
+    on_visitor_leaving
+    after_scroll
+    after_delay
+  }
+
   belongs_to :rule
   belongs_to :contact_list
 
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES }
   validates :rule, association_exists: true
+  validates :display_when, inclusion: { in: DISPLAY_WHEN_OPTIONS }
 
   validate :contact_list_is_present, if: Proc.new {|se| se.element_subtype == "email"}
 
