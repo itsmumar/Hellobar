@@ -14,7 +14,7 @@ class SiteElement < ActiveRecord::Base
 
   DISPLAY_WHEN_OPTIONS = %w{
     immediately
-    on_visitor_leaving
+    after_leaving
     after_scroll
     after_delay
   }
