@@ -18,7 +18,7 @@ class Condition < ActiveRecord::Base
     excludes: 'excludes'
   }.with_indifferent_access
 
-  belongs_to :rule#, inverse_of: :condition
+  belongs_to :rule, inverse_of: :conditions
 
   validates :rule, association_exists: true
 

@@ -1,0 +1,120 @@
+script id="rule-modal" type="text/x-handlebars-template"
+  .modal-wrapper.rules-modal.show-modal
+    .modal-block
+      header
+        | {{#if id}}
+        h5 Edit Rule
+        | {{else}}
+        h5 New Rule
+        | {{/if}}
+
+      form.simple_form.form-inline.rule-modal accept-charset="UTF-8" action="/sites/{{siteId}}/rules/{{id}}" method="post" novalidate="novalidate"
+        div style="display:none"
+          input name="utf8" type="hidden" value="✓"
+          | {{#if id}}
+          input name="_method" type="hidden" value="patch"
+          | {{/if}}
+        p
+          | Show
+          span
+            input#rule_priority max="100" min="1" name="rule[priority]" step="1" type="number" value="{{priority}}"/
+          | % of people who match
+          span.select-wrapper
+            select#rule_match name="rule[match]"
+              | {{option match "all" "all"}}
+              | {{option match "any" "any"}}
+          | of the following conditions.
+        .conditions-wrapper
+          | {{#each conditions}}
+          .condition-block
+            .condition-ruleset
+              .select-wrapper.optional.rule_conditions_segment
+                select class="condition-segment" name="rule[conditions_attributes][{{@index}}][segment]"
+                  | {{option segment "CountryCondition" "country"}}
+                  | {{option segment "DeviceCondition" "device"}}
+                  | {{option segment "DateCondition" "date"}}
+                  | {{option segment "UrlCondition" "url"}}
+              .select-wrapper.optional.rule_conditions_operand
+                select class="condition-operand" name="rule[conditions_attributes][{{@index}}][operand]"
+                  | {{option operand "is_after" "is after"}}
+                  | {{option operand "is_before" "is before"}}
+                  | {{option operand "is_between" "is between"}}
+                  | {{option operand "is" "is"}}
+                  | {{option operand "is_not" "is not"}}
+                  | {{option operand "includes" "includes"}}
+                  | {{option operand "excludes" "excludes"}}
+              .rule_conditions_choices
+                .choice-wrapper.date-choice
+                  input.start_date.value disabled="disabled" name="rule[conditions_attributes][{{@index}}][value][start_date]" type="date" value="{{value.start_date}}"
+                  input.end_date.value disabled="disabled" name="rule[conditions_attributes][{{@index}}][value][end_date]" type="date" value="{{value.end_date}}"
+                .choice-wrapper.url-choice
+                  input.url.value disabled="disabled" name="rule[conditions_attributes][{{@index}}][value]" placeholder="something..." type="text" value="{{value}}"
+                .choice-wrapper.select-wrapper.country-choice
+                  select.country.value disabled="disabled" name="rule[conditions_attributes][{{@index}}][value]"
+                    | {{option value "USA" "USA"}}
+                    | {{option value "USA" "USA"}}
+                    | {{option value "USA" "USA"}}
+                .choice-wrapper.select-wrapper.device-choice
+                  select.device.value disabled="disabled" name="rule[conditions_attributes][{{@index}}][value]"
+                    | {{option value "Desktop" "Desktop"}}
+                    | {{option value "Mobile" "Mobile"}}
+            input name="rule[conditions_attributes][{{@index}}][id]" value="{{id}}" type="hidden"
+            input.destroy name="rule[conditions_attributes][{{@index}}][_destroy]" type="hidden" value="false"
+            .condition-actions
+              a.condition-remove href="#" -
+              a.condition-add href="#" +
+
+          | {{/each}}
+          .condition-block.no-condition-message
+            .condition-ruleset
+              small
+                | There are no conditions yet, so this rule matches 
+                strong everyone.
+                br To only match certain people click the blue (+) button to the right.
+            .condition-actions
+              a.condition-add href="#" +
+
+        label.string.optional for="rule_name" Name
+        input#rule_name name="rule[name]" type="text" value="{{name}}"
+
+        footer
+          a.cancel.button href="#" Cancel
+          button.button name="button" type="submit" Save
+
+script#new-condition type="text/x-handlebars-template"
+  .placeholder
+    .condition-block
+      .condition-ruleset
+        .select-wrapper.optional.rule_conditions_segment
+          select.condition-segment name="segment"
+            option value="CountryCondition" country
+            option value="DeviceCondition" device
+            option value="DateCondition" date
+            option value="UrlCondition" url
+        .select-wrapper.optional.rule_conditions_operand
+          select.condition-operand name="operand"
+            option value="is_after" is after
+            option value="is_before" is before
+            option value="is_between" is between
+            option value="is" is
+            option value="is_not" is not
+            option value="includes" includes
+            option value="excludes" excludes
+        .rule_conditions_choices
+          .choice-wrapper.date-choice
+            input#value.start_date.value disabled="disabled" name="value" type="date" /
+            input#value.end_date.value disabled="disabled" name="value" type="date" /
+          .choice-wrapper.url-choice
+            input#value.url.value disabled="disabled" name="value" placeholder="something..." type="text" /
+          .choice-wrapper.select-wrapper.country-choice
+            select#value.country.value disabled="disabled" name="value" 
+              option value="USA" USA
+              option value="USA" USA
+              option value="USA" USA
+          .choice-wrapper.select-wrapper.device-choice
+            select#value.device.value disabled="disabled" name="value" 
+              option value="Desktop" Desktop
+              option value="Mobile" Mobile
+      .condition-actions
+        a.condition-remove href="#" -
+        a.condition-add href="#" +

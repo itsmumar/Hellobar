@@ -25,17 +25,31 @@ $ ->
   $('body').on 'click', '.edit-rule', (event) ->
     event.preventDefault()
 
-    ruleId = $(this).attr('data-rule-id')
-    $form = $("form#rule-#{ruleId}")
-    $modal = $form.parents('.modal-wrapper:first')
+    ruleJson = null
+    ruleId = $(this).data('rule-id')
+
+    for rule in window.rules
+      ruleJson = rule if rule.id == ruleId
+
+    ruleJson.siteId = window.siteID
+
+    console.log "Couldnt find rule with ID: #{ruleId}" unless ruleJson
 
     options =
+      ruleData: ruleJson
       successCallback: ->
         $ruleContent = $(".rule-block[data-rule-id=#{@id}]")
         $ruleContent.find("h4").text("/#{@name}")
         $ruleContent.find("span").text(@description)
 
-    new RuleModal($modal, options).open()
+        ruleIds = window.rules.map (rule) -> rule.id
+
+        if ruleIds.indexOf(@id) == -1 # we created the rule
+          window.rules.push this
+        else # we updated the rule
+          window.rules[ruleIds.indexOf(@id)] = this
+
+    new RuleModal(options).open()
 
   # toggle pause / unpause
   $('body').on 'click', '.toggle-pause', (event) ->

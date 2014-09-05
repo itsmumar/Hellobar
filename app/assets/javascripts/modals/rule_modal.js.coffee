@@ -5,13 +5,18 @@ class @RuleModal extends Modal
   newConditionTemplate: ->
     $('script#new-condition').html()
 
-  constructor: (@$modal, @options={}) ->
-    @_bindInteractions()
-    super
+  constructor: (@options={}) ->
+    source = $('script#rule-modal').html()
+    template = Handlebars.compile(source)
+    @$modal = $(template(@options.ruleData))
 
   open: ->
     @_renderContent()
+    @_bindInteractions()
     super
+
+  close: ->
+    @$modal.remove()
 
   _bindInteractions: ->
     @_bindSubmit()
@@ -19,6 +24,8 @@ class @RuleModal extends Modal
     @_bindRemoveCondition()
 
   _renderContent: ->
+    $('body').append(@$modal)
+
     ruleModal = this
 
     @$modal.find('.condition-block:not(".no-condition-message")').each ->

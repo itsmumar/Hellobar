@@ -1,8 +1,6 @@
 #ember-root
 
-- @rules.each do |rule|
-  = render 'shared/modals/rules', site: @site, rule: rule
-
 javascript:
   var barID = #{@site_element.id};
   var siteID = #{@site.id};
+  var rules = #{{@rules.map{|rule| RuleSerializer.new(rule) }.to_json }};
