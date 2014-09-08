@@ -116,6 +116,9 @@ private
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       id: site_element.id,
+      # views: ???,
+      # conversions: ???,
+      # conversionRate: ???,
       contact_list_id: site_element.contact_list_id,
       target: site_element.target_segment,
       template_name: site_element.element_subtype,

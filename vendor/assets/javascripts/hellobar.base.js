@@ -25,9 +25,11 @@ var HBQ = function()
   // Set all the default tracking trackings
   HB.setDefaultSegments();
   // Apply the rules
-  HB.applyRules();
+  var siteElement = HB.applyRules();
+  if ( siteElement )
+    HB.render(siteElement);
   
-  // As the user readjust the window size we need to adjust the size of the containing
+  // As the vistor readjust the window size we need to adjust the size of the containing
   // iframe. We do this by checking the the size of the inner div. If the the width
   // of the window is less than or equal to 640 pixels we set the flag isMobileWidth to true.
   // Note: we are not actually detecting a mobile device - just the width of the window. 
@@ -284,25 +286,40 @@ var _HB = {
   trackClick: function(element)
   {
     var url = element.href;
-    HB.conversion(function(){element.target == "_blank" ?  window.open(url) : document.location = url;});
+    HB.converted(function(){element.target == "_blank" ?  window.open(url) : document.location = url;});
   },
 
   // Returns the conversion key used in the cookies to determine if this
   // conversion has already happened or not
   getConversionKey: function(siteElement)
   {
-    switch(siteElement.type)
+    switch(HB.baseType(siteElement))
     {
       case "email":
         return "ec";
-      case "social-facebook-like":
-        return "fl";
+      case "social":
+        return "sc";
       case "link":
         // Need to make sure this is unique per URL
         // getShortestKey returns either the raw URL or
         // a SHA1 hash of the URL - whichever is shorter
         return "l-"+HB.getShortestKeyForURL(siteElement.url);
     }
+  },
+
+  // Returns the base type for a site element. Will be either:
+  // email, social, or link
+  baseType: function(siteElement)
+  {
+    switch(siteElement.type)
+    {
+      case "facebook":
+      case "twitter":
+        return "social";
+    }
+
+    // Just return the type
+    return siteElement.type;
   },
 
   // Returns the shortest possible key for the given URL,
@@ -315,12 +332,32 @@ var _HB = {
   },
 
   // Called when a conversion happens (e.g. link clicked, email form filled out)
-  conversion: function(callback)
+  converted: function(callback)
   {
-    var conversion_Key = HB.getConversionKey(HB.currentSiteElement);
-    HB.setUserData(conversionKey, (HB.getUserData(conversionKey) || 0)+1);
+    var conversionKey = HB.getConversionKey(HB.currentSiteElement);
+    var conversionData = HB.getVisitorData(conversionKey);
+    var now = Math.round(new Date().getTime()/1000)
+    if ( !conversionData )
+      conversionData = [now, now, 0];
+
+    // We store first time converted, last time converted and number of conversions
+      
+    conversionData[1] = now; // Set the last time they converted to now
+    conversionData[2] += 1; // Increase number of times
+    HB.setVisitorData(conversionKey, conversionData);
+    HB.setSiteElementData(HB.si, "nc", (HB.getSiteElementData(HB.si, "nc") || 0)+1);
+    HB.setSiteElementData(HB.si, "nc", (HB.getSiteElementData(HB.si, "nc") || 0)+1);
+    if ( !HB.getSiteElementData(HB.si, "fc") )
+      HB.setSiteElementData(HB.si, "fc", now);
+    HB.setSiteElementData(HB.si, "lc", now);
     HB.trigger("conversion", HB.currentSiteElement);
-    HB.s("c?b="+HB.bi, HB.attributeParams(), callback);
+    HB.s("c?b="+HB.si, HB.attributeParams(), callback);
+  },
+
+  // Returns true if the visitor did this conversion or not
+  didConvert: function(siteElement)
+  {
+    return HB.getVisitorData(HB.getConversionKey(HB.currentSiteElement));
   },
 
   // This takes the the email field, name field, and target siteElement DOM element.
@@ -366,7 +403,7 @@ var _HB = {
       params.push("q=y"); // only in staging
 
       // Record the email address and then track that the rule was performed
-      HB.s("e", params.join("&"), function(){HB.conversion(callback)});
+      HB.s("e", params.join("&"), function(){HB.converted(callback)});
     }
 
   },
@@ -384,7 +421,7 @@ var _HB = {
   //       *custom: *value
   //     }
   //   },
-  //   user: {
+  //   visitor: {
   //     first_visit: timestamp,
   //     last_visit: timestamp,
   //     num_visits: count,
@@ -396,9 +433,9 @@ var _HB = {
     if ( !cookies )
       return "";
     var result = "";
-    if ( cookies.user )
+    if ( cookies.visitor )
     {
-      result += HB.serializeCookieValues(cookies.user);
+      result += HB.serializeCookieValues(cookies.visitor);
     }
     result += "^";
     if ( cookies.siteElements )
@@ -411,7 +448,7 @@ var _HB = {
     return result;
   },
 
-  // Called by serializeCookies. Takes a hash (either user or siteElement) and
+  // Called by serializeCookies. Takes a hash (either visitor or siteElement) and
   // serializes it into a string
   serializeCookieValues: function(hash)
   {
@@ -423,7 +460,8 @@ var _HB = {
       var value = hash[key];
       if (typeof(value) != "function" && typeof(value) != "object")
       {
-        pairs.push(HB.sanitizeCookieValue(key)+":"+HB.sanitizeCookieValue(value));
+        // Key can not contain ":", but value can
+        pairs.push(HB.sanitizeCookieValue(key).replace(/:/g,"-")+":"+HB.sanitizeCookieValue(value));
       }
     }
     return pairs.join("|");
@@ -440,11 +478,11 @@ var _HB = {
   {
     var results = {};
     if ( !input )
-      return {user:{}, siteElements:{}};
+      return {visitor:{}, siteElements:{}};
     var parts = input.split("^");
 
-    // Parse out the user uwhich is the first argument
-    results.user = HB.parseCookieValues(parts[0]);
+    // Parse out the visitor uwhich is the first argument
+    results.visitor = HB.parseCookieValues(parts[0]);
     // Parse out all the siteElements
     results.siteElements = {};
     for(var i=1;i<parts.length;i++)
@@ -461,7 +499,7 @@ var _HB = {
     return results;
   },
 
-  // Called by parseCookies. Takes a string (either user or siteElement) and
+  // Called by parseCookies. Takes a string (either visitor or siteElement) and
   // parses it into a hash
   parseCookieValues: function(string)
   {
@@ -486,12 +524,12 @@ var _HB = {
   },
 
   // Loads the cookies from the browser cookies into global hash HB.cookies
-  // in the format of {siteElements: {id:{...}, id2:{...}}, user:{...}}
+  // in the format of {siteElements: {id:{...}, id2:{...}}, visitor:{...}}
   loadCookies: function()
   {
     // Don't let any cookies get set without a site ID
     if ( typeof(HB_SITE_ID) == "undefined")
-      HB.cookies = {siteElements:{}, user:{}};
+      HB.cookies = {siteElements:{}, visitor:{}};
     else
       HB.cookies = HB.parseCookies(HB.gc("hb_"+HB_SITE_ID));
   },
@@ -504,19 +542,19 @@ var _HB = {
       HB.sc("hb_"+HB_SITE_ID, HB.serializeCookies(HB.cookies), 365*5);
   },
 
-  // Gets the user attribute specified by the key or returns null
-  getUserData: function(key)
+  // Gets the visitor attribute specified by the key or returns null
+  getVisitorData: function(key)
   {
-    return HB.cookies.user[key];
+    return HB.cookies.visitor[key];
   },
 
-  // Sets the user attribute specified by the key to the value in the HB.cookies hash
+  // Sets the visitor attribute specified by the key to the value in the HB.cookies hash
   // Also updates the cookies via HB.saveCookies
-  setUserData: function(key, value, skipEmptyValue)
+  setVisitorData: function(key, value, skipEmptyValue)
   {
     if ( skipEmptyValue && !value) // This allows us to only conditionally set values
       return;
-    HB.cookies.user[key] = value;
+    HB.cookies.visitor[key] = value;
     HB.saveCookies();
   },
 
@@ -715,7 +753,7 @@ var _HB = {
     // Call prerender
     var siteElement = HB.prerender(siteElementCopy);
     HB.currentSiteElement = siteElement;
-    HB.bi = siteElement.id;
+    HB.si = siteElement.id;
     // If there is a #nohb in the has we don't render anything
     if ( document.location.hash == "#nohb" )
       return;
@@ -739,7 +777,13 @@ var _HB = {
   viewed: function()
   {
     // Track number of views
-    HB.s("v?b="+HB.bi, HB.attributeParams());
+    HB.s("v?b="+HB.si, HB.attributeParams());
+    // Record the number of views, first seen and last seen
+    HB.setSiteElementData(HB.si, "nv", (HB.getSiteElementData(HB.si, "nv") || 0)+1);
+    var now = Math.round(nowDate.getTime()/1000);
+    if ( !HB.getSiteElementData(HB.si, "fv") )
+      HB.setSiteElementData(HB.si, "fv", now)
+    HB.setSiteElementData(HB.si, "lv", now)
     // Trigger siteElement shown event
     HB.trigger("siteElementshown", HB.currentSiteElement);
   },
@@ -837,18 +881,17 @@ var _HB = {
     d.close();
   },
 
-  // Adds a rule to the list of rules. The method is a function that returns true if the given
-  // visitor is eligible for the rule. The siteElements is the list of siteElements for the given rule. Priority
-  // is a numeric value and metadata is a hash of settings for the rule.
-  addRule: function(method, siteElements, priority, metadata)
+  // Adds a rule to the list of rules.
+  //  matchType: is either "any" or "all" - refers to the conditions
+  //  conditions: serialized array of conditions for the rule to be true
+  //  siteElements: serialized array of siteElements if the rule is true
+  addRule: function(matchType, conditions, siteElements)
   {
     // First check to see if siteElements is an array, and make it one if it is not
     if (Object.prototype.toString.call(siteElements) !== "[object Array]")
       siteElements = [siteElements];
-    if ( !priority )
-      priority = 0;
     // Create the rule
-    var rule = {method: method, siteElements: siteElements, priority: priority, data: metadata};
+    var rule = {matchType: matchType, conditions: conditions, siteElements: siteElements};
     HB.rules.push(rule);
     // Set the rule on all of the siteElements
     for(var i=0;i<siteElements.length;i++)
@@ -858,83 +901,208 @@ var _HB = {
   },
 
   // applyRules scans through all the rules added via addRule and finds the
-  // highest priority rule the visitor is eligible for. Once found it sends
-  // all the eligible siteElements to the backend server which then returns with which
-  // variation to show.
+  // all rules that are true and pushes the site elements into a list of
+  // possible results. Next it tries to find the "highest priority" site 
+  // elements (e.g. collecting email if not collected, etc). From there
+  // we use multi-armed bandit to determine which site element to return
   applyRules: function()
   {
-    // Sort the rules
-    HB.rules.sort(function(a,b){
-      if ( a.priority > b.priority )
-        return 1;
-      else if ( a.priority < b.priority )
-        return -1;
-      else
-        return 0;
-    });
-    // Determine the first rule the visitor is eligible for
-    for(var i=0;i<HB.rules.length;i++)
+    var i,j,siteElement;
+    var possibleSiteElements = [];
+    // First get all the site elements from all the rules that the
+    // person matches
+    for(i=0;i<HB.rules.length;i++)
     {
       var rule = HB.rules[i];
-      if ( rule.method() ) // Did the method return true?
+      if ( HB.ruleTrue(rule) )
       {
-        // Found a match
-        // If there is siteElement then render it
-        if ( rule.siteElements && rule.siteElements.length > 0 && rule.siteElements[0])
+        // Get all site elements that are a part of this rule that the
+        // visitor has not done
+        for(j=0;j<rule.site_elements.length;j++)
         {
-          HB.currentRule = rule;
-          HB.cli = rule.contact_list_id;
-          // Check to see if the user is eligible for any siteElements
-          var eligiblesiteElements = [];
-          for(var j=0;j<rule.siteElements.length;j++)
+          siteElement = rule.site_elements[j];
+          if ( !HB.didConvert(siteElement) )
           {
-            var siteElement = rule.siteElements[j];
-            siteElement.rule = rule;
-            if ( !siteElement.target ) {
-              eligiblesiteElements.push(siteElement); // If there is no target it is eligible for everyone
-            }
-            else
-            {
-              // Check to see if the segment matches if this is a targeted siteElement
-              var parts = siteElement.target.split(":");
-              var key = parts[0];
-              var value = parts.slice(1,parts.length).join(":");
-              if ( (typeof HB_ALLOW_ALL !== "undefined" && HB_ALLOW_ALL) || (HB.getUserData(key) || "").toLowerCase() == value.toLowerCase())
-                eligiblesiteElements.push(siteElement);
-            }
+            var type = HB.baseType(siteElement);
+            if ( !possibleSiteElements[type] )
+              possibleSiteElements[type] = [];
+            possibleSiteElements[type].push(siteElement);
           }
-          // See if we have just one eligible siteElement in which case render it
-          if ( eligiblesiteElements.length == 1 )
-          {
-            HB.render(eligiblesiteElements[0]);
-            return true;
-          }
-          else if ( eligiblesiteElements.length > 1 )
-          {
-            // We need to ask the server which siteElement is the best. 
-            HB.pickBestSiteElement(eligiblesiteElements);
-            return true;
-          }
-          else
-          {
-            // No match
-            HB.currentRule = null;
-            HB.cli = null;
-          }
-        }
       }
+    }
+    // Now we narrow down based on the "value" of the site elements
+    // (collecting emails is considered more valuable than clicking links
+    // for example)
+    if ( possibleSiteElements.email )
+      possibleSiteElements = possibleSiteElements.email;
+    else if ( possibleSiteElements.social )
+      possibleSiteElements = possibleSiteElements.social;
+    else if ( possibleSiteElements.link )
+      possibleSiteElements = possibleSiteElements.link;
+    else
+      return; // Should not reach here - if we do there is nothing to show
+    
+    // If we have no elements then stop
+    if ( !possibleSiteElements || possibleSiteElements.length == 0 )
+      return;
+    // If we only have one element just show it
+    if ( possibleSiteElements.length == 1 )
+      return possibleSiteElements[0];
+    // First we should see if the visitor has seen any of these site elements
+    // If so we should show them the same element again for a consistent
+    // user experience.
+    for(i=0;i<possibleSiteElements.length;i++)
+    {
+      if ( HB.getSiteElementData(possibleSiteElements[i].id, "nv") )
+        return possibleSiteElements[i];
+    }
+    // We have more than one possibility so first we check for site elements
+    // with less than 1000 views
+    var siteElementsWithoutEnoughViews = [];
+    for(i=0;i<possibleSiteElements.length;i++)
+    {
+      if ( possibleSiteElements[i].views < 1000 )
+        siteElementsWithoutEnoughViews.push(possibleSiteElements[i]);
+    }
+    // If we have at least one element without enough views pick
+    // randomly from them
+    if ( siteElementsWithoutEnoughViews.length >= 1 )
+    {
+      return siteElementsWithoutEnoughViews[Math.floor((Math.random() * siteElementsWithoutEnoughViews.length))]
+    }
+    // So now we have more than one site element all with enough views
+    // We need to determine if we are going to explore or exploit
+    if ( Math.random() >= 0.9 )
+    {
+      // Explore mode
+      // Just return a random site element
+      return possibleSiteElements[Math.floor((Math.random() * possibleSiteElements.length))]
+    }
+    else
+    {
+      // Exploit mode
+      // Return the site element with the highest conversion rate
+      possibleSiteElements.sort(function(a, b){
+        if (a.conversionRate < b.conversionRate)
+          return 1;
+        else if (a.conversionRate > b.conversionRate)
+          return -1;
+        return 0;
+      });
+      // Return the top value
+      return possibleSiteElements[0];
     }
   },
 
-  // This takes an array of siteElements and sends them to the backend server
-  // which will then determine which siteElement to show. However, if we have
-  // already shown a user one of these siteElements before we just show them the
-  // same siteElement again for consistency and to save a server trip.
-  pickBestSiteElement: function(siteElements)
+  // Checkes if the rule is true by checking each of the conditions and
+  // the matching logic of the rule (any vs all).
+  ruleTrue: function(rule)
   {
+    for(var i=0;i<rule.conditions.length;i++)
+    {
+      if ( HB.conditionTrue(rule.conditions[i]) )
+      {
+        // If we just need to match any condition and we have matched
+        // one then return true
+        if ( rule.match == "any" )
+          return true;
+      }
+      else
+      {
+        // We didn't match a condition. Return false if we needed to
+        // match all of them
+        if ( rule.match == "all" )
+          return false;
+      }
+    }
+    // If we needed to match any condition (and we had at least one)
+    // and didn't yet return false
+    if ( rule.match == "any" && rule.conditions.length > 0)
+      return false;
+    return true;
   },
 
-  // This just sets the default segments/tracking data for the user
+  // Determines if the condition (a rule is made of one or more conditions)
+  // is true. It gets the current value and applies the operand
+  conditionTrue: function(condition)
+  {
+    // Need to get the current value
+    var currentValue = HB.getSegmentValue(condition.segment);
+    // Now we need to apply the operands
+    return HB.applyOperand(currentValue, condition.operand, condition.value);
+  },
+
+  // Gets the current segment value that will be compared to the conditions
+  // value
+  getSegmentValue: function(segmentName)
+  {
+    // Convert long names to short names
+    if ( segmentName == "url" )
+      segmentName = "pu";
+    else if ( segmentName == "device" )
+      segmentName = "dv";
+    else if ( segmentName == "country" )
+      segmentName = "co";
+    else if ( segmentName == "referrer" || segmentName == "referer" )
+      segmentName = "rf";
+    else if ( segmentName == "date" )
+      return (new Date()); // special case
+
+    // All other segment names
+    return HB.getVisitorData(segmentName);
+  },
+
+  // Applies the operand specified to the arguments passed in
+  applyOperand: function(a, operand, b)
+  {
+    switch(operand)
+    {
+      case "is":
+        return HB.guessType(a, [b]) == HB.guessType(b, a);
+      case "is_not":
+        return HB.guessType(a, [b]) != HB.guessType(b, a);
+      case "includes":
+        return HB.stringify(a).indexOf(HB.stringify(b)) != -1;
+      case "does_not_include":
+        return HB.stringify(a).indexOf(HB.stringify(b)) == -1;
+      case "before":
+      case "less_than":
+        return HB.numerify(a) < HB.numerify(b);
+      case "less_than_or_equal":
+        return HB.numerify(a) <= HB.numerify(b);
+      case "after":
+      case "greater_than":
+        return HB.numerify(a) > HB.numerify(b);
+      case "greater_than_or_equal":
+        return HB.numerify(a) >= HB.numerify(b);
+      case "between":
+        return HB.numerify(a) >= HB.numerify(b[0]) && HB.numerify(a) <= HB.numerify(b[1]);
+    }
+  },
+
+  // Returns a normalized string value
+  // Used for applying operands
+  stringify: function(o)
+  {
+    return (o+"").toLowerCase();
+  },
+
+  // Turns the input into a number. If this is a date reference it
+  // will be converted into a timestamp
+  // Used for applying operands
+  numerify: function(o)
+  {
+    return Number(o);
+  },
+
+  // This guesses the type. If it is numeric or a date reference it will
+  // use "numerify", otherwise it will use "stringify".
+  // Used for applying operands
+  guessType: function(o)
+  {
+    return HB.stringify(o);
+  },
+  // This just sets the default segments/tracking data for the visitor
   // (such as when the suer visited, referrer, etc)
   setDefaultSegments: function()
   {
@@ -944,22 +1112,22 @@ var _HB = {
 
     // Track first visit and most recent visit and time since
     // last visit
-    if (!HB.getUserData("fv"))
-        HB.setUserData("fv", now);
+    if (!HB.getVisitorData("fv"))
+        HB.setVisitorData("fv", now);
     // Get the previous visit
-    var previousVisit = HB.getUserData("lv");
+    var previousVisit = HB.getVisitorData("lv");
 
     // Set the time since the last visit as the number
     // of days
     if ( previousVisit )
-      HB.setUserData("ls", Math.round((now-previousVisit)/day));
-    HB.setUserData("lv", now);
+      HB.setVisitorData("ls", Math.round((now-previousVisit)/day));
+    HB.setVisitorData("lv", now);
 
     // Set the life of the visitor in number of days
-    HB.setUserData("lf", Math.round((now-HB.getUserData("fv"))/day));
+    HB.setVisitorData("lf", Math.round((now-HB.getVisitorData("fv"))/day));
 
-    // Track number of user visits
-    HB.setUserData("nv", (HB.getUserData("nv") || 0)+1);
+    // Track number of visitor visits
+    HB.setVisitorData("nv", (HB.getVisitorData("nv") || 0)+1);
 
     // Set referrer if it is from a different domain (don't count internal referrers)
     if ( document.referrer )
@@ -972,12 +1140,12 @@ var _HB = {
       {
         // This is an external referrer
         // Set the original referrer if not set
-        if ( !HB.getUserData("or" ))
-          HB.setUserData("or", referrer);
+        if ( !HB.getVisitorData("or" ))
+          HB.setVisitorData("or", referrer);
         // Set the full referrer
-        HB.setUserData("rf", referrer);
+        HB.setVisitorData("rf", referrer);
         // Set the referrer domain
-        HB.setUserData("rd", referrerDomain);
+        HB.setVisitorData("rd", referrerDomain);
 
         // Check for search terms
         var referrerQueryParts = referrer.split("?")[1];
@@ -998,31 +1166,31 @@ var _HB = {
           // Check for search terms
           var search = params['query'] || params['q'] || params['search'];
           if ( search )
-            HB.setUserData("st", search);
+            HB.setVisitorData("st", search);
           // Check for UTM variables and set them if present
-          HB.setUserData('ad_so', params['utm_source'], true);
-          HB.setUserData('ad_ca', params['utm_campaign'], true);
-          HB.setUserData('ad_me', params['utm_medium'], true);
-          HB.setUserData('ad_co', params['utm_siteElement'], true);
-          HB.setUserData('ad_te', params['utm_term'], true);
+          HB.setVisitorData('ad_so', params['utm_source'], true);
+          HB.setVisitorData('ad_ca', params['utm_campaign'], true);
+          HB.setVisitorData('ad_me', params['utm_medium'], true);
+          HB.setVisitorData('ad_co', params['utm_siteElement'], true);
+          HB.setVisitorData('ad_te', params['utm_term'], true);
         }
       }
     }
     // Set the page URL
-    HB.setUserData("pu", (document.location+"").split("#")[0]);
+    HB.setVisitorData("pu", (document.location+"").split("#")[0]);
     // Set the date
-    HB.setUserData("dt", nowDate.getUTCFullYear()+"-"+(nowDate.getUTCMonth()+1)+"-"+nowDate.getUTCDate());
+    HB.setVisitorData("dt", nowDate.getUTCFullYear()+"-"+(nowDate.getUTCMonth()+1)+"-"+nowDate.getUTCDate());
     // Set the timestamp - this can be used for filtering
-    HB.setUserData("ts", now);
+    HB.setVisitorData("ts", now);
 
     // Detect the device
     var ua = navigator.userAgent;
     if (ua.match(/(mobi|phone|ipod|blackberry|docomo)/i))
-      HB.setUserData("dv", "mobile");
+      HB.setVisitorData("dv", "mobile");
     else if (ua.match(/(ipad|kindle|android)/i))
-      HB.setUserData("dv", "tablet");
+      HB.setVisitorData("dv", "tablet");
     else
-      HB.setUserData("dv", "computer");
+      HB.setVisitorData("dv", "computer");
   },
 
   // This code returns the root domain of the current site so "www.yahoo.co.jp" will return "yahoo.co.jp" and "blog.kissmetrics.com
@@ -1105,7 +1273,7 @@ var _HB = {
   // SF is +04:00 (+05:00 in DST).
   // Half hour time zones would be +05:30.
   //
-  // Passing no argument leads to "Detect user timezone" mode, as does "auto".
+  // Passing no argument leads to "Detect visitor timezone" mode, as does "auto".
   // Pass an integer offset in hours otherwise, from 0 to 23.
   comparableDate: function(targetOffset) {
     if (typeof targetOffset === "undefined") targetOffset = "auto";
