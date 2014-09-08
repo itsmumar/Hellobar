@@ -1,14 +1,14 @@
 <label>Show after:</label>
 
 <label>
-  {{view Ember.Checkbox checked=isScroll}}
-  {{view Ember.TextField value=content.scrollPercentage placeholder="10"}}
+  {{view Ember.RadioButton name="pageScrollType" selectionBinding="model.settings.display_when_scroll_type" value="percentage"}}
+  {{view Ember.TextField value=model.settings.display_when_scroll_percentage placeholder="10"}}
   % Page scroll
 </label>
+
 <label>
-  {{view Ember.Checkbox checked=isElement}}
-  {{view Ember.TextField value=content.elementTarget placeholder=".sidemenu"}}
-  Element appearrs
+  {{view Ember.RadioButton name="pageScrollType" selectionBinding="model.settings.display_when_scroll_type" value="element"}}
+  {{view Ember.TextField value=model.settings.display_when_scroll_element placeholder=".sidemenu"}}
+  Element appears
   <p>ADVANCED</p>
 </label>
-{{!-- ^ will likely need to be a component... --}}
