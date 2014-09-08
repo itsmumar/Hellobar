@@ -310,7 +310,7 @@ describe LegacyMigrator, ".migrate_goals_to_contact_lists" do
   let(:legacy_traffic_goal) { double "legacy_traffic_goal", id: 12346, site_id: legacy_site.id, data_json: {}, created_at: Time.parse("2000-01-31"), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
   let(:legacy_site) { double "legacy_site", id: 123 }
   let(:legacy_identity) { double "identity", embed_code: "old embed code" }
-  let(:legacy_id_int) { double "legacy_id_int", id: 123, identity_id: 4113, data: {"remote_name" => "list name"}, last_synced_at: 1.week.ago, created_at: 1.month.ago, updated_at: 1.day.ago, identity: legacy_identity }
+  let(:legacy_id_int) { double "legacy_id_int", id: 123, identity_id: 4113, data: {"remote_name" => "list name"}, created_at: 1.month.ago, updated_at: 1.day.ago, identity: legacy_identity }
 
   before do
     Site.stub :exists? => true
