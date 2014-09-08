@@ -1,5 +1,5 @@
 $ ->
-  siteID = location.pathname.match(/sites\/(\d+)/)[1]
+  siteID = (location.pathname.match(/sites\/(\d+)/) || [])[1]
   contactListID = (location.pathname.match(/contact_lists\/(\d+)/) || [])[1]
 
   baseOptions =

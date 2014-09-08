@@ -8,6 +8,9 @@ class @ContactListModal extends Modal
     @_initializeTemplates()
     @_initializeBlocks()
 
+    @$modal.on 'load',   -> $(this).addClass('loading')
+    @$modal.on 'complete', -> $(this).removeClass('loading').finish()
+
     super(@$modal)
 
   close: ->
@@ -83,14 +86,11 @@ class @ContactListModal extends Modal
       type: @options.saveMethod
       data: {contact_list: formData}
       success: (data) =>
-        if data.errors.length > 0
-          @_showErrors(data.errors)
-          submitButton.attr("disabled", false)
-        else
-          @options.success(data, this)
+        @options.success(data, this)
       error: (response) =>
-        contactList = JSON.parse(response.responseText)
+        contactList = response.responseJSON
         @_showErrors(contactList.errors)
+        @$modal.find("a.submit").removeAttr("disabled")
 
   _getFormData: ->
     remoteListSelect = @$modal.find("#contact_list_remote_list_id")
@@ -139,7 +139,11 @@ class @ContactListModal extends Modal
       @blocks.remoteListSelect.hide()
       return
 
+    @$modal.trigger 'load'
+
     $.get "/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
+      @$modal.trigger 'complete'
+
       if data and data.lists # an identity was found for the selected provider
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
@@ -156,9 +160,9 @@ class @ContactListModal extends Modal
         @blocks.remoteListSelect.hide()
 
   _showErrors: (errors) ->
+    return unless errors.length > 0
     html = "<div class=\"alert\">#{errors.reduce (a, b) -> "#{a}<br>#{b}"}</div>"
     @$modal.find(".modal-block").prepend(html)
-    @$modal.find("a.submit").removeAttr("disabled")
 
   _clearErrors: ->
     @$modal.find(".alert").remove()

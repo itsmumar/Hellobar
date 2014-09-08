@@ -1,23 +1,16 @@
-h5 Recent Activity
+- if @recent_elements.any?
+  h5 Recent Activity
+  table.activity-wrapper
+    - @recent_elements.each do |element|
+      tr
+        td.color-flag style="background-color: #54d388"
+        td= recent_activity_message(element)
 
-table.activity-wrapper
-  tr
-    td.color-flag style="background-color: #54d388"
-    td
-      strong The email bar you created yesterday
-      |  has already resulted in 20 additional emails collected to your MailChimp account. We don't have enough data to know if this is a significant increase in signups.
-
-  tr
-    td.color-flag style="background-color: #54d388"
-    td
-      strong The email bar you created yesterday
-      |  has already resulted in 20 additional emails collected to your MailChimp account. We don't have enough data to know if this is a significant increase in signups.
-
-  tr
-    td.color-flag style="background-color: #54d388"
-    td
-      strong The email bar you created yesterday
-      |  has already resulted in 20 additional emails collected to your MailChimp account. We don't have enough data to know if this is a significant increase in signups.
+- else
+  .create-new-content-cta-block
+    strong You haven't created anything new in a while.
+    p If you create more content for your site, we'll automatically A/B test it and show your visitors the best-performing content.
+    = link_to "Create New", new_site_site_element_path(@site), :class => "button"
 
 h5 Lifetime Totals
 
@@ -26,3 +19,5 @@ h5 Lifetime Totals
   = render "sites/chart_block", {site: @site, totals: @totals, type: :email, chart: "emails", icon: "contacts", days: 7}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: 7}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: 7}
+
+p.view-more= link_to 'View More', site_improve_path(@site)

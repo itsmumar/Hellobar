@@ -1,4 +1,7 @@
 .quickstart-wrapper
   = form_tag sites_path do
-    input type="url" name="site[url]" placeholder="Your website URL"
+    input type="text" name="site[url]" placeholder="Your website URL"
     button type="submit" Create Your First Bar
+    .clear
+  - if flash[:error]
+    .error= flash[:error]

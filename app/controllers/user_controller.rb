@@ -1,6 +1,6 @@
 class UserController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :load_user, :only => [:edit, :update]
+  before_action :authenticate_user!
+  before_action :load_user, :only => [:edit, :update]
 
   def update
     if @user.update_attributes(user_params)

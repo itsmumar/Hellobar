@@ -112,7 +112,7 @@ private
   end
 
   def site_element_settings(site_element)
-    settings = %w{ closable show_border hide_after show_wait background_color border_color button_color font link_color link_style link_text message size target text_color texture }
+    settings = %w{ closable show_border background_color border_color button_color font link_color link_style link_text message size target text_color texture }
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       id: site_element.id,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140814182417) do
+ActiveRecord::Schema.define(version: 20140904195618) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -156,8 +156,6 @@ ActiveRecord::Schema.define(version: 20140814182417) do
     t.string   "target_segment"
     t.boolean  "closable",                      default: false
     t.boolean  "show_border",                   default: false
-    t.integer  "hide_after",                    default: 0
-    t.integer  "show_wait"
     t.string   "background_color",              default: "eb593c"
     t.string   "border_color",                  default: "ffffff"
     t.string   "button_color",                  default: "000000"

@@ -1,5 +1,5 @@
 class IdentitiesController < ApplicationController
-  before_filter :load_site
+  before_action :load_site
 
   def new
     redirect_to "/auth/#{params[:provider]}/?site_id=#{@site.id}&redirect_to=#{request.referrer}"
@@ -11,7 +11,7 @@ class IdentitiesController < ApplicationController
   end
 
   def create
-    identity = Identity.find_or_initialize_by_site_id_and_provider(@site.id, params[:provider])
+    identity = Identity.where(site_id: @site.id, provider: params[:provider]).first_or_initialize
 
     if @site && identity.persisted?
       flash[:error] = "Please disconnect your #{identity.provider_config[:name]} before adding a new one."

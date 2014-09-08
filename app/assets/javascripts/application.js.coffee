@@ -6,6 +6,7 @@
 #= require moment
 #= require amcharts/amcharts
 #= require amcharts/serial
+#= require lib/url_params
 
 # Couldn't get 'require_tree .' to ignore the dashboard directory, so I opted to indivdually list the local js assets you needed here
 
@@ -21,6 +22,7 @@
 
 #= require contact_lists
 #= require summary
+#= require improve
 #= require sites_controller
 #= require site_elements_controller
 #= require_self

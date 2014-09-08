@@ -9,13 +9,13 @@ tr.site-element-block class="#{site_element.paused? ? 'paused' : ''}"
   td
     i.icon-bar
   td
-    span.num= site_element_views(totals)
+    span.num= number_with_delimiter(site_element.total_views)
   td
-    span.num= site_element_conversions(totals)
+    span.num= number_with_delimiter(site_element.total_conversions)
   td
-    span.num= site_element_conversion_percentage(totals)
+    span.num= number_to_percentage(site_element.conversion_percentage * 100, precision: 1)
   td
-    i.icon-abtest
+    = ab_test_icon(site_element)
     .dropdown-wrapper
       i.icon-settings
       .dropdown-block

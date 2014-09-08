@@ -1,5 +1,9 @@
+require 'cleaners/embed_code'
+
 class ServiceProvider
   attr_accessor :client
+
+  include Cleaners::EmbedCode
 
   class << self
     def [](name)

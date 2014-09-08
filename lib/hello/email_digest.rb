@@ -2,6 +2,7 @@ module Hello::EmailDigest
   class << self
     include Hellobar::Application.routes.url_helpers
     include EmailDigestHelper
+    include SiteElementsHelper
 
     def installed_sites
       Site.where("script_installed_at IS NOT NULL").select{|s| s.send_email_digest?}
@@ -34,16 +35,27 @@ module Hello::EmailDigest
     end
 
     def site_metrics(site)
-      bar_data = Hello::BarData.get_over_time_data(site.id, 14.days.ago.strftime("%Y%m%d").to_i, 1.day.ago.strftime("%Y%m%d").to_i)
+      api_data = Hello::DataAPI.lifetime_totals(site, site.site_elements, 14)
+      site_element_data = []
       metrics = {}
 
-      {:social => /^social/, :email => /^email/, :traffic => /^traffic/, :total => /./}.each do |key, element_subtype_pattern|
-        element_subtype_data = bar_data.select do |bd|
-          bar = SiteElement.find_by_id(bd.bar_id)
-          bar && bar.element_subtype =~ element_subtype_pattern
-        end
+      api_data.keys.each do |site_element_id|
+        site_element = SiteElement.find(site_element_id)
 
-        metrics[key] = bar_metrics_for_site(site, element_subtype_data)
+        api_data[site_element_id].each_with_index do |datum, i|
+          site_element_data << OpenStruct.new(
+            :site_element_id => site_element.id,
+            :conversions => datum[1],
+            :views => datum[0],
+            :days_ago => api_data[site_element_id].count - i - 1,
+            :subtype => site_element.element_subtype
+          )
+        end
+      end
+
+      {:social => /^social/, :email => /^email/, :traffic => /^traffic/, :total => /./}.each do |key, element_subtype_pattern|
+        element_subtype_data = site_element_data.select{ |d| d.subtype =~ element_subtype_pattern }
+        metrics[key] = site_element_metrics_for_site(site, element_subtype_data)
       end
 
       return metrics
@@ -62,16 +74,16 @@ module Hello::EmailDigest
         element_subtypes = {:social => /^social/, :email => /^email/, :traffic => /^traffic/}
         worst_type = element_subtypes.keys.sort_by{|a| metrics[a][:conversion][:n]}.first
         worst_bars = site_elements.select{|b| b.element_subtype =~ element_subtypes[worst_type]}
-        conversion_noun = element_activity_units(worst_bars, :plural => true)
+        conversion_noun = site_element_activity_units(worst_bars, :plural => true)
 
         "Your #{worst_type} bars have the lowest conversion rate. Try creating a variation on your existing #{worst_type} bars to see if you can get more #{conversion_noun}. <a href='#{url}'>Start testing more #{worst_type} bars now</a>."
       end
     end
 
-    def bar_metrics_for_site(site, bar_data)
-      return nil if bar_data.empty?
+    def site_element_metrics_for_site(site, site_element_data)
+      return nil if site_element_data.empty?
 
-      this_week, last_week = bar_data.partition{|bd| bd.segment >= 7.days.ago.strftime("%Y%m%d").to_i}
+      this_week, last_week = site_element_data.partition{ |d| d.days_ago < 7 }
       metrics = {}
 
       # calculate this week's metrics

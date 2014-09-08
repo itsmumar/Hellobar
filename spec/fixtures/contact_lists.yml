@@ -13,4 +13,4 @@ embed_code:
   name: embed code list
   site: zombo
   identity: mad_mimi
-  data: <%= {"embed_code" => "test embed code" }.to_yaml.inspect %>
+  data: <%= {'embed_code' => '<iframe src="https://madmimi.com/signups/103242/iframe" scrolling="no" frameborder="0" height="405" width="400"></iframe>' }.to_yaml.inspect %>

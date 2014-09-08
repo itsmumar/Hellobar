@@ -1,24 +1,7 @@
 class ContactList < ActiveRecord::Base
   include GuaranteedQueue::Delay
   include DeserializeWithErrors
-
-  EPS_ERROR_CLASSES = [
-    Gibbon::MailChimpError,
-    CreateSend::RevokedOAuthToken,
-    URI::InvalidURIError,
-    ArgumentError,
-    RestClient::ResourceNotFound
-  ]
-
-  EPS_NONTRANSIENT_ERRORS = [
-    "Invalid MailChimp List ID",
-    "Invalid Mailchimp API Key",
-    "This account has been deactivated",
-    "122: Revoked OAuth Token",
-    "bad URI",
-    "bad value for range",
-    "404 Resource Not Found"
-  ]
+  include EmailSynchronizer
 
   EMPTY_PROVIDER_VALUES = [ nil, "", 0, "0" ]
 
@@ -31,13 +14,14 @@ class ContactList < ActiveRecord::Base
 
   serialize :data, Hash
 
-  before_validation :set_identity, :reject_empty_data_values
+  before_validation :set_identity, :reject_empty_data_values, :clean_embed_code
 
   validates :name, :presence => true
   validates :site, :association_exists => true
   validate :provider_valid, :if => :provider_set?
   validate :provider_credentials_exist, :if => :provider_set?
-  validate :embed_code_exists, :if => :embed_code?
+  validate :embed_code_exists?, :if => :embed_code?
+  validate :embed_code_valid?, :if => :embed_code?
 
   def self.sync_all!
     all.each do |list|
@@ -56,13 +40,13 @@ class ContactList < ActiveRecord::Base
     if oauth?
       data["remote_name"] && data["remote_id"]
     elsif embed_code?
-      data["embed_code"]
+      data["embed_code"].present?
     end
   end
 
   def service_provider
     return nil unless syncable?
-    @provider ||= identity.service_provider
+    @service_provider ||= identity.service_provider(contact_list: self)
   end
 
   def sync(options = {})
@@ -71,9 +55,9 @@ class ContactList < ActiveRecord::Base
     options.reverse_merge! immediate: false
 
     if options[:immediate]
-      subscribe_all_emails_to_list!
+      sync_all!
     else
-      delay :subscribe_all_emails_to_list!
+      delay :sync_all!
     end
   end
 
@@ -119,28 +103,6 @@ class ContactList < ActiveRecord::Base
     service_provider_class.try(:embed_code?)
   end
 
-  protected
-
-  def subscribe_all_emails_to_list!
-    return unless syncable?
-
-    timestamp = last_synced_at || Time.at(0) # sync from last sync, or for all time
-    Rails.logger.info "Syncing emails later than #{timestamp}"
-
-    Hello::EmailData.get_emails_since(id, timestamp.to_i).in_groups_of(1000).collect do |group|
-      service_provider.batch_subscribe(data["remote_id"], group.compact, double_optin) unless group.compact.empty?
-    end
-
-    update_column :last_synced_at, Time.now
-  rescue *EPS_ERROR_CLASSES => e
-    if EPS_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
-      Raven.capture_exception(e)
-      self.identity.destroy_and_notify_user
-    else
-      raise e
-    end
-  end
-
   private
 
   def provider_valid
@@ -151,13 +113,22 @@ class ContactList < ActiveRecord::Base
     errors.add(:provider, "credentials have not been set yet") unless identity && identity.provider == provider
   end
 
-  def embed_code_exists
-    errors.add(:base, "Embed code cannot be blank") unless data[:embed_code]
+  def clean_embed_code
+    return unless data['embed_code'] && identity
+    self.data['embed_code'] = service_provider.clean_embed_code(data['embed_code'])
   end
 
   def reject_empty_data_values
     return unless data
     self.data = data.delete_if { |k,v| v.blank? }
+  end
+  
+  def embed_code_exists?
+    errors.add(:base, "Embed code cannot be blank") unless data['embed_code'].present?
+  end
+
+  def embed_code_valid?
+    service_provider && service_provider.embed_code_valid?
   end
 
   def service_provider_class

@@ -92,9 +92,11 @@ class LegacyMigrator
             next
           end
 
+          identity = legacy_id_int.identity
+
           params.merge!(
             identity_id: legacy_id_int.identity_id,
-            data: legacy_id_int.data,
+            data: legacy_id_int.data.merge(embed_code: identity.embed_code),
             name: legacy_id_int.data["remote_name"],
             last_synced_at: legacy_id_int.last_synced_at,
             created_at: legacy_id_int.created_at,
@@ -118,7 +120,6 @@ class LegacyMigrator
                              provider: legacy_id.provider,
                              credentials: legacy_id.credentials,
                              extra: legacy_id.extra,
-                             embed_code: legacy_id.embed_code,
                              created_at: legacy_id.created_at,
                              updated_at: legacy_id.updated_at
 
@@ -142,7 +143,7 @@ class LegacyMigrator
         legacy_membership = legacy_memberships.first
         legacy_user = legacy_membership.user
 
-        if legacy_user && !::User.exists?(legacy_user.id_to_migrate)
+        if legacy_user && !::User.exists?(legacy_user.id_to_migrate) && !::Hello::WordpressUser.email_exists?(legacy_user.email)
           begin
             # disable password requirement for import
             User.send(:define_method, :password_required?) { false }
@@ -213,8 +214,6 @@ class LegacyMigrator
                       rule_id: legacy_bar.goal_id,
                       closable: legacy_bar.settings_json['closable'],
                       show_border: legacy_bar.settings_json['show_border'],
-                      hide_after: legacy_bar.settings_json['hide_after'],
-                      show_wait: legacy_bar.settings_json['show_wait'],
                       background_color: legacy_bar.settings_json['bar_color'],
                       border_color: legacy_bar.settings_json['border_color'],
                       button_color: legacy_bar.settings_json['button_color'],

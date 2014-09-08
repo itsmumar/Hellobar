@@ -8,88 +8,73 @@ describe SitesController do
   end
 
   describe "POST create" do
-    it "creates a new temporary user and logs them in if not currently logged in" do
-      mock_storage = double 'asset_storage'
-      mock_storage.should_receive :create_or_update_file_with_contents
-      Hello::AssetStorage.stub new: mock_storage
-
-      lambda {
-        post :create, :site => { url: 'temporary-site.com' }
-      }.should change(User, :count).by(1)
-
-      temp_user = User.last
-      temp_user.status.should == User::TEMPORARY_STATUS
-      controller.current_user.should == temp_user
-    end
-
-    it "allows a non-logged-in user to create a new site and sets them as the owner" do
-      temp_user = User.new
-      User.stub generate_temporary_user: temp_user
-
-      mock_storage = double 'asset_storage'
-      mock_storage.should_receive :create_or_update_file_with_contents
-      Hello::AssetStorage.stub new: mock_storage
-
-      lambda {
-        post :create, :site => { url: 'temporary-site.com' }
-      }.should change(Site, :count).by(1)
-
-      temp_user.sites.should include(Site.last)
-    end
-
-    it "allows a logged-in user to create a new site and sets him as the owner" do
-      stub_current_user(@user)
-
-      mock_storage = double("asset_storage")
-      mock_storage.should_receive(:create_or_update_file_with_contents)
+    before do
+      mock_storage = double('asset_storage', :create_or_update_file_with_contents => true)
       Hello::AssetStorage.stub(:new => mock_storage)
+    end
 
-      lambda {
+    context "when no user is logged-in" do
+      it "creates a new temporary user and logs them in" do
+        lambda {
+          post :create, :site => { url: 'temporary-site.com' }
+        }.should change(User, :count).by(1)
+
+        temp_user = User.last
+        temp_user.status.should == User::TEMPORARY_STATUS
+        controller.current_user.should == temp_user
+      end
+
+      it "creates a new site and sets a temporary user as the owner" do
+        temp_user = User.new
+        User.stub(generate_temporary_user: temp_user)
+
+        lambda {
+          post :create, :site => { url: 'temporary-site.com' }
+        }.should change(Site, :count).by(1)
+
+        temp_user.sites.should include(Site.last)
+      end
+
+      it 'redirects to the editor after creation' do
+        post :create, :site => { url: 'temporary-site.com' }
+
+        response.should redirect_to new_site_site_element_path(Site.last)
+      end
+
+      it "redirects to the landing page with an error if site is not valid" do
+        post :create, :site => { url: 'not a url lol' }
+
+        response.should redirect_to root_path
+        flash[:error].should =~ /not valid/
+      end
+    end
+
+    context "existing user" do
+      before { stub_current_user(@user) }
+
+      it "can create a new site and is set as the owner" do
+        lambda {
+          post :create, :site => {:url => "zombo.com"}
+        }.should change(@user.sites, :count).by(1)
+
+        site = @user.sites.last
+
+        site.url.should == "http://zombo.com"
+        @user.role_for_site(site).should == :owner
+      end
+
+      it 'creates a site with a rule set' do
         post :create, :site => {:url => "zombo.com"}
-      }.should change(@user.sites, :count).by(1)
 
-      site = @user.sites.last
+        site = @user.sites.last
+        site.rules.size.should == 1
+      end
 
-      site.url.should == "http://zombo.com"
-      @user.role_for_site(site).should == :owner
-    end
+      it "redirects to the site's path" do
+        post :create, :site => { url: 'temporary-site.com' }
 
-    it 'creates a site with a rule set' do
-      stub_current_user(@user)
-
-      mock_storage = double("asset_storage")
-      mock_storage.should_receive(:create_or_update_file_with_contents)
-      Hello::AssetStorage.stub(:new => mock_storage)
-
-      post :create, :site => {:url => "zombo.com"}
-
-      site = @user.sites.last
-
-      site.rules.size.should == 1
-    end
-
-    it 'redirects to the editor if the user came from the root path' do
-      request.stub referrer: root_url
-
-      mock_storage = double 'asset_storage'
-      mock_storage.should_receive :create_or_update_file_with_contents
-      Hello::AssetStorage.stub new: mock_storage
-
-      post :create, :site => { url: 'temporary-site.com' }
-
-      response.should redirect_to new_site_site_element_path(Site.last)
-    end
-
-    it 'redirects to the site if the user did not come from the root path' do
-      request.stub referrer: 'NOT THE ROOT URL'
-
-      mock_storage = double 'asset_storage'
-      mock_storage.should_receive :create_or_update_file_with_contents
-      Hello::AssetStorage.stub new: mock_storage
-
-      post :create, :site => { url: 'temporary-site.com' }
-
-      response.should redirect_to site_path(Site.last)
+        response.should redirect_to site_path(Site.last)
+      end
     end
   end
 

@@ -16,14 +16,14 @@ class Condition < ActiveRecord::Base
     is_not: 'is not',
     includes: 'includes',
     excludes: 'excludes'
-  }
+  }.with_indifferent_access
 
   belongs_to :rule
 
   validates :rule, association_exists: true
 
   def to_sentence
-    "#{segment} #{operand} #{value}"
+    "#{SEGMENTS[segment]} #{OPERANDS[operand]} #{value}"
   end
 
   def short_segment

@@ -94,5 +94,6 @@ end
 
 Hellobar::Settings[:host] = "http://hellobar.com"
 Hellobar::Settings[:store_site_scripts_locally] = false
+Hellobar::Settings[:fake_data_api] = false
 
 Fog.mock!

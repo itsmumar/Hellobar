@@ -1,7 +1,7 @@
 nav.tabs-wrapper
-  a href="#active" Active
-  a href="#paused" Paused
-  a.active href="#all" All
+  a.element-filter href="#active" Active
+  a.element-filter href="#paused" Paused
+  a.element-filter.active href="#all" All
 
 table.rules-wrapper
   thead
@@ -17,7 +17,7 @@ table.rules-wrapper
       th 
   tbody
     - @rules.each do |rule|
-      tr.rule-block
+      tr.rule-block id="rule-id-#{rule.id}"
         th.page-header colspan='9'
           h4= "/#{rule.name.blank? ? "(no name)" : rule.name}"
           span= rule.to_sentence
@@ -31,25 +31,17 @@ table.rules-wrapper
 
               = content_tag 'a', class: 'remove-rule' do
                 i.icon-trash
-                | Remove this and 
-                br
-                = rule.site_elements.count
-                |  bars/modals
+                = "Remove this and #{pluralize(rule.site_elements.count, "bar")}"
 
-      - if rule.site_elements.empty?
-        tr.rule-block
-          th.page-header colspan='9'
-            small (No Site Elements)
-
-      - else
-        - rule.site_elements.each do |site_element|
-          = render "site_elements/site_element", { :site_element => site_element, :totals => @totals[site_element.id.to_s] }
+      - rule.site_elements.each do |site_element|
+        = render "site_elements/site_element", { :site_element => site_element }
 
       tr
-        td.temporary-block colspan='9'
-          | Every week, 2,300 people use your Hello Bar. 
-          a Create something new
-          | to better utilize these users!
+        td.temporary-block.suggestion-block colspan='9'
+          - if rule.site_elements.empty?
+            = link_to "Create a bar for this rule", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
+          - else
+            = link_to "A/B test a new bar for this rule to maximize your conversions", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
 
 - @rules.each do |rule|
   = render 'shared/modals/rules', site: @site, rule: rule

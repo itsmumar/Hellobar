@@ -1,4 +1,4 @@
-class ServiceProviders::AWeber < ServiceProvider  
+class ServiceProviders::AWeber < ServiceProviders::Email
   def initialize(opts = {})
     if opts[:identity]
       identity = opts[:identity]

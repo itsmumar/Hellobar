@@ -25,7 +25,11 @@
 - else
   
   .temporary-block
-    h5 Grow you email lists
+    h5 Grow your email lists
     strong Did you know that Hello Bar can collect email addresses for you?
-    p We can even sync them to MailChimp automatically!
-    .button#new-contact-list Start Collecting Emails
+    - if site_element_subtypes_for_site(current_site).include?("email")
+      p We can even sync them to providers like MailChimp automatically!
+      .button#new-contact-list Start Collecting Emails
+    - else
+      p You'll need to create an email bar before you can start collecting emails.
+      = link_to "New email bar", new_site_site_element_path(current_site, anchor: "/settings/emails"), class: "button"

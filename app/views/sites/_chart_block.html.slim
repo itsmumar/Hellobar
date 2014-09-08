@@ -1,4 +1,4 @@
-- if totals[type].empty? || totals[type][0] == [0,0]
+- if totals[type].empty? || totals[type].last == [0,0]
   div class="chart-block #{chart}"
     i class="icon-#{icon}"
     .chart-overview
@@ -16,7 +16,7 @@
   div class="chart-block #{chart}" data-chart='#{chart}' data-site-id="#{site.id}" data-num-days="#{days}"
     i class="icon-#{icon}"
     .chart-overview
-      = totals[type][0][type == :total ? 0 : 1]
+      = number_to_human(totals[type].last[type == :total ? 0 : 1], :units => {:thousand => "K", :million => "M", :billion => "B"})
       - case type
       - when :total
         small views

@@ -1,7 +1,7 @@
 class ContactListsController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :load_site
-  before_filter :load_contact_list, :only => [:show, :update]
+  before_action :authenticate_user!
+  before_action :load_site
+  before_action :load_contact_list, :only => [:show, :update]
 
   def index
     @contact_lists = @site.contact_lists
@@ -23,7 +23,7 @@ class ContactListsController < ApplicationController
 
   def update
     status = @contact_list.update_attributes(contact_list_params)
-    render :json => @contact_list, :status => status ? :success : :bad_request
+    render :json => @contact_list, :status => status ? :ok : :bad_request
   end
 
   private

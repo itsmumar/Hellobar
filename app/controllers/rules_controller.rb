@@ -1,6 +1,6 @@
 class RulesController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :load_site
+  before_action :authenticate_user!
+  before_action :load_site
 
   def show
     rule = @site.rules.find(params[:id])
