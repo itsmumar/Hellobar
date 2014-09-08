@@ -9,9 +9,9 @@ class LegacyMigrator
       ActiveRecord::Base.record_timestamps = false
 
       migrate_sites_and_users_and_memberships
-      migrate_goals_to_rules
       migrate_identities
       migrate_contact_lists
+      migrate_goals_to_rules
 
       ActiveRecord::Base.record_timestamps = true
     end
@@ -226,7 +226,8 @@ class LegacyMigrator
                       target: legacy_bar.settings_json['target'],
                       text_color: legacy_bar.settings_json['text_color'],
                       texture: legacy_bar.settings_json['texture'],
-                      settings: settings_to_migrate
+                      settings: settings_to_migrate,
+                      contact_list: ContactList.where(id: legacy_goal.id).first
       end
     end
 
