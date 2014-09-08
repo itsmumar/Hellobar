@@ -63,9 +63,9 @@ module EmailSynchronizer
   rescue *ESP_ERROR_CLASSES => e
     if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
       Raven.capture_exception(e)
-      if oauth? && identity.present?
+      if oauth?
         # Clear identity on failure
-        identity.destroy_and_notify_user
+        identity.try(:destroy_and_notify_user)
       end
     else
       raise e

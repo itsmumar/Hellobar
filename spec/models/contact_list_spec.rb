@@ -129,6 +129,7 @@ describe ContactList do
     before do
       Hello::DataAPI.stub(:get_contacts).and_return([:foo, :bar])
       contact_list.stub(:syncable? => true)
+      contact_list.stub(:oauth? => true)
     end
 
     after { contact_list.sync! }
