@@ -10,7 +10,11 @@ module Hellobar
   class Application < Rails::Application
     config.autoload_paths += %W(#{config.root}/app/models/condition/)
     config.autoload_paths += %W(#{config.root}/app/models/validators)
-    config.autoload_paths += %W(#{config.root}/lib)
+    # We'd prefer to use initializers to load the files from the /lib
+    # directory that we need. This way we have more control over load
+    # order and have a convenient place to put other initialization 
+    # code (config, etc.)
+    # config.autoload_paths += %W(#{config.root}/lib)
 
     config.sass.preferred_syntax = :sass
     config.action_mailer.default_url_options = { host: "www.hellobar.com" }
