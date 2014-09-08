@@ -1252,7 +1252,7 @@ var _HB = {
   // user's timezone since this can not be changed, but it will be offset
   // by the correct hours and minutes of the zone passed in. 
   // If no valid format is found we use the current user's timezone
-  // You can also pass in the value "user" which will use the user's
+  // You can also pass in the value "visitor" which will use the visitor's
   // timezone
   nowInTimezone: function(zone)
   {
