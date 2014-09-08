@@ -122,6 +122,7 @@ private
       contact_list_id: site_element.contact_list_id,
       target: site_element.target_segment,
       template_name: site_element.element_subtype,
+      type: site_element.short_subtype,
       settings: site_element.settings,
       hide_destination: true,
       open_in_new_window: false,
