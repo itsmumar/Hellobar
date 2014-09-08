@@ -15,18 +15,22 @@ HelloBar.TargetingController = Ember.Controller.extend
     filtered[0]
   ).property("model.rule_id", "model.site.rules")
 
-  whenOptions: [
-    {route: null,                text: 'Show immediately'}
-    {route: 'targeting.leaving', text: 'When a visitor is leaving'}
-    {route: 'targeting.scroll',  text: 'After visitor scrolls'}
-    {route: 'targeting.delay',   text: 'After a time delay'}
+  displayWhenOptions: [
+    {value: 'immediately',   label: 'Show immediately'}
+    {value: 'after_leaving', label: 'When a visitor is leaving'}
+    {value: 'after_scroll',  label: 'After visitor scrolls'}
+    {value: 'after_delay',   label: 'After a time delay'}
   ]
 
-  unitsOptions: [
-    {id: 1, text: 'hours'}
-    {id: 2, text: 'minuts'}
-    {id: 3, text: 'seconds'}
-  ]
+  setDefaultScrollType: ( ->
+    if @get("model.display_when") == "after_scroll" && !@get("model.settings.display_when_scroll_type")
+      @set("model.settings.display_when_scroll_type", "percentage")
+  ).observes("model.display_when")
+
+  setDefaultDelayUnits: ( ->
+    if @get("model.display_when") == "after_delay" && !@get("model.settings.display_when_delay_units")
+      @set("model.settings.display_when_delay_units", "seconds")
+  ).observes("model.display_when")
 
   #-----------  Step Settings  -----------#
 
@@ -42,10 +46,12 @@ HelloBar.TargetingController = Ember.Controller.extend
   routeForwarding: false
 
   changeTargeting: (->
-    if @get('content.whenSelection.route')
-      @set('routeForwarding', @get('content.whenSelection.route'))
-      @transitionToRoute(@get('content.whenSelection.route'))
-    else 
-      @set('routeForwarding', false)
-      @transitionToRoute('targeting')
-  ).observes('content.whenSelection').on('init')
+    route = switch @get("model.display_when")
+      when "after_leaving" then "targeting.leaving"
+      when "after_scroll"  then "targeting.scroll"
+      when "after_delay"   then "targeting.delay"
+      else "targeting"
+
+    @set('routeForwarding', false) if route == "targeting"
+    @transitionToRoute(route)
+  ).observes('model.display_when').on('init')

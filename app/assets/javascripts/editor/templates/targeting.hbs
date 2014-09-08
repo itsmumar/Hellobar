@@ -14,10 +14,10 @@
 <label>When should they see this?</label>
 <div class="select-wrapper">
   {{view Ember.Select
-    content=whenOptions
-    selection=model.whenSelection
-    optionValuePath='content.route'
-    optionLabelPath='content.text'
+    content=displayWhenOptions
+    value=model.display_when
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
   }}
 </div>
 
