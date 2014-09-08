@@ -299,27 +299,12 @@ var _HB = {
         return "ec";
       case "social":
         return "sc";
-      case "link":
+      case "traffic":
         // Need to make sure this is unique per URL
         // getShortestKey returns either the raw URL or
         // a SHA1 hash of the URL - whichever is shorter
         return "l-"+HB.getShortestKeyForURL(siteElement.url);
     }
-  },
-
-  // Returns the base type for a site element. Will be either:
-  // email, social, or link
-  baseType: function(siteElement)
-  {
-    switch(siteElement.type)
-    {
-      case "facebook":
-      case "twitter":
-        return "social";
-    }
-
-    // Just return the type
-    return siteElement.type;
   },
 
   // Returns the shortest possible key for the given URL,
@@ -923,11 +908,11 @@ var _HB = {
           siteElement = rule.site_elements[j];
           if ( !HB.didConvert(siteElement) )
           {
-            var type = HB.baseType(siteElement);
-            if ( !possibleSiteElements[type] )
-              possibleSiteElements[type] = [];
-            possibleSiteElements[type].push(siteElement);
+            if ( !possibleSiteElements[siteElement.type] )
+              possibleSiteElements[siteElement.type] = [];
+            possibleSiteElements[siteElement.type].push(siteElement);
           }
+        }
       }
     }
     // Now we narrow down based on the "value" of the site elements
@@ -937,8 +922,8 @@ var _HB = {
       possibleSiteElements = possibleSiteElements.email;
     else if ( possibleSiteElements.social )
       possibleSiteElements = possibleSiteElements.social;
-    else if ( possibleSiteElements.link )
-      possibleSiteElements = possibleSiteElements.link;
+    else if ( possibleSiteElements.traffic )
+      possibleSiteElements = possibleSiteElements.traffic;
     else
       return; // Should not reach here - if we do there is nothing to show
     
@@ -1045,8 +1030,10 @@ var _HB = {
       segmentName = "co";
     else if ( segmentName == "referrer" || segmentName == "referer" )
       segmentName = "rf";
-    else if ( segmentName == "date" )
-      return (new Date()); // special case
+    else if ( segmentName == "date" || segmentName == "dt" )
+      // instead of returning visitor data we just return
+      // the date of now in the timezone of the user
+      return (HB.ymd(HB.nowInTimezone())); 
 
     // All other segment names
     return HB.getVisitorData(segmentName);
@@ -1058,25 +1045,27 @@ var _HB = {
     switch(operand)
     {
       case "is":
-        return HB.guessType(a, [b]) == HB.guessType(b, a);
+      case "equals":
+        return a == b;
       case "is_not":
-        return HB.guessType(a, [b]) != HB.guessType(b, a);
+      case "does_not_equal":
+        return a != b;
       case "includes":
         return HB.stringify(a).indexOf(HB.stringify(b)) != -1;
       case "does_not_include":
         return HB.stringify(a).indexOf(HB.stringify(b)) == -1;
       case "before":
       case "less_than":
-        return HB.numerify(a) < HB.numerify(b);
+        return a < b;
       case "less_than_or_equal":
-        return HB.numerify(a) <= HB.numerify(b);
+        return a <= b;
       case "after":
       case "greater_than":
-        return HB.numerify(a) > HB.numerify(b);
+        return a > b;
       case "greater_than_or_equal":
-        return HB.numerify(a) >= HB.numerify(b);
+        return a >= b;
       case "between":
-        return HB.numerify(a) >= HB.numerify(b[0]) && HB.numerify(a) <= HB.numerify(b[1]);
+        return a >= b[0] && a <= b[1];
     }
   },
 
@@ -1087,21 +1076,6 @@ var _HB = {
     return (o+"").toLowerCase();
   },
 
-  // Turns the input into a number. If this is a date reference it
-  // will be converted into a timestamp
-  // Used for applying operands
-  numerify: function(o)
-  {
-    return Number(o);
-  },
-
-  // This guesses the type. If it is numeric or a date reference it will
-  // use "numerify", otherwise it will use "stringify".
-  // Used for applying operands
-  guessType: function(o)
-  {
-    return HB.stringify(o);
-  },
   // This just sets the default segments/tracking data for the visitor
   // (such as when the suer visited, referrer, etc)
   setDefaultSegments: function()
@@ -1247,58 +1221,55 @@ var _HB = {
     })(HB.$(element));
   },
 
-  // Returns UTC time (you must ignore the timezone attached, as it will be local)
-  utc: function() {
+
+  // Parses the zone and returns the offset in seconds. If it can
+  // not be parsed returns null.
+  // Valid formats for zone are:
+  // "HHMM", "+HHMM", "-HHMM", "HH:MM", "+HH:MM and "-HH:MM".
+  parseTimezone: function(zone)
+  {
+    if ( !zone || typeof(zone) != "string" )
+      return null;
+    // Add + if missing +/-
+    if ( zone[0] != '+' && zone[0] != '-' )
+      zone = "+"+zone;
+    if ( zone.indexOf(":") == -1 )
+      zone = zone.slice(0, zone.length-2) + ":" + zone.slice(zone.length-2);
+    if ( !zone.match(/^[\+-]\d{1,2}:\d\d$/) )
+      return null;
+    // Parse it
+    var parts = zone.split(":");
+    var signMultiplier = zone[0] == "+" ? 1 : -1;
+    var hour = Math.abs(parseInt(parts[0], 10));
+    var minute = parseInt(parts[1], 10);
+
+    return ((hour*60*60)+(minute*60))*signMultiplier;
+  },
+
+  // Returns a Date object adjusted to the timezone specified (if none is 
+  // specified we try to use HB_TZ - if that is not present we use the user
+  // timezone. The timezone of the actual Date object wills till be the
+  // user's timezone since this can not be changed, but it will be offset
+  // by the correct hours and minutes of the zone passed in. 
+  // If no valid format is found we use the current user's timezone
+  // You can also pass in the value "user" which will use the user's
+  // timezone
+  nowInTimezone: function(zone)
+  {
+    // If no zone is specified try the HB_TZ variable
+    if ( !zone && typeof(HB_TZ) == "string" )
+      zone = HB_TZ;
+    var zoneOffset = HB.parseTimezone(zone);
+    if ( zoneOffset === null )
+      return new Date();
     var now = new Date();
-    return new Date(now.getUTCFullYear(),
-                    now.getUTCMonth(),
-                    now.getUTCDate(),
-                    now.getUTCHours(),
-                    now.getUTCMinutes(),
-                    now.getUTCSeconds());
-  },
-
-  // Returns time at International Date Line cross (i.e. the first second it is a new day, or UTC+12 hours).
-  idl: function() {
-    return new Date(this.utc().getTime() + ((86400/2) * 1000));
-  },
-
-  // Returns current date as YYYY/MM/DD +ZZ:ZZ, which is lexicographically sortable.
-  // ZZ:ZZ refers to the offset from the International Date line, but inverted.
-  // The latest time zones (Hawaii, for example) have the smallest offset,
-  // so they are always less than the later timezones.
-  //
-  // Generally, UTC is +-0. Here, UTC is +12.00. To find a TZ's offset under these rules, add 12.
-  // Chicago would be +06:00 (outside of DST, when it is +07:00).
-  // SF is +04:00 (+05:00 in DST).
-  // Half hour time zones would be +05:30.
-  //
-  // Passing no argument leads to "Detect visitor timezone" mode, as does "auto".
-  // Pass an integer offset in hours otherwise, from 0 to 23.
-  comparableDate: function(targetOffset) {
-    if (typeof targetOffset === "undefined") targetOffset = "auto";
-    if (targetOffset === "auto") {
-      return this.ymd(new Date());
-    } else {
-      var idl = this.idl(),
-          time = new Date();
-
-      targetOffset *= 60; // We're working with minutes in this function
-
-      var baseOffset = time.getTimezoneOffset();
-
-      var offsetMS = (targetOffset - baseOffset) * 60000;
-
-      convertedTime = new Date(this.utc().getTime() + offsetMS);
-      
-      return this.ymd(idl) + " +" + this.zeropad(convertedTime.getHours()) + ":" + this.zeropad(convertedTime.getMinutes());
-    }
+    return new Date(now.getTime()+(now.getTimezoneOffset()*60*1000)+(zoneOffset*1000))
   },
 
   ymd: function(date) {
     if (typeof date === "undefined") date = new Date();
     var m = date.getMonth() + 1;
-    return date.getFullYear() + "/" + this.zeropad(m) + "/" + this.zeropad(date.getDate());
+    return date.getFullYear() + "-" + this.zeropad(m) + "-" + this.zeropad(date.getDate());
   },
 
   // Copied from zeropad.jquery.js
