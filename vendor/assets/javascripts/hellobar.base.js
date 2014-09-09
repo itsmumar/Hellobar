@@ -968,9 +968,9 @@ var _HB = {
       // Exploit mode
       // Return the site element with the highest conversion rate
       possibleSiteElements.sort(function(a, b){
-        if (a.conversionRate < b.conversionRate)
+        if (a.conversion_rate < b.conversion_rate)
           return 1;
-        else if (a.conversionRate > b.conversionRate)
+        else if (a.conversion_rate > b.conversion_rate)
           return -1;
         return 0;
       });
