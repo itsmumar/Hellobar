@@ -1,8 +1,8 @@
 class Site < ActiveRecord::Base
   include GuaranteedQueue::Delay
 
-  has_many :rules
-  has_many :site_elements, through: :rules
+  has_many :rules, dependent: :destroy
+  has_many :site_elements, through: :rules, dependent: :destroy
   has_many :site_memberships, dependent: :destroy
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy

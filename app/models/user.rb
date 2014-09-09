@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
-  has_many :site_memberships
-  has_many :sites, :through => :site_memberships
+  has_many :site_memberships, dependent: :destroy
+  has_many :sites, through: :site_memberships
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
   delegate :url_helpers, to: "Rails.application.routes"
