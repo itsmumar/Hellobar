@@ -19,6 +19,9 @@
   .button
     @extend %green-button
 
+    &[disabled]
+      @extend %darkgray-button
+
   /*-----------  Color Select  -----------*/
 
   .color-select
@@ -233,3 +236,78 @@
         .toggle-floater
           box-shadow: $shadow
 
+  /*-----------  Social Select -----------*/
+
+  .social-select
+    margin-top: 0.5em
+
+    li
+      cursor: pointer
+      margin: 0 -0.5em
+      font-size: 0.95em
+      border-radius: 10em
+      padding: 0.25em 0.5em
+      @include antialiased()
+      @include transition()
+
+      i
+        top: 1px
+        font-size: 1.5em
+        line-height: 100%
+        position: relative
+        margin-right: 0.5rem
+        vertical-align: middle
+
+      &.twitter
+
+        i
+          color: $twitter
+
+        &:hover
+          color: $twitter
+          background-color: rgba($twitter, 0.08)
+
+      &.facebook
+ 
+        i
+          color: $facebook
+
+        &:hover
+          color: $facebook
+          background-color: rgba($facebook, 0.08)
+
+      &.linkedin
+ 
+        i
+          color: $linkedin
+
+        &:hover
+          color: $linkedin
+          background-color: rgba($linkedin, 0.08)
+
+      &.google
+ 
+        i
+          color: $google
+
+        &:hover
+          color: $google
+          background-color: rgba($google, 0.08)
+
+      &.pinterest
+ 
+        i
+          color: $pinterest
+
+        &:hover
+          color: $pinterest
+          background-color: rgba($pinterest, 0.08)
+
+      &.buffer
+ 
+        i
+          color: $buffer
+
+        &:hover
+          color: $buffer
+          background-color: rgba($buffer, 0.08)
