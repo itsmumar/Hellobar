@@ -1285,5 +1285,53 @@ var _HB = {
     if (typeof length === "undefined" && string.length == 1) length = 2;
     length = length || string.length;
     return string.length >= length ? string : this.zeropad("0" + string, length);
-  }
+  },
+
+  // Takes an input ID and returns an obfuscated ID
+  // This is the required format for IDs for hi.hellobar.com
+  obfID: function(number)
+  {
+    var SEP = "-";
+    var ZERO_ENCODE = "_";
+    var ENCODE = "S6pjZ9FbD8RmIvT3rfzVWAloJKMqg7CcGe1OHULNuEkiQByns5d4Y0PhXw2xta";
+    var id = number+"";
+    var outputs = [];
+    var initialInputs = [id.slice(0,3), id.slice(3,6), id.slice(6,9)];
+    var inputs = [];
+    var i;
+    for(i=0;i<initialInputs.length;i++)
+    {
+      if (initialInputs[i])
+        inputs.push(initialInputs[i]);
+    }
+    for(i=0;i<inputs.length;i++)
+    {
+      var output = "";
+      var chars = inputs[i].split("");
+      for(var c=0;c<chars.length;c++)
+      {
+        if ( chars[c] != "0")
+          break;
+        output += ZERO_ENCODE;
+      }
+      var inputInt = parseInt(inputs[i], 10);
+      if ( inputInt != 0 )
+      {
+        while(1)
+        {
+          var val;
+          if ( inputInt > ENCODE.length )
+            val = Math.floor((Math.random() * ENCODE.length) + 1);
+          else
+            val = Math.floor((Math.random() * inputInt) + 1);
+          output += ENCODE[val-1];
+          inputInt -= val;
+          if ( inputInt <= 0 )
+            break;
+        }
+      }
+      outputs.push(output);
+    }
+    return outputs.join(SEP);
+  } 
 };
