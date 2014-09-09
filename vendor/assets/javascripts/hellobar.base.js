@@ -1103,6 +1103,14 @@ var _HB = {
     // Track number of visitor visits
     HB.setVisitorData("nv", (HB.getVisitorData("nv") || 0)+1);
 
+    // Check for UTM params
+    var params = HB.paramsFromURL(document.location);
+
+    HB.setVisitorData('ad_so', params['utm_source'], true);
+    HB.setVisitorData('ad_ca', params['utm_campaign'], true);
+    HB.setVisitorData('ad_me', params['utm_medium'], true);
+    HB.setVisitorData('ad_co', params['utm_content'], true);
+    HB.setVisitorData('ad_te', params['utm_term'], true);
     // Set referrer if it is from a different domain (don't count internal referrers)
     if ( document.referrer )
     {
@@ -1122,32 +1130,9 @@ var _HB = {
         HB.setVisitorData("rd", referrerDomain);
 
         // Check for search terms
-        var referrerQueryParts = referrer.split("?")[1];
-        if ( referrerQueryParts )
-        {
-          // Build a hash of decoded params;
-          var params = {};
-          var pairs = referrerQueryParts.split("&");
-          for(var i=0;i<pairs.length;i++)
-          {
-            var key, value;
-            var components = pairs[i].split("=");
-            key = decodeURIComponent(components[0]).toLowerCase();
-            value = decodeURIComponent(components[1]);
-            params[key] = value;
-          }
-
-          // Check for search terms
-          var search = params['query'] || params['q'] || params['search'];
-          if ( search )
-            HB.setVisitorData("st", search);
-          // Check for UTM variables and set them if present
-          HB.setVisitorData('ad_so', params['utm_source'], true);
-          HB.setVisitorData('ad_ca', params['utm_campaign'], true);
-          HB.setVisitorData('ad_me', params['utm_medium'], true);
-          HB.setVisitorData('ad_co', params['utm_siteElement'], true);
-          HB.setVisitorData('ad_te', params['utm_term'], true);
-        }
+        var referrerParams = HB.paramsFromURL(document.referer);
+        // Check for search terms
+        HB.setVisitorData("st", referrerParams['query'] || referrerParams['q'] || referrerParams['search'], true);
       }
     }
     // Set the page URL
@@ -1165,6 +1150,27 @@ var _HB = {
       HB.setVisitorData("dv", "tablet");
     else
       HB.setVisitorData("dv", "computer");
+  },
+  
+  paramsFromURL: function(url)
+  {
+    var params = {};
+    if ( !url )
+      return params;
+    url += ""; // cast to string
+    var query = url.split("?")[1];
+    if ( !query )
+      return params;
+    var pairs = query.split("&");
+    for(var i=0;i<pairs.length;i++)
+    {
+      var key, value;
+      var components = pairs[i].split("=");
+      key = decodeURIComponent(components[0]).toLowerCase();
+      value = decodeURIComponent(components[1]);
+      params[key] = value;
+    }
+    return params;
   },
 
   // This code returns the root domain of the current site so "www.yahoo.co.jp" will return "yahoo.co.jp" and "blog.kissmetrics.com
