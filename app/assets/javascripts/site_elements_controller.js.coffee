@@ -21,6 +21,7 @@ $ ->
     # set the current active anchor
     $anchor.addClass('active')
 
+  # open the rule modal
   $('body').on 'click', '.edit-rule', (event) ->
     event.preventDefault()
 
@@ -30,7 +31,7 @@ $ ->
 
     options =
       successCallback: ->
-        $ruleContent = $(".rule-block#rule-id-#{@id}")
+        $ruleContent = $(".rule-block[data-rule-id=#{@id}]")
         $ruleContent.find("h4").text("/#{@name}")
         $ruleContent.find("span").text(@description)
 
@@ -60,6 +61,29 @@ $ ->
         # toggle the class and text back to original and render any error
         console.log "Unexepcted error: #{error}"
 
+  # send a request to delete the rule itself, let Rails
+  # delete the children objects but remove entire
+  # DOM object
+  $('body').on 'click', '.remove-rule', (event) ->
+    event.preventDefault()
+
+    $rule = $(this).parents('tr')
+    ruleId = $rule.data('rule-id')
+    $siteElements = $rule.siblings(".site-element-block[data-rule-id=#{ruleId}]")
+
+    # assume a successful delete
+    $rule.hide()
+    $siteElements.hide()
+
+    $.ajax
+      contentType: "text/javascript"
+      type: 'DELETE'
+      url: "/sites/#{window.siteID}/rules/#{ruleId}"
+      error: (xhr, status, error) ->
+        $rule.hide()
+        $siteElements.show()
+        console.log "Error removing rule #{ruleId}: #{error}"
+
   # delete site element
   $('body').on 'click', '.delete-element', (event) ->
     event.preventDefault()
@@ -72,9 +96,11 @@ $ ->
     # REFACTOR
     # traversing the DOM like this is asinine. There should be an object that we
     # can just update & query against to tell us how many rules there are.
-    $elementCount = $element.parents('table').find('a.remove-rule span')
+    ruleId = $(this).data('rule-id')
+    $rule = $row.siblings(".rule-block[data-rule-id=#{ruleId}]")
+    $elementCount = $rule.find('a.remove-rule span')
     newValue = parseInt($elementCount.text()) - 1
-    $elementCount.text(newValue)
+    $elementCount.text(newValue) # FIXME: does not handle "bar/s" pluralization when 0 or 1 element
 
     $.ajax
       contentType: "text/javascript"

@@ -26,3 +26,4 @@ html
 
 javascript:
   var currentUser = #{{UserSerializer.new(current_user).to_json}};
+  var siteID = #{@site.try(:id)};

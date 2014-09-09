@@ -17,7 +17,7 @@ table.rules-wrapper
       th 
   tbody
     - @rules.each do |rule|
-      tr.rule-block id="rule-id-#{rule.id}"
+      tr.rule-block data-rule-id=rule.id
         th.page-header colspan='9'
           h4= "/#{rule.name.blank? ? "(no name)" : rule.name}"
           span= rule.to_sentence
@@ -31,10 +31,12 @@ table.rules-wrapper
 
               = content_tag 'a', class: 'remove-rule' do
                 i.icon-trash
-                = "Remove this and #{pluralize(rule.site_elements.count, "bar")}"
+                = "Remove this and"
+                span= rule.site_elements.size
+                = "bar".pluralize(rule.site_elements.size)
 
       - rule.site_elements.each do |site_element|
-        = render "site_elements/site_element", { :site_element => site_element }
+        = render "site_elements/site_element", { :site_element => site_element, :rule => rule }
 
       tr
         td.temporary-block.suggestion-block colspan='9'
