@@ -263,7 +263,8 @@
         i
           color: $twitter
 
-        &:hover
+        &:hover,
+        &.selected
           color: $twitter
           background-color: rgba($twitter, 0.08)
 
@@ -272,7 +273,8 @@
         i
           color: $facebook
 
-        &:hover
+        &:hover,
+        &.selected
           color: $facebook
           background-color: rgba($facebook, 0.08)
 
@@ -281,7 +283,8 @@
         i
           color: $linkedin
 
-        &:hover
+        &:hover,
+        &.selected
           color: $linkedin
           background-color: rgba($linkedin, 0.08)
 
@@ -290,7 +293,8 @@
         i
           color: $google
 
-        &:hover
+        &:hover,
+        &.selected
           color: $google
           background-color: rgba($google, 0.08)
 
@@ -299,7 +303,8 @@
         i
           color: $pinterest
 
-        &:hover
+        &:hover,
+        &.selected
           color: $pinterest
           background-color: rgba($pinterest, 0.08)
 
@@ -308,6 +313,28 @@
         i
           color: $buffer
 
-        &:hover
+        &:hover,
+        &.selected
           color: $buffer
           background-color: rgba($buffer, 0.08)
+
+      i.icon-close
+        color: $white
+        width: 1.33em
+        height: 1.33em
+        font-size: 0.67em
+        margin-left: 0.5em
+        text-align: center
+        border-radius: 10em
+        background-color: $grayLight
+        @include inline-block()
+        @include transition()
+
+        &:before
+          top: 2px
+          font-size: 0.75em
+          font-weight: bold
+          position: relative
+
+        &:hover
+          background-color: $gray
