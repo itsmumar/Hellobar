@@ -114,11 +114,21 @@ private
   def site_element_settings(site_element)
     settings = %w{ closable show_border background_color border_color button_color font link_color link_style link_text message size target text_color texture }
 
+    lifetime_totals = @site.lifetime_totals
+    conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
+    views = conversions = conversion_rate = 0
+    if conversion_data and conversion_data[0]
+      views = conversion_data[0][0]
+      conversions = conversion_data[0][1]
+      if views > 0
+        conversion_rate = ((conversions.to_f/views)*1000).floor.to_f/1000
+      end
+    end
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       id: site_element.id,
-      # views: ???,
-      # conversions: ???,
-      # conversionRate: ???,
+      views: views,
+      conversions: conversions,
+      conversion_rate: conversion_rate,
       contact_list_id: site_element.contact_list_id,
       target: site_element.target_segment,
       template_name: site_element.element_subtype,
