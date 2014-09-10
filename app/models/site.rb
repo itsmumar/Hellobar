@@ -96,6 +96,8 @@ class Site < ActiveRecord::Base
     url = Addressable::URI.heuristic_parse(self.url)
 
     self.url = "#{url.scheme}://#{url.normalized_host}"
+  rescue Addressable::URI::InvalidURIError
+    false
   end
 
   def generate_read_write_keys
