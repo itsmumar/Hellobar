@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
     new_user
   end
 
+  def active?
+    status == ACTIVE_STATUS
+  end
+
   def send_devise_notification(notification, *args)
     host = ActionMailer::Base.default_url_options[:host]
 

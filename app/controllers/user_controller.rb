@@ -5,11 +5,24 @@ class UserController < ApplicationController
   def update
     if @user.update_attributes(user_params)
       sign_in @user, :bypass => true
-      flash[:success] = "Your settings have been updated."
-      redirect_to current_site ? site_path(current_site) : new_site_path
+
+      respond_to do |format|
+        format.html do
+          flash[:success] = "Your settings have been updated."
+          redirect_to current_site ? site_path(current_site) : new_site_path
+        end
+
+        format.json { render json: @user, status: :ok }
+      end
     else
-      flash.now[:error] = "There was a problem updating your settings."
-      render :action => :edit
+      respond_to do |format|
+        format.html do
+          flash.now[:error] = "There was a problem updating your settings."
+          render :action => :edit
+        end
+
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -19,11 +32,16 @@ class UserController < ApplicationController
     @user = current_user
   end
 
-  def user_params
-    if params[:user] && params[:user][:password].blank?
+  # delete password params if blank and the user is active
+  def filter_password_params_if_optional
+    if @user.active? && params[:user] && params[:user][:password].blank?
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
     end
+  end
+
+  def user_params
+    filter_password_params_if_optional
 
     params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation, :status)
   end
