@@ -35,30 +35,35 @@ module Hello::EmailDigest
     end
 
     def site_metrics(site)
-      api_data = Hello::DataAPI.lifetime_totals(site, site.site_elements, 14)
-      site_element_data = []
-      metrics = {}
+      api_data = Hello::DataAPI.lifetime_totals_by_type(site, site.site_elements, 16)
 
-      api_data.keys.each do |site_element_id|
-        site_element = SiteElement.find(site_element_id)
+      {}.tap do |metrics|
+        api_data.each { |k, v| metrics[k] = metrics_for_data_subset(v) }
+      end
+    end
 
-        api_data[site_element_id].each_with_index do |datum, i|
-          site_element_data << OpenStruct.new(
-            :site_element_id => site_element.id,
-            :conversions => datum[1],
-            :views => datum[0],
-            :days_ago => api_data[site_element_id].count - i - 1,
-            :subtype => site_element.element_subtype
-          )
+    def metrics_for_data_subset(data)
+      # we have to start with yesterday's data, since today will never be a full day's worth
+      return nil if data.count < 2
+
+      initial = data[-16] || [0, 0] # the total views and conversions immediately before the period we're sampling
+      last_week = data[-9] || [0, 0]
+      last_week = [last_week[0] - initial[0], last_week[1] - initial[1]]
+      this_week = [data[-2][0] - last_week[0], data[-2][1] - last_week[1]]
+
+      {}.tap do |metrics|
+        metrics[:views] = {:n => this_week[0]}
+        metrics[:actions] = {:n => this_week[1]}
+        metrics[:conversion] = {:n => this_week[0] == 0 ? 0 : (this_week[1].to_f / this_week[0]).round(4)}
+
+        if data.count >= 15 # only calculate lift if we have two full weeks of data
+          old_conversion = last_week[0] == 0 ? 0 : last_week[1].to_f / last_week[0]
+
+          metrics[:views][:lift] = last_week[0] == 0 ? nil : (metrics[:views][:n] - last_week[0]) / last_week[0].to_f
+          metrics[:actions][:lift] = last_week[1] == 0 ? nil : (metrics[:actions][:n] - last_week[1]) / last_week[1].to_f
+          metrics[:conversion][:lift] = old_conversion == 0 ? nil : ((metrics[:conversion][:n] - old_conversion) / old_conversion.to_f).round(4)
         end
       end
-
-      {:social => /^social/, :email => /^email/, :traffic => /^traffic/, :total => /./}.each do |key, element_subtype_pattern|
-        element_subtype_data = site_element_data.select{ |d| d.subtype =~ element_subtype_pattern }
-        metrics[key] = site_element_metrics_for_site(site, element_subtype_data)
-      end
-
-      return metrics
     end
 
     def create_bar_cta(site, metrics, url)
@@ -78,42 +83,6 @@ module Hello::EmailDigest
 
         "Your #{worst_type} bars have the lowest conversion rate. Try creating a variation on your existing #{worst_type} bars to see if you can get more #{conversion_noun}. <a href='#{url}'>Start testing more #{worst_type} bars now</a>."
       end
-    end
-
-    def site_element_metrics_for_site(site, site_element_data)
-      return nil if site_element_data.empty?
-
-      this_week, last_week = site_element_data.partition{ |d| d.days_ago < 7 }
-      metrics = {}
-
-      # calculate this week's metrics
-      metrics[:views] = {:n => this_week.sum(&:views)}
-      metrics[:actions] = {:n => this_week.sum(&:conversions)}
-      metrics[:conversion] = {:n => this_week.sum(&:views) == 0 ? 0 : (this_week.sum(&:conversions).to_f / this_week.sum(&:views)).round(4)}
-
-      # calculate lift over last week if we have sufficient data
-      if last_week.any? && site.script_installed_at && site.script_installed_at <= 14.days.ago.beginning_of_day
-        if last_week.sum(&:views) == 0
-          metrics[:views][:lift] = nil
-        else
-          metrics[:views][:lift] = (metrics[:views][:n] - last_week.sum(&:views)) / last_week.sum(&:views).to_f
-        end
-
-        if last_week.sum(&:conversions) == 0
-          metrics[:actions][:lift] = nil
-        else
-          metrics[:actions][:lift] = (metrics[:actions][:n] - last_week.sum(&:conversions)) / last_week.sum(&:conversions).to_f
-        end
-
-        if metrics[:conversion][:n].nil? || last_week.sum(&:views) == 0 || last_week.sum(&:conversions) == 0
-          metrics[:conversion][:lift] = nil
-        else
-          conversion = (last_week.sum(&:conversions).to_f / last_week.sum(&:views)).round(4)
-          metrics[:conversion][:lift] = ((metrics[:conversion][:n] - conversion) / conversion).round(4)
-        end
-      end
-
-      return metrics
     end
   end
 end

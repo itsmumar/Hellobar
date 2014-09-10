@@ -42,7 +42,7 @@ describe Hello::EmailDigest do
 
     it "does not include lift unless the script has been installed for two full weeks" do
       Hello::DataAPI.stub(:lifetime_totals => {
-        @social_bar.id.to_s => [[12, 11]]
+        @social_bar.id.to_s => [[12, 11], [12, 11]]
       })
 
       data = Hello::EmailDigest.site_metrics(@site)
@@ -54,7 +54,7 @@ describe Hello::EmailDigest do
 
     it "does not include data for bar types that haven't been created" do
       Hello::DataAPI.stub(:lifetime_totals => {
-        @social_bar.id.to_s => [[12, 11]]
+        @social_bar.id.to_s => [[12, 11], [12, 11]]
       })
 
       data = Hello::EmailDigest.site_metrics(@site)
@@ -66,8 +66,8 @@ describe Hello::EmailDigest do
 
     it "separates statistics by bar type" do
       Hello::DataAPI.stub(:lifetime_totals => {
-        @social_bar.id.to_s => [[12, 11]],
-        @traffic_bar.id.to_s => [[56, 55], [34, 33]]
+        @social_bar.id.to_s => [[12, 11], [12, 11]],
+        @traffic_bar.id.to_s => [[56, 55], [90, 88], [90, 88]]
       })
 
       data = Hello::EmailDigest.site_metrics(@site)
@@ -83,10 +83,9 @@ describe Hello::EmailDigest do
 
     it "includes lift data if the script has been installed for two full weeks and there is enough bar data" do
       Hello::DataAPI.stub(:lifetime_totals => {
-        @traffic_bar.id.to_s => [[56, 55], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [34, 33]]
+        @traffic_bar.id.to_s => Array.new(7, [56, 55]) + Array.new(8, [90, 88])
       })
 
-      @site.script_installed_at = 15.days.ago
       data = Hello::EmailDigest.site_metrics(@site)
 
       data[:traffic][:views][:n].should == 34
@@ -99,11 +98,10 @@ describe Hello::EmailDigest do
 
     it "totals this week's data" do
       Hello::DataAPI.stub(:lifetime_totals => {
-        @social_bar.id.to_s => [[12, 11]],
-        @traffic_bar.id.to_s => [[56, 55], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [34, 33]]
+        @social_bar.id.to_s => Array.new(7, [0, 0]) + Array.new(8, [12, 11]),
+        @traffic_bar.id.to_s => Array.new(7, [56, 55]) + Array.new(8, [90, 88])
       })
 
-      @site.script_installed_at = 15.days.ago
       data = Hello::EmailDigest.site_metrics(@site)
 
       data[:total][:views][:n].should == 46
@@ -125,13 +123,12 @@ describe Hello::EmailDigest do
       data[:total].should == nil
     end
 
-    it "works when there's data for last week but not this week" do
+    it "works when there have been no views or conversions this week" do
       Hello::DataAPI.stub(:lifetime_totals => {
-        @email_bar.id.to_s => [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
-        @traffic_bar.id.to_s => [[56, 55], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+        @email_bar.id.to_s => Array.new(8, [0, 0]),
+        @traffic_bar.id.to_s => Array.new(10, [20, 10])
       })
 
-      @site.script_installed_at = 15.days.ago
       data = Hello::EmailDigest.site_metrics(@site)
 
       data[:total][:views][:n].should == 0
@@ -139,10 +136,9 @@ describe Hello::EmailDigest do
 
     it "computes lift totals correctly if there were no conversions last week" do
       Hello::DataAPI.stub(:lifetime_totals => {
-        @email_bar.id.to_s => [[10, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [10, 4]]
+        @email_bar.id.to_s => Array.new(7, [10, 0]) + Array.new(8, [20, 4])
       })
 
-      @site.script_installed_at = 15.days.ago
       data = Hello::EmailDigest.site_metrics(@site)
 
       data[:total][:views][:lift].should == 0.0
