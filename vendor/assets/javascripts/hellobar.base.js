@@ -414,14 +414,19 @@ var _HB = {
       var key = data[0];
       var value = data.slice(1,data.length).join(":");
 
-      // Convert value to a number if it makes sense
-      if ( parseInt(value, 10) == value )
-          value = parseInt(value,10);
-      else if ( parseFloat(value) == value )
-          value = parseFloat(value);
-      results[key] = value;
+      results[key] = HB.parseValue(value);
     }
     return results;
+  },
+
+  // Convert value to a number if it makes sense
+  parseValue: function(value)
+  {
+    if ( parseInt(value, 10) == value )
+      value = parseInt(value,10);
+    else if ( parseFloat(value) == value )
+      value = parseFloat(value);
+    return value;
   },
 
   // Loads the cookies from the browser cookies into global hash HB.cookies
@@ -432,10 +437,22 @@ var _HB = {
     if ( typeof(HB_SITE_ID) == "undefined")
       HB.cookies = {siteElements:{}, visitor:{}};
     else
+    {
       HB.cookies = {
-        visitor: HB.parseCookies(HB.gc("hbv_"+HB_SITE_ID)),
-        siteElements: HB.parseCookies(HB.gc("hbs_"+HB_SITE_ID)),
+        visitor: HB.parseCookieValues(HB.gc("hbv_"+HB_SITE_ID)),
+        siteElements: {}
       };
+      // We need to parse out the nested site element data
+      var siteElementData = HB.parseCookieValues(HB.gc("hbs_"+HB_SITE_ID)).split("^");
+      for(var i=0;i<siteElementData.length;i++)
+      {
+        var raw = siteElementData[i];
+        var partIndex = raw.indexOf("|");
+        var id = raw.slice(0,partIndex);
+        var data = raw.slice(partIndex+1);
+        HB.cookies.siteElements[id] = HB.parseCookieValues(data);
+      }
+    }
   },
 
   // Saves HB.cookies into the actual cookie
@@ -445,7 +462,18 @@ var _HB = {
     if ( typeof(HB_SITE_ID) != "undefined")
     {
       HB.sc("hbv_"+HB_SITE_ID, HB.serializeCookieValues(HB.cookies.visitor), 365*5);
-      HB.sc("hbs_"+HB_SITE_ID, HB.serializeCookieValues(HB.cookies.siteElement), 365*5);
+      // We encode the site elements as:
+      // site_element_id|data^site_element_id|data...
+      var siteElementData = [];
+      for(var k in HB.cookies.siteElements)
+      {
+        var value = HB.cookies.siteElements[k];
+        if (typeof(value) != "function" )
+        {
+          siteElementData.push(k+"|"+HB.serializeCookieValues(value));
+        }
+      }
+      HB.sc("hbs_"+HB_SITE_ID, siteElementData.join("^"), 365*5);
     }
   },
 
@@ -468,14 +496,26 @@ var _HB = {
   // Gets the siteElement attribute from HB.cookies specified by the siteElementID and key
   getSiteElementData: function(siteElementID, key)
   {
-    return HB.cookies.siteElements[siteElementID+"|"+key];
+    if ( !siteElementID )
+      return;
+    siteElementID = siteElementID+"";
+    var s = HB.cookies.siteElements;
+    if ( !s[siteElementID] )
+      s[siteElementID] = {}
+    return s[siteElementID][key];
   },
 
   // Sets the siteElement attribute specified by the key and siteElementID to the value in HB.cookies
   // Also updates the cookies via HB.saveCookies
   setSiteElementData: function(siteElementID, key, value)
   {
-    HB.cookies.siteElements[siteElementID+"|"+key] = value;
+    if ( !siteElementID )
+      return;
+    siteElementID = siteElementID+"";
+    var s = HB.cookies.siteElements;
+    if ( !s[siteElementID] )
+      s[siteElementID] = {}
+    s[siteElementID][key] = value;
     HB.saveCookies();
   },
 
