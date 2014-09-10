@@ -194,28 +194,53 @@ var _HB = {
   // Returns the standard siteElement params used for communicating with the backend server
   attributeParams: function()
   {
-    return "a="+encodeURIComponent("all:all|"+HB.serializeCookies(HB.cookies));
+    return "a="+;
+  },
+
+  getVisitorAttributes: function()
+  {
+    var ignoredAttributes = ["fv","lv"];
+    var ignoredAttributePattern = /^(ec|sc|l\-).*_[fl]$/
+    var attributes = {};
+    // Remove ignored attributes
+    for(var k in HB.cookies.visitor)
+    {
+      if ( typeof(HB.cookies.visitor[k]) != "function" && ignoredAttributes.indexOf(k) == -1 && !k.match(ignoredAttributePattern))
+      {
+        attributes[k] = HB.cookies.visitor[k];
+      }
+    }
+    return HB.serializeCookieValues(attributes);
   },
 
   // Sends data to the tracking server (e.g. which siteElements viewed, if a rule was performed, etc)
-  s: function(url, paramString, callback)
+  s: function(path, itemID, params, callback)
   {
-    if ( typeof(HB_DNT) != "undefined" || typeof(HB_SITE_ID) == "undefined")
+    // If we are not tracking or this or no site ID then just issue the 
+    // callback without sending any data
+    if ( typeof(HB_DNT) != "undefined" || typeof(HB_SITE_ID) == "undefined" || typeof(HB_WK) == "undefined")
     {
       if ( callback && typeof(callback) == "function" )
         callback();
       return;
     }
+    // Build the URL
+    var url = "/"+path+"/"+HB.obfID(HB_SITE_ID);
+    if ( itemID )
+      url += "/"+HB.obfID(itemID);
+    
+    params["t"] = now; // Timestamp
+    params["v"] = HB.i(); // visitor UUID
+    params["f"] = "i" // Make sure we return an image 
+
+    // Sign the URL
+    params["s"] = HB.signature(HB_WK, url, params);
+
+    // Add the query string
+    url += "?" + HB.paramsToString(params);
+
     var img = document.createElement('img');
     img.style.display = 'none';
-    // Standard params
-    url += ((url.indexOf("?") == -1) ? "?" : "&") + "s="+HB_SITE_ID+"&u="+HB.i();
-    // Extra params
-    if ( paramString )
-      url += ((paramString.indexOf("&") == 0) ? "" : "&") + paramString;
-    // Make sure we return an image
-    url += "&t=i";
-
     if ( callback )
     {
       // Make sure you only call the callback once
@@ -230,56 +255,14 @@ var _HB = {
       setTimeout(issueCallback, 750);
       img.onload = issueCallback;
     }
+    console.log(url);
     img.src = HB.hi(url);
-  },
-
-  // Gets data from the tracking server such as what siteElement variation to render from a set of siteElements
-  g: function(url, paramString, callback)
-  {
-    var script = document.createElement('script');
-    script.type = "text/javascript";
-    script.async = true;
-    // Standard params
-    url += ((url.indexOf("?") == -1) ? "?" : "&") + "s="+HB_SITE_ID+"&u="+HB.i();
-    // Extra params
-    if ( paramString )
-      url += ((paramString.indexOf("&") == 0) ? "" : "&") + paramString;
-    // Make sure we return Javascript 
-    url += "&t=j"; 
-    if ( callback )
-    {
-      // Create a new function that can be referenced in the global name space
-      if (!HB.cb)
-        HB.cb = [];
-      var responderName = "HB.cb["+(HB.cb.length)+"]";
-      // Add the responder name to the request
-      url += "&j="+encodeURIComponent(responderName);
-      // Make sure you only call the callback once
-      // We do this by setting a locally scoped variable, issuedCallback
-      var issuedCallback = false;
-      var issueCallback = function(result){
-        if( !issuedCallback)
-          callback(result);
-        issuedCallback = true;
-      };
-      // Set the global responder to issue the callback
-      HB.cb.push(function(result){
-        issueCallback(result);
-      });
-      // Call the callback within a set period of time in case the server
-      // does not respond - notice that result will be null and a subsequent
-      // response will be ignored
-      setTimeout(issueCallback, 750);
-    }
-    script.src = HB.hi(url);
-    // Insert the script
-    (document.head || document.body || document.childNodes[0]).appendChild(script);
   },
 
   // Returns the URL for the backend server (e.g. "hi.hellobar.com").
   hi: function(url)
   {
-    return (document.location.protocol == "https:" ? "https" : "http")+ "://"+HB_BACKEND_HOST+"/"+url;
+    return (document.location.protocol == "https:" ? "https" : "http")+ "://"+HB_BACKEND_HOST+url;
   },
 
   // Recoards the rule being formed when the visitor clicks the specified element
@@ -304,6 +287,9 @@ var _HB = {
         // getShortestKey returns either the raw URL or
         // a SHA1 hash of the URL - whichever is shorter
         return "l-"+HB.getShortestKeyForURL(siteElement.url);
+      // ------------------------------------------------------- 
+      // IMPORTANT - if you add other conversion keys you need to 
+      // update the ignoredAttributePattern in getVisitorAttributes
     }
   },
 
@@ -320,23 +306,26 @@ var _HB = {
   converted: function(callback)
   {
     var conversionKey = HB.getConversionKey(HB.currentSiteElement);
-    var conversionData = HB.getVisitorData(conversionKey);
     var now = Math.round(new Date().getTime()/1000)
-    if ( !conversionData )
-      conversionData = [now, now, 0];
 
-    // We store first time converted, last time converted and number of conversions
-      
-    conversionData[1] = now; // Set the last time they converted to now
-    conversionData[2] += 1; // Increase number of times
-    HB.setVisitorData(conversionKey, conversionData);
+    // Set the number of conversions for the visitor for this type of conversion
+    HB.setVisitorData(conversionKey, (HB.getVisitorData(conversionKey) || 0 )+1);
+    // Record first time converted, unless already set for the visitor for this type of conversion
+    HB.setVisitorData(conversionKey+"_f", now);
+    // Record last time converted for the visitor for this type of conversion
+    HB.setVisitorData(conversionKey+"_l", now);
+
+    // Set the number of conversions for the specific site element
     HB.setSiteElementData(HB.si, "nc", (HB.getSiteElementData(HB.si, "nc") || 0)+1);
-    HB.setSiteElementData(HB.si, "nc", (HB.getSiteElementData(HB.si, "nc") || 0)+1);
+    // Set the first time converted for the site element if not set
     if ( !HB.getSiteElementData(HB.si, "fc") )
       HB.setSiteElementData(HB.si, "fc", now);
+    // Set the last time converted for the site element to now
     HB.setSiteElementData(HB.si, "lc", now);
+    // Trigger the event
     HB.trigger("conversion", HB.currentSiteElement);
-    HB.s("c?b="+HB.si, HB.attributeParams(), callback);
+    // Send the data to the backend
+    HB.s("g", HB.si, {a:HB.getVisitorAttributes()}, callback);
   },
 
   // Returns true if the visitor did this conversion or not
@@ -381,59 +370,12 @@ var _HB = {
   {
     if ( email )
     {
-      var params = ["g="+HB.cli, "e="+encodeURIComponent(email)];
-      if ( name )
-        params.push("n="+encodeURIComponent(name));
-
-      params.push("q=y"); // only in staging
-
-      // Record the email address and then track that the rule was performed
-      HB.s("e", params.join("&"), function(){HB.converted(callback)});
+      // Record the email address to the cnact list and then track that the rule was performed
+      HB.s("c", HB.cli, {e:emailAndName}, function(){HB.converted(callback)});
     }
-
-  },
-  // Serialzied the cookies object into a string that can be stored in a cookie. The 
-  // cookies object should be in the form:
-  // {
-  //   siteElements: {
-  //     site_element_id: {
-  //       first_view: timestamp,
-  //       last_view: timestamp,
-  //       num_views: count,
-  //       first_action: timestamp,
-  //       last_action: timestamp,
-  //       num_actions: count,
-  //       *custom: *value
-  //     }
-  //   },
-  //   visitor: {
-  //     first_visit: timestamp,
-  //     last_visit: timestamp,
-  //     num_visits: count,
-  //     *custom: *value
-  //   }
-  // }
-  serializeCookies: function(cookies)
-  {
-    if ( !cookies )
-      return "";
-    var result = "";
-    if ( cookies.visitor )
-    {
-      result += HB.serializeCookieValues(cookies.visitor);
-    }
-    result += "^";
-    if ( cookies.siteElements )
-    {
-      for(var siteElementID in cookies.siteElements)
-      {
-        result += siteElementID+"|"+HB.serializeCookieValues(cookies.siteElements[siteElementID])+"^";
-      }
-    }
-    return result;
   },
 
-  // Called by serializeCookies. Takes a hash (either visitor or siteElement) and
+  // Takes a hash (either visitor or siteElement) and
   // serializes it into a string
   serializeCookieValues: function(hash)
   {
@@ -456,32 +398,6 @@ var _HB = {
   sanitizeCookieValue: function(value)
   {
     return (value+"").replace(/[\^\|\,\;\n\r]/g, " ");
-  },
-
-  // Parses a cookie string into the object describe in serializeCookies
-  parseCookies: function(input)
-  {
-    var results = {};
-    if ( !input )
-      return {visitor:{}, siteElements:{}};
-    var parts = input.split("^");
-
-    // Parse out the visitor uwhich is the first argument
-    results.visitor = HB.parseCookieValues(parts[0]);
-    // Parse out all the siteElements
-    results.siteElements = {};
-    for(var i=1;i<parts.length;i++)
-    {
-      if ( parts[i] ) // Ignore empty parts
-      {
-        var siteElementData = parts[i].split("|");
-        var siteElementID = siteElementData[0];
-        var siteElementValues = siteElementData.slice(1, siteElementData.length);
-
-        results.siteElements[siteElementID] = HB.parseCookieValues(siteElementValues.join("|"));
-      }
-    }
-    return results;
   },
 
   // Called by parseCookies. Takes a string (either visitor or siteElement) and
@@ -509,14 +425,17 @@ var _HB = {
   },
 
   // Loads the cookies from the browser cookies into global hash HB.cookies
-  // in the format of {siteElements: {id:{...}, id2:{...}}, visitor:{...}}
+  // in the format of {siteElements:{...}}, visitor:{...}}
   loadCookies: function()
   {
     // Don't let any cookies get set without a site ID
     if ( typeof(HB_SITE_ID) == "undefined")
       HB.cookies = {siteElements:{}, visitor:{}};
     else
-      HB.cookies = HB.parseCookies(HB.gc("hb_"+HB_SITE_ID));
+      HB.cookies = {
+        visitor: HB.parseCookies(HB.gc("hbv_"+HB_SITE_ID)),
+        siteElements: HB.parseCookies(HB.gc("hbs_"+HB_SITE_ID)),
+      };
   },
 
   // Saves HB.cookies into the actual cookie
@@ -524,7 +443,10 @@ var _HB = {
   {
     // Don't let any cookies get set without a site ID
     if ( typeof(HB_SITE_ID) != "undefined")
-      HB.sc("hb_"+HB_SITE_ID, HB.serializeCookies(HB.cookies), 365*5);
+    {
+      HB.sc("hbv_"+HB_SITE_ID, HB.serializeCookieValues(HB.cookies.visitor), 365*5);
+      HB.sc("hbs_"+HB_SITE_ID, HB.serializeCookieValues(HB.cookies.siteElement), 365*5);
+    }
   },
 
   // Gets the visitor attribute specified by the key or returns null
@@ -546,22 +468,14 @@ var _HB = {
   // Gets the siteElement attribute from HB.cookies specified by the siteElementID and key
   getSiteElementData: function(siteElementID, key)
   {
-    // Ensure siteElementID is a string
-    siteElementID = siteElementID+"";
-    if ( !HB.cookies.siteElements[siteElementID] )
-      return null;
-    return HB.cookies.siteElements[siteElementID][key];
+    return HB.cookies.siteElements[siteElementID+"|"+key];
   },
 
   // Sets the siteElement attribute specified by the key and siteElementID to the value in HB.cookies
   // Also updates the cookies via HB.saveCookies
   setSiteElementData: function(siteElementID, key, value)
   {
-    // Ensure siteElementID is a string
-    siteElementID = siteElementID+"";
-    if ( !HB.cookies.siteElements[siteElementID] )
-      HB.cookies.siteElements[siteElementID] = {};
-    HB.cookies.siteElements[siteElementID][key] = value;
+    HB.cookies.siteElements[siteElementID+"|"+key] = value;
     HB.saveCookies();
   },
 
@@ -738,7 +652,9 @@ var _HB = {
     // Call prerender
     var siteElement = HB.prerender(siteElementCopy);
     HB.currentSiteElement = siteElement;
+    // Convenience accessors for commonl ussed attributes
     HB.si = siteElement.id;
+    HB.cli = siteElement.list_id;
     // If there is a #nohb in the has we don't render anything
     if ( document.location.hash == "#nohb" )
       return;
@@ -762,7 +678,7 @@ var _HB = {
   viewed: function()
   {
     // Track number of views
-    HB.s("v?b="+HB.si, HB.attributeParams());
+    HB.s("v", HB.si, {a:HB.getVisitorAttributes()});
     // Record the number of views, first seen and last seen
     HB.setSiteElementData(HB.si, "nv", (HB.getSiteElementData(HB.si, "nv") || 0)+1);
     var now = Math.round(nowDate.getTime()/1000);
@@ -1030,10 +946,8 @@ var _HB = {
       segmentName = "co";
     else if ( segmentName == "referrer" || segmentName == "referer" )
       segmentName = "rf";
-    else if ( segmentName == "date" || segmentName == "dt" )
-      // instead of returning visitor data we just return
-      // the date of now in the timezone of the user
-      return (HB.ymd(HB.nowInTimezone())); 
+    else if ( segmentName == "date" )
+      segmentName = "dt";
 
     // All other segment names
     return HB.getVisitorData(segmentName);
@@ -1104,7 +1018,7 @@ var _HB = {
     HB.setVisitorData("nv", (HB.getVisitorData("nv") || 0)+1);
 
     // Check for UTM params
-    var params = HB.paramsFromURL(document.location);
+    var params = HB.paramsFromString(document.location);
 
     HB.setVisitorData('ad_so', params['utm_source'], true);
     HB.setVisitorData('ad_ca', params['utm_campaign'], true);
@@ -1124,13 +1038,13 @@ var _HB = {
         // Set the original referrer if not set
         if ( !HB.getVisitorData("or" ))
           HB.setVisitorData("or", referrer);
-        // Set the full referrer
+        // Set the full current referrer
         HB.setVisitorData("rf", referrer);
         // Set the referrer domain
         HB.setVisitorData("rd", referrerDomain);
 
         // Check for search terms
-        var referrerParams = HB.paramsFromURL(document.referer);
+        var referrerParams = HB.paramsFromString(document.referer);
         // Check for search terms
         HB.setVisitorData("st", referrerParams['query'] || referrerParams['q'] || referrerParams['search'], true);
       }
@@ -1138,10 +1052,7 @@ var _HB = {
     // Set the page URL
     HB.setVisitorData("pu", (document.location+"").split("#")[0]);
     // Set the date
-    HB.setVisitorData("dt", nowDate.getUTCFullYear()+"-"+(nowDate.getUTCMonth()+1)+"-"+nowDate.getUTCDate());
-    // Set the timestamp - this can be used for filtering
-    HB.setVisitorData("ts", now);
-
+    HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
     // Detect the device
     var ua = navigator.userAgent;
     if (ua.match(/(mobi|phone|ipod|blackberry|docomo)/i))
@@ -1152,13 +1063,13 @@ var _HB = {
       HB.setVisitorData("dv", "computer");
   },
   
-  paramsFromURL: function(url)
+  paramsFromString: function(url)
   {
     var params = {};
     if ( !url )
       return params;
     url += ""; // cast to string
-    var query = url.split("?")[1];
+    var query = url.indexOf("?") == -1 ? url : url.split("?")[1];
     if ( !query )
       return params;
     var pairs = query.split("&");
@@ -1171,6 +1082,19 @@ var _HB = {
       params[key] = value;
     }
     return params;
+  },
+
+  paramsToString: function(params)
+  {
+    var pairs = [];
+    for(var k in params)
+    {
+      if ( typeof(params[k]) != "function" )
+      {
+        pairs.push(encodeURIComponent(k)+"="+encodeURIComponent(params[k]));
+      }
+    }
+    return pairs.join("&");
   },
 
   // This code returns the root domain of the current site so "www.yahoo.co.jp" will return "yahoo.co.jp" and "blog.kissmetrics.com
