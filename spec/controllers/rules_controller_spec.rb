@@ -80,6 +80,20 @@ describe RulesController do
       end.to change { Rule.count }.by(-1)
       expect(response).to be_success
     end
+
+    it "should fail when user only has one rule for their site" do
+      site = sites(:horsebike)
+      rule = site.rules.first
+      stub_current_user(site.owner)
+
+      site.rules.count.should == 1
+
+      expect do
+        delete :destroy, site_id: site, id: rule
+      end.to_not change { Rule.count }
+
+      expect(response.status).to eq(422)
+    end
   end
 
   describe 'PUT :update' do

@@ -35,8 +35,10 @@ class RulesController < ApplicationController
   def destroy
     rule = @site.rules.find(params[:id])
 
-    if rule.destroy
-      render :json => rule
+    if @site.rules.count == 1
+      render :nothing => true, :status => :unprocessable_entity
+    elsif rule.destroy
+      render :nothing => true, :status => :ok
     else
       render :json => rule.errors, :status => :unprocessable_entity
     end
