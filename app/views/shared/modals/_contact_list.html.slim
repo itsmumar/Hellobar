@@ -1,28 +1,40 @@
 script id="contact-list-modal-template" type="text/x-handlebars-template"
-  .modal-wrapper.contact-list-modal
+
+  .modal-wrapper
+
     .modal-block
-      h4= "{{header}}"
-      hr
 
-      .provider-instructions-block
-      .provider-instructions-nevermind-block
-      .name-and-provider-block
-        form.contact_list
-          label for="contact_list_name" Name
-          input type="text" id="contact_list_name" name="contact_list[name]"
+      header
+        h5= "{{header}}"
 
-          label for="contact_list_provider" Where do you want your contacts stored?
-          select id="contact_list_provider" name="contact_list[provider]"
-            - options_for_provider_select.each do |text, value, data|
-              = content_tag :option, text, value: value, data: data
+      .contact-list-modal
 
-          p
-            small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
-          .remote-list-select-block
+        .provider-instructions-block
+          / Empty
 
-      hr
-      a.button.submit Done
-      a.button.cancel Cancel
+        .provider-instructions-nevermind-block
+          / Empty
+        
+        .name-and-provider-block
+          form.contact_list
+            label for="contact_list_name" Name
+            input type="text" id="contact_list_name" name="contact_list[name]"
+
+            label for="contact_list_provider" Where do you want your contacts stored?
+
+            .select-wrapper
+              select id="contact_list_provider" name="contact_list[provider]"
+                - options_for_provider_select.each do |text, value, data|
+                  = content_tag :option, text, value: value, data: data
+
+            p
+              small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
+      
+            .remote-list-select-block
+
+      footer
+        a.button.cancel Cancel
+        a.button Done
 
 script id="contact-list-modal-provider-instructions-template" type="text/x-handlebars-template"
   | <p>To integrate with {{providerName}} you'll need:</p>
