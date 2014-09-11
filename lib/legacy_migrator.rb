@@ -145,9 +145,6 @@ class LegacyMigrator
 
         if legacy_user && !::User.exists?(legacy_user.id_to_migrate) && !::Hello::WordpressUser.email_exists?(legacy_user.email)
           begin
-            # disable password requirement for import
-            User.send(:define_method, :password_required?) { false }
-
             user = ::User.create! id: legacy_user.id_to_migrate,
                                   email: legacy_user.email,
                                   encrypted_password: legacy_user.encrypted_password,
@@ -155,6 +152,8 @@ class LegacyMigrator
                                   reset_password_sent_at: legacy_user.reset_password_sent_at,
                                   remember_created_at: legacy_user.remember_created_at,
                                   sign_in_count: legacy_user.sign_in_count,
+                                  status: ::User::ACTIVE_STATUS,
+                                  legacy_migration: true,
                                   current_sign_in_at: legacy_user.current_sign_in_at,
                                   last_sign_in_at: legacy_user.last_sign_in_at,
                                   current_sign_in_ip: legacy_user.current_sign_in_ip,

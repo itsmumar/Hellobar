@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   validate :email_does_not_exist_in_wordpress
   validates :email, uniqueness: true
 
+  attr_accessor :legacy_migration
+
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
 
@@ -22,6 +24,12 @@ class User < ActiveRecord::Base
     end
 
     new_user
+  end
+
+  # dont require the password virtual attribute to be present
+  # if we are migrating users from the legacy DB
+  def password_required?
+    super unless legacy_migration
   end
 
   def active?
