@@ -69,7 +69,7 @@ $ ->
 
     $rule = $(this).parents('tr')
     ruleId = $rule.data('rule-id')
-    $siteElements = $rule.siblings(".site-element-block[data-rule-id=#{ruleId}]")
+    $siteElements = $rule.siblings("[data-rule-id=#{ruleId}]")
 
     # assume a successful delete
     $rule.hide()
