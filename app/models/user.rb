@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   # dont require the password virtual attribute to be present
   # if we are migrating users from the legacy DB
   def password_required?
-    super unless legacy_migration
+    legacy_migration ? false : super
   end
 
   def active?
