@@ -80,7 +80,7 @@ $ ->
       type: 'DELETE'
       url: "/sites/#{window.siteID}/rules/#{ruleId}"
       error: (xhr, status, error) ->
-        $rule.hide()
+        $rule.show()
         $siteElements.show()
         console.log "Error removing rule #{ruleId}: #{error}"
 
