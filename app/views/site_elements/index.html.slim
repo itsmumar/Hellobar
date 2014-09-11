@@ -29,13 +29,14 @@ table.rules-wrapper
                 i.icon-edit
                 | Edit
 
-              = content_tag 'a', class: 'remove-rule' do
-                i.icon-trash
-                = "Delete"
-                - if rule.site_elements.any?
-                  = " this and"
-                  span= rule.site_elements.size
-                  = "bar".pluralize(rule.site_elements.size)
+              - unless @rules.count == 1
+                = content_tag 'a', class: 'remove-rule' do
+                  i.icon-trash
+                  = "Delete"
+                  - if rule.site_elements.any?
+                    = " this and"
+                    span= rule.site_elements.size
+                    = "bar".pluralize(rule.site_elements.size)
 
       - rule.site_elements.each do |site_element|
         = render "site_elements/site_element", { :site_element => site_element, :rule => rule }
