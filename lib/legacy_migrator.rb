@@ -41,28 +41,33 @@ class LegacyMigrator
 
     def migrate_goals_to_rules
       count = 0
-      LegacyGoal.find_each do |legacy_goal|
-        if ::Site.exists?(legacy_goal.site_id)
-          rule = ::Rule.create! id: legacy_goal.id,
-                                site_id: legacy_goal.site_id,
-                                name: 'Everyone', # or /URL? TODO
-                                priority: legacy_goal.priority,
-                                match: Rule::MATCH_ON[:all],
-                                created_at: legacy_goal.created_at.utc,
-                                updated_at: legacy_goal.updated_at.utc
 
-          create_conditions(rule, legacy_goal).each do |new_condition|
-            rule.conditions << new_condition
+      ::Site.find_each do |site|
+        legacy_goals = LegacyGoal.where(site_id: site.id)
+
+        if legacy_goals.present?
+          legacy_goals.each do |legacy_goal|
+            rule = ::Rule.create! id: legacy_goal.id,
+                                  site_id: legacy_goal.site_id,
+                                  name: 'Everyone', # or /URL? TODO
+                                  priority: legacy_goal.priority,
+                                  match: Rule::MATCH_ON[:all],
+                                  created_at: legacy_goal.created_at.utc,
+                                  updated_at: legacy_goal.updated_at.utc
+
+            create_conditions(rule, legacy_goal).each do |new_condition|
+              rule.conditions << new_condition
+            end
+
+            create_site_elements(legacy_goal.bars, legacy_goal).each do |new_bar|
+              rule.site_elements << new_bar
+            end
+
+            count += 1
+            puts "Migrated #{count} goals to rules" if count % 100 == 0
           end
-
-          create_site_elements(legacy_goal.bars, legacy_goal).each do |new_bar|
-            rule.site_elements << new_bar
-          end
-
-          count += 1
-          puts "Migrated #{count} goals to rules" if count % 100 == 0
-        else
-          Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal:#{legacy_goal.id}"
+        else # site has no rules so create a default
+          site.create_default_rule
         end
       end
     end
