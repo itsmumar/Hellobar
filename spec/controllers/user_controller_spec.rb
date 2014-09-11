@@ -3,14 +3,10 @@ require 'spec_helper'
 describe UserController do
   fixtures :all
 
-  before(:each) do
-    @user = users(:joey)
-  end
-
   describe "PUT update" do
     context 'user is active' do
       before do
-        @user.update_attribute :status, User::ACTIVE_STATUS
+        @user = users(:joey)
         stub_current_user(@user)
       end
 
@@ -32,7 +28,7 @@ describe UserController do
 
     context 'user is temporary' do
       before do
-        @user.update_attribute :status, User::TEMPORARY_STATUS
+        @user = users(:inactive)
         stub_current_user(@user)
       end
 
