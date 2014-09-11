@@ -15,7 +15,7 @@ HelloBar.SettingsController = Ember.Controller.extend
       when "settings.click"
         @set("model.element_subtype", "traffic")
       when "settings.social"
-        @set("model.element_subtype", "social/tweet_on_twitter")
+        @set("model.element_subtype", null)
   ).observes('routeForwarding')
 
   # Sets a property which tells the route to forward to a previously

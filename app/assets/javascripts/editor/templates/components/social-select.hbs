@@ -1,7 +1,7 @@
-{{#each content}}
-  <li {{bind-attr class=service}}>
+{{#each options}}
+  {{#view HelloBar.SocialOption content=this}}
     <i {{bind-attr class=icon}}></i>
     {{ label }}
     <i class='icon-close'></i>
-  </li>
+  {{/view}}
 {{/each}}
