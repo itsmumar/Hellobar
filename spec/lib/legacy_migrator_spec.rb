@@ -45,7 +45,7 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
   context 'user and membership migration' do
     before do
       LegacyMigrator::LegacySite.should_receive(:find_each).and_yield(legacy_site)
-      legacy_user.stub legacy_user_id: 11223344, id: 44332211, email: "rand#{rand(10_0000)}-#{rand(10_000)}@email.com", original_created_at: Time.parse('1824-05-07')
+      legacy_user.stub legacy_user_id: 11223344, id: 44332211, email: "rand#{rand(10_0000)}-#{rand(10_000)}@email.com", original_created_at: Time.parse('1824-05-07'), encrypted_password: 'lol'
     end
 
     let(:legacy_account) { double 'legacy_account', memberships: [legacy_membership] }
@@ -86,6 +86,17 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
       expect {
         LegacyMigrator.migrate_sites_and_users_and_memberships
       }.to_not change(SiteMembership, :count)
+    end
+
+    it 'skips creating a user if no encrypted password was present' do
+      legacy_user.stub encrypted_password: ''
+      old_count = User.count
+
+      expect {
+        LegacyMigrator.migrate_sites_and_users_and_memberships
+      }.to raise_error
+
+      User.count.should == old_count
     end
 
     it 'creates a new user with the LegacyUser#legacy_user_id if it exists' do

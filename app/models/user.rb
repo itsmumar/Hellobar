@@ -24,6 +24,12 @@ class User < ActiveRecord::Base
     new_user
   end
 
+  # dont require the password virtual attribute to be present
+  # if we are migrating users from the legacy DB
+  def password_required?
+    super unless encrypted_password.present?
+  end
+
   def active?
     status == ACTIVE_STATUS
   end
