@@ -5,11 +5,11 @@ module Hello::EmailDigest
     include SiteElementsHelper
 
     def installed_sites
-      Site.where("script_installed_at IS NOT NULL").select{|s| s.send_email_digest?}
+      Site.where("script_installed_at IS NOT NULL").where(:opted_in_to_email_digest => true)
     end
 
     def not_installed_sites
-      Site.where(:script_installed_at => nil).where("created_at > ?", 4.weeks.ago).select{|s| s.send_email_digest?}
+      Site.where(:script_installed_at => nil, :opted_in_to_email_digest => true).where("created_at > ?", 4.weeks.ago)
     end
 
     def email_name(site)
