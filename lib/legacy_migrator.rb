@@ -42,6 +42,8 @@ class LegacyMigrator
     def migrate_goals_to_rules
       count = 0
 
+      sites_needing_rules = []
+
       ::Site.find_each do |site|
         legacy_goals = LegacyGoal.where(site_id: site.id)
 
@@ -66,10 +68,13 @@ class LegacyMigrator
             count += 1
             puts "Migrated #{count} goals to rules" if count % 100 == 0
           end
-        else # site has no rules so create a default
-          site.create_default_rule
+        else # site has no rules so add them to the collection
+          sites_needing_rules << site
         end
       end
+
+      # lets avoid ID collisions with legacy goals
+      sites_needing_rules.each{|site| site.create_default_rule }
     end
 
     def migrate_contact_lists
