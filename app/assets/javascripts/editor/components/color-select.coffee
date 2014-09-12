@@ -32,7 +32,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
     return $.fn.dropperredux({}) unless @get('isSelecting')
 
     $.fn.dropperredux
-      selector: $('.preview-wrapper img')
+      selector: $('#hellobar-preview-container > img')
       clickCallback: (color) =>
         @set('color', color.rgbhex)
   ).observes('isSelecting').on('didInsertElement')
