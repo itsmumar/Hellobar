@@ -18,7 +18,7 @@ select,
 textarea,
 input:not([type=submit]):not([type=file]):not([type=button]):not([type=radio]):not([type=checkbox]):not([type=color])
   width: 100%
-  color: $gray
+  color: $grayDark
   border-radius: 0
   font-size: 0.85em
   margin: 0.75em auto
@@ -34,10 +34,8 @@ input:not([type=submit]):not([type=file]):not([type=button]):not([type=radio]):n
     color: $grayDarker
 
   &:disabled
+    color: lighten($gray, 5%)
     background-color: #f7f7f7
-
-textarea, 
-input:not([type=submit]):not([type=file]):not([type=button]):not([type=radio]):not([type=checkbox]):not([type=color])
 
   @include placeholder 
     color: lighten($gray, 5%)
@@ -64,16 +62,16 @@ span > textarea
     margin-bottom: 0
     cursor: pointer
     color: $grayDarker
-    padding: 0.45em 0.67em 0.5em
     background-color: $white
+    padding: 0.4em 0.67em 0.38em
 
   label
     position: relative
 
   &:before
     right: 1rem
-    top: 0.67rem
     content: 'U'
+    line-height: 300%
     font-size: 0.75em
     color: $grayDarker
     position: absolute

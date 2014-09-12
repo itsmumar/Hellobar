@@ -1,9 +1,15 @@
-<label><span>Start after:</span>
-  {{view Ember.TextField value=model.settings.display_when_delay placeholder="3"}}
+
+<label>Start after:</label>
+
+<label class="time-delay">
+  {{view Ember.TextField value=model.delayValue placeholder="3"}}
+
   <div class="select-wrapper">
     {{view Ember.Select
-      content=delayUnitsOptions
-      selection=model.settings.display_when_delay_units
+      content=unitsOptions
+      selection=model.unitsSelections
+      optionValuePath='content.id'
+      optionLabelPath='content.text'
     }}
   </div>
 </label>

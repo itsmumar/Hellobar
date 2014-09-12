@@ -36,7 +36,10 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
         a.button.cancel Cancel
         a.button Done
 
+/-----------  Provider Instructions Template  -----------/
+
 script id="contact-list-modal-provider-instructions-template" type="text/x-handlebars-template"
+  
   | <p>To integrate with {{providerName}} you'll need:</p>
   |
   | <ol>
@@ -62,12 +65,18 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |
   | {{/if}}
 
+/-----------  No Provider Template  -----------/
+
 script id="contact-list-modal-provider-instructions-nevermind-template" type="text/x-handlebars-template"
+
   p No worries!
   p We'll store all of your contacts in Hello Bar for now.
   p Syncing with {{providerName}} can be set up any time via the contacts area, or by editing a contacts list.
 
+/-----------  Remote List Template  -----------/
+
 script id="contact-list-modal-remote-list-select-template" type="text/x-handlebars-template"
+
   | <label for="contact_list_remote_list_id">Choose a {{providerName}} list to sync with</label>
   | <select id="contact_list_remote_list_id" name="contact_list[remote_list_id]">
   |   {{#each identity.lists}}

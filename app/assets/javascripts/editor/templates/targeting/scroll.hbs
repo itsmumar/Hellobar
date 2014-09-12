@@ -1,14 +1,23 @@
 <label>Show after:</label>
 
-<label>
-  {{view Ember.RadioButton name="pageScrollType" selectionBinding="model.settings.display_when_scroll_type" value="percentage"}}
-  {{view Ember.TextField value=model.settings.display_when_scroll_percentage placeholder="10"}}
-  % Page scroll
-</label>
+{{#view HelloBar.ScrollSelect type='percentage' class='scroll-percentage'}}
+  <i class="psudo-radio"></i>
+  {{input 
+    type='text' 
+    placeholder='10' 
+    disabled=view.notSelected
+    value=model.settings.display_when_scroll_percentage
+  }}
+  <span>% Page scroll</span>
+{{/view}}
 
-<label>
-  {{view Ember.RadioButton name="pageScrollType" selectionBinding="model.settings.display_when_scroll_type" value="element"}}
-  {{view Ember.TextField value=model.settings.display_when_scroll_element placeholder=".sidemenu"}}
-  Element appears
-  <p>ADVANCED</p>
-</label>
+{{#view HelloBar.ScrollSelect type='element' class='scroll-element'}}
+  <i class="psudo-radio"></i>
+  {{input 
+    type='text' 
+    placeholder='.sidemenu' 
+    disabled=view.notSelected
+    value=model.settings.display_when_scroll_element
+  }}
+  <span>Element appears<br><small>ADVANCED</small></span>
+{{/view}}
