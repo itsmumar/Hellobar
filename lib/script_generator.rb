@@ -30,6 +30,10 @@ class ScriptGenerator < Mustache
     site.id
   end
 
+  def site_write_key
+    site.write_key
+  end
+
   def hb_backend_host
     Hellobar::Settings[:tracking_host]
   end
