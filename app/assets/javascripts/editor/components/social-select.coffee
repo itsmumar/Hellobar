@@ -22,10 +22,8 @@ HelloBar.SocialOption = Ember.View.extend
 
   click: (event) ->
     if !@get('isSelected')
-      console.log 'selected'
       @set('parentView.selection', @get('content.value'))
     else if event.target.className == 'icon-close'
-      console.log 'deselected'
       @set('parentView.selection', null)
     false
 
