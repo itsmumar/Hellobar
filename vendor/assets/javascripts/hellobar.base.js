@@ -392,7 +392,7 @@ var _HB = {
       }
     }
     return pairs.join("|");
-  },
+  ,
 
   // Replaces all chars used within the serialization schema with a space
   sanitizeCookieValue: function(value)
@@ -694,7 +694,7 @@ var _HB = {
     HB.currentSiteElement = siteElement;
     // Convenience accessors for commonl ussed attributes
     HB.si = siteElement.id;
-    HB.cli = siteElement.list_id;
+    HB.cli = siteElement.contact_list_id;
     // If there is a #nohb in the has we don't render anything
     if ( document.location.hash == "#nohb" )
       return;
