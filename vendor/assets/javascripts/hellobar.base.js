@@ -14,6 +14,7 @@ var HBQ = function()
 {
   // Initialize the rules array so it can be pushed into
   HB.rules = [];
+
   // Need to load the serialized cookies
   HB.loadCookies();
   // Once initialized replace the existing data with it
@@ -21,6 +22,19 @@ var HBQ = function()
   {
     for(var i=0;i<_hbq.length;i++)
       this.push(_hbq[i]);
+  }
+
+  // Add the appropriate CSS
+  if ( HBCrypto.HmacSHA512(HB_SITE_ID+HB_WK, HB_PS).toString() == HB_PK )
+  {
+    // User is pro
+    HB.addCSS("#hellobar a.hellobar_logo_"+HB_PS+"{display: none !important;}");
+  }
+  else
+  {
+    // User is not pro
+    HB.addCSS("#hellobar a.hellobar_logo_"+HB_PS+"{display: block !important;}");
+    HB.addCSS("#hellobar.mobile a.hellobar_logo_"+HB_PS+" { display: none !important; }");
   }
   // Set all the default tracking trackings
   HB.setDefaultSegments();
@@ -151,8 +165,11 @@ var _HB = {
   // Adds CSS to the page
   addCSS: function(css)
   {
+    if ( !css ) return;
     if ( !HB.css )
       HB.css = "";
+    // Update CSS related to hellobar logo
+    css = css.split("hellobar_logo").join("hellobar_logo_"+HB_PS);
     HB.css += "<style>"+css+"</style>";
   },
 
@@ -191,12 +208,6 @@ var _HB = {
     return HB.n(srcPattern, true) == HB.n(url, true); 
   },
 
-  // Returns the standard siteElement params used for communicating with the backend server
-  attributeParams: function()
-  {
-    return "a="+;
-  },
-
   getVisitorAttributes: function()
   {
     var ignoredAttributes = ["fv","lv"];
@@ -228,7 +239,8 @@ var _HB = {
     var url = "/"+path+"/"+HB.obfID(HB_SITE_ID);
     if ( itemID )
       url += "/"+HB.obfID(itemID);
-    
+    var now = Math.round(new Date().getTime()/1000)
+
     params["t"] = now; // Timestamp
     params["v"] = HB.i(); // visitor UUID
     params["f"] = "i" // Make sure we return an image 
@@ -276,7 +288,7 @@ var _HB = {
   // conversion has already happened or not
   getConversionKey: function(siteElement)
   {
-    switch(HB.baseType(siteElement))
+    switch(siteElement.type)
     {
       case "email":
         return "ec";
@@ -331,7 +343,7 @@ var _HB = {
   // Returns true if the visitor did this conversion or not
   didConvert: function(siteElement)
   {
-    return HB.getVisitorData(HB.getConversionKey(HB.currentSiteElement));
+    return HB.getVisitorData(HB.getConversionKey(siteElement));
   },
 
   // This takes the the email field, name field, and target siteElement DOM element.
@@ -392,7 +404,7 @@ var _HB = {
       }
     }
     return pairs.join("|");
-  ,
+  },
 
   // Replaces all chars used within the serialization schema with a space
   sanitizeCookieValue: function(value)
@@ -443,14 +455,17 @@ var _HB = {
         siteElements: {}
       };
       // We need to parse out the nested site element data
-      var siteElementData = HB.parseCookieValues(HB.gc("hbs_"+HB_SITE_ID)).split("^");
+      var siteElementData = (HB.gc("hbs_"+HB_SITE_ID)||"").split("^");
       for(var i=0;i<siteElementData.length;i++)
       {
         var raw = siteElementData[i];
-        var partIndex = raw.indexOf("|");
-        var id = raw.slice(0,partIndex);
-        var data = raw.slice(partIndex+1);
-        HB.cookies.siteElements[id] = HB.parseCookieValues(data);
+        if ( raw )
+        {
+          var partIndex = raw.indexOf("|");
+          var id = raw.slice(0,partIndex);
+          var data = raw.slice(partIndex+1);
+          HB.cookies.siteElements[id] = HB.parseCookieValues(data);
+        }
       }
     }
   },
@@ -721,7 +736,7 @@ var _HB = {
     HB.s("v", HB.si, {a:HB.getVisitorAttributes()});
     // Record the number of views, first seen and last seen
     HB.setSiteElementData(HB.si, "nv", (HB.getSiteElementData(HB.si, "nv") || 0)+1);
-    var now = Math.round(nowDate.getTime()/1000);
+    var now = Math.round((new Date()).getTime()/1000);
     if ( !HB.getSiteElementData(HB.si, "fv") )
       HB.setSiteElementData(HB.si, "fv", now)
     HB.setSiteElementData(HB.si, "lv", now)
@@ -816,7 +831,7 @@ var _HB = {
     // Inject the container into the DOM
     HB.injectAtTop(HB.w);
     // Render the siteElement in the container.
-    var d = HB.w.siteElementWindow.document;
+    var d = HB.w.contentWindow.document;
     d.open();
     d.write((HB.css || "")+html);
     d.close();
@@ -859,9 +874,9 @@ var _HB = {
       {
         // Get all site elements that are a part of this rule that the
         // visitor has not done
-        for(j=0;j<rule.site_elements.length;j++)
+        for(j=0;j<rule.siteElements.length;j++)
         {
-          siteElement = rule.site_elements[j];
+          siteElement = rule.siteElements[j];
           if ( !HB.didConvert(siteElement) )
           {
             if ( !possibleSiteElements[siteElement.type] )
