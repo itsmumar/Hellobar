@@ -267,7 +267,6 @@ var _HB = {
       setTimeout(issueCallback, 750);
       img.onload = issueCallback;
     }
-    console.log(url);
     img.src = HB.hi(url);
   },
 
@@ -885,6 +884,7 @@ var _HB = {
           }
         }
       }
+
     }
     // Now we narrow down based on the "value" of the site elements
     // (collecting emails is considered more valuable than clicking links
@@ -960,20 +960,20 @@ var _HB = {
       {
         // If we just need to match any condition and we have matched
         // one then return true
-        if ( rule.match == "any" )
+        if ( rule.matchType == "any" )
           return true;
       }
       else
       {
         // We didn't match a condition. Return false if we needed to
         // match all of them
-        if ( rule.match == "all" )
+        if ( rule.matchType != "any" )
           return false;
       }
     }
     // If we needed to match any condition (and we had at least one)
     // and didn't yet return false
-    if ( rule.match == "any" && rule.conditions.length > 0)
+    if ( rule.matchType == "any" && rule.conditions.length > 0)
       return false;
     return true;
   },
@@ -985,7 +985,8 @@ var _HB = {
     // Need to get the current value
     var currentValue = HB.getSegmentValue(condition.segment);
     // Now we need to apply the operands
-    return HB.applyOperand(currentValue, condition.operand, condition.value);
+    var returnValue= HB.applyOperand(currentValue, condition.operand, condition.value);
+    return returnValue;
   },
 
   // Gets the current segment value that will be compared to the conditions
@@ -1034,6 +1035,7 @@ var _HB = {
       case "greater_than_or_equal":
         return a >= b;
       case "between":
+      case "is_between":
         return a >= b[0] && a <= b[1];
     }
   },
