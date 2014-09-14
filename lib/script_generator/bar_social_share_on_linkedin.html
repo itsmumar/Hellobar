@@ -1,11 +1,11 @@
 <span>
-  {{bar.message}}
+  {{siteElement.message}}
 </span>
 
 <span class="social-wrapper linkedin-button-wrapper">
   <span class="linkedin-button">
     <script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
-    <script type="IN/Share" data-url="{{(HB.t(bar.settings.use_location_for_url) ? window.parent.location.href : bar.settings.url_to_share).replace(/^(?!http)/, 'http://')}}" data-counter="right" data-showzero="true"></script>
+    <script type="IN/Share" data-url="{{(HB.t(siteElement.settings.use_location_for_url) ? window.parent.location.href : siteElement.settings.url_to_share).replace(/^(?!http)/, 'http://')}}" data-counter="right" data-showzero="true"></script>
   </span>
 </span>
 

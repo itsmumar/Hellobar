@@ -1,7 +1,7 @@
 <span>
-  {{bar.message}}
+  {{siteElement.message}}
 </span>
 
 <span class="social-wrapper buffer-add-button-wrapper">
-  <a href="http://bufferapp.com/add/?url={{encodeURIComponent((HB.t(bar.settings.use_location_for_url) ? window.parent.location.href : bar.settings.buffer_url).replace(/^(?!http)/, 'http://'))}}&text={{encodeURIComponent(bar.settings.buffer_message)}}" class="buffer-add-button" target="_blank" onclick="window.parent.HB.trackClick(this)"></a>
+  <a href="http://bufferapp.com/add/?url={{encodeURIComponent((HB.t(siteElement.settings.use_location_for_url) ? window.parent.location.href : siteElement.settings.buffer_url).replace(/^(?!http)/, 'http://'))}}&text={{encodeURIComponent(siteElement.settings.buffer_message)}}" class="buffer-add-button" target="_blank" onclick="window.parent.HB.trackClick(this)"></a>
 </span>
