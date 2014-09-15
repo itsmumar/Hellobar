@@ -59,7 +59,7 @@ class SitesController < ApplicationController
 
   # Returns the site's script
   def script
-    render :js => @site.script_content(params[:no_compress].to_i == 1)
+    render :js => @site.script_content(params[:compress].to_i == 1)
   end
 
   def chart_data
