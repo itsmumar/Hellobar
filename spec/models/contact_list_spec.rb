@@ -111,14 +111,6 @@ describe ContactList do
     end
   end
 
-  it "should queue all jobs when running sync_all!" do
-    mock_list = double("contact list", :syncable? => true)
-    mock_list.should_receive(:sync!)
-    ContactList.stub(:all).and_return([mock_list])
-
-    ContactList.sync_all!
-  end
-
   it "should handle invalid JSON correctly" do
     contact_list.update_column :data, "{\"url\":\"http://yoursite.com/goal\",\"collect_names\":0,\"exclude_urls\":[\","
 

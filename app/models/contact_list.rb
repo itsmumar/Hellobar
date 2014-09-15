@@ -25,17 +25,6 @@ class ContactList < ActiveRecord::Base
 
   after_save :sync, :if => :data_changed?
 
-  def self.sync_all!
-    all.each do |list|
-      begin
-        list.sync! if list.syncable?
-      rescue => e
-        # if something goes wrong, we want to know about it, but we don't want to prevent other lists from syncing
-        Raven.capture_exception(e)
-      end
-    end
-  end
-
   def syncable?
     return false unless identity && data
 
