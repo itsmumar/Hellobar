@@ -38,7 +38,7 @@ class Site < ActiveRecord::Base
     if Hellobar::Settings[:store_site_scripts_locally]
       "generated_scripts/#{script_name}"
     else
-      "s3.amazonaws.com/#{Hellobar::Settings[:s3_bucket]}/#{script_name}"
+      "my.hellobar.com/#{script_name}"
     end
   end
 
