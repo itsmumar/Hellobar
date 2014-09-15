@@ -3,25 +3,6 @@
 
 module 'RuleModal.open'
 
-test 'rendering the correct operand for CountryCondition', ->
-  expect(1)
-
-  options =
-    ruleData:
-      name: 'Rule name'
-      conditions: [
-        segment: 'CountryCondition'
-      ]
-
-  modal = new RuleModal(options)
-  $modal = modal.open()
-
-  $modal.find('select.condition-segment').val('CountryCondition')
-  operands = $modal.find('select.condition-operand option').map ->
-    @value
-
-  deepEqual $.makeArray(operands), ['is', 'is_not'], 'filters the correct operands for CountryCondition'
-
 test 'rendering the correct operand for DeviceCondition', ->
   expect(1)
 
@@ -93,24 +74,15 @@ test 'RuleModal._renderValue($condition)', (assert) ->
     ruleData:
       name: 'Rule name'
       conditions: [
-        segment: 'CountryCondition'
+        segment: 'DeviceCondition'
       ]
 
   modal = new RuleModal(options)
   $modal = modal.open()
   $condition = $modal.find('.condition-block:not(".no-condition-message"):first')
 
-  $condition.find('select.condition-segment').val('CountryCondition').trigger('change')
-  modal._renderValue($condition)
-  equal $condition.find('.country').prop('disabled'), false, 'it enables the country value when the segment is CountryCondition'
-  equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is CountryCondition'
-  equal $condition.find('.url').prop('disabled'), true, 'it disables the url value when the segment is CountryCondition'
-  equal $condition.find('.start_date').prop('disabled'), true, 'it disables the start_date value when the segment is CountryCondition'
-  equal $condition.find('.end_date').prop('disabled'), true, 'it disables the end_date value when the segment is CountryCondition'
-
   $condition.find('select.condition-segment').val('DeviceCondition').trigger('change')
   modal._renderValue($condition)
-  equal $condition.find('.country').prop('disabled'), true, 'it disables the country value when the segment is DeviceCondition'
   equal $condition.find('.device').prop('disabled'), false, 'it enables the device value when the segment is DeviceCondition'
   equal $condition.find('.url').prop('disabled'), true, 'it disables the url value when the segment is DeviceCondition'
   equal $condition.find('.start_date').prop('disabled'), true, 'it disables the start_date value when the segment is DeviceCondition'
@@ -118,7 +90,6 @@ test 'RuleModal._renderValue($condition)', (assert) ->
 
   $condition.find('select.condition-segment').val('UrlCondition').trigger('change')
   modal._renderValue($condition)
-  equal $condition.find('.country').prop('disabled'), true, 'it disables the country value when the segment is UrlCondition'
   equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is UrlCondition'
   equal $condition.find('.url').prop('disabled'), false, 'it enables the url value when the segment is UrlCondition'
   equal $condition.find('.start_date').prop('disabled'), true, 'it disables the start_date value when the segment is UrlCondition'
@@ -127,7 +98,6 @@ test 'RuleModal._renderValue($condition)', (assert) ->
   $condition.find('select.condition-segment').val('DateCondition').trigger('change')
   $condition.find('select.condition-operand').val('is_before').trigger('change')
   modal._renderValue($condition)
-  equal $condition.find('.country').prop('disabled'), true, 'it disables the country value when the segment is DateCondition'
   equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is DateCondition'
   equal $condition.find('.url').prop('disabled'), true, 'it disables the url value when the segment is DateCondition'
 
@@ -185,7 +155,6 @@ test '_validOperands()', ->
       conditions: [{}]
   modal = new RuleModal(options)
 
-  deepEqual modal._validOperands('CountryCondition'), ['is', 'is_not'], 'has a valid value for country'
   deepEqual modal._validOperands('DeviceCondition'), ['is', 'is_not'], 'has a valid value for device'
   deepEqual modal._validOperands('DateCondition'), ['is_before', 'is_after', 'is_between'], 'has a valid value for date'
   deepEqual modal._validOperands('UrlCondition'), ['includes', 'excludes'], 'has a valid value for url'
@@ -200,13 +169,13 @@ test '_filteredOperands(segment)', ->
     template +=   "<select class='condition-operand'>#{isOption}</select>"
     template += "</div>"
 
-  equal modal.filteredOperands('CountryCondition').val(), $(isOption).val()
+  equal modal.filteredOperands('DeviceCondition').val(), $(isOption).val()
 
   modal.newConditionTemplate = ->
     template =  "<div>"
     template +=   "<select class='condition-operand'>#{isOption}#{isNotOption}</select>"
     template += "</div>"
 
-  expectedValue = modal.filteredOperands("CountryCondition").map -> @value
+  expectedValue = modal.filteredOperands("DeviceCondition").map -> @value
 
   deepEqual $.makeArray(expectedValue), ["is", "is_not"], 'it pulls all option elements that match'

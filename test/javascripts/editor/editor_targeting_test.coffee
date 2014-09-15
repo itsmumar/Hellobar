@@ -43,11 +43,8 @@ test 'it should be able to create a new rule', ->
     addCondition = $modal.find('.condition-add:first')
     addCondition.click()
     equal $modal.find('.condition-block:not(".no-condition-message")').length, 1, 'builds a new condition'
-    equal $modal.find('.country-choice:visible').length, 1, 'makes country condition visible by default'
 
-    equal $modal.find('.device.value:visible').length, 0, 'device is hidden by default'
-    $modal.find('.condition-segment').val('DeviceCondition').trigger('change')
-    equal $modal.find('.device.value:visible').length, 1, 'shows device once selected'
+    equal $modal.find('.device.value:visible').length, 1, 'device is visible by default'
 
     $modal.find('.condition-segment').val('UrlCondition').trigger('change')
     equal $modal.find('.device.value:visible').length, 0, 'device is hidden'
