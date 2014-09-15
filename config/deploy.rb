@@ -23,9 +23,6 @@ namespace :deploy do
     end
   end
 
-  after :publishing, :restart
-  after :publishing, :copy_additional_logrotate_files
-
   task :reload_nginx_config do
     on roles(:web) do
       # uses kill, but actually just reloads the config.
@@ -61,4 +58,7 @@ namespace :deploy do
       execute "cp #{release_path}/config/deploy/logrotate.d/guaranteed_queue /etc/logrotate.d/"
     end
   end
+
+  after :publishing, :restart
+  after :publishing, :copy_additional_logrotate_files
 end
