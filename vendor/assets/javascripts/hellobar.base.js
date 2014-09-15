@@ -369,6 +369,10 @@ var _HB = {
   {
     if ( email )
     {
+      var emailAndName = email;
+      if ( name )
+        emailAndName += ","+name;
+
       // Record the email address to the cnact list and then track that the rule was performed
       HB.s("c", HB.cli, {e:emailAndName}, function(){HB.converted(callback)});
     }
@@ -864,7 +868,7 @@ var _HB = {
         for(j=0;j<rule.siteElements.length;j++)
         {
           siteElement = rule.siteElements[j];
-          if ( !HB.didConvert(siteElement) )
+          if ( siteElement.type == "traffic" || !HB.didConvert(siteElement) )
           {
             if ( !possibleSiteElements[siteElement.type] )
               possibleSiteElements[siteElement.type] = [];
