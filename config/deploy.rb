@@ -24,6 +24,7 @@ namespace :deploy do
   end
 
   after :publishing, :restart
+  after :publishing, :copy_additional_logrotate_files
 
   task :reload_nginx_config do
     on roles(:web) do
@@ -52,6 +53,12 @@ namespace :deploy do
       execute "sudo chown root /etc/monit/monitrc"
       execute "sudo service monit start"
       execute "sudo monit restart all"
+    end
+  end
+
+  task :copy_additional_logrotate_files do
+    on roles(:web) do
+      execute "cp #{release_path}/config/deploy/logrotate.d/guaranteed_queue /etc/logrotate.d/"
     end
   end
 end

@@ -1,0 +1,29 @@
+/mnt/deploy/shared/log/guaranteed_queue.log {
+    weekly
+    missingok
+    rotate 52
+    compress
+    delaycompress
+    notifempty
+    copytruncate
+}
+
+/mnt/deploy/shared/log/guaranteed_queue.failed.log {
+    weekly
+    missingok
+    rotate 52
+    compress
+    delaycompress
+    notifempty
+    copytruncate
+}
+
+/mnt/deploy/shared/log/guaranteed_queue.deleted.log {
+    weekly
+    missingok
+    rotate 52
+    compress
+    delaycompress
+    notifempty
+    copytruncate
+}

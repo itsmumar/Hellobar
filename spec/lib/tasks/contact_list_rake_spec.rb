@@ -22,11 +22,7 @@ describe "contact_list:sync_one" do
     expect_any_instance_of(ContactList).to receive(:sync_one!).with("test.testerson@example.com", "Test Testerson")
     perform!
   end
-
-  it 'should update last_synced_at' do
-    expect { perform! }.to change { contact_list.last_synced_at }.from(NilClass).to(Time)
-  end
-
+  
   it 'should require an email' do
     expect_any_instance_of(ContactList).not_to receive(:sync_one!)
     user[:email] = nil

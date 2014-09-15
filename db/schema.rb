@@ -58,10 +58,9 @@ ActiveRecord::Schema.define(version: 20140905160712) do
     t.integer  "identity_id"
     t.string   "name"
     t.text     "data"
-    t.datetime "last_synced_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "double_optin",   default: true
+    t.boolean  "double_optin", default: true
   end
 
   add_index "contact_lists", ["identity_id"], name: "index_contact_lists_on_identity_id", using: :btree
