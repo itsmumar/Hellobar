@@ -152,33 +152,32 @@ class LegacyMigrator
         legacy_membership = legacy_memberships.first
         legacy_user = legacy_membership.user
 
-        if legacy_user && !::User.exists?(legacy_user.id_to_migrate) && !::Hello::WordpressUser.email_exists?(legacy_user.email)
-          begin
-            user = ::User.create! id: legacy_user.id_to_migrate,
-                                  email: legacy_user.email,
-                                  encrypted_password: legacy_user.encrypted_password,
-                                  reset_password_token: legacy_user.reset_password_token,
-                                  reset_password_sent_at: legacy_user.reset_password_sent_at,
-                                  remember_created_at: legacy_user.remember_created_at,
-                                  sign_in_count: legacy_user.sign_in_count,
-                                  status: ::User::ACTIVE_STATUS,
-                                  legacy_migration: true,
-                                  current_sign_in_at: legacy_user.current_sign_in_at,
-                                  last_sign_in_at: legacy_user.last_sign_in_at,
-                                  current_sign_in_ip: legacy_user.current_sign_in_ip,
-                                  last_sign_in_ip: legacy_user.last_sign_in_ip,
-                                  created_at: legacy_user.original_created_at || legacy_user.created_at,
-                                  updated_at: legacy_user.updated_at
-
-          ::SiteMembership.create! user_id: user.id,
-                                   site_id: legacy_site_id
-
-          rescue ActiveRecord::RecordNotUnique => e
-            Rails.logger.info "WTF:Error creating New user:#{e}"
-          end
-        else
-          Rails.logger.info "WTF:No user found for Legacy Membership id:#{legacy_membership.id}"
+        unless legacy_user
+          Rails.logger.info "WTF:Legacy Membership: #{legacy_membership.id} has no users!"
+          return
         end
+
+        return if ::Hello::WordpressUser.email_exists?(legacy_user.email)
+
+        migrated_user = ::User.where(id: legacy_user.id_to_migrate).first
+        migrated_user ||= ::User.create! id: legacy_user.id_to_migrate,
+                                         email: legacy_user.email,
+                                         encrypted_password: legacy_user.encrypted_password,
+                                         reset_password_token: legacy_user.reset_password_token,
+                                         reset_password_sent_at: legacy_user.reset_password_sent_at,
+                                         remember_created_at: legacy_user.remember_created_at,
+                                         sign_in_count: legacy_user.sign_in_count,
+                                         status: ::User::ACTIVE_STATUS,
+                                         legacy_migration: true,
+                                         current_sign_in_at: legacy_user.current_sign_in_at,
+                                         last_sign_in_at: legacy_user.last_sign_in_at,
+                                         current_sign_in_ip: legacy_user.current_sign_in_ip,
+                                         last_sign_in_ip: legacy_user.last_sign_in_ip,
+                                         created_at: legacy_user.original_created_at || legacy_user.created_at,
+                                         updated_at: legacy_user.updated_at
+
+        ::SiteMembership.create! user_id: migrated_user.id,
+                                 site_id: legacy_site_id
       end
     end
 

@@ -44,7 +44,7 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
 
   context 'user and membership migration' do
     before do
-      LegacyMigrator::LegacySite.should_receive(:find_each).and_yield(legacy_site)
+      LegacyMigrator::LegacySite.stub(:find_each).and_yield(legacy_site)
       legacy_user.stub legacy_user_id: 11223344, id: 44332211, email: "rand#{rand(10_0000)}-#{rand(10_000)}@email.com", original_created_at: Time.parse('1824-05-07')
     end
 
@@ -57,7 +57,7 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
     end
 
     it 'does not create a user if it already exists' do
-      User.stub :exists? => true
+      User.stub :where => [User.new]
 
       expect {
         LegacyMigrator.migrate_sites_and_users_and_memberships
@@ -137,6 +137,17 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
       new_site = Site.find(legacy_site.legacy_site_id)
 
       new_user.sites.should == [new_site]
+    end
+
+    it 'associates multiple sites with the correct user' do
+      second_legacy_site = double 'legacy_site', legacy_site_id: 44332212, id: 11223344, base_url: 'http://baller4ever.sho', account_id: 1, created_at: Time.parse('1875-01-30'), updated_at: Time.parse('1875-01-31'), script_installed_at: Time.now, generated_script: Time.now, attempted_generate_script: Time.now
+      LegacyMigrator::LegacySite.stub(:find_each).and_yield(legacy_site).and_yield(second_legacy_site)
+
+      LegacyMigrator.migrate_sites_and_users_and_memberships
+
+      migrated_user = User.find(legacy_user.legacy_user_id)
+
+      migrated_user.sites.size.should == 2
     end
   end
 end
