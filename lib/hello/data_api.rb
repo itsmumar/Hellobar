@@ -16,7 +16,7 @@ module Hello::DataAPI
 
       site_element_ids = site_elements.map(&:id).sort
 
-      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.sort.join('-')}:lifetime_totals:#{num_days}days"
+      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.join('-')}:lifetime_totals:#{num_days}days"
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
@@ -101,7 +101,7 @@ module Hello::DataAPI
     def contact_list_totals(site, contact_lists, cache_options = {})
       contact_list_ids = contact_lists.map(&:id).sort
 
-      cache_key = "hello:data-api:#{site.id}:#{contact_list_ids.sort.join('-')}:contact_list_totals"
+      cache_key = "hello:data-api:#{site.id}:#{contact_list_ids.join('-')}:contact_list_totals"
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
@@ -124,7 +124,7 @@ module Hello::DataAPI
 
       site_element_ids = site_elements.map(&:id).sort
 
-      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.sort.join('-')}:suggested_opportunities"
+      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.join('-')}:suggested_opportunities"
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
