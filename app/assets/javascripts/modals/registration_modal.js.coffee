@@ -29,7 +29,7 @@ class @RegistrationModal extends Modal
         url: @action
         type: @method
         data: $(this).serialize()
-        succes: (data, status, xhr) ->
+        success: (data, status, xhr) ->
           modal.close()
         error: (xhr, status, error) ->
           console.log "Something went wrong: #{error}"
