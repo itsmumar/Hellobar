@@ -48,5 +48,7 @@ table.rules-wrapper
           - else
             = link_to "A/B test a new bar for this rule to maximize your conversions", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
 
-- @rules.each do |rule|
-  = render 'shared/modals/rules', site: @site, rule: rule
+= render 'shared/modals/rule_modal_template'
+
+javascript:
+  var rules = #{{@rules.map{|rule| RuleSerializer.new(rule) }.to_json }};

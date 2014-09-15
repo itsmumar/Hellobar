@@ -31,6 +31,8 @@ class SiteElementSerializer < ActiveModel::Serializer
           :id => rule.id,
           :name => rule.name,
           :description => rule.to_sentence,
+          :match => rule.match,
+          :priority => rule.priority,
           :conditions => rule.conditions.map{|c| ConditionSerializer.new(c) }
         }
       end,

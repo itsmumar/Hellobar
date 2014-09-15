@@ -1,19 +1,45 @@
 HelloBar.TargetingController = Ember.Controller.extend
 
   ruleOptions: ( ->
-    rules = @get("model.site.rules").map (rule) ->
-      {id: rule.id, text: rule.name, description: rule.description}
-
-    rules.push({id: 0, text: "Other...", description: "?"})
+    rules = @get("model.site.rules").slice()
+    rules.push({name: "Other...", description: "?"})
     rules
   ).property("model.site.rules")
 
   selectedRule: (->
-    filtered = @get("ruleOptions").filter (rule) =>
-      rule.id == @get("model.rule_id")
-
-    filtered[0]
+    selectedRuleId = @get('model.rule_id')
+    @get("ruleOptions").find (rule) -> rule.id == selectedRuleId
   ).property("model.rule_id", "model.site.rules")
+
+  # TODO: move this into openRuleModal
+  popNewRuleModal: (->
+    @send('openRuleModal', {}) unless @get('model.rule_id')
+  ).observes('model.rule_id')
+
+  actions:
+    openRuleModal: (ruleData) ->
+      ruleData.siteId = window.siteID
+      controller = this
+
+      options =
+        ruleData: ruleData
+        successCallback: ->
+          ruleData = this
+          updatedRule = controller.get('model.site.rules').find (rule) -> rule.id == ruleData.id
+
+          if updatedRule
+            Ember.set(updatedRule, "conditions", ruleData.conditions)
+            Ember.set(updatedRule, "description", ruleData.description)
+            Ember.set(updatedRule, "name", ruleData.name)
+            Ember.set(updatedRule, "match", ruleData.match)
+            Ember.set(updatedRule, "priority", ruleData.priority)
+          else # we created a new rule
+            controller.get('model.site.rules').push(ruleData)
+
+          controller.set('model.rule_id', ruleData.id)
+          controller.notifyPropertyChange('model.site.rules')
+
+      new RuleModal(options).open()
 
   displayWhenOptions: [
     {value: 'immediately',   label: 'Show immediately'}

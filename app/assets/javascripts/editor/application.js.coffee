@@ -7,6 +7,7 @@
 #= require jquery_minicolors
 
 #= require handlebars
+#= require handlebars_helpers
 #= require ember
 
 #= require_self

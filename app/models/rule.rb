@@ -7,7 +7,7 @@ class Rule < ActiveRecord::Base
   belongs_to :site
 
   has_many :site_elements, dependent: :destroy
-  has_many :conditions, dependent: :destroy
+  has_many :conditions, dependent: :destroy, inverse_of: :rule
 
   accepts_nested_attributes_for :conditions, allow_destroy: true
 
