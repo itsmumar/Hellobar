@@ -201,7 +201,7 @@ private
   protected
 
   # We don't want to expose this boolean right in the Javascript
-  # so we leave it protectedk
+  # so we leave it protected
   def is_pro
     false
   end
