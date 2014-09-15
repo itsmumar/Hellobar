@@ -24,18 +24,6 @@ var HBQ = function()
       this.push(_hbq[i]);
   }
 
-  // Add the appropriate CSS
-  if ( HBCrypto.HmacSHA512(HB_SITE_ID+HB_WK, HB_PS).toString() == HB_PK )
-  {
-    // User is pro
-    HB.addCSS("#hellobar a.hellobar_logo_"+HB_PS+"{display: none !important;}");
-  }
-  else
-  {
-    // User is not pro
-    HB.addCSS("#hellobar a.hellobar_logo_"+HB_PS+"{display: block !important;}");
-    HB.addCSS("#hellobar.mobile a.hellobar_logo_"+HB_PS+" { display: none !important; }");
-  }
   // Set all the default tracking trackings
   HB.setDefaultSegments();
   // Apply the rules
