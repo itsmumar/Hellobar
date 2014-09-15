@@ -30,7 +30,6 @@ script id="rule-modal" type="text/x-handlebars-template"
             .condition-ruleset
               .select-wrapper.optional.rule_conditions_segment
                 select class="condition-segment" name="rule[conditions_attributes][{{@index}}][segment]"
-                  | {{option segment "CountryCondition" "country"}}
                   | {{option segment "DeviceCondition" "device"}}
                   | {{option segment "DateCondition" "date"}}
                   | {{option segment "UrlCondition" "url"}}
@@ -87,7 +86,6 @@ script#new-condition type="text/x-handlebars-template"
       .condition-ruleset
         .select-wrapper.optional.rule_conditions_segment
           select.condition-segment name="segment"
-            option value="CountryCondition" country
             option value="DeviceCondition" device
             option value="DateCondition" date
             option value="UrlCondition" url
