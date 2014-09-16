@@ -1,9 +1,14 @@
 /*-----------  Icons  -----------*/
 
-[class^='icon-']
+[class*='icon-']
+  position: relative
 
-  .icon-num
+  .numbers
+    top: 0
+    left: 0
     margin: 0
+    width: 100%
+    line-height: 100%
     position: absolute
     font-style: normal
     color: $white !important
@@ -11,9 +16,8 @@
 /*-----------  Noitifcations Icon  -----------*/
 
 .icon-notification
-  position: relative
 
-  .icon-num
+  .numbers
     right: 31%
     bottom: 19%
     width: 1.85em
@@ -27,30 +31,8 @@
 /*-----------  Badge Icon  -----------*/
 
 .icon-badge
-  position: relative
 
-  .icon-num
+  .numbers
     top: 64%
     left: 24%
     font-size: 0.33em
-
-/*-------  A/B Test Icons on Manage Page  -------*/
-
-tr.site-element-block td
-  .icon-tip
-    position: relative
-
-    .icon-num
-      top: 12%
-      left: 28%
-      font-weight: bold
-      font-size: 0.6em
-
-    &.icon-ab-yellow
-      color: $yellow !important
-
-    &.icon-ab-blue
-      color: $blue !important
-
-    &.icon-ab-green
-      color: $green !important

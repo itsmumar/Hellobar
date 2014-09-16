@@ -108,18 +108,34 @@
             border-right-width: 1px
             background-color: $grayLightest
 
-            > i,
+            .testing-icon,
             .dropdown-wrapper > i
               top: 3px
               color: $grayLight
-              font-size: 1.33em
-              position: relative
               vertical-align: middle
+
+            .testing-icon
+              font-size: 1.67em
+
+              &.social
+                color: $yellow !important
+
+              &.traffic
+                color: $blue !important
+
+              &.email
+                color: $green !important
+
+              .numbers
+                font-size: 0.6em
+                font-weight: bold
+                line-height: 195%
 
             .dropdown-wrapper
               margin-right: -1.33rem
 
               > i
+                font-size: 1.33em
                 padding-left: 1.25rem
 
       /*-----------  Suggestion Rows  -----------*/
