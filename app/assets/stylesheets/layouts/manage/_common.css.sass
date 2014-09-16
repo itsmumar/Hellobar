@@ -116,6 +116,7 @@
 
             .testing-icon
               font-size: 1.67em
+              @include inline-block()
 
               &.social
                 color: $yellow !important
@@ -127,9 +128,20 @@
                 color: $green !important
 
               .numbers
-                font-size: 0.6em
+                left: 30%
                 font-weight: bold
-                line-height: 195%
+
+              &.icon-tip
+
+                .numbers
+                  top: 16%
+                  font-size: 0.55em
+
+              &.icon-circle
+    
+                .numbers
+                  top: 10%
+                  font-size: 0.6em
 
             .dropdown-wrapper
               margin-right: -1.33rem
