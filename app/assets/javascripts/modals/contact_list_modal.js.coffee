@@ -150,7 +150,6 @@ class @ContactListModal extends Modal
         @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if listData
-          window.foo = listData
           @$modal.find("#contact_list_remote_list_id").val(listData.data.remote_id) if listData.data && listData.data.remote_id
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 
