@@ -18,7 +18,6 @@ test 'it should be able to create a new rule', ->
   andThen ->
     $modal = $('.modal-wrapper.show-modal.rules-modal')
     equal $modal.find('h5').text(), 'New Rule', 'we are in the new rule modal'
-    equal $modal.find('input[name="rule[priority]"]').val(), '', 'priority is not set by default'
     equal $modal.find('select[name="rule[match]"]').val(), 'all', 'match is set to all by default'
     equal $modal.find('input[name="rule[name]"]').val(), 'Other...', 'name is other by default'
     equal $modal.find('.condition-block:not(".no-condition-message")').length, 0, 'there should be no conditions'
