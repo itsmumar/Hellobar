@@ -25,21 +25,22 @@
         = button_to "Add New Site", new_site_path, :class => "button", :method => :get
 
   .header-user-wrapper
+    - unless current_user && current_user.temporary?
 
-    .button
-      | Upgrade to Pro
+      .button
+        | Upgrade to Pro
 
-    img.user-avatar src= gravatar_url_for(current_user)
-    span.user-name= display_name_for_user(current_user)
+      img.user-avatar src= gravatar_url_for(current_user)
+      span.user-name= display_name_for_user(current_user)
 
-    .dropdown-wrapper
-      i.icon-dropdown
-      .dropdown-block
-        = active_link_to 'User Settings', profile_path()
-        = content_tag 'a', 'Access Controls'
-        = content_tag 'a', 'Payment Info'
-        = content_tag 'a', 'Upgrade to Pro'
-        - if impersonated_user
-          = active_link_to "Stop Impersonation", admin_unimpersonate_user_path, :method => :delete
-        - else
-          = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
+      .dropdown-wrapper
+        i.icon-dropdown
+        .dropdown-block
+          = active_link_to 'User Settings', profile_path()
+          = content_tag 'a', 'Access Controls'
+          = content_tag 'a', 'Payment Info'
+          = content_tag 'a', 'Upgrade to Pro'
+          - if impersonated_user
+            = active_link_to "Stop Impersonation", admin_unimpersonate_user_path, :method => :delete
+          - else
+            = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete

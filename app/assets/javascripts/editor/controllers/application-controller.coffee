@@ -100,12 +100,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
     saveSiteElement: ->
       @toggleProperty('saveSubmitted')
-
-      # open the registration modal if user is temporary
-      if @isTemporaryUser
-        modal = new RegistrationModal
-        modal.open()
-
       true
 
     closeEditor: ->

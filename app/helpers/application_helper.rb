@@ -6,8 +6,13 @@ module ApplicationHelper
   def page_id
     if controller_name == 'pages' && params[:page]
       [controller_name, params[:page]].join('-')
-    else      
+    else
       [controller_name, action_name].join('-')
     end
-  end  
+  end
+
+  def show_account_prompt?
+    current_user && current_user.temporary? &&
+      !(params[:action] == "edit" && params[:controller] == "user")
+  end
 end
