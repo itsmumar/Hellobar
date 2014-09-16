@@ -124,8 +124,10 @@ module SiteElementsHelper
     letter = ("A".."Z").to_a[index]
 
     if rand(2) == 1
+      # Circled Icon
       "<i class='testing-icon icon-circle #{site_element.short_subtype}'><span class='numbers'>#{letter}</span></i>".html_safe
     else
+      # Starred Icon
       "<i class='testing-icon icon-tip #{site_element.short_subtype}'><span class='numbers'>#{letter}</span></i>".html_safe
     end
   end
