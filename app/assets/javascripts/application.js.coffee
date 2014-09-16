@@ -31,9 +31,7 @@
 $ ->
 
   # Reveal Blocks
-  $('.reveal-wrapper').click () ->
-    if $(@).hasClass('activated')
-      $(@).removeClass('activated')
-    else
+  $('.reveal-wrapper').click (evt) ->
+    unless $(@).hasClass('activated')
       $('.reveal-wrapper.activated').removeClass('activated')
       $(@).addClass('activated')

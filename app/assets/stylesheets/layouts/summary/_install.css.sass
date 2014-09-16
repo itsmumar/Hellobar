@@ -15,3 +15,48 @@
   > h5
     font-size: 1em
     color: $grayLight
+
+  pre
+    white-space: normal
+
+  /*-----------  Wordpress Reveal  -----------*/
+
+  .wordpress-reveal
+
+    strong
+      display: block
+      color: $grayDarker
+      font-weight: normal
+      @include antialiased()
+
+    .button,
+    strong + p
+      margin: 0.5em 1em 1.5em
+
+    .button
+
+      .icon-download
+        font-size: 1.33em
+
+    small
+      top: -0.5em
+      color: $grayLighter
+      position: relative
+
+  /*-----------  Developer Reveal  -----------*/
+
+  .developer-reveal
+
+    form
+      position: relative
+
+      label
+        width: 5em
+        left: -6.25em
+        color: $grayLight
+        font-size: 0.75em
+        text-align: right
+        position: absolute
+
+      .topper
+        margin-top: 2em
