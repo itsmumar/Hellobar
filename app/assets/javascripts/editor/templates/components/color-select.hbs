@@ -7,14 +7,14 @@
   </div>
 
   <div class="color-dropdown">
-    <div class="color-preview-row">
+    {{!-- <div class="color-preview-row">
       <small>Site colors</small>
       <ul>
         {{#each siteColors}}
           {{view HelloBar.ColorPreview color=this}}
         {{/each}}
       </ul>
-    </div>
+    </div> --}}
 
     <div class="color-preview-row">
       <small>Recent</small>
@@ -28,9 +28,9 @@
     <div class="color-picker">
       <div class="gradient-block"></div>
       
-      <a class="eyedrop-button" {{action 'toggleSelecting'}}>
+      {{!-- <a class="eyedrop-button" {{action 'toggleSelecting'}}>
         <i class="icon-eyedropper"></i>
-      </a>
+      </a> --}}
 
       <div class="rgb-block">
         <h6>R</h6><span>{{ rgbObject.r }}</span>
