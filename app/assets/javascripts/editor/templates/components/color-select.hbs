@@ -33,13 +33,16 @@
       </a> --}}
 
       <div class="rgb-block">
-        <h6>R</h6><span>{{ rgbObject.r }}</span>
+        <h6>R</h6>
+        {{input type='number' class='r-val' min='0' max='255' step='1' value=rVal}}
       </div>
       <div class="rgb-block">
-        <h6>G</h6><span>{{ rgbObject.g }}</span>
+        <h6>G</h6>
+        {{input type='number' class='g-val' min='0' max='255' step='1' value=gVal}}
       </div>
       <div class="rgb-block">
-        <h6>B</h6><span>{{ rgbObject.b }}</span>
+        <h6>B</h6>
+        {{input type='number' class='b-val' min='0' max='255' step='1' value=bVal}}
       </div>
     </div>
   </div>

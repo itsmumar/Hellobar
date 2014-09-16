@@ -128,16 +128,22 @@
           .rgb-block
             width: 25%
             float: right
+            position: relative
             margin-top: 0.25em
-            padding: 0.25em 0.5em
-            border-radius: $radiusSm
-            border: 1px solid $grayLight
 
             h6
+              top: 0.5em
+              left: 0.5em
+              position: absolute
               @include inline-block(inherit)
 
-            span
-              float: right
+            input
+              margin: 0
+              width: 100%
+              padding: 0.5em
+              text-align: right
+              border-radius: $radiusSm
+              border: 1px solid $grayLight
 
     &.in-focus
 
