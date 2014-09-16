@@ -178,7 +178,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
       rule = Rule.find(legacy_goal.id)
 
       rule.id.should == legacy_goal.id
-      rule.site_id.should == legacy_site.id
+      rule.site_id.should == site.id
       rule.created_at.to_time.utc.to_s.should == legacy_goal.created_at.to_time.utc.to_s
       rule.updated_at.to_time.utc.to_s.should == legacy_goal.updated_at.to_time.utc.to_s
     end
@@ -265,6 +265,28 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
       expect {
         LegacyMigrator.migrate_goals_to_rules
       }.to change(Condition, :count).by(4)
+    end
+
+    it 'sets the rule name to Everyone when there are only 1 conditions for a rule' do
+      data = { 'exclude_urls' => ['http://exclude.com'] }
+      legacy_goal.stub data_json: data
+
+      LegacyMigrator.migrate_goals_to_rules
+
+      rule = Rule.find(legacy_goal.id)
+
+      rule.name.should == 'Everyone'
+    end
+
+    it 'updates the rule name when there are more than 1 conditions for a rule' do
+      data = { 'exclude_urls' => ['http://exclude.com'], 'start_date' => '01/01/2014' }
+      legacy_goal.stub data_json: data
+
+      LegacyMigrator.migrate_goals_to_rules
+
+      rule = Rule.find(legacy_goal.id)
+
+      rule.name.should == 'Rule 1'
     end
   end
 

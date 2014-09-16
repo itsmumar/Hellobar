@@ -50,8 +50,8 @@ class LegacyMigrator
         if legacy_goals.present?
           legacy_goals.each do |legacy_goal|
             rule = ::Rule.create! id: legacy_goal.id,
-                                  site_id: legacy_goal.site_id,
-                                  name: 'Everyone', # or /URL? TODO
+                                  site_id: site.id,
+                                  name: 'Everyone', # may be renamed later depending on # of conditions
                                   priority: legacy_goal.priority,
                                   match: Rule::MATCH_ON[:all],
                                   created_at: legacy_goal.created_at.utc,
@@ -70,6 +70,15 @@ class LegacyMigrator
           end
         else # site has no rules so add them to the collection
           sites_needing_rules << site
+        end
+
+        # rename rules if we need to based on the # of conditions
+        site.rules.includes(:conditions).each do |rule|
+          rule_count = 1
+          if rule.conditions.size > 1
+            rule.update_attribute :name, "Rule #{rule_count}"
+            rule_count += 1
+          end
         end
       end
 
