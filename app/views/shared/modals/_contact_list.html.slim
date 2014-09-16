@@ -9,11 +9,6 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
 
       .contact-list-modal
 
-        .provider-instructions-block
-          / Empty
-
-        .provider-instructions-nevermind-block
-          / Empty
         .name-and-provider-block
           form.contact_list
             label for="contact_list_name" Name
@@ -30,6 +25,12 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
               small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
             .remote-list-select-block
 
+        .provider-instructions-block
+          / Empty
+
+        .provider-instructions-nevermind-block
+          / Empty
+          
       footer
         a.button.cancel Cancel
         a.button.submit Done
@@ -46,7 +47,7 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |  {{else}}
   |    <li>Your {{providerName}} username and password</li>  
   |  {{/if}}
-  |  <li>To have an existing list with {{providerName}} to sync to</li>
+  |  <li>An existing list with {{providerName}} to sync to</li>
   | </ol>
   |
   | {{#if requiresEmbedCode}}
@@ -56,10 +57,10 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |
   | {{else}}
   |
-  | <p>
-  |   <a class="do-this-later">I'll do this later</a>
-  |   <a class="ready button">I'm ready</a>
-  | </p>
+  | <div>
+  |   <a class="button cancel do-this-later">I'll do this later</a>
+  |   <a class="button ready">I'm ready</a>
+  | </div>
   |
   | {{/if}}
 

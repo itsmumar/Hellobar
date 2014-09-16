@@ -24,6 +24,12 @@
     box-shadow: $shadowSubtle
     @include transition(margin-top $modalSpeed, opacity $modalSpeed/2 $modalSpeed/2)
 
+    .button
+      @extend %green-button
+
+      &.cancel
+        @extend %gray-button
+
     .alert
       margin-bottom: 1.5em
 
@@ -44,10 +50,6 @@
 
       .button
         float: left
-        @extend %green-button
-
-        &.cancel
-          @extend %gray-button
 
         &:last-child
           float: right
