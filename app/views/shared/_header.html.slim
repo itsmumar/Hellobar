@@ -29,7 +29,7 @@
     .button
       | Upgrade to Pro
 
-    img.user-avatar src= avatar_url_for(current_user)
+    img.user-avatar src= gravatar_url_for(current_user)
     span.user-name= display_name_for_user(current_user)
 
     .dropdown-wrapper
