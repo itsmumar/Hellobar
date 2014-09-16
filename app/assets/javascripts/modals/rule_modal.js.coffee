@@ -16,6 +16,7 @@ class @RuleModal extends Modal
     super
 
   close: ->
+    @options.close() if @options.close
     @$modal.remove()
 
   _bindInteractions: ->

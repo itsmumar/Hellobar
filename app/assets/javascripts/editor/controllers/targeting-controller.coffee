@@ -38,6 +38,12 @@ HelloBar.TargetingController = Ember.Controller.extend
 
           controller.set('model.rule_id', ruleData.id)
           controller.notifyPropertyChange('model.site.rules')
+        close: ->
+          # if we selected "Other...", reset the current rule to the first
+          if ruleData.id == undefined
+            firstRule = controller.get('model.site.rules')[0]
+            firstRule ||= { id: null }
+            controller.set('model.rule_id', firstRule.id)
 
       new RuleModal(options).open()
 
