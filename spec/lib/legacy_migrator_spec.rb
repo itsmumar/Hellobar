@@ -267,9 +267,8 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
       }.to change(Condition, :count).by(4)
     end
 
-    it 'sets the rule name to Everyone when there are only 1 conditions for a rule' do
-      data = { 'exclude_urls' => ['http://exclude.com'] }
-      legacy_goal.stub data_json: data
+    it 'sets the rule name to Everyone when there are zero conditions for a rule' do
+      legacy_goal.stub data_json: {}
 
       LegacyMigrator.migrate_goals_to_rules
 

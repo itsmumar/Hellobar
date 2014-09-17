@@ -75,7 +75,7 @@ class LegacyMigrator
         # rename rules if we need to based on the # of conditions
         site.rules.includes(:conditions).each do |rule|
           rule_count = 1
-          if rule.conditions.size > 1
+          unless rule.conditions.size.zero?
             rule.update_attribute :name, "Rule #{rule_count}"
             rule_count += 1
           end
