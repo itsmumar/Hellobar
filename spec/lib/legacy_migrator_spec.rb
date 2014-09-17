@@ -343,9 +343,6 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
 
     bar.settings.should == { 'buffer_message' => 'such buffer. wow.' }
   end
-
-=begin
-=end
 end
 
 describe LegacyMigrator, ".migrate_identities" do

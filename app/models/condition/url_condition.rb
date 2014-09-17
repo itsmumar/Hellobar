@@ -2,24 +2,24 @@ class UrlCondition < Condition
   serialize :value
 
   def self.include_url(url)
-    UrlCondition.new operand: Condition::OPERANDS[:includes],
+    UrlCondition.new operand: :includes,
                      value: url
   end
 
-  def self.exclude_url(url)
-    UrlCondition.new operand: Condition::OPERANDS[:excludes],
+  def self.does_not_include_url(url)
+    UrlCondition.new operand: :does_not_include,
                      value: url
   end
 
   def include_url?
-    operand == Condition::OPERANDS[:includes]
+    operand == :includes
   end
 
   def to_sentence
     case operand
-    when OPERANDS[:includes]
+    when :includes
       "URL includes #{value}"
-    when OPERANDS[:excludes]
+    when :does_not_include
       "URL does not include #{value}"
     end
   end

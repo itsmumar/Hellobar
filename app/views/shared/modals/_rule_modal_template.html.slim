@@ -38,7 +38,7 @@ script id="rule-modal" type="text/x-handlebars-template"
                   | {{option operand "is" "is"}}
                   | {{option operand "is_not" "is not"}}
                   | {{option operand "includes" "includes"}}
-                  | {{option operand "excludes" "excludes"}}
+                  | {{option operand "does_not_include" "does not include"}}
               .rule_conditions_choices
                 .choice-wrapper.date-choice
                   input.start_date.value disabled="disabled" name="rule[conditions_attributes][{{@index}}][value][start_date]" type="date" value="{{value.start_date}}"
@@ -94,7 +94,7 @@ script#new-condition type="text/x-handlebars-template"
             option value="is" is
             option value="is_not" is not
             option value="includes" includes
-            option value="excludes" excludes
+            option value="does_not_include" does not include
         .rule_conditions_choices
           .choice-wrapper.date-choice
             input#value.start_date.value disabled="disabled" name="value" type="date" /

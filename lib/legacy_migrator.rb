@@ -196,7 +196,7 @@ class LegacyMigrator
       start_date = convert_start_time(legacy_goal.data_json['start_date'], legacy_goal.data_json['dates_timezone'])
       end_date = convert_end_time(legacy_goal.data_json['end_date'], legacy_goal.data_json['dates_timezone'])
       include_urls = legacy_goal.data_json['include_urls']
-      exclude_urls = legacy_goal.data_json['exclude_urls']
+      does_not_include_urls = legacy_goal.data_json['exclude_urls'] # legacy key is exclude_urls, which we map to does_not_include
 
       date_condition = DateCondition.from_params(start_date, end_date)
       new_conditions << date_condition if date_condition
@@ -207,9 +207,9 @@ class LegacyMigrator
         end
       end
 
-      if exclude_urls.present?
-        exclude_urls.each do |exclude_url|
-          new_conditions << UrlCondition.exclude_url(exclude_url)
+      if does_not_include_urls.present?
+        does_not_include_urls.each do |does_not_include_url|
+          new_conditions << UrlCondition.does_not_include_url(does_not_include_url)
         end
       end
 

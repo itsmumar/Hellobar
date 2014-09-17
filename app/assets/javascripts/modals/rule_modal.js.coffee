@@ -145,7 +145,7 @@ class @RuleModal extends Modal
     'CountryCondition': ['is', 'is_not']
     'DeviceCondition': ['is', 'is_not']
     'DateCondition': ['is_before', 'is_after', 'is_between']
-    'UrlCondition': ['includes', 'excludes']
+    'UrlCondition': ['includes', 'does_not_include']
 
   _renderAlert: (content) ->
     template = Handlebars.compile($('script#alert-template').html())

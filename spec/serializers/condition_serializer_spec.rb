@@ -12,7 +12,7 @@ describe ConditionSerializer do
     expect(serializer.as_json).to eq({
       id: condition.id,
       rule_id: nil,
-      segment: condition.short_segment,
+      segment: condition.segment,
       operand: condition.operand,
       value: condition.value
     })

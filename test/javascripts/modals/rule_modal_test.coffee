@@ -58,7 +58,7 @@ test 'rendering the correct operand for UrlCondition', ->
   operands = $modal.find('select.condition-operand option').map ->
     @value
 
-  deepEqual $.makeArray(operands), ['includes', 'excludes'], 'filteres the correct operands for UrlCondition'
+  deepEqual $.makeArray(operands), ['includes', 'does_not_include'], 'filteres the correct operands for UrlCondition'
 
 test 'RuleModal._dateClasses(operand)', ->
   expect(3)
@@ -161,7 +161,7 @@ test '_validOperands()', ->
 
   deepEqual modal._validOperands('DeviceCondition'), ['is', 'is_not'], 'has a valid value for device'
   deepEqual modal._validOperands('DateCondition'), ['is_before', 'is_after', 'is_between'], 'has a valid value for date'
-  deepEqual modal._validOperands('UrlCondition'), ['includes', 'excludes'], 'has a valid value for url'
+  deepEqual modal._validOperands('UrlCondition'), ['includes', 'does_not_include'], 'has a valid value for url'
 
 test '_filteredOperands(segment)', ->
   modal = new RuleModal({})

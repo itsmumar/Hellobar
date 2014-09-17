@@ -22,7 +22,7 @@ url_includes:
   operand: includes
   value: /asdf
 
-url_excludes:
+url_does_not_include:
   segment: UrlCondition
-  operand: excludes
+  operand: does_not_include
   value: /asdf

@@ -5,26 +5,26 @@ describe UrlCondition, '::include_url' do
     url = 'http://googley.com'
 
     UrlCondition.should_receive(:new).
-      with({ operand: Condition::OPERANDS[:includes], value: url })
+      with({ operand: :includes, value: url })
 
     UrlCondition.include_url(url)
   end
 end
 
-describe UrlCondition, '::exclude_url' do
+describe UrlCondition, '::does_not_include' do
   it 'creates the correct url condition with the correct operand' do
     url = 'http://moogley.com'
 
     UrlCondition.should_receive(:new).
-      with({ operand: Condition::OPERANDS[:excludes], value: url })
+      with({ operand: :does_not_include, value: url })
 
-    UrlCondition.exclude_url(url)
+    UrlCondition.does_not_include_url(url)
   end
 end
 
 describe UrlCondition, '#include_url?' do
   it 'returns true when the operator is includes' do
-    condition = UrlCondition.new operand: Condition::OPERANDS[:includes]
+    condition = UrlCondition.new operand: :includes
 
     condition.should be_include_url
   end
@@ -35,8 +35,8 @@ describe UrlCondition, '#include_url?' do
 end
 
 describe UrlCondition, '#to_sentence' do
-  it "converts exclude url conditions to sentences" do
-    UrlCondition.exclude_url("zombo.com").to_sentence.should == "URL does not include zombo.com"
+  it "converts does_not_include urls conditions to sentences" do
+    UrlCondition.does_not_include_url("zombo.com").to_sentence.should == "URL does not include zombo.com"
   end
 
   it "converts include url conditions to sentences" do

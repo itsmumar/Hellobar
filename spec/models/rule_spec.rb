@@ -10,7 +10,7 @@ describe Rule, "#to_sentence" do
     rule.conditions << UrlCondition.include_url("zombo.com")
     rule.to_sentence.should == "Show this when URL includes zombo.com"
 
-    rule.conditions << UrlCondition.exclude_url("zombo.com/foo")
+    rule.conditions << UrlCondition.does_not_include_url("zombo.com/foo")
     rule.to_sentence.should == "Show this when URL includes zombo.com and URL does not include zombo.com/foo"
 
     rule.conditions << DateCondition.from_params("7/6", "")
@@ -66,7 +66,7 @@ describe Rule, 'accepting nested condition attributes' do
   end
 
   it 'builds out a URL condition with a string' do
-    condition = conditions(:url_excludes)
+    condition = conditions(:url_does_not_include)
     expect(condition.value.class).to eq(String)
     expect(condition.value).to eq("/asdf")
     expect(condition.to_sentence).to eq "URL does not include /asdf"

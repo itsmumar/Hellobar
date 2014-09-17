@@ -126,22 +126,22 @@ describe ScriptGenerator, '#render' do
 
     it 'adds an exlusion constraint for all blacklisted URLs' do
       rule = Rule.new
-      conditions = [UrlCondition.new(value: '/signup', operand: Condition::OPERANDS[:excludes] )]
+      conditions = [UrlCondition.new(value: '/signup', operand: :does_not_include )]
       rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
-      expected_string = 'HB.addRule("", [{"segment":"url","operand":"excludes","value":"/signup"}], [])'
+      expected_string = 'HB.addRule("", [{"segment":"url","operand":"does_not_include","value":"/signup"}], [])'
 
       generator.render.should include(expected_string)
     end
 
-    it 'converts excluded urls to paths' do
+    it 'converts does_not_include urls to paths' do
       rule = Rule.new
-      conditions = [UrlCondition.new(value: 'http://soamazing.com/signup', operand: Condition::OPERANDS[:excludes])]
+      conditions = [UrlCondition.new(value: 'http://soamazing.com/signup', operand: :does_not_include )]
       rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
-      expected_string = 'HB.addRule("", [{"segment":"url","operand":"excludes","value":"http://soamazing.com/signup"}], [])}'
+      expected_string = 'HB.addRule("", [{"segment":"url","operand":"does_not_include","value":"http://soamazing.com/signup"}], [])}'
 
       generator.render.should include(expected_string)
     end

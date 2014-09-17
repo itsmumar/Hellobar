@@ -4,7 +4,7 @@ describe DateCondition, '::from_params' do
   it 'creates a between condition when both start_date and end_date are present' do
     condition = DateCondition.from_params('start', 'end')
 
-    condition.operand.should == 'is_between'
+    condition.operand.should == :is_between
     condition.value['start_date'].should == 'start'
     condition.value['end_date'].should == 'end'
   end
@@ -12,7 +12,7 @@ describe DateCondition, '::from_params' do
   it 'creates a start_date condition when only start_date is present' do
     condition = DateCondition.from_params('start', '')
 
-    condition.operand.should == 'is_after'
+    condition.operand.should == :is_after
     condition.value['start_date'].should == 'start'
     condition.value['end_date'].should be_nil
   end
@@ -20,7 +20,7 @@ describe DateCondition, '::from_params' do
   it 'creates a end_date condition when only end_date is present' do
     condition = DateCondition.from_params('', 'end')
 
-    condition.operand.should == 'is_before'
+    condition.operand.should == :is_before
     condition.value['end_date'].should == 'end'
     condition.value['start_date'].should be_nil
   end

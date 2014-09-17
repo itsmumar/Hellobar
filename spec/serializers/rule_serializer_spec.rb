@@ -22,7 +22,7 @@ describe RuleSerializer do
       conditions: [{
         id: condition.id,
         rule_id: rule.id,
-        segment: condition.short_segment,
+        segment: condition.segment,
         operand: condition.operand,
         value: condition.value
       }]

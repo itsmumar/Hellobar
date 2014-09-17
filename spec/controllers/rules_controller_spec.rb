@@ -156,7 +156,7 @@ describe RulesController do
           expect(rule_obj['conditions']).to eq([{
             "id" => id,
             "rule_id" => rule.id,
-            "segment" => "date",
+            "segment" => "DateCondition",
             "operand" => "is_between",
             "value" => {
               "start_date" => (Date.current - 1.day).strftime("%Y-%m-%d"),
@@ -190,7 +190,7 @@ describe RulesController do
           expect(rule_obj['conditions']).to eq([{
             "id" => id,
             "rule_id" => rule.id,
-            "segment" => "url",
+            "segment" => "UrlCondition",
             "operand" => "includes",
             "value" => "/asdf"
           }])
@@ -208,9 +208,9 @@ describe RulesController do
           }
         }
 
-        JSON.parse(response.body).tap do |rule_obj|          
+        JSON.parse(response.body).tap do |rule_obj|
           segments = rule_obj['conditions'].collect {|c| c['segment'] }
-          expect(segments).to match_array %w(date url)
+          expect(segments).to match_array %w(DateCondition UrlCondition)
         end
       end
 
