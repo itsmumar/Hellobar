@@ -96,7 +96,7 @@ describe ApplicationController, '#require_no_user' do
   it 'redirects a logged in user to the dashboard of their most recent site' do
     user = users(:joey)
     controller.stub current_user: user
-    dashboard_path = site_path(user.sites.last)
+    dashboard_path = site_path(user.sites.first)
 
     get :index
 
