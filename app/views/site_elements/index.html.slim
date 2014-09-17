@@ -19,7 +19,7 @@ table.rules-wrapper
     - @rules.each do |rule|
       tr.rule-block data-rule-id=rule.id
         th.page-header colspan='9'
-          h4= rule.name.blank? ? "(no name)" : rule.name
+          h4= rule.name
           span= rule.to_sentence
 
           .dropdown-wrapper

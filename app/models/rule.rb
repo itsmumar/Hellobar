@@ -19,11 +19,7 @@ class Rule < ActiveRecord::Base
                        },
                        if: "priority.present?"
 
-  def name
-    read_attribute(:name) || "rule ##{id}"
-  end
-
   def to_sentence
-    conditions.empty? ? "everyone" : conditions.map(&:to_sentence).to_sentence
+    conditions.empty? ? "Show this to everyone" : "Show this when #{conditions.map(&:to_sentence).to_sentence}"
   end
 end
