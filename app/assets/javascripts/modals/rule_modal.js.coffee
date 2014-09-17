@@ -66,12 +66,7 @@ class @RuleModal extends Modal
 
     segmentValue = $condition.find('select.condition-segment').val()
 
-    if segmentValue == 'CountryCondition'
-      $condition.find('.country-choice')
-                .show()
-                .find('.value')
-                .prop('disabled', false)
-    else if segmentValue == 'DeviceCondition'
+    if segmentValue == 'DeviceCondition'
       $condition.find('.device-choice')
                 .show()
                 .find('.value')
@@ -142,7 +137,6 @@ class @RuleModal extends Modal
   _validOperands: (segment) -> @_operandMapping[segment]
 
   _operandMapping:
-    'CountryCondition': ['is', 'is_not']
     'DeviceCondition': ['is', 'is_not']
     'DateCondition': ['is_before', 'is_after', 'is_between']
     'UrlCondition': ['includes', 'does_not_include']
