@@ -1,13 +1,5 @@
 <label>Would you like your visitors to..</label>
-<div class="select-wrapper">
-  {{view Ember.Select
-    content=socialOptions
-    value=model.element_subtype
-    optionValuePath='content.value'
-    optionLabelPath='content.label'
-  }}
-</div>
-{{!-- ^ will likely need to be a component... --}}
+{{social-select options=socialOptions selection=selectedSocialSubtype}}
 
 {{#if selectedSocialSubtype}}
   {{partial selectedSocialSubtype}}

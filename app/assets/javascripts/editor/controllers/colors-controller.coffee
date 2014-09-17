@@ -8,7 +8,7 @@ HelloBar.ColorsController = Ember.Controller.extend
 
   #-----------  Color Tracking  -----------#
 
-  siteColors: ['def1ff', '4f4f4f', 'fffff', 'ff11dd']
+  # siteColors: ['def1ff', '4f4f4f', 'fffff', 'ff11dd']
   recentColors: ['ffffff', 'ffffff', 'ffffff', 'ffffff']
 
   actions: 

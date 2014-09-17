@@ -75,6 +75,7 @@ describe Site do
 
   describe "#script_content" do
     it "generates the contents of the script for a site" do
+      Hello::DataAPI.stub(:lifetime_totals => nil)
       script = @site.script_content(false)
 
       script.should =~ /HB_SITE_ID/
@@ -82,6 +83,7 @@ describe Site do
     end
 
     it "generates the compressed contents of the script for a site" do
+      Hello::DataAPI.stub(:lifetime_totals => nil)
       script = @site.script_content
 
       script.should =~ /HB_SITE_ID/
@@ -91,6 +93,8 @@ describe Site do
 
   describe "#generate_static_assets" do
     it "generates and uploads the script content for a site" do
+      ScriptGenerator.any_instance.stub(:pro_secret => "asdf")
+      Hello::DataAPI.stub(:lifetime_totals => nil)
       script_content = @site.script_content(true)
       script_name = @site.script_name
 

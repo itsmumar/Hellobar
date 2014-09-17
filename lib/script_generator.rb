@@ -91,7 +91,7 @@ class ScriptGenerator < Mustache
   end
 
   def templates
-    template_names = options[:templates] || site.site_elements.active.map.map(&:element_subtype).uniq
+    template_names = options[:templates] || site.site_elements.active.map(&:element_subtype).uniq
 
     template_names.map do |name|
       {

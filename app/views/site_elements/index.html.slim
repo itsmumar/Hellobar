@@ -17,9 +17,9 @@ table.rules-wrapper
       th 
   tbody
     - @rules.each do |rule|
-      tr.rule-block id="rule-id-#{rule.id}"
+      tr.rule-block data-rule-id=rule.id
         th.page-header colspan='9'
-          h4= "/#{rule.name.blank? ? "(no name)" : rule.name}"
+          h4= rule.name.blank? ? "(no name)" : rule.name
           span= rule.to_sentence
 
           .dropdown-wrapper
@@ -29,19 +29,26 @@ table.rules-wrapper
                 i.icon-edit
                 | Edit
 
-              = content_tag 'a', class: 'remove-rule' do
-                i.icon-trash
-                = "Remove this and #{pluralize(rule.site_elements.count, "bar")}"
+              - unless @rules.count == 1
+                = content_tag 'a', class: 'remove-rule' do
+                  i.icon-trash
+                  = "Delete"
+                  - if rule.site_elements.any?
+                    = " this and"
+                    span= rule.site_elements.size
+                    = "bar".pluralize(rule.site_elements.size)
 
       - rule.site_elements.each do |site_element|
-        = render "site_elements/site_element", { :site_element => site_element }
+        = render "site_elements/site_element", { :site_element => site_element, :rule => rule }
 
-      tr
+      tr data-rule-id=rule.id
         td.temporary-block.suggestion-block colspan='9'
           - if rule.site_elements.empty?
             = link_to "Create a bar for this rule", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
           - else
             = link_to "A/B test a new bar for this rule to maximize your conversions", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
 
-- @rules.each do |rule|
-  = render 'shared/modals/rules', site: @site, rule: rule
+= render 'shared/modals/rule_modal_template'
+
+javascript:
+  var rules = #{{@rules.map{|rule| RuleSerializer.new(rule) }.to_json }};

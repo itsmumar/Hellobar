@@ -3,13 +3,31 @@ module "editor colors",
     @route = getModule("route:application")
     visit "colors"
   teardown: ->
-    find(".color-select.in-focus").each -> $(this).removeClass('in-focus')
+    find(".color-select.in-focus").each -> 
+      $(@).removeClass('in-focus')
 
-colorsTab = -> find(".step-links li a[href^='#/colors']")
+#-----------  Properties  -----------#
+
+cssColors =
+  red:    {hex: '#FF0000', rgb: 'rgb(255, 0, 0)',   r: 255, g: 0,   b: 0}
+  blue:   {hex: '#0000FF', rgb: 'rgb(0, 0, 255)',   r: 0,   g: 0,   b: 255}
+  green:  {hex: '#00FF00', rgb: 'rgb(0, 255, 0)',   r: 0,   g: 255, b: 0}
+  orange: {hex: '#FFA500', rgb: 'rgb(255, 165, 0)', r: 255, g: 165, b: 0}
 
 selectors =
   colorDropdown: '.in-focus .color-dropdown'
   colorPreview: '.color-preview'
+
+#-----------  Helpers  -----------#
+
+colorsTab = -> find(".step-links li a[href^='#/colors']")
+
+fillInColors = (color) ->
+  fillIn('.in-focus .r-val', cssColors[color].r)
+  fillIn('.in-focus .g-val', cssColors[color].g)
+  fillIn('.in-focus .b-val', cssColors[color].b)
+
+#-----------  Tests  -----------#
 
 test "it should change to tab", ->
   visit "settings" # reset
@@ -21,10 +39,9 @@ asyncTest "can change the background color", ->
   click(colorsTab()).andThen =>
     click(findLabeled("Background").find(".color-select-block")).andThen =>
       debounce (done) ->
-        colorWell = find("#{selectors.colorDropdown} #{selectors.colorPreview}[style='background-color:#ffffff']")
-        click(colorWell).andThen =>
+        fillInColors('red').andThen =>
           bar = hbFrame().find("#hellobar")
-          equal bar.css('background-color'), 'rgb(255, 255, 255)', "New color should equal #fff"
+          equal bar.css('background-color'), cssColors['red'].rgb, "New color should equal " + cssColors['red'].hex
           done()
 
 asyncTest "can change the text color", ->
@@ -32,21 +49,19 @@ asyncTest "can change the text color", ->
   click(colorsTab()).andThen =>
     click(findLabeled("Text").find(".color-select-block")).andThen =>
       debounce (done) ->
-        colorWell = find("#{selectors.colorDropdown} #{selectors.colorPreview}[style='background-color:#ff11dd']")
-        click(colorWell).andThen =>
+        fillInColors('blue').andThen =>
           barText = hbFrame().find("#hb_msg_container span")
-          equal barText.css('color'), 'rgb(255, 17, 221)', "New color should equal #ff11dd"
+          equal barText.css('color'), cssColors['blue'].rgb, "New color should equal " + cssColors['blue'].hex
           done()
 
 asyncTest "can change the button background-color", ->
   expect(1)
   click(colorsTab()).andThen =>
-    click(findLabeled("Button", "").find(".color-select-block")).andThen =>
+    click(findLabeled("Button").find(".color-select-block")).andThen =>
       debounce (done) ->
-        colorWell = find("#{selectors.colorDropdown} #{selectors.colorPreview}[style='background-color:#def1ff']")
-        click(colorWell).andThen =>
+        fillInColors('green').andThen =>
           button = hbFrame().find(".hb-button")
-          equal button.css('background-color'), 'rgb(222, 241, 255)', "New color should equal #DEF1FF"
+          equal button.css('background-color'), cssColors['green'].rgb, "New color should equal " + cssColors['green'].hex
           done()
 
 asyncTest "can change the button text color", ->
@@ -54,8 +69,7 @@ asyncTest "can change the button text color", ->
   click(colorsTab()).andThen =>
     click(findLabeled("Button Text").find(".color-select-block")).andThen =>
       debounce (done) ->
-        colorWell = find("#{selectors.colorDropdown} #{selectors.colorPreview}[style='background-color:#4f4f4f']")
-        click(colorWell).andThen =>
+        fillInColors('orange').andThen =>
           buttonText = hbFrame().find(".hb-button")
-          equal buttonText.css('color'), 'rgb(79, 79, 79)', "New color should equal #4F4F4F"
+          equal buttonText.css('color'), cssColors['orange'].rgb, "New color should equal " + cssColors['orange'].hex
           done()

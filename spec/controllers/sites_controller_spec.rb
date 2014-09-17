@@ -47,6 +47,13 @@ describe SitesController do
         response.should redirect_to root_path
         flash[:error].should =~ /not valid/
       end
+
+      it "redirects to the landing page with an error if site is an email address" do
+        post :create, :site => { url: "asdf@mail.com" }
+
+        response.should redirect_to root_path
+        flash[:error].should =~ /not valid/
+      end
     end
 
     context "existing user" do

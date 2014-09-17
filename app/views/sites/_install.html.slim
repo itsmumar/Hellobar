@@ -10,7 +10,7 @@ h5 Installation Methods
   .reveal-title I can install code myself
   p If you know HTML and can edit your site, our install only takes on line of code.
 
-  .reveal-block
+  .reveal-block.myself-reveal
     p To install Hello Bar, copy and paste the following code right before your closing </body> tag.
     pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\"></script>"
     p That's it! You'll never need to update the code on your site again.
@@ -20,33 +20,36 @@ h5 Installation Methods
   .reveal-title I use WordPress
   p If you use WordPress you'll love our zero-configuration custom plugin. Just download, install and you're done.
   
-  .reveal-block
-    p 1. Download Your Plugin
-    = button_to site_wordpress_plugin_path(@site), :method => :get, :class => "button" do
+  .reveal-block.wordpress-reveal
+    strong 1) Download Your Plugin
+    = link_to site_wordpress_plugin_path(@site), :method => :get, :class => "button" do
       i.icon-download
       span Download
+    small 1MB
 
-    p 2. Install Your Plugin
+    strong 2) Install Your Plugin
     p= "Now you just need to install the .zip file you downloaded it by uploading it to your WordPress site. The plugin was preconfigured specifically for your site (#{@site.url}). After you install and activate there are no settings to adjust!"
 
-    p Need More Help?
-    p= "Try reading these #{link_to "helpful instructions for installing plugins on WordPress", "http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation"}.".html_safe
+    p 
+      strong Need More Help?
+      | Try reading these 
+      = link_to "helpful instructions for installing plugins on WordPress", "http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation"
 
 .reveal-wrapper
   i.icon-contacts
   .reveal-title Email my Web Developer
   p If someone else manages your website, we can email them the instructions for you.
 
-  .reveal-block
+  .reveal-block.developer-reveal
     = form_tag email_developer_contact_submission_path, :method => :post do |f|
       = hidden_field_tag :site_id, @site.id
       label To:
-      = text_field_tag :developer_email, "", :placeholder => "Your developer's email address"
+      = email_field :developer_email, "", :placeholder => "Your developer's email address"
       label From: 
       pre Hello Bar &lt;contact@hellobar.com&gt;
 
       label Subject: 
-      pre= "Please install Hello Bar on #{display_url_for_site(@site)}"
+      pre.topper= "Please install Hello Bar on #{display_url_for_site(@site)}"
 
       pre= "I just created a Hello Bar for #{display_url_for_site(@site)} and I've asked Hello Bar to email you the instructions for installing it. All you need to do is add the following bit of JavaScript at the end of each page (right before the closing </body> tag):"
 
@@ -63,7 +66,7 @@ h5 Installation Methods
   .reveal-title I need help!
   p Still not sure what to do? Let us help!
 
-  .reveal-block
+  .reveal-block.help-reveal
     p How can we help?
     p Just fill out the form below and we'll get back to you as soon as we can.
 

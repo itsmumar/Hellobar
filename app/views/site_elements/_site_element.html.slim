@@ -1,4 +1,4 @@
-tr.site-element-block class="#{site_element.paused? ? 'paused' : ''}"
+tr.site-element-block class="#{site_element.paused? ? 'paused' : 'active'}" data-rule-id=rule.id
   td.color-flag style="background-color: ##{site_element.background_color}"
   td
     p= site_element.message
@@ -31,6 +31,6 @@ tr.site-element-block class="#{site_element.paused? ? 'paused' : ''}"
           i.icon-edit
           = site_element.paused? ? 'Unpause' : 'Pause'
 
-        = content_tag 'a', class: 'delete-element', "data-element-id" => site_element.id, "data-site-id" => @site.id do
+        = content_tag 'a', class: 'delete-element', "data-element-id" => site_element.id, "data-site-id" => @site.id, "data-rule-id" => rule.id do
           i.icon-edit
           | Remove

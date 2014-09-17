@@ -3,6 +3,7 @@
 #= require bootstrap
 #= require zeropad.jquery
 #= require handlebars
+#= require handlebars_helpers
 #= require moment
 #= require amcharts/amcharts
 #= require amcharts/serial
@@ -30,9 +31,7 @@
 $ ->
 
   # Reveal Blocks
-  $('.reveal-wrapper').click () ->
-    if $(@).hasClass('activated')
-      $(@).removeClass('activated')
-    else
+  $('.reveal-wrapper').click (evt) ->
+    unless $(@).hasClass('activated')
       $('.reveal-wrapper.activated').removeClass('activated')
       $(@).addClass('activated')

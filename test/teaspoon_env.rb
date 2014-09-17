@@ -4,14 +4,6 @@ unless defined?(Rails)
   require File.expand_path("../../config/environment", __FILE__)
 end
 
-def site_rule_path(*args)
-  '/'
-end
-
-def site_rules_path(*args)
-  '/'
-end
-
 include ContactListsHelper
 
 Teaspoon.configure do |config|

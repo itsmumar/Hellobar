@@ -14,7 +14,7 @@ tr class="#{'more-top-performers' if index > 2}"
     span.num= number_to_percentage(element.conversion_percentage * 100, precision: 1)
     - if index < 3
       i class="icon-badge #{'first' if index == 0}"
-        span.icon-num= index + 1
+        span.numbers= index + 1
   td
     = link_to "Create another", new_site_site_element_path(:site_id => element.site, :element_to_copy_id => element), :class => "button"
 

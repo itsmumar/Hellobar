@@ -9,9 +9,9 @@ class LegacyMigrator
       ActiveRecord::Base.record_timestamps = false
 
       migrate_sites_and_users_and_memberships
-      migrate_goals_to_rules
       migrate_identities
       migrate_contact_lists
+      migrate_goals_to_rules
 
       ActiveRecord::Base.record_timestamps = true
     end
@@ -41,30 +41,49 @@ class LegacyMigrator
 
     def migrate_goals_to_rules
       count = 0
-      LegacyGoal.find_each do |legacy_goal|
-        if ::Site.exists?(legacy_goal.site_id)
-          rule = ::Rule.create! id: legacy_goal.id,
-                                site_id: legacy_goal.site_id,
-                                name: 'Everyone', # or /URL? TODO
-                                priority: legacy_goal.priority,
-                                match: Rule::MATCH_ON[:all],
-                                created_at: legacy_goal.created_at.utc,
-                                updated_at: legacy_goal.updated_at.utc
 
-          create_conditions(rule, legacy_goal).each do |new_condition|
-            rule.conditions << new_condition
+      sites_needing_rules = []
+
+      ::Site.find_each do |site|
+        legacy_goals = LegacyGoal.where(site_id: site.id)
+
+        if legacy_goals.present?
+          legacy_goals.each do |legacy_goal|
+            rule = ::Rule.create! id: legacy_goal.id,
+                                  site_id: site.id,
+                                  name: 'Everyone', # may be renamed later depending on # of conditions
+                                  priority: legacy_goal.priority,
+                                  match: Rule::MATCH_ON[:all],
+                                  created_at: legacy_goal.created_at.utc,
+                                  updated_at: legacy_goal.updated_at.utc
+
+            create_conditions(rule, legacy_goal).each do |new_condition|
+              rule.conditions << new_condition
+            end
+
+            create_site_elements(legacy_goal.bars, legacy_goal).each do |new_bar|
+              rule.site_elements << new_bar
+            end
+
+            count += 1
+            puts "Migrated #{count} goals to rules" if count % 100 == 0
           end
+        else # site has no rules so add them to the collection
+          sites_needing_rules << site
+        end
 
-          create_site_elements(legacy_goal.bars, legacy_goal).each do |new_bar|
-            rule.site_elements << new_bar
+        # rename rules if we need to based on the # of conditions
+        site.rules.includes(:conditions).each do |rule|
+          rule_count = 1
+          if rule.conditions.size > 1
+            rule.update_attribute :name, "Rule #{rule_count}"
+            rule_count += 1
           end
-
-          count += 1
-          puts "Migrated #{count} goals to rules" if count % 100 == 0
-        else
-          Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal:#{legacy_goal.id}"
         end
       end
+
+      # lets avoid ID collisions with legacy goals
+      sites_needing_rules.each{|site| site.create_default_rule }
     end
 
     def migrate_contact_lists
@@ -98,7 +117,6 @@ class LegacyMigrator
             identity_id: legacy_id_int.identity_id,
             data: legacy_id_int.data.merge(embed_code: identity.embed_code),
             name: legacy_id_int.data["remote_name"],
-            last_synced_at: legacy_id_int.last_synced_at,
             created_at: legacy_id_int.created_at,
             updated_at: legacy_id_int.updated_at
           )
@@ -143,34 +161,32 @@ class LegacyMigrator
         legacy_membership = legacy_memberships.first
         legacy_user = legacy_membership.user
 
-        if legacy_user && !::User.exists?(legacy_user.id_to_migrate) && !::Hello::WordpressUser.email_exists?(legacy_user.email)
-          begin
-            # disable password requirement for import
-            User.send(:define_method, :password_required?) { false }
-
-            user = ::User.create! id: legacy_user.id_to_migrate,
-                                  email: legacy_user.email,
-                                  encrypted_password: legacy_user.encrypted_password,
-                                  reset_password_token: legacy_user.reset_password_token,
-                                  reset_password_sent_at: legacy_user.reset_password_sent_at,
-                                  remember_created_at: legacy_user.remember_created_at,
-                                  sign_in_count: legacy_user.sign_in_count,
-                                  current_sign_in_at: legacy_user.current_sign_in_at,
-                                  last_sign_in_at: legacy_user.last_sign_in_at,
-                                  current_sign_in_ip: legacy_user.current_sign_in_ip,
-                                  last_sign_in_ip: legacy_user.last_sign_in_ip,
-                                  created_at: legacy_user.original_created_at || legacy_user.created_at,
-                                  updated_at: legacy_user.updated_at
-
-          ::SiteMembership.create! user_id: user.id,
-                                   site_id: legacy_site_id
-
-          rescue ActiveRecord::RecordNotUnique => e
-            Rails.logger.info "WTF:Error creating New user:#{e}"
-          end
-        else
-          Rails.logger.info "WTF:No user found for Legacy Membership id:#{legacy_membership.id}"
+        unless legacy_user
+          Rails.logger.info "WTF:Legacy Membership: #{legacy_membership.id} has no users!"
+          return
         end
+
+        return if ::Hello::WordpressUser.email_exists?(legacy_user.email)
+
+        migrated_user = ::User.where(id: legacy_user.id_to_migrate).first
+        migrated_user ||= ::User.create! id: legacy_user.id_to_migrate,
+                                         email: legacy_user.email,
+                                         encrypted_password: legacy_user.encrypted_password,
+                                         reset_password_token: legacy_user.reset_password_token,
+                                         reset_password_sent_at: legacy_user.reset_password_sent_at,
+                                         remember_created_at: legacy_user.remember_created_at,
+                                         sign_in_count: legacy_user.sign_in_count,
+                                         status: ::User::ACTIVE_STATUS,
+                                         legacy_migration: true,
+                                         current_sign_in_at: legacy_user.current_sign_in_at,
+                                         last_sign_in_at: legacy_user.last_sign_in_at,
+                                         current_sign_in_ip: legacy_user.current_sign_in_ip,
+                                         last_sign_in_ip: legacy_user.last_sign_in_ip,
+                                         created_at: legacy_user.original_created_at || legacy_user.created_at,
+                                         updated_at: legacy_user.updated_at
+
+        ::SiteMembership.create! user_id: migrated_user.id,
+                                 site_id: legacy_site_id
       end
     end
 
@@ -226,7 +242,8 @@ class LegacyMigrator
                       target: legacy_bar.settings_json['target'],
                       text_color: legacy_bar.settings_json['text_color'],
                       texture: legacy_bar.settings_json['texture'],
-                      settings: settings_to_migrate
+                      settings: settings_to_migrate,
+                      contact_list: ContactList.where(id: legacy_goal.id).first
       end
     end
 

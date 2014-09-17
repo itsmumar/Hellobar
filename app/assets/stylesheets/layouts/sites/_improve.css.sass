@@ -9,7 +9,7 @@
     font-weight: bold
 
     &:before
-      content: 'J'
+      content: ';'
       color: $yellow
       font-size: 0.8em
       font-weight: normal
@@ -95,7 +95,7 @@
         &:before
           top: 1.15em
           right: 1.5em
-          content: 'q'
+          content: 'U'
           color: $purple
           font-size: 0.5em
           font-family: 'hellobar'
@@ -116,6 +116,9 @@
     border-collapse: separate
 
     th, td
+
+      &:nth-child(6)
+        width: 6.5em
 
       [class^='icon-']
         line-height: 0
@@ -146,14 +149,15 @@
     td
 
       &:nth-child(2)
+        width: 35%
         max-width: 27em
 
         p
           max-width: 91%
 
       i.site-element-type
-        font-size: 2.25em
         margin: 0
+        font-size: 2.25em
         vertical-align: bottom
 
       .button

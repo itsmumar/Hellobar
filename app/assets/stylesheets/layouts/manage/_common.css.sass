@@ -45,6 +45,15 @@
           > i
             font-size: 1.15em
 
+      /*-----------  Rule Row ----------*/
+
+      &.rule-block
+        .remove-rule
+          span
+            margin: 0
+            &:before, &:after
+              content: " "
+
       /*-----------  Site Element Rows  -----------*/
 
       &.site-element-block
@@ -99,18 +108,46 @@
             border-right-width: 1px
             background-color: $grayLightest
 
-            > i,
+            .testing-icon,
             .dropdown-wrapper > i
               top: 3px
               color: $grayLight
-              font-size: 1.33em
-              position: relative
               vertical-align: middle
+
+            .testing-icon
+              font-size: 1.67em
+              @include inline-block()
+
+              &.social
+                color: $yellow !important
+
+              &.traffic
+                color: $blue !important
+
+              &.email
+                color: $green !important
+
+              .numbers
+                left: 30%
+                font-weight: bold
+
+              &.icon-tip
+
+                .numbers
+                  top: 16%
+                  font-size: 0.55em
+
+              &.icon-circle
+    
+                .numbers
+                  top: 10%
+                  font-size: 0.6em
 
             .dropdown-wrapper
               margin-right: -1.33rem
 
               > i
+                font-size: 1.33em
                 padding-left: 1.25rem
 
       /*-----------  Suggestion Rows  -----------*/

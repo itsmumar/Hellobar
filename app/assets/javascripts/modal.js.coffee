@@ -27,6 +27,7 @@ class @Modal
 
   _bindClickOnClose: (callback) ->
     @$modal.find('a.cancel').on 'click', (event) =>
+      event.preventDefault()
       callback.call(this)
 
   _bindClickOutsideTarget: (callback) ->

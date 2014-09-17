@@ -25,22 +25,14 @@ module EmailSynchronizer
   def sync_all!
     return unless syncable?
     
-    timestamp = last_synced_at || Time.at(0) # sync from last sync, or for all time
-    Rails.logger.info "Syncing emails later than #{timestamp}"
+    Rails.logger.info "Syncing all emails for contact_list #{self.id}"
 
     perform_sync do
-      contacts = Hello::DataAPI.get_contacts(self, timestamp.to_i, force: true)
+      contacts = Hello::DataAPI.get_contacts(self)
       contacts.in_groups_of(1000, false).each do |group|
         group = group.map{ |g| {:email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2]} }
         batch_subscribe(data["remote_id"], group, double_optin)
       end
-    end
-  rescue *ESP_ERROR_CLASSES => e
-    if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
-      Raven.capture_exception(e)
-      identity.destroy_and_notify_user
-    else
-      raise e
     end
   end
 
@@ -65,7 +57,18 @@ module EmailSynchronizer
   private
 
   def perform_sync
+    # run something immediately before sync
     yield
-    update_column :last_synced_at, Time.now
+    # run something immediately after sync 
+  rescue *ESP_ERROR_CLASSES => e
+    if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
+      Raven.capture_exception(e)
+      if oauth?
+        # Clear identity on failure
+        identity.try(:destroy_and_notify_user)
+      end
+    else
+      raise e
+    end
   end
 end

@@ -61,7 +61,7 @@ class @ContactListModal extends Modal
   _bindReadyButton: (object) ->
     object.find("a.ready").click (e) =>
       @_clearErrors()
-      
+
       # stash the model so that it can be reloaded by the ember app
       localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
       localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
@@ -150,7 +150,6 @@ class @ContactListModal extends Modal
         @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if listData
-          window.foo = listData
           @$modal.find("#contact_list_remote_list_id").val(listData.data.remote_id) if listData.data && listData.data.remote_id
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 

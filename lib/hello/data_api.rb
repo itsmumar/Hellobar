@@ -53,19 +53,22 @@ module Hello::DataAPI
       data = Hello::DataAPI.lifetime_totals(site, site.site_elements, num_days, cache_options) || {}
       totals = {:total => [], :email => [], :social => [], :traffic => []}
       elements = site.site_elements.where(:id => data.keys)
+      ids = {}
 
-      return totals if data == {}
+      # collect the ids of each subtype
+      [:traffic, :email, :social].each do |key|
+        ids[key] = elements.select{|e| e.short_subtype == key.to_s}.map{|e| e.id.to_s}
+      end
 
-      # collect the ids of each group
-      ids = {
-        :total => data.keys,
-        :email => elements.select{|e| e.element_subtype == "email"}.map{|e| e.id.to_s},
-        :traffic => elements.select{|e| e.element_subtype == "traffic"}.map{|e| e.id.to_s},
-        :social => elements.select{|e| e.element_subtype =~ /social\//}.map{|e| e.id.to_s}
-      }
+      # what is the most amount of data (in days) we have for any site element?
+      most_days = data.values.map(&:count).sort.last || 0
 
-      # loop for the number of days of data, based on what came back from the API
-      data.values.first.count.times do |i|
+      # zero-pad all data so that it can be summed conveniently
+      data.each do |key, value|
+        data[key] = Array.new(most_days - value.count, [0, 0]) + value
+      end
+
+      most_days.times do |i|
         # sum the values for day i in each row of data and shovel that array into totals
         totals[:total] << data.inject([0, 0]) do |sum, data_row|
           day_i_data = data_row[1][i]
@@ -80,6 +83,11 @@ module Hello::DataAPI
             [sum[0] + day_i_data[0], sum[1] + day_i_data[1]]
           end
         end
+      end
+
+      # remove any zero-padding values that made it through summation
+      totals.each do |key, value|
+        totals[key] = value.select { |v| v != [0, 0] }
       end
 
       totals

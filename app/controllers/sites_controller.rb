@@ -3,6 +3,7 @@ class SitesController < ApplicationController
 
   before_action :authenticate_user!, :except => :create
   before_action :load_site, :only => [:show, :edit, :update, :destroy, :preview_script, :script, :improve, :chart_data]
+
   skip_before_action :verify_authenticity_token, :only => [:preview_script, :script]
 
   layout :determine_layout

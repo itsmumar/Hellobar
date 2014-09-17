@@ -17,6 +17,7 @@ describe ContactList do
       })
       contact_list.stub(:syncable? => true)
       expect(service_provider).to be_a(ServiceProviders::Email)
+      service_provider.stub(:batch_subscribe).and_return(nil)
     end
     
     Hello::DataAPI.stub(:get_contacts).and_return([
@@ -66,19 +67,15 @@ describe ContactList do
   it "should run email sync_all! correctly" do
     contact_list.identity.provider = 'mailchimp'
     contact_list.save!
-    contact_list.last_synced_at.should be_nil
     contact_list.stub(:syncable? => true)
 
     expect(service_provider).to receive(:batch_subscribe)
     contact_list.send :sync_all! # calls #sync_all!
-
-    contact_list.last_synced_at.should_not be_nil
   end
 
   describe "sync_one!" do
     before do
       contact_list.save!
-      contact_list.last_synced_at.should be_nil
       contact_list.stub(:syncable? => true)
     end
 
@@ -93,8 +90,8 @@ describe ContactList do
       end
 
       it "should not raise error" do
-        expect(contact_list.service_provider).to be_oauth
-        expect(contact_list.service_provider).to receive(:subscribe)
+        expect(service_provider).to be_oauth
+        expect(service_provider).to receive(:subscribe)
         contact_list.sync_one! "email@email.com", "Test Testerson"
       end
     end
@@ -103,23 +100,15 @@ describe ContactList do
       let(:provider) { 'mad_mimi' }
       let(:contact_list) { contact_lists(:embed_code).tap{|c| c.identity = identity} }
       let(:service_provider) { contact_list.service_provider }
+      let(:double_optin) { ContactList.new.double_optin }
 
       it "should sync" do
         expect(service_provider).to be_a(ServiceProviders::MadMimi)
         expect(service_provider).to be_embed_code
+        expect(service_provider).to receive(:subscribe_params).with("email@email.com", "Test Testerson", double_optin)
         contact_list.sync_one! "email@email.com", "Test Testerson"
-
-        expect(contact_list.last_synced_at).not_to be_nil
       end
     end
-  end
-
-  it "should queue all jobs when running sync_all!" do
-    mock_list = double("contact list", :syncable? => true)
-    mock_list.should_receive(:sync!)
-    ContactList.stub(:all).and_return([mock_list])
-
-    ContactList.sync_all!
   end
 
   it "should handle invalid JSON correctly" do
@@ -132,6 +121,7 @@ describe ContactList do
     before do
       Hello::DataAPI.stub(:get_contacts).and_return([:foo, :bar])
       contact_list.stub(:syncable? => true)
+      contact_list.stub(:oauth? => true)
     end
 
     after { contact_list.sync! }
@@ -232,7 +222,7 @@ describe ContactList do
 end
 
 describe ContactList, "embed code" do
-  fixtures :contact_lists, :identities, :sites
+  fixtures :all
 
   subject { contact_lists(:embed_code) }
 
@@ -257,5 +247,17 @@ describe ContactList, "embed code" do
   context "valid" do
     let(:embed_code) { "<form></form>" }
     its(:embed_code_valid?) { should == true }
+  end
+end
+
+describe ContactList, "sync!" do
+  fixtures :all
+
+  subject { contact_lists(:embed_code) }
+
+  context "embed_code changed" do
+    after { subject.update_attribute :data, { "embed_code" => "new embed code" } }
+    it { should receive(:sync) }
+    it { should receive(:sync_all!) } # this one via `delay`
   end
 end

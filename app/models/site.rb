@@ -1,8 +1,8 @@
 class Site < ActiveRecord::Base
   include GuaranteedQueue::Delay
 
-  has_many :rules
-  has_many :site_elements, through: :rules
+  has_many :rules, dependent: :destroy
+  has_many :site_elements, through: :rules, dependent: :destroy
   has_many :site_memberships, dependent: :destroy
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
@@ -96,6 +96,8 @@ class Site < ActiveRecord::Base
     url = Addressable::URI.heuristic_parse(self.url)
 
     self.url = "#{url.scheme}://#{url.normalized_host}"
+  rescue Addressable::URI::InvalidURIError
+    false
   end
 
   def generate_read_write_keys

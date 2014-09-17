@@ -1,12 +1,14 @@
 class User < ActiveRecord::Base
-  has_many :site_memberships
-  has_many :sites, :through => :site_memberships
+  has_many :site_memberships, dependent: :destroy
+  has_many :sites, through: :site_memberships
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
   delegate :url_helpers, to: "Rails.application.routes"
 
   validate :email_does_not_exist_in_wordpress
   validates :email, uniqueness: true
+
+  attr_accessor :legacy_migration
 
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
@@ -22,6 +24,16 @@ class User < ActiveRecord::Base
     end
 
     new_user
+  end
+
+  # dont require the password virtual attribute to be present
+  # if we are migrating users from the legacy DB
+  def password_required?
+    legacy_migration ? false : super
+  end
+
+  def active?
+    status == ACTIVE_STATUS
   end
 
   def send_devise_notification(notification, *args)

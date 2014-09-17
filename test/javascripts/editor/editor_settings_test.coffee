@@ -30,17 +30,14 @@ test 'it should be able to choose an email goal', ->
 
 test 'it should be able to choose a social goal', ->
   route = @route
-
-  click(find('.change-selection')).andThen ->
+  click(find('.change-selection')).andThen =>
     clickOn('Social', '.step-link-wrapper').andThen =>
-      includes find('.substep').text(), "Would you like your visitors to.."
-
       # 0. Choose a different post type to ensure view switches
-      select("+1 on Google+") 
+      clickOn("+1 on Google+")
       ok findLabeled("URL to +1")
 
       # 1. Select the social post type
-      select("Tweet on Twitter")
+      clickOn("Tweet on Twitter")
 
       # 2. fill in tweet message
       fillIn(findLabeled("Message to tweet"), "Yo! This is my tweet").andThen =>

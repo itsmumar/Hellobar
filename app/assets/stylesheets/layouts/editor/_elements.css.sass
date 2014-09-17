@@ -19,6 +19,9 @@
   .button
     @extend %green-button
 
+    &[disabled]
+      @extend %darkgray-button
+
   /*-----------  Color Select  -----------*/
 
   .color-select
@@ -125,16 +128,22 @@
           .rgb-block
             width: 25%
             float: right
+            position: relative
             margin-top: 0.25em
-            padding: 0.25em 0.5em
-            border-radius: $radiusSm
-            border: 1px solid $grayLight
 
             h6
+              top: 0.5em
+              left: 0.5em
+              position: absolute
               @include inline-block(inherit)
 
-            span
-              float: right
+            input
+              margin: 0
+              width: 100%
+              padding: 0.5em
+              text-align: right
+              border-radius: $radiusSm
+              border: 1px solid $grayLight
 
     &.in-focus
 
@@ -233,3 +242,123 @@
         .toggle-floater
           box-shadow: $shadow
 
+  /*-----------  Social Select -----------*/
+
+  .social-select
+    margin-top: 0.5em
+
+    li
+      opacity: 1
+      cursor: pointer
+      max-height: 2em
+      margin: 0 -0.5em
+      border-radius: 10em
+      padding: 0.25em 0.5em 0.33em
+      @include transition(0.67s)
+      @include antialiased()
+
+      i
+        top: 0
+        font-size: 1.5em
+        line-height: 100%
+        position: relative
+        margin-right: 0.5rem
+        vertical-align: middle
+
+      &.twitter
+
+        i
+          color: $twitter
+
+        &:hover
+          color: $twitter
+          background-color: rgba($twitter, 0.08)
+
+      &.facebook
+ 
+        i
+          color: $facebook
+
+        &:hover
+          color: $facebook
+          background-color: rgba($facebook, 0.08)
+
+      &.linkedin
+ 
+        i
+          color: $linkedin
+
+        &:hover
+          color: $linkedin
+          background-color: rgba($linkedin, 0.08)
+
+      &.google
+ 
+        i
+          color: $google
+
+        &:hover
+          color: $google
+          background-color: rgba($google, 0.08)
+
+      &.pinterest
+ 
+        i
+          color: $pinterest
+
+        &:hover
+          color: $pinterest
+          background-color: rgba($pinterest, 0.08)
+
+      &.buffer
+ 
+        i
+          color: $buffer
+
+        &:hover
+          color: $buffer
+          background-color: rgba($buffer, 0.08)
+
+      i.icon-close
+        top: -1px
+        color: $white
+        display: none
+        width: 1.33em
+        height: 1.33em
+        font-size: 0.67em
+        text-align: center
+        margin-left: 0.5rem
+        border-radius: 10em
+        background-color: $grayLight
+        @include transition(0.67s)
+
+        &:before
+          top: 1px
+          font-size: 0.75em
+          font-weight: bold
+          position: relative
+
+        &:hover
+          background-color: $gray
+
+    &.is-selected
+
+      li
+
+        &:not(.is-selected)
+          opacity: 0
+          max-height: 0
+          padding-top: 0
+          padding-bottom: 0
+          overflow: hidden
+
+        &.is-selected
+          cursor: default
+  
+          .icon-close
+            cursor: pointer
+            @include inline-block()
+
+          &:hover
+            color: inherit
+            background-color: transparent

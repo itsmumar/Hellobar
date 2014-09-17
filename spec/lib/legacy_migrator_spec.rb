@@ -44,7 +44,7 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
 
   context 'user and membership migration' do
     before do
-      LegacyMigrator::LegacySite.should_receive(:find_each).and_yield(legacy_site)
+      LegacyMigrator::LegacySite.stub(:find_each).and_yield(legacy_site)
       legacy_user.stub legacy_user_id: 11223344, id: 44332211, email: "rand#{rand(10_0000)}-#{rand(10_000)}@email.com", original_created_at: Time.parse('1824-05-07')
     end
 
@@ -57,7 +57,7 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
     end
 
     it 'does not create a user if it already exists' do
-      User.stub :exists? => true
+      User.stub :where => [User.new]
 
       expect {
         LegacyMigrator.migrate_sites_and_users_and_memberships
@@ -138,10 +138,24 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
 
       new_user.sites.should == [new_site]
     end
+
+    it 'associates multiple sites with the correct user' do
+      second_legacy_site = double 'legacy_site', legacy_site_id: 44332212, id: 11223344, base_url: 'http://baller4ever.sho', account_id: 1, created_at: Time.parse('1875-01-30'), updated_at: Time.parse('1875-01-31'), script_installed_at: Time.now, generated_script: Time.now, attempted_generate_script: Time.now
+      LegacyMigrator::LegacySite.stub(:find_each).and_yield(legacy_site).and_yield(second_legacy_site)
+
+      LegacyMigrator.migrate_sites_and_users_and_memberships
+
+      migrated_user = User.find(legacy_user.legacy_user_id)
+
+      migrated_user.sites.size.should == 2
+    end
   end
 end
 
 describe LegacyMigrator, '.migrate_goals_to_rules' do
+  fixtures :all
+
+  let(:site) { sites(:zombo) }
   let(:start_date) { '2013-12-01' }
   let(:end_date) { '2014-06-05' }
   let(:legacy_goal) { double 'legacy_goal', id: 12345, site_id: legacy_site.id, data_json: {}, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
@@ -150,42 +164,156 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
   let(:legacy_bar) { double 'legacy_bar', legacy_bar_id: 123, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: legacy_goal.id, settings_json: bar_settings }
 
   before do
-    Site.stub :exists? => true
     legacy_goal.stub bars: [legacy_bar]
-    LegacyMigrator::LegacyGoal.should_receive(:find_each).and_yield(legacy_goal)
+    Site.stub(:find_each).and_yield(site)
+    LegacyMigrator::LegacyGoal.stub where: [legacy_goal]
   end
 
-  it 'doesnt create a new rule if the goal belongs to a site that doesnt exist' do
-    Site.stub :exists? => false
+  context 'creating rules' do
+    it 'should create a rule from a corresponding goal for a site' do
+      expect {
+        LegacyMigrator.migrate_goals_to_rules
+      }.to change(Rule, :count).by(1)
 
-    expect {
+      rule = Rule.find(legacy_goal.id)
+
+      rule.id.should == legacy_goal.id
+      rule.site_id.should == site.id
+      rule.created_at.to_time.utc.to_s.should == legacy_goal.created_at.to_time.utc.to_s
+      rule.updated_at.to_time.utc.to_s.should == legacy_goal.updated_at.to_time.utc.to_s
+    end
+
+    it 'creates a new rule for every legacy goal that exists' do
+      legacy_goal2 = legacy_goal.clone
+      legacy_goal2 = double 'legacy_goal', id: 54321, site_id: legacy_site.id, data_json: {}, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1
+      legacy_bar2 = double 'legacy_bar', legacy_bar_id: 314, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: legacy_goal.id, settings_json: bar_settings
+      legacy_goal2.stub bars: [legacy_bar2]
+
+      LegacyMigrator::LegacyGoal.stub where: [legacy_goal, legacy_goal2]
+
+      expect {
+        LegacyMigrator.migrate_goals_to_rules
+      }.to change(Rule, :count).by(2)
+    end
+
+    it 'creates a default rule for sites that dont have legacy goals' do
+      LegacyMigrator::LegacyGoal.stub where: []
+
+      site.should_receive(:create_default_rule)
+
       LegacyMigrator.migrate_goals_to_rules
-    }.to_not change(Rule, :count)
-  end
+    end
 
-  it 'creates a new rule set with the proper attributes' do
-    expect {
+    it 'creates a new DateCondition if start_date is specified' do
+      legacy_goal.stub data_json: { 'start_date' => start_date }
+
+      expect {
+        LegacyMigrator.migrate_goals_to_rules
+      }.to change(Condition, :count).by(1)
+    end
+
+    it 'creates a new DateRule if end_date is specified' do
+      legacy_goal.stub data_json: { 'end_date' => end_date }
+
+      expect {
+        LegacyMigrator.migrate_goals_to_rules
+      }.to change(Condition, :count).by(1)
+    end
+
+    it 'creates a new DateRule with the proper values when both start_date and end_date are specified' do
+      legacy_goal.stub data_json: { 'start_date' => start_date, 'end_date' => end_date }
+
       LegacyMigrator.migrate_goals_to_rules
-    }.to change(Rule, :count).by(1)
 
-    rule = Rule.find(legacy_goal.id)
+      condition = Rule.find(legacy_goal.id).conditions.first
 
-    rule.id.should == legacy_goal.id
-    rule.site_id.should == legacy_site.id
-    rule.created_at.to_time.utc.to_s.should == legacy_goal.created_at.to_time.utc.to_s
-    rule.updated_at.to_time.utc.to_s.should == legacy_goal.updated_at.to_time.utc.to_s
-  end
+      condition.value.should == { 'start_date' => DateTime.parse(start_date + " 00:00:00"), 'end_date' => DateTime.parse(end_date + " 23:59:59") }
+    end
 
-  it 'creates a new bar for every legacy bar that exists' do
-    expect {
+    it 'creates a new UrlRule if include_urls is specified' do
+      legacy_goal.stub data_json: { 'include_urls' => ['http://url.com'] }
+
+      expect {
+        LegacyMigrator.migrate_goals_to_rules
+      }.to change(Condition, :count).by(1)
+    end
+
+    it 'creates a new UrlRule if exclude_urls is specified' do
+      legacy_goal.stub data_json: { 'exclude_urls' => ['http://url.com'] }
+
+      expect {
+        LegacyMigrator.migrate_goals_to_rules
+      }.to change(Condition, :count).by(1)
+    end
+
+    it 'creates a new UrlRule if both exclude_urls and are specified' do
+      data = { 'exclude_urls' => ['http://exclude.com'], 'include_urls' => ['http://include.com'] }
+      legacy_goal.stub data_json: data
+
       LegacyMigrator.migrate_goals_to_rules
-    }.to change(SiteElement, :count).by(1)
+
+      conditions = Rule.find(legacy_goal.id).conditions
+
+      conditions.find{|condition| condition.include_url? }.value.should == 'http://include.com'
+      conditions.find{|condition| !condition.include_url? }.value.should == 'http://exclude.com'
+    end
+
+    it 'creates both a DateRule and a UrlRule for every url present when start_date and include_urls are specified' do
+      data = { 'exclude_urls' => ['http://include.com', 'http://another.com'], 'include_urls' => ['http://exclude.com'], 'start_date' => '01/01/2001', 'end_date' => '12/12/2012' }
+      legacy_goal.stub data_json: data
+
+      expect {
+        LegacyMigrator.migrate_goals_to_rules
+      }.to change(Condition, :count).by(4)
+    end
+
+    it 'sets the rule name to Everyone when there are only 1 conditions for a rule' do
+      data = { 'exclude_urls' => ['http://exclude.com'] }
+      legacy_goal.stub data_json: data
+
+      LegacyMigrator.migrate_goals_to_rules
+
+      rule = Rule.find(legacy_goal.id)
+
+      rule.name.should == 'Everyone'
+    end
+
+    it 'updates the rule name when there are more than 1 conditions for a rule' do
+      data = { 'exclude_urls' => ['http://exclude.com'], 'start_date' => '01/01/2014' }
+      legacy_goal.stub data_json: data
+
+      LegacyMigrator.migrate_goals_to_rules
+
+      rule = Rule.find(legacy_goal.id)
+
+      rule.name.should == 'Rule 1'
+    end
   end
 
-  it 'associates all newly created bars with the new rule set' do
-    LegacyMigrator.migrate_goals_to_rules
+  context 'creating site elements from legacy bars' do
+    it 'creates a new bar for every legacy bar that exists' do
+      legacy_goal2 = legacy_goal.clone
+      legacy_goal2 = double 'legacy_goal', id: 54321, site_id: legacy_site.id, data_json: {}, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1
+      legacy_bar2 = double 'legacy_bar', legacy_bar_id: 314, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: legacy_goal.id, settings_json: bar_settings
+      legacy_goal2.stub bars: [legacy_bar2]
 
-    Rule.find(legacy_goal.id).site_elements.count.should == 1
+      LegacyMigrator::LegacyGoal.stub where: [legacy_goal, legacy_goal2]
+
+      expect {
+        LegacyMigrator.migrate_goals_to_rules
+      }.to change(SiteElement, :count).by(2)
+    end
+
+    it 'associates all newly created bars with the new rule' do
+      legacy_goal.stub bars: [legacy_bar]
+      LegacyMigrator::LegacyGoal.stub where: [legacy_goal]
+
+      LegacyMigrator.migrate_goals_to_rules
+
+      rule = Rule.find(legacy_goal.id)
+
+      rule.site_elements.count.should == 1
+    end
   end
 
   it 'standardizes the legacy goal type' do
@@ -217,68 +345,8 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
     bar.settings.should == { 'buffer_message' => 'such buffer. wow.' }
   end
 
-  it 'creates a new DateCondition if start_date is specified' do
-    legacy_goal.stub data_json: { 'start_date' => start_date }
-
-    expect {
-      LegacyMigrator.migrate_goals_to_rules
-    }.to change(Condition, :count).by(1)
-  end
-
-  it 'creates a new DateRule if end_date is specified' do
-    legacy_goal.stub data_json: { 'end_date' => end_date }
-
-    expect {
-      LegacyMigrator.migrate_goals_to_rules
-    }.to change(Condition, :count).by(1)
-  end
-
-  it 'creates a new DateRule with the proper values when both start_date and end_date are specified' do
-    legacy_goal.stub data_json: { 'start_date' => start_date, 'end_date' => end_date }
-
-    LegacyMigrator.migrate_goals_to_rules
-
-    condition = Rule.find(legacy_goal.id).conditions.first
-
-    condition.value.should == { 'start_date' => DateTime.parse(start_date + " 00:00:00"), 'end_date' => DateTime.parse(end_date + " 23:59:59") }
-  end
-
-  it 'creates a new UrlRule if include_urls is specified' do
-    legacy_goal.stub data_json: { 'include_urls' => ['http://url.com'] }
-
-    expect {
-      LegacyMigrator.migrate_goals_to_rules
-    }.to change(Condition, :count).by(1)
-  end
-
-  it 'creates a new UrlRule if exclude_urls is specified' do
-    legacy_goal.stub data_json: { 'exclude_urls' => ['http://url.com'] }
-
-    expect {
-      LegacyMigrator.migrate_goals_to_rules
-    }.to change(Condition, :count).by(1)
-  end
-
-  it 'creates a new UrlRule if both exclude_urls and are specified' do
-    data = { 'exclude_urls' => ['http://exclude.com'], 'include_urls' => ['http://include.com'] }
-    legacy_goal.stub data_json: data
-
-    LegacyMigrator.migrate_goals_to_rules
-
-    conditions = Rule.find(legacy_goal.id).conditions
-
-    conditions.find{|condition| condition.include_url? }.value.should == 'http://include.com'
-    conditions.find{|condition| !condition.include_url? }.value.should == 'http://exclude.com'
-  end
-
-  it 'creates both a DateRule and a UrlRule for every url present when start_date and include_urls are specified' do
-    data = { 'exclude_urls' => ['http://include.com', 'http://another.com'], 'include_urls' => ['http://exclude.com'], 'start_date' => '01/01/2001', 'end_date' => '12/12/2012' }
-    legacy_goal.stub data_json: data
-
-    expect {
-      LegacyMigrator.migrate_goals_to_rules
-    }.to change(Condition, :count).by(4)
-  end
+=begin
+=end
 end
 
 describe LegacyMigrator, ".migrate_identities" do
@@ -310,7 +378,7 @@ describe LegacyMigrator, ".migrate_goals_to_contact_lists" do
   let(:legacy_traffic_goal) { double "legacy_traffic_goal", id: 12346, site_id: legacy_site.id, data_json: {}, created_at: Time.parse("2000-01-31"), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
   let(:legacy_site) { double "legacy_site", id: 123 }
   let(:legacy_identity) { double "identity", embed_code: "old embed code" }
-  let(:legacy_id_int) { double "legacy_id_int", id: 123, identity_id: 4113, data: {"remote_name" => "list name"}, last_synced_at: 1.week.ago, created_at: 1.month.ago, updated_at: 1.day.ago, identity: legacy_identity }
+  let(:legacy_id_int) { double "legacy_id_int", id: 123, identity_id: 4113, data: {"remote_name" => "list name"}, created_at: 1.month.ago, updated_at: 1.day.ago, identity: legacy_identity }
 
   before do
     Site.stub :exists? => true
@@ -346,7 +414,6 @@ describe LegacyMigrator, ".migrate_goals_to_contact_lists" do
       identity_id: legacy_id_int.identity_id,
       data: legacy_id_int.data.merge(embed_code: legacy_identity.embed_code),
       name: legacy_id_int.data["remote_name"],
-      last_synced_at: legacy_id_int.last_synced_at,
       created_at: legacy_id_int.created_at,
       updated_at: legacy_id_int.updated_at
     ))

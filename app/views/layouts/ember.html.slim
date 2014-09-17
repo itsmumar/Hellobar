@@ -15,6 +15,7 @@ html
   body
     = render "shared/modals/contact_list"
     = render "shared/modals/editor_errors"
+    = render "shared/modals/unsaved_changes"
 
     javascript:
       HB_DNT = 1
@@ -22,4 +23,5 @@ html
 
     = yield
 
+    = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'

@@ -1,14 +1,23 @@
 <label>Show after:</label>
 
-<label>
-  {{view Ember.Checkbox checked=isScroll}}
-  {{view Ember.TextField value=content.scrollPercentage placeholder="10"}}
-  % Page scroll
-</label>
-<label>
-  {{view Ember.Checkbox checked=isElement}}
-  {{view Ember.TextField value=content.elementTarget placeholder=".sidemenu"}}
-  Element appearrs
-  <p>ADVANCED</p>
-</label>
-{{!-- ^ will likely need to be a component... --}}
+{{#view HelloBar.ScrollSelect type='percentage' class='scroll-percentage'}}
+  <i class="psudo-radio"></i>
+  {{input 
+    type='text' 
+    placeholder='10' 
+    disabled=view.notSelected
+    value=model.settings.display_when_scroll_percentage
+  }}
+  <span>% Page scroll</span>
+{{/view}}
+
+{{#view HelloBar.ScrollSelect type='element' class='scroll-element'}}
+  <i class="psudo-radio"></i>
+  {{input 
+    type='text' 
+    placeholder='.sidemenu' 
+    disabled=view.notSelected
+    value=model.settings.display_when_scroll_element
+  }}
+  <span>Element appears<br><small>ADVANCED</small></span>
+{{/view}}

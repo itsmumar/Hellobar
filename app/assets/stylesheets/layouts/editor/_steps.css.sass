@@ -83,7 +83,11 @@
     @include justify-content(space-between)
     @include align-items(center)
     @include flex-flow(row nowrap)
-    @include display(flex)    
+    @include display(flex)
+
+    .button
+      padding-top: 0.55em
+      padding-bottom: 0.55em
 
     .nav-dot
       width: 10px
@@ -139,6 +143,78 @@
     
     .substep
       margin-top: 0.33em
+
+    label[class]
+      font-size: 1em
+
+      span
+        font-size: 0.85em
+
+    /*-----------  Step: Targeting/Scroll  -----------*/
+
+    label.scroll-element,
+    label.scroll-percentage
+      @include clearfix()
+
+      .psudo-radio
+        width: 0.9em
+        height: 0.9em
+        cursor: pointer
+        padding: 0.15em
+        border-radius: 10em
+        border: 1px solid $gray
+        background-color: $white
+        box-shadow: inset 0 0 0 2px $white
+        @include inline-block()
+        @include transition()
+
+      input
+        margin: 0 0.25em !important
+
+        &[disabled]
+          background-color: red
+
+      span
+        font-size: 0.85em
+        line-height: 100%
+        @include user-select(none)
+        @include inline-block()
+
+        small
+          color: $gray
+
+      &.is-selected
+
+        .psudo-radio
+          border-color: $green
+          background-color: $green
+
+    label.scroll-percentage
+      margin-top: 0.9em
+
+      input
+        width: 15% !important
+
+    label.scroll-element
+      margin-top: 0.25em
+
+      input
+        width: 33% !important
+
+    /*-----------  Step: Targeting/Delay  -----------*/
+
+    label.time-delay
+      margin-top: 0.15em
+
+      > *
+        @include inline-block()
+
+      input[type="text"]
+        width: 14% !important
+        margin-right: 0.25em !important
+
+      .select-wrapper
+        width: 50% !important
 
   /*-----------  Save Button  -----------*/
 

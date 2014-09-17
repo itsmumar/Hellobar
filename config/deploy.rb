@@ -7,6 +7,7 @@ set :linked_files, %w{config/database.yml config/secrets.yml config/settings.yml
 set :linked_dirs, %w{log tmp/pids}
 set :rails_env, "production"
 set :ssh_options, { :forward_agent => true }
+set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -21,8 +22,6 @@ namespace :deploy do
       invoke "deploy:restart_monit"
     end
   end
-
-  after :publishing, :restart
 
   task :reload_nginx_config do
     on roles(:web) do
@@ -53,4 +52,13 @@ namespace :deploy do
       execute "sudo monit restart all"
     end
   end
+
+  task :copy_additional_logrotate_files do
+    on roles(:web) do
+      execute "sudo cp #{release_path}/config/deploy/logrotate.d/guaranteed_queue /etc/logrotate.d/"
+    end
+  end
+
+  after :publishing, :restart
+  after :publishing, :copy_additional_logrotate_files
 end

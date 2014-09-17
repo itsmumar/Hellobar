@@ -2,7 +2,7 @@ class SiteElementSerializer < ActiveModel::Serializer
   attributes :id, :site, :rule_id, :rule, :contact_list_id, :errors, :full_error_messages,
 
     # settings
-    :element_subtype, :settings,
+    :element_subtype, :settings, :display_when,
 
     # text
     :message, :link_text, :font,
@@ -31,6 +31,8 @@ class SiteElementSerializer < ActiveModel::Serializer
           :id => rule.id,
           :name => rule.name,
           :description => rule.to_sentence,
+          :match => rule.match,
+          :priority => rule.priority,
           :conditions => rule.conditions.map{|c| ConditionSerializer.new(c) }
         }
       end,

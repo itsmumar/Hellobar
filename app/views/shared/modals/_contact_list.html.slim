@@ -1,30 +1,44 @@
 script id="contact-list-modal-template" type="text/x-handlebars-template"
-  .modal-wrapper.contact-list-modal
+
+  .modal-wrapper
+
     .modal-block
-      h4= "{{header}}"
-      hr
 
-      .provider-instructions-block
-      .provider-instructions-nevermind-block
-      .name-and-provider-block
-        form.contact_list
-          label for="contact_list_name" Name
-          input type="text" id="contact_list_name" name="contact_list[name]"
+      header
+        h5= "{{header}}"
 
-          label for="contact_list_provider" Where do you want your contacts stored?
-          select id="contact_list_provider" name="contact_list[provider]"
-            - options_for_provider_select.each do |text, value, data|
-              = content_tag :option, text, value: value, data: data
+      .contact-list-modal
 
-          p
-            small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
-          .remote-list-select-block
+        .name-and-provider-block
+          form.contact_list
+            label for="contact_list_name" Name
+            input type="text" id="contact_list_name" name="contact_list[name]"
 
-      hr
-      a.button.submit Done
-      a.button.cancel Cancel
+            label for="contact_list_provider" Where do you want your contacts stored?
+
+            .select-wrapper
+              select id="contact_list_provider" name="contact_list[provider]"
+                - options_for_provider_select.each do |text, value, data|
+                  = content_tag :option, text, value: value, data: data
+
+            p
+              small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
+            .remote-list-select-block
+
+        .provider-instructions-block
+          / Empty
+
+        .provider-instructions-nevermind-block
+          / Empty
+          
+      footer
+        a.button.cancel Cancel
+        a.button.submit Done
+
+/-----------  Provider Instructions Template  -----------/
 
 script id="contact-list-modal-provider-instructions-template" type="text/x-handlebars-template"
+  
   | <p>To integrate with {{providerName}} you'll need:</p>
   |
   | <ol>
@@ -33,7 +47,7 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |  {{else}}
   |    <li>Your {{providerName}} username and password</li>  
   |  {{/if}}
-  |  <li>To have an existing list with {{providerName}} to sync to</li>
+  |  <li>An existing list with {{providerName}} to sync to</li>
   | </ol>
   |
   | {{#if requiresEmbedCode}}
@@ -43,19 +57,25 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |
   | {{else}}
   |
-  | <p>
-  |   <a class="do-this-later">I'll do this later</a>
-  |   <a class="ready button">I'm ready</a>
-  | </p>
+  | <div>
+  |   <a class="button cancel do-this-later">I'll do this later</a>
+  |   <a class="button ready">I'm ready</a>
+  | </div>
   |
   | {{/if}}
 
+/-----------  No Provider Template  -----------/
+
 script id="contact-list-modal-provider-instructions-nevermind-template" type="text/x-handlebars-template"
+
   p No worries!
   p We'll store all of your contacts in Hello Bar for now.
   p Syncing with {{providerName}} can be set up any time via the contacts area, or by editing a contacts list.
 
+/-----------  Remote List Template  -----------/
+
 script id="contact-list-modal-remote-list-select-template" type="text/x-handlebars-template"
+
   | <label for="contact_list_remote_list_id">Choose a {{providerName}} list to sync with</label>
   | <select id="contact_list_remote_list_id" name="contact_list[remote_list_id]">
   |   {{#each identity.lists}}
