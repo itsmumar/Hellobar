@@ -11,6 +11,7 @@ class Rule < ActiveRecord::Base
 
   accepts_nested_attributes_for :conditions, allow_destroy: true
 
+  validates :name, presence: true
   validates :site, association_exists: true
   validates :priority, numericality: {
                          only_integer: true,

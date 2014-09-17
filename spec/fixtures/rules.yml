@@ -1,8 +1,12 @@
 zombo:
+  name: zomboname
   site: zombo
 zombo2:
+  name: zomboname2
   site: zombo
 horsebike:
+  name: horseybikename
   site: horsebike
 polymathic:
+  name: polyname
   site: polymathic

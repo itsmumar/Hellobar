@@ -199,7 +199,7 @@ describe ScriptGenerator, '#rules' do
   end
 
   it 'returns the proper hash when a single bar_id is passed as an option' do
-    rule = Rule.create! site: site
+    rule = rules(:horsebike)
     bar = SiteElement.create! element_subtype: 'email', rule: rule, contact_list: contact_list
     options = { bar_id: bar.id }
 
@@ -218,7 +218,7 @@ describe ScriptGenerator, '#rules' do
   end
 
   it 'renders all bar json when the render_paused_site_elements is true' do
-    rule = Rule.create! site: site
+    rule = rules(:horsebike)
     bar = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
     options = { render_paused_site_elements: true }
     generator = ScriptGenerator.new(site, options)
@@ -236,7 +236,7 @@ describe ScriptGenerator, '#rules' do
   end
 
   it 'renders only active bar json by default' do
-    rule = Rule.create! site: site
+    rule = rules(:horsebike)
     paused = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
     active_bar = SiteElement.create! element_subtype: 'traffic', rule: rule, paused: false
     generator = ScriptGenerator.new(site)

@@ -1,7 +1,6 @@
 class @RuleModal extends Modal
 
   modalName: 'rules'
-  errors: []
 
   newConditionTemplate: ->
     $('script#new-condition').html()
@@ -147,15 +146,7 @@ class @RuleModal extends Modal
     @$modal.find('.modal-block').prepend(alert)
 
   _removeAlerts: ->
-    @errors = []
     @$modal.find('.alert').remove()
-
-  formIsValid: ->
-    # validate presence of rule name
-    if @$modal.find('input#rule_name').val() == ''
-      @errors.push('Please add a name for this rule.')
-
-    @errors.length == 0
 
   _bindSubmit: ->
     modal = this
@@ -163,14 +154,6 @@ class @RuleModal extends Modal
     @$modal.find('form').on 'submit', (event) ->
       event.preventDefault()
       modal._removeAlerts()
-
-      # check the validity of the Rule modal form
-      unless modal.formIsValid()
-        # render all of the errors
-        for error in modal.errors
-          console.log(error)
-          modal._renderAlert(error)
-        return # dont submit form
 
       $.ajax
         dataType: 'json'
