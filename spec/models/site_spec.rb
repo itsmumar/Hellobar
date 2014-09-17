@@ -71,6 +71,12 @@ describe Site do
       site.should_not be_valid
       site.errors[:url].should_not be_empty
     end
+
+    it "doesn't try to format a blank URL" do
+      site = Site.new(:url => "")
+      site.should_not be_valid
+      site.url.should be_blank
+    end
   end
 
   describe "#script_content" do

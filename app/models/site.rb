@@ -93,8 +93,9 @@ class Site < ActiveRecord::Base
   end
 
   def standardize_url
-    url = Addressable::URI.heuristic_parse(self.url)
+    return if self.url.blank?
 
+    url = Addressable::URI.heuristic_parse(self.url)
     self.url = "#{url.scheme}://#{url.normalized_host}"
   rescue Addressable::URI::InvalidURIError
     false
