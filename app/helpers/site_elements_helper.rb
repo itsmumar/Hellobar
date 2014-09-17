@@ -123,12 +123,12 @@ module SiteElementsHelper
 
     letter = ("A".."Z").to_a[index]
 
-    if rand(2) == 1
-      # Circled Icon
-      "<i class='testing-icon icon-circle #{site_element.short_subtype}'><span class='numbers'>#{letter}</span></i>".html_safe
-    else
-      # Starred Icon
+    winner = elements_in_group.sort_by(&:conversion_percentage).last
+
+    if difference_is_significant?(elements_in_group) && site_element == winner
       "<i class='testing-icon icon-tip #{site_element.short_subtype}'><span class='numbers'>#{letter}</span></i>".html_safe
+    else
+      "<i class='testing-icon icon-circle #{site_element.short_subtype}'><span class='numbers'>#{letter}</span></i>".html_safe
     end
   end
 
