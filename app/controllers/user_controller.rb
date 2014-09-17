@@ -3,7 +3,7 @@ class UserController < ApplicationController
   before_action :load_user, :only => [:edit, :update]
 
   def update
-    if @user.update_attributes(user_params)
+    if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(:status => User::ACTIVE_STATUS))
       sign_in @user, :bypass => true
 
       respond_to do |format|
@@ -28,6 +28,13 @@ class UserController < ApplicationController
 
   private
 
+  def can_attempt_update?(user, params)
+    # this guard prevents users from activating unless they supply both a password and email
+    # active users, however, can always update
+    user.active? ||
+      (params[:password].present? && params[:email].present?)
+  end
+
   def load_user
     @user = current_user
   end
@@ -43,6 +50,6 @@ class UserController < ApplicationController
   def user_params
     filter_password_params_if_optional
 
-    params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation, :status)
+    params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
   end
 end

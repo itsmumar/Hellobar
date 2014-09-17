@@ -28,22 +28,40 @@ describe UserController do
 
     context 'user is temporary' do
       before do
-        @user = users(:inactive)
+        @user = users(:temporary)
         stub_current_user(@user)
       end
 
-      it "allows the user to change their password" do
+      it "allows user to set their email and passwore, and activate" do
         original_hash = @user.encrypted_password
 
-        put :update, :user => {:password => "asdfffff", :password_confirmation => "asdfffff"}
+        put :update, :user => {:email => "myrealemail@gmail.com", :password => "asdfffff"}
 
-        @user.reload.encrypted_password.should_not == original_hash
+        @user.reload
+
+        @user.encrypted_password.should_not == original_hash
+        @user.email.should == "myrealemail@gmail.com"
+        @user.status.should == User::ACTIVE_STATUS
       end
 
-      it 'does not update the user if the password params are blank' do
-        put :update, :user => {:first_name => "Sexton", :last_name => "Hardcastle", :password => "", :password_confirmation => ""}
+      it 'does not update the user if the password param is blank' do
+        put :update, :user => {:email => "myrealemail@gmail.com"}
 
-        @user.reload.first_name.should_not == 'Sexton'
+        @user.reload
+
+        @user.email.should_not == "myrealemail@gmail.com"
+        @user.status.should == User::TEMPORARY_STATUS
+      end
+
+      it 'does not update the user if the email param is blank' do
+        original_hash = @user.encrypted_password
+
+        put :update, :user => {:password => "asdffff"}
+
+        @user.reload
+
+        @user.encrypted_password.should == original_hash
+        @user.status.should == User::TEMPORARY_STATUS
       end
     end
   end
