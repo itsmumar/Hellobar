@@ -63,7 +63,9 @@ test 'rendering the correct operand for UrlCondition', ->
 test 'RuleModal._dateClasses(operand)', ->
   expect(3)
 
-  modal = new RuleModal({})
+  options =
+    ruleData: 'Name'
+  modal = new RuleModal(options)
 
   equal modal._dateClasses('is_before'), '.end_date.value'
   equal modal._dateClasses('is_after'), '.start_date.value'
@@ -120,6 +122,7 @@ module 'RuleModal interactions',
   setup: ->
     @modal = new RuleModal(
       ruleData:
+        name: 'Name'
         siteId: 1
     )
 
@@ -136,6 +139,7 @@ asyncTest 'RuleModal closes the modal on a successful form submission event', (a
 
   options =
     ruleData:
+      name: 'Name'
       siteId: 1
   modal = new RuleModal(options)
   $modal = modal.open()

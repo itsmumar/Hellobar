@@ -3,6 +3,7 @@
   @site = Site.first
   @site_element = SiteElement.first
   @rules = @site.rules.all
+  @rules << Rule.new(name: 'Everyone') if @rules.empty?
 %>
 
 <script type="text/javascript">
