@@ -27,9 +27,9 @@ script id="rule-modal" type="text/x-handlebars-template"
             .condition-ruleset
               .select-wrapper.optional.rule_conditions_segment
                 select class="condition-segment" name="rule[conditions_attributes][{{@index}}][segment]"
-                  | {{option segment "DeviceCondition" "device"}}
-                  | {{option segment "DateCondition" "date"}}
-                  | {{option segment "UrlCondition" "url"}}
+                  | {{option segment "DeviceCondition" "Device"}}
+                  | {{option segment "DateCondition" "Date"}}
+                  | {{option segment "UrlCondition" "Page URL"}}
               .select-wrapper.optional.rule_conditions_operand
                 select class="condition-operand" name="rule[conditions_attributes][{{@index}}][operand]"
                   | {{option operand "is_after" "is after"}}
@@ -78,9 +78,9 @@ script#new-condition type="text/x-handlebars-template"
       .condition-ruleset
         .select-wrapper.optional.rule_conditions_segment
           select.condition-segment name="segment"
-            option value="DeviceCondition" device
-            option value="DateCondition" date
-            option value="UrlCondition" url
+            option value="DeviceCondition" Device
+            option value="DateCondition" Date
+            option value="UrlCondition" Page URL
         .select-wrapper.optional.rule_conditions_operand
           select.condition-operand name="operand"
             option value="is_after" is after
