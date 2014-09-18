@@ -23,5 +23,5 @@ secret = SETTINGS['aws_secret_access_key']
 sqs = AWS::SQS.new(access_key_id: key, secret_access_key: secret)
 queue = sqs.queues.find {|q| q.url.include?(stage) }
 
-puts "Sending #{message} to #{queue.url}"
+puts "[#{Time.now}] Sending #{message} to #{queue.url}"
 queue.send_message(message)
