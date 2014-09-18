@@ -1,12 +1,12 @@
 class Condition < ActiveRecord::Base
   self.inheritance_column = 'segment'
 
-  # stored value: displayed value
+  # class name: Hello::Segments::User key
   SEGMENTS = {
-    'CountryCondition' => 'country',
-    'DeviceCondition' => 'device',
-    'DateCondition' => 'date',
-    'UrlCondition' => 'url'
+    'CountryCondition' => 'co',
+    'DeviceCondition' => 'dv',
+    'DateCondition' => 'dt',
+    'UrlCondition' => 'pu'
   }
 
   # stored value: displayed value
@@ -31,10 +31,14 @@ class Condition < ActiveRecord::Base
   end
 
   def to_sentence
-    "#{SEGMENTS[segment]} #{OPERANDS[operand]} #{value}"
+    "#{segment_data[:name]} #{OPERANDS[operand]} #{value}"
   end
 
-  def short_segment
-    segment.gsub(/Condition$/, '').underscore.downcase
+  def segment_key
+    SEGMENTS[segment]
+  end
+
+  def segment_data
+    Hello::Segments::User.find { |s| s[:key] == segment_key } || {}
   end
 end
