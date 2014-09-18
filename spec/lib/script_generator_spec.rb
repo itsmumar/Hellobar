@@ -90,7 +90,7 @@ describe ScriptGenerator, '#render' do
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
-      expected_string = 'HB.addRule("", [{"segment":"date","operand":"is after","value":{"start_date":"2000-01-01"}}], [])'
+      expected_string = 'HB.addRule("", [{"segment":"dt","operand":"is after","value":{"start_date":"2000-01-01"}}], [])'
 
       generator.render.should include(expected_string)
     end
@@ -110,7 +110,7 @@ describe ScriptGenerator, '#render' do
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
-      expected_string = 'HB.addRule("", [{"segment":"date","operand":"is before","value":{"end_date":"2015-01-01"}}], [])}'
+      expected_string = 'HB.addRule("", [{"segment":"dt","operand":"is before","value":{"end_date":"2015-01-01"}}], [])}'
 
       generator.render.should include(expected_string)
     end
@@ -130,7 +130,7 @@ describe ScriptGenerator, '#render' do
       rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
-      expected_string = 'HB.addRule("", [{"segment":"url","operand":"does_not_include","value":"/signup"}], [])'
+      expected_string = 'HB.addRule("", [{"segment":"pu","operand":"does_not_include","value":"/signup"}], [])'
 
       generator.render.should include(expected_string)
     end
@@ -141,7 +141,7 @@ describe ScriptGenerator, '#render' do
       rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
-      expected_string = 'HB.addRule("", [{"segment":"url","operand":"does_not_include","value":"http://soamazing.com/signup"}], [])}'
+      expected_string = 'HB.addRule("", [{"segment":"pu","operand":"does_not_include","value":"http://soamazing.com/signup"}], [])}'
 
       generator.render.should include(expected_string)
     end
@@ -161,7 +161,7 @@ describe ScriptGenerator, '#render' do
       rule.stub conditions: conditions
       site.stub rules: [rule]
 
-      expected_string = 'HB.addRule("", [{"segment":"url","operand":"includes","value":"/signup"}], [])'
+      expected_string = 'HB.addRule("", [{"segment":"pu","operand":"includes","value":"/signup"}], [])'
 
       generator.render.should include(expected_string)
     end

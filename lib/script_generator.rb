@@ -122,7 +122,7 @@ private
   def condition_settings(condition)
     result = {}
     {
-      segment: :short_segment,
+      segment: :segment_key,
       operand: nil,
       value: nil
     }.each do |key, method|
