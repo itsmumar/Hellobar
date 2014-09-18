@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140917141415) do
+ActiveRecord::Schema.define(version: 20140918035327) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -149,6 +149,20 @@ ActiveRecord::Schema.define(version: 20140917141415) do
   end
 
   add_index "internal_reports", ["name"], name: "index_internal_reports_on_name", using: :btree
+
+  create_table "payment_method_details", force: true do |t|
+    t.integer  "payment_method_id"
+    t.string   "type"
+    t.text     "data"
+    t.datetime "created_at"
+  end
+
+  create_table "payment_methods", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "status",     default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "rules", force: true do |t|
     t.integer  "site_id"
