@@ -213,7 +213,7 @@ class @RuleModal extends Modal
     $condition.find('.choice-wrapper').hide()
 
     @_renderCondition($condition)
-    @$modal.find('.conditions-wrapper').append($condition.html())
+    @$modal.find('.conditions-wrapper').append($condition.prop('outerHTML'))
 
   _removeCondition: ($condition) ->
     $condition.find('.destroy').val(true)
