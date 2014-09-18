@@ -30,6 +30,7 @@ unless defined?(Hellobar::Settings)
     mailchimp_secret
     data_api_url
     fake_data_api
+    script_cdn_url
   )
 
   keys.each do |key|
