@@ -35,6 +35,10 @@ describe RulesController do
   end
 
   describe 'POST :create' do
+    before do
+      Site.any_instance.stub(:generate_script => true)
+    end
+
     it 'should fail when not logged in' do
       post :create, site_id: 1, rule: {}
       expect(response.code).to eq UNAUTHORIZED
@@ -82,6 +86,10 @@ describe RulesController do
   end
 
   describe 'DELETE :destroy' do
+    before do
+      Site.any_instance.stub(:generate_script => true)
+    end
+
     it 'should fail when not logged in' do
       delete :destroy, site_id: site, id: rule
       expect(response.code).to eq UNAUTHORIZED
@@ -118,6 +126,10 @@ describe RulesController do
   end
 
   describe 'PUT :update' do
+    before do
+      Site.any_instance.stub(:generate_script => true)
+    end
+
     it 'should fail when not logged in' do
       put :update, site_id: site, id: rule
 
