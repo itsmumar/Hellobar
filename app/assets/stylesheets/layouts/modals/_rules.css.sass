@@ -2,24 +2,22 @@
 
 .rules-modal
 
-  form 
+  > p
 
-    > p
+    input[type='number'],
+    .select-wrapper select
+      width: 5.5em !important
 
-      input[type='number'],
-      .select-wrapper select
-        width: 5.5em !important
+  > label
+    width: 9%
+    margin: 0
+    color: $gray
+    font-size: 1em
+    @include inline-block()
 
-    > label
-      width: 9%
-      margin: 0
-      color: $gray
-      font-size: 1em
-      @include inline-block()
-
-    > input
-      width: 91% !important
-      display: inline-block !important
+  > input
+    width: 91% !important
+    display: inline-block !important
 
   /*-----------  Conditions Wrapper  -----------*/
   
@@ -69,6 +67,7 @@
 
             &[type='date']
               width: 40%
+              margin-top: 1px !important
               padding-top: 0.375em
               padding-bottom: 0.375em
               @include transition(margin-left 0)

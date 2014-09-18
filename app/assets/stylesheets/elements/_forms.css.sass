@@ -40,6 +40,13 @@ input:not([type=submit]):not([type=file]):not([type=button]):not([type=radio]):n
   @include placeholder 
     color: lighten($gray, 5%)
 
+  &.error
+    color: $red
+    border-color: $red
+
+    @include placeholder 
+      color: lighten($red, 25%)
+
 textarea
   min-height: 6em      
 
@@ -81,6 +88,15 @@ span > textarea
 
   &:hover:before
     color: $grayDarker
+
+  &.error 
+
+    select
+      color: $red
+      border-color: $red
+
+    &:before
+      color: $red
 
 span.select-wrapper
   margin: 0 0.5em !important
