@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140905160712) do
+ActiveRecord::Schema.define(version: 20140917141415) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -41,6 +41,19 @@ ActiveRecord::Schema.define(version: 20140905160712) do
 
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
+
+  create_table "billing_logs", force: true do |t|
+    t.string   "message"
+    t.string   "source_file"
+    t.datetime "created_at"
+    t.integer  "user_id"
+    t.integer  "site_id"
+    t.integer  "subscription_id"
+    t.integer  "payment_method_id"
+    t.integer  "payment_method_details_id"
+    t.integer  "bill_id"
+    t.integer  "billing_attempt_id"
+  end
 
   create_table "conditions", force: true do |t|
     t.integer  "rule_id"
