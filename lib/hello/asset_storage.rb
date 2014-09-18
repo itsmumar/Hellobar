@@ -3,6 +3,9 @@ require "stringio"
 
 module Hello
   class AssetStorage
+    MAXAGE = 2.minutes
+    S_MAXAGE = 1.minute
+
     cattr_accessor :connection
 
     self.connection = Fog::Storage.new({
@@ -36,22 +39,26 @@ module Hello
       if file
         file.body = contents
         file.public = true
-        file.expires = 100.years.from_now
         file.content_type = "text/javascript"
         file.content_encoding = "gzip"
+        file.metadata = cache_header
       else
         file = directory.files.new({
           :key => filename,
           :body => contents,
-          :expires => 100.years.from_now,
           :public => true,
           :content_type => "text/javascript",
-          :content_encoding => "gzip"
+          :content_encoding => "gzip",
+          :metadata => cache_header
         })
       end
 
       file.save
       file
+    end
+
+    def cache_header
+      {"Cache-Control" => "max-age=#{MAXAGE},s-maxage=#{S_MAXAGE}"}
     end
   end
 end
