@@ -24,7 +24,8 @@ describe RuleSerializer do
         rule_id: rule.id,
         segment: condition.segment,
         operand: condition.operand,
-        value: condition.value
+        value: condition.value,
+        is_between: true
       }]
     })
   end

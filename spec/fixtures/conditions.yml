@@ -1,21 +1,17 @@
 date_between:
   segment: DateCondition
   operand: is_between
-  value:
-    start_date: <%= Date.current - 1.day %>
-    end_date: <%= Date.current + 1.day %>
+  value: [<%= Date.current - 1.day %>, <%= Date.current + 1.day %>]
 
 date_before:
   segment: DateCondition
   operand: is_before
-  value:
-    end_date: <%= Date.current + 1.day %>
+  value: [<%= Date.current + 1.day %>]
 
 date_after:
   segment: DateCondition
   operand: is_after
-  value:
-    start_date: <%= Date.current - 1.day %>
+  value: [<%= Date.current - 1.day %>]
 
 url_includes:
   segment: UrlCondition

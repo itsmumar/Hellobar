@@ -227,7 +227,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
 
       condition = Rule.find(legacy_goal.id).conditions.first
 
-      condition.value.should == { 'start_date' => DateTime.parse(start_date + " 00:00:00"), 'end_date' => DateTime.parse(end_date + " 23:59:59") }
+      condition.value.should == [DateTime.parse(start_date + " 00:00:00"), DateTime.parse(end_date + " 23:59:59")]
     end
 
     it 'creates a new UrlRule if include_urls is specified' do

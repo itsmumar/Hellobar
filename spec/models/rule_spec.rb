@@ -31,31 +31,22 @@ describe Rule, 'accepting nested condition attributes' do
 
   it 'builds out a "before" date condition properly' do
     condition = conditions(:date_before)
-    expect(condition.value.class).to eq(Hash)
-    condition.value.tap do |hash|
-      expect(hash['start_date']).to be_nil
-      expect(hash['end_date']).to eq Date.current + 1.day
-    end
+
+    expect(condition.value).to eq [Date.current + 1.day]
     expect(condition.to_sentence).to eq "date is before #{Date.current + 1.day}"
   end
 
   it 'builds out an "after" date condition properly' do
     condition = conditions(:date_after)
-    expect(condition.value.class).to eq(Hash)
-    condition.value.tap do |hash|
-      expect(hash['end_date']).to be_nil
-      expect(hash['start_date']).to eq Date.current - 1.day
-    end
+
+    expect(condition.value).to eq [Date.current - 1.day]
     expect(condition.to_sentence).to eq "date is after #{Date.current - 1.day}"
   end
 
   it 'builds out a "between" date condition properly' do
     condition = conditions(:date_between)
-    expect(condition.value.class).to eq(Hash)
-    condition.value.tap do |hash|
-      expect(hash['start_date']).to eq Date.current - 1.day
-      expect(hash['end_date']).to eq Date.current + 1.day
-    end
+
+    expect(condition.value).to eq [Date.current - 1.day, Date.current + 1.day]
   end
 
   it 'builds out a URL condition with a string' do
