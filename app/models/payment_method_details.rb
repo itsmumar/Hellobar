@@ -82,21 +82,40 @@ class CyberSourceCreditCard < PaymentMethodDetails
   # Shouldn't really need to get this directly
   def cybersource_profile
     unless @cybersource_profile
-      response = HB::CyberSource.gateway.retrieve(formatted_token, {order_id: "#{formatted_token}-#{Time.now.to_i}"})
+      response = HB::CyberSource.gateway.retrieve(formatted_token, {order_id: order_id})
       raise response.message unless response.success?
       @cybersource_profile = response.params
     end
     @cybersource_profile
   end
 
+  def charge(amount_in_dollars)
+    raise "Can not charge money until saved" unless persisted? and token
+    response = HB::CyberSource.gateway.purchase(amount_in_dollars*100, formatted_token, {order_id: order_id})
+
+    if response.success?
+      return true, response.authorization
+    else
+      return false, response.message
+    end
+  end
+
   protected
+  def token
+    data["token"]
+  end
   # ActiveMerchant requires the token in this form
   def formatted_token
-    format_token(data["token"])
+    format_token(token)
   end
 
   def format_token(token)
     ";#{token};"
+  end
+
+  def order_id
+    # The order_id is fairly irrelevant
+    "#{self.payment_method ? self.payment_method.id : "NA"}-#{Time.now.to_i}"
   end
 
   before_save :save_to_cybersource
@@ -117,8 +136,6 @@ class CyberSourceCreditCard < PaymentMethodDetails
       end
     end
     response = nil
-    # The order_id is fairly irrelevant
-    order_id = "#{self.payment_method ? self.payment_method.id : "NA"}-#{Time.now.to_i}"
     # Note: we don't want to give CyberSource our customer's email addresses,
     # which is why we use the generic userXXX@hellobar.com format
     email = "user#{user ? user.id : "NA"}@hellobar.com"

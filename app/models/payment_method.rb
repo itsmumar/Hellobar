@@ -8,6 +8,6 @@ class PaymentMethod < ActiveRecord::Base
   end
 
   def name
-    current_payment_details.name
+    current_payment_details ? current_payment_details.name : nil
   end
 end

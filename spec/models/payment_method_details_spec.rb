@@ -3,7 +3,9 @@ require 'spec_helper'
 
 describe PaymentMethodDetails do
   it "should be read-only" do
-    pending
+    d = PaymentMethodDetails.create
+    d.data = {foo: "bar"}
+    lambda{d.save}.should raise_error(ActiveRecord::ReadOnlyRecord)
   end
 end
 
@@ -21,6 +23,7 @@ describe CyberSourceCreditCard do
     address1: "123 Some St",
     country: "USA"
   }.freeze
+  INVALID_DATA = VALID_DATA.clone.merge(number: '1234123412341234')
 
   it "should remove all non-standard fields from data" do
     cc = CyberSourceCreditCard.new
@@ -79,5 +82,12 @@ describe CyberSourceCreditCard do
     cc2 = CyberSourceCreditCard.find(cc2.id)
     cc2.cybersource_profile["cardExpirationYear"].should == "2017"
     cc1.cybersource_profile["cardExpirationYear"].should == "2017"
+  end
+
+  it "should let you charge the card and return the transaction ID" do
+    success, response = CyberSourceCreditCard.create(data: VALID_DATA).charge(100)
+    success.should be_true
+    response.should_not be_nil
+    response.should match(/^.*?;.*?;.*$/)
   end
 end
