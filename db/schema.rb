@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140919135951) do
+ActiveRecord::Schema.define(version: 20140919190249) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -159,10 +159,12 @@ ActiveRecord::Schema.define(version: 20140919135951) do
 
   create_table "payment_methods", force: true do |t|
     t.integer  "user_id"
-    t.integer  "status",     default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
+
+  add_index "payment_methods", ["deleted_at"], name: "index_payment_methods_on_deleted_at", using: :btree
 
   create_table "rules", force: true do |t|
     t.integer  "site_id"

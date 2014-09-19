@@ -1,7 +1,7 @@
 class PaymentMethod < ActiveRecord::Base
   belongs_to :user
-  enum status: [:active, :deleted]
   has_many :details, -> {order 'id'}, :class_name=>"PaymentMethodDetails"
+  acts_as_paranoid
 
   def current_details
     self.details.last

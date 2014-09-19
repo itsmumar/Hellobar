@@ -2,15 +2,19 @@ require 'spec_helper'
 
 
 describe PaymentMethodDetails do
+  fixtures :all
   it "should be read-only" do
     d = PaymentMethodDetails.create
     d.data = {foo: "bar"}
     lambda{d.save}.should raise_error(ActiveRecord::ReadOnlyRecord)
+    lambda{d.destroy}.should raise_error(ActiveRecord::ReadOnlyRecord)
+
   end
 end
 
 describe CyberSourceCreditCard do
- VALID_DATA = {
+  fixtures :all
+  VALID_DATA = {
     number: '4111111111111111',
     month: '8',
     year: '2016',
@@ -26,7 +30,8 @@ describe CyberSourceCreditCard do
   INVALID_DATA = VALID_DATA.clone.merge(number: '123412341234')
 
   it "should remove all non-standard fields from data" do
-    cc = CyberSourceCreditCard.new
+    cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
+
     cc.data = VALID_DATA.merge("foo" => "bar")
     cc.save!
     cc = CyberSourceCreditCard.find(cc.id)
@@ -34,7 +39,7 @@ describe CyberSourceCreditCard do
   end
 
   it "should not store the full credit card number" do
-    cc = CyberSourceCreditCard.new
+    cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
     cc.data = VALID_DATA
     cc.save!
     cc.data["number"].should == "XXXX-XXXX-XXXX-1111"
@@ -43,7 +48,7 @@ describe CyberSourceCreditCard do
   end
 
   it "should store the cybersource_token" do
-    cc = CyberSourceCreditCard.new
+    cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
     cc.data = VALID_DATA
     cc.data["token"].should be_nil
     cc.save!
@@ -53,7 +58,7 @@ describe CyberSourceCreditCard do
   end
 
   it "should provide a good name" do
-    cc = CyberSourceCreditCard.new
+    cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
     cc.data = VALID_DATA
     cc.name.should == "Visa ending in 1111"
     cc.save!
@@ -62,8 +67,7 @@ describe CyberSourceCreditCard do
   end
 
   it "should re-use an existing token if set on the same payment_method" do
-    p = PaymentMethod.new
-    p.save!
+    p = payment_methods(:joeys)
     puts "-"*80
     cc1 = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: p)
     cc1.save!
@@ -86,7 +90,7 @@ describe CyberSourceCreditCard do
   end
 
   it "should let you charge the card and return the transaction ID" do
-    success, response = CyberSourceCreditCard.create!(data: VALID_DATA).charge(100)
+    success, response = CyberSourceCreditCard.create!(data: VALID_DATA, payment_method: payment_methods(:joeys)).charge(100)
     success.should be_true
     response.should_not be_nil
     response.should match(/^.*?;.*?;.*$/)
@@ -94,15 +98,15 @@ describe CyberSourceCreditCard do
 
   it "should validate the data" do
     # Should be valid
-    cc = CyberSourceCreditCard.new(data: VALID_DATA)
+    cc = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: payment_methods(:joeys))
     cc.errors.messages.should == {}
     cc.should be_valid
     
-    CyberSourceCreditCard.new.should_not be_valid
+    CyberSourceCreditCard.new(payment_method: payment_methods(:joeys)).should_not be_valid
     missing = VALID_DATA.merge({})
     missing.delete(:first_name)
-    CyberSourceCreditCard.new(data: missing).should_not be_valid
-    cc = CyberSourceCreditCard.new(data: INVALID_DATA)
+    CyberSourceCreditCard.new(data: missing, payment_method: payment_methods(:joeys)).should_not be_valid
+    cc = CyberSourceCreditCard.new(data: INVALID_DATA, payment_method: payment_methods(:joeys))
     cc.should_not be_valid
   end
 end

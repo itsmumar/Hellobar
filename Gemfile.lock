@@ -303,6 +303,8 @@ GEM
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
     parallel (1.0.0)
+    paranoia (2.0.2)
+      activerecord (~> 4.0)
     polyglot (0.3.5)
     pony (1.8)
       mail (>= 2.0)
@@ -506,6 +508,7 @@ DEPENDENCIES
   omniauth-constantcontact2 (~> 1.0)
   omniauth-createsend (~> 1.0)
   omniauth-mailchimp (~> 1.0)!
+  paranoia (~> 2.0)
   pony (~> 1.8)
   pry
   psych (~> 2.0.5)

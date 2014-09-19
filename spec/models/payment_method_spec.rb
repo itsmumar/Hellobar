@@ -1,8 +1,11 @@
 require 'spec_helper'
 
 describe PaymentMethod do
-  it "should be default be active" do
-    PaymentMethod.new.active?
+  it "should soft-delete" do
+    p = PaymentMethod.create
+    p.deleted_at.should be_nil
+    p.destroy
+    p.deleted_at.should be_within(1).of(Time.now)
   end
 
   it "should provide the current_payment_details if available" do
