@@ -36,7 +36,26 @@ end
 class CyberSourceCreditCard < PaymentMethodDetails
   CC_FIELDS = %w{number month year first_name last_name brand}
   ADDRESS_FIELDS = %w{city state zip address1 country}
-  FIELDS = CC_FIELDS+ADDRESS_FIELDS 
+  # Note: any fields not included here will be stripped out when setting
+  FIELDS = CC_FIELDS+ADDRESS_FIELDS+["token"]
+  # These are the required fields to be set
+  REQUIRED_FIELDS = FIELDS-%w{brand token}
+
+  class CyberSourceCreditCardValidator < ActiveModel::Validator
+    def validate(record)
+      REQUIRED_FIELDS.each do |field|
+        if !record.data or record.data[field].blank?
+          record.errors[field.to_sym] = "can not be blank"
+        end
+      end
+      begin
+        record.send(:save_to_cybersource)
+      rescue Exception => e
+        record.errors[:base] = e.message
+      end
+    end
+  end
+  validates_with CyberSourceCreditCardValidator
 
   def name
     "#{brand ? brand.capitalize : "Credit Card"} ending in #{card.number ? card.number[-4..-1] : "???"}"
@@ -118,7 +137,6 @@ class CyberSourceCreditCard < PaymentMethodDetails
     "#{self.payment_method ? self.payment_method.id : "NA"}-#{Time.now.to_i}"
   end
 
-  before_save :save_to_cybersource
   def save_to_cybersource
     user = nil
     if self.payment_method and self.payment_method.user
@@ -127,7 +145,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     # See if there is a previous token
     previous_token = nil
     if self.payment_method
-      self.payment_method.details.each do |details|
+      self.payment_method.details(true).each do |details|
         if details.is_a?(CyberSourceCreditCard)
           if details.data["token"]
             previous_token = details.data["token"]
@@ -147,7 +165,16 @@ class CyberSourceCreditCard < PaymentMethodDetails
       # Create a new profile
       response = HB::CyberSource.gateway.store(card, params)
     end
-    raise response.message unless response.success?
+    unless response.success?
+      if field = response.params["invalidField"]
+        if field == "c:cardType"
+          raise "Invalid credit card"
+        else
+          raise "Invalid #{field.gsub(/^c:/,"").underscore.humanize.downcase}"
+        end
+      end
+      raise response.message
+    end
     data["token"] = response.params["subscriptionID"]
     # Set the brand
     data["brand"] = card.brand

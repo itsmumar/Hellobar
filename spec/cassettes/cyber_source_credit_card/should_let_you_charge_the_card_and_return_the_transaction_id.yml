@@ -19,7 +19,7 @@ http_interactions:
           <s:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <requestMessage xmlns="urn:schemas-cybersource-com:transaction-data-1.69">
               <merchantID>hellobar</merchantID>
-              <merchantReferenceCode>NA-1411089340</merchantReferenceCode>
+              <merchantReferenceCode>NA-1411101720</merchantReferenceCode>
               <clientLibrary>Ruby Active Merchant</clientLibrary>
               <clientLibraryVersion>1.44.1</clientLibraryVersion>
               <clientEnvironment>x86_64-darwin12.0</clientEnvironment>
@@ -74,23 +74,23 @@ http_interactions:
       Server:
       - Apache-Coyote/1.1
       X-Opnet-Transaction-Trace:
-      - pid=24998,requestid=a8f3d9c6-709d-470a-bd60-070146db4d47
+      - pid=24998,requestid=4a2bc0c4-12f6-45bd-99fe-fe03c2888a16
       Set-Cookie:
-      - _op_aixPageId=a_3bea50d4-5c92-4c88-91fb-a8918ac28982; Path=/
+      - _op_aixPageId=a_fe9988a4-5a36-4e7f-a18c-f168798ae760; Path=/
       Content-Type:
       - text/xml
       Content-Length:
-      - '1483'
+      - '1484'
       Date:
-      - Fri, 19 Sep 2014 01:15:40 GMT
+      - Fri, 19 Sep 2014 04:41:59 GMT
     body:
       encoding: UTF-8
       string: |-
         <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
         <soap:Header>
-        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><wsu:Timestamp xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="Timestamp-924055405"><wsu:Created>2014-09-19T01:15:41.197Z</wsu:Created></wsu:Timestamp></wsse:Security></soap:Header><soap:Body><c:replyMessage xmlns:c="urn:schemas-cybersource-com:transaction-data-1.69"><c:merchantReferenceCode>NA-1411089340</c:merchantReferenceCode><c:requestID>4110893408360176195842</c:requestID><c:decision>ACCEPT</c:decision><c:reasonCode>100</c:reasonCode><c:requestToken>Ahj/7wSRvbQ2fOnmRTIEIkHLZo3cuHDmYwbsZcmRYT97NZh9UBT97NZh9XSACFLDJpJlukB2eJ0Ccje2hs+dPMimQIAApwL1</c:requestToken><c:purchaseTotals><c:currency>USD</c:currency></c:purchaseTotals><c:ccAuthReply><c:reasonCode>100</c:reasonCode><c:amount>0.00</c:amount><c:authorizationCode>888888</c:authorizationCode><c:avsCode>X</c:avsCode><c:avsCodeRaw>I1</c:avsCodeRaw><c:authorizedDateTime>2014-09-19T01:15:41Z</c:authorizedDateTime><c:processorResponse>100</c:processorResponse><c:reconciliationID>96479889L071KIHX</c:reconciliationID></c:ccAuthReply><c:paySubscriptionCreateReply><c:reasonCode>100</c:reasonCode><c:subscriptionID>4110893408360176195842</c:subscriptionID></c:paySubscriptionCreateReply></c:replyMessage></soap:Body></soap:Envelope>
+        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><wsu:Timestamp xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="Timestamp-2038578079"><wsu:Created>2014-09-19T04:42:00.601Z</wsu:Created></wsu:Timestamp></wsse:Security></soap:Header><soap:Body><c:replyMessage xmlns:c="urn:schemas-cybersource-com:transaction-data-1.69"><c:merchantReferenceCode>NA-1411101720</c:merchantReferenceCode><c:requestID>4111017202540176195842</c:requestID><c:decision>ACCEPT</c:decision><c:reasonCode>100</c:reasonCode><c:requestToken>Ahj/7wSRvbemGTcel4IEIkHLZo5csHDKiwbw6EaazT+Rj80jwBT+Rj80jzSACFLDJpJlukB2eJ0Ccje29MMm49LwQIAAuwTb</c:requestToken><c:purchaseTotals><c:currency>USD</c:currency></c:purchaseTotals><c:ccAuthReply><c:reasonCode>100</c:reasonCode><c:amount>0.00</c:amount><c:authorizationCode>888888</c:authorizationCode><c:avsCode>X</c:avsCode><c:avsCodeRaw>I1</c:avsCodeRaw><c:authorizedDateTime>2014-09-19T04:42:00Z</c:authorizedDateTime><c:processorResponse>100</c:processorResponse><c:reconciliationID>96499082Q07CPFM3</c:reconciliationID></c:ccAuthReply><c:paySubscriptionCreateReply><c:reasonCode>100</c:reasonCode><c:subscriptionID>4111017202540176195842</c:subscriptionID></c:paySubscriptionCreateReply></c:replyMessage></soap:Body></soap:Envelope>
     http_version: 
-  recorded_at: Fri, 19 Sep 2014 01:15:41 GMT
+  recorded_at: Fri, 19 Sep 2014 04:42:00 GMT
 - request:
     method: post
     uri: https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
@@ -110,7 +110,7 @@ http_interactions:
           <s:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <requestMessage xmlns="urn:schemas-cybersource-com:transaction-data-1.69">
               <merchantID>hellobar</merchantID>
-              <merchantReferenceCode>NA-1411089341</merchantReferenceCode>
+              <merchantReferenceCode>NA-1411101720</merchantReferenceCode>
               <clientLibrary>Ruby Active Merchant</clientLibrary>
               <clientLibraryVersion>1.44.1</clientLibraryVersion>
               <clientEnvironment>x86_64-darwin12.0</clientEnvironment>
@@ -119,7 +119,7 @@ http_interactions:
           <grandTotalAmount>100.00</grandTotalAmount>
         </purchaseTotals>
         <recurringSubscriptionInfo>
-          <subscriptionID>4110893408360176195842</subscriptionID>
+          <subscriptionID>4111017202540176195842</subscriptionID>
           <approvalRequired>false</approvalRequired>
         </recurringSubscriptionInfo>
         <ccAuthService run="true"/>
@@ -146,21 +146,21 @@ http_interactions:
       Server:
       - Apache-Coyote/1.1
       X-Opnet-Transaction-Trace:
-      - pid=443,requestid=d98868a0-c1e2-4365-8042-ff5cd474f467
+      - pid=24998,requestid=9a2788f8-7e5d-4e8e-a402-e8fa61d08695
       Set-Cookie:
-      - _op_aixPageId=a_b1243554-d981-4693-a4b8-6a818e386541; Path=/
+      - _op_aixPageId=a_f950da3f-ad5f-40e0-b009-8a5ea200fb77; Path=/
       Content-Type:
       - text/xml
       Content-Length:
-      - '1596'
+      - '1597'
       Date:
-      - Fri, 19 Sep 2014 01:15:41 GMT
+      - Fri, 19 Sep 2014 04:42:01 GMT
     body:
       encoding: UTF-8
       string: |-
         <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
         <soap:Header>
-        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><wsu:Timestamp xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="Timestamp-574696282"><wsu:Created>2014-09-19T01:15:42.104Z</wsu:Created></wsu:Timestamp></wsse:Security></soap:Header><soap:Body><c:replyMessage xmlns:c="urn:schemas-cybersource-com:transaction-data-1.69"><c:merchantReferenceCode>NA-1411089341</c:merchantReferenceCode><c:requestID>4110893417430176195995</c:requestID><c:decision>ACCEPT</c:decision><c:reasonCode>100</c:reasonCode><c:requestToken>Ahj//wSRvbQ2jWlyhss2IkHLZo3cs2jiawbsZdFk3T9+70UYABT9+70UYDSB04ghSwyaSZbpAdnicGBORvbQ2jWlyhss2AAADQsk</c:requestToken><c:purchaseTotals><c:currency>USD</c:currency></c:purchaseTotals><c:ccAuthReply><c:reasonCode>100</c:reasonCode><c:amount>100.00</c:amount><c:authorizationCode>888888</c:authorizationCode><c:avsCode>X</c:avsCode><c:avsCodeRaw>I1</c:avsCodeRaw><c:authorizedDateTime>2014-09-19T01:15:42Z</c:authorizedDateTime><c:processorResponse>100</c:processorResponse><c:reconciliationID>96479348M071KQ27</c:reconciliationID><c:ownerMerchantID>hellobar</c:ownerMerchantID></c:ccAuthReply><c:ccCaptureReply><c:reasonCode>100</c:reasonCode><c:requestDateTime>2014-09-19T01:15:42Z</c:requestDateTime><c:amount>100.00</c:amount><c:reconciliationID>96479348M071KQ27</c:reconciliationID></c:ccCaptureReply></c:replyMessage></soap:Body></soap:Envelope>
+        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><wsu:Timestamp xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="Timestamp-1536672038"><wsu:Created>2014-09-19T04:42:01.413Z</wsu:Created></wsu:Timestamp></wsse:Security></soap:Header><soap:Body><c:replyMessage xmlns:c="urn:schemas-cybersource-com:transaction-data-1.69"><c:merchantReferenceCode>NA-1411101720</c:merchantReferenceCode><c:requestID>4111017210610176195842</c:requestID><c:decision>ACCEPT</c:decision><c:reasonCode>100</c:reasonCode><c:requestToken>Ahj//wSRvbemJ+UBjvoEIkHLZo5csHDOiwbw6Eaa0T+Rj80j0BT+Rj80j3SB04ghSwyaSZbpAdnicGBORvbemJ+UBjvoEAAARAmK</c:requestToken><c:purchaseTotals><c:currency>USD</c:currency></c:purchaseTotals><c:ccAuthReply><c:reasonCode>100</c:reasonCode><c:amount>100.00</c:amount><c:authorizationCode>888888</c:authorizationCode><c:avsCode>X</c:avsCode><c:avsCodeRaw>I1</c:avsCodeRaw><c:authorizedDateTime>2014-09-19T04:42:01Z</c:authorizedDateTime><c:processorResponse>100</c:processorResponse><c:reconciliationID>96499083Q07CPFM4</c:reconciliationID><c:ownerMerchantID>hellobar</c:ownerMerchantID></c:ccAuthReply><c:ccCaptureReply><c:reasonCode>100</c:reasonCode><c:requestDateTime>2014-09-19T04:42:01Z</c:requestDateTime><c:amount>100.00</c:amount><c:reconciliationID>96499083Q07CPFM4</c:reconciliationID></c:ccCaptureReply></c:replyMessage></soap:Body></soap:Envelope>
     http_version: 
-  recorded_at: Fri, 19 Sep 2014 01:15:41 GMT
+  recorded_at: Fri, 19 Sep 2014 04:42:01 GMT
 recorded_with: VCR 2.9.0

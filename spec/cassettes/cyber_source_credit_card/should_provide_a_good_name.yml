@@ -19,7 +19,7 @@ http_interactions:
           <s:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <requestMessage xmlns="urn:schemas-cybersource-com:transaction-data-1.69">
               <merchantID>hellobar</merchantID>
-              <merchantReferenceCode>NA-1411079206</merchantReferenceCode>
+              <merchantReferenceCode>NA-1411101715</merchantReferenceCode>
               <clientLibrary>Ruby Active Merchant</clientLibrary>
               <clientLibraryVersion>1.44.1</clientLibraryVersion>
               <clientEnvironment>x86_64-darwin12.0</clientEnvironment>
@@ -74,21 +74,21 @@ http_interactions:
       Server:
       - Apache-Coyote/1.1
       X-Opnet-Transaction-Trace:
-      - pid=21138,requestid=d247c293-7020-4d12-b31d-3082dac4b236
+      - pid=443,requestid=5887850e-bd6b-4f73-a87d-9b60cd987ef3
       Set-Cookie:
-      - _op_aixPageId=a_f36a74e1-9f4a-46e5-9c8c-695378f4c35d; Path=/
+      - _op_aixPageId=a_c463c604-844a-4ed9-85ca-539622c4dfe9; Path=/
       Content-Type:
       - text/xml
       Content-Length:
-      - '1483'
+      - '1484'
       Date:
-      - Thu, 18 Sep 2014 22:26:47 GMT
+      - Fri, 19 Sep 2014 04:41:55 GMT
     body:
       encoding: UTF-8
       string: |-
         <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
         <soap:Header>
-        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><wsu:Timestamp xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="Timestamp-783011696"><wsu:Created>2014-09-18T22:26:47.592Z</wsu:Created></wsu:Timestamp></wsse:Security></soap:Header><soap:Body><c:replyMessage xmlns:c="urn:schemas-cybersource-com:transaction-data-1.69"><c:merchantReferenceCode>NA-1411079206</c:merchantReferenceCode><c:requestID>4110792072280176195844</c:requestID><c:decision>ACCEPT</c:decision><c:reasonCode>100</c:reasonCode><c:requestToken>Ahj/7wSRvbFmc6hvm/IIIkHLZm4cs2LGgwbw581nLT+N1hWyUBT+N1hWyXSACFLDJpJlukB2eJ0Ccje2LM51DfN+QQAAjy69</c:requestToken><c:purchaseTotals><c:currency>USD</c:currency></c:purchaseTotals><c:ccAuthReply><c:reasonCode>100</c:reasonCode><c:amount>0.00</c:amount><c:authorizationCode>888888</c:authorizationCode><c:avsCode>X</c:avsCode><c:avsCodeRaw>I1</c:avsCodeRaw><c:authorizedDateTime>2014-09-18T22:26:47Z</c:authorizedDateTime><c:processorResponse>100</c:processorResponse><c:reconciliationID>96389311P07COM3K</c:reconciliationID></c:ccAuthReply><c:paySubscriptionCreateReply><c:reasonCode>100</c:reasonCode><c:subscriptionID>4110792072280176195844</c:subscriptionID></c:paySubscriptionCreateReply></c:replyMessage></soap:Body></soap:Envelope>
+        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><wsu:Timestamp xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="Timestamp-1627424678"><wsu:Created>2014-09-19T04:41:55.837Z</wsu:Created></wsu:Timestamp></wsse:Security></soap:Header><soap:Body><c:replyMessage xmlns:c="urn:schemas-cybersource-com:transaction-data-1.69"><c:merchantReferenceCode>NA-1411101715</c:merchantReferenceCode><c:requestID>4111017154750176195995</c:requestID><c:decision>ACCEPT</c:decision><c:reasonCode>100</c:reasonCode><c:requestToken>Ahj/7wSRvbelwkkqpOs2IkHLZo5csm7WYwbsZdGjYT97NZ2UYBT97NZ2UbSACFLDJpJlukB2eJ0Ccje29LhJJVSdZsAAERYc</c:requestToken><c:purchaseTotals><c:currency>USD</c:currency></c:purchaseTotals><c:ccAuthReply><c:reasonCode>100</c:reasonCode><c:amount>0.00</c:amount><c:authorizationCode>888888</c:authorizationCode><c:avsCode>X</c:avsCode><c:avsCodeRaw>I1</c:avsCodeRaw><c:authorizedDateTime>2014-09-19T04:41:55Z</c:authorizedDateTime><c:processorResponse>100</c:processorResponse><c:reconciliationID>96499275L071KQQX</c:reconciliationID></c:ccAuthReply><c:paySubscriptionCreateReply><c:reasonCode>100</c:reasonCode><c:subscriptionID>4111017154750176195995</c:subscriptionID></c:paySubscriptionCreateReply></c:replyMessage></soap:Body></soap:Envelope>
     http_version: 
-  recorded_at: Thu, 18 Sep 2014 22:26:47 GMT
+  recorded_at: Fri, 19 Sep 2014 04:41:56 GMT
 recorded_with: VCR 2.9.0
