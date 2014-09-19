@@ -5,7 +5,7 @@
   = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: 30}
 
 - @suggestions.each do |suggestion|
-  = render "sites/improve_block", {suggestion: suggestion}
+  = render "sites/improve_block", {site: @site, suggestion: suggestion}
 
 - unless @top_performers.empty?
   h5 Top performing
