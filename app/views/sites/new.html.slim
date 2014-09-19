@@ -1,7 +1,7 @@
 = simple_form_for @site do |f|
 
   h1 Create A New Site
-  
-  = f.text_field :url, :placeholder => "Your URL (www.mysite.com)"
+
+  = f.input :url, :placeholder => "Your URL (www.mysite.com)"
   = f.input :opted_in_to_email_digest, as: :boolean, inline_label: "Send me a weekly email digest of this site's performance", label: false
   = f.button :submit, "Create Site", :class => "button"
