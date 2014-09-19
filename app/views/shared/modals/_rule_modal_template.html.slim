@@ -60,8 +60,13 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option operand "does_not_include" "does not include"}}
       .rule_conditions_choices
         .choice-wrapper.date-choice
-          input.start_date.value name="rule[conditions_attributes][{{@index}}{{index}}][value][start_date]" type="date" value="{{value.start_date}}"
-          input.end_date.value name="rule[conditions_attributes][{{@index}}{{index}}][value][end_date]" type="date" value="{{value.end_date}}"
+          | {{#if is_between}}
+          input.start_date.between.value disabled="disabled" name="rule[conditions_attributes][{{@index}}{{../../index}}][value][]" type="date" value="{{../value.[0]}}"
+          input.end_date.between.value disabled="disabled" name="rule[conditions_attributes][{{@index}}{{index}}][value][]" type="date" value="{{../value.[1]}}"
+          | {{else}}
+          input.start_date.value disabled="disabled" name="rule[conditions_attributes][{{@index}}{{../../index}}][value][]" type="date" value="{{../value}}"
+          input.end_date.value disabled="disabled" name="rule[conditions_attributes][{{@index}}{{../../index}}][value][]" type="date" value="{{../value}}"
+          | {{/if}}
         .choice-wrapper.url-choice
           input.url.value name="rule[conditions_attributes][{{@index}}{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.select-wrapper.device-choice

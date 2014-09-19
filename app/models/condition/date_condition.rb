@@ -20,11 +20,11 @@ class DateCondition < Condition
 
   def to_sentence
     if operand.to_s == 'is_between'
-      "date is between #{value['start_date']} and #{value['end_date']}"
+      "date is between #{value.first} and #{value.last}"
     elsif operand.to_s == 'is_after'
-      "date is after #{value['start_date']}"
+      "date is after #{value.last}"
     elsif operand.to_s == 'is_before'
-      "date is before #{value['end_date']}"
+      "date is before #{value.last}"
     end
   end
 end
