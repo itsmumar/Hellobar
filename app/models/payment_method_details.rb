@@ -1,6 +1,12 @@
+require 'billing_log'
+
 class PaymentMethodDetails < ActiveRecord::Base
   belongs_to :payment_method
   serialize :data, JSON
+  include BillingAuditTrail
+  # For auditing purposes
+  delegate :user, to: :payment_method
+  delegate :user_id, to: :payment_method
 
   def readonly?
     new_record? ? false : true
@@ -110,12 +116,18 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def charge(amount_in_dollars)
     raise "Can not charge money until saved" unless persisted? and token
-    response = HB::CyberSource.gateway.purchase(amount_in_dollars*100, formatted_token, {order_id: order_id})
+    begin
+      response = HB::CyberSource.gateway.purchase(amount_in_dollars*100, formatted_token, {order_id: order_id})
 
-    if response.success?
-      return true, response.authorization
-    else
-      return false, response.message
+      audit << "Charging #{amount_in_dollars.inspect}, got response: #{response.inspect}"
+      if response.success?
+        return true, response.authorization
+      else
+        return false, response.message
+      end
+    rescue Exception => e
+      audit << "Error charging #{amount_in_dollars.inspect}: #{e.message}"
+      raise
     end
   end
 
@@ -123,6 +135,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   def token
     data["token"]
   end
+
   # ActiveMerchant requires the token in this form
   def formatted_token
     format_token(token)
@@ -158,27 +171,38 @@ class CyberSourceCreditCard < PaymentMethodDetails
     # which is why we use the generic userXXX@hellobar.com format
     email = "user#{user ? user.id : "NA"}@hellobar.com"
     params = {:order_id=>order_id, :email => email, :address=>address.to_h}
-    if previous_token
-      # Update the profile
-      response = HB::CyberSource::gateway.update(format_token(previous_token), card, params)
-    else
-      # Create a new profile
-      response = HB::CyberSource.gateway.store(card, params)
-    end
-    unless response.success?
-      if field = response.params["invalidField"]
-        if field == "c:cardType"
-          raise "Invalid credit card"
-        else
-          raise "Invalid #{field.gsub(/^c:/,"").underscore.humanize.downcase}"
-        end
-      end
-      raise response.message
-    end
-    data["token"] = response.params["subscriptionID"]
     # Set the brand
     data["brand"] = card.brand
-    data["number"] = "XXXX-XXXX-XXXX-"+data["number"][-4..-1]
+    data["sanitized_number"] = "XXXX-XXXX-XXXX-"+data["number"][-4..-1]
+    sanitized_data = data.clone
+    sanitized_data.delete("number")
+    begin
+      if previous_token
+        # Update the profile
+        response = HB::CyberSource::gateway.update(format_token(previous_token), card, params)
+        audit << "Updated previous_token: #{previous_token.inspect} with #{sanitized_data.inspect} response: #{response.inspect}"
+      else
+        # Create a new profile
+        response = HB::CyberSource.gateway.store(card, params)
+        audit << "Create new token with #{sanitized_data.inspect} response: #{response.inspect}"
+      end
+      unless response.success?
+        if field = response.params["invalidField"]
+          if field == "c:cardType"
+            raise "Invalid credit card"
+          else
+            raise "Invalid #{field.gsub(/^c:/,"").underscore.humanize.downcase}"
+          end
+        end
+        raise response.message
+      end
+    rescue Exception => e
+      audit << "Error tokenizing with #{sanitized_data.inspect} response: #{response.inspect} error: #{e.message}"
+      raise
+    end
+    data["number"] = data["sanitized_number"]
+    data.delete("sanitized_number")
+    data["token"] = response.params["subscriptionID"]
     # Clear the card attribute so it clears the cache of the number
     @card = nil
   end

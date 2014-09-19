@@ -42,7 +42,17 @@ describe BillingAuditTrail do
   end
 
   it "should set additional lookup ids" do
-    pending
+    user = users(:joey)
+    payment_method = PaymentMethod.create!(:user=>user)
+    payment_method_details = PaymentMethodDetails.create!(:payment_method=>payment_method)
+
+    payment_method_details.audit << "Hello"
+    BillingLog.count.should == 1
+    log = BillingLog.all.first
+    log.payment_method_details_id.should == payment_method_details.id
+    log.payment_method_id.should == payment_method.id
+    log.user_id.should == user.id
+    log.user_id.should_not be_nil
   end
 
   it "should include the line number, file and current git revision" do

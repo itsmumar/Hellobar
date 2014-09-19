@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140918035327) do
+ActiveRecord::Schema.define(version: 20140919135951) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20140918035327) do
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
 
   create_table "billing_logs", force: true do |t|
-    t.string   "message"
+    t.text     "message"
     t.string   "source_file"
     t.datetime "created_at"
     t.integer  "user_id"

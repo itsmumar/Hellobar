@@ -22,16 +22,19 @@ module BillingAuditTrail
       log.source_file = "#{GitUtils.current_commit} @ #{caller.first.split(":in").first.gsub(Rails.root.to_s, "")}"
       # See if we can set the @source_id
       if @source.is_a?(ActiveRecord::Base)
-        # Try to set the source id. So if source is a User this would set user_id. If source is a Site this would set site_id
-        source_id_setter = :"#{@source.class.model_name.singular}_id="
-        if log.respond_to?(source_id_setter)
-          log.send(source_id_setter, @source.id)
-        end
         # See if the source has any other id attributes we can set
         BillingLog.column_names.each do |name|
           if name =~ /_id$/
+            # See if it has the id column
             if @source.respond_to?(name)
               log.send(:"#{name}=", @source.send(name))
+            end
+            # See if this is the source
+            class_name = name.gsub(/_id$/,"").classify + (name =~ /s_id$/ ? "s" : "")
+            klass = nil
+            begin; klass = Kernel.const_get(class_name); rescue; end;
+            if klass and @source.is_a?(klass)
+              log.send(:"#{name}=", @source.id)
             end
           end
         end
