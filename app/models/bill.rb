@@ -50,9 +50,31 @@ class Bill < ActiveRecord::Base
   end
 
   class Recurring < Bill
+    class << self
+      def next_month(date)
+        date+1.month
+      end
+
+      def next_year(date)
+        date+1.year
+      end
+    end
+
     def on_paid
       super
       # Create the next bill
+      next_method = self.subscription.monthly? ? :next_month : :next_year
+      new_start_date = self.end_date
+      new_bill = Bill::Recurring.create!(
+        subscription: self.subscription,
+        amount: self.subscription.amount,
+        description: "#{self.subscription.monthly? ? "Monthly" : "Yearly"} Renewal",
+        grace_period_allowed: true,
+        bill_at: Bill::Recurring.send(next_method, self.bill_at),
+        start_date: new_start_date,
+        end_date: Bill::Recurring.send(next_method, new_start_date)
+      )
+      new_bill
     end
   end
 

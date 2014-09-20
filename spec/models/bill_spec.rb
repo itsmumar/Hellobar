@@ -45,7 +45,34 @@ describe Bill do
 
   describe Bill::Recurring do
     it "should create the next bill once paid" do
-      pending
+      subscription = subscriptions(:zombo_subscription)
+      Bill.destroy_all
+      subscription.bills(true).length.should == 0
+      june = Time.parse("2014-06-10")
+      bill_at = Time.parse("2014-06-11")
+      july = Time.parse("2014-07-10")
+      aug = Time.parse("2014-08-10")
+      subscription.should be_monthly
+      bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at)
+      subscription.bills(true).length.should == 1
+      bill.paid!
+      subscription.bills(true).length.should == 2
+      bill1 = subscription.bills[0]
+      bill1.should be_paid
+      bill1.start_date.should == june
+      bill1.end_date.should == july
+      bill2 = subscription.bills[1]
+      bill2.should be_pending
+      bill2.start_date.should == july
+      bill2.bill_at.should == Bill::Recurring.next_month(bill_at)
+      bill2.end_date.should == aug
+    end
+
+    it "should return the correct date for next_month" do
+      Bill::Recurring.next_month(Time.parse("2014-12-30")).strftime("%Y-%m-%d").should == "2015-01-30"
+      Bill::Recurring.next_month(Time.parse("2015-01-30")).strftime("%Y-%m-%d").should == "2015-02-28"
+      Bill::Recurring.next_year(Time.parse("2014-12-30")).strftime("%Y-%m-%d").should == "2015-12-30"
+      Bill::Recurring.next_year(Time.parse("2016-02-29")).strftime("%Y-%m-%d").should == "2017-02-28"
     end
   end
 end
