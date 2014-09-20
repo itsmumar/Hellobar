@@ -5,6 +5,20 @@ class Subscription < ActiveRecord::Base
   belongs_to :user
   belongs_to :site
   enum schedule: [:monthly, :yearly]
+  has_many :bills, ->{order "id"}
+
+  def pending_bills(reload=false)
+    self.bills(reload).reject{|b| b.status != :pending}
+  end
+
+  def paid_bills(reload=false)
+    self.bills(reload).reject{|b| b.status != :paid}
+  end
+
+  def active_bills(reload=false, date=nil)
+    date ||= Time.now
+    self.bills(reload).reject{|b| b.voided? || !b.start_date || !b.end_date || b.start_date > date || b.end_date < date}
+  end
 
   def capabilities
     unless @capabilities

@@ -1,9 +1,11 @@
 require 'billing_log'
 
 class Bill < ActiveRecord::Base
-  class StatusChanged < Exception; end
+  class StatusAlreadySet < Exception; end
+  class InvalidStatus < Exception; end
   serialize :metadata, JSON
   belongs_to :subscription
+  validates_presence_of :subscription
   include BillingAuditTrail
   delegate :site, to: :subscription
   delegate :site_id, to: :subscription
@@ -11,18 +13,26 @@ class Bill < ActiveRecord::Base
   enum status: [:pending, :paid, :voided]
 
   def status=(value)
+    value = value.to_sym
     return if self.status == value
-    raise StatusChanged.new("Can not change status once set. Was #{self.status.inspect} trying to set to #{value.inspect}") unless self.status == :pending
+    raise StatusAlreadySet.new("Can not change status once set. Was #{self.status.inspect} trying to set to #{value.inspect}") unless self.status == :pending
 
     audit << "Changed status from #{self.status.inspect} to #{value.inspect}"
-    write_attribute(:status, value)
-    self.changed_status_at = Time.now
+    status_value = Bill.statuses[value.to_sym]
+    raise InvalidStatus.new("Invalid status: #{value.inspect}") unless status_value
+    write_attribute(:status, status_value)
+    self.status_set_at = Time.now
 
     if status == :paid
       on_paid
     elsif status == :voided
       on_voided
     end
+  end
+
+  alias :orig_status :status
+  def status
+    orig_status.to_sym
   end
 
   def due_at(payment_method=nil)

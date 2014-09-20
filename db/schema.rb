@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140920035350) do
+ActiveRecord::Schema.define(version: 20140920154516) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -62,11 +62,11 @@ ActiveRecord::Schema.define(version: 20140920035350) do
     t.decimal  "amount",               precision: 7, scale: 2
     t.string   "description"
     t.string   "metadata"
-    t.boolean  "grace_period_allowed"
+    t.boolean  "grace_period_allowed",                         default: true
     t.datetime "bill_at"
     t.datetime "start_date"
-    t.datetime "ends_date"
-    t.datetime "changed_status_at"
+    t.datetime "end_date"
+    t.datetime "status_set_at"
     t.datetime "created_at"
   end
 

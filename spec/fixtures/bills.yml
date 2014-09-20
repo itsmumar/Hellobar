@@ -1,0 +1,9 @@
+future_bill:
+  bill_at: 2016-12-15
+  subscription: zombo_subscription
+now_bill:
+  bill_at: <%= Time.now %>
+  subscription: zombo_subscription
+  
+  
+  
