@@ -203,6 +203,6 @@ private
   # We don't want to expose this boolean right in the Javascript
   # so we leave it protected
   def is_pro
-    false
+    @site.capabilities.remove_branding?
   end
 end
