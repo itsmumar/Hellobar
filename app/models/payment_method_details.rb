@@ -12,6 +12,10 @@ class PaymentMethodDetails < ActiveRecord::Base
     new_record? ? false : true
   end
 
+  def grace_period
+    nil
+  end
+
   def name
     raise NotImplementedError
   end
@@ -65,6 +69,10 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def name
     "#{brand ? brand.capitalize : "Credit Card"} ending in #{card.number ? card.number[-4..-1] : "???"}"
+  end
+
+  def grace_period
+    15.days
   end
 
   def brand

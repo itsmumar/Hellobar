@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140919191949) do
+ActiveRecord::Schema.define(version: 20140920035350) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20140919191949) do
 
   create_table "billing_logs", force: true do |t|
     t.text     "message"
-    t.string   "source_file"
+    t.text     "source_file"
     t.datetime "created_at"
     t.integer  "user_id"
     t.integer  "site_id"
@@ -53,6 +53,21 @@ ActiveRecord::Schema.define(version: 20140919191949) do
     t.integer  "payment_method_details_id"
     t.integer  "bill_id"
     t.integer  "billing_attempt_id"
+  end
+
+  create_table "bills", force: true do |t|
+    t.integer  "subscription_id"
+    t.integer  "status",                                       default: 0
+    t.string   "type"
+    t.decimal  "amount",               precision: 7, scale: 2
+    t.string   "description"
+    t.string   "metadata"
+    t.boolean  "grace_period_allowed"
+    t.datetime "bill_at"
+    t.datetime "start_date"
+    t.datetime "ends_date"
+    t.datetime "changed_status_at"
+    t.datetime "created_at"
   end
 
   create_table "conditions", force: true do |t|
