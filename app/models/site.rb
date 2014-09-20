@@ -7,6 +7,7 @@ class Site < ActiveRecord::Base
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
   has_many :contact_lists, dependent: :destroy
+  has_many :subscriptions, -> {order 'id'}
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
@@ -70,6 +71,16 @@ class Site < ActiveRecord::Base
                   :match => Rule::MATCH_ON[:all])
   end
 
+  def current_subscription
+    self.subscriptions.last
+  end
+
+  def capabilities
+    # Return the current subscription's capabilities if we have one, otherwise
+    # just return the free plan capabilities
+    (current_subscription ? current_subscription.capabilities : Subscription::Free::Capabilities.new(nil, self))
+  end
+
   private
 
   def generate_static_assets(options = {})
@@ -104,4 +115,6 @@ class Site < ActiveRecord::Base
     self.read_key = SecureRandom.uuid if self.read_key.blank?
     self.write_key = SecureRandom.uuid if self.write_key.blank?
   end
+
+
 end
