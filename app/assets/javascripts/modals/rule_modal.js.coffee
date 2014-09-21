@@ -1,22 +1,30 @@
 class @RuleModal extends Modal
 
   modalName: 'rules'
-
-  newConditionTemplate: ->
-    $('script#condition-partial').html()
+  ruleModalTemplate: -> $('script#rule-modal').html()
+  conditionTemplate: -> $('script#condition-partial').html()
 
   constructor: (@options={}) ->
-    source = $('script#rule-modal').html()
-    template = Handlebars.compile(source)
-    Handlebars.registerPartial("condition", @newConditionTemplate())
     @ruleData = @addMetadata(@options.ruleData)
-    @$modal = $(template(@ruleData))
+    @$modal = @buildModal(@ruleData)
 
-  addMetadata: (basicRuleData) ->
-    completeData = $.extend {}, basicRuleData
+  buildModal: (ruleData) ->
+    Handlebars.registerPartial("condition", @conditionTemplate())
+    template = Handlebars.compile(@ruleModalTemplate())
+    $(template(ruleData))
+
+  buildCondition: (conditionData) ->
+    template = Handlebars.compile(@conditionTemplate())
+    $condition = $(template(conditionData))
+    @_updateConditionMarkup($condition, conditionData)
+    $condition
+
+  addMetadata: (baseRuleData) ->
+    completeData = $.extend {}, baseRuleData
     completeData.conditions ||= []
 
-    for condition in completeData.conditions
+    for condition, index in completeData.conditions
+      condition.index = index
       condition.is_between = true if condition.operand == 'is_between'
 
     completeData
@@ -43,28 +51,23 @@ class @RuleModal extends Modal
     $('body').append(@$modal)
 
     ruleModal = this
-    @ruleData.conditions ||= []
 
+    # render all of the conditions
     for conditionData in @ruleData.conditions
-      if conditionData.id
-        $condition = @$modal.find(".condition-id[value=#{conditionData.id}]").parents('.condition-block')
-      else
-        index = @ruleData.conditions.indexOf(conditionData)
-        $condition = @$modal.find(".condition-block[data-condition-index='#{index}']")
+      $condition = ruleModal.buildCondition(conditionData)
+      ruleModal._addCondition($condition)
 
-      ruleModal._renderCondition($condition, conditionData)
+    @_toggleNewConditionMessage()
 
     @$modal.on 'change', '.rule_conditions_segment, .rule_conditions_operand', ->
       $this = $(this)
       $condition = $this.parents('.condition-block:first')
 
+      # reset the value if the segment changes
       if $this.hasClass('rule_conditions_segment')
         value = null
       else
         value = $condition.find('.value:visible').val()
-      # reset the value if the segment changed
-
-      template = Handlebars.compile(ruleModal.newConditionTemplate())
 
       conditionData =
         id: $condition.find('.condition-id').val()
@@ -73,15 +76,12 @@ class @RuleModal extends Modal
         operand: $condition.find('.condition-operand').val()
         value: value
 
-      $updatedCondition = $(template(conditionData))
-      ruleModal._renderCondition($updatedCondition, conditionData)
+      $updatedCondition = ruleModal.buildCondition(conditionData)
 
+      # replace the markup of the condition based on new data
       $condition.html($updatedCondition.html())
 
-    @_toggleNewConditionMessage()
-
-  # SIDE EFFECT: this method mutates $condition
-  _renderCondition: ($condition, conditionData) ->
+  _updateConditionMarkup: ($condition, conditionData) ->
     @_renderOperands($condition, conditionData)
     @_renderValue($condition, conditionData)
 
@@ -99,32 +99,25 @@ class @RuleModal extends Modal
     $condition.find('.choice-wrapper').hide()        # hide the selections by default
     $condition.find('.value').prop('disabled', true) # disable the values by default
 
-    # TODO: can we just have a function that returns the proper
-    # class choice based on the segment and
-    # find/show/find/disable all at once?
-    switch conditionData.segment
-      when 'DeviceCondition'
-        $condition.find('.device-choice')
-                  .show()
-                  .find('.value')
-                  .prop('disabled', false)
-      when 'UrlCondition'
-        $condition.find('.url-choice')
-                  .show()
-                  .find('.value')
-                  .prop('disabled', false)
-      when 'DateCondition'
-        $condition.find('.date-choice')
-                  .show()
-                  .find('.value')
-                  .hide()
 
-        datesToShow = @_dateClasses(conditionData.operand)
-        $condition.find(datesToShow)
-                  .prop('disabled', false)
-                  .show()
+    if conditionData.segment == 'DateCondition'
+      datesToShow = @_dateClasses(conditionData.operand)
+      $condition.find('.date-choice')
+                .show()
+                .find('.value')
+                .hide()
 
-        @_formatDates($condition, conditionData)
+      $condition.find(datesToShow)
+                .prop('disabled', false)
+                .show()
+
+      @_formatDates($condition, conditionData)
+    else
+      classToEnable = @_segmentToClassMapping[conditionData.segment]
+      $condition.find(classToEnable)
+                .show()
+                .find('.value')
+                .prop('disabled', false)
 
   _formatDates: ($condition, conditionData) ->
     conditionData.value ||= {}
@@ -173,6 +166,11 @@ class @RuleModal extends Modal
     'DateCondition': ['is_before', 'is_after', 'is_between']
     'UrlCondition': ['includes', 'does_not_include']
 
+  _segmentToClassMapping:
+    'DeviceCondition': '.device-choice'
+    'DateCondition': '.date-choice'
+    'UrlCondition': '.url-choice'
+
   _renderAlert: (content) ->
     template = Handlebars.compile($('script#alert-template').html())
     alert = template({type: 'error', content: content})
@@ -214,7 +212,16 @@ class @RuleModal extends Modal
     @$modal.on 'click', '.condition-add', (event) =>
       event.preventDefault()
 
-      @_addCondition()
+      nextIndex = @$modal.find('.condition-block:not(".no-condition-message")').length
+      # default condition data
+      conditionData =
+        index: nextIndex
+        segment: 'DeviceCondition'
+        operand: 'is'
+
+      $condition = @buildCondition(conditionData)
+
+      @_addCondition($condition)
       @_toggleNewConditionMessage()
 
   _bindRemoveCondition: ->
@@ -227,17 +234,8 @@ class @RuleModal extends Modal
       ruleModal._removeCondition($condition)
       ruleModal._toggleNewConditionMessage()
 
-  _addCondition: ->
-    nextIndex = @$modal.find('.condition-block:not(".no-condition-message")').length
-    template = Handlebars.compile(@newConditionTemplate())
-    # default condition data
-    conditionData =
-      index: nextIndex
-      segment: 'DeviceCondition'
-      operand: 'is'
-    $condition = $(template(conditionData))
-
-    @_renderCondition($condition, conditionData)
+  # renders a condition to the page
+  _addCondition: ($condition) ->
     @$modal.find('.conditions-wrapper').append($condition.prop('outerHTML'))
 
   _removeCondition: ($condition) ->
