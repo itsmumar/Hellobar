@@ -14,8 +14,7 @@ describe ConditionSerializer do
       rule_id: nil,
       segment: condition.segment,
       operand: condition.operand,
-      value: condition.value,
-      is_between: true
+      value: condition.value
     })
   end
 end
