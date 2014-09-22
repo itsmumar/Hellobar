@@ -11,15 +11,16 @@ end
 
 module BillingAuditTrail
   class BillingAuditor
-    def initialize(source)
+    def initialize(source, debug=false)
       @source = source
+      @debug = debug
     end
 
     def <<(message)
       log = BillingLog.new
       log.message = message
       # Record the current commit and line number and file
-      log.source_file = "#{GitUtils.current_commit} @ #{caller[0..10].collect{|l| l.split(":in").first.gsub(Rails.root.to_s, "")}}"
+      log.source_file = "#{GitUtils.current_commit} @ #{caller[0..10].collect{|l| l.split(":in").first.gsub(Rails.root.to_s, "")}.join("\n")}"
       # See if we can set the @source_id
       if @source.is_a?(ActiveRecord::Base)
         # See if the source has any other id attributes we can set
@@ -40,12 +41,26 @@ module BillingAuditTrail
         end
       end
       # Save it
+      if @debug
+        puts "="*80
+        puts log.source_file
+        puts "-"*80
+        puts log.message
+        puts "-"*80
+        log.attribute_names.sort.each do |n|
+          unless [:message, :source_file, :created_at, :id].include?(n.to_sym)
+            puts "\t#{n} => #{log.send(n)}"
+          end
+        end
+        puts "="*80
+      end
+      puts(log.inspect) if @debug
       log.save!
     end
   end
 
-  def audit
-    @auditor ||= BillingAuditor.new(self)
+  def audit(debug=false)
+    @auditor ||= BillingAuditor.new(self, debug)
   end
 end
 
