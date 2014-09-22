@@ -10,9 +10,9 @@ class Condition < ActiveRecord::Base
 
   # stored value: displayed value
   OPERANDS = {
-    is_after: 'is after',
-    is_before: 'is before',
-    is_between: 'is between',
+    after: 'is after',
+    before: 'is before',
+    between: 'is between',
     is: 'is',
     is_not: 'is not',
     includes: 'includes',

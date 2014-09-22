@@ -86,7 +86,7 @@ describe ScriptGenerator, '#render' do
   context 'when rules are present' do
     it 'has a start date constraint when present' do
       rule = Rule.new
-      condition = DateCondition.new value: { 'start_date' => Date.new(2000, 01, 01) }, operand: Condition::OPERANDS[:is_after]
+      condition = DateCondition.new value: { 'start_date' => Date.new(2000, 01, 01) }, operand: Condition::OPERANDS[:after]
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
@@ -106,7 +106,7 @@ describe ScriptGenerator, '#render' do
 
     it 'has an end date constraint when present' do
       rule = Rule.new
-      condition = DateCondition.new value: { 'end_date' => Date.new(2015, 01, 01) }, operand: Condition::OPERANDS[:is_before]
+      condition = DateCondition.new value: { 'end_date' => Date.new(2015, 01, 01) }, operand: Condition::OPERANDS[:before]
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
