@@ -1,9 +1,6 @@
 require_relative './legacy_migrator/legacy_model'
-require_relative './legacy_migrator/date_time_converter'
 
 class LegacyMigrator
-  extend DateTimeConverter
-
   class << self
     def migrate
       ActiveRecord::Base.record_timestamps = false
@@ -193,8 +190,8 @@ class LegacyMigrator
     def create_conditions(rule, legacy_goal)
       new_conditions = []
 
-      start_date = convert_start_time(legacy_goal.data_json['start_date'], legacy_goal.data_json['dates_timezone'])
-      end_date = convert_end_time(legacy_goal.data_json['end_date'], legacy_goal.data_json['dates_timezone'])
+      start_date = legacy_goal.data_json['start_date']
+      end_date = legacy_goal.data_json['end_date']
       include_urls = legacy_goal.data_json['include_urls']
       does_not_include_urls = legacy_goal.data_json['exclude_urls'] # legacy key is exclude_urls, which we map to does_not_include
 

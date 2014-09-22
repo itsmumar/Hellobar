@@ -1,17 +1,17 @@
 date_between:
   segment: DateCondition
   operand: is_between
-  value: [<%= Date.current - 1.day %>, <%= Date.current + 1.day %>]
+  value: <%= [Date.yesterday.strftime("%Y-%m-%d"), Date.tomorrow.strftime("%Y-%m-%d")] %>
 
 date_before:
   segment: DateCondition
   operand: is_before
-  value: [<%= Date.current + 1.day %>]
+  value: <%= [Date.tomorrow.strftime("%Y-%m-%d")] %>
 
 date_after:
   segment: DateCondition
   operand: is_after
-  value: [<%= Date.current - 1.day %>]
+  value: <%= [Date.yesterday.strftime("%Y-%m-%d")] %>
 
 url_includes:
   segment: UrlCondition
