@@ -3,7 +3,6 @@ class Condition < ActiveRecord::Base
 
   # class name: Hello::Segments::User key
   SEGMENTS = {
-    'CountryCondition' => 'co',
     'DeviceCondition' => 'dv',
     'DateCondition' => 'dt',
     'UrlCondition' => 'pu'
