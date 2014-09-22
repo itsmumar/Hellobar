@@ -46,7 +46,12 @@ class @RuleModal extends Modal
     @ruleData.conditions ||= []
 
     for conditionData in @ruleData.conditions
-      $condition = @$modal.find(".condition-id[value=#{conditionData.id}]").parents('.condition-block')
+      if conditionData.id
+        $condition = @$modal.find(".condition-id[value=#{conditionData.id}]").parents('.condition-block')
+      else
+        index = @ruleData.conditions.indexOf(conditionData)
+        $condition = @$modal.find(".condition-block[data-condition-index='#{index}']")
+
       ruleModal._renderCondition($condition, conditionData)
 
     @$modal.on 'change', '.rule_conditions_segment, .rule_conditions_operand', ->

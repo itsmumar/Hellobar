@@ -30,7 +30,7 @@ table
       td
         span.num= segment[1] == 0 ? "0.0%" : number_to_percentage(segment[2] * 100.0 / segment[1], precision: 1)
       td
-        .button Create targeted content
+        = create_targeted_content_link(site, segment[0])
 
   - unless total_views == 0 || total_conversions == 0
     tr.improve-calculator data-views="#{total_views}" data-conversions="#{total_conversions}"

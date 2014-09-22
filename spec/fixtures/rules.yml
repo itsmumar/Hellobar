@@ -1,8 +1,8 @@
 zombo:
   name: zomboname
   site: zombo
-zombo2:
-  name: zomboname2
+zombo_mobile:
+  name: mobile
   site: zombo
 horsebike:
   name: horseybikename
