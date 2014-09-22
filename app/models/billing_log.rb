@@ -11,6 +11,7 @@ end
 
 module BillingAuditTrail
   class BillingAuditor
+    attr_accessor :debug
     def initialize(source, debug=false)
       @source = source
       @debug = debug
@@ -61,6 +62,8 @@ module BillingAuditTrail
 
   def audit(debug=false)
     @auditor ||= BillingAuditor.new(self, debug)
+    @auditor.debug = debug
+    @auditor
   end
 end
 

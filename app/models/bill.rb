@@ -89,7 +89,7 @@ class Bill < ActiveRecord::Base
       # Create the next bill
       next_method = self.subscription.monthly? ? :next_month : :next_year
       new_start_date = self.end_date
-      new_bill = Bill::Recurring.create!(
+      new_bill = Bill::Recurring.new(
         subscription: self.subscription,
         amount: self.subscription.amount,
         description: "#{self.subscription.monthly? ? "Monthly" : "Yearly"} Renewal",
@@ -98,6 +98,8 @@ class Bill < ActiveRecord::Base
         start_date: new_start_date,
         end_date: Bill::Recurring.send(next_method, new_start_date)
       )
+      audit << "Paid recurring bill, created new bill for #{subscription.amount} that starts at #{new_start_date}. #{new_bill.inspect}"
+      new_bill.save!
       new_bill
     end
   end
