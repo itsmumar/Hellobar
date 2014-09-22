@@ -22,9 +22,7 @@ script id="rule-modal" type="text/x-handlebars-template"
               | {{option match "any" "any"}}
           | of the following conditions.
         .conditions-wrapper
-          | {{#each conditions}}
-          |   {{> condition}}
-          | {{/each}}
+          / conditions placeholder
           .condition-block.no-condition-message
             .condition-ruleset
               small
@@ -42,15 +40,15 @@ script id="rule-modal" type="text/x-handlebars-template"
         button.button name="button" type="submit" Save
 
 script#condition-partial type="text/x-handlebars-template"
-  .condition-block data-condition-index="{{@index}}{{index}}"
+  .condition-block data-condition-index="{{index}}"
     .condition-ruleset
       .select-wrapper.optional.rule_conditions_segment
-        select class="condition-segment" name="rule[conditions_attributes][{{@index}}{{index}}][segment]"
+        select class="condition-segment" name="rule[conditions_attributes][{{index}}][segment]"
           | {{option segment "DeviceCondition" "device"}}
           | {{option segment "DateCondition" "date"}}
           | {{option segment "UrlCondition" "url"}}
       .select-wrapper.optional.rule_conditions_operand
-        select class="condition-operand" name="rule[conditions_attributes][{{@index}}{{index}}][operand]"
+        select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
           | {{option operand "is_after" "is after"}}
           | {{option operand "is_before" "is before"}}
           | {{option operand "is_between" "is between"}}
@@ -61,21 +59,21 @@ script#condition-partial type="text/x-handlebars-template"
       .rule_conditions_choices
         .choice-wrapper.date-choice
           | {{#if is_between}}
-          input.start_date.between.value disabled="disabled" name="rule[conditions_attributes][{{@index}}{{../../index}}][value][]" type="date" value="{{../value.[0]}}"
-          input.end_date.between.value disabled="disabled" name="rule[conditions_attributes][{{@index}}{{index}}][value][]" type="date" value="{{../value.[1]}}"
+          input.start_date.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value.[0]}}"
+          input.end_date.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value.[1]}}"
           | {{else}}
-          input.start_date.value disabled="disabled" name="rule[conditions_attributes][{{@index}}{{../../index}}][value][]" type="date" value="{{../value}}"
-          input.end_date.value disabled="disabled" name="rule[conditions_attributes][{{@index}}{{../../index}}][value][]" type="date" value="{{../value}}"
+          input.start_date.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value}}"
+          input.end_date.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value}}"
           | {{/if}}
         .choice-wrapper.url-choice
-          input.url.value name="rule[conditions_attributes][{{@index}}{{index}}][value]" type="text" value="{{value}}"
+          input.url.value name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.select-wrapper.device-choice
-          select.device.value name="rule[conditions_attributes][{{@index}}{{index}}][value]"
+          select.device.value name="rule[conditions_attributes][{{index}}][value]"
             | {{option value "Desktop" "Desktop"}}
             | {{option value "Mobile" "Mobile"}}
     | {{#if id}}
-    input class="condition-id" name="rule[conditions_attributes][{{@index}}{{index}}][id]" value="{{id}}" type="hidden"
-    input.destroy name="rule[conditions_attributes][{{@index}}{{index}}][_destroy]" type="hidden" value="false"
+    input class="condition-id" name="rule[conditions_attributes][{{index}}][id]" value="{{id}}" type="hidden"
+    input.destroy name="rule[conditions_attributes][{{index}}][_destroy]" type="hidden" value="false"
     | {{/if}}
     .condition-actions
       a.condition-remove href="#" -
