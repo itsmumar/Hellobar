@@ -86,7 +86,7 @@ class Site < ActiveRecord::Base
       now = Time.now
       active_paid_bills = []
       bills(clear_cache).each do |bill|
-        if bill.paid?
+        if bill.paid? and bill.is_a?(Bill::Recurring)
           if bill.active_during(now)
             active_paid_bills << bill
           end
@@ -97,6 +97,7 @@ class Site < ActiveRecord::Base
         # have one, otherwise just return the free plan capabilities
         @capabilities = (current_subscription ? current_subscription.capabilities : Subscription::Free::Capabilities.new(nil, self))
       else
+        # Get the highest paid plan
         @capabilities = active_paid_bills.collect{|b| b.subscription}.sort.first.capabilities
       end
     end
@@ -117,11 +118,13 @@ class Site < ActiveRecord::Base
       # and keep any active paid bills
       active_paid_bills = []
       bills(true).each do |bill|
-        if bill.pending?
-          bill.void!
-        elsif bill.paid?
-          if bill.active_during(now)
-            active_paid_bills << bill
+        if bill.is_a?(Bill::Recurring)
+          if bill.pending?
+            bill.void!
+          elsif bill.paid?
+            if bill.active_during(now)
+              active_paid_bills << bill
+            end
           end
         end
       end

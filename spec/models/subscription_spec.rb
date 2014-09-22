@@ -43,31 +43,32 @@ describe Subscription do
     end
 
     it "should return default capabilities for plan" do
-      @site.capabilities(true).should be_a(Subscription::Free::Capabilities)
+      @site.capabilities(true).class.should == Subscription::Free::Capabilities
       @site.change_subscription(@pro, @payment_method)
-      @site.capabilities(true).should be_a(Subscription::Pro::Capabilities)
+      @site.capabilities(true).class.should == Subscription::Pro::Capabilities
     end
     
     it "should return ProblemWithPayment capabilities if on a paid plan and payment has not been made" do
       @site.change_subscription(@pro, payment_methods(:always_fails))
-      @site.capabilities(true).should be_a(Subscription::ProblemWithPayment::Capabilities)
+      @site.capabilities(true).class.should == Subscription::ProblemWithPayment::Capabilities
     end
 
     it "should return the right capabilities if payment is not due yet" do
       success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
 
-      @site.capabilities(true).should be_a(Subscription::ProblemWithPayment::Capabilities)
+      @site.capabilities(true).class.should == Subscription::ProblemWithPayment::Capabilities
       # Make the bill not due until later
       bill.bill_at += 10.days
       bill.save!
-      @site.capabilities(true).should be_a(Subscription::Pro::Capabilities)
+      @site.capabilities(true).class.should == Subscription::Pro::Capabilities
     end
 
     it "should return the right capabilities based on the active period of the Bill" do
       @site.change_subscription(@enterprise, @payment_method)
-      @site.capabilities(true).should be_a(Subscription::Enterprise::Capabilities)
+      @site.capabilities(true).class.should == Subscription::Enterprise::Capabilities
       @site.change_subscription(@pro, @payment_method)
-      @site.capabilities(true).should be_a(Subscription::Pro::Capabilities)
+      # Should still be on enterprise capabilities
+      @site.capabilities(true).class.should == Subscription::Enterprise::Capabilities
     end
 
     it "should return the default visit_overage for the plan" do
@@ -92,15 +93,15 @@ end
 
 describe Site do
   it "should return Free capabilities if no subscription" do
-    Site.new.capabilities.should be_a(Subscription::Free::Capabilities)
+    Site.new.capabilities.class.should == Subscription::Free::Capabilities
   end
 
   it "should return the latest subscription capabilities otherwise" do
     s = Site.new
     s.subscriptions << Subscription::Pro.create
-    s.capabilities(true).should be_a(Subscription::Pro::Capabilities)
+    s.capabilities(true).class.should == Subscription::Pro::Capabilities
     s.subscriptions << Subscription::Enterprise.create
-    s.capabilities(true).should be_a(Subscription::Enterprise::Capabilities)
+    s.capabilities(true).class.should == Subscription::Enterprise::Capabilities
   end
 
   describe "change_subscription" do
@@ -125,7 +126,7 @@ describe Site do
       bill.should be_paid
       bill.amount.should == 0
       @site.current_subscription.should == @free
-      @site.capabilities.should be_a(Subscription::Free::Capabilities)
+      @site.capabilities.class.should == Subscription::Free::Capabilities
     end
 
     it "should charge a full amount for starting out a new plan for the first time" do
@@ -134,7 +135,7 @@ describe Site do
       bill.should be_paid
       bill.amount.should == @pro.amount
       @site.current_subscription.should == @pro
-      @site.capabilities.should be_a(Subscription::Pro::Capabilities)
+      @site.capabilities.class.should == Subscription::Pro::Capabilities
     end
 
     it "should charge full amount if you were on a Free plan" do
@@ -146,7 +147,7 @@ describe Site do
       bill.should be_paid
       bill.amount.should == @pro.amount
       @site.current_subscription.should == @pro
-      @site.capabilities(true).should be_a(Subscription::Pro::Capabilities)
+      @site.capabilities(true).class.should == Subscription::Pro::Capabilities
     end
 
     it "should prorate if you are upgrading and were on a paid plan" do
@@ -176,7 +177,7 @@ describe Site do
       # Only going to apply 75% of pro payment since we used up 25% (1/4) of it
       bill.amount.should == (@enterprise.amount-@pro.amount*(0.75)).to_i
       @site.current_subscription.should == @enterprise
-      @site.capabilities(true).should be_a(Subscription::Enterprise::Capabilities)
+      @site.capabilities(true).class.should == Subscription::Enterprise::Capabilities
     end
 
     it "should start your new plan after your current plan if you are downgrading" do
@@ -191,7 +192,7 @@ describe Site do
       bill.grace_period_allowed.should be_true
       # Should still have enterprise abilities
       @site.current_subscription.should == @pro
-      @site.capabilities.should be_a(Subscription::Enterprise::Capabilities)
+      @site.capabilities.class.should == Subscription::Enterprise::Capabilities
     end
 
     it "should charge full amount if you used to be on a paid plan but are no longer on one" do
@@ -206,21 +207,35 @@ describe Site do
       bill.should be_paid
       bill.amount.should == @enterprise.amount
       @site.current_subscription.should == @enterprise
-      @site.capabilities(true).should be_a(Subscription::Enterprise::Capabilities)
+      @site.capabilities(true).class.should == Subscription::Enterprise::Capabilities
     end
 
-    it "should charge full amount and voided pending payment if pending payment" do
-      pending_bill = Bill.create(subscription: @pro, status: :pending, amount: 100)
+    it "should charge full amount and void pending recurring payment if pending payment" do
+      pending_bill = Bill::Recurring.create(subscription: @pro, status: :pending, amount: 25)
       pending_bill.should be_pending
       success, bill = @site.change_subscription(@enterprise, @payment_method)
       success.should be_true
       bill.should be_paid
       bill.amount.should == @enterprise.amount
       @site.current_subscription.should == @enterprise
-      @site.capabilities(true).should be_a(Subscription::Enterprise::Capabilities)
+      @site.capabilities(true).class.should == Subscription::Enterprise::Capabilities
       pending_bill = Bill.find(pending_bill.id)
       pending_bill.should be_voided
     end
+
+    it "should charge full amount and ignore pending overage payment if pending payment" do
+      pending_bill = Bill::Overage.create(subscription: @pro, status: :pending, amount: 25)
+      pending_bill.should be_pending
+      success, bill = @site.change_subscription(@enterprise, @payment_method)
+      success.should be_true
+      bill.should be_paid
+      bill.amount.should == @enterprise.amount
+      @site.current_subscription.should == @enterprise
+      @site.capabilities(true).class.should == Subscription::Enterprise::Capabilities
+      pending_bill = Bill.find(pending_bill.id)
+      pending_bill.should be_pending
+    end
+
 
     it "should return false if payment fails" do
       success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
@@ -228,7 +243,7 @@ describe Site do
       bill.should be_pending
       bill.amount.should == @pro.amount
       @site.current_subscription.should == @pro
-      @site.capabilities(true).should be_a(Subscription::ProblemWithPayment::Capabilities)
+      @site.capabilities(true).class.should == Subscription::ProblemWithPayment::Capabilities
     end
   end
 end
