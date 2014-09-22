@@ -68,6 +68,4 @@ module BillingAuditTrail
 end
 
 # Now add the audit trail to all relevant classes
-[User, Site].each do |klass|
-  klass.include(BillingAuditTrail)
-end
+User.include(BillingAuditTrail)

@@ -92,8 +92,6 @@ ActiveRecord::Schema.define(version: 20140922043727) do
 
   add_index "bills", ["status", "bill_at"], name: "index_bills_on_status_and_bill_at", using: :btree
   add_index "bills", ["subscription_id", "status", "bill_at"], name: "index_bills_on_subscription_id_and_status_and_bill_at", using: :btree
-  add_index "bills", ["subscription_id", "type", "bill_at"], name: "index_bills_on_subscription_id_and_type_and_bill_at", using: :btree
-  add_index "bills", ["type", "bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
 
   create_table "conditions", force: true do |t|
     t.integer  "rule_id"
