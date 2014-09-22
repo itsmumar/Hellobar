@@ -21,7 +21,7 @@ end
 
 
 class CyberSourceCreditCard < PaymentMethodDetails
-  CC_FIELDS = %w{number month year first_name last_name brand}
+  CC_FIELDS = %w{number month year first_name last_name brand verification_value}
   ADDRESS_FIELDS = %w{city state zip address1 country}
   # Note: any fields not included here will be stripped out when setting
   FIELDS = CC_FIELDS+ADDRESS_FIELDS+["token"]
