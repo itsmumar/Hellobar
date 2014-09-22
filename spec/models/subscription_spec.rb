@@ -30,20 +30,44 @@ describe Subscription do
   end
 
   describe Subscription::Capabilities do
+    fixtures :all
+    before do
+      @user = users(:joey)
+      @site = sites(:horsebike)
+      @payment_method = payment_methods(:always_successful)
+      @free = Subscription::Free.new(user: @user, site: @site)
+      @pro = Subscription::Pro.new(user: @user, site: @site)
+      @enterprise = Subscription::Enterprise.new(user: @user, site: @site)
+      @site.current_subscription.should be_nil
+      @site.bills.should == []
+    end
+
     it "should return default capabilities for plan" do
-      Subscription::Pro.create.capabilities.remove_branding?.should == true
+      @site.capabilities(true).should be_a(Subscription::Free::Capabilities)
+      @site.change_subscription(@pro, @payment_method)
+      @site.capabilities(true).should be_a(Subscription::Pro::Capabilities)
     end
     
     it "should return ProblemWithPayment capabilities if on a paid plan and payment has not been made" do
-      pending "Bills"
+      @site.change_subscription(@pro, payment_methods(:always_fails))
+      @site.capabilities(true).should be_a(Subscription::ProblemWithPayment::Capabilities)
     end
 
     it "should return the right capabilities if payment is not due yet" do
-      pending "Bills"
+      success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
+
+      @site.capabilities(true).should be_a(Subscription::ProblemWithPayment::Capabilities)
+      # Make the bill not due until later
+      bill.bill_at += 10.days
+      bill.save!
+      @site.capabilities(true).should be_a(Subscription::Pro::Capabilities)
     end
 
     it "should return the right capabilities based on the active period of the Bill" do
-      pending "Bills"
+      @site.change_subscription(@enterprise, @payment_method)
+      @site.capabilities(true).should be_a(Subscription::Enterprise::Capabilities)
+      @site.change_subscription(@pro, @payment_method)
+      @site.capabilities(true).should be_a(Subscription::Pro::Capabilities)
     end
 
     it "should return the default visit_overage for the plan" do
