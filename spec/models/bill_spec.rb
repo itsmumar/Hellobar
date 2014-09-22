@@ -99,7 +99,8 @@ describe Subscription do
   it "should return all bills active for time period" do
     now = Time.now
     subscription = subscriptions(:zombo_subscription)
-    subscription.active_bills.length.should == 0
+    Bill.delete_all
+    subscription.active_bills(true).length.should == 0
     # Add a bill after
     Bill.create!(subscription: subscription, start_date: now+15.days, end_date: now+45.days)
     subscription.active_bills(true).length.should == 0
@@ -112,5 +113,52 @@ describe Subscription do
     # Add an active bill
     Bill.create!(subscription: subscription, start_date: now, end_date: now+30.days)
     subscription.active_bills(true).length.should == 1
+  end
+end
+
+describe PaymentMethod do
+  fixtures :all
+  describe "pay" do
+    it "should attempt to charge the bill with the payment method" do
+      payment_method = payment_methods(:always_successful)
+      bill = bills(:now_bill)
+      AlwaysSuccessfulPaymentMethodDetails.any_instance.should_receive(:charge).with(bill.amount)
+      payment_method.pay(bill)
+    end
+
+    it "should mark the bill as paid if successul" do
+      bill = bills(:now_bill)
+      payment_methods(:always_successful).pay(bill).should be_success
+      bill.should be_paid
+    end
+
+    it "should not mark the bill as paid if failed" do
+      bill = bills(:now_bill)
+      payment_methods(:always_fails).pay(bill).should_not be_success
+      bill.should_not be_paid
+    end
+
+    it "should create a BillingAttempt either way" do
+      billing_attempt = payment_methods(:always_successful).pay(bills(:now_bill))
+      billing_attempt.should_not be_nil
+      billing_attempt.should be_persisted
+      billing_attempt.payment_method_details.should_not be_nil
+      billing_attempt.bill.should_not be_nil
+      billing_attempt.response.should_not be_nil
+      billing_attempt.should be_success
+      # failure
+      billing_attempt = payment_methods(:always_fails).pay(bills(:now_bill))
+      billing_attempt.should_not be_nil
+      billing_attempt.should be_persisted
+      billing_attempt.payment_method_details.should_not be_nil
+      billing_attempt.bill.should_not be_nil
+      billing_attempt.response.should_not be_nil
+      billing_attempt.should_not be_success
+    end
+
+    it "should raise an error if no payment_method_details" do
+      lambda{PaymentMethod.new.pay(bills(:now_bill))}.should raise_error(PaymentMethod::MissingPaymentDetails)
+    end
+
   end
 end

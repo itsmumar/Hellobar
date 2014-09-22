@@ -5,6 +5,7 @@ class Bill < ActiveRecord::Base
   class InvalidStatus < Exception; end
   serialize :metadata, JSON
   belongs_to :subscription
+  has_many :billing_attempts
   validates_presence_of :subscription
   include BillingAuditTrail
   delegate :site, to: :subscription
@@ -12,12 +13,13 @@ class Bill < ActiveRecord::Base
 
   enum status: [:pending, :paid, :voided]
 
+  alias :void! :voided!
   def status=(value)
     value = value.to_sym
     return if self.status == value
     raise StatusAlreadySet.new("Can not change status once set. Was #{self.status.inspect} trying to set to #{value.inspect}") unless self.status == :pending
 
-    audit << "Changed status from #{self.status.inspect} to #{value.inspect}"
+    audit << "Changed Bill[#{self.id}] status from #{self.status.inspect} to #{value.inspect}"
     status_value = Bill.statuses[value.to_sym]
     raise InvalidStatus.new("Invalid status: #{value.inspect}") unless status_value
     write_attribute(:status, status_value)
@@ -35,12 +37,29 @@ class Bill < ActiveRecord::Base
     orig_status.to_sym
   end
 
+  def active_during(date)
+    return false if voided?
+    return false if start_date and start_date > date
+    return false if end_date and end_date < date
+    return true
+  end
+
   def due_at(payment_method=nil)
     if self.grace_period_allowed and payment_method and payment_method.current_details and payment_method.current_details.grace_period
       return self.bill_at+payment_method.current_details.grace_period
     end
     # Otherwise it is due now
     return self.bill_at
+  end
+
+  def past_due?(payment_method=nil)
+    return Time.now > due_at(payment_method)
+  end
+
+  def problem_with_payment?(payment_method=nil)
+    return false if paid? || voided?
+    # If pending see if we are past due
+    return true if past_due?(payment_method)
   end
 
   def on_paid
@@ -58,6 +77,11 @@ class Bill < ActiveRecord::Base
       def next_year(date)
         date+1.year
       end
+    end
+
+    def renewal_date
+      raise "can not calculate renewal date without start_date" unless start_date
+      self.subscription.monthly? ? self.class.next_month(start_date) : self.class.next_year(start_date)
     end
 
     def on_paid

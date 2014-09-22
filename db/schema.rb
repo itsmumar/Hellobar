@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140920154516) do
+ActiveRecord::Schema.define(version: 20140921192012) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -41,6 +41,14 @@ ActiveRecord::Schema.define(version: 20140920154516) do
 
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
+
+  create_table "billing_attempts", force: true do |t|
+    t.integer  "bill_id"
+    t.integer  "payment_method_details_id"
+    t.integer  "status"
+    t.string   "response"
+    t.datetime "created_at"
+  end
 
   create_table "billing_logs", force: true do |t|
     t.text     "message"
@@ -258,6 +266,7 @@ ActiveRecord::Schema.define(version: 20140920154516) do
     t.integer  "visit_overage_unit"
     t.decimal  "visit_overage_amount", precision: 5, scale: 2
     t.datetime "created_at"
+    t.integer  "payment_method_id"
   end
 
   create_table "users", force: true do |t|

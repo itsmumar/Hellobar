@@ -4,6 +4,7 @@ class Subscription < ActiveRecord::Base
   include BillingAuditTrail
   belongs_to :user
   belongs_to :site
+  belongs_to :payment_method
   enum schedule: [:monthly, :yearly]
   has_many :bills, ->{order "id"}
 
@@ -17,25 +18,33 @@ class Subscription < ActiveRecord::Base
 
   def active_bills(reload=false, date=nil)
     date ||= Time.now
-    self.bills(reload).reject{|b| b.voided? || !b.start_date || !b.end_date || b.start_date > date || b.end_date < date}
+    self.bills(reload).reject{|b| !b.active_during(date)}
   end
 
-  def capabilities
-    unless @capabilities
+  def capabilities(reload=false)
+    if reload || !@capabilities
       # If we are in good standing we just return our normal
       # capabilities, otherwise we return the default capabilities
+      active_bills(reload).each do |bill|
+        if bill.problem_with_payment?
+          @capabilities = ProblemWithPayment::Capabilities.new(self, self.site)
+          return @capabilities
+        end
+      end
       @capabilities = self.class::Capabilities.new(self, self.site)
     end
     @capabilities
   end
 
-  before_create :set_defaults
+  after_initialize :set_defaults
   def set_defaults
-    defaults = self.class.defaults
-    self.amount ||= self.monthly? ? defaults[:monthly_amount] : defaults[:yearly_amount]
-    self.visit_overage ||= defaults[:visit_overage]
-    self.visit_overage_unit ||= defaults[:visit_overage_unit]
-    self.visit_overage_amount ||= defaults[:visit_overage_amount]
+    unless self.persisted?
+      defaults = self.class.defaults
+      self.amount ||= self.monthly? ? defaults[:monthly_amount] : defaults[:yearly_amount]
+      self.visit_overage ||= defaults[:visit_overage]
+      self.visit_overage_unit ||= defaults[:visit_overage_unit]
+      self.visit_overage_amount ||= defaults[:visit_overage_amount]
+    end
   end
 
   class Capabilities
@@ -181,5 +190,45 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  def <=>(other)
+    if other.is_a?(Subscription)
+      return Comparison.new(self, other).direction
+    else
+      super(other)
+    end
+  end
+
+  # These need to be in the order of least expensive to most expensive
   PLANS = [Free, Pro, Enterprise]
+  class Comparison
+    attr_reader :from_subscription, :to_subscription, :direction
+    def initialize(from_subscription, to_subscription)
+      @from_subscription, @to_subscription = from_subscription, to_subscription
+      from_index = to_index = nil
+      PLANS.each_with_index do |plan, index|
+        from_index = index if from_subscription.is_a?(plan)
+        to_index = index if to_subscription.is_a?(plan)
+      end
+      raise "Could not find plans (from_subscription: #{from_subscription.inspect} and to_subscription: #{to_subscription.inspect}, got #{from_index.inspect} and #{to_index.inspect}" unless from_index and to_index
+      if from_index == to_index
+        @direction = 0
+      elsif from_index > to_index
+        @direction = -1
+      else
+        @direction = 1
+      end
+    end
+
+    def upgrade?
+      @direction >= 0
+    end
+
+    def downgrade?
+      !upgrade?
+    end
+
+    def same_plan?
+      @direction == 0
+    end
+  end
 end

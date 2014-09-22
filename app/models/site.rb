@@ -1,3 +1,5 @@
+require 'billing_log'
+
 class Site < ActiveRecord::Base
   include GuaranteedQueue::Delay
 
@@ -8,6 +10,7 @@ class Site < ActiveRecord::Base
   has_many :identities, dependent: :destroy
   has_many :contact_lists, dependent: :destroy
   has_many :subscriptions, -> {order 'id'}
+  has_many :bills, -> {order 'id'}, through: :subscriptions
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
@@ -75,10 +78,104 @@ class Site < ActiveRecord::Base
     self.subscriptions.last
   end
 
-  def capabilities
-    # Return the current subscription's capabilities if we have one, otherwise
-    # just return the free plan capabilities
-    (current_subscription ? current_subscription.capabilities : Subscription::Free::Capabilities.new(nil, self))
+  def capabilities(clear_cache=false)
+    @capabilities = nil if clear_cache
+
+    unless @capabilities
+      # See if there are any active paid bills
+      now = Time.now
+      active_paid_bills = []
+      bills(clear_cache).each do |bill|
+        if bill.paid?
+          if bill.active_during(now)
+            active_paid_bills << bill
+          end
+        end
+      end
+      if active_paid_bills.empty?
+        # Return the current subscription's capabilities if we
+        # have one, otherwise just return the free plan capabilities
+        @capabilities = (current_subscription ? current_subscription.capabilities : Subscription::Free::Capabilities.new(nil, self))
+      else
+        @capabilities = active_paid_bills.collect{|b| b.subscription}.sort.first.capabilities
+      end
+    end
+    return @capabilities
+  end
+
+  include BillingAuditTrail
+  class MissingPaymentMethod < Exception; end
+  class MissingSubscription < Exception; end
+  def change_subscription(subscription, payment_method)
+    raise MissingPaymentMethod.new unless payment_method
+    raise MissingSubscription.new unless subscription
+    transaction do
+      subscription.site = self
+      subscription.payment_method = payment_method
+      now = Time.now
+      # First we need to void any pending recurring bills
+      # and keep any active paid bills
+      active_paid_bills = []
+      bills(true).each do |bill|
+        if bill.pending?
+          bill.void!
+        elsif bill.paid?
+          if bill.active_during(now)
+            active_paid_bills << bill
+          end
+        end
+      end
+      audit << "Changing subscription to #{subscription.inspect}"
+      bill = Bill::Recurring.new(subscription: subscription)
+      if active_paid_bills.empty?
+        # Gotta pay full amount now
+        bill.amount = subscription.amount
+        bill.grace_period_allowed = false
+        bill.bill_at = now
+        audit << "No active paid bills, charging full amount now: #{bill.inspect}"
+      else
+        last_subscription = active_paid_bills.last.subscription
+        if Subscription::Comparison.new(last_subscription, subscription).upgrade?
+          # We are upgrading, gotta pay now, but we prorate it
+          
+          bill.bill_at = now
+          bill.grace_period_allowed = false
+          # Figure out percentage of their subscriptiont they've used
+          # rounded to the day
+          num_days_used = (now-active_paid_bills.last.start_date)/1.day
+          total_days_of_last_subcription = (active_paid_bills.last.end_date-active_paid_bills.last.start_date)/1.day
+          percentage_used = num_days_used.to_f/total_days_of_last_subcription
+          percentage_unused = 1.0-percentage_used
+          audit << "now: #{now}, start_date: #{active_paid_bills.last.start_date}, end_date: #{active_paid_bills.last.end_date}, total_days_of_last_subscription: #{total_days_of_last_subcription.inspect}, num_days_used: #{num_days_used}, percentage_unused: #{percentage_unused}"
+
+          unused_paid_amount = last_subscription.amount*percentage_unused
+          # Subtract the unused paid amount from the price and round it
+          bill.amount = (subscription.amount-unused_paid_amount).to_i
+          audit << "Upgrade from active bill: #{active_paid_bills.last.inspect} changing from subscription #{active_paid_bills.last.subscription.inspect}, prorating amount now: #{bill.inspect}"
+        else
+          # We are downgrading or staying the same, so just set the bill to start
+          # after this bill ends, but make it the full amount
+          bill.bill_at = active_paid_bills.last.end_date
+          bill.amount = subscription.amount
+          bill.grace_period_allowed = true
+          audit << "Downgrade from active bill: #{active_paid_bills.last.inspect} changing from subscription #{active_paid_bills.last.subscription.inspect}, charging full amount later: #{bill.inspect}"
+        end
+      end
+      bill.start_date = bill.bill_at
+      bill.end_date = bill.renewal_date
+      success = true
+      if bill.due_at(payment_method) <= now
+        audit << "Change plan, bill is due now: #{bill.inspect}"
+        attempt = payment_method.pay(bill)
+        success = false unless attempt.success?
+      else
+        audit << "Change plan, bill is due later: #{bill.inspect}"
+      end
+      bill.save!
+      subscription.save!
+
+      return success, bill
+    end
   end
 
   private
