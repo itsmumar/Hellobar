@@ -10,8 +10,8 @@ module HB
       @gateway = nil
       def gateway
         unless @gateway
-          password = "YGxyAaeHOQe2vRoisqdInSI9DE4UEhiOVy5aYpoQewXKcCwF11FZRQncjhOlBU41Qo/MwaQ5vIEMuO/zdFTY+WhXYA8KVgquD2H5mgw/CK470t/oXKHNzzRdfcrYbdChFTloHTSm6TxV/Uo94MzIQSf+38eFYpjkOAei7Fm2esJlm2P3rKCBb10JGMvuE9hJAcJidFJ3qdlw9NzfCEWWzajJ9Wl4/Fc9zRszZ5zbX7oRmCkf/aRDu4nO6gML3wVWj1DkCylLdfYLnbjRFKfF8uHriOo/txJCZRuorM5KkjUTroXAGRq2G40btrXhiQsw4j10Gqa8JJCfM3tvnQoNyg=="
-          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(:login=>"hellobar", :password=>password)
+          ActiveMerchant::Billing::Base.mode = Hellobar::Settings[:cybersource_environment].to_sym || :test
+          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(:login=>Hellobar::Settings[:cybersource_login], :password=>Hellobar::Settings[:cybersource_password])
         end
         @gateway
       end

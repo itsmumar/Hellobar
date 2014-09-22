@@ -30,6 +30,9 @@ unless defined?(Hellobar::Settings)
     mailchimp_secret
     data_api_url
     fake_data_api
+    cybersource_environment
+    cybersource_login
+    cybersource_password
   )
 
   keys.each do |key|
