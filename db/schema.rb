@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140921192012) do
+ActiveRecord::Schema.define(version: 20140922043727) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -50,6 +50,9 @@ ActiveRecord::Schema.define(version: 20140921192012) do
     t.datetime "created_at"
   end
 
+  add_index "billing_attempts", ["bill_id"], name: "index_billing_attempts_on_bill_id", using: :btree
+  add_index "billing_attempts", ["payment_method_details_id"], name: "index_billing_attempts_on_payment_method_details_id", using: :btree
+
   create_table "billing_logs", force: true do |t|
     t.text     "message"
     t.text     "source_file"
@@ -62,6 +65,15 @@ ActiveRecord::Schema.define(version: 20140921192012) do
     t.integer  "bill_id"
     t.integer  "billing_attempt_id"
   end
+
+  add_index "billing_logs", ["bill_id"], name: "index_billing_logs_on_bill_id", using: :btree
+  add_index "billing_logs", ["billing_attempt_id"], name: "index_billing_logs_on_billing_attempt_id", using: :btree
+  add_index "billing_logs", ["created_at"], name: "index_billing_logs_on_created_at", using: :btree
+  add_index "billing_logs", ["payment_method_details_id"], name: "index_billing_logs_on_payment_method_details_id", using: :btree
+  add_index "billing_logs", ["payment_method_id"], name: "index_billing_logs_on_payment_method_id", using: :btree
+  add_index "billing_logs", ["site_id"], name: "index_billing_logs_on_site_id", using: :btree
+  add_index "billing_logs", ["subscription_id"], name: "index_billing_logs_on_subscription_id", using: :btree
+  add_index "billing_logs", ["user_id"], name: "index_billing_logs_on_user_id", using: :btree
 
   create_table "bills", force: true do |t|
     t.integer  "subscription_id"
@@ -77,6 +89,11 @@ ActiveRecord::Schema.define(version: 20140921192012) do
     t.datetime "status_set_at"
     t.datetime "created_at"
   end
+
+  add_index "bills", ["status", "bill_at"], name: "index_bills_on_status_and_bill_at", using: :btree
+  add_index "bills", ["subscription_id", "status", "bill_at"], name: "index_bills_on_subscription_id_and_status_and_bill_at", using: :btree
+  add_index "bills", ["subscription_id", "type", "bill_at"], name: "index_bills_on_subscription_id_and_type_and_bill_at", using: :btree
+  add_index "bills", ["type", "bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
 
   create_table "conditions", force: true do |t|
     t.integer  "rule_id"
@@ -180,6 +197,8 @@ ActiveRecord::Schema.define(version: 20140921192012) do
     t.datetime "created_at"
   end
 
+  add_index "payment_method_details", ["payment_method_id"], name: "index_payment_method_details_on_payment_method_id", using: :btree
+
   create_table "payment_methods", force: true do |t|
     t.integer  "user_id"
     t.datetime "created_at"
@@ -188,6 +207,7 @@ ActiveRecord::Schema.define(version: 20140921192012) do
   end
 
   add_index "payment_methods", ["deleted_at"], name: "index_payment_methods_on_deleted_at", using: :btree
+  add_index "payment_methods", ["user_id"], name: "index_payment_methods_on_user_id", using: :btree
 
   create_table "rules", force: true do |t|
     t.integer  "site_id"
@@ -268,6 +288,10 @@ ActiveRecord::Schema.define(version: 20140921192012) do
     t.datetime "created_at"
     t.integer  "payment_method_id"
   end
+
+  add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
+  add_index "subscriptions", ["payment_method_id"], name: "index_subscriptions_on_payment_method_id", using: :btree
+  add_index "subscriptions", ["site_id"], name: "index_subscriptions_on_site_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",       null: false
