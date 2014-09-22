@@ -8,6 +8,14 @@ class Subscription < ActiveRecord::Base
   enum schedule: [:monthly, :yearly]
   has_many :bills, ->{order "id"}
 
+  class << self
+    def values_for(site)
+      # Just return the defaults for now, in the future we can 
+      # offer per-site discounts, etc
+      return self.defaults
+    end
+  end
+
   def pending_bills(reload=false)
     self.bills(reload).reject{|b| b.status != :pending}
   end
@@ -26,7 +34,11 @@ class Subscription < ActiveRecord::Base
       # If we are in good standing we just return our normal
       # capabilities, otherwise we return the default capabilities
       active_bills(reload).each do |bill|
-        if bill.problem_with_payment?
+        payment_method = nil
+        if self.site and self.site.current_subscription and self.site.current_subscription.payment_method
+          payment_method = self.site.current_subscription.payment_method
+        end
+        if bill.problem_with_payment?(payment_method)
           @capabilities = ProblemWithPayment::Capabilities.new(self, self.site)
           return @capabilities
         end
@@ -36,14 +48,14 @@ class Subscription < ActiveRecord::Base
     @capabilities
   end
 
-  after_initialize :set_defaults
-  def set_defaults
+  after_initialize :set_initial_values
+  def set_initial_values
     unless self.persisted?
-      defaults = self.class.defaults
-      self.amount ||= self.monthly? ? defaults[:monthly_amount] : defaults[:yearly_amount]
-      self.visit_overage ||= defaults[:visit_overage]
-      self.visit_overage_unit ||= defaults[:visit_overage_unit]
-      self.visit_overage_amount ||= defaults[:visit_overage_amount]
+      values = self.class.values_for(self.site)
+      self.amount ||= self.monthly? ? values[:monthly_amount] : values[:yearly_amount]
+      self.visit_overage ||= values[:visit_overage]
+      self.visit_overage_unit ||= values[:visit_overage_unit]
+      self.visit_overage_amount ||= values[:visit_overage_amount]
     end
   end
 
@@ -78,15 +90,15 @@ class Subscription < ActiveRecord::Base
     end
 
     def visit_overage
-      @subscription ? @subscription.visit_overage : parent_class.defaults[:visit_overage]
+      @subscription ? @subscription.visit_overage : parent_class.values_for(@site)[:visit_overage]
     end
 
     def visit_overage_unit
-      @subscription ? @subscription.visit_overage_unit : parent_class.defaults[:visit_overage_unit]
+      @subscription ? @subscription.visit_overage_unit : parent_class.values_for(@site)[:visit_overage_unit]
     end
 
     def visit_overage_amount
-      @subscription ? @subscription.visit_overage_amount : parent_class.defaults[:visit_overage_amount]
+      @subscription ? @subscription.visit_overage_amount : parent_class.values_for(@site)[:visit_overage_amount]
     end
 
     protected
@@ -103,6 +115,7 @@ class Subscription < ActiveRecord::Base
     class << self
       def defaults
         {
+          name: "Free",
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: 25_000, # after this many visits in a month
@@ -119,16 +132,15 @@ class Subscription < ActiveRecord::Base
   class ProblemWithPayment < Free
     class Capabilities < Free::Capabilities
       def visit_overage
-        puts "-"*80
-        parent_class.defaults[:visit_overage]
+        parent_class.values_for(@site)[:visit_overage]
       end
 
       def visit_overage_unit
-        parent_class.defaults[:visit_overage_unit]
+        parent_class.values_for(@site)[:visit_overage_unit]
       end
 
       def visit_overage_amount
-        parent_class.defaults[:visit_overage_amount]
+        parent_class.values_for(@site)[:visit_overage_amount]
       end
     end
   end
@@ -163,6 +175,7 @@ class Subscription < ActiveRecord::Base
     class << self
       def defaults
         {
+          name: "Pro",
           monthly_amount: 15.0,
           yearly_amount: 149.0,
           visit_overage: 250_000, # after this many visits in a month
@@ -180,6 +193,7 @@ class Subscription < ActiveRecord::Base
     class << self
       def defaults
         {
+          name: "Enterprise",
           monthly_amount: 99.0,
           yearly_amount: 999.0,
           visit_overage: nil, # unlimited

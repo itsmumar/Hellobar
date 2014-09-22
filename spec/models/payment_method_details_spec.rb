@@ -68,10 +68,8 @@ describe CyberSourceCreditCard do
 
   it "should re-use an existing token if set on the same payment_method" do
     p = payment_methods(:joeys)
-    puts "-"*80
     cc1 = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: p)
     cc1.save!
-    puts "-"*80
     cc1 = CyberSourceCreditCard.find(cc1.id)
     cc1.data["token"].should_not be_nil
     cc1.cybersource_profile["cardExpirationYear"].should == "2016"

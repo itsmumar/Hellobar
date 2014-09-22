@@ -150,6 +150,28 @@ describe Site do
       @site.capabilities(true).class.should == Subscription::Pro::Capabilities
     end
 
+    it "should work to downgrade to a free plan" do
+      success, pro_bill = @site.change_subscription(@pro, @payment_method)
+      success.should be_true
+      pro_bill.should be_paid
+      pro_bill.amount.should == @pro.amount
+      @site.current_subscription.should == @pro
+      @site.capabilities(true).class.should == Subscription::Pro::Capabilities
+      success, bill = @site.change_subscription(@free, @payment_method)
+      success.should be_true
+      bill.should be_pending
+      bill.amount.should == 0
+      @site.current_subscription.should == @free
+      # should still have pro
+      @site.capabilities(true).class.should == Subscription::Pro::Capabilities
+      # after it expires no longer have pro
+      pro_bill.start_date -= 2.years
+      pro_bill.end_date -= 2.years
+      pro_bill.save!
+      @site.capabilities(true).class.should == Subscription::Free::Capabilities
+
+    end
+
     it "should prorate if you are upgrading and were on a paid plan" do
       success, bill = @site.change_subscription(@pro, @payment_method)
       success.should be_true
