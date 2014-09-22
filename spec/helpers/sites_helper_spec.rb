@@ -31,9 +31,9 @@ describe SitesHelper do
     end
 
     it "links to editor with segment and value in params if no matching rule exists" do
-      link = create_targeted_content_link(sites(:zombo), "co:Russia")
-      link.should =~ /\?.*segment=co/
-      link.should =~ /\?.*value=Russia/
+      link = create_targeted_content_link(sites(:zombo), "dv:desktop")
+      link.should =~ /\?.*segment=DeviceCondition/
+      link.should =~ /\?.*value=desktop/
     end
   end
 

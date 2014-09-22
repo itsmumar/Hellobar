@@ -23,7 +23,8 @@ module SitesHelper
     path = if existing_rule
       new_site_site_element_path(site, anchor: "/settings?rule_id=#{existing_rule.id}")
     else
-      new_site_site_element_path(site, anchor: "/targeting?segment=#{segment}&value=#{value}")
+      condition_class = Condition::SEGMENTS.find{|k, v| v == segment}[0]
+      new_site_site_element_path(site, anchor: "/targeting?segment=#{condition_class}&value=#{value}")
     end
 
     link_to "Create targeted content", path, class: "button"
