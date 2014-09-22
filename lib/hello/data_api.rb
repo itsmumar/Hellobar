@@ -28,11 +28,13 @@ module Hello::DataAPI
     def fake_lifetime_totals(site, site_elements, num_days = 1)
       {}.tap do |hash|
         site_elements.each do |el|
-          hash[el.id.to_s] = [[rand(100) + 100, rand(100)]]
+          rng = Random.new(el.id)
+
+          hash[el.id.to_s] = [[rng.rand(100) + 100, rng.rand(90)]]
 
           (num_days - 1).times do
             last = hash[el.id.to_s].last
-            hash[el.id.to_s] << [last[0] + rand(100) + 100, last[1] + rand(100)]
+            hash[el.id.to_s] << [last[0] + rng.rand(101) + 100, last[1] + rng.rand(91)]
           end
         end
       end
