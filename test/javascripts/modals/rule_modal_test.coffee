@@ -1,6 +1,30 @@
 #= require modal
 #= require modals/rule_modal
 
+test 'RuleModal constructor properly sets is_between to true for conditions that have a "between" operand', ->
+  expect(2)
+
+  options =
+    ruleData:
+      conditions: [
+        {
+          segment: 'DateCondition'
+          operand: 'is_between'
+        },
+        {
+          segment: 'DateCondition'
+          operand: 'is_after'
+        }
+      ]
+
+  modal = new RuleModal(options)
+  betweenCondition = modal.ruleData.conditions[0]
+  afterCondition = modal.ruleData.conditions[1]
+
+  equal betweenCondition.is_between, true, 'properly sets conditions with an "in between operand"'
+  equal afterCondition.is_between, undefined, 'does not set is_between to anything when operand is not in between'
+
+
 test 'RuleModal._dateClasses(operand)', ->
   expect(3)
 

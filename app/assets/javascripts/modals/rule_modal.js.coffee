@@ -9,8 +9,17 @@ class @RuleModal extends Modal
     source = $('script#rule-modal').html()
     template = Handlebars.compile(source)
     Handlebars.registerPartial("condition", @newConditionTemplate())
-    @ruleData = @options.ruleData
+    @ruleData = @addMetadata(@options.ruleData)
     @$modal = $(template(@ruleData))
+
+  addMetadata: (basicRuleData) ->
+    completeData = $.extend {}, basicRuleData
+    completeData.conditions ||= []
+
+    for condition in completeData.conditions
+      condition.is_between = true if condition.operand == 'is_between'
+
+    completeData
 
   open: ->
     @_renderContent()

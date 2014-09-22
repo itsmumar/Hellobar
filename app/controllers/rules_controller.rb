@@ -61,6 +61,6 @@ class RulesController < ApplicationController
   end
 
   def conditions_attrs
-    [:id, :rule_id, :segment, :operand, :_destroy, { :value => [:start_date, :end_date] }, :value]
+    [:id, :rule_id, :segment, :operand, :_destroy, { :value => [] }, :value]
   end
 end
