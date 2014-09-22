@@ -10,8 +10,23 @@ describe Subscription do
   end
 
   it "should default to monthly schedule" do
-    Subscription::Pro.create.monthly?.should be_true
-    Subscription::Pro.create.amount.should == Subscription::Pro.defaults[:monthly_amount]
+    subscription = Subscription::Pro.new
+    subscription.monthly?.should be_true
+    subscription.amount.should == Subscription::Pro.defaults[:monthly_amount]
+  end
+
+  it "should let you set yearly" do
+    subscription = Subscription::Pro.new(schedule: "yearly")
+    subscription.yearly?.should be_true
+    subscription.amount.should == Subscription::Pro.defaults[:yearly_amount]
+    # Test with symbol
+    subscription = Subscription::Pro.new(schedule: :yearly)
+    subscription.yearly?.should be_true
+    subscription.amount.should == Subscription::Pro.defaults[:yearly_amount]
+  end
+
+  it "should raise an exception for an invalid schedule" do
+    lambda{Subscription::Pro.new(schedule: "fortnightly")}.should raise_error(ArgumentError)
   end
 
   it "should set the amount based on the schedule unless overridden" do
