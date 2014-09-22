@@ -1,6 +1,23 @@
 require 'spec_helper'
 
+module SubscriptionHelper
+  def setup_subscriptions
+    @user = users(:joey)
+    @site = sites(:horsebike)
+    @payment_method = payment_methods(:always_successful)
+    @free = Subscription::Free.new(user: @user, site: @site)
+    @pro = Subscription::Pro.new(user: @user, site: @site)
+    @enterprise = Subscription::Enterprise.new(user: @user, site: @site)
+    @site.current_subscription.should be_nil
+    @site.bills.should == []
+    @free.amount.should == 0
+    @pro.amount.should_not == 0
+    @enterprise.amount.should_not == 0
+  end
+end
+
 describe Subscription do
+  include SubscriptionHelper
   it "should set defaults if not set" do
     Subscription::Pro.create.visit_overage.should == Subscription::Pro.defaults[:visit_overage]
   end
@@ -47,14 +64,7 @@ describe Subscription do
   describe Subscription::Capabilities do
     fixtures :all
     before do
-      @user = users(:joey)
-      @site = sites(:horsebike)
-      @payment_method = payment_methods(:always_successful)
-      @free = Subscription::Free.new(user: @user, site: @site)
-      @pro = Subscription::Pro.new(user: @user, site: @site)
-      @enterprise = Subscription::Enterprise.new(user: @user, site: @site)
-      @site.current_subscription.should be_nil
-      @site.bills.should == []
+      setup_subscriptions
     end
 
     it "should return default capabilities for plan" do
@@ -107,6 +117,7 @@ describe Subscription do
 end
 
 describe Site do
+  include SubscriptionHelper
   it "should return Free capabilities if no subscription" do
     Site.new.capabilities.class.should == Subscription::Free::Capabilities
   end
@@ -122,17 +133,7 @@ describe Site do
   describe "change_subscription" do
     fixtures :all
     before do
-      @user = users(:joey)
-      @site = sites(:horsebike)
-      @payment_method = payment_methods(:always_successful)
-      @free = Subscription::Free.new(user: @user, site: @site)
-      @pro = Subscription::Pro.new(user: @user, site: @site)
-      @enterprise = Subscription::Enterprise.new(user: @user, site: @site)
-      @site.current_subscription.should be_nil
-      @site.bills.should == []
-      @free.amount.should == 0
-      @pro.amount.should_not == 0
-      @enterprise.amount.should_not == 0
+      setup_subscriptions
     end
 
     it "should work with starting out on a Free plan" do
@@ -148,9 +149,21 @@ describe Site do
       success, bill = @site.change_subscription(@pro, @payment_method)
       success.should be_true
       bill.should be_paid
+      bill.should be_persisted
       bill.amount.should == @pro.amount
+      bill.bill_at.should <= Time.now
       @site.current_subscription.should == @pro
       @site.capabilities.class.should == Subscription::Pro::Capabilities
+    end
+
+    it "should let you preview a subscription without actually changing anything" do
+      bill = @site.preview_change_subscription(@pro)
+      bill.should_not be_paid
+      bill.should_not be_persisted
+      bill.amount.should == @pro.amount
+      bill.bill_at.should <= Time.now
+      @site.current_subscription.should_not == @pro
+      @site.capabilities.class.should == Subscription::Free::Capabilities
     end
 
     it "should charge full amount if you were on a Free plan" do
@@ -281,6 +294,44 @@ describe Site do
       bill.amount.should == @pro.amount
       @site.current_subscription.should == @pro
       @site.capabilities(true).class.should == Subscription::ProblemWithPayment::Capabilities
+    end
+  end
+
+  describe "bills_with_payment_issues" do
+    fixtures :all
+    before do
+      setup_subscriptions
+    end
+
+    it "should return bills that are due" do
+      @site.bills_with_payment_issues(true).should == []
+      success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
+      success.should be_false
+      bill.should be_pending
+      @site.bills_with_payment_issues(true).should == [bill]
+    end
+
+    it "should not return bills not due" do
+      @site.bills_with_payment_issues(true).should == []
+      success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
+      success.should be_false
+      bill.should be_pending
+      # Make it due later
+      bill.bill_at = Time.now+7.days
+      bill.save!
+      @site.bills_with_payment_issues(true).should == []
+    end
+
+    it "should not return bills that we haven't attempted to charge at least once" do
+      @site.bills_with_payment_issues(true).should == []
+      success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
+      success.should be_false
+      bill.should be_pending
+      # Delete the attempt
+      # We have to do this monkey business to get around the fact that
+      # BillingAttmps are read only
+      BillingAttempt.connection.execute("TRUNCATE #{BillingAttempt.table_name}")
+      @site.bills_with_payment_issues(true).should == []
     end
   end
 end
