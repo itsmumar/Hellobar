@@ -62,23 +62,23 @@ test 'RuleModal._renderValue($condition)', (assert) ->
   equal $condition.find('.start_date').prop('disabled'), true, 'it disables the start_date value when the segment is UrlCondition'
   equal $condition.find('.end_date').prop('disabled'), true, 'it disables the end_date value when the segment is UrlCondition'
 
-  modal._renderValue($condition, { segment: 'DateCondition' })
+  modal._renderValue($condition, { segment: 'DateCondition', operand: 'before' })
   $condition.find('select.condition-segment').val('DateCondition').trigger('change')
   $condition.find('select.condition-operand').val('before').trigger('change')
   equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is DateCondition'
   equal $condition.find('.url').prop('disabled'), true, 'it disables the url value when the segment is DateCondition'
 
-  modal._renderValue($condition, { segment: 'DateCondition' })
+  modal._renderValue($condition, { segment: 'DateCondition', operand: 'before' })
   $condition.find('select.condition-operand').val('before').trigger('change')
   equal $condition.find('.start_date').prop('disabled'), true, 'it disables the start_date value when the segment is DateCondition and the operand is before'
   equal $condition.find('.end_date').prop('disabled'), false, 'it enables the end_date value when the segment is DateCondition and the operand is before'
 
-  modal._renderValue($condition, { segment: 'DateCondition' })
+  modal._renderValue($condition, { segment: 'DateCondition', operand: 'after' })
   $condition.find('select.condition-operand').val('after').trigger('change')
   equal $condition.find('.start_date').prop('disabled'), false, 'it enables the start_date value when the segment is DateCondition and the operand is after'
   equal $condition.find('.end_date').prop('disabled'), true, 'it disables the end_date value when the segment is DateCondition and the operand is after'
 
-  modal._renderValue($condition, { segment: 'DateCondition' })
+  modal._renderValue($condition, { segment: 'DateCondition', operand: 'between' })
   $condition.find('select.condition-operand').val('between').trigger('change')
   equal $condition.find('.start_date').prop('disabled'), false, 'it enables the start_date value when the segment is DateCondition and the operand is between'
   equal $condition.find('.end_date').prop('disabled'), false, 'it enables the end_date value when the segment is DateCondition and the operand is between'

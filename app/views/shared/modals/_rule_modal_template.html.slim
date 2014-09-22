@@ -49,9 +49,9 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "UrlCondition" "url"}}
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
-          | {{option operand "is_after" "is after"}}
-          | {{option operand "is_before" "is before"}}
-          | {{option operand "is_between" "is between"}}
+          | {{option operand "after" "is after"}}
+          | {{option operand "before" "is before"}}
+          | {{option operand "between" "is between"}}
           | {{option operand "is" "is"}}
           | {{option operand "is_not" "is not"}}
           | {{option operand "includes" "includes"}}
