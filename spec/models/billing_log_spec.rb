@@ -10,6 +10,10 @@ end
 
 describe BillingAuditTrail do
   fixtures :all
+  before do
+    BillingLog.connection.execute("DELETE FROM #{BillingLog.table_name}")
+  end
+
   it "should allow us to call audit on an object" do
     BillingLog.count.should == 0
     user = users(:joey)
