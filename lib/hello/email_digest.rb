@@ -1,8 +1,10 @@
 module Hello::EmailDigest
   class << self
-    include Hellobar::Application.routes.url_helpers
     include EmailDigestHelper
     include SiteElementsHelper
+    include SitesHelper
+    include ActionView::Helpers
+    include Hellobar::Application.routes.url_helpers
 
     def installed_sites
       Site.where("script_installed_at IS NOT NULL").where(:opted_in_to_email_digest => true)
@@ -69,11 +71,11 @@ module Hello::EmailDigest
     def create_bar_cta(site, metrics, url)
       site_elements = site.site_elements
 
-      if !site_elements.any?{|b| b.element_subtype =~ /^social/}
+      if metrics[:social].nil?
         "Use different types of bars to help you reach other goals, like gaining followers on Twitter. <a href='#{url}'>Start testing social bars now</a>."
-      elsif !site_elements.any?{|b| b.element_subtype =~ /^traffic/}
+      elsif metrics[:traffic].nil?
         "Use different types of bars to help you reach other goals, like driving traffic to important pages. <a href='#{url}'>Start testing traffic bars now</a>."
-      elsif !site_elements.any?{|b| b.element_subtype =~ /^email/}
+      elsif metrics[:email].nil?
         "Use different types of bars to help you reach other goals, like collecting email addresses. <a href='#{url}'>Start testing email bars now</a>."
       else
         element_subtypes = {:social => /^social/, :email => /^email/, :traffic => /^traffic/}
@@ -83,6 +85,76 @@ module Hello::EmailDigest
 
         "Your #{worst_type} bars have the lowest conversion rate. Try creating a variation on your existing #{worst_type} bars to see if you can get more #{conversion_noun}. <a href='#{url}'>Start testing more #{worst_type} bars now</a>."
       end
+    end
+
+    def installed_params(site, user, metrics, email_name)
+      create_bar_url = new_site_site_element_url(:site_id => site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_create_bar_cta"))
+      create_bar_button_url = new_site_site_element_url(:site_id => site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_create_bar_button"))
+      unsubscribe_url = edit_site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_unsubscribe"))
+
+      params = {
+        :site_url => display_url_for_site(site),
+        :start_date => 7.days.ago.strftime("%B %-d"),
+        :end_date => 1.day.ago.strftime("%B %-d, %Y"),
+        :tracking_pixel => tracking_pixel_url(:host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "open", email_name)),
+        :create_bar_cta => Hello::EmailDigest.create_bar_cta(site, metrics, create_bar_url),
+        :create_bar_button_url => create_bar_button_url,
+        :unsubscribe_url => unsubscribe_url
+      }
+
+      if metrics[:total].nil?
+        params[:total_views] = 0
+        params[:total_actions] = 0
+        params[:total_conversion] = 0
+        params[:total_views_lift] = formatted_percent_with_wrapper(nil)
+        params[:total_actions_lift] = formatted_percent_with_wrapper(nil)
+        params[:total_conversion_lift] = formatted_percent_with_wrapper(nil)
+      else
+        params[:total_views] = number_with_delimiter(metrics[:total][:views][:n])
+        params[:total_actions] = number_with_delimiter(metrics[:total][:actions][:n])
+        params[:total_conversion] = number_to_percentage(metrics[:total][:conversion][:n] * 100, :precision => 2)
+        params[:total_views_lift] = formatted_percent_with_wrapper(metrics[:total][:views][:lift])
+        params[:total_actions_lift] = formatted_percent_with_wrapper(metrics[:total][:actions][:lift])
+        params[:total_conversion_lift] = formatted_percent_with_wrapper(metrics[:total][:conversion][:lift])
+      end
+
+      [:traffic, :email, :social].each do |bar_type|
+        bar_data = metrics[bar_type]
+
+        if bar_data.nil?
+          params["#{bar_type}_row_header".to_sym] = "<span style='color: gray'>#{bar_type.capitalize} bars</span>"
+          params["#{bar_type}_views".to_sym] =      "<big style='color: gray'>-</big>"
+          params["#{bar_type}_actions".to_sym] =    "<big style='color: gray'>-</big>"
+          params["#{bar_type}_conversion".to_sym] = "<big style='color: gray'>-</big>"
+        else
+          params["#{bar_type}_row_header".to_sym] = "#{bar_type.capitalize} bars"
+          params["#{bar_type}_views".to_sym] = "<big>#{number_with_delimiter(bar_data[:views][:n])}</big> <small>#{formatted_percent_with_wrapper(bar_data[:views][:lift], :parens => true)}</small>"
+          params["#{bar_type}_actions".to_sym] = "<big>#{number_with_delimiter(bar_data[:actions][:n])}</big> <small>#{formatted_percent_with_wrapper(bar_data[:actions][:lift], :parens => true)}</small>"
+          params["#{bar_type}_conversion".to_sym] = "<big>#{number_to_percentage(bar_data[:conversion][:n] * 100, :precision => 2)}</big> <small>#{formatted_percent_with_wrapper(bar_data[:conversion][:lift], :parens => true)}</small>"
+        end
+      end
+
+      # Grand Central only accepts string parameters
+      params.each{|k,v| params[k] = v.to_s}
+
+      return params
+    end
+
+    def not_installed_params(site, user, email_name)
+      unsubscribe_url = edit_site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_unsubscribe"))
+      install_url = site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_install"))
+
+      params = {
+        :site_url => display_url_for_site(site),
+        :tracking_pixel => tracking_pixel_url(:host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "open", email_name)),
+        :unsubscribe_url => unsubscribe_url,
+        :install_url => install_url
+      }
+
+      # Grand Central only accepts string parameters
+      params.each{|k,v| params[k] = v.to_s}
+
+      return params
     end
   end
 end

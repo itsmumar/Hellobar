@@ -157,7 +157,6 @@ describe Hello::EmailDigest do
 
       @url = ""
       @site = sites(:polymathic)
-      @site.create_default_rule
     end
 
     it "suggests creation of a social bar if there aren't any" do
@@ -165,6 +164,8 @@ describe Hello::EmailDigest do
         SiteElement.new.tap{|b| b.element_subtype = "traffic"},
         SiteElement.new.tap{|b| b.element_subtype = "email"; b.contact_list = contact_lists(:zombo)}
       ]
+
+      @metrics[:social] = nil
 
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /gaining followers/
     end
@@ -175,6 +176,8 @@ describe Hello::EmailDigest do
         SiteElement.new.tap{|b| b.element_subtype = "social/tweet_on_twitter"}
       ]
 
+      @metrics[:email] = nil
+
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /collecting email/
     end
 
@@ -183,6 +186,8 @@ describe Hello::EmailDigest do
         SiteElement.new.tap{|b| b.element_subtype = "social/tweet_on_twitter"},
         SiteElement.new.tap{|b| b.element_subtype = "email"; b.contact_list = contact_lists(:zombo)}
       ]
+
+      @metrics[:traffic] = nil
 
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /driving traffic/
     end
@@ -205,6 +210,37 @@ describe Hello::EmailDigest do
       ]
 
       Hello::EmailDigest.create_bar_cta(@site, @metrics, @url).should =~ /get more followers/
+    end
+  end
+
+  describe "installed_params" do
+    before do
+      @metrics = {
+        :total => {:views => {:n => 3570, :lift => 50.0}, :actions => {:n => 357, :lift => 50.0}, :conversion => {:n => 0.1, :lift => 0.0}},
+        :email => nil,
+        :social => nil,
+        :traffic => {:views => {:n => 3570, :lift => 50.0}, :actions => {:n => 357, :lift => 50.0}, :conversion => {:n => 0.1, :lift => 0.0}}
+      }
+
+      @site = sites(:zombo)
+      @user = @site.owner
+    end
+
+    it "generates the params for the 'installed' version of the digest" do
+      params = Hello::EmailDigest.installed_params(@site, @user, @metrics, "installed_v1_w1")
+      params[:site_url].should == "zombo.com"
+    end
+  end
+
+  describe "not_installed_params" do
+    before do
+      @site = sites(:zombo)
+      @user = @site.owner
+    end
+
+    it "generates the params for the 'installed' version of the digest" do
+      params = Hello::EmailDigest.not_installed_params(@site, @user, "not_installed_v1_w1")
+      params[:site_url].should == "zombo.com"
     end
   end
 end
