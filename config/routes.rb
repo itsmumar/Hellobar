@@ -55,4 +55,6 @@ Rails.application.routes.draw do
   get '/use-cases' => 'pages#use_cases'
   get '/terms-of-use' => 'pages#terms_of_use'
   get '/privacy-policy' => 'pages#privacy_policy'
+
+  get "/pixel.gif" => "pixel#show", :as => :tracking_pixel
 end
