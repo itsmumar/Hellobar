@@ -162,6 +162,8 @@ describe Site do
       bill.should_not be_persisted
       bill.amount.should == @pro.amount
       bill.bill_at.should <= Time.now
+      lambda{bill.save!}.should raise_error(ActiveRecord::ReadOnlyRecord)
+      bill.should_not be_persisted
       @site.current_subscription.should_not == @pro
       @site.capabilities.class.should == Subscription::Free::Capabilities
     end

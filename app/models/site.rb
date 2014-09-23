@@ -132,6 +132,10 @@ class Site < ActiveRecord::Base
 
   def preview_change_subscription(subscription)
     bill = calculate_bill(subscription, false)
+    # Make the bill read-only
+    def bill.readonly?
+      return true
+    end
     return bill
   end
 
