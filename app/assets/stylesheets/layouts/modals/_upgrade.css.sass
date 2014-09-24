@@ -80,12 +80,24 @@
     .package-title
       color: $white
       border-width: 0
-      @include flex(1 0 18%)
+      line-height: 145%
+      @include flex(1 0 16%)
 
       .package-name
         font-size: 1.1em
         font-weight: bold
-        margin-bottom: 0.33em
+
+      .package-price.annual
+        opacity: 0
+        @include transition()
+
+      &.annually
+
+        .package-price.monthly
+          text-decoration: line-through
+
+        .package-price.annual
+          opacity: 1
 
     .package-features
       border-width: 1px 1px 1px 0
@@ -98,12 +110,12 @@
       ul
         margin: -1em 0
         color: $grayLight
-        padding-left: 2.5em
+        padding-left: 3em
 
         li
           width: 50%
           color: $gray
-          padding: 0.75em
+          padding: 0.67em
           text-align: left
           font-size: 0.85em
           position: relative
@@ -163,7 +175,7 @@
           @include antialiased(subpixel-antialiased)
 
           i
-            top: 20%
+            top: 18%
             left: -1em
             color: $green
             font-size: 1.67em
