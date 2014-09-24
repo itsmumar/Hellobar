@@ -1,0 +1,144 @@
+/*-----------  Payment Modal  -----------*/
+
+.payment-modal
+  text-align: center
+  margin-left: -2.33em
+  margin-right: -2.33em
+
+  .site-title
+    font-size: 1.33em
+    margin-bottom: 1em
+    @include antialiased()
+
+  .payment-wrapper
+    @include justify-content(space-between)
+    @include align-content(flex-start)
+    @include align-items(flex-start)
+    @include flex-flow(row nowrap)
+    @include antialiased()
+    @include display(flex)
+
+    /*-----------  Payment Sidebar  -----------*/
+
+    .payment-sidebar
+      @include flex(1 0 auto)
+
+      header
+        color: $white
+        padding: 1.25em
+        font-size: 1.1em
+        font-weight: bold
+        text-transform: capitalize
+
+        small
+          display: block
+          font-size: 0.75em
+          font-weight: normal
+          letter-spacing: 0.05em
+          text-transform: uppercase
+
+      .package-cycle
+        margin-bottom: 0.5em
+        border-style: solid
+        border-width: 0 1px 1px 1px
+        border-color: $grayLighter
+        padding: 0.1em 1.25em 1.25em 1.25em
+
+        input
+          display: none
+
+        label
+          font-size: 0.95em
+          text-align: left
+          position: relative
+          padding-left: 2.5em
+          @include antialiased(subpixel-antialiased)
+
+          small
+            color: $gray
+            display: block
+            @include antialiased()
+
+            strong
+              color: $red
+              display: block
+
+          &:before
+            top: 2px
+            left: 2px
+            width: 15px
+            height: 15px
+            content: ''
+            position: absolute
+            border-radius: 10em
+            border: 1px solid $grayLighter
+            box-shadow: inset 0 0 0 2px $white
+            @include transition()
+
+      > a
+        font-size: 0.9em
+        text-decoration: underline
+
+      /*-----------  Pro  -----------*/
+
+      &.pro
+
+        header
+          background-color: $green
+
+        input:checked + label:before
+          border-color: $green
+          background-color: $green
+
+        > a
+          color: $green
+
+          &:hover
+            color: lighten($green, 5%)
+  
+      /*-----------  Enterprise  -----------*/
+  
+      &.enterprise
+
+        header
+          background-color: $blue
+
+        input:checked + label:before
+          border-color: $blue
+          background-color: $blue
+
+        > a
+          color: $blue
+
+          &:hover
+            color: lighten($blue, 5%)
+
+    /*-----------  Payment Form  -----------*/
+
+    .payment-form
+      text-align: left
+      margin-left: 1em
+      border: 1px solid $grayLighter
+      @include flex(0 1 73%)
+
+      header
+        color: $gray
+        padding: 1.5rem
+        font-size: 1.25em
+        line-height: 195%
+        background-color: $grayLightest
+
+      .credit-card
+        padding: 1.5rem
+
+        p
+          font-size: 0.8em
+
+        footer
+          margin-top: 1em
+          padding-top: 1em
+          border-top: 1px solid $grayLighter
+
+          .button
+            float: right
+            margin-left: 1em

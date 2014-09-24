@@ -13,8 +13,8 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
         .billing-options
           input id='monthly-billing' type='radio' name='billing' value='monthly'
           label for='monthly-billing' Monthly Billing
-          input id='annual-billing' type='radio' name='billing' value='annual'
-          label for='annual-billing' Annual Billing
+          input id='annually-billing' type='radio' name='billing' value='annually'
+          label for='annually-billing' Annual Billing
 
         / Basic Package
         .package-block.basic
@@ -38,7 +38,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-title
             .package-name Pro
             .package-price.monthly $15/mo    
-            .package-price.annual $12.5/mo
+            .package-price.annually $12.5/mo
 
           .package-features
 
@@ -70,14 +70,14 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
             .package-status
               p After 2500,000 visits, every 25,000 visits are an extra $5
-              .button Choose Plan
+              .button data-package='pro' Choose Plan
 
         / Enterprise Package
         .package-block.enterprise
           .package-title
             .package-name Enterprise
             .package-price.monthly $99/mo    
-            .package-price.annual $83.3/mo
+            .package-price.annually $83.3/mo
 
           .package-features
 
@@ -88,5 +88,5 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               li Enterprise integrations
 
             .package-status
-              .button Choose Plan
+              .button data-package='enterprise' Choose Plan
 

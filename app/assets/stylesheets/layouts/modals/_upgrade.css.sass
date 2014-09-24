@@ -6,7 +6,7 @@
   margin-right: -2.33em
 
   .site-title
-    font-size: 1.25em
+    font-size: 1.33em
     @include antialiased()
 
   .billing-options
@@ -71,10 +71,10 @@
     @include display(flex)
 
     > *
-      border-style: solid
-      border-color: inherit
       padding-top: 1.5em
       padding-bottom: 1.5em
+      border-style: solid
+      border-color: inherit
       @include antialiased()
 
     .package-title
@@ -87,7 +87,7 @@
         font-size: 1.1em
         font-weight: bold
 
-      .package-price.annual
+      .package-price.annually
         opacity: 0
         @include transition()
 
@@ -96,7 +96,7 @@
         .package-price.monthly
           text-decoration: line-through
 
-        .package-price.annual
+        .package-price.annually
           opacity: 1
 
     .package-features
@@ -115,7 +115,7 @@
         li
           width: 50%
           color: $gray
-          padding: 0.67em
+          padding: 0.85em
           text-align: left
           font-size: 0.85em
           position: relative

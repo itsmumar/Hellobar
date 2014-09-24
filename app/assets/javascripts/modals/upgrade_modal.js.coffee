@@ -2,6 +2,10 @@ class @UpgradeAccountModal extends Modal
 
   modalName: "upgrade-account"
 
+  packageOptions: 
+    type: null
+    cycle: null
+
   constructor: (@options = {}) ->
     @template = Handlebars.compile($("#upgrade-account-modal-template").html())
     @$modal = $(@template({errors: @options.errors}))
@@ -12,18 +16,30 @@ class @UpgradeAccountModal extends Modal
     super(@$modal)
 
   open: ->
-    @$modal.find('#annual-billing').trigger('click')
+    @$modal.find('#annually-billing').trigger('click')
+
+    @_bindPackageSelection()
+
     super()
+    
+  #-----------  Select Package  -----------#
+
+  _bindPackageSelection: () ->
+    @$modal.find('.button').on 'click', (event) =>
+      if event.target.dataset.package 
+        @packageOptions.type = event.target.dataset.package 
+        @paymentModal = new PaymentModal(@packageOptions).open()
+
+      @close()
+
+  #-----------  Change Billing Cycle  -----------#
 
   _bindBillingCycleEvents: () ->
-    @$modal.find('#annual-billing').on 'change', (event) =>
-      @_billedAnnually() if event.target.checked
-
-    @$modal.find('#monthly-billing').on 'change', (event) =>
-      @_billedMonthly() if event.target.checked
-      
-  _billedAnnually: () ->
-    @$modal.find('.package-title').addClass('annually')
-
-  _billedMonthly: () ->
-    @$modal.find('.package-title').removeClass('annually')
+    @$modal.find('input[type="radio"]').on 'change', (event) =>
+      switch event.target.value
+        when 'annually'
+          @packageOptions.cycle = 'annually'
+          @$modal.find('.package-title').addClass('annually')
+        when 'monthly'
+          @packageOptions.cycle = 'monthly'
+          @$modal.find('.package-title').removeClass('annually')

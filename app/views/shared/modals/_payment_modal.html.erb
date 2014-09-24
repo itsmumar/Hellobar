@@ -1,0 +1,60 @@
+<script id="payment-modal-template" type="text/x-handlebars-template">
+  <div class="modal-wrapper">
+    <div class="modal-block">
+      <i class="icon-close"></i>
+
+      <form class="payment-modal">
+        <div class="site-title">
+          <%= "Upgrade #{display_url_for_site(current_site)}!" %>
+        </div>
+
+        <div class="payment-wrapper">
+          <div class="payment-sidebar {{ package.type }}">
+            <header>
+              {{ package.type }}
+              <small>Select Billing</small>
+            </header>
+            <div class="package-cycle">
+              <input type="radio" id="monthly-billing" name="billing" value="monthly" />
+              <label for="monthly-billing">
+                Monthly
+                <small>$15 Per Month</small>
+              </label>
+              <input type="radio" id="anually-billing" name="billing" value="anually" />
+              <label for="anually-billing">
+                Annually
+                <small>$150 Per Year <strong>Save 15%</strong></small>
+              </label>
+            </div>
+            <a class="different-plan">Choose a different plan</a>
+          </div>
+
+          <div class="payment-form">
+            <header>Billing Information</header>
+
+            <div class="credit-card">
+              <p>This will upgrade ONLY site "<%= display_url_for_site(current_site) %>" to {{ package.type }}. Each site will need to be upgraded seperately to gain {{ package.type }} features.
+
+              <label>Name on card</label>
+              <input type="text" placeholder="John Smith" />
+
+              <label>Card number</label>
+              <input type="text" placeholder="    -    -    -" />
+
+              <label>Expiry</label>
+              <input type="text" placeholder="08/216" />
+
+              <label>CSV</label>
+              <input type="text" placeholder="123" />
+
+              <footer>
+                <a class="button">Confirm</a>
+                <p>This card will be added to your profile and charged $150 each year starting today, July 1st 2014</p>
+              </footer>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</script>
