@@ -123,19 +123,49 @@
 
       header
         color: $gray
-        padding: 1.5rem
         font-size: 1.25em
         line-height: 195%
+        padding: 1.5rem 2rem
         background-color: $grayLightest
 
       .credit-card
-        padding: 1.5rem
+        padding: 1.5rem 2rem
 
         p
           font-size: 0.8em
+          margin-bottom: 0
+
+        fieldset
+          margin-right: 1%
+          font-size: 1.1em
+          @include inline-block()
+
+          label
+            @include antialiased(subpixel-antialiased)
+
+          input
+            margin-top: 0.33em !important
+            margin-bottom: 0em !important
+            border-color: $grayLight !important
+            @include placeholder
+              color: $grayLighter !important
+
+        .cc-name
+          width: 100%
+          margin-right: 0
+
+        .cc-number
+          width: 62%
+
+        .cc-expiry
+          width: 22%
+
+        .cc-csv
+          width: 12%
+          margin-right: 0
 
         footer
-          margin-top: 1em
+          margin-top: 2em
           padding-top: 1em
           border-top: 1px solid $grayLighter
 

@@ -35,17 +35,25 @@
             <div class="credit-card">
               <p>This will upgrade ONLY site "<%= display_url_for_site(current_site) %>" to {{ package.type }}. Each site will need to be upgraded seperately to gain {{ package.type }} features.
 
-              <label>Name on card</label>
-              <input type="text" placeholder="John Smith" />
+              <fieldset class="cc-name">
+                <label>Name on card</label>
+                <input type="text" placeholder="John Smith" />
+              </fieldset>
 
-              <label>Card number</label>
-              <input type="text" placeholder="    -    -    -" />
+              <fieldset class="cc-number">
+                <label>Card number</label>
+                <input type="text" placeholder="    -    -    -" />
+              </fieldset>
 
-              <label>Expiry</label>
-              <input type="text" placeholder="08/216" />
+              <fieldset class="cc-expiry">
+                <label>Expiry</label>
+                <input type="text" placeholder="08/216" />
+              </fieldset>
 
-              <label>CSV</label>
-              <input type="text" placeholder="123" />
+              <fieldset class="cc-csv">
+                <label>CSV</label>
+                <input type="text" placeholder="123" />
+              </fieldset>
 
               <footer>
                 <a class="button">Confirm</a>
