@@ -24,6 +24,8 @@ html
         == yield
 
     = render 'shared/alert_template'
+    = render "shared/modals/upgrade_modal"
+
 
 javascript:
   var currentUser = #{{UserSerializer.new(current_user).to_json}};

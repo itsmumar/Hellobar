@@ -18,11 +18,23 @@
     width: 55em
     margin: auto
     margin-top: -10em
+    position: relative
     padding: 1.75em 5em
     border-radius: $radiusSm
     background-color: $white
     box-shadow: $shadowSubtle
     @include transition(margin-top $modalSpeed, opacity $modalSpeed/2 $modalSpeed/2)
+
+    > .icon-close
+      top: 1em
+      right: 1em
+      cursor: pointer
+      color: $grayLight
+      position: absolute
+      @include transition()
+
+      &:hover
+        color: $orange
 
     .button
       @extend %green-button

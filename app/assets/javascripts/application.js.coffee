@@ -42,3 +42,8 @@ $ ->
     $timezone = $('#site_timezone, #user_timezone')
     userTimezone = jstz.determine().name()
     $timezone.val(userTimezone)
+
+  # Upgrade Account Modal
+  $("#upgrade-account").click (e) ->
+    new UpgradeAccountModal().open()
+

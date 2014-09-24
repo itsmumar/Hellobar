@@ -30,7 +30,7 @@ class @Modal
       callback.call(this) if event.keyCode == 27
 
   _bindClickOnClose: (callback) ->
-    @$modal.find('a.cancel').on 'click', (event) =>
+    @$modal.find('a.cancel, .icon-close').on 'click', (event) =>
       event.preventDefault()
       callback.call(this)
 

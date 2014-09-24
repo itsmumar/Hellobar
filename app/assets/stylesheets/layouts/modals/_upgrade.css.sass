@@ -1,0 +1,183 @@
+/*-----------  Upgrade Modal  -----------*/
+
+.upgrade-account-modal
+  text-align: center
+  margin-left: -2.33em
+  margin-right: -2.33em
+
+  .site-title
+    font-size: 1.25em
+    @include antialiased()
+
+  .billing-options
+    width: 20em
+    margin: 1.5em auto
+    position: relative
+
+    input
+      display: none
+
+    label
+      width: 50%
+      margin: 0
+      color: $gray
+      padding: 0.33em
+      cursor: pointer
+      font-size: 0.95em
+      border: 1px solid $green
+      text-transform: uppercase
+      @include inline-block()
+      @include antialiased()
+      @include transition()
+
+      &:first-child
+        border-radius: $radiusSm 0 0 $radiusSm
+
+      &:last-child
+        border-radius: 0 $radiusSm $radiusSm 0
+
+      &:hover
+        background-color: lighten($green, 37.5%)
+
+    input:checked + label
+      color: $white
+      cursor: default
+      background-color: $green
+
+    &:after
+      top: -1.5em
+      right: -2em
+      width: 3.5em
+      height: 3.5em
+      color: $white
+      font-size: 0.6em
+      line-height: 115%
+      position: absolute
+      content: 'Save 15%'
+      padding-top: 0.67em
+      border-radius: 10em
+      text-transform: uppercase
+      background-color: $yellow
+
+  /*-----------  Packages  -----------*/
+
+  .package-block
+    margin-bottom: 0.5em
+    border-color: $grayLighter
+    @include justify-content(flex-start)
+    @include align-content(center)
+    @include align-items(stretch)
+    @include flex-flow(row nowrap)
+    @include display(flex)
+
+    > *
+      border-style: solid
+      border-color: inherit
+      padding-top: 1.5em
+      padding-bottom: 1.5em
+      @include antialiased()
+
+    .package-title
+      color: $white
+      border-width: 0
+      @include flex(1 0 18%)
+
+      .package-name
+        font-size: 1.1em
+        font-weight: bold
+        margin-bottom: 0.33em
+
+    .package-features
+      border-width: 1px 1px 1px 0
+      @include justify-content(center)
+      @include align-content(center)
+      @include align-items(center)
+      @include flex-flow(row nowrap)
+      @include display(flex)
+
+      ul
+        margin: -1em 0
+        color: $grayLight
+        padding-left: 2.5em
+
+        li
+          width: 50%
+          color: $gray
+          padding: 0.75em
+          text-align: left
+          font-size: 0.85em
+          position: relative
+          letter-spacing: 0.033em
+          @include inline-block()
+
+          &:before
+            top: 45%
+            left: -8px
+            width: 6px
+            height: 6px
+            content: ''
+            position: absolute
+            border-radius: 10em
+            background-color: $grayLight
+
+      .package-status
+        padding-right: 1em
+        position: relative
+        @include flex(1 0 25%)
+
+        p
+          color: $gray
+          font-size: 0.8em
+          line-height: 133%
+          margin-bottom: 0.75em
+
+        .button
+          display: block
+          font-size: 0.85em !important
+
+          &[disabled]
+            color: $gray
+            cursor: default
+            background-color: transparent
+
+      /*-----------  Basic Package  -----------*/
+
+    &.basic
+
+      .package-title
+        color: $gray
+        border-width: 1px 0 1px 1px
+        background-color: $grayLightest
+
+    /*-----------  Pro Package  -----------*/
+
+    &.pro
+      border-color: $grayLight
+
+      .package-title
+        background-color: $green
+
+      .package-features
+
+        li
+          @include antialiased(subpixel-antialiased)
+
+          i
+            top: 20%
+            left: -1em
+            color: $green
+            font-size: 1.67em
+            position: absolute
+
+          &:before
+            display: none
+
+    /*-----------  Enterprise Package  -----------*/
+
+    &.enterprise
+
+      .package-title
+        background-color: $blue
+
+      .button
+        @extend %blue-button

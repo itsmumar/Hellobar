@@ -1,0 +1,92 @@
+script id="upgrade-account-modal-template" type="text/x-handlebars-template"
+
+  .modal-wrapper
+
+    .modal-block
+
+      i.icon-close
+
+      form.upgrade-account-modal
+  
+        .site-title= "Upgrade #{display_url_for_site(current_site)}!"
+
+        .billing-options
+          input id='monthly-billing' type='radio' name='billing' value='monthly'
+          label for='monthly-billing' Monthly Billing
+          input id='annual-billing' type='radio' name='billing' value='annual' checked=true
+          label for='annual-billing' Annual Billing
+
+        / Basic Package
+        .package-block.basic
+          .package-title
+            .package-name Basic
+            .package-price FREE
+
+          .package-features
+
+            ul
+              li Limit of 10 bars & rules
+              li HelloBar logo on all content
+              li 3 improve suggestions
+              li Ads after 25,000 views
+
+            .package-status
+              .button{disabled} Current Plan
+
+        / Pro Package
+        .package-block.pro
+          .package-title
+            .package-name Pro
+            .package-price.monthly $15/mo    
+            .package-price.annual $12.5/mo
+
+          .package-features
+
+            ul
+              li 
+                i.icon-views
+                | Unbranded content
+              li 
+                i.icon-views
+                | Create custom content
+              li 
+                i.icon-views
+                | Unlimited rules & bars
+              li 
+                i.icon-views
+                | Behavior activated content
+              li 
+                i.icon-views
+                | 10 improve suggestions
+              li 
+                i.icon-views
+                | Future improvements
+              li 
+                i.icon-views
+                | Custom targeted content
+              li 
+                i.icon-views
+                | Our sincere thanks!
+
+            .package-status
+              p After 2500,000 visits, every 25,000 visits are an extra $5
+              .button Choose Plan
+
+        / Enterprise Package
+        .package-block.enterprise
+          .package-title
+            .package-name Enterprise
+            .package-price.monthly $99/mo    
+            .package-price.annual $83.3/mo
+
+          .package-features
+
+            ul
+              li All the benefits of Pro
+              li Future improvements
+              li Unlimited visits
+              li Enterprise integrations
+
+            .package-status
+              .button Choose Plan
+
