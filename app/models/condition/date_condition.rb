@@ -5,13 +5,13 @@ class DateCondition < Condition
     return unless [start_date, end_date].any?(&:present?)
 
     if [start_date, end_date].all?(&:present?)
-      operand = 'is_between'
+      operand = 'between'
       value = [start_date, end_date]
     elsif start_date.present?
-      operand = 'is_after'
+      operand = 'after'
       value = [start_date]
     elsif end_date.present?
-      operand = 'is_before'
+      operand = 'before'
       value = [end_date]
     end
 
@@ -19,11 +19,11 @@ class DateCondition < Condition
   end
 
   def to_sentence
-    if operand.to_s == 'is_between'
+    if operand.to_s == 'between'
       "date is between #{value.first} and #{value.last}"
-    elsif operand.to_s == 'is_after'
+    elsif operand.to_s == 'after'
       "date is after #{value.first}"
-    elsif operand.to_s == 'is_before'
+    elsif operand.to_s == 'before'
       "date is before #{value.first}"
     end
   end

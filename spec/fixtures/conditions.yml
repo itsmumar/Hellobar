@@ -1,16 +1,16 @@
 date_between:
   segment: DateCondition
-  operand: is_between
+  operand: between
   value: <%= [Date.yesterday.strftime("%Y-%m-%d"), Date.tomorrow.strftime("%Y-%m-%d")] %>
 
 date_before:
   segment: DateCondition
-  operand: is_before
+  operand: before
   value: <%= [Date.tomorrow.strftime("%Y-%m-%d")] %>
 
 date_after:
   segment: DateCondition
-  operand: is_after
+  operand: after
   value: <%= [Date.yesterday.strftime("%Y-%m-%d")] %>
 
 url_includes:

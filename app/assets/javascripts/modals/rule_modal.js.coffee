@@ -25,7 +25,7 @@ class @RuleModal extends Modal
 
     for condition, index in completeData.conditions
       condition.index = index
-      condition.is_between = true if condition.operand == 'is_between'
+      condition.is_between = true if condition.operand == 'between'
 
     completeData
 
@@ -151,9 +151,9 @@ class @RuleModal extends Modal
 
   _dateClasses: (operand) ->
     switch operand
-      when 'is_before' then '.end_date.value'
-      when 'is_after' then '.start_date.value'
-      when 'is_between' then '.start_date.value, .end_date.value'
+      when 'before' then '.end_date.value'
+      when 'after' then '.start_date.value'
+      when 'between' then '.start_date.value, .end_date.value'
       else '.start_date.value'
 
   filteredOperands: (segment) ->
@@ -163,8 +163,8 @@ class @RuleModal extends Modal
 
   _operandMapping:
     'DeviceCondition': ['is', 'is_not']
-    'DateCondition': ['is_before', 'is_after', 'is_between']
-    'UrlCondition': ['includes', 'does_not_include']
+    'DateCondition': ['is', 'is_not', 'before', 'after', 'between']
+    'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
 
   _segmentToClassMapping:
     'DeviceCondition': '.device-choice'

@@ -49,9 +49,9 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "UrlCondition" "url"}}
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
-          | {{option operand "is_after" "is after"}}
-          | {{option operand "is_before" "is before"}}
-          | {{option operand "is_between" "is between"}}
+          | {{option operand "after" "is after"}}
+          | {{option operand "before" "is before"}}
+          | {{option operand "between" "is between"}}
           | {{option operand "is" "is"}}
           | {{option operand "is_not" "is not"}}
           | {{option operand "includes" "includes"}}
@@ -69,8 +69,9 @@ script#condition-partial type="text/x-handlebars-template"
           input.url.value name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.select-wrapper.device-choice
           select.device.value name="rule[conditions_attributes][{{index}}][value]"
-            | {{option value "Desktop" "Desktop"}}
-            | {{option value "Mobile" "Mobile"}}
+            | {{option value "mobile" "mobile"}}
+            | {{option value "tablet" "tablet"}}
+            | {{option value "computer" "computer"}}
     | {{#if id}}
     input class="condition-id" name="rule[conditions_attributes][{{index}}][id]" value="{{id}}" type="hidden"
     input.destroy name="rule[conditions_attributes][{{index}}][_destroy]" type="hidden" value="false"
