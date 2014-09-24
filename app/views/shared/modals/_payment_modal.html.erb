@@ -8,8 +8,8 @@
           <%= "Upgrade #{display_url_for_site(current_site)}!" %>
         </div>
 
-        <div class="payment-wrapper">
-          <div class="payment-sidebar {{ package.type }}">
+        <div class="payment-wrapper {{ package.type }}">
+          <div class="payment-sidebar">
             <header>
               {{ package.type }}
               <small>Select Billing</small>
@@ -43,11 +43,12 @@
               <fieldset class="cc-number">
                 <label>Card number</label>
                 <input type="text" placeholder="    -    -    -" />
+                <i class="icon-modal"></i>
               </fieldset>
 
               <fieldset class="cc-expiry">
                 <label>Expiry</label>
-                <input type="text" placeholder="08/216" />
+                <input type="text" placeholder="08/2016" />
               </fieldset>
 
               <fieldset class="cc-csv">

@@ -79,40 +79,6 @@
         font-size: 0.9em
         text-decoration: underline
 
-      /*-----------  Pro  -----------*/
-
-      &.pro
-
-        header
-          background-color: $green
-
-        input:checked + label:before
-          border-color: $green
-          background-color: $green
-
-        > a
-          color: $green
-
-          &:hover
-            color: lighten($green, 5%)
-  
-      /*-----------  Enterprise  -----------*/
-  
-      &.enterprise
-
-        header
-          background-color: $blue
-
-        input:checked + label:before
-          border-color: $blue
-          background-color: $blue
-
-        > a
-          color: $blue
-
-          &:hover
-            color: lighten($blue, 5%)
-
     /*-----------  Payment Form  -----------*/
 
     .payment-form
@@ -144,9 +110,11 @@
             @include antialiased(subpixel-antialiased)
 
           input
+            letter-spacing: 0.05em
             margin-top: 0.33em !important
             margin-bottom: 0em !important
-            border-color: $grayLight !important
+            padding: 0.55em 0.75em !important
+            border: 1px solid $grayLighter !important
             @include placeholder
               color: $grayLighter !important
 
@@ -156,6 +124,17 @@
 
         .cc-number
           width: 62%
+          position: relative
+
+          input
+            padding-left: 3.2em !important
+
+          i
+            left: 12px
+            bottom: 2px
+            color: $grayLighter
+            font-size: 1.25em
+            position: absolute
 
         .cc-expiry
           width: 22%
@@ -172,3 +151,45 @@
           .button
             float: right
             margin-left: 1em
+
+    /*-----------  Pro  -----------*/
+
+    &.pro
+
+      .payment-sidebar 
+
+        header
+          background-color: $green
+
+        input:checked + label:before
+          border-color: $green
+          background-color: $green
+
+        > a
+          color: $green
+
+          &:hover
+            color: lighten($green, 5%)        
+
+    /*-----------  Enterprise  -----------*/
+
+    &.enterprise
+
+      .payment-sidebar 
+
+        header
+          background-color: $blue
+
+        input:checked + label:before
+          border-color: $blue
+          background-color: $blue
+
+        > a
+          color: $blue
+
+          &:hover
+            color: lighten($blue, 5%)
+
+      .button
+        @extend %blue-button
+        
