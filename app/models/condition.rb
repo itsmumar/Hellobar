@@ -1,6 +1,8 @@
 class Condition < ActiveRecord::Base
   self.inheritance_column = 'segment'
 
+  serialize :value
+
   # class name: Hello::Segments::User key
   SEGMENTS = {
     'DateCondition' => 'dt',

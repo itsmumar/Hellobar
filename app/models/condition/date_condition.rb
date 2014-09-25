@@ -1,6 +1,4 @@
 class DateCondition < Condition
-  serialize :value
-
   def self.from_params(start_date, end_date)
     return unless [start_date, end_date].any?(&:present?)
 
