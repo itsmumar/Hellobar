@@ -12,3 +12,11 @@ env = settings_yaml["env_name"] || "edge"
 every 20.minutes, :roles => [:web] do
   script "send_sqs_message #{env} 'hello::tracking::internal_stats_harvester:process_internal_stats'"
 end
+
+every :monday, :at => "8:00am", :roles => [:web] do
+  rake "email_digest:deliver_not_installed"
+end
+
+every :monday, :at => "8:30am", :roles => [:web] do
+  rake "email_digest:deliver_installed"
+end
