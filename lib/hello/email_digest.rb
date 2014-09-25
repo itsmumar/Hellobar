@@ -51,7 +51,7 @@ module Hello::EmailDigest
       initial = data[-16] || [0, 0] # the total views and conversions immediately before the period we're sampling
       last_week = data[-9] || [0, 0]
       last_week = [last_week[0] - initial[0], last_week[1] - initial[1]]
-      this_week = [data[-2][0] - last_week[0], data[-2][1] - last_week[1]]
+      this_week = [data[-2][0] - last_week[0] - initial[0], data[-2][1] - last_week[1] - initial[1]]
 
       {}.tap do |metrics|
         metrics[:views] = {:n => this_week[0]}
