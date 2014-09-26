@@ -28,7 +28,7 @@
     - unless current_user && current_user.temporary?
 
       .button
-        | Upgrade to Pro
+        | Upgrade Plan
 
       img.user-avatar src= gravatar_url_for(current_user)
       span.user-name= display_name_for_user(current_user)
@@ -39,7 +39,7 @@
           = active_link_to 'User Settings', profile_path()
           = content_tag 'a', 'Access Controls'
           = content_tag 'a', 'Payment Info'
-          = content_tag 'a', 'Upgrade to Pro'
+          = content_tag 'a', 'Upgrade Plan'
           - if impersonated_user
             = active_link_to "Stop Impersonation", admin_unimpersonate_user_path, :method => :delete
           - else
