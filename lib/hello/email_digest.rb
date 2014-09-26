@@ -93,7 +93,7 @@ module Hello::EmailDigest
       unsubscribe_url = edit_site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_unsubscribe"))
 
       params = {
-        :site_url => display_url_for_site(site),
+        :site_url => display_name_for_site(site),
         :start_date => 7.days.ago.strftime("%B %-d"),
         :end_date => 1.day.ago.strftime("%B %-d, %Y"),
         :tracking_pixel => tracking_pixel_url(:host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "open", email_name)),
@@ -145,7 +145,7 @@ module Hello::EmailDigest
       install_url = site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_install"))
 
       params = {
-        :site_url => display_url_for_site(site),
+        :site_url => display_name_for_site(site),
         :tracking_pixel => tracking_pixel_url(:host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "open", email_name)),
         :unsubscribe_url => unsubscribe_url,
         :install_url => install_url

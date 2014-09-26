@@ -8,7 +8,7 @@
 - if current_user && current_site
   .header-nav-wrapper
     img.site-avatar src=""
-    span.site-name= display_url_for_site(current_site)
+    span.site-name= display_name_for_site(current_site)
 
     .dropdown-wrapper
       i.icon-dropdown
@@ -20,7 +20,7 @@
             - (current_user.sites - [current_site]).each do |site|
               li
                 img.site-avatar src=""
-                = active_link_to display_url_for_site(site), site_path(site)
+                = active_link_to display_name_for_site(site), site_path(site)
 
         = button_to "Add New Site", new_site_path, :class => "button", :method => :get
 
