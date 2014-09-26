@@ -1,6 +1,7 @@
 #= require jquery
 #= require jquery_ujs
 #= require zeropad.jquery
+#= require jstz-1.0.4.min
 
 #= require color_thief
 #= require jquery_dropper

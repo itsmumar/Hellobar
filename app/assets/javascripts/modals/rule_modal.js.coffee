@@ -95,7 +95,6 @@ class @RuleModal extends Modal
     $condition.find('.choice-wrapper').hide()        # hide the selections by default
     $condition.find('.value').prop('disabled', true) # disable the values by default
 
-
     if conditionData.segment == 'DateCondition'
       datesToShow = @_dateClasses(conditionData.operand)
       $condition.find('.date-choice')

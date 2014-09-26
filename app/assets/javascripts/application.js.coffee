@@ -8,6 +8,7 @@
 #= require amcharts/amcharts
 #= require amcharts/serial
 #= require lib/url_params
+#= require jstz-1.0.4.min
 
 # Couldn't get 'require_tree .' to ignore the dashboard directory, so I opted to indivdually list the local js assets you needed here
 
@@ -35,3 +36,9 @@ $ ->
     unless $(@).hasClass('activated')
       $('.reveal-wrapper.activated').removeClass('activated')
       $(@).addClass('activated')
+
+  # detect user timezone
+  $timezone = $('select#user_timezone')
+  if $timezone.length
+    userTimezone = jstz.determine().name()
+    $timezone.val(userTimezone)

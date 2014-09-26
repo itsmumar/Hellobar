@@ -81,7 +81,7 @@ class SitesController < ApplicationController
   private
 
   def site_params
-    params.require(:site).permit(:url, :opted_in_to_email_digest)
+    params.require(:site).permit(:url, :opted_in_to_email_digest, :timezone)
   end
 
   def load_site
