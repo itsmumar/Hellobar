@@ -24,6 +24,20 @@ describe UserController do
         @user.reload.first_name.should == "Sexton"
         @user.reload.last_name.should == "Hardcastle"
       end
+
+      it 'sets the timezone on all sites when passed in' do
+        put :update, :user => { :first_name => 'Sexton', :last_name => 'Hardcastle', :password => 'asdfffff', :password_confirmation => 'asdfffff', :timezone => 'America/Chicago' }
+
+        @user.sites.reload.map(&:timezone).should == ['America/Chicago', 'America/Chicago']
+      end
+
+      it 'does not override a sites timezone if already set' do
+        @user.sites.first.update_attribute :timezone, 'FIRST'
+
+        put :update, :user => { :first_name => 'Sexton', :last_name => 'Hardcastle', :password => 'asdfffff', :password_confirmation => 'asdfffff', :timezone => 'America/Chicago' }
+
+        @user.sites.reload.map(&:timezone).should == ['FIRST', 'America/Chicago']
+      end
     end
 
     context 'user is temporary' do

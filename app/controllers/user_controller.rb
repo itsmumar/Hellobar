@@ -6,6 +6,8 @@ class UserController < ApplicationController
     if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(:status => User::ACTIVE_STATUS))
       sign_in @user, :bypass => true
 
+      set_timezones_on_sites(@user)
+
       respond_to do |format|
         format.html do
           flash[:success] = "Your settings have been updated."
@@ -27,6 +29,16 @@ class UserController < ApplicationController
   end
 
   private
+
+  def set_timezones_on_sites(user)
+    if params[:user] && params[:user][:timezone]
+      timezone = params[:user][:timezone]
+
+      user.sites.each do |site|
+        site.update_attribute :timezone, timezone unless site.timezone
+      end
+    end
+  end
 
   def can_attempt_update?(user, params)
     # this guard prevents users from activating unless they supply both a password and email
