@@ -36,11 +36,7 @@ class @RuleModal extends Modal
 
   close: ->
     @options.close() if @options.close
-    @$modal.removeClass('show-modal')
-
-    # wait a bit before removing from the DOM
-    setTimeout 500, ->
-      @$modal.remove()
+    super
 
   _bindInteractions: ->
     @_bindSubmit()

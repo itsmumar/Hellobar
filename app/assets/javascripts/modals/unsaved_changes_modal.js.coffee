@@ -14,9 +14,6 @@ class @UnsavedChangesModal extends Modal
 
     super
 
-  close: ->
-    @$modal.remove()
-
   _bindInteractions: (object) ->
     @_bindSaveButton(object)
     @_bindDoNotSaveButton(object)

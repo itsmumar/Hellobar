@@ -15,7 +15,7 @@ class @ContactListModal extends Modal
 
   close: ->
     @options.close(this) if @options.close
-    @$modal.remove()
+    super
 
   open: ->
     @_loadContactList() if @options.loadURL

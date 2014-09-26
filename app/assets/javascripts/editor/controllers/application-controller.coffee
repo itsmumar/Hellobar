@@ -20,18 +20,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   colorPalette: []
 
-  #-----------  Modal Triggers  -----------#
-
-  # Query params are managed by the controller (and no the router)
-  # This defines the acceptable params and toggles the modal property 
-  # used to trigger the modal visibility.
-
-  modal: null
-
-  toggleModal: (->
-    @toggleProperty('isModal')
-  ).observes('modal')
-
 
   #-----------  Element Preview  -----------#
 
@@ -63,7 +51,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
   # Tracks global application states & catches actions
   # (primarily observed by the application-view)
 
-  queryParams: ['modal', 'rule_id']
+  queryParams: ['rule_id']
   isMobile: false
   isFullscreen: false
   saveSubmitted: false

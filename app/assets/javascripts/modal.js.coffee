@@ -1,5 +1,5 @@
 class @Modal
-  
+
   # $modal: jQuery selector of the .modal-wrapper
   constructor: (@$modal) ->
 
@@ -8,13 +8,13 @@ class @Modal
     @_bindCloseEvents(@close)
     @$modal.addClass("show-modal #{@modalName}-modal")
 
-  # closes the modal via CSS and disables all event bindings
   close: ->
     @$modal.removeClass('show-modal')
-           .off() # unbind all modal events
-           .find("*")
-           .off() # unbind all child events
-           .delay(330).removeClass("#{@modalName}-modal")
+
+    # wait a bit before removing from the DOM
+    setTimeout (=>
+      @$modal.remove()
+    ), 500
 
   _bindCloseEvents: (callback) ->
     @_bindEscape(callback)

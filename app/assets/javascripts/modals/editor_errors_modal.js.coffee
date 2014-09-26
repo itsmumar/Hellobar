@@ -8,6 +8,3 @@ class @EditorErrorsModal extends Modal
     @$modal.appendTo($("body"))
 
     super(@$modal)
-
-  close: ->
-    @$modal.remove()
