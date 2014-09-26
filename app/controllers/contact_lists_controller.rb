@@ -14,6 +14,8 @@ class ContactListsController < ApplicationController
   end
 
   def show
+    @other_lists = @site.contact_lists.where.not(:id => @contact_list.id)
+
     respond_to do |format|
       format.html
       format.csv  { redirect_to contact_list_csv_url(@contact_list) }

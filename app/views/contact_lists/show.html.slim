@@ -6,11 +6,12 @@
 .page-header
   .dropdown-wrapper
     h5= @contact_list.name
-    i.icon-dropdown
-    .dropdown-block
-      = content_tag 'a', 'New Products'
-      = content_tag 'a', 'Marketing Advice'
-      = content_tag 'a', 'Monthly Newsletter'
+
+    - if @other_lists.any?
+      i.icon-dropdown
+      .dropdown-block
+        - @other_lists.each do |other_list|
+          = link_to other_list.name, site_contact_list_path(@site, other_list)
 
 .service-block
   .service-icon 
