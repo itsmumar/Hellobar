@@ -31,6 +31,7 @@ unless defined?(Hellobar::Settings)
     data_api_url
     fake_data_api
     script_cdn_url
+    deliver_email_digests
   )
 
   keys.each do |key|

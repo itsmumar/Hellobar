@@ -1,5 +1,7 @@
 namespace :email_digest do
   task :deliver_installed => :environment do
+    return unless Hellobar::Settings[:deliver_email_digests]
+
     Hello::EmailDigest.installed_sites.each do |site|
       next unless user = site.owner
 
@@ -13,6 +15,8 @@ namespace :email_digest do
   end
 
   task :deliver_not_installed => :environment do
+    return unless Hellobar::Settings[:deliver_email_digests]
+
     Hello::EmailDigest.not_installed_sites.each do |site|
       next unless user = site.owner
 
