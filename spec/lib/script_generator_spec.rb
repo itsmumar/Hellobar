@@ -23,6 +23,13 @@ describe ScriptGenerator, '#render' do
     generator.render.should include(expected_string)
   end
 
+  it 'renders the HB_TZ timezone variable' do
+    site.stub timezone: 'America/Chicago'
+    expected_string = "HB_TZ = \"-06:00\";"
+
+    generator.render.should include(expected_string)
+  end
+
   it 'renders the hellobar base file' do
     hellobar_base = File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
 

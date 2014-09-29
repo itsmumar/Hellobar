@@ -38,6 +38,13 @@ class ScriptGenerator < Mustache
     site.write_key
   end
 
+  # returns the sites tz offset as "+/-HH:MM"
+  def site_timezone
+    Time.use_zone(site.timezone) do
+      Time.zone.formatted_offset
+    end
+  end
+
   # To determine if a user is really pro or not in the code
   # we hash their site id with this secret. If it matches
   # the pro_key then the user has pro. If it doesn't match
