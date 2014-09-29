@@ -453,3 +453,90 @@ describe LegacyMigrator, ".migrate_goals_to_contact_lists" do
     LegacyMigrator.migrate_contact_lists
   end
 end
+
+describe LegacyMigrator, '.migrate_site_timezones' do
+  fixtures :all
+
+  let(:legacy_site) { double 'legacy_site', legacy_site_id: 44332211, id: 11223344, base_url: 'http://baller4ever.sho', account_id: 1, created_at: Time.parse('1875-01-30'), updated_at: Time.parse('1875-01-31'), script_installed_at: Time.now, generated_script: Time.now, attempted_generate_script: Time.now }
+  let(:site) { sites(:zombo) }
+
+  before do
+    LegacyMigrator::LegacySite.stub(:find_each).and_yield(legacy_site)
+    Site.stub find: site
+  end
+
+  it "doesnt set a site's timezone if the goals had no timezone" do
+    legacy_goal = double 'legacy goal', data_json: {}
+    LegacyMigrator::LegacyGoal.stub where: [legacy_goal]
+
+    ::Site.should_not_receive(:find)
+
+    LegacyMigrator.migrate_site_timezones
+  end
+
+  it "sets the site's timezone if there is only 1 goal with a timezone" do
+    goal = double 'legacy goal', data_json: { 'dates_timezone' => '(GMT+HH:MM) best timezone evar' }
+    LegacyMigrator::LegacyGoal.stub where: [goal]
+
+    LegacyMigrator.migrate_site_timezones
+
+    site.reload.timezone.should == 'best timezone evar'
+  end
+
+  it "sets the site's timezone if there is only 1 timezone for multiple goals" do
+    goal = double 'legacy goal', data_json: { 'dates_timezone' => '(GMT+HH:MM) best timezone evar' }
+    LegacyMigrator::LegacyGoal.stub where: [goal, goal]
+
+    LegacyMigrator.migrate_site_timezones
+
+    site.reload.timezone.should == 'best timezone evar'
+  end
+
+  it "sets the site's timezone to the first goals timezone for multiple goals" do
+    goal = double 'legacy goal', data_json: { 'dates_timezone' => '(GMT+HH:MM) first timezone' }
+    goal2 = double 'legacy goal', data_json: { 'dates_timezone' => '(GMT+HH:MM) second timezone' }
+    LegacyMigrator::LegacyGoal.stub where: [goal, goal2]
+
+    LegacyMigrator.migrate_site_timezones
+
+    site.reload.timezone.should == 'first timezone'
+
+    LegacyMigrator::LegacyGoal.stub where: [goal2, goal]
+
+    LegacyMigrator.migrate_site_timezones
+
+    site.reload.timezone.should == 'second timezone' # sanity check
+  end
+end
+
+describe LegacyMigrator, '#timezone_for_goal' do
+  let(:goal) { double 'legacy_goal', data_json: {} }
+
+  it 'returns nil if calling #date_json throws an error' do
+    goal.stub(:data_json).and_raise(StandardError)
+
+    LegacyMigrator.timezone_for_goal(goal).should be_nil
+  end
+
+  it 'returns nil if the timezone is nil' do
+    LegacyMigrator.timezone_for_goal(goal).should be_nil
+  end
+
+  it 'returns nil if the timezone is "visitor"' do
+    goal.data_json['dates_timezone'] = 'visitor'
+
+    LegacyMigrator.timezone_for_goal(goal).should be_nil
+  end
+
+  it 'returns nil if the timezone is "false"' do
+    goal.data_json['dates_timezone'] = 'false'
+
+    LegacyMigrator.timezone_for_goal(goal).should be_nil
+  end
+
+  it 'returns the timezone string without the offset' do
+    goal.data_json['dates_timezone'] = '(GMT-06:00) Central Time (US & Canada)'
+
+    LegacyMigrator.timezone_for_goal(goal).should == 'Central Time (US & Canada)'
+  end
+end

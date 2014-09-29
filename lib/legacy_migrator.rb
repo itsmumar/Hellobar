@@ -9,6 +9,7 @@ class LegacyMigrator
       migrate_identities
       migrate_contact_lists
       migrate_goals_to_rules
+      migrate_site_timezones
 
       ActiveRecord::Base.record_timestamps = true
     end
@@ -154,6 +155,29 @@ class LegacyMigrator
           Rails.logger.info "WTF:Legacy Site: #{legacy_id.site_id} doesnt exist for Identity: #{legacy_id.id}"
         end
       end
+    end
+
+    def migrate_site_timezones
+      LegacySite.find_each do |legacy_site|
+        site_id = legacy_site.id
+
+        timezones = LegacyGoal.where(site_id: site_id).map{|goal| timezone_for_goal(goal)}.compact.uniq
+
+        # update the new Site with the first timezone
+        if timezones.length >= 1
+          ::Site.find(site_id).update_attribute :timezone, timezones.first
+        end
+      end
+    end
+
+    # Returns a timezone if applicable. Returns nil for "visitor" and "false"
+    # "(GMT-06:00) Central Time (US & Canada)" => "Central Time (US & Canada)"
+    def timezone_for_goal(goal)
+      timezone = goal.data_json['dates_timezone'] rescue nil
+
+      return nil if timezone == 'visitor' || timezone == 'false' || timezone.nil?
+
+      timezone[12..-1] # timezone is in a standardized format "(GMT+HH:MM) "
     end
 
   private
