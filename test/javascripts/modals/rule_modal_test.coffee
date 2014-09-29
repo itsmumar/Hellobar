@@ -18,23 +18,12 @@ test 'RuleModal constructor properly sets is_between to true for conditions that
       ]
 
   modal = new RuleModal(options)
+  modal.open()
   betweenCondition = modal.ruleData.conditions[0]
   afterCondition = modal.ruleData.conditions[1]
 
   equal betweenCondition.is_between, true, 'properly sets conditions with an "in between operand"'
   equal afterCondition.is_between, undefined, 'does not set between to anything when operand is not in between'
-
-
-test 'RuleModal._dateClasses(operand)', ->
-  expect(3)
-
-  options =
-    ruleData: 'Name'
-  modal = new RuleModal(options)
-
-  equal modal._dateClasses('before'), '.end_date.value'
-  equal modal._dateClasses('after'), '.start_date.value'
-  equal modal._dateClasses('between'), '.start_date.value, .end_date.value'
 
 test 'RuleModal._renderValue($condition)', (assert) ->
   options =
@@ -52,36 +41,17 @@ test 'RuleModal._renderValue($condition)', (assert) ->
   $condition.find('select.condition-segment').val('DeviceCondition').trigger('change')
   equal $condition.find('.device').prop('disabled'), false, 'it enables the device value when the segment is DeviceCondition'
   equal $condition.find('.url').prop('disabled'), true, 'it disables the url value when the segment is DeviceCondition'
-  equal $condition.find('.start_date').prop('disabled'), true, 'it disables the start_date value when the segment is DeviceCondition'
-  equal $condition.find('.end_date').prop('disabled'), true, 'it disables the end_date value when the segment is DeviceCondition'
 
   modal._renderValue($condition, { segment: 'UrlCondition' })
   $condition.find('select.condition-segment').val('UrlCondition').trigger('change')
   equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is UrlCondition'
   equal $condition.find('.url').prop('disabled'), false, 'it enables the url value when the segment is UrlCondition'
-  equal $condition.find('.start_date').prop('disabled'), true, 'it disables the start_date value when the segment is UrlCondition'
-  equal $condition.find('.end_date').prop('disabled'), true, 'it disables the end_date value when the segment is UrlCondition'
 
   modal._renderValue($condition, { segment: 'DateCondition', operand: 'before' })
   $condition.find('select.condition-segment').val('DateCondition').trigger('change')
   $condition.find('select.condition-operand').val('before').trigger('change')
   equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is DateCondition'
   equal $condition.find('.url').prop('disabled'), true, 'it disables the url value when the segment is DateCondition'
-
-  modal._renderValue($condition, { segment: 'DateCondition', operand: 'before' })
-  $condition.find('select.condition-operand').val('before').trigger('change')
-  equal $condition.find('.start_date').prop('disabled'), true, 'it disables the start_date value when the segment is DateCondition and the operand is before'
-  equal $condition.find('.end_date').prop('disabled'), false, 'it enables the end_date value when the segment is DateCondition and the operand is before'
-
-  modal._renderValue($condition, { segment: 'DateCondition', operand: 'after' })
-  $condition.find('select.condition-operand').val('after').trigger('change')
-  equal $condition.find('.start_date').prop('disabled'), false, 'it enables the start_date value when the segment is DateCondition and the operand is after'
-  equal $condition.find('.end_date').prop('disabled'), true, 'it disables the end_date value when the segment is DateCondition and the operand is after'
-
-  modal._renderValue($condition, { segment: 'DateCondition', operand: 'between' })
-  $condition.find('select.condition-operand').val('between').trigger('change')
-  equal $condition.find('.start_date').prop('disabled'), false, 'it enables the start_date value when the segment is DateCondition and the operand is between'
-  equal $condition.find('.end_date').prop('disabled'), false, 'it enables the end_date value when the segment is DateCondition and the operand is between'
 
 module 'RuleModal interactions',
   setup: ->

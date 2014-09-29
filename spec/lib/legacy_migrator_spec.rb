@@ -254,8 +254,8 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
 
       conditions = Rule.find(legacy_goal.id).conditions
 
-      conditions.find{|condition| condition.include_url? }.value.should == 'http://include.com'
-      conditions.find{|condition| !condition.include_url? }.value.should == 'http://exclude.com'
+      conditions.find{|condition| condition.operand == :includes }.value.should == 'http://include.com'
+      conditions.find{|condition| condition.operand == :does_not_include }.value.should == 'http://exclude.com'
     end
 
     it 'creates both a DateRule and a UrlRule for every url present when start_date and include_urls are specified' do

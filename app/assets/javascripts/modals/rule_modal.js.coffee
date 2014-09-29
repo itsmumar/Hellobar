@@ -5,7 +5,8 @@ class @RuleModal extends Modal
   conditionTemplate: -> $('script#condition-partial').html()
 
   constructor: (@options={}) ->
-    @ruleData = @addMetadata(@options.ruleData)
+    @ruleData = @options.ruleData
+    @ruleData.conditions ||= []
     @$modal = @buildModal(@ruleData)
 
   buildModal: (ruleData) ->
@@ -13,21 +14,14 @@ class @RuleModal extends Modal
     template = Handlebars.compile(@ruleModalTemplate())
     $(template(ruleData))
 
-  buildCondition: (conditionData) ->
+  buildCondition: (conditionData, index) ->
+    conditionData.index ||= index
+    conditionData.is_between = true if conditionData.operand == 'between'
+
     template = Handlebars.compile(@conditionTemplate())
     $condition = $(template(conditionData))
     @_updateConditionMarkup($condition, conditionData)
     $condition
-
-  addMetadata: (baseRuleData) ->
-    completeData = $.extend {}, baseRuleData
-    completeData.conditions ||= []
-
-    for condition, index in completeData.conditions
-      condition.index = index
-      condition.is_between = true if condition.operand == 'between'
-
-    completeData
 
   open: ->
     @_renderContent()
@@ -49,8 +43,8 @@ class @RuleModal extends Modal
     ruleModal = this
 
     # render all of the conditions
-    for conditionData in @ruleData.conditions
-      $condition = ruleModal.buildCondition(conditionData)
+    for conditionData, index in @ruleData.conditions
+      $condition = ruleModal.buildCondition(conditionData, index)
       ruleModal._addCondition($condition)
 
     @_toggleNewConditionMessage()
@@ -72,7 +66,7 @@ class @RuleModal extends Modal
         operand: $condition.find('.condition-operand').val()
         value: value
 
-      $updatedCondition = ruleModal.buildCondition(conditionData)
+      $updatedCondition = ruleModal.buildCondition(conditionData, conditionData.index)
 
       # replace the markup of the condition based on new data
       $condition.html($updatedCondition.html())
@@ -95,61 +89,11 @@ class @RuleModal extends Modal
     $condition.find('.choice-wrapper').hide()        # hide the selections by default
     $condition.find('.value').prop('disabled', true) # disable the values by default
 
-    if conditionData.segment == 'DateCondition'
-      datesToShow = @_dateClasses(conditionData.operand)
-      $condition.find('.date-choice')
-                .show()
-                .find('.value')
-                .hide()
-
-      $condition.find(datesToShow)
-                .prop('disabled', false)
-                .show()
-
-      @_formatDates($condition, conditionData)
-    else
-      classToEnable = @_segmentToClassMapping[conditionData.segment]
-      $condition.find(classToEnable)
-                .show()
-                .find('.value')
-                .prop('disabled', false)
-
-  _formatDates: ($condition, conditionData) ->
-    conditionData.value ||= {}
-    datesToShow = @_dateClasses(conditionData.operand)
-
-    if datesToShow.indexOf(',') == -1
-      $condition.find('.and-interjection').remove()
-    else
-      $condition.find('.start_date').after('<span class="and-interjection">and</span>') unless $condition.find('.and-interjection').length
-
-    rawStartDate = conditionData.value.start_date
-    rawEndDate = conditionData.value.end_date
-
-    # date parsing requires slashes
-    rawStartDate = rawStartDate.replace(/\-/g, '/') if rawStartDate
-    rawEndDate = rawEndDate.replace(/\-/g, '/') if rawEndDate
-
-    if rawStartDate
-      startDate = new Date(rawStartDate)
-      paddedStartMonth = $.zeropad startDate.getMonth() + 1
-      paddedStartDate = $.zeropad startDate.getDate()
-      startDateString = "#{startDate.getFullYear()}-#{paddedStartMonth}-#{paddedStartDate}"
-      $condition.find('.start_date').val(startDateString)
-
-    if rawEndDate
-      endDate = new Date(rawEndDate)
-      paddedEndMonth = $.zeropad endDate.getMonth() + 1
-      paddedEndDate = $.zeropad endDate.getDate()
-      endDateString = "#{endDate.getFullYear()}-#{paddedEndMonth}-#{paddedEndDate}"
-      $condition.find('.end_date').val(endDateString)
-
-  _dateClasses: (operand) ->
-    switch operand
-      when 'before' then '.end_date.value'
-      when 'after' then '.start_date.value'
-      when 'between' then '.start_date.value, .end_date.value'
-      else '.start_date.value'
+    classToEnable = @_segmentToClassMapping[conditionData.segment]
+    $condition.find(classToEnable)
+              .show()
+              .find('.value')
+              .prop('disabled', false)
 
   filteredOperands: (segment) ->
     @_validOperands(segment)
@@ -159,11 +103,17 @@ class @RuleModal extends Modal
   _operandMapping:
     'DeviceCondition': ['is', 'is_not']
     'DateCondition': ['is', 'is_not', 'before', 'after', 'between']
+    'NumberOfVisitsCondition': ['is', 'is_not', 'less_than', 'greater_than', 'between']
+    'ReferrerCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'SearchTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
 
   _segmentToClassMapping:
     'DeviceCondition': '.device-choice'
     'DateCondition': '.date-choice'
+    'NumberOfVisitsCondition': '.number-of-visits-choice'
+    'ReferrerCondition': '.referrer-choice'
+    'SearchTermCondition': '.search-term-choice'
     'UrlCondition': '.url-choice'
 
   _renderAlert: (content) ->
@@ -214,7 +164,7 @@ class @RuleModal extends Modal
         segment: 'DeviceCondition'
         operand: 'is'
 
-      $condition = @buildCondition(conditionData)
+      $condition = @buildCondition(conditionData, nextIndex)
 
       @_addCondition($condition)
       @_toggleNewConditionMessage()
@@ -234,9 +184,12 @@ class @RuleModal extends Modal
     @$modal.find('.conditions-wrapper').append($condition.prop('outerHTML'))
 
   _removeCondition: ($condition) ->
-    # set the hidden destroy field to true for Rails to pick up
-    $condition.find('.destroy').val(true)
-    $condition.hide()
+    # if persisted, set the hidden destroy field to true for Rails to pick up
+    if $condition.find('.condition-id').length
+      $condition.find('.destroy').val(true)
+      $condition.hide()
+    else # just remove from DOM
+      $condition.remove()
 
   _toggleNewConditionMessage: ->
     if @$modal.find('.condition-block:visible:not(".no-condition-message")').length == 0

@@ -65,17 +65,17 @@
           input
             margin-top: -1px !important
 
-            &[type='date']
+            &.between
               width: 40%
               margin-top: 1px !important
               padding-top: 0.375em
               padding-bottom: 0.375em
               @include transition(margin-left 0)
 
-            &:not([type='date'])
+            &:not(.between)
               width: 96% !important
 
-          input[type='date']:not([disabled]) ~ input[type='date']:not([disabled])
+          input.between:not([disabled]) ~ input.between:not([disabled])
             margin-left: 4%
 
           .and-interjection

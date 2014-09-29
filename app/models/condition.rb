@@ -1,10 +1,15 @@
 class Condition < ActiveRecord::Base
   self.inheritance_column = 'segment'
 
+  serialize :value
+
   # class name: Hello::Segments::User key
   SEGMENTS = {
-    'DeviceCondition' => 'dv',
     'DateCondition' => 'dt',
+    'DeviceCondition' => 'dv',
+    'NumberOfVisitsCondition' => 'nv',
+    'ReferrerCondition' => 'rf',
+    'SearchTermCondition' => 'st',
     'UrlCondition' => 'pu'
   }
 
@@ -13,10 +18,12 @@ class Condition < ActiveRecord::Base
     after: 'is after',
     before: 'is before',
     between: 'is between',
+    does_not_include: 'does not include',
+    greater_than: 'is greater than',
+    includes: 'includes',
     is: 'is',
     is_not: 'is not',
-    includes: 'includes',
-    does_not_include: 'does not include'
+    less_than: 'is less than'
   }.with_indifferent_access
 
   belongs_to :rule, inverse_of: :conditions
@@ -30,7 +37,11 @@ class Condition < ActiveRecord::Base
   end
 
   def to_sentence
-    "#{segment_data[:name]} #{OPERANDS[operand]} #{value}"
+    if operand.to_s == 'between'
+      "#{segment_data[:name]} is between #{value.first} and #{value.last}"
+    else
+      "#{segment_data[:name]} #{OPERANDS[operand]} #{value}"
+    end
   end
 
   def segment_key

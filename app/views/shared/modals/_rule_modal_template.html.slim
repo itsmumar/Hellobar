@@ -46,6 +46,9 @@ script#condition-partial type="text/x-handlebars-template"
         select class="condition-segment" name="rule[conditions_attributes][{{index}}][segment]"
           | {{option segment "DeviceCondition" "device"}}
           | {{option segment "DateCondition" "date"}}
+          | {{option segment "NumberOfVisitsCondition" "number of visits"}}
+          | {{option segment "ReferrerCondition" "referrer"}}
+          | {{option segment "SearchTermCondition" "search term"}}
           | {{option segment "UrlCondition" "url"}}
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
@@ -56,22 +59,36 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option operand "is_not" "is not"}}
           | {{option operand "includes" "includes"}}
           | {{option operand "does_not_include" "does not include"}}
+          | {{option operand "less_than" "is less than"}}
+          | {{option operand "greater_than" "is greater than"}}
       .rule_conditions_choices
-        .choice-wrapper.date-choice
-          | {{#if is_between}}
-          input.start_date.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value.[0]}}"
-          input.end_date.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value.[1]}}"
-          | {{else}}
-          input.start_date.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value}}"
-          input.end_date.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value}}"
-          | {{/if}}
-        .choice-wrapper.url-choice
-          input.url.value name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.select-wrapper.device-choice
           select.device.value name="rule[conditions_attributes][{{index}}][value]"
             | {{option value "mobile" "mobile"}}
             | {{option value "tablet" "tablet"}}
             | {{option value "computer" "computer"}}
+        .choice-wrapper.date-choice
+          | {{#if is_between}}
+          input.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value.[0]}}"
+          span.and-interjection and
+          input.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value.[1]}}"
+          | {{else}}
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="date" value="{{value}}"
+          | {{/if}}
+        .choice-wrapper.number-of-visits-choice
+          | {{#if is_between}}
+          input.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[0]}}"
+          span.and-interjection and
+          input.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[1]}}"
+          | {{else}}
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="number" value="{{value}}"
+          | {{/if}}
+        .choice-wrapper.referrer-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="url" value="{{value}}"
+        .choice-wrapper.search-term-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        .choice-wrapper.url-choice
+          input.url.value name="rule[conditions_attributes][{{index}}][value]" type="url" value="{{value}}"
     | {{#if id}}
     input class="condition-id" name="rule[conditions_attributes][{{index}}][id]" value="{{id}}" type="hidden"
     input.destroy name="rule[conditions_attributes][{{index}}][_destroy]" type="hidden" value="false"

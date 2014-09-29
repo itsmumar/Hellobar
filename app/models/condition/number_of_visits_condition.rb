@@ -1,0 +1,2 @@
+class NumberOfVisitsCondition < Condition
+end

@@ -1,0 +1,2 @@
+class SearchTermCondition < Condition
+end

@@ -1,0 +1,2 @@
+class ReferrerCondition < Condition
+end
