@@ -95,33 +95,6 @@ class @RuleModal extends Modal
               .find('.value')
               .prop('disabled', false)
 
-    # @_formatDates($condition, conditionData) if conditionData.segment == 'DateCondition'
-
-  # TODO: this is probably broken
-  _formatDates: ($condition, conditionData) ->
-    conditionData.value ||= {}
-
-    rawStartDate = conditionData.value.start_date
-    rawEndDate = conditionData.value.end_date
-
-    # date parsing requires slashes
-    rawStartDate = rawStartDate.replace(/\-/g, '/') if rawStartDate
-    rawEndDate = rawEndDate.replace(/\-/g, '/') if rawEndDate
-
-    if rawStartDate
-      startDate = new Date(rawStartDate)
-      paddedStartMonth = $.zeropad startDate.getMonth() + 1
-      paddedStartDate = $.zeropad startDate.getDate()
-      startDateString = "#{startDate.getFullYear()}-#{paddedStartMonth}-#{paddedStartDate}"
-      $condition.find('.value:first').val(startDateString)
-
-    if rawEndDate
-      endDate = new Date(rawEndDate)
-      paddedEndMonth = $.zeropad endDate.getMonth() + 1
-      paddedEndDate = $.zeropad endDate.getDate()
-      endDateString = "#{endDate.getFullYear()}-#{paddedEndMonth}-#{paddedEndDate}"
-      $condition.find('.value:last').val(endDateString)
-
   filteredOperands: (segment) ->
     @_validOperands(segment)
 
