@@ -77,10 +77,10 @@ describe SitesController do
         site.rules.size.should == 1
       end
 
-      it "redirects to the site's path" do
+      it "redirects to the editor" do
         post :create, :site => { url: 'temporary-site.com' }
 
-        response.should redirect_to site_path(Site.last)
+        response.should redirect_to new_site_site_element_path(Site.last)
       end
     end
   end
