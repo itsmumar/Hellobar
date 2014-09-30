@@ -42,6 +42,59 @@ ActiveRecord::Schema.define(version: 20140925185539) do
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
 
+  create_table "billing_attempts", force: true do |t|
+    t.integer  "bill_id"
+    t.integer  "payment_method_details_id"
+    t.integer  "status"
+    t.string   "response"
+    t.datetime "created_at"
+  end
+
+  add_index "billing_attempts", ["bill_id"], name: "index_billing_attempts_on_bill_id", using: :btree
+  add_index "billing_attempts", ["payment_method_details_id"], name: "index_billing_attempts_on_payment_method_details_id", using: :btree
+
+  create_table "billing_logs", force: true do |t|
+    t.text     "message"
+    t.text     "source_file"
+    t.datetime "created_at"
+    t.integer  "user_id"
+    t.integer  "site_id"
+    t.integer  "subscription_id"
+    t.integer  "payment_method_id"
+    t.integer  "payment_method_details_id"
+    t.integer  "bill_id"
+    t.integer  "billing_attempt_id"
+  end
+
+  add_index "billing_logs", ["bill_id"], name: "index_billing_logs_on_bill_id", using: :btree
+  add_index "billing_logs", ["billing_attempt_id"], name: "index_billing_logs_on_billing_attempt_id", using: :btree
+  add_index "billing_logs", ["created_at"], name: "index_billing_logs_on_created_at", using: :btree
+  add_index "billing_logs", ["payment_method_details_id"], name: "index_billing_logs_on_payment_method_details_id", using: :btree
+  add_index "billing_logs", ["payment_method_id"], name: "index_billing_logs_on_payment_method_id", using: :btree
+  add_index "billing_logs", ["site_id"], name: "index_billing_logs_on_site_id", using: :btree
+  add_index "billing_logs", ["subscription_id"], name: "index_billing_logs_on_subscription_id", using: :btree
+  add_index "billing_logs", ["user_id"], name: "index_billing_logs_on_user_id", using: :btree
+
+  create_table "bills", force: true do |t|
+    t.integer  "subscription_id"
+    t.integer  "status",                                       default: 0
+    t.string   "type"
+    t.decimal  "amount",               precision: 7, scale: 2
+    t.string   "description"
+    t.string   "metadata"
+    t.boolean  "grace_period_allowed",                         default: true
+    t.datetime "bill_at"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "status_set_at"
+    t.datetime "created_at"
+  end
+
+  add_index "bills", ["status", "bill_at"], name: "index_bills_on_status_and_bill_at", using: :btree
+  add_index "bills", ["subscription_id", "status", "bill_at"], name: "index_bills_on_subscription_id_and_status_and_bill_at", using: :btree
+  add_index "bills", ["subscription_id", "type", "bill_at"], name: "index_bills_on_subscription_id_and_type_and_bill_at", using: :btree
+  add_index "bills", ["type", "bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
+
   create_table "conditions", force: true do |t|
     t.integer  "rule_id"
     t.string   "segment",    null: false
@@ -137,6 +190,25 @@ ActiveRecord::Schema.define(version: 20140925185539) do
 
   add_index "internal_reports", ["name"], name: "index_internal_reports_on_name", using: :btree
 
+  create_table "payment_method_details", force: true do |t|
+    t.integer  "payment_method_id"
+    t.string   "type"
+    t.text     "data"
+    t.datetime "created_at"
+  end
+
+  add_index "payment_method_details", ["payment_method_id"], name: "index_payment_method_details_on_payment_method_id", using: :btree
+
+  create_table "payment_methods", force: true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "payment_methods", ["deleted_at"], name: "index_payment_methods_on_deleted_at", using: :btree
+  add_index "payment_methods", ["user_id"], name: "index_payment_methods_on_user_id", using: :btree
+
   create_table "rules", force: true do |t|
     t.integer  "site_id"
     t.datetime "created_at"
@@ -204,6 +276,23 @@ ActiveRecord::Schema.define(version: 20140925185539) do
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
+
+  create_table "subscriptions", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "site_id"
+    t.string   "type"
+    t.integer  "schedule",                                     default: 0
+    t.decimal  "amount",               precision: 7, scale: 2
+    t.integer  "visit_overage"
+    t.integer  "visit_overage_unit"
+    t.decimal  "visit_overage_amount", precision: 5, scale: 2
+    t.datetime "created_at"
+    t.integer  "payment_method_id"
+  end
+
+  add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
+  add_index "subscriptions", ["payment_method_id"], name: "index_subscriptions_on_payment_method_id", using: :btree
+  add_index "subscriptions", ["site_id"], name: "index_subscriptions_on_site_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",       null: false

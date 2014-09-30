@@ -21,3 +21,6 @@ TODO
 
 # Ignore any SQL dumpfiles
 db/*_dump.sql
+
+# Ignore scratch files
+*_scratch.rb

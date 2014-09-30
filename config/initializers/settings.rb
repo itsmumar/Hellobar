@@ -32,6 +32,9 @@ unless defined?(Hellobar::Settings)
     fake_data_api
     script_cdn_url
     deliver_email_digests
+    cybersource_environment
+    cybersource_login
+    cybersource_password
   )
 
   keys.each do |key|

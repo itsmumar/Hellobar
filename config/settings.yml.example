@@ -25,3 +25,6 @@ dynamo_tables:
   bar_current: "env_current"
   bar_prev: "env_previous"
   bar_over_time: "env_over_time"
+cybersource_environment: "test"
+cybersource_login: cybersource-login
+cybersource_password: cybersource-password

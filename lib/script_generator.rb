@@ -34,10 +34,6 @@ class ScriptGenerator < Mustache
     site.id
   end
 
-  def site_write_key
-    site.write_key
-  end
-
   # returns the sites tz offset as "+/-HH:MM"
   def site_timezone
     Time.use_zone(site.timezone) do
@@ -45,36 +41,24 @@ class ScriptGenerator < Mustache
     end
   end
 
-  # To determine if a user is really pro or not in the code
-  # we hash their site id with this secret. If it matches
-  # the pro_key then the user has pro. If it doesn't match
-  # the pro key then they don't have pro. 
-  #
-  # The reason for this obfuscation is just to make it a little
-  # more difficult for a savvy person to add some JS to their site
-  # to automatically get pro
+  # This is used to rename the CSS class for the branding so users can not
+  # create their own CSS easily to target the branding
   def pro_secret
-    is_pro ? real_pro_secret : fake_pro_secret
-  end
-
-  # Every site gets unique secrets
-  # See comments for pro_secret
-  def real_pro_secret
-    unless @real_pro_secret
-      @real_pro_secret = Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url}#{site.id}#{Time.now.to_f}-for-real")
-    end
-    @real_pro_secret
-  end
-
-  # Some random secret
-  # See comments for pro_secret
-  def fake_pro_secret
     Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url.to_s.upcase}#{site.id}#{Time.now.to_f}#{rand(1_000_000)}")
   end
 
-  # See comments for pro_secret
-  def pro_key
-    HMAC::SHA512.hexdigest(pro_secret,"#{site_id}#{site_write_key}")
+  def capabilities
+    {
+      no_b: @site.capabilities.remove_branding?
+    }
+  end
+
+  def capabilities_json
+    capabilities.to_json
+  end
+
+  def site_write_key
+    site.write_key
   end
 
   def hb_backend_host
@@ -82,7 +66,9 @@ class ScriptGenerator < Mustache
   end
 
   def hellobar_base_js
-    File.read "#{Rails.root}/vendor/assets/javascripts/hellobar.base.js"
+    js = File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
+    js.gsub!("var HB_CAP = {};", "var HB_CAP = #{capabilities_json};")
+    js
   end
 
   def hellobar_base_css
@@ -159,7 +145,7 @@ private
   end
 
   def site_element_settings(site_element)
-    settings = %w{ closable show_border background_color border_color button_color font link_color link_style link_text message size target text_color texture }
+    settings = %w{ closable show_border background_color border_color button_color font link_color link_style link_text message size target text_color texture show_branding}
 
     lifetime_totals = @site.lifetime_totals
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
@@ -203,13 +189,5 @@ private
     end
 
     site_elements.map{|element| site_element_settings(element) }
-  end
-
-  protected
-
-  # We don't want to expose this boolean right in the Javascript
-  # so we leave it protected
-  def is_pro
-    false
   end
 end
