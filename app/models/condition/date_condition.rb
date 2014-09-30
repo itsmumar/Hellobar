@@ -1,4 +1,9 @@
 class DateCondition < Condition
+  validates :operand, presence: true,
+                      inclusion: {
+                        in: %w{ is is_not before after between }
+                      }
+
   def self.from_params(start_date, end_date)
     return unless [start_date, end_date].any?(&:present?)
 
