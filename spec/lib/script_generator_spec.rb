@@ -30,7 +30,7 @@ describe ScriptGenerator, '#render' do
     generator.render.should include(expected_string)
   end
 
-  it 'renders the hellobar base file' do
+  xit 'renders the hellobar base file' do
     hellobar_base = File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
 
     generator.render.should include(hellobar_base)
