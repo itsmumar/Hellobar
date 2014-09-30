@@ -25,7 +25,9 @@ test 'RuleModal constructor properly sets is_between to true for conditions that
   equal betweenCondition.is_between, true, 'properly sets conditions with an "in between operand"'
   equal afterCondition.is_between, undefined, 'does not set between to anything when operand is not in between'
 
-test 'RuleModal._renderValue($condition)', (assert) ->
+asyncTest 'RuleModal._renderValue($condition)', (assert) ->
+  expect(6)
+
   options =
     ruleData:
       name: 'Rule name'
@@ -34,24 +36,29 @@ test 'RuleModal._renderValue($condition)', (assert) ->
       ]
 
   modal = new RuleModal(options)
-  $modal = modal.open()
-  $condition = $modal.find('.condition-block:not(".no-condition-message"):first')
 
-  modal._renderValue($condition, { segment: 'DeviceCondition' })
-  $condition.find('select.condition-segment').val('DeviceCondition').trigger('change')
-  equal $condition.find('.device').prop('disabled'), false, 'it enables the device value when the segment is DeviceCondition'
-  equal $condition.find('.url').prop('disabled'), true, 'it disables the url value when the segment is DeviceCondition'
+  modal.$modal.on "open", =>
+    $condition = modal.$modal.find('.condition-block:not(".no-condition-message"):first')
 
-  modal._renderValue($condition, { segment: 'UrlCondition' })
-  $condition.find('select.condition-segment').val('UrlCondition').trigger('change')
-  equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is UrlCondition'
-  equal $condition.find('.url').prop('disabled'), false, 'it enables the url value when the segment is UrlCondition'
+    modal._renderValue($condition, { segment: 'DeviceCondition' })
+    $condition.find('select.condition-segment').val('DeviceCondition').trigger('change')
+    equal $condition.find('.device').prop('disabled'), false, 'it enables the device value when the segment is DeviceCondition'
+    equal $condition.find('.url').prop('disabled'), true, 'it disables the url value when the segment is DeviceCondition'
 
-  modal._renderValue($condition, { segment: 'DateCondition', operand: 'before' })
-  $condition.find('select.condition-segment').val('DateCondition').trigger('change')
-  $condition.find('select.condition-operand').val('before').trigger('change')
-  equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is DateCondition'
-  equal $condition.find('.url').prop('disabled'), true, 'it disables the url value when the segment is DateCondition'
+    modal._renderValue($condition, { segment: 'UrlCondition' })
+    $condition.find('select.condition-segment').val('UrlCondition').trigger('change')
+    equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is UrlCondition'
+    equal $condition.find('.url').prop('disabled'), false, 'it enables the url value when the segment is UrlCondition'
+
+    modal._renderValue($condition, { segment: 'DateCondition', operand: 'before' })
+    $condition.find('select.condition-segment').val('DateCondition').trigger('change')
+    $condition.find('select.condition-operand').val('before').trigger('change')
+    equal $condition.find('.device').prop('disabled'), true, 'it disables the device value when the segment is DateCondition'
+    equal $condition.find('.url').prop('disabled'), true, 'it disables the url value when the segment is DateCondition'
+
+    QUnit.start()
+
+  modal.open()
 
 module 'RuleModal interactions',
   setup: ->
@@ -70,20 +77,22 @@ module 'RuleModal interactions',
 
 asyncTest 'RuleModal closes the modal on a successful form submission event', (assert) ->
   expect(1)
+
   $('.rules-modal').remove()
 
   options =
     ruleData:
       name: 'Name'
       siteId: 1
+
   modal = new RuleModal(options)
-  $modal = modal.open()
 
-  $modal.find('form').submit()
-
-  @modal.$modal.on "ajax-complete", =>
+  modal.$modal.on "open", =>
+    modal.$modal.find('form').submit()
     equal $('.rules-modal .show-modal').length, 0, 'removes the modal from the DOM after form submission'
     start()
+
+  modal.open()
 
 module 'RuleModal filtering out operands'
 

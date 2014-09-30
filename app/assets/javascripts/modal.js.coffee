@@ -6,7 +6,11 @@ class @Modal
   # renders the modal via CSS
   open: ->
     @_bindCloseEvents(@close)
-    @$modal.addClass("show-modal #{@modalName}-modal")
+
+    setTimeout (=>
+      @$modal.addClass("show-modal #{@modalName}-modal")
+      @$modal.trigger("open")
+    ), 0
 
   close: ->
     @$modal.removeClass('show-modal')
