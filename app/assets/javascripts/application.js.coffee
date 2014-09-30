@@ -38,7 +38,7 @@ $ ->
       $(@).addClass('activated')
 
   # detect user timezone
-  $timezone = $('select#user_timezone')
-  if $timezone.length
+  if $('#detect_timezone').length
+    $timezone = $('#site_timezone, #user_timezone')
     userTimezone = jstz.determine().name()
     $timezone.val(userTimezone)

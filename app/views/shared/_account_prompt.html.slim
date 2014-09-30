@@ -4,5 +4,6 @@
   input type='email' placeholder='Your Email Address' name="user[email]"
   input type='password' placeholder='Password' name="user[password]"
   = select 'user', 'timezone', ActiveSupport::TimeZone.all.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
+  = hidden_field_tag :detect_timezone, disabled: true
 
   input type="submit" class="button" value="Done"
