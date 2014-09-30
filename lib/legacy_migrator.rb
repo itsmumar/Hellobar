@@ -58,7 +58,12 @@ class LegacyMigrator
               rule.conditions << new_condition
             end
 
-            create_site_elements(legacy_goal.bars, legacy_goal).each do |new_bar|
+            if existing = existing_rule(rule)
+              rule.destroy
+              rule = existing
+            end
+
+            create_site_elements(legacy_goal.bars, legacy_goal, rule).each do |new_bar|
               rule.site_elements << new_bar
             end
 
@@ -81,6 +86,11 @@ class LegacyMigrator
 
       # lets avoid ID collisions with legacy goals
       sites_needing_rules.each{|site| site.create_default_rule }
+    end
+
+    # a rule for site which already exists and has same conditions
+    def existing_rule(rule)
+      rule.site.rules.find { |r| rule.same_as?(r) && rule != r }
     end
 
     def migrate_contact_lists
@@ -215,7 +225,7 @@ class LegacyMigrator
       new_conditions
     end
 
-    def create_site_elements(legacy_bars, legacy_goal)
+    def create_site_elements(legacy_bars, legacy_goal, rule)
       legacy_bars.map do |legacy_bar|
         setting_keys = ["buffer_message", "buffer_url", "collect_names", "link_url", "message_to_tweet", "pinterest_description", "pinterest_full_name", "pinterest_image_url", "pinterest_url", "pinterest_user_url", "twitter_handle", "url", "url_to_like", "url_to_plus_one", "url_to_share", "url_to_tweet", "use_location_for_url"]
         settings_to_migrate = legacy_goal.data_json.select{|key, value| setting_keys.include?(key) && value.present? }
@@ -226,7 +236,7 @@ class LegacyMigrator
                       created_at: legacy_bar.created_at.utc,
                       updated_at: legacy_bar.updated_at.utc,
                       target_segment: legacy_bar.target_segment,
-                      rule_id: legacy_bar.goal_id,
+                      rule_id: rule.id,
                       closable: legacy_bar.settings_json['closable'],
                       show_border: legacy_bar.settings_json['show_border'],
                       background_color: legacy_bar.settings_json['bar_color'],

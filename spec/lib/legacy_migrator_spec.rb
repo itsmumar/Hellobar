@@ -164,6 +164,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
   let(:legacy_bar) { double 'legacy_bar', legacy_bar_id: 123, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: legacy_goal.id, settings_json: bar_settings }
 
   before do
+    Rule.destroy_all
     legacy_goal.stub bars: [legacy_bar]
     Site.stub(:find_each).and_yield(site)
     LegacyMigrator::LegacyGoal.stub where: [legacy_goal]
@@ -185,7 +186,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
 
     it 'creates a new rule for every legacy goal that exists' do
       legacy_goal2 = legacy_goal.clone
-      legacy_goal2 = double 'legacy_goal', id: 54321, site_id: legacy_site.id, data_json: {}, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1
+      legacy_goal2 = double 'legacy_goal', id: 54321, site_id: legacy_site.id, data_json: {}, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1, data_json: {'start_date' => '01/01/2014'}
       legacy_bar2 = double 'legacy_bar', legacy_bar_id: 314, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: legacy_goal.id, settings_json: bar_settings
       legacy_goal2.stub bars: [legacy_bar2]
 
@@ -286,6 +287,41 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
       rule = Rule.find(legacy_goal.id)
 
       rule.name.should == 'Rule 1'
+    end
+
+    context "combining goals into the same rule" do
+      let(:legacy_bar2) { double('legacy_bar', legacy_bar_id: 1234, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: legacy_goal.id, settings_json: bar_settings) }
+      let(:legacy_goal2) {  double('legacy_goal', id: 12346, site_id: legacy_site.id, data_json: {}, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1, bars: [legacy_bar2]) }
+
+      before do
+        LegacyMigrator::LegacyGoal.stub where: [legacy_goal, legacy_goal2]
+      end
+
+      it "merges goals when the conditions match" do
+        data = { 'exclude_urls' => ['http://exclude.com'], 'start_date' => '01/01/2014' }
+        legacy_goal.stub data_json: data
+        legacy_goal2.stub data_json: data
+
+        LegacyMigrator.migrate_goals_to_rules
+
+        rules = Rule.where(:id => [legacy_goal.id, legacy_goal2.id])
+
+        rules.count.should == 1
+        rules.first.site_elements.count.should == 2
+      end
+
+      it "does not merge goals when the conditions are different" do
+        legacy_goal.stub data_json: { 'exclude_urls' => ['http://exclude.com'] }
+        legacy_goal2.stub data_json: { 'start_date' => '01/01/2014' }
+
+        LegacyMigrator.migrate_goals_to_rules
+
+        rules = Rule.where(:id => [legacy_goal.id, legacy_goal2.id])
+
+        rules.count.should == 2
+        rules[0].site_elements.count.should == 1
+        rules[1].site_elements.count.should == 1
+      end
     end
   end
 
