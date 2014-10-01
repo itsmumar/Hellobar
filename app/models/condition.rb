@@ -29,11 +29,13 @@ class Condition < ActiveRecord::Base
   belongs_to :rule, inverse_of: :conditions
 
   validates :rule, association_exists: true
+  validates :value, presence: true
+  validate :value_is_valid
 
   def operand
     value = read_attribute(:operand)
 
-    value.to_sym if value
+    value.to_s if value
   end
 
   def to_sentence
@@ -50,5 +52,15 @@ class Condition < ActiveRecord::Base
 
   def segment_data
     Hello::Segments::User.find { |s| s[:key] == segment_key } || {}
+  end
+
+  private
+
+  def value_is_valid
+    if operand == 'between'
+      errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2
+    else
+      errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
+    end
   end
 end
