@@ -162,6 +162,7 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
   let(:legacy_site) { double 'legacy_site', id: 123 }
   let(:bar_settings) { { 'message' => 'goes here' } }
   let(:legacy_bar) { double 'legacy_bar', legacy_bar_id: 123, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: legacy_goal.id, settings_json: bar_settings }
+  let(:mobile_bar) { double 'legacy_bar', target_segment: nil, settings_json: { 'target' => 'dv:mobile' }}
 
   before do
     Rule.destroy_all
@@ -321,6 +322,47 @@ describe LegacyMigrator, '.migrate_goals_to_rules' do
         rules.count.should == 2
         rules[0].site_elements.count.should == 1
         rules[1].site_elements.count.should == 1
+      end
+    end
+
+    context 'when the goal has a bar that is targeted to mobile users' do
+      let(:legacy_goal) { double 'legacy_goal', id: 12345, site_id: legacy_site.id, data_json: { 'start_date' => '01/01/2012' }, created_at: Time.parse('2000-01-31'), updated_at: Time.now, type: "Goals::DirectTraffic", priority: 1 }
+      let(:mobile_bar) { double('legacy_bar', legacy_bar_id: 1234, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:mobile', goal_id: legacy_goal.id, settings_json: {}) }
+      let(:non_mobile_bar) { double('legacy_bar', legacy_bar_id: 1235, active?: true, created_at: Time.parse('2001-09-11'), updated_at: Time.now, target_segment: 'dv:computer', goal_id: legacy_goal.id, settings_json: {}) }
+
+      before do
+        Rule.destroy_all
+        Site.stub(:find_each).and_yield(site)
+        LegacyMigrator::LegacyGoal.stub where: [legacy_goal]
+        legacy_goal.stub bars: [mobile_bar, non_mobile_bar]
+      end
+
+      it 'only creates 1 rule if there is only 1 mobile bar' do
+        legacy_goal.stub bars: [mobile_bar]
+
+        expect {
+          LegacyMigrator.migrate_goals_to_rules
+        }.to change(Rule, :count).by(1)
+      end
+
+      it 'creates 2 rules when there are both mobile and non mobile bars' do
+        expect {
+          LegacyMigrator.migrate_goals_to_rules
+        }.to change(Rule, :count).by(2)
+      end
+
+      it 'sets the non-mobile rule ID to the legacy goal ID when both mobile and non-mobile rules are created' do
+        LegacyMigrator.migrate_goals_to_rules
+
+        Rule.find(legacy_goal.id).conditions.size.should == 1
+      end
+
+      it 'adds the device condition to the mobile rule' do
+        legacy_goal.stub bars: [mobile_bar]
+
+        LegacyMigrator.migrate_goals_to_rules
+
+        Rule.find(legacy_goal.id).conditions.size.should == 2
       end
     end
   end
@@ -538,5 +580,25 @@ describe LegacyMigrator, '#timezone_for_goal' do
     goal.data_json['dates_timezone'] = '(GMT-06:00) Central Time (US & Canada)'
 
     LegacyMigrator.timezone_for_goal(goal).should == 'Central Time (US & Canada)'
+  end
+end
+
+describe LegacyMigrator, '#bar_is_mobile?' do
+  it 'returns true if legacy bar#target_segment equals the mobile code' do
+    legacy_bar = double 'legacy_bar', target_segment: 'dv:mobile'
+
+    LegacyMigrator.bar_is_mobile?(legacy_bar).should be_true
+  end
+
+  it 'returns true if legacy bar has a mobile json setting' do
+    legacy_bar = double 'legacy_bar', target_segment: nil, settings_json: { 'target' => 'dv:mobile' }
+
+    LegacyMigrator.bar_is_mobile?(legacy_bar).should be_true
+  end
+
+  it 'returns false if both legacy bar#target_segment and no mobile json setting is set' do
+    legacy_bar = double 'legacy_bar', target_segment: nil, settings_json: {}
+
+    LegacyMigrator.bar_is_mobile?(legacy_bar).should be_false
   end
 end

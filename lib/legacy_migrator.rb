@@ -37,45 +37,78 @@ class LegacyMigrator
       end
     end
 
+    def create_rule(id, is_mobile, site, legacy_goal, legacy_bars)
+      rule = ::Rule.create! id: id,
+                            site_id: site.id,
+                            name: 'Everyone', # may be renamed later depending on # of conditions
+                            priority: legacy_goal.priority,
+                            match: Rule::MATCH_ON[:all],
+                            created_at: legacy_goal.created_at.utc,
+                            updated_at: legacy_goal.updated_at.utc
+
+
+      create_conditions(rule, legacy_goal).each do |new_condition|
+        rule.conditions << new_condition
+      end
+
+      # add the mobile condition if the rule is mobile
+      DeviceCondition.create!(operand: 'is', value: 'mobile', rule: rule) if is_mobile
+
+      if existing = existing_rule(rule)
+        rule.destroy
+        rule = existing
+      end
+
+      # create site elements
+      create_site_elements(legacy_bars, legacy_goal, rule).each do |new_bar|
+        rule.site_elements << new_bar
+      end
+
+      rule
+    end
+
     def migrate_goals_to_rules
-      count = 0
+      goal_count = 0
 
       sites_needing_rules = []
+      mobile_rules_to_create_later = []
 
       ::Site.find_each do |site|
         legacy_goals = LegacyGoal.where(site_id: site.id)
 
         if legacy_goals.present?
           legacy_goals.each do |legacy_goal|
-            rule = ::Rule.create! id: legacy_goal.id,
-                                  site_id: site.id,
-                                  name: 'Everyone', # may be renamed later depending on # of conditions
-                                  priority: legacy_goal.priority,
-                                  match: Rule::MATCH_ON[:all],
-                                  created_at: legacy_goal.created_at.utc,
-                                  updated_at: legacy_goal.updated_at.utc
+            mobile_bars, non_mobile_bars = legacy_goal.bars.partition{|bar| bar_is_mobile?(bar) }
 
-            create_conditions(rule, legacy_goal).each do |new_condition|
-              rule.conditions << new_condition
+            # create the mobile, non-mobile, or both Rules, conditions, site elements
+            if mobile_bars.present? && non_mobile_bars.present?
+              # create a non-mobile rule and give it the legacy_goal ID
+              create_rule(legacy_goal.id, false, site, legacy_goal, non_mobile_bars)
+              # create a mobile rule w/ auto-incrementing ID and add a mobile condition
+              mobile_rules_to_create_later << { site: site, legacy_goal: legacy_goal, mobile_bars: mobile_bars }
+            elsif mobile_bars.present?
+              # create a rule and add the mobile condition
+              create_rule(legacy_goal.id, true, site, legacy_goal, mobile_bars)
+            else
+              # create a rule with the legacy goal ID
+              create_rule(legacy_goal.id, false, site, legacy_goal, non_mobile_bars)
             end
 
-            if existing = existing_rule(rule)
-              rule.destroy
-              rule = existing
-            end
-
-            create_site_elements(legacy_goal.bars, legacy_goal, rule).each do |new_bar|
-              rule.site_elements << new_bar
-            end
-
-            count += 1
-            puts "Migrated #{count} goals to rules" if count % 100 == 0
+            goal_count += 1
+            puts "Migrated #{goal_count} goals to rules" if goal_count % 100 == 0
           end
         else # site has no rules so add them to the collection
           sites_needing_rules << site
         end
+      end
 
-        # rename rules if we need to based on the # of conditions
+      # creating mobile rules later to avoid ID collisions
+      mobile_rules_to_create_later.each do |data|
+        create_rule(nil, true, data[:site], data[:legacy_goal], data[:mobile_bars])
+      end
+
+      # rename rules if we need to based on the # of conditions
+      ::Site.find_each do |site|
         site.rules.includes(:conditions).each do |rule|
           rule_count = 1
           unless rule.conditions.size.zero?
@@ -92,6 +125,12 @@ class LegacyMigrator
     # a rule for site which already exists and has same conditions
     def existing_rule(rule)
       rule.site.rules.find { |r| rule.same_as?(r) && rule != r }
+    end
+
+    # returns true/false if the bar is targeting mobile users
+    def bar_is_mobile?(bar)
+      bar.target_segment == 'dv:mobile' ||
+        bar.settings_json['target'] == 'dv:mobile'
     end
 
     def migrate_contact_lists
