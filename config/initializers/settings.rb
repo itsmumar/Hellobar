@@ -4,37 +4,37 @@ unless defined?(Hellobar::Settings)
   config = {}
 
   keys = %w(
-    twilio_user
-    twilio_password
-    host
-    recaptcha_public_key
-    recaptcha_private_key
-    sendgrid_password
-    grand_central_api_key
-    grand_central_api_secret
+    aweber_app_id
+    aweber_consumer_key
+    aweber_consumer_secret
     aws_access_key_id
     aws_secret_access_key
-    s3_bucket
-    tracking_host
-    env_name
-    process_synchronously
-    store_site_scripts_locally
-    aweber_app_id
-    aweber_consumer_secret
-    aweber_consumer_key
-    createsend_client_id
-    createsend_secret
     constantcontact_app_key
     constantcontact_app_secret
-    mailchimp_client_id
-    mailchimp_secret
-    data_api_url
-    fake_data_api
-    script_cdn_url
-    deliver_email_digests
+    createsend_client_id
+    createsend_secret
     cybersource_environment
     cybersource_login
     cybersource_password
+    data_api_url
+    deliver_email_digests
+    env_name
+    fake_data_api
+    grand_central_api_key
+    grand_central_api_secret
+    host
+    mailchimp_client_id
+    mailchimp_secret
+    process_synchronously
+    recaptcha_private_key
+    recaptcha_public_key
+    s3_bucket
+    script_cdn_url
+    sendgrid_password
+    store_site_scripts_locally
+    tracking_host
+    twilio_password
+    twilio_user
   )
 
   keys.each do |key|
