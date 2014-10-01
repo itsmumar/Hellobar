@@ -2,8 +2,8 @@ source "https://rubygems.org"
 
 gem "abanalyzer"
 gem "active_link_to",            "~> 1.0.2"
-gem "activemerchant",            "~> 1.44.1"
 gem "active_model_serializers",  "~> 0.8.1"
+gem "activemerchant",            "~> 1.44.1"
 gem "addressable",               "~> 2.3.6", :require => "addressable/uri"
 gem "avatar",                    "~> 0.2.0"
 gem "aweber",                    "~> 1.6.1"
@@ -63,17 +63,17 @@ group :development, :test do
   gem "debugger"
   gem "metric_fu"
   gem "minitest"
-  gem "rspec-rails", "~> 2.14"
-  gem "teaspoon", "~> 0.8.0"
-  gem "simplecov", "~> 0.7.1"
   gem "pry"
+  gem "rspec-rails", "~> 2.14"
+  gem "simplecov", "~> 0.7.1"
+  gem "teaspoon", "~> 0.8.0"
 end
 
 group :test do
+  gem "database_cleaner", '~> 1.3'
+  gem "fivemat"
   gem "timecop"
   gem "vcr"
   gem "webmock"
   gem "zonebie", "~> 0.5.1"
-  gem "database_cleaner", '~> 1.3'
-  gem "fivemat"
 end
