@@ -13,6 +13,11 @@ describe Site do
     @site.owner.should == users(:joey)
   end
 
+  it "#is_free? is true initially" do
+    site = Site.new
+    site.is_free?.should be_true
+  end
+
   describe "url formatting" do
     it "adds the protocol if not present" do
       site = Site.new(:url => "zombo.com")

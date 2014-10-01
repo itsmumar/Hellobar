@@ -80,6 +80,10 @@ class Site < ActiveRecord::Base
     self.subscriptions.last
   end
 
+  def is_free?
+    capabilities.is_a?(Subscription::Free::Capabilities)
+  end
+
   def capabilities(clear_cache=false)
     @capabilities = nil if clear_cache
 
