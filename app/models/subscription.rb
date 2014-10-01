@@ -53,9 +53,9 @@ class Subscription < ActiveRecord::Base
     unless self.persisted?
       values = self.class.values_for(self.site)
       self.amount ||= self.monthly? ? values[:monthly_amount] : values[:yearly_amount]
-      self._visit_overage ||= values[:visit_overage]
-      self._visit_overage_unit ||= values[:visit_overage_unit]
-      self._visit_overage_amount ||= values[:visit_overage_amount]
+      self.visit_overage ||= values[:visit_overage]
+      self.visit_overage_unit ||= values[:visit_overage_unit]
+      self.visit_overage_amount ||= values[:visit_overage_amount]
     end
   end
 
@@ -90,15 +90,15 @@ class Subscription < ActiveRecord::Base
     end
 
     def visit_overage
-      @subscription ? @subscription._visit_overage : parent_class.values_for(@site)[:visit_overage]
+      @subscription ? @subscription.visit_overage : parent_class.values_for(@site)[:visit_overage]
     end
 
     def visit_overage_unit
-      @subscription ? @subscription._visit_overage_unit : parent_class.values_for(@site)[:visit_overage_unit]
+      @subscription ? @subscription.visit_overage_unit : parent_class.values_for(@site)[:visit_overage_unit]
     end
 
     def visit_overage_amount
-      @subscription ? @subscription._visit_overage_amount : parent_class.values_for(@site)[:visit_overage_amount]
+      @subscription ? @subscription.visit_overage_amount : parent_class.values_for(@site)[:visit_overage_amount]
     end
 
     protected

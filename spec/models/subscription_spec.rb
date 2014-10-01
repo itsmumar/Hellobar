@@ -19,11 +19,11 @@ end
 describe Subscription do
   include SubscriptionHelper
   it "should set defaults if not set" do
-    Subscription::Pro.create._visit_overage.should == Subscription::Pro.defaults[:visit_overage]
+    Subscription::Pro.create.visit_overage.should == Subscription::Pro.defaults[:visit_overage]
   end
 
   it "should not override values set with defaults" do
-    Subscription::Pro.create(:_visit_overage=>3)._visit_overage.should == 3
+    Subscription::Pro.create(:visit_overage=>3).visit_overage.should == 3
   end
 
   it "should default to monthly schedule" do
@@ -101,7 +101,7 @@ describe Subscription do
     end
 
     it "should let you override the visit_overage for the plan" do
-      Subscription::Pro.create(_visit_overage: 3).capabilities.visit_overage.should == 3
+      Subscription::Pro.create(visit_overage: 3).capabilities.visit_overage.should == 3
     end
 
     describe Subscription::ProblemWithPayment do
@@ -110,7 +110,7 @@ describe Subscription do
       end
 
       it "should not let you override the visit_overage for the plan" do
-        Subscription::ProblemWithPayment.create(_visit_overage: 3).capabilities.visit_overage.should == Subscription::Free.defaults[:visit_overage]
+        Subscription::ProblemWithPayment.create(visit_overage: 3).capabilities.visit_overage.should == Subscription::Free.defaults[:visit_overage]
       end
     end
   end

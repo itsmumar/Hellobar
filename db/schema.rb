@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140925185539) do
+ActiveRecord::Schema.define(version: 20141001034606) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -92,6 +92,8 @@ ActiveRecord::Schema.define(version: 20140925185539) do
 
   add_index "bills", ["status", "bill_at"], name: "index_bills_on_status_and_bill_at", using: :btree
   add_index "bills", ["subscription_id", "status", "bill_at"], name: "index_bills_on_subscription_id_and_status_and_bill_at", using: :btree
+  add_index "bills", ["subscription_id", "type", "bill_at"], name: "index_bills_on_subscription_id_and_type_and_bill_at", using: :btree
+  add_index "bills", ["type", "bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
 
   create_table "conditions", force: true do |t|
     t.integer  "rule_id"
@@ -279,11 +281,11 @@ ActiveRecord::Schema.define(version: 20140925185539) do
     t.integer  "user_id"
     t.integer  "site_id"
     t.string   "type"
-    t.integer  "schedule",                                      default: 0
-    t.decimal  "amount",                precision: 7, scale: 2
-    t.integer  "_visit_overage"
-    t.integer  "_visit_overage_unit"
-    t.decimal  "_visit_overage_amount", precision: 5, scale: 2
+    t.integer  "schedule",                                     default: 0
+    t.decimal  "amount",               precision: 7, scale: 2
+    t.integer  "visit_overage"
+    t.integer  "visit_overage_unit"
+    t.decimal  "visit_overage_amount", precision: 5, scale: 2
     t.datetime "created_at"
     t.integer  "payment_method_id"
   end
