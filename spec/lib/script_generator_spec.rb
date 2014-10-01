@@ -30,12 +30,6 @@ describe ScriptGenerator, '#render' do
     generator.render.should include(expected_string)
   end
 
-  xit 'renders the hellobar base file' do
-    hellobar_base = File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
-
-    generator.render.should include(hellobar_base)
-  end
-
   it 'includes the minified hellobar css' do
     generator.stub :hellobar_container_css
     hellobar_css = File.read("#{Rails.root}/vendor/assets/stylesheets/hellobar_script.css")
