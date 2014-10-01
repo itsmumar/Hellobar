@@ -37,7 +37,6 @@ gem "omniauth-createsend",       "~> 1.0"
 gem "omniauth-mailchimp",        "~> 1.0",   :github => "floomoon/omniauth-mailchimp"
 gem "paranoia",                  "~> 2.0"
 gem "pony",                      "~> 1.8"
-gem "pry"
 gem "psych",                     "~> 2.0.5"
 gem "rails",                     "4.1.5"
 gem "rb-readline",               "~> 0.5.1"
@@ -67,6 +66,7 @@ group :development, :test do
   gem "rspec-rails", "~> 2.14"
   gem "teaspoon", "~> 0.8.0"
   gem "simplecov", "~> 0.7.1"
+  gem "pry"
 end
 
 group :test do
