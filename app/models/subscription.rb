@@ -81,7 +81,7 @@ class Subscription < ActiveRecord::Base
       false
     end
 
-    def max_rules
+    def max_site_elements
       10
     end
 
@@ -163,7 +163,7 @@ class Subscription < ActiveRecord::Base
         true
       end
 
-      def max_rules
+      def max_site_elements
         false
       end
 
