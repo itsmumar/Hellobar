@@ -23,6 +23,7 @@
 #= require_tree ./templates
 #= require ./../modal
 #= require_tree ./../modals
+#= require ./../upgrade_modal_initializer
 
 #= require ./router
 

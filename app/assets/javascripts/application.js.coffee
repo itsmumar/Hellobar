@@ -27,6 +27,7 @@
 #= require improve
 #= require sites_controller
 #= require site_elements_controller
+#= require upgrade_modal_initializer
 #= require_self
 
 $ ->
@@ -42,8 +43,3 @@ $ ->
     $timezone = $('#site_timezone, #user_timezone')
     userTimezone = jstz.determine().name()
     $timezone.val(userTimezone)
-
-  # Upgrade Account Modal
-  $("#upgrade-account").click (e) ->
-    new UpgradeAccountModal().open()
-

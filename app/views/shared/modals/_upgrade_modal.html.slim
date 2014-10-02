@@ -7,8 +7,8 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
       i.icon-close
 
       form.upgrade-account-modal
-  
-        .site-title= "Upgrade #{display_url_for_site(current_site)}!"
+
+        .site-title= "Upgrade #{display_name_for_site(current_site)}!"
 
         .billing-options
           input id='monthly-billing' type='radio' name='billing' value='monthly'
@@ -37,7 +37,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
         .package-block.pro
           .package-title
             .package-name Pro
-            .package-price.monthly $15/mo    
+            .package-price.monthly $15/mo
             .package-price.annually $12.5/mo
 
           .package-features
@@ -76,7 +76,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
         .package-block.enterprise
           .package-title
             .package-name Enterprise
-            .package-price.monthly $99/mo    
+            .package-price.monthly $99/mo
             .package-price.annually $83.3/mo
 
           .package-features

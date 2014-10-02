@@ -27,7 +27,6 @@ html
     = render "shared/modals/upgrade_modal"
     = render "shared/modals/payment_modal"
 
-
 javascript:
   var currentUser = #{{UserSerializer.new(current_user).to_json}};
   var siteID = "#{@site.try(:id)}";

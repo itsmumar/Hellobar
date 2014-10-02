@@ -5,7 +5,7 @@
 
       <form class="payment-modal">
         <div class="site-title">
-          <%= "Upgrade #{display_url_for_site(current_site)}!" %>
+          <%= "Upgrade #{display_name_for_site(current_site)}!" %>
         </div>
 
         <div class="payment-wrapper {{ package.type }}">
@@ -15,12 +15,21 @@
               <small>Select Billing</small>
             </header>
             <div class="package-cycle">
+              {{#if isAnnual}}
               <input type="radio" id="monthly-billing" name="billing" value="monthly" />
+              {{else}}
+              <input type="radio" id="monthly-billing" name="billing" value="monthly" checked />
+              {{/if}}
+
               <label for="monthly-billing">
                 Monthly
                 <small>$15 Per Month</small>
               </label>
+              {{#if isAnnual}}
+              <input type="radio" id="anually-billing" name="billing" value="anually" checked />
+              {{else}}
               <input type="radio" id="anually-billing" name="billing" value="anually" />
+              {{/if}}
               <label for="anually-billing">
                 Annually
                 <small>$150 Per Year <strong>Save 15%</strong></small>
@@ -33,7 +42,7 @@
             <header>Billing Information</header>
 
             <div class="credit-card">
-              <p>This will upgrade ONLY site "<%= display_url_for_site(current_site) %>" to {{ package.type }}. Each site will need to be upgraded seperately to gain {{ package.type }} features.
+              <p>This will upgrade ONLY site "<%= display_name_for_site(current_site) %>" to {{ package.type }}. Each site will need to be upgraded seperately to gain {{ package.type }} features.
 
               <fieldset class="cc-name">
                 <label>Name on card</label>

@@ -6,7 +6,7 @@ class Subscription < ActiveRecord::Base
   belongs_to :site
   belongs_to :payment_method
   enum schedule: [:monthly, :yearly]
-  has_many :bills, ->{order "id"}
+  has_many :bills, -> {order "id"}
 
   class << self
     def values_for(site)
