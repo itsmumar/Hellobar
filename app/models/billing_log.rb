@@ -66,6 +66,3 @@ module BillingAuditTrail
     @auditor
   end
 end
-
-# Now add the audit trail to all relevant classes
-User.include(BillingAuditTrail)

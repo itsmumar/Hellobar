@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include BillingAuditTrail
   has_many :site_memberships, dependent: :destroy
   has_many :sites, through: :site_memberships
 
