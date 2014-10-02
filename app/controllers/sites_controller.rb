@@ -23,6 +23,7 @@ class SitesController < ApplicationController
   end
 
   def show
+    flash[:error] = 'checking this out'
     session[:current_site] = @site.id
 
     @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, 30, :force => is_page_refresh?)

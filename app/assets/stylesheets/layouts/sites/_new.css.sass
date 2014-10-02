@@ -2,26 +2,26 @@
 
 #sites-new,
 #sites-create
-  top: 0
-  width: 100%
-  position: absolute
   text-align: center
-  background-color: transparent
 
-  form
-    width: 40%
-    margin: 5em auto 2em
+  form.new_site
+    width: 50%
     padding: 2.75em
+    margin: 4.5em auto 2em
     border-radius: $radiusLg
-    background-color: $white
+    background-color: $grayLightest
 
     h1
       margin-top: -0.1em
       margin-bottom: 0.5em
   
-    input
+    input,
+    select
       font-size: 1em
       border-radius: $radiusLg
+
+    .select-wrapper:before
+      line-height: 360%
 
     label 
       font-size: 1em

@@ -1,4 +1,45 @@
 /*-----------  Flash Alerts  -----------*/
 
-.flash-wrapper
+.flash-block
+  opacity: 0
+  width: 76.5%
+  color: $white
+  z-index: 5000
+  text-align: left
+  overflow: hidden
+  margin-top: -2.5em
+  position: absolute
+  padding: 0.55em 1.33em
+  border-radius: $radiusSm 
+  box-shadow: 1px 1px 7px rgba(0,0,0,0.15)
+  @include transition(0.5s)
+
+  i
+    float: right
+    color: $white
+    cursor: pointer
+    font-size: 0.65em
+    line-height: 225%
+    font-weight: bold
+    @include transition()
+
+  /*-----------  States  -----------*/
   
+  &.success
+    background-color: $green
+
+    i:hover
+      color: $green
+
+  &.error
+    background-color: $orange
+    @include antialiased()
+
+    i:hover
+      color: $orange
+  
+  /*-----------  Animation  -----------*/
+
+  &.show
+    opacity: 1
+    margin-top: -1em

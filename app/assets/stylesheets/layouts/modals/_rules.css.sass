@@ -75,6 +75,19 @@
             &:not(.between)
               width: 96% !important
 
+            &[type="date"]
+              display: -webkit-inline-flex
+
+              &::-webkit-calendar-picker-indicator
+                float: right
+                margin-top: 2%
+                @include inline-block()
+
+              &::-webkit-clear-button,
+              &::-webkit-inner-spin-button
+                margin: 0
+                -webkit-appearance: none
+
           input.between:not([disabled]) ~ input.between:not([disabled])
             margin-left: 4%
 

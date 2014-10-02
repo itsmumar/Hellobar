@@ -9,6 +9,7 @@
 #= require amcharts/serial
 #= require lib/url_params
 #= require jstz-1.0.4.min
+#= require growl
 
 # Couldn't get 'require_tree .' to ignore the dashboard directory, so I opted to indivdually list the local js assets you needed here
 
@@ -38,8 +39,21 @@ $ ->
       $('.reveal-wrapper.activated').removeClass('activated')
       $(@).addClass('activated')
 
-  # detect user timezone
+  # Detect User Timezone
   if $('#detect_timezone').length
     $timezone = $('#site_timezone, #user_timezone')
     userTimezone = jstz.determine().name()
     $timezone.val(userTimezone)
+
+  # Remove Flash Messsages
+  if $('.flash-block').length
+    setTimeout ( ->
+      $('.flash-block').addClass('show')
+    ), 300
+
+    $('.flash-block .icon-close').click (event) ->
+      flash = $(event.currentTarget).parent('.flash-block')
+      flash.removeClass('show')
+      setTimeout ( ->
+        flash.remove()
+      ), 500

@@ -11,12 +11,14 @@
   *
     color: $blue
 
-  span
+  span:not(.select-wrapper)
     font-size: 1.15em
 
   input[type=email],
-  input[type=password]
-    width: 25% !important
+  input[type=password],
+  .select-wrapper select
+    width: 19% !important
+    color: $grayDark !important
     margin: 0 0 0 1em !important
     display: inline-block !important
     border-radius: $radiusSm !important
@@ -25,7 +27,22 @@
     @include placeholder 
       color: $grayLighter !important
 
+  .select-wrapper
+    margin: 0 0 0 1em !important
+
+    &:before
+      color: $grayLighter
+      line-height: 300%
+
+    select
+      font-size: 85%
+      margin: 0 !important
+      width: 23% !important
+      padding-right: 2.75em
+      @include ellipsis()
+
   .button
     margin-left: 1em
+    margin-top: -1px
     font-size: 0.75em !important
     @extend %blue-button

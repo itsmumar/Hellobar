@@ -1,0 +1,9 @@
+- unless flash[:success].blank?
+  .flash-block.success
+    = flash[:success]
+    i.icon-close
+
+- unless flash[:error].blank?
+  .flash-block.error
+    = flash[:error]
+    i.icon-close

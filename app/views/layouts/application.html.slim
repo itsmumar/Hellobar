@@ -20,6 +20,7 @@ html
         = render "shared/sidebar"
 
       main.global-content id=page_id
+        = render 'shared/flash'
         = render "shared/account_prompt" if show_account_prompt?
         == yield
 
