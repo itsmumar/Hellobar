@@ -102,9 +102,9 @@ class Subscription < ActiveRecord::Base
     end
 
     protected
-    # Is there a better way?
+
     def parent_class
-      Kernel.const_get(self.class.name.split("::")[0...-1].join("::"))
+      self.class.parent
     end
   end
 
