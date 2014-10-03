@@ -34,6 +34,7 @@ class @PaymentModal extends Modal
         method: $form.attr('method')
         data: $form.serialize() + "&site_id=#{window.siteID}"
         success: (data, status, xhr) ->
+          alert "Successfully paid!"
           # now we need to open the success window
         error: (xhr, status, error) ->
           errors = xhr.responseJSON.errors
