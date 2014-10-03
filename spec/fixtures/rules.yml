@@ -10,3 +10,9 @@ horsebike:
 polymathic:
   name: polyname
   site: polymathic
+pro:
+  name: proname
+  site: pro_site
+pro2:
+  name: proname
+  site: pro_site

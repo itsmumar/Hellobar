@@ -1,6 +1,7 @@
 class RulesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
+  before_action :verify_capability, only: [:create, :update]
 
   def show
     rule = @site.rules.find(params[:id])
@@ -62,5 +63,11 @@ class RulesController < ApplicationController
 
   def conditions_attrs
     [:id, :rule_id, :segment, :operand, :_destroy, { :value => [] }, :value]
+  end
+
+  def verify_capability
+    unless @site && @site.capabilities.custom_targeted_bars?
+      render :json => { error: "forbidden" }, :status => :forbidden
+    end
   end
 end

@@ -6,3 +6,7 @@ horsebike:
   site: horsebike
   user: joey
   role: owner
+pro:
+  site: pro_site
+  user: pro
+  role: owner
