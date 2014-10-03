@@ -64,8 +64,11 @@ describe BillingAuditTrail do
     User.new.audit << "Test"
     BillingLog.count.should == 1
     log = BillingLog.all.first
-    log.source_file.should =~ /#{GitUtils.current_commit} @ .*?billing_log_spec\.rb:#{__LINE__-3}/
-  end
 
-  
+    # we have to escape everything in this string because sometimes - if you're in a detached head state, for instance - the
+    # value of GitUtils.current_commit will be "???" or something else that will potentially mess up the regex
+    current_commit = GitUtils.current_commit.gsub(/.{1}/) { |m| m =~ /[a-z0-9]/ ? m : "\\#{m}" }
+
+    log.source_file.should =~ /#{current_commit} @ .*?billing_log_spec\.rb:#{__LINE__-8}/
+  end
 end
