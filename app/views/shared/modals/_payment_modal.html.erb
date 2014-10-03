@@ -3,7 +3,7 @@
     <div class="modal-block">
       <i class="icon-close"></i>
 
-      <form class="payment-modal">
+      <form class="payment-modal" accept-charset="UTF-8" action="/payment_methods" method="POST">
         <div class="site-title">
           <%= "Upgrade #{display_name_for_site(current_site)}!" %>
         </div>
@@ -16,19 +16,21 @@
             </header>
             <div class="package-cycle">
               {{#if isAnnual}}
-              <input type="radio" id="monthly-billing" name="billing" value="monthly" />
+              <input type="radio" id="monthly-billing" name="billing[cycle]" value="monthly" />
               {{else}}
-              <input type="radio" id="monthly-billing" name="billing" value="monthly" checked />
+              <input type="radio" id="monthly-billing" name="billing[cycle]" value="monthly" checked />
               {{/if}}
+
+              <input type="hidden" name="billing[plan]" value="{{ package.type }}" />
 
               <label for="monthly-billing">
                 Monthly
                 <small>$15 Per Month</small>
               </label>
               {{#if isAnnual}}
-              <input type="radio" id="anually-billing" name="billing" value="anually" checked />
+              <input type="radio" id="anually-billing" name="billing[cycle]" value="yearly" checked />
               {{else}}
-              <input type="radio" id="anually-billing" name="billing" value="anually" />
+              <input type="radio" id="anually-billing" name="billing[cycle]" value="yearly" />
               {{/if}}
               <label for="anually-billing">
                 Annually
@@ -46,27 +48,35 @@
 
               <fieldset class="cc-name">
                 <label>Name on card</label>
-                <input type="text" placeholder="John Smith" />
+                <input type="text" placeholder="John Smith" name="payment_method_details[name]"/>
               </fieldset>
 
               <fieldset class="cc-number">
                 <label>Card number</label>
-                <input type="text" placeholder="    -    -    -" />
+                <input type="text" placeholder="    -    -    -" name="payment_method_details[number]"/>
                 <i class="icon-modal"></i>
               </fieldset>
 
               <fieldset class="cc-expiry">
                 <label>Expiry</label>
-                <input type="text" placeholder="08/2016" />
+                <input type="text" placeholder="08/2016" name="payment_method_details[expiration]"/>
               </fieldset>
 
               <fieldset class="cc-csv">
                 <label>CSV</label>
-                <input type="text" placeholder="123" />
+                <input type="text" placeholder="123" name="payment_method_details[verification_value]"/>
+              </fieldset>
+
+              <fieldset>
+                <input type="text" name="payment_method_details[city]" value="Chicago" />
+                <input type="text" name="payment_method_details[state]" value="IL" />
+                <input type="text" name="payment_method_details[zip]" value="60647" />
+                <input type="text" name="payment_method_details[address]" value="2423 W North Ave" />
+                <input type="text" name="payment_method_details[country]" value="USA" />
               </fieldset>
 
               <footer>
-                <a class="button">Confirm</a>
+                <a class="button submit">Confirm</a>
                 <p>This card will be added to your profile and charged $150 each year starting today, July 1st 2014</p>
               </footer>
             </div>

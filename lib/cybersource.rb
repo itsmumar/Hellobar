@@ -88,7 +88,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     end
     write_attribute(:data, sanitized_data)
   end
-  
+
   # Shouldn't really need to get this directly
   def cybersource_profile
     unless @cybersource_profile
