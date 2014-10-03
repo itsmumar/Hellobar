@@ -217,9 +217,10 @@ var _HB = {
     // Remove ignored attributes
     for(var k in HB.cookies.visitor)
     {
-      if ( typeof(HB.cookies.visitor[k]) == 'string' && ignoredAttributes.indexOf(k) == -1 && !k.match(ignoredAttributePattern))
+      var value = HB.cookies.visitor[k];
+      if ( (typeof(value) == 'string' || typeof(value) == 'number' || typeof(value) == 'boolean') && ignoredAttributes.indexOf(k) == -1 && !k.match(ignoredAttributePattern))
       {
-        attributes[k.toLowerCase()] = HB.cookies.visitor[k].toLowerCase().substr(0,150);
+        attributes[k.toLowerCase()] = (HB.cookies.visitor[k]+"").toLowerCase().substr(0,150);
       }
     }
     return HB.serializeCookieValues(attributes);
