@@ -32,7 +32,7 @@ class SitesController < ApplicationController
   end
 
   def improve
-    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, 30, :force => is_page_refresh?)
+    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, :force => is_page_refresh?)
     @top_performers = @site.site_elements.sort_by{|e| -1 * e.conversion_percentage}[0, 6]
   end
 
