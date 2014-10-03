@@ -16,7 +16,7 @@ module Subscribable
   def update_subscription(site, payment_method, billing_params)
     subscription = build_subscription_instance(billing_params)
 
-    site.change_subscription(subscription, payment_method)
+    site.change_subscription(subscription, payment_method.reload) # reload payment_method so #current_details bypasses cached details
   end
 
   def build_subscription_instance(billing_params)
