@@ -4,6 +4,7 @@
       <i class="icon-close"></i>
 
       <form class="payment-modal" accept-charset="UTF-8" action="/payment_methods" method="POST">
+        <input type="hidden" name="billing[plan]" value="{{ package.type }}" />
         <div class="site-title">
           <%= "Upgrade #{display_name_for_site(current_site)}!" %>
         </div>
@@ -20,8 +21,6 @@
               {{else}}
               <input type="radio" id="monthly-billing" name="billing[cycle]" value="monthly" checked />
               {{/if}}
-
-              <input type="hidden" name="billing[plan]" value="{{ package.type }}" />
 
               <label for="monthly-billing">
                 Monthly

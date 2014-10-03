@@ -17,7 +17,7 @@ class @UpgradeAccountModal extends Modal
 
   open: ->
     @$modal.appendTo($("body"))
-    @$modal.find('#annually-billing').trigger('click')
+    @$modal.find('#yearly-billing').trigger('click')
     @_bindPackageSelection()
     super
 
@@ -36,9 +36,9 @@ class @UpgradeAccountModal extends Modal
   _bindBillingCycleEvents: ->
     @$modal.find('input[type="radio"]').on 'change', (event) =>
       switch event.target.value
-        when 'annually'
-          @packageOptions.cycle = 'annually'
-          @$modal.find('.package-title').addClass('annually')
+        when 'yearly'
+          @packageOptions.cycle = 'yearly'
+          @$modal.find('.package-title').addClass('yearly')
         when 'monthly'
           @packageOptions.cycle = 'monthly'
-          @$modal.find('.package-title').removeClass('annually')
+          @$modal.find('.package-title').removeClass('yearly')

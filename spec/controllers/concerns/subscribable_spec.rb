@@ -49,7 +49,7 @@ describe Subscribable, '#build_subscription_instance' do
     controller.build_subscription_instance(billing_params).schedule.should == 'monthly'
   end
 
-  it 'sets the schedule to annually properly' do
+  it 'sets the schedule to yearly properly' do
     billing_params = { plan: 'pro', cycle: 'yearly' }
 
     controller.build_subscription_instance(billing_params).schedule.should == 'yearly'

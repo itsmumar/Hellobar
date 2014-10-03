@@ -13,8 +13,8 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
         .billing-options
           input id='monthly-billing' type='radio' name='billing' value='monthly'
           label for='monthly-billing' Monthly Billing
-          input id='annually-billing' type='radio' name='billing' value='annually'
-          label for='annually-billing' Annual Billing
+          input id='yearly-billing' type='radio' name='billing' value='yearly'
+          label for='yearly-billing' Annual Billing
 
         / Basic Package
         .package-block.basic
@@ -38,7 +38,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-title
             .package-name Pro
             .package-price.monthly $15/mo
-            .package-price.annually $12.5/mo
+            .package-price.yearly $12.5/mo
 
           .package-features
 
@@ -77,7 +77,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-title
             .package-name Enterprise
             .package-price.monthly $99/mo
-            .package-price.annually $83.3/mo
+            .package-price.yearly $83.3/mo
 
           .package-features
 
