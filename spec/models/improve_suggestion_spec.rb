@@ -76,4 +76,12 @@ describe ImproveSuggestion do
     suggestion.save!
     ImproveSuggestion.get(@site, "traffic").should == {"foo"=>"bar"}
   end
+
+  it "should get_all the data if it exists" do
+    ImproveSuggestion.get_all(@site, true).should == {}
+    suggestion = ImproveSuggestion.generate(@site, "traffic", [@traffic])
+    suggestion.data = {"foo"=>"bar"}
+    suggestion.save!
+    ImproveSuggestion.get_all(@site, true).should == {"traffic"=>{"foo"=>"bar"}}
+  end
 end

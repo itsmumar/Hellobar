@@ -10,6 +10,17 @@ class ImproveSuggestion < ActiveRecord::Base
       return suggestion ? suggestion.data : nil
     end
 
+    # Returns all the suggestion data in a single query as a hash
+    # where the key is the name and the value is the data. 
+    # Note: some keys might be missing
+    def get_all(site, clear_cache=false)
+      results = {}
+      site.improve_suggestions(clear_cache).each do |suggestion|
+        results[suggestion.name] = suggestion.data
+      end
+      return results
+    end
+
     # Creates or finds and updates the improve suggestion for the
     # given name
     def generate(site, name, site_elements)
