@@ -66,9 +66,7 @@ class ScriptGenerator < Mustache
   end
 
   def hellobar_base_js
-    js = File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
-    js.gsub!("var HB_CAP = {};", "var HB_CAP = #{capabilities_json};")
-    js
+    File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
   end
 
   def hellobar_base_css

@@ -9,6 +9,17 @@ HB_PS = "{{pro_secret}}";
 
 if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
   HB = _HB;
+  HB.CAP = {{{capabilities_json}}};
+  // Protect capabilities from being modified
+  if ( typeof(Object.defineProperty) != "undefined")
+  {
+    try{Object.defineProperty(HB, 'CAP', {writable:false, configurable: false});}catch(e){};
+    for(var p in HB.CAP)
+    {
+      try{Object.defineProperty(HB.CAP, p, {writable:false, configurable: false})}catch(e){};
+    }
+  }
+
   {{#templates}}
     HB.setTemplate("{{name}}", {{{markup}}});
   {{/templates}}

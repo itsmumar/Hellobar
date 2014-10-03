@@ -110,6 +110,8 @@ HBQ.prototype.push = function()
 // **Special case: If a user includes multiple siteElements, to avoid overwriting the first siteElement and causing errors,
 // we manually set _HB to HB later before pushing rules.
 var _HB = {
+  CAP: {}, // Capabilies
+
   // Returns the element or looks it up via getElementById
   $: function(idOrElement)
   {
@@ -665,7 +667,6 @@ var _HB = {
   // Parses the value passed in in {{...}} for a template (which basically does an eval on it)
   parseTemplateVar: function(value, siteElement)
   {
-    var HB_CAP = {};
     try{value = eval(value)}catch(e){}
     return (value === undefined ? "" : value);
   },
@@ -1382,8 +1383,3 @@ h<<13)^(g<<3|h>>>29)^g>>>6,h=(h>>>19|g<<13)^(h<<3|g>>>29)^(h>>>6|g<<26),g=k[t-7]
 this._hasher;a=b.finalize(a);b.reset();return b.finalize(this._oKey.clone().concat(a))}})})();
 (function(){var k=HBCrypto,b=k.lib,m=b.WordArray,l=b.Hasher,d=[],b=k.algo.SHA1=l.extend({_doReset:function(){this._hash=new m.init([1732584193,4023233417,2562383102,271733878,3285377520])},_doProcessBlock:function(n,p){for(var a=this._hash.words,e=a[0],f=a[1],h=a[2],j=a[3],b=a[4],c=0;80>c;c++){if(16>c)d[c]=n[p+c]|0;else{var g=d[c-3]^d[c-8]^d[c-14]^d[c-16];d[c]=g<<1|g>>>31}g=(e<<5|e>>>27)+b+d[c];g=20>c?g+((f&h|~f&j)+1518500249):40>c?g+((f^h^j)+1859775393):60>c?g+((f&h|f&j|h&j)-1894007588):g+((f^h^
 j)-899497514);b=j;j=h;h=f<<30|f>>>2;f=e;e=g}a[0]=a[0]+e|0;a[1]=a[1]+f|0;a[2]=a[2]+h|0;a[3]=a[3]+j|0;a[4]=a[4]+b|0},_doFinalize:function(){var b=this._data,d=b.words,a=8*this._nDataBytes,e=8*b.sigBytes;d[e>>>5]|=128<<24-e%32;d[(e+64>>>9<<4)+14]=Math.floor(a/4294967296);d[(e+64>>>9<<4)+15]=a;b.sigBytes=4*d.length;this._process();return this._hash},clone:function(){var b=l.clone.call(this);b._hash=this._hash.clone();return b}});k.SHA1=l._createHelper(b);k.HmacSHA1=l._createHmacHelper(b)})();
-// Protect methods that reference HB_CAP
-if ( typeof(Object.defineProperty) != "undefined")
-{
-  Object.defineProperty(_HB, 'parseTemplateVar', {writable:false, configurable: false});
-}
