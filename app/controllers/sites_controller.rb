@@ -3,6 +3,7 @@ class SitesController < ApplicationController
 
   before_action :authenticate_user!, :except => :create
   before_action :load_site, :only => [:show, :edit, :update, :destroy, :preview_script, :script, :improve, :chart_data]
+  before_action :get_suggestions, :only => :improve
 
   skip_before_action :verify_authenticity_token, :only => [:preview_script, :script]
 
@@ -32,7 +33,6 @@ class SitesController < ApplicationController
 
   def improve
     @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, 30, :force => is_page_refresh?)
-    @suggestions = Hello::DataAPI.suggested_opportunities(@site, @site.site_elements) || []
     @top_performers = @site.site_elements.sort_by{|e| -1 * e.conversion_percentage}[0, 6]
   end
 
@@ -124,6 +124,16 @@ class SitesController < ApplicationController
     else
       flash.now[:error] = "There was a problem creating your site."
       render :action => :new
+    end
+  end
+
+  def get_suggestions
+    @suggestions = {}
+    max = @site.capabilities.max_suggestions
+    raw_suggestions = Hello::DataAPI.suggested_opportunities(@site, @site.site_elements) || {}
+
+    raw_suggestions.each do |k, v|
+      @suggestions[k] = v[0, max]
     end
   end
 end

@@ -111,4 +111,32 @@ describe SitesController do
       end
     end
   end
+
+  describe "GET improve" do
+    let(:site) { sites(:zombo) }
+    let(:user) { site.owner }
+
+    before do
+      stub_current_user(user)
+      Hello::DataAPI.stub(lifetime_totals: nil)
+      Hello::DataAPI.stub(suggested_opportunities: {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]]})
+    end
+
+    it "returns all suggestions if site capabilities allow it" do
+      site.capabilities.max_suggestions.should >= 3
+
+      get :improve, :id => site
+
+      assigns(:suggestions).should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]]}
+    end
+
+    it "restricts the number of improvement suggestions based on the site's capabilities" do
+      capabilities = Subscription::Free::Capabilities.new(nil, site).tap { |c| c.stub(max_suggestions: 2) }
+      Site.any_instance.stub(capabilities: capabilities)
+
+      get :improve, :id => site
+
+      assigns(:suggestions).should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2]]}
+    end
+  end
 end
