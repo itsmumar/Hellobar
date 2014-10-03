@@ -161,6 +161,17 @@ var _HB = {
     HB.css += "<style>"+css+"</style>";
   },
 
+  // Takes a URL and returns normalized domain (downcase and strip www)
+  getNDomain: function(url)
+  {
+    if ( !url )
+      return "";
+    url = url+"";
+    if ( url.indexOf("/") == 0 )
+      return "";
+    return url.replace(/.*?\:\/\//,"").replace(/(.*?)\/.*/,"$1").replace(/www\./i,"").toLowerCase();
+  },
+
   // Normalizes a URL so that "https://www.google.com/#foo" becomes "http://google.com"
   // Also sorts the params alphabetically
   n: function(url, pathOnly)
@@ -296,8 +307,17 @@ var _HB = {
   // which may be a SHA1 hash of the url
   getShortestKeyForURL: function(url)
   {
-    // If the URL is on the same domain strip it to the path
+    // If the URL is a path already or it's on the same domain
+    // strip to just the path
+    if ( url.indexOf("/") == 0 || HB.getNDomain(url) == HB.getNDomain(document.location) )
+      url = HB.n(url, true);
+    else
+      url = HB.n(url); // Get full URL
     // If the URL is shorter than 40 chars just return it
+    if  (url.length > 40 )
+      return HBCrypto.SHA1(url).toString()
+    else
+      return url;
     // Otherwise return a SHA1 hash of the URL
   },
 
@@ -1357,7 +1377,8 @@ h<<13)^(g<<3|h>>>29)^g>>>6,h=(h>>>19|g<<13)^(h<<3|g>>>29)^(h>>>6|g<<26),g=k[t-7]
 0);U=N.low=U+K;N.high=ga+X+(U>>>0<K>>>0?1:0);V=c.low=V+L;c.high=ha+Z+(V>>>0<L>>>0?1:0)},_doFinalize:function(){var a=this._data,b=a.words,c=8*this._nDataBytes,f=8*a.sigBytes;b[f>>>5]|=128<<24-f%32;b[(f+128>>>10<<5)+30]=Math.floor(c/4294967296);b[(f+128>>>10<<5)+31]=c;a.sigBytes=4*b.length;this._process();return this._hash.toX32()},clone:function(){var a=c.clone.call(this);a._hash=this._hash.clone();return a},blockSize:32});j.SHA512=c._createHelper(b);j.HmacSHA512=c._createHmacHelper(b)})();
 (function(){var a=HBCrypto,j=a.enc.Utf8;a.algo.HMAC=a.lib.Base.extend({init:function(a,b){a=this._hasher=new a.init;"string"==typeof b&&(b=j.parse(b));var f=a.blockSize,l=4*f;b.sigBytes>l&&(b=a.finalize(b));b.clamp();for(var u=this._oKey=b.clone(),k=this._iKey=b.clone(),m=u.words,y=k.words,z=0;z<f;z++)m[z]^=1549556828,y[z]^=909522486;u.sigBytes=k.sigBytes=l;this.reset()},reset:function(){var a=this._hasher;a.reset();a.update(this._iKey)},update:function(a){this._hasher.update(a);return this},finalize:function(a){var b=
 this._hasher;a=b.finalize(a);b.reset();return b.finalize(this._oKey.clone().concat(a))}})})();
-
+(function(){var k=HBCrypto,b=k.lib,m=b.WordArray,l=b.Hasher,d=[],b=k.algo.SHA1=l.extend({_doReset:function(){this._hash=new m.init([1732584193,4023233417,2562383102,271733878,3285377520])},_doProcessBlock:function(n,p){for(var a=this._hash.words,e=a[0],f=a[1],h=a[2],j=a[3],b=a[4],c=0;80>c;c++){if(16>c)d[c]=n[p+c]|0;else{var g=d[c-3]^d[c-8]^d[c-14]^d[c-16];d[c]=g<<1|g>>>31}g=(e<<5|e>>>27)+b+d[c];g=20>c?g+((f&h|~f&j)+1518500249):40>c?g+((f^h^j)+1859775393):60>c?g+((f&h|f&j|h&j)-1894007588):g+((f^h^
+j)-899497514);b=j;j=h;h=f<<30|f>>>2;f=e;e=g}a[0]=a[0]+e|0;a[1]=a[1]+f|0;a[2]=a[2]+h|0;a[3]=a[3]+j|0;a[4]=a[4]+b|0},_doFinalize:function(){var b=this._data,d=b.words,a=8*this._nDataBytes,e=8*b.sigBytes;d[e>>>5]|=128<<24-e%32;d[(e+64>>>9<<4)+14]=Math.floor(a/4294967296);d[(e+64>>>9<<4)+15]=a;b.sigBytes=4*d.length;this._process();return this._hash},clone:function(){var b=l.clone.call(this);b._hash=this._hash.clone();return b}});k.SHA1=l._createHelper(b);k.HmacSHA1=l._createHmacHelper(b)})();
 // Protect methods that reference HB_CAP
 if ( typeof(Object.defineProperty) != "undefined")
 {
