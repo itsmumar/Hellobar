@@ -10,3 +10,7 @@ polymathic:
   url: http://wearepolymathic.me
   read_key: asdf
   write_key: asdf
+pro_site:
+  url: http://tincanapp.com
+  read_key: asdf
+  write_key: asdf

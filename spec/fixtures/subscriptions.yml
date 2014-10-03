@@ -1,2 +1,7 @@
 zombo_subscription:
   site: zombo
+  user: joey
+pro_subscription:
+  site: pro_site
+  user: pro
+  type: Subscription::Pro

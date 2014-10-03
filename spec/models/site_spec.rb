@@ -18,6 +18,14 @@ describe Site do
     site.is_free?.should be_true
   end
 
+  it "#is_free? is true for sites with a free-level subscriptions" do
+    sites(:horsebike).is_free?.should be_true
+  end
+
+  it "#is_free? is false for pro sites" do
+    sites(:pro_site).is_free?.should be_false
+  end
+
   describe "url formatting" do
     it "adds the protocol if not present" do
       site = Site.new(:url => "zombo.com")

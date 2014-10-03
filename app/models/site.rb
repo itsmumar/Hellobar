@@ -81,7 +81,9 @@ class Site < ActiveRecord::Base
   end
 
   def is_free?
-    capabilities.is_a?(Subscription::Free::Capabilities)
+    current_subscription.nil? ||
+      current_subscription.type.blank? ||
+      Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
   end
 
   def capabilities(clear_cache=false)

@@ -6,6 +6,8 @@ now_bill:
   amount: 10
   bill_at: <%= Time.now %>
   subscription: zombo_subscription
-  
-  
-  
+pro_bill:
+  amount: 10
+  bill_at: <%= Time.now %>
+  subscription: pro_subscription
+  status: 1
