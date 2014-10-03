@@ -1,0 +1,201 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://mock-hi.hellobar.com/i/CcgJ2g8vEVan8i83SS-0EgbIA9pSpS-_Zpj/MQk1ZcxF6C322YSSp-NpxPwBwnG7H6TkCnK4CUgpZQI6wTBI-Ghhl4jS6?s=63e7d1a5ea104483cd71a5f2e210f00fa4ac60fc36c3215ad3f96feb7a937788ae4f5265bb887ee26c5f3925f8895b4bf03bdcbfe6122aa25375f9fcdd6d123f&t=1412310427
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 03 Oct 2014 04:27:07 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '31'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '"HB::URLResponder::InvalidSite"'
+    http_version: 
+  recorded_at: Fri, 03 Oct 2014 04:27:08 GMT
+- request:
+    method: get
+    uri: http://mock-hi.hellobar.com/i/pjmiYMp7N8ZL934ZGuJp9jpT66-iO2GDS-_m/X68zMcLNMflmYyUKbS-A5qDOTbpSty460BDoPkV3u9Js3Zj1iMRHSrfMz-Qyo3bYqZS?s=5b3373e7c427797ac87158f34680346231b63c04ddf6da0db6a5c2ec39bc0d77996c5c04c7d429d5e8b766b292b0d9eaf9924c0c5a549caed2421c0aaddd2508&t=1412310510
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 03 Oct 2014 04:28:30 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '31'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '"HB::URLResponder::InvalidSite"'
+    http_version: 
+  recorded_at: Fri, 03 Oct 2014 04:28:30 GMT
+- request:
+    method: get
+    uri: http://mock-hi.hellobar.com/i/y09m5GARqNlqk4TZ8pS-Xu9DU7S-_SpFS/wsGKSsnmA6a6SUK89e-bESReJlFgU0TEHTNcDAiWfZL2C18ponBMa68I6-tTHrZ4T8pFpSS?s=b0d0e41d7fb207684d7f46a5be9bd4536c31fd6eb89e9e17e067557edd99ca1bad833e0ffcf3487fd6e9ee4ffe88e8c23282c436f2c8233b13a149876dc00bf9&t=1412310609
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 03 Oct 2014 04:30:09 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '31'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '"HB::URLResponder::InvalidSite"'
+    http_version: 
+  recorded_at: Fri, 03 Oct 2014 04:30:10 GMT
+- request:
+    method: get
+    uri: http://mock-hi.hellobar.com/i/E4Z215F1D3uFjhPpZ6-zYuX8SS-_9pp/Zhrx0k2Z9HtDQZ3S-kjA1tjVgeZa0sBrTKTRBLOG47zLAfAP9mSS-fnzGc23SS?s=2a1662c5c02c559067bf3eb298aedc39afc7ace60ef5c34cdc9ef3dc5c96b9a1fb51930aba4d47755c52c5b0158179269261efffff382cfcbd9bc98c30e506bd&t=1412310641
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 03 Oct 2014 04:30:41 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '31'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '"HB::URLResponder::InvalidSite"'
+    http_version: 
+  recorded_at: Fri, 03 Oct 2014 04:30:41 GMT
+- request:
+    method: get
+    uri: http://mock-hi.hellobar.com/i/HnvtjOx2BgFTcrvj-NWPn36-_bS6S/mZI9Jb8usi0L8toaFbS-qxghdL22lsROe12BkvjIYKm8g2eb66-p8ta4mfD?s=560dc85510499efd55155e155aaa38876bb076247de9abb3ab705b31b2628f3ded0a1ddfab11b4dd7790d221d69a1f3cac012a8fc153648af7851371f8d9ceea&t=1412310660
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 03 Oct 2014 04:31:00 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '31'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '"HB::URLResponder::InvalidSite"'
+    http_version: 
+  recorded_at: Fri, 03 Oct 2014 04:31:01 GMT
+- request:
+    method: get
+    uri: http://mock-hi.hellobar.com/i/mpnbI4CwVM7a8JUMjI6-TqKrmiDSV6b-_RS/S10Nzfa4nVLAhZb-Ev8sn7plqYtgatqKReZDGYy5QYFQ6RR-QG61mI41?s=96eb635b851750c410c2aae92ea3965b914c99c5b1b74688d115fa5c96f17362ac42e40e537421e5e8055267641f89d863ae6a35c33c763f2a8939f86e651cde&t=1412310661
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 03 Oct 2014 04:31:00 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '31'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '"HB::URLResponder::InvalidSite"'
+    http_version: 
+  recorded_at: Fri, 03 Oct 2014 04:31:01 GMT
+recorded_with: VCR 2.9.0

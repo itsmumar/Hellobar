@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141001034606) do
+ActiveRecord::Schema.define(version: 20141003004551) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -128,6 +128,16 @@ ActiveRecord::Schema.define(version: 20141001034606) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "improve_suggestions", force: true do |t|
+    t.integer  "site_id"
+    t.string   "name"
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "improve_suggestions", ["site_id", "name", "updated_at"], name: "index_improve_suggestions_on_site_id_and_name_and_updated_at", using: :btree
 
   create_table "internal_dimensions", id: false, force: true do |t|
     t.integer "person_id",              null: false
