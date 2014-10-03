@@ -217,7 +217,7 @@ var _HB = {
     // Remove ignored attributes
     for(var k in HB.cookies.visitor)
     {
-      if ( typeof(HB.cookies.visitor[k]) != "function" && ignoredAttributes.indexOf(k) == -1 && !k.match(ignoredAttributePattern))
+      if ( typeof(HB.cookies.visitor[k]) == 'string' && ignoredAttributes.indexOf(k) == -1 && !k.match(ignoredAttributePattern))
       {
         attributes[k.toLowerCase()] = HB.cookies.visitor[k].toLowerCase().substr(0,150);
       }
