@@ -209,8 +209,10 @@ var _HB = {
 
   getVisitorAttributes: function()
   {
-    var ignoredAttributes = ["fv","lv"];
-    var ignoredAttributePattern = /^(ec|sc|l\-).*_[fl]$/
+    // Ignore first and last view timestamps and email and social conversions
+    var ignoredAttributes = ["fv","lv","ec","sc"];
+    // Ignore first and last converted timestamps and number of traffic conversions
+    var ignoredAttributePattern = /(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/
     var attributes = {};
     // Remove ignored attributes
     for(var k in HB.cookies.visitor)
