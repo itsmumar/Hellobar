@@ -219,7 +219,7 @@ var _HB = {
     {
       if ( typeof(HB.cookies.visitor[k]) != "function" && ignoredAttributes.indexOf(k) == -1 && !k.match(ignoredAttributePattern))
       {
-        attributes[k] = HB.cookies.visitor[k];
+        attributes[k.toLowerCase()] = HB.cookies.visitor[k].toLowerCase().substr(0,150);
       }
     }
     return HB.serializeCookieValues(attributes);
