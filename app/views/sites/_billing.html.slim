@@ -32,4 +32,7 @@ h5 Billing
         td= bill.bill_at
         td= bill.amount.to_f
         td= "Hello Bar #{bill.subscription.values[:name]}"
-        td= 'How do we know which card paid for this bill?'
+        - if bill.status == :paid
+          td= bill.paid_with_payment_method_detail.data['number']
+        - else
+          td Unpaid

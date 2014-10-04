@@ -31,4 +31,13 @@ class BillingAttempt < ActiveRecord::Base
     end
     return self
   end
+
+  alias :orig_status :status
+  def status
+    orig_status.to_sym
+  end
+
+  def success?
+    status == :success
+  end
 end

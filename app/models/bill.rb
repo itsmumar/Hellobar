@@ -68,6 +68,11 @@ class Bill < ActiveRecord::Base
   def on_voided
   end
 
+  def paid_with_payment_method_detail
+    billing_attempts.find{|attempt| attempt.success? }.
+                     try(:payment_method_details)
+  end
+
   class Recurring < Bill
     class << self
       def next_month(date)

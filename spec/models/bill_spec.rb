@@ -3,6 +3,8 @@ require 'payment_method_details'
 
 describe Bill do
   fixtures :all
+  set_fixture_class payment_method_details: PaymentMethodDetails # pluralized class screws up naming convention
+
   it "should not let you change the status once set" do
     bill = bills(:future_bill)
     bill.status.should  == :pending
@@ -14,7 +16,7 @@ describe Bill do
     lambda{bill.paid!}.should raise_error(Bill::StatusAlreadySet)
     lambda{bill.status = :pending}.should raise_error(Bill::StatusAlreadySet)
   end
-  
+
   it "should raise an error if you try to change the status to an invalid value" do
     bill = bills(:future_bill)
     lambda{bill.status = "foo"}.should raise_error(Bill::InvalidStatus)
@@ -41,6 +43,13 @@ describe Bill do
     bill.due_at(payment_method).should == bill.bill_at+payment_method_details.grace_period
     bill.grace_period_allowed = false
     bill.due_at(payment_method).should == bill.bill_at
+  end
+
+  it "should return the payment details of the successful billing attempt" do
+    bill = bills(:pro_bill)
+    details = payment_method_details(:always_successful_details)
+
+    bill.paid_with_payment_method_detail.should == details
   end
 
   describe Bill::Recurring do
@@ -118,6 +127,7 @@ end
 
 describe PaymentMethod do
   fixtures :all
+
   describe "pay" do
     it "should attempt to charge the bill with the payment method" do
       payment_method = payment_methods(:always_successful)
@@ -159,6 +169,5 @@ describe PaymentMethod do
     it "should raise an error if no payment_method_details" do
       lambda{PaymentMethod.new.pay(bills(:now_bill))}.should raise_error(PaymentMethod::MissingPaymentDetails)
     end
-
   end
 end
