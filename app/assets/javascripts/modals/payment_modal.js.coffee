@@ -19,13 +19,20 @@ class @PaymentModal extends Modal
     super
 
   _bindInteractions: ->
+    @_bindChangePlan()
+    @_bindFormSubmission()
+
+  _bindChangePlan: ->
     # re-open the upgrade modal to allow selecting a different plan
     @$modal.find('.different-plan').on 'click', (event) =>
       new UpgradeAccountModal().open()
       @close()
 
+  _bindFormSubmission: ->
     # bind submission of payment details
     @$modal.find('a.submit').on 'click', (event) =>
+      @_unbindFormSubmission() # prevent double submissions
+
       $form = @$modal.find('form')
 
       $.ajax
@@ -33,11 +40,17 @@ class @PaymentModal extends Modal
         url: $form.attr('action')
         method: $form.attr('method')
         data: $form.serialize() + "&site_id=#{window.siteID}"
-        success: (data, status, xhr) ->
+        success: (data, status, xhr) =>
           alert "Successfully paid!"
+          @close()
+          # TODO:
           # now we need to open the success window
-        error: (xhr, status, error) ->
+          # should we perform a hard refresh on the page?
+          # if not, what do we need to update on the page?
+        error: (xhr, status, error) =>
+          @bindFormSubmission() # rebind so they can enter valid info
           errors = xhr.responseJSON.errors
           alert errors.join(", ")
 
-      # async submission of the form to the backend
+  _unbindFormSubmission: ->
+    @$modal.find('a.submit').off('click')
