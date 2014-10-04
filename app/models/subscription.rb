@@ -16,6 +16,10 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  def values
+    self.class.values_for(site)
+  end
+
   def pending_bills(reload=false)
     self.bills(reload).reject{|b| b.status != :pending}
   end
@@ -72,7 +76,7 @@ class Subscription < ActiveRecord::Base
     def custom_targeted_bars?
       false
     end
-    
+
     def max_suggestions
       3
     end

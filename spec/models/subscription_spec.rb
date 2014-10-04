@@ -17,6 +17,7 @@ module SubscriptionHelper
 end
 
 describe Subscription do
+  fixtures :all
   include SubscriptionHelper
   it "should set defaults if not set" do
     Subscription::Pro.create.visit_overage.should == Subscription::Pro.defaults[:visit_overage]
@@ -61,6 +62,13 @@ describe Subscription do
     subscription.amount.should == 2
   end
 
+  it 'should return its site-specific values' do
+    site = sites(:horsebike)
+    pro = Subscription::Pro.new site: site
+
+    pro.values.should == Subscription::Pro.values_for(site)
+  end
+
   describe Subscription::Capabilities do
     fixtures :all
     before do
@@ -72,7 +80,7 @@ describe Subscription do
       @site.change_subscription(@pro, @payment_method)
       @site.capabilities(true).class.should == Subscription::Pro::Capabilities
     end
-    
+
     it "should return ProblemWithPayment capabilities if on a paid plan and payment has not been made" do
       @site.change_subscription(@pro, payment_methods(:always_fails))
       @site.capabilities(true).class.should == Subscription::ProblemWithPayment::Capabilities
