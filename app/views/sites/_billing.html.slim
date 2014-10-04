@@ -1,0 +1,35 @@
+h5 Billing
+
+.plan
+  span Plan
+  p
+    = display_name_for_site(@site)
+    | is on the 
+    = @site.current_subscription.values[:name]
+    | plan.
+    = @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym]
+    = @site.current_subscription.schedule
+    = link_to 'Change to monthly billing', '#'
+
+.card
+  span Card
+  p
+    = @site.current_subscription.payment_method.current_details.data['number']
+  = link_to 'Change card', '#'
+  = link_to 'Update card details', '#'
+
+.history
+  span History
+
+  table
+    tr
+      th Date
+      th Cost
+      th Plan
+      th Card
+    - @bills.each do |bill|
+      tr
+        td= bill.bill_at
+        td= bill.amount.to_f
+        td= "Hello Bar #{bill.subscription.values[:name]}"
+        td= 'How do we know which card paid for this bill?'

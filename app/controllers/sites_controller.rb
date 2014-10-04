@@ -9,6 +9,10 @@ class SitesController < ApplicationController
 
   layout :determine_layout
 
+  def new
+    @site = Site.new
+  end
+
   def create
     @site = Site.new(site_params)
 
@@ -19,8 +23,8 @@ class SitesController < ApplicationController
     end
   end
 
-  def new
-    @site = Site.new
+  def edit
+    @bills = @site.bills.includes(:subscription)
   end
 
   def show
