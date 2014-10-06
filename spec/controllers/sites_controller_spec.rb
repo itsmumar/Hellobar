@@ -119,7 +119,7 @@ describe SitesController do
     before do
       stub_current_user(user)
       Hello::DataAPI.stub(lifetime_totals: nil)
-      Hello::DataAPI.stub(suggested_opportunities: {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]]})
+      ImproveSuggestion.stub(get: {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]]})
     end
 
     it "returns all suggestions if site capabilities allow it" do
@@ -127,7 +127,7 @@ describe SitesController do
 
       get :improve, :id => site
 
-      assigns(:suggestions).should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]]}
+      assigns(:suggestions)["all"].should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]]}
     end
 
     it "restricts the number of improvement suggestions based on the site's capabilities" do
@@ -136,7 +136,7 @@ describe SitesController do
 
       get :improve, :id => site
 
-      assigns(:suggestions).should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2]]}
+      assigns(:suggestions)["all"].should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2]]}
     end
   end
 end

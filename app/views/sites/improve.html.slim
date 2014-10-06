@@ -4,8 +4,13 @@
   = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: 30}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: 30}
 
-- @suggestions.each do |suggestion|
-  = render "sites/improve_block", {site: @site, suggestion: suggestion}
+- @suggestions.each do |name, suggestions|
+  div class="suggestions-wrapper #{name}" data-name=name
+    - if suggestions.nil?
+      p Sorry, no suggestions yet.
+    - else
+      - suggestions.each do |suggestion|
+        = render "sites/suggestion_block", {site: @site, suggestion: suggestion}
 
 - unless @top_performers.empty?
   h5 Top performing

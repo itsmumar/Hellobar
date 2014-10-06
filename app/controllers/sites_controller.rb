@@ -134,10 +134,14 @@ class SitesController < ApplicationController
   def get_suggestions
     @suggestions = {}
     max = @site.capabilities.max_suggestions
-    raw_suggestions = Hello::DataAPI.suggested_opportunities(@site, @site.site_elements) || {}
 
-    raw_suggestions.each do |k, v|
-      @suggestions[k] = v[0, max]
+    %w(all social email traffic).each do |name|
+      @suggestions[name] = {}
+      raw_suggestions = ImproveSuggestion.get(@site, "all") || nil
+
+      raw_suggestions.each do |k, v|
+        @suggestions[name][k] = v[0, max]
+      end
     end
   end
 end

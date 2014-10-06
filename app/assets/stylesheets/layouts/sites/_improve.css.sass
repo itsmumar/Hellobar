@@ -83,7 +83,6 @@
         border-right: none
 
     td[colspan]
-      color: $purple
       font-size: 0.85em
       text-align: center
       letter-spacing: 0.033em
@@ -96,13 +95,11 @@
           top: 0
           right: 1.5em
           content: 'U'
-          color: $purple
           font-size: 0.5em
           font-family: 'hellobar'
           @include transform(rotate(90deg))
 
         select
-          color: $purple
           border-color: $grayLight
           border-radius: $radiusSm
 
@@ -162,3 +159,48 @@
 
       .button
         white-space: nowrap
+
+  /*-----------  Suggestions  -----------*/
+
+  .suggestions-wrapper
+    display: none
+
+    &.all table:not(.top-performing) td[colspan]
+      color: $red
+
+      .select-wrapper
+        &:before
+          color: $red
+
+        select
+          color: $red
+
+    &.email table:not(.top-performing) td[colspan]
+      color: $green
+
+      .select-wrapper
+        &:before
+          color: $green
+
+        select
+          color: $green
+
+    &.traffic table:not(.top-performing) td[colspan]
+      color: $yellow
+
+      .select-wrapper
+        &:before
+          color: $yellow
+
+        select
+          color: $yellow
+
+    &.social table:not(.top-performing) td[colspan]
+      color: $blue
+
+      .select-wrapper
+        &:before
+          color: $blue
+
+        select
+          color: $blue
