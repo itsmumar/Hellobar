@@ -6,7 +6,7 @@
 
 - @suggestions.each do |name, suggestions|
   div class="suggestions-wrapper #{name}" data-name=name
-    - if suggestions.nil?
+    - if suggestions.empty?
       p Sorry, no suggestions yet.
     - else
       - suggestions.each do |suggestion|
