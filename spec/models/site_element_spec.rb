@@ -46,17 +46,17 @@ describe SiteElement do
     let(:element) { site_elements(:zombo_traffic) }
 
     it "returns total views as reported by the data API" do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1).and_return({element.id.to_s => [[10, 5], [12, 6]]})
+      Hello::DataAPI.stub(:lifetime_totals).with(site, site.site_elements, 1, {}).and_return({element.id.to_s => [[10, 5], [12, 6]]})
       element.total_views.should == 12
     end
 
     it "returns zero if no data is returned from the data API" do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1).and_return({})
+      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1, {}).and_return({})
       element.total_views.should == 0
     end
 
     it "returns zero if data API returns nil" do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1).and_return(nil)
+      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1, {}).and_return(nil)
       element.total_views.should == 0
     end
   end
@@ -66,17 +66,17 @@ describe SiteElement do
     let(:element) { site_elements(:zombo_traffic) }
 
     it "returns total views as reported by the data API" do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1).and_return({element.id.to_s => [[10, 5], [12, 6]]})
+      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1, {}).and_return({element.id.to_s => [[10, 5], [12, 6]]})
       element.total_conversions.should == 6
     end
 
     it "returns zero if no data is returned from the data API" do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1).and_return({})
+      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1, {}).and_return({})
       element.total_conversions.should == 0
     end
 
     it "returns zero if data API returns nil" do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1).and_return(nil)
+      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, 1, {}).and_return(nil)
       element.total_conversions.should == 0
     end
   end

@@ -66,8 +66,8 @@ class Site < ActiveRecord::Base
     delay :generate_blank_static_assets
   end
 
-  def lifetime_totals
-    @lifetime_totals ||= Hello::DataAPI.lifetime_totals(self, site_elements, 1)
+  def lifetime_totals(cache_opts = {})
+    @lifetime_totals ||= Hello::DataAPI.lifetime_totals(self, site_elements, 1, cache_opts)
   end
 
   def create_default_rule
