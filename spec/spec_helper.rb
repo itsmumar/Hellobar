@@ -37,11 +37,6 @@ VCR.configure do |c|
   c.ignore_localhost = true
   c.cassette_library_dir = "spec/cassettes"
   c.hook_into :webmock
-  c.ignore_request do |request|
-    # Ignore requests here because they will change with every test run
-    # and thus are poor candidates for VCR
-    request.uri =~ /mock-hi\.hellobar\.com/
-  end
   c.default_cassette_options = {:record => :none} # *TEMPORARILY* set to :new_episodes if you add a spec that makes a network request
 end
 

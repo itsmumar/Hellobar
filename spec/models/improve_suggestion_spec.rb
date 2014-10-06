@@ -20,18 +20,23 @@ describe ImproveSuggestion do
     @email = site_elements(:zombo_email)
     @twitter = site_elements(:zombo_twitter)
     @facebook = site_elements(:zombo_facebook)
+
+    Hello::DataAPI.stub(suggested_opportunities: {
+      "high traffic, low conversion" =>  [["co:USA", 100, 1], ["dv:Mobile", 200, 2], ["rf:http://zombo.com", 130, 4]],
+      "low traffic, high conversion" =>  [["co:Russia", 10, 9], ["dv:Desktop", 22, 20], ["pu:http://zombo.com/signup", 5, 4]],
+      "high traffic, high conversion" => [["co:China", 100, 30], ["ad_so:Google AdWords", 200, 55], ["co:Canada", 430, 120]]
+    })
   end
 
   it "should return the site elements into groups for generation" do
     groups = ImproveSuggestion.determine_groups(@site)
+
     sorted_ids(groups).should == sorted_ids({
       "all" => [@traffic, @email, @twitter, @facebook],
       "social" => [@twitter, @facebook],
       "email" => [@email],
       "traffic" => [@traffic]
     })
-
-
   end
 
   it "should let you generate data for a site" do

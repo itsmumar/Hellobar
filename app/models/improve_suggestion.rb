@@ -32,9 +32,7 @@ class ImproveSuggestion < ActiveRecord::Base
         return false
       end
 
-      site_element_ids = site_elements.map(&:id).sort
-      path, params = Hello::DataAPIHelper::RequestParts.suggested_opportunities(site.id, site_element_ids, site.read_key)
-      suggestion.data = Hello::DataAPI.get(path, params)
+      suggestion.data = Hello::DataAPI.suggested_opportunities(site, site_elements, force: true)
       suggestion.save!
       suggestion
     end
