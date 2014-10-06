@@ -13,7 +13,7 @@
 
     .reveal-block.myself-reveal
       p To install Hello Bar, copy and paste the following code right before your closing </body> tag.
-      pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\"></script>"
+      pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\" async></script>"
       p That's it! You'll never need to update the code on your site again.
 
   .reveal-wrapper
@@ -54,7 +54,7 @@
 
         pre= "I just created a Hello Bar for #{display_name_for_site(@site)} and I've asked Hello Bar to email you the instructions for installing it. All you need to do is add the following bit of JavaScript at the end of each page (right before the closing </body> tag):"
 
-        pre= "<script type=\"text/javascript\" src=\"//#{@site.script_url}\"></script>"
+        pre= "<script type=\"text/javascript\" src=\"//#{@site.script_url}\" async></script>"
         
         pre= "If you have any questions don't hesitate to email Hello Bar support at support@hellobar.com, or e-mail me at #{current_user.email}."
         

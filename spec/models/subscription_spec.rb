@@ -149,6 +149,14 @@ describe Site do
       success.should be_true
       bill.should be_paid
       bill.amount.should == 0
+      @site.bills(true).each do |bill|
+        puts bill.inspect
+      end
+      @payment_method.pay(@site.bills.last)
+      puts "-"*80
+      @site.bills(true).each do |bill|
+        puts bill.inspect
+      end
       @site.current_subscription.should == @free
       @site.capabilities.class.should == Subscription::Free::Capabilities
     end
