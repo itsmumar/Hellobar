@@ -2,12 +2,14 @@ class @PaymentModal extends Modal
 
   modalName: "payment-account"
   modalTemplate: -> $('script#payment-modal-template').html()
+  paymentDetailsTemplate: -> $('script#cc-payment-details-template').html()
 
   constructor: (@options = {}) ->
     @$modal = @buildModal()
     @_bindInteractions()
 
   buildModal: ->
+    Handlebars.registerPartial('cc-payment-details', @paymentDetailsTemplate())
     template = Handlebars.compile(@modalTemplate())
     $(template({errors: @options.errors, package: @options, isAnnual: @isAnnual()}))
 
