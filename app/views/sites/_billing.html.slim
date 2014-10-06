@@ -4,19 +4,23 @@ h5 Billing
   span Plan
   p
     = display_name_for_site(@site)
-    | is on the 
-    = @site.current_subscription.values[:name]
-    | plan.
-    = @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym]
-    = @site.current_subscription.schedule
-    = link_to 'Change to monthly billing', '#'
+    - if @site.current_subscription
+      | is on the 
+      = @site.current_subscription.values[:name]
+      | plan.
+      = @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym]
+      = @site.current_subscription.schedule
+      = link_to 'Change to monthly billing', '#'
+    - else
+      |  is on the free plan.
 
 .card
-  span Card
-  p
-    = @site.current_subscription.payment_method.current_details.data['number']
-  = link_to 'Change card', '#'
-  = link_to 'Update card details', '#'
+  - if @site.current_subscription
+    span Card
+    p
+      = @site.current_subscription.payment_method.current_details.data['number']
+    = link_to 'Change card', '#'
+    = link_to 'Update card details', '#'
 
 .history
   span History
