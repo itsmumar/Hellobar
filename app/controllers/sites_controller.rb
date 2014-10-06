@@ -137,7 +137,7 @@ class SitesController < ApplicationController
 
     %w(all social email traffic).each do |name|
       @suggestions[name] = {}
-      raw_suggestions = ImproveSuggestion.get(@site, "all") || nil
+      raw_suggestions = ImproveSuggestion.get(@site, name) || nil
 
       raw_suggestions.each do |k, v|
         @suggestions[name][k] = v[0, max]
