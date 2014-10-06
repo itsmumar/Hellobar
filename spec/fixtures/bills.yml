@@ -11,3 +11,22 @@ pro_bill:
   bill_at: <%= Time.now %>
   subscription: pro_subscription
   status: 1
+paid_bill:
+  amount: 10
+  bill_at: <%= Time.now %>
+  subscription: pro_subscription
+  status: 1
+voided_bill:
+  amount: 10
+  bill_at: <%= Time.now %>
+  subscription: pro_subscription
+  status: 2
+free_bill:
+  amount: 0
+  bill_at: <%= Time.now %>
+  subscription: free_subscription
+past_due_bill:
+  amount: 10
+  bill_at: '2014-09-01'
+  subscription: past_due_subscription
+  status: 0

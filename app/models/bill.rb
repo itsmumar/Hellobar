@@ -3,6 +3,7 @@ require 'billing_log'
 class Bill < ActiveRecord::Base
   class StatusAlreadySet < Exception; end
   class InvalidStatus < Exception; end
+  class BillingEarly < Exception; end
   serialize :metadata, JSON
   belongs_to :subscription
   has_many :billing_attempts
@@ -32,6 +33,19 @@ class Bill < ActiveRecord::Base
     end
   end
 
+  def attempt_billing!(allow_early=false)
+    now = Time.now
+    raise BillingEarly.new("Attempted to bill on #{now} but bill[#{self.id}] has a bill_at date of #{self.bill_at}") if !allow_early and now < self.bill_at  
+    if self.subscription.requires_payment_method?
+      return self.subscription.payment_method.pay(self)
+    else
+      audit << "Marking bill as paid because no payment method required"
+      # Mark as paid
+      self.paid!
+      return true
+    end
+  end
+
   alias :orig_status :status
   def status
     orig_status.to_sym
@@ -56,10 +70,18 @@ class Bill < ActiveRecord::Base
     return Time.now > due_at(payment_method)
   end
 
+  def should_bill?
+    return (self.pending? and Time.now >= self.bill_at)
+  end
+
   def problem_with_payment?(payment_method=nil)
-    return false if paid? || voided?
-    # If pending see if we are past due
-    return true if past_due?(payment_method)
+    return false if paid? || voided? || self.amount == 0
+    # If pending see if we are past due and we have
+    # tried billing them at least once
+    return true if past_due?(payment_method) and self.billing_attempts.size > 0
+    # False otherwise
+    return false
+
   end
 
   def on_paid

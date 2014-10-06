@@ -1,7 +1,16 @@
 zombo_subscription:
   site: zombo
   user: joey
+  type: Subscription::Pro
 pro_subscription:
   site: pro_site
   user: pro
   type: Subscription::Pro
+free_subscription:
+  site: free_site
+  type: Subscription::Free
+  user: joey
+past_due_site:
+  site: past_due_site
+  type: Subscription::Pro
+  user: joey

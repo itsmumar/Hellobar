@@ -116,9 +116,9 @@ class Site < ActiveRecord::Base
   include BillingAuditTrail
   class MissingPaymentMethod < Exception; end
   class MissingSubscription < Exception; end
-  def change_subscription(subscription, payment_method)
-    raise MissingPaymentMethod.new unless payment_method
+  def change_subscription(subscription, payment_method=nil)
     raise MissingSubscription.new unless subscription
+    raise MissingPaymentMethod.new if subscription.requires_payment_method? and !payment_method
     transaction do
       subscription.site = self
       subscription.payment_method = payment_method
@@ -127,8 +127,14 @@ class Site < ActiveRecord::Base
       now = Time.now
       if bill.due_at(payment_method) <= now
         audit << "Change plan, bill is due now: #{bill.inspect}"
-        attempt = payment_method.pay(bill)
-        success = false unless attempt.success?
+        result = bill.attempt_billing!
+        if result.is_a?(BillingAttempt)
+          success = result.success?
+        elsif result.is_a?(TrueClass) || result.is_a?(FalseClass)
+          success = result
+        else
+          raise "Unexpected result: #{result.inspect}"
+        end
       else
         audit << "Change plan, bill is due later: #{bill.inspect}"
       end

@@ -23,6 +23,12 @@ describe Subscription do
     Subscription::Pro.create.visit_overage.should == Subscription::Pro.defaults[:visit_overage]
   end
 
+  it "should not require payment method for Free, but should for all other plans" do
+    Subscription::Free.new.requires_payment_method?.should == false
+    Subscription::Pro.new.requires_payment_method?.should == true
+    Subscription::Enterprise.new.requires_payment_method?.should == true
+  end
+
   it "should not override values set with defaults" do
     Subscription::Pro.create(:visit_overage=>3).visit_overage.should == 3
   end
@@ -144,19 +150,21 @@ describe Site do
       setup_subscriptions
     end
 
+
+    it "should work with starting on a Free plan with no payment_method" do
+      success, bill = @site.change_subscription(@free)
+      success.should be_true
+      bill.should be_paid
+      bill.amount.should == 0
+      @site.current_subscription.should == @free
+      @site.capabilities.class.should == Subscription::Free::Capabilities
+    end
+
     it "should work with starting out on a Free plan" do
       success, bill = @site.change_subscription(@free, @payment_method)
       success.should be_true
       bill.should be_paid
       bill.amount.should == 0
-      @site.bills(true).each do |bill|
-        puts bill.inspect
-      end
-      @payment_method.pay(@site.bills.last)
-      puts "-"*80
-      @site.bills(true).each do |bill|
-        puts bill.inspect
-      end
       @site.current_subscription.should == @free
       @site.capabilities.class.should == Subscription::Free::Capabilities
     end

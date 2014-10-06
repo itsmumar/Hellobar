@@ -14,3 +14,11 @@ pro_site:
   url: http://tincanapp.com
   read_key: asdf
   write_key: asdf
+free_site:
+  url: http://freesite.com
+  read_key: asdf
+  write_key: asdf
+past_due_site:
+  url: http://freeloader.com
+  read_key: asdf
+  write_key: asdf

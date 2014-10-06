@@ -84,6 +84,53 @@ describe Bill do
       Bill::Recurring.next_year(Time.parse("2016-02-29")).strftime("%Y-%m-%d").should == "2017-02-28"
     end
   end
+
+  describe "attempt_billing!" do
+    it "should call payment_method.pay if the subscription requires_payment_method" do
+      bill = bills(:now_bill)
+      bill.subscription.payment_method = payment_methods(:always_successful)
+      PaymentMethod.any_instance.should_receive(:pay).with(bill)
+      bill.attempt_billing!
+    end
+
+    it "should mark it as paid if the subscription does not require a payment method" do
+      bill = bills(:free_bill)
+      PaymentMethod.any_instance.should_not_receive(:pay).with(bill)
+      bill.attempt_billing!
+    end
+  end
+
+  describe "problem_with_payment" do
+    it "should return false if paid" do
+      bills(:paid_bill).problem_with_payment?.should == false
+    end
+
+    it "should return false if voided" do
+      bills(:voided_bill).problem_with_payment?.should == false
+    end
+
+    it "should return false if amount is zero" do
+      bill = bills(:free_bill)
+      bill.should_bill?.should == true
+      bill.problem_with_payment?.should == false
+    end
+
+    it "should return true if pending and past due" do
+      bill = bills(:past_due_bill)
+      bill.should_bill?.should == true
+      bill.past_due?.should == true
+      bill.problem_with_payment?.should == true
+    end
+
+    it "should return false if due, but haven't tried billing yet" do
+      bill = bills(:past_due_bill)
+      # Get around destroying read-only records
+      BillingAttempt.connection.execute("DELETE FROM #{BillingAttempt.table_name}")
+      bill.should_bill?.should == true
+      bill.past_due?.should == true
+      bill.problem_with_payment?.should == false
+    end
+  end
 end
 
 describe Subscription do
