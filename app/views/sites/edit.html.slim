@@ -3,6 +3,7 @@ nav.tabs-wrapper
   = active_link_to 'Site', edit_site_path(current_site)
 
 = simple_form_for @site do |f|
+  p= link_to "Installation instructions", site_install_path(@site)
 
   = f.input :url
   = f.input :opted_in_to_email_digest, as: :boolean, inline_label: "Send me a weekly email digest of this site's performance", label: 'Email Digest'

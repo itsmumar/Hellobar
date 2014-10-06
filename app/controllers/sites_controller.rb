@@ -2,7 +2,7 @@ class SitesController < ApplicationController
   include SitesHelper
 
   before_action :authenticate_user!, :except => :create
-  before_action :load_site, :only => [:show, :edit, :update, :destroy, :preview_script, :script, :improve, :chart_data]
+  before_action :load_site, :only => [:show, :edit, :update, :destroy, :install, :preview_script, :script, :improve, :chart_data]
   before_action :get_suggestions, :only => :improve
 
   skip_before_action :verify_authenticity_token, :only => [:preview_script, :script]
@@ -28,6 +28,8 @@ class SitesController < ApplicationController
   end
 
   def show
+    redirect_to(action: "install") unless @site.has_script_installed?
+
     flash[:error] = 'checking this out'
     session[:current_site] = @site.id
 

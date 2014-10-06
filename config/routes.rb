@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   resource :payment_methods, only: [:create]
 
+  get "sites/:id/install", :to => "sites#install", :as => :site_install
   get "sites/:id/improve", :to => "sites#improve", :as => :site_improve
   get "sites/:id/preview_script", :to => "sites#preview_script", :as => :preview_script
   get "sites/:id/script", :to => "sites#script", :as => :script
