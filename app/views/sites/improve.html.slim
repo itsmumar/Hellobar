@@ -5,34 +5,36 @@
   = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: 30}
 
 - @suggestions.each do |name, suggestions|
-  div class="suggestions-wrapper #{name}" data-name=name
+  div class="suggestions-wrapper #{name}"
     - if suggestions.empty?
       p Sorry, no suggestions yet.
     - else
       - suggestions.each do |suggestion|
         = render "sites/suggestion_block", {site: @site, suggestion: suggestion, name: name}
 
-- unless @top_performers.empty?
-  h5 Top performing
+- @top_performers.each do |name, top_performers|
+  div class="top-performers-wrapper #{name}"
+    - unless top_performers.empty?
+      h5 Top performing
 
-  table.top-performing
-    tr
-      th.color-flag
-      th Text
-      th Age
-      th Type
-      th Views
-      th Conversions
-      th %
-      th
+      table.top-performing
+        tr
+          th.color-flag
+          th Text
+          th Age
+          th Type
+          th Views
+          th Conversions
+          th %
+          th
 
-    - @top_performers[0, 3].each_with_index do |element, i|
-      = render "sites/top_performer_block", {element: element, index: i}
+        - top_performers[0, 3].each_with_index do |element, i|
+          = render "sites/top_performer_block", {element: element, index: i}
 
-    - if @top_performers.count > 3
-      tr.see-more
-        td colspan='8'
-          a Show More
+        - if top_performers.count > 3
+          tr.see-more
+            td colspan='8'
+              a Show More
 
-      - @top_performers[3..-1].each_with_index do |element, i|
-        = render "sites/top_performer_block", {element: element, index: i + 3}
+          - top_performers[3..-1].each_with_index do |element, i|
+            = render "sites/top_performer_block", {element: element, index: i + 3}

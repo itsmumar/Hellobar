@@ -108,57 +108,69 @@
 
   /*-----------  Top Performing Table  -----------*/
 
-  table.top-performing
-    border-spacing: 0 0.75em
-    border-collapse: separate
+  .top-performers-wrapper
+    display: none
 
-    th, td
+    &.all td .icon-badge.first
+      color: $red
 
-      &:nth-child(6)
-        width: 6.5em
+    &.email td .icon-badge.first
+      color: $green
 
-      [class^='icon-']
-        line-height: 0
-        color: $grayLighter
-        margin-left: 0.5em
-        vertical-align: middle
+    &.traffic td .icon-badge.first
+      color: $yellow
 
-      .icon-magnifyingglass
-        font-size: 1.33em
+    &.social td .icon-badge.first
+      color: $blue
 
-      .icon-bar,
-      .icon-modal
-        margin: 0
-        font-size: 3em
+    table.top-performing
+      border-spacing: 0 0.75em
+      border-collapse: separate
 
-      .icon-badge
-        font-size: 2.25em
-        position: absolute
-        margin-left: 0.25em
+      th, td
 
-        &.first
-          color: $purple
+        &:nth-child(6)
+          width: 6.5em
 
-    th
-      padding-top: 0
-      padding-bottom: 0
+        [class^='icon-']
+          line-height: 0
+          color: $grayLighter
+          margin-left: 0.5em
+          vertical-align: middle
 
-    td
+        .icon-magnifyingglass
+          font-size: 1.33em
 
-      &:nth-child(2)
-        width: 35%
-        max-width: 27em
+        .icon-bar,
+        .icon-modal
+          margin: 0
+          font-size: 3em
 
-        p
-          max-width: 91%
+        .icon-badge
+          font-size: 2.25em
+          position: absolute
+          margin-left: 0.25em
 
-      i.site-element-type
-        margin: 0
-        font-size: 2.25em
-        vertical-align: bottom
+      th
+        padding-top: 0
+        padding-bottom: 0
 
-      .button
-        white-space: nowrap
+      td
+
+        &:nth-child(2)
+          width: 35%
+          max-width: 27em
+
+          p
+            max-width: 91%
+
+        i.site-element-type
+          margin: 0
+          font-size: 2.25em
+          vertical-align: bottom
+
+        .button
+          white-space: nowrap
 
   /*-----------  Suggestions  -----------*/
 

@@ -4,6 +4,7 @@ class SitesController < ApplicationController
   before_action :authenticate_user!, :except => :create
   before_action :load_site, :only => [:show, :edit, :update, :destroy, :install, :preview_script, :script, :improve, :chart_data]
   before_action :get_suggestions, :only => :improve
+  before_action :get_top_performers, :only => :improve
 
   skip_before_action :verify_authenticity_token, :only => [:preview_script, :script]
 
@@ -39,7 +40,6 @@ class SitesController < ApplicationController
 
   def improve
     @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, :force => is_page_refresh?)
-    @top_performers = @site.site_elements.sort_by{|e| -1 * e.conversion_percentage}[0, 6]
   end
 
   def update
@@ -144,6 +144,21 @@ class SitesController < ApplicationController
       raw_suggestions.each do |k, v|
         @suggestions[name][k] = v[0, max]
       end
+    end
+  end
+
+  def get_top_performers
+    @top_performers = {}
+    all_elements = @site.site_elements.sort_by{|e| -1 * e.conversion_percentage}
+
+    %w(all social email traffic).each do |name|
+      if name == "all"
+        elements = all_elements
+      else
+        elements = all_elements.select { |e| e.short_subtype == name }
+      end
+
+      @top_performers[name] = elements[0,6]
     end
   end
 end
