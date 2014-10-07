@@ -1,5 +1,4 @@
 module Subscribable
-  extend ActiveSupport::Concern
 
   # returns object to render and status code
   def subscription_bill_and_status(site, payment_method, billing_params)

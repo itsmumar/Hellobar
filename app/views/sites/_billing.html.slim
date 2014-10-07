@@ -36,7 +36,13 @@ h5 Billing
         td= bill.bill_at
         td= bill.amount.to_f
         td= "Hello Bar #{bill.subscription.values[:name]}"
-        - if bill.status == :paid
-          td= bill.paid_with_payment_method_detail.data['number']
-        - else
-          td Unpaid
+        td= bill.paid_with_payment_method_detail.data['number']
+
+  p
+    | Next bill is due 
+    = @next_bill.due_at
+    |  and will total 
+    = @next_bill.amount.to_f
+    |  for a 
+    = @next_bill.subscription.schedule
+    |  subscription.
