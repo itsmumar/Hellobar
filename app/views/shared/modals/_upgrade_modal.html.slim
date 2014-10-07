@@ -31,7 +31,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               li Ads after 25,000 views
 
             .package-status
-              .button{disabled} Current Plan
+              = choose_plan_button(@site.current_subscription, 'free')
 
         / Pro Package
         .package-block.pro
@@ -70,7 +70,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
             .package-status
               p After 2500,000 visits, every 25,000 visits are an extra $5
-              .button data-package='pro' Choose Plan
+              = choose_plan_button(@site.current_subscription, 'pro')
 
         / Enterprise Package
         .package-block.enterprise
@@ -88,5 +88,5 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               li Enterprise integrations
 
             .package-status
-              .button data-package='enterprise' Choose Plan
+              = choose_plan_button(@site.current_subscription, 'enterprise')
 

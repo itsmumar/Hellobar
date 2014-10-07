@@ -12,6 +12,12 @@ def display_name_for_site(site)
   'This site name will always be rendered in teaspoon!'
 end
 
+def choose_plan_button(subscription, plan)
+  content_tag :div, class: 'button' do
+    'Choose Plan'
+  end
+end
+
 include ContactListsHelper
 
 Teaspoon.configure do |config|
