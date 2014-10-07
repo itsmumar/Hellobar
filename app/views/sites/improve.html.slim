@@ -10,7 +10,7 @@
       p Sorry, no suggestions yet.
     - else
       - suggestions.each do |suggestion|
-        = render "sites/suggestion_block", {site: @site, suggestion: suggestion}
+        = render "sites/suggestion_block", {site: @site, suggestion: suggestion, name: name}
 
 - unless @top_performers.empty?
   h5 Top performing

@@ -146,4 +146,12 @@ module SiteElementsHelper
   rescue ABAnalyzer::InsufficientDataError
     false
   end
+
+  def activity_units_for_improve_suggestion(name)
+    case name
+    when "email" then "emails"
+    when "traffic" then "clicks"
+    else "conversions"
+    end
+  end
 end
