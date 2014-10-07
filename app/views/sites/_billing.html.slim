@@ -4,21 +4,21 @@ h5 Billing
   span Plan
   p
     = display_name_for_site(@site)
-    - if @site.current_subscription
+    - if @subscription
       | is on the 
-      = @site.current_subscription.values[:name]
+      = @subscription.values[:name]
       | plan.
-      = @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym]
-      = @site.current_subscription.schedule
+      = @subscription.values["#{@site.current_subscription.schedule}_amount".to_sym]
+      = @subscription.schedule
       = link_to 'Change to monthly billing', '#', id: 'change-billing-cycle'
     - else
       |  is on the free plan.
 
 .card
-  - if @site.current_subscription
+  - if @subscription
     span Card
     p
-      = @site.current_subscription.payment_method.current_details.data['number']
+      = @subscription.payment_method.current_details.data['number']
     = link_to 'Change card', '#'
     = link_to 'Update card details', '#', id: 'update-cc-details'
 
@@ -38,11 +38,12 @@ h5 Billing
         td= "Hello Bar #{bill.subscription.values[:name]}"
         td= bill.paid_with_payment_method_detail.data['number']
 
-  p
-    | Next bill is due 
-    = @next_bill.due_at
-    |  and will total 
-    = @next_bill.amount.to_f
-    |  for a 
-    = @next_bill.subscription.schedule
-    |  subscription.
+  - if @next_bill
+    p
+      | Next bill is due 
+      = @next_bill.due_at
+      |  and will total 
+      = @next_bill.amount.to_f
+      |  for a 
+      = @next_bill.subscription.schedule
+      |  subscription.

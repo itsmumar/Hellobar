@@ -28,13 +28,12 @@ class SitesController < ApplicationController
     @bills = @site.bills.includes(:subscription).select{|bill| bill.status == :paid }
     @next_bill = @site.bills.includes(:subscription).find{|bill| bill.status == :pending }
     @subscription = @site.current_subscription
-    @payment_details = @subscription.payment_method.current_details
+    @payment_details = @subscription.payment_method.current_details if @subscription
   end
 
   def show
     redirect_to(action: "install") unless @site.has_script_installed?
 
-    flash[:error] = 'checking this out'
     session[:current_site] = @site.id
 
     @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, 30, :force => is_page_refresh?)

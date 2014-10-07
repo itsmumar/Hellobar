@@ -45,12 +45,11 @@ class @PaymentModal extends Modal
         data: $form.serialize() + "&site_id=#{window.siteID}"
         success: (data, status, xhr) =>
           alert "Successfully paid!"
-          # update the subscriptionValues and paymentDetails window objects
           @close()
           # TODO:
           # now we need to open the success window
-          # should we perform a hard refresh on the page?
-          # if not, what do we need to update on the page?
+          window.location = window.location # temp solution: hard refresh of page
+          # update the subscriptionValues and paymentDetails window objects
         error: (xhr, status, error) =>
           @_bindFormSubmission() # rebind so they can enter valid info
           errors = xhr.responseJSON.errors
