@@ -9,7 +9,7 @@ module UpgradeModalHelper
         'Current Plan'
       end
     else
-      content_tag :div, class: 'button', 'data-package' => subscription_type do
+      content_tag :div, class: 'button', 'data-package' => plan do
         'Choose Plan'
       end
     end
