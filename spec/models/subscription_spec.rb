@@ -68,11 +68,11 @@ describe Subscription do
     subscription.amount.should == 2
   end
 
-  it 'should return its site-specific values' do
+  it 'should return its site-specific values with the schedule' do
     site = sites(:horsebike)
     pro = Subscription::Pro.new site: site
 
-    pro.values.should == Subscription::Pro.values_for(site)
+    pro.values.should == Subscription::Pro.values_for(site).merge(schedule: pro.schedule)
   end
 
   describe Subscription::Capabilities do

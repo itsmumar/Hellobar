@@ -5,13 +5,14 @@ class @PaymentModal extends Modal
   paymentDetailsTemplate: -> $('script#cc-payment-details-template').html()
 
   constructor: (@options = {}) ->
+    @paymentDetails = @options.paymentDetails || {}
     @$modal = @buildModal()
     @_bindInteractions()
 
   buildModal: ->
     Handlebars.registerPartial('cc-payment-details', @paymentDetailsTemplate())
     template = Handlebars.compile(@modalTemplate())
-    $(template({errors: @options.errors, package: @options, isAnnual: @isAnnual()}))
+    $(template({errors: @options.errors, package: @options, paymentDetails: @paymentDetails, isAnnual: @isAnnual()}))
 
   isAnnual: ->
     @options.cycle == 'yearly'
@@ -44,13 +45,15 @@ class @PaymentModal extends Modal
         data: $form.serialize() + "&site_id=#{window.siteID}"
         success: (data, status, xhr) =>
           alert "Successfully paid!"
+          # update the subscriptionValues and paymentDetails window objects
+          debugger
           @close()
           # TODO:
           # now we need to open the success window
           # should we perform a hard refresh on the page?
           # if not, what do we need to update on the page?
         error: (xhr, status, error) =>
-          @bindFormSubmission() # rebind so they can enter valid info
+          @_bindFormSubmission() # rebind so they can enter valid info
           errors = xhr.responseJSON.errors
           alert errors.join(", ")
 

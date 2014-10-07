@@ -26,6 +26,8 @@ class SitesController < ApplicationController
 
   def edit
     @bills = @site.bills.includes(:subscription)
+    @subscription = @site.current_subscription
+    @payment_details = @subscription.payment_method.current_details
   end
 
   def show

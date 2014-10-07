@@ -21,7 +21,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def values
-    self.class.values_for(site)
+    self.class.values_for(site).merge(schedule: schedule)
   end
 
   def pending_bills(reload=false)

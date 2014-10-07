@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     get :registration
   end
 
-  resource :payment_methods, only: [:create]
+  resources :payment_methods, only: [:create, :update]
 
   get "sites/:id/install", :to => "sites#install", :as => :site_install
   get "sites/:id/improve", :to => "sites#improve", :as => :site_improve

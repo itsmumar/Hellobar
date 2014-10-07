@@ -10,7 +10,7 @@ h5 Billing
       | plan.
       = @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym]
       = @site.current_subscription.schedule
-      = link_to 'Change to monthly billing', '#'
+      = link_to 'Change to monthly billing', '#', id: 'change-billing-cycle'
     - else
       |  is on the free plan.
 
@@ -20,7 +20,7 @@ h5 Billing
     p
       = @site.current_subscription.payment_method.current_details.data['number']
     = link_to 'Change card', '#'
-    = link_to 'Update card details', '#'
+    = link_to 'Update card details', '#', id: 'update-cc-details'
 
 .history
   span History
