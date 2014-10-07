@@ -4,6 +4,7 @@ class PaymentMethodDetailsSerializer < ActiveModel::Serializer
   def data
     {
       id: object.id,
+      payment_method_id: object.payment_method_id,
       number: object.data['number'],
       expiration: expiration,
       name: name,
