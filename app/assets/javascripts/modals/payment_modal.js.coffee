@@ -46,7 +46,6 @@ class @PaymentModal extends Modal
         success: (data, status, xhr) =>
           alert "Successfully paid!"
           # update the subscriptionValues and paymentDetails window objects
-          debugger
           @close()
           # TODO:
           # now we need to open the success window
