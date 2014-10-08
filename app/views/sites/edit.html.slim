@@ -18,5 +18,6 @@ nav.tabs-wrapper
     = link_to "Delete Site", site_path(@site), :method => :delete, :class => "button", data: { confirm: "Historical data will be deleted and you will not be able to recover it after this. Are you sure you wish to delete this site?" }
 
 javascript:
-  var subscriptionValues = #{{@subscription.try(:values).try(:to_json)}};
-  var paymentDetails = #{{PaymentMethodDetailsSerializer.new(@payment_details).to_json }};
+  var currentSubscription = #{{SubscriptionSerializer.new(@current_subscription).to_json}}
+  var currentPaymentDetails = #{{PaymentMethodDetailsSerializer.new(@current_payment_details).to_json}};
+  var userPaymentMethods = #{{@user_payment_methods.map{|method| PaymentMethodSerializer.new(method) }.to_json}};

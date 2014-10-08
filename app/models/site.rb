@@ -273,6 +273,4 @@ class Site < ActiveRecord::Base
     self.read_key = SecureRandom.uuid if self.read_key.blank?
     self.write_key = SecureRandom.uuid if self.write_key.blank?
   end
-
-
 end

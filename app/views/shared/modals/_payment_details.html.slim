@@ -8,42 +8,52 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
         = display_name_for_site(current_site)
         |  to {{ package.type }}. Each site will need to be upgraded seperately to gain {{ package.type }} features.
 
+        | {{#if userPaymentMethods.[1]}}
+        label Use a linked card
+        select
+          option
+          | {{#each userPaymentMethods}}
+          option value="{{current_details.data.id}}"
+            | {{current_details.data.number}}
+          | {{/each}}
+        | {{/if}}
+
       fieldset.cc-name
         label Name on card
-        input type="text" placeholder="John Smith" name="payment_method_details[name]" value="{{paymentDetails.name}}"
+        input type="text" placeholder="John Smith" name="payment_method_details[name]" value="{{currentPaymentDetails.name}}"
 
       fieldset.cc-number
         label Card number
-        input type="text" placeholder="    -    -    -" name="payment_method_details[number]" value="{{paymentDetails.number}}"
+        input type="text" placeholder="    -    -    -" name="payment_method_details[number]" value="{{currentPaymentDetails.number}}"
         i.icon-modal
 
       fieldset.cc-expiry
         label Expiry
-        input type="text" placeholder="08/2016" name="payment_method_details[expiration]" value="{{paymentDetails.expiration}}"
+        input type="text" placeholder="08/2016" name="payment_method_details[expiration]" value="{{currentPaymentDetails.expiration}}"
 
       fieldset.cc-csv
         label CSV
-        input type="text" placeholder="123" name="payment_method_details[verification_value]" value="{{paymentDetails.verification_value}}"
+        input type="text" placeholder="123" name="payment_method_details[verification_value]" value="{{currentPaymentDetails.verification_value}}"
 
       fieldset
         label City
-        input type="text" placeholder="City" name="payment_method_details[city]" value="{{paymentDetails.city}}"
+        input type="text" placeholder="City" name="payment_method_details[city]" value="{{currentPaymentDetails.city}}"
 
       fieldset
         label State
-        input type="text" placeholder="State" name="payment_method_details[state]" value="{{paymentDetails.state}}"
+        input type="text" placeholder="State" name="payment_method_details[state]" value="{{currentPaymentDetails.state}}"
 
       fieldset
         label Zipcode
-        input type="text" placeholder="Zipcode" name="payment_method_details[zip]" value="{{paymentDetails.zip}}"
+        input type="text" placeholder="Zipcode" name="payment_method_details[zip]" value="{{currentPaymentDetails.zip}}"
 
       fieldset
         label Address
-        input type="text" placeholder="Address" name="payment_method_details[address]" value="{{paymentDetails.address}}"
+        input type="text" placeholder="Address" name="payment_method_details[address]" value="{{currentPaymentDetails.address}}"
 
       fieldset
         label Country
-        input type="text" placeholder="USA" name="payment_method_details[country]" value="{{paymentDetails.country}}"
+        input type="text" placeholder="USA" name="payment_method_details[country]" value="{{currentPaymentDetails.country}}"
 
       footer
         a.button.submit Confirm

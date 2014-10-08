@@ -68,11 +68,12 @@ describe Subscription do
     subscription.amount.should == 2
   end
 
-  it 'should return its site-specific values with the schedule' do
+  it 'should return its site-specific values' do
     site = sites(:horsebike)
     pro = Subscription::Pro.new site: site
+    expected_values = Subscription::Pro.values_for(site).merge(schedule: 'monthly')
 
-    pro.values.should == Subscription::Pro.values_for(site).merge(schedule: pro.schedule)
+    pro.values.should == expected_values
   end
 
   describe Subscription::Capabilities do
@@ -149,7 +150,6 @@ describe Site do
     before do
       setup_subscriptions
     end
-
 
     it "should work with starting on a Free plan with no payment_method" do
       success, bill = @site.change_subscription(@free)

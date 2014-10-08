@@ -6,7 +6,8 @@ $ ->
   # allow users to edit/update their payment information
   $('a#update-cc-details, a#change-billing-cycle').click ->
     options =
-      type: window.subscriptionValues.name.toLowerCase(),
-      cycle: window.subscriptionValues.schedule
-      paymentDetails: window.paymentDetails.data
+      type: window.currentSubscription.values.name.toLowerCase(),
+      cycle: window.currentSubscription.values.schedule
+      currentPaymentDetails: window.currentPaymentDetails.data
+      userPaymentMethods: window.userPaymentMethods
     new PaymentModal(options).open()

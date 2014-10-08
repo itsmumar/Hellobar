@@ -5,14 +5,19 @@ class @PaymentModal extends Modal
   paymentDetailsTemplate: -> $('script#cc-payment-details-template').html()
 
   constructor: (@options = {}) ->
-    @paymentDetails = @options.paymentDetails || {}
     @$modal = @buildModal()
     @_bindInteractions()
 
   buildModal: ->
     Handlebars.registerPartial('cc-payment-details', @paymentDetailsTemplate())
     template = Handlebars.compile(@modalTemplate())
-    $(template({errors: @options.errors, package: @options, paymentDetails: @paymentDetails, isAnnual: @isAnnual()}))
+    $(template(
+      errors: @options.errors
+      package: @options
+      currentPaymentDetails: @options.currentPaymentDetails || {}
+      userPaymentMethods: @options.userPaymentMethods
+      isAnnual: @isAnnual()
+    ))
 
   isAnnual: ->
     @options.cycle == 'yearly'
@@ -49,7 +54,7 @@ class @PaymentModal extends Modal
           # TODO:
           # now we need to open the success window
           window.location = window.location # temp solution: hard refresh of page
-          # update the subscriptionValues and paymentDetails window objects
+          # update the currentSubscription and paymentDetails window objects
         error: (xhr, status, error) =>
           @_bindFormSubmission() # rebind so they can enter valid info
           errors = xhr.responseJSON.errors
