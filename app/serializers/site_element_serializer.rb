@@ -21,28 +21,7 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site
-    return {} unless object.site
-
-    {
-      :id => object.site.id,
-      :url => object.site.url,
-      :rules => object.site.rules.map do |rule|
-        {
-          :id => rule.id,
-          :name => rule.name,
-          :description => rule.to_sentence,
-          :match => rule.match,
-          :priority => rule.priority,
-          :conditions => rule.conditions.map{|c| ConditionSerializer.new(c) }
-        }
-      end,
-      :contact_lists => object.site.contact_lists.map do |list|
-        {
-          :id => list.id,
-          :name => list.name
-        }
-      end
-    }
+    SiteSerializer.new(object.site)
   end
 
   def site_preview_image
