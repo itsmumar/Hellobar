@@ -4,6 +4,8 @@ html
     title Hello Bar
     link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css"
 
+    link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
+
     - if defined?(preview_script_path)
       = javascript_include_tag preview_script_path(@site)
 
