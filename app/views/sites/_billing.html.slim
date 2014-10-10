@@ -5,11 +5,13 @@ h5 Billing
   p
     = display_name_for_site(@site)
     - if @current_subscription
-      | is on the 
+      |  is on the 
       = @current_subscription.values[:name]
-      | plan.
-      = @current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym]
+      |  plan. 
+      = number_to_currency(@current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
+      |  
       = @current_subscription.schedule
+      |  
       = link_to 'Change to monthly billing', '#', id: 'change-billing-cycle'
     - else
       |  is on the free plan.
@@ -34,7 +36,7 @@ h5 Billing
     - @bills.each do |bill|
       tr
         td= bill.bill_at
-        td= bill.amount.to_f
+        td= number_to_currency(bill.amount)
         td= "Hello Bar #{bill.subscription.values[:name]}"
         td= bill.paid_with_payment_method_detail.data['number']
 
@@ -43,7 +45,7 @@ h5 Billing
       | Next bill is due 
       = @next_bill.due_at
       |  and will total 
-      = @next_bill.amount.to_f
+      = number_to_currency(@next_bill.amount)
       |  for a 
       = @next_bill.subscription.schedule
       |  subscription.
