@@ -1,5 +1,5 @@
 class SiteSerializer < ActiveModel::Serializer
-  attributes :id, :url, :contact_lists
+  attributes :id, :url, :contact_lists, :capabilities
 
   has_many :rules, serializer: RuleSerializer
 
@@ -10,5 +10,12 @@ class SiteSerializer < ActiveModel::Serializer
         :name => list.name
       }
     end
+  end
+
+  def capabilities
+    {
+      :remove_branding => object.capabilities.remove_branding?,
+      :custom_targeted_bars => object.capabilities.custom_targeted_bars?
+    }
   end
 end
