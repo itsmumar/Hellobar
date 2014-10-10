@@ -25,6 +25,7 @@ unless defined?(Hellobar::Settings)
     host
     mailchimp_client_id
     mailchimp_secret
+    memcached_server
     process_synchronously
     recaptcha_private_key
     recaptcha_public_key
