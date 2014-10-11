@@ -28,7 +28,7 @@ html
         == yield
 
     = render 'shared/alert_template'
-    = render "shared/modals/upgrade_modal"
+    = render "shared/modals/upgrade_modal", {site: @site || current_site}
     = render "shared/modals/payment_modal"
 
 javascript:
