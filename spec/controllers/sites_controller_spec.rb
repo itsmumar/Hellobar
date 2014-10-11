@@ -54,6 +54,15 @@ describe SitesController do
         response.should redirect_to root_path
         flash[:error].should =~ /not valid/
       end
+
+      it 'creates the site with an initial free subscription' do
+        post :create, site: { url: 'good-site.com' }
+
+        site = Site.last
+
+        site.current_subscription.should be_present
+        site.current_subscription.kind_of?(Subscription::Free).should be_true
+      end
     end
 
     context "existing user" do

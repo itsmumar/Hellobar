@@ -27,8 +27,6 @@ class SitesController < ApplicationController
   def edit
     @bills = @site.bills.includes(:subscription).select{|bill| bill.status == :paid }
     @next_bill = @site.bills.includes(:subscription).find{|bill| bill.status == :pending }
-    @current_subscription = @site.current_subscription
-    @current_payment_details = @current_subscription.payment_method.current_details if @current_subscription
   end
 
   def show
@@ -110,6 +108,7 @@ class SitesController < ApplicationController
       generate_temporary_logged_in_user
 
       SiteMembership.create!(:site => @site, :user => current_user)
+      @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rule
       @site.generate_script
@@ -124,6 +123,7 @@ class SitesController < ApplicationController
   def create_for_logged_in_user
     if @site.save
       SiteMembership.create!(:site => @site, :user => current_user)
+      @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rule
       @site.generate_script
