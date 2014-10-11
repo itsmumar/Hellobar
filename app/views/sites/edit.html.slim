@@ -16,7 +16,3 @@ nav.tabs-wrapper
   footer
     = f.button :submit, "Save & Update", :class => "button"
     = link_to "Delete Site", site_path(@site), :method => :delete, :class => "button", data: { confirm: "Historical data will be deleted and you will not be able to recover it after this. Are you sure you wish to delete this site?" }
-
-javascript:
-  var currentSubscription = #{{SubscriptionSerializer.new(@current_subscription).to_json}}
-  var currentPaymentDetails = #{{PaymentMethodDetailsSerializer.new(@current_payment_details).to_json}};

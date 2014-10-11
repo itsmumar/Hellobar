@@ -100,8 +100,11 @@ class @PaymentModal extends Modal
     if @_method() == 'POST'
       "/payment_methods/"
     else # inject the payment_method_id OF the selected payment detail
-      paymentMethod = window.userPaymentMethods.filter((method) =>
-        method.current_details.data.id == @_linkedDetailId()
-      )[0]
+      paymentMethodId = if @_isUsingLinkedPaymentMethod()
+        window.userPaymentMethods.filter((method) =>
+          method.current_details.data.id == @_linkedDetailId()
+        )[0].id
+      else
+        window.currentPaymentDetails.data.payment_method_id
 
-      "/payment_methods/#{paymentMethod.id}"
+      "/payment_methods/#{paymentMethodId}"
