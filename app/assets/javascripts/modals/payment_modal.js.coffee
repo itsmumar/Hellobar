@@ -41,6 +41,7 @@ class @PaymentModal extends Modal
     # bind submission of payment details
     @$modal.find('a.submit').on 'click', (event) =>
       @_unbindFormSubmission() # prevent double submissions
+      @_removeAlerts()
 
       $form = @$modal.find('form')
 
@@ -58,8 +59,12 @@ class @PaymentModal extends Modal
           # update the currentSubscription and paymentDetails window objects
         error: (xhr, status, error) =>
           @_bindFormSubmission() # rebind so they can enter valid info
-          errors = xhr.responseJSON.errors
-          alert errors.join(", ")
+          content = ''
+
+          if xhr.responseJSON
+            content = xhr.responseJSON.errors.join(', ')
+
+          @_renderAlert(content)
 
   _unbindFormSubmission: ->
     @$modal.find('a.submit').off('click')
@@ -108,3 +113,11 @@ class @PaymentModal extends Modal
         window.currentPaymentDetails.data.payment_method_id
 
       "/payment_methods/#{paymentMethodId}"
+
+  _renderAlert: (content) ->
+    template = Handlebars.compile($('script#alert-template').html())
+    alert = template({type: 'error', content: content})
+    @$modal.find('.modal-block').prepend(alert)
+
+  _removeAlerts: ->
+    @$modal.find('.alert').remove()
