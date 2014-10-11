@@ -20,4 +20,3 @@ nav.tabs-wrapper
 javascript:
   var currentSubscription = #{{SubscriptionSerializer.new(@current_subscription).to_json}}
   var currentPaymentDetails = #{{PaymentMethodDetailsSerializer.new(@current_payment_details).to_json}};
-  var userPaymentMethods = #{{@user_payment_methods.map{|method| PaymentMethodSerializer.new(method) }.to_json}};

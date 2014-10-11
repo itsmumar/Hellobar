@@ -28,15 +28,22 @@ class PaymentMethodsController < ApplicationController
   def update
     payment_method = current_user.payment_methods.find params[:id]
 
-    if params[:payment_method_details] # they are updating payment details to an existing payment method
+    # use an existing payment method for this site
+    if params[:payment_method_details] && params[:payment_method_details][:linked_detail_id].present?
+      process_subscription = true
+    elsif params[:payment_method_details] # update payment details on existing payment method
       payment_method_details = CyberSourceCreditCard.new \
         payment_method: payment_method,
         data: PaymentForm.new(params[:payment_method_details]).to_hash
+
+      process_subscription = payment_method_details.save
     else # they are linking an existing payment method to the subscription
       payment_method_details = payment_method.current_details
+
+      process_subscription = payment_method_details.save
     end
 
-    if payment_method_details.save
+    if process_subscription
       respond_to do |format|
         format.json { render json: subscription_bill_and_status(@site, payment_method, params[:billing]) } # subscribe renders appropriate object and status
       end

@@ -90,3 +90,12 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
             .package-status
               = choose_plan_button(@site.current_subscription, 'enterprise')
 
+/ initializing this here instead of a controller
+/ because I like it better than a before_action?
+- if current_user
+  - @user_payment_methods = current_user.payment_methods.includes(:details)
+- else
+  - @user_payment_methods = []
+
+javascript:
+  var userPaymentMethods = #{{@user_payment_methods.map{|method| PaymentMethodSerializer.new(method) }.to_json}};

@@ -10,7 +10,7 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
 
         | {{#if userPaymentMethods.[1]}}
         label Use a linked card
-        select
+        select#linked-detail name="payment_method_details[linked_detail_id]"
           option
           | {{#each userPaymentMethods}}
           option value="{{current_details.data.id}}"

@@ -25,7 +25,6 @@ class SitesController < ApplicationController
   end
 
   def edit
-    @user_payment_methods = current_user.payment_methods.includes(:details)
     @bills = @site.bills.includes(:subscription).select{|bill| bill.status == :paid }
     @next_bill = @site.bills.includes(:subscription).find{|bill| bill.status == :pending }
     @current_subscription = @site.current_subscription

@@ -2,6 +2,8 @@ class PaymentMethodDetailsSerializer < ActiveModel::Serializer
   attributes :data
 
   def data
+    object.data ||= {}
+
     {
       id: object.id,
       payment_method_id: object.payment_method_id,

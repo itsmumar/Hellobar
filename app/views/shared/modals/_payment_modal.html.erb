@@ -3,11 +3,7 @@
     <div class="modal-block">
       <i class="icon-close"></i>
 
-      {{#if paymentDetails.payment_method_id}}
-      <form class="payment-modal" accept-charset="UTF-8" action="/payment_methods/{{paymentDetails.payment_method_id}}" method="PUT">
-      {{else}}
-      <form class="payment-modal" accept-charset="UTF-8" action="/payment_methods" method="POST">
-      {{/if}}
+      <form class="payment-modal" accept-charset="UTF-8">
         <input type="hidden" name="billing[plan]" value="{{ package.type }}" />
         <div class="site-title">
           <%= "Upgrade #{display_name_for_site(current_site)}!" %>

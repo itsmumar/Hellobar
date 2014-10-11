@@ -14,7 +14,7 @@ class @PaymentModal extends Modal
     $(template(
       errors: @options.errors
       package: @options
-      currentPaymentDetails: @options.currentPaymentDetails || {}
+      currentPaymentDetails: @options.currentPaymentDetails
       userPaymentMethods: @options.userPaymentMethods
       isAnnual: @isAnnual()
     ))
@@ -29,6 +29,7 @@ class @PaymentModal extends Modal
   _bindInteractions: ->
     @_bindChangePlan()
     @_bindFormSubmission()
+    @_bindLinkedPayment()
 
   _bindChangePlan: ->
     # re-open the upgrade modal to allow selecting a different plan
@@ -45,8 +46,8 @@ class @PaymentModal extends Modal
 
       $.ajax
         dataType: 'json'
-        url: $form.attr('action')
-        method: $form.attr('method')
+        url: @_url()
+        method: @_method()
         data: $form.serialize() + "&site_id=#{window.siteID}"
         success: (data, status, xhr) =>
           alert "Successfully paid!"
@@ -62,3 +63,45 @@ class @PaymentModal extends Modal
 
   _unbindFormSubmission: ->
     @$modal.find('a.submit').off('click')
+
+  _bindLinkedPayment: ->
+    @$modal.find('select#linked-detail').on 'change', (event) =>
+      $paymentDetail = $(event.target)
+
+      if @_isUsingLinkedPaymentMethod()
+        @_disableDetailsForm()
+      else
+        @_enableDetailsForm()
+
+  # disables the details form elements
+  # triggered when a user wants to link an existing payment method
+  _disableDetailsForm: ->
+    @$modal.find('form input:not("[name^=billing]")')
+         .val('')
+         .attr('disabled', true)
+
+  _enableDetailsForm: ->
+    @$modal.find('form input')
+           .attr('disabled', false)
+
+  _isUsingLinkedPaymentMethod: ->
+    !isNaN(@_linkedDetailId())
+
+  _linkedDetailId: ->
+    parseInt(@$modal.find('select#linked-detail').val())
+
+  _method: ->
+    if @_isUsingLinkedPaymentMethod() || @options.currentPaymentDetails
+      'PUT'
+    else
+      'POST'
+
+  _url: ->
+    if @_method() == 'POST'
+      "/payment_methods/"
+    else # inject the payment_method_id OF the selected payment detail
+      paymentMethod = window.userPaymentMethods.filter((method) =>
+        method.current_details.data.id == @_linkedDetailId()
+      )[0]
+
+      "/payment_methods/#{paymentMethod.id}"
