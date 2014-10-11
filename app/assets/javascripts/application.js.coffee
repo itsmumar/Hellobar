@@ -28,6 +28,7 @@
 #= require sites_controller
 #= require site_elements_controller
 #= require upgrade_modal_initializer
+#= require enforce_restrictions_initializer
 #= require_self
 
 $ ->

@@ -23,6 +23,18 @@ describe SiteElement do
     element.should be_valid
   end
 
+  it 'requires a site to be able to create new site elements' do
+    site = sites(:free_site)
+    capability = double 'capability', at_site_element_limit?: true
+    site.stub capabilities: capability
+
+    element = SiteElement.new
+    element.stub site: site
+    element.valid?
+
+    element.errors[:site].should == ['is currently at its limit to create site elements']
+  end
+
   describe '#toggle_paused!' do
     let(:site_element) { site_elements(:zombo_traffic) }
 

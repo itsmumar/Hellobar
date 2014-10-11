@@ -28,6 +28,7 @@ class SiteElement < ActiveRecord::Base
   validates :display_when, inclusion: { in: DISPLAY_WHEN_OPTIONS }
 
   validate :contact_list_is_present, if: Proc.new {|se| se.element_subtype == "email"}
+  validate :site_is_capable_of_creating_element
 
   scope :paused, -> { where(paused: true) }
   scope :active, -> { where(paused: false) }
@@ -75,6 +76,12 @@ class SiteElement < ActiveRecord::Base
   def contact_list_is_present
     if contact_list.nil? && (contact_list_id.blank? || contact_list_id == 0)
       errors.add(:contact_list, "can't be blank")
+    end
+  end
+
+  def site_is_capable_of_creating_element
+    if site && site.capabilities.at_site_element_limit?
+      errors.add(:site, 'is currently at its limit to create site elements')
     end
   end
 end

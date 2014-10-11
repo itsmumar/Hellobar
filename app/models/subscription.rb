@@ -93,6 +93,10 @@ class Subscription < ActiveRecord::Base
       10
     end
 
+    def at_site_element_limit?
+      @site.site_elements.size >= max_site_elements
+    end
+
     def num_days_improve_data
       90
     end
@@ -180,7 +184,7 @@ class Subscription < ActiveRecord::Base
       end
 
       def max_site_elements
-        false
+        1.0 / 0.0 # infinity
       end
 
       def num_days_improve_data

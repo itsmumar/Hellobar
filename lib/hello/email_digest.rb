@@ -69,7 +69,7 @@ module Hello::EmailDigest
     end
 
     def create_bar_cta(site, metrics, url)
-      site_elements = site.site_elements
+      site_elements = site.site_elements.reload
 
       if metrics[:social].nil?
         "Use different types of bars to help you reach other goals, like gaining followers on Twitter. <a href='#{url}'>Start testing social bars now</a>."
