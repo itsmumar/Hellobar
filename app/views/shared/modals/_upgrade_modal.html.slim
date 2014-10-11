@@ -98,7 +98,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
   - @user_payment_methods = []
 
 - @current_subscription = @site.current_subscription
-- @current_payment_details = @current_subscription.payment_method.current_details if @current_subscription
+- @current_payment_details = @current_subscription.payment_method.current_details if @current_subscription && @current_subscription.payment_method
 
 javascript:
   var userPaymentMethods = #{{@user_payment_methods.map{|method| PaymentMethodSerializer.new(method) }.to_json}};
