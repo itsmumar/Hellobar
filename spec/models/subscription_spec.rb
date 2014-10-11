@@ -119,6 +119,20 @@ describe Subscription do
       Subscription::Pro.create(visit_overage: 3).capabilities.visit_overage.should == 3
     end
 
+    context '#at_site_element_limit?' do
+      it 'returns true when it has as many site elements as it can have' do
+        @site.capabilities.at_site_element_limit?.should be_false
+      end
+
+      it 'returns false when it can still add site elements' do
+        max_elements = @site.capabilities.max_site_elements
+        elements = ['element'] * max_elements
+        @site.stub site_elements: elements
+
+        @site.capabilities.at_site_element_limit?.should be_true
+      end
+    end
+
     describe Subscription::ProblemWithPayment do
       it "should default to Free plan capabilities" do
         Subscription::ProblemWithPayment.create.capabilities.visit_overage.should == Subscription::Free.defaults[:visit_overage]
