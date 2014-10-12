@@ -17,7 +17,7 @@ h5 Billing
       |  is on the free plan.
 
 .card
-  - if @site.current_subscription
+  - if @site.current_subscription && @site.current_subscription.payment_method
     span Card
     p
       = @site.current_subscription.payment_method.current_details.data['number']
