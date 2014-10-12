@@ -38,7 +38,7 @@ h5 Billing
         td= bill.bill_at
         td= number_to_currency(bill.amount)
         td= "Hello Bar #{bill.subscription.values[:name]}"
-        td= bill.paid_with_payment_method_detail.data['number']
+        td= bill.paid_with_payment_method_detail.data['number'] if bill.paid_with_payment_method_detail
 
   - if @next_bill
     p
