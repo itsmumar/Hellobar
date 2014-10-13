@@ -62,6 +62,10 @@ class Site < ActiveRecord::Base
     delay :generate_static_assets, options
   end
 
+  def generate_improve_suggestions(options = {})
+    delay :generate_all_improve_suggestions, options
+  end
+
   def blank_out_script(options = {})
     delay :generate_blank_static_assets, options
   end
@@ -258,6 +262,10 @@ class Site < ActiveRecord::Base
 
   def generate_blank_static_assets
     generate_static_assets(:script_content => "")
+  end
+
+  def generate_all_improve_suggestions
+    ImproveSuggestion.generate_all(self)
   end
 
   def standardize_url

@@ -24,3 +24,7 @@ end
 every 24.hours, :at => "12:00am", :roles => [:web] do
   rake "site:scripts:generate_all_separately"
 end
+
+every 24.hours, :at => "12:00am", :roles => [:web] do
+  rake "site:improve_suggestions:generate_all_separately"
+end
