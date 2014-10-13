@@ -22,5 +22,5 @@ every :monday, :at => "8:30am", :roles => [:web] do
 end
 
 every 24.hours, :at => "12:00am", :roles => [:web] do
-  rake "site:regenerate_all"
+  rake "site:regenerate_all_separately"
 end
