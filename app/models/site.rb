@@ -58,12 +58,12 @@ class Site < ActiveRecord::Base
     ScriptGenerator.new(self, :compress => compress).generate_script
   end
 
-  def generate_script
-    delay :generate_static_assets
+  def generate_script(options = {})
+    delay :generate_static_assets, options
   end
 
-  def blank_out_script
-    delay :generate_blank_static_assets
+  def blank_out_script(options = {})
+    delay :generate_blank_static_assets, options
   end
 
   def lifetime_totals(cache_opts = {})
