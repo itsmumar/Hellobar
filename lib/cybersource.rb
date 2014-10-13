@@ -166,7 +166,6 @@ class CyberSourceCreditCard < PaymentMethodDetails
     data["brand"] = card.brand
 
     data["sanitized_number"] = "XXXX-XXXX-XXXX-"+data["number"][-4..-1]
-    data["sanitized_verification_value"] = "XXX"
     sanitized_data = data.clone
     sanitized_data.delete("number")
     sanitized_data.delete("verification_value")
@@ -196,7 +195,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
       raise
     end
     data["number"] = data.delete("sanitized_number")
-    data["verification_value"] = data.delete("sanitized_verification_value")
+    data.delete("verification_value")
     data["token"] = response.params["subscriptionID"]
     # Clear the card attribute so it clears the cache of the number
     @card = nil

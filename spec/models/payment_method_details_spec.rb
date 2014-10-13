@@ -51,9 +51,9 @@ describe CyberSourceCreditCard do
     cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
     cc.data = VALID_DATA
     cc.save!
-    cc.data["verification_value"].should == "XXX"
+    cc.data["verification_value"].should == nil
     cc = CyberSourceCreditCard.find(cc.id)
-    cc.data["verification_value"].should == "XXX"
+    cc.data["verification_value"].should == nil
   end
 
   it "should store the cybersource_token" do
