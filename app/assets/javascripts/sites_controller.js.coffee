@@ -4,10 +4,11 @@ $ ->
     $("tr.more-top-performers").toggle()
 
   # allow users to edit/update their payment information
-  $('a#update-cc-details, a#change-billing-cycle').click ->
+  $('a.update-cc-details').click ->
     options =
-      type: window.currentSubscription.values.name.toLowerCase(),
-      cycle: window.currentSubscription.values.schedule
+      package:
+        type: window.currentSubscription.values.name.toLowerCase(),
+        cycle: window.currentSubscription.values.schedule
       currentPaymentDetails: window.currentPaymentDetails.data
-      userPaymentMethods: window.userPaymentMethods
+      addPaymentMethod: $(this).hasClass('add-payment-method')
     new PaymentModal(options).open()

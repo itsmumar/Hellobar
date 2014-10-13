@@ -3,9 +3,11 @@ class @PaymentModal extends Modal
   modalName: "payment-account"
   modalTemplate: -> $('script#payment-modal-template').html()
   paymentDetailsTemplate: -> $('script#cc-payment-details-template').html()
+  linkedMethodsTemplate: -> $("script#linked-methods-template").html()
 
   constructor: (@options = {}) ->
-    @userPaymentMethods = @fetchUserPaymentMethods({siteID: window.siteID})
+    @fetchUserPaymentMethods(window.siteID) unless @options.addPaymentMethod
+    @options.currentPaymentDetails = null if @options.addPaymentMethod
     @$modal = @buildModal()
     @_bindInteractions()
 
@@ -14,32 +16,44 @@ class @PaymentModal extends Modal
     template = Handlebars.compile(@modalTemplate())
     $(template(
       errors: @options.errors
-      package: @options
+      package: @options.package
       currentPaymentDetails: @options.currentPaymentDetails
-      userPaymentMethods: @options.userPaymentMethods
       isAnnual: @isAnnual()
     ))
 
   isAnnual: ->
-    @options.cycle == 'yearly'
+    @options.package.cycle == 'yearly'
 
   open: ->
     $('body').append(@$modal)
     super
 
+  fetchUserPaymentMethods: (siteID) ->
+    paymentUrl = "/payment_methods/"
+    paymentUrl += "?site_id=#{siteID}" if siteID
+
+    $.getJSON(paymentUrl).then (response) =>
+      # on success, update the payment detail modal
+      if response.payment_methods.length > 0
+        template = Handlebars.compile(@linkedMethodsTemplate())
+        html = $(template({paymentMethods: response.payment_methods}))
+        @$modal.find('#linked-payment-methods').html(html)
+        @_bindLinkedPayment()
+    , -> # on failed retreival
+      console.log "Couldn't retreive user payments for #{siteID}"
+
   _bindInteractions: ->
     @_bindChangePlan()
     @_bindFormSubmission()
-    @_bindLinkedPayment()
 
+  # re-open the upgrade modal to allow selecting a different plan
   _bindChangePlan: ->
-    # re-open the upgrade modal to allow selecting a different plan
     @$modal.find('.different-plan').on 'click', (event) =>
       new UpgradeAccountModal().open()
       @close()
 
+  # bind submission of payment details
   _bindFormSubmission: ->
-    # bind submission of payment details
     @$modal.find('a.submit').on 'click', (event) =>
       @_unbindFormSubmission() # prevent double submissions
       @_removeAlerts()
@@ -60,12 +74,10 @@ class @PaymentModal extends Modal
           # update the currentSubscription and paymentDetails window objects
         error: (xhr, status, error) =>
           @_bindFormSubmission() # rebind so they can enter valid info
-          content = ''
 
           if xhr.responseJSON
             content = xhr.responseJSON.errors.join(', ')
-
-          @_renderAlert(content)
+            @_renderAlert(content)
 
   _unbindFormSubmission: ->
     @$modal.find('a.submit').off('click')
@@ -91,9 +103,9 @@ class @PaymentModal extends Modal
            .attr('disabled', false)
 
   _isUsingLinkedPaymentMethod: ->
-    !isNaN(@_linkedDetailId())
+    !isNaN(@_linkedPaymentMethodId())
 
-  _linkedDetailId: ->
+  _linkedPaymentMethodId: ->
     parseInt(@$modal.find('select#linked-detail').val())
 
   _method: ->
@@ -103,17 +115,14 @@ class @PaymentModal extends Modal
       'POST'
 
   _url: ->
-    if @_method() == 'POST'
-      "/payment_methods/"
-    else # inject the payment_method_id OF the selected payment detail
-      paymentMethodId = if @_isUsingLinkedPaymentMethod()
-        window.userPaymentMethods.filter((method) =>
-          method.current_details.data.id == @_linkedDetailId()
-        )[0].id
-      else
-        window.currentPaymentDetails.data.payment_method_id
-
-      "/payment_methods/#{paymentMethodId}"
+    if @options.addPaymentMethod
+      "/payment_methods"
+    else if @_isUsingLinkedPaymentMethod()
+      "/payment_methods/" + @_linkedPaymentMethodId()
+    else if @options.currentPaymentDetails
+      "/payment_methods/" + @options.currentPaymentDetails.payment_method_id
+    else
+      "/payment_methods"
 
   _renderAlert: (content) ->
     template = Handlebars.compile($('script#alert-template').html())

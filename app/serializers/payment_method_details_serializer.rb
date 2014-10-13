@@ -2,6 +2,8 @@ class PaymentMethodDetailsSerializer < ActiveModel::Serializer
   attributes :data
 
   def data
+    return {} unless object
+
     object.data ||= {}
 
     {
