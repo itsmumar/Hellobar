@@ -24,7 +24,6 @@
 #= require ./../modal
 #= require_tree ./../modals
 #= require ./../upgrade_modal_initializer
-#= require ./../enforce_restrictions_initializer
 
 #= require ./router
 
