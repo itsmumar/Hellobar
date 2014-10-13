@@ -22,7 +22,7 @@ HelloBar.TargetingController = Ember.Controller.extend
 
       options =
         ruleData:
-          siteId: window.siteID
+          siteID: window.siteID
           name: @get("value")
           conditions: [{segment: @get("segment"), operand: "is", value: @get("value")}]
         successCallback: ->
@@ -40,7 +40,7 @@ HelloBar.TargetingController = Ember.Controller.extend
 
   actions:
     openRuleModal: (ruleData) ->
-      ruleData.siteId = window.siteID
+      ruleData.siteID = window.siteID
       controller = this
 
       options =

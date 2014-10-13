@@ -65,7 +65,7 @@ module 'RuleModal interactions',
     @modal = new RuleModal(
       ruleData:
         name: 'Name'
-        siteId: 1
+        siteID: 1
     )
 
     $(document).ajaxComplete =>
@@ -83,7 +83,7 @@ asyncTest 'RuleModal closes the modal on a successful form submission event', (a
   options =
     ruleData:
       name: 'Name'
-      siteId: 1
+      siteID: 1
 
   modal = new RuleModal(options)
 

@@ -5,6 +5,7 @@ class @PaymentModal extends Modal
   paymentDetailsTemplate: -> $('script#cc-payment-details-template').html()
 
   constructor: (@options = {}) ->
+    @userPaymentMethods = @fetchUserPaymentMethods({siteID: window.siteID})
     @$modal = @buildModal()
     @_bindInteractions()
 

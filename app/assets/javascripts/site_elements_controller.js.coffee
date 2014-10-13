@@ -31,7 +31,7 @@ $ ->
     for rule in window.rules
       ruleJson = rule if rule.id == ruleId
 
-    ruleJson.siteId = window.siteID
+    ruleJson.siteID = window.siteID
 
     console.log "Couldnt find rule with ID: #{ruleId}" unless ruleJson
 
@@ -57,7 +57,7 @@ $ ->
 
     $element = $(this)
     $row = $element.parents('tr')
-    siteId = $element.attr('data-site-id')
+    siteID = $element.attr('data-site-id')
     elementId = $element.attr('data-element-id')
 
     # assume successful change for faster user feedback
@@ -70,7 +70,7 @@ $ ->
 
     $.ajax
       type: 'PUT'
-      url: "/sites/#{siteId}/site_elements/#{elementId}/toggle_paused"
+      url: "/sites/#{siteID}/site_elements/#{elementId}/toggle_paused"
       error: (xhr, status, error) ->
         # toggle the class and text back to original and render any error
         console.log "Unexepcted error: #{error}"
@@ -104,7 +104,7 @@ $ ->
 
     $element = $(this)
     $row = $element.parents('tr')
-    siteId = $element.attr('data-site-id')
+    siteID = $element.attr('data-site-id')
     elementId = $element.attr('data-element-id')
     $row.hide()
     # REFACTOR
@@ -119,7 +119,7 @@ $ ->
     $.ajax
       contentType: "text/javascript"
       type: 'DELETE'
-      url: "/sites/#{siteId}/site_elements/#{elementId}/"
+      url: "/sites/#{siteID}/site_elements/#{elementId}/"
       error: (xhr, status, error) ->
         $row.show()
         originalValue = parseInt($count.text()) + 1
