@@ -164,9 +164,13 @@ class CyberSourceCreditCard < PaymentMethodDetails
     params = {:order_id=>order_id, :email => email, :address=>address.to_h}
     # Set the brand
     data["brand"] = card.brand
+
     data["sanitized_number"] = "XXXX-XXXX-XXXX-"+data["number"][-4..-1]
+    data["sanitized_verification_value"] = "XXX"
     sanitized_data = data.clone
     sanitized_data.delete("number")
+    sanitized_data.delete("verification_value")
+
     begin
       if previous_token
         # Update the profile
@@ -191,8 +195,8 @@ class CyberSourceCreditCard < PaymentMethodDetails
       audit << "Error tokenizing with #{sanitized_data.inspect} response: #{response.inspect} error: #{e.message}"
       raise
     end
-    data["number"] = data["sanitized_number"]
-    data.delete("sanitized_number")
+    data["number"] = data.delete("sanitized_number")
+    data["verification_value"] = data.delete("sanitized_verification_value")
     data["token"] = response.params["subscriptionID"]
     # Clear the card attribute so it clears the cache of the number
     @card = nil

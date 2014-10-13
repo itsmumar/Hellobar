@@ -47,6 +47,15 @@ describe CyberSourceCreditCard do
     cc.data["number"].should == "XXXX-XXXX-XXXX-1111"
   end
 
+  it "should not store the cvv" do
+    cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
+    cc.data = VALID_DATA
+    cc.save!
+    cc.data["verification_value"].should == "XXX"
+    cc = CyberSourceCreditCard.find(cc.id)
+    cc.data["verification_value"].should == "XXX"
+  end
+
   it "should store the cybersource_token" do
     cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
     cc.data = VALID_DATA
