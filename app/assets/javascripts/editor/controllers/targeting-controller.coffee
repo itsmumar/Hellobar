@@ -1,5 +1,9 @@
 HelloBar.TargetingController = Ember.Controller.extend
 
+  canUseRuleModal: ( ->
+    @get("model.site.capabilities.custom_targeted_bars")
+  ).property("model.site.capabilities.custom_targeted_bars")
+
   ruleOptions: ( ->
     rules = @get("model.site.rules").slice()
     rules.push({name: "Other...", description: "?"})
@@ -39,7 +43,19 @@ HelloBar.TargetingController = Ember.Controller.extend
   value: null
 
   actions:
+    resetRuleDropdown: (ruleData = {}) ->
+      if ruleData.id == undefined
+        firstRule = @get('model.site.rules')[0]
+        firstRule ||= { id: null }
+        @set('model.rule_id', firstRule.id)
+
+    openUpgradeModal: (ruleData = {}) ->
+      @send("resetRuleDropdown", ruleData)
+      new UpgradeAccountModal({site: @get("model.site")}).open()
+
     openRuleModal: (ruleData) ->
+      return @send("openUpgradeModal", ruleData) unless @get("canUseRuleModal")
+
       ruleData.siteID = window.siteID
       controller = this
 
@@ -61,11 +77,7 @@ HelloBar.TargetingController = Ember.Controller.extend
           controller.set('model.rule_id', ruleData.id)
           controller.notifyPropertyChange('model.site.rules')
         close: ->
-          # if we selected "Other...", reset the current rule to the first
-          if ruleData.id == undefined
-            firstRule = controller.get('model.site.rules')[0]
-            firstRule ||= { id: null }
-            controller.set('model.rule_id', firstRule.id)
+          controller.send("resetRuleDropdown", ruleData)
 
       new RuleModal(options).open()
 
