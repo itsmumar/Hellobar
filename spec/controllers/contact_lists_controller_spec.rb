@@ -62,7 +62,6 @@ describe ContactListsController, type: :controller do
 
     subject { get :show, site_id: site, id: contact_list }
     it { should be_success }
-    its(:body) { should include "Syncing contacts with #{contact_list.provider}" }
   end
 
   describe "POST 'create'" do
