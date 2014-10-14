@@ -3,12 +3,16 @@
 .upgrade-account-modal
   text-align: center
 
+  .modal-block
+    padding-left: 1.75em
+    padding-right: 1.75em
+
   .site-title
     font-size: 1.33em
     @include antialiased()
 
   .billing-options
-    width: 20em
+    width: 21.5em
     margin: 1.5em auto
     position: relative
 
@@ -21,9 +25,10 @@
       color: $gray
       padding: 0.33em
       cursor: pointer
-      font-size: 0.95em
+      text-align: center
       border: 1px solid $green
       text-transform: uppercase
+      font-size: 0.95em !important
       @include inline-block()
       @include antialiased()
       @include transition()
@@ -38,7 +43,7 @@
         background-color: lighten($green, 37.5%)
 
     input:checked + label
-      color: $white
+      color: $white !important
       cursor: default
       background-color: $green
 
@@ -60,7 +65,7 @@
   /*-----------  Packages  -----------*/
 
   .package-block
-    margin-bottom: 1em
+    margin-bottom: 0.5em
     border-color: $grayLighter
     @include justify-content(flex-start)
     @include align-content(center)
@@ -139,11 +144,12 @@
           color: $gray
           font-size: 0.75em
           line-height: 145%
-          margin: 0 0.25em 0.75em
+          margin: 0 0.5em 0.75em
 
         .button
           display: block
           font-size: 0.85em !important
+          @include antialiased(false)
 
           &[disabled]
             color: $gray

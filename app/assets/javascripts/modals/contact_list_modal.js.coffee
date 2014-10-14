@@ -160,8 +160,8 @@ class @ContactListModal extends Modal
 
   _showErrors: (errors) ->
     return unless errors.length > 0
-    html = "<div class=\"alert\">#{errors.reduce (a, b) -> "#{a}<br>#{b}"}</div>"
-    @$modal.find(".modal-block").prepend(html)
+    errorText = errors.reduce (a, b) -> "#{a}<br>#{b}"
+    @$modal.find('.modal-block .flash-block').html(errorText + '<i class="icon-close"></i>').addClass('alert show')
 
   _clearErrors: ->
     @$modal.find(".alert").remove()

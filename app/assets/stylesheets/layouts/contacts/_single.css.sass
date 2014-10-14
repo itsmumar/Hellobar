@@ -20,11 +20,14 @@
 
     .service-description
       width: 100%
+      font-size: 1.15em
       @include ellipsis()
 
       small
         color: $gray
         display: block
+        letter-spacing: 0.02em
+        @include antialiased()
 
       span
         color: $grayDark
@@ -45,7 +48,23 @@
   /*-----------  Table  -----------*/
 
   table
+    margin-top: 3em
 
     td:first-of-type
       width: 4em
 
+    td[colspan]
+      border-left: none
+      border-right: none
+      border-bottom: none
+      text-align: center
+
+      *
+        font-style: italic
+
+  /*-----------  Empty State  -----------*/
+
+
+  .temporary-block
+    width: 100%
+    margin-top: 4em

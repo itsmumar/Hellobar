@@ -66,6 +66,12 @@
         &:last-child
           float: right
 
+    .flash-block
+      width: 81.67%
+
+      &.show
+        margin-top: -3em
+
   /*-----------  Animations  -----------*/
 
   &.show-modal
@@ -77,3 +83,14 @@
       opacity: 1
       margin-top: 0
       @include transition(margin-top $modalSpeed, opacity $modalSpeed)
+
+/*-----------  Application States  -----------*/
+
+#hb-editor
+
+  .modal-block .button.cancel
+    background-color: darken($gray, 5%)
+
+    &:hover
+      background-color: darken($gray, 12%)
+

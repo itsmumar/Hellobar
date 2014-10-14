@@ -18,23 +18,28 @@
     = image_tag contact_list_image(@contact_list)
 
   .service-description
-    span= contact_list_sync_details(@contact_list)
+    = contact_list_sync_details(@contact_list)
 
   .service-actions
     a#edit-contact-list.button Edit
     = button_to "Export CSV", site_contact_list_path(@site, @contact_list, :format => :csv), :method => :get, :class => 'button'
 
-- if @contact_list.subscribers.any?
-  table
-    tr
-      th #
-      th Email
-      th Name
-      th Date Subscribed
+table
+  tr
+    th #
+    th Email
+    th Name
+    th Date Subscribed
 
-    - @contact_list.subscribers.each_with_index do |subscriber, index|
+    - if @contact_list.subscribers.any?
+      - @contact_list.subscribers.each_with_index do |subscriber, index|
+        tr
+          td= index + 1
+          td= subscriber[:email]
+          td= subscriber[:name]
+          td
+
+    - else
       tr
-        td= index + 1
-        td= subscriber[:email]
-        td= subscriber[:name]
-        td
+        td colspan='9'
+          h6 No Emails Collected Yet

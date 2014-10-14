@@ -10,6 +10,10 @@
         width: 2em
         height: auto
 
+      span + img
+        margin-left: 0.67em
+        @include inline-block()
+
     th:last-of-type:after
       content: 'q'
       font-size: 0.5em
@@ -17,6 +21,9 @@
       font-family: 'hellobar'
       @include transform(rotate(90deg))
       @include inline-block()
+
+    td:first-of-type
+      width: 35%
 
     td:last-of-type
       width: 13em

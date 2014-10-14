@@ -40,7 +40,7 @@ section
     tbody
       - @bills.each do |bill|
         tr
-          td= bill.bill_at
+          td= bill.bill_at.strftime("%-m-%-d-%Y")
           td= number_to_currency(bill.amount)
           td= "Hello Bar #{bill.subscription.values[:name]}"
           td= bill.paid_with_payment_method_detail ? bill.paid_with_payment_method_detail.data['number'] : 'n/a'
@@ -48,7 +48,7 @@ section
   - if @next_bill
     small
       | Next bill is due 
-      = @next_bill.due_at
+      = @next_bill.due_at.strftime("%-m-%-d-%Y")
       |  and will total 
       = number_to_currency(@next_bill.amount)
       |  for a 
