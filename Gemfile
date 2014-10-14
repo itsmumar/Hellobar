@@ -60,7 +60,7 @@ group :development do
 end
 
 group :development, :test do
-  gem "debugger"
+  # gem "debugger"
   gem "metric_fu"
   gem "minitest"
   gem "pry"

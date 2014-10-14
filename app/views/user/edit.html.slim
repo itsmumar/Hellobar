@@ -2,26 +2,33 @@ nav.tabs-wrapper
   = active_link_to 'You', profile_path()
   = active_link_to 'Site', edit_site_path(current_site)
 
-= form_for @user, :url => user_path, :html => {:class => 'avatar-form'} do |f|
-  img.user-avatar src= gravatar_url_for(@user, :size => 300)
+.profile-wrapper
+  = form_for @user, :url => user_path, :html => {:class => 'avatar-form'} do |f|
+    = image_tag gravatar_url_for(@user, :size => 300), :class => 'user-avatar'
+    / .button Choose File
+    = link_to 'Import from Gravatar', 'https://en.gravatar.com/emails/' 
 
-= form_for @user, :url => user_path, :html => {:class => 'personal-form'} do |f|
-  = f.label :email
-  = f.text_field :email
 
-  = f.label :first_name
-  = f.text_field :first_name
+  = form_for @user, :url => user_path, :html => {:class => 'personal-form'} do |f|
+    = f.label :email
+    = f.text_field :email
 
-  = f.label :last_name
-  = f.text_field :last_name
+    = f.label :first_name
+    = f.text_field :first_name
 
-  = f.submit "Save & Update", :class => "button"
+    = f.label :last_name
+    = f.text_field :last_name
 
-= form_for @user, :url => user_path, :html => {:class => 'password-form'} do |f|
-  = f.label :password, "Change password"
-  = f.password_field :password
+    = f.submit "Save & Update", :class => "button"
 
-  = f.label :password_confirmation, "Change password (confirm)"
-  = f.password_field :password_confirmation
+  = form_for @user, :url => user_path, :html => {:class => 'password-form'} do |f|
 
-  = f.submit "Change Password", :class => "button"
+    = f.label :password, "New Password"
+    = f.password_field :password
+
+    = f.label :password_confirmation, "Repeat Password"
+    = f.password_field :password_confirmation
+
+    small Must be 6 characters with one uppercase letter and a number
+
+    = f.submit "Change Password", :class => "button"

@@ -52,7 +52,7 @@
           text-align: left
           position: relative
           padding-left: 2.5em
-          @include antialiased(subpixel-antialiased)
+          @include antialiased(false)
 
           small
             color: $gray
@@ -107,7 +107,7 @@
           @include inline-block()
 
           label
-            @include antialiased(subpixel-antialiased)
+            @include antialiased(false)
 
           input
             letter-spacing: 0.05em

@@ -1,0 +1,86 @@
+/*-----------  Radio & Checkbox  -----------*/
+
+input[type=radio],
+input[type=checkbox]
+  width: 5%
+  font-size: 1.5em
+  @include inline-block()
+
+input[type=radio] + label,
+input[type=checkbox] + label
+  margin: 0
+  width: 95%
+  color: $gray
+  cursor: pointer
+  text-align: left
+  position: relative
+  padding-left: 1em
+  font-size: 0.85em !important
+  font-weight: $fontWeightLight !important
+  @include user-select(none)
+  @include inline-block()
+  @include transition()
+
+  small
+    color: $gray
+    display: block
+
+    strong
+      color: red
+      display: block
+
+//   &:before
+//     top: 2px
+//     left: 0
+//     width: 14px
+//     height: 14px
+//     content: ''
+//     position: absolute
+//     background-color: $white
+//     border: 1px solid $brownLight
+//     @include transition()
+
+//   &:first-of-type
+//     margin-top: 0
+
+// input[type=radio] + label:hover,
+// input[type=radio]:focus + label,
+// input[type=checkbox] + label:hover,
+// input[type=checkbox]:focus + label
+//   color: $brown
+
+//   &:before
+//     border-color: $orange
+
+// input[type=radio]:checked + label,
+// input[type=checkbox]:checked + label
+//   color: $brownDark
+
+//   &:before
+//     border-color: $orange
+//     background-color: $orange
+
+// /*-----------  Radio  -----------*/
+
+// input[type=radio] + label
+
+//   &:before
+//     border-radius: 10em
+
+// /*-----------  Checkbox  -----------*/
+
+
+// input[type=checkbox] + label
+
+//   &:before
+//     border-radius: $radiusSm
+
+//   &:after
+//     top: 4px
+//     left: 2px
+//     color: $white
+//     content: '\e802'
+//     font-size: 0.6em
+//     position: absolute
+//     font-family: 'twigtale'
+//     @include transition()

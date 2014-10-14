@@ -1,0 +1,50 @@
+/*-----------  Text Inputs  -----------*/
+
+#{$all-text-inputs},
+textarea,
+select
+  width: 100%
+  color: $grayDark
+  border-radius: 0
+  font-size: 0.85em
+  margin: 0.75em auto
+  padding: 0.45em 0.67em
+  border: 1px solid $gray
+  @include box-shadow(none)
+  @include appearance(none)
+  @include inline-block()
+  @include transition()
+
+  &:focus
+    outline: none
+    color: $grayDarker
+
+  &:disabled
+    color: lighten($gray, 5%)
+    background-color: #f7f7f7
+
+  @include placeholder 
+    color: lighten($gray, 5%)
+
+textarea
+  min-height: 6em      
+
+/*-----------  Inline States  -----------*/
+
+span > input,
+span > textarea
+  display: inline !important
+  margin: 0 0.5em !important
+  vertical-align: middle  
+  
+/*-----------  Error States  -----------*/
+
+.has-error
+  #{$all-text-inputs},
+  textarea,
+  select
+    color: $red
+    border-color: $red
+
+    @include placeholder 
+      color: lighten($red, 25%)

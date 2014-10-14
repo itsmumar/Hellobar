@@ -1,0 +1,65 @@
+/*-----------  Select Dropdowns  -----------*/
+
+.select-wrapper
+  color: $grayDark
+  position: relative
+  margin: 0.75em auto
+  background-color: $white
+
+  select
+    cursor: pointer
+    color: $grayDarker
+    padding-right: 2.67em
+    background-color: $white
+    @include ellipsis()
+
+    option
+      @include ellipsis()
+
+  label
+    position: relative
+
+  &:before
+    right: 1rem
+    content: 'U'
+    bottom: 0.75em
+    line-height: 300%
+    font-size: 0.75em
+    color: $grayDarker
+    position: absolute
+    pointer-events: none
+    font-family: 'hellobar'
+    @include transition()
+
+  &:hover:before
+    color: $grayDarker
+
+/*-----------  Error States  -----------*/
+
+.has-error 
+  span > input,
+  span > textarea
+
+    select
+      color: $red
+      border-color: $red
+
+    &:before
+      color: $red
+
+/*-----------  Inline States  -----------*/
+
+span.select-wrapper
+  margin: 0 0.5em !important
+  
+  &:before
+    line-height: 350%
+
+  select
+    width: inherit
+    display: inline !important
+    vertical-align: middle
+
+@media screen and (-webkit-min-device-pixel-ratio:0)
+  select
+    padding-right: 18px

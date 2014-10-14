@@ -6,10 +6,10 @@
 
 - if current_user && current_site
   .header-nav-wrapper
-    img.site-avatar src=""
-    span.site-name= display_name_for_site(current_site)
-
     .dropdown-wrapper
+      span.site-name
+        img.site-avatar src=""
+        = display_name_for_site(current_site)
       i.icon-dropdown
       .dropdown-block
         = active_link_to 'Settings', (current_user ? edit_site_path(current_site) : root_path)
@@ -30,10 +30,9 @@
         #upgrade-account.button
           | Upgrade to Pro
 
-      img.user-avatar src= gravatar_url_for(current_user)
-      span.user-name= display_name_for_user(current_user)
-
       .dropdown-wrapper
+        = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
+        span.user-name= display_name_for_user(current_user)
         i.icon-dropdown
         .dropdown-block
           = active_link_to 'User Settings', profile_path()

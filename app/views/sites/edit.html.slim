@@ -3,15 +3,25 @@ nav.tabs-wrapper
   = active_link_to 'Site', edit_site_path(current_site)
 
 = simple_form_for @site do |f|
-  p= link_to "Installation instructions", site_install_path(@site)
+  
+  .url-wrapper
+    = f.label :url
+    = f.text_field :url
 
-  = f.input :url
-  = f.input :opted_in_to_email_digest, as: :boolean, inline_label: "Send me a weekly email digest of this site's performance", label: 'Email Digest'
+  .select-wrapper
+    = f.label :timezone
+    = f.select :timezone, ActiveSupport::TimeZone.all.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
 
-  = f.label :timezone
-  = f.select :timezone, ActiveSupport::TimeZone.all.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
+  br
 
-  = render 'billing'
+  .selector-wrapper
+    = f.check_box :opted_in_to_email_digest, as: :boolean
+    = f.label :opted_in_to_email_digest, "Send me a weekly email digest of this site's performance"
+
+  = link_to "Installation instructions", site_install_path(@site), :class => 'button'
+
+  .billing-wrapper
+    = render 'billing'
 
   footer
     = f.button :submit, "Save & Update", :class => "button"

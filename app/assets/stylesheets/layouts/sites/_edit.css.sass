@@ -1,0 +1,58 @@
+/*-----------  Edit Site  -----------*/
+
+#sites-edit
+
+  form.edit_site
+    
+    .url-wrapper,
+    .select-wrapper,
+    .selector-wrapper
+      width: 30%
+      @include inline-block()
+
+      label
+        margin-top: 0
+
+    .url-wrapper,
+    .selector-wrapper
+      margin-right: 2.5%
+
+  /*-----------  Billing Section  -----------*/
+
+  .billing-wrapper
+    margin-top: 3.5em
+
+    section
+      margin-bottom: 2em
+
+      label
+        width: 9%
+        float: left
+        margin-top: 0
+        line-height: 135%
+
+      > p
+        color: $gray
+        padding-left: 10%
+
+        a
+          color: $blue
+          margin-left: 0.67em
+          text-decoration: underline
+
+      table
+        clear: both
+        width: 62.5%
+        margin-left: 0
+        margin-bottom: 0.5em
+
+        th, td
+          padding: 0.85em 1em
+
+        tbody tr:nth-child(even)
+          background-color: $grayLightest
+
+      small
+        font-size: 0.9em
+        color: $grayLight
+        @include antialiased()

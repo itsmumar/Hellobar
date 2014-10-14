@@ -1,7 +1,7 @@
-h5 Billing
+h5.page-header.alt Billing
 
-.plan
-  span Plan
+section
+  label Plan
   p
     = display_name_for_site(@site)
     - if @site.current_subscription
@@ -11,37 +11,42 @@ h5 Billing
       = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
       |  
       = @site.current_subscription.schedule
-      |  
+      | . 
       = link_to 'Change to monthly billing', '#', id: 'change-billing-cycle'
     - else
       |  is on the free plan.
 
-.card
-  - if @site.current_subscription && @site.current_subscription.payment_method
-    span Card
-    p
+section
+  label Card
+  p
+    - if @site.current_subscription && @site.current_subscription.payment_method
       = @site.current_subscription.payment_method.current_details.data['number']
-    = link_to 'Change card', '#'
-    = link_to 'Update card details', '#', id: 'update-cc-details'
+      = link_to 'Change card', '#'
+      = link_to 'Update card details', '#', id: 'update-cc-details'
+    - else
+      small
+        | (no credit card on file)
 
-.history
-  span History
+section
+  label History
 
   table
-    tr
-      th Date
-      th Cost
-      th Plan
-      th Card
-    - @bills.each do |bill|
+    thead
       tr
-        td= bill.bill_at
-        td= number_to_currency(bill.amount)
-        td= "Hello Bar #{bill.subscription.values[:name]}"
-        td= bill.paid_with_payment_method_detail.data['number'] if bill.paid_with_payment_method_detail
+        th Date
+        th Cost
+        th Plan
+        th Card
+    tbody
+      - @bills.each do |bill|
+        tr
+          td= bill.bill_at
+          td= number_to_currency(bill.amount)
+          td= "Hello Bar #{bill.subscription.values[:name]}"
+          td= bill.paid_with_payment_method_detail ? bill.paid_with_payment_method_detail.data['number'] : 'n/a'
 
   - if @next_bill
-    p
+    small
       | Next bill is due 
       = @next_bill.due_at
       |  and will total 

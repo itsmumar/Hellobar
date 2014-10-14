@@ -3,19 +3,49 @@
 #user-edit, 
 #user-update
 
-  form
-    width: 22.75%
-    margin-right: 3%
-    @include inline-block(top)
+  .profile-wrapper
 
-    &.avatar-form
-      padding: 1.5em
-      text-align: center
-      border-radius: $radiusSm
-      border: 1px solid $grayLighter
+  /*-----------  Profile Forms  -----------*/
+
+  form
+    width: 21.75%
+    margin-right: 4%
+    @include inline-block(top)
 
     &.personal-form .button
       @extend %green-button
 
     &.password-form .button
-      @extend %gray-button      
+      @extend %gray-button    
+
+    small
+      font-size: 0.9em
+      color: $grayLight
+      @include antialiased()
+
+    label
+      margin-top: 1em
+
+      &[for="user_email"],
+      &[for="user_password"]
+        margin-top: 0
+
+    .button
+      margin-top: 1em
+
+  /*-----------  User Avatar  -----------*/
+
+  form.avatar-form
+    padding: 1.5em
+    text-align: center
+    border-radius: $radiusSm
+    border: 1px solid $grayLighter
+
+    .button
+      @extend %gray-inverted-button
+
+    a:not(.button)
+      color: $blue
+      display: block
+      font-size: 0.85em
+      margin-top: 0.75em
