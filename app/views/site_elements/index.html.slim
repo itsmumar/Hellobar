@@ -25,7 +25,7 @@ table.rules-wrapper
           .dropdown-wrapper
             i.icon-settings
             .dropdown-block
-              = link_to '#', class: 'edit-rule', 'data-rule-id' => rule.id do
+              = link_to "#", class: "edit-rule", "data-rule-id" => rule.id, "data-can-edit" => @site.capabilities.custom_targeted_bars? do
                 i.icon-edit
                 | Edit
 
