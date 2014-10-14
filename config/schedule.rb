@@ -20,3 +20,11 @@ end
 every :monday, :at => "8:30am", :roles => [:web] do
   rake "email_digest:deliver_installed"
 end
+
+every 24.hours, :at => "12:00am", :roles => [:web] do
+  rake "site:scripts:generate_all_separately"
+end
+
+every 24.hours, :at => "12:00am", :roles => [:web] do
+  rake "site:improve_suggestions:generate_all_separately"
+end
