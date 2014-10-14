@@ -20,6 +20,10 @@ class Rule < ActiveRecord::Base
                        },
                        if: "priority.present?"
 
+  def self.create_from_segment(segment)
+    # TODO
+  end
+
   def to_sentence
     conditions.empty? ? "Show this to everyone" : "Show this when #{conditions.map(&:to_sentence).to_sentence}"
   end
