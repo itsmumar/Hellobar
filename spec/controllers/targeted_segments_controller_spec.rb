@@ -18,7 +18,7 @@ describe TargetedSegmentsController do
     end
 
     it "creates a rule with conditions that match the segment" do
-      Rule.should_receive(:create_from_segment).with(@segment).and_return(@mock_rule)
+      Rule.should_receive(:create_from_segment).with(site, @segment).and_return(@mock_rule)
       post :create, site_id: site, targeted_segment: {token: @token, segment: @segment}
     end
 
@@ -31,7 +31,7 @@ describe TargetedSegmentsController do
     end
 
     it "redirects to sites#improve if the rule couldn't be created for some reason" do
-      Rule.should_receive(:create_from_segment).with(@segment).and_return(double("rule", :valid? => false))
+      Rule.should_receive(:create_from_segment).with(site, @segment).and_return(double("rule", :valid? => false))
 
       post :create, site_id: site, targeted_segment: {token: @token, segment: @segment}
 

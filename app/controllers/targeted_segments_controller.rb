@@ -10,7 +10,7 @@ class TargetedSegmentsController < ApplicationController
     generated_token = generate_segment_token(params[:targeted_segment][:segment])
 
     if generated_token == params[:targeted_segment][:token]
-      @rule = Rule.create_from_segment(params[:targeted_segment][:segment])
+      @rule = Rule.create_from_segment(@site, params[:targeted_segment][:segment])
     end
 
     if @rule && @rule.valid?
