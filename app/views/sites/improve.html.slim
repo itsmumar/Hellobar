@@ -7,7 +7,10 @@
 - @suggestions.each do |name, suggestions|
   div class="suggestions-wrapper #{name}"
     - if suggestions.empty?
-      p Sorry, no suggestions yet.
+      .temporary-block
+        h5 Sorry, No suggestions yet.
+        strong Did you know that Hello Bar can suggest improvements for you?
+        p Once we have enough data to analyze, we can start suggesting improvements for your site. Until then, get out there and promote!
     - else
       - suggestions.each do |suggestion|
         = render "sites/suggestion_block", {site: @site, suggestion: suggestion, name: name}
