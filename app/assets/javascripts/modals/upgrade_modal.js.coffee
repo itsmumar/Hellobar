@@ -27,11 +27,9 @@ class @UpgradeAccountModal extends Modal
     @$modal.find('.button').on 'click', (event) =>
       if event.target.dataset.package 
         @packageOptions.type = event.target.dataset.package
-        window.currentPaymentDetails ||= {}
 
         options =
           package: @packageOptions
-          currentPaymentDetails: window.currentPaymentDetails.data
 
         new PaymentModal(options).open()
 

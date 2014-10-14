@@ -4,11 +4,16 @@ class @PaymentModal extends Modal
   modalTemplate: -> $('script#payment-modal-template').html()
   paymentDetailsTemplate: -> $('script#cc-payment-details-template').html()
   linkedMethodsTemplate: -> $("script#linked-methods-template").html()
+  currentPaymentMethod: null
 
   constructor: (@options = {}) ->
-    @fetchUserPaymentMethods(window.siteID) unless @options.addPaymentMethod
-    @options.currentPaymentDetails = null if @options.addPaymentMethod
     @$modal = @buildModal()
+
+    @$modal.on 'load', -> $(this).addClass('loading')
+    @$modal.on 'complete', -> $(this).removeClass('loading').finish()
+
+    @fetchUserPaymentMethods(window.siteID)
+
     @_bindInteractions()
 
   buildModal: ->
@@ -17,7 +22,6 @@ class @PaymentModal extends Modal
     $(template(
       errors: @options.errors
       package: @options.package
-      currentPaymentDetails: @options.currentPaymentDetails
       isAnnual: @isAnnual()
     ))
 
@@ -29,18 +33,45 @@ class @PaymentModal extends Modal
     super
 
   fetchUserPaymentMethods: (siteID) ->
+    return if @options.addPaymentMethod # we don't need to do anything!
+
+    @$modal.trigger('load') # indicate we need to do more work
+
     paymentUrl = "/payment_methods/"
     paymentUrl += "?site_id=#{siteID}" if siteID
 
     $.getJSON(paymentUrl).then (response) =>
-      # on success, update the payment detail modal
       if response.payment_methods.length > 0
-        template = Handlebars.compile(@linkedMethodsTemplate())
-        html = $(template({paymentMethods: response.payment_methods}))
-        @$modal.find('#linked-payment-methods').html(html)
-        @_bindLinkedPayment()
+        template = Handlebars.compile(@paymentDetailsTemplate())
+
+        @currentPaymentMethod = response.payment_methods.filter((paymentMethod) ->
+          paymentMethod.current_site_payment_method
+        )[0] || {}
+
+        html = $(template(
+          package: @options.package
+          currentPaymentDetails: @currentPaymentMethod.current_details
+        ))
+
+        # update the template with linked payment methods
+        html.find('#linked-payment-methods')
+            .html(@_buildLinkedPaymentMethods(response.payment_methods))
+
+      # replace the payment details fragment
+      # with linked payment methods & current payment info
+      $paymentDetails = $('#payment-details')
+      $paymentDetails.html(html)
+      @_bindLinkedPayment() # make sure we still toggle on linking payment
+      @_bindFormSubmission() # make sure we can still submit with the new form!
+
     , -> # on failed retreival
       console.log "Couldn't retreive user payments for #{siteID}"
+
+    @$modal.trigger('complete') # all done.
+
+  _buildLinkedPaymentMethods: (paymentMethods) ->
+    template = Handlebars.compile(@linkedMethodsTemplate())
+    $(template({paymentMethods: paymentMethods}))
 
   _bindInteractions: ->
     @_bindChangePlan()
@@ -68,10 +99,8 @@ class @PaymentModal extends Modal
         success: (data, status, xhr) =>
           alert "Successfully paid!"
           @close()
-          # TODO:
-          # now we need to open the success window
-          window.location = window.location # temp solution: hard refresh of page
-          # update the currentSubscription and paymentDetails window objects
+          # TODO: open the success window
+          window.location.reload(true) # temp solution: hard refresh of page
         error: (xhr, status, error) =>
           @_bindFormSubmission() # rebind so they can enter valid info
 
@@ -109,7 +138,7 @@ class @PaymentModal extends Modal
     parseInt(@$modal.find('select#linked-detail').val())
 
   _method: ->
-    if @_isUsingLinkedPaymentMethod() || @options.currentPaymentDetails
+    if @_isUsingLinkedPaymentMethod()
       'PUT'
     else
       'POST'
@@ -119,8 +148,8 @@ class @PaymentModal extends Modal
       "/payment_methods"
     else if @_isUsingLinkedPaymentMethod()
       "/payment_methods/" + @_linkedPaymentMethodId()
-    else if @options.currentPaymentDetails
-      "/payment_methods/" + @options.currentPaymentDetails.payment_method_id
+    else if @currentPaymentMethod && @currentPaymentMethod.currentPaymentDetails
+      "/payment_methods/" + @currentPaymentMethod.currentPaymentDetails.payment_method_id
     else
       "/payment_methods"
 
