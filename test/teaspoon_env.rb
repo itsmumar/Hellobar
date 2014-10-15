@@ -4,10 +4,6 @@ unless defined?(Rails)
   require File.expand_path("../../config/environment", __FILE__)
 end
 
-def current_site
-  @site
-end
-
 def choose_plan_button(subscription, plan)
   content_tag :div, class: 'button' do
     'Choose Plan'
