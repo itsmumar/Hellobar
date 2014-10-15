@@ -80,6 +80,8 @@ class SiteElement < ActiveRecord::Base
   end
 
   def site_is_capable_of_creating_element
+    return if persisted? # user is updating the site element
+
     if site && site.capabilities.at_site_element_limit?
       errors.add(:site, 'is currently at its limit to create site elements')
     end
