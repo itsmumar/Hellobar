@@ -90,6 +90,7 @@ class @PaymentModal extends Modal
     @$modal.find('a.submit').on 'click', (event) =>
       @_unbindFormSubmission() # prevent double submissions
       @_removeAlerts()
+      @$modal.find("a.submit").addClass("cancel")
 
       $form = @$modal.find('form')
 
@@ -105,6 +106,7 @@ class @PaymentModal extends Modal
           window.location.reload(true) # temp solution: hard refresh of page
         error: (xhr, status, error) =>
           @_bindFormSubmission() # rebind so they can enter valid info
+          @$modal.find("a.submit").removeClass("cancel")
 
           if xhr.responseJSON
             content = xhr.responseJSON.errors.join(', ')
