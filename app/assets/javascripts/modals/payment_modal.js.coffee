@@ -22,7 +22,8 @@ class @PaymentModal extends Modal
     $(template(
       errors: @options.errors
       package: @options.package
-      isAnnual: @isAnnual()
+      isAnnual: @isAnnual(),
+      siteName: window.site.display_name
     ))
 
   isAnnual: ->
@@ -51,6 +52,7 @@ class @PaymentModal extends Modal
         html = $(template(
           package: @options.package
           currentPaymentDetails: @currentPaymentMethod.current_details
+          siteName: @options.site.display_name
         ))
 
         # update the template with linked payment methods

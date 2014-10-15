@@ -3,7 +3,7 @@ class @UpgradeAccountModal extends Modal
   modalName: "upgrade-account"
   modalTemplate: -> $('script#upgrade-account-modal-template').html()
 
-  packageOptions: 
+  packageOptions:
     type: null
     cycle: null
 
@@ -13,15 +13,16 @@ class @UpgradeAccountModal extends Modal
 
   buildModal: ->
     template = Handlebars.compile(@modalTemplate())
-    $(template({errors: @options}))
+    $(template(
+      errors: @options,
+      siteName: window.site.display_name
+    ))
 
   open: ->
     @$modal.appendTo($("body"))
     @$modal.find('#yearly-billing').trigger('click')
     @_bindPackageSelection()
     super
-
-  #-----------  Select Package  -----------#
 
   _bindPackageSelection: ->
     @$modal.find('.button').on 'click', (event) =>
@@ -34,8 +35,6 @@ class @UpgradeAccountModal extends Modal
         new PaymentModal(options).open()
 
       @close()
-
-  #-----------  Change Billing Cycle  -----------#
 
   _bindBillingCycleEvents: ->
     @$modal.find('input[type="radio"]').on 'change', (event) =>

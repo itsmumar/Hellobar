@@ -5,9 +5,7 @@
 
       <form class="payment-modal" accept-charset="UTF-8">
         <input type="hidden" name="billing[plan]" value="{{ package.type }}" />
-        <div class="site-title">
-          <%= "Upgrade #{display_name_for_site(current_site)}!" %>
-        </div>
+        <div class="site-title">Upgrade {{siteName}}!</div>
 
         <div class="payment-wrapper {{ package.type }}">
           <div class="payment-sidebar">
@@ -40,7 +38,7 @@
           </div>
 
           <div id="payment-details">
-          {{> cc-payment-details}}
+          {{> cc-payment-details this}}
           </div>
         </div>
       </form>
