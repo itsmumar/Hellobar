@@ -22,11 +22,12 @@ class @PaymentModal extends Modal
     $(template(
       errors: @options.errors
       package: @options.package
-      isAnnual: @isAnnual()
+      isAnnual: @isAnnual(),
+      siteName: @options.site.display_name
     ))
 
   isAnnual: ->
-    @options.package.cycle == 'yearly'
+    @options.package.schedule == 'yearly'
 
   open: ->
     $('body').append(@$modal)
@@ -51,6 +52,7 @@ class @PaymentModal extends Modal
         html = $(template(
           package: @options.package
           currentPaymentDetails: @currentPaymentMethod.current_details
+          siteName: @options.site.display_name
         ))
 
         # update the template with linked payment methods
@@ -80,7 +82,7 @@ class @PaymentModal extends Modal
   # re-open the upgrade modal to allow selecting a different plan
   _bindChangePlan: ->
     @$modal.find('.different-plan').on 'click', (event) =>
-      new UpgradeAccountModal().open()
+      new UpgradeAccountModal({site: @options.site}).open()
       @close()
 
   # bind submission of payment details

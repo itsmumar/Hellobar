@@ -4,15 +4,7 @@ unless defined?(Rails)
   require File.expand_path("../../config/environment", __FILE__)
 end
 
-def current_site
-  @site
-end
-
-def display_name_for_site(site)
-  'This site name will always be rendered in teaspoon!'
-end
-
-def choose_plan_button(subscription, plan)
+def choose_plan_button(subscription)
   content_tag :div, class: 'button' do
     'Choose Plan'
   end

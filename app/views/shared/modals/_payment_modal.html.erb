@@ -5,9 +5,7 @@
 
       <form class="payment-modal" accept-charset="UTF-8">
         <input type="hidden" name="billing[plan]" value="{{ package.type }}" />
-        <div class="site-title">
-          <%= "Upgrade #{display_name_for_site(current_site)}!" %>
-        </div>
+        <div class="site-title">Upgrade {{siteName}}!</div>
 
         <div class="payment-wrapper {{ package.type }}">
           <div class="payment-sidebar">
@@ -17,30 +15,30 @@
             </header>
             <div class="package-cycle">
               {{#if isAnnual}}
-              <input type="radio" id="monthly-billing" name="billing[cycle]" value="monthly" />
+              <input type="radio" id="monthly-billing" name="billing[schedule]" value="monthly" />
               {{else}}
-              <input type="radio" id="monthly-billing" name="billing[cycle]" value="monthly" checked />
+              <input type="radio" id="monthly-billing" name="billing[schedule]" value="monthly" checked />
               {{/if}}
 
               <label for="monthly-billing">
                 Monthly
-                <small>$15 Per Month</small>
+                <small>${{package.monthly_amount}} Per Month</small>
               </label>
               {{#if isAnnual}}
-              <input type="radio" id="anually-billing" name="billing[cycle]" value="yearly" checked />
+              <input type="radio" id="anually-billing" name="billing[schedule]" value="yearly" checked />
               {{else}}
-              <input type="radio" id="anually-billing" name="billing[cycle]" value="yearly" />
+              <input type="radio" id="anually-billing" name="billing[schedule]" value="yearly" />
               {{/if}}
               <label for="anually-billing">
                 Annually
-                <small>$150 Per Year <strong>Save 15%</strong></small>
+                <small>${{package.yearly_amount}} Per Year <strong>Save 15%</strong></small>
               </label>
             </div>
             <a class="different-plan">Choose a different plan</a>
           </div>
 
           <div id="payment-details">
-          {{> cc-payment-details}}
+          {{> cc-payment-details this}}
           </div>
         </div>
       </form>

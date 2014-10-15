@@ -8,7 +8,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
       form.upgrade-account-modal
 
-        .site-title= "Upgrade #{display_name_for_site(site)}!"
+        .site-title= "Upgrade {{siteName}}!"
 
         .billing-options
           input id='monthly-billing' type='radio' name='billing' value='monthly'
@@ -31,7 +31,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               li Ads after 25,000 views
 
             .package-status
-              = choose_plan_button(site.current_subscription, 'free')
+              = choose_plan_button(Subscription::Free.new)
 
         / Pro Package
         .package-block.pro
@@ -70,7 +70,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
             .package-status
               p After 2500,000 visits, every 25,000 visits are an extra $5
-              = choose_plan_button(site.current_subscription, 'pro')
+              = choose_plan_button(Subscription::Pro.new)
 
         / Enterprise Package
         .package-block.enterprise
@@ -88,12 +88,4 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               li Enterprise integrations
 
             .package-status
-              = choose_plan_button(site.current_subscription, 'enterprise')
-
-/ initializing this here instead of a controller
-/ because I like it better than a before_action?
-
-- @current_subscription = site.current_subscription
-
-javascript:
-  var currentSubscription = #{{SubscriptionSerializer.new(@current_subscription).to_json}};
+              = choose_plan_button(Subscription::Enterprise.new)

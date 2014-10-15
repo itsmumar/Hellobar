@@ -3,10 +3,7 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
     header Billing Information
 
     .credit-card
-      p
-        | This will upgrade ONLY site 
-        = display_name_for_site(current_site)
-        |  to {{ package.type }}. Each site will need to be upgraded seperately to gain {{ package.type }} features.
+      p This will upgrade ONLY site {{siteName}} to {{ package.type }}. Each site will need to be upgraded seperately to gain {{ package.type }} features.
 
       #linked-payment-methods
 
