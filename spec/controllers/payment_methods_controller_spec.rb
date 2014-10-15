@@ -67,7 +67,7 @@ describe PaymentMethodsController, '#update' do
                             with(payment_method: payment_method, data: data).
                             and_return(PaymentMethodDetails.new)
 
-      put :update, id: payment_method.id, payment_method_details: {}, billing: { plan: 'pro', cycle: 'monthly' }, site_id: site.id
+      put :update, id: payment_method.id, payment_method_details: {}, billing: { plan: 'pro', schedule: 'monthly' }, site_id: site.id
     end
   end
 end

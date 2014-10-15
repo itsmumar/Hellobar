@@ -26,31 +26,31 @@ describe Subscribable, '#build_subscription_instance' do
   end
 
   it 'builds a free subscription instance properly' do
-    billing_params = { plan: 'free', cycle: 'yearly' }
+    billing_params = { plan: 'free', schedule: 'yearly' }
 
     controller.build_subscription_instance(billing_params).class.should == Subscription::Free
   end
 
   it 'builds a pro subscription instance properly' do
-    billing_params = { plan: 'pro', cycle: 'yearly' }
+    billing_params = { plan: 'pro', schedule: 'yearly' }
 
     controller.build_subscription_instance(billing_params).class.should == Subscription::Pro
   end
 
   it 'builds an enterprise subscription instance properly' do
-    billing_params = { plan: 'enterprise', cycle: 'yearly' }
+    billing_params = { plan: 'enterprise', schedule: 'yearly' }
 
     controller.build_subscription_instance(billing_params).class.should == Subscription::Enterprise
   end
 
   it 'sets the schedule to monthly properly' do
-    billing_params = { plan: 'pro', cycle: 'monthly' }
+    billing_params = { plan: 'pro', schedule: 'monthly' }
 
     controller.build_subscription_instance(billing_params).schedule.should == 'monthly'
   end
 
   it 'sets the schedule to yearly properly' do
-    billing_params = { plan: 'pro', cycle: 'yearly' }
+    billing_params = { plan: 'pro', schedule: 'yearly' }
 
     controller.build_subscription_instance(billing_params).schedule.should == 'yearly'
   end
