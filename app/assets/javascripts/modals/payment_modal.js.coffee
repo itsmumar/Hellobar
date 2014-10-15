@@ -85,6 +85,8 @@ class @PaymentModal extends Modal
 
   # bind submission of payment details
   _bindFormSubmission: ->
+    @_unbindFormSubmission() # clear any existing event bindings to make sure we only have one at a time
+
     @$modal.find('a.submit').on 'click', (event) =>
       @_unbindFormSubmission() # prevent double submissions
       @_removeAlerts()
