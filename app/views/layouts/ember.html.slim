@@ -24,7 +24,6 @@ html
     javascript:
       HB_DNT = 1
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
-      var site = #{{SiteSerializer.new(current_site).to_json}};
 
     = yield
 

@@ -28,7 +28,10 @@ class @UpgradeAccountModal extends Modal
       if event.target.dataset.package 
         @packageOptions.type = event.target.dataset.package
 
-        new PaymentModal(@packageOptions).open()
+        options =
+          package: @packageOptions
+
+        new PaymentModal(options).open()
 
       @close()
 

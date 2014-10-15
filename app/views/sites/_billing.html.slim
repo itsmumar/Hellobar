@@ -4,25 +4,27 @@ section
   label Plan
   p
     = display_name_for_site(@site)
-    - if @site.current_subscription
-      |  is on the 
-      = @site.current_subscription.values[:name]
-      |  plan. 
-      = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
-      |  
-      = @site.current_subscription.schedule
-      | . 
-      = link_to 'Change to monthly billing', '#', id: 'change-billing-cycle'
-    - else
-      |  is on the free plan.
+    |  is on the 
+    = @site.current_subscription.values[:name]
+    |  plan. 
+    = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
+    |  
+    = @site.current_subscription.schedule
+    | .
+    - # changing the schedule for a Free plan doesn't make sense
+    - if @site.current_subscription.requires_payment_method?
+      - if @site.current_subscription.schedule == 'monthly'
+        = link_to 'Change to annual billing', '#', class: 'update-cc-details'
+      - else
+        = link_to 'Change to monthly billing', '#', class: 'update-cc-details'
 
 section
   label Card
   p
     - if @site.current_subscription && @site.current_subscription.payment_method
       = @site.current_subscription.payment_method.current_details.data['number']
-      = link_to 'Change card', '#'
-      = link_to 'Update card details', '#', id: 'update-cc-details'
+      = link_to 'Add card', '#', class: 'update-cc-details add-payment-method'
+      = link_to 'Update card details', '#', class: 'update-cc-details'
     - else
       small
         | (no credit card on file)

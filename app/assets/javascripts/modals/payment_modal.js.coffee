@@ -3,10 +3,17 @@ class @PaymentModal extends Modal
   modalName: "payment-account"
   modalTemplate: -> $('script#payment-modal-template').html()
   paymentDetailsTemplate: -> $('script#cc-payment-details-template').html()
+  linkedMethodsTemplate: -> $("script#linked-methods-template").html()
+  currentPaymentMethod: null
 
   constructor: (@options = {}) ->
-    @userPaymentMethods = @fetchUserPaymentMethods({siteID: window.siteID})
     @$modal = @buildModal()
+
+    @$modal.on 'load', -> $(this).addClass('loading')
+    @$modal.on 'complete', -> $(this).removeClass('loading').finish()
+
+    @fetchUserPaymentMethods(window.siteID)
+
     @_bindInteractions()
 
   buildModal: ->
@@ -14,32 +21,70 @@ class @PaymentModal extends Modal
     template = Handlebars.compile(@modalTemplate())
     $(template(
       errors: @options.errors
-      package: @options
-      currentPaymentDetails: @options.currentPaymentDetails
-      userPaymentMethods: @options.userPaymentMethods
+      package: @options.package
       isAnnual: @isAnnual()
     ))
 
   isAnnual: ->
-    @options.cycle == 'yearly'
+    @options.package.cycle == 'yearly'
 
   open: ->
     $('body').append(@$modal)
     super
 
+  fetchUserPaymentMethods: (siteID) ->
+    return if @options.addPaymentMethod # we don't need to do anything!
+
+    @$modal.trigger('load') # indicate we need to do more work
+
+    paymentUrl = "/payment_methods/"
+    paymentUrl += "?site_id=#{siteID}" if siteID
+
+    $.getJSON(paymentUrl).then (response) =>
+      if response.payment_methods.length > 0
+        template = Handlebars.compile(@paymentDetailsTemplate())
+
+        @currentPaymentMethod = response.payment_methods.filter((paymentMethod) ->
+          paymentMethod.current_site_payment_method
+        )[0] || {}
+
+        html = $(template(
+          package: @options.package
+          currentPaymentDetails: @currentPaymentMethod.current_details
+        ))
+
+        # update the template with linked payment methods
+        html.find('#linked-payment-methods')
+            .html(@_buildLinkedPaymentMethods(response.payment_methods))
+
+      # replace the payment details fragment
+      # with linked payment methods & current payment info
+      $paymentDetails = $('#payment-details')
+      $paymentDetails.html(html)
+      @_bindLinkedPayment() # make sure we still toggle on linking payment
+      @_bindFormSubmission() # make sure we can still submit with the new form!
+
+    , -> # on failed retreival
+      console.log "Couldn't retreive user payments for #{siteID}"
+
+    @$modal.trigger('complete') # all done.
+
+  _buildLinkedPaymentMethods: (paymentMethods) ->
+    template = Handlebars.compile(@linkedMethodsTemplate())
+    $(template({paymentMethods: paymentMethods}))
+
   _bindInteractions: ->
     @_bindChangePlan()
     @_bindFormSubmission()
-    @_bindLinkedPayment()
 
+  # re-open the upgrade modal to allow selecting a different plan
   _bindChangePlan: ->
-    # re-open the upgrade modal to allow selecting a different plan
     @$modal.find('.different-plan').on 'click', (event) =>
       new UpgradeAccountModal().open()
       @close()
 
+  # bind submission of payment details
   _bindFormSubmission: ->
-    # bind submission of payment details
     @$modal.find('a.submit').on 'click', (event) =>
       @_unbindFormSubmission() # prevent double submissions
       @_removeAlerts()
@@ -54,18 +99,14 @@ class @PaymentModal extends Modal
         success: (data, status, xhr) =>
           alert "Successfully paid!"
           @close()
-          # TODO:
-          # now we need to open the success window
-          window.location = window.location # temp solution: hard refresh of page
-          # update the currentSubscription and paymentDetails window objects
+          # TODO: open the success window
+          window.location.reload(true) # temp solution: hard refresh of page
         error: (xhr, status, error) =>
           @_bindFormSubmission() # rebind so they can enter valid info
-          content = ''
 
           if xhr.responseJSON
             content = xhr.responseJSON.errors.join(', ')
-
-          @_renderAlert(content)
+            @_renderAlert(content)
 
   _unbindFormSubmission: ->
     @$modal.find('a.submit').off('click')
@@ -91,29 +132,26 @@ class @PaymentModal extends Modal
            .attr('disabled', false)
 
   _isUsingLinkedPaymentMethod: ->
-    !isNaN(@_linkedDetailId())
+    !isNaN(@_linkedPaymentMethodId())
 
-  _linkedDetailId: ->
+  _linkedPaymentMethodId: ->
     parseInt(@$modal.find('select#linked-detail').val())
 
   _method: ->
-    if @_isUsingLinkedPaymentMethod() || @options.currentPaymentDetails
+    if @_isUsingLinkedPaymentMethod()
       'PUT'
     else
       'POST'
 
   _url: ->
-    if @_method() == 'POST'
-      "/payment_methods/"
-    else # inject the payment_method_id OF the selected payment detail
-      paymentMethodId = if @_isUsingLinkedPaymentMethod()
-        window.userPaymentMethods.filter((method) =>
-          method.current_details.data.id == @_linkedDetailId()
-        )[0].id
-      else
-        window.currentPaymentDetails.data.payment_method_id
-
-      "/payment_methods/#{paymentMethodId}"
+    if @options.addPaymentMethod
+      "/payment_methods"
+    else if @_isUsingLinkedPaymentMethod()
+      "/payment_methods/" + @_linkedPaymentMethodId()
+    else if @currentPaymentMethod && @currentPaymentMethod.currentPaymentDetails
+      "/payment_methods/" + @currentPaymentMethod.currentPaymentDetails.payment_method_id
+    else
+      "/payment_methods"
 
   _renderAlert: (content) ->
     template = Handlebars.compile($('script#alert-template').html())

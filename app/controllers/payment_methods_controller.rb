@@ -2,10 +2,29 @@ class PaymentMethodsController < ApplicationController
   include Subscribable
 
   before_action :authenticate_user!
-  before_action :load_site
+
+  # returns all of the payment methods for the current user
+  def index
+    load_site if params[:site_id] # not required for this action
+
+    payment_methods = current_user.payment_methods.includes(:details)
+    subscription_payment_method_id = @site.current_subscription.payment_method_id if @site
+
+    payment_response = payment_methods.map do |method|
+      PaymentMethodSerializer.new(method).to_hash.tap do |hash|
+        hash[:current_site_payment_method] = hash[:id] == subscription_payment_method_id
+      end
+    end
+
+    respond_to do |format|
+      format.json { render json: payment_response }
+    end
+  end
 
   # creating a new payment method and payment detail
   def create
+    load_site
+
     payment_method = PaymentMethod.new user: current_user
     payment_method_details = CyberSourceCreditCard.new \
       payment_method: payment_method,
@@ -26,19 +45,15 @@ class PaymentMethodsController < ApplicationController
 
   # updating the details of their CC or linking existing payment detail
   def update
+    load_site
     payment_method = current_user.payment_methods.find params[:id]
+    process_subscription = true
 
-    # use an existing payment method for this site
-    if params[:payment_method_details] && params[:payment_method_details][:linked_detail_id].present?
-      process_subscription = true
-    elsif params[:payment_method_details] # update payment details on existing payment method
+    # they are updating their current payment details
+    if params[:payment_method_details]
       payment_method_details = CyberSourceCreditCard.new \
         payment_method: payment_method,
         data: PaymentForm.new(params[:payment_method_details]).to_hash
-
-      process_subscription = payment_method_details.save
-    else # they are linking an existing payment method to the subscription
-      payment_method_details = payment_method.current_details
 
       process_subscription = payment_method_details.save
     end
