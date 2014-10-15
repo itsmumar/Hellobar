@@ -15,9 +15,9 @@
             </header>
             <div class="package-cycle">
               {{#if isAnnual}}
-              <input type="radio" id="monthly-billing" name="billing[cycle]" value="monthly" />
+              <input type="radio" id="monthly-billing" name="billing[schedule]" value="monthly" />
               {{else}}
-              <input type="radio" id="monthly-billing" name="billing[cycle]" value="monthly" checked />
+              <input type="radio" id="monthly-billing" name="billing[schedule]" value="monthly" checked />
               {{/if}}
 
               <label for="monthly-billing">
@@ -25,9 +25,9 @@
                 <small>$15 Per Month</small>
               </label>
               {{#if isAnnual}}
-              <input type="radio" id="anually-billing" name="billing[cycle]" value="yearly" checked />
+              <input type="radio" id="anually-billing" name="billing[schedule]" value="yearly" checked />
               {{else}}
-              <input type="radio" id="anually-billing" name="billing[cycle]" value="yearly" />
+              <input type="radio" id="anually-billing" name="billing[schedule]" value="yearly" />
               {{/if}}
               <label for="anually-billing">
                 Annually

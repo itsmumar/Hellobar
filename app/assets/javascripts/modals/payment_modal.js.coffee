@@ -27,7 +27,7 @@ class @PaymentModal extends Modal
     ))
 
   isAnnual: ->
-    @options.package.cycle == 'yearly'
+    @options.package.schedule == 'yearly'
 
   open: ->
     $('body').append(@$modal)

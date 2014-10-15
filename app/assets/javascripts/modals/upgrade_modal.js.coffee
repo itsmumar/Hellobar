@@ -5,7 +5,7 @@ class @UpgradeAccountModal extends Modal
 
   packageOptions:
     type: null
-    cycle: null
+    schedule: null
 
   constructor: (@options = {}) ->
     @$modal = @buildModal()
@@ -41,8 +41,8 @@ class @UpgradeAccountModal extends Modal
     @$modal.find('input[type="radio"]').on 'change', (event) =>
       switch event.target.value
         when 'yearly'
-          @packageOptions.cycle = 'yearly'
+          @packageOptions.schedule = 'yearly'
           @$modal.find('.package-title').addClass('yearly')
         when 'monthly'
-          @packageOptions.cycle = 'monthly'
+          @packageOptions.schedule = 'monthly'
           @$modal.find('.package-title').removeClass('yearly')
