@@ -22,7 +22,7 @@
 
               <label for="monthly-billing">
                 Monthly
-                <small>$15 Per Month</small>
+                <small>${{package.monthly_amount}} Per Month</small>
               </label>
               {{#if isAnnual}}
               <input type="radio" id="anually-billing" name="billing[schedule]" value="yearly" checked />
@@ -31,7 +31,7 @@
               {{/if}}
               <label for="anually-billing">
                 Annually
-                <small>$150 Per Year <strong>Save 15%</strong></small>
+                <small>${{package.yearly_amount}} Per Year <strong>Save 15%</strong></small>
               </label>
             </div>
             <a class="different-plan">Choose a different plan</a>

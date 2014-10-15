@@ -3,9 +3,7 @@ class @UpgradeAccountModal extends Modal
   modalName: "upgrade-account"
   modalTemplate: -> $('script#upgrade-account-modal-template').html()
 
-  packageOptions:
-    type: null
-    schedule: null
+  chosenSchedule: "yearly"
 
   constructor: (@options = {}) ->
     @$modal = @buildModal()
@@ -21,16 +19,18 @@ class @UpgradeAccountModal extends Modal
   open: ->
     @$modal.appendTo($("body"))
     @$modal.find('#yearly-billing').trigger('click')
+    @_disableCurrentPlanButton()
     @_bindPackageSelection()
     super
 
   _bindPackageSelection: ->
     @$modal.find('.button').on 'click', (event) =>
-      if event.target.dataset.package
-        @packageOptions.type = event.target.dataset.package
+      unless !!$(event.target).attr("disabled")
+        packageData = JSON.parse(event.target.dataset.package)
+        packageData.schedule = @chosenSchedule
 
         options =
-          package: @packageOptions
+          package: packageData
           site: @options.site
 
         new PaymentModal(options).open()
@@ -41,8 +41,16 @@ class @UpgradeAccountModal extends Modal
     @$modal.find('input[type="radio"]').on 'change', (event) =>
       switch event.target.value
         when 'yearly'
-          @packageOptions.schedule = 'yearly'
+          @chosenSchedule = 'yearly'
           @$modal.find('.package-title').addClass('yearly')
         when 'monthly'
-          @packageOptions.schedule = 'monthly'
+          @chosenSchedule = 'monthly'
           @$modal.find('.package-title').removeClass('yearly')
+
+  _disableCurrentPlanButton: ->
+    @$modal.find("div.button").each (index, button) =>
+      buttonPackage = $(button).data("package")
+
+      if buttonPackage.type == @options.site.current_subscription.type
+        $(button).attr("disabled", "disabled")
+        $(button).text("Current Plan")
