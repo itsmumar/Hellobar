@@ -6,12 +6,12 @@ set httpd port 4000 and
 
 set logfile /mnt/deploy/shared/log/monit.log
 
-check process guaranteed_queue with pidfile /mnt/deploy/shared/tmp/pids/guaranteed_queue.pid
+check process guaranteed_queue with pidfile /mnt/deploy/shared/pids/guaranteed_queue.pid
         start program = "/bin/bash -c 'cd /mnt/deploy/current; HOME=/home/hellobar PATH=/usr/local/bin:$PATH RAILS_ENV=production bundle exec guaranteed_queue start --pidfile=/mnt/deploy/shared/pids/guaranteed_queue.pid'" as uid "hellobar"
         stop program = "/bin/bash -c 'cd /mnt/deploy/current; HOME=/home/hellobar PATH=/usr/local/bin:$PATH RAILS_ENV=production bundle exec guaranteed_queue stop --pidfile=/mnt/deploy/shared/pids/guaranteed_queue.pid'" as uid "hellobar"
         if cpu usage > 95% for 10 cycles then restart
 
-check process guaranteed_queue_lowpriority with pidfile /mnt/deploy/shared/tmp/pids/guaranteed_queue.lowpriority.pid
+check process guaranteed_queue_lowpriority with pidfile /mnt/deploy/shared/pids/guaranteed_queue.lowpriority.pid
         start program = "/bin/bash -c 'cd /mnt/deploy/current; HOME=/home/hellobar PATH=/usr/local/bin:$PATH RAILS_ENV=production bundle exec guaranteed_queue start --pidfile=/mnt/deploy/shared/pids/guaranteed_queue.lowpriority.pid'" as uid "hellobar"
         stop program = "/bin/bash -c 'cd /mnt/deploy/current; HOME=/home/hellobar PATH=/usr/local/bin:$PATH RAILS_ENV=production bundle exec guaranteed_queue stop --pidfile=/mnt/deploy/shared/pids/guaranteed_queue.lowpriority.pid'" as uid "hellobar"
         if cpu usage > 95% for 10 cycles then restart
