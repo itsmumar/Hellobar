@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/colinyoung/guaranteed_queue.git
-  revision: ecc08f53f2d578ea9190230ffdbcdb5c8bad33d5
+  revision: 8e6e0434e90f081541f80c0823c0e905adbaad33
   specs:
     guaranteed_queue (0.0.1)
       aws-sdk
