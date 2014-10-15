@@ -16,5 +16,6 @@ tr class="#{'more-top-performers' if index > 2}"
       i class="icon-badge #{'first' if index == 0}"
         span.numbers= index + 1
   td
-    = link_to "Create another", new_site_site_element_path(:site_id => element.site, :element_to_copy_id => element), :class => "button"
+    = link_to "Create another", new_site_site_element_path(:site_id => element.site, :element_to_copy_id => element), :class => "button", "data-prompt-upgrade" => element.site.capabilities.at_site_element_limit?
+
 

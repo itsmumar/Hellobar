@@ -44,9 +44,9 @@ table.rules-wrapper
       tr data-rule-id=rule.id
         td.temporary-block.suggestion-block colspan='9'
           - if rule.site_elements.empty?
-            = link_to "Create a bar for this rule", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
+            = link_to "Create a bar for this rule", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}"), "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?
           - else
-            = link_to "A/B test a new bar for this rule to maximize your conversions", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}")
+            = link_to "A/B test a new bar for this rule to maximize your conversions", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}"), "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?
 
 = render 'shared/modals/rule_modal_template'
 

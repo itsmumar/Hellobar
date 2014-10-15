@@ -1,7 +1,4 @@
 $ ->
-  $('nav.global-sidebar input, a.create-variation, td.suggestion-block a').on 'click', (event) ->
-    # if site has maxed out site elements
-    if window.site && window.site.capabilities.at_site_element_limit
-      event.preventDefault()
-
-      new UpgradeAccountModal().open() # ask them to upgrade
+  $("[data-prompt-upgrade=true]").on "click", (event) ->
+    event.preventDefault()
+    new UpgradeAccountModal().open()
