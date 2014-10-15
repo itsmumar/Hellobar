@@ -23,7 +23,7 @@ class @PaymentModal extends Modal
       errors: @options.errors
       package: @options.package
       isAnnual: @isAnnual(),
-      siteName: window.site.display_name
+      siteName: @options.site.display_name
     ))
 
   isAnnual: ->
@@ -82,7 +82,7 @@ class @PaymentModal extends Modal
   # re-open the upgrade modal to allow selecting a different plan
   _bindChangePlan: ->
     @$modal.find('.different-plan').on 'click', (event) =>
-      new UpgradeAccountModal().open()
+      new UpgradeAccountModal({site: @options.site}).open()
       @close()
 
   # bind submission of payment details

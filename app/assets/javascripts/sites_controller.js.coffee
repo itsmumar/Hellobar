@@ -10,4 +10,5 @@ $ ->
         type: window.currentSubscription.values.name.toLowerCase(),
         cycle: window.currentSubscription.values.schedule
       addPaymentMethod: $(this).hasClass('add-payment-method')
+      site: window.site
     new PaymentModal(options).open()

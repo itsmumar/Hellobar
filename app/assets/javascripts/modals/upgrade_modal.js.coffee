@@ -15,7 +15,7 @@ class @UpgradeAccountModal extends Modal
     template = Handlebars.compile(@modalTemplate())
     $(template(
       errors: @options,
-      siteName: window.site.display_name
+      siteName: @options.site.display_name
     ))
 
   open: ->
@@ -26,11 +26,12 @@ class @UpgradeAccountModal extends Modal
 
   _bindPackageSelection: ->
     @$modal.find('.button').on 'click', (event) =>
-      if event.target.dataset.package 
+      if event.target.dataset.package
         @packageOptions.type = event.target.dataset.package
 
         options =
           package: @packageOptions
+          site: @options.site
 
         new PaymentModal(options).open()
 
