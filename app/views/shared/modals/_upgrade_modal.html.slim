@@ -89,11 +89,3 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
             .package-status
               = choose_plan_button(site.current_subscription, 'enterprise')
-
-/ initializing this here instead of a controller
-/ because I like it better than a before_action?
-
-- @current_subscription = site.current_subscription
-
-javascript:
-  var currentSubscription = #{{SubscriptionSerializer.new(@current_subscription).to_json}};
