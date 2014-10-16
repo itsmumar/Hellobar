@@ -1,5 +1,5 @@
 class TargetedSegmentsController < ApplicationController
-  SALT = "7f9d074257b1400c55d0b838d8e7f5bdd8330151"
+  include TargetedSegmentsHelper
 
   before_action :authenticate_user!
   before_action :load_site
@@ -25,9 +25,5 @@ class TargetedSegmentsController < ApplicationController
 
   def load_site
     @site = current_user.sites.find(params[:site_id])
-  end
-
-  def generate_segment_token(segment)
-    Digest::SHA1.hexdigest("#{SALT}#{segment}")
   end
 end
