@@ -35,7 +35,7 @@ describe SiteElement do
     element.errors[:site].should == ['is currently at its limit to create site elements']
   end
 
-  it 'does not allow an unpersisted element to be created when site is at its limit' do
+  it 'allows a persisted element to be updated when site is at its limit' do
     site = sites(:free_site)
     capability = double 'capability', at_site_element_limit?: true
     site.stub capabilities: capability

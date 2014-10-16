@@ -28,7 +28,7 @@ class SiteElement < ActiveRecord::Base
   validates :display_when, inclusion: { in: DISPLAY_WHEN_OPTIONS }
 
   validate :contact_list_is_present, if: Proc.new {|se| se.element_subtype == "email"}
-  validate :site_is_capable_of_creating_element
+  validate :site_is_capable_of_creating_element, unless: :persisted?
 
   scope :paused, -> { where(paused: true) }
   scope :active, -> { where(paused: false) }
@@ -80,8 +80,6 @@ class SiteElement < ActiveRecord::Base
   end
 
   def site_is_capable_of_creating_element
-    return if persisted? # user is updating the site element
-
     if site && site.capabilities.at_site_element_limit?
       errors.add(:site, 'is currently at its limit to create site elements')
     end
