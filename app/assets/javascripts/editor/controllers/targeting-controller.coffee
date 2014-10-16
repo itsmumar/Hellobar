@@ -20,28 +20,6 @@ HelloBar.TargetingController = Ember.Controller.extend
     @send('openRuleModal', {}) unless @get('model.rule_id')
   ).observes('model.rule_id')
 
-  ruleModalFromParams: (->
-    if @get("segment") && @get("value")
-      controller = this
-
-      options =
-        ruleData:
-          siteID: window.siteID
-          name: @get("value")
-          conditions: [{segment: @get("segment"), operand: "is", value: @get("value")}]
-        successCallback: ->
-          ruleData = this
-          controller.get('model.site.rules').push(ruleData)
-          controller.set('model.rule_id', ruleData.id)
-          controller.notifyPropertyChange('model.site.rules')
-
-      new RuleModal(options).open()
-  ).observes("segment", "value")
-
-  queryParams: ["segment", "value"]
-  segment: null
-  value: null
-
   actions:
     resetRuleDropdown: (ruleData = {}) ->
       if ruleData.id == undefined
