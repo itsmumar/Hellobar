@@ -9,8 +9,8 @@ describe RulesController do
 
   fixtures :all
 
-  let(:rule) { rules(:zombo) }
-  let(:site) { sites(:zombo) }
+  let(:rule) { rules(:pro) }
+  let(:site) { sites(:pro_site) }
 
   describe 'GET :show' do
     it 'should fail when not logged in' do
@@ -96,14 +96,14 @@ describe RulesController do
     end
 
     it 'should fail when not site owner' do
-      expect(site.owner).to eq users(:joey)
+      expect(site.owner).to eq users(:pro)
       stub_current_user users(:wootie)
       delete :destroy, site_id: site, id: rule
       expect(response).to be_not_found
     end
 
     it 'should succeed when owner' do
-      stub_current_user users(:joey)
+      stub_current_user users(:pro)
       expect do
         delete :destroy, site_id: site, id: rule
       end.to change { Rule.count }.by(-1)
@@ -137,7 +137,7 @@ describe RulesController do
     end
 
     it 'should fail when not site owner' do
-      expect(site.owner).to eq users(:joey)
+      expect(site.owner).to eq users(:pro)
 
       stub_current_user users(:wootie)
       put :update, site_id: site, id: rule, rule: {}

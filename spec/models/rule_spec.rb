@@ -103,3 +103,26 @@ describe Rule, "#same_as?" do
     rule.should_not be_same_as(other_rule)
   end
 end
+
+describe Rule, "::create_from_segment" do
+  fixtures :all
+
+  let(:site) { sites(:zombo) }
+
+  it "creates a rule with the correct conditions" do
+    rule = Rule.create_from_segment(site, "dv:mobile")
+    condition = rule.conditions.first
+
+    rule.should be_valid
+    rule.conditions.count.should == 1
+
+    condition.segment.should == "DeviceCondition"
+    condition.value.should == "mobile"
+    condition.operand.should == "is"
+  end
+
+  it "sets the name based on segment" do
+    rule = Rule.create_from_segment(site, "dv:mobile")
+    rule.name.should == "Device is mobile"
+  end
+end

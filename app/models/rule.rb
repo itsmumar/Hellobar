@@ -20,6 +20,22 @@ class Rule < ActiveRecord::Base
                        },
                        if: "priority.present?"
 
+  def self.create_from_segment(site, segment)
+    segment, value = segment.split(":", 2)
+
+    new(site: site).tap do |rule|
+      condition = rule.conditions.new(
+        segment: Condition::SEGMENTS.find{|k, v| v == segment}[0],
+        operand: "is",
+        value: value
+      )
+
+      rule.name = condition.to_sentence
+
+      rule.save
+    end
+  end
+
   def to_sentence
     conditions.empty? ? "Show this to everyone" : "Show this when #{conditions.map(&:to_sentence).to_sentence}"
   end

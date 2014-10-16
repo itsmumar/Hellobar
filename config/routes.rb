@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     resources :rules
     resources :identities
     resources :contact_lists
+    resources :targeted_segments
   end
 
   namespace :modals do
