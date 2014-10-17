@@ -9,6 +9,7 @@ grand_central_api_secret: grand-central-api-secret
 aws_access_key_id: aws-access-key-id
 aws_secret_access_key: aws-secret-access-key
 s3_bucket: scripts-test.hellobar.com
+script_cdn_url: scripts-test.hellobar.com
 tracking_host: hi-dev.hellobar.com
 env_name: env-name
 aweber_app_id: aweber-app-id
