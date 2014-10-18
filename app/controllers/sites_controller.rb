@@ -61,7 +61,7 @@ class SitesController < ApplicationController
 
   # a version of the site's script with all templates, no elements and no rules, for use in the editor live preview
   def preview_script
-    generator = ScriptGenerator.new(@site, :templates => SiteElement::BAR_TYPES, :rules => [])
+    generator = ScriptGenerator.new(@site, :templates => SiteElement::BAR_TYPES, :rules => [], :preview => true)
     render :js => generator.generate_script
   end
 
