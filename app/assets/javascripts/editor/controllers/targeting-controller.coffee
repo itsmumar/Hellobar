@@ -28,8 +28,14 @@ HelloBar.TargetingController = Ember.Controller.extend
         @set('model.rule_id', firstRule.id)
 
     openUpgradeModal: (ruleData = {}) ->
-      @send("resetRuleDropdown", ruleData)
-      new UpgradeAccountModal({site: @get("model.site")}).open()
+      controller = this
+      controller.send("resetRuleDropdown", ruleData)
+
+      options =
+        site: controller.get("model.site")
+        successCallback: ->
+          controller.set('model.site.capabilities', this.site.capabilities)
+      new UpgradeAccountModal(options).open()
 
     openRuleModal: (ruleData) ->
       return @send("openUpgradeModal", ruleData) unless @get("canUseRuleModal")

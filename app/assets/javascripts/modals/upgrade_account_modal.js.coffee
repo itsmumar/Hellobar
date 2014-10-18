@@ -32,6 +32,7 @@ class @UpgradeAccountModal extends Modal
         options =
           package: packageData
           site: @options.site
+          successCallback: @options.successCallback
 
         new PaymentModal(options).open()
 
@@ -48,6 +49,8 @@ class @UpgradeAccountModal extends Modal
           @$modal.find('.package-title').removeClass('yearly')
 
   _disableCurrentPlanButton: ->
+    return if $.isEmptyObject(@options.site.current_subscription)
+
     @$modal.find("div.button").each (index, button) =>
       buttonPackage = $(button).data("package")
 

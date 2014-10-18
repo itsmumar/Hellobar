@@ -5,7 +5,7 @@ module Subscribable
     success, bill = update_subscription(site, payment_method, billing_params)
 
     if success
-      { bill: bill, status: :ok }
+      { bill: bill, site: SiteSerializer.new(site.reload), status: :ok }
     else
       { errors: bill.errors, status: :unprocessable_entity }
     end
