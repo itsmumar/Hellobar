@@ -43,7 +43,7 @@ namespace :deploy do
 
   task :restart_monit do
     on roles(:web) do
-      execute "sudo service monit stop"
+      execute "sudo service monit stop || sudo apt-get install monit"
       execute "sudo rm /etc/monit/monitrc"
       execute "sudo ln -s /mnt/deploy/current/config/deploy/monitrc /etc/monit/monitrc"
       execute "sudo chown root /etc/monit/monitrc"
