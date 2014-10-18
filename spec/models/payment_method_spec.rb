@@ -5,7 +5,7 @@ describe PaymentMethod do
     p = PaymentMethod.create
     p.deleted_at.should be_nil
     p.destroy
-    p.deleted_at.should be_within(1).of(Time.now)
+    p.deleted_at.should be_within(2).of(Time.now)
   end
 
   it "should provide the current_payment_details if available" do

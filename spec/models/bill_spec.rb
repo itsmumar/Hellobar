@@ -27,7 +27,7 @@ describe Bill do
     bill.status.should  == :pending
     bill.status_set_at.should be_nil
     bill.paid!
-    bill.status_set_at.should be_within(1).of(Time.now)
+    bill.status_set_at.should be_within(2).of(Time.now)
   end
 
   it "should take the payment_method grace period into account when grace_period_allowed" do

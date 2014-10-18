@@ -22,7 +22,7 @@ describe BillingAuditTrail do
     BillingLog.count.should == 1
     log = BillingLog.all.first
     log.message.should == message
-    log.created_at.should be_within(1).of(Time.now)
+    log.created_at.should be_within(2).of(Time.now)
   end
 
   it "should allow us to call audit on an object and set the source ID correctly" do
