@@ -76,6 +76,7 @@ class SiteElementsController < ApplicationController
 
   def load_site
     @site = current_user.sites.find(params[:site_id])
+    session[:current_site] = @site.id if @site
   end
 
   def determine_layout
