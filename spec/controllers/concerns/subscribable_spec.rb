@@ -1,15 +1,20 @@
 require 'spec_helper'
 
 describe Subscribable, '#subscription_bill_and_status' do
+  fixtures :all
+
   controller do
     include Subscribable
   end
 
-  it 'returns the bill and successful status when successful' do
+  it 'returns the bill, updated site, and successful status when successful' do
     bill = double 'bill'
     controller.stub update_subscription: [true, bill]
+    site = sites(:horsebike)
+    serializer = double 'SiteSerializer'
+    SiteSerializer.stub new: serializer
 
-    controller.subscription_bill_and_status('site', 'payment_method', 'billing_params').should == { bill: bill, status: :ok }
+    controller.subscription_bill_and_status(site, 'payment_method', 'billing_params').should == { bill: bill, site: serializer, status: :ok }
   end
 
   it 'returns errors and an unprocessable_entity status when NOT successful' do

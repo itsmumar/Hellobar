@@ -4,13 +4,8 @@ unless defined?(Rails)
   require File.expand_path("../../config/environment", __FILE__)
 end
 
-def choose_plan_button(subscription)
-  content_tag :div, class: 'button' do
-    'Choose Plan'
-  end
-end
-
 include ContactListsHelper
+include UpgradeModalHelper
 
 Teaspoon.configure do |config|
 

@@ -103,9 +103,9 @@ class @PaymentModal extends Modal
         data: $form.serialize() + "&site_id=#{window.siteID}"
         success: (data, status, xhr) =>
           alert "Successfully paid!"
+          @options.successCallback.call(data) if @options.successCallback
           @close()
           # TODO: open the success window
-          window.location.reload(true) # temp solution: hard refresh of page
         error: (xhr, status, error) =>
           @_bindFormSubmission() # rebind so they can enter valid info
           @$modal.find("a.submit").removeClass("cancel")

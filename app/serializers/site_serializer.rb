@@ -27,7 +27,7 @@ class SiteSerializer < ActiveModel::Serializer
   end
 
   def current_subscription
-    if object.current_subscription
+    if object.current_subscription.present?
       SubscriptionSerializer.new(object.current_subscription)
     else
       {}
