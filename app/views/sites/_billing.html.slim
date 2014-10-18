@@ -11,20 +11,18 @@ section
     |  
     = @site.current_subscription.schedule
     | .
-    - # changing the schedule for a Free plan doesn't make sense
     - if @site.current_subscription.requires_payment_method?
-      - if @site.current_subscription.schedule == 'monthly'
-        = link_to 'Change to annual billing', '#', class: 'update-cc-details'
-      - else
-        = link_to 'Change to monthly billing', '#', class: 'update-cc-details'
+      - # only show "billing schedule" if user is on a plan that actually has one
+      = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal'
+    - else
+      = link_to 'Change plan', '#', class: 'show-upgrade-modal'
 
 section
   label Card
   p
     - if @site.current_subscription && @site.current_subscription.payment_method
       = @site.current_subscription.payment_method.current_details.data['number']
-      = link_to 'Add card', '#', class: 'update-cc-details add-payment-method'
-      = link_to 'Update card details', '#', class: 'update-cc-details'
+      = link_to 'Add or change card', '#', class: 'show-payment-modal'
     - else
       small
         | (no credit card on file)

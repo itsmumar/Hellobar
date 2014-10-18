@@ -34,8 +34,6 @@ class @PaymentModal extends Modal
     super
 
   fetchUserPaymentMethods: (siteID) ->
-    return if @options.addPaymentMethod # we don't need to do anything!
-
     @$modal.trigger('load') # indicate we need to do more work
 
     paymentUrl = "/payment_methods/"
@@ -150,9 +148,7 @@ class @PaymentModal extends Modal
       'POST'
 
   _url: ->
-    if @options.addPaymentMethod
-      "/payment_methods"
-    else if @_isUsingLinkedPaymentMethod()
+    if @_isUsingLinkedPaymentMethod()
       "/payment_methods/" + @_linkedPaymentMethodId()
     else if @currentPaymentMethod && @currentPaymentMethod.currentPaymentDetails
       "/payment_methods/" + @currentPaymentMethod.currentPaymentDetails.payment_method_id
