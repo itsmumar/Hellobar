@@ -4,6 +4,7 @@ class Bill < ActiveRecord::Base
   class StatusAlreadySet < Exception; end
   class InvalidStatus < Exception; end
   class BillingEarly < Exception; end
+  class InvalidBillingAmount < Exception; end
   serialize :metadata, JSON
   belongs_to :subscription
   has_many :billing_attempts
@@ -13,6 +14,12 @@ class Bill < ActiveRecord::Base
   delegate :site_id, to: :subscription
 
   enum status: [:pending, :paid, :voided]
+
+  before_save :check_amount
+  before_validation :check_amount
+  def check_amount
+    raise InvalidBillingAmount.new("Amount was: #{self.amount.inspect}") if !self.amount or self.amount < 0
+  end
 
   alias :void! :voided!
   def status=(value)

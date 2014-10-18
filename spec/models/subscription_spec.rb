@@ -335,6 +335,26 @@ describe Site do
       @site.current_subscription.should == @pro
       @site.capabilities(true).class.should == Subscription::ProblemWithPayment::Capabilities
     end
+    
+    it "should not create a negative bill when switching from yearly to monthly" do
+      pro_yearly = Subscription::Pro.new(user: @user, site: @site, schedule: "yearly")
+      pro_monthly = Subscription::Pro.new(user: @user, site: @site, schedule: "monthly")
+
+      success, bill = @site.change_subscription(pro_yearly, @payment_method)
+      success.should be_true
+      bill.amount.should == pro_yearly.amount
+      bill.should be_paid
+
+      success, bill = @site.change_subscription(pro_monthly, @payment_method)
+      success.should be_true
+      bill.amount.should > 0
+      # Bill should be full amount
+      bill.amount.should == pro_monthly.amount
+      # Bill should be due at end of yearly subscription
+      bill.due_at.should be_within(1.minute).of(Time.now+1.year)
+      # Bill should be pending
+      bill.should be_pending
+    end
   end
 
   describe "bills_with_payment_issues" do

@@ -5,6 +5,10 @@ describe Bill do
   fixtures :all
   set_fixture_class payment_method_details: PaymentMethodDetails # pluralized class screws up naming convention
 
+  it "should not let create a negative bill" do
+    lambda{Bill.create(:amount=>-1)}.should raise_error(Bill::InvalidBillingAmount)
+  end
+
   it "should not let you change the status once set" do
     bill = bills(:future_bill)
     bill.status.should  == :pending
@@ -62,7 +66,7 @@ describe Bill do
       july = Time.parse("2014-07-10")
       aug = Time.parse("2014-08-10")
       subscription.should be_monthly
-      bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at)
+      bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 1)
       subscription.bills(true).length.should == 1
       bill.paid!
       subscription.bills(true).length.should == 2
@@ -158,16 +162,16 @@ describe Subscription do
     Bill.delete_all
     subscription.active_bills(true).length.should == 0
     # Add a bill after
-    Bill.create!(subscription: subscription, start_date: now+15.days, end_date: now+45.days)
+    Bill.create!(subscription: subscription, start_date: now+15.days, end_date: now+45.days, amount: 1)
     subscription.active_bills(true).length.should == 0
     # Add a bill before
-    Bill.create!(subscription: subscription, start_date: now-45.days, end_date: now-15.days)
+    Bill.create!(subscription: subscription, start_date: now-45.days, end_date: now-15.days, amount: 1)
     subscription.active_bills(true).length.should == 0
     # Add a bill during time, but voided
-    Bill.create!(subscription: subscription, start_date: now, end_date: now+30.days, status: :voided)
+    Bill.create!(subscription: subscription, start_date: now, end_date: now+30.days, status: :voided, amount: 1)
     subscription.active_bills(true).length.should == 0
     # Add an active bill
-    Bill.create!(subscription: subscription, start_date: now, end_date: now+30.days)
+    Bill.create!(subscription: subscription, start_date: now, end_date: now+30.days, amount: 1)
     subscription.active_bills(true).length.should == 1
   end
 end

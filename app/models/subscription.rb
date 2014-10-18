@@ -257,7 +257,7 @@ class Subscription < ActiveRecord::Base
     end
 
     def upgrade?
-      @direction >= 0
+      @direction > 0
     end
 
     def downgrade?
