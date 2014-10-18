@@ -30,6 +30,7 @@ html
     = render 'shared/alert_template'
     = render "shared/modals/upgrade_modal"
     = render "shared/modals/payment_modal"
+    = render "shared/modals/payment_confirmation"
 
 javascript:
   var currentUser = #{{UserSerializer.new(current_user).to_json}};

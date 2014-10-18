@@ -1,5 +1,5 @@
 class SubscriptionSerializer < ActiveModel::Serializer
-  attributes :schedule, :type, :yearly_amount, :monthly_amount, :payment_method_details_id
+  attributes :schedule, :type, :yearly_amount, :monthly_amount, :payment_method_details_id, :payment_method_number
 
   def schedule
     object.values[:schedule]
@@ -20,6 +20,14 @@ class SubscriptionSerializer < ActiveModel::Serializer
   def payment_method_details_id
     if object.payment_method.try(:current_details)
       object.payment_method.current_details.id
+    else
+      nil
+    end
+  end
+
+  def payment_method_number
+    if object.payment_method.try(:current_details)
+      (object.payment_method.current_details.data.try(:[], "number") || "")[-4..-1]
     else
       nil
     end
