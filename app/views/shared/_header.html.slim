@@ -36,9 +36,10 @@
         i.icon-dropdown
         .dropdown-block
           = active_link_to 'User Settings', profile_path()
-          = content_tag 'a', 'Payment Info'
           - if current_site.is_free?
-            = content_tag 'a', 'Upgrade Plan'
+            = content_tag 'a', 'Upgrade Plan', class: "show-upgrade-modal"
+          - else
+            = content_tag 'a', 'Payment Info', class: "show-payment-modal"
           - if impersonated_user
             = active_link_to "Stop Impersonation", admin_unimpersonate_user_path, :method => :delete
           - else
