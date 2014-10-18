@@ -64,6 +64,9 @@ class @PaymentModal extends Modal
       @_bindLinkedPayment() # make sure we still toggle on linking payment
       @_bindFormSubmission() # make sure we can still submit with the new form!
 
+      if @options.site.current_subscription && @options.site.current_subscription.payment_method_details_id
+        $paymentDetails.find("select#linked-detail").val(@options.site.current_subscription.payment_method_details_id).change()
+
     , -> # on failed retreival
       console.log "Couldn't retreive user payments for #{siteID}"
 

@@ -51,7 +51,7 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
 script id="linked-methods-template" type="text/x-handlebars-template"
   label Use a linked card
   select#linked-detail name="linked_payment_id"
-    option
+    option New card...
     | {{#each paymentMethods}}
     option value="{{id}}"
       | {{current_details.number}}
