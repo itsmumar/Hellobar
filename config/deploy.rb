@@ -43,7 +43,7 @@ namespace :deploy do
   task :start_thin do
     on roles(:web) do
       as :hellobar do
-        execute "mkdir -p /mnt/shared/sockets || true"
+        execute "mkdir -p /mnt/deploy/shared/sockets || true"
         execute "cd #{release_path} && bundle exec thin start -C config/thin/www.yml"
       end
     end
