@@ -83,7 +83,11 @@ class @PaymentModal extends Modal
   # re-open the upgrade modal to allow selecting a different plan
   _bindChangePlan: ->
     @$modal.find('.different-plan').on 'click', (event) =>
-      new UpgradeAccountModal({site: @options.site}).open()
+      options =
+        site: @options.site
+        successCallback: @options.successCallback
+
+      new UpgradeAccountModal(options).open()
       @close()
 
   # bind submission of payment details
