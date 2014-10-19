@@ -7,10 +7,11 @@ section
     |  is on the 
     = @site.current_subscription.values[:name]
     |  plan. 
-    = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
-    |  
-    = @site.current_subscription.schedule
-    | .
+    - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
+      = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
+      |  
+      = @site.current_subscription.schedule
+      | .
     - if @site.current_subscription.requires_payment_method?
       - # only show "billing schedule" if user is on a plan that actually has one
       = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal'
@@ -45,7 +46,7 @@ section
           td= "Hello Bar #{bill.subscription.values[:name]}"
           td= bill.paid_with_payment_method_detail ? bill.paid_with_payment_method_detail.data['number'] : 'n/a'
 
-  - if @next_bill
+  - if @next_bill && @next_bill.amount > 0
     small
       | Next bill is due 
       = @next_bill.due_at.strftime("%-m-%-d-%Y")
