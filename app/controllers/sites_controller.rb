@@ -144,7 +144,7 @@ class SitesController < ApplicationController
       raw_suggestions = ImproveSuggestion.get(@site, name) || {}
 
       raw_suggestions.each do |k, v|
-        @suggestions[name][k] = v[0, max]
+        @suggestions[name][k] = v[0, max] unless v.empty?
       end
     end
   end

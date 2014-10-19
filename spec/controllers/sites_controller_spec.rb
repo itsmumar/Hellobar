@@ -147,5 +147,13 @@ describe SitesController do
 
       assigns(:suggestions)["all"].should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2]]}
     end
+
+    it "does not load any empty suggestions" do
+      ImproveSuggestion.stub(get: {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]], "high traffic, high conversion" => []})
+
+      get :improve, :id => site
+
+      assigns(:suggestions)["all"].keys.should_not include("high traffic, high conversion")
+    end
   end
 end
