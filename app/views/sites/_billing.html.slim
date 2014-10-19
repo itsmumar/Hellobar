@@ -28,23 +28,24 @@ section
       small
         | (no credit card on file)
 
-section
-  label History
+- unless @bills.empty?
+  section
+    label History
 
-  table
-    thead
-      tr
-        th Date
-        th Cost
-        th Plan
-        th Card
-    tbody
-      - @bills.each do |bill|
+    table
+      thead
         tr
-          td= bill.bill_at.strftime("%-m-%-d-%Y")
-          td= number_to_currency(bill.amount)
-          td= "Hello Bar #{bill.subscription.values[:name]}"
-          td= bill.paid_with_payment_method_detail ? bill.paid_with_payment_method_detail.data['number'] : 'n/a'
+          th Date
+          th Cost
+          th Plan
+          th Card
+      tbody
+        - @bills.each do |bill|
+          tr
+            td= bill.bill_at.strftime("%-m-%-d-%Y")
+            td= number_to_currency(bill.amount)
+            td= "Hello Bar #{bill.subscription.values[:name]}"
+            td= bill.paid_with_payment_method_detail ? bill.paid_with_payment_method_detail.data['number'] : 'n/a'
 
   - if @next_bill && @next_bill.amount > 0
     small
