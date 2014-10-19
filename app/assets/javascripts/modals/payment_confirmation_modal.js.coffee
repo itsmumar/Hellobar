@@ -34,7 +34,7 @@ class @PaymentConfirmationModal extends Modal
     else
       billingSchedule = ""
 
-    if bill && bill.amount > 0
+    if bill && bill.amount > 0 && bill.status == "paid"
       chargeDescription = "Your card has been charged $#{parseInt(bill.amount).toFixed(2)}"
     else
       chargeDescription = "Your card has not been charged at this time"
