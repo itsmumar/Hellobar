@@ -29,6 +29,7 @@
 #= require site_elements_controller
 #= require upgrade_modal_initializer
 #= require enforce_restrictions_initializer
+#= require flash_message_initializer
 #= require_self
 
 $ ->
@@ -44,16 +45,3 @@ $ ->
     $timezone = $('#site_timezone, #user_timezone')
     userTimezone = jstz.determine().name()
     $timezone.val(userTimezone)
-
-  # Remove Flash Messsages
-  if $('.flash-block').length
-    setTimeout ( ->
-      $('.flash-block').addClass('show')
-    ), 300
-
-    $('.flash-block .icon-close').click (event) ->
-      flash = $(event.currentTarget).parent('.flash-block')
-      flash.removeClass('show')
-      setTimeout ( ->
-        flash.remove()
-      ), 500

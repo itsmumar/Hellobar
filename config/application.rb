@@ -19,7 +19,7 @@ module Hellobar
     config.sass.preferred_syntax = :sass
     config.action_mailer.default_url_options = { host: "www.hellobar.com" }
 
-    config.assets.precompile += ['editor.css', 'static.css', 'editor/application.js']
+    config.assets.precompile += ['editor.css', 'static.css', 'editor/application.js', 'static.js']
     config.assets.paths << Rails.root.join('vendor', 'assets')
 
     config.handlebars.precompile = false
