@@ -22,6 +22,12 @@ describe Site do
     sites(:horsebike).is_free?.should be_true
   end
 
+  it "#is_free? is true for sites with a free-plus-level subscriptions" do
+    site = sites(:horsebike)
+    site.change_subscription(Subscription::FreePlus.new(schedule: 'monthly'))
+    site.is_free?.should be_true
+  end
+
   it "#is_free? is false for pro sites" do
     sites(:pro_site).is_free?.should be_false
   end

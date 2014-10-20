@@ -40,6 +40,15 @@ describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
 
       Site.find(legacy_site.legacy_site_id).updated_at.should == legacy_site.updated_at
     end
+
+    it "sets the subscription for migrated sites to 'free plus'" do
+      LegacyMigrator.stub :create_user_and_membership
+
+      LegacyMigrator.migrate_sites_and_users_and_memberships
+
+      site = Site.find(legacy_site.legacy_site_id)
+      site.current_subscription.class.should == Subscription::FreePlus
+    end
   end
 
   context 'user and membership migration' do
