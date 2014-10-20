@@ -3,6 +3,8 @@ class UserController < ApplicationController
   before_action :load_user, :only => [:edit, :update]
 
   def update
+    active_before_update = @user.active?
+
     if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(:status => User::ACTIVE_STATUS))
       sign_in @user, :bypass => true
 
@@ -10,7 +12,7 @@ class UserController < ApplicationController
 
       respond_to do |format|
         format.html do
-          flash[:success] = "Your settings have been updated."
+          flash[:success] = active_before_update ? "Your settings have been updated." : "Your account has been created."
           redirect_to current_site ? site_path(current_site) : new_site_path
         end
 
@@ -19,8 +21,13 @@ class UserController < ApplicationController
     else
       respond_to do |format|
         format.html do
-          flash.now[:error] = "There was a problem updating your settings."
-          render :action => :edit
+          if active_before_update
+            flash.now[:error] = "There was a problem updating your settings."
+            render :action => :edit
+          else
+            flash[:error] = "Sorry, there was a problem creating your account. Please try again."
+            redirect_to request.referrer || after_sign_in_path_for(@user)
+          end
         end
 
         format.json { render json: @user.errors, status: :unprocessable_entity }
