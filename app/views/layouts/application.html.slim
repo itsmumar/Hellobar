@@ -27,6 +27,7 @@ html
         = render "shared/account_prompt" if show_account_prompt?
         == yield
 
+    / deprecated JS implementation of shared/flash
     = render 'shared/alert_template'
     = render "shared/modals/upgrade_modal"
     = render "shared/modals/payment_modal"
