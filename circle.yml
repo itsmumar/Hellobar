@@ -17,3 +17,10 @@ test:
     - bundle exec rake:
         environment:
           RAILS_ENV: test
+
+deployment:
+  alpha:
+    branch: master
+    commands:
+      - bundle exec cap alpha deploy:
+          timeout: 600
