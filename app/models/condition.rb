@@ -58,7 +58,7 @@ class Condition < ActiveRecord::Base
 
   def value_is_valid
     if operand == 'between'
-      errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2
+      errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
     else
       errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
     end

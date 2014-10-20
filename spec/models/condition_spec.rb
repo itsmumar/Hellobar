@@ -28,6 +28,12 @@ describe Condition, 'validating the value format' do
       condition.should_not be_valid
     end
 
+    it 'is NOT valid when the value is an array with 2 empty values' do
+      condition = Condition.new operand: 'between', value: ['', ''], rule: Rule.new
+
+      condition.should_not be_valid
+    end
+
     it 'is valid when the value is an Array with 2 elements' do
       condition = Condition.new operand: 'between', value: ['one', 'two'], rule: Rule.new
 
