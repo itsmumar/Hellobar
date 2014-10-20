@@ -13,7 +13,8 @@ class @UpgradeAccountModal extends Modal
     template = Handlebars.compile(@modalTemplate())
     $(template(
       errors: @options,
-      siteName: @options.site.display_name
+      siteName: @options.site.display_name,
+      showFreePlus: @options.site.current_subscription.type == "free plus"
     ))
 
   open: ->

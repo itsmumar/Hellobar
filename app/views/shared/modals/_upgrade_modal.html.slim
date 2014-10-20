@@ -25,13 +25,14 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-features
 
             ul
-              li Limit of 10 bars
+              li= "{{#if showFreePlus}}Unlimited bars{{else}}Limit of 10 bars{{/if}}"
               li HelloBar logo on all content
               li 3 improve suggestions
               li Ads after 25,000 views
 
             .package-status
-              = choose_plan_button(Subscription::Free.new)
+              = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
+
 
         / Pro Package
         .package-block.pro
