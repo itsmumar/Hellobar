@@ -34,10 +34,6 @@ class ContactListsController < ApplicationController
     params.require(:contact_list).permit(:name, :provider, {:data => [:remote_id, :remote_name, :embed_code]}, :double_optin)
   end
 
-  def load_site
-    @site = current_user.sites.find(params[:site_id])
-  end
-
   def load_contact_list
     @contact_list = @site.contact_lists.find(params[:id])
   end

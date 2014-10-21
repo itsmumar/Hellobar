@@ -88,8 +88,9 @@ class SitesController < ApplicationController
     params.require(:site).permit(:url, :opted_in_to_email_digest, :timezone)
   end
 
+  # overwrite where we get the params from from ApplicationController
   def load_site
-    @site = current_user.sites.find(params[:id])
+    @site ||= current_user.sites.find(params[:id]) if current_user && params[:id]
   end
 
   def determine_layout

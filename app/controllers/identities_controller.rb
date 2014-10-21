@@ -33,6 +33,6 @@ class IdentitiesController < ApplicationController
   private
 
   def load_site
-    @site = current_user.sites.find(params[:site_id] || env["omniauth.params"]["site_id"])
+    @site ||= current_user.sites.find(params[:site_id] || env["omniauth.params"]["site_id"])
   end
 end

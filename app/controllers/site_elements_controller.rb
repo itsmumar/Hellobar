@@ -75,7 +75,7 @@ class SiteElementsController < ApplicationController
   private
 
   def load_site
-    @site = current_user.sites.find(params[:site_id])
+    super
     session[:current_site] = @site.id if @site
   end
 

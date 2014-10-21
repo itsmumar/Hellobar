@@ -20,10 +20,4 @@ class TargetedSegmentsController < ApplicationController
       redirect_to site_improve_path(@site)
     end
   end
-
-  private
-
-  def load_site
-    @site = current_user.sites.find(params[:site_id])
-  end
 end

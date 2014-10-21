@@ -10,11 +10,4 @@ class WordpressPluginController < ApplicationController
   ensure
     plugin.cleanup
   end
-
-
-  private
-
-  def load_site
-    @site = current_user.sites.find(params[:site_id])
-  end
 end

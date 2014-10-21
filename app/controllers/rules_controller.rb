@@ -47,12 +47,12 @@ class RulesController < ApplicationController
   private
 
   def load_site
-    @site = current_user.sites.find(params[:site_id])
+    super
   rescue ActiveRecord::RecordNotFound
     if request.get? or request.delete?
-      render :json => { error: "not_found" }, :status => :not_found
+      head :not_found
     else
-      render :json => { error: "forbidden" }, :status => :forbidden
+      head :forbidden
     end
   end
 

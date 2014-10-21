@@ -90,12 +90,17 @@ class ApplicationController < ActionController::Base
 
   # sets a flash when there are errors with their payment method
   def render_payment_errors
-    if @site && @site.bills_with_payment_issues.present?
+    # must check presence, since RulesController returns " " from #load_site
+    if load_site.present? && @site.bills_with_payment_issues.present?
       total_bill_amount = @site.bills_with_payment_issues.inject(0){|sum,b| sum+=b.amount}
       first_bill_date = @site.bills_with_payment_issues.sort{|a,b| a.bill_at <=> b.bill_at}.first.bill_at
 
       flash.now[:error] = "You have outstanding bills in the amount of #{number_to_currency(total_bill_amount)} since #{first_bill_date.strftime("%-m-%-d-%Y")}"
     end
+  end
+
+  def load_site
+    @site ||= current_user.sites.find(params[:site_id]) if current_user && params[:site_id]
   end
 
   def store_last_requested_path

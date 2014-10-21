@@ -68,10 +68,4 @@ class PaymentMethodsController < ApplicationController
       end
     end
   end
-
-  private
-
-  def load_site
-    @site = current_user.sites.find params[:site_id]
-  end
 end
