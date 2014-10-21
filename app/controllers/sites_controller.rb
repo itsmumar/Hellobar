@@ -5,6 +5,7 @@ class SitesController < ApplicationController
   before_action :load_site, :only => [:show, :edit, :update, :destroy, :install, :preview_script, :script, :improve, :chart_data]
   before_action :get_suggestions, :only => :improve
   before_action :get_top_performers, :only => :improve
+  before_action :load_bills, :only => :edit
 
   skip_before_action :verify_authenticity_token, :only => [:preview_script, :script]
 
@@ -22,11 +23,6 @@ class SitesController < ApplicationController
     else
       create_for_temporary_user
     end
-  end
-
-  def edit
-    @bills = @site.bills.includes(:subscription).select{|bill| bill.status == :paid && bill.amount > 0}.sort_by(&:bill_at).reverse
-    @next_bill = @site.bills.includes(:subscription).find{|bill| bill.status == :pending}
   end
 
   def show
@@ -47,6 +43,7 @@ class SitesController < ApplicationController
       flash[:success] = "Your settings have been updated."
       redirect_to site_path(@site)
     else
+      load_bills
       flash.now[:error] = "There was a problem updating your settings."
       render :action => :edit
     end
@@ -162,5 +159,10 @@ class SitesController < ApplicationController
 
       @top_performers[name] = elements[0,6]
     end
+  end
+
+  def load_bills
+    @bills = @site.bills.includes(:subscription).select{|bill| bill.status == :paid && bill.amount > 0}.sort_by(&:bill_at).reverse
+    @next_bill = @site.bills.includes(:subscription).find{|bill| bill.status == :pending}
   end
 end
