@@ -29,4 +29,5 @@ dynamo_tables:
 cybersource_environment: "test"
 cybersource_login: cybersource-login
 cybersource_password: cybersource-password
-low_priority_queue: hellobar_production_lowpriority
+main_queue: hellobar3_production
+low_priority_queue: hellobar3_production_lowpriority
