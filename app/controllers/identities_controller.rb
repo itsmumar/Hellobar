@@ -22,7 +22,7 @@ class IdentitiesController < ApplicationController
     identity.extra = env["omniauth.auth"]["extra"]
 
     if identity.save
-      flash[:notice] = "We've successfully connected your #{identity.provider_config[:name]} account."
+      flash[:success] = "We've successfully connected your #{identity.provider_config[:name]} account."
     else
       flash[:error] = "There was a problem connecting your #{identity.provider_config[:name]} account. Please try again later."
     end
