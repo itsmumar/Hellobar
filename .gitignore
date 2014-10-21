@@ -27,3 +27,4 @@ db/*_dump.sql
 
 # Ignore application configuration
 /config/application.yml
+/config/thin/www+application.yml

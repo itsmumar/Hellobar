@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'yaml'
+require 'optparse'
+
+options = { paths: { config: 'config/application.yml' } }
+FILES = ARGV
+yaml = {}
+env = ENV['RAILS_ENV'] || ENV['RACK_ENV'] || 'production'
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: example.rb [options]"
+
+  opts.on("-o", "--output OUTPUT", "Output target") do |file|
+    options[:paths][:output] = file
+  end
+
+  opts.on("-c", "--config CONFIG", "Config file location") do |file|
+    options[:paths][:config] = file
+  end
+end.parse!
+
+# Load each yml file
+FILES.each do |f|
+  yaml.merge! YAML.load_file(f)
+end
+
+# Append config vars
+config = YAML.load_file(options[:paths][:config])
+config = config[env] if config.has_key?(env)
+config.each do |key, value|
+  yaml[key.upcase] ||= value
+end
+
+File.write(options[:paths][:output], yaml.to_yaml)
