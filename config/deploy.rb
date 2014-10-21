@@ -1,3 +1,5 @@
+require 'yaml'
+
 lock "3.2.1"
 
 set :application, "hellobar"
@@ -14,6 +16,22 @@ set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 
 
 namespace :deploy do
+  desc "Copy configuration file to config/application.yml."
+  task :copy_application_yml do
+    on roles(:web) do
+      if ENV['CI']
+        config = YAML.load_file('config/application.yml.example')
+        production = config['production']
+        production.each do |key, value|
+          production[key] = ENV[key.upcase]
+        end
+        upload! StringIO.new(production.to_yaml), "#{release_path}/config/application.yml"
+      else
+        upload! 'config/application.yml', "#{release_path}/config"
+      end
+    end
+  end
+
   desc "Restart application"
   task :restart do
     on roles(:web) do
@@ -58,6 +76,7 @@ namespace :deploy do
     end
   end
 
+  after :publishing, :copy_application_yml
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
 end

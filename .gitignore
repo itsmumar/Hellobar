@@ -24,3 +24,6 @@ db/*_dump.sql
 
 # Ignore scratch files
 *_scratch.rb
+
+# Ignore application configuration
+/config/application.yml
