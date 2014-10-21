@@ -54,7 +54,7 @@ namespace :deploy do
     on roles(:web) do
       as :hellobar do
         execute "mkdir -p /mnt/deploy/shared/sockets"
-        execute "cd #{release_path} && bundle exec thin restart -C config/thin/www.yml"
+        execute "cd #{release_path} && bundle exec ./bin/load_env -c config/application.yml -- thin restart -C config/thin/www.yml"
       end
     end
   end
