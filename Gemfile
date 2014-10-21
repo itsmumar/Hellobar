@@ -54,6 +54,7 @@ gem "unf",                       "~> 0.1.4"
 gem "whenever",                  "~> 0.9.2"
 gem "zip",                       "~> 2.0.2"
 gem "figaro",                    "~> 1.0.0"
+gem "rake_running",              "~> 0.0.1", :github => "colinyoung/rake_running"
 
 group :development do
   gem "better_errors", "~> 1.1"

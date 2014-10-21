@@ -8,6 +8,13 @@ GIT
       colorize
 
 GIT
+  remote: git://github.com/colinyoung/rake_running.git
+  revision: 12d47fe692ffb8cc4112ec25c6b0a9595123c3c3
+  specs:
+    rake_running (0.0.1)
+      rake
+
+GIT
   remote: git://github.com/floomoon/omniauth-mailchimp.git
   revision: 239e08d3297cf637b5b0b77b419fdc8461239378
   specs:
@@ -510,6 +517,7 @@ DEPENDENCIES
   pry
   psych (~> 2.0.5)
   rails (= 4.1.5)
+  rake_running (~> 0.0.1)!
   rb-readline (~> 0.5.1)
   recaptcha (~> 0.3.6)
   render_anywhere (~> 0.0.9)
