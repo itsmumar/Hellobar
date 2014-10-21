@@ -1,0 +1,14 @@
+h1 Okay!
+
+p Signed out successfully.
+
+p
+  | You're being redirected. 
+  = link_to 'Continue manually', root_path
+  br
+  | if you are still waiting.
+
+javascript:
+  setTimeout(function() {
+    window.location = '/'
+  }, 5000)

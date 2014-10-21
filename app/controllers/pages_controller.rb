@@ -10,4 +10,8 @@ class PagesController < ApplicationController
 
   def privacy_policy
   end
+
+  def logout_confirmation
+    flash.delete(:notice) # dont render the logout flash
+  end
 end

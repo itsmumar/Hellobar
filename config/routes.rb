@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords"}
-  root "welcome#index"
 
   get "profile", :to => "user#edit", :as => :profile
   resource :user, :controller => :user, :only => [:update]
@@ -59,6 +58,9 @@ Rails.application.routes.draw do
   get '/use-cases' => 'pages#use_cases'
   get '/terms-of-use' => 'pages#terms_of_use'
   get '/privacy-policy' => 'pages#privacy_policy'
+  get '/logged_out' => 'pages#logout_confirmation', as: :logout_confirmation
 
   get "/pixel.gif" => "pixel#show", :as => :tracking_pixel
+
+  root "welcome#index"
 end
