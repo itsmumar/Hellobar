@@ -63,7 +63,7 @@ namespace :deploy do
     on roles(:web) do
       execute "sudo service monit stop || sudo apt-get install monit"
       execute "sudo rm /etc/monit/monitrc"
-      execute "sudo ln -s /mnt/deploy/current/config/deploy/monitrc /etc/monit/monitrc"
+      execute "sudo ln -s /mnt/deploy/current/config/deploy/monitrc/#{stage}.monitrc /etc/monit/monitrc"
       execute "sudo chown root /etc/monit/monitrc"
       execute "sudo service monit start"
       execute "sudo monit restart all"
