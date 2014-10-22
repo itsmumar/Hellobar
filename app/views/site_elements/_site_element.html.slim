@@ -24,13 +24,13 @@ tr.site-element-block class="#{site_element.paused? ? 'paused' : 'active'}" data
           | Edit
 
         = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit? do
-          i.icon-edit
+          i.icon-docs
           | Create Variation
 
         = content_tag 'a', class: 'toggle-pause', "data-element-id" => site_element.id, "data-site-id" => @site.id do
-          i.icon-edit
+          i.icon-pause
           = site_element.paused? ? 'Unpause' : 'Pause'
 
         = content_tag 'a', class: 'delete-element', "data-element-id" => site_element.id, "data-site-id" => @site.id, "data-rule-id" => rule.id do
-          i.icon-edit
+          i.icon-trash
           | Remove

@@ -24,7 +24,7 @@
     @include inline-block(baseline)
 
   span
-    @include inline-block()
+    @include inline-block(bottom)
     @include ellipsis()
 
   .dropdown-wrapper
@@ -42,38 +42,3 @@
 
       .dropdown-block
         border-color: $grayLighter
-
-/*-----------  Temporary Block  -----------*/
-
-.temporary-block
-  color: $gray
-  padding: 2.25em
-  margin-left: auto
-  margin-right: auto
-  max-width: $blockWidth
-  border-radius: $radiusLg
-  text-align: center !important
-  border: 1px dashed $grayLighter
-
-  a
-    color: $blueLight
-    margin-right: 0.33em
-    text-decoration: underline
-
-    &:hover
-      color: $blue
-
-  p
-    max-width: 75%
-    margin-left: auto
-    margin-right: auto
-    margin-bottom: 0
-
-  .button
-    @extend %green-button
-
-  a.button
-    text-decoration: none
-    &:hover
-      color: white
-
