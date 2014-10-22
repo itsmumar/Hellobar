@@ -89,7 +89,7 @@ class @ContactListModal extends Modal
         @options.success(data, this)
       error: (response) =>
         contactList = response.responseJSON
-        @_showErrors(contactList.errors)
+        @_displayErrors(contactList.errors)
         @$modal.find("a.submit").removeAttr("disabled")
 
   _getFormData: ->
@@ -157,14 +157,6 @@ class @ContactListModal extends Modal
         @_renderBlock("nevermind", defaultContext).hide()
         @_renderBlock("instructions", defaultContext).show()
         @blocks.remoteListSelect.hide()
-
-  _showErrors: (errors) ->
-    return unless errors.length > 0
-    errorText = errors.reduce (a, b) -> "#{a}<br>#{b}"
-    @$modal.find('.modal-block .flash-block').html(errorText + '<i class="icon-close"></i>').addClass('alert show')
-
-  _clearErrors: ->
-    @$modal.find(".alert").remove()
 
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)

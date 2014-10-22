@@ -1,5 +1,7 @@
 = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
 
+  = render 'shared/flash'
+
   h1 Sign In
 
   = f.input_field :email, :placeholder => 'Your Email', autofocus: true

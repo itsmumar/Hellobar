@@ -1,12 +1,16 @@
 /*-----------  Flash Alerts  -----------*/
 
 .flash-block
+  left: 0
+  right: 0
   opacity: 0
-  width: 76.5%
+  width: auto
   color: $white
   z-index: 5000
   text-align: left
   overflow: hidden
+  margin-left: 3em
+  margin-right: 3em
   margin-top: -2.5em
   position: absolute
   padding: 0.55em 1.33em
@@ -16,34 +20,25 @@
 
   i
     float: right
-    color: $white
     cursor: pointer
     font-size: 0.65em
     line-height: 225%
     font-weight: bold
+    color: rgba($white, 0.5)
     @include transition()
+
+    &:hover
+      color: $white
 
   /*-----------  States  -----------*/
   
   &.success
     background-color: $green
 
-    i:hover
-      color: $green
-
-  &.alert
-    background-color: $yellow
-    @include antialiased()
-
-    i:hover
-      color: $yellow
-
+  &.alert,
   &.error
     background-color: $orange
     @include antialiased()
-
-    i:hover
-      color: $orange
   
   /*-----------  Animation  -----------*/
 

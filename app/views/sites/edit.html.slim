@@ -18,7 +18,8 @@ nav.tabs-wrapper
     = f.check_box :opted_in_to_email_digest, as: :boolean
     = f.label :opted_in_to_email_digest, "Send me a weekly email digest of this site's performance"
 
-  = link_to "Installation instructions", site_install_path(@site), :class => 'button'
+  .button-wrapper
+    = link_to "Installation instructions", site_install_path(@site)
 
   .billing-wrapper
     = render 'billing'

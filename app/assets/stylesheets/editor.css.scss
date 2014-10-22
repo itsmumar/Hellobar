@@ -26,4 +26,7 @@
 @import 'layouts/document';         // Document Layouts
 @import 'layouts/modals/*';         // Modals
 
-@import 'layouts/editor/*';         // Editor Application
+@import 'layouts/editor/common';    // Editor 
+@import 'layouts/editor/elements';  // Editor Elements
+@import 'layouts/editor/preview';   // Editor Preview
+@import 'layouts/editor/steps';     // Editor Steps Layouts

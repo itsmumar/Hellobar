@@ -7,7 +7,8 @@
     
     .url-wrapper,
     .select-wrapper,
-    .selector-wrapper
+    .selector-wrapper,
+    .button-wrapper
       width: 30%
       @include inline-block()
 
@@ -21,10 +22,25 @@
       label:last-child
         font-size: 0.85em
 
+  .button-wrapper
+    vertical-align: super !important
+
+    a
+      color: $blue
+      display: block
+      font-size: 0.85em
+      text-decoration: underline
+
   /*-----------  Billing Section  -----------*/
 
   .billing-wrapper
     margin-top: 3.5em
+
+    .upgrade-account-modal
+      padding-top: 0.5em
+      padding-bottom: 0.5em
+      text-decoration: none
+      @extend %red-button
 
     section
       margin-bottom: 2em

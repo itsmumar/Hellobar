@@ -1,10 +1,12 @@
-div.row
-  div.col-md-4
-  div.col-md-4
-    h2 Forgot your password?
+= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
 
-    = simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
-      = f.input :email
-      = f.button :submit, "Send me reset password instructions", :class => "btn btn-primary"
+  = render 'shared/flash'
 
-  div.col-md-4
+  h1 Reset Password
+
+  = f.input_field :email, :placeholder => 'Your Email', autofocus: true
+
+  = f.button :submit, "Send Reset Instructions", :class => "button"
+
+  .devise-links
+    = render "devise/shared/links"

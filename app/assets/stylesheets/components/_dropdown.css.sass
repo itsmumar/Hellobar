@@ -2,11 +2,11 @@
 
 .dropdown-wrapper
   position: relative
+  cursor: context-menu
   @include inline-block()
 
   > a,
   > i
-    cursor: pointer
     padding: 0 1.5rem
 
   &:before
@@ -21,6 +21,7 @@
     right: 0
     opacity: 0
     padding: 1rem
+    cursor: default
     font-size: 1rem
     min-width: 12rem
     text-align: left

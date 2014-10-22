@@ -34,6 +34,18 @@
 window.HelloBar = Ember.Application.create
   rootElement: "#ember-root"
 
+#-----------  Debounce/Throttle Observers  -----------#
+
+Ember.debouncedObserver = (keys..., time, func) ->  
+  Em.observer ->
+    Em.run.debounce @, func, time
+  , keys...
+
+Ember.throttledObserver = (keys..., time, func) ->  
+  Em.observer ->
+    Em.run.throttle @, func, time
+  , keys...
+
 #-----------  Set Application Height  -----------#
 
 $ ->

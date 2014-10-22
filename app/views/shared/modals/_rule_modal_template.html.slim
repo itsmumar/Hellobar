@@ -9,6 +9,9 @@ script id="rule-modal" type="text/x-handlebars-template"
         | {{/if}}
 
       .rules-modal 
+        .flash-block
+          i.icon-close
+
         div style="display:none"
           input name="utf8" type="hidden" value="✓"
           | {{#if id}}
