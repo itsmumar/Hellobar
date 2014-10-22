@@ -2,6 +2,7 @@
 #= require jquery_ujs
 #= require zeropad.jquery
 #= require jstz-1.0.4.min
+#= require underscore
 
 #= require color_thief
 #= require jquery_dropper
@@ -31,6 +32,7 @@
 
 window.HelloBar = Ember.Application.create
   rootElement: "#ember-root"
+
 
 #-----------  Set Application Height  -----------#
 

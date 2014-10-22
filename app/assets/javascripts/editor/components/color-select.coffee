@@ -69,7 +69,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
       theme: 'default'
       defaultValue: @get('color')
       change: (hex, opacity) =>
-        @set('color', hex.substring(1))
+        _.throttle(@set('color', hex.substring(1)), 1000);
   ).on('didInsertElement')
 
   miniColorsListener: ( ->

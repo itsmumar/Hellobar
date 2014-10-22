@@ -15,7 +15,6 @@
   position: absolute
   padding: 0.55em 1.33em
   border-radius: $radiusSm 
-  box-shadow: 1px 1px 7px rgba(0,0,0,0.15)
   @include transition(0.5s)
 
   i
@@ -34,13 +33,16 @@
   
   &.success
     background-color: $green
+    box-shadow: 1px 1px 7px rgba(0,0,0,0.15)
 
   &.notice,
   &.alert
     background-color: $yellow
+    box-shadow: 1px 1px 7px rgba(0,0,0,0.15)
 
   &.error
     background-color: $orange
+    box-shadow: 1px 1px 7px rgba(0,0,0,0.15)
     @include antialiased()
   
   /*-----------  Animation  -----------*/
