@@ -12,6 +12,6 @@ check process guaranteed_queue with pidfile /mnt/deploy/shared/pids/guaranteed_q
         if cpu usage > 95% for 10 cycles then restart
 
 check process guaranteed_queue_lowpriority with pidfile /mnt/deploy/shared/pids/guaranteed_queue.lowpriority.pid
-        start program = "/bin/bash -c 'HOME=/home/hellobar cd /mnt/deploy/current && HOME=/home/hellobar PATH=/usr/bin:/usr/local/bin:$PATH RAILS_ENV=production GUARANTEED_QUEUE_NAME=hellobar3_production_lowpriority GUARANTEED_QUEUE_INTERVAL=60 bundle exec guaranteed_queue start --pidfile=/mnt/deploy/shared/pids/guaranteed_queue.lowpriority.pid'"
+        start program = "/bin/bash -c 'HOME=/home/hellobar cd /mnt/deploy/current && HOME=/home/hellobar PATH=/usr/bin:/usr/local/bin:$PATH RAILS_ENV=production GUARANTEED_QUEUE_NAME=hellobar3_production_lowpriority GUARANTEED_QUEUE_INTERVAL=10 bundle exec guaranteed_queue start --pidfile=/mnt/deploy/shared/pids/guaranteed_queue.lowpriority.pid'"
         stop program = "/bin/bash -c 'HOME=/home/hellobar cd /mnt/deploy/current && HOME=/home/hellobar PATH=/usr/bin:/usr/local/bin:$PATH RAILS_ENV=production bundle exec guaranteed_queue stop --pidfile=/mnt/deploy/shared/pids/guaranteed_queue.lowpriority.pid'"
         if cpu usage > 95% for 10 cycles then restart
