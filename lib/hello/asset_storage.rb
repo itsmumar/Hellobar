@@ -4,7 +4,7 @@ require "stringio"
 module Hello
   class AssetStorage
     MAXAGE = 2.minutes
-    S_MAXAGE = 1.minute
+    S_MAXAGE = 5.seconds
 
     cattr_accessor :connection
 
