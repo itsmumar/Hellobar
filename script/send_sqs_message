@@ -19,7 +19,7 @@ die!("Command not present!") unless message && message.length > 0
 
 key = SETTINGS['aws_access_key_id']
 secret = SETTINGS['aws_secret_access_key']
-queue_name ||= SETTINGS['guaranteed_queue_name']
+queue_name ||= SETTINGS['main_queue']
 
 die!("Queue name not set") unless queue_name
 
@@ -29,7 +29,8 @@ queue = sqs.queues.find do |q|
   q.url.split('/').last == queue_name
 end
 
-fail 'Queue seems incorrect for that stage' unless queue.include?(stage)
+# fail 'Queue seems incorrect for that stage' unless queue.url.include?(stage)
 
 puts "[#{Time.now}] Sending #{message} to #{queue.url}"
-queue.send_message(message)
+receipt = queue.send_message(message)
+p receipt
