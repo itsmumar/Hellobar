@@ -3,7 +3,8 @@
 [id^="unlocks-"],
 [id^="sessions-"],
 [id^="passwords-"],
-[id^="registrations-"]
+[id^="registrations-"],
+#pages-logout_confirmation
   background-color: $grayLightest
  
   h1
@@ -32,6 +33,10 @@
       margin-top: 0.75em
       @extend %red-button
       @include antialiased(false)
+
+    p a
+      color: $blue
+      text-decoration: underline
 
     .devise-links
       text-align: left

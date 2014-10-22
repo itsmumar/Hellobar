@@ -49,6 +49,7 @@ class @Modal
 
   _displayErrors: (errors) ->
     return unless errors.length > 0
+    $('.modal-wrapper').animate({ scrollTop: 0 })
     errorText = errors.reduce (a, b) -> "#{a}<br>#{b}"
     @$modal.find('.modal-block .flash-block').prepend(errorText).addClass('alert show')
 

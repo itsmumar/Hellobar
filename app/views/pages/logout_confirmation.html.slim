@@ -1,14 +1,16 @@
-h1 Okay!
+form
+  = render 'shared/flash'
 
-p Signed out successfully.
+  h1 Okay!
 
-p
-  | You're being redirected. 
-  = link_to 'Continue manually', root_path
-  br
-  | if you are still waiting.
+  p Signed out successfully.
+
+  p
+    | You're being redirected. 
+    = link_to 'Continue manually', root_path
+    |  if you are still waiting.
 
 javascript:
   setTimeout(function() {
     window.location = '/'
-  }, 5000)
+  }, 4000)

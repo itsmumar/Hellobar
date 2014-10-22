@@ -72,8 +72,9 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
         @set('color', hex.substring(1))
   ).on('didInsertElement')
 
-  miniColorsListener: Ember.throttledObserver 'color', 1000, () ->
+  miniColorsListener: ( ->
     @$('.gradient-block').minicolors('value', @get('color'))
+  ).observes('color')
 
   #-----------  Push 'Recent' Changes to Controller  -----------#
 

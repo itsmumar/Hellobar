@@ -96,7 +96,7 @@ class @PaymentModal extends Modal
 
     @$modal.find('a.submit').on 'click', (event) =>
       @_unbindFormSubmission() # prevent double submissions
-      @_removeAlerts()
+      @_clearErrors()
       @$modal.find("a.submit").addClass("cancel")
 
       $form = @$modal.find('form')
@@ -118,8 +118,7 @@ class @PaymentModal extends Modal
           @$modal.find("a.submit").removeClass("cancel")
 
           if xhr.responseJSON
-            content = xhr.responseJSON.errors.join(', ')
-            @_renderAlert(content)
+            @_displayErrors(xhr.responseJSON.errors)
 
   _unbindFormSubmission: ->
     @$modal.find('a.submit').off('click')
@@ -163,11 +162,3 @@ class @PaymentModal extends Modal
       "/payment_methods/" + @currentPaymentMethod.currentPaymentDetails.payment_method_id
     else
       "/payment_methods"
-
-  _renderAlert: (content) ->
-    template = Handlebars.compile($('script#alert-template').html())
-    alert = template({type: 'error', content: content})
-    @$modal.find('.modal-block').prepend(alert)
-
-  _removeAlerts: ->
-    @$modal.find('.alert').remove()

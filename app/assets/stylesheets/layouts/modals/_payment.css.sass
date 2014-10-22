@@ -103,10 +103,17 @@
           font-size: 0.8em
           margin-bottom: 0
 
-        fieldset
-          margin-right: 1%
-          font-size: 1.1em
-          @include inline-block()
+        .field-row
+          width: 100%
+
+          > div
+            width: 100%
+            margin-right: 3%
+            font-size: 1.1em
+            @include inline-block()
+
+            &:last-child
+              margin-right: 0
 
           label
             @include antialiased(false)
@@ -120,41 +127,52 @@
             @include placeholder
               color: $grayLighter !important
 
-        .cc-name
-          width: 100%
-          margin-right: 0
+          .cc-number
+            width: 57%
+            position: relative
 
-        .cc-number
-          width: 62%
-          position: relative
+            input
+              padding-left: 3em !important
 
-          input
-            padding-left: 3.2em !important
+            i
+              left: 12px
+              bottom: 2px
+              color: $grayLighter
+              font-size: 1.25em
+              position: absolute
 
-          i
-            left: 12px
-            bottom: 2px
-            color: $grayLighter
-            font-size: 1.25em
-            position: absolute
+          .cc-expiry
+            width: 23%
 
-        .cc-expiry
-          width: 22%
+          .cc-csv
+            width: 14%
 
-        .cc-csv
-          width: 14%
-          margin-right: 0
+          .cc-city
+            width: 57%
+
+          .cc-state
+            width: 14%
+
+          .cc-zip
+            width: 23%
 
         footer
           margin-top: 2em
           padding-top: 1em
           border-top: 1px solid $grayLighter
+          @include clearfix()
+
+          p
+            color: $gray
+            margin-top: 1px
+            text-align: right
 
           .button
             float: right
             margin-left: 1em
 
     /*----------- Free -----------*/
+
     &.free
 
       .payment-sidebar
