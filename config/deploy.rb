@@ -14,7 +14,6 @@ set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-
 namespace :deploy do
   desc "Copy configuration file to config/application.yml."
   task :copy_application_yml do
@@ -62,8 +61,8 @@ namespace :deploy do
   task :restart_monit do
     on roles(:web) do
       execute "sudo service monit stop || sudo apt-get install monit"
-      execute "sudo rm /etc/monit/monitrc"
-      execute "sudo ln -s /mnt/deploy/current/config/deploy/monitrc/#{stage}.monitrc /etc/monit/monitrc"
+      execute "sudo rm /etc/monit/monitrc || true"
+      execute "sudo ln -s /mnt/deploy/current/config/deploy/monitrc/#{fetch(:stage)}.monitrc /etc/monit/monitrc"
       execute "sudo chown root /etc/monit/monitrc"
       execute "sudo service monit start"
       execute "sudo monit restart all"

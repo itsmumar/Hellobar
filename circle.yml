@@ -19,8 +19,8 @@ test:
           RAILS_ENV: test
 
 deployment:
-  alpha:
+  edge:
     branch: master
     commands:
-      - bundle exec cap alpha deploy:
+      - bundle exec cap edge deploy:
           timeout: 600
