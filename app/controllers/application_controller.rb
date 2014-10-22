@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
   helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id
 
   before_action :record_tracking_param
-  before_action :render_payment_errors
   after_action :store_last_requested_path
 
   def access_token
@@ -86,17 +85,6 @@ class ApplicationController < ActionController::Base
 
   def record_tracking_param
     Hello::TrackingParam.track(params[:trk]) if params[:trk]
-  end
-
-  # sets a flash when there are errors with their payment method
-  def render_payment_errors
-    # must check presence, since RulesController returns " " from #load_site
-    if load_site.present? && @site.bills_with_payment_issues.present?
-      total_bill_amount = @site.bills_with_payment_issues.inject(0){|sum,b| sum+=b.amount}
-      first_bill_date = @site.bills_with_payment_issues.sort{|a,b| a.bill_at <=> b.bill_at}.first.bill_at
-
-      flash.now[:error] = "You have outstanding bills in the amount of #{number_to_currency(total_bill_amount)} since #{first_bill_date.strftime("%-m-%-d-%Y")}"
-    end
   end
 
   def load_site
