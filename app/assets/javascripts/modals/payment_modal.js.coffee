@@ -113,6 +113,8 @@ class @PaymentModal extends Modal
 
           new PaymentConfirmationModal(options).open()
           @close()
+
+          window.location.reload(true) unless @options.successCallback # reload the window by default
         error: (xhr, status, error) =>
           @_bindFormSubmission() # rebind so they can enter valid info
           @$modal.find("a.submit").removeClass("cancel")
