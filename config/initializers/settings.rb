@@ -36,6 +36,8 @@ unless defined?(Hellobar::Settings)
     tracking_host
     twilio_password
     twilio_user
+    main_queue
+    low_priority_queue
   )
 
   keys.each do |key|
