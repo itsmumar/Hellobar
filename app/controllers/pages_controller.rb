@@ -12,6 +12,5 @@ class PagesController < ApplicationController
   end
 
   def logout_confirmation
-    flash.delete(:notice) # dont render the logout flash
   end
 end
