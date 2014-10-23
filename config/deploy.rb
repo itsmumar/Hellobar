@@ -25,6 +25,8 @@ namespace :deploy do
           production[key] = ENV[key.upcase]
         end
         upload! StringIO.new(production.to_yaml), "#{release_path}/config/application.yml"
+      elsif !File.exists?('config/application.yml')
+        raise 'You are deploying locally and do not have a config/application.yml file.'
       else
         upload! 'config/application.yml', "#{release_path}/config"
       end
@@ -53,8 +55,7 @@ namespace :deploy do
     on roles(:web) do
       as :hellobar do
         execute "mkdir -p /mnt/deploy/shared/sockets"
-        execute "cd #{release_path} && bundle exec ./bin/copy_config config/thin/www.yml --output config/thin/www+application.yml"
-        execute "cd #{release_path} && bundle exec thin restart -C config/thin/www+application.yml"
+        execute "cd #{release_path} && ./bin/load_env -- bundle exec thin restart -C config/thin/www.yml"
       end
     end
   end
@@ -76,7 +77,7 @@ namespace :deploy do
     end
   end
 
-  after :publishing, :copy_application_yml
+  after :updating, :copy_application_yml
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
 end
