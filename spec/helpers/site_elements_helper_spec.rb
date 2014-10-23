@@ -76,7 +76,6 @@ describe SiteElementsHelper do
       end
     end
 
-
     it "doesn't pluralize when there was only one conversion" do
       element = site_elements(:zombo_email)
       element.stub(:total_conversions => 1, :total_views => 1)
@@ -119,6 +118,16 @@ describe SiteElementsHelper do
       })
 
       recent_activity_message(element).should =~ /converting 400\.0% better than your other social bars/
+    end
+
+    it "doesnt return the conversion rate when it is Infinite" do
+      element = site_elements(:zombo_twitter)
+      Hello::DataAPI.stub(:lifetime_totals => {
+        element.id.to_s => [[0, 5]],
+        site_elements(:zombo_facebook).id.to_s => [[10, 1]]
+      })
+
+      recent_activity_message(element).should_not =~ /converting (.+) better than your other social bars/
     end
   end
 
