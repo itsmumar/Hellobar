@@ -43,4 +43,5 @@ class @PaymentConfirmationModal extends Modal
       planName: subscription.type
       billingSchedule: billingSchedule
       chargeDescription: chargeDescription
+      isPaidPlan: !@options.isFree
     }

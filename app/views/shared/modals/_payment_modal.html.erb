@@ -7,43 +7,50 @@
 
       <form class="payment-modal" accept-charset="UTF-8">
         <input type="hidden" name="billing[plan]" value="{{ package.type }}" />
-        <div class="site-title">Upgrade {{siteName}}!</div>
+        {{#if isFree}}
+          <input type="hidden" name="billing[schedule]" value="monthly" />
+          <div class="site-title downgrade-free">Are you sure you want to downgrade {{siteName}} to a free plan?</div>
+        {{else}}
+          <div class="site-title">Upgrade {{siteName}}!</div>
 
-        <div class="payment-wrapper {{ package.type }}">
-          <div class="payment-sidebar">
-            <header>
-              {{ package.type }}
-              <small>Select Billing</small>
-            </header>
-            <div class="package-cycle">
-              {{#if isAnnual}}
-              <input type="radio" id="monthly-billing" name="billing[schedule]" value="monthly" />
-              {{else}}
-              <input type="radio" id="monthly-billing" name="billing[schedule]" value="monthly" checked />
-              {{/if}}
+          <div class="payment-wrapper {{ package.type }}">
+            <div class="payment-sidebar">
+              <header>
+                {{ package.type }}
+                <small>Select Billing</small>
+              </header>
 
-              <label for="monthly-billing">
-                Monthly
-                <small>${{package.monthly_amount}} Per Month</small>
-              </label>
-              {{#if isAnnual}}
-              <input type="radio" id="anually-billing" name="billing[schedule]" value="yearly" checked />
-              {{else}}
-              <input type="radio" id="anually-billing" name="billing[schedule]" value="yearly" />
-              {{/if}}
-              <label for="anually-billing">
-                Annually
-                <small>${{package.yearly_amount}} Per Year <strong>Save 15%</strong></small>
-              </label>
+              <div class="package-cycle">
+                <input type="radio" id="monthly-billing" name="billing[schedule]" value="monthly" {{#if isMonthly}}checked{{/if}} />
+
+                <label for="monthly-billing">
+                  Monthly
+                  <small>${{package.monthly_amount}} Per Month</small>
+                </label>
+
+                <input type="radio" id="anually-billing" name="billing[schedule]" value="yearly" {{#if isAnnual}}checked{{/if}} />
+
+                <label for="anually-billing">
+                  Annually
+                  <small>${{package.yearly_amount}} Per Year <strong>Save 15%</strong></small>
+                </label>
+              </div>
+
+              <a class="different-plan">Choose a different plan</a>
             </div>
-            <a class="different-plan">Choose a different plan</a>
-          </div>
 
-          <div id="payment-details">
-          {{> cc-payment-details this}}
+            <div id="payment-details">
+              {{> cc-payment-details this}}
+            </div>
+
           </div>
-        </div>
+        {{/if}}
       </form>
+
+      <footer>
+        <a class="button cancel">Cancel</a>
+        <a class="button submit">Confirm</a>
+      </footer>
     </div>
   </div>
 </script>

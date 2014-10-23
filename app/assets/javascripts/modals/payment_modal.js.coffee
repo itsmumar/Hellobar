@@ -22,12 +22,11 @@ class @PaymentModal extends Modal
     $(template(
       errors: @options.errors
       package: @options.package
-      isAnnual: @isAnnual(),
+      isAnnual: @_isAnnual()
+      isMonthly: @_isMonthly()
+      isFree: @_isFree()
       siteName: @options.site.display_name
     ))
-
-  isAnnual: ->
-    @options.package.schedule == 'yearly'
 
   open: ->
     $('body').append(@$modal)
@@ -110,6 +109,7 @@ class @PaymentModal extends Modal
           options =
             successCallback: @options.successCallback
             data: data
+            isFree: @_isFree()
 
           new PaymentConfirmationModal(options).open()
           @close()
@@ -146,11 +146,21 @@ class @PaymentModal extends Modal
   _isUsingLinkedPaymentMethod: ->
     !isNaN(@_linkedPaymentMethodId())
 
+  _isAnnual: ->
+    @options.package.schedule == 'yearly'
+
+  _isMonthly: ->
+    !@_isAnnual()
+
+  _isFree: ->
+    !@options.package.requires_payment_method &&
+      if @_isAnnual() then @options.package.yearly_amount == 0 else @options.package.monthly_amount == 0
+
   _linkedPaymentMethodId: ->
     parseInt(@$modal.find('select#linked-detail').val())
 
   _method: ->
-    if @_isUsingLinkedPaymentMethod()
+    if @_isUsingLinkedPaymentMethod() || @_isFree
       'PUT'
     else
       'POST'
@@ -158,7 +168,7 @@ class @PaymentModal extends Modal
   _url: ->
     if @_isUsingLinkedPaymentMethod()
       "/payment_methods/" + @_linkedPaymentMethodId()
-    else if @currentPaymentMethod && @currentPaymentMethod.currentPaymentDetails
-      "/payment_methods/" + @currentPaymentMethod.currentPaymentDetails.payment_method_id
+    else if @currentPaymentMethod && @currentPaymentMethod.current_details
+      "/payment_methods/" + @currentPaymentMethod.current_details.payment_method_id
     else
       "/payment_methods"

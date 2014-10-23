@@ -1,5 +1,5 @@
 class SubscriptionSerializer < ActiveModel::Serializer
-  attributes :schedule, :type, :yearly_amount, :monthly_amount, :payment_method_details_id, :payment_method_number
+  attributes :schedule, :type, :yearly_amount, :monthly_amount, :payment_method_details_id, :payment_method_number, :requires_payment_method
 
   def schedule
     object.values[:schedule]
@@ -31,5 +31,9 @@ class SubscriptionSerializer < ActiveModel::Serializer
     else
       nil
     end
+  end
+
+  def requires_payment_method
+    object.requires_payment_method?
   end
 end

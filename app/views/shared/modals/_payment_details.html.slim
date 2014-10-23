@@ -49,9 +49,6 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
           label Country
           input type="text" placeholder="USA" name="payment_method_details[country]" value="{{currentPaymentDetails.country}}" autocomplete="country-name"
 
-      footer
-        a.button.submit Confirm
-
 script id="linked-methods-template" type="text/x-handlebars-template"
   label Use a linked card
   select#linked-detail name="linked_payment_id"

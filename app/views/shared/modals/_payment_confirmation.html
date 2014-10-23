@@ -7,7 +7,9 @@
 
       <div class="payment-confirmation-modal">
         <p>Your site is now on the {{planName}} plan{{billingSchedule}}.</p>
-        <p>{{chargeDescription}}.</p>
+        {{#if isPaidPlan}}
+          <p>{{chargeDescription}}.</p>
+        {{/if}}
       </div>
 
       <footer>
