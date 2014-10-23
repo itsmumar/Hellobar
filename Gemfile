@@ -66,6 +66,7 @@ group :development, :test do
   gem "metric_fu"
   gem "minitest"
   gem "pry"
+  gem "pry-nav"
   gem "rspec-rails", "~> 2.14"
   gem "simplecov", "~> 0.7.1"
   gem "teaspoon", "~> 0.8.0"
