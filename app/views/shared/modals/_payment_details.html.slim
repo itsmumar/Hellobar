@@ -2,7 +2,7 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
   .payment-form
     header Billing Information
 
-    .credit-card        
+    .credit-card
       p This will upgrade ONLY site {{siteName}} to {{ package.type }}. Each site will need to be upgraded seperately to gain {{ package.type }} features.
 
       #linked-payment-methods
@@ -47,7 +47,7 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
       .field-row
         .cc-country
           label Country
-          input type="text" placeholder="USA" name="payment_method_details[country]" value="{{currentPaymentDetails.country}}" autocomplete="country-name"
+          = country_select("payment_method_details", "country", priority_countries: ['US'], selected: "{{currentPaymentDetails.country}}")
 
 script id="linked-methods-template" type="text/x-handlebars-template"
   label Use a linked card
