@@ -21,6 +21,7 @@ gem "dalli",                     "~> 2.7.2"
 gem "devise",                    "~> 3.2.4"
 gem "ember-rails",               "~> 0.15.0"
 gem "ember-source",              "~> 1.5.1.1"
+gem "figaro",                    "~> 1.0.0"
 gem "fog",                       "~> 1.22.1"
 gem "gibbon",                    "~> 1.0.4"
 gem "guaranteed_queue",          "~> 0.0.1", :github => "colinyoung/guaranteed_queue"
@@ -39,6 +40,7 @@ gem "paranoia",                  "~> 2.0"
 gem "pony",                      "~> 1.8"
 gem "psych",                     "~> 2.0.5"
 gem "rails",                     "4.1.5"
+gem "rake_running",              "~> 0.0.1", :github => "colinyoung/rake_running"
 gem "rb-readline",               "~> 0.5.1"
 gem "recaptcha",                 "~> 0.3.6", :require => "recaptcha/rails"
 gem "render_anywhere",           "~> 0.0.9"
@@ -53,8 +55,6 @@ gem "uglifier",                  "2.0.1"
 gem "unf",                       "~> 0.1.4"
 gem "whenever",                  "~> 0.9.2"
 gem "zip",                       "~> 2.0.2"
-gem "figaro",                    "~> 1.0.0"
-gem "rake_running",              "~> 0.0.1", :github => "colinyoung/rake_running"
 
 group :development do
   gem "better_errors", "~> 1.1"
@@ -62,7 +62,6 @@ group :development do
 end
 
 group :development, :test do
-  # gem "debugger"
   gem "metric_fu"
   gem "minitest"
   gem "pry"
