@@ -4,9 +4,9 @@
 #= require jstz-1.0.4.min
 #= require underscore
 
+#= require colorpicker
 #= require color_thief
 #= require jquery_dropper
-#= require jquery_minicolors
 
 #= require handlebars
 #= require handlebars_helpers
@@ -33,6 +33,17 @@
 window.HelloBar = Ember.Application.create
   rootElement: "#ember-root"
 
+#-----------  Debounce/Throttle Observers  -----------#
+
+Ember.debouncedObserver = (keys..., time, func) ->  
+  Em.observer ->
+    Em.run.debounce @, func, time
+  , keys...
+
+Ember.throttledObserver = (keys..., time, func) ->  
+  Em.observer ->
+    Em.run.throttle @, func, time
+  , keys...
 
 #-----------  Set Application Height  -----------#
 

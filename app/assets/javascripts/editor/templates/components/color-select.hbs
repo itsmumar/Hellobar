@@ -26,23 +26,32 @@
     </div>
 
     <div class="color-picker">
-      <div class="gradient-block"></div>
+      <div class="gradient-wrapper">
+        <div class="gradient"></div>
+        <div class="gradient-indicator"></div>
+      </div>
+      <div class="slider-wrapper">
+        <div class="slider"></div>
+        <div class="slider-indicator"></div>
+      </div>
       
       {{!-- <a class="eyedrop-button" {{action 'toggleSelecting'}}>
         <i class="icon-eyedropper"></i>
       </a> --}}
 
-      <div class="rgb-block">
-        <h6>R</h6>
-        {{input type='number' class='r-val' min='0' max='255' step='1' value=rVal}}
-      </div>
-      <div class="rgb-block">
-        <h6>G</h6>
-        {{input type='number' class='g-val' min='0' max='255' step='1' value=gVal}}
-      </div>
-      <div class="rgb-block">
-        <h6>B</h6>
-        {{input type='number' class='b-val' min='0' max='255' step='1' value=bVal}}
+      <div class="rgb-wrapper">
+        <div class="rgb-block">
+          <h6>R</h6>
+          {{input type='number' value=rVal class='r-val' min=0 max=255 step=1 maxlength=3}}
+        </div>
+        <div class="rgb-block">
+          <h6>G</h6>
+          {{input type='number' value=gVal class='g-val' min=0 max=255 step=1 maxlength=3}}
+        </div>
+        <div class="rgb-block">
+          <h6>B</h6>
+          {{input type='number' value=bVal class='b-val' min=0 max=255 step=1 maxlength=3}}
+        </div>
       </div>
     </div>
   </div>
