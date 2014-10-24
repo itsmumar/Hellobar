@@ -12,7 +12,7 @@
 <div class="select-wrapper">
   {{view Ember.Select
     content=contactListOptions
-    value=contactListValue
+    value=model.contact_list_id
     optionValuePath='content.id'
     optionLabelPath='content.name'
     prompt="Please select a list"
