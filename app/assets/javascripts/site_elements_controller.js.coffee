@@ -1,5 +1,15 @@
 $ ->
 
+  renderElements = (type) ->
+    if type == '#active'
+      $('tr.site-element-block:not(.active)').hide()
+      $('tr.site-element-block.active').show()
+    else if type == '#paused'
+      $('tr.site-element-block:not(.paused)').hide()
+      $('tr.site-element-block.paused').show()
+    else if type == '#all'
+      $('tr.site-element-block').show()
+
   # filter the site elements on the page
   $('body').on 'click', 'a.element-filter', (event) ->
     event.preventDefault()
@@ -9,14 +19,7 @@ $ ->
     # unset the current active filter
     $('a.element-filter').removeClass('active')
 
-    if href == '#active'
-      $('tr.site-element-block:not(.active)').hide()
-      $('tr.site-element-block.active').show()
-    else if href == '#paused'
-      $('tr.site-element-block:not(.paused)').hide()
-      $('tr.site-element-block.paused').show()
-    else if href == '#all'
-      $('tr.site-element-block').show()
+    renderElements(href)
 
     # set the current active anchor
     $anchor.addClass('active')
@@ -66,10 +69,15 @@ $ ->
     # assume successful change for faster user feedback
     if $row.hasClass('paused')
       $row.removeClass('paused')
+      $row.addClass('active')
       $element.html('<i class="icon-edit"></i>Pause')
     else
       $row.addClass('paused')
+      $row.removeClass('active')
       $element.html('<i class="icon-edit"></i>Unpause')
+
+    currentFilter = $('nav.tabs-wrapper .element-filter.active')
+    renderElements(currentFilter.attr('href'))
 
     $.ajax
       type: 'PUT'
