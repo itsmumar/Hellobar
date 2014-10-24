@@ -24,6 +24,7 @@ class ImproveSuggestion < ActiveRecord::Base
     # Creates or finds and updates the improve suggestion for the
     # given name
     def generate(site, name, site_elements)
+      return nil unless site_elements and site_elements.length > 0
       name = name.to_s
       suggestion = ImproveSuggestion.find_or_initialize_by(site: site, name: name)
 
@@ -31,8 +32,8 @@ class ImproveSuggestion < ActiveRecord::Base
       if suggestion.updated_at and Time.now-suggestion.updated_at < MIN_UPDATE_TIME
         return false
       end
-
-      suggestion.data = Hello::DataAPI.suggested_opportunities(site, site_elements, force: true)
+      data = Hello::DataAPI.suggested_opportunities(site, site_elements, force: true)
+      suggestion.data = data
       suggestion.save!
       suggestion
     end
@@ -54,7 +55,8 @@ class ImproveSuggestion < ActiveRecord::Base
     def generate_all(site)
       results = {}
       determine_groups(site).each do |name, site_elements|
-        results[name] = generate(site, name, site_elements)
+        data = generate(site, name, site_elements)
+        results[name] = data if data
       end
 
       return results
