@@ -1,6 +1,9 @@
 <div id="hellobar-preview-container" {{bind-attr class="isMobile:hellobar-preview-container-mobile"}}>
-  <div id="preview-image-loading">
-    Site preview loading...
+  <div class="preview-wrapper">
+    <div class="preview-message">
+      <i class="icon-settings"></i>
+      Site preview loading...
+    </div>
   </div>
 
   {{#if isMobile}}

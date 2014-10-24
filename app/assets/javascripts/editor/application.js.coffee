@@ -17,7 +17,6 @@
 
 #= require_tree ./controllers
 #= require_tree ./views
-#= require_tree ./helpers
 #= require_tree ./components
 #= require ./routes/step-routes
 #= require_tree ./routes
@@ -44,6 +43,16 @@ Ember.throttledObserver = (keys..., time, func) ->
   Em.observer ->
     Em.run.throttle @, func, time
   , keys...
+
+#-----------  Preview Injection  -----------#
+
+HB.injectAtTop = (element) ->
+  container = HB.$("#hellobar-preview-container")
+
+  if container.children[0]
+    container.insertBefore(element, container.children[0])
+  else
+    container.appendChild(element)
 
 #-----------  Set Application Height  -----------#
 

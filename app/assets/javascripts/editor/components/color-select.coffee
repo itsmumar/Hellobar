@@ -76,7 +76,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
 
   #-----------  Push 'Recent' Changes to Controller  -----------#
 
-  updateRecent: Ember.throttledObserver 'color', 75, ->
+  updateRecent: Ember.debouncedObserver 'color', 75, ->
     color = @get('color')
     recent = @get('recentColors')
 

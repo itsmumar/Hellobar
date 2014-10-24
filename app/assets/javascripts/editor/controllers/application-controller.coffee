@@ -1,6 +1,7 @@
 HelloBar.ApplicationController = Ember.Controller.extend
 
   #-----------  User  -----------#
+  
   currentUser: ( -> window.currentUser ).property()
   isTemporaryUser: ( -> @get('currentUser') and @get('currentUser').status is 'temporary' ).property('currentUser')
 
@@ -19,7 +20,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
   # (primarily observed by the color-picker component)
 
   colorPalette: []
-
 
   #-----------  Element Preview  -----------#
 

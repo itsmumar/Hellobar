@@ -96,15 +96,38 @@
         a
           width: 200%
           margin-left: -100%
+          position: relative
           @include transition(0.25s)
 
           i
             width: 50%
             float: left
 
+      .toggle-mobile a i
+
+        &:before
+          margin-left: -8px
+
+        &:after
+          content: 's'
+          margin-top: -3px
+          position: absolute
+          font-style: normal
+          font-family: 'hellobar'  
+          @include vertical-align()
+
+        &.icon-desktop:after
+          right: -4px
+
+        &.icon-mobile:after
+          right: -1px
+
       .toggle-fullscreen a i:first-child
         margin-top: -6px
         @include transform(rotate(180deg))
+
+      .icon-close:before
+        font-size: 0.75em
   
   /*-----------  Main Viewport  -----------*/
 
@@ -127,19 +150,8 @@
       @include transition(0.25s)
       @include flex(1 0 auto)
 
-    /*-----------  Preview  -----------*/
-
     .preview-wrapper
-      width: 100%
-      overflow: hidden
       @include flex(0 1 auto)
-
-      img
-        height: auto
-        max-width: 100%
-
-      canvas 
-        cursor: url(<%= asset_path "eyedropper.svg" %>) 0 18, auto
 
   /*-----------  Alternate States  -----------*/
 
@@ -155,4 +167,3 @@
 
     .toggle-mobile a
       margin-left: 0% !important
-

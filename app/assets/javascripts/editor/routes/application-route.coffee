@@ -27,6 +27,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
         options =
           saveURL: "/sites/#{siteID}/contact_lists/#{contactList.id}.json"
           saveMethod: "PUT"
+          
           success: (data, modal) =>
             resolvedModel.site.contact_lists.forEach (list) ->
               Ember.set(list, "name", data.name) if list.id == data.id
@@ -36,6 +37,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
         options =
           saveURL: "/sites/#{siteID}/contact_lists.json"
           saveMethod: "POST"
+
           success: (data, modal) =>
             lists = resolvedModel.site.contact_lists.slice(0)
             lists.push({id: data.id, name: data.name})
@@ -66,6 +68,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
         url: url
         contentType: "application/json"
         data: JSON.stringify(@currentModel)
+
         success: =>
           window.location = "/sites/#{window.siteID}/site_elements"
         error: (data) =>
