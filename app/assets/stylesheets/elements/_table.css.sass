@@ -25,6 +25,33 @@ table
       font-size: 0.85em
       font-weight: normal
 
+      &.header
+        cursor: pointer
+        @include transition()
+
+        &:after
+          opacity: 0
+          color: $red
+          content: 'q'
+          font-size: 0.5em
+          margin-left: 1.5em
+          font-family: 'hellobar'
+          @include inline-block()
+          @include transition()
+
+        &.headerSortUp,
+        &.headerSortDown
+          color: $red
+
+          &:after
+            opacity: 1
+
+        &.headerSortUp:after
+          @include transform(rotate(-90deg))
+
+        &.headerSortDown:after
+          @include transform(rotate(90deg))
+
     td
       font-size: 0.9em
       border-top: 1px solid $grayLighter

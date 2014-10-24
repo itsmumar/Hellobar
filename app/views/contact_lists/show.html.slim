@@ -1,7 +1,7 @@
 = render "shared/modals/contact_list"
 
-.page-header.alt
-  h5 Contacts
+nav.tabs-wrapper
+  = link_to 'Contacts', site_contact_lists_path(current_site)
 
 .page-header
   .dropdown-wrapper
@@ -24,13 +24,15 @@
     a#edit-contact-list.button Edit
     = button_to "Export CSV", site_contact_list_path(@site, @contact_list, :format => :csv), :method => :get, :class => 'button'
 
-table
-  tr
-    th #
-    th Email
-    th Name
-    th Date Subscribed
+table.contacts-table
+  thead
+    tr
+      th #
+      th Email
+      th Name
+      th Date Subscribed
 
+  tbody
     - if @contact_list.subscribers.any?
       - @contact_list.subscribers.each_with_index do |subscriber, index|
         tr

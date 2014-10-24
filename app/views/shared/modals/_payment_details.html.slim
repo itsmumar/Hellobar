@@ -47,7 +47,8 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
       .field-row
         .cc-country
           label Country
-          = country_select("payment_method_details", "country", priority_countries: ['US'], selected: "{{currentPaymentDetails.country}}")
+          .select-wrapper
+            = country_select("payment_method_details", "country", priority_countries: ['US'], selected: "{{currentPaymentDetails.country}}")
 
 script id="linked-methods-template" type="text/x-handlebars-template"
   label Use a linked card
