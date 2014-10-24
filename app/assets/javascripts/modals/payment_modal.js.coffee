@@ -160,7 +160,7 @@ class @PaymentModal extends Modal
     parseInt(@$modal.find('select#linked-detail').val())
 
   _method: ->
-    if @_isUsingLinkedPaymentMethod() || @_isFree
+    if @_isUsingLinkedPaymentMethod() || @_isFree()
       'PUT'
     else
       'POST'
