@@ -13,6 +13,14 @@ module UserHelper
 
   def gravatar_url_for(user, opts = {})
     email = OpenStruct.new(:email => user.email.blank? ? "none" : user.email)
-    avatar_url_for(email, opts)
+    url = avatar_url_for(email, opts)
+
+    # avatar gem doesn't support adding a non-url string to the d/default param
+    # This param changes the default gravatar image to "mystery man"
+    if url.match(/\?/) # already has a query param
+      url += "&d=mm"
+    else
+      url += "?d=mm"
+    end
   end
 end
