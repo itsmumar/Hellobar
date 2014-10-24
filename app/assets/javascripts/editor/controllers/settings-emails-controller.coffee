@@ -11,6 +11,13 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
     lists
   ).property("model.site.contact_lists")
 
+  contactListValue: (->
+    firstList = @get('model.site.contact_lists')[0]
+    firstListId = if firstList then firstList.id else null
+
+    @get('model.contact_list_id') || firstListId
+  ).property('model.site.contact_lists')
+
   popNewContactListModal: (->
     if @get("model.site.contact_lists").length == 0 || @get("model.contact_list_id") == 0 && $(".contact-list-modal:visible").length == 0
       options =
