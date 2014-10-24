@@ -10,7 +10,11 @@ class @Chart
 
   _fetchData: ->
     $.ajax("/sites/#{@options.siteID}/chart_data.json?type=#{@chart_data_type}&days=#{@options.numDays}").done((data) =>
-        @_renderData(data)
+        if data.length > 1
+          @_renderData(data)
+        else
+          @$el.hide()
+
         return
       ).fail(=>
         @_failedAttempt()
