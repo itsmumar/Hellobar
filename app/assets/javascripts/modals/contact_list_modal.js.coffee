@@ -22,6 +22,11 @@ class @ContactListModal extends Modal
     @_populateContactList() if @options.contactList
     @_bindInteractions(@$modal)
 
+    if @$modal.find("#contact_list_provider").val() == "0"
+      @blocks.hellobarOnly.show()
+    else
+      @blocks.hellobarOnly.hide()
+
     super
 
   _initializeTemplates: ->
@@ -39,6 +44,7 @@ class @ContactListModal extends Modal
       instructions: @$modal.find(".provider-instructions-block")
       nevermind: @$modal.find(".provider-instructions-nevermind-block")
       remoteListSelect: @$modal.find(".remote-list-select-block")
+      hellobarOnly: @$modal.find(".hellobar-only")
 
   _bindInteractions: (object) ->
     @_bindProviderSelect(object)
@@ -134,6 +140,7 @@ class @ContactListModal extends Modal
       contactList: @options.contactList
 
     if value == "0" # user selected "in Hello Bar only"
+      @blocks.hellobarOnly.show()
       @blocks.instructions.hide()
       @blocks.nevermind.hide()
       @blocks.remoteListSelect.hide()
@@ -145,6 +152,7 @@ class @ContactListModal extends Modal
       @$modal.trigger 'complete'
 
       if data and data.lists # an identity was found for the selected provider
+        @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
         @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
@@ -157,6 +165,7 @@ class @ContactListModal extends Modal
         @_renderBlock("nevermind", defaultContext).hide()
         @_renderBlock("instructions", defaultContext).show()
         @blocks.remoteListSelect.hide()
+        @blocks.hellobarOnly.hide()
 
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)
