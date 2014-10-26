@@ -128,19 +128,21 @@ class @PaymentModal extends Modal
       $paymentDetail = $(event.target)
 
       if @_isUsingLinkedPaymentMethod()
-        @_disableDetailsForm()
+        @_hideDetailsForm()
       else
-        @_enableDetailsForm()
+        @_showDetailsForm()
 
   # disables the details form elements
   # triggered when a user wants to link an existing payment method
-  _disableDetailsForm: ->
-    @$modal.find('form input:not("[name^=billing]")')
+  _hideDetailsForm: ->
+    @$modal.find('form .details-fields').hide()
+    @$modal.find('.details-fields input, .details-fields select')
          .val('')
          .attr('disabled', true)
 
-  _enableDetailsForm: ->
-    @$modal.find('form input')
+  _showDetailsForm: ->
+    @$modal.find('form .details-fields').show()
+    @$modal.find('.details-fields input, .details-fields select')
            .attr('disabled', false)
 
   _isUsingLinkedPaymentMethod: ->
