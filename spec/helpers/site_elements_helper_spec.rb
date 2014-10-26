@@ -127,7 +127,7 @@ describe SiteElementsHelper do
         site_elements(:zombo_facebook).id.to_s => [[10, 1]]
       })
 
-      recent_activity_message(element).should_not =~ /converting (.+) better than your other social bars/
+      recent_activity_message(element).should_not =~ /Currently this bar is converting/
     end
   end
 
