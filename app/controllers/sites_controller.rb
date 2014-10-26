@@ -102,7 +102,11 @@ class SitesController < ApplicationController
   end
 
   def create_for_temporary_user
-    if @site.save
+    @site.valid?
+
+    if params[:source] == "landing" && @site.url_exists?
+      redirect_to new_user_session_path(existing_url: @site.url)
+    elsif @site.save
       generate_temporary_logged_in_user
 
       SiteMembership.create!(:site => @site, :user => current_user)

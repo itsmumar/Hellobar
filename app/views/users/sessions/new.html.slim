@@ -2,6 +2,15 @@
 
   = render 'shared/flash'
 
+  - if params[:existing_url]
+    p
+      small= "#{params[:existing_url]} has already been registered."
+    p
+      small If you already have an account, you can log in below. Otherwise, you can continue creating a new Hello Bar account for this site.
+
+    p= link_to "Create a new account", sites_path(site: {url: params[:existing_url]}), method: "post", class: "button create-existing"
+
+
   h1 Sign In
 
   = f.input_field :email, :placeholder => 'Your Email', autofocus: true

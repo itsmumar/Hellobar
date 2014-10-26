@@ -63,6 +63,14 @@ describe SitesController do
         site.current_subscription.should be_present
         site.current_subscription.kind_of?(Subscription::Free).should be_true
       end
+
+      it "redirects to login page if base URL has already been taken" do
+        site = sites(:zombo)
+
+        post :create, site: { url: "#{site.url}/path" }, source: "landing"
+
+        response.should redirect_to(new_user_session_path(existing_url: site.url))
+      end
     end
 
     context "existing user" do

@@ -85,6 +85,10 @@ class Site < ActiveRecord::Base
     self.subscriptions.last
   end
 
+  def url_exists?
+    Site.where(url: url).where.not(id: id).first.present?
+  end
+
   def is_free?
     current_subscription.nil? ||
       current_subscription.type.blank? ||
