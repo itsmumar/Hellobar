@@ -23,9 +23,8 @@ html
         = render "shared/sidebar"
 
       main.global-content id=page_id
-        - render_payment_errors
-        = render 'shared/flash'
-        = render "shared/account_prompt" if show_account_prompt?
+        = render "shared/flash"
+        = render "shared/prompt"
         == yield
 
     / deprecated JS implementation of shared/flash

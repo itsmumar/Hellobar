@@ -1,6 +1,6 @@
-/*-----------  Account Prompt  -----------*/
+/*-----------  Prompt  -----------*/
 
-.account-prompt
+.prompt
   text-align: center
   margin-top: -2.5em
   margin-bottom: 2.5em
@@ -24,7 +24,7 @@
     border-radius: $radiusSm !important
     border-color: $grayLighter !important
 
-    @include placeholder 
+    @include placeholder
       color: $grayLighter !important
 
   .select-wrapper
@@ -46,3 +46,7 @@
     margin-top: -1px
     font-size: 0.75em !important
     @extend %blue-button
+
+  &.payment-issue-prompt
+    span a
+      text-decoration: underline

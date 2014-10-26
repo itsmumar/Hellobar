@@ -1,0 +1,2 @@
+.prompt.payment-issue-prompt
+  span= "You have an outstanding bill for #{number_to_currency(payment_issue_amount(site))}, dated #{payment_issue_date(site).strftime("%b %d, %Y")}. #{link_to "Fix this", edit_site_path(site)}.".html_safe

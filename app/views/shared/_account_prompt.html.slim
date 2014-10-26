@@ -1,9 +1,9 @@
-= form_for current_user, html: {class: "account-prompt"} do |f|
+= form_for current_user, html: {class: "prompt account-prompt"} do |f|
   span Finish creating your account!
 
   input type='email' placeholder='Your Email Address' name="user[email]"
   input type='password' placeholder='Password' name="user[password]"
-  
+
   span.select-wrapper
     = select 'user', 'timezone', ActiveSupport::TimeZone.all.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
   = hidden_field_tag :detect_timezone, disabled: true
