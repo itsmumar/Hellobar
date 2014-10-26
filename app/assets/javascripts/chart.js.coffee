@@ -79,6 +79,7 @@ class @Chart
         axisThickness: 0
         gridColor: "#f6f6f6"
         showFirstLabel: false
+        integersOnly: true
       ]
 
   _failedAttempt: ->
