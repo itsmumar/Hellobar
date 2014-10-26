@@ -35,9 +35,11 @@ class @PaymentConfirmationModal extends Modal
       billingSchedule = ""
 
     if bill && bill.amount > 0 && bill.status == "paid"
-      chargeDescription = "Your card has been charged $#{parseInt(bill.amount).toFixed(2)}"
+      chargeDescription = "Your card has been charged $#{parseInt(bill.amount).toFixed(2)}."
+      chargeDescription += " Your next bill is due on #{moment(bill.end_date).format("MMM Do, YYYY")}." if bill.end_date
     else
-      chargeDescription = "Your card has not been charged at this time"
+      chargeDescription = "Your card has not been charged at this time."
+      chargeDescription += " Your next bill is due on #{moment(bill.bill_at).format("MMM Do, YYYY")}." if bill.status == "pending"
 
     {
       planName: subscription.type
