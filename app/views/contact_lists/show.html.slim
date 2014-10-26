@@ -39,7 +39,7 @@ table.contacts-table
           td= index + 1
           td= subscriber[:email]
           td= subscriber[:name]
-          td
+          td= subscriber[:subscribed_at].try(:strftime, "%b %d, %Y")
 
     - else
       tr
