@@ -13,7 +13,7 @@ class @Chart
         if data.length > 1
           @_renderData(data)
         else
-          @$el.hide()
+          @$el.addClass('insufficient-data')
 
         return
       ).fail(=>
