@@ -212,7 +212,7 @@ var _HB = {
   getVisitorAttributes: function()
   {
     // Ignore first and last view timestamps and email and social conversions
-    var ignoredAttributes = ["fv","lv","ec","sc"];
+    var ignoredAttributes = ["fv","lv","ec","sc", "dt"];
     // Ignore first and last converted timestamps and number of traffic conversions
     var ignoredAttributePattern = /(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/
     var attributes = {};
@@ -383,7 +383,7 @@ var _HB = {
   // Called to validate the email and name. Does not actually submit the email
   validateEmail: function(email, name, successCallback, failCallback)
   {
-    if ( email && email.match(/.+@.+\..+/) )
+    if ( email && email.match(/.+@.+\..+/) && !email.match(/,/))
       successCallback();
     else
       failCallback();
