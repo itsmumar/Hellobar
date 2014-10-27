@@ -57,6 +57,9 @@ table
       border-top: 1px solid $grayLighter
       border-bottom: 1px solid $grayLighter      
 
+      &.color-flag
+        background-color: $red
+
       &:first-of-type
         border-left: 1px solid $grayLighter      
 
@@ -125,3 +128,20 @@ table
 
     &.see-more td a.seeing-more:after
       @include transform(rotate(90deg))
+
+    /*-----------  Type Variations  -----------*/
+
+    &.type-social
+      
+      .color-flag
+        background-color: $blue
+    
+    &.type-traffic
+
+      .color-flag
+        background-color: $yellow
+    
+    &.type-email
+
+      .color-flag
+        background-color: $green

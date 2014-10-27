@@ -1,5 +1,5 @@
-tr.site-element-block class="#{site_element.paused? ? 'paused' : 'active'}" data-rule-id=rule.id
-  td.color-flag style="background-color: ##{site_element.background_color}"
+tr.site-element-block class="#{site_element.paused? ? 'paused' : 'active'} type-#{site_element.element_subtype}" data-rule-id=rule.id
+  td.color-flag
   td
     p= site_element.message
   td

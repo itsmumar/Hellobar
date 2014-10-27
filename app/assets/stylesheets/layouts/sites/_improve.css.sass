@@ -118,17 +118,8 @@
   .top-performers-wrapper
     display: none
 
-    &.all td .icon-badge.first
-      color: $red
-
-    &.email td .icon-badge.first
-      color: $green
-
-    &.traffic td .icon-badge.first
-      color: $yellow
-
-    &.social td .icon-badge.first
-      color: $blue
+    .icon-badge.first
+      color: $green !important
 
     table.top-performing
       border-spacing: 0 0.75em
@@ -179,7 +170,7 @@
         .button
           white-space: nowrap
 
-  /*-----------  Suggestions  -----------*/
+  /*-----------  Suggestion Type Variations  -----------*/
 
   .suggestions-wrapper
     display: none

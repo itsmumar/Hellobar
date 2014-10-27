@@ -2,8 +2,8 @@
   h5 Recent Activity
   table.activity-wrapper
     - @recent_elements.each do |element|
-      tr
-        td.color-flag style="background-color: #54d388"
+      tr class="type-#{element.element_subtype}"
+        td.color-flag
         td= recent_activity_message(element)
 
 - else
