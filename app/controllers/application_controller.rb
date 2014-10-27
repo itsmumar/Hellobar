@@ -9,6 +9,12 @@ class ApplicationController < ActionController::Base
   before_action :record_tracking_param
   after_action :store_last_requested_path
 
+  force_ssl if: :ssl_configured?
+
+  def ssl_configured?
+    Hellobar::Settings[:host] == 'alpha.hellobar.com'
+  end
+
   def access_token
     @access_token ||= Digest::SHA256.hexdigest(["hellobar", remote_ip, user_agent, access_cookie, "a776b"].join)
   end
