@@ -70,11 +70,11 @@ $ ->
     if $row.hasClass('paused')
       $row.removeClass('paused')
       $row.addClass('active')
-      $element.html('<i class="icon-edit"></i>Pause')
+      $element.html('<i class="icon-pause"></i>Pause')
     else
       $row.addClass('paused')
       $row.removeClass('active')
-      $element.html('<i class="icon-edit"></i>Unpause')
+      $element.html('<i class="icon-play"></i>Unpause')
 
     currentFilter = $('nav.tabs-wrapper .element-filter.active')
     renderElements(currentFilter.attr('href'))

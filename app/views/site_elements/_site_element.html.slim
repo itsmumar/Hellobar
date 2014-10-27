@@ -28,7 +28,10 @@ tr.site-element-block class="#{site_element.paused? ? 'paused' : 'active'}" data
           | Create Variation
 
         = content_tag 'a', class: 'toggle-pause', "data-element-id" => site_element.id, "data-site-id" => @site.id do
-          i.icon-pause
+          - if site_element.paused?
+            i.icon-play
+          - else
+           i.icon-pause
           = site_element.paused? ? 'Unpause' : 'Pause'
 
         = content_tag 'a', class: 'delete-element', "data-element-id" => site_element.id, "data-site-id" => @site.id, "data-rule-id" => rule.id do
