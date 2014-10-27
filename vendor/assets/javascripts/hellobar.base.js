@@ -301,7 +301,7 @@ var _HB = {
         // Need to make sure this is unique per URL
         // getShortestKey returns either the raw URL or
         // a SHA1 hash of the URL - whichever is shorter
-        return "l-"+HB.getShortestKeyForURL(siteElement.url);
+        return "l-"+HB.getShortestKeyForURL(siteElement.settings.url);
       // ------------------------------------------------------- 
       // IMPORTANT - if you add other conversion keys you need to 
       // update the ignoredAttributePattern in getVisitorAttributes
