@@ -11,7 +11,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   end
 
   def lists
-    @lists ||= @client.lists.list['data']
+    @lists ||= @client.lists.list(:start => 0, :limit => 100)['data']
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
@@ -19,7 +19,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
     if name
       split = name.split(' ', 2)
-      opts[:merge_vars] = {:FNAME => split[0], :LNAME => split[1]}
+      opts[:merge_vars] = {:NAME => name, :FNAME => split[0], :LNAME => split[1]}
     end
 
     @client.lists.subscribe(opts).tap do |result|
@@ -35,7 +35,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       {:EMAIL => {:email => subscriber[:email]}}.tap do |entry|
         if subscriber[:name]
           split = subscriber[:name].split(' ', 2)
-          entry[:merge_vars] = {:FNAME => split[0], :LNAME => split[1], :CREATEDAT => subscriber[:created_at]}
+          entry[:merge_vars] = {:NAME => subscriber[:name], :FNAME => split[0], :LNAME => split[1], :CREATEDAT => subscriber[:created_at]}
         end
       end
     end
@@ -45,14 +45,22 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
   end
 
-  def log message
-    unless message.is_a? String
+  def log(message)
+    if message.is_a? String
+      LogglyLogger.info("#{@site.base_url} - #{message}")
+    else
       result = message
       non_already_subscribed_errors = result['errors'].select { |e| e['code'] != 214 }
-      error_count = non_already_subscribed_errors.count - result['error_count']
+      error_count = non_already_subscribed_errors.count
       message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " + 
                 "#{error_count} errors that weren't just existing subscribers."
-      message += "\nA sample of those errors:\n#{non_already_subscribed_errors[0...20].join("\n")}" if error_count > 0
+
+      if error_count > 0
+        message += "\nA sample of those errors:\n#{non_already_subscribed_errors[0...20].join("\n")}"
+        LogglyLogger.error("#{@site.base_url} - #{message}")
+      else
+        LogglyLogger.info("#{@site.base_url} - #{message}")
+      end
     end
 
     super message

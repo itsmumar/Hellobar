@@ -23,8 +23,11 @@ unless defined?(Hellobar::Settings)
     grand_central_api_key
     grand_central_api_secret
     host
+    loggly_url
+    low_priority_queue
     mailchimp_client_id
     mailchimp_secret
+    main_queue
     memcached_server
     process_synchronously
     recaptcha_private_key
@@ -36,8 +39,6 @@ unless defined?(Hellobar::Settings)
     tracking_host
     twilio_password
     twilio_user
-    main_queue
-    low_priority_queue
   )
 
   keys.each do |key|

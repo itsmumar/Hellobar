@@ -67,10 +67,33 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
   def batch_subscribe(list_id, subscribers, double_optin = true)
-    cc_list = @client.get_list(@token, list_id)
+    contacts = subscribers.map do |subscriber|
+      first, last = (subscriber[:name] || '').split(' ')
 
-    subscribers.each do |subscriber|
-      subscribe(list_id, subscriber[:email], subscriber[:name], cc_list, double_optin)
+      ConstantContact::Components::AddContactsImportData.new.tap do |data|
+        data.first_name = first
+        data.last_name = last
+        data.add_email(subscriber[:email])
+      end
+    end
+
+    lists = [list_id]
+    columns = ["E-Mail", "First Name", "Last Name"]
+    activity = ConstantContact::Components::AddContacts.new(contacts, lists, columns)
+
+    @client.add_create_contacts_activity(@token, activity)
+  rescue RestClient::BadRequest => e
+    raise e unless e.inspect =~ /not a valid email/
+
+    # if any of the emails in a batch is invalid, the request will be rejected, so we try to naively select only valid addresses and try again
+    pattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/
+    valid_subscribers = subscribers.select { |s| s[:email] =~ pattern }
+
+    if valid_subscribers.count < subscribers.count
+      # to prevent an infinite loop, only retry if we were able to pare the subscribers array down
+      batch_subscribe(list_id, valid_subscribers)
+    else
+      return true
     end
   end
 end
