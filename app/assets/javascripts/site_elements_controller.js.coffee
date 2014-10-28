@@ -136,3 +136,7 @@ $ ->
         originalValue = parseInt($count.text()) + 1
         $elementCount.text(originalValue)
         console.log "Error removing site element: #{error}"
+
+  # render elements for default filter
+  currentFilter = $('nav.tabs-wrapper .element-filter.active')
+  renderElements(currentFilter.attr('href'))
