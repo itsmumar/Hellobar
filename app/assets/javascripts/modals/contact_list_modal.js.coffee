@@ -34,6 +34,7 @@ class @ContactListModal extends Modal
       main: Handlebars.compile($("#contact-list-modal-template").html())
       instructions: Handlebars.compile($("#contact-list-modal-provider-instructions-template").html())
       nevermind: Handlebars.compile($("#contact-list-modal-provider-instructions-nevermind-template").html())
+      syncDetails: Handlebars.compile($("#contact-list-modal-sync-details-template").html())
       remoteListSelect: Handlebars.compile($("#contact-list-modal-remote-list-select-template").html())
 
     @$modal = $(@templates.main({header: if @options.id then "Edit Contact List" else "New Contact List"}))
@@ -43,6 +44,7 @@ class @ContactListModal extends Modal
     @blocks =
       instructions: @$modal.find(".provider-instructions-block")
       nevermind: @$modal.find(".provider-instructions-nevermind-block")
+      syncDetails: @$modal.find(".sync-details-block")
       remoteListSelect: @$modal.find(".remote-list-select-block")
       hellobarOnly: @$modal.find(".hellobar-only")
 
@@ -143,6 +145,7 @@ class @ContactListModal extends Modal
       @blocks.hellobarOnly.show()
       @blocks.instructions.hide()
       @blocks.nevermind.hide()
+      @blocks.syncDetails.hide()
       @blocks.remoteListSelect.hide()
       return
 
@@ -155,6 +158,7 @@ class @ContactListModal extends Modal
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
+        @_renderBlock("syncDetails", defaultContext).show()
         @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if listData
@@ -166,6 +170,7 @@ class @ContactListModal extends Modal
         @_renderBlock("instructions", defaultContext).show()
         @blocks.remoteListSelect.hide()
         @blocks.hellobarOnly.hide()
+        @blocks.syncDetails.hide()
 
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)
