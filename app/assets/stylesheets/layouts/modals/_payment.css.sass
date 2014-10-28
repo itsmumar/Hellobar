@@ -1,226 +1,248 @@
 /*-----------  Payment Modal  -----------*/
 
-.payment-modal
-  text-align: center
-  margin-left: -2.33em
-  margin-right: -2.33em
+.payment-account-modal
+  
+  .modal-block > footer
+    margin-top: 0
+    border-top: none
 
-  .site-title
-    font-size: 1.33em
-    margin-bottom: 1em
-    @include antialiased()
+  .payment-modal
+    text-align: center
+    margin-left: -2.33em
+    margin-right: -2.33em
 
-    &.downgrade-free
-      margin: 3em 0 4em 0
+    .site-title
+      font-size: 1.33em
+      margin-bottom: 1em
+      @include antialiased()
 
-  .payment-wrapper
-    @include justify-content(space-between)
-    @include align-content(flex-start)
-    @include align-items(flex-start)
-    @include flex-flow(row nowrap)
-    @include antialiased()
-    @include display(flex)
+      &.downgrade-free
+        margin: 3em 0 4em 0
 
-    /*-----------  Payment Sidebar  -----------*/
+    .payment-wrapper
+      @include clearfix()
 
-    .payment-sidebar
-      @include flex(1 0 auto)
+      /*-----------  Payment Sidebar  -----------*/
 
-      header
-        color: $white
-        padding: 1.25em
-        font-size: 1.1em
-        font-weight: bold
-        text-transform: capitalize
+      .payment-sidebar
+        width: 34%
+        float: left
 
-        small
-          display: block
-          font-size: 0.75em
-          font-weight: normal
-          letter-spacing: 0.05em
-          text-transform: uppercase
-
-      .package-cycle
-        margin-bottom: 0.5em
-        border-style: solid
-        border-width: 0 1px 1px 1px
-        border-color: $grayLighter
-        padding: 0.1em 1.25em 1.25em 1.25em
-
-        input
-          display: none
-
-        label
-          font-size: 0.95em
-          text-align: left
-          position: relative
-          padding-left: 2.5em
-          padding-top: 1.5em
-          @include antialiased(false)
+        header
+          color: $white
+          padding: 1.25em
+          font-size: 1.1em
+          font-weight: bold
+          text-transform: capitalize
 
           small
-            color: $gray
             display: block
-            @include antialiased()
-
-            strong
-              color: $red
-              display: block
-
-          &:before
-            top: 2px
-            left: 2px
-            width: 15px
-            height: 15px
-            content: ''
-            margin-top: 1.5em
-            position: absolute
-            border-radius: 10em
-            border: 1px solid $grayLighter
-            box-shadow: inset 0 0 0 2px $white
-            @include transition()
-
-      > a
-        font-size: 0.9em
-        text-decoration: underline
-
-    /*-----------  Payment Form  -----------*/
-
-    .payment-form
-      text-align: left
-      margin-left: 1em
-      border: 1px solid $grayLighter
-      @include flex(0 1 75%)
-
-      header
-        color: $gray
-        font-size: 1.25em
-        line-height: 195%
-        padding: 1.5rem 2rem
-        background-color: $grayLightest
-
-      .credit-card
-        padding: 1.5rem 2rem
+            font-size: 0.75em
+            font-weight: normal
+            letter-spacing: 0.05em
+            text-transform: uppercase
 
         p
-          font-size: 0.8em
-          margin-bottom: 0
+          color: $gray
+          text-align: left
+          padding: 1em 0 0
+          margin: 1.5em 0 0
+          font-size: 0.75em
+          border-top: 1px solid $grayLighter
 
-        .field-row
-          width: 100%
-
-          > div
-            width: 100%
-            margin-right: 3%
-            font-size: 1.1em
-            @include inline-block()
-
-            &:last-child
-              margin-right: 0
-
-          label
-            @include antialiased(false)
+        .package-cycle
+          margin-bottom: 0.5em
+          border-style: solid
+          border-width: 0 1px 1px 1px
+          border-color: $grayLighter
+          padding: 0.1em 1.25em 1.25em 1.25em
 
           input
-            letter-spacing: 0.05em
-            margin-top: 0.33em !important
-            margin-bottom: 0em !important
-            padding: 0.55em 0.75em !important
-            border: 1px solid $grayLighter !important
-            @include placeholder
-              color: $grayLighter !important
+            display: none
 
-          .cc-number
-            width: 57%
+          label
+            font-size: 0.95em
+            text-align: left
             position: relative
+            padding-left: 2.5em
+            padding-top: 1.5em
+            @include antialiased(false)
+
+            small
+              color: $gray
+              display: block
+              @include antialiased()
+
+              strong
+                color: $red
+                display: block
+
+            &:before
+              top: 2px
+              left: 2px
+              width: 15px
+              height: 15px
+              content: ''
+              margin-top: 1.5em
+              position: absolute
+              border-radius: 10em
+              border: 1px solid $grayLighter
+              box-shadow: inset 0 0 0 2px $white
+              @include transition()
+
+        > a
+          font-size: 0.9em
+          text-decoration: underline
+
+      /*-----------  Payment Form  -----------*/
+
+      #payment-details
+        width: 62%
+        float: right
+        text-align: left
+        border: 1px solid $grayLighter
+
+        header
+          color: $gray
+          font-size: 1.25em
+          line-height: 195%
+          padding: 1.5rem 2rem
+          background-color: $grayLightest
+
+        .credit-card
+          padding: 1.5rem 2rem
+
+          .field-row
+            width: 100%
+
+            > div
+              width: 100%
+              margin-right: 3%
+              font-size: 1.1em
+              @include inline-block()
+
+              &:last-child
+                margin-right: 0
+
+            label
+              @include antialiased(false)
 
             input
-              padding-left: 3em !important
+              letter-spacing: 0.05em
+              margin-bottom: 0em !important
+              padding: 0.55em 0.75em !important
+              border: 1px solid $grayLighter !important
+              @include placeholder
+                color: $grayLighter !important
 
-            i
-              left: 12px
-              bottom: 2px
-              color: $grayLighter
-              font-size: 1.25em
-              position: absolute
+            .cc-name label
+              margin-top: 0 
 
-          .cc-expiry
-            width: 23%
+            .cc-number
+              width: 57%
+              position: relative
 
-          .cc-csv
-            width: 14%
+              input
+                padding-left: 3em !important
 
-          .cc-city
-            width: 57%
+              i
+                left: 12px
+                bottom: 2px
+                color: $grayLighter
+                font-size: 1.25em
+                position: absolute
 
-          .cc-state
-            width: 14%
+            .cc-expiry
+              width: 23%
 
-          .cc-zip
-            width: 23%
+            .cc-csv
+              width: 14%
 
-        footer
-          margin-top: 2em
-          padding-top: 1em
-          border-top: 1px solid $grayLighter
-          @include clearfix()
+            .cc-city
+              width: 57%
 
-          p
-            color: $gray
-            margin-top: 1px
-            text-align: right
+            .cc-state
+              width: 14%
 
-          .button
-            float: right
-            margin-left: 1em
+            .cc-zip
+              width: 23%
 
-    /*----------- Free -----------*/
+            .cc-country
 
-    &.free
+              .select-wrapper
+                margin-bottom: 0 !important
 
-      .payment-sidebar
+          footer
+            margin-top: 2em
+            padding-top: 1em
+            border-top: 1px solid $grayLighter
+            @include clearfix()
 
-        header
-          background-color: $grayLighter
+            p
+              color: $gray
+              margin-top: 1px
+              text-align: right
 
-    /*-----------  Pro  -----------*/
+            .button
+              float: right
+              margin-left: 1em
 
-    &.pro
+        label 
+          font-size: 0.8em !important
+          margin: 1.15em 0 0.4em 
 
-      .payment-sidebar
+        input,
+        select
+          margin-top: 0 !important
+          font-size: 0.85em !important
+         
+      /*----------- Free -----------*/
 
-        header
-          background-color: $green
+      &.free
 
-        input:checked + label:before
-          border-color: $green
-          background-color: $green
+        .payment-sidebar
 
-        > a
-          color: $green
+          header
+            background-color: $grayLighter
 
-          &:hover
-            color: lighten($green, 5%)
+      /*-----------  Pro  -----------*/
 
-    /*-----------  Enterprise  -----------*/
+      &.pro
 
-    &.enterprise
+        .payment-sidebar
 
-      .payment-sidebar 
+          header
+            background-color: $green
 
-        header
-          background-color: $blue
+          input:checked + label:before
+            border-color: $green
+            background-color: $green
 
-        input:checked + label:before
-          border-color: $blue
-          background-color: $blue
+          > a
+            color: $green
 
-        > a
-          color: $blue
+            &:hover
+              color: lighten($green, 5%)
 
-          &:hover
-            color: lighten($blue, 5%)
+      /*-----------  Enterprise  -----------*/
 
-      .button
-        @extend %blue-button
-        
+      &.enterprise
+
+        .payment-sidebar 
+
+          header
+            background-color: $blue
+
+          input:checked + label:before
+            border-color: $blue
+            background-color: $blue
+
+          > a
+            color: $blue
+
+            &:hover
+              color: lighten($blue, 5%)
+
+        .button
+          @extend %blue-button
+          

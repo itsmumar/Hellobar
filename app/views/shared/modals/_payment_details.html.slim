@@ -3,8 +3,6 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
     header Billing Information
 
     .credit-card
-      p This will upgrade ONLY site {{siteName}} to {{ package.type }}. Each site will need to be upgraded seperately to gain {{ package.type }} features.
-
       #linked-payment-methods
 
       .details-fields
@@ -54,9 +52,10 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
 
 script id="linked-methods-template" type="text/x-handlebars-template"
   label Use credit card on file
-  select#linked-detail name="linked_payment_id"
-    option New card...
-    | {{#each paymentMethods}}
-    option value="{{id}}"
-      | {{current_details.number}}
-    | {{/each}}
+  .select-wrapper
+    select#linked-detail name="linked_payment_id"
+      option New card...
+      | {{#each paymentMethods}}
+      option value="{{id}}"
+        | {{current_details.number}}
+      | {{/each}}

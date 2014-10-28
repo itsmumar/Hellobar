@@ -11,6 +11,7 @@
       th Email Service
       th Contacts
       th Date Created
+
     - @contact_lists.each do |list|
       tr
         td= link_to list.name, site_contact_list_path(@site, list)
