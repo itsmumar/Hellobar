@@ -63,12 +63,17 @@ class UserController < ApplicationController
     if @user.active? && params[:user] && params[:user][:password].blank?
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
+      return true
+    else
+      return false
     end
   end
 
   def user_params
-    filter_password_params_if_optional
+    filtered = filter_password_params_if_optional
 
     params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
+  rescue ActionController::ParameterMissing => e
+    filtered ? {} : raise(e)
   end
 end
