@@ -34,7 +34,7 @@ table.contacts-table
 
   tbody
     - if @contact_list.subscribers.any?
-      - @contact_list.subscribers.each_with_index do |subscriber, index|
+      - @contact_list.subscribers[0,100].each_with_index do |subscriber, index|
         tr
           td= index + 1
           td= subscriber[:email]
@@ -45,3 +45,6 @@ table.contacts-table
       tr
         td colspan='9'
           h6 No Emails Collected Yet
+
+- if @contact_list.subscribers.count > 100
+  p.center= "Only showing the first 100 subscribers. #{link_to "Download the rest here", site_contact_list_path(@site, @contact_list, :format => :csv)}.".html_safe
