@@ -84,11 +84,13 @@ script id="contact-list-modal-provider-instructions-nevermind-template" type="te
 script id="contact-list-modal-remote-list-select-template" type="text/x-handlebars-template"
 
   | <label for="contact_list_remote_list_id">Choose a {{providerName}} list to sync with</label>
-  | <select id="contact_list_remote_list_id" name="contact_list[remote_list_id]">
-  |   {{#each identity.lists}}
-  |     <option value="{{id}}">{{name}}</option>
-  |   {{/each}}
-  | </select>
+  | <div class="select-wrapper">
+  |   <select id="contact_list_remote_list_id" name="contact_list[remote_list_id]">
+  |     {{#each identity.lists}}
+  |       <option value="{{id}}">{{name}}</option>
+  |     {{/each}}
+  |   </select>
+  | </div>
   | {{#if identity.supports_double_optin}}
   |   <label for="contact_list_double_optin">
   |     <input type="checkbox" name="contact_list[double_optin]" id="contact_list_double_optin" value="1"> Use double opt-in? (recommended)
