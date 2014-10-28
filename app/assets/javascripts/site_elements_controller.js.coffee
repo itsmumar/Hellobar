@@ -29,7 +29,7 @@ $ ->
     event.preventDefault()
 
     unless $(event.currentTarget).data("can-edit")
-      return new UpgradeAccountModal({site: window.site}).open()
+      return new UpgradeAccountModal({site: window.site, upgradeBenefit: "create custom-targeted rules"}).open()
 
     ruleJson = null
     ruleId = $(this).data('rule-id')

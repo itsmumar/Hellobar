@@ -11,7 +11,11 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
       form.upgrade-account-modal
 
-        .site-title= "Upgrade {{siteName}}!"
+        .site-title
+          | Upgrade {{siteName}}
+          | {{#if upgradeBenefit}}
+          |   to {{upgradeBenefit}}
+          | {{/if}}
 
         .billing-options
           input id='monthly-billing' type='radio' name='billing' value='monthly'

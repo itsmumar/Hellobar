@@ -21,7 +21,8 @@ module TargetedSegmentsHelper
 
     link_options = {
       method: site.capabilities.at_site_element_limit? ? nil : method, # if method is set, browser will follow link despite our restriction-enforcing javascript
-      "data-prompt-upgrade" => site.capabilities.at_site_element_limit?
+      "data-prompt-upgrade" => site.capabilities.at_site_element_limit?,
+      "data-upgrade-benefit" => "create more bars"
     }
 
     link_to "Create targeted content", path, {class: "button"}.merge(link_options)

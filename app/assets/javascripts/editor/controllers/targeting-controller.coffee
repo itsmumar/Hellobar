@@ -35,6 +35,7 @@ HelloBar.TargetingController = Ember.Controller.extend
         site: controller.get("model.site")
         successCallback: ->
           controller.set('model.site.capabilities', this.site.capabilities)
+        upgradeBenefit: "create custom-targeted rules"
       new UpgradeAccountModal(options).open()
 
     openRuleModal: (ruleData) ->

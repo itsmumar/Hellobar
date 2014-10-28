@@ -15,6 +15,7 @@ class @UpgradeAccountModal extends Modal
       errors: @options,
       siteName: @options.site.display_name,
       showFreePlus: @options.site.current_subscription.type == "free plus"
+      upgradeBenefit: @options.upgradeBenefit
     ))
 
   open: ->
@@ -34,6 +35,7 @@ class @UpgradeAccountModal extends Modal
           package: packageData
           site: @options.site
           successCallback: @options.successCallback
+          upgradeBenefit: @options.upgradeBenefit
 
         new PaymentModal(options).open()
 

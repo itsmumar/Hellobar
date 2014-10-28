@@ -26,6 +26,7 @@ class @PaymentModal extends Modal
       isMonthly: @_isMonthly()
       isFree: @_isFree()
       siteName: @options.site.display_name
+      upgradeBenefit: @options.upgradeBenefit
     ))
 
   open: ->
@@ -85,6 +86,7 @@ class @PaymentModal extends Modal
       options =
         site: @options.site
         successCallback: @options.successCallback
+        upgradeBenefit: @options.upgradeBenefit
 
       new UpgradeAccountModal(options).open()
       @close()

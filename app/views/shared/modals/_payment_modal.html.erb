@@ -11,7 +11,12 @@
           <input type="hidden" name="billing[schedule]" value="monthly" />
           <div class="site-title downgrade-free">Are you sure you want to downgrade {{siteName}} to a free plan?</div>
         {{else}}
-          <div class="site-title">Upgrade {{siteName}}!</div>
+        <div class="site-title">
+          Upgrade {{siteName}}
+          {{#if upgradeBenefit}}
+            to {{upgradeBenefit}}
+          {{/if}}
+        </div>
 
           <div class="payment-wrapper {{ package.type }}">
             <div class="payment-sidebar">

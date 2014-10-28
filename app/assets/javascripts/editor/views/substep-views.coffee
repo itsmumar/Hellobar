@@ -28,6 +28,7 @@ HelloBar.StyleBarView         = HelloBar.StepView.extend
         successCallback: ->
           view.set('controller.model.site.capabilities', this.site.capabilities) # update site with new capabilities
           view.set('controller.model.show_branding', false)
+        upgradeBenefit: "remove branding"
 
       new UpgradeAccountModal(options).open()
   ).observes("controller.model.show_branding")
