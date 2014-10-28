@@ -22,10 +22,10 @@ class UserController < ApplicationController
       respond_to do |format|
         format.html do
           if active_before_update
-            flash.now[:error] = "There was a problem updating your settings."
+            flash.now[:error] = "There was a problem updating your settings#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
             render :action => :edit
           else
-            flash[:error] = "Sorry, there was a problem creating your account. Please try again."
+            flash[:error] = "There was a problem creating your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
             redirect_to request.referrer || after_sign_in_path_for(@user)
           end
         end
