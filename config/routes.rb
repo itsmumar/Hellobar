@@ -62,5 +62,7 @@ Rails.application.routes.draw do
 
   get "/pixel.gif" => "pixel#show", :as => :tracking_pixel
 
+  get "/heartbeat" => "heartbeat#index"
+
   root "welcome#index"
 end
