@@ -4,6 +4,7 @@ class MailerGateway
   end
 
   def self.send_email(type, recipient = "support@hellobar.com", params = {})
+    return true unless Hellobar::Settings[:deliver_emails]
     gateway.send_mail(type, {recipient => params})
   end
 end
