@@ -59,3 +59,40 @@
   
     li
       margin-bottom: 0.5em
+
+  /*-----------  Loading State  -----------*/
+
+  .loading-overlay
+    top: 0
+    left: 0
+    opacity: 0
+    width: 100%
+    height: 100%
+    display: none
+    position: absolute
+    pointer-events: none
+    border-radius: $radiusLg
+    background-color: rgba($white, 0.75)
+    @include transition()
+
+    .loading-message
+      left: 0
+      right: 0
+      position: absolute
+      text-align: center
+      @include vertical-align()
+
+      i:before
+        display: block
+        font-size: 2.75em
+        @include animation(spin 2s infinite ease-in-out)
+
+  &.loading
+
+    .contact-list-modal
+      position: relative
+  
+    .loading-overlay
+      opacity: 1
+      display: block
+      pointer-events: auto
