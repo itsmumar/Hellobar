@@ -18,6 +18,7 @@ unless defined?(Hellobar::Settings)
     cybersource_password
     data_api_url
     deliver_email_digests
+    deliver_emails
     env_name
     fake_data_api
     grand_central_api_key
