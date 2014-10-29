@@ -47,10 +47,10 @@
     .change-selection
       cursor: default !important
       opacity: 0
-      color: $gray
       cursor: pointer
       font-size: 0.75em
       padding-left: 18%
+      color: $grayLighter
       text-transform: uppercase
       @include inline-block()
 
@@ -97,7 +97,12 @@
       width: 10px
       height: 10px
       border-radius: 1em
-      background-color: $gray
+      background-color: $grayLight
+      @include transition()
+
+      &:hover
+        cursor: hover
+        background-color: $green
 
       &.past
         background-color: $green
@@ -135,7 +140,7 @@
 
       .icon-bar,
       .icon-modal
-        color: $grayDark
+        color: $grayLight
         font-size: 2em
 
       .icon-bar

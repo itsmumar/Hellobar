@@ -26,6 +26,8 @@
 @import 'layouts/document';         // Document Layouts
 @import 'layouts/modals/*';         // Modals
 
+@import 'layouts/editor/forms';     // Form Overwrites 
+
 @import 'layouts/editor/common';    // Editor 
 @import 'layouts/editor/elements';  // Editor Elements
 @import 'layouts/editor/preview';   // Editor Preview

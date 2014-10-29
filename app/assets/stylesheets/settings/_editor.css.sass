@@ -1,13 +1,6 @@
 /*-----------  Colors  -----------*/
 
-$grayLightest : rgb(246, 246, 246)
-$grayLighter  : rgb(239, 239, 239)
-$grayLight    : rgb(231, 231, 231)
-$gray         : rgb(206, 206, 206)
-$grayDark     : rgb(181, 181, 181)
-$grayDarker   : darken($grayDark, 10%)
 $grayDarkest  : darken($grayDark, 33%)
-
 $black        : rgb(  0,   0,   0)
 
 /*-----------  Sizing  -----------*/
@@ -17,8 +10,8 @@ $stepWidth    : 22.5em
 
 /*-----------  Styling Defaults  -----------*/
 
-$border       : 1px solid $gray
-$borderLight  : 1px solid $grayLight
+$border       : 1px solid $grayLighter
+$borderLight  : 1px solid $grayLightest
 
-$shadow       : 0.33em 0.33em 1em rgba($grayDarker, 0.33)
-$shadowSubtle : 0 0 1em rgba($grayDarker, 0.15)
+$shadow       : 0.33em 0.33em 1em rgba($grayDark, 0.33)
+$shadowSubtle : 0 0 1em rgba($gray, 0.15)

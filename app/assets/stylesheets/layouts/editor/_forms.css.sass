@@ -1,0 +1,39 @@
+/*-----------  Labels & Fieldsets  -----------*/
+
+label
+  color: $gray
+
+  &.disabled
+    color: $grayLight
+
+/*-----------  Text Inputs  -----------*/
+
+#{$all-text-inputs},
+textarea,
+select
+  color: $gray
+  border-color: $grayLighter
+
+  &:focus
+    color: $grayDark
+    border-color: $grayLight
+
+  &:disabled
+    color: $grayLighter
+
+  @include placeholder 
+    color: $grayLighter
+
+/*-----------  Select Dropdowns  -----------*/
+
+.select-wrapper
+
+  select
+    color: $gray
+
+  &:before
+    color: $gray
+
+  &:hover:before
+    color: $grayDark
+

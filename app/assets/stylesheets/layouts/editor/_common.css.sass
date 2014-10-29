@@ -24,7 +24,7 @@
     z-index: 1000
     position: absolute
     border-right: $border
-    background-color: $grayLighter
+    background-color: $grayLightest
 
     li
       display: block
@@ -34,11 +34,11 @@
       @include user-select(none)
 
       a
-        color: $gray
         display: block
+        color: $grayLight
         width: $linkWidth
         line-height: $linkWidth
-        background-color: $grayLighter
+        background-color: $grayLightest
 
         &:hover
           color: $red
@@ -67,10 +67,10 @@
         pointer-events: none
         letter-spacing: 0.03em
         border-radius: $radiusSm
-        background: $grayDarkest
+        background: $grayDarker
         font-weight: $fontWeightBold
         padding: 0.2em 1.33em 0.25em 0.75em
-        @include left-arrow(0.67em, $grayDarkest)
+        @include left-arrow(0.67em, $grayDarker)
         @include transition(0.5s)
         @include antialiased()
 

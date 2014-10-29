@@ -5,11 +5,11 @@
   h6
     font-size: 0.95em
     line-height: 133%
-    color: $grayDarkest
+    color: $grayDark
     letter-spacing: 0.02em
 
   p
-    color: $grayDarker
+    color: $gray
     font-size: 0.8em
     line-height: 150%
     letter-spacing: 0.02em
@@ -21,6 +21,7 @@
 
     &[disabled]
       @extend %darkgray-button
+      background-color: $grayLight
 
   /*-----------  Color Select  -----------*/
 
@@ -42,16 +43,18 @@
       max-height: 2.67em
       position: absolute
       margin: 0.75em auto
-      border: 1px solid $gray
       background-color: $white
+      border: 1px solid $grayLighter
       @include transition(0.15s ease-in-out)
       @extend .select-wrapper
 
       &:before
         top: 0.25em
         bottom: auto
+        color: $gray
 
       .color-select-block
+        color: $gray
         cursor: pointer
         line-height: 1.85em
         padding-bottom: 0.5em
@@ -61,7 +64,7 @@
           width: 2.5em
           height: 1.75em
           margin-right: 0.67em
-          border: 1px solid $gray
+          border: 1px solid $grayLight
           @include inline-block()
 
       .color-dropdown
@@ -69,7 +72,7 @@
         opacity: 0
         margin: 0 auto
         padding: 0.67em 0
-        border-top: 1px solid $grayLight
+        border-top: 1px solid $grayLightest
         @include transition(0.25s ease-in-out)
 
         .color-preview-row
@@ -89,13 +92,13 @@
               width: 22%
               height: 1.1em
               border-radius: $radiusSm
-              border: 1px solid $gray
+              border: 1px solid $grayLight
               @include inline-block()
 
           small
             width: 25%
             float: right
-            color: $gray
+            color: $grayLight
             line-height: 1.67em
 
         .color-picker
@@ -107,7 +110,7 @@
             height: 11.75em
             cursor: pointer
             position: relative
-            border: 1px solid $grayLight
+            border: 1px solid $grayLighter
             @include inline-block()
 
           .gradient-wrapper
@@ -144,9 +147,9 @@
 
           .eyedrop-button
             width: 25%
+            color: $gray
             float: right
             cursor: pointer
-            color: $grayDark
             text-align: center
             margin-bottom: 2.65em
             border-radius: $radiusSm
@@ -157,7 +160,7 @@
               line-height: 2em
 
             &:hover
-              color: $grayDarker
+              color: $grayDark
               border-color: $gray
 
           .rgb-wrapper
@@ -171,6 +174,7 @@
               h6
                 top: 0.5em
                 left: 0.5em
+                color: $gray
                 position: absolute
                 @include inline-block(inherit)
 
@@ -180,7 +184,7 @@
                 padding: 0.5em
                 text-align: right
                 border-radius: $radiusSm
-                border: 1px solid $grayLight
+                border: 1px solid $grayLighter
 
     &.in-focus
 
@@ -190,6 +194,7 @@
         box-shadow: $shadowSubtle
     
         &:before
+          color: $grayDark
           @include transform(rotate(-180deg))
 
         .color-dropdown
@@ -210,13 +215,13 @@
     margin-top: -4px
     border-radius: $radiusSm
     background-color: $white
-    border: 1px solid $grayLight
+    border: 1px solid $grayLighter
     @include user-select(none)
     @include inline-block()
     @include transition()
 
     span
-      color: $grayLight
+      color: $grayLighter
       text-align: center
       line-height: 1.25rem
       text-transform: uppercase
@@ -242,19 +247,19 @@
       margin-left: 0
       border-radius: 2px
       margin-right: 1.75em
-      background-color: $grayLight
+      background-color: $grayLighter
       @include transition(0.2s)
 
     &:hover
-      border-color: $gray
+      border-color: $grayLight
       box-shadow: inset $shadowSubtle
 
       span
-        color: $gray
+        color: $grayLight
     
       .toggle-floater
         box-shadow: $shadowSubtle
-        background-color: $gray
+        background-color: $grayLight
     
     &.is-selected
       border-color: $green
@@ -287,6 +292,7 @@
 
     li
       opacity: 1
+      color: $grayLight
       cursor: pointer
       max-height: 2em
       margin: 0 -0.5em
@@ -367,7 +373,7 @@
         text-align: center
         margin-left: 0.5rem
         border-radius: 10em
-        background-color: $grayLight
+        background-color: $grayLighter
         @include transition(0.67s)
 
         &:before
@@ -377,11 +383,12 @@
           position: relative
 
         &:hover
-          background-color: $gray
+          background-color: $grayLight
 
     &.is-selected
 
       li
+        color: $gray
 
         &:not(.is-selected)
           opacity: 0
@@ -398,5 +405,5 @@
             @include inline-block()
 
           &:hover
-            color: inherit
+            color: $gray
             background-color: transparent
