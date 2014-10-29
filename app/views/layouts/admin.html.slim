@@ -12,10 +12,9 @@ html
 
   body#hb-admin
     = render :partial => "shared/admin_header"
+    = render :partial => "shared/flash"
 
     div.container
-      div.row
-        div.col-md-12= render "shared/notices"
       = yield
 
     = render 'shared/alert_template'
