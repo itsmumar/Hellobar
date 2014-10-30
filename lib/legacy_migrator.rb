@@ -5,20 +5,102 @@ class LegacyMigrator
     def migrate
       ActiveRecord::Base.record_timestamps = false
 
+      @migrated_memberships = {}
+      puts "[#{Time.now}] Start"
+      load_wp_emails
+      preload_data
       migrate_sites_and_users_and_memberships
+      puts "[#{Time.now}] Done reading, writing..."
+      save_to_db(@migrated_memberships)
+      save_to_db(@migrated_users)
+      save_to_db(@migrated_sites)
+=begin
+      puts "[#{Time.now}] Done writing, changing subscription..."
+      optimize_inserts do
+        @migrated_sites.each do |key, site|
+          site.change_subscription_no_checks(Subscription::FreePlus.new(schedule: 'monthly'))
+        end
+      end
+      puts "[#{Time.now}] Done"
+=end
+=begin
       migrate_identities
       migrate_contact_lists
       migrate_goals_to_rules
       migrate_site_timezones
+=end
 
       ActiveRecord::Base.record_timestamps = true
     end
 
+    def optimize_inserts
+      ActiveRecord::Base.transaction do
+        ActiveRecord::Base.connection.execute("SET autocommit=0")
+        ActiveRecord::Base.connection.execute("SET unique_checks=0")
+        ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
+        yield
+        ActiveRecord::Base.connection.execute("SET autocommit=1")
+        ActiveRecord::Base.connection.execute("SET unique_checks=1")
+        ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
+      end
+    end
+
+    def save_to_db(items)
+      klass =  items[items.keys.first].class
+      count = 0
+
+      optimize_inserts do
+        items.each do |key, item|
+          count += 1
+          puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 500 == 0
+          item.save(validate: false)
+        end
+      end
+    end
+    
+    def load_wp_emails
+      @wp_emails = {}
+      File.read(File.join(Rails.root,"db", "wp_logins.csv")).split("\n").each_with_index do |line, i|
+        if i > 0
+          e1, e2 = *line.split("\t")
+          @wp_emails[e1] = true
+          @wp_emails[e2] = true
+        end
+      end
+    end
+
+    def preload(klass, key_method=:id, type=:single)
+      puts "[#{Time.now}] Loading #{klass}..."
+      if type == :single
+        results = {}
+        klass.all.each do |object|
+          results[object.send(key_method)] = object
+        end
+      else
+        results = Hash.new{|h,k| h[k] = []}
+        klass.all.each do |object|
+          results[object.send(key_method)] << object
+        end
+      end
+      return results
+    end
+
+    def preload_data
+      @legacy_sites = preload(LegacyMigrator::LegacySite)
+      @legacy_accounts = preload(LegacyMigrator::LegacyAccount)
+      @legacy_users = preload(LegacyMigrator::LegacyUser)
+      @legacy_memberships = preload(LegacyMigrator::LegacyMembership, :account_id, :collection)
+      @migrated_users = {}
+      @migrated_sites = {}
+    end
+
     def migrate_sites_and_users_and_memberships
       count = 0
-      LegacySite.find_each do |legacy_site|
+      puts "[#{Time.now}] migrate_sites_and_users_and_memberships.."
+
+      @legacy_sites.each do |id, legacy_site|
         begin
-          site = ::Site.create! id: legacy_site.legacy_site_id || legacy_site.id,
+          site = ::Site.new id: legacy_site.legacy_site_id || legacy_site.id,
                                 url: legacy_site.base_url,
                                 script_installed_at: legacy_site.script_installed_at,
                                 script_generated_at: legacy_site.generated_script,
@@ -29,10 +111,10 @@ class LegacyMigrator
           create_user_and_membership legacy_site_id: site.id,
                                      account_id: legacy_site.account_id
 
-          site.change_subscription(Subscription::FreePlus.new(schedule: 'monthly'))
 
+          @migrated_sites[site.id] = site
           count += 1
-          puts "Migrated #{count} sites" if count % 100 == 0
+          puts "Migrated #{count} sites" if count % 1000 == 0
         rescue ActiveRecord::RecordInvalid => e
           raise e.inspect
         end
@@ -138,10 +220,12 @@ class LegacyMigrator
     def migrate_contact_lists
       count = 0
 
-      LegacyGoal.find_each do |legacy_goal|
+      @legacy_goals = preload(LegacyMigrator::LegacyGoal)
+      @legacy_identity_integrations = preload(LegacyMigrator::LegacyIdentityIntegration, :integrable_id)
+      @legacy_goals.each do |id, legacy_goal|
         next unless legacy_goal.type == "Goals::CollectEmail"
 
-        unless Site.exists?(legacy_goal.site_id)
+        unless @migrated_sites[legacy_goal.site_id]
           Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal: #{legacy_goal.id}"
           next
         end
@@ -154,13 +238,11 @@ class LegacyMigrator
           updated_at: legacy_goal.updated_at.utc
         }
 
-        if legacy_id_int = LegacyIdentityIntegration.where(:integrable_id => legacy_goal.id).first
-          unless Identity.exists?(legacy_id_int.identity_id)
+        if legacy_id_int = @legacy_identity_integrations[legacy_goal.id]
+          unless identity = @migrated_identities[legacy_id_int.identity_id]
             Rails.logger.info "WTF:Identity: #{legacy_id_int.identity_id} doesnt exist for Goal: #{legacy_goal.id}"
             next
           end
-
-          identity = legacy_id_int.identity
 
           params.merge!(
             identity_id: legacy_id_int.identity_id,
@@ -180,9 +262,11 @@ class LegacyMigrator
 
     def migrate_identities
       count = 0
-      LegacyIdentity.find_each do |legacy_id|
-        if ::Site.exists?(legacy_id.site_id)
-          ::Identity.create! id: legacy_id.id,
+      @migrated_identities = {}
+      @legacy_identities = preload(LegacyMigrator::LegacyIdentity)
+      @legacy_identities.each do |id, legacy_id|
+        if site = @legacy_sites[legacy_id.site_id]
+          identity = ::Identity.create! id: legacy_id.id,
                              site_id: legacy_id.site_id,
                              provider: legacy_id.provider,
                              credentials: legacy_id.credentials,
@@ -191,6 +275,7 @@ class LegacyMigrator
                              updated_at: legacy_id.updated_at
 
           count += 1
+          @migrated_identities[identity.id] = identity
           puts "Migrated #{count} identities" if count % 100 == 0
         else
           Rails.logger.info "WTF:Legacy Site: #{legacy_id.site_id} doesnt exist for Identity: #{legacy_id.id}"
@@ -224,40 +309,44 @@ class LegacyMigrator
   private
 
     def create_user_and_membership(legacy_site_id: legacy_site_id, account_id: account_id)
-      legacy_account = LegacyAccount.find(account_id)
-      legacy_memberships = legacy_account.memberships
+      legacy_account = @legacy_accounts[account_id]
+      legacy_memberships = @legacy_memberships[legacy_account.id]
 
       if legacy_memberships.size != 1
         Rails.logger.info "WTF:Legacy Membership has #{legacy_memberships.size} memberships for Account:#{account_id}" if legacy_memberships.size != 1
       else
         legacy_membership = legacy_memberships.first
-        legacy_user = legacy_membership.user
+        legacy_user = @legacy_users[legacy_membership.user_id]
 
         unless legacy_user
           Rails.logger.info "WTF:Legacy Membership: #{legacy_membership.id} has no users!"
           return
         end
 
-        return if ::Hello::WordpressUser.email_exists?(legacy_user.email)
+        # These were already validated presumably on HB 2.0 so need for the following line
+        return if @wp_emails[legacy_user.email]
 
-        migrated_user = ::User.where(id: legacy_user.id_to_migrate).first
-        migrated_user ||= ::User.create! id: legacy_user.id_to_migrate,
-                                         email: legacy_user.email,
-                                         encrypted_password: legacy_user.encrypted_password,
-                                         reset_password_token: legacy_user.reset_password_token,
-                                         reset_password_sent_at: legacy_user.reset_password_sent_at,
-                                         remember_created_at: legacy_user.remember_created_at,
-                                         sign_in_count: legacy_user.sign_in_count,
-                                         status: ::User::ACTIVE_STATUS,
-                                         legacy_migration: true,
-                                         current_sign_in_at: legacy_user.current_sign_in_at,
-                                         last_sign_in_at: legacy_user.last_sign_in_at,
-                                         current_sign_in_ip: legacy_user.current_sign_in_ip,
-                                         last_sign_in_ip: legacy_user.last_sign_in_ip,
-                                         created_at: legacy_user.original_created_at || legacy_user.created_at,
-                                         updated_at: legacy_user.updated_at
+        migrated_user = @migrated_users[legacy_user.id_to_migrate.to_i]
+        unless migrated_user
+          migrated_user ||= ::User.new id: legacy_user.id_to_migrate,
+                                           email: legacy_user.email,
+                                           encrypted_password: legacy_user.encrypted_password,
+                                           reset_password_token: legacy_user.reset_password_token,
+                                           reset_password_sent_at: legacy_user.reset_password_sent_at,
+                                           remember_created_at: legacy_user.remember_created_at,
+                                           sign_in_count: legacy_user.sign_in_count,
+                                           status: ::User::ACTIVE_STATUS,
+                                           legacy_migration: true,
+                                           current_sign_in_at: legacy_user.current_sign_in_at,
+                                           last_sign_in_at: legacy_user.last_sign_in_at,
+                                           current_sign_in_ip: legacy_user.current_sign_in_ip,
+                                           last_sign_in_ip: legacy_user.last_sign_in_ip,
+                                           created_at: legacy_user.original_created_at || legacy_user.created_at,
+                                           updated_at: legacy_user.updated_at
 
-        ::SiteMembership.create! user_id: migrated_user.id,
+          @migrated_users[legacy_user.id_to_migrate.to_i] = migrated_user
+        end
+        @migrated_memberships[migrated_user.id.to_s+"-"+legacy_site_id.to_s] = ::SiteMembership.new user_id: migrated_user.id,
                                  site_id: legacy_site_id
       end
     end

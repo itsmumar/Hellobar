@@ -63,6 +63,7 @@ class User < ActiveRecord::Base
   private
 
   def email_does_not_exist_in_wordpress
+    return if legacy_migration # Don't check this
     errors.add(:email, "has already been taken") if Hello::WordpressUser.email_exists?(email)
   end
 end
