@@ -14,7 +14,10 @@ class LegacyMigrator
       save_to_db(@migrated_memberships)
       save_to_db(@migrated_users)
       save_to_db(@migrated_sites)
-=begin
+      migrate_identities
+      migrate_contact_lists
+      migrate_goals_to_rules
+      migrate_site_timezones
       puts "[#{Time.now}] Done writing, changing subscription..."
       optimize_inserts do
         @migrated_sites.each do |key, site|
@@ -22,38 +25,31 @@ class LegacyMigrator
         end
       end
       puts "[#{Time.now}] Done"
-=end
-=begin
-      migrate_identities
-      migrate_contact_lists
-      migrate_goals_to_rules
-      migrate_site_timezones
-=end
 
       ActiveRecord::Base.record_timestamps = true
     end
 
     def optimize_inserts
-      ActiveRecord::Base.transaction do
-        ActiveRecord::Base.connection.execute("SET autocommit=0")
-        ActiveRecord::Base.connection.execute("SET unique_checks=0")
-        ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
-        yield
-        ActiveRecord::Base.connection.execute("SET autocommit=1")
-        ActiveRecord::Base.connection.execute("SET unique_checks=1")
-        ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
-      end
+      ActiveRecord::Base.connection.execute("SET autocommit=0")
+      ActiveRecord::Base.connection.execute("SET unique_checks=0")
+      ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
+      yield
+      ActiveRecord::Base.connection.execute("SET autocommit=1")
+      ActiveRecord::Base.connection.execute("SET unique_checks=1")
+      ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
     end
 
     def save_to_db(items)
       klass =  items[items.keys.first].class
       count = 0
 
-      optimize_inserts do
-        items.each do |key, item|
-          count += 1
-          puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 500 == 0
-          item.save(validate: false)
+      ActiveRecord::Base.transaction do
+        optimize_inserts do
+          items.each do |key, item|
+            count += 1
+            puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 500 == 0
+            item.save(validate: false)
+          end
         end
       end
     end
