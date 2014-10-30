@@ -27,7 +27,6 @@ class SiteElement < ActiveRecord::Base
   validates :rule, association_exists: true
   validates :display_when, inclusion: { in: DISPLAY_WHEN_OPTIONS }
 
-  validate :contact_list_is_present, if: Proc.new {|se| se.element_subtype == "email"}
   validate :site_is_capable_of_creating_element, unless: :persisted?
 
   scope :paused, -> { where(paused: true) }
@@ -70,12 +69,6 @@ class SiteElement < ActiveRecord::Base
       [0, 0]
     else
       data[id.to_s].last
-    end
-  end
-
-  def contact_list_is_present
-    if contact_list.nil? && (contact_list_id.blank? || contact_list_id == 0)
-      errors.add(:contact_list, "can't be blank")
     end
   end
 
