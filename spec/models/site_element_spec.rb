@@ -15,10 +15,6 @@ describe SiteElement do
     element = site_elements(:zombo_traffic)
     element.should be_valid
 
-    element.element_subtype = "email"
-    element.should_not be_valid
-    element.errors[:contact_list].should == ["can't be blank"]
-
     element.contact_list = contact_lists(:zombo)
     element.should be_valid
   end
