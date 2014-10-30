@@ -1,4 +1,4 @@
-source "https://rubygems.org"
+source "http://rubygems.org"
 
 gem "abanalyzer"
 gem "active_link_to",            "~> 1.0.2"
