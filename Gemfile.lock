@@ -30,7 +30,7 @@ GIT
       countries (~> 0.9, >= 0.9.3)
 
 GEM
-  remote: https://rubygems.org/
+  remote: http://rubygems.org/
   specs:
     abanalyzer (0.1.0)
       statistics2 (>= 0.54)

@@ -1,5 +1,7 @@
 source "http://rubygems.org"
 
+ruby '2.1.4'
+
 gem "abanalyzer"
 gem "active_link_to",            "~> 1.0.2"
 gem "active_model_serializers",  "~> 0.8.1"
