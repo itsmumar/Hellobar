@@ -11,31 +11,13 @@ class LegacyMigrator
       preload_data
       migrate_sites_and_users_and_memberships
       puts "[#{Time.now}] Done reading, writing..."
-      save_to_db(@migrated_memberships)
-      save_to_db(@migrated_users)
-      save_to_db(@migrated_sites)
-      puts "[#{Time.now}] Done writing, changing subscription..."
-      now = Time.now
-      one_month_from_now = now + 1.month
-      two_months_from_now = one_month_from_now + 1.month
-      optimize_inserts do
-        @migrated_sites.each do |key, site|
-          subscription = Subscription::FreePlus.new(site_id: site.id, created_at: now, schedule: 0)
-          subscription.save(validate: false)
-          # This bill
-          bill = Bill::Recurring.new(amount: 0, subscription_id: subscription.id, grace_period_allowed: 0, bill_at: now, created_at: now, status_set_at: now, start_date: now, end_date: one_month_from_now)
-          bill.send(:write_attribute, :status, 1)
-          bill.save(validate: false)
-          subscription.bills << bill
-          # Next month
-          next_bill = Bill::Recurring.new(amount: 0, subscription_id: subscription.id, grace_period_allowed: 1, bill_at: one_month_from_now, created_at: now, start_date: one_month_from_now, end_date: two_months_from_now, description: "Monthly Renewal")
-          next_bill.send(:write_attribute, :status, 0)
-          next_bill.save(validate: false)
-          subscription.bills << next_bill
-          site.subscriptions << subscription
-        end
-      end
-      puts "[#{Time.now}] Done"
+      threads = []
+      threads << set_subscriptions
+      threads << save_to_db(@migrated_memberships)
+      threads << save_to_db(@migrated_users)
+      threads << save_to_db(@migrated_sites)
+      threads.each{|t| t.join}
+      puts "[#{Time.now}] Done writing"
       # Probably a good idea to load the subscriptions into the site object for
       # checking capabbilities, etc
       migrate_identities
@@ -45,16 +27,46 @@ class LegacyMigrator
 
       ActiveRecord::Base.record_timestamps = true
     end
+    
+    def set_subscriptions
+      # Override for faster capabilities checking
+      Site.send(:define_method, :capabilities) do
+        return Subscription::FreePro::Capabilities.new(nil, self)
+      end
+      now = Time.now
+      one_month_from_now = now + 1.month
+      two_months_from_now = one_month_from_now + 1.month
+      escaped_now = ActiveRecord::Base.sanitize(now)
+      escaped_one_month_from_now = ActiveRecord::Base.sanitize(one_month_from_now)
+      escaped_two_months_from_now = ActiveRecord::Base.sanitize(two_months_from_now)
+      subscription_id = 0
+      optimize_inserts do
+        puts "[#{Time.now}] Done writing, changing subscription..."
+        @migrated_sites.each do |key, site|
+          # Direct inserts
+          ActiveRecord::Base.connection.execute("INSERT INTO #{Subscription.table_name} VALUES (NULL, NULL, #{site.id}, 'Subscription::FreePlus', 0, 0.00, 25000, NULL, NULL, #{escaped_now}, NULL)")
+          subscription_id += 1
+          # This bill and next bill
+          ActiveRecord::Base.connection.execute("INSERT INTO #{Bill.table_name} VALUES 
+          (NULL, #{subscription_id}, 1, 'Bill::Recurring', 0.00, NULL, NULL, 0, #{escaped_now}, #{escaped_now}, #{escaped_one_month_from_now}, #{escaped_now}, #{escaped_now}),
+          (NULL, #{subscription_id}, 0, 'Bill::Recurring', 0.00, 'Monthly Renewal', NULL, 1, #{escaped_one_month_from_now}, #{escaped_one_month_from_now}, #{escaped_two_months_from_now}, NULL, #{escaped_now})")
+          puts "[#{Time.now}] Changing subscription #{subscription_id}..." if subscription_id % 5000 == 0
+        end
+        puts "[#{Time.now}] Done inserting subscriptions"
+      end
+    end
 
     def optimize_inserts
-      ActiveRecord::Base.transaction do
-        ActiveRecord::Base.connection.execute("SET autocommit=0")
-        ActiveRecord::Base.connection.execute("SET unique_checks=0")
-        ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
-        yield
-        ActiveRecord::Base.connection.execute("SET autocommit=1")
-        ActiveRecord::Base.connection.execute("SET unique_checks=1")
-        ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
+      Thread.new do
+        ActiveRecord::Base.transaction do
+          ActiveRecord::Base.connection.execute("SET autocommit=0")
+          ActiveRecord::Base.connection.execute("SET unique_checks=0")
+          ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
+          yield
+          ActiveRecord::Base.connection.execute("SET autocommit=1")
+          ActiveRecord::Base.connection.execute("SET unique_checks=1")
+          ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
+        end
       end
     end
 
