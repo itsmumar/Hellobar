@@ -153,42 +153,6 @@ class Site < ActiveRecord::Base
     end
   end
 
-  # Temporary method used for setting up subscription for import process
-  def change_subscription_no_checks(subscription, payment_method=nil)
-    raise MissingSubscription.new unless subscription
-    raise MissingPaymentMethod.new if subscription.requires_payment_method? and !payment_method
-    transaction do
-      subscription.site = self
-      subscription.payment_method = payment_method
-      success = true
-      raise MissingSubscription.new unless subscription
-      now = Time.now
-      # First we need to void any pending recurring bills
-      # and keep any active paid bills
-      active_paid_bills = []
-      bill = Bill::Recurring.new(subscription: subscription)
-      # Gotta pay full amount now
-      bill.amount = subscription.amount
-      bill.grace_period_allowed = false
-      bill.bill_at = now
-      bill.start_date = bill.bill_at
-      bill.end_date = bill.renewal_date
-      now = Time.now
-      result = bill.attempt_billing!
-      if result.is_a?(BillingAttempt)
-        success = result.success?
-      elsif result.is_a?(TrueClass) || result.is_a?(FalseClass)
-        success = result
-      else
-        raise "Unexpected result: #{result.inspect}"
-      end
-      bill.save(validate: false) 
-      subscription.save(validate: false)
-
-      return success, bill
-    end
-  end
-
   def preview_change_subscription(subscription)
     bill = calculate_bill(subscription, false)
     # Make the bill read-only
@@ -252,7 +216,7 @@ class Site < ActiveRecord::Base
 
         bill.bill_at = now
         bill.grace_period_allowed = false
-        # Figure out percentage of their subscriptiont they've used
+        # Figure out percentage of their subscription they've used
         # rounded to the day
         num_days_used = (now-active_paid_bills.last.start_date)/1.day
         total_days_of_last_subcription = (active_paid_bills.last.end_date-active_paid_bills.last.start_date)/1.day

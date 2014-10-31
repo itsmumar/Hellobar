@@ -15,12 +15,29 @@ class LegacyMigrator
       save_to_db(@migrated_users)
       save_to_db(@migrated_sites)
       puts "[#{Time.now}] Done writing, changing subscription..."
+      now = Time.now
+      one_month_from_now = now + 1.month
+      two_months_from_now = one_month_from_now + 1.month
       optimize_inserts do
         @migrated_sites.each do |key, site|
-          site.change_subscription_no_checks(Subscription::FreePlus.new(schedule: 'monthly'))
+          subscription = Subscription::FreePlus.new(site_id: site.id, created_at: now, schedule: 0)
+          subscription.save(validate: false)
+          # This bill
+          bill = Bill::Recurring.new(amount: 0, subscription_id: subscription.id, grace_period_allowed: 0, bill_at: now, created_at: now, status_set_at: now, start_date: now, end_date: one_month_from_now)
+          bill.send(:write_attribute, :status, 1)
+          bill.save(validate: false)
+          subscription.bills << bill
+          # Next month
+          next_bill = Bill::Recurring.new(amount: 0, subscription_id: subscription.id, grace_period_allowed: 1, bill_at: one_month_from_now, created_at: now, start_date: one_month_from_now, end_date: two_months_from_now, description: "Monthly Renewal")
+          next_bill.send(:write_attribute, :status, 0)
+          next_bill.save(validate: false)
+          subscription.bills << next_bill
+          site.subscriptions << subscription
         end
       end
       puts "[#{Time.now}] Done"
+      # Probably a good idea to load the subscriptions into the site object for
+      # checking capabbilities, etc
       migrate_identities
       migrate_contact_lists
       migrate_goals_to_rules
@@ -30,30 +47,32 @@ class LegacyMigrator
     end
 
     def optimize_inserts
-      ActiveRecord::Base.connection.execute("SET autocommit=0")
-      ActiveRecord::Base.connection.execute("SET unique_checks=0")
-      ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
-      yield
-      ActiveRecord::Base.connection.execute("SET autocommit=1")
-      ActiveRecord::Base.connection.execute("SET unique_checks=1")
-      ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
+      ActiveRecord::Base.transaction do
+        ActiveRecord::Base.connection.execute("SET autocommit=0")
+        ActiveRecord::Base.connection.execute("SET unique_checks=0")
+        ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
+        yield
+        ActiveRecord::Base.connection.execute("SET autocommit=1")
+        ActiveRecord::Base.connection.execute("SET unique_checks=1")
+        ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
+      end
     end
 
     def save_to_db(items)
       klass =  items[items.keys.first].class
       count = 0
-
-      ActiveRecord::Base.transaction do
-        optimize_inserts do
-          items.each do |key, item|
-            count += 1
-            puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 500 == 0
-            item.save(validate: false)
-          end
+      optimize_inserts do
+        items.each do |key, item|
+          count += 1
+          puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 5000 == 0
+          item.save(validate: false)
         end
       end
     end
 
+=begin
+    The following method yielded a 2x improvement, but skipped callbacks
+    and probably has other issues. Keeping for posterity's sake
     def save_to_db_via_csv(items)
       klass =  items[items.keys.first].class
       count = 0
@@ -77,6 +96,7 @@ class LegacyMigrator
       end
       # `sudo rm /var/lib/mysql/hellobar/#{File.basename(csv_file}`
     end
+=end
     
     def load_wp_emails
       @wp_emails = {}
@@ -134,7 +154,7 @@ class LegacyMigrator
 
           @migrated_sites[site.id] = site
           count += 1
-          puts "Migrated #{count} sites" if count % 1000 == 0
+          puts "[#{Time.now}] Migrated #{count} sites" if count % 5000 == 0
         rescue ActiveRecord::RecordInvalid => e
           raise e.inspect
         end
@@ -199,7 +219,7 @@ class LegacyMigrator
             end
 
             goal_count += 1
-            puts "Migrated #{goal_count} goals to rules" if goal_count % 100 == 0
+            puts "[#{Time.now}] Migrated #{goal_count} goals to rules" if goal_count % 100 == 0
           end
         else # site has no rules so add them to the collection
           sites_needing_rules << site
@@ -276,7 +296,7 @@ class LegacyMigrator
         ::ContactList.create!(params)
 
         count += 1
-        puts "Migrated #{count} contact lists" if count % 100 == 0
+        puts "[#{Time.now}] Migrated #{count} contact lists" if count % 100 == 0
       end
     end
 
@@ -296,7 +316,7 @@ class LegacyMigrator
 
           count += 1
           @migrated_identities[identity.id] = identity
-          puts "Migrated #{count} identities" if count % 100 == 0
+          puts "[#{Time.now}] Migrated #{count} identities" if count % 100 == 0
         else
           Rails.logger.info "WTF:Legacy Site: #{legacy_id.site_id} doesnt exist for Identity: #{legacy_id.id}"
         end
