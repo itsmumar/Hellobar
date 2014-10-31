@@ -31,7 +31,7 @@ class LegacyMigrator
     def set_subscriptions
       # Override for faster capabilities checking
       Site.send(:define_method, :capabilities) do
-        return Subscription::FreePro::Capabilities.new(nil, self)
+        return Subscription::FreePlus::Capabilities.new(nil, self)
       end
       now = Time.now
       one_month_from_now = now + 1.month
