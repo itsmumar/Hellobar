@@ -26,7 +26,7 @@ class ContactList < ActiveRecord::Base
   after_save :sync, :if => :data_changed?
 
   def syncable?
-    return false unless identity && data
+    return false unless identity && data && Hellobar::Settings[:syncable]
 
     if oauth?
       data["remote_name"] && data["remote_id"]

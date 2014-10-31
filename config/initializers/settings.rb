@@ -37,6 +37,7 @@ unless defined?(Hellobar::Settings)
     script_cdn_url
     sendgrid_password
     store_site_scripts_locally
+    syncable
     tracking_host
     twilio_password
     twilio_user

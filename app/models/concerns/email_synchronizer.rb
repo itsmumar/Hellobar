@@ -24,7 +24,7 @@ module EmailSynchronizer
   # Extracted from contact_list#subscribe_all_emails_to_list!
   def sync_all!
     return unless syncable?
-    
+
     Rails.logger.info "Syncing all emails for contact_list #{self.id}"
 
     perform_sync do
