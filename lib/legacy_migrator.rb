@@ -14,10 +14,6 @@ class LegacyMigrator
       save_to_db(@migrated_memberships)
       save_to_db(@migrated_users)
       save_to_db(@migrated_sites)
-      migrate_identities
-      migrate_contact_lists
-      migrate_goals_to_rules
-      migrate_site_timezones
       puts "[#{Time.now}] Done writing, changing subscription..."
       optimize_inserts do
         @migrated_sites.each do |key, site|
@@ -25,6 +21,10 @@ class LegacyMigrator
         end
       end
       puts "[#{Time.now}] Done"
+      migrate_identities
+      migrate_contact_lists
+      migrate_goals_to_rules
+      migrate_site_timezones
 
       ActiveRecord::Base.record_timestamps = true
     end
@@ -52,6 +52,30 @@ class LegacyMigrator
           end
         end
       end
+    end
+
+    def save_to_db_via_csv(items)
+      klass =  items[items.keys.first].class
+      count = 0
+
+      columns = klass.column_names
+      csv_file = File.join(Rails.root, "#{klass.name.underscore}.csv")
+      CSV.open(csv_file, "w") do |csv|
+        items.each do |key, item|
+          count += 1
+          puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 500 == 0
+          # item.save(validate: false)
+          csv << columns.collect{|c| klass.sanitize(item.send(c)).gsub(/^'(.*)'$/,"\\1")}
+        end
+      end
+      `chmod 777 #{csv_file}`
+      `sudo mv #{csv_file} /var/lib/mysql/hellobar/`
+      ActiveRecord::Base.transaction do
+        optimize_inserts do
+          ActiveRecord::Base.connection.execute(%{LOAD DATA INFILE '#{File.basename(csv_file)}' INTO TABLE #{klass.table_name} FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n'})
+        end
+      end
+      # `sudo rm /var/lib/mysql/hellobar/#{File.basename(csv_file}`
     end
     
     def load_wp_emails

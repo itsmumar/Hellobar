@@ -182,8 +182,8 @@ class Site < ActiveRecord::Base
       else
         raise "Unexpected result: #{result.inspect}"
       end
-      bill.save!
-      subscription.save!
+      bill.save(validate: false) 
+      subscription.save(validate: false)
 
       return success, bill
     end
