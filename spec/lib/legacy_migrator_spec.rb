@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+=begin
 describe LegacyMigrator, '.migrate_sites_and_users_and_memberships' do
   let(:legacy_site) { double 'legacy_site', legacy_site_id: 44332211, id: 11223344, base_url: 'http://baller4ever.sho', account_id: 1, created_at: Time.parse('1875-01-30'), updated_at: Time.parse('1875-01-31'), script_installed_at: Time.now, generated_script: Time.now, attempted_generate_script: Time.now }
 
@@ -611,3 +612,4 @@ describe LegacyMigrator, '#bar_is_mobile?' do
     LegacyMigrator.bar_is_mobile?(legacy_bar).should be_false
   end
 end
+=end
