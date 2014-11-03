@@ -10,24 +10,29 @@ class LegacyMigrator
       load_wp_emails
       preload_data
       migrate_sites_and_users_and_memberships
+      migrate_identities
+      migrate_contact_lists
+      migrate_goals_to_rules
+      migrate_site_timezones
+
       puts "[#{Time.now}] Done reading, writing..."
       threads = []
       threads << set_subscriptions
       threads << save_to_db(@migrated_memberships)
       threads << save_to_db(@migrated_users)
       threads << save_to_db(@migrated_sites)
+      threads << save_to_db(@migrated_identities)
+      threads << save_to_db(@migrated_contact_lists)
+      threads << save_to_db(@migrated_rules)
       threads.each{|t| t.join}
+      save_to_db(@rules_to_migrate_later) # must happen after initial rules are created to prevent ID collision
       puts "[#{Time.now}] Done writing"
       # Probably a good idea to load the subscriptions into the site object for
       # checking capabbilities, etc
-      migrate_identities
-      migrate_contact_lists
-      migrate_goals_to_rules
-      migrate_site_timezones
 
       ActiveRecord::Base.record_timestamps = true
     end
-    
+
     def set_subscriptions
       # Override for faster capabilities checking
       Site.send(:define_method, :capabilities) do
@@ -75,9 +80,16 @@ class LegacyMigrator
       count = 0
       optimize_inserts do
         items.each do |key, item|
-          count += 1
-          puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 5000 == 0
-          item.save(validate: false)
+          if item.kind_of?(Array)
+            klass = item.first.class
+            count += 1
+            puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 5000 == 0
+            item.each{|i| i.save(validate: false)}
+          else
+            count += 1
+            puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 5000 == 0
+            item.save(validate: false)
+          end
         end
       end
     end
@@ -109,7 +121,7 @@ class LegacyMigrator
       # `sudo rm /var/lib/mysql/hellobar/#{File.basename(csv_file}`
     end
 =end
-    
+
     def load_wp_emails
       @wp_emails = {}
       File.read(File.join(Rails.root,"db", "wp_logins.csv")).split("\n").each_with_index do |line, i|
@@ -142,8 +154,21 @@ class LegacyMigrator
       @legacy_accounts = preload(LegacyMigrator::LegacyAccount)
       @legacy_users = preload(LegacyMigrator::LegacyUser)
       @legacy_memberships = preload(LegacyMigrator::LegacyMembership, :account_id, :collection)
+      @legacy_bars = preload(LegacyMigrator::LegacyBar, :goal_id, :collection)
+      @legacy_goals = preload(LegacyMigrator::LegacyGoal)
+      @legacy_identity_integrations = preload(LegacyMigrator::LegacyIdentityIntegration, :integrable_id)
+
+      # keyed off site_id for faster lookup
+      @legacy_goals_by_site_id = {}
+      @legacy_goals.each do |key, legacy_goal|
+        @legacy_goals_by_site_id[legacy_goal.site_id] ||= []
+        @legacy_goals_by_site_id[legacy_goal.site_id] << legacy_goal
+      end
+
       @migrated_users = {}
       @migrated_sites = {}
+      @migrated_rules = {}
+      @rules_to_migrate_later = {}
     end
 
     def migrate_sites_and_users_and_memberships
@@ -153,16 +178,15 @@ class LegacyMigrator
       @legacy_sites.each do |id, legacy_site|
         begin
           site = ::Site.new id: legacy_site.legacy_site_id || legacy_site.id,
-                                url: legacy_site.base_url,
-                                script_installed_at: legacy_site.script_installed_at,
-                                script_generated_at: legacy_site.generated_script,
-                                script_attempted_to_generate_at: legacy_site.attempted_generate_script,
-                                created_at: legacy_site.created_at.utc,
-                                updated_at: legacy_site.updated_at.utc
+                            url: legacy_site.base_url,
+                            script_installed_at: legacy_site.script_installed_at,
+                            script_generated_at: legacy_site.generated_script,
+                            script_attempted_to_generate_at: legacy_site.attempted_generate_script,
+                            created_at: legacy_site.created_at.utc,
+                            updated_at: legacy_site.updated_at.utc
 
           create_user_and_membership legacy_site_id: site.id,
                                      account_id: legacy_site.account_id
-
 
           @migrated_sites[site.id] = site
           count += 1
@@ -173,94 +197,143 @@ class LegacyMigrator
       end
     end
 
-    def create_rule(id, is_mobile, site, legacy_goal, legacy_bars)
-      rule = ::Rule.create! id: id,
-                            site_id: site.id,
-                            name: 'Everyone', # may be renamed later depending on # of conditions
-                            priority: legacy_goal.priority,
-                            match: Rule::MATCH_ON[:all],
-                            created_at: legacy_goal.created_at.utc,
-                            updated_at: legacy_goal.updated_at.utc
-
-
-      create_conditions(rule, legacy_goal).each do |new_condition|
-        rule.conditions << new_condition
-      end
-
-      # add the mobile condition if the rule is mobile
-      DeviceCondition.create!(operand: 'is', value: 'mobile', rule: rule) if is_mobile
-
-      if existing = existing_rule(rule)
-        rule.destroy
-        rule = existing
-      end
-
-      # create site elements
-      create_site_elements(legacy_bars, legacy_goal, rule).each do |new_bar|
-        rule.site_elements << new_bar
-      end
-
-      rule
-    end
-
     def migrate_goals_to_rules
       goal_count = 0
 
-      sites_needing_rules = []
-      mobile_rules_to_create_later = []
+      @migrated_sites.each do |key, site|
+        if @legacy_goals_by_site_id[site.id].present?
+          # create rules, conditions, and site elements
+          @legacy_goals_by_site_id[site.id].each do |legacy_goal|
+            # legacy bars are keyed off goal ID
 
-      ::Site.find_each do |site|
-        legacy_goals = LegacyGoal.where(site_id: site.id)
+            mobile_bars, non_mobile_bars = @legacy_bars[legacy_goal.id].partition{|bar| bar_is_mobile?(bar) }
 
-        if legacy_goals.present?
-          legacy_goals.each do |legacy_goal|
-            mobile_bars, non_mobile_bars = legacy_goal.bars.partition{|bar| bar_is_mobile?(bar) }
+            if non_mobile_bars.present?
+              rule = ::Rule.new(id: legacy_goal.id, site_id: site.id, name: 'Everyone', priority: legacy_goal.priority, match: Rule::MATCH_ON[:all], created_at: legacy_goal.created_at.utc, updated_at: legacy_goal.updated_at.utc)
 
-            # create the mobile, non-mobile, or both Rules, conditions, site elements
-            if mobile_bars.present? && non_mobile_bars.present?
-              # create a non-mobile rule and give it the legacy_goal ID
-              create_rule(legacy_goal.id, false, site, legacy_goal, non_mobile_bars)
-              # create a mobile rule w/ auto-incrementing ID and add a mobile condition
-              mobile_rules_to_create_later << { site: site, legacy_goal: legacy_goal, mobile_bars: mobile_bars }
-            elsif mobile_bars.present?
-              # create a rule and add the mobile condition
-              create_rule(legacy_goal.id, true, site, legacy_goal, mobile_bars)
-            else
-              # create a rule with the legacy goal ID
-              create_rule(legacy_goal.id, false, site, legacy_goal, non_mobile_bars)
+              # build conditions
+              create_conditions(rule, legacy_goal) # condition added to rule in-memory
+
+              # build site elements
+              create_site_elements(rule, @legacy_bars[legacy_goal.id], legacy_goal)
+
+              @migrated_rules[site.id] ||= []
+              @migrated_rules[site.id] << rule
+            end
+
+            if mobile_bars.present?
+              rule = ::Rule.new(id: nil, site_id: site.id, name: 'Everyone', priority: legacy_goal.priority, match: Rule::MATCH_ON[:all], created_at: legacy_goal.created_at.utc, updated_at: legacy_goal.updated_at.utc)
+
+              create_conditions(rule, legacy_goal) # conditions added to rule in-memory
+              # build a mobile DeviceCondition for mobile bars only
+              rule.conditions.build operand: 'is', value: 'mobile', segment: 'DeviceCondition'
+
+              # build site elements
+              create_site_elements(rule, @legacy_bars[legacy_goal.id], legacy_goal)
+
+              @rules_to_migrate_later[site.id] ||= []
+              @rules_to_migrate_later[site.id] << rule
             end
 
             goal_count += 1
             puts "[#{Time.now}] Migrated #{goal_count} goals to rules" if goal_count % 100 == 0
+
+            if non_mobile_bars.empty? && mobile_bars.empty?
+              Rails.logger.info "WTF: Legacy Goal #{legacy_goal.id} has no bars!"
+              next
+            end
           end
-        else # site has no rules so add them to the collection
-          sites_needing_rules << site
+
+        else # site has no rules so give them a default rule
+          rule = Rule.new(:name => "Everyone",
+                          :match => Rule::MATCH_ON[:all],
+                          :site => site)
+
+          @rules_to_migrate_later[site.id] ||= []
+          @rules_to_migrate_later[site.id] << rule
         end
       end
 
-      # creating mobile rules later to avoid ID collisions
-      mobile_rules_to_create_later.each do |data|
-        create_rule(nil, true, data[:site], data[:legacy_goal], data[:mobile_bars])
+      # check for existing rules
+      @migrated_rules.each do |site_id, rules|
+        rules.each do |rule|
+          if existing = existing_rule(rule)
+            @migrated_rules[rule.site_id].delete(rule)
+            @migrated_rules[rule.site_id] << existing
+          end
+        end
       end
 
       # rename rules if we need to based on the # of conditions
-      ::Site.find_each do |site|
-        site.rules.includes(:conditions).each do |rule|
-          rule_count = 1
-          unless rule.conditions.size.zero?
-            rule.update_attribute :name, "Rule #{rule_count}"
-            rule_count += 1
-          end
-        end
-      end
+      # @migrated_rules.each do |site_id, rules|
+      #   rules.each do |rule|
+      #     rule_count = 1
 
-      # lets avoid ID collisions with legacy goals
-      sites_needing_rules.each{|site| site.create_default_rule }
+          # causing a bunch of SQL count statements...
+          # was hoping it just check in-memory
+          # not positive if this is doing what we want
+      #     unless rule.conditions.size.zero?
+      #       rule.name = "Rule #{rule_count}"
+      #       rule_count += 1
+      #     end
+      #   end
+      # end
+    end
+
+    def create_site_elements(rule, legacy_bars, legacy_goal)
+      legacy_bars.each do |legacy_bar|
+        setting_keys = ["buffer_message", "buffer_url", "collect_names", "link_url", "message_to_tweet", "pinterest_description", "pinterest_full_name", "pinterest_image_url", "pinterest_url", "pinterest_user_url", "twitter_handle", "url", "url_to_like", "url_to_plus_one", "url_to_share", "url_to_tweet", "use_location_for_url"]
+        settings_to_migrate = legacy_goal.data_json.select{|key, value| setting_keys.include?(key) && value.present? }
+
+        rule.site_elements.build id: legacy_bar.legacy_bar_id || legacy_bar.id,
+                                 paused: !legacy_bar.active?,
+                                 element_subtype: determine_element_subtype(legacy_goal),
+                                 created_at: legacy_bar.created_at.utc,
+                                 updated_at: legacy_bar.updated_at.utc,
+                                 target_segment: legacy_bar.target_segment,
+                                 closable: legacy_bar.settings_json['closable'],
+                                 show_border: legacy_bar.settings_json['show_border'],
+                                 background_color: legacy_bar.settings_json['bar_color'],
+                                 border_color: legacy_bar.settings_json['border_color'],
+                                 button_color: legacy_bar.settings_json['button_color'],
+                                 font: legacy_bar.settings_json['font'],
+                                 link_color: legacy_bar.settings_json['link_color'],
+                                 link_style: legacy_bar.settings_json['link_style'],
+                                 link_text: legacy_bar.settings_json['link_text'],
+                                 message: legacy_bar.settings_json['message'],
+                                 size: legacy_bar.settings_json['size'],
+                                 target: legacy_bar.settings_json['target'],
+                                 text_color: legacy_bar.settings_json['text_color'],
+                                 texture: legacy_bar.settings_json['texture'],
+                                 settings: settings_to_migrate,
+                                 contact_list: @migrated_contact_lists[legacy_goal.id]
+      end
     end
 
     # a rule for site which already exists and has same conditions
     def existing_rule(rule)
-      rule.site.rules.find { |r| rule.same_as?(r) && rule != r }
+      @migrated_rules[rule.site_id].find { |r| rules_equal?(rule, r) && rule != r }
+    end
+
+    def rules_equal?(rule_one, rule_two)
+      rule_one_conditions = rule_one.conditions
+      rule_two_conditions = rule_two.conditions
+
+      if rule_one_conditions.size == 0 && rule_two_conditions.size == 0
+        true
+      elsif rule_one_conditions.size != rule_two_conditions.size
+        false
+      elsif rule_one_conditions.size > 1 && rule_one.match != rule_two.match
+        false
+      else
+        rule_one.conditions.all? do |condition|
+          rule_two_conditions.any? do |other_condition|
+            condition.segment == other_condition.segment &&
+              condition.operand == other_condition.operand &&
+              condition.value == other_condition.value
+          end
+        end
+      end
     end
 
     # returns true/false if the bar is targeting mobile users
@@ -272,8 +345,7 @@ class LegacyMigrator
     def migrate_contact_lists
       count = 0
 
-      @legacy_goals = preload(LegacyMigrator::LegacyGoal)
-      @legacy_identity_integrations = preload(LegacyMigrator::LegacyIdentityIntegration, :integrable_id)
+      @migrated_contact_lists = {}
       @legacy_goals.each do |id, legacy_goal|
         next unless legacy_goal.type == "Goals::CollectEmail"
 
@@ -305,7 +377,8 @@ class LegacyMigrator
           )
         end
 
-        ::ContactList.create!(params)
+        contact_list = ::ContactList.new(params)
+        @migrated_contact_lists[contact_list.id] = contact_list
 
         count += 1
         puts "[#{Time.now}] Migrated #{count} contact lists" if count % 100 == 0
@@ -318,7 +391,7 @@ class LegacyMigrator
       @legacy_identities = preload(LegacyMigrator::LegacyIdentity)
       @legacy_identities.each do |id, legacy_id|
         if site = @legacy_sites[legacy_id.site_id]
-          identity = ::Identity.create! id: legacy_id.id,
+          identity = ::Identity.new id: legacy_id.id,
                              site_id: legacy_id.site_id,
                              provider: legacy_id.provider,
                              credentials: legacy_id.credentials,
@@ -336,14 +409,13 @@ class LegacyMigrator
     end
 
     def migrate_site_timezones
-      LegacySite.find_each do |legacy_site|
-        site_id = legacy_site.id
-
-        timezones = LegacyGoal.where(site_id: site_id).map{|goal| timezone_for_goal(goal)}.compact.uniq
+      @legacy_sites.each do |site_id, legacy_site|
+        next unless legacy_goals = @legacy_goals_by_site_id[site_id]
+        timezones = legacy_goals.map{|goal| timezone_for_goal(goal)}.compact.uniq
 
         # update the new Site with the first timezone
         if timezones.length >= 1
-          ::Site.find(site_id).update_attribute :timezone, timezones.first
+          @migrated_sites[site_id].timezone = timezones.first
         end
       end
     end
@@ -404,61 +476,35 @@ class LegacyMigrator
     end
 
     def create_conditions(rule, legacy_goal)
-      new_conditions = []
-
       start_date = legacy_goal.data_json['start_date']
       end_date = legacy_goal.data_json['end_date']
-      include_urls = legacy_goal.data_json['include_urls']
+      include_urls = legacy_goal.data_json['include_urls'] || []
+      include_urls += Array[legacy_goal.data_json['url']].flatten || []
       does_not_include_urls = legacy_goal.data_json['exclude_urls'] # legacy key is exclude_urls, which we map to does_not_include
 
       date_condition = DateCondition.from_params(start_date, end_date)
-      new_conditions << date_condition if date_condition
+
+      # add conditionto in-memory rule
+      if date_condition
+        rule.conditions.build operand: date_condition.operand,
+                              value: date_condition.value,
+                              segment: 'DateCondition'
+      end
 
       if include_urls.present?
         include_urls.each do |include_url|
-          new_conditions << UrlCondition.new(:operand => :includes,
-                                             :value => include_url)
+          rule.conditions.build operand: :includes,
+                                value: include_url,
+                                segment: 'UrlCondition'
         end
       end
 
       if does_not_include_urls.present?
         does_not_include_urls.each do |does_not_include_url|
-          new_conditions << UrlCondition.new(operand: :does_not_include,
-                                             value: does_not_include_url)
+          rule.conditions.build operand: :does_not_include,
+                                value: does_not_include_url,
+                                segment: 'UrlCondition'
         end
-      end
-
-      new_conditions
-    end
-
-    def create_site_elements(legacy_bars, legacy_goal, rule)
-      legacy_bars.map do |legacy_bar|
-        setting_keys = ["buffer_message", "buffer_url", "collect_names", "link_url", "message_to_tweet", "pinterest_description", "pinterest_full_name", "pinterest_image_url", "pinterest_url", "pinterest_user_url", "twitter_handle", "url", "url_to_like", "url_to_plus_one", "url_to_share", "url_to_tweet", "use_location_for_url"]
-        settings_to_migrate = legacy_goal.data_json.select{|key, value| setting_keys.include?(key) && value.present? }
-
-        ::SiteElement.create! id: legacy_bar.legacy_bar_id || legacy_bar.id,
-                      paused: !legacy_bar.active?,
-                      element_subtype: determine_element_subtype(legacy_goal),
-                      created_at: legacy_bar.created_at.utc,
-                      updated_at: legacy_bar.updated_at.utc,
-                      target_segment: legacy_bar.target_segment,
-                      rule_id: rule.id,
-                      closable: legacy_bar.settings_json['closable'],
-                      show_border: legacy_bar.settings_json['show_border'],
-                      background_color: legacy_bar.settings_json['bar_color'],
-                      border_color: legacy_bar.settings_json['border_color'],
-                      button_color: legacy_bar.settings_json['button_color'],
-                      font: legacy_bar.settings_json['font'],
-                      link_color: legacy_bar.settings_json['link_color'],
-                      link_style: legacy_bar.settings_json['link_style'],
-                      link_text: legacy_bar.settings_json['link_text'],
-                      message: legacy_bar.settings_json['message'],
-                      size: legacy_bar.settings_json['size'],
-                      target: legacy_bar.settings_json['target'],
-                      text_color: legacy_bar.settings_json['text_color'],
-                      texture: legacy_bar.settings_json['texture'],
-                      settings: settings_to_migrate,
-                      contact_list: ContactList.where(id: legacy_goal.id).first
       end
     end
 
