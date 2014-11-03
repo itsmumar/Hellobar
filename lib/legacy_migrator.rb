@@ -4,6 +4,8 @@ class LegacyMigrator
   class << self
     def migrate
       ActiveRecord::Base.record_timestamps = false
+      ActiveRecord::Base.connection.execute("SET unique_checks=0")
+      ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
 
       @migrated_memberships = {}
       puts "[#{Time.now}] Start"
@@ -63,15 +65,7 @@ class LegacyMigrator
 
     def optimize_inserts
       Thread.new do
-        ActiveRecord::Base.transaction do
-          # ActiveRecord::Base.connection.execute("SET autocommit=0")
-          ActiveRecord::Base.connection.execute("SET unique_checks=0")
-          ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
-          yield
-          # ActiveRecord::Base.connection.execute("SET autocommit=1")
-          ActiveRecord::Base.connection.execute("SET unique_checks=1")
-          ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
-        end
+        yield
       end
     end
 
