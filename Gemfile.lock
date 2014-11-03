@@ -330,6 +330,7 @@ GEM
       pry (>= 0.9.10, < 0.11.0)
     psych (2.0.5)
     rack (1.5.2)
+    rack-ssl-enforcer (0.2.8)
     rack-test (0.6.2)
       rack (>= 1.0)
     rails (4.1.5)
@@ -532,6 +533,7 @@ DEPENDENCIES
   pry
   pry-nav
   psych (~> 2.0.5)
+  rack-ssl-enforcer (~> 0.2.8)
   rails (= 4.1.5)
   rake_running (~> 0.0.1)!
   rb-readline (~> 0.5.1)

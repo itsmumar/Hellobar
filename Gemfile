@@ -41,6 +41,7 @@ gem "omniauth-mailchimp",        "~> 1.0",   :github => "floomoon/omniauth-mailc
 gem "paranoia",                  "~> 2.0"
 gem "pony",                      "~> 1.8"
 gem "psych",                     "~> 2.0.5"
+gem 'rack-ssl-enforcer',         "~> 0.2.8"
 gem "rails",                     "4.1.5"
 gem "rake_running",              "~> 0.0.1", :github => "colinyoung/rake_running"
 gem "rb-readline",               "~> 0.5.1"
