@@ -11,6 +11,7 @@ class LegacyMigrator
 end
 
 require_relative './legacy_account'
+require_relative './legacy_admin'
 require_relative './legacy_bar'
 require_relative './legacy_goal'
 require_relative './legacy_identity'

@@ -16,6 +16,7 @@ class LegacyMigrator
       migrate_contact_lists
       migrate_goals_to_rules
       migrate_site_timezones
+      migrate_admins
 
       puts "[#{Time.now}] Done reading, writing..."
       threads = []
@@ -401,6 +402,28 @@ class LegacyMigrator
         else
           Rails.logger.info "WTF:Legacy Site: #{legacy_id.site_id} doesnt exist for Identity: #{legacy_id.id}"
         end
+      end
+    end
+
+    def migrate_admins
+      LegacyMigrator::LegacyAdmin.find_each do |legacy_admin|
+        admin = Admin.new(
+          id: legacy_admin.id,
+          email: legacy_admin.email,
+          mobile_phone: legacy_admin.mobile_phone,
+          password_hashed: legacy_admin.password_hashed,
+          mobile_code: legacy_admin.mobile_code,
+          session_token: legacy_admin.session_token,
+          session_access_token: legacy_admin.session_access_token,
+          password_last_reset: legacy_admin.password_last_reset,
+          session_last_active: legacy_admin.session_last_active,
+          mobile_codes_sent: legacy_admin.mobile_codes_sent,
+          login_attempts: legacy_admin.login_attempts,
+          valid_access_tokens: JSON.parse(legacy_admin.valid_access_tokens_json || "{}"),
+          locked: legacy_admin.locked
+        )
+
+        admin.save(validate: false)
       end
     end
 
