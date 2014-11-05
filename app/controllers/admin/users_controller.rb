@@ -13,6 +13,7 @@ class Admin::UsersController < ApplicationController
     end
 
     users += sites.map{|s| s.users}.flatten
+    users.uniq!
 
     @users = Kaminari.paginate_array(users).page(params[:page]).per(24)
   end
