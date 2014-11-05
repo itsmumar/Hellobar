@@ -65,6 +65,7 @@
 
       &.site-element-block
         border-color: $grayLighter
+        @include transition()
 
         td
           padding: 0
@@ -173,6 +174,22 @@
 
             [class*='icon-']
               color: $grayLight
+
+        /*-----------  Deleting State  -----------*/
+
+        &.deleting
+          @include animation(barberpole 5s linear infinite)
+          @include striped-bg(lighten($grayLightest, 5%))
+
+          td
+            opacity: 0.33
+            background-color: transparent
+
+            [class*='icon-']
+              color: $grayLight !important
+
+          .dropdown-wrapper
+            pointer-events: none
 
       /*-----------  Suggestion Rows  -----------*/
 

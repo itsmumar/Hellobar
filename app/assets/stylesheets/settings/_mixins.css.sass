@@ -12,7 +12,7 @@
 
 /*-----------  Decoration  -----------*/
 
-@mixin striped-bg($bg-color: $grayLightest, $darken-amount: 3%, $stripe-color: darken($bg-color, $darken-amount))
+@mixin striped-bg($bg-color: $grayLightest, $darken-amount: 4%, $stripe-color: darken($bg-color, $darken-amount))
   background-size: 40px 40px 
   background-color: $bg-color
   @include background-image(linear-gradient(-45deg, $stripe-color 25%, transparent 25%, transparent 50%, $stripe-color 50%, $stripe-color 75%, transparent 75%, transparent))

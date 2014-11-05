@@ -10,7 +10,27 @@ $ ->
     else if type == '#all'
       $('tr.site-element-block').show()
 
-  # filter the site elements on the page
+  removeRow = (row) ->
+    row.css({height: 0})
+       .children('td, th')
+       .animate({padding: 0})
+       .wrapInner('<div style="overflow: hidden; height: 4rem;"></div>')
+       .children().animate({height: 0}, 500, -> $(@).closest('tr').remove())
+
+  recountDeletionString = (ruleId) ->
+    $rule = $(".rule-block[data-rule-id=#{ruleId}]")
+    $ruleDeleteElem = $rule.find('a.remove-rule')
+    elementCount = parseInt($ruleDeleteElem.find('span').text())
+
+    newString = switch
+      when elementCount > 2 then "<i class='icon-trash'></i>Delete this and <span>#{elementCount-1}</span> bars"
+      when elementCount == 2 then "<i class='icon-trash'></i>Delete this and <span>1</span> bar"
+      else "<i class='icon-trash'></i>Delete this rule"
+
+    $ruleDeleteElem.html(newString)
+
+  #-----------  Filter Site Elemtents  -----------#
+
   $('body').on 'click', 'a.element-filter', (event) ->
     event.preventDefault()
     $anchor = $(this)
@@ -24,7 +44,8 @@ $ ->
     # set the current active anchor
     $anchor.addClass('active')
 
-  # open the rule modal
+  #-----------  Open Rules Modal  -----------#
+
   $('body').on 'click', '.edit-rule', (event) ->
     event.preventDefault()
 
@@ -57,7 +78,8 @@ $ ->
 
     new RuleModal(options).open()
 
-  # toggle pause / unpause
+  #-----------  Toggle Pause/Unpause  -----------#
+
   $('body').on 'click', '.toggle-pause', (event) ->
     event.preventDefault()
 
@@ -86,9 +108,12 @@ $ ->
         # toggle the class and text back to original and render any error
         console.log "Unexepcted error: #{error}"
 
+  #-----------  Delete Rule  -----------#
+
   # send a request to delete the rule itself, let Rails
   # delete the children objects but remove entire
   # DOM object
+
   $('body').on 'click', '.remove-rule', (event) ->
     event.preventDefault()
 
@@ -96,20 +121,22 @@ $ ->
     ruleId = $rule.data('rule-id')
     $siteElements = $rule.siblings("[data-rule-id=#{ruleId}]")
 
-    # assume a successful delete
-    $rule.hide()
-    $siteElements.hide()
+    $siteElements.addClass('deleting')
 
     $.ajax
       contentType: "text/javascript"
       type: 'DELETE'
       url: "/sites/#{window.siteID}/rules/#{ruleId}"
+      success: (xhr, status) ->
+        removeRow($rule)
+        for row in $siteElements
+          removeRow($(row))
       error: (xhr, status, error) ->
-        $rule.show()
-        $siteElements.show()
+        $siteElements.removeClass('deleting')
         console.log "Error removing rule #{ruleId}: #{error}"
 
-  # delete site element
+  #-----------  Delete Site Element  -----------#
+
   $('body').on 'click', '.delete-element', (event) ->
     event.preventDefault()
 
@@ -117,26 +144,21 @@ $ ->
     $row = $element.parents('tr')
     siteID = $element.attr('data-site-id')
     elementId = $element.attr('data-element-id')
-    $row.hide()
-    # REFACTOR
-    # traversing the DOM like this is asinine. There should be an object that we
-    # can just update & query against to tell us how many rules there are.
-    ruleId = $(this).data('rule-id')
-    $rule = $row.siblings(".rule-block[data-rule-id=#{ruleId}]")
-    $elementCount = $rule.find('a.remove-rule span')
-    newValue = parseInt($elementCount.text()) - 1
-    $elementCount.text(newValue) # FIXME: does not handle "bar/s" pluralization when 0 or 1 element
+
+    $row.addClass('deleting')
 
     $.ajax
       contentType: "text/javascript"
       type: 'DELETE'
       url: "/sites/#{siteID}/site_elements/#{elementId}/"
+      success: (xhr, status) ->
+        removeRow($row)
+        recountDeletionString($row.data('rule-id'))
       error: (xhr, status, error) ->
-        $row.show()
-        originalValue = parseInt($count.text()) + 1
-        $elementCount.text(originalValue)
+        $row.removeClass('deleting')
         console.log "Error removing site element: #{error}"
 
-  # render elements for default filter
+  #-----------  Render elements for default filter  -----------#
+
   currentFilter = $('nav.tabs-wrapper .element-filter.active')
   renderElements(currentFilter.attr('href'))
