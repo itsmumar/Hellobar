@@ -13,7 +13,7 @@
   function trackClick(event) {
     var target = event.target || event.srcElement;
 
-    if (typeof(target.href) == 'string' && target.href.indexOf('pinterest.com') >= 0) {
+    if (typeof(target.dataset.pinHref) == 'string') {
       parent.HB.goalPerformed()
     }
   }
