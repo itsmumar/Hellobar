@@ -215,7 +215,7 @@ class LegacyMigrator
               create_conditions(rule, legacy_goal) # condition added to rule in-memory
 
               # build site elements
-              create_site_elements(rule, @legacy_bars[legacy_goal.id], legacy_goal)
+              create_site_elements(rule, non_mobile_bars, legacy_goal)
 
               @migrated_rules[site.id] ||= []
               @migrated_rules[site.id] << rule
@@ -229,7 +229,7 @@ class LegacyMigrator
               rule.conditions.build operand: 'is', value: 'mobile', segment: 'DeviceCondition'
 
               # build site elements
-              create_site_elements(rule, @legacy_bars[legacy_goal.id], legacy_goal)
+              create_site_elements(rule, mobile_bars, legacy_goal)
 
               @rules_to_migrate_later[site.id] ||= []
               @rules_to_migrate_later[site.id] << rule
