@@ -1,0 +1,200 @@
+/*-----------  Admin Setup  -----------*/
+
+$light-grey: #F6F6F6
+$grey: #C6C6C6
+$dark-grey: #848484
+$darkest-grey: #4F4F4F
+
+$orange: #ED5734
+$light-orange: #F7755C
+
+$purple: #9D53BC
+$blue: #45B4D6
+$green: #54D388
+$yellow: #FFC84D
+
+$brand-primary: $orange
+
+$btn-primary-color: #fff !default
+$btn-primary-bg: $brand-primary !default
+$btn-primary-border: darken($btn-primary-bg, 5%) !default
+
+$brand-info: $blue
+$brand-success: $green
+
+@mixin vertical-align
+  position: relative
+  top: 50%
+  -webkit-transform: translateY(-50%)
+  -ms-transform: translateY(-50%)
+  transform: translateY(-50%)
+
+@mixin border-radius($radius)
+  -webkit-border-radius: $radius
+  -moz-border-radius: $radius
+  -ms-border-radius: $radius
+  border-radius: $radius
+
+@mixin border-button($color)
+  color: $color
+  background-color: #fff
+  border-color: $color
+  border-width: 3px
+  font-weight: 700
+
+  &:hover, &:focus, &:active, &.active, .open > &.dropdown-toggle
+    color: darken($color, 10%)
+    border-color: darken($color, 10%)
+
+.btn-border-primary
+  @include border-button($btn-primary-bg)
+
+/*-----------  Admin Dashboard  -----------*/
+
+html, body
+  height: 100%
+  font-family: "Open Sans", sans-serif
+  font-weight: 400
+
+h1
+  font-weight: 400
+  color: $orange
+
+h2, h3
+  font-weight: 600
+  color: $darkest-grey
+
+h3
+  text-transform: uppercase
+  font-size: 1.2em
+  margin-top: 30px
+  color: $dark-grey
+
+p, input, label, li
+  font-size: 12pt
+  font-weight: 400
+  line-height: 18pt
+  color: $darkest-grey
+
+small
+  color: $dark-grey
+
+.center
+  text-align: center
+
+.pull-right
+  text-align: right
+
+.float-right
+  float: right
+
+.site-element-row
+  border: 1px solid $grey
+  border-left: 0
+  padding: 1.2em 0
+  margin: 0 1px 10px
+  clear: both
+
+.site-element-col
+  float: left
+  padding: 0 0.6em
+
+/*-----------  Admin Header  -----------*/
+
+#admin-users-search
+  float: right
+  margin-top: 20px
+
+.header-wrapper
+  background-color: $orange
+  color: #fff
+  border-bottom: 2px solid $light-orange
+  margin-bottom: 10px
+
+  .row > div // bootstrap "col" divs
+    height: 75px
+    z-index: 10
+
+    > ul // top-level nav uls: site selection, logged-in right nav, logged-out right nav
+      margin: 0
+      padding: 0
+
+      > li
+        display: inline-block
+        font-size: 1.2em
+
+        a
+          color: #fff
+
+  ul#sites-dropdown, ul#navigation
+    li
+      color: white
+
+    ul.dropdown-menu
+      background-color: white
+      border-radius: 0
+      border: 1px solid $dark-grey
+      top: 60px
+
+      li
+        font-size: 1em
+        color: $dark-grey
+        padding-right: 0
+
+        a
+          color: $dark-grey
+
+      form.button_to
+        text-align: center
+        margin: 10px 0
+
+  h1#logo
+    @include vertical-align
+    margin: 0
+    background: image-url("hellobar_logo_white.svg") no-repeat
+    background-size: 100%
+    width: 150px
+    height: 42px
+    display: inline-block
+
+  ul#sites-dropdown
+    @include vertical-align
+
+    li
+      padding-right: 25px
+
+      .glyphicon-globe
+        padding-right: 5px
+
+  ul#navigation
+    float: right
+
+    li
+      padding-left: 25px
+
+    li.avatar
+      padding-top: 13px
+
+      img
+        border: 3px solid #fff
+        height: 50px
+
+  ul#navigation.logged-out
+    @include vertical-align
+
+  ul#navigation.admin
+    @include vertical-align
+
+
+.col-bar-message
+  width: 30%
+  padding-left: 1.2em
+
+.col-age,
+.col-edit,
+.col-pause
+  text-align: center
+  width: 8%
+
+.col-age span
+  font-size: 1.2em
