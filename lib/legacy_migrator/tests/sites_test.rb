@@ -33,4 +33,20 @@ describe "migration of legacy sites" do
 
     assert timezone.include?(site.timezone)
   end
+
+  it "migrates the email digest opt-in flag when true" do
+    site = Site.find(2149)
+    legacy_site = LegacyMigrator::LegacySite.find(site.id)
+
+    assert_equal "1", legacy_site.settings_json["email_digest"]
+    assert_equal true, site.opted_in_to_email_digest
+  end
+
+  it "migrates the email digest opt-in flag when false" do
+    site = Site.find(2022)
+    legacy_site = LegacyMigrator::LegacySite.find(site.id)
+
+    assert_equal "0", legacy_site.settings_json["email_digest"]
+    assert_equal false, site.opted_in_to_email_digest
+  end
 end

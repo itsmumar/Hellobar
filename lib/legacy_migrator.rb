@@ -183,7 +183,8 @@ class LegacyMigrator
                             created_at: legacy_site.created_at.utc,
                             updated_at: legacy_site.updated_at.utc,
                             read_key: SecureRandom.uuid,
-                            write_key: SecureRandom.uuid
+                            write_key: SecureRandom.uuid,
+                            opted_in_to_email_digest: legacy_site.settings_json["email_digest"] == "1"
 
           create_user_and_membership legacy_site_id: site.id,
                                      account_id: legacy_site.account_id
