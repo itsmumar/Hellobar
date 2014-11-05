@@ -37,7 +37,15 @@ class Rule < ActiveRecord::Base
   end
 
   def to_sentence
-    conditions.empty? ? "Show this to everyone" : "Show this when #{conditions.map(&:to_sentence).to_sentence}"
+    if conditions.empty?
+      "Show this to everyone" 
+    elsif conditions.size == 1
+      conditions.first.to_sentence
+    elsif conditions.size == 2
+      "#{conditions.first.to_sentence} and 1 other condition"
+    else
+      "#{conditions.first.to_sentence} and #{conditions.size - 1} other conditions"
+    end
   end
 
   # does this rule match the same conditions as some other rule?

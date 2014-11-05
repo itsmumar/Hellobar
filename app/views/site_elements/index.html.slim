@@ -19,8 +19,9 @@ table.rules-wrapper
     - @rules.each do |rule|
       tr.rule-block data-rule-id=rule.id
         th.page-header colspan='9'
-          h4= rule.name
-          span.rule-description= rule.to_sentence
+          .rule-description
+            h4= rule.name
+            = rule.to_sentence
 
           .dropdown-wrapper
             i.icon-settings

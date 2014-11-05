@@ -48,9 +48,16 @@
       /*-----------  Rule Row ----------*/
 
       &.rule-block
+
+        .rule-description
+          max-width: 60em
+          @include ellipsis()
+
         .remove-rule
+      
           span
             margin: 0
+      
             &:before, &:after
               content: " "
 
@@ -71,7 +78,11 @@
 
           &:nth-child(2)
             width: 100%
+            max-width: 23em
             padding-left: 1.67rem
+
+            p
+              width: 100%
 
           &:nth-child(3)
             min-width: 6rem
