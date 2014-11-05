@@ -7,6 +7,9 @@ class LegacyMigrator
       ActiveRecord::Base.connection.execute("SET unique_checks=0")
       ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
 
+      # propagate any exceptions raised in a thread
+      Thread::abort_on_exception = true
+
       @migrated_memberships = {}
       puts "[#{Time.now}] Start"
       load_wp_emails
