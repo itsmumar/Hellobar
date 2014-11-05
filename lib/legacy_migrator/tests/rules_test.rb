@@ -78,8 +78,20 @@ describe "migration of legacy rules to goals" do
     assert_equal "Everyone", rule.name
   end
 
-  it "sets a rule name when the rule has any conditions" do
-    skip "not yet implemented"
+  it "sets an appropriate name when for mobile rules" do
+    rule = Rule.find(650)
+
+    assert_equal 1, rule.conditions.count
+    assert_equal "mobile", rule.conditions.first.value
+    assert rule.name =~ /Device Rule #\d+/
+  end
+
+  it "sets an appropriate name when for rules with any conditions" do
+    rule = Rule.find(376)
+
+    assert_equal 1, rule.conditions.count
+    assert_equal "UrlCondition", rule.conditions.first.segment
+    assert rule.name =~ /Page URL Rule #\d+/
   end
 
   it "merges goals when the conditions are the same" do

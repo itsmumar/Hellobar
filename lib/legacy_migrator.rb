@@ -266,19 +266,17 @@ class LegacyMigrator
       end
 
       # rename rules if we need to based on the # of conditions
-      # @migrated_rules.each do |site_id, rules|
-      #   rules.each do |rule|
-      #     rule_count = 1
-
-          # causing a bunch of SQL count statements...
-          # was hoping it just check in-memory
-          # not positive if this is doing what we want
-      #     unless rule.conditions.size.zero?
-      #       rule.name = "Rule #{rule_count}"
-      #       rule_count += 1
-      #     end
-      #   end
-      # end
+      rule_count = 0
+      [@migrated_rules, @rules_to_migrate_later].each do |rule_group|
+        rule_group.each do |site_id, rules|
+          rules.each do |rule|
+            if rule.conditions.any?
+              rule_count += 1
+              rule.name = "#{rule.conditions.first.segment_data[:name]} Rule ##{rule_count}"
+            end
+          end
+        end
+      end
     end
 
     def create_site_elements(rule, legacy_bars, legacy_goal)
