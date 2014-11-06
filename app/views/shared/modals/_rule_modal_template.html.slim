@@ -91,7 +91,13 @@ script#condition-partial type="text/x-handlebars-template"
         .choice-wrapper.search-term-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.url-choice
-          input.url.value name="rule[conditions_attributes][{{index}}][value]" type="url" value="{{value}}"
+          .url-input-wrapper
+            span or
+            input.url.value name="rule[conditions_attributes][{{index}}][value]" type="url" value="{{value}}"
+            .url-actions
+              a.url-remove –
+              a.url-add +
+
     | {{#if id}}
     input class="condition-id" name="rule[conditions_attributes][{{index}}][id]" value="{{id}}" type="hidden"
     input.destroy name="rule[conditions_attributes][{{index}}][_destroy]" type="hidden" value="false"

@@ -53,15 +53,21 @@
           margin-right: 2%
           @include inline-block()
 
+        /*-----------  Condition Type  -----------*/
+
         .rule_conditions_segment
           width: 22%
 
           select
             text-transform: capitalize
 
+        /*-----------  Condition Operand  -----------*/
+
         .rule_conditions_operand
           width: 22%
 
+        /*-----------  Condition Choices  -----------*/
+      
         .rule_conditions_choices
           width: 52%
           text-align: left
@@ -101,6 +107,53 @@
             color: $gray
             margin-left: 4%
             font-size: 0.85em
+
+          .url-input-wrapper
+            position: relative
+            margin-top: 0.15em
+
+            span
+              top: -0.8em
+              color: $grayLight
+              font-size: 0.9em
+              position: absolute
+              text-align: center
+              text-shadow: 0 0 3px white
+              @include horizontal-align()
+
+            input
+              width: 100% !important
+
+            .url-actions
+              top: 0
+              right: 0.67em
+              position: absolute
+
+              a
+                color: $grayLight
+                font-size: 1.15em
+                font-weight: bold
+                line-height: 200%
+
+              .url-add:hover
+                color: $green
+
+              .url-remove
+                top: -1px
+                position: relative
+                margin-right: 0.33em
+
+                &:hover
+                  color: $red
+
+            &:first-child
+              margin-top: 0
+
+              span,
+              .url-remove
+                display: none
+
+      /*-----------  Condition Actions  -----------*/
 
       .condition-actions
         width: 15%

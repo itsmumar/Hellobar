@@ -36,6 +36,7 @@ class @RuleModal extends Modal
     @_bindSubmit()
     @_bindAddCondition()
     @_bindRemoveCondition()
+    @_bindUrlActions()
 
   _renderContent: ->
     $('body').append(@$modal)
@@ -179,7 +180,8 @@ class @RuleModal extends Modal
       ruleModal._removeCondition($condition)
       ruleModal._toggleNewConditionMessage()
 
-  # renders a condition to the page
+  #-----------  Render a Condition to the Page  -----------#
+
   _addCondition: ($condition) ->
     @$modal.find('.conditions-wrapper').append($condition.prop('outerHTML'))
 
@@ -196,3 +198,24 @@ class @RuleModal extends Modal
       @$modal.find('.no-condition-message').show()
     else
       @$modal.find('.no-condition-message').hide()
+
+  #-----------  Adding / Subtracting URLs  -----------#
+
+  _bindUrlActions: ->
+    @$modal.on 'click', '.url-add', (event) ->
+      event.preventDefault()
+
+      $inputWrapper = $(this).closest('.url-choice')
+      $inputBlock   = $(this).closest('.url-input-wrapper')
+
+      $inputBlock.clone()
+                 .css({opacity: 0, maxHeight: 0})
+                 .appendTo($inputWrapper)
+                 .animate({opacity: 1, maxHeight: '3em'}, 200)
+                 .find('input').val(null)
+
+    @$modal.on 'click', '.url-remove', (event) ->
+      event.preventDefault()
+
+      $(this).closest('.url-input-wrapper')
+             .animate({opacity: 0, maxHeight: 0}, 200, -> $(@).remove())
