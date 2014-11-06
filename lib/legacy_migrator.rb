@@ -271,13 +271,15 @@ class LegacyMigrator
       end
 
       # rename rules if we need to based on the # of conditions
-      rule_count = 0
       [@migrated_rules, @rules_to_migrate_later].each do |rule_group|
         rule_group.each do |site_id, rules|
           rules.each do |rule|
             if rule.conditions.any?
-              rule_count += 1
-              rule.name = "#{rule.conditions.first.segment_data[:name]} Rule ##{rule_count}"
+              site_rules = (@migrated_rules[site_id] || []) + (@rules_to_migrate_later[site_id] || [])
+              segment_name = rule.conditions.first.segment_data[:name]
+              index = site_rules.select{|r| r.conditions.any? && r.conditions.first.segment_data[:name] == segment_name}.index(rule) + 1
+
+              rule.name = "#{segment_name} Rule ##{index}"
             end
           end
         end
