@@ -41,7 +41,8 @@
 
       .condition-ruleset
         width: 85%
-        @include inline-block()
+        margin-top: 3px
+        @include inline-block(top)
 
         input,
         .select-wrapper
@@ -71,7 +72,7 @@
         .rule_conditions_choices
           width: 52%
           text-align: left
-          @include inline-block()
+          @include inline-block(top)
 
           .select-wrapper
             width: 67%
@@ -80,11 +81,11 @@
           input
 
             &.between
-              width: 40%
+              width: 41.75%%
               @include transition(margin-left 0)
 
             &:not(.between)
-              width: 96% !important
+              width: 100% !important
 
             &[type="date"]
               padding-bottom: 0.33em
@@ -113,16 +114,12 @@
             margin-top: 0.15em
 
             span
-              top: -0.8em
+              top: 0
+              left: -2em
               color: $grayLight
               font-size: 0.9em
+              line-height: 250%
               position: absolute
-              text-align: center
-              text-shadow: 0 0 3px white
-              @include horizontal-align()
-
-            input
-              width: 100% !important
 
             .url-actions
               top: 0
@@ -158,7 +155,7 @@
       .condition-actions
         width: 15%
         text-align: right
-        @include inline-block()
+        @include inline-block(top)
 
         a
           width: 1.67em

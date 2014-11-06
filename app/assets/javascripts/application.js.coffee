@@ -10,6 +10,7 @@
 #= require lib/url_params
 #= require jstz-1.0.4.min
 #= require tablesorter
+#= require serialize-json
 
 # Couldn't get 'require_tree .' to ignore the dashboard directory, so I opted to indivdually list the local js assets you needed here
 
