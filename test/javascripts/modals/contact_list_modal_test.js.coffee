@@ -20,8 +20,8 @@ module "ContactListModal.open",
 test "inserts the modal html", ->
   includes find(@modal.$modal).text(), "sync with an email service", "Modal HTML was not rendered"
 
-test "header is \"New Contact List\" when creating a new list", ->
-  includes find(@modal.$modal).text(), "New Contact List", "\"New Contact List\" not found in modal"
+test "header is \"Where do you want to store the emails we collect?\" when creating a new list", ->
+  includes find(@modal.$modal).text(), "Where do you want to store the emails we collect?", "correct message not found in modal"
 
 asyncTest "selecting a provider with no stored identities renders the provider instructions", ->
   expect(2)
