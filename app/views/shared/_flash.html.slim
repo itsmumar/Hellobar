@@ -1,5 +1,5 @@
-- flash.each do |key, error|
-  - next unless error.present?
+- flash.each do |key, message|
+  - next unless message.present?
   .flash-block class=key
-    = error
+    = message
     i.icon-close
