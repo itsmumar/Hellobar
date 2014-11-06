@@ -1,14 +1,13 @@
 $ ->
 
-  renderElements = (type) ->
-    if type == '#active'
-      $('tr.site-element-block:not(.active)').hide()
-      $('tr.site-element-block.active').show()
-    else if type == '#paused'
-      $('tr.site-element-block:not(.paused)').hide()
-      $('tr.site-element-block.paused').show()
-    else if type == '#all'
-      $('tr.site-element-block').show()
+  setFilter = (type) ->
+    typeClass = type.replace('#', 'is-')
+    $('.rules-wrapper tbody').removeClass().addClass(typeClass)
+
+  checkPaused = (rule_id) ->
+    displayBlock = $(".elements-paused[data-rule-id='#{rule_id}']")
+    activeCount = $(".site-element-block.active[data-rule-id='#{rule_id}']").length
+    if activeCount then displayBlock.removeClass('displayed') else displayBlock.addClass('displayed')
 
   removeRow = (row) ->
     row.css({height: 0})
@@ -33,16 +32,14 @@ $ ->
 
   $('body').on 'click', 'a.element-filter', (event) ->
     event.preventDefault()
+
     $anchor = $(this)
-    href = $anchor.attr('href')
+    currentFilter = $anchor.attr('href')
 
-    # unset the current active filter
     $('a.element-filter').removeClass('active')
-
-    renderElements(href)
-
-    # set the current active anchor
     $anchor.addClass('active')
+
+    setFilter(currentFilter)
 
   #-----------  Open Rules Modal  -----------#
 
@@ -90,16 +87,14 @@ $ ->
 
     # assume successful change for faster user feedback
     if $row.hasClass('paused')
-      $row.removeClass('paused')
-      $row.addClass('active')
+      $row.removeClass('paused').addClass('active')
       $element.html('<i class="icon-pause"></i>Pause')
     else
-      $row.addClass('paused')
-      $row.removeClass('active')
+      $row.addClass('paused').removeClass('active')
       $element.html('<i class="icon-play"></i>Unpause')
 
-    currentFilter = $('nav.tabs-wrapper .element-filter.active')
-    renderElements(currentFilter.attr('href'))
+    # check if all are paused
+    checkPaused $row.data('rule-id')
 
     $.ajax
       type: 'PUT'
@@ -147,6 +142,9 @@ $ ->
 
     $row.addClass('deleting')
 
+    # check if all are paused
+    checkPaused $row.data('rule-id')
+
     $.ajax
       contentType: "text/javascript"
       type: 'DELETE'
@@ -158,7 +156,17 @@ $ ->
         $row.removeClass('deleting')
         console.log "Error removing site element: #{error}"
 
+  #-----------  View Paused Bars  -----------#
+
+  $('body').on 'click', '.elements-paused a', (event) ->
+    $('a.element-filter').removeClass('active')
+    $('a.element-filter[href="#paused"]').addClass('active')
+    setFilter('#paused')
+
   #-----------  Render elements for default filter  -----------#
 
-  currentFilter = $('nav.tabs-wrapper .element-filter.active')
-  renderElements(currentFilter.attr('href'))
+  currentFilter = $('nav.tabs-wrapper .element-filter.active').attr('href')
+  setFilter(currentFilter)
+
+  $('.rules-wrapper .rule-block').each (index, rule) -> 
+    checkPaused $(rule).data('rule-id')

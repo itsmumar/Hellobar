@@ -50,7 +50,7 @@
       &.rule-block
 
         .rule-description
-          max-width: 60em
+          max-width: 55em
           @include ellipsis()
 
         .remove-rule
@@ -169,11 +169,17 @@
         &.paused
           background-color: $grayLightest
 
+          td.color-flag
+            background-color: $grayLight !important
+
+          td:nth-child(2) p
+            color: $gray
+
           td:nth-child(4)
             background-color: $grayLightest
 
-            [class*='icon-']
-              color: $grayLight
+          [class*='icon-']
+            color: $grayLight !important
 
         /*-----------  Deleting State  -----------*/
 
@@ -191,6 +197,26 @@
           .dropdown-wrapper
             pointer-events: none
 
+      /*-----------  Paused / Active Counters  -----------*/
+
+      &.elements-paused
+        display: none
+        background-color: $grayLightest
+
+        td
+          color: $gray
+          font-size: 0.8em
+          padding: 0.5em 1.15em
+          @include antialiased()
+
+          a
+            color: $blue
+            margin-left: 0.5em
+            text-decoration: underline
+
+            &:hover
+              color: $blueLight
+
       /*-----------  Suggestion Rows  -----------*/
 
       .suggestion-block
@@ -198,3 +224,18 @@
         letter-spacing: 0.033em
         border-left-style: dashed
         border-right-style: dashed
+
+    /*-----------  Active / Paused Filters  -----------*/
+
+    .is-active
+
+      .site-element-block.paused
+        display: none
+
+      .elements-paused.displayed
+        display: table-row
+
+    .is-paused
+
+      .site-element-block.active
+        display: none

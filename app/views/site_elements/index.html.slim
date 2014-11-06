@@ -42,6 +42,12 @@ table.rules-wrapper
       - rule.site_elements.each do |site_element|
         = render "site_elements/site_element", { :site_element => site_element, :rule => rule }
 
+      tr.elements-paused data-rule-id=rule.id
+        td colspan='9' 
+          | Everything is currently paused.
+          a 
+            | [view paused bars]
+
       tr data-rule-id=rule.id
         td.temporary-block.suggestion-block colspan='9'
           - if rule.site_elements.empty?
