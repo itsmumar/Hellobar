@@ -49,4 +49,8 @@ describe "migration of legacy sites" do
     assert_equal "0", legacy_site.settings_json["email_digest"]
     assert_equal false, site.opted_in_to_email_digest
   end
+
+  it "migrates all sites" do
+    assert_equal LegacyMigrator::LegacySite.count, Site.count
+  end
 end
