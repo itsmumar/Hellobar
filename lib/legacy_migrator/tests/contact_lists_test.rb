@@ -23,4 +23,19 @@ describe "migration of goals to contact lists" do
     assert_equal legacy_id.credentials, identity.credentials
     assert_equal legacy_id.extra, identity.extra
   end
+
+  it "names contact lists based on ordinality" do
+    site = Site.find(1987)
+    names = site.contact_lists.map(&:name)
+
+    assert_equal ["My Contacts", "My Contacts 2", "My Contacts 3"].sort, names.sort
+  end
+
+  it "uses remote name for contact list if available" do
+    list = ContactList.find(469)
+    goal = LegacyMigrator::LegacyGoal.find(list.id)
+    integration = LegacyMigrator::LegacyIdentityIntegration.where(integrable_id: goal.id).first
+
+    assert_equal integration.data["remote_name"], list.name
+  end
 end

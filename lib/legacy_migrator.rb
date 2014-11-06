@@ -352,6 +352,7 @@ class LegacyMigrator
       count = 0
 
       @migrated_contact_lists = {}
+      @migrated_contact_lists_by_site = {}
       @legacy_goals.each do |id, legacy_goal|
         next unless legacy_goal.type == "Goals::CollectEmail"
 
@@ -363,7 +364,6 @@ class LegacyMigrator
         params = {
           id: legacy_goal.id,
           site_id: legacy_goal.site_id,
-          name: "List #{legacy_goal.id}",
           created_at: legacy_goal.created_at.utc,
           updated_at: legacy_goal.updated_at.utc
         }
@@ -385,9 +385,18 @@ class LegacyMigrator
 
         contact_list = ::ContactList.new(params)
         @migrated_contact_lists[contact_list.id] = contact_list
+        @migrated_contact_lists_by_site[contact_list.site_id] ||= []
+        @migrated_contact_lists_by_site[contact_list.site_id] << contact_list
 
         count += 1
         puts "[#{Time.now}] Migrated #{count} contact lists" if count % 100 == 0
+      end
+
+      @migrated_contact_lists.each do |id, list|
+        if list.name.nil?
+          index = @migrated_contact_lists_by_site[list.site_id].index(list)
+          list.name = index == 0 ? "My Contacts" : "My Contacts #{index + 1}"
+        end
       end
     end
 
