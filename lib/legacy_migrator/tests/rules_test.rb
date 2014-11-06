@@ -103,4 +103,15 @@ describe "migration of legacy rules to goals" do
 
     assert_equal 1, Rule.where(id: legacy_site.goals.map(&:id)).count
   end
+
+  it "merges goals that have no conditions" do
+    site = Site.find(2012)
+    assert_equal 1, site.rules.count
+    assert_equal "Everyone", site.rules.first.name
+  end
+
+  it "names rules based on their ordinality within rules of that type belonging to the same site" do
+    site = Site.find(2155)
+    assert_equal ["Everyone", "Device Rule #1"], site.rules.map(&:name)
+  end
 end

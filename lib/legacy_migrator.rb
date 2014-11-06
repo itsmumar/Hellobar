@@ -258,12 +258,14 @@ class LegacyMigrator
       # check for duplicate rules
       @migrated_rules.each do |site_id, rules|
         rules.each do |rule|
-          if existing = existing_rule(rule)
-            rule.site_elements.each do |element|
-              existing.site_elements << element
+          next unless @migrated_rules[rule.site_id].include?(rule)
+
+          existing_rules(rule).each do |existing|
+            existing.site_elements.each do |element|
+              rule.site_elements << element
             end
 
-            @migrated_rules[rule.site_id].delete(rule)
+            @migrated_rules[rule.site_id].delete(existing)
           end
         end
       end
@@ -313,8 +315,8 @@ class LegacyMigrator
     end
 
     # a rule for site which already exists and has same conditions
-    def existing_rule(rule)
-      @migrated_rules[rule.site_id].find { |r| rules_equal?(rule, r) && rule != r }
+    def existing_rules(rule)
+      @migrated_rules[rule.site_id].select { |r| rules_equal?(rule, r) && rule != r }
     end
 
     def rules_equal?(rule_one, rule_two)
