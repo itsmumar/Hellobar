@@ -166,7 +166,7 @@ $ ->
   #-----------  Render elements for default filter  -----------#
 
   currentFilter = $('nav.tabs-wrapper .element-filter.active').attr('href')
-  setFilter(currentFilter)
+  setFilter(currentFilter) if currentFilter
 
   $('.rules-wrapper .rule-block').each (index, rule) -> 
     checkPaused $(rule).data('rule-id')
