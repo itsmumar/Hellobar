@@ -90,17 +90,21 @@
         font-size: 1.1em
         font-weight: bold
 
-      .package-price.yearly
-        opacity: 0
-        @include transition()
+      .package-price
+
+        &.monthly
+          display: block
+
+        &.yearly
+          display: none
 
       &.yearly
 
         .package-price.monthly
-          text-decoration: line-through
+          display: none
 
         .package-price.yearly
-          opacity: 1
+          display: block
 
     .package-features
       border-width: 1px 1px 1px 0
