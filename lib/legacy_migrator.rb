@@ -255,12 +255,15 @@ class LegacyMigrator
         end
       end
 
-      # check for existing rules
+      # check for duplicate rules
       @migrated_rules.each do |site_id, rules|
         rules.each do |rule|
           if existing = existing_rule(rule)
+            rule.site_elements.each do |element|
+              existing.site_elements << element
+            end
+
             @migrated_rules[rule.site_id].delete(rule)
-            @migrated_rules[rule.site_id] << existing
           end
         end
       end
