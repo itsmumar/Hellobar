@@ -528,19 +528,15 @@ class LegacyMigrator
       end
 
       if include_urls.present?
-        include_urls.each do |include_url|
-          rule.conditions.build operand: :includes,
-                                value: include_url,
-                                segment: 'UrlCondition'
-        end
+        rule.conditions.build operand: :includes,
+                              value: include_urls,
+                              segment: 'UrlCondition'
       end
 
       if does_not_include_urls.present?
-        does_not_include_urls.each do |does_not_include_url|
-          rule.conditions.build operand: :does_not_include,
-                                value: does_not_include_url,
-                                segment: 'UrlCondition'
-        end
+        rule.conditions.build operand: :does_not_include,
+                              value: does_not_include_urls,
+                              segment: 'UrlCondition'
       end
     end
 

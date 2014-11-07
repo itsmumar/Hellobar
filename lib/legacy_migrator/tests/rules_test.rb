@@ -55,7 +55,7 @@ describe "migration of legacy rules to goals" do
 
     assert_equal "UrlCondition", condition.segment
     assert_equal "includes", condition.operand
-    assert_equal goal.data_json["include_urls"].first, condition.value
+    assert_equal goal.data_json["include_urls"], condition.value
   end
 
   it "creates a UrlRule if exclude_urls is specified on goal" do
@@ -67,7 +67,7 @@ describe "migration of legacy rules to goals" do
 
     assert_equal "UrlCondition", condition.segment
     assert_equal "does_not_include", condition.operand
-    assert_equal goal.data_json["exclude_urls"].first, condition.value
+    assert_equal goal.data_json["exclude_urls"], condition.value
   end
 
   it "sets the rule name to Everyone when there are zero conditions for a rule" do
@@ -113,5 +113,11 @@ describe "migration of legacy rules to goals" do
   it "names rules based on their ordinality within rules of that type belonging to the same site" do
     site = Site.find(2155)
     assert_equal ["Everyone", "Device Rule #1"], site.rules.map(&:name)
+  end
+
+  it "creates all valid conditions" do
+    Condition.all.each do |condition|
+      assert condition.valid?
+    end
   end
 end
