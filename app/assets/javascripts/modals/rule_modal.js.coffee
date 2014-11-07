@@ -117,20 +117,12 @@ class @RuleModal extends Modal
     'SearchTermCondition': '.search-term-choice'
     'UrlCondition': '.url-choice'
 
-  _renderAlert: (content) ->
-    template = Handlebars.compile($('script#alert-template').html())
-    alert = template({type: 'error', content: content})
-    @$modal.find('.modal-block').prepend(alert)
-
-  _removeAlerts: ->
-    @$modal.find('.alert').remove()
-
   _bindSubmit: ->
     modal = this
 
     @$modal.find('form').on 'submit', (event) ->
       event.preventDefault()
-      modal._removeAlerts()
+      modal._clearErrors()
   
       $.ajax
         dataType: 'json'
@@ -143,16 +135,15 @@ class @RuleModal extends Modal
         error: (xhr, status, error) ->
           console.log "Something went wrong: #{error}"
 
-          content = ''
+          content = []
 
           if xhr.responseJSON
             for key in Object.keys(xhr.responseJSON)
-              content += "#{key} #{xhr.responseJSON[key].join()}"
-              content += "<br />"
+              content.push("#{key} #{xhr.responseJSON[key].join()}")
           else
-            content = error
+            content.push(error)
 
-          modal._renderAlert(content)
+          modal._displayErrors(content)
 
   _bindAddCondition: ->
     @$modal.on 'click', '.condition-add', (event) =>
