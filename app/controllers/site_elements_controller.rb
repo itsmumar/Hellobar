@@ -54,11 +54,13 @@ class SiteElementsController < ApplicationController
   def destroy
     @site_element.destroy
     @site.generate_script
-    flash[:success] = "Your bar was successfully deleted."
 
     respond_to do |format|
       format.js { head :ok }
-      format.html { redirect_to site_site_elements_path(:site_id => @site) }
+      format.html do
+        flash[:success] = "Your bar was successfully deleted."
+        redirect_to site_site_elements_path(:site_id => @site)
+      end
     end
   end
 
