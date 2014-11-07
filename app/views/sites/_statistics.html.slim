@@ -3,7 +3,7 @@
   table.activity-wrapper
     - @recent_elements.each do |element|
       tr class="type-#{element.short_subtype}"
-        td.color-flag
+        td.color-flag style="background-color: ##{element.background_color}"
         td= recent_activity_message(element)
 
 - else
