@@ -111,15 +111,11 @@ private
   end
 
   def condition_settings(condition)
-    result = {}
     {
-      segment: :segment_key,
-      operand: nil,
-      value: nil
-    }.each do |key, method|
-      result[key] = condition.send(method || key)
-    end
-    return result
+      segment: condition.segment_key,
+      operand: condition.operand,
+      value: condition.value
+    }
   end
 
   def content_template(element_subtype)
