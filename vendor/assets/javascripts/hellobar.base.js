@@ -1008,11 +1008,18 @@ var _HB = {
     if ( typeof(values) != "object" || typeof(values.length) != "number" )
       values = [values];
 
+    // Sanitize all values
+    currentValue = HB.sanitizeConditionValue(condition.segment, currentValue);
+    var i;
+    for(i=0;i<values.length;i++)
+    {
+      values[i] = HB.sanitizeConditionValue(condition.segment, values[i]);
+    }
     // For negative/excluding operands we use "and" logic:
     if ( condition.operand.match(/not/) )
     {
       // Must be true for all so a single false means it is false for whole condition
-      for(var i=0;i<values.length;i++)
+      for(i=0;i<values.length;i++)
       {
         if (!HB.applyOperand(currentValue, condition.operand, values[i]))
           return false;
@@ -1023,13 +1030,20 @@ var _HB = {
     {
       // For including/positive operands we use "or" logic
       // Must be true for just one, so a single true is true for condition
-      for(var i=0;i<values.length;i++)
+      for(i=0;i<values.length;i++)
       {
         if (HB.applyOperand(currentValue, condition.operand, values[i]))
           return true;
       }
       return false;
     }
+  },
+
+  sanitizeConditionValue: function(segment, value)
+  {
+    if ( segment == "pu" )
+      value = HB.n(value, true);
+    return value;
   },
 
   // Gets the current segment value that will be compared to the conditions
