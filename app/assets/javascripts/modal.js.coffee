@@ -48,7 +48,6 @@ class @Modal
       @_clearErrors()
 
   _displayErrors: (errors) ->
-    console.log errors
     return unless errors.length > 0
     $('.modal-wrapper').animate({ scrollTop: 0 })
     errorText = errors.reduce (a, b) -> "#{a}<br>#{b}"
