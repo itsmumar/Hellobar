@@ -23,6 +23,9 @@ nav.tabs-wrapper
 
   = form_for @user, :url => user_path, :html => {:class => 'password-form'} do |f|
 
+    = f.label :current_password, "Current Password"
+    = f.password_field :current_password, autocomplete: "off"
+
     = f.label :password, "New Password"
     = f.password_field :password
 
