@@ -39,6 +39,6 @@
           - else
             = content_tag 'a', 'Payment Info', class: "show-payment-modal"
           - if impersonated_user
-            = active_link_to "Stop Impersonation", admin_unimpersonate_user_path, :method => :delete
+            = active_link_to "Stop Impersonating", admin_unimpersonate_user_path, :method => :delete
           - else
             = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
