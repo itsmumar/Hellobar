@@ -43,6 +43,8 @@ class @RuleModal extends Modal
 
     ruleModal = this
 
+    console.log 'k', @ruleData
+
     # render all of the conditions
     for conditionData, index in @ruleData.conditions
       $condition = ruleModal.buildCondition(conditionData, index)

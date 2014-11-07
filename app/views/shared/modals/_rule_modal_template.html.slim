@@ -91,12 +91,23 @@ script#condition-partial type="text/x-handlebars-template"
         .choice-wrapper.search-term-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.url-choice
+          | {{#if value}}
+          | {{#each value}}
+          .url-input-wrapper
+            span or
+            input.url.value name="rule[conditions_attributes][{{../index}}][value][]" type="url" value="{{this}}"
+            .url-actions
+              a.url-remove –
+              a.url-add +
+          | {{/each}}
+          | {{else}}
           .url-input-wrapper
             span or
             input.url.value name="rule[conditions_attributes][{{index}}][value][]" type="url" value="{{value}}"
             .url-actions
               a.url-remove –
               a.url-add +
+          | {{/if}}
 
     | {{#if id}}
     input class="condition-id" name="rule[conditions_attributes][{{index}}][id]" value="{{id}}" type="hidden"
