@@ -1002,8 +1002,34 @@ var _HB = {
     // Need to get the current value
     var currentValue = HB.getSegmentValue(condition.segment);
     // Now we need to apply the operands
-    var returnValue= HB.applyOperand(currentValue, condition.operand, condition.value);
-    return returnValue;
+    // If it's an array of values this is true if the operand is true for any of the values
+    var values = condition.value;
+    // Put the value in an array if it is not an array
+    if ( typeof(values) != "object" || typeof(values.length) != "number" )
+      values = [values];
+
+    // For negative/excluding operands we use "and" logic:
+    if ( condition.operand.match(/not/) )
+    {
+      // Must be true for all so a single false means it is false for whole condition
+      for(var i=0;i<values.length;i++)
+      {
+        if (!HB.applyOperand(currentValue, condition.operand, values[i]))
+          return false;
+      }
+      return true;
+    }
+    else
+    {
+      // For including/positive operands we use "or" logic
+      // Must be true for just one, so a single true is true for condition
+      for(var i=0;i<values.length;i++)
+      {
+        if (HB.applyOperand(currentValue, condition.operand, values[i]))
+          return true;
+      }
+      return false;
+    }
   },
 
   // Gets the current segment value that will be compared to the conditions
