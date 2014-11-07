@@ -67,10 +67,10 @@ class @RuleModal extends Modal
         operand: $condition.find('.condition-operand').val()
         value: value
 
-      if conditionData.segment != 'UrlCondition'
-        # replace the markup of the condition based on new data
-        $updatedCondition = ruleModal.buildCondition(conditionData, conditionData.index)
-        $condition.html($updatedCondition.html())
+      $updatedCondition = ruleModal.buildCondition(conditionData, conditionData.index)
+
+      # replace the markup of the condition based on new data
+      $condition.html($updatedCondition.html())
 
   _updateConditionMarkup: ($condition, conditionData) ->
     @_renderOperands($condition, conditionData)
