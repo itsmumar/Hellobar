@@ -1,4 +1,6 @@
 class UrlCondition < Condition
+  before_validation :clear_blank_values
+
   validates :operand, presence: true,
                       inclusion: {
                         in: %w{ is is_not includes does_not_include }
@@ -12,5 +14,11 @@ class UrlCondition < Condition
     else
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first}"
     end
+  end
+
+  private
+
+  def clear_blank_values
+    self.value = value.select{|v| !v.blank?}
   end
 end
