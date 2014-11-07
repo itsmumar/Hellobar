@@ -3,6 +3,7 @@
 #= require zeropad.jquery
 #= require jstz-1.0.4.min
 #= require underscore
+#= require moment
 
 #= require colorpicker
 #= require color_thief
