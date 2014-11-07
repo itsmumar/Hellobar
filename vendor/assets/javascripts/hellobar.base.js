@@ -178,6 +178,10 @@ var _HB = {
   // Also sorts the params alphabetically
   n: function(url, pathOnly)
   {
+    // Add trailing slash when we think it's needed
+    if ( url.match(/^https?:\/\/[^\/]*$/i) || url.match(/^[^\/]*\.(com|edu|gov|us|net|io)$/i))
+      url += "/";
+
     // Get rid of things that make no difference in the URL (such as protocol and anchor)
     url = (url+"").toLowerCase().replace(/https?:\/\//,"").replace(/^www\./,"").replace(/\#.*/,"");
     // Strip the host if pathOnly
@@ -1004,6 +1008,11 @@ var _HB = {
     // Now we need to apply the operands
     // If it's an array of values this is true if the operand is true for any of the values
     var values = condition.value;
+
+    // We don't want to mess with the array for the between operand
+    if ( condition.operand == "between" )
+      return HB.applyOperand(currentValue, condition.operand, values);
+
     // Put the value in an array if it is not an array
     if ( typeof(values) != "object" || typeof(values.length) != "number" )
       values = [values];
@@ -1164,7 +1173,7 @@ var _HB = {
       }
     }
     // Set the page URL
-    HB.setVisitorData("pu", (document.location+"").split("#")[0]);
+    HB.setVisitorData("pu", HB.n(document.location+"", true));
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
     // Detect the device
