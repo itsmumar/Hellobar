@@ -41,8 +41,6 @@ class Condition < ActiveRecord::Base
   def to_sentence
     if operand.to_s == 'between'
       "#{segment_data[:name]} is between #{value.first} and #{value.last}"
-    elsif value.is_a?(Array)
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.to_sentence(two_words_connector: " or ", last_word_connector: ", or ")}"
     else
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value}"
     end
