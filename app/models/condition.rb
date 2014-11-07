@@ -41,6 +41,8 @@ class Condition < ActiveRecord::Base
   def to_sentence
     if operand.to_s == 'between'
       "#{segment_data[:name]} is between #{value.first} and #{value.last}"
+    elsif value.is_a?(Array)
+      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.to_sentence(two_words_connector: " or ", last_word_connector: ", or ")}"
     else
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value}"
     end
@@ -59,6 +61,8 @@ class Condition < ActiveRecord::Base
   def value_is_valid
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
+    elsif segment == 'UrlCondition'
+      errors.add(:value, 'is not a valid value') unless value.kind_of?(Array)
     else
       errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
     end

@@ -16,12 +16,12 @@ date_after:
 url_includes:
   segment: UrlCondition
   operand: includes
-  value: /asdf
+  value: ["/asdf"]
 
 url_does_not_include:
   segment: UrlCondition
   operand: does_not_include
-  value: /asdf
+  value: ["/asdf"]
 
 zombo_mobile:
   rule: zombo_mobile

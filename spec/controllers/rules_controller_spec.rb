@@ -201,7 +201,7 @@ describe RulesController do
             "rule_id" => rule.id,
             "segment" => "UrlCondition",
             "operand" => "includes",
-            "value" => "/asdf"
+            "value" => ["/asdf"]
           }])
         end
       end

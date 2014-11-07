@@ -7,10 +7,10 @@ describe Rule, "#to_sentence" do
 
   it "concatenates conditions when present" do
     rule = Rule.new
-    rule.conditions << UrlCondition.new(operand: :includes, value: "zombo.com")
+    rule.conditions << UrlCondition.new(operand: :includes, value: ["zombo.com"])
     rule.to_sentence.should == "Page URL includes zombo.com"
 
-    rule.conditions << UrlCondition.new(operand: :does_not_include, value: "zombo.com/foo")
+    rule.conditions << UrlCondition.new(operand: :does_not_include, value: ["zombo.com/foo"])
     rule.to_sentence.should == "Page URL includes zombo.com and 1 other condition"
 
     rule.conditions << DateCondition.from_params("7/6", "")
@@ -53,18 +53,24 @@ describe Rule, 'accepting nested condition attributes' do
     expect(condition.value).to eq [yesterday, tomorrow]
   end
 
-  it 'builds out a URL condition with a string' do
+  it 'builds out a URL condition with an include URLs' do
     condition = conditions(:url_includes)
-    expect(condition.value.class).to eq(String)
-    expect(condition.value).to eq("/asdf")
+    expect(condition.value.class).to eq(Array)
+    expect(condition.value).to eq(["/asdf"])
     expect(condition.to_sentence).to eq "Page URL includes /asdf"
   end
 
-  it 'builds out a URL condition with a string' do
+  it 'builds out a URL condition with a "does not include" URL' do
     condition = conditions(:url_does_not_include)
-    expect(condition.value.class).to eq(String)
-    expect(condition.value).to eq("/asdf")
+    expect(condition.value.class).to eq(Array)
+    expect(condition.value).to eq(["/asdf"])
     expect(condition.to_sentence).to eq "Page URL does not include /asdf"
+  end
+
+  it 'builds out a URL condition with a multiple URLs' do
+    condition = conditions(:url_includes)
+    condition.value = ["/foo", "/bar"]
+    expect(condition.to_sentence).to eq "Page URL includes /foo or /bar"
   end
 end
 
