@@ -64,7 +64,7 @@ $ ->
       successCallback: ->
         $ruleContent = $(".rule-block[data-rule-id=#{@id}]")
         $ruleContent.find("h4").text(@name)
-        $ruleContent.find("span.rule-description").text(@description)
+        $ruleContent.find(".rule-description span").text(@description)
 
         ruleIds = window.rules.map (rule) -> rule.id
 
