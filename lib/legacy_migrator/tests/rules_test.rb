@@ -54,7 +54,7 @@ describe "migration of legacy rules to goals" do
     assert goal.data_json["include_urls"].present?
 
     assert_equal "UrlCondition", condition.segment
-    assert_equal "includes", condition.operand
+    assert_equal "is", condition.operand
     assert_equal goal.data_json["include_urls"], condition.value
   end
 
@@ -66,7 +66,7 @@ describe "migration of legacy rules to goals" do
     assert goal.data_json["exclude_urls"].present?
 
     assert_equal "UrlCondition", condition.segment
-    assert_equal "does_not_include", condition.operand
+    assert_equal "is_not", condition.operand
     assert_equal goal.data_json["exclude_urls"], condition.value
   end
 
