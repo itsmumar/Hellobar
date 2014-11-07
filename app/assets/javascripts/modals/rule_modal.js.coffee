@@ -132,29 +132,27 @@ class @RuleModal extends Modal
       event.preventDefault()
       modal._removeAlerts()
   
-      console.log $(this).serializeJSON()
+      $.ajax
+        dataType: 'json'
+        url: @action
+        type: @method
+        data: $(this).serialize()
+        success: (data, status, xhr) ->
+          modal.options.successCallback.call(data) if modal.options.successCallback
+          modal.close()
+        error: (xhr, status, error) ->
+          console.log "Something went wrong: #{error}"
 
-    #   $.ajax
-    #     dataType: 'json'
-    #     url: @action
-    #     type: @method
-    #     data: $(this).serialize()
-    #     success: (data, status, xhr) ->
-    #       modal.options.successCallback.call(data) if modal.options.successCallback
-    #       modal.close()
-    #     error: (xhr, status, error) ->
-    #       console.log "Something went wrong: #{error}"
+          content = ''
 
-    #       content = ''
+          if xhr.responseJSON
+            for key in Object.keys(xhr.responseJSON)
+              content += "#{key} #{xhr.responseJSON[key].join()}"
+              content += "<br />"
+          else
+            content = error
 
-    #       if xhr.responseJSON
-    #         for key in Object.keys(xhr.responseJSON)
-    #           content += "#{key} #{xhr.responseJSON[key].join()}"
-    #           content += "<br />"
-    #       else
-    #         content = error
-
-    #       modal._renderAlert(content)
+          modal._renderAlert(content)
 
   _bindAddCondition: ->
     @$modal.on 'click', '.condition-add', (event) =>
