@@ -118,21 +118,28 @@ class @RuleModal extends Modal
     'UrlCondition': '.url-choice'
 
   _bindSubmit: ->
+    @_unbindSubmit() # clear any existing event bindings to make sure we only have one at a time
     modal = this
 
-    @$modal.find('form').on 'submit', (event) ->
+    @$modal.find("a.submit").on 'click', (event) =>
+      @_unbindSubmit()
       event.preventDefault()
       modal._clearErrors()
-  
+
+      $form = @$modal.find("form")
+      $form.find("a.submit").addClass("cancel")
+      window.form = $form
+
       $.ajax
         dataType: 'json'
-        url: @action
-        type: @method
-        data: $(this).serialize()
+        url: $form.attr("action")
+        type: $form.attr("method")
+        data: $form.serialize()
         success: (data, status, xhr) ->
           modal.options.successCallback.call(data) if modal.options.successCallback
           modal.close()
         error: (xhr, status, error) ->
+          $form.find("a.submit").removeClass("cancel")
           console.log "Something went wrong: #{error}"
 
           content = []
@@ -144,6 +151,9 @@ class @RuleModal extends Modal
             content.push(error)
 
           modal._displayErrors(content)
+
+  _unbindSubmit: ->
+    @$modal.find('a.submit').off('click')
 
   _bindAddCondition: ->
     @$modal.on 'click', '.condition-add', (event) =>
