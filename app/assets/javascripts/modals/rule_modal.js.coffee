@@ -53,17 +53,20 @@ class @RuleModal extends Modal
     @$modal.on 'change', '.rule_conditions_segment, .rule_conditions_operand', ->
       $this = $(this)
       $condition = $this.parents('.condition-block:first')
+      segment = $condition.find('.condition-segment').val()
 
       # reset the value if the segment changes
       if $this.hasClass('rule_conditions_segment')
         value = null
+      else if segment == "UrlCondition"
+        value = $.map($condition.find('.value:visible'), (field, i) -> $(field).val())
       else
         value = $condition.find('.value:visible').val()
 
       conditionData =
         id: $condition.find('.condition-id').val()
         index: $condition.data('condition-index')
-        segment: $condition.find('.condition-segment').val()
+        segment: segment
         operand: $condition.find('.condition-operand').val()
         value: value
 
