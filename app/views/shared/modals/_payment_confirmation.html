@@ -2,13 +2,19 @@
   <div class="modal-wrapper">
     <div class="modal-block">
       <header>
-        <h5>Success</h5>
+        {{#if isUpgrade}}
+          <h5>Congratulations on upgrading {{siteName}} to the {{planName}} plan!</h5>
+        {{else}}
+          <h5>{{siteName}} is now on the {{planName}} plan</h5>
+        {{/if}}
       </header>
 
       <div class="payment-confirmation-modal">
-        <p>Your site is now on the {{planName}} plan{{billingSchedule}}.</p>
         {{#if isPaidPlan}}
           <p>{{chargeDescription}}</p>
+          <p>{{billingSchedule}}</p>
+        {{else}}
+          <p>You will no longer have access to your {{oldPlanName}} features.</p>
         {{/if}}
       </div>
 

@@ -1,11 +1,22 @@
 module Subscribable
 
   # returns object to render and status code
-  def subscription_bill_and_status(site, payment_method, billing_params)
+  def subscription_bill_and_status(site, payment_method, billing_params, old_subscription)
     success, bill = update_subscription(site, payment_method, billing_params)
 
     if success
-      { bill: bill, site: SiteSerializer.new(site.reload), status: :ok }
+      site.reload
+
+      is_upgrade = if old_subscription
+        Subscription::Comparison.new(old_subscription, site.current_subscription).upgrade?
+      else
+       true
+      end
+
+      response = { bill: bill, site: SiteSerializer.new(site), is_upgrade: is_upgrade, status: :ok }
+      response[:old_subscription] = SubscriptionSerializer.new(old_subscription) if old_subscription
+
+      response
     else
       { errors: bill.errors, status: :unprocessable_entity }
     end

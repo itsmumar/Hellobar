@@ -25,25 +25,34 @@ class @PaymentConfirmationModal extends Modal
 
   _templateOptions: ->
     subscription = @options.data.site.current_subscription
+    old_subscription = @options.data.old_subscription
     bill = @options.data.bill
 
+    chargeDescription = "Your card ending in #{subscription.payment_method_number} "
+
+    if bill && bill.amount > 0 && bill.status == "paid"
+      chargeDescription += "has been charged $#{parseInt(bill.amount).toFixed(2)}."
+    else
+      chargeDescription += "has not been charged."
+
     if subscription.schedule == "yearly" && subscription.yearly_amount > 0
-      billingSchedule = "; your card ending in #{subscription.payment_method_number} will be billed $#{parseInt(subscription.yearly_amount).toFixed(2)} per year"
+      billingSchedule = "You will be billed $#{parseInt(subscription.yearly_amount).toFixed(2)} every year."
     else if subscription.schedule == "monthly" && subscription.monthly_amount > 0
-      billingSchedule = "; your card ending in #{subscription.payment_method_number} will be billed $#{parseInt(subscription.monthly_amount).toFixed(2)} per month"
+      billingSchedule = "You will be billed $#{parseInt(subscription.monthly_amount).toFixed(2)} every month."
     else
       billingSchedule = ""
 
-    if bill && bill.amount > 0 && bill.status == "paid"
-      chargeDescription = "Your card has been charged $#{parseInt(bill.amount).toFixed(2)}."
-      chargeDescription += " Your next bill is due on #{moment(bill.end_date).format("MMM Do, YYYY")}." if bill.end_date
+    if bill.amount > 0 && bill.status == "paid"
+      billingSchedule += " Your next bill will be on #{moment(bill.end_date).format("MMM Do, YYYY")}." if bill.end_date
     else
-      chargeDescription = "Your card has not been charged at this time."
-      chargeDescription += " Your next bill is due on #{moment(bill.bill_at).format("MMM Do, YYYY")}." if bill.status == "pending"
+      billingSchedule += " Your next bill will be on #{moment(bill.bill_at).format("MMM Do, YYYY")}." if bill.status == "pending"
 
     {
       planName: subscription.type
       billingSchedule: billingSchedule
       chargeDescription: chargeDescription
       isPaidPlan: !@options.isFree
+      siteName: @options.siteName
+      isUpgrade: @options.data.is_upgrade
+      oldPlanName: if old_subscription then old_subscription.type else ""
     }

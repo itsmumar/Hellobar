@@ -112,6 +112,7 @@ class @PaymentModal extends Modal
             successCallback: @options.successCallback
             data: data
             isFree: @_isFree()
+            siteName: @options.site.display_name
 
           new PaymentConfirmationModal(options).open()
           @close()

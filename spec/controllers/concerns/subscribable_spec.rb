@@ -14,14 +14,14 @@ describe Subscribable, '#subscription_bill_and_status' do
     serializer = double 'SiteSerializer'
     SiteSerializer.stub new: serializer
 
-    controller.subscription_bill_and_status(site, 'payment_method', 'billing_params').should == { bill: bill, site: serializer, status: :ok }
+    controller.subscription_bill_and_status(site, 'payment_method', 'billing_params', nil).should == { bill: bill, site: serializer, is_upgrade: true, status: :ok }
   end
 
   it 'returns errors and an unprocessable_entity status when NOT successful' do
     bill = double 'bill', errors: ['boo boo']
     controller.stub update_subscription: [false, bill]
 
-    controller.subscription_bill_and_status('site', 'payment_method', 'billing_params').should == { errors: bill.errors, status: :unprocessable_entity }
+    controller.subscription_bill_and_status('site', 'payment_method', 'billing_params', nil).should == { errors: bill.errors, status: :unprocessable_entity }
   end
 end
 

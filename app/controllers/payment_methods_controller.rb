@@ -25,6 +25,7 @@ class PaymentMethodsController < ApplicationController
   def create
     load_site
 
+    old_subscription = @site.current_subscription
     payment_method = PaymentMethod.new user: current_user
     payment_method_details = CyberSourceCreditCard.new \
       payment_method: payment_method,
@@ -34,7 +35,7 @@ class PaymentMethodsController < ApplicationController
       payment_method.reload # reload so #current_details can be loaded properly
 
       respond_to do |format|
-        format.json { render json: subscription_bill_and_status(@site, payment_method, params[:billing]) } # subscribe renders appropriate object and status
+        format.json { render json: subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription) }
       end
     else # invalid payment info
       respond_to do |format|
@@ -46,6 +47,8 @@ class PaymentMethodsController < ApplicationController
   # updating the details of their CC or linking existing payment detail
   def update
     load_site
+
+    old_subscription = @site.current_subscription
     payment_method = current_user.payment_methods.find params[:id]
     process_subscription = true
 
@@ -60,7 +63,7 @@ class PaymentMethodsController < ApplicationController
 
     if process_subscription
       respond_to do |format|
-        format.json { render json: subscription_bill_and_status(@site, payment_method, params[:billing]) } # subscribe renders appropriate object and status
+        format.json { render json: subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription) }
       end
     else # invalid payment info
       respond_to do |format|
