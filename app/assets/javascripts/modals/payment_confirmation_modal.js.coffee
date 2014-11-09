@@ -33,7 +33,7 @@ class @PaymentConfirmationModal extends Modal
     if bill && bill.amount > 0 && bill.status == "paid"
       chargeDescription += "has been charged $#{parseInt(bill.amount).toFixed(2)}."
     else
-      chargeDescription += "has not been charged."
+      chargeDescription += "has not been charged at this time."
 
     if subscription.schedule == "yearly" && subscription.yearly_amount > 0
       billingSchedule = "You will be billed $#{parseInt(subscription.yearly_amount).toFixed(2)} every year."
@@ -55,4 +55,6 @@ class @PaymentConfirmationModal extends Modal
       siteName: @options.siteName
       isUpgrade: @options.data.is_upgrade
       oldPlanName: if old_subscription then old_subscription.type else ""
+      showProFeatures: subscription.type == "pro" || subscription.type == "enterprise"
+      showEnterpriseFeatures: subscription.type == "enterprise"
     }

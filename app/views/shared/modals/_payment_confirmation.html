@@ -10,6 +10,42 @@
       </header>
 
       <div class="payment-confirmation-modal">
+        {{#if showProFeatures}}
+          <div class="package-block pro">
+            <div class="package-title">
+              <div class="package-name">Pro</div>
+            </div>
+            <div class="package-features">
+              <ul>
+                <li><i class="icon-unbranded"></i> Unbranded content</li>
+                <li><i class="icon-pants"></i> Create custom content</li>
+                <li><i class="icon-unlimited"></i> Unlimited bars</li>
+                <li><i class="icon-pointer"></i> Behavior activated content</li>
+                <li><i class="icon-improve"></i> 10 improve suggestions</li>
+                <li><i class="icon-opportunity"></i> Future improvements</li>
+                <li><i class="icon-target"></i> Custom targeted content</li>
+                <li><i class="icon-thumbsup"></i> Our sincere thanks!</li>
+              </ul>
+            </div>
+          </div>
+        {{/if}}
+
+        {{#if showEnterpriseFeatures}}
+          <div class="package-block enterprise">
+            <div class="package-title">
+              <div class="package-name">Enterprise</div>
+            </div>
+            <div class="package-features">
+              <ul>
+                <li>All the benefits of Pro</li>
+                <li>Future improvements</li>
+                <li>Unlimited visits</li>
+                <li>Enterprise integrations</li>
+              </ul>
+            </div>
+          </div>
+        {{/if}}
+
         {{#if isPaidPlan}}
           <p>{{chargeDescription}}</p>
           <p>{{billingSchedule}}</p>
