@@ -30,7 +30,7 @@ class SitesController < ApplicationController
 
     session[:current_site] = @site.id
 
-    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, 30, :force => is_page_refresh?)
+    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, :force => is_page_refresh?)
     @recent_elements = @site.site_elements.where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC").limit(5)
   end
 
@@ -68,9 +68,11 @@ class SitesController < ApplicationController
   end
 
   def chart_data
-    raw_data = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements).try(:[], params[:type].to_sym) || []
+    raw_data = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data).try(:[], params[:type].to_sym) || []
     series = raw_data.map{|d| d[params[:type] == "total" ? 0 : 1]}
-    days = [params[:days].to_i, series.count].min
+    days_limits = [series.count]
+    days_limits << params[:days].to_i unless params[:days].blank?
+    days = days_limits.min
 
     series_with_dates = (0..days-1).map do |i|
       {

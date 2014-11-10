@@ -1,8 +1,8 @@
 .chart-wrapper
-  = render "sites/chart_block", {site: @site, totals: @totals, type: :total, chart: "views", icon: "views", days: 30}
-  = render "sites/chart_block", {site: @site, totals: @totals, type: :email, chart: "emails", icon: "contacts", days: 30}
-  = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: 30}
-  = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: 30}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :total, chart: "views", icon: "views", days: nil}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :email, chart: "emails", icon: "contacts", days: nil}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: nil}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: nil}
 
 - @suggestions.each do |name, suggestions|
   div class="suggestions-wrapper #{name}"
