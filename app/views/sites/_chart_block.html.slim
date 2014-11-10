@@ -6,11 +6,11 @@
       - when :total
         = link_to "Get More Views", new_site_site_element_path(site)
       - when :email
-        = link_to "Get More Emails", new_site_site_element_path(site, :anchor => "/settings/emails")
+        = link_to "Collect Emails", new_site_site_element_path(site, :anchor => "/settings/emails")
       - when :traffic
-        = link_to "Get More Traffic", new_site_site_element_path(site, :anchor => "/settings/click")
+        = link_to "Get Traffic", new_site_site_element_path(site, :anchor => "/settings/click")
       - when :social
-        = link_to "Get More Social Activity", new_site_site_element_path(site, :anchor => "/settings/social")
+        = link_to "Increase Social Marketing", new_site_site_element_path(site, :anchor => "/settings/social")
 
 - else
   div class="chart-block #{chart}" data-chart='#{chart}' data-site-id="#{site.id}" data-num-days="#{days}"
