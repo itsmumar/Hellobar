@@ -1,7 +1,7 @@
 class SiteSerializer < ActiveModel::Serializer
   include SitesHelper
 
-  attributes :id, :url, :contact_lists, :capabilities, :display_name, :current_subscription, :script_installed_at
+  attributes :id, :url, :contact_lists, :capabilities, :display_name, :current_subscription
 
   has_many :rules, serializer: RuleSerializer
 

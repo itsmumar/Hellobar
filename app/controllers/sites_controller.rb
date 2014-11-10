@@ -34,18 +34,6 @@ class SitesController < ApplicationController
     @recent_elements = @site.site_elements.where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC").limit(5)
   end
 
-  def install
-    respond_to do |format|
-      format.html # render the template
-      format.json do
-        has_data = Hello::DataAPI.lifetime_totals(@site, @site.site_elements, 1, :force => true).values.flatten.any?{|val| val > 0 }
-        redirect_path = has_data ? site_site_elements_path(@site) : site_install_path(@site)
-
-        render json: { redirect_path: redirect_path }, status: :ok
-      end
-    end
-  end
-
   def improve
     @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, :force => is_page_refresh?)
   end
