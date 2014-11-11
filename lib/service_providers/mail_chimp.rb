@@ -1,4 +1,5 @@
 class ServiceProviders::MailChimp < ServiceProviders::Email
+
   def initialize(opts = {})
     if opts[:identity]
       identity = opts[:identity]
@@ -7,6 +8,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       raise "Site does not have a stored MailChimp identity" unless identity
     end
 
+    @identity = identity
     @client = Gibbon::API.new(identity.credentials['token'], :api_endpoint => identity.extra['metadata']['api_endpoint'])
   end
 
@@ -47,19 +49,22 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def log(message)
     if message.is_a? String
-      LogglyLogger.info("#{@site.base_url} - #{message}")
+      LogglyLogger.info("#{site.url} - #{message}")
     else
       result = message
-      non_already_subscribed_errors = result['errors'].select { |e| e['code'] != 214 }
-      error_count = non_already_subscribed_errors.count
-      message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " + 
-                "#{error_count} errors that weren't just existing subscribers."
+      error_count = 0
+      if result['errors']
+        non_already_subscribed_errors = result['errors'].select { |e| e['code'] != 214 }
+        error_count = non_already_subscribed_errors.count
+        message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " + 
+                  "#{error_count} errors that weren't just existing subscribers."
+      end
 
       if error_count > 0
         message += "\nA sample of those errors:\n#{non_already_subscribed_errors[0...20].join("\n")}"
-        LogglyLogger.error("#{@site.base_url} - #{message}")
+        LogglyLogger.error("#{site.url} - #{message}")
       else
-        LogglyLogger.info("#{@site.base_url} - #{message}")
+        LogglyLogger.info("#{site.url} - #{message}")
       end
     end
 
