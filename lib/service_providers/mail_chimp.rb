@@ -66,6 +66,8 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       else
         LogglyLogger.info("#{site.url} - #{message}")
       end
+
+      return super message.inspect
     end
 
     super message
