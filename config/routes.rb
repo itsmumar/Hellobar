@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   get "/pixel.gif" => "pixel#show", :as => :tracking_pixel
 
   get "/heartbeat" => "heartbeat#index"
+  get "/login", to: redirect("/users/sign_in")
 
   root "welcome#index"
 end
