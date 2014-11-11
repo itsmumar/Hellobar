@@ -30,7 +30,6 @@ unless defined?(Hellobar::Settings)
     mailchimp_secret
     main_queue
     memcached_server
-    process_synchronously
     recaptcha_private_key
     recaptcha_public_key
     s3_bucket
