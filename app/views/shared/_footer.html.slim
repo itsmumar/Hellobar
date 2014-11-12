@@ -1,9 +1,10 @@
-= active_link_to 'Sign In', new_user_session_path
-= active_link_to 'Use Cases', use_cases_path
-= active_link_to 'Terms of Use', terms_of_use_path
-= active_link_to 'Privacy Policy', privacy_policy_path
+- unless params[:controller] == "welcome" && params[:action] == "index"
+  = active_link_to 'Sign In', new_user_session_path
+  = active_link_to 'Use Cases', use_cases_path
+  = active_link_to 'Terms of Use', terms_of_use_path
+  = active_link_to 'Privacy Policy', privacy_policy_path
 
-span
+span.copyright
   | &copy; Crazy Egg, Inc. 
   = Time.current.year
 
