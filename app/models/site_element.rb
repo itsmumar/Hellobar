@@ -11,6 +11,7 @@ class SiteElement < ActiveRecord::Base
     social/follow_on_pinterest
     social/share_on_buffer
   }
+
   SHORT_SUBTYPES = %w{traffic email social}
 
   DISPLAY_WHEN_OPTIONS = %w{
