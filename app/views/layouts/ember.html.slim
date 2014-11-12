@@ -10,7 +10,8 @@ html
       = javascript_include_tag preview_script_path(@site)
 
     = stylesheet_link_tag    "editor", :media => "all"
-    = javascript_include_tag "editor/application"
+
+    = javascript_include_tag "editor/vendor"
 
     = csrf_meta_tags
 
@@ -31,3 +32,6 @@ html
 
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'
+
+    = javascript_include_tag "ember"
+    = javascript_include_tag "editor/application"
