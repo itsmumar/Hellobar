@@ -15,8 +15,8 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'ec2-184-72-141-214.compute-1.amazonaws.com', user: 'hellobar', roles: %w{web app db}
-
+server '184.72.141.214', user: 'hellobar', roles: %w{web web1}
+server '23.21.249.113', user: 'hellobar', roles: %w{web web2}
 
 # Custom SSH Options
 # ==================
