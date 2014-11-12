@@ -32,6 +32,12 @@ describe Site do
     sites(:pro_site).is_free?.should be_false
   end
 
+  it "#is_free? is false for pro comped sites" do
+    site = sites(:horsebike)
+    site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
+    site.is_free?.should be_false
+  end
+
   describe "url formatting" do
     it "adds the protocol if not present" do
       site = Site.new(:url => "zombo.com")

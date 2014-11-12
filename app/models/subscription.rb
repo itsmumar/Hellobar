@@ -227,6 +227,25 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  class ProComped < Pro
+    def requires_payment_method?
+      false
+    end
+
+    class << self
+      def defaults
+        {
+          name: "Pro Comped",
+          monthly_amount: 0.0,
+          yearly_amount: 0.0,
+          visit_overage: 250_000, # after this many visits in a month
+          visit_overage_amount: 25_000, # every X visitors
+          visit_overage_amount: 0.0 # $$$
+        }
+      end
+    end
+  end
+
   class Enterprise < Pro
     def requires_payment_method?
       true
