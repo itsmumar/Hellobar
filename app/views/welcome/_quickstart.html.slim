@@ -1,7 +1,7 @@
 .quickstart-wrapper
   = form_tag sites_path do
     input type="hidden" name="source" value="landing"
-    input type="text" name="site[url]" placeholder="Your website URL"
+    input type="text" name="site[url]" placeholder="Your website URL" autofocus=true
     button type="submit" Continue, It's Free
     .clear
   - if flash[:error]
