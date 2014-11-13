@@ -18,7 +18,8 @@ class SiteSerializer < ActiveModel::Serializer
     {
       :remove_branding => object.capabilities.remove_branding?,
       :custom_targeted_bars => object.capabilities.custom_targeted_bars?,
-      :at_site_element_limit => object.capabilities.at_site_element_limit?
+      :at_site_element_limit => object.capabilities.at_site_element_limit?,
+      :custom_thank_you_text => object.capabilities.custom_thank_you_text?
     }
   end
 

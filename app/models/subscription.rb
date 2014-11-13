@@ -10,7 +10,7 @@ class Subscription < ActiveRecord::Base
 
   class << self
     def values_for(site)
-      # Just return the defaults for now, in the future we can 
+      # Just return the defaults for now, in the future we can
       # offer per-site discounts, etc
       return self.defaults
     end
@@ -78,6 +78,10 @@ class Subscription < ActiveRecord::Base
     end
 
     def custom_targeted_bars?
+      false
+    end
+
+    def custom_thank_you_text?
       false
     end
 
@@ -193,6 +197,10 @@ class Subscription < ActiveRecord::Base
       end
 
       def custom_targeted_bars?
+        true
+      end
+
+      def custom_thank_you_text?
         true
       end
 

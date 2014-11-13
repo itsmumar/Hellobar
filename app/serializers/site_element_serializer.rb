@@ -5,7 +5,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :element_subtype, :settings, :display_when,
 
     # text
-    :message, :link_text, :font,
+    :message, :link_text, :font, :thank_you_text,
 
     # colors
     :background_color, :border_color, :button_color, :link_color, :text_color,
@@ -70,5 +70,9 @@ class SiteElementSerializer < ActiveModel::Serializer
     end
 
     messages
+  end
+
+  def thank_you_text
+    object.thank_you_text.presence || "Thank you for signing up!"
   end
 end
