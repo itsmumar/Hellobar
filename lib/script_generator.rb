@@ -144,6 +144,7 @@ private
     lifetime_totals = @site.lifetime_totals
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
     views = conversions = conversion_rate = 0
+
     if conversion_data and conversion_data[0]
       views = conversion_data[0][0]
       conversions = conversion_data[0][1]
@@ -151,6 +152,7 @@ private
         conversion_rate = ((conversions.to_f/views)*1000).floor.to_f/1000
       end
     end
+
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       id: site_element.id,
       views: views,
@@ -167,7 +169,7 @@ private
       remains_at_top: true,
       wiggle_wait: 0,
       tab_side: "right",
-      thank_you_text: "Thank you for signing up!"
+      thank_you_text: site_element.thank_you_text.presence || "Thank you for signing up!"
     }).select{|key, value| !value.nil? || !value == '' }
   end
 

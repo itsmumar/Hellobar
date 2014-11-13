@@ -366,13 +366,13 @@ var _HB = {
   // It then checks the validity of the fields and if valid it records the 
   // email and then sets the message in the siteElement to "Thank you". If invalid it
   // shakes the email field
-  submitEmail: function(emailField, nameField, targetSiteElement)
+  submitEmail: function(emailField, nameField, targetSiteElement, thankYouText)
   {
     HB.validateEmail(
       emailField.value,
       nameField.value,
       function(){
-        targetSiteElement.innerHTML='<span>Thank you!</span>';
+        targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
         HB.recordEmail(emailField.value, nameField.value, function(){
           // Successfully saved
         });

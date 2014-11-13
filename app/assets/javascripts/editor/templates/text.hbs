@@ -2,11 +2,14 @@
 
 <label>Bar text</label>
 {{view Ember.TextField value=model.message placeholder="Subscribe to our mailing list"}}
-{{!-- ^ will likely need to be a component... --}}
 
 <label>Link text</label>
 {{view Ember.TextField value=model.link_text placeholder="OK!"}}
-{{!-- ^ will likely need to be a component... --}}
+
+{{#if showThankYouText}}
+  <label>Thank you text</label>
+  {{view Ember.TextField value=model.thank_you_text placeholder="Thank you!"}}
+{{/if}}
 
 <label>Font family</label>
 <div class="select-wrapper">
@@ -17,4 +20,3 @@
     optionLabelPath='content.label'
   }}
 </div>
-{{!-- ^ will likely need to be a component... --}}

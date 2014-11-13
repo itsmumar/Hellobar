@@ -7,6 +7,10 @@ HelloBar.TextController = Ember.Controller.extend
     {value: 'Helvetica,Arial,sans-serif', label: 'Sans-Serif'}
   ]
 
+  showThankYouText: (->
+    @get("model.element_subtype") == "email"
+  ).property("model.element_subtype")
+
   #-----------  Step Settings  -----------#
 
   step: 4

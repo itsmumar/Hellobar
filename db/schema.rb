@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141003004551) do
+ActiveRecord::Schema.define(version: 20141113163104) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -254,6 +254,7 @@ ActiveRecord::Schema.define(version: 20141003004551) do
     t.boolean  "show_branding",                 default: true
     t.integer  "contact_list_id"
     t.string   "display_when",                  default: "immediately"
+    t.string   "thank_you_text"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
