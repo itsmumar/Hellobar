@@ -7,7 +7,7 @@ namespace :queue_worker do
       Hellobar::Settings[:main_queue] => 2,
       Hellobar::Settings[:low_priority_queue] => 3
     }.each do |queue, num_workers|
-      puts "Strating #{num_workers} workers for #{queue.inspect}"
+      puts "Starting #{num_workers} workers for #{queue.inspect}"
       cmd = "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec bin/queue_worker -- -q #{queue} -n #{num_workers}"
       puts cmd
       `#{cmd}`

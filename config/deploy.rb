@@ -46,7 +46,7 @@ namespace :deploy do
   task :restart_queue_workers do
     on roles(:web) do
       as :hellobar do
-        execute "cd #{release_path} && ./bin/load_env -- bundle exec rake queue_worker:restart"
+        execute "cd #{release_path} && RAILS_ENV=production bundle exec rake queue_worker:restart"
       end
     end
   end
