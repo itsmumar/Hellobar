@@ -147,7 +147,7 @@ OptionParser.new do |opts|
     config[:run_once] = run_once
     # When you run once log to stdout
     $queue_worker_logger = :stdout
-    conf[:num_workers] = 1
+    config[:num_workers] = 1
   end
 end.parse!
 
