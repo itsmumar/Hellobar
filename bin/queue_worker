@@ -1,0 +1,181 @@
+#!/usr/bin/env ruby
+# Usage:
+#   bin/queue_worker -- -q QUEUE_NAME
+# You can start as many as the system can support. Notice the "--" before
+# the "-q" argument. This is a requirement due to the Rake-based system.
+#
+begin
+  load File.expand_path("../spring", __FILE__)
+rescue LoadError
+end
+require_relative '../config/boot'
+require 'rake'
+
+# Define a method that gets a descriptive name for the current process
+module Process
+  @@current_name = nil
+  class << self
+    def current_name(force=false)
+      if !@@current_name or force
+        host = `hostname 2>&1`.chomp
+        pid = Process.pid
+        name = File.basename($0.to_s)
+        @@current_name = "#{name}@#{host}|#{pid}"
+      end
+      return @@current_name
+    end
+  end
+end
+
+# Define our simple queue worker class which just polls SQS and invokes
+# the Rake tasks
+class QueueWorker
+  class << self
+    # We log messages to a file (log/queue_worker.log) or to stdout when just running one
+    def log(msg, type = "INFO")
+      # If the message is an exception get the backtrace too and set
+      # the type to ERRO
+      if msg.is_a?(Exception)
+        type = "ERRO"
+        msg = "#{msg.class}: #{msg.message}\n  #{msg.backtrace.join("\n  ")}"
+      end
+      # Add in the timestamp and current process name
+      line = "[#{type}] #{Time.now.utc.strftime("%Y-%m-%d %T %Z")} #{Process.current_name} => #{msg}"
+      if $queue_worker_logger == :stdout
+        puts line
+      else
+        # Re-open the file handle every time. Slightly slower, but simpler.
+        File.open(File.join(Rails.root,"log", "queue_worker.log"), "a"){|f| f.puts(line)}
+      end
+    end
+  end
+
+  def initialize(config)
+    @config = config
+    raise "Need a queue name: #{config.inspect}" unless @config[:queue]
+    # Connect to SQS and make sure the queue exists
+    @sqs = AWS::SQS.new(access_key_id: Hellobar::Settings[:aws_access_key_id], secret_access_key: Hellobar::Settings[:aws_secret_access_key])
+    @queue = @sqs.queues.named(config[:queue])
+    raise "Queue does not exist: #{config.inspect}" unless @queue.exists?
+  end
+
+  def start
+    # This method doesn't really do anything, but is called right before
+    # the work starts in the new forked process when daemonizing
+    QueueWorker.log("Starting in #{Rails.env} mode...")
+  end
+
+  # Gets 1-10 messages and processes them
+  def process_next_job
+    begin
+      # Get the messages
+      @queue.receive_message(limit: 10, wait_time_seconds: 3).each do |message|
+        begin
+          QueueWorker.log("Received message[#{message.id}]: #{message.body.inspect}")
+          task = message.body
+          task_name = task
+          # Separate the task name from the message
+          if task =~ /^(.+?)\[.+?\]/
+            task_name = $1
+          end
+          begin
+            # We need to re-enable the Rake task so it can be called
+            # more than once
+            Rake::Task[task_name].reenable
+          rescue Exception => e
+            # Ignore failed attempts to reenable
+          end
+          # Invoke the task
+          Rake.application.invoke_task(task)
+          QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect}")
+        rescue Exception => e
+          # Any failures are logged
+          QueueWorker.log(e)
+        ensure
+          # We always delete messages to prevent them from clogging up the system.
+          # Any retry logic should go in the task itself
+          message.delete 
+        end
+      end
+    rescue Exception => e
+      QueueWorker.log(e)
+    end
+  end
+end
+# Load up Rake and Rails
+puts "Loading Rails..."
+Rake.application.init
+Rake.application.load_rakefile
+require File.join(Rails.root, "config", "environment.rb")
+
+# Parse the options and set up the config
+config = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: queue_worker --queue='queue_name' [--run-once]"
+
+  opts.on('-q', '--queue [QUEUE_NAME]', 'The name of the queue to run from') do |queue|
+    config[:queue] = queue
+  end
+  opts.on('--run-once', 'If included just run once and exit') do |run_once|
+    config[:run_once] = run_once
+    # When you run once log to stdout
+    $queue_worker_logger = :stdout
+  end
+end.parse!
+
+# If there was any crazy exception not caught, better log it
+# if we can
+at_exit do
+  if $!
+    exception = $!
+    unless exception.is_a?(SystemExit)
+      QueueWorker.log(exception)
+    end
+  end
+end
+# Initialize the worker
+worker = QueueWorker.new(config)
+puts "Worker started successfully."
+
+if config[:run_once]
+  # If we run once just call process_next_job and quit
+  worker.start
+  worker.process_next_job
+else
+  # If we are running in normal (daemonized) mode then we 
+  # need to fork this process
+  begin
+    # Attempt to make a nice process ID if the platform
+    # supports it
+    Process.setsid
+  rescue Exception => e
+  end
+  # Fork the worker into a new process and execute in a loop
+  pid = fork do
+    # Now that we have a new pid need to clear the current
+    # name of the process
+    Process.current_name(true)
+    # Re-route I/O
+    STDIN.reopen "/dev/null"
+    STDOUT.reopen "/dev/null", "a"
+    STDERR.reopen STDOUT
+    # We trap the terminate and interrupt signals so that we exit at the end
+    # of the loop as opposed to raising an exception in the middle of a job
+    trap("TERM"){$exit_signal_sent = "TERM"}
+    trap("INT"){$exit_signal_sent = "INT"}
+    # Start the worker
+    worker.start
+    loop do
+      # Process jobs in a loop
+      worker.process_next_job
+      # Exit if signal sent
+      if $exit_signal_sent
+        QueueWorker.log("Exiting due to SIG#{$exit_signal_sent}")
+        break 
+      end
+      sleep 0.2 # Sleep a little so we don't overload the CPU when there are no jobs
+    end
+  end
+  # Finish the daemonize bit
+  Process.detach(pid)
+end
