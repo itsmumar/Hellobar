@@ -133,12 +133,15 @@ Rake.application.load_rakefile
 require File.join(Rails.root, "config", "environment.rb")
 
 # Parse the options and set up the config
-config = {}
+config = {num_workers: 5}
 OptionParser.new do |opts|
   opts.banner = "Usage: queue_worker --queue='queue_name' [--run-once]"
 
   opts.on('-q', '--queue [QUEUE_NAME]', 'The name of the queue to run from') do |queue|
     config[:queue] = queue
+  end
+  opts.on('-n', '--num-workers X', 'The number of workers to run') do |num_workers|
+    config[:num_workers] = num_workers.to_i
   end
   opts.on('--run-once', 'If included just run once and exit') do |run_once|
     config[:run_once] = run_once
@@ -175,31 +178,33 @@ else
   rescue Exception => e
   end
   # Fork the worker into a new process and execute in a loop
-  pid = fork do
-    # Now that we have a new pid need to clear the current
-    # name of the process
-    Process.current_name(true)
-    # Re-route I/O
-    STDIN.reopen "/dev/null"
-    STDOUT.reopen "/dev/null", "a"
-    STDERR.reopen STDOUT
-    # We trap the terminate and interrupt signals so that we exit at the end
-    # of the loop as opposed to raising an exception in the middle of a job
-    trap("TERM"){$exit_signal_sent = "TERM"}
-    trap("INT"){$exit_signal_sent = "INT"}
-    # Start the worker
-    worker.start
-    loop do
-      # Process jobs in a loop
-      worker.process_next_job
-      # Exit if signal sent
-      if $exit_signal_sent
-        QueueWorker.log("Exiting due to SIG#{$exit_signal_sent}")
-        break 
+  config[:num_workers].times do
+    pid = fork do
+      # Now that we have a new pid need to clear the current
+      # name of the process
+      Process.current_name(true)
+      # Re-route I/O
+      STDIN.reopen "/dev/null"
+      STDOUT.reopen "/dev/null", "a"
+      STDERR.reopen STDOUT
+      # We trap the terminate and interrupt signals so that we exit at the end
+      # of the loop as opposed to raising an exception in the middle of a job
+      trap("TERM"){$exit_signal_sent = "TERM"}
+      trap("INT"){$exit_signal_sent = "INT"}
+      # Start the worker
+      worker.start
+      loop do
+        # Process jobs in a loop
+        worker.process_next_job
+        # Exit if signal sent
+        if $exit_signal_sent
+          QueueWorker.log("Exiting due to SIG#{$exit_signal_sent}")
+          break 
+        end
+        sleep 0.2 # Sleep a little so we don't overload the CPU when there are no jobs
       end
-      sleep 0.2 # Sleep a little so we don't overload the CPU when there are no jobs
     end
+    # Finish the daemonize bit
+    Process.detach(pid)
   end
-  # Finish the daemonize bit
-  Process.detach(pid)
 end
