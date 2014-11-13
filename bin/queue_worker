@@ -69,7 +69,13 @@ class QueueWorker
   def process_next_job
     begin
       # Get the messages
-      @queue.receive_message(limit: 10, wait_time_seconds: 3).each do |message|
+      messages = @queue.receive_message(limit: @config[:run_once] ? 1 : 10, wait_time_seconds: 3)
+      if messages == nil
+        messages = []
+      elsif !messages.is_a?(Array)
+        messages = [messages] 
+      end
+      messages.each do |message|
         begin
           QueueWorker.log("Received message[#{message.id}]: #{message.body.inspect}")
           task = message.body
@@ -86,7 +92,25 @@ class QueueWorker
             # Ignore failed attempts to reenable
           end
           # Invoke the task
-          Rake.application.invoke_task(task)
+          begin
+            Rake.application.invoke_task(task)
+          rescue RuntimeError => error
+            if error.message =~ /Don't know how to build task/
+              # Attempt to call the method on the class
+              args = CSV.parse(message.body.gsub(/\b([\[\]:])\b{1}/, ',').gsub(/[,\]]$/, '')).first
+              klass       = args[0].gsub(/::(\w)/) {|m| m.upcase }.classify
+              method      = args[1]
+              id          = args[2]
+              if id
+                klass.constantize.find(id).send(method)
+              else
+                klass.constantize.send(method)
+              end
+            else
+              raise # re-raise
+            end
+          end
+
           QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect}")
         rescue Exception => e
           # Any failures are logged
