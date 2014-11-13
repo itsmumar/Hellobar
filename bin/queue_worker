@@ -147,6 +147,7 @@ OptionParser.new do |opts|
     config[:run_once] = run_once
     # When you run once log to stdout
     $queue_worker_logger = :stdout
+    conf[:num_workers] = 1
   end
 end.parse!
 
@@ -162,7 +163,7 @@ at_exit do
 end
 # Initialize the worker
 worker = QueueWorker.new(config)
-puts "Worker started successfully."
+puts "Starting #{config[:num_workers]} workers."
 
 if config[:run_once]
   # If we run once just call process_next_job and quit
@@ -182,6 +183,7 @@ else
     pid = fork do
       # Now that we have a new pid need to clear the current
       # name of the process
+      $PROGRAM_NAME = "queue_worker[#{config[:queue]}]"
       Process.current_name(true)
       # Re-route I/O
       STDIN.reopen "/dev/null"
