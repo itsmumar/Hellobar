@@ -21,6 +21,7 @@ namespace :deploy do
       invoke "deploy:reload_nginx_config"
       invoke "deploy:restart_thin"
       invoke "deploy:restart_monit"
+      invoke "deploy:restart_queue_workers"
     end
   end
 
@@ -38,6 +39,14 @@ namespace :deploy do
       as :hellobar do
         execute "mkdir -p /mnt/deploy/shared/sockets"
         execute "cd #{release_path} && ./bin/load_env -- bundle exec thin restart -C config/thin/www.yml"
+      end
+    end
+  end
+
+  task :restart_queue_workers do
+    on roles(:web) do
+      as :hellobar do
+        execute "cd #{release_path} && ./bin/load_env -- bundle exec rake queue_worker:restart"
       end
     end
   end
