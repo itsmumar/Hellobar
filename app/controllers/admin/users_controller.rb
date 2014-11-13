@@ -7,8 +7,8 @@ class Admin::UsersController < ApplicationController
     if params[:q].blank?
       @users = User.page(params[:page]).per(24)
     else
-      users = User.where("email like ?", "%#{params[:q]}%").all
-      sites = Site.where("url like ?", "%#{params[:q]}%").all
+      users = User.where("email like ?", "%#{params[:q].strip}%").all
+      sites = Site.where("url like ?", "%#{params[:q].strip}%").all
       users += sites.map{|s| s.users}.flatten
 
       @users = Kaminari.paginate_array(users.uniq).page(params[:page]).per(24)
