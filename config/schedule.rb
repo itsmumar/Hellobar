@@ -28,7 +28,3 @@ end
 every 24.hours, :at => "12:00am", :roles => [:cron] do
   rake "site:improve_suggestions:generate_all_separately"
 end
-
-every 30.minutes, :roles => [:web] do
-  command "sudo monit restart guaranteed_queue && sudo monit restart guaranteed_queue_lowpriority"
-end
