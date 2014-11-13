@@ -45,7 +45,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
 
     @client.lists.batch_subscribe({:id => list_id, :batch => batch, :double_optin => double_optin}).tap do |result|
-      log result
+      log catch_error(result)
     end
   end
 
@@ -58,7 +58,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       if result['errors']
         non_already_subscribed_errors = result['errors'].select { |e| e['code'] != 214 }
         error_count = non_already_subscribed_errors.count
-        message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " + 
+        message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " +
                   "#{error_count} errors that weren't just existing subscribers."
       end
 
@@ -73,5 +73,46 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
 
     super message
+  end
+
+  def catch_error(response)
+    response.tap do
+      if errors = response['errors'].compact
+        if error = errors.find {|e| e['code'] == 250 }
+          catch_required_merge_var_error!(error)
+        end
+      end
+    end
+  end
+
+  private
+
+  def catch_required_merge_var_error!(error)
+    # pause identity by deleting it
+    user = @identity.site.users.first
+    @identity.delete
+
+    body = <<EOS
+Hi there,
+
+Unfortunately, we need you to change your MailChimp configuration.
+
+It looks like you're requiring a field. Unfortunately, sometimes users don't
+input that field (such as first name or last name), and we can't fill in other fields.
+
+We've paused your email synchronization to give you a chance to get that done.
+
+To fix this, just go to your MailChimp account, select your list, then edit your form.
+After that, uncheck "required" for all fields.
+
+We totally understand why you might want to require fields on some forms. In that case,
+please consider using a separate MailChimp list for those forms.
+
+Thanks!
+
+Hellobar
+EOS
+
+    MailerGateway.send_email("Custom", user.email, body: body)
   end
 end
