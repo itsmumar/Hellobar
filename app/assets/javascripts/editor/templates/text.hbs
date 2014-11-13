@@ -8,7 +8,17 @@
 
 {{#if showThankYouText}}
   <label>Thank you text</label>
-  {{view Ember.TextField value=model.thank_you_text placeholder="Thank you!"}}
+  {{
+    view Ember.TextField
+    value=model.thank_you_text
+    placeholder="Thank you!"
+    disabled=disableThankYouText
+  }}
+
+  {{#if disableThankYouText}}
+    <p><a {{action "openUpgradeModal"}}>Upgrade your site to customize this text.</a></p>
+  {{/if}}
+
 {{/if}}
 
 <label>Font family</label>

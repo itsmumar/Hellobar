@@ -153,6 +153,12 @@ private
       end
     end
 
+    thank_you_text = if @site.capabilities.custom_thank_you_text? && site_element.thank_you_text.present?
+                       site_element.thank_you_text
+                     else
+                       "Thank you for signing up!"
+                     end
+
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       id: site_element.id,
       views: views,
@@ -169,7 +175,7 @@ private
       remains_at_top: true,
       wiggle_wait: 0,
       tab_side: "right",
-      thank_you_text: site_element.thank_you_text.presence || "Thank you for signing up!"
+      thank_you_text: thank_you_text
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
