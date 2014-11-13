@@ -25,8 +25,12 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
 
     retry_on_timeout do
-      @client.lists.subscribe(opts).tap do |result|
-        log result
+      begin
+        @client.lists.subscribe(opts).tap do |result|
+          log result
+        end
+      rescue Gibbon::MailChimpError => error
+        handle_error(error)
       end
     end
   end
@@ -45,7 +49,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
 
     @client.lists.batch_subscribe({:id => list_id, :batch => batch, :double_optin => double_optin}).tap do |result|
-      log catch_error(result)
+      log handle_result(result)
     end
   end
 
@@ -75,14 +79,29 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     super message
   end
 
-  def catch_error(response)
-    response.tap do
-      if errors = response['errors'].compact
-        if error = errors.find {|e| e['code'] == 250 }
-          catch_required_merge_var_error!(error)
+  def handle_error(error)
+    case error.code
+    when 250
+      catch_required_merge_var_error!(error)
+    else
+      # bubble up to email_synchronizer, which will catch if it is a transient error
+      raise error
+    end
+  end
+
+  def handle_result(result)
+    if result['errors']
+      result['errors'].each do |error|
+        case error['code'].to_i
+        when 250
+          break catch_required_merge_var_error!(error)
+        else
+          next
         end
       end
     end
+
+    result
   end
 
   private
