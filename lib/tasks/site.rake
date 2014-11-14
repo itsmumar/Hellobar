@@ -2,7 +2,7 @@ namespace :site do
   namespace :scripts do
     desc 'Schedule a re-generation of all active site scripts'
     task :generate_all_separately => :environment do |t, args|
-      Site.find_each do |site|
+      Site.where("script_installed_at IS NOT NULL").each do |site|
         site.generate_script(queue_name: Hellobar::Settings[:low_priority_queue])
       end
     end
@@ -11,7 +11,7 @@ namespace :site do
   namespace :improve_suggestions do
     desc 'Schedule a re-generation of all active site improve_suggestions'
     task :generate_all_separately => :environment do |t, args|
-      Site.find_each do |site|
+      Site.where("script_installed_at IS NOT NULL").each do |site|
         site.generate_improve_suggestions(queue_name: Hellobar::Settings[:low_priority_queue])
       end
     end
