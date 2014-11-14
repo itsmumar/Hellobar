@@ -69,7 +69,7 @@ class QueueWorker
   def process_next_job
     begin
       # Get the messages
-      messages = @queue.receive_message(limit: @config[:run_once] ? 1 : 10, wait_time_seconds: 3)
+      messages = @queue.receive_message(limit: @config[:run_once] ? 1 : 10, wait_time_seconds: 3, attributes: [:sent_at])
       if messages == nil
         messages = []
       elsif !messages.is_a?(Array)
@@ -78,40 +78,47 @@ class QueueWorker
       messages.each do |message|
         begin
           QueueWorker.log("Received message[#{message.id}]: #{message.body.inspect}")
-          task = message.body
-          task_name = task
-          # Separate the task name from the message
-          if task =~ /^(.+?)\[.+?\]/
-            task_name = $1
-          end
-          begin
-            # We need to re-enable the Rake task so it can be called
-            # more than once
-            Rake::Task[task_name].reenable
-          rescue Exception => e
-            # Ignore failed attempts to reenable
-          end
-          # Invoke the task
-          begin
-            Rake.application.invoke_task(task)
-          rescue RuntimeError => error
-            if error.message =~ /Don't know how to build task/
-              # Attempt to call the method on the class
-              args = CSV.parse(message.body.gsub(/\b([\[\]:])\b{1}/, ',').gsub(/[,\]]$/, '')).first
-              klass       = args[0].gsub(/::(\w)/) {|m| m.upcase }.classify
-              method      = args[1]
-              id          = args[2]
-              if id
-                klass.constantize.find(id).send(method)
-              else
-                klass.constantize.send(method)
-              end
-            else
-              raise # re-raise
+          now = Time.now
+          puts message.sent_at
+          if @config[:skip_old] and now-message.sent_at > 24.hours
+            QueueWorker.log("Skipped message[#{message.id}]: #{message.body.inspect} (#{(now-message.sent_at).to_i/(60*60)} hours old)")
+          else
+            start_time = now.to_f
+            task = message.body
+            task_name = task
+            # Separate the task name from the message
+            if task =~ /^(.+?)\[.+?\]/
+              task_name = $1
             end
-          end
+            begin
+              # We need to re-enable the Rake task so it can be called
+              # more than once
+              Rake::Task[task_name].reenable
+            rescue Exception => e
+              # Ignore failed attempts to reenable
+            end
+            # Invoke the task
+            begin
+              Rake.application.invoke_task(task)
+            rescue RuntimeError => error
+              if error.message =~ /Don't know how to build task/
+                # Attempt to call the method on the class
+                args = CSV.parse(message.body.gsub(/\b([\[\]:])\b{1}/, ',').gsub(/[,\]]$/, '')).first
+                klass       = args[0].gsub(/::(\w)/) {|m| m.upcase }.classify
+                method      = args[1]
+                id          = args[2]
+                if id
+                  klass.constantize.find(id).send(method)
+                else
+                  klass.constantize.send(method)
+                end
+              else
+                raise # re-raise
+              end
+            end
 
-          QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect}")
+            QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect} in #{Time.now.to_f-start_time}s")
+          end
         rescue Exception => e
           # Any failures are logged
           QueueWorker.log(e)
@@ -148,6 +155,9 @@ OptionParser.new do |opts|
     # When you run once log to stdout
     $queue_worker_logger = :stdout
     config[:num_workers] = 1
+  end
+  opts.on('--skip-old', 'If included skip messages older than 24 hours') do |skip_old|
+    config[:skip_old] = true
   end
 end.parse!
 

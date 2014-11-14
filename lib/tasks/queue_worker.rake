@@ -4,11 +4,13 @@ namespace :queue_worker do
     require File.join(Rails.root, "config", "initializers", "settings.rb")
 
     {
-      Hellobar::Settings[:main_queue] => 2,
-      Hellobar::Settings[:low_priority_queue] => 3
-    }.each do |queue, num_workers|
+      Hellobar::Settings[:main_queue] => [2],
+      Hellobar::Settings[:low_priority_queue] => [3, "--skip-old"]
+    }.each do |queue, options|
+      num_workers = options[0]
+      additional_options = options[1] || ""
       puts "Starting #{num_workers} workers for #{queue.inspect}"
-      cmd = "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec bin/queue_worker -- -q #{queue} -n #{num_workers}"
+      cmd = "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec bin/queue_worker -- -q #{queue} -n #{num_workers} #{additional_options}"
       puts cmd
       `#{cmd}`
     end
