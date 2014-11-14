@@ -21,6 +21,61 @@ namespace :legacy_migration do
     Rake::Task["legacy_migration:run_tests"].invoke
   end
 
+  desc "Migrate 2.0 users that were present in 1.0 and skipped the first time"
+  task :migrate_1_point_0_users => :environment do
+    wp_emails = {}
+
+    File.read(File.join(Rails.root, "db", "wp_logins.csv")).split("\n").each_with_index do |line, i|
+      if i > 0
+        e1, e2 = *line.split("\t")
+        wp_emails[e1] = true
+        wp_emails[e2] = true
+      end
+    end
+
+    legacy_users = []
+
+    LegacyMigrator::LegacyUser.find_each do |user|
+      legacy_users << user if wp_emails[user.email]
+    end
+
+    legacy_users.each do |legacy_user|
+      if User.where(id: legacy_user.id_to_migrate).first
+        puts "Could not migrate Legacy User #{legacy_user.id}: ID already exists"
+      elsif User.where(email: legacy_user.email).first
+        puts "Could not migrate Legacy User #{legacy_user.id}: email already exists"
+      else
+        user = User.new(
+          id: legacy_user.id_to_migrate,
+          email: legacy_user.email,
+          encrypted_password: legacy_user.encrypted_password,
+          reset_password_token: legacy_user.reset_password_token,
+          reset_password_sent_at: legacy_user.reset_password_sent_at,
+          remember_created_at: legacy_user.remember_created_at,
+          sign_in_count: legacy_user.sign_in_count,
+          status: ::User::ACTIVE_STATUS,
+          legacy_migration: true,
+          current_sign_in_at: legacy_user.current_sign_in_at,
+          last_sign_in_at: legacy_user.last_sign_in_at,
+          current_sign_in_ip: legacy_user.current_sign_in_ip,
+          last_sign_in_ip: legacy_user.last_sign_in_ip,
+          created_at: legacy_user.original_created_at || legacy_user.created_at,
+          updated_at: legacy_user.updated_at
+        )
+
+        user.save(validate: false)
+
+        legacy_user.accounts.first.sites.each do |legacy_site|
+          if site = Site.where(id: legacy_site.id).first
+            user.site_memberships.new(site_id: legacy_site.id).save(validate: false)
+          else
+            puts "Legacy Site #{legacy_site.id} was not migrated the first time"
+          end
+        end
+      end
+    end
+  end
+
   Rake::TestTask.new(:run_tests) do |t|
     t.test_files = FileList["lib/legacy_migrator/tests/*_test.rb"]
   end

@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
   delegate :url_helpers, to: "Rails.application.routes"
 
-  validate :email_does_not_exist_in_wordpress
+  validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: true
 
   attr_accessor :legacy_migration
