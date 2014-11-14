@@ -29,7 +29,9 @@ namespace :deploy do
     on roles(:web) do
       # uses kill, but actually just reloads the config.
       as :hellobar do
-        execute "sudo kill -HUP `cat /mnt/deploy/shared/pids/nginx.pid` || sudo nginx -c /mnt/deploy/current/config/nginx/web.conf"
+        execute "mkdir -p /mnt/deploy/shared/pids"
+        execute '/usr/bin/env bash -c "if test -f /mnt/deploy/shared/pids/nginx.pid; then sudo kill -HUP `cat /mnt/deploy/shared/pids/nginx.pid`; fi"'
+        execute "sudo nginx -c /mnt/deploy/current/config/nginx/web.conf"
       end
     end
   end

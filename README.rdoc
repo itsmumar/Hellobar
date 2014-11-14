@@ -1,28 +1,37 @@
-== README
+== Hello Bar 3.0
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Made with love.
 
-Things you may want to cover:
+== Provisioning a new Hello Bar server
 
-* Ruby version
+1. Once you've got the server's IP, log on.
+2. Create the folders for deploy and disable the server's default Nginx config.
 
-* System dependencies
+*On the server*, run the following script:
 
-* Configuration
+```bash
+sudo su root - bash -c 'mkdir -p /mnt/deploy/shared/config; \
+                        chown hellobar:staff -R /mnt/deploy; \
+                        sudo service nginx stop; \
+                        sudo update-rc.d nginx disable;'
+```
 
-* Database creation
+3. Copy the config files from a working server to the new one.
 
-* Database initialization
+*On your local machine*, run the following script:
 
-* How to run the test suite
+```bash
+mkdir _temp; \
+scp hellobar@184.72.141.214:/mnt/deploy/shared/config/*.yml _temp; \
+scp _temp/* hellobar@<server_to_provision>:/mnt/deploy/shared/config; \
+rm -r _temp
+```
+4. Add the server's IP address to capistrano.
 
-* Services (job queues, cache servers, search engines, etc.)
+# config/deploy/production.rb
 
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+```ruby
+...
+server 'new-ip-address', user: 'hellobar', roles: %w{web}
+...
+```

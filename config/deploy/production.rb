@@ -16,7 +16,10 @@
 # used to set extended properties on the server.
 
 server '184.72.141.214', user: 'hellobar', roles: %w{web db cron}
-server '23.21.249.113', user: 'hellobar', roles: %w{web}
+server '23.21.249.113', user: 'hellobar', roles: %w{web} # web2
+server '54.235.76.197', user: 'hellobar', roles: %w{web} # web3
+server '54.90.172.206', user: 'hellobar', roles: %w{web} # web4
+server '54.211.192.176', user: 'hellobar', roles: %w{web} # web
 
 # Custom SSH Options
 # ==================
