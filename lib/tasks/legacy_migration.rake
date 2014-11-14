@@ -33,11 +33,7 @@ namespace :legacy_migration do
       end
     end
 
-    legacy_users = []
-
-    LegacyMigrator::LegacyUser.find_each do |user|
-      legacy_users << user if wp_emails[user.email]
-    end
+    legacy_users = LegacyMigrator::LegacyUser.where(email: @wp_emails.keys)
 
     legacy_users.each do |legacy_user|
       if User.where(id: legacy_user.id_to_migrate).first
