@@ -29,9 +29,8 @@ rm -r _temp
 ```
 4. Add the server's IP address to capistrano.
 
-# config/deploy/production.rb
-
 ```ruby
+# config/deploy/production.rb
 ...
 server 'new-ip-address', user: 'hellobar', roles: %w{web}
 ...
