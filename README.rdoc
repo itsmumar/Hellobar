@@ -13,6 +13,7 @@ Made with love.
 sudo su root - bash -c 'mkdir -p /mnt/deploy/shared/config; \
                         chown hellobar:staff -R /mnt/deploy; \
                         sudo service nginx stop; \
+                        sudo update-ca-certificates; \
                         sudo update-rc.d nginx disable;'
 ```
 
