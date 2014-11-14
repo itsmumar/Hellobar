@@ -1,8 +1,8 @@
-== Hello Bar 3.0
+# Hello Bar 3.0
 
 Made with love.
 
-== Provisioning a new Hello Bar server
+## Provisioning a new Hello Bar server
 
 1. Once you've got the server's IP, log on.
 2. Create the folders for deploy and disable the server's default Nginx config.
