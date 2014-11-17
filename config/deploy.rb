@@ -30,8 +30,7 @@ namespace :deploy do
       # uses kill, but actually just reloads the config.
       as :hellobar do
         execute "mkdir -p /mnt/deploy/shared/pids"
-        execute '/usr/bin/env bash -c "if test -f /mnt/deploy/shared/pids/nginx.pid; then sudo kill -HUP `cat /mnt/deploy/shared/pids/nginx.pid`; fi"'
-        execute "sudo nginx -c /mnt/deploy/current/config/nginx/web.conf"
+        execute '/usr/bin/env bash -c "if test -f /mnt/deploy/shared/pids/nginx.pid; then sudo kill -HUP `cat /mnt/deploy/shared/pids/nginx.pid`; else sudo nginx -c /mnt/deploy/current/config/nginx/web.conf; fi"'
       end
     end
   end
