@@ -17,7 +17,8 @@ class ServiceProviders::AWeber < ServiceProviders::Email
     @client.account.lists.map {|k,v| {'id' => v.id, 'name' => v.name}} rescue []
   end
 
-  def subscribe(list_id, email, name = nil)
+  def subscribe(list_id, email, name = nil, double_optin = true)
+    # AWeber will always force double-optin: https://help.aweber.com/entries/22883171-Why-Was-a-Confirmation-Message-Sent-When-Confirmation-Was-Disabled-
     @client.account.lists[list_id.to_i].subscribers.create({'name' => name, 'email' => email})
   end
 
