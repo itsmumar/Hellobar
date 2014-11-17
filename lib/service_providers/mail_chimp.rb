@@ -24,8 +24,10 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       opts[:merge_vars] = {:NAME => name, :FNAME => split[0], :LNAME => split[1]}
     end
 
-    @client.lists.subscribe(opts).tap do |result|
-      log result
+    retry_on_timeout do
+      @client.lists.subscribe(opts).tap do |result|
+        log result
+      end
     end
   end
 

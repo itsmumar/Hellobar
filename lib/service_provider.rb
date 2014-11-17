@@ -47,6 +47,22 @@ class ServiceProvider
     end
   end
 
+  def retry_on_timeout(max: 1, &block)
+    original_max = max
+    loop do
+      raise "Timed out too many times (#{original_max})" if max == 0
+      max -= 1
+
+      begin
+        block.call(self)
+        break # will not break if exception is raised
+      rescue Net::OpenTimeout => e
+        puts "Caught #{e}, retrying after 5 seconds"
+        sleep 5
+      end
+    end
+  end
+
   def log message
     $stdout.puts "#{Time.current} [#{self.class.name}] " + message
   end
