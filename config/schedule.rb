@@ -11,7 +11,7 @@ env = settings_yaml["env_name"] || "edge"
 
 # Dummy entry to keep crontabs empty on non-cron machines
 every 10.days, :roles => [:web] do
-  script "/bin/true" # no-op
+  command "/bin/true" # no-op
 end
 
 every 20.minutes, :roles => [:cron] do
