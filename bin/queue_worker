@@ -65,6 +65,10 @@ class QueueWorker
     QueueWorker.log("Starting in #{Rails.env} mode...")
   end
 
+  def parse_message(message)
+    CSV.parse(message.body.gsub(/([A-z\!\?])([\[\]:]){1}\b/, '\1,').gsub(/[,\]]$/, '')).first
+  end
+
   # Gets 1-10 messages and processes them
   def process_next_job
     begin
@@ -104,7 +108,7 @@ class QueueWorker
               if error.message =~ /Don't know how to build task/
                 # Attempt to call the method on the class
                 # split message by ':' and '[' (at word boundaries incl. ruby method characters '!' and '?')
-                args = CSV.parse(message.body.gsub(/([A-z\!\?])([\[\]:]){1}\b/, '\1,').gsub(/[,\]]$/, '')).first
+                args        = parse_message(message)
                 klass       = args[0].gsub(/::(\w)/) {|m| m.upcase }.classify
                 method      = args[1]
                 id          = args[2]
