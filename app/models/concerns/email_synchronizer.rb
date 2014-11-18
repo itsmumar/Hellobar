@@ -40,6 +40,8 @@ module EmailSynchronizer
 
   # Extracted from embed_code_provider#subscribe!
   def sync_one!(email, name, options={})
+    return unless syncable?
+
     perform_sync do
       if oauth?
         subscribe(data["remote_id"], email, name, double_optin)
