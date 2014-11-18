@@ -171,8 +171,8 @@ private
       settings: site_element.settings,
       hide_destination: true,
       open_in_new_window: false,
-      pushes_page_down: true,
-      remains_at_top: true,
+      pushes_page_down: site_element.pushes_page_down,
+      remains_at_top: site_element.remains_at_top,
       wiggle_wait: 0,
       tab_side: "right",
       thank_you_text: thank_you_text

@@ -27,15 +27,15 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   renderPreview: ( ->
     Ember.run.debounce(this, @doRenderPreview, 500)
-  ).observes("model.element_subtype", "model.message", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.closable", "model.show_branding", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url").on("init")
+  ).observes("model.element_subtype", "model.message", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.closable", "model.show_branding", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url", "model.pushes_page_down", "model.remains_at_top").on("init")
 
   doRenderPreview: ( ->
     previewElement = $.extend({}, @get("model"),
       template_name: @get("model.element_subtype") or "traffic"
       hide_destination: true
       open_in_new_window: false
-      pushes_page_down: true
-      remains_at_top: true
+      pushes_page_down: @get("model.pushes_page_down")
+      remains_at_top: @get("model.remains_at_top")
       wiggle_wait: 0
       tab_side: "right"
       thank_you_text: "Thank you for signing up!"
@@ -68,7 +68,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     # is not null or undefined before the change, we avoid setting the flag until the property has had an initial value set.
 
     @set("modelIsDirty", true) if !!@get(keyName)
-  ).observesBefore("model.element_subtype", "model.message", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.closable", "model.show_branding", "model.settings.url", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url", "model.contact_list_id")
+  ).observesBefore("model.element_subtype", "model.message", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.closable", "model.show_branding", "model.settings.url", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url", "model.contact_list_id", "model.pushes_page_down", "model.remains_at_top")
 
   #-----------  Actions  -----------#
 
