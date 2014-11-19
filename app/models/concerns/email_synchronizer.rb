@@ -42,6 +42,11 @@ module EmailSynchronizer
   def sync_one!(email, name, options={})
     return unless syncable?
 
+    # Ensure rake-task quotes are removed
+    start_end_quotes = /^"|"$/
+    name.gsub!(start_end_quotes, '')
+    email.gsub!(start_end_quotes, '')
+
     perform_sync do
       if oauth?
         subscribe(data["remote_id"], email, name, double_optin)
