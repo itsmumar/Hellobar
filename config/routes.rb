@@ -34,7 +34,8 @@ Rails.application.routes.draw do
     post "/contact_submissions/#{sub}", :to => "contact_submissions##{sub}", :as => "#{sub}_contact_submission"
   end
 
-  get "/admin", :to => "admin#index", :as => :admin
+  get "/admin", :to => "admin/users#index", :as => :admin
+  get "/admin/reports", :to => "admin#reports", :as => :admin_reports
   namespace :admin do
     resources :users, :only => [:index]
     post "users/:id/impersonate", :to => "users#impersonate", :as => :impersonate_user

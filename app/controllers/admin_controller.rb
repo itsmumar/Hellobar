@@ -3,7 +3,7 @@ class AdminController < ApplicationController
 
   before_action :require_admin
 
-  def index
+  def reports
     @optimizely_experiments = InternalReport.where("name like 'Optimizely: %'").select("DISTINCT(NAME)").map{|p| p["NAME"]}
   end
 end
