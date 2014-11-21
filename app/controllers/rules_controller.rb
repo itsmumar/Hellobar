@@ -23,7 +23,7 @@ class RulesController < ApplicationController
   def update
     rule = @site.rules.find(params[:id])
 
-    if rule.update_attributes rule_params.permit!
+    if rule.editable? && rule.update_attributes(rule_params.permit!)
       @site.generate_script
       render :json => rule
     else
@@ -36,7 +36,7 @@ class RulesController < ApplicationController
 
     if @site.rules.count == 1
       render :nothing => true, :status => :unprocessable_entity
-    elsif rule.destroy
+    elsif rule.editable? && rule.destroy
       @site.generate_script
       render :nothing => true, :status => :ok
     else

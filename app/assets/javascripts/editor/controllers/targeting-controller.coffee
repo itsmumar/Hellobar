@@ -6,7 +6,7 @@ HelloBar.TargetingController = Ember.Controller.extend
 
   ruleOptions: ( ->
     rules = @get("model.site.rules").slice()
-    rules.push({name: "Other...", description: "?"})
+    rules.push({name: "Other...", description: "?", editable: true})
     rules
   ).property("model.site.rules")
 

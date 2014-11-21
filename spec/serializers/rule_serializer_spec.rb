@@ -18,6 +18,7 @@ describe RuleSerializer do
       match: rule.match,
       priority: rule.priority,
       description: rule.to_sentence,
+      editable: true,
 
       conditions: [{
         id: condition.id,

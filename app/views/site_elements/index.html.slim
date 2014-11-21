@@ -23,21 +23,22 @@ table.rules-wrapper
             h4= rule.name
             span= rule.to_sentence
 
-          .dropdown-wrapper
-            i.icon-settings
-            .dropdown-block
-              = link_to "#", class: "edit-rule", "data-rule-id" => rule.id, "data-can-edit" => @site.capabilities.custom_targeted_bars? do
-                i.icon-edit
-                | Edit
+          - if rule.editable?
+            .dropdown-wrapper
+              i.icon-settings
+              .dropdown-block
+                = link_to "#", class: "edit-rule", "data-rule-id" => rule.id, "data-can-edit" => @site.capabilities.custom_targeted_bars? do
+                  i.icon-edit
+                  | Edit
 
-              - unless @rules.count == 1
-                = content_tag 'a', class: 'remove-rule' do
-                  i.icon-trash
-                  = "Delete"
-                  - if rule.site_elements.any?
-                    = " this and "
-                    span= rule.site_elements.size
-                    = " bar".pluralize(rule.site_elements.size)
+                - unless @rules.count == 1
+                  = content_tag 'a', class: 'remove-rule' do
+                    i.icon-trash
+                    = "Delete"
+                    - if rule.site_elements.any?
+                      = " this and "
+                      span= rule.site_elements.size
+                      = " bar".pluralize(rule.site_elements.size)
 
       - rule.site_elements.each do |site_element|
         = render "site_elements/site_element", { :site_element => site_element, :rule => rule }
