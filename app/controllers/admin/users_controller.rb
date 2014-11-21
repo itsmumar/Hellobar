@@ -11,6 +11,10 @@ class Admin::UsersController < ApplicationController
       sites = Site.where("url like ?", "%#{params[:q].strip}%").all
       users += sites.map{|s| s.users}.flatten
 
+      if params[:q].strip =~ /\d{4}/
+        users += PaymentMethodDetails.where("data like ?", "%-#{params[:q].strip}%").map(&:user)
+      end
+
       @users = Kaminari.paginate_array(users.uniq).page(params[:page]).per(24)
     end
   end
