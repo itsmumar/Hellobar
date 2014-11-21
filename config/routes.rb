@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     get "logout", :to => "access#logout_admin", :as => :logout
     get "reset_password", :to => "access#reset_password"
     post "reset_password", :to => "access#do_reset_password"
-    get "access", :to => "access#step1"
+    get "access", :to => "access#step1", :as => :access
     post "access/authenticate", :to => "access#process_step2", :as => :authenticate
     post "access", :to => "access#process_step1"
     get "locked", :to => "access#locked", :as => :locked

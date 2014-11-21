@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
 
   def require_admin
     if current_admin.nil?
-      redirect_to root_path
+      redirect_to admin_access_path
     elsif current_admin.needs_to_set_new_password?
       redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path
     end

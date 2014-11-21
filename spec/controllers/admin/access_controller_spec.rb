@@ -39,7 +39,7 @@ describe Admin::AccessController do
 
     it "redirects if no admin is logged-in" do
       get :logout_admin
-      response.should redirect_to(root_path)
+      response.should redirect_to(admin_access_path)
     end
   end
 

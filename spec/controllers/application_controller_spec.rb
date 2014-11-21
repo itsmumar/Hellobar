@@ -55,10 +55,10 @@ describe ApplicationController, '#require_admin' do
     def index; render nothing: true; end
   end
 
-  it 'redirects the user to the root path when there is no current_admin' do
+  it 'redirects the user to the admin login path when there is no current_admin' do
     get :index
 
-    response.should redirect_to(root_path)
+    response.should redirect_to(admin_access_path)
   end
 
   it 'redirects the user to the reset password path if they need to set a new password' do
