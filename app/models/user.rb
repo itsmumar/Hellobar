@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   include BillingAuditTrail
   has_many :payment_methods
+  has_many :payment_method_details, through: :payment_methods, source: :details
   has_many :site_memberships, dependent: :destroy
   has_many :sites, through: :site_memberships
 

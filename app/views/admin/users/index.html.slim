@@ -11,10 +11,11 @@ div.row
         i none found
 
     - else
-      table.table
+      table.table.admin-users
         tr
           th Email
           th Sites
+          th Payment Methods
           th Registered
           th Logins
           th Last login
@@ -24,8 +25,13 @@ div.row
           tr
             td= user.email
             td
-              - user.sites.each do |site|
-                = "#{display_name_for_site(site)} (#{site.current_subscription.values[:name]})#{site == user.sites.last ? '' : '<br>'}".html_safe
+              ul
+                - user.sites.each do |site|
+                  li= "#{display_name_for_site(site)} (#{site.current_subscription.values[:name]})".html_safe
+            td
+              ul
+                - user.payment_method_details.uniq.each do |details|
+                  li= "#{details.brand} X#{details.data["number"][-5,5]}"
             td= user.created_at.strftime("%b %d, %Y")
             td= user.sign_in_count
             td= user.last_sign_in_at.try(:strftime, "%b %d, %Y at %l:%M %p")
