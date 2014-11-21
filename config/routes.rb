@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   end
 
   resources :payment_methods, only: [:index, :create, :update]
+  resources :bills, only: :show
 
   get "sites/:id/install", :to => "sites#install", :as => :site_install
   get "sites/:id/improve", :to => "sites#improve", :as => :site_improve

@@ -47,7 +47,7 @@ section
             td= number_to_currency(bill.amount)
             td= "Hello Bar #{bill.subscription.values[:name]}"
             td= bill.paid_with_payment_method_detail ? bill.paid_with_payment_method_detail.data['number'] : 'n/a'
-            td= link_to 'Receipt', ''
+            td= link_to 'Receipt', bill_path(bill)
 
   - if @next_bill && @next_bill.amount > 0
     small
