@@ -18,6 +18,8 @@ every 20.minutes, :roles => [:cron] do
   script "send_sqs_message #{env} 'hello::tracking::internal_stats_harvester:process_internal_stats'"
 end
 
+=begin
+temporarily disabling
 every :monday, :at => "8:00am", :roles => [:cron] do
   rake "email_digest:deliver_not_installed"
 end
@@ -25,6 +27,7 @@ end
 every :monday, :at => "8:30am", :roles => [:cron] do
   rake "email_digest:deliver_installed"
 end
+=end
 
 every 24.hours, :at => "12:00am", :roles => [:cron] do
   rake "site:scripts:generate_all_separately"
