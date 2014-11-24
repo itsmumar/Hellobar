@@ -114,22 +114,15 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     body = <<EOS
 Hi there,
 
-Unfortunately, we need you to change your MailChimp configuration.
+It looks like you have required fields in MailChimp, which Hellobar doesn’t support. We've paused your email synchronization to give you a chance to change your MailChimp settings. 
 
-It looks like you're requiring a field. Unfortunately, sometimes users don't
-input that field (such as first name or last name), and we can't fill in other fields.
+To fix this, log into your MailChimp account, select your list, then choose Settings > List fields and Merge tags. Once there, deselect "required" for all fields. Alternately, you may choose a different list to sync with Hellobar.
 
-We've paused your email synchronization to give you a chance to get that done.
-
-To fix this, just go to your MailChimp account, select your list, then edit your form.
-After that, uncheck "required" for all fields.
-
-We totally understand why you might want to require fields on some forms. In that case,
-please consider using a separate MailChimp list for those forms.
+We understand why you might want to require fields on some forms. In such cases, please consider using a separate MailChimp list for those forms. 
 
 Thanks!
 
-Hellobar
+Hello Bar
 EOS
 
     MailerGateway.send_email("Custom", user.email, body: body)
