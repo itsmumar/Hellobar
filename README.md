@@ -5,6 +5,7 @@ Made with love.
 ## Provisioning a new Hello Bar server
 
 0\. Once you've got the server's IP, log on.
+
 1\. Add your own and your co-workers' public keys so that everyone can log in:
 
 *On the server*, add additional SSH keys to `/home/hellobar/.ssh/authorized_keys`.
