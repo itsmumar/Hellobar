@@ -4,8 +4,12 @@ Made with love.
 
 ## Provisioning a new Hello Bar server
 
-1. Once you've got the server's IP, log on.
-2. Create the folders for deploy and disable the server's default Nginx config.
+0\. Once you've got the server's IP, log on.
+1\. Add your own and your co-workers' public keys so that everyone can log in:
+
+*On the server*, add additional SSH keys to `/home/hellobar/.ssh/authorized_keys`.
+
+2\. Create the folders for deploy and disable the server's default Nginx config.
 
 *On the server*, run the following script:
 
@@ -17,7 +21,7 @@ sudo su root - bash -c 'mkdir -p /mnt/deploy/shared/config; \
                         sudo update-rc.d nginx disable;'
 ```
 
-3. Copy the config files from a working server to the new one.
+3\. Copy the config files from a working server to the new one.
 
 *On your local machine*, run the following script:
 
@@ -27,7 +31,7 @@ scp hellobar@184.72.141.214:/mnt/deploy/shared/config/*.yml _temp; \
 scp _temp/* hellobar@<server_to_provision>:/mnt/deploy/shared/config; \
 rm -r _temp
 ```
-4. Add the server's IP address to capistrano.
+4\. Add the server's IP address to capistrano.
 
 ```ruby
 # config/deploy/production.rb
