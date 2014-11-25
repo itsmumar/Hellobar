@@ -173,7 +173,7 @@ class @PaymentModal extends Modal
   _url: ->
     if @_isUsingLinkedPaymentMethod()
       "/payment_methods/" + @_linkedPaymentMethodId()
-    else if @currentPaymentMethod && @currentPaymentMethod.current_details
+    else if @_isFree()
       "/payment_methods/" + @currentPaymentMethod.current_details.payment_method_id
     else
       "/payment_methods"
