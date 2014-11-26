@@ -66,6 +66,7 @@ Rails.application.routes.draw do
 
   get "/heartbeat" => "heartbeat#index"
   get "/login", to: redirect("/users/sign_in")
+  get "/signup", to: redirect("/")
 
   root "welcome#index"
 end
