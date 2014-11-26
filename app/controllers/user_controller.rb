@@ -47,11 +47,19 @@ class UserController < ApplicationController
     end
   end
 
-  def can_attempt_update?(user, params)
-    # this guard prevents users from activating unless they supply both a password and email
-    # active users, however, can always update
-    user.active? ||
-      (params[:password].present? && params[:email].present?)
+  def can_attempt_update?(user, user_params)
+    # If the user is active then they must supply a current_password
+    # to update the password.
+    if user.active?
+      if user_params[:password].present? && !user.valid_password?(params[:user][:current_password])
+        user.errors.add(:current_password, "is incorrect")
+        return false
+      end
+      true
+    else
+      # If the user is not active then they must supply an email and password
+      user_params[:password].present? && user_params[:email].present?
+    end
   end
 
   def load_user
