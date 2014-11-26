@@ -1,13 +1,4 @@
 GIT
-  remote: git://github.com/colinyoung/guaranteed_queue.git
-  revision: f322c781fae138f310edac22b353969e06f0c74b
-  specs:
-    guaranteed_queue (0.0.1)
-      aws-sdk
-      celluloid
-      colorize
-
-GIT
   remote: git://github.com/colinyoung/rake_running.git
   revision: 12d47fe692ffb8cc4112ec25c6b0a9595123c3c3
   specs:
@@ -115,8 +106,6 @@ GEM
     capistrano-rails (1.1.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
-    celluloid (0.16.0)
-      timers (~> 4.0.0)
     chronic (0.10.2)
     churn (0.0.35)
       chronic (>= 0.2.3)
@@ -138,7 +127,6 @@ GEM
       execjs
     coffee-script-source (1.7.0)
     colored (1.2)
-    colorize (0.7.3)
     constantcontact (1.1.2)
       json (~> 1.8, >= 1.8.1)
       mime-types (~> 1.25, >= 1.25.1)
@@ -219,7 +207,6 @@ GEM
     hashie (2.1.1)
     hike (1.2.3)
     hirb (0.7.2)
-    hitimes (1.2.2)
     httparty (0.13.1)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
@@ -449,8 +436,6 @@ GEM
     thread_safe (0.3.4)
     tilt (1.4.1)
     timecop (0.7.1)
-    timers (4.0.1)
-      hitimes
     tins (1.3.0)
     treetop (1.4.15)
       polyglot
@@ -513,7 +498,6 @@ DEPENDENCIES
   fivemat
   fog (~> 1.22.1)
   gibbon (~> 1.0.4)
-  guaranteed_queue (~> 0.0.1)!
   hashie (~> 2.1.1)
   jbuilder (~> 2.0)
   jquery-rails (~> 3.1.0)
