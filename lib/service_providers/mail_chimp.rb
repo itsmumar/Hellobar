@@ -109,6 +109,13 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   def catch_required_merge_var_error!(error)
     # pause identity by deleting it
     user = @identity.site.users.first
+    if user.temporary_email?
+      Rails.logger.warn "Cannot catch required_merge_var error for Contact List #{@identity.contact_list.id} -- user has not yet added their email address."
+      return
+    end
+
+    Rails.logger.info "required_merge_var_error for Contact List #{@identity.contact_list.id}. Deleting identity and sending email to #{user.email}."
+
     @identity.delete
 
     body = <<EOS
