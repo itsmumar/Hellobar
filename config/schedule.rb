@@ -18,8 +18,10 @@ every 20.minutes, :roles => [:cron] do
   script "send_sqs_message #{env} 'hello::tracking::internal_stats_harvester:process_internal_stats'"
 end
 
-every :thursday, :at => "10:00pm", :roles => [:cron] do
-  rake "internal_metrics:email_weekly"
+if env == "production"
+  every :thursday, :at => "10:00pm", :roles => [:cron] do
+    rake "internal_metrics:email_weekly"
+  end
 end
 
 =begin
