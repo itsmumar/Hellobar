@@ -19,7 +19,7 @@ every 20.minutes, :roles => [:cron] do
 end
 
 if env == "production"
-  every :thursday, :at => "10:00pm", :roles => [:cron] do
+  every :friday, :at => "2:00pm", :roles => [:cron] do
     rake "internal_metrics:email_weekly"
   end
 end
