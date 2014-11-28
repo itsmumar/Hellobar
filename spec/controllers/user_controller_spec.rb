@@ -7,15 +7,23 @@ describe UserController do
     context 'user is active' do
       before do
         @user = users(:joey)
+        @current_password = "current_pass"
+        @user.update_attributes(password: @current_password, password_confirmation: @current_password)
         stub_current_user(@user)
       end
 
-      it "allows the user to change their password" do
-        original_hash = @user.encrypted_password
+      it "rejects password change when incorrect current_password" do
+        put :update, :user => {:password => "asdfffff", :password_confirmation => "asdfffff", current_password: "oops" }
 
-        put :update, :user => {:password => "asdfffff", :password_confirmation => "asdfffff" }
+        @user.reload.valid_password?(@current_password).should be_true
+      end
 
-        @user.reload.encrypted_password.should_not == original_hash
+      it "allows the user to change their password with correct current_password" do
+        new_password = "asdfffff"
+        update_params = {password: new_password, password_confirmation: new_password, current_password: @current_password}
+        put :update, :user => update_params
+
+        @user.reload.valid_password?(new_password).should be_true
       end
 
       it "allows the user to change other settings with blank password params" do
@@ -26,7 +34,7 @@ describe UserController do
       end
 
       it 'sets the timezone on all sites when passed in' do
-        put :update, :user => { :first_name => 'Sexton', :last_name => 'Hardcastle', :password => 'asdfffff', :password_confirmation => 'asdfffff', :timezone => 'America/Chicago' }
+        put :update, :user => {:timezone => 'America/Chicago'}
 
         @user.sites.reload.map(&:timezone).should == ['America/Chicago', 'America/Chicago']
       end
@@ -34,7 +42,7 @@ describe UserController do
       it 'does not override a sites timezone if already set' do
         @user.sites.first.update_attribute :timezone, 'FIRST'
 
-        put :update, :user => { :first_name => 'Sexton', :last_name => 'Hardcastle', :password => 'asdfffff', :password_confirmation => 'asdfffff', :timezone => 'America/Chicago' }
+        put :update, :user => {:timezone => 'America/Chicago'}
 
         @user.sites.reload.map(&:timezone).should == ['FIRST', 'America/Chicago']
       end
