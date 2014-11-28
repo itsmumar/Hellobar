@@ -1,7 +1,7 @@
 namespace :internal_metrics do
   desc 'Emails a weekly metrics update'
   task :email_weekly => :environment do |t, args|
-    last_week=Date.commercial(Date.today.year, Date.today.cweek-1, 2)
+    last_week=Date.commercial(Date.today.year, Date.today.cweek, 2)
     two_weeks_ago=last_week - 1.week
     sites = Site.where('created_at >= ? and created_at <= ?', two_weeks_ago, last_week).all
     installed_sites = sites.reject{|s| !s.has_script_installed?}
