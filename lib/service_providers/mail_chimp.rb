@@ -1,4 +1,5 @@
 class ServiceProviders::MailChimp < ServiceProviders::Email
+  include ActionView::Helpers::SanitizeHelper
 
   def initialize(opts = {})
     if opts[:identity]
@@ -118,20 +119,23 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
     @identity.delete
 
-    body = <<EOS
-Hi there,
+    html = <<EOS
+<p>Hi there,</p>
 
-It looks like you have required fields in MailChimp, which Hellobar doesn’t support. We've paused your email synchronization to give you a chance to change your MailChimp settings. 
+<p>It looks like you have required fields in MailChimp, which Hellobar doesn’t support. We've paused your email synchronization to give you a chance to change your MailChimp settings. </p>
 
-To fix this, log into your MailChimp account, select your list, then choose Settings > List fields and Merge tags. Once there, deselect "required" for all fields. Alternately, you may choose a different list to sync with Hellobar.
+<p>To fix this, log into your MailChimp account, select your list, then choose Settings > List fields and Merge tags. Once there, deselect "required" for all fields. Alternately, you may choose a different list to sync with Hellobar.</p>
 
-We understand why you might want to require fields on some forms. In such cases, please consider using a separate MailChimp list for those forms. 
+<p>We understand why you might want to require fields on some forms. In such cases, please consider using a separate MailChimp list for those forms. </p>
 
-Thanks!
+<p>Thanks!</p>
 
-Hello Bar
+<p>Hello Bar</p>
 EOS
 
-    MailerGateway.send_email("Custom", user.email, body: body)
+    MailerGateway.send_email("Custom", user.email,
+                              subject: "Your list cannot be synced to Mailchimp",
+                              html_body: html,
+                              text_body: strip_tags(html))
   end
 end
