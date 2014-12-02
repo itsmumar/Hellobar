@@ -24,7 +24,7 @@
           padding-left: 1.33rem
 
       /*-----------  Table Headers  -----------*/
-      
+
       th
         padding: 1.67em 0 0.67em
 
@@ -54,10 +54,10 @@
           @include ellipsis()
 
         .remove-rule
-      
+
           span
             margin: 0
-      
+
             &:before, &:after
               content: " "
 
@@ -95,8 +95,8 @@
               color: $red
 
           &:nth-child(8)
-            min-width: 6rem   
-            font-weight: bold       
+            min-width: 6rem
+            font-weight: bold
 
           &:nth-child(9)
             min-width: 7rem
@@ -126,7 +126,7 @@
                   font-size: 0.55em
 
               &.icon-circle
-    
+
                 .numbers
                   top: 10%
                   font-size: 0.6em
@@ -147,7 +147,7 @@
 
           td:nth-child(9) .testing-icon
             color: $blue
-        
+
         &.type-traffic
 
           td:nth-child(4) [class*='icon-']
@@ -200,7 +200,6 @@
       /*-----------  Paused / Active Counters  -----------*/
 
       &.elements-paused
-        display: none
         background-color: $grayLightest
 
         td
@@ -235,7 +234,18 @@
       .elements-paused.displayed
         display: table-row
 
+      tr.paused
+        display: none
+
     .is-paused
 
       .site-element-block.active
+        display: none
+
+      tr.active
+        display: none
+
+    .is-all
+
+      tr.elements-paused
         display: none
