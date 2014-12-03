@@ -25,7 +25,7 @@ class Bill < ActiveRecord::Base
   def status=(value)
     value = value.to_sym
     return if self.status == value
-    raise StatusAlreadySet.new("Can not change status once set. Was #{self.status.inspect} trying to set to #{value.inspect}") unless self.status == :pending
+    raise StatusAlreadySet.new("Can not change status once set. Was #{self.status.inspect} trying to set to #{value.inspect}") unless self.status == :pending || value == :voided
 
     audit << "Changed Bill[#{self.id}] status from #{self.status.inspect} to #{value.inspect}"
     status_value = Bill.statuses[value.to_sym]
@@ -98,8 +98,17 @@ class Bill < ActiveRecord::Base
   end
 
   def paid_with_payment_method_detail
-    billing_attempts.find{|attempt| attempt.success? }.
-                     try(:payment_method_details)
+    successful_billing_attempt.try(:payment_method_details)
+  end
+
+  def successful_billing_attempt
+    billing_attempts.find{|attempt| attempt.success? }
+  end
+
+  # Can optionally specify a partial amount or description
+  # Note: amount must be negative
+  def refund!(description = nil, amount=nil) 
+    successful_billing_attempt.refund!(description, amount)
   end
 
   class Recurring < Bill
@@ -139,5 +148,43 @@ class Bill < ActiveRecord::Base
   end
 
   class Overage < Bill
+  end
+
+  class Refund < Bill
+    # Refunds must be a negative amount
+    def check_amount
+      raise InvalidBillingAmount.new("Amount was: #{self.amount.inspect}") if self.amount > 0
+    end
+
+    # Refunds are never considered "active"
+    def active_during(date)
+      return false
+    end
+
+    def refunded_billing_attempt
+      unless @refunded_billing_attempt
+        if self.refunded_billing_attempt_id
+          @refunded_billing_attempt = BillingAttempt.find(self.refunded_billing_attempt_id)
+        end
+      end
+      @refunded_billing_attempt
+    end
+
+    def refunded_billing_attempt_id
+      return self.metadata["refunded_billing_attempt_id"] if self.metadata
+    end
+
+    def refunded_billing_attempt=(billing_attempt)
+      self.refunded_billing_attempt_id = billing_attempt.id
+    end
+
+    def refunded_billing_attempt_id=(id)
+      if !self.metadata
+        self.metadata = {}
+      end
+      self.metadata["refunded_billing_attempt_id"] = id
+      @refunded_billing_attempt = nil
+    end
+
   end
 end

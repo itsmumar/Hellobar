@@ -122,6 +122,32 @@ class CyberSourceCreditCard < PaymentMethodDetails
     end
   end
 
+  def refund(amount_in_dollars, original_transaction_id)
+    raise "Can not refund money until saved" unless persisted? and token
+    if amount_in_dollars == 0
+      return true, "Amount was zero"
+    end
+    if !amount_in_dollars or amount_in_dollars < 0
+      raise "Invalid amount: #{amount_in_dollars.inspect}"
+    end
+    if !original_transaction_id
+      raise "Can not refund without original transaction ID"
+    end
+    begin
+      response = HB::CyberSource.gateway.refund(amount_in_dollars*100, original_transaction_id)
+
+      audit << "Refunding #{amount_in_dollars.inspect} to #{original_transaction_id.inspect}, got response: #{response.inspect}"
+      if response.success?
+        return true, response.authorization
+      else
+        return false, response.message
+      end
+    rescue Exception => e
+      audit << "Error refunding #{amount_in_dollars.inspect} to #{original_transaction_id.inspect}: #{e.message}"
+      raise
+    end
+  end
+
   protected
   def token
     data["token"]

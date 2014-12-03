@@ -1,13 +1,24 @@
 require 'spec_helper'
 require 'payment_method_details'
 
+module BillSpecDates
+  def june; Time.parse("2014-06-10"); end
+  def bill_at; Time.parse("2014-06-11"); end
+  def july; Time.parse("2014-07-10"); end 
+  def aug; Time.parse("2014-08-10"); end 
+  def sep; Time.parse("2014-09-10"); end 
+end
+
 describe Bill do
+  include BillSpecDates
+
   fixtures :all
   set_fixture_class payment_method_details: PaymentMethodDetails # pluralized class screws up naming convention
 
   it "should not let create a negative bill" do
     lambda{Bill.create(:amount=>-1)}.should raise_error(Bill::InvalidBillingAmount)
   end
+
 
   it "should not let you change the status once set" do
     bill = bills(:future_bill)
@@ -61,10 +72,6 @@ describe Bill do
       subscription = subscriptions(:zombo_subscription)
       Bill.destroy_all
       subscription.bills(true).length.should == 0
-      june = Time.parse("2014-06-10")
-      bill_at = Time.parse("2014-06-11")
-      july = Time.parse("2014-07-10")
-      aug = Time.parse("2014-08-10")
       subscription.should be_monthly
       bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 1)
       subscription.bills(true).length.should == 1
@@ -86,6 +93,36 @@ describe Bill do
       Bill::Recurring.next_month(Time.parse("2015-01-30")).strftime("%Y-%m-%d").should == "2015-02-28"
       Bill::Recurring.next_year(Time.parse("2014-12-30")).strftime("%Y-%m-%d").should == "2015-12-30"
       Bill::Recurring.next_year(Time.parse("2016-02-29")).strftime("%Y-%m-%d").should == "2017-02-28"
+    end
+
+    it "should not be affected by a refund" do
+      subscription = subscriptions(:always_successful_subscription)
+      Bill.destroy_all
+      subscription.bills(true).length.should == 0
+      subscription.should be_monthly
+      bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 1)
+      subscription.bills(true).length.should == 1
+      bill.attempt_billing!
+      bill.refund!
+      subscription.bills(true).length.should == 3
+      initial_bill = subscription.bills[0]
+      recurring_bill = subscription.bills[1]
+      refund_bill = subscription.bills[2]
+      recurring_bill.paid!
+      subscription.bills(true).length.should == 4
+      recurring_bill2 = subscription.bills[3]
+      initial_bill.should be_paid
+      initial_bill.start_date.should == june
+      initial_bill.end_date.should == july
+      recurring_bill.should be_paid
+      recurring_bill.start_date.should == july
+      recurring_bill.bill_at.should == Bill::Recurring.next_month(bill_at)
+      recurring_bill.end_date.should == aug
+      # Next recurring bill should be unaffected by refund
+      recurring_bill2.should be_pending
+      recurring_bill2.start_date.should == aug
+      recurring_bill2.bill_at.should == Bill::Recurring.next_month(Bill::Recurring.next_month(bill_at))
+      recurring_bill2.end_date.should == sep
     end
   end
 
@@ -177,6 +214,7 @@ describe Subscription do
 end
 
 describe PaymentMethod do
+  include BillSpecDates
   fixtures :all
 
   describe "pay" do
@@ -220,5 +258,46 @@ describe PaymentMethod do
     it "should raise an error if no payment_method_details" do
       lambda{PaymentMethod.new.pay(bills(:now_bill))}.should raise_error(PaymentMethod::MissingPaymentDetails)
     end
+  end
+
+  describe "refund" do
+    it "should successfully refund the billing attempt" do
+      subscription = subscriptions(:always_successful_subscription)
+      bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10)
+      billing_attempt = subscription.payment_method.pay(bill)
+      # AlwaysSuccessfulPaymentMethodDetails.any_instance.should_receive(:refund).with(bill.amount, billing_attempt.response) -- enabling this will cause a later method to fail - not sure why
+      refund_bill, refund_attempt = billing_attempt.refund!
+      refund_bill.amount.should == -10
+      refund_bill.refunded_billing_attempt.should == billing_attempt
+      refund_bill.should_not be_nil
+      refund_bill.subscription.should == subscription
+      refund_bill.start_date.should be_within(5).of(Time.now)
+      refund_bill.bill_at.should be_within(5).of(Time.now)
+      refund_bill.end_date.should == july
+      refund_attempt.should be_successful
+      refund_attempt.bill.should == refund_bill
+      refund_attempt.payment_method_details.should == subscription.payment_method.current_details
+    end
+
+    it "should let you do a partial refund" do
+      subscription = subscriptions(:always_successful_subscription)
+      billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
+      refund_bill, refund_attempt = billing_attempt.refund!(nil, -5)
+      refund_bill.amount.should == -5
+    end
+
+    it "should let you specify description" do
+      subscription = subscriptions(:always_successful_subscription)
+      billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
+      refund_bill, refund_attempt = billing_attempt.refund!("custom description")
+      refund_bill.description.should == "custom description"
+    end
+
+    it "should not let you refund an unsuccessful billing attempt" do
+      subscription = subscriptions(:zombo_subscription)
+      billing_attempt = payment_methods(:always_fails).pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
+      lambda{billing_attempt.refund!}.should raise_error(BillingAttempt::InvalidRefund)
+    end
+
   end
 end

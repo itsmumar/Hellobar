@@ -116,4 +116,15 @@ describe CyberSourceCreditCard do
     cc = CyberSourceCreditCard.new(data: INVALID_DATA, payment_method: payment_methods(:joeys))
     cc.should_not be_valid
   end
+
+  it "should let you refund a payment" do
+    credit_card = CyberSourceCreditCard.create!(data: VALID_DATA, payment_method: payment_methods(:joeys))
+    charge_success, charge_response = credit_card.charge(100)
+    charge_success.should be_true
+    charge_response.should_not be_nil
+    refund_success, refund_response = credit_card.refund(50, charge_response)
+    refund_success.should be_true
+    refund_response.should_not be_nil
+    refund_response.should_not == charge_response
+  end
 end

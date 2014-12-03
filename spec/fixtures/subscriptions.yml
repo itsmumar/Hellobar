@@ -18,3 +18,9 @@ past_due_site:
   type: Subscription::Pro
   user: joey
   amount: 149
+always_successful_subscription:
+  site: zombo
+  user: joey
+  type: Subscription::Pro
+  amount: 149
+  payment_method: always_successful

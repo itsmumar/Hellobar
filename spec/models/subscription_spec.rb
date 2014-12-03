@@ -111,6 +111,42 @@ describe Subscription do
       @site.capabilities(true).class.should == Subscription::Enterprise::Capabilities
     end
 
+    it "should handle refund, switch, and void" do
+      success, pro_bill = @site.change_subscription(@pro, @payment_method)
+      success.should be_true
+      @site.capabilities(true).class.should == Subscription::Pro::Capabilities
+      
+      # Refund
+      refund_bill, refund_attempt = pro_bill.refund!
+      refund_bill.should be_paid
+      refund_attempt.should be_successful
+      # Should still have pro cabalities
+      @site.capabilities(true).class.should == Subscription::Pro::Capabilities
+      # Should have a pending bill for pro
+      pending = @site.bills(true).reject{|b| !b.pending?}
+      pending.should have(1).bill
+      pending.first.subscription.should be_a(Subscription::Pro)
+
+      # Switch to Free
+      success, free_bill = @site.change_subscription(@free, @payment_method)
+      success.should be_true
+      # Should still have pro capabilities
+      @site.capabilities(true).class.should == Subscription::Pro::Capabilities
+      # Should have a pending bill for free
+      pending = @site.bills(true).reject{|b| !b.pending?}
+      pending.should have(1).bill
+      pending.first.subscription.should be_a(Subscription::Free)
+
+      # Void the paid bill
+      pro_bill.void!
+      # Should not have pro capabilities
+      @site.capabilities(true).class.should == Subscription::Free::Capabilities
+      # Should still have a pending bill for free
+      pending = @site.bills(true).reject{|b| !b.pending?}
+      pending.should have(1).bill
+      pending.first.subscription.should be_a(Subscription::Free)
+    end
+
     it "should return the default visit_overage for the plan" do
       Subscription::Pro.create.capabilities.visit_overage.should == Subscription::Pro.defaults[:visit_overage]
     end
@@ -250,6 +286,61 @@ describe Site do
       bill.amount.should == @enterprise.amount-@pro.amount
       @site.current_subscription.should == @enterprise
       @site.capabilities(true).should be_a(Subscription::Enterprise::Capabilities)
+    end
+
+    it "should not have prorating affected by refund" do
+      success, bill1 = @site.change_subscription(@pro, @payment_method)
+      success.should be_true
+      @site.current_subscription.should == @pro
+      bill1.refund!
+      success, bill2 = @site.change_subscription(@enterprise, @payment_method)
+      success.should be_true
+      bill2.should be_paid
+      bill2.amount.should == @enterprise.amount-@pro.amount
+      @site.current_subscription.should == @enterprise
+      @site.capabilities(true).should be_a(Subscription::Enterprise::Capabilities)
+    end
+
+    it "should affect prorating if you refund and switch plan" do
+      success, pro_bill = @site.change_subscription(@pro, @payment_method)
+      success.should be_true
+      
+      # Refund
+      refund_bill, refund_attempt = pro_bill.refund!
+      refund_bill.should be_paid
+      refund_attempt.should be_successful
+
+      # Switch to Free
+      success, free_bill = @site.change_subscription(@free, @payment_method)
+      success.should be_true
+
+      # Switch to enterprise
+      success, enterprise_bill = @site.change_subscription(@enterprise, @payment_method)
+      success.should be_true
+      # Should still prorate
+      enterprise_bill.amount.should == @enterprise.amount-@pro.amount
+    end
+
+    it "should affect prorating if you refund and switch plan" do
+      success, pro_bill = @site.change_subscription(@pro, @payment_method)
+      success.should be_true
+      
+      # Refund
+      refund_bill, refund_attempt = pro_bill.refund!
+      refund_bill.should be_paid
+      refund_attempt.should be_successful
+
+      # Switch to Free
+      success, free_bill = @site.change_subscription(@free, @payment_method)
+      success.should be_true
+      # Void the pro bill
+      pro_bill.void!
+
+      # Switch to enterprise
+      success, enterprise_bill = @site.change_subscription(@enterprise, @payment_method)
+      success.should be_true
+      # NO prorating
+      enterprise_bill.amount.should == @enterprise.amount
     end
 
     it "should prorate based on amount of time used from a paid plan" do

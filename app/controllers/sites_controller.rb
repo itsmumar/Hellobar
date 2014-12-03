@@ -169,7 +169,7 @@ class SitesController < ApplicationController
   end
 
   def load_bills
-    @bills = @site.bills.includes(:subscription).select{|bill| bill.status == :paid && bill.amount > 0}.sort_by(&:bill_at).reverse
+    @bills = @site.bills.includes(:subscription).select{|bill| bill.status == :paid && bill.amount != 0}.sort_by(&:bill_at).reverse
     @next_bill = @site.bills.includes(:subscription).find{|bill| bill.status == :pending}
   end
 end
