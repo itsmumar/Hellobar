@@ -40,6 +40,7 @@ unless defined?(Hellobar::Settings)
     tracking_host
     twilio_password
     twilio_user
+    sentry_dsn
   )
 
   keys.each do |key|

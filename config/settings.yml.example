@@ -31,3 +31,4 @@ cybersource_login: cybersource-login
 cybersource_password: cybersource-password
 main_queue: hellobar3_production
 low_priority_queue: hellobar3_production_lowpriority
+sentry_dsn: sentry-dsn-endpoint
