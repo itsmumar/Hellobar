@@ -6,7 +6,7 @@ class Bill < ActiveRecord::Base
   class BillingEarly < Exception; end
   class InvalidBillingAmount < Exception; end
   serialize :metadata, JSON
-  belongs_to :subscription
+  belongs_to :subscription, inverse_of: :bills
   has_many :billing_attempts, -> {order 'id'}
   validates_presence_of :subscription
   include BillingAuditTrail
@@ -42,7 +42,7 @@ class Bill < ActiveRecord::Base
 
   def attempt_billing!(allow_early=false)
     now = Time.now
-    raise BillingEarly.new("Attempted to bill on #{now} but bill[#{self.id}] has a bill_at date of #{self.bill_at}") if !allow_early and now < self.bill_at  
+    raise BillingEarly.new("Attempted to bill on #{now} but bill[#{self.id}] has a bill_at date of #{self.bill_at}") if !allow_early and now < self.bill_at
     if self.subscription.requires_payment_method?
       return self.subscription.payment_method.pay(self)
     else
@@ -107,7 +107,7 @@ class Bill < ActiveRecord::Base
 
   # Can optionally specify a partial amount or description
   # Note: amount must be negative
-  def refund!(description = nil, amount=nil) 
+  def refund!(description = nil, amount=nil)
     successful_billing_attempt.refund!(description, amount)
   end
 
