@@ -1,0 +1,30 @@
+script id='account-prompt-modal-template' type='text/x-handlebars-template'
+  .modal-wrapper
+    = form_for current_user, html: {class: "modal-block"} do |f|
+      header
+        h5 Your Hello Bar has been created!
+
+      .account-prompt-modal
+        p Before you install your Hello Bar, please enter your email and password below. This will allow you to return and make changes later.
+
+        .thirds-wrapper
+          .thirds
+            label Email
+            input type='email' placeholder='name@email.com' name="user[email]"
+
+          .thirds
+            label Passowrd
+            input type='password' placeholder='••••••' name="user[password]"
+
+          .thirds
+            label Timezone
+            .select-wrapper
+              = select 'user', 'timezone', ActiveSupport::TimeZone.all.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
+       
+        = hidden_field_tag :detect_timezone, disabled: true
+
+      footer
+        input type="submit" class="button" value="Save Account"
+
+javascript:
+  new AccountPromptModal().open();

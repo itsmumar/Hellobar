@@ -34,6 +34,9 @@ html
     = render "shared/modals/payment_modal"
     = render "shared/modals/payment_confirmation"
 
+    - if show_account_prompt?
+      = render "shared/modals/account_prompt"
+
 javascript:
   var currentUser = #{{UserSerializer.new(current_user).to_json}};
   var siteID = "#{@site.try(:id)}";

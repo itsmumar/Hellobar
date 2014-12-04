@@ -11,7 +11,6 @@ class @UnsavedChangesModal extends Modal
 
   open: ->
     @_bindInteractions(@$modal)
-
     super
 
   _bindInteractions: (object) ->
