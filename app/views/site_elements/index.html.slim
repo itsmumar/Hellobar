@@ -14,8 +14,18 @@ table.rules-wrapper
       th Views
       th Converstions
       th %
-      th 
+      th
   tbody
+    tr.active.elements-paused#paused-guidance
+      td colspan='9'
+        | Everything is currently paused.
+        a
+          | [view paused bars]
+    tr.paused.elements-paused#active-guidance
+      td colspan='9'
+        | Everything is currently active.
+        a
+          | [view active bars]
     - @rules.each do |rule|
       tr.rule-block data-rule-id=rule.id
         th.page-header colspan='9'
@@ -43,11 +53,7 @@ table.rules-wrapper
       - rule.site_elements.each do |site_element|
         = render "site_elements/site_element", { :site_element => site_element, :rule => rule }
 
-      tr.elements-paused data-rule-id=rule.id
-        td colspan='9' 
-          | Everything is currently paused.
-          a 
-            | [view paused bars]
+
 
       tr data-rule-id=rule.id
         td.temporary-block.suggestion-block colspan='9'

@@ -5,9 +5,33 @@ $ ->
     $('.rules-wrapper tbody').removeClass().addClass(typeClass)
 
   checkPaused = (rule_id) ->
-    displayBlock = $(".elements-paused[data-rule-id='#{rule_id}']")
-    activeCount = $(".site-element-block.active[data-rule-id='#{rule_id}']").length
-    if activeCount then displayBlock.removeClass('displayed') else displayBlock.addClass('displayed')
+    # Find the number of active and paused bars for this rule
+    activeBarCount = $(".site-element-block.active[data-rule-id='#{rule_id}']").length
+    pausedBarCount = $(".site-element-block.paused[data-rule-id='#{rule_id}']").length
+
+    # Find the total number of active and paused bars across all rules
+    allActiveBarsCount = $("tr.site-element-block.active").length
+    allPausedBarsCount = $("tr.site-element-block.paused").length
+
+    # The table rows for this rule
+    ruleBlocks = $("tr[data-rule-id='#{rule_id}']").not(".site-element-block")
+
+    ruleBlocks.removeClass('active paused')
+
+    if activeBarCount == 0
+      ruleBlocks.addClass('paused')
+    else if pausedBarCount == 0
+      ruleBlocks.addClass('active')
+
+    if allActiveBarsCount == 0
+      $("#paused-guidance").css({ display: "" });
+      $("#active-guidance").hide();
+    else if allPausedBarsCount == 0
+      $("#paused-guidance").hide();
+      $("#active-guidance").css({ display: "" });
+    else
+      $("#paused-guidance").hide();
+      $("#active-guidance").hide();
 
   removeRow = (row) ->
     row.css({height: 0})
@@ -158,15 +182,20 @@ $ ->
 
   #-----------  View Paused Bars  -----------#
 
-  $('body').on 'click', '.elements-paused a', (event) ->
+  $('body').on 'click', '#paused-guidance a', (event) ->
     $('a.element-filter').removeClass('active')
     $('a.element-filter[href="#paused"]').addClass('active')
     setFilter('#paused')
+
+  $('body').on 'click', '#active-guidance a', (event) ->
+    $('a.element-filter').removeClass('active')
+    $('a.element-filter[href="#active"]').addClass('active')
+    setFilter('#active')
 
   #-----------  Render elements for default filter  -----------#
 
   currentFilter = $('nav.tabs-wrapper .element-filter.active').attr('href')
   setFilter(currentFilter) if currentFilter
 
-  $('.rules-wrapper .rule-block').each (index, rule) -> 
+  $('.rules-wrapper .rule-block').each (index, rule) ->
     checkPaused $(rule).data('rule-id')
