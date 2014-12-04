@@ -9,5 +9,18 @@ class @AccountPromptModal extends Modal
 
     super(@$modal)
 
+  open: ->
+    @_rerouteErrors()
+    super
+
   close: ->
     false
+
+  _rerouteErrors: ->
+    flash = $('.global-content .flash-block')
+
+    if flash.length
+      message = flash.text()
+      flash.remove()
+      @_displayErrors([message])
+
