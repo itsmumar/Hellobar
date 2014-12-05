@@ -87,4 +87,20 @@ describe UserController do
       end
     end
   end
+
+  describe "destroy" do
+    it "should not destroy a user with active bills" do
+      user = bills(:past_due_bill).subscription.user
+      stub_current_user(user)
+      delete :destroy
+      User.where(id: user.id).first.should == user
+    end
+
+    it "should not destroy a user with active bills" do
+      user = bills(:paid_bill).subscription.user
+      stub_current_user(user)
+      delete :destroy
+      User.where(id: user.id).first.should be_nil
+    end
+  end
 end

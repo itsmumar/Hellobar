@@ -1,6 +1,6 @@
 class UserController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_user, :only => [:edit, :update]
+  before_action :load_user, :only => [:edit, :update, :destroy]
 
   def update
     active_before_update = @user.active?
@@ -30,6 +30,28 @@ class UserController < ApplicationController
           end
         end
 
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @user.destroy
+    if @user.destroyed?
+      respond_to do |format|
+        format.html do
+          flash[:success] = "Account successfully deleted."
+          sign_out @user
+          redirect_to root_path
+        end
+        format.json { render json: {success: true}, status: :ok }
+      end
+    else
+      respond_to do |format|
+        format.html do
+          flash.now[:error] = "There was a problem deleting your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
+          render :action => :edit
+        end
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
