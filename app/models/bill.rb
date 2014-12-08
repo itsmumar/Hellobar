@@ -7,7 +7,7 @@ class Bill < ActiveRecord::Base
   class InvalidBillingAmount < Exception; end
   serialize :metadata, JSON
   belongs_to :subscription
-  has_many :billing_attempts
+  has_many :billing_attempts, -> {order 'id'}
   validates_presence_of :subscription
   include BillingAuditTrail
   delegate :site, to: :subscription
