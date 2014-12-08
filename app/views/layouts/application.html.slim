@@ -34,7 +34,7 @@ html
     = render "shared/modals/payment_modal"
     = render "shared/modals/payment_confirmation"
 
-    - if show_account_prompt?
+    - if show_account_prompt? && !impersonated_user
       = render "shared/modals/account_prompt"
 
 javascript:
