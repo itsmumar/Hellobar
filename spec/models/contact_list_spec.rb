@@ -64,18 +64,20 @@ describe ContactList do
     end
 
     it "should notify the old identity when the identity is updated" do
-      old_identity = contact_list.identity
+      cl = contact_lists(:zombo2)
+      old_identity = cl.identity
       old_identity.should_receive(:contact_lists_updated)
       Identity.stub_chain(:where, :first).and_return(old_identity)
-      contact_list.identity = identities(:constantcontact)
-      contact_list.save
+      cl.identity = identities(:constantcontact)
+      cl.save
     end
 
     it "should message the identity when the contact list is destroyed" do
-      old_identity = contact_list.identity
+      cl = contact_lists(:zombo2)
+      old_identity = cl.identity
       old_identity.should_receive(:contact_lists_updated)
       Identity.stub_chain(:where, :first).and_return(old_identity)
-      contact_list.destroy
+      cl.destroy
     end
   end
 

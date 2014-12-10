@@ -7,6 +7,7 @@ zombo:
 zombo2:
   id: 2
   name: another zombo list
+  identity: mailchimp
   site: zombo
 embed_code:
   id: 3

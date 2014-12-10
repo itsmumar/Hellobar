@@ -98,8 +98,8 @@ class ContactList < ActiveRecord::Base
 
   private
   def notify_identity
-    old_identity_id = destroyed? ? identity_id : changes[:identity_id]
-    Identity.where(id: old_identity_id).first.try(:contact_lists_updated)
+    old_identity_id = destroyed? ? identity_id : changes[:identity_id].try(:first)
+    Identity.where(id: old_identity_id).first.try(:contact_lists_updated) if old_identity_id
   end
 
   def provider_valid
