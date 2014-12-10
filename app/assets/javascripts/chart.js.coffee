@@ -14,7 +14,6 @@ class @Chart
           @_renderData(data)
         else
           @$el.addClass('insufficient-data')
-
         return
       ).fail(=>
         @_failedAttempt()

@@ -28,6 +28,18 @@ describe CyberSourceCreditCard do
     country: "USA"
   }.freeze
   INVALID_DATA = VALID_DATA.clone.merge(number: '123412341234')
+  FOREIGN_DATA = {
+    number: '4111111111111111',
+    month: '8',
+    year: '2016',
+    first_name: 'Tobias',
+    last_name: 'Luetke',
+    verification_value: '123',
+    city: "London",
+    zip: "W10 6TH",
+    address1: "149 Freston Rd",
+    country: "United Kingdom"
+  }.freeze
 
   it "should remove all non-standard fields from data" do
     cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
@@ -115,6 +127,13 @@ describe CyberSourceCreditCard do
     CyberSourceCreditCard.new(data: missing, payment_method: payment_methods(:joeys)).should_not be_valid
     cc = CyberSourceCreditCard.new(data: INVALID_DATA, payment_method: payment_methods(:joeys))
     cc.should_not be_valid
+  end
+
+  it "should not require the state field for foreign addresses" do
+    # Should be valid
+    cc = CyberSourceCreditCard.new(data: FOREIGN_DATA, payment_method: payment_methods(:joeys))
+    cc.errors.messages.should == {}
+    cc.should be_valid
   end
 
   it "should let you refund a payment" do

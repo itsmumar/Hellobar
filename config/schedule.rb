@@ -22,6 +22,9 @@ if env == "production"
   every :friday, :at => "2:00pm", :roles => [:cron] do
     rake "internal_metrics:email_weekly"
   end
+  every :day, :at => "1:00pm", :roles => [:cron] do
+    rake "billing:run"
+  end
 end
 
 =begin

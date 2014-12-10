@@ -30,13 +30,14 @@ class ApplicationController < ActionController::Base
   end
 
   def current_admin
-    @current_admin ||= Admin.validate_session(access_token, session[:admin_token])
+    return nil if @current_admin == false
+    @current_admin ||= Admin.validate_session(access_token, session[:admin_token]) || false
   end
 
   def require_admin
-    if current_admin.nil?
-      redirect_to admin_access_path
-    elsif current_admin.needs_to_set_new_password?
+    redirect_to admin_access_path and return unless current_admin
+
+    if current_admin.needs_to_set_new_password?
       redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path
     end
   end
@@ -74,12 +75,14 @@ class ApplicationController < ActionController::Base
   end
 
   def current_site
-    if current_user && session[:current_site]
-      current_user.sites.where(:id => session[:current_site]).first || current_user.sites.first
-    elsif current_user
-      current_user.sites.first
-    else
-      nil
+    @current_site ||= begin
+      if current_user && session[:current_site]
+        current_user.sites.where(:id => session[:current_site]).first || current_user.sites.first
+      elsif current_user
+        current_user.sites.first
+      else
+        nil
+      end
     end
   end
 
