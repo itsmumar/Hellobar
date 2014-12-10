@@ -63,6 +63,10 @@ class Identity < ActiveRecord::Base
     self.destroy
   end
 
+  def contact_lists_updated
+    self.destroy if contact_lists.count == 0
+  end
+
   # Deprecated
   # TODO -Remove once the `embed_code` column is removed from Identities
   def embed_code=(embed_code)

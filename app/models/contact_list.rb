@@ -24,6 +24,8 @@ class ContactList < ActiveRecord::Base
   validate :embed_code_valid?, :if => :embed_code?
 
   after_save :sync, :if => :data_changed?
+  after_save :notify_identity, :if => :identity_id_changed?
+  after_destroy :notify_identity
 
   def syncable?
     return false unless identity && data && Hellobar::Settings[:syncable]
@@ -95,6 +97,10 @@ class ContactList < ActiveRecord::Base
   end
 
   private
+  def notify_identity
+    old_identity_id = destroyed? ? identity_id : changes[:identity_id]
+    Identity.where(id: old_identity_id).first.try(:contact_lists_updated)
+  end
 
   def provider_valid
     errors.add(:provider, "is not valid") unless provider_set? && identity.try(:provider)
@@ -113,7 +119,7 @@ class ContactList < ActiveRecord::Base
     return unless data
     self.data = data.delete_if { |k,v| v.blank? }
   end
-  
+
   def embed_code_exists?
     errors.add(:base, "Embed code cannot be blank") unless data['embed_code'].present?
   end
