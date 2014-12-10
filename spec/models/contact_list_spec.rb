@@ -62,6 +62,21 @@ describe ContactList do
       list.update_attributes(:provider => "0")
       list.identity.should be_blank
     end
+
+    it "should notify the old identity when the identity is updated" do
+      old_identity = contact_list.identity
+      old_identity.should_receive(:contact_lists_updated)
+      Identity.stub_chain(:where, :first).and_return(old_identity)
+      contact_list.identity = identities(:constantcontact)
+      contact_list.save
+    end
+
+    it "should message the identity when the contact list is destroyed" do
+      old_identity = contact_list.identity
+      old_identity.should_receive(:contact_lists_updated)
+      Identity.stub_chain(:where, :first).and_return(old_identity)
+      contact_list.destroy
+    end
   end
 
   it "should run email sync_all! correctly" do

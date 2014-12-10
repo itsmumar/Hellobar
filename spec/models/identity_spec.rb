@@ -47,12 +47,30 @@ describe Identity do
     end
   end
 
+  describe "contact lists updated" do
+    context "still has referencing contact lists" do
+      it "should do nothing" do
+        identity = contact_lists(:zombo).identity
+        identity.contact_lists_updated
+        identity.destroyed?.should be_false
+      end
+    end
+
+    context "has no referencing contact lists" do
+      it "should do nothing" do
+        identity = Identity.create(:provider => "aweber", :credentials => {}, :site => sites(:zombo))
+        identity.contact_lists_updated
+        identity.destroyed?.should be_true
+      end
+    end
+  end
+
   describe "embed code service provider" do
     let(:contact_list) do
       contact_lists(:embed_code).tap {|c| c.identity = nil }
     end
     let(:file_name) { (file rescue provider) }
-    
+
     let(:service_provider) do
       contact_list.provider = provider
       contact_list.data['embed_code'] = embed_code_file_for(file_name)
