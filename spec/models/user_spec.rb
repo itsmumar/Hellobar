@@ -44,13 +44,3 @@ describe User, '#active?' do
     user.should_not be_active
   end
 end
-
-describe User do
-  fixtures :all
-
-  it "should not destroy the user if there are pending bills" do
-    user = bills(:past_due_bill).subscription.user
-    user.destroy
-    user.destroyed?.should be_false
-  end
-end

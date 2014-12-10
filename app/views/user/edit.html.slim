@@ -35,5 +35,4 @@ nav.tabs-wrapper
     small Must be 6 characters with one uppercase letter and a number
 
     = f.submit "Change Password", :class => "button"
-
-  = button_to "Delete User", user_path, method: :delete, data: { confirm: "Are you sure?" }
+    = link_to "Delete User", user_path, method: :delete, data: { confirm: "Are you sure?" }

@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  before_destroy :can_destroy? #TODO: stop payment
-
   include BillingAuditTrail
   has_many :payment_methods
   has_many :payment_method_details, through: :payment_methods, source: :details
@@ -61,13 +59,6 @@ class User < ActiveRecord::Base
 
   def temporary?
     status == TEMPORARY_STATUS
-  end
-
-  def can_destroy?
-    if sites.any? { |x| x.bills.any? { |b| b.status == :pending && b.amount != 0 } }
-      errors.add(:bills, "have not been paid")
-      return false
-    end
   end
 
   private
