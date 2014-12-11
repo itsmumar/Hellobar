@@ -5,6 +5,7 @@ describe Users::SessionsController do
 
   before(:each) do
     @request.env["devise.mapping"] = Devise.mappings[:user]
+    @wordpress_user = OpenStruct.new(id: 123)
   end
 
   describe "POST create" do
@@ -14,12 +15,27 @@ describe Users::SessionsController do
       controller.current_user.should == users(:joey)
     end
 
-    it "should redirect if trying to sign in with an email that's in the wordpress database" do
-      Hello::WordpressUser.should_receive(:email_exists?).with("user@website.com").and_return(true)
+    it "redirects 1.0 users to migration wizard if the correct password is used" do
+      email, password = "user@website.com", "asdfasdf"
 
-      post :create, :user => {:email => "user@website.com", :password => "asdfasdf"}
+      Hello::WordpressUser.should_receive(:email_exists?).with(email).and_return(true)
+      Hello::WordpressUser.should_receive(:authenticate).with(email, password).and_return(@wordpress_user)
 
-      response.should render_template("pages/redirect_login")
+      post :create, :user => {:email => email, :password => password}
+
+      response.should redirect_to(user_migration_step1_path)
+    end
+
+    it "asks 1.0 users to reauthenticate if their password is wrong" do
+      email, password = "user@website.com", "asdfasdf"
+
+      Hello::WordpressUser.should_receive(:email_exists?).with(email).and_return(true)
+      Hello::WordpressUser.should_receive(:authenticate).with(email, password).and_return(nil)
+
+      post :create, :user => {:email => email, :password => password}
+
+      flash.now[:alert].should =~ /Invalid/
+      response.should render_template("users/sessions/new")
     end
   end
 end

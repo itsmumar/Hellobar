@@ -13,6 +13,9 @@
 
   h1 Sign In
 
+  - if params[:source] == "migration_email"
+    p We're excited to have you join the new Hello Bar!
+
   = f.input_field :email, :placeholder => 'Your Email', autofocus: true
   = f.input_field :password, :placeholder => 'Password'
 
