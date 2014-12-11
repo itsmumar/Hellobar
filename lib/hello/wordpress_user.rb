@@ -15,5 +15,10 @@ module Hello
       Rails.logger.error("Wordpress database configured in database.yml does not exist")
       false
     end
+
+    def self.authenticate(email, password)
+      # TODO: actually check the password here; return nil if it doesn't match
+      where(['user_email = ? or user_login = ?', email, email]).first
+    end
   end
 end
