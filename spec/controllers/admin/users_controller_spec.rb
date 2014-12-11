@@ -40,4 +40,13 @@ describe Admin::UsersController do
       controller.current_user.should be_nil
     end
   end
+
+  describe "DELETE destroy" do
+    it "allows the admin to (soft) destroy a user" do
+      stub_current_admin(@admin)
+      user = users(:wootie)
+      delete :destroy, :id => user
+      User.only_deleted.should include(user)
+    end
+  end
 end

@@ -23,7 +23,7 @@ div.row
 
         - @users.each do |user|
           tr
-            td= user.email
+            td= link_to user.email, admin_user_path(user)
             td
               ul
                 - user.sites.each do |site|

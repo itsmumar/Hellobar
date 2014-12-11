@@ -19,6 +19,21 @@ class Admin::UsersController < ApplicationController
     end
   end
 
+  def show
+    @user = User.find(params[:id])
+  end
+
+  def destroy
+    @user = User.find(params[:id])
+    if @user.destroy
+      flash[:success] = "Deleted user #{@user.id} (#{@user.email})"
+      redirect_to admin_users_path
+    else
+      flash[:error] = "Failed to delete user."
+      redirect_to admin_user_path(@user)
+    end
+  end
+
   def impersonate
     @user = User.find(params[:id])
     session[:impersonated_user] = @user.id
