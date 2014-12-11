@@ -2,3 +2,28 @@ div#user_profile
   div#profile_header
     h1= @user.email
     = link_to "Destroy User", admin_user_path(@user), method: :delete, data: { confirm: "Are you sure?" }
+  - @user.sites.each do |site|
+    h3
+      | #{site.url} - #{site.current_subscription.values[:name]}
+
+    - unless bills_for(site).empty?
+      div.site_section
+        div.title Billing History
+        table
+          tr
+            th Amount
+            th Status
+            th Due At
+          - bills_for(site).each do |bill|
+            tr
+              td= bill.amount
+              td= bill.status
+              td= bill.due_at.strftime('%D')
+
+    div.site_section
+      div.title Subscription History
+      - site.subscriptions.each do |sub|
+        div
+          | Changed to #{sub.values[:name]} on #{sub.created_at.strftime('%D')}
+      div
+        | Created on #{site.created_at.strftime('%D')}
