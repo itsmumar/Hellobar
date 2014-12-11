@@ -145,6 +145,12 @@ describe Site do
     @site.destroy
   end
 
+  it "should soft-delete" do
+    @site.stub(:generate_static_assets)
+    @site.destroy
+    Site.only_deleted.should include(@site)
+  end
+
   describe "#has_script_installed?" do
     it "is true if script_installed_at is set" do
       @site.script_installed_at = 1.day.ago

@@ -1,6 +1,7 @@
 class SiteMembership < ActiveRecord::Base
   belongs_to :user
   belongs_to :site
+  acts_as_paranoid
 
   validates :user_id, :uniqueness => {:scope => :site_id}
   validate :only_one_owner_per_site

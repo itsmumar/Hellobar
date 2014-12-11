@@ -10,4 +10,10 @@ describe SiteMembership do
     membership.role = "owner"
     membership.should_not be_valid
   end
+
+  it "should soft-delete" do
+    membership = SiteMembership.create(:site => sites(:zombo), :user => users(:wootie), :role => "editor")
+    membership.destroy
+    SiteMembership.only_deleted.should include(membership)
+  end
 end

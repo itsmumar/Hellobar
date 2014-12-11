@@ -2,14 +2,21 @@ class User < ActiveRecord::Base
   include BillingAuditTrail
   has_many :payment_methods
   has_many :payment_method_details, through: :payment_methods, source: :details
-  has_many :site_memberships, dependent: :destroy
+  has_many :site_memberships
   has_many :sites, through: :site_memberships
+  acts_as_paranoid
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
   delegate :url_helpers, to: "Rails.application.routes"
 
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: true
+
+  # If we ever assign more than one user to a site, this will have
+  # to be refactored
+  before_destroy do
+    self.sites.each(&:destroy)
+  end
 
   attr_accessor :legacy_migration
 
