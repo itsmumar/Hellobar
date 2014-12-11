@@ -28,5 +28,5 @@ free_bill:
 past_due_bill:
   amount: 10
   bill_at: '2014-09-01'
-  subscription: past_due_subscription
+  subscription: past_due_site
   status: 0

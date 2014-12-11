@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords"}
 
   get "profile", :to => "user#edit", :as => :profile
-  resource :user, :controller => :user, :only => [:update]
+  resource :user, :controller => :user, :only => [:update, :destroy]
 
   resources :sites do
     resource :wordpress_plugin, :controller => :wordpress_plugin

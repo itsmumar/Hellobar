@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141121221535) do
+ActiveRecord::Schema.define(version: 20141210220524) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -270,6 +270,7 @@ ActiveRecord::Schema.define(version: 20141121221535) do
     t.string   "role",       default: "owner"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
 
   add_index "site_memberships", ["site_id"], name: "index_site_memberships_on_site_id", using: :btree
@@ -286,6 +287,7 @@ ActiveRecord::Schema.define(version: 20141121221535) do
     t.string   "read_key"
     t.string   "write_key"
     t.string   "timezone"
+    t.datetime "deleted_at"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
@@ -323,6 +325,7 @@ ActiveRecord::Schema.define(version: 20141121221535) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "status",                 default: "active"
+    t.datetime "deleted_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

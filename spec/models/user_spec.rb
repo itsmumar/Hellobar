@@ -44,3 +44,26 @@ describe User, '#active?' do
     user.should_not be_active
   end
 end
+
+describe User, '#destroy' do
+  fixtures :all
+  let(:site_member) { site_memberships(:zombo) }
+
+  before do
+    Site.any_instance.stub(:generate_static_assets)
+  end
+
+  it 'destroying a user should destroy their sites' do
+    user = site_member.user
+    site = site_member.site
+    user.destroy
+    user.destroyed?.should be_true
+    site.reload.destroyed?.should be_true
+  end
+
+  it "should soft-delete" do
+    u = users(:joey)
+    u.destroy
+    User.only_deleted.should include(u)
+  end
+end

@@ -12,6 +12,7 @@ class Site < ActiveRecord::Base
   has_many :subscriptions, -> {order 'id'}
   has_many :bills, -> {order 'id'}, through: :subscriptions
   has_many :improve_suggestions
+  acts_as_paranoid
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
