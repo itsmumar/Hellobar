@@ -306,6 +306,7 @@ GEM
     parallel (1.0.0)
     paranoia (2.0.2)
       activerecord (~> 4.0)
+    php-serialize (1.1.0)
     polyglot (0.3.5)
     pony (1.8)
       mail (>= 2.0)
@@ -513,6 +514,7 @@ DEPENDENCIES
   omniauth-createsend (~> 1.0)
   omniauth-mailchimp (~> 1.0)!
   paranoia (~> 2.0)
+  php-serialize
   pony (~> 1.8)
   pry
   pry-nav
