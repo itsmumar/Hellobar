@@ -37,7 +37,12 @@ Rails.application.routes.draw do
   get "/admin", :to => "admin/users#index", :as => :admin
   get "/admin/reports", :to => "admin#reports", :as => :admin_reports
   namespace :admin do
-    resources :users, :only => [:index, :show, :destroy]
+    resources :users, :only => [:index, :show, :destroy] do
+      resources :bills, :only => [] do
+        put 'void'
+      end
+    end
+
     post "users/:id/impersonate", :to => "users#impersonate", :as => :impersonate_user
     delete "users/unimpersonate", :to => "users#unimpersonate", :as => :unimpersonate_user
 

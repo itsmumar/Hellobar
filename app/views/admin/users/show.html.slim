@@ -20,6 +20,9 @@ div#user_profile
               td= bill.amount
               td= bill.status
               td= bill.due_at.strftime('%D')
+              td
+                - if bill.status == :pending
+                  = link_to "void", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Void this bill?" }
 
     div.site_section
       div.title Subscription History
