@@ -2,7 +2,7 @@ div#user_profile
   div#profile_header
     h1= @user.email
     = link_to "Destroy User", admin_user_path(@user), method: :delete, data: { confirm: "Are you sure?" }
-  - @user.sites.each do |site|
+  - @user.sites.with_deleted.each do |site|
     h3
       | #{site.url} - #{site.current_subscription.values[:name]}
 

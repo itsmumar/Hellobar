@@ -7,9 +7,8 @@ class Admin::UsersController < ApplicationController
     if params[:q].blank?
       @users = User.page(params[:page]).per(24)
     else
-      users = User.where("email like ?", "%#{params[:q].strip}%").all
-      sites = Site.where("url like ?", "%#{params[:q].strip}%").all
-      users += sites.map{|s| s.users}.flatten
+      users = User.with_deleted.where("email like ?", "%#{params[:q].strip}%").all
+      users += User.joins(:sites).where("url like ?", "%#{params[:q].strip}%").all
 
       if params[:q].strip =~ /\d{4}/
         users += PaymentMethodDetails.where("data like ?", "%-#{params[:q].strip}%").map(&:user)
@@ -20,7 +19,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    @user = User.with_deleted.find(params[:id])
   end
 
   def destroy

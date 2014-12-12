@@ -26,7 +26,7 @@ div.row
             td= link_to user.email, admin_user_path(user)
             td
               ul
-                - user.sites.each do |site|
+                - user.sites.with_deleted.each do |site|
                   li= "#{display_name_for_site(site)} (#{site.current_subscription.values[:name]})".html_safe
             td
               ul
@@ -35,6 +35,10 @@ div.row
             td= user.created_at.strftime("%b %d, %Y")
             td= user.sign_in_count
             td= user.last_sign_in_at.try(:strftime, "%b %d, %Y at %l:%M %p")
-            td= link_to "impersonate", admin_impersonate_user_path(user), :method => :post
+            td
+              - if user.destroyed?
+                | Destroyed
+              - else
+                = link_to "impersonate", admin_impersonate_user_path(user), :method => :post
 
       = paginate @users
