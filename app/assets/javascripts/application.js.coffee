@@ -34,6 +34,7 @@
 #= require flash_message_initializer
 #= require install_check
 #= require tracking_events
+#= require user_migration
 #= require_self
 
 $ ->
