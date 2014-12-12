@@ -17,7 +17,7 @@ module Hello
         return first_pass
       else
         match = string.match(/^\w+:\d+:\\*\"(.*)\\*\";$/)
-        match ? PHP.unserialize(match[1]) : {}
+        match ? PHP.unserialize(match[1]) : nil
       end
     end
   end

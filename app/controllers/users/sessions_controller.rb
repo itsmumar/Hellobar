@@ -10,7 +10,7 @@ class Users::SessionsController < Devise::SessionsController
 
       if wordpress_user = Hello::WordpressUser.authenticate(email, password)
         session[:wordpress_user_id] = wordpress_user.id
-        redirect_to user_migration_step1_path
+        redirect_to new_user_migration_path
       else
         @user = User.new
 

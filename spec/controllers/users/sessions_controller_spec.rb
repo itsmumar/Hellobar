@@ -23,7 +23,7 @@ describe Users::SessionsController do
 
       post :create, :user => {:email => email, :password => password}
 
-      response.should redirect_to(user_migration_step1_path)
+      response.should redirect_to(new_user_migration_path)
     end
 
     it "asks 1.0 users to reauthenticate if their password is wrong" do

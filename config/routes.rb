@@ -74,7 +74,7 @@ Rails.application.routes.draw do
   get "/login", to: redirect("/users/sign_in")
   get "/signup", to: redirect("/")
 
-  get "user_migration/step1", to: "user_migration#step1", as: :user_migration_step1
+  get "/user_migration", to: "user_migration#new", as: :new_user_migration
 
   root "welcome#index"
 end
