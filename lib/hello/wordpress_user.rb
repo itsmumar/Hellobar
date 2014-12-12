@@ -14,6 +14,15 @@ class Hello::WordpressUser < Hello::WordpressModel
   end
 
   def bars
-    Hello::WordpressBar.where(post_author: id)
+    all_bars = Hello::WordpressBar.where(post_author: id)
+
+    all_bars.select do |bar|
+      if bar.post_parent.present? && bar.post_parent != 0
+        parent = all_bars.find{|b| b.id == bar.post_parent}
+        parent && parent.post_status == "publish" && bar.post_status == "publish"
+      else
+        bar.post_status == "publish"
+      end
+    end
   end
 end
