@@ -9,8 +9,8 @@ class Hello::WordpressUser < Hello::WordpressModel
   end
 
   def self.authenticate(email, password)
-    # TODO: actually check the password here; return nil if it doesn't match
-    where(['user_email = ? or user_login = ?', email, email]).first
+    user = where(['user_email = ? or user_login = ?', email, email]).first
+    user && Phpass.new.check(password, user.user_pass) ? user : nil
   end
 
   def bars
