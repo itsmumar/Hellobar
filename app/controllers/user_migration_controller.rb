@@ -5,6 +5,10 @@ class UserMigrationController < ApplicationController
     @bars = @user.bars
   end
 
+  def create
+    render text: "Not yet implemented"
+  end
+
   private
 
   def verify_wordpress_user

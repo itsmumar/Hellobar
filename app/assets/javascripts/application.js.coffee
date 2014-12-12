@@ -2,6 +2,7 @@
 #= require jquery_ujs
 #= require bootstrap
 #= require zeropad.jquery
+#= require jquery-ui.min
 #= require handlebars
 #= require handlebars_helpers
 #= require moment

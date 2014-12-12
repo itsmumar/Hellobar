@@ -1,4 +1,10 @@
 $ ->
+  $(".unassigned-wordpress-bars > div").draggable(
+    axis: "y"
+    revert: "invalid"
+    revertDuration: 100
+  )
+
   bindAddSite = (element) ->
     element.unbind("click")
 
@@ -12,6 +18,7 @@ $ ->
     form = $(event.target).parents("form:first")
     data = form.serializeJSON()
 
+
     if data.site_url.match(/^[^@\s]+\.[^@\s]+$/)
       # site url looks like a url
       primaryForm = $("form.user-migration-multiple-bars")
@@ -20,7 +27,14 @@ $ ->
       primaryForm.find("a.add-site").show()
 
       template = Handlebars.compile($("#user-migration-drop-area-template").html())
-      $(template(siteURL: data.site_url, siteTimezone: data.site_timezone)).insertBefore(primaryForm.find(".unassigned-wordpress-bars"))
+      droppable = $(template(siteURL: data.site_url, siteTimezone: data.site_timezone))
+      droppable.insertBefore(primaryForm.find(".unassigned-wordpress-bars"))
+      droppable.find(".drop-area").droppable(
+        drop: (event, ui) ->
+          window.foo = event
+          window.bar = ui
+          droppable.find(".wordpress-bar-holder").append(ui.draggable.css("top", 0))
+      )
 
       $("p.instructions").html("Drag your bars to your site. <a class='add-site'>Click here to add another site.</a>")
 
