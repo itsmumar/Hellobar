@@ -75,6 +75,7 @@ Rails.application.routes.draw do
   get "/signup", to: redirect("/")
 
   get "/user_migration", to: "user_migration#new", as: :new_user_migration
+  post "/user_migration", to: "user_migration#create", as: :user_migration
 
   root "welcome#index"
 end

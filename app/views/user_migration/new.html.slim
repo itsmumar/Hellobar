@@ -1,5 +1,19 @@
 h1 Your Site Information
-p The new Hello Bar organizes your bars by site. Enter your website URL and timezone below.
 
-- @bars.each do |bar|
-  = render "wordpress_bar", bar: bar
+- if @bars.count == 1
+  p The new Hello Bar organizes your bars by site. Enter your website URL and timezone below.
+
+  = form_for Site.new, url: user_migration_path, html: {class: "user-migration-single-bar"} do |f|
+    = f.text_field :url, placeholder: "Your website URL"
+
+    .select-wrapper
+      = f.select :timezone, ActiveSupport::TimeZone.all.map{ |tz| [tz.to_s, tz.tzinfo.identifier] }
+    = hidden_field_tag :detect_timezone, nil, disabled: true
+
+    = render "wordpress_bar", bar: @bars.first
+
+    = f.submit "Done", class: "button"
+
+- else
+  - @bars.each do |bar|
+    = render "wordpress_bar", bar: bar
