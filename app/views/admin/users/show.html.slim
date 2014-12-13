@@ -23,6 +23,17 @@ div#user_profile
               td
                 - if bill.status == :pending
                   = link_to "void", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Void this bill?" }
+                - elsif bill.status == :paid
+                  a.refund_link data-id=bill.id refund
+                  = form_for bill, url: admin_user_bill_refund_path(@user, bill), method: :put do |f|
+                    = f.label "Entire Bill: "
+                    = check_box_tag(:full_amount, 1, true)
+                    br
+                    = f.label "Specific Amount: "
+                    br
+                    = f.text_field :amount
+                    br
+                    = f.submit "Refund", data: { confirm: "Refund this bill?" }
 
     div.site_section
       div.title Subscription History

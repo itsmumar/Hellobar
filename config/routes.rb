@@ -44,6 +44,7 @@ Rails.application.routes.draw do
     resources :users, :only => [:index, :show, :destroy] do
       resources :bills, :only => [] do
         put 'void'
+        put 'refund'
       end
     end
 
