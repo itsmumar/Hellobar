@@ -108,30 +108,40 @@ namespace :deploy do
   after :publishing, :copy_additional_logrotate_files
 
   desc "Starts maintenance mode"
-  task :start_maintenance, :roles =>:web do
-    invoke "deploy:stop_nginx"
-    invoke "deploy:start_nginx_maintenance"
-    invoke "deploy:stop_thin"
-    invoke "deploy:stop_queue_workers"
+  task :start_maintenance do
+    on roles(:web) do
+      invoke "deploy:stop_nginx"
+      invoke "deploy:start_nginx_maintenance"
+      invoke "deploy:stop_thin"
+      invoke "deploy:stop_queue_workers"
+    end
   end
 
   desc "Stops maintenance mode"
-  task :stop_maintenance, :roles =>:web do
-    invoke "deploy:start_thin"
-    invoke "deploy:stop_nginx"
-    invoke "deploy:start_nginx_web"
-    invoke "deploy:start_queue_workers"
+  task :stop_maintenance do
+    on roles(:web) do
+      invoke "deploy:start_thin"
+      invoke "deploy:stop_nginx"
+      invoke "deploy:start_nginx_web"
+      invoke "deploy:start_queue_workers"
+    end
   end
 
-  task :stop_nginx, :roles=>:web do
-    run "sudo kill `cat /mnt/deploy/shared/pids/nginx.pid` || echo 'no nginx'"
+  task :stop_nginx do
+    on roles(:web) do
+      run "sudo kill `cat /mnt/deploy/shared/pids/nginx.pid` || echo 'no nginx'"
+    end
   end
 
-  task :start_nginx_web, :roles=>:web do
-    run "sudo nginx -c /mnt/deploy/current/config/nginx/web.conf"
+  task :start_nginx_web do
+    on roles(:web) do
+      run "sudo nginx -c /mnt/deploy/current/config/nginx/web.conf"
+    end
   end
 
-  task :start_nginx_maintenance, :roles=>:web do
-    run "sudo nginx -c /mnt/deploy/current/config/nginx/maintenance.conf"
+  task :start_nginx_maintenance do
+    on roles(:web) do
+      run "sudo nginx -c /mnt/deploy/current/config/nginx/maintenance.conf"
+    end
   end
 end
