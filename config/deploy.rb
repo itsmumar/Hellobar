@@ -45,10 +45,44 @@ namespace :deploy do
     end
   end
 
+  task :stop_thin do
+    on roles(:web) do
+      as :hellobar do
+        execute "mkdir -p /mnt/deploy/shared/sockets"
+        execute "cd #{release_path} && ./bin/load_env -- bundle exec thin stop -C config/thin/www.yml"
+      end
+    end
+  end
+
+  task :start do
+    on roles(:web) do
+      as :hellobar do
+        execute "mkdir -p /mnt/deploy/shared/sockets"
+        execute "cd #{release_path} && ./bin/load_env -- bundle exec thin start -C config/thin/www.yml"
+      end
+    end
+  end
+
   task :restart_queue_workers do
     on roles(:web) do
       as :hellobar do
         execute "cd #{release_path} && RAILS_ENV=production bundle exec rake queue_worker:restart"
+      end
+    end
+  end
+
+  task :stop_queue_workers do
+    on roles(:web) do
+      as :hellobar do
+        execute "cd #{release_path} && RAILS_ENV=production bundle exec rake queue_worker:stop"
+      end
+    end
+  end
+
+  task :stop_queue_workers do
+    on roles(:web) do
+      as :hellobar do
+        execute "cd #{release_path} && RAILS_ENV=production bundle exec rake queue_worker:start"
       end
     end
   end
@@ -72,4 +106,32 @@ namespace :deploy do
 
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
+
+  desc "Starts maintenance mode"
+  task :start_maintenance, :roles =>:web do
+    invoke "deploy:stop_nginx"
+    invoke "deploy:start_nginx_maintenance"
+    invoke "deploy:stop_thin"
+    invoke "deploy:stop_queue_workers"
+  end
+
+  desc "Stops maintenance mode"
+  task :stop_maintenance, :roles =>:web do
+    invoke "deploy:start_thin"
+    invoke "deploy:stop_nginx"
+    invoke "deploy:start_nginx_web"
+    invoke "deploy:start_queue_workers"
+  end
+
+  task :stop_nginx, :roles=>:web do
+    run "sudo kill `cat /mnt/deploy/shared/pids/nginx.pid` || echo 'no nginx'"
+  end
+
+  task :start_nginx_web, :roles=>:web do
+    run "sudo nginx -c /mnt/deploy/current/config/nginx/web.conf"
+  end
+
+  task :start_nginx_maintenance, :roles=>:web do
+    run "sudo nginx -c /mnt/deploy/current/config/nginx/maintenance.conf"
+  end
 end
