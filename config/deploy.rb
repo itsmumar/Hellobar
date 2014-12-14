@@ -54,7 +54,7 @@ namespace :deploy do
     end
   end
 
-  task :start do
+  task :start_thin do
     on roles(:web) do
       as :hellobar do
         execute "mkdir -p /mnt/deploy/shared/sockets"
@@ -129,19 +129,19 @@ namespace :deploy do
 
   task :stop_nginx do
     on roles(:web) do
-      run "sudo kill `cat /mnt/deploy/shared/pids/nginx.pid` || echo 'no nginx'"
+      execute "sudo kill `cat /mnt/deploy/shared/pids/nginx.pid` || echo 'no nginx'"
     end
   end
 
   task :start_nginx_web do
     on roles(:web) do
-      run "sudo nginx -c /mnt/deploy/current/config/nginx/web.conf"
+      execute "sudo nginx -c /mnt/deploy/current/config/nginx/web.conf"
     end
   end
 
   task :start_nginx_maintenance do
     on roles(:web) do
-      run "sudo nginx -c /mnt/deploy/current/config/nginx/maintenance.conf"
+      execute "sudo nginx -c /mnt/deploy/current/config/nginx/maintenance.conf"
     end
   end
 end
