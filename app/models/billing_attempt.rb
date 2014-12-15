@@ -21,9 +21,14 @@ class BillingAttempt < ActiveRecord::Base
 
   # Can optionally specify a partial amount or description
   # Note: amount must be negative
-  def refund!(description = nil, amount=nil) 
+  def refund!(description = nil, amount=nil)
     raise InvalidRefund.new("Can not refund unsuccessful billing attempt") unless self.success?
     amount ||= -self.bill.amount
+
+    # Check that we're not refunding more than they paid
+    previous_refunds = self.bill.subscription.bills.select { |x| x.is_a?(Bill::Refund) && x.refunded_billing_attempt_id == id }.map(&:amount).sum
+    raise InvalidRefund.new("Cannot refund more than than the amount paid") if self.bill.amount + (amount + previous_refunds) < 0
+
     description ||= "Refund due to customer service request"
     now = Time.now
     refund_bill = Bill::Refund.new(

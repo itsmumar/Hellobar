@@ -12,18 +12,24 @@ div#user_profile
         div.title Billing History
         table
           tr
+            th ID
             th Amount
             th Status
             th Due At
-          - bills_for(site).each do |bill|
+          - bills_for(site).each do |bill, refunds|
             tr
-              td= bill.amount
+              td= bill.id
+              td
+                = bill.amount
+                - if refunds.length > 0
+                  br
+                  | (#{refunds.map(&:amount).sum}) Refunded
               td= bill.status
               td= bill.due_at.strftime('%D')
               td
                 - if bill.status == :pending
                   = link_to "void", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Void this bill?" }
-                - elsif bill.status == :paid
+                - elsif bill.status == :paid && !bill.instance_of?(Bill::Refund)
                   a.refund_link data-id=bill.id refund
                   = form_for bill, url: admin_user_bill_refund_path(@user, bill), method: :put do |f|
                     = f.label "Entire Bill: "
@@ -31,7 +37,7 @@ div#user_profile
                     br
                     = f.label "Specific Amount: "
                     br
-                    = f.text_field :amount
+                    = f.text_field :amount, value: bill.amount * -1
                     br
                     = f.submit "Refund", data: { confirm: "Refund this bill?" }
 
