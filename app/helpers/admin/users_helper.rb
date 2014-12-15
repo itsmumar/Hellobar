@@ -10,4 +10,8 @@ module Admin::UsersHelper
     end
     bills
   end
+
+  def subscriptions
+    ObjectSpace.each_object(Class).select { |klass| klass < Subscription }
+  end
 end

@@ -42,6 +42,7 @@ Rails.application.routes.draw do
     delete "users/unimpersonate", :to => "users#unimpersonate", :as => :unimpersonate_user
 
     resources :users, :only => [:index, :show, :destroy] do
+      resources :sites, :only => [:update]
       resources :bills, :only => [] do
         put 'void'
         put 'refund'
