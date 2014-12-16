@@ -1178,7 +1178,9 @@ var _HB = {
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
     // Detect the device
     var ua = navigator.userAgent;
-    if (ua.match(/(mobi|phone|ipod|blackberry|docomo)/i))
+    if (ua.match(/ipad/i))
+      HB.setVisitorData("dv", "tablet");
+    else if (ua.match(/(mobi|phone|ipod|blackberry|docomo)/i))
       HB.setVisitorData("dv", "mobile");
     else if (ua.match(/(ipad|kindle|android)/i))
       HB.setVisitorData("dv", "tablet");
