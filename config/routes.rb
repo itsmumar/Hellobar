@@ -37,14 +37,14 @@ Rails.application.routes.draw do
   get "/admin", :to => "admin/users#index", :as => :admin
   get "/admin/reports", :to => "admin#reports", :as => :admin_reports
   namespace :admin do
+    post "users/:id/impersonate", :to => "users#impersonate", :as => :impersonate_user
+    delete "users/unimpersonate", :to => "users#unimpersonate", :as => :unimpersonate_user
+
     resources :users, :only => [:index, :show, :destroy] do
       resources :bills, :only => [] do
         put 'void'
       end
     end
-
-    post "users/:id/impersonate", :to => "users#impersonate", :as => :impersonate_user
-    delete "users/unimpersonate", :to => "users#unimpersonate", :as => :unimpersonate_user
 
     get "lockdown/:email/:key/:timestamp", :to => "access#lockdown", :constraints => {:email => /[^\/]+/}, :as => :lockdown
     get "validate_access_token/:email/:key/:timestamp", :to => "access#validate_access_token", :constraints => {:email => /[^\/]+/}, :as => :validate_access_token
