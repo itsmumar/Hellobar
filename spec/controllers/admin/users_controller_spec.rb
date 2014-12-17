@@ -15,6 +15,36 @@ describe Admin::UsersController do
 
       assigns(:users).include?(sites(:zombo).owner).should be_true
     end
+
+    it "finds deleted users" do
+      stub_current_admin(@admin)
+      user = User.create email: "test@test.com", password: 'supers3cr37'
+      user.destroy
+      get :index, :q => "test"
+
+      assigns(:users).include?(user).should be_true
+    end
+  end
+
+  describe "GET show" do
+    before do
+      stub_current_admin(@admin)
+    end
+
+    it "shows the specified user" do
+      user = users(:joey)
+      get :show, :id => user.id
+
+      assigns(:user).should == user
+    end
+
+    it "shows a deleted users" do
+      user = User.create email: "test@test.com", password: 'supers3cr37'
+      user.destroy
+      get :show, :id => user.id
+
+      assigns(:user).should == user
+    end
   end
 
   describe "POST impersonate" do
