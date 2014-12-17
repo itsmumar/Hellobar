@@ -105,7 +105,7 @@ private
       site_elements: site_elements_for_rule(rule).to_json
     }
   end
-  
+
   def conditions_for_rule(rule)
     rule.conditions.map{|c| condition_settings(c)}
   end
@@ -175,7 +175,7 @@ private
       remains_at_top: site_element.remains_at_top,
       wiggle_wait: 0,
       tab_side: "right",
-      thank_you_text: thank_you_text
+      thank_you_text: SiteElement.sanitize(thank_you_text).gsub(/"/, "&quot;")
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
