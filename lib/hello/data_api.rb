@@ -159,11 +159,16 @@ module Hello::DataAPI
     end
 
     def get(path, params)
-      url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
-      response = Net::HTTP.get(URI.parse(url))
-      JSON.parse(response)
+      Timeout::timeout(5) do
+        url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
+        response = Net::HTTP.get(URI.parse(url))
+        JSON.parse(response)
+      end
     rescue JSON::ParserError, SocketError
       Rails.logger.error("Data API Error: #{response}")
+      return nil
+    rescue Timeout::Error
+      Rails.logger.error("Data API Error: Request Timeout")
       return nil
     end
   end
