@@ -1,5 +1,7 @@
+require 'queue_worker/delay'
+
 class ContactList < ActiveRecord::Base
-  include GuaranteedQueue::Delay
+  include QueueWorker::Delay
   include DeserializeWithErrors
   include EmailSynchronizer
 

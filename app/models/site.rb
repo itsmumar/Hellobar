@@ -1,7 +1,8 @@
 require 'billing_log'
+require 'queue_worker/delay'
 
 class Site < ActiveRecord::Base
-  include GuaranteedQueue::Delay
+  include QueueWorker::Delay
 
   has_many :rules, -> { order("editable ASC, id ASC") }, dependent: :destroy
   has_many :site_elements, through: :rules, dependent: :destroy

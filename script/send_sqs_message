@@ -5,11 +5,17 @@ require 'aws-sdk'
 
 STAGES = %w(edge staging production)
 BASEDIR = File.expand_path(File.dirname(__FILE__)).gsub('/script', '')
-SETTINGS = YAML.load_file(BASEDIR + '/config/settings.yml')
+SETTINGS_FILE = BASEDIR + '/config/settings.yml'
 
 def die!(message)
   puts "Usage: send_sqs_message [stage] [command] [queue_name=nil]\n" + message
   exit!
+end
+
+if File.exists?(SETTINGS_FILE)
+  settings = YAML.load_file(SETTINGS_FILE)
+else
+  die!("Settings file not present.")
 end
 
 # Sends a message to SQS without loading Rails environment
@@ -17,9 +23,9 @@ stage, message, queue_name = *ARGV
 die!("Stage is required to be one of #{STAGES}") unless STAGES.include?(stage)
 die!("Command not present!") unless message && message.length > 0
 
-key = SETTINGS['aws_access_key_id']
-secret = SETTINGS['aws_secret_access_key']
-queue_name ||= SETTINGS['main_queue']
+key = settings['aws_access_key_id']
+secret = settings['aws_secret_access_key']
+queue_name ||= settings['main_queue'] || 'test_queue'
 
 die!("Queue name not set") unless queue_name
 
