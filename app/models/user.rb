@@ -46,6 +46,10 @@ class User < ActiveRecord::Base
     status == ACTIVE_STATUS
   end
 
+  def temporary_email?
+    email.match(/hello\-[0-9]+@hellobar.com/)
+  end
+
   def send_devise_notification(notification, *args)
     host = ActionMailer::Base.default_url_options[:host]
 
