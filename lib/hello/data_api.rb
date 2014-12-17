@@ -165,7 +165,7 @@ module Hello::DataAPI
         JSON.parse(response)
       end
     rescue JSON::ParserError, SocketError
-      Rails.logger.error("Data API Error: #{response}")
+      Rails.logger.error("Data API Error: #{response if defined?(response)}")
       return nil
     rescue Timeout::Error
       Rails.logger.error("Data API Error: Request Timeout")
