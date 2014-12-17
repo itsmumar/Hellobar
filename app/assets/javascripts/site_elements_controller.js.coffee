@@ -1,4 +1,6 @@
 $ ->
+  highlightBar = (elementId) ->
+    $(elementId).addClass("flash")
 
   setFilter = (type) ->
     typeClass = type.replace('#', 'is-')
@@ -199,3 +201,8 @@ $ ->
 
   $('.rules-wrapper .rule-block').each (index, rule) ->
     checkPaused $(rule).data('rule-id')
+
+  # On page load, see if they were linked to a particular bar
+  window_anchor = window.location.hash
+  if window_anchor
+    highlightBar(window_anchor)

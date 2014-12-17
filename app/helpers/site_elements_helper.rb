@@ -68,7 +68,9 @@ module SiteElementsHelper
   def recent_activity_message(element)
     views, conversions = element.total_views, element.total_conversions
 
-    message = "<strong>The #{element.short_subtype} bar you added #{time_ago_in_words(element.created_at)} ago</strong>"
+    message = "<strong>"
+    message += link_to "The #{element.short_subtype} bar you added #{time_ago_in_words(element.created_at)} ago", site_site_elements_path(element.site) << "#site_element_#{element.id}"
+    message += "</strong>"
 
     # how many conversions has this site element resulted in?
     if conversions == 0
