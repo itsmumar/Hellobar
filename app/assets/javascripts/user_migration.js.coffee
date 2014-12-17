@@ -18,7 +18,6 @@ $ ->
     form = $(event.target).parents("form:first")
     data = form.serializeJSON()
 
-
     if data.site_url.match(/^[^@\s]+\.[^@\s]+$/)
       # site url looks like a url
       primaryForm = $("form.user-migration-multiple-bars")
@@ -31,9 +30,10 @@ $ ->
       droppable.insertBefore(primaryForm.find(".unassigned-wordpress-bars"))
       droppable.find(".drop-area").droppable(
         drop: (event, ui) ->
-          window.foo = event
-          window.bar = ui
           droppable.find(".wordpress-bar-holder").append(ui.draggable.css("top", 0))
+          if $(".unassigned-wordpress-bars .wordpress-bar").length < 1
+            # enable primary form button if all bars have been assigned to sites
+            $("form.user-migration-multiple-bars button").prop("disabled", false)
       )
 
       $("p.instructions").html("Drag your bars to your site. <a class='add-site'>Click here to add another site.</a>")
@@ -41,3 +41,22 @@ $ ->
       bindAddSite($("a.add-site"))
 
       form.hide()
+
+  $("form.user-migration-multiple-bars").submit (event) ->
+    event.preventDefault()
+
+    barIDs = {}
+
+    $(event.target).find(".wordpress-bar-holder").each (i, holder) ->
+      url = $(holder).data("site-url")
+      barIDs[url] = []
+
+      $(holder).find(".wordpress-bar").each (i2, bar) ->
+        barIDs[url].push($(bar).data("bar-id"))
+
+    $.ajax
+      type: "POST"
+      url: $(event.target).attr("action")
+      data: {bar_ids: barIDs}
+      success: ->
+        console.log("success")

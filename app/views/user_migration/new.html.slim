@@ -25,11 +25,11 @@ p.instructions The new Hello Bar organizes your bars by site. Enter your website
 
     button class="button" Add Site
 
-  = form_tag "", class: "user-migration-multiple-bars" do
+  = form_tag user_migration_path, class: "user-migration-multiple-bars" do
     .unassigned-wordpress-bars
       - @bars.each do |bar|
         = render "wordpress_bar", bar: bar
 
-    button class="button" Done
+    button class="button" disabled="true" Done
 
     a class="add-site" Click here to add another site.
