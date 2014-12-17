@@ -6,7 +6,7 @@ $.mockjax
   contentType: 'text/json'
   response: (settings) ->
     <%
-      site = Site.new
+      site = Site.new(script_installed_at: Time.now)
       element = site.site_elements.new
       rule = Rule.new(:site => site)
       element.rule = rule

@@ -152,6 +152,10 @@ describe Site do
   end
 
   describe "#has_script_installed?" do
+    before do
+      @site.script_installed_at = nil
+    end
+
     it "is true if script_installed_at is set" do
       @site.script_installed_at = 1.day.ago
       @site.has_script_installed?.should be_true

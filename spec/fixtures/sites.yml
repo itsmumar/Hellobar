@@ -2,6 +2,7 @@ zombo:
   url: http://zombo.com
   read_key: asdf
   write_key: asdf
+  script_installed_at: <%= 5.day.ago.to_s(:db) %>
 horsebike:
   url: http://horse.bike
   read_key: asdf
