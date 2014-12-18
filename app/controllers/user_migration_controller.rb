@@ -12,6 +12,7 @@ class UserMigrationController < ApplicationController
       Site.new(url: url).tap do |site|
         site.save!
         site.create_default_rule
+        site.change_subscription(Subscription::Free.new(schedule: "monthly"))
 
         SiteMembership.create!(site: site, user: user)
 
