@@ -29,9 +29,16 @@
       margin-top: 0 !important
 
     a.add-site
-      color: $blue
+      color: $blueLight
+      float: right
+      font-size: 0.9em
+      margin-right: 1em
       font-style: italic
+      line-height: 2.67em
       text-transform: underline
+
+      &:hover
+        color: $blue
   
     &.user-migration-multiple-bars
       
@@ -61,12 +68,12 @@
   cursor: -ie-grab 
   cursor: -gecko-grab 
   cursor: -webkit-grab 
-  box-shadow: 0 0 0 rgba(0,0,0,0)
-  @include transition()
 
   .wordpress-bar
     padding: 0.67em 1em
+    box-shadow: 0 0 0 rgba(0,0,0,0)
     @include clearfix()
+    @include transition()
 
     .message
       float: left
@@ -88,8 +95,10 @@
     margin: 0.33em 0 1.5em
 
   &.ui-draggable-dragging
-    box-shadow: 2px 2px 12px rgba(0,0,0,0.12)
-    @include transform(scale(1.15))
+
+    .wordpress-bar
+      box-shadow: 2px 2px 12px rgba(0,0,0,0.12)
+      @include transform(scale(1.05))
 
 .unassigned-wordpress-bars
   padding: 1em
