@@ -26,12 +26,18 @@ class SitesController < ApplicationController
   end
 
   def show
-    redirect_to(action: "install") unless @site.has_script_installed?
+    respond_to do |format|
+      format.html do
+        redirect_to(action: "install") unless @site.has_script_installed?
 
-    session[:current_site] = @site.id
+        flash[:success] = "Script successfully installed." if params[:installed]
+        session[:current_site] = @site.id
 
-    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, :force => is_page_refresh?)
-    @recent_elements = @site.site_elements.where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC").limit(5)
+        @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, :force => is_page_refresh?)
+        @recent_elements = @site.site_elements.where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC").limit(5)
+      end
+      format.json { render :json => @site }
+    end
   end
 
   def improve
