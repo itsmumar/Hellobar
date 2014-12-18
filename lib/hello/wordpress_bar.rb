@@ -2,19 +2,6 @@ class Hello::WordpressBar < Hello::WordpressModel
   self.table_name = "hbwp_posts"
 
   def convert_to_site_element!(rule)
-    # site element attributes we might want to capture:
-    #      "show_border"=>false,
-    #      "border_color"=>"ffffff",
-    #      "button_color"=>"000000",
-    #      "font"=>"Helvetica,Arial,sans-serif",
-    #      "link_color"=>"ffffff",
-    #      "texture"=>"none",
-    #      "paused"=>false,
-    #      "show_branding"=>true,
-    #      "display_when"=>"immediately",
-    #      "pushes_page_down"=>true,
-    #      "remains_at_top"=>true
-
     params = {
       rule: rule,
       element_subtype: "traffic",
@@ -23,6 +10,8 @@ class Hello::WordpressBar < Hello::WordpressModel
       font: hellobar_meta["meta"]["fontFamily"],
       created_at: post_date,
       wordpress_bar_id: id,
+      show_border: hellobar_meta["meta"]["border"] == "1",
+      font: hellobar_meta["meta"]["fontFamily"].presence || "Helvetica,Arial,sans-serif",
       settings: {
         url: hellobar_meta["linkurl"]
       }
@@ -30,6 +19,8 @@ class Hello::WordpressBar < Hello::WordpressModel
 
     params[:background_color] = background_color.gsub("#", "") if background_color.present?
     params[:text_color] = text_color.gsub("#", "") if text_color.present?
+    params[:link_color] = link_color.gsub("#", "") if link_color.present?
+    params[:border_color] = border_color.gsub("#", "") if border_color.present?
 
     SiteElement.create!(params)
   end
@@ -47,5 +38,13 @@ class Hello::WordpressBar < Hello::WordpressModel
 
   def text_color
     hellobar_meta["meta"]["textcolor"]
+  end
+
+  def link_color
+    hellobar_meta["meta"]["linkcolor"]
+  end
+
+  def border_color
+    hellobar_meta["meta"]["bordercolor"]
   end
 end
