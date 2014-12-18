@@ -3,7 +3,9 @@
 #user_migration-new,
 #user_migration-create
 
-  button
+  button,
+  .button,
+  input[type='submit']
     width: auto
 
   form
@@ -46,26 +48,36 @@
 /*-----------  Wordpress Bar  -----------*/
 
 .wordpress-bar-wrapper
-  clear: both
   cursor: grab
+  cursor: -ie-grab 
+  cursor: -gecko-grab 
+  cursor: -webkit-grab 
+  box-shadow: 0 0 0 rgba(0,0,0,0)
   @include transition()
 
   .wordpress-bar
     padding: 1em
+    @include clearfix()
 
     .message
+      float: left
       text-align: left
 
     .button
-      background-color: $white
-      @extend %inverted-button
+      float: right
+      color: $grayDark !important
+      background-color: $white !important
 
   .bar-url
     color: $gray
     display: block
     font-size: 0.8em
     text-align: right
-    margin-bottom: 1em
+    margin: 0.33em 0 1.5em
+
+  &.ui-draggable-dragging
+    box-shadow: 2px 2px 12px rgba(0,0,0,0.12)
+    @include transform(scale(1.15))
 
 .unassigned-wordpress-bars
   padding: 1em
