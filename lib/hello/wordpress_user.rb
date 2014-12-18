@@ -25,4 +25,11 @@ class Hello::WordpressUser < Hello::WordpressModel
       end
     end
   end
+
+  def convert_to_user
+    User.new(
+      email: user_email,
+      encrypted_password: user_pass
+    ).tap{ |u| u.save(validate: false) }
+  end
 end
