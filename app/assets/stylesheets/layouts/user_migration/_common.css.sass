@@ -6,7 +6,7 @@
   button,
   .button,
   input[type='submit']
-    width: auto
+    width: auto !important
 
   form
     width: 75%
@@ -23,6 +23,15 @@
       select
         font-size: 1em
         border-radius: $radiusLg
+
+    button.button
+      float: right
+      margin-top: 0 !important
+
+    a.add-site
+      color: $blue
+      font-style: italic
+      text-transform: underline
   
     &.user-migration-multiple-bars
       
@@ -56,15 +65,18 @@
   @include transition()
 
   .wordpress-bar
-    padding: 1em
+    padding: 0.67em 1em
     @include clearfix()
 
     .message
       float: left
       text-align: left
+      line-height: 2.75em
+      @include ellipsis()
 
     .button
       float: right
+      margin: 0 !important
       color: $grayDark !important
       background-color: $white !important
 
