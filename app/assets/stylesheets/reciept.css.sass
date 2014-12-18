@@ -1,0 +1,71 @@
+//-----------  External Libraries  -----------//
+
+@import 'bourbon'
+@import 'normalize'
+@import 'jquery_minicolors'
+
+//-----------  Application Settings  -----------//
+
+@import 'settings/variables'
+@import 'settings/editor'
+@import 'settings/mixins'
+@import 'settings/fonts'
+
+//-----------  Page Layouts  -----------//
+
+@import 'layouts/document'
+
+/*-----------  Billing Reciept  -----------*/
+
+#hb-reciept
+  padding: 2em
+
+  header
+    @include clearfix()
+
+    img
+      float: left
+      margin-right: 1em
+
+    address
+      color: $gray
+      font-size: 0.85em
+      line-height: 145%
+      font-style: normal
+      @include antialiased()
+
+  main
+    margin: 1.75em 0 
+    padding: 1.75em 0
+    border-top: 1px solid $grayLighter
+    @include justify-content(space-between)
+    @include align-content(stretch)
+    @include align-items(stretch)
+    @include flex-flow(row wrap)
+    @include display(flex)
+
+  section
+    @include flex(1 0 auto)
+
+
+    h4
+      color: $gray
+      margin: 0 0 0.75em
+      font-weight: normal
+      text-transform: uppercase
+      @include antialiased()
+
+    strong
+      width: 5rem
+      color: $gray
+      font-size: 0.95em
+      margin-right: 1em
+      text-align: right
+      font-weight: normal
+      padding: 0.5em 1em 0.5em 0
+      border-right: 1px solid $grayLighter
+      @include inline-block()
+
+    address
+      font-style: normal
+      @include inline-block(text-top)

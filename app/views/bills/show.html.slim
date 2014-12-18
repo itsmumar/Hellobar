@@ -1,35 +1,63 @@
-div HelloBar
-br
-div
-  | #{@bill.subscription.values[:name]} - #{@bill.subscription.schedule}
-div= @bill.site.url
-div
-  | Amount: #{number_to_currency(@bill.amount)}
-br
-div
-  | Due on #{@bill.bill_at.strftime('%D')}
-- if @bill.paid?
-  div
-    | Paid on #{@bill.successful_billing_attempt.created_at.strftime('%D')}
-- else
-  div
-    | Status: #{@bill.status}
-br
-- if !@details.nil?
-  div Billed to:
-  div
-    | #{@details.data["first_name"]} #{@details.data["last_name"]}
-  - if !@details.address.nil?
-    div= @details.address.address1
-    div
-      | #{@details.address.city}, #{@details.address.state}, #{@details.address.zip}, #{@details.address.country}
-    br
-  div Card:
-  div
-    = @details.data["number"]
+header
+  = image_tag 'hellobar_logo_red.svg', :title => 'HelloBar'
 
-br
-br
-div Crazy Egg, Inc. 2014
-div 2970 5th Avenue, Suite 340
-div San Diego, California 92103
+  address
+    | Crazy Egg, Inc. 2014
+    br
+    | 2970 5th Avenue, Suite 340
+    br
+    | San Diego, California 92103
+
+main
+
+  section
+    h4 Reciept
+
+    div
+      strong Amount
+      = number_to_currency(@bill.amount)
+
+    div
+      strong Due On
+      = @bill.bill_at.strftime('%D')
+
+    div
+      - if @bill.paid?
+        strong Paid On
+        = @bill.successful_billing_attempt.created_at.strftime('%D')
+    
+      - else
+        strong Status
+        = @bill.status
+
+  section
+    h4 Billing Information
+
+    div
+      strong Card
+      = @details.data["number"]
+
+    div
+      strong Address
+      address
+        = @details.data["first_name"] + ' ' + @details.data["last_name"]
+        - if !@details.address.nil?
+          br
+          = @details.address.address1
+          br
+          = @details.address.city + ' ' + @details.address.state + ' ' + @details.address.zip + ' ' + @details.address.country
+    
+  section
+    h4 Subscription
+
+    div
+      strong Type
+      = @bill.subscription.values[:name]
+
+    div
+      strong Billed
+      = @bill.subscription.schedule.capitalize
+
+    div
+      strong Site
+      = @bill.site.url
