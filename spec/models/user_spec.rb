@@ -67,3 +67,23 @@ describe User, '#destroy' do
     User.only_deleted.should include(u)
   end
 end
+
+describe User, "#valid_password?" do
+  fixtures :all
+
+  it "is true for valid devise-stored password" do
+    user = User.create!(
+      email: "newuser@asdf.com",
+      password: "asdfasdf"
+    )
+
+    user.valid_password?("asdfasdf").should be_true
+  end
+
+  it "is true for valid wordpress passwords" do
+    user = User.create!(email: "newuser@asdf.com", password: "asdfasdf")
+    user.update(encrypted_password: "$P$Brhelf0cSqkZABYCgR08YB8kVp1EFa/")
+
+    user.valid_password?("thisisold").should be_true
+  end
+end

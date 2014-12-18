@@ -85,6 +85,9 @@ class User < ActiveRecord::Base
     @was_temporary = temporary?
   end
 
+  def valid_password?(password)
+    Phpass.new.check(password, encrypted_password) || super
+  end
 
   private
 
