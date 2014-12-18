@@ -13,7 +13,6 @@ class UserMigrationController < ApplicationController
       Site.new(url: url).tap do |site|
         site.save!
         site.create_default_rule
-        site.change_subscription(Subscription::Free.new(schedule: "monthly"))
 
         SiteMembership.create!(site: site, user: user)
 
@@ -22,13 +21,16 @@ class UserMigrationController < ApplicationController
             bar.convert_to_site_element!(site.rules.first)
           end
         end
+
+        sub = site.site_elements.count >= 10 ? Subscription::FreePlus.new(schedule: "monthly") : Subscription::Free.new(schedule: "monthly")
+        site.change_subscription(sub)
       end
     end
 
     sign_in(user)
     session[:wordpress_user_id] = nil
 
-    render json: { url: user.sites.any? ? site_site_elements_path(user.sites.first) : new_site_path }
+    render json: { url: user.sites.any? ? site_site_elements_path(user.sites.first, anchor: "upgrade-modal") : new_site_path }
   end
 
   private
