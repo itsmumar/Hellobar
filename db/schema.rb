@@ -207,6 +207,7 @@ ActiveRecord::Schema.define(version: 20150218205022) do
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: false
     t.boolean  "wiggle_button",                   default: false
+    t.integer  "wordpress_bar_id"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

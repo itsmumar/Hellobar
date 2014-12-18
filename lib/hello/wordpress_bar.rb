@@ -22,6 +22,7 @@ class Hello::WordpressBar < Hello::WordpressModel
       message: post_content,
       font: hellobar_meta["meta"]["fontFamily"],
       created_at: post_date,
+      wordpress_bar_id: id,
       settings: {
         url: hellobar_meta["linkurl"]
       }
