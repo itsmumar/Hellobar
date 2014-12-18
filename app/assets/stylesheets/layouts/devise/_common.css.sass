@@ -4,6 +4,7 @@
 [id^="sessions-"],
 [id^="passwords-"],
 [id^="registrations-"],
+#user_migration-new,
 #pages-logout_confirmation
   background-color: $grayLightest
  
@@ -17,6 +18,7 @@
     position: relative
     border-radius: $radiusLg
     background-color: $white
+    @include clearfix()
   
     input
       font-size: 1em

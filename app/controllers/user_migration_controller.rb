@@ -1,4 +1,5 @@
 class UserMigrationController < ApplicationController
+  layout 'static'
   before_filter :verify_wordpress_user
 
   def new

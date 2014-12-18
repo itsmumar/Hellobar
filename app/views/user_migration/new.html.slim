@@ -1,22 +1,28 @@
 = render "drop_area"
 
-h1 Your Site Information
-p.instructions The new Hello Bar organizes your bars by site. Enter your website URL and timezone below.
-
-- if @bars.count == 1
+- if false
   = form_for Site.new, url: user_migration_path do |f|
+
+    h1 Your Site Information
+    p The new Hello Bar organizes your bars by site. Enter your website URL and timezone below.
+
     = f.text_field :url, placeholder: "Your website URL"
 
     .select-wrapper
       = f.select :timezone, ActiveSupport::TimeZone.all.map{ |tz| [tz.to_s, tz.tzinfo.identifier] }
+
     = hidden_field_tag :detect_timezone, nil, disabled: true
 
     = render "wordpress_bar", bar: @bars.first
 
     = f.submit "Done", class: "button"
 
-- elsif @bars.count > 1
+- else
   = form_tag "", class: "add-site-for-migration" do
+
+    h1 Your Site Information
+    p The new Hello Bar organizes your bars by site. Enter your website URL and timezone below.
+
     = text_field_tag :site_url, nil, placeholder: "Your website URL"
 
     .select-wrapper
