@@ -45,18 +45,23 @@ $ ->
 
     $(event.target).find("button").prop("disabled", true)
 
-    barIDs = {}
+    sites = []
 
     $(event.target).find(".wordpress-bar-holder").each (i, holder) ->
-      url = $(holder).data("site-url")
-      barIDs[url] = []
+      site = {
+        url: $(holder).data("site-url")
+        timezone: $(holder).data("site-timezone")
+        bar_ids: []
+      }
 
       $(holder).find(".wordpress-bar").each (i2, bar) ->
-        barIDs[url].push($(bar).data("bar-id"))
+        site.bar_ids.push($(bar).data("bar-id"))
+
+      sites.push(site)
 
     $.ajax
       type: "POST"
       url: $(event.target).attr("action")
-      data: {bar_ids: barIDs}
+      data: {sites: sites}
       success: (data) ->
         window.location = data.url

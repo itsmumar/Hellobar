@@ -3,25 +3,31 @@ class UserMigrationController < ApplicationController
   before_filter :verify_wordpress_user
 
   def new
-    @bars = [current_wordpress_user.bars.first]
+    @bars = current_wordpress_user.bars
   end
 
   def create
-    if params[:bar_ids].blank? && params[:bar_id].present? && params[:site][:url].present?
-      params[:bar_ids] = {params[:site][:url] => [params[:bar_id]]}
+    site_hashes = if params[:sites].present?
+      params[:sites].map{ |k, v| v }
+    elsif params[:site].present?
+      [{
+        url: params[:site][:url],
+        timezone: params[:site][:timezone],
+        bar_ids: [params[:bar_id]]
+      }]
     end
 
     ActiveRecord::Base.transaction do
       user = current_wordpress_user.convert_to_user
 
-      params[:bar_ids].each do |url, ids|
-        Site.new(url: url).tap do |site|
+      site_hashes.each do |site_hash|
+        Site.new(url: site_hash[:url], timezone: site_hash[:timezone]).tap do |site|
           site.save!
           site.create_default_rule
 
           SiteMembership.create!(site: site, user: user)
 
-          ids.each do |id|
+          site_hash[:bar_ids].each do |id|
             if bar = load_wordpress_bar(id)
               bar.convert_to_site_element!(site.rules.first)
             end
