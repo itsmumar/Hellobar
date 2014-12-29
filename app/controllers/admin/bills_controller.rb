@@ -15,9 +15,9 @@ class Admin::BillsController < ApplicationController
     begin
       amount = params[:full_amount] ? nil : params[:bill_recurring][:amount].to_f
       bill.refund!(nil, amount)
-      flash[:success] = "Refunded #{amount} of #{bill.amount}."
+      flash[:success] = "Refund successful: Refunded #{amount} of #{bill.amount}."
     rescue BillingAttempt::InvalidRefund, Bill::InvalidBillingAmount => e
-      flash[:error] = e.message
+      flash[:error] = "Refund error: #{e.message}"
     end
 
     redirect_to admin_user_path(params[:user_id])

@@ -153,7 +153,7 @@ class Bill < ActiveRecord::Base
   class Refund < Bill
     # Refunds must be a negative amount
     def check_amount
-      raise InvalidBillingAmount.new("Amount was: #{self.amount.inspect}") if self.amount > 0
+      raise InvalidBillingAmount.new("Amount must be negative. It was #{self.amount.to_f}") if self.amount > 0
     end
 
     # Refunds are never considered "active"
