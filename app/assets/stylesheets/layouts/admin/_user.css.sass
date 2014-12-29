@@ -9,13 +9,45 @@
       @include vertical-align
       float: right
 
+  .site_title
+    display: inline-block
+
+    h3
+      float: left
+
+    a
+      margin-top: 30px
+      margin-left: 10px
+      float: left
+
+  .schedule_form
+
+    input
+      margin: 5px
+
+  table, th, td
+    border: 1px solid rgba(203, 203, 203, 1)
+
   table
+    border-collapse: collapse
 
     th, td
-      padding-right: 15px
+      padding: 5px 15px 5px 5px
+
+    tr.hilight
+      background-color: #DFDFDF
+
+    form
+      padding: 10px
 
   .site_section
     padding: 15px 0
 
     .title
       font-weight: bold
+
+    .hiddens
+      display: none
+
+    label
+      padding-right: 10px
