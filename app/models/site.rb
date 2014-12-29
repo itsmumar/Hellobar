@@ -121,8 +121,8 @@ class Site < ActiveRecord::Base
   end
 
   include BillingAuditTrail
-  class MissingPaymentMethod < Exception; end
-  class MissingSubscription < Exception; end
+  class MissingPaymentMethod < StandardError; end
+  class MissingSubscription < StandardError; end
   def change_subscription(subscription, payment_method=nil)
     raise MissingSubscription.new unless subscription
     raise MissingPaymentMethod.new if subscription.requires_payment_method? and !payment_method
