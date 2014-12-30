@@ -1,6 +1,17 @@
 $ ->
   highlightBar = (elementId) ->
-    $(elementId).addClass("flash")
+    # Add the highlight animation to the bar
+    bar = $(elementId)
+    bar.addClass("flash")
+
+    # Remove the flash after a period of time to ensure it doesn't flash
+    # again while toggling between paused and unpaused
+    removeFlash = -> bar.removeClass("flash")
+    setTimeout removeFlash, 2000
+
+    # If the bar is paused, trigger the "view paused" functionality
+    if bar.hasClass( "paused" )
+      $("#paused-guidance a").trigger("click")
 
   setFilter = (type) ->
     typeClass = type.replace('#', 'is-')
