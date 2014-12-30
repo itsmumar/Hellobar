@@ -1,16 +1,16 @@
 HelloBar.ApplicationController = Ember.Controller.extend
 
   #-----------  User  -----------#
-  
+
   currentUser: ( -> window.currentUser ).property()
   isTemporaryUser: ( -> @get('currentUser') and @get('currentUser').status is 'temporary' ).property('currentUser')
 
   #-----------  Step Tracking  -----------#
 
-  # Tracks global step tracking 
+  # Tracks global step tracking
   # (primarily observed by the step-navigation component)
 
-  prevRoute: null 
+  prevRoute: null
   nextRoute: null
   currentStep: false
 
@@ -33,7 +33,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     previewElement = $.extend({}, @get("model"),
       template_name: @get("model.element_subtype") or "traffic"
       hide_destination: true
-      open_in_new_window: false
+      open_in_new_window: @get("model.open_in_new_window")
       pushes_page_down: @get("model.pushes_page_down")
       remains_at_top: @get("model.remains_at_top")
       wiggle_wait: 0
