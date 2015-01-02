@@ -10,7 +10,12 @@ class Condition < ActiveRecord::Base
     'NumberOfVisitsCondition' => 'nv',
     'ReferrerCondition' => 'rf',
     'SearchTermCondition' => 'st',
-    'UrlCondition' => 'pu'
+    'UrlCondition' => 'pu',
+    'UTMSourceCondition' => 'ad_so',
+    'UTMCampaignCondition' => 'ad_ca',
+    'UTMMediumCondition' => 'ad_me',
+    'UTMContentCondition' => 'ad_co',
+    'UTMTermCondition' => 'ad_te'
   }
 
   # stored value: displayed value

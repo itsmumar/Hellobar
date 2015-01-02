@@ -111,6 +111,11 @@ class @RuleModal extends Modal
     'ReferrerCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'SearchTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UTMSourceCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UTMCampaignCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UTMContentCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UTMTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
 
   _segmentToClassMapping:
     'DeviceCondition': '.device-choice'
@@ -119,6 +124,11 @@ class @RuleModal extends Modal
     'ReferrerCondition': '.referrer-choice'
     'SearchTermCondition': '.search-term-choice'
     'UrlCondition': '.url-choice'
+    'UTMSourceCondition': '.utm-source-choice'
+    'UTMCampaignCondition': '.utm-campaign-choice'
+    'UTMMediumCondition': '.utm-medium-choice'
+    'UTMContentCondition': '.utm-content-choice'
+    'UTMTermCondition': '.utm-term-choice'
 
   _bindSubmit: ->
     @_unbindSubmit() # clear any existing event bindings to make sure we only have one at a time

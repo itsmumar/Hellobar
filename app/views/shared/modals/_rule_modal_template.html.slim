@@ -53,6 +53,11 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "ReferrerCondition" "referrer"}}
           | {{option segment "SearchTermCondition" "search term"}}
           | {{option segment "UrlCondition" "URL"}}
+          | {{option segment "UTMSourceCondition" "Ad Source"}}
+          | {{option segment "UTMCampaignCondition" "Ad Campaign"}}
+          | {{option segment "UTMMediumCondition" "Ad Medium"}}
+          | {{option segment "UTMContentCondition" "Ad Content"}}
+          | {{option segment "UTMTermCondition" "Ad Term"}}
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
           | {{option operand "after" "is after"}}
@@ -89,6 +94,16 @@ script#condition-partial type="text/x-handlebars-template"
         .choice-wrapper.referrer-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="url" value="{{value}}"
         .choice-wrapper.search-term-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        .choice-wrapper.utm-source-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        .choice-wrapper.utm-campaign-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        .choice-wrapper.utm-medium-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        .choice-wrapper.utm-content-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        .choice-wrapper.utm-term-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.url-choice
           | {{#if value}}
