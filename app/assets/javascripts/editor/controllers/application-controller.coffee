@@ -1,16 +1,16 @@
 HelloBar.ApplicationController = Ember.Controller.extend
 
   #-----------  User  -----------#
-  
+
   currentUser: ( -> window.currentUser ).property()
   isTemporaryUser: ( -> @get('currentUser') and @get('currentUser').status is 'temporary' ).property('currentUser')
 
   #-----------  Step Tracking  -----------#
 
-  # Tracks global step tracking 
+  # Tracks global step tracking
   # (primarily observed by the step-navigation component)
 
-  prevRoute: null 
+  prevRoute: null
   nextRoute: null
   currentStep: false
 
@@ -91,14 +91,17 @@ HelloBar.ApplicationController = Ember.Controller.extend
       true
 
     closeEditor: ->
-      dashboardURL = "/sites/#{window.siteID}/site_elements"
-
-      if @get("modelIsDirty")
-        options =
-          dashboardURL: dashboardURL
-          doSave: =>
-            @send("saveSiteElement")
-
-        new UnsavedChangesModal(options).open()
+      if @get('currentUser') and @get('currentUser').status is 'temporary'
+        new TempUserUnsavedChangesModal().open()
       else
-        window.location = dashboardURL
+        dashboardURL = "/sites/#{window.siteID}/site_elements"
+
+        if @get("modelIsDirty")
+          options =
+            dashboardURL: dashboardURL
+            doSave: =>
+              @send("saveSiteElement")
+
+          new UnsavedChangesModal(options).open()
+        else
+          window.location = dashboardURL
