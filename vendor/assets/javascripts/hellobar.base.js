@@ -288,7 +288,7 @@ var _HB = {
   trackClick: function(element)
   {
     var url = element.href;
-    HB.converted(function(){element.target == "_blank" ?  window.open(url) : document.location = url;});
+    HB.converted(function(){if(element.target != "_blank") document.location = url;});
   },
 
   // Returns the conversion key used in the cookies to determine if this
