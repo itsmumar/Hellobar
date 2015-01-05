@@ -23,12 +23,6 @@ describe Subscription do
     Subscription::Pro.create.visit_overage.should == Subscription::Pro.defaults[:visit_overage]
   end
 
-  it "should not require payment method for Free, but should for all other plans" do
-    Subscription::Free.new.requires_payment_method?.should == false
-    Subscription::Pro.new.requires_payment_method?.should == true
-    Subscription::Enterprise.new.requires_payment_method?.should == true
-  end
-
   it "should not override values set with defaults" do
     Subscription::Pro.create(:visit_overage=>3).visit_overage.should == 3
   end

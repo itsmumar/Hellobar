@@ -127,14 +127,14 @@ describe Bill do
   end
 
   describe "attempt_billing!" do
-    it "should call payment_method.pay if the subscription requires_payment_method" do
+    it "should call payment_method.pay if the bill.amount > 0" do
       bill = bills(:now_bill)
       bill.subscription.payment_method = payment_methods(:always_successful)
       PaymentMethod.any_instance.should_receive(:pay).with(bill)
       bill.attempt_billing!
     end
 
-    it "should mark it as paid if the subscription does not require a payment method" do
+    it "should mark it as paid if the bill amount is 0" do
       bill = bills(:free_bill)
       PaymentMethod.any_instance.should_not_receive(:pay).with(bill)
       bill.attempt_billing!

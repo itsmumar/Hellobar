@@ -120,12 +120,17 @@ class Site < ActiveRecord::Base
     return @capabilities
   end
 
+  def requires_payment_method?
+    return false unless self.current_subscription
+    return false if self.current_subscription.amount == 0
+    return true
+  end
+
   include BillingAuditTrail
   class MissingPaymentMethod < StandardError; end
   class MissingSubscription < StandardError; end
   def change_subscription(subscription, payment_method=nil)
     raise MissingSubscription.new unless subscription
-    raise MissingPaymentMethod.new if subscription.requires_payment_method? and !payment_method
     transaction do
       subscription.site = self
       subscription.payment_method = payment_method

@@ -12,7 +12,7 @@ section
       |  
       = @site.current_subscription.schedule
       | .
-    - if @site.current_subscription.requires_payment_method?
+    - if @site.requires_payment_method?
       - # only show "billing schedule" if user is on a plan that actually has one
       = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal'
     - else

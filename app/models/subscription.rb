@@ -16,10 +16,6 @@ class Subscription < ActiveRecord::Base
     end
   end
 
-  def requires_payment_method?
-    raise NotImplementedError
-  end
-
   def values
     self.class.values_for(site).merge(schedule: schedule)
   end
@@ -125,10 +121,6 @@ class Subscription < ActiveRecord::Base
   end
 
   class Free < self
-    def requires_payment_method?
-      false
-    end
-
     class Capabilities < Subscription::Capabilities
     end
 
@@ -187,10 +179,6 @@ class Subscription < ActiveRecord::Base
   end
 
   class Pro < Free
-    def requires_payment_method?
-      true
-    end
-
     class Capabilities < Free::Capabilities
       def remove_branding?
         true
@@ -236,10 +224,6 @@ class Subscription < ActiveRecord::Base
   end
 
   class ProComped < Pro
-    def requires_payment_method?
-      false
-    end
-
     class << self
       def defaults
         {
@@ -255,9 +239,6 @@ class Subscription < ActiveRecord::Base
   end
 
   class Enterprise < Pro
-    def requires_payment_method?
-      true
-    end
     class Capabilities < Pro::Capabilities
     end
 

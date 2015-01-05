@@ -5,6 +5,7 @@ class Bill < ActiveRecord::Base
   class InvalidStatus < Exception; end
   class BillingEarly < Exception; end
   class InvalidBillingAmount < Exception; end
+  class MissingPaymentMethod < Exception; end
   serialize :metadata, JSON
   belongs_to :subscription, inverse_of: :bills
   has_many :billing_attempts, -> {order 'id'}
@@ -43,13 +44,14 @@ class Bill < ActiveRecord::Base
   def attempt_billing!(allow_early=false)
     now = Time.now
     raise BillingEarly.new("Attempted to bill on #{now} but bill[#{self.id}] has a bill_at date of #{self.bill_at}") if !allow_early and now < self.bill_at
-    if self.subscription.requires_payment_method?
-      return self.subscription.payment_method.pay(self)
-    else
-      audit << "Marking bill as paid because no payment method required"
+    if self.amount == 0 # Note: less than 0 is a valid value for refunds
+      audit << "Marking bill as paid because no payment required"
       # Mark as paid
       self.paid!
       return true
+    else
+      raise MissingPaymentMethod.new unless self.subscription.payment_method
+      return self.subscription.payment_method.pay(self)
     end
   end
 
