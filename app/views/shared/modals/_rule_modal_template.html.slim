@@ -53,6 +53,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "ReferrerCondition" "referrer"}}
           | {{option segment "SearchTermCondition" "search term"}}
           | {{option segment "UrlCondition" "URL"}}
+          | {{option segment "ReferrerDomainCondition" "Referrer Domain"}}
           | {{option segment "UTMSourceCondition" "Ad Source"}}
           | {{option segment "UTMCampaignCondition" "Ad Campaign"}}
           | {{option segment "UTMMediumCondition" "Ad Medium"}}
@@ -95,6 +96,8 @@ script#condition-partial type="text/x-handlebars-template"
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="url" value="{{value}}"
         .choice-wrapper.search-term-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        .choice-wrapper.referrer-domain-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="url" value="{{value}}"
         .choice-wrapper.utm-source-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.utm-campaign-choice

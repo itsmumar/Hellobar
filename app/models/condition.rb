@@ -11,6 +11,7 @@ class Condition < ActiveRecord::Base
     'ReferrerCondition' => 'rf',
     'SearchTermCondition' => 'st',
     'UrlCondition' => 'pu',
+    'ReferrerDomainCondition' => 'rd',
     'UTMSourceCondition' => 'ad_so',
     'UTMCampaignCondition' => 'ad_ca',
     'UTMMediumCondition' => 'ad_me',
