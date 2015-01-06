@@ -129,6 +129,32 @@ describe SitesController do
     end
   end
 
+  describe "GET chart_data" do
+    let(:site_element) { site_elements(:zombo_traffic) }
+    let(:user) { site_element.site.owner }
+
+    before do
+      stub_current_user(user)
+      Hello::DataAPI.stub(lifetime_totals: {total: [[10, 1], [12, 1], [18, 2]]})
+    end
+
+    it "should return the latest lifeteime totals" do
+      request.env["HTTP_ACCEPT"] = 'application/json'
+      get :chart_data, id: site_element.site.id, type: :total, days: 2
+      json = JSON.parse(response.body)
+      json.size.should == 2
+      json[0]["value"].should == 12
+      json[1]["value"].should == 18
+    end
+
+    it "should return the the max amount of data if requesting more days than there is data" do
+      request.env["HTTP_ACCEPT"] = 'application/json'
+      get :chart_data, id: site_element.site.id, type: :total, days: 10
+      json = JSON.parse(response.body)
+      json.size.should == 3
+    end
+  end
+
   describe "GET improve" do
     let(:site) { sites(:zombo) }
     let(:user) { site.owner }

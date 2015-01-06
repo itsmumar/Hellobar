@@ -76,14 +76,14 @@ class SitesController < ApplicationController
   def chart_data
     raw_data = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data).try(:[], params[:type].to_sym) || []
     series = raw_data.map{|d| d[params[:type] == "total" ? 0 : 1]}
-    days_limits = [series.count]
+    days_limits = [series.size]
     days_limits << params[:days].to_i unless params[:days].blank?
     days = days_limits.min
 
-    series_with_dates = (0..days-1).map do |i|
+    series_with_dates = (days - 1).downto(0).map do |i|
       {
-        :date => (Date.today - days + i + 1).strftime("%-m/%d"),
-        :value => series[i]
+        :date => (Date.today - i).strftime("%-m/%d"),
+        :value => series[(series.size - i) - 1]
       }
     end
 
