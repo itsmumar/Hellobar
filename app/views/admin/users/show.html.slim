@@ -3,6 +3,7 @@ div#user_profile
     h1= @user.email
     - unless @user.destroyed?
       = link_to "Destroy User", admin_user_path(@user), method: :delete, data: { confirm: "Are you sure?" }
+      = link_to "Impersonate User", admin_impersonate_user_path(@user), :method => :post
   - @user.sites.with_deleted.each do |site|
     div.site_title
       h3
