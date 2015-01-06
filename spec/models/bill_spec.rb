@@ -4,9 +4,9 @@ require 'payment_method_details'
 module BillSpecDates
   def june; Time.parse("2014-06-10"); end
   def bill_at; Time.parse("2014-06-11"); end
-  def july; Time.parse("2014-07-10"); end 
-  def aug; Time.parse("2014-08-10"); end 
-  def sep; Time.parse("2014-09-10"); end 
+  def july; Time.parse("2014-07-10"); end
+  def aug; Time.parse("2014-08-10"); end
+  def sep; Time.parse("2014-09-10"); end
 end
 
 describe Bill do
@@ -84,7 +84,7 @@ describe Bill do
       bill2 = subscription.bills[1]
       bill2.should be_pending
       bill2.start_date.should == july
-      bill2.bill_at.should == Bill::Recurring.next_month(bill_at)
+      bill2.bill_at.should == july
       bill2.end_date.should == aug
     end
 
@@ -116,12 +116,12 @@ describe Bill do
       initial_bill.end_date.should == july
       recurring_bill.should be_paid
       recurring_bill.start_date.should == july
-      recurring_bill.bill_at.should == Bill::Recurring.next_month(bill_at)
+      recurring_bill.bill_at.should == initial_bill.end_date
       recurring_bill.end_date.should == aug
       # Next recurring bill should be unaffected by refund
       recurring_bill2.should be_pending
       recurring_bill2.start_date.should == aug
-      recurring_bill2.bill_at.should == Bill::Recurring.next_month(Bill::Recurring.next_month(bill_at))
+      recurring_bill2.bill_at.should == recurring_bill.end_date
       recurring_bill2.end_date.should == sep
     end
   end

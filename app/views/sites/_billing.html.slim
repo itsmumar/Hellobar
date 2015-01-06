@@ -6,6 +6,8 @@ section
     = display_name_for_site(@site)
     |  is on the 
     = @site.current_subscription.values[:name]
+    - if @site.current_subscription.trial?
+      |  Trial
     |  plan. 
     - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
       = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
@@ -28,7 +30,7 @@ section
       small
         | (no credit card on file)
 
-- unless @bills.empty?
+- if !@bills.empty?
   section
     label History
 
@@ -61,3 +63,7 @@ section
       |  for a 
       = @next_bill.subscription.schedule
       |  subscription.
+- elsif @next_bill && @site.current_subscription.trial?
+  | This site is on a trial plan.
+  |  Please enter a payment method by #{@next_bill.due_at.strftime("%-m-%-d-%Y")}
+  |  to continue using HelloBar #{@site.current_subscription.values[:name]}.

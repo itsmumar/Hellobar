@@ -16,6 +16,10 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  def trial?
+    self.amount != 0 && self.payment_method.nil?
+  end
+
   def values
     self.class.values_for(site).merge(schedule: schedule)
   end

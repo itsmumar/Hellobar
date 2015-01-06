@@ -1,11 +1,11 @@
 require 'billing_log'
 
 class Bill < ActiveRecord::Base
-  class StatusAlreadySet < Exception; end
-  class InvalidStatus < Exception; end
-  class BillingEarly < Exception; end
-  class InvalidBillingAmount < Exception; end
-  class MissingPaymentMethod < Exception; end
+  class StatusAlreadySet < StandardError; end
+  class InvalidStatus < StandardError; end
+  class BillingEarly < StandardError; end
+  class InvalidBillingAmount < StandardError; end
+  class MissingPaymentMethod < StandardError; end
   serialize :metadata, JSON
   belongs_to :subscription, inverse_of: :bills
   has_many :billing_attempts, -> {order 'id'}
@@ -139,7 +139,7 @@ class Bill < ActiveRecord::Base
         amount: self.subscription.amount,
         description: "#{self.subscription.monthly? ? "Monthly" : "Yearly"} Renewal",
         grace_period_allowed: true,
-        bill_at: Bill::Recurring.send(next_method, self.bill_at),
+        bill_at: self.end_date,
         start_date: new_start_date,
         end_date: Bill::Recurring.send(next_method, new_start_date)
       )
