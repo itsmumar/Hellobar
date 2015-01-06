@@ -33,6 +33,17 @@ describe Identity do
       identity.service_provider.should be_an_instance_of ServiceProviders::AWeber
     end
 
+    describe "service provider" do
+      it "should call destroy_and_notify_user when it encounters an error" do
+        Gibbon::API.stubs(:new => double("gibbon"))
+
+        identity = Identity.new(:provider => "mailchimp", :extra => {"metadata" => {}}, :credentials => {})
+        ServiceProviders::MailChimp.should_receive(:new).and_raise(Gibbon::MailChimpError)
+        identity.should_receive(:destroy_and_notify_user)
+        identity.service_provider.should be_nil
+      end
+    end
+
     describe "destroy_and_notify_user" do
       it "should email the user that there was a problem syncing their identity" do
         MailerGateway.should_receive(:send_email) do |*args|

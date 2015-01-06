@@ -49,6 +49,11 @@ class Identity < ActiveRecord::Base
 
   def service_provider(options={})
     @service_provider ||= service_provider_class.new(:identity => self, :contact_list => options[:contact_list])
+  rescue *EmailSynchronizer::ESP_ERROR_CLASSES => e
+    if service_provider_class.oauth?
+      destroy_and_notify_user
+    end
+    nil
   end
 
   def service_provider_class
