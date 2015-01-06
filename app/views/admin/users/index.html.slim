@@ -27,7 +27,12 @@ div.row
             td
               ul
                 - user.sites.with_deleted.each do |site|
-                  li= "#{display_name_for_site(site)} (#{site.current_subscription.values[:name]})".html_safe
+                  li
+                    = display_name_for_site(site).html_safe
+                    - if site.deleted?
+                      |  (Deleted)
+                    - else
+                      |  (#{site.current_subscription.values[:name]})
             td
               ul
                 - user.payment_method_details.uniq.each do |details|

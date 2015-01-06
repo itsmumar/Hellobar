@@ -6,8 +6,9 @@ div#user_profile
   - @user.sites.with_deleted.each do |site|
     div.site_title
       h3
-        | #{site.url} - #{site.current_subscription.values[:name]}
-      a.subscription_link data-id=site.id change plan
+        | #{site.url} - #{site.deleted? ? "Deleted" : site.current_subscription.values[:name]}
+      - unless site.deleted?
+        a.subscription_link data-id=site.id change plan
 
     = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "hidden schedule_form"} do |f|
       - fields_for :subscription do |sf|
@@ -65,6 +66,8 @@ div#user_profile
 
     div.site_section
       div.title Subscription History
+      - if site.deleted?
+        div= "Deleted on #{site.deleted_at.strftime('%D')}"
       - site.subscriptions.reverse.each do |sub|
         div
           | Changed to #{sub.values[:name]} on #{sub.created_at.strftime('%D')}
