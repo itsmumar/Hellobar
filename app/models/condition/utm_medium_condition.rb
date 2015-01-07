@@ -1,0 +1,1 @@
+class UTMMediumCondition < UTMCondition; end
