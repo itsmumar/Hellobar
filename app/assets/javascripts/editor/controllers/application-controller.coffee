@@ -91,7 +91,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
       true
 
     closeEditor: ->
-      if @get('currentUser') and @get('currentUser').status is 'temporary'
+      if @get('isTemporaryUser')
         new TempUserUnsavedChangesModal().open()
       else
         dashboardURL = "/sites/#{window.siteID}/site_elements"
