@@ -91,14 +91,17 @@ HelloBar.ApplicationController = Ember.Controller.extend
       true
 
     closeEditor: ->
-      dashboardURL = "/sites/#{window.siteID}/site_elements"
-
-      if @get("modelIsDirty")
-        options =
-          dashboardURL: dashboardURL
-          doSave: =>
-            @send("saveSiteElement")
-
-        new UnsavedChangesModal(options).open()
+      if @get('isTemporaryUser')
+        new TempUserUnsavedChangesModal().open()
       else
-        window.location = dashboardURL
+        dashboardURL = "/sites/#{window.siteID}/site_elements"
+
+        if @get("modelIsDirty")
+          options =
+            dashboardURL: dashboardURL
+            doSave: =>
+              @send("saveSiteElement")
+
+          new UnsavedChangesModal(options).open()
+        else
+          window.location = dashboardURL

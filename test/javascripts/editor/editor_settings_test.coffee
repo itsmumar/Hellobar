@@ -80,7 +80,7 @@ test 'it should be able to choose a social goal', ->
 test 'a user can exit the editor when active', ->
   equal find(".icon-close").length, 1, 'renders the editor close button'
 
-test 'it hides the exit editor button if a temporary user', ->
+test 'a temp user can exit the editor', ->
   Ember.run =>
     @route.controller.set('currentUser', {status: 'temporary'})
-  equal find(".icon-close").length, 0, 'does not render the editor close button'
+  equal find(".icon-close").length, 1, 'renders the editor close button'
