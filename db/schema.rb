@@ -133,7 +133,6 @@ ActiveRecord::Schema.define(version: 20141230174251) do
     t.integer  "site_id"
     t.string   "name"
     t.text     "data"
-    t.datetime "created_at"
     t.datetime "updated_at"
   end
 
