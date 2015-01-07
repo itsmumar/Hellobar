@@ -11,7 +11,7 @@ module HB
       def gateway
         unless @gateway
           ActiveMerchant::Billing::Base.mode = Hellobar::Settings[:cybersource_environment].try(:to_sym) || :test
-          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(:login=>Hellobar::Settings[:cybersource_login], :password=>Hellobar::Settings[:cybersource_password])
+          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(:login=>Hellobar::Settings[:cybersource_login], :password=>Hellobar::Settings[:cybersource_password], :ignore_avs=>true)
         end
         @gateway
       end
