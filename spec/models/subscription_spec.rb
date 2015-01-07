@@ -19,6 +19,25 @@ end
 describe Subscription do
   fixtures :all
   include SubscriptionHelper
+
+  describe "#trial?" do
+    it "should be true if subscription amount is not 0 and has a paid bill but no payment method" do
+      bill = bills(:paid_bill)
+      bill.update_attribute(:amount, 0)
+      bill.subscription.payment_method = nil
+      bill.subscription.trial?.should be_true
+    end
+
+    it "should be false if subscription amount is not 0 and paid bill is not 0" do
+      bill = bills(:paid_bill)
+      bill.subscription.trial?.should be_false
+    end
+
+    it "should be false when there are no paid bills" do
+      subscriptions(:zombo_subscription).trial?.should be_false
+    end
+  end
+
   it "should set defaults if not set" do
     Subscription::Pro.create.visit_overage.should == Subscription::Pro.defaults[:visit_overage]
   end
@@ -109,7 +128,7 @@ describe Subscription do
       success, pro_bill = @site.change_subscription(@pro, @payment_method)
       success.should be_true
       @site.capabilities(true).class.should == Subscription::Pro::Capabilities
-      
+
       # Refund
       refund_bill, refund_attempt = pro_bill.refund!
       refund_bill.should be_paid
@@ -298,7 +317,7 @@ describe Site do
     it "should affect prorating if you refund and switch plan" do
       success, pro_bill = @site.change_subscription(@pro, @payment_method)
       success.should be_true
-      
+
       # Refund
       refund_bill, refund_attempt = pro_bill.refund!
       refund_bill.should be_paid
@@ -318,7 +337,7 @@ describe Site do
     it "should affect prorating if you refund and switch plan" do
       success, pro_bill = @site.change_subscription(@pro, @payment_method)
       success.should be_true
-      
+
       # Refund
       refund_bill, refund_attempt = pro_bill.refund!
       refund_bill.should be_paid
@@ -420,7 +439,7 @@ describe Site do
       @site.current_subscription.should == @pro
       @site.capabilities(true).class.should == Subscription::ProblemWithPayment::Capabilities
     end
-    
+
     it "should not create a negative bill when switching from yearly to monthly" do
       pro_yearly = Subscription::Pro.new(user: @user, site: @site, schedule: "yearly")
       pro_monthly = Subscription::Pro.new(user: @user, site: @site, schedule: "monthly")

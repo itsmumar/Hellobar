@@ -17,7 +17,8 @@ class Subscription < ActiveRecord::Base
   end
 
   def trial?
-    self.amount != 0 && self.payment_method.nil?
+    amount != 0 && payment_method.nil? && \
+    active_bills.any? { |b| b.amount == 0 && b.paid? }
   end
 
   def values

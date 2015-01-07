@@ -173,4 +173,40 @@ describe Site do
       @site.script_installed_at.should_not be_nil
     end
   end
+
+  describe "calculate_bill" do
+    include ActiveSupport::Testing::TimeHelpers
+
+    context "trial_period is specified" do
+      it "should set the bill amount to 0" do
+        sub = subscriptions(:zombo_subscription)
+        bill = sub.site.send(:calculate_bill, sub, true, 20.day)
+        bill.amount.should == 0
+      end
+
+      it "should set the end_at of the bill to the current time + the trial period" do
+        sub = subscriptions(:zombo_subscription)
+        travel_to Time.now do
+          bill = sub.site.send(:calculate_bill, sub, true, 20.day)
+          bill.end_date.should == Time.now + 20.day
+        end
+      end
+    end
+
+    context "trial_period is not specified" do
+      it "should set the bill amount to subscription.amount" do
+        sub = subscriptions(:zombo_subscription)
+        bill = sub.site.send(:calculate_bill, sub, true)
+        bill.amount.should == sub.amount
+      end
+
+      it "should set the bill end_date to " do
+        sub = subscriptions(:zombo_subscription)
+        travel_to Time.now do
+          bill = sub.site.send(:calculate_bill, sub, true)
+          bill.end_date.should == Bill::Recurring.next_month(Time.now)
+        end
+      end
+    end
+  end
 end

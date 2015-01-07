@@ -72,3 +72,27 @@ describe Subscribable, '#build_subscription_instance' do
     controller.build_subscription_instance(billing_params).schedule.should == 'yearly'
   end
 end
+
+describe Subscribable, '#update_subscription' do
+  fixtures :all
+
+  controller do
+    include Subscribable
+  end
+
+  context "trial_period" do
+    it 'translates the trial_period to days' do
+      billing_params = { plan: 'pro', schedule: 'yearly', trial_period: '60'}
+      site = sites(:horsebike)
+      site.should_receive(:change_subscription).with(anything, nil, 60.day)
+      controller.update_subscription(site, nil, billing_params)
+    end
+
+    it 'translates the trial_period to nil if not given' do
+      billing_params = { plan: 'pro', schedule: 'yearly' }
+      site = sites(:horsebike)
+      site.should_receive(:change_subscription).with(anything, nil, nil)
+      controller.update_subscription(site, nil, billing_params)
+    end
+  end
+end
