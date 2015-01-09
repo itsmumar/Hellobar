@@ -2,10 +2,7 @@
   = form_tag sites_path do
     input type="hidden" name="source" value="landing"
     input type="text" name="site[url]" placeholder="Your website URL" autofocus=true
-    - if @button_text == "continue"
-      button type="submit" Continue, It's Free
-    - else 
-      button type="submit" Get Started
+    button type="submit" Continue, It's Free
     .clear
   - if flash[:error]
     .error= flash[:error]

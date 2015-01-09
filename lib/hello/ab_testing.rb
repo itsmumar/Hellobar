@@ -43,7 +43,7 @@ module Hello
     # ==========================================
     # ==      REGISTER YOUR TESTS HERE        ==
     # ==========================================
-    register_test("Homepage: Button", %w{continue get_started}, 0)
+    register_test("Use Cases Amount", %w{more less}, 0)
 
     def ab_test_cookie_name
       'hb3ab'
