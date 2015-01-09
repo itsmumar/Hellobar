@@ -4,8 +4,6 @@ describe SiteElementsHelper do
   fixtures :all
 
   describe "site_element_subtypes_for_site" do
-    fixtures :all
-
     let(:site) { sites(:zombo) }
 
     context "none" do
@@ -205,6 +203,39 @@ describe SiteElementsHelper do
       other_traffic_bar = SiteElement.new(:element_subtype => "traffic")
       site_element_activity_units([other_traffic_bar, @bars[:traffic]]).should == "click"
       site_element_activity_units([other_traffic_bar, @bars[:traffic], @bars[:email]]).should == "conversion"
+    end
+  end
+
+  describe "ab_test_icon" do
+    it "returns the A/B icon for paused bars"  do
+      se = site_elements(:zombo_traffic)
+      se.update_attribute(:paused, true)
+      helper.ab_test_icon(se).should include("icon-abtest")
+    end
+
+    it "returns the bars indexed by letter" do
+      se1 = site_elements(:zombo_traffic)
+      se2 = se1.dup
+      se2.created_at = se1.created_at + 1.minute
+      se2.save
+      SiteElement.any_instance.stub(:total_conversions).and_return(250)
+      SiteElement.any_instance.stub(:total_views).and_return(500)
+
+      helper.ab_test_icon(se1).should include("<span class='numbers'>A</span>")
+      helper.ab_test_icon(se2).should include("<span class='numbers'>B</span>")
+    end
+
+    it "uses icon-tip for the 'winning' bar" do
+      se1 = site_elements(:zombo_traffic)
+      se2 = se1.dup
+      se2.save
+      se1.stub(:total_conversions).and_return(250)
+      se1.stub(:total_views).and_return(500)
+      se2.stub(:total_conversions).and_return(100)
+      se2.stub(:total_views).and_return(500)
+      Site.any_instance.stub(:site_elements).and_return([se1, se2])
+      helper.ab_test_icon(se1).should include("icon-tip")
+      helper.ab_test_icon(se2).should include("icon-circle")
     end
   end
 end

@@ -1,4 +1,6 @@
 module SiteElementsHelper
+  A_OFFSET = "A".ord
+
   def site_element_activity_units(elements, opts = {})
     units = [*elements].map do |element|
       case element.element_subtype
@@ -121,14 +123,18 @@ module SiteElementsHelper
   end
 
   def ab_test_icon(site_element)
-    elements_in_group = site_element.site.site_elements.active.order("created_at ASC").select{ |se| se.short_subtype == site_element.short_subtype }
+    elements_in_group = site_element.site.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype }
+    elements_in_group.sort! { |a, b| a.created_at <=> b.created_at }
     index = elements_in_group.index(site_element)
 
-    return "<i class='testing-icon icon-abtest'></i>".html_safe if index.nil? # site element is paused, or something wacky is going on
+    # site element is paused, its the only site element in the group, or something wacky is going on
+    if index.nil? || elements_in_group.size == 1
+      return "<i class='testing-icon icon-abtest'></i>".html_safe
+    end
 
-    letter = ("A".."Z").to_a[index]
+    letter = (index + A_OFFSET).chr
 
-    winner = elements_in_group.sort_by(&:conversion_percentage).last
+    winner = elements_in_group.max_by(&:conversion_percentage)
 
     if difference_is_significant?(elements_in_group) && site_element == winner
       "<i class='testing-icon icon-tip #{site_element.short_subtype}'><span class='numbers'>#{letter}</span></i>".html_safe
