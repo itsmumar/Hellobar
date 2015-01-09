@@ -9,6 +9,8 @@ module Hello
     MAX_TESTS = 4000
     MAX_VALUES_PER_TEST = 10
     TESTS = {}
+    VISITOR_ID_COOKIE = :vid
+    AB_TEST_COOKIE = :hb3ab
 
     class << self
       @@expected_index = 0
@@ -46,7 +48,7 @@ module Hello
     register_test("Use Cases Amount", %w{more less}, 0)
 
     def ab_test_cookie_name
-      'hb3ab'
+      AB_TEST_COOKIE
     end
 
     def ab_test_cookie_domain
@@ -85,15 +87,6 @@ module Hello
       return cookie
     end
 
-    def visitor_id
-      return nil unless defined?(cookies)
-
-      unless cookies[:vid]
-        cookies.permanent[:vid] = Digest::SHA1.hexdigest("visitor_#{Time.now.to_f}_#{request.remote_ip}_#{request.env['HTTP_USER_AGENT']}_#{rand(1000)}_id")
-      end
-      return cookies[:vid]
-    end
-
 
     def set_ab_variation(test_name, value)
       # First make sure we have registered this test
@@ -111,10 +104,8 @@ module Hello
       return ab_test
     end
 
-    def get_ab_variation_index_without_setting(test_name, user = nil)
+    def get_ab_variation_index_without_setting(test_name)
       ab_test = get_ab_test(test_name)
-      user ||= current_user if defined?(current_user)
-
       # Now we need to see if we have a value for the index
       if defined?(cookies)
         return get_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index])
@@ -133,13 +124,13 @@ module Hello
 
     def get_ab_variation(test_name, user = nil)
       ab_test = get_ab_test(test_name)
-      user ||= current_user if defined?(current_user)
-      value_index = get_ab_variation_index_without_setting(test_name, user)
+      value_index = get_ab_variation_index_without_setting(test_name)
       value = nil
 
       if !value_index
         # Determine a new one and set it
-        value_index = get_ab_test_value_index_from_id(ab_test, user ? user.id : visitor_id)
+        person_type, person_id = current_person(user)
+        value_index = get_ab_test_value_index_from_id(ab_test, person_id)
 
         if defined?(cookies)
           cookie_value = set_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index], value_index)
@@ -150,7 +141,7 @@ module Hello
         value = ab_test[:values][value_index]
 
         # Track it
-        Analytics.track(*person(user), test_name, {value: value})
+        Analytics.track(person_type, person_id, test_name, {value: value})
       else
         # Just get the value
         value = ab_test[:values][value_index]
@@ -159,9 +150,34 @@ module Hello
       return value
     end
 
-    def person(user=nil)
+    def visitor_id
+      return nil unless defined?(cookies)
+
+      unless cookies[VISITOR_ID_COOKIE]
+        cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{Time.now.to_f}_#{request.remote_ip}_#{request.env['HTTP_USER_AGENT']}_#{rand(1000)}_id")+"x" # The x indicates this ID has not been persisted yet
+      end
+      # Return the first 40 characters of the hash
+      return cookies[VISITOR_ID_COOKIE][0...40]
+    end
+    
+    def get_visitor_id_without_setting
+      return nil unless defined?(cookies)
+      return cookies[VISITOR_ID_COOKIE]
+    end
+
+    def current_person(user=nil)
       user ||= current_user if defined?(current_user)
       if user
+        if defined?(cookies)
+          # See if a we have an unassociated visitor ID
+          if cookies[VISITOR_ID_COOKIE] and cookies[VISITOR_ID_COOKIE][-1..-1] == "x"
+            # Associate it with the visitor
+            Analytics.track(:visitor, visitor_id, :user_id, value: user.id)
+
+            # Mark it as associated
+            cookies.permanent[VISITOR_ID_COOKIE] = cookies[VISITOR_ID_COOKIE][0...40] + "y"
+          end
+        end
         return :user, user.id
       else
         return :visitor, visitor_id
