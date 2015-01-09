@@ -23,9 +23,9 @@ module Hello
 
       case tracker_action
       when "click"
-        Hello::Tracking.track_event("user", user_id, "Clicked link: #{tracker_data}")
+        # Hello::Tracking.track_event("user", user_id, "Clicked link: #{tracker_data}")
       when "open"
-        Hello::Tracking.track_event("user", user_id, "Opened email: #{tracker_data}")
+        # Hello::Tracking.track_event("user", user_id, "Opened email: #{tracker_data}")
       end
     rescue => e
       Raven.capture_exception(e)

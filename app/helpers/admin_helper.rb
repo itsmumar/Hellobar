@@ -22,7 +22,7 @@ module AdminHelper
 
   def render_report(test_name, options={}, col1, col2)
     options = {title: "", subtitle: ""}.merge(options)
-    return "" unless report = InternalReport.get(test_name)
+    return ""
     options[:subtitle] += " - "+last_updated_report(report)
     headline = %{<h3>#{options[:title]} <small>#{options[:subtitle]}</small></h3>}
     html = ""

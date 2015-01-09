@@ -60,11 +60,6 @@ Rails.application.routes.draw do
     get "locked", :to => "access#locked", :as => :locked
   end
 
-  post "/user/:user_id/did/:event" => Hello::Tracking.create_events_endpoint()
-  post "/visitor/:visitor_id/did/:event" => Hello::Tracking.create_events_endpoint()
-  post "/user/:user_id/has/:prop_name/of/:prop_value" => Hello::Tracking.create_props_endpoint()
-  post "/visitor/:visitor_id/has/:prop_name/of/:prop_value" => Hello::Tracking.create_props_endpoint()
-
   get '/use-cases' => 'pages#use_cases'
   get '/terms-of-use' => 'pages#terms_of_use'
   get '/privacy-policy' => 'pages#privacy_policy'

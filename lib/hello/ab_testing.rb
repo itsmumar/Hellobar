@@ -77,7 +77,8 @@ module Hello
     end
 
     def get_ab_test_value_index_from_db(ab_test, user)
-      prop = InternalProp.where(:target_type => "user", :target_id => user.id, :name => ab_test[:name]).first
+      # prop = InternalProp.where(:target_type => "user", :target_id => user.id, :name => ab_test[:name]).first
+      prop = nil
       prop ? ab_test[:values].index(prop.value) : nil
     end
 
@@ -161,7 +162,7 @@ module Hello
 
         # Tag the user
         if user
-          InternalProp.create(:target_type => "user", :target_id => user.id, :name => test_name, :value => value, :timestamp => Time.now.to_i)
+          # InternalProp.create(:target_type => "user", :target_id => user.id, :name => test_name, :value => value, :timestamp => Time.now.to_i)
         elsif visitor_id
           Hello::Tracking.track_prop('visitor', visitor_id, test_name, value)
         end
