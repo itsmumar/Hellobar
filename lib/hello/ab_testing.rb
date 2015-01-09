@@ -43,24 +43,10 @@ module Hello
     # ==========================================
     # ==      REGISTER YOUR TESTS HERE        ==
     # ==========================================
-    register_test("Bar Creation: Simple", %w{original simpler}, 0)
-    register_test("Homepage: Test 1", %w{home home2}, 1)
-    register_test("Homepage: Test 2", %w{home2 home3}, 2)
-    register_test("Homepage: Test 3", %w{home3 home4 home5}, 3)
-    register_test("Homepage: Test 4", %w{home3 home3b home4 home4b}, 4)
-    register_test("Homepage: Test 5", %w{home3b home6 home6b}, 5, [50, 25, 25])
-    register_test("Bar Suggestion: Test 1 (Suggestion Type)", %w{control color content mobile}, 6, [50, 17, 17, 16])
-    register_test("Homepage: Test 6", %w{home6 home7}, 7)
-    register_test("Bar Suggestion: Test 2 (Multiple Suggestions)", %w{color_and_mobile color mobile}, 8, [50, 25, 25])
-    register_test("Homepage: Test 7", %w{home6 home_a1 home_a2 home_a3 home_a4 home_b1 home_b2 home_b3 home_b4}, 9, [52, 6, 6, 6, 6, 6, 6, 6, 6])
-    register_test("Bar Creation: Dont Worry", %w{original added_text}, 10)
-    register_test("Homepage: Test 8", %w{home6 home_a1 home_a2 home_a3 home_a4 home_b1 home_b2 home_b3 home_b4}, 11, [52, 6, 6, 6, 6, 6, 6, 6, 6])
-    register_test("Email Drip 1: No bars", %w{control experiment}, 12, [50, 50])
-    register_test("Email Drip 2: Not installed", %w{control experiment}, 13, [50, 50])
-    register_test("Email Drip 3: Only one bar", %w{control experiment}, 14, [50, 50])
+    register_test("Homepage: Button", %w{continue get_started}, 0)
 
     def ab_test_cookie_name
-      'hb2ab'
+      'hb3ab'
     end
 
     def ab_test_cookie_domain
@@ -76,10 +62,15 @@ module Hello
       return nil
     end
 
-    def get_ab_test_value_index_from_db(ab_test, user)
-      # prop = InternalProp.where(:target_type => "user", :target_id => user.id, :name => ab_test[:name]).first
-      prop = nil
-      prop ? ab_test[:values].index(prop.value) : nil
+    def get_ab_test_value_index_from_id(ab_test, id)
+      rand_value = Digest::SHA1.hexdigest([ab_test[:name], id].join("|")).chars.inject(0){|s,o| s+o.ord}
+
+      # See if the test is weighted
+      ab_test[:weights].each_with_index do |weight, i|
+        return i if weight.include?(rand_value)
+      end
+      # Return the index
+      return rand_value % ab_test[:values].length
     end
 
     def set_ab_test_value_index_from_cookie(cookie, index, value_index)
@@ -125,9 +116,7 @@ module Hello
       user ||= current_user if defined?(current_user)
 
       # Now we need to see if we have a value for the index
-      if user
-        return get_ab_test_value_index_from_db(ab_test, user)
-      elsif defined?(cookies)
+      if defined?(cookies)
         return get_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index])
       else
         return nil
@@ -150,7 +139,7 @@ module Hello
 
       if !value_index
         # Determine a new one and set it
-        value_index = get_weighted_value_index(ab_test) || rand(ab_test[:values].length)
+        value_index = get_ab_test_value_index_from_id(ab_test, user ? user.id : visitor_id)
 
         if defined?(cookies)
           cookie_value = set_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index], value_index)
@@ -160,18 +149,23 @@ module Hello
         # Get the value
         value = ab_test[:values][value_index]
 
-        # Tag the user
-        if user
-          # InternalProp.create(:target_type => "user", :target_id => user.id, :name => test_name, :value => value, :timestamp => Time.now.to_i)
-        elsif visitor_id
-          Hello::Tracking.track_prop('visitor', visitor_id, test_name, value)
-        end
+        # Track it
+        Analytics.track(*person(user), test_name, {value: value})
       else
         # Just get the value
         value = ab_test[:values][value_index]
       end
 
       return value
+    end
+
+    def person(user=nil)
+      user ||= current_user if defined?(current_user)
+      if user
+        return :user, user.id
+      else
+        return :visitor, visitor_id
+      end
     end
 
     def get_weighted_value_index(ab_test)
