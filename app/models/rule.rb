@@ -22,10 +22,12 @@ class Rule < ActiveRecord::Base
 
   def self.create_from_segment(site, segment)
     segment, value = segment.split(":", 2)
+    segment = Condition::SEGMENTS.find{|k, v| v == segment}[0]
+    value = [value] if segment == 'UrlCondition'
 
     new(site: site).tap do |rule|
       condition = rule.conditions.new(
-        segment: Condition::SEGMENTS.find{|k, v| v == segment}[0],
+        segment: segment,
         operand: "is",
         value: value
       )
@@ -38,7 +40,7 @@ class Rule < ActiveRecord::Base
 
   def to_sentence
     if conditions.empty?
-      "Show this to everyone" 
+      "Show this to everyone"
     elsif conditions.size == 1
       conditions.first.to_sentence
     elsif conditions.size == 2

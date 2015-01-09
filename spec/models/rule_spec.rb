@@ -133,6 +133,18 @@ describe Rule, "::create_from_segment" do
     condition.operand.should == "is"
   end
 
+  it "creates a url condition" do
+    rule = Rule.create_from_segment(site, "pu:httpsomeurl")
+    condition = rule.conditions.first
+
+    rule.should be_valid
+    rule.conditions.count.should == 1
+
+    condition.segment.should == "UrlCondition"
+    condition.value.should == ["httpsomeurl"]
+    condition.operand.should == "is"
+  end
+
   it "sets the name based on segment" do
     rule = Rule.create_from_segment(site, "dv:mobile")
     rule.name.should == "Device is mobile"
