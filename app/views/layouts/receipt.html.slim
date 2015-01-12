@@ -9,6 +9,6 @@ html
     = stylesheet_link_tag "receipt", :media => "all"
     = csrf_meta_tags
 
-  body#hb-receipt
-
-    == yield
+  body
+    div#hb-receipt
+      == yield
