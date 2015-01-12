@@ -10,54 +10,48 @@ header
 
 main
 
-  section
-    h4 Receipt
-
-    div
-      strong Amount
-      = number_to_currency(@bill.amount)
-
-    div
-      strong Due On
-      = @bill.bill_at.strftime('%D')
-
-    div
+  div.section
+    div.left
+      strong To:
+      div
+        address
+          div= @bill.site.url
+          br
+          = @details.data["first_name"] + ' ' + @details.data["last_name"]
+          - if !@details.address.nil?
+            br
+            = @details.address.address1
+            br
+            = @details.address.city + ' ' + @details.address.state + ' ' + @details.address.zip + ' ' + @details.address.country
+    div.right
+      strong Invoice:
+      div Invoice #: #{@bill.id}
+      div Due #{@bill.bill_at.strftime('%b. %d, %Y')}
       - if @bill.paid?
-        strong Paid On
-        = @bill.successful_billing_attempt.created_at.strftime('%D')
+        div Paid On #{@bill.successful_billing_attempt.created_at.strftime('%b. %d, %Y')}
+  br.clear
 
-      - else
-        strong Status
-        = @bill.status
 
-  section
-    h4 Billing Information
+  table
+    tr.thick_border
+      th.left.wide_column Name
+      th.right.narrow_column Unit price
+      th.right.narrow_column Line total
+    tr.thin_border
+      td.left
+        | HelloBar #{@bill.subscription.values[:name]} - #{@bill.subscription.schedule.capitalize}
+        br
+        | #{@bill.start_date.strftime('%b. %d, %Y')} thru #{@bill.end_date.strftime('%b. %d, %Y')}
+      td.right= number_to_currency(@bill.amount)
+      td.right= number_to_currency(@bill.amount)
+    tr
+      th.left
+      th.right Invoice Total
+      th.right= number_to_currency(@bill.amount)
 
-    div
-      strong Card
-      = @details.data["number"]
-
-    div
-      strong Address
-      address
-        = @details.data["first_name"] + ' ' + @details.data["last_name"]
-        - if !@details.address.nil?
-          br
-          = @details.address.address1
-          br
-          = @details.address.city + ' ' + @details.address.state + ' ' + @details.address.zip + ' ' + @details.address.country
-
-  section
-    h4 Subscription
-
-    div
-      strong Type
-      = @bill.subscription.values[:name]
-
-    div
-      strong Billed
-      = @bill.subscription.schedule.capitalize
-
-    div
-      strong Site
-      = @bill.site.url
+  div.message
+    | If you have any questions concerning this invoice, email: 
+    a href="mailto:contact@crazyegg.com"
+      | contact@crazyegg.com
+  div.centered
+    | Thank you for your business
