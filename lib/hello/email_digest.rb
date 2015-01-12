@@ -28,14 +28,7 @@ module Hello::EmailDigest
     end
 
     def track_send(user, email_name)
-=begin
-      InternalEvent.create(
-        :timestamp => Time.now.to_i,
-        :target_id => user.id,
-        :target_type=>"user",
-        :name => "Sent email digest: #{email_name}"
-      )
-=end
+      Analytics.track(:user, user.id, "Sent Email Digest", {name: email_name})
     end
 
     def site_metrics(site)
