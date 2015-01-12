@@ -14,7 +14,7 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
     @client.lists.map{|l| {'id' => l['ListID'], 'name' => l['Name']}}
   end
 
-  def subscribe(list_id, email, name = nil)
+  def subscribe(list_id, email, name = nil, double_optin = true)
     CreateSend::Subscriber.add(@auth, list_id, email, name, [], true)
   end
 
