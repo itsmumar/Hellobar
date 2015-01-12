@@ -10,6 +10,8 @@ module Hello
     MAX_VALUES_PER_TEST = 10
     TESTS = {}
     VISITOR_ID_COOKIE = :vid
+    VISITOR_ID_LENGTH = 40
+    USER_ID_NOT_SET_YET = "x"
     AB_TEST_COOKIE = :hb3ab
 
     class << self
@@ -129,7 +131,7 @@ module Hello
 
       if !value_index
         # Determine a new one and set it
-        person_type, person_id = current_person(user)
+        person_type, person_id = current_person_type_and_id(user)
         value_index = get_ab_test_value_index_from_id(ab_test, person_id)
 
         if defined?(cookies)
@@ -154,32 +156,38 @@ module Hello
       return nil unless defined?(cookies)
 
       unless cookies[VISITOR_ID_COOKIE]
-        cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{Time.now.to_f}_#{request.remote_ip}_#{request.env['HTTP_USER_AGENT']}_#{rand(1000)}_id")+"x" # The x indicates this ID has not been persisted yet
+        cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{Time.now.to_f}_#{request.remote_ip}_#{request.env['HTTP_USER_AGENT']}_#{rand(1000)}_id")+USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
       end
-      # Return the first 40 characters of the hash
-      return cookies[VISITOR_ID_COOKIE][0...40]
+      # Return the first VISITOR_ID_LENGTH characters of the hash
+      return cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH]
     end
     
-    def get_visitor_id_without_setting
+    def get_user_id_from_cookie
       return nil unless defined?(cookies)
-      return cookies[VISITOR_ID_COOKIE]
+      visitor_id_cookie = cookies[VISITOR_ID_COOKIE]
+      return nil unless visitor_id_cookie
+      return nil unless visitor_id_cookie.length > VISITOR_ID_LENGTH
+      return visitor_id_cookie[VISITOR_ID_LENGTH..-1]
     end
 
-    def current_person(user=nil)
+    def current_person_type_and_id(user=nil)
       user ||= current_user if defined?(current_user)
       if user
-        if defined?(cookies)
-          # See if a we have an unassociated visitor ID
-          if cookies[VISITOR_ID_COOKIE] and cookies[VISITOR_ID_COOKIE][-1..-1] == "x"
-            # Associate it with the visitor
-            Analytics.track(:visitor, visitor_id, :user_id, value: user.id)
-
-            # Mark it as associated
-            cookies.permanent[VISITOR_ID_COOKIE] = cookies[VISITOR_ID_COOKIE][0...40] + "y"
-          end
+        # See if a we have an unassociated visitor ID
+        if get_user_id_from_cookie == USER_ID_NOT_SET_YET
+          # Associate it with the visitor
+          Analytics.track(:visitor, visitor_id, :user_id, value: user.id)
+          # Mark it as associated
+          cookies.permanent[VISITOR_ID_COOKIE] = cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH] + user.id.to_s
         end
         return :user, user.id
       else
+        # See if we can get a user id
+        user_id = get_user_id_from_cookie
+        if user_id and user_id != USER_ID_NOT_SET_YET
+          return :user, user_id.to_i
+        end
+        # Return the visitor ID
         return :visitor, visitor_id
       end
     end
