@@ -123,7 +123,7 @@ unless defined?(Hellobar::Settings)
       :requires_embed_code => true
     }
   }
-  config[:analytics_log_file] ||= File.join(Rails.root, "log", "events.log")
+  config[:analytics_log_file] ||= File.join(Rails.root, "log", "analytics.log")
 
   Hellobar::Settings = config
 end
