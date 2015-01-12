@@ -1,6 +1,6 @@
 require "./config/initializers/settings"
 
-require "./lib/hello/ab_testing"
+require "./lib/hello/internal_analytics"
 require "./lib/hello/asset_storage"
 require "./lib/hello/data_api"
 require "./lib/hello/data_api_helper"

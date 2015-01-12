@@ -5,7 +5,7 @@
 # person saw
 # - it tags the user when a new test is seen so we can track it with the backend analytics
 module Hello
-  module ABTesting
+  module InternalAnalytics
     MAX_TESTS = 4000
     MAX_VALUES_PER_TEST = 10
     TESTS = {}
@@ -106,19 +106,22 @@ module Hello
       return ab_test
     end
 
-    def get_ab_variation_index_without_setting(test_name)
+    def get_ab_variation_index_without_setting(test_name, user=nil)
       ab_test = get_ab_test(test_name)
       # Now we need to see if we have a value for the index
       if defined?(cookies)
-        return get_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index])
-      else
-        return nil
+        if index = get_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index])
+          return index, :existing
+        end
       end
+      person_type, person_id = current_person_type_and_id(user)
+      value_index = get_ab_test_value_index_from_id(ab_test, person_id)
+      return value_index, :new
     end
 
-    def get_ab_variation_without_setting(test_name)
+    def get_ab_variation_without_setting(test_name, user=nil)
       ab_test = get_ab_test(test_name)
-      value_index = get_ab_variation_index_without_setting(test_name)
+      value_index, status = get_ab_variation_index_without_setting(test_name, user)
       return nil unless value_index
       value = ab_test[:values][value_index]
       return value
@@ -126,14 +129,10 @@ module Hello
 
     def get_ab_variation(test_name, user = nil)
       ab_test = get_ab_test(test_name)
-      value_index = get_ab_variation_index_without_setting(test_name)
+      value_index, status = get_ab_variation_index_without_setting(test_name, user)
       value = nil
 
-      if !value_index
-        # Determine a new one and set it
-        person_type, person_id = current_person_type_and_id(user)
-        value_index = get_ab_test_value_index_from_id(ab_test, person_id)
-
+      if status == :new
         if defined?(cookies)
           cookie_value = set_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index], value_index)
           cookies.permanent[ab_test_cookie_name.to_sym] = cookie_value
@@ -143,7 +142,7 @@ module Hello
         value = ab_test[:values][value_index]
 
         # Track it
-        Analytics.track(person_type, person_id, test_name, {value: value})
+        Analytics.track(*current_person_type_and_id(user), test_name, {value: value})
       else
         # Just get the value
         value = ab_test[:values][value_index]
