@@ -6,23 +6,26 @@ describe Hello::TrackingParam do
   it "encodes and decodes a tracker" do
     user_id = "1"
     action = "click"
-    data = "some url"
-    tracker = Hello::TrackingParam.encode_tracker(user_id, action, data)
+    props = {"url" => "some url"}
+    tracker = Hello::TrackingParam.encode_tracker(user_id, action, props)
 
-    Hello::TrackingParam.decode_tracker(tracker).should == [user_id, action, data]
+    Hello::TrackingParam.decode_tracker(tracker).should == [user_id, action, props]
     URI::escape(tracker).should == tracker
   end
 
   it "can handle cgi-escaped params" do
-    tracker = "MTIvLy9vcGVuLy8vRHJpcCAxLy8vMDk0MDhmZjk%3D"
-    Hello::TrackingParam.decode_tracker(tracker).should == ["12", "open", "Drip 1"]
+    user_id = "1"
+    action = "click"
+    props = {"url" => "some url"}
+    tracker = Hello::TrackingParam.encode_tracker(user_id, action, props)
+    tracker = CGI::escape(tracker)
+    Hello::TrackingParam.decode_tracker(tracker).should == [user_id, action, props]
   end
 
   describe "::track" do
     it "decodes and records a tracking parameters" do
-      tracker = Hello::TrackingParam.encode_tracker("1", "click", "some url")
-      Hello::Tracking.should_receive(:track_event).with("user", "1", "Clicked link: some url")
-
+      tracker = Hello::TrackingParam.encode_tracker("1", "Clicked", {url: "some url"})
+      Analytics.should_receive(:track).with(:user, "1", "Clicked", {"url"=>"some url"})
       Hello::TrackingParam.track(tracker)
     end
   end

@@ -5,6 +5,7 @@ class Analytics
 
   class << self
     def track(target_type, target_id, event_name, props={})
+      props = {} unless props
       # Default :at to now
       props[:at] ||= Time.now
       # If :at is a timestamp convert to a Time object

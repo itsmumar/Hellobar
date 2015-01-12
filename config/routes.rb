@@ -60,12 +60,15 @@ Rails.application.routes.draw do
     get "locked", :to => "access#locked", :as => :locked
   end
 
+  post "/track/current_person/did/:event" => "tracking#track_current_person"
+  post "/track/:type/:id/did/:event" => "tracking#track"
+  get "/pixel.gif" => "tracking#track", :as => :tracking_pixel
+
   get '/use-cases' => 'pages#use_cases'
   get '/terms-of-use' => 'pages#terms_of_use'
   get '/privacy-policy' => 'pages#privacy_policy'
   get '/logged_out' => 'pages#logout_confirmation', as: :logout_confirmation
 
-  get "/pixel.gif" => "pixel#show", :as => :tracking_pixel
 
   get "/heartbeat" => "heartbeat#index"
   get "/login", to: redirect("/users/sign_in")

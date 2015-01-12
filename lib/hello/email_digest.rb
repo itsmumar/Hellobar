@@ -28,7 +28,7 @@ module Hello::EmailDigest
     end
 
     def track_send(user, email_name)
-      Analytics.track(:user, user.id, "Sent Email Digest", {name: email_name})
+      Analytics.track(:user, user.id, "Sent Email Digest", name: email_name)
     end
 
     def site_metrics(site)
@@ -83,15 +83,15 @@ module Hello::EmailDigest
     end
 
     def installed_params(site, user, metrics, email_name)
-      create_bar_url = new_site_site_element_url(:site_id => site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_create_bar_cta"))
-      create_bar_button_url = new_site_site_element_url(:site_id => site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_create_bar_button"))
-      unsubscribe_url = edit_site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_unsubscribe"))
+      create_bar_url = new_site_site_element_url(:site_id => site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "Clicked Create Bar CTA", name: email_name))
+      create_bar_button_url = new_site_site_element_url(:site_id => site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "Clicked Create Bar Button", name: email_name))
+      unsubscribe_url = edit_site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "Clicked Unsubscribe", name: email_name))
 
       params = {
         :site_url => display_name_for_site(site),
         :start_date => 7.days.ago.strftime("%B %-d"),
         :end_date => 1.day.ago.strftime("%B %-d, %Y"),
-        :tracking_pixel => tracking_pixel_url(:host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "open", email_name)),
+        :tracking_pixel => tracking_pixel_url(:host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "Opened Email", name: email_name)),
         :create_bar_cta => Hello::EmailDigest.create_bar_cta(site, metrics, create_bar_url),
         :create_bar_button_url => create_bar_button_url,
         :unsubscribe_url => unsubscribe_url
@@ -136,12 +136,12 @@ module Hello::EmailDigest
     end
 
     def not_installed_params(site, user, email_name)
-      unsubscribe_url = edit_site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_unsubscribe"))
-      install_url = site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "click", "#{email_name}_install"))
+      unsubscribe_url = edit_site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "Clicked Unsubscribe", name: email_name))
+      install_url = site_url(site, :host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "Clicked Install", name: email_name))
 
       params = {
         :site_url => display_name_for_site(site),
-        :tracking_pixel => tracking_pixel_url(:host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "open", email_name)),
+        :tracking_pixel => tracking_pixel_url(:host => "www.hellobar.com", :trk => Hello::TrackingParam.encode_tracker(user.id, "Opened Email", name: email_name)),
         :unsubscribe_url => unsubscribe_url,
         :install_url => install_url
       }
