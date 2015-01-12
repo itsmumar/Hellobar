@@ -10,6 +10,6 @@ trackOptimizelyExperiments = ->
       variationId = experiment.variation_ids[value]
       variation = variations[variationId]
 
-      InternalTracking.track_prop("visitor", visitorId, "Optimizely: " + experiment.name, variation.name)
+      InternalTracking.track_current_person("Optimizely: " + experiment.name, {variation: variation.name})
 
 trackOptimizelyExperiments()
