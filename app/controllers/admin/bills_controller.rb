@@ -6,7 +6,7 @@ class Admin::BillsController < ApplicationController
   def show
     @bill = Bill.find(params[:id])
     @details = @bill.successful_billing_attempt.try(:payment_method_details)
-    render "bills/show", layout: 'reciept'
+    render "bills/show", layout: 'receipt'
   end
 
   def void
