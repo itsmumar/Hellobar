@@ -39,6 +39,7 @@ div#user_profile
             th Amount
             th Status
             th Due At
+            th Reciept
             th Actions
           - bills_for(site).each do |bill, refunds|
             tr
@@ -50,6 +51,9 @@ div#user_profile
                   | (#{refunds.map(&:amount).sum}) Refunded
               td= bill.status
               td= bill.due_at.strftime('%D')
+              td
+                - if bill.status == :paid
+                  = link_to("view", admin_user_bill_path(@user, bill))
               td
                 - if bill.status == :pending
                   = link_to "void", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Void this bill?" }

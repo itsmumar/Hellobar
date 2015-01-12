@@ -43,7 +43,7 @@ Rails.application.routes.draw do
 
     resources :users, :only => [:index, :show, :destroy] do
       resources :sites, :only => [:update]
-      resources :bills, :only => [] do
+      resources :bills, :only => [:show] do
         put 'void'
         put 'refund'
       end

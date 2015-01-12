@@ -3,6 +3,12 @@ class Admin::BillsController < ApplicationController
 
   before_action :require_admin
 
+  def show
+    @bill = Bill.find(params[:id])
+    @details = @bill.successful_billing_attempt.try(:payment_method_details)
+    render "bills/show", layout: 'reciept'
+  end
+
   def void
     bill = Bill.find(params[:bill_id])
     bill.void!
