@@ -59,6 +59,10 @@ class SiteElement < ActiveRecord::Base
     element_subtype[/(\w+)/]
   end
 
+  def track_creation
+    Analytics.track(:site, self.site.id, "Created Site Element", {site_element_id: self.id, type: self.element_subtype})
+  end
+  after_create :track_creation
   private
 
   def total_views_and_conversions

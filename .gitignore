@@ -28,3 +28,6 @@ db/*_dump.sql
 # Ignore application configuration
 /config/application.yml
 /config/thin/www+application.yml
+
+# Ignore .DS_Store
+.DS_Store

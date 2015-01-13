@@ -60,17 +60,15 @@ Rails.application.routes.draw do
     get "locked", :to => "access#locked", :as => :locked
   end
 
-  post "/user/:user_id/did/:event" => Hello::Tracking.create_events_endpoint()
-  post "/visitor/:visitor_id/did/:event" => Hello::Tracking.create_events_endpoint()
-  post "/user/:user_id/has/:prop_name/of/:prop_value" => Hello::Tracking.create_props_endpoint()
-  post "/visitor/:visitor_id/has/:prop_name/of/:prop_value" => Hello::Tracking.create_props_endpoint()
+  post "/track/current_person/did/:event" => "tracking#track_current_person"
+  post "/track/:type/:id/did/:event" => "tracking#track"
+  get "/pixel.gif" => "tracking#track", :as => :tracking_pixel
 
   get '/use-cases' => 'pages#use_cases'
   get '/terms-of-use' => 'pages#terms_of_use'
   get '/privacy-policy' => 'pages#privacy_policy'
   get '/logged_out' => 'pages#logout_confirmation', as: :logout_confirmation
 
-  get "/pixel.gif" => "pixel#show", :as => :tracking_pixel
 
   get "/heartbeat" => "heartbeat#index"
   get "/login", to: redirect("/users/sign_in")

@@ -1,200 +1,205 @@
+# The AB Testing module does a few things:
+# - it keeps track of all the tests
+# - it maintains a cookie to track which test the user has seen. This cookie is a string of 
+# digits from 0-9. Each digit represents a single test and each value is the variation the
+# person saw
+# - it tags the user when a new test is seen so we can track it with the backend analytics
 module Hello
-  class InternalAnalytics
+  module InternalAnalytics
+    MAX_TESTS = 4000
+    MAX_VALUES_PER_TEST = 10
+    TESTS = {}
+    VISITOR_ID_COOKIE = :vid
+    VISITOR_ID_LENGTH = 40
+    USER_ID_NOT_SET_YET = "x"
+    AB_TEST_COOKIE = :hb3ab
+
     class << self
-      # Processes any unprocessed props and events
-      def process
-        cxn = ActiveRecord::Base.connection
-        # Get the metadata
-        last_updated_at, last_event_processed, last_prop_processed, last_visitor_user_id_processed = *(cxn.execute("SELECT * FROM `internal_processing`")).first
-        internal_processing_metadata_set = false
-        if last_updated_at
-          internal_processing_metadata_set = true
+      @@expected_index = 0
+      def register_test(name, values, index, weights=[])
+        raise "Expected index: #{@@expected_index.inspect}, but got index: #{index.inspect}. You either changed the order of the tests, removed a test, added a test out of order, or did not set the index of a test correctly. Please fix and try again" unless index == @@expected_index
+        raise "#{name.inspect} has #{values.length} values, but max is #{MAX_VALUES_PER_TEST}" if values.length > MAX_VALUES_PER_TEST
+        sum = weights.inject(0){|result, w| result += w}
+        if weights.length < values.length
+          remainder = 100-sum
+          num_weights_needed = values.length-weights.length
+          # We inject n-1 weights this allows the last weight to round up or down as needed
+          weights += [(remainder/num_weights_needed)]*(num_weights_needed-1)
+          # Determine last weight and add it
+          sum = weights.inject(0){|result, w| result += w}
+          weights << 100-sum
+          sum = weights.inject(0){|result, w| result += w}
+        end
+        raise "Weighting added up #{sum}, expected 100: #{weights.inspect} for test #{name.inspect}" unless sum == 100
+        # Now create ranges out of the weights
+        c = 0
+        weights.collect! do |weight|
+          start_range = c
+          end_range = c+weight
+          c = end_range
+          (start_range...end_range)
         end
 
-        # Process the events and props
-        last_visitor_user_id_processed = process_visitor_user_ids(last_visitor_user_id_processed)
-        last_event_processed = process_events(last_event_processed)
-        last_prop_processed = process_props(last_prop_processed)
-        last_updated_at = Time.now.to_i
+        @@expected_index += 1
+        TESTS[name] = {:values=>values, :index=>index, :weights=>weights, :name=>name}
+      end
+    end
+    # ==========================================
+    # ==      REGISTER YOUR TESTS HERE        ==
+    # ==========================================
+    register_test("Use Cases Amount", %w{more less}, 0)
 
-        # Update the metadata
-        if internal_processing_metadata_set
-          cxn.execute("UPDATE `internal_processing` SET last_event_processed = #{last_event_processed}, last_prop_processed = #{last_prop_processed}, last_updated_at = #{last_updated_at}, last_visitor_user_id_processed = #{last_visitor_user_id_processed}")
-        else
-          cxn.execute("INSERT INTO `internal_processing` VALUES(#{last_updated_at}, #{last_event_processed}, #{last_prop_processed}, #{last_visitor_user_id_processed})")
+    def ab_test_cookie_name
+      AB_TEST_COOKIE
+    end
+
+    def ab_test_cookie_domain
+      Hellobar::Settings[:host] == "localhost" ? nil : Hellobar::Settings[:host]
+    end
+
+    def get_ab_test_value_index_from_cookie(cookie, index)
+      return nil if cookie == nil
+      value = cookie[index..index]
+      if value and value =~ /\d+/
+        return value.to_i
+      end
+      return nil
+    end
+
+    def get_ab_test_value_index_from_id(ab_test, id)
+      rand_value = Digest::SHA1.hexdigest([ab_test[:name], id].join("|")).chars.inject(0){|s,o| s+o.ord}
+
+      # See if the test is weighted
+      ab_test[:weights].each_with_index do |weight, i|
+        return i if weight.include?(rand_value)
+      end
+      # Return the index
+      return rand_value % ab_test[:values].length
+    end
+
+    def set_ab_test_value_index_from_cookie(cookie, index, value_index)
+      raise "Value: #{value.inspect} is out of range" if value_index > MAX_VALUES_PER_TEST or value_index < 0
+      # Make sure there is enough values
+      cookie = "" unless cookie
+      num_chars_needed = ((index+1)-cookie.length)
+      cookie += "x"*num_chars_needed if num_chars_needed > 0
+      # Set the value
+      cookie[index] = value_index.to_s # Sets the char value to 0-9
+
+      return cookie
+    end
+
+
+    def set_ab_variation(test_name, value)
+      # First make sure we have registered this test
+      raise "Could not find test: #{test_name.inspect}" unless ab_test = TESTS[test_name]
+      # Now make sure the value is a valid value
+      value_index = ab_test[:values].index(value)
+      raise "Could not find value: #{value.inspect} in test #{test_name.inspect} => #{ab_test.inspect}" unless value_index
+      cookie_value = set_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index], value_index)
+      cookies.permanent[ab_test_cookie_name.to_sym] = cookie_value
+    end
+
+    def get_ab_test(test_name)
+      # First make sure we have registered this test
+      raise "Could not find test: #{test_name.inspect}" unless ab_test = TESTS[test_name]
+      return ab_test
+    end
+
+    def get_ab_variation_index_without_setting(test_name, user=nil)
+      ab_test = get_ab_test(test_name)
+      # Now we need to see if we have a value for the index
+      if defined?(cookies)
+        if index = get_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index])
+          return index, :existing
         end
       end
+      person_type, person_id = current_person_type_and_id(user)
+      value_index = get_ab_test_value_index_from_id(ab_test, person_id)
+      return value_index, :new
+    end
 
-      def get_person(target_type, target_id)
-        # First see if we have the person in the DB already
-        unless person = InternalPerson.where(:"#{target_type}_id"=>target_id).first
-          # Nope - so create them
-          person = InternalPerson.new
-          case target_type
-          when "visitor"
-            person.visitor_id = target_id
-          when "user"
-            person.user_id = target_id.to_i
-          end
+    def get_ab_variation_without_setting(test_name, user=nil)
+      ab_test = get_ab_test(test_name)
+      value_index, status = get_ab_variation_index_without_setting(test_name, user)
+      return nil unless value_index
+      value = ab_test[:values][value_index]
+      return value
+    end
+
+    def get_ab_variation(test_name, user = nil)
+      ab_test = get_ab_test(test_name)
+      value_index, status = get_ab_variation_index_without_setting(test_name, user)
+      value = nil
+
+      if status == :new
+        if defined?(cookies)
+          cookie_value = set_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index], value_index)
+          cookies.permanent[ab_test_cookie_name.to_sym] = cookie_value
         end
-        return person if person
+
+        # Get the value
+        value = ab_test[:values][value_index]
+
+        # Track it
+        Analytics.track(*current_person_type_and_id(user), test_name, {value: value})
+      else
+        # Just get the value
+        value = ab_test[:values][value_index]
       end
 
-      def merge_people(person1, person2)
-        person = InternalPerson.new
-        person.visitor_id = person1.visitor_id || person2.visitor_id
-        person.user_id = person1.user_id || person2.user_id
-        # Use whichever timestamp is greater
-        [:first_visited_at, :signed_up_at, :completed_registration_at, :created_first_bar_at, :created_second_bar_at, :received_data_at].each do |timestamp|
-          person.send("#{timestamp}=".to_sym, [person2.send(timestamp), person1.send(timestamp)].compact.max)
-        end
-        # Update attributes
-        cxn = ActiveRecord::Base.connection
-        person1_id = person1.id
-        person2_id = person2.id
-        person1.destroy
-        person2.destroy
-        person.save
+      return value
+    end
 
-        dimensions = {}
-        to_delete = []
-        # Load up all the dimensions for both exsting users
-        cxn.execute("SELECT person_id, name, value, timestamp FROM `internal_dimensions` WHERE person_id = #{person1_id} OR person_id = #{person2_id}").each do |row|
-          data = {person_id: row[0], name: row[1], value: row[2], timestamp: row[3]}
-          # Only keep one dimension (whichever is later) 
-          if existing = dimensions[data[:name]]
-            if data[:timestamp] > existing[:timestamp]
-              to_delete << existing
-              dimensions[data[:name]] = data
-            else
-              to_delete << data
-            end
-          else
-            # Just one so far
-            dimensions[data[:name]] = data
-          end
-        end
-        # Update the person of the ones we are keeping
-        dimensions.values.each do |row|
-          cxn.execute("UPDATE `internal_dimensions` SET person_id=#{person.id} WHERE person_id = #{row[:person_id]} and name = #{cxn.quote(row[:name])}")
-        end
-        # Delete the ones we are not keeping
-        to_delete.each do |row|
-          cxn.execute("DELETE FROM `internal_dimensions` WHERE person_id = #{row[:person_id]} and name = #{cxn.quote(row[:name])}")
-        end
+    def visitor_id
+      return nil unless defined?(cookies)
 
-        return person
+      unless cookies[VISITOR_ID_COOKIE]
+        cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{Time.now.to_f}_#{request.remote_ip}_#{request.env['HTTP_USER_AGENT']}_#{rand(1000)}_id")+USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
+        Analytics.track(*current_person_type_and_id, "First Visit", {ip: request.remote_ip})
+      end
+      # Return the first VISITOR_ID_LENGTH characters of the hash
+      return cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH]
+    end
+    
+    def get_user_id_from_cookie
+      return nil unless defined?(cookies)
+      visitor_id_cookie = cookies[VISITOR_ID_COOKIE]
+      return nil unless visitor_id_cookie
+      return nil unless visitor_id_cookie.length > VISITOR_ID_LENGTH
+      return visitor_id_cookie[VISITOR_ID_LENGTH..-1]
+    end
+
+    def current_person_type_and_id(user=nil)
+      user ||= current_user if defined?(current_user)
+      if user
+        # See if a we have an unassociated visitor ID
+        if get_user_id_from_cookie == USER_ID_NOT_SET_YET
+          # Associate it with the visitor
+          Analytics.track(:visitor, visitor_id, :user_id, value: user.id)
+          # Mark it as associated
+          cookies.permanent[VISITOR_ID_COOKIE] = cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH] + user.id.to_s
+        end
+        return :user, user.id
+      else
+        # See if we can get a user id
+        user_id = get_user_id_from_cookie
+        if user_id and user_id != USER_ID_NOT_SET_YET
+          return :user, user_id.to_i
+        end
+        # Return the visitor ID
+        return :visitor, visitor_id
+      end
+    end
+
+    def get_weighted_value_index(ab_test)
+      rand_value = rand(100)
+
+      ab_test[:weights].each_with_index do |weight, i|
+        return i if weight.include?(rand_value)
       end
 
-      def process_visitor_user_ids(last_visitor_user_id_processed)
-        cxn = ActiveRecord::Base.connection
-        cxn.execute("SELECT * FROM `internal_props` WHERE `name` = 'user_id' AND id > #{last_visitor_user_id_processed || 0}").each do |row|
-          id, timestamp, target_type, target_id, name, value = *row 
-          person_by_visitor = get_person(target_type, target_id)
-          person_by_user = get_person("user", value.to_i)
-
-          method = nil
-          if person_by_visitor.new_record? and !person_by_user.new_record?
-            # The person by user already exists and we just need to update
-            # the visitor id
-            method = :set_visitor_id
-            person = person_by_user
-          elsif !person_by_visitor.new_record? and person_by_user.new_record?
-            # The person by visitor already exists we just need to update
-            # the user id
-            method = :set_user_id
-            person = person_by_visitor
-          elsif !person_by_visitor.new_record? and !person_by_user.new_record?
-            # They both exist, if they are not the same person we merge them
-            if person_by_visitor.id != person_by_user.id
-              person = merge_people(person_by_visitor, person_by_user)
-            else
-              # They are the same person - no need to set anything
-              person = person_by_visitor
-            end
-          elsif person_by_visitor.new_record? and person_by_user.new_record?
-            # They are both new records, so lets use the person_by_visitor
-            person = person_by_visitor
-            method = :set_user_id
-          end
-
-          case method
-          when :set_visitor_id
-            person.visitor_id = target_id unless person.visitor_id
-          when :set_user_id
-            person.user_id = value.to_i
-          end
-          
-          # Update the first visited at if needed
-          person.first_visited_at = timestamp if !person.first_visited_at or timestamp < person.first_visited_at
-          # Save any changes
-          person.save if person.changed?
-
-          last_visitor_user_id_processed = id
-        end
-
-        return last_visitor_user_id_processed
-      end
-
-      def process_events(last_event_processed)
-        cxn = ActiveRecord::Base.connection
-        valid_events = ["Signed Up", "Created First Bar", "Created Second Bar", "Completed Registration", "Received Data"]
-        cxn.execute("SELECT * FROM `internal_events` WHERE `name` IN (#{valid_events.collect{|e| cxn.quote(e)}.join(", ")}) AND id > #{last_event_processed || 0}").each do |row|
-          id, timestamp, target_type, target_id, name = *row 
-          person = get_person(target_type, target_id)
-          person.first_visited_at = timestamp if !person.first_visited_at or timestamp < person.first_visited_at
-          case name
-            when "Signed Up"
-              person.signed_up_at ||= timestamp
-            when "Created First Bar"
-              person.created_first_bar_at ||= timestamp
-            when "Created Second Bar"
-              person.created_second_bar_at ||= timestamp
-            when "Completed Registration"
-              person.completed_registration_at ||= timestamp
-            when "Received Data"
-              person.received_data_at ||= timestamp
-          end
-          if person.changed?
-            person.save
-          end
-          last_event_processed = id
-        end
-        return last_event_processed
-      end
-
-      def process_props(last_prop_processed)
-        cxn = ActiveRecord::Base.connection
-        invalid_props = ["user_id"]
-        cxn.execute("SELECT * FROM `internal_props` WHERE `name` NOT IN (#{invalid_props.collect{|e| cxn.quote(e)}.join(", ")}) AND id > #{last_prop_processed || 0}").each do |row|
-          id, timestamp, target_type, name, value, target_id = *row
-          person = get_person(target_type, target_id)
-          person.first_visited_at = timestamp if !person.first_visited_at or timestamp < person.first_visited_at
-          if person.changed?
-            person.save
-          end
-
-          # See if we can find the internal dimension and create it
-          # if we can't find it
-          attributes = {:person_id=>person.id, :name=>name}
-          dimension = InternalDimension.where(attributes).first || InternalDimension.new(attributes)
-          # See if we have different value then what was established
-          if value != dimension.value and (!dimension.timestamp || timestamp > dimension.timestamp)
-            # Update it
-            dimension.value = value
-            dimension.timestamp = timestamp
-            # Need to write your own save code because we 
-            # are using a primary composite key
-            if dimension.new_record?
-              cxn.execute("INSERT INTO `internal_dimensions` VALUES(#{dimension.person_id}, #{cxn.quote(dimension.name)}, #{cxn.quote(dimension.value)}, #{dimension.timestamp})")
-            else  
-              cxn.execute("UPDATE `internal_dimensions` SET value = #{cxn.quote(dimension.value)}, timestamp = #{dimension.timestamp} WHERE person_id = #{dimension.person_id} AND name = #{cxn.quote(dimension.name)}")
-            end
-          end
-          last_prop_processed = id
-        end
-        return last_prop_processed
-      end
+      return nil
     end
   end
 end

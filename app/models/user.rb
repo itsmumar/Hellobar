@@ -72,6 +72,20 @@ class User < ActiveRecord::Base
     status == TEMPORARY_STATUS
   end
 
+  after_save :track_temporary_status_change
+  def track_temporary_status_change
+    if @was_temporary and !temporary?
+      Analytics.track(:user, self.id, "Completed Signup", {email: self.email})
+      @was_temporary = false
+    end
+  end
+
+  after_initialize :check_if_temporary
+  def check_if_temporary
+    @was_temporary = temporary?
+  end
+
+
   private
 
   def email_does_not_exist_in_wordpress
