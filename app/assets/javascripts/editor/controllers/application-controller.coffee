@@ -20,6 +20,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
   # (primarily observed by the color-picker component)
 
   colorPalette: []
+  focusedColor: null
 
   #-----------  Element Preview  -----------#
 

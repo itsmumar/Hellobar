@@ -1,5 +1,7 @@
 HelloBar.ColorSelectComponent = Ember.Component.extend
 
+  needs: ['colors']
+
   classNames: ['color-select']
   classNameBindings: ['inFocus', 'isSelecting']
 
@@ -98,9 +100,15 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
 
   #-----------  Component State Switching  -----------#
 
+  observeSiblings: ( ->
+    if @get('inFocus') && (@get('focusedColor') != @get('elementId'))
+      @set('inFocus', false)
+  ).observes('focusedColor')
+
   actions:
 
     toggleFocus: ->
+      @set('focusedColor', @get('elementId'))
       @toggleProperty('inFocus')
 
 

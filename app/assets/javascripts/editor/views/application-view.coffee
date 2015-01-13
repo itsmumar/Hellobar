@@ -11,3 +11,9 @@ HelloBar.ApplicationView = Ember.View.extend
 
   isMobile: Ember.computed.alias('controller.isMobile')
   isFullscreen: Ember.computed.alias('controller.isFullscreen')
+
+  #-----------  Click Action  -----------#
+
+  click: (obj) ->
+    unless $(obj.target).hasClass('color-select-block')
+      @set('controller.focusedColor', null)
