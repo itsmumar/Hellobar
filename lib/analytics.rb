@@ -31,6 +31,7 @@ class Analytics
         File.open(LOG_FILE, (File::WRONLY | File::APPEND)){|fp| fp.puts(data.to_json)}
       rescue Errno::ENOENT
         raise if tried_creating_missing_file
+        FileUtils.mkdir_p(File.dirname(LOG_FILE))
         FileUtils.touch(LOG_FILE)
         tried_creating_missing_file = true
         retry
