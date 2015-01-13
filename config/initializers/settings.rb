@@ -4,6 +4,7 @@ unless defined?(Hellobar::Settings)
   config = {}
 
   keys = %w(
+    analytics_log_file
     aweber_app_id
     aweber_consumer_key
     aweber_consumer_secret
@@ -35,12 +36,12 @@ unless defined?(Hellobar::Settings)
     s3_bucket
     script_cdn_url
     sendgrid_password
+    sentry_dsn
     store_site_scripts_locally
     syncable
     tracking_host
     twilio_password
     twilio_user
-    sentry_dsn
   )
 
   keys.each do |key|
