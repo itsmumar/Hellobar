@@ -7,6 +7,8 @@ module Subscribable
     if success
       site.reload
 
+      track_subscription_change(site, old_subscription)
+
       is_upgrade = if old_subscription
         Subscription::Comparison.new(old_subscription, site.current_subscription).upgrade?
       else
@@ -31,5 +33,21 @@ module Subscribable
 
   def build_subscription_instance(billing_params)
     "Subscription::#{billing_params[:plan].camelize}".constantize.new schedule: billing_params[:schedule]
+  end
+
+  def track_subscription_change(site, old_subscription)
+    props = {}
+
+    if old_subscription
+      props[:from_plan] = old_subscription.values[:name]
+      props[:from_schedule] = old_subscription.schedule
+    end
+
+    if new_subscription = site.current_subscription
+      props[:to_plan] = new_subscription.values[:name]
+      props[:to_schedule] = new_subscription.schedule
+    end
+
+    Analytics.track(:site, site.id, :change_sub, props)
   end
 end
