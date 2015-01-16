@@ -15,8 +15,17 @@ tr.site-element-block class="#{site_element.paused? ? 'paused' : 'active'} type-
   td
     span.num= number_to_percentage(site_element.conversion_percentage * 100, precision: 1)
   td
-    = ab_test_icon(site_element)
-    .dropdown-wrapper
+    - if (icon = ab_test_icon(site_element)) && icon.match(/icon-abtest/)
+      .dropdown-wrapper
+        = icon
+        .dropdown-block.adjusted
+          = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars" do
+              i.icon-docs
+              | Create Variation
+    - else
+      = icon
+
+    .dropdown-wrapper.adjusted
       i.icon-settings
       .dropdown-block
         = link_to edit_site_site_element_path(site_element, :site_id => @site) do

@@ -141,6 +141,7 @@
             .testing-icon
               color: $red
               font-size: 1.67em
+              padding: 0
               @include inline-block()
 
               .numbers
@@ -160,12 +161,17 @@
                   top: 10%
                   font-size: 0.6em
 
-            .dropdown-wrapper
+            .dropdown-wrapper.adjusted
               margin-right: -1.33rem
 
               > i
                 font-size: 1.33em
                 padding-left: 1.25rem
+
+            .dropdown-wrapper
+
+              .dropdown-block.adjusted
+                right: -1.2em
 
         /*-----------  Type Variations  -----------*/
 
