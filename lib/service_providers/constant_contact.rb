@@ -15,8 +15,8 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     @client.get_lists(@token).map{|l| {'id' => l.id, 'name' => l.name}}
   end
 
-  def subscribe(list_id, email, name = nil, list = nil, double_optin = true)
-    cc_list = list || @client.get_list(@token, list_id)
+  def subscribe(list_id, email, name = nil, double_optin = true)
+    cc_list = @client.get_list(@token, list_id)
     cc_contact = ConstantContact::Components::Contact.new
     cc_email = ConstantContact::Components::EmailAddress.new
 

@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Hello::ABTesting
+  include Hello::InternalAnalytics
   include ActionView::Helpers::NumberHelper
 
   protect_from_forgery with: :exception

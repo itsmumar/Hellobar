@@ -1,19 +1,19 @@
 var InternalTracking = {
-  track_event: function(type, id, eventName)
+  track: function(type, id, eventName, props)
   {
-      $.ajax({
-        url: "/"+type+"/" + id + "/did/" + encodeURIComponent(eventName),
-        type: "POST",
-        dataType: "json"
-      });
+    $.ajax({
+      url: "/track/"+type+"/" + id + "/did/" + encodeURIComponent(eventName)+"?props="+encodeURIComponent(JSON.stringify(props || {})),
+      type: "POST",
+      dataType: "json"
+    });
   },
 
-  track_prop: function(type, id, propName, propValue)
+  track_current_person: function(eventName, props)
   {
-      $.ajax({
-        url: "/"+type+"/" + id + "/has/" + encodeURIComponent(propName)+ "/of/" +encodeURIComponent(propValue),
-        type: "POST",
-        dataType: "json"
-      });
+    $.ajax({
+      url: "/track/current_person/did/" + encodeURIComponent(eventName)+"?props="+encodeURIComponent(JSON.stringify(props || {})),
+      type: "POST",
+      dataType: "json"
+    });
   }
 }

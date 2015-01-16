@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141230174251) do
+ActiveRecord::Schema.define(version: 20150113162958) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -138,66 +138,12 @@ ActiveRecord::Schema.define(version: 20141230174251) do
 
   add_index "improve_suggestions", ["site_id", "name", "updated_at"], name: "index_improve_suggestions_on_site_id_and_name_and_updated_at", using: :btree
 
-  create_table "internal_dimensions", id: false, force: true do |t|
-    t.integer "person_id",              null: false
-    t.string  "name",      default: "", null: false
-    t.string  "value"
-    t.integer "timestamp"
-  end
-
-  add_index "internal_dimensions", ["name", "timestamp"], name: "index_internal_dimensions_on_name_and_timestamp", using: :btree
-  add_index "internal_dimensions", ["name", "value"], name: "index_internal_dimensions_on_name_and_value", using: :btree
-
-  create_table "internal_events", force: true do |t|
-    t.integer "timestamp"
-    t.string  "target_type"
-    t.string  "name"
-    t.string  "target_id",   limit: 40
-  end
-
-  add_index "internal_events", ["target_type", "name"], name: "index_internal_events_on_target_type_and_name", using: :btree
-
-  create_table "internal_people", force: true do |t|
-    t.string  "visitor_id",                limit: 40
-    t.integer "user_id"
-    t.integer "first_visited_at"
-    t.integer "signed_up_at"
-    t.integer "completed_registration_at"
-    t.integer "created_first_bar_at"
-    t.integer "created_second_bar_at"
-    t.integer "received_data_at"
-  end
-
-  add_index "internal_people", ["first_visited_at"], name: "index_internal_people_on_first_visited_at", using: :btree
-  add_index "internal_people", ["signed_up_at"], name: "index_internal_people_on_signed_up_at", using: :btree
-  add_index "internal_people", ["user_id"], name: "index_internal_people_on_user_id", using: :btree
-  add_index "internal_people", ["visitor_id"], name: "index_internal_people_on_visitor_id", using: :btree
-
   create_table "internal_processing", id: false, force: true do |t|
     t.integer "last_updated_at",                null: false
     t.integer "last_event_processed",           null: false
     t.integer "last_prop_processed",            null: false
     t.integer "last_visitor_user_id_processed", null: false
   end
-
-  create_table "internal_props", force: true do |t|
-    t.integer "timestamp"
-    t.string  "target_type"
-    t.string  "name"
-    t.string  "value"
-    t.string  "target_id",   limit: 40
-  end
-
-  add_index "internal_props", ["target_type", "name", "value"], name: "index_internal_props_on_target_type_and_name_and_value", using: :btree
-
-  create_table "internal_reports", force: true do |t|
-    t.string   "name"
-    t.text     "data",       limit: 2147483647
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "internal_reports", ["name"], name: "index_internal_reports_on_name", using: :btree
 
   create_table "payment_method_details", force: true do |t|
     t.integer  "payment_method_id"
@@ -258,6 +204,7 @@ ActiveRecord::Schema.define(version: 20141230174251) do
     t.string   "thank_you_text"
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
+    t.integer  "wordpress_bar_id"
     t.boolean  "open_in_new_window",              default: false
   end
 

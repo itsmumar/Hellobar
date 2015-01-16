@@ -10,9 +10,5 @@ module ServiceProviders
       html.css('#mad_mimi_signup_form').first
     end
 
-    def name_param
-      email_param.gsub('email', 'name')
-    end
-
   end
 end

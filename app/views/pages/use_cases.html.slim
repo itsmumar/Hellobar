@@ -3,10 +3,11 @@ p Create Hello Bars that show the right message at the right time to your websit
 
 .marketing-wrapper
 
-  .marketing-block
-    = image_tag 'marketing_visits.svg'
-    h5 Direct visitors to a page on your website
-    p Tell your website visitors what page they should visit next.
+  - unless @amount_of_use_cases == "less"
+    .marketing-block
+      = image_tag 'marketing_visits.svg'
+      h5 Direct visitors to a page on your website
+      p Tell your website visitors what page they should visit next.
 
   .marketing-block
     = image_tag 'marketing_emails.svg'
@@ -28,9 +29,10 @@ p Create Hello Bars that show the right message at the right time to your websit
     h5 A/B test your messages
     p Test and discover the messages that work best for your website visitors.
 
-  .marketing-block
-    = image_tag 'marketing_upcoming.svg'
-    h5 Coming Soon...
-    p Keep an eye on this page for new use cases for Hello Bar.
+  - unless @amount_of_use_cases == "less"
+    .marketing-block
+      = image_tag 'marketing_upcoming.svg'
+      h5 Coming Soon...
+      p Keep an eye on this page for new use cases for Hello Bar.
 
 = render 'welcome/quickstart'

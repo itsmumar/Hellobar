@@ -106,7 +106,7 @@ class SitesController < ApplicationController
   end
 
   def generate_temporary_logged_in_user
-    sign_in User.generate_temporary_user
+    sign_in(User.generate_temporary_user)
   end
 
   def create_for_temporary_user
@@ -116,8 +116,10 @@ class SitesController < ApplicationController
       redirect_to new_user_session_path(existing_url: @site.url)
     elsif @site.save
       generate_temporary_logged_in_user
+      Analytics.track(*current_person_type_and_id, "Signed Up", {ip: request.remote_ip, url: @site.url, site_id: @site.id})
 
       SiteMembership.create!(:site => @site, :user => current_user)
+      Analytics.track(*current_person_type_and_id, "Created Site", {site_id: @site.id})
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rule
@@ -133,6 +135,7 @@ class SitesController < ApplicationController
   def create_for_logged_in_user
     if @site.save
       SiteMembership.create!(:site => @site, :user => current_user)
+      Analytics.track(*current_person_type_and_id, "Created Site", {site_id: @site.id})
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rule

@@ -22,7 +22,7 @@ describe "contact_list:sync_one" do
     expect_any_instance_of(ContactList).to receive(:sync_one!).with("test.testerson@example.com", "Test Testerson")
     perform!
   end
-  
+
   it 'should require an email' do
     expect_any_instance_of(ContactList).not_to receive(:sync_one!)
     user[:email] = nil
@@ -44,6 +44,29 @@ describe "contact_list:sync_one" do
 
   def perform!(contact_list_id = contact_list.id, email = user[:email], name = user[:name])
     subject.invoke(contact_list_id, email, name)
+    contact_list.reload
+  end
+end
+
+describe "contact_list:sync_all!" do
+  fixtures :all
+  include_context 'rake'
+
+  let(:embed_code) { CY_MAD_MIMI_EMBED_CODE }
+  let(:contact_list) do
+    contact_lists(:embed_code).tap do |l|
+      l.data['embed_code'] = embed_code
+      l.save!
+    end
+  end
+
+  it 'should call sync_all!' do
+    expect_any_instance_of(ContactList).to receive(:sync_all!)
+    perform!
+  end
+
+  def perform!(contact_list_id = contact_list.id)
+    subject.invoke(contact_list_id)
     contact_list.reload
   end
 end

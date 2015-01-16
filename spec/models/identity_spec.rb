@@ -98,7 +98,7 @@ describe Identity do
 
         service_provider.params.any? {|item| item[:name] == 'signup[email]' }.should == true
         service_provider.email_param.should == 'signup[email]'
-        service_provider.name_param.should == 'signup[name]'
+        service_provider.name_params.should be_empty
         service_provider.required_params.should be_empty
       end
     end

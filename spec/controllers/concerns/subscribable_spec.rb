@@ -23,6 +23,18 @@ describe Subscribable, '#subscription_bill_and_status' do
 
     controller.subscription_bill_and_status('site', 'payment_method', 'billing_params', nil).should == { errors: bill.errors, status: :unprocessable_entity }
   end
+
+  it "tracks changes to subscription" do
+    bill = double 'bill'
+    controller.stub update_subscription: [true, bill]
+    site = sites(:horsebike)
+    serializer = double 'SiteSerializer'
+    SiteSerializer.stub new: serializer
+
+    Analytics.should_receive(:track).with(:site, site.id, :change_sub, anything)
+
+    controller.subscription_bill_and_status(site, 'payment_method', 'billing_params', nil).should == { bill: bill, site: serializer, is_upgrade: true, status: :ok }
+  end
 end
 
 describe Subscribable, '#build_subscription_instance' do

@@ -57,7 +57,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     Hash.new.tap do |hash|
       params.each do |input|
         name, value = input[:name], input[:value]
-        hash[name] = value 
+        hash[name] = value
       end
     end
   end
@@ -87,23 +87,25 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def subscribe_params(email, name, double_optin = true)
-    name_params_hash = if name_params.count > 1
-      names = name.split(' ')
-      params = name_params.find {|p| p.match(/first|fname/) }, name_params.find {|p| p.match(/last|lname/) }
+    name_hash = {}
 
-      {
-        params.first => names.first,
-        params.last => names.last
-      }
-    elsif name_params.count == 1
-      { name_param => name }
-    else
-      {}
+    if name_params.size >= 1
+      first_name, last_name = name.split(' ')
+      name_params.each do |name_field|
+        case name_field
+        when /first|fname/
+          name_hash[name_field] = first_name
+        when /last|lname/
+          name_hash[name_field] = last_name
+        else
+          name_hash[name_field] = name
+        end
+      end
     end
 
     required_params.tap do |params|
       params.merge!(email_param => email)
-      params.merge!(name_params_hash)
+      params.merge!(name_hash)
     end
   end
 
