@@ -10,7 +10,11 @@ class @AccountPromptModal extends Modal
     super(@$modal)
 
   open: ->
+    InternalTracking.track_current_person("registration_viewed_form")
+
     @_rerouteErrors()
+    @_attachTracking()
+
     super
 
   close: ->
@@ -24,3 +28,18 @@ class @AccountPromptModal extends Modal
       flash.remove()
       @_displayErrors([message])
 
+  _attachTracking: ->
+    @$modal.find("input#user_email").keyup (event) =>
+      unless @trackedUserEmail
+        InternalTracking.track_current_person("registration_entered_email")
+
+      @trackedUserEmail = true
+
+    @$modal.find("input#user_password").keyup (event) =>
+      unless @trackedUserPassword
+        InternalTracking.track_current_person("registration_entered_password")
+
+      @trackedUserPassword = true
+
+    @$modal.find("form").submit (event) =>
+      InternalTracking.track_current_person("registration_submitted_form")
