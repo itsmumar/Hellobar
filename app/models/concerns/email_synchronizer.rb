@@ -66,12 +66,13 @@ module EmailSynchronizer
   def perform_sync
     # run something immediately before sync
     yield
-    # run something immediately after sync 
+    # run something immediately after sync
   rescue *ESP_ERROR_CLASSES => e
     if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
       Raven.capture_exception(e)
       if oauth?
         # Clear identity on failure
+        Rails.logger.warn "Removing identity #{identity.try(:id)}\n#{e.message}"
         identity.try(:destroy_and_notify_user)
       end
     else
