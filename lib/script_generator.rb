@@ -85,6 +85,10 @@ class ScriptGenerator < Mustache
     CSSMin.minify(file).to_json
   end
 
+  def animation_js
+    @options[:preview] ? "" : File.read("#{Rails.root}/vendor/assets/javascripts/move.min.js")
+  end
+
   def templates
     template_names = options[:templates] || site.site_elements.active.map(&:element_subtype).uniq
 
@@ -177,6 +181,7 @@ private
       open_in_new_window: site_element.open_in_new_window,
       pushes_page_down: site_element.pushes_page_down,
       remains_at_top: site_element.remains_at_top,
+      animated: site_element.animated,
       wiggle_wait: 0,
       tab_side: "right",
       thank_you_text: SiteElement.sanitize(thank_you_text).gsub(/"/, "&quot;")

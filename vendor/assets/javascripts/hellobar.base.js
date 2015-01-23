@@ -745,6 +745,8 @@ var _HB = {
         HB.viewed();
         // Monitor zoom scale events
         HB.hideOnZoom();
+        if(HB.w.className.indexOf("animated") > -1)
+          HB.bounceIn(HB.w);
       }, 1);
     });
   },
@@ -815,6 +817,7 @@ var _HB = {
     HB.w.name = "hellobar_container";
     // Set any necessary CSS classes
     HB.w.className = siteElement.size+(HB.t(siteElement.remains_at_top) ? " remains_at_top" : "");
+    HB.w.className += siteElement.animated ? " animated" : "";
     HB.w.scrolling = "no";
     // Remove the pusher if it exists
     if ( HB.p )
@@ -1294,6 +1297,28 @@ var _HB = {
     }
 
     return .2126 * rgb[0] + .7152 * rgb[1] + 0.0722 * rgb[2];
+  },
+
+  bounceIn: function(element, time){
+    time = typeof time !== 'undefined' ? time : 200;
+
+    if(move && typeof(move) == "function") {
+        var origH = parseInt(element.style.height) || element.offsetHeight || 0;
+        move(element).ease('in').y(0).duration(time).end(function(){
+          move(element).ease('out').y((origH / 4) * -1).duration(time / 4).end(function(){
+            move(element).ease('in').y(0).duration(time / 4).end();
+          });
+        });
+      }
+  },
+
+  bounceOut: function(element, time){
+    time = typeof time !== 'undefined' ? time : 200;
+
+    if(move && typeof(move) == "function") {
+      var origH = parseInt(element.style.height) || element.offsetHeight || 0;
+      move(element).ease('in').y(-origH).duration(time).end();
+    }
   },
 
   // Parses the zone and returns the offset in seconds. If it can

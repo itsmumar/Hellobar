@@ -19,6 +19,9 @@
   top:0;
   _top:expression(eval(document.body.scrollTop));
 }
+#hellobar_container.animated {
+  transform: translateY(-60px);
+}
 
 #hellobar_pusher{
   height: 30px;
