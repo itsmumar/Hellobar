@@ -86,7 +86,11 @@ class ScriptGenerator < Mustache
   end
 
   def animation_js
-    @options[:preview] ? "" : File.read("#{Rails.root}/vendor/assets/javascripts/move.min.js")
+    if @options[:preview] || (site.site_elements.none?(&:animated) && site.site_elements.none?(&:closable))
+      ""
+    else
+      File.read("#{Rails.root}/vendor/assets/javascripts/move.min.js")
+    end
   end
 
   def templates
@@ -147,7 +151,7 @@ private
   end
 
   def site_element_settings(site_element)
-    settings = %w{ closable show_border background_color border_color button_color font link_color link_style link_text message size target text_color texture show_branding}
+    settings = %w{ show_border background_color border_color button_color font link_color link_style link_text message size target text_color texture show_branding closable animated}
 
     lifetime_totals = @site.lifetime_totals
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
@@ -181,7 +185,6 @@ private
       open_in_new_window: site_element.open_in_new_window,
       pushes_page_down: site_element.pushes_page_down,
       remains_at_top: site_element.remains_at_top,
-      animated: site_element.animated,
       wiggle_wait: 0,
       tab_side: "right",
       thank_you_text: SiteElement.sanitize(thank_you_text).gsub(/"/, "&quot;")

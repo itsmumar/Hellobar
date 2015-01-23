@@ -32,3 +32,31 @@
 #hellobar_pusher.large {
   height: 50px;
 }
+
+.hellobar#pull-down {
+  display: block;
+  height: 28px;
+  border: 2px solid white;
+  width: 28px;
+  overflow: hidden;
+  top: -4px;
+  position: absolute;
+  right: 66px;
+  z-index: 16999;
+  padding: 6px;
+  border-radius: 0 0 5px 5px;
+  transform: translateY(-40px);
+}
+
+.hellobar#pull-down .hellobar_arrow {
+  width: 28px;
+  height: 29px;
+  background-image: url("https://s3.amazonaws.com/hb-assets/arrow_white.png");
+  opacity: 0.3;
+  -moz-transform: scaleY(-1);
+  -webkit-transform: scaleY(-1);
+  -o-transform: scaleY(-1);
+  transform: scaleY(-1);
+  filter: flipv; /*IE*/
+  cursor: pointer;
+}
