@@ -27,8 +27,9 @@ module Subscribable
   # returns [success, bill]
   def update_subscription(site, payment_method, billing_params)
     subscription = build_subscription_instance(billing_params)
-
-    site.change_subscription(subscription, payment_method)
+    trial_period = billing_params[:trial_period]
+    trial_period = trial_period.blank? ? nil : trial_period.to_i.days
+    site.change_subscription(subscription, payment_method, trial_period)
   end
 
   def build_subscription_instance(billing_params)

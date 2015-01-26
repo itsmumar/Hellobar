@@ -8,6 +8,8 @@ div#user_profile
     div.site_title
       h3
         | #{site.url} - #{site.deleted? ? "Deleted" : site.current_subscription.values[:name]}
+        - if site.current_subscription.trial?
+          |  Trial
       - unless site.deleted?
         a.subscription_link data-id=site.id change plan
 
@@ -28,6 +30,8 @@ div#user_profile
                 div
                   = sf.label "#{name.capitalize}: "
                   = sf.radio_button 'schedule', name, checked: site.current_subscription.schedule == name
+              div= sf.label "Trial period in days.  Leave blank for no trial."
+              div= sf.number_field 'trial_period'
               = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
 
     - unless bills_for(site).empty?

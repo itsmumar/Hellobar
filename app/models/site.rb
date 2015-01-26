@@ -129,13 +129,13 @@ class Site < ActiveRecord::Base
   include BillingAuditTrail
   class MissingPaymentMethod < StandardError; end
   class MissingSubscription < StandardError; end
-  def change_subscription(subscription, payment_method=nil)
+  def change_subscription(subscription, payment_method=nil, trial_period=nil)
     raise MissingSubscription.new unless subscription
     transaction do
       subscription.site = self
       subscription.payment_method = payment_method
       success = true
-      bill = calculate_bill(subscription, true)
+      bill = calculate_bill(subscription, true, trial_period)
       now = Time.now
       if bill.due_at(payment_method) <= now
         audit << "Change plan, bill is due now: #{bill.inspect}"
@@ -184,7 +184,7 @@ class Site < ActiveRecord::Base
   private
   # Calculates a bill, but does not save or pay the bill. Used by
   # change_subscription and preview_change_subscription
-  def calculate_bill(subscription, actually_change)
+  def calculate_bill(subscription, actually_change, trial_period=nil)
     raise MissingSubscription.new unless subscription
     now = Time.now
     # First we need to void any pending recurring bills
@@ -249,6 +249,12 @@ class Site < ActiveRecord::Base
     end
     bill.start_date = bill.bill_at
     bill.end_date = bill.renewal_date
+
+    if trial_period
+      bill.amount = 0
+      bill.end_date = Time.now + trial_period
+    end
+
     return bill
   end
 
