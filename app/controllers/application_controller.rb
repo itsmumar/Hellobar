@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id
 
   before_action :record_tracking_param
+  before_action :track_h_visit
   after_action :store_last_requested_path
 
   def access_token
@@ -88,6 +89,12 @@ class ApplicationController < ActionController::Base
 
   def record_tracking_param
     Hello::TrackingParam.track(params[:trk]) if params[:trk]
+  end
+
+  def track_h_visit
+    if params[:hbt]
+      Analytics.track(*current_person_type_and_id, "H Visit", {h_type: params[:hbt]})
+    end
   end
 
   def load_site
