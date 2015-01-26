@@ -3,7 +3,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def initialize(opts = {})
     super opts
-    
+
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
@@ -17,6 +17,10 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def lists
     @lists ||= @client.lists.list(:start => 0, :limit => 100)['data']
+  end
+
+  def email_exists?(list_id, email)
+    @client.lists.member_info({:id => list_id, :emails => [{:email => email}]})["success_count"] == 1
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
