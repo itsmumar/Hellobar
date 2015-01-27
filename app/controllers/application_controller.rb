@@ -57,7 +57,9 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if current_user.sites.any?
-      site_path(current_user.sites.last)
+      # Use last site viewed if available
+      s = cookies[:lsv] && current_user.sites.where(id: cookies[:lsv]).first
+      site_path(s || current_user.sites.last)
     else
       new_site_path
     end

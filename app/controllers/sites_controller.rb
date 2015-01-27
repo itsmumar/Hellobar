@@ -26,6 +26,9 @@ class SitesController < ApplicationController
   end
 
   def show
+    # Store last site viewed
+    cookies[:lsv] = @site.id
+
     respond_to do |format|
       format.html do
         redirect_to(action: "install") unless @site.has_script_installed?
