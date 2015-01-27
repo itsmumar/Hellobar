@@ -205,7 +205,6 @@ ActiveRecord::Schema.define(version: 20150127165223) do
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
     t.boolean  "open_in_new_window",              default: false
-    t.boolean  "animated",                        default: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

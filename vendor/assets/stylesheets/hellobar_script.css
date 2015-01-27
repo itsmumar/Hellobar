@@ -36,7 +36,7 @@
 #hellobar.large span {
   font-size: 17px;
 }
-#hellobar.large a { line-height: 45px; }
+
 #hellobar.large a.hellobar_cta.hb-text { line-height: 48px; }
 #hellobar.large span { line-height: 25px; }
 #hellobar.large a.hellobar_arrow { top: 10px; }
@@ -366,4 +366,16 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 .hellobar-logo-wrapper .line {
   text-align: left;
   line-height: 15px;
+}
+
+.hellobar-logo-wrapper.hellobar-inverted a {
+  color: #3C3E3F;
+}
+
+.hellobar-logo-wrapper.hellobar-inverted svg {
+  fill: #3C3E3F;
+}
+
+#orig {
+  opacity: 0.5;
 }

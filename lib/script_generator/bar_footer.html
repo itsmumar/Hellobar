@@ -1,7 +1,7 @@
-<div class="hellobar-logo-wrapper_{{HB_PS}}">
+<div class="hellobar-logo-wrapper_{{HB_PS}} {{HB.colorIsBright(siteElement.background_color) ? 'hellobar-inverted' : ''}}" style="{{(HB.t(siteElement.show_branding) || !HB.CAP.no_b) ? '' : 'display:none'}}">
   <a href="http://www.hellobar.com/?hbt=" target="_parent">
     <!-- LOGO TEST Original -->
-    <img src="https://s3.amazonaws.com/hb-assets/logo_white.png" alt="Hello Bar"  width="48" height="29" id="orig" style="display: none" />
+    <img src="https://s3.amazonaws.com/hb-assets/{{HB.colorIsBright(siteElement.background_color) ? 'logo_dark' : 'logo_white'}}.png" alt="Hello Bar"  width="48" height="29" id="orig" style="display: none" />
 
     <!-- LOGO TEST 1 -->
     <div class="text" id="pb1l" style="display: none">
@@ -31,7 +31,7 @@
     </div>
 
     <!-- LOGO TEST 3 -->
-    <img src="https://s3.amazonaws.com/hb-assets/logo_white.png" alt="Hello Bar"  width="48" height="29" id="animated" class="animated" style="display: none" />
+    <img src="https://s3.amazonaws.com/hb-assets/{{HB.colorIsBright(siteElement.background_color) ? 'logo_dark' : 'logo_white'}}.png" alt="Hello Bar"  width="48" height="29" id="animated" class="animated" style="display: none" />
   </a>
 </div>
 
