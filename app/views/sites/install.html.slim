@@ -1,3 +1,8 @@
+- unless show_account_prompt?
+  javascript:
+    InternalTracking.track_current_person("install_page_viewed")
+
+
 .installation-page#install_page data-site-id=@site.id
   header
     h1 Install Hello Bar Script
@@ -6,7 +11,7 @@
 
   h5 Installation Methods
 
-  .reveal-wrapper
+  .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "install_myself"}.to_json
     i.icon-installmyself
     .reveal-title I can install code myself
     p If you know HTML and can edit your site, our install only takes one line of code.
@@ -16,7 +21,7 @@
       pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
       p That's it! You'll never need to update the code on your site again.
 
-  .reveal-wrapper
+  .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "wordpress"}.to_json
     i.icon-wordpress
     .reveal-title I use WordPress
     p If you use WordPress you'll love our zero-configuration custom plugin. Just download, install and you're done.
@@ -36,7 +41,7 @@
         | Try reading these 
         = link_to "helpful instructions for installing plugins on WordPress", "http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation"
 
-  .reveal-wrapper
+  .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "email_my_dev"}.to_json
     i.icon-contacts
     .reveal-title Email my Web Developer
     p If someone else manages your website, we can email them the instructions for you.
@@ -62,7 +67,7 @@
 
         = submit_tag "Send", :class => "button"
 
-  .reveal-wrapper
+  .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "i_need_help"}.to_json
     i.icon-support
     .reveal-title I need help!
     p Still not sure what to do? Let us help!
