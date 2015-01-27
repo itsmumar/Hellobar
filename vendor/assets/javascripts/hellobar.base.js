@@ -30,12 +30,12 @@ var HBQ = function()
   var siteElement = HB.applyRules();
   if ( siteElement )
     HB.render(siteElement);
-  
+
   // As the vistor readjust the window size we need to adjust the size of the containing
   // iframe. We do this by checking the the size of the inner div. If the the width
   // of the window is less than or equal to 640 pixels we set the flag isMobileWidth to true.
-  // Note: we are not actually detecting a mobile device - just the width of the window. 
-  // If isMobileWidth is true we add an additional "mobile" CSS class which is used to 
+  // Note: we are not actually detecting a mobile device - just the width of the window.
+  // If isMobileWidth is true we add an additional "mobile" CSS class which is used to
   // adjust the style of the siteElement.
   // To accomplish all of this we set up an interval to monitor the size of everything:
   HB.isMobileWidth = false;
@@ -66,7 +66,7 @@ var HBQ = function()
         }
         // Adjust the container height
         if ( HB.e.container )
-          HB.e.container.style.height = (HB.e.siteElement.clientHeight+8)+"px"; 
+          HB.e.container.style.height = (HB.e.siteElement.clientHeight+8)+"px";
         // Adjust the pusher
         if ( HB.e.pusher )
           HB.e.pusher.style.height = (HB.e.siteElement.clientHeight+(HB.t(HB.currentSiteElement.show_border) ? 3 : 0))+"px";
@@ -87,8 +87,8 @@ var HBQ = function()
         HB.addClass(HB.e.siteElement, "mobile");
       else
         HB.removeClass(HB.e.siteElement, "mobile");
-    } 
-    
+    }
+
   }, 50); // Check every 50ms
 }
 // Call the function right away once this is loaded
@@ -103,7 +103,7 @@ HBQ.prototype.push = function()
     {
       originalArgs.push(arguments[i]);
     }
-    HB[arguments[0]].apply(HB, originalArgs); 
+    HB[arguments[0]].apply(HB, originalArgs);
   }
 }
 // Keep everything within the HB namespace
@@ -159,7 +159,7 @@ var _HB = {
     if ( !HB.css )
       HB.css = "";
     // Update CSS related to hellobar logo
-    css = css.split("hellobar_logo").join("hellobar_logo_"+HB_PS);
+    css = css.split("hellobar-logo-wrapper").join("hellobar-logo-wrapper_"+HB_PS);
     HB.css += "<style>"+css+"</style>";
   },
 
@@ -191,7 +191,7 @@ var _HB = {
       if ( !url.match(/^\//) )
           url = url.replace(/.*?\//, "/");
     }
-    // Get the params 
+    // Get the params
     var urlParts = url.split("?");
     // If no params just return the URL
     if ( !urlParts[1] )
@@ -210,7 +210,7 @@ var _HB = {
     if ( srcPattern.indexOf("?") == -1 ) // srcPattern does not have any query params...
       return HB.n(srcPattern, true) == HB.n(url, true).split("?")[0]; // ...so ignore them in the url
     // Otherwise URLs must match exactly
-    return HB.n(srcPattern, true) == HB.n(url, true); 
+    return HB.n(srcPattern, true) == HB.n(url, true);
   },
 
   getVisitorAttributes: function()
@@ -235,7 +235,7 @@ var _HB = {
   // Sends data to the tracking server (e.g. which siteElements viewed, if a rule was performed, etc)
   s: function(path, itemID, params, callback)
   {
-    // If we are not tracking or this or no site ID then just issue the 
+    // If we are not tracking or this or no site ID then just issue the
     // callback without sending any data
     if ( typeof(HB_DNT) != "undefined" || typeof(HB_SITE_ID) == "undefined" || typeof(HB_WK) == "undefined")
     {
@@ -251,7 +251,7 @@ var _HB = {
 
     params["t"] = now; // Timestamp
     params["v"] = HB.i(); // visitor UUID
-    params["f"] = "i" // Make sure we return an image 
+    params["f"] = "i" // Make sure we return an image
 
     // Sign the URL
     params["s"] = HB.signature(HB_WK, url, params);
@@ -306,8 +306,8 @@ var _HB = {
         // getShortestKey returns either the raw URL or
         // a SHA1 hash of the URL - whichever is shorter
         return "l-"+HB.getShortestKeyForURL(siteElement.settings.url);
-      // ------------------------------------------------------- 
-      // IMPORTANT - if you add other conversion keys you need to 
+      // -------------------------------------------------------
+      // IMPORTANT - if you add other conversion keys you need to
       // update the ignoredAttributePattern in getVisitorAttributes
     }
   },
@@ -363,7 +363,7 @@ var _HB = {
   },
 
   // This takes the the email field, name field, and target siteElement DOM element.
-  // It then checks the validity of the fields and if valid it records the 
+  // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
   // shakes the email field
   submitEmail: function(emailField, nameField, targetSiteElement, thankYouText)
@@ -642,7 +642,7 @@ var _HB = {
   },
 
   // Called before rendering. This lets you modify siteElement attributes.
-  // NOTE: siteElement is already a copy of the original siteElement so it can be 
+  // NOTE: siteElement is already a copy of the original siteElement so it can be
   // safely modified.
   prerender: function(siteElement)
   {
@@ -714,7 +714,7 @@ var _HB = {
       }
     }
   },
-  
+
   // Renders the siteElement
   render: function(siteElementToRender)
   {
@@ -741,6 +741,7 @@ var _HB = {
       // conflicts with certain sites
       setTimeout(function(){
         HB.injectSiteElementHTML(html, siteElement);
+        HB.setLogoVariation();
         // Track the view
         HB.viewed();
         // Monitor zoom scale events
@@ -857,6 +858,29 @@ var _HB = {
     d.close();
   },
 
+  // Finds the logo variations and enables one of them by hashing the
+  // visitor id to an index number
+  setLogoVariation: function() {
+    var d = HB.w.contentWindow.document;
+    var ids = [];
+    var link = d.querySelectorAll(".hellobar-logo-wrapper_" + HB_PS + " > a")[0]
+    var variations = link.children;
+    for(var i = 0;i < variations.length; i++) {
+      ids.push(variations[i].id);
+    }
+
+    var variationIdx = 0 // The default logo
+
+    if(HB.CAP.b_variation === true) {
+      var uniqValue = HBCrypto.SHA1("HBLogo1"+HB.i()).toString();
+      var sum=0;for(var i=0;i<uniqValue.length;i++){sum+=uniqValue.charCodeAt(i)};
+      variationIdx = sum % ids.length;
+      link.href = link.href + ids[variationIdx];
+    }
+
+    d.getElementById(ids[variationIdx]).removeAttribute("style");
+  },
+
   // Adds a rule to the list of rules.
   //  matchType: is either "any" or "all" - refers to the conditions
   //  conditions: serialized array of conditions for the rule to be true
@@ -878,7 +902,7 @@ var _HB = {
 
   // applyRules scans through all the rules added via addRule and finds the
   // all rules that are true and pushes the site elements into a list of
-  // possible results. Next it tries to find the "highest priority" site 
+  // possible results. Next it tries to find the "highest priority" site
   // elements (e.g. collecting email if not collected, etc). From there
   // we use multi-armed bandit to determine which site element to return
   applyRules: function()
@@ -918,7 +942,7 @@ var _HB = {
       possibleSiteElements = possibleSiteElements.traffic;
     else
       return; // Should not reach here - if we do there is nothing to show
-    
+
     // If we have no elements then stop
     if ( !possibleSiteElements || possibleSiteElements.length == 0 )
       return;
@@ -1152,7 +1176,7 @@ var _HB = {
     if ( document.referrer )
     {
       var tld = HB.getTLD().toLowerCase();
-      // Check to ensure that the tld is not present in the 
+      // Check to ensure that the tld is not present in the
       var referrer = (document.referrer+"").replace(/.*?\:\/\//,"").replace(/www\./i,"").toLowerCase().substr(0,150);
       var referrerDomain = referrer.replace(/(.*?)\/.*/, "$1");
       if ( referrerDomain.indexOf(tld) == -1 )
@@ -1187,7 +1211,7 @@ var _HB = {
     else
       HB.setVisitorData("dv", "computer");
   },
-  
+
   paramsFromString: function(url)
   {
     var params = {};
@@ -1241,7 +1265,7 @@ var _HB = {
   },
 
   // Takes the given element and "shakes" it a few times and returns
-  // it to its original style and positioning. Used to shake the 
+  // it to its original style and positioning. Used to shake the
   // email field when it is invalid.
   shake: function(element){
     (function(element){
@@ -1301,11 +1325,11 @@ var _HB = {
     return ((hour*60*60)+(minute*60))*signMultiplier;
   },
 
-  // Returns a Date object adjusted to the timezone specified (if none is 
+  // Returns a Date object adjusted to the timezone specified (if none is
   // specified we try to use HB_TZ - if that is not present we use the user
   // timezone. The timezone of the actual Date object wills till be the
   // user's timezone since this can not be changed, but it will be offset
-  // by the correct hours and minutes of the zone passed in. 
+  // by the correct hours and minutes of the zone passed in.
   // If no valid format is found we use the current user's timezone
   // You can also pass in the value "visitor" which will use the visitor's
   // timezone

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150113162958) do
+ActiveRecord::Schema.define(version: 20150127165223) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -205,6 +205,7 @@ ActiveRecord::Schema.define(version: 20150113162958) do
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
     t.boolean  "open_in_new_window",              default: false
+    t.boolean  "animated",                        default: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
@@ -235,6 +236,7 @@ ActiveRecord::Schema.define(version: 20150113162958) do
     t.string   "write_key"
     t.string   "timezone"
     t.datetime "deleted_at"
+    t.boolean  "beta_features",                   default: false
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
