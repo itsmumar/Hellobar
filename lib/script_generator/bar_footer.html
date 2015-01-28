@@ -1,4 +1,60 @@
-<a href="http://www.hellobar.com/?hbt=orig" target="_parent" class="hellobar_logo_{{HB_PS}}" style="{{(HB.t(siteElement.show_branding) || !HB.CAP.no_b) ? '' : 'display:none'}}"><img src="https://s3.amazonaws.com/hb-assets/logo_white.png" alt="Hello Bar"  width="48" height="29" /></a>
-  <a href="#" class="hellobar_arrow" style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}"><img src="https://s3.amazonaws.com/hb-assets/arrow_white.png" alt="" width="28" height="29" /></a>
-  <div id="hellobar-shadow"></div>
+<div class="hellobar-logo-wrapper_{{HB_PS}} {{HB.colorIsBright(siteElement.background_color) ? 'hellobar-inverted' : ''}}" style="{{(HB.t(siteElement.show_branding) || !HB.CAP.no_b) ? '' : 'display:none'}}">
+  <a href="http://www.hellobar.com/?hbt=" target="_parent">
+    <!-- LOGO TEST Original -->
+    <img src="https://s3.amazonaws.com/hb-assets/{{HB.colorIsBright(siteElement.background_color) ? 'logo_dark' : 'logo_white'}}.png" alt="Hello Bar"  width="48" height="29" id="orig" style="display: none" />
+
+    <!-- LOGO TEST 1 -->
+    <div class="text" id="pb1l" style="display: none">
+      Powered by
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 40 26.1" enable-background="new 0 0 40 26.1" xml:space="preserve" class="hellobar-logo">
+          <g>
+            <path d="M39.5 0h-39C0.2 0 0 0.2 0 0.5v25.1c0 0.3 0.2 0.5 0.5 0.5h39c0.3 0 0.5-0.2 0.5-0.5V0.5C40 0.2 39.8 0 39.5 0z M33.8 8.6 h-4.3v9h4.3v2.8H21.7v-2.8h4.7V14H13.6v3.6h4.7v2.8h-12v-2.8h4.3v-9H6.2V5.7h12v2.8h-4.7v2.9h12.9V8.6h-4.7V5.7h12.1V8.6z"></path>
+          </g>
+        </svg>
+      Hello Bar
+    </div>
+
+    <!-- LOGO TEST 2 -->
+    <div id="pb2l" style="display: none">
+      <div class="line">
+        Get
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 40 26.1" enable-background="new 0 0 40 26.1" xml:space="preserve" class="hellobar-logo">
+          <g>
+            <path d="M39.5 0h-39C0.2 0 0 0.2 0 0.5v25.1c0 0.3 0.2 0.5 0.5 0.5h39c0.3 0 0.5-0.2 0.5-0.5V0.5C40 0.2 39.8 0 39.5 0z M33.8 8.6 h-4.3v9h4.3v2.8H21.7v-2.8h4.7V14H13.6v3.6h4.7v2.8h-12v-2.8h4.3v-9H6.2V5.7h12v2.8h-4.7v2.9h12.9V8.6h-4.7V5.7h12.1V8.6z"></path>
+          </g>
+        </svg>
+        Hello Bar
+      </div>
+      <div class="line">
+        for your website
+      </div>
+    </div>
+
+    <!-- LOGO TEST 3 -->
+    <img src="https://s3.amazonaws.com/hb-assets/{{HB.colorIsBright(siteElement.background_color) ? 'logo_dark' : 'logo_white'}}.png" alt="Hello Bar"  width="48" height="29" id="animated" class="animated" style="display: none" />
+  </a>
 </div>
+
+<a href="#" class="hellobar_arrow" style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}"><img src="https://s3.amazonaws.com/hb-assets/arrow_white.png" alt="" width="28" height="29" /></a>
+<div id="hellobar-shadow"></div>
+</div>
+
+<script>
+var ids = [];
+var link = document.querySelectorAll(".hellobar-logo-wrapper_{{HB_PS}} > a")[0]
+var variations = link.children;
+for(var i = 0;i < variations.length; i++) {
+  ids.push(variations[i].id);
+}
+
+var variationIdx = 0 // The default logo
+
+if(window.parent.HB.CAP.b_variation === true) {
+  var uniqValue = window.parent.HBCrypto.SHA1("HBLogo1"+window.parent.HB.i()).toString();
+  var sum=0;for(var i=0;i<uniqValue.length;i++){sum+=uniqValue.charCodeAt(i)};
+  variationIdx = sum % ids.length;
+  link.href = link.href + ids[variationIdx];
+}
+
+document.getElementById(ids[variationIdx]).removeAttribute("style");
+</script>

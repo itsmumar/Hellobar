@@ -49,7 +49,8 @@ class ScriptGenerator < Mustache
 
   def capabilities
     {
-      no_b: @site.capabilities.remove_branding? || @options[:preview]
+      no_b: @site.capabilities.remove_branding? || @options[:preview],
+      b_variation: @site.beta_features
     }
   end
 
