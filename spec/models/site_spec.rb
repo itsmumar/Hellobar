@@ -202,9 +202,9 @@ describe Site do
 
       it "should set the bill end_date to " do
         sub = subscriptions(:zombo_subscription)
-        travel_to Time.now do
+        travel_to Time.current do
           bill = sub.site.send(:calculate_bill, sub, true)
-          bill.end_date.should == Bill::Recurring.next_month(Time.now)
+          bill.end_date.should == Bill::Recurring.next_month(Time.current)
         end
       end
     end
