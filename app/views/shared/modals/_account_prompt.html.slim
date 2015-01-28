@@ -33,7 +33,11 @@ script id='alternate-account-prompt-modal-template' type='text/x-handlebars-temp
   .modal-wrapper
     = form_for current_user, html: {class: "modal-block"} do |f|
       header class="{{headerClass}}"
-        h5 To install Hello Bar on {{siteURL}} you must create a FREE account below.
+        h5 
+          i.icomoon-alert
+          | To install Hello Bar on {{siteURL}} you must 
+          strong create a free account 
+          | below
 
       .account-prompt-modal
         .flash-block
@@ -45,7 +49,10 @@ script id='alternate-account-prompt-modal-template' type='text/x-handlebars-temp
             input type='email' placeholder='name@email.com' name="user[email]" id="user_email"
 
           .thirds
-            label Password (must be at least 8 characters long)
+            label 
+              | Password 
+              small 
+                | (8 or more characters)
             input type='password' placeholder='••••••' name="user[password]" id="user_password"
 
           .thirds
