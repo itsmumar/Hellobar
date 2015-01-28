@@ -41,3 +41,4 @@ javascript:
   var currentUser = #{{UserSerializer.new(current_user).to_json}};
   var siteID = "#{@site.try(:id)}";
   var site = #{{SiteSerializer.new(current_site).to_json}};
+  HB_ACCOUNT_CREATION_VARIATION = "#{get_ab_variation("Account Creation Test 2015-01-21")}";

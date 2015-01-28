@@ -26,7 +26,8 @@ html
     = render "shared/gtm"
 
     javascript:
-      HB_DNT = 1
+      HB_DNT = 1;
+      HB_ACCOUNT_CREATION_VARIATION = "#{get_ab_variation("Account Creation Test 2015-01-21")}";
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
 
     = yield
