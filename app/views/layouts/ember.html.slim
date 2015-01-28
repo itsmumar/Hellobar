@@ -34,6 +34,8 @@ html
 
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'
+    - if current_user
+      = render "shared/modals/account_prompt"
 
     - if Rails.env.development?
       = javascript_include_tag "ember"

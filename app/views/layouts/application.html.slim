@@ -12,6 +12,9 @@ html
     = csrf_meta_tags
 
   body#hb-application
+    javascript:
+      HB_ACCOUNT_CREATION_VARIATION = "#{get_ab_variation("Account Creation Test 2015-01-21")}";
+
     = render "shared/optimizely"
     = render "shared/gtm"
 
@@ -33,9 +36,15 @@ html
     = render "shared/modals/upgrade_modal"
     = render "shared/modals/payment_modal"
     = render "shared/modals/payment_confirmation"
+    = render "shared/modals/account_prompt"
 
     - if show_account_prompt? && !impersonated_user
-      = render "shared/modals/account_prompt"
+      javascript:
+        if (HB_ACCOUNT_CREATION_VARIATION == "original") {
+          new AccountPromptModal().open();
+        } else {
+          new AlternateAccountPromptModal({siteURL: "#{current_site.url}"}).open();
+        }
 
 javascript:
   var currentUser = #{{UserSerializer.new(current_user).to_json}};

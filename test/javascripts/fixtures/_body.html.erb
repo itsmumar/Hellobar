@@ -4,6 +4,8 @@
   @site_element = SiteElement.first
   @rules = @site.rules.all
   @rules << Rule.new(name: 'Everyone') if @rules.empty?
+
+  def get_ab_variation(test); "original"; end
 %>
 
 <script type="text/javascript">

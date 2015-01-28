@@ -17,6 +17,10 @@ class SiteElementsController < ApplicationController
   end
 
   def new
+    if current_user.temporary? && @site.site_elements.any?
+      return redirect_to after_sign_in_path_for(@site)
+    end
+
     @rules = @site.rules.all
     @site_element = @site.site_elements.new(:rule => @site.rules.first)
 
