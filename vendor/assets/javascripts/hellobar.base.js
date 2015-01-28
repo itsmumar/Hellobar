@@ -741,7 +741,6 @@ var _HB = {
       // conflicts with certain sites
       setTimeout(function(){
         HB.injectSiteElementHTML(html, siteElement);
-        HB.setLogoVariation();
         // Track the view
         HB.viewed();
         // Monitor zoom scale events
@@ -856,29 +855,6 @@ var _HB = {
     d.open();
     d.write((HB.css || "")+html);
     d.close();
-  },
-
-  // Finds the logo variations and enables one of them by hashing the
-  // visitor id to an index number
-  setLogoVariation: function() {
-    var d = HB.w.contentWindow.document;
-    var ids = [];
-    var link = d.querySelectorAll(".hellobar-logo-wrapper_" + HB_PS + " > a")[0]
-    var variations = link.children;
-    for(var i = 0;i < variations.length; i++) {
-      ids.push(variations[i].id);
-    }
-
-    var variationIdx = 0 // The default logo
-
-    if(HB.CAP.b_variation === true) {
-      var uniqValue = HBCrypto.SHA1("HBLogo1"+HB.i()).toString();
-      var sum=0;for(var i=0;i<uniqValue.length;i++){sum+=uniqValue.charCodeAt(i)};
-      variationIdx = sum % ids.length;
-      link.href = link.href + ids[variationIdx];
-    }
-
-    d.getElementById(ids[variationIdx]).removeAttribute("style");
   },
 
   // Adds a rule to the list of rules.

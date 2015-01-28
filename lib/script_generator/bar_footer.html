@@ -38,3 +38,23 @@
 <a href="#" class="hellobar_arrow" style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}"><img src="https://s3.amazonaws.com/hb-assets/arrow_white.png" alt="" width="28" height="29" /></a>
 <div id="hellobar-shadow"></div>
 </div>
+
+<script>
+var ids = [];
+var link = document.querySelectorAll(".hellobar-logo-wrapper_{{HB_PS}} > a")[0]
+var variations = link.children;
+for(var i = 0;i < variations.length; i++) {
+  ids.push(variations[i].id);
+}
+
+var variationIdx = 0 // The default logo
+
+if(window.parent.HB.CAP.b_variation === true) {
+  var uniqValue = window.parent.HBCrypto.SHA1("HBLogo1"+window.parent.HB.i()).toString();
+  var sum=0;for(var i=0;i<uniqValue.length;i++){sum+=uniqValue.charCodeAt(i)};
+  variationIdx = sum % ids.length;
+  link.href = link.href + ids[variationIdx];
+}
+
+document.getElementById(ids[variationIdx]).removeAttribute("style");
+</script>
