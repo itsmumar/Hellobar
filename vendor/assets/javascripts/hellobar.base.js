@@ -746,7 +746,7 @@ var _HB = {
         // Monitor zoom scale events
         HB.hideOnZoom();
         if(HB.w.className.indexOf("animated") > -1)
-          HB.bounceIn(HB.w);
+          setTimeout(function(){ HB.bounceIn(HB.w); }, 500);
       }, 1);
     });
   },
@@ -1322,7 +1322,7 @@ var _HB = {
   },
 
   bounceIn: function(element, time){
-    time = typeof time !== 'undefined' ? time : 200;
+    time = typeof time !== 'undefined' ? time : 400;
 
     if(move && typeof(move) == "function") {
         var origH = parseInt(element.style.height) || element.offsetHeight || 0;
@@ -1335,7 +1335,7 @@ var _HB = {
   },
 
   bounceOut: function(element, time){
-    time = typeof time !== 'undefined' ? time : 200;
+    time = typeof time !== 'undefined' ? time : 400;
 
     if(move && typeof(move) == "function") {
       var origH = parseInt(element.style.height) || element.offsetHeight || 0;
