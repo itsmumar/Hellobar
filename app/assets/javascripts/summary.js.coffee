@@ -46,7 +46,7 @@ AmCharts.ready ->
   else
     $(".chart-wrapper .chart-block.#{CurrentChart}").click()
 
-  $('body').on 'click', '.view-more', (event) ->
+  $('body').on 'click', '.view-more a', (event) ->
     event.preventDefault()
 
     window.location = "#{event.target.href}?chart=#{window.CurrentChart}"
