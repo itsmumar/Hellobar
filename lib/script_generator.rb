@@ -151,7 +151,7 @@ private
   end
 
   def site_element_settings(site_element)
-    settings = %w{ show_border background_color border_color button_color font link_color link_style link_text message size target text_color texture show_branding closable animated}
+    settings = %w{ show_border background_color border_color button_color font link_color link_style link_text message size target text_color texture show_branding}
 
     lifetime_totals = @site.lifetime_totals
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
@@ -187,6 +187,8 @@ private
       remains_at_top: site_element.remains_at_top,
       wiggle_wait: 0,
       tab_side: "right",
+      animated: @site.capabilities.animated? && site_element.animated,
+      closable: @site.capabilities.closable? && site_element.closable,
       thank_you_text: SiteElement.sanitize(thank_you_text).gsub(/"/, "&quot;")
     }).select{|key, value| !value.nil? || !value == '' }
   end

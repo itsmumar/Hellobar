@@ -78,6 +78,14 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def closable?
+      false
+    end
+
+    def animated?
+      false
+    end
+
     def custom_targeted_bars?
       false
     end
@@ -186,6 +194,14 @@ class Subscription < ActiveRecord::Base
   class Pro < Free
     class Capabilities < Free::Capabilities
       def remove_branding?
+        true
+      end
+
+      def closable?
+        true
+      end
+
+      def animated?
         true
       end
 
