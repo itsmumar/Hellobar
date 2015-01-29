@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150127165223) do
+ActiveRecord::Schema.define(version: 20150129195156) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -235,7 +235,6 @@ ActiveRecord::Schema.define(version: 20150127165223) do
     t.string   "write_key"
     t.string   "timezone"
     t.datetime "deleted_at"
-    t.boolean  "beta_features",                   default: false
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree

@@ -13,6 +13,9 @@ class ScriptGenerator < Mustache
 
   attr_reader :site, :options
 
+  # Show brand variations for sites created after 1-29-15
+  BRAND_VARIATION_DATE = DateTime.new(2015,1,29,12,0,0)
+
   def initialize(site, options={})
     @site = site
     @options = options
@@ -50,7 +53,7 @@ class ScriptGenerator < Mustache
   def capabilities
     {
       no_b: @site.capabilities.remove_branding? || @options[:preview],
-      b_variation: @site.beta_features
+      b_variation: @site.created_at >= BRAND_VARIATION_DATE
     }
   end
 
