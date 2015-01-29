@@ -858,6 +858,7 @@ var _HB = {
     d.open();
     d.write((HB.css || "")+html);
     d.close();
+
     d.getElementById("close_bar").onclick = function() {
       window.parent.HB.bounceOut(window.parent.HB.w)
       HB.bounceIn(document.getElementById("pull-down"))

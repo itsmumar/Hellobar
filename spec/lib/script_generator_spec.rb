@@ -78,7 +78,7 @@ describe ScriptGenerator, '#render' do
 
     it 'renders only the setTemplate definition and 1 call per bar type' do
       bar = double 'bar', element_subtype: 'traffic'
-      site.stub(site_elements: double('site_elements', active: [bar, bar]))
+      site.stub(site_elements: double('site_elements', active: [bar, bar], none?: true ))
 
       generator = ScriptGenerator.new site
 
@@ -88,7 +88,7 @@ describe ScriptGenerator, '#render' do
     it 'renders the setTemplate definition and 1 call per bar type for multiple types' do
       traffic_bar = double 'bar', element_subtype: 'traffic'
       email_bar = double 'bar', element_subtype: 'email'
-      site.stub site_elements: double('site_elements', active: [traffic_bar, email_bar])
+      site.stub site_elements: double('site_elements', active: [traffic_bar, email_bar], none?: true)
 
       generator = ScriptGenerator.new site
 
