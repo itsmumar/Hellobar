@@ -5,7 +5,6 @@ class @AlternateAccountPromptModal extends AccountPromptModal
   constructor: (@options = {}) ->
     @options.siteURL = @options.siteURL.replace("http://", "")
     @options.headerClass = HB_ACCOUNT_CREATION_VARIATION
-    @options.headerClass = "orange_header"
 
     @template = Handlebars.compile($("#alternate-account-prompt-modal-template").html())
 
