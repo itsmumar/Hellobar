@@ -3,8 +3,10 @@ class @AccountPromptModal extends Modal
   modalName: "account-prompt"
 
   constructor: (@options = {}) ->
-    @template = Handlebars.compile($("#account-prompt-modal-template").html())
-    @$modal = $(@template())
+    # use ?= in case this is executed from AlternateAccountPromptModal's constructor's "super"
+    @template ?= Handlebars.compile($("#account-prompt-modal-template").html())
+
+    @$modal ?= $(@template(@options))
     @$modal.appendTo($("body"))
 
     super(@$modal)
@@ -14,6 +16,8 @@ class @AccountPromptModal extends Modal
 
     @_rerouteErrors()
     @_attachTracking()
+    @_bindSubmit()
+    @_detectTimezone()
 
     super
 
@@ -43,3 +47,21 @@ class @AccountPromptModal extends Modal
 
     @$modal.find("form").submit (event) =>
       InternalTracking.track_current_person("registration_submitted_form")
+
+  _bindSubmit: ->
+    @$modal.find("form").submit (event) =>
+      event.preventDefault()
+      $form = $(event.target)
+
+      $.ajax
+        dataType: 'json'
+        url: $form.attr("action")
+        type: $form.attr("method")
+        data: $form.serialize()
+        success: (data, status, xhr) =>
+          window.location = data.redirect_to
+        error: (xhr, status, error) =>
+          @_displayErrors([xhr.responseJSON["error_message"]])
+
+  _detectTimezone: ->
+    @$modal.find("#user_timezone").val(jstz.determine().name())

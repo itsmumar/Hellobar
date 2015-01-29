@@ -59,6 +59,20 @@ HelloBar.ApplicationController = Ember.Controller.extend
   modelIsDirty: false
   rule_id: null
 
+  doneButtonText: (->
+    if !@get("model.site.has_script_installed") && HB_ACCOUNT_CREATION_VARIATION != "original"
+      "Install Hello Bar"
+    else
+      "Done"
+  ).property()
+
+  doneButtonStyle: (->
+    if @get("doneButtonText") == "Done"
+      "width: 40%"
+    else
+      "width: 60%"
+  ).property()
+
   setRuleID: (->
     @set("model.rule_id", parseInt(@get("rule_id")))
   ).observes("rule_id")

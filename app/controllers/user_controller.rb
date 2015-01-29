@@ -16,21 +16,28 @@ class UserController < ApplicationController
           redirect_to current_site ? site_path(current_site) : new_site_path
         end
 
-        format.json { render json: @user, status: :ok }
+        format.json { render json: {user: @user, redirect_to: (current_site ? site_path(current_site) : new_site_path)}, status: :ok }
       end
     else
+      error_message =
+        if active_before_update
+          "There was a problem updating your settings#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
+        else
+          "There was a problem creating your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
+        end
+
       respond_to do |format|
         format.html do
           if active_before_update
-            flash.now[:error] = "There was a problem updating your settings#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
+            flash.now[:error] = error_message
             render :action => :edit
           else
-            flash[:error] = "There was a problem creating your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
+            flash[:error] = error_message
             redirect_to request.referrer || after_sign_in_path_for(@user)
           end
         end
 
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.json { render json: {error_message: error_message}, status: :unprocessable_entity }
       end
     end
   end

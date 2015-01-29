@@ -26,13 +26,16 @@ html
     = render "shared/gtm"
 
     javascript:
-      HB_DNT = 1
+      HB_DNT = 1;
+      HB_ACCOUNT_CREATION_VARIATION = "#{get_ab_variation("Account Creation Test 2015-01-21")}";
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
 
     = yield
 
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'
+    - if current_user
+      = render "shared/modals/account_prompt"
 
     - if Rails.env.development?
       = javascript_include_tag "ember"

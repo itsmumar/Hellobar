@@ -48,6 +48,7 @@ module Hello
     # ==      REGISTER YOUR TESTS HERE        ==
     # ==========================================
     register_test("Use Cases Amount", %w{more less}, 0)
+    register_test("Account Creation Test 2015-01-21", %w{original orange_header no_orange_header}, 1)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
