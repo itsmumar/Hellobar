@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
     self.sites.each(&:destroy)
   end
 
-  attr_accessor :legacy_migration
+  attr_accessor :legacy_migration, :timezone
 
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
