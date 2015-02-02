@@ -33,3 +33,4 @@ main_queue: hellobar3_production
 low_priority_queue: hellobar3_production_lowpriority
 loggly_url: https://logs-01.loggly.com/inputs/[your-customer-token]/tag/[your-rails-app]/
 sentry_dsn: sentry-dsn-endpoint
+support_location: "http://support.hellobar.com/"

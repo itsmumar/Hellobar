@@ -21,5 +21,9 @@
       = active_link_to edit_site_path(current_site) do
         i.icon-settings
         | Settings
+    li
+      = link_to(Hellobar::Settings[:support_location], target: '_blank') do
+        i.icon-support
+        | Help
 
   = button_to "Create New", new_site_site_element_path(:site_id => current_site), :class => "button", :method => :get, "data-prompt-upgrade" => current_site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
