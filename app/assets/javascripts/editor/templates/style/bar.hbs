@@ -9,3 +9,13 @@
 <label>Remains at top
   {{toggle-switch switch=model.remains_at_top}}
 </label>
+
+<label>Bar Size</label>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=sizeOptions
+    value=model.size
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
+  }}
+</div>

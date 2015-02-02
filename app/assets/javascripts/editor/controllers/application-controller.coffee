@@ -41,6 +41,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
       tab_side: "right"
       thank_you_text: "Thank you for signing up!"
       show_border: false
+      size: @get("model.size")
     )
 
     HB.render(previewElement)
