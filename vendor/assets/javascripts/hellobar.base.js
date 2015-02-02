@@ -741,6 +741,7 @@ var _HB = {
       // conflicts with certain sites
       setTimeout(function(){
         HB.injectSiteElementHTML(html, siteElement);
+        HB.setPullDown(siteElement)
         // Track the view
         HB.viewed();
         // Monitor zoom scale events
@@ -858,29 +859,6 @@ var _HB = {
     d.open();
     d.write((HB.css || "")+html);
     d.close();
-
-    d.getElementById("close_bar").onclick = function() {
-      window.parent.HB.bounceOut(window.parent.HB.w)
-      HB.bounceIn(document.getElementById("pull-down"))
-    };
-
-    // Create the pull down elements
-    if(siteElement.closable) {
-      var pullDown = document.createElement("div");
-      pullDown.className = "hellobar"
-      pullDown.id = "pull-down"
-
-      pullDown.style.backgroundColor = siteElement.background_color
-      var pdLink = document.createElement("div");
-      pdLink.className = "hellobar_arrow"
-      pdLink.onclick = function() {
-        HB.bounceIn(HB.w)
-        HB.bounceOut(document.getElementById("pull-down"))
-      };
-
-      pullDown.appendChild(pdLink);
-      HB.injectAtTop(pullDown)
-    }
   },
 
   // Adds a rule to the list of rules.
@@ -1341,6 +1319,28 @@ var _HB = {
     if(move && typeof(move) == "function") {
       var origH = parseInt(element.style.height) || element.offsetHeight || 0;
       move(element).ease('in').y(-origH).duration(time).end();
+    }
+  },
+
+  // Create the pulldown arrow element for when a bar is hidden
+  // The pulldown arrow is only created when a site element is closable
+  setPullDown: function(siteElement) {
+    // Create the pull down elements
+    if(siteElement.closable) {
+      var pullDown = document.createElement("div");
+      pullDown.className = "hellobar"
+      pullDown.id = "pull-down"
+
+      pullDown.style.backgroundColor = siteElement.background_color
+      var pdLink = document.createElement("div");
+      pdLink.className = "hellobar_arrow"
+      pdLink.onclick = function() {
+        HB.bounceIn(HB.w)
+        HB.bounceOut(document.getElementById("pull-down"))
+      };
+
+      pullDown.appendChild(pdLink);
+      HB.injectAtTop(pullDown)
     }
   },
 
