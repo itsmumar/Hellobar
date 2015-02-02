@@ -27,7 +27,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
         options =
           saveURL: "/sites/#{siteID}/contact_lists/#{contactList.id}.json"
           saveMethod: "PUT"
-          
+
           success: (data, modal) =>
             resolvedModel.site.contact_lists.forEach (list) ->
               Ember.set(list, "name", data.name) if list.id == data.id
@@ -73,7 +73,10 @@ HelloBar.ApplicationRoute = Ember.Route.extend
           if HB_ACCOUNT_CREATION_VARIATION != "original" && @controllerFor("application").get("isTemporaryUser")
             new AlternateAccountPromptModal(siteURL: @controller.get("model.site.url")).open()
           else
-            window.location = "/sites/#{window.siteID}/site_elements"
+            if @controller.get("model.site.num_site_elements") == 0
+              window.location = "/sites/#{window.siteID}"
+            else
+              window.location = "/sites/#{window.siteID}/site_elements"
         error: (data) =>
           @controller.toggleProperty('saveSubmitted')
           @controller.set("model.errors", data.responseJSON.errors)
