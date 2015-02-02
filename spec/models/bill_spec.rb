@@ -165,11 +165,18 @@ describe Bill do
 
     it "should return false if due, but haven't tried billing yet" do
       bill = bills(:past_due_bill)
+      pm = payment_methods(:joeys)
       # Get around destroying read-only records
       BillingAttempt.connection.execute("DELETE FROM #{BillingAttempt.table_name}")
       bill.should_bill?.should == true
       bill.past_due?.should == true
-      bill.problem_with_payment?.should == false
+      bill.problem_with_payment?(pm).should == false
+    end
+
+    it "should return true if past due and there is no payment method" do
+      bill = bills(:past_due_bill)
+      bill.billing_attempts.delete_all
+      bill.problem_with_payment?.should == true
     end
   end
 end
