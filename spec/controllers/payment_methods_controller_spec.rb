@@ -60,6 +60,7 @@ describe PaymentMethodsController, '#update' do
 
   context 'updating a payment detail' do
     it 'changes the subscription with the correct payment method and detail' do
+      Site.any_instance.stub(has_script_installed?: true)
       payment_method = payment_methods(:always_successful)
       data = PaymentForm.new({}).to_hash
 

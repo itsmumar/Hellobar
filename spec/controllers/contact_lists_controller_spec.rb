@@ -42,6 +42,7 @@ describe ContactListsController, type: :controller do
 
     before do
       expect(Hello::DataAPI).to receive(:contact_list_totals).and_return { data_api_response }.at_least(1).times
+      Hello::DataAPI.stub(lifetime_totals: nil)
     end
 
     subject { get :index, site_id: site }
@@ -58,6 +59,7 @@ describe ContactListsController, type: :controller do
 
     before do
       expect(Hello::DataAPI).to receive(:get_contacts).and_return { data_api_response }.at_least(1).times
+      Hello::DataAPI.stub(lifetime_totals: nil)
     end
 
     subject { get :show, site_id: site, id: contact_list }

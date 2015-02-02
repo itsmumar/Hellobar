@@ -24,6 +24,10 @@ class Site < ActiveRecord::Base
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
 
+  scope :script_installed_db, -> do
+    where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
+  end
+
   def owner
     if membership = site_memberships.where(:role => "owner").first
       membership.user
@@ -32,13 +36,34 @@ class Site < ActiveRecord::Base
     end
   end
 
+  # check and report whether script is installed, recording timestamp and tracking event if status has changed
   def has_script_installed?
-    if script_installed_at.nil? && site_elements.any?{|b| b.total_views > 0}
-      update_attribute(:script_installed_at, Time.current)
+    if !script_installed_db? && script_installed_api?
+      update(script_installed_at: Time.current)
       Analytics.track(:site, self.id, "Installed Script")
+    elsif script_installed_db? && !script_installed_api?
+      update(script_uninstalled_at: Time.current)
+      Analytics.track(:site, self.id, "Uninstalled Script")
     end
 
-    script_installed_at.present?
+    script_installed_db?
+  end
+
+  # is the site's script installed according to the db timestamps?
+  def script_installed_db?
+    script_installed_at.present? && (script_uninstalled_at.blank? || script_installed_at > script_uninstalled_at)
+  end
+
+  # has the script been installed according to the API?
+  def script_installed_api?(days = 7)
+    return false unless lifetime_totals(days: days).present?
+
+    lifetime_totals(days: days).values.any? do |values|
+      days_with_views = values.select{|v| v[0] > 0}.count
+
+      (days_with_views < days && days_with_views > 0) ||            # site element was installed in the last n days
+        (values.count >= days && values[-days][0] < values.last[0]) # site element received views in the last n days
+    end
   end
 
   def script_url
@@ -64,6 +89,10 @@ class Site < ActiveRecord::Base
     delay :generate_static_assets, options
   end
 
+  def generate_script_and_check_for_uninstall(options = {})
+    delay :generate_static_assets_and_check_for_uninstall, options
+  end
+
   def generate_improve_suggestions(options = {})
     delay :generate_all_improve_suggestions, options
   end
@@ -72,8 +101,9 @@ class Site < ActiveRecord::Base
     delay :generate_blank_static_assets, options
   end
 
-  def lifetime_totals(cache_opts = {})
-    @lifetime_totals ||= Hello::DataAPI.lifetime_totals(self, site_elements, 1, cache_opts)
+  def lifetime_totals(opts = {})
+    days = opts.delete(:days) || 7
+    @lifetime_totals ||= Hello::DataAPI.lifetime_totals(self, site_elements, days, opts)
   end
 
   def create_default_rule
@@ -182,6 +212,7 @@ class Site < ActiveRecord::Base
   end
 
   private
+
   # Calculates a bill, but does not save or pay the bill. Used by
   # change_subscription and preview_change_subscription
   def calculate_bill(subscription, actually_change, trial_period=nil)
@@ -256,6 +287,11 @@ class Site < ActiveRecord::Base
     end
 
     return bill
+  end
+
+  def generate_static_assets_and_check_for_uninstall(options = {})
+    generate_static_assets(options)
+    has_script_installed?
   end
 
   def generate_static_assets(options = {})

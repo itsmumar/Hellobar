@@ -154,23 +154,117 @@ describe Site do
   describe "#has_script_installed?" do
     before do
       @site.script_installed_at = nil
+      @site.script_uninstalled_at = nil
     end
 
-    it "is true if script_installed_at is set" do
-      @site.script_installed_at = 1.day.ago
+    it "is true if script is installed according to db, and not still installed according to api" do
+      @site.script_installed_at = 1.week.ago
+      @site.stub(script_installed_api?: true)
+
       @site.has_script_installed?.should be_true
+      @site.script_installed_at.should be_present
+      @site.script_uninstalled_at.should be_nil
     end
 
-    it "is false if no site_elements have views" do
-      @site.stub(:site_elements => [double("bar", :total_views => 0)])
+    it "is false if not installed according to db, and not yet installed according to api" do
+      @site.script_installed_at = nil
+      @site.stub(script_installed_api?: false)
+
       @site.has_script_installed?.should be_false
       @site.script_installed_at.should be_nil
+      @site.script_uninstalled_at.should be_nil
     end
 
-    it "is true and sets script_installed_at if at least one site_element has been viewed" do
-      @site.stub(:site_elements => [double("bar", :total_views => 1)])
+    it "is true if not installed according to db, but installed according to api" do
+      @site.script_installed_at = nil
+      @site.stub(script_installed_api?: true)
+
       @site.has_script_installed?.should be_true
-      @site.script_installed_at.should_not be_nil
+      @site.script_installed_at.should be_present
+      @site.script_uninstalled_at.should be_nil
+    end
+
+    it "is false if previously installed, but now uninstalled according to api" do
+      @site.script_installed_at = 1.week.ago
+      @site.stub(script_installed_api?: false)
+
+      @site.has_script_installed?.should be_false
+      @site.script_uninstalled_at.should be_present
+    end
+  end
+
+  describe "#script_installed_api?" do
+    it "is true if there is only one day of data" do
+      Hello::DataAPI.should_receive(:lifetime_totals).and_return({"1" => [[1,0]]})
+      @site.script_installed_api?.should be_true
+    end
+
+    it "is true if there are multiple days of data" do
+      Hello::DataAPI.should_receive(:lifetime_totals).and_return({"1" => [[1,0], [2,0]]})
+      @site.script_installed_api?.should be_true
+    end
+
+    it "is false if the api returns nil" do
+      Hello::DataAPI.should_receive(:lifetime_totals).and_return(nil)
+      @site.script_installed_api?.should be_false
+    end
+
+    it "is false if the api returns an empty hash" do
+      Hello::DataAPI.should_receive(:lifetime_totals).and_return({})
+      @site.script_installed_api?.should be_false
+    end
+
+    it "is true if one element has views but others do not" do
+      Hello::DataAPI.should_receive(:lifetime_totals).and_return({
+        "1" => [[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0]],
+        "2" => [[1, 0],[1, 0],[2, 0],[2, 0],[2, 0],[2, 0],[2, 0],[2, 0]]
+      })
+
+      @site.script_installed_api?.should be_true
+    end
+
+    it "is true if any of the elements have been installed in the last 7 days" do
+      Hello::DataAPI.should_receive(:lifetime_totals).and_return({
+        "1" => [[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0]],
+        "2" => [[1, 0],[1, 0]]
+      })
+
+      @site.script_installed_api?.should be_true
+    end
+
+    it "is false if there have been no views in the last 7 days" do
+      Hello::DataAPI.should_receive(:lifetime_totals).and_return({
+        "1" => [[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0]],
+        "2" => [[0, 0]]
+      })
+
+      @site.script_installed_api?.should be_false
+    end
+  end
+
+  describe "#script_installed_db?" do
+    before do
+      @site.script_installed_at = nil
+      @site.script_uninstalled_at = nil
+    end
+
+    it "is true if installed_at is set" do
+      @site.script_installed_at = 1.week.ago
+      @site.script_installed_db?.should be_true
+    end
+
+    it "is true if installed_at is more recent than uninstalled_at" do
+      @site.script_installed_at = 1.day.ago
+      @site.script_uninstalled_at = 1.week.ago
+
+      @site.script_installed_db?.should be_true
+    end
+
+    it "is false if uninstalled_at is more recent than installed_at" do
+      @site.script_installed_at = 1.week.ago
+      @site.script_uninstalled_at = 1.day.ago
+
+      @site.script_installed_db?.should be_false
     end
   end
 
