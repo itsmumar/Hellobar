@@ -85,14 +85,6 @@ class ScriptGenerator < Mustache
     CSSMin.minify(file).to_json
   end
 
-  def animation_js
-    if @options[:preview] || (site.site_elements.none?(&:animated) && site.site_elements.none?(&:closable))
-      ""
-    else
-      File.read("#{Rails.root}/vendor/assets/javascripts/move.min.js")
-    end
-  end
-
   def templates
     template_names = options[:templates] || site.site_elements.active.map(&:element_subtype).uniq
 

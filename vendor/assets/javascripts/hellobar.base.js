@@ -818,7 +818,7 @@ var _HB = {
     HB.w.name = "hellobar_container";
     // Set any necessary CSS classes
     HB.w.className = siteElement.size+(HB.t(siteElement.remains_at_top) ? " remains_at_top" : "");
-    HB.w.className += siteElement.animated ? " animated" : "";
+    HB.w.className += siteElement.animated ? " hellobar animated" : "";
     HB.w.scrolling = "no";
     // Remove the pusher if it exists
     if ( HB.p )
@@ -1301,25 +1301,15 @@ var _HB = {
   },
 
   bounceIn: function(element, time){
-    time = typeof time !== 'undefined' ? time : 400;
-
-    if(move && typeof(move) == "function") {
-        var origH = parseInt(element.style.height) || element.offsetHeight || 0;
-        move(element).ease('in').y(0).duration(time).end(function(){
-          move(element).ease('out').y((origH / 4) * -1).duration(time / 4).end(function(){
-            move(element).ease('in').y(0).duration(time / 4).end();
-          });
-        });
-      }
+    element.classList.remove("bounceOutUp");
+    element.classList.add("animated");
+    element.classList.add("bounceInDown");
   },
 
-  bounceOut: function(element, time){
-    time = typeof time !== 'undefined' ? time : 400;
-
-    if(move && typeof(move) == "function") {
-      var origH = parseInt(element.style.height) || element.offsetHeight || 0;
-      move(element).ease('in').y(-origH).duration(time).end();
-    }
+  bounceOut: function(element){
+    element.classList.remove("bounceInDown");
+    element.classList.add("animated");
+    element.classList.add("bounceOutUp");
   },
 
   // Create the pulldown arrow element for when a bar is hidden
