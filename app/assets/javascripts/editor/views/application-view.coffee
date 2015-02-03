@@ -15,5 +15,5 @@ HelloBar.ApplicationView = Ember.View.extend
   #-----------  Click Action  -----------#
 
   click: (obj) ->
-    unless $(obj.target).hasClass('color-select-block')
+    unless $(obj.target).closest('.color-select-wrapper').length
       @set('controller.focusedColor', null)
