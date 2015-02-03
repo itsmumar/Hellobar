@@ -252,7 +252,7 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 
 /* Display forms not-inline on mobile */
 #hellobar.mobile #hb_email, #hellobar.mobile #hb_name {
-	width: 80%; 
+	width: 80%;
   margin-right: 2.5%;
 }
 #hellobar.mobile #hb_email{
@@ -272,6 +272,11 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 }
 
 /* logos */
+#hellobar.large .hellobar-logo-wrapper img { width: 48px; height: 36px;}
+#hellobar.large .hellobar-logo-wrapper svg { transform: translateY(2px); width: 20px; }
+#hellobar.regular .hellobar-logo-wrapper img { width: 33px; height: 21px;}
+#hellobar.regular #pb2l { font-size: 10px; }
+#hellobar.regular .hellobar-logo-wrapper svg { transform: translateY(1px); width: 16px; }
 
 .hellobar-logo-wrapper .animated {
   -webkit-animation: logo-spin 10.5s ease-in-out infinite;
@@ -286,7 +291,7 @@ a:hover.hellobar_arrow { opacity: 0.6; }
   backface-visibility: visible;
 }
 
-..hellobar-logo-wrapper .animated:hover {
+.hellobar-logo-wrapper .animated:hover {
   -webkit-animation-play-state: paused;
   -moz-animation-play-state: paused;
   animation-play-state: paused;
@@ -357,10 +362,8 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 
 .hellobar-logo-wrapper svg {
   fill: #fff;
-  width: 20px;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  transform: translateY(2px);
 }
 
 .hellobar-logo-wrapper a {
