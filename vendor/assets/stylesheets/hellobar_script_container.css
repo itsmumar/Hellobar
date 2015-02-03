@@ -31,11 +31,12 @@
   height: 50px;
 }
 
+.hellobar#pull-down.large .hellobar_arrow { width: 28px; height: 28px; background-size: 28px 28px; }
+.hellobar#pull-down.regular .hellobar_arrow  { width: 21px; height: 21px; background-size: 21px 21px; }
+
 .hellobar#pull-down {
   display: block;
-  height: 28px;
   border: 2px solid white;
-  width: 28px;
   overflow: hidden;
   top: -4px;
   position: absolute;
@@ -47,8 +48,6 @@
 }
 
 .hellobar#pull-down .hellobar_arrow {
-  width: 28px;
-  height: 29px;
   background-image: url("https://s3.amazonaws.com/hb-assets/arrow_white.png");
   opacity: 0.3;
   -moz-transform: scaleY(-1);

@@ -1331,7 +1331,7 @@ var _HB = {
     // Create the pull down elements
     if(siteElement.closable) {
       var pullDown = document.createElement("div");
-      pullDown.className = "hellobar"
+      pullDown.className = siteElement.size + " hellobar"
       pullDown.id = "pull-down"
 
       pullDown.style.backgroundColor = siteElement.background_color
