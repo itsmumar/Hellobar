@@ -24,7 +24,6 @@
 
 #hellobar_pusher.large {
   height: 50px;
-
 }
 
 #hellobar.large {
@@ -32,29 +31,35 @@
   height: auto;
   font-size: 17px;
   font-weight: 600;
+  -webkit-font-smoothing: antialiased;
 }
 #hellobar.large span {
   font-size: 17px;
 }
-
+#hellobar.large input {
+  height: 25px;
+  margin-top: 1px;
+  padding: 0 5px;
+}
 #hellobar.large a.hellobar_cta.hb-text { line-height: 48px; }
 #hellobar.large span { line-height: 25px; }
 #hellobar.large a.hellobar_arrow { top: 10px; }
 #hellobar.large a.hellobar_arrow img{ height: 29px; width: 28px;}
-#hellobar.large a.hellobar_cta.hb-button {padding: 6px 15px;}
+#hellobar.large a.hellobar_cta.hb-button { padding: 5px 15px 2px; }
 
 #hellobar.regular {
   font-size: 14px;
 }
 #hellobar.regular span {
   font-size: 14px;
+  margin-top: 5px;
 }
 #hellobar.regular a { line-height: 30px; }
 #hellobar.regular a.hellobar_cta.hb-text { line-height: 28px; }
 #hellobar.regular span { line-height: 20px; margin-top: 3px;}
 #hellobar.regular a.hellobar_arrow { top: 4px; }
 #hellobar.regular a.hellobar_arrow img { height: 21px; width: 21px;}
-#hellobar.regular a.hellobar_cta.hb-button {padding: 2px 8px;}
+#hellobar.regular a.hellobar_cta.hb-button { padding: 3px 8px 1px; }
 /* span & link */
 
 #hellobar {
@@ -62,7 +67,7 @@
 }
 #hellobar span{
   margin-left: 50px;
-  margin-right: 20px;
+  margin-right: 10px;
   margin-top: 13px;
   display: inline-block;
 }
@@ -93,10 +98,9 @@
 
 #hellobar a.hellobar_cta.hb-button {
     border: 1px solid;
-    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
-    border-radius: 4px;
+    border-radius: 3px;
+    position: relative;
     margin: 0 0;
-    margin-left: 10px;
     text-decoration: none;
     color: #fff;
     white-space: nowrap;
@@ -137,21 +141,25 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 }
 
 #hellobar input{
-  box-shadow: inset 1px 1px 3px #aaa;
-  border-radius: 4px;
   border: none;
   width: 150px;
-  margin-left: 10px;
   vertical-align: middle;
-  padding: 3px 3px;
   margin-bottom: 2px;
   margin-top: 0px;
+
+  box-shadow: inset 1px 1px 3px #aaa;
+  border-radius: 3px;
+  margin-left: 5px;
+  padding: 0 5px;
+  outline: none;
+  height: 20px;
+  box-shadow: none;
 }
 
 #hellobar.large input{
   padding: 5px 5px;
-  margin-bottom: 5px;
-  margin-top: 0px;
+  margin-bottom: 0;
+  margin-top: -1px;
 }
 
 #hellobar iframe {
@@ -244,7 +252,8 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 
 /* Display forms not-inline on mobile */
 #hellobar.mobile #hb_email, #hellobar.mobile #hb_name {
-	width: 80%; margin-right: 2.5%;
+	width: 80%; 
+  margin-right: 2.5%;
 }
 #hellobar.mobile #hb_email{
 	margin-top: 10px
