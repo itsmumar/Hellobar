@@ -820,6 +820,7 @@ var _HB = {
     HB.w.className = siteElement.size+(HB.t(siteElement.remains_at_top) ? " remains_at_top" : "");
     HB.w.className += siteElement.animated ? " hellobar animated" : "";
     HB.w.scrolling = "no";
+    HB.w.setAttribute("frameBorder", 0) // IE 9 and less
     // Remove the pusher if it exists
     if ( HB.p )
       HB.p.parentNode.removeChild(HB.p);
@@ -1301,15 +1302,27 @@ var _HB = {
   },
 
   bounceIn: function(element, time){
-    element.classList.remove("bounceOutUp");
-    element.classList.add("animated");
-    element.classList.add("bounceInDown");
+    // HTML 5 supported so show the animation
+    if (typeof element.classList == 'object') {
+      element.classList.remove("bounceOutUp");
+      element.classList.add("animated");
+      element.classList.add("bounceInDown");
+    } // else just unhide
+    else {
+      element.style.display = "";
+    }
   },
 
   bounceOut: function(element){
-    element.classList.remove("bounceInDown");
-    element.classList.add("animated");
-    element.classList.add("bounceOutUp");
+    // HTML 5 supported so show the animation
+    if (typeof element.classList == 'object') {
+      element.classList.remove("bounceInDown");
+      element.classList.add("animated");
+      element.classList.add("bounceOutUp");
+    } // else just hide
+    else {
+      element.style.display = "none";
+    }
   },
 
   // Create the pulldown arrow element for when a bar is hidden
