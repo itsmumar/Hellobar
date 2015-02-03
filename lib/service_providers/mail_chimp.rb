@@ -23,6 +23,19 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     @client.lists.member_info({:id => list_id, :emails => [{:email => email}]})["success_count"] == 1
   end
 
+  def subscriber_statuses(list_id, emails)
+    {}.tap do |result|
+      emails.each { |e| result[e] = nil }
+
+      emails.each_slice(50) do |email_group|
+        email_arr = email_group.map { |x| {email: x} }
+        @client.lists.member_info(id: list_id, emails: email_arr)["data"].each do |r|
+          result[r["email"]] = r["status"]
+        end
+      end
+    end
+  end
+
   def subscribe(list_id, email, name = nil, double_optin = true)
     opts = {:id => list_id, :email => {:email => email}, :double_optin => double_optin}
 
