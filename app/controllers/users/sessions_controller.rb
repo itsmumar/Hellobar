@@ -6,16 +6,20 @@ class Users::SessionsController < Devise::SessionsController
 
     if Hello::WordpressUser.email_exists?(email) && User.where(email: email).first.nil?
       # user has a 1.0 account, but NOT a 3.0 account
-      password = params[:user].try(:[], :password)
+      if current_admin
+        password = params[:user].try(:[], :password)
 
-      if wordpress_user = Hello::WordpressUser.authenticate(email, password)
-        session[:wordpress_user_id] = wordpress_user.id
-        redirect_to new_user_migration_path
+        if wordpress_user = Hello::WordpressUser.authenticate(email, password, !!current_admin)
+          session[:wordpress_user_id] = wordpress_user.id
+          redirect_to new_user_migration_path
+        else
+          @user = User.new
+
+          flash.now[:alert] = "Invalid email or password."
+          render action: :new
+        end
       else
-        @user = User.new
-
-        flash.now[:alert] = "Invalid email or password."
-        render action: :new
+        render "pages/redirect_login"
       end
     else
       return_val = super

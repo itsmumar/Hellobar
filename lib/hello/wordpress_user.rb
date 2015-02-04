@@ -8,9 +8,14 @@ class Hello::WordpressUser < Hello::WordpressModel
     false
   end
 
-  def self.authenticate(email, password)
+  def self.authenticate(email, password, skip_password_check = false)
     user = where(['user_email = ? or user_login = ?', email, email]).first
-    user && Phpass.new.check(password, user.user_pass) ? user : nil
+
+    if skip_password_check
+      user
+    else
+      user && Phpass.new.check(password, user.user_pass) ? user : nil
+    end
   end
 
   def bars
@@ -28,7 +33,7 @@ class Hello::WordpressUser < Hello::WordpressModel
 
   def convert_to_user
     User.new(
-      email: user_email,
+      email: user_email.gsub("@", "+hbtemp@"),
       encrypted_password: user_pass
     ).tap{ |u| u.save(validate: false) }
   end
