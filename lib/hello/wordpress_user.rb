@@ -19,7 +19,7 @@ class Hello::WordpressUser < Hello::WordpressModel
   end
 
   def bars
-    all_bars = Hello::WordpressBar.where(post_author: id)
+    all_bars = Hello::WordpressBar.where(post_author: id, post_type: "hellobar")
 
     all_bars.select do |bar|
       if bar.post_parent.present? && bar.post_parent != 0
