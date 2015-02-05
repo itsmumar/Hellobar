@@ -14,7 +14,7 @@ class Hello::WordpressBar < Hello::WordpressModel
       font: hellobar_meta["meta"]["fontFamily"].presence || "Helvetica,Arial,sans-serif",
       paused: paused?,
       settings: {
-        url: hellobar_meta["linkurl"]
+        url: link_url
       }
     }
 
@@ -59,5 +59,9 @@ class Hello::WordpressBar < Hello::WordpressModel
 
   def border_color
     hellobar_meta["meta"]["bordercolor"]
+  end
+
+  def link_url
+    hellobar_meta["linkurl"].blank? ? "" : CGI.unescapeHTML(hellobar_meta["linkurl"])
   end
 end
