@@ -103,7 +103,13 @@ class Site < ActiveRecord::Base
 
   def lifetime_totals(opts = {})
     days = opts.delete(:days) || 7
-    @lifetime_totals ||= Hello::DataAPI.lifetime_totals(self, site_elements, days, opts)
+    @lifetime_totals ||= {}
+
+    if opts[:force] || @lifetime_totals[days].nil?
+      @lifetime_totals[days] = Hello::DataAPI.lifetime_totals(self, site_elements, days, opts)
+    else
+      @lifetime_totals[days]
+    end
   end
 
   def create_default_rule
