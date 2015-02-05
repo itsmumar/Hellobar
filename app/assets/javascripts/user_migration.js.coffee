@@ -10,6 +10,7 @@ $ ->
     element.click (event) ->
       $("a.add-site").hide()
       $("form.add-site-for-migration").show()
+      document.body.scrollTop = document.documentElement.scrollTop = 0
 
   $("form.add-site-for-migration button").click (event) ->
     event.preventDefault()
