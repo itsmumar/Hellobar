@@ -14,10 +14,23 @@ module Hello
       first_pass = PHP.unserialize(string)
 
       if first_pass.is_a?(Hash)
-        return first_pass
+        hash = first_pass
       else
         match = string.match(/^\w+:\d+:\\*\"(.*)\\*\";$/)
-        match ? PHP.unserialize(match[1]) : nil
+        hash = match ? PHP.unserialize(match[1]) : nil
+      end
+
+      if hash
+        encoded_hash = {}
+
+        hash.each do |k, v|
+          k = k.is_a?(String) ? k.dup.force_encoding("utf-8") : k
+          v = v.is_a?(String) ? v.dup.force_encoding("utf-8") : v
+
+          encoded_hash[k] = v
+        end
+
+        return encoded_hash
       end
     end
   end
