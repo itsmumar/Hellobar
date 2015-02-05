@@ -12,6 +12,7 @@ class Hello::WordpressBar < Hello::WordpressModel
       wordpress_bar_id: id,
       show_border: hellobar_meta["meta"]["border"] == "1",
       font: hellobar_meta["meta"]["fontFamily"].presence || "Helvetica,Arial,sans-serif",
+      paused: paused?,
       settings: {
         url: hellobar_meta["linkurl"]
       }
@@ -23,6 +24,18 @@ class Hello::WordpressBar < Hello::WordpressModel
     params[:border_color] = border_color.gsub("#", "") if border_color.present?
 
     SiteElement.create!(params)
+  end
+
+  def paused?
+    post_status == "draft" || (parent.try(:post_status) == "draft")
+  end
+
+  def parent
+    if post_parent.present? && post_parent != 0
+      Hello::WordpressBar.where(post_author: post_author, id: post_parent).first
+    else
+      nil
+    end
   end
 
   def hellobar_meta

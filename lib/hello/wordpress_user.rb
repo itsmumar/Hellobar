@@ -24,9 +24,9 @@ class Hello::WordpressUser < Hello::WordpressModel
     all_bars.select do |bar|
       if bar.post_parent.present? && bar.post_parent != 0
         parent = all_bars.find{|b| b.id == bar.post_parent}
-        parent && parent.post_status == "publish" && bar.post_status == "publish"
+        parent && parent.post_status != "trash" && bar.post_status != "trash"
       else
-        bar.post_status == "publish"
+        bar.post_status != "trash"
       end
     end
   end
