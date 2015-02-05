@@ -22,6 +22,7 @@ class Hello::WordpressBar < Hello::WordpressModel
     params[:text_color] = text_color.gsub("#", "") if text_color.present?
     params[:link_color] = link_color.gsub("#", "") if link_color.present?
     params[:border_color] = border_color.gsub("#", "") if border_color.present?
+    params[:button_color] = "e8e7e9"
 
     SiteElement.create!(params)
   end
