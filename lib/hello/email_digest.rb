@@ -7,7 +7,7 @@ module Hello::EmailDigest
     include Hellobar::Application.routes.url_helpers
 
     def installed_sites
-      Site.where("script_installed_at IS NOT NULL").where(:opted_in_to_email_digest => true)
+      Site.script_installed_db.where(:opted_in_to_email_digest => true)
     end
 
     def not_installed_sites

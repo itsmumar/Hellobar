@@ -7,6 +7,7 @@ describe SiteElementsController do
     it "serializes a site_element to json" do
       element = site_elements(:zombo_traffic)
       stub_current_user(element.site.owner)
+      Site.any_instance.stub(has_script_installed?: true)
 
       get :show, :site_id => element.site, :id => element, :format => :json
 

@@ -7,6 +7,7 @@ $.mockjax
   response: (settings) ->
     <%
       site = Site.new(script_installed_at: Time.now)
+      def site.has_script_installed?; true; end
       element = site.site_elements.new
       rule = Rule.new(:site => site)
       element.rule = rule
