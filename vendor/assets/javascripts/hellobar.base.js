@@ -1334,7 +1334,7 @@ var _HB = {
       pullDown.className = siteElement.size + " hellobar"
       pullDown.id = "pull-down"
 
-      pullDown.style.backgroundColor = siteElement.background_color
+      pullDown.style.backgroundColor = "#" + siteElement.background_color
       var pdLink = document.createElement("div");
       pdLink.className = "hellobar_arrow"
       pdLink.onclick = function() {
