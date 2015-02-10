@@ -34,6 +34,9 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
         end
       end
     end
+  rescue => e
+    Rails.logger.warn("#{site.url} - #{e.message}")
+    {}
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)

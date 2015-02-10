@@ -216,6 +216,21 @@ describe ContactList do
     end
   end
 
+  describe "#subscriber_statuses" do
+    it "returns empty hash if service provider does not retreive statuses" do
+      service_provider.stub(:respond_to?).with(:subscriber_statuses).and_return false
+      contact_list.subscriber_statuses([{email: "test"}]).should == {}
+    end
+
+    it "returns a hash with the status as returned by the service provider" do
+      subscribers = [{email: "test@test.com"}, {email: "test2@test.com"}]
+      result = { "test@test.com" => "pending", "test2@test.com" => "subscribed" }
+      service_provider.should_receive(:subscriber_statuses)\
+        .with(contact_list.data["remote_id"], ["test@test.com", "test2@test.com"]).and_return(result)
+      contact_list.subscriber_statuses(subscribers).should == result
+    end
+  end
+
   describe "#num_subscribers" do
     it "gets number of subscribers from the data API" do
       Hello::DataAPI.stub(:contact_list_totals => {contact_list.id.to_s => 5})

@@ -14,7 +14,7 @@ nav.tabs-wrapper
           = link_to other_list.name, site_contact_list_path(@site, other_list)
 
 .service-block
-  .service-icon 
+  .service-icon
     = image_tag contact_list_image(@contact_list)
 
   .service-description
@@ -30,6 +30,8 @@ table.contacts-table
       th #
       th Email
       th Name
+      - if @contact_list.subscribers.any? && @contact_list.subscriber_statuses(@contact_list.subscribers[0,100]).any?
+        th Status
       th Date Subscribed
 
   tbody
@@ -39,6 +41,11 @@ table.contacts-table
           td= index + 1
           td= subscriber[:email]
           td= subscriber[:name]
+          td
+            - if @contact_list.subscriber_statuses(nil)[subscriber[:email]].nil?
+              | Not Synced
+            - else
+              = @contact_list.subscriber_statuses(nil)[subscriber[:email]].capitalize
           td= subscriber[:subscribed_at].try(:strftime, "%b %d, %Y")
 
     - else
