@@ -357,6 +357,8 @@ a:hover.hellobar_arrow { opacity: 0.6; }
   font-style: normal;
   font-weight: normal;
   line-height: 15px;
+  height: 15px;
+  margin-bottom: 3px;
 }
 
 .hellobar-logo-wrapper svg {
