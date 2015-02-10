@@ -741,10 +741,13 @@ var _HB = {
       // conflicts with certain sites
       setTimeout(function(){
         HB.injectSiteElementHTML(html, siteElement);
+        HB.setPullDown(siteElement)
         // Track the view
         HB.viewed();
         // Monitor zoom scale events
         HB.hideOnZoom();
+        if(HB.w.className.indexOf("animated") > -1)
+          setTimeout(function(){ HB.bounceIn(HB.w); }, 500);
       }, 1);
     });
   },
@@ -815,7 +818,9 @@ var _HB = {
     HB.w.name = "hellobar_container";
     // Set any necessary CSS classes
     HB.w.className = siteElement.size+(HB.t(siteElement.remains_at_top) ? " remains_at_top" : "");
+    HB.w.className += siteElement.animated ? " hellobar animated" : "";
     HB.w.scrolling = "no";
+    HB.w.setAttribute("frameBorder", 0) // IE 9 and less
     // Remove the pusher if it exists
     if ( HB.p )
       HB.p.parentNode.removeChild(HB.p);
@@ -1294,6 +1299,52 @@ var _HB = {
     }
 
     return .2126 * rgb[0] + .7152 * rgb[1] + 0.0722 * rgb[2];
+  },
+
+  bounceIn: function(element, time){
+    // HTML 5 supported so show the animation
+    if (typeof element.classList == 'object') {
+      element.classList.remove("bounceOutUp");
+      element.classList.add("animated");
+      element.classList.add("bounceInDown");
+    } // else just unhide
+    else {
+      element.style.display = "";
+    }
+  },
+
+  bounceOut: function(element){
+    // HTML 5 supported so show the animation
+    if (typeof element.classList == 'object') {
+      element.classList.remove("bounceInDown");
+      element.classList.add("animated");
+      element.classList.add("bounceOutUp");
+    } // else just hide
+    else {
+      element.style.display = "none";
+    }
+  },
+
+  // Create the pulldown arrow element for when a bar is hidden
+  // The pulldown arrow is only created when a site element is closable
+  setPullDown: function(siteElement) {
+    // Create the pull down elements
+    if(siteElement.closable) {
+      var pullDown = document.createElement("div");
+      pullDown.className = siteElement.size + " hellobar"
+      pullDown.id = "pull-down"
+
+      pullDown.style.backgroundColor = siteElement.background_color
+      var pdLink = document.createElement("div");
+      pdLink.className = "hellobar_arrow"
+      pdLink.onclick = function() {
+        HB.bounceIn(HB.w)
+        HB.bounceOut(document.getElementById("pull-down"))
+      };
+
+      pullDown.appendChild(pdLink);
+      HB.injectAtTop(pullDown)
+    }
   },
 
   // Parses the zone and returns the offset in seconds. If it can

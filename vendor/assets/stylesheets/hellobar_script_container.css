@@ -20,6 +20,7 @@
   _top:expression(eval(document.body.scrollTop));
 }
 
+
 #hellobar_pusher{
   height: 30px;
   position: relative;
@@ -28,4 +29,149 @@
 
 #hellobar_pusher.large {
   height: 50px;
+}
+
+.hellobar#pull-down.large .hellobar_arrow { width: 28px; height: 28px; background-size: 28px 28px; }
+.hellobar#pull-down.regular .hellobar_arrow  { width: 21px; height: 21px; background-size: 21px 21px; }
+
+.hellobar#pull-down {
+  display: block;
+  border: 2px solid white;
+  overflow: hidden;
+  top: -4px;
+  position: absolute;
+  right: 10px;
+  z-index: 16999;
+  padding: 6px;
+  border-radius: 0 0 5px 5px;
+  transform: translateY(-40px);
+}
+
+.hellobar#pull-down .hellobar_arrow {
+  background-image: url("https://s3.amazonaws.com/hb-assets/arrow_white.png");
+  opacity: 0.3;
+  -moz-transform: scaleY(-1);
+  -webkit-transform: scaleY(-1);
+  -o-transform: scaleY(-1);
+  transform: scaleY(-1);
+  filter: flipv; /*IE*/
+  cursor: pointer;
+}
+
+@-webkit-keyframes bounceInDown {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    -webkit-transform: translate3d(0, -3000px, 0);
+    transform: translate3d(0, -3000px, 0);
+  }
+
+  60% {
+    -webkit-transform: translate3d(0, 0px, 0);
+    transform: translate3d(0, 0px, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, 0px, 0);
+    transform: translate3d(0, 0px, 0);
+  }
+
+  100% {
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes bounceInDown {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    -webkit-transform: translate3d(0, -3000px, 0);
+    transform: translate3d(0, -3000px, 0);
+  }
+
+  60% {
+    -webkit-transform: translate3d(0, 0px, 0);
+    transform: translate3d(0, 0px, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, 0px, 0);
+    transform: translate3d(0, 0px, 0);
+  }
+
+  100% {
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.hellobar.bounceInDown {
+  -webkit-animation-name: bounceInDown;
+  animation-name: bounceInDown;
+}
+
+@-webkit-keyframes bounceOutUp {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+  }
+
+  0% {
+    -webkit-transform: none;
+    transform: none;
+  }
+
+  100% {
+
+    -webkit-transform: translate3d(0, -500px, 0);
+    transform: translate3d(0, -500px, 0);
+  }
+}
+
+@keyframes bounceOutUp {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+  }
+
+  0% {
+    -webkit-transform: none;
+    transform: none;
+
+  }
+
+  100% {
+    -webkit-transform: translate3d(0, -500px, 0);
+    transform: translate3d(0, -500px, 0);
+  }
+}
+
+.hellobar.bounceOutUp {
+  -webkit-animation-name: bounceOutUp;
+  animation-name: bounceOutUp;
+}
+
+.hellobar.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  transform: translateY(-60px);
 }
