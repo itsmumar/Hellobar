@@ -28,7 +28,7 @@
   .color-select
     position: relative
     @include user-select(none)
-    
+
     .color-select-spacer
       height: 2.67em
       display: block
@@ -67,6 +67,23 @@
           border: 1px solid $grayLight
           @include inline-block()
 
+        .hash-mark
+          margin-right: -0.25em
+          top: 1px
+          position: relative
+
+        input
+          width: 70%
+          margin: 0px
+          border: 1px solid $white
+          color: $gray
+          text-transform: uppercase
+          font-size: 0.95em
+          padding: 0.25em 0.3em
+
+          &:focus
+            border: 1px solid $grayLight
+
       .color-dropdown
         width: 95%
         opacity: 0
@@ -85,7 +102,7 @@
             @include justify-content(space-between)
             @include align-items(stretch)
             @include flex-flow(row nowrap)
-            @include display(flex)    
+            @include display(flex)
 
 
             .color-preview
@@ -120,7 +137,7 @@
               width: 100%
               height: 100%
 
-            .gradient-indicator 
+            .gradient-indicator
               width: 8px
               height: 8px
               position: absolute
@@ -136,7 +153,7 @@
               width: 100%
               height: 100%
 
-            .slider-indicator 
+            .slider-indicator
               width: 17px
               height: 5px
               cursor: pointer
@@ -192,7 +209,7 @@
         z-index: 900
         max-height: 21em
         box-shadow: $shadowSubtle
-    
+
         &:before
           color: $grayDark
           @include transform(rotate(-180deg))
@@ -240,7 +257,7 @@
           background-color: rgba($twitter, 0.08)
 
       &.facebook
- 
+
         i
           color: $facebook
 
@@ -249,7 +266,7 @@
           background-color: rgba($facebook, 0.08)
 
       &.linkedin
- 
+
         i
           color: $linkedin
 
@@ -258,7 +275,7 @@
           background-color: rgba($linkedin, 0.08)
 
       &.google
- 
+
         i
           color: $google
 
@@ -267,7 +284,7 @@
           background-color: rgba($google, 0.08)
 
       &.pinterest
- 
+
         i
           color: $pinterest
 
@@ -276,7 +293,7 @@
           background-color: rgba($pinterest, 0.08)
 
       &.buffer
- 
+
         i
           color: $buffer
 
@@ -320,7 +337,7 @@
 
         &.is-selected
           cursor: default
-  
+
           .icon-close
             cursor: pointer
             @include inline-block()

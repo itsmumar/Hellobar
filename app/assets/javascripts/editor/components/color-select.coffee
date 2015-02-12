@@ -18,6 +18,16 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
     @setRGB()
 
   setRGB: Ember.throttledObserver 'color', 75, ->
+    # Only work with full colors, also, strip out any hash marks pasted in
+    hex = @get('color')
+    if hex.length < 6
+      return
+    else if hex.length > 6
+      hex = hex.replace('#', '')
+      hex = hex.substring(0, 6)
+      @set('color', hex)
+
+
     rgb = @getRGB()
 
     @set 'rVal', parseInt(rgb[1], 16)
@@ -35,15 +45,15 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
     result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
     result || ['ffffff', 'ff', 'ff', 'ff']
 
-  setHex: Ember.debouncedObserver 'rVal', 'gVal', 'bVal', 150, ->
+  setHex: Ember.debouncedObserver 'rVal', 'gVal', 'bVal', 'hexVal', 150, ->
     r = parseInt(@get('rVal'))
     g = parseInt(@get('gVal'))
     b = parseInt(@get('bVal'))
 
     gradRGB = @get('rgb')
-    inputRGB = {r: r, g: g, b: b} 
+    inputRGB = {r: r, g: g, b: b}
 
-    unless JSON.stringify(gradRGB) == JSON.stringify(inputRGB) 
+    unless JSON.stringify(gradRGB) == JSON.stringify(inputRGB)
       hex = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
       @gradient.setHex('#' + hex)
 
@@ -82,7 +92,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
     color = @get('color')
     recent = @get('recentColors')
 
-    unless recent.indexOf(color) > -1    
+    unless recent.indexOf(color) > -1
       recent.shiftObject()
       recent.pushObject(@get('color'))
       @set('recentColors', recent)
@@ -108,8 +118,9 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
   actions:
 
     toggleFocus: ->
-      @set('focusedColor', @get('elementId'))
-      @toggleProperty('inFocus')
+      if !(@get('inFocus') && $("#" + @get('elementId') + " input:focus").length)
+        @set('focusedColor', @get('elementId'))
+        @toggleProperty('inFocus')
 
 
 #-----------  Color Preview Child Views  -----------#
