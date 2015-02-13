@@ -35,7 +35,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               li= "{{#if showFreePlus}}Unlimited bars{{else}}Limit of 10 bars{{/if}}"
               li HelloBar logo on all content
               li 3 improve suggestions
-              li Ads after 25,000 views
+              li Occasional ads for Hello Bar after 25,000 views
 
             .package-status
               = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
