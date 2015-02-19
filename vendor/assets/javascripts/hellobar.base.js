@@ -646,7 +646,7 @@ var _HB = {
   // safely modified.
   prerender: function(siteElement)
   {
-    siteElement.wiggle_button = (siteElement.wiggle_button ? 'wiggle' : '');
+    siteElement.wiggle = (siteElement.wiggle_button ? 'wiggle' : '');
     return this.sanitize(siteElement);
   },
 
@@ -751,6 +751,9 @@ var _HB = {
         // Bounce in animation
         if(HB.w.className.indexOf("animated") > -1)
           setTimeout(function(){ HB.bounceIn(HB.w); }, 500);
+        // Set wiggle listeners
+        if(siteElement.wiggle_button.length > 0)
+          HB.wiggleEventListeners(HB.w);
       }, 1);
     });
   },
@@ -1329,6 +1332,21 @@ var _HB = {
     else {
       element.style.display = "none";
     }
+  },
+
+  // Delays & restarts wiggle animation before & after mousing over bar 
+  wiggleEventListeners: function(element){
+    $(element)
+      .on('mouseenter', '#hellobar', function(){
+        console.log('in', $(this));
+        $('#hellobar').find('.hellobar_cta').removeClass('wiggle');
+      })
+      .on('mouseleave', '#hellobar', function(){
+        setTimeout( function(){ 
+          console.log('out');
+          $('#hellobar').find('.hellobar_cta').addClass('wiggle');
+        }, 2500);
+      });
   },
 
   // Create the pulldown arrow element for when a bar is hidden
