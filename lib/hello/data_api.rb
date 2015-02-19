@@ -3,6 +3,7 @@ require "./lib/hello/data_api_helper"
 
 module Hello::DataAPI
   class << self
+    API_MAX_SLICE = 25
 
     # Returns total views and conversions for each site_element, by day for n days.
     # For example, if site element with id 123 had a total of 10 views and 3 conversions yesterday,
@@ -19,9 +20,13 @@ module Hello::DataAPI
       cache_key = "hello:data-api:#{site.id}:#{site_element_ids.sort.join('-')}:lifetime_totals:#{num_days}days:#{site.script_installed_at.to_i}"
       cache_options[:expires_in] = 10.minutes
 
-      Rails.cache.fetch cache_key, cache_options do
-        path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, site_element_ids, site.read_key, num_days)
-        get(path, params)
+      api_results = Rails.cache.fetch cache_key, cache_options do
+        results = {}
+        site_element_ids.each_slice(API_MAX_SLICE) do |ids|
+          path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, ids, site.read_key, num_days)
+          results.merge!(get(path, params))
+        end
+        results
       end
     end
 
@@ -130,8 +135,12 @@ module Hello::DataAPI
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
-        path, params = Hello::DataAPIHelper::RequestParts.suggested_opportunities(site.id, site_element_ids, site.read_key)
-        get(path, params)
+        results = {}
+        site_element_ids.each_slice(API_MAX_SLICE) do |ids|
+          path, params = Hello::DataAPIHelper::RequestParts.suggested_opportunities(site.id, ids, site.read_key)
+          results = results.deep_merge(get(path, params)) { |key, x, y| x + y }
+        end
+        results
       end
     end
 
