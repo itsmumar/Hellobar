@@ -1334,16 +1334,14 @@ var _HB = {
     }
   },
 
-  // Delays & restarts wiggle animation before & after mousing over bar 
+  // Delays & restarts wiggle animation before & after mousing over bar
   wiggleEventListeners: function(element){
     $(element)
       .on('mouseenter', '#hellobar', function(){
-        console.log('in', $(this));
         $('#hellobar').find('.hellobar_cta').removeClass('wiggle');
       })
       .on('mouseleave', '#hellobar', function(){
         setTimeout( function(){ 
-          console.log('out');
           $('#hellobar').find('.hellobar_cta').addClass('wiggle');
         }, 2500);
       });
