@@ -1,4 +1,4 @@
-  // We use a variable called _hbq which is defined as just an empty array on the
+// We use a variable called _hbq which is defined as just an empty array on the
 // user's page in the embed script (ensuring that it is present). This allows users
 // to push function calls into the _hbq array, e.g.:
 //
@@ -646,6 +646,7 @@ var _HB = {
   // safely modified.
   prerender: function(siteElement)
   {
+    siteElement.wiggle = (siteElement.wiggle_button ? 'wiggle' : '');
     return this.sanitize(siteElement);
   },
 
@@ -726,6 +727,7 @@ var _HB = {
     }
     // Call prerender
     var siteElement = HB.prerender(siteElementCopy);
+
     HB.currentSiteElement = siteElement;
     // Convenience accessors for commonl ussed attributes
     HB.si = siteElement.id;
@@ -746,8 +748,12 @@ var _HB = {
         HB.viewed();
         // Monitor zoom scale events
         HB.hideOnZoom();
+        // Bounce in animation
         if(HB.w.className.indexOf("animated") > -1)
           setTimeout(function(){ HB.bounceIn(HB.w); }, 500);
+        // Set wiggle listeners
+        if(siteElement.wiggle_button.length > 0)
+          HB.wiggleEventListeners(HB.w);
       }, 1);
     });
   },
@@ -1326,6 +1332,19 @@ var _HB = {
     else {
       element.style.display = "none";
     }
+  },
+
+  // Delays & restarts wiggle animation before & after mousing over bar
+  wiggleEventListeners: function(element){
+    $(element)
+      .on('mouseenter', '#hellobar', function(){
+        $('#hellobar').find('.hellobar_cta').removeClass('wiggle');
+      })
+      .on('mouseleave', '#hellobar', function(){
+        setTimeout( function(){ 
+          $('#hellobar').find('.hellobar_cta').addClass('wiggle');
+        }, 2500);
+      });
   },
 
   // Create the pulldown arrow element for when a bar is hidden

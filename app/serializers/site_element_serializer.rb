@@ -11,7 +11,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :background_color, :border_color, :button_color, :link_color, :text_color,
 
     # style
-    :closable, :show_branding, :pushes_page_down, :remains_at_top, :animated,
+    :closable, :show_branding, :pushes_page_down, :remains_at_top, :animated, :wiggle_button,
 
     # other
     :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window
