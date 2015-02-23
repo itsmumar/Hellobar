@@ -44,6 +44,7 @@ module Hello
         TESTS[name] = {:values=>values, :index=>index, :weights=>weights, :name=>name}
       end
     end
+    
     # ==========================================
     # ==      REGISTER YOUR TESTS HERE        ==
     # ==========================================

@@ -1,5 +1,4 @@
 #= require_self
-#= require ./store
 
 #= require_tree ./controllers
 #= require_tree ./views
