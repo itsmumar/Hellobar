@@ -11,7 +11,7 @@ html
 
     = stylesheet_link_tag    "editor", :media => "all"
 
-    // = javascript_include_tag "editor/vendor"
+    = javascript_include_tag "editor/vendor"
 
     = csrf_meta_tags
 
@@ -27,7 +27,7 @@ html
 
     javascript:
       HB_DNT = 1;
-      HB_EDITOR_VARIATION = 'interstitial'; // get_ab_variation('Editor Test 2015-02-23')
+      HB_EDITOR_VARIATION = "#{get_ab_variation('Editor Test 2015-02-23')}";
       HB_ACCOUNT_CREATION_VARIATION = "#{get_ab_variation('Account Creation Test 2015-01-21')}";
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
 

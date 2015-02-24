@@ -1,35 +1,5 @@
 #ember-root
 
-.goal-interstitial
-  header
-    h5 Select Your Goal
-
-  .goal-wrapper
-
-    .goal-block
-      i.icon-clicks
-      h6 Drive Traffic
-      p Use your Hello Bar to drive more traffic to a specific URL
-      .button Select This Goal
-
-    .goal-block
-      i.icon-contacts
-      h6 Collect Email
-      p Use your Hello Bar to collect visitors' emails addresses
-      .button Select This Goal
-
-    .goal-block
-      i.icon-social
-      h6 Drive Traffic
-      p Use your Hello Bar to point visitors to your social media channels
-      .button Select This Goal
-
-  footer
-
-    p
-      | Select one of the goals above. You can always change this later. 
-      = link_to 'Need Help?', root_path
-
 javascript:
   var barID = #{@site_element.id};
   var siteID = #{@site.id};

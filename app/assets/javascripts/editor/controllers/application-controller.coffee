@@ -100,6 +100,13 @@ HelloBar.ApplicationController = Ember.Controller.extend
       @toggleProperty('saveSubmitted')
       true
 
+    # Subscribes to outside action used by intertitial
+    # to route ember app through selection
+
+    interstitialRouting: (subroute) ->
+      @transitionToRoute("settings.#{subroute}")
+      false
+
     closeEditor: ->
       if @get('isTemporaryUser')
         new TempUserUnsavedChangesModal().open()
