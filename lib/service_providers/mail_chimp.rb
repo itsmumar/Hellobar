@@ -78,7 +78,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def log(message)
     if message.is_a? String
-      LogglyLogger.info("#{site.url} - #{message}")
+      Rails.logger.info("#{site.url} - #{message}")
     else
       result = message
       error_count = 0
@@ -91,9 +91,9 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
       if error_count > 0
         message += "\nA sample of those errors:\n#{non_already_subscribed_errors[0...20].join("\n")}"
-        LogglyLogger.error("#{site.url} - #{message}")
+        Rails.logger.error("#{site.url} - #{message}")
       else
-        LogglyLogger.info("#{site.url} - #{message}")
+        Rails.logger.info("#{site.url} - #{message}")
       end
 
       return super message.inspect

@@ -32,6 +32,7 @@ class ServiceProviders::AWeber < ServiceProviders::Email
         # this is raised if a subscriber already belongs to the list
         log e.inspect
       end
+      sleep(2) # Aweber only allows 60 calls per minute so we rate this at 30 just to be safe 
     end
   end
 end
