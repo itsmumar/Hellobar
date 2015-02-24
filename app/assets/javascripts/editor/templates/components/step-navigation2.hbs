@@ -1,13 +1,11 @@
 {{#if next}}
   {{link-to 'Continue &#8594;' next class="button"}}
 {{else}}
-  {{#if saveSubmitted}}
-    <a disabled class="button">
-      Saving... <i class="icon-settings"></i>
-    </a>
-  {{else}}
-    <a class="button save-editor" {{action "saveSiteElement"}}>
+  <button class="button save-editor" {{bind-attr disabled=saveSubmitted}} {{action "saveSiteElement"}}>
+    {{#if saveSubmitted}}
+      Saving...
+    {{else}}
       {{doneButtonText}}
-    </a>
-  {{/if}}
+    {{/if}}
+  </button>
 {{/if}}
