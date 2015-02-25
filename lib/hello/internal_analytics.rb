@@ -44,11 +44,13 @@ module Hello
         TESTS[name] = {:values=>values, :index=>index, :weights=>weights, :name=>name}
       end
     end
+    
     # ==========================================
     # ==      REGISTER YOUR TESTS HERE        ==
     # ==========================================
     register_test("Use Cases Amount", %w{more less}, 0)
     register_test("Account Creation Test 2015-01-21", %w{original orange_header no_orange_header}, 1)
+    register_test("Editor Test 2015-02-23", %w{original interstitial navigation}, 2)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE

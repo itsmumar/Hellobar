@@ -74,17 +74,3 @@ $fontFamily       : 'Open Sans', sans-serif
 $fontWeightLight  : 400
 $fontWeightNormal : 600
 $fontWeightBold   : 700
-
-/*-----------  Animations  -----------*/
-
-@include keyframes(spin)
-  from
-    @include transform(rotate(0deg))
-  to 
-    @include transform(rotate(-360deg))
-
-@include keyframes(barberpole)
-  from
-    background-position: 0 0
-  to
-    background-position: 80px 40px

@@ -1,5 +1,4 @@
 #= require_self
-#= require ./store
 
 #= require_tree ./controllers
 #= require_tree ./views
@@ -53,3 +52,19 @@ $ ->
     setHeight()
 
   setHeight()
+
+#-----------  Goal Interstitial  -----------#
+
+$ ->
+
+  wrapper = $('.goal-interstitial')
+  buttons = $('.goal-block button')
+
+  buttons.prop('disabled', false).on 'click touch', (evt) ->
+    $(@).closest('.goal-block').addClass('selected')
+    wrapper.addClass('transitioning')
+    setTimeout ->
+      wrapper.remove()
+    , 1000
+
+    Ember.instrument('interstitial.routing', $(@).val())

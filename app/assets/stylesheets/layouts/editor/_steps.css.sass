@@ -85,34 +85,44 @@
 
   .step-navigation
     margin: 3em 0
-    @include justify-content(space-between)
-    @include align-items(center)
-    @include flex-flow(row nowrap)
-    @include display(flex)
+    text-align: center
 
-    .button
-      padding-top: 0.55em
-      padding-bottom: 0.55em
+    nav
+      margin-bottom: 1.75em
+      @include justify-content(space-between)
+      @include align-items(center)
+      @include flex-flow(row nowrap)
+      @include display(flex)
 
-    .nav-dot
-      width: 10px
-      height: 10px
-      border-radius: 1em
-      background-color: $grayLight
-      @include transition()
+      .button
+        padding-top: 0.55em
+        padding-bottom: 0.55em
 
-      &:hover
-        cursor: hover
-        background-color: $green
+      .nav-dot
+        width: 10px
+        height: 10px
+        border-radius: 1em
+        background-color: $grayLight
+        @include transition()
 
-      &.past
-        background-color: $green
+        &:hover
+          cursor: hover
+          background-color: $green
 
-      &.active
-        width: 13px
-        height: 13px
-        border: 2px solid $green
-        background-color: $white
+        &.past
+          background-color: $green
+
+        &.active
+          width: 13px
+          height: 13px
+          border: 2px solid $green
+          background-color: $white
+
+    .save-editor
+      @extend %inverted-button
+
+    &.alternative
+      text-align: left
 
   /*-----------  Step: Settings  -----------*/
 
@@ -225,15 +235,3 @@
 
       .select-wrapper
         width: 50% !important
-
-  /*-----------  Save Button  -----------*/
-
-  .save-button
-    width: 40%
-    margin: 0 auto
-    display: block
-    text-align: center
-    background-color: $red
-
-    &:hover
-      background-color: darken($red, 15%)
