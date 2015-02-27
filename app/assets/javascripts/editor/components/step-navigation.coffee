@@ -25,5 +25,4 @@ HelloBar.StepNavigationComponent = Ember.Component.extend
   actions:
 
     saveSiteElement: ->
-      console.log 'gin'
       @sendAction('action')    
