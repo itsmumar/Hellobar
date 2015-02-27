@@ -1,0 +1,28 @@
+<label>Theme</label>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=themeOptions
+    selection=model.popupThemeSelection
+    optionValuePath='content.id'
+    optionLabelPath='content.text'
+  }}
+</div>
+{{!-- ^ will likely need to be a component... --}}
+
+<label>Hello Bar branding
+  {{toggle-switch switch=model.popupIsBranded}}
+</label>
+
+<label>Animations
+  {{toggle-switch switch=model.popupIsAnimated}}
+</label>
+
+<label>Placement</label>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=placementOptions
+    selection=model.popupPlacementSelection
+    optionValuePath='content.id'
+    optionLabelPath='content.text'
+  }}
+</div>

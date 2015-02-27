@@ -9,7 +9,7 @@ HelloBar.SettingsController = Ember.Controller.extend
 
   step: 1
   prevStep: false
-  nextStep: 'style.bar'
+  nextStep: 'style'
   hasSideArrows: ( ->
       return (HB_EDITOR_VARIATION == 'navigation')
     ).property()

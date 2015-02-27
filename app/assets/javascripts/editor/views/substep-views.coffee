@@ -35,7 +35,9 @@ HelloBar.StyleBarView         = HelloBar.StepView.extend
       @promptUpgrade('show_branding', isBranded, "remove branding")
   ).observes("controller.model.show_branding")
 
-HelloBar.StylePopupView       = HelloBar.StepView.extend()
+HelloBar.StyleModalView       = HelloBar.StepView.extend()
+HelloBar.StyleSliderView      = HelloBar.StepView.extend()
+HelloBar.StyleTakeoverView    = HelloBar.StepView.extend()
 
 HelloBar.TargetingLeavingView = HelloBar.StepView.extend()
 HelloBar.TargetingScrollview  = HelloBar.StepView.extend()
