@@ -2,10 +2,10 @@ class SiteElementSerializer < ActiveModel::Serializer
   attributes :id, :site, :rule_id, :rule, :contact_list_id, :errors, :full_error_messages,
 
     # settings
-    :element_subtype, :settings, :display_when,
+    :type, :element_subtype, :settings, :display_when,
 
     # text
-    :message, :link_text, :font, :thank_you_text,
+    :headline, :link_text, :font, :thank_you_text,
 
     # colors
     :background_color, :border_color, :button_color, :link_color, :text_color,

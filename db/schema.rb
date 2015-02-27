@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150218205022) do
+ActiveRecord::Schema.define(version: 20150227180613) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -190,7 +190,7 @@ ActiveRecord::Schema.define(version: 20150218205022) do
     t.string   "link_color",                      default: "ffffff"
     t.string   "link_style",                      default: "button"
     t.string   "link_text",          limit: 5000, default: "Click Here"
-    t.string   "message",            limit: 5000, default: "Hello. Add your message here."
+    t.string   "headline",           limit: 5000, default: "Hello. Add your message here."
     t.string   "size",                            default: "large"
     t.string   "target"
     t.string   "text_color",                      default: "ffffff"
@@ -208,6 +208,8 @@ ActiveRecord::Schema.define(version: 20150218205022) do
     t.boolean  "animated",                        default: false
     t.boolean  "wiggle_button",                   default: false
     t.integer  "wordpress_bar_id"
+    t.string   "type",                            default: "Bar"
+    t.string   "caption"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

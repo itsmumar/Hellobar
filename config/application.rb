@@ -10,9 +10,10 @@ module Hellobar
   class Application < Rails::Application
     config.autoload_paths += %W(#{config.root}/app/models/condition/)
     config.autoload_paths += %W(#{config.root}/app/models/validators)
+    config.autoload_paths += %W(#{config.root}/app/models/site_elements)
     # We'd prefer to use initializers to load the files from the /lib
     # directory that we need. This way we have more control over load
-    # order and have a convenient place to put other initialization 
+    # order and have a convenient place to put other initialization
     # code (config, etc.)
     # config.autoload_paths += %W(#{config.root}/lib)
 

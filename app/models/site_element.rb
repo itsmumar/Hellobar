@@ -1,4 +1,6 @@
 class SiteElement < ActiveRecord::Base
+  TYPES = [Bar]
+
   BAR_TYPES = %w{
     traffic
     email
@@ -64,6 +66,17 @@ class SiteElement < ActiveRecord::Base
     Analytics.track(:site, self.site.id, "Created Site Element", {site_element_id: self.id, type: self.element_subtype})
   end
   after_create :track_creation
+
+  def self.all_templates
+    [].tap do |templates|
+      TYPES.each do |type|
+        BAR_TYPES.each do |subtype|
+          templates << "#{type.name.downcase}_#{subtype}"
+        end
+      end
+    end
+  end
+
   private
 
   def total_views_and_conversions
