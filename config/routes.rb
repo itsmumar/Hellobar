@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   get "/pixel.gif" => "tracking#track", :as => :tracking_pixel
 
   get '/use-cases' => 'pages#use_cases'
+  get '/amazon' => 'pages#use_cases'
   get '/terms-of-use' => 'pages#terms_of_use'
   get '/privacy-policy' => 'pages#privacy_policy'
   get '/logged_out' => 'pages#logout_confirmation', as: :logout_confirmation
