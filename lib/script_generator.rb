@@ -69,6 +69,14 @@ class ScriptGenerator < Mustache
     Hellobar::Settings[:tracking_host]
   end
 
+  def hellobar_js
+    js = File.read("#{Rails.root}/vendor/assets/javascripts/site_elements/site_element.js")
+    all_site_elements.map(&:class).uniq.each do |klass|
+      js << "\n" << File.read("#{Rails.root}/vendor/assets/javascripts/site_elements/#{klass.name.downcase}.js")
+    end
+    js
+  end
+
   def hellobar_base_js
     File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
   end

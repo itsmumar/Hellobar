@@ -641,15 +641,6 @@ var _HB = {
     return HB.templateHTML[siteElement.template_name];
   },
 
-  // Called before rendering. This lets you modify siteElement attributes.
-  // NOTE: siteElement is already a copy of the original siteElement so it can be
-  // safely modified.
-  prerender: function(siteElement)
-  {
-    siteElement.wiggle = (siteElement.wiggle_button ? 'wiggle' : '');
-    return this.sanitize(siteElement);
-  },
-
   // Takes each string value in the siteElement and escapes HTML < > chars
   // with the matching symbol
   sanitize: function(siteElement){
@@ -719,14 +710,18 @@ var _HB = {
   // Renders the siteElement
   render: function(siteElementToRender)
   {
-    var siteElementCopy = {};
+    var siteElement = {};
+
     // Make a copy of the siteElement
-    for(var k in siteElementToRender)
-    {
-      siteElementCopy[k] = siteElementToRender[k];
+    var fn = window[siteElementToRender.type];
+    if(typeof fn === 'function') {
+      siteElement = new window[siteElementToRender.type](siteElementToRender)
+    } else {
+      siteElement = new SiteElement(siteElementToRender)
     }
+
     // Call prerender
-    var siteElement = HB.prerender(siteElementCopy);
+    siteElement.prerender();
 
     HB.currentSiteElement = siteElement;
     // Convenience accessors for commonl ussed attributes
@@ -822,23 +817,9 @@ var _HB = {
     HB.w.src = "about:blank";
     HB.w.id = "hellobar_container";
     HB.w.name = "hellobar_container";
-    // Set any necessary CSS classes
-    HB.w.className = siteElement.size+(HB.t(siteElement.remains_at_top) ? " remains_at_top" : "");
-    HB.w.className += siteElement.animated ? " hellobar animated" : "";
-    HB.w.scrolling = "no";
-    HB.w.setAttribute("frameBorder", 0) // IE 9 and less
-    // Remove the pusher if it exists
-    if ( HB.p )
-      HB.p.parentNode.removeChild(HB.p);
-    HB.p = null;
-    // Create the pusher (which pushes the page down) if needed
-    if ( HB.t(siteElement.pushes_page_down) )
-    {
-      HB.p = document.createElement("div");
-      HB.p.id="hellobar_pusher";
-      HB.p.className = siteElement.size;
-      HB.injectAtTop(HB.p);
-    }
+
+    siteElement.setupIFrame(HB.w)
+
     // Check if we have any external CSS to add
     if ( HB.extCSS )
     {
@@ -859,6 +840,7 @@ var _HB = {
       var head=document.getElementsByTagName('HEAD')[0];
       head.appendChild(HB.extCSSStyle);
     }
+
     // Inject the container into the DOM
     HB.injectAtTop(HB.w);
     // Render the siteElement in the container.
@@ -878,6 +860,7 @@ var _HB = {
     // First check to see if siteElements is an array, and make it one if it is not
     if (Object.prototype.toString.call(siteElements) !== "[object Array]")
       siteElements = [siteElements];
+
     // Create the rule
     var rule = {matchType: matchType, conditions: conditions, siteElements: siteElements};
     HB.rules.push(rule);
