@@ -71,7 +71,9 @@ class ScriptGenerator < Mustache
 
   def hellobar_js
     js = File.read("#{Rails.root}/vendor/assets/javascripts/site_elements/site_element.js")
-    all_site_elements.map(&:class).uniq.each do |klass|
+
+    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
+    klasses.each do |klass|
       js << "\n" << File.read("#{Rails.root}/vendor/assets/javascripts/site_elements/#{klass.name.downcase}.js")
     end
     js
@@ -82,14 +84,14 @@ class ScriptGenerator < Mustache
   end
 
   def hellobar_container_css
-    all_site_elements.map(&:class).uniq.map { |x| site_element_css(x, true) }.join("\n")
+    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
+    CSSMin.minify(klasses.map { |x| site_element_css(x, true) }.join("\n")).to_json
   end
 
   def hellobar_css
-    file = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/common.css"
-    css = file.blank? ? "" : CSSMin.minify(file).to_json
+    css = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/common.css"
     all_site_elements.map(&:class).uniq.each { |x| css << "\n" << site_element_css(x) }
-    css
+    CSSMin.minify(css).to_json
   end
 
   def site_element_css(element_class, container=false)
@@ -98,7 +100,7 @@ class ScriptGenerator < Mustache
 
     if File.exist?(file)
       f = File.read(file)
-      return CSSMin.minify(f).to_json if !f.blank?
+      return f if !f.blank?
     end
     ""
   end

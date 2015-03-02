@@ -816,6 +816,7 @@ var _HB = {
     HB.w = document.createElement("iframe");
     HB.w.src = "about:blank";
     HB.w.id = "hellobar_container";
+    HB.w.className = siteElement.type;
     HB.w.name = "hellobar_container";
 
     siteElement.setupIFrame(HB.w)

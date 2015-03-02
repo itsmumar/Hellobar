@@ -6,8 +6,13 @@ Bar.prototype = Object.create(SiteElement.prototype);
 Bar.prototype.constructor = Bar;
 
 Bar.prototype.setupIFrame = function(iframe){
-  iframe.className = this.size+(HB.t(this.remains_at_top) ? " remains_at_top" : "");
-  iframe.className += this.animated ? " hellobar animated" : "";
+  HB.addClass(iframe, this.size)
+  HB.addClass(iframe, (HB.t(this.remains_at_top) ? " remains_at_top" : ""))
+  if(this.animated) {
+    HB.addClass(iframe, "hellobar")
+    HB.addClass(iframe, "animated")
+  }
+
   iframe.scrolling = "no";
   iframe.setAttribute("frameBorder", 0) // IE 9 and less
   // Remove the pusher if it exists

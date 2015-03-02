@@ -5,6 +5,11 @@ HelloBar.StyleController = Ember.Controller.extend
     {value: 'regular', label: 'Regular - 30px height, 14px font'}
   ]
 
+  typeOptions: [
+    {value: 'Bar', label: 'Bar'}
+    {value: 'Slider', label: 'Slider'}
+  ]
+
   #-----------  Step Settings  -----------#
 
   step: 2

@@ -14,7 +14,7 @@
       height: 100%
       position: relative
 
-      #hellobar_container
+      #hellobar_container.Bar
         width: 100%
         position: absolute
         pointer-events: none
@@ -46,21 +46,21 @@
         margin-top: 0
         position: relative !important
 
-      &.is-pushed 
+      &.is-pushed
 
-        #hellobar_container
+        #hellobar_container.Bar
           position: relative !important
 
         .preview-image
           margin-top: -0.8em
 
-    canvas 
+    canvas
       cursor: url(<%= asset_path "eyedropper.svg" %>) 0 18, auto
 
   /*-----------  Mobile State -----------*/
 
   &.is-mobile
-  
+
     .preview-wrapper
       background: $grayLightest url(<%= asset_path "iphone-bg.png" %>) center center no-repeat
 
