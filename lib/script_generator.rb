@@ -73,16 +73,26 @@ class ScriptGenerator < Mustache
     File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
   end
 
-  def hellobar_base_css
-    file = File.read "#{Rails.root}/vendor/assets/stylesheets/hellobar_script.css"
-
-    CSSMin.minify(file).to_json
+  def hellobar_container_css
+    all_site_elements.map(&:class).uniq.map { |x| site_element_css(x, true) }.join("\n")
   end
 
-  def hellobar_container_css
-    file = File.read "#{Rails.root}/vendor/assets/stylesheets/hellobar_script_container.css"
+  def hellobar_css
+    file = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/common.css"
+    css = file.blank? ? "" : CSSMin.minify(file).to_json
+    all_site_elements.map(&:class).uniq.each { |x| css << "\n" << site_element_css(x) }
+    css
+  end
 
-    CSSMin.minify(file).to_json
+  def site_element_css(element_class, container=false)
+    file = "#{Rails.root}/vendor/assets/stylesheets/site_elements/#{element_class.name.downcase}/"
+    file << (container ? "container.css" : "element.css")
+
+    if File.exist?(file)
+      f = File.read(file)
+      return CSSMin.minify(f).to_json if !f.blank?
+    end
+    ""
   end
 
   def templates
@@ -92,10 +102,6 @@ class ScriptGenerator < Mustache
     else
       site.site_elements.active.each { |se| template_names << [se.class.name.downcase, se.element_subtype]}
     end
-    puts "HERE!!!!!!!!"
-    puts options[:templates]
-    puts "======="
-    puts template_names
 
     template_names.map do |name|
       {
@@ -157,7 +163,7 @@ private
   end
 
   def site_element_settings(site_element)
-    settings = %w{ show_border background_color border_color button_color font link_color link_style link_text headline caption size target text_color texture show_branding animated wiggle_button closable}
+    settings = %w{ type show_border background_color border_color button_color font link_color link_style link_text headline caption size target text_color texture show_branding animated wiggle_button closable}
 
     lifetime_totals = @site.lifetime_totals
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
@@ -185,7 +191,7 @@ private
       contact_list_id: site_element.contact_list_id,
       target: site_element.target_segment,
       template_name: "#{site_element.class.name.downcase}_#{site_element.element_subtype}",
-      type: site_element.short_subtype,
+      subtype: site_element.short_subtype,
       settings: site_element.settings,
       hide_destination: true,
       open_in_new_window: site_element.open_in_new_window,
@@ -197,7 +203,7 @@ private
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
-  def site_elements_for_rule(rule)
+  def site_elements_for_rule(rule, hashify=true)
     site_elements = if options[:bar_id]
       [rule.site_elements.find(options[:bar_id])]
     else
@@ -208,6 +214,10 @@ private
       end
     end
 
-    site_elements.map{|element| site_element_settings(element) }
+    hashify ? site_elements.map{|element| site_element_settings(element) } : site_elements
+  end
+
+  def all_site_elements
+    site.rules.map { |r| site_elements_for_rule(r, false) }.flatten
   end
 end

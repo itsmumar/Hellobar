@@ -863,6 +863,7 @@ var _HB = {
     HB.injectAtTop(HB.w);
     // Render the siteElement in the container.
     var d = HB.w.contentWindow.document;
+    d.body.className = siteElement.type
     d.open();
     d.write((HB.css || "")+html);
     d.close();
@@ -1341,7 +1342,7 @@ var _HB = {
         $('#hellobar').find('.hellobar_cta').removeClass('wiggle');
       })
       .on('mouseleave', '#hellobar', function(){
-        setTimeout( function(){ 
+        setTimeout( function(){
           $('#hellobar').find('.hellobar_cta').addClass('wiggle');
         }, 2500);
       });

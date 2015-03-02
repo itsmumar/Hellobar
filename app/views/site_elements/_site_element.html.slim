@@ -1,7 +1,7 @@
 tr.site-element-block class="#{site_element.paused? ? 'paused' : 'active'} type-#{site_element.short_subtype}" id="site_element_#{site_element.id}" data-rule-id=rule.id
   td.color-flag style="background-color: ##{site_element.background_color}"
   td
-    p= site_element.message
+    p= site_element.headline
   td
     span.num= site_element_age(site_element)
   td

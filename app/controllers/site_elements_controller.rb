@@ -6,7 +6,7 @@ class SiteElementsController < ApplicationController
   layout :determine_layout
 
   def show
-    render :json => @site_element
+    render :json => @site_element, serializer: SiteElementSerializer
   end
 
   def index
@@ -26,7 +26,7 @@ class SiteElementsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render :json => @site_element }
+      format.json { render :json => @site_element, serializer: SiteElementSerializer }
     end
   end
 
@@ -40,18 +40,18 @@ class SiteElementsController < ApplicationController
     if @site_element.valid?
       @site_element.save!
       @site.generate_script
-      render :json => @site_element
+      render :json => @site_element, serializer: SiteElementSerializer
     else
-      render :json => @site_element, :status => :unprocessable_entity
+      render :json => @site_element, :status => :unprocessable_entity, serializer: SiteElementSerializer
     end
   end
 
   def update
     if @site_element.update_attributes(site_element_params)
       @site.generate_script
-      render :json => @site_element
+      render :json => @site_element, serializer: SiteElementSerializer
     else
-      render :json => @site_element, :status => :unprocessable_entity
+      render :json => @site_element, :status => :unprocessable_entity, serializer: SiteElementSerializer
     end
   end
 
@@ -96,6 +96,6 @@ class SiteElementsController < ApplicationController
   def site_element_params
     settings_keys = [:url, :collect_names, :url_to_tweet, :message_to_tweet, :twitter_handle, :url_to_like, :url_to_share, :url_to_plus_one, :pinterest_url, :pinterest_image_url, :pinterest_description, :pinterest_user_url, :pinterest_full_name, :buffer_url, :buffer_message, :use_location_for_url, :display_when_scroll_percentage, :display_when_scroll_element, :display_when_scroll_type, :display_when_delay, :display_when_delay_units]
 
-    params.require(:site_element).permit(:rule_id, :element_subtype, :headline, :background_color, :border_color, :button_color, :font, :link_color, :link_text, :text_color, :closable, :show_branding, :contact_list_id, :display_when, :thank_you_text, :remains_at_top, :pushes_page_down, :open_in_new_window, :size, :animated, :wiggle_button, {:settings => settings_keys})
+    params.require(:site_element).permit(:type, :rule_id, :element_subtype, :headline, :background_color, :border_color, :button_color, :font, :link_color, :link_text, :text_color, :closable, :show_branding, :contact_list_id, :display_when, :thank_you_text, :remains_at_top, :pushes_page_down, :open_in_new_window, :size, :animated, :wiggle_button, {:settings => settings_keys})
   end
 end
