@@ -1,5 +1,5 @@
 class SiteElement < ActiveRecord::Base
-  TYPES = [Bar, Slider]
+  TYPES = [Bar, Modal, Slider, Takeover]
 
   BAR_TYPES = %w{
     traffic

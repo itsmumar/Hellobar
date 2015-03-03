@@ -13,16 +13,16 @@ HelloBar.StyleController = Ember.Controller.extend
 
   routeForwarding: false
 
-  setStyle: (->
+  setType: (->
     switch @get('routeForwarding')
       when 'style.modal'
-        @set('model.element_style', 'modal')
+        @set('model.type', 'Modal')
       when 'style.slider'
-        @set('model.element_style', 'slider')
+        @set('model.type', 'Slider')
       when 'style.takeover'
-        @set('model.element_style', 'takeover')
+        @set('model.type', 'Takeover')
       else
-        @set('model.element_style', 'bar')
+        @set('model.type', 'Bar')
   ).observes('routeForwarding')
 
   actions:

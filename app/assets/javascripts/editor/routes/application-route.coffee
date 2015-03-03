@@ -62,15 +62,23 @@ HelloBar.ApplicationRoute = Ember.Route.extend
       settings.routeForwarding = 'settings.social'
     else
       switch model.element_subtype
-        when "email"
+        when 'email'
           settings.routeForwarding = 'settings.emails'
-        when "traffic"
+        when 'traffic'
           settings.routeForwarding = 'settings.click'
         else
           settings.routeForwarding = false
 
-    # !!!!!!! DO SAME FOR STYLE !!!!!!!
     style = @controllerFor('style')
+    switch model.type
+      when 'Takeover'
+        style.routeForwarding = 'style.takeover'
+      when 'Slider'
+        style.routeForwarding = 'style.slider'
+      when 'Modal'
+        style.routeForwarding = 'style.modal'
+      else
+        style.routeForwarding = if model.id then 'style.bar' else false
 
     # Subscribes to outside action used by intertitial
     # to route ember app through selection

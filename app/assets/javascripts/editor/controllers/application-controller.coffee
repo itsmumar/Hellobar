@@ -74,11 +74,11 @@ HelloBar.ApplicationController = Ember.Controller.extend
     @set("model.rule_id", parseInt(@get("rule_id")))
   ).observes("rule_id")
 
-  setModelIsDirty: ( (obj, keyName) ->
-    # Model properties are all updated when the model is initially loaded, but we only want to set this flag on any property changes
-    # that happen AFTER that initialization. By using an observesBefore here and only setting the flag if the property being changed
-    # is not null or undefined before the change, we avoid setting the flag until the property has had an initial value set.
+  # Model properties are all updated when the model is initially loaded, but we only want to set this flag on any property changes
+  # that happen AFTER that initialization. By using an observesBefore here and only setting the flag if the property being changed
+  # is not null or undefined before the change, we avoid setting the flag until the property has had an initial value set.
 
+  setModelIsDirty: ( (obj, keyName) ->
     @set("modelIsDirty", true) if !!@get(keyName)
   ).observesBefore("model.type", "model.element_subtype", "model.headline", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.closable", "model.show_branding", "model.settings.url", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url", "model.contact_list_id", "model.pushes_page_down", "model.remains_at_top", "model.animated", "model.wiggle_button")
 
