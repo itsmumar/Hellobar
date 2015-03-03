@@ -17,6 +17,8 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def lists
     @lists ||= @client.lists.list(:start => 0, :limit => 100)['data']
+  rescue Gibbon::MailChimpError => error
+    handle_error(error)
   end
 
   def email_exists?(list_id, email)
@@ -106,6 +108,9 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     case error.code
     when 250
       catch_required_merge_var_error!(error)
+    when 104
+      identity.destroy_and_notify_user if identity != nil
+      raise error
     else
       # bubble up to email_synchronizer, which will catch if it is a transient error
       raise error
