@@ -1,178 +1,90 @@
-#hellobar_pusher{
-  height: 30px;
-  position: relative;
-  overflow: hidden;
-}
-
 #hellobar {
-  min-height: 30px;
-  height: auto;
-  text-align: center;
-  width: 100%;
-  _width:expression(eval(document.body.offsetWidth-20));
   top: 0px;
   left: 0px;
+  width: 100%;
   margin: 0 0;
   padding: 0 0;
-  z-index: 5000;
-  position: absolute;
-}
-
-#hellobar.has_border {
-  border-bottom: 3px solid white;
-}
-
-#hellobar_pusher.large {
-  height: 50px;
-}
-
-#hellobar.large {
-  min-height: 50px;
   height: auto;
-  font-size: 17px;
-  font-weight: 600;
-  -webkit-font-smoothing: antialiased;
-}
-#hellobar.large span {
-  font-size: 17px;
-}
-#hellobar.large input {
-  height: 25px;
-  margin-top: 1px;
-  padding: 0 5px;
-}
-#hellobar.large a.hellobar_cta.hb-text { line-height: 48px; }
-#hellobar.large span { line-height: 25px; }
-#hellobar.large a.hellobar_arrow { top: 10px; }
-#hellobar.large a.hellobar_arrow img{ height: 29px; width: 28px;}
-#hellobar.large a.hellobar_cta.hb-button { padding: 5px 15px 2px; line-height: 45px; }
-
-#hellobar.regular {
-  font-size: 14px;
-}
-#hellobar.regular span {
-  font-size: 14px;
-  margin-top: 5px;
-}
-#hellobar.regular a { line-height: 30px; }
-#hellobar.regular a.hellobar_cta.hb-text { line-height: 28px; }
-#hellobar.regular span { line-height: 20px; margin-top: 3px;}
-#hellobar.regular a.hellobar_arrow { top: 4px; }
-#hellobar.regular a.hellobar_arrow img { height: 21px; width: 21px;}
-#hellobar.regular a.hellobar_cta.hb-button { padding: 3px 8px 1px; }
-/* span & link */
-
-#hellobar {
+  z-index: 5000;
+  min-height: 30px;
+  position: absolute;
+  text-align: center;
   white-space: normal;
+  _width:expression(eval(document.body.offsetWidth-20));
 }
-#hellobar span{
+
+#hellobar > div {
+  margin-right: 58px;
+}
+
+#hellobar span {
+  margin-top: 13px;
   margin-left: 50px;
   margin-right: 10px;
-  margin-top: 13px;
 }
 
-#hellobar.large span{
-  margin-left: 65px;
-  display: inline-block;
-}
-#hellobar.large.mobile span, #hellobar.regular.mobile span{
-  margin-left: 10px;
-}
-
-#hellobar a.hellobar_cta.hb-text {
-    padding: 6px 15px;
-    border-radius: 4px;
-    color: #fff;
-    padding-left: 5px;
-    text-decoration: underline;
-    background: none !important;
-}
-#hellobar a:hover.hellobar_cta.hb-text {}
-
-#hellobar a img{
+#hellobar a img {
   border: none;
-  padding: 0 0;
   margin: 0 0;
+  padding: 0 0;
   background-color: transparent;
 }
 
-#hellobar a.hellobar_cta.hb-button {
-    border: 1px solid;
-    border-radius: 3px;
-    position: relative;
-    margin: 0 0;
-    text-decoration: none;
-    color: #fff;
-    white-space: nowrap;
-}
-
-/* arrow */
-
-#hellobar.mobile a.hellobar_arrow {
-  display: none;
-}
-
-#hellobar a.hellobar_arrow {
-    display: block;
-    position: absolute; right: 10px; left: auto;
-    opacity: 0.3;
-}
-
-#hellobar.left a.hellobar_arrow{
-  left: 10px; right: auto;
-}
-a:hover.hellobar_arrow { opacity: 0.6; }
-
-#hellobar-shadow {
-  left: 0;
-  width: 100%;
-  height: 8px;
-  line-height: 8px;
-  background: url(https://s3.amazonaws.com/hb-assets/system/modules/hellobar/lib/sprite-8bit.png);
-  position: absolute;
-  margin-top: -3px;
-  display: none;
-}
-
-
-#hellobar.has_border #hellobar-shadow{
-  margin-top: 0px;
-}
-
-#hellobar input{
-  border: none;
+#hellobar input {
   width: 150px;
-  vertical-align: middle;
-  margin-bottom: 2px;
-  margin-top: 0px;
-
-  box-shadow: inset 1px 1px 3px #aaa;
-  border-radius: 3px;
-  margin-left: 5px;
-  padding: 0 5px;
-  outline: none;
   height: 20px;
-  box-shadow: none;
-}
-
-#hellobar.large input{
-  padding: 5px 5px;
-  margin-bottom: 0;
-  margin-top: -1px;
+  border: none;
+  outline: none;
+  padding: 0 5px;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin: 0 auto 2px 5px;
+  box-shadow: inset 1px 1px 3px #aaa;
 }
 
 #hellobar iframe {
   vertical-align: middle;
 }
 
-#hellobar.large span.social-wrapper { white-space: nowrap; margin: 0; }
-#hellobar.large span.twitter-share-button-wrapper { width: 110px; }
-#hellobar.large span.twitter-follow-button-wrapper { width: 130px; }
-#hellobar.large span.fb-like-wrapper { width: 80px; }
-#hellobar.large span.linkedin-button-wrapper { width: 105px; }
-#hellobar.large span.g-plusone-wrapper { width: 110px; }
-#hellobar.large span.pinterest-pin-button-wrapper { width: 50px; }
-#hellobar.large span.pinterest-follow-button-wrapper { width: 100px; }
+#hellobar #orig1 {
+  opacity: 0.5;
+}
+
+/*-----------  Call to Acton Button  -----------*/
+
+#hellobar a.hellobar_cta.hb-text {
+  color: #fff;
+  padding: 6px 15px;
+  padding-left: 5px;
+  border-radius: 4px;
+  text-decoration: underline;
+  background: none !important;
+}
+
+#hellobar a.hellobar_cta.hb-button {
+  color: #fff;
+  margin: 0 0;
+  border: 1px solid;
+  position: relative;
+  border-radius: 3px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+/*-----------  Shadows  -----------*/
+
+#hellobar-shadow {
+  left: 0;
+  width: 100%;
+  height: 8px;
+  display: none;
+  margin-top: -3px;
+  line-height: 8px;
+  position: absolute;
+  background: url(https://s3.amazonaws.com/hb-assets/system/modules/hellobar/lib/sprite-8bit.png);
+}
+
+/*-----------  Social Styling  -----------*/
 
 #hellobar span.fb_iframe_widget,
 #hellobar span.fb_iframe_widget span {
@@ -186,16 +98,16 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 }
 
 #hellobar span.linkedin-button {
-  line-height: normal;
-  position: relative;
   top: 5px;
   margin: 0;
+  position: relative;
+  line-height: normal;
 }
 
 #hellobar span.linkedin-button span {
-  line-height: normal;
   margin: 0;
   font-size: 100%;
+  line-height: normal;
 }
 
 #hellobar div#___plusone_0,
@@ -204,9 +116,9 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 }
 
 #hellobar span.pinterest-pin-button {
-  position: relative;
   top: 5px;
   margin: 0;
+  position: relative;
 }
 
 #hellobar span.pinterest-pin-button a {
@@ -214,9 +126,9 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 }
 
 #hellobar span.pinterest-follow-button {
-  position: relative;
   top: -2px;
   margin-left: 0;
+  position: relative;
 }
 
 #hellobar span.pinterest-follow-button a {
@@ -224,14 +136,14 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 }
 
 #hellobar a.buffer-add-button {
+  top: 4px;
   width: 55px;
   height: 20px;
-  display: inline-block;
-  overflow: hidden;
-  background-image: url(https://d389zggrogs7qo.cloudfront.net/images/buffer_button.png);
-  position: relative;
-  top: 4px;
   margin-right: 0;
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+  background-image: url(https://d389zggrogs7qo.cloudfront.net/images/buffer_button.png);
 }
 
 #hellobar a.buffer-add-button:hover {
@@ -239,137 +151,84 @@ a:hover.hellobar_arrow { opacity: 0.6; }
 }
 
 .gc-bubbleDefault, .pls-container {
-   display: none !important;
+  display: none !important;
 }
 
-#hellobar.multiline a.hellobar_cta.hb-button {
-  margin-left: 10px;
-}
-#hellobar.mobile a.hellobar_cta.hb-button {
-  margin-left: inherit;
-}
+/*-----------  Has Border  -----------*/
 
-/* Display forms not-inline on mobile */
-#hellobar.mobile #hb_email, #hellobar.mobile #hb_name {
-	width: 80%;
-  margin-right: 2.5%;
-}
-#hellobar.mobile #hb_email{
-	margin-top: 10px
+#hellobar.has_border {
+  border-bottom: 3px solid white;
 }
 
-#hellobar > div {
-  margin-right: 58px;
+#hellobar.has_border #hellobar-shadow {
+  margin-top: 0px;
 }
 
-#hellobar.multiline > div {
-  margin-right: 65px;
+/*-----------  HelloBar Arrow  -----------*/
+
+#hellobar a.hellobar_arrow {
+  left: auto;
+  right: 10px;
+  opacity: 0.3;
+  display: block;
+  position: absolute;
 }
 
-#hellobar.mobile > div {
-  margin-right: inherit;
+#hellobar a.hellobar_arrow:hover {
+  opacity: 0.6;
 }
 
-/* logos */
-#hellobar.large .hellobar-logo-wrapper img { width: 48px; height: 36px;}
-#hellobar.large .hellobar-logo-wrapper svg { transform: translateY(2px); width: 20px; }
-#hellobar.regular .hellobar-logo-wrapper img { width: 33px; height: 21px;}
-#hellobar.regular #pb2l { font-size: 10px; }
-#hellobar.regular .hellobar-logo-wrapper svg { transform: translateY(1px); width: 16px; }
-
-#hellobar.mobile .hellobar-logo-wrapper {
-  display: none;
+#hellobar.left a.hellobar_arrow {
+  left: 10px; right: auto;
 }
 
-.hellobar-logo-wrapper .animated {
-  -webkit-animation: logo-spin 10.5s ease-in-out infinite;
-  -moz-animation: logo-spin 10.5s ease-in-out infinite;
-  animation: logo-spin 10.5s ease-in-out infinite;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  -webkit-backface-visibility: visible;
-  backface-visibility: visible;
-}
-
-.hellobar-logo-wrapper .animated:hover {
-  -webkit-animation-play-state: paused;
-  -moz-animation-play-state: paused;
-  animation-play-state: paused;
-}
-
-@-webkit-keyframes logo-spin {
-  90% {
-    -webkit-transform: rotate3d(0, 1, 0, 0deg);
-  }
-
-  100% {
-      -webkit-transform: rotate3d(0, 1, 0, -180deg);
-  }
-}
-
-@-moz-keyframes logo-spin {
-  90% {
-    -moz-transform: rotate3d(0, 1, 0, 0deg);
-  }
-
-  100% {
-    -moz-transform: rotate3d(0, 1, 0, -180deg);
-  }
-}
-
-@keyframes logo-spin {
-  90% {
-    -webkit-transform: rotate3d(0, 1, 0, 0deg);
-    -moz-transform: rotate3d(0, 1, 0, 0deg);
-    -ms-transform: rotate3d(0, 1, 0, 0deg);
-    -o-transform: rotate3d(0, 1, 0, 0deg);
-    transform: rotate3d(0, 1, 0, 0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate3d(0, 1, 0, -180deg);
-    -moz-transform: rotate3d(0, 1, 0, -180deg);
-    -ms-transform: rotate3d(0, 1, 0, -180deg);
-    -o-transform: rotate3d(0, 1, 0, -180deg);
-    transform: rotate3d(0, 1, 0, -180deg);
-  }
-}
+/*-----------  Logos  -----------*/
 
 .hellobar-logo-wrapper {
-  position: absolute;
   top: 50%;
   left: 10px;
-  -webkit-transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  transform: translateY(-50%);
+  opacity: 0.7;
   font-size: 12px;
+  position: absolute;
   font-style: normal;
   font-weight: normal;
   line-height: normal;
-  opacity: 0.7;
+  
+  backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+
   transition: opacity 0.2s ease;
-  backface-visibility:hidden;
+  -o-transition: translateY(-50%);
+  -ms-transition: translateY(-50%);
+  -moz-transition: translateY(-50%);
+  -webkit-transition: translateY(-50%);
 }
 
 .hellobar-logo-wrapper .text {
+  height: 15px;
   font-size: 12px;
+  line-height: 15px;
   font-style: normal;
   font-weight: normal;
-  line-height: 15px;
-  height: 15px;
 }
 
-#hellobar.large .hellobar-logo-wrapper .text { margin-bottom: 3px; }
 
 .hellobar-logo-wrapper svg {
   fill: #fff;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .hellobar-logo-wrapper a {
@@ -394,120 +253,197 @@ a:hover.hellobar_arrow { opacity: 0.6; }
   fill: #3C3E3F;
 }
 
-#orig1 {
-  opacity: 0.5;
+/*-----------  Size: Regular  -----------*/
+
+#hellobar.regular {
+  font-size: 14px;
 }
 
-/* button wiggle */
-
-@-webkit-keyframes hb_wiggle {
-  2% {
-    -webkit-transform: translateX(3px) rotate(2deg);
-    transform: translateX(3px) rotate(2deg);
-  }
-  4% {
-    -webkit-transform: translateX(-3px) rotate(-2deg);
-    transform: translateX(-3px) rotate(-2deg);
-  }
-  6% {
-    -webkit-transform: translateX(3px) rotate(2deg);
-    transform: translateX(3px) rotate(2deg);
-  }
-  8% {
-    -webkit-transform: translateX(-3px) rotate(-2deg);
-    transform: translateX(-3px) rotate(-2deg);
-  }
-  10% {
-    -webkit-transform: translateX(2px) rotate(1deg);
-    transform: translateX(2px) rotate(1deg);
-  }
-  12% {
-    -webkit-transform: translateX(-2px) rotate(-1deg);
-    transform: translateX(-2px) rotate(-1deg);
-  }
-  14% {
-    -webkit-transform: translateX(2px) rotate(1deg);
-    transform: translateX(2px) rotate(1deg);
-  }
-  16% {
-    -webkit-transform: translateX(-2px) rotate(-1deg);
-    transform: translateX(-2px) rotate(-1deg);
-  }
-  18% {
-    -webkit-transform: translateX(1px) rotate(0);
-    transform: translateX(1px) rotate(0);
-  }
-  20% {
-    -webkit-transform: translateX(-1px) rotate(0);
-    transform: translateX(-1px) rotate(0);
-  }
+#hellobar.regular span {
+  font-size: 14px;
+  margin-top: 3px;
+  line-height: 20px;
 }
 
-@keyframes hb_wiggle {
-  2% {
-    -webkit-transform: translateX(3px) rotate(2deg);
-    transform: translateX(3px) rotate(2deg);
-  }
-  4% {
-    -webkit-transform: translateX(-3px) rotate(-2deg);
-    transform: translateX(-3px) rotate(-2deg);
-  }
-  6% {
-    -webkit-transform: translateX(3px) rotate(2deg);
-    transform: translateX(3px) rotate(2deg);
-  }
-  8% {
-    -webkit-transform: translateX(-3px) rotate(-2deg);
-    transform: translateX(-3px) rotate(-2deg);
-  }
-  10% {
-    -webkit-transform: translateX(2px) rotate(1deg);
-    transform: translateX(2px) rotate(1deg);
-  }
-  12% {
-    -webkit-transform: translateX(-2px) rotate(-1deg);
-    transform: translateX(-2px) rotate(-1deg);
-  }
-  14% {
-    -webkit-transform: translateX(2px) rotate(1deg);
-    transform: translateX(2px) rotate(1deg);
-  }
-  16% {
-    -webkit-transform: translateX(-2px) rotate(-1deg);
-    transform: translateX(-2px) rotate(-1deg);
-  }
-  18% {
-    -webkit-transform: translateX(1px) rotate(0);
-    transform: translateX(1px) rotate(0);
-  }
-  20% {
-    -webkit-transform: translateX(-1px) rotate(0);
-    transform: translateX(-1px) rotate(0);
-  }
+#hellobar.regular a {
+  line-height: 30px;
 }
+
+#hellobar.regular a.hellobar_arrow { top: 4px; }
+#hellobar.regular a.hellobar_arrow img { height: 21px; width: 21px;}
+#hellobar.regular a.hellobar_cta.hb-text { line-height: 28px; }
+#hellobar.regular a.hellobar_cta.hb-button { padding: 3px 8px 1px; }
+
+#hellobar.regular #pb2l { font-size: 10px; }
+#hellobar.regular .hellobar-logo-wrapper img { width: 33px; height: 21px;}
+#hellobar.regular .hellobar-logo-wrapper svg { transform: translateY(1px); width: 16px; }
+
+/*-----------  Size: Large  -----------*/
+
+#hellobar.large {
+  font-size: 17px;
+  min-height: 50px;
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+}
+
+#hellobar.large input {
+  height: 25px;
+  padding: 5px 5px;
+  margin-top: -1px;
+  margin-bottom: 0;
+}
+
+#hellobar.large a.hellobar_arrow { top: 10px; }
+#hellobar.large a.hellobar_arrow img{ height: 29px; width: 28px;}
+#hellobar.large a.hellobar_cta.hb-text { line-height: 48px; }
+#hellobar.large a.hellobar_cta.hb-button { padding: 5px 15px 2px; line-height: 45px; }
+
+#hellobar.large span {
+  font-size: 17px;
+  line-height: 25px;
+  margin-left: 65px;
+  display: inline-block;
+}
+
+#hellobar.large span.social-wrapper { white-space: nowrap; margin: 0; }
+#hellobar.large span.twitter-share-button-wrapper { width: 110px; }
+#hellobar.large span.twitter-follow-button-wrapper { width: 130px; }
+#hellobar.large span.fb-like-wrapper { width: 80px; }
+#hellobar.large span.linkedin-button-wrapper { width: 105px; }
+#hellobar.large span.g-plusone-wrapper { width: 110px; }
+#hellobar.large span.pinterest-pin-button-wrapper { width: 50px; }
+#hellobar.large span.pinterest-follow-button-wrapper { width: 100px; }
+
+#hellobar.large .hellobar-logo-wrapper img { width: 48px; height: 36px;}
+#hellobar.large .hellobar-logo-wrapper svg { transform: translateY(2px); width: 20px; }
+#hellobar.large .hellobar-logo-wrapper .text { margin-bottom: 3px; }
+
+/*-----------  Mobile  -----------*/
+
+#hellobar.mobile > div {
+  margin-right: inherit;
+}
+
+#hellobar.mobile span {
+  margin-left: 10px;
+}
+
+#hellobar.mobile a.hellobar_arrow {
+  display: none;
+}
+
+#hellobar.mobile a.hellobar_cta.hb-button {
+  margin-left: inherit;
+}
+
+#hellobar.mobile #hb_name, 
+#hellobar.mobile #hb_email {
+  width: 80%;
+  margin-right: 2.5%;
+}
+
+#hellobar.mobile #hb_email {
+  margin-top: 10px
+}
+
+#hellobar.mobile .hellobar-logo-wrapper {
+  display: none;
+}
+
+/*-----------  Multiline  -----------*/
+
+#hellobar.multiline > div {
+  margin-right: 65px;
+}
+
+#hellobar.multiline a.hellobar_cta.hb-button {
+  margin-left: 10px;
+}
+
+/*-----------  Animations: Logo Spin  -----------*/
+
+.hellobar-logo-wrapper .animated {
+  backface-visibility: visible;
+  -o-backface-visibility: visible;
+  -ms-backface-visibility: visible;
+  -moz-backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+
+  animation: logo-spin 10.5s ease-in-out infinite;
+  -o-animation: logo-spin 10.5s ease-in-out infinite;
+  -ms-animation: logo-spin 10.5s ease-in-out infinite;
+  -moz-animation: logo-spin 10.5s ease-in-out infinite;
+  -webkit-animation: logo-spin 10.5s ease-in-out infinite;
+
+  transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.hellobar-logo-wrapper .animated:hover {
+  animation-play-state: paused;
+  -o-animation-play-state: paused;
+  -ms-animation-play-state: paused;
+  -moz-animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+}
+
+/*-----------  Animations: Button Wiggle  -----------*/
 
 #hellobar a.hellobar_cta.wiggle {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
   -moz-osx-font-smoothing: grayscale;
 
-  -webkit-animation-name: hb_wiggle;
-  animation-name: hb_wiggle;
-  -webkit-animation-duration: 5s;
-  animation-duration: 5s;
-  -webkit-animation-timing-function: linear;
-  animation-timing-function: linear;
-  -webkit-animation-iteration-count: infinite;
-  animation-iteration-count: infinite;
+  backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
-  -webkit-animation-play-state: running;
+  transform: translateZ(0);
+  -o-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+
+  animation-name: wiggle;
+  -o-animation-name: wiggle;
+  -ms-animation-name: wiggle;
+  -moz-animation-name: wiggle;
+  -webkit-animation-name: wiggle;
+
+  animation-duration: 5s;
+  -o-animation-duration: 5s;
+  -ms-animation-duration: 5s;
+  -moz-animation-duration: 5s;
+  -webkit-animation-duration: 5s;
+
+  animation-timing-function: linear;
+  -o-animation-timing-function: linear;
+  -ms-animation-timing-function: linear;
+  -moz-animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+
+  animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  -ms-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+
   animation-play-state: running;
+  -o-animation-play-state: running;
+  -ms-animation-play-state: running;
+  -moz-animation-play-state: running;
+  -webkit-animation-play-state: running;
 }
 
 #hellobar:hover a.hellobar_cta.wiggle {
-  -webkit-animation-play-state: paused;
   animation-play-state: paused;
+  -o-animation-play-state: paused;
+  -ms-animation-play-state: paused;
+  -moz-animation-play-state: paused;
+  -webkit-animation-play-state: paused;
 }
