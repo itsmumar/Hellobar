@@ -55,11 +55,11 @@
 
 /*-----------  Sticky  -----------*/
 
-#hellobar_container.Bar.remains_at_top{
-  top:0;
-  position:fixed;
-  _position:absolute;
-  _top:expression(eval(document.body.scrollTop));
+#hellobar_container.Bar.remains_at_top {
+  top: 0;
+  position: fixed;
+  _position: absolute;
+  _top: expression(eval(document.body.scrollTop));
 }
 
 /*-----------  Animations  -----------*/

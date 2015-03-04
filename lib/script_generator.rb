@@ -88,7 +88,7 @@ class ScriptGenerator < Mustache
     CSSMin.minify(klasses.map { |x| site_element_css(x, true) }.join("\n")).to_json
   end
 
-  def hellobar_css
+  def hellobar_element_css
     css = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/common.css"
     all_site_elements.map(&:class).uniq.each { |x| css << "\n" << site_element_css(x) }
     CSSMin.minify(css).to_json
