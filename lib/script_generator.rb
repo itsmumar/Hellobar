@@ -84,8 +84,10 @@ class ScriptGenerator < Mustache
   end
 
   def hellobar_container_css
+    css = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/container_common.css"
     klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
-    CSSMin.minify(klasses.map { |x| site_element_css(x, true) }.join("\n")).to_json
+    css << "\n" << klasses.map { |x| site_element_css(x, true) }.join("\n")
+    CSSMin.minify(css).to_json
   end
 
   def hellobar_element_css
