@@ -18,10 +18,10 @@ class Hello::WordpressBar < Hello::WordpressModel
       }
     }
 
-    params[:background_color] = background_color.gsub("#", "") if background_color.present?
-    params[:text_color] = text_color.gsub("#", "") if text_color.present?
-    params[:link_color] = link_color.gsub("#", "") if link_color.present?
-    params[:border_color] = border_color.gsub("#", "") if border_color.present?
+    params[:background_color] = standardize_color(background_color) if background_color.present?
+    params[:text_color] = standardize_color(text_color) if text_color.present?
+    params[:link_color] = standardize_color(link_color) if link_color.present?
+    params[:border_color] = standardize_color(border_color) if border_color.present?
     params[:button_color] = "e8e7e9"
 
     SiteElement.create!(params)
@@ -60,6 +60,15 @@ class Hello::WordpressBar < Hello::WordpressModel
 
   def border_color
     hellobar_meta["meta"]["bordercolor"]
+  end
+
+  def standardize_color(color)
+    color = color.gsub("#", "")
+    if color.length == 3
+      color.scan(/\w/).map{ |x| x * 2 }.join
+    else
+      color
+    end
   end
 
   def link_url
