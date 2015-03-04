@@ -1,4 +1,10 @@
 class Users::SessionsController < Devise::SessionsController
+  TEMP_MIGRATION_USERS = [
+    "sarangan2@gmail.com",
+    "tyler@ripoffreport.com",
+    "jozef.simon@pelikan.sk"
+  ]
+
   layout 'static'
 
   def create
@@ -6,7 +12,7 @@ class Users::SessionsController < Devise::SessionsController
 
     if Hello::WordpressUser.email_exists?(email) && User.where(email: email).first.nil?
       # user has a 1.0 account, but NOT a 3.0 account
-      if current_admin
+      if current_admin || TEMP_MIGRATION_USERS.include?(email)
         password = params[:user].try(:[], :password)
 
         if wordpress_user = Hello::WordpressUser.authenticate(email, password, !!current_admin)
@@ -28,5 +34,5 @@ class Users::SessionsController < Devise::SessionsController
       return return_val
     end
   end
-  
+
 end
