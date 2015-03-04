@@ -14,4 +14,4 @@ HelloBar.ColorsController = Ember.Controller.extend
   recentColors: ['ffffff', 'ffffff', 'ffffff', 'ffffff']
 
   focusedColor: Ember.computed.alias('controllers.application.focusedColor')
-  showAdditionalColors: Ember.computed.equal('model.element_style', 'bar')
+  showAdditionalColors: Ember.computed.equal('model.type', 'Bar')
