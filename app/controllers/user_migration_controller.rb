@@ -27,14 +27,20 @@ class UserMigrationController < ApplicationController
 
           SiteMembership.create!(site: site, user: user)
 
+          if current_wordpress_user.is_pro_user?
+            subscription = Subscription::Pro.new(schedule: "monthly")
+            site.change_subscription(subscription, nil, 90)
+          elsif site_hash[:bar_ids].count >= 10
+            site.change_stubscription(Subscription::FreePlus.new(schedule: "monthly"))
+          else
+            site.change_subscription(Subscription::Free.new(schedule: "monthly"))
+          end
+
           site_hash[:bar_ids].each do |id|
             if bar = load_wordpress_bar(id)
               bar.convert_to_site_element!(site.rules.first)
             end
           end
-
-          sub = site.site_elements.count >= 10 ? Subscription::FreePlus.new(schedule: "monthly") : Subscription::Free.new(schedule: "monthly")
-          site.change_subscription(sub)
         end
       end
 

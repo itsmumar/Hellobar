@@ -39,3 +39,4 @@ end
 require_relative "./wordpress_bar"
 require_relative "./wordpress_bar_meta"
 require_relative "./wordpress_user"
+require_relative "./wordpress_user_meta"
