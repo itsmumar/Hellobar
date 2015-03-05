@@ -52,7 +52,7 @@
 
 /*-----------  Call to Acton Button  -----------*/
 
-#hellobar_bar a.hellobar_cta.hb-text {
+#hellobar_bar .hb-cta-style-text {
   color: #fff;
   padding: 6px 15px;
   padding-left: 5px;
@@ -61,7 +61,7 @@
   background: none !important;
 }
 
-#hellobar_bar a.hellobar_cta.hb-button {
+#hellobar_bar .hb-cta-style-button {
   margin: 0 0;
   display: inline-block;
 }
@@ -144,7 +144,7 @@
 
 /*-----------  HelloBar Arrow  -----------*/
 
-#hellobar_bar a.hellobar_arrow {
+#hellobar_bar .hb-arrow {
   left: auto;
   right: 10px;
   opacity: 0.3;
@@ -152,11 +152,11 @@
   position: absolute;
 }
 
-#hellobar_bar a.hellobar_arrow:hover {
+#hellobar_bar .hb-arrow:hover {
   opacity: 0.6;
 }
 
-#hellobar_bar.left a.hellobar_arrow {
+#hellobar_bar.left .hb-arrow {
   left: 10px; right: auto;
 }
 

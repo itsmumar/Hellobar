@@ -1,6 +1,4 @@
-#hellobar_slider {
-  bottom: 0;
-  width: 100%;
-  padding: 1.33em;
-  position: absolute;
+* {
+  color: green !important;
+  background-color: red !important;
 }

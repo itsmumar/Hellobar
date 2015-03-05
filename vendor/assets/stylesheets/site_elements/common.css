@@ -67,9 +67,9 @@ html, body {
 
 /*-----------  Colored Header  -----------*/
 
-#hellobar_modal header,
-#hellobar_slider header,
-#hellobar_takeover header {
+#hellobar_modal .hb-header,
+#hellobar_slider .hb-header,
+#hellobar_takeover .hb-header {
   top: 0;
   left: 0;
   width: 100%;
@@ -77,8 +77,8 @@ html, body {
   position: absolute;
 }
 
-#hellobar_modal header,
-#hellobar_slider header {
+#hellobar_modal .hb-header,
+#hellobar_slider .hb-header {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
@@ -109,7 +109,7 @@ html, body {
 
 /*-----------  Call to Acton Button  -----------*/
 
-a.hellobar_cta.hb-button {
+.hb-cta-style-button {
   opacity: 1;
   color: #fff;
   display: block;
@@ -130,7 +130,7 @@ a.hellobar_cta.hb-button {
   -webkit-transition: all 0.25s ease;
 }
 
-a.hellobar_cta.hb-button:hover {
+.hb-cta-style-button:hover {
   opacity: 0.9;
 }
 
@@ -153,7 +153,7 @@ a.hellobar_cta.hb-button:hover {
 
 /*-----------  Logos  -----------*/
 
-.hellobar-logo-wrapper {
+.hb-logo-wrapper {
   top: 50%;
   left: 10px;
   opacity: 0.7;
@@ -182,7 +182,7 @@ a.hellobar_cta.hb-button:hover {
   -webkit-transition: translateY(-50%);
 }
 
-.hellobar-logo-wrapper .text {
+.hb-logo-wrapper .hb-logo-text {
   height: 15px;
   font-size: 12px;
   line-height: 15px;
@@ -191,7 +191,7 @@ a.hellobar_cta.hb-button:hover {
 }
 
 
-.hellobar-logo-wrapper svg {
+.hb-logo-wrapper svg {
   fill: #fff;
   backface-visibility: hidden;
   -o-backface-visibility: hidden;
@@ -200,25 +200,25 @@ a.hellobar_cta.hb-button:hover {
   -webkit-backface-visibility: hidden;
 }
 
-.hellobar-logo-wrapper a {
+.hb-logo-wrapper a {
   color: white;
   text-decoration: none;
 }
 
-.hellobar-logo-wrapper:hover {
+.hb-logo-wrapper:hover {
   opacity: 1;
 }
 
-.hellobar-logo-wrapper .line {
+.hb-logo-wrapper .hb-logo-line {
   text-align: left;
   line-height: 15px;
 }
 
-.hellobar-logo-wrapper.hellobar-inverted a {
+.hb-logo-wrapper.hb-logo-inverted a {
   color: #3C3E3F;
 }
 
-.hellobar-logo-wrapper.hellobar-inverted svg {
+.hb-logo-wrapperr.hb-logo-inverted svg {
   fill: #3C3E3F;
 }
 

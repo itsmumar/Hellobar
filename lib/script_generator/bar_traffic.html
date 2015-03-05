@@ -4,7 +4,7 @@
     <div class="hb-secondary-text">{{siteElement.caption}}</div>
   </div>
 
-  <a onclick="window.parent.HB.trackClick(this); return {{HB.t(siteElement.open_in_new_window) ? 'true' : 'false'}};" class="hellobar_cta hb-{{siteElement.link_style}} {{siteElement.wiggle}}" href="{{siteElement.settings.url}}" {{HB.t(siteElement.open_in_new_window) ? 'target=_blank' : 'target=_parent'}} style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.button_color}}; border-color: #{{siteElement.button_color}}">
+  <a class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}" onclick="window.parent.HB.trackClick(this); return {{HB.t(siteElement.open_in_new_window) ? 'true' : 'false'}};"  href="{{siteElement.settings.url}}" {{HB.t(siteElement.open_in_new_window) ? 'target=_blank' : 'target=_parent'}} style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.button_color}}; border-color: #{{siteElement.button_color}}">
     {{siteElement.link_text}}
   </a>
 </div>

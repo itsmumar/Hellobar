@@ -4,7 +4,7 @@
     <div class="hb-secondary-text">{{siteElement.caption}}</div>
   </div>
   
-  <a onclick="window.parent.HB.submitEmail(document.getElementById('hb_email'), document.getElementById('hb_name'), document.getElementById('hb_msg_container'), {{siteElement.thank_you_text}}); return false" href="#" class="hellobar_cta hb-{{siteElement.link_style}} {{siteElement.wiggle}}" style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.button_color}}; border-color: #{{siteElement.button_color}}">
+  <a class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}" onclick="window.parent.HB.submitEmail(document.getElementById('hb_email'), document.getElementById('hb_name'), document.getElementById('hb_msg_container'), {{siteElement.thank_you_text}}); return false" href="#" style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.button_color}}; border-color: #{{siteElement.button_color}}">
     {{siteElement.link_text}}
   </a>
 </div>
