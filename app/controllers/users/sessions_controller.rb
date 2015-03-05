@@ -1,8 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
   TEMP_MIGRATION_USERS = [
-    "sarangan2@gmail.com",
-    "tyler@ripoffreport.com",
-    "jozef.simon@pelikan.sk"
+    "sarangan2@gmail.com"
   ]
 
   layout 'static'
