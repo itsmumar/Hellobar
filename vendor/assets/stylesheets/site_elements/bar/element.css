@@ -1,4 +1,4 @@
-#hellobar {
+#hellobar_bar {
   top: 0px;
   left: 0px;
   width: 100%;
@@ -13,24 +13,24 @@
   _width:expression(eval(document.body.offsetWidth-20));
 }
 
-#hellobar > div {
+#hellobar_bar > div {
   margin-right: 58px;
 }
 
-#hellobar span {
+#hellobar_bar span {
   margin-top: 13px;
   margin-left: 50px;
   margin-right: 10px;
 }
 
-#hellobar a img {
+#hellobar_bar a img {
   border: none;
   margin: 0 0;
   padding: 0 0;
   background-color: transparent;
 }
 
-#hellobar input {
+#hellobar_bar input {
   width: 150px;
   height: 20px;
   border: none;
@@ -42,17 +42,17 @@
   box-shadow: inset 1px 1px 3px #aaa;
 }
 
-#hellobar iframe {
+#hellobar_bar iframe {
   vertical-align: middle;
 }
 
-#hellobar #orig1 {
+#hellobar_bar #orig1 {
   opacity: 0.5;
 }
 
 /*-----------  Call to Acton Button  -----------*/
 
-#hellobar a.hellobar_cta.hb-text {
+#hellobar_bar a.hellobar_cta.hb-text {
   color: #fff;
   padding: 6px 15px;
   padding-left: 5px;
@@ -61,81 +61,63 @@
   background: none !important;
 }
 
-#hellobar a.hellobar_cta.hb-button {
-  color: #fff;
+#hellobar_bar a.hellobar_cta.hb-button {
   margin: 0 0;
-  border: 1px solid;
-  position: relative;
-  border-radius: 3px;
-  white-space: nowrap;
-  text-decoration: none;
-}
-
-/*-----------  Shadows  -----------*/
-
-#hellobar-shadow {
-  left: 0;
-  width: 100%;
-  height: 8px;
-  display: none;
-  margin-top: -3px;
-  line-height: 8px;
-  position: absolute;
-  background: url(https://s3.amazonaws.com/hb-assets/system/modules/hellobar/lib/sprite-8bit.png);
+  display: inline-block;
 }
 
 /*-----------  Social Styling  -----------*/
 
-#hellobar span.fb_iframe_widget,
-#hellobar span.fb_iframe_widget span {
+#hellobar_bar span.fb_iframe_widget,
+#hellobar_bar span.fb_iframe_widget span {
   margin: 0;
   overflow: hidden
 }
 
-#hellobar span.fb_iframe_widget {
+#hellobar_bar span.fb_iframe_widget {
   position: relative;
   top: 4px;
 }
 
-#hellobar span.linkedin-button {
+#hellobar_bar span.linkedin-button {
   top: 5px;
   margin: 0;
   position: relative;
   line-height: normal;
 }
 
-#hellobar span.linkedin-button span {
+#hellobar_bar span.linkedin-button span {
   margin: 0;
   font-size: 100%;
   line-height: normal;
 }
 
-#hellobar div#___plusone_0,
-#hellobar div#___follow_0 {
+#hellobar_bar div#___plusone_0,
+#hellobar_bar div#___follow_0 {
   vertical-align: middle !important;
 }
 
-#hellobar span.pinterest-pin-button {
+#hellobar_bar span.pinterest-pin-button {
   top: 5px;
   margin: 0;
   position: relative;
 }
 
-#hellobar span.pinterest-pin-button a {
+#hellobar_bar span.pinterest-pin-button a {
   margin: 0;
 }
 
-#hellobar span.pinterest-follow-button {
+#hellobar_bar span.pinterest-follow-button {
   top: -2px;
   margin-left: 0;
   position: relative;
 }
 
-#hellobar span.pinterest-follow-button a {
+#hellobar_bar span.pinterest-follow-button a {
   display: none;
 }
 
-#hellobar a.buffer-add-button {
+#hellobar_bar a.buffer-add-button {
   top: 4px;
   width: 55px;
   height: 20px;
@@ -146,7 +128,7 @@
   background-image: url(https://d389zggrogs7qo.cloudfront.net/images/buffer_button.png);
 }
 
-#hellobar a.buffer-add-button:hover {
+#hellobar_bar a.buffer-add-button:hover {
   background-position: 0 -20px;
 }
 
@@ -156,17 +138,13 @@
 
 /*-----------  Has Border  -----------*/
 
-#hellobar.has_border {
+#hellobar_bar.has_border {
   border-bottom: 3px solid white;
-}
-
-#hellobar.has_border #hellobar-shadow {
-  margin-top: 0px;
 }
 
 /*-----------  HelloBar Arrow  -----------*/
 
-#hellobar a.hellobar_arrow {
+#hellobar_bar a.hellobar_arrow {
   left: auto;
   right: 10px;
   opacity: 0.3;
@@ -174,190 +152,119 @@
   position: absolute;
 }
 
-#hellobar a.hellobar_arrow:hover {
+#hellobar_bar a.hellobar_arrow:hover {
   opacity: 0.6;
 }
 
-#hellobar.left a.hellobar_arrow {
+#hellobar_bar.left a.hellobar_arrow {
   left: 10px; right: auto;
-}
-
-/*-----------  Logos  -----------*/
-
-.hellobar-logo-wrapper {
-  top: 50%;
-  left: 10px;
-  opacity: 0.7;
-  font-size: 12px;
-  position: absolute;
-  font-style: normal;
-  font-weight: normal;
-  line-height: normal;
-  
-  backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
-  transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
-
-  transition: opacity 0.2s ease;
-  -o-transition: translateY(-50%);
-  -ms-transition: translateY(-50%);
-  -moz-transition: translateY(-50%);
-  -webkit-transition: translateY(-50%);
-}
-
-.hellobar-logo-wrapper .text {
-  height: 15px;
-  font-size: 12px;
-  line-height: 15px;
-  font-style: normal;
-  font-weight: normal;
-}
-
-
-.hellobar-logo-wrapper svg {
-  fill: #fff;
-  backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.hellobar-logo-wrapper a {
-  color: white;
-  text-decoration: none;
-}
-
-.hellobar-logo-wrapper:hover {
-  opacity: 1;
-}
-
-.hellobar-logo-wrapper .line {
-  text-align: left;
-  line-height: 15px;
-}
-
-.hellobar-logo-wrapper.hellobar-inverted a {
-  color: #3C3E3F;
-}
-
-.hellobar-logo-wrapper.hellobar-inverted svg {
-  fill: #3C3E3F;
 }
 
 /*-----------  Size: Regular  -----------*/
 
-#hellobar.regular {
+#hellobar_bar.regular {
   font-size: 14px;
 }
 
-#hellobar.regular span {
+#hellobar_bar.regular span {
   font-size: 14px;
   margin-top: 3px;
   line-height: 20px;
 }
 
-#hellobar.regular a {
+#hellobar_bar.regular a {
   line-height: 30px;
 }
 
-#hellobar.regular a.hellobar_arrow { top: 4px; }
-#hellobar.regular a.hellobar_arrow img { height: 21px; width: 21px;}
-#hellobar.regular a.hellobar_cta.hb-text { line-height: 28px; }
-#hellobar.regular a.hellobar_cta.hb-button { padding: 3px 8px 1px; }
+#hellobar_bar.regular a.hellobar_arrow { top: 4px; }
+#hellobar_bar.regular a.hellobar_arrow img { height: 21px; width: 21px;}
+#hellobar_bar.regular a.hellobar_cta.hb-text { line-height: 28px; }
+#hellobar_bar.regular a.hellobar_cta.hb-button { padding: 3px 8px 1px; }
 
-#hellobar.regular #pb2l { font-size: 10px; }
-#hellobar.regular .hellobar-logo-wrapper img { width: 33px; height: 21px;}
-#hellobar.regular .hellobar-logo-wrapper svg { transform: translateY(1px); width: 16px; }
+#hellobar_bar.regular #pb2l { font-size: 10px; }
+#hellobar_bar.regular .hellobar-logo-wrapper img { width: 33px; height: 21px;}
+#hellobar_bar.regular .hellobar-logo-wrapper svg { transform: translateY(1px); width: 16px; }
 
 /*-----------  Size: Large  -----------*/
 
-#hellobar.large {
+#hellobar_bar.large {
   font-size: 17px;
   min-height: 50px;
   font-weight: 600;
   -webkit-font-smoothing: antialiased;
 }
 
-#hellobar.large input {
+#hellobar_bar.large input {
   height: 25px;
   padding: 5px 5px;
   margin-top: -1px;
   margin-bottom: 0;
 }
 
-#hellobar.large a.hellobar_arrow { top: 10px; }
-#hellobar.large a.hellobar_arrow img{ height: 29px; width: 28px;}
-#hellobar.large a.hellobar_cta.hb-text { line-height: 48px; }
-#hellobar.large a.hellobar_cta.hb-button { padding: 5px 15px 2px; line-height: 45px; }
+#hellobar_bar.large a.hellobar_arrow { top: 10px; }
+#hellobar_bar.large a.hellobar_arrow img{ height: 29px; width: 28px;}
+#hellobar_bar.large a.hellobar_cta.hb-text { line-height: 48px; }
+#hellobar_bar.large a.hellobar_cta.hb-button { padding: 5px 15px 2px; line-height: 45px; }
 
-#hellobar.large span {
+#hellobar_bar.large span {
   font-size: 17px;
   line-height: 25px;
   margin-left: 65px;
   display: inline-block;
 }
 
-#hellobar.large span.social-wrapper { white-space: nowrap; margin: 0; }
-#hellobar.large span.twitter-share-button-wrapper { width: 110px; }
-#hellobar.large span.twitter-follow-button-wrapper { width: 130px; }
-#hellobar.large span.fb-like-wrapper { width: 80px; }
-#hellobar.large span.linkedin-button-wrapper { width: 105px; }
-#hellobar.large span.g-plusone-wrapper { width: 110px; }
-#hellobar.large span.pinterest-pin-button-wrapper { width: 50px; }
-#hellobar.large span.pinterest-follow-button-wrapper { width: 100px; }
+#hellobar_bar.large span.social-wrapper { white-space: nowrap; margin: 0; }
+#hellobar_bar.large span.twitter-share-button-wrapper { width: 110px; }
+#hellobar_bar.large span.twitter-follow-button-wrapper { width: 130px; }
+#hellobar_bar.large span.fb-like-wrapper { width: 80px; }
+#hellobar_bar.large span.linkedin-button-wrapper { width: 105px; }
+#hellobar_bar.large span.g-plusone-wrapper { width: 110px; }
+#hellobar_bar.large span.pinterest-pin-button-wrapper { width: 50px; }
+#hellobar_bar.large span.pinterest-follow-button-wrapper { width: 100px; }
 
-#hellobar.large .hellobar-logo-wrapper img { width: 48px; height: 36px;}
-#hellobar.large .hellobar-logo-wrapper svg { transform: translateY(2px); width: 20px; }
-#hellobar.large .hellobar-logo-wrapper .text { margin-bottom: 3px; }
+#hellobar_bar.large .hellobar-logo-wrapper img { width: 48px; height: 36px;}
+#hellobar_bar.large .hellobar-logo-wrapper svg { transform: translateY(2px); width: 20px; }
+#hellobar_bar.large .hellobar-logo-wrapper .text { margin-bottom: 3px; }
 
 /*-----------  Mobile  -----------*/
 
-#hellobar.mobile > div {
+#hellobar_bar.mobile > div {
   margin-right: inherit;
 }
 
-#hellobar.mobile span {
+#hellobar_bar.mobile span {
   margin-left: 10px;
 }
 
-#hellobar.mobile a.hellobar_arrow {
+#hellobar_bar.mobile a.hellobar_arrow {
   display: none;
 }
 
-#hellobar.mobile a.hellobar_cta.hb-button {
+#hellobar_bar.mobile a.hellobar_cta.hb-button {
   margin-left: inherit;
 }
 
-#hellobar.mobile #hb_name, 
-#hellobar.mobile #hb_email {
+#hellobar_bar.mobile #hb_name, 
+#hellobar_bar.mobile #hb_email {
   width: 80%;
   margin-right: 2.5%;
 }
 
-#hellobar.mobile #hb_email {
+#hellobar_bar.mobile #hb_email {
   margin-top: 10px
 }
 
-#hellobar.mobile .hellobar-logo-wrapper {
+#hellobar_bar.mobile .hellobar-logo-wrapper {
   display: none;
 }
 
 /*-----------  Multiline  -----------*/
 
-#hellobar.multiline > div {
+#hellobar_bar.multiline > div {
   margin-right: 65px;
 }
 
-#hellobar.multiline a.hellobar_cta.hb-button {
+#hellobar_bar.multiline a.hellobar_cta.hb-button {
   margin-left: 10px;
 }
 
@@ -393,7 +300,7 @@
 
 /*-----------  Animations: Button Wiggle  -----------*/
 
-#hellobar a.hellobar_cta.wiggle {
+#hellobar_bar a.hellobar_cta.wiggle {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
   -moz-osx-font-smoothing: grayscale;
 
@@ -440,7 +347,7 @@
   -webkit-animation-play-state: running;
 }
 
-#hellobar:hover a.hellobar_cta.wiggle {
+#hellobar_bar:hover a.hellobar_cta.wiggle {
   animation-play-state: paused;
   -o-animation-play-state: paused;
   -ms-animation-play-state: paused;

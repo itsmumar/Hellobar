@@ -1,7 +1,8 @@
-<div id="hb_msg_container">
-  <span>
-    {{siteElement.headline}}
-  </span>
+<div class="hb-content-wrapper">
+  <div class="hb-text-wrapper">
+    <div class="hb-headline-text">{{siteElement.headline}}</div>
+    <div class="hb-secondary-text">{{siteElement.caption}}</div>
+  </div>
 
   {{siteElement.additionalHtml.replace(/&lt;/g, '<').replace(/&gt;/g, '>')}}
 </div>

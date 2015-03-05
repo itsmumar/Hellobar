@@ -713,9 +713,9 @@ var _HB = {
     var siteElement = {};
 
     // Make a copy of the siteElement
-    var fn = window[siteElementToRender.type];
+    var fn = window[siteElementToRender.type + 'Element'];
     if(typeof fn === 'function') {
-      siteElement = new window[siteElementToRender.type](siteElementToRender)
+      siteElement = new window[siteElementToRender.type + 'Element'](siteElementToRender)
     } else {
       siteElement = new SiteElement(siteElementToRender)
     }

@@ -1,4 +1,6 @@
-#hellobar_slider div {
+#hellobar_slider {
+  bottom: 0;
   width: 100%;
-  height: 100%;
+  padding: 1.33em;
+  position: absolute;
 }

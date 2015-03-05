@@ -1,12 +1,10 @@
 #hellobar_container {
+  margin: 0 0;
+  padding: 0 0;
   border: none;
   z-index: 17000;
   overflow: hidden;
   position: absolute;
-}
-
-#hellobar_container body {
-  margin: 0;
 }
 
 /*-----------  Spacing Pusher  -----------*/

@@ -1,6 +1,6 @@
-function Slider(props) {
+function SliderElement(props) {
   SiteElement.call(this, props);
 };
 
-Slider.prototype = Object.create(SiteElement.prototype);
-Slider.prototype.constructor = Slider;
+SliderElement.prototype = Object.create(SiteElement.prototype);
+SliderElement.prototype.constructor = SliderElement;

@@ -1,11 +1,11 @@
-function Bar(props) {
+function BarElement(props) {
   SiteElement.call(this, props);
 };
 
-Bar.prototype = Object.create(SiteElement.prototype);
-Bar.prototype.constructor = Bar;
+BarElement.prototype = Object.create(SiteElement.prototype);
+BarElement.prototype.constructor = BarElement;
 
-Bar.prototype.setupIFrame = function(iframe){
+BarElement.prototype.setupIFrame = function(iframe){
   HB.addClass(iframe, this.size)
   HB.addClass(iframe, (HB.t(this.remains_at_top) ? " remains_at_top" : ""))
   if(this.animated) {
@@ -29,7 +29,7 @@ Bar.prototype.setupIFrame = function(iframe){
   }
 };
 
-Bar.prototype.prerender = function(){
+BarElement.prototype.prerender = function(){
   this.wiggle = (this.wiggle_button ? 'wiggle' : '');
   SiteElement.prototype.prerender.call(this);
 };
