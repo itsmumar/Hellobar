@@ -5,7 +5,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :type, :element_subtype, :settings, :display_when,
 
     # text
-    :headline, :link_text, :font, :thank_you_text,
+    :headline, :caption, :link_text, :font, :thank_you_text,
 
     # colors
     :background_color, :border_color, :button_color, :link_color, :text_color,
