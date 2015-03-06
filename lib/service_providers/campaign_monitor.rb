@@ -11,7 +11,10 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
   end
 
   def lists
-    @client.lists.map{|l| {'id' => l['ListID'], 'name' => l['Name']}}
+    @client.clients.map do |cl|
+      client = CreateSend::Client.new(@auth, cl.ClientID)
+      client.lists.map{|l| {'id' => l['ListID'], 'name' => l['Name']}}
+    end.flatten
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
@@ -33,8 +36,7 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
       :refresh_token => identity.credentials['refresh_token']
     }
 
-    cs = CreateSend::CreateSend.new(@auth)
-    @client = CreateSend::Client.new(@auth, cs.clients.first.ClientID)
+    @client = CreateSend::CreateSend.new(@auth)
   rescue CreateSend::ExpiredOAuthToken => e
     raise(e) if retries <= 0
 
