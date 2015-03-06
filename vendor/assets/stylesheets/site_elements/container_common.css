@@ -10,11 +10,11 @@
 /*-----------  Animations  -----------*/
 
 #hellobar_container.animated {
-  animation-duration: 0.67s;
-  -o-animation-duration: 0.67s;
-  -ms-animation-duration: 0.67s;
-  -moz-animation-duration: 0.67s;
-  -webkit-animation-duration: 0.67s;
+  animation-duration: 0.25s;
+  -o-animation-duration: 0.25s;
+  -ms-animation-duration: 0.25s;
+  -moz-animation-duration: 0.25s;
+  -webkit-animation-duration: 0.25s;
 
   animation-fill-mode: forwards;
   -o-animation-fill-mode: forwards;
@@ -382,5 +382,113 @@
   }
   100% {
     opacity: 0
+  }
+}
+
+/*-----------  Animations: FadeInDown  -----------*/
+
+@keyframes fadeInDown {
+  0%, 100% {
+    transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    -ms-transition-timing-function: ease-in;
+    -moz-transition-timing-function: ease-in;
+    -webkit-transition-timing-function: ease-in;
+  }
+  0% {
+    opacity: 0;
+    height: 110%;
+    margin-top: -5%; 
+  }
+  100% {
+    opacity: 1;
+    height: 100%;
+    margin-top: 0; 
+  }
+}
+
+@-moz-keyframes fadeInDown {
+  0%, 100% {
+    -moz-transition-timing-function: ease-in;
+  }
+  0% {
+    opacity: 0;
+    height: 110%;
+    margin-top: -5%; 
+  }
+  100% {
+    opacity: 1;
+    height: 100%;
+    margin-top: 0; 
+  }
+}
+
+@-webkit-keyframes fadeInDown {
+  0%, 100% {
+    -webkit-transition-timing-function: ease-in;
+  }
+  0% {
+    opacity: 0;
+    height: 110%;
+    margin-top: -5%; 
+  }
+  100% {
+    opacity: 1;
+    height: 100%;
+    margin-top: 0; 
+  }
+}
+
+/*-----------  Animations: FadeOutUp  -----------*/
+
+@keyframes fadeOutUp {
+  0%, 100% {
+    transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    -ms-transition-timing-function: ease-in;
+    -moz-transition-timing-function: ease-in;
+    -webkit-transition-timing-function: ease-in;
+  }
+  0% {
+    opacity: 1;
+    height: 100%;
+    margin-top: 0; 
+  }
+  100% {
+    opacity: 0;
+    height: 110%;
+    margin-top: -5%; 
+  }
+}
+
+@-moz-keyframes fadeOutUp {
+  0%, 100% {
+    -moz-transition-timing-function: ease-in;
+  }
+  0% {
+    opacity: 1;
+    height: 100%;
+    margin-top: 0; 
+  }
+  100% {
+    opacity: 0;
+    height: 110%;
+    margin-top: -5%; 
+  }
+}
+
+@-webkit-keyframes fadeOutUp {
+  0%, 100% {
+    -webkit-transition-timing-function: ease-in;
+  }
+  0% {
+    opacity: 1;
+    height: 100%;
+    margin-top: 0; 
+  }
+  100% {
+    opacity: 0;
+    height: 110%;
+    margin-top: -5%; 
   }
 }

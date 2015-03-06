@@ -10,20 +10,22 @@
 
 #hellobar_container.Modal.animated {
   opacity: 0;
+  height: 110%;
+  margin-top: -5%; 
 }
 
 #hellobar_container.Modal.animateIn {
-  animation-name: fadeIn;
-  -o-animation-name: fadeIn;
-  -ms-animation-name: fadeIn;
-  -moz-animation-name: fadeIn;
-  -webkit-animation-name: fadeIn;
+  animation-name: fadeInDown;
+  -o-animation-name: fadeInDown;
+  -ms-animation-name: fadeInDown;
+  -moz-animation-name: fadeInDown;
+  -webkit-animation-name: fadeInDown;
 }
 
 #hellobar_container.Modal.animateOut {
-  animation-name: fadeOut;
-  -o-animation-name: fadeOut;
-  -ms-animation-name: fadeOut;
-  -moz-animation-name: fadeOut;
-  -webkit-animation-name: fadeOut;
+  animation-name: fadeOutUp;
+  -o-animation-name: fadeOutUp;
+  -ms-animation-name: fadeOutUp;
+  -moz-animation-name: fadeOutUp;
+  -webkit-animation-name: fadeOutUp
 }

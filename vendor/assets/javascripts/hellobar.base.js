@@ -1327,7 +1327,7 @@ var _HB = {
       if (isModal || isTakeout){
         element.setAttribute('style','height:0px');
       }
-    }, 670);
+    }, 250);
   },
 
   // Delays & restarts wiggle animation before & after mousing over bar
