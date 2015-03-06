@@ -1309,7 +1309,7 @@ var _HB = {
 
   animateOut: function(element){
     // HTML 5 supported so show the animation
-    if (typeof element.classList == 'object') {
+    if (typeof element.classList == 'object' && element.getAttribute('class').indexOf('animated') != -1) {
       element.classList.remove("animateIn");
       element.classList.add("animated");
       element.classList.add("animateOut");
@@ -1317,6 +1317,17 @@ var _HB = {
     else {
       element.style.display = "none";
     }
+
+    // Makes Iframe small after hiding in order to allow click events.
+    hideIframe = window.setTimeout(function(){
+      var classes = element.getAttribute('class');
+      var isModal = (classes.indexOf('Modal') > -1);
+      var isTakeout = (classes.indexOf('Takeover') > -1);
+
+      if (isModal || isTakeout){
+        element.setAttribute('style','height:0px');
+      }
+    }, 670);
   },
 
   // Delays & restarts wiggle animation before & after mousing over bar

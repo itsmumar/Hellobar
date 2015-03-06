@@ -10,11 +10,11 @@
 /*-----------  Animations  -----------*/
 
 #hellobar_container.animated {
-  animation-duration: 1s;
-  -o-animation-duration: 1s;
-  -ms-animation-duration: 1s;
-  -moz-animation-duration: 1s;
-  -webkit-animation-duration: 1s;
+  animation-duration: 0.67s;
+  -o-animation-duration: 0.67s;
+  -ms-animation-duration: 0.67s;
+  -moz-animation-duration: 0.67s;
+  -webkit-animation-duration: 0.67s;
 
   animation-fill-mode: forwards;
   -o-animation-fill-mode: forwards;
