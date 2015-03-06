@@ -745,7 +745,7 @@ var _HB = {
         HB.hideOnZoom();
         // Bounce in animation
         if(HB.w.className.indexOf("animated") > -1)
-          setTimeout(function(){ HB.bounceIn(HB.w); }, 500);
+          setTimeout(function(){ HB.animateIn(HB.w); }, 500);
         // Set wiggle listeners
         if(siteElement.wiggle_button.length > 0)
           HB.wiggleEventListeners(HB.w);
@@ -1295,24 +1295,24 @@ var _HB = {
     return .2126 * rgb[0] + .7152 * rgb[1] + 0.0722 * rgb[2];
   },
 
-  bounceIn: function(element, time){
+  animateIn: function(element, time){
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
-      element.classList.remove("bounceOutUp");
+      element.classList.remove("animateOut");
       element.classList.add("animated");
-      element.classList.add("bounceInDown");
+      element.classList.add("animateIn");
     } // else just unhide
     else {
       element.style.display = "";
     }
   },
 
-  bounceOut: function(element){
+  animateOut: function(element){
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
-      element.classList.remove("bounceInDown");
+      element.classList.remove("animateIn");
       element.classList.add("animated");
-      element.classList.add("bounceOutUp");
+      element.classList.add("animateOut");
     } // else just hide
     else {
       element.style.display = "none";
@@ -1345,8 +1345,8 @@ var _HB = {
       var pdLink = document.createElement("div");
       pdLink.className = "hellobar_arrow"
       pdLink.onclick = function() {
-        HB.bounceIn(HB.w)
-        HB.bounceOut(document.getElementById("pull-down"))
+        HB.animateIn(HB.w)
+        HB.animateOut(document.getElementById("pull-down"))
       };
 
       pullDown.appendChild(pdLink);

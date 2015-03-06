@@ -3,4 +3,27 @@
   left: 0;
   width: 100%;
   height: 100%;
+  position: absolute;
+}
+
+/*-----------  Animations  -----------*/
+
+#hellobar_container.Modal.animated {
+  opacity: 0;
+}
+
+#hellobar_container.Modal.animateIn {
+  animation-name: fadeIn;
+  -o-animation-name: fadeIn;
+  -ms-animation-name: fadeIn;
+  -moz-animation-name: fadeIn;
+  -webkit-animation-name: fadeIn;
+}
+
+#hellobar_container.Modal.animateOut {
+  animation-name: fadeOut;
+  -o-animation-name: fadeOut;
+  -ms-animation-name: fadeOut;
+  -moz-animation-name: fadeOut;
+  -webkit-animation-name: fadeOut;
 }

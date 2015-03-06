@@ -1,7 +1,32 @@
 #hellobar_container.Slider {
-  right: 30px;
-  bottom: 30px;
-  width: 375px;
-  height: 300px;
-  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*-----------  Animations  -----------*/
+
+#hellobar_container.Slider.animated {
+  transform: translateX(500px);
+  -o-transform: translateX(500px);
+  -ms-transform: translateX(500px);
+  -moz-transform: translateX(500px);
+  -webkit-transform: translateX(500px);
+}
+
+#hellobar_container.Slider.animateIn {
+  animation-name: bounceInLeft;
+  -o-animation-name: bounceInLeft;
+  -ms-animation-name: bounceInLeft;
+  -moz-animation-name: bounceInLeft;
+  -webkit-animation-name: bounceInLeft;
+}
+
+#hellobar_container.Slider.animateOut {
+  animation-name: bounceOutRight;
+  -o-animation-name: bounceOutRight;
+  -ms-animation-name: bounceOutRight;
+  -moz-animation-name: bounceOutRight;
+  -webkit-animation-name: bounceOutRight;
 }

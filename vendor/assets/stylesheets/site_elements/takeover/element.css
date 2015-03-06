@@ -1,8 +1,39 @@
+/*-----------  Takeover Element  -----------*/
+
 #hellobar_takeover {
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  position: absolute;
+  font-size: 20px;
+  position: fixed;
   text-align: center;
+}
+
+#hellobar_takeover .hb-content-wrapper {
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  max-width: 41em;
+  margin-left: 1em;
+  margin-right: 1em;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+
+/*-----------  Logo  -----------*/
+
+#hellobar_takeover .hb-logo-wrapper a {
+  left: 50%;
+  bottom: 1em;
+  font-size: 14px;
+  position: absolute;
+  transform: translateX(-50%);
+  -o-transition: translateX(-50%);
+  -ms-transition: translateX(-50%);
+  -moz-transition: translateX(-50%);
+  -webkit-transition: translateX(-50%);
 }

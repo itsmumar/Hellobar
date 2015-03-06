@@ -1,4 +1,32 @@
-* {
-  color: green !important;
-  background-color: red !important;
+/*-----------  Slider Element  -----------*/
+
+#hellobar_slider {
+  right: 1.5em;
+  bottom: 1.5em;
+  padding: 1.67em;
+  font-size: 12px;
+  max-width: 31em;
+  text-align: left;
+  position: absolute;
+}
+
+#hellobar_slider .hb-content-wrapper {
+  padding-right: 1.67em;
+}
+
+/*-----------  Call to Acton Button  -----------*/
+
+#hellobar_slider .hb-cta-style-button {
+  margin: 1em 0 0;
+  display: inline-block;
+}
+
+/*-----------  Logos  -----------*/
+
+#hellobar_slider .hb-logo-wrapper {
+  margin-bottom: -0.67em;
+}
+
+#hellobar_slider .hb-logo-wrapper .hb-logo-line {
+  display: inline;
 }

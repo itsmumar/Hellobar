@@ -1,17 +1,4 @@
-#hellobar_modal_background {
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  position: fixed;
-  text-align: left;
-  background: rgba(0, 0, 0, 0.65);
-  transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
-  -o-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
-  -ms-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
-  -moz-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
-  -webkit-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
-}
+/*-----------  Modal Element  -----------*/
 
 #hellobar_modal {
   top: 50%;
@@ -22,8 +9,23 @@
   margin-right: 1em;
   position: absolute;
   text-align: center;
+
   transform: translate(-50%, -50%);
   -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
   -moz-transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
 }
+
+/*-----------  Modal Background  -----------*/
+
+#hellobar_modal_background {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  position: fixed;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.65);
+}
+

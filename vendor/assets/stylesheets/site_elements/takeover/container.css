@@ -5,3 +5,25 @@
   height: 100%;
   position: absolute;
 }
+
+/*-----------  Animations  -----------*/
+
+#hellobar_container.Takeover.animated {
+  opacity: 0;
+}
+
+#hellobar_container.Takeover.animateIn {
+  animation-name: fadeIn;
+  -o-animation-name: fadeIn;
+  -ms-animation-name: fadeIn;
+  -moz-animation-name: fadeIn;
+  -webkit-animation-name: fadeIn;
+}
+
+#hellobar_container.Takeover.animateOut {
+  animation-name: fadeOut;
+  -o-animation-name: fadeOut;
+  -ms-animation-name: fadeOut;
+  -moz-animation-name: fadeOut;
+  -webkit-animation-name: fadeOut;
+}

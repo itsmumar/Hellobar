@@ -9,6 +9,18 @@
   height: 60px;
 }
 
+/*-----------  Spacing Pusher  -----------*/
+
+#hellobar_pusher {
+  height: 30px;
+  overflow: hidden;
+  position: relative;
+}
+
+#hellobar_pusher.large {
+  height: 50px;
+}
+
 /*-----------  Pull-Downs  -----------*/
 
 .hellobar#pull-down {
@@ -62,7 +74,15 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.Bar.bounceInDown {
+#hellobar_container.Bar.animated {
+  transform: translateY(-60px);
+  -o-transform: translateY(-60px);
+  -ms-transform: translateY(-60px);
+  -moz-transform: translateY(-60px);
+  -webkit-transform: translateY(-60px);  
+}
+
+#hellobar_container.Bar.animateIn {
   animation-name: bounceInDown;
   -o-animation-name: bounceInDown;
   -ms-animation-name: bounceInDown;
@@ -70,30 +90,10 @@
   -webkit-animation-name: bounceInDown;
 }
 
-#hellobar_container.Bar.bounceOutUp {
+#hellobar_container.Bar.animateOut {
   animation-name: bounceOutUp;
   -o-animation-name: bounceOutUp;
   -ms-animation-name: bounceOutUp;
   -moz-animation-name: bounceOutUp;
   -webkit-animation-name: bounceOutUp;
-}
-
-#hellobar_container.Bar.animated {
-  animation-duration: 1s;
-  -o-animation-duration: 1s;
-  -ms-animation-duration: 1s;
-  -moz-animation-duration: 1s;
-  -webkit-animation-duration: 1s;
-
-  animation-fill-mode: both;
-  -o-animation-fill-mode: both;
-  -ms-animation-fill-mode: both;
-  -moz-animation-fill-mode: both;
-  -webkit-animation-fill-mode: both;
-
-  transform: translateY(-60px);
-  -o-transform: translateY(-60px);
-  -ms-transform: translateY(-60px);
-  -moz-transform: translateY(-60px);
-  -webkit-transform: translateY(-60px);
 }

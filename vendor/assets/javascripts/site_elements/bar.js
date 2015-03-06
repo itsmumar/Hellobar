@@ -8,6 +8,7 @@ BarElement.prototype.constructor = BarElement;
 BarElement.prototype.setupIFrame = function(iframe){
   HB.addClass(iframe, this.size)
   HB.addClass(iframe, (HB.t(this.remains_at_top) ? " remains_at_top" : ""))
+  
   if(this.animated) {
     HB.addClass(iframe, "hellobar")
     HB.addClass(iframe, "animated")
