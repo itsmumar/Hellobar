@@ -1,17 +1,10 @@
 /*-----------  Slider Element  -----------*/
 
 #hellobar_slider {
-  right: 1.5em;
-  bottom: 1.5em;
   padding: 1.67em;
   font-size: 12px;
   max-width: 31em;
-  text-align: left;
   position: absolute;
-}
-
-#hellobar_slider .hb-content-wrapper {
-  padding-right: 1.67em;
 }
 
 /*-----------  Call to Acton Button  -----------*/
@@ -29,4 +22,50 @@
 
 #hellobar_slider .hb-logo-wrapper .hb-logo-line {
   display: inline;
+}
+
+/*-----------  Positions: Top  -----------*/
+
+#hellobar_slider.top-left,
+#hellobar_slider.top-right {
+  top: 1.5em;
+}
+
+/*-----------  Positions: Bottom  -----------*/
+
+#hellobar_slider.bottom-left,
+#hellobar_slider.bottom-right {
+  bottom: 1.5em;
+}
+
+/*-----------  Positions: Right  -----------*/
+
+#hellobar_slider.top-right,
+#hellobar_slider.bottom-right {
+  right: 1.5em;
+  text-align: left;
+}
+
+#hellobar_slider.top-right .hb-content-wrapper,
+#hellobar_slider.bottom-right .hb-content-wrapper {
+  padding-right: 1.67em;
+}
+
+/*-----------  Positions: Left  -----------*/
+
+#hellobar_slider.top-left,
+#hellobar_slider.bottom-left {
+  left: 1.5em;
+  text-align: right;
+}
+
+#hellobar_slider.top-left .icon-close,
+#hellobar_slider.bottom-left .icon-close {
+  left: 1em;
+  right: auto;
+}
+
+#hellobar_slider.top-left .hb-content-wrapper,
+#hellobar_slider.bottom-left .hb-content-wrapper {
+  padding-left: 1.67em;
 }

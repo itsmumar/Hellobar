@@ -1,24 +1,33 @@
 #hellobar_container.Slider {
-  right: 0;
-  bottom: 0;
   width: 400px;
   height: 180px;
 }
 
-/*-----------  Positions  -----------*/
+/*-----------  Placements: Right  -----------*/
 
+#hellobar_container.Slider.top-left.animated,
+#hellobar_container.Slider.bottom-left.animated {
+  left: 0;
+}
 
+#hellobar_container.Slider.top-right.animated,
+#hellobar_container.Slider.bottom-right.animated {
+  right: 0;
+}
 
+#hellobar_container.Slider.top-left.animated,
+#hellobar_container.Slider.top-right.animated {
+  top: 0;
+}
+
+#hellobar_container.Slider.bottom-left.animated,
+#hellobar_container.Slider.bottom-right.animated {
+  bottom: 0;
+}
 
 /*-----------  Animations  -----------*/
 
 #hellobar_container.Slider.animated {
-  transform: translate3d(200%, 0, 0);
-  -o-transform: translate3d(200%, 0, 0);
-  -ms-transform: translate3d(200%, 0, 0);
-  -moz-transform: translate3d(200%, 0, 0);
-  -webkit-transform: translate3d(200%, 0, 0);
-
   animation-duration: 0.5s;
   -o-animation-duration: 0.5s;
   -ms-animation-duration: 0.5s;
@@ -26,7 +35,19 @@
   -webkit-animation-duration: 0.5s; 
 }
 
-#hellobar_container.Slider.animateIn {
+/*-----------  Animations: Right  -----------*/
+
+#hellobar_container.Slider.top-right.animated,
+#hellobar_container.Slider.bottom-right.animated {
+  transform: translate3d(200%, 0, 0);
+  -o-transform: translate3d(200%, 0, 0);
+  -ms-transform: translate3d(200%, 0, 0);
+  -moz-transform: translate3d(200%, 0, 0);
+  -webkit-transform: translate3d(200%, 0, 0);
+}
+
+#hellobar_container.Slider.top-right.animateIn,
+#hellobar_container.Slider.bottom-right.animateIn {
   animation-name: bounceInLeft;
   -o-animation-name: bounceInLeft;
   -ms-animation-name: bounceInLeft;
@@ -34,10 +55,40 @@
   -webkit-animation-name: bounceInLeft;
 }
 
-#hellobar_container.Slider.animateOut {
+#hellobar_container.Slider.top-right.animateOut,
+#hellobar_container.Slider.bottom-right.animateOut {
   animation-name: bounceOutRight;
   -o-animation-name: bounceOutRight;
   -ms-animation-name: bounceOutRight;
   -moz-animation-name: bounceOutRight;
   -webkit-animation-name: bounceOutRight;
+}
+
+/*-----------  Animations: Left  -----------*/
+
+#hellobar_container.Slider.top-left.animated,
+#hellobar_container.Slider.bottom-left.animated {
+  transform: translate3d(-200%, 0, 0);
+  -o-transform: translate3d(-200%, 0, 0);
+  -ms-transform: translate3d(-200%, 0, 0);
+  -moz-transform: translate3d(-200%, 0, 0);
+  -webkit-transform: translate3d(-200%, 0, 0);
+}
+
+#hellobar_container.Slider.top-left.animateIn,
+#hellobar_container.Slider.bottom-left.animateIn {
+  animation-name: bounceInRight;
+  -o-animation-name: bounceInRight;
+  -ms-animation-name: bounceInRight;
+  -moz-animation-name: bounceInRight;
+  -webkit-animation-name: bounceInRight;
+}
+
+#hellobar_container.Slider.top-left.animateOut,
+#hellobar_container.Slider.bottom-left.animateOut {
+  animation-name: bounceOutLeft;
+  -o-animation-name: bounceOutLeft;
+  -ms-animation-name: bounceOutLeft;
+  -moz-animation-name: bounceOutLeft;
+  -webkit-animation-name: bounceOutLeft;
 }

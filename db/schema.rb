@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150227180613) do
+ActiveRecord::Schema.define(version: 20150306235413) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -210,6 +210,8 @@ ActiveRecord::Schema.define(version: 20150227180613) do
     t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
     t.string   "caption"
+    t.string   "modal_placement",                 default: "middle"
+    t.string   "slider_placement",                default: "bottom-right"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
