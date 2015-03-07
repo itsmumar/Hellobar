@@ -1,5 +1,5 @@
-// Fetched from channel: canary, with url http://builds.emberjs.com/canary/ember.js
-// Fetched on: 2014-06-25T03:22:57Z
+// Fetched from channel: tags/v1.7.1, with url http://builds.emberjs.com/tags/v1.7.1/ember.js
+// Fetched on: 2015-03-07T00:56:15Z
 /*!
  * @overview  Ember - JavaScript Application Framework
  * @copyright Copyright 2011-2014 Tilde Inc. and contributors
@@ -7,7 +7,7 @@
  *            Portions Copyright 2008-2011 Apple Inc. All rights reserved.
  * @license   Licensed under MIT license
  *            See https://raw.github.com/emberjs/ember.js/master/LICENSE
- * @version   1.7.0-beta.1+canary.edda0fb6
+ * @version   1.7.1
  */
 
 (function() {
@@ -870,6 +870,47 @@ define("backburner/utils",
     };
   });
 
+define("calculateVersion",
+  [],
+  function() {
+    "use strict";
+    'use strict';
+
+    var fs   = require('fs');
+    var path = require('path');
+
+    module.exports = function () {
+      var packageVersion = require('../package.json').version;
+      var output         = [packageVersion];
+      var gitPath        = path.join(__dirname,'..','.git');
+      var headFilePath   = path.join(gitPath, 'HEAD');
+
+      if (packageVersion.indexOf('+') > -1) {
+        try {
+          if (fs.existsSync(headFilePath)) {
+            var headFile = fs.readFileSync(headFilePath, {encoding: 'utf8'});
+            var branchName = headFile.split('/').slice(-1)[0].trim();
+            var refPath = headFile.split(' ')[1];
+            var branchSHA;
+
+            if (refPath) {
+              var branchPath = path.join(gitPath, refPath.trim());
+              branchSHA  = fs.readFileSync(branchPath);
+            } else {
+              branchSHA = branchName;
+            }
+
+            output.push(branchSHA.slice(0,10));
+          }
+        } catch (err) {
+          console.error(err.stack);
+        }
+        return output.join('.');
+      } else {
+        return packageVersion;
+      }
+    };
+  });
 define("container",
   ["container/container","exports"],
   function(__dependency1__, __exports__) {
@@ -1097,7 +1138,7 @@ define("container/container",
 
         Optionally the container can be provided with a custom resolver.
         If provided, `resolve` will first provide the custom resolver
-        the oppertunity to resolve the fullName, otherwise it will fallback
+        the opportunity to resolve the fullName, otherwise it will fallback
         to the registry.
 
         ```javascript
@@ -1116,17 +1157,7 @@ define("container/container",
       */
       resolve: function(fullName) {
         Ember.assert('fullName must be a proper full name', validateFullName(fullName));
-
-        var normalizedName = this.normalize(fullName);
-        var cached = this.resolveCache.get(normalizedName);
-
-        if (cached) { return cached; }
-
-        var resolved = this.resolver(normalizedName) || this.registry.get(normalizedName);
-
-        this.resolveCache.set(normalizedName, resolved);
-
-        return resolved;
+        return resolve(this, this.normalize(fullName));
       },
 
       /**
@@ -1184,7 +1215,7 @@ define("container/container",
 
         // by default the container will return singletons
         var twitter2 = container.lookup('api:twitter');
-        twitter instanceof Twitter; // => true
+        twitter2 instanceof Twitter; // => true
 
         twitter === twitter2; //=> true
         ```
@@ -1527,6 +1558,16 @@ define("container/container",
       }
     };
 
+    function resolve(container, normalizedName) {
+      var cached = container.resolveCache.get(normalizedName);
+      if (cached) { return cached; }
+
+      var resolved = container.resolver(normalizedName) || container.registry.get(normalizedName);
+      container.resolveCache.set(normalizedName, resolved);
+
+      return resolved;
+    }
+
     function has(container, fullName){
       if (container.cache.has(fullName)) {
         return true;
@@ -1600,18 +1641,14 @@ define("container/container",
     }
 
     function factoryFor(container, fullName) {
-      var name = fullName;
-      var factory = container.resolve(name);
-      var injectedFactory;
       var cache = container.factoryCache;
-      var type = fullName.split(':')[0];
-
-      if (factory === undefined) { return; }
-
       if (cache.has(fullName)) {
         return cache.get(fullName);
       }
+      var factory = container.resolve(fullName);
+      if (factory === undefined) { return; }
 
+      var type = fullName.split(':')[0];
       if (!factory || typeof factory.extend !== 'function' || (!Ember.MODEL_FACTORY_INJECTIONS && type === 'model')) {
         // TODO: think about a 'safe' merge style extension
         // for now just fallback to create time injection
@@ -1622,7 +1659,7 @@ define("container/container",
 
         factoryInjections._toString = container.makeToString(factory, fullName);
 
-        injectedFactory = factory.extend(injections);
+        var injectedFactory = factory.extend(injections);
         injectedFactory.reopenClass(factoryInjections);
 
         cache.set(fullName, injectedFactory);
@@ -1860,7 +1897,7 @@ define("ember-application",
 
     var DAG = __dependency3__["default"];
     var Resolver = __dependency4__.Resolver;
-    var DefaultResolver = __dependency4__.default;
+    var DefaultResolver = __dependency4__["default"];
     var Application = __dependency5__["default"];
     // side effect of extending ControllerMixin
 
@@ -1995,8 +2032,8 @@ define("ember-application/ext/controller",
       needs: [],
 
       init: function() {
-        var needs = get(this, 'needs'),
-        length = get(needs, 'length');
+        var needs = get(this, 'needs');
+        var length = get(needs, 'length');
 
         if (length > 0) {
           Ember.assert(' `' + inspect(this) + ' specifies `needs`, but does ' +
@@ -2050,8 +2087,8 @@ define("ember-application/ext/controller",
     __exports__["default"] = ControllerMixin;
   });
 define("ember-application/system/application",
-  ["ember-metal","ember-metal/property_get","ember-metal/property_set","ember-runtime/system/lazy_load","ember-application/system/dag","ember-runtime/system/namespace","ember-runtime/mixins/deferred","ember-application/system/resolver","ember-metal/platform","ember-metal/run_loop","ember-metal/utils","container/container","ember-runtime/controllers/controller","ember-metal/enumerable_utils","ember-runtime/controllers/object_controller","ember-runtime/controllers/array_controller","ember-views/system/event_dispatcher","ember-views/system/jquery","ember-routing/system/route","ember-routing/system/router","ember-routing/location/hash_location","ember-routing/location/history_location","ember-routing/location/auto_location","ember-routing/location/none_location","ember-routing/system/cache","ember-metal/core","ember-handlebars-compiler","ember-application/system/deprecated-container","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __dependency25__, __dependency26__, __dependency27__, __dependency28__, __exports__) {
+  ["ember-metal","ember-metal/property_get","ember-metal/property_set","ember-runtime/system/lazy_load","ember-application/system/dag","ember-runtime/system/namespace","ember-runtime/mixins/deferred","ember-application/system/resolver","ember-metal/platform","ember-metal/run_loop","ember-metal/utils","container/container","ember-runtime/controllers/controller","ember-metal/enumerable_utils","ember-runtime/controllers/object_controller","ember-runtime/controllers/array_controller","ember-views/system/event_dispatcher","ember-views/system/jquery","ember-routing/system/route","ember-routing/system/router","ember-routing/location/hash_location","ember-routing/location/history_location","ember-routing/location/auto_location","ember-routing/location/none_location","ember-routing/system/cache","ember-metal/core","ember-handlebars-compiler","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __dependency25__, __dependency26__, __dependency27__, __exports__) {
     "use strict";
     /**
     @module ember
@@ -2088,7 +2125,6 @@ define("ember-application/system/application",
 
     var K = __dependency26__.K;
     var EmberHandlebars = __dependency27__["default"];
-    var DeprecatedContainer = __dependency28__["default"];
 
     var ContainerDebugAdapter;
 
@@ -2235,6 +2271,7 @@ define("ember-application/system/application",
     */
 
     var Application = Namespace.extend(DeferredMixin, {
+      _suppressDeferredDeprecation: true,
 
       /**
         The root DOM element of the Application. This can be specified as an
@@ -2706,11 +2743,11 @@ define("ember-application/system/application",
         @method runInitializers
       */
       runInitializers: function() {
-        var initializers = get(this.constructor, 'initializers'),
-            container = this.__container__,
-            graph = new DAG(),
-            namespace = this,
-            name, initializer;
+        var initializers = get(this.constructor, 'initializers');
+        var container = this.__container__;
+        var graph = new DAG();
+        var namespace = this;
+        var name, initializer;
 
         for (name in initializers) {
           initializer = initializers[name];
@@ -2751,9 +2788,9 @@ define("ember-application/system/application",
         @method setupEventDispatcher
       */
       setupEventDispatcher: function() {
-        var customEvents = get(this, 'customEvents'),
-            rootElement = get(this, 'rootElement'),
-            dispatcher = this.__container__.lookup('event_dispatcher:main');
+        var customEvents = get(this, 'customEvents');
+        var rootElement = get(this, 'rootElement');
+        var dispatcher = this.__container__.lookup('event_dispatcher:main');
 
         set(this, 'eventDispatcher', dispatcher);
         dispatcher.setup(customEvents, rootElement);
@@ -2814,6 +2851,17 @@ define("ember-application/system/application",
 
       initializer: function(options) {
         this.constructor.initializer(options);
+      },
+
+      /**
+        @method then
+        @private
+        @deprecated
+      */
+      then: function() {
+        Ember.deprecate('Do not use `.then` on an instance of Ember.Application.  Please use the `.ready` hook instead.');
+
+        this._super.apply(this, arguments);
       }
     });
 
@@ -2985,8 +3033,6 @@ define("ember-application/system/application",
       buildContainer: function(namespace) {
         var container = new Container();
 
-        Container.defaultContainer = new DeprecatedContainer(container);
-
         container.set = set;
         container.resolver  = resolverFor(namespace);
         container.normalize = container.resolver.normalize;
@@ -3100,11 +3146,12 @@ define("ember-application/system/dag",
     var EmberError = __dependency1__["default"];
 
     function visit(vertex, fn, visited, path) {
-      var name = vertex.name,
-        vertices = vertex.incoming,
-        names = vertex.incomingNames,
-        len = names.length,
-        i;
+      var name = vertex.name;
+      var vertices = vertex.incoming;
+      var names = vertex.incomingNames;
+      var len = names.length;
+      var i;
+
       if (!visited) {
         visited = {};
       }
@@ -3123,11 +3170,28 @@ define("ember-application/system/dag",
       path.pop();
     }
 
+
+    /**
+     * DAG stands for Directed acyclic graph.
+     *
+     * It is used to build a graph of dependencies checking that there isn't circular
+     * dependencies. p.e Registering initializers with a certain precedence order.
+     *
+     * @class DAG
+     * @constructor
+     */
     function DAG() {
       this.names = [];
       this.vertices = {};
     }
 
+    /**
+     * Adds a vertex entry to the graph unless it is already added.
+     *
+     * @private
+     * @method add
+     * @param {String} name The name of the vertex to add
+     */
     DAG.prototype.add = function(name) {
       if (!name) { return; }
       if (this.vertices.hasOwnProperty(name)) {
@@ -3141,10 +3205,27 @@ define("ember-application/system/dag",
       return vertex;
     };
 
+    /**
+     * Adds a vertex to the graph and sets its value.
+     *
+     * @private
+     * @method map
+     * @param {String} name The name of the vertex.
+     * @param         value The value to put in the vertex.
+     */
     DAG.prototype.map = function(name, value) {
       this.add(name).value = value;
     };
 
+    /**
+     * Connects the vertices with the given names, adding them to the graph if
+     * necesary, only if this does not produce is any circular dependency.
+     *
+     * @private
+     * @method addEdge
+     * @param {String} fromName The name the vertex where the edge starts.
+     * @param {String} toName The name the vertex where the edge ends.
+     */
     DAG.prototype.addEdge = function(fromName, toName) {
       if (!fromName || !toName || fromName === toName) {
         return;
@@ -3164,12 +3245,20 @@ define("ember-application/system/dag",
       to.incomingNames.push(fromName);
     };
 
+    /**
+     * Visits all the vertex of the graph calling the given function with each one,
+     * ensuring that the vertices are visited respecting their precedence.
+     *
+     * @method  topsort
+     * @param {Function} fn The function to be invoked on each vertex.
+     */
     DAG.prototype.topsort = function(fn) {
-      var visited = {},
-        vertices = this.vertices,
-        names = this.names,
-        len = names.length,
-        i, vertex;
+      var visited = {};
+      var vertices = this.vertices;
+      var names = this.names;
+      var len = names.length;
+      var i, vertex;
+
       for (i = 0; i < len; i++) {
         vertex = vertices[names[i]];
         if (!vertex.hasOutgoing) {
@@ -3178,6 +3267,23 @@ define("ember-application/system/dag",
       }
     };
 
+    /**
+     * Adds a vertex with the given name and value to the graph and joins it with the
+     * vertices referenced in _before_ and _after_. If there isn't vertices with those
+     * names, they are added too.
+     *
+     * If either _before_ or _after_ are falsy/empty, the added vertex will not have
+     * an incoming/outgoing edge.
+     *
+     * @method addEdges
+     * @param {String} name The name of the vertex to be added.
+     * @param         value The value of that vertex.
+     * @param        before An string or array of strings with the names of the vertices before
+     *                      which this vertex must be visited.
+     * @param         after An string or array of strings with the names of the vertex after
+     *                      which this vertex must be visited.
+     *
+     */
     DAG.prototype.addEdges = function(name, value, before, after) {
       var i;
       this.map(name, value);
@@ -3202,32 +3308,6 @@ define("ember-application/system/dag",
     };
 
     __exports__["default"] = DAG;
-  });
-define("ember-application/system/deprecated-container",
-  ["exports"],
-  function(__exports__) {
-    "use strict";
-    function DeprecatedContainer(container) {
-      this._container = container;
-    }
-
-    DeprecatedContainer.deprecate = function(method) {
-      return function() {
-        var container = this._container;
-
-        Ember.deprecate('Using the defaultContainer is no longer supported. [defaultContainer#' + method + '] see: http://git.io/EKPpnA', false);
-        return container[method].apply(container, arguments);
-      };
-    };
-
-    DeprecatedContainer.prototype = {
-      _container: null,
-      lookup: DeprecatedContainer.deprecate('lookup'),
-      resolve: DeprecatedContainer.deprecate('resolve'),
-      register: DeprecatedContainer.deprecate('register')
-    };
-
-    __exports__["default"] = DeprecatedContainer;
   });
 define("ember-application/system/resolver",
   ["ember-metal/core","ember-metal/property_get","ember-metal/logger","ember-runtime/system/string","ember-runtime/system/object","ember-runtime/system/namespace","ember-handlebars","exports"],
@@ -3257,31 +3337,15 @@ define("ember-application/system/resolver",
         @property namespace
       */
       namespace: null,
-      normalize: function(fullName) {
-        throw new Error("Invalid call to `resolver.normalize(fullName)`. Please override the 'normalize' method in subclass of `Ember.Resolver` to prevent falling through to this error.");
-      },
-      resolve: function(fullName) {
-       throw new Error("Invalid call to `resolver.resolve(parsedName)`. Please override the 'resolve' method in subclass of `Ember.Resolver` to prevent falling through to this error.");
-      },
-      parseName: function(parsedName) {
-       throw new Error("Invalid call to `resolver.resolveByType(parsedName)`. Please override the 'resolveByType' method in subclass of `Ember.Resolver` to prevent falling through to this error.");
-      },
-      lookupDescription: function(fullName) {
-        throw new Error("Invalid call to `resolver.lookupDescription(fullName)`. Please override the 'lookupDescription' method in subclass of `Ember.Resolver` to prevent falling through to this error.");
-      },
-      makeToString: function(factory, fullName) {
-        throw new Error("Invalid call to `resolver.makeToString(factory, fullName)`. Please override the 'makeToString' method in subclass of `Ember.Resolver` to prevent falling through to this error.");
-      },
-      resolveOther: function(parsedName) {
-       throw new Error("Invalid call to `resolver.resolveOther(parsedName)`. Please override the 'resolveOther' method in subclass of `Ember.Resolver` to prevent falling through to this error.");
-      },
-      _logLookup: function(found, parsedName) {
-       throw new Error("Invalid call to `resolver._logLookup(found, parsedName)`. Please override the '_logLookup' method in subclass of `Ember.Resolver` to prevent falling through to this error.");
-      }
+      normalize:         Ember.required(Function),
+      resolve:           Ember.required(Function),
+      parseName:         Ember.required(Function),
+      lookupDescription: Ember.required(Function),
+      makeToString:      Ember.required(Function),
+      resolveOther:      Ember.required(Function),
+      _logLookup:        Ember.required(Function)
     });
     __exports__.Resolver = Resolver;
-
-
     /**
       The DefaultResolver defines the default lookup rules to resolve
       container lookups before consulting the container for registered
@@ -3402,7 +3466,7 @@ define("ember-application/system/resolver",
             resolved;
 
         if (!(parsedName.name && parsedName.type)) {
-          throw new TypeError("Invalid fullName: `" + fullName + "`, must be of the form `type:name` ");
+          throw new TypeError('Invalid fullName: `' + fullName + '`, must be of the form `type:name` ');
         }
 
         if (this[resolveMethodName]) {
@@ -3420,7 +3484,7 @@ define("ember-application/system/resolver",
         return resolved;
       },
       /**
-        Convert the string name of the form "type:name" to
+        Convert the string name of the form 'type:name' to
         a Javascript object with the parsed aspects of the name
         broken out.
 
@@ -3429,7 +3493,7 @@ define("ember-application/system/resolver",
         @method parseName
       */
       parseName: function(fullName) {
-        var nameParts = fullName.split(":"),
+        var nameParts = fullName.split(':'),
             type = nameParts[0], fullNameWithoutType = nameParts[1],
             name = fullNameWithoutType,
             namespace = get(this, 'namespace'),
@@ -3450,7 +3514,7 @@ define("ember-application/system/resolver",
           fullNameWithoutType: fullNameWithoutType,
           name: name,
           root: root,
-          resolveMethodName: "resolve" + classify(type)
+          resolveMethodName: 'resolve' + classify(type)
         };
       },
 
@@ -3468,10 +3532,10 @@ define("ember-application/system/resolver",
         var parsedName = this.parseName(fullName);
 
         if (parsedName.type === 'template') {
-          return "template at " + parsedName.fullNameWithoutType.replace(/\./g, '/');
+          return 'template at ' + parsedName.fullNameWithoutType.replace(/\./g, '/');
         }
 
-        var description = parsedName.root + "." + classify(parsedName.name);
+        var description = parsedName.root + '.' + classify(parsedName.name);
         if (parsedName.type !== 'model') { description += classify(parsedName.type); }
 
         return description;
@@ -3561,8 +3625,8 @@ define("ember-application/system/resolver",
         @method resolveModel
       */
       resolveModel: function(parsedName) {
-        var className = classify(parsedName.name),
-            factory = get(parsedName.root, className);
+        var className = classify(parsedName.name);
+        var factory = get(parsedName.root, className);
 
          if (factory) { return factory; }
       },
@@ -3588,8 +3652,8 @@ define("ember-application/system/resolver",
         @method resolveOther
       */
       resolveOther: function(parsedName) {
-        var className = classify(parsedName.name) + classify(parsedName.type),
-            factory = get(parsedName.root, className);
+        var className = classify(parsedName.name) + classify(parsedName.type);
+        var factory = get(parsedName.root, className);
         if (factory) { return factory; }
       },
 
@@ -3603,7 +3667,7 @@ define("ember-application/system/resolver",
         var symbol, padding;
 
         if (found) { symbol = '[✓]'; }
-        else          { symbol = '[ ]'; }
+        else       { symbol = '[ ]'; }
 
         if (parsedName.fullName.length > 60) {
           padding = '.';
@@ -4950,8 +5014,8 @@ define("ember-handlebars/component_lookup",
     __exports__["default"] = ComponentLookup;
   });
 define("ember-handlebars/controls",
-  ["ember-handlebars/controls/checkbox","ember-handlebars/controls/text_field","ember-handlebars/controls/text_area","ember-metal/core","ember-handlebars-compiler","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
+  ["ember-handlebars/controls/checkbox","ember-handlebars/controls/text_field","ember-handlebars/controls/text_area","ember-metal/core","ember-handlebars-compiler","ember-handlebars/ext","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
     var Checkbox = __dependency1__["default"];
     var TextField = __dependency2__["default"];
@@ -4962,11 +5026,20 @@ define("ember-handlebars/controls",
     // var emberAssert = Ember.assert;
 
     var EmberHandlebars = __dependency5__["default"];
+    var handlebarsGet = __dependency6__.handlebarsGet;
     var helpers = EmberHandlebars.helpers;
     /**
     @module ember
     @submodule ember-handlebars-compiler
     */
+
+    function _resolveOption(context, options, key) {
+      if (options.hashTypes[key] === "ID") {
+        return handlebarsGet(context, options.hash[key], options);
+      } else {
+        return options.hash[key];
+      }
+    }
 
     /**
 
@@ -5027,6 +5100,35 @@ define("ember-handlebars/controls",
       <input type="text" value="Stanley" disabled="disabled" size="50"/>
       ```
 
+      ## Actions
+
+      The helper can send multiple actions based on user events.
+
+      The action property defines the action which is send when
+      the user presses the return key.
+
+      ```handlebars
+      {{input action="submit"}}
+      ```
+
+      The helper allows some user events to send actions.
+
+    * `enter`
+    * `insert-newline`
+    * `escape-press`
+    * `focus-in`
+    * `focus-out`
+    * `key-press`
+
+      For example, if you desire an action to be sent when the input is blurred,
+      you only need to setup the action name to the event name property.
+
+      ```handlebars
+      {{input focus-in="alertMessage"}}
+      ```
+
+      See more about [Text Support Actions](/api/classes/Ember.TextField.html)
+
       ## Extension
 
       Internally, `{{input type="text"}}` creates an instance of `Ember.TextField`, passing
@@ -5046,7 +5148,7 @@ define("ember-handlebars/controls",
       itself extends `Ember.Component`, meaning that it does NOT inherit
       the `controller` of the parent view.
 
-      See more about [Ember components](api/classes/Ember.Component.html)
+      See more about [Ember components](/api/classes/Ember.Component.html)
 
 
       ## Use as checkbox
@@ -5119,17 +5221,19 @@ define("ember-handlebars/controls",
 
       var hash = options.hash,
           types = options.hashTypes,
-          inputType = hash.type,
+          inputType = _resolveOption(this, options, 'type'),
           onEvent = hash.on;
 
-      delete hash.type;
-      delete hash.on;
-
       if (inputType === 'checkbox') {
+        delete hash.type;
+        delete types.type;
+
         Ember.assert("{{input type='checkbox'}} does not support setting `value=someBooleanValue`; you must use `checked=someBooleanValue` instead.", options.hashTypes.value !== 'ID');
+
         return helpers.view.call(this, Checkbox, options);
       } else {
-        if (inputType) { hash.type = inputType; }
+        delete hash.on;
+
         hash.onEvent = onEvent || 'enter';
         return helpers.view.call(this, TextField, options);
       }
@@ -5264,6 +5368,35 @@ define("ember-handlebars/controls",
       </textarea>
       ```
 
+      ## Actions
+
+      The helper can send multiple actions based on user events.
+
+      The action property defines the action which is send when
+      the user presses the return key.
+
+      ```handlebars
+      {{input action="submit"}}
+      ```
+
+      The helper allows some user events to send actions.
+
+    * `enter`
+    * `insert-newline`
+    * `escape-press`
+    * `focus-in`
+    * `focus-out`
+    * `key-press`
+
+      For example, if you desire an action to be sent when the input is blurred,
+      you only need to setup the action name to the event name property.
+
+      ```handlebars
+      {{textarea focus-in="alertMessage"}}
+      ```
+
+      See more about [Text Support Actions](/api/classes/Ember.TextArea.html)
+
       ## Extension
 
       Internally, `{{textarea}}` creates an instance of `Ember.TextArea`, passing
@@ -5285,7 +5418,7 @@ define("ember-handlebars/controls",
       itself extends `Ember.Component`, meaning that it does NOT inherit
       the `controller` of the parent view.
 
-      See more about [Ember components](api/classes/Ember.Component.html)
+      See more about [Ember components](/api/classes/Ember.Component.html)
 
       @method textarea
       @for Ember.Handlebars.helpers
@@ -6328,10 +6461,10 @@ define("ember-handlebars/controls/text_support",
       },
 
       /**
-        The action to be sent when the user inserts a new line.
+        Called when the user inserts a new line.
 
         Called by the `Ember.TextSupport` mixin on keyUp if keycode matches 13.
-        Uses sendAction to send the `enter` action to the controller.
+        Uses sendAction to send the `enter` action.
 
         @method insertNewline
         @param {Event} event
@@ -6345,7 +6478,7 @@ define("ember-handlebars/controls/text_support",
         Called when the user hits escape.
 
         Called by the `Ember.TextSupport` mixin on keyUp if keycode matches 27.
-        Uses sendAction to send the `escape-press` action to the controller.
+        Uses sendAction to send the `escape-press` action.
 
         @method cancel
         @param {Event} event
@@ -6357,6 +6490,8 @@ define("ember-handlebars/controls/text_support",
       /**
         Called when the text area is focused.
 
+        Uses sendAction to send the `focus-in` action.
+
         @method focusIn
         @param {Event} event
       */
@@ -6365,7 +6500,9 @@ define("ember-handlebars/controls/text_support",
       },
 
       /**
-        Called when the text area is blurred.
+        Called when the text area is blurred. 
+
+        Uses sendAction to send the `focus-out` action.
 
         @method focusOut
         @param {Event} event
@@ -6375,10 +6512,10 @@ define("ember-handlebars/controls/text_support",
       },
 
       /**
-        The action to be sent when the user presses a key. Enabled by setting
+        Called when the user presses a key. Enabled by setting
         the `onEvent` property to `keyPress`.
 
-        Uses sendAction to send the `keyPress` action to the controller.
+        Uses sendAction to send the `key-press` action.
 
         @method keyPress
         @param {Event} event
@@ -6504,21 +6641,7 @@ define("ember-handlebars/ext",
           normalizedPath = normalizePath(root, path, data),
           value;
 
-      if (Ember.FEATURES.isEnabled("ember-handlebars-caps-lookup")) {
-
-        // If the path starts with a capital letter, look it up on Ember.lookup,
-        // which defaults to the `window` object in browsers.
-        if (isGlobalPath(path)) {
-          value = get(Ember.lookup, path);
-        } else {
-
-          // In cases where the path begins with a keyword, change the
-          // root to the value represented by that keyword, and ensure
-          // the path is relative to it.
-          value = get(normalizedPath.root, normalizedPath.path);
-        }
-
-      } else {
+      
         root = normalizedPath.root;
         path = normalizedPath.path;
 
@@ -6527,7 +6650,7 @@ define("ember-handlebars/ext",
         if (value === undefined && root !== Ember.lookup && isGlobalPath(path)) {
           value = get(Ember.lookup, path);
         }
-      }
+      
 
       return value;
     }
@@ -6823,6 +6946,7 @@ define("ember-handlebars/ext",
           loc, len, hashOption,
           boundOption, property,
           normalizedValue = SimpleHandlebarsView.prototype.normalizedValue;
+        var hashTypes = options.hashTypes;
 
         Ember.assert("registerBoundHelper-generated helpers do not support use with Handlebars blocks.", !options.fn);
 
@@ -6832,6 +6956,8 @@ define("ember-handlebars/ext",
           if (IS_BINDING.test(hashOption)) {
             // Lop off 'Binding' suffix.
             boundOptions[hashOption.slice(0, -7)] = hash[hashOption];
+          } else if (hashTypes[hashOption] === 'ID') {
+            boundOptions[hashOption] = hash[hashOption];
           }
         }
 
@@ -7516,7 +7642,7 @@ define("ember-handlebars/helpers/binding",
         localizedOptions.hash.keywordPath = contextPath;
 
         bindContext = this;
-        context = path;
+        context = contextPath;
         options = localizedOptions;
         preserveContext = true;
       } else {
@@ -7593,7 +7719,7 @@ define("ember-handlebars/helpers/binding",
       <img {{bind-attr src="imageUrl" alt="imageTitle"}}>
       ```
 
-      The above handlebars template will fill the `<img>`'s `src` attribute will
+      The above handlebars template will fill the `<img>`'s `src` attribute with
       the value of the property referenced with `"imageUrl"` and its `alt`
       attribute with the value of the property referenced with `"imageTitle"`.
 
@@ -8300,6 +8426,7 @@ define("ember-handlebars/helpers/debug",
       // These are helpful values you can inspect while debugging.
       var templateContext = this;
       var typeOfTemplateContext = inspect(templateContext);
+      Ember.Logger.info('Use `this` to access the context of the calling template.');
 
       debugger;
     }
@@ -9220,8 +9347,10 @@ define("ember-handlebars/helpers/view",
               //
               //     classNameBinding="_parentView.context.isGreen:green"
               var parsedPath = View._parsePropertyPath(full);
-              path = this.contextualizeBindingPath(parsedPath.path, data);
-              if (path) { extensions.classNameBindings[b] = path + parsedPath.classNames; }
+              if(parsedPath.path !== '') {
+                path = this.contextualizeBindingPath(parsedPath.path, data); 
+                if (path) { extensions.classNameBindings[b] = path + parsedPath.classNames; }
+              }
             }
           }
         }
@@ -9474,11 +9603,11 @@ define("ember-handlebars/helpers/view",
       Ember.assert("The view helper only takes a single argument", arguments.length <= 2);
 
       // If no path is provided, treat path param as options
-      // and get an instance of the registered `view:default`
+      // and get an instance of the registered `view:toplevel`
       if (path && path.data && path.data.isRenderData) {
         options = path;
         Ember.assert('{{view}} helper requires parent view to have a container but none was found. This usually happens when you are manually-managing views.', !!options.data.view.container);
-        path = options.data.view.container.lookupFactory('view:default');
+        path = options.data.view.container.lookupFactory('view:toplevel');
       }
 
       options.helperName = options.helperName || 'view';
@@ -9789,6 +9918,7 @@ define("ember-handlebars/views/handlebars_bound_view",
       this.isEscaped = isEscaped;
       this.templateData = templateData;
 
+      this._lastNormalizedValue = undefined;
       this.morph = Metamorph();
       this.state = 'preRender';
       this.updateId = null;
@@ -9817,9 +9947,9 @@ define("ember-handlebars/views/handlebars_bound_view",
       propertyDidChange: K,
 
       normalizedValue: function() {
-        var path = this.path,
-            pathRoot = this.pathRoot,
-            result, templateData;
+        var path = this.path;
+        var pathRoot = this.pathRoot;
+        var result, templateData;
 
         // Use the pathRoot as the result if no path is provided. This
         // happens if the path is `this`, which gets normalized into
@@ -9845,12 +9975,12 @@ define("ember-handlebars/views/handlebars_bound_view",
         buffer.push(string);
       },
 
-      render: function() {
+      render: function(value) {
         // If not invoked via a triple-mustache ({{{foo}}}), escape
         // the content of the template.
         var escape = this.isEscaped;
-        var result = this.normalizedValue();
-
+        var result = value || this.normalizedValue();
+        this._lastNormalizedValue = result;
         if (result === null || result === undefined) {
           result = "";
         } else if (!(result instanceof SafeString)) {
@@ -9879,10 +10009,13 @@ define("ember-handlebars/views/handlebars_bound_view",
 
       update: function () {
         this.updateId = null;
-        this.morph.html(this.render());
+        var value = this.normalizedValue();
+        if (value !== this._lastNormalizedValue) {
+          this.morph.html(this.render(value));
+        }
       },
 
-      transitionTo: function(state) {
+      _transitionTo: function(state) {
         this.state = state;
       }
     };
@@ -10159,7 +10292,7 @@ define("ember-handlebars/views/metamorph_view",
       replace: function(view) {
         var morph = view.morph;
 
-        view.transitionTo('preRender');
+        view._transitionTo('preRender');
 
         run.schedule('render', this, function renderMetamorphView() {
           if (view.isDestroying) { return; }
@@ -10173,7 +10306,7 @@ define("ember-handlebars/views/metamorph_view",
           view.triggerRecursively('willInsertElement');
 
           morph.replaceWith(buffer.string());
-          view.transitionTo('inDOM');
+          view._transitionTo('inDOM');
 
           view.invokeRecursively(function(view) {
             view.propertyDidChange('element');
@@ -10251,8 +10384,8 @@ define("ember-handlebars/views/metamorph_view",
     __exports__._SimpleMetamorphView = _SimpleMetamorphView;__exports__["default"] = View.extend(_Metamorph);
   });
 define("ember-metal",
-  ["ember-metal/core","ember-metal/merge","ember-metal/instrumentation","ember-metal/utils","ember-metal/error","ember-metal/enumerable_utils","ember-metal/platform","ember-metal/array","ember-metal/logger","ember-metal/property_get","ember-metal/events","ember-metal/observer_set","ember-metal/property_events","ember-metal/properties","ember-metal/property_set","ember-metal/map","ember-metal/get_properties","ember-metal/set_properties","ember-metal/watch_key","ember-metal/chains","ember-metal/watch_path","ember-metal/watching","ember-metal/expand_properties","ember-metal/computed","ember-metal/observer","ember-metal/mixin","ember-metal/binding","ember-metal/run_loop","ember-metal/libraries","ember-metal/is_none","ember-metal/is_empty","ember-metal/is_blank","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __dependency25__, __dependency26__, __dependency27__, __dependency28__, __dependency29__, __dependency30__, __dependency31__, __dependency32__, __exports__) {
+  ["ember-metal/core","ember-metal/merge","ember-metal/instrumentation","ember-metal/utils","ember-metal/error","ember-metal/enumerable_utils","ember-metal/platform","ember-metal/array","ember-metal/logger","ember-metal/property_get","ember-metal/events","ember-metal/observer_set","ember-metal/property_events","ember-metal/properties","ember-metal/property_set","ember-metal/map","ember-metal/get_properties","ember-metal/set_properties","ember-metal/watch_key","ember-metal/chains","ember-metal/watch_path","ember-metal/watching","ember-metal/expand_properties","ember-metal/computed","ember-metal/computed_macros","ember-metal/observer","ember-metal/mixin","ember-metal/binding","ember-metal/run_loop","ember-metal/libraries","ember-metal/is_none","ember-metal/is_empty","ember-metal/is_blank","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __dependency25__, __dependency26__, __dependency27__, __dependency28__, __dependency29__, __dependency30__, __dependency31__, __dependency32__, __dependency33__, __exports__) {
     "use strict";
     /**
     Ember Metal
@@ -10289,6 +10422,7 @@ define("ember-metal",
     var wrap = __dependency4__.wrap;
     var apply = __dependency4__.apply;
     var applyStr = __dependency4__.applyStr;
+    var uuid = __dependency4__.uuid;
     var EmberError = __dependency5__["default"];
     var EnumerableUtils = __dependency6__["default"];
 
@@ -10354,35 +10488,37 @@ define("ember-metal",
     var computed = __dependency24__.computed;
     var cacheFor = __dependency24__.cacheFor;
 
-    var addObserver = __dependency25__.addObserver;
-    var observersFor = __dependency25__.observersFor;
-    var removeObserver = __dependency25__.removeObserver;
-    var addBeforeObserver = __dependency25__.addBeforeObserver;
-    var _suspendBeforeObserver = __dependency25__._suspendBeforeObserver;
-    var _suspendObserver = __dependency25__._suspendObserver;
-    var _suspendBeforeObservers = __dependency25__._suspendBeforeObservers;
-    var _suspendObservers = __dependency25__._suspendObservers;
-    var beforeObserversFor = __dependency25__.beforeObserversFor;
-    var removeBeforeObserver = __dependency25__.removeBeforeObserver;
-    var IS_BINDING = __dependency26__.IS_BINDING;
-    var mixin = __dependency26__.mixin;
-    var Mixin = __dependency26__.Mixin;
-    var required = __dependency26__.required;
-    var aliasMethod = __dependency26__.aliasMethod;
-    var observer = __dependency26__.observer;
-    var immediateObserver = __dependency26__.immediateObserver;
-    var beforeObserver = __dependency26__.beforeObserver;
-    var Binding = __dependency27__.Binding;
-    var isGlobalPath = __dependency27__.isGlobalPath;
-    var bind = __dependency27__.bind;
-    var oneWay = __dependency27__.oneWay;
-    var run = __dependency28__["default"];
-    var libraries = __dependency29__["default"];
-    var isNone = __dependency30__.isNone;
-    var none = __dependency30__.none;
-    var isEmpty = __dependency31__.isEmpty;
-    var empty = __dependency31__.empty;
-    var isBlank = __dependency32__["default"];
+    // side effect of defining the computed.* macros
+
+    var addObserver = __dependency26__.addObserver;
+    var observersFor = __dependency26__.observersFor;
+    var removeObserver = __dependency26__.removeObserver;
+    var addBeforeObserver = __dependency26__.addBeforeObserver;
+    var _suspendBeforeObserver = __dependency26__._suspendBeforeObserver;
+    var _suspendObserver = __dependency26__._suspendObserver;
+    var _suspendBeforeObservers = __dependency26__._suspendBeforeObservers;
+    var _suspendObservers = __dependency26__._suspendObservers;
+    var beforeObserversFor = __dependency26__.beforeObserversFor;
+    var removeBeforeObserver = __dependency26__.removeBeforeObserver;
+    var IS_BINDING = __dependency27__.IS_BINDING;
+    var mixin = __dependency27__.mixin;
+    var Mixin = __dependency27__.Mixin;
+    var required = __dependency27__.required;
+    var aliasMethod = __dependency27__.aliasMethod;
+    var observer = __dependency27__.observer;
+    var immediateObserver = __dependency27__.immediateObserver;
+    var beforeObserver = __dependency27__.beforeObserver;
+    var Binding = __dependency28__.Binding;
+    var isGlobalPath = __dependency28__.isGlobalPath;
+    var bind = __dependency28__.bind;
+    var oneWay = __dependency28__.oneWay;
+    var run = __dependency29__["default"];
+    var libraries = __dependency30__["default"];
+    var isNone = __dependency31__.isNone;
+    var none = __dependency31__.none;
+    var isEmpty = __dependency32__.isEmpty;
+    var empty = __dependency32__.empty;
+    var isBlank = __dependency33__["default"];
     // END IMPORTS
 
     // BEGIN EXPORTS
@@ -10427,6 +10563,7 @@ define("ember-metal",
     Ember.wrap            = wrap;
     Ember.apply           = apply;
     Ember.applyStr        = applyStr;
+    Ember.uuid            = uuid;
 
     Ember.Logger = Logger;
 
@@ -10564,6 +10701,86 @@ define("ember-metal",
     }
 
     __exports__["default"] = Ember;
+  });
+define("ember-metal/alias",
+  ["ember-metal/property_get","ember-metal/property_set","ember-metal/error","ember-metal/properties","ember-metal/computed","ember-metal/platform","ember-metal/utils","ember-metal/dependent_keys","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __exports__) {
+    "use strict";
+    var get = __dependency1__.get;
+    var set = __dependency2__.set;
+    var EmberError = __dependency3__["default"];
+    var Descriptor = __dependency4__.Descriptor;
+    var defineProperty = __dependency4__.defineProperty;
+    var ComputedProperty = __dependency5__.ComputedProperty;
+    var create = __dependency6__.create;
+    var meta = __dependency7__.meta;
+    var inspect = __dependency7__.inspect;
+    var addDependentKeys = __dependency8__.addDependentKeys;
+    var removeDependentKeys = __dependency8__.removeDependentKeys;
+
+    function alias(altKey) {
+      return new AliasedProperty(altKey);
+    }
+
+    __exports__.alias = alias;function AliasedProperty(altKey) {
+      this.altKey = altKey;
+      this._dependentKeys = [ altKey ];
+    }
+
+    __exports__.AliasedProperty = AliasedProperty;AliasedProperty.prototype = create(Descriptor.prototype);
+
+    AliasedProperty.prototype.get = function AliasedProperty_get(obj, keyName) {
+      return get(obj, this.altKey);
+    };
+
+    AliasedProperty.prototype.set = function AliasedProperty_set(obj, keyName, value) {
+      return set(obj, this.altKey, value);
+    };
+
+    AliasedProperty.prototype.willWatch = function(obj, keyName) {
+      addDependentKeys(this, obj, keyName, meta(obj));
+    };
+
+    AliasedProperty.prototype.didUnwatch = function(obj, keyName) {
+      removeDependentKeys(this, obj, keyName, meta(obj));
+    };
+
+    AliasedProperty.prototype.setup = function(obj, keyName) {
+      var m = meta(obj);
+      if (m.watching[keyName]) {
+        addDependentKeys(this, obj, keyName, m);
+      }
+    };
+
+    AliasedProperty.prototype.teardown = function(obj, keyName) {
+      var m = meta(obj);
+      if (m.watching[keyName]) {
+        removeDependentKeys(this, obj, keyName, m);
+      }
+    };
+
+    AliasedProperty.prototype.readOnly = function() {
+      this.set = AliasedProperty_readOnlySet;
+      return this;
+    };
+
+    function AliasedProperty_readOnlySet(obj, keyName, value) {
+      throw new EmberError('Cannot set read-only property "' + keyName + '" on object: ' + inspect(obj));
+    }
+
+    AliasedProperty.prototype.oneWay = function() {
+      this.set = AliasedProperty_oneWaySet;
+      return this;
+    };
+
+    function AliasedProperty_oneWaySet(obj, keyName, value) {
+      defineProperty(obj, keyName, null);
+      return set(obj, keyName, value);
+    }
+
+    // Backwards compatibility with Ember Data
+    AliasedProperty.prototype._meta = undefined;
+    AliasedProperty.prototype.meta = ComputedProperty.prototype.meta;
   });
 define("ember-metal/array",
   ["exports"],
@@ -10746,12 +10963,14 @@ define("ember-metal/binding",
     // BINDING
     //
 
-    var Binding = function(toPath, fromPath) {
+    function Binding(toPath, fromPath) {
       this._direction = 'fwd';
       this._from = fromPath;
       this._to   = toPath;
       this._directionMap = Map.create();
-    };
+      this._readyToSync = undefined;
+      this._oneWay = undefined;
+    }
 
     /**
     @class Binding
@@ -11015,7 +11234,6 @@ define("ember-metal/binding",
       }
 
     });
-
     /**
       An `Ember.Binding` connects the properties of two objects so that whenever
       the value of one property changes, the other property will be changed also.
@@ -11028,7 +11246,7 @@ define("ember-metal/binding",
 
       Properties ending in a `Binding` suffix will be converted to `Ember.Binding`
       instances. The value of this property should be a string representing a path
-      to another object or a custom binding instanced created using Binding helpers
+      to another object or a custom binding instance created using Binding helpers
       (see "One Way Bindings"):
 
       ```
@@ -11084,7 +11302,7 @@ define("ember-metal/binding",
       something like this on your binding:
 
       ```javascript
-      binding = Ember.Binding.from(this.valueBinding).to("value");
+      binding = Ember.Binding.from("valueBinding").to("value");
       ```
 
       This creates a new binding instance based on the template you provide, and
@@ -11100,6 +11318,19 @@ define("ember-metal/binding",
       connected to. This object will be used as the root for both the from and
       to side of the binding when inspecting relative paths. This allows the
       binding to be automatically inherited by subclassed objects as well.
+
+      This also allows you to bind between objects using the paths you declare in
+      `from` and `to`:
+
+      ```javascript
+      // Example 1
+      binding = Ember.Binding.from("App.someObject.value").to("value");
+      binding.connect(this);
+
+      // Example 2
+      binding = Ember.Binding.from("parentView.value").to("App.someObject.value");
+      binding.connect(this);
+      ```
 
       Now that the binding is connected, it will observe both the from and to side
       and relay changes.
@@ -11512,29 +11743,23 @@ define("ember-metal/chains",
     __exports__.ChainNode = ChainNode;
   });
 define("ember-metal/computed",
-  ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/enumerable_utils","ember-metal/platform","ember-metal/watching","ember-metal/expand_properties","ember-metal/error","ember-metal/properties","ember-metal/property_events","ember-metal/is_empty","ember-metal/is_none","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __exports__) {
+  ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/expand_properties","ember-metal/error","ember-metal/properties","ember-metal/property_events","ember-metal/dependent_keys","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __exports__) {
     "use strict";
     var Ember = __dependency1__["default"];
     var get = __dependency2__.get;
     var set = __dependency3__.set;
     var meta = __dependency4__.meta;
     var META_KEY = __dependency4__.META_KEY;
-    var guidFor = __dependency4__.guidFor;
-    var typeOf = __dependency4__.typeOf;
     var inspect = __dependency4__.inspect;
-    var EnumerableUtils = __dependency5__["default"];
-    var create = __dependency6__.create;
-    var watch = __dependency7__.watch;
-    var unwatch = __dependency7__.unwatch;
-    var expandProperties = __dependency8__["default"];
-    var EmberError = __dependency9__["default"];
-    var Descriptor = __dependency10__.Descriptor;
-    var defineProperty = __dependency10__.defineProperty;
-    var propertyWillChange = __dependency11__.propertyWillChange;
-    var propertyDidChange = __dependency11__.propertyDidChange;
-    var isEmpty = __dependency12__["default"];
-    var isNone = __dependency13__.isNone;
+    var expandProperties = __dependency5__["default"];
+    var EmberError = __dependency6__["default"];
+    var Descriptor = __dependency7__.Descriptor;
+    var defineProperty = __dependency7__.defineProperty;
+    var propertyWillChange = __dependency8__.propertyWillChange;
+    var propertyDidChange = __dependency8__.propertyDidChange;
+    var addDependentKeys = __dependency9__.addDependentKeys;
+    var removeDependentKeys = __dependency9__.removeDependentKeys;
 
     /**
     @module ember-metal
@@ -11544,83 +11769,9 @@ define("ember-metal/computed",
 
 
     var metaFor = meta,
-        a_slice = [].slice,
-        o_create = create;
+        a_slice = [].slice;
 
     function UNDEFINED() { }
-
-    var lengthPattern = /\.(length|\[\])$/;
-
-    // ..........................................................
-    // DEPENDENT KEYS
-    //
-
-    // data structure:
-    //  meta.deps = {
-    //    'depKey': {
-    //      'keyName': count,
-    //    }
-    //  }
-
-    /*
-      This function returns a map of unique dependencies for a
-      given object and key.
-    */
-    function keysForDep(depsMeta, depKey) {
-      var keys = depsMeta[depKey];
-      if (!keys) {
-        // if there are no dependencies yet for a the given key
-        // create a new empty list of dependencies for the key
-        keys = depsMeta[depKey] = {};
-      } else if (!depsMeta.hasOwnProperty(depKey)) {
-        // otherwise if the dependency list is inherited from
-        // a superclass, clone the hash
-        keys = depsMeta[depKey] = o_create(keys);
-      }
-      return keys;
-    }
-
-    function metaForDeps(meta) {
-      return keysForDep(meta, 'deps');
-    }
-
-    function addDependentKeys(desc, obj, keyName, meta) {
-      // the descriptor has a list of dependent keys, so
-      // add all of its dependent keys.
-      var depKeys = desc._dependentKeys, depsMeta, idx, len, depKey, keys;
-      if (!depKeys) return;
-
-      depsMeta = metaForDeps(meta);
-
-      for(idx = 0, len = depKeys.length; idx < len; idx++) {
-        depKey = depKeys[idx];
-        // Lookup keys meta for depKey
-        keys = keysForDep(depsMeta, depKey);
-        // Increment the number of times depKey depends on keyName.
-        keys[keyName] = (keys[keyName] || 0) + 1;
-        // Watch the depKey
-        watch(obj, depKey, meta);
-      }
-    }
-
-    function removeDependentKeys(desc, obj, keyName, meta) {
-      // the descriptor has a list of dependent keys, so
-      // remove all of its dependent keys.
-      var depKeys = desc._dependentKeys, depsMeta, idx, len, depKey, keys;
-      if (!depKeys) return;
-
-      depsMeta = metaForDeps(meta);
-
-      for(idx = 0, len = depKeys.length; idx < len; idx++) {
-        depKey = depKeys[idx];
-        // Lookup keys meta for depKey
-        keys = keysForDep(depsMeta, depKey);
-        // Decrement the number of times depKey depends on keyName.
-        keys[keyName] = (keys[keyName] || 0) - 1;
-        // Unwatch the depKey
-        unwatch(obj, depKey, meta);
-      }
-    }
 
     // ..........................................................
     // COMPUTED PROPERTY
@@ -11759,7 +11910,7 @@ define("ember-metal/computed",
       @return {Ember.ComputedProperty} this
       @chainable
     */
-    ComputedPropertyPrototype.volatile = function() {
+    ComputedPropertyPrototype["volatile"] = function() {
       return this.cacheable(false);
     };
 
@@ -11974,7 +12125,10 @@ define("ember-metal/computed",
       try {
 
         if (cacheable && cache[keyName] !== undefined) {
-          cachedValue = cache[keyName];
+          if(cache[keyName] !== UNDEFINED) {
+            cachedValue = cache[keyName];
+          }
+
           hadCachedValue = true;
         }
 
@@ -12115,6 +12269,28 @@ define("ember-metal/computed",
       cache[key] = undefined;
     };
 
+    __exports__.ComputedProperty = ComputedProperty;
+    __exports__.computed = computed;
+    __exports__.cacheFor = cacheFor;
+  });
+define("ember-metal/computed_macros",
+  ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/computed","ember-metal/is_empty","ember-metal/is_none","ember-metal/alias"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var get = __dependency2__.get;
+    var set = __dependency3__.set;
+    var computed = __dependency4__.computed;
+    var isEmpty = __dependency5__["default"];
+    var isNone = __dependency6__.isNone;
+    var alias = __dependency7__.alias;
+
+    /**
+    @module ember-metal
+    */
+
+    var a_slice = [].slice;
+
     function getProperties(self, propertyNames) {
       var ret = {};
       for(var i = 0; i < propertyNames.length; i++) {
@@ -12181,15 +12357,11 @@ define("ember-metal/computed",
       A computed property that returns true if the value of the dependent
       property is NOT null, an empty string, empty array, or empty function.
 
-      Note: When using `computed.notEmpty` to watch an array make sure to
-      use the `array.[]` syntax so the computed can subscribe to transitions
-      from empty to non-empty states.
-
       Example
 
       ```javascript
       var Hamster = Ember.Object.extend({
-        hasStuff: Ember.computed.notEmpty('backpack.[]')
+        hasStuff: Ember.computed.notEmpty('backpack')
       });
 
       var hamster = Hamster.create({ backpack: ['Food', 'Sleeping Bag', 'Tent'] });
@@ -12205,9 +12377,11 @@ define("ember-metal/computed",
       @return {Ember.ComputedProperty} computed property which returns true if
       original value for property is not empty.
     */
-    registerComputed('notEmpty', function(dependentKey) {
-      return !isEmpty(get(this, dependentKey));
-    });
+    computed.notEmpty = function(dependentKey) {
+      return computed(dependentKey + '.length', function () {
+        return !isEmpty(get(this, dependentKey));
+      });
+    };
 
     /**
       A computed property that returns true if the value of the dependent
@@ -12652,15 +12826,7 @@ define("ember-metal/computed",
       @return {Ember.ComputedProperty} computed property which creates an
       alias to the original value for property.
     */
-    computed.alias = function(dependentKey) {
-      return computed(dependentKey, function(key, value) {
-        if (arguments.length > 1) {
-          set(this, dependentKey, value);
-        }
-
-        return get(this, dependentKey);
-      });
-    };
+    computed.alias = alias;
 
     /**
       Where `computed.alias` aliases `get` and `set`, and allows for bidirectional
@@ -12695,9 +12861,7 @@ define("ember-metal/computed",
       one way computed property to the original value for property.
     */
     computed.oneWay = function(dependentKey) {
-      return computed(dependentKey, function() {
-        return get(this, dependentKey);
-      });
+      return alias(dependentKey).oneWay();
     };
 
     
@@ -12749,9 +12913,7 @@ define("ember-metal/computed",
       @since 1.5.0
     */
     computed.readOnly = function(dependentKey) {
-      return computed(dependentKey, function() {
-        return get(this, dependentKey);
-      }).readOnly();
+      return alias(dependentKey).readOnly();
     };
     /**
       A computed property that acts like a standard getter and setter,
@@ -12800,6 +12962,7 @@ define("ember-metal/computed",
       @param {String} dependentKey
       @return {Ember.ComputedProperty} computed property which creates an
       alias with a deprecation to the original value for property.
+      @since 1.7.0
     */
     computed.deprecatingAlias = function(dependentKey) {
       return computed(dependentKey, function(key, value) {
@@ -12813,10 +12976,6 @@ define("ember-metal/computed",
         }
       });
     };
-
-    __exports__.ComputedProperty = ComputedProperty;
-    __exports__.computed = computed;
-    __exports__.cacheFor = cacheFor;
   });
 define("ember-metal/core",
   ["exports"],
@@ -12846,7 +13005,7 @@ define("ember-metal/core",
 
       @class Ember
       @static
-      @version 1.7.0-beta.1+canary.edda0fb6
+      @version 1.7.1
     */
 
     if ('undefined' === typeof Ember) {
@@ -12873,10 +13032,10 @@ define("ember-metal/core",
     /**
       @property VERSION
       @type String
-      @default '1.7.0-beta.1+canary.edda0fb6'
+      @default '1.7.1'
       @static
     */
-    Ember.VERSION = '1.7.0-beta.1+canary.edda0fb6';
+    Ember.VERSION = '1.7.1';
 
     /**
       Standard environmental variables. You can define these in a global `EmberENV`
@@ -12913,7 +13072,7 @@ define("ember-metal/core",
     MetamorphENV.DISABLE_RANGE_API = Ember.ENV.DISABLE_RANGE_API;
 
     /**
-      Hash of enabled Canary features. Add to before creating your application.
+      Hash of enabled Canary features. Add to this before creating your application.
 
       You can also define `ENV.FEATURES` if you need to enable features flagged at runtime.
 
@@ -13032,6 +13191,92 @@ define("ember-metal/core",
     }
 
     __exports__["default"] = Ember;
+  });
+define("ember-metal/dependent_keys",
+  ["ember-metal/platform","ember-metal/watching","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var create = __dependency1__.create;
+    var watch = __dependency2__.watch;
+    var unwatch = __dependency2__.unwatch;
+
+    /**
+    @module ember-metal
+    */
+
+    var o_create = create;
+
+    // ..........................................................
+    // DEPENDENT KEYS
+    //
+
+    // data structure:
+    //  meta.deps = {
+    //    'depKey': {
+    //      'keyName': count,
+    //    }
+    //  }
+
+    /*
+      This function returns a map of unique dependencies for a
+      given object and key.
+    */
+    function keysForDep(depsMeta, depKey) {
+      var keys = depsMeta[depKey];
+      if (!keys) {
+        // if there are no dependencies yet for a the given key
+        // create a new empty list of dependencies for the key
+        keys = depsMeta[depKey] = {};
+      } else if (!depsMeta.hasOwnProperty(depKey)) {
+        // otherwise if the dependency list is inherited from
+        // a superclass, clone the hash
+        keys = depsMeta[depKey] = o_create(keys);
+      }
+      return keys;
+    }
+
+    function metaForDeps(meta) {
+      return keysForDep(meta, 'deps');
+    }
+
+    function addDependentKeys(desc, obj, keyName, meta) {
+      // the descriptor has a list of dependent keys, so
+      // add all of its dependent keys.
+      var depKeys = desc._dependentKeys, depsMeta, idx, len, depKey, keys;
+      if (!depKeys) return;
+
+      depsMeta = metaForDeps(meta);
+
+      for(idx = 0, len = depKeys.length; idx < len; idx++) {
+        depKey = depKeys[idx];
+        // Lookup keys meta for depKey
+        keys = keysForDep(depsMeta, depKey);
+        // Increment the number of times depKey depends on keyName.
+        keys[keyName] = (keys[keyName] || 0) + 1;
+        // Watch the depKey
+        watch(obj, depKey, meta);
+      }
+    }
+
+    __exports__.addDependentKeys = addDependentKeys;function removeDependentKeys(desc, obj, keyName, meta) {
+      // the descriptor has a list of dependent keys, so
+      // remove all of its dependent keys.
+      var depKeys = desc._dependentKeys, depsMeta, idx, len, depKey, keys;
+      if (!depKeys) return;
+
+      depsMeta = metaForDeps(meta);
+
+      for(idx = 0, len = depKeys.length; idx < len; idx++) {
+        depKey = depKeys[idx];
+        // Lookup keys meta for depKey
+        keys = keysForDep(depsMeta, depKey);
+        // Decrement the number of times depKey depends on keyName.
+        keys[keyName] = (keys[keyName] || 0) - 1;
+        // Unwatch the depKey
+        unwatch(obj, depKey, meta);
+      }
+    }
+    __exports__.removeDependentKeys = removeDependentKeys;
   });
 define("ember-metal/enumerable_utils",
   ["ember-metal/array","exports"],
@@ -16066,6 +16311,7 @@ define("ember-metal/properties",
         } else {
           obj[keyName] = undefined; // make enumerable
         }
+        if (desc.setup) { desc.setup(obj, keyName); }
       } else {
         descs[keyName] = undefined; // shadow descriptor in proto
         if (desc == null) {
@@ -16110,6 +16356,7 @@ define("ember-metal/properties",
       @param {String} deprecatedKey The property to add (and print deprecation warnings upon accessing).
       @param {String} newKey The property that will be aliased.
       @private
+      @since 1.7.0
     */
 
     function deprecateProperty(object, deprecatedKey, newKey) {
@@ -16121,8 +16368,8 @@ define("ember-metal/properties",
         defineProperty(object, deprecatedKey, {
             configurable: true,
             enumerable: false,
-            set: function(value) { deprecate(); set(object, newKey, value); },
-            get: function() { deprecate(); return get(object, newKey); }
+            set: function(value) { deprecate(); set(this, newKey, value); },
+            get: function() { deprecate(); return get(this, newKey); }
         });
       }
     }
@@ -16834,7 +17081,7 @@ define("ember-metal/run_loop",
       ```
 
       @method bind
-      @namespace run
+      @namespace Ember
       @param {Object} [target] target of method to call
       @param {Function|String} method Method to invoke.
         May be a function or a string. If you pass a string
@@ -17374,6 +17621,15 @@ define("ember-metal/utils",
     */
     var _uuid = 0;
 
+    /**
+      Generates a universally unique identifier. This method
+      is used internally by Ember for assisting with
+      the generation of GUID's and other unique identifiers
+      such as `bind-attr` data attributes.
+
+      @public
+      @return {Number} [description]
+     */
     function uuid() {
       return ++_uuid;
     }
@@ -17701,10 +17957,10 @@ define("ember-metal/utils",
     */
     function wrap(func, superFunc) {
       function superWrapper() {
-        var ret, sup = this.__nextSuper;
-        this.__nextSuper = superFunc;
+        var ret, sup = this && this.__nextSuper;
+        if(this) { this.__nextSuper = superFunc; }
         ret = apply(this, func, arguments);
-        this.__nextSuper = sup;
+        if(this) { this.__nextSuper = sup; }
         return ret;
       }
 
@@ -18182,6 +18438,9 @@ define("ember-metal/watch_key",
       if (!watching[keyName]) {
         watching[keyName] = 1;
 
+        var desc = m.descs[keyName];
+        if (desc && desc.willWatch) { desc.willWatch(obj, keyName); }
+
         if ('function' === typeof obj.willWatchProperty) {
           obj.willWatchProperty(keyName);
         }
@@ -18205,6 +18464,9 @@ define("ember-metal/watch_key",
 
       if (watching[keyName] === 1) {
         watching[keyName] = 0;
+
+        var desc = m.descs[keyName];
+        if (desc && desc.didUnwatch) { desc.didUnwatch(obj, keyName); }
 
         if ('function' === typeof obj.didUnwatchProperty) {
           obj.didUnwatchProperty(keyName);
@@ -18571,8 +18833,8 @@ define("ember-routing-handlebars/helpers/action",
           if (options.boundProperty) {
             actionName = resolveParams(parameters.context, [actionNameOrPath], { types: ['ID'], data: parameters.options.data })[0];
 
-            if(typeof actionName === 'undefined' || typeof actionName === 'function') {
-              Ember.assert("You specified a quoteless path to the {{action}} helper '" + actionNameOrPath + "' which did not resolve to an actionName. Perhaps you meant to use a quoted actionName? (e.g. {{action '" + actionNameOrPath + "'}}).", true);
+            if (typeof actionName === 'undefined' || typeof actionName === 'function') {
+              Ember.deprecate("You specified a quoteless path to the {{action}} helper '" + actionNameOrPath + "' which did not resolve to an actionName. Perhaps you meant to use a quoted actionName? (e.g. {{action '" + actionNameOrPath + "'}}).");
               actionName = actionNameOrPath;
             }
           }
@@ -18944,7 +19206,7 @@ define("ember-routing-handlebars/helpers/link_to",
         @type Array | String
         @default ['href', 'title', 'rel']
        **/
-      attributeBindings: ['href', 'title', 'rel'],
+      attributeBindings: ['href', 'title', 'rel', 'tabindex'],
 
       /**
         By default the `{{link-to}}` helper will bind to the `active`, `loading`, and
@@ -19103,13 +19365,16 @@ define("ember-routing-handlebars/helpers/link_to",
       active: computed('loadedParams', function computeLinkViewActive() {
         if (get(this, 'loading')) { return false; }
 
-        var router = get(this, 'router'),
-            loadedParams = get(this, 'loadedParams'),
-            contexts = loadedParams.models,
-            currentWhen = this.currentWhen || loadedParams.targetRouteName,
-            handlers = router.router.recognizer.handlersFor(currentWhen),
-            leafName = handlers[handlers.length-1].handler,
-            maximumContexts = numberOfContextsAcceptedByHandler(currentWhen, handlers);
+        var router = get(this, 'router');
+        var loadedParams = get(this, 'loadedParams');
+        var contexts = loadedParams.models;
+        var currentWhen = this.currentWhen;
+        var isCurrentWhenSpecified = Boolean(currentWhen);
+        currentWhen = currentWhen || loadedParams.targetRouteName;
+
+        var handlers = router.router.recognizer.handlersFor(currentWhen);
+        var leafName = handlers[handlers.length-1].handler;
+        var maximumContexts = numberOfContextsAcceptedByHandler(currentWhen, handlers);
 
         // NOTE: any ugliness in the calculation of activeness is largely
         // due to the fact that we support automatic normalizing of
@@ -19130,7 +19395,9 @@ define("ember-routing-handlebars/helpers/link_to",
         if (!isActive) { return false; }
 
         
-          if (!this.currentWhen && leafName === loadedParams.targetRouteName) {
+          var emptyQueryParams = Ember.isEmpty(Ember.keys(loadedParams.queryParams));
+
+          if (!isCurrentWhenSpecified && !emptyQueryParams && isActive) {
             var visibleQueryParams = {};
             merge(visibleQueryParams, loadedParams.queryParams);
             router._prepareQueryParams(loadedParams.targetRouteName, loadedParams.models, visibleQueryParams);
@@ -19163,7 +19430,10 @@ define("ember-routing-handlebars/helpers/link_to",
         @property router
       **/
       router: computed(function() {
-        return get(this, 'controller').container.lookup('router:main');
+        var controller = get(this, 'controller');
+        if (controller && controller.container) {
+          return controller.container.lookup('router:main');
+        }
       }),
 
       /**
@@ -19177,14 +19447,9 @@ define("ember-routing-handlebars/helpers/link_to",
         if (!isSimpleClick(event)) { return true; }
 
         if (this.preventDefault !== false) {
-          if (Ember.FEATURES.isEnabled("ember-routing-linkto-target-attribute")) {
-            var targetAttribute = get(this, 'target');
-            if (!targetAttribute || targetAttribute === '_self') {
-              event.preventDefault();
-            }
-          } else {
+          
             event.preventDefault();
-          }
+          
         }
 
         if (this.bubbles === false) { event.stopPropagation(); }
@@ -19301,8 +19566,10 @@ define("ember-routing-handlebars/helpers/link_to",
         @return {Array} An array with the route name and any dynamic segments
       **/
       loadedParams: computed('resolvedParams', function computeLinkViewRouteArgs() {
+        var router = get(this, 'router');
+        if (!router) { return; }
+
         var resolvedParams = get(this, 'resolvedParams'),
-            router = get(this, 'router'),
             namedRoute = resolvedParams.targetRouteName;
 
         if (!namedRoute) { return; }
@@ -19362,20 +19629,7 @@ define("ember-routing-handlebars/helpers/link_to",
 
     LinkView.toString = function() { return "LinkView"; };
 
-    if (Ember.FEATURES.isEnabled("ember-routing-linkto-target-attribute")) {
-      LinkView.reopen({
-        attributeBindings: ['target'],
-
-        /**
-          Sets the `target` attribute of the `LinkView`'s anchor element.
-
-          @property target
-          @default null
-        **/
-        target: null
-      });
-    }
-
+    
     /**
       The `{{link-to}}` helper renders a link to the supplied
       `routeName` passing an optionally supplied model to the
@@ -19896,7 +20150,7 @@ define("ember-routing-handlebars/helpers/render",
     var set = __dependency4__.set;
     var camelize = __dependency5__.camelize;
     var generateControllerFactory = __dependency6__.generateControllerFactory;
-    var generateController = __dependency6__.default;
+    var generateController = __dependency6__["default"];
     var handlebarsGet = __dependency7__.handlebarsGet;
     var viewHelper = __dependency8__.viewHelper;
 
@@ -20159,8 +20413,8 @@ define("ember-routing-handlebars/helpers/shared",
     __exports__.resolvePaths = resolvePaths;
   });
 define("ember-routing",
-  ["ember-handlebars","ember-metal/core","ember-routing/ext/run_loop","ember-routing/ext/controller","ember-routing/ext/view","ember-routing/location/api","ember-routing/location/none_location","ember-routing/location/hash_location","ember-routing/location/history_location","ember-routing/location/auto_location","ember-routing/system/controller_for","ember-routing/system/dsl","ember-routing/system/router","ember-routing/system/route","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __exports__) {
+  ["ember-handlebars","ember-metal/core","ember-routing/ext/run_loop","ember-routing/ext/controller","ember-routing/ext/view","ember-routing/location/api","ember-routing/location/none_location","ember-routing/location/hash_location","ember-routing/location/history_location","ember-routing/location/auto_location","ember-routing/system/generate_controller","ember-routing/system/controller_for","ember-routing/system/dsl","ember-routing/system/router","ember-routing/system/route","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __exports__) {
     "use strict";
     /**
     Ember Routing
@@ -20181,12 +20435,12 @@ define("ember-routing",
     var HistoryLocation = __dependency9__["default"];
     var AutoLocation = __dependency10__["default"];
 
-    var controllerFor = __dependency11__.controllerFor;
     var generateControllerFactory = __dependency11__.generateControllerFactory;
-    var generateController = __dependency11__.generateController;
-    var RouterDSL = __dependency12__["default"];
-    var Router = __dependency13__["default"];
-    var Route = __dependency14__["default"];
+    var generateController = __dependency11__["default"];
+    var controllerFor = __dependency12__["default"];
+    var RouterDSL = __dependency13__["default"];
+    var Router = __dependency14__["default"];
+    var Route = __dependency15__["default"];
 
     Ember.Location = EmberLocation;
     Ember.AutoLocation = AutoLocation;
@@ -20283,8 +20537,8 @@ define("ember-routing/ext/controller",
       */
       transitionToRoute: function() {
         // target may be either another controller or a router
-        var target = get(this, 'target'),
-            method = target.transitionToRoute || target.transitionTo;
+        var target = get(this, 'target');
+        var method = target.transitionToRoute || target.transitionTo;
         return method.apply(target, arguments);
       },
 
@@ -20355,8 +20609,8 @@ define("ember-routing/ext/controller",
       */
       replaceRoute: function() {
         // target may be either another controller or a router
-        var target = get(this, 'target'),
-            method = target.replaceRoute || target.replaceWith;
+        var target = get(this, 'target');
+        var method = target.replaceRoute || target.replaceWith;
         return method.apply(target, arguments);
       },
 
@@ -20390,7 +20644,7 @@ define("ember-routing/ext/controller",
             return get(m.proto, '_normalizedQueryParams');
           }
 
-          var queryParams = this.queryParams;
+          var queryParams = get(this, 'queryParams');
           if (queryParams._qpMap) {
             return queryParams._qpMap;
           }
@@ -20410,14 +20664,14 @@ define("ember-routing/ext/controller",
             return get(m.proto, '_cacheMeta');
           }
 
-          var cacheMeta = {},
-              qpMap = get(this, '_normalizedQueryParams');
+          var cacheMeta = {};
+          var qpMap = get(this, '_normalizedQueryParams');
           for (var prop in qpMap) {
             if (!qpMap.hasOwnProperty(prop)) { continue; }
 
-            var qp = qpMap[prop],
-                scope = qp.scope,
-                parts;
+            var qp = qpMap[prop];
+            var scope = qp.scope;
+            var parts;
 
             if (scope === 'controller') {
               parts = [];
@@ -20444,9 +20698,11 @@ define("ember-routing/ext/controller",
 
             var cacheKey = this._calculateCacheKey(propMeta.prefix, propMeta.parts, propMeta.values);
             var cache = this._bucketCache;
-            var value = cache.lookup(cacheKey, prop, propMeta.def);
 
-            set(this, prop, value);
+            if (cache) {
+              var value = cache.lookup(cacheKey, prop, propMeta.def);
+              set(this, prop, value);
+            }
           }
         },
 
@@ -20458,7 +20714,10 @@ define("ember-routing/ext/controller",
           var value = get(controller, prop);
 
           // 1. Update model-dep cache
-          controller._bucketCache.stash(cacheKey, prop, value);
+          var cache = this._bucketCache;
+          if (cache) {
+            controller._bucketCache.stash(cacheKey, prop, value);
+          }
 
           // 2. Notify a delegate (e.g. to fire a qp transition)
           var delegate = controller._qpDelegate;
@@ -20597,10 +20856,10 @@ define("ember-routing/ext/view",
           return;
         }
 
-        var outlets = get(this, '_outlets'),
-            container = get(this, 'container'),
-            router = container && container.lookup('router:main'),
-            renderedName = get(view, 'renderedName');
+        var outlets = get(this, '_outlets');
+        var container = get(this, 'container');
+        var router = container && container.lookup('router:main');
+        var renderedName = get(view, 'renderedName');
 
         set(outlets, outletName, view);
 
@@ -20890,8 +21149,8 @@ define("ember-routing/location/api",
       _getHash: function () {
         // AutoLocation has it at _location, HashLocation at .location.
         // Being nice and not changing
-        var href = (this._location || this.location).href,
-            hashIndex = href.indexOf('#');
+        var href = (this._location || this.location).href;
+        var hashIndex = href.indexOf('#');
 
         if (hashIndex === -1) {
           return '';
@@ -21032,8 +21291,8 @@ define("ember-routing/location/auto_location",
         @method _getOrigin
       */
       _getOrigin: function () {
-        var location = this._location,
-            origin = location.origin;
+        var location = this._location;
+        var origin = location.origin;
 
         // Older browsers, especially IE, don't have origin
         if (!origin) {
@@ -21082,8 +21341,8 @@ define("ember-routing/location/auto_location",
         @method _getSupportsHashChange
       */
       _getSupportsHashChange: function () {
-        var _window = this._window,
-            documentMode = _window.document.documentMode;
+        var _window = this._window;
+        var documentMode = _window.document.documentMode;
 
         return ('onhashchange' in _window && (documentMode === undefined || documentMode > 7 ));
       },
@@ -21169,12 +21428,12 @@ define("ember-routing/location/auto_location",
         @method _getHistoryPath
       */
       _getHistoryPath: function () {
-        var rootURL = this._getRootURL(),
-            path = this._getPath(),
-            hash = this._getHash(),
-            query = this._getQuery(),
-            rootURLIndex = path.indexOf(rootURL),
-            routeHash, hashParts;
+        var rootURL = this._getRootURL();
+        var path = this._getPath();
+        var hash = this._getHash();
+        var query = this._getQuery();
+        var rootURLIndex = path.indexOf(rootURL);
+        var routeHash, hashParts;
 
         Ember.assert('Path ' + path + ' does not start with the provided rootURL ' + rootURL, rootURLIndex === 0);
 
@@ -21217,10 +21476,10 @@ define("ember-routing/location/auto_location",
         @method _getHashPath
       */
       _getHashPath: function () {
-        var rootURL = this._getRootURL(),
-            path = rootURL,
-            historyPath = this._getHistoryPath(),
-            routePath = historyPath.substr(rootURL.length);
+        var rootURL = this._getRootURL();
+        var path = rootURL;
+        var historyPath = this._getHistoryPath();
+        var routePath = historyPath.substr(rootURL.length);
 
         if (routePath !== '') {
           if (routePath.charAt(0) !== '/') {
@@ -21246,10 +21505,10 @@ define("ember-routing/location/auto_location",
           this.rootURL = options.rootURL;
         }
 
-        var historyPath, hashPath,
-            cancelRouterSetup = false,
-            implementationClass = this._NoneLocation,
-            currentPath = this._getFullPath();
+        var historyPath, hashPath;
+        var cancelRouterSetup = false;
+        var implementationClass = this._NoneLocation;
+        var currentPath = this._getFullPath();
 
         if (this._getSupportsHistory()) {
           historyPath = this._getHistoryPath();
@@ -21407,7 +21666,7 @@ define("ember-routing/location/hash_location",
         @param url {String}
       */
       formatURL: function(url) {
-        return '#'+url;
+        return '#' + url;
       },
 
       /**
@@ -21487,13 +21746,14 @@ define("ember-routing/location/history_location",
         @return url {String}
       */
       getURL: function() {
-        var rootURL = get(this, 'rootURL'),
-            location = get(this, 'location'),
-            path = location.pathname,
-            baseURL = get(this, 'baseURL');
+        var rootURL = get(this, 'rootURL');
+        var location = get(this, 'location');
+        var path = location.pathname;
+        var baseURL = get(this, 'baseURL');
 
         rootURL = rootURL.replace(/\/$/, '');
         baseURL = baseURL.replace(/\/$/, '');
+
         var url = path.replace(baseURL, '').replace(rootURL, '');
 
         
@@ -21602,8 +21862,8 @@ define("ember-routing/location/history_location",
         @param callback {Function}
       */
       onUpdateURL: function(callback) {
-        var guid = guidFor(this),
-            self = this;
+        var guid = guidFor(this);
+        var self = this;
 
         jQuery(window).on('popstate.ember-location-'+guid, function(e) {
           // Ignore initial page load popstate event in Chrome
@@ -21624,8 +21884,8 @@ define("ember-routing/location/history_location",
         @return formatted url {String}
       */
       formatURL: function(url) {
-        var rootURL = get(this, 'rootURL'),
-            baseURL = get(this, 'baseURL');
+        var rootURL = get(this, 'rootURL');
+        var baseURL = get(this, 'baseURL');
 
         if (url !== '') {
           rootURL = rootURL.replace(/\/$/, '');
@@ -21820,9 +22080,7 @@ define("ember-routing/system/dsl",
     __exports__["default"] = DSL;
 
     DSL.prototype = {
-      resource: function(name, options, callback) {
-        Ember.assert("'basic' cannot be used as a resource name.", name !== 'basic');
-
+      route: function(name, options, callback) {
         if (arguments.length === 2 && typeof options === 'function') {
           callback = options;
           options = {};
@@ -21832,18 +22090,19 @@ define("ember-routing/system/dsl",
           options = {};
         }
 
+        var type = options.resetNamespace === true ? 'resource' : 'route';
+        Ember.assert("'basic' cannot be used as a " + type + " name.", name !== 'basic');
+
+
         if (typeof options.path !== 'string') {
           options.path = "/" + name;
         }
 
-        var createSubRoutes = false;
-        if (Ember.FEATURES.isEnabled('ember-routing-consistent-resources')) {
-          createSubRoutes = true;
-        } else {
-          if (callback) { createSubRoutes = true; }
+        if (canNest(this) && options.resetNamespace !== true) {
+          name = this.parent + "." + name;
         }
 
-        if (createSubRoutes) {
+        if (callback) {
           var dsl = new DSL(name);
           route(dsl, 'loading');
           route(dsl, 'error', { path: "/_unused_dummy_error_path_route_" + name + "/:error" });
@@ -21855,16 +22114,7 @@ define("ember-routing/system/dsl",
           this.push(options.path, name, null);
         }
 
-
-        if (Ember.FEATURES.isEnabled("ember-routing-named-substates")) {
-          // For namespace-preserving nested resource (e.g. resource('foo.bar') within
-          // resource('foo')) we only want to use the last route name segment to determine
-          // the names of the error/loading substates (e.g. 'bar_loading')
-          name = name.split('.').pop();
-          route(this, name + '_loading');
-          route(this, name + '_error', { path: "/_unused_dummy_error_path_route_" + name + "/:error" });
-        }
-      },
+              },
 
       push: function(url, name, callback) {
         var parts = name.split('.');
@@ -21873,21 +22123,25 @@ define("ember-routing/system/dsl",
         this.matches.push([url, name, callback]);
       },
 
-      route: function(name, options) {
-        Ember.assert("'basic' cannot be used as a route name.", name !== 'basic');
-
-        route(this, name, options);
-        if (Ember.FEATURES.isEnabled("ember-routing-named-substates")) {
-          route(this, name + '_loading');
-          route(this, name + '_error', { path: "/_unused_dummy_error_path_route_" + name + "/:error" });
+      resource: function(name, options, callback) {
+        if (arguments.length === 2 && typeof options === 'function') {
+          callback = options;
+          options = {};
         }
+
+        if (arguments.length === 1) {
+          options = {};
+        }
+
+        options.resetNamespace = true;
+        this.route(name, options, callback);
       },
 
       generate: function() {
         var dslMatches = this.matches;
 
         if (!this.explicitIndex) {
-          this.route("index", { path: "/" });
+          route(this, "index", { path: "/" });
         }
 
         return function(match) {
@@ -21899,6 +22153,10 @@ define("ember-routing/system/dsl",
       }
     };
 
+    function canNest(dsl) {
+      return dsl.parent && dsl.parent !== 'application';
+    }
+
     function route(dsl, name, options) {
       Ember.assert("You must use `this.resource` to nest", typeof options !== 'function');
 
@@ -21908,7 +22166,7 @@ define("ember-routing/system/dsl",
         options.path = "/" + name;
       }
 
-      if (dsl.parent && dsl.parent !== 'application') {
+      if (canNest(dsl) && options.resetNamespace !== true) {
         name = dsl.parent + "." + name;
       }
 
@@ -22059,9 +22317,10 @@ define("ember-routing/system/route",
       /**
         @private
 
-        @method reset
+        @method _reset
+        @since 1.7.0
       */
-      reset: function(isExiting, transition) {
+      _reset: function(isExiting, transition) {
         
           var controller = this.controller;
           controller._qpDelegate = get(this, '_qp.states.inactive');
@@ -22360,7 +22619,7 @@ define("ember-routing/system/route",
               // this controller.
               var value, svalue;
               if (changes && qp.urlKey in changes) {
-                // Controller overrode this value in setupController
+                // Value updated in/before setupController
                 value = get(controller, qp.prop);
                 svalue = route.serializeQueryParam(value, qp.urlKey, qp.type);
               } else {
@@ -22370,10 +22629,7 @@ define("ember-routing/system/route",
                 } else {
                   // No QP provided; use default value.
                   svalue = qp.sdef;
-                  value = qp.def;
-                  if (isArray(value)) {
-                    value = Ember.A(value.slice());
-                  }
+                  value = copyDefaultValue(qp.def);
                 }
               }
 
@@ -22698,8 +22954,9 @@ define("ember-routing/system/route",
         @method setup
       */
       setup: function(context, transition) {
-        var controllerName = this.controllerName || this.routeName,
-            controller = this.controllerFor(controllerName, true);
+        var controllerName = this.controllerName || this.routeName;
+        var controller = this.controllerFor(controllerName, true);
+
         if (!controller) {
           controller =  this.generateController(controllerName, context);
         }
@@ -22716,10 +22973,16 @@ define("ember-routing/system/route",
             var states = get(this, '_qp.states');
             if (transition) {
               // Update the model dep values used to calculate cache keys.
+              stashParamNames(this.router, transition.state.handlerInfos);
               controller._qpDelegate = states.changingKeys;
               controller._updateCacheParams(transition.params);
             }
             controller._qpDelegate = states.allowOverrides;
+
+            if (transition) {
+              var qpValues = getQueryParamsFor(this, transition.state);
+              controller.setProperties(qpValues);
+            }
 
             this.setupController(controller, context, transition);
                   }
@@ -22865,6 +23128,7 @@ define("ember-routing/system/route",
 
         @method redirect
         @param {Object} model the model for this route
+        @param {Transition} transition the transition object associated with the current transition
       */
       redirect: Ember.K,
 
@@ -22897,12 +23161,29 @@ define("ember-routing/system/route",
         * The find method is called on the model class with the value of
           the dynamic segment.
 
-        Note that for routes with dynamic segments, this hook is only
-        executed when entered via the URL. If the route is entered
-        through a transition (e.g. when using the `link-to` Handlebars
-        helper), then a model context is already provided and this hook
-        is not called. Routes without dynamic segments will always
-        execute the model hook.
+        Note that for routes with dynamic segments, this hook is not always
+        executed. If the route is entered through a transition (e.g. when
+        using the `link-to` Handlebars helper or the `transitionTo` method
+        of routes), and a model context is already provided this hook
+        is not called.
+
+        A model context does not include a primitive string or number,
+        which does cause the model hook to be called.
+
+        Routes without dynamic segments will always execute the model hook.
+
+        ```js
+        // no dynamic segment, model hook always called
+        this.transitionTo('posts');
+
+        // model passed in, so model hook not called
+        thePost = store.find('post', 1);
+        this.transitionTo('post', thePost);
+
+        // integer passed in, model hook is called
+        this.transitionTo('post', 1);
+        ```
+
 
         This hook follows the asynchronous/promise semantics
         described in the documentation for `beforeModel`. In particular,
@@ -23166,9 +23447,9 @@ define("ember-routing/system/route",
         @return {Ember.Controller}
       */
       controllerFor: function(name, _skipAssert) {
-        var container = this.container,
-            route = container.lookup('route:'+name),
-            controller;
+        var container = this.container;
+        var route = container.lookup('route:'+name);
+        var controller;
 
         if (route && route.controllerName) {
           name = route.controllerName;
@@ -23247,8 +23528,8 @@ define("ember-routing/system/route",
         @return {Object} the model object
       */
       modelFor: function(name) {
-        var route = this.container.lookup('route:' + name),
-            transition = this.router ? this.router.router.activeTransition : null;
+        var route = this.container.lookup('route:' + name);
+        var transition = this.router ? this.router.router.activeTransition : null;
 
         // If we are mid-transition, we want to try and look up
         // resolved parent contexts on the current transitionEvent.
@@ -23297,55 +23578,122 @@ define("ember-routing/system/route",
       },
 
       /**
-        Renders a template into an outlet.
+        `render` is used to render a template into a region of another template
+        (indicated by an `{{outlet}}`). `render` is used both during the entry
+        phase of routing (via the `renderTemplate` hook) and later in response to
+        user interaction.
 
-        This method has a number of defaults, based on the name of the
-        route specified in the router.
+        For example, given the following minimal router and templates:
+
+        ```js
+        Router.map(function() {
+          this.resource('photos');
+        });
+        ```
+
+        ```handlebars
+        <!-- application.hbs -->
+        <div class='something-in-the-app-hbs'>
+          {{outlet "anOutletName"}}
+        </div>
+        ```
+
+        ```handlebars
+        <!-- photos.hbs -->
+        <h1>Photos</h1>
+        ```
+
+        You can render `photos.hbs` into the `"anOutletName"` outlet of
+        `application.hbs` by calling `render`:
+
+        ```js
+        // posts route
+        Ember.Route.extend({
+          renderTemplate: function(){
+            this.render('posts', {
+              into: 'application',
+              outlet: 'anOutletName'
+            })
+          }
+        });
+        ```
+
+        `render` additionally allows you to supply which `view`, `controller`, and
+        `model` objects should be loaded and associated with the rendered template.
+
+
+        ```js
+        // posts route
+        Ember.Route.extend({
+          renderTemplate: function(controller, model){
+            this.render('posts', {    // the template to render, referenced by name
+              into: 'application',    // the template to render into, referenced by name
+              outlet: 'anOutletName', // the outlet inside `options.template` to render into.
+              view: 'aViewName',      // the view to use for this template, referenced by name
+              controller: 'someControllerName', // the controller to use for this template, referenced by name
+              model: model            // the model to set on `options.controller`.
+            })
+          }
+        });
+        ```
+
+        The string values provided for the template name, view, and controller
+        will eventually pass through to the resolver for lookup. See
+        Ember.Resolver for how these are mapped to JavaScript objects in your
+        application.
+
+        Not all options need to be passed to `render`. Default values will be used
+        based on the name of the route specified in the router or the Route's
+        `controllerName`, `viewName` and and `templateName` properties.
 
         For example:
 
         ```js
-        App.Router.map(function() {
+        // router
+        Router.map(function() {
           this.route('index');
           this.resource('post', {path: '/posts/:post_id'});
         });
-
-        App.PostRoute = App.Route.extend({
-          renderTemplate: function() {
-            this.render();
-          }
-        });
         ```
-
-        The name of the `PostRoute`, as defined by the router, is `post`.
-
-        By default, render will:
-
-        * render the `post` template
-        * with the `post` view (`PostView`) for event handling, if one exists
-        * and the `post` controller (`PostController`), if one exists
-        * into the `main` outlet of the `application` template
-
-        You can override this behavior:
 
         ```js
-        App.PostRoute = App.Route.extend({
+        // post route
+        PostRoute = App.Route.extend({
           renderTemplate: function() {
-            this.render('myPost', {   // the template to render
-              into: 'index',          // the template to render into
-              outlet: 'detail',       // the name of the outlet in that template
-              controller: 'blogPost'  // the controller to use for the template
-            });
+            this.render(); // all defaults apply
           }
         });
         ```
 
-        Remember that the controller's `model` will be the route's model. In
-        this case, the default model will be `App.Post.find(params.post_id)`.
+        The name of the `PostRoute`, defined by the router, is `post`.
+
+        The following equivalent default options will be applied when
+        the Route calls `render`:
+
+        ```js
+        //
+        this.render('post', {  // the template name associated with 'post' Route
+          into: 'application', // the parent route to 'post' Route
+          outlet: 'main',      // {{outlet}} and {{outlet 'main' are synonymous}},
+          view: 'post',        // the view associated with the 'post' Route
+          controller: 'post',  // the controller associated with the 'post' Route
+        })
+        ```
+
+        By default the controller's `model` will be the route's model, so it does not
+        need to be passed unless you wish to change which model is being used.
 
         @method render
         @param {String} name the name of the template to render
-        @param {Object} options the options
+        @param {Object} [options] the options
+        @param {String} [options.into] the template to render into,
+                        referenced by name. Defaults to the parent template
+        @param {String} [options.outlet] the outlet inside `options.template` to render into.
+                        Defaults to 'main'
+        @param {String} [options.controller] the controller to use for this template,
+                        referenced by name. Defaults to the Route's paired controller
+        @param {String} [options.model] the model object to set on `options.controller`
+                        Defaults to the return value of the Route's model hook
       */
       render: function(name, options) {
         Ember.assert("The name in the given arguments is undefined", arguments.length > 0 ? !isNone(arguments[0]) : true);
@@ -23358,6 +23706,7 @@ define("ember-routing/system/route",
         }
 
         options = options || {};
+        options.namePassed = namePassed;
 
         var templateName;
 
@@ -23371,9 +23720,9 @@ define("ember-routing/system/route",
 
         var viewName = options.view || namePassed && name || this.viewName || name;
 
-        var container = this.container,
-            view = container.lookup('view:' + viewName),
-            template = view ? view.get('template') : null;
+        var container = this.container;
+        var view = container.lookup('view:' + viewName);
+        var template = view ? view.get('template') : null;
 
         if (!template) {
           template = container.lookup('template:' + templateName);
@@ -23626,9 +23975,6 @@ define("ember-routing/system/route",
           run.once(this, this._fireQueryParamTransition);
         },
 
-        //_inactiveQPChanged: function(controller, qp) {
-        //},
-
         _updatingQPChanged: function(controller, qp) {
           var router = this.router;
           if (!router._qpUpdates) {
@@ -23646,37 +23992,12 @@ define("ember-routing/system/route",
             return {};
           }
 
-          var transition = this.router.router.activeTransition,
-              state = transition ? transition.state : this.router.router.state,
-              params = {};
+          var transition = this.router.router.activeTransition;
+          var state = transition ? transition.state : this.router.router.state;
 
+          var params = {};
           merge(params, state.params[name]);
-
-          if (!state.fullQueryParams) {
-            state.fullQueryParams = {};
-            merge(state.fullQueryParams, state.queryParams);
-
-            var targetRouteName = state.handlerInfos[state.handlerInfos.length-1].name;
-            this.router._deserializeQueryParams(targetRouteName, state.fullQueryParams);
-          }
-
-          var qpMeta = get(route, '_qp');
-
-          if (!qpMeta) {
-            // No query params specified on the controller.
-            return params;
-          }
-
-          // Copy over all the query params for this route/controller into params hash.
-          // TODO: is this correct? I think this won't do model dep state.
-          var qps = qpMeta.qps;
-          for (var i = 0, len = qps.length; i < len; ++i) {
-            // Put deserialized qp on params hash.
-            var qp = qps[i];
-            if (!(qp.prop in params)) {
-              params[qp.prop] = state.fullQueryParams[qp.prop] || qp.def;
-            }
-          }
+          merge(params, getQueryParamsFor(route, state));
 
           return params;
         },
@@ -23736,9 +24057,9 @@ define("ember-routing/system/route",
 
           @method resetController
           @param {Controller} controller instance
-          @param {Object} model
           @param {Boolean} isExiting
           @param {Object} transition
+          @since 1.7.0
         */
         resetController: Ember.K
       });
@@ -23787,10 +24108,10 @@ define("ember-routing/system/route",
 
       if (options.controller) {
         controller = options.controller;
-      } else if (namedController = route.container.lookup('controller:' + name)) {
-        controller = namedController;
+      } else if (options.namePassed) {
+        controller = route.container.lookup('controller:' + name) || route.controllerName || route.routeName;
       } else {
-        controller = route.controllerName || route.routeName;
+        controller = route.controllerName || route.container.lookup('controller:' + name);
       }
 
       if (typeof controller === 'string') {
@@ -23860,6 +24181,50 @@ define("ember-routing/system/route",
 
     function generateOutletTeardown(parentView, outlet) {
       return function() { parentView.disconnectOutlet(outlet); };
+    }
+
+    function getFullQueryParams(router, state) {
+      if (state.fullQueryParams) { return state.fullQueryParams; }
+
+      state.fullQueryParams = {};
+      merge(state.fullQueryParams, state.queryParams);
+
+      var targetRouteName = state.handlerInfos[state.handlerInfos.length-1].name;
+      router._deserializeQueryParams(targetRouteName, state.fullQueryParams);
+      return state.fullQueryParams;
+    }
+
+    function getQueryParamsFor(route, state) {
+      state.queryParamsFor = state.queryParamsFor || {};
+      var name = route.routeName;
+
+      if (state.queryParamsFor[name]) { return state.queryParamsFor[name]; }
+
+      var fullQueryParams = getFullQueryParams(route.router, state);
+
+      var params = state.queryParamsFor[name] = {};
+
+      // Copy over all the query params for this route/controller into params hash.
+      var qpMeta = get(route, '_qp');
+      var qps = qpMeta.qps;
+      for (var i = 0, len = qps.length; i < len; ++i) {
+        // Put deserialized qp on params hash.
+        var qp = qps[i];
+
+        var qpValueWasPassedIn = (qp.prop in fullQueryParams);
+        params[qp.prop] = qpValueWasPassedIn ?
+                          fullQueryParams[qp.prop] :
+                          copyDefaultValue(qp.def);
+      }
+
+      return params;
+    }
+
+    function copyDefaultValue(value) {
+      if (isArray(value)) {
+        return Ember.A(value.slice());
+      }
+      return value;
     }
 
     __exports__["default"] = Route;
@@ -23978,11 +24343,11 @@ define("ember-routing/system/router",
       startRouting: function() {
         this.router = this.router || this.constructor.map(Ember.K);
 
-        var router = this.router,
-            location = get(this, 'location'),
-            container = this.container,
-            self = this,
-            initialURL = get(this, 'initialURL');
+        var router = this.router;
+        var location = get(this, 'location');
+        var container = this.container;
+        var self = this;
+        var initialURL = get(this, 'initialURL');
 
         // Allow the Location class to cancel the router setup while it refreshes
         // the page
@@ -24097,12 +24462,13 @@ define("ember-routing/system/router",
         manual concatenation of the arguments into a single
         array.
 
-        @method isActive
+        @method isActiveIntent
         @param routeName
         @param models
         @param queryParams
         @return {Boolean}
         @private
+        @since 1.7.0
       */
       isActiveIntent: function(routeName, models, queryParams) {
         var router = this.router;
@@ -24156,10 +24522,10 @@ define("ember-routing/system/router",
       },
 
       _setupLocation: function() {
-        var location = get(this, 'location'),
-            rootURL = get(this, 'rootURL');
+        var location = get(this, 'location');
+        var rootURL = get(this, 'rootURL');
 
-        if (rootURL && !this.container.has('-location-setting:root-url')) {
+        if (rootURL && this.container && !this.container.has('-location-setting:root-url')) {
           this.container.register('-location-setting:root-url', rootURL, { instantiate: false });
         }
 
@@ -24186,13 +24552,13 @@ define("ember-routing/system/router",
       },
 
       _getHandlerFunction: function() {
-        var seen = {}, container = this.container,
-            DefaultRoute = container.lookupFactory('route:basic'),
-            self = this;
+        var seen = {}, container = this.container;
+        var DefaultRoute = container.lookupFactory('route:basic');
+        var self = this;
 
         return function(name) {
-          var routeName = 'route:' + name,
-              handler = container.lookup(routeName);
+          var routeName = 'route:' + name;
+          var handler = container.lookup(routeName);
 
           if (seen[name]) { return handler; }
 
@@ -24327,9 +24693,9 @@ define("ember-routing/system/router",
             recogHandlerInfos = routerjs.recognizer.handlersFor(leafRouteName);
 
         for (var i = 0, len = recogHandlerInfos.length; i < len; ++i) {
-          var recogHandler = recogHandlerInfos[i],
-              route = routerjs.getHandler(recogHandler.handler),
-              qpMeta = get(route, '_qp');
+          var recogHandler = recogHandlerInfos[i];
+          var route = routerjs.getHandler(recogHandler.handler);
+          var qpMeta = get(route, '_qp');
 
           if (!qpMeta) { continue; }
 
@@ -24427,12 +24793,13 @@ define("ember-routing/system/router",
       @private
      */
     function forEachRouteAbove(originRoute, transition, callback) {
-      var handlerInfos = transition.state.handlerInfos,
-          originRouteFound = false;
+      var handlerInfos = transition.state.handlerInfos;
+      var originRouteFound = false;
+      var handlerInfo, route;
 
       for (var i = handlerInfos.length - 1; i >= 0; --i) {
-        var handlerInfo = handlerInfos[i],
-            route = handlerInfo.handler;
+        handlerInfo = handlerInfos[i];
+        route = handlerInfo.handler;
 
         if (!originRouteFound) {
           if (originRoute === route) {
@@ -24475,21 +24842,9 @@ define("ember-routing/system/router",
             router.intermediateTransitionTo('application_error', error);
             return;
           }
-        } else {
-          // Don't fire an assertion if we found an error substate.
-          return;
         }
 
-        var errorArgs = ['Error while processing route: ' + transition.targetName];
-
-        if (error) {
-          if (error.message) { errorArgs.push(error.message); }
-          if (error.stack)   { errorArgs.push(error.stack); }
-
-          if (typeof error === "string") { errorArgs.push(error); }
-        }
-
-        Ember.Logger.error.apply(this, errorArgs);
+        logError(error, 'Error while processing route: ' + transition.targetName);
       },
 
       loading: function(transition, originRoute) {
@@ -24520,20 +24875,28 @@ define("ember-routing/system/router",
       }
     };
 
-    function findChildRouteName(parentRoute, originatingChildRoute, name) {
-      var router = parentRoute.router,
-          childName,
-          targetChildRouteName = originatingChildRoute.routeName.split('.').pop(),
-          namespace = parentRoute.routeName === 'application' ? '' : parentRoute.routeName + '.';
+    function logError(error, initialMessage) {
+      var errorArgs = [];
 
-      if (Ember.FEATURES.isEnabled("ember-routing-named-substates")) {
-        // First, try a named loading state, e.g. 'foo_loading'
-        childName = namespace + targetChildRouteName + '_' + name;
-        if (routeHasBeenDefined(router, childName)) {
-          return childName;
-        }
+      if (initialMessage) { errorArgs.push(initialMessage); }
+
+      if (error) {
+        if (error.message) { errorArgs.push(error.message); }
+        if (error.stack)   { errorArgs.push(error.stack); }
+
+        if (typeof error === "string") { errorArgs.push(error); }
       }
 
+      Ember.Logger.error.apply(this, errorArgs);
+    }
+
+    function findChildRouteName(parentRoute, originatingChildRoute, name) {
+      var router = parentRoute.router;
+      var childName;
+      var targetChildRouteName = originatingChildRoute.routeName.split('.').pop();
+      var namespace = parentRoute.routeName === 'application' ? '' : parentRoute.routeName + '.';
+
+      
       // Second, try general loading state, e.g. 'loading'
       childName = namespace + name;
       if (routeHasBeenDefined(router, childName)) {
@@ -24556,10 +24919,11 @@ define("ember-routing/system/router",
       }
 
       var eventWasHandled = false;
+      var handlerInfo, handler;
 
       for (var i = handlerInfos.length - 1; i >= 0; i--) {
-        var handlerInfo = handlerInfos[i],
-            handler = handlerInfo.handler;
+        handlerInfo = handlerInfos[i];
+        handler = handlerInfo.handler;
 
         if (handler._actions && handler._actions[name]) {
           if (handler._actions[name].apply(handler, args) === true) {
@@ -24624,17 +24988,34 @@ define("ember-routing/system/router",
 
     EmberRouter.reopenClass({
       router: null,
+
+      /**
+        The `Router.map` function allows you to define mappings from URLs to routes
+        and resources in your application. These mappings are defined within the
+        supplied callback function using `this.resource` and `this.route`.
+
+        ```javascript
+        App.Router.map(function({
+          this.route('about');
+          this.resource('article');
+        }));
+        ```
+
+        For more detailed examples please see
+        [the guides](http://emberjs.com/guides/routing/defining-your-routes/).
+
+        @method map
+        @param callback
+      */
       map: function(callback) {
         var router = this.router;
         if (!router) {
           router = new Router();
 
-          if (Ember.FEATURES.isEnabled("ember-routing-will-change-hooks")) {
-            router._willChangeContextEvent = 'willChangeModel';
-          } else {
+          
             router._triggerWillChangeContext = Ember.K;
             router._triggerWillLeave = Ember.K;
-          }
+          
 
           router.callbacks = [];
           router.triggerEvent = triggerEvent;
@@ -24671,10 +25052,11 @@ define("ember-routing/system/router",
           return true;
         }
 
+        var name, nameParts, oldNameParts;
         for (var i=1, l=handlerInfos.length; i<l; i++) {
-          var name = handlerInfos[i].name,
-              nameParts = name.split("."),
-              oldNameParts = slice.call(path);
+          name = handlerInfos[i].name;
+          nameParts = name.split(".");
+          oldNameParts = slice.call(path);
 
           while (oldNameParts.length) {
             if (intersectionMatches(oldNameParts, nameParts)) {
@@ -24696,12 +25078,7 @@ define("ember-routing/system/router",
 
         if (error.name === "UnrecognizedURLError") {
           Ember.assert("The URL '" + error.message + "' did not match any routes in your application");
-        } else if (error.name === 'TransitionAborted') {
-          // just ignore TransitionAborted here
-        } else {
-          throw error;
         }
-
         return error;
       }, 'Ember: Process errors from Router');
     }
@@ -26527,12 +26904,6 @@ define("ember-runtime/computed/reduce_computed_macros",
       duplicated elements from the dependent arrays
     */
     function intersect() {
-      var getDependentKeyGuids = function (changeMeta) {
-        return map(changeMeta.property._dependentKeys, function (dependentKey) {
-          return guidFor(dependentKey);
-        });
-      };
-
       var args = a_slice.call(arguments);
       args.push({
         initialize: function (array, changeMeta, instanceMeta) {
@@ -26540,11 +26911,10 @@ define("ember-runtime/computed/reduce_computed_macros",
         },
 
         addedItem: function(array, item, changeMeta, instanceMeta) {
-          var itemGuid = guidFor(item),
-              dependentGuids = getDependentKeyGuids(changeMeta),
-              dependentGuid = guidFor(changeMeta.arrayChanged),
-              numberOfDependentArrays = changeMeta.property._dependentKeys.length,
-              itemCounts = instanceMeta.itemCounts;
+          var itemGuid = guidFor(item);
+          var dependentGuid = guidFor(changeMeta.arrayChanged);
+          var numberOfDependentArrays = changeMeta.property._dependentKeys.length;
+          var itemCounts = instanceMeta.itemCounts;
 
           if (!itemCounts[itemGuid]) { itemCounts[itemGuid] = {}; }
           if (itemCounts[itemGuid][dependentGuid] === undefined) { itemCounts[itemGuid][dependentGuid] = 0; }
@@ -26557,14 +26927,16 @@ define("ember-runtime/computed/reduce_computed_macros",
           return array;
         },
         removedItem: function(array, item, changeMeta, instanceMeta) {
-          var itemGuid = guidFor(item),
-              dependentGuids = getDependentKeyGuids(changeMeta),
-              dependentGuid = guidFor(changeMeta.arrayChanged),
-              numberOfDependentArrays = changeMeta.property._dependentKeys.length,
-              numberOfArraysItemAppearsIn,
-              itemCounts = instanceMeta.itemCounts;
+          var itemGuid = guidFor(item);
+          var dependentGuid = guidFor(changeMeta.arrayChanged);
+          var numberOfDependentArrays = changeMeta.property._dependentKeys.length;
+          var numberOfArraysItemAppearsIn;
+          var itemCounts = instanceMeta.itemCounts;
 
-          if (itemCounts[itemGuid][dependentGuid] === undefined) { itemCounts[itemGuid][dependentGuid] = 0; }
+          if (itemCounts[itemGuid][dependentGuid] === undefined) {
+            itemCounts[itemGuid][dependentGuid] = 0;
+          }
+
           if (--itemCounts[itemGuid][dependentGuid] === 0) {
             delete itemCounts[itemGuid][dependentGuid];
             numberOfArraysItemAppearsIn = keys(itemCounts[itemGuid]).length;
@@ -27704,7 +28076,7 @@ define("ember-runtime/keys",
         if (key.substring(0,2) === '__') return;
         if (key === '_super') return;
         if (EnumerableUtils.indexOf(array, key) >= 0) return;
-        if (typeof obj.hasOwnProperty === 'function' && !obj.hasOwnProperty(key)) return;
+        if (!Object.prototype.hasOwnProperty.call(obj, key)) return;
 
         array.push(key);
       };
@@ -28098,7 +28470,7 @@ define("ember-runtime/mixins/array",
 
       /**
         This is the handler for the special array content property. If you get
-        this property, it will return this. If you set this property it a new
+        this property, it will return this. If you set this property to a new
         array, it will replace the current content.
 
         This property overrides the default property defined in `Ember.Enumerable`.
@@ -28513,7 +28885,18 @@ define("ember-runtime/mixins/controller",
 
       store: null,
 
+      /**
+        The controller's current model. When retrieving or modifying a controller's
+        model, this property should be used instead of the `content` property.
+
+        @property model
+        @public
+       */
       model: null,
+
+      /**
+        @private
+       */
       content: computed.alias('model'),
 
       deprecatedSendHandles: function(actionName) {
@@ -28556,6 +28939,8 @@ define("ember-runtime/mixins/controller_content_model_alias_deprecation",
 
       @class ControllerContentModelAliasDeprecation
       @namespace Ember
+      @private
+      @since 1.7.0
     */
     __exports__["default"] = Mixin.create({
       /**
@@ -28758,6 +29143,8 @@ define("ember-runtime/mixins/deferred",
       },
 
       _deferred: computed(function() {
+        Ember.deprecate('Usage of Ember.DeferredMixin or Ember.Deferred is deprecated.', this._suppressDeferredDeprecation);
+
         return RSVP.defer('Ember: DeferredMixin - ' + this);
       })
     });
@@ -29740,7 +30127,7 @@ define("ember-runtime/mixins/enumerable",
 
       /**
         Invoke this method when the contents of your enumerable has changed.
-        This will notify any observers watching for content changes. If your are
+        This will notify any observers watching for content changes. If you are
         implementing an ordered enumerable (such as an array), also pass the
         start and end values where the content changed so that it can be used to
         notify range observers.
@@ -30678,13 +31065,15 @@ define("ember-runtime/mixins/observable",
         with a list of strings or an array:
 
         ```javascript
-        record.getProperties('firstName', 'lastName', 'zipCode');  // { firstName: 'John', lastName: 'Doe', zipCode: '10011' }
+        record.getProperties('firstName', 'lastName', 'zipCode');
+        // { firstName: 'John', lastName: 'Doe', zipCode: '10011' }
         ```
 
         is equivalent to:
 
         ```javascript
-        record.getProperties(['firstName', 'lastName', 'zipCode']);  // { firstName: 'John', lastName: 'Doe', zipCode: '10011' }
+        record.getProperties(['firstName', 'lastName', 'zipCode']);
+        // { firstName: 'John', lastName: 'Doe', zipCode: '10011' }
         ```
 
         @method getProperties
@@ -32127,6 +32516,7 @@ define("ember-runtime/system/core_object",
     var finishPartial = Mixin.finishPartial;
     var reopen = Mixin.prototype.reopen;
     var MANDATORY_SETTER = Ember.ENV.MANDATORY_SETTER;
+    var hasCachedComputedProperties = false;
 
     var undefinedDescriptor = {
       configurable: true,
@@ -32237,7 +32627,12 @@ define("ember-runtime/system/core_object",
           }
         }
         finishPartial(this, m);
-        apply(this, this.init, arguments);
+        var length = arguments.length;
+        var args = new Array(length);
+        for (var x = 0; x < length; x++) {
+          args[x] = arguments[x];
+        }
+        apply(this, this.init, args);
         m.proto = proto;
         finishChains(this);
         sendEvent(this, "init");
@@ -32280,7 +32675,12 @@ define("ember-runtime/system/core_object",
 
     CoreObject.PrototypeMixin = Mixin.create({
       reopen: function() {
-        applyMixin(this, arguments, true);
+        var length = arguments.length;
+        var args = new Array(length);
+        for (var i = 0; i < length; i++) {
+          args[i] = arguments[i];
+        }
+        applyMixin(this, args, true);
         return this;
       },
 
@@ -32631,7 +33031,14 @@ define("ember-runtime/system/core_object",
       */
       createWithMixins: function() {
         var C = this;
-        if (arguments.length>0) { this._initMixins(arguments); }
+        var l= arguments.length;
+        if (l > 0) {
+          var args = new Array(l);
+          for (var i = 0; i < l; i++) {
+            args[i] = arguments[i];
+          }
+          this._initMixins(args);
+        }
         return new C();
       },
 
@@ -32674,7 +33081,14 @@ define("ember-runtime/system/core_object",
       */
       create: function() {
         var C = this;
-        if (arguments.length>0) { this._initProperties(arguments); }
+        var l = arguments.length;
+        if (l > 0) {
+          var args = new Array(l);
+          for (var i = 0; i < l; i++) {
+            args[i] = arguments[i];
+          }
+          this._initProperties(args);
+        }
         return new C();
       },
 
@@ -32709,7 +33123,16 @@ define("ember-runtime/system/core_object",
       */
       reopen: function() {
         this.willReopen();
-        apply(this.PrototypeMixin, reopen, arguments);
+
+        var l = arguments.length;
+        var args = new Array(l);
+        if (l > 0) {
+          for (var i = 0; i < l; i++) {
+            args[i] = arguments[i];
+          }
+        }
+
+        apply(this.PrototypeMixin, reopen, args);
         return this;
       },
 
@@ -32769,7 +33192,15 @@ define("ember-runtime/system/core_object",
         @method reopenClass
       */
       reopenClass: function() {
-        apply(this.ClassMixin, reopen, arguments);
+        var l = arguments.length;
+        var args = new Array(l);
+        if (l > 0) {
+          for (var i = 0; i < l; i++) {
+            args[i] = arguments[i];
+          }
+        }
+
+        apply(this.ClassMixin, reopen, args);
         applyMixin(this, arguments, false);
         return this;
       },
@@ -32822,6 +33253,26 @@ define("ember-runtime/system/core_object",
         return desc._meta || {};
       },
 
+      _computedProperties: Ember.computed(function() {
+        hasCachedComputedProperties = true;
+        var proto = this.proto();
+        var descs = meta(proto).descs;
+        var property;
+        var properties = [];
+
+        for (var name in descs) {
+          property = descs[name];
+
+          if (property instanceof ComputedProperty) {
+            properties.push({
+              name: name,
+              meta: property._meta
+            });
+          }
+        }
+        return properties;
+      }).readOnly(),
+
       /**
         Iterate over each computed property for the class, passing its name
         and any associated metadata (see `metaForProperty`) to the callback.
@@ -32831,17 +33282,15 @@ define("ember-runtime/system/core_object",
         @param {Object} binding
       */
       eachComputedProperty: function(callback, binding) {
-        var proto = this.proto(),
-            descs = meta(proto).descs,
-            empty = {},
-            property;
+        var property, name;
+        var empty = {};
 
-        for (var name in descs) {
-          property = descs[name];
+        var properties = get(this, '_computedProperties');
 
-          if (property instanceof ComputedProperty) {
-            callback.call(binding || this, name, property._meta || empty);
-          }
+        for (var i = 0, length = properties.length; i < length; i++) {
+          property = properties[i];
+          name = property.name;
+          callback.call(binding || this, property.name, property.meta || empty);
         }
       }
     });
@@ -32853,19 +33302,42 @@ define("ember-runtime/system/core_object",
     }
 
     CoreObject.ClassMixin = ClassMixin;
+
     ClassMixin.apply(CoreObject);
+
+    CoreObject.reopen({
+      didDefineProperty: function(proto, key, value) {
+        if (hasCachedComputedProperties === false) { return; }
+        if (value instanceof Ember.ComputedProperty) {
+          var cache = Ember.meta(this.constructor).cache;
+
+          if (cache._computedProperties !== undefined) {
+            cache._computedProperties = undefined;
+          }
+        }
+
+        this._super();
+      }
+    });
+
 
     __exports__["default"] = CoreObject;
   });
 define("ember-runtime/system/deferred",
-  ["ember-runtime/mixins/deferred","ember-metal/property_get","ember-runtime/system/object","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
+  ["ember-metal/core","ember-runtime/mixins/deferred","ember-metal/property_get","ember-runtime/system/object","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
-    var DeferredMixin = __dependency1__["default"];
-    var get = __dependency2__.get;
-    var EmberObject = __dependency3__["default"];
+    var Ember = __dependency1__["default"];
+    var DeferredMixin = __dependency2__["default"];
+    var get = __dependency3__.get;
+    var EmberObject = __dependency4__["default"];
 
-    var Deferred = EmberObject.extend(DeferredMixin);
+    var Deferred = EmberObject.extend(DeferredMixin, {
+      init: function() {
+        Ember.deprecate('Usage of Ember.Deferred is deprecated.');
+        this._super();
+      }
+    });
 
     Deferred.reopenClass({
       promise: function(callback, binding) {
@@ -33306,6 +33778,15 @@ define("ember-runtime/system/namespace",
 
     var STARTS_WITH_UPPERCASE = /^[A-Z]/;
 
+    function tryIsNamespace(lookup, prop) {
+      try {
+        var obj = lookup[prop];
+        return obj && obj.isNamespace && obj;
+      } catch (e) {
+        // continue
+      }
+    }
+
     function findNamespaces() {
       var lookup = Ember.lookup, obj, isNamespace;
 
@@ -33320,14 +33801,8 @@ define("ember-runtime/system/namespace",
 
         // At times we are not allowed to access certain properties for security reasons.
         // There are also times where even if we can access them, we are not allowed to access their properties.
-        try {
-          obj = lookup[prop];
-          isNamespace = obj && obj.isNamespace;
-        } catch (e) {
-          continue;
-        }
-
-        if (isNamespace) {
+        obj = tryIsNamespace(lookup, prop);
+        if (obj) {
           obj[NAME_KEY] = prop;
         }
       }
@@ -35243,11 +35718,11 @@ define("ember-testing/helpers",
         run(app, app.handleURL, url);
       }
 
-      return wait(app);
+      return app.testHelpers.wait();
     }
 
     function click(app, selector, context) {
-      var $el = findWithAssert(app, selector, context);
+      var $el = app.testHelpers.findWithAssert(selector, context);
       run($el, 'mousedown');
 
       if ($el.is(':input')) {
@@ -35269,26 +35744,38 @@ define("ember-testing/helpers",
       run($el, 'mouseup');
       run($el, 'click');
 
-      return wait(app);
+      return app.testHelpers.wait();
     }
 
     function triggerEvent(app, selector, context, type, options){
       if (arguments.length === 3) {
+        // context and options are optional, so this is
+        // app, selector, type
         type = context;
         context = null;
-      }
-
-      if (typeof options === 'undefined') {
         options = {};
       }
 
-      var $el = findWithAssert(app, selector, context);
+      if (arguments.length === 4) {
+        // context and options are optional, so this is
+        if (typeof type === "object") {  // either
+          // app, selector, type, options
+          options = type;
+          type = context;
+          context = null;
+        } else { // or
+          // app, selector, context, type
+          options = {};
+        }
+      }
+
+      var $el = app.testHelpers.findWithAssert(selector, context);
 
       var event = jQuery.Event(type, options);
 
       run($el, 'trigger', event);
 
-      return wait(app);
+      return app.testHelpers.wait();
     }
 
     function keyEvent(app, selector, context, type, keyCode) {
@@ -35298,7 +35785,7 @@ define("ember-testing/helpers",
         context = null;
       }
 
-      return triggerEvent(app, selector, context, type, { keyCode: keyCode, which: keyCode });
+      return app.testHelpers.triggerEvent(selector, context, type, { keyCode: keyCode, which: keyCode });
     }
 
     function fillIn(app, selector, context, text) {
@@ -35307,15 +35794,15 @@ define("ember-testing/helpers",
         text = context;
         context = null;
       }
-      $el = findWithAssert(app, selector, context);
+      $el = app.testHelpers.findWithAssert(selector, context);
       run(function() {
         $el.val(text).change();
       });
-      return wait(app);
+      return app.testHelpers.wait();
     }
 
     function findWithAssert(app, selector, context) {
-      var $el = find(app, selector, context);
+      var $el = app.testHelpers.find(selector, context);
       if ($el.length === 0) {
         throw new EmberError("Element " + selector + " not found.");
       }
@@ -35331,7 +35818,7 @@ define("ember-testing/helpers",
     }
 
     function andThen(app, callback) {
-      return wait(app, callback(app));
+      return app.testHelpers.wait(callback(app));
     }
 
     function wait(app, value) {
@@ -35498,7 +35985,7 @@ define("ember-testing/helpers",
         .fillIn('#password', username)
         .click('.submit')
 
-        return wait();
+        return app.testHelpers.wait();
       });
 
       @method wait
@@ -35567,7 +36054,7 @@ define("ember-testing/helpers",
     helper('currentURL', currentURL);
 
     /**
-      Triggers the given event on the element identified by the provided selector.
+      Triggers the given DOM event on the element identified by the provided selector.
 
       Example:
 
@@ -35583,8 +36070,10 @@ define("ember-testing/helpers",
 
      @method triggerEvent
      @param {String} selector jQuery selector for finding element on the DOM
+     @param {String} [context] jQuery selector that will limit the selector
+                               argument to find only within the context's children
      @param {String} type The event type to be triggered.
-     @param {String} options The options to be passed to jQuery.Event.
+     @param {Object} [options] The options to be passed to jQuery.Event.
      @return {RSVP.Promise}
      @since 1.5.0
     */
@@ -35759,6 +36248,14 @@ define("ember-testing/test",
       @namespace Ember
     */
     var Test = {
+      /**
+        Hash containing all known test helpers.
+
+        @property _helpers
+        @private
+        @since 1.7.0
+      */
+      _helpers: helpers,
 
       /**
         `registerHelper` is used to register a test helper that will be injected
@@ -35929,7 +36426,7 @@ define("ember-testing/test",
       /**
         Replacement for `Ember.RSVP.resolve`
         The only difference is this uses
-        and instance of `Ember.Test.Promise`
+        an instance of `Ember.Test.Promise`
 
         @public
         @method resolve
@@ -36536,6 +37033,35 @@ define("ember-views/system/event_dispatcher",
       rootElement: 'body',
 
       /**
+        It enables events to be dispatched to the view's `eventManager.` When present,
+        this object takes precedence over handling of events on the view itself.
+
+        Note that most Ember applications do not use this feature. If your app also
+        does not use it, consider setting this property to false to gain some performance
+        improvement by allowing the EventDispatcher to skip the search for the
+        `eventManager` on the view tree.
+
+        ```javascript
+        var EventDispatcher = Em.EventDispatcher.extend({
+          events: {
+              click       : 'click',
+              focusin     : 'focusIn',
+              focusout    : 'focusOut',
+              change      : 'change'
+          },
+          canDispatchToEventManager: false
+        });
+        container.register('event_dispatcher:main', EventDispatcher);
+        ```
+
+        @property canDispatchToEventManager
+        @type boolean
+        @default 'true'
+        @since 1.7.0
+      */
+      canDispatchToEventManager: true,
+
+      /**
         Sets up event listeners for standard browser events.
 
         This will be called after the browser sends a `DOMContentReady` event. By
@@ -36551,7 +37077,6 @@ define("ember-views/system/event_dispatcher",
         var event, events = get(this, 'events');
 
         jQuery.extend(events, addedEvents || {});
-
 
         if (!isNone(rootElement)) {
           set(this, 'rootElement', rootElement);
@@ -36575,19 +37100,12 @@ define("ember-views/system/event_dispatcher",
       },
 
       /**
-        Registers an event listener on the document. If the given event is
+        Registers an event listener on the rootElement. If the given event is
         triggered, the provided event handler will be triggered on the target view.
 
         If the target view does not implement the event handler, or if the handler
         returns `false`, the parent view will be called. The event will continue to
         bubble to each successive parent view until it reaches the top.
-
-        For example, to have the `mouseDown` method called on the target view when
-        a `mousedown` event is received from the browser, do the following:
-
-        ```javascript
-        setupHandler('mousedown', 'mouseDown');
-        ```
 
         @private
         @method setupHandler
@@ -36600,16 +37118,14 @@ define("ember-views/system/event_dispatcher",
 
         rootElement.on(event + '.ember', '.ember-view', function(evt, triggeringManager) {
           var view = View.views[this.id],
-              result = true, manager = null;
+              result = true;
 
-          manager = self._findNearestEventManager(view, eventName);
+          var manager = self.canDispatchToEventManager ? self._findNearestEventManager(view, eventName) : null;
 
           if (manager && manager !== triggeringManager) {
             result = self._dispatchEvent(manager, evt, eventName, view);
           } else if (view) {
             result = self._bubbleEvent(view, evt, eventName);
-          } else {
-            evt.stopPropagation();
           }
 
           return result;
@@ -36669,6 +37185,7 @@ define("ember-views/system/event_dispatcher",
         jQuery(rootElement).off('.ember', '**').removeClass('ember-application');
         return this._super();
       },
+
       toString: function() {
         return '(EventDisptacher)';
       }
@@ -38370,6 +38887,13 @@ define("ember-views/views/container_view",
     var ContainerView = View.extend(MutableArray, {
       _states: states,
 
+      willWatchProperty: function(prop){
+        Ember.deprecate(
+          "ContainerViews should not be observed as arrays. This behavior will change in future implementations of ContainerView.",
+          !prop.match(/\[]/) && prop.indexOf('@') !== 0
+        );
+      },
+
       init: function() {
         this._super();
 
@@ -38429,7 +38953,7 @@ define("ember-views/views/container_view",
 
       length: computed(function () {
         return this._childViews.length;
-      }).volatile(),
+      })["volatile"](),
 
       /**
         Instructs each child view to render to the passed render buffer.
@@ -38595,7 +39119,7 @@ define("ember-views/views/container_view",
       }
 
       viewCollection.forEach(function(v) {
-        v.transitionTo('inDOM');
+        v._transitionTo('inDOM');
         v.propertyDidChange('element');
         v.triggerRecursively('didInsertElement');
       });
@@ -38605,8 +39129,8 @@ define("ember-views/views/container_view",
     __exports__["default"] = ContainerView;
   });
 define("ember-views/views/core_view",
-  ["ember-views/views/states","ember-runtime/system/object","ember-runtime/mixins/evented","ember-runtime/mixins/action_handler","ember-metal/properties","ember-metal/property_get","ember-metal/property_set","ember-metal/computed","ember-metal/utils","ember-metal/instrumentation","ember-views/system/render_buffer","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __exports__) {
+  ["ember-views/views/states","ember-runtime/system/object","ember-runtime/mixins/evented","ember-runtime/mixins/action_handler","ember-metal/property_get","ember-metal/computed","ember-metal/utils","ember-metal/instrumentation","ember-views/system/render_buffer","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __exports__) {
     "use strict";
     var cloneStates = __dependency1__.cloneStates;
     var states = __dependency1__.states;
@@ -38614,18 +39138,15 @@ define("ember-views/views/core_view",
     var Evented = __dependency3__["default"];
     var ActionHandler = __dependency4__["default"];
 
-    var defineProperty = __dependency5__.defineProperty;
-    var deprecateProperty = __dependency5__.deprecateProperty;
-    var get = __dependency6__.get;
-    var set = __dependency7__.set;
-    var computed = __dependency8__.computed;
+    var get = __dependency5__.get;
+    var computed = __dependency6__.computed;
 
-    var typeOf = __dependency9__.typeOf;
+    var typeOf = __dependency7__.typeOf;
 
-    var instrument = __dependency10__.instrument;
+    var instrument = __dependency8__.instrument;
 
 
-    var renderBuffer = __dependency11__["default"];
+    var renderBuffer = __dependency9__["default"];
 
     /**
       `Ember.CoreView` is an abstract class that exists to give view-like behavior
@@ -38649,11 +39170,8 @@ define("ember-views/views/core_view",
 
       init: function() {
         this._super();
-        this.transitionTo('preRender');
+        this._transitionTo('preRender');
         this._isVisible = get(this, 'isVisible');
-
-        deprecateProperty(this, 'states', '_states');
-        deprecateProperty(this, 'state', '_state');
       },
 
       /**
@@ -38732,7 +39250,7 @@ define("ember-views/views/core_view",
         }
 
         var buffer = this.buffer = _buffer && _buffer.begin(tagName) || renderBuffer(tagName);
-        this.transitionTo('inBuffer', false);
+        this._transitionTo('inBuffer', false);
 
         this.beforeRender(buffer);
         this.render(buffer);
@@ -38793,7 +39311,7 @@ define("ember-views/views/core_view",
         // the DOM again.
         if (parent) { parent.removeChild(this); }
 
-        this.transitionTo('destroying', false);
+        this._transitionTo('destroying', false);
 
         return this;
       },
@@ -38801,7 +39319,7 @@ define("ember-views/views/core_view",
       clearRenderedChildren: Ember.K,
       triggerRecursively: Ember.K,
       invokeRecursively: Ember.K,
-      transitionTo: Ember.K,
+      _transitionTo: Ember.K,
       destroyElement: Ember.K
     });
 
@@ -38982,7 +39500,7 @@ define("ember-views/views/states/has_element",
 
       setElement: function(view, value) {
         if (value === null) {
-          view.transitionTo('preRender');
+          view._transitionTo('preRender');
         } else {
           throw new EmberError("You cannot set an element to a non-null value when the element is already in the DOM.");
         }
@@ -39127,10 +39645,10 @@ define("ember-views/views/states/in_buffer",
 
       setElement: function(view, value) {
         if (value === null) {
-          view.transitionTo('preRender');
+          view._transitionTo('preRender');
         } else {
           view.clearBuffer();
-          view.transitionTo('hasElement');
+          view._transitionTo('hasElement');
         }
 
         return value;
@@ -39193,12 +39711,15 @@ define("ember-views/views/states/in_dom",
     __exports__["default"] = inDOM;
   });
 define("ember-views/views/states/pre_render",
-  ["ember-views/views/states/default","ember-metal/platform","ember-metal/merge","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
+  ["ember-views/views/states/default","ember-metal/platform","ember-metal/merge","ember-views/system/jquery","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
+    /* global Node */
+
     var _default = __dependency1__["default"];
     var create = __dependency2__.create;
     var merge = __dependency3__["default"];
+    var jQuery = __dependency4__["default"];
 
     /**
     @module ember
@@ -39219,7 +39740,7 @@ define("ember-views/views/states/pre_render",
 
         // We transition to `inDOM` if the element exists in the DOM
         var element = view.get('element');
-        if (document.body.contains(element)) {
+        if (jQuery.contains(document.body, element)) {
           viewCollection.transitionTo('inDOM', false);
           viewCollection.trigger('didInsertElement');
         }
@@ -39234,7 +39755,7 @@ define("ember-views/views/states/pre_render",
 
       setElement: function(view, value) {
         if (value !== null) {
-          view.transitionTo('hasElement');
+          view._transitionTo('hasElement');
         }
         return value;
       }
@@ -39243,8 +39764,8 @@ define("ember-views/views/states/pre_render",
     __exports__["default"] = preRender;
   });
 define("ember-views/views/view",
-  ["ember-metal/core","ember-runtime/mixins/evented","ember-runtime/system/object","ember-metal/error","ember-metal/property_get","ember-metal/property_set","ember-metal/set_properties","ember-metal/run_loop","ember-metal/observer","ember-metal/properties","ember-metal/utils","ember-metal/computed","ember-metal/mixin","ember-metal/is_none","container/container","ember-runtime/system/native_array","ember-runtime/system/string","ember-metal/enumerable_utils","ember-runtime/copy","ember-metal/binding","ember-metal/property_events","ember-views/system/jquery","ember-views/system/ext","ember-views/views/core_view","ember-views/views/view_collection","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __dependency25__, __exports__) {
+  ["ember-metal/core","ember-runtime/mixins/evented","ember-runtime/system/object","ember-metal/error","ember-metal/property_get","ember-metal/property_set","ember-metal/set_properties","ember-metal/run_loop","ember-metal/observer","ember-metal/properties","ember-metal/utils","ember-metal/computed","ember-metal/mixin","ember-metal/is_none","ember-runtime/system/native_array","ember-runtime/system/string","ember-metal/enumerable_utils","ember-runtime/copy","ember-metal/binding","ember-metal/property_events","ember-views/system/jquery","ember-views/system/ext","ember-views/views/core_view","ember-views/views/view_collection","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __exports__) {
     "use strict";
     // Ember.assert, Ember.deprecate, Ember.warn, Ember.TEMPLATES,
     // Ember.K, jQuery, Ember.lookup,
@@ -39273,28 +39794,28 @@ define("ember-views/views/view",
     var isArray = __dependency11__.isArray;
     var isNone = __dependency14__.isNone;
     var Mixin = __dependency13__.Mixin;
-    var Container = __dependency15__["default"];
-    var emberA = __dependency16__.A;
+    var deprecateProperty = __dependency10__.deprecateProperty;
+    var emberA = __dependency15__.A;
 
-    var dasherize = __dependency17__.dasherize;
+    var dasherize = __dependency16__.dasherize;
 
     // ES6TODO: functions on EnumerableUtils should get their own export
-    var forEach = __dependency18__.forEach;
-    var addObject = __dependency18__.addObject;
-    var removeObject = __dependency18__.removeObject;
+    var forEach = __dependency17__.forEach;
+    var addObject = __dependency17__.addObject;
+    var removeObject = __dependency17__.removeObject;
 
     var beforeObserver = __dependency13__.beforeObserver;
-    var copy = __dependency19__["default"];
-    var isGlobalPath = __dependency20__.isGlobalPath;
+    var copy = __dependency18__["default"];
+    var isGlobalPath = __dependency19__.isGlobalPath;
 
-    var propertyWillChange = __dependency21__.propertyWillChange;
-    var propertyDidChange = __dependency21__.propertyDidChange;
+    var propertyWillChange = __dependency20__.propertyWillChange;
+    var propertyDidChange = __dependency20__.propertyDidChange;
 
-    var jQuery = __dependency22__["default"];
+    var jQuery = __dependency21__["default"];
      // for the side effect of extending Ember.run.queues
 
-    var CoreView = __dependency24__["default"];
-    var ViewCollection = __dependency25__["default"];
+    var CoreView = __dependency23__["default"];
+    var ViewCollection = __dependency24__["default"];
 
     /**
     @module ember
@@ -40058,9 +40579,13 @@ define("ember-views/views/view",
         if (!name) { return; }
         Ember.assert("templateNames are not allowed to contain periods: "+name, name.indexOf('.') === -1);
 
-        // the defaultContainer is deprecated
-        var container = this.container || (Container && Container.defaultContainer);
-        return container && container.lookup('template:' + name);
+        if (!this.container) {
+          throw new EmberError('Container was not found when looking up a views template. ' +
+                     'This is most likely due to manually instantiating an Ember.View. ' +
+                     'See: http://git.io/EKPpnA');
+        }
+
+        return this.container.lookup('template:' + name);
       },
 
       /**
@@ -40082,7 +40607,7 @@ define("ember-views/views/view",
         } else {
           return get(this, '_context');
         }
-      }).volatile(),
+      })["volatile"](),
 
       /**
         Private copy of the view's template context. This can be set directly
@@ -41348,10 +41873,14 @@ define("ember-views/views/view",
       clearBuffer: function() {
         this.invokeRecursively(nullViewsBuffer);
       },
-
       transitionTo: function(state, children) {
-        var priorState = this.currentState,
-            currentState = this.currentState = this._states[state];
+        Ember.deprecate("Ember.View#transitionTo has been deprecated, it is for internal use only");
+        this._transitionTo(state, children);
+      },
+      _transitionTo: function(state, children) {
+        var priorState = this.currentState;
+        var currentState = this.currentState = this._states[state];
+
         this._state = state;
 
         if (priorState && priorState.exit) { priorState.exit(this); }
@@ -41360,7 +41889,7 @@ define("ember-views/views/view",
 
         if (children !== false) {
           this.forEachChildView(function(view) {
-            view.transitionTo(state);
+            view._transitionTo(state);
           });
         }
       },
@@ -41407,6 +41936,8 @@ define("ember-views/views/view",
       }
 
     });
+    deprecateProperty(View.prototype, 'state', '_state');
+    deprecateProperty(View.prototype, 'states', '_states');
 
     /*
       Describe how the specified actions should behave in the various
@@ -41632,7 +42163,12 @@ define("ember-views/views/view",
         if (isNone(value) || value === false) {
           // `null`, `undefined` or `false` should remove attribute
           elem.removeAttr(name);
-          elem.prop(name, '');
+          // In IE8 `prop` couldn't remove attribute when name is `required`.
+          if (name === 'required') {
+            elem.removeProp(name);
+          } else {
+            elem.prop(name, '');
+          }
         } else if (value !== elem.prop(name)) {
           // value should always be properties
           elem.prop(name, value);
@@ -41685,7 +42221,7 @@ define("ember-views/views/view_collection",
       transitionTo: function(state, children) {
         var views = this.views;
         for (var i = 0, l = views.length; i < l; i++) {
-          views[i].transitionTo(state, children);
+          views[i]._transitionTo(state, children);
         }
       },
 
@@ -42246,9 +42782,11 @@ define("metamorph",
   });
 
 define("route-recognizer",
-  ["exports"],
-  function(__exports__) {
+  ["route-recognizer/dsl","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
+    var map = __dependency1__["default"];
+
     var specials = [
       '/', '.', '*', '+', '?', '|',
       '(', ')', '[', ']', '{', '}', '\\'
@@ -42674,7 +43212,7 @@ define("route-recognizer",
           if (value == null) {
             continue;
           }
-          var pair = key;
+          var pair = encodeURIComponent(key);
           if (isArray(value)) {
             for (var j = 0, l = value.length; j < l; j++) {
               var arrayPair = key + '[]' + '=' + encodeURIComponent(value[j]);
@@ -42715,7 +43253,7 @@ define("route-recognizer",
           if (isArray) {
             queryParams[key].push(value);
           } else {
-            queryParams[key] = decodeURIComponent(value);
+            queryParams[key] = value;
           }
         }
         return queryParams;
@@ -42726,14 +43264,14 @@ define("route-recognizer",
             pathLen, i, l, queryStart, queryParams = {},
             isSlashDropped = false;
 
-        path = decodeURI(path);
-
         queryStart = path.indexOf('?');
         if (queryStart !== -1) {
           var queryString = path.substr(queryStart + 1, path.length);
           path = path.substr(0, queryStart);
           queryParams = this.parseQueryString(queryString);
         }
+
+        path = decodeURI(path);
 
         // DEBUG GROUP path
 
@@ -42772,8 +43310,14 @@ define("route-recognizer",
       }
     };
 
-    __exports__["default"] = RouteRecognizer;
+    RouteRecognizer.prototype.map = map;
 
+    __exports__["default"] = RouteRecognizer;
+  });
+define("route-recognizer/dsl",
+  ["exports"],
+  function(__exports__) {
+    "use strict";
     function Target(path, matcher, delegate) {
       this.path = path;
       this.matcher = matcher;
@@ -42863,7 +43407,7 @@ define("route-recognizer",
       }
     }
 
-    RouteRecognizer.prototype.map = function(callback, addRouteCallback) {
+    __exports__["default"] = function(callback, addRouteCallback) {
       var matcher = new Matcher();
 
       callback(generateMatch("", matcher, this.delegate));
@@ -42872,7 +43416,7 @@ define("route-recognizer",
         if (addRouteCallback) { addRouteCallback(this, route); }
         else { this.add(route); }
       }, this);
-    };
+    }
   });
 
 define("router/handler-info",
@@ -42883,6 +43427,7 @@ define("router/handler-info",
     var merge = __dependency1__.merge;
     var serialize = __dependency1__.serialize;
     var promiseLabel = __dependency1__.promiseLabel;
+    var applyHook = __dependency1__.applyHook;
     var Promise = __dependency2__["default"];
 
     function HandlerInfo(_props) {
@@ -42969,14 +43514,13 @@ define("router/handler-info",
         }
         args.push(payload);
 
-        var handler = this.handler;
-        var result = handler[hookName] && handler[hookName].apply(handler, args);
+        var result = applyHook(this.handler, hookName, args);
 
         if (result && result.isTransition) {
           result = null;
         }
 
-        return Promise.resolve(result, null, this.promiseLabel("Resolve value returned from one of the model hooks"));
+        return Promise.resolve(result, this.promiseLabel("Resolve value returned from one of the model hooks"));
       },
 
       // overridden by subclasses
@@ -43173,6 +43717,7 @@ define("router/handler-info/unresolved-handler-info-by-param",
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     var HandlerInfo = __dependency1__["default"];
+    var resolveHook = __dependency2__.resolveHook;
     var merge = __dependency2__.merge;
     var subclass = __dependency2__.subclass;
     var promiseLabel = __dependency2__.promiseLabel;
@@ -43191,8 +43736,9 @@ define("router/handler-info/unresolved-handler-info-by-param",
           fullParams.queryParams = payload.queryParams;
         }
 
-        var hookName = typeof this.handler.deserialize === 'function' ?
-                       'deserialize' : 'model';
+        var handler = this.handler;
+        var hookName = resolveHook(handler, 'deserialize') ||
+                       resolveHook(handler, 'model');
 
         return this.runSharedModelHook(payload, hookName, [fullParams]);
       }
@@ -43215,6 +43761,7 @@ define("router/router",
     var extractQueryParams = __dependency3__.extractQueryParams;
     var getChangelist = __dependency3__.getChangelist;
     var promiseLabel = __dependency3__.promiseLabel;
+    var callHook = __dependency3__.callHook;
     var TransitionState = __dependency4__["default"];
     var logAbort = __dependency5__.logAbort;
     var Transition = __dependency5__.Transition;
@@ -43260,17 +43807,7 @@ define("router/router",
       queryParamsTransition: function(changelist, wasTransitioning, oldState, newState) {
         var router = this;
 
-        // This is a little hacky but we need some way of storing
-        // changed query params given that no activeTransition
-        // is guaranteed to have occurred.
-        this._changedQueryParams = changelist.changed;
-        for (var k in changelist.removed) {
-          if (changelist.removed.hasOwnProperty(k)) {
-            this._changedQueryParams[k] = null;
-          }
-        }
         fireQueryParamDidChange(this, newState, changelist);
-        this._changedQueryParams = null;
 
         if (!wasTransitioning && this.activeTransition) {
           // One of the handlers in queryParamsDidChange
@@ -43368,11 +43905,9 @@ define("router/router",
       */
       reset: function() {
         if (this.state) {
-          forEach(this.state.handlerInfos, function(handlerInfo) {
+          forEach(this.state.handlerInfos.slice().reverse(), function(handlerInfo) {
             var handler = handlerInfo.handler;
-            if (handler.exit) {
-              handler.exit();
-            }
+            callHook(handler, 'exit');
           });
         }
 
@@ -43436,12 +43971,10 @@ define("router/router",
       },
 
       intermediateTransitionTo: function(name) {
-        doTransition(this, arguments, true);
+        return doTransition(this, arguments, true);
       },
 
       refresh: function(pivotHandler) {
-
-
         var state = this.activeTransition ? this.activeTransition.state : this.state;
         var handlerInfos = state.handlerInfos;
         var params = {};
@@ -43605,12 +44138,7 @@ define("router/router",
         // This is a little hacky but we need some way of storing
         // changed query params given that no activeTransition
         // is guaranteed to have occurred.
-        router._changedQueryParams = queryParamChangelist.changed;
-        for (var i in queryParamChangelist.removed) {
-          if (queryParamChangelist.removed.hasOwnProperty(i)) {
-            router._changedQueryParams[i] = null;
-          }
-        }
+        router._changedQueryParams = queryParamChangelist.all;
         trigger(router, newState.handlerInfos, true, ['queryParamsDidChange', queryParamChangelist.changed, queryParamChangelist.all, queryParamChangelist.removed]);
         router._changedQueryParams = null;
       }
@@ -43663,8 +44191,9 @@ define("router/router",
       forEach(partition.exited, function(handlerInfo) {
         var handler = handlerInfo.handler;
         delete handler.context;
-        if (handler.reset) { handler.reset(true, transition); }
-        if (handler.exit) { handler.exit(transition); }
+
+        callHook(handler, 'reset', true, transition);
+        callHook(handler, 'exit', transition);
       });
 
       var oldState = router.oldState = router.state;
@@ -43674,7 +44203,7 @@ define("router/router",
       try {
         forEach(partition.reset, function(handlerInfo) {
           var handler = handlerInfo.handler;
-          if (handler.reset) { handler.reset(false, transition); }
+          callHook(handler, 'reset', false, transition);
         });
 
         forEach(partition.updatedContext, function(handlerInfo) {
@@ -43705,15 +44234,15 @@ define("router/router",
       var handler = handlerInfo.handler,
           context = handlerInfo.context;
 
-      if (enter && handler.enter) { handler.enter(transition); }
+      callHook(handler, 'enter', transition);
       if (transition && transition.isAborted) {
         throw new TransitionAborted();
       }
 
       handler.context = context;
-      if (handler.contextDidChange) { handler.contextDidChange(); }
+      callHook(handler, 'contextDidChange');
 
-      if (handler.setup) { handler.setup(context, transition); }
+      callHook(handler, 'setup', context, transition);
       if (transition && transition.isAborted) {
         throw new TransitionAborted();
       }
@@ -43776,7 +44305,7 @@ define("router/router",
             unchanged: []
           };
 
-      var handlerChanged, contextChanged, i, l;
+      var handlerChanged, contextChanged = false, i, l;
 
       for (i=0, l=newHandlers.length; i<l; i++) {
         var oldHandler = oldHandlers[i], newHandler = newHandlers[i];
@@ -43879,7 +44408,7 @@ define("router/router",
         // Resolve with the final handler.
         return handlerInfos[handlerInfos.length - 1].handler;
       } catch(e) {
-        if (!(e instanceof TransitionAborted)) {
+        if (!((e instanceof TransitionAborted))) {
           //var erroneousHandler = handlerInfos.pop();
           var infos = transition.state.handlerInfos;
           transition.trigger(true, 'error', e, transition, infos[infos.length-1].handler);
@@ -43994,9 +44523,10 @@ define("router/router",
       var oldHandlers = router.state.handlerInfos,
           changing = [],
           leavingIndex = null,
-          leaving, leavingChecker, i, oldHandler, newHandler;
+          leaving, leavingChecker, i, oldHandlerLen, oldHandler, newHandler;
 
-      for (i = 0; i < oldHandlers.length; i++) {
+      oldHandlerLen = oldHandlers.length;
+      for (i = 0; i < oldHandlerLen; i++) {
         oldHandler = oldHandlers[i];
         newHandler = newState.handlerInfos[i];
 
@@ -44011,9 +44541,9 @@ define("router/router",
       }
 
       if (leavingIndex !== null) {
-        leaving = oldHandlers.slice(leavingIndex, oldHandlers.length);
+        leaving = oldHandlers.slice(leavingIndex, oldHandlerLen);
         leavingChecker = function(name) {
-          for (var h = 0; h < leaving.length; h++) {
+          for (var h = 0, len = leaving.length; h < len; h++) {
             if (leaving[h].name === name) {
               return true;
             }
@@ -44092,7 +44622,7 @@ define("router/transition-intent/named-transition-intent",
 
       applyToHandlers: function(oldState, handlers, getHandler, targetRouteName, isIntermediate, checkingIfActive) {
 
-        var i;
+        var i, len;
         var newState = new TransitionState();
         var objects = this.contexts.slice(0);
 
@@ -44100,7 +44630,7 @@ define("router/transition-intent/named-transition-intent",
 
         // Pivot handlers are provided for refresh transitions
         if (this.pivotHandler) {
-          for (i = 0; i < handlers.length; ++i) {
+          for (i = 0, len = handlers.length; i < len; ++i) {
             if (getHandler(handlers[i].handler) === this.pivotHandler) {
               invalidateIndex = i;
               break;
@@ -44331,6 +44861,7 @@ define("router/transition-state",
     var ResolvedHandlerInfo = __dependency1__.ResolvedHandlerInfo;
     var forEach = __dependency2__.forEach;
     var promiseLabel = __dependency2__.promiseLabel;
+    var callHook = __dependency2__.callHook;
     var Promise = __dependency3__["default"];
 
     function TransitionState(other) {
@@ -44375,13 +44906,13 @@ define("router/transition-state",
         .then(resolveOneHandlerInfo, null, this.promiseLabel('Resolve handler'))['catch'](handleError, this.promiseLabel('Handle error'));
 
         function innerShouldContinue() {
-          return Promise.resolve(shouldContinue(), promiseLabel("Check if should continue"))['catch'](function(reason) {
+          return Promise.resolve(shouldContinue(), currentState.promiseLabel("Check if should continue"))['catch'](function(reason) {
             // We distinguish between errors that occurred
             // during resolution (e.g. beforeModel/model/afterModel),
             // and aborts due to a rejecting promise from shouldContinue().
             wasAborted = true;
             return Promise.reject(reason);
-          }, promiseLabel("Handle abort"));
+          }, currentState.promiseLabel("Handle abort"));
         }
 
         function handleError(error) {
@@ -44411,14 +44942,12 @@ define("router/transition-state",
             // routes don't re-run the model hooks for this
             // already-resolved route.
             var handler = resolvedHandlerInfo.handler;
-            if (handler && handler.redirect) {
-              handler.redirect(resolvedHandlerInfo.context, payload);
-            }
+            callHook(handler, 'redirect', resolvedHandlerInfo.context, payload);
           }
 
           // Proceed after ensuring that the redirect hook
           // didn't abort this transition by transitioning elsewhere.
-          return innerShouldContinue().then(resolveOneHandlerInfo, null, promiseLabel('Resolve handler'));
+          return innerShouldContinue().then(resolveOneHandlerInfo, null, currentState.promiseLabel('Resolve handler'));
         }
 
         function resolveOneHandlerInfo() {
@@ -44434,7 +44963,7 @@ define("router/transition-state",
           var handlerInfo = currentState.handlerInfos[payload.resolveIndex];
 
           return handlerInfo.resolve(innerShouldContinue, payload)
-                            .then(proceed, null, promiseLabel('Proceed'));
+                            .then(proceed, null, currentState.promiseLabel('Proceed'));
         }
       }
     };
@@ -44482,7 +45011,7 @@ define("router/transition",
 
         var len = state.handlerInfos.length;
         if (len) {
-          this.targetName = state.handlerInfos[state.handlerInfos.length-1].name;
+          this.targetName = state.handlerInfos[len-1].name;
         }
 
         for (var i = 0; i < len; ++i) {
@@ -44576,11 +45105,48 @@ define("router/transition",
         use in situations where you want to pass around a thennable,
         but not the Transition itself.
 
-        @param {Function} success
-        @param {Function} failure
+        @param {Function} onFulfilled
+        @param {Function} onRejected
+        @param {String} label optional string for labeling the promise.
+        Useful for tooling.
+        @return {Promise}
        */
-      then: function(success, failure) {
-        return this.promise.then(success, failure);
+      then: function(onFulfilled, onRejected, label) {
+        return this.promise.then(onFulfilled, onRejected, label);
+      },
+
+      /**
+        @public
+
+        Forwards to the internal `promise` property which you can
+        use in situations where you want to pass around a thennable,
+        but not the Transition itself.
+
+        @method catch
+        @param {Function} onRejection
+        @param {String} label optional string for labeling the promise.
+        Useful for tooling.
+        @return {Promise}
+       */
+      "catch": function(onRejection, label) {
+        return this.promise["catch"](onRejection, label);
+      },
+
+      /**
+        @public
+
+        Forwards to the internal `promise` property which you can
+        use in situations where you want to pass around a thennable,
+        but not the Transition itself.
+
+        @method finally
+        @param {Function} callback
+        @param {String} label optional string for labeling the promise.
+        Useful for tooling.
+        @return {Promise}
+       */
+      "finally": function(callback, label) {
+        return this.promise["finally"](callback, label);
       },
 
       /**
@@ -44907,10 +45473,32 @@ define("router/utils",
       return C;
     }
 
-    __exports__.subclass = subclass;__exports__.merge = merge;
+    __exports__.subclass = subclass;function resolveHook(obj, hookName) {
+      if (!obj) { return; }
+      var underscored = "_" + hookName;
+      return obj[underscored] && underscored ||
+             obj[hookName] && hookName;
+    }
+
+    function callHook(obj, hookName) {
+      var args = slice.call(arguments, 2);
+      return applyHook(obj, hookName, args);
+    }
+
+    function applyHook(obj, _hookName, args) {
+      var hookName = resolveHook(obj, _hookName);
+      if (hookName) {
+        return obj[hookName].apply(obj, args);
+      }
+    }
+
+    __exports__.merge = merge;
     __exports__.slice = slice;
     __exports__.isParam = isParam;
     __exports__.coerceQueryParamsToString = coerceQueryParamsToString;
+    __exports__.callHook = callHook;
+    __exports__.resolveHook = resolveHook;
+    __exports__.applyHook = applyHook;
   });
 define("router",
   ["./router/router","exports"],
@@ -44921,226 +45509,370 @@ define("router",
     __exports__["default"] = Router;
   });
 
-/**
-  @class RSVP
-  @module RSVP
-  */
-define('rsvp/-internal', [
-    './utils',
-    './instrument',
-    './config',
-    'exports'
-], function (__dependency1__, __dependency2__, __dependency3__, __exports__) {
-    'use strict';
+define("rsvp",
+  ["./rsvp/promise","./rsvp/events","./rsvp/node","./rsvp/all","./rsvp/all-settled","./rsvp/race","./rsvp/hash","./rsvp/hash-settled","./rsvp/rethrow","./rsvp/defer","./rsvp/config","./rsvp/map","./rsvp/resolve","./rsvp/reject","./rsvp/filter","./rsvp/asap","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
+    var EventTarget = __dependency2__["default"];
+    var denodeify = __dependency3__["default"];
+    var all = __dependency4__["default"];
+    var allSettled = __dependency5__["default"];
+    var race = __dependency6__["default"];
+    var hash = __dependency7__["default"];
+    var hashSettled = __dependency8__["default"];
+    var rethrow = __dependency9__["default"];
+    var defer = __dependency10__["default"];
+    var config = __dependency11__.config;
+    var configure = __dependency11__.configure;
+    var map = __dependency12__["default"];
+    var resolve = __dependency13__["default"];
+    var reject = __dependency14__["default"];
+    var filter = __dependency15__["default"];
+    var asap = __dependency16__["default"];
+
+    config.async = asap; // default async is asap;
+    var cast = resolve;
+    function async(callback, arg) {
+      config.async(callback, arg);
+    }
+
+    function on() {
+      config.on.apply(config, arguments);
+    }
+
+    function off() {
+      config.off.apply(config, arguments);
+    }
+
+    // Set up instrumentation through `window.__PROMISE_INTRUMENTATION__`
+    if (typeof window !== 'undefined' && typeof window['__PROMISE_INSTRUMENTATION__'] === 'object') {
+      var callbacks = window['__PROMISE_INSTRUMENTATION__'];
+      configure('instrument', true);
+      for (var eventName in callbacks) {
+        if (callbacks.hasOwnProperty(eventName)) {
+          on(eventName, callbacks[eventName]);
+        }
+      }
+    }
+
+    __exports__.cast = cast;
+    __exports__.Promise = Promise;
+    __exports__.EventTarget = EventTarget;
+    __exports__.all = all;
+    __exports__.allSettled = allSettled;
+    __exports__.race = race;
+    __exports__.hash = hash;
+    __exports__.hashSettled = hashSettled;
+    __exports__.rethrow = rethrow;
+    __exports__.defer = defer;
+    __exports__.denodeify = denodeify;
+    __exports__.configure = configure;
+    __exports__.on = on;
+    __exports__.off = off;
+    __exports__.resolve = resolve;
+    __exports__.reject = reject;
+    __exports__.async = async;
+    __exports__.map = map;
+    __exports__.filter = filter;
+  });
+define("rsvp.umd",
+  ["./rsvp"],
+  function(__dependency1__) {
+    "use strict";
+    var Promise = __dependency1__.Promise;
+    var allSettled = __dependency1__.allSettled;
+    var hash = __dependency1__.hash;
+    var hashSettled = __dependency1__.hashSettled;
+    var denodeify = __dependency1__.denodeify;
+    var on = __dependency1__.on;
+    var off = __dependency1__.off;
+    var map = __dependency1__.map;
+    var filter = __dependency1__.filter;
+    var resolve = __dependency1__.resolve;
+    var reject = __dependency1__.reject;
+    var rethrow = __dependency1__.rethrow;
+    var all = __dependency1__.all;
+    var defer = __dependency1__.defer;
+    var EventTarget = __dependency1__.EventTarget;
+    var configure = __dependency1__.configure;
+    var race = __dependency1__.race;
+    var async = __dependency1__.async;
+
+    var RSVP = {
+      'race': race,
+      'Promise': Promise,
+      'allSettled': allSettled,
+      'hash': hash,
+      'hashSettled': hashSettled,
+      'denodeify': denodeify,
+      'on': on,
+      'off': off,
+      'map': map,
+      'filter': filter,
+      'resolve': resolve,
+      'reject': reject,
+      'all': all,
+      'rethrow': rethrow,
+      'defer': defer,
+      'EventTarget': EventTarget,
+      'configure': configure,
+      'async': async
+    };
+
+    /* global define:true module:true window: true */
+    if (typeof define === 'function' && define.amd) {
+      define(function() { return RSVP; });
+    } else if (typeof module !== 'undefined' && module.exports) {
+      module.exports = RSVP;
+    } else if (typeof this !== 'undefined') {
+      this['RSVP'] = RSVP;
+    }
+  });
+define("rsvp/-internal",
+  ["./utils","./instrument","./config","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
+    "use strict";
     var objectOrFunction = __dependency1__.objectOrFunction;
     var isFunction = __dependency1__.isFunction;
-    var now = __dependency1__.now;
-    var instrument = __dependency2__['default'];
+
+    var instrument = __dependency2__["default"];
+
     var config = __dependency3__.config;
-    function noop() {
-    }
-    var PENDING = void 0;
+
+    function noop() {}
+
+    var PENDING   = void 0;
     var FULFILLED = 1;
-    var REJECTED = 2;
+    var REJECTED  = 2;
+
     var GET_THEN_ERROR = new ErrorObject();
+
     function getThen(promise) {
-        try {
-            return promise.then;
-        } catch (error) {
-            GET_THEN_ERROR.error = error;
-            return GET_THEN_ERROR;
-        }
+      try {
+        return promise.then;
+      } catch(error) {
+        GET_THEN_ERROR.error = error;
+        return GET_THEN_ERROR;
+      }
     }
+
     function tryThen(then, value, fulfillmentHandler, rejectionHandler) {
-        try {
-            then.call(value, fulfillmentHandler, rejectionHandler);
-        } catch (e) {
-            return e;
-        }
+      try {
+        then.call(value, fulfillmentHandler, rejectionHandler);
+      } catch(e) {
+        return e;
+      }
     }
+
     function handleForeignThenable(promise, thenable, then) {
-        config.async(function (promise$2) {
-            var sealed = false;
-            var error = tryThen(then, thenable, function (value) {
-                    if (sealed) {
-                        return;
-                    }
-                    sealed = true;
-                    if (thenable !== value) {
-                        resolve(promise$2, value);
-                    } else {
-                        fulfill(promise$2, value);
-                    }
-                }, function (reason) {
-                    if (sealed) {
-                        return;
-                    }
-                    sealed = true;
-                    reject(promise$2, reason);
-                }, 'Settle: ' + (promise$2._label || ' unknown promise'));
-            if (!sealed && error) {
-                sealed = true;
-                reject(promise$2, error);
-            }
-        }, promise);
-    }
-    function handleOwnThenable(promise, thenable) {
-        promise._onerror = null;
-        if (thenable._state === FULFILLED) {
-            fulfill(promise, thenable._result);
-        } else if (promise._state === REJECTED) {
-            reject(promise, thenable._result);
-        } else {
-            subscribe(thenable, undefined, function (value) {
-                if (thenable !== value) {
-                    resolve(promise, value);
-                } else {
-                    fulfill(promise, value);
-                }
-            }, function (reason) {
-                reject(promise, reason);
-            });
-        }
-    }
-    function handleMaybeThenable(promise, maybeThenable) {
-        if (maybeThenable instanceof promise.constructor) {
-            handleOwnThenable(promise, maybeThenable);
-        } else {
-            var then = getThen(maybeThenable);
-            if (then === GET_THEN_ERROR) {
-                reject(promise, GET_THEN_ERROR.error);
-            } else if (then === undefined) {
-                fulfill(promise, maybeThenable);
-            } else if (isFunction(then)) {
-                handleForeignThenable(promise, maybeThenable, then);
-            } else {
-                fulfill(promise, maybeThenable);
-            }
-        }
-    }
-    function resolve(promise, value) {
-        if (promise === value) {
-            fulfill(promise, value);
-        } else if (objectOrFunction(value)) {
-            handleMaybeThenable(promise, value);
-        } else {
-            fulfill(promise, value);
-        }
-    }
-    function publishRejection(promise) {
-        if (promise._onerror) {
-            promise._onerror(promise._result);
-        }
-        publish(promise);
-    }
-    function fulfill(promise, value) {
-        if (promise._state !== PENDING) {
-            return;
-        }
-        promise._result = value;
-        promise._state = FULFILLED;
-        if (promise._subscribers.length === 0) {
-            if (config.instrument) {
-                instrument('fulfilled', promise);
-            }
-        } else {
-            config.async(publish, promise);
-        }
-    }
-    function reject(promise, reason) {
-        if (promise._state !== PENDING) {
-            return;
-        }
-        promise._state = REJECTED;
-        promise._result = reason;
-        config.async(publishRejection, promise);
-    }
-    function subscribe(parent, child, onFulfillment, onRejection) {
-        var subscribers = parent._subscribers;
-        var length = subscribers.length;
-        parent._onerror = null;
-        subscribers[length] = child;
-        subscribers[length + FULFILLED] = onFulfillment;
-        subscribers[length + REJECTED] = onRejection;
-        if (length === 0 && parent._state) {
-            config.async(publish, parent);
-        }
-    }
-    function publish(promise) {
-        var subscribers = promise._subscribers;
-        var settled = promise._state;
-        if (config.instrument) {
-            instrument(settled === FULFILLED ? 'fulfilled' : 'rejected', promise);
-        }
-        if (subscribers.length === 0) {
-            return;
-        }
-        var child, callback, detail = promise._result;
-        for (var i = 0; i < subscribers.length; i += 3) {
-            child = subscribers[i];
-            callback = subscribers[i + settled];
-            if (child) {
-                invokeCallback(settled, child, callback, detail);
-            } else {
-                callback(detail);
-            }
-        }
-        promise._subscribers.length = 0;
-    }
-    function ErrorObject() {
-        this.error = null;
-    }
-    var TRY_CATCH_ERROR = new ErrorObject();
-    function tryCatch(callback, detail) {
-        try {
-            return callback(detail);
-        } catch (e) {
-            TRY_CATCH_ERROR.error = e;
-            return TRY_CATCH_ERROR;
-        }
-    }
-    function invokeCallback(settled, promise, callback, detail) {
-        var hasCallback = isFunction(callback), value, error, succeeded, failed;
-        if (hasCallback) {
-            value = tryCatch(callback, detail);
-            if (value === TRY_CATCH_ERROR) {
-                failed = true;
-                error = value.error;
-                value = null;
-            } else {
-                succeeded = true;
-            }
-            if (promise === value) {
-                reject(promise, new TypeError('A promises callback cannot return that same promise.'));
-                return;
-            }
-        } else {
-            value = detail;
-            succeeded = true;
-        }
-        if (promise._state !== PENDING) {
-        }    // noop
-        else if (hasCallback && succeeded) {
+      config.async(function(promise) {
+        var sealed = false;
+        var error = tryThen(then, thenable, function(value) {
+          if (sealed) { return; }
+          sealed = true;
+          if (thenable !== value) {
             resolve(promise, value);
-        } else if (failed) {
-            reject(promise, error);
-        } else if (settled === FULFILLED) {
+          } else {
             fulfill(promise, value);
-        } else if (settled === REJECTED) {
-            reject(promise, value);
+          }
+        }, function(reason) {
+          if (sealed) { return; }
+          sealed = true;
+
+          reject(promise, reason);
+        }, 'Settle: ' + (promise._label || ' unknown promise'));
+
+        if (!sealed && error) {
+          sealed = true;
+          reject(promise, error);
         }
+      }, promise);
     }
+
+    function handleOwnThenable(promise, thenable) {
+      if (thenable._state === FULFILLED) {
+        fulfill(promise, thenable._result);
+      } else if (promise._state === REJECTED) {
+        reject(promise, thenable._result);
+      } else {
+        subscribe(thenable, undefined, function(value) {
+          if (thenable !== value) {
+            resolve(promise, value);
+          } else {
+            fulfill(promise, value);
+          }
+        }, function(reason) {
+          reject(promise, reason);
+        });
+      }
+    }
+
+    function handleMaybeThenable(promise, maybeThenable) {
+      if (maybeThenable.constructor === promise.constructor) {
+        handleOwnThenable(promise, maybeThenable);
+      } else {
+        var then = getThen(maybeThenable);
+
+        if (then === GET_THEN_ERROR) {
+          reject(promise, GET_THEN_ERROR.error);
+        } else if (then === undefined) {
+          fulfill(promise, maybeThenable);
+        } else if (isFunction(then)) {
+          handleForeignThenable(promise, maybeThenable, then);
+        } else {
+          fulfill(promise, maybeThenable);
+        }
+      }
+    }
+
+    function resolve(promise, value) {
+      if (promise === value) {
+        fulfill(promise, value);
+      } else if (objectOrFunction(value)) {
+        handleMaybeThenable(promise, value);
+      } else {
+        fulfill(promise, value);
+      }
+    }
+
+    function publishRejection(promise) {
+      if (promise._onerror) {
+        promise._onerror(promise._result);
+      }
+
+      publish(promise);
+    }
+
+    function fulfill(promise, value) {
+      if (promise._state !== PENDING) { return; }
+
+      promise._result = value;
+      promise._state = FULFILLED;
+
+      if (promise._subscribers.length === 0) {
+        if (config.instrument) {
+          instrument('fulfilled', promise);
+        }
+      } else {
+        config.async(publish, promise);
+      }
+    }
+
+    function reject(promise, reason) {
+      if (promise._state !== PENDING) { return; }
+      promise._state = REJECTED;
+      promise._result = reason;
+
+      config.async(publishRejection, promise);
+    }
+
+    function subscribe(parent, child, onFulfillment, onRejection) {
+      var subscribers = parent._subscribers;
+      var length = subscribers.length;
+
+      parent._onerror = null;
+
+      subscribers[length] = child;
+      subscribers[length + FULFILLED] = onFulfillment;
+      subscribers[length + REJECTED]  = onRejection;
+
+      if (length === 0 && parent._state) {
+        config.async(publish, parent);
+      }
+    }
+
+    function publish(promise) {
+      var subscribers = promise._subscribers;
+      var settled = promise._state;
+
+      if (config.instrument) {
+        instrument(settled === FULFILLED ? 'fulfilled' : 'rejected', promise);
+      }
+
+      if (subscribers.length === 0) { return; }
+
+      var child, callback, detail = promise._result;
+
+      for (var i = 0; i < subscribers.length; i += 3) {
+        child = subscribers[i];
+        callback = subscribers[i + settled];
+
+        if (child) {
+          invokeCallback(settled, child, callback, detail);
+        } else {
+          callback(detail);
+        }
+      }
+
+      promise._subscribers.length = 0;
+    }
+
+    function ErrorObject() {
+      this.error = null;
+    }
+
+    var TRY_CATCH_ERROR = new ErrorObject();
+
+    function tryCatch(callback, detail) {
+      try {
+        return callback(detail);
+      } catch(e) {
+        TRY_CATCH_ERROR.error = e;
+        return TRY_CATCH_ERROR;
+      }
+    }
+
+    function invokeCallback(settled, promise, callback, detail) {
+      var hasCallback = isFunction(callback),
+          value, error, succeeded, failed;
+
+      if (hasCallback) {
+        value = tryCatch(callback, detail);
+
+        if (value === TRY_CATCH_ERROR) {
+          failed = true;
+          error = value.error;
+          value = null;
+        } else {
+          succeeded = true;
+        }
+
+        if (promise === value) {
+          reject(promise, new TypeError('A promises callback cannot return that same promise.'));
+          return;
+        }
+
+      } else {
+        value = detail;
+        succeeded = true;
+      }
+
+      if (promise._state !== PENDING) {
+        // noop
+      } else if (hasCallback && succeeded) {
+        resolve(promise, value);
+      } else if (failed) {
+        reject(promise, error);
+      } else if (settled === FULFILLED) {
+        fulfill(promise, value);
+      } else if (settled === REJECTED) {
+        reject(promise, value);
+      }
+    }
+
     function initializePromise(promise, resolver) {
-        try {
-            resolver(function resolvePromise(value) {
-                resolve(promise, value);
-            }, function rejectPromise(reason) {
-                reject(promise, reason);
-            });
-        } catch (e) {
-            reject(promise, e);
-        }
+      try {
+        resolver(function resolvePromise(value){
+          resolve(promise, value);
+        }, function rejectPromise(reason) {
+          reject(promise, reason);
+        });
+      } catch(e) {
+        reject(promise, e);
+      }
     }
+
     __exports__.noop = noop;
     __exports__.resolve = resolve;
     __exports__.reject = reject;
@@ -45152,27 +45884,28 @@ define('rsvp/-internal', [
     __exports__.invokeCallback = invokeCallback;
     __exports__.FULFILLED = FULFILLED;
     __exports__.REJECTED = REJECTED;
-});
-define('rsvp/all-settled', [
-    './enumerator',
-    './promise',
-    './utils',
-    'exports'
-], function (__dependency1__, __dependency2__, __dependency3__, __exports__) {
-    'use strict';
-    var Enumerator = __dependency1__['default'];
+    __exports__.PENDING = PENDING;
+  });
+define("rsvp/all-settled",
+  ["./enumerator","./promise","./utils","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
+    "use strict";
+    var Enumerator = __dependency1__["default"];
     var makeSettledResult = __dependency1__.makeSettledResult;
-    var Promise = __dependency2__['default'];
+    var Promise = __dependency2__["default"];
     var o_create = __dependency3__.o_create;
+
     function AllSettled(Constructor, entries, label) {
-        this._superConstructor(Constructor, entries, false, label);
+      this._superConstructor(Constructor, entries, false /* don't abort on reject */, label);
     }
+
     AllSettled.prototype = o_create(Enumerator.prototype);
     AllSettled.prototype._superConstructor = Enumerator;
     AllSettled.prototype._makeResult = makeSettledResult;
-    AllSettled.prototype._validationError = function () {
-        return new Error('allSettled must be called with an array');
+    AllSettled.prototype._validationError = function() {
+      return new Error('allSettled must be called with an array');
     };
+
     /**
       `RSVP.allSettled` is similar to `RSVP.all`, but instead of implementing
       a fail-fast method, it waits until all the promises have returned and
@@ -45207,8 +45940,8 @@ define('rsvp/all-settled', [
         //   { state: 'rejected', reason: Error },
         //   { state: 'rejected', reason: Error }
         // ]
-        // Note that for the second item, reason.message will be "2", and for the
-        // third item, reason.message will be "3".
+        // Note that for the second item, reason.message will be '2', and for the
+        // third item, reason.message will be '3'.
       }, function(error) {
         // Not run. (This block would only be called if allSettled had failed,
         // for instance if passed an incorrect argument type.)
@@ -45224,16 +45957,17 @@ define('rsvp/all-settled', [
       @return {Promise} promise that is fulfilled with an array of the settled
       states of the constituent promises.
     */
-    __exports__['default'] = function allSettled(entries, label) {
-        return new AllSettled(Promise, entries, label).promise;
-    };
-});
-define('rsvp/all', [
-    './promise',
-    'exports'
-], function (__dependency1__, __exports__) {
-    'use strict';
-    var Promise = __dependency1__['default'];
+
+    __exports__["default"] = function allSettled(entries, label) {
+      return new AllSettled(Promise, entries, label).promise;
+    }
+  });
+define("rsvp/all",
+  ["./promise","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
+
     /**
       This is a convenient alias for `RSVP.Promise.all`.
 
@@ -45244,110 +45978,134 @@ define('rsvp/all', [
       @param {String} label An optional label. This is useful
       for tooling.
     */
-    __exports__['default'] = function all(array, label) {
-        return Promise.all(array, label);
-    };
-});
-define('rsvp/asap', ['exports'], function (__exports__) {
-    'use strict';
-    var length = 0;
-    __exports__['default'] = function asap(callback, arg) {
-        queue[length] = callback;
-        queue[length + 1] = arg;
-        length += 2;
-        if (length === 2) {
-            // If length is 1, that means that we need to schedule an async flush.
-            // If additional callbacks are queued before the queue is flushed, they
-            // will be processed by this flush that we are scheduling.
-            scheduleFlush();
-        }
-    };
-    var browserGlobal = typeof window !== 'undefined' ? window : {};
+    __exports__["default"] = function all(array, label) {
+      return Promise.all(array, label);
+    }
+  });
+define("rsvp/asap",
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var len = 0;
+
+    __exports__["default"] = function asap(callback, arg) {
+      queue[len] = callback;
+      queue[len + 1] = arg;
+      len += 2;
+      if (len === 2) {
+        // If len is 1, that means that we need to schedule an async flush.
+        // If additional callbacks are queued before the queue is flushed, they
+        // will be processed by this flush that we are scheduling.
+        scheduleFlush();
+      }
+    }
+
+    var browserGlobal = (typeof window !== 'undefined') ? window : {};
     var BrowserMutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
+
     // test for web worker but not in IE10
-    var isWorker = typeof Uint8ClampedArray !== 'undefined' && typeof importScripts !== 'undefined' && typeof MessageChannel !== 'undefined';
+    var isWorker = typeof Uint8ClampedArray !== 'undefined' &&
+      typeof importScripts !== 'undefined' &&
+      typeof MessageChannel !== 'undefined';
+
     // node
     function useNextTick() {
-        return function () {
-            process.nextTick(flush);
-        };
+      return function() {
+        process.nextTick(flush);
+      };
     }
+
     function useMutationObserver() {
-        var iterations = 0;
-        var observer = new BrowserMutationObserver(flush);
-        var node = document.createTextNode('');
-        observer.observe(node, { characterData: true });
-        return function () {
-            node.data = iterations = ++iterations % 2;
-        };
+      var iterations = 0;
+      var observer = new BrowserMutationObserver(flush);
+      var node = document.createTextNode('');
+      observer.observe(node, { characterData: true });
+
+      return function() {
+        node.data = (iterations = ++iterations % 2);
+      };
     }
+
     // web worker
     function useMessageChannel() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = flush;
-        return function () {
-            channel.port2.postMessage(0);
-        };
+      var channel = new MessageChannel();
+      channel.port1.onmessage = flush;
+      return function () {
+        channel.port2.postMessage(0);
+      };
     }
+
     function useSetTimeout() {
-        return function () {
-            setTimeout(flush, 1);
-        };
+      return function() {
+        setTimeout(flush, 1);
+      };
     }
+
     var queue = new Array(1000);
     function flush() {
-        for (var i = 0; i < length; i += 2) {
-            var callback = queue[i];
-            var arg = queue[i + 1];
-            callback(arg);
-            queue[i] = undefined;
-            queue[i + 1] = undefined;
-        }
-        length = 0;
+      for (var i = 0; i < len; i+=2) {
+        var callback = queue[i];
+        var arg = queue[i+1];
+
+        callback(arg);
+
+        queue[i] = undefined;
+        queue[i+1] = undefined;
+      }
+
+      len = 0;
     }
+
     var scheduleFlush;
+
     // Decide what async method to use to triggering processing of queued callbacks:
     if (typeof process !== 'undefined' && {}.toString.call(process) === '[object process]') {
-        scheduleFlush = useNextTick();
+      scheduleFlush = useNextTick();
     } else if (BrowserMutationObserver) {
-        scheduleFlush = useMutationObserver();
+      scheduleFlush = useMutationObserver();
     } else if (isWorker) {
-        scheduleFlush = useMessageChannel();
+      scheduleFlush = useMessageChannel();
     } else {
-        scheduleFlush = useSetTimeout();
+      scheduleFlush = useSetTimeout();
     }
-});
-define('rsvp/config', [
-    './events',
-    'exports'
-], function (__dependency1__, __exports__) {
-    'use strict';
-    var EventTarget = __dependency1__['default'];
-    var config = { instrument: false };
+  });
+define("rsvp/config",
+  ["./events","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var EventTarget = __dependency1__["default"];
+
+    var config = {
+      instrument: false
+    };
+
     EventTarget.mixin(config);
+
     function configure(name, value) {
-        if (name === 'onerror') {
-            // handle for legacy users that expect the actual
-            // error to be passed to their function added via
-            // `RSVP.configure('onerror', someFunctionHere);`
-            config.on('error', value);
-            return;
-        }
-        if (arguments.length === 2) {
-            config[name] = value;
-        } else {
-            return config[name];
-        }
+      if (name === 'onerror') {
+        // handle for legacy users that expect the actual
+        // error to be passed to their function added via
+        // `RSVP.configure('onerror', someFunctionHere);`
+        config.on('error', value);
+        return;
+      }
+
+      if (arguments.length === 2) {
+        config[name] = value;
+      } else {
+        return config[name];
+      }
     }
+
     __exports__.config = config;
     __exports__.configure = configure;
-});
-define('rsvp/defer', [
-    './promise',
-    'exports'
-], function (__dependency1__, __exports__) {
-    'use strict';
-    var Promise = __dependency1__['default'];
+  });
+define("rsvp/defer",
+  ["./promise","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
+
     /**
       `RSVP.defer` returns an object similar to jQuery's `$.Deferred`.
       `RSVP.defer` should be used when porting over code reliant on `$.Deferred`'s
@@ -45380,23 +46138,25 @@ define('rsvp/defer', [
       Useful for tooling.
       @return {Object}
      */
-    __exports__['default'] = function defer(label) {
-        var deferred = {};
-        deferred.promise = new Promise(function (resolve, reject) {
-            deferred.resolve = resolve;
-            deferred.reject = reject;
-        }, label);
-        return deferred;
-    };
-});
-define('rsvp/enumerator', [
-    './utils',
-    './-internal',
-    'exports'
-], function (__dependency1__, __dependency2__, __exports__) {
-    'use strict';
+
+    __exports__["default"] = function defer(label) {
+      var deferred = { };
+
+      deferred.promise = new Promise(function(resolve, reject) {
+        deferred.resolve = resolve;
+        deferred.reject = reject;
+      }, label);
+
+      return deferred;
+    }
+  });
+define("rsvp/enumerator",
+  ["./utils","./-internal","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
     var isArray = __dependency1__.isArray;
     var isMaybeThenable = __dependency1__.isMaybeThenable;
+
     var noop = __dependency2__.noop;
     var reject = __dependency2__.reject;
     var fulfill = __dependency2__.fulfill;
@@ -45404,173 +46164,331 @@ define('rsvp/enumerator', [
     var FULFILLED = __dependency2__.FULFILLED;
     var REJECTED = __dependency2__.REJECTED;
     var PENDING = __dependency2__.PENDING;
-    var ABORT_ON_REJECTION = true;
-    __exports__.ABORT_ON_REJECTION = ABORT_ON_REJECTION;
+
     function makeSettledResult(state, position, value) {
-        if (state === FULFILLED) {
-            return {
-                state: 'fulfilled',
-                value: value
-            };
-        } else {
-            return {
-                state: 'rejected',
-                reason: value
-            };
-        }
+      if (state === FULFILLED) {
+        return {
+          state: 'fulfilled',
+          value: value
+        };
+      } else {
+        return {
+          state: 'rejected',
+          reason: value
+        };
+      }
     }
-    __exports__.makeSettledResult = makeSettledResult;
-    function Enumerator(Constructor, input, abortOnReject, label) {
-        this._instanceConstructor = Constructor;
-        this.promise = new Constructor(noop, label);
-        this._abortOnReject = abortOnReject;
-        if (this._validateInput(input)) {
-            this._input = input;
-            this.length = input.length;
-            this._remaining = input.length;
-            this._init();
-            if (this.length === 0) {
-                fulfill(this.promise, this._result);
-            } else {
-                this.length = this.length || 0;
-                this._enumerate();
-                if (this._remaining === 0) {
-                    fulfill(this.promise, this._result);
-                }
-            }
+
+    __exports__.makeSettledResult = makeSettledResult;function Enumerator(Constructor, input, abortOnReject, label) {
+      this._instanceConstructor = Constructor;
+      this.promise = new Constructor(noop, label);
+      this._abortOnReject = abortOnReject;
+
+      if (this._validateInput(input)) {
+        this._input     = input;
+        this.length     = input.length;
+        this._remaining = input.length;
+
+        this._init();
+
+        if (this.length === 0) {
+          fulfill(this.promise, this._result);
         } else {
-            reject(this.promise, this._validationError());
+          this.length = this.length || 0;
+          this._enumerate();
+          if (this._remaining === 0) {
+            fulfill(this.promise, this._result);
+          }
         }
+      } else {
+        reject(this.promise, this._validationError());
+      }
     }
-    Enumerator.prototype._validateInput = function (input) {
-        return isArray(input);
+
+    Enumerator.prototype._validateInput = function(input) {
+      return isArray(input);
     };
-    Enumerator.prototype._validationError = function () {
-        return new Error('Array Methods must be provided an Array');
+
+    Enumerator.prototype._validationError = function() {
+      return new Error('Array Methods must be provided an Array');
     };
-    Enumerator.prototype._init = function () {
-        this._result = new Array(this.length);
+
+    Enumerator.prototype._init = function() {
+      this._result = new Array(this.length);
     };
-    __exports__['default'] = Enumerator;
-    Enumerator.prototype._enumerate = function () {
-        var length = this.length;
-        var promise = this.promise;
-        var input = this._input;
-        for (var i = 0; promise._state === PENDING && i < length; i++) {
-            this._eachEntry(input[i], i);
-        }
+
+    __exports__["default"] = Enumerator;
+
+    Enumerator.prototype._enumerate = function() {
+      var length  = this.length;
+      var promise = this.promise;
+      var input   = this._input;
+
+      for (var i = 0; promise._state === PENDING && i < length; i++) {
+        this._eachEntry(input[i], i);
+      }
     };
-    Enumerator.prototype._eachEntry = function (entry, i) {
-        var c = this._instanceConstructor;
-        if (isMaybeThenable(entry)) {
-            if (entry.constructor === c && entry._state !== PENDING) {
-                entry._onerror = null;
-                this._settledAt(entry._state, i, entry._result);
-            } else {
-                this._willSettleAt(c.resolve(entry), i);
-            }
+
+    Enumerator.prototype._eachEntry = function(entry, i) {
+      var c = this._instanceConstructor;
+      if (isMaybeThenable(entry)) {
+        if (entry.constructor === c && entry._state !== PENDING) {
+          entry._onerror = null;
+          this._settledAt(entry._state, i, entry._result);
         } else {
-            this._remaining--;
-            this._result[i] = this._makeResult(FULFILLED, i, entry);
+          this._willSettleAt(c.resolve(entry), i);
         }
+      } else {
+        this._remaining--;
+        this._result[i] = this._makeResult(FULFILLED, i, entry);
+      }
     };
-    Enumerator.prototype._settledAt = function (state, i, value) {
-        var promise = this.promise;
-        if (promise._state === PENDING) {
-            this._remaining--;
-            if (this._abortOnReject && state === REJECTED) {
-                reject(promise, value);
-            } else {
-                this._result[i] = this._makeResult(state, i, value);
-            }
+
+    Enumerator.prototype._settledAt = function(state, i, value) {
+      var promise = this.promise;
+
+      if (promise._state === PENDING) {
+        this._remaining--;
+
+        if (this._abortOnReject && state === REJECTED) {
+          reject(promise, value);
+        } else {
+          this._result[i] = this._makeResult(state, i, value);
         }
-        if (this._remaining === 0) {
-            fulfill(promise, this._result);
-        }
+      }
+
+      if (this._remaining === 0) {
+        fulfill(promise, this._result);
+      }
     };
-    Enumerator.prototype._makeResult = function (state, i, value) {
-        return value;
+
+    Enumerator.prototype._makeResult = function(state, i, value) {
+      return value;
     };
-    Enumerator.prototype._willSettleAt = function (promise, i) {
-        var enumerator = this;
-        subscribe(promise, undefined, function (value) {
-            enumerator._settledAt(FULFILLED, i, value);
-        }, function (reason) {
-            enumerator._settledAt(REJECTED, i, reason);
-        });
+
+    Enumerator.prototype._willSettleAt = function(promise, i) {
+      var enumerator = this;
+
+      subscribe(promise, undefined, function(value) {
+        enumerator._settledAt(FULFILLED, i, value);
+      }, function(reason) {
+        enumerator._settledAt(REJECTED, i, reason);
+      });
     };
-});
-define('rsvp/events', ['exports'], function (__exports__) {
-    'use strict';
+  });
+define("rsvp/events",
+  ["exports"],
+  function(__exports__) {
+    "use strict";
     function indexOf(callbacks, callback) {
-        for (var i = 0, l = callbacks.length; i < l; i++) {
-            if (callbacks[i] === callback) {
-                return i;
-            }
-        }
-        return -1;
+      for (var i=0, l=callbacks.length; i<l; i++) {
+        if (callbacks[i] === callback) { return i; }
+      }
+
+      return -1;
     }
+
     function callbacksFor(object) {
-        var callbacks = object._promiseCallbacks;
-        if (!callbacks) {
-            callbacks = object._promiseCallbacks = {};
-        }
-        return callbacks;
+      var callbacks = object._promiseCallbacks;
+
+      if (!callbacks) {
+        callbacks = object._promiseCallbacks = {};
+      }
+
+      return callbacks;
     }
+
     /**
       @class RSVP.EventTarget
     */
-    __exports__['default'] = {
-        mixin: function (object) {
-            object.on = this.on;
-            object.off = this.off;
-            object.trigger = this.trigger;
-            object._promiseCallbacks = undefined;
-            return object;
-        },
-        on: function (eventName, callback) {
-            var allCallbacks = callbacksFor(this), callbacks;
-            callbacks = allCallbacks[eventName];
-            if (!callbacks) {
-                callbacks = allCallbacks[eventName] = [];
-            }
-            if (indexOf(callbacks, callback) === -1) {
-                callbacks.push(callback);
-            }
-        },
-        off: function (eventName, callback) {
-            var allCallbacks = callbacksFor(this), callbacks, index;
-            if (!callback) {
-                allCallbacks[eventName] = [];
-                return;
-            }
-            callbacks = allCallbacks[eventName];
-            index = indexOf(callbacks, callback);
-            if (index !== -1) {
-                callbacks.splice(index, 1);
-            }
-        },
-        trigger: function (eventName, options) {
-            var allCallbacks = callbacksFor(this), callbacks, callbackTuple, callback, binding;
-            if (callbacks = allCallbacks[eventName]) {
-                // Don't cache the callbacks.length since it may grow
-                for (var i = 0; i < callbacks.length; i++) {
-                    callback = callbacks[i];
-                    callback(options);
-                }
-            }
+    __exports__["default"] = {
+
+      /**
+        `RSVP.EventTarget.mixin` extends an object with EventTarget methods. For
+        Example:
+
+        ```javascript
+        var object = {};
+
+        RSVP.EventTarget.mixin(object);
+
+        object.on('finished', function(event) {
+          // handle event
+        });
+
+        object.trigger('finished', { detail: value });
+        ```
+
+        `EventTarget.mixin` also works with prototypes:
+
+        ```javascript
+        var Person = function() {};
+        RSVP.EventTarget.mixin(Person.prototype);
+
+        var yehuda = new Person();
+        var tom = new Person();
+
+        yehuda.on('poke', function(event) {
+          console.log('Yehuda says OW');
+        });
+
+        tom.on('poke', function(event) {
+          console.log('Tom says OW');
+        });
+
+        yehuda.trigger('poke');
+        tom.trigger('poke');
+        ```
+
+        @method mixin
+        @for RSVP.EventTarget
+        @private
+        @param {Object} object object to extend with EventTarget methods
+      */
+      mixin: function(object) {
+        object.on = this.on;
+        object.off = this.off;
+        object.trigger = this.trigger;
+        object._promiseCallbacks = undefined;
+        return object;
+      },
+
+      /**
+        Registers a callback to be executed when `eventName` is triggered
+
+        ```javascript
+        object.on('event', function(eventInfo){
+          // handle the event
+        });
+
+        object.trigger('event');
+        ```
+
+        @method on
+        @for RSVP.EventTarget
+        @private
+        @param {String} eventName name of the event to listen for
+        @param {Function} callback function to be called when the event is triggered.
+      */
+      on: function(eventName, callback) {
+        var allCallbacks = callbacksFor(this), callbacks;
+
+        callbacks = allCallbacks[eventName];
+
+        if (!callbacks) {
+          callbacks = allCallbacks[eventName] = [];
         }
+
+        if (indexOf(callbacks, callback) === -1) {
+          callbacks.push(callback);
+        }
+      },
+
+      /**
+        You can use `off` to stop firing a particular callback for an event:
+
+        ```javascript
+        function doStuff() { // do stuff! }
+        object.on('stuff', doStuff);
+
+        object.trigger('stuff'); // doStuff will be called
+
+        // Unregister ONLY the doStuff callback
+        object.off('stuff', doStuff);
+        object.trigger('stuff'); // doStuff will NOT be called
+        ```
+
+        If you don't pass a `callback` argument to `off`, ALL callbacks for the
+        event will not be executed when the event fires. For example:
+
+        ```javascript
+        var callback1 = function(){};
+        var callback2 = function(){};
+
+        object.on('stuff', callback1);
+        object.on('stuff', callback2);
+
+        object.trigger('stuff'); // callback1 and callback2 will be executed.
+
+        object.off('stuff');
+        object.trigger('stuff'); // callback1 and callback2 will not be executed!
+        ```
+
+        @method off
+        @for RSVP.EventTarget
+        @private
+        @param {String} eventName event to stop listening to
+        @param {Function} callback optional argument. If given, only the function
+        given will be removed from the event's callback queue. If no `callback`
+        argument is given, all callbacks will be removed from the event's callback
+        queue.
+      */
+      off: function(eventName, callback) {
+        var allCallbacks = callbacksFor(this), callbacks, index;
+
+        if (!callback) {
+          allCallbacks[eventName] = [];
+          return;
+        }
+
+        callbacks = allCallbacks[eventName];
+
+        index = indexOf(callbacks, callback);
+
+        if (index !== -1) { callbacks.splice(index, 1); }
+      },
+
+      /**
+        Use `trigger` to fire custom events. For example:
+
+        ```javascript
+        object.on('foo', function(){
+          console.log('foo event happened!');
+        });
+        object.trigger('foo');
+        // 'foo event happened!' logged to the console
+        ```
+
+        You can also pass a value as a second argument to `trigger` that will be
+        passed as an argument to all event listeners for the event:
+
+        ```javascript
+        object.on('foo', function(value){
+          console.log(value.name);
+        });
+
+        object.trigger('foo', { name: 'bar' });
+        // 'bar' logged to the console
+        ```
+
+        @method trigger
+        @for RSVP.EventTarget
+        @private
+        @param {String} eventName name of the event to be triggered
+        @param {Any} options optional value to be passed to any event handlers for
+        the given `eventName`
+      */
+      trigger: function(eventName, options) {
+        var allCallbacks = callbacksFor(this), callbacks, callback;
+
+        if (callbacks = allCallbacks[eventName]) {
+          // Don't cache the callbacks.length since it may grow
+          for (var i=0; i<callbacks.length; i++) {
+            callback = callbacks[i];
+
+            callback(options);
+          }
+        }
+      }
     };
-});
-define('rsvp/filter', [
-    './promise',
-    './utils',
-    'exports'
-], function (__dependency1__, __dependency2__, __exports__) {
-    'use strict';
-    var Promise = __dependency1__['default'];
+  });
+define("rsvp/filter",
+  ["./promise","./utils","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
     var isFunction = __dependency2__.isFunction;
-    var isMaybeThenable = __dependency2__.isMaybeThenable;
+
     /**
      `RSVP.filter` is similar to JavaScript's native `filter` method, except that it
       waits for all promises to become fulfilled before running the `filterFn` on
@@ -45603,8 +46521,8 @@ define('rsvp/filter', [
 
       ```javascript
       var promise1 = RSVP.resolve(1);
-      var promise2 = RSVP.reject(new Error("2"));
-      var promise3 = RSVP.reject(new Error("3"));
+      var promise2 = RSVP.reject(new Error('2'));
+      var promise3 = RSVP.reject(new Error('3'));
       var promises = [ promise1, promise2, promise3 ];
 
       var filterFn = function(item){
@@ -45614,7 +46532,7 @@ define('rsvp/filter', [
       RSVP.filter(promises, filterFn).then(function(array){
         // Code here never runs because there are rejected promises!
       }, function(reason) {
-        // reason.message === "2"
+        // reason.message === '2'
       });
       ```
 
@@ -45656,53 +46574,59 @@ define('rsvp/filter', [
       tooling.
       @return {Promise}
     */
-    __exports__['default'] = function filter(promises, filterFn, label) {
-        return Promise.all(promises, label).then(function (values) {
-            if (!isFunction(filterFn)) {
-                throw new TypeError('You must pass a function as filter\'s second argument.');
+    __exports__["default"] = function filter(promises, filterFn, label) {
+      return Promise.all(promises, label).then(function(values) {
+        if (!isFunction(filterFn)) {
+          throw new TypeError("You must pass a function as filter's second argument.");
+        }
+
+        var length = values.length;
+        var filtered = new Array(length);
+
+        for (var i = 0; i < length; i++) {
+          filtered[i] = filterFn(values[i]);
+        }
+
+        return Promise.all(filtered, label).then(function(filtered) {
+          var results = new Array(length);
+          var newLength = 0;
+
+          for (var i = 0; i < length; i++) {
+            if (filtered[i]) {
+              results[newLength] = values[i];
+              newLength++;
             }
-            var length = values.length;
-            var filtered = new Array(length);
-            for (var i = 0; i < length; i++) {
-                filtered[i] = filterFn(values[i]);
-            }
-            return Promise.all(filtered, label).then(function (filtered$2) {
-                var results = new Array(length);
-                var newLength = 0;
-                for (var i$2 = 0; i$2 < length; i$2++) {
-                    if (filtered$2[i$2]) {
-                        results[newLength] = values[i$2];
-                        newLength++;
-                    }
-                }
-                results.length = newLength;
-                return results;
-            });
+          }
+
+          results.length = newLength;
+
+          return results;
         });
-    };
-});
-define('rsvp/hash-settled', [
-    './promise',
-    './enumerator',
-    './promise-hash',
-    './utils',
-    'exports'
-], function (__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
-    'use strict';
-    var Promise = __dependency1__['default'];
-    var makeSettledResult = __dependency2__.makeSettledResult;
-    var PromiseHash = __dependency3__['default'];
-    var Enumerator = __dependency2__['default'];
-    var o_create = __dependency4__.o_create;
-    function HashSettled(Constructor, object, label) {
-        this._superConstructor(Constructor, object, false, label);
+      });
     }
+  });
+define("rsvp/hash-settled",
+  ["./promise","./enumerator","./promise-hash","./utils","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
+    var makeSettledResult = __dependency2__.makeSettledResult;
+    var PromiseHash = __dependency3__["default"];
+    var Enumerator = __dependency2__["default"];
+    var o_create = __dependency4__.o_create;
+
+    function HashSettled(Constructor, object, label) {
+      this._superConstructor(Constructor, object, false, label);
+    }
+
     HashSettled.prototype = o_create(PromiseHash.prototype);
     HashSettled.prototype._superConstructor = Enumerator;
     HashSettled.prototype._makeResult = makeSettledResult;
-    HashSettled.prototype._validationError = function () {
-        return new Error('hashSettled must be called with an object');
+
+    HashSettled.prototype._validationError = function() {
+      return new Error('hashSettled must be called with an object');
     };
+
     /**
       `RSVP.hashSettled` is similar to `RSVP.allSettled`, but takes an object
       instead of an array for its `promises` argument.
@@ -45751,7 +46675,7 @@ define('rsvp/hash-settled', [
       var promises = {
         myPromise: RSVP.Promise.resolve(1),
         rejectedPromise: RSVP.Promise.reject(new Error('rejection')),
-        anotherRejectedPromise: RSVP.Promise.reject(new Error('more rejection'))
+        anotherRejectedPromise: RSVP.Promise.reject(new Error('more rejection')),
       };
 
       RSVP.hashSettled(promises).then(function(hash){
@@ -45804,20 +46728,17 @@ define('rsvp/hash-settled', [
       have been settled.
       @static
     */
-    __exports__['default'] = function hashSettled(object, label) {
-        return new HashSettled(Promise, object, label).promise;
-    };
-});
-define('rsvp/hash', [
-    './promise',
-    './promise-hash',
-    './enumerator',
-    'exports'
-], function (__dependency1__, __dependency2__, __dependency3__, __exports__) {
-    'use strict';
-    var Promise = __dependency1__['default'];
-    var PromiseHash = __dependency2__['default'];
-    var ABORT_ON_REJECTION = __dependency3__.ABORT_ON_REJECTION;
+    __exports__["default"] = function hashSettled(object, label) {
+      return new HashSettled(Promise, object, label).promise;
+    }
+  });
+define("rsvp/hash",
+  ["./promise","./promise-hash","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
+    var PromiseHash = __dependency2__["default"];
+
     /**
       `RSVP.hash` is similar to `RSVP.all`, but takes an object instead of an array
       for its `promises` argument.
@@ -45857,14 +46778,14 @@ define('rsvp/hash', [
       ```javascript
       var promises = {
         myPromise: RSVP.resolve(1),
-        rejectedPromise: RSVP.reject(new Error("rejectedPromise")),
-        anotherRejectedPromise: RSVP.reject(new Error("anotherRejectedPromise"))
+        rejectedPromise: RSVP.reject(new Error('rejectedPromise')),
+        anotherRejectedPromise: RSVP.reject(new Error('anotherRejectedPromise')),
       };
 
       RSVP.hash(promises).then(function(hash){
         // Code here never runs because there are rejected promises!
       }, function(reason) {
-        // reason.message === "rejectedPromise"
+        // reason.message === 'rejectedPromise'
       });
       ```
 
@@ -45876,11 +46797,11 @@ define('rsvp/hash', [
 
       ```javascript
       function MyConstructor(){
-        this.example = RSVP.resolve("Example");
+        this.example = RSVP.resolve('Example');
       }
 
       MyConstructor.prototype = {
-        protoProperty: RSVP.resolve("Proto Property")
+        protoProperty: RSVP.resolve('Proto Property')
       };
 
       var myObject = new MyConstructor();
@@ -45889,7 +46810,7 @@ define('rsvp/hash', [
         // protoProperty will not be present, instead you will just have an
         // object that looks like:
         // {
-        //   example: "Example"
+        //   example: 'Example'
         // }
         //
         // hash.hasOwnProperty('protoProperty'); // false
@@ -45906,52 +46827,50 @@ define('rsvp/hash', [
       @return {Promise} promise that is fulfilled when all properties of `promises`
       have been fulfilled, or rejected if any of them become rejected.
     */
-    __exports__['default'] = function hash(object, label) {
-        return new PromiseHash(Promise, object, label).promise;
-    };
-});
-define('rsvp/instrument', [
-    './config',
-    './utils',
-    'exports'
-], function (__dependency1__, __dependency2__, __exports__) {
-    'use strict';
+    __exports__["default"] = function hash(object, label) {
+      return new PromiseHash(Promise, object, label).promise;
+    }
+  });
+define("rsvp/instrument",
+  ["./config","./utils","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
     var config = __dependency1__.config;
     var now = __dependency2__.now;
+
     var queue = [];
-    __exports__['default'] = function instrument(eventName, promise, child) {
-        if (1 === queue.push({
-                name: eventName,
-                payload: {
-                    guid: promise._guidKey + promise._id,
-                    eventName: eventName,
-                    detail: promise._result,
-                    childGuid: child && promise._guidKey + child._id,
-                    label: promise._label,
-                    timeStamp: now(),
-                    stack: new Error(promise._label).stack
-                }
-            })) {
-            setTimeout(function () {
-                var entry;
-                for (var i = 0; i < queue.length; i++) {
-                    entry = queue[i];
-                    config.trigger(entry.name, entry.payload);
-                }
-                queue.length = 0;
+
+    __exports__["default"] = function instrument(eventName, promise, child) {
+      if (1 === queue.push({
+          name: eventName,
+          payload: {
+            guid: promise._guidKey + promise._id,
+            eventName: eventName,
+            detail: promise._result,
+            childGuid: child && promise._guidKey + child._id,
+            label: promise._label,
+            timeStamp: now(),
+            stack: new Error(promise._label).stack
+          }})) {
+
+            setTimeout(function() {
+              var entry;
+              for (var i = 0; i < queue.length; i++) {
+                entry = queue[i];
+                config.trigger(entry.name, entry.payload);
+              }
+              queue.length = 0;
             }, 50);
-        }
-    };
-});
-define('rsvp/map', [
-    './promise',
-    './utils',
-    'exports'
-], function (__dependency1__, __dependency2__, __exports__) {
-    'use strict';
-    var Promise = __dependency1__['default'];
-    var isArray = __dependency2__.isArray;
+          }
+      }
+  });
+define("rsvp/map",
+  ["./promise","./utils","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
     var isFunction = __dependency2__.isFunction;
+
     /**
      `RSVP.map` is similar to JavaScript's native `map` method, except that it
       waits for all promises to become fulfilled before running the `mapFn` on
@@ -45983,8 +46902,8 @@ define('rsvp/map', [
 
       ```javascript
       var promise1 = RSVP.resolve(1);
-      var promise2 = RSVP.reject(new Error("2"));
-      var promise3 = RSVP.reject(new Error("3"));
+      var promise2 = RSVP.reject(new Error('2'));
+      var promise3 = RSVP.reject(new Error('3'));
       var promises = [ promise1, promise2, promise3 ];
 
       var mapFn = function(item){
@@ -45994,7 +46913,7 @@ define('rsvp/map', [
       RSVP.map(promises, mapFn).then(function(array){
         // Code here never runs because there are rejected promises!
       }, function(reason) {
-        // reason.message === "2"
+        // reason.message === '2'
       });
       ```
 
@@ -46030,31 +46949,99 @@ define('rsvp/map', [
        The promise will be rejected if any of the given `promises` become rejected.
       @static
     */
-    __exports__['default'] = function map(promises, mapFn, label) {
-        return Promise.all(promises, label).then(function (values) {
-            if (!isFunction(mapFn)) {
-                throw new TypeError('You must pass a function as map\'s second argument.');
-            }
-            var length = values.length;
-            var results = new Array(length);
-            for (var i = 0; i < length; i++) {
-                results[i] = mapFn(values[i]);
-            }
-            return Promise.all(results, label);
-        });
-    };
-});
-define('rsvp/node', [
-    './promise',
-    './utils',
-    'exports'
-], function (__dependency1__, __dependency2__, __exports__) {
-    'use strict';
-    /* global  arraySlice */
-    var Promise = __dependency1__['default'];
-    var isArray = __dependency2__.isArray;
+    __exports__["default"] = function map(promises, mapFn, label) {
+      return Promise.all(promises, label).then(function(values) {
+        if (!isFunction(mapFn)) {
+          throw new TypeError("You must pass a function as map's second argument.");
+        }
+
+        var length = values.length;
+        var results = new Array(length);
+
+        for (var i = 0; i < length; i++) {
+          results[i] = mapFn(values[i]);
+        }
+
+        return Promise.all(results, label);
+      });
+    }
+  });
+define("rsvp/node",
+  ["./promise","./-internal","./utils","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
+    var noop = __dependency2__.noop;
+    var resolve = __dependency2__.resolve;
+    var reject = __dependency2__.reject;
+    var isArray = __dependency3__.isArray;
+
+    function Result() {
+      this.value = undefined;
+    }
+
+    var ERROR = new Result();
+    var GET_THEN_ERROR = new Result();
+
+    function getThen(obj) {
+      try {
+       return obj.then;
+      } catch(error) {
+        ERROR.value= error;
+        return ERROR;
+      }
+    }
+
+
+    function tryApply(f, s, a) {
+      try {
+        f.apply(s, a);
+      } catch(error) {
+        ERROR.value = error;
+        return ERROR;
+      }
+    }
+
+    function makeObject(_, argumentNames) {
+      var obj = {};
+      var name;
+      var i;
+      var length = _.length;
+      var args = new Array(length);
+
+      for (var x = 0; x < length; x++) {
+        args[x] = _[x];
+      }
+
+      for (i = 0; i < argumentNames.length; i++) {
+        name = argumentNames[i];
+        obj[name] = args[i + 1];
+      }
+
+      return obj;
+    }
+
+    function arrayResult(_) {
+      var length = _.length;
+      var args = new Array(length - 1);
+
+      for (var i = 1; i < length; i++) {
+        args[i - 1] = _[i];
+      }
+
+      return args;
+    }
+
+    function wrapThenable(then, promise) {
+      return {
+        then: function(onFulFillment, onRejection) {
+          return then.call(promise, onFulFillment, onRejection);
+        }
+      };
+    }
+
     /**
-      `RSVP.denodeify` takes a "node-style" function and returns a function that
+      `RSVP.denodeify` takes a 'node-style' function and returns a function that
       will return an `RSVP.Promise`. You can use `denodeify` in Node.js or the
       browser when you'd prefer to use promises over using callbacks. For example,
       `denodeify` transforms the following:
@@ -46167,10 +47154,10 @@ define('rsvp/node', [
       @method denodeify
       @static
       @for RSVP
-      @param {Function} nodeFunc a "node-style" function that takes a callback as
+      @param {Function} nodeFunc a 'node-style' function that takes a callback as
       its last argument. The callback expects an error to be passed as its first
       argument (if an error occurred, otherwise null), and the value from the
-      operation as its second argument ("function(err, value){ }").
+      operation as its second argument ('function(err, value){ }').
       @param {Boolean|Array} argumentNames An optional paramter that if set
       to `true` causes the promise to fulfill with the callback's success arguments
       as an array. This is useful if the node function has multiple success
@@ -46181,153 +47168,173 @@ define('rsvp/node', [
       `RSVP.Promise`
       @static
     */
-    __exports__['default'] = function denodeify(nodeFunc, argumentNames) {
-        var asArray = argumentNames === true;
-        var asHash = isArray(argumentNames);
-        function denodeifiedFunction() {
-            var length = arguments.length;
-            var nodeArgs = new Array(length);
-            for (var i = 0; i < length; i++) {
-                nodeArgs[i] = arguments[i];
+    __exports__["default"] = function denodeify(nodeFunc, options) {
+      var fn = function() {
+        var self = this;
+        var l = arguments.length;
+        var args = new Array(l + 1);
+        var arg;
+        var promiseInput = false;
+
+        for (var i = 0; i < l; ++i) {
+          arg = arguments[i];
+
+          if (!promiseInput) {
+            // TODO: clean this up
+            promiseInput = needsPromiseInput(arg);
+            if (promiseInput === GET_THEN_ERROR) {
+              var p = new Promise(noop);
+              reject(p, GET_THEN_ERROR.value);
+              return p;
+            } else if (promiseInput && promiseInput !== true) {
+              arg = wrapThenable(promiseInput, arg);
             }
-            var thisArg;
-            if (!asArray && !asHash && argumentNames) {
-                if (typeof console === 'object') {
-                    console.warn('Deprecation: RSVP.denodeify() doesn\'t allow setting the ' + '"this" binding anymore. Use yourFunction.bind(yourThis) instead.');
-                }
-                thisArg = argumentNames;
-            } else {
-                thisArg = this;
-            }
-            return Promise.all(nodeArgs).then(function (nodeArgs$2) {
-                return new Promise(resolver);
-                // sweet.js has a bug, this resolver can't be defined in the constructor
-                // or the arraySlice macro doesn't work
-                function resolver(resolve, reject) {
-                    function callback() {
-                        var length$2 = arguments.length;
-                        var args = new Array(length$2);
-                        for (var i$2 = 0; i$2 < length$2; i$2++) {
-                            args[i$2] = arguments[i$2];
-                        }
-                        var error = args[0];
-                        var value = args[1];
-                        if (error) {
-                            reject(error);
-                        } else if (asArray) {
-                            resolve(args.slice(1));
-                        } else if (asHash) {
-                            var obj = {};
-                            var successArguments = args.slice(1);
-                            var name;
-                            var i$3;
-                            for (i$3 = 0; i$3 < argumentNames.length; i$3++) {
-                                name = argumentNames[i$3];
-                                obj[name] = successArguments[i$3];
-                            }
-                            resolve(obj);
-                        } else {
-                            resolve(value);
-                        }
-                    }
-                    nodeArgs$2.push(callback);
-                    nodeFunc.apply(thisArg, nodeArgs$2);
-                }
-            });
+          }
+          args[i] = arg;
         }
-        denodeifiedFunction.__proto__ = nodeFunc;
-        return denodeifiedFunction;
-    };
-});
-define('rsvp/promise-hash', [
-    './enumerator',
-    './-internal',
-    './utils',
-    'exports'
-], function (__dependency1__, __dependency2__, __dependency3__, __exports__) {
-    'use strict';
-    var Enumerator = __dependency1__['default'];
-    var PENDING = __dependency2__.PENDING;
-    var FULFILLED = __dependency2__.FULFILLED;
-    var o_create = __dependency3__.o_create;
-    function PromiseHash(Constructor, object, label) {
-        this._superConstructor(Constructor, object, true, label);
+
+        var promise = new Promise(noop);
+
+        args[l] = function(err, val) {
+          if (err)
+            reject(promise, err);
+          else if (options === undefined)
+            resolve(promise, val);
+          else if (options === true)
+            resolve(promise, arrayResult(arguments));
+          else if (isArray(options))
+            resolve(promise, makeObject(arguments, options));
+          else
+            resolve(promise, val);
+        };
+
+        if (promiseInput) {
+          return handlePromiseInput(promise, args, nodeFunc, self);
+        } else {
+          return handleValueInput(promise, args, nodeFunc, self);
+        }
+      };
+
+      fn.__proto__ = nodeFunc;
+
+      return fn;
     }
-    __exports__['default'] = PromiseHash;
+
+    function handleValueInput(promise, args, nodeFunc, self) {
+      var result = tryApply(nodeFunc, self, args);
+      if (result === ERROR) {
+        reject(promise, result.value);
+      }
+      return promise;
+    }
+
+    function handlePromiseInput(promise, args, nodeFunc, self){
+      return Promise.all(args).then(function(args){
+        var result = tryApply(nodeFunc, self, args);
+        if (result === ERROR) {
+          reject(promise, result.value);
+        }
+        return promise;
+      });
+    }
+
+    function needsPromiseInput(arg) {
+      if (arg && typeof arg === 'object') {
+        if (arg.constructor === Promise) {
+          return true;
+        } else {
+          return getThen(arg);
+        }
+      } else {
+        return false;
+      }
+    }
+  });
+define("rsvp/promise-hash",
+  ["./enumerator","./-internal","./utils","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
+    "use strict";
+    var Enumerator = __dependency1__["default"];
+    var PENDING = __dependency2__.PENDING;
+    var o_create = __dependency3__.o_create;
+
+    function PromiseHash(Constructor, object, label) {
+      this._superConstructor(Constructor, object, true, label);
+    }
+
+    __exports__["default"] = PromiseHash;
+
     PromiseHash.prototype = o_create(Enumerator.prototype);
     PromiseHash.prototype._superConstructor = Enumerator;
-    PromiseHash.prototype._init = function () {
-        this._result = {};
+    PromiseHash.prototype._init = function() {
+      this._result = {};
     };
-    PromiseHash.prototype._validateInput = function (input) {
-        return input && typeof input === 'object';
+
+    PromiseHash.prototype._validateInput = function(input) {
+      return input && typeof input === 'object';
     };
-    PromiseHash.prototype._validationError = function () {
-        return new Error('Promise.hash must be called with an object');
+
+    PromiseHash.prototype._validationError = function() {
+      return new Error('Promise.hash must be called with an object');
     };
-    PromiseHash.prototype._enumerate = function () {
-        var promise = this.promise;
-        var input = this._input;
-        var results = [];
-        for (var key in input) {
-            if (promise._state === PENDING && input.hasOwnProperty(key)) {
-                results.push({
-                    position: key,
-                    entry: input[key]
-                });
-            }
+
+    PromiseHash.prototype._enumerate = function() {
+      var promise = this.promise;
+      var input   = this._input;
+      var results = [];
+
+      for (var key in input) {
+        if (promise._state === PENDING && input.hasOwnProperty(key)) {
+          results.push({
+            position: key,
+            entry: input[key]
+          });
         }
-        var length = results.length;
-        this._remaining = length;
-        var result;
-        for (var i = 0; promise._state === PENDING && i < length; i++) {
-            result = results[i];
-            this._eachEntry(result.entry, result.position);
-        }
+      }
+
+      var length = results.length;
+      this._remaining = length;
+      var result;
+
+      for (var i = 0; promise._state === PENDING && i < length; i++) {
+        result = results[i];
+        this._eachEntry(result.entry, result.position);
+      }
     };
-});
-define('rsvp/promise', [
-    './config',
-    './events',
-    './instrument',
-    './utils',
-    './-internal',
-    './promise/cast',
-    './promise/all',
-    './promise/race',
-    './promise/resolve',
-    './promise/reject',
-    'exports'
-], function (__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __exports__) {
-    'use strict';
+  });
+define("rsvp/promise",
+  ["./config","./instrument","./utils","./-internal","./promise/all","./promise/race","./promise/resolve","./promise/reject","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __exports__) {
+    "use strict";
     var config = __dependency1__.config;
-    var EventTarget = __dependency2__['default'];
-    var instrument = __dependency3__['default'];
-    var objectOrFunction = __dependency4__.objectOrFunction;
-    var isFunction = __dependency4__.isFunction;
-    var now = __dependency4__.now;
-    var noop = __dependency5__.noop;
-    var resolve = __dependency5__.resolve;
-    var reject = __dependency5__.reject;
-    var fulfill = __dependency5__.fulfill;
-    var subscribe = __dependency5__.subscribe;
-    var initializePromise = __dependency5__.initializePromise;
-    var invokeCallback = __dependency5__.invokeCallback;
-    var FULFILLED = __dependency5__.FULFILLED;
-    var cast = __dependency6__['default'];
-    var all = __dependency7__['default'];
-    var race = __dependency8__['default'];
-    var Resolve = __dependency9__['default'];
-    var Reject = __dependency10__['default'];
+    var instrument = __dependency2__["default"];
+
+    var isFunction = __dependency3__.isFunction;
+    var now = __dependency3__.now;
+
+    var noop = __dependency4__.noop;
+    var subscribe = __dependency4__.subscribe;
+    var initializePromise = __dependency4__.initializePromise;
+    var invokeCallback = __dependency4__.invokeCallback;
+    var FULFILLED = __dependency4__.FULFILLED;
+    var REJECTED = __dependency4__.REJECTED;
+
+    var all = __dependency5__["default"];
+    var race = __dependency6__["default"];
+    var Resolve = __dependency7__["default"];
+    var Reject = __dependency8__["default"];
+
     var guidKey = 'rsvp_' + now() + '-';
     var counter = 0;
+
     function needsResolver() {
-        throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
+      throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
     }
+
     function needsNew() {
-        throw new TypeError('Failed to construct \'Promise\': Please use the \'new\' operator, this object constructor cannot be called as a function.');
+      throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
     }
-    __exports__['default'] = Promise;
+    __exports__["default"] = Promise;
     /**
       Promise objects represent the eventual result of an asynchronous operation. The
       primary way of interacting with a promise is through its `then` method, which
@@ -46398,7 +47405,7 @@ define('rsvp/promise', [
               if (this.status === 200) {
                 resolve(this.response);
               } else {
-                reject(new Error("getJSON: `" + url + "` failed with status: [" + this.status + "]"));
+                reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
               }
             }
           };
@@ -46433,79 +47440,363 @@ define('rsvp/promise', [
       @constructor
     */
     function Promise(resolver, label) {
-        this._id = counter++;
-        this._label = label;
-        this._subscribers = [];
-        if (config.instrument) {
-            instrument('created', this);
+      this._id = counter++;
+      this._label = label;
+      this._state = undefined;
+      this._result = undefined;
+      this._subscribers = [];
+
+      if (config.instrument) {
+        instrument('created', this);
+      }
+
+      if (noop !== resolver) {
+        if (!isFunction(resolver)) {
+          needsResolver();
         }
-        if (noop !== resolver) {
-            if (!isFunction(resolver)) {
-                needsResolver();
-            }
-            if (!(this instanceof Promise)) {
-                needsNew();
-            }
-            initializePromise(this, resolver);
+
+        if (!(this instanceof Promise)) {
+          needsNew();
         }
+
+        initializePromise(this, resolver);
+      }
     }
-    Promise.cast = cast;
+
+    Promise.cast = Resolve; // deprecated
     Promise.all = all;
     Promise.race = race;
     Promise.resolve = Resolve;
     Promise.reject = Reject;
+
     Promise.prototype = {
-        constructor: Promise,
-        _id: undefined,
-        _guidKey: guidKey,
-        _label: undefined,
-        _state: undefined,
-        _result: undefined,
-        _subscribers: undefined,
-        _onerror: function (reason) {
-            config.trigger('error', reason);
-        },
-        then: function (onFulfillment, onRejection, label) {
-            var parent = this;
-            parent._onerror = null;
-            var child = new this.constructor(noop, label);
-            var state = parent._state;
-            var result = parent._result;
-            if (config.instrument) {
-                instrument('chained', parent, child);
-            }
-            if (state === FULFILLED && onFulfillment) {
-                config.async(function () {
-                    invokeCallback(state, child, onFulfillment, result);
-                });
-            } else {
-                subscribe(parent, child, onFulfillment, onRejection);
-            }
-            return child;
-        },
-        'catch': function (onRejection, label) {
-            return this.then(null, onRejection, label);
-        },
-        'finally': function (callback, label) {
-            var constructor = this.constructor;
-            return this.then(function (value) {
-                return constructor.resolve(callback()).then(function () {
-                    return value;
-                });
-            }, function (reason) {
-                return constructor.resolve(callback()).then(function () {
-                    throw reason;
-                });
-            }, label);
+      constructor: Promise,
+
+      _guidKey: guidKey,
+
+      _onerror: function (reason) {
+        config.trigger('error', reason);
+      },
+
+    /**
+      The primary way of interacting with a promise is through its `then` method,
+      which registers callbacks to receive either a promise's eventual value or the
+      reason why the promise cannot be fulfilled.
+
+      ```js
+      findUser().then(function(user){
+        // user is available
+      }, function(reason){
+        // user is unavailable, and you are given the reason why
+      });
+      ```
+
+      Chaining
+      --------
+
+      The return value of `then` is itself a promise.  This second, 'downstream'
+      promise is resolved with the return value of the first promise's fulfillment
+      or rejection handler, or rejected if the handler throws an exception.
+
+      ```js
+      findUser().then(function (user) {
+        return user.name;
+      }, function (reason) {
+        return 'default name';
+      }).then(function (userName) {
+        // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
+        // will be `'default name'`
+      });
+
+      findUser().then(function (user) {
+        throw new Error('Found user, but still unhappy');
+      }, function (reason) {
+        throw new Error('`findUser` rejected and we're unhappy');
+      }).then(function (value) {
+        // never reached
+      }, function (reason) {
+        // if `findUser` fulfilled, `reason` will be 'Found user, but still unhappy'.
+        // If `findUser` rejected, `reason` will be '`findUser` rejected and we're unhappy'.
+      });
+      ```
+      If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
+
+      ```js
+      findUser().then(function (user) {
+        throw new PedagogicalException('Upstream error');
+      }).then(function (value) {
+        // never reached
+      }).then(function (value) {
+        // never reached
+      }, function (reason) {
+        // The `PedgagocialException` is propagated all the way down to here
+      });
+      ```
+
+      Assimilation
+      ------------
+
+      Sometimes the value you want to propagate to a downstream promise can only be
+      retrieved asynchronously. This can be achieved by returning a promise in the
+      fulfillment or rejection handler. The downstream promise will then be pending
+      until the returned promise is settled. This is called *assimilation*.
+
+      ```js
+      findUser().then(function (user) {
+        return findCommentsByAuthor(user);
+      }).then(function (comments) {
+        // The user's comments are now available
+      });
+      ```
+
+      If the assimliated promise rejects, then the downstream promise will also reject.
+
+      ```js
+      findUser().then(function (user) {
+        return findCommentsByAuthor(user);
+      }).then(function (comments) {
+        // If `findCommentsByAuthor` fulfills, we'll have the value here
+      }, function (reason) {
+        // If `findCommentsByAuthor` rejects, we'll have the reason here
+      });
+      ```
+
+      Simple Example
+      --------------
+
+      Synchronous Example
+
+      ```javascript
+      var result;
+
+      try {
+        result = findResult();
+        // success
+      } catch(reason) {
+        // failure
+      }
+      ```
+
+      Errback Example
+
+      ```js
+      findResult(function(result, err){
+        if (err) {
+          // failure
+        } else {
+          // success
         }
+      });
+      ```
+
+      Promise Example;
+
+      ```javascript
+      findResult().then(function(result){
+        // success
+      }, function(reason){
+        // failure
+      });
+      ```
+
+      Advanced Example
+      --------------
+
+      Synchronous Example
+
+      ```javascript
+      var author, books;
+
+      try {
+        author = findAuthor();
+        books  = findBooksByAuthor(author);
+        // success
+      } catch(reason) {
+        // failure
+      }
+      ```
+
+      Errback Example
+
+      ```js
+
+      function foundBooks(books) {
+
+      }
+
+      function failure(reason) {
+
+      }
+
+      findAuthor(function(author, err){
+        if (err) {
+          failure(err);
+          // failure
+        } else {
+          try {
+            findBoooksByAuthor(author, function(books, err) {
+              if (err) {
+                failure(err);
+              } else {
+                try {
+                  foundBooks(books);
+                } catch(reason) {
+                  failure(reason);
+                }
+              }
+            });
+          } catch(error) {
+            failure(err);
+          }
+          // success
+        }
+      });
+      ```
+
+      Promise Example;
+
+      ```javascript
+      findAuthor().
+        then(findBooksByAuthor).
+        then(function(books){
+          // found books
+      }).catch(function(reason){
+        // something went wrong
+      });
+      ```
+
+      @method then
+      @param {Function} onFulfilled
+      @param {Function} onRejected
+      @param {String} label optional string for labeling the promise.
+      Useful for tooling.
+      @return {Promise}
+    */
+      then: function(onFulfillment, onRejection, label) {
+        var parent = this;
+        var state = parent._state;
+
+        if (state === FULFILLED && !onFulfillment || state === REJECTED && !onRejection) {
+          if (config.instrument) {
+            instrument('chained', this, this);
+          }
+          return this;
+        }
+
+        parent._onerror = null;
+
+        var child = new this.constructor(noop, label);
+        var result = parent._result;
+
+        if (config.instrument) {
+          instrument('chained', parent, child);
+        }
+
+        if (state) {
+          var callback = arguments[state - 1];
+          config.async(function(){
+            invokeCallback(state, child, callback, result);
+          });
+        } else {
+          subscribe(parent, child, onFulfillment, onRejection);
+        }
+
+        return child;
+      },
+
+    /**
+      `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
+      as the catch block of a try/catch statement.
+
+      ```js
+      function findAuthor(){
+        throw new Error('couldn't find that author');
+      }
+
+      // synchronous
+      try {
+        findAuthor();
+      } catch(reason) {
+        // something went wrong
+      }
+
+      // async with promises
+      findAuthor().catch(function(reason){
+        // something went wrong
+      });
+      ```
+
+      @method catch
+      @param {Function} onRejection
+      @param {String} label optional string for labeling the promise.
+      Useful for tooling.
+      @return {Promise}
+    */
+      'catch': function(onRejection, label) {
+        return this.then(null, onRejection, label);
+      },
+
+    /**
+      `finally` will be invoked regardless of the promise's fate just as native
+      try/catch/finally behaves
+
+      Synchronous example:
+
+      ```js
+      findAuthor() {
+        if (Math.random() > 0.5) {
+          throw new Error();
+        }
+        return new Author();
+      }
+
+      try {
+        return findAuthor(); // succeed or fail
+      } catch(error) {
+        return findOtherAuther();
+      } finally {
+        // always runs
+        // doesn't affect the return value
+      }
+      ```
+
+      Asynchronous example:
+
+      ```js
+      findAuthor().catch(function(reason){
+        return findOtherAuther();
+      }).finally(function(){
+        // author was either found, or not
+      });
+      ```
+
+      @method finally
+      @param {Function} callback
+      @param {String} label optional string for labeling the promise.
+      Useful for tooling.
+      @return {Promise}
+    */
+      'finally': function(callback, label) {
+        var constructor = this.constructor;
+
+        return this.then(function(value) {
+          return constructor.resolve(callback()).then(function(){
+            return value;
+          });
+        }, function(reason) {
+          return constructor.resolve(callback()).then(function(){
+            throw reason;
+          });
+        }, label);
+      }
     };
-});
-define('rsvp/promise/all', [
-    '../enumerator',
-    'exports'
-], function (__dependency1__, __exports__) {
-    'use strict';
-    var Enumerator = __dependency1__['default'];
+  });
+define("rsvp/promise/all",
+  ["../enumerator","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Enumerator = __dependency1__["default"];
+
     /**
       `RSVP.Promise.all` accepts an array of promises, and returns a new promise which
       is fulfilled with an array of fulfillment values for the passed promises, or
@@ -46553,100 +47844,22 @@ define('rsvp/promise/all', [
       fulfilled, or rejected if any of them become rejected.
       @static
     */
-    __exports__['default'] = function all(entries, label) {
-        return new Enumerator(this, entries, true, label).promise;
-    };
-});
-define('rsvp/promise/cast', [
-    './resolve',
-    'exports'
-], function (__dependency1__, __exports__) {
-    'use strict';
-    var resolve = __dependency1__['default'];
-    /**
-      @deprecated
-
-      `RSVP.Promise.cast` coerces its argument to a promise, or returns the
-      argument if it is already a promise which shares a constructor with the caster.
-
-      Example:
-
-      ```javascript
-      var promise = RSVP.Promise.resolve(1);
-      var casted = RSVP.Promise.cast(promise);
-
-      console.log(promise === casted); // true
-      ```
-
-      In the case of a promise whose constructor does not match, it is assimilated.
-      The resulting promise will fulfill or reject based on the outcome of the
-      promise being casted.
-
-      Example:
-
-      ```javascript
-      var thennable = $.getJSON('/api/foo');
-      var casted = RSVP.Promise.cast(thennable);
-
-      console.log(thennable === casted); // false
-      console.log(casted instanceof RSVP.Promise) // true
-
-      casted.then(function(data) {
-        // data is the value getJSON fulfills with
-      });
-      ```
-
-      In the case of a non-promise, a promise which will fulfill with that value is
-      returned.
-
-      Example:
-
-      ```javascript
-      var value = 1; // could be a number, boolean, string, undefined...
-      var casted = RSVP.Promise.cast(value);
-
-      console.log(value === casted); // false
-      console.log(casted instanceof RSVP.Promise) // true
-
-      casted.then(function(val) {
-        val === value // => true
-      });
-      ```
-
-      `RSVP.Promise.cast` is similar to `RSVP.Promise.resolve`, but `RSVP.Promise.cast` differs in the
-      following ways:
-
-      * `RSVP.Promise.cast` serves as a memory-efficient way of getting a promise, when you
-      have something that could either be a promise or a value. RSVP.resolve
-      will have the same effect but will create a new promise wrapper if the
-      argument is a promise.
-      * `RSVP.Promise.cast` is a way of casting incoming thenables or promise subclasses to
-      promises of the exact class specified, so that the resulting object's `then` is
-      ensured to have the behavior of the constructor you are calling cast on (i.e., RSVP.Promise).
-
-      @method cast
-      @static
-      @param {Object} object to be casted
-      @param {String} label optional string for labeling the promise.
-      Useful for tooling.
-      @return {Promise} promise
-    */
-    __exports__['default'] = resolve;
-});
-define('rsvp/promise/race', [
-    '../utils',
-    '../-internal',
-    'exports'
-], function (__dependency1__, __dependency2__, __exports__) {
-    'use strict';
+    __exports__["default"] = function all(entries, label) {
+      return new Enumerator(this, entries, true /* abort on reject */, label).promise;
+    }
+  });
+define("rsvp/promise/race",
+  ["../utils","../-internal","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
     var isArray = __dependency1__.isArray;
-    var isFunction = __dependency1__.isFunction;
-    var isMaybeThenable = __dependency1__.isMaybeThenable;
+
     var noop = __dependency2__.noop;
     var resolve = __dependency2__.resolve;
     var reject = __dependency2__.reject;
     var subscribe = __dependency2__.subscribe;
     var PENDING = __dependency2__.PENDING;
+
     /**
       `RSVP.Promise.race` returns a new promise which is settled in the same way as the
       first passed promise to settle.
@@ -46656,18 +47869,18 @@ define('rsvp/promise/race', [
       ```javascript
       var promise1 = new RSVP.Promise(function(resolve, reject){
         setTimeout(function(){
-          resolve("promise 1");
+          resolve('promise 1');
         }, 200);
       });
 
       var promise2 = new RSVP.Promise(function(resolve, reject){
         setTimeout(function(){
-          resolve("promise 2");
+          resolve('promise 2');
         }, 100);
       });
 
       RSVP.Promise.race([promise1, promise2]).then(function(result){
-        // result === "promise 2" because it was resolved before promise1
+        // result === 'promise 2' because it was resolved before promise1
         // was resolved.
       });
       ```
@@ -46681,20 +47894,20 @@ define('rsvp/promise/race', [
       ```javascript
       var promise1 = new RSVP.Promise(function(resolve, reject){
         setTimeout(function(){
-          resolve("promise 1");
+          resolve('promise 1');
         }, 200);
       });
 
       var promise2 = new RSVP.Promise(function(resolve, reject){
         setTimeout(function(){
-          reject(new Error("promise 2"));
+          reject(new Error('promise 2'));
         }, 100);
       });
 
       RSVP.Promise.race([promise1, promise2]).then(function(result){
         // Code here never runs
       }, function(reason){
-        // reason.message === "promise 2" because promise 2 became rejected before
+        // reason.message === 'promise 2' because promise 2 became rejected before
         // promise 1 became fulfilled
       });
       ```
@@ -46713,34 +47926,41 @@ define('rsvp/promise/race', [
       @return {Promise} a promise which settles in the same way as the first passed
       promise to settle.
     */
-    __exports__['default'] = function race(entries, label) {
-        /*jshint validthis:true */
-        var Constructor = this, entry;
-        var promise = new Constructor(noop, label);
-        if (!isArray(entries)) {
-            reject(promise, new TypeError('You must pass an array to race.'));
-            return promise;
-        }
-        var length = entries.length;
-        function onFulfillment(value) {
-            resolve(promise, value);
-        }
-        function onRejection(reason) {
-            reject(promise, reason);
-        }
-        for (var i = 0; promise._state === PENDING && i < length; i++) {
-            subscribe(Constructor.resolve(entries[i]), undefined, onFulfillment, onRejection);
-        }
+    __exports__["default"] = function race(entries, label) {
+      /*jshint validthis:true */
+      var Constructor = this;
+
+      var promise = new Constructor(noop, label);
+
+      if (!isArray(entries)) {
+        reject(promise, new TypeError('You must pass an array to race.'));
         return promise;
-    };
-});
-define('rsvp/promise/reject', [
-    '../-internal',
-    'exports'
-], function (__dependency1__, __exports__) {
-    'use strict';
+      }
+
+      var length = entries.length;
+
+      function onFulfillment(value) {
+        resolve(promise, value);
+      }
+
+      function onRejection(reason) {
+        reject(promise, reason);
+      }
+
+      for (var i = 0; promise._state === PENDING && i < length; i++) {
+        subscribe(Constructor.resolve(entries[i]), undefined, onFulfillment, onRejection);
+      }
+
+      return promise;
+    }
+  });
+define("rsvp/promise/reject",
+  ["../-internal","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
     var noop = __dependency1__.noop;
     var _reject = __dependency1__.reject;
+
     /**
       `RSVP.Promise.reject` returns a promise rejected with the passed `reason`.
       It is shorthand for the following:
@@ -46776,21 +47996,21 @@ define('rsvp/promise/reject', [
       Useful for tooling.
       @return {Promise} a promise rejected with the given `reason`.
     */
-    __exports__['default'] = function reject(reason, label) {
-        /*jshint validthis:true */
-        var Constructor = this;
-        var promise = new Constructor(noop, label);
-        _reject(promise, reason);
-        return promise;
-    };
-});
-define('rsvp/promise/resolve', [
-    '../-internal',
-    'exports'
-], function (__dependency1__, __exports__) {
-    'use strict';
+    __exports__["default"] = function reject(reason, label) {
+      /*jshint validthis:true */
+      var Constructor = this;
+      var promise = new Constructor(noop, label);
+      _reject(promise, reason);
+      return promise;
+    }
+  });
+define("rsvp/promise/resolve",
+  ["../-internal","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
     var noop = __dependency1__.noop;
     var _resolve = __dependency1__.resolve;
+
     /**
       `RSVP.Promise.resolve` returns a promise that will become resolved with the
       passed `value`. It is shorthand for the following:
@@ -46823,23 +48043,25 @@ define('rsvp/promise/resolve', [
       @return {Promise} a promise that will become fulfilled with the given
       `value`
     */
-    __exports__['default'] = function resolve(object, label) {
-        /*jshint validthis:true */
-        var Constructor = this;
-        if (object && typeof object === 'object' && object.constructor === Constructor) {
-            return object;
-        }
-        var promise = new Constructor(noop, label);
-        _resolve(promise, object);
-        return promise;
-    };
-});
-define('rsvp/race', [
-    './promise',
-    'exports'
-], function (__dependency1__, __exports__) {
-    'use strict';
-    var Promise = __dependency1__['default'];
+    __exports__["default"] = function resolve(object, label) {
+      /*jshint validthis:true */
+      var Constructor = this;
+
+      if (object && typeof object === 'object' && object.constructor === Constructor) {
+        return object;
+      }
+
+      var promise = new Constructor(noop, label);
+      _resolve(promise, object);
+      return promise;
+    }
+  });
+define("rsvp/race",
+  ["./promise","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
+
     /**
       This is a convenient alias for `RSVP.Promise.race`.
 
@@ -46850,16 +48072,16 @@ define('rsvp/race', [
       @param {String} label An optional label. This is useful
       for tooling.
      */
-    __exports__['default'] = function race(array, label) {
-        return Promise.race(array, label);
-    };
-});
-define('rsvp/reject', [
-    './promise',
-    'exports'
-], function (__dependency1__, __exports__) {
-    'use strict';
-    var Promise = __dependency1__['default'];
+    __exports__["default"] = function race(array, label) {
+      return Promise.race(array, label);
+    }
+  });
+define("rsvp/reject",
+  ["./promise","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
+
     /**
       This is a convenient alias for `RSVP.Promise.reject`.
 
@@ -46871,16 +48093,16 @@ define('rsvp/reject', [
       Useful for tooling.
       @return {Promise} a promise rejected with the given `reason`.
     */
-    __exports__['default'] = function reject(reason, label) {
-        return Promise.reject(reason, label);
-    };
-});
-define('rsvp/resolve', [
-    './promise',
-    'exports'
-], function (__dependency1__, __exports__) {
-    'use strict';
-    var Promise = __dependency1__['default'];
+    __exports__["default"] = function reject(reason, label) {
+      return Promise.reject(reason, label);
+    }
+  });
+define("rsvp/resolve",
+  ["./promise","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Promise = __dependency1__["default"];
+
     /**
       This is a convenient alias for `RSVP.Promise.resolve`.
 
@@ -46893,12 +48115,14 @@ define('rsvp/resolve', [
       @return {Promise} a promise that will become fulfilled with the given
       `value`
     */
-    __exports__['default'] = function resolve(value, label) {
-        return Promise.resolve(value, label);
-    };
-});
-define('rsvp/rethrow', ['exports'], function (__exports__) {
-    'use strict';
+    __exports__["default"] = function resolve(value, label) {
+      return Promise.resolve(value, label);
+    }
+  });
+define("rsvp/rethrow",
+  ["exports"],
+  function(__exports__) {
+    "use strict";
     /**
       `RSVP.rethrow` will rethrow an error on the next turn of the JavaScript event
       loop in order to aid debugging.
@@ -46939,129 +48163,58 @@ define('rsvp/rethrow', ['exports'], function (__exports__) {
       @throws Error
       @static
     */
-    __exports__['default'] = function rethrow(reason) {
-        setTimeout(function () {
-            throw reason;
-        });
+    __exports__["default"] = function rethrow(reason) {
+      setTimeout(function() {
         throw reason;
-    };
-});
-define('rsvp/utils', ['exports'], function (__exports__) {
-    'use strict';
+      });
+      throw reason;
+    }
+  });
+define("rsvp/utils",
+  ["exports"],
+  function(__exports__) {
+    "use strict";
     function objectOrFunction(x) {
-        return typeof x === 'function' || typeof x === 'object' && x !== null;
+      return typeof x === 'function' || (typeof x === 'object' && x !== null);
     }
-    __exports__.objectOrFunction = objectOrFunction;
-    function isFunction(x) {
-        return typeof x === 'function';
+
+    __exports__.objectOrFunction = objectOrFunction;function isFunction(x) {
+      return typeof x === 'function';
     }
-    __exports__.isFunction = isFunction;
-    function isMaybeThenable(x) {
-        return typeof x === 'object' && x !== null;
+
+    __exports__.isFunction = isFunction;function isMaybeThenable(x) {
+      return typeof x === 'object' && x !== null;
     }
-    __exports__.isMaybeThenable = isMaybeThenable;
-    var _isArray;
+
+    __exports__.isMaybeThenable = isMaybeThenable;var _isArray;
     if (!Array.isArray) {
-        _isArray = function (x) {
-            return Object.prototype.toString.call(x) === '[object Array]';
-        };
+      _isArray = function (x) {
+        return Object.prototype.toString.call(x) === '[object Array]';
+      };
     } else {
-        _isArray = Array.isArray;
+      _isArray = Array.isArray;
     }
+
     var isArray = _isArray;
     __exports__.isArray = isArray;
     // Date.now is not available in browsers < IE9
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now#Compatibility
-    var now = Date.now || function () {
-            return new Date().getTime();
-        };
+    var now = Date.now || function() { return new Date().getTime(); };
     __exports__.now = now;
-    var o_create = Object.create || function (object) {
-            var o = function () {
-            };
-            o.prototype = object;
-            return o;
-        };
-    __exports__.o_create = o_create;
-});
-define('rsvp', [
-    './rsvp/promise',
-    './rsvp/events',
-    './rsvp/node',
-    './rsvp/all',
-    './rsvp/all-settled',
-    './rsvp/race',
-    './rsvp/hash',
-    './rsvp/hash-settled',
-    './rsvp/rethrow',
-    './rsvp/defer',
-    './rsvp/config',
-    './rsvp/map',
-    './rsvp/resolve',
-    './rsvp/reject',
-    './rsvp/filter',
-    './rsvp/asap',
-    'exports'
-], function (__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __exports__) {
-    'use strict';
-    var Promise = __dependency1__['default'];
-    var EventTarget = __dependency2__['default'];
-    var denodeify = __dependency3__['default'];
-    var all = __dependency4__['default'];
-    var allSettled = __dependency5__['default'];
-    var race = __dependency6__['default'];
-    var hash = __dependency7__['default'];
-    var hashSettled = __dependency8__['default'];
-    var rethrow = __dependency9__['default'];
-    var defer = __dependency10__['default'];
-    var config = __dependency11__.config;
-    var configure = __dependency11__.configure;
-    var map = __dependency12__['default'];
-    var resolve = __dependency13__['default'];
-    var reject = __dependency14__['default'];
-    var filter = __dependency15__['default'];
-    var asap = __dependency16__['default'];
-    config.async = asap;
-    // default async is asap;
-    function async(callback, arg) {
-        config.async(callback, arg);
-    }
-    function on() {
-        config.on.apply(config, arguments);
-    }
-    function off() {
-        config.off.apply(config, arguments);
-    }
-    // Set up instrumentation through `window.__PROMISE_INTRUMENTATION__`
-    if (typeof window !== 'undefined' && typeof window.__PROMISE_INSTRUMENTATION__ === 'object') {
-        var callbacks = window.__PROMISE_INSTRUMENTATION__;
-        configure('instrument', true);
-        for (var eventName in callbacks) {
-            if (callbacks.hasOwnProperty(eventName)) {
-                on(eventName, callbacks[eventName]);
-            }
-        }
-    }
-    __exports__.Promise = Promise;
-    __exports__.EventTarget = EventTarget;
-    __exports__.all = all;
-    __exports__.allSettled = allSettled;
-    __exports__.race = race;
-    __exports__.hash = hash;
-    __exports__.hashSettled = hashSettled;
-    __exports__.rethrow = rethrow;
-    __exports__.defer = defer;
-    __exports__.denodeify = denodeify;
-    __exports__.configure = configure;
-    __exports__.on = on;
-    __exports__.off = off;
-    __exports__.resolve = resolve;
-    __exports__.reject = reject;
-    __exports__.async = async;
-    __exports__.map = map;
-    __exports__.filter = filter;
-});
+    function F() { }
 
+    var o_create = (Object.create || function (o) {
+      if (arguments.length > 1) {
+        throw new Error('Second argument not supported');
+      }
+      if (typeof o !== 'object') {
+        throw new TypeError('Argument must be an object');
+      }
+      F.prototype = o;
+      return new F();
+    });
+    __exports__.o_create = o_create;
+  });
 requireModule("ember");
 
 })();
