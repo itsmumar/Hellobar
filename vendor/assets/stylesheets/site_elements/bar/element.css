@@ -64,13 +64,30 @@
   padding: 4px 15px 0px;
 }
 
+/*-----------  Social Styling  -----------*/
+
+#hellobar_bar .hb-social-wrapper {
+  margin: 0;
+  line-height: 0;
+  vertical-align: text-bottom;
+}
+
+#hellobar_bar .hb-social-wrapper.hb-google-wrapper {
+  vertical-align: middle;
+}
+
+#hellobar_bar .hb-social-wrapper #___follow_0,
+#hellobar_bar .hb-social-wrapper #___plusone_0 {
+  display: inline-block !important;
+}
+
 /*-----------  Has Border  -----------*/
 
 #hellobar_bar.has_border {
   border-bottom: 3px solid white;
 }
 
-/*-----------  HelloBar Arrow  -----------*/
+/*-----------  Hide Arrow  -----------*/
 
 #hellobar_bar .hb-arrow {
   width: 2em;
@@ -156,6 +173,16 @@
 
 #hellobar_bar.regular .hb-cta-style-button { 
   padding: 3px 15px 1px;
+}
+
+#hellobar_bar.regular .hb-social-wrapper {
+  vertical-align: bottom;
+}
+
+#hellobar_bar.regular .hb-social-wrapper.hb-google-wrapper {
+  height: 24px;
+  margin: -1px 0;
+  vertical-align: middle;
 }
 
 /*-----------  Size: Large  -----------*/

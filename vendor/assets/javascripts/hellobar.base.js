@@ -58,8 +58,6 @@ var HBQ = function()
     };
 
     if ( containerDocument ) {
-      HB.e.shadow = containerDocument.getElementById("hellobar_shadow");
-
       if ( containerDocument.getElementById("hellobar_bar") !== null ) {
         HB.e.siteElement = containerDocument.getElementById("hellobar_bar");
         HB.e.siteElementType = "bar";
@@ -113,13 +111,6 @@ var HBQ = function()
         // Bar specific adjustments
         if ( HB.e.siteElementType == "bar" ) {
           
-          // Adjust the shadow offset
-          if ( HB.e.shadow ) {
-            var borderPush = HB.t((HB.currentSiteElement.show_border) ? 0 : -1)
-            HB.e.shadow.style.top = (HB.e.siteElement.clientHeight + borderPush) + "px";
-            HB.e.shadow.style.display = "block";
-          }
-          
           // Adjust the pusher
           if ( HB.e.pusher ) {
             var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
@@ -135,7 +126,7 @@ var HBQ = function()
         } 
       }
     }
-  }, 50); // Check every 50ms
+  }, 100); // Check every second
 }
 
 // Call the function right away once this is loaded

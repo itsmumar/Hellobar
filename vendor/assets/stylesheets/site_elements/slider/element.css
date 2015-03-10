@@ -20,6 +20,12 @@
   margin-bottom: -0.67em;
 }
 
+/*-----------  Social Styling  -----------*/
+
+#hellobar_slider .hb-social-wrapper {
+  margin-bottom: 0;
+}
+
 /*-----------  Positions: Top  -----------*/
 
 #hellobar_slider.top-left,
@@ -45,6 +51,11 @@
 #hellobar_slider.top-right .hb-content-wrapper,
 #hellobar_slider.bottom-right .hb-content-wrapper {
   padding-right: 1.67em;
+}
+
+#hellobar_slider.top-right .hb-social-wrapper.hb-twitter-wrapper #widget,
+#hellobar_slider.bottom-right .hb-social-wrapper.hb-twitter-wrapper #widget {
+  text-align: right;
 }
 
 /*-----------  Positions: Left  -----------*/

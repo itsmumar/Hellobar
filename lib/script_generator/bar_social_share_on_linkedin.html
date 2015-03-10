@@ -1,29 +1,22 @@
-<div class="hb-content-wrapper">
-  <div class="hb-text-wrapper">
-    <div class="hb-headline-text">{{siteElement.headline}}</div>
-    <div class="hb-secondary-text">{{siteElement.caption}}</div>
-  </div>
-
-  <span class="social-wrapper linkedin-button-wrapper">
-    <span class="linkedin-button">
-      <script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
-      <script type="IN/Share" data-url="{{(HB.t(siteElement.settings.use_location_for_url) ? window.parent.location.href : siteElement.settings.url_to_share).replace(/^(?!http)/, 'http://')}}" data-counter="right" data-showzero="true"></script>
-    </span>
+<div class="hb-social-wrapper hb-linkedin-wrapper">
+  <span class="hb-linkedin-share-button">
+    <script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+    <script type="IN/Share" data-url="{{(HB.t(siteElement.settings.use_location_for_url) ? window.parent.location.href : siteElement.settings.url_to_share).replace(/^(?!http)/, 'http://')}}" data-counter="right" data-showzero="true"></script>
   </span>
-</div>
 
-<script>
-  function trackClick(event) {
-    var target = event.target || event.srcElement;
+  <script>
+    function trackClick(event) {
+      var target = event.target || event.srcElement;
 
-    if (target.innerHTML == 'Share') {
-      parent.HB.converted();
+      if (target.innerHTML == 'Share') {
+        parent.HB.converted();
+      }
     }
-  }
 
-  if (document.addEventListener) {
-    document.addEventListener('click', trackClick, true);
-  } else if (document.attachEvent) {
-    document.attachEvent('onclick', trackClick);
-  }
-</script>
+    if (document.addEventListener) {
+      document.addEventListener('click', trackClick, true);
+    } else if (document.attachEvent) {
+      document.attachEvent('onclick', trackClick);
+    }
+  </script>
+</div>

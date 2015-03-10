@@ -202,57 +202,27 @@ html, body {
 
 /*-----------  Social Styling  -----------*/
 
-#hellobar_bar span.fb_iframe_widget,
-#hellobar_bar span.fb_iframe_widget span {
-  margin: 0;
-  overflow: hidden
+.hb-social-wrapper {
+  min-width: 1px;
+  min-height: 20px;
+  display: inline-block;
+  margin: 1em auto -1.25em;
 }
 
-#hellobar_bar span.fb_iframe_widget {
-  position: relative;
-  top: 4px;
+.hb-social-wrapper #___follow_0,
+.hb-social-wrapper #___plusone_0 {
+  display: block !important;
 }
 
-#hellobar_bar span.linkedin-button {
-  top: 5px;
-  margin: 0;
-  position: relative;
-  line-height: normal;
+.hb-social-wrapper.hb-google-wrapper {
+  height: 24px !important;
 }
 
-#hellobar_bar span.linkedin-button span {
-  margin: 0;
-  font-size: 100%;
-  line-height: normal;
+.hb-social-wrapper.hb-linkedin-wrapper {
+  height: 20px !important;
 }
 
-#hellobar_bar div#___plusone_0,
-#hellobar_bar div#___follow_0 {
-  vertical-align: middle !important;
-}
-
-#hellobar_bar span.pinterest-pin-button {
-  top: 5px;
-  margin: 0;
-  position: relative;
-}
-
-#hellobar_bar span.pinterest-pin-button a {
-  margin: 0;
-}
-
-#hellobar_bar span.pinterest-follow-button {
-  top: -2px;
-  margin-left: 0;
-  position: relative;
-}
-
-#hellobar_bar span.pinterest-follow-button a {
-  display: none;
-}
-
-#hellobar_bar a.buffer-add-button {
-  top: 4px;
+.hb-social-wrapper .hb-buffer-share-button {
   width: 55px;
   height: 20px;
   margin-right: 0;
@@ -262,10 +232,12 @@ html, body {
   background-image: url(https://d389zggrogs7qo.cloudfront.net/images/buffer_button.png);
 }
 
-#hellobar_bar a.buffer-add-button:hover {
+.hb-social-wrapper .hb-buffer-share-button:hover {
   background-position: 0 -20px;
 }
 
-.gc-bubbleDefault, .pls-container {
+.hb-social-wrapper script,
+.hb-social-wrapper .gc-bubbleDefault,
+.hb-social-wrapper .pls-container {
   display: none !important;
 }

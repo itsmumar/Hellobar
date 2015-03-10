@@ -1,7 +1,3 @@
-<span>
-  {{siteElement.headline}}
-</span>
-
-<span class="social-wrapper buffer-add-button-wrapper">
-  <a href="http://bufferapp.com/add/?url={{encodeURIComponent((HB.t(siteElement.settings.use_location_for_url) ? window.parent.location.href : siteElement.settings.buffer_url).replace(/^(?!http)/, 'http://'))}}&text={{encodeURIComponent(siteElement.settings.buffer_message)}}" class="buffer-add-button" target="_blank" onclick="window.parent.HB.trackClick(this)"></a>
-</span>
+<div class="hb-social-wrapper hb-buffer-wrapper">
+  <a class="hb-buffer-share-button" href="http://bufferapp.com/add/?url={{encodeURIComponent((HB.t(siteElement.settings.use_location_for_url) ? window.parent.location.href : siteElement.settings.buffer_url).replace(/^(?!http)/, 'http://'))}}&text={{encodeURIComponent(siteElement.settings.buffer_message)}}" target="_blank" onclick="window.parent.HB.trackClick(this)"></a>
+</div>
