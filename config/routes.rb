@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords"}
+  devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords", :omniauth_callbacks => "users/omniauth_callbacks"}
 
   get "profile", :to => "user#edit", :as => :profile
   resource :user, :controller => :user, :only => [:update, :destroy]
@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   resources :payment_methods, only: [:index, :create, :update]
   resources :bills, only: :show
 
+  get "continue_create_site", :to => "sites#create", :as => :continue_create_site
   get "sites/:id/install", :to => "sites#install", :as => :site_install
   get "sites/:id/improve", :to => "sites#improve", :as => :site_improve
   get "sites/:id/preview_script", :to => "sites#preview_script", :as => :preview_script

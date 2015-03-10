@@ -299,6 +299,9 @@ GEM
       omniauth-oauth2 (~> 1.0)
     omniauth-createsend (1.0.2)
       omniauth-oauth2 (~> 1.1)
+    omniauth-google-oauth2 (0.2.6)
+      omniauth (> 1.0)
+      omniauth-oauth2 (~> 1.1)
     omniauth-oauth (1.0.1)
       oauth
       omniauth (~> 1.0)
@@ -519,6 +522,7 @@ DEPENDENCIES
   omniauth-aweber (~> 1.0)
   omniauth-constantcontact2 (~> 1.0)
   omniauth-createsend (~> 1.0)
+  omniauth-google-oauth2
   omniauth-mailchimp (~> 1.0)!
   paranoia (~> 2.0)
   php-serialize

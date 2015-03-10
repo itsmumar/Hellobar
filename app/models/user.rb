@@ -4,9 +4,11 @@ class User < ActiveRecord::Base
   has_many :payment_method_details, through: :payment_methods, source: :details
   has_many :site_memberships
   has_many :sites, through: :site_memberships
+  has_many :authentications, dependent: :destroy
   acts_as_paranoid
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
+  devise :omniauthable, :omniauth_providers => [:google_oauth2]
   delegate :url_helpers, to: "Rails.application.routes"
 
   validate :email_does_not_exist_in_wordpress, on: :create
@@ -87,6 +89,27 @@ class User < ActiveRecord::Base
 
   def valid_password?(password)
     Phpass.new.check(password, encrypted_password) || super
+  end
+
+  def self.find_for_google_oauth2(access_token, signed_in_resource=nil)
+      data = access_token["info"]
+      user = User.joins(:authentications).where(authentications: { uid: access_token[:uid] }).first
+
+      unless user
+        password = Devise.friendly_token[9,20]
+        user = User.new(
+          email: data["email"],
+          password: password,
+          password_confirmation: password
+        )
+        user.authentications.build(provider: access_token["provider"], uid: access_token[:uid])
+        user.save
+        puts "HERE !!!!!!!!"
+        puts user.inspect
+        puts "ERRORS: "
+        puts user.errors.inspect
+      end
+      user
   end
 
   private

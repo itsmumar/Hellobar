@@ -1,6 +1,6 @@
 # The AB Testing module does a few things:
 # - it keeps track of all the tests
-# - it maintains a cookie to track which test the user has seen. This cookie is a string of 
+# - it maintains a cookie to track which test the user has seen. This cookie is a string of
 # digits from 0-9. Each digit represents a single test and each value is the variation the
 # person saw
 # - it tags the user when a new test is seen so we can track it with the backend analytics
@@ -44,13 +44,14 @@ module Hello
         TESTS[name] = {:values=>values, :index=>index, :weights=>weights, :name=>name}
       end
     end
-    
+
     # ==========================================
     # ==      REGISTER YOUR TESTS HERE        ==
     # ==========================================
     register_test("Use Cases Amount", %w{more less}, 0)
     register_test("Account Creation Test 2015-01-21", %w{original orange_header no_orange_header}, 1)
     register_test("Editor Test 2015-02-23", %w{original interstitial navigation}, 2)
+    register_test("Google Auth 2015-03-10", %w{original google_auth}, 3)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
@@ -164,7 +165,7 @@ module Hello
       # Return the first VISITOR_ID_LENGTH characters of the hash
       return cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH]
     end
-    
+
     def get_user_id_from_cookie
       return nil unless defined?(cookies)
       visitor_id_cookie = cookies[VISITOR_ID_COOKIE]

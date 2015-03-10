@@ -20,6 +20,14 @@ class SitesController < ApplicationController
 
     if current_user
       create_for_logged_in_user
+    elsif params[:oauth]
+      if @site.valid?
+        session[:new_site_url] = @site.url
+        redirect_to user_omniauth_authorize_path(:google_oauth2)
+      else
+        flash[:error] = "Your URL is not valid. Please double-check it and try again."
+        redirect_to root_path
+      end
     else
       create_for_temporary_user
     end
@@ -96,6 +104,11 @@ class SitesController < ApplicationController
   private
 
   def site_params
+    if session[:new_site_url]
+      params[:site] ||= {}
+      params[:site][:url] ||= session[:new_site_url]
+      session.delete(:new_site_url)
+    end
     params.require(:site).permit(:url, :opted_in_to_email_digest, :timezone)
   end
 
