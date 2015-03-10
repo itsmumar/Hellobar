@@ -23,6 +23,12 @@
   -webkit-transform: translate(-50%, -50%);
 }
 
+/*-----------  Inputs  -----------*/
+
+#hellobar_takeover .hb-input-wrapper input {
+  border-width: 2px;
+}
+
 /*-----------  Logo  -----------*/
 
 #hellobar_takeover .hb-logo-wrapper a {

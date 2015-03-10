@@ -118,6 +118,7 @@ html, body {
   line-height: 1.4;
   border: 1px solid;
   max-width: 22.5em;
+  text-align: center;
   position: relative;
   border-radius: 2px;
   white-space: nowrap;
@@ -151,6 +152,54 @@ html, body {
   margin-top: 0.5em;
   -moz-osx-font-smoothing: grayscale; 
   -webkit-font-smoothing: antialiased;
+}
+
+/*-----------  Inputs  -----------*/
+
+.hb-input-wrapper {
+  max-width: 22.5em;
+  margin: 1.33em auto 0;
+}
+
+.hb-input-wrapper input {
+  width: 100%;
+  outline: none;
+  color: #5c5e60;
+  padding: 0 10px;
+  line-height: 2.5;
+  font-size: 0.9em;
+  border-radius: 2px;
+  border: 1px solid #e0e0e0;
+
+  appearance: none;
+  -o-appearance: none;
+  -ms-appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+
+  box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+
+  transition: border-color 0.2s ease;
+  -o-transition: border-color 0.2s ease;
+  -ms-transition: border-color 0.2s ease;
+  -moz-transition: border-color 0.2s ease;
+  -webkit-transition: border-color 0.2s ease;
+}
+
+.hb-input-wrapper input:focus {
+  border-color: #b2b2b2;
+}
+
+.hb-input-wrapper input + input {
+  margin-top: -1px;
+}
+
+.hb-input-wrapper .hb-cta {
+  margin-top: 1.25em;
 }
 
 /*-----------  Logo  -----------*/

@@ -19,18 +19,6 @@
   _width:expression(eval(document.body.offsetWidth-20));
 }
 
-#hellobar_bar input {
-  border: none;
-  outline: none;
-  width: 10.5em;
-  height: 1.45em;
-  padding: 0 0.33em;
-  border-radius: 3px;
-  vertical-align: middle;
-  margin: 0 auto 0.25em 0.33em;
-  box-shadow: inset 1px 1px 3px #aaa;
-}
-
 #hellobar_bar iframe {
   vertical-align: middle;
 }
@@ -61,7 +49,7 @@
 #hellobar_bar .hb-cta-style-button {
   margin: 0 0;
   line-height: 1.05;
-  padding: 4px 15px 0px;
+  padding: 4px 15px 1px;
 }
 
 /*-----------  Social Styling  -----------*/
@@ -119,6 +107,22 @@
   display: none;
 }
 
+/*-----------  Inputs  -----------*/
+
+#hellobar_bar .hb-input-wrapper,
+#hellobar_bar .hb-input-wrapper input,
+#hellobar_bar .hb-input-wrapper .hb-cta {
+  width: auto;
+  margin-top: 0;
+  display: inline-block;
+}
+
+#hellobar_bar .hb-input-wrapper input {
+  line-height: 2;
+  font-size: 0.67em;
+  vertical-align: bottom;
+}
+
 /*-----------  Logos  -----------*/
 
 #hellobar_bar .hb-logo-wrapper {
@@ -154,6 +158,28 @@
   opacity: 1;
 }
 
+/*-----------  State: Multiline  -----------*/
+
+#hellobar_bar.multiline .hb-text-wrapper,
+#hellobar_bar.multiline .hb-input-wrapper {
+  display: block;
+  max-width: 100%;
+  text-align: center;
+}
+
+/*-----------  State: Mobile  -----------*/
+
+
+#hellobar_bar.mobile .hb-arrow,
+#hellobar_bar.mobile .hb-logo-wrapper {
+  display: none;
+}
+
+#hellobar_bar.mobile .hb-input-wrapper input {
+  display: block;
+  margin: 0.25em auto;
+}
+
 /*-----------  Size: Regular  -----------*/
 
 #hellobar_bar.regular {
@@ -183,43 +209,6 @@
   height: 24px;
   margin: -1px 0;
   vertical-align: middle;
-}
-
-/*-----------  Size: Large  -----------*/
-
-/*#hellobar_bar.large input {
-  height: 25px;
-  padding: 5px 5px;
-  margin-top: -1px;
-  margin-bottom: 0;
-}
-*/
-/*-----------  Mobile  -----------*/
-
-
-#hellobar_bar.mobile .hb-arrow,
-#hellobar_bar.mobile .hb-logo-wrapper {
-  display: none;
-}
-
-#hellobar_bar.mobile #hb_name, 
-#hellobar_bar.mobile #hb_email {
-  width: 80%;
-  margin-right: 2.5%;
-}
-
-#hellobar_bar.mobile #hb_email {
-  margin-top: 10px
-}
-
-/*-----------  Multiline  -----------*/
-
-#hellobar_bar.multiline > div {
-  margin-right: 65px;
-}
-
-#hellobar_bar.multiline .hb-cta-style-text {
-  margin-left: 10px;
 }
 
 /*-----------  Animations: Button Wiggle  -----------*/

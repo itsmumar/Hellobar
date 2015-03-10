@@ -167,7 +167,7 @@ private
     if File.exist?(fname)
       File.read(fname)
     else
-      File.read("#{Rails.root}/lib/script_generator/bar_#{type.gsub("/", "_").underscore}.html")
+      File.read("#{Rails.root}/lib/script_generator/#{type.gsub("/", "_").underscore}.html")
     end
   end
 

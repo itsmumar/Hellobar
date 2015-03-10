@@ -118,7 +118,9 @@ var HBQ = function()
           }
 
           // Add multiline class
-          if ( HB.e.siteElement.clientHeight > 50 ) {
+          var barBounds = (HB.w.className.indexOf('regular') > -1 ? 32 : 52 );
+
+          if ( HB.e.siteElement.clientHeight > barBounds ) {
             HB.addClass(HB.e.siteElement, "multiline");
           } else {
             HB.removeClass(HB.e.siteElement, "multiline");
@@ -126,7 +128,7 @@ var HBQ = function()
         } 
       }
     }
-  }, 100); // Check every second
+  }, 50); // Check every 50ms
 }
 
 // Call the function right away once this is loaded
