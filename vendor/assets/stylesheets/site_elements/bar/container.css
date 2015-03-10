@@ -1,8 +1,7 @@
 #hellobar_container.Bar {
   top: 0;
   left: 0;
-  width: 100%;
-  height: 40px;
+  max-height: 40px;
 }
 
 #hellobar_container.Bar.large {

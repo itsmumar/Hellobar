@@ -16,10 +16,12 @@ BarElement.prototype.setupIFrame = function(iframe){
 
   iframe.scrolling = "no";
   iframe.setAttribute("frameBorder", 0) // IE 9 and less
+
   // Remove the pusher if it exists
   if ( HB.p )
     HB.p.parentNode.removeChild(HB.p);
   HB.p = null;
+  
   // Create the pusher (which pushes the page down) if needed
   if ( HB.t(this.pushes_page_down) )
   {

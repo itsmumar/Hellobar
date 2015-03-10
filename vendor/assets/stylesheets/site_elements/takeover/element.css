@@ -14,9 +14,8 @@
   top: 50%;
   left: 50%;
   width: 100%;
+  padding: 1em;
   max-width: 41em;
-  margin-left: 1em;
-  margin-right: 1em;
   position: absolute;
   transform: translate(-50%, -50%);
   -o-transform: translate(-50%, -50%);
@@ -36,4 +35,14 @@
   -ms-transition: translateX(-50%);
   -moz-transition: translateX(-50%);
   -webkit-transition: translateX(-50%);
+}
+
+/*-----------  State: Mobile  -----------*/
+
+#hellobar_takeover.mobile {
+  font-size: 16px;
+}
+
+#hellobar_takeover.mobile .hb-logo-wrapper a {
+  font-size: 12px;
 }

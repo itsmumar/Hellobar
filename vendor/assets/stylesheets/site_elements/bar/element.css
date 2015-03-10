@@ -121,6 +121,10 @@
   fill: #fff;
 }
 
+#hellobar_bar .hb-logo-wrapper .hb-logo-line {
+  display: block;
+}
+
 #hellobar_bar .hb-logo-wrapper.hb-logo-inverted a {
   color: #3C3E3F;
 }

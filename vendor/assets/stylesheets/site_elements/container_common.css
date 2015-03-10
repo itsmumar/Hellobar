@@ -1,6 +1,8 @@
 #hellobar_container {
-  margin: 0 0;
-  padding: 0 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   border: none;
   z-index: 17000;
   overflow: hidden;

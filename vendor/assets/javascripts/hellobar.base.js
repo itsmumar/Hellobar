@@ -8,24 +8,29 @@
 // fails to load. Once the HB script loads we replace the _hbq variable with a custom HBQ
 // object that has its own push method. HBQ#push just immediately calls the action.
 //
+
 // When HBQ is initialized we also kickstart the initialization process of Hello Bar:
-if (typeof(_hbq) == 'undefined'){_hbq=[];}
+if ( typeof(_hbq) == 'undefined' ){ _hbq=[]; }
+
 var HBQ = function()
 {
   // Initialize the rules array so it can be pushed into
   HB.rules = [];
+  HB.isMobile = false;
+  HB.widthCache = 0;
 
   // Need to load the serialized cookies
   HB.loadCookies();
+
   // Once initialized replace the existing data with it
-  if(typeof(_hbq) != "undefined" && _hbq && _hbq.length)
-  {
-    for(var i=0;i<_hbq.length;i++)
+  if ( typeof(_hbq) != "undefined" && _hbq && _hbq.length ) {
+    for ( var i=0; i<_hbq.length; i++ )
       this.push(_hbq[i]);
   }
 
   // Set all the default tracking trackings
   HB.setDefaultSegments();
+
   // Apply the rules
   var siteElement = HB.applyRules();
   if ( siteElement )
@@ -44,53 +49,95 @@ var HBQ = function()
     var frame = window.frames["hellobar_container"];
     if ( !frame )
       return;
+
     // Get the relevant elements that might need checking/adjusting
     var containerDocument = frame.document;
     HB.e = {
       container: HB.$("#hellobar_container"),
       pusher: HB.$("#hellobar_pusher")
     };
-    if (containerDocument) {
-      HB.e.siteElement = containerDocument.getElementById("hellobar");
-      HB.e.shadow = containerDocument.getElementById("hellobar-shadow");
-    }
-    // Monitor siteElement height to update HTML/CSS
-    if ( HB.e.siteElement )
-    {
-      if ( HB.e.siteElement.clientHeight )
-      {
-        // Adjust the shadow offset
-        if ( HB.e.shadow ) {
-          HB.e.shadow.style.top = (HB.e.siteElement.clientHeight+(HB.currentSiteElement.show_border ? 0 : -1))+"px";
-          HB.e.shadow.style.display = "block";
-        }
-        // Adjust the container height
-        if ( HB.e.container )
-          HB.e.container.style.height = (HB.e.siteElement.clientHeight+8)+"px";
-        // Adjust the pusher
-        if ( HB.e.pusher )
-          HB.e.pusher.style.height = (HB.e.siteElement.clientHeight+(HB.t(HB.currentSiteElement.show_border) ? 3 : 0))+"px";
-        // Add multiline class
-        if ( HB.e.siteElement.clientHeight > 50 ) {
-          HB.addClass(HB.e.siteElement, "multiline");
-        } else {
-          HB.removeClass(HB.e.siteElement, "multiline");
-        }
+
+    if ( containerDocument ) {
+      HB.e.shadow = containerDocument.getElementById("hellobar_shadow");
+
+      if ( containerDocument.getElementById("hellobar_bar") !== null ) {
+        HB.e.siteElement = containerDocument.getElementById("hellobar_bar");
+        HB.e.siteElementType = "bar";
+      } else if ( containerDocument.getElementById("hellobar_modal") !== null ) {
+        HB.e.siteElement = containerDocument.getElementById("hellobar_modal");
+        HB.e.siteElementType = "modal";
+      } else if ( containerDocument.getElementById("hellobar_slider") !== null ) {
+        HB.e.siteElement = containerDocument.getElementById("hellobar_slider");
+        HB.e.siteElementType = "slider";
+      } else if ( containerDocument.getElementById("hellobar_takeover") !== null ) {
+        HB.e.siteElement = containerDocument.getElementById("hellobar_takeover");
+        HB.e.siteElementType = "takeover";
+      } else  {
+        HB.e.siteElement = false;
+        HB.e.siteElementType = false;
       }
-
-      // Update the CSS class based on the width
-      var origValue = HB.isMobileWidth;
-      HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
-      if ( origValue == HB.isMobileWidth )
-        return;
-      if ( HB.isMobileWidth )
-        HB.addClass(HB.e.siteElement, "mobile");
-      else
-        HB.removeClass(HB.e.siteElement, "mobile");
     }
 
+    // Monitor siteElement height to update HTML/CSS
+    if ( HB.e.siteElement ) {
+      if ( HB.e.siteElement.clientHeight ) {
+
+        // Update the CSS class based on the width
+        var wasMobile = HB.isMobileWidth;
+
+        if ( HB.e.siteElementType == "modal" && containerDocument )
+          HB.isMobileWidth = (containerDocument.getElementById("hellobar_modal_background").clientWidth <= 640 );
+        else if ( HB.e.siteElementType == "slider" )
+          HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 370 );
+        else
+          HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
+
+        if ( wasMobile != HB.isMobileWidth ) {
+          HB.widthCache = 0;
+
+          if ( HB.isMobileWidth ) {
+            HB.isMobile = true;
+            HB.addClass(HB.e.siteElement, "mobile");
+          } else {
+            HB.isMobile = false;
+            HB.removeClass(HB.e.siteElement, "mobile");
+          }
+        }
+
+        // Adjust the container size
+        if ( HB.e.container && HB.widthCache != HB.e.container.clientWidth ) {
+          HB.setContainerSize(HB.e.container, HB.e.siteElement, HB.e.siteElementType, HB.isMobile);
+          HB.widthCache = HB.e.container.clientWidth;
+        }
+
+        // Bar specific adjustments
+        if ( HB.e.siteElementType == "bar" ) {
+          
+          // Adjust the shadow offset
+          if ( HB.e.shadow ) {
+            var borderPush = HB.t((HB.currentSiteElement.show_border) ? 0 : -1)
+            HB.e.shadow.style.top = (HB.e.siteElement.clientHeight + borderPush) + "px";
+            HB.e.shadow.style.display = "block";
+          }
+          
+          // Adjust the pusher
+          if ( HB.e.pusher ) {
+            var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
+            HB.e.pusher.style.height = (HB.e.siteElement.clientHeight + borderPush) + "px";
+          }
+
+          // Add multiline class
+          if ( HB.e.siteElement.clientHeight > 50 ) {
+            HB.addClass(HB.e.siteElement, "multiline");
+          } else {
+            HB.removeClass(HB.e.siteElement, "multiline");
+          }
+        } 
+      }
+    }
   }, 50); // Check every 50ms
 }
+
 // Call the function right away once this is loaded
 HBQ.prototype.push = function()
 {
@@ -1321,10 +1368,9 @@ var _HB = {
     // Makes Iframe small after hiding in order to allow click events.
     hideIframe = window.setTimeout(function(){
       var classes = element.getAttribute('class');
-      var isModal = (classes.indexOf('Modal') > -1);
-      var isTakeout = (classes.indexOf('Takeover') > -1);
+      var isBar = (classes.indexOf('Bar') > -1);
 
-      if (isModal || isTakeout){
+      if (!isBar){
         element.setAttribute('style','height:0px');
       }
     }, 250);
@@ -1491,6 +1537,16 @@ var _HB = {
 
     return HBCrypto.HmacSHA512(path+"?"+sortedParamPairs.join("|"), key).toString();
 
+  },
+
+  setContainerSize: function(container, element, type, isMobile)
+  {
+    if ( type == 'bar' ) {
+      HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
+    } else if ( type == 'slider' ) {
+      HB.e.container.style.maxHeight = (element.clientHeight + 24) + "px";
+      HB.e.container.style.maxWidth = (isMobile ? "none" : (element.clientWidth + 24) + "px");
+    }
   }
 };
 
