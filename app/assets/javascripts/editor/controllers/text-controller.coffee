@@ -7,6 +7,8 @@ HelloBar.TextController = Ember.Controller.extend
     {value: 'Helvetica,Arial,sans-serif', label: 'Sans-Serif'}
   ]
 
+  hideCaptionField: Ember.computed.equal('model.type', 'Bar')
+  
   showThankYouText: Ember.computed.equal('model.element_subtype', 'email')
   disableThankYouText: Ember.computed.not('model.site.capabilities.custom_thank_you_text')
 
