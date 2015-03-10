@@ -11,6 +11,14 @@
     border-bottom: $borderLight
     @include antialiased()
 
+  .step-arrow
+    @extend %green-button
+    position: relative
+    top: -45px
+    left: 225px
+    &.disabled
+      background-color: gray
+
   p
     padding-right: 15%
 
@@ -70,6 +78,9 @@
 
       .step-link-block.active
         margin-bottom: -0.67em
+
+      .step-arrow
+        display: none
 
       .change-selection
         opacity: 1
