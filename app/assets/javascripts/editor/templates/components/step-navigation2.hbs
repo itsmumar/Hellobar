@@ -1,5 +1,7 @@
 {{#if next}}
-  {{link-to 'Continue &#8594;' next class="button"}}
+  {{#unless cannotContinue}}
+    {{link-to 'Continue &#8594;' next class="button"}}
+  {{/unless}}
 {{else}}
   <button class="button save-editor" {{bind-attr disabled=saveSubmitted}} {{action "saveSiteElement"}}>
     {{#if saveSubmitted}}
