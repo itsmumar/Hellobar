@@ -11,7 +11,7 @@ nav.tabs-wrapper
 
   = form_for @user, :url => user_path, :html => {:class => 'personal-form'} do |f|
     = f.label :email
-    = f.text_field :email
+    = f.text_field :email, :disabled => @user.is_oauth_user?
 
     = f.label :first_name
     = f.text_field :first_name
@@ -22,18 +22,20 @@ nav.tabs-wrapper
     = f.submit "Save & Update", :class => "button"
 
   = form_for @user, :url => user_path, :html => {:class => 'password-form'} do |f|
+    - if @user.is_oauth_user?
+      div.label This account was created using google authentication.
+    - else
+      = f.label :current_password, "Current Password"
+      = f.password_field :current_password, autocomplete: "off"
 
-    = f.label :current_password, "Current Password"
-    = f.password_field :current_password, autocomplete: "off"
+      = f.label :password, "New Password"
+      = f.password_field :password
 
-    = f.label :password, "New Password"
-    = f.password_field :password
+      = f.label :password_confirmation, "Repeat Password"
+      = f.password_field :password_confirmation
 
-    = f.label :password_confirmation, "Repeat Password"
-    = f.password_field :password_confirmation
+      small Must be 6 characters with one uppercase letter and a number
 
-    small Must be 6 characters with one uppercase letter and a number
-
-    = f.submit "Change Password", :class => "button"
+      = f.submit "Change Password", :class => "button"
 
     = link_to "Delete User", user_path, method: :delete, data: { confirm: "Are you sure?" }

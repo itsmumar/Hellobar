@@ -104,12 +104,12 @@ class User < ActiveRecord::Base
         )
         user.authentications.build(provider: access_token["provider"], uid: access_token[:uid])
         user.save
-        puts "HERE !!!!!!!!"
-        puts user.inspect
-        puts "ERRORS: "
-        puts user.errors.inspect
       end
       user
+  end
+
+  def is_oauth_user?
+     authentications.size > 0
   end
 
   private
