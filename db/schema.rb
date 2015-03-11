@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150306235413) do
+ActiveRecord::Schema.define(version: 20150311164337) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -209,7 +209,7 @@ ActiveRecord::Schema.define(version: 20150306235413) do
     t.boolean  "wiggle_button",                   default: false
     t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
-    t.string   "caption"
+    t.string   "caption",                         default: ""
     t.string   "modal_placement",                 default: "middle"
     t.string   "slider_placement",                default: "bottom-right"
   end
