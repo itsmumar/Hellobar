@@ -12,6 +12,8 @@ HelloBar.ApplicationRoute = Ember.Route.extend
     else
       Ember.$.getJSON("/sites/#{window.siteID}/site_elements/new.json")
 
+  #-----------  Parse JSON Model  -----------#
+
   afterModel: (resolvedModel) ->
     if localStorage["stashedContactList"]
       contactList = JSON.parse(localStorage["stashedContactList"])
@@ -51,10 +53,35 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
   #-----------  Controller Setup  -----------#
 
-  # Subscribes to outside action used by intertitial
-  # to route ember app through selection
-
   setupController: (controller, model) ->
+
+    # Set sub-step forwarding on application load
+
+    settings = @controllerFor('settings')
+    if /^social/.test model.element_subtype
+      settings.routeForwarding = 'settings.social'
+    else
+      switch model.element_subtype
+        when 'email'
+          settings.routeForwarding = 'settings.emails'
+        when 'traffic'
+          settings.routeForwarding = 'settings.click'
+        else
+          settings.routeForwarding = false
+
+    style = @controllerFor('style')
+    switch model.type
+      when 'Takeover'
+        style.routeForwarding = 'style.takeover'
+      when 'Slider'
+        style.routeForwarding = 'style.slider'
+      when 'Modal'
+        style.routeForwarding = 'style.modal'
+      else
+        style.routeForwarding = if model.id then 'style.bar' else false
+
+    # Subscribes to outside action used by intertitial
+    # to route ember app through selection
 
     Ember.subscribe 'interstitial.routing',
       before: (name, timestamp, subroute) ->
@@ -94,6 +121,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
               window.location = "/sites/#{window.siteID}"
             else
               window.location = "/sites/#{window.siteID}/site_elements"
+        
         error: (data) =>
           @controller.toggleProperty('saveSubmitted')
           @controller.set("model.errors", data.responseJSON.errors)

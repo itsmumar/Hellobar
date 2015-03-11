@@ -10,7 +10,9 @@ HelloBar.Router.map ->
 
   @resource 'style', ->
     @route 'bar'
-    @route 'popup'
+    @route 'modal'
+    @route 'slider'
+    @route 'takeover'
 
   @route 'colors'
   

@@ -1,0 +1,17 @@
+<label>Hello Bar branding
+  {{toggle-switch switch=model.show_branding}}
+</label>
+
+<label>Animations
+  {{toggle-switch switch=model.animated}}
+</label>
+
+<label>Placement</label>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=placementOptions
+    value=model.modal_placement
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
+  }}
+</div>

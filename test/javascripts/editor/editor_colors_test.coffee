@@ -3,7 +3,7 @@ module "editor colors",
     @route = getModule("route:application")
     visit "colors"
   teardown: ->
-    find(".color-select.in-focus").each -> 
+    find(".color-select.in-focus").each ->
       $(@).removeClass('in-focus')
 
 #-----------  Properties  -----------#
@@ -40,7 +40,7 @@ asyncTest "can change the background color", ->
     click(findLabeled("Background").find(".color-select-block")).andThen =>
       debounce (done) ->
         fillInColors('red').andThen =>
-          bar = hbFrame().find("#hellobar")
+          bar = hbFrame().find("#hellobar_bar")
           equal bar.css('background-color'), cssColors['red'].rgb, "New color should equal " + cssColors['red'].hex
           done()
 
@@ -50,7 +50,7 @@ asyncTest "can change the text color", ->
     click(findLabeled("Text").find(".color-select-block")).andThen =>
       debounce (done) ->
         fillInColors('blue').andThen =>
-          barText = hbFrame().find("#hb_msg_container span")
+          barText = hbFrame().find("#hb_msg_container")
           equal barText.css('color'), cssColors['blue'].rgb, "New color should equal " + cssColors['blue'].hex
           done()
 
@@ -60,7 +60,7 @@ asyncTest "can change the button background-color", ->
     click(findLabeled("Button").find(".color-select-block")).andThen =>
       debounce (done) ->
         fillInColors('green').andThen =>
-          button = hbFrame().find(".hb-button")
+          button = hbFrame().find(".hb-cta")
           equal button.css('background-color'), cssColors['green'].rgb, "New color should equal " + cssColors['green'].hex
           done()
 
@@ -70,6 +70,6 @@ asyncTest "can change the button text color", ->
     click(findLabeled("Button Text").find(".color-select-block")).andThen =>
       debounce (done) ->
         fillInColors('orange').andThen =>
-          buttonText = hbFrame().find(".hb-button")
+          buttonText = hbFrame().find(".hb-cta")
           equal buttonText.css('color'), cssColors['orange'].rgb, "New color should equal " + cssColors['orange'].hex
           done()

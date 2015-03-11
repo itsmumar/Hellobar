@@ -1,0 +1,21 @@
+<div class="hb-social-wrapper hb-pintrest-wrapper">
+  <a class="hb-pinterest-follow-button" data-pin-do="buttonFollow" href="{{siteElement.settings.pinterest_user_url.replace(/^(?!http)/, 'http://')}}">{{siteElement.settings.pinterest_full_name}}</a>
+
+  <script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
+
+  <script>
+    function trackClick(event) {
+      var target = event.target || event.srcElement;
+
+      if (typeof(target.dataset.pinHref) == 'string') {
+        parent.HB.converted()
+      }
+    }
+
+    if (document.addEventListener) {
+      document.addEventListener('click', trackClick, true);
+    } else if (document.attachEvent) {
+      document.attachEvent('onclick', trackClick);
+    }
+  </script>
+</div>

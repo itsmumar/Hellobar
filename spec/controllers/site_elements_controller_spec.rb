@@ -14,7 +14,7 @@ describe SiteElementsController do
       json = JSON.parse(response.body)
 
       json["id"].should == element.id
-      json["message"].should == element.message
+      json["headline"].should == element.headline
       json["background_color"].should == element.background_color
     end
   end

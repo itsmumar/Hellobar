@@ -1,0 +1,3 @@
+class Slider < SiteElement
+
+end

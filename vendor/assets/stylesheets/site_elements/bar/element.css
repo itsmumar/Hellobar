@@ -1,0 +1,265 @@
+/*-----------  Bar Element  -----------*/
+
+#hellobar_bar {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  margin: 0 0;
+  height: auto;
+  z-index: 5000;
+  display: table;
+  font-size: 17px;
+  min-height: 51px;
+  font-weight: 600;
+  position: absolute;
+  text-align: center;
+  white-space: normal;
+  padding: 0.33em 0.5em;
+  -webkit-font-smoothing: antialiased;
+  _width:expression(eval(document.body.offsetWidth-20));
+}
+
+#hellobar_bar iframe {
+  vertical-align: middle;
+}
+
+#hellobar_bar .hb-arrow,
+#hellobar_bar .hb-logo-wrapper,
+#hellobar_bar .hb-content-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+/*-----------  Call to Acton Button  -----------*/
+
+#hellobar_bar .hb-cta {
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+#hellobar_bar .hb-cta-style-text {
+  color: #fff;
+  padding: 6px 15px;
+  padding-left: 5px;
+  border-radius: 4px;
+  text-decoration: underline;
+  background: none !important;
+}
+
+#hellobar_bar .hb-cta-style-button {
+  margin: 0 0;
+  line-height: 1.05;
+  padding: 4px 15px 1px;
+}
+
+/*-----------  Social Styling  -----------*/
+
+#hellobar_bar .hb-social-wrapper {
+  margin: 0;
+  line-height: 0;
+  vertical-align: text-bottom;
+}
+
+#hellobar_bar .hb-social-wrapper.hb-google-wrapper {
+  vertical-align: middle;
+}
+
+#hellobar_bar .hb-social-wrapper #___follow_0,
+#hellobar_bar .hb-social-wrapper #___plusone_0 {
+  display: inline-block !important;
+}
+
+/*-----------  Has Border  -----------*/
+
+#hellobar_bar.has_border {
+  border-bottom: 3px solid white;
+}
+
+/*-----------  Hide Arrow  -----------*/
+
+#hellobar_bar .hb-arrow {
+  width: 2em;
+  opacity: 0.3;
+  text-align: right;
+}
+
+#hellobar_bar .hb-arrow img {
+  width: 28px;
+  height: 29px; 
+}
+
+#hellobar_bar .hb-arrow:hover {
+  opacity: 0.6;
+}
+
+/*-----------  Text  -----------*/
+
+#hellobar_bar .hb-text-wrapper {
+  margin-right: 0.67em;
+  display: inline-block;
+}
+
+#hellobar_bar .hb-text-wrapper .hb-headline-text {
+  font-size: 1em;
+}
+
+/*-----------  Inputs  -----------*/
+
+#hellobar_bar .hb-input-wrapper,
+#hellobar_bar .hb-input-wrapper input,
+#hellobar_bar .hb-input-wrapper .hb-cta {
+  width: auto;
+  margin-top: 0;
+  display: inline-block;
+}
+
+#hellobar_bar .hb-input-wrapper input {
+  line-height: 2;
+  font-size: 0.67em;
+  vertical-align: bottom;
+}
+
+/*-----------  Logos  -----------*/
+
+#hellobar_bar .hb-logo-wrapper {
+  width: 8em;
+  opacity: 0.7;
+  margin-top: 0;
+  font-size: 12px;
+  text-align: left;
+  font-weight: normal;
+}
+
+#hellobar_bar .hb-logo-wrapper a {
+  color: #fff;
+}
+
+#hellobar_bar .hb-logo-wrapper svg {
+  fill: #fff;
+}
+
+#hellobar_bar .hb-logo-wrapper .hb-logo-line {
+  display: block;
+}
+
+#hellobar_bar .hb-logo-wrapper.hb-logo-inverted a {
+  color: #3C3E3F;
+}
+
+#hellobar_bar .hb-logo-wrapper.hb-logo-inverted svg {
+  fill: #3C3E3F;
+}
+
+#hellobar_bar .hb-logo-wrapper:hover {
+  opacity: 1;
+}
+
+/*-----------  State: Multiline  -----------*/
+
+#hellobar_bar.multiline .hb-text-wrapper,
+#hellobar_bar.multiline .hb-input-wrapper {
+  display: block;
+  max-width: 100%;
+  text-align: center;
+}
+
+/*-----------  State: Mobile  -----------*/
+
+
+#hellobar_bar.mobile .hb-arrow,
+#hellobar_bar.mobile .hb-logo-wrapper {
+  display: none;
+}
+
+#hellobar_bar.mobile .hb-input-wrapper input {
+  display: block;
+  margin: 0.25em auto;
+}
+
+/*-----------  Size: Regular  -----------*/
+
+#hellobar_bar.regular {
+  font-size: 14px;
+  min-height: 31px;
+  padding-top: 0.25em;
+}
+
+#hellobar_bar.regular .hb-arrow img { 
+  width: 21px;
+  height: 21px; 
+}
+
+#hellobar_bar.regular .hb-logo-wrapper { 
+  font-size: 9px; 
+}
+
+#hellobar_bar.regular .hb-cta-style-button { 
+  padding: 3px 15px 1px;
+}
+
+#hellobar_bar.regular .hb-social-wrapper {
+  vertical-align: bottom;
+}
+
+#hellobar_bar.regular .hb-social-wrapper.hb-google-wrapper {
+  height: 24px;
+  margin: -1px 0;
+  vertical-align: middle;
+}
+
+/*-----------  Animations: Button Wiggle  -----------*/
+
+#hellobar_bar .hb-cta.wiggle {
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -moz-osx-font-smoothing: grayscale;
+
+  backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  transform: translateZ(0);
+  -o-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+
+  animation-name: wiggle;
+  -o-animation-name: wiggle;
+  -ms-animation-name: wiggle;
+  -moz-animation-name: wiggle;
+  -webkit-animation-name: wiggle;
+
+  animation-duration: 5s;
+  -o-animation-duration: 5s;
+  -ms-animation-duration: 5s;
+  -moz-animation-duration: 5s;
+  -webkit-animation-duration: 5s;
+
+  animation-timing-function: linear;
+  -o-animation-timing-function: linear;
+  -ms-animation-timing-function: linear;
+  -moz-animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+
+  animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  -ms-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+
+  animation-play-state: running;
+  -o-animation-play-state: running;
+  -ms-animation-play-state: running;
+  -moz-animation-play-state: running;
+  -webkit-animation-play-state: running;
+}
+
+#hellobar_bar:hover .hb-cta.wiggle {
+  animation-play-state: paused;
+  -o-animation-play-state: paused;
+  -ms-animation-play-state: paused;
+  -moz-animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+}

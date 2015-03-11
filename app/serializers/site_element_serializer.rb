@@ -2,10 +2,10 @@ class SiteElementSerializer < ActiveModel::Serializer
   attributes :id, :site, :rule_id, :rule, :contact_list_id, :errors, :full_error_messages,
 
     # settings
-    :element_subtype, :settings, :display_when,
+    :type, :element_subtype, :settings, :display_when,
 
     # text
-    :message, :link_text, :font, :thank_you_text,
+    :headline, :caption, :link_text, :font, :thank_you_text,
 
     # colors
     :background_color, :border_color, :button_color, :link_color, :text_color,
@@ -14,7 +14,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :closable, :show_branding, :pushes_page_down, :remains_at_top, :animated, :wiggle_button,
 
     # other
-    :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window
+    :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :modal_placement, :slider_placement
 
   def rule
     RuleSerializer.new(object.rule)

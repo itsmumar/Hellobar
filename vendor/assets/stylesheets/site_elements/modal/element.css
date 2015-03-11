@@ -1,0 +1,60 @@
+/*-----------  Modal Element  -----------*/
+
+#hellobar_modal {
+  left: 50%;
+  padding: 3.33em;
+  position: fixed;
+  max-width: 41em;
+  text-align: center;
+
+  transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+}
+
+/*-----------  Modal Background  -----------*/
+
+#hellobar_modal_background {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+/*-----------  Logos  -----------*/
+
+#hellobar_modal .hb-logo-wrapper {
+  margin-top: 3.5em;
+  margin-bottom: -2.5em;
+}
+
+/*-----------  Positions  -----------*/
+
+#hellobar_modal.top {
+  top: 5%;
+}
+
+#hellobar_modal.middle {
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+
+/*-----------  State: Mobile  -----------*/
+
+#hellobar_modal.mobile {
+  width: 88%;
+  padding: 3em 1.25em 1.25em;
+}
+
+#hellobar_modal.mobile .hb-logo-wrapper {
+  margin: 2em auto 0;
+}

@@ -1,0 +1,31 @@
+#hellobar_container.Modal {
+  top: 0;
+  left: 0;
+  position: fixed;
+  _position: absolute;
+  _top: expression(eval(document.body.scrollTop));
+}
+
+/*-----------  Animations  -----------*/
+
+#hellobar_container.Modal.animated {
+  opacity: 0;
+  height: 110%;
+  margin-top: -5%; 
+}
+
+#hellobar_container.Modal.animateIn {
+  animation-name: fadeInDown;
+  -o-animation-name: fadeInDown;
+  -ms-animation-name: fadeInDown;
+  -moz-animation-name: fadeInDown;
+  -webkit-animation-name: fadeInDown;
+}
+
+#hellobar_container.Modal.animateOut {
+  animation-name: fadeOutUp;
+  -o-animation-name: fadeOutUp;
+  -ms-animation-name: fadeOutUp;
+  -moz-animation-name: fadeOutUp;
+  -webkit-animation-name: fadeOutUp
+}

@@ -1,0 +1,3 @@
+class Bar < SiteElement
+
+end

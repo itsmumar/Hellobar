@@ -1,0 +1,144 @@
+/*-----------  Slider Element  -----------*/
+
+#hellobar_slider {
+  padding: 1.75em;
+  font-size: 11.5px;
+  max-width: 33.25em;
+  position: absolute;
+}
+
+/*-----------  Call to Acton Button  -----------*/
+
+#hellobar_slider .hb-cta-style-button {
+  margin: 1em 0 0;
+  display: inline-block;
+}
+
+/*-----------  Logos  -----------*/
+
+#hellobar_slider .hb-logo-wrapper {
+  margin-bottom: -0.67em;
+}
+
+/*-----------  Inputs  -----------*/
+
+#hellobar_slider .hb-input-wrapper {
+  max-width: 100%;
+}
+
+#hellobar_slider .hb-input-wrapper input {
+  font-size: 0.95em;
+}
+
+#hellobar_slider .hb-input-wrapper .hb-cta {
+  display: block;
+  max-width: 100%;
+  margin-top: 0.67em;
+}
+
+#hellobar_slider .hb-input-wrapper.hb-both-inputs input {
+  width: 50%;
+  display: inline-block;
+}
+
+#hellobar_slider .hb-input-wrapper.hb-both-inputs input + input {
+  margin-top: 0;
+  margin-left: -4px;
+}
+
+/*-----------  Social Styling  -----------*/
+
+
+#hellobar_slider .hb-social-wrapper {
+  margin-bottom: 0;
+}
+
+/*-----------  Positions: Top  -----------*/
+
+#hellobar_slider.top-left,
+#hellobar_slider.top-right {
+  top: 1em;
+}
+
+/*-----------  Positions: Bottom  -----------*/
+
+#hellobar_slider.bottom-left,
+#hellobar_slider.bottom-right {
+  bottom: 1em;
+}
+
+/*-----------  Positions: Right  -----------*/
+
+#hellobar_slider.top-right,
+#hellobar_slider.bottom-right {
+  right: 1em;
+  text-align: left;
+}
+
+#hellobar_slider.top-right .hb-text-wrapper,
+#hellobar_slider.bottom-right .hb-text-wrapper {
+  padding-right: 1.67em;
+}
+
+#hellobar_slider.top-right .hb-social-wrapper.hb-twitter-wrapper #widget,
+#hellobar_slider.bottom-right .hb-social-wrapper.hb-twitter-wrapper #widget {
+  text-align: right;
+}
+
+/*-----------  Positions: Left  -----------*/
+
+#hellobar_slider.top-left,
+#hellobar_slider.bottom-left {
+  left: 1em;
+  text-align: right;
+}
+
+#hellobar_slider.top-left .icon-close,
+#hellobar_slider.bottom-left .icon-close {
+  left: 1em;
+  right: auto;
+}
+
+#hellobar_slider.top-left .hb-text-wrapper,
+#hellobar_slider.bottom-left .hb-text-wrapper {
+  padding-left: 1.67em;
+}
+
+/*-----------  State: Mobile  -----------*/
+
+#hellobar_slider.mobile {
+  left: 6%;
+  width: 88%;
+  right: auto;
+  text-align: center;
+}
+
+#hellobar_slider.mobile.top-left,
+#hellobar_slider.mobile.top-right {
+  top: 6%;
+  bottom: auto;
+}
+
+#hellobar_slider.mobile.bottom-left,
+#hellobar_slider.mobile.bottom-right {
+  top: auto;
+  bottom: 6%;
+}
+
+#hellobar_slider.mobile .hb-text-wrapper {
+  padding: 1.67em 0 0 0;
+}
+
+#hellobar_slider.mobile .hb-logo-wrapper .hb-logo-line {
+  display: block;
+}
+
+#hellobar_slider .hb-input-wrapper.hb-both-inputs input {
+  width: 100%;
+  display: block;
+}
+
+#hellobar_slider .hb-input-wrapper.hb-both-inputs input + input {
+  margin-left: 0;
+  margin-top: -1px;
+}

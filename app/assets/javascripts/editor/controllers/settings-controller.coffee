@@ -9,13 +9,12 @@ HelloBar.SettingsController = Ember.Controller.extend
 
   step: 1
   prevStep: false
-  nextStep: 'style.bar'
+  nextStep: 'style'
   hasSideArrows: ( ->
       return (HB_EDITOR_VARIATION == 'navigation')
     ).property()
 
   #-----------  Sub-Step Selection  -----------#
-
 
   setSubtype: (->
     switch @get("routeForwarding")
@@ -31,6 +30,16 @@ HelloBar.SettingsController = Ember.Controller.extend
   # selected child route (ie. sub-step)
 
   routeForwarding: false
+
+  setSubtype: (->
+    switch @get('routeForwarding')
+      when 'settings.emails'
+        @set('model.element_subtype', 'email')
+      when 'settings.click'
+        @set('model.element_subtype', 'traffic')
+      when 'settings.social'
+        @set('model.element_subtype', null)
+  ).observes('routeForwarding')
 
   actions:
 

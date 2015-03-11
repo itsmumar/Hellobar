@@ -32,20 +32,26 @@ describe ScriptGenerator, '#render' do
 
   it 'includes the minified hellobar css' do
     generator.stub :hellobar_container_css
-    hellobar_css = File.read("#{Rails.root}/vendor/assets/stylesheets/hellobar_script.css")
+    hellobar_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/common.css")
+    element_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/bar/element.css")
 
-    CSSMin.should_receive(:minify).with(hellobar_css).and_return(hellobar_css)
+    CSSMin.stub(:minify) { |x| x }
+    result = generator.render
 
-    generator.render.should include(hellobar_css.to_json)
+    result.should include(hellobar_css.to_json[1..-2])
+    result.should include(element_css.to_json[1..-2])
   end
 
   it 'includes the hellobar container css' do
-    generator.stub :hellobar_base_css
-    container_css = File.read("#{Rails.root}/vendor/assets/stylesheets/hellobar_script_container.css")
+    generator.stub :hellobar_element_css
+    container_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/container_common.css")
+    element_container_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/bar/container.css")
 
-    CSSMin.should_receive(:minify).with(container_css).and_return(container_css)
+    CSSMin.stub(:minify) { |x| x }
+    result = generator.render
 
-    generator.render.should include(container_css.to_json)
+    result.should include(container_css.to_json[1..-2])
+    result.should include(element_container_css.to_json[1..-2])
   end
 
   it 'renders the initialization of the hellobar queue object' do
@@ -70,6 +76,8 @@ describe ScriptGenerator, '#render' do
     it 'renders the setTemplate function on HB with the template name and markup' do
       template = { name: 'yey name', markup: 'yey markup' }
       generator.stub templates: [template]
+      generator.stub(:hellobar_container_css)
+      generator.stub(:hellobar_element_css)
 
       expected_string = "HB.setTemplate(\"yey name\", yey markup);"
 
@@ -77,7 +85,7 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'renders only the setTemplate definition and 1 call per bar type' do
-      bar = double 'bar', element_subtype: 'traffic'
+      bar = Bar.new(element_subtype: 'traffic')
       site.stub(site_elements: double('site_elements', active: [bar, bar], none?: true ))
 
       generator = ScriptGenerator.new site
@@ -86,8 +94,8 @@ describe ScriptGenerator, '#render' do
     end
 
     it 'renders the setTemplate definition and 1 call per bar type for multiple types' do
-      traffic_bar = double 'bar', element_subtype: 'traffic'
-      email_bar = double 'bar', element_subtype: 'email'
+      traffic_bar = Bar.new(element_subtype: 'traffic')
+      email_bar = Bar.new(element_subtype: 'email')
       site.stub site_elements: double('site_elements', active: [traffic_bar, email_bar], none?: true)
 
       generator = ScriptGenerator.new site

@@ -7,8 +7,8 @@ textTab = -> find(".step-links li a[href^='#/text']")
 
 test "can change the bar text", ->
   click(textTab()).andThen =>
-    fillIn(findLabeled("Bar text"), "My test's bar text").then =>
-      equal @route.controller.get("model.message"), "My test's bar text", "Text wasn't equal"
+    fillIn(findLabeled("Headline"), "My test's bar text").then =>
+      equal @route.controller.get("model.headline"), "My test's bar text", "Text wasn't equal"
 
 test "can change the link text", ->
   click(textTab()).andThen =>

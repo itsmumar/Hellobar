@@ -9,6 +9,6 @@ test "it should immediately load a preview of the element being edited", ->
 test "changing certain model properties updates the preview", ->
   visit "text"
 
-  fillIn(findLabeled("Bar text"), "New message").andThen =>
-    ok find("#hellobar-preview-container iframe").contents().find("#hb_msg_container span").text().indexOf("New message") > -1,
+  fillIn(findLabeled("Headline"), "New message").andThen =>
+    ok find("#hellobar-preview-container iframe").contents().find("#hb_msg_container").text().indexOf("New message") > -1,
       "Did not update preview"

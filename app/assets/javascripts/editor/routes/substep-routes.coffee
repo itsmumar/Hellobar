@@ -13,14 +13,6 @@ HelloBar.SettingsStepRoute = Ember.Route.extend
     parentRoute = @routeName.split('.')[0]
     @controllerFor(parentRoute).set('routeForwarding', @routeName)
 
-  # Called whenever the application leaves this route. Used here to 
-  # deconsturct some things when the app transtitions to a parent step
-  # due to the use of the back button
-
-  deactivate: ->
-    parentRoute = @routeName.split('.')[0]
-    @controllerFor(parentRoute).set('routeForwarding', false)
-
 
 #-----------  Setup Sub-Step Routes  -----------#
 
@@ -30,7 +22,9 @@ HelloBar.SettingsClickRoute    = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsFeedbackRoute = HelloBar.SettingsStepRoute.extend()
 
 HelloBar.StyleBarRoute         = HelloBar.SettingsStepRoute.extend()
-HelloBar.StylePopupRoute       = HelloBar.SettingsStepRoute.extend()
+HelloBar.StyleModalRoute       = HelloBar.SettingsStepRoute.extend()
+HelloBar.StyleSliderRoute      = HelloBar.SettingsStepRoute.extend()
+HelloBar.StyleTakeoverRoute    = HelloBar.SettingsStepRoute.extend()
 
 HelloBar.TargetingLeavingRoute = HelloBar.SettingsStepRoute.extend()
 HelloBar.TargetingScrollRoute  = HelloBar.SettingsStepRoute.extend()

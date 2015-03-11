@@ -230,22 +230,23 @@
 
     li
       opacity: 1
+      clear: both
+      padding: 0.5em
+      line-height: 0
       color: $grayLight
       cursor: pointer
       max-height: 2em
       margin: 0 -0.5em
       border-radius: 10em
-      padding: 0.25em 0.5em 0.33em
+      padding: 1em 0.5em 1.1em
       @include transition(0.67s)
       @include antialiased()
 
       i
-        top: 0
+        top: -0.5em
+        float: left
         font-size: 1.5em
-        line-height: 100%
-        position: relative
         margin-right: 0.5rem
-        vertical-align: middle
 
       &.twitter
 
@@ -315,8 +316,8 @@
         @include transition(0.67s)
 
         &:before
-          top: 1px
-          font-size: 0.75em
+          top: 3px
+          font-size: 0.7em
           font-weight: bold
           position: relative
 
@@ -339,6 +340,8 @@
           cursor: default
 
           .icon-close
+            top: -0.67em
+            float: right
             cursor: pointer
             @include inline-block()
 

@@ -69,29 +69,57 @@ class ScriptGenerator < Mustache
     Hellobar::Settings[:tracking_host]
   end
 
+  def hellobar_js
+    js = File.read("#{Rails.root}/vendor/assets/javascripts/site_elements/site_element.js")
+
+    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
+    klasses.each do |klass|
+      js << "\n" << File.read("#{Rails.root}/vendor/assets/javascripts/site_elements/#{klass.name.downcase}.js")
+    end
+    js
+  end
+
   def hellobar_base_js
     File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
   end
 
-  def hellobar_base_css
-    file = File.read "#{Rails.root}/vendor/assets/stylesheets/hellobar_script.css"
-
-    CSSMin.minify(file).to_json
+  def hellobar_container_css
+    css = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/container_common.css"
+    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
+    css << "\n" << klasses.map { |x| site_element_css(x, true) }.join("\n")
+    CSSMin.minify(css).to_json
   end
 
-  def hellobar_container_css
-    file = File.read "#{Rails.root}/vendor/assets/stylesheets/hellobar_script_container.css"
+  def hellobar_element_css
+    css = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/common.css"
+    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
+    klasses.each { |x| css << "\n" << site_element_css(x) }
+    CSSMin.minify(css).to_json
+  end
 
-    CSSMin.minify(file).to_json
+  def site_element_css(element_class, container=false)
+    file = "#{Rails.root}/vendor/assets/stylesheets/site_elements/#{element_class.name.downcase}/"
+    file << (container ? "container.css" : "element.css")
+
+    if File.exist?(file)
+      f = File.read(file)
+      return f if !f.blank?
+    end
+    ""
   end
 
   def templates
-    template_names = options[:templates] || site.site_elements.active.map(&:element_subtype).uniq
+    template_names = Set.new
+    if options[:templates]
+      options[:templates].each { |t| template_names << t.split("_", 2) }
+    else
+      site.site_elements.active.each { |se| template_names << [se.class.name.downcase, se.element_subtype]}
+    end
 
     template_names.map do |name|
       {
-        name: name,
-        markup: content_template(name)
+        name: name.join('_'),
+        markup: content_template(name[0], name[1])
       }
     end
   end
@@ -122,28 +150,33 @@ private
     }
   end
 
-  def content_template(element_subtype)
+  def content_template(element_class, type)
     ActiveSupport.escape_html_entities_in_json = false
-    content = (content_header + content_markup(element_subtype) + content_footer).to_json
+    content = (content_header(element_class) + content_markup(element_class, type) + content_footer(element_class)).to_json
     ActiveSupport.escape_html_entities_in_json = true
 
     content
   end
 
-  def content_header
-    @content_header ||= File.read("#{Rails.root}/lib/script_generator/bar_header.html")
+  def content_header(element_class)
+    File.read("#{Rails.root}/lib/script_generator/#{element_class}/header.html")
   end
 
-  def content_markup(element_subtype)
-    File.read("#{Rails.root}/lib/script_generator/bar_#{element_subtype.gsub("/", "_").underscore}.html")
+  def content_markup(element_class, type)
+    fname = "#{Rails.root}/lib/script_generator/#{element_class}/#{type.gsub("/", "_").underscore}.html"
+    if File.exist?(fname)
+      File.read(fname)
+    else
+      File.read("#{Rails.root}/lib/script_generator/#{type.gsub("/", "_").underscore}.html")
+    end
   end
 
-  def content_footer
-    @content_footer ||= File.read("#{Rails.root}/lib/script_generator/bar_footer.html")
+  def content_footer(element_class)
+    File.read("#{Rails.root}/lib/script_generator/#{element_class}/footer.html")
   end
 
   def site_element_settings(site_element)
-    settings = %w{ show_border background_color border_color button_color font link_color link_style link_text message size target text_color texture show_branding animated wiggle_button closable}
+    settings = %w{ type show_border background_color border_color button_color font link_color link_style link_text headline caption size target text_color texture show_branding animated wiggle_button closable}
 
     lifetime_totals = @site.lifetime_totals
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
@@ -170,8 +203,8 @@ private
       conversion_rate: conversion_rate,
       contact_list_id: site_element.contact_list_id,
       target: site_element.target_segment,
-      template_name: site_element.element_subtype,
-      type: site_element.short_subtype,
+      template_name: "#{site_element.class.name.downcase}_#{site_element.element_subtype}",
+      subtype: site_element.short_subtype,
       settings: site_element.settings,
       hide_destination: true,
       open_in_new_window: site_element.open_in_new_window,
@@ -183,7 +216,7 @@ private
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
-  def site_elements_for_rule(rule)
+  def site_elements_for_rule(rule, hashify=true)
     site_elements = if options[:bar_id]
       [rule.site_elements.find(options[:bar_id])]
     else
@@ -194,6 +227,10 @@ private
       end
     end
 
-    site_elements.map{|element| site_element_settings(element) }
+    hashify ? site_elements.map{|element| site_element_settings(element) } : site_elements
+  end
+
+  def all_site_elements
+    site.rules.map { |r| site_elements_for_rule(r, false) }.flatten
   end
 end

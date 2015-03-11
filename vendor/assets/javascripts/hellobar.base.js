@@ -8,24 +8,29 @@
 // fails to load. Once the HB script loads we replace the _hbq variable with a custom HBQ
 // object that has its own push method. HBQ#push just immediately calls the action.
 //
+
 // When HBQ is initialized we also kickstart the initialization process of Hello Bar:
-if (typeof(_hbq) == 'undefined'){_hbq=[];}
+if ( typeof(_hbq) == 'undefined' ){ _hbq=[]; }
+
 var HBQ = function()
 {
   // Initialize the rules array so it can be pushed into
   HB.rules = [];
+  HB.isMobile = false;
+  HB.widthCache = 0;
 
   // Need to load the serialized cookies
   HB.loadCookies();
+
   // Once initialized replace the existing data with it
-  if(typeof(_hbq) != "undefined" && _hbq && _hbq.length)
-  {
-    for(var i=0;i<_hbq.length;i++)
+  if ( typeof(_hbq) != "undefined" && _hbq && _hbq.length ) {
+    for ( var i=0; i<_hbq.length; i++ )
       this.push(_hbq[i]);
   }
 
   // Set all the default tracking trackings
   HB.setDefaultSegments();
+
   // Apply the rules
   var siteElement = HB.applyRules();
   if ( siteElement )
@@ -44,53 +49,88 @@ var HBQ = function()
     var frame = window.frames["hellobar_container"];
     if ( !frame )
       return;
+
     // Get the relevant elements that might need checking/adjusting
     var containerDocument = frame.document;
     HB.e = {
       container: HB.$("#hellobar_container"),
       pusher: HB.$("#hellobar_pusher")
     };
-    if (containerDocument) {
-      HB.e.siteElement = containerDocument.getElementById("hellobar");
-      HB.e.shadow = containerDocument.getElementById("hellobar-shadow");
-    }
-    // Monitor siteElement height to update HTML/CSS
-    if ( HB.e.siteElement )
-    {
-      if ( HB.e.siteElement.clientHeight )
-      {
-        // Adjust the shadow offset
-        if ( HB.e.shadow ) {
-          HB.e.shadow.style.top = (HB.e.siteElement.clientHeight+(HB.currentSiteElement.show_border ? 0 : -1))+"px";
-          HB.e.shadow.style.display = "block";
-        }
-        // Adjust the container height
-        if ( HB.e.container )
-          HB.e.container.style.height = (HB.e.siteElement.clientHeight+8)+"px";
-        // Adjust the pusher
-        if ( HB.e.pusher )
-          HB.e.pusher.style.height = (HB.e.siteElement.clientHeight+(HB.t(HB.currentSiteElement.show_border) ? 3 : 0))+"px";
-        // Add multiline class
-        if ( HB.e.siteElement.clientHeight > 50 ) {
-          HB.addClass(HB.e.siteElement, "multiline");
-        } else {
-          HB.removeClass(HB.e.siteElement, "multiline");
-        }
+
+    if ( containerDocument ) {
+      if ( containerDocument.getElementById("hellobar_bar") !== null ) {
+        HB.e.siteElement = containerDocument.getElementById("hellobar_bar");
+        HB.e.siteElementType = "bar";
+      } else if ( containerDocument.getElementById("hellobar_modal") !== null ) {
+        HB.e.siteElement = containerDocument.getElementById("hellobar_modal");
+        HB.e.siteElementType = "modal";
+      } else if ( containerDocument.getElementById("hellobar_slider") !== null ) {
+        HB.e.siteElement = containerDocument.getElementById("hellobar_slider");
+        HB.e.siteElementType = "slider";
+      } else if ( containerDocument.getElementById("hellobar_takeover") !== null ) {
+        HB.e.siteElement = containerDocument.getElementById("hellobar_takeover");
+        HB.e.siteElementType = "takeover";
+      } else  {
+        HB.e.siteElement = false;
+        HB.e.siteElementType = false;
       }
-
-      // Update the CSS class based on the width
-      var origValue = HB.isMobileWidth;
-      HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
-      if ( origValue == HB.isMobileWidth )
-        return;
-      if ( HB.isMobileWidth )
-        HB.addClass(HB.e.siteElement, "mobile");
-      else
-        HB.removeClass(HB.e.siteElement, "mobile");
     }
 
+    // Monitor siteElement height to update HTML/CSS
+    if ( HB.e.siteElement ) {
+      if ( HB.e.siteElement.clientHeight ) {
+
+        // Update the CSS class based on the width
+        var wasMobile = HB.isMobileWidth;
+
+        if ( HB.e.siteElementType == "modal" && containerDocument )
+          HB.isMobileWidth = (containerDocument.getElementById("hellobar_modal_background").clientWidth <= 640 );
+        else if ( HB.e.siteElementType == "slider" )
+          HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 370 );
+        else
+          HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
+
+        if ( wasMobile != HB.isMobileWidth ) {
+          HB.widthCache = 0;
+
+          if ( HB.isMobileWidth ) {
+            HB.isMobile = true;
+            HB.addClass(HB.e.siteElement, "mobile");
+          } else {
+            HB.isMobile = false;
+            HB.removeClass(HB.e.siteElement, "mobile");
+          }
+        }
+
+        // Adjust the container size
+        if ( HB.e.container && HB.widthCache != HB.e.container.clientWidth ) {
+          HB.setContainerSize(HB.e.container, HB.e.siteElement, HB.e.siteElementType, HB.isMobile);
+          HB.widthCache = HB.e.container.clientWidth;
+        }
+
+        // Bar specific adjustments
+        if ( HB.e.siteElementType == "bar" ) {
+          
+          // Adjust the pusher
+          if ( HB.e.pusher ) {
+            var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
+            HB.e.pusher.style.height = (HB.e.siteElement.clientHeight + borderPush) + "px";
+          }
+
+          // Add multiline class
+          var barBounds = (HB.w.className.indexOf('regular') > -1 ? 32 : 52 );
+
+          if ( HB.e.siteElement.clientHeight > barBounds ) {
+            HB.addClass(HB.e.siteElement, "multiline");
+          } else {
+            HB.removeClass(HB.e.siteElement, "multiline");
+          }
+        } 
+      }
+    }
   }, 50); // Check every 50ms
 }
+
 // Call the function right away once this is loaded
 HBQ.prototype.push = function()
 {
@@ -641,15 +681,6 @@ var _HB = {
     return HB.templateHTML[siteElement.template_name];
   },
 
-  // Called before rendering. This lets you modify siteElement attributes.
-  // NOTE: siteElement is already a copy of the original siteElement so it can be
-  // safely modified.
-  prerender: function(siteElement)
-  {
-    siteElement.wiggle = (siteElement.wiggle_button ? 'wiggle' : '');
-    return this.sanitize(siteElement);
-  },
-
   // Takes each string value in the siteElement and escapes HTML < > chars
   // with the matching symbol
   sanitize: function(siteElement){
@@ -719,14 +750,18 @@ var _HB = {
   // Renders the siteElement
   render: function(siteElementToRender)
   {
-    var siteElementCopy = {};
+    var siteElement = {};
+
     // Make a copy of the siteElement
-    for(var k in siteElementToRender)
-    {
-      siteElementCopy[k] = siteElementToRender[k];
+    var fn = window[siteElementToRender.type + 'Element'];
+    if(typeof fn === 'function') {
+      siteElement = new window[siteElementToRender.type + 'Element'](siteElementToRender)
+    } else {
+      siteElement = new SiteElement(siteElementToRender)
     }
+
     // Call prerender
-    var siteElement = HB.prerender(siteElementCopy);
+    siteElement.prerender();
 
     HB.currentSiteElement = siteElement;
     // Convenience accessors for commonl ussed attributes
@@ -750,7 +785,7 @@ var _HB = {
         HB.hideOnZoom();
         // Bounce in animation
         if(HB.w.className.indexOf("animated") > -1)
-          setTimeout(function(){ HB.bounceIn(HB.w); }, 500);
+          setTimeout(function(){ HB.animateIn(HB.w); }, 500);
         // Set wiggle listeners
         if(siteElement.wiggle_button.length > 0)
           HB.wiggleEventListeners(HB.w);
@@ -821,24 +856,11 @@ var _HB = {
     HB.w = document.createElement("iframe");
     HB.w.src = "about:blank";
     HB.w.id = "hellobar_container";
+    HB.w.className = siteElement.type;
     HB.w.name = "hellobar_container";
-    // Set any necessary CSS classes
-    HB.w.className = siteElement.size+(HB.t(siteElement.remains_at_top) ? " remains_at_top" : "");
-    HB.w.className += siteElement.animated ? " hellobar animated" : "";
-    HB.w.scrolling = "no";
-    HB.w.setAttribute("frameBorder", 0) // IE 9 and less
-    // Remove the pusher if it exists
-    if ( HB.p )
-      HB.p.parentNode.removeChild(HB.p);
-    HB.p = null;
-    // Create the pusher (which pushes the page down) if needed
-    if ( HB.t(siteElement.pushes_page_down) )
-    {
-      HB.p = document.createElement("div");
-      HB.p.id="hellobar_pusher";
-      HB.p.className = siteElement.size;
-      HB.injectAtTop(HB.p);
-    }
+
+    siteElement.setupIFrame(HB.w)
+
     // Check if we have any external CSS to add
     if ( HB.extCSS )
     {
@@ -859,10 +881,12 @@ var _HB = {
       var head=document.getElementsByTagName('HEAD')[0];
       head.appendChild(HB.extCSSStyle);
     }
+
     // Inject the container into the DOM
     HB.injectAtTop(HB.w);
     // Render the siteElement in the container.
     var d = HB.w.contentWindow.document;
+    d.body.className = siteElement.type
     d.open();
     d.write((HB.css || "")+html);
     d.close();
@@ -877,6 +901,7 @@ var _HB = {
     // First check to see if siteElements is an array, and make it one if it is not
     if (Object.prototype.toString.call(siteElements) !== "[object Array]")
       siteElements = [siteElements];
+
     // Create the rule
     var rule = {matchType: matchType, conditions: conditions, siteElements: siteElements};
     HB.rules.push(rule);
@@ -1310,28 +1335,38 @@ var _HB = {
     return .2126 * rgb[0] + .7152 * rgb[1] + 0.0722 * rgb[2];
   },
 
-  bounceIn: function(element, time){
+  animateIn: function(element, time){
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
-      element.classList.remove("bounceOutUp");
+      element.classList.remove("animateOut");
       element.classList.add("animated");
-      element.classList.add("bounceInDown");
+      element.classList.add("animateIn");
     } // else just unhide
     else {
       element.style.display = "";
     }
   },
 
-  bounceOut: function(element){
+  animateOut: function(element){
     // HTML 5 supported so show the animation
-    if (typeof element.classList == 'object') {
-      element.classList.remove("bounceInDown");
+    if (typeof element.classList == 'object' && element.getAttribute('class').indexOf('animated') != -1) {
+      element.classList.remove("animateIn");
       element.classList.add("animated");
-      element.classList.add("bounceOutUp");
+      element.classList.add("animateOut");
     } // else just hide
     else {
       element.style.display = "none";
     }
+
+    // Makes Iframe small after hiding in order to allow click events.
+    hideIframe = window.setTimeout(function(){
+      var classes = element.getAttribute('class');
+      var isBar = (classes.indexOf('Bar') > -1);
+
+      if (!isBar){
+        element.setAttribute('style','height:0px');
+      }
+    }, 250);
   },
 
   // Delays & restarts wiggle animation before & after mousing over bar
@@ -1341,7 +1376,7 @@ var _HB = {
         $('#hellobar').find('.hellobar_cta').removeClass('wiggle');
       })
       .on('mouseleave', '#hellobar', function(){
-        setTimeout( function(){ 
+        setTimeout( function(){
           $('#hellobar').find('.hellobar_cta').addClass('wiggle');
         }, 2500);
       });
@@ -1360,8 +1395,8 @@ var _HB = {
       var pdLink = document.createElement("div");
       pdLink.className = "hellobar_arrow"
       pdLink.onclick = function() {
-        HB.bounceIn(HB.w)
-        HB.bounceOut(document.getElementById("pull-down"))
+        HB.animateIn(HB.w)
+        HB.animateOut(document.getElementById("pull-down"))
       };
 
       pullDown.appendChild(pdLink);
@@ -1495,6 +1530,16 @@ var _HB = {
 
     return HBCrypto.HmacSHA512(path+"?"+sortedParamPairs.join("|"), key).toString();
 
+  },
+
+  setContainerSize: function(container, element, type, isMobile)
+  {
+    if ( type == 'bar' ) {
+      HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
+    } else if ( type == 'slider' ) {
+      HB.e.container.style.maxHeight = (element.clientHeight + 24) + "px";
+      HB.e.container.style.maxWidth = (isMobile ? "none" : (element.clientWidth + 24) + "px");
+    }
   }
 };
 

@@ -1,7 +1,12 @@
 <h5 class="step-title">Text and Content</h5>
 
-<label>Bar text</label>
-{{view Ember.TextField value=model.message placeholder="Subscribe to our mailing list"}}
+<label>Headline</label>
+{{view Ember.TextField value=model.headline placeholder="Subscribe to our mailing list"}}
+
+{{#unless hideCaptionField}}
+  <label>Caption</label>
+  {{view Ember.TextField value=model.caption placeholder="(optional)"}}
+{{/unless}}
 
 <label>Link text</label>
 {{view Ember.TextField value=model.link_text placeholder="OK!"}}
@@ -18,7 +23,6 @@
   {{#if disableThankYouText}}
     <p><a {{action "openUpgradeModal"}}>Upgrade required.</a></p>
   {{/if}}
-
 {{/if}}
 
 <label>Font family</label>

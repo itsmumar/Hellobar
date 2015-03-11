@@ -1,0 +1,19 @@
+<div class="hb-social-wrapper hb-facebook-wrapper">
+  <span class="hb-facebook-share-button" data-href="{{siteElement.settings.url_to_share.replace(/^(?!http)/, 'http://')}}" data-type="button_count"></span>
+
+  <span id="fb-root"></span>
+  
+  <script>
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+  <script>
+    // facebook doesn't provide any callback events for the share button, so there's nothing to attach our tracking to.
+  </script>
+</div>
