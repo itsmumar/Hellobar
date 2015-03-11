@@ -123,7 +123,7 @@ describe SitesController do
 
       response.should be_success
 
-      SiteElement::BAR_TYPES.each do |template|
+      SiteElement.all_templates.each do |template|
         response.body.should include("HB.setTemplate(\"#{template}\"")
       end
     end

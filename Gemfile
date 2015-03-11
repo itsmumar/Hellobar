@@ -73,6 +73,7 @@ group :development, :test do
   gem "rspec-rails", "~> 2.14"
   gem "simplecov", "~> 0.7.1"
   gem "teaspoon", "~> 0.8.0"
+  gem "byebug"
 end
 
 group :test do
