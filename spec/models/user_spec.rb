@@ -87,3 +87,34 @@ describe User, "#valid_password?" do
     user.valid_password?("thisisold").should be_true
   end
 end
+
+describe User, ".find_for_google_oauth2" do
+  it "creates a new user with the given authentication token" do
+    token = {
+      "info" => {
+        "email" => "test@test.com"
+      },
+      "uid" => "abc123",
+      "provider" => "google_oauth2"
+    }
+
+    u = User.find_for_google_oauth2(token)
+    u.email.should == "test@test.com"
+    u.authentications.count.should == 1
+  end
+
+  it "finds a user based on the uid and provider" do
+    user = User.create(email: "test@test.com", password: "123devdev", password_confirmation: "123devdev")
+    user.authentications.create(provider: "google_oauth2", uid: "abc123")
+    token = {
+      "info" => {
+        "email" => "test@test.com"
+      },
+      "uid" => "abc123",
+      "provider" => "google_oauth2"
+    }
+
+    found = User.find_for_google_oauth2(token)
+    found.id.should == user.id
+  end
+end

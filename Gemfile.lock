@@ -522,7 +522,7 @@ DEPENDENCIES
   omniauth-aweber (~> 1.0)
   omniauth-constantcontact2 (~> 1.0)
   omniauth-createsend (~> 1.0)
-  omniauth-google-oauth2
+  omniauth-google-oauth2 (~> 0.2.6)
   omniauth-mailchimp (~> 1.0)!
   paranoia (~> 2.0)
   php-serialize

@@ -218,11 +218,11 @@ ActiveRecord::Schema.define(version: 20150320210322) do
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
-    t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
     t.string   "modal_placement",                 default: "middle"
     t.string   "slider_placement",                default: "bottom-right"
+    t.integer  "wordpress_bar_id"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
