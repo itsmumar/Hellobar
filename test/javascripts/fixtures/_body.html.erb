@@ -9,7 +9,7 @@
 %>
 
 <script type="text/javascript">
-  <%= ScriptGenerator.new(@site, :templates => SiteElement::BAR_TYPES, :rules => []).generate_script.gsub("<script>", "\\<script\\>").gsub("</script>", "\\</script\\>").html_safe %>
+  <%= ScriptGenerator.new(@site, :templates => SiteElement.all_templates, :rules => []).generate_script.gsub("<script>", "\\<script\\>").gsub("</script>", "\\</script\\>").html_safe %>
 </script>
 
 <%= render template: "layouts/ember" %>
