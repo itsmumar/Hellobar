@@ -220,9 +220,8 @@ ActiveRecord::Schema.define(version: 20150320210322) do
     t.boolean  "wiggle_button",                   default: false
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
-    t.string   "modal_placement",                 default: "middle"
-    t.string   "slider_placement",                default: "bottom-right"
     t.integer  "wordpress_bar_id"
+    t.string   "placement"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

@@ -22,6 +22,16 @@
   {{toggle-switch switch=model.remains_at_top}}
 </label>
 
+<label>Placement</label>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=placementOptions
+    value=selectedPlacement
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
+  }}
+</div>
+
 <label>Bar Size</label>
 <div class="select-wrapper">
   {{view Ember.Select

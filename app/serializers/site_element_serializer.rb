@@ -14,7 +14,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :closable, :show_branding, :pushes_page_down, :remains_at_top, :animated, :wiggle_button,
 
     # other
-    :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :modal_placement, :slider_placement
+    :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement
 
   def rule
     RuleSerializer.new(object.rule)
