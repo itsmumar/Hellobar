@@ -1,6 +1,7 @@
 HelloBar.HasPlacement = Ember.Mixin.create
 
   selectedPlacement: ( (key, value) ->
+
     if arguments.length > 1
       @set('model.placement', value)
       return value
@@ -13,6 +14,6 @@ HelloBar.HasPlacement = Ember.Mixin.create
       if @placementOptions != null && @placementOptions.length > 0
         current_placement = @placementOptions[0].value
         @set('model.placement', current_placement)
-      
+
       current_placement
   ).property()

@@ -4,4 +4,3 @@ HelloBar.StyleModalController = Ember.Controller.extend HelloBar.HasPlacement,
     {value: 'middle', label: 'Middle'}
     {value: 'top', label: 'Top'}
   ]
-
