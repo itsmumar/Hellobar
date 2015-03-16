@@ -1349,7 +1349,7 @@ var _HB = {
 
   animateOut: function(element){
     // HTML 5 supported so show the animation
-    if (typeof element.classList == 'object' && element.getAttribute('class').indexOf('animated') != -1) {
+    if (typeof element.classList == 'object') {
       element.classList.remove("animateIn");
       element.classList.add("animated");
       element.classList.add("animateOut");
