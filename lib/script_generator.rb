@@ -212,6 +212,7 @@ private
       remains_at_top: site_element.remains_at_top,
       wiggle_wait: 0,
       tab_side: "right",
+      subtype: site_element.element_subtype,
       thank_you_text: SiteElement.sanitize(thank_you_text).gsub(/"/, "&quot;")
     }).select{|key, value| !value.nil? || !value == '' }
   end

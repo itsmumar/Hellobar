@@ -110,7 +110,7 @@ var HBQ = function()
 
         // Bar specific adjustments
         if ( HB.e.siteElementType == "bar" ) {
-          
+
           // Adjust the pusher
           if ( HB.e.pusher ) {
             var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
@@ -125,7 +125,7 @@ var HBQ = function()
           } else {
             HB.removeClass(HB.e.siteElement, "multiline");
           }
-        } 
+        }
       }
     }
   }, 50); // Check every 50ms
@@ -335,7 +335,7 @@ var _HB = {
   // conversion has already happened or not
   getConversionKey: function(siteElement)
   {
-    switch(siteElement.type)
+    switch(siteElement.subtype)
     {
       case "email":
         return "ec";
@@ -933,11 +933,11 @@ var _HB = {
         for(j=0;j<rule.siteElements.length;j++)
         {
           siteElement = rule.siteElements[j];
-          if ( siteElement.type == "traffic" || !HB.didConvert(siteElement) )
+          if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
           {
-            if ( !possibleSiteElements[siteElement.type] )
-              possibleSiteElements[siteElement.type] = [];
-            possibleSiteElements[siteElement.type].push(siteElement);
+            if ( !possibleSiteElements[siteElement.subtype] )
+              possibleSiteElements[siteElement.subtype] = [];
+            possibleSiteElements[siteElement.subtype].push(siteElement);
           }
         }
       }
