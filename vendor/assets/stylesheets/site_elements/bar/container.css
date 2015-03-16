@@ -32,9 +32,10 @@
   position: absolute;
   border: 2px solid white;
   border-radius: 0 0 5px 5px;
-  
+
   transform: translateY(-40px);
   -o-transform: translateY(-40px);
+  -ms-transform: translateY(-40px);
   -moz-transform: translateY(-40px);
   -webkit-transform: translateY(-40px);
 }
@@ -56,9 +57,9 @@
   background-size: 21px 21px;
 }
 
-.hellobar#pull-down.large .hellobar_arrow { 
-  width: 28px; 
-  height: 28px; 
+.hellobar#pull-down.large .hellobar_arrow {
+  width: 28px;
+  height: 28px;
   background-size: 28px 28px;
 }
 
@@ -73,21 +74,21 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.Bar.animated {
+#hellobar_container.Bar.animated, #pull-down.animated {
   transform: translateY(-60px);
   -o-transform: translateY(-60px);
   -ms-transform: translateY(-60px);
   -moz-transform: translateY(-60px);
-  -webkit-transform: translateY(-60px);  
+  -webkit-transform: translateY(-60px);
 
   animation-duration: 1s;
   -o-animation-duration: 1s;
   -ms-animation-duration: 1s;
   -moz-animation-duration: 1s;
-  -webkit-animation-duration: 1s;  
+  -webkit-animation-duration: 1s;
 }
 
-#hellobar_container.Bar.animateIn {
+#hellobar_container.Bar.animateIn, #pull-down.animateIn {
   animation-name: bounceInDown;
   -o-animation-name: bounceInDown;
   -ms-animation-name: bounceInDown;
@@ -95,7 +96,7 @@
   -webkit-animation-name: bounceInDown;
 }
 
-#hellobar_container.Bar.animateOut {
+#hellobar_container.Bar.animateOut, #pull-down.animateOut {
   animation-name: bounceOutUp;
   -o-animation-name: bounceOutUp;
   -ms-animation-name: bounceOutUp;

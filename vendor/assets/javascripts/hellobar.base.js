@@ -1363,7 +1363,7 @@ var _HB = {
       var classes = element.getAttribute('class');
       var isBar = (classes.indexOf('Bar') > -1);
 
-      if (!isBar){
+      if (!isBar && element.id != "pull-down"){
         element.setAttribute('style','height:0px');
       }
     }, 250);

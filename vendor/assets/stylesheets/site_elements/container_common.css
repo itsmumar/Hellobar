@@ -11,7 +11,7 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.animated {
+#hellobar_container.animated, #pull-down.animated {
   animation-duration: 0.25s;
   -o-animation-duration: 0.25s;
   -ms-animation-duration: 0.25s;
@@ -513,12 +513,12 @@
   0% {
     opacity: 0;
     height: 110%;
-    margin-top: -5%; 
+    margin-top: -5%;
   }
   100% {
     opacity: 1;
     height: 100%;
-    margin-top: 0; 
+    margin-top: 0;
   }
 }
 
@@ -529,12 +529,12 @@
   0% {
     opacity: 0;
     height: 110%;
-    margin-top: -5%; 
+    margin-top: -5%;
   }
   100% {
     opacity: 1;
     height: 100%;
-    margin-top: 0; 
+    margin-top: 0;
   }
 }
 
@@ -545,12 +545,12 @@
   0% {
     opacity: 0;
     height: 110%;
-    margin-top: -5%; 
+    margin-top: -5%;
   }
   100% {
     opacity: 1;
     height: 100%;
-    margin-top: 0; 
+    margin-top: 0;
   }
 }
 
@@ -567,12 +567,12 @@
   0% {
     opacity: 1;
     height: 100%;
-    margin-top: 0; 
+    margin-top: 0;
   }
   100% {
     opacity: 0;
     height: 110%;
-    margin-top: -5%; 
+    margin-top: -5%;
   }
 }
 
@@ -583,12 +583,12 @@
   0% {
     opacity: 1;
     height: 100%;
-    margin-top: 0; 
+    margin-top: 0;
   }
   100% {
     opacity: 0;
     height: 110%;
-    margin-top: -5%; 
+    margin-top: -5%;
   }
 }
 
@@ -599,11 +599,11 @@
   0% {
     opacity: 1;
     height: 100%;
-    margin-top: 0; 
+    margin-top: 0;
   }
   100% {
     opacity: 0;
     height: 110%;
-    margin-top: -5%; 
+    margin-top: -5%;
   }
 }
