@@ -1,0 +1,35 @@
+body.oldIE
+
+  .toggle-fullscreen
+    display: none
+
+  /*-----------  Main Viewport  -----------*/
+
+  .viewport-wrapper
+    display: table
+
+    /*-----------  Steps  -----------*/
+
+    .step-wrapper,
+    .preview-wrapper
+      display: table-cell
+      vertical-align: top
+
+    .step-wrapper:before
+      height: 1px
+      content: ''
+      width: 17.33em
+      display: block
+
+
+  /*-----------  Step Navigations  -----------*/
+
+  .step-navigation
+
+    nav
+      display: table
+      border-spacing: 5px
+      border-collapse: separate
+
+      a
+        display: table-cell    
