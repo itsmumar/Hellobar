@@ -1537,7 +1537,6 @@ var _HB = {
     if ( type == 'bar' ) {
       HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
     } else if ( type == 'slider' ) {
-      HB.e.container.style.maxHeight = (element.clientHeight + 24) + "px";
       HB.e.container.style.maxWidth = (isMobile ? "none" : (element.clientWidth + 24) + "px");
     }
   }
