@@ -133,12 +133,12 @@
   display: block;
 }
 
-#hellobar_slider .hb-input-wrapper.hb-both-inputs input {
+#hellobar_slider.mobile .hb-input-wrapper.hb-both-inputs input {
   width: 100%;
   display: block;
 }
 
-#hellobar_slider .hb-input-wrapper.hb-both-inputs input + input {
+#hellobar_slider.mobile .hb-input-wrapper.hb-both-inputs input + input {
   margin-left: 0;
   margin-top: -1px;
 }
