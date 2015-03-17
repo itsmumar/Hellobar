@@ -886,10 +886,10 @@ var _HB = {
     HB.injectAtTop(HB.w);
     // Render the siteElement in the container.
     var d = HB.w.contentWindow.document;
-    d.body.className = siteElement.type
     d.open();
     d.write((HB.css || "")+html);
     d.close();
+    d.body.className = siteElement.type;
   },
 
   // Adds a rule to the list of rules.
