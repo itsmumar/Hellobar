@@ -1,11 +1,11 @@
 #hellobar_container.Bar {
   top: 0;
   left: 0;
-  max-height: 40px;
+  min-height: 40px;
 }
 
 #hellobar_container.Bar.large {
-  height: 60px;
+  min-height: 60px;
 }
 
 /*-----------  Spacing Pusher  -----------*/
