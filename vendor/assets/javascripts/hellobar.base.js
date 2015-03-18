@@ -1400,6 +1400,10 @@ var _HB = {
       pdLink.onclick = function() {
         HB.animateIn(HB.w)
         HB.animateOut(document.getElementById("pull-down"))
+
+        // if the pusher exists, unhide it since it should be hidden at this point
+        if(HB.e.pusher != null)
+          HB.e.pusher.style.display = '';
       };
 
       pullDown.appendChild(pdLink);
