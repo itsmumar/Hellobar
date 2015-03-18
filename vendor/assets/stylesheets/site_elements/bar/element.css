@@ -49,7 +49,7 @@
 #hellobar_bar .hb-cta-style-button {
   margin: 0 0;
   line-height: 1.05;
-  padding: 4px 15px 1px;
+  padding: 5px 15px 2px;
 }
 
 /*-----------  Social Styling  -----------*/
@@ -85,7 +85,7 @@
 
 #hellobar_bar .hb-arrow img {
   width: 28px;
-  height: 29px; 
+  height: 29px;
 }
 
 #hellobar_bar .hb-arrow:hover {
@@ -184,16 +184,16 @@
   padding-top: 0.25em;
 }
 
-#hellobar_bar.regular .hb-arrow img { 
+#hellobar_bar.regular .hb-arrow img {
   width: 21px;
-  height: 21px; 
+  height: 21px;
 }
 
-#hellobar_bar.regular .hb-logo-wrapper { 
-  font-size: 9px; 
+#hellobar_bar.regular .hb-logo-wrapper {
+  font-size: 9px;
 }
 
-#hellobar_bar.regular .hb-cta-style-button { 
+#hellobar_bar.regular .hb-cta-style-button {
   padding: 3px 15px 1px;
 }
 

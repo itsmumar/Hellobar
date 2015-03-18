@@ -14,7 +14,7 @@
   font-variant: normal;
   text-transform: none;
   font-family: 'icomoon';
-  -moz-osx-font-smoothing: grayscale; 
+  -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -94,7 +94,7 @@ html, body {
   font-size: 1em;
   cursor: pointer;
   position: absolute;
-  
+
   transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
   -o-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
   -ms-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
@@ -120,7 +120,7 @@ html, body {
   max-width: 22.5em;
   text-align: center;
   position: relative;
-  border-radius: 2px;
+  border-radius: 3px;
   white-space: nowrap;
   margin: 1.75em auto 0;
   text-decoration: none;
@@ -150,7 +150,7 @@ html, body {
 
 .hb-text-wrapper .hb-secondary-text {
   margin-top: 0.5em;
-  -moz-osx-font-smoothing: grayscale; 
+  -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -242,7 +242,7 @@ html, body {
   -o-transition: translateY(2px);
   -ms-transition: translateY(2px);
   -moz-transition: translateY(2px);
-  -webkit-transition: translateY(2px);  
+  -webkit-transition: translateY(2px);
 }
 
 .hb-logo-wrapper:hover {
