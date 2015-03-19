@@ -229,6 +229,7 @@ html, body {
 
 .hb-logo-wrapper svg {
   width: 1.45em;
+  height: 1.45em;
   fill: #5c5e60;
 
   backface-visibility: hidden;
