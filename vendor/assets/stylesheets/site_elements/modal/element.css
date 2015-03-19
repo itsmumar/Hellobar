@@ -48,6 +48,12 @@
   -webkit-transform: translate(-50%, -50%);
 }
 
+/*-----------  Inputs  -----------*/
+
+#hellobar_modal .hb-input-wrapper {
+  max-width: 22.5em;
+}
+
 /*-----------  State: Mobile  -----------*/
 
 #hellobar_modal.mobile {
