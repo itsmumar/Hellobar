@@ -108,7 +108,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     case error.code
     when 250
       catch_required_merge_var_error!(error)
-    when 104
+    when 104, 200 #Invalid_ApiKey, Invalid List
       identity.destroy_and_notify_user if identity != nil
       raise error
     else
