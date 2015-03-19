@@ -24,7 +24,8 @@ module Hello::DataAPI
         results = {}
         site_element_ids.each_slice(API_MAX_SLICE) do |ids|
           path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, ids, site.read_key, num_days)
-          results.merge!(get(path, params))
+          slice_results = get(path, params)
+          results.merge!(slice_results) if !slice_results.nil?
         end
         results
       end
@@ -138,7 +139,10 @@ module Hello::DataAPI
         results = {}
         site_element_ids.each_slice(API_MAX_SLICE) do |ids|
           path, params = Hello::DataAPIHelper::RequestParts.suggested_opportunities(site.id, ids, site.read_key)
-          results = results.deep_merge(get(path, params)) { |key, x, y| x + y }
+          slice_results = get(path, params)
+          if slice_results != nil
+            results = results.deep_merge(slice_results) { |key, x, y| x + y }
+          end
         end
         results
       end
