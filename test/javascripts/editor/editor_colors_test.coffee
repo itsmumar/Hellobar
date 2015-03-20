@@ -37,7 +37,7 @@ test "it should change to tab", ->
 asyncTest "can change the background color", ->
   expect(1)
   click(colorsTab()).andThen =>
-    click(findLabeled("Background").find(".color-select-block")).andThen =>
+    click(findLabeled("Primary Color").find(".color-select-block")).andThen =>
       debounce (done) ->
         fillInColors('red').andThen =>
           bar = hbFrame().find("#hellobar_bar")
