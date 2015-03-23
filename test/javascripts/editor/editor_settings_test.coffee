@@ -28,25 +28,6 @@ test 'it should be able to choose an email goal', ->
       clickOn("Next").andThen =>
         equal find(".step-title").text(), "Style", "Should have progressed"
 
-test 'it should be able to choose a traffic goal', ->
-  route = @route
-  click(find('.change-selection')).andThen =>
-    clickOn('Click Link', '.step-link-wrapper').andThen =>
-
-      # 1. fill in the link
-      fillIn(findLabeled("Enter link URL"), "www.hellobar.com")
-
-      # 2. toggle open in new window
-      label = findLabeled("Open link in new window")
-      click(label).andThen =>
-        equal true,
-            route.currentModel.open_in_new_window,
-            "open_in_new_window was not changed on model"
-
-      # 2. click next
-      clickOn("Next").andThen =>
-        equal find(".step-title").text(), "Style", "Should have progressed"
-
 test 'it should be able to choose a social goal', ->
   route = @route
   click(find('.change-selection')).andThen =>
@@ -76,6 +57,25 @@ test 'it should be able to choose a social goal', ->
           # 4. click next
           clickOn("Next").andThen =>
             equal find(".step-title").text(), "Style", "Should have progressed"
+
+test 'it should be able to choose a traffic goal', ->
+  route = @route
+  click(find('.change-selection')).andThen =>
+    clickOn('Click Link', '.step-link-wrapper').andThen =>
+
+      # 1. fill in the link
+      fillIn(findLabeled("Enter link URL"), "www.hellobar.com")
+
+      # 2. toggle open in new window
+      label = findLabeled("Open link in new window")
+      click(label).andThen =>
+        equal true,
+            route.currentModel.open_in_new_window,
+            "open_in_new_window was not changed on model"
+
+      # 2. click next
+      clickOn("Next").andThen =>
+        equal find(".step-title").text(), "Style", "Should have progressed"
 
 test 'a user can exit the editor when active', ->
   equal find(".icon-close").length, 1, 'renders the editor close button'

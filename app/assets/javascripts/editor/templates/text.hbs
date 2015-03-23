@@ -8,8 +8,10 @@
   {{view Ember.TextField value=model.caption placeholder="(optional)"}}
 {{/unless}}
 
-<label>Link text</label>
-{{view Ember.TextField value=model.link_text placeholder="OK!"}}
+{{#unless hideLinkText}}
+  <label>Link text</label>
+  {{view Ember.TextField value=model.link_text placeholder="OK!"}}
+{{/unless}}
 
 {{#if showThankYouText}}
   <label>Thank you text</label>
