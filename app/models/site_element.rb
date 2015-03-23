@@ -77,6 +77,14 @@ class SiteElement < ActiveRecord::Base
     end
   end
 
+  def primary_color
+    background_color
+  end
+
+  def secondary_color
+    background_color
+  end
+
   private
 
   def total_views_and_conversions

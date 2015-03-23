@@ -214,8 +214,8 @@ private
       tab_side: "right",
       subtype: site_element.short_subtype,
       thank_you_text: SiteElement.sanitize(thank_you_text).gsub(/"/, "&quot;"),
-      primary_color: site_element.background_color,
-      secondary_color: site_element.is_a?(Bar) ? site_element.background_color : site_element.button_color
+      primary_color: site_element.primary_color,
+      secondary_color: site_element.secondary_color
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
