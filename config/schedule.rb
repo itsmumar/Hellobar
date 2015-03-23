@@ -15,7 +15,7 @@ every 10.days, :roles => [:web] do
 end
 
 every 20.minutes, :roles => [:cron] do
-  script "send_sqs_message #{env} 'hello::tracking::internal_stats_harvester:process_internal_stats'"
+  rake "internal_metrics:process"
 end
 
 if env == "production"

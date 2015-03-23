@@ -18,7 +18,7 @@ namespace :internal_metrics do
     emails = %w{imtall@gmail.com hnshah@gmail.com neil@neilpatel.com}
     Pony.mail({
       to: emails.join(", "),
-      subject: "#{last_week} | #{number_with_delimiter(sites.length)} new sites, #{number_to_percentage((installed_sites.length.to_f/sites.length)*100, precision: 1)} install rate, #{number_to_currency(sum)}", 
+      subject: "#{last_week} | #{number_with_delimiter(sites.length)} new sites, #{number_to_percentage((installed_sites.length.to_f/sites.length)*100, precision: 1)} install rate, #{number_to_currency(sum)}",
       body: "Report #{two_weeks_ago} to #{last_week}
 
 Created sites: #{number_with_delimiter(sites.length)}
@@ -31,5 +31,10 @@ Revenue: #{number_to_currency(sum)}
 - Enterprise (Monthly): #{number_with_delimiter(enterprise_monthly.length)} (#{number_to_currency(enterprise_monthly.inject(0){|s,b| s+=b.amount})})
 - Enterprise (Yearly): #{number_with_delimiter(enterprise_yearly.length)} (#{number_to_currency(enterprise_yearly.inject(0){|s,b| s+=b.amount})})
 "})
+  end
+
+  desc 'Queues a worker for the internal stats processor'
+  task :process => :environment do |t, args|
+    QueueWorker.send_sqs_message('hello::tracking::internal_stats_harvester:process_internal_stats')
   end
 end

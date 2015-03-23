@@ -1,5 +1,3 @@
-require 'queue_worker/delay'
-
 class ContactList < ActiveRecord::Base
   include QueueWorker::Delay
   include DeserializeWithErrors
