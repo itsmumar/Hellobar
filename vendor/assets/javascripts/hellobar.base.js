@@ -905,7 +905,7 @@ var _HB = {
     d.close();
     d.body.className = siteElement.type;
     if(HB.isIENineOrLess())
-      HB.addClass(d.body, "old_ie");
+      HB.addClass(d.body, "hb-old-ie");
   },
 
   // Adds a rule to the list of rules.

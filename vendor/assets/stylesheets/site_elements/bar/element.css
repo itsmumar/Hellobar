@@ -20,6 +20,12 @@
   vertical-align: middle;
 }
 
+/*-----------  Main Content  -----------*/
+
+#hellobar_bar .hb-content-wrapper {
+  text-align: center;
+}
+
 /*-----------  Call to Acton Button  -----------*/
 
 #hellobar_bar .hb-cta {
@@ -110,8 +116,8 @@
 }
 
 #hellobar_bar .hb-input-wrapper .hb-input-block input {
+  height: 2.3em;
   font-size: 0.67em;
-  line-height: 215%;
 }
 
 /*-----------  Logos  -----------*/
@@ -199,6 +205,7 @@
 }
 
 #hellobar_bar.regular .hb-input-wrapper .hb-input-block input {
+  height: 2.9em;
   line-height: 195%;
 }
 
