@@ -1,9 +1,7 @@
   </div>
 
-  <div class="right-content">
-    <a href="#" class="hb-arrow" style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}" id="close_bar" onclick="window.parent.HB.animateOut(window.parent.HB.w);
-    if(window.parent.HB.e.pusher != null) window.parent.HB.e.pusher.style.display = 'none'; window.parent.HB.animateIn(window.parent.document.getElementById('pull-down'));" >
-      <img src="https://s3.amazonaws.com/hb-assets/arrow_white.png" alt="" width="28" height="29" />
-    </a>
-  </div>
+  <a href="#" class="hb-arrow-wrapper" style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}" id="close_bar" onclick="window.parent.HB.animateOut(window.parent.HB.w);
+  if(window.parent.HB.e.pusher != null) window.parent.HB.e.pusher.style.display = 'none'; window.parent.HB.animateIn(window.parent.document.getElementById('pull-down'));" >
+    <img class="hb-arrow" src="https://s3.amazonaws.com/hb-assets/arrow_white.png" alt="" width="28" height="29" />
+  </a>
 </div>

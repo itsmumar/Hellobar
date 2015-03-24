@@ -25,12 +25,12 @@
 
 /*-----------  Inputs  -----------*/
 
-#hellobar_takeover .hb-input-wrapper input {
-  border-width: 2px;
-}
-
 #hellobar_takeover .hb-input-wrapper {
   max-width: 22.5em;
+}
+
+#hellobar_takeover .hb-input-wrapper .hb-input-block input {
+  border-width: 2px;
 }
 
 /*-----------  Logo  -----------*/

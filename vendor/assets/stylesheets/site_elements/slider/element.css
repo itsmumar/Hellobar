@@ -26,7 +26,7 @@
   max-width: 100%;
 }
 
-#hellobar_slider .hb-input-wrapper input {
+#hellobar_slider .hb-input-wrapper .hb-input-block input {
   font-size: 0.95em;
 }
 
@@ -36,12 +36,12 @@
   margin-top: 0.67em;
 }
 
-#hellobar_slider .hb-input-wrapper.hb-both-inputs input {
+#hellobar_slider .hb-input-wrapper.hb-both-inputs .hb-input-block {
   width: 50%;
   display: inline-block;
 }
 
-#hellobar_slider .hb-input-wrapper.hb-both-inputs input + input {
+#hellobar_slider .hb-input-wrapper.hb-both-inputs .hb-input-block + .hb-input-block {
   margin-top: 0;
   margin-left: -4px;
 }

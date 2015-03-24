@@ -108,6 +108,12 @@ html, body {
   opacity: 1;
 }
 
+/*-----------  Main Content  -----------*/
+
+.hb-content-wrapper {
+  text-align: center;
+}
+
 /*-----------  Call to Acton Button  -----------*/
 
 .hb-cta-style-button {
@@ -160,13 +166,21 @@ html, body {
   margin: 1.33em auto 0;
 }
 
-.hb-input-wrapper input {
+.hb-input-wrapper .hb-input-block {
+  width: 100%;
+}
+
+.hb-input-wrapper .hb-input-block label {
+  display: none;
+}
+
+.hb-input-wrapper .hb-input-block input {
   width: 100%;
   outline: none;
   color: #5c5e60;
   padding: 0 10px;
-  line-height: 2.5;
   font-size: 0.9em;
+  line-height: 250%;
   border-radius: 2px;
   border: 1px solid #e0e0e0;
 
@@ -189,11 +203,11 @@ html, body {
   -webkit-transition: border-color 0.2s ease;
 }
 
-.hb-input-wrapper input:focus {
+.hb-input-wrapper .hb-input-block input:focus {
   border-color: #b2b2b2;
 }
 
-.hb-input-wrapper input + input {
+.hb-input-wrapper .hb-input-block + .hb-input-block {
   margin-top: -1px;
 }
 
@@ -229,7 +243,7 @@ html, body {
 
 .hb-logo-wrapper svg {
   width: 1.45em;
-  height: 1.45em;
+  height: 1.25em;
   fill: #5c5e60;
 
   backface-visibility: hidden;

@@ -1,37 +1,23 @@
 /*-----------  Bar Element  -----------*/
 
 #hellobar_bar {
-  background-color: #FF0000;
-  height: 50px;
   width: 100%;
-  display: table;
   margin: 0 0;
+  height: 50px;
+  display: table;
   font-size: 17px;
   font-weight: 600;
   padding: 0.33em 0.5em;
+  background-color: #FF0000;
+
   -webkit-font-smoothing: antialiased;
 }
 
-#hellobar_bar .hb-logo-wrapper {
-  padding-left: 15px;
-  width: 100px;
+#hellobar_bar .hb-logo-wrapper,
+#hellobar_bar .hb-content-wrapper,
+#hellobar_bar .hb-arrow-wrapper {
   display: table-cell;
   vertical-align: middle;
-}
-
-#hellobar_bar .hb-content-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-  text-align:center;
-  margin: 10px;
-}
-
-#hellobar_bar .right-content {
-  display: table-cell;
-  vertical-align: middle;
-  padding-right: 15px;
-  width: 43px;
-  text-align:right;
 }
 
 /*-----------  Call to Acton Button  -----------*/
@@ -82,18 +68,18 @@
 
 /*-----------  Hide Arrow  -----------*/
 
-#hellobar_bar .hb-arrow {
-  width: 2em;
-  opacity: 0.3;
+#hellobar_bar .hb-arrow-wrapper {
   text-align: right;
+  padding-left: 1em;
 }
 
-#hellobar_bar .hb-arrow img {
+#hellobar_bar .hb-arrow-wrapper .hb-arrow {
   width: 28px;
   height: 29px;
+  opacity: 0.3;
 }
 
-#hellobar_bar .hb-arrow:hover {
+#hellobar_bar .hb-arrow-wrapper .hb-arrow:hover {
   opacity: 0.6;
 }
 
@@ -112,17 +98,20 @@
 /*-----------  Inputs  -----------*/
 
 #hellobar_bar .hb-input-wrapper,
-#hellobar_bar .hb-input-wrapper input,
+#hellobar_bar .hb-input-wrapper .hb-input-block,
 #hellobar_bar .hb-input-wrapper .hb-cta {
   width: auto;
   margin-top: 0;
   display: inline-block;
 }
 
-#hellobar_bar .hb-input-wrapper input {
-  line-height: 2;
-  font-size: 0.67em;
+#hellobar_bar .hb-input-wrapper .hb-input-block {
   vertical-align: bottom;
+}
+
+#hellobar_bar .hb-input-wrapper .hb-input-block input {
+  font-size: 0.67em;
+  line-height: 215%;
 }
 
 /*-----------  Logos  -----------*/
@@ -134,6 +123,7 @@
   font-size: 12px;
   text-align: left;
   font-weight: normal;
+  padding-right: 1em;
 }
 
 #hellobar_bar .hb-logo-wrapper a {
@@ -172,13 +162,12 @@
 /*-----------  State: Mobile  -----------*/
 
 
-#hellobar_bar.mobile .hb-arrow,
 #hellobar_bar.mobile .hb-logo-wrapper,
-#hellobar_bar.mobile .right-content {
+#hellobar_bar.mobile .hb-arrow-wrapper {
   display: none;
 }
 
-#hellobar_bar.mobile .hb-input-wrapper input {
+#hellobar_bar.mobile .hb-input-wrapper .hb-input-block input {
   display: block;
   margin: 0.25em auto;
 }
@@ -186,14 +175,9 @@
 /*-----------  Size: Regular  -----------*/
 
 #hellobar_bar.regular {
+  height: 30px;
   font-size: 14px;
-  height: 31px;
-  padding-top: 0.25em;
-}
-
-#hellobar_bar.regular .hb-arrow img {
-  width: 21px;
-  height: 21px;
+  padding: 0.2em 0.5em;
 }
 
 #hellobar_bar.regular .hb-logo-wrapper {
@@ -201,7 +185,7 @@
 }
 
 #hellobar_bar.regular .hb-cta-style-button {
-  padding: 3px 15px 1px;
+  padding: 3px 8px 1px;
 }
 
 #hellobar_bar.regular .hb-social-wrapper {
@@ -212,6 +196,15 @@
   height: 24px;
   margin: -1px 0;
   vertical-align: middle;
+}
+
+#hellobar_bar.regular .hb-input-wrapper .hb-input-block input {
+  line-height: 195%;
+}
+
+#hellobar_bar.regular .hb-arrow-wrapper .hb-arrow {
+  width: 21px;
+  height: 21px;
 }
 
 /*-----------  Animations: Button Wiggle  -----------*/
