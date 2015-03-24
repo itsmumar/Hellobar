@@ -162,6 +162,7 @@ html, body {
 
 .hb-input-wrapper .hb-input-block {
   width: 100%;
+  position: relative;
 }
 
 .hb-input-wrapper .hb-input-block label {
@@ -297,4 +298,15 @@ html, body {
 .hb-social-wrapper .gc-bubbleDefault,
 .hb-social-wrapper .pls-container {
   display: none !important;
+}
+
+/*-----------  Old IE Fixes  -----------*/
+
+.hb-old-ie .hb-input-wrapper .hb-input-block label {
+  top: 30%;
+  right: 1.25em;
+  color: #e0e0e0;
+  font-size: 0.85em;
+  position: absolute;
+  display: inline-block;
 }
