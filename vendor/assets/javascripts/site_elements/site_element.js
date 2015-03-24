@@ -10,4 +10,6 @@ SiteElement.prototype.setupIFrame = function(){
 
 SiteElement.prototype.prerender = function(){
   HB.sanitize(this);
+  if(HB.isIENineOrLess())
+    this.animated = false;
 };

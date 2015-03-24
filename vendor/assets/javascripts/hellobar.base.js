@@ -694,6 +694,17 @@ var _HB = {
     return siteElement;
   },
 
+  isIENineOrLess: function() {
+    var myNav = navigator.userAgent.toLowerCase();
+    var version = (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
+
+    if(isNaN(version) || version == null || version == false)
+      return false;
+
+    if (version <= 9)
+      return true;
+  },
+
   // Renders the html template for the siteElement by calling HB.parseTemplateVar for
   // each {{...}} entry in the template
   renderTemplate: function(html, siteElement)
@@ -893,6 +904,8 @@ var _HB = {
     d.write((HB.css || "")+html);
     d.close();
     d.body.className = siteElement.type;
+    if(HB.isIENineOrLess())
+      HB.addClass(d.body, "old_ie");
   },
 
   // Adds a rule to the list of rules.
