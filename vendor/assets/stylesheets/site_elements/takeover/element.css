@@ -37,6 +37,10 @@
   margin-top: -2px;
 }
 
+#hellobar_takeover .hb-input-wrapper .hb-input-block input {
+  border-width: 2px;
+}
+
 /*-----------  Logo  -----------*/
 
 #hellobar_takeover .hb-logo-wrapper a {

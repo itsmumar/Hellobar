@@ -9,7 +9,6 @@
   font-weight: 600;
   padding: 0.33em 0.5em;
   background-color: #FF0000;
-
   -webkit-font-smoothing: antialiased;
 }
 
@@ -171,7 +170,7 @@
 #hellobar_bar.bar-bottom {
   top: auto;
   bottom: 0;
-  position: absolute; 
+  position: absolute;
 }
 
 /*-----------  State: Mobile  -----------*/

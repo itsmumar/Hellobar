@@ -108,6 +108,12 @@ html, body {
   opacity: 1;
 }
 
+/*-----------  Main Content  -----------*/
+
+.hb-content-wrapper {
+  text-align: center;
+}
+
 /*-----------  Call to Acton Button  -----------*/
 
 .hb-cta-style-button {
@@ -170,6 +176,7 @@ html, body {
   color: #5c5e60;
   padding: 0 10px;
   font-size: 0.9em;
+  line-height: 250%;
   border-radius: 2px;
   border: 1px solid #e0e0e0;
 
