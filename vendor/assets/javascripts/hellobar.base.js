@@ -256,7 +256,7 @@ var _HB = {
   getVisitorAttributes: function()
   {
     // Ignore first and last view timestamps and email and social conversions
-    var ignoredAttributes = ["fv","lv","ec","sc", "dt"];
+    var ignoredAttributes = "fv lv ec sc dt";
     // Ignore first and last converted timestamps and number of traffic conversions
     var ignoredAttributePattern = /(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/
     var attributes = {};
@@ -1377,9 +1377,7 @@ var _HB = {
     // Makes Iframe small after hiding in order to allow click events.
     hideIframe = window.setTimeout(function(){
       var classes = element.getAttribute('class');
-      var isBar = (classes.indexOf('Bar') > -1);
-
-      if (!isBar && element.id != "pull-down"){
+      if (classes != null && classes.indexOf('Bar') > -1 && !isBar && element.id != "pull-down"){
         element.setAttribute('style','height:0px');
       }
     }, 250);
