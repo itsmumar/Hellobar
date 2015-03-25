@@ -33,4 +33,5 @@ if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
   _hbq.push(function(){HB.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}})});
 {{/rules}}
 
-_hbq = new HBQ();
+if(!HB.isIEXOrLess(8))
+  _hbq = new HBQ();

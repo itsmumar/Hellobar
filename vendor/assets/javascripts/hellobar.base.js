@@ -694,14 +694,14 @@ var _HB = {
     return siteElement;
   },
 
-  isIENineOrLess: function() {
+  isIEXOrLess: function(x) {
     var myNav = navigator.userAgent.toLowerCase();
     var version = (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
 
     if(isNaN(version) || version == null || version == false)
       return false;
 
-    if (version <= 9)
+    if (version <= x)
       return true;
   },
 
@@ -904,7 +904,7 @@ var _HB = {
     d.write((HB.css || "")+html);
     d.close();
     d.body.className = siteElement.type;
-    if(HB.isIENineOrLess())
+    if(HB.isIEXOrLess(9))
       HB.addClass(d.body, "hb-old-ie");
   },
 

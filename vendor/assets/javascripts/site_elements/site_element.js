@@ -22,6 +22,6 @@ SiteElement.prototype.setupIFrame = function(){
 
 SiteElement.prototype.prerender = function(){
   HB.sanitize(this);
-  if(HB.isIENineOrLess())
+  if(HB.isIEXOrLess(9))
     this.animated = false;
 };
