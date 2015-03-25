@@ -116,3 +116,35 @@
   -moz-animation-name: bounceOutUp;
   -webkit-animation-name: bounceOutUp;
 }
+
+/*-----------  Animations (Bottom)  -----------*/
+
+#hellobar_container.Bar.animated.bar-bottom {
+  transform: translateY(60px);
+  -o-transform: translateY(60px);
+  -ms-transform: translateY(60px);
+  -moz-transform: translateY(60px);
+  -webkit-transform: translateY(60px);
+
+  animation-duration: 1s;
+  -o-animation-duration: 1s;
+  -ms-animation-duration: 1s;
+  -moz-animation-duration: 1s;
+  -webkit-animation-duration: 1s;
+}
+
+#hellobar_container.Bar.animateIn.bar-bottom {
+  animation-name: bounceInUp;
+  -o-animation-name: bounceInUp;
+  -ms-animation-name: bounceInUp;
+  -moz-animation-name: bounceInUp;
+  -webkit-animation-name: bounceInUp;
+}
+
+#hellobar_container.Bar.animateOut.bar-bottom {
+  animation-name: bounceOutDown;
+  -o-animation-name: bounceOutDown;
+  -ms-animation-name: bounceOutDown;
+  -moz-animation-name: bounceOutDown;
+  -webkit-animation-name: bounceOutDown;
+}
