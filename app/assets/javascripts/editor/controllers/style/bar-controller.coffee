@@ -1,4 +1,4 @@
-HelloBar.StyleBarController = Ember.Controller.extend(HelloBar.HasPlacement, {
+HelloBar.StyleBarController = Ember.Controller.extend HelloBar.HasPlacement,
 
   sizeOptions: [
     {value: 'large', label: 'Large - 50px height, 17px font'}
@@ -9,4 +9,3 @@ HelloBar.StyleBarController = Ember.Controller.extend(HelloBar.HasPlacement, {
     {value: 'bar-top', label: 'Top'}
     {value: 'bar-bottom', label: 'Bottom'}
   ]
-})

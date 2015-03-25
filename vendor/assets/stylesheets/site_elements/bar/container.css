@@ -66,13 +66,23 @@
   background-size: 28px 28px;
 }
 
-/*-----------  Sticky  -----------*/
+/*-----------  State: Sticky  -----------*/
 
-#hellobar_container.Bar.remains_at_top {
+#hellobar_container.Bar.remains_in_place {
   top: 0;
   position: fixed;
   _position: absolute;
   _top: expression(eval(document.body.scrollTop));
+}
+
+/*-----------  State: Bottom  -----------*/
+
+#hellobar_container.Bar.bar-bottom {
+  top: auto;
+  bottom: 0;
+  position: fixed;
+  _position: absolute;
+  _bottom: expression(eval(document.body.scrollTop));
 }
 
 /*-----------  Animations  -----------*/

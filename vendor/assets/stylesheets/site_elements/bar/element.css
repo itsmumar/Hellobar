@@ -166,6 +166,14 @@
   text-align: center;
 }*/
 
+/*-----------  State: Bottom  -----------*/
+
+#hellobar_bar.bar-bottom {
+  top: auto;
+  bottom: 0;
+  position: absolute; 
+}
+
 /*-----------  State: Mobile  -----------*/
 
 
