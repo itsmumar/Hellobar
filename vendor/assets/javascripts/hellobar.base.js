@@ -867,6 +867,12 @@ var _HB = {
     // Remove the containing iframe element if it exists
     if ( HB.w &&  HB.w.parentNode)
       HB.w.parentNode.removeChild(HB.w);
+
+    // Remove pull-arrow if it exists
+    HB.pd = document.getElementById("pull-down")
+    if ( HB.pd )
+      HB.pd.parentNode.removeChild(HB.pd);
+
     // Create the iframe container
     HB.w = document.createElement("iframe");
     HB.w.src = "about:blank";
@@ -1412,23 +1418,23 @@ var _HB = {
     // Create the pull down elements
     if(siteElement.closable) {
       var pullDown = document.createElement("div");
-      pullDown.className = siteElement.size + " hellobar"
-      pullDown.id = "pull-down"
+      pullDown.className = siteElement.size + " hellobar " + siteElement.placement;
+      pullDown.id = "pull-down";
 
-      pullDown.style.backgroundColor = "#" + siteElement.background_color
+      pullDown.style.backgroundColor = "#" + siteElement.background_color;
       var pdLink = document.createElement("div");
-      pdLink.className = "hellobar_arrow"
+      pdLink.className = "hellobar_arrow";
       pdLink.onclick = function() {
-        HB.animateIn(HB.w)
-        HB.animateOut(document.getElementById("pull-down"))
+        HB.animateIn(HB.w);
+        HB.animateOut(document.getElementById("pull-down"));
 
         // if the pusher exists, unhide it since it should be hidden at this point
-        if(HB.e.pusher != null)
+        if (HB.e.pusher != null)
           HB.e.pusher.style.display = '';
       };
 
       pullDown.appendChild(pdLink);
-      HB.injectAtTop(pullDown)
+      HB.injectAtTop(pullDown);
     }
   },
 
