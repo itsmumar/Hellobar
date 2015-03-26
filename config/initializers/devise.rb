@@ -1,3 +1,7 @@
+# Can't depend on settings already being loaded so read it again here
+settings_file = File.join(Rails.root, "config/settings.yml")
+yaml = File.exists?(settings_file) ? YAML.load_file(settings_file) : {}
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
@@ -230,7 +234,7 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-  config.omniauth :google_oauth2, "977705132675-kl0q4325rr3ccn4rt8iiv8pk36bv951h.apps.googleusercontent.com", "7yKhge6g-EKdHhL4q96eM5r5"
+  config.omniauth :google_oauth2, yaml["google_auth_id"], yaml["google_auth_secret"]
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
