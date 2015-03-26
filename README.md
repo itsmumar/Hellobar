@@ -2,6 +2,12 @@
 
 Made with love.
 
+## Workflow
+
+To add a new feature, make a branch of **edge**.  When ready to test, rebase your branch into **edge**.
+
+When ready to deploy to production, merge **edge** into **master** and deploy.
+
 ## Provisioning a new Hello Bar server
 
 0\. Once you've got the server's IP, log on.
