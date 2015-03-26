@@ -11,7 +11,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         redirect_to after_sign_in_path_for(@user)
       end
     else
-      flash[:notice] = "We couldn't verify with Google.  Please try again."
+      if @user.errors.any?
+        flash[:error] = @user.errors.full_messages.uniq.join(". ") << "."
+      else
+        flash[:error] = "We could not authenticate with Google."
+      end
       redirect_to root_path
     end
   end
