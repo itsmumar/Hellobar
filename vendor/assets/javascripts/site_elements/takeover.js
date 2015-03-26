@@ -1,5 +1,6 @@
 function TakeoverElement(props) {
   SiteElement.call(this, props);
+  this.link_color = "FFFFFF";
 };
 
 TakeoverElement.prototype = Object.create(SiteElement.prototype);
