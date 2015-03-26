@@ -77,5 +77,6 @@ Rails.application.routes.draw do
   get "/user_migration", to: "user_migration#new", as: :new_user_migration
   post "/user_migration", to: "user_migration#create", as: :user_migration
 
+  get "sorry-ie.html", to: "welcome#no_ie"
   root "welcome#index"
 end
