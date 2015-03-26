@@ -49,19 +49,28 @@
       &.is-pushed.Bar
         overflow: hidden
 
-        #hellobar_container
+        #hellobar_container:not(.bar-bottom)
           position: relative !important
-
-          &.bar-bottom
-            position: fixed !important
 
         .preview-image
           margin-top: -14px
 
+      #hellobar_container.bar-bottom
+        position: fixed
+        padding-left: 394px
+        @include transition()
+
     canvas
       cursor: url(<%= asset_path "eyedropper.svg" %>) 0 18, auto
 
-  /*-----------  Mobile State -----------*/
+  /*-----------  Fullscreen State  -----------*/
+
+  &.is-fullscreen
+
+    #hellobar_container.bar-bottom
+      padding-left: 58px !important
+
+  /*-----------  Mobile State  -----------*/
 
   &.is-mobile
 
@@ -75,3 +84,7 @@
       margin: -3px auto 0
       border: 1px solid $grayLight
       @include vertical-align()
+
+      #hellobar_container.bar-bottom
+        padding-left: 0 !important
+        position: absolute !important
