@@ -33,6 +33,7 @@ set :ssh_options, {
   forward_agent: true
 }
 
+set :branch, "master"
 #
 # And/or per server (overrides global)
 # ------------------------------------

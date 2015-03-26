@@ -30,6 +30,8 @@ set :ssh_options, {
   forward_agent: true
 }
 
+set :branch, "edge"
+
 #
 # And/or per server (overrides global)
 # ------------------------------------
