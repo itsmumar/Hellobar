@@ -75,8 +75,9 @@
 /*-----------  Hide Arrow  -----------*/
 
 #hellobar_bar .hb-arrow-wrapper {
+  width: 8rem;
   text-align: right;
-  padding-left: 1em;
+  padding-left: 1rem;
 }
 
 #hellobar_bar .hb-arrow-wrapper .hb-arrow {
@@ -123,13 +124,13 @@
 /*-----------  Logos  -----------*/
 
 #hellobar_bar .hb-logo-wrapper {
-  width: 8em;
+  width: 8rem;
   opacity: 0.7;
   margin-top: 0;
   font-size: 12px;
   text-align: left;
   font-weight: normal;
-  padding-right: 1em;
+  padding-right: 1rem;
 }
 
 #hellobar_bar .hb-logo-wrapper a {
