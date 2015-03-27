@@ -7,6 +7,10 @@
   position: absolute;
 }
 
+#hellobar_slider .hb-content-wrapper {
+  text-align: left;
+}
+
 /*-----------  Call to Acton Button  -----------*/
 
 #hellobar_slider .hb-cta-style-button {
@@ -72,7 +76,6 @@
 #hellobar_slider.top-right,
 #hellobar_slider.bottom-right {
   right: 1em;
-  text-align: left;
 }
 
 #hellobar_slider.top-right .hb-text-wrapper,
@@ -90,18 +93,6 @@
 #hellobar_slider.top-left,
 #hellobar_slider.bottom-left {
   left: 1em;
-  text-align: right;
-}
-
-#hellobar_slider.top-left .icon-close,
-#hellobar_slider.bottom-left .icon-close {
-  left: 1em;
-  right: auto;
-}
-
-#hellobar_slider.top-left .hb-text-wrapper,
-#hellobar_slider.bottom-left .hb-text-wrapper {
-  padding-left: 1.67em;
 }
 
 /*-----------  State: Mobile  -----------*/
