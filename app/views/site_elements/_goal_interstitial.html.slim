@@ -26,7 +26,5 @@
   footer
 
     p
-      | Select one of the goals above. You can always change this later. 
-      = link_to 'Need Help?', root_path
-
-      
+      | Select one of the goals above. You can always change this later.
+      = mail_to 'support@hellobar.com', ' Need Help?', subject: "Hello Bar - Getting Started"
