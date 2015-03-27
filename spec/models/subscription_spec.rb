@@ -449,15 +449,15 @@ describe Site do
       bill.amount.should == pro_yearly.amount
       bill.should be_paid
 
-      success, bill = @site.change_subscription(pro_monthly, @payment_method)
+      success, bill2 = @site.change_subscription(pro_monthly, @payment_method)
       success.should be_true
-      bill.amount.should > 0
+      bill2.amount.should > 0
       # Bill should be full amount
-      bill.amount.should == pro_monthly.amount
+      bill2.amount.should == pro_monthly.amount
       # Bill should be due at end of yearly subscription
-      bill.due_at.should be_within(1.minute).of(Time.now+1.year)
+      bill2.due_at.should be_within(1.minute).of(bill.due_at+1.year)
       # Bill should be pending
-      bill.should be_pending
+      bill2.should be_pending
     end
   end
 
