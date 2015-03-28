@@ -106,7 +106,7 @@ var HBQ = function()
         if ( HB.e.container && (HB.widthCache != HB.e.container.clientWidth || HB.e.siteElement.clientHeight != HB.heightCache)) {
           HB.setContainerSize(HB.e.container, HB.e.siteElement, HB.e.siteElementType, HB.isMobile);
           HB.widthCache = HB.e.container.clientWidth;
-          HB.heightCache = HB.e.siteElement.clientHeight; 
+          HB.heightCache = HB.e.siteElement.clientHeight;
         }
 
         // Bar specific adjustments
