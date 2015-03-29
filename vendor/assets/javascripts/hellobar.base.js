@@ -908,7 +908,7 @@ var _HB = {
     // Render the siteElement in the container.
     var d = HB.w.contentWindow.document;
     d.open();
-    d.write((HB.css || "")+html);
+    d.write("<html><head>" + (HB.css || "") + "</head><body>" + html + "</body></html>");
     d.close();
     d.body.className = siteElement.type;
     if(HB.isIEXOrLess(9))
