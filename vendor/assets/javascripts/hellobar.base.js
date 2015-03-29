@@ -1364,7 +1364,7 @@ var _HB = {
     }
   },
 
-  animateOut: function(element){
+  animateOut: function(element, callback){
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
       element.classList.remove("animateIn");
@@ -1379,9 +1379,18 @@ var _HB = {
     hideIframe = window.setTimeout(function(){
       var classes = element.getAttribute('class');
       if (classes != null && classes.indexOf('Bar') > -1 && !isBar && element.id != "pull-down"){
-        element.setAttribute('style','height:0px');
+        element.setAttribute('style','height:0px;max-height:0px');
+      }
+      if(typeof(callback) == 'function') {
+        callback();
       }
     }, 250);
+  },
+
+  closeIframe: function() {
+    if(HB.w != null && HB.w.parentNode != null) {
+      HB.w.parentNode.removeChild(HB.w)
+    }
   },
 
   // Delays & restarts wiggle animation before & after mousing over bar
@@ -1553,6 +1562,8 @@ var _HB = {
 
   setContainerSize: function(container, element, type, isMobile)
   {
+    if (HB.e.container == null)
+      return;
     if ( type == 'bar' ) {
       HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
     } else if ( type == 'slider' ) {
