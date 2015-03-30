@@ -11,24 +11,37 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
   end
 
   def lists
-    @client.clients.map do |cl|
-      client = CreateSend::Client.new(@auth, cl.ClientID)
-      client.lists.map{|l| {'id' => l['ListID'], 'name' => l['Name']}}
-    end.flatten
+    handle_error do
+      @client.clients.map do |cl|
+        client = CreateSend::Client.new(@auth, cl.ClientID)
+        client.lists.map{|l| {'id' => l['ListID'], 'name' => l['Name']}}
+      end.flatten
+    end
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
-    CreateSend::Subscriber.add(@auth, list_id, email, name, [], true)
+    handle_error do
+      CreateSend::Subscriber.add(@auth, list_id, email, name, [], true)
+    end
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
   def batch_subscribe(list_id, subscribers, double_optin = true)
-    subscribers = subscribers.map{|s| {'EmailAddress' => s[:email], 'Name' => s[:name]}}
-    CreateSend::Subscriber.import(@auth, list_id, subscribers, true)
+    handle_error do
+      subscribers = subscribers.map{|s| {'EmailAddress' => s[:email], 'Name' => s[:name]}}
+      CreateSend::Subscriber.import(@auth, list_id, subscribers, true)
+    end
   end
 
 
   private
+
+  def handle_error
+    yield
+  rescue CreateSend::RevokedOAuthToken => e
+    identity.destroy_and_notify_user if identity != nil
+    raise e
+  end
 
   def initialize_client(identity, retries = 2)
     @auth = {
