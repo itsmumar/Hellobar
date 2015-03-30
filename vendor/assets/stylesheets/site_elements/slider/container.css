@@ -1,5 +1,5 @@
 #hellobar_container.Slider {
-  max-width: 400px;
+  width: 400px;
   position: fixed;
   _position: absolute;
   _top: expression(eval(document.body.scrollTop));
