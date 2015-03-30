@@ -865,7 +865,7 @@ var _HB = {
   injectSiteElementHTML: function(html, siteElement)
   {
     // Remove the containing iframe element if it exists
-    if ( HB.w )
+    if ( HB.w &&  HB.w.parentNode)
       HB.w.parentNode.removeChild(HB.w);
     // Create the iframe container
     HB.w = document.createElement("iframe");
