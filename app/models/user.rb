@@ -110,6 +110,13 @@ class User < ActiveRecord::Base
         user.authentications.build(provider: access_token["provider"], uid: access_token["uid"])
         user.save
       end
+
+      user.authentications.detect { |x| x.provider == access_token["provider"]}.update(
+        refresh_token: access_token["credentials"].refresh_token,
+        access_token: access_token["credentials"].token,
+        expires_at: Time.at(access_token["credentials"].expires_at)
+      ) if access_token["credentials"]
+
       user
   end
 
