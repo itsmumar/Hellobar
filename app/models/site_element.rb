@@ -63,7 +63,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def track_creation
-    Analytics.track(:site, self.site.id, "Created Site Element", {site_element_id: self.id, type: self.element_subtype})
+    Analytics.track(:site, self.site.id, "Created Site Element", {site_element_id: self.id, type: self.element_subtype, style: self.type.to_s.downcase})
   end
   after_create :track_creation
 
