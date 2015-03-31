@@ -57,6 +57,17 @@ HelloBar.ApplicationController = Ember.Controller.extend
     HB.isMobileWidth = "changed"
   )
 
+  # Sets a callback on the preview script to rerender the preview after the user
+  # closes the element
+  setRerenderOnClose: ( ->
+    that = this
+    callback = ->
+      delayedFunc = -> Ember.run.debounce(that, that.doRenderPreview, false, 500)
+      setTimeout delayedFunc, 1000
+
+    HB.on("elementDismissed", callback)
+  ).on('init')
+
   #-----------  State Default  -----------#
 
   # Tracks global application states & catches actions

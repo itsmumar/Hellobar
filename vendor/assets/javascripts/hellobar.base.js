@@ -1397,6 +1397,8 @@ var _HB = {
     if(HB.w != null && HB.w.parentNode != null) {
       HB.w.parentNode.removeChild(HB.w)
     }
+
+    HB.trigger("elementDismissed");
   },
 
   // Delays & restarts wiggle animation before & after mousing over bar
