@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150330192647) do
+ActiveRecord::Schema.define(version: 20150331172410) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -200,7 +200,7 @@ ActiveRecord::Schema.define(version: 20150330192647) do
     t.string   "background_color",                default: "eb593c"
     t.string   "border_color",                    default: "ffffff"
     t.string   "button_color",                    default: "000000"
-    t.string   "font",                            default: "Helvetica,Arial,sans-serif"
+    t.string   "font",                            default: "'Open Sans',sans-serif"
     t.string   "link_color",                      default: "ffffff"
     t.string   "link_style",                      default: "button"
     t.string   "link_text",          limit: 5000, default: "Click Here"

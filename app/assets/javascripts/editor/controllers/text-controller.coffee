@@ -1,6 +1,7 @@
 HelloBar.TextController = Ember.Controller.extend
 
   fontOptions: [
+    {value: "'Open Sans',sans-serif", label: 'Open Sans'}
     {value: 'Helvetica,sans-serif', label: 'Helvetica'}
     {value: 'Arial,Helvetica,sans-serif', label: 'Arial'}
     {value: 'Georgia,serif', label: 'Georgia'}
