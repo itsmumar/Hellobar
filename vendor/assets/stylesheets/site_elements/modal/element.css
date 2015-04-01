@@ -29,7 +29,7 @@
 /*-----------  Logos  -----------*/
 
 #hellobar_modal .hb-logo-wrapper {
-  margin-top: 3.5em;
+  margin-top: 2.75em;
   margin-bottom: -2.5em;
 }
 
@@ -52,6 +52,7 @@
 
 #hellobar_modal .hb-input-wrapper {
   max-width: 22.5em;
+  margin: 1.33em auto 0;
 }
 
 /*-----------  State: Mobile  -----------*/

@@ -28,6 +28,7 @@
 
 #hellobar_slider .hb-input-wrapper {
   max-width: 100%;
+  margin: 1.33em auto 0;
 }
 
 #hellobar_slider .hb-input-wrapper .hb-input-block input {

@@ -156,13 +156,10 @@ html, body {
 
 /*-----------  Inputs  -----------*/
 
-.hb-input-wrapper {
-  margin: 1.33em auto 0;
-}
-
 .hb-input-wrapper .hb-input-block {
   width: 100%;
   position: relative;
+  vertical-align: middle;
 }
 
 .hb-input-wrapper .hb-input-block label {
@@ -176,7 +173,6 @@ html, body {
   color: #5c5e60;
   padding: 0 10px;
   font-size: 0.9em;
-  line-height: 250%;
   border-radius: 2px;
   border: 1px solid #e0e0e0;
 
@@ -201,10 +197,6 @@ html, body {
 
 .hb-input-wrapper .hb-input-block input:focus {
   border-color: #b2b2b2;
-}
-
-.hb-input-wrapper .hb-input-block + .hb-input-block {
-  margin-top: -1px;
 }
 
 .hb-input-wrapper .hb-cta {
