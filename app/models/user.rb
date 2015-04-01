@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   include BillingAuditTrail
+  include UserValidator
+
   has_many :payment_methods
   has_many :payment_method_details, through: :payment_methods, source: :details
   has_many :site_memberships
@@ -7,12 +9,12 @@ class User < ActiveRecord::Base
   has_many :authentications, dependent: :destroy
   acts_as_paranoid
 
-  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable
   devise :omniauthable, :omniauth_providers => [:google_oauth2]
   delegate :url_helpers, to: "Rails.application.routes"
 
   validate :email_does_not_exist_in_wordpress, on: :create
-  validates :email, uniqueness: true
+  validates :email, uniqueness: {scope: :deleted_at, unless: :deleted? }
 
   # If we ever assign more than one user to a site, this will have
   # to be refactored

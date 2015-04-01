@@ -17,6 +17,31 @@ describe User, 'as a valid object' do
 
     user.errors.messages[:email].should include('has already been taken')
   end
+
+  it 'can have the same email as someone in the Rails database if the previous user was deleted' do
+    email = 'hoogaboo@gmail.com'
+    u = User.create email: email, password: 'supers3cr37'
+    u.destroy
+
+    user = User.create email: email
+
+    user.errors.messages[:email].should be_nil
+  end
+
+  it 'should require a valid email' do
+    u = User.create(email: "test")
+    u.errors.messages[:email].should include('is invalid')
+  end
+
+  it 'should require a password of 9 characters or more' do
+    u = User.create(email: "test@test.com", password: "123")
+    u.errors.messages[:password].should include('is too short (minimum is 8 characters)')
+  end
+
+  it 'should require password_confirmation to match' do
+    u = User.create(email: "test@test.com", password: "12345678", password_confirmation: "sdaf")
+    u.errors.messages[:password_confirmation].should include('doesn\'t match Password')
+  end
 end
 
 describe User, '.generate_temporary_user' do
