@@ -9,7 +9,7 @@ BarElement.prototype.setupIFrame = function(iframe){
   HB.addClass(iframe, this.size);
   HB.addClass(iframe, this.placement);
   HB.addClass(iframe, (HB.t(this.remains_at_top) ? " remains_in_place" : ""));
-  
+
   if ( this.animated ) {
     HB.addClass(iframe, "hellobar");
     HB.addClass(iframe, "animated");
@@ -23,13 +23,13 @@ BarElement.prototype.setupIFrame = function(iframe){
     HB.p.parentNode.removeChild(HB.p);
 
   HB.p = null;
-  
+
   // Create the pusher (which pushes the page down) if needed
   if ( HB.t(this.pushes_page_down) ) {
     HB.p = document.createElement("div");
     HB.p.id="hellobar_pusher";
     HB.p.className = this.size;
-    HB.injectAtTop(HB.p);
+    HB.injectAtTop(HB.p, this.placement == "bar-bottom");
   }
 };
 

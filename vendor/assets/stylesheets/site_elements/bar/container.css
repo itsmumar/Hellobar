@@ -111,7 +111,7 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.Bar.animated, 
+#hellobar_container.Bar.animated,
 .hellobar#pull-down.animated {
   transform: translateY(-60px);
   -o-transform: translateY(-60px);
@@ -126,7 +126,7 @@
   -webkit-animation-duration: 1s;
 }
 
-#hellobar_container.Bar.animateIn, 
+#hellobar_container.Bar.animateIn,
 .hellobar#pull-down.animateIn {
   animation-name: bounceInDown;
   -o-animation-name: bounceInDown;
@@ -148,11 +148,11 @@
 
 #hellobar_container.Bar.animated.bar-bottom,
 .hellobar#pull-down.animated.bar-bottom {
-  transform: none;
-  -o-transform: none;
-  -ms-transform: none;
-  -moz-transform: none;
-  -webkit-transform: none;
+  transform: translateY(60px);
+  -o-transform: translateY(60px);
+  -ms-transform: translateY(60px);
+  -moz-transform: translateY(60px);
+  -webkit-transform: translateY(60px);
 
   animation-duration: 1s;
   -o-animation-duration: 1s;

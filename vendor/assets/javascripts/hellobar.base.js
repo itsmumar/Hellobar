@@ -853,9 +853,12 @@ var _HB = {
   },
 
   // Injects the specified element at the top of the body tag
-  injectAtTop:function(element)
+  // or bottom if reverse is selected
+  injectAtTop:function(element, reverse)
   {
-    if ( document.body.children[0] )
+    reverse = typeof reverse !== 'undefined' ? reverse : false;
+
+    if ( !reverse && document.body.children.length > 0 )
       document.body.insertBefore(element,document.body.children[0]);
     else
       document.body.appendChild(element);
