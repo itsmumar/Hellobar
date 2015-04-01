@@ -31,12 +31,12 @@ class QueueWorker
     raise ArgumentError, "Queue name must be defined" unless queue_name
 
     @sqs ||= AWS::SQS.new(access_key_id: Hellobar::Settings[:aws_access_key_id], secret_access_key: Hellobar::Settings[:aws_secret_access_key])
-    @queue ||= sqs.queues.find do |q|
+    @queue ||= @sqs.queues.find do |q|
       q.url.split('/').last == queue_name
     end
 
-    Rails.logger.info "[#{Time.now}] Sending #{message} to #{queue.url}"
-    receipt = queue.send_message(message)
+    Rails.logger.info "[#{Time.now}] Sending #{message} to #{@queue.url}"
+    receipt = @queue.send_message(message)
     Rails.logger.info receipt.to_s
   end
 end
