@@ -169,8 +169,8 @@ html
         font-family: sans-serif;
       }
 
-      img.Bar { height: 8px; }
-      img.Modal, img.Slider, img.Takeover { height: 20px; }
+      img.Bar { width: 38px; }
+      img.Modal, img.Slider, img.Takeover { width: 26px; }
 
   body
     table#bodyTable border="0" cellpadding="0" cellspacing="0" height="100%" width="100%"
@@ -184,7 +184,7 @@ html
                   tr
                     td.third.alignLeft
                       div.headerText
-                        | Your Weekly Summary
+                        = @site.url
                     td.third.alignCenter
                       img src="https://s3.amazonaws.com/cms.crazyegg.com/7a43448531e5edf5f39d4da3b79181cd1bad410a_1427309860.png"
                     td.third.alignRight
@@ -255,7 +255,7 @@ html
                           tr
                             td.left.bottom.alignCenter.cell
                               div class="circle #{se.short_subtype}"
-                                =index
+                                = index + 1
                               div.elementText= se.headline
                             td.bottom.alignCenter.cell= image_tag(se.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: se.type)
                             td.bottom.alignCenter.cell= @se_totals[se.id.to_s].last[0]
@@ -272,23 +272,24 @@ html
                   tr
                     td colspan="3"
                       div.heightPadding
-                  tr
-                    td colspan="3"
-                      table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
-                        tr
-                          td.alignCenter.orangeText style="font-size: 15px; padding: 15px 0; "
-                            | Get
-                            span.blueText  4x
-                            |  more conversions with Hello Bar Pro
-                        tr
-                          td
-                            = link_to edit_site_path(@site) do
-                              img src="https://s3.amazonaws.com/cms.crazyegg.com/8464251a238fbff664d20e5eb43c2abf6dcf185a_1427309865.png"
-                        tr
-                          td.alignCenter style="font-size: 15px; padding: 15px 0; font-weight: lighter; color: #222222;"
-                            span style="line-height: 24px; height: 24px; margin-right: 10px;"
-                              | Get all the pro features for $15
-                            = link_to "Start using Hello Bar Pro", edit_site_path(@site), class: "button largeButton"
+                  - if @site.is_free?
+                    tr
+                      td colspan="3"
+                        table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
+                          tr
+                            td.alignCenter.orangeText style="font-size: 15px; padding: 15px 0; "
+                              | Get
+                              span.blueText  4x
+                              |  more conversions with Hello Bar Pro
+                          tr
+                            td
+                              = link_to edit_site_path(@site) do
+                                img src="https://s3.amazonaws.com/cms.crazyegg.com/8464251a238fbff664d20e5eb43c2abf6dcf185a_1427309865.png"
+                          tr
+                            td.alignCenter style="font-size: 15px; padding: 15px 0; font-weight: lighter; color: #222222;"
+                              span style="line-height: 24px; height: 24px; margin-right: 10px;"
+                                | Get all the pro features for $15
+                              = link_to "Start using Hello Bar Pro", edit_site_path(@site), class: "button largeButton"
               td
             tr.lightGrey
               td colspan="3"
