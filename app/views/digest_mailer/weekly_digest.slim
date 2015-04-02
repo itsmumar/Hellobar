@@ -6,6 +6,10 @@ html
       .lightGrey { background-color: #EFEFEF; }
       .white { background-color: #FFFFFF; }
       .orangeText { color: #FE3817; }
+      .email { background-color: #54D388; }
+      .social { background-color: #45B4D6; }
+      .traffic { background-color: #FFC83F; }
+      .blueText { color: #00B4DC; }
 
       .third { width: 33% }
       .alignLeft { text-align: left; }
@@ -109,7 +113,6 @@ html
       }
 
       .circle {
-        background-color: #AC32BD;
         height: 20px;
         width: 20px;
         border-radius:10px;
@@ -166,6 +169,9 @@ html
         font-family: sans-serif;
       }
 
+      img.Bar { height: 8px; }
+      img.Modal, img.Slider, img.Takeover { height: 20px; }
+
   body
     table#bodyTable border="0" cellpadding="0" cellspacing="0" height="100%" width="100%"
       tr
@@ -204,25 +210,25 @@ html
                           td.summaryCell
                             div.greyBorder.right
                               div.largeLabel style="color: #FE3817;"
-                                | 83k
+                                = number_to_human(@totals[:total].last[0], :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u")
                               div.smallLabel
                                 | visits
                           td.summaryCell
                             div.greyBorder.right
                               div.largeLabel style="color: #00B7DB;"
-                                | 58k
+                                = number_to_human(@totals[:total].last[1], :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u")
                               div.smallLabel
                                 | conversions
                           td.summaryCell
                             div.greyBorder.right
                               div.largeLabel style="color: #A738BB;"
-                                | 70%
+                                = (@cur_conversion * 100).to_i.to_s + "%"
                               div.smallLabel
                                 | conversion rate
                           td.summaryCell
                             div.greyBorder
                               div.largeLabel style="color: #7FEBB9;"
-                                | 23%
+                                = (@one_month_conversion * 100).to_i.to_s + "%"
                               div.smallLabel
                                 | since last month
                   tr
@@ -245,19 +251,24 @@ html
                           td.top.bottom.alignCenter.cell
                             | Conversions
                           td.top.bottom.right.alignCenter.cell
-                        tr
-                          td.left.bottom.alignCenter.cell
-                            div.circle 1
-                            div.elementText Help us improve the web - join us ...
-                          td.bottom.alignCenter.cell
-                          td.bottom.alignCenter.cell 31,897
-                          td.bottom.alignCenter.cell 10,111 (13%)
-                          td.bottom.right.cell.alignCenter
-                            a.button.smallButton update
+                        - @site.site_elements.active.each_with_index do |se, index|
+                          tr
+                            td.left.bottom.alignCenter.cell
+                              div class="circle #{se.short_subtype}"
+                                =index
+                              div.elementText= se.headline
+                            td.bottom.alignCenter.cell= image_tag(se.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: se.type)
+                            td.bottom.alignCenter.cell= @se_totals[se.id.to_s].last[0]
+                            td.bottom.alignCenter.cell
+                              | #{@se_totals[se.id.to_s].last[1]}
+                              |  (#{((@se_totals[se.id.to_s].last[1] / @se_totals[se.id.to_s].last[0].to_f) * 100).to_i}%)
+                            td.bottom.right.cell.alignCenter
+                              = link_to "update", edit_site_site_element_path(se, site_id: @site), class: "button smallButton"
                         tr.alignCenter
                           td.bottom.right.left colspan=5 style="padding: 10px 0;"
                             span.conversionText Drive more conversions
-                            a.button.largeButton + Add new
+                            = link_to "+ Add new", site_site_elements_path(@site), class: "button largeButton"
+
                   tr
                     td colspan="3"
                       div.heightPadding
@@ -266,17 +277,24 @@ html
                       table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
                         tr
                           td.alignCenter.orangeText style="font-size: 15px; padding: 15px 0; "
-                            | Get 4x more conversions with Hello Bar Pro
+                            | Get
+                            span.blueText  4x
+                            |  more conversions with Hello Bar Pro
                         tr
                           td
-                            img src="https://s3.amazonaws.com/cms.crazyegg.com/8464251a238fbff664d20e5eb43c2abf6dcf185a_1427309865.png"
+                            = link_to edit_site_path(@site) do
+                              img src="https://s3.amazonaws.com/cms.crazyegg.com/8464251a238fbff664d20e5eb43c2abf6dcf185a_1427309865.png"
                         tr
                           td.alignCenter style="font-size: 15px; padding: 15px 0; font-weight: lighter; color: #222222;"
                             span style="line-height: 24px; height: 24px; margin-right: 10px;"
                               | Get all the pro features for $15
-                            a.button.largeButton Start using Hello Bar Pro
+                            = link_to "Start using Hello Bar Pro", edit_site_path(@site), class: "button largeButton"
               td
             tr.lightGrey
               td colspan="3"
     div.footerText
-      | You are receiving weekly updates. You can turn off or change your settings by visiting your email settings page or hellobar.com
+      | You are receiving weekly updates. You can turn off or change your settings by visiting your&nbsp;
+      = link_to "email settings page", profile_path
+      | &nbsp;or&nbsp;
+      = link_to "hellobar.com", root_path
+      | .
