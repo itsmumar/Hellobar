@@ -1,0 +1,30 @@
+Your performance this week for <%= @site.url %>
+
+<%= number_to_human(@totals[:total].last[0], :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u") %> visits
+<%= number_to_human(@totals[:total].last[1], :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u") %> conversions
+<%= (@cur_conversion * 100).to_i.to_s + "%" %> conversion rate
+<%= (@one_month_conversion * 100).to_i.to_s + "%" %> since last month
+
+Conversions
+
+<% @site.site_elements.active.each_with_index do |se, index| %>
+<%= index + 1 %>) <%= se.headline %>
+  * Views: <%= @se_totals[se.id.to_s].last[0] %>
+  * Conversions: <%= @se_totals[se.id.to_s].last[1] %> (<%= ((@se_totals[se.id.to_s].last[1] / @se_totals[se.id.to_s].last[0].to_f) * 100).to_i %>%)
+<% end %>
+
+Drive more conversions by visiting <%= site_site_elements_url(@site) %>
+
+<% if @site.is_free? %>
+
+Get 4x more conversions by upgrading to Pro!
+* Brand it as your bar!  No Hello Bar logo in your bar.  It's all yours!
+* Remove Ads! Increase your results by removing ads.
+* Targeted messages! Show different messages to different users.
+* Better stats! See tips to improve your marketing.
+
+Get all the Pro features for $15.  Visit <%= edit_site_url(@site) %>
+<% end %>
+
+
+You are receiving weekly updates. You can turn off or change your settings by visiting your email settings page at <%= profile_url %>
