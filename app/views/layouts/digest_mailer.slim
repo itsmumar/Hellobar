@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+html
+  head
+    css:
+      #bodyTable { font-family: sans-serif; }
+      .lightGrey { background-color: #EFEFEF; }
+      .white { background-color: #FFFFFF; }
+      .orangeText { color: #FE3817; }
+      .email { background-color: #54D388; }
+      .social { background-color: #45B4D6; }
+      .traffic { background-color: #FFC83F; }
+      .blueText { color: #00B4DC; }
+
+      .third { width: 33% }
+      .alignLeft { text-align: left; }
+      .alignCenter { text-align: center; }
+      .alignRight { text-align: right; }
+      .headerText { height: 30px; line-height: 60px; }
+
+      .headerTable {
+        width: 100%;
+        font-weight: lighter;
+        font-size: 15px;
+      }
+
+      .summaryTable {
+        width: 100%;
+        border-top: 4px solid #FE3817;
+        border-left: 1px solid #EDEDED;
+        border-right: 1px solid #EDEDED;
+        border-bottom: 1px solid #EDEDED;
+      }
+
+      .siteElementTable {
+        width: 100%;
+        font-weight: lighter;
+        color: #222222;
+        font-size: 14px;
+      }
+
+      .siteElementTable .headerRow {
+        font-size: 15px;
+      }
+
+      .siteElementTable .bottom {
+        border-bottom: 1px solid #EDEDED;
+      }
+
+      .siteElementTable .left {
+        border-left: 1px solid #EDEDED;
+      }
+
+      .siteElementTable .right {
+        border-right: 1px solid #EDEDED;
+      }
+
+      .siteElementTable .top {
+        border-top: 1px solid #EDEDED;
+      }
+
+      .siteElementTable .cell {
+        padding: 10px 0;
+      }
+
+      .summaryCell {
+        text-align: center; padding: 15px 0;
+      }
+
+      .lineBreakGraphic {
+        width: 100px;
+        height: 1px;
+        background-color: #EFEFEF;
+        margin-bottom: 15px;
+      }
+
+      .title {
+        font-size: 18px;
+        padding-bottom: 15px;
+      }
+
+      .largeLabel {
+        font-size: 25px;
+        width: 130px;
+      }
+
+      .smallLabel {
+        color: #B8B8B8;
+        font-weight: lighter;
+        padding-top: 8px;
+        font-size: 14px;
+      }
+
+      .greyBorder.right {
+        border-right: 1px solid #EDEDED;
+      }
+
+      .greyBorder.left {
+        border-left: 1px solid #EDEDED;
+      }
+
+      .greyBorder.bottom {
+        border-bottom: 1px solid #EDEDED;
+      }
+
+      .heightPadding {
+        height: 20px
+      }
+
+      .sectionLabel {
+        text-align: center;
+        font-size: 15px;
+        padding-bottom: 15px;
+      }
+
+      .circle {
+        height: 20px;
+        width: 20px;
+        border-radius:10px;
+        color: #FFFFFF;
+        text-align: center;
+        font-weight: lighter;
+        font-size: 14px;
+        line-height: 22px;
+        margin: 0 10px;
+        float: left;
+      }
+
+      .elementText {
+        white-space: nowrap;
+        overflow: hidden;
+        line-height: 20px;
+      }
+
+      .button {
+        background-color: #FE3812;
+        border-radius:3px;
+        color: #FFFFFF;
+        text-align: center;
+        font-size: 13px;
+        display: inline-block;
+        text-decoration: none;
+      }
+
+      .button.smallButton {
+        height: 17px;
+        padding: 0 8px;
+        line-height: 17px;
+      }
+
+      .button.largeButton {
+        height: 24px;
+        padding: 0 10px;
+        line-height: 24px;
+      }
+
+      .conversionText {
+        line-height: 24px;
+        height: 24px;
+        margin-right: 10px;
+      }
+
+      .footerText {
+        width: 600px;
+        margin: 20px auto;
+        text-align: center;
+        font-size: 14px;
+        font-weight: lighter;
+        color: #222222;
+        font-family: sans-serif;
+      }
+
+      .install_item {
+        margin: 15px 0;
+      }
+
+      img.Bar { width: 38px; }
+      img.Modal, img.Slider, img.Takeover { width: 26px; }
+
+  body
+    table#bodyTable border="0" cellpadding="0" cellspacing="0" height="100%" width="100%"
+      tr
+        td align="center" valign="top"
+          table#emailContainer border="0" cellpadding="20" cellspacing="0" width="600px"
+            tr.lightGrey
+              td
+              td
+                table.headerTable border="0"
+                  tr
+                    td.third.alignLeft
+                      div.headerText
+                        = @site.url
+                    td.third.alignCenter
+                      img src="https://s3.amazonaws.com/cms.crazyegg.com/7a43448531e5edf5f39d4da3b79181cd1bad410a_1427309860.png"
+                    td.third.alignRight
+                      div.headerText
+                        | Feb 1 - Feb 8
+              td
+              = yield
+              tr.lightGrey
+                td colspan="3"
+    div.footerText
+      | You are receiving weekly updates. You can turn off or change your settings by visiting your&nbsp;
+      = link_to "email settings page", profile_path
+      | &nbsp;or&nbsp;
+      = link_to "hellobar.com", root_path
+      | .

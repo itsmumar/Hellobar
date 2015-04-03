@@ -5,4 +5,8 @@ class DigestMailerPreview < ActionMailer::Preview
     DigestMailer.weekly_digest(s)
   end
 
+  def not_installed
+    s = Site.first
+    DigestMailer.not_installed(s)
+  end
 end

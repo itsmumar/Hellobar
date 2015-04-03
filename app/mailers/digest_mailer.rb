@@ -13,4 +13,13 @@ class DigestMailer < ActionMailer::Base
       subject: 'Your Weekly Hello Bar Digest'
     )
   end
+
+  def not_installed(site)
+    @site = site
+
+    roadie_mail(
+      to: site.owner.email,
+      subject: 'One final step and your Hello Bar is live!'
+    )
+  end
 end
