@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150401181046) do
+ActiveRecord::Schema.define(version: 20150403192532) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -186,6 +186,7 @@ ActiveRecord::Schema.define(version: 20150401181046) do
     t.integer  "priority"
     t.string   "match"
     t.boolean  "editable",   default: true
+    t.datetime "deleted_at"
   end
 
   add_index "rules", ["site_id"], name: "index_rules_on_site_id", using: :btree
@@ -225,6 +226,7 @@ ActiveRecord::Schema.define(version: 20150401181046) do
     t.string   "caption",                         default: ""
     t.integer  "wordpress_bar_id"
     t.string   "placement"
+    t.datetime "deleted_at"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

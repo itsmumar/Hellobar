@@ -26,6 +26,8 @@ class SiteElement < ActiveRecord::Base
   belongs_to :rule
   belongs_to :contact_list
 
+  acts_as_paranoid
+
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES }
   validates :rule, association_exists: true
   validates :display_when, inclusion: { in: DISPLAY_WHEN_OPTIONS }
