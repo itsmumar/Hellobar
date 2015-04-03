@@ -1,4 +1,5 @@
 require 'billing_log'
+require 'queue_worker/queue_worker'
 
 class Site < ActiveRecord::Base
   include QueueWorker::Delay
