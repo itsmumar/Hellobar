@@ -43,15 +43,15 @@ class SiteElement < ActiveRecord::Base
   serialize :settings, Hash
 
   def total_views
-    total_views_and_conversions[0]
+    lifetime_totals.try(:views) || 0
   end
 
   def total_conversions
-    total_views_and_conversions[1]
+    lifetime_totals.try(:conversions) || 0
   end
 
   def conversion_percentage
-    total_views == 0 ? 0 : total_conversions * 1.0 / total_views
+    total_views == 0 ? 0 : total_conversions.to_f / total_views
   end
 
   def toggle_paused!
@@ -89,16 +89,9 @@ class SiteElement < ActiveRecord::Base
 
   private
 
-  def total_views_and_conversions
-    return [0, 0] unless site
-
-    data = site.lifetime_totals
-
-    if data.nil? || data[id.to_s].nil?
-      [0, 0]
-    else
-      data[id.to_s].last
-    end
+  def lifetime_totals
+    return nil if site.nil?
+    site.lifetime_totals[id.to_s]
   end
 
   def site_is_capable_of_creating_element
