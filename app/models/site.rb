@@ -119,6 +119,14 @@ class Site < ActiveRecord::Base
     delay :generate_blank_static_assets, options
   end
 
+  def queue_digest_email(options = {})
+    delay :send_digest_email, options
+  end
+
+  def send_digest_email(options = {})
+    Hello::EmailDigest.send(self)
+  end
+
   def lifetime_totals(opts = {})
     days = opts.delete(:days) || 7
     @lifetime_totals ||= {}

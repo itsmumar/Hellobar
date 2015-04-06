@@ -63,7 +63,7 @@ Rails.application.routes.draw do
 
   post "/track/current_person/did/:event" => "tracking#track_current_person"
   post "/track/:type/:id/did/:event" => "tracking#track"
-  get "/pixel.gif" => "tracking#track", :as => :tracking_pixel
+  get "/pixel.gif" => "tracking#pixel", :as => :tracking_pixel
 
   get '/use-cases' => 'pages#use_cases'
   get '/amazon' => 'pages#use_cases'

@@ -1,6 +1,6 @@
 class DigestMailer < ActionMailer::Base
   include Roadie::Rails::Mailer
-  include EmailDigestHelper
+  add_template_helper(EmailDigestHelper)
   default from: "from@example.com"
 
   def weekly_digest(site)
