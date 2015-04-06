@@ -36,12 +36,30 @@ class Site < ActiveRecord::Base
     end
   end
 
+  # We are getting bad analytics data regarding installs and uninstalls
+  # When I analyzed the data the samples were 90-99% inaccurate. Looking
+  # at the code I can not see any obvious error. I'm adding this logging
+  # to collect more data so that hopefully I can find the source of the
+  # problem and then implement an appropriate fix.
+  def debug_install(type)
+    lines = ["[#{Time.now}] #{type} - Site[#{self.id}] script_installed_at: #{self.script_installed_at.inspect}, script_uninstalled_at: #{self.script_uninstalled_at.inspect}, lifetime_totals: #{@lifetime_totals.inspect}"]
+    caller[0..4].each do |line|
+      lines << "\t#{line}"
+    end
+
+    File.open(File.join(Rails.root, "log", "debug_install.log"), "a") do |file|
+      file.puts(lines.join("\n"))
+    end
+  end
+
   # check and report whether script is installed, recording timestamp and tracking event if status has changed
   def has_script_installed?
     if !script_installed_db? && script_installed_api?
+      debug_install("INSTALLED")
       update(script_installed_at: Time.current)
       Analytics.track(:site, self.id, "Installed Script")
     elsif script_installed_db? && !script_installed_api?
+      debug_install("UNINSTALLED")
       update(script_uninstalled_at: Time.current)
       Analytics.track(:site, self.id, "Uninstalled Script")
     end
