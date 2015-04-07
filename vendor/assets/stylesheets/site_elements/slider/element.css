@@ -22,6 +22,12 @@
   font-size: 0.85em;
 }
 
+/*-----------  Close Buttons  -----------*/
+
+#hellobar_slider .icon-close {
+  font-size: 10px;
+}
+
 /*-----------  Call to Acton Button  -----------*/
 
 #hellobar_slider .hb-cta-style-button {

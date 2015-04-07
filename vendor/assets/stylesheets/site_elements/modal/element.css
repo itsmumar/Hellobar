@@ -2,10 +2,11 @@
 
 #hellobar_modal {
   left: 50%;
-  padding: 3.33em;
+  padding: 48px;
   position: fixed;
   max-width: 41em;
   text-align: center;
+  font-size: 16px;
 
   transform: translateX(-50%);
   -o-transform: translateX(-50%);
@@ -26,11 +27,18 @@
   background: rgba(0, 0, 0, 0.85);
 }
 
+/*-----------  Text  -----------*/
+
+#hellobar_modal .hb-text-wrapper .hb-secondary-text {
+  margin-top: 8px;
+}
+
 /*-----------  Logos  -----------*/
 
 #hellobar_modal .hb-logo-wrapper {
   margin-top: 2.75em;
   margin-bottom: -2.5em;
+  font-size: 0.75em;
 }
 
 /*-----------  Positions  -----------*/
@@ -48,11 +56,25 @@
   -webkit-transform: translate(-50%, -50%);
 }
 
+/*-----------  Close Buttons  -----------*/
+
+#hellobar_modal .icon-close,
+  font-size: 12px;
+}
+
 /*-----------  Inputs  -----------*/
 
 #hellobar_modal .hb-input-wrapper {
   max-width: 22.5em;
   margin: 1.33em auto 0;
+}
+
+#hellobar_modal .hb-input-wrapper .hb-cta {
+  margin-top: 25px;
+}
+
+#hellobar_modal .hb-cta-style-button {
+  padding: 8px 20px;
 }
 
 /*-----------  State: Mobile  -----------*/

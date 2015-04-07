@@ -98,7 +98,6 @@ html, body {
   height: 15px;
   opacity: 0.2;
   color: #000000;
-  font-size: 10px;
   cursor: pointer;
   position: absolute;
   text-align: center;
@@ -115,6 +114,12 @@ html, body {
 #hellobar_slider .icon-close:hover,
 #hellobar_takeover .icon-close:hover {
   opacity: 0.4;
+}
+
+#hellobar_modal .icon-close,
+#hellobar_slider .icon-close {
+  top: 15px;
+  right: 10px;
 }
 
 /*-----------  Main Content  -----------*/

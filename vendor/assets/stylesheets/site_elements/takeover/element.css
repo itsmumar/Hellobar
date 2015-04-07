@@ -5,7 +5,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  font-size: 20px;
+  font-size: 24px;
   position: fixed;
   text-align: center;
 }
@@ -21,6 +21,20 @@
   -o-transform: translate(-50%, -50%);
   -moz-transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
+}
+
+/*-----------  Close Buttons  -----------*/
+
+#hellobar_takeover .icon-close {
+  font-size: 24px;
+  top: 32px;
+  right: 32px;
+}
+
+/*-----------  Call to Acton Button  -----------*/
+
+#hellobar_takeover .hb-cta-style-button {
+  padding: 12px 40px;
 }
 
 /*-----------  Inputs  -----------*/
