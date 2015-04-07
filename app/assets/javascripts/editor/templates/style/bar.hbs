@@ -6,9 +6,11 @@
   {{toggle-switch switch=model.animated}}
 </label>
 
+{{#if canWiggle}}
 <label>Wiggle button
   {{toggle-switch switch=model.wiggle_button}}
 </label>
+{{/if}}
 
 <label>Allow to hide bar
   {{toggle-switch switch=model.closable}}
