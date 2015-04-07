@@ -1,9 +1,10 @@
 <div id="hellobar_slider" class="{{siteElement.placement}}" style="font-family: {{siteElement.font}};">
   <div class="hb-header" style="background-color: #{{siteElement.primary_color}}"></div>
-  <a class="icon-close" onclick="window.parent.HB.animateOut(window.parent.HB.w, window.parent.HB.closeIframe);"></a>
+  <div class="slider-content">
+    <a class="icon-close" onclick="window.parent.HB.animateOut(window.parent.HB.w, window.parent.HB.closeIframe);"></a>
 
-  <div class="hb-content-wrapper">
-    <div class="hb-text-wrapper">
-      <div class="hb-headline-text">{{siteElement.headline}}</div>
-      <div class="hb-secondary-text">{{siteElement.caption}}</div>
-    </div>
+    <div class="hb-content-wrapper">
+      <div class="hb-text-wrapper">
+        <div class="hb-headline-text">{{siteElement.headline}}</div>
+        <div class="hb-secondary-text">{{siteElement.caption}}</div>
+      </div>

@@ -62,7 +62,7 @@ html, body {
 
 #hellobar_modal,
 #hellobar_slider {
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 /*-----------  Colored Header  -----------*/
@@ -70,17 +70,21 @@ html, body {
 #hellobar_modal .hb-header,
 #hellobar_slider .hb-header,
 #hellobar_takeover .hb-header {
+  width: 100%;
+  height: 7px;
+}
+
+#hellobar_modal .hb-header,
+#hellobar_takeover .hb-header {
   top: 0;
   left: 0;
-  width: 100%;
-  height: 0.6em;
   position: absolute;
 }
 
 #hellobar_modal .hb-header,
 #hellobar_slider .hb-header {
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
 }
 
 /*-----------  Close Buttons  -----------*/
@@ -88,12 +92,17 @@ html, body {
 #hellobar_modal .icon-close,
 #hellobar_slider .icon-close,
 #hellobar_takeover .icon-close {
-  top: 1.5em;
-  right: 1em;
+  top: 15px;
+  right: 10px;
+  width: 15px;
+  height: 15px;
   opacity: 0.2;
-  font-size: 1em;
+  color: #000000;
+  font-size: 10px;
   cursor: pointer;
   position: absolute;
+  text-align: center;
+  line-height: 15px;
 
   transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
   -o-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
@@ -105,7 +114,7 @@ html, body {
 #hellobar_modal .icon-close:hover,
 #hellobar_slider .icon-close:hover,
 #hellobar_takeover .icon-close:hover {
-  opacity: 1;
+  opacity: 0.4;
 }
 
 /*-----------  Main Content  -----------*/
@@ -140,7 +149,7 @@ html, body {
 /*-----------  Text  -----------*/
 
 .hb-text-wrapper {
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
 .hb-text-wrapper .hb-headline-text {
@@ -149,7 +158,7 @@ html, body {
 }
 
 .hb-text-wrapper .hb-secondary-text {
-  margin-top: 0.5em;
+  margin-top: 5px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }

@@ -86,7 +86,7 @@ var HBQ = function()
         if ( HB.e.siteElementType == "modal" && containerDocument )
           HB.isMobileWidth = (containerDocument.getElementById("hellobar_modal_background").clientWidth <= 640 );
         else if ( HB.e.siteElementType == "slider" )
-          HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 370 );
+          HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 270 );
         else
           HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
 
@@ -1579,7 +1579,7 @@ var _HB = {
       HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
     } else if ( type == 'slider' ) {
       HB.e.container.style.height = (element.clientHeight + 24) + "px";
-      HB.e.container.style.width = (element.clientWidth + 100) + "px";
+      HB.e.container.style.width = (element.clientWidth + 24) + "px";
     }
   }
 };
