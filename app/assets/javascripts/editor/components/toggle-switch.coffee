@@ -1,12 +1,13 @@
 HelloBar.ToggleSwitchComponent = Ember.Component.extend
 
   classNames: ['toggle-switch']
-  classNameBindings: ['switch:is-selected']
+  classNameBindings: ['displayValue:is-selected']
   attributeBindings: ['tabindex']
 
   #-----------  Trigger Changes  -----------#
 
   init: ->
+    @_setDisplayValue()
     @_super()
     @on('change', @, @_elementValueDidChange)
 
@@ -17,3 +18,7 @@ HelloBar.ToggleSwitchComponent = Ember.Component.extend
 
   _elementValueDidChange: ->
     @toggleProperty('switch')
+    @_setDisplayValue()
+
+  _setDisplayValue: ->
+    @set('displayValue', if @get('inverted') then !@get('switch') else @get('switch'))
