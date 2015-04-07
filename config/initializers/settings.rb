@@ -43,6 +43,7 @@ unless defined?(Hellobar::Settings)
     twilio_password
     twilio_user
     support_location
+    intercom
   )
 
   keys.each do |key|
