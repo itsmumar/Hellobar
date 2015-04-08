@@ -7,9 +7,10 @@
       small= "#{params[:existing_url]} has already been registered."
     p
       small If you already have an account, you can log in below. Otherwise, you can continue creating a new Hello Bar account for this site.
-
-    p= link_to "Create a new account", sites_path(site: {url: params[:existing_url]}), method: "post", class: "button create-existing"
-
+    - if get_ab_variation('Google Auth 2015-03-10') == 'google_auth'
+      p= link_to "Create a new account", sites_path(site: {url: params[:existing_url]}, oauth: true), method: "post", class: "button create-existing"
+    - else
+      p= link_to "Create a new account", sites_path(site: {url: params[:existing_url]}), method: "post", class: "button create-existing"
 
   h1 Sign In
 

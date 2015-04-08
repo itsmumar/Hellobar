@@ -138,8 +138,12 @@ class Site < ActiveRecord::Base
     self.subscriptions.last
   end
 
-  def url_exists?
-    Site.where(url: url).where.not(id: id).first.present?
+  def url_exists?(user=nil)
+    if user
+      Site.joins(:users).where(url: url, users: {id: user.id}).where.not(id: id).any?
+    else
+      Site.where(url: url).where.not(id: id).any?
+    end
   end
 
   def is_free?

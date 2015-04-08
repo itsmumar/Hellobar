@@ -303,4 +303,22 @@ describe Site do
       end
     end
   end
+
+  describe "#url_exists?" do
+    it "should return false if no other site exists with the url" do
+      Site.create(url: "http://abc.com").url_exists?.should be_false
+    end
+
+    it "should return true if another site exists with the url" do
+      Site.create(url: "http://abc.com")
+      Site.new(url: "http://abc.com").url_exists?.should be_true
+    end
+
+    it "should scope to user if user is given" do
+      u1 = users(:joey)
+      u1.sites.create(url: "http://abc.com")
+      u2 = users(:wootie)
+      u2.sites.build(url: "http://abc.com").url_exists?(u2).should be_false
+    end
+  end
 end

@@ -20,16 +20,20 @@ class SitesController < ApplicationController
 
     if current_user
       create_for_logged_in_user
-    elsif params[:oauth]
-      if @site.valid?
-        session[:new_site_url] = @site.url
-        redirect_to user_omniauth_authorize_path(:google_oauth2)
-      else
+    else
+      if !@site.valid?
         flash[:error] = "Your URL is not valid. Please double-check it and try again."
         redirect_to root_path
+      else
+        if params[:source] == "landing" && @site.url_exists?
+          redirect_to new_user_session_path(existing_url: @site.url)
+        elsif params[:oauth]
+          session[:new_site_url] = @site.url
+          redirect_to user_omniauth_authorize_path(:google_oauth2)
+        else
+          create_for_temporary_user
+        end
       end
-    else
-      create_for_temporary_user
     end
   end
 
@@ -126,11 +130,7 @@ class SitesController < ApplicationController
   end
 
   def create_for_temporary_user
-    @site.valid?
-
-    if params[:source] == "landing" && @site.url_exists?
-      redirect_to new_user_session_path(existing_url: @site.url)
-    elsif @site.save
+    if @site.save
       generate_temporary_logged_in_user
       Analytics.track(*current_person_type_and_id, "Signed Up", {ip: request.remote_ip, url: @site.url, site_id: @site.id})
 
@@ -149,7 +149,9 @@ class SitesController < ApplicationController
   end
 
   def create_for_logged_in_user
-    if @site.save
+    if @site.valid? && @site.url_exists?(current_user)
+      redirect_to site_path(current_user.sites.where(url: @site.url).first)
+    elsif @site.save
       SiteMembership.create!(:site => @site, :user => current_user)
       Analytics.track(*current_person_type_and_id, "Created Site", {site_id: @site.id})
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))

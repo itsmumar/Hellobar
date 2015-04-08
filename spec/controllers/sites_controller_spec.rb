@@ -25,7 +25,7 @@ describe SitesController do
       end
 
       it "redirects to oauth login if oauth is set" do
-        post :create, :site => { url: 'temporary-sitee.com'}, :oauth => true 
+        post :create, :site => { url: 'temporary-sitee.com'}, :oauth => true
         response.should redirect_to(user_omniauth_authorize_path(:google_oauth2))
       end
 
@@ -83,17 +83,17 @@ describe SitesController do
 
       it "can create a new site and is set as the owner" do
         lambda {
-          post :create, :site => {:url => "zombo.com"}
+          post :create, :site => {:url => "newzombo.com"}
         }.should change(@user.sites, :count).by(1)
 
         site = @user.sites.last
 
-        site.url.should == "http://zombo.com"
+        site.url.should == "http://newzombo.com"
         @user.role_for_site(site).should == :owner
       end
 
       it 'creates a site with a rule set' do
-        post :create, :site => {:url => "zombo.com"}
+        post :create, :site => {:url => "newzombo.com"}
 
         site = @user.sites.last
         site.rules.size.should == 1
