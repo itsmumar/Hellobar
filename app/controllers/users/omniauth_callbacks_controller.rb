@@ -19,4 +19,14 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       redirect_to root_path
     end
   end
+
+  def failure
+    if session[:new_site_url]
+      flash[:error] = "Sorry, we could not authenticate with Google. Please try again."
+      redirect_to root_path
+    else
+      flash[:error] = "Sorry, we could not authenticate with Google. Please try again."
+      redirect_to new_user_session_path
+    end
+  end
 end
