@@ -25,6 +25,9 @@ class Users::SessionsController < Devise::SessionsController
       else
         render "pages/redirect_login"
       end
+    elsif User.joins(:authentications).where(email: email).any?
+      # The user used oauth to sign in so redirect them to that
+      redirect_to user_omniauth_authorize_path(Authentication.joins(:user).where(users: {email: email}).first.provider)
     else
       return_val = super
       # Record log in
