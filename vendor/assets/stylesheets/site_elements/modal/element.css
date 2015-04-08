@@ -58,7 +58,7 @@
 
 /*-----------  Close Buttons  -----------*/
 
-#hellobar_modal .icon-close,
+#hellobar_modal .icon-close {
   font-size: 12px;
 }
 
@@ -70,11 +70,16 @@
 }
 
 #hellobar_modal .hb-input-wrapper .hb-cta {
-  margin-top: 25px;
+  margin-top: 15px;
 }
 
 #hellobar_modal .hb-cta-style-button {
   padding: 8px 20px;
+}
+
+#hellobar_modal .hb-input-wrapper .hb-input-block input {
+  height: 35px;
+  font-size: 13px;
 }
 
 /*-----------  State: Mobile  -----------*/
