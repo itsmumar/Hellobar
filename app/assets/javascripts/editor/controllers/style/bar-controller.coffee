@@ -13,3 +13,7 @@ HelloBar.StyleBarController = Ember.Controller.extend HelloBar.HasPlacement,
   canWiggle: (->
     @get("model.element_subtype") == "traffic" || @get("model.element_subtype")  == "email"
   ).property("model.element_subtype")
+
+  pushesText: (->
+    if @get('selectedPlacement') == 'bar-top' then 'Pushes page down' else 'Pushes page up'
+  ).property('selectedPlacement')
