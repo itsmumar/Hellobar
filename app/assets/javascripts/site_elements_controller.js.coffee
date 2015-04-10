@@ -13,70 +13,64 @@ $ ->
     if bar.hasClass( "paused" )
       $("#paused-guidance a").trigger("click")
 
-  setFilter = (type) ->
-    typeClass = type.replace('#', 'is-')
-    $('.rules-wrapper tbody').removeClass().addClass(typeClass)
+  #-----------  Show elements of currently active tab  -----------#
 
-  checkPaused = (rule_id) ->
-    # Find the number of active and paused bars for this rule
-    activeBarCount = $(".site-element-block.active[data-rule-id='#{rule_id}']").length
-    pausedBarCount = $(".site-element-block.paused[data-rule-id='#{rule_id}']").length
+  renderBars = ->
+    active = currentSelection()
+    if $(".site-element-block").length == 0
+      active = null
 
-    # Find the total number of active and paused bars across all rules
-    allActiveBarsCount = $("tr.site-element-block.active").length
-    allPausedBarsCount = $("tr.site-element-block.paused").length
+    for i, rule of rules()
+      showRule(rule)
+      showBars = []
+      for bar in rule.site_elements
+        bar = $(bar)
+        bar.hide()
+        showBars.push(bar) if active == null || bar.data('active') == active
 
-    # The table rows for this rule
-    ruleBlocks = $("tr[data-rule-id='#{rule_id}']").not(".site-element-block")
+      if showBars.length == 0 && active != null
+        hideRule(rule)
+      for bar in showBars
+        bar.show()
+        bar.removeClass("active paused").addClass(if bar.data('active') then "active" else "paused")
 
-    ruleBlocks.removeClass('active paused')
+    renderGuidance(active)
 
-    if activeBarCount == 0
-      ruleBlocks.addClass('paused')
-    else if pausedBarCount == 0
-      ruleBlocks.addClass('active')
+  renderGuidance = (active) ->
+    $("#active-guidance").hide();
+    $("#paused-guidance").hide();
+    return if active == null
 
-    if allActiveBarsCount == 0
-      $("#paused-guidance").css({ display: "" });
-      $("#active-guidance").hide();
-    else if allPausedBarsCount == 0
-      $("#paused-guidance").hide();
-      $("#active-guidance").css({ display: "" });
-    else
-      $("#paused-guidance").hide();
-      $("#active-guidance").hide();
+    if active && $(".site-element-block").filter((index) -> $(@).data('active')).length == 0
+      $("#paused-guidance").show();
+    else if active == false && $(".site-element-block").filter((index) -> $(@).data('active') == false).length == 0
+      $("#active-guidance").show();
+
+  hideRule = (rule) ->
+    $("tr[data-rule-id='#{rule.id}']").hide()
+
+  showRule = (rule) ->
+    $("tr[data-rule-id='#{rule.id}']").show()
 
   removeRow = (row) ->
     row.css({height: 0})
        .children('td, th')
        .animate({padding: 0})
        .wrapInner('<div style="overflow: hidden; height: 4rem;"></div>')
-       .children().animate({height: 0}, 500, -> $(@).closest('tr').remove())
+       .children().animate({height: 0}, 500, ->
+         $(@).closest('tr').remove()
+         renderBars()
+        )
 
-  recountDeletionString = (ruleId) ->
-    $rule = $(".rule-block[data-rule-id=#{ruleId}]")
-    $ruleDeleteElem = $rule.find('a.remove-rule')
-    elementCount = parseInt($ruleDeleteElem.find('span').text())
-
-    newString = switch
-      when elementCount > 2 then "<i class='icon-trash'></i>Delete this and <span>#{elementCount-1}</span> bars"
-      when elementCount == 2 then "<i class='icon-trash'></i>Delete this and <span>1</span> bar"
-      else "<i class='icon-trash'></i>Delete this rule"
-
-    $ruleDeleteElem.html(newString)
-
-  #-----------  Filter Site Elemtents  -----------#
+  #-----------  Filter Site Elements  -----------#
 
   $('body').on 'click', 'a.element-filter', (event) ->
     event.preventDefault()
 
-    $anchor = $(this)
-    currentFilter = $anchor.attr('href')
-
     $('a.element-filter').removeClass('active')
-    $anchor.addClass('active')
+    $(this).addClass('active')
 
-    setFilter(currentFilter)
+    renderBars()
 
   #-----------  Open Rules Modal  -----------#
 
@@ -122,23 +116,22 @@ $ ->
     siteID = $element.attr('data-site-id')
     elementId = $element.attr('data-element-id')
 
+    $row.data('active', !$row.data('active'))
+
     # assume successful change for faster user feedback
-    if $row.hasClass('paused')
-      $row.removeClass('paused').addClass('active')
+    if $row.data('active')
       $element.html('<i class="icon-pause"></i>Pause')
     else
-      $row.addClass('paused').removeClass('active')
       $element.html('<i class="icon-play"></i>Unpause')
 
-    # check if all are paused
-    checkPaused $row.data('rule-id')
+    renderBars()
 
     $.ajax
       type: 'PUT'
       url: "/sites/#{siteID}/site_elements/#{elementId}/toggle_paused"
       error: (xhr, status, error) ->
         # toggle the class and text back to original and render any error
-        console.log "Unexepcted error: #{error}"
+        console.log "Unexpected error: #{error}"
 
   #-----------  Delete Rule  -----------#
 
@@ -179,40 +172,46 @@ $ ->
 
     $row.addClass('deleting')
 
-    # check if all are paused
-    checkPaused $row.data('rule-id')
-
     $.ajax
       contentType: "text/javascript"
       type: 'DELETE'
       url: "/sites/#{siteID}/site_elements/#{elementId}/"
       success: (xhr, status) ->
         removeRow($row)
-        recountDeletionString($row.data('rule-id'))
       error: (xhr, status, error) ->
         $row.removeClass('deleting')
         console.log "Error removing site element: #{error}"
+
+  # Returns the currently active tab
+  # active = true, paused = false, all = null
+  currentSelection = ->
+    selection = $('a.element-filter.active').attr('href').replace(/\W/g, '')
+    return null if selection == "all"
+    selection == "active"
+
+  rules = ->
+    result = []
+    $('.rules-wrapper .rule-block').each (index, rule) ->
+      id = $(rule).data('rule-id')
+      result.push({
+        element: $(rule), id: id,
+        site_elements: $(".site-element-block[data-rule-id='#{id}']")
+      })
+    result
 
   #-----------  View Paused Bars  -----------#
 
   $('body').on 'click', '#paused-guidance a', (event) ->
     $('a.element-filter').removeClass('active')
     $('a.element-filter[href="#paused"]').addClass('active')
-    setFilter('#paused')
+    renderBars()
 
   $('body').on 'click', '#active-guidance a', (event) ->
     $('a.element-filter').removeClass('active')
     $('a.element-filter[href="#active"]').addClass('active')
-    setFilter('#active')
+    renderBars()
 
-  #-----------  Render elements for default filter  -----------#
-
-  currentFilter = $('nav.tabs-wrapper .element-filter.active').attr('href')
-  setFilter(currentFilter) if currentFilter
-
-  $('.rules-wrapper .rule-block').each (index, rule) ->
-    checkPaused $(rule).data('rule-id')
-
+  renderBars()
   # On page load, see if they were linked to a particular bar
   window_anchor = window.location.hash
   if window_anchor
