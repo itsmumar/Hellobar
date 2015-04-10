@@ -111,6 +111,8 @@ class User < ActiveRecord::Base
         )
         user.authentications.build(provider: access_token["provider"], uid: access_token["uid"])
         user.save
+
+        Analytics.track(:user, user.id, "Completed Signup", {email: user.email})
       end
 
       user.authentications.detect { |x| x.provider == access_token["provider"]}.update(
