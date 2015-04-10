@@ -43,8 +43,18 @@
             @include animation(spin 2s infinite ease-in-out)
 
       .preview-image
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
         margin-top: 0
-        position: relative !important
+        border-width: 0
+        position: absolute
+        border-style: solid
+        border-color: $white
+        background-size: cover
+        background-repeat: no-repeat
+        background-position: center top
 
       &.is-pushed.Bar
         overflow: hidden
@@ -52,10 +62,24 @@
         #hellobar_container:not(.bar-bottom)
           position: relative !important
 
-        .preview-image
-          margin-top: -14px
+        &.bar-top
+
+          &.regular .preview-image
+            border-top-width: 29px
+
+          &.large .preview-image
+            border-top-width: 49px
+
+        &.bar-bottom
+
+          &.regular .preview-image
+            border-bottom-width: 29px
+
+          &.large .preview-image
+            border-bottom-width: 49px
 
       #hellobar_container.bar-bottom
+        bottom: -1px
         position: absolute
         @include transition()
 
@@ -76,6 +100,12 @@
     .preview-wrapper
       background: $grayLightest url(<%= asset_path "iphone-bg.png" %>) center center no-repeat
 
+    .preview-image
+      width: 232px !important
+      height: 410px !important
+      border-top: none !important
+      position: relative !important
+
     #hellobar-preview-container
       width: 232px
       height: 410px
@@ -87,3 +117,7 @@
       #hellobar_container.bar-bottom
         padding-left: 0 !important
         position: absolute !important
+
+      &.is-pushed.Bar.bar-top .preview-image
+        top: -12px !important
+

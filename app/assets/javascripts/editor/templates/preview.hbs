@@ -1,4 +1,4 @@
-<div id="hellobar-preview-container" {{bind-attr class="isMobile:hellobar-preview-container-mobile isPushed elementType"}}>
+<div id="hellobar-preview-container" {{bind-attr class="isMobile:hellobar-preview-container-mobile barPosition barSize isPushed elementType"}}>
 
   <div class="preview-wrapper">
     <div class="preview-message">
@@ -7,11 +7,5 @@
     </div>
   </div>
 
-  <div class="preview-image">
-    {{#if isMobile}}
-      <img {{bind-attr src='model.site_preview_image_mobile'}} />
-    {{else}}
-      <img {{bind-attr src='model.site_preview_image'}} />
-    {{/if}}
-  </div>
+  <div class="preview-image" {{bind-attr style=previewStyleString}}></div>
 </div>

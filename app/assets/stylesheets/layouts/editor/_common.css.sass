@@ -26,6 +26,7 @@
     left: 0
     height: 100%
     z-index: 1000
+    overflow: hidden
     position: absolute
     border-right: $border
     background-color: $grayLightest
@@ -147,9 +148,10 @@
     /*-----------  Steps  -----------*/
 
     .step-wrapper
+      overflow: scroll
       width: $stepWidth
-      max-width: $stepWidth
       padding: 0 2em 2em
+      max-width: $stepWidth
       border-right: $border
       @include transition(0.25s)
       @include flex(1 0 auto)
