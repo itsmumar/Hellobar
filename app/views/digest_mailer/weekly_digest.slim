@@ -1,3 +1,8 @@
+- no_branding_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/5e1d01493a72d35002fc11985ec9034a04170ea2_1428695536.png"
+- no_ads_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/b64037fbd4d57265a5703c6d22b33f924957f9dc_1428695541.png"
+- targeted_bars_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/1382713c95b27339184e8411f64eb70b115211f1_1428695544.png"
+- charts_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/30dfe7a23fd5ce5c9f722684720da8ce4bb377d2_1428695547.png"
+
 tr.lightGrey
   td
   td.white align="center" valign="top"
@@ -89,8 +94,37 @@ tr.lightGrey
                   |  more conversions with Hello Bar Pro
               tr
                 td
-                  = link_to edit_site_path(@site) do
-                    img src="https://s3.amazonaws.com/cms.crazyegg.com/8464251a238fbff664d20e5eb43c2abf6dcf185a_1427309865.png"
+                  table.proFeaturesTable cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
+                    tr
+                      td
+                        div.feature
+                          img src=no_branding_image_url
+                          div.content
+                            div.strong Brand it as your bar
+                            div.text No Hello Bar logo in your bar, it's all yours!
+                            = link_to "Brand your bar", edit_site_path(@site), class: "button largeButton"
+                      td
+                        div.feature
+                          img src=no_ads_image_url
+                          div.content
+                            div.strong Remove ads
+                            div.text Increase results by removing ads.
+                            = link_to "Remove ads", edit_site_path(@site), class: "button largeButton"
+                    tr
+                      td
+                        div.feature
+                          img src=targeted_bars_image_url
+                          div.content
+                            div.strong Targeted messages
+                            div.text Show different visitors different messages.
+                            = link_to "Customize now", edit_site_path(@site), class: "button largeButton"
+                      td
+                        div.feature
+                          img src=charts_image_url
+                          div.content
+                            div.strong Better stats
+                            div.text See tips to improve your marketing.
+                            = link_to "Get better stats", edit_site_path(@site), class: "button largeButton"
               tr
                 td.alignCenter style="font-size: 15px; padding: 15px 0; font-weight: lighter; color: #222222;"
                   span style="line-height: 24px; height: 24px; margin-right: 10px;"
