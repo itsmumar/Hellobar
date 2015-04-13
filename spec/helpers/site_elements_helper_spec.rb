@@ -111,8 +111,8 @@ describe SiteElementsHelper do
     it "shows the conversion rate relative to other elements of the same type" do
       element = site_elements(:zombo_twitter)
       Hello::DataAPI.stub(:lifetime_totals => {
-        element.id.to_s => [[10, 5]],
-        site_elements(:zombo_facebook).id.to_s => [[10, 1]]
+        element.id.to_s => Hello::DataAPI::Performance.new([[10, 5]]),
+        site_elements(:zombo_facebook).id.to_s => Hello::DataAPI::Performance.new([[10, 1]])
       })
 
       recent_activity_message(element).should =~ /converting 400\.0% better than your other social bars/
@@ -121,8 +121,8 @@ describe SiteElementsHelper do
     it "doesnt return the conversion rate when it is Infinite" do
       element = site_elements(:zombo_twitter)
       Hello::DataAPI.stub(:lifetime_totals => {
-        element.id.to_s => [[0, 5]],
-        site_elements(:zombo_facebook).id.to_s => [[10, 1]]
+        element.id.to_s => Hello::DataAPI::Performance.new([[0, 5]]),
+        site_elements(:zombo_facebook).id.to_s => Hello::DataAPI::Performance.new([[10, 1]])
       })
 
       recent_activity_message(element).should_not =~ /Currently this bar is converting/

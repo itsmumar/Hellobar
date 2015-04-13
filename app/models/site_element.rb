@@ -91,7 +91,7 @@ class SiteElement < ActiveRecord::Base
 
   def lifetime_totals
     return nil if site.nil?
-    site.lifetime_totals[id.to_s]
+    site.lifetime_totals.try(:[], id.to_s)
   end
 
   def site_is_capable_of_creating_element
