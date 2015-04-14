@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   acts_as_paranoid
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable
-  devise :omniauthable, :omniauth_providers => [:google_oauth2]
+  # devise :omniauthable, :omniauth_providers => [:google_oauth2]
   delegate :url_helpers, to: "Rails.application.routes"
 
   validate :email_does_not_exist_in_wordpress, on: :create

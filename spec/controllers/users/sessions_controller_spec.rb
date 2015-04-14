@@ -18,7 +18,7 @@ describe Users::SessionsController do
     it "redirects oauth users to their respective oauth path" do
       users(:joey).authentications.create(provider: "google_oauth2", uid: "123")
       post :create, :user => {:email => "joey@polymathic.me", :password => "some incorrect pass"}
-      response.should redirect_to(user_omniauth_authorize_path("google_oauth2"))
+      response.should redirect_to("/auth/google_oauth2")
     end
 
     it "redirects 1.0 users to migration wizard if the correct password is used" do

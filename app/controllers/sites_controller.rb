@@ -29,7 +29,7 @@ class SitesController < ApplicationController
           redirect_to new_user_session_path(existing_url: @site.url)
         elsif params[:oauth]
           session[:new_site_url] = @site.url
-          redirect_to user_omniauth_authorize_path(:google_oauth2)
+          redirect_to "/auth/google_oauth2"
         else
           create_for_temporary_user
         end

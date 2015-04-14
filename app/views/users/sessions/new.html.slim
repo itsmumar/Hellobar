@@ -23,6 +23,6 @@
   = f.input_field :remember_me, as: :boolean, inline_label: true, label: false
   = f.button :submit, "Sign in", :class => "button"
   .devise-links
-    = link_to "Sign in with Google", omniauth_authorize_path(resource_name, :google_oauth2)
+    = link_to "Sign in with Google", "/auth/google_oauth2"
     br
     = render "devise/shared/links"
