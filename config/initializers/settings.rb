@@ -43,6 +43,9 @@ unless defined?(Hellobar::Settings)
     twilio_password
     twilio_user
     support_location
+    intercom
+    google_auth_id
+    google_auth_secret
   )
 
   keys.each do |key|

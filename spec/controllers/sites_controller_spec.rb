@@ -26,7 +26,7 @@ describe SitesController do
 
       it "redirects to oauth login if oauth is set" do
         post :create, :site => { url: 'temporary-sitee.com'}, :oauth => true
-        response.should redirect_to(user_omniauth_authorize_path(:google_oauth2))
+        response.should redirect_to("/auth/google_oauth2")
       end
 
       it "creates a new site and sets a temporary user as the owner" do
