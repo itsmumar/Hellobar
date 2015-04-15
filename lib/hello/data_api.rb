@@ -1,5 +1,6 @@
 require "./config/initializers/settings"
 require "./lib/hello/data_api_helper"
+require "./lib/hello/api_performance"
 
 module Hello::DataAPI
   class << self
@@ -29,6 +30,10 @@ module Hello::DataAPI
         end
         results
       end
+
+      api_results.tap do |r|
+        r.each { |x, y| r[x] = Performance.new(y)}
+      end
     end
 
     def fake_lifetime_totals(site, site_elements, num_days = 1)
@@ -42,6 +47,8 @@ module Hello::DataAPI
             last = hash[el.id.to_s].last
             hash[el.id.to_s] << [last[0] + rng.rand(101) + 100, last[1] + rng.rand(91)]
           end
+
+          hash[el.id.to_s] = Performance.new(hash[el.id.to_s])
         end
       end
     end
@@ -95,7 +102,7 @@ module Hello::DataAPI
 
       # remove any zero-padding values that made it through summation
       totals.each do |key, value|
-        totals[key] = value.select { |v| v != [0, 0] }
+        totals[key] = Performance.new(value.select { |v| v != [0, 0] })
       end
 
       totals

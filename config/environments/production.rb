@@ -1,6 +1,8 @@
 require "./config/initializers/settings"
 
 Rails.application.configure do
+  config.roadie.url_options = {host: "www.hellobar.com", scheme: "https"}
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.

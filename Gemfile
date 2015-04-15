@@ -49,6 +49,7 @@ gem "rake_running",              "~> 0.0.1", :github => "colinyoung/rake_running
 gem "rb-readline",               "~> 0.5.1"
 gem "recaptcha",                 "~> 0.3.6", :require => "recaptcha/rails"
 gem "render_anywhere",           "~> 0.0.9"
+gem "roadie-rails"
 gem "ruby-hmac"
 gem "sass-rails",                "~> 4.0.3"
 gem "sentry-raven",              "~> 0.9"

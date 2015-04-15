@@ -1,0 +1,133 @@
+- no_branding_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/5e1d01493a72d35002fc11985ec9034a04170ea2_1428695536.png"
+- no_ads_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/b64037fbd4d57265a5703c6d22b33f924957f9dc_1428695541.png"
+- targeted_bars_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/1382713c95b27339184e8411f64eb70b115211f1_1428695544.png"
+- charts_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/30dfe7a23fd5ce5c9f722684720da8ce4bb377d2_1428695547.png"
+
+tr.lightGrey
+  td
+  td.white align="center" valign="top"
+    table
+      tr
+        td
+          div.lineBreakGraphic style="float: right;"
+        td.alignCenter.title.orangeText
+          | Your Performance This Week
+        td
+          div.lineBreakGraphic style="float: left;"
+      tr
+        td colspan="3"
+          table.summaryTable border="0"
+            tr
+              td.summaryCell
+                div.greyBorder.right
+                  div.largeLabel style="color: #FE3817;"
+                    = number_to_human(@totals[:total].views_between(1.week.ago), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u")
+                  div.smallLabel
+                    | visits
+              td.summaryCell
+                div.greyBorder.right
+                  div.largeLabel style="color: #00B7DB;"
+                    = number_to_human(@totals[:total].conversions_between(1.week.ago), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u")
+                  div.smallLabel
+                    | conversions
+              td.summaryCell
+                div.greyBorder.right
+                  div.largeLabel style="color: #A738BB;"
+                    = (@totals[:total].conversion_percent_between(1.week.ago) * 100).to_i.to_s + "%"
+                  div.smallLabel
+                    | conversion rate
+              td.summaryCell
+                div.greyBorder
+                  div.largeLabel style="color: #7FEBB9;"
+                    = ((@totals[:total].conversion_percent_between(2.month.ago, 1.month.ago) - @totals[:total].conversion_percent_between(1.month.ago)) * 100).to_i.to_s + "%"
+                  div.smallLabel
+                    | since last month
+      tr
+        td colspan="3"
+          div.heightPadding
+      tr
+        td colspan="3"
+          div.sectionLabel.orangeText
+            | Conversions
+      tr
+        td colspan="3"
+          table.siteElementTable border="0" cellpadding="0" cellspacing="0"
+            tr.headerRow
+              td.top.left.bottom.alignLeft style="padding: 10px 10px; width: 40%;"
+                | Your Text
+              td.top.bottom.alignCenter.cell
+                | Type
+              td.top.bottom.alignCenter.cell
+                | Views
+              td.top.bottom.alignCenter.cell
+                | Conversions
+              td.top.bottom.right.alignCenter.cell
+            - @site.site_elements.active.each_with_index do |se, index|
+              tr
+                td.left.bottom.alignCenter.cell
+                  div class="circle #{se.short_subtype}"
+                    = index + 1
+                  div.elementText= se.headline
+                td.bottom.alignCenter.cell= image_tag(se.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: se.type)
+                td.bottom.alignCenter.cell= @se_totals[se.id.to_s].views_between(1.week.ago)
+                td.bottom.alignCenter.cell
+                  | #{@se_totals[se.id.to_s].conversions_between(1.week.ago)}
+                  |  (#{((@se_totals[se.id.to_s].conversion_percent_between(1.week.ago)) * 100).to_i}%)
+                td.bottom.right.cell.alignCenter
+                  = link_to "update", edit_site_site_element_path(se, site_id: @site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Edit Bar", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button smallButton"
+            tr.alignCenter
+              td.bottom.right.left colspan=5 style="padding: 10px 0;"
+                span.conversionText Drive more conversions
+                = link_to "+ Add new", site_site_elements_path(@site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Add Bar", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+
+      tr
+        td colspan="3"
+          div.heightPadding
+      - if @site.is_free?
+        tr
+          td colspan="3"
+            table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
+              tr
+                td.alignCenter.orangeText style="font-size: 15px; padding: 15px 0; "
+                  | Get
+                  span.blueText  4x
+                  |  more conversions with Hello Bar Pro
+              tr
+                td
+                  table.proFeaturesTable cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
+                    tr
+                      td
+                        div.feature
+                          img src=no_branding_image_url
+                          div.content
+                            div.strong Brand it as your bar
+                            div.text No Hello Bar logo in your bar, it's all yours!
+                            = link_to "Brand your bar", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Pro Branding", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                      td
+                        div.feature
+                          img src=no_ads_image_url
+                          div.content
+                            div.strong Remove ads
+                            div.text Increase results by removing ads.
+                            = link_to "Remove ads", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Pro Remove Ads", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                    tr
+                      td
+                        div.feature
+                          img src=targeted_bars_image_url
+                          div.content
+                            div.strong Targeted messages
+                            div.text Show different visitors different messages.
+                            = link_to "Customize now", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Pro Targeted Bars", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                      td
+                        div.feature
+                          img src=charts_image_url
+                          div.content
+                            div.strong Better stats
+                            div.text See tips to improve your marketing.
+                            = link_to "Get better stats", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Pro Stats", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+              tr
+                td.alignCenter style="font-size: 15px; padding: 15px 0; font-weight: lighter; color: #222222;"
+                  span style="line-height: 24px; height: 24px; margin-right: 10px;"
+                    | Get all the pro features for $15
+                  = link_to "Start using Hello Bar Pro", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Pro Start", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+  td

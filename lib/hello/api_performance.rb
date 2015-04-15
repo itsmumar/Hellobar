@@ -1,0 +1,55 @@
+require "./config/initializers/settings"
+require "./lib/hello/data_api_helper"
+
+module Hello::DataAPI
+  class Performance
+    attr_accessor :data
+
+    def initialize(data)
+      @data = data
+    end
+
+    def views(date=Date.today)
+      data_for(date, 0)
+    end
+
+    def conversions(date=Date.today)
+      data_for(date, 1)
+    end
+
+    def views_between(d1, d2=Date.today)
+      data_for(d2, 0) - data_for(d1, 0)
+    end
+
+    def conversions_between(d1, d2=Date.today)
+      data_for(d2, 1) - data_for(d1, 1)
+    end
+
+    def conversion_percent_between(d1, d2=Date.today)
+      v = views_between(d1, d2)
+      return 0 if v == 0
+      conversions_between(d1, d2) / v.to_f
+    end
+
+    def respond_to?(sym, include_private=false)
+      super(sym, include_private) || data.respond_to?(sym, include_private)
+    end
+
+    def method_missing(sym, *args, &block)
+      return data.send(sym, *args, &block) if data.respond_to?(sym)
+      super(sym, *args, &block)
+    end
+
+    private
+    def date_to_index(date)
+      i = data.length - 1 - (Date.today - date).to_i
+      i.clamp(0, data.length - 1)
+    end
+
+    def data_for(date, type)
+      date = date.to_date
+      return 0 if data.length == 0
+      data[date_to_index(date)][type]
+    end
+  end
+end
