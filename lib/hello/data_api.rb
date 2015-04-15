@@ -31,9 +31,7 @@ module Hello::DataAPI
         results
       end
 
-      api_results.tap do |r|
-        r.each { |x, y| r[x] = Performance.new(y)}
-      end
+      Hash[api_results.map{|k,v| [k, Performance.new(v)] } ]
     end
 
     def fake_lifetime_totals(site, site_elements, num_days = 1)
