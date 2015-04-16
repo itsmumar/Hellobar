@@ -1,3 +1,6 @@
+- logo_top_url = "https://s3.amazonaws.com/cms.crazyegg.com/60c976ea4f6e50d356a66f371cc6e06810844670_1429134188.png"
+- logo_bottom_url = "https://s3.amazonaws.com/cms.crazyegg.com/bb319efb07cf515b7dccf4be97d30ba919f278e4_1429134183.png"
+
 <!DOCTYPE html>
 html
   head
@@ -15,7 +18,7 @@ html
       .alignLeft { text-align: left; }
       .alignCenter { text-align: center; }
       .alignRight { text-align: right; }
-      .headerText { height: 30px; line-height: 60px; }
+      .headerText { font-weight: normal; }
 
       .headerTable {
         width: 100%;
@@ -211,24 +214,33 @@ html
     table#bodyTable border="0" cellpadding="0" cellspacing="0" height="100%" width="100%"
       tr
         td align="center" valign="top"
-          table#emailContainer border="0" cellpadding="20" cellspacing="0" width="600px"
+          table border="0" cellpadding="0" cellspacing="0" width="600px"
+            tr
+              td.alignCenter
+                div style="height: 23px;"
+                  img src=logo_top_url
             tr.lightGrey
+              td.alignCenter
+                img src=logo_bottom_url
+            tr
               td
-              td
-                table.headerTable border="0"
-                  tr
-                    td.third.alignLeft
-                      div.headerText
-                        = @site.url
-                    td.third.alignCenter
-                      img src="https://s3.amazonaws.com/cms.crazyegg.com/7a43448531e5edf5f39d4da3b79181cd1bad410a_1427309860.png"
-                    td.third.alignRight
-                      div.headerText
-                        | Feb 1 - Feb 8
-              td
-              = yield
-              tr.lightGrey
-                td colspan="3"
+                table#emailContainer border="0" cellpadding="20" cellspacing="0" width="600px"
+                  tr.lightGrey
+                    td
+                    td
+                      table.headerTable border="0"
+                        tr
+                          td.alignLeft
+                            div.headerText
+                              | Your Weekly Summary
+                          td.alignCenter
+                          td.alignRight
+                            div.headerText
+                              | #{(Date.today - 7.day).strftime("%b %e")} - #{Date.today.strftime("%b %e")}
+                    td
+                    = yield
+                    tr.lightGrey
+                      td colspan="3"
     div.footerText
       | You are receiving weekly updates. You can turn off or change your settings by visiting your&nbsp;
       = link_to "email settings page", profile_path
