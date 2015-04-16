@@ -86,7 +86,7 @@ var HBQ = function()
         if ( HB.e.siteElementType == "modal" && containerDocument )
           HB.isMobileWidth = (containerDocument.getElementById("hellobar_modal_background").clientWidth <= 640 );
         else if ( HB.e.siteElementType == "slider" )
-          HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 270 );
+          HB.isMobileWidth = HB.e.siteElement.clientWidth <= 270 || document.body.clientWidth <= 320;
         else
           HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
 
@@ -103,11 +103,7 @@ var HBQ = function()
         }
 
         // Adjust the container size
-        if ( HB.e.container && (HB.widthCache != HB.e.container.clientWidth || HB.e.siteElement.clientHeight != HB.heightCache)) {
-          HB.setContainerSize(HB.e.container, HB.e.siteElement, HB.e.siteElementType, HB.isMobile);
-          HB.widthCache = HB.e.container.clientWidth;
-          HB.heightCache = HB.e.siteElement.clientHeight;
-        }
+        HB.setContainerSize(HB.e.container, HB.e.siteElement, HB.e.siteElementType, HB.isMobile);
 
         // Bar specific adjustments
         if ( HB.e.siteElementType == "bar" ) {
@@ -1578,8 +1574,14 @@ var _HB = {
     if ( type == 'bar' ) {
       HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
     } else if ( type == 'slider' ) {
-      HB.e.container.style.height = (element.clientHeight + 24) + "px";
-      HB.e.container.style.width = (element.clientWidth + 24) + "px";
+      if(isMobile) {
+        var newWidth = Math.min(document.body.clientWidth);
+        HB.e.container.style.width = (newWidth) + "px";
+        HB.e.container.style.height = (element.clientHeight + 24) + "px";
+      } else {
+        HB.e.container.style.width = (element.clientWidth + 24) + "px";
+        HB.e.container.style.height = (element.clientHeight + 24) + "px";
+      }
     }
   }
 };
