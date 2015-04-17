@@ -7,6 +7,7 @@ module Hello::EmailDigest
       options = {content: m.html_part.body.raw_source,
                   text: m.text_part.body.raw_source,
                   site_url: site.url}
+      Analytics.track(:user, site.owner.id, "Sent Email", {"Email Template"=>EmailDigestHelper.template_name(site)})
       MailerGateway.send_email(EmailDigestHelper.template_name(site), site.owner.email, options)
     end
   end
