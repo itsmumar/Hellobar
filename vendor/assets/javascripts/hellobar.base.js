@@ -399,13 +399,9 @@ var _HB = {
     return HB.getVisitorData(HB.getConversionKey(siteElement));
   },
 
-  // Returns true if the visitor previously closed a site element in the last 15 minutes
+  // Returns true if the visitor previously closed a site element
   didDismissHB: function() {
-    var dismissTime = HB.getVisitorData("HBDismissed");
-    if(dismissTime != null && ((new Date()).getTime() - dismissTime) < (1000 * 60 * 15))
-      return true;
-    else
-      return false;
+    return HB.gc("HBDismissed") != null;
   },
 
   // This takes the the email field, name field, and target siteElement DOM element.
@@ -620,13 +616,19 @@ var _HB = {
   },
 
   // Sets a cookie
-  sc: function(name,value,exdays)
+  // exdays can be number of days or a date object
+  sc: function(name,value,exdays,path)
   {
     if ( typeof(HB_NC) != "undefined" )
       return;
-    var exdate=new Date();
-    exdate.setDate(exdate.getDate() + exdays);
+
+    var exdate= typeof exdays == "object" ? exdays : new Date();
+
+    if(typeof exdays == "number")
+      exdate.setDate(exdate.getDate() + exdays);
+
     value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    value = path == null ? value : value + "; " + path;
     document.cookie=name + "=" + value;
   },
 
@@ -967,7 +969,7 @@ var _HB = {
 
           // Skip the site element if it's a modal / slider / takeover and the
           // user already dismissed one of those types
-          if(siteElement.siteElementType != "bar" && HB.didDismissHB())
+          if(siteElement.type != "Bar" && HB.didDismissHB())
             continue;
 
           if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
@@ -1410,7 +1412,8 @@ var _HB = {
   closeIframe: function() {
     if(HB.w != null && HB.w.parentNode != null) {
       HB.w.parentNode.removeChild(HB.w);
-      HB.setVisitorData("HBDismissed", new Date().getTime());
+      // Sets the dismissed state for the next 15 minutes
+      HB.sc("HBDismissed", true, new Date((new Date().getTime() + 1000 * 60 * 15)), "path=/");
     }
 
     HB.trigger("elementDismissed");
