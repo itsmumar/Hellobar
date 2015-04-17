@@ -18,10 +18,11 @@ describe Subscribable, '#subscription_bill_and_status' do
   end
 
   it 'returns errors and an unprocessable_entity status when NOT successful' do
-    bill = double 'bill', errors: ['boo boo']
+    bill = Bill.new
+    bill.errors.add(:status, "oops")
     controller.stub update_subscription: [false, bill]
 
-    controller.subscription_bill_and_status('site', 'payment_method', 'billing_params', nil).should == { errors: bill.errors, status: :unprocessable_entity }
+    controller.subscription_bill_and_status('site', 'payment_method', 'billing_params', nil).should == { errors: bill.errors.full_messages, status: :unprocessable_entity }
   end
 
   it "tracks changes to subscription" do
