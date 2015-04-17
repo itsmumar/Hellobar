@@ -399,6 +399,15 @@ var _HB = {
     return HB.getVisitorData(HB.getConversionKey(siteElement));
   },
 
+  // Returns true if the visitor previously closed a site element in the last 15 minutes
+  didDismissHB: function() {
+    var dismissTime = HB.getVisitorData("HBDismissed");
+    if(dismissTime != null && ((new Date()).getTime() - dismissTime) < (1000 * 60 * 15))
+      return true;
+    else
+      return false;
+  },
+
   // This takes the the email field, name field, and target siteElement DOM element.
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
@@ -955,6 +964,12 @@ var _HB = {
         for(j=0;j<rule.siteElements.length;j++)
         {
           siteElement = rule.siteElements[j];
+
+          // Skip the site element if it's a modal / slider / takeover and the
+          // user already dismissed one of those types
+          if(siteElement.siteElementType != "bar" && HB.didDismissHB())
+            continue;
+
           if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
           {
             if ( !possibleSiteElements[siteElement.subtype] )
@@ -1394,7 +1409,8 @@ var _HB = {
 
   closeIframe: function() {
     if(HB.w != null && HB.w.parentNode != null) {
-      HB.w.parentNode.removeChild(HB.w)
+      HB.w.parentNode.removeChild(HB.w);
+      HB.setVisitorData("HBDismissed", new Date().getTime());
     }
 
     HB.trigger("elementDismissed");
