@@ -44,6 +44,7 @@ unless defined?(Hellobar::Settings)
     twilio_user
     support_location
     intercom
+    intercom_secret
     google_auth_id
     google_auth_secret
   )
