@@ -1,13 +1,9 @@
 .quickstart-wrapper
   = form_tag sites_path do
     input type="hidden" name="source" value="landing"
-    - if get_ab_variation('Google Auth 2015-03-10') == 'google_auth'
-      input type="hidden" name="oauth" value="google_oauth2"
+    input type="hidden" name="oauth" value="google_oauth2"
     input type="text" name="site[url]" placeholder="Your website URL" autofocus=true value=@site_url
-    - if get_ab_variation('Google Auth 2015-03-10') == 'google_auth'
-      button type="submit" Log in with Google
-    - else
-      button type="submit" Continue, It's Free
+    button type="submit" Log in with Google
     .clear
   - if flash[:error]
     .error= flash[:error]
