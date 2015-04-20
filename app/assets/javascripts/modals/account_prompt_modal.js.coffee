@@ -3,7 +3,6 @@ class @AccountPromptModal extends Modal
   modalName: "account-prompt"
 
   constructor: (@options = {}) ->
-    # use ?= in case this is executed from AlternateAccountPromptModal's constructor's "super"
     @template ?= Handlebars.compile($("#account-prompt-modal-template").html())
 
     @$modal ?= $(@template(@options))
