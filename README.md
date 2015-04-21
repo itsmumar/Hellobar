@@ -4,9 +4,9 @@ Made with love.
 
 ## Workflow
 
-To add a new feature, make a branch of **edge**.  When ready to test, rebase your branch into **edge**.
+To add a new feature, make a branch of **master**.  When ready to test, rebase your branch into **master**.
 
-When ready to deploy to production, merge **edge** into **master** and deploy.
+When ready to deploy to production, merge **master** into **production** and use capistrano to deploy the **production** branch.
 
 ## Provisioning a new Hello Bar server
 
