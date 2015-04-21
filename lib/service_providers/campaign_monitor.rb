@@ -7,6 +7,7 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
       raise "Site does not have a stored Campaign Monitor identity" unless identity
     end
 
+    @identity = identity
     initialize_client(identity)
   end
 
@@ -38,7 +39,7 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
 
   def handle_error
     yield
-  rescue CreateSend::RevokedOAuthToken => e
+  rescue CreateSend::RevokedOAuthToken, CreateSend::ExpiredOAuthToken => e
     identity.destroy_and_notify_user if identity != nil
     raise e
   end
