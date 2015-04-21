@@ -20,7 +20,7 @@ test:
 
 deployment:
   edge:
-    branch: edge
+    branch: master
     commands:
       - bundle exec cap edge deploy:
           timeout: 600
