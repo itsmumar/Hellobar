@@ -62,7 +62,7 @@ tr.lightGrey
               td.top.bottom.alignCenter.cell
                 | Conversions
               td.top.bottom.right.alignCenter.cell
-            - @site.site_elements.active.each_with_index do |se, index|
+            - @sorted_elements.each_with_index do |se, index|
               tr class=('odd' if index % 2 == 1)
                 td.left.bottom.alignCenter.cell
                   div class="circle #{se.short_subtype}"
