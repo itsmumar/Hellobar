@@ -98,7 +98,7 @@ class User < ActiveRecord::Base
     Phpass.new.check(password, encrypted_password) || super
   end
 
-  def self.find_for_google_oauth2(access_token, signed_in_resource=nil)
+  def self.find_for_google_oauth2(access_token, signed_in_resource=nil, track_options={})
       data = access_token["info"]
       user = User.joins(:authentications).where(authentications: { uid: access_token["uid"], provider: access_token["provider"] }).first
 
@@ -112,6 +112,7 @@ class User < ActiveRecord::Base
         user.authentications.build(provider: access_token["provider"], uid: access_token["uid"])
         user.save
 
+        Analytics.track(:user, user.id, "Signed Up", track_options) if user.valid?
         Analytics.track(:user, user.id, "Completed Signup", {email: user.email}) if user.valid?
       end
 
