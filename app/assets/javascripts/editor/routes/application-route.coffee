@@ -114,14 +114,11 @@ HelloBar.ApplicationRoute = Ember.Route.extend
         data: JSON.stringify(@currentModel)
 
         success: =>
-          if HB_ACCOUNT_CREATION_VARIATION != "original" && @controllerFor("application").get("isTemporaryUser")
-            new AlternateAccountPromptModal(siteURL: @controller.get("model.site.url")).open()
+          if @controller.get("model.site.num_site_elements") == 0
+            window.location = "/sites/#{window.siteID}"
           else
-            if @controller.get("model.site.num_site_elements") == 0
-              window.location = "/sites/#{window.siteID}"
-            else
-              window.location = "/sites/#{window.siteID}/site_elements"
-        
+            window.location = "/sites/#{window.siteID}/site_elements"
+
         error: (data) =>
           @controller.toggleProperty('saveSubmitted')
           @controller.set("model.errors", data.responseJSON.errors)

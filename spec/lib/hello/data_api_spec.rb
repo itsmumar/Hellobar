@@ -3,6 +3,12 @@ require "spec_helper"
 describe Hello::DataAPI, '.lifetime_totals_by_type' do
   fixtures :all
 
+  def for_comparison(results)
+    {}.tap do |r|
+      results.each { |k, v| r[k] = v.to_a }
+    end
+  end
+
   it "rolls up lifetime totals by site element type" do
     site = sites(:zombo)
 
@@ -15,7 +21,7 @@ describe Hello::DataAPI, '.lifetime_totals_by_type' do
 
     result = Hello::DataAPI.lifetime_totals_by_type(site, site.site_elements)
 
-    result.should == {
+    for_comparison(result).should == {
       :total =>   [[20, 16]],
       :traffic => [[2, 1]],
       :email =>   [[4, 3]],
@@ -35,7 +41,7 @@ describe Hello::DataAPI, '.lifetime_totals_by_type' do
 
     result = Hello::DataAPI.lifetime_totals_by_type(site, site.site_elements)
 
-    result.should == {
+    for_comparison(result).should == {
       :total =>   [[3, 1], [20, 16]],
       :traffic => [[2, 1]],
       :email =>   [[4, 3]],
@@ -49,6 +55,6 @@ describe Hello::DataAPI, '.lifetime_totals_by_type' do
     Hello::DataAPI.should_receive(:lifetime_totals).and_return({})
 
     result = Hello::DataAPI.lifetime_totals_by_type(site, site.site_elements)
-    result.should == {:total =>   [], :traffic => [], :email =>   [], :social =>  []}
+    for_comparison(result).should == {:total =>   [], :traffic => [], :email =>   [], :social =>  []}
   end
 end

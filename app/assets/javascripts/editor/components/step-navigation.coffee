@@ -3,7 +3,7 @@ HelloBar.StepNavigationComponent = Ember.Component.extend
   classNames: ['step-navigation']
 
   layoutName: ( ->
-    return (if HB_EDITOR_VARIATION == 'navigation' then 'components/step-navigation2' else 'components/step-navigation1')
+    return ('components/step-navigation1') # HB_EDITOR_VARIATION
   ).property()
 
   #-----------  Routing  -----------#

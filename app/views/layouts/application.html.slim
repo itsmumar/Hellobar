@@ -10,12 +10,9 @@ html
     = javascript_include_tag "application"
 
     = csrf_meta_tags
+    = render "shared/intercom"
 
   body#hb-application
-    javascript:
-      HB_EDITOR_VARIATION = "#{get_ab_variation('Editor Test 2015-02-23')}";
-      HB_ACCOUNT_CREATION_VARIATION = "#{get_ab_variation('Account Creation Test 2015-01-21')}";
-
     = render "shared/optimizely"
     = render "shared/gtm"
 
@@ -41,14 +38,9 @@ html
 
     - if show_account_prompt? && !impersonated_user
       javascript:
-        if (HB_ACCOUNT_CREATION_VARIATION == "original") {
-          new AccountPromptModal().open();
-        } else {
-          new AlternateAccountPromptModal({siteURL: "#{current_site.url}"}).open();
-        }
+        new AccountPromptModal().open();
 
 javascript:
   var currentUser = #{{UserSerializer.new(current_user).to_json}};
   var siteID = "#{@site.try(:id)}";
   var site = #{{SiteSerializer.new(current_site).to_json}};
-  HB_ACCOUNT_CREATION_VARIATION = "#{get_ab_variation("Account Creation Test 2015-01-21")}";

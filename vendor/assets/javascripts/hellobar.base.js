@@ -86,7 +86,7 @@ var HBQ = function()
         if ( HB.e.siteElementType == "modal" && containerDocument )
           HB.isMobileWidth = (containerDocument.getElementById("hellobar_modal_background").clientWidth <= 640 );
         else if ( HB.e.siteElementType == "slider" )
-          HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 270 );
+          HB.isMobileWidth = HB.e.siteElement.clientWidth <= 270 || document.body.clientWidth <= 320;
         else
           HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
 
@@ -103,11 +103,7 @@ var HBQ = function()
         }
 
         // Adjust the container size
-        if ( HB.e.container && (HB.widthCache != HB.e.container.clientWidth || HB.e.siteElement.clientHeight != HB.heightCache)) {
-          HB.setContainerSize(HB.e.container, HB.e.siteElement, HB.e.siteElementType, HB.isMobile);
-          HB.widthCache = HB.e.container.clientWidth;
-          HB.heightCache = HB.e.siteElement.clientHeight;
-        }
+        HB.setContainerSize(HB.e.container, HB.e.siteElement, HB.e.siteElementType, HB.isMobile);
 
         // Bar specific adjustments
         if ( HB.e.siteElementType == "bar" ) {
@@ -403,6 +399,11 @@ var _HB = {
     return HB.getVisitorData(HB.getConversionKey(siteElement));
   },
 
+  // Returns true if the visitor previously closed a site element
+  didDismissHB: function() {
+    return HB.gc("HBDismissed") != null;
+  },
+
   // This takes the the email field, name field, and target siteElement DOM element.
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
@@ -615,13 +616,19 @@ var _HB = {
   },
 
   // Sets a cookie
-  sc: function(name,value,exdays)
+  // exdays can be number of days or a date object
+  sc: function(name,value,exdays,path)
   {
     if ( typeof(HB_NC) != "undefined" )
       return;
-    var exdate=new Date();
-    exdate.setDate(exdate.getDate() + exdays);
+
+    var exdate= typeof exdays == "object" ? exdays : new Date();
+
+    if(typeof exdays == "number")
+      exdate.setDate(exdate.getDate() + exdays);
+
     value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    value = path == null ? value : value + "; " + path;
     document.cookie=name + "=" + value;
   },
 
@@ -959,6 +966,12 @@ var _HB = {
         for(j=0;j<rule.siteElements.length;j++)
         {
           siteElement = rule.siteElements[j];
+
+          // Skip the site element if it's a modal / slider / takeover and the
+          // user already dismissed one of those types
+          if(siteElement.type != "Bar" && HB.didDismissHB())
+            continue;
+
           if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
           {
             if ( !possibleSiteElements[siteElement.subtype] )
@@ -1398,7 +1411,9 @@ var _HB = {
 
   closeIframe: function() {
     if(HB.w != null && HB.w.parentNode != null) {
-      HB.w.parentNode.removeChild(HB.w)
+      HB.w.parentNode.removeChild(HB.w);
+      // Sets the dismissed state for the next 15 minutes
+      HB.sc("HBDismissed", true, new Date((new Date().getTime() + 1000 * 60 * 15)), "path=/");
     }
 
     HB.trigger("elementDismissed");
@@ -1578,8 +1593,14 @@ var _HB = {
     if ( type == 'bar' ) {
       HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
     } else if ( type == 'slider' ) {
-      HB.e.container.style.height = (element.clientHeight + 24) + "px";
-      HB.e.container.style.width = (element.clientWidth + 24) + "px";
+      if(isMobile) {
+        var newWidth = Math.min(document.body.clientWidth);
+        HB.e.container.style.width = (newWidth) + "px";
+        HB.e.container.style.height = (element.clientHeight + 24) + "px";
+      } else {
+        HB.e.container.style.width = (element.clientWidth + 24) + "px";
+        HB.e.container.style.height = (element.clientHeight + 24) + "px";
+      }
     }
   }
 };

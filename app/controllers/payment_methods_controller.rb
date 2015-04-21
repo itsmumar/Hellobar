@@ -63,7 +63,9 @@ class PaymentMethodsController < ApplicationController
 
     if process_subscription
       respond_to do |format|
-        format.json { render json: subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription) }
+        result = subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription)
+        status = result.delete(:status) || :ok
+        format.json { render json: result, status: status }
       end
     else # invalid payment info
       respond_to do |format|

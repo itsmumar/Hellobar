@@ -81,10 +81,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
   rule_id: null
 
   doneButtonText: (->
-    if !@get("model.site.has_script_installed") && HB_ACCOUNT_CREATION_VARIATION != "original"
-      "Save & Install"
-    else
-      "Save & Publish"
+    "Save & Publish"
   ).property()
 
   setRuleID: (->

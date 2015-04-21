@@ -1,6 +1,6 @@
 #ember-root
 
-- if get_ab_variation('Editor Test 2015-02-23') == 'interstitial' && params[:element_to_copy_id].blank?
+- if params[:element_to_copy_id].blank?
   = render "site_elements/goal_interstitial"
 
 javascript:
