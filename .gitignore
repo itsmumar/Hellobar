@@ -31,3 +31,9 @@ db/*_dump.sql
 
 # Ignore .DS_Store
 .DS_Store
+
+config/database.yml.example
+
+config/settings.yml.asc
+
+config/database.yml.example
