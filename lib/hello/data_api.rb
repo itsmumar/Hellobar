@@ -177,17 +177,48 @@ module Hello::DataAPI
     end
 
     def get(path, params)
+      begin_time = Time.now.to_f
+      url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
+      response = nil
       Timeout::timeout(5) do
-        url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
         response = Net::HTTP.get(URI.parse(url))
         JSON.parse(response)
       end
-    rescue JSON::ParserError, SocketError
-      Rails.logger.error("Data API Error: #{response if defined?(response)}")
-      return nil
-    rescue Timeout::Error
-      Rails.logger.error("Data API Error: Request Timeout")
-      return nil
+    rescue JSON::ParserError, SocketError, Timeout::Error => e
+      now = Time.now
+      duration = now.to_f - begin_time
+      # Log the error
+      lines = ["[#{now}] Data API Error::#{e.class} (#{duration}s) - #{e.message.inspect} => #{url.inspect}"]
+      lines << "Response: #{response.inspect}" if response
+      caller[0..4].each do |line|
+        lines << "\t#{line}"
+      end
+      # Attempt the request again - just once
+      begin_time = Time.now.to_f
+      results = nil
+      begin
+        url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
+        Timeout::timeout(5) do
+          response = Net::HTTP.get(URI.parse(url))
+          results = JSON.parse(response)
+        end
+        # It was a succcess, log it
+        now = Time.now
+        duration = now.to_f - begin_time
+        lines << "[#{now}] Retry Successful => #{url.inspect}"
+      rescue JSON::ParserError, SocketError, Timeout::Error => retry_e
+        # The retry failed too, log it
+        now = Time.now
+        duration = now.to_f - begin_time
+        lines << "[#{now}] Retry Error::#{e.class} (#{duration}s) - #{e.message.inspect} => #{url.inspect}"
+      end
+      # Write everything to the log
+      File.open(File.join(Rails.root, "log", "data_api_error.log"), "a") do |file|
+        file.puts(lines.join("\n"))
+      end
+      # Return results which will be nil if there was an error or the
+      # actual results
+      return results
     end
   end
 end
