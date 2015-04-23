@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403192532) do
+ActiveRecord::Schema.define(version: 20150423145614) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -194,39 +194,41 @@ ActiveRecord::Schema.define(version: 20150403192532) do
   create_table "site_elements", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "element_subtype",                                                           null: false
+    t.string   "element_subtype",                                                                 null: false
     t.string   "target_segment"
-    t.boolean  "closable",                        default: false
-    t.boolean  "show_border",                     default: false
-    t.string   "background_color",                default: "eb593c"
-    t.string   "border_color",                    default: "ffffff"
-    t.string   "button_color",                    default: "000000"
-    t.string   "font",                            default: "'Open Sans',sans-serif"
-    t.string   "link_color",                      default: "ffffff"
-    t.string   "link_style",                      default: "button"
-    t.string   "link_text",          limit: 5000, default: "Click Here"
-    t.string   "headline",           limit: 5000, default: "Hello. Add your message here."
-    t.string   "size",                            default: "large"
+    t.boolean  "closable",                              default: false
+    t.boolean  "show_border",                           default: false
+    t.string   "background_color",                      default: "eb593c"
+    t.string   "border_color",                          default: "ffffff"
+    t.string   "button_color",                          default: "000000"
+    t.string   "font",                                  default: "'Open Sans',sans-serif"
+    t.string   "link_color",                            default: "ffffff"
+    t.string   "link_style",                            default: "button"
+    t.string   "link_text",                limit: 5000, default: "Click Here"
+    t.string   "headline",                 limit: 5000, default: "Hello. Add your message here."
+    t.string   "size",                                  default: "large"
     t.string   "target"
-    t.string   "text_color",                      default: "ffffff"
-    t.string   "texture",                         default: "none"
-    t.boolean  "paused",                          default: false
+    t.string   "text_color",                            default: "ffffff"
+    t.string   "texture",                               default: "none"
+    t.boolean  "paused",                                default: false
     t.integer  "rule_id"
     t.text     "settings"
-    t.boolean  "show_branding",                   default: true
+    t.boolean  "show_branding",                         default: true
     t.integer  "contact_list_id"
-    t.string   "display_when",                    default: "immediately"
+    t.string   "display_when",                          default: "immediately"
     t.string   "thank_you_text"
-    t.boolean  "pushes_page_down",                default: true
-    t.boolean  "remains_at_top",                  default: true
-    t.boolean  "open_in_new_window",              default: false
-    t.boolean  "animated",                        default: true
-    t.boolean  "wiggle_button",                   default: false
-    t.string   "type",                            default: "Bar"
-    t.string   "caption",                         default: ""
+    t.boolean  "pushes_page_down",                      default: true
+    t.boolean  "remains_at_top",                        default: true
+    t.boolean  "open_in_new_window",                    default: false
+    t.boolean  "animated",                              default: true
+    t.boolean  "wiggle_button",                         default: false
+    t.string   "type",                                  default: "Bar"
+    t.string   "caption",                               default: ""
     t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
+    t.string   "view_condition"
+    t.integer  "view_condition_attribute"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
