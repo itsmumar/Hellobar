@@ -79,5 +79,9 @@ Rails.application.routes.draw do
   get "/user_migration", to: "user_migration#new", as: :new_user_migration
   post "/user_migration", to: "user_migration#create", as: :user_migration
 
+  %w( 404 422 500 ).each do |code|
+    get code, :to => "errors#show", :code => code
+  end
+
   root "welcome#index"
 end

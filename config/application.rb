@@ -8,6 +8,9 @@ Bundler.require(*Rails.groups)
 
 module Hellobar
   class Application < Rails::Application
+    # We'll handle our own errors
+    config.exceptions_app = self.routes
+
     config.autoload_paths += %W(#{config.root}/app/models/condition/)
     config.autoload_paths += %W(#{config.root}/app/models/validators)
     config.autoload_paths += %W(#{config.root}/app/models/site_elements)
