@@ -6,3 +6,9 @@ HelloBar.StyleSliderController = Ember.Controller.extend HelloBar.HasPlacement,
     {value: 'bottom-left', label: 'Bottom Left'}
     {value: 'top-left', label: 'Top Left'}
   ]
+
+  triggerOptions: [
+    {value: 'immidiately', label: 'Immediately'}
+    {value: 'wait', label: '5 second delay'}
+    {value: 'scroll', label: 'After scrolling'}
+  ]
