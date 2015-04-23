@@ -1,9 +1,7 @@
 module EmailDigestHelper
   def formatted_percent(percent)
     str = "#{percent}%"
-    if percent < 0
-      "-#{str}"
-    elsif percent > 0
+    if percent > 0
       "+#{str}"
     else
       str
