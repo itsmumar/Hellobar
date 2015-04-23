@@ -39,7 +39,10 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder
                   div.largeLabel style="color: #7FEBB9;"
-                    = formatted_percent(((@totals[:total].conversion_percent_between(2.week.ago, 1.week.ago) - @totals[:total].conversion_percent_between(1.week.ago)) * 100).to_i)
+                    - if @totals[:total].size < 7
+                      | n/a
+                    - else
+                      = formatted_percent(((@totals[:total].conversion_percent_between(1.week.ago) - @totals[:total].conversion_percent_between(2.week.ago, 1.week.ago)) * 100).to_i)
                   div.smallLabel
                     | since last week
       tr
