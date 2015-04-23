@@ -39,9 +39,9 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder
                   div.largeLabel style="color: #7FEBB9;"
-                    = ((@totals[:total].conversion_percent_between(2.month.ago, 1.month.ago) - @totals[:total].conversion_percent_between(1.month.ago)) * 100).to_i.to_s + "%"
+                    = formatted_percent(((@totals[:total].conversion_percent_between(2.week.ago, 1.week.ago) - @totals[:total].conversion_percent_between(1.week.ago)) * 100).to_i)
                   div.smallLabel
-                    | since last month
+                    | since last week
       tr
         td colspan="3"
           div.heightPadding
@@ -71,14 +71,16 @@ tr.lightGrey
                 td.bottom.alignCenter.cell= image_tag(se.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: se.type)
                 td.bottom.alignCenter.cell= @se_totals[se.id.to_s].views_between(1.week.ago)
                 td.bottom.alignCenter.cell
-                  | #{@se_totals[se.id.to_s].conversions_between(1.week.ago)}
-                  |  (#{((@se_totals[se.id.to_s].conversion_percent_between(1.week.ago)) * 100).to_i}%)
+                  - if @se_totals[se.id.to_s].conversions_between(1.week.ago) > 0
+                    | #{@se_totals[se.id.to_s].conversions_between(1.week.ago)}
+                    |  (#{((@se_totals[se.id.to_s].conversion_percent_between(1.week.ago)) * 100).to_i}%)
+                  - else
+                    span.darkGreyText none
                 td.bottom.right.cell.alignCenter
                   = link_to "update", edit_site_site_element_path(se, site_id: @site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Edit Bar", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button smallButton"
             tr.alignCenter
               td.bottom.right.left colspan=5 style="padding: 10px 0;"
-                span.conversionText Drive more conversions
-                = link_to "+ Add new", site_site_elements_path(@site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Add Bar", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                = link_to "Get more conversions", site_site_elements_path(@site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Add Bar", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
 
       tr
         td colspan="3"

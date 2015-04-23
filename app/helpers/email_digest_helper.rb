@@ -1,30 +1,13 @@
 module EmailDigestHelper
-  def formatted_percent_with_wrapper(percent, opts = {})
-    if percent.nil? || percent == 0
-      style = "color: gray"
-      direction = nil
+  def formatted_percent(percent)
+    str = "#{percent}%"
+    if percent < 0
+      "-#{str}"
     elsif percent > 0
-      style = "color: green"
-      direction = "+"
+      "+#{str}"
     else
-      style = "color: red"
-      direction = nil
+      str
     end
-
-    if percent.nil?
-      formatted = "n/a%"
-    else
-      formatted = number_to_percentage(percent * 100, :precision => 2)
-    end
-
-    "<span style=\"#{style}\">".tap do |output|
-      output << "(" if opts[:parens]
-      output << direction if direction
-      output << formatted
-      output << ")" if opts[:parens]
-
-      output << "</span>"
-    end.html_safe
   end
 
   def self.template_name(site)
