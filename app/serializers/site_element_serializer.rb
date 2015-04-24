@@ -2,7 +2,11 @@ class SiteElementSerializer < ActiveModel::Serializer
   attributes :id, :site, :rule_id, :rule, :contact_list_id, :errors, :full_error_messages,
 
     # settings
-    :type, :element_subtype, :settings, :display_when,
+    :type, :element_subtype, :settings, :display_when, :view_condition, :view_condition_attribute, 
+
+    #
+    # display_when is abandoned code, newer approach uses view_condition and view_condition_attribute to achieve same feature
+    #
 
     # text
     :headline, :caption, :link_text, :font, :thank_you_text,
