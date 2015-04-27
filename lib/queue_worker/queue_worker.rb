@@ -3,6 +3,7 @@ class QueueWorker
 
   module Delay
     def delay(task_name, options={})
+      queue = options.delete(:queue_name)
       namespace = options.delete(:namespace) || self.class.name
       body = "#{namespace.underscore.downcase}:#{task_name}[#{id}]".gsub(/^:/,'')
       if Rails.env.development? || Rails.env.test?
@@ -17,7 +18,7 @@ class QueueWorker
           end
         end
       else
-        QueueWorker.send_sqs_message(body)
+        QueueWorker.send_sqs_message(body, nil, queue)
       end
     end
   end
