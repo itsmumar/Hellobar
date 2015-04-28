@@ -21,7 +21,7 @@ HelloBar.HasPlacement = Ember.Mixin.create
   selectedTrigger: ( (key, value) ->
 
     if arguments.length > 1
-      @set('model.trigger', value)
+      @set('model.view_condition', value)
       return value
     else
       current_trigger = @get('model.trigger')
@@ -31,7 +31,7 @@ HelloBar.HasPlacement = Ember.Mixin.create
 
       if @triggerOptions != null && @triggerOptions.length > 0
         current_trigger = @triggerOptions[0].value
-        @set('model.trigger', current_trigger)
+        @set('model.view_condition', current_trigger)
 
       current_trigger
   ).property()
