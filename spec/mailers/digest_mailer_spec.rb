@@ -34,7 +34,7 @@ describe DigestMailer do
     end
 
     it 'should show total -10% week to week conversion' do
-      dt = [[0,0], [0, 0], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [20, 1]]
+      dt = [[0,0], [0, 0], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [19, 19]]
       data = {}.tap do |d|
         site.site_elements.each { |se| d[se.id.to_s] = Hello::DataAPI::Performance.new(dt)}
       end
@@ -45,7 +45,7 @@ describe DigestMailer do
     end
 
     it 'should show total +100% week to week conversions' do
-      dt = [[0,0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [20, 20]]
+      dt = [[0,0], [0, 0], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [30, 30]]
       data = {}.tap do |d|
         site.site_elements.each { |se| d[se.id.to_s] = Hello::DataAPI::Performance.new(dt)}
       end

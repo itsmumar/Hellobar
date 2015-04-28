@@ -39,10 +39,10 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder
                   div.largeLabel style="color: #7FEBB9;"
-                    - if @totals[:total].size < 7
+                    - if @totals[:total].size < 7 || @conversion_percent_improvement.nil?
                       | n/a
                     - else
-                      = formatted_percent(((@totals[:total].conversion_percent_between(1.week.ago) - @totals[:total].conversion_percent_between(2.week.ago, 1.week.ago)) * 100).to_i)
+                      = formatted_percent(@conversion_percent_improvement.round)
                   div.smallLabel
                     | since last week
       tr
@@ -94,9 +94,7 @@ tr.lightGrey
             table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
               tr
                 td.alignCenter.orangeText style="font-size: 15px; padding: 15px 0; "
-                  | Get
-                  span.blueText  4x
-                  |  more conversions with Hello Bar Pro
+                  | Get more conversions with Hello Bar Pro
               tr
                 td
                   table.proFeaturesTable cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
@@ -133,6 +131,6 @@ tr.lightGrey
               tr
                 td.alignCenter style="font-size: 15px; padding: 15px 0; font-weight: lighter; color: #222222;"
                   span style="line-height: 24px; height: 24px; margin-right: 10px;"
-                    | Get all the pro features for $15
+                    | Get all the pro features for $15/mo
                   = link_to "Start using Hello Bar Pro", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Pro Start", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
   td

@@ -31,6 +31,14 @@ module Hello::DataAPI
       conversions_between(d1, d2) / v.to_f
     end
 
+    # Gets change in conversions between two sets of dates
+    # conversion_change_between(2.week.ago, 1.week.ago, 1.week.ago, Time.now)
+    def conversion_change_between(d1, d2, d3, d4)
+      n = conversions_between(d3, d4)
+      d = conversions_between(d1, d2)
+      d == 0 ? nil : ((n / d.to_f) - 1) * 100
+    end
+
     def respond_to?(sym, include_private=false)
       super(sym, include_private) || data.respond_to?(sym, include_private)
     end
