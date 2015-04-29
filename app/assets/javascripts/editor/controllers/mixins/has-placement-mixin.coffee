@@ -24,7 +24,7 @@ HelloBar.HasPlacement = Ember.Mixin.create
       @set('model.view_condition', value)
       return value
     else
-      current_trigger = @get('model.trigger')
+      current_trigger = @get('model.view_condition')
       
       for val in this.triggerOptions
         return current_trigger if current_trigger == val.value
