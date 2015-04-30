@@ -21,19 +21,19 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #FE3817;"
-                    = number_to_human(@totals[:total].views_between(1.week.ago), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u")
+                    = number_to_human(@totals[:total].views_between(1.week.ago + 1.day), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u")
                   div.smallLabel
                     | visits
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #00B7DB;"
-                    = number_to_human(@totals[:total].conversions_between(1.week.ago), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u")
+                    = number_to_human(@totals[:total].conversions_between(1.week.ago + 1.day), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u")
                   div.smallLabel
                     | conversions
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #A738BB;"
-                    = (@totals[:total].conversion_percent_between(1.week.ago) * 100).to_i.to_s + "%"
+                    = (@totals[:total].conversion_percent_between(1.week.ago + 1.day) * 100).to_i.to_s + "%"
                   div.smallLabel
                     | conversion rate
               td.summaryCell
@@ -72,11 +72,11 @@ tr.lightGrey
                     = index + 1
                   div.elementText= se.headline
                 td.bottom.alignCenter.cell= image_tag(se.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: se.type)
-                td.bottom.alignCenter.cell= @se_totals[se.id.to_s].views_between(1.week.ago)
+                td.bottom.alignCenter.cell= @se_totals[se.id.to_s].views_between(1.week.ago + 1.day)
                 td.bottom.alignCenter.cell
-                  - if @se_totals[se.id.to_s].conversions_between(1.week.ago) > 0
-                    | #{@se_totals[se.id.to_s].conversions_between(1.week.ago)}
-                    |  (#{((@se_totals[se.id.to_s].conversion_percent_between(1.week.ago)) * 100).to_i}%)
+                  - if @se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day) > 0
+                    | #{@se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day)}
+                    |  (#{((@se_totals[se.id.to_s].conversion_percent_between(1.week.ago + 1.day)) * 100).to_i}%)
                   - else
                     span.darkGreyText none
                 td.bottom.right.cell.alignCenter

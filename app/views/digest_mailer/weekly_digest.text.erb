@@ -1,16 +1,16 @@
 Your performance this week for <%= @site.url %>
 
-<%= number_to_human(@totals[:total].views_between(1.week.ago), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u") %> visits
-<%= number_to_human(@totals[:total].conversions_between(1.week.ago), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u") %> conversions
-<%= (@totals[:total].conversion_percent_between(1.week.ago) * 100).to_i.to_s + "%" %> conversion rate
+<%= number_to_human(@totals[:total].views_between(1.week.ago + 1.day), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u") %> visits
+<%= number_to_human(@totals[:total].conversions_between(1.week.ago + 1.day), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u") %> conversions
+<%= (@totals[:total].conversion_percent_between(1.week.ago + 1.day) * 100).to_i.to_s + "%" %> conversion rate
 <%= @conversion_percent_improvement == nil ? "0%" : formatted_percent(@conversion_percent_improvement.to_i) %> since last week
 
 Conversions
 
 <% @sorted_elements.each_with_index do |se, index| %>
 <%= index + 1 %>) <%= se.headline %>
-  * Views: <%= @se_totals[se.id.to_s].views_between(1.week.ago) %>
-  * Conversions: <%= @se_totals[se.id.to_s].conversions_between(1.week.ago) %> (<%= ((@se_totals[se.id.to_s].conversion_percent_between(1.week.ago)) * 100).round %>%)
+  * Views: <%= @se_totals[se.id.to_s].views_between(1.week.ago + 1.day) %>
+  * Conversions: <%= @se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day) %> (<%= ((@se_totals[se.id.to_s].conversion_percent_between(1.week.ago + 1.day)) * 100).round %>%)
 <% end %>
 
 Get more conversions by visiting <%= site_site_elements_url(@site) %>
