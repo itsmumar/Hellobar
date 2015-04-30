@@ -15,6 +15,7 @@ class ContactListsController < ApplicationController
 
   def show
     @other_lists = @site.contact_lists.where.not(:id => @contact_list.id)
+    @statuses = @contact_list.subscriber_statuses(@contact_list.subscribers[0,100])
 
     respond_to do |format|
       format.html

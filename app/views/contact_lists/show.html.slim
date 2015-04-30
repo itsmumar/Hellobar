@@ -30,7 +30,7 @@ table.contacts-table
       th #
       th Email
       th Name
-      - if @contact_list.subscribers.any? && @contact_list.subscriber_statuses(@contact_list.subscribers[0,100]).any?
+      - if @statuses.any?
         th Status
       th Date Subscribed
 
@@ -41,11 +41,12 @@ table.contacts-table
           td= index + 1
           td= subscriber[:email]
           td= subscriber[:name]
-          td
-            - if @contact_list.subscriber_statuses(nil)[subscriber[:email]].nil?
-              | Not Synced
-            - else
-              = @contact_list.subscriber_statuses(nil)[subscriber[:email]].capitalize
+          - if @statuses.any?
+            td
+              - if @statuses[subscriber[:email]].nil?
+                | Not Synced
+              - else
+                = @statuses[subscriber[:email]].capitalize
           td= subscriber[:subscribed_at].try(:strftime, "%b %d, %Y")
 
     - else

@@ -70,7 +70,7 @@ class ContactList < ActiveRecord::Base
   def subscriber_statuses(_subscribers, force=false)
     return @statuses if @statuses && !force
     @statuses = begin
-      if service_provider.respond_to?(:subscriber_statuses)
+      if !_subscribers.blank? && service_provider.respond_to?(:subscriber_statuses)
         service_provider.subscriber_statuses(data["remote_id"], _subscribers.map { |x| x[:email] })
       else
         {}
