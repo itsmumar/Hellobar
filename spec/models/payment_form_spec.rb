@@ -57,6 +57,12 @@ describe PaymentForm do
     payment_form.year.should == 2016
   end
 
+  it 'accepts mm/yy format' do
+    data[:expiration] = '08/16'
+    form = PaymentForm.new(data)
+    form.year.should == 2016
+  end
+
   it 'returns the raw expiration when the year cant be parsed' do
     data[:expiration] = '1.2'
 

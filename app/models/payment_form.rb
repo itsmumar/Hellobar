@@ -19,12 +19,24 @@ class PaymentForm
 
   # derived from expiration
   def month
-    Date.parse(data[:expiration]).month rescue data[:expiration]
+    return data[:expiration] if data[:expiration].split('/').length < 2
+    data[:expiration].split('/')[0].to_i
+  rescue
+    data[:expiration]
   end
 
   # derived from expiration
   def year
-    Date.parse(data[:expiration]).year rescue data[:expiration]
+    y = data[:expiration].split('/')[1]
+    if y.length == 2
+      "20#{y}".to_i
+    elsif y.length == 4
+      y.to_i
+    else
+      Date.parse(data[:expiration]).year
+    end
+  rescue
+    data[:expiration]
   end
 
   def to_hash
