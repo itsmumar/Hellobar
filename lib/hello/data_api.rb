@@ -141,15 +141,7 @@ module Hello::DataAPI
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
-        results = {}
-        site_element_ids.each_slice(API_MAX_SLICE) do |ids|
-          path, params = Hello::DataAPIHelper::RequestParts.suggested_opportunities(site.id, ids, site.read_key)
-          slice_results = get(path, params)
-          if slice_results != nil
-            results = results.deep_merge(slice_results) { |key, x, y| x + y }
-          end
-        end
-        results
+        Hello::SuggestedOpportunities.generate(site, site_elements)
       end
     end
 
