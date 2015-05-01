@@ -191,14 +191,14 @@ module Hello::DataAPI
       results = nil
       begin
         url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
-        Timeout::timeout(5) do
+        Timeout::timeout(8) do
           response = Net::HTTP.get(URI.parse(url))
           results = JSON.parse(response)
         end
         # It was a succcess, log it
         now = Time.now
         duration = now.to_f - begin_time
-        lines << "[#{now}] Retry Successful => #{url.inspect}"
+        lines << "[#{now}] Retry Successful (#{duration}s) => #{url.inspect}"
       rescue JSON::ParserError, SocketError, Timeout::Error => retry_e
         # The retry failed too, log it
         now = Time.now
