@@ -112,6 +112,7 @@ module Hello::DataAPI
     # => {"1" => 141, "2" => 951}
     #
     def contact_list_totals(site, contact_lists, cache_options = {})
+      return {} if contact_lists.empty?
       contact_list_ids = contact_lists.map(&:id).sort
 
       cache_key = "hello:data-api:#{site.id}:#{contact_list_ids.sort.join('-')}:contact_list_totals:#{site.script_installed_at.to_i}"
