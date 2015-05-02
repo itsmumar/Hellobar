@@ -147,6 +147,7 @@ ActiveRecord::Schema.define(version: 20150403192532) do
     t.integer  "site_id"
     t.string   "name"
     t.text     "data"
+    t.datetime "created_at"
     t.datetime "updated_at"
   end
 
@@ -220,11 +221,11 @@ ActiveRecord::Schema.define(version: 20150403192532) do
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
     t.boolean  "open_in_new_window",              default: false
+    t.integer  "wordpress_bar_id"
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
-    t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
   end
