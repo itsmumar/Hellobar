@@ -4,7 +4,7 @@ require "./lib/hello/api_performance"
 
 module Hello::DataAPI
   class << self
-    API_MAX_SLICE = 25
+    API_MAX_SLICE = 20
 
     # Returns total views and conversions for each site_element, by day for n days.
     # For example, if site element with id 123 had a total of 10 views and 3 conversions yesterday,
