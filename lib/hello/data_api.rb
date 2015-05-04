@@ -170,14 +170,25 @@ module Hello::DataAPI
     end
 
     def get(path, params)
-      begin_time = Time.now.to_f
-      url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
-      response = nil
-      Timeout::timeout(5) do
-        response = Net::HTTP.get(URI.parse(url))
-        JSON.parse(response)
+      timeouts = [3,3,5,5,8] # Determines the length and number of attempts
+      timeout_index = 0
+      begin
+        begin_time = Time.now.to_f
+        url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
+        response = nil
+        Timeout::timeout(timeouts[timeout_index]) do
+          response = Net::HTTP.get(URI.parse(url))
+        end
+        results = JSON.parse(response)
+        return results
+      rescue Timeout::Error => e
+        # If it's just a timeout, keep retrying while we can
+        timeout_index += 1
+        retry if timeouts[timeout_index]
+        # Ran out of attempts, re-raise the error
+        raise
       end
-    rescue JSON::ParserError, SocketError, Timeout::Error => e
+    rescue JSON::ParserError, SocketError, Timeout::Error, StandardError => e
       now = Time.now
       duration = now.to_f - begin_time
       # Log the error
@@ -186,32 +197,12 @@ module Hello::DataAPI
       caller[0..4].each do |line|
         lines << "\t#{line}"
       end
-      # Attempt the request again - just once
-      begin_time = Time.now.to_f
-      results = nil
-      begin
-        url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
-        Timeout::timeout(8) do
-          response = Net::HTTP.get(URI.parse(url))
-          results = JSON.parse(response)
-        end
-        # It was a succcess, log it
-        now = Time.now
-        duration = now.to_f - begin_time
-        lines << "[#{now}] Retry Successful (#{duration}s) => #{url.inspect}"
-      rescue JSON::ParserError, SocketError, Timeout::Error => retry_e
-        # The retry failed too, log it
-        now = Time.now
-        duration = now.to_f - begin_time
-        lines << "[#{now}] Retry Error::#{e.class} (#{duration}s) - #{e.message.inspect} => #{url.inspect}"
-      end
       # Write everything to the log
       File.open(File.join(Rails.root, "log", "data_api_error.log"), "a") do |file|
         file.puts(lines.join("\n"))
       end
-      # Return results which will be nil if there was an error or the
-      # actual results
-      return results
+      # Re-raise the error
+      raise
     end
   end
 end
