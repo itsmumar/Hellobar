@@ -4,7 +4,7 @@ module Hello::EmailDigest
   class << self
     def send(site)
       mailer = mailer_for_site(site)
-      return if mailer.nil
+      return if mailer.nil?
 
       options = {content: mailer.html_part.body.raw_source,
                   text: mailer.text_part.body.raw_source,
