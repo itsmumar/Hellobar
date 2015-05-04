@@ -73,7 +73,7 @@ class Site < ActiveRecord::Base
   end
 
   # has the script been installed according to the API?
-  def script_installed_api?(days = 7)
+  def script_installed_api?(days = 10)
     return false unless lifetime_totals(days: days).present?
 
     lifetime_totals(days: days).values.any? do |values|
