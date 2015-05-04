@@ -74,14 +74,27 @@ class Site < ActiveRecord::Base
 
   # has the script been installed according to the API?
   def script_installed_api?(days = 10)
-    return false unless lifetime_totals(days: days).present?
+    data = lifetime_totals(days: days)
+    return false unless data.present?
 
-    lifetime_totals(days: days).values.any? do |values|
+    has_new_views = data.values.any? do |values|
       days_with_views = values.select{|v| v[0] > 0}.count
 
       (days_with_views < days && days_with_views > 0) ||            # site element was installed in the last n days
         (values.count >= days && values[-days][0] < values.last[0]) # site element received views in the last n days
     end
+    return true if has_new_views
+    # No new views, but if the script is installed and the site has site elements it might
+    # just be a low traffic site
+    return true if self.site_elements.length > 0 and script_installed_on_homepage?
+    return false
+  end
+
+  def script_installed_on_homepage?
+    response = HTTParty.get(self.url)
+    response =~ /#{script_name}/
+  rescue
+    return false
   end
 
   def script_url
