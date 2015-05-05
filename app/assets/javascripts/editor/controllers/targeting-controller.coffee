@@ -68,8 +68,9 @@ HelloBar.TargetingController = Ember.Controller.extend
       new RuleModal(options).open()
 
   trackTargetView: (->
-    InternalTracking.track_current_person("Editor Flow", {step: "Targeting Settings", goal: @get("model.element_subtype"), style: @get("model.type")}) if trackEditorFlow
-  ).on('init')
+    if trackEditorFlow && !Ember.isEmpty(@get('model'))
+      InternalTracking.track_current_person("Editor Flow", {step: "Targeting Settings", goal: @get("model.element_subtype"), style: @get("model.type")})
+  ).observes('model').on('init')
 
   #-----------  Step Settings  -----------#
 

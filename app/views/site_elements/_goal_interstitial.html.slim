@@ -30,4 +30,5 @@
       = mail_to 'support@hellobar.com', ' Need Help?', subject: "Hello Bar - Getting Started"
 
 javascript:
-  InternalTracking.track_current_person("Editor Flow", {step: "Choose Goal"}) if trackEditorFlow
+  if(trackEditorFlow)
+    InternalTracking.track_current_person("Editor Flow", {step: "Choose Goal"});

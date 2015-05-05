@@ -14,8 +14,9 @@ HelloBar.TextController = Ember.Controller.extend
   disableThankYouText: Ember.computed.not('model.site.capabilities.custom_thank_you_text')
 
   trackTextView: (->
-    InternalTracking.track_current_person("Editor Flow", {step: "Content Settings", goal: @get("model.element_subtype"), style: @get("model.type")}) if trackEditorFlow
-  ).on('init')
+    if trackEditorFlow && !Ember.isEmpty(@get('model'))
+      InternalTracking.track_current_person("Editor Flow", {step: "Content Settings", goal: @get("model.element_subtype"), style: @get("model.type")})
+  ).observes('model').on('init')
 
   #-----------  Step Settings  -----------#
 
