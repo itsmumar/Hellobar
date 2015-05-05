@@ -29,6 +29,7 @@ html
     javascript:
       HB_DNT = 1;
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
+      var trackEditorFlow = #{{current_user.site_elements == 0}};
 
     = yield
 

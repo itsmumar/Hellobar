@@ -41,6 +41,10 @@ HelloBar.SettingsController = Ember.Controller.extend
         @set('model.element_subtype', null)
   ).observes('routeForwarding')
 
+  trackGoalSettingView: (->
+    InternalTracking.track_current_person("Editor Flow", {step: "Goal Settings", goal: @get("model.element_subtype")}) if trackEditorFlow
+  ).on('init')
+
   actions:
 
     changeSettings: ->

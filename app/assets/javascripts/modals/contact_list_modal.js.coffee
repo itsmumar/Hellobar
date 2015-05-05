@@ -135,7 +135,7 @@ class @ContactListModal extends Modal
     value = $(select).val()
     option = $(select).find("option:selected")
     label = option.text()
-    defaultContext = 
+    defaultContext =
       provider: value
       providerName: label
       requiresEmbedCode: option.data('requiresEmbedCode')

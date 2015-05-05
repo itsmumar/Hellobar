@@ -15,3 +15,7 @@ HelloBar.ColorsController = Ember.Controller.extend
 
   focusedColor: Ember.computed.alias('controllers.application.focusedColor')
   showAdditionalColors: Ember.computed.equal('model.type', 'Bar')
+
+  trackColorView: (->
+    InternalTracking.track_current_person("Editor Flow", {step: "Color Settings", goal: @get("model.element_subtype"), style: @get("model.type")}) if trackEditorFlow
+  ).on('init')

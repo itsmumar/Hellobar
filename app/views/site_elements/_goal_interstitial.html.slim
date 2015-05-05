@@ -28,3 +28,6 @@
     p
       | Select one of the goals above. You can always change this later.
       = mail_to 'support@hellobar.com', ' Need Help?', subject: "Hello Bar - Getting Started"
+
+javascript:
+  InternalTracking.track_current_person("Editor Flow", {step: "Choose Goal"}) if trackEditorFlow
