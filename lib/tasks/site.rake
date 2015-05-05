@@ -3,7 +3,11 @@ namespace :site do
     desc 'Schedule a re-generation of all active site scripts'
     task :generate_all_separately => :environment do |t, args|
       Site.script_installed_db.each do |site|
-        site.generate_script_and_check_for_uninstall(queue_name: Hellobar::Settings[:low_priority_queue])
+        site.generate_script_and_check_installation(queue_name: Hellobar::Settings[:low_priority_queue])
+      end
+      # See if anyone who uninstalled has installed
+      Site.where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at AND (script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at)', Time.now-30.days).each do |site|
+        site.check_installation(queue_name: Hellobar::Settings[:low_priority_queue])
       end
     end
   end

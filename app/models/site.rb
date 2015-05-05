@@ -120,8 +120,12 @@ class Site < ActiveRecord::Base
     delay :generate_static_assets, options
   end
 
-  def generate_script_and_check_for_uninstall(options = {})
-    delay :generate_static_assets_and_check_for_uninstall, options
+  def generate_script_and_check_installation(options = {})
+    delay :do_generate_script_and_check_installation, options
+  end
+
+  def check_installation(options = {})
+    delay :do_check_installation, options
   end
 
   def generate_improve_suggestions(options = {})
@@ -338,8 +342,12 @@ class Site < ActiveRecord::Base
     return bill
   end
 
-  def generate_static_assets_and_check_for_uninstall(options = {})
+  def do_generate_script_and_check_installation(options = {})
     generate_static_assets(options)
+    has_script_installed?
+  end
+
+  def do_check_installation(options = {})
     has_script_installed?
   end
 
