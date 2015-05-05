@@ -57,11 +57,13 @@ class Site < ActiveRecord::Base
     if !script_installed_db? && script_installed_api?
       debug_install("INSTALLED")
       update(script_installed_at: Time.current)
-      Analytics.track(:site, self.id, "Installed Script")
+      # Temporarily disabled while I recheck everything
+      # Analytics.track(:site, self.id, "Installed")
     elsif script_installed_db? && !script_installed_api?
       debug_install("UNINSTALLED")
       update(script_uninstalled_at: Time.current)
-      Analytics.track(:site, self.id, "Uninstalled Script")
+      # Temporarily disabled while I recheck everything
+      # Analytics.track(:site, self.id, "Uninstalled")
     end
 
     script_installed_db?
@@ -126,6 +128,10 @@ class Site < ActiveRecord::Base
 
   def check_installation(options = {})
     delay :do_check_installation, options
+  end
+
+  def recheck_installation(options = {})
+    delay :do_recheck_installation, options
   end
 
   def generate_improve_suggestions(options = {})
@@ -349,6 +355,15 @@ class Site < ActiveRecord::Base
 
   def do_check_installation(options = {})
     has_script_installed?
+  end
+
+  def do_recheck_installation(options = {})
+    # Check the script installation
+    if self.has_script_installed?
+      Analytics.track(:self, self.id, "Installed", at: self.script_installed_at))
+    else
+      Analytics.track(:self, self.id, "Uninstalled", at: self.script_uninstalled_at))
+    end
   end
 
   def generate_static_assets(options = {})

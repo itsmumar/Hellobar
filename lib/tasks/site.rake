@@ -10,6 +10,13 @@ namespace :site do
         site.check_installation(queue_name: Hellobar::Settings[:low_priority_queue])
       end
     end
+
+    desc 'Rechecks all installations'
+    task :recheck_all_site_installations => :environment do |t, args|
+      Site.each do |site|
+        site.recheck_installation(queue_name: Hellobar::Settings[:low_priority_queue])
+      end
+    end
   end
 
   namespace :improve_suggestions do
@@ -20,4 +27,5 @@ namespace :site do
       end
     end
   end
+
 end
