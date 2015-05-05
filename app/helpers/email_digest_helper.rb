@@ -1,11 +1,8 @@
 module EmailDigestHelper
-  def formatted_percent(percent)
-    str = "#{percent}%"
-    if percent > 0
-      "+#{str}"
-    else
-      str
-    end
+  def formatted_percent(percent, include_sign=true)
+    precision = 3
+    precision = 2 if percent.abs >= 1 && percent.abs < 100
+    number_to_human(percent, format: include_sign && percent > 0 ? "+%n%" : "%n%", precision: precision)
   end
 
   def format_number(num)

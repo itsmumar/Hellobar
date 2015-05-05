@@ -10,6 +10,7 @@ namespace :site do
         site.check_installation(queue_name: Hellobar::Settings[:low_priority_queue])
       end
     end
+  end
 
 =begin
     desc 'Rechecks all installations'

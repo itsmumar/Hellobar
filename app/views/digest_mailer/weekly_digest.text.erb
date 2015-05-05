@@ -10,7 +10,7 @@ Conversions
 <% @sorted_elements.each_with_index do |se, index| %>
 <%= index + 1 %>) <%= se.headline %>
   * Views: <%= @se_totals[se.id.to_s].views_between(1.week.ago + 1.day) %>
-  * Conversions: <%= @se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day) %> (<%= ((@se_totals[se.id.to_s].conversion_percent_between(1.week.ago + 1.day)) * 100).round %>%)
+  * Conversions: <%= @se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day) %> (<%= formatted_percent(@se_totals[se.id.to_s].conversion_percent_between(1.week.ago + 1.day) * 100, false) %>)
 <% end %>
 
 Get more conversions by visiting <%= site_site_elements_url(@site) %>

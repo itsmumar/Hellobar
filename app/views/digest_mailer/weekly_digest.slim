@@ -33,7 +33,7 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #A738BB;"
-                    = (@totals[:total].conversion_percent_between(1.week.ago + 1.day) * 100).to_i.to_s + "%"
+                    = formatted_percent(@totals[:total].conversion_percent_between(1.week.ago + 1.day) * 100)
                   div.smallLabel
                     | conversion rate
               td.summaryCell
@@ -76,7 +76,7 @@ tr.lightGrey
                 td.bottom.alignCenter.cell
                   - if @se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day) > 0
                     | #{@se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day)}
-                    |  (#{((@se_totals[se.id.to_s].conversion_percent_between(1.week.ago + 1.day)) * 100).to_i}%)
+                    |  (#{formatted_percent(@se_totals[se.id.to_s].conversion_percent_between(1.week.ago + 1.day) * 100, false)})
                   - else
                     span.darkGreyText none
                 td.bottom.right.cell.alignCenter
