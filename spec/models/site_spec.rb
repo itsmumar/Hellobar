@@ -232,9 +232,9 @@ describe Site do
       @site.script_installed_api?.should be_true
     end
 
-    it "is false if there have been no views in the last 7 days" do
+    it "is false if there have been no views in the last 10 days" do
       Hello::DataAPI.should_receive(:lifetime_totals).and_return({
-        "1" => [[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0]],
+        "1" => [[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0]],
         "2" => [[0, 0]]
       })
 

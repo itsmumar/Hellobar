@@ -360,9 +360,9 @@ class Site < ActiveRecord::Base
   def do_recheck_installation(options = {})
     # Check the script installation
     if self.has_script_installed?
-      Analytics.track(:self, self.id, "Installed", at: self.script_installed_at))
+      Analytics.track(:self, self.id, "Installed", at: self.script_installed_at)
     else
-      Analytics.track(:self, self.id, "Uninstalled", at: self.script_uninstalled_at))
+      Analytics.track(:self, self.id, "Uninstalled", at: self.script_uninstalled_at)
     end
   end
 
