@@ -1583,18 +1583,21 @@ var _HB = {
     }
   },
 
+  // Hides entire site element iframe 
   hideSiteElement: function()
   {
     // console.log("hideSiteElement runs");
     HB.w.style.display = 'none';
   },
 
+  // Unhides entire site element iframe 
   showSiteElement: function()
   {
     // console.log("showSiteElement runs");
     HB.w.style.display = 'block'
   },
 
+  // Reads the site element's display_when setting and calls hide/show per selected behavior
   checkForDisplaySetting: function()
   {
   // this will need to run right after site element is "ready"
