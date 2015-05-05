@@ -22,37 +22,5 @@ describe DigestMailer do
       Hello::DataAPI.stub(:lifetime_totals_by_type).and_return({:total=>Hello::DataAPI::Performance.new([[0, 1]])})
       expect(mail.body.encoded).to match("n/a")
     end
-
-    it 'should not raise a divide by zero error when there are 0 conversions' do
-      data = {}.tap do |d|
-        site.site_elements.each { |se| d[se.id.to_s] = Hello::DataAPI::Performance.new([[0, 0]] * 365)}
-      end
-      Hello::DataAPI.stub(:lifetime_totals).and_return(data)
-      Hello::DataAPI.stub(:lifetime_totals_by_type).and_return({:total=>Hello::DataAPI::Performance.new([[0, 0]] * 365)})
-      expect{mail.body}.to_not raise_error
-      expect(mail.body.encoded).to match("0%")
-    end
-
-    it 'should show total -10% week to week conversion' do
-      dt = [[0,0], [0, 0], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [19, 19]]
-      data = {}.tap do |d|
-        site.site_elements.each { |se| d[se.id.to_s] = Hello::DataAPI::Performance.new(dt)}
-      end
-      Hello::DataAPI.stub(:lifetime_totals).and_return(data)
-      Hello::DataAPI.stub(:lifetime_totals_by_type).and_return({:total=>Hello::DataAPI::Performance.new(dt)})
-      expect{mail.body}.to_not raise_error
-      expect(mail.body.encoded).to match("-10%")
-    end
-
-    it 'should show total +100% week to week conversions' do
-      dt = [[0,0], [0, 0], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [10, 10], [30, 30]]
-      data = {}.tap do |d|
-        site.site_elements.each { |se| d[se.id.to_s] = Hello::DataAPI::Performance.new(dt)}
-      end
-      Hello::DataAPI.stub(:lifetime_totals).and_return(data)
-      Hello::DataAPI.stub(:lifetime_totals_by_type).and_return({:total=>Hello::DataAPI::Performance.new(dt)})
-      expect{mail.body}.to_not raise_error
-      expect(mail.body.encoded).to match("\\+100%")
-    end
   end
 end

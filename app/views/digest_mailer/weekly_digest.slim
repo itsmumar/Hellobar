@@ -23,28 +23,28 @@ tr.lightGrey
                   div.largeLabel style="color: #FE3817;"
                     = format_number(@totals[:total].views_between(1.week.ago + 1.day))
                   div.smallLabel
-                    | visits
+                    | views this week
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #00B7DB;"
                     = format_number(@totals[:total].conversions_between(1.week.ago + 1.day))
                   div.smallLabel
-                    | conversions
+                    | conversions this week
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #A738BB;"
-                    = formatted_percent(@totals[:total].conversion_percent_between(1.week.ago + 1.day) * 100)
-                  div.smallLabel
-                    | conversion rate
-              td.summaryCell
-                div.greyBorder
-                  div.largeLabel style="color: #7FEBB9;"
                     - if @totals[:total].size < 7 || @conversion_percent_improvement.nil?
                       | n/a
                     - else
-                      = formatted_percent(@conversion_percent_improvement.round)
+                      = format_number(@totals[:total].conversions_between(2.week.ago + 1.day, 1.week.ago))
                   div.smallLabel
-                    | since last week
+                    | conversion last week
+              td.summaryCell
+                div.greyBorder
+                  div.largeLabel style="color: #7FEBB9;"
+                    = format_number(@totals[:total].conversions)
+                  div.smallLabel
+                    | total conversions ever
       tr
         td colspan="3"
           div.heightPadding
