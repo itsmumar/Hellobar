@@ -1,7 +1,7 @@
 Your performance this week for <%= @site.url %>
 
-<%= number_to_human(@totals[:total].views_between(1.week.ago + 1.day), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u") %> visits
-<%= number_to_human(@totals[:total].conversions_between(1.week.ago + 1.day), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u") %> conversions
+<%= format_number(@totals[:total].views_between(1.week.ago + 1.day)) %> visits
+<%= format_number(@totals[:total].conversions_between(1.week.ago + 1.day)) %> conversions
 <%= (@totals[:total].conversion_percent_between(1.week.ago + 1.day) * 100).to_i.to_s + "%" %> conversion rate
 <%= @conversion_percent_improvement == nil ? "0%" : formatted_percent(@conversion_percent_improvement.to_i) %> since last week
 

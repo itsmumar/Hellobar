@@ -21,13 +21,13 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #FE3817;"
-                    = number_to_human(@totals[:total].views_between(1.week.ago + 1.day), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u")
+                    = format_number(@totals[:total].views_between(1.week.ago + 1.day))
                   div.smallLabel
                     | visits
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #00B7DB;"
-                    = number_to_human(@totals[:total].conversions_between(1.week.ago + 1.day), :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u")
+                    = format_number(@totals[:total].conversions_between(1.week.ago + 1.day))
                   div.smallLabel
                     | conversions
               td.summaryCell
