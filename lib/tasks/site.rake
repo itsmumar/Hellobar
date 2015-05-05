@@ -13,7 +13,7 @@ namespace :site do
 
     desc 'Rechecks all installations'
     task :recheck_all_site_installations => :environment do |t, args|
-      Site.each do |site|
+      Site.all.each do |site|
         site.recheck_installation(queue_name: Hellobar::Settings[:low_priority_queue])
       end
     end
