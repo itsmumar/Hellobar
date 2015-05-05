@@ -1581,7 +1581,31 @@ var _HB = {
       HB.e.container.style.height = (element.clientHeight + 24) + "px";
       HB.e.container.style.width = (element.clientWidth + 24) + "px";
     }
+  },
+
+  hideSiteElement: function()
+  {
+    // console.log("hideSiteElement runs");
+    HB.w.style.display = 'none';
+  },
+
+  showSiteElement: function()
+  {
+    // console.log("showSiteElement runs");
+    HB.w.style.display = 'block'
+  },
+
+  checkForDisplaySetting: function()
+  {
+  // this will need to run right after site element is "ready"
+    console.log("checkForDisplaySetting runs");
+    if (true) // should read the display_when attribute of the site element and differentiate behavior
+      {
+        HB.hideSiteElement();
+        setTimeout(HB.showSiteElement, 5000);
+      };
   }
+
 };
 
 /*
