@@ -28,6 +28,10 @@ class Site < ActiveRecord::Base
     where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
   end
 
+  scope :script_uninstalled_db, -> do
+    where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
+  end
+
   def owner
     if membership = site_memberships.where(:role => "owner").first
       membership.user
@@ -128,9 +132,11 @@ class Site < ActiveRecord::Base
     delay :do_check_installation, options
   end
 
+=begin
   def recheck_installation(options = {})
     delay :do_recheck_installation, options
   end
+=end
 
   def generate_improve_suggestions(options = {})
     delay :generate_all_improve_suggestions, options
@@ -355,6 +361,7 @@ class Site < ActiveRecord::Base
     has_script_installed?
   end
 
+=begin
   def do_recheck_installation(options = {})
     # Check the script installation
     if self.has_script_installed?
@@ -365,6 +372,7 @@ class Site < ActiveRecord::Base
       end
     end
   end
+=end
 
   def generate_static_assets(options = {})
     update_attribute(:script_attempted_to_generate_at, Time.now)

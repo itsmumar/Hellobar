@@ -11,6 +11,7 @@ namespace :site do
       end
     end
 
+=begin
     desc 'Rechecks all installations'
     task :recheck_all_site_installations => :environment do |t, args|
       Site.all.each do |site|
@@ -18,6 +19,7 @@ namespace :site do
       end
     end
   end
+=end
 
   namespace :improve_suggestions do
     desc 'Schedule a re-generation of all active site improve_suggestions'
