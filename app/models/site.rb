@@ -57,13 +57,11 @@ class Site < ActiveRecord::Base
     if !script_installed_db? && script_installed_api?
       debug_install("INSTALLED")
       update(script_installed_at: Time.current)
-      # Temporarily disabled while I recheck everything
-      # Analytics.track(:site, self.id, "Installed")
+      Analytics.track(:site, self.id, "Installed")
     elsif script_installed_db? && !script_installed_api?
       debug_install("UNINSTALLED")
       update(script_uninstalled_at: Time.current)
-      # Temporarily disabled while I recheck everything
-      # Analytics.track(:site, self.id, "Uninstalled")
+      Analytics.track(:site, self.id, "Uninstalled")
     end
 
     script_installed_db?

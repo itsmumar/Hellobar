@@ -39,8 +39,7 @@ end
 =end
 
 every 24.hours, :at => "12:00am", :roles => [:cron] do
-  # Temporarily disabled while I recheck all installations
-  # rake "site:scripts:generate_all_separately"
+  rake "site:scripts:generate_all_separately"
 end
 
 every 24.hours, :at => "12:00am", :roles => [:cron] do
