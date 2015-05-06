@@ -1586,14 +1586,14 @@ var _HB = {
   // Hides entire site element iframe 
   hideSiteElement: function()
   {
-    // console.log("hideSiteElement runs");
+    console.log("hideSiteElement runs");
     HB.w.style.display = 'none';
   },
 
   // Unhides entire site element iframe 
   showSiteElement: function()
   {
-    // console.log("showSiteElement runs");
+    console.log("showSiteElement runs");
     HB.w.style.display = 'block'
   },
 
@@ -1602,11 +1602,30 @@ var _HB = {
   {
   // this will need to run right after site element is "ready"
     console.log("checkForDisplaySetting runs");
-    if (true) // should read the display_when attribute of the site element and differentiate behavior
-      {
-        HB.hideSiteElement();
-        setTimeout(HB.showSiteElement, 5000);
-      };
+    // should read the display_when attribute of the site element and differentiate behavior
+    if (HB.currentSiteElement.view_condition === 'immidiately') 
+    {
+      console.log("displaying immidiately");
+      return;
+    } 
+    else if (HB.currentSiteElement.view_condition === 'wait-5') 
+    {
+      console.log("waiting 5");
+      HB.hideSiteElement();
+      setTimeout(HB.showSiteElement, 5000);
+    } 
+    else if (HB.currentSiteElement.view_condition === 'wait-10') 
+    {
+      console.log("waiting 10");
+      HB.hideSiteElement();
+      setTimeout(HB.showSiteElement, 10000);
+    } 
+    else if (HB.currentSiteElement.view_condition === 'wait-60') 
+    {
+      console.log("waiting 60");
+      HB.hideSiteElement();
+      setTimeout(HB.showSiteElement, 60000);
+    };
   }
 
 };
