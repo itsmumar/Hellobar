@@ -1625,6 +1625,11 @@ var _HB = {
       console.log("waiting 60");
       HB.hideSiteElement();
       setTimeout(HB.showSiteElement, 60000);
+    } 
+    else if (HB.currentSiteElement.view_condition === 'scroll-to-bottom') 
+    {
+      console.log("waiting for scroll-to-bottom");
+      HB.hideSiteElement();
     };
   }
 
