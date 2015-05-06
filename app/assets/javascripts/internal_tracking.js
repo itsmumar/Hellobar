@@ -10,7 +10,6 @@ var InternalTracking = {
 
   track_current_person: function(eventName, props)
   {
-    console.log("TRACK " + eventName, props);
     $.ajax({
       url: "/track/current_person/did/" + encodeURIComponent(eventName)+"?props="+encodeURIComponent(JSON.stringify(props || {})),
       type: "POST",
