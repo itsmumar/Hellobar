@@ -8,7 +8,6 @@ class DigestMailer < ActionMailer::Base
     @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data)
     @se_totals = Hello::DataAPI.lifetime_totals(@site, @site.site_elements, @site.capabilities.num_days_improve_data)
     @sorted_elements = site.site_elements.active.sort_by { |se| @se_totals[se.id.to_s].views_between(1.week.ago + 1.day) }.reverse!
-    @conversion_percent_improvement = @totals[:total].conversion_change_between(2.week.ago + 1.day, 1.week.ago, 1.week.ago + 1.day, Time.now)
 
     roadie_mail(
       to: site.owner.email,

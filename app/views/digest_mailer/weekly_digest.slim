@@ -33,7 +33,7 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #A738BB;"
-                    - if @totals[:total].size < 7 || @conversion_percent_improvement.nil?
+                    - if @totals[:total].size < 7
                       | n/a
                     - else
                       = format_number(@totals[:total].conversions_between(2.week.ago + 1.day, 1.week.ago))
