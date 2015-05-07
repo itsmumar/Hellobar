@@ -1630,6 +1630,7 @@ var _HB = {
     else if (viewCondition === 'scroll-some') 
     {
       console.log("waiting for scroll-some");
+      // scroll-some is defined here as "visitor scrolls 300 pixels"
       HB.hideSiteElement();
       HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, 300, HB.showSiteElement);  
     }
@@ -1645,11 +1646,11 @@ var _HB = {
       HB.hideSiteElement();
       HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "bottom", HB.showSiteElement);  
     }
-        else if (viewCondition === 'exit-intent') 
+    else if (viewCondition === 'exit-intent') 
     {
-      console.log("waiting for scroll-to-bottom");
+      console.log("waiting for exit-intent");
       HB.hideSiteElement();
-      HB.scrollInterval = setInterval(HB.intentCheck, 100, "exit", HB.showSiteElement);  
+      HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", HB.showSiteElement);  
     };
   },
 
@@ -1677,9 +1678,36 @@ var _HB = {
   },
 
   // Runs a function if the visitor meets intent-detection conditions 
-  intentCheck: function(intent, payload) {
+  intentCheck: function(intentSetting, payload) {
+    console.log("intentCheck runs with intentSetting", intentSetting);
+    var intentCondition = false;
+
+    if (intentSetting === "exit") {
+      if (HB.mouseY < 20 && HB.intentConditionCache === "armed")  {
+        intentCondition = true;
+      };
+
+      if (HB.mouseY < 20) { HB.intentConditionCache = "armed" };
+    };
+
+    if (intentCondition) {
+      payload();
+      clearInterval(HB.intentInterval);
+    };
+  },
+
+  initializeIntentListeners: function() {
+    console.log("initializeIntentListeners runs")
+
+    document.onmousemove = function(e) {
+      console.log("mouse listener fires");
+      var event = e || window.event;
+      HB.mouseX = event.clientX;
+      HB.mouseY = event.clientY;
+    }
 
   }
+
 
 };
 
