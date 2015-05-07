@@ -23,7 +23,12 @@ HelloBar.StyleController = Ember.Controller.extend
         @set('model.type', 'Takeover')
       else
         @set('model.type', 'Bar')
+    InternalTracking.track_current_person("Editor Flow", {step: "Style Settings", goal: @get("model.element_subtype")}) if trackEditorFlow
   ).observes('routeForwarding')
+
+  trackStyleView: (->
+    InternalTracking.track_current_person("Editor Flow", {step: "Choose Style", goal: @get("model.element_subtype")}) if trackEditorFlow && !Ember.isEmpty(@get('model'))
+  ).observes('model').on('init')
 
   actions:
 

@@ -1,5 +1,7 @@
 HelloBar.ApplicationRoute = Ember.Route.extend
 
+  saveCount: 0
+
   model: ->
     if localStorage["stashedEditorModel"]
       model = JSON.parse(localStorage["stashedEditorModel"])
@@ -100,6 +102,9 @@ HelloBar.ApplicationRoute = Ember.Route.extend
   actions:
 
     saveSiteElement: ->
+      @set("saveCount", @get("saveCount") + 1)
+      InternalTracking.track_current_person("Editor Flow", {step: "Save Bar", goal: @currentModel.element_subtype, style: @currentModel.type, save_attempts: @get("saveCount")}) if trackEditorFlow
+
       if window.barID
         url = "/sites/#{window.siteID}/site_elements/#{window.barID}.json"
         method = "PUT"
@@ -114,6 +119,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
         data: JSON.stringify(@currentModel)
 
         success: =>
+          InternalTracking.track_current_person("Editor Flow", {step: "Completed", goal: @currentModel.element_subtype, style: @currentModel.type, save_attempts: @get("saveCount")}) if trackEditorFlow
           if @controller.get("model.site.num_site_elements") == 0
             window.location = "/sites/#{window.siteID}"
           else

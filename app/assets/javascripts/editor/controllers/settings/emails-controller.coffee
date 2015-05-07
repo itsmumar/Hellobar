@@ -35,6 +35,7 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
         close: (modal) =>
           @set("model.contact_list_id", null)
 
+      InternalTracking.track_current_person("Editor Flow", {step: "Contact List Settings", goal: @get("model.element_subtype")}) if trackEditorFlow
       new ContactListModal(options).open()
   ).observes("model.contact_list_id")
 

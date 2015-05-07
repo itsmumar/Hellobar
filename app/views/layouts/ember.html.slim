@@ -29,8 +29,7 @@ html
     javascript:
       HB_DNT = 1;
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
-
-    = yield
+      var trackEditorFlow = #{{!current_user.nil? && current_user.sites.count == 1 && current_user.site_elements.count == 0}};
 
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'
@@ -43,3 +42,5 @@ html
       script src='//cdnjs.cloudflare.com/ajax/libs/ember.js/1.7.0-beta.1/ember.prod.js'
 
     = javascript_include_tag "editor/application"
+
+    = yield

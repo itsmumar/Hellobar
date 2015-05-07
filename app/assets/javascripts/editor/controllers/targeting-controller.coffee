@@ -39,6 +39,7 @@ HelloBar.TargetingController = Ember.Controller.extend
       new UpgradeAccountModal(options).open()
 
     openRuleModal: (ruleData) ->
+      InternalTracking.track_current_person("Editor Flow", {step: "Edit Targeting", goal: @get("model.element_subtype"), style: @get("model.type")}) if trackEditorFlow
       return @send("openUpgradeModal", ruleData) unless @get("canUseRuleModal")
 
       ruleData.siteID = window.siteID
@@ -65,6 +66,11 @@ HelloBar.TargetingController = Ember.Controller.extend
           controller.send("resetRuleDropdown", ruleData)
 
       new RuleModal(options).open()
+
+  trackTargetView: (->
+    if trackEditorFlow && !Ember.isEmpty(@get('model'))
+      InternalTracking.track_current_person("Editor Flow", {step: "Targeting Settings", goal: @get("model.element_subtype"), style: @get("model.type")})
+  ).observes('model').on('init')
 
   #-----------  Step Settings  -----------#
 

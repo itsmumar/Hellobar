@@ -24,22 +24,13 @@ HelloBar.SettingsController = Ember.Controller.extend
         @set("model.element_subtype", "traffic")
       when "settings.social"
         @set("model.element_subtype", null)
+    InternalTracking.track_current_person("Editor Flow", {step: "Goal Settings", goal: @get("model.element_subtype")}) if trackEditorFlow
   ).observes('routeForwarding')
 
   # Sets a property which tells the route to forward to a previously
   # selected child route (ie. sub-step)
 
   routeForwarding: false
-
-  setSubtype: (->
-    switch @get('routeForwarding')
-      when 'settings.emails'
-        @set('model.element_subtype', 'email')
-      when 'settings.click'
-        @set('model.element_subtype', 'traffic')
-      when 'settings.social'
-        @set('model.element_subtype', null)
-  ).observes('routeForwarding')
 
   actions:
 
