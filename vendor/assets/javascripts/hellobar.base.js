@@ -1603,35 +1603,82 @@ var _HB = {
   // this will need to run right after site element is "ready"
     console.log("checkForDisplaySetting runs");
 
-    var view_condition = HB.currentSiteElement.view_condition;
-    if (view_condition === 'immidiately') 
+    var viewCondition = HB.currentSiteElement.view_condition;
+    if (viewCondition === 'immidiately') 
     {
       console.log("displaying immidiately");
       return;
     } 
-    else if (view_condition === 'wait-5') 
+    else if (viewCondition === 'wait-5') 
     {
       console.log("waiting 5");
       HB.hideSiteElement();
       setTimeout(HB.showSiteElement, 5000);
     } 
-    else if (view_condition === 'wait-10') 
+    else if (viewCondition === 'wait-10') 
     {
       console.log("waiting 10");
       HB.hideSiteElement();
       setTimeout(HB.showSiteElement, 10000);
     } 
-    else if (view_condition === 'wait-60') 
+    else if (viewCondition === 'wait-60') 
     {
       console.log("waiting 60");
       HB.hideSiteElement();
       setTimeout(HB.showSiteElement, 60000);
     } 
-    else if (view_condition === 'scroll-to-bottom') 
+    else if (viewCondition === 'scroll-some') 
+    {
+      console.log("waiting for scroll-some");
+      HB.hideSiteElement();
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, 300, HB.showSiteElement);  
+    }
+    else if (viewCondition === 'scroll-middle') 
+    {
+      console.log("waiting for scroll-to-middle");
+      HB.hideSiteElement();
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "middle", HB.showSiteElement);  
+    }
+    else if (viewCondition === 'scroll-to-bottom') 
     {
       console.log("waiting for scroll-to-bottom");
       HB.hideSiteElement();
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "bottom", HB.showSiteElement);  
+    }
+        else if (viewCondition === 'exit-intent') 
+    {
+      console.log("waiting for scroll-to-bottom");
+      HB.hideSiteElement();
+      HB.scrollInterval = setInterval(HB.intentCheck, 100, "exit", HB.showSiteElement);  
     };
+  },
+
+  // Runs a function if the visitor has scrolled to a given height.   
+  scrollTargetCheck: function(scrollTarget, payload) {
+    // scrollTarget of "bottom" and "middle" are computed during check, in case page size changes;
+    // scrollTarget also accepts distance from top in pixels
+
+    console.log("scrollTargetCheck runs");
+
+    if (scrollTarget === "bottom") {
+      // arbitrary 300 pixels subtracted from page height to assume visitor will not scroll through a footer
+      scrollTarget = (document.body.scrollHeight - document.body.clientHeight - 300);
+    }
+    else if (scrollTarget === "middle") {
+      // triggers just before middle of page - feels right due to polling rate
+      scrollTarget = ((document.body.scrollHeight - (document.body.clientHeight * 2)) / 2);
+    };
+
+    // window.pageYOffset is same as window.scrollY, but with better compatibility
+    if (window.pageYOffset >= scrollTarget) {
+      payload();
+      clearInterval(HB.scrollInterval);
+    }
+  },
+
+  // Runs a function if the visitor meets intent-detection conditions 
+  intentCheck: function(intent, payload) {
+
   }
 
 };
