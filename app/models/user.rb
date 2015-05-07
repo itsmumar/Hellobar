@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
     case notification
     when :reset_password_instructions
       if is_oauth_user?
-        reset_link = url_helpers.user_omniauth_authorize_url(:google_oauth2, :host => host)
+        reset_link = "#{host}/auth/google_oauth2"
         MailerGateway.send_email("Reset Password Oauth", email, {:email => email, :reset_link => reset_link})
       else
         reset_link = url_helpers.edit_user_password_url(self, :reset_password_token => args[0], :host => host)
