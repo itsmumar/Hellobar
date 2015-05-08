@@ -1697,6 +1697,9 @@ var _HB = {
 
   initializeIntentListeners: function() {
     HB.intentConditionCache = [];
+    // initialize mouse position near center of window, avoids edge case with no mouse events yet
+    HB.mouseX = 300;
+    HB.mouseY = 300;
 
     document.onmousemove = function(e) {
       var event = e || window.event;
