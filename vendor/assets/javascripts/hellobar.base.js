@@ -1586,71 +1586,61 @@ var _HB = {
   // Hides entire site element iframe 
   hideSiteElement: function()
   {
-    console.log("hideSiteElement runs");
     HB.w.style.display = 'none';
   },
 
   // Unhides entire site element iframe 
   showSiteElement: function()
   {
-    console.log("showSiteElement runs");
     HB.w.style.display = 'block'
   },
 
   // Reads the site element's display_when setting and calls hide/show per selected behavior
+  // if viewCondition is missing of badly formed, siteElement displays immidiately by default
+
   checkForDisplaySetting: function()
   {
-    console.log("checkForDisplaySetting runs");
 
     var viewCondition = HB.currentSiteElement.view_condition;
     if (viewCondition === 'immidiately') 
     {
-      console.log("displaying immidiately");
-      return;
+      return; 
     } 
     else if (viewCondition === 'wait-5') 
     {
-      console.log("waiting 5");
       HB.hideSiteElement();
       setTimeout(HB.showSiteElement, 5000);
     } 
     else if (viewCondition === 'wait-10') 
     {
-      console.log("waiting 10");
       HB.hideSiteElement();
       setTimeout(HB.showSiteElement, 10000);
     } 
     else if (viewCondition === 'wait-60') 
     {
-      console.log("waiting 60");
       HB.hideSiteElement();
       setTimeout(HB.showSiteElement, 60000);
     } 
     else if (viewCondition === 'scroll-some') 
     {
-      console.log("waiting for scroll-some");
       // scroll-some is defined here as "visitor scrolls 300 pixels"
       HB.hideSiteElement();
       HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, 300, HB.showSiteElement);  
     }
     else if (viewCondition === 'scroll-middle') 
     {
-      console.log("waiting for scroll-to-middle");
       HB.hideSiteElement();
       HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "middle", HB.showSiteElement);  
     }
     else if (viewCondition === 'scroll-to-bottom') 
     {
-      console.log("waiting for scroll-to-bottom");
       HB.hideSiteElement();
       HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "bottom", HB.showSiteElement);  
     }
     else if (viewCondition === 'exit-intent') 
     {
-      console.log("waiting for exit-intent");
       HB.hideSiteElement();
       HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", HB.showSiteElement);  
-      console.log("created interval value of", HB.intentInterval)
     };
   },
 
@@ -1658,8 +1648,6 @@ var _HB = {
   scrollTargetCheck: function(scrollTarget, payload) {
     // scrollTarget of "bottom" and "middle" are computed during check, in case page size changes;
     // scrollTarget also accepts distance from top in pixels
-
-    console.log("scrollTargetCheck runs");
 
     if (scrollTarget === "bottom") {
       // arbitrary 300 pixels subtracted from page height to assume visitor will not scroll through a footer
@@ -1679,42 +1667,35 @@ var _HB = {
 
   // Runs a function if the visitor meets intent-detection conditions 
   intentCheck: function(intentSetting, payload) {
-    console.log("intentCheck runs with intentSetting", intentSetting);
     var intentCondition = false;
-
     HB.intentConditionCache.push({x: HB.mouseX, y: HB.mouseY});
-    console.log(HB.intentConditionCache[0].x, HB.intentConditionCache[0].y)
     if (HB.intentConditionCache.length > 5) {HB.intentConditionCache.shift();};
-    console.log(HB.intentConditionCache);
 
     var c = HB.intentConditionCache;
-    console.log(HB.mouseY)
 
     if (intentSetting === "exit") {
 
       // catches fast move off screentop (same location implies cursor out of viewport)
-      if ((HB.mouseY < 30) && (c[c.length - 1].x === c[c.length - 3].x) && (c[c.length - 1].y === c[c.length - 3].y)) { intentCondition = true; console.log("fast move detected"); };
+      if ((HB.mouseY < 50) && (c[c.length - 1].x === c[c.length - 3].x) && (c[c.length - 1].y === c[c.length - 3].y)) { intentCondition = true };
 
       // catches slow move off screentop (requires previous poll to be near edge)
-      if (HB.mouseY < 2 && c[c.length - 2].y < 10) { intentCondition = true; console.log("slow move detected");};
+      if (HB.mouseY < 2 && c[c.length - 2].y < 10) { intentCondition = true };
 
       // catches any move towards the back button 
-      if (HB.mouseY + HB.mouseX < 150) { intentCondition = true; console.log("backbutton move detected");};
+      if (HB.mouseY + HB.mouseX < 200) { intentCondition = true };
 
       //  catch page inactive state
-      if ( document.hidden || document.unloaded ) { intentCondition = true; console.log("page inactive"); };
+      if ( document.hidden || document.unloaded ) { intentCondition = true };
 
     };
 
     if (intentCondition) {
       payload();
-      console.log("attempting clearInterval", HB.intentInterval);
       clearInterval(HB.intentInterval);
     };
   },
 
   initializeIntentListeners: function() {
-    console.log("initializeIntentListeners runs")
     HB.intentConditionCache = [];
 
     document.onmousemove = function(e) {
@@ -1722,27 +1703,9 @@ var _HB = {
       HB.mouseX = event.clientX;
       HB.mouseY = event.clientY;
     }
-
   }
 
-
 };
-
-  // TEMP NOTE for 
-  // triggerOptions: [
-  //   {value: 'immidiately', label: 'Immediately'}
-  //   {value: 'wait-5', label: '5 second delay'}
-  //   {value: 'wait-10', label: '10 second delay'}
-  //   {value: 'wait-60', label: '60 second delay'}
-  //   {value: 'scroll-some', label: 'After scrolling a little'}
-  //   {value: 'scroll-middle', label: 'After scrolling to middle'}
-  //   {value: 'scroll-to-bottom', label: 'After scrolling to bottom'}
-  //   {value: 'exit-intent', label: 'User intends to leave'} 
-  //   {value: 'tab-inactive', label: 'User switches tabs'}
-  // ]
-
-
-
 
 
 /*
