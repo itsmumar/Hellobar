@@ -1600,7 +1600,6 @@ var _HB = {
   // Reads the site element's display_when setting and calls hide/show per selected behavior
   checkForDisplaySetting: function()
   {
-  // this will need to run right after site element is "ready"
     console.log("checkForDisplaySetting runs");
 
     var viewCondition = HB.currentSiteElement.view_condition;
@@ -1650,7 +1649,8 @@ var _HB = {
     {
       console.log("waiting for exit-intent");
       HB.hideSiteElement();
-      HB.intentInterval = setInterval(HB.intentCheck, 250, "exit", HB.showSiteElement);  
+      HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", HB.showSiteElement);  
+      console.log("created interval value of", HB.intentInterval)
     };
   },
 
@@ -1681,27 +1681,41 @@ var _HB = {
   intentCheck: function(intentSetting, payload) {
     console.log("intentCheck runs with intentSetting", intentSetting);
     var intentCondition = false;
+
+    HB.intentConditionCache.push({x: HB.mouseX, y: HB.mouseY});
+    console.log(HB.intentConditionCache[0].x, HB.intentConditionCache[0].y)
+    if (HB.intentConditionCache.length > 5) {HB.intentConditionCache.shift();};
+    console.log(HB.intentConditionCache);
+
+    var c = HB.intentConditionCache;
     console.log(HB.mouseY)
 
     if (intentSetting === "exit") {
 
-      // catches fast move offscreen (same location implies cursor offscreen)
-      if (HB.mouseY < 30 && HB.intentConditionCache === HB.mouseY) { intentCondition = true; };
+      // catches fast move off screentop (same location implies cursor out of viewport)
+      if ((HB.mouseY < 30) && (c[c.length - 1].x === c[c.length - 3].x) && (c[c.length - 1].y === c[c.length - 3].y)) { intentCondition = true; console.log("fast move detected"); };
 
-      // catches slow move offscreen (requires previous poll to be near edge)
-      if (HB.mouseY < 5 && HB.intentConditionCache < 10) { intentCondition = true; };
+      // catches slow move off screentop (requires previous poll to be near edge)
+      if (HB.mouseY < 2 && c[c.length - 2].y < 10) { intentCondition = true; console.log("slow move detected");};
 
-      HB.intentConditionCache = HB.mouseY;
+      // catches any move towards the back button 
+      if (HB.mouseY + HB.mouseX < 150) { intentCondition = true; console.log("backbutton move detected");};
+
+      //  catch page inactive state
+      if ( document.hidden || document.unloaded ) { intentCondition = true; console.log("page inactive"); };
+
     };
 
     if (intentCondition) {
       payload();
+      console.log("attempting clearInterval", HB.intentInterval);
       clearInterval(HB.intentInterval);
     };
   },
 
   initializeIntentListeners: function() {
     console.log("initializeIntentListeners runs")
+    HB.intentConditionCache = [];
 
     document.onmousemove = function(e) {
       var event = e || window.event;
