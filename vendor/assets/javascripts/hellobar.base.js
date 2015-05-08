@@ -1650,7 +1650,7 @@ var _HB = {
     {
       console.log("waiting for exit-intent");
       HB.hideSiteElement();
-      HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", HB.showSiteElement);  
+      HB.intentInterval = setInterval(HB.intentCheck, 250, "exit", HB.showSiteElement);  
     };
   },
 
@@ -1681,13 +1681,17 @@ var _HB = {
   intentCheck: function(intentSetting, payload) {
     console.log("intentCheck runs with intentSetting", intentSetting);
     var intentCondition = false;
+    console.log(HB.mouseY)
 
     if (intentSetting === "exit") {
-      if (HB.mouseY < 20 && HB.intentConditionCache === "armed")  {
-        intentCondition = true;
-      };
 
-      if (HB.mouseY < 20) { HB.intentConditionCache = "armed" };
+      // catches fast move offscreen (same location implies cursor offscreen)
+      if (HB.mouseY < 30 && HB.intentConditionCache === HB.mouseY) { intentCondition = true; };
+
+      // catches slow move offscreen (requires previous poll to be near edge)
+      if (HB.mouseY < 5 && HB.intentConditionCache < 10) { intentCondition = true; };
+
+      HB.intentConditionCache = HB.mouseY;
     };
 
     if (intentCondition) {
@@ -1700,7 +1704,6 @@ var _HB = {
     console.log("initializeIntentListeners runs")
 
     document.onmousemove = function(e) {
-      console.log("mouse listener fires");
       var event = e || window.event;
       HB.mouseX = event.clientX;
       HB.mouseY = event.clientY;
