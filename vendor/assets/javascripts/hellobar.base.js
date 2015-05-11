@@ -1602,7 +1602,7 @@ var _HB = {
   {
     var viewCondition = HB.currentSiteElement.view_condition;
 
-    if (document.getElementById('hellobar-preview-container') !== null) { viewCondition = 'preview'; console.log("I'm a preview")};
+    if (document.getElementById('hellobar-preview-container') !== null) { viewCondition = 'preview' };
    
     if (viewCondition === 'immidiately') 
     {
@@ -1610,7 +1610,7 @@ var _HB = {
     } 
     else if (viewCondition === 'preview') 
     {
-      // append message to preview function
+      // if deemed useful, append display setting message to preview
       return;
     }
     else if (viewCondition === 'wait-5') 
