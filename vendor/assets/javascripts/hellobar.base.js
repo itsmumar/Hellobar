@@ -1688,7 +1688,7 @@ var _HB = {
     if (intentSetting === "exit") {
 
       // catches fast move off screentop (same location across polls implies cursor out of viewport)
-      if ((HB.mouseY < 50) 
+      if ((HB.mouseY < 75) 
         && (c[c.length - 1].x === c[c.length - 2].x) 
         && (c[c.length - 1].y === c[c.length - 2].y) 
         && (c[c.length - 1].y === c[c.length - 3].y) 
