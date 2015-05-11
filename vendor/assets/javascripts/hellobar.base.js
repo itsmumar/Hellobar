@@ -1601,10 +1601,18 @@ var _HB = {
   checkForDisplaySetting: function()
   {
     var viewCondition = HB.currentSiteElement.view_condition;
+
+    if (document.getElementById('hellobar-preview-container') !== null) { viewCondition = 'preview'; console.log("I'm a preview")};
+   
     if (viewCondition === 'immidiately') 
     {
       return; 
     } 
+    else if (viewCondition === 'preview') 
+    {
+      // append message to preview function
+      return;
+    }
     else if (viewCondition === 'wait-5') 
     {
       HB.hideSiteElement();
