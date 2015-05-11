@@ -16,13 +16,6 @@ class SiteElement < ActiveRecord::Base
 
   SHORT_SUBTYPES = %w{traffic email social}
 
-  DISPLAY_WHEN_OPTIONS = %w{
-    immediately
-    after_leaving
-    after_scroll
-    after_delay
-  }
-
   belongs_to :rule
   belongs_to :contact_list
 
@@ -30,7 +23,6 @@ class SiteElement < ActiveRecord::Base
 
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES }
   validates :rule, association_exists: true
-  validates :display_when, inclusion: { in: DISPLAY_WHEN_OPTIONS }
   validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
 
   validate :site_is_capable_of_creating_element, unless: :persisted?
