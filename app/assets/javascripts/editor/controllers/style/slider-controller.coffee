@@ -16,5 +16,4 @@ HelloBar.StyleSliderController = Ember.Controller.extend HelloBar.HasPlacement,
     {value: 'scroll-middle', label: 'After scrolling to middle'}
     {value: 'scroll-to-bottom', label: 'After scrolling to bottom'}
     {value: 'exit-intent', label: 'User intends to leave'} 
-    {value: 'tab-inactive', label: 'User switches tabs'}
   ]
