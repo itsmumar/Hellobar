@@ -1596,11 +1596,10 @@ var _HB = {
   },
 
   // Reads the site element's display_when setting and calls hide/show per selected behavior
-  // if viewCondition is missing of badly formed, siteElement displays immidiately by default
+  // if viewCondition is missing or badly formed, siteElement displays immidiately by default
 
   checkForDisplaySetting: function()
   {
-
     var viewCondition = HB.currentSiteElement.view_condition;
     if (viewCondition === 'immidiately') 
     {
@@ -1667,29 +1666,59 @@ var _HB = {
 
   // Runs a function if the visitor meets intent-detection conditions 
   intentCheck: function(intentSetting, payload) {
-    var intentCondition = false;
-    HB.intentConditionCache.push({x: HB.mouseX, y: HB.mouseY});
-    if (HB.intentConditionCache.length > 5) {HB.intentConditionCache.shift();};
+    var vistorIntendsTo = false;
 
+    // aliases for readability
+    var yFromBottom = (HB.mouseY - document.body.clientHeight) * -1;
+    var xFromLeft = HB.mouseX;
+
+     // Caches most recent polling data for reference by rules
+    HB.intentConditionCache.push({ x: HB.mouseX, y: HB.mouseY, yFromBottom: yFromBottom });
+    if (HB.intentConditionCache.length > 5) { HB.intentConditionCache.shift(); };
     var c = HB.intentConditionCache;
 
     if (intentSetting === "exit") {
 
-      // catches fast move off screentop (same location implies cursor out of viewport)
-      if ((HB.mouseY < 50) && (c[c.length - 1].x === c[c.length - 3].x) && (c[c.length - 1].y === c[c.length - 3].y)) { intentCondition = true };
+      // catches fast move off screentop (same location across polls implies cursor out of viewport)
+      if ((HB.mouseY < 50) 
+        && (c[c.length - 1].x === c[c.length - 2].x) 
+        && (c[c.length - 1].y === c[c.length - 2].y) 
+        && (c[c.length - 1].y === c[c.length - 3].y) 
+        && (c[c.length - 1].x === c[c.length - 3].x)) { vistorIntendsTo = true };
 
       // catches slow move off screentop (requires previous poll to be near edge)
-      if (HB.mouseY < 2 && c[c.length - 2].y < 10) { intentCondition = true };
+      if (HB.mouseY < 2 && c[c.length - 2].y < 10) { vistorIntendsTo = true };
 
       // catches any move towards the back button 
-      if (HB.mouseY + HB.mouseX < 200) { intentCondition = true };
+      if (HB.mouseY + HB.mouseX < 200) { vistorIntendsTo = true };
+
+      // Windows-ish only rules
+      if (navigator.appVersion.indexOf("Win")!=-1) { 
+
+        // catch any move towards Start Menu (bottom left) 
+        if (yFromBottom + xFromLeft < 200) { vistorIntendsTo = true };
+      };
+
+      // OSX-ish only rules
+      if (navigator.appVersion.indexOf("Mac")!=-1) { 
+
+        // catch slow move towards default Dock position (bottom) 
+        if (yFromBottom < 10 && c[c.length - 2].yFromBottom < 15) { vistorIntendsTo = true };
+
+        // catch fast move towards default Dock position (bottom) 
+        if ((yFromBottom < 50) 
+          && (c[c.length - 1].x === c[c.length - 2].x) 
+          && (c[c.length - 1].y === c[c.length - 2].y) 
+          && (c[c.length - 1].y === c[c.length - 3].y) 
+          && (c[c.length - 1].x === c[c.length - 3].x)) { vistorIntendsTo = true };
+      };
 
       //  catch page inactive state
-      if ( document.hidden || document.unloaded ) { intentCondition = true };
+      if ( document.hidden || document.unloaded ) { vistorIntendsTo = true };
 
     };
 
-    if (intentCondition) {
+    if (vistorIntendsTo) {
       payload();
       clearInterval(HB.intentInterval);
     };
