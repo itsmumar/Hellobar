@@ -1583,75 +1583,59 @@ var _HB = {
     }
   },
 
-  // Hides entire site element iframe 
-  hideSiteElement: function()
-  {
-    HB.w.style.display = 'none';
-  },
-
-  // Unhides entire site element iframe 
-  showSiteElement: function()
-  {
-    HB.w.style.display = 'block'
-  },
-
   // Reads the site element's display_when setting and calls hide/show per selected behavior
-  // if viewCondition is missing or badly formed, siteElement displays immidiately by default
+  // if viewCondition is missing or badly formed, siteElement displays immediately by default
 
-  checkForDisplaySetting: function()
+  checkForDisplaySetting: function(siteElement)
   {
-    var viewCondition = HB.currentSiteElement.view_condition;
+    var viewCondition = siteElement.view_condition;
 
-    if (document.getElementById('hellobar-preview-container') !== null) { viewCondition = 'preview' };
-   
-    if (viewCondition === 'immidiately') 
-    {
-      return; 
-    } 
-    else if (viewCondition === 'preview') 
-    {
-      // if deemed useful, append display setting message to preview
+    if (document.getElementById('hellobar-preview-container') !== null)
+      viewCondition = 'preview';
+
+    if (viewCondition === 'immediately' || viewCondition === 'preview')
       return;
+
+    // Hide the site element
+    HB.w.style.display = 'none';
+
+    var show = function() {
+      HB.w.style.display = '';
+      HB.animateIn(HB.w);
     }
-    else if (viewCondition === 'wait-5') 
+
+    if (viewCondition === 'wait-5')
     {
-      HB.hideSiteElement();
-      setTimeout(HB.showSiteElement, 5000);
-    } 
-    else if (viewCondition === 'wait-10') 
+      setTimeout(show, 5000);
+    }
+    else if (viewCondition === 'wait-10')
     {
-      HB.hideSiteElement();
-      setTimeout(HB.showSiteElement, 10000);
-    } 
-    else if (viewCondition === 'wait-60') 
+      setTimeout(show, 10000);
+    }
+    else if (viewCondition === 'wait-60')
     {
-      HB.hideSiteElement();
-      setTimeout(HB.showSiteElement, 60000);
-    } 
-    else if (viewCondition === 'scroll-some') 
+      setTimeout(show, 60000);
+    }
+    else if (viewCondition === 'scroll-some')
     {
       // scroll-some is defined here as "visitor scrolls 300 pixels"
-      HB.hideSiteElement();
-      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, 300, HB.showSiteElement);  
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, 300, show);
     }
-    else if (viewCondition === 'scroll-middle') 
+    else if (viewCondition === 'scroll-middle')
     {
-      HB.hideSiteElement();
-      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "middle", HB.showSiteElement);  
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "middle", show);
     }
-    else if (viewCondition === 'scroll-to-bottom') 
+    else if (viewCondition === 'scroll-to-bottom')
     {
-      HB.hideSiteElement();
-      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "bottom", HB.showSiteElement);  
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "bottom", show);
     }
-    else if (viewCondition === 'exit-intent') 
+    else if (viewCondition === 'exit-intent')
     {
-      HB.hideSiteElement();
-      HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", HB.showSiteElement);  
+      HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", show);
     };
   },
 
-  // Runs a function if the visitor has scrolled to a given height.   
+  // Runs a function if the visitor has scrolled to a given height.
   scrollTargetCheck: function(scrollTarget, payload) {
     // scrollTarget of "bottom" and "middle" are computed during check, in case page size changes;
     // scrollTarget also accepts distance from top in pixels
@@ -1672,7 +1656,7 @@ var _HB = {
     }
   },
 
-  // Runs a function if the visitor meets intent-detection conditions 
+  // Runs a function if the visitor meets intent-detection conditions
   intentCheck: function(intentSetting, payload) {
     var vistorIntendsTo = false;
 
@@ -1688,36 +1672,36 @@ var _HB = {
     if (intentSetting === "exit") {
 
       // catches fast move off screentop (same location across polls implies cursor out of viewport)
-      if ((HB.mouseY < 75) 
-        && (c[c.length - 1].x === c[c.length - 2].x) 
-        && (c[c.length - 1].y === c[c.length - 2].y) 
-        && (c[c.length - 1].y === c[c.length - 3].y) 
+      if ((HB.mouseY < 75)
+        && (c[c.length - 1].x === c[c.length - 2].x)
+        && (c[c.length - 1].y === c[c.length - 2].y)
+        && (c[c.length - 1].y === c[c.length - 3].y)
         && (c[c.length - 1].x === c[c.length - 3].x)) { vistorIntendsTo = true };
 
       // catches slow move off screentop (requires previous poll to be near edge)
       if (HB.mouseY < 2 && c[c.length - 2].y < 10) { vistorIntendsTo = true };
 
-      // catches any move towards the back button 
+      // catches any move towards the back button
       if (HB.mouseY + HB.mouseX < 200) { vistorIntendsTo = true };
 
       // Windows-ish only rules
-      if (navigator.appVersion.indexOf("Win")!=-1) { 
+      if (navigator.appVersion.indexOf("Win")!=-1) {
 
-        // catch any move towards Start Menu (bottom left) 
+        // catch any move towards Start Menu (bottom left)
         if (yFromBottom + xFromLeft < 200) { vistorIntendsTo = true };
       };
 
       // OSX-ish only rules
-      if (navigator.appVersion.indexOf("Mac")!=-1) { 
+      if (navigator.appVersion.indexOf("Mac")!=-1) {
 
-        // catch slow move towards default Dock position (bottom) 
+        // catch slow move towards default Dock position (bottom)
         if (yFromBottom < 10 && c[c.length - 2].yFromBottom < 15) { vistorIntendsTo = true };
 
-        // catch fast move towards default Dock position (bottom) 
-        if ((yFromBottom < 50) 
-          && (c[c.length - 1].x === c[c.length - 2].x) 
-          && (c[c.length - 1].y === c[c.length - 2].y) 
-          && (c[c.length - 1].y === c[c.length - 3].y) 
+        // catch fast move towards default Dock position (bottom)
+        if ((yFromBottom < 50)
+          && (c[c.length - 1].x === c[c.length - 2].x)
+          && (c[c.length - 1].y === c[c.length - 2].y)
+          && (c[c.length - 1].y === c[c.length - 3].y)
           && (c[c.length - 1].x === c[c.length - 3].x)) { vistorIntendsTo = true };
       };
 

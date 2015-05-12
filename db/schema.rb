@@ -219,15 +219,15 @@ ActiveRecord::Schema.define(version: 20150423145614) do
     t.string   "thank_you_text"
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
-    t.integer  "wordpress_bar_id"
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
+    t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
     t.string   "placement"
     t.datetime "deleted_at"
-    t.string   "view_condition",                  default: "immidiately"
+    t.string   "view_condition",                  default: "immediately"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

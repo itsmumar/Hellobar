@@ -17,17 +17,13 @@ var SiteElement = function(props) {
 };
 
 SiteElement.prototype.setupIFrame = function(){
-  
-  // THIS IS OVERRIDDEN FOR EACH SITE ELEMENT TYPE
-  // IF JS HAD AN EASY `SUPER`, THESE WOULD INHERIT
-
-  // Any view_condition including string 'intent' will run the intent event listeners 
-  if (this.view_condition.indexOf('intent') !== -1) { 
-    HB.initializeIntentListeners(); 
+  // Any view_condition including string 'intent' will run the intent event listeners
+  if (this.view_condition.indexOf('intent') !== -1) {
+    HB.initializeIntentListeners();
   };
 
   // Starts setIntervals that check display setting conditions
-  HB.checkForDisplaySetting();
+  HB.checkForDisplaySetting(this);
 };
 
 SiteElement.prototype.prerender = function(){
