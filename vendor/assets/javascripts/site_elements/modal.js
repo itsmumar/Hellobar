@@ -9,7 +9,7 @@ ModalElement.prototype.constructor = ModalElement;
 ModalElement.prototype.setupIFrame = function(iframe){
 
   // Any view_condition including string 'intent' will run the intent event listeners 
-  if (this.view_condition !== null && this.view_condition.indexOf('intent') !== -1) { 
+  if (this.view_condition.indexOf('intent') !== -1) { 
     HB.initializeIntentListeners(); 
   };
 
