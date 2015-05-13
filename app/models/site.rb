@@ -95,7 +95,7 @@ class Site < ActiveRecord::Base
   end
 
   def script_installed_on_homepage?
-    response = HTTParty.get(self.url)
+    response = HTTParty.get(self.url, timeout: 5)
     response =~ /#{script_name}/
   rescue
     return false
