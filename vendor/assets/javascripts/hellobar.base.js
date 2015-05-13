@@ -1589,12 +1589,10 @@ var _HB = {
   checkForDisplaySetting: function(siteElement)
   {
     var viewCondition = siteElement.view_condition;
+    var originalDisplay = HB.w.style.display;
 
     if (document.getElementById('hellobar-preview-container') !== null)
       viewCondition = 'preview';
-
-    if (viewCondition === 'immediately' || viewCondition === 'preview')
-      return;
 
     // Hide the site element
     HB.w.style.display = 'none';
@@ -1632,7 +1630,11 @@ var _HB = {
     else if (viewCondition === 'exit-intent')
     {
       HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", show);
-    };
+    }
+    else {
+      // No view condition so show immediately
+      HB.w.style.display = originalDisplay;
+    }
   },
 
   // Runs a function if the visitor has scrolled to a given height.
