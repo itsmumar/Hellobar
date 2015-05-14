@@ -1602,8 +1602,158 @@ var _HB = {
         HB.e.container.style.height = (element.clientHeight + 24) + "px";
       }
     }
+  },
+
+  // Reads the site element's display_when setting and calls hide/show per selected behavior
+  // if viewCondition is missing or badly formed, siteElement displays immediately by default
+
+  checkForDisplaySetting: function(siteElement)
+  {
+    var viewCondition = siteElement.view_condition;
+    var originalDisplay = HB.w.style.display;
+
+    if (document.getElementById('hellobar-preview-container') !== null)
+      viewCondition = 'preview';
+
+    // Hide the site element
+    HB.w.style.display = 'none';
+
+    var show = function() {
+      HB.w.style.display = '';
+      HB.animateIn(HB.w);
+    }
+
+    if (viewCondition === 'wait-5')
+    {
+      setTimeout(show, 5000);
+    }
+    else if (viewCondition === 'wait-10')
+    {
+      setTimeout(show, 10000);
+    }
+    else if (viewCondition === 'wait-60')
+    {
+      setTimeout(show, 60000);
+    }
+    else if (viewCondition === 'scroll-some')
+    {
+      // scroll-some is defined here as "visitor scrolls 300 pixels"
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, 300, show);
+    }
+    else if (viewCondition === 'scroll-middle')
+    {
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "middle", show);
+    }
+    else if (viewCondition === 'scroll-to-bottom')
+    {
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "bottom", show);
+    }
+    else if (viewCondition === 'exit-intent')
+    {
+      HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", show);
+    }
+    else {
+      // No view condition so show immediately
+      HB.w.style.display = originalDisplay;
+    }
+  },
+
+  // Runs a function if the visitor has scrolled to a given height.
+  scrollTargetCheck: function(scrollTarget, payload) {
+    // scrollTarget of "bottom" and "middle" are computed during check, in case page size changes;
+    // scrollTarget also accepts distance from top in pixels
+
+    if (scrollTarget === "bottom") {
+      // arbitrary 300 pixels subtracted from page height to assume visitor will not scroll through a footer
+      scrollTarget = (document.body.scrollHeight - document.body.clientHeight - 300);
+    }
+    else if (scrollTarget === "middle") {
+      // triggers just before middle of page - feels right due to polling rate
+      scrollTarget = ((document.body.scrollHeight - (document.body.clientHeight * 2)) / 2);
+    };
+
+    // window.pageYOffset is same as window.scrollY, but with better compatibility
+    if (window.pageYOffset >= scrollTarget) {
+      payload();
+      clearInterval(HB.scrollInterval);
+    }
+  },
+
+  // Runs a function if the visitor meets intent-detection conditions
+  intentCheck: function(intentSetting, payload) {
+    var vistorIntendsTo = false;
+
+    // aliases for readability
+    var yFromBottom = (HB.mouseY - document.body.clientHeight) * -1;
+    var xFromLeft = HB.mouseX;
+
+     // Caches most recent polling data for reference by rules
+    HB.intentConditionCache.push({ x: HB.mouseX, y: HB.mouseY, yFromBottom: yFromBottom });
+    if (HB.intentConditionCache.length > 5) { HB.intentConditionCache.shift(); };
+    var c = HB.intentConditionCache;
+
+    if (intentSetting === "exit") {
+
+      // catches fast move off screentop (same location across polls implies cursor out of viewport)
+      if ((HB.mouseY < 75)
+        && (c[c.length - 1].x === c[c.length - 2].x)
+        && (c[c.length - 1].y === c[c.length - 2].y)
+        && (c[c.length - 1].y === c[c.length - 3].y)
+        && (c[c.length - 1].x === c[c.length - 3].x)) { vistorIntendsTo = true };
+
+      // catches slow move off screentop (requires previous poll to be near edge)
+      if (HB.mouseY < 2 && c[c.length - 2].y < 10) { vistorIntendsTo = true };
+
+      // catches any move towards the back button
+      if (HB.mouseY + HB.mouseX < 200) { vistorIntendsTo = true };
+
+      // Windows-ish only rules
+      if (navigator.appVersion.indexOf("Win")!=-1) {
+
+        // catch any move towards Start Menu (bottom left)
+        if (yFromBottom + xFromLeft < 200) { vistorIntendsTo = true };
+      };
+
+      // OSX-ish only rules
+      if (navigator.appVersion.indexOf("Mac")!=-1) {
+
+        // catch slow move towards default Dock position (bottom)
+        if (yFromBottom < 10 && c[c.length - 2].yFromBottom < 15) { vistorIntendsTo = true };
+
+        // catch fast move towards default Dock position (bottom)
+        if ((yFromBottom < 50)
+          && (c[c.length - 1].x === c[c.length - 2].x)
+          && (c[c.length - 1].y === c[c.length - 2].y)
+          && (c[c.length - 1].y === c[c.length - 3].y)
+          && (c[c.length - 1].x === c[c.length - 3].x)) { vistorIntendsTo = true };
+      };
+
+      //  catch page inactive state
+      if ( document.hidden || document.unloaded ) { vistorIntendsTo = true };
+
+    };
+
+    if (vistorIntendsTo) {
+      payload();
+      clearInterval(HB.intentInterval);
+    };
+  },
+
+  initializeIntentListeners: function() {
+    HB.intentConditionCache = [];
+    // initialize mouse position near center of window, avoids edge case with no mouse events yet
+    HB.mouseX = 300;
+    HB.mouseY = 300;
+
+    document.onmousemove = function(e) {
+      var event = e || window.event;
+      HB.mouseX = event.clientX;
+      HB.mouseY = event.clientY;
+    }
   }
+
 };
+
 
 /*
 CryptoJS v3.1

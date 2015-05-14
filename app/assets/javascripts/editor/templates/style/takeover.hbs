@@ -5,3 +5,13 @@
 <label>Animations
   {{toggle-switch switch=model.animated}}
 </label>
+
+<label>When does it display?</label>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=triggerOptions
+    value=selectedTrigger
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
+  }}
+</div>

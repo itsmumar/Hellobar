@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403192532) do
+ActiveRecord::Schema.define(version: 20150423145614) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -224,10 +224,12 @@ ActiveRecord::Schema.define(version: 20150403192532) do
     t.integer  "wordpress_bar_id"
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
+    t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
     t.string   "placement"
     t.datetime "deleted_at"
+    t.string   "view_condition",                  default: "immediately"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
