@@ -8,7 +8,8 @@ module Hello::EmailDigest
 
       options = {content: mailer.html_part.body.raw_source,
                   text: mailer.text_part.body.raw_source,
-                  site_url: site.url}
+                  site_url: site.url,
+                  date: Date.today.strftime("%b %-d, %Y")}
       Analytics.track(:user, site.owner.id, "Sent Email", {"Email Template"=>EmailDigestHelper.template_name(site)})
       MailerGateway.send_email(EmailDigestHelper.template_name(site), site.owner.email, options)
     end
