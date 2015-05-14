@@ -1,17 +1,17 @@
 class SiteElement < ActiveRecord::Base
   TYPES = [Bar, Modal, Slider, Takeover]
 
-  BAR_TYPES = %w{
-    traffic
-    email
-    social/tweet_on_twitter
-    social/follow_on_twitter
-    social/like_on_facebook
-    social/share_on_linkedin
-    social/plus_one_on_google_plus
-    social/pin_on_pinterest
-    social/follow_on_pinterest
-    social/share_on_buffer
+  # valid bar types and their conversion units
+  BAR_TYPES = {
+    "traffic"                         => "Clicks",
+    "email"                           => "Emails",
+    "social/tweet_on_twitter"         => "Tweets",
+    "social/follow_on_twitter"        => "Follows",
+    "social/like_on_facebook"         => "Likes",
+    "social/plus_one_on_google_plus"  => "+1's",
+    "social/pin_on_pinterest"         => "Pins",
+    "social/follow_on_pinterest"      => "Follows",
+    "social/share_on_buffer"          => "Shares"
   }
 
   SHORT_SUBTYPES = %w{traffic email social}
@@ -21,7 +21,7 @@ class SiteElement < ActiveRecord::Base
 
   acts_as_paranoid
 
-  validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES }
+  validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES.keys }
   validates :rule, association_exists: true
   validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
 
@@ -64,7 +64,7 @@ class SiteElement < ActiveRecord::Base
   def self.all_templates
     [].tap do |templates|
       TYPES.each do |type|
-        BAR_TYPES.each do |subtype|
+        BAR_TYPES.keys.each do |subtype|
           templates << "#{type.name.downcase}_#{subtype}"
         end
       end

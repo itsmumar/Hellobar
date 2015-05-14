@@ -40,4 +40,22 @@ describe EmailDigestHelper, type: :helper do
       helper.formatted_percent(-89.3).should == "-89%"
     end
   end
+
+  context "conversion_header" do
+    it "should use the conversion unit if all elements are the same type" do
+      elements = [
+        SiteElement.new(element_subtype: SiteElement::BAR_TYPES.keys[3]),
+        SiteElement.new(element_subtype: SiteElement::BAR_TYPES.keys[3])
+      ]
+      helper.conversion_header(elements).should == SiteElement::BAR_TYPES[SiteElement::BAR_TYPES.keys[3]]
+    end
+
+    it "should use the 'Conversions' if mix of element types" do
+      elements = [
+        SiteElement.new(element_subtype: SiteElement::BAR_TYPES.keys[3]),
+        SiteElement.new(element_subtype: SiteElement::BAR_TYPES.keys[2])
+      ]
+      helper.conversion_header(elements).should == "Conversions"
+    end
+  end
 end
