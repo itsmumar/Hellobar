@@ -1689,10 +1689,12 @@ var _HB = {
 
      // Caches most recent polling data for reference by rules
     HB.intentConditionCache.push({ x: HB.mouseX, y: HB.mouseY, yFromBottom: yFromBottom });
-    if (HB.intentConditionCache.length > 5) { HB.intentConditionCache.shift(); };
+    if (HB.intentConditionCache.length > 5)
+      HB.intentConditionCache.shift();
     var c = HB.intentConditionCache;
 
-    if (intentSetting === "exit") {
+    // intent is set to exit and we have enough mouse position data
+    if (intentSetting === "exit" && c.length > 2) {
 
       // catches fast move off screentop (same location across polls implies cursor out of viewport)
       if ((HB.mouseY < 75)
