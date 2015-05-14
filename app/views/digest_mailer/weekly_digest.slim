@@ -29,7 +29,7 @@ tr.lightGrey
                   div.largeLabel style="color: #00B7DB;"
                     = format_number(@totals[:total].conversions_between(1.week.ago + 1.day))
                   div.smallLabel
-                    | conversions this week
+                    | #{@conversion_header.downcase} this week
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #A738BB;"
@@ -38,20 +38,20 @@ tr.lightGrey
                     - else
                       = format_number(@totals[:total].conversions_between(2.week.ago + 1.day, 1.week.ago))
                   div.smallLabel
-                    | conversion last week
+                    | #{@conversion_header.downcase} last week
               td.summaryCell
                 div.greyBorder
                   div.largeLabel style="color: #7FEBB9;"
                     = format_number(@totals[:total].conversions)
                   div.smallLabel
-                    | total conversions ever
+                    | total #{@conversion_header.downcase} ever
       tr
         td colspan="3"
           div.heightPadding
       tr
         td colspan="3"
           div.sectionLabel.orangeText
-            | Conversions
+            = @conversion_header
       tr
         td colspan="3"
           table.siteElementTable border="0" cellpadding="0" cellspacing="0"
@@ -63,14 +63,14 @@ tr.lightGrey
               td.top.bottom.alignCenter.cell
                 | Views
               td.top.bottom.alignCenter.cell
-                | Conversions
+                = @conversion_header
               td.top.bottom.right.alignCenter.cell
             - @sorted_elements.each_with_index do |se, index|
               tr class=('odd' if index % 2 == 1)
                 td.left.bottom.alignCenter.cell
                   div class="circle #{se.short_subtype}"
                     = index + 1
-                  div.elementText= se.headline
+                  div.elementText= truncate(se.headline, length: 50, separator: ' ')
                 td.bottom.alignCenter.cell= image_tag(se.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: se.type)
                 td.bottom.alignCenter.cell= @se_totals[se.id.to_s].views_between(1.week.ago + 1.day)
                 td.bottom.alignCenter.cell
@@ -94,7 +94,7 @@ tr.lightGrey
             table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
               tr
                 td.alignCenter.orangeText style="font-size: 15px; padding: 15px 0; "
-                  | Get more conversions with Hello Bar Pro
+                  | Get more #{@conversion_header.downcase} with Hello Bar Pro
               tr
                 td
                   table.proFeaturesTable cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"

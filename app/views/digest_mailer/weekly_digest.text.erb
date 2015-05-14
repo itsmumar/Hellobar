@@ -1,23 +1,23 @@
 Your performance this week for <%= @site.url %>
 
 <%= format_number(@totals[:total].views_between(1.week.ago + 1.day)) %> views this week
-<%= format_number(@totals[:total].conversions_between(1.week.ago + 1.day)) %> conversions this week
-<%= format_number(@totals[:total].conversions_between(2.week.ago + 1.day, 1.week.ago)) %> conversions last week
-<%= format_number(@totals[:total].conversions) %> total conversions ever
+<%= format_number(@totals[:total].conversions_between(1.week.ago + 1.day)) %> <%= @conversion_header.downcase %> this week
+<%= format_number(@totals[:total].conversions_between(2.week.ago + 1.day, 1.week.ago)) %> <%= @conversion_header.downcase %> last week
+<%= format_number(@totals[:total].conversions) %> total <%= @conversion_header.downcase %> ever
 
-Conversions
+<%= @conversion_header %>
 
 <% @sorted_elements.each_with_index do |se, index| %>
 <%= index + 1 %>) <%= se.headline %>
   * Views: <%= @se_totals[se.id.to_s].views_between(1.week.ago + 1.day) %>
-  * Conversions: <%= @se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day) %> (<%= formatted_percent(@se_totals[se.id.to_s].conversion_percent_between(1.week.ago + 1.day) * 100, false) %>)
+  * <%= @conversion_header %>: <%= @se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day) %> (<%= formatted_percent(@se_totals[se.id.to_s].conversion_percent_between(1.week.ago + 1.day) * 100, false) %>)
 <% end %>
 
 Get more conversions by visiting <%= site_site_elements_url(@site) %>
 
 <% if @site.is_free? %>
 
-Get 4x more conversions by upgrading to Pro!
+Get 4x more <%= @conversion_header.downcase %> by upgrading to Pro!
 * Brand it as your bar!  No Hello Bar logo in your bar.  It's all yours!
 * Remove Ads! Increase your results by removing ads.
 * Targeted messages! Show different messages to different users.

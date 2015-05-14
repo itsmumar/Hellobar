@@ -5,6 +5,11 @@ module EmailDigestHelper
     number_to_human(percent, format: include_sign && percent > 0 ? "+%n%" : "%n%", precision: precision)
   end
 
+  def conversion_header(site_elements)
+    types = site_elements.map { |se| SiteElement::BAR_TYPES[se.element_subtype] }.uniq
+    types.count == 1 ? types.first : "Conversions"
+  end
+
   def format_number(num)
     precision = 3
     precision = 2 if num >= 1_000 && num < 100_000
