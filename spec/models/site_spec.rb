@@ -321,4 +321,18 @@ describe Site do
       u2.sites.build(url: "http://abc.com").url_exists?(u2).should be_false
     end
   end
+
+  describe "#send_digest_email" do
+    it "should not send an email if there are no views in the last week" do
+      Hello::DataAPI.stub(:lifetime_totals_by_type).and_return({:total=>Hello::DataAPI::Performance.new([[1, 1], [1, 1]])})
+      Hello::EmailDigest.should_not_receive(:send)
+      @site.send_digest_email
+    end
+
+    it "should send an email if there are views in the last week" do
+      Hello::DataAPI.stub(:lifetime_totals_by_type).and_return({:total=>Hello::DataAPI::Performance.new([[1, 1], [2, 2]])})
+      Hello::EmailDigest.should_receive(:send)
+      @site.send_digest_email
+    end
+  end
 end
