@@ -2,8 +2,9 @@
 
 #hellobar_slider {
   font-size: 14px;
-  max-width: 380px;
+  max-width: 380px; /* IF CHANGED, UPDATE maxSliderSize HELLOBAR.BASE.JS */
   position: absolute;
+  width: 95%;
 }
 
 #hellobar_slider .slider-content {
