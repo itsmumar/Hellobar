@@ -86,7 +86,7 @@ var HBQ = function()
         if ( HB.e.siteElementType == "modal" && containerDocument )
           HB.isMobileWidth = (containerDocument.getElementById("hellobar_modal_background").clientWidth <= 640 );
         else if ( HB.e.siteElementType == "slider" )
-          HB.isMobileWidth = HB.e.siteElement.clientWidth <= 270 || document.body.clientWidth <= 320;
+          HB.isMobileWidth = HB.e.siteElement.clientWidth <= 270 || window.innerWidth <= 320;
         else
           HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
 
@@ -1594,7 +1594,7 @@ var _HB = {
       HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
     } else if ( type == 'slider' ) {
       if(isMobile) {
-        var newWidth = Math.min(document.body.clientWidth);
+        var newWidth = Math.min(window.innerWidth);
         HB.e.container.style.width = (newWidth) + "px";
         HB.e.container.style.height = (element.clientHeight + 24) + "px";
       } else {
@@ -1665,11 +1665,11 @@ var _HB = {
 
     if (scrollTarget === "bottom") {
       // arbitrary 300 pixels subtracted from page height to assume visitor will not scroll through a footer
-      scrollTarget = (document.body.scrollHeight - document.body.clientHeight - 300);
+      scrollTarget = (document.body.scrollHeight - window.innerHeight - 300);
     }
     else if (scrollTarget === "middle") {
       // triggers just before middle of page - feels right due to polling rate
-      scrollTarget = ((document.body.scrollHeight - (document.body.clientHeight * 2)) / 2);
+      scrollTarget = ((document.body.scrollHeight - (window.innerHeight * 2)) / 2);
     };
 
     // window.pageYOffset is same as window.scrollY, but with better compatibility
@@ -1684,7 +1684,7 @@ var _HB = {
     var vistorIntendsTo = false;
 
     // aliases for readability
-    var yFromBottom = (HB.mouseY - document.body.clientHeight) * -1;
+    var yFromBottom = (HB.mouseY - window.innerHeight) * -1;
     var xFromLeft = HB.mouseX;
 
      // Caches most recent polling data for reference by rules
