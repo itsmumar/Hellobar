@@ -166,6 +166,7 @@ class @RuleModal extends Modal
             content.push(error)
 
           modal._displayErrors(content)
+          modal._bindSubmit()
 
   _unbindSubmit: ->
     @$modal.find('a.submit').off('click')
