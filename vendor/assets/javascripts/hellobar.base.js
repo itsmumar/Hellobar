@@ -1672,8 +1672,10 @@ var _HB = {
       scrollTarget = ((document.body.scrollHeight - (window.innerHeight * 2)) / 2);
     };
 
-    // window.pageYOffset is same as window.scrollY, but with better compatibility
-    if (window.pageYOffset >= scrollTarget) {
+    // first condition checks if visitor has scrolled.
+    // second condition guards against pages too small to scroll, displays immidiately.
+    // window.pageYOffset is same as window.scrollY, but with better compatibility.
+    if (window.pageYOffset >= scrollTarget || document.body.scrollHeight <= scrollTarget + window.innerHeight) {
       payload();
       clearInterval(HB.scrollInterval);
     }
