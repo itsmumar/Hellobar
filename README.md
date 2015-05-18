@@ -8,6 +8,8 @@ To add a new feature, make a branch of **master**.  When ready to test, rebase y
 
 When ready to deploy to production, merge **master** into **production** and use capistrano to deploy the **production** branch.
 
+```BRANCH=production cap production deploy```
+
 ## Provisioning a new Hello Bar server
 
 0\. Once you've got the server's IP, log on.
