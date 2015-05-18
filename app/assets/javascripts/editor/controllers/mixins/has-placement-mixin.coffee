@@ -7,7 +7,7 @@ HelloBar.HasPlacement = Ember.Mixin.create
       return value
     else
       current_placement = @get('model.placement')
-      
+
       for val in this.placementOptions
         return current_placement if current_placement == val.value
 
@@ -25,7 +25,7 @@ HelloBar.HasPlacement = Ember.Mixin.create
       return value
     else
       current_trigger = @get('model.view_condition')
-      
+
       for val in this.triggerOptions
         return current_trigger if current_trigger == val.value
 
@@ -35,3 +35,7 @@ HelloBar.HasPlacement = Ember.Mixin.create
 
       current_trigger
   ).property()
+
+  canSetViewTrigger: (->
+    trackEditorFlow
+  ).property('canSetViewTrigger')

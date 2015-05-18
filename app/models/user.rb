@@ -130,6 +130,14 @@ class User < ActiveRecord::Base
      authentications.size > 0
   end
 
+  # REMOVE AFTER TEST IS DONE
+  def can_use_view_conditions?
+    @@test_users ||= %w(imtall@gmail.com @crazyegg @polymathic)
+    @@test_date ||= Date.parse('2015-5-25')
+    return true if created_at.to_date >= @@test_date
+    @@test_users.any? { |s| email.include?(s) }
+  end
+
   private
 
   def email_does_not_exist_in_wordpress
