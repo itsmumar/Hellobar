@@ -6,10 +6,13 @@ module Hello::EmailDigest
       mailer = mailer_for_site(site)
       return if mailer.nil?
 
+      end_date = EmailDigestHelper.date_of_previous("Sunday")
+      start_date = end_date - 6
+
       options = {content: mailer.html_part.body.raw_source,
                   text: mailer.text_part.body.raw_source,
                   site_url: site.url,
-                  date: Date.today.strftime("%b %-d, %Y")}
+                  date: start_date.strftime("%b %-d") + " - " + end_date.strftime(end_date.month == start_date.month ? "%-d, %Y" : "%b %-d, %Y")}
       Analytics.track(:user, site.owner.id, "Sent Email", {"Email Template"=>EmailDigestHelper.template_name(site)})
       MailerGateway.send_email(EmailDigestHelper.template_name(site), site.owner.email, options)
     end

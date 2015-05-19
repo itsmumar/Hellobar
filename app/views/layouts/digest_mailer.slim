@@ -245,7 +245,7 @@ html
                           td.alignCenter
                           td.alignRight
                             div.headerText
-                              | #{(Date.today - 7.day).strftime("%b %e")} - #{Date.today.strftime("%b %e")}
+                              | #{@date_ranges[2].strftime("%b %e")} - #{@date_ranges[3].strftime("%b %e")}
                     td
                     = yield
                     tr.lightGrey
