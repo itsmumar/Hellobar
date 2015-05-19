@@ -1604,7 +1604,7 @@ var _HB = {
     }
   },
 
-  // Reads the site element's display_when setting and calls hide/show per selected behavior
+  // Reads the site element's view_condition setting and calls hide/show per selected behavior
   // if viewCondition is missing or badly formed, siteElement displays immediately by default
 
   checkForDisplaySetting: function(siteElement)
