@@ -17,6 +17,12 @@ module EmailDigestHelper
     number_to_human(num, :units => {:thousand => "k", :million => "m", :billion => "b"}, format: "%n%u", precision: precision)
   end
 
+  def self.date_of_previous(day)
+    date  = Date.parse(day)
+    delta = date > Date.today ? 7 : 0
+    date - delta
+  end
+
   def self.template_name(site)
     if site.script_installed_at.nil?
       "New Email Digest (Not Installed)"

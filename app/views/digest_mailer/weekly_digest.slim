@@ -11,7 +11,7 @@ tr.lightGrey
         td
           div.lineBreakGraphic style="float: right;"
         td.alignCenter.title.orangeText
-          | Your Performance This Week
+          | Your Performance Last Week
         td
           div.lineBreakGraphic style="float: left;"
       tr
@@ -21,24 +21,24 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #FE3817;"
-                    = format_number(@totals[:total].views_between(1.week.ago + 1.day))
+                    = format_number(@totals[:total].views_between(@date_ranges[2]))
                   div.smallLabel
-                    | views this week
+                    | views last week
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #00B7DB;"
-                    = format_number(@totals[:total].conversions_between(1.week.ago + 1.day))
+                    = format_number(@totals[:total].conversions_between(@date_ranges[2]))
                   div.smallLabel
-                    | #{@conversion_header.downcase} this week
+                    | #{@conversion_header.downcase} last week
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #A738BB;"
                     - if @totals[:total].size < 7
                       | n/a
                     - else
-                      = format_number(@totals[:total].conversions_between(2.week.ago + 1.day, 1.week.ago))
+                      = format_number(@totals[:total].conversions_between(@date_ranges[0], @date_ranges[1]))
                   div.smallLabel
-                    | #{@conversion_header.downcase} last week
+                    | #{@conversion_header.downcase} the week before
               td.summaryCell
                 div.greyBorder
                   div.largeLabel style="color: #7FEBB9;"
@@ -72,11 +72,11 @@ tr.lightGrey
                     = index + 1
                   div.elementText= truncate(se.headline, length: 50, separator: ' ')
                 td.bottom.alignCenter.cell= image_tag(se.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: se.type)
-                td.bottom.alignCenter.cell= @se_totals[se.id.to_s].views_between(1.week.ago + 1.day)
+                td.bottom.alignCenter.cell= @se_totals[se.id.to_s].views_between(@date_ranges[2])
                 td.bottom.alignCenter.cell
-                  - if @se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day) > 0
-                    | #{@se_totals[se.id.to_s].conversions_between(1.week.ago + 1.day)}
-                    |  (#{formatted_percent(@se_totals[se.id.to_s].conversion_percent_between(1.week.ago + 1.day) * 100, false)})
+                  - if @se_totals[se.id.to_s].conversions_between(@date_ranges[2]) > 0
+                    | #{@se_totals[se.id.to_s].conversions_between(@date_ranges[2])}
+                    |  (#{formatted_percent(@se_totals[se.id.to_s].conversion_percent_between(@date_ranges[2]) * 100, false)})
                   - else
                     span.darkGreyText none
                 td.bottom.right.cell.alignCenter
