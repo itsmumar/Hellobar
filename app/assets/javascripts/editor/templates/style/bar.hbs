@@ -43,3 +43,13 @@
     optionLabelPath='content.label'
   }}
 </div>
+
+<label>When does it display?</label>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=triggerOptions
+    value=selectedTrigger
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
+  }}
+</div>

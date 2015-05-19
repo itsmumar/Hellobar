@@ -6,6 +6,7 @@ BarElement.prototype = Object.create(SiteElement.prototype);
 BarElement.prototype.constructor = BarElement;
 
 BarElement.prototype.setupIFrame = function(iframe){
+  SiteElement.prototype.setupIFrame.call(this, iframe);
   HB.addClass(iframe, this.size);
   HB.addClass(iframe, this.placement);
   HB.addClass(iframe, (HB.t(this.remains_at_top) ? " remains_in_place" : ""));
