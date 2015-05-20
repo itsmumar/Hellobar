@@ -110,6 +110,12 @@ var HBQ = function()
 
           // Adjust the pusher
           if ( HB.e.pusher ) {
+            // handle case where display-condition check has hidden HB.w
+            if (HB.w.style.display === "none") { 
+              HB.e.pusher.style.height = 0; 
+              return; 
+            };
+
             var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
             HB.e.pusher.style.height = (HB.e.siteElement.clientHeight + borderPush) + "px";
           }
