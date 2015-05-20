@@ -1620,7 +1620,7 @@ var _HB = {
 
     var show = function() {
       HB.w.style.display = '';
-      HB.animateIn(HB.w);
+      if (HB.w.className.indexOf("animated") > -1) { HB.animateIn(HB.w) };
     }
 
     if (viewCondition === 'wait-5')

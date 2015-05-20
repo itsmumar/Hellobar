@@ -30,6 +30,8 @@ BarElement.prototype.setupIFrame = function(iframe){
     HB.p = document.createElement("div");
     HB.p.id="hellobar_pusher";
     HB.p.className = this.size;
+    console.log("about to inject HB.p via bar.js");
+    console.log(HB.p);
     HB.injectAtTop(HB.p, this.placement == "bar-bottom");
   }
 };
