@@ -22,7 +22,6 @@ BarElement.prototype.setupIFrame = function(iframe){
   // Remove the pusher if it exists
   if ( HB.p )
     HB.p.parentNode.removeChild(HB.p);
-
   HB.p = null;
 
   // Create the pusher (which pushes the page down) if needed
@@ -30,6 +29,8 @@ BarElement.prototype.setupIFrame = function(iframe){
     HB.p = document.createElement("div");
     HB.p.id="hellobar_pusher";
     HB.p.className = this.size;
+    // shrinks pusher if siteElement hidden by viewCondition rules
+    if (HB.w.style.display === "none") {HB.p.style.height = 0};
     HB.injectAtTop(HB.p, this.placement == "bar-bottom");
   }
 };
