@@ -107,7 +107,7 @@ describe ScriptGenerator, '#render' do
   context 'when rules are present' do
     it 'has a start date constraint when present' do
       rule = Rule.new
-      condition = DateCondition.new value: { 'start_date' => Date.new(2000, 01, 01) }, operand: Condition::OPERANDS[:after]
+      condition = Condition.new value: { 'start_date' => Date.new(2000, 01, 01) }, operand: Condition::OPERANDS[:after], segment: "DateCondition"
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
@@ -127,7 +127,7 @@ describe ScriptGenerator, '#render' do
 
     it 'has an end date constraint when present' do
       rule = Rule.new
-      condition = DateCondition.new value: { 'end_date' => Date.new(2015, 01, 01) }, operand: Condition::OPERANDS[:before]
+      condition = Condition.new value: { 'end_date' => Date.new(2015, 01, 01) }, operand: Condition::OPERANDS[:before], segment: "DateCondition"
       rule.stub conditions: [condition]
       site.stub rules: [rule]
 
@@ -147,7 +147,7 @@ describe ScriptGenerator, '#render' do
 
     it 'adds an exlusion constraint for all blacklisted URLs' do
       rule = Rule.new
-      conditions = [UrlCondition.new(value: '/signup', operand: :does_not_include )]
+      conditions = [Condition.new(value: '/signup', operand: :does_not_include, segment: "UrlCondition" )]
       rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
@@ -158,7 +158,7 @@ describe ScriptGenerator, '#render' do
 
     it 'converts does_not_include urls to paths' do
       rule = Rule.new
-      conditions = [UrlCondition.new(value: 'http://soamazing.com/signup', operand: :does_not_include )]
+      conditions = [Condition.new(value: 'http://soamazing.com/signup', operand: :does_not_include, segment: "UrlCondition" )]
       rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
       site.stub rules: [rule]
 
@@ -178,7 +178,7 @@ describe ScriptGenerator, '#render' do
 
     it 'adds an inclusion constraint for all whitelisted URLs' do
       rule = Rule.new
-      conditions = [UrlCondition.new(value: '/signup', operand: Condition::OPERANDS[:includes] )]
+      conditions = [Condition.new(value: '/signup', operand: Condition::OPERANDS[:includes], segment: "UrlCondition" )]
       rule.stub conditions: conditions
       site.stub rules: [rule]
 

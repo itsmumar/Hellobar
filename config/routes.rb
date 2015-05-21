@@ -10,7 +10,9 @@ Rails.application.routes.draw do
 
     put "site_elements/:id/toggle_paused", to: "site_elements#toggle_paused", as: :site_element_toggle_paused
     resources :site_elements
-    resources :rules
+    resources :rules do
+      resources :conditions
+    end
     resources :identities
     resources :contact_lists
     resources :targeted_segments

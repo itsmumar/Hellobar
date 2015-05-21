@@ -7,13 +7,13 @@ describe Rule, "#to_sentence" do
 
   it "concatenates conditions when present" do
     rule = Rule.new
-    rule.conditions << UrlCondition.new(operand: :includes, value: ["zombo.com"])
+    rule.conditions << Condition.new(operand: :includes, value: ["zombo.com"], segment: "UrlCondition")
     rule.to_sentence.should == "Page URL includes zombo.com"
 
-    rule.conditions << UrlCondition.new(operand: :does_not_include, value: ["zombo.com/foo"])
+    rule.conditions << Condition.new(operand: :does_not_include, value: ["zombo.com/foo"], segment: "UrlCondition")
     rule.to_sentence.should == "Page URL includes zombo.com and 1 other condition"
 
-    rule.conditions << DateCondition.from_params("7/6", "")
+    rule.conditions << Condition.date_condition_from_params("7/6", "")
     rule.to_sentence.should == "Page URL includes zombo.com and 2 other conditions"
   end
 end

@@ -1,2 +1,0 @@
-class UTMSourceCondition < UTMCondition
-end

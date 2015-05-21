@@ -1,1 +1,0 @@
-class UTMCampaignCondition < UTMCondition; end
