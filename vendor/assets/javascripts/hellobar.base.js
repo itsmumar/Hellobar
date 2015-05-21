@@ -1737,6 +1737,10 @@ var _HB = {
       //  catch page inactive state
       if ( document.hidden || document.unloaded ) { vistorIntendsTo = true };
 
+      // if on mobile, display the bar after N ms regardless of mouse behavior
+      var mobileDelaySetting = 30000;
+      var date = new Date();
+      if ( HB.isMobile && date.getTime() - HB.intentStartTime > mobileDelaySetting) { vistorIntendsTo = true };
     };
 
     if (vistorIntendsTo) {
@@ -1746,6 +1750,11 @@ var _HB = {
   },
 
   initializeIntentListeners: function() {
+
+    // cache the time when page loads 
+    var date = new Date();
+    HB.intentStartTime = date.getTime();
+
     HB.intentConditionCache = [{},{},{},{},{}];
     // initialize mouse position near center of window, avoids edge case with no mouse events yet
     HB.mouseX = 300;
