@@ -111,6 +111,12 @@ var HBQ = function()
 
           // Adjust the pusher
           if ( HB.e.pusher ) {
+            // handle case where display-condition check has hidden HB.w
+            if (HB.w.style.display === "none") { 
+              HB.e.pusher.style.height = 0; 
+              return; 
+            };
+
             var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
             HB.e.pusher.style.height = (HB.e.siteElement.clientHeight + borderPush) + "px";
           }
@@ -126,7 +132,7 @@ var HBQ = function()
         }
       }
     }
-  }, 50); // Check every 50ms
+  }, 1000); // Check screen size every N ms 
 }
 
 // Call the function right away once this is loaded
@@ -1600,7 +1606,7 @@ var _HB = {
     }
   },
 
-  // Reads the site element's display_when setting and calls hide/show per selected behavior
+  // Reads the site element's view_condition setting and calls hide/show per selected behavior
   // if viewCondition is missing or badly formed, siteElement displays immediately by default
 
   checkForDisplaySetting: function(siteElement)
@@ -1616,7 +1622,7 @@ var _HB = {
 
     var show = function() {
       HB.w.style.display = '';
-      HB.animateIn(HB.w);
+      if (HB.w.className.indexOf("animated") > -1) { HB.animateIn(HB.w) };
     }
 
     if (viewCondition === 'wait-5')
