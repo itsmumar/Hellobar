@@ -99,14 +99,14 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
 
   #-----------  Screenshot Eye-Dropper  -----------#
 
-  # eyeDropper: ( () ->
-  #   return $.fn.dropperredux({}) unless @get('isSelecting')
+  eyeDropper: ( () ->
+    return $.fn.dropperredux({}) unless @get('isSelecting')
 
-  #   $.fn.dropperredux
-  #     selector: $('#hellobar-preview-container > img')
-  #     clickCallback: (color) =>
-  #       @set('color', color.rgbhex)
-  # ).observes('isSelecting').on('didInsertElement')
+    $.fn.dropperredux
+      selector: $('#hellobar-preview-container > img')
+      clickCallback: (color) =>
+        @set('color', color.rgbhex)
+  ).observes('isSelecting').on('didInsertElement')
 
   #-----------  Component State Switching  -----------#
 

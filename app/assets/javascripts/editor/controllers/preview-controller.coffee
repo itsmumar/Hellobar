@@ -14,3 +14,10 @@ HelloBar.PreviewController = Ember.Controller.extend
     else
       "background-image:url(#{@get('model.site_preview_image')})"
   ).property('isMobile', 'model.site_preview_image', 'model.site_preview_image_mobile')
+
+  previewImageURL: ( ->
+    if @get('isMobile')
+      "#{@get('model.site_preview_image_mobile')}"
+    else
+      "#{@get('model.site_preview_image')}"
+  ).property('isMobile', 'model.site_preview_image', 'model.site_preview_image_mobile')
