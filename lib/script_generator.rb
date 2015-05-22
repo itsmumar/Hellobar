@@ -108,6 +108,17 @@ class ScriptGenerator < Mustache
     ""
   end
 
+  def branding_templates
+    [].tap do |r|
+      Dir.glob("#{Rails.root}/lib/script_generator/branding/*.html") do |f|
+        ActiveSupport.escape_html_entities_in_json = false
+        content = File.read(f).to_json
+        ActiveSupport.escape_html_entities_in_json = true
+        r << {name: f.split(".html").first.split("/").last, markup: content}
+      end
+    end
+  end
+
   def templates
     template_names = Set.new
     if options[:templates]

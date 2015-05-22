@@ -219,7 +219,44 @@ html, body {
 
 /*-----------  Logo  -----------*/
 
-.hb-logo-wrapper {
+  .hb-logo-wrapper {
+    opacity: 0.3;
+  }
+
+  .hb-logo-wrapper:hover {
+    opacity: 0.6;
+  }
+
+  .hb-logo-wrapper a {
+    color: #5c5e60;
+    text-decoration: none;
+  }
+
+  .hb-logo-wrapper {
+    font-family: 'Open Sans',sans-serif;
+
+    transition: opacity 0.2s ease;
+    -o-transition: opacity 0.2s ease;
+    -ms-transition: opacity 0.2s ease;
+    -moz-transition: opacity 0.2s ease;
+    -webkit-transition: opacity 0.2s ease;
+  }
+
+  .hb-logo-wrapper.pb2l svg {
+    transform: translateY(2px);
+    -o-transform: translateY(2px);
+    -ms-transform: translateY(2px);
+    -moz-transform: translateY(2px);
+    -webkit-transform: translateY(2px);
+  }
+
+  .hb-logo-wrapper .hb-logo-line {
+    display: inline;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+
+/*.hb-logo-wrapper {
   opacity: 0.33;
   margin-top: 2em;
   font-size: 0.85em;
@@ -264,7 +301,7 @@ html, body {
 
 .hb-logo-wrapper:hover {
   opacity: 0.67;
-}
+}*/
 
 /*-----------  Social Styling  -----------*/
 
