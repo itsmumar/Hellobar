@@ -25,16 +25,16 @@ $ ->
     $('body').addClass('oldIE')
 
   # ------- Code to grab dominant color -----#
-  image = $('.preview-image-for-colorpicker').get(0)
-
-  imagesLoaded(image, ->
-    colorThief = new ColorThief()
-    dominantColor = colorThief.getColor(image)
+  console.log('Matt, look at vendor.js.coffee line 28')
+  # image = $('.preview-image-for-colorpicker').get(0)
+  # imagesLoaded(image, ->
+  #   colorThief = new ColorThief()
+  #   dominantColor = colorThief.getColor(image)
     
-    # if r, g, and b are equal (gray/white), use the first palette color
-    if dominantColor[0] == dominantColor[1] and dominantColor[1] == dominantColor[2]
-      paletteColors = colorThief.getPalette(image)
-      dominantColor = paletteColors[0]
+  #   # if r, g, and b are equal (gray/white), use the first palette color
+  #   if dominantColor[0] == dominantColor[1] and dominantColor[1] == dominantColor[2]
+  #     paletteColors = colorThief.getPalette(image)
+  #     dominantColor = paletteColors[0]
 
-    # console.log(dominantColor)
-  )
+  #   # console.log(dominantColor)
+  # )
