@@ -30,6 +30,7 @@
 #= require sites_controller
 #= require upgrade_modal_initializer
 #= require enforce_restrictions_initializer
+#= require editor_initializer
 #= require flash_message_initializer
 #= require install_check
 #= require tracking_events
