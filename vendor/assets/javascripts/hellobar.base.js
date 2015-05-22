@@ -1398,6 +1398,10 @@ var _HB = {
   },
 
   logo_variation_name: function() {
+    return "animated"
+    return "add_hb";
+    return "not_using_hb";
+    return "powered_by";
     return "pb2l";
     return "original";
   },

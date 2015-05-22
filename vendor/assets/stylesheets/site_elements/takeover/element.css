@@ -67,12 +67,12 @@
   width: 100%;
 }
 
-#hellobar_takeover .hb-logo-wrapper.original svg {
+#hellobar_takeover .hb-logo-wrapper.original svg, #hellobar_takeover .hb-logo-wrapper.animated svg {
   width: 4em;
   border-radius: 3px;
 }
 
-#hellobar_takeover .hb-logo-wrapper.pb2l {
+#hellobar_takeover .hb-logo-wrapper {
   text-transform: uppercase;
 }
 

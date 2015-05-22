@@ -46,12 +46,12 @@
   margin: 5px 25px 10px 20px;
 }
 
-#hellobar_slider .hb-logo-wrapper.original svg {
+#hellobar_slider .hb-logo-wrapper.original svg, #hellobar_slider .hb-logo-wrapper.animated svg {
   width: 4em;
   border-radius: 3px;
 }
 
-#hellobar_slider .hb-logo-wrapper.pb2l {
+#hellobar_slider .hb-logo-wrapper {
   text-transform: uppercase;
 }
 
