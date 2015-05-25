@@ -112,9 +112,9 @@ var HBQ = function()
           // Adjust the pusher
           if ( HB.e.pusher ) {
             // handle case where display-condition check has hidden HB.w
-            if (HB.w.style.display === "none") { 
-              HB.e.pusher.style.height = 0; 
-              return; 
+            if (HB.w.style.display === "none") {
+              HB.e.pusher.style.height = 0;
+              return;
             };
 
             var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
@@ -132,7 +132,7 @@ var HBQ = function()
         }
       }
     }
-  }, 1000); // Check screen size every N ms 
+  }, 1000); // Check screen size every N ms
 }
 
 // Call the function right away once this is loaded
@@ -423,8 +423,12 @@ var _HB = {
       function(){
         if(targetSiteElement != null)
           targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
-        if(removeElement != null)
-          removeElement.style.display = "none";
+        if(removeElement != null) {
+          for (var i = 0; i < removeElement.length; i++) {
+            removeElement[i].style.display = "none";
+          }
+        }
+
         HB.recordEmail(emailField.value, nameField.value, function(){
           // Successfully saved
         });
@@ -1751,7 +1755,7 @@ var _HB = {
 
   initializeIntentListeners: function() {
 
-    // cache the time when page loads 
+    // cache the time when page loads
     var date = new Date();
     HB.intentStartTime = date.getTime();
 
