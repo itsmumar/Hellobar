@@ -50,8 +50,19 @@ class ScriptGenerator < Mustache
   def capabilities
     {
       no_b: @site.capabilities.remove_branding? || @options[:preview],
-      b_variation: ["@polymathic", "@crazyegg"].include?(@site.owner.email)
+      b_variation: get_branding_variation
     }
+  end
+
+  def get_branding_variation
+    if ["@polymathic", "@crazyegg"].include?(@site.owner.email)
+      variations = ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"]
+      variation = variations[@site.id % variations.length]
+      Analytics.track(:site, @site.id, "Branding Test Assigned", {variation: variation})
+      variation
+    else
+      "powered_by_no_track"
+    end
   end
 
   def capabilities_json

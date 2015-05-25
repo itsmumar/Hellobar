@@ -1397,18 +1397,6 @@ var _HB = {
     return .2126 * rgb[0] + .7152 * rgb[1] + 0.0722 * rgb[2];
   },
 
-  logo_variation_name: function() {
-    var variations = ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"];
-    var variationIdx = 0; // The default logo
-    if(HB.CAP.b_variation === true) {
-      var uniqValue = window.parent.HBCrypto.SHA1("HBLogo1"+window.parent.HB.i()).toString();
-      var sum=0;for(var i=0;i<uniqValue.length;i++){sum+=uniqValue.charCodeAt(i)};
-      variationIdx = sum % variations.length;
-    }
-
-    return variations[variationIdx];
-  },
-
   animateIn: function(element, time){
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {

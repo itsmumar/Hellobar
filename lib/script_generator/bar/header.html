@@ -1,6 +1,6 @@
 <div id="hellobar_bar" class="{{siteElement.size}} {{HB.t(siteElement.show_border) ? 'has_border' : ''}} {{HB.t(siteElement.remains_at_top) ? 'remains_in_place' : ''}} {{siteElement.placement}}" style="background-color: #{{siteElement.primary_color}}; color: #{{siteElement.text_color}}; font-family: {{siteElement.font}}; border-color: #{{siteElement.border_color}};">
-  <div class="hb-logo-wrapper {{HB.colorIsBright(siteElement.primary_color) ? 'hb-logo-inverted' : ''}} {{HB.logo_variation_name()}}" >
-    {{HB.renderTemplate(HB.getBrandingTemplate(HB.logo_variation_name()), siteElement)}}
+  <div class="hb-logo-wrapper {{HB.colorIsBright(siteElement.primary_color) ? 'hb-logo-inverted' : ''}} {{HB.CAP.b_variation}}" >
+    {{HB.renderTemplate(HB.getBrandingTemplate(HB.CAP.b_variation), siteElement)}}
   </div>
 
   <div class="hb-content-wrapper">
