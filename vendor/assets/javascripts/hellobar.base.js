@@ -1398,12 +1398,15 @@ var _HB = {
   },
 
   logo_variation_name: function() {
-    return "animated"
-    return "add_hb";
-    return "not_using_hb";
-    return "powered_by";
-    return "pb2l";
-    return "original";
+    var variations = ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"];
+    var variationIdx = 0; // The default logo
+    if(HB.CAP.b_variation === true) {
+      var uniqValue = window.parent.HBCrypto.SHA1("HBLogo1"+window.parent.HB.i()).toString();
+      var sum=0;for(var i=0;i<uniqValue.length;i++){sum+=uniqValue.charCodeAt(i)};
+      variationIdx = sum % variations.length;
+    }
+
+    return variations[variationIdx];
   },
 
   animateIn: function(element, time){
