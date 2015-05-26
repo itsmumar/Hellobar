@@ -243,12 +243,12 @@ html, body {
   }
 
   .hb-logo-wrapper.pb2l svg, .hb-logo-wrapper.powered_by svg, .hb-logo-wrapper.powered_by_no_track svg,
-  .hb-logo-wrapper.not_using_hb svg, .hb-logo-wrapper.add_hb svg {
-    transform: translateY(2px);
-    -o-transform: translateY(2px);
-    -ms-transform: translateY(2px);
-    -moz-transform: translateY(2px);
-    -webkit-transform: translateY(2px);
+  .hb-logo-wrapper.not_using_hb svg, .hb-logo-wrapper.add_hb svg, .hb-logo-wrapper.gethb svg {
+    transform: translateY(3px);
+    -o-transform: translateY(3px);
+    -ms-transform: translateY(3px);
+    -moz-transform: translateY(3px);
+    -webkit-transform: translateY(3px);
   }
 
   .hb-logo-wrapper .hb-logo-line {

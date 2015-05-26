@@ -1781,6 +1781,11 @@ var _HB = {
       HB.mouseX = event.clientX;
       HB.mouseY = event.clientY;
     }
+  },
+
+  branding_template: function() {
+    var stored = HB.gc("b_template");
+    return stored != null ? stored : HB.CAP.b_variation;
   }
 
 };
