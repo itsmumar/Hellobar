@@ -7,15 +7,17 @@ HelloBar.PreviewView = Ember.View.extend
 
   #-----------  Color Thief  -----------#
 
+  formatRGB: (rgbArray) ->
+    rgbArray.push(0)
+    return rgbArray
+
   didInsertElement: ->
     colorThief = new ColorThief()
     image = $('.preview-image-for-colorpicker').get(0)
  
     imagesLoaded image, =>
-      dominantColor = colorThief.getColor(image).push(0)
-      colorPalette = colorThief.getPalette(image, 4).map (color) -> 
-        color.push(0)
-        return color
+      dominantColor = @formatRGB(colorThief.getColor(image))
+      colorPalette = colorThief.getPalette(image, 4).map (color) => @formatRGB(color)
 
       @set('dominantColor', dominantColor)
       @set('colorPalette', colorPalette)

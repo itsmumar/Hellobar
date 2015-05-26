@@ -28,9 +28,28 @@ HelloBar.PreviewController = Ember.Controller.extend
 
   colorPalette  : Ember.computed.alias('controllers.application.colorPalette')
   
-  setDominantColor: ( ->
-    return false unless !@get('model.id') || window.elementToCopyID
+  setSiteColors: ( ->
+    return false if @get('model.id') || window.elementToCopyID
     
-    # color = one.color(@get('dominantColor'))
-    # console.log color
-  ).observes('dominantColor')
+    colorPalette = @get('colorPalette')
+    dominantColor = @get('dominantColor')
+
+    # Primary Color
+
+    primaryColor = dominantColor
+    allColors = colorPalette.concat([dominantColor])
+    
+    for color in allColors
+      if Math.abs(color[0] - color[1]) > 5 || Math.abs(color[1] - color[2]) > 5 || Math.abs(color[0] - color[2]) > 5
+        primaryColor = color
+        break
+
+    @set('model.background_color', one.color(primaryColor).hex().replace('#',''))
+
+    # Text Color
+
+    # Button Color
+
+    # Button Text
+
+  ).observes('dominantColor', 'colorPalette')
