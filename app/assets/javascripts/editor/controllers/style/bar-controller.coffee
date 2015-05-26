@@ -28,8 +28,3 @@ HelloBar.StyleBarController = Ember.Controller.extend HelloBar.HasPlacement,
     {value: 'scroll-to-bottom', label: 'After scrolling to bottom'}
     {value: 'exit-intent', label: 'User intends to leave'}
   ]
-
-  actions:
-
-    popDelayTootlipModal: () ->
-      new DelayTooltipModal().open()  
