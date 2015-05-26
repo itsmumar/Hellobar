@@ -39,3 +39,8 @@ HelloBar.HasPlacement = Ember.Mixin.create
   canSetViewTrigger: (->
     showViewCondition
   ).property('canSetViewTrigger')
+
+  actions:
+
+    popDelayTootlipModal: () ->
+      new DelayTooltipModal().open()
