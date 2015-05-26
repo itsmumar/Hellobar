@@ -131,9 +131,12 @@ HelloBar.ColorPreview = Ember.View.extend
   classNames: ['color-preview']
   attributeBindings: ['style']
 
-  style: (->
-    'background-color:#' + @get('color')
+  style: ( ->
+    color = one.color(@get('color'))
+    'background-color: ' + color.hex()
   ).property('color')
 
   mouseUp: ->
-    @set('parentView.color', @color)
+    color = one.color(@get('color'))
+    @set('parentView.color', color.hex())
+

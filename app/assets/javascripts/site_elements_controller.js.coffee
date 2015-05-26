@@ -1,4 +1,5 @@
 $ ->
+
   highlightBar = (elementId) ->
     # Add the highlight animation to the bar
     bar = $(elementId)
