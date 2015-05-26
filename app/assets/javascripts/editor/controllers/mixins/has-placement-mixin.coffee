@@ -37,5 +37,5 @@ HelloBar.HasPlacement = Ember.Mixin.create
   ).property()
 
   canSetViewTrigger: (->
-    trackEditorFlow
+    showViewCondition
   ).property('canSetViewTrigger')

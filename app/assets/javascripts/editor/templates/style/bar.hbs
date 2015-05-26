@@ -44,6 +44,7 @@
   }}
 </div>
 
+{{#if canSetViewTrigger}}
 <label>When does it display?</label>
 <div class="select-wrapper">
   {{view Ember.Select
@@ -53,3 +54,4 @@
     optionLabelPath='content.label'
   }}
 </div>
+{{/if}}
