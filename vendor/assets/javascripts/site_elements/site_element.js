@@ -17,7 +17,13 @@ var SiteElement = function(props) {
 };
 
 SiteElement.prototype.setupIFrame = function(){
-  // Override this func
+  // Any view_condition including string 'intent' will run the intent event listeners
+  if (this.view_condition.indexOf('intent') !== -1) {
+    HB.initializeIntentListeners();
+  };
+
+  // Starts setIntervals that check display setting conditions
+  HB.checkForDisplaySetting(this);
 };
 
 SiteElement.prototype.prerender = function(){

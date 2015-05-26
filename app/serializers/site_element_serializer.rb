@@ -2,7 +2,7 @@ class SiteElementSerializer < ActiveModel::Serializer
   attributes :id, :site, :rule_id, :rule, :contact_list_id, :errors, :full_error_messages,
 
     # settings
-    :type, :element_subtype, :settings, :display_when,
+    :type, :element_subtype, :settings, :view_condition,  
 
     # text
     :headline, :caption, :link_text, :font, :thank_you_text,

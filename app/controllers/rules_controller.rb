@@ -1,4 +1,6 @@
 class RulesController < ApplicationController
+  include RulesHelper
+
   before_action :authenticate_user!
   before_action :load_site
   before_action :verify_capability, only: [:create, :update]
@@ -27,7 +29,7 @@ class RulesController < ApplicationController
       @site.generate_script
       render :json => rule
     else
-      render :json => rule.errors, :status => :unprocessable_entity
+      render :json => format_errors(rule.errors), :status => :unprocessable_entity
     end
   end
 

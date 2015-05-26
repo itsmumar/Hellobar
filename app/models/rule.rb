@@ -14,6 +14,7 @@ class Rule < ActiveRecord::Base
 
   validates :name, presence: true
   validates :site, association_exists: true
+  validates_associated :conditions
   validates :priority, numericality: {
                          only_integer: true,
                          greater_than_or_equal_to: 1,
@@ -69,5 +70,28 @@ class Rule < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def update_conditions(conditions_attributes)
+    transaction do
+      conditions_attributes.each do |index, attributes|
+        if attributes["id"]
+          c = conditions.detect { |x| x.id == attributes["id"].to_i}
+          if attributes["_destroy"] == "true"
+            c.destroy
+          else
+            attributes.delete("_destroy")
+            c.assign_attributes(attributes)
+            c = c.becomes(c.segment.constantize)
+            c.save!
+          end
+        else
+          conditions.create!(attributes)
+        end
+      end
+    end
+    true
+  rescue
+    false
   end
 end

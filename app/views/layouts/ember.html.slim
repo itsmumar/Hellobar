@@ -23,6 +23,7 @@ html
     = render "shared/modals/temp_user_unsaved_changes"
     = render "shared/modals/upgrade_modal"
     = render "shared/modals/payment_modal"
+    = render "shared/modals/delay_tooltip"
     = render "shared/modals/payment_confirmation"
     = render "shared/gtm"
 
@@ -30,6 +31,7 @@ html
       HB_DNT = 1;
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
       var trackEditorFlow = #{{!current_user.nil? && current_user.sites.count == 1 && current_user.site_elements.count == 0}};
+      var showViewCondition = #{{!current_user.nil? && current_user.can_use_view_conditions?}}
 
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'

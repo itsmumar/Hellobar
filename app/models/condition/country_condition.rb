@@ -1,2 +1,0 @@
-class CountryCondition < Condition
-end

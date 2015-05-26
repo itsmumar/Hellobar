@@ -43,3 +43,16 @@
     optionLabelPath='content.label'
   }}
 </div>
+
+
+{{#if canSetViewTrigger}}
+<label>When does it display? <a {{action "popDelayTootlipModal"}} class="tooltip-label">(what's this?)</a></label>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=triggerOptions
+    value=selectedTrigger
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
+  }}
+</div>
+{{/if}}

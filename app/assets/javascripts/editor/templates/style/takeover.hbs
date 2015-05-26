@@ -5,3 +5,15 @@
 <label>Animations
   {{toggle-switch switch=model.animated}}
 </label>
+
+{{#if canSetViewTrigger}}
+<label>When does it display? <small><a {{action "popDelayTootlipModal"}} class="tooltip-label">(What's this?)</a></small></label>
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=triggerOptions
+    value=selectedTrigger
+    optionValuePath='content.value'
+    optionLabelPath='content.label'
+  }}
+</div>
+{{/if}}

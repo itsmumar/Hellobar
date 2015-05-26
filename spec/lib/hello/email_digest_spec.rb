@@ -6,6 +6,7 @@ describe Hello::EmailDigest do
   describe "mailer_for_site" do
     it "should use the 'not installed' mailer if script not installed and has site elements" do
       site = sites(:zombo)
+      site.script_installed_at = nil
       site.stub(has_script_installed?: false)
       DigestMailer.should_receive(:not_installed).and_return(nil)
       Hello::EmailDigest.mailer_for_site(site)

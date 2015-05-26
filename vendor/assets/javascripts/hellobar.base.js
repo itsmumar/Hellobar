@@ -18,6 +18,7 @@ var HBQ = function()
   HB.rules = [];
   HB.isMobile = false;
   HB.widthCache = 0;
+  HB.maxSliderSize = 380; /* IF CHANGED, UPDATE SLIDER ELEMENT CSS */
 
   // Need to load the serialized cookies
   HB.loadCookies();
@@ -86,7 +87,7 @@ var HBQ = function()
         if ( HB.e.siteElementType == "modal" && containerDocument )
           HB.isMobileWidth = (containerDocument.getElementById("hellobar_modal_background").clientWidth <= 640 );
         else if ( HB.e.siteElementType == "slider" )
-          HB.isMobileWidth = HB.e.siteElement.clientWidth <= 270 || document.body.clientWidth <= 320;
+          HB.isMobileWidth = HB.e.siteElement.clientWidth <= 270 || document.body.clientWidth <= 375 || document.body.clientWidth < HB.e.siteElement.clientWidth;
         else
           HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
 
@@ -110,6 +111,12 @@ var HBQ = function()
 
           // Adjust the pusher
           if ( HB.e.pusher ) {
+            // handle case where display-condition check has hidden HB.w
+            if (HB.w.style.display === "none") {
+              HB.e.pusher.style.height = 0;
+              return;
+            };
+
             var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
             HB.e.pusher.style.height = (HB.e.siteElement.clientHeight + borderPush) + "px";
           }
@@ -125,7 +132,7 @@ var HBQ = function()
         }
       }
     }
-  }, 50); // Check every 50ms
+  }, 1000); // Check screen size every N ms
 }
 
 // Call the function right away once this is loaded
@@ -416,8 +423,12 @@ var _HB = {
       function(){
         if(targetSiteElement != null)
           targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
-        if(removeElement != null)
-          removeElement.style.display = "none";
+        if(removeElement != null) {
+          for (var i = 0; i < removeElement.length; i++) {
+            removeElement[i].style.display = "none";
+          }
+        }
+
         HB.recordEmail(emailField.value, nameField.value, function(){
           // Successfully saved
         });
@@ -1593,17 +1604,175 @@ var _HB = {
     if ( type == 'bar' ) {
       HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
     } else if ( type == 'slider' ) {
-      if(isMobile) {
-        var newWidth = Math.min(document.body.clientWidth);
-        HB.e.container.style.width = (newWidth) + "px";
-        HB.e.container.style.height = (element.clientHeight + 24) + "px";
-      } else {
-        HB.e.container.style.width = (element.clientWidth + 24) + "px";
-        HB.e.container.style.height = (element.clientHeight + 24) + "px";
-      }
+      var newWidth = Math.min(HB.maxSliderSize + 24, window.innerWidth - 24);
+      HB.e.container.style.width = (newWidth) + "px";
+      HB.e.container.style.height = (element.clientHeight + 24) + "px";
+    }
+  },
+
+  // Reads the site element's view_condition setting and calls hide/show per selected behavior
+  // if viewCondition is missing or badly formed, siteElement displays immediately by default
+
+  checkForDisplaySetting: function(siteElement)
+  {
+    var viewCondition = siteElement.view_condition;
+    var originalDisplay = HB.w.style.display;
+
+    if (document.getElementById('hellobar-preview-container') !== null)
+      viewCondition = 'preview';
+
+    // Hide the site element
+    HB.w.style.display = 'none';
+
+    var show = function() {
+      HB.w.style.display = '';
+      if (HB.w.className.indexOf("animated") > -1) { HB.animateIn(HB.w) };
+    }
+
+    if (viewCondition === 'wait-5')
+    {
+      setTimeout(show, 5000);
+    }
+    else if (viewCondition === 'wait-10')
+    {
+      setTimeout(show, 10000);
+    }
+    else if (viewCondition === 'wait-60')
+    {
+      setTimeout(show, 60000);
+    }
+    else if (viewCondition === 'scroll-some')
+    {
+      // scroll-some is defined here as "visitor scrolls 300 pixels"
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, 300, show);
+    }
+    else if (viewCondition === 'scroll-middle')
+    {
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "middle", show);
+    }
+    else if (viewCondition === 'scroll-to-bottom')
+    {
+      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "bottom", show);
+    }
+    else if (viewCondition === 'exit-intent')
+    {
+      HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", show);
+    }
+    else {
+      // No view condition so show immediately
+      HB.w.style.display = originalDisplay;
+    }
+  },
+
+  // Runs a function if the visitor has scrolled to a given height.
+  scrollTargetCheck: function(scrollTarget, payload) {
+    // scrollTarget of "bottom" and "middle" are computed during check, in case page size changes;
+    // scrollTarget also accepts distance from top in pixels
+
+    if (scrollTarget === "bottom") {
+      // arbitrary 300 pixels subtracted from page height to assume visitor will not scroll through a footer
+      scrollTarget = (document.body.scrollHeight - window.innerHeight - 300);
+    }
+    else if (scrollTarget === "middle") {
+      // triggers just before middle of page - feels right due to polling rate
+      scrollTarget = ((document.body.scrollHeight - (window.innerHeight * 2)) / 2);
+    };
+
+    // first condition checks if visitor has scrolled.
+    // second condition guards against pages too small to scroll, displays immidiately.
+    // window.pageYOffset is same as window.scrollY, but with better compatibility.
+    if (window.pageYOffset >= scrollTarget || document.body.scrollHeight <= scrollTarget + window.innerHeight) {
+      payload();
+      clearInterval(HB.scrollInterval);
+    }
+  },
+
+  // Runs a function if the visitor meets intent-detection conditions
+  intentCheck: function(intentSetting, payload) {
+    var vistorIntendsTo = false;
+
+    // aliases for readability
+    var yFromBottom = (HB.mouseY - window.innerHeight) * -1;
+    var xFromLeft = HB.mouseX;
+
+     // Caches most recent polling data for reference by rules
+    HB.intentConditionCache.push({ x: HB.mouseX, y: HB.mouseY, yFromBottom: yFromBottom });
+    if (HB.intentConditionCache.length > 5)
+      HB.intentConditionCache.shift();
+    var c = HB.intentConditionCache;
+
+    // intent is set to exit and we have enough mouse position data
+    if (intentSetting === "exit" && c.length > 2) {
+
+      // catches fast move off screentop (same location across polls implies cursor out of viewport)
+      if ((HB.mouseY < 75)
+        && (c[c.length - 1].x === c[c.length - 2].x)
+        && (c[c.length - 1].y === c[c.length - 2].y)
+        && (c[c.length - 1].y === c[c.length - 3].y)
+        && (c[c.length - 1].x === c[c.length - 3].x)) { vistorIntendsTo = true };
+
+      // catches slow move off screentop (requires previous poll to be near edge)
+      if (HB.mouseY < 2 && c[c.length - 2].y < 10) { vistorIntendsTo = true };
+
+      // catches any move towards the back button
+      if (HB.mouseY + HB.mouseX < 200) { vistorIntendsTo = true };
+
+      // Windows-ish only rules
+      if (navigator.appVersion.indexOf("Win")!=-1) {
+
+        // catch any move towards Start Menu (bottom left)
+        if (yFromBottom + xFromLeft < 200) { vistorIntendsTo = true };
+      };
+
+      // OSX-ish only rules
+      if (navigator.appVersion.indexOf("Mac")!=-1) {
+
+        // catch slow move towards default Dock position (bottom)
+        if (yFromBottom < 10 && c[c.length - 2].yFromBottom < 15) { vistorIntendsTo = true };
+
+        // catch fast move towards default Dock position (bottom)
+        if ((yFromBottom < 50)
+          && (c[c.length - 1].x === c[c.length - 2].x)
+          && (c[c.length - 1].y === c[c.length - 2].y)
+          && (c[c.length - 1].y === c[c.length - 3].y)
+          && (c[c.length - 1].x === c[c.length - 3].x)) { vistorIntendsTo = true };
+      };
+
+      //  catch page inactive state
+      if ( document.hidden || document.unloaded ) { vistorIntendsTo = true };
+
+      // if on mobile, display the bar after N ms regardless of mouse behavior
+      var mobileDelaySetting = 30000;
+      var date = new Date();
+      if ( HB.isMobile && date.getTime() - HB.intentStartTime > mobileDelaySetting) { vistorIntendsTo = true };
+    };
+
+    if (vistorIntendsTo) {
+      payload();
+      clearInterval(HB.intentInterval);
+    };
+  },
+
+  initializeIntentListeners: function() {
+
+    // cache the time when page loads
+    var date = new Date();
+    HB.intentStartTime = date.getTime();
+
+    HB.intentConditionCache = [{},{},{},{},{}];
+    // initialize mouse position near center of window, avoids edge case with no mouse events yet
+    HB.mouseX = 300;
+    HB.mouseY = 300;
+
+    document.onmousemove = function(e) {
+      var event = e || window.event;
+      HB.mouseX = event.clientX;
+      HB.mouseY = event.clientY;
     }
   }
+
 };
+
 
 /*
 CryptoJS v3.1

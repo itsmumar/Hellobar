@@ -1,1 +1,0 @@
-class UTMContentCondition < UTMCondition; end

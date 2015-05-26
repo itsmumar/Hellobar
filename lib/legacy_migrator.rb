@@ -58,7 +58,7 @@ class LegacyMigrator
           ActiveRecord::Base.connection.execute("INSERT INTO #{Subscription.table_name} VALUES (NULL, NULL, #{site.id}, 'Subscription::FreePlus', 0, 0.00, 25000, NULL, NULL, #{escaped_now}, NULL)")
           subscription_id += 1
           # This bill and next bill
-          ActiveRecord::Base.connection.execute("INSERT INTO #{Bill.table_name} VALUES 
+          ActiveRecord::Base.connection.execute("INSERT INTO #{Bill.table_name} VALUES
           (NULL, #{subscription_id}, 1, 'Bill::Recurring', 0.00, NULL, NULL, 0, #{escaped_now}, #{escaped_now}, #{escaped_one_month_from_now}, #{escaped_now}, #{escaped_now}),
           (NULL, #{subscription_id}, 0, 'Bill::Recurring', 0.00, 'Monthly Renewal', NULL, 1, #{escaped_one_month_from_now}, #{escaped_one_month_from_now}, #{escaped_two_months_from_now}, NULL, #{escaped_now})")
           puts "[#{Time.now}] Changing subscription #{subscription_id}..." if subscription_id % 5000 == 0
@@ -518,7 +518,7 @@ class LegacyMigrator
       include_urls = legacy_goal.data_json['include_urls'] || []
       does_not_include_urls = legacy_goal.data_json['exclude_urls'] # legacy key is exclude_urls, which we map to does_not_include
 
-      date_condition = DateCondition.from_params(start_date, end_date)
+      date_condition = Condition.date_condition_from_params(start_date, end_date)
 
       # add conditionto in-memory rule
       if date_condition

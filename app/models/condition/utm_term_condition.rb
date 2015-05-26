@@ -1,1 +1,0 @@
-class UTMTermCondition < UTMCondition; end

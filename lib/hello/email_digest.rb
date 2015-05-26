@@ -23,7 +23,9 @@ module Hello::EmailDigest
       if site.has_script_installed?
         DigestMailer.weekly_digest(site)
       elsif site.site_elements.where("site_elements.created_at > ?", 10.days.ago).count > 0
-        DigestMailer.not_installed(site)
+        if site.script_installed_at.nil? # Only send if the site never had it installed in the first place
+          DigestMailer.not_installed(site)
+        end
       else
         nil
       end
