@@ -48,6 +48,7 @@ HelloBar.PreviewController = Ember.Controller.extend
     #----------- Other Colors  -----------#
 
     white = 'ffffff'
+    black = '000000'
 
     if @brightness(primaryColor) < 0.5
       @setProperties
@@ -58,11 +59,12 @@ HelloBar.PreviewController = Ember.Controller.extend
       colorPalette.sort (a, b) =>
         @brightness(a) - @brightness(b)
 
+      darkest = if @brightness(colorPalette[0]) >= 0.5 then black else one.color(colorPalette[0]).hex().replace('#','')
+
       @setProperties
-        'model.text_color'   : one.color(colorPalette[0]).hex().replace('#','')
-        'model.button_color' : one.color(colorPalette[0]).hex().replace('#','')
+        'model.text_color'   : darkest
+        'model.button_color' : darkest
         'model.link_color'   : white
-        
   ).observes('colorPalette')
 
   brightness: (color) ->
