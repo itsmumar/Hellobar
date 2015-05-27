@@ -100,10 +100,10 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
   #-----------  Screenshot Eye-Dropper  -----------#
 
   eyeDropper: ( () ->
-    return $.fn.dropperredux({}) unless @get('isSelecting')
+    return false unless @get('isSelecting')
 
-    $.fn.dropperredux
-      selector: $('#hellobar-preview-container > img')
+    jQuery('.preview-image-for-colorpicker').dropper
+      selector: $('.preview-image-for-colorpicker')
       clickCallback: (color) =>
         @set('color', color.rgbhex)
   ).observes('isSelecting').on('didInsertElement')
@@ -120,7 +120,11 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
     toggleFocus: ->
       if !(@get('inFocus') && $("#" + @get('elementId') + " input:focus").length)
         @set('focusedColor', @get('elementId'))
+        @set('isSelecting', false)
         @toggleProperty('inFocus')
+
+    toggleSelecting: ->
+      @toggleProperty('isSelecting')
 
 
 #-----------  Color Preview Child Views  -----------#

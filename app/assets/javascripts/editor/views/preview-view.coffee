@@ -8,7 +8,7 @@ HelloBar.PreviewView = Ember.View.extend
   #-----------  Color Thief  -----------#
 
   formatRGB: (rgbArray) ->
-    rgbArray.push(0)
+    rgbArray.push(1)
     return rgbArray
 
   didInsertElement: ->

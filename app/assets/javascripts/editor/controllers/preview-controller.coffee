@@ -26,7 +26,7 @@ HelloBar.PreviewController = Ember.Controller.extend
 
   #-----------  Color Intelligence  -----------#
 
-  colorPalette  : Ember.computed.alias('controllers.application.colorPalette')
+  colorPalette: Ember.computed.alias('controllers.application.colorPalette')
   
   setSiteColors: ( ->
     return false if @get('model.id') || window.elementToCopyID
@@ -34,22 +34,42 @@ HelloBar.PreviewController = Ember.Controller.extend
     colorPalette = @get('colorPalette')
     dominantColor = @get('dominantColor')
 
-    # Primary Color
+    #----------- Primary Color  -----------#
 
     primaryColor = dominantColor
-    allColors = colorPalette.concat([dominantColor])
     
-    for color in allColors
-      if Math.abs(color[0] - color[1]) > 5 || Math.abs(color[1] - color[2]) > 5 || Math.abs(color[0] - color[2]) > 5
+    for color in colorPalette
+      if Math.abs(color[0] - color[1]) > 10 || Math.abs(color[1] - color[2]) > 10 || Math.abs(color[0] - color[2]) > 10
         primaryColor = color
         break
 
     @set('model.background_color', one.color(primaryColor).hex().replace('#',''))
 
-    # Text Color
+    #----------- Other Colors  -----------#
 
-    # Button Color
+    white = 'ffffff'
 
-    # Button Text
+    if @brightness(primaryColor) < 0.5
+      @setProperties
+        'model.text_color'   : white
+        'model.button_color' : white
+        'model.link_color'   : one.color(primaryColor).hex().replace('#','')
+    else
+      colorPalette.sort (a, b) =>
+        @brightness(a) - @brightness(b)
 
-  ).observes('dominantColor', 'colorPalette')
+      @setProperties
+        'model.text_color'   : one.color(colorPalette[0]).hex().replace('#','')
+        'model.button_color' : one.color(colorPalette[0]).hex().replace('#','')
+        'model.link_color'   : white
+        
+  ).observes('colorPalette')
+
+  brightness: (color) ->
+    rgb = Ember.copy(color)
+
+    [0..2].forEach (i) ->
+      val = rgb[i] / 255
+      rgb[i] = if val < 0.03928 then val / 12.92 else Math.pow((val + 0.055) / 1.055, 2.4)
+ 
+    return (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2])

@@ -36,10 +36,6 @@
         <div class="slider-indicator"></div>
       </div>
 
-      {{!-- <a class="eyedrop-button" {{action 'toggleSelecting'}}>
-        <i class="icon-eyedropper"></i>
-      </a> --}}
-
       <div class="rgb-wrapper">
         <div class="rgb-block">
           <h6>R</h6>
@@ -53,6 +49,10 @@
           <h6>B</h6>
           {{input type='number' value=bVal class='b-val' min=0 max=255 step=1 maxlength=3}}
         </div>
+        
+        <a class="eyedrop-button" {{action 'toggleSelecting'}}>
+          <i class="icon-eyedropper"></i>
+        </a>
       </div>
     </div>
   </div>
