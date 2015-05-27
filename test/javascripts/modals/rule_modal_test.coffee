@@ -94,15 +94,15 @@ asyncTest 'RuleModal closes the modal on a successful form submission event', (a
 
   modal.open()
 
-# module 'RuleModal filtering out operands'
+module 'RuleModal filtering out operands'
 
-# test '_validOperands()', ->
-#   options =
-#     ruleData:
-#       name: 'Rule name'
-#       conditions: [{}]
-#   modal = new RuleModal(options)
+test '_validOperands()', ->
+  options =
+    ruleData:
+      name: 'Rule name'
+      conditions: [{}]
+  modal = new RuleModal(options)
 
-#   deepEqual modal._validOperands('DeviceCondition'), ['is', 'is_not'], 'has a valid value for device'
-#   deepEqual modal._validOperands('DateCondition'), ['is', 'is_not', 'before', 'after', 'between'], 'has a valid value for date'
-#   deepEqual modal._validOperands('UrlCondition'), ['is', 'is_not', 'includes', 'does_not_include'], 'has a valid value for url'
+  deepEqual modal._validOperands('DeviceCondition'), ['is', 'is_not'], 'has a valid value for device'
+  deepEqual modal._validOperands('DateCondition'), ['is', 'is_not', 'before', 'after', 'between'], 'has a valid value for date'
+  deepEqual modal._validOperands('UrlCondition'), ['is', 'is_not', 'includes', 'does_not_include'], 'has a valid value for url'
