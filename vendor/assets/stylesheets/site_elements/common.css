@@ -219,7 +219,101 @@ html, body {
 
 /*-----------  Logo  -----------*/
 
-.hb-logo-wrapper {
+  .hb-logo-wrapper {
+    opacity: 0.3;
+  }
+
+  .hb-logo-wrapper:hover {
+    opacity: 0.6;
+  }
+
+  .hb-logo-wrapper a {
+    color: #5c5e60;
+    text-decoration: none;
+  }
+
+  .hb-logo-wrapper {
+    font-family: 'Open Sans',sans-serif;
+
+    transition: opacity 0.2s ease;
+    -o-transition: opacity 0.2s ease;
+    -ms-transition: opacity 0.2s ease;
+    -moz-transition: opacity 0.2s ease;
+    -webkit-transition: opacity 0.2s ease;
+  }
+
+  .hb-logo-wrapper.pb2l svg, .hb-logo-wrapper.powered_by svg, .hb-logo-wrapper.powered_by_no_track svg,
+  .hb-logo-wrapper.not_using_hb svg, .hb-logo-wrapper.add_hb svg, .hb-logo-wrapper.gethb svg {
+    transform: translateY(3px);
+    -o-transform: translateY(3px);
+    -ms-transform: translateY(3px);
+    -moz-transform: translateY(3px);
+    -webkit-transform: translateY(3px);
+  }
+
+  .hb-logo-wrapper .hb-logo-line {
+    display: inline;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+
+  .hb-logo-wrapper .animated {
+    -webkit-animation: logo-spin 10.5s ease-in-out infinite;
+    -moz-animation: logo-spin 10.5s ease-in-out infinite;
+    animation: logo-spin 10.5s ease-in-out infinite;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+  }
+
+  .hb-logo-wrapper .animated:hover {
+    -webkit-animation-play-state: paused;
+    -moz-animation-play-state: paused;
+    animation-play-state: paused;
+  }
+
+  @-webkit-keyframes logo-spin {
+    90% {
+      -webkit-transform: rotate3d(0, 1, 0, 0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate3d(0, 1, 0, -180deg);
+    }
+  }
+
+  @-moz-keyframes logo-spin {
+    90% {
+      -moz-transform: rotate3d(0, 1, 0, 0deg);
+    }
+
+    100% {
+      -moz-transform: rotate3d(0, 1, 0, -180deg);
+    }
+  }
+
+  @keyframes logo-spin {
+    90% {
+      -webkit-transform: rotate3d(0, 1, 0, 0deg);
+      -moz-transform: rotate3d(0, 1, 0, 0deg);
+      -ms-transform: rotate3d(0, 1, 0, 0deg);
+      -o-transform: rotate3d(0, 1, 0, 0deg);
+      transform: rotate3d(0, 1, 0, 0deg);
+    }
+
+    100% {
+      -webkit-transform: rotate3d(0, 1, 0, -180deg);
+      -moz-transform: rotate3d(0, 1, 0, -180deg);
+      -ms-transform: rotate3d(0, 1, 0, -180deg);
+      -o-transform: rotate3d(0, 1, 0, -180deg);
+      transform: rotate3d(0, 1, 0, -180deg);
+    }
+  }
+/*.hb-logo-wrapper {
   opacity: 0.33;
   margin-top: 2em;
   font-size: 0.85em;
@@ -264,7 +358,7 @@ html, body {
 
 .hb-logo-wrapper:hover {
   opacity: 0.67;
-}
+}*/
 
 /*-----------  Social Styling  -----------*/
 

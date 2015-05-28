@@ -60,18 +60,6 @@ describe ScriptGenerator, '#render' do
     generator.render.should include(hbq_initialization)
   end
 
-  describe 'capabilities' do
-    it 'sets branding variations to true if the site created at is > BRAND_VARIATION_DATE' do
-      site.stub(:created_at).and_return(ScriptGenerator::BRAND_VARIATION_DATE + 1.day)
-      generator.capabilities[:b_variation].should be_true
-    end
-
-    it 'sets branding variations to false if the site created at is < BRAND_VARIATION_DATE' do
-      site.stub(:created_at).and_return(ScriptGenerator::BRAND_VARIATION_DATE - 1.day)
-      generator.capabilities[:b_variation].should be_false
-    end
-  end
-
   context 'when templates are present' do
     it 'renders the setTemplate function on HB with the template name and markup' do
       template = { name: 'yey name', markup: 'yey markup' }

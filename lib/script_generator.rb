@@ -13,9 +13,6 @@ class ScriptGenerator < Mustache
 
   attr_reader :site, :options
 
-  # Show brand variations for sites created after 1-29-15
-  BRAND_VARIATION_DATE = DateTime.new(2015,1,29,12,0,0)
-
   def initialize(site, options={})
     @site = site
     @options = options
@@ -53,8 +50,19 @@ class ScriptGenerator < Mustache
   def capabilities
     {
       no_b: @site.capabilities.remove_branding? || @options[:preview],
-      b_variation: @site.created_at >= BRAND_VARIATION_DATE
+      b_variation: get_branding_variation
     }
+  end
+
+  def get_branding_variation
+    if ["@polymathic", "@crazyegg"].include?(@site.owner.email)
+      variations = ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"]
+      variation = variations[@site.id % variations.length]
+      Analytics.track(:site, @site.id, "Branding Test Assigned", {variation: variation})
+      variation
+    else
+      "powered_by_no_track"
+    end
   end
 
   def capabilities_json
@@ -106,6 +114,17 @@ class ScriptGenerator < Mustache
       return f if !f.blank?
     end
     ""
+  end
+
+  def branding_templates
+    [].tap do |r|
+      Dir.glob("#{Rails.root}/lib/script_generator/branding/*.html") do |f|
+        ActiveSupport.escape_html_entities_in_json = false
+        content = File.read(f).to_json
+        ActiveSupport.escape_html_entities_in_json = true
+        r << {name: f.split(".html").first.split("/").last, markup: content}
+      end
+    end
   end
 
   def templates

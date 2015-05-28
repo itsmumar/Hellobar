@@ -58,16 +58,30 @@
 
 /*-----------  Logo  -----------*/
 
-#hellobar_takeover .hb-logo-wrapper a {
-  left: 50%;
+#hellobar_takeover .hb-logo-wrapper{
   bottom: 1em;
+  left: 0;
   font-size: 14px;
   position: absolute;
-  transform: translateX(-50%);
-  -o-transition: translateX(-50%);
-  -ms-transition: translateX(-50%);
-  -moz-transition: translateX(-50%);
-  -webkit-transition: translateX(-50%);
+  text-align: center;
+  width: 100%;
+}
+
+#hellobar_takeover .hb-logo-wrapper.original, #hellobar_takeover .hb-logo-wrapper.animated {
+  opacity: 0.2;
+}
+
+#hellobar_takeover .hb-logo-wrapper.original:hover, #hellobar_takeover .hb-logo-wrapper.animated:hover {
+  opacity: 0.4;
+}
+
+#hellobar_takeover .hb-logo-wrapper.original svg, #hellobar_takeover .hb-logo-wrapper.animated svg {
+  width: 3em;
+  border-radius: 3px;
+}
+
+#hellobar_takeover .hb-logo-wrapper {
+  text-transform: uppercase;
 }
 
 /*-----------  State: Mobile  -----------*/

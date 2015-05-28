@@ -41,6 +41,23 @@
   font-size: 0.75em;
 }
 
+#hellobar_modal .hb-logo-wrapper.original, #hellobar_modal .hb-logo-wrapper.animated {
+  opacity: 0.2;
+}
+
+#hellobar_modal .hb-logo-wrapper.original:hover, #hellobar_modal .hb-logo-wrapper.animated:hover {
+  opacity: 0.4;
+}
+
+#hellobar_modal .hb-logo-wrapper.original svg, #hellobar_modal .hb-logo-wrapper.animated svg {
+  width: 3em;
+  border-radius: 3px;
+}
+
+#hellobar_modal .hb-logo-wrapper {
+  text-transform: uppercase;
+}
+
 /*-----------  Positions  -----------*/
 
 #hellobar_modal.top {

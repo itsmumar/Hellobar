@@ -46,6 +46,23 @@
   margin: 5px 25px 10px 20px;
 }
 
+#hellobar_slider .hb-logo-wrapper.original, #hellobar_slider .hb-logo-wrapper.animated {
+  opacity: 0.2;
+}
+
+#hellobar_slider .hb-logo-wrapper.original:hover, #hellobar_slider .hb-logo-wrapper.animated:hover {
+  opacity: 0.4;
+}
+
+#hellobar_slider .hb-logo-wrapper.original svg, #hellobar_slider .hb-logo-wrapper.animated svg {
+  width: 3em;
+  border-radius: 3px;
+}
+
+#hellobar_slider .hb-logo-wrapper {
+  text-transform: uppercase;
+}
+
 /*-----------  Inputs  -----------*/
 
 #hellobar_slider .hb-input-wrapper {
