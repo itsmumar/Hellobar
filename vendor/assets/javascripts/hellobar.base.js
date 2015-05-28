@@ -132,7 +132,7 @@ var HBQ = function()
         }
       }
     }
-  }, 1000); // Check screen size every N ms
+  }, 50); // Check screen size every N ms
 }
 
 // Call the function right away once this is loaded
