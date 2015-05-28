@@ -685,6 +685,7 @@ var _HB = {
 
   // A global variable to store templates
   templateHTML: {},
+  brandingTemplates: {},
 
   // Sets the template HTML. Note if you override getTemplate this will have
   // no affect
@@ -701,6 +702,17 @@ var _HB = {
   getTemplate: function(siteElement)
   {
     return HB.templateHTML[siteElement.template_name];
+  },
+
+  // Sets the branding HTML.
+  setBrandingTemplate: function(type, html)
+  {
+    HB.brandingTemplates[type] = html;
+  },
+
+  getBrandingTemplate: function(type)
+  {
+    return HB.brandingTemplates[type];
   },
 
   // Takes each string value in the siteElement and escapes HTML < > chars
@@ -1783,6 +1795,11 @@ var _HB = {
       HB.intentBodyBlurEvent = true; 
     };
 
+  },
+
+  branding_template: function() {
+    var stored = HB.gc("b_template");
+    return stored != null ? stored : HB.CAP.b_variation;
   }
 
 };
