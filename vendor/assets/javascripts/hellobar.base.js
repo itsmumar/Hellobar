@@ -1699,7 +1699,7 @@ var _HB = {
     }
   },
 
-  // Runs a function if the visitor meets intent-detection conditions
+  // Runs a function "payload" if the visitor meets intent-detection conditions
   intentCheck: function(intentSetting, payload) {
     var vistorIntendsTo = false;
 
@@ -1713,10 +1713,16 @@ var _HB = {
       HB.intentConditionCache.shift();
     var c = HB.intentConditionCache;
 
-    // intent is set to exit and we have enough mouse position data
+    // if intent is set to exit and we have enough mouse position data...
     if (intentSetting === "exit" && c.length > 2) {
 
-      // catches fast move off screentop (same location across polls implies cursor out of viewport)
+      // catch a keyboard move towards the address bar via onBlur event; resets onBlur state
+      if ( HB.intentBodyBlurEvent ) { 
+        console.log("document.body.onBlur rule activated")
+        vistorIntendsTo = true; 
+        HB.intentBodyBlurEvent = false; }
+
+      // catches fast mouse move off screentop (same location across polls implies cursor out of viewport)
       if ((HB.mouseY < 75)
         && (c[c.length - 1].x === c[c.length - 2].x)
         && (c[c.length - 1].y === c[c.length - 2].y)
@@ -1781,6 +1787,14 @@ var _HB = {
       HB.mouseX = event.clientX;
       HB.mouseY = event.clientY;
     }
+
+    // captures state of whether event has fired (ex: keyboard move to address bar)
+    // response to this state defined by rules inside the intentCheck loop
+    document.body.onblur=function(){
+      console.log("document.body.onBlur event fires")
+      HB.intentBodyBlurEvent = true; 
+    };
+
   },
 
   branding_template: function() {
