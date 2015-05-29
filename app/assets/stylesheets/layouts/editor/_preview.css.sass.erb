@@ -15,6 +15,11 @@
       height: 100%
       position: relative
 
+      canvas
+        z-index: 10
+        margin-top: -12px
+        position: relative
+
       #hellobar_container
         width: 100%
         position: absolute
@@ -57,9 +62,10 @@
         background-position: center top
 
       .preview-image-for-colorpicker
-        position: absolute
         top: -99999px
         left: -99999px
+        width: initial
+        position: absolute
 
       &.is-pushed.Bar
         overflow: hidden
