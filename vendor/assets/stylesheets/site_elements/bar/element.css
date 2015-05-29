@@ -148,6 +148,7 @@
 
 #hellobar_bar .hb-logo-wrapper.original svg, #hellobar_bar .hb-logo-wrapper.animated svg {
   width: 4em;
+  height: 4em;
   border-radius: 3px;
 }
 
