@@ -89,32 +89,25 @@
   #-----------  Mimic Background "Cover" Display  -----------#
 
   drawImageCanvas = (ctx, img) ->
-    iw = img.width
-    ih = img.height
-    cw = ctx.canvas.width
-    ch = ctx.canvas.height
+    img_ratio = img.height / img.width
+    ctx_ratio = ctx.canvas.height / ctx.canvas.width
 
-    imgRatio = img.height / img.width
-    ctxRatio = ctx.canvas.height / ctx.canvas.width
+    width_ratio = img.width / ctx.canvas.width
+    height_ratio = img.height / ctx.canvas.height
 
-    if ctxRatio > imgRatio
-      # Full Height, Cropped Width
-      sx = sy = 0
-      sWidth = img.height * (imgRatio)
+    if ctx_ratio > img_ratio
+      sy = 0
       sHeight = img.height
-      
-      dx = dy = 0
-      dWidth = ctx.canvas.width
-      dHeight = ctx.canvas.height
+      sWidth = Math.round(ctx.canvas.width * height_ratio)
+      sx = (img.width - sWidth) / 2
     else
-      # Full Width, Cropped Height
       sx = sy = 0
       sWidth = img.width
-      sHeight = Math.round(img.height * imgRatio)
+      sHeight = Math.round(ctx.canvas.height * width_ratio)
 
-      dx = dy = 0
-      dWidth = ctx.canvas.width
-      dHeight = ctx.canvas.height
+    dx = dy = 0
+    dWidth = ctx.canvas.width
+    dHeight = ctx.canvas.height
 
     ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
 

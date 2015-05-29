@@ -113,6 +113,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
 
   observeSiblings: ( ->
     if @get('inFocus') && (@get('focusedColor') != @get('elementId'))
+      @set('isSelecting', false)
       @set('inFocus', false)
   ).observes('focusedColor')
 
