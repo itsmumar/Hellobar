@@ -11,19 +11,19 @@
 
 ( ($) ->
 
-  config         = {}
-  image_data     = []
-  dropper_image  = null
-  dropper_canvas = null
-  hover_spyglass = null
-  canvas_failure = false
+  config          = {}
+  dropper_image   = null
+  dropper_canvas  = null
+  dropper_context = null
+  hover_spyglass  = null
+  canvas_failure  = false
 
   defaults =
     clickCallback     : (color, evt) -> false
     mouseMoveCallback : (color, evt) -> false
     mouseOutCallback  : (color, evt) -> false
     selector          : $('#background-image')
-    hover_size        : 12
+    hover_size        : 20
 
   defaults.selector.length = 0
 
@@ -35,8 +35,8 @@
 
     config = $.extend({}, defaults, settings)
     
-    $('body').append "'<div class='dropperTrios_spyglass' style='width:#{config.hoverwidth}px; height:#{config.hoverwidth}px; display:none'></div>"
-    hover_spyglass = $('body').children().last()
+    $('body').append "'<div class='dropperTrios_spyglass' style='width:#{config.hover_size}px; height:#{config.hover_size}px; display:none'></div>"
+    hover_spyglass = $('.dropperTrios_spyglass')
 
     if config.selector && config.selector.length
       if config.selector[0].complete
@@ -60,7 +60,7 @@
       dropper_canvas = null
 
     if hover_spyglass
-      $(hover_spyglass).remove()
+      hover_spyglass.remove()
       hover_spyglass = null
 
     config.selector = defaults.selector;
@@ -77,9 +77,8 @@
     $(dropper_canvas).insertBefore(@)
 
     try
-      ctx = dropper_canvas.getContext('2d')
-      drawImageCanvas(ctx, @)
-      image_data = ctx.getImageData(0, 0, @width, @height)
+      dropper_context = dropper_canvas.getContext('2d')
+      drawImageCanvas(dropper_context, @)
     catch e
       canvas_failure = true
       dropperAbort()
@@ -138,61 +137,53 @@
   #-----------  Mouse Events  -----------#
 
   mouseMove = (evt) ->
-    canvas_index = canvasIndexFromEvent(evt, $(@))
-    color = colorFromData(canvas_index)
-
+    color = colorFromData(evt)
     hover_spyglass.css(
-      'top'              : evt.pageY - 15
-      'left'             : evt.pageX + 10
-      'background-color' : '#' + color.hex
+      'top'              : evt.pageY - 25
+      'left'             : evt.pageX - 25
+      'background-color' : '#' + color
       'position'         : 'absolute'
     ).show()
 
   mouseLeave = (evt) ->
-    canvas_index = canvasIndexFromEvent(evt, $(@))
-    color = colorFromData(canvas_index)
-
     hover_spyglass.hide()
 
   mouseDown = (evt) ->
-    canvas_index = canvasIndexFromEvent(evt, $(@))
-    color = colorFromData(canvas_index)
-
+    color = colorFromData(evt)
     config.clickCallback(color, evt)
     false
 
   #-----------  Helper Functions  -----------#
 
-  colorFromData = (canvas_index) ->
-    console.log canvas_index, image_data.data[canvas_index]
+  colorFromData = (evt) ->
+    pos = findPosition()
+    x = evt.pageX - (pos.x)
+    y = evt.pageY - (pos.y)
+    coord = 'x=' + x + ', y=' + y
+    p = dropper_context.getImageData(x, y, 1, 1).data
+    color = ('000000' + rgbToHex(p[0], p[1], p[2])).slice(-6)
 
-    color = 
-      r: image_data.data[canvas_index]
-      g: image_data.data[canvas_index + 1]
-      b: image_data.data[canvas_index + 2]
-      a: image_data.data[canvas_index + 3]
-    color.hex = rgbToHex(color)
-    
     return color
-
-  canvasIndexFromEvent = (e, obj) ->
-    x = e.pageX - parseInt(obj.offset().left)
-    y = e.pageY - parseInt(obj.offset().top)
-    
-    return (x + y * obj.width()) * 4
 
   #-----------  Color Helpers  -----------#
 
-  rgbToHex = (color) ->
-    return toHex(color[0]) + toHex(color[1]) + toHex(color[2])
+  findPosition = () ->
+    obj = dropper_canvas
+    cur_left = cur_top = 0
 
-  toHex = (i) ->
-    return 'ff' unless i
+    if obj.offsetParent
+      loop
+        cur_left += obj.offsetLeft
+        cur_top += obj.offsetTop
+        unless obj = obj.offsetParent
+          break
+      return {x: cur_left, y: cur_top}
+    return undefined
 
-    str = i.toString(16)
-    while str.length < 2
-      str = '0' + str
- 
-    return str
+  rgbToHex = (r, g, b) ->
+    if r > 255 || g > 255 || b > 255
+      throw 'Invalid color component'
+
+    return ((r << 16) | (g << 8) | b).toString(16)
 
 ) jQuery

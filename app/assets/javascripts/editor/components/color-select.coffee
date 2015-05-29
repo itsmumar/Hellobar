@@ -104,8 +104,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
       $('.preview-image-for-colorpicker').dropperTrios
         selector: $('.preview-image-for-colorpicker')
         clickCallback: (color) =>
-          console.log 'cllback', color
-          # @set('color', color.rgbhex)
+          @set('color', color)
     else 
       $('.preview-image-for-colorpicker').dropperClean()
   ).observes('isSelecting').on('didInsertElement')
