@@ -1,4 +1,3 @@
-/*-----------  Site Preview  -----------*/
 
 .dropperTrios_spyglass
   z-index: 1000
@@ -23,7 +22,6 @@
 
       canvas
         z-index: 10
-        margin-top: -12px
         position: relative
 
       #hellobar_container
@@ -75,6 +73,9 @@
 
       &.is-pushed.Bar
         overflow: hidden
+
+        canvas
+          margin-top: -12px
 
         #hellobar_container:not(.bar-bottom)
           position: relative !important
