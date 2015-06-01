@@ -1423,7 +1423,7 @@ var _HB = {
     // Makes Iframe small after hiding in order to allow click events.
     hideIframe = window.setTimeout(function(){
       var classes = element.getAttribute('class');
-      if (classes != null && classes.indexOf('Bar') > -1 && !isBar && element.id != "pull-down"){
+      if (classes != null && classes.indexOf('Bar') > -1 && element.id != "pull-down"){
         element.setAttribute('style','height:0px;max-height:0px');
       }
       if(typeof(callback) == 'function') {
@@ -1717,9 +1717,8 @@ var _HB = {
     if (intentSetting === "exit" && c.length > 2) {
 
       // catch a keyboard move towards the address bar via onBlur event; resets onBlur state
-      if ( HB.intentBodyBlurEvent ) { 
-        console.log("document.body.onBlur rule activated")
-        vistorIntendsTo = true; 
+      if ( HB.intentBodyBlurEvent ) {
+        vistorIntendsTo = true;
         HB.intentBodyBlurEvent = false; }
 
       // catches fast mouse move off screentop (same location across polls implies cursor out of viewport)
@@ -1791,8 +1790,7 @@ var _HB = {
     // captures state of whether event has fired (ex: keyboard move to address bar)
     // response to this state defined by rules inside the intentCheck loop
     document.body.onblur=function(){
-      console.log("document.body.onBlur event fires")
-      HB.intentBodyBlurEvent = true; 
+      HB.intentBodyBlurEvent = true;
     };
 
   },
