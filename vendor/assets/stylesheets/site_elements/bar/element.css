@@ -79,6 +79,10 @@
   padding-left: 1rem;
 }
 
+#hellobar_bar .hb-arrow-wrapper a {
+  display: block;
+}
+
 #hellobar_bar .hb-arrow-wrapper .hb-arrow {
   width: 28px;
   height: 29px;
@@ -128,6 +132,7 @@
 
 #hellobar_bar .hb-logo-wrapper a {
   color: #fff;
+  display: block;
 }
 
 #hellobar_bar .hb-logo-wrapper svg {
@@ -148,7 +153,7 @@
 
 #hellobar_bar .hb-logo-wrapper.original svg, #hellobar_bar .hb-logo-wrapper.animated svg {
   width: 4em;
-  height: 4em;
+  height: 2.6em;
   border-radius: 3px;
 }
 
