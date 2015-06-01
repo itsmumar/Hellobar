@@ -16,7 +16,6 @@
   }}
 </div>
 
-{{#if canSetViewTrigger}}
 <label>When does it display? <small><a {{action "popDelayTootlipModal"}} class="tooltip-label">(What's this?)</a></small></label>
 <div class="select-wrapper">
   {{view Ember.Select
@@ -26,4 +25,3 @@
     optionLabelPath='content.label'
   }}
 </div>
-{{/if}}
