@@ -9,9 +9,12 @@
 #= require underscore
 #= require moment
 
+#= require one-color
+#= require one-color-ieshim
 #= require colorpicker
 #= require color_thief
 #= require jquery_dropper
+#= require imagesloaded
 
 #= require handlebars
 #= require handlebars_helpers
@@ -22,3 +25,4 @@ $ ->
 
   if (bowser.msie && bowser.version <= 9)
     $('body').addClass('oldIE')
+    

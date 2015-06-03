@@ -324,7 +324,7 @@ describe Site do
 
   describe "#send_digest_email" do
     it "should not send an email if there are no views in the last week" do
-      Hello::DataAPI.stub(:lifetime_totals_by_type).and_return({:total=>Hello::DataAPI::Performance.new([[1, 1], [1, 1]])})
+      Hello::DataAPI.stub(:lifetime_totals_by_type).and_return({:total=>Hello::DataAPI::Performance.new([[1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1]])})
       Hello::EmailDigest.should_not_receive(:send)
       @site.send_digest_email
     end

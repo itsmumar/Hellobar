@@ -85,5 +85,7 @@ Rails.application.routes.draw do
     get code, :to => "errors#show", :code => code
   end
 
+  get "/proxy/:scheme/*url", to: "proxy#proxy" if Rails.env.development?
+
   root "welcome#index"
 end

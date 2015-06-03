@@ -162,24 +162,6 @@
               border: 1px solid $white
               box-shadow: 1px 1px 5px rgba($black, 0.4)
 
-          .eyedrop-button
-            width: 25%
-            color: $gray
-            float: right
-            cursor: pointer
-            text-align: center
-            margin-bottom: 2.65em
-            border-radius: $radiusSm
-            border: 1px solid $grayLight
-            @include inline-block()
-
-            i:before
-              line-height: 2em
-
-            &:hover
-              color: $grayDark
-              border-color: $gray
-
           .rgb-wrapper
             width: 25%
             float: right
@@ -202,6 +184,26 @@
                 text-align: right
                 border-radius: $radiusSm
                 border: 1px solid $grayLighter
+
+              &:first-child
+                margin-top: 1px
+
+            .eyedrop-button
+              width: 100%
+              color: $gray
+              display: block
+              cursor: pointer
+              margin-top: 2.67em
+              text-align: center
+              border-radius: $radiusSm
+              border: 1px solid $grayLighter
+
+              i:before
+                line-height: 2em
+
+              &:hover
+                color: $grayDark
+                border-color: $gray
 
     &.in-focus
 

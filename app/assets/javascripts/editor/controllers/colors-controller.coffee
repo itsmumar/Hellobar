@@ -10,10 +10,10 @@ HelloBar.ColorsController = Ember.Controller.extend
 
   #-----------  Color Tracking  -----------#
 
-  # siteColors: ['def1ff', '4f4f4f', 'fffff', 'ff11dd']
-  recentColors: ['ffffff', 'ffffff', 'ffffff', 'ffffff']
-
-  focusedColor: Ember.computed.alias('controllers.application.focusedColor')
+  recentColors : ['ffffff', 'ffffff', 'ffffff', 'ffffff']
+  siteColors   : Ember.computed.alias('controllers.application.colorPalette')
+  focusedColor : Ember.computed.alias('controllers.application.focusedColor')
+  
   showAdditionalColors: Ember.computed.equal('model.type', 'Bar')
 
   trackColorView: (->

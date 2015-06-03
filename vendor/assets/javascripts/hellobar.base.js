@@ -132,7 +132,7 @@ var HBQ = function()
         }
       }
     }
-  }, 1000); // Check screen size every N ms
+  }, 50); // Check screen size every N ms
 }
 
 // Call the function right away once this is loaded
@@ -685,6 +685,7 @@ var _HB = {
 
   // A global variable to store templates
   templateHTML: {},
+  brandingTemplates: {},
 
   // Sets the template HTML. Note if you override getTemplate this will have
   // no affect
@@ -701,6 +702,17 @@ var _HB = {
   getTemplate: function(siteElement)
   {
     return HB.templateHTML[siteElement.template_name];
+  },
+
+  // Sets the branding HTML.
+  setBrandingTemplate: function(type, html)
+  {
+    HB.brandingTemplates[type] = html;
+  },
+
+  getBrandingTemplate: function(type)
+  {
+    return HB.brandingTemplates[type];
   },
 
   // Takes each string value in the siteElement and escapes HTML < > chars
@@ -1411,7 +1423,7 @@ var _HB = {
     // Makes Iframe small after hiding in order to allow click events.
     hideIframe = window.setTimeout(function(){
       var classes = element.getAttribute('class');
-      if (classes != null && classes.indexOf('Bar') > -1 && !isBar && element.id != "pull-down"){
+      if (classes != null && classes.indexOf('Bar') > -1 && element.id != "pull-down"){
         element.setAttribute('style','height:0px;max-height:0px');
       }
       if(typeof(callback) == 'function') {
@@ -1687,7 +1699,7 @@ var _HB = {
     }
   },
 
-  // Runs a function if the visitor meets intent-detection conditions
+  // Runs a function "payload" if the visitor meets intent-detection conditions
   intentCheck: function(intentSetting, payload) {
     var vistorIntendsTo = false;
 
@@ -1701,10 +1713,15 @@ var _HB = {
       HB.intentConditionCache.shift();
     var c = HB.intentConditionCache;
 
-    // intent is set to exit and we have enough mouse position data
+    // if intent is set to exit and we have enough mouse position data...
     if (intentSetting === "exit" && c.length > 2) {
 
-      // catches fast move off screentop (same location across polls implies cursor out of viewport)
+      // catch a keyboard move towards the address bar via onBlur event; resets onBlur state
+      if ( HB.intentBodyBlurEvent ) {
+        vistorIntendsTo = true;
+        HB.intentBodyBlurEvent = false; }
+
+      // catches fast mouse move off screentop (same location across polls implies cursor out of viewport)
       if ((HB.mouseY < 75)
         && (c[c.length - 1].x === c[c.length - 2].x)
         && (c[c.length - 1].y === c[c.length - 2].y)
@@ -1769,6 +1786,18 @@ var _HB = {
       HB.mouseX = event.clientX;
       HB.mouseY = event.clientY;
     }
+
+    // captures state of whether event has fired (ex: keyboard move to address bar)
+    // response to this state defined by rules inside the intentCheck loop
+    document.body.onblur=function(){
+      HB.intentBodyBlurEvent = true;
+    };
+
+  },
+
+  branding_template: function() {
+    var stored = HB.gc("b_template");
+    return stored != null ? stored : HB.CAP.b_variation;
   }
 
 };

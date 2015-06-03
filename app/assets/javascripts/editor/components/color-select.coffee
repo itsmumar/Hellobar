@@ -99,19 +99,21 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
 
   #-----------  Screenshot Eye-Dropper  -----------#
 
-  # eyeDropper: ( () ->
-  #   return $.fn.dropperredux({}) unless @get('isSelecting')
-
-  #   $.fn.dropperredux
-  #     selector: $('#hellobar-preview-container > img')
-  #     clickCallback: (color) =>
-  #       @set('color', color.rgbhex)
-  # ).observes('isSelecting').on('didInsertElement')
+  eyeDropper: ( () ->
+    if @get('isSelecting')
+      $('.preview-image-for-colorpicker').dropperTrios
+        selector: $('.preview-image-for-colorpicker')
+        clickCallback: (color) =>
+          @set('color', color)
+    else 
+      $('.preview-image-for-colorpicker').dropperClean()
+  ).observes('isSelecting').on('didInsertElement')
 
   #-----------  Component State Switching  -----------#
 
   observeSiblings: ( ->
     if @get('inFocus') && (@get('focusedColor') != @get('elementId'))
+      @set('isSelecting', false)
       @set('inFocus', false)
   ).observes('focusedColor')
 
@@ -120,7 +122,11 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
     toggleFocus: ->
       if !(@get('inFocus') && $("#" + @get('elementId') + " input:focus").length)
         @set('focusedColor', @get('elementId'))
+        @set('isSelecting', false)
         @toggleProperty('inFocus')
+
+    toggleSelecting: ->
+      @toggleProperty('isSelecting')
 
 
 #-----------  Color Preview Child Views  -----------#
@@ -131,9 +137,12 @@ HelloBar.ColorPreview = Ember.View.extend
   classNames: ['color-preview']
   attributeBindings: ['style']
 
-  style: (->
-    'background-color:#' + @get('color')
+  style: ( ->
+    color = one.color(@get('color'))
+    'background-color: ' + color.hex()
   ).property('color')
 
   mouseUp: ->
-    @set('parentView.color', @color)
+    color = one.color(@get('color'))
+    @set('parentView.color', color.hex())
+
