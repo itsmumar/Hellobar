@@ -55,7 +55,7 @@ class ScriptGenerator < Mustache
   end
 
   def get_branding_variation
-    if ["@polymathic", "@crazyegg"].include?(@site.owner.email)
+    if ["@polymathic", "@crazyegg"].any? { |x| @site.owner.email.include?(x) }
       variations = ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"]
       variation = variations[@site.id % variations.length]
       Analytics.track(:site, @site.id, "Branding Test Assigned", {variation: variation})
