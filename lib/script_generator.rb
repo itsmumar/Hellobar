@@ -61,7 +61,7 @@ class ScriptGenerator < Mustache
       Analytics.track(:site, @site.id, "Branding Test Assigned", {variation: variation})
       variation
     else
-      "powered_by_no_track"
+      "gethb_no_track"
     end
   end
 
