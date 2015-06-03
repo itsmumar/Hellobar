@@ -242,7 +242,7 @@ html, body {
     -webkit-transition: opacity 0.2s ease;
   }
 
-  .hb-logo-wrapper.pb2l svg, .hb-logo-wrapper.powered_by svg, .hb-logo-wrapper.powered_by_no_track svg,
+  .hb-logo-wrapper.pb2l svg, .hb-logo-wrapper.powered_by svg, .hb-logo-wrapper.gethb_no_track svg,
   .hb-logo-wrapper.not_using_hb svg, .hb-logo-wrapper.add_hb svg, .hb-logo-wrapper.gethb svg {
     transform: translateY(3px);
     -o-transform: translateY(3px);

@@ -157,16 +157,6 @@
   border-radius: 3px;
 }
 
-#hellobar_bar .hb-logo-wrapper.pb2l, #hellobar_bar .hb-logo-wrapper.powered_by, #hellobar_bar .hb-logo-wrapper.powered_by_no_track,
-#hellobar_bar .hb-logo-wrapper.not_using_hb, #hellobar_bar .hb-logo-wrapper.add_hb {
-  opacity: 0.7;
-}
-
-#hellobar_bar .hb-logo-wrapper.pb2l:hover, #hellobar_bar .hb-logo-wrapper.powered_by:hover, #hellobar_bar .hb-logo-wrapper.powered_by_no_track:hover,
-#hellobar_bar .hb-logo-wrapper.not_using_hb:hover, #hellobar_bar .hb-logo-wrapper.add_hb:hover  {
-  opacity: 0.9;
-}
-
 /*-----------  State: Multiline  -----------*/
 
 /*#hellobar_bar.multiline .hb-text-wrapper,
