@@ -50,14 +50,18 @@ module Hello::DataAPI
 
     private
     def date_to_index(date)
-      data.length - 1 - (Date.today - date).to_i
+      index = data.length - 1 - (Date.today - date).to_i
+      return nil if index < 0
+      return data.length-1 if  index >= data.length
+      return index
     end
 
     def data_for(date, type)
       date = date.to_date
       return 0 if data.length == 0
       index = date_to_index(date)
-      index < 0 ? 0 : data[index][type]
+      return 0 unless index
+      return data[index][type]
     end
   end
 end

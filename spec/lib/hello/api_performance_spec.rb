@@ -27,9 +27,14 @@ describe Hello::DataAPI::Performance do
       d.views_between(Date.today - 3, Date.today).should == 25
     end
 
-    it "should calculate from 0 if not enough data" do
+    it "should calculate from 0 if you ask for data for a date too far in the past" do
       d = Hello::DataAPI::Performance.new([[10, 5], [20, 10], [30, 15], [35, 20]])
       d.views_between(Date.today - 10, Date.today).should == 35
+    end
+
+    it "should calculate from the latest if you ask for data for a date too far in the future" do
+      d = Hello::DataAPI::Performance.new([[10, 5], [20, 10], [30, 15], [35, 20]])
+      d.views_between(Date.today - 2, Date.today+10).should == 15
     end
   end
 
