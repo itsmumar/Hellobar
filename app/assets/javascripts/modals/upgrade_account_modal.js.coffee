@@ -25,6 +25,11 @@ class @UpgradeAccountModal extends Modal
     @_bindPackageSelection()
     super
 
+  close: (continuing = false) ->
+    if !continuing && @options.site.current_subscription.type == "free"
+      Intercom('trackEvent', 'upgrade-viewed');
+    super
+
   _bindPackageSelection: ->
     @$modal.find('.button').on 'click', (event) =>
       unless !!$(event.target).attr("disabled")
@@ -39,7 +44,7 @@ class @UpgradeAccountModal extends Modal
 
         new PaymentModal(options).open()
 
-      @close()
+      @close(true)
 
   _bindBillingCycleEvents: ->
     @$modal.find('input[type="radio"]').on 'change', (event) =>
