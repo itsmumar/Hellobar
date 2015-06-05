@@ -33,7 +33,7 @@ class Hello::WordpressUser < Hello::WordpressModel
 
   def convert_to_user
     User.new(
-      email: user_email.gsub("@", "+hbtemp@"),
+      email: user_email,
       encrypted_password: user_pass
     ).tap{ |u| u.save(validate: false) }
   end

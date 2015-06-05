@@ -6,7 +6,7 @@ class Hello::WordpressBar < Hello::WordpressModel
       rule: rule,
       element_subtype: "traffic",
       link_text: hellobar_meta["linktext"],
-      message: post_content,
+      headline: post_content,
       font: hellobar_meta["meta"]["fontFamily"],
       created_at: post_date,
       wordpress_bar_id: id,
@@ -24,7 +24,7 @@ class Hello::WordpressBar < Hello::WordpressModel
     params[:border_color] = standardize_color(border_color) if border_color.present?
     params[:button_color] = "e8e7e9"
 
-    SiteElement.create!(params)
+    Bar.create!(params)
   end
 
   def paused?
