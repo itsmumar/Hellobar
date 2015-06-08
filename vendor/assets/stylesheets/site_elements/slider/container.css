@@ -29,7 +29,7 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.Slider.animated {
+#hellobar_container.Slider.hb_animated {
   animation-duration: 0.5s;
   -o-animation-duration: 0.5s;
   -ms-animation-duration: 0.5s;
@@ -39,8 +39,8 @@
 
 /*-----------  Animations: Right  -----------*/
 
-#hellobar_container.Slider.top-right.animated,
-#hellobar_container.Slider.bottom-right.animated {
+#hellobar_container.Slider.top-right.hb_animated,
+#hellobar_container.Slider.bottom-right.hb_animated {
   transform: translate3d(200%, 0, 0);
   -o-transform: translate3d(200%, 0, 0);
   -ms-transform: translate3d(200%, 0, 0);

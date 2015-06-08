@@ -10,7 +10,7 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.Modal.animated {
+#hellobar_container.Modal.hb_animated {
   opacity: 0;
   height: 110%;
   margin-top: -5%;

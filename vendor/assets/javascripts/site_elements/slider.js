@@ -10,8 +10,4 @@ SliderElement.prototype.setupIFrame = function(iframe){
   SiteElement.prototype.setupIFrame.call(this, iframe);
 
   HB.addClass(iframe, this.placement)
-
-  if(this.animated) {
-    HB.addClass(iframe, "animated")
-  }
 };
