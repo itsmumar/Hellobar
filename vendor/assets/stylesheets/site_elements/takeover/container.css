@@ -10,7 +10,7 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.Takeover.animated {
+#hellobar_container.Takeover.hb_animated {
   opacity: 0;
 }
 

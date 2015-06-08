@@ -8,8 +8,4 @@ TakeoverElement.prototype.constructor = TakeoverElement;
 
 TakeoverElement.prototype.setupIFrame = function(iframe){
   SiteElement.prototype.setupIFrame.call(this, iframe);
-
-  if(this.animated) {
-    HB.addClass(iframe, "animated")
-  }
 };

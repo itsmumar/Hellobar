@@ -829,7 +829,7 @@ var _HB = {
         // Monitor zoom scale events
         HB.hideOnZoom();
         // Bounce in animation
-        if(HB.w.className.indexOf("animated") > -1)
+        if(HB.w.className.indexOf("hb_animated") > -1)
           setTimeout(function(){ HB.animateIn(HB.w); }, 500);
         // Set wiggle listeners
         if(siteElement.wiggle_button.length > 0)
@@ -1401,7 +1401,7 @@ var _HB = {
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
       element.classList.remove("animateOut");
-      element.classList.add("animated");
+      element.classList.add("hb_animated");
       element.classList.add("animateIn");
     } // else just unhide
     else {
@@ -1413,7 +1413,7 @@ var _HB = {
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
       element.classList.remove("animateIn");
-      element.classList.add("animated");
+      element.classList.add("hb_animated");
       element.classList.add("animateOut");
     } // else just hide
     else {
@@ -1638,7 +1638,7 @@ var _HB = {
 
     var show = function() {
       HB.w.style.display = '';
-      if (HB.w.className.indexOf("animated") > -1) { HB.animateIn(HB.w) };
+      if (HB.w.className.indexOf("hb_animated") > -1) { HB.animateIn(HB.w) };
     }
 
     if (viewCondition === 'wait-5')

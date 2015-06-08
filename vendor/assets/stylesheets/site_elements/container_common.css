@@ -9,7 +9,7 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.animated, #pull-down.animated {
+#hellobar_container.hb_animated, #pull-down.hb_animated {
   animation-duration: 0.25s;
   -o-animation-duration: 0.25s;
   -ms-animation-duration: 0.25s;

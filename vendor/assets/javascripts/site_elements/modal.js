@@ -8,8 +8,4 @@ ModalElement.prototype.constructor = ModalElement;
 
 ModalElement.prototype.setupIFrame = function(iframe){
   SiteElement.prototype.setupIFrame.call(this, iframe);
-
-  if(this.animated) {
-    HB.addClass(iframe, "animated")
-  }
 };

@@ -16,7 +16,11 @@ var SiteElement = function(props) {
   }
 };
 
-SiteElement.prototype.setupIFrame = function(){
+SiteElement.prototype.setupIFrame = function(iframe) {
+  if(this.animated) {
+    HB.addClass(iframe, "hb_animated")
+  }
+
   // Any view_condition including string 'intent' will run the intent event listeners
   if (this.view_condition.indexOf('intent') !== -1) {
     HB.initializeIntentListeners();

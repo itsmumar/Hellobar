@@ -13,7 +13,6 @@ BarElement.prototype.setupIFrame = function(iframe){
 
   if ( this.animated ) {
     HB.addClass(iframe, "hellobar");
-    HB.addClass(iframe, "animated");
   }
 
   iframe.scrolling = "no";

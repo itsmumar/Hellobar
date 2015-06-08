@@ -111,8 +111,8 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.Bar.animated,
-.hellobar#pull-down.animated {
+#hellobar_container.Bar.hb_animated,
+.hellobar#pull-down.hb_animated {
   transform: translateY(-60px);
   -o-transform: translateY(-60px);
   -ms-transform: translateY(-60px);
@@ -146,8 +146,8 @@
 
 /*-----------  Animations (Bottom)  -----------*/
 
-#hellobar_container.Bar.animated.bar-bottom,
-.hellobar#pull-down.animated.bar-bottom {
+#hellobar_container.Bar.hb_animated.bar-bottom,
+.hellobar#pull-down.hb_animated.bar-bottom {
   transform: translateY(60px);
   -o-transform: translateY(60px);
   -ms-transform: translateY(60px);
