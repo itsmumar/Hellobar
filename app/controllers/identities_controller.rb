@@ -32,6 +32,12 @@ class IdentitiesController < ApplicationController
     redirect_to env["omniauth.params"]["redirect_to"]
   end
 
+  def destroy
+    @identity = @site.identities.find(params[:id])
+    @identity.destroy
+    render :json => @identity
+  end
+
   private
 
   def load_site

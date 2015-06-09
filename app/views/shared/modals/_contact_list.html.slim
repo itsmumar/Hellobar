@@ -53,14 +53,14 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
 /-----------  Provider Instructions Template  -----------/
 
 script id="contact-list-modal-provider-instructions-template" type="text/x-handlebars-template"
-  
+
   | <p>To integrate with {{providerName}} you'll need:</p>
   |
   | <ol>
   |  {{#if requiresEmbedCode}}
   |    <li>Your embed code from {{providerName}}</li>
   |  {{else}}
-  |    <li>Your {{providerName}} username and password</li>  
+  |    <li>Your {{providerName}} username and password</li>
   |  {{/if}}
   |  <li>An existing list with {{providerName}} to sync to</li>
   | </ol>
@@ -110,3 +110,5 @@ script id="contact-list-modal-remote-list-select-template" type="text/x-handleba
 script id="contact-list-modal-sync-details-template" type="text/x-handlebars-template"
 
   p Whenever a visitor to your site enters their email address into your Hello Bar, we'll automatically sync it with your {{providerName}} account.
+  div
+    a.button.cancel.unlink data-identity-id="{{identity.id}}" Disconnect {{providerName}}
