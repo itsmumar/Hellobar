@@ -31,7 +31,7 @@ class UserMigrationController < ApplicationController
             subscription = Subscription::Pro.new(schedule: "monthly")
             site.change_subscription(subscription, nil, 90)
           elsif site_hash[:bar_ids].count >= 10
-            site.change_stubscription(Subscription::FreePlus.new(schedule: "monthly"))
+            site.change_subscription(Subscription::FreePlus.new(schedule: "monthly"))
           else
             site.change_subscription(Subscription::Free.new(schedule: "monthly"))
           end
