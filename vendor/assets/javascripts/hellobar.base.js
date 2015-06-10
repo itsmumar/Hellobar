@@ -912,6 +912,7 @@ var _HB = {
     HB.w.id = "hellobar_container";
     HB.w.className = siteElement.type;
     HB.w.name = "hellobar_container";
+    HB.w.style.display = 'none'; // Start all site elements as hidden
 
     siteElement.setupIFrame(HB.w)
 
@@ -1633,9 +1634,6 @@ var _HB = {
     if (document.getElementById('hellobar-preview-container') !== null)
       viewCondition = 'preview';
 
-    // Hide the site element
-    HB.w.style.display = 'none';
-
     var show = function() {
       HB.w.style.display = '';
       if (HB.w.className.indexOf("hb_animated") > -1) { HB.animateIn(HB.w) };
@@ -1672,7 +1670,7 @@ var _HB = {
     }
     else {
       // No view condition so show immediately
-      HB.w.style.display = originalDisplay;
+      show();
     }
   },
 
