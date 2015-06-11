@@ -53,12 +53,25 @@ class @ContactListModal extends Modal
     @_bindDoThisLater(object)
     @_bindReadyButton(object)
     @_bindSubmit(object)
+    @_bindDisconnect(object)
 
   _bindProviderSelect: (object) ->
     modal = this
 
     object.find("#contact_list_provider").change (e) ->
       modal._loadRemoteLists(select: this, listData: {double_optin: true})
+
+  _bindDisconnect: (object) ->
+    modal = this
+    object.find("a.unlink").click (e) ->
+      $.ajax "/sites/#{modal.options.siteID}/identities/#{$(this).data('identity-id')}",
+        type: "DELETE"
+        success: (data) =>
+          modal.blocks.instructions.show()
+          modal.blocks.syncDetails.hide()
+          modal.blocks.remoteListSelect.hide()
+        error: (response) =>
+          console.log("Could not disconnect identity", response)
 
   _bindDoThisLater: (object) ->
     object.find("a.do-this-later").click (e) =>
@@ -158,7 +171,8 @@ class @ContactListModal extends Modal
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
-        @_renderBlock("syncDetails", defaultContext).show()
+        @_renderBlock("syncDetails", $.extend(defaultContext, {identity: data})).show()
+        @_renderBlock("instructions", defaultContext).hide()
         @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if listData
