@@ -228,6 +228,7 @@ class Site < ActiveRecord::Base
   def change_subscription(subscription, payment_method=nil, trial_period=nil)
     raise MissingSubscription.new unless subscription
     transaction do
+      old_subscription = current_subscription
       subscription.site = self
       subscription.payment_method = payment_method
       success = true
@@ -248,6 +249,8 @@ class Site < ActiveRecord::Base
       end
       bill.save!
       subscription.save!
+
+      set_branding_on_site_elements
 
       return success, bill
     end
@@ -413,5 +416,9 @@ class Site < ActiveRecord::Base
   def generate_read_write_keys
     self.read_key = SecureRandom.uuid if self.read_key.blank?
     self.write_key = SecureRandom.uuid if self.write_key.blank?
+  end
+
+  def set_branding_on_site_elements
+    site_elements.update_all(show_branding: !capabilities(true).remove_branding?)
   end
 end
