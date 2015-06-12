@@ -101,11 +101,17 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
 
   eyeDropper: ( () ->
     if @get('isSelecting')
+      # Hide the preview frame for Modal and Takeovers so that they can select colors
+      $("#hellobar_container.Takeover, #hellobar_container.Modal").fadeOut()
+
       $('.preview-image-for-colorpicker').dropperTrios
         selector: $('.preview-image-for-colorpicker')
         clickCallback: (color) =>
           @set('color', color)
-    else 
+    else
+      # Show the Modal and Takeover in case it was hidden
+      $("#hellobar_container.Takeover, #hellobar_container.Modal").fadeIn()
+
       $('.preview-image-for-colorpicker').dropperClean()
   ).observes('isSelecting').on('didInsertElement')
 
@@ -145,4 +151,3 @@ HelloBar.ColorPreview = Ember.View.extend
   mouseUp: ->
     color = one.color(@get('color'))
     @set('parentView.color', color.hex())
-
