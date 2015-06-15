@@ -11,9 +11,9 @@ tr.site-element-block class="type-#{site_element.short_subtype}" id="site_elemen
   td
     span.num= number_with_delimiter(site_element.total_views)
   td
-    span.num= number_with_delimiter(site_element.total_conversions)
+    span.num= total_conversion_text(site_element)
   td
-    span.num= number_to_percentage(site_element.conversion_percentage * 100, precision: 1)
+    span.num= conversion_percent_text(site_element)
   td
     - if (icon = ab_test_icon(site_element)) && icon.match(/icon-abtest/)
       .dropdown-wrapper

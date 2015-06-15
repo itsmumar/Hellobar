@@ -63,7 +63,7 @@ module Hello::DataAPI
     #    }
     #
     def lifetime_totals_by_type(site, site_elements, num_days = 30, cache_options = {})
-      data = Hello::DataAPI.lifetime_totals(site, site.site_elements, num_days, cache_options) || {}
+      data = Hello::DataAPI.lifetime_totals(site, site_elements, num_days, cache_options) || {}
       totals = {:total => [], :email => [], :social => [], :traffic => []}
       elements = site.site_elements.where(:id => data.keys)
       ids = {}

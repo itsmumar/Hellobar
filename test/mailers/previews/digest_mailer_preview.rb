@@ -1,7 +1,7 @@
 class DigestMailerPreview < ActionMailer::Preview
 
   def weekly_digest
-    s = Site.first
+    s = Site.last
     DigestMailer.weekly_digest(s)
   end
 

@@ -5,6 +5,7 @@ class SiteElement < ActiveRecord::Base
   BAR_TYPES = {
     "traffic"                         => "Clicks",
     "email"                           => "Emails",
+    "announcement"                    => "Conversions",
     "social/tweet_on_twitter"         => "Tweets",
     "social/follow_on_twitter"        => "Follows",
     "social/like_on_facebook"         => "Likes",
@@ -14,7 +15,7 @@ class SiteElement < ActiveRecord::Base
     "social/share_on_buffer"          => "Shares"
   }
 
-  SHORT_SUBTYPES = %w{traffic email social}
+  SHORT_SUBTYPES = %w{traffic email social announcement}
 
   belongs_to :rule
   belongs_to :contact_list
@@ -29,6 +30,7 @@ class SiteElement < ActiveRecord::Base
 
   scope :paused, -> { where(paused: true) }
   scope :active, -> { where(paused: false) }
+  scope :has_performance, -> { where("element_subtype != ?", "announcement") }
 
   delegate :site, to: :rule, allow_nil: true
 
