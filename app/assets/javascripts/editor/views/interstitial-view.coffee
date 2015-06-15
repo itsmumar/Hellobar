@@ -1,4 +1,8 @@
 HelloBar.InterstitialView = Ember.View.extend
 
-  template: ->
-    console.log 'hello'
+  classNames: ['goal-interstitial']
+
+  templateName: ( ->
+    type = @get('controller.interstitialType')
+    return "interstitials/#{type}" if type
+  ).property('controller.interstitialType')

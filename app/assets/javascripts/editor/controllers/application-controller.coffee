@@ -15,7 +15,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
   currentStep: false
   cannotContinue: true
   showInterstitial: false
-  intertitialType: null
+  interstitialType: null
 
   #-----------  Color Palette  -----------#
 
@@ -128,7 +128,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
       if isInterstitial
         @set("showInterstitial", true)
-        @set("intertitialType", choice)
+        @set("interstitialType", choice)
       else if isSubroute
         @transitionToRoute("settings.#{choice}")
       false
