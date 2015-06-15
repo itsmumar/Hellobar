@@ -36,7 +36,7 @@ describe UserController do
       it 'sets the timezone on all sites when passed in' do
         put :update, :user => {:timezone => 'America/Chicago'}
 
-        @user.sites.reload.map(&:timezone).should == ['America/Chicago', 'America/Chicago']
+        @user.sites.reload.map(&:timezone).should == ['America/Chicago', 'America/Chicago', 'America/Chicago']
       end
 
       it 'does not override a sites timezone if already set' do
@@ -44,7 +44,7 @@ describe UserController do
 
         put :update, :user => {:timezone => 'America/Chicago'}
 
-        @user.sites.reload.map(&:timezone).should == ['FIRST', 'America/Chicago']
+        @user.sites.reload.map(&:timezone).should == ['FIRST', 'America/Chicago', 'America/Chicago']
       end
     end
 
