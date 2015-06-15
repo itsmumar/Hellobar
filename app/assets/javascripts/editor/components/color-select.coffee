@@ -101,19 +101,23 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
 
   eyeDropper: ( () ->
     if @get('isSelecting')
-      # Hide the preview frame for Modal and Takeovers so that they can select colors
-      $("#hellobar_container.Takeover, #hellobar_container.Modal").fadeOut()
-
       $('.preview-image-for-colorpicker').dropperTrios
         selector: $('.preview-image-for-colorpicker')
         clickCallback: (color) =>
           @set('color', color)
           @sendAction('eyeDropperSelected')
     else
-      # Show the Modal and Takeover in case it was hidden
-      $("#hellobar_container.Takeover, #hellobar_container.Modal").fadeIn()
       $('.preview-image-for-colorpicker').dropperClean()
   ).observes('isSelecting').on('didInsertElement')
+
+  togglePreview: ( () ->
+    if @get('isSelecting')
+      # Hide the preview frame for Modal and Takeovers so that they can select colors
+      $("#hellobar_container.Takeover, #hellobar_container.Modal").fadeOut()
+    else
+      # Show the Modal and Takeover in case it was hidden
+      $("#hellobar_container.Takeover, #hellobar_container.Modal").fadeIn()
+  ).observes('isSelecting')
 
   #-----------  Component State Switching  -----------#
 
@@ -128,6 +132,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
   resetOnDestruction: ( ->
     $('.preview-image-for-colorpicker').dropperClean()
     @set('isSelecting', false)
+    @togglePreview()
   ).on('willDestroyElement')
 
   actions:
