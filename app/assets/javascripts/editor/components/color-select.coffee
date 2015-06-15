@@ -123,6 +123,13 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
       @set('inFocus', false)
   ).observes('focusedColor')
 
+  #-----------  Actions  -----------#
+
+  resetOnDestruction: ( ->
+    $('.preview-image-for-colorpicker').dropperClean()
+    @set('isSelecting', false)
+  ).on('willDestroyElement')
+
   actions:
 
     toggleFocus: ->
