@@ -42,6 +42,7 @@
 <div class="viewport-wrapper">
   <div class="step-wrapper">
     {{outlet}}
+
     {{step-navigation action='saveSiteElement' current=currentStep
     prev=prevRoute next=nextRoute saveSubmitted=saveSubmitted
     doneButtonText=doneButtonText cannotContinue=cannotContinue}}
@@ -49,3 +50,8 @@
 
   {{render 'preview' model}}
 </div>
+
+{{#if showInterstitial}}
+  {{render 'interstitial' model}}
+{{/if}}
+

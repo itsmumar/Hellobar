@@ -63,6 +63,7 @@ $ ->
   buttons.prop('disabled', false).on 'click touch', (evt) ->
     $(@).closest('.goal-block').addClass('selected')
     wrapper.addClass('transitioning')
+    
     setTimeout ->
       wrapper.remove()
     , 1000

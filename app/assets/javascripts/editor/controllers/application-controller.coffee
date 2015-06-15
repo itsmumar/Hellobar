@@ -14,6 +14,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
   nextRoute: null
   currentStep: false
   cannotContinue: true
+  showInterstitial: false
+  intertitialType: null
 
   #-----------  Color Palette  -----------#
 
@@ -120,8 +122,15 @@ HelloBar.ApplicationController = Ember.Controller.extend
     # Subscribes to outside action used by intertitial
     # to route ember app through selection
 
-    interstitialRouting: (subroute) ->
-      @transitionToRoute("settings.#{subroute}")
+    interstitialRouting: (choice) ->
+      isInterstitial = $.inArray(choice, ['money', 'contacts', 'facebook']) > -1
+      isSubroute     = $.inArray(choice, ['click', 'emails', 'social']) > -1
+
+      if isInterstitial
+        @set("showInterstitial", true)
+        @set("intertitialType", choice)
+      else if isSubroute
+        @transitionToRoute("settings.#{choice}")
       false
 
     closeEditor: ->
