@@ -108,10 +108,10 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
         selector: $('.preview-image-for-colorpicker')
         clickCallback: (color) =>
           @set('color', color)
+          @sendAction('eyeDropperSelected')
     else
       # Show the Modal and Takeover in case it was hidden
       $("#hellobar_container.Takeover, #hellobar_container.Modal").fadeIn()
-
       $('.preview-image-for-colorpicker').dropperClean()
   ).observes('isSelecting').on('didInsertElement')
 

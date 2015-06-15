@@ -19,3 +19,11 @@ HelloBar.ColorsController = Ember.Controller.extend
   trackColorView: (->
     InternalTracking.track_current_person("Editor Flow", {step: "Color Settings", goal: @get("model.element_subtype"), style: @get("model.type")}) if trackEditorFlow && !Ember.isEmpty(@get('model'))
   ).observes('model').on('init')
+
+  actions: 
+
+    eyeDropperSelected: ->
+      type = @get('model.type')
+      if type == 'Modal' || type == 'Takeover'
+        @set('focusedColor', null)
+      false

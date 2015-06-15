@@ -2,15 +2,15 @@
 
 
 <label>Primary Color</label>
-{{color-select color=model.background_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
+{{color-select color=model.background_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
 
 {{#if showAdditionalColors}}
   <label>Text</label>
-  {{color-select color=model.text_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
+  {{color-select color=model.text_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
 
   <label>Button</label>
-  {{color-select color=model.button_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
+  {{color-select color=model.button_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
 
   <label>Button Text</label>
-  {{color-select color=model.link_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
+  {{color-select color=model.link_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
 {{/if}}
