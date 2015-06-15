@@ -400,6 +400,8 @@ var _HB = {
     // Send the data to the backend if this is the first conversion
     if(conversionCount == 1)
       HB.s("g", HB.si, {a:HB.getVisitorAttributes()}, callback);
+    else if(typeof(callback) === typeof(Function))
+      callback();
   },
 
   // Returns true if the visitor did this conversion or not
