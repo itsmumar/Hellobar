@@ -72,7 +72,7 @@ module SiteElementsHelper
     when "email"
       "icon-contacts"
     when "announcement"
-      "icon-feedback"
+      "icon-megaphone"
     when /social\//
       "icon-social"
     when "traffic"
