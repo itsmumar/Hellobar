@@ -11,6 +11,21 @@
 
   h5 Installation Methods
 
+  - install_help = install_help_data(@site)
+  - if install_help
+    .reveal-wrapper.track-click.activated data-tracking-event="install_page_clicked" data-tracking-props={install_button: "install_help_#{@site.install_type}"}.to_json
+      i.icon-edit
+      .reveal-title I use a service to manage my site
+      p= "It looks like you use #{install_help[0]} to manage your site. Follow our guide to get up and running quickly."
+
+      .reveal-block.myself-reveal
+        p
+          | To install Hello Bar on #{install_help[0]}, follow the instructions on our&nbsp;
+          = link_to "support page", install_help[1]
+          | . Once complete you'll never need to update the Hello Bar code on your site again.
+        p Your install code is -
+        pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
+
   .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "install_myself"}.to_json
     i.icon-installmyself
     .reveal-title I can install code myself
@@ -21,11 +36,11 @@
       pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
       p That's it! You'll never need to update the code on your site again.
 
-  .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "wordpress"}.to_json
+  div class=["reveal-wrapper", "track-click", @site.install_type == "wordpress" ? "activated" : ""] data-tracking-event="install_page_clicked" data-tracking-props={install_button: "wordpress"}.to_json
     i.icon-wordpress
     .reveal-title I use WordPress
     p If you use WordPress you'll love our zero-configuration custom plugin. Just download, install and you're done.
-    
+
     .reveal-block.wordpress-reveal
       strong 1) Download Your Plugin
       = link_to site_wordpress_plugin_path(@site), :method => :get, :class => "button" do
@@ -36,9 +51,9 @@
       strong 2) Install Your Plugin
       p= "Now you just need to install the .zip file you downloaded it by uploading it to your WordPress site. The plugin was preconfigured specifically for your site (#{@site.url}). After you install and activate there are no settings to adjust!"
 
-      p 
+      p
         strong Need More Help?
-        | Try reading these 
+        | Try reading these&nbsp;
         = link_to "helpful instructions for installing plugins on WordPress", "http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation"
 
   .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "email_my_dev"}.to_json
@@ -51,18 +66,18 @@
         = hidden_field_tag :site_id, @site.id
         label To:
         = email_field :developer_email, "", :placeholder => "Your developer's email address"
-        label From: 
+        label From:
         pre Hello Bar &lt;contact@hellobar.com&gt;
 
-        label Subject: 
+        label Subject:
         pre.topper= "Please install Hello Bar on #{display_name_for_site(@site)}"
 
         pre= "I just created a Hello Bar for #{display_name_for_site(@site)} and I've asked Hello Bar to email you the instructions for installing it. All you need to do is add the following bit of JavaScript at the end of each page (right before the closing </body> tag):"
 
         pre= "<script type=\"text/javascript\" src=\"//#{@site.script_url}\" async=\"async\"></script>"
-        
+
         pre= "If you have any questions don't hesitate to email Hello Bar support at support@hellobar.com, or e-mail me at #{current_user.email}."
-        
+
         pre= "Thank you!"
 
         = submit_tag "Send", :class => "button"
