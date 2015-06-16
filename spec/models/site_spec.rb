@@ -38,6 +38,14 @@ describe Site do
     site.is_free?.should be_false
   end
 
+  describe "#change_subscription" do
+    it "runs set_branding_on_site_elements after changing subscription" do
+      site = sites(:horsebike)
+      site.should_receive(:set_branding_on_site_elements)
+      site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
+    end
+  end
+
   describe "url formatting" do
     it "adds the protocol if not present" do
       site = Site.new(:url => "zombo.com")
@@ -333,6 +341,28 @@ describe Site do
       Hello::DataAPI.stub(:lifetime_totals_by_type).and_return({:total=>Hello::DataAPI::Performance.new([[1, 1], [2, 2]])})
       Hello::EmailDigest.should_receive(:send)
       @site.send_digest_email
+    end
+  end
+
+  describe "#set_branding_on_site_elements" do
+    it "should set branding based on the current subscription capabilities" do
+      sub = subscriptions(:pro_subscription)
+      se = site_elements(:zombo_traffic)
+      se.rule = sub.site.rules.first
+      se.show_branding = true
+      se.save
+      sub.site.send(:set_branding_on_site_elements)
+      se.reload.show_branding.should be_false
+    end
+
+    it "should set branding based on the current subscription capabilities" do
+      sub = subscriptions(:free_subscription)
+      se = site_elements(:zombo_traffic)
+      se.rule = sub.site.rules.first
+      se.show_branding = true
+      se.save
+      sub.site.send(:set_branding_on_site_elements)
+      se.reload.show_branding.should be_true
     end
   end
 end

@@ -33,6 +33,19 @@ class @PaymentModal extends Modal
     $('body').append(@$modal)
     super
 
+  close: ->
+    $form = @$modal.find('form')
+    filledOutInputs = $form.find(":input:text:not([type=hidden])").filter( (index) ->
+      @value && 0 != @value.length
+    ).length
+
+    if !@_isFree() && $.isEmptyObject(@currentPaymentMethod)
+      if filledOutInputs > 0
+        Intercom('trackEvent', 'upgrade-abandoned');
+      else
+        Intercom('trackEvent', 'upgrade-payment-viewed');
+    super
+
   fetchUserPaymentMethods: (siteID) ->
     @$modal.trigger('load') # indicate we need to do more work
 

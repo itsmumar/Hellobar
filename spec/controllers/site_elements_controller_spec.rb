@@ -31,4 +31,22 @@ describe SiteElementsController do
       json["errors"]["rule"].should == ["can't be blank"]
     end
   end
+
+  describe "POST new" do
+    it "defaults branding to false if pro" do
+      subscription = subscriptions(:pro_subscription)
+      stub_current_user(subscription.site.owner)
+      get :new, :site_id => subscription.site.id, :format => :json
+      json = JSON.parse(response.body)
+      json["show_branding"].should == false
+    end
+
+    it "defaults branding to true if free user" do
+      subscription = subscriptions(:free_subscription)
+      stub_current_user(subscription.site.owner)
+      get :new, :site_id => subscription.site.id, :format => :json
+      json = JSON.parse(response.body)
+      json["show_branding"].should == true
+    end
+  end
 end

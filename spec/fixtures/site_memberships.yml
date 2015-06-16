@@ -10,3 +10,7 @@ pro:
   site: pro_site
   user: pro
   role: owner
+free:
+  site: free_site
+  user: joey
+  role: owner

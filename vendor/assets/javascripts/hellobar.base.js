@@ -378,10 +378,11 @@ var _HB = {
   converted: function(callback)
   {
     var conversionKey = HB.getConversionKey(HB.currentSiteElement);
-    var now = Math.round(new Date().getTime()/1000)
+    var now = Math.round(new Date().getTime()/1000);
+    var conversionCount = (HB.getVisitorData(conversionKey) || 0 ) + 1;
 
     // Set the number of conversions for the visitor for this type of conversion
-    HB.setVisitorData(conversionKey, (HB.getVisitorData(conversionKey) || 0 )+1);
+    HB.setVisitorData(conversionKey, conversionCount);
     // Record first time converted, unless already set for the visitor for this type of conversion
     HB.setVisitorData(conversionKey+"_f", now);
     // Record last time converted for the visitor for this type of conversion
@@ -396,8 +397,11 @@ var _HB = {
     HB.setSiteElementData(HB.si, "lc", now);
     // Trigger the event
     HB.trigger("conversion", HB.currentSiteElement);
-    // Send the data to the backend
-    HB.s("g", HB.si, {a:HB.getVisitorAttributes()}, callback);
+    // Send the data to the backend if this is the first conversion
+    if(conversionCount == 1)
+      HB.s("g", HB.si, {a:HB.getVisitorAttributes()}, callback);
+    else if(typeof(callback) === typeof(Function))
+      callback();
   },
 
   // Returns true if the visitor did this conversion or not
@@ -841,8 +845,10 @@ var _HB = {
   // Called when the siteElement is viewed
   viewed: function()
   {
-    // Track number of views
-    HB.s("v", HB.si, {a:HB.getVisitorAttributes()});
+    // Track number of views if not yet converted for this site element
+    if(!HB.didConvert(HB.currentSiteElement))
+      HB.s("v", HB.si, {a:HB.getVisitorAttributes()});
+
     // Record the number of views, first seen and last seen
     HB.setSiteElementData(HB.si, "nv", (HB.getSiteElementData(HB.si, "nv") || 0)+1);
     var now = Math.round((new Date()).getTime()/1000);
