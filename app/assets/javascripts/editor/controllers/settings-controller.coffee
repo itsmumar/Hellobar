@@ -22,6 +22,8 @@ HelloBar.SettingsController = Ember.Controller.extend
         @set("model.element_subtype", "email")
       when "settings.click"
         @set("model.element_subtype", "traffic")
+      when "settings.announcement"
+        @set("model.element_subtype", "announcement")
       when "settings.social"
         @set("model.element_subtype", null)
     InternalTracking.track_current_person("Editor Flow", {step: "Goal Settings", goal: @get("model.element_subtype")}) if trackEditorFlow

@@ -9,7 +9,8 @@ class DigestMailer < ActionMailer::Base
   def weekly_digest(site)
     @site = site
 
-    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data)
+
+    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements.has_performance, @site.capabilities.num_days_improve_data)
     @se_totals = Hello::DataAPI.lifetime_totals(@site, @site.site_elements, @site.capabilities.num_days_improve_data)
     @sorted_elements = site.site_elements.active.sort_by { |se| @se_totals[se.id.to_s].views_between(@date_ranges[2], @date_ranges[3]) }.reverse!
     @conversion_header = conversion_header(@sorted_elements)

@@ -13,7 +13,7 @@ $transition: 1s
   min-width: $maxWidth
   background-color: $grayLightest
   @include transition($transition all ease-in-out)
-  
+
   header
     padding: 1em
     text-align: center
@@ -40,14 +40,14 @@ $transition: 1s
       color: $red
 
   /*-----------  Goal Block  -----------*/
-  
+
   .goal-wrapper
     text-align: center
     margin: 6em auto 4em
     @include justify-content(center)
     @include flex-flow(row nowrap)
     @include align-items(stretch)
-    @include display(flex)    
+    @include display(flex)
 
     .goal-block
       margin: 0 1em
@@ -91,6 +91,14 @@ $transition: 1s
           &:before
             margin-top: 1px
 
+        &.icon-megaphone
+          color: $purple
+          border-color: $purple
+
+          &:before
+            font-size: 2.3em
+            margin-top: -1px
+
       h6
         color: $grayDark
         margin: 1.5em 0 0.33em
@@ -121,9 +129,9 @@ $transition: 1s
 
   &.transitioning
     opacity: 0
-    
+
     header,
-    footer  
+    footer
       @include filter(blur(2px))
 
     .goal-block

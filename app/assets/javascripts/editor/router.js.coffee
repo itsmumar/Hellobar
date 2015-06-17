@@ -1,12 +1,13 @@
 HelloBar.Router.map ->
 
   @route 'home', {path: '/'}
-  
+
   @resource 'settings', ->
     @route 'emails'
     @route 'social'
     @route 'click'
     @route 'feedback'
+    @route 'announcement'
 
   @resource 'style', ->
     @route 'bar'
@@ -15,9 +16,9 @@ HelloBar.Router.map ->
     @route 'takeover'
 
   @route 'colors'
-  
+
   @route 'text'
-  
+
   @resource 'targeting', ->
     @route 'immediately'
     @route 'leaving'

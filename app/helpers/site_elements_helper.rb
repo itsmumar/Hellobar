@@ -1,6 +1,22 @@
 module SiteElementsHelper
   A_OFFSET = "A".ord
 
+  def total_conversion_text(site_element)
+    if site_element.element_subtype == "announcement"
+      "--"
+    else
+      number_with_delimiter(site_element.total_conversions)
+    end
+  end
+
+  def conversion_percent_text(site_element)
+    if site_element.element_subtype == "announcement"
+      "n/a"
+    else
+      number_to_percentage(site_element.conversion_percentage * 100, precision: 1)
+    end
+  end
+
   def site_element_activity_units(elements, opts = {})
     units = [*elements].map do |element|
       case element.element_subtype
@@ -55,6 +71,8 @@ module SiteElementsHelper
     case element.element_subtype
     when "email"
       "icon-contacts"
+    when "announcement"
+      "icon-megaphone"
     when /social\//
       "icon-social"
     when "traffic"
@@ -75,7 +93,9 @@ module SiteElementsHelper
     message += "</strong>"
 
     # how many conversions has this site element resulted in?
-    if conversions == 0
+    if element.element_subtype == "announcement"
+      return "#{message} has already resulted in #{number_with_delimiter(element.total_views)} views.".html_safe
+    elsif conversions == 0
       conversion_description = site_element_activity_units([element], :plural => true, :verb => true)
       return "#{message} hasn't resulted in any #{conversion_description} yet.".html_safe
     else

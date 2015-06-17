@@ -68,6 +68,8 @@ HelloBar.ApplicationRoute = Ember.Route.extend
           settings.routeForwarding = 'settings.emails'
         when 'traffic'
           settings.routeForwarding = 'settings.click'
+        when 'announcement'
+          settings.routeForwarding = 'settings.announcement'
         else
           settings.routeForwarding = false
 

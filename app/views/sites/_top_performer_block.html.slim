@@ -9,9 +9,9 @@ tr class="#{'more-top-performers' if index > 2} type-#{element.short_subtype}"
   td
     span.num= number_with_delimiter(element.total_views)
   td
-    span.num= number_with_delimiter(element.total_conversions)
+    span.num= total_conversion_text(element)
   td
-    span.num= number_to_percentage(element.conversion_percentage * 100, precision: 1)
+    span.num= conversion_percent_text(element)
     - if index < 3
       i class="icon-badge #{'first' if index == 0}"
         span.numbers= index + 1
