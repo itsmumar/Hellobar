@@ -8,7 +8,7 @@ $transition: 1s
   width: 100%
   height: 100%
   position: fixed
-  z-index: 999999
+  z-index: 800000
   text-align: center
   min-width: $maxWidth
   background-color: $grayLightest
@@ -49,6 +49,67 @@ $transition: 1s
     @include align-items(stretch)
     @include display(flex)
 
+    i.large-icon
+      width: 4.95em
+      height: 4.95em
+      border-radius: 10em
+      border: 2px solid transparent
+      @include inline-block()
+
+      &:before
+        font-size: 1.85em
+        @include center-align()
+
+      &.icon-social
+        color: $blue
+        border-color: $blue
+
+        &:before
+          margin-left: -2px
+
+      &.icon-thumbsup
+        color: $blue
+        border-color: $blue
+
+        &:before
+          margin-left: 0px
+
+      &.icon-clicks
+        color: $yellow
+        border-color: $yellow
+
+        &:before
+          margin-left: 1px
+
+      &.icon-money
+        color: $yellow
+        border-color: $yellow
+
+        &:before
+          margin-left: 1px
+
+      &.icon-contacts
+        color: $green
+        border-color: $green
+
+        &:before
+          margin-top: 1px
+
+      &.icon-megaphone
+        color: $purple
+        border-color: $purple
+
+        &:before
+          font-size: 2.3em
+          margin-top: -1px
+
+      &.icon-other
+        color: $gray
+        border-color: $gray
+
+        &:before
+          margin-left: -2px
+
     .goal-block
       margin: 0 1em
       padding: $gutter
@@ -57,68 +118,6 @@ $transition: 1s
       box-shadow: 0 0 0 rgba(0,0,0,0)
       @include transition($transition/1.5 all ease-in-out)
       @include flex(0 1 18.5em)
-
-      i
-        width: 4.95em
-        height: 4.95em
-        position: relative
-        border-radius: 10em
-        border: 2px solid transparent
-        @include inline-block()
-
-        &:before
-          font-size: 1.85em
-          @include center-align()
-
-        &.icon-social
-          color: $blue
-          border-color: $blue
-
-          &:before
-            margin-left: -2px
-
-        &.icon-thumbsup
-          color: $blue
-          border-color: $blue
-
-          &:before
-            margin-left: 0px
-
-        &.icon-clicks
-          color: $yellow
-          border-color: $yellow
-
-          &:before
-            margin-left: 1px
-
-        &.icon-money
-          color: $yellow
-          border-color: $yellow
-
-          &:before
-            margin-left: 1px
-
-        &.icon-contacts
-          color: $green
-          border-color: $green
-
-          &:before
-            margin-top: 1px
-
-        &.icon-megaphone
-          color: $purple
-          border-color: $purple
-
-          &:before
-            font-size: 2.3em
-            margin-top: -1px
-
-        &.icon-other
-          color: $gray
-          border-color: $gray
-
-          &:before
-            margin-left: -2px
 
       h6
         color: $grayDark
@@ -161,3 +160,32 @@ $transition: 1s
 
       &.selected
         @include transform(scale(1.15))
+
+  /*-----------  Template Forms  -----------*/
+
+  .template-form
+    width: 50%
+    margin: 6em auto 4em
+    background-color: white
+    border-radius: 5px
+    padding: 4.5em 2em 2em 2em
+    display: block
+    position: relative
+
+    .large-icon
+      position: absolute
+      top: -2.425em
+      background-color: white
+      left: 50%
+      margin-left: -2.425em
+
+    input
+      margin: 0.75em 0 1.5em
+
+    .step-container
+      width: 100%
+      text-align: left
+      margin: 0.5em 0
+
+    .button.save-editor
+      float: right

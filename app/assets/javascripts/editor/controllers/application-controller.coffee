@@ -129,6 +129,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
       if isInterstitial
         @set("showInterstitial", true)
         @set("interstitialType", choice)
+        map = {money: 'click', contacts: 'emails', facebook: 'social'}
+        @transitionToRoute("settings.#{map[choice]}")
       else if isSubroute
         @transitionToRoute("settings.#{choice}")
       false

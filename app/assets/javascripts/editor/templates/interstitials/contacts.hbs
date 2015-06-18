@@ -2,10 +2,21 @@
   <h1>Grow Your Mailing List</h1>
 </header>
 
-What should your Hello Bar say? 
-{{!-- Join our mailing list to stay up to date on our upcoming events. --}}
+<div class="goal-wrapper template-form">
+  <i class="large-icon icon-contacts"></i>
 
-What should the button say?
-{{!-- Subscribe --}}
+  <h6>What should your Hello Bar say?</h6>
+  {{view Ember.TextField value=model.headline placeholder="Join our mailing list to stay up to date on our upcoming events"}}
 
-You can always change this later. <a>Need help?</a> 
+  <h6>What should the button say?</h6>
+  {{view Ember.TextField value=model.link_text placeholder="Subscribe"}}
+
+  <div class="step-container">
+    <button class="cancel-button cancel" {{action 'closeEditor'}}>Cancel</button>
+    <button class="button save-editor" {{action 'closeInterstitial'}}>Continue</button>
+  </div>
+</div>
+
+<div>
+  You can always change this later. <a>Need help?</a>
+</div>
