@@ -15,13 +15,13 @@
   - if install_help
     .reveal-wrapper.track-click.activated data-tracking-event="install_page_clicked" data-tracking-props={install_button: "install_help_#{@site.install_type}"}.to_json
       i.icon-edit
-      .reveal-title I use a service to manage my site
+      .reveal-title I use #{install_help[0]} to manage my site
       p= "It looks like you use #{install_help[0]} to manage your site. Follow our guide to get up and running quickly."
 
       .reveal-block.myself-reveal
         p
           | To install Hello Bar on #{install_help[0]}, follow the instructions on our&nbsp;
-          = link_to "support page", install_help[1]
+          = link_to "support page", install_help[1], target: "_blank"
           | . Once complete you'll never need to update the Hello Bar code on your site again.
         p Your install code is -
         pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
