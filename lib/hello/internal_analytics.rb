@@ -52,6 +52,7 @@ module Hello
     register_test("Account Creation Test 2015-01-21", %w{original orange_header no_orange_header}, 1)
     register_test("Editor Test 2015-02-23", %w{original interstitial navigation}, 2)
     register_test("Google Auth 2015-03-10", %w{original google_auth}, 3)
+    register_test("Templated Editor 2015-05-19", %w{original templated}, 4)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
