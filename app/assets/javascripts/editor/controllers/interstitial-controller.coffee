@@ -9,11 +9,14 @@ HelloBar.InterstitialController = Ember.Controller.extend
       when 'money'
         @set('model.headline', "Check out our latest sale")
         @set('model.link_text', "Shop Now")
+        @set('model.element_subtype', "traffic")
       when 'contacts'
         @set('model.headline', "Join our mailing list to stay up to date on our upcoming events")
         @set('model.link_text', "Subscribe")
+        @set('model.element_subtype', "email")
       when 'facebook'
         @set('model.headline', "Like us on Facebook!")
+        @set('model.element_subtype', "social/like_on_facebook")
 
   #-----------  Template Properties  -----------#
 
