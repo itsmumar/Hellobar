@@ -53,6 +53,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
       secondary_color: if @get("model.type") == "Bar" then @get("model.button_color") else @get("model.background_color")
     )
 
+    HB.isPreviewMode = true
     HB.render(previewElement)
     HB.isMobileWidth = "changed"
   )
