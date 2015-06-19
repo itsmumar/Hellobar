@@ -1021,6 +1021,8 @@ var _HB = {
       possibleSiteElements = possibleSiteElements.social;
     else if ( possibleSiteElements.traffic )
       possibleSiteElements = possibleSiteElements.traffic;
+    else if ( possibleSiteElements.announcement )
+      possibleSiteElements = possibleSiteElements.announcement;
     else
       return; // Should not reach here - if we do there is nothing to show
 
