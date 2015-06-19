@@ -129,8 +129,11 @@ HelloBar.ApplicationController = Ember.Controller.extend
       if isInterstitial
         @set("showInterstitial", true)
         @set("interstitialType", choice)
-        map = {money: 'click', contacts: 'emails', facebook: 'social'}
-        @transitionToRoute("settings.#{map[choice]}")
+
+        # If the choice was a subcategory of social, we have to trigger the transition
+        # now so that when they drop into the editor they'll be in the right category
+        if choice == 'facebook'
+          @transitionToRoute("settings.social")
       else if isSubroute
         @transitionToRoute("settings.#{choice}")
       false

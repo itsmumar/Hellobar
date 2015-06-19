@@ -15,8 +15,8 @@ HelloBar.InterstitialController = Ember.Controller.extend
         @set('model.link_text', "Subscribe")
         @set('model.element_subtype', "email")
       when 'facebook'
-        @set('model.headline', "Like us on Facebook!")
         @set('model.element_subtype', "social/like_on_facebook")
+        @set('model.headline', "Like us on Facebook!")
 
   #-----------  Template Properties  -----------#
 
@@ -26,7 +26,13 @@ HelloBar.InterstitialController = Ember.Controller.extend
   actions:
 
     closeInterstitial: ->
+      choice = @get('controllers.application.interstitialType')
       @set("controllers.application.showInterstitial", false)
 
+      # Trigger the transition to the category they made when they close the overlay
+      map = {money: 'click', contacts: 'emails'}
+      if map[choice]
+        @get('controllers.application').send('transitionToRoute', "settings.#{map[choice]}")
+
     closeEditor: ->
-      @get('controllers.application').send('closeEditor');
+      @get('controllers.application').send('closeEditor')
