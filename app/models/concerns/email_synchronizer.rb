@@ -46,6 +46,8 @@ module EmailSynchronizer
     start_end_quotes = /^"|"$/
     name.gsub!(start_end_quotes, '')
     email.gsub!(start_end_quotes, '')
+    # Remove name if rake interpreted is as "nil"
+    name = nil if name == "nil"
 
     perform_sync do
       if oauth?

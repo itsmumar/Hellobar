@@ -44,7 +44,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   def subscribe(list_id, email, name = nil, double_optin = true)
     opts = {:id => list_id, :email => {:email => email}, :double_optin => double_optin}
 
-    if name
+    if name.present?
       split = name.split(' ', 2)
       opts[:merge_vars] = {:NAME => name, :FNAME => split[0], :LNAME => split[1]}
     end
