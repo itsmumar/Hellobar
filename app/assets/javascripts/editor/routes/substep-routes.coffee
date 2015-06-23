@@ -20,6 +20,7 @@ HelloBar.SettingsEmailsRoute   = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsSocialRoute   = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsClickRoute    = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsFeedbackRoute = HelloBar.SettingsStepRoute.extend()
+HelloBar.SettingsAnnouncementRoute = HelloBar.SettingsStepRoute.extend()
 
 HelloBar.StyleBarRoute         = HelloBar.SettingsStepRoute.extend()
 HelloBar.StyleModalRoute       = HelloBar.SettingsStepRoute.extend()

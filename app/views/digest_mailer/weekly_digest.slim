@@ -74,7 +74,9 @@ tr.lightGrey
                 td.bottom.alignCenter.cell= image_tag(se.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: se.type)
                 td.bottom.alignCenter.cell= @se_totals[se.id.to_s].views_between(@date_ranges[2], @date_ranges[3])
                 td.bottom.alignCenter.cell
-                  - if @se_totals[se.id.to_s].conversions_between(@date_ranges[2], @date_ranges[3]) > 0
+                  - if se.element_subtype == "announcement"
+                    span.darkGreyText --
+                  - elsif @se_totals[se.id.to_s].conversions_between(@date_ranges[2], @date_ranges[3]) > 0
                     | #{@se_totals[se.id.to_s].conversions_between(@date_ranges[2], @date_ranges[3])}
                     |  (#{formatted_percent(@se_totals[se.id.to_s].conversion_percent_between(@date_ranges[2], @date_ranges[3]) * 100, false)})
                   - else

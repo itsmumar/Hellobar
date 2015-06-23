@@ -4,7 +4,7 @@ module Hello::EmailDigest
   class << self
     def send(site)
       mailer = mailer_for_site(site)
-      return if mailer.nil? or mailer.html_part.nil?
+      return if mailer.nil? || mailer.is_a?(ActionMailer::Base::NullMail) || mailer.html_part.nil?
 
       end_date = EmailDigestHelper.date_of_previous("Sunday")
       start_date = end_date - 6

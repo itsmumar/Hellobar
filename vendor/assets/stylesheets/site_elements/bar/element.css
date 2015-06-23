@@ -103,6 +103,7 @@
 #hellobar_bar .hb-text-wrapper .hb-headline-text {
   font-size: 1em;
   display: inline-block;
+  vertical-align: middle;
 }
 
 /*-----------  Inputs  -----------*/

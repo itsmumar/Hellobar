@@ -35,7 +35,8 @@ describe ImproveSuggestion do
       "all" => [@traffic, @email, @twitter, @facebook],
       "social" => [@twitter, @facebook],
       "email" => [@email],
-      "traffic" => [@traffic]
+      "traffic" => [@traffic],
+      "announcement" => []
     })
   end
 
@@ -46,7 +47,7 @@ describe ImproveSuggestion do
     suggestion.name.should == "traffic"
     suggestion.id.should_not be_nil
   end
-  
+
   it "should store actual data" do
     pending "a good way to test this against actual data API"
   end
