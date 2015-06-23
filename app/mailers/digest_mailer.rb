@@ -8,8 +8,6 @@ class DigestMailer < ActionMailer::Base
 
   def weekly_digest(site)
     @site = site
-
-
     @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements.has_performance, @site.capabilities.num_days_improve_data)
     @se_totals = Hello::DataAPI.lifetime_totals(@site, @site.site_elements, @site.capabilities.num_days_improve_data)
     @sorted_elements = site.site_elements.active.collect do |site_element|
@@ -19,6 +17,7 @@ class DigestMailer < ActionMailer::Base
       # Next we reject any elements without any views, sort by the views, and then
       # distill the results back to just the site elements
     end.reject{|d| d[0] == 0}.sort_by{|d| d[0]}.reverse!.collect{|d| d[1]}
+
     # Bail if we don't have any elements with data
     return nil if @sorted_elements.empty?
     @conversion_header = conversion_header(@sorted_elements)
