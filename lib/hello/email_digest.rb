@@ -4,7 +4,7 @@ module Hello::EmailDigest
   class << self
     def send(site)
       mailer = mailer_for_site(site)
-      return if mailer.nil?
+      return if mailer.nil? or mailer.html_part.nil?
 
       end_date = EmailDigestHelper.date_of_previous("Sunday")
       start_date = end_date - 6
@@ -18,13 +18,13 @@ module Hello::EmailDigest
     end
 
     def mailer_for_site(site)
-      return nil if site.site_elements.count == 0
+      return nil if site.site_elements.active.count == 0
 
       if site.has_script_installed?
-        DigestMailer.weekly_digest(site)
+        return DigestMailer.weekly_digest(site)
       elsif site.site_elements.where("site_elements.created_at > ?", 10.days.ago).count > 0
         if site.script_installed_at.nil? # Only send if the site never had it installed in the first place
-          DigestMailer.not_installed(site)
+          return DigestMailer.not_installed(site)
         end
       else
         nil

@@ -27,16 +27,10 @@ if env == "production"
   end
 end
 
-=begin
-temporarily disabling
-every :monday, :at => "8:00am", :roles => [:cron] do
-  rake "email_digest:deliver_not_installed"
+# Note: time is UTC
+every :monday, :at => "3:00pm", :roles => [:cron] do
+  rake "email_digest:deliver"
 end
-
-every :monday, :at => "8:30am", :roles => [:cron] do
-  rake "email_digest:deliver_installed"
-end
-=end
 
 every 24.hours, :at => "12:00am", :roles => [:cron] do
   rake "site:scripts:generate_all_separately"
