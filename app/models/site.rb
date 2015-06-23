@@ -151,10 +151,7 @@ class Site < ActiveRecord::Base
   end
 
   def send_digest_email(options = {})
-    views_last_week = Hello::DataAPI.lifetime_totals_by_type(self, self.site_elements, 7)[:total].views_between(1.week.ago)
-    if views_last_week > 0 || options[:force]
-      Hello::EmailDigest.send(self)
-    end
+    Hello::EmailDigest.send(self)
   end
 
   def lifetime_totals(opts = {})
