@@ -167,6 +167,8 @@ module Hello::DataAPI
         path, params = Hello::DataAPIHelper::RequestParts.get_contacts(contact_list.site_id, contact_list.id, contact_list.site.read_key, nil, from_timestamp)
         get(path, params)
       end
+    rescue
+      []
     end
 
     def get(path, params)

@@ -47,6 +47,8 @@ unless defined?(Hellobar::Settings)
     intercom_secret
     google_auth_id
     google_auth_secret
+    drip_client_id
+    drip_secret
   )
 
   keys.each do |key|
@@ -98,6 +100,14 @@ unless defined?(Hellobar::Settings)
       :name => 'MailChimp',
       :client_id => config[:mailchimp_client_id],
       :secret => config[:mailchimp_secret],
+      :supports_double_optin => true,
+      :oauth => true
+    },
+    :drip => {
+      :type => :email,
+      :name => 'Drip',
+      :client_id => config[:drip_client_id],
+      :secret => config[:drip_secret],
       :supports_double_optin => true,
       :oauth => true
     },
