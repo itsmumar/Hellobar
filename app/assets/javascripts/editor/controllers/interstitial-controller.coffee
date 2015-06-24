@@ -27,12 +27,19 @@ HelloBar.InterstitialController = Ember.Controller.extend
 
     closeInterstitial: ->
       choice = @get('controllers.application.interstitialType')
-      @set("controllers.application.showInterstitial", false)
 
       # Trigger the transition to the category they made when they close the overlay
       map = {money: 'click', contacts: 'emails'}
       if map[choice]
         @get('controllers.application').send('transitionToRoute', "settings.#{map[choice]}")
+
+      # Remove the view
+      wrapper = $('.goal-interstitial')
+      wrapper.addClass('transitioning')
+
+      setTimeout ->
+        wrapper.remove()
+      , 1000
 
     closeEditor: ->
       @get('controllers.application').send('closeEditor')
