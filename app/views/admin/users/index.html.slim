@@ -28,7 +28,7 @@ div.row
               ul
                 - user.sites.with_deleted.each do |site|
                   li
-                    = display_name_for_site(site).html_safe
+                    = link_to display_name_for_site(site).html_safe, site.url, target: "_blank"
                     - if site.deleted?
                       |  (Deleted)
                     - else
