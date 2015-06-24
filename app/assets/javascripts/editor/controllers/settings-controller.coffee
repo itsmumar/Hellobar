@@ -11,8 +11,8 @@ HelloBar.SettingsController = Ember.Controller.extend
   prevStep: false
   nextStep: 'style'
   hasSideArrows: ( ->
-      return (false) # HB_EDITOR_VARIATION
-    ).property()
+    return (false) # HB_EDITOR_VARIATION
+  ).property()
 
   #-----------  Sub-Step Selection  -----------#
 

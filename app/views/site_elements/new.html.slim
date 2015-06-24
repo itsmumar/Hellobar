@@ -1,7 +1,10 @@
 #ember-root
 
 - if params[:element_to_copy_id].blank?
-  = render "site_elements/goal_interstitial"
+  - if get_ab_variation("Templated Editor 2015-05-19", current_user) == "original"
+    = render "site_elements/goal_interstitial"
+  - else
+    = render "site_elements/goal_interstitial_alternate"
 
 javascript:
   var siteID = #{@site.id}

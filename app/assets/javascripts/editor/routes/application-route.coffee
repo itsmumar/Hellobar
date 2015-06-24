@@ -84,7 +84,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
       else
         style.routeForwarding = if model.id then 'style.bar' else false
 
-    # Subscribes to outside action used by intertitial
+    # Subscribes to outside action used by interstitial
     # to route ember app through selection
 
     Ember.subscribe 'interstitial.routing',

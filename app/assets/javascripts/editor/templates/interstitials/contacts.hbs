@@ -1,0 +1,25 @@
+<header>
+  <h1>Grow Your Mailing List</h1>
+</header>
+
+<div class="goal-wrapper template-form">
+  <i class="large-icon icon-contacts"></i>
+
+  <h6>What should your Hello Bar say?</h6>
+  {{view Ember.TextField value=model.headline placeholder="Join our mailing list to stay up to date on our upcoming events"}}
+
+  <h6>What should the button say?</h6>
+  {{view Ember.TextField value=model.link_text placeholder="Subscribe"}}
+
+  <div class="step-container">
+    <button class="button cancel-button cancel" {{action 'closeEditor'}}>Cancel</button>
+    <button class="button save-editor" {{action 'closeInterstitial'}}>Continue</button>
+  </div>
+</div>
+
+<footer>
+  <p>
+    You can always change this later.
+    <a href="mailto:support@hellobar.com?subject=Hello%20Bar%20-%20Getting%20Started">Need Help?</a>
+  <p>
+</footer>
