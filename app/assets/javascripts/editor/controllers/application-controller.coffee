@@ -127,6 +127,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
       isSubroute     = $.inArray(choice, ['click', 'emails', 'social']) > -1
 
       if isInterstitial
+        InternalTracking.track_current_person("Template Selected", {template: choice})
+
         @set("showInterstitial", true)
         @set("interstitialType", choice)
 
