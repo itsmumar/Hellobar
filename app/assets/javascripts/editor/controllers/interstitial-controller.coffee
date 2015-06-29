@@ -37,14 +37,33 @@ HelloBar.InterstitialController = Ember.Controller.extend
         @set('model.headline', "Join our mailing list to stay up to date on our upcoming events")
         @set('model.link_text', "Subscribe")
         @set('model.element_subtype', "email")
+        @createDefaultContactList()
       when 'facebook'
         @set('model.element_subtype', "social/like_on_facebook")
         @set('model.headline', "Like us on Facebook!")
 
-  #-----------  Template Properties  -----------#
+
 
   showInterstitial: Ember.computed.alias('controllers.application.showInterstitial')
   interstitialType: Ember.computed.alias('controllers.application.interstitialType')
+
+  #-----------  Email template defaults  -----------#
+
+  createDefaultContactList: ->
+    if @get("model.site.contact_lists").length == 0 || @get("model.contact_list_id") == 0
+      if @get("model.site.contact_lists").length > 0
+        @set("model.contact_list_id", @get("model.site.contact_lists")[0].id)
+      else
+        $.ajax "/sites/#{@get('model.site.id')}/contact_lists.json",
+          type: "POST"
+          data: {contact_list: {name: "My Contacts", provider: 0, double_optin: 0}}
+          success: (data) =>
+            @set("model.site.contact_lists", [data])
+            @set("model.contact_list_id", data.id)
+          error: (response) =>
+            # Failed to create default list.  Without a list set a user will see the ContactListModal
+
+  #-----------  View actions  -----------#
 
   actions:
 
