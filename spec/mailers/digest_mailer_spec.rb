@@ -10,6 +10,7 @@ describe DigestMailer do
 
     it 'should work correctly when there are no site elements' do
       site.site_elements.each(&:destroy)
+      site.reload
       Hello::DataAPI.stub(lifetime_totals: {})
       expect{mail.body}.to_not raise_error
     end
