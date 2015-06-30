@@ -65,6 +65,12 @@ HelloBar.InterstitialController = Ember.Controller.extend
 
   #-----------  View actions  -----------#
 
+  inputIsInvalid: ( ->
+    $.grep($(".template-form input:text"), (n) ->
+      $(n).val().length == 0
+    ).length > 0
+  ).property('model.settings.url', 'model.link_text', 'model.headline', 'model.settings.url_to_like')
+
   actions:
 
     closeInterstitial: ->
