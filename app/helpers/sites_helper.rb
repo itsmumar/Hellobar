@@ -24,4 +24,13 @@ module SitesHelper
       params["controller"] == "sites" &&                    # user is on the site summary page
       params["action"] == "show"
   end
+
+  def install_help_data(site)
+    case site.install_type
+    when "weebly"
+      ["Weebly", "http://support.hellobar.com/how-do-i-install-hello-bar-on-weebly/"]
+    else
+      nil
+    end
+  end
 end
