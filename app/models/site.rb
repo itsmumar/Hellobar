@@ -283,7 +283,7 @@ class Site < ActiveRecord::Base
   end
 
   def set_install_type
-    update_attribute(:install_type, SiteDetector.new(url))
+    update_attribute(:install_type, SiteDetector.new(url).site_type) unless Rails.env.test?
   end
 
   private
