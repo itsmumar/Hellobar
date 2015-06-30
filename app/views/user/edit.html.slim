@@ -21,13 +21,16 @@ nav.tabs-wrapper
 
     = f.submit "Save & Update", :class => "button"
 
-  = form_for @user, :url => user_path, :html => {:class => 'password-form'} do |f|
+  = form_for @user, :url => user_path, :html => {:class => ['password-form']} do |f|
     - if @user.is_oauth_user?
       div.label This account was created using google authentication.
-    - else
+      div#show-password-form.button Change email / password
+
+    - unless @user.is_oauth_user?
       = f.label :current_password, "Current Password"
       = f.password_field :current_password, autocomplete: "off"
 
+    div class=[@user.is_oauth_user? ? "hidden" : ""]
       = f.label :password, "New Password"
       = f.password_field :password
 
@@ -36,6 +39,6 @@ nav.tabs-wrapper
 
       small Must be 6 characters with one uppercase letter and a number
 
-      = f.submit "Change Password", :class => "button"
+      = f.submit "Change Password", :class => "button", data: (@user.is_oauth_user? ? { confirm: "After you add a password, you will no longer be able to login through Google." } : {})
 
     = link_to "Cancel My Account", user_path, method: :delete, data: { confirm: "Are you sure?" }
