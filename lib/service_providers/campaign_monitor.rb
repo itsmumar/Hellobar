@@ -37,26 +37,31 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
 
   private
 
-  def handle_error
-    yield
-  rescue CreateSend::RevokedOAuthToken, CreateSend::ExpiredOAuthToken => e
-    identity.destroy_and_notify_user if identity != nil
-    raise e
+  def handle_error(retries=2)
+    begin
+      yield
+    rescue CreateSend::ExpiredOAuthToken => e
+      if @client
+        identity.credentials['token'], identity.credentials['expires_at'], identity.credentials['refresh_token'] = @client.refresh_token
+        identity.save
+        retry unless (retries -= 1).zero?
+      end
+      identity.destroy_and_notify_user if identity != nil
+      raise e
+    rescue CreateSend::RevokedOAuthToken => e
+      identity.destroy_and_notify_user if identity != nil
+      raise e
+    end
   end
 
-  def initialize_client(identity, retries = 2)
-    @auth = {
-      :access_token => identity.credentials['token'],
-      :refresh_token => identity.credentials['refresh_token']
-    }
+  def initialize_client(identity)
+    handle_error do
+      @auth = {
+        :access_token => identity.credentials['token'],
+        :refresh_token => identity.credentials['refresh_token']
+      }
 
-    @client = CreateSend::CreateSend.new(@auth)
-  rescue CreateSend::ExpiredOAuthToken => e
-    raise(e) if retries <= 0
-
-    identity.credentials['token'], identity.credentials['expires_at'], identity.credentials['refresh_token'] = cs.refresh_token
-    identity.save
-
-    initialize_client(identity, retries - 1)
+      @client = CreateSend::CreateSend.new(@auth)
+    end
   end
 end
