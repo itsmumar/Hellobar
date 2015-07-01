@@ -1,9 +1,10 @@
 nav.tabs-wrapper
   = active_link_to 'You', profile_path()
+  = active_link_to 'Team', site_team_path(current_site)
   = active_link_to 'Site', edit_site_path(current_site)
 
 = simple_form_for @site do |f|
-  
+
   .url-wrapper
     = f.label :url
     = f.text_field :url

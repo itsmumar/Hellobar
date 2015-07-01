@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   resource :user, :controller => :user, :only => [:update, :destroy]
 
   resources :sites do
+    get "team"
+
     resource :wordpress_plugin, :controller => :wordpress_plugin
 
     put "site_elements/:id/toggle_paused", to: "site_elements#toggle_paused", as: :site_element_toggle_paused
@@ -16,6 +18,7 @@ Rails.application.routes.draw do
     resources :identities
     resources :contact_lists
     resources :targeted_segments
+    resources :site_memberships
   end
 
   namespace :modals do

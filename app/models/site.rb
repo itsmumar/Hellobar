@@ -317,6 +317,10 @@ class Site < ActiveRecord::Base
     false
   end
 
+  def membership_for_user(user)
+    site_memberships.detect { |x| x.user_id = user.id }
+  end
+
   private
 
   # Calculates a bill, but does not save or pay the bill. Used by
