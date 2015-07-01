@@ -29,6 +29,10 @@ module SitesHelper
     case site.install_type
     when "weebly"
       ["Weebly", "http://support.hellobar.com/how-do-i-install-hello-bar-on-weebly/"]
+    when "squarespace"
+      ["Squarespace", "http://support.hellobar.com/how-do-i-install-hello-bar-on-squarespace/"]
+    when "shopify"
+      ["Shopify", "http://support.hellobar.com/how-do-i-install-hello-bar-on-shopify/"]
     else
       nil
     end
