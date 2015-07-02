@@ -1,29 +1,9 @@
-HelloBar.InterstitialController = Ember.Controller.extend
+HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
 
   needs: ['application']
 
-  facebookLikeOptions: [
-    {value: 'homepage', label: 'Home Page'}
-    {value: 'use_location_for_url', label: 'Current Page Visitor is Viewing'}
-    {value: 'other', label: 'Other'}
-  ]
-  showFacebookUrl: false
-
-  selectedFacebookLikeOptions: ( (key, value) ->
-    if arguments.length > 1
-      @set('showFacebookUrl', false)
-      @set('model.settings.use_location_for_url', false)
-
-      if value == 'homepage'
-        @set('model.settings.url_to_like', @get('model.site.url'))
-      else if value == 'use_location_for_url'
-        @set('model.settings.use_location_for_url', true)
-      else
-        @set('showFacebookUrl', true)
-      return value
-    else
-      'homepage'
-  ).property()
+  showInterstitial: Ember.computed.alias('controllers.application.showInterstitial')
+  interstitialType: Ember.computed.alias('controllers.application.interstitialType')
 
   init: ->
     @_super.apply(this, arguments)
@@ -42,12 +22,32 @@ HelloBar.InterstitialController = Ember.Controller.extend
         @set('model.element_subtype', "social/like_on_facebook")
         @set('model.headline', "Like us on Facebook!")
 
+  #-----------  Facebook Options  -----------#
 
+  showFacebookUrl: false
+  facebookLikeOptions: [
+    {value: 'homepage', label: 'Home Page'}
+    {value: 'use_location_for_url', label: 'Current Page Visitor is Viewing'}
+    {value: 'other', label: 'Other'}
+  ]
 
-  showInterstitial: Ember.computed.alias('controllers.application.showInterstitial')
-  interstitialType: Ember.computed.alias('controllers.application.interstitialType')
+  selectedFacebookLikeOptions: ( (key, value) ->
+    if arguments.length > 1
+      @set('showFacebookUrl', false)
+      @set('model.settings.use_location_for_url', false)
 
-  #-----------  Email template defaults  -----------#
+      if value == 'homepage'
+        @set('model.settings.url_to_like', @get('model.site.url'))
+      else if value == 'use_location_for_url'
+        @set('model.settings.use_location_for_url', true)
+      else
+        @set('showFacebookUrl', true)
+      return value
+    else
+      'homepage'
+  ).property()
+
+  #-----------  Email Template Defaults  -----------#
 
   createDefaultContactList: ->
     if @get("model.site.contact_lists").length == 0 || @get("model.contact_list_id") == 0
@@ -71,19 +71,19 @@ HelloBar.InterstitialController = Ember.Controller.extend
     ).length > 0
   ).property('model.settings.url', 'model.link_text', 'model.headline', 'model.settings.url_to_like')
 
+  #-----------  Actions  -----------#
+
   actions:
 
     closeInterstitial: ->
-      # Navigate to the style section after the user is done with the interstital choices
-      @get('controllers.application').send('transitionToRoute', "style")
+      choice = @get('controllers.application.interstitialType')
 
-      # Remove the view
-      wrapper = $('.goal-interstitial')
-      wrapper.addClass('transitioning')
-
-      setTimeout ->
-        wrapper.remove()
-      , 1000
+      # Trigger the transition to the category they made when they close the overlay
+      map = {money: 'click', contacts: 'emails'}
+      if map[choice]
+        @transitionToRoute("settings.#{map[choice]}")
+      else
+        @transitionToRoute('style')
 
     closeEditor: ->
       @get('controllers.application').send('closeEditor')
