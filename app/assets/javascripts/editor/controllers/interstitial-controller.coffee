@@ -63,7 +63,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
           error: (response) =>
             # Failed to create default list.  Without a list set a user will see the ContactListModal
 
-  #-----------  View actions  -----------#
+  #-----------  Input Validation  -----------#
 
   inputIsInvalid: ( ->
     $.grep($(".template-form input:text"), (n) ->
@@ -76,14 +76,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
   actions:
 
     closeInterstitial: ->
-      choice = @get('controllers.application.interstitialType')
-
-      # Trigger the transition to the category they made when they close the overlay
-      map = {money: 'click', contacts: 'emails'}
-      if map[choice]
-        @transitionToRoute("settings.#{map[choice]}")
-      else
-        @transitionToRoute('style')
+      @transitionToRoute('style')
 
     closeEditor: ->
       @get('controllers.application').send('closeEditor')
