@@ -18,7 +18,11 @@ Rails.application.routes.draw do
     resources :identities
     resources :contact_lists
     resources :targeted_segments
-    resources :site_memberships
+    resources :site_memberships do
+      collection do
+        post "invite"
+      end
+    end
   end
 
   namespace :modals do

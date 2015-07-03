@@ -28,6 +28,15 @@ class SiteMembershipsController < ApplicationController
     end
   end
 
+  def invite
+    user = User.where(email: params[:email]).first
+    @site_membership = @site.site_memberships.create(user: user, role: "admin")
+    unless @site_membership.valid?
+      flash.now[:error] = @site_membership.errors.full_messages
+    end
+    redirect_to site_team_path(@site)
+  end
+
   private
 
   def load_site_membership

@@ -9,7 +9,7 @@ class SiteMembership < ActiveRecord::Base
   validate :at_least_one_owner_per_site
 
   before_destroy do
-    if role == "owner" && SiteMembership.where(user_id: user_id, site_id: site_id, role: role).count == 1
+    if role == "owner" && SiteMembership.where(site_id: site_id, role: role).count == 1
       errors.add :site, "must have at least one owner"
       false
     else

@@ -318,7 +318,7 @@ class Site < ActiveRecord::Base
   end
 
   def membership_for_user(user)
-    site_memberships.detect { |x| x.user_id = user.id }
+    site_memberships.detect { |x| x.user_id == user.id }
   end
 
   private
