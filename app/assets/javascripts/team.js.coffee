@@ -1,5 +1,11 @@
 $ ->
 
+  $('.new_site_membership').submit (event) ->
+    if !$(event.target).hasClass('ready')
+      if $(event.target).addClass('ready')
+        event.preventDefault()
+
+
   $('body').on 'click', '.change-permission', (event) ->
     event.preventDefault()
 

@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
 
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
+  INVITE_STATUS = 'invited'
 
   # returns a user with a random email and password
   def self.generate_temporary_user
@@ -101,6 +102,10 @@ class User < ActiveRecord::Base
     Phpass.new.check(password, encrypted_password) || super
   end
 
+  def is_oauth_user?
+     authentications.size > 0
+  end
+
   def self.find_for_google_oauth2(access_token, signed_in_resource=nil, track_options={})
       data = access_token["info"]
       user = User.joins(:authentications).where(authentications: { uid: access_token["uid"], provider: access_token["provider"] }).first
@@ -128,8 +133,20 @@ class User < ActiveRecord::Base
       user
   end
 
-  def is_oauth_user?
-     authentications.size > 0
+  def self.find_or_invite_by_email(email)
+    user = User.where(email: email).first
+    if user.nil?
+      password = Devise.friendly_token[9,20]
+      password_confirmation = password
+      user = User.create(
+        email: email,
+        password: password,
+        password_confirmation: password,
+        status: INVITE_STATUS
+      )
+      MailerGateway.send_email("User Invite", email, {:email => email, :reset_link => reset_link})
+    end
+    user
   end
 
   private
