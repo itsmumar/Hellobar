@@ -5,10 +5,10 @@ class Admin::UsersController < ApplicationController
 
   def index
     if params[:q].blank?
-      @users = User.page(params[:page]).per(24)
+      @users = User.page(params[:page]).per(24).includes(:authentications)
     else
-      users = User.with_deleted.where("email like ?", "%#{params[:q].strip}%").all
-      users += User.joins(:sites).where("url like ?", "%#{params[:q].strip}%").all
+      users = User.with_deleted.where("email like ?", "%#{params[:q].strip}%").includes(:authentications)
+      users += User.joins(:sites).where("url like ?", "%#{params[:q].strip}%").includes(:authentications)
 
       if params[:q].strip =~ /\d{4}/
         users += PaymentMethodDetails.where("data like ?", "%-#{params[:q].strip}%").map(&:user).compact
