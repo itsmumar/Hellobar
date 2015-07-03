@@ -66,10 +66,19 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
   #-----------  Input Validation  -----------#
 
   inputIsInvalid: ( ->
-    $.grep($(".template-form input:text"), (n) ->
-      $(n).val().length == 0
-    ).length > 0
-  ).property('model.settings.url', 'model.link_text', 'model.headline', 'model.settings.url_to_like')
+    switch @get('controllers.application.interstitialType')
+      when 'money'
+        return true if @get('model.settings.url').length == 0
+        return true if @get('model.headline').length == 0
+        return true if @get('model.link_text').length == 0
+      when 'contacts'
+        return true if @get('model.headline').length == 0
+        return true if @get('model.link_text').length == 0
+      when 'facebook'
+        if !@get('model.settings.use_location_for_url')
+          return true if @get('model.settings.url_to_like').length == 0
+    false
+  ).property('model.settings.url', 'model.link_text', 'model.headline', 'model.settings.url_to_like', 'model.settings.use_location_for_url')
 
   #-----------  Actions  -----------#
 
