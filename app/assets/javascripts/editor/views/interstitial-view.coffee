@@ -1,7 +1,7 @@
 HelloBar.InterstitialView = Ember.View.extend
 
   classNames: ['goal-interstitial']
-  classNameBindings: ['isTransitioning']
+  classNameBindings: ['transitioning']
 
   isTransitioning: false
 
@@ -19,7 +19,7 @@ HelloBar.InterstitialView = Ember.View.extend
   click: (evt) ->
     return false unless (evt.target.className == 'button save-editor')
 
-    @set('isTransitioning', true)
+    @set('transitioning', true)
     
     setTimeout =>
       @$().remove()
