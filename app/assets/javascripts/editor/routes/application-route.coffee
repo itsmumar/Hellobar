@@ -92,6 +92,11 @@ HelloBar.ApplicationRoute = Ember.Route.extend
         isInterstitial = $.inArray(subroute, ['money', 'contacts', 'facebook']) > -1
         isSubroute     = $.inArray(subroute, ['click', 'emails', 'social']) > -1
 
+        @disconnectOutlet({
+          outlet     : 'interstitial'
+          parentView : 'application'
+        })
+
         if isInterstitial
           InternalTracking.track_current_person('Template Selected', {template: subroute})
 
