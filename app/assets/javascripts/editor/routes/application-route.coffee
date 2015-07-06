@@ -90,7 +90,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
     Ember.subscribe 'interstitial.routing',
       before: (name, timestamp, subroute) =>
         isInterstitial = $.inArray(subroute, ['money', 'contacts', 'facebook']) > -1
-        isSubroute     = $.inArray(subroute, ['click', 'emails', 'social']) > -1
+        isSubroute     = $.inArray(subroute, ['click', 'emails', 'social', 'announcement']) > -1
 
         @disconnectOutlet({
           outlet     : 'interstitial'
@@ -115,10 +115,10 @@ HelloBar.ApplicationRoute = Ember.Route.extend
           # # now so that when they drop into the editor they'll be in the right category
           if choice == 'facebook'
             @transitionTo("settings.social")
-        
+
         else if isSubroute
           @transitionTo("settings.#{subroute}")
-      
+
       after: (name, timestamp, subroute) =>
         false
 
