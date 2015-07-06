@@ -5,22 +5,19 @@ HelloBar.InterstitialView = Ember.View.extend
 
   isTransitioning: false
 
-  #-----------  Template Routing  -----------#
-
-  # use specific templates depending on interstitial type
-
-  templateName: ( ->
-    type = @get('controller.interstitialType')
-    return "interstitials/#{type}" if type
-  ).property('controller.interstitialType')
-
   #-----------  Removal Animation  -----------#
 
   click: (evt) ->
-    return false unless (evt.target.className == 'button save-editor')
+    switch evt.target.className
+  
+      when 'button save-editor'
+        @set('transitioning', true)      
+        setTimeout =>
+          @$().remove()
+        , 1000
+  
+      when 'button cancel-button cancel'
+        $('.goal-interstitial').trigger("toggleGoalSelection")
 
-    @set('transitioning', true)
-    
-    setTimeout =>
-      @$().remove()
-    , 1000
+    return false
+

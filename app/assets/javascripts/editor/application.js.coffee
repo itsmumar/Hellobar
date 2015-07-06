@@ -61,14 +61,7 @@ $ ->
   buttons = $('.goal-block button')
 
   wrapper.on("toggleGoalSelection", ->
-    if wrapper.is(":visible")
-      wrapper.addClass('transitioning')
-      setTimeout ->
-        wrapper.hide()
-      , 1000
-    else
-      wrapper.removeClass('transitioning')
-      wrapper.show()
+    wrapper.toggleClass('transitioning')
   )
 
   buttons.prop('disabled', false).on 'click touch', (evt) ->

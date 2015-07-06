@@ -88,9 +88,33 @@ HelloBar.ApplicationRoute = Ember.Route.extend
     # to route ember app through selection
 
     Ember.subscribe 'interstitial.routing',
-      before: (name, timestamp, subroute) ->
-        controller.send('interstitialRouting', subroute);
-      after: (name, timestamp, subroute) ->
+      before: (name, timestamp, subroute) =>
+        isInterstitial = $.inArray(subroute, ['money', 'contacts', 'facebook']) > -1
+        isSubroute     = $.inArray(subroute, ['click', 'emails', 'social']) > -1
+
+        if isInterstitial
+          InternalTracking.track_current_person('Template Selected', {template: subroute})
+
+          controller.set('showInterstitial', true)
+          controller.set('interstitialType', subroute)
+
+          @render("interstitials/#{subroute}", {
+            into       : 'application'
+            outlet     : 'interstitial'
+            view       : 'interstitial'
+            controller : 'interstitial'
+            model      : model
+          })
+
+          # # If the choice was a subcategory of social, we have to trigger the transition
+          # # now so that when they drop into the editor they'll be in the right category
+          if choice == 'facebook'
+            @transitionTo("settings.social")
+        
+        else if isSubroute
+          @transitionTo("settings.#{subroute}")
+      
+      after: (name, timestamp, subroute) =>
         false
 
     @_super(controller, model)

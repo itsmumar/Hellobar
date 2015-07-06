@@ -1,6 +1,6 @@
 /*-----------  Goal Interstitial  -----------*/
 
-$transition: 1s
+$transition: 0.75s
 
 .goal-interstitial
   top: 0
@@ -9,10 +9,10 @@ $transition: 1s
   height: 100%
   position: fixed
   z-index: 800000
+  overflow: scroll
   text-align: center
   min-width: $maxWidth
   background-color: $grayLightest
-  overflow: scroll
   @include transition($transition all ease-in-out)
 
   header
@@ -150,6 +150,7 @@ $transition: 1s
 
   &.transitioning
     opacity: 0
+    pointer-events: none
 
     header,
     footer

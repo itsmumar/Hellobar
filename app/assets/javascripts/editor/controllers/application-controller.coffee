@@ -14,8 +14,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
   nextRoute: null
   currentStep: false
   cannotContinue: true
-  showInterstitial: false
-  interstitialType: null
 
   #-----------  Color Palette  -----------#
 
@@ -118,27 +116,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
     saveSiteElement: ->
       @toggleProperty('saveSubmitted')
       true
-
-    # Subscribes to outside action used by intertitial
-    # to route ember app through selection
-
-    interstitialRouting: (choice) ->
-      isInterstitial = $.inArray(choice, ['money', 'contacts', 'facebook']) > -1
-      isSubroute     = $.inArray(choice, ['click', 'emails', 'social']) > -1
-
-      if isInterstitial
-        InternalTracking.track_current_person("Template Selected", {template: choice})
-
-        @set("showInterstitial", true)
-        @set("interstitialType", choice)
-
-        # If the choice was a subcategory of social, we have to trigger the transition
-        # now so that when they drop into the editor they'll be in the right category
-        if choice == 'facebook'
-          @transitionToRoute("settings.social")
-      else if isSubroute
-        @transitionToRoute("settings.#{choice}")
-      false
 
     closeEditor: ->
       if @get('isTemporaryUser')

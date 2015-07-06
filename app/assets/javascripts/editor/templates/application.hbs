@@ -51,6 +51,4 @@
   {{render 'preview' model}}
 </div>
 
-{{#if showInterstitial}}
-  {{render 'interstitial' model}}
-{{/if}}
+{{outlet 'interstitial'}}
