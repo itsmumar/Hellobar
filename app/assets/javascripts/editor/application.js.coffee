@@ -60,12 +60,19 @@ $ ->
   wrapper = $('.goal-interstitial')
   buttons = $('.goal-block button')
 
+  wrapper.on("toggleGoalSelection", ->
+    if wrapper.is(":visible")
+      wrapper.addClass('transitioning')
+      setTimeout ->
+        wrapper.hide()
+      , 1000
+    else
+      wrapper.removeClass('transitioning')
+      wrapper.show()
+  )
+
   buttons.prop('disabled', false).on 'click touch', (evt) ->
     $(@).closest('.goal-block').addClass('selected')
-    wrapper.addClass('transitioning')
-
-    setTimeout ->
-      wrapper.remove()
-    , 1000
+    wrapper.trigger("toggleGoalSelection")
 
     Ember.instrument('interstitial.routing', $(@).val())

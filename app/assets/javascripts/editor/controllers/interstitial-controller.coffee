@@ -88,4 +88,5 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
       @transitionToRoute('style')
 
     closeEditor: ->
-      @get('controllers.application').send('closeEditor')
+      @set('showInterstitial', false)
+      $('.goal-interstitial').trigger("toggleGoalSelection")
