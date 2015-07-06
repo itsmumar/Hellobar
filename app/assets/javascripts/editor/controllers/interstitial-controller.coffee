@@ -2,13 +2,13 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
 
   needs: ['application']
 
-  showInterstitial: Ember.computed.alias('controllers.application.showInterstitial')
-  interstitialType: Ember.computed.alias('controllers.application.interstitialType')
+  showInterstitial: false
+  interstitialType: null
 
-  init: ->
-    @_super.apply(this, arguments)
+  setDefaults: ( ->
+    return false unless @get('model')
 
-    switch @get('controllers.application.interstitialType')
+    switch @get('interstitialType')
       when 'money'
         @set('model.headline', "Check out our latest sale")
         @set('model.link_text', "Shop Now")
@@ -21,6 +21,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
       when 'facebook'
         @set('model.element_subtype', "social/like_on_facebook")
         @set('model.headline', "Like us on Facebook!")
+  ).observes('model', 'interstitialType')
 
   #-----------  Facebook Options  -----------#
 
@@ -66,7 +67,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
   #-----------  Input Validation  -----------#
 
   inputIsInvalid: ( ->
-    switch @get('controllers.application.interstitialType')
+    switch @get('interstitialType')
       when 'money'
         return true if @get('model.settings.url').length == 0
         return true if @get('model.headline').length == 0
@@ -88,4 +89,4 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
       @transitionToRoute('style')
 
     closeEditor: ->
-      @get('controllers.application').send('closeEditor')
+      # maybe reset some of the model parameters set in init() ??
