@@ -21,7 +21,7 @@ class SiteMembershipsController < ApplicationController
   end
 
   def destroy
-    if @site_membership.destroy
+    if @site_membership.can_destroy? && @site_membership.destroy
       render json: @site_membership
     else
       render json: @site_membership.errors.full_messages, :status => :unprocessable_entity
@@ -29,12 +29,20 @@ class SiteMembershipsController < ApplicationController
   end
 
   def invite
-    user = User.where(email: params[:email]).first
-    @site_membership = @site.site_memberships.create(user: user, role: "admin")
-    unless @site_membership.valid?
-      flash.now[:error] = @site_membership.errors.full_messages
+    user = User.find_or_invite_by_email(params[:email])
+    notice = nil
+    if user.valid?
+      @site_membership = @site.site_memberships.create(user: user, role: "admin")
+      if @site_membership.valid?
+        notice = "#{user.email} has been invited to #{@site.url}."
+      else
+        notice = @site_membership.errors.full_messages.join(". ")
+      end
+    else
+      notice = user.errors.full_messages.join(". ")
     end
-    redirect_to site_team_path(@site)
+
+    redirect_to site_team_path(@site), notice: notice
   end
 
   private

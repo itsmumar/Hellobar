@@ -1,6 +1,29 @@
 class UserController < ApplicationController
-  before_action :authenticate_user!
+  layout "static", only: [:new, :create]
+  before_action :authenticate_user!, except: [:new, :create]
   before_action :load_user, :only => [:edit, :update, :destroy]
+
+  def new
+    load_user_from_invitation
+
+    if @user.nil? || @user.invite_token_expired?
+      flash[:error] = "This invitation token has expired.  Please request the owner to issue you a new invitation."
+      redirect_to root_path
+    end
+  end
+
+  def create
+    load_user_from_invitation
+    attr_hash = user_params.delete(:email)
+    attr_hash = user_params.merge!(status: User::ACTIVE_STATUS)
+    if @user.update(attr_hash)
+      sign_in @user, event: :authentication
+      redirect_to after_sign_in_path_for(@user)
+    else
+      flash[:error] = @user.errors.full_messages.uniq.join(". ") << "."
+      render "new"
+    end
+  end
 
   def update
     active_before_update = @user.active?
@@ -65,6 +88,13 @@ class UserController < ApplicationController
   end
 
   private
+
+  def load_user_from_invitation
+    token = params[:user].try(:delete, :invite_token) || params[:token]
+    return nil unless token
+
+    @user = User.where(invite_token: token, status: User::TEMPORARY_STATUS).first
+  end
 
   def set_timezones_on_sites(user)
     if params[:user] && params[:user][:timezone]

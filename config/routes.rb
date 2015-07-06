@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get "/auth/:action/callback", :to => "users/omniauth_callbacks", :constraints => { :action => /google_oauth2/ }
 
   get "profile", :to => "user#edit", :as => :profile
-  resource :user, :controller => :user, :only => [:update, :destroy]
+  resource :user, :controller => :user, :only => [:update, :destroy, :new, :create]
 
   resources :sites do
     get "team"

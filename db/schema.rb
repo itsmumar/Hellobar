@@ -300,6 +300,8 @@ ActiveRecord::Schema.define(version: 20150701162052) do
     t.string   "last_name"
     t.string   "status",                 default: "active"
     t.datetime "deleted_at"
+    t.string   "invite_token"
+    t.datetime "invite_token_expire_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree

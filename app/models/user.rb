@@ -25,11 +25,17 @@ class User < ActiveRecord::Base
 
   after_save :disconnect_oauth
 
+  before_save do
+    if self.status == ACTIVE_STATUS && self.invite_token
+      self.invite_token = nil
+    end
+  end
+
   attr_accessor :legacy_migration, :timezone
 
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
-  INVITE_STATUS = 'invited'
+  INVITE_EXPIRE_RATE = 2.week
 
   # returns a user with a random email and password
   def self.generate_temporary_user
@@ -106,17 +112,20 @@ class User < ActiveRecord::Base
      authentications.size > 0
   end
 
+  def invite_token_expired?
+    invite_token_expire_at && invite_token_expire_at <= Time.now
+  end
+
   def self.find_for_google_oauth2(access_token, signed_in_resource=nil, track_options={})
       data = access_token["info"]
       user = User.joins(:authentications).where(authentications: { uid: access_token["uid"], provider: access_token["provider"] }).first
 
       unless user
+        user = User.where(email: data["email"], status: TEMPORARY_STATUS)
+        user ||= User.new(email: data["email"])
         password = Devise.friendly_token[9,20]
-        user = User.new(
-          email: data["email"],
-          password: password,
-          password_confirmation: password
-        )
+        user.password = password
+        user.password_confirmation = password
         user.authentications.build(provider: access_token["provider"], uid: access_token["uid"])
         user.save
 
@@ -136,15 +145,15 @@ class User < ActiveRecord::Base
   def self.find_or_invite_by_email(email)
     user = User.where(email: email).first
     if user.nil?
+      user = User.new(email: email)
       password = Devise.friendly_token[9,20]
-      password_confirmation = password
-      user = User.create(
-        email: email,
-        password: password,
-        password_confirmation: password,
-        status: INVITE_STATUS
-      )
-      MailerGateway.send_email("User Invite", email, {:email => email, :reset_link => reset_link})
+      user.password = password
+      user.password_confirmation = password
+      user.invite_token = Devise.friendly_token
+      user.invite_token_expire_at = INVITE_EXPIRE_RATE.from_now
+      user.status = TEMPORARY_STATUS
+      user.save
+      #MailerGateway.send_email("User Invite", email, {:email => email, :reset_link => reset_link})
     end
     user
   end
