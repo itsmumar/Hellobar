@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   has_many :payment_methods
   has_many :payment_method_details, through: :payment_methods, source: :details
-  has_many :site_memberships
+  has_many :site_memberships, dependent: :destroy
   has_many :sites, through: :site_memberships
   has_many :site_elements, through: :sites
   has_many :authentications, dependent: :destroy
@@ -17,10 +17,11 @@ class User < ActiveRecord::Base
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: {scope: :deleted_at, unless: :deleted? }
 
-  # If we ever assign more than one user to a site, this will have
-  # to be refactored
+  # Remove any sites where this was the last user
   before_destroy do
-    self.sites.each(&:destroy)
+    self.sites.each do |site|
+      site.destroy if site.site_memberships.size <= 1
+    end
   end
 
   after_save :disconnect_oauth
@@ -116,17 +117,23 @@ class User < ActiveRecord::Base
     invite_token_expire_at && invite_token_expire_at <= Time.now
   end
 
+  def has_permission_for(feature, site)
+    role = site.membership_for_user(self).try(:role)
+    role && Hellobar::Settings[:permissions][role].try(:include?, feature)
+  end
+
   def self.find_for_google_oauth2(access_token, signed_in_resource=nil, track_options={})
       data = access_token["info"]
       user = User.joins(:authentications).where(authentications: { uid: access_token["uid"], provider: access_token["provider"] }).first
 
       unless user
-        user = User.where(email: data["email"], status: TEMPORARY_STATUS)
+        user = User.where(email: data["email"], status: TEMPORARY_STATUS).first
         user ||= User.new(email: data["email"])
         password = Devise.friendly_token[9,20]
         user.password = password
         user.password_confirmation = password
         user.authentications.build(provider: access_token["provider"], uid: access_token["uid"])
+        user.status = ACTIVE_STATUS
         user.save
 
         Analytics.track(:user, user.id, "Signed Up", track_options) if user.valid?

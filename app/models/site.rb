@@ -37,12 +37,8 @@ class Site < ActiveRecord::Base
     where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
   end
 
-  def owner
-    if membership = site_memberships.where(:role => "owner").first
-      membership.user
-    else
-      nil
-    end
+  def owners
+    site_memberships.select { |x| x.role == "owner" }.map(&:user)
   end
 
   # We are getting bad analytics data regarding installs and uninstalls

@@ -22,8 +22,9 @@ nav.tabs-wrapper
   .button-wrapper
     = link_to "Installation instructions", site_install_path(@site)
 
-  .billing-wrapper
-    = render 'billing'
+  - if current_user.has_permission_for(:billing, @site)
+    .billing-wrapper
+      = render 'billing'
 
   footer
     = f.button :submit, "Save & Update", :class => "button"
