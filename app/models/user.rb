@@ -130,6 +130,10 @@ class User < ActiveRecord::Base
      authentications.size > 0
   end
 
+  def templatized_editor?
+    created_at.to_date > "2015-7-7".to_date
+  end
+
   private
 
   def email_does_not_exist_in_wordpress
