@@ -14,6 +14,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
   nextRoute: null
   currentStep: false
   cannotContinue: true
+  showInterstitial: false    
+  interstitialType: null
 
   #-----------  Color Palette  -----------#
 
