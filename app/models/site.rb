@@ -1,4 +1,5 @@
 require 'billing_log'
+require 'site_detector'
 require 'queue_worker/queue_worker'
 
 class Site < ActiveRecord::Base
@@ -19,6 +20,10 @@ class Site < ActiveRecord::Base
   before_validation :generate_read_write_keys
 
   before_destroy :blank_out_script
+
+  after_create do
+    delay :set_install_type
+  end
 
   validates :url, url: true
   validates :read_key, presence: true, uniqueness: true
@@ -275,6 +280,10 @@ class Site < ActiveRecord::Base
       end
     end
     return @bills_with_payment_issues
+  end
+
+  def set_install_type
+    update_attribute(:install_type, SiteDetector.new(url).site_type) unless Rails.env.test?
   end
 
   private

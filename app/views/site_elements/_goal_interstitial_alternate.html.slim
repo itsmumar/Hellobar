@@ -1,0 +1,40 @@
+.goal-interstitial
+
+  header
+    h5 Select Your Goal
+
+  .goal-wrapper
+
+    .goal-block
+      i.large-icon.icon-money
+      h6 Promote a Sale/Discount
+      p Point vistiors to your latest deal, bargain, or giveaway.
+      button.button(disabled value='money') Select This Goal
+
+    .goal-block
+      i.large-icon.icon-contacts
+      h6 Grow Your Mailing List
+      p Convert one-time visits into lasting connections.
+      button.button(disabled value='contacts') Select This Goal
+
+    .goal-block
+      i.large-icon.icon-thumbsup
+      h6 Get Facebook Likes
+      p Expand your social reach to maximize word of mouth.
+      button.button(disabled value='facebook') Select This Goal
+
+    .goal-block
+      i.large-icon.icon-other
+      h6 Other
+      p Don't see your goal?  Customize Hello Bar to fit your needs.
+      button.button(disabled value='other') Select This Goal
+
+  footer
+
+    p
+      | Select one of the goals above. You can always change this later.
+      = mail_to 'support@hellobar.com', ' Need Help?', subject: "Hello Bar - Getting Started"
+
+javascript:
+  if(trackEditorFlow)
+    InternalTracking.track_current_person("Editor Flow", {step: "Choose Goal"});

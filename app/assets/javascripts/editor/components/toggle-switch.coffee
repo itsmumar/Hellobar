@@ -20,5 +20,6 @@ HelloBar.ToggleSwitchComponent = Ember.Component.extend
     @toggleProperty('switch')
     @_setDisplayValue()
 
-  _setDisplayValue: ->
+  _setDisplayValue: ( ->
     @set('displayValue', if @get('inverted') then !@get('switch') else @get('switch'))
+  ).observes('switch')

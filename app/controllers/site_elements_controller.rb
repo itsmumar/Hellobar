@@ -22,7 +22,11 @@ class SiteElementsController < ApplicationController
     end
 
     @rules = @site.rules.all
-    @site_element = @site.site_elements.new(:rule => @site.rules.first, show_branding: !@site.capabilities(true).remove_branding?)
+    @site_element = @site.site_elements.new({
+      rule: @site.rules.first,
+      show_branding: !@site.capabilities(true).remove_branding?,
+      settings: {url: @site.url, url_to_like: @site.url }
+    })
 
     respond_to do |format|
       format.html

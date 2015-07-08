@@ -20,12 +20,12 @@ window.HelloBar = Ember.Application.create
 
 #-----------  Debounce/Throttle Observers  -----------#
 
-Ember.debouncedObserver = (keys..., time, func) ->  
+Ember.debouncedObserver = (keys..., time, func) ->
   Em.observer ->
     Em.run.debounce @, func, time
   , keys...
 
-Ember.throttledObserver = (keys..., time, func) ->  
+Ember.throttledObserver = (keys..., time, func) ->
   Em.observer ->
     Em.run.throttle @, func, time
   , keys...
@@ -60,11 +60,12 @@ $ ->
   wrapper = $('.goal-interstitial')
   buttons = $('.goal-block button')
 
+  wrapper.on("toggleGoalSelection", ->
+    wrapper.toggleClass('transitioning')
+  )
+
   buttons.prop('disabled', false).on 'click touch', (evt) ->
     $(@).closest('.goal-block').addClass('selected')
-    wrapper.addClass('transitioning')
-    setTimeout ->
-      wrapper.remove()
-    , 1000
+    wrapper.trigger("toggleGoalSelection")
 
     Ember.instrument('interstitial.routing', $(@).val())

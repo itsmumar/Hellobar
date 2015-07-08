@@ -1,5 +1,11 @@
 $ ->
-  $(".track-click").click (event) ->
-    trackingEvent = $(event.currentTarget).data("tracking-event")
-    trackingProps = $(event.currentTarget).data("tracking-props")
+  trackClick = (target) ->
+    trackingEvent = $(target).data("tracking-event")
+    trackingProps = $(target).data("tracking-props")
     InternalTracking.track_current_person(trackingEvent, trackingProps)
+
+  $(".track-click").click (event) ->
+    trackClick(event.currentTarget)
+
+  $(".track-click.activated").each ->
+    trackClick(this)

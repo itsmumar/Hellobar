@@ -23,12 +23,16 @@ div.row
 
         - @users.each do |user|
           tr
-            td= link_to user.email, admin_user_path(user)
+            td
+              = link_to user.email, admin_user_path(user)
+              - if user.authentications.size > 0
+                span.subtype
+                  |  (G)
             td
               ul
                 - user.sites.with_deleted.each do |site|
                   li
-                    = display_name_for_site(site).html_safe
+                    = link_to display_name_for_site(site).html_safe, site.url, target: "_blank"
                     - if site.deleted?
                       |  (Deleted)
                     - else
