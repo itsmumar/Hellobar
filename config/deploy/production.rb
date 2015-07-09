@@ -15,14 +15,9 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-
-
 server '54.235.76.197', user: 'hellobar', roles: %w{web db cron} # web1
 server '23.21.249.113', user: 'hellobar', roles: %w{web} # web2
 server '54.211.192.176', user: 'hellobar', roles: %w{web} # worker1
-
-# Deprecated
-server '184.72.141.214', user: 'hellobar', roles: %w{web}
 
 
 # Custom SSH Options
