@@ -2,8 +2,8 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
 
   needs: ['application']
 
-  showInterstitial: false
-  interstitialType: null
+  showInterstitial: Ember.computed.alias('controllers.application.showInterstitial')
+  interstitialType: Ember.computed.alias('controllers.application.interstitialType')
 
   setDefaults: ( ->
     return false unless @get('model')
