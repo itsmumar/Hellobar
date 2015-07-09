@@ -8,8 +8,28 @@
   {{view Ember.TextField value=model.caption placeholder="(optional) maxlength=255"}}
 {{/unless}}
 
+{{#if showNamePlaceholderText}}
+  <label>Name placeholder</label>
+  {{
+    view Ember.TextField
+    value=model.name_placeholder
+    placeholder="Your name"
+    maxlength=100
+  }}
+{{/if}}
+
+{{#if showEmailPlaceholderText}}
+  <label>Email placeholder</label>
+  {{
+    view Ember.TextField
+    value=model.email_placeholder
+    placeholder="Your email"
+    maxlength=100
+  }}
+{{/if}}
+
 {{#unless hideLinkText}}
-  <label>Link text</label>
+  <label>Button text</label>
   {{view Ember.TextField value=model.link_text placeholder="OK!" maxlength=255}}
 {{/unless}}
 
