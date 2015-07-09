@@ -23,7 +23,6 @@ server '54.211.192.176', user: 'hellobar', roles: %w{web} # worker1
 
 # Deprecated
 server '184.72.141.214', user: 'hellobar', roles: %w{web}
-server '54.90.172.206', user: 'hellobar', roles: %w{web} # web4
 
 
 # Custom SSH Options
