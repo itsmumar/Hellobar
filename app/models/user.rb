@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
     self.sites.each(&:destroy)
   end
 
+  after_save :disconnect_oauth
+
   attr_accessor :legacy_migration, :timezone
 
   ACTIVE_STATUS = 'active'
@@ -135,6 +137,13 @@ class User < ActiveRecord::Base
   end
 
   private
+
+  # Disconnect oauth logins if user sets their own password
+  def disconnect_oauth
+    if !id_changed? && encrypted_password_changed? && is_oauth_user?
+      authentications.destroy_all
+    end
+  end
 
   def email_does_not_exist_in_wordpress
     return if legacy_migration # Don't check this

@@ -1,9 +1,12 @@
 .quickstart-wrapper
   = form_tag sites_path do
     input type="hidden" name="source" value="landing"
-    input type="hidden" name="oauth" value="google_oauth2"
     input type="text" name="site[url]" placeholder="Your website URL" autofocus=true value=@site_url
-    button type="submit" Log in with Google
+    - if @signup_type == :email
+      button type="submit" Continue, It's Free
+    - else
+      input type="hidden" name="oauth" value="google_oauth2"
+      button type="submit" Log in with Google
     .clear
   - if flash[:error]
     .error= flash[:error]
