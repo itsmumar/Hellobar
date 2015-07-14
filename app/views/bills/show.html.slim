@@ -15,7 +15,7 @@ main
       strong To:
       div
         address
-          div= @bill.site.url
+          div= @bill.site.try(:url) || @site.try(:url)
           br
           = @details.data["first_name"] + ' ' + @details.data["last_name"]
           - if !@details.address.nil?
@@ -50,7 +50,7 @@ main
       th.right= number_to_currency(@bill.amount)
 
   div.message
-    | If you have any questions concerning this invoice, email: 
+    | If you have any questions concerning this invoice, email:&nbsp;
     a href="mailto:support@hellobar.com"
       | support@hellobar.com
   div.centered
