@@ -832,9 +832,7 @@ var _HB = {
         HB.viewed();
         // Monitor zoom scale events
         HB.hideOnZoom();
-        // Bounce in animation
-        if(HB.w.className.indexOf("hb_animated") > -1)
-          setTimeout(function(){ HB.animateIn(HB.w); }, 500);
+
         // Set wiggle listeners
         if(siteElement.wiggle_button.length > 0)
           HB.wiggleEventListeners(HB.w);
@@ -1644,6 +1642,9 @@ var _HB = {
 
     var show = function() {
       HB.w.style.display = '';
+      // Next line is a Safari hack.  Couldn't find out why but sometimes safari
+      // wouldn't display the contents of the iframe, but toggling the display style fixes this
+      HB.e.siteElement.style.display = 'none'; HB.e.siteElement.style.display = '';
       if (HB.w.className.indexOf("hb_animated") > -1) { HB.animateIn(HB.w) };
     }
 
@@ -1677,7 +1678,10 @@ var _HB = {
       HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", show);
     }
     else {
-      // No view condition so show immediately
+      // No view condition so show immediately (very small delay for animated elements)
+      if (HB.w.className.indexOf("hb_animated") > -1)
+        setTimeout(show, 500);
+      else
       show();
     }
   },
