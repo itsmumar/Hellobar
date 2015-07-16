@@ -25,7 +25,7 @@ class SiteElement < ActiveRecord::Base
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES.keys }
   validates :rule, association_exists: true
   validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
-
+  validates :contact_list, association_exists: true, if: Proc.new { |s| s.element_subtype == "email" }
   validate :site_is_capable_of_creating_element, unless: :persisted?
 
   scope :paused, -> { where(paused: true) }
