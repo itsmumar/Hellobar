@@ -19,6 +19,12 @@ var HBQ = function()
   HB.isMobile = false;
   HB.widthCache = 0;
   HB.maxSliderSize = 380; /* IF CHANGED, UPDATE SLIDER ELEMENT CSS */
+  HB.id_type_map = {
+    "hellobar_bar": "bar",
+    "hellobar_modal": "modal",
+    "hellobar_slider": "slider",
+    "hellobar_takeover": "takeover"
+  }
 
   // Need to load the serialized cookies
   HB.loadCookies();
@@ -58,23 +64,13 @@ var HBQ = function()
       pusher: HB.$("#hellobar_pusher")
     };
 
-    if ( containerDocument ) {
-      if ( containerDocument.getElementById("hellobar_bar") !== null ) {
-        HB.e.siteElement = containerDocument.getElementById("hellobar_bar");
-        HB.e.siteElementType = "bar";
-      } else if ( containerDocument.getElementById("hellobar_modal") !== null ) {
-        HB.e.siteElement = containerDocument.getElementById("hellobar_modal");
-        HB.e.siteElementType = "modal";
-      } else if ( containerDocument.getElementById("hellobar_slider") !== null ) {
-        HB.e.siteElement = containerDocument.getElementById("hellobar_slider");
-        HB.e.siteElementType = "slider";
-      } else if ( containerDocument.getElementById("hellobar_takeover") !== null ) {
-        HB.e.siteElement = containerDocument.getElementById("hellobar_takeover");
-        HB.e.siteElementType = "takeover";
-      } else  {
-        HB.e.siteElement = false;
-        HB.e.siteElementType = false;
-      }
+    var foundElement = HB.getSiteElementDomNode();
+    if ( foundElement ) {
+      HB.e.siteElement = foundElement;
+      HB.e.siteElementType = HB.id_type_map[foundElement.id]
+    } else {
+      HB.e.siteElement = null;
+      HB.e.siteElementType = null;
     }
 
     // Monitor siteElement height to update HTML/CSS
@@ -169,6 +165,17 @@ var _HB = {
   t: function(value)
   {
     return (value && value != "false" && value != "0") ? true : false;
+  },
+
+  getSiteElementDomNode: function() {
+    if(HB.w && HB.w.contentDocument) {
+      for(var key in HB.id_type_map) {
+        var el = HB.w.contentDocument.getElementById(key);
+        if(el != undefined)
+          return el;
+      }
+    }
+    return null;
   },
 
   // Adds the CSS class to the target element
@@ -1644,7 +1651,12 @@ var _HB = {
       HB.w.style.display = '';
       // Next line is a Safari hack.  Couldn't find out why but sometimes safari
       // wouldn't display the contents of the iframe, but toggling the display style fixes this
-      HB.e.siteElement.style.display = 'none'; HB.e.siteElement.style.display = '';
+      var siteElementNode = HB.getSiteElementDomNode();
+      if(siteElementNode) {
+        siteElementNode.style.display = 'none';
+        siteElementNode.style.display = '';
+      }
+
       if (HB.w.className.indexOf("hb_animated") > -1) { HB.animateIn(HB.w) };
     }
 
