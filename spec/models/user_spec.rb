@@ -143,3 +143,13 @@ describe User, ".find_for_google_oauth2" do
     found.id.should == user.id
   end
 end
+
+describe User, "#disconnect_oauth" do
+  it "should remove oauth authentications when settings a password" do
+    user = User.create(email: "test@test.com", password: "123devdev", password_confirmation: "123devdev")
+    user.authentications.create(provider: "google_oauth2", uid: "abc123")
+    user = User.find user.id
+    user.update_attributes(password: "1234devdev", password_confirmation: "1234devdev")
+    user.authentications.count.should == 0
+  end
+end

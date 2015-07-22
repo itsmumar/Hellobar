@@ -26,7 +26,7 @@ class SitesController < ApplicationController
         redirect_to root_path
       else
         if params[:source] == "landing" && @site.url_exists?
-          redirect_to new_user_session_path(existing_url: @site.url)
+          redirect_to new_user_session_path(existing_url: @site.url, oauth: params[:oauth])
         elsif params[:oauth]
           session[:new_site_url] = @site.url
           redirect_to "/auth/google_oauth2"

@@ -87,5 +87,6 @@ Rails.application.routes.draw do
 
   get "/proxy/:scheme/*url", to: "proxy#proxy" if Rails.env.development?
 
+  get "/email-signup", to: "welcome#email_quickstart"
   root "welcome#index"
 end

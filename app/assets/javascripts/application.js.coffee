@@ -33,6 +33,7 @@
 #= require flash_message_initializer
 #= require install_check
 #= require tracking_events
+#= require user_edit
 #= require_self
 
 $ ->
