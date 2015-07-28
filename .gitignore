@@ -31,3 +31,5 @@ db/*_dump.sql
 
 # Ignore .DS_Store
 .DS_Store
+
+public/*_test.html
