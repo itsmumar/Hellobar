@@ -26,13 +26,14 @@ var HBQ = function()
     "hellobar_takeover": "takeover"
   }
 
+  // Need to load the serialized cookies
+  HB.loadCookies();
+
+  // Determine AD state
   HB.AD = HB.isAd();
   if (HB.AD) {
     HB_DNT = true;
   }
-
-  // Need to load the serialized cookies
-  HB.loadCookies();
 
   // Once initialized replace the existing data with it
   if ( typeof(_hbq) != "undefined" && _hbq && _hbq.length ) {
@@ -1833,7 +1834,10 @@ var _HB = {
   },
 
   isAd: function() {
-    return Math.random() >= 0.1 && !window.parent.HB.isPreviewMode;
+    var adFactor = 0.1; // 10% of the time, show an ad
+    return Math.random() >= (1 - adFactor) && 
+           !window.parent.HB.isPreviewMode &&
+           HB.getVisitorData('nv') > 0;
   },
 
   adifySiteElement: function(siteElement) {
