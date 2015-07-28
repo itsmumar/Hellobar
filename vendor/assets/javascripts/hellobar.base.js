@@ -1834,10 +1834,11 @@ var _HB = {
   },
 
   isAd: function() {
+    if (HB.CAP.no_in_bar_ads === true) return false;
+    if (window.parent.HB.isPreviewMode) return false;
+
     var adFactor = 0.1; // 10% of the time, show an ad
-    return Math.random() >= (1 - adFactor) && 
-           !window.parent.HB.isPreviewMode &&
-           HB.getVisitorData('nv') > 0;
+    return Math.random() >= (1 - adFactor) && HB.getVisitorData('nv') > 0;
   },
 
   adifySiteElement: function(siteElement) {

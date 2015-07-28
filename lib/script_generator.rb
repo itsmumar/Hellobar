@@ -50,7 +50,8 @@ class ScriptGenerator < Mustache
   def capabilities
     {
       no_b: @site.capabilities.remove_branding? || @options[:preview],
-      b_variation: get_branding_variation
+      b_variation: get_branding_variation,
+      no_in_bar_ads: !@site.show_in_bar_ads?
     }
   end
 

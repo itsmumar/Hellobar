@@ -286,6 +286,14 @@ class Site < ActiveRecord::Base
     update_attribute(:install_type, SiteDetector.new(url).site_type) unless Rails.env.test?
   end
 
+  def show_in_bar_ads?
+    if url =~ /iwillteachyoutoberich\.com/ || url =~ /lewishowes\.com/
+      false
+    else
+      is_free?
+    end
+  end
+
   private
 
   # Calculates a bill, but does not save or pay the bill. Used by
