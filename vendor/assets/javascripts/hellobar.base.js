@@ -26,6 +26,11 @@ var HBQ = function()
     "hellobar_takeover": "takeover"
   }
 
+  HB.AD = HB.isAd();
+  if (HB.AD) {
+    HB_DNT = true;
+  }
+
   // Need to load the serialized cookies
   HB.loadCookies();
 
@@ -1821,6 +1826,11 @@ var _HB = {
     var stored = HB.gc("b_template");
     return stored != null ? stored : HB.CAP.b_variation;
   }
+  },
+
+  isAd: function() {
+    return Math.random() >= 0.1 && !window.parent.HB.isPreviewMode;
+  },
 
 };
 
