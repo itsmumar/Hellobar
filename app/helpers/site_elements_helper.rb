@@ -67,7 +67,7 @@ module SiteElementsHelper
     "#{units[0]} <small>#{units[1].pluralize(units[0])} old</small>".html_safe
   end
 
-  def icon_class_for_element(element)
+  def type_icon_class_for_element(element)
     case element.element_subtype
     when "email"
       "icon-contacts"
@@ -77,6 +77,14 @@ module SiteElementsHelper
       "icon-social"
     when "traffic"
       "icon-clicks"
+    end
+  end
+
+  def style_icon_class_for_element(element)
+    if element.type.downcase == 'bar'
+      'icon-bar'
+    else
+      'icon-modal'
     end
   end
 

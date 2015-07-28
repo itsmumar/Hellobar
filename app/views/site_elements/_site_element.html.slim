@@ -5,9 +5,9 @@ tr.site-element-block class="type-#{site_element.short_subtype}" id="site_elemen
   td
     span.num= site_element_age(site_element)
   td
-    i class="#{icon_class_for_element(site_element)}"
+    i class="#{type_icon_class_for_element(site_element)}"
   td
-    i.icon-bar
+    i class="#{style_icon_class_for_element(site_element)}"
   td
     span.num= number_with_delimiter(site_element.total_views)
   td
