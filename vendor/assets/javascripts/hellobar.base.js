@@ -1838,7 +1838,7 @@ var _HB = {
     if (window.parent.HB.isPreviewMode) return false;
 
     var adFactor = 0.1; // 10% of the time, show an ad
-    return Math.random() >= (1 - adFactor) && HB.getVisitorData('nv') > 0;
+    return Math.random() >= (1 - adFactor);
   },
 
   adifySiteElement: function(siteElement) {
