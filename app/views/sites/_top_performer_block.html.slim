@@ -5,7 +5,7 @@ tr class="#{'more-top-performers' if index > 2} type-#{element.short_subtype}"
   td
     span.num= site_element_age(element)
   td
-    i class="site-element-type #{icon_class_for_element(element)}"
+    i class="site-element-type #{type_icon_class_for_element(element)}"
   td
     span.num= number_with_delimiter(element.total_views)
   td
