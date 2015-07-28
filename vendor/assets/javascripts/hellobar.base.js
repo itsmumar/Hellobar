@@ -824,8 +824,13 @@ var _HB = {
     // Call prerender
     siteElement.prerender();
 
+    // Adify if AD load
+    if (HB.AD) {
+      siteElement = HB.adifySiteElement(siteElement);
+    }
+
     HB.currentSiteElement = siteElement;
-    // Convenience accessors for commonl ussed attributes
+    // Convenience accessors for commonly used attributes
     HB.si = siteElement.id;
     HB.cli = siteElement.contact_list_id;
     // If there is a #nohb in the has we don't render anything
@@ -1825,13 +1830,52 @@ var _HB = {
   branding_template: function() {
     var stored = HB.gc("b_template");
     return stored != null ? stored : HB.CAP.b_variation;
-  }
   },
 
   isAd: function() {
     return Math.random() >= 0.1 && !window.parent.HB.isPreviewMode;
   },
 
+  adifySiteElement: function(siteElement) {
+    var hellobarColor = 'e8562a';
+    var elementType = siteElement['template_name'].split('_')[0];
+
+    // Force element subtype to 'traffic'
+    siteElement['template_name'] = elementType + "_traffic";
+
+    // Set colors for each type
+    siteElement['primary_color'] = hellobarColor;
+    siteElement['background_color'] = hellobarColor;
+    siteElement['text_color'] = 'fff';
+    siteElement['button_color'] = 'fff';
+    siteElement['font'] = "'Open Sans',sans-serif";
+
+    switch (elementType) {
+      case 'bar':
+        siteElement['secondary_color'] = 'fff';
+        siteElement['link_color'] = hellobarColor;
+        break;
+      default: // 'modal', 'slider', 'takeover'
+        siteElement['secondary_color'] = hellobarColor;
+        siteElement['link_color'] = 'fff';
+    }
+
+    var headlines = {
+      ad1: 'Convert more visitors into customers with Hello Bar.',
+      ad2: 'Increase your online sales with Hello Bar.',
+      ad3: 'All of the popular sites use Hello Bar, so why aren’t you?'
+    }
+    var headlineSegment = this.sample(Object.keys(headlines));
+    siteElement['headline'] = headlines[headlineSegment];
+    siteElement['link_text'] = 'Get Started';
+    siteElement.settings.url = "https://www.hellobar.com/?hbt=" + elementType + '_' + headlineSegment;
+
+    return siteElement;
+  },
+
+  sample: function(items) {
+    return items[ Math.floor(Math.random()*items.length) ];
+  }
 };
 
 
