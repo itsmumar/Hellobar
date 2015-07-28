@@ -287,10 +287,15 @@ class Site < ActiveRecord::Base
   end
 
   def show_in_bar_ads?
+    ad_factor = 0.25
+    ad_start_date = "2015-7-27".to_date
+    
     if url =~ /iwillteachyoutoberich\.com/ || url =~ /lewishowes\.com/
       false
     else
-      is_free?
+      is_free? && # is not upgraded
+        created_at.to_date > ad_start_date && # is after target date
+        id % (1 / ad_factor) == 0 # id is mod 4 (25% of sites)
     end
   end
 
