@@ -135,6 +135,13 @@ class ScriptGenerator < Mustache
       site.site_elements.active.each { |se| template_names << [se.class.name.downcase, se.element_subtype]}
     end
 
+    # Add traffic version of each template for ads
+    types = Set.new
+    template_names.each {|(type, subtype)| types << type }
+    types.each do |type|
+      template_names << [type, 'traffic']
+    end
+
     template_names.map do |name|
       {
         name: name.join('_'),
