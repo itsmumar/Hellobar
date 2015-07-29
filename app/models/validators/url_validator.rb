@@ -1,4 +1,4 @@
-class URLValidator < ActiveModel::EachValidator
+class UrlValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     record.errors.add(attribute, "can't be blank") unless value.present?
 
