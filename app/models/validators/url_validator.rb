@@ -1,4 +1,4 @@
-class UrlValidator < ActiveModel::EachValidator
+class URLValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     record.errors.add(attribute, "can't be blank") unless value.present?
 
@@ -11,3 +11,6 @@ class UrlValidator < ActiveModel::EachValidator
     record.errors.add(attribute, "is invalid")
   end
 end
+
+# Add an alias (diff versions of Rails/Ruby constantize this differently)
+class UrlValidator < URLValidator; end

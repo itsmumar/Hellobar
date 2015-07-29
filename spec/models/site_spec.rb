@@ -353,11 +353,12 @@ describe Site do
   end
 
   describe "#show_in_bar_ads?" do
+    let(:start_date) { Site.in_bar_ads_config[:start_date].to_date }
     context "ad factor 1.0" do
       let(:passing_site) do
         Site.new.tap do |passing_site|
           allow(passing_site).to receive(:is_free?).at_least(:once).and_return(true)
-          allow(passing_site).to receive(:created_at).at_least(:once).and_return(Site.in_bar_ads_config[:start_date] + 1.day)
+          allow(passing_site).to receive(:created_at).at_least(:once).and_return(start_date + 1.day)
           passing_site.url = "http://zombo.com"
         end
       end
@@ -375,7 +376,7 @@ describe Site do
         end
 
         it "if the bar was created before start_date" do
-          allow(passing_site).to receive(:created_at).at_least(:once).and_return(Site.in_bar_ads_config[:start_date] - 1.day)
+          allow(passing_site).to receive(:created_at).at_least(:once).and_return(start_date - 1.day)
           expect(passing_site.show_in_bar_ads?).to eq false
         end
 

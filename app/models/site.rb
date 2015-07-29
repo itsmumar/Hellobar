@@ -294,7 +294,7 @@ class Site < ActiveRecord::Base
   def self.in_bar_ads_config
     {
       show_to_fraction: (1.0/4.0),
-      start_date: "2015-07-27".to_date,
+      start_date: "2015-07-27",
       url_blacklist: ["iwillteachyoutoberich.com", "lewishowes.com"]
     }.merge(@in_bar_ads_config || {})
   end
@@ -309,7 +309,7 @@ class Site < ActiveRecord::Base
       false
     else
       is_free? && # is not upgraded
-        created_at.to_date >= ad_start_date && # is after target date
+        created_at.to_date >= ad_start_date.to_date && # is after target date
         ( (ad_fraction >= 1.0) || (id % (1 / ad_fraction) == 0) ) # id is mod fraction (fraction of sites)
     end
   end
