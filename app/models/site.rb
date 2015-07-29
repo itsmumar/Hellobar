@@ -286,6 +286,34 @@ class Site < ActiveRecord::Base
     update_attribute(:install_type, SiteDetector.new(url).site_type) unless Rails.env.test?
   end
 
+  def self.in_bar_ads_config=(config)
+    @in_bar_ads_config ||= {}
+    @in_bar_ads_config.merge!(config)
+  end
+
+  def self.in_bar_ads_config
+    {
+      show_to_fraction: (1.0/4.0),
+      start_date: "2015-07-27".to_date,
+      url_blacklist: ["iwillteachyoutoberich.com", "lewishowes.com"]
+    }.merge(@in_bar_ads_config || {})
+  end
+
+  def show_in_bar_ads?
+    config = self.class.in_bar_ads_config
+    ad_fraction     = config[:show_to_fraction]
+    ad_start_date   = config[:start_date]
+    ad_blacklist    = config[:url_blacklist]
+    
+    if ad_blacklist.any? {|b| url.include?(b) }
+      false
+    else
+      is_free? && # is not upgraded
+        created_at.to_date >= ad_start_date && # is after target date
+        ( (ad_fraction >= 1.0) || (id % (1 / ad_fraction) == 0) ) # id is mod fraction (fraction of sites)
+    end
+  end
+
   private
 
   # Calculates a bill, but does not save or pay the bill. Used by

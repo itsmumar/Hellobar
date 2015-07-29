@@ -50,7 +50,8 @@ class ScriptGenerator < Mustache
   def capabilities
     {
       no_b: @site.capabilities.remove_branding? || @options[:preview],
-      b_variation: get_branding_variation
+      b_variation: get_branding_variation,
+      no_in_bar_ads: !@site.show_in_bar_ads?
     }
   end
 
@@ -133,6 +134,13 @@ class ScriptGenerator < Mustache
       options[:templates].each { |t| template_names << t.split("_", 2) }
     else
       site.site_elements.active.each { |se| template_names << [se.class.name.downcase, se.element_subtype]}
+    end
+
+    # Add traffic version of each template for ads
+    types = Set.new
+    template_names.each {|(type, subtype)| types << type }
+    types.each do |type|
+      template_names << [type, 'traffic']
     end
 
     template_names.map do |name|

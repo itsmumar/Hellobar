@@ -23,5 +23,11 @@ module ServiceProviders
       list_url.gsub(/https?/, 'https')
               .gsub('add_contact_webform.html', "site/#{campaign_id}/webform.html") + "&wid=#{webform_id}" 
     end
+
+    def subscribe_params(email, name, double_optin = true)
+      super(email, name, double_optin).merge(
+        'type' => 'ajax'
+      )
+    end
   end
 end
