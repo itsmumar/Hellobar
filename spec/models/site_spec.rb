@@ -351,4 +351,54 @@ describe Site do
       se.reload.show_branding.should be_true
     end
   end
+
+  describe "#show_in_bar_ads?" do
+    context "ad factor 1.0" do
+      let(:passing_site) do
+        Site.new.tap do |passing_site|
+          allow(passing_site).to receive(:is_free?).at_least(:once).and_return(true)
+          allow(passing_site).to receive(:created_at).at_least(:once).and_return(Site.in_bar_ads_config[:start_date] + 1.day)
+          passing_site.url = "http://zombo.com"
+        end
+      end
+
+      before do
+        Site.in_bar_ads_config = {
+          show_to_fraction: 1.0 # show all bars to all people that pass the other restrictions
+        }
+      end
+
+      context "should not show" do
+        it "if the bar is not free" do
+          allow(passing_site).to receive(:is_free?).at_least(:once).and_return(false)
+          expect(passing_site.show_in_bar_ads?).to eq false
+        end
+
+        it "if the bar was created before start_date" do
+          allow(passing_site).to receive(:created_at).at_least(:once).and_return(Site.in_bar_ads_config[:start_date] - 1.day)
+          expect(passing_site.show_in_bar_ads?).to eq false
+        end
+
+        it "if the bar was created after start_date but is also not free" do
+          allow(passing_site).to receive(:is_free?).at_least(:once).and_return(false)
+          expect(passing_site.show_in_bar_ads?).to eq false
+        end
+
+        it "if the url is on blacklist" do
+          Site.in_bar_ads_config = {
+            url_blacklist: ["asdf.com"]
+          }
+          allow(passing_site).to receive(:url).at_least(:once).and_return("asdf.com")
+          expect(passing_site.show_in_bar_ads?).to eq false
+        end
+      end
+
+      context "should show" do
+        it "if the bar is free and the bar was created after start date" do
+          expect(Site.in_bar_ads_config[:show_to_fraction]).to eq 1.0
+          expect(passing_site.show_in_bar_ads?).to eq true
+        end
+      end
+    end
+  end
 end
