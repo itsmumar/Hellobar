@@ -294,7 +294,7 @@ class Site < ActiveRecord::Base
   def self.in_bar_ads_config
     {
       show_to_fraction: (1.0/4.0),
-      start_date: "2000-07-27".to_date,
+      start_date: "2015-07-27".to_date,
       url_blacklist: ["iwillteachyoutoberich.com", "lewishowes.com"]
     }.merge(@in_bar_ads_config || {})
   end
