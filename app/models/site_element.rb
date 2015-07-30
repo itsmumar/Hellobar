@@ -12,7 +12,8 @@ class SiteElement < ActiveRecord::Base
     "social/plus_one_on_google_plus"  => "+1's",
     "social/pin_on_pinterest"         => "Pins",
     "social/follow_on_pinterest"      => "Follows",
-    "social/share_on_buffer"          => "Shares"
+    "social/share_on_buffer"          => "Shares",
+    "social/share_on_linkedin"        => "Shares"
   }
 
   SHORT_SUBTYPES = %w{traffic email social announcement}
