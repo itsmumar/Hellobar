@@ -1834,10 +1834,9 @@ var _HB = {
   },
 
   isAd: function() {
-    if (HB.CAP.no_in_bar_ads === true) return false;
-    if (window.parent.HB.isPreviewMode) return false;
+    if (HB.CAP.preview) return false;
 
-    var adFactor = 0.1; // 10% of the time, show an ad
+    var adFactor = HB.CAP.in_bar_ad_fraction || 0.0 // Don't show an ad unless explictly defined in script
     return Math.random() >= (1 - adFactor);
   },
 
