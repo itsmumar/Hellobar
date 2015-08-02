@@ -356,8 +356,7 @@ describe Site do
     let(:start_date) { Site.in_bar_ads_config[:start_date].to_date }
     context "ad factor 1.0" do
       let(:passing_site) do
-        Site.new.tap do |passing_site|
-          allow(passing_site).to receive(:is_free?).at_least(:once).and_return(true)
+        sites(:free_site).tap do |passing_site|
           allow(passing_site).to receive(:created_at).at_least(:once).and_return(start_date + 1.day)
           passing_site.url = "http://zombo.com"
         end
@@ -365,6 +364,7 @@ describe Site do
 
       before do
         Site.in_bar_ads_config = {
+          test_fraction: 1.0,
           show_to_fraction: 1.0 # show all bars to all people that pass the other restrictions
         }
       end
