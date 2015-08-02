@@ -132,10 +132,6 @@ class User < ActiveRecord::Base
      authentications.size > 0
   end
 
-  def templatized_editor?
-    created_at.to_date > "2015-7-7".to_date
-  end
-
   private
 
   # Disconnect oauth logins if user sets their own password

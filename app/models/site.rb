@@ -305,7 +305,7 @@ class Site < ActiveRecord::Base
     test_fraction   = config[:test_fraction]
     ad_start_date   = config[:start_date]
     ad_blacklist    = config[:url_blacklist]
-    
+
     if ad_blacklist.any? {|b| url.include?(b) }
       false
     else
