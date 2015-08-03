@@ -1,6 +1,6 @@
 /*-----------  Bar Element  -----------*/
 
-#hellobar_bar {
+#hellobar-bar {
   width: 100%;
   margin: 0 0;
   height: 50px;
@@ -12,28 +12,28 @@
   -webkit-font-smoothing: antialiased;
 }
 
-#hellobar_bar .hb-logo-wrapper,
-#hellobar_bar .hb-content-wrapper,
-#hellobar_bar .hb-arrow-wrapper {
+#hellobar-bar .hb-logo-wrapper,
+#hellobar-bar .hb-content-wrapper,
+#hellobar-bar .hb-arrow-wrapper {
   display: table-cell;
   vertical-align: middle;
 }
 
 /*-----------  Main Content  -----------*/
 
-#hellobar_bar .hb-content-wrapper {
+#hellobar-bar .hb-content-wrapper {
   text-align: center;
 }
 
 /*-----------  Call to Acton Button  -----------*/
 
-#hellobar_bar .hb-cta {
+#hellobar-bar .hb-cta {
   display: inline-block;
   vertical-align: middle;
   margin: 5px 0;
 }
 
-#hellobar_bar .hb-cta-style-text {
+#hellobar-bar .hb-cta-style-text {
   color: #fff;
   padding: 6px 15px;
   padding-left: 5px;
@@ -42,7 +42,7 @@
   background: none !important;
 }
 
-#hellobar_bar .hb-cta-style-button {
+#hellobar-bar .hb-cta-style-button {
   margin: 0 0;
   line-height: 1.05;
   padding: 5px 15px;
@@ -50,57 +50,57 @@
 
 /*-----------  Social Styling  -----------*/
 
-#hellobar_bar .hb-social-wrapper {
+#hellobar-bar .hb-social-wrapper {
   margin: 0;
   line-height: 0;
   vertical-align: text-bottom;
 }
 
-#hellobar_bar .hb-social-wrapper.hb-google-wrapper {
+#hellobar-bar .hb-social-wrapper.hb-google-wrapper {
   vertical-align: middle;
 }
 
-#hellobar_bar .hb-social-wrapper #___follow_0,
-#hellobar_bar .hb-social-wrapper #___plusone_0 {
+#hellobar-bar .hb-social-wrapper #___follow_0,
+#hellobar-bar .hb-social-wrapper #___plusone_0 {
   display: inline-block !important;
 }
 
 /*-----------  Has Border  -----------*/
 
-#hellobar_bar.has_border {
+#hellobar-bar.has_border {
   border-bottom: 3px solid white;
 }
 
 /*-----------  Hide Arrow  -----------*/
 
-#hellobar_bar .hb-arrow-wrapper {
+#hellobar-bar .hb-arrow-wrapper {
   width: 8rem;
   text-align: right;
   padding-left: 1rem;
 }
 
-#hellobar_bar .hb-arrow-wrapper a {
+#hellobar-bar .hb-arrow-wrapper a {
   display: block;
 }
 
-#hellobar_bar .hb-arrow-wrapper .hb-arrow {
+#hellobar-bar .hb-arrow-wrapper .hb-arrow {
   width: 28px;
   height: 29px;
   opacity: 0.3;
 }
 
-#hellobar_bar .hb-arrow-wrapper .hb-arrow:hover {
+#hellobar-bar .hb-arrow-wrapper .hb-arrow:hover {
   opacity: 0.6;
 }
 
 /*-----------  Text  -----------*/
 
-#hellobar_bar .hb-text-wrapper {
+#hellobar-bar .hb-text-wrapper {
   margin-right: 0.67em;
   display: inline-block;
 }
 
-#hellobar_bar .hb-text-wrapper .hb-headline-text {
+#hellobar-bar .hb-text-wrapper .hb-headline-text {
   font-size: 1em;
   display: inline-block;
   vertical-align: middle;
@@ -108,21 +108,21 @@
 
 /*-----------  Inputs  -----------*/
 
-#hellobar_bar .hb-input-wrapper,
-#hellobar_bar .hb-input-wrapper .hb-input-block,
-#hellobar_bar .hb-input-wrapper .hb-cta {
+#hellobar-bar .hb-input-wrapper,
+#hellobar-bar .hb-input-wrapper .hb-input-block,
+#hellobar-bar .hb-input-wrapper .hb-cta {
   width: auto;
   display: inline-block;
 }
 
-#hellobar_bar .hb-input-wrapper .hb-input-block input {
+#hellobar-bar .hb-input-wrapper .hb-input-block input {
   height: 2.3em;
   font-size: 0.67em;
 }
 
 /*-----------  Logos  -----------*/
 
-#hellobar_bar .hb-logo-wrapper {
+#hellobar-bar .hb-logo-wrapper {
   width: 8rem;
   margin-top: 0;
   font-size: 12px;
@@ -131,28 +131,28 @@
   padding-right: 1rem;
 }
 
-#hellobar_bar .hb-logo-wrapper a {
+#hellobar-bar .hb-logo-wrapper a {
   color: #fff;
   display: block;
 }
 
-#hellobar_bar .hb-logo-wrapper svg {
+#hellobar-bar .hb-logo-wrapper svg {
   fill: #fff;
 }
 
-#hellobar_bar .hb-logo-wrapper .hb-logo-line {
+#hellobar-bar .hb-logo-wrapper .hb-logo-line {
   display: block;
 }
 
-#hellobar_bar .hb-logo-wrapper.hb-logo-inverted a {
+#hellobar-bar .hb-logo-wrapper.hb-logo-inverted a {
   color: #3C3E3F;
 }
 
-#hellobar_bar .hb-logo-wrapper.hb-logo-inverted svg {
+#hellobar-bar .hb-logo-wrapper.hb-logo-inverted svg {
   fill: #3C3E3F;
 }
 
-#hellobar_bar .hb-logo-wrapper.original svg, #hellobar_bar .hb-logo-wrapper.animated svg {
+#hellobar-bar .hb-logo-wrapper.original svg, #hellobar-bar .hb-logo-wrapper.animated svg {
   width: 4em;
   height: 2.6em;
   border-radius: 3px;
@@ -160,8 +160,8 @@
 
 /*-----------  State: Multiline  -----------*/
 
-/*#hellobar_bar.multiline .hb-text-wrapper,
-#hellobar_bar.multiline .hb-input-wrapper {
+/*#hellobar-bar.multiline .hb-text-wrapper,
+#hellobar-bar.multiline .hb-input-wrapper {
   display: block;
   max-width: 100%;
   text-align: center;
@@ -169,13 +169,13 @@
 
 /*-----------  State: Bottom  -----------*/
 
-#hellobar_bar.bar-bottom {
+#hellobar-bar.bar-bottom {
   top: auto;
   bottom: 0;
   position: absolute;
 }
 
-#hellobar_bar.bar-bottom .hb-arrow-wrapper .hb-arrow {
+#hellobar-bar.bar-bottom .hb-arrow-wrapper .hb-arrow {
   filter: flipv; /*IE*/
   transform: scaleY(-1);
   -o-transform: scaleY(-1);
@@ -187,54 +187,54 @@
 /*-----------  State: Mobile  -----------*/
 
 
-#hellobar_bar.mobile .hb-logo-wrapper,
-#hellobar_bar.mobile .hb-arrow-wrapper {
+#hellobar-bar.mobile .hb-logo-wrapper,
+#hellobar-bar.mobile .hb-arrow-wrapper {
   display: none;
 }
 
-#hellobar_bar.mobile .hb-input-wrapper .hb-input-block input {
+#hellobar-bar.mobile .hb-input-wrapper .hb-input-block input {
   display: block;
   margin: 0.25em auto;
 }
 
 /*-----------  Size: Regular  -----------*/
 
-#hellobar_bar.regular {
+#hellobar-bar.regular {
   height: 30px;
   font-size: 14px;
   padding: 0.2em 0.5em;
 }
 
-#hellobar_bar.regular .hb-logo-wrapper {
+#hellobar-bar.regular .hb-logo-wrapper {
   font-size: 9px;
 }
 
-#hellobar_bar.regular .hb-cta-style-button {
+#hellobar-bar.regular .hb-cta-style-button {
   padding: 3px 8px;
 }
 
-#hellobar_bar.regular .hb-social-wrapper {
+#hellobar-bar.regular .hb-social-wrapper {
   vertical-align: bottom;
 }
 
-#hellobar_bar.regular .hb-social-wrapper.hb-google-wrapper {
+#hellobar-bar.regular .hb-social-wrapper.hb-google-wrapper {
   height: 24px;
   margin: -1px 0;
   vertical-align: middle;
 }
 
-#hellobar_bar.regular .hb-input-wrapper .hb-input-block input {
+#hellobar-bar.regular .hb-input-wrapper .hb-input-block input {
   line-height: 195%;
 }
 
-#hellobar_bar.regular .hb-arrow-wrapper .hb-arrow {
+#hellobar-bar.regular .hb-arrow-wrapper .hb-arrow {
   width: 21px;
   height: 21px;
 }
 
 /*-----------  Animations: Button Wiggle  -----------*/
 
-#hellobar_bar .hb-cta.wiggle {
+#hellobar-bar .hb-cta.wiggle {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
   -moz-osx-font-smoothing: grayscale;
 
@@ -281,7 +281,7 @@
   -webkit-animation-play-state: running;
 }
 
-#hellobar_bar:hover .hb-cta.wiggle {
+#hellobar-bar:hover .hb-cta.wiggle {
   animation-play-state: paused;
   -o-animation-play-state: paused;
   -ms-animation-play-state: paused;

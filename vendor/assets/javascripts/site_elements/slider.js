@@ -9,5 +9,5 @@ SliderElement.prototype.constructor = SliderElement;
 SliderElement.prototype.setupIFrame = function(iframe){
   SiteElement.prototype.setupIFrame.call(this, iframe);
 
-  HB.addClass(iframe, this.placement)
+  HB.addClass(iframe, "hb-" + this.placement)
 };

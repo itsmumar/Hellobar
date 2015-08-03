@@ -113,10 +113,10 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
   togglePreview: ( () ->
     if @get('isSelecting')
       # Hide the preview frame for Modal and Takeovers so that they can select colors
-      $("#hellobar_container.Takeover, #hellobar_container.Modal").fadeOut()
+      $("#hellobar-container.HB-Takeover, #hellobar-container.HB-Modal").fadeOut()
     else
       # Show the Modal and Takeover in case it was hidden
-      $("#hellobar_container.Takeover, #hellobar_container.Modal").fadeIn()
+      $("#hellobar-container.HB-Takeover, #hellobar-container.HB-Modal").fadeIn()
   ).observes('isSelecting')
 
   #-----------  Component State Switching  -----------#

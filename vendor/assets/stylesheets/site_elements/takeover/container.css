@@ -1,4 +1,4 @@
-#hellobar_container.Takeover {
+#hellobar-container.HB-Takeover {
   top: 0;
   left: 0;
   width: 100%;
@@ -10,11 +10,11 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.Takeover.hb_animated {
+#hellobar-container.HB-Takeover.hb-animated {
   opacity: 0;
 }
 
-#hellobar_container.Takeover.animateIn {
+#hellobar-container.HB-Takeover.hb-animateIn {
   animation-name: fadeIn;
   -o-animation-name: fadeIn;
   -ms-animation-name: fadeIn;
@@ -22,7 +22,7 @@
   -webkit-animation-name: fadeIn;
 }
 
-#hellobar_container.Takeover.animateOut {
+#hellobar-container.HB-Takeover.hb-animateOut {
   animation-name: fadeOut;
   -o-animation-name: fadeOut;
   -ms-animation-name: fadeOut;

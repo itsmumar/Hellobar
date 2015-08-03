@@ -1,5 +1,4 @@
-iframe#hellobar_container,
-div#hellobar_pusher {
+iframe#hellobar-container,
+div#hellobar-pusher {
   display: none;
 }
-

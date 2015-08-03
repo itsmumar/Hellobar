@@ -1,4 +1,4 @@
-#hellobar_container {
+#hellobar-container {
   margin: 0;
   padding: 0;
   border: none;
@@ -9,7 +9,7 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.hb_animated, #pull-down.hb_animated {
+#hellobar-container.hb-animated, #pull-down.hb-animated {
   animation-duration: 0.25s;
   -o-animation-duration: 0.25s;
   -ms-animation-duration: 0.25s;

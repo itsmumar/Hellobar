@@ -1,6 +1,6 @@
 /*-----------  Takeover Element  -----------*/
 
-#hellobar_takeover {
+#hellobar-takeover {
   top: 0;
   left: 0;
   width: 100%;
@@ -10,7 +10,7 @@
   text-align: center;
 }
 
-#hellobar_takeover .hb-content-wrapper {
+#hellobar-takeover .hb-content-wrapper {
   top: 50%;
   left: 50%;
   width: 100%;
@@ -25,7 +25,7 @@
 
 /*-----------  Close Buttons  -----------*/
 
-#hellobar_takeover .icon-close {
+#hellobar-takeover .icon-close {
   font-size: 24px;
   top: 32px;
   right: 32px;
@@ -33,32 +33,32 @@
 
 /*-----------  Call to Acton Button  -----------*/
 
-#hellobar_takeover .hb-cta-style-button {
+#hellobar-takeover .hb-cta-style-button {
   padding: 12px 40px;
 }
 
 /*-----------  Inputs  -----------*/
 
-#hellobar_takeover .hb-input-wrapper {
+#hellobar-takeover .hb-input-wrapper {
   max-width: 22.5em;
   margin: 1.33em auto 0;
 }
 
-#hellobar_takeover .hb-input-wrapper .hb-input-block input {
+#hellobar-takeover .hb-input-wrapper .hb-input-block input {
   border-width: 2px;
 }
 
-#hellobar_takeover .hb-input-wrapper .hb-input-block + .hb-input-block {
+#hellobar-takeover .hb-input-wrapper .hb-input-block + .hb-input-block {
   margin-top: -2px;
 }
 
-#hellobar_takeover .hb-input-wrapper .hb-input-block input {
+#hellobar-takeover .hb-input-wrapper .hb-input-block input {
   border-width: 2px;
 }
 
 /*-----------  Logo  -----------*/
 
-#hellobar_takeover .hb-logo-wrapper{
+#hellobar-takeover .hb-logo-wrapper{
   bottom: 1em;
   left: 0;
   font-size: 14px;
@@ -67,42 +67,42 @@
   width: 100%;
 }
 
-#hellobar_takeover .hb-logo-wrapper.original, #hellobar_takeover .hb-logo-wrapper.animated {
+#hellobar-takeover .hb-logo-wrapper.original, #hellobar-takeover .hb-logo-wrapper.animated {
   opacity: 0.2;
 }
 
-#hellobar_takeover .hb-logo-wrapper.original:hover, #hellobar_takeover .hb-logo-wrapper.animated:hover {
+#hellobar-takeover .hb-logo-wrapper.original:hover, #hellobar-takeover .hb-logo-wrapper.animated:hover {
   opacity: 0.4;
 }
 
-#hellobar_takeover .hb-logo-wrapper.original svg, #hellobar_takeover .hb-logo-wrapper.animated svg {
+#hellobar-takeover .hb-logo-wrapper.original svg, #hellobar-takeover .hb-logo-wrapper.animated svg {
   width: 3em;
   height: 1.95em;
   border-radius: 3px;
 }
 
-#hellobar_takeover .hb-logo-wrapper {
+#hellobar-takeover .hb-logo-wrapper {
   text-transform: uppercase;
 }
 
 /*-----------  State: Mobile  -----------*/
 
-#hellobar_takeover.mobile {
+#hellobar-takeover.mobile {
   font-size: 16px;
 }
 
-#hellobar_takeover.mobile .hb-logo-wrapper a {
+#hellobar-takeover.mobile .hb-logo-wrapper a {
   font-size: 12px;
 }
 
 /*-----------  Old IE Fixes  -----------*/
 
-.hb-old-ie #hellobar_takeover {
+.hb-old-ie #hellobar-takeover {
   display: table;
   text-align: center;
 }
 
-.hb-old-ie #hellobar_takeover .hb-content-wrapper {
+.hb-old-ie #hellobar-takeover .hb-content-wrapper {
   top: 0;
   left: 0;
   margin: 0 auto;
@@ -112,14 +112,14 @@
   vertical-align: middle;
 }
 
-.hb-old-ie #hellobar_takeover .hb-logo-wrapper {
+.hb-old-ie #hellobar-takeover .hb-logo-wrapper {
   left: 0;
   right: 0;
   bottom: 1em;
   position: absolute;
 }
 
-.hb-old-ie #hellobar_takeover .hb-logo-wrapper a {
+.hb-old-ie #hellobar-takeover .hb-logo-wrapper a {
   left: 0;
   bottom: 0;
   margin: 0 auto;
@@ -128,6 +128,6 @@
   position: relative;
 }
 
-.hb-old-ie #hellobar_takeover .hb-logo-wrapper a .hb-logo-line {
+.hb-old-ie #hellobar-takeover .hb-logo-wrapper a .hb-logo-line {
   display: block;
 }
