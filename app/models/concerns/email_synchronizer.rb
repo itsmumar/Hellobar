@@ -30,8 +30,15 @@ module EmailSynchronizer
     perform_sync do
       contacts = Hello::DataAPI.get_contacts(self) || []
       contacts.in_groups_of(1000, false).each do |group|
-        group = group.map{ |g| {:email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2]} }
-        batch_subscribe(data["remote_id"], group, double_optin)
+        if oauth?
+          group = group.map{ |g| {:email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2]} }
+          batch_subscribe(data["remote_id"], group, double_optin)
+        else
+          group.each do |g|
+            params = subscribe_params(g[0], g[1], double_optin)
+            HTTParty.post(action_url, body: params)
+          end
+        end
       end
     end
   end

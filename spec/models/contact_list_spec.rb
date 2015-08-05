@@ -83,6 +83,7 @@ describe ContactList do
 
   it "should run email sync_all! correctly" do
     contact_list.identity.provider = 'mailchimp'
+    contact_list.stub(:oauth?).and_return(true)
     contact_list.save!
     contact_list.stub(:syncable? => true)
 
@@ -247,6 +248,7 @@ describe ContactList do
     it "drops nil values in data" do
       contact_list.data = { "remote_name" => "", "remote_id" => 1}
       contact_list.identity = nil
+      contact_list.stub(:sync_all!).and_return(true)
       contact_list.save
       contact_list.data['remote_name'].should be_nil
     end
