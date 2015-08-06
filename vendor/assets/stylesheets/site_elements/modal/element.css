@@ -1,6 +1,6 @@
 /*-----------  Modal Element  -----------*/
 
-#hellobar_modal {
+#hellobar-modal {
   left: 50%;
   padding: 48px;
   position: fixed;
@@ -17,7 +17,7 @@
 
 /*-----------  Modal Background  -----------*/
 
-#hellobar_modal_background {
+#hellobar-modal-background {
   top: 0px;
   left: 0px;
   width: 100%;
@@ -29,43 +29,43 @@
 
 /*-----------  Text  -----------*/
 
-#hellobar_modal .hb-text-wrapper .hb-secondary-text {
+#hellobar-modal .hb-text-wrapper .hb-secondary-text {
   margin-top: 8px;
 }
 
 /*-----------  Logos  -----------*/
 
-#hellobar_modal .hb-logo-wrapper {
+#hellobar-modal .hb-logo-wrapper {
   margin-top: 2.75em;
   margin-bottom: -2.5em;
   font-size: 0.75em;
 }
 
-#hellobar_modal .hb-logo-wrapper.original, #hellobar_modal .hb-logo-wrapper.animated {
+#hellobar-modal .hb-logo-wrapper.original, #hellobar-modal .hb-logo-wrapper.animated {
   opacity: 0.2;
 }
 
-#hellobar_modal .hb-logo-wrapper.original:hover, #hellobar_modal .hb-logo-wrapper.animated:hover {
+#hellobar-modal .hb-logo-wrapper.original:hover, #hellobar-modal .hb-logo-wrapper.animated:hover {
   opacity: 0.4;
 }
 
-#hellobar_modal .hb-logo-wrapper.original svg, #hellobar_modal .hb-logo-wrapper.animated svg {
+#hellobar-modal .hb-logo-wrapper.original svg, #hellobar-modal .hb-logo-wrapper.animated svg {
   width: 3em;
   height: 1.95em;
   border-radius: 3px;
 }
 
-#hellobar_modal .hb-logo-wrapper {
+#hellobar-modal .hb-logo-wrapper {
   text-transform: uppercase;
 }
 
 /*-----------  Positions  -----------*/
 
-#hellobar_modal.top {
+#hellobar-modal.top {
   top: 5%;
 }
 
-#hellobar_modal.middle {
+#hellobar-modal.middle {
   top: 50%;
   transform: translate(-50%, -50%);
   -o-transform: translate(-50%, -50%);
@@ -76,37 +76,37 @@
 
 /*-----------  Close Buttons  -----------*/
 
-#hellobar_modal .icon-close {
+#hellobar-modal .icon-close {
   font-size: 12px;
 }
 
 /*-----------  Inputs  -----------*/
 
-#hellobar_modal .hb-input-wrapper {
+#hellobar-modal .hb-input-wrapper {
   max-width: 22.5em;
   margin: 1.33em auto 0;
 }
 
-#hellobar_modal .hb-input-wrapper .hb-cta {
+#hellobar-modal .hb-input-wrapper .hb-cta {
   margin-top: 15px;
 }
 
-#hellobar_modal .hb-cta-style-button {
+#hellobar-modal .hb-cta-style-button {
   padding: 8px 20px;
 }
 
-#hellobar_modal .hb-input-wrapper .hb-input-block input {
+#hellobar-modal .hb-input-wrapper .hb-input-block input {
   height: 35px;
   font-size: 13px;
 }
 
 /*-----------  State: Mobile  -----------*/
 
-#hellobar_modal.mobile {
+#hellobar-modal.mobile {
   width: 88%;
   padding: 3em 1.25em 1.25em;
 }
 
-#hellobar_modal.mobile .hb-logo-wrapper {
+#hellobar-modal.mobile .hb-logo-wrapper {
   margin: 2em auto 0;
 }

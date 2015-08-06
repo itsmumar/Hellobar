@@ -1,4 +1,4 @@
-#hellobar_container.Modal {
+#hellobar-container.HB-Modal {
   top: 0;
   left: 0;
   position: fixed;
@@ -10,13 +10,13 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.Modal.hb_animated {
+#hellobar-container.HB-Modal.hb-animated {
   opacity: 0;
   height: 110%;
   margin-top: -5%;
 }
 
-#hellobar_container.Modal.animateIn {
+#hellobar-container.HB-Modal.hb-animateIn {
   animation-name: fadeInDown;
   -o-animation-name: fadeInDown;
   -ms-animation-name: fadeInDown;
@@ -24,7 +24,7 @@
   -webkit-animation-name: fadeInDown;
 }
 
-#hellobar_container.Modal.animateOut {
+#hellobar-container.HB-Modal.hb-animateOut {
   animation-name: fadeOutUp;
   -o-animation-name: fadeOutUp;
   -ms-animation-name: fadeOutUp;

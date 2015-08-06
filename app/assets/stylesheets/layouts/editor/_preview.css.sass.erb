@@ -24,11 +24,11 @@
         z-index: 10
         position: relative
 
-      #hellobar_container
+      #hellobar-container
         width: 100%
         position: absolute
 
-      #hellobar_pusher
+      #hellobar-pusher
         display: none !important
 
       .preview-wrapper
@@ -77,7 +77,7 @@
         canvas
           margin-top: -12px
 
-        #hellobar_container:not(.bar-bottom)
+        #hellobar-container:not(.hb-bar-bottom)
           position: relative !important
 
         &.bar-top
@@ -96,7 +96,7 @@
           &.large .preview-image
             border-bottom-width: 49px
 
-      #hellobar_container.bar-bottom
+      #hellobar-container.bar-bottom
         bottom: -1px
         position: absolute
         @include transition()
@@ -108,7 +108,7 @@
 
   &.is-fullscreen
 
-    #hellobar_container.bar-bottom
+    #hellobar-container.bar-bottom
       padding-left: 58px !important
 
   /*-----------  Mobile State  -----------*/
@@ -132,10 +132,9 @@
       border: 1px solid $grayLight
       @include vertical-align()
 
-      #hellobar_container.bar-bottom
+      #hellobar-container.hb-bar-bottom
         padding-left: 0 !important
         position: absolute !important
 
       &.is-pushed.Bar.bar-top .preview-image
         top: -12px !important
-

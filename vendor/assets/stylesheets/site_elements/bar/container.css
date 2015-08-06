@@ -1,4 +1,4 @@
-#hellobar_container.Bar {
+#hellobar-container.HB-Bar {
   top: 0;
   left: 0;
   width: 100%;
@@ -6,20 +6,20 @@
   max-height: 40px; /* This gets overridden by the js */
 }
 
-#hellobar_container.Bar.large {
+#hellobar-container.HB_Bar.hb-large {
   min-height: 50px;
   max-height: 50px; /* This gets overridden by the js */
 }
 
 /*-----------  Spacing Pusher  -----------*/
 
-#hellobar_pusher {
+#hellobar-pusher {
   height: 30px;
   overflow: hidden;
   position: relative;
 }
 
-#hellobar_pusher.large {
+#hellobar-pusher.hb-large {
   height: 50px;
 }
 
@@ -43,7 +43,7 @@
   -webkit-transform: translateY(-40px);
 }
 
-.hellobar#pull-down .hellobar_arrow {
+.hellobar#pull-down .hellobar-arrow {
   opacity: 0.3;
   cursor: pointer;
 
@@ -56,19 +56,19 @@
   background-image: url("https://s3.amazonaws.com/hb-assets/arrow_white.png");
 }
 
-.hellobar#pull-down.regular .hellobar_arrow {
+.hellobar#pull-down.hb-regular .hellobar-arrow {
   width: 21px;
   height: 21px;
   background-size: 21px 21px;
 }
 
-.hellobar#pull-down.large .hellobar_arrow {
+.hellobar#pull-down.hb-large .hellobar-arrow {
   width: 28px;
   height: 28px;
   background-size: 28px 28px;
 }
 
-.hellobar#pull-down.bar-bottom {
+.hellobar#pull-down.hb-bar-bottom {
   top: auto;
   bottom: -4px;
   position: fixed;
@@ -81,7 +81,7 @@
   -webkit-transform: translateY(40px);
 }
 
-.hellobar#pull-down.bar-bottom .hellobar_arrow {
+.hellobar#pull-down.hb-bar-bottom .hellobar-arrow {
   filter: none;
   transform: none;
   -o-transform: none;
@@ -92,7 +92,7 @@
 
 /*-----------  State: Sticky  -----------*/
 
-#hellobar_container.Bar.remains_in_place {
+#hellobar-container.HB-Bar.remains-in-place {
   top: 0;
   position: fixed;
   _position: absolute;
@@ -101,7 +101,7 @@
 
 /*-----------  State: Bottom  -----------*/
 
-#hellobar_container.Bar.bar-bottom {
+#hellobar-container.HB-Bar.hb-bar-bottom {
   top: auto;
   bottom: 0;
   position: fixed;
@@ -111,8 +111,8 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar_container.Bar.hb_animated,
-.hellobar#pull-down.hb_animated {
+#hellobar-container.HB-Bar.hb-animated,
+.hellobar#pull-down.hb-animated {
   animation-duration: 1s;
   -o-animation-duration: 1s;
   -ms-animation-duration: 1s;
@@ -120,8 +120,8 @@
   -webkit-animation-duration: 1s;
 }
 
-#hellobar_container.Bar.animateIn,
-.hellobar#pull-down.animateIn {
+#hellobar-container.HB-Bar.hb-animateIn,
+.hellobar#pull-down.hb-animateIn {
   animation-name: bounceInDown;
   -o-animation-name: bounceInDown;
   -ms-animation-name: bounceInDown;
@@ -129,8 +129,8 @@
   -webkit-animation-name: bounceInDown;
 }
 
-#hellobar_container.Bar.animateOut,
-.hellobar#pull-down.animateOut {
+#hellobar-container.HB-Bar.hb-animateOut,
+.hellobar#pull-down.hb-animateOut {
   animation-name: bounceOutUp;
   -o-animation-name: bounceOutUp;
   -ms-animation-name: bounceOutUp;
@@ -140,8 +140,8 @@
 
 /*-----------  Animations (Bottom)  -----------*/
 
-#hellobar_container.Bar.hb_animated.bar-bottom,
-.hellobar#pull-down.hb_animated.bar-bottom {
+#hellobar-container.HB-Bar.hb-animated.hb-bar-bottom,
+.hellobar#pull-down.hb-animated.hb-bar-bottom {
   animation-duration: 1s;
   -o-animation-duration: 1s;
   -ms-animation-duration: 1s;
@@ -149,8 +149,8 @@
   -webkit-animation-duration: 1s;
 }
 
-#hellobar_container.Bar.animateIn.bar-bottom,
-.hellobar#pull-down.animateIn.bar-bottom {
+#hellobar-container.HB-Bar.hb-animateIn.hb-bar-bottom,
+.hellobar#pull-down.hb-animateIn.hb-bar-bottom {
   animation-name: bounceInUp;
   -o-animation-name: bounceInUp;
   -ms-animation-name: bounceInUp;
@@ -158,8 +158,8 @@
   -webkit-animation-name: bounceInUp;
 }
 
-#hellobar_container.Bar.animateOut.bar-bottom,
-.hellobar#pull-down.animateOut.bar-bottom {
+#hellobar-container.HB-Bar.hb-animateOut.hb-bar-bottom,
+.hellobar#pull-down.hb-animateOut.hb-bar-bottom {
   animation-name: bounceOutDown;
   -o-animation-name: bounceOutDown;
   -ms-animation-name: bounceOutDown;

@@ -50,10 +50,10 @@ html, body {
 
 /*-----------  Elements  -----------*/
 
-#hellobar_bar,
-#hellobar_modal,
-#hellobar_slider,
-#hellobar_takeover {
+#hellobar-bar,
+#hellobar-modal,
+#hellobar-slider,
+#hellobar-takeover {
   width: 100%;
   color: #5c5e60;
   position: relative;
@@ -61,38 +61,38 @@ html, body {
   box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.15);
 }
 
-#hellobar_modal,
-#hellobar_slider {
+#hellobar-modal,
+#hellobar-slider {
   border-radius: 2px;
 }
 
 /*-----------  Colored Header  -----------*/
 
-#hellobar_modal .hb-header,
-#hellobar_slider .hb-header,
-#hellobar_takeover .hb-header {
+#hellobar-modal .hb-header,
+#hellobar-slider .hb-header,
+#hellobar-takeover .hb-header {
   width: 100%;
   height: 7px;
 }
 
-#hellobar_modal .hb-header,
-#hellobar_takeover .hb-header {
+#hellobar-modal .hb-header,
+#hellobar-takeover .hb-header {
   top: 0;
   left: 0;
   position: absolute;
 }
 
-#hellobar_modal .hb-header,
-#hellobar_slider .hb-header {
+#hellobar-modal .hb-header,
+#hellobar-slider .hb-header {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
 
 /*-----------  Close Buttons  -----------*/
 
-#hellobar_modal .icon-close,
-#hellobar_slider .icon-close,
-#hellobar_takeover .icon-close {
+#hellobar-modal .icon-close,
+#hellobar-slider .icon-close,
+#hellobar-takeover .icon-close {
   top: 15px;
   right: 10px;
   width: 15px;
@@ -111,14 +111,14 @@ html, body {
   -webkit-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
 }
 
-#hellobar_modal .icon-close:hover,
-#hellobar_slider .icon-close:hover,
-#hellobar_takeover .icon-close:hover {
+#hellobar-modal .icon-close:hover,
+#hellobar-slider .icon-close:hover,
+#hellobar-takeover .icon-close:hover {
   opacity: 0.4;
 }
 
-#hellobar_modal .icon-close,
-#hellobar_slider .icon-close {
+#hellobar-modal .icon-close,
+#hellobar-slider .icon-close {
   top: 15px;
   right: 10px;
 }

@@ -20,10 +20,10 @@ var HBQ = function()
   HB.widthCache = 0;
   HB.maxSliderSize = 380; /* IF CHANGED, UPDATE SLIDER ELEMENT CSS */
   HB.id_type_map = {
-    "hellobar_bar": "bar",
-    "hellobar_modal": "modal",
-    "hellobar_slider": "slider",
-    "hellobar_takeover": "takeover"
+    "hellobar-bar": "bar",
+    "hellobar-modal": "modal",
+    "hellobar-slider": "slider",
+    "hellobar-takeover": "takeover"
   }
 
   // Need to load the serialized cookies
@@ -59,15 +59,15 @@ var HBQ = function()
   HB.isMobileWidth = false;
   var mobileDeviceInterval = setInterval(function(){
     // Get the frame
-    var frame = window.frames["hellobar_container"];
+    var frame = window.frames["hellobar-container"];
     if ( !frame )
       return;
 
     // Get the relevant elements that might need checking/adjusting
     var containerDocument = frame.document;
     HB.e = {
-      container: HB.$("#hellobar_container"),
-      pusher: HB.$("#hellobar_pusher")
+      container: HB.$("#hellobar-container"),
+      pusher: HB.$("#hellobar-pusher")
     };
 
     var foundElement = HB.getSiteElementDomNode();
@@ -87,7 +87,7 @@ var HBQ = function()
         var wasMobile = HB.isMobileWidth;
 
         if ( HB.e.siteElementType == "modal" && containerDocument )
-          HB.isMobileWidth = (containerDocument.getElementById("hellobar_modal_background").clientWidth <= 640 );
+          HB.isMobileWidth = (containerDocument.getElementById("hellobar-modal-background").clientWidth <= 640 );
         else if ( HB.e.siteElementType == "slider" )
           HB.isMobileWidth = HB.e.siteElement.clientWidth <= 270 || document.body.clientWidth <= 375 || document.body.clientWidth < HB.e.siteElement.clientWidth;
         else
@@ -931,9 +931,9 @@ var _HB = {
     // Create the iframe container
     HB.w = document.createElement("iframe");
     HB.w.src = "about:blank";
-    HB.w.id = "hellobar_container";
-    HB.w.className = siteElement.type;
-    HB.w.name = "hellobar_container";
+    HB.w.id = "hellobar-container";
+    HB.w.className = "HB-" + siteElement.type;
+    HB.w.name = "hellobar-container";
     HB.w.style.display = 'none'; // Start all site elements as hidden
 
     siteElement.setupIFrame(HB.w)
@@ -1425,9 +1425,9 @@ var _HB = {
   animateIn: function(element, time){
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
-      element.classList.remove("animateOut");
-      element.classList.add("hb_animated");
-      element.classList.add("animateIn");
+      element.classList.remove("hb-animateOut");
+      element.classList.add("hb-animated");
+      element.classList.add("hb-animateIn");
     } // else just unhide
     else {
       element.style.display = "";
@@ -1437,24 +1437,13 @@ var _HB = {
   animateOut: function(element, callback){
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
-      element.classList.remove("animateIn");
-      element.classList.add("hb_animated");
-      element.classList.add("animateOut");
+      element.classList.remove("hb-animateIn");
+      element.classList.add("hb-animated");
+      element.classList.add("hb-animateOut");
     } // else just hide
     else {
       element.style.display = "none";
     }
-
-    // Makes Iframe small after hiding in order to allow click events.
-    hideIframe = window.setTimeout(function(){
-      var classes = element.getAttribute('class');
-      if (classes != null && classes.indexOf('Bar') > -1 && element.id != "pull-down"){
-        element.setAttribute('style','height:0px;max-height:0px');
-      }
-      if(typeof(callback) == 'function') {
-        callback();
-      }
-    }, 250);
   },
 
   closeIframe: function() {
@@ -1471,11 +1460,11 @@ var _HB = {
   wiggleEventListeners: function(element){
     $(element)
       .on('mouseenter', '#hellobar', function(){
-        $('#hellobar').find('.hellobar_cta').removeClass('wiggle');
+        $('#hellobar').find('.hellobar-cta').removeClass('wiggle');
       })
       .on('mouseleave', '#hellobar', function(){
         setTimeout( function(){
-          $('#hellobar').find('.hellobar_cta').addClass('wiggle');
+          $('#hellobar').find('.hellobar-cta').addClass('wiggle');
         }, 2500);
       });
   },
@@ -1486,12 +1475,12 @@ var _HB = {
     // Create the pull down elements
     if(siteElement.closable) {
       var pullDown = document.createElement("div");
-      pullDown.className = siteElement.size + " hellobar " + siteElement.placement;
+      pullDown.className = "hb-" + siteElement.size + " hellobar " + "hb-" + siteElement.placement;
       pullDown.id = "pull-down";
 
       pullDown.style.backgroundColor = "#" + siteElement.background_color;
       var pdLink = document.createElement("div");
-      pdLink.className = "hellobar_arrow";
+      pdLink.className = "hellobar-arrow";
       pdLink.onclick = function() {
         HB.animateIn(HB.w);
         HB.animateOut(document.getElementById("pull-down"));
@@ -1668,7 +1657,7 @@ var _HB = {
         siteElementNode.style.display = '';
       }
 
-      if (HB.w.className.indexOf("hb_animated") > -1) { HB.animateIn(HB.w) };
+      if (HB.w.className.indexOf("hb-animated") > -1) { HB.animateIn(HB.w) };
     }
 
     if (viewCondition === 'wait-5')
@@ -1702,7 +1691,7 @@ var _HB = {
     }
     else {
       // No view condition so show immediately (very small delay for animated elements)
-      if (HB.w.className.indexOf("hb_animated") > -1)
+      if (HB.w.className.indexOf("hb-animated") > -1)
         setTimeout(show, 500);
       else
       show();
