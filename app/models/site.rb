@@ -293,9 +293,8 @@ class Site < ActiveRecord::Base
 
   def self.in_bar_ads_config
     {
-      test_fraction: (1.0/4.0),
       show_to_fraction: 0.1,
-      start_date: "2015-07-27",
+      test_fraction: (1.0/4.0),
       url_blacklist: ["iwillteachyoutoberich.com", "lewishowes.com"]
     }.merge(@in_bar_ads_config || {})
   end
@@ -303,16 +302,19 @@ class Site < ActiveRecord::Base
   def show_in_bar_ads?
     config = self.class.in_bar_ads_config
     test_fraction   = config[:test_fraction]
-    ad_start_date   = config[:start_date]
     ad_blacklist    = config[:url_blacklist]
+    site_ids        = config[:site_ids]
 
-    if ad_blacklist.any? {|b| url.include?(b) }
-      false
-    else
-      is_free? && # is not upgraded
-        created_at.to_date >= ad_start_date.to_date && # is after target date
-        ( (test_fraction >= 1.0) || (id % (1 / test_fraction) == 0) ) # id is mod fraction (fraction of sites)
+    if ad_blacklist.none? {|b| url.include?(b) }
+      if is_free?
+        if site_ids.nil?
+          return (test_fraction >= 1.0) || (id % (1 / test_fraction) == 0)
+        else
+          return site_ids.include?(id)
+        end
+      end
     end
+    false
   end
 
   private

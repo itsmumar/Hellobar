@@ -353,11 +353,9 @@ describe Site do
   end
 
   describe "#show_in_bar_ads?" do
-    let(:start_date) { Site.in_bar_ads_config[:start_date].to_date }
     context "ad factor 1.0" do
       let(:passing_site) do
         sites(:free_site).tap do |passing_site|
-          allow(passing_site).to receive(:created_at).at_least(:once).and_return(start_date + 1.day)
           passing_site.url = "http://zombo.com"
         end
       end
@@ -375,16 +373,6 @@ describe Site do
           expect(passing_site.show_in_bar_ads?).to eq false
         end
 
-        it "if the bar was created before start_date" do
-          allow(passing_site).to receive(:created_at).at_least(:once).and_return(start_date - 1.day)
-          expect(passing_site.show_in_bar_ads?).to eq false
-        end
-
-        it "if the bar was created after start_date but is also not free" do
-          allow(passing_site).to receive(:is_free?).at_least(:once).and_return(false)
-          expect(passing_site.show_in_bar_ads?).to eq false
-        end
-
         it "if the url is on blacklist" do
           Site.in_bar_ads_config = {
             url_blacklist: ["asdf.com"]
@@ -392,12 +380,28 @@ describe Site do
           allow(passing_site).to receive(:url).at_least(:once).and_return("asdf.com")
           expect(passing_site.show_in_bar_ads?).to eq false
         end
+
+        it "if the url is not in the white listed site ids" do
+          Site.in_bar_ads_config = {
+            site_ids: [passing_site.id + 1]
+          }
+          expect(passing_site.show_in_bar_ads?).to eq false
+          Site.in_bar_ads_config = {site_ids: nil} # Reset
+        end
       end
 
       context "should show" do
-        it "if the bar is free and the bar was created after start date" do
+        it "if the bar is free" do
           expect(Site.in_bar_ads_config[:show_to_fraction]).to eq 1.0
           expect(passing_site.show_in_bar_ads?).to eq true
+        end
+
+        it "if the bar is in the white listed ids" do
+          Site.in_bar_ads_config = {
+            site_ids: [passing_site.id]
+          }
+          expect(passing_site.show_in_bar_ads?).to eq true
+          Site.in_bar_ads_config = {site_ids: nil} # Reset
         end
       end
     end
