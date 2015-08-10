@@ -736,8 +736,13 @@ var _HB = {
   // with the matching symbol
   sanitize: function(siteElement){
     for (var k in siteElement){
-      if (siteElement.hasOwnProperty(k) && siteElement[k] && siteElement[k].replace)
-        siteElement[k] = siteElement[k].replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      if (siteElement.hasOwnProperty(k) && siteElement[k]) {
+        if (siteElement[k].replace) {
+          siteElement[k] = siteElement[k].replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g, '&quot;');
+        } else if(!Array.isArray(siteElement[k])) {
+          siteElement[k] = HB.sanitize(siteElement[k]);
+        }
+      }
     }
     return siteElement;
   },
