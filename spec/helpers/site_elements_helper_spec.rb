@@ -118,6 +118,16 @@ describe SiteElementsHelper do
       recent_activity_message(element).should =~ /converting 400\.0% better than your other social bars/
     end
 
+    it "doesn't show a percentage when comparing against other bars with no conversions" do
+      element = site_elements(:zombo_twitter)
+      Hello::DataAPI.stub(:lifetime_totals => {
+        element.id.to_s => Hello::DataAPI::Performance.new([[10, 5]]),
+        site_elements(:zombo_facebook).id.to_s => Hello::DataAPI::Performance.new([[10, 0]])
+      })
+
+      recent_activity_message(element).should =~ /converting better than your other social bars/
+    end
+
     it "doesnt return the conversion rate when it is Infinite" do
       element = site_elements(:zombo_twitter)
       Hello::DataAPI.stub(:lifetime_totals => {

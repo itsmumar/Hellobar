@@ -122,16 +122,18 @@ module SiteElementsHelper
       conversion_rate = conversions * 1.0 / views
       group_conversion_rate = group_conversions * 1.0 / group_views
 
-      # dont provide life number when lift is infinite
+      # dont provide lift number when lift is infinite
       unless [group_conversion_rate, conversion_rate].any?(&:infinite?)
         message << " Currently this bar is converting"
 
         if conversion_rate > group_conversion_rate
           lift = (conversion_rate - group_conversion_rate) / group_conversion_rate
-          message << " #{number_to_percentage(lift * 100, :precision => 1)} better than"
+          message << " #{number_to_percentage(lift * 100, :precision => 1)}" unless lift.infinite?
+          message << " better than"
         elsif group_conversion_rate > conversion_rate
           lift = (group_conversion_rate - conversion_rate) / conversion_rate
-          message << " #{number_to_percentage(lift * 100, :precision => 1)} worse than"
+          message << " #{number_to_percentage(lift * 100, :precision => 1)}" unless lift.infinite?
+          message << " worse than"
         else
           message << " exactly as well as"
         end
