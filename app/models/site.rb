@@ -307,10 +307,10 @@ class Site < ActiveRecord::Base
 
     if ad_blacklist.none? {|b| url.include?(b) }
       if is_free?
-        if site_ids.nil?
-          return (test_fraction >= 1.0) || (id % (1 / test_fraction) == 0)
-        else
+        if site_ids
           return site_ids.include?(id)
+        elsif !Rails.env.production?
+          return (test_fraction >= 1.0) || (id % (1 / test_fraction) == 0)
         end
       end
     end
