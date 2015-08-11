@@ -1449,6 +1449,18 @@ var _HB = {
     else {
       element.style.display = "none";
     }
+
+    // if the element that was slid out was a bar, then make the iframe small
+    // to ensure it doesn't still cover the page.
+    window.setTimeout(function(){
+      var classes = element.getAttribute('class');
+      if (classes != null && classes.indexOf('HB-Bar') > -1 && element.id != "pull-down"){
+        element.setAttribute('style','height:0px;max-height:0px');
+      }
+      if(typeof(callback) == 'function') {
+        callback();
+      }
+    }, 250);
   },
 
   closeIframe: function() {
