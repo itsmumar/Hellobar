@@ -225,7 +225,6 @@ ActiveRecord::Schema.define(version: 20150701162052) do
     t.boolean  "wiggle_button",                   default: false
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
-    t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
     t.string   "view_condition",                  default: "immidiately"
