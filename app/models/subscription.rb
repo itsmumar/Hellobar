@@ -86,6 +86,10 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def after_submit_redirect?
+      false
+    end
+
     def max_suggestions
       3
     end
@@ -194,6 +198,10 @@ class Subscription < ActiveRecord::Base
       end
 
       def custom_thank_you_text?
+        true
+      end
+
+      def after_submit_redirect?
         true
       end
 

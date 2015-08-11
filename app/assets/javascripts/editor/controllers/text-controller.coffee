@@ -10,8 +10,6 @@ HelloBar.TextController = Ember.Controller.extend
 
   hideCaptionField: Ember.computed.equal('model.type', 'Bar')
   hideLinkText: Ember.computed.match('model.element_subtype', /social|announcement/)
-  showThankYouText: Ember.computed.equal('model.element_subtype', 'email')
-  disableThankYouText: Ember.computed.not('model.site.capabilities.custom_thank_you_text')
   showEmailPlaceholderText: Ember.computed.equal('model.element_subtype', 'email')
   showNamePlaceholderText: Ember.computed.equal('model.settings.collect_names', 1)
 

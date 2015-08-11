@@ -11,7 +11,15 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
     lists
   ).property("model.site.contact_lists")
 
-  setDeafultListID: (->
+  afterSubmitOptions: [
+    {value: 0, label: 'Show a message'}
+    {value: 1, label: 'Redirect the visitor to a url'}
+  ]
+
+  disableThankYouText: Ember.computed.not('model.site.capabilities.custom_thank_you_text')
+  disableRedirect: Ember.computed.not('model.site.capabilities.after_submit_redirect')
+
+  setDefaultListID: (->
     if !@get('model.contact_list_id')
       firstList = @get('model.site.contact_lists')[0]
       listId = if firstList then firstList.id else null
@@ -44,6 +52,9 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
     id && id != 0
   ).property("model.contact_list_id")
 
+  showRedirectUrlInput: (->
+    num = @get("model.settings.redirect") == 1
+  ).property("model.settings.redirect")
 
   actions:
 
