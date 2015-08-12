@@ -1305,6 +1305,10 @@ var _HB = {
         // Check for search terms
         HB.setVisitorData("st", referrerParams['query'] || referrerParams['q'] || referrerParams['search'], true);
       }
+    } else {
+      // There is no referrer so set the "rf" and "rd" segments to blank
+      HB.setVisitorData("rf", "");
+      HB.setVisitorData("rd", "");
     }
     // Set the page URL
     HB.setVisitorData("pu", HB.n(document.location+"", true));
