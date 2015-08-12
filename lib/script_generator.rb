@@ -204,7 +204,31 @@ private
   end
 
   def site_element_settings(site_element)
-    settings = %w{ type show_border background_color border_color button_color font link_color link_style link_text headline caption size target text_color texture show_branding animated wiggle_button placement closable view_condition email_placeholder name_placeholder}
+    settings = %w{
+      animated
+      background_color
+      border_color
+      button_color
+      caption
+      closable
+      email_placeholder
+      font
+      headline
+      link_color
+      link_style
+      link_text
+      name_placeholder
+      placement
+      show_border
+      show_branding
+      size
+      target
+      text_color
+      texture
+      type
+      view_condition
+      wiggle_button
+    }
 
     lifetime_totals = @site.lifetime_totals
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
