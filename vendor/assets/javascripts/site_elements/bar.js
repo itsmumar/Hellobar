@@ -35,6 +35,12 @@ BarElement.prototype.setupIFrame = function(iframe){
 };
 
 BarElement.prototype.prerender = function(){
-  this.wiggle = (this.wiggle_button ? 'wiggle' : '');
+  // Disable wiggle on Mobile Safari because it blocks the click action
+  if(this.wiggle_button && !HB.isMobileSafari()) {
+    this.wiggle = 'wiggle';
+  } else {
+    this.wiggle = '';
+  }
+
   SiteElement.prototype.prerender.call(this);
 };

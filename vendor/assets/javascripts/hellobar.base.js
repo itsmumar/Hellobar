@@ -758,6 +758,12 @@ var _HB = {
       return true;
   },
 
+  // Returns true if the device is using mobile safari (ie, ipad / iphone)
+  isMobileSafari: function() {
+    var ua = navigator.userAgent.toLowerCase();
+    return (ua.indexOf("safari") > -1 && (ua.indexOf("iphone") > -1 || ua.indexOf("ipad") > -1));
+  },
+
   // Renders the html template for the siteElement by calling HB.parseTemplateVar for
   // each {{...}} entry in the template
   renderTemplate: function(html, siteElement)
