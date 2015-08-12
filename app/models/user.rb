@@ -149,7 +149,7 @@ class User < ActiveRecord::Base
       user
   end
 
-  def self.find_or_invite_by_email(email)
+  def self.find_or_invite_by_email(email, site)
     user = User.where(email: email).first
     if user.nil?
       user = User.new(email: email)
@@ -160,12 +160,19 @@ class User < ActiveRecord::Base
       user.invite_token_expire_at = INVITE_EXPIRE_RATE.from_now
       user.status = TEMPORARY_STATUS
       user.save
-      #MailerGateway.send_email("User Invite", email, {:email => email, :reset_link => reset_link})
+      user.send_invitation_email(site)
     end
     user
   end
 
   private
+
+  def send_invitation_email(site)
+    host = ActionMailer::Base.default_url_options[:host]
+    oauth_link = "#{host}/auth/google_oauth2"
+    signup_link = url_helpers.new_user_url(user: {invite_token: invite_token}, :host => host)
+    MailerGateway.send_email("Invitation", email, {site_url: site.url, oauth_link: oauth_link, signup_link: signup_link})
+  end
 
   # Disconnect oauth logins if user sets their own password
   def disconnect_oauth

@@ -31,7 +31,7 @@ class SiteMembershipsController < ApplicationController
   end
 
   def invite
-    user = User.find_or_invite_by_email(params[:email])
+    user = User.find_or_invite_by_email(params[:email], @site)
     notice = nil
     if user.valid?
       @site_membership = @site.site_memberships.create(user: user, role: "admin")
