@@ -57,7 +57,7 @@ class ScriptGenerator < Mustache
   end
 
   def get_branding_variation
-    if @site.owner.created_at.to_date >= "2015-07-22".to_date
+    if @site.users.any? { |u| u.created_at.to_date >= "2015-07-22".to_date }
       variations = ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"]
       variation = variations[@site.id % variations.length]
       Analytics.track(:site, @site.id, "Branding Test Assigned", {variation: variation})

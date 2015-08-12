@@ -317,6 +317,10 @@ class Site < ActiveRecord::Base
     site_memberships.detect { |x| x.user_id == user.id }
   end
 
+  def owners
+    users.where(site_memberships: { role: Permissions::OWNER } )
+  end
+
   private
 
   # Calculates a bill, but does not save or pay the bill. Used by

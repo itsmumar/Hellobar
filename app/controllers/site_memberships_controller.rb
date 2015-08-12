@@ -21,7 +21,9 @@ class SiteMembershipsController < ApplicationController
   end
 
   def destroy
-    if @site_membership.can_destroy? && @site_membership.destroy
+    if @site_membership.user == current_user
+      render json: {site_memberships: ["Can't remove permissions from yourself."]}, :status => :unprocessable_entity
+    elsif @site_membership.can_destroy? && @site_membership.destroy
       render json: @site_membership
     else
       render json: @site_membership.errors.full_messages, :status => :unprocessable_entity
@@ -52,6 +54,6 @@ class SiteMembershipsController < ApplicationController
   end
 
   def site_membership_params
-    params.require(:site_membership).permit(:role, :user_id, :site_id)
+    params.require(:site_membership).permit(:role, :user_id, :site_id).merge(updated_by: current_user)
   end
 end

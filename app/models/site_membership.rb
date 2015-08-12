@@ -7,6 +7,9 @@ class SiteMembership < ActiveRecord::Base
   validates :role, inclusion: { in: %w(owner admin) }
   validate :user_site_uniqueness
   validate :at_least_one_owner_per_site
+  validate :updater_permission
+
+  attr_accessor :updated_by
 
   def can_destroy?
     if role == "owner" && SiteMembership.where(site_id: site_id, role: role).count == 1
@@ -18,6 +21,12 @@ class SiteMembership < ActiveRecord::Base
   end
 
   private
+
+  def updater_permission
+    if updated_by && updated_by.role_for_site(site) == :admin
+      self.errors.add(:owner, "can only be set by other owners") if role == "owner"
+    end
+  end
 
   # Have to write our own because of acts as paranoid
   def user_site_uniqueness
