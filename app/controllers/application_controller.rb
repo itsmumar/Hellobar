@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include Hello::InternalAnalytics
   include ActionView::Helpers::NumberHelper
+  serialization_scope :current_user
 
   protect_from_forgery with: :exception
 

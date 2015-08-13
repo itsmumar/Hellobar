@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 gem "abanalyzer"
 gem "active_link_to",            "~> 1.0.2"
-gem "active_model_serializers",  "~> 0.8.1"
+gem "active_model_serializers",  "~> 0.9.3"
 gem "activemerchant",            "~> 1.44.1"
 gem "addressable",               "~> 2.3.6", :require => "addressable/uri"
 gem "avatar",                    "~> 0.2.0"

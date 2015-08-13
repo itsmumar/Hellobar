@@ -22,6 +22,7 @@ class @UpgradeAccountModal extends Modal
     @$modal.appendTo($("body"))
     @$modal.find('#yearly-billing').trigger('click')
     @_disableCurrentPlanButton()
+    if !@options.site.view_billing then @_invalidPermissions()
     @_bindPackageSelection()
     super
 
@@ -65,3 +66,9 @@ class @UpgradeAccountModal extends Modal
       if buttonPackage.type == @options.site.current_subscription.type
         $(button).attr("disabled", "disabled")
         $(button).text("Current Plan")
+
+  _invalidPermissions: ->
+    @$modal.find("div.button").each (index, button) =>
+      if !$(button).attr("disabled")
+        $(button).attr("disabled", "disabled")
+        $(button).text("Contact the account owner to upgrade this site.")
