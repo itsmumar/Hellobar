@@ -6,7 +6,7 @@ describe ContactSubmissionsController do
   it "sends a 'email your developer' message" do
     dev_email = "dev@polymathic.me"
     site = sites(:zombo)
-    user = stub_current_user(site.owner)
+    user = stub_current_user(site.owners.first)
 
     email_params = {
       :site_url => "zombo.com",
@@ -21,7 +21,7 @@ describe ContactSubmissionsController do
 
   it "sends a generic message" do
     site = sites(:zombo)
-    user = stub_current_user(site.owner)
+    user = stub_current_user(site.owners.first)
     message = "HELP ME"
     return_to = root_path
 

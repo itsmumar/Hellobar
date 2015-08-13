@@ -14,10 +14,9 @@ class SiteMembership < ActiveRecord::Base
   def can_destroy?
     if role == "owner" && SiteMembership.where(site_id: site_id, role: role).count == 1
       errors.add :site, "must have at least one owner"
-      false
-    else
-      true
+      return false
     end
+    true
   end
 
   private

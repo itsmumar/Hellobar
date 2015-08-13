@@ -13,7 +13,7 @@ describe Admin::UsersController do
 
       get :index, :q => "zombo.com"
 
-      assigns(:users).include?(sites(:zombo).owner).should be_true
+      assigns(:users).include?(sites(:zombo).owners.first).should be_true
     end
 
     it "finds deleted users" do

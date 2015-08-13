@@ -257,4 +257,4 @@ html
       | &nbsp;or&nbsp;
       = link_to "hellobar.com", root_path
       | .
-      img src=tracking_pixel_path(:trk => Hello::TrackingParam.encode_tracker(@site.owner.id, "Opened Email", "Email Template"=> EmailDigestHelper.template_name(@site)))
+      img src=tracking_pixel_path(:trk => Hello::TrackingParam.encode_tracker(@user.id, "Opened Email", "Email Template"=> EmailDigestHelper.template_name(@site)))

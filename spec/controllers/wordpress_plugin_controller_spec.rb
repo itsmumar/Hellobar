@@ -5,7 +5,7 @@ describe WordpressPluginController do
 
   it "generates the wordpress plugin without errors" do
     site = sites(:zombo)
-    stub_current_user(site.owner)
+    stub_current_user(site.owners.first)
 
     get :show, :site_id => site.to_param
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150701162052) do
+ActiveRecord::Schema.define(version: 20150706203001) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -219,7 +219,6 @@ ActiveRecord::Schema.define(version: 20150701162052) do
     t.string   "thank_you_text"
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
-    t.integer  "wordpress_bar_id"
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
@@ -227,7 +226,7 @@ ActiveRecord::Schema.define(version: 20150701162052) do
     t.string   "caption",                         default: ""
     t.string   "placement"
     t.datetime "deleted_at"
-    t.string   "view_condition",                  default: "immidiately"
+    t.string   "view_condition",                  default: "immediately"
     t.string   "email_placeholder",               default: "Your email",                    null: false
     t.string   "name_placeholder",                default: "Your name",                     null: false
   end

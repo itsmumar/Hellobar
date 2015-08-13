@@ -10,7 +10,7 @@ describe Site do
   it_behaves_like "an object with a valid url"
 
   it "is able to access its owner" do
-    @site.owner.should == users(:joey)
+    @site.owners.first.should == users(:joey)
   end
 
   it "#is_free? is true initially" do

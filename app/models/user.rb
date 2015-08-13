@@ -2,6 +2,14 @@ class User < ActiveRecord::Base
   include BillingAuditTrail
   include UserValidator
 
+  # Remove any sites where this was the last user
+  # This must come before any dependent: :destroy
+  before_destroy do
+    self.sites.each do |site|
+      site.destroy if site.site_memberships.size <= 1
+    end
+  end
+
   has_many :payment_methods
   has_many :payment_method_details, through: :payment_methods, source: :details
   has_many :site_memberships, dependent: :destroy
@@ -16,13 +24,6 @@ class User < ActiveRecord::Base
 
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: {scope: :deleted_at, unless: :deleted? }
-
-  # Remove any sites where this was the last user
-  before_destroy do
-    self.sites.each do |site|
-      site.destroy if site.site_memberships.size <= 1
-    end
-  end
 
   after_save :disconnect_oauth
 
