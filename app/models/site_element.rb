@@ -26,8 +26,9 @@ class SiteElement < ActiveRecord::Base
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES.keys }
   validates :rule, association_exists: true
   validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
-  validates :contact_list, association_exists: true, if: Proc.new { |s| s.element_subtype == "email" }
+  validates :contact_list, association_exists: true, if: :is_email?
   validate :site_is_capable_of_creating_element, unless: :persisted?
+  validate :redirect_has_url, if: :is_email?
 
   scope :paused, -> { where(paused: true) }
   scope :active, -> { where(paused: false) }
@@ -84,6 +85,10 @@ class SiteElement < ActiveRecord::Base
 
   private
 
+  def is_email?
+     element_subtype == "email"
+  end
+
   def lifetime_totals
     return nil if site.nil?
     site.lifetime_totals.try(:[], id.to_s)
@@ -92,6 +97,12 @@ class SiteElement < ActiveRecord::Base
   def site_is_capable_of_creating_element
     if site && site.capabilities.at_site_element_limit?
       errors.add(:site, 'is currently at its limit to create site elements')
+    end
+  end
+
+  def redirect_has_url
+    if settings["redirect"] == 1 && !settings["redirect_url"].present?
+      errors.add('settings.redirect_url', 'cannot be blank')
     end
   end
 end
