@@ -412,3 +412,8 @@ html, body {
   position: absolute;
   display: inline-block;
 }
+
+/*-----------  Hide Facebook Comment Box  -----------*/
+.fb-like.fb_iframe_widget {
+  overflow: hidden;
+}
