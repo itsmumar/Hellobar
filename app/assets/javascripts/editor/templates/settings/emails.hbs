@@ -46,7 +46,7 @@
   }}
 
   {{#if disableRedirect}}
-    <p><a {{action "openUpgradeModal"}}>Upgrade required.</a></p>
+    <p><a {{action "openUpgradeModal" "redirect"}}>Upgrade required.</a></p>
   {{/if}}
 {{else}}
   <label>Thank you text</label>
@@ -59,6 +59,6 @@
   }}
 
   {{#if disableThankYouText}}
-    <p><a {{action "openUpgradeModal"}}>Upgrade required.</a></p>
+    <p><a {{action "openUpgradeModal" "thank_you"}}>Upgrade required.</a></p>
   {{/if}}
 {{/if}}

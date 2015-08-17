@@ -53,7 +53,10 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   ).property("model.contact_list_id")
 
   showRedirectUrlInput: (->
-    num = @get("model.settings.redirect") == 1
+    show = @get("model.settings.redirect") == 1
+    if show && Ember.computed.not('model.site.capabilities.after_submit_redirect')
+      @set("model.settings.redirect_url", "")
+    show
   ).property("model.settings.redirect")
 
   actions:
@@ -74,11 +77,17 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
 
       new ContactListModal(options).open()
 
-    openUpgradeModal: ->
+    openUpgradeModal: (capabilityType) ->
       controller = this
+
+      if capabilityType == "redirect"
+        upgradeText = 'redirect to a custom url'
+      else
+        upgradeText = 'customize your thank you text'
+
       new UpgradeAccountModal(
         site: controller.get('model.site')
-        upgradeBenefit: 'customize your thank you text'
+        upgradeBenefit: upgradeText
         successCallback: ->
           controller.set('model.site.capabilities', this.site.capabilities)
       ).open()
