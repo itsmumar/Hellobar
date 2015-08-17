@@ -73,3 +73,12 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
           modal.close()
 
       new ContactListModal(options).open()
+
+    openUpgradeModal: ->
+      controller = this
+      new UpgradeAccountModal(
+        site: controller.get('model.site')
+        upgradeBenefit: 'customize your thank you text'
+        successCallback: ->
+          controller.set('model.site.capabilities', this.site.capabilities)
+      ).open()

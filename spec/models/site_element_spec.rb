@@ -49,7 +49,7 @@ describe SiteElement do
       context "when subtype is email" do
         it "requires a redirect url if redirect is true" do
           element = site_elements(:zombo_email)
-          element.settings["redirect"] = "1"
+          element.settings["redirect"] = 1
 
           element.save
 
@@ -59,7 +59,7 @@ describe SiteElement do
 
         it "doesn't require a redirect url if redirect is false" do
           element = site_elements(:zombo_email)
-          element.settings["redirect"] = "0"
+          element.settings["redirect"] = 0
 
           element.save
 
