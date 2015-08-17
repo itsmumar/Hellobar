@@ -432,23 +432,31 @@ var _HB = {
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
   // shakes the email field
-  submitEmail: function(emailField, nameField, targetSiteElement, thankYouText, removeElement)
+  submitEmail: function(emailField, nameField, targetSiteElement, thankYouText, redirect, redirectUrl, removeElement)
   {
     HB.validateEmail(
       emailField.value,
       nameField.value,
       function(){
-        if(targetSiteElement != null)
-          targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
-        if(removeElement != null) {
-          for (var i = 0; i < removeElement.length; i++) {
-            removeElement[i].style.display = "none";
+        var doRedirect = HB.t(redirect);
+
+        if(!doRedirect) {
+          if(targetSiteElement != null)
+            targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
+          if(removeElement != null) {
+            for (var i = 0; i < removeElement.length; i++) {
+              removeElement[i].style.display = "none";
+            }
           }
         }
 
         HB.recordEmail(emailField.value, nameField.value, function(){
           // Successfully saved
         });
+
+        if(doRedirect) {
+          window.location.href = redirectUrl;
+        }
       },
       function(){
         // Fail

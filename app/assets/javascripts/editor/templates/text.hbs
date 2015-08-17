@@ -33,21 +33,6 @@
   {{view Ember.TextField value=model.link_text placeholder="OK!" maxlength=255}}
 {{/unless}}
 
-{{#if showThankYouText}}
-  <label>Thank you text</label>
-  {{
-    view Ember.TextField
-    value=model.thank_you_text
-    placeholder="Thank you!"
-    disabled=disableThankYouText
-    maxlength=255
-  }}
-
-  {{#if disableThankYouText}}
-    <p><a {{action "openUpgradeModal"}}>Upgrade required.</a></p>
-  {{/if}}
-{{/if}}
-
 <label>Font family</label>
 <div class="select-wrapper">
   {{view Ember.Select

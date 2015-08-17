@@ -14,7 +14,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
   nextRoute: null
   currentStep: false
   cannotContinue: true
-  showInterstitial: false    
+  showInterstitial: false
   interstitialType: null
 
   #-----------  Color Palette  -----------#
@@ -97,7 +97,50 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   setModelIsDirty: ( (obj, keyName) ->
     @set("modelIsDirty", true) if !!@get(keyName)
-  ).observesBefore("model.type", "model.element_subtype", "model.headline", "model.caption", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.closable", "model.show_branding", "model.settings.url", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url", "model.contact_list_id", "model.pushes_page_down", "model.remains_at_top", "model.animated", "model.placement", "model.wiggle_button", "model.email_placeholder", "model.name_placeholder")
+  ).observesBefore(
+    "model.animated",
+    "model.background_color",
+    "model.border_color",
+    "model.button_color",
+    "model.caption",
+    "model.closable",
+    "model.contact_list_id",
+    "model.element_subtype",
+    "model.email_placeholder",
+    "model.font",
+    "model.headline",
+    "model.link_text",
+    "model.link_color",
+    "model.link_style",
+    "model.placement",
+    "model.pushes_page_down",
+    "model.name_placeholder"
+    "model.remains_at_top",
+    "model.settings.buffer_message",
+    "model.settings.buffer_url",
+    "model.settings.collect_names",
+    "model.settings.link_url",
+    "model.settings.message_to_tweet",
+    "model.settings.pinterest_description",
+    "model.settings.pinterest_full_name",
+    "model.settings.pinterest_image_url",
+    "model.settings.pinterest_url",
+    "model.settings.pinterest_user_url",
+    "model.settings.redirect",
+    "model.settings.redirect_url",
+    "model.settings.twitter_handle",
+    "model.settings.url",
+    "model.settings.url_to_like",
+    "model.settings.url_to_plus_one",
+    "model.settings.url_to_share",
+    "model.settings.url_to_tweet",
+    "model.settings.use_location_for_url",
+    "model.show_branding",
+    "model.size",
+    "model.text_color",
+    "model.type",
+    "model.wiggle_button",
+  )
 
   #-----------  Actions  -----------#
 

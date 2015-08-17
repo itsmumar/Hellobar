@@ -11,35 +11,72 @@ describe SiteElement do
     bar.site.should be_nil
   end
 
-  it "requires a contact list if element_subtype is \"email\"" do
-    element = site_elements(:zombo_traffic)
-    element.should be_valid
+  describe "validations" do
+    it "requires a contact list if element_subtype is \"email\"" do
+      element = site_elements(:zombo_traffic)
+      element.should be_valid
 
-    element.contact_list = contact_lists(:zombo)
-    element.should be_valid
-  end
+      element.contact_list = contact_lists(:zombo)
+      element.should be_valid
+    end
 
-  it 'does not allow an unpersisted element to be created when site is at its limit' do
-    site = sites(:free_site)
-    capability = double 'capability', at_site_element_limit?: true
-    site.stub capabilities: capability
+    describe "#site_is_capable_of_creating_element" do
+      it 'does not allow an unpersisted element to be created when site is at its limit' do
+        site = sites(:free_site)
+        capability = double 'capability', at_site_element_limit?: true
+        site.stub capabilities: capability
 
-    element = SiteElement.new
-    element.stub site: site
-    element.valid?
+        element = SiteElement.new
+        element.stub site: site
+        element.valid?
 
-    element.errors[:site].should == ['is currently at its limit to create site elements']
-  end
+        element.errors[:site].should == ['is currently at its limit to create site elements']
+      end
 
-  it 'allows a persisted element to be updated when site is at its limit' do
-    site = sites(:free_site)
-    capability = double 'capability', at_site_element_limit?: true
-    site.stub capabilities: capability
+      it 'allows a persisted element to be updated when site is at its limit' do
+        site = sites(:free_site)
+        capability = double 'capability', at_site_element_limit?: true
+        site.stub capabilities: capability
 
-    element = site_elements(:zombo_traffic)
-    element.stub site: site
+        element = site_elements(:zombo_traffic)
+        element.stub site: site
 
-    element.should be_valid
+        element.should be_valid
+      end
+    end
+
+    describe "#redirect_has_url" do
+      context "when subtype is email" do
+        it "requires a redirect url if redirect is true" do
+          element = site_elements(:zombo_email)
+          element.settings["redirect"] = 1
+
+          element.save
+
+          element.errors["settings.redirect_url"].
+            should include("cannot be blank")
+        end
+
+        it "doesn't require a redirect url if redirect is false" do
+          element = site_elements(:zombo_email)
+          element.settings["redirect"] = 0
+
+          element.save
+
+          element.errors["settings.redirect_url"].should be_empty
+        end
+      end
+
+      context "when subtype is not email" do
+        it "doesn't care about redirect url" do
+          element = site_elements(:zombo_traffic)
+
+          element.save
+
+          element.errors["settings.redirect_url"].should be_empty
+        end
+      end
+    end
   end
 
   describe '#toggle_paused!' do
