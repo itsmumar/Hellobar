@@ -95,7 +95,15 @@ class ApplicationController < ActionController::Base
 
   def track_h_visit
     if params[:hbt]
-      Analytics.track(*current_person_type_and_id, "H Visit", {h_type: params[:hbt]})
+      track_params = {h_type: params[:hbt]}
+      if params[:sid] # If site element is given, attach the site element id and site id
+        site_element = SiteElement.where(id: params[:sid]).first
+        if site_element
+          track_params[:site_element_id] = site_element.id
+          track_params[:site_id] = site_element.site.id if site_element.site
+        end
+      end
+      Analytics.track(*current_person_type_and_id, "H Visit", track_params)
     end
   end
 

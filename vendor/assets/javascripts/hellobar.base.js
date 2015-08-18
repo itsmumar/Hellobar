@@ -1889,7 +1889,8 @@ var _HB = {
     var headlineSegment = this.sample(Object.keys(headlines));
     siteElement['headline'] = headlines[headlineSegment];
     siteElement['link_text'] = 'Get Started';
-    siteElement.settings.url = "https://www.hellobar.com/?hbt=" + elementType + '_' + headlineSegment;
+    params = "hbt=v2_" + elementType + '_' + headlineSegment + "&sid=" + siteElement.id;
+    siteElement.settings.url = "https://www.hellobar.com/?" + params;
 
     return siteElement;
   },
