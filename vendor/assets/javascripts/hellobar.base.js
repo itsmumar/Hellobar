@@ -44,8 +44,10 @@ var HBQ = function()
   // Set all the default tracking trackings
   HB.setDefaultSegments();
 
-  // Apply the rules
-  var siteElement = HB.applyRules();
+  // If a specific element has already been set, use it
+  // Otherwise use the tradition apply rules method
+  var siteElement = HB.getFixedSiteElement();
+  siteElement = siteElement || HB.applyRules();
   if ( siteElement )
     HB.render(siteElement);
 
@@ -1009,6 +1011,24 @@ var _HB = {
     {
       siteElements[i].rule = rule;
     }
+  },
+
+  // If window.HB_element_id is set, use that to find the site element
+  // Will return null if HB_element_id is not set or no site element exists with that id
+  getFixedSiteElement: function () {
+    if(window.HB_element_id != null) {
+      for(i=0;i<HB.rules.length;i++)
+      {
+        var rule = HB.rules[i];
+        for(j=0;j<rule.siteElements.length;j++)
+        {
+          siteElement = rule.siteElements[j];
+          if(siteElement.id == window.HB_element_id)
+            return siteElement;
+        }
+      }
+    }
+    return null;
   },
 
   // applyRules scans through all the rules added via addRule and finds the

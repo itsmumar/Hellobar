@@ -314,6 +314,7 @@ ActiveRecord::Schema.define(version: 20150916164007) do
     t.datetime "deleted_at"
     t.string   "invite_token"
     t.datetime "invite_token_expire_at"
+    t.integer  "wordpress_user_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree

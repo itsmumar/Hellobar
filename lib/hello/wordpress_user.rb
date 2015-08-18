@@ -34,7 +34,8 @@ class Hello::WordpressUser < Hello::WordpressModel
   def convert_to_user
     User.new(
       email: user_email,
-      encrypted_password: user_pass
+      encrypted_password: user_pass,
+      wordpress_user_id: id
     ).tap{ |u| u.save(validate: false) }
   end
 

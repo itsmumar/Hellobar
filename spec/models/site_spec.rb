@@ -131,17 +131,34 @@ describe Site do
   end
 
   describe "#generate_static_assets" do
+    before do
+      @mock_storage = double("asset_storage")
+      allow(Hello::AssetStorage).to receive(:new).and_return(@mock_storage)
+    end
+
     it "generates and uploads the script content for a site" do
       ScriptGenerator.any_instance.stub(:pro_secret => "asdf")
       Hello::DataAPI.stub(:lifetime_totals => nil)
       script_content = @site.script_content(true)
       script_name = @site.script_name
 
-      mock_storage = double("asset_storage")
-      mock_storage.should_receive(:create_or_update_file_with_contents).with(script_name, script_content)
-      Hello::AssetStorage.stub(:new => mock_storage)
-
+      @mock_storage.should_receive(:create_or_update_file_with_contents).with(script_name, script_content)
       @site.generate_script
+    end
+
+    it "generates scripts for each wordpress bar" do
+      site_element = create(:site_element, wordpress_bar_id: 123)
+      user = create(:user, wordpress_user_id: 456)
+      site_element.site.users << user
+
+      allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return("asdf")
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
+      site = site_element.site.reload
+
+      # First, generate for site, then for the site element
+      expect(@mock_storage).to receive(:create_or_update_file_with_contents).with(anything, anything).ordered
+      expect(@mock_storage).to receive(:create_or_update_file_with_contents).with("#{user.wordpress_user_id}_#{site_element.wordpress_bar_id}", anything).ordered
+      site.send(:generate_static_assets)
     end
   end
 

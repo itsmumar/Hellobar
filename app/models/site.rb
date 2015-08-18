@@ -417,6 +417,17 @@ class Site < ActiveRecord::Base
         File.open(File.join(Rails.root, "public/generated_scripts/", script_name), "w") { |f| f.puts(generated_script_content) }
       else
         Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
+
+        site_elements.each do |site_element|
+          if site_element.wordpress_bar_id
+            users.each do |user|
+              if user.wordpress_user_id
+                name = "#{user.wordpress_user_id}_#{site_element.wordpress_bar_id}"
+                Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
+              end
+            end
+          end
+        end
       end
     end
 
