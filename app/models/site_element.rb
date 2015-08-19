@@ -1,5 +1,11 @@
 class SiteElement < ActiveRecord::Base
   TYPES = [Bar, Modal, Slider, Takeover]
+  DEFAULT_EMAIL_THANK_YOU = "Thank you for signing up!"
+  AFTER_EMAIL_ACTION_MAP = {
+    0 => :show_default_message,
+    1 => :custom_thank_you_text,
+    2 => :redirect
+  }
 
   # valid bar types and their conversion units
   BAR_TYPES = {
@@ -29,6 +35,7 @@ class SiteElement < ActiveRecord::Base
   validates :contact_list, association_exists: true, if: :is_email?
   validate :site_is_capable_of_creating_element, unless: :persisted?
   validate :redirect_has_url, if: :is_email?
+  validate :has_thank_you_text, if: :is_email?
 
   scope :paused, -> { where(paused: true) }
   scope :active, -> { where(paused: false) }
@@ -83,6 +90,18 @@ class SiteElement < ActiveRecord::Base
     background_color
   end
 
+  def display_thank_you_text
+    if after_email_submit_action == :show_default_message
+      DEFAULT_EMAIL_THANK_YOU
+    else
+      thank_you_text.blank? ? DEFAULT_EMAIL_THANK_YOU : thank_you_text
+    end
+  end
+
+  def after_email_submit_action
+    AFTER_EMAIL_ACTION_MAP[settings["after_email_submit_action"]]
+  end
+
   private
 
   def is_email?
@@ -101,8 +120,22 @@ class SiteElement < ActiveRecord::Base
   end
 
   def redirect_has_url
-    if settings["redirect"] == 1 && !settings["redirect_url"].present?
-      errors.add('settings.redirect_url', 'cannot be blank')
+    if after_email_submit_action == :redirect
+      if !site.capabilities.after_submit_redirect?
+        errors.add('settings.redirect_url', 'is a pro feature')
+      elsif !settings["redirect_url"].present?
+        errors.add('settings.redirect_url', 'cannot be blank')
+      end
+    end
+  end
+
+  def has_thank_you_text
+    if after_email_submit_action == :custom_thank_you_text
+      if !site.capabilities.custom_thank_you_text?
+        errors.add('custom_thank_you_text', 'is a pro feature')
+      elsif !thank_you_text.present?
+        errors.add('custom_thank_you_text', 'cannot be blank')
+      end
     end
   end
 end

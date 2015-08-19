@@ -18,8 +18,11 @@ select
     color: $grayDark
     border-color: $grayLight
 
-  &:disabled
+  &:disabled:not(.visible)
     color: $grayLighter
+
+    .visible
+      color: inherit
 
   @include placeholder
     color: $grayLighter

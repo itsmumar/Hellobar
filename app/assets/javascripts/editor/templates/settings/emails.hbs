@@ -25,40 +25,49 @@
   </p>
 {{/if}}
 
-<label>After visitor enters email ...</label>
+<label>After visitor submits their email ...</label>
 <div class="select-wrapper">
   {{view Ember.Select
     content=afterSubmitOptions
-    value=model.settings.redirect
+    value=model.settings.after_email_submit_action
     optionValuePath='content.value'
     optionLabelPath='content.label'
   }}
 </div>
 
 {{#if showRedirectUrlInput}}
-  <label>Redirect Url</label>
-  {{
-    view Ember.TextField
-    value=model.settings.redirect_url
-    placeholder="http://www.example.com"
-    disabled=disableRedirect
-    maxlength=255
-  }}
-
   {{#if disableRedirect}}
     <p><a {{action "openUpgradeModal" "redirect"}}>Upgrade required.</a></p>
+  {{else}}
+    {{
+      view Ember.TextField
+      value=model.settings.redirect_url
+      placeholder="http://www.example.com"
+      disabled=disableRedirect
+      maxlength=255
+    }}
   {{/if}}
 {{else}}
-  <label>Thank you text</label>
-  {{
-    view Ember.TextField
-    value=model.thank_you_text
-    placeholder="Thank you!"
-    disabled=disableThankYouText
-    maxlength=255
-  }}
-
-  {{#if disableThankYouText}}
-    <p><a {{action "openUpgradeModal" "thank_you"}}>Upgrade required.</a></p>
+  {{#if showDefaultMessage}}
+    {{
+      view Ember.TextField
+      class="visible"
+      value=model.default_email_thank_you
+      placeholder=model.default_email_thank_you
+      disabled=true
+      maxlength=255
+    }}
+  {{else}}
+    {{#if disableThankYouText}}
+      <p><a {{action "openUpgradeModal" "thank_you"}}>Upgrade required.</a></p>
+    {{else}}
+      {{
+        view Ember.TextField
+        value=model.thank_you_text
+        placeholder=model.default_email_thank_you
+        disabled=disableThankYouText
+        maxlength=255
+      }}
+    {{/if}}
   {{/if}}
 {{/if}}

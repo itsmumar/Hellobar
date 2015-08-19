@@ -147,7 +147,7 @@ class SiteElementsController < ApplicationController
       :pinterest_description,
       :pinterest_user_url,
       :pinterest_full_name,
-      :redirect,
+      :after_email_submit_action,
       :redirect_url,
       :twitter_handle,
       :url,

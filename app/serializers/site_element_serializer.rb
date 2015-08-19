@@ -2,7 +2,7 @@ class SiteElementSerializer < ActiveModel::Serializer
   attributes :id, :site, :rule_id, :rule, :contact_list_id, :errors, :full_error_messages,
 
     # settings
-    :type, :element_subtype, :settings, :view_condition,  
+    :type, :element_subtype, :settings, :view_condition,
 
     # text
     :headline, :caption, :link_text, :font, :thank_you_text, :email_placeholder, :name_placeholder,
@@ -14,7 +14,12 @@ class SiteElementSerializer < ActiveModel::Serializer
     :closable, :show_branding, :pushes_page_down, :remains_at_top, :animated, :wiggle_button,
 
     # other
-    :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement
+    :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement,
+    :default_email_thank_you
+
+  def default_email_thank_you
+    SiteElement::DEFAULT_EMAIL_THANK_YOU
+  end
 
   def rule
     RuleSerializer.new(object.rule)
@@ -74,9 +79,5 @@ class SiteElementSerializer < ActiveModel::Serializer
     end
 
     messages
-  end
-
-  def thank_you_text
-    object.thank_you_text.presence || "Thank you for signing up!"
   end
 end
