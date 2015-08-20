@@ -22,10 +22,11 @@ nav.tabs-wrapper
   .button-wrapper
     = link_to "Installation instructions", site_install_path(@site)
 
-  - if current_user.has_permission_for(:billing, @site)
+  - if Permissions.view_bills?(current_user, @site)
     .billing-wrapper
       = render 'billing'
 
   footer
     = f.button :submit, "Save & Update", :class => "button"
-    = link_to "Delete Site", site_path(@site), :method => :delete, :class => "button", data: { confirm: "Historical data will be deleted and you will not be able to recover it after this. Are you sure you wish to delete this site?" }
+    - if Permissions.delete_site?(current_user, @site)
+      = link_to "Delete Site", site_path(@site), :method => :delete, :class => "button", data: { confirm: "Historical data will be deleted and you will not be able to recover it after this. Are you sure you wish to delete this site?" }
