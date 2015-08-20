@@ -171,7 +171,7 @@ class User < ActiveRecord::Base
   def send_invitation_email(site)
     host = ActionMailer::Base.default_url_options[:host]
     oauth_link = "#{host}/auth/google_oauth2"
-    signup_link = url_helpers.new_user_url(user: {invite_token: invite_token}, :host => host)
+    signup_link = url_helpers.invite_user_url(invite_token: invite_token, :host => host)
     MailerGateway.send_email("Invitation", email, {site_url: site.url, oauth_link: oauth_link, signup_link: signup_link})
   end
 
