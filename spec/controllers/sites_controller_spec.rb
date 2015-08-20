@@ -136,7 +136,7 @@ describe SitesController do
 
   describe "GET chart_data" do
     let(:site_element) { site_elements(:zombo_traffic) }
-    let(:user) { site_element.site.owner }
+    let(:user) { site_element.site.owners.first }
 
     before do
       stub_current_user(user)
@@ -162,7 +162,7 @@ describe SitesController do
 
   describe "GET improve" do
     let(:site) { sites(:zombo) }
-    let(:user) { site.owner }
+    let(:user) { site.owners.first }
 
     before do
       stub_current_user(user)

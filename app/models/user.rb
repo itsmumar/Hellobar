@@ -2,9 +2,17 @@ class User < ActiveRecord::Base
   include BillingAuditTrail
   include UserValidator
 
+  # Remove any sites where this was the last user
+  # This must come before any dependent: :destroy
+  before_destroy do
+    self.sites.each do |site|
+      site.destroy if site.site_memberships.size <= 1
+    end
+  end
+
   has_many :payment_methods
   has_many :payment_method_details, through: :payment_methods, source: :details
-  has_many :site_memberships
+  has_many :site_memberships, dependent: :destroy
   has_many :sites, through: :site_memberships
   has_many :site_elements, through: :sites
   has_many :authentications, dependent: :destroy
@@ -17,18 +25,19 @@ class User < ActiveRecord::Base
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: {scope: :deleted_at, unless: :deleted? }
 
-  # If we ever assign more than one user to a site, this will have
-  # to be refactored
-  before_destroy do
-    self.sites.each(&:destroy)
-  end
-
   after_save :disconnect_oauth
+
+  before_save do
+    if self.status == ACTIVE_STATUS && self.invite_token
+      self.invite_token = nil
+    end
+  end
 
   attr_accessor :legacy_migration, :timezone
 
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
+  INVITE_EXPIRE_RATE = 2.week
 
   # returns a user with a random email and password
   def self.generate_temporary_user
@@ -101,18 +110,31 @@ class User < ActiveRecord::Base
     Phpass.new.check(password, encrypted_password) || super
   end
 
+  def is_oauth_user?
+     authentications.size > 0
+  end
+
+  def invite_token_expired?
+    invite_token_expire_at && invite_token_expire_at <= Time.now
+  end
+
+  def has_permission_for(feature, site)
+    role = site.membership_for_user(self).try(:role)
+    role && Hellobar::Settings[:permissions][role].try(:include?, feature)
+  end
+
   def self.find_for_google_oauth2(access_token, signed_in_resource=nil, track_options={})
       data = access_token["info"]
       user = User.joins(:authentications).where(authentications: { uid: access_token["uid"], provider: access_token["provider"] }).first
 
       unless user
+        user = User.where(email: data["email"], status: TEMPORARY_STATUS).first
+        user ||= User.new(email: data["email"])
         password = Devise.friendly_token[9,20]
-        user = User.new(
-          email: data["email"],
-          password: password,
-          password_confirmation: password
-        )
+        user.password = password
+        user.password_confirmation = password
         user.authentications.build(provider: access_token["provider"], uid: access_token["uid"])
+        user.status = ACTIVE_STATUS
         user.save
 
         Analytics.track(:user, user.id, "Signed Up", track_options) if user.valid?
@@ -128,11 +150,30 @@ class User < ActiveRecord::Base
       user
   end
 
-  def is_oauth_user?
-     authentications.size > 0
+  def self.find_or_invite_by_email(email, site)
+    user = User.where(email: email).first
+    if user.nil?
+      user = User.new(email: email)
+      password = Devise.friendly_token[9,20]
+      user.password = password
+      user.password_confirmation = password
+      user.invite_token = Devise.friendly_token
+      user.invite_token_expire_at = INVITE_EXPIRE_RATE.from_now
+      user.status = TEMPORARY_STATUS
+      user.save
+      user.send_invitation_email(site)
+    end
+    user
   end
 
   private
+
+  def send_invitation_email(site)
+    host = ActionMailer::Base.default_url_options[:host]
+    oauth_link = "#{host}/auth/google_oauth2"
+    signup_link = url_helpers.new_user_url(user: {invite_token: invite_token}, :host => host)
+    MailerGateway.send_email("Invitation", email, {site_url: site.url, oauth_link: oauth_link, signup_link: signup_link})
+  end
 
   # Disconnect oauth logins if user sets their own password
   def disconnect_oauth

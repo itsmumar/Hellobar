@@ -4,7 +4,7 @@ describe "migration of legacy users" do
   before do
     @site = Site.where(url: "http://zombo.com").first
     @legacy_site = LegacyMigrator::LegacySite.find(@site.id)
-    @user = @site.owner
+    @user = @site.owners.first
     @legacy_user = LegacyMigrator::LegacyUser.find_by_email(@user.email)
   end
 
@@ -16,7 +16,7 @@ describe "migration of legacy users" do
 
   it "migrates memberships" do
     assert SiteMembership.where(site_id: @legacy_site.id, user_id: @legacy_site.account.users.first.id).first.present?
-    assert_equal @legacy_site.account.users.first.id, @site.owner.id
+    assert_equal @legacy_site.account.users.first.id, @site.owners.first.id
   end
 
   it "associates multiple sites with the correct user" do

@@ -5,8 +5,8 @@ describe DigestMailer do
 
   describe 'weekly_digest' do
     let(:site) { sites(:zombo) }
-    let(:user) { site.owner }
-    let(:mail) { DigestMailer.weekly_digest(site) }
+    let(:user) { site.owners.first }
+    let(:mail) { DigestMailer.weekly_digest(site, user) }
 
     it 'should work correctly when there are no site elements' do
       site.site_elements.each(&:destroy)

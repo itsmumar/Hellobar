@@ -7,7 +7,7 @@ describe ContactListsController, "#num_subscribers" do
 
   describe "get #index" do
     it "makes a single API call to get num_subscribers for each list" do
-      stub_current_user(site.owner)
+      stub_current_user(site.owners.first)
 
       Hello::DataAPI.should_receive(:contact_list_totals).once
 
@@ -26,7 +26,7 @@ describe ContactListsController, type: :controller do
   let(:subscribers) { [] } # no subscribers for now
 
   before do
-    user = stub_current_user(site.owner)
+    user = stub_current_user(site.owners.first)
     site.contact_lists = [ contact_list ]
     allow_any_instance_of(Identity).to receive(:credentials).and_return("token" => "test")
     allow_any_instance_of(Identity).to receive(:extra).and_return("metadata" => { "api_endpoint" => "test" })

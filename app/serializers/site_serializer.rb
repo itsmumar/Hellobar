@@ -3,6 +3,7 @@ class SiteSerializer < ActiveModel::Serializer
 
   attributes :id, :url, :contact_lists, :capabilities, :display_name
   attributes :current_subscription, :has_script_installed?, :num_site_elements
+  attributes :view_billing
 
   has_many :rules, serializer: RuleSerializer
 
@@ -39,5 +40,9 @@ class SiteSerializer < ActiveModel::Serializer
 
   def num_site_elements
     object.site_elements.size
+  end
+
+  def view_billing
+    scope && Permissions.view_bills?(scope, object)
   end
 end

@@ -1,0 +1,41 @@
+/*-----------  Team Settings  -----------*/
+
+#sites-team
+
+  .new_site_membership
+    &.ready
+      .email_input
+        display: inherit
+    .email_input
+      display: none
+
+  .user-avatar
+    width: 2.5em
+    height: 2.5em
+    margin: 0 0.75em
+    border-radius: 10em
+    border: 2px solid $white
+    @include inline-block()
+
+  .permission-icon
+    width: 1.45em
+    height: 1.45em
+    border-radius: 0.75em
+    display: inline-block
+    margin-right: 1em
+
+    &.owner
+      background-color: $red
+
+    &.admin
+      background-color: $yellow
+
+    &.none
+      background-color: $gray
+
+  .dropdown-block
+
+    .permission-icon
+      width: 0.95em
+      height: 0.95em
+      border-radius: 0.5em

@@ -1,9 +1,10 @@
 nav.tabs-wrapper
   = active_link_to 'You', profile_path()
+  = active_link_to 'Team', site_team_path(current_site)
   = active_link_to 'Site', edit_site_path(current_site)
 
 = simple_form_for @site do |f|
-  
+
   .url-wrapper
     = f.label :url
     = f.text_field :url
@@ -21,8 +22,9 @@ nav.tabs-wrapper
   .button-wrapper
     = link_to "Installation instructions", site_install_path(@site)
 
-  .billing-wrapper
-    = render 'billing'
+  - if current_user.has_permission_for(:billing, @site)
+    .billing-wrapper
+      = render 'billing'
 
   footer
     = f.button :submit, "Save & Update", :class => "button"

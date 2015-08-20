@@ -48,7 +48,7 @@ describe Identity do
       it "should email the user that there was a problem syncing their identity" do
         MailerGateway.should_receive(:send_email) do |*args|
           args[0].should == "Integration Sync Error"
-          args[1].should == @identity.site.owner.email
+          args[1].should == @identity.site.owners.first.email
           args[2][:link].should =~ /http\S+sites\S+#{@identity.site_id}/
           args[2][:integration_name].should == "MailChimp"
         end

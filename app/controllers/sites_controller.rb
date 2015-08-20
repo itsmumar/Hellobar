@@ -2,7 +2,7 @@ class SitesController < ApplicationController
   include SitesHelper
 
   before_action :authenticate_user!, :except => :create
-  before_action :load_site, :only => [:show, :edit, :update, :destroy, :install, :preview_script, :script, :improve, :chart_data]
+  before_action :load_site, :only => [:show, :edit, :update, :destroy, :install, :preview_script, :script, :improve, :chart_data, :team]
   before_action :get_suggestions, :only => :improve
   before_action :get_top_performers, :only => :improve
   before_action :load_bills, :only => :edit

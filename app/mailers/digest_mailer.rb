@@ -6,8 +6,9 @@ class DigestMailer < ActionMailer::Base
 
   before_filter :set_weekly_dates
 
-  def weekly_digest(site)
+  def weekly_digest(site, user)
     @site = site
+    @user = user
 
     # First find the site elements that actually have views
     @se_totals = Hello::DataAPI.lifetime_totals(@site, @site.site_elements, @site.capabilities.num_days_improve_data)
@@ -25,16 +26,17 @@ class DigestMailer < ActionMailer::Base
     @conversion_header = conversion_header(@sorted_elements)
 
     roadie_mail(
-      to: site.owner.email,
+      to: "", # Doesn't matter, we're sending the results through Grand Central
       subject: 'Your Weekly Hello Bar Digest'
     )
   end
 
-  def not_installed(site)
+  def not_installed(site, user)
     @site = site
+    @user = user
 
     roadie_mail(
-      to: site.owner.email,
+      to: "", # Doesn't matter, we're sending the results through Grand Central
       subject: 'One final step and your Hello Bar is live!'
     )
   end

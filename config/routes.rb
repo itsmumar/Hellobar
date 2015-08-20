@@ -3,9 +3,11 @@ Rails.application.routes.draw do
   get "/auth/:action/callback", :to => "users/omniauth_callbacks", :constraints => { :action => /google_oauth2/ }
 
   get "profile", :to => "user#edit", :as => :profile
-  resource :user, :controller => :user, :only => [:update, :destroy]
+  resource :user, :controller => :user, :only => [:update, :destroy, :new, :create]
 
   resources :sites do
+    get "team"
+
     resource :wordpress_plugin, :controller => :wordpress_plugin
 
     put "site_elements/:id/toggle_paused", to: "site_elements#toggle_paused", as: :site_element_toggle_paused
@@ -16,6 +18,11 @@ Rails.application.routes.draw do
     resources :identities
     resources :contact_lists
     resources :targeted_segments
+    resources :site_memberships do
+      collection do
+        post "invite"
+      end
+    end
   end
 
   namespace :modals do

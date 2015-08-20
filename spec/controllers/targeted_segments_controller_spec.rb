@@ -4,7 +4,7 @@ describe TargetedSegmentsController do
   fixtures :all
 
   let(:site) { sites(:zombo) }
-  let(:user) { site.owner }
+  let(:user) { site.owners.first }
 
   before do
     stub_current_user(user)

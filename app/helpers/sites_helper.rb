@@ -37,4 +37,8 @@ module SitesHelper
       nil
     end
   end
+
+  def format_role(site_membership)
+    site_membership.try(:role) || :none
+  end
 end

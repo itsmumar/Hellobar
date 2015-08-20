@@ -6,7 +6,7 @@ describe SiteElementsController do
   describe "GET show" do
     it "serializes a site_element to json" do
       element = site_elements(:zombo_traffic)
-      stub_current_user(element.site.owner)
+      stub_current_user(element.site.owners.first)
       Site.any_instance.stub(has_script_installed?: true)
 
       get :show, :site_id => element.site, :id => element, :format => :json
@@ -23,7 +23,7 @@ describe SiteElementsController do
     it "sets the correct error if a rule is not provided" do
       Site.any_instance.stub(:generate_script => true)
       site = sites(:zombo)
-      stub_current_user(site.owner)
+      stub_current_user(site.owners.first)
 
       post :create, :site_id => site.id, :site_element => {:element_subtype => "traffic", :rule_id => 0}
 
@@ -35,7 +35,7 @@ describe SiteElementsController do
   describe "POST new" do
     it "defaults branding to false if pro" do
       subscription = subscriptions(:pro_subscription)
-      stub_current_user(subscription.site.owner)
+      stub_current_user(subscription.site.owners.first)
       get :new, :site_id => subscription.site.id, :format => :json
       json = JSON.parse(response.body)
       json["show_branding"].should == false
@@ -43,7 +43,7 @@ describe SiteElementsController do
 
     it "defaults branding to true if free user" do
       subscription = subscriptions(:free_subscription)
-      stub_current_user(subscription.site.owner)
+      stub_current_user(subscription.site.owners.first)
       get :new, :site_id => subscription.site.id, :format => :json
       json = JSON.parse(response.body)
       json["show_branding"].should == true

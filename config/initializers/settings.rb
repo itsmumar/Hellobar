@@ -141,5 +141,9 @@ unless defined?(Hellobar::Settings)
   }
   config[:analytics_log_file] ||= File.join(Rails.root, "log", "analytics.log")
 
+  config[:permissions] = {
+    "owner" => [:billing, :edit_owner]
+  }
+
   Hellobar::Settings = config
 end
