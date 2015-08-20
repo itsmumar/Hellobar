@@ -242,10 +242,10 @@ private
       end
     end
 
-    thank_you_text = if @site.capabilities.custom_thank_you_text? && site_element.thank_you_text.present?
-                       site_element.thank_you_text
+    thank_you_text = if @site.capabilities.custom_thank_you_text?
+                       site_element.display_thank_you_text
                      else
-                       "Thank you for signing up!"
+                       SiteElement::DEFAULT_EMAIL_THANK_YOU
                      end
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
@@ -267,7 +267,8 @@ private
       subtype: site_element.short_subtype,
       thank_you_text: SiteElement.sanitize(thank_you_text).gsub(/"/, "&quot;"),
       primary_color: site_element.primary_color,
-      secondary_color: site_element.secondary_color
+      secondary_color: site_element.secondary_color,
+      email_redirect: site_element.after_email_submit_action == :redirect
     }).select{|key, value| !value.nil? || !value == '' }
   end
 

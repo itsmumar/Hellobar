@@ -46,10 +46,22 @@ describe SiteElement do
     end
 
     describe "#redirect_has_url" do
+      let(:element) { site_elements(:zombo_email) }
+
       context "when subtype is email" do
-        it "requires a redirect url if redirect is true" do
-          element = site_elements(:zombo_email)
-          element.settings["redirect"] = 1
+        it "requires a the correct capabilities" do
+          element.site.capabilities.stub(:after_submit_redirect?).and_return(false)
+          element.settings["after_email_submit_action"] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
+
+          element.save
+
+          element.errors["settings.redirect_url"].
+            should include("is a pro feature")
+        end
+
+        it "requires a redirect url if after_email_submit_action is :redirect" do
+          element.site.capabilities.stub(:after_submit_redirect?).and_return(true)
+          element.settings["after_email_submit_action"] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
 
           element.save
 
@@ -57,9 +69,9 @@ describe SiteElement do
             should include("cannot be blank")
         end
 
-        it "doesn't require a redirect url if redirect is false" do
-          element = site_elements(:zombo_email)
-          element.settings["redirect"] = 0
+        it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
+          element.site.capabilities.stub(:after_submit_redirect?).and_return(true)
+          element.settings["after_email_submit_action"] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
 
           element.save
 
@@ -78,6 +90,81 @@ describe SiteElement do
       end
     end
   end
+
+  describe "#redirect_has_url" do
+    let(:element) { site_elements(:zombo_email) }
+
+    context "when subtype is email" do
+      it "requires a the correct capabilities" do
+        element.site.capabilities.stub(:after_submit_redirect?).and_return(false)
+        element.settings["after_email_submit_action"] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
+
+        element.save
+
+        element.errors["settings.redirect_url"].
+          should include("is a pro feature")
+      end
+
+      it "requires a redirect url if after_email_submit_action is :redirect" do
+        element.site.capabilities.stub(:after_submit_redirect?).and_return(true)
+        element.settings["after_email_submit_action"] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
+
+        element.save
+
+        element.errors["settings.redirect_url"].
+          should include("cannot be blank")
+      end
+
+      it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
+        element.site.capabilities.stub(:after_submit_redirect?).and_return(true)
+        element.settings["after_email_submit_action"] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
+
+        element.save
+
+        element.errors["settings.redirect_url"].should be_empty
+      end
+    end
+
+    context "when subtype is not email" do
+      it "doesn't care about redirect url" do
+        element.save
+        element.errors["settings.redirect_url"].should be_empty
+      end
+    end
+  end
+
+  describe "#has_thank_you_text" do
+    let(:element) { site_elements(:zombo_email) }
+
+    context "when subtype is email" do
+      it "requires a the correct capabilities" do
+        element.site.capabilities.stub(:custom_thank_you_text?).and_return(false)
+        element.settings["after_email_submit_action"] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
+
+        element.save
+
+        element.errors["custom_thank_you_text"].
+          should include("is a pro feature")
+      end
+
+      it "requires thank you text if after_email_submit_action is :custom_thank_you_text" do
+        element.site.capabilities.stub(:custom_thank_you_text?).and_return(true)
+        element.settings["after_email_submit_action"] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
+
+        element.save
+
+        element.errors["custom_thank_you_text"].
+          should include("cannot be blank")
+      end
+
+      it "doesn't require thank you text if after_email_submit_action is not :custom_thank_you_text" do
+        element.site.capabilities.stub(:custom_thank_you_text?).and_return(true)
+        element.save
+        element.errors["custom_thank_you_text"].should be_empty
+      end
+    end
+  end
+
 
   describe '#toggle_paused!' do
     let(:site_element) { site_elements(:zombo_traffic) }
@@ -134,6 +221,32 @@ describe SiteElement do
     it "returns zero if data API returns nil" do
       Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(nil)
       element.total_conversions.should == 0
+    end
+  end
+
+  describe "#display_thank_you_text" do
+    let(:element) { site_elements(:zombo_email) }
+
+    context "when after_email_submit_action is :show_default_message" do
+      it "should return the default message regardless of the thank you text" do
+        element.thank_you_text = "test"
+        element.stub(:after_email_submit_action).and_return(:show_default_message)
+        element.display_thank_you_text.should == SiteElement::DEFAULT_EMAIL_THANK_YOU
+      end
+    end
+
+    context "when after_email_submit_action is not :show_default_message" do
+      it "should return the default message if thank you text not set" do
+        element.thank_you_text = ""
+        element.stub(:after_email_submit_action).and_return(:something)
+        element.display_thank_you_text.should == SiteElement::DEFAULT_EMAIL_THANK_YOU
+      end
+
+      it "should return the the thank you text" do
+        element.thank_you_text = "test"
+        element.stub(:after_email_submit_action).and_return(:something)
+        element.display_thank_you_text.should == "test"
+      end
     end
   end
 end

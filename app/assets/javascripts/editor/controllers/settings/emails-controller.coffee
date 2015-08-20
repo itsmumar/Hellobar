@@ -12,9 +12,15 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   ).property("model.site.contact_lists")
 
   afterSubmitOptions: [
-    {value: 0, label: 'Show a message'}
-    {value: 1, label: 'Redirect the visitor to a url'}
+    {value: 0, label: 'Show default message'}
+    {value: 1, label: 'Show a custom message'}
+    {value: 2, label: 'Redirect the visitor to a url'}
   ]
+
+  showDefaultMessage: (->
+    action_index = @get("model.settings.after_email_submit_action")
+    action_index == 0
+  ).property("model.settings.after_email_submit_action")
 
   disableThankYouText: Ember.computed.not('model.site.capabilities.custom_thank_you_text')
   disableRedirect: Ember.computed.not('model.site.capabilities.after_submit_redirect')
@@ -53,11 +59,8 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   ).property("model.contact_list_id")
 
   showRedirectUrlInput: (->
-    show = @get("model.settings.redirect") == 1
-    if show && Ember.computed.not('model.site.capabilities.after_submit_redirect')
-      @set("model.settings.redirect_url", "")
-    show
-  ).property("model.settings.redirect")
+    @get("model.settings.after_email_submit_action") == 2
+  ).property("model.settings.after_email_submit_action")
 
   actions:
 
