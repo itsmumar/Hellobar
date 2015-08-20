@@ -161,7 +161,7 @@ class User < ActiveRecord::Base
       user.invite_token_expire_at = INVITE_EXPIRE_RATE.from_now
       user.status = TEMPORARY_STATUS
       user.save
-      user.send_invitation_email(site)
+      user.send(:send_invitation_email, site)
     end
     user
   end
