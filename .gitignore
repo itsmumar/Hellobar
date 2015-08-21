@@ -33,3 +33,4 @@ db/*_dump.sql
 .DS_Store
 
 public/*bar_test.html
+public/integration

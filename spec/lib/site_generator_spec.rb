@@ -24,6 +24,12 @@ describe SiteGenerator do
       expect(generator.full_path).to eq(full_path)
     end
 
+    it "has a nil full_path when neither full_path or directory are set" do
+      generator = described_class.new(site.id)
+
+      expect(generator.full_path).to be_nil
+    end
+
     context "when directory is set" do
       it "generates a full path in that directory" do
         directory = Rails.root.join("spec/tmp")

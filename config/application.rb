@@ -33,5 +33,9 @@ module Hellobar
     config.to_prepare do
         Devise::SessionsController.layout proc{ |controller| action_name == 'new' ? 'static' : 'application' }
     end
+
+    config.generators do |g|
+      g.factory_girl false
+    end
   end
 end
