@@ -268,7 +268,8 @@ private
       thank_you_text: SiteElement.sanitize(thank_you_text).gsub(/"/, "&quot;"),
       primary_color: site_element.primary_color,
       secondary_color: site_element.secondary_color,
-      email_redirect: site_element.after_email_submit_action == :redirect
+      email_redirect: site_element.after_email_submit_action == :redirect,
+      branding_url: "http://www.hellobar.com?sid=#{site_element.id}"
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
