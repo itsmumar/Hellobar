@@ -8,7 +8,7 @@ script id="rule-modal" type="text/x-handlebars-template"
         h5 New Rule
         | {{/if}}
 
-      .rules-modal 
+      .rules-modal
         .flash-block
           i.icon-close
 
@@ -18,7 +18,7 @@ script id="rule-modal" type="text/x-handlebars-template"
           input name="_method" type="hidden" value="patch"
           | {{/if}}
         p
-          | Show to people who match 
+          | Show to people who match
           span.select-wrapper
             select#rule_match name="rule[match]"
               | {{option match "all" "all"}}
@@ -29,7 +29,7 @@ script id="rule-modal" type="text/x-handlebars-template"
           .condition-block.no-condition-message
             .condition-ruleset
               small
-                | There are no conditions yet, so this rule matches 
+                ' There are no conditions yet, so this rule matches
                 strong everyone.
                 br To only match certain people click the blue (+) button to the right.
             .condition-actions
@@ -51,7 +51,6 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "DateCondition" "date"}}
           | {{option segment "NumberOfVisitsCondition" "number of visits"}}
           | {{option segment "ReferrerCondition" "referrer"}}
-          | {{option segment "SearchTermCondition" "search term"}}
           | {{option segment "UrlCondition" "URL"}}
           | {{option segment "ReferrerDomainCondition" "Referrer Domain"}}
           | {{option segment "UTMSourceCondition" "Ad Source"}}
