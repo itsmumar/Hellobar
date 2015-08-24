@@ -112,6 +112,7 @@ module Hello::DataAPI
     # => {"1" => 141, "2" => 951}
     #
     def contact_list_totals(site, contact_lists, cache_options = {})
+      return fake_contact_list_totals(contact_lists) if Hellobar::Settings[:fake_data_api]
       return {} if contact_lists.empty?
       contact_list_ids = contact_lists.map(&:id).sort
 
@@ -121,6 +122,12 @@ module Hello::DataAPI
       Rails.cache.fetch cache_key, cache_options do
         path, params = Hello::DataAPIHelper::RequestParts.contact_list_totals(site.id, contact_list_ids, site.read_key)
         get(path, params)
+      end
+    end
+
+    def fake_contact_list_totals(contact_lists)
+      {}.tap do |results|
+        contact_lists.each { |cl| results[cl.id.to_s] = rand(500) }
       end
     end
 
@@ -160,6 +167,7 @@ module Hello::DataAPI
     # => [["person100@gmail.com", "person name", 1388534400], ["person99@gmail.com", "person name", 1388534399]]
     #
     def get_contacts(contact_list, from_timestamp = nil, cache_options = {})
+      return fake_get_contacts(contact_list) if Hellobar::Settings[:fake_data_api]
       cache_key = "hello:data-api:#{contact_list.site_id}:contact_list-#{contact_list.id}:from#{from_timestamp}"
       cache_options[:expires_in] = 10.minutes
 
@@ -169,6 +177,10 @@ module Hello::DataAPI
       end
     rescue
       []
+    end
+
+    def fake_get_contacts(contact_list)
+      [["person100@gmail.com", "First Last", 1388534400], ["person99@gmail.com", "Dr Pepper", 1388534399]]
     end
 
     def get(path, params)
