@@ -41,4 +41,8 @@ module SitesHelper
   def format_role(site_membership)
     site_membership.try(:role) || :none
   end
+
+  def sites_for_team_view
+    current_user.sites.sort_by { |site| [site == current_site ? 0 : 1, site.url.downcase]}
+  end
 end
