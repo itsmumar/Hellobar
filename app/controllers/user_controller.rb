@@ -90,7 +90,7 @@ class UserController < ApplicationController
   private
 
   def load_user_from_invitation
-    token = params[:token] || params[:invite_token]
+    token = params[:token] || params[:invite_token] || params[:user].try(:[], :invite_token)
     return nil unless token
 
     @user = User.where(invite_token: token, status: User::TEMPORARY_STATUS).first

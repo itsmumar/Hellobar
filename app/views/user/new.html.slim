@@ -1,14 +1,14 @@
 div.row
   div.col-md-4
   div.col-md-4
-    h1 Sign up
+    h1 Sign Up
 
     = simple_form_for(@user, as: :user, url: user_path, method: :post) do |f|
       = render 'shared/flash'
-      = f.input :email, disabled: true
-      = f.input :password
-      = f.input :password_confirmation
+      = f.input :email, disabled: true, label: false, class: "string email"
+      = f.input :password, placeholder: "Password", autofocus: true, label: false
+      = f.input :password_confirmation, placeholder: "Password Confirmation", label: false
       = f.hidden_field :invite_token
-      = f.button :submit, "Sign up", :class => "btn btn-primary"
+      = f.button :submit, "Sign up", class: "btn btn-default button"
 
   div.col-md-4

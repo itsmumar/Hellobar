@@ -26,4 +26,5 @@
 
 @import 'layouts/pages/*';          // Static Pages (Home, About Us, etc)
 @import 'layouts/devise/*';         // User Account Pages
+@import 'layouts/user/new';         // User Account Pages
 @import 'layouts/user_migration/*'; // HB 1.0 User Migrations Pages
