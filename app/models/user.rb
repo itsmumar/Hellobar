@@ -123,6 +123,10 @@ class User < ActiveRecord::Base
     role && Hellobar::Settings[:permissions][role].try(:include?, feature)
   end
 
+  def name
+    first_name || last_name ? "#{first_name} #{last_name}".strip : nil
+  end
+
   def self.find_for_google_oauth2(access_token, signed_in_resource=nil, track_options={})
       data = access_token["info"]
       user = User.joins(:authentications).where(authentications: { uid: access_token["uid"], provider: access_token["provider"] }).first

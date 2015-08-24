@@ -16,7 +16,10 @@ table
     tr
       td
         = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
-        = user.email
+        .name-tag
+          .name= user.name || user.email
+          - if user.name
+            div= user.email
       - current_user.sites.each do |site|
         - membership = site.membership_for_user(user)
         td data={site_id: site.id, user_id: user.id, site_membership_id: membership.try(:id)}

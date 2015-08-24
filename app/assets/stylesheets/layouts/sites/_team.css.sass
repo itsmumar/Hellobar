@@ -2,6 +2,13 @@
 
 #sites-team
 
+  .name-tag
+    display: inline-block
+    vertical-align: middle
+
+    .name
+      font-weight: bold
+
   .new_site_membership
     &.ready
       .email_input
@@ -15,7 +22,8 @@
     margin: 0 0.75em
     border-radius: 10em
     border: 2px solid $white
-    @include inline-block()
+    vertical-align: middle
+    display: inline-block
 
   .permission-icon
     width: 1.45em
@@ -23,6 +31,7 @@
     border-radius: 0.75em
     display: inline-block
     margin-right: 1em
+    vertical-align: middle
 
     &.owner
       background-color: $red

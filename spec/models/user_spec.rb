@@ -153,3 +153,16 @@ describe User, "#disconnect_oauth" do
     user.authentications.count.should == 0
   end
 end
+
+describe User, "#name" do
+  it "should be nil if first and last are nil" do
+    user = User.new(first_name: nil, last_name: nil)
+    user.name.should == nil
+  end
+
+  it "should first and last name combined" do
+    User.new(first_name: "abc", last_name: nil).name.should == "abc"
+    User.new(first_name: nil, last_name: "abc").name.should == "abc"
+    User.new(first_name: "abc", last_name: "123").name.should == "abc 123"
+  end
+end
