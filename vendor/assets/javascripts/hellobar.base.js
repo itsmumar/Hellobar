@@ -445,7 +445,7 @@ var _HB = {
             targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
           if(removeElement != null) {
             for (var i = 0; i < removeElement.length; i++) {
-              removeElement[i].style.display = "none";
+              HB.hideElement(removeElement[i]);
             }
           }
         }
@@ -953,7 +953,7 @@ var _HB = {
     HB.w.id = "hellobar-container";
     HB.w.className = "HB-" + siteElement.type;
     HB.w.name = "hellobar-container";
-    HB.w.style.display = 'none'; // Start all site elements as hidden
+    HB.hideElement(HB.w); // Start all site elements as hidden
 
     siteElement.setupIFrame(HB.w)
 
@@ -1451,10 +1451,9 @@ var _HB = {
       element.classList.remove("hb-animateOut");
       element.classList.add("hb-animated");
       element.classList.add("hb-animateIn");
-    } // else just unhide
-    else {
-      element.style.display = "";
     }
+
+    HB.showElement(element); // unhide if hidden
   },
 
   animateOut: function(element, callback){
@@ -1465,7 +1464,7 @@ var _HB = {
       element.classList.add("hb-animateOut");
     } // else just hide
     else {
-      element.style.display = "none";
+      HB.hideElement(element);
     }
 
     // if a callback is given, wait for animation then execute
@@ -1515,7 +1514,7 @@ var _HB = {
 
         // if the pusher exists, unhide it since it should be hidden at this point
         if (HB.e.pusher != null)
-          HB.e.pusher.style.display = '';
+          HB.showElement(HB.e.pusher);
       };
 
       pullDown.appendChild(pdLink);
@@ -1676,7 +1675,7 @@ var _HB = {
       viewCondition = 'preview';
 
     var show = function() {
-      HB.w.style.display = '';
+      HB.showElement(HB.w);
       // Next line is a Safari hack.  Couldn't find out why but sometimes safari
       // wouldn't display the contents of the iframe, but toggling the display style fixes this
       var siteElementNode = HB.getSiteElementDomNode();
@@ -1848,6 +1847,14 @@ var _HB = {
   branding_template: function() {
     var stored = HB.gc("b_template");
     return stored != null ? stored : HB.CAP.b_variation;
+  },
+
+  hideElement: function(element) {
+    element.style.display = 'none';
+  },
+
+  showElement: function(element) {
+    element.style.display = 'inline';
   },
 
   isAd: function() {
