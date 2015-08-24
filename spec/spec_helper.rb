@@ -41,7 +41,7 @@ VCR.configure do |c|
 end
 
 if ENV['CI']
-  Capybara.default_wait_time = 5
+  Capybara.default_wait_time = 30
 end
 
 RSpec.configure do |config|

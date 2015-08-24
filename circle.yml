@@ -14,7 +14,7 @@ database:
 
 test:
   override:
-    - bundle exec rake:
+    - xvfb-run -a bundle exec rake:
         environment:
           RAILS_ENV: test
 
