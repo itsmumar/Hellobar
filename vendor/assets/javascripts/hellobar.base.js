@@ -1740,7 +1740,7 @@ var _HB = {
     };
 
     // first condition checks if visitor has scrolled.
-    // second condition guards against pages too small to scroll, displays immidiately.
+    // second condition guards against pages too small to scroll, displays immediately.
     // window.pageYOffset is same as window.scrollY, but with better compatibility.
     if (window.pageYOffset >= scrollTarget || document.body.scrollHeight <= scrollTarget + window.innerHeight) {
       payload();
