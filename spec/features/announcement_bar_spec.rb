@@ -7,6 +7,9 @@ feature "Site with an announcement bar", js: true do
 
     visit "#{site_path_to_url(path)}"
 
+    # force capybara to wait until iframe is loaded
+    page.has_xpath?('.//iframe[@id="hellobar-container"]')
+
     within_frame 'hellobar-container' do
       expect(page).to have_content(element.headline)
     end
