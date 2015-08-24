@@ -45,6 +45,7 @@ div#user_profile
             th Due At
             th Receipt
             th Actions
+            th Bill Duration
           - bills_for(site).each do |bill, refunds|
             tr
               td= bill.id
@@ -75,6 +76,8 @@ div#user_profile
                     = f.text_field :amount, value: bill.amount * -1
                     br
                     = f.submit "Refund", data: { confirm: "Refund this bill?" }
+              td
+                = bill_duration(bill)
 
     div.site_section
       div.title Subscription History
