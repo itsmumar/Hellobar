@@ -4,66 +4,74 @@ section
   label Plan
   p
     = display_name_for_site(@site)
-    |  is on the 
+    |  is on the&nbsp;
     = @site.current_subscription.values[:name]
     - if @site.current_subscription.trial?
       |  Trial
-    |  plan. 
-    - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
-      = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
-      |  
-      = @site.current_subscription.schedule
-      | .
-    - if @site.requires_payment_method?
-      - # only show "billing schedule" if user is on a plan that actually has one
-      = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal'
-    - else
-      = link_to 'Upgrade plan', '#', class: 'show-upgrade-modal button'
+    |  plan.
+    - if Permissions.view_bills?(current_user, @site)
+      - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
+        = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
+        |
+        = @site.current_subscription.schedule
+        | .
+      - if @site.requires_payment_method?
+        - # only show "billing schedule" if user is on a plan that actually has one
+        = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal'
+      - else
+        = link_to 'Upgrade plan', '#', class: 'show-upgrade-modal button'
 
-section
-  label Card
-  p
-    - if @site.current_subscription && @site.current_subscription.payment_method
-      = @site.current_subscription.payment_method.current_details.data['number']
-      = link_to 'Add or change card', '#', class: 'show-payment-modal'
-    - else
-      small
-        | (no credit card on file)
-
-- if !@bills.empty?
+- if Permissions.view_bills?(current_user, @site)
   section
-    label History
+    label Card
+    p
+      - if @site.current_subscription && @site.current_subscription.payment_method
+        = @site.current_subscription.payment_method.current_details.data['number']
+        = link_to 'Add or change card', '#', class: 'show-payment-modal'
+      - else
+        small
+          | (no credit card on file)
 
-    table
-      thead
-        tr
-          th Date
-          th Cost
-          th Plan
-          th Card
-          th
-      tbody
-        - @bills.each do |bill|
+  - if !@bills.empty?
+    section
+      label History
+
+      table
+        thead
           tr
-            td= bill.bill_at.strftime("%-m-%-d-%Y")
-            td
-              = number_to_currency(bill.amount)
-              - if bill.is_a?(Bill::Refund)
-                |  (Refund)
-            td= "Hello Bar #{bill.subscription.values[:name]}"
-            td= bill.paid_with_payment_method_detail ? bill.paid_with_payment_method_detail.data['number'] : 'n/a'
-            td= link_to 'Receipt', bill_path(bill), target: '_blank'
+            th Date
+            th Cost
+            th Plan
+            th Card
+            th
+        tbody
+          - @bills.each do |bill|
+            tr
+              td= bill.bill_at.strftime("%-m-%-d-%Y")
+              td
+                = number_to_currency(bill.amount)
+                - if bill.is_a?(Bill::Refund)
+                  |  (Refund)
+              td= "Hello Bar #{bill.subscription.values[:name]}"
+              td= bill.paid_with_payment_method_detail ? bill.paid_with_payment_method_detail.data['number'] : 'n/a'
+              td= link_to 'Receipt', bill_path(bill), target: '_blank'
 
-  - if @next_bill && @next_bill.amount > 0
-    small
-      | Next bill is due 
-      = @next_bill.due_at.strftime("%-m-%-d-%Y")
-      |  and will total 
-      = number_to_currency(@next_bill.amount)
-      |  for a 
-      = @next_bill.subscription.schedule
-      |  subscription.
-- elsif @next_bill && @site.current_subscription.trial?
-  | This site is on a trial plan.
-  |  Please enter a payment method by #{@next_bill.due_at.strftime("%-m-%-d-%Y")}
-  |  to continue using HelloBar #{@site.current_subscription.values[:name]}.
+    - if @next_bill && @next_bill.amount > 0
+      small
+        | Next bill is due
+        = @next_bill.due_at.strftime("%-m-%-d-%Y")
+        |  and will total
+        = number_to_currency(@next_bill.amount)
+        |  for a
+        = @next_bill.subscription.schedule
+        |  subscription.
+  - elsif @next_bill && @site.current_subscription.trial?
+    | This site is on a trial plan.
+    |  Please enter a payment method by #{@next_bill.due_at.strftime("%-m-%-d-%Y")}
+    |  to continue using HelloBar #{@site.current_subscription.values[:name]}.
+- elsif @site.is_free?
+  p Contact the site owners to request an upgrade!
+  ul
+    - @site.owners.each do |owner|
+      li
+        .button-wrapper= mail_to owner.email, owner.name || owner.email
