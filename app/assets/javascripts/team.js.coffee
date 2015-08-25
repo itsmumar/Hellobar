@@ -1,11 +1,7 @@
 $ ->
 
-  $('.new_site_membership').submit (event) ->
-    if !$(event.target).hasClass('ready')
-      if $(event.target).addClass('ready')
-        $(event.target).find(":submit").val("Invite")
-        event.preventDefault()
-
+  $('#add-user').click (event) ->
+    new AddTeamMemberModal().open();
 
   $('body').on 'click', '.change-permission', (event) ->
     event.preventDefault()

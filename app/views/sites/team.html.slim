@@ -40,13 +40,6 @@ table
               a.change-permission href="#" data={option: "none"}
                 div.permission-icon.none
                 | none
-  tr
-    td
-    - sites.each do |site|
-      td
-        - if site.membership_for_user(current_user).try(:role) == "owner"
-          = form_for SiteMembership.new, url: invite_site_site_memberships_path(site) do |f|
-            div.email_input
-              = f.label :current_password, "Email"
-              = text_field_tag :email
-            = f.submit "Add User", :class => "button"
+
+#add-user.button
+  | Add user

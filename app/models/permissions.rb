@@ -5,11 +5,13 @@ class Permissions
   PERMISSION_MAP = {
     ADMIN => {
       billing: false,
-      delete_site: false
+      delete_site: false,
+      invite_user: false
     },
     OWNER => {
       billing: true,
-      delete_site: true
+      delete_site: true,
+      invite_user: true
     }
   }
 
@@ -19,6 +21,10 @@ class Permissions
 
   def self.delete_site?(user, site)
     permission_for(user, site, :delete_site)
+  end
+
+  def self.invite_users?(user, site)
+    permission_for(user, site, :invite_user)
   end
 
   def self.permission_for(user, site, feature)
