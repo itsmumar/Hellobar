@@ -41,5 +41,6 @@ table
                 div.permission-icon.none
                 | none
 
-#add-user.button
-  | Add user
+- if sites.any? { |s| Permissions.invite_users?(current_user, s) }
+  #add-user.button
+    | Add user

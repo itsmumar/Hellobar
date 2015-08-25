@@ -2,15 +2,16 @@ script id='add-team-member-template' type='text/x-handlebars-template'
   .modal-wrapper
     .modal-block
       - sites = sites_for_team_view.select { |s| Permissions.invite_users?(current_user, s) }
-      = form_for SiteMembership.new, url: invite_site_site_memberships_path(sites.first) do |f|
-        header
-          h5 Invite someone to your team
-        div.email_input
-          = f.label :current_password, "Email"
-          = text_field_tag :email, nil, placeholder: "johndoe@example.com"
-        .select-wrapper
-          = f.label :site_id, "Site to invite to"
-          = select_tag :site_id, options_for_select(sites.map { |s| [display_name_for_site(s), s.id]})
+      - unless sites.blank?
+        = form_for SiteMembership.new, url: invite_site_site_memberships_path(sites.first) do |f|
+          header
+            h5 Invite someone to your team
+          div.email_input
+            = f.label :current_password, "Email"
+            = text_field_tag :email, nil, placeholder: "johndoe@example.com"
+          .select-wrapper
+            = f.label :site_id, "Site to invite to"
+            = select_tag :site_id, options_for_select(sites.map { |s| [display_name_for_site(s), s.id]})
 
-        footer
-          = f.submit "Add User", :class => "button"
+          footer
+            = f.submit "Add User", :class => "button"
