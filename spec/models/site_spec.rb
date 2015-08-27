@@ -361,10 +361,15 @@ describe Site do
       end
 
       before do
+        @original_config = Site.in_bar_ads_config
         Site.in_bar_ads_config = {
           test_fraction: 1.0,
           show_to_fraction: 1.0 # show all bars to all people that pass the other restrictions
         }
+      end
+
+      after do
+        Site.in_bar_ads_config = @original_config
       end
 
       context "should not show" do

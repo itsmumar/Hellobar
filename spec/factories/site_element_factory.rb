@@ -10,5 +10,9 @@ FactoryGirl.define do
     type "Bar"
     element_subtype "announcement"
     rule
+
+    factory :modal_element do
+      type "Modal"
+    end
   end
 end
