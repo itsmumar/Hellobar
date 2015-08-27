@@ -40,6 +40,10 @@ VCR.configure do |c|
   c.default_cassette_options = {:record => :none} # *TEMPORARILY* set to :new_episodes if you add a spec that makes a network request
 end
 
+if ENV['CI']
+  Capybara.default_wait_time = 30
+end
+
 RSpec.configure do |config|
   # ## VCR
   config.around(:each) do |example|
