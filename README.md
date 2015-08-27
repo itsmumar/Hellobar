@@ -48,3 +48,55 @@ rm -r _temp
 server 'new-ip-address', user: 'hellobar', roles: %w{web}
 ...
 ```
+
+## Testing generated scripts
+
+### Manually in development
+
+There is a sinatra app in `test_site`.
+
+#### Defaults
+Run `rake test_site:generate` to generate `test_site/public/test.html`
+using the last site created.
+
+Run `rake test_site:run` to start the Sinatra server and navigate to
+`localhost:4567`
+
+By default this will use the last site created to generate the js.
+
+You can explicitly pass a site id as well:
+
+```
+rake test_site:generate[2]
+```
+
+
+#### Options
+
+To generate a site html file at an arbitary location:
+
+```
+rake test_site:file[2,'/Users/hb/index.html']
+```
+
+The above method is used by the capybara integration tests.
+
+All of these rake tasks use the `lib/SiteGenerator.rb` class as well as
+an `HbTestSite` class defined within the rake task itself.
+
+### Automated (integration) tests
+
+Integration tests run in the `spec/features` directory.  They use the
+`lib/SiteGenerator` to create an html file in `public/integration`.  The
+file name is a random hex.
+
+Capybara navigates to the public html file in order to test interations.
+
+To test the content of the iframe use `within_frame`.
+
+To test adding or removing the iframe use
+`page.driver.browser.frame_focus`.
+
+Watch out for animations and other asyncronous or delayed interactions.
+You may need to fiddle with the `Capybara.default_wait_time` in
+`spec/spec_helper`.
