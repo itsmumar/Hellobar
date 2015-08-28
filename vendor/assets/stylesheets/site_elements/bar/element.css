@@ -19,6 +19,10 @@
   vertical-align: middle;
 }
 
+#hellobar-bar .hb-arrow {
+  border-width: 0px;
+}
+
 /*-----------  Main Content  -----------*/
 
 #hellobar-bar .hb-content-wrapper {

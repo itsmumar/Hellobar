@@ -34,3 +34,4 @@ db/*_dump.sql
 
 public/*bar_test.html
 public/integration
+test_site/public/*.html
