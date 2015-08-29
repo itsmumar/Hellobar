@@ -13,7 +13,7 @@ describe Admin::UsersController do
 
       get :index, :q => "zombo.com"
 
-      assigns(:users).include?(sites(:zombo).owners.first).should be_true
+      expect(assigns(:users).include?(sites(:zombo).owners.first)).to be_true
     end
 
     it "finds deleted users" do
@@ -22,7 +22,7 @@ describe Admin::UsersController do
       user.destroy
       get :index, :q => "test"
 
-      assigns(:users).include?(user).should be_true
+      expect(assigns(:users).include?(user)).to be_true
     end
   end
 
@@ -35,7 +35,7 @@ describe Admin::UsersController do
       user = users(:joey)
       get :show, :id => user.id
 
-      assigns(:user).should == user
+      expect(assigns(:user)).to eq(user)
     end
 
     it "shows a deleted users" do
@@ -43,7 +43,7 @@ describe Admin::UsersController do
       user.destroy
       get :show, :id => user.id
 
-      assigns(:user).should == user
+      expect(assigns(:user)).to eq(user)
     end
   end
 
@@ -53,7 +53,7 @@ describe Admin::UsersController do
 
       post :impersonate, :id => users(:joey)
 
-      controller.current_user.should == users(:joey)
+      expect(controller.current_user).to eq(users(:joey))
     end
   end
 
@@ -63,11 +63,11 @@ describe Admin::UsersController do
 
       post :impersonate, :id => users(:joey)
 
-      controller.current_user.should == users(:joey)
+      expect(controller.current_user).to eq(users(:joey))
 
       delete :unimpersonate
 
-      controller.current_user.should be_nil
+      expect(controller.current_user).to be_nil
     end
   end
 
@@ -78,7 +78,7 @@ describe Admin::UsersController do
 
       delete :destroy, :id => user
 
-      User.only_deleted.should include(user)
+      expect(User.only_deleted).to include(user)
     end
   end
 
