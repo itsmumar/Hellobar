@@ -53,7 +53,10 @@ Rails.application.routes.draw do
     delete "users/unimpersonate", :to => "users#unimpersonate", :as => :unimpersonate_user
 
     resources :users, :only => [:index, :show, :destroy] do
-      resources :sites, :only => [:update]
+      resources :sites, :only => [:update] do
+        post 'regenerate', to: "users#regenerate_script", as: :regenerate
+      end
+
       resources :bills, :only => [:show] do
         put 'void'
         put 'refund'
