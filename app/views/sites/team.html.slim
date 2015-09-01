@@ -9,6 +9,10 @@ nav.tabs-wrapper
 
 - sites = sites_for_team_view
 
+- if sites.any? { |s| Permissions.invite_users?(current_user, s) }
+  #add-user.button
+    | Add user
+
 table
   tr
     td
@@ -41,6 +45,11 @@ table
                 div.permission-icon.none
                 | none
 
-- if sites.any? { |s| Permissions.invite_users?(current_user, s) }
-  #add-user.button
-    | Add user
+div.permission-block
+  div class=["role-icon", "permission-icon", "owner"]
+  strong Owner:
+  span  Has full access to the site
+div.permission-block
+  div class=["role-icon", "permission-icon", "admin"]
+  strong Admin:
+  span  Has full access, but cannot edit or view billing information
