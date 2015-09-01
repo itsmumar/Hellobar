@@ -54,7 +54,9 @@ Rails.application.routes.draw do
 
     resources :users, :only => [:index, :show, :destroy] do
       resources :sites, :only => [:update] do
-        post 'regenerate', to: "users#regenerate_script", as: :regenerate
+        member do
+          post :regenerate
+        end
       end
 
       resources :bills, :only => [:show] do

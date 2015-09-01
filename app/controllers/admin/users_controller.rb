@@ -44,24 +44,4 @@ class Admin::UsersController < ApplicationController
     session.delete(:impersonated_user)
     redirect_to admin_users_path
   end
-
-  def regenerate_script
-    user = User.find(params[:user_id])
-    site = user.sites.where(id: params[:site_id]).try(:first)
-
-    if site.nil?
-      render json: { message: "Site was not found" }, status: 404
-      return
-    end
-
-    begin
-      site.generate_script
-      render json: {  message: "Site script started generating" }, status: 200
-    rescue RuntimeError
-      render json: {
-        message: "Site's script failed to generate"
-      },
-      status: 500
-    end
-  end
 end
