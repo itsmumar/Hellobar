@@ -33,6 +33,7 @@ class Condition < ActiveRecord::Base
   belongs_to :rule, inverse_of: :conditions
 
   before_validation :clear_blank_values
+  before_validation :normalize_url_condition
 
   validates :rule, association_exists: true
   validates :value, presence: true
@@ -120,5 +121,28 @@ class Condition < ActiveRecord::Base
     end
 
     new(operand: operand, value: value, segment: "DateCondition")
+  end
+
+  def normalize_url_condition
+    return if self.segment != "UrlCondition"
+
+    if self.value.kind_of?(String)
+      self.value = normalize_url(self.value)
+    elsif self.value.kind_of?(Array)
+      self.value.each_with_index do |val, i|
+        self.value[i] = normalize_url(val)
+      end
+    end
+  end
+
+  def normalize_url(url)
+    return url if url.blank?
+    # Don't do anything if it starts with '/' or "http(s)://"
+    return url if url.match(/^(https?:\/\/|\/)/i)
+    if PublicSuffix.valid?(url.split('/').first)
+      "http://#{url}"
+    else
+      "/#{url}"
+    end
   end
 end

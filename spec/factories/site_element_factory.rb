@@ -1,15 +1,8 @@
 FactoryGirl.define do
-  factory :rule do
-    name "Everyone"
-    match "all"
-    editable false
-    site
-  end
-
   factory :site_element do
+    rule
     type "Bar"
     element_subtype "announcement"
-    rule
 
     factory :modal_element do
       type "Modal"

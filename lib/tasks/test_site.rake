@@ -30,7 +30,7 @@ end
 namespace :test_site do
   desc "Creates a temp html file with site script at specified location\n rake test_site:file[95,'/Users/polymathic/Desktop/test.html']"
   task :file, [:site_id, :file_path] => :environment do |t, args|
-    HbTestSite.generate(args[:site_id], full_path: args[:file_path])
+    HbTestSite.generate(args[:site_id], args[:file_path])
   end
 
   desc "Creates a test.html file in the test_site sinatra folder\n rake test_site:generate[95]\nDefaults to last site if not passed"

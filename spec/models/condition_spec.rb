@@ -1,100 +1,162 @@
 require 'spec_helper'
 
-describe Condition, 'validating the value format' do
-  fixtures :all
+RSpec.describe Condition, type: :model do
+  describe '#validating the value format' do
+    fixtures :all
 
-  it "clears empty values during validation" do
-    condition = Condition.new(
-      rule: rules(:zombo),
-      operand: "is",
-      value: ["/foo", "/bar", ""],
-      segment: "UrlCondition"
-    )
-
-    condition.should be_valid
-    condition.value.should == ["/foo", "/bar"]
-  end
-
-  context 'the operand is NOT "between"' do
-    it 'is NOT valid when the value is a non-String object' do
-      condition = Condition.new operand: 'is', value: ['array'], rule: Rule.new
-
-      condition.should_not be_valid
-    end
-
-    it 'is valid when the value is a String' do
-      condition = Condition.new operand: 'is', value: 'string', rule: Rule.new
+    it "clears empty values during validation" do
+      condition = Condition.new(
+        rule: rules(:zombo),
+        operand: "is",
+        value: ["/foo", "/bar", ""],
+        segment: "UrlCondition"
+      )
 
       condition.should be_valid
+      condition.value.should == ["/foo", "/bar"]
+    end
+
+    context 'the operand is NOT "between"' do
+      it 'is NOT valid when the value is a non-String object' do
+        condition = Condition.new operand: 'is', value: ['array'], rule: Rule.new
+
+        condition.should_not be_valid
+      end
+
+      it 'is valid when the value is a String' do
+        condition = Condition.new operand: 'is', value: 'string', rule: Rule.new
+
+        condition.should be_valid
+      end
+    end
+
+    context 'the operand is "between"' do
+      it 'is NOT valid when the value is a non-Array object' do
+        condition = Condition.new operand: 'between', value: 'string value', rule: Rule.new
+
+        condition.should_not be_valid
+      end
+
+      it 'is NOT valid when the value is an Array with 1 element' do
+        condition = Condition.new operand: 'between', value: ['one'], rule: Rule.new
+
+        condition.should_not be_valid
+      end
+
+      it 'is NOT valid when the value is an array with 2 empty values' do
+        condition = Condition.new operand: 'between', value: ['', ''], rule: Rule.new
+
+        condition.should_not be_valid
+      end
+
+      it 'is valid when the value is an Array with 2 elements' do
+        condition = Condition.new operand: 'between', value: ['one', 'two'], rule: Rule.new
+
+        condition.should be_valid
+      end
     end
   end
 
-  context 'the operand is "between"' do
-    it 'is NOT valid when the value is a non-Array object' do
-      condition = Condition.new operand: 'between', value: 'string value', rule: Rule.new
+  describe '#date_condition_from_params' do
+    it 'creates a between condition when both start_date and end_date are present' do
+      condition = Condition.date_condition_from_params('start', 'end')
 
-      condition.should_not be_valid
+      condition.operand.should == 'between'
+      condition.value.should == ['start', 'end']
     end
 
-    it 'is NOT valid when the value is an Array with 1 element' do
-      condition = Condition.new operand: 'between', value: ['one'], rule: Rule.new
+    it 'creates a start_date condition when only start_date is present' do
+      condition = Condition.date_condition_from_params('start', '')
 
-      condition.should_not be_valid
+      condition.operand.should == 'after'
+      condition.value.should == 'start'
     end
 
-    it 'is NOT valid when the value is an array with 2 empty values' do
-      condition = Condition.new operand: 'between', value: ['', ''], rule: Rule.new
+    it 'creates a end_date condition when only end_date is present' do
+      condition = Condition.date_condition_from_params('', 'end')
 
-      condition.should_not be_valid
+      condition.operand.should == 'before'
+      condition.value.should == 'end'
     end
 
-    it 'is valid when the value is an Array with 2 elements' do
-      condition = Condition.new operand: 'between', value: ['one', 'two'], rule: Rule.new
-
-      condition.should be_valid
+    it 'does nothing when neither start nor end date are present' do
+      Condition.date_condition_from_params('', '').should be_nil
     end
   end
-end
 
-describe Condition, '::date_condition_from_params' do
-  it 'creates a between condition when both start_date and end_date are present' do
-    condition = Condition.date_condition_from_params('start', 'end')
+  describe '#to_sentence' do
+    context "is a DateCondition" do
+      it "converts 'is between' conditions to sentences" do
+        Condition.date_condition_from_params('7/6', '7/13').to_sentence.should == "Date is between 7/6 and 7/13"
+      end
 
-    condition.operand.should == 'between'
-    condition.value.should == ['start', 'end']
+      it "converts 'is before' conditions to sentences" do
+        Condition.date_condition_from_params('', '7/13').to_sentence.should == "Date is before 7/13"
+      end
+
+      it "converts 'is after' conditions to sentences" do
+        Condition.date_condition_from_params('7/6', '').to_sentence.should == "Date is after 7/6"
+      end
+    end
   end
 
-  it 'creates a start_date condition when only start_date is present' do
-    condition = Condition.date_condition_from_params('start', '')
-
-    condition.operand.should == 'after'
-    condition.value.should == 'start'
-  end
-
-  it 'creates a end_date condition when only end_date is present' do
-    condition = Condition.date_condition_from_params('', 'end')
-
-    condition.operand.should == 'before'
-    condition.value.should == 'end'
-  end
-
-  it 'does nothing when neither start nor end date are present' do
-    Condition.date_condition_from_params('', '').should be_nil
-  end
-end
-
-describe Condition, '#to_sentence' do
-  context "is a DateCondition" do
-    it "converts 'is between' conditions to sentences" do
-      Condition.date_condition_from_params('7/6', '7/13').to_sentence.should == "Date is between 7/6 and 7/13"
+  describe "#normalize_url_condition" do
+    context "is not a UrlCondition" do
+      it "should do nothing to the value" do
+        condition = build(:condition, segment: "ReferrerCondition", value: "google.com")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("google.com")
+      end
     end
 
-    it "converts 'is before' conditions to sentences" do
-      Condition.date_condition_from_params('', '7/13').to_sentence.should == "Date is before 7/13"
-    end
+    context "is a UrlCondition" do
+      it "should do nothing if url is already absolute (http)" do
+        condition = build(:condition, segment: "UrlCondition", value: "http://google.com")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("http://google.com")
+      end
 
-    it "converts 'is after' conditions to sentences" do
-      Condition.date_condition_from_params('7/6', '').to_sentence.should == "Date is after 7/6"
+      it "should do nothing if url is already absolute (https)" do
+        condition = build(:condition, segment: "UrlCondition", value: "http://google.com")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("http://google.com")
+      end
+
+      it "should do nothing if url is already relative" do
+        condition = build(:condition, segment: "UrlCondition", value: "/about")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("/about")
+      end
+
+      it "should prepend a / if url is relative" do
+        condition = build(:condition, segment: "UrlCondition", value: "about")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("/about")
+      end
+
+      it "should prepend a / if url is relative" do
+        condition = build(:condition, segment: "UrlCondition", value: "about.html")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("/about.html")
+      end
+
+      it "should prepend https if url is absolute" do
+        condition = build(:condition, segment: "UrlCondition", value: "about.com")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("http://about.com")
+      end
+
+      it "should prepend https if url is absolute" do
+        condition = build(:condition, segment: "UrlCondition", value: "hey.hellobar.com")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("http://hey.hellobar.com")
+      end
+
+      it "should normalize values in an array" do
+        condition = build(:condition, segment: "UrlCondition", value: ["hey.hellobar.com", "about.html"])
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq(["http://hey.hellobar.com", "/about.html"])
+      end
     end
   end
 end

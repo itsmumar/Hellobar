@@ -1153,26 +1153,19 @@ var _HB = {
 
     // We don't want to mess with the array for the between operand
     if ( condition.operand == "between" )
-      return HB.applyOperand(currentValue, condition.operand, values);
+      return HB.applyOperand(currentValue, condition.operand, values, condition.segment);
 
     // Put the value in an array if it is not an array
     if ( typeof(values) != "object" || typeof(values.length) != "number" )
       values = [values];
 
-    // Sanitize all values
-    currentValue = HB.sanitizeConditionValue(condition.segment, currentValue);
-    var i;
-    for(i=0;i<values.length;i++)
-    {
-      values[i] = HB.sanitizeConditionValue(condition.segment, values[i]);
-    }
     // For negative/excluding operands we use "and" logic:
     if ( condition.operand.match(/not/) )
     {
       // Must be true for all so a single false means it is false for whole condition
       for(i=0;i<values.length;i++)
       {
-        if (!HB.applyOperand(currentValue, condition.operand, values[i]))
+        if (!HB.applyOperand(currentValue, condition.operand, values[i], condition.segment))
           return false;
       }
       return true;
@@ -1183,17 +1176,21 @@ var _HB = {
       // Must be true for just one, so a single true is true for condition
       for(i=0;i<values.length;i++)
       {
-        if (HB.applyOperand(currentValue, condition.operand, values[i]))
+        if (HB.applyOperand(currentValue, condition.operand, values[i], condition.segment))
           return true;
       }
       return false;
     }
   },
 
-  sanitizeConditionValue: function(segment, value)
+  // Sanitizes the value parameter based on the segment and input
+  // Value is the value to sanitize
+  // Input is the users value condition
+  sanitizeConditionValue: function(segment, value, input)
   {
     if ( segment == "pu" )
-      value = HB.n(value, true);
+      var relative = /^\//.test(input);
+      value = HB.n(value, relative);
     return value;
   },
 
@@ -1218,8 +1215,11 @@ var _HB = {
   },
 
   // Applies the operand specified to the arguments passed in
-  applyOperand: function(a, operand, b)
+  applyOperand: function(currentValue, operand, input, segment)
   {
+    var a = HB.sanitizeConditionValue(segment, currentValue, input);
+    var b = HB.sanitizeConditionValue(segment, input, input);
+
     switch(operand)
     {
       case "is":
@@ -1319,7 +1319,7 @@ var _HB = {
       HB.setVisitorData("rd", "");
     }
     // Set the page URL
-    HB.setVisitorData("pu", HB.n(document.location+"", true));
+    HB.setVisitorData("pu", HB.n(document.location+"", false));
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
     // Detect the device

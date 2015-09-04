@@ -141,7 +141,7 @@ describe Rule, "::create_from_segment" do
     rule.conditions.count.should == 1
 
     condition.segment.should == "UrlCondition"
-    condition.value.should == ["httpsomeurl"]
+    condition.value.should == ["/httpsomeurl"]
     condition.operand.should == "is"
   end
 
