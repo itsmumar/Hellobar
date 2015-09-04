@@ -215,6 +215,11 @@ describe ContactList do
       Hello::DataAPI.stub(:get_contacts => nil)
       contact_list.subscribers.should == []
     end
+
+    it "sends a limit to the data api if specified" do
+      expect(Hello::DataAPI).to receive(:get_contacts).with(contact_list, 100)
+      contact_list.subscribers(100)
+    end
   end
 
   describe "#subscriber_statuses" do

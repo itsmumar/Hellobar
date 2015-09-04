@@ -15,7 +15,9 @@ class ContactListsController < ApplicationController
 
   def show
     @other_lists = @site.contact_lists.where.not(:id => @contact_list.id)
-    @statuses = @contact_list.subscriber_statuses(@contact_list.subscribers[0,100])
+    @subscribers = @contact_list.subscribers(100)
+    @total_subscribers = Hello::DataAPI.contact_list_totals(@site, [@contact_list])[@contact_list.id.to_s]
+    @statuses = @contact_list.subscriber_statuses(@subscribers)
 
     respond_to do |format|
       format.html

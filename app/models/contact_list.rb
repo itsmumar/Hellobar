@@ -60,10 +60,10 @@ class ContactList < ActiveRecord::Base
     sync(immediate: true)
   end
 
-  def subscribers
+  def subscribers(limit=nil)
     return @subscribers if @subscribers
 
-    data = Hello::DataAPI.get_contacts(self) || []
+    data = Hello::DataAPI.get_contacts(self, limit) || []
     @subscribers = data.map{|d| {:email => d[0], :name => d[1], :subscribed_at => d[2].is_a?(Integer) ? Time.at(d[2]) : nil}}
   end
 
