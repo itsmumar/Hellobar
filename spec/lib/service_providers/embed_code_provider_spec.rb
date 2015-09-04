@@ -12,6 +12,12 @@ describe ServiceProviders::EmbedCodeProvider do
   describe "subscribe_params" do
     context "names" do
       # Test a form that asks for (full) name only
+      it "sets names to blank strings if input is nil" do
+        contact_list.data["embed_code"] = embed_code_file_for("mad_mimi_full_name")
+        p = service_provider.subscribe_params("email@email.com", nil)
+        p["signup[name]"].should == ""
+      end
+
       it "sets a single name param" do
         contact_list.data["embed_code"] = embed_code_file_for("mad_mimi_full_name")
         p = service_provider.subscribe_params("email@email.com", "Michael Jordan")
