@@ -44,7 +44,13 @@ class ScriptGenerator < Mustache
   # This is used to rename the CSS class for the branding so users can not
   # create their own CSS easily to target the branding
   def pro_secret
-    @pro_secret ||= Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url.to_s.upcase}#{site.id}#{Time.now.to_f}#{rand(1_000_000)}")
+    @pro_secret ||= begin
+      if @options[:preview]
+        "hellobar"
+      else
+        Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url.to_s.upcase}#{site.id}#{Time.now.to_f}#{rand(1_000_000)}")
+      end
+    end
   end
 
   def capabilities
