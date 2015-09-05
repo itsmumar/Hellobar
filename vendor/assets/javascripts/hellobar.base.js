@@ -59,14 +59,14 @@ var HBQ = function()
   HB.isMobileWidth = false;
   var mobileDeviceInterval = setInterval(function(){
     // Get the frame
-    var frame = window.frames["hellobar-container"];
+    var frame = window.frames[HB_PS + "-container"];
     if ( !frame )
       return;
 
     // Get the relevant elements that might need checking/adjusting
     var containerDocument = frame.document;
     HB.e = {
-      container: HB.$("#hellobar-container"),
+      container: HB.$("#" + HB_PS + "-container"),
       pusher: HB.$("#hellobar-pusher")
     };
 
@@ -217,6 +217,7 @@ var _HB = {
       HB.css = "";
     // Update CSS related to hellobar logo
     css = css.split("hellobar-logo-wrapper").join("hellobar-logo-wrapper_"+HB_PS);
+
     HB.css += "<style>"+css+"</style>";
   },
 
@@ -950,9 +951,9 @@ var _HB = {
     // Create the iframe container
     HB.w = document.createElement("iframe");
     HB.w.src = "about:blank";
-    HB.w.id = "hellobar-container";
+    HB.w.id = HB_PS + "-container";
     HB.w.className = "HB-" + siteElement.type;
-    HB.w.name = "hellobar-container";
+    HB.w.name = HB_PS + "-container";
     HB.hideElement(HB.w); // Start all site elements as hidden
 
     siteElement.setupIFrame(HB.w)

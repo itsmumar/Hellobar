@@ -44,8 +44,11 @@ describe ScriptGenerator, '#render' do
 
   it 'includes the hellobar container css' do
     generator.stub :hellobar_element_css
+    allow(Digest::SHA1).to receive(:hexdigest) { 'random' }
     container_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/container_common.css")
+    container_css.gsub!('hellobar-container', 'random-container')
     element_container_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/bar/container.css")
+    element_container_css.gsub!('hellobar-container', 'random-container')
 
     CSSMin.stub(:minify) { |x| x }
     result = generator.render
@@ -261,27 +264,43 @@ describe ScriptGenerator, '#rules' do
 
     generator.rules.should == [expected_hash]
   end
-end
 
-describe ScriptGenerator, '#generate_script' do
-  it 'does not compress the template if the compress option is not set' do
-    generator = ScriptGenerator.new('site')
-    generator.stub :render => 'template'
+  describe '#generate_script' do
+    it 'does not compress the template if the compress option is not set' do
+      generator = ScriptGenerator.new('site')
+      generator.stub :render => 'template'
 
-    Uglifier.should_not_receive(:new)
-    generator.should_receive(:render)
+      Uglifier.should_not_receive(:new)
+      generator.should_receive(:render)
 
-    generator.generate_script
+      generator.generate_script
+    end
+
+    it 'compresses the template when the compress option is true' do
+      generator = ScriptGenerator.new('site', { compress: true })
+      generator.stub :render => 'template'
+
+      uglifier = Uglifier.new
+      Uglifier.should_receive(:new).and_return(uglifier)
+      uglifier.should_receive(:compress).with('template')
+
+      generator.generate_script
+    end
   end
 
-  it 'compresses the template when the compress option is true' do
-    generator = ScriptGenerator.new('site', { compress: true })
-    generator.stub :render => 'template'
+  describe '#pro_secret' do
+    context 'preview mode' do
+      it 'returns hellobar' do
+        generator = ScriptGenerator.new('site', { preview: true })
+        expect(generator.pro_secret).to eq("hellobar")
+      end
+    end
 
-    uglifier = Uglifier.new
-    Uglifier.should_receive(:new).and_return(uglifier)
-    uglifier.should_receive(:compress).with('template')
-
-    generator.generate_script
+    context 'not preview mode' do
+      it 'returns a random string (not hellobar)' do
+        generator = ScriptGenerator.new(create(:site))
+        expect(generator.pro_secret).to_not eq("hellobar")
+      end
+    end
   end
 end

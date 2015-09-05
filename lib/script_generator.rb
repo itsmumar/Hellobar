@@ -44,7 +44,13 @@ class ScriptGenerator < Mustache
   # This is used to rename the CSS class for the branding so users can not
   # create their own CSS easily to target the branding
   def pro_secret
-    Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url.to_s.upcase}#{site.id}#{Time.now.to_f}#{rand(1_000_000)}")
+    @pro_secret ||= begin
+      if @options[:preview]
+        "hellobar"
+      else
+        Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url.to_s.upcase}#{site.id}#{Time.now.to_f}#{rand(1_000_000)}")
+      end
+    end
   end
 
   def capabilities
@@ -97,6 +103,9 @@ class ScriptGenerator < Mustache
     css = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/container_common.css"
     klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
     css << "\n" << klasses.map { |x| site_element_css(x, true) }.join("\n")
+
+    css = css.gsub("hellobar-container", "#{pro_secret}-container")
+
     CSSMin.minify(css).to_json
   end
 
@@ -104,6 +113,7 @@ class ScriptGenerator < Mustache
     css = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/common.css"
     klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
     klasses.each { |x| css << "\n" << site_element_css(x) }
+
     CSSMin.minify(css).to_json
   end
 
@@ -113,7 +123,7 @@ class ScriptGenerator < Mustache
 
     if File.exist?(file)
       f = File.read(file)
-      return f if !f.blank?
+      return f unless f.blank?
     end
     ""
   end
