@@ -1892,13 +1892,21 @@ var _HB = {
     var headlines = {
       ad1: 'Convert more visitors into customers with Hello Bar.',
       ad2: 'Increase your online sales with Hello Bar.',
-      ad3: 'All of the popular sites use Hello Bar, so why aren’t you?'
-    }
+      ad3: 'All of the popular sites use Hello Bar, so why aren\'t you?'
+    };
+
+    var urls = {
+      home: "https://www.hellobar.com?",
+      use: "https://www.hellobar.com/use-cases?"
+    };
+
+    var urlSegment = this.sample(Object.keys(urls));
     var headlineSegment = this.sample(Object.keys(headlines));
     siteElement['headline'] = headlines[headlineSegment];
     siteElement['link_text'] = 'Get Started';
-    params = "hbt=v2_" + elementType + '_' + headlineSegment + "&sid=" + siteElement.id;
-    siteElement.settings.url = "https://www.hellobar.com/?" + params;
+
+    params = "hbt=v3_" + headlineSegment + "_" + urlSegment + "&sid=" + siteElement.id;
+    siteElement.settings.url = urls[urlSegment] + params;
 
     return siteElement;
   },

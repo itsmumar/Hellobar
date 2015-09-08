@@ -290,27 +290,16 @@ class Site < ActiveRecord::Base
   def self.in_bar_ads_config
     {
       show_to_fraction: 0.1,
-      test_fraction: (1.0/4.0),
       url_blacklist: ["iwillteachyoutoberich.com", "lewishowes.com"]
     }.merge(@in_bar_ads_config || {})
   end
 
   def show_in_bar_ads?
     config = self.class.in_bar_ads_config
-    test_fraction   = config[:test_fraction]
     ad_blacklist    = config[:url_blacklist]
     site_ids        = config[:site_ids]
 
-    if ad_blacklist.none? {|b| url.include?(b) }
-      if is_free?
-        if site_ids
-          return site_ids.include?(id)
-        elsif !Rails.env.production?
-          return (test_fraction >= 1.0) || (id % (1 / test_fraction) == 0)
-        end
-      end
-    end
-    false
+    is_free? && (ad_blacklist.none? {|b| url.include?(b) })
   end
 
   def membership_for_user(user)

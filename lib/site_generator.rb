@@ -20,7 +20,7 @@ class SiteGenerator
       <style></style>
       </head>
       <body style="background-color: #FFFFFF;">
-      <a onclick="console.log(‘BUTTON PUSHED')">HERE</a>
+      <a onclick="console.log('BUTTON PUSHED')">HERE</a>
       <div style="height:500px;">Content</div>
       <div style="height:500px;">Content</div>
       Content
