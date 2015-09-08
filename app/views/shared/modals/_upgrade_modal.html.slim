@@ -80,9 +80,10 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               p After 250,000 visits, every 25,000 visits are an extra $5
               = choose_plan_button(Subscription::Pro.new)
               .email-links
-                - current_site.owners.each do |owner|
-                  div
-                    = mail_to owner.email, owner.name || owner.email
+                - if current_site
+                  - current_site.owners.each do |owner|
+                    div
+                      = mail_to owner.email, owner.name || owner.email
 
         / Enterprise Package
         .package-block.enterprise
@@ -102,6 +103,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
             .package-status
               = choose_plan_button(Subscription::Enterprise.new)
               .email-links
-                - current_site.owners.each do |owner|
-                  div
-                    = mail_to owner.email, owner.name || owner.email
+                - if current_site
+                  - current_site.owners.each do |owner|
+                    div
+                      = mail_to owner.email, owner.name || owner.email
