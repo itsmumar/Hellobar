@@ -26,7 +26,7 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site
-    SiteSerializer.new(object.site)
+    SiteSerializer.new(object.site, scope: scope)
   end
 
   def site_preview_image
