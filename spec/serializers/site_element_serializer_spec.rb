@@ -12,4 +12,11 @@ describe SiteElementSerializer do
     serializer = SiteElementSerializer.new(element)
     serializer.as_json[:full_error_messages].should == ["You must select a type in the \"settings\" section"]
   end
+
+  it "passes the scope to the site serializer" do
+    user = create(:user)
+    serializer = SiteElementSerializer.new(element, scope: user)
+    expect(SiteSerializer).to receive(:new).with(element.site, scope: user)
+    serializer.as_json
+  end
 end
