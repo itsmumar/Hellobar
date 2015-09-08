@@ -21,4 +21,9 @@ describe SiteDetector do
     s = SiteDetector.new("http://blog.lyft.com/")
     s.site_type.should == :squarespace
   end
+
+  it 'should detect a squarespace install' do
+    s = SiteDetector.new("http://skipjacksnauticalliving.blogspot.com/")
+    s.site_type.should == :blogspot
+  end
 end

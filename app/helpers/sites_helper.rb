@@ -33,6 +33,8 @@ module SitesHelper
       ["Squarespace", "http://support.hellobar.com/how-do-i-install-hello-bar-on-squarespace/"]
     when "shopify"
       ["Shopify", "http://support.hellobar.com/how-do-i-install-hello-bar-on-shopify/"]
+    when "blogspot"
+      ["Blogger", "http://support.hellobar.com/how-do-i-istall-hello-bar-on-bloggerblogspot/"]
     else
       nil
     end
