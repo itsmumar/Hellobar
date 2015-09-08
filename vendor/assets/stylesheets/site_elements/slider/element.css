@@ -48,6 +48,9 @@
 
 #hellobar-slider .hb-logo-wrapper.original, #hellobar-slider .hb-logo-wrapper.animated {
   opacity: 0.2;
+  position: absolute;
+  right: -16px;
+  bottom: 0px;
 }
 
 #hellobar-slider .hb-logo-wrapper.original:hover, #hellobar-slider .hb-logo-wrapper.animated:hover {
