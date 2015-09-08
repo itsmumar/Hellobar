@@ -153,7 +153,7 @@ module SiteElementsHelper
   end
 
   def ab_test_icon(site_element)
-    elements_in_group = site_element.site.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype }
+    elements_in_group = site_element.site.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && site_element.rule_id == se.rule_id }
     elements_in_group.sort! { |a, b| a.created_at <=> b.created_at }
     index = elements_in_group.index(site_element)
 

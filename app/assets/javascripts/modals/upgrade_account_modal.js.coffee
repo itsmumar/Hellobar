@@ -28,7 +28,7 @@ class @UpgradeAccountModal extends Modal
 
   close: (continuing = false) ->
     if !continuing && @options.site.current_subscription.type == "free"
-      Intercom('trackEvent', 'upgrade-viewed');
+      Intercom('trackEvent', 'upgrade-viewed')
     super
 
   _bindPackageSelection: ->

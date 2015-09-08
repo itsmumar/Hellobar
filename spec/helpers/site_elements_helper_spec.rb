@@ -220,7 +220,8 @@ describe SiteElementsHelper do
     it "returns the A/B icon for paused bars"  do
       se = site_elements(:zombo_traffic)
       se.update_attribute(:paused, true)
-      helper.ab_test_icon(se).should include("icon-abtest")
+
+      expect(helper.ab_test_icon(se)).to include("icon-abtest")
     end
 
     it "returns the bars indexed by letter" do
@@ -228,24 +229,57 @@ describe SiteElementsHelper do
       se2 = se1.dup
       se2.created_at = se1.created_at + 1.minute
       se2.save
+
       SiteElement.any_instance.stub(:total_conversions).and_return(250)
       SiteElement.any_instance.stub(:total_views).and_return(500)
 
-      helper.ab_test_icon(se1).should include("<span class='numbers'>A</span>")
-      helper.ab_test_icon(se2).should include("<span class='numbers'>B</span>")
+      expect(helper.ab_test_icon(se1)).to include("<span class='numbers'>A</span>")
+      expect(helper.ab_test_icon(se2)).to include("<span class='numbers'>B</span>")
     end
 
     it "uses icon-tip for the 'winning' bar" do
       se1 = site_elements(:zombo_traffic)
       se2 = se1.dup
       se2.save
-      se1.stub(:total_conversions).and_return(250)
-      se1.stub(:total_views).and_return(500)
-      se2.stub(:total_conversions).and_return(100)
-      se2.stub(:total_views).and_return(500)
+
+      allow(se1).to receive(:total_conversions) { 250 }
+      allow(se1).to receive(:total_views)       { 500 }
+      allow(se2).to receive(:total_conversions) { 100 }
+      allow(se2).to receive(:total_views)       { 500 }
+
       Site.any_instance.stub(:site_elements).and_return([se1, se2])
-      helper.ab_test_icon(se1).should include("icon-tip")
-      helper.ab_test_icon(se2).should include("icon-circle")
+
+      expect(helper.ab_test_icon(se1)).to include("icon-tip")
+      expect(helper.ab_test_icon(se2)).to include("icon-circle")
+    end
+
+    it "does not group elements that are in different rules" do
+      variation_1 = site_elements(:zombo_traffic)
+      variation_2 = variation_1.dup
+      variation_3 = variation_1.dup
+
+      variation_2.save
+      variation_3.save
+
+      allow(variation_3).to receive(:rule_id) { 0 }
+
+      allow(variation_1).to receive(:total_views) { 250 }
+      allow(variation_2).to receive(:total_views) { 250 }
+      allow(variation_3).to receive(:total_views) { 250 }
+
+      allow(variation_1).to receive(:total_conversions) { 250 }
+      allow(variation_2).to receive(:total_conversions) { 250 }
+      allow(variation_3).to receive(:total_conversions) { 250 }
+
+      Site.any_instance.stub(:site_elements).and_return([variation_1, variation_2, variation_3])
+
+      icon_1 = helper.ab_test_icon(variation_1)
+      icon_2 = helper.ab_test_icon(variation_2)
+      icon_3 = helper.ab_test_icon(variation_3)
+
+      expect(icon_1).to include("icon-circle")
+      expect(icon_2).to include("icon-circle")
+      expect(icon_3).to include("icon-abtest")
     end
   end
 end
