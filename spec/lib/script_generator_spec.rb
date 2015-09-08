@@ -44,7 +44,7 @@ describe ScriptGenerator, '#render' do
 
   it 'includes the hellobar container css' do
     generator.stub :hellobar_element_css
-    allow(Digest::SHA1).to receive(:hexdigest) { 'random' }
+    allow(generator).to receive(:pro_secret) { 'random' }
     container_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/container_common.css")
     container_css.gsub!('hellobar-container', 'random-container')
     element_container_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/bar/container.css")

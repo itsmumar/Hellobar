@@ -3,7 +3,7 @@ require 'integration_helper'
 feature "Site with an announcement bar", js: true do
   scenario "shows headline" do
     element = FactoryGirl.create(:site_element)
-    allow(Digest::SHA1).to receive(:hexdigest) { 'random' }
+    allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
     path = generate_file_and_return_path(element.site.id)
 
     visit "#{site_path_to_url(path)}"
