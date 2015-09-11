@@ -15,6 +15,24 @@ class Admin::SitesController < ApplicationController
     redirect_to admin_user_path(params[:user_id])
   end
 
+  def regenerate
+    site = Site.where(id: params[:id]).try(:first)
+
+    if site.nil?
+      render json: { message: "Site was not found" }, status: 404 and return
+    end
+
+    begin
+      site.generate_script
+      render json: {  message: "Site script started generating" }, status: 200
+    rescue RuntimeError
+      render json: {
+        message: "Site's script failed to generate"
+      },
+      status: 500
+    end
+  end
+
   private
   def subscription_params
     params.require(:subscription).permit(:plan, :schedule, :trial_period)

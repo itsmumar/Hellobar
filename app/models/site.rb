@@ -8,6 +8,7 @@ class Site < ActiveRecord::Base
   has_many :rules, -> { order("editable ASC, id ASC") }, dependent: :destroy
   has_many :site_elements, through: :rules, dependent: :destroy
   has_many :site_memberships, dependent: :destroy
+  has_many :owners, -> { where(role: "owner") }, through: :site_memberships
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
   has_many :contact_lists, dependent: :destroy
@@ -35,10 +36,6 @@ class Site < ActiveRecord::Base
 
   scope :script_uninstalled_db, -> do
     where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
-  end
-
-  def owners
-    site_memberships.select { |x| x.role == "owner" }.map(&:user)
   end
 
   # We are getting bad analytics data regarding installs and uninstalls
