@@ -16,16 +16,14 @@ class Admin::SitesController < ApplicationController
   end
 
   def regenerate
-    user = User.find(params[:user_id])
-    user_site = Site.where(id: params[:id]).try(:first)
+    site = Site.where(id: params[:id]).try(:first)
 
-    if user_site.nil? || !user_site.owners.include?(user)
-      render json: { message: "Site was not found" }, status: 404
-      return
+    if site.nil?
+      render json: { message: "Site was not found" }, status: 404 and return
     end
 
     begin
-      user_site.generate_script
+      site.generate_script
       render json: {  message: "Site script started generating" }, status: 200
     rescue RuntimeError
       render json: {
