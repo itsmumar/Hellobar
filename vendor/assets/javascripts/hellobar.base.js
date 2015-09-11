@@ -1773,7 +1773,7 @@ var _HB = {
         HB.intentBodyBlurEvent = false; }
 
       // catches fast mouse move off screentop (same location across polls implies cursor out of viewport)
-      if ((HB.mouseY < 75)
+      if ((HB.mouseY < 25)
         && (c[c.length - 1].x === c[c.length - 2].x)
         && (c[c.length - 1].y === c[c.length - 2].y)
         && (c[c.length - 1].y === c[c.length - 3].y)
