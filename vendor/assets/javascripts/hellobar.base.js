@@ -1783,7 +1783,7 @@ var _HB = {
       if (HB.mouseY < 2 && c[c.length - 2].y < 10) { vistorIntendsTo = true };
 
       // catches any move towards the back button
-      if (HB.mouseY + HB.mouseX < 200) { vistorIntendsTo = true };
+      if ((HB.mouseY / 2) + HB.mouseX < 50) { vistorIntendsTo = true };
 
       // Windows-ish only rules
       if (navigator.appVersion.indexOf("Win")!=-1) {
