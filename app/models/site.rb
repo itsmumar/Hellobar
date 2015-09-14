@@ -164,7 +164,9 @@ class Site < ActiveRecord::Base
   end
 
   def create_default_rule
-    rules.create!(:name => "Everyone", :match => Rule::MATCH_ON[:all], editable: false)
+    rule = rules.default
+    rule.save!
+    rule
   end
 
   def current_subscription
