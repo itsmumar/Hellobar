@@ -18,10 +18,6 @@ describe Admin::SitesController do
   end
 
   describe "POST #regenerate" do
-    before do
-      stub_current_admin(@admin)
-    end
-
     context "when the site exists" do
       let(:user) { site.owners.first }
 
@@ -96,11 +92,6 @@ describe Admin::SitesController do
 
     def post_regenerate(site_id = site.id)
       post :regenerate, { user_id: user.id, id: site_id }
-    end
-
-    def expect_json_response_to_include(json)
-      json_response = JSON.parse(response.body).with_indifferent_access
-      expect(json_response).to include(json)
     end
   end
 end

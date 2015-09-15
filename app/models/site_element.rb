@@ -1,5 +1,6 @@
 class SiteElement < ActiveRecord::Base
   TYPES = [Bar, Modal, Slider, Takeover]
+
   DEFAULT_EMAIL_THANK_YOU = "Thank you for signing up!"
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,
@@ -41,9 +42,24 @@ class SiteElement < ActiveRecord::Base
   scope :active, -> { where(paused: false) }
   scope :has_performance, -> { where("element_subtype != ?", "announcement") }
 
-  delegate :site, to: :rule, allow_nil: true
+  delegate :site, :site_id, to: :rule, allow_nil: true
 
   serialize :settings, Hash
+
+  after_create :track_creation
+
+  NOT_CLONEABLE_ATTRIBUTES = [
+    :element_subtype,
+    :id,
+    :created_at,
+    :updated_at,
+    :deleted_at,
+    :paused
+  ]
+
+  def cloneable_attributes
+    attributes.reject { |k,v| NOT_CLONEABLE_ATTRIBUTES.include?(k.to_sym) }
+  end
 
   def total_views
     lifetime_totals.try(:views) || 0
@@ -68,9 +84,8 @@ class SiteElement < ActiveRecord::Base
   end
 
   def track_creation
-    Analytics.track(:site, self.site.id, "Created Site Element", {site_element_id: self.id, type: self.element_subtype, style: self.type.to_s.downcase})
+    Analytics.track(:site, self.site_id, "Created Site Element", {site_element_id: self.id, type: self.element_subtype, style: self.type.to_s.downcase})
   end
-  after_create :track_creation
 
   def self.all_templates
     [].tap do |templates|
@@ -105,7 +120,7 @@ class SiteElement < ActiveRecord::Base
   private
 
   def is_email?
-     element_subtype == "email"
+    element_subtype == "email"
   end
 
   def lifetime_totals
