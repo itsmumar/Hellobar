@@ -147,16 +147,72 @@ describe User do
         expect(u.authentications.first.provider).to eq("google_oauth2")
         expect(u.authentications.first.uid).to eq(uuid)
       end
+
+      context "when first and last name provided" do
+        let(:first_name) { Faker::Name.first_name }
+        let(:last_name) { Faker::Name.last_name }
+
+        before do
+          token["info"]["first_name"] = first_name
+          token["info"]["last_name"] = last_name
+        end
+
+        it "set the first name" do
+          u = User.find_for_google_oauth2(token)
+
+          expect(u.first_name).to eq(first_name)
+        end
+
+        it "set the last name" do
+          u = User.find_for_google_oauth2(token)
+
+          expect(u.last_name).to eq(last_name)
+        end
+      end
     end
 
     context "when user exists" do
       it "finds a user based on the uid and provider" do
-        user = User.create(email: "test@test.com", password: "123devdev", password_confirmation: "123devdev")
-        user.authentications.create(provider: "google_oauth2", uid: uuid)
+        user = create_user
 
         found = User.find_for_google_oauth2(token)
 
         expect(found.id).to eq(user.id)
+      end
+
+      context "when name not set & names passed" do
+        let(:first_name) { Faker::Name.first_name }
+        let(:last_name) { Faker::Name.last_name }
+
+        before do
+          token["info"]["first_name"] = first_name
+          token["info"]["last_name"] = last_name
+        end
+
+        it "sets the first name" do
+          user = create_user
+          expect(user.first_name).to be_nil
+
+          found = User.find_for_google_oauth2(token)
+
+          expect(found.reload.first_name).to eq(first_name)
+        end
+
+        it "sets the last name" do
+          user = create_user
+          expect(user.last_name).to be_nil
+
+          found = User.find_for_google_oauth2(token)
+
+          expect(found.reload.last_name).to eq(last_name)
+
+        end
+      end
+
+      def create_user
+        user = User.create(email: email, password: "123devdev", password_confirmation: "123devdev")
+        user.authentications.create(provider: "google_oauth2", uid: uuid)
+        user
       end
     end
   end
