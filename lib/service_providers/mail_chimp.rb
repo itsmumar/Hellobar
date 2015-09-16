@@ -111,6 +111,8 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     when 104, 200, 101 #Invalid_ApiKey, Invalid List, Deactivated Account
       identity.destroy_and_notify_user if identity != nil
       raise error
+    when 214
+      # Email already existed in list, don't do anything
     else
       # bubble up to email_synchronizer, which will catch if it is a transient error
       raise error
