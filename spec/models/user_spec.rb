@@ -3,11 +3,11 @@ require 'spec_helper'
 describe User do
   describe "validations" do
     it "cannot have the same email as someone in the wordpress database" do
-      Hello::WordpressUser.should_receive(:email_exists?).with("foo@bar.com").and_return(true)
+      expect(Hello::WordpressUser).to receive(:email_exists?).with("foo@bar.com").and_return(true)
 
       user = User.create(:email => "foo@bar.com")
 
-      user.errors.messages[:email].should include("has already been taken")
+      expect(user.errors.messages[:email]).to include("has already been taken")
     end
 
     it 'cannot have the same email as someone in the Rails database' do
@@ -16,7 +16,7 @@ describe User do
 
       user = User.create email: email
 
-      user.errors.messages[:email].should include('has already been taken')
+      expect(user.errors.messages[:email]).to include('has already been taken')
     end
 
     it 'can have the same email as someone in the Rails database if the previous user was deleted' do
@@ -26,22 +26,22 @@ describe User do
 
       user = User.create email: email
 
-      user.errors.messages[:email].should be_nil
+      expect(user.errors.messages[:email]).to be_nil
     end
 
     it 'should require a valid email' do
       u = User.create(email: "test")
-      u.errors.messages[:email].should include('is invalid')
+      expect(u.errors.messages[:email]).to include('is invalid')
     end
 
     it 'should require a password of 9 characters or more' do
       u = User.create(email: "test@test.com", password: "123")
-      u.errors.messages[:password].should include('is too short (minimum is 8 characters)')
+      expect(u.errors.messages[:password]).to include('is too short (minimum is 8 characters)')
     end
 
     it 'should require password_confirmation to match' do
       u = User.create(email: "test@test.com", password: "12345678", password_confirmation: "sdaf")
-      u.errors.messages[:password_confirmation].should include('doesn\'t match Password')
+      expect(u.errors.messages[:password_confirmation]).to include('doesn\'t match Password')
     end
   end
 
@@ -51,7 +51,7 @@ describe User do
         User.generate_temporary_user
       }.to change(User, :count).by(1)
 
-      User.last.status.should == User::TEMPORARY_STATUS
+      expect(User.last.status).to eq(User::TEMPORARY_STATUS)
     end
   end
 
@@ -61,13 +61,13 @@ describe User do
     it 'returns true when the user is active' do
       user.status = User::ACTIVE_STATUS
 
-      user.should be_active
+      expect(user).to be_active
     end
 
     it 'returns false when the user is not active' do
       user.status = 'something else'
 
-      user.should_not be_active
+      expect(user).not_to be_active
     end
   end
 
@@ -76,21 +76,21 @@ describe User do
     let(:site_member) { site_memberships(:zombo) }
 
     before do
-      Site.any_instance.stub(:generate_static_assets)
+      allow_any_instance_of(Site).to receive(:generate_static_assets)
     end
 
     it 'destroying a user should destroy their sites' do
       user = site_member.user
       site = site_member.site
       user.destroy
-      user.destroyed?.should be_true
-      site.reload.destroyed?.should be_true
+      expect(user.destroyed?).to be_true
+      expect(site.reload.destroyed?).to be_true
     end
 
     it "should soft-delete" do
       u = users(:joey)
       u.destroy
-      User.only_deleted.should include(u)
+      expect(User.only_deleted).to include(u)
     end
   end
 
@@ -103,45 +103,61 @@ describe User do
         password: "asdfasdf"
       )
 
-      user.valid_password?("asdfasdf").should be_true
+      expect(user.valid_password?("asdfasdf")).to be_true
     end
 
     it "is true for valid wordpress passwords" do
       user = User.create!(email: "newuser@asdf.com", password: "asdfasdf")
       user.update(encrypted_password: "$P$Brhelf0cSqkZABYCgR08YB8kVp1EFa/")
 
-      user.valid_password?("thisisold").should be_true
+      expect(user.valid_password?("thisisold")).to be_true
     end
   end
 
   describe ".find_for_google_oauth2" do
-    it "creates a new user with the given authentication token" do
-      token = {
+    let(:email) { Faker::Internet.email }
+    let(:uuid) { SecureRandom.uuid }
+
+    let(:token) do
+      {
         "info" => {
-          "email" => "test@test.com"
+          "email" => email
         },
-        "uid" => "abc123",
+        "uid" => uuid,
         "provider" => "google_oauth2"
       }
-
-      u = User.find_for_google_oauth2(token)
-      u.email.should == "test@test.com"
-      u.authentications.count.should == 1
     end
 
-    it "finds a user based on the uid and provider" do
-      user = User.create(email: "test@test.com", password: "123devdev", password_confirmation: "123devdev")
-      user.authentications.create(provider: "google_oauth2", uid: "abc123")
-      token = {
-        "info" => {
-          "email" => "test@test.com"
-        },
-        "uid" => "abc123",
-        "provider" => "google_oauth2"
-      }
+    context "when user does not exist" do
+      it "creates a new user with correct email" do
+        u = User.find_for_google_oauth2(token)
 
-      found = User.find_for_google_oauth2(token)
-      found.id.should == user.id
+        expect(u.email).to eq(email)
+      end
+
+      it "creates a new user with one authentication" do
+        u = User.find_for_google_oauth2(token)
+
+        expect(u.authentications.count).to eq(1)
+      end
+
+      it "creates a new user with correct provider info" do
+        u = User.find_for_google_oauth2(token)
+
+        expect(u.authentications.first.provider).to eq("google_oauth2")
+        expect(u.authentications.first.uid).to eq(uuid)
+      end
+    end
+
+    context "when user exists" do
+      it "finds a user based on the uid and provider" do
+        user = User.create(email: "test@test.com", password: "123devdev", password_confirmation: "123devdev")
+        user.authentications.create(provider: "google_oauth2", uid: uuid)
+
+        found = User.find_for_google_oauth2(token)
+
+        expect(found.id).to eq(user.id)
+      end
     end
   end
 
@@ -151,39 +167,39 @@ describe User do
       user.authentications.create(provider: "google_oauth2", uid: "abc123")
       user = User.find user.id
       user.update_attributes(password: "1234devdev", password_confirmation: "1234devdev")
-      user.authentications.count.should == 0
+      expect(user.authentications.count).to eq(0)
     end
   end
 
   describe "#name" do
     it "should be nil if first and last are nil" do
       user = User.new(first_name: nil, last_name: nil)
-      user.name.should == nil
+      expect(user.name).to eq(nil)
     end
 
     it "should first and last name combined" do
-      User.new(first_name: "abc", last_name: nil).name.should == "abc"
-      User.new(first_name: nil, last_name: "abc").name.should == "abc"
-      User.new(first_name: "abc", last_name: "123").name.should == "abc 123"
+      expect(User.new(first_name: "abc", last_name: nil).name).to eq("abc")
+      expect(User.new(first_name: nil, last_name: "abc").name).to eq("abc")
+      expect(User.new(first_name: "abc", last_name: "123").name).to eq("abc 123")
     end
   end
 
   describe "#send_invitation_email" do
     it "should send the token invite email when token has not been redeemed" do
       user = User.new(status: User::TEMPORARY_STATUS, invite_token: "sdaf", invite_token_expire_at: 1.month.from_now)
-      user.should_receive(:send_invite_token_email)
+      expect(user).to receive(:send_invite_token_email)
       user.send_invitation_email(nil)
     end
 
     it "should send the team invite email if token expired" do
       user = User.new(status: User::TEMPORARY_STATUS, invite_token: "sdaf", invite_token_expire_at: 1.month.ago)
-      user.should_receive(:send_team_invite_email)
+      expect(user).to receive(:send_team_invite_email)
       user.send_invitation_email(nil)
     end
 
     it "should send the team invite email if user is not temporary" do
       user = User.new(status: User::ACTIVE_STATUS, invite_token: "sdaf", invite_token_expire_at: 1.month.from_now)
-      user.should_receive(:send_team_invite_email)
+      expect(user).to receive(:send_team_invite_email)
       user.send_invitation_email(nil)
     end
   end

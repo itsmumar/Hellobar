@@ -164,6 +164,7 @@ class User < ActiveRecord::Base
 
   def self.find_or_invite_by_email(email, site)
     user = User.where(email: email).first
+
     if user.nil?
       user = User.new(email: email)
       password = Devise.friendly_token[9,20]
@@ -174,6 +175,7 @@ class User < ActiveRecord::Base
       user.status = TEMPORARY_STATUS
       user.save
     end
+
     user
   end
 
