@@ -230,6 +230,20 @@ describe ContactList do
     end
   end
 
+  describe "#destroy" do
+    it "deletes contact list from default scope" do
+      expect {
+        contact_list.destroy
+      }.to change { ContactList.count }.by(-1)
+    end
+
+    it "soft deletes a contact list" do
+      expect {
+        contact_list.destroy
+      }.to change { ContactList.only_deleted.count }
+    end
+  end
+
   describe "#subscribers" do
     it "gets subscribers from the data API" do
       Hello::DataAPI.stub(:get_contacts => [["person@gmail.com", "Per Son", 123456789]])
