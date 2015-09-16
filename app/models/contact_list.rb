@@ -13,6 +13,7 @@ class ContactList < ActiveRecord::Base
   belongs_to :identity
 
   has_many :site_elements
+  has_many :contact_list_logs
 
   serialize :data, Hash
 

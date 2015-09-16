@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150706203001) do
+ActiveRecord::Schema.define(version: 20150916164007) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -120,6 +120,18 @@ ActiveRecord::Schema.define(version: 20150706203001) do
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
 
+  create_table "contact_list_logs", force: true do |t|
+    t.integer  "contact_list_id"
+    t.string   "email"
+    t.string   "name"
+    t.text     "error"
+    t.boolean  "completed",       default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contact_list_logs", ["contact_list_id"], name: "index_contact_list_logs_on_contact_list_id", using: :btree
+
   create_table "contact_lists", force: true do |t|
     t.integer  "site_id"
     t.integer  "identity_id"
@@ -219,12 +231,12 @@ ActiveRecord::Schema.define(version: 20150706203001) do
     t.string   "thank_you_text"
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
-    t.integer  "wordpress_bar_id"
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
+    t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
     t.string   "view_condition",                  default: "immediately"

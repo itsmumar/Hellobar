@@ -127,6 +127,31 @@ describe ContactList do
         contact_list.sync_one! "email@email.com", "Test Testerson"
       end
     end
+
+    it "creates a log entry" do
+      allow(contact_list).to receive(:oauth?) { true }
+      allow(service_provider).to receive(:subscribe)
+
+      expect{
+        contact_list.sync_one! "email@email.com", "Test Testerson"
+      }.to change{ContactListLog.count}.by(1)
+    end
+
+    it "saves the error in a log entry" do
+      allow(contact_list).to receive(:oauth?) { true }
+      allow(service_provider).to receive(:subscribe).and_raise("this error")
+      expect { contact_list.sync_one! "email@email.com", "Test Testerson"}.to raise_error
+      expect(contact_list.contact_list_logs.last.error).to include("this error")
+    end
+
+    it "marks a log entry as completed" do
+      allow(contact_list).to receive(:oauth?) { true }
+      allow(service_provider).to receive(:subscribe)
+
+      expect{
+        contact_list.sync_one! "email@email.com", "Test Testerson"
+      }.to change{ContactListLog.where(completed: true).count}.by(1)
+    end
   end
 
   it "should handle invalid JSON correctly" do

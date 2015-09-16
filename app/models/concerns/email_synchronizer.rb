@@ -47,6 +47,7 @@ module EmailSynchronizer
 
   # Extracted from embed_code_provider#subscribe!
   def sync_one!(email, name, options={})
+    log_entry = contact_list_logs.create(email: email, name: name)
     return unless syncable?
 
     # Ensure rake-task quotes are removed
@@ -56,7 +57,7 @@ module EmailSynchronizer
     # Remove name if rake interpreted is as "nil"
     name = nil if name == "nil"
 
-    perform_sync do
+    perform_sync(log_entry) do
       if oauth?
         subscribe(data["remote_id"], email, name, double_optin)
       else
@@ -72,11 +73,14 @@ module EmailSynchronizer
 
   private
 
-  def perform_sync
+  def perform_sync(log_entry=nil)
     # run something immediately before sync
     yield
     # run something immediately after sync
+    log_entry.update(completed: true) if log_entry
   rescue *ESP_ERROR_CLASSES => e
+    log_entry.update(completed: false, error: e.to_s) if log_entry
+
     if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
       Raven.capture_exception(e)
       if oauth?
@@ -87,5 +91,8 @@ module EmailSynchronizer
     else
       raise e
     end
+  rescue => e
+    log_entry.update(completed: false, error: e.to_s) if log_entry
+    raise e
   end
 end
