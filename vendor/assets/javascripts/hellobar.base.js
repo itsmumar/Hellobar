@@ -1704,19 +1704,19 @@ var _HB = {
     else if (viewCondition === 'scroll-some')
     {
       // scroll-some is defined here as "visitor scrolls 300 pixels"
-      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, 300, show);
+      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck(300, show)}, 500);      
     }
     else if (viewCondition === 'scroll-middle')
     {
-      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "middle", show);
+      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck("middle", show)}, 500);
     }
     else if (viewCondition === 'scroll-to-bottom')
     {
-      HB.scrollInterval = setInterval(HB.scrollTargetCheck, 500, "bottom", show);
+      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck("bottom", show)}, 500);      
     }
     else if (viewCondition === 'exit-intent')
     {
-      HB.intentInterval = setInterval(HB.intentCheck, 100, "exit", show);
+      HB.intentInterval = setInterval(function(){HB.intentCheck("exit", show)}, 100);     
     }
     else {
       // No view condition so show immediately (very small delay for animated elements)
