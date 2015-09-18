@@ -1862,7 +1862,7 @@ var _HB = {
   isAd: function() {
     if (HB.CAP.preview) return false;
 
-    var adFactor = HB.CAP.in_bar_ad_fraction || 0.0 // Don't show an ad unless explictly defined in script
+    var adFactor = HB.CAP.in_bar_ad_fraction || 0.0; // Don't show an ad unless explictly defined in script
     return Math.random() >= (1 - adFactor);
   },
 
