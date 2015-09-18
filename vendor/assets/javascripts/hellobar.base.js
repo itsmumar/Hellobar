@@ -1704,7 +1704,7 @@ var _HB = {
     else if (viewCondition === 'scroll-some')
     {
       // scroll-some is defined here as "visitor scrolls 300 pixels"
-      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck(300, show)}, 500);      
+      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck(300, show)}, 500);
     }
     else if (viewCondition === 'scroll-middle')
     {
@@ -1712,11 +1712,11 @@ var _HB = {
     }
     else if (viewCondition === 'scroll-to-bottom')
     {
-      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck("bottom", show)}, 500);      
+      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck("bottom", show)}, 500);
     }
     else if (viewCondition === 'exit-intent')
     {
-      HB.intentInterval = setInterval(function(){HB.intentCheck("exit", show)}, 100);     
+      HB.intentInterval = setInterval(function(){HB.intentCheck("exit", show)}, 100);
     }
     else {
       // No view condition so show immediately (very small delay for animated elements)
@@ -1890,24 +1890,9 @@ var _HB = {
         siteElement['link_color'] = 'fff';
     }
 
-    var headlines = {
-      ad1: 'Convert more visitors into customers with Hello Bar.',
-      ad2: 'Increase your online sales with Hello Bar.',
-      ad3: 'All of the popular sites use Hello Bar, so why aren\'t you?'
-    };
-
-    var urls = {
-      home: "https://www.hellobar.com?",
-      use: "https://www.hellobar.com/use-cases?"
-    };
-
-    var urlSegment = this.sample(Object.keys(urls));
-    var headlineSegment = this.sample(Object.keys(headlines));
-    siteElement['headline'] = headlines[headlineSegment];
+    siteElement['headline'] = "Convert more visitors into customers with Hello Bar.";
     siteElement['link_text'] = 'Get Started';
-
-    params = "hbt=v3_" + headlineSegment + "_" + urlSegment + "&sid=" + siteElement.id;
-    siteElement.settings.url = urls[urlSegment] + params;
+    siteElement.settings.url = "https://www.hellobar.com";
 
     return siteElement;
   },
