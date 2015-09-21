@@ -139,18 +139,29 @@ class User < ActiveRecord::Base
       data = access_token["info"]
       user = User.joins(:authentications).where(authentications: { uid: access_token["uid"], provider: access_token["provider"] }).first
 
-      unless user
+      if user.nil?
         user = User.where(email: data["email"], status: TEMPORARY_STATUS).first
         user ||= User.new(email: data["email"])
+
         password = Devise.friendly_token[9,20]
         user.password = password
         user.password_confirmation = password
+
+        user.first_name = data["first_name"]
+        user.last_name = data["last_name"]
+
         user.authentications.build(provider: access_token["provider"], uid: access_token["uid"])
         user.status = ACTIVE_STATUS
+
         user.save
 
         Analytics.track(:user, user.id, "Signed Up", track_options) if user.valid?
         Analytics.track(:user, user.id, "Completed Signup", {email: user.email}) if user.valid?
+      else
+        user.first_name = data["first_name"] if data["first_name"].present?
+        user.last_name = data["last_name"] if data["last_name"].present?
+
+        user.save
       end
 
       user.authentications.detect { |x| x.provider == access_token["provider"]}.update(
@@ -164,6 +175,7 @@ class User < ActiveRecord::Base
 
   def self.find_or_invite_by_email(email, site)
     user = User.where(email: email).first
+
     if user.nil?
       user = User.new(email: email)
       password = Devise.friendly_token[9,20]
@@ -174,6 +186,7 @@ class User < ActiveRecord::Base
       user.status = TEMPORARY_STATUS
       user.save
     end
+
     user
   end
 
