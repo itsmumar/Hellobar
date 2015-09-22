@@ -71,7 +71,9 @@ class @UpgradeAccountModal extends Modal
     @$modal.find("div.button").each (index, button) =>
       if !$(button).attr("disabled")
         $(button).attr("disabled", "disabled")
-        $(button).text("Contact the account owner to upgrade this site.")
+        $(button).addClass("disabled-promo")
+        $(button).text("Email the account owner to upgrade this site:")
 
-    @$modal.find(".email-links").each (index, element) =>
+    @$modal.find(".email-links").each (index, element) => 
+      $(element).addClass("disabled-link")
       $(element).show()

@@ -160,14 +160,24 @@
             cursor: default
             background-color: transparent
 
+          &[disabled].disabled-promo
+            color: $gray
+            cursor: default
+            background-color: $white
+            border: 1px solid $blue 
+            border-radius: 0     
+
         .email-links
           display: none
           font-size: 0.85em !important
-          cursor: default
+          background-color: $blue
+          padding: 5px
 
           a
-            color: $gray
+            color: $white
             word-wrap: break-word
+
+ 
 
 
       /*-----------  Basic Package  -----------*/
@@ -211,3 +221,4 @@
 
       .button
         @extend %blue-button
+
