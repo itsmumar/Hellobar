@@ -70,8 +70,10 @@ section
     |  Please enter a payment method by #{@next_bill.due_at.strftime("%-m-%-d-%Y")}
     |  to continue using HelloBar #{@site.current_subscription.values[:name]}.
 - elsif @site.is_free?
-  p Contact the site owners to request an upgrade!
-  ul
+  ul 
+    li
+      .button-wrapper.promo-label To upgrade your plan, contact the site owner. Your site owner is: 
     - @site.owners.each do |owner|
       li
-        .button-wrapper= mail_to owner.email, owner.name || owner.email
+        .button-wrapper.promo-button 
+          = mail_to owner.email, owner.name || owner.email
