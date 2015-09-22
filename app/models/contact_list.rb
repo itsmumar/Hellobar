@@ -17,6 +17,8 @@ class ContactList < ActiveRecord::Base
 
   serialize :data, Hash
 
+  acts_as_paranoid
+
   before_validation :set_identity, :reject_empty_data_values, :clean_embed_code
 
   validates :name, :presence => true
