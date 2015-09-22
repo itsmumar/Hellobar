@@ -3,12 +3,14 @@
 #welcome-index, #welcome-email_quickstart
   text-align: left
   background-color: $red
+  overflow: hidden
 
   *
     color: $white
 
   .bounds-wrapper
-    border-right: 10em solid transparent
+    border-left: 5em solid transparent
+    border-right: 5em solid transparent
 
   .logo-block
     height: 3.85em
@@ -30,6 +32,29 @@
   p
     width: 85%
     margin: 1em 0
+
+  .welcome-video
+    width: 100%
+
+    .background
+      width: 4000em
+      left: -2000em
+      position: absolute
+      background-color: black
+      height: 21em
+
+    .video-container
+      position: relative
+      padding-top: 1em
+      height: 20em
+      width: 35.5em
+      margin-left: auto
+      margin-right: auto
+
+      video
+        width: 100%
+        height: 100%
+
 
   /*-----------  Quickstart  -----------*/
 
