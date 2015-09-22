@@ -157,7 +157,7 @@ describe Site do
 
       # First, generate for site, then for the site element
       expect(@mock_storage).to receive(:create_or_update_file_with_contents).with(anything, anything).ordered
-      expect(@mock_storage).to receive(:create_or_update_file_with_contents).with("#{user.wordpress_user_id}_#{site_element.wordpress_bar_id}", anything).ordered
+      expect(@mock_storage).to receive(:create_or_update_file_with_contents).with("#{user.wordpress_user_id}_#{site_element.wordpress_bar_id}.js", anything).ordered
       site.send(:generate_static_assets)
     end
   end

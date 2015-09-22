@@ -1023,7 +1023,7 @@ var _HB = {
         for(j=0;j<rule.siteElements.length;j++)
         {
           siteElement = rule.siteElements[j];
-          if(siteElement.id == window.HB_element_id)
+          if(siteElement.wordpress_bar_id == window.HB_element_id)
             return siteElement;
         }
       }

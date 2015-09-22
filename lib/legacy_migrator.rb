@@ -298,7 +298,7 @@ class LegacyMigrator
                                  updated_at: legacy_bar.updated_at.utc,
                                  target_segment: legacy_bar.target_segment,
                                  closable: legacy_bar.settings_json['closable'],
-                                 show_border: legacy_bar.settings_json['show_border'],
+                                 show_border: false,
                                  background_color: legacy_bar.settings_json['bar_color'],
                                  border_color: legacy_bar.settings_json['border_color'],
                                  button_color: legacy_bar.settings_json['button_color'],

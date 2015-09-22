@@ -234,6 +234,7 @@ private
       type
       view_condition
       wiggle_button
+      wordpress_bar_id
     }
 
     lifetime_totals = @site.lifetime_totals
