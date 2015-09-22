@@ -12,6 +12,7 @@ describe Hello::InternalAnalytics do
 
     @test_index = Hello::InternalAnalytics.class_variable_get("@@expected_index")
     Hello::InternalAnalytics.register_test("Example Test", %w{experiment control}, @test_index)
+    Hello::InternalAnalytics.register_test("Weighted Test", %w{experiment control}, @test_index + 1, [10, 90])
 
     @cookies = ActionDispatch::Cookies::CookieJar.new("key_generator")
     @user = users(:joey)
@@ -57,12 +58,23 @@ describe Hello::InternalAnalytics do
     end
 
     it "uses current_user if available and no explicit user is passed" do
-      @object.stub(:current_user).and_return(@user)
-      @object.get_ab_variation_index_without_setting("Example Test").should == [0, :new]
+      allow(@object).to receive(:current_user).and_return(@user)
+      allow(@object).to receive(:get_ab_test_value_index_from_id).with(anything, @user.id).and_return(123)
+      expect(@object.get_ab_variation_index_without_setting("Example Test")).to eq([123, :new])
     end
 
     it "returns current visitor ID if there is no user and no cookies" do
       @object.get_ab_variation_index_without_setting("Example Test").should == [0, :new]
+    end
+  end
+
+  describe "get_ab_test_value_index_from_id" do
+    it "uses weights to determine index when available" do
+      ab_test = @object.get_ab_test("Weighted Test")
+      # person id 4 evaluates to rand_value 6, so it should return the first test value
+      # person id 1 evaluates to rand_value 16, so it should return the second test value
+      expect(@object.get_ab_test_value_index_from_id(ab_test, 4)).to eq(0)
+      expect(@object.get_ab_test_value_index_from_id(ab_test, 1)).to eq(1)
     end
   end
 end

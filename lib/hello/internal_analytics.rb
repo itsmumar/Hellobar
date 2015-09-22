@@ -53,7 +53,7 @@ module Hello
     register_test("Editor Test 2015-02-23", %w{original interstitial navigation}, 2)
     register_test("Google Auth 2015-03-10", %w{original google_auth}, 3)
     register_test("Templated Editor 2015-07-07", %w{original templated}, 4)
-    register_test("Video Welcome 2015-9-22", %w{original video}, 5)
+    register_test("Video Welcome 2015-9-22", %w{original video}, 5, [75, 25])
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
@@ -77,7 +77,7 @@ module Hello
 
       # See if the test is weighted
       ab_test[:weights].each_with_index do |weight, i|
-        return i if weight.include?(rand_value)
+        return i if weight.include?(rand_value % 100)
       end
       # Return the index
       return rand_value % ab_test[:values].length
