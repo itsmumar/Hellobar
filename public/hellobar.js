@@ -2,7 +2,7 @@ var HB_HelloBar=function(a,b){var n=navigator.userAgent.toLowerCase();var o={ver
 
 var HelloBar=function(a, b) {
   window.HB_element_id = b;
-  var url = "//scripts-edge.hellobar.com.s3.amazonaws.com/" + a + "_" + b + ".js"
+  var url = "//my.hellobar.com/" + a + "_" + b + ".js"
   var ele = document.createElement("script");
   ele.setAttribute("src", url);
   ele.onerror = function() {
