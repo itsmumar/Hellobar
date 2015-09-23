@@ -22,6 +22,10 @@ class Rule < ActiveRecord::Base
                        },
                        if: "priority.present?"
 
+  def self.default
+    Rule.new(name: "Everyone", match: MATCH_ON[:all], editable: false)
+  end
+
   def self.create_from_segment(site, segment)
     segment, value = segment.split(":", 2)
     segment = Condition::SEGMENTS.find{|k, v| v == segment}[0]

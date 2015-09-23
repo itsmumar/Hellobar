@@ -51,9 +51,9 @@ class SiteElementsController < ApplicationController
   end
 
   def update
-    if @site_element.update_attributes(site_element_params)
-      @site.generate_script
-      render :json => @site_element, serializer: SiteElementSerializer
+    updater = UpdateSiteElement.new(@site_element)
+    if updater.update(site_element_params)
+      render :json => updater.element, serializer: SiteElementSerializer
     else
       render :json => @site_element, :status => :unprocessable_entity, serializer: SiteElementSerializer
     end

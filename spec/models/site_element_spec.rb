@@ -35,8 +35,8 @@ describe SiteElement do
 
       it 'allows a persisted element to be updated when site is at its limit' do
         site = sites(:free_site)
-        capability = double 'capability', at_site_element_limit?: true
-        site.stub capabilities: capability
+        capability = double('capability', at_site_element_limit?: true)
+        site.stub(capabilities: capability)
 
         element = site_elements(:zombo_traffic)
         element.stub site: site
@@ -242,7 +242,7 @@ describe SiteElement do
         element.display_thank_you_text.should == SiteElement::DEFAULT_EMAIL_THANK_YOU
       end
 
-      it "should return the the thank you text" do
+      it "should return the thank you text" do
         element.thank_you_text = "test"
         element.stub(:after_email_submit_action).and_return(:something)
         element.display_thank_you_text.should == "test"
