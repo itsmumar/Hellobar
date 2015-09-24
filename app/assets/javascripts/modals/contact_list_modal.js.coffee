@@ -190,3 +190,8 @@ class @ContactListModal extends Modal
     @$modal.find("#contact_list_name").val(data.name)
     @$modal.find("#contact_list_provider").val(data.provider || "0")
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
+
+    if data.id < 1
+      @$modal.find(".button.delete").addClass('hidden')
+    else
+      @$modal.find(".button.delete").removeClass('hidden')
