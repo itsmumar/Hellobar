@@ -159,4 +159,24 @@ RSpec.describe Condition, type: :model do
       end
     end
   end
+
+  describe "#format_string_values" do
+    it "it strips whitespace from string values" do
+      condition = build(:condition, segment: "ReferrerCondition", value: "  abc  ")
+      condition.send(:format_string_values)
+      expect(condition.value).to eq("abc")
+    end
+
+    it "it strips whitespace from strings in the value array" do
+      condition = build(:condition, segment: "ReferrerCondition", value: ["  abc  "])
+      condition.send(:format_string_values)
+      expect(condition.value[0]).to eq("abc")
+    end
+
+    it "does nothing when value is not a string or array" do
+      condition = build(:condition, segment: "ReferrerCondition", value: 1)
+      condition.send(:format_string_values)
+      expect(condition.value).to eq(1)
+    end
+  end
 end

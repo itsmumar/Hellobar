@@ -33,6 +33,7 @@ class Condition < ActiveRecord::Base
   belongs_to :rule, inverse_of: :conditions
 
   before_validation :clear_blank_values
+  before_validation :format_string_values
   before_validation :normalize_url_condition
 
   validates :rule, association_exists: true
@@ -143,6 +144,16 @@ class Condition < ActiveRecord::Base
       "http://#{url}"
     else
       "/#{url}"
+    end
+  end
+
+  def format_string_values
+    if self.value.kind_of?(String)
+      self.value = self.value.strip
+    elsif self.value.kind_of?(Array)
+      self.value.each_with_index do |val, i|
+        self.value[i] = val.strip if val.kind_of?(String)
+      end
     end
   end
 end
