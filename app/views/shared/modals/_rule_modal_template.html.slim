@@ -18,7 +18,7 @@ script id="rule-modal" type="text/x-handlebars-template"
           input name="_method" type="hidden" value="patch"
           | {{/if}}
         p
-          | Show to people who match
+          ' Show to people who match
           span.select-wrapper
             select#rule_match name="rule[match]"
               | {{option match "all" "all"}}
