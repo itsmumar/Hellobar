@@ -11,9 +11,10 @@ module Hellobar
     # We'll handle our own errors
     config.exceptions_app = self.routes
 
-    config.autoload_paths += %W(#{config.root}/app/models/condition/)
-    config.autoload_paths += %W(#{config.root}/app/models/validators)
-    config.autoload_paths += %W(#{config.root}/app/models/site_elements)
+    # config.autoload_paths += %W(#{config.root}/app/models/condition/)
+    # config.autoload_paths += %W(#{config.root}/app/models/validators)
+    # config.autoload_paths += %W(#{config.root}/app/models/site_elements)
+    config.autoload_paths += Dir[ Rails.root.join('app', 'models', '**/') ]
     config.autoload_paths += %W(#{config.root}/lib/queue_worker/)
     # We'd prefer to use initializers to load the files from the /lib
     # directory that we need. This way we have more control over load

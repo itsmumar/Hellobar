@@ -17,7 +17,12 @@ class Bill < ActiveRecord::Base
   enum status: [:pending, :paid, :voided]
 
   before_save :check_amount
-  before_validation :check_amount
+  before_validation :set_base_amount, :check_amount
+
+  def set_base_amount
+    self.base_amount = self.amount if self.base_amount.nil?
+  end
+
   def check_amount
     raise InvalidBillingAmount.new("Amount was: #{self.amount.inspect}") if !self.amount or self.amount < 0
   end
@@ -42,6 +47,8 @@ class Bill < ActiveRecord::Base
   end
 
   def attempt_billing!(allow_early=false)
+    set_final_amount!
+
     now = Time.now
     raise BillingEarly.new("Attempted to bill on #{now} but bill[#{self.id}] has a bill_at date of #{self.bill_at}") if !allow_early and now < self.bill_at
     if self.amount == 0 # Note: less than 0 is a valid value for refunds
@@ -111,6 +118,37 @@ class Bill < ActiveRecord::Base
   # Note: amount must be negative
   def refund!(description = nil, amount=nil)
     successful_billing_attempt.refund!(description, amount)
+  end
+
+  def calculate_discount
+    discounts = subscription.class.defaults[:discounts]
+    calculated_discount = 0
+
+    if discounts
+      calculator = DiscountCalculator.new(discounts)
+      subscription.payment_method.user.sites.each do |site|
+        other_sub = site.current_subscription
+        next if other_sub == subscription
+        if other_sub && other_sub.instance_of?(subscription.class)\
+          && other_sub.payment_method.try(:user) == subscription.payment_method.user
+
+          latest_bill = other_sub.bills.where(status: Bill.statuses["paid"]).where("amount > 0 && bill_at > ?", 1.month.ago).order("bill_at DESC").first
+          if latest_bill
+            calculator.add_by_amount(latest_bill.discount)
+          end
+        end
+      end
+      calculated_discount = calculator.current_discount
+    end
+
+    calculated_discount
+  end
+
+  def set_final_amount!
+    return if paid? || base_amount.nil?
+
+    self.discount = self.base_amount > 0 ? calculate_discount : 0
+    self.amount = [self.base_amount - self.discount, 0].max
   end
 
   class Recurring < Bill

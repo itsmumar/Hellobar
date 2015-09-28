@@ -14,6 +14,8 @@ class Subscription < ActiveRecord::Base
       # offer per-site discounts, etc
       return self.defaults
     end
+
+    def defaults; {}; end
   end
 
   def trial?
@@ -230,7 +232,14 @@ class Subscription < ActiveRecord::Base
           yearly_amount: 149.0,
           visit_overage: 250_000, # after this many visits in a month
           visit_overage_amount: 25_000, # every X visitors
-          visit_overage_amount: 5.00 # $$$
+          visit_overage_amount: 5.00, # $$$
+          discounts: [
+            {start: 1, end: 5, amount: 0},
+            {start: 6, end: 10, amount: 2},
+            {start: 11, end: 20, amount: 4},
+            {start: 21, end: 30, amount: 6},
+            {start: 31, amount: 8}
+          ]
         }
       end
     end
