@@ -1,4 +1,5 @@
 require 'billing_log'
+require 'discount_calculator'
 
 class Subscription < ActiveRecord::Base
   include BillingAuditTrail
@@ -234,11 +235,11 @@ class Subscription < ActiveRecord::Base
           visit_overage_amount: 25_000, # every X visitors
           visit_overage_amount: 5.00, # $$$
           discounts: [
-            {start: 1, end: 5, amount: 0},
-            {start: 6, end: 10, amount: 2},
-            {start: 11, end: 20, amount: 4},
-            {start: 21, end: 30, amount: 6},
-            {start: 31, amount: 8}
+            DiscountRange.new(5, 0, 0, 0),
+            DiscountRange.new(5, 1, 2, 20),
+            DiscountRange.new(10, 2, 4, 40),
+            DiscountRange.new(10, 3, 6, 60),
+            DiscountRange.new(nil, 4, 8, 80)
           ]
         }
       end

@@ -1,39 +1,48 @@
 class DiscountCalculator
   attr_reader :discounts
 
-  def initialize(discounts)
-    @discounts = discounts
-    @ranges = []
-
-    discounts.each do |discount|
-      if discount[:end].nil?
-        @ranges << DiscountRange.new(nil, discount[:amount])
-      else
-        @ranges << DiscountRange.new((1 + discount[:end]) - (discount[:start] || 1), discount[:amount])
-      end
-    end
-
-    @ranges.sort_by!(&:amount)
+  def initialize(discounts, subscription)
+    @user = subscription.payment_method.try(:user)
+    @subscription = subscription
+    @discounts = discounts || []
+    @discounts.sort_by!(&:tier)
   end
 
   def current_discount
-    @ranges.detect { |x| !x.full? }.amount
+    return nil if @user.nil? || @subscription.nil?
+
+    discount = discount_for_index(discount_index)
+    discount.nil? ? nil : discount.send(@subscription.schedule)
   end
 
-  def add_by_amount(amount)
-    return if amount.nil?
-    range = @ranges.detect { |x| x.amount <= amount && !x.full? } || @ranges.detect { |x| !x.full? }
-    range.add
+  private
+  def discount_for_index(index)
+    return nil if index.nil?
+
+    @discounts.each do |discount|
+      return discount if discount.slots.nil? || index < discount.slots
+      index -= discount.slots
+    end
+    nil
+  end
+
+  def discount_index
+    subs = active_subscriptions.sort_by! { |x| x.site.created_at }
+    subs.index(@subscription)
+  end
+
+  def active_subscriptions
+    subscriptions = @user.sites.includes(subscriptions: :payment_method).map(&:current_subscription)
+    subscriptions.select! { |s| s.instance_of?(@subscription.class) }
+    subscriptions.select! { |s| s.payment_method && s.payment_method.try(:user) == @user}
+    subscriptions
   end
 end
 
-DiscountRange = Struct.new(:slots, :amount) do
-  def add
-    @recorded_discounts += 1
-  end
-
-  def full?
-    @recorded_discounts ||= 0
-    !slots.nil? && @recorded_discounts >= slots
-  end
-end
+# Struct for holding discount information
+# Params
+# slots - number of subscriptions that this tier can hold
+# tier - index of the tier, higher index is applied later
+# monthly - amount to discount for a monthly subscriptions
+# yearly - amount to discount for a yearly subscriptions
+DiscountRange = Struct.new(:slots, :tier, :monthly, :yearly)

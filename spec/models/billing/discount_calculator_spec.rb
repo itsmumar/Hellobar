@@ -1,45 +1,56 @@
 require 'spec_helper'
 
 describe DiscountCalculator do
-  let(:discount_calculator) do
-    DiscountCalculator.new([
-      {start: 1, end: 3, amount: 1},
-      {start: 4, end: 5, amount: 2},
-      {start: 6, amount: 3}
-    ])
+  let(:user) { create(:user) }
+  let(:discounts) do
+    [
+      DiscountRange.new(2, 0, 1, 10),
+      DiscountRange.new(2, 1, 2, 20),
+      DiscountRange.new(nil, 2, 3, 30)
+    ]
+  end
+
+  def create_sub_for_user(u)
+    subscription = create(:pro_subscription, schedule: :monthly)
+    subscription.payment_method.update(user: u)
+    subscription.site.users << u
+    subscription
   end
 
   describe "#current_discount" do
-    context "nothing has been added" do
+    context "there is only one Subscription" do
       it "returns the first amount" do
-        expect(discount_calculator.current_discount).to eq(1)
+        subscription = create_sub_for_user(user)
+        calculator = DiscountCalculator.new(discounts, subscription)
+        expect(calculator.current_discount).to eq(1)
       end
     end
 
     context "the first tier has been filled" do
       before do
-        discount_calculator.add_by_amount(1)
-        discount_calculator.add_by_amount(1)
-        discount_calculator.add_by_amount(1)
+        create_sub_for_user(user)
+        create_sub_for_user(user)
       end
 
-      it "returns the first amount" do
-        expect(discount_calculator.current_discount).to eq(2)
+      it "returns the amount for the second tier" do
+        subscription = create_sub_for_user(user)
+        calculator = DiscountCalculator.new(discounts, subscription)
+        expect(calculator.current_discount).to eq(2)
       end
     end
 
     context "all tiers have been filled" do
       before do
-        discount_calculator.add_by_amount(1)
-        discount_calculator.add_by_amount(1)
-        discount_calculator.add_by_amount(1)
-        discount_calculator.add_by_amount(2)
-        discount_calculator.add_by_amount(2)
-        discount_calculator.add_by_amount(3)
+        create_sub_for_user(user)
+        create_sub_for_user(user)
+        create_sub_for_user(user)
+        create_sub_for_user(user)
       end
 
       it "returns the last amount" do
-        expect(discount_calculator.current_discount).to eq(3)
+        subscription = create_sub_for_user(user)
+        calculator = DiscountCalculator.new(discounts, subscription)
+        expect(calculator.current_discount).to eq(3)
       end
     end
   end

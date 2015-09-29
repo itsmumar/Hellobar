@@ -125,20 +125,8 @@ class Bill < ActiveRecord::Base
     calculated_discount = 0
 
     if discounts
-      calculator = DiscountCalculator.new(discounts)
-      subscription.payment_method.user.sites.each do |site|
-        other_sub = site.current_subscription
-        next if other_sub == subscription
-        if other_sub && other_sub.instance_of?(subscription.class)\
-          && other_sub.payment_method.try(:user) == subscription.payment_method.user
-
-          latest_bill = other_sub.bills.where(status: Bill.statuses["paid"]).where("amount > 0 && bill_at > ?", 1.month.ago).order("bill_at DESC").first
-          if latest_bill
-            calculator.add_by_amount(latest_bill.discount)
-          end
-        end
-      end
-      calculated_discount = calculator.current_discount
+      calculator = DiscountCalculator.new(discounts, subscription)
+      calculated_discount = calculator.current_discount || 0
     end
 
     calculated_discount
@@ -149,6 +137,11 @@ class Bill < ActiveRecord::Base
 
     self.discount = self.base_amount > 0 ? calculate_discount : 0
     self.amount = [self.base_amount - self.discount, 0].max
+  end
+
+  def estimated_amount
+    discount = calculate_discount || 0
+    (base_amount || amount) - discount
   end
 
   class Recurring < Bill

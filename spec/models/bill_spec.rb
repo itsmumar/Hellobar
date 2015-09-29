@@ -165,6 +165,7 @@ describe Bill do
     it "discounts to the appropriate tier" do
       user = create(:user)
       bills = []
+
       35.times do
         bill = create(:pro_bill, status: :paid)
         bill.site.users << user
