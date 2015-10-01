@@ -8,5 +8,11 @@ var HelloBar=function(a, b) {
   ele.onerror = function() {
     HB_HelloBar(a, b);
   };
-  document.body.appendChild(ele);
+  var f = function(){
+    if ( document && document.body && document.body.appendChild )
+      document.body.appendChild(ele);
+    else
+      setTimeout(f, 50);
+  }
+  f();
 };
