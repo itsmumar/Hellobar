@@ -1910,9 +1910,21 @@ var _HB = {
         siteElement['link_color'] = 'fff';
     }
 
-    siteElement['headline'] = "Convert more visitors into customers with Hello Bar.";
+    var headlines = {
+      ad1: 'Convert more visitors into customers with Hello Bar.',
+      ad2: 'Make money from wasted space on your site: Use Hello Bar.',
+      ad3: 'Your site + Hello Bar = More Profits. Here\'s why...',
+      ad4: 'Hello Bar is really a More-Profits Bar. Here\'s why...',
+      ad5: 'Hello Bar pulls more sales out of your existing site.',
+      ad6: 'Boost your sales easily with Hello Bar.'
+    };
+
+    var headlineSegment = this.sample(Object.keys(headlines));
+    siteElement['headline'] = headlines[headlineSegment];
     siteElement['link_text'] = 'Get Started';
-    siteElement.settings.url = "https://www.hellobar.com";
+
+    params = "hbt=v4_" + headlineSegment + "&sid=" + siteElement.id;
+    siteElement.settings.url = "https://www.hellobar.com?" + params;
 
     return siteElement;
   },
