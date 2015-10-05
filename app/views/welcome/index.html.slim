@@ -1,11 +1,3 @@
 = link_to 'Sign In', new_user_session_path, :class => 'button'
 
 = render 'quickstart'
-
-- if get_ab_variation("Video Welcome 2015-9-22") == "video"
-  .welcome-video
-    .background
-    .video-container
-      .title
-        | What is Hello Bar?
-      = video_tag("HB-Intro.mp4", controls: true)
