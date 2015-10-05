@@ -111,7 +111,7 @@ class Site < ActiveRecord::Base
 
   def script_name
     raise "script_name requires ID" unless persisted?
-    "#{Digest::SHA1.hexdigest("bar#{id}cat")}.js"
+    "#{Site.id_to_script_hash(id)}.js"
   end
 
   def script_content(compress = true)
@@ -307,6 +307,20 @@ class Site < ActiveRecord::Base
 
   def owners
     users.where(site_memberships: { role: Permissions::OWNER } )
+  end
+
+  def self.id_to_script_hash(id)
+    Digest::SHA1.hexdigest("bar#{id}cat")
+  end
+
+  def self.find_by_script(script_embed)
+    target_hash = script_embed.gsub(/^.*\//, "").gsub(/\.js$/,"")
+
+    (Site.maximum(:id) || 1).downto(1) do |i|
+      return Site.find_by_id(i) if id_to_script_hash(i) == target_hash
+    end
+
+    nil
   end
 
   private

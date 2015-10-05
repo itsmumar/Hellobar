@@ -9,6 +9,13 @@ class Admin::UsersController < ApplicationController
     else
       users = User.with_deleted.where("email like ?", "%#{params[:q].strip}%").includes(:authentications)
       users += User.joins(:sites).where("url like ?", "%#{params[:q].strip}%").includes(:authentications)
+      
+      if params[:q] =~ /\.js$/
+        site = Site.find_by_script(params[:q])
+        if site
+          users += site.owners
+        end
+      end
 
       if params[:q].strip =~ /\d{4}/
         users += PaymentMethodDetails.where("data like ?", "%-#{params[:q].strip}%").map(&:user).compact
