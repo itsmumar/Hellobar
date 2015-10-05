@@ -38,6 +38,20 @@ class Site < ActiveRecord::Base
     where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
   end
 
+  class self
+    def Site.find_by_script(script_embed)
+      target_hash = script_embed.gsub(/^.*\//, "").gsub(/\.js$/,"")
+      max_id = Site.all.order("id desc").first.id
+      max_id.times do |i|
+        id = i+1
+        hash_for_id = "#{Digest::SHA1.hexdigest("bar#{id}cat")}"
+        if hash_for_id == target_hash
+          return Site.find(id)
+        end
+      end
+      return nil
+    end
+  end
   # We are getting bad analytics data regarding installs and uninstalls
   # When I analyzed the data the samples were 90-99% inaccurate. Looking
   # at the code I can not see any obvious error. I'm adding this logging
