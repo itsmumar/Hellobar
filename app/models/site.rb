@@ -38,20 +38,6 @@ class Site < ActiveRecord::Base
     where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
   end
 
-  class self
-    def Site.find_by_script(script_embed)
-      target_hash = script_embed.gsub(/^.*\//, "").gsub(/\.js$/,"")
-      max_id = Site.all.order("id desc").first.id
-      max_id.times do |i|
-        id = i+1
-        hash_for_id = "#{Digest::SHA1.hexdigest("bar#{id}cat")}"
-        if hash_for_id == target_hash
-          return Site.find(id)
-        end
-      end
-      return nil
-    end
-  end
   # We are getting bad analytics data regarding installs and uninstalls
   # When I analyzed the data the samples were 90-99% inaccurate. Looking
   # at the code I can not see any obvious error. I'm adding this logging
@@ -125,7 +111,7 @@ class Site < ActiveRecord::Base
 
   def script_name
     raise "script_name requires ID" unless persisted?
-    "#{Digest::SHA1.hexdigest("bar#{id}cat")}.js"
+    "#{Site.id_to_script_hash(id)}.js"
   end
 
   def script_content(compress = true)
@@ -321,6 +307,20 @@ class Site < ActiveRecord::Base
 
   def owners
     users.where(site_memberships: { role: Permissions::OWNER } )
+  end
+
+  def self.id_to_script_hash(id)
+    Digest::SHA1.hexdigest("bar#{id}cat")
+  end
+
+  def self.find_by_script(script_embed)
+    target_hash = script_embed.gsub(/^.*\//, "").gsub(/\.js$/,"")
+
+    (Site.maximum(:id) || 1).downto(1) do |i|
+      return Site.find_by_id(i) if id_to_script_hash(i) == target_hash
+    end
+
+    nil
   end
 
   private
