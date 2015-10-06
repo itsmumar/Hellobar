@@ -71,7 +71,7 @@ class Admin < ActiveRecord::Base
     end
 
     def unlock_all!
-      Admin.update_all("login_attempts=0, locked=0, mobile_codes_sent=0")
+      Admin.update_all(login_attempts: 0, locked: 0, mobile_codes_sent: 0)
     end
   end
 
@@ -125,7 +125,7 @@ class Admin < ActiveRecord::Base
         :subject => "Admin login attempt",
         :body => "Someone is attempting to log into your admin account from an unrecognized computer.
 
-If this is you, click this link to continue logging in: 
+If this is you, click this link to continue logging in:
 
         It's me let me in -> #{validate_url}
 
@@ -241,7 +241,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def unlock!
-    update_attribute(:locked, false)
+    update_attributes(locked: false, login_attempts: 0, mobile_codes_sent: 0)
   end
 
   def has_validated_access_token?(access_token)
