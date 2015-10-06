@@ -69,6 +69,10 @@ class Admin < ActiveRecord::Base
     def lockdown!
       Admin.all.each{|a| a.lock!}
     end
+
+    def unlock_all!
+      Admin.update_all("login_attempts=0, locked=0, mobile_codes_sent=0")
+    end
   end
 
   def logout!
