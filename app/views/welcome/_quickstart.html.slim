@@ -1,4 +1,8 @@
-.quickstart-wrapper
+-if get_ab_variation("Quickstart CTA 2015-10-06") == "cta"
+  h1.headline= "Convert more visitors into customers with Hello Bar"
+  h1.subheadline= "Enter your URL below to get started"
+
+.quickstart-wrapper id=(get_ab_variation("Quickstart CTA 2015-10-06") == 'cta' ? "quickstart-variant" : "")
   = form_tag sites_path do
     input type="hidden" name="source" value="landing"
     input type="text" name="site[url]" placeholder="Your website URL" autofocus=true value=@site_url
