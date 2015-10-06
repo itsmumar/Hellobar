@@ -1,0 +1,20 @@
+div.row
+  div.col-md-12
+
+    h1 Admins
+
+    table.table.admin-users
+      tr
+        th Email
+        th Last Active
+        th Locked
+        th
+
+      - @admins.each do |admin|
+        tr
+          td= admin.email
+          td= admin.session_last_active
+          td= admin.locked
+          td
+            - if admin.locked
+              = link_to "Unlock", unlock_admin_admin_path(admin), method: :put

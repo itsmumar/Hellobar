@@ -52,6 +52,12 @@ Rails.application.routes.draw do
     post "users/:id/impersonate", :to => "users#impersonate", :as => :impersonate_user
     delete "users/unimpersonate", :to => "users#unimpersonate", :as => :unimpersonate_user
 
+    resources :admins, only: :index do
+      member do
+        put :unlock
+      end
+    end
+
     resources :users, :only => [:index, :show, :destroy] do
       resources :sites, :only => [:update] do
         member do

@@ -180,4 +180,44 @@ describe Admin do
     @admin.session_token.should_not be_blank
     @admin.session_access_token.should_not be_blank
   end
+
+  describe "#unlock!" do
+    it "should set admin to unlocked" do
+      admin = create(:admin, locked: true)
+      admin.unlock!
+      expect(admin.reload.locked).to be(false)
+    end
+
+    it "should set admin login attempts to 0" do
+      admin = create(:admin, login_attempts: 2)
+      admin.unlock!
+      expect(admin.reload.login_attempts).to be(0)
+    end
+
+    it "should set admin mobile_codes_sent to 0" do
+      admin = create(:admin, mobile_codes_sent: 2)
+      admin.unlock!
+      expect(admin.reload.mobile_codes_sent).to be(0)
+    end
+  end
+
+  describe ".unlock_all!" do
+    it "should set all admins to unlocked" do
+      create(:admin, locked: true)
+      Admin.unlock_all!
+      expect(Admin.where(locked: true).count).to be(0)
+    end
+
+    it "should set all admin login attempts to 0" do
+      create(:admin, login_attempts: 2)
+      Admin.unlock_all!
+      expect(Admin.where("login_attempts > 0").count).to be(0)
+    end
+
+    it "should set all admin mobile_codes_sent to 0" do
+      create(:admin, mobile_codes_sent: 2)
+      Admin.unlock_all!
+      expect(Admin.where("mobile_codes_sent > 0").count).to be(0)
+    end
+  end
 end
