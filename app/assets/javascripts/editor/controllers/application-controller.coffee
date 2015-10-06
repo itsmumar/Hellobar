@@ -50,6 +50,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
       tab_side: "right"
       thank_you_text: "Thank you for signing up!"
       show_border: false
+      subtype: @get("model.element_subtype")
       size: @get("model.size"),
       primary_color: @get("model.background_color"),
       secondary_color: if @get("model.type") == "Bar" then @get("model.button_color") else @get("model.background_color")

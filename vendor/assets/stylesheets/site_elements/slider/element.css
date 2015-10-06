@@ -53,6 +53,12 @@
   bottom: 0px;
 }
 
+#hellobar-slider.email .hb-logo-wrapper.original, #hellobar-slider.email .hb-logo-wrapper.animated {
+  position: initial;
+  right: initial;
+  bottom: initial;
+}
+
 #hellobar-slider .hb-logo-wrapper.original:hover, #hellobar-slider .hb-logo-wrapper.animated:hover {
   opacity: 0.4;
 }

@@ -256,27 +256,26 @@ private
                      end
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
-      id: site_element.id,
-      views: views,
-      conversions: conversions,
-      conversion_rate: conversion_rate,
+      branding_url: "http://www.hellobar.com?sid=#{site_element.id}",
       contact_list_id: site_element.contact_list_id,
-      target: site_element.target_segment,
-      template_name: "#{site_element.class.name.downcase}_#{site_element.element_subtype}",
-      subtype: site_element.short_subtype,
-      settings: site_element.settings,
+      conversion_rate: conversion_rate,
+      conversions: conversions,
+      email_redirect: site_element.after_email_submit_action == :redirect,
       hide_destination: true,
+      id: site_element.id,
       open_in_new_window: site_element.open_in_new_window,
+      primary_color: site_element.primary_color,
       pushes_page_down: site_element.pushes_page_down,
       remains_at_top: site_element.remains_at_top,
-      wiggle_wait: 0,
-      tab_side: "right",
-      subtype: site_element.short_subtype,
-      thank_you_text: SiteElement.sanitize(thank_you_text).gsub(/"/, "&quot;"),
-      primary_color: site_element.primary_color,
       secondary_color: site_element.secondary_color,
-      email_redirect: site_element.after_email_submit_action == :redirect,
-      branding_url: "http://www.hellobar.com?sid=#{site_element.id}"
+      settings: site_element.settings,
+      subtype: site_element.short_subtype,
+      tab_side: "right",
+      target: site_element.target_segment,
+      template_name: "#{site_element.class.name.downcase}_#{site_element.element_subtype}",
+      thank_you_text: SiteElement.sanitize(thank_you_text).gsub(/"/, "&quot;"),
+      views: views,
+      wiggle_wait: 0
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
