@@ -54,6 +54,7 @@ module Hello
     register_test("Google Auth 2015-03-10", %w{original google_auth}, 3)
     register_test("Templated Editor 2015-07-07", %w{original templated}, 4)
     register_test("Video Welcome 2015-9-22", %w{original video}, 5, [75, 25])
+    register_test("Quickstart CTA 2015-10-06", %w{original cta}, 6)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
