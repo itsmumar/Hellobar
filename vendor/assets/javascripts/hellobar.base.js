@@ -1893,6 +1893,9 @@ var _HB = {
     // Force element subtype to 'traffic'
     siteElement['template_name'] = elementType + "_traffic";
 
+    // Remove any caption
+    siteElement['caption'] = '';
+
     // Set colors for each type
     siteElement['primary_color'] = hellobarColor;
     siteElement['background_color'] = hellobarColor;
