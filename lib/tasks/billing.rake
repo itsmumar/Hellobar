@@ -12,10 +12,13 @@ namespace :billing do
 
     @billing_report_log = []
     def billing_report(msg)
+      return unless msg
       @billing_report_log << msg
       File.open(File.join(Rails.root,"log", "billing.log"), "a"){|f| f.puts(msg)}
       puts msg
     end
+
+    msg = nil
 
     begin
       billing_report "#{Time.now}"
@@ -46,15 +49,21 @@ namespace :billing do
             else
               # Attempt the billing
               msg = "Attempting to bill #{bill.id}: #{bill.subscription.site.url} for #{number_to_currency(bill.amount)}..."
-              attempt = bill.attempt_billing!
-              if attempt.success?
-                num_successful += 1
-                amount_successful += bill.amount
-                billing_report(msg+"OK")
-              else
+              if bill.amount != 0 and !bill.subscription.payment_method
                 num_failed += 1
                 amount_failed += bill.amount
-                billing_report(msg+"Failed: #{attempt.response}")
+                billing_report(msg+"Skipped: no payment method available")
+              else
+                attempt = bill.attempt_billing!
+                if attempt.success?
+                  num_successful += 1
+                  amount_successful += bill.amount
+                  billing_report(msg+"OK")
+                else
+                  num_failed += 1
+                  amount_failed += bill.amount
+                  billing_report(msg+"Failed: #{attempt.response}")
+                end
               end
             end
           end
@@ -67,6 +76,7 @@ namespace :billing do
       billing_report ""
       billing_report ""
     rescue Exception => e
+      billing_report(msg+"ERROR")
       billing_report "#{e.class}: #{e.message}\n  #{e.backtrace.collect{|l| "  #{l}"}.join("\n  ")}"
       exit
     ensure
