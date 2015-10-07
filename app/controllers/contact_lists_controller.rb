@@ -4,6 +4,11 @@ class ContactListsController < ApplicationController
   before_action :load_contact_list, :only => [:show, :update]
 
   def index
+    if request.env["omniauth.error"] || request.env["omniauth.error.type"]
+      @site ||= current_site #Necessary here in case this is a redirect from failed oauth
+      flash[:error] = request.env["omniauth.error"].try(:message) ||  request.env["omniauth.error.type"]
+    end
+
     @contact_lists = @site.contact_lists
     @contact_list_totals = Hello::DataAPI.contact_list_totals(@site, @contact_lists) || {}
   end

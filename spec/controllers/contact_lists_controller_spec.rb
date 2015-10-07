@@ -6,14 +6,23 @@ describe ContactListsController, "#num_subscribers" do
   let(:site) { sites(:zombo) }
 
   describe "get #index" do
-    it "makes a single API call to get num_subscribers for each list" do
+    before do
       stub_current_user(site.owners.first)
+    end
 
+    it "makes a single API call to get num_subscribers for each list" do
       Hello::DataAPI.should_receive(:contact_list_totals).once
 
       get :index, :site_id => site
 
       assigns(:contact_lists).count.should be > 1
+    end
+
+    it "should set a notice if omniauth.error is present" do
+      allow(Hello::DataAPI).to receive(:contact_list_totals)
+      request.env['omniauth.error'] = double('oauth_error', message: "Invalid Credentials")
+      get :index, site_id: site
+      expect(flash[:error]).to be_present
     end
   end
 end
