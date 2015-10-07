@@ -1,12 +1,14 @@
 class ContactListsController < ApplicationController
+  include OmniauthErrors
+
   before_action :authenticate_user!
   before_action :load_site
   before_action :load_contact_list, :only => [:show, :update]
 
   def index
-    if request.env["omniauth.error"] || request.env["omniauth.error.type"]
-      @site ||= current_site #Necessary here in case this is a redirect from failed oauth
-      flash[:error] = request.env["omniauth.error"].try(:message) ||  request.env["omniauth.error.type"]
+    @site ||= current_site #Necessary here in case this is a redirect from failed oauth
+    if omniauth_error?
+      flash[:error] = omniauth_error_message
     end
 
     @contact_lists = @site.contact_lists
