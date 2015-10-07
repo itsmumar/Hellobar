@@ -867,6 +867,7 @@ var _HB = {
       // conflicts with certain sites
       setTimeout(function(){
         HB.injectSiteElementHTML(html, siteElement);
+        HB.setIosKeyboardHandlers();
         HB.setPullDown(siteElement)
         // Track the view
         HB.viewed();
@@ -1931,6 +1932,43 @@ var _HB = {
 
   sample: function(items) {
     return items[ Math.floor(Math.random() * items.length) ];
+  },
+
+  setIosKeyboardHandlers: function() {
+    if(!HB.isMobileSafari()) {
+      return;
+    }
+
+    var inputs = HB.w.contentDocument.getElementsByTagName("input");
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].addEventListener("focus", HB.iosKeyboardShow );
+      inputs[i].addEventListener("blur", HB.iosKeyboardHide );
+    }
+  },
+
+  iosKeyboardShow: function() {
+    if(HB.e.siteElementType == "slider" || HB.e.siteElementType == "bar") {
+      HB.iosFocusInterval = setTimeout(function() { window.scrollTo(0, HB.w.offsetTop); }, 500);
+    } else if(HB.e.siteElementType == "takeover" || HB.e.siteElementType == "modal") {
+      HB.w.style.position = "absolute";
+      HB.w.style.height = window.innerHeight + "px";
+      HB.w.style.width = window.innerWidth + "px";
+      HB.iosFocusInterval = setInterval(function() { HB.w.style.top = window.pageYOffset + "px"; }, 200);
+    }
+  },
+
+  iosKeyboardHide: function() {
+    if(HB.iosFocusInterval != null) {
+      clearInterval(HB.iosFocusInterval);
+      HB.iosFocusInterval = null;
+    }
+
+    if(HB.e.siteElementType == "takeover" || HB.e.siteElementType == "modal") {
+      HB.w.style.position = "";
+      HB.w.style.height = "";
+      HB.w.style.width = "";
+      HB.w.style.top = "";
+    }
   }
 };
 
