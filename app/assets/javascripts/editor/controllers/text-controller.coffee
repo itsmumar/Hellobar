@@ -45,6 +45,6 @@ HelloBar.TextController = Ember.Controller.extend
           controller.set('model.site.capabilities', this.site.capabilities)
       ).open()
 
-    setImageURL: (imageUrl) ->
+    setImageProps: (imageID, imageUrl) ->
+      @set('model.image_upload_id', imageID)
       @set('model.image_url', imageUrl)
-      @removeImage()

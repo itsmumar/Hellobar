@@ -4,24 +4,12 @@ class ImageUploadsController < ApplicationController
 
   def create
     image_upload = @site.image_uploads.new(image: params[:file])
-    @site_element.update(image_upload: image_upload)
+    #@site_element.update(image_upload: image_upload)
 
-    if image_upload.save && @site_element.update(image_upload_id: image_upload.id)
-      render status: 200, json: image_upload
+    if image_upload.save #&& @site_element.update(image_upload_id: image_upload.id)
+      render json: image_upload, status: 200
     else
-      render status: 500, json: { errors: image_upload.errors.full_messages}
-    end
-  end
-
-  def destroy
-    site_element = SiteElement.find params[:id]
-
-    if site_element.image_upload.nil?
-      render status: 404, json: {}
-    elsif site_element.image_upload.delete
-      render status: 200, json: {}
-    else
-      render status: 500, json: { errors: image_upload.errors.full_messages}
+      render json: { error: image_upload.errors.full_messages.join("; ") }, status: 500
     end
   end
 

@@ -219,6 +219,12 @@ html, body {
 
 /*-----------  Logo  -----------*/
 
+.uploaded_image {
+  margin: 20px;
+}
+
+/*-----------  Logo  -----------*/
+
   .hb-logo-wrapper {
     opacity: 0.3;
   }
