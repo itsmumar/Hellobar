@@ -7,9 +7,9 @@ class Admin::UsersController < ApplicationController
     if params[:q].blank?
       @users = User.page(params[:page]).per(24).includes(:authentications)
     else
-      users = User.with_deleted.where("email like ?", "%#{params[:q].strip}%").includes(:authentications)
-      users += User.joins(:sites).where("url like ?", "%#{params[:q].strip}%").includes(:authentications)
-      
+      users = User.search_by_username(params[:q].strip)
+      users += User.search_by_url(params[:q].strip)
+
       if params[:q] =~ /\.js$/
         site = Site.find_by_script(params[:q])
         if site

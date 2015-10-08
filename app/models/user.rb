@@ -190,6 +190,20 @@ class User < ActiveRecord::Base
     user
   end
 
+  def self.search_by_url(url)
+    host = Site.normalize_url(url).host
+    if host
+      domain = PublicSuffix.parse(host).domain
+      User.joins(:sites).where("url like ?", "%#{domain}%").includes(:authentications)
+    else
+      []
+    end
+  end
+
+  def self.search_by_username(username)
+    User.with_deleted.where("email like ?", "%#{username}%").includes(:authentications)
+  end
+
   private
 
   def send_team_invite_email(site)

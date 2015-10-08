@@ -281,6 +281,10 @@ class Site < ActiveRecord::Base
     update_attribute(:install_type, SiteDetector.new(url).site_type) unless Rails.env.test?
   end
 
+  def self.normalize_url(url)
+    Addressable::URI.heuristic_parse(url)
+  end
+
   def self.in_bar_ads_config=(config)
     @in_bar_ads_config ||= {}
     @in_bar_ads_config.merge!(config)
@@ -460,9 +464,8 @@ class Site < ActiveRecord::Base
 
   def standardize_url
     return if self.url.blank?
-
-    url = Addressable::URI.heuristic_parse(self.url)
-    self.url = "#{url.scheme}://#{url.normalized_host}"
+    normalized_url = self.class.normalize_url(self.url)
+    self.url = "#{normalized_url.scheme}://#{normalized_url.normalized_host}"
   rescue Addressable::URI::InvalidURIError
     false
   end
