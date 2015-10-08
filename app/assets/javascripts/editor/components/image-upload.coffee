@@ -13,6 +13,7 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
     dropzone = new Dropzone this.$(".file-upload")[0],
       url: "image_uploads"
       maxFiles: 1
+      maxFilesize: 1
       addRemoveLinks: false
       createImageThumbnails: false
       init: ->

@@ -86,4 +86,16 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.middleware.use Rack::SslEnforcer, only_hosts: ['alpha.hellobar.com', 'www.hellobar.com']
+
+  settings = YAML.load_file('config/settings.yml')
+  if settings['s3_bucket'] && settings['aws_access_key_id'] && settings['aws_secret_access_key']
+    config.paperclip_defaults = {
+      :storage => :s3,
+      :s3_credentials => {
+        :bucket => settings['s3_bucket'],
+        :access_key_id => settings['aws_access_key_id'],
+        :secret_access_key => settings['aws_secret_access_key'],
+      }
+    }
+  end
 end

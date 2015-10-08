@@ -6,6 +6,7 @@ require 'rspec/autorun'
 require 'simplecov'
 require 'metric_fu/metrics/rcov/simplecov_formatter'
 require 'database_cleaner'
+require 'paperclip/matchers'
 
 Zonebie.set_random_timezone
 
@@ -54,6 +55,11 @@ RSpec.configure do |config|
     end
   end
 
+  #remove test paperclip images
+  config.after(:suite) do
+    FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_files/"])
+  end
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -84,6 +90,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
   config.include EmbedCodeFileHelper
+  config.include Paperclip::Shoulda::Matchers
   config.include ControllerSpecHelper, type: :controller
 end
 
