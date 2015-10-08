@@ -2,7 +2,7 @@ div.row
   div.col-md-12
 
     = form_tag "/admin/users", :method => :get, :id => "admin-users-search" do
-      = text_field_tag "q", "", :class => "form-control", :placeholder => "Search users"
+      = text_field_tag "q", "", :class => "form-control", :placeholder => "Search users", :autofocus => true
 
     h1 Users
 
