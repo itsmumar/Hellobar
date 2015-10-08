@@ -8,7 +8,12 @@ HelloBar.TextController = Ember.Controller.extend
     {value: 'Helvetica,Arial,sans-serif', label: 'Sans-Serif'}
   ]
 
-  hideCaptionField: Ember.computed.equal('model.type', 'Bar')
+  imagePlacementOptions: [
+    {value: 'top', label: 'Top'}
+    {value: 'bottom', label: 'Bottom'}
+  ]
+
+  hideNonBarFields: Ember.computed.equal('model.type', 'Bar')
   hideLinkText: Ember.computed.match('model.element_subtype', /social|announcement/)
   showEmailPlaceholderText: Ember.computed.equal('model.element_subtype', 'email')
   showNamePlaceholderText: Ember.computed.equal('model.settings.collect_names', 1)
@@ -17,6 +22,9 @@ HelloBar.TextController = Ember.Controller.extend
     if trackEditorFlow && !Ember.isEmpty(@get('model'))
       InternalTracking.track_current_person("Editor Flow", {step: "Content Settings", goal: @get("model.element_subtype"), style: @get("model.type")})
   ).observes('model').on('init')
+
+  removeImage: ->
+    @set('model.image_upload_id', null)
 
   #-----------  Step Settings  -----------#
 
@@ -36,3 +44,7 @@ HelloBar.TextController = Ember.Controller.extend
         successCallback: ->
           controller.set('model.site.capabilities', this.site.capabilities)
       ).open()
+
+    setImageURL: (imageUrl) ->
+      @set('model.image_url', imageUrl)
+      @removeImage()

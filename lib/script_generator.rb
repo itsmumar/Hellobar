@@ -220,6 +220,8 @@ private
       email_placeholder
       font
       headline
+      image_placement
+      image_url
       link_color
       link_style
       link_text

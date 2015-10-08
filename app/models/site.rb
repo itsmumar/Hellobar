@@ -15,6 +15,7 @@ class Site < ActiveRecord::Base
   has_many :subscriptions, -> {order 'id'}
   has_many :bills, -> {order 'id'}, through: :subscriptions
   has_many :improve_suggestions
+  has_many :image_uploads, dependent: :destroy
   acts_as_paranoid
 
   before_validation :standardize_url

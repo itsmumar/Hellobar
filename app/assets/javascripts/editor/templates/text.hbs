@@ -3,7 +3,7 @@
 <label>Headline</label>
 {{view Ember.TextField value=model.headline placeholder="Subscribe to our mailing list" maxlength=255}}
 
-{{#unless hideCaptionField}}
+{{#unless hideNonBarFields}}
   <label>Caption</label>
   {{view Ember.TextField value=model.caption placeholder="(optional)" maxlength=255}}
 {{/unless}}
@@ -42,3 +42,23 @@
     optionLabelPath='content.label'
   }}
 </div>
+
+{{#unless hideNonBarField}}
+  <label>Image Placement</label>
+  <div class="select-wrapper">
+    {{view Ember.Select
+      content=imagePlacementOptions
+      value=model.image_placement
+      optionValuePath='content.value'
+      optionLabelPath='content.label'
+    }}
+  </div>
+
+  <label>Upload an Image</label>
+  <div class="image-upload">
+    {{image-upload
+      setImageURL="setImageURL"
+      existingURL=model.image_url
+    }}
+  </div>
+{{/unless}}

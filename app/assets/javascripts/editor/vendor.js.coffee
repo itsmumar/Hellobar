@@ -15,14 +15,14 @@
 #= require color_thief
 #= require jquery_dropper
 #= require imagesloaded
+#= require dropzone.min
 
 #= require handlebars
 #= require handlebars_helpers
 
 $ ->
-  
+
   #-----------  Old IE Detection  -----------#
 
   if (bowser.msie && bowser.version <= 9)
     $('body').addClass('oldIE')
-    

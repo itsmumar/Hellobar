@@ -35,3 +35,10 @@ SiteElement.prototype.prerender = function(){
   if(HB.isIEXOrLess(9))
     this.animated = false;
 };
+
+SiteElement.prototype.imageFor = function(location) {
+  if (!this.image_url || location.indexOf(this.image_placement) == -1)
+    return "";
+  else
+    return "<div class='hb-image-wrapper " + this.image_placement + "'><img class='uploaded-image' src=" + this.image_url + " /></div>";
+}

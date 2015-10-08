@@ -27,6 +27,7 @@ class SiteElement < ActiveRecord::Base
 
   belongs_to :rule
   belongs_to :contact_list
+  belongs_to :image_upload
 
   acts_as_paranoid
 
@@ -115,6 +116,10 @@ class SiteElement < ActiveRecord::Base
 
   def after_email_submit_action
     AFTER_EMAIL_ACTION_MAP[settings["after_email_submit_action"]]
+  end
+
+  def image_url
+    image_upload.try(:url)
   end
 
   private
