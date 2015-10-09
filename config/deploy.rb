@@ -145,3 +145,12 @@ namespace :deploy do
     end
   end
 end
+
+namespace :prerequisites do
+  desc "Install necessary ubuntu packages"
+  task :install do
+    on roles(:web) do
+      execute "sudo apt-get -y install imagemagick"
+    end
+  end
+end
