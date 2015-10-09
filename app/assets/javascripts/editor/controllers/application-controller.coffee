@@ -31,7 +31,49 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   renderPreview: ( ->
     Ember.run.debounce(this, @doRenderPreview, 500)
-  ).observes("model.type", "model.element_subtype", "model.headline", "model.caption", "model.link_text", "model.font", "model.background_color", "model.border_color", "model.button_color", "model.link_color", "model.text_color", "model.link_style", "model.size", "model.closable", "model.show_branding", "model.settings.buffer_message", "model.settings.buffer_url", "model.settings.collect_names", "model.settings.link_url", "model.settings.message_to_tweet", "model.settings.pinterest_description", "model.settings.pinterest_full_name", "model.settings.pinterest_image_url", "model.settings.pinterest_url", "model.settings.pinterest_user_url", "model.settings.twitter_handle", "model.settings.url", "model.settings.url_to_like", "model.settings.url_to_plus_one", "model.settings.url_to_share", "model.settings.url_to_tweet", "model.settings.use_location_for_url", "model.pushes_page_down", "model.remains_at_top", "model.placement", "model.wiggle_button", "model.view_condition", "model.email_placeholder", "model.name_placeholder").on("init")
+  ).observes(
+    "model.background_color",
+    "model.border_color",
+    "model.button_color",
+    "model.caption",
+    "model.closable",
+    "model.element_subtype",
+    "model.email_placeholder",
+    "model.font",
+    "model.headline",
+    "model.image_placement",
+    "model.image_url",
+    "model.link_color",
+    "model.link_style",
+    "model.link_text",
+    "model.name_placeholder",
+    "model.placement",
+    "model.pushes_page_down",
+    "model.remains_at_top",
+    "model.settings.buffer_message",
+    "model.settings.buffer_url",
+    "model.settings.collect_names",
+    "model.settings.link_url",
+    "model.settings.message_to_tweet",
+    "model.settings.pinterest_description",
+    "model.settings.pinterest_full_name",
+    "model.settings.pinterest_image_url",
+    "model.settings.pinterest_url",
+    "model.settings.pinterest_user_url",
+    "model.settings.twitter_handle",
+    "model.settings.url_to_like",
+    "model.settings.url_to_plus_one",
+    "model.settings.url_to_share",
+    "model.settings.url_to_tweet",
+    "model.settings.url",
+    "model.settings.use_location_for_url",
+    "model.show_branding",
+    "model.size",
+    "model.text_color",
+    "model.type",
+    "model.view_condition",
+    "model.wiggle_button"
+  ).on("init")
 
   renderPreviewWithAnimations: ( ->
     Ember.run.debounce(this, @doRenderPreview, true, 500)
@@ -39,21 +81,21 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   doRenderPreview: ( (withAnimations = false) ->
     previewElement = $.extend({}, @get("model"),
-      template_name: @get("model.type").toLowerCase() + "_" + (@get("model.element_subtype") or "traffic")
+      animated: withAnimations && @get("model.animated")
       hide_destination: true
       open_in_new_window: @get("model.open_in_new_window")
+      primary_color: @get("model.background_color"),
       pushes_page_down: @get("model.pushes_page_down")
       remains_at_top: @get("model.remains_at_top")
-      wiggle_button: @get("model.wiggle_button")
-      animated: withAnimations && @get("model.animated")
-      wiggle_wait: 0
-      tab_side: "right"
-      thank_you_text: "Thank you for signing up!"
-      show_border: false
-      subtype: @get("model.element_subtype")
-      size: @get("model.size"),
-      primary_color: @get("model.background_color"),
       secondary_color: if @get("model.type") == "Bar" then @get("model.button_color") else @get("model.background_color")
+      show_border: false
+      size: @get("model.size"),
+      subtype: @get("model.element_subtype")
+      tab_side: "right"
+      template_name: @get("model.type").toLowerCase() + "_" + (@get("model.element_subtype") or "traffic")
+      thank_you_text: "Thank you for signing up!"
+      wiggle_button: @get("model.wiggle_button")
+      wiggle_wait: 0
     )
 
     HB.isPreviewMode = true
@@ -110,12 +152,14 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.email_placeholder",
     "model.font",
     "model.headline",
-    "model.link_text",
+    "model.image_placement",
+    "model.image_url",
     "model.link_color",
     "model.link_style",
+    "model.link_text",
+    "model.name_placeholder"
     "model.placement",
     "model.pushes_page_down",
-    "model.name_placeholder"
     "model.remains_at_top",
     "model.settings.buffer_message",
     "model.settings.buffer_url",
@@ -127,20 +171,20 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.settings.pinterest_image_url",
     "model.settings.pinterest_url",
     "model.settings.pinterest_user_url",
-    "model.settings.redirect",
     "model.settings.redirect_url",
+    "model.settings.redirect",
     "model.settings.twitter_handle",
-    "model.settings.url",
     "model.settings.url_to_like",
     "model.settings.url_to_plus_one",
     "model.settings.url_to_share",
     "model.settings.url_to_tweet",
+    "model.settings.url",
     "model.settings.use_location_for_url",
     "model.show_branding",
     "model.size",
     "model.text_color",
     "model.type",
-    "model.wiggle_button",
+    "model.wiggle_button"
   )
 
   #-----------  Actions  -----------#

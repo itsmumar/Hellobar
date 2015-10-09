@@ -23,11 +23,11 @@ select
     color: lighten($gray, 5%)
     background-color: $grayLightest
 
-  @include placeholder 
+  @include placeholder
     color: lighten($gray, 5%)
 
 textarea
-  min-height: 6em      
+  min-height: 6em
 
 /*-----------  Inline States  -----------*/
 
@@ -35,8 +35,8 @@ span > input,
 span > textarea
   display: inline !important
   margin: 0 0.5em !important
-  vertical-align: middle  
-  
+  vertical-align: middle
+
 /*-----------  Error States  -----------*/
 
 .has-error
@@ -46,5 +46,5 @@ span > textarea
     color: $red
     border-color: $red
 
-    @include placeholder 
+    @include placeholder
       color: lighten($red, 25%)

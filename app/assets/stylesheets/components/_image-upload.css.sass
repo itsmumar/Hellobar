@@ -1,0 +1,43 @@
+.file-upload-container
+  width: 100%
+  height: 2em
+  margin: 0.75em auto
+  color: $gray
+
+  .file-upload
+    height: 100%
+    width: 85%
+    cursor: pointer
+    border: 1px solid $grayLighter
+    float: left
+    padding: 0.45em 0.67em
+    font-size: 0.85em
+
+  .remove-file
+    cursor: pointer
+    float: right
+    font-size: 1.75em
+
+    &.active
+      color: red
+
+  .dz-error-message
+    color: red
+    font-style: italic
+    font-size: 0.9em
+    margin-top: 10px
+
+  .dz-image
+    display: none
+
+  .dz-size
+    float: right
+
+  .dz-progress
+    display: none
+
+  .dz-success-mark
+    display: none
+
+  .dz-error-mark
+    display: none

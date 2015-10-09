@@ -6,6 +6,7 @@ require 'rspec/autorun'
 require 'simplecov'
 require 'metric_fu/metrics/rcov/simplecov_formatter'
 require 'database_cleaner'
+require 'paperclip/matchers'
 
 Zonebie.set_random_timezone
 
@@ -84,6 +85,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
   config.include EmbedCodeFileHelper
+  config.include Paperclip::Shoulda::Matchers
   config.include ControllerSpecHelper, type: :controller
 end
 

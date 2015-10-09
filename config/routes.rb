@@ -12,7 +12,9 @@ Rails.application.routes.draw do
     resource :wordpress_plugin, :controller => :wordpress_plugin
 
     put "site_elements/:id/toggle_paused", to: "site_elements#toggle_paused", as: :site_element_toggle_paused
-    resources :site_elements
+    resources :site_elements do
+      resources :image_uploads, only: [:create, :destroy]
+    end
     resources :rules do
       resources :conditions
     end

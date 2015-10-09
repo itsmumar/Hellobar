@@ -8,7 +8,12 @@ HelloBar.TextController = Ember.Controller.extend
     {value: 'Helvetica,Arial,sans-serif', label: 'Sans-Serif'}
   ]
 
-  hideCaptionField: Ember.computed.equal('model.type', 'Bar')
+  imagePlacementOptions: [
+    {value: 'top', label: 'Top'}
+    {value: 'bottom', label: 'Bottom'}
+  ]
+
+  hideNonBarFields: Ember.computed.equal('model.type', 'Bar')
   hideLinkText: Ember.computed.match('model.element_subtype', /social|announcement/)
   showEmailPlaceholderText: Ember.computed.equal('model.element_subtype', 'email')
   showNamePlaceholderText: Ember.computed.equal('model.settings.collect_names', 1)
@@ -36,3 +41,7 @@ HelloBar.TextController = Ember.Controller.extend
         successCallback: ->
           controller.set('model.site.capabilities', this.site.capabilities)
       ).open()
+
+    setImageProps: (imageID, imageUrl) ->
+      @set('model.active_image_id', imageID)
+      @set('model.image_url', imageUrl)

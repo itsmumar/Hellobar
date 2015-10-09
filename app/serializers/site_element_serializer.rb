@@ -13,6 +13,9 @@ class SiteElementSerializer < ActiveModel::Serializer
     # style
     :closable, :show_branding, :pushes_page_down, :remains_at_top, :animated, :wiggle_button,
 
+    # image
+    :image_url, :image_placement, :active_image_id,
+
     # other
     :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement,
     :default_email_thank_you
