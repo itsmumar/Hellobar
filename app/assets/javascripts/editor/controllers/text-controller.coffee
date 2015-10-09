@@ -23,9 +23,6 @@ HelloBar.TextController = Ember.Controller.extend
       InternalTracking.track_current_person("Editor Flow", {step: "Content Settings", goal: @get("model.element_subtype"), style: @get("model.type")})
   ).observes('model').on('init')
 
-  removeImage: ->
-    @set('model.image_upload_id', null)
-
   #-----------  Step Settings  -----------#
 
   step: 4
@@ -46,5 +43,5 @@ HelloBar.TextController = Ember.Controller.extend
       ).open()
 
     setImageProps: (imageID, imageUrl) ->
-      @set('model.image_upload_id', imageID)
+      @set('model.active_image_id', imageID)
       @set('model.image_url', imageUrl)

@@ -99,6 +99,7 @@ class SiteElementsController < ApplicationController
 
   def site_element_params
     params.require(:site_element).permit(
+      :active_image_id,
       :animated,
       :background_color,
       :border_color,
@@ -111,7 +112,6 @@ class SiteElementsController < ApplicationController
       :email_placeholder,
       :font,
       :headline,
-      :image_upload_id,
       :link_color,
       :link_text,
       :name_placeholder,

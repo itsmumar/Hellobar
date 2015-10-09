@@ -3,8 +3,8 @@ require 'integration_helper'
 feature "Takeover with image", js: true do
   scenario "shows the image" do
     element = FactoryGirl.create(:takeover_element, image_placement: 'bottom')
-    element.image_upload = create(:image_upload, :with_valid_image)
-    element.save
+    image = create(:image_upload, :with_valid_image, site_element: element)
+    element.update(active_image: image)
 
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
     path = generate_file_and_return_path(element.site.id)

@@ -27,7 +27,8 @@ class SiteElement < ActiveRecord::Base
 
   belongs_to :rule
   belongs_to :contact_list
-  belongs_to :image_upload
+  has_many :image_uploads, dependent: :destroy
+  belongs_to :active_image, class_name: "ImageUpload"
 
   acts_as_paranoid
 
@@ -48,7 +49,7 @@ class SiteElement < ActiveRecord::Base
   serialize :settings, Hash
 
   after_create :track_creation
-  after_save :remove_unreferenced_image
+  after_save :remove_unreferenced_images
 
   NOT_CLONEABLE_ATTRIBUTES = [
     :element_subtype,
@@ -120,20 +121,13 @@ class SiteElement < ActiveRecord::Base
   end
 
   def image_url
-    image_upload.try(:url)
+    active_image.try(:url)
   end
 
   private
 
-  def remove_unreferenced_image
-    return unless image_upload_id_changed?
-    old_image_id = image_upload_id_was
-
-    if old_image_id && old_image_upload = ImageUpload.where(id: old_image_id).first
-      if old_image_upload.site_elements.count == 0
-        old_image_upload.destroy
-      end
-    end
+  def remove_unreferenced_images
+    image_uploads.where.not(id: active_image_id).destroy_all
   end
 
   def is_email?

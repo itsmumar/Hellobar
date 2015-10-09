@@ -3,7 +3,7 @@ class ImageUploadsController < ApplicationController
   respond_to :json
 
   def create
-    image_upload = @site.image_uploads.new(image: params[:file])
+    image_upload = ImageUpload.new(image: params[:file], site_element: @site_element)
 
     if image_upload.save
       render json: image_upload, status: 200
@@ -14,6 +14,6 @@ class ImageUploadsController < ApplicationController
 
   private
   def load_site_element
-    @site_element = SiteElement.find params[:site_element_id]
+    @site_element = @site.site_elements.find params[:site_element_id]
   end
 end

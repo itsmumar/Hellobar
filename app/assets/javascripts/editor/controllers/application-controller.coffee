@@ -81,21 +81,21 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   doRenderPreview: ( (withAnimations = false) ->
     previewElement = $.extend({}, @get("model"),
-      template_name: @get("model.type").toLowerCase() + "_" + (@get("model.element_subtype") or "traffic")
+      animated: withAnimations && @get("model.animated")
       hide_destination: true
       open_in_new_window: @get("model.open_in_new_window")
+      primary_color: @get("model.background_color"),
       pushes_page_down: @get("model.pushes_page_down")
       remains_at_top: @get("model.remains_at_top")
-      wiggle_button: @get("model.wiggle_button")
-      animated: withAnimations && @get("model.animated")
-      wiggle_wait: 0
-      tab_side: "right"
-      thank_you_text: "Thank you for signing up!"
-      show_border: false
-      subtype: @get("model.element_subtype")
-      size: @get("model.size"),
-      primary_color: @get("model.background_color"),
       secondary_color: if @get("model.type") == "Bar" then @get("model.button_color") else @get("model.background_color")
+      show_border: false
+      size: @get("model.size"),
+      subtype: @get("model.element_subtype")
+      tab_side: "right"
+      template_name: @get("model.type").toLowerCase() + "_" + (@get("model.element_subtype") or "traffic")
+      thank_you_text: "Thank you for signing up!"
+      wiggle_button: @get("model.wiggle_button")
+      wiggle_wait: 0
     )
 
     HB.isPreviewMode = true
@@ -154,7 +154,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.headline",
     "model.image_placement",
     "model.image_url",
-    "model.image_upload_id",
     "model.link_color",
     "model.link_style",
     "model.link_text",

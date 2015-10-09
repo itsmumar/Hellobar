@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151008152548) do
+ActiveRecord::Schema.define(version: 20151009195217) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -159,7 +159,6 @@ ActiveRecord::Schema.define(version: 20151008152548) do
   end
 
   create_table "image_uploads", force: true do |t|
-    t.integer  "site_id"
     t.string   "description"
     t.string   "url"
     t.string   "image_file_name"
@@ -168,7 +167,10 @@ ActiveRecord::Schema.define(version: 20151008152548) do
     t.datetime "image_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "site_element_id"
   end
+
+  add_index "image_uploads", ["site_element_id"], name: "index_image_uploads_on_site_element_id", using: :btree
 
   create_table "improve_suggestions", force: true do |t|
     t.integer  "site_id"
@@ -259,6 +261,7 @@ ActiveRecord::Schema.define(version: 20151008152548) do
     t.string   "name_placeholder",                default: "Your name",                     null: false
     t.integer  "image_upload_id"
     t.string   "image_placement",                 default: "bottom"
+    t.integer  "active_image_id"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
