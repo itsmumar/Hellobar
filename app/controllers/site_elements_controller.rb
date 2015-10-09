@@ -112,6 +112,7 @@ class SiteElementsController < ApplicationController
       :email_placeholder,
       :font,
       :headline,
+      :image_placement,
       :link_color,
       :link_text,
       :name_placeholder,
