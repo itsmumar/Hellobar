@@ -46,7 +46,7 @@ describe SiteElement do
     end
 
     describe "callbacks" do
-      it "should remove unreferenced image uploads" do
+      it "removes unreferenced image uploads" do
         image_upload = create(:image_upload)
         element = create(:site_element, image_upload: image_upload)
         new_image = create(:image_upload)
@@ -57,7 +57,7 @@ describe SiteElement do
         }.to change { ImageUpload.count }.by(-1)
       end
 
-      it "should remove image uploads that still have references" do
+      it "does not remove image uploads that still have references" do
         image_upload = create(:image_upload)
         element = create(:site_element, image_upload: image_upload)
         create(:site_element, image_upload: image_upload)
