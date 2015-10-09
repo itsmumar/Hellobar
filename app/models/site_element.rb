@@ -48,6 +48,7 @@ class SiteElement < ActiveRecord::Base
   serialize :settings, Hash
 
   after_create :track_creation
+  after_save :remove_unreferenced_image
 
   NOT_CLONEABLE_ATTRIBUTES = [
     :element_subtype,
@@ -123,6 +124,17 @@ class SiteElement < ActiveRecord::Base
   end
 
   private
+
+  def remove_unreferenced_image
+    return unless image_upload_id_changed?
+    old_image_id = image_upload_id_was
+
+    if old_image_id && old_image_upload = ImageUpload.where(id: old_image_id).first
+      if old_image_upload.site_elements.count == 0
+        old_image_upload.destroy
+      end
+    end
+  end
 
   def is_email?
     element_subtype == "email"

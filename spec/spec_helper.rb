@@ -55,11 +55,6 @@ RSpec.configure do |config|
     end
   end
 
-  #remove test paperclip images
-  config.after(:suite) do
-    FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_files/"])
-  end
-
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:

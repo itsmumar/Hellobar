@@ -45,6 +45,31 @@ describe SiteElement do
       end
     end
 
+    describe "callbacks" do
+      it "should remove unreferenced image uploads" do
+        image_upload = create(:image_upload)
+        element = create(:site_element, image_upload: image_upload)
+        new_image = create(:image_upload)
+
+        expect {
+          element.image_upload = new_image
+          element.save
+        }.to change { ImageUpload.count }.by(-1)
+      end
+
+      it "should remove image uploads that still have references" do
+        image_upload = create(:image_upload)
+        element = create(:site_element, image_upload: image_upload)
+        create(:site_element, image_upload: image_upload)
+        new_image = create(:image_upload)
+
+        expect {
+          element.image_upload = new_image
+          element.save
+        }.to change { ImageUpload.count }.by(0)
+      end
+    end
+
     describe "#redirect_has_url" do
       let(:element) { site_elements(:zombo_email) }
 

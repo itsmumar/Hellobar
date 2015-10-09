@@ -221,7 +221,6 @@ private
       font
       headline
       image_placement
-      image_url
       link_color
       link_style
       link_text
@@ -265,6 +264,7 @@ private
       email_redirect: site_element.after_email_submit_action == :redirect,
       hide_destination: true,
       id: site_element.id,
+      image_url: site_element.image_url,
       open_in_new_window: site_element.open_in_new_window,
       primary_color: site_element.primary_color,
       pushes_page_down: site_element.pushes_page_down,
