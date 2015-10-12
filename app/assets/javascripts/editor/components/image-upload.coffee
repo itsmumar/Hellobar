@@ -26,8 +26,11 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
         @sendAction('setImageProps', res.id, res.url)
       sending: (file, xhr, formData) =>
         formData.append('site_element_id', siteID)
+        @set('showUploadingLabel', true)
       drop: (evt) ->
         @removeAllFiles()
+      complete: () =>
+        @set('showUploadingLabel', false)
 
     @set('dropzoneInstance', dropzone)
 

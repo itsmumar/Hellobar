@@ -1,4 +1,7 @@
 <div class="file-upload-container">
   <div class="file-upload"><span class="default-text">Click or drag to upload ...</span></div>
   <i class="remove-file icon-trash"></i>
+  {{#if showUploadingLabel}}
+    <label class=uploading_label>uploading...</label>
+  {{/if}}
 </div>
