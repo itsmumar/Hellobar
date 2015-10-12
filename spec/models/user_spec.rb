@@ -263,8 +263,8 @@ describe User do
   context '.search_by_url' do
     before do
       loblaw_url = 'http://www.google.com/'
-      @user = User.create email: 'bobloblaw@lawblog.com', password: 'uknownolaw'
-      @user.sites.create url: loblaw_url
+      @user = create :user
+      @user.sites << create( :site,  url: loblaw_url)
     end
 
     context 'with invalid host string' do

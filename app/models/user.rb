@@ -194,14 +194,14 @@ class User < ActiveRecord::Base
     host = Site.normalize_url(url).host
     if host
       domain = PublicSuffix.parse(host).domain
-      User.joins(:sites).where("url like ?", "%#{domain}%").includes(:authentications)
+      User.joins(:sites).where("url like ?", "%#{domain}%")
     else
       []
     end
   end
 
   def self.search_by_username(username)
-    User.with_deleted.where("email like ?", "%#{username}%").includes(:authentications)
+    User.with_deleted.where("email like ?", "%#{username}%")
   end
 
   private

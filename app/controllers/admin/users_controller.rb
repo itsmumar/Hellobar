@@ -7,8 +7,8 @@ class Admin::UsersController < ApplicationController
     if params[:q].blank?
       @users = User.page(params[:page]).per(24).includes(:authentications)
     else
-      users = User.search_by_username(params[:q].strip)
-      users += User.search_by_url(params[:q].strip)
+      users = User.search_by_username(params[:q].strip).includes(:authentications)
+      users += User.search_by_url(params[:q].strip).includes(:authentications)
 
       if params[:q] =~ /\.js$/
         site = Site.find_by_script(params[:q])
