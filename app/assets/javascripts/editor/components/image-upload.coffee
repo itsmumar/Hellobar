@@ -1,9 +1,12 @@
 HelloBar.ImageUploadComponent = Ember.Component.extend
   dropzoneInstance: null
+  actionIcons:
+    sync: "icon-sync"
+    trash: "icon-trash"
 
   didInsertElement: ->
     @insertDropzone()
-    @$(".remove-file").click =>
+    @$(".file-action").click =>
       @removeDropzoneImages()
     if !!@get('existingURL')
       @setRemoveButtonActive()
@@ -25,19 +28,27 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
         @setRemoveButtonActive()
         @sendAction('setImageProps', res.id, res.url)
       sending: (file, xhr, formData) =>
+        @setActionIcon("sync")
         formData.append('site_element_id', siteID)
-        @set('showUploadingLabel', true)
       drop: (evt) ->
         @removeAllFiles()
-      complete: () =>
-        @set('showUploadingLabel', false)
+      complete: =>
+        @setActionIcon("trash")
 
     @set('dropzoneInstance', dropzone)
+
+  clearActionIcons: ->
+    for key, val of @actionIcons
+      @$(".file-action").removeClass(val)
+
+  setActionIcon: (icon) ->
+    @clearActionIcons()
+    @$(".file-action").addClass(@actionIcons[icon])
 
   removeDropzoneImages: ->
     @sendAction('setImageProps', null, '')
     @get('dropzoneInstance').removeAllFiles()
-    @$(".remove-file").removeClass('active')
+    @$(".file-action").removeClass('active')
 
   setRemoveButtonActive: ->
-    @$(".remove-file").addClass('active')
+    @$(".file-action").addClass('active')

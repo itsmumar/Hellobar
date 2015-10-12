@@ -13,13 +13,22 @@
     padding: 0.45em 0.67em
     font-size: 0.85em
 
-  .remove-file
+  .file-action
     cursor: pointer
     float: right
     font-size: 1.75em
 
-    &.active
+    &.icon-trash.active
       color: red
+
+    &.icon-sync
+      color: $green
+      @include animation(spin 2s infinite ease-in-out)
+      -webkit-transform-origin: 50% 42%
+      -moz-transform-origin: 50% 42%
+      -ms-transform-origin: 50% 42%
+      -o-transform-origin: 50% 42%
+      transform-origin: 50% 42%
 
   .dz-error-message
     color: red
@@ -41,6 +50,3 @@
 
   .dz-error-mark
     display: none
-
-  .uploading_label
-    margin: 0
