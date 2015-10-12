@@ -259,4 +259,33 @@ describe User do
       user.send_invitation_email(nil)
     end
   end
+
+  context '.search_by_url' do
+    before do
+      loblaw_url = 'http://www.google.com/'
+      @user = create :user
+      @user.sites << create( :site,  url: loblaw_url)
+    end
+
+    context 'with invalid host string' do
+      it 'should return empty array when arg is not url' do
+        expect(User.search_by_url('how can mirrors be real')).
+          to eq([])
+      end
+    end
+
+    context 'with subdomain' do
+      it 'should search with correct domain' do
+        expect(User.search_by_url('www.google.com')).
+          to include(@user)
+      end
+    end
+
+    context 'without subdomain' do
+      it 'should search with correct domain' do
+        expect(User.search_by_url('google.com')).
+          to include(@user)
+      end
+    end
+  end
 end
