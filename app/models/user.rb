@@ -196,7 +196,7 @@ class User < ActiveRecord::Base
       domain = PublicSuffix.parse(host).domain
       User.joins(:sites).where("url like ?", "%#{domain}%")
     else
-      []
+      User.none
     end
   end
 
