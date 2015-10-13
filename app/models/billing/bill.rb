@@ -20,7 +20,7 @@ class Bill < ActiveRecord::Base
   before_validation :set_base_amount, :check_amount
 
   def set_base_amount
-    self.base_amount = self.amount if self.base_amount.nil?
+    self.base_amount ||= self.amount
   end
 
   def check_amount
@@ -126,7 +126,7 @@ class Bill < ActiveRecord::Base
 
     if discounts
       calculator = DiscountCalculator.new(discounts, subscription)
-      calculated_discount = calculator.current_discount || 0
+      calculated_discount = calculator.current_discount
     end
 
     calculated_discount
@@ -140,8 +140,7 @@ class Bill < ActiveRecord::Base
   end
 
   def estimated_amount
-    discount = calculate_discount || 0
-    (base_amount || amount) - discount
+    (base_amount || amount) - calculate_discount
   end
 
   class Recurring < Bill

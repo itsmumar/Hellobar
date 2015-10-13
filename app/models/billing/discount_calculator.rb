@@ -9,10 +9,10 @@ class DiscountCalculator
   end
 
   def current_discount
-    return nil if @user.nil? || @subscription.nil?
+    return 0 if @user.nil? || @subscription.nil?
 
     discount = discount_for_index(discount_index)
-    discount.nil? ? nil : discount.send(@subscription.schedule)
+    discount.nil? ? 0 : discount.send(@subscription.schedule)
   end
 
   private
