@@ -1951,9 +1951,12 @@ var _HB = {
       HB.iosFocusInterval = setTimeout(function() { window.scrollTo(0, HB.w.offsetTop); }, 500);
     } else if(HB.e.siteElementType == "takeover" || HB.e.siteElementType == "modal") {
       HB.w.style.position = "absolute";
-      HB.w.style.height = window.innerHeight + "px";
-      HB.w.style.width = window.innerWidth + "px";
-      HB.iosFocusInterval = setInterval(function() { HB.w.style.top = window.pageYOffset + "px"; }, 200);
+      HB.iosFocusInterval = setInterval(function() {
+        HB.w.style.height = window.innerHeight + "px";
+        HB.w.style.width = window.innerWidth + "px";
+        HB.w.style.top = window.pageYOffset + "px";
+        HB.w.style.left = window.pageXOffset + "px";
+      }, 200);
     }
   },
 
@@ -1968,6 +1971,7 @@ var _HB = {
       HB.w.style.height = "";
       HB.w.style.width = "";
       HB.w.style.top = "";
+      HB.w.style.left = "";
     }
   }
 };
