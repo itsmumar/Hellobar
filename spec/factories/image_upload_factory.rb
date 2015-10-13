@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :image_upload do
-    site_element
+    site
 
     trait :with_valid_image do
       image { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'images', 'coupon.png'), 'image/png') }

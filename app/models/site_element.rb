@@ -27,7 +27,6 @@ class SiteElement < ActiveRecord::Base
 
   belongs_to :rule
   belongs_to :contact_list
-  has_many :image_uploads, dependent: :destroy
   belongs_to :active_image, class_name: "ImageUpload"
 
   acts_as_paranoid
@@ -45,6 +44,7 @@ class SiteElement < ActiveRecord::Base
   scope :has_performance, -> { where("element_subtype != ?", "announcement") }
 
   delegate :site, :site_id, to: :rule, allow_nil: true
+  delegate :image_uploads, to: :site
 
   serialize :settings, Hash
 

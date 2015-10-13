@@ -48,8 +48,8 @@ describe SiteElement do
     describe "callbacks" do
       it "removes unreferenced image uploads" do
         element = create(:site_element)
-        image = create(:image_upload, site_element: element)
-        create(:image_upload, site_element: element)
+        image = create(:image_upload, site: element.site)
+        create(:image_upload, site: element.site)
 
         expect {
           element.active_image = image
@@ -59,7 +59,7 @@ describe SiteElement do
 
       it "does not remove image uploads that are still active" do
         element = create(:site_element)
-        image = create(:image_upload, site_element: element)
+        image = create(:image_upload, site: element.site)
         element.update(active_image: image)
 
         expect {
