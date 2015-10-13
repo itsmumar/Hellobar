@@ -238,12 +238,21 @@ var _HB = {
   // Also sorts the params alphabetically
   n: function(url, pathOnly)
   {
+    url = (url+"").toLowerCase();
     // Add trailing slash when we think it's needed
-    if ( url.match(/^https?:\/\/[^\/]*$/i) || url.match(/^[^\/]*\.(com|edu|gov|us|net|io)$/i))
+    if ( url.match(/^https?:\/\/[^\/?]*$/i) ||
+        url.match(/^[^\/]*\.(com|edu|gov|us|net|io)$/i))
       url += "/";
 
+    //normalize query string to start with slash
+    url = url.replace(/([^\/])\?/, "$1/?")
+
     // Get rid of things that make no difference in the URL (such as protocol and anchor)
-    url = (url+"").toLowerCase().replace(/https?:\/\//,"").replace(/^www\./,"").replace(/\#.*/,"");
+    url = url.
+      replace(/https?:\/\//,"").
+      replace(/^www\./,"").
+      replace(/\#.*/,"");
+
     // Strip the host if pathOnly
     if ( pathOnly )
     {
@@ -251,13 +260,24 @@ var _HB = {
       if ( !url.match(/^\//) )
           url = url.replace(/.*?\//, "/");
     }
+
+    if ( url == "/" || url == "/?")
+      return url;
+
+    // If no query string just return the URL
+    if ( url.indexOf("?") === -1 )
+      return HB.stripTrailingSlash(url);
+
     // Get the params
     var urlParts = url.split("?");
-    // If no params just return the URL
+
+    // If no params just return the URL with ?
     if ( !urlParts[1] )
-      return HB.stripTrailingSlash(urlParts[0]);
+      return HB.stripTrailingSlash(urlParts[0]) + "?";
+
     // Sort the params
-    return HB.stripTrailingSlash(urlParts[0])+"?"+urlParts[1].split("&").sort().join("&");
+    var sortedParams = urlParts[1].split("&").sort().join("&");
+    return HB.stripTrailingSlash(urlParts[0] + "/") + "?" + sortedParams;
   },
 
   stripTrailingSlash: function(urlPart) {

@@ -83,7 +83,8 @@ group :development, :test do
   gem "pry-nav"
   gem "rspec-rails", "~> 2.14"
   gem "simplecov", "~> 0.7.1"
-  gem "teaspoon", "~> 0.8.0"
+  #gem "teaspoon", "~> 0.8.0"
+  gem "teaspoon-jasmine"
 end
 
 group :test do
