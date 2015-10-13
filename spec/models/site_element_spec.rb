@@ -48,8 +48,8 @@ describe SiteElement do
     describe "callbacks" do
       it "removes unreferenced image uploads" do
         element = create(:site_element)
-        image = create(:image_upload, site_element: element)
-        create(:image_upload, site_element: element)
+        image = create(:image_upload, site: element.site)
+        create(:image_upload, site: element.site)
 
         expect {
           element.active_image = image
@@ -59,11 +59,22 @@ describe SiteElement do
 
       it "does not remove image uploads that are still active" do
         element = create(:site_element)
-        image = create(:image_upload, site_element: element)
+        image = create(:image_upload, site: element.site)
         element.update(active_image: image)
 
         expect {
           element.headline = "dsfadsf" # trigger save
+          element.save
+        }.to change { ImageUpload.count }.by(0)
+      end
+
+      it "does not remove image uploads that are active for other elements" do
+        element = create(:site_element)
+        image = create(:image_upload, site: element.site)
+        elementTwo = create(:site_element, active_image_id: image.id, rule: create(:rule, site: element.site))
+
+        expect {
+          element.headline = "a new headline"
           element.save
         }.to change { ImageUpload.count }.by(0)
       end

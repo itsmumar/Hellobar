@@ -27,7 +27,6 @@ class SiteElement < ActiveRecord::Base
 
   belongs_to :rule
   belongs_to :contact_list
-  has_many :image_uploads, dependent: :destroy
   belongs_to :active_image, class_name: "ImageUpload"
 
   acts_as_paranoid
@@ -45,6 +44,7 @@ class SiteElement < ActiveRecord::Base
   scope :has_performance, -> { where("element_subtype != ?", "announcement") }
 
   delegate :site, :site_id, to: :rule, allow_nil: true
+  delegate :image_uploads, to: :site
 
   serialize :settings, Hash
 
@@ -127,7 +127,9 @@ class SiteElement < ActiveRecord::Base
   private
 
   def remove_unreferenced_images
-    image_uploads.where.not(id: active_image_id).destroy_all
+    # Done through SQL to ensure references are up to date
+    image_uploads.joins("LEFT JOIN site_elements ON site_elements.active_image_id = image_uploads.id")\
+      .where("site_elements.id IS NULL").destroy_all
   end
 
   def is_email?

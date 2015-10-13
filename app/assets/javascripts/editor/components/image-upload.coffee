@@ -11,7 +11,7 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
   insertDropzone: ->
     that = this
     dropzone = new Dropzone this.$(".file-upload")[0],
-      url: "image_uploads"
+      url: "/sites/#{siteID}/image_uploads"
       maxFiles: 1
       maxFilesize: 1
       addRemoveLinks: false
