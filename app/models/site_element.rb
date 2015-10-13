@@ -127,7 +127,9 @@ class SiteElement < ActiveRecord::Base
   private
 
   def remove_unreferenced_images
-    image_uploads.where.not(id: active_image_id).destroy_all
+    # Done through SQL to ensure references are up to date
+    image_uploads.joins("LEFT JOIN site_elements ON site_elements.active_image_id = image_uploads.id")\
+      .where("site_elements.id IS NULL").destroy_all
   end
 
   def is_email?

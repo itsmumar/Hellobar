@@ -5,7 +5,7 @@ require 'queue_worker/queue_worker'
 class Site < ActiveRecord::Base
   include QueueWorker::Delay
 
-  has_many :rules, -> { order("editable ASC, id ASC") }, dependent: :destroy
+  has_many :rules, -> { order("rules.editable ASC, rules.id ASC") }, dependent: :destroy
   has_many :site_elements, through: :rules, dependent: :destroy
   has_many :site_memberships, dependent: :destroy
   has_many :owners, -> { where(role: "owner") }, through: :site_memberships

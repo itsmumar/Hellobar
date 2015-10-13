@@ -67,6 +67,17 @@ describe SiteElement do
           element.save
         }.to change { ImageUpload.count }.by(0)
       end
+
+      it "does not remove image uploads that are active for other elements" do
+        element = create(:site_element)
+        image = create(:image_upload, site: element.site)
+        elementTwo = create(:site_element, active_image_id: image.id, rule: create(:rule, site: element.site))
+
+        expect {
+          element.headline = "a new headline"
+          element.save
+        }.to change { ImageUpload.count }.by(0)
+      end
     end
 
     describe "#redirect_has_url" do
