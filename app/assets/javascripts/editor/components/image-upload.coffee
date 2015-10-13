@@ -15,13 +15,17 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
     that = this
     dropzone = new Dropzone this.$(".file-upload")[0],
       url: "/sites/#{siteID}/image_uploads"
-      maxFiles: 1
+      clickable: "#dropzone-preview"
+      maxFiles: 2
       maxFilesize: 1
       addRemoveLinks: false
       createImageThumbnails: false
       init: ->
         this.on "addedfile", (file) ->
           that.$(".default-text").text("")
+          for existingFile in this.files
+            if existingFile != file
+              this.removeFile(existingFile)
       headers:
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       success: (file, res) =>
@@ -30,8 +34,6 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
       sending: (file, xhr, formData) =>
         @setActionIcon("sync")
         formData.append('site_element_id', siteID)
-      drop: (evt) ->
-        @removeAllFiles()
       complete: =>
         @setActionIcon("trash")
 
