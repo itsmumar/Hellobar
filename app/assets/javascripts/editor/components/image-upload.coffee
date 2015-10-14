@@ -1,4 +1,5 @@
 HelloBar.ImageUploadComponent = Ember.Component.extend
+  defaultMessage: "Click or drag to upload ..."
   dropzoneInstance: null
   actionIcons:
     sync: "icon-sync"
@@ -12,7 +13,6 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
       @setRemoveButtonActive()
 
   insertDropzone: ->
-    that = this
     dropzone = new Dropzone this.$(".file-upload")[0],
       url: "/sites/#{siteID}/image_uploads"
       clickable: "#dropzone-preview"
@@ -20,12 +20,10 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
       maxFilesize: 1
       addRemoveLinks: false
       createImageThumbnails: false
-      init: ->
-        this.on "addedfile", (file) ->
-          that.$(".default-text").text("")
-          for existingFile in this.files
-            if existingFile != file
-              this.removeFile(existingFile)
+      acceptedFiles: "image/*"
+      dictInvalidFileType: "You can only upload image files."
+      init: =>
+        @setDropzoneMessage(@defaultMessage)
       headers:
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       success: (file, res) =>
@@ -36,6 +34,14 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
         formData.append('site_element_id', siteID)
       complete: =>
         @setActionIcon("trash")
+      reset: =>
+        @setDropzoneMessage(@defaultMessage)
+
+    dropzone.on 'addedfile', (file) =>
+      @setDropzoneMessage("")
+      for existingFile in dropzone.files
+        if existingFile != file
+          dropzone.removeFile(existingFile)
 
     @set('dropzoneInstance', dropzone)
 
@@ -54,3 +60,6 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
 
   setRemoveButtonActive: ->
     @$(".file-action").addClass('active')
+
+  setDropzoneMessage: (message) ->
+    @$(".default-text").text(message)
