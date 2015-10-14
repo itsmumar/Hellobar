@@ -89,8 +89,8 @@ describe("HB", function() {
           expect(url).toEqual("hellobar.com/?a=first&b=second");
         });
 
-        it("removes slash before query if none exists", function() {
-          var url = HB.n("http://www.hellobar.com/?anything=true", false);
+        it("adds slash before query if none exists", function() {
+          var url = HB.n("http://www.hellobar.com?anything=true", false);
           expect(url).toEqual("hellobar.com/?anything=true");
         });
       });
