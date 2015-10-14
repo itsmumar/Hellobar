@@ -20,6 +20,8 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
       maxFilesize: 1
       addRemoveLinks: false
       createImageThumbnails: false
+      acceptedFiles: "image/*"
+      dictInvalidFileType: "You can only upload image files."
       init: =>
         @setDropzoneMessage(@defaultMessage)
       headers:
