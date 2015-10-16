@@ -758,6 +758,11 @@ var _HB = {
     return siteElement;
   },
 
+  isIE11: function() {
+    var myNav = navigator.userAgent.toLowerCase();
+    return myNav.indexOf('rv:11') != -1;
+  },
+
   isIEXOrLess: function(x) {
     var myNav = navigator.userAgent.toLowerCase();
     var version = (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
@@ -991,6 +996,10 @@ var _HB = {
     d.body.className = siteElement.type;
     if(HB.isIEXOrLess(9))
       HB.addClass(d.body, "hb-old-ie");
+
+    if(HB.isIE11())
+      HB.addClass(d.body, "hb-paused-animations-ie");
+
   },
 
   // Adds a rule to the list of rules.
