@@ -17,11 +17,12 @@ class SiteGenerator
     str = <<-EOS
       <html>
       <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1”>
       <style></style>
       </head>
       <body style="background-color: #FFFFFF;">
       <a onclick="console.log('BUTTON PUSHED')">HERE</a>
-      <div style="height:500px;background-color: yellow">TOP OF PAGE CONTENT</div>      
+      <div style="height:500px;background-color: yellow">TOP OF PAGE CONTENT</div>
       <div style="height:500px;">Content</div>
       <div style="height:500px;background-color: #eee">Content</div>
       <div style="height:500px;">Content</div>
@@ -31,9 +32,9 @@ class SiteGenerator
       <div style="height:500px;">Content</div>
       <div style="height:500px;background-color: #eee">Content</div>
       <div style="height:500px;">Content</div>
-      <div style="height:500px;background-color: #eee">Content</div>        
+      <div style="height:500px;background-color: #eee">Content</div>
       <div style="height:500px;">Content</div>
-      <div style="height:500px;background-color: pink">BOTTOM OF PAGE CONTENT</div>  
+      <div style="height:500px;background-color: pink">BOTTOM OF PAGE CONTENT</div>
       <script>
     EOS
 
