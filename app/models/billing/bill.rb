@@ -121,21 +121,14 @@ class Bill < ActiveRecord::Base
   end
 
   def calculate_discount
-    discounts = subscription.class.defaults[:discounts]
-    calculated_discount = 0
-
-    if discounts
-      calculator = DiscountCalculator.new(discounts, subscription)
-      calculated_discount = calculator.current_discount
-    end
-
-    calculated_discount
+    calculator = DiscountCalculator.new(subscription)
+    calculated_discount = calculator.current_discount
   end
 
   def set_final_amount!
     return if paid? || base_amount.nil?
 
-    self.discount = self.base_amount > 0 ? calculate_discount : 0
+    self.discount = self.is_a?(Refund) ? 0 : calculate_discount
     self.amount = [self.base_amount - self.discount, 0].max
   end
 

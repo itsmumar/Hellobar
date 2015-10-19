@@ -59,15 +59,15 @@ section
     - if @next_bill && @next_bill.amount > 0
       small
         ' Next bill is due on
-        = @next_bill.due_at.strftime("%-m-%-d-%Y")
+        = bill_due_at(@next_bill)
         '  and will total
-        = number_to_currency(@next_bill.estimated_amount)
+        = bill_estimated_amount(@next_bill)
         '  for a
         = @next_bill.subscription.schedule
         |  subscription.
   - elsif @next_bill && @site.current_subscription.trial?
     | This site is on a trial plan.
-    |  Please enter a payment method by #{@next_bill.due_at.strftime("%-m-%-d-%Y")}
+    |  Please enter a payment method by #{bill_due_at(@next_bill)}
     |  to continue using HelloBar #{@site.current_subscription.values[:name]}.
 - elsif @site.is_free?
   ul 

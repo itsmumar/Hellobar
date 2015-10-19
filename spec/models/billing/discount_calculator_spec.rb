@@ -2,12 +2,14 @@ require 'spec_helper'
 
 describe DiscountCalculator do
   let(:user) { create(:user) }
-  let(:discounts) do
-    [
-      DiscountRange.new(2, 0, 1, 10),
-      DiscountRange.new(2, 1, 2, 20),
-      DiscountRange.new(nil, 2, 3, 30)
-    ]
+  before do
+    allow(Subscription::Pro).to receive(:defaults).and_return({
+      discounts: [
+        DiscountRange.new(2, 0, 1, 10),
+        DiscountRange.new(2, 1, 2, 20),
+        DiscountRange.new(nil, 2, 3, 30)
+      ]
+    })
   end
 
   def create_sub_for_user(u)
@@ -21,7 +23,7 @@ describe DiscountCalculator do
     context "there is only one Subscription" do
       it "returns the first amount" do
         subscription = create_sub_for_user(user)
-        calculator = DiscountCalculator.new(discounts, subscription)
+        calculator = DiscountCalculator.new(subscription)
         expect(calculator.current_discount).to eq(1)
       end
     end
@@ -34,7 +36,7 @@ describe DiscountCalculator do
 
       it "returns the amount for the second tier" do
         subscription = create_sub_for_user(user)
-        calculator = DiscountCalculator.new(discounts, subscription)
+        calculator = DiscountCalculator.new(subscription)
         expect(calculator.current_discount).to eq(2)
       end
     end
@@ -49,7 +51,7 @@ describe DiscountCalculator do
 
       it "returns the last amount" do
         subscription = create_sub_for_user(user)
-        calculator = DiscountCalculator.new(discounts, subscription)
+        calculator = DiscountCalculator.new(subscription)
         expect(calculator.current_discount).to eq(3)
       end
     end

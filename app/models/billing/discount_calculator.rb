@@ -1,10 +1,10 @@
 class DiscountCalculator
   attr_reader :discounts
 
-  def initialize(discounts, subscription)
+  def initialize(subscription)
     @user = subscription.payment_method.try(:user)
     @subscription = subscription
-    @discounts = discounts || []
+    @discounts = subscription.class.defaults[:discounts] || []
     @discounts.sort_by!(&:tier)
   end
 
@@ -38,11 +38,3 @@ class DiscountCalculator
     subscriptions
   end
 end
-
-# Struct for holding discount information
-# Params
-# slots - number of subscriptions that this tier can hold
-# tier - index of the tier, higher index is applied later
-# monthly - amount to discount for a monthly subscriptions
-# yearly - amount to discount for a yearly subscriptions
-DiscountRange = Struct.new(:slots, :tier, :monthly, :yearly)
