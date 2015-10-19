@@ -117,9 +117,9 @@ RSpec.describe Condition, type: :model do
       end
 
       it "should do nothing if url is already absolute (https)" do
-        condition = build(:condition, segment: "UrlCondition", value: "http://google.com")
+        condition = build(:condition, segment: "UrlCondition", value: "https://google.com")
         condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("http://google.com")
+        expect(condition.value).to eq("https://google.com")
       end
 
       it "should do nothing if url is already relative" do
@@ -140,13 +140,13 @@ RSpec.describe Condition, type: :model do
         expect(condition.value).to eq("/about.html")
       end
 
-      it "should prepend https if url is absolute" do
+      it "should prepend http if url is absolute" do
         condition = build(:condition, segment: "UrlCondition", value: "about.com")
         condition.send(:normalize_url_condition)
         expect(condition.value).to eq("http://about.com")
       end
 
-      it "should prepend https if url is absolute" do
+      it "should prepend http if url is absolute" do
         condition = build(:condition, segment: "UrlCondition", value: "hey.hellobar.com")
         condition.send(:normalize_url_condition)
         expect(condition.value).to eq("http://hey.hellobar.com")
