@@ -23,10 +23,15 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
       acceptedFiles: "image/*"
       dictInvalidFileType: "You can only upload image files."
       init: =>
-        @setDropzoneMessage(@defaultMessage)
+        existingFileName = @get('existingFileName')
+        if !!existingFileName
+          @setDropzoneMessage(existingFileName)
+        else
+          @setDropzoneMessage(@defaultMessage)
       headers:
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       success: (file, res) =>
+        @set('existingFileName', file.name)
         @setRemoveButtonActive()
         @sendAction('setImageProps', res.id, res.url)
       sending: (file, xhr, formData) =>
@@ -34,8 +39,6 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
         formData.append('site_element_id', siteID)
       complete: =>
         @setActionIcon("trash")
-      reset: =>
-        @setDropzoneMessage(@defaultMessage)
 
     dropzone.on 'addedfile', (file) =>
       @setDropzoneMessage("")
@@ -54,6 +57,8 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
     @$(".file-action").addClass(@actionIcons[icon])
 
   removeDropzoneImages: ->
+    @set('existingFileName', null)
+    @setDropzoneMessage(@defaultMessage)
     @sendAction('setImageProps', null, '')
     @get('dropzoneInstance').removeAllFiles()
     @$(".file-action").removeClass('active')
