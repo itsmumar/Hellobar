@@ -45,6 +45,8 @@ class SiteElement < ActiveRecord::Base
 
   delegate :site, :site_id, to: :rule, allow_nil: true
   delegate :image_uploads, to: :site
+  delegate :url, to: :active_image, allow_nil: true, prefix: :image
+  delegate :image_file_name, to: :active_image, allow_nil: true
 
   serialize :settings, Hash
 
@@ -118,10 +120,6 @@ class SiteElement < ActiveRecord::Base
 
   def after_email_submit_action
     AFTER_EMAIL_ACTION_MAP[settings["after_email_submit_action"]]
-  end
-
-  def image_url
-    active_image.try(:url)
   end
 
   private
