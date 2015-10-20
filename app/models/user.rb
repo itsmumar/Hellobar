@@ -198,6 +198,8 @@ class User < ActiveRecord::Base
     else
       User.none
     end
+  rescue Addressable::URI::InvalidURIError
+    User.none
   end
 
   def self.search_by_username(username)

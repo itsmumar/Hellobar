@@ -268,6 +268,11 @@ describe User do
     end
 
     context 'with invalid host string' do
+      it 'should return empty array when arg is email address' do
+        expect(User.search_by_url('dude@brah.bro')).
+          to eq([])
+      end
+
       it 'should return empty array when arg is not url' do
         expect(User.search_by_url('how can mirrors be real')).
           to eq([])
