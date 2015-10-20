@@ -11,6 +11,8 @@ HelloBar.TextController = Ember.Controller.extend
   imagePlacementOptions: [
     {value: 'top', label: 'Top'}
     {value: 'bottom', label: 'Bottom'}
+    {value: 'left', label: 'Left'}
+    {value: 'right', label: 'Right'}
   ]
 
   hideNonBarFields: Ember.computed.equal('model.type', 'Bar')

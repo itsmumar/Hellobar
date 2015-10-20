@@ -110,3 +110,28 @@
 #hellobar-modal.mobile .hb-logo-wrapper {
   margin: 2em auto 0;
 }
+
+/*-----------  Uploaded Image  -----------*/
+#hellobar-modal.image-left .hb-image-wrapper {
+  float: left;
+  width: 48%;
+}
+
+#hellobar-modal.image-left .hb-inner-content {
+  float: right;
+  width: 50%;
+}
+
+#hellobar-modal.image-right .hb-image-wrapper {
+  float: right;
+  width: 48%;
+}
+
+#hellobar-modal.image-right .hb-inner-content {
+  float: left;
+  width: 50%;
+}
+
+#hellobar-modal.image-bottom .hb-logo-wrapper {
+  margin-top: 0;
+}

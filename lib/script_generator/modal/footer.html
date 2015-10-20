@@ -1,7 +1,8 @@
-  {{siteElement.imageFor(['bottom'])}}
+      {{siteElement.imageFor(['bottom'])}}
+      <div class="hb-logo-wrapper {{HB.colorIsBright(siteElement.primary_color) ? 'hb-logo-inverted' : ''}} {{HB.branding_template()}}" >
+        {{HB.renderTemplate(HB.getBrandingTemplate(HB.branding_template()), siteElement)}}
+      </div>
+    </div>
   </div>
-
-  <div class="hb-logo-wrapper {{HB.colorIsBright(siteElement.primary_color) ? 'hb-logo-inverted' : ''}} {{HB.branding_template()}}" >
-    {{HB.renderTemplate(HB.getBrandingTemplate(HB.branding_template()), siteElement)}}
-  </div>
+  {{siteElement.imageFor(['right'])}}
 </div>
