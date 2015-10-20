@@ -36,6 +36,14 @@ SiteElement.prototype.prerender = function(){
     this.animated = false;
 };
 
+SiteElement.prototype.imagePlacementClass = function() {
+  if(!!this.image_url) {
+    return 'image-' + this.image_placement
+  } else {
+    return ''
+  }
+}
+
 SiteElement.prototype.imageFor = function(location) {
   if (!this.image_url || location.indexOf(this.image_placement) == -1)
     return "";

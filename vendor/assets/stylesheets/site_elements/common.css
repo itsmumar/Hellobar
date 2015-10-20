@@ -430,3 +430,48 @@ html, body {
 .fb-like.fb_iframe_widget {
   overflow: hidden;
 }
+
+/*-----------  Uploaded Image  -----------*/
+.image-left .hb-image-wrapper {
+  float: left;
+  width: 48%;
+}
+
+.image-left .hb-inner-content {
+  float: right;
+  width: 50%;
+}
+
+.image-left .uploaded-image {
+  margin: 0;
+}
+
+.image-right .hb-image-wrapper {
+  float: right;
+  width: 48%;
+}
+
+.image-right .hb-inner-content {
+  float: left;
+  width: 50%;
+}
+
+.image-right .uploaded-image {
+  margin: 0;
+}
+
+.image-bottom .hb-logo-wrapper {
+  margin-top: 0;
+}
+
+.image-top .uploaded-image {
+  margin-top: 0;
+}
+
+.image-bottom .uploaded-image {
+  margin-bottom: 0;
+}
+
+.image-clear-fix {
+  display: none;
+}

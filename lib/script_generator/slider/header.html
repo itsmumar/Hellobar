@@ -1,11 +1,13 @@
-<div id="hellobar-slider" class="{{siteElement.placement}} {{siteElement.subtype}}" style="font-family: {{siteElement.font}};">
+<div id="hellobar-slider" class="{{siteElement.placement}} {{siteElement.subtype}} {{siteElement.imagePlacementClass()}}" style="font-family: {{siteElement.font}};">
   <div class="hb-header" style="background-color: #{{siteElement.primary_color}}"></div>
   <div class="slider-content">
     <a class="icon-close" onclick="window.parent.HB.animateOut(window.parent.HB.w, window.parent.HB.closeIframe);"></a>
 
     <div class="hb-content-wrapper">
-      {{siteElement.imageFor(['top'])}}
-      <div class="hb-text-wrapper">
-        <div class="hb-headline-text">{{siteElement.headline}}</div>
-        <div class="hb-secondary-text">{{siteElement.caption}}</div>
-      </div>
+      {{siteElement.imageFor(['left'])}}
+      <div class="hb-inner-content">
+        {{siteElement.imageFor(['top'])}}
+        <div class="hb-text-wrapper">
+          <div class="hb-headline-text">{{siteElement.headline}}</div>
+          <div class="hb-secondary-text">{{siteElement.caption}}</div>
+        </div>

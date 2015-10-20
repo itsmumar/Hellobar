@@ -184,3 +184,9 @@
   margin-left: 0;
   margin-top: -1px;
 }
+
+/*-----------  Uploaded Image  -----------*/
+#hellobar-slider.image-left .image-clear-fix, #hellobar-slider.image-right .image-clear-fix {
+  display: initial;
+  clear: both;
+}
