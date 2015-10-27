@@ -15,6 +15,12 @@ describe Bill do
   fixtures :all
   set_fixture_class payment_method_details: PaymentMethodDetails # pluralized class screws up naming convention
 
+  describe "callbacks" do
+    it "sets the base amount before saving" do
+      expect(create(:bill, amount: 10).base_amount).to eq(10)
+    end
+  end
+
   it "should not let create a negative bill" do
     lambda{Bill.create(:amount=>-1)}.should raise_error(Bill::InvalidBillingAmount)
   end
@@ -127,6 +133,12 @@ describe Bill do
   end
 
   describe "attempt_billing!" do
+    it "calls set_final_amount" do
+      bill = create(:pro_bill)
+      expect(bill).to receive(:set_final_amount!)
+      bill.attempt_billing!
+    end
+
     it "should call payment_method.pay if the bill.amount > 0" do
       bill = bills(:now_bill)
       bill.subscription.payment_method = payment_methods(:always_successful)
@@ -138,6 +150,52 @@ describe Bill do
       bill = bills(:free_bill)
       PaymentMethod.any_instance.should_not_receive(:pay).with(bill)
       bill.attempt_billing!
+    end
+  end
+
+  describe "#calculate_discount" do
+    it "should be 0" do
+      user = create(:user)
+      bill = create(:pro_bill)
+      bill.site.users << user
+
+      expect(bill.calculate_discount).to eq(0)
+    end
+
+    it "discounts to the appropriate tier" do
+      user = create(:user)
+      bills = []
+
+      35.times do
+        bill = create(:pro_bill, status: :paid)
+        bill.site.users << user
+        user.reload
+        bill.subscription.payment_method.update(user: user)
+        bill.update(discount: bill.calculate_discount)
+        bills << bill
+      end
+
+      expected = []
+      5.times { expected << 0 }
+      5.times { expected << 2 }
+      10.times { expected << 4 }
+      10.times { expected << 6 }
+      5.times { expected << 8 }
+      expect(bills.map(&:discount)).to eq(expected)
+    end
+  end
+
+  describe "#set_base_amount" do
+    it "sets the base amount from amount" do
+      bill = build(:bill, amount: 10)
+      bill.set_base_amount
+      expect(bill.base_amount).to eq(10)
+    end
+
+    it "does nothing if base amount already set" do
+      bill = build(:bill, amount: 10, base_amount: 12)
+      bill.set_base_amount
+      expect(bill.base_amount).to eq(12)
     end
   end
 

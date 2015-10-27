@@ -4,15 +4,15 @@ section
   label Plan
   p
     = display_name_for_site(@site)
-    |  is on the&nbsp;
+    '  is on the
     = @site.current_subscription.values[:name]
     - if @site.current_subscription.trial?
       |  Trial
-    |  plan.&nbsp;
+    '  plan.
     - if Permissions.view_bills?(current_user, @site)
       - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
         = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
-        | &nbsp;
+        '
         = @site.current_subscription.schedule
         | .
       - if @site.requires_payment_method?
@@ -58,16 +58,16 @@ section
 
     - if @next_bill && @next_bill.amount > 0
       small
-        | Next bill is due on&nbsp;
-        = @next_bill.due_at.strftime("%-m-%-d-%Y")
-        |  and will total&nbsp;
-        = number_to_currency(@next_bill.amount)
-        |  for a&nbsp;
+        ' Next bill is due on
+        = bill_due_at(@next_bill)
+        '  and will total
+        = bill_estimated_amount(@next_bill)
+        '  for a
         = @next_bill.subscription.schedule
         |  subscription.
   - elsif @next_bill && @site.current_subscription.trial?
     | This site is on a trial plan.
-    |  Please enter a payment method by #{@next_bill.due_at.strftime("%-m-%-d-%Y")}
+    |  Please enter a payment method by #{bill_due_at(@next_bill)}
     |  to continue using HelloBar #{@site.current_subscription.values[:name]}.
 - elsif @site.is_free?
   ul 
