@@ -29,7 +29,7 @@ class UserMigrationController < ApplicationController
 
           if current_wordpress_user.is_pro_user?
             subscription = Subscription::Pro.new(schedule: "monthly")
-            site.change_subscription(subscription, nil, 90)
+            site.change_subscription(subscription, nil, 90.days)
           elsif site_hash[:bar_ids].count >= 10
             site.change_subscription(Subscription::FreePlus.new(schedule: "monthly"))
           else
