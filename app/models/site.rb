@@ -231,8 +231,10 @@ class Site < ActiveRecord::Base
       subscription.payment_method = payment_method
       success = true
       bill = calculate_bill(subscription, true, trial_period)
-      now = Time.now
-      if bill.due_at(payment_method) <= now
+      bill.save!
+      subscription.save!
+
+      if bill.due_at(payment_method) <= Time.now
         audit << "Change plan, bill is due now: #{bill.inspect}"
         result = bill.attempt_billing!
         if result.is_a?(BillingAttempt)
@@ -245,8 +247,6 @@ class Site < ActiveRecord::Base
       else
         audit << "Change plan, bill is due later: #{bill.inspect}"
       end
-      bill.save!
-      subscription.save!
 
       set_branding_on_site_elements
 
