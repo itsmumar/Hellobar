@@ -49,6 +49,7 @@ class UserMigrationController < ApplicationController
 
     session[:wordpress_user_id] = nil
     url = current_user.sites.any? ? site_site_elements_path(current_user.sites.first, anchor: "upgrade-modal") : new_site_path
+    current_user.sites.each { |site| site.generate_script }
 
     respond_to do |format|
       format.json { render json: { url: url } }
