@@ -20,7 +20,7 @@ files.each_with_index do |file, i|
       if !pattern or line =~ pattern
         line.chomp!
         begin
-          QueueWorker.send_sqs_message(line)
+          QueueWorker.send_sqs_message(line, Hellobar::Settings[:env_name], Hellobar::Settings[:low_priority_queue])
           num_jobs += 1
         rescue Exception => e
           puts "Failed on #{line.inspect}"
