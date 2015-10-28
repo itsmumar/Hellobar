@@ -4,7 +4,7 @@ if (!Object.create) {
         if (typeof o !== 'object' && typeof o !== 'function') throw new TypeError('Object prototype may only be an Object: ' + o);
         else if (o === null) throw new Error("This browser's implementation of Object.create is a shim and doesn't support 'null' as the first argument.");
         if (typeof properties != 'undefined') throw new Error("This browser's implementation of Object.create is a shim and doesn't support a second argument.");
-        function F() {}
+        function F() {};
         F.prototype = o;
         return new F();
     };
@@ -12,13 +12,13 @@ if (!Object.create) {
 
 var SiteElement = function(props) {
   for (var key in props) {
-    this[key] = props[key]
+    this[key] = props[key];
   }
 };
 
 SiteElement.prototype.setupIFrame = function(iframe) {
   if(this.animated) {
-    HB.addClass(iframe, "hb-animated")
+    HB.addClass(iframe, "hb-animated");
   }
 
   // Any view_condition including string 'intent' will run the intent event listeners
@@ -38,9 +38,9 @@ SiteElement.prototype.prerender = function(){
 
 SiteElement.prototype.imagePlacementClass = function() {
   if(!!this.image_url) {
-    return 'image-' + this.image_placement
+    return 'image-' + this.image_placement;
   } else {
-    return ''
+    return '';
   }
 }
 
