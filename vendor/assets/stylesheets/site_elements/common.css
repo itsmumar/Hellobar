@@ -219,14 +219,6 @@ html, body {
 
 /*-----------  Logo  -----------*/
 
-.uploaded-image {
-  margin: 20px;
-  max-width: 80%;
-  max-height: 300px;
-}
-
-/*-----------  Logo  -----------*/
-
   .hb-logo-wrapper {
     opacity: 0.3;
   }
@@ -432,6 +424,12 @@ html, body {
 }
 
 /*-----------  Uploaded Image  -----------*/
+
+.uploaded-image {
+  margin: 20px;
+  max-width: 80%;
+  max-height: 300px;
+}
 .image-left .hb-image-wrapper {
   float: left;
   width: 48%;
@@ -470,6 +468,22 @@ html, body {
 
 .image-bottom .uploaded-image {
   margin-bottom: 0;
+}
+
+.image-above-caption .hb-image-wrapper {
+  text-align: center;
+}
+
+.image-above-caption .hb-image-wrapper .uploaded-image {
+  margin: 0;
+}
+
+.image-below-caption .hb-image-wrapper {
+  text-align: center;
+}
+
+.image-below-caption .hb-image-wrapper .uploaded-image {
+  margin: 0;
 }
 
 .image-clear-fix {
