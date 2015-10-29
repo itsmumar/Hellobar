@@ -9,11 +9,6 @@ settings_file = "config/settings.yml"
 settings_yaml = File.exists?(settings_file) ? YAML.load_file(settings_file) : {}
 env = settings_yaml["env_name"] || "edge"
 
-# Dummy entry to keep crontabs empty on non-cron machines
-every 10.days, :roles => [:web] do
-  command "/bin/true" # no-op
-end
-
 every 20.minutes, :roles => [:cron] do
   rake "internal_metrics:process"
 end
@@ -38,4 +33,8 @@ end
 
 every 24.hours, :at => "12:00am", :roles => [:cron] do
   rake "site:improve_suggestions:generate_all_separately"
+end
+
+every 24.hours, :at => "12:00am", :roles => [:web] do
+  rake "queue_worker:restart"
 end
