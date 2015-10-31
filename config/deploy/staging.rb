@@ -15,7 +15,7 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'staging.hellobar.com', user: 'hellobar', roles: %w{web db cron}
+server 'staging.hellobar.com', user: 'hellobar', roles: %w{web db cron worker}
 
 
 # Custom SSH Options

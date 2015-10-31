@@ -1,4 +1,6 @@
 namespace :queue_worker do
+  WORKER_PATTERN = /queue_worker\s*\[.*?\]/
+
   desc 'Starts all the queue workers'
   task :start do
     require File.join(Rails.root, "config", "initializers", "settings.rb")
@@ -19,7 +21,7 @@ namespace :queue_worker do
 
   desc 'Stops all the queue workers'
   task :stop do
-    processes = `ps aux`.split("\n").reject{|l| l !~ /queue_worker\s*\[.*?\]/}
+    processes = `ps aux`.split("\n").reject{|l| l !~ WORKER_PATTERN}
     puts "Stopping #{processes.length} queue workers..."
     processes.each do |process|
       pid = process.split(/\s+/)[1].to_i
@@ -33,5 +35,35 @@ namespace :queue_worker do
   task :restart do
     Rake::Task["queue_worker:stop"].invoke
     Rake::Task["queue_worker:start"].invoke
+  end
+
+  desc 'Restarts only workers that are not currently running'
+  task :resurrect do
+    require File.join(Rails.root, "config", "initializers", "settings.rb")
+
+    processes = `ps aux`.split("\n").reject{|l| l !~ WORKER_PATTERN }
+    {
+      Hellobar::Settings[:main_queue] => [2],
+      Hellobar::Settings[:low_priority_queue] => [3, "--skip-old"]
+    }.each do |queue, options|
+      num_workers = options[0]
+      additional_options = options[1] || ""
+      puts "Expecting #{num_workers} workers for #{queue.inspect}"
+      num_workers_found = 0
+      processes.each do |process|
+        if process =~ WORKER_PATTERN
+          if $1 == queue.to_s
+            num_workers_found += 1
+          end
+        end
+      end
+      num_workers_needed = num_workers-num_workers_found
+      puts "Found #{num_workers_found}. Starting #{num_workers_needed}..."
+      if num_workers_needed > 0
+        cmd = "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec bin/queue_worker -- -q #{queue} -n #{num_workers_needed} #{additional_options}"
+        puts cmd
+        `#{cmd}`
+      end
+    end
   end
 end
