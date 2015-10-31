@@ -31,6 +31,13 @@ end
 # the Rake tasks
 class QueueWorker
   class << self
+    def log_failed_job(job)
+      # We log failed jobs to a file that is specific for the day. This 
+      # makes retrying failed jobs easier
+      # Re-open the file handle every time. Slightly slower, but simpler.
+      File.open(File.join(Rails.root,"log", "failed_jobs.#{now.strftime("%Y-%m-%d")}.log"), "a"){|f| f.puts(job)}
+    end
+
     # We log messages to a file (log/queue_worker.log) or to stdout when just running one
     def log(msg, type = "INFO")
       # If the message is an exception get the backtrace too and set
@@ -171,6 +178,9 @@ class QueueWorker
           end
           # Any failures are logged during the attempt to execute each message
           # (just because one message fails doesn't mean they should all fail)
+          # Log the failed job
+          QueueWorker.log_failed_job(message.body)
+          # Log the error message
           QueueWorker.log(e)
         ensure
           # We always delete messages to prevent them from clogging up the system.
