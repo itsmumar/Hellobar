@@ -134,6 +134,41 @@ class QueueWorker
             QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect} in #{Time.now.to_f-start_time}s")
           end
         rescue Exception => e
+          # Let's see if this is a MySQL connection issue
+          if e.message =~ /closed MySQL connection|Lost connection|MySQL server has gone away/
+            QueueWorker.log("MySQL error processing message[#{message.id}]: #{message.body.inspect} (#{e.message})", "ERRO")
+            # Let's try reconnecting for up to 60 seconds
+            start_time = Time.now
+            sleep_time = 1
+            successful_reconnect = false
+            loop do
+              QueueWorker.log("Attempting to reconnect to MySQL...")
+              begin
+                ActiveRecord::Base.connection.reconnect!
+                User.all.first.email # do a test query
+                successful_reconnect = true # if we made this far with no exception it's working again!
+              rescue Exception => e
+                # still broken
+              end
+              break if successful_reconnect
+              break if Time.now-start_time > 60 # get out of here if we've been trying for a minute
+              sleep sleep_time # sleep a little so we don't hammer the DB
+              # Increase sleep time up to a max time
+              sleep_time += 1 if sleep_time < 10
+            end
+            # Did we reconnect? If so retry the job
+            if successful_reconnect
+              QueueWorker.log("Successfully reconnected to MySQL!")
+              # Try processing the message again
+              retry
+            else
+              QueueWorker.log("Failed to reconnect to MySQL. Exiting...")
+              # With MySQL hosed we might as well just quit. The crontab for
+              # rake queue_worker::resurrect will attempt again in a couple of
+              # minutes
+              $exit_signal_sent = "MySQL FAIL"
+            end
+          end
           # Any failures are logged during the attempt to execute each message
           # (just because one message fails doesn't mean they should all fail)
           QueueWorker.log(e)
