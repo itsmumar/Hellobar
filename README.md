@@ -51,7 +51,7 @@ server 'new-ip-address', user: 'hellobar', roles: %w{web}
 
 ## Testing generated scripts
 
-### Manually in development
+### Manually in Development
 
 There is a sinatra app in `test_site`.
 
