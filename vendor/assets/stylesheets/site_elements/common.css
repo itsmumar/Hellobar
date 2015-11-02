@@ -446,6 +446,7 @@ html, body {
 
 .image-right .hb-image-wrapper {
   float: right;
+  text-align: center;
   width: 48%;
 }
 
