@@ -1,5 +1,5 @@
 namespace :queue_worker do
-  WORKER_PATTERN = /queue_worker\s*\[.*?\]/
+  WORKER_PATTERN = /queue_worker\s*\[(.*?)\]/
 
   desc 'Starts all the queue workers'
   task :start do
