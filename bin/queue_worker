@@ -35,7 +35,7 @@ class QueueWorker
       # We log failed jobs to a file that is specific for the day. This 
       # makes retrying failed jobs easier
       # Re-open the file handle every time. Slightly slower, but simpler.
-      File.open(File.join(Rails.root,"log", "failed_jobs.#{now.strftime("%Y-%m-%d")}.log"), "a"){|f| f.puts(job)}
+      File.open(File.join(Rails.root,"log", "failed_jobs.#{Time.now.strftime("%Y-%m-%d")}.log"), "a"){|f| f.puts(job)}
     end
 
     # We log messages to a file (log/queue_worker.log) or to stdout when just running one
