@@ -38,24 +38,24 @@ feature "Update Profile", js: true do
     end
     after { devise_reset }
 
-    scenario "email field should be disabled when loading the page" do
+    scenario "email field is be disabled when loading the page" do
       visit profile_path
-      page.should have_css("#user_email[disabled]")
+      expect(page).to have_css("#user_email[disabled]")
     end
 
-    scenario "email field should be enabled after clicking the reveal password button" do
+    scenario "email field is enabled after clicking the reveal password button" do
       visit profile_path
       find("#show-password-form").click
-      page.should_not have_css("#user_email[disabled]")
+      expect(page).to_not have_css("#user_email[disabled]")
     end
 
     scenario "password fields revealed after clicking the reveal password button" do
       visit profile_path
-      find("#user_password", visible: false).should_not be_visible
-      find("#user_password_confirmation", visible: false).should_not be_visible
+      expect(find("#user_password", visible: false)).to_not be_visible
+      expect(find("#user_password_confirmation", visible: false)).to_not be_visible
       find("#show-password-form").click
-      find("#user_password").should be_visible
-      find("#user_password_confirmation").should be_visible
+      expect(find("#user_password")).to be_visible
+      expect(find("#user_password_confirmation")).to be_visible
     end
 
     scenario "email cannot be changed without setting password" do
