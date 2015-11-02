@@ -42,9 +42,13 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
 
     dropzone.on 'addedfile', (file) =>
       @setDropzoneMessage("")
+      @toggleErrorState(false)
       for existingFile in dropzone.files
         if existingFile != file
           dropzone.removeFile(existingFile)
+
+    dropzone.on 'error', (file) =>
+      @toggleErrorState(true)
 
     @set('dropzoneInstance', dropzone)
 
@@ -62,9 +66,13 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
     @sendAction('setImageProps', null, '')
     @get('dropzoneInstance').removeAllFiles()
     @$(".file-action").removeClass('active')
+    @toggleErrorState(false)
 
   setRemoveButtonActive: ->
     @$(".file-action").addClass('active')
 
   setDropzoneMessage: (message) ->
     @$(".default-text").text(message)
+
+  toggleErrorState: (bool) ->
+      @$(".file-upload-container").toggleClass("with-errors", bool)
