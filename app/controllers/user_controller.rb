@@ -42,6 +42,8 @@ class UserController < ApplicationController
         format.json { render json: {user: @user, redirect_to: (current_site ? site_path(current_site) : new_site_path)}, status: :ok }
       end
     else
+      @user.reload # Don't persist any changes
+
       error_message =
         if active_before_update
           "There was a problem updating your settings#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"

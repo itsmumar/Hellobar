@@ -43,6 +43,25 @@ describe User do
       u = User.create(email: "test@test.com", password: "12345678", password_confirmation: "sdaf")
       expect(u.errors.messages[:password_confirmation]).to include('doesn\'t match Password')
     end
+
+    context "oauth user" do
+      let(:user) { create(:authentication).user.reload }
+
+      it "rejects changes to emails without setting a password" do
+        user.update(email: "changed@email.com")
+        expect(user.errors.messages[:email]).to include('cannot be changed without a password.')
+      end
+
+      it "accepts changes to emails when setting a password" do
+        user.update(email: "changed@email.com", password: "abc123abc", password_confirmation: "abc123abc")
+        expect(user.valid?).to be(true)
+      end
+
+      it "calls disconnect_oauth after saving" do
+        expect(user).to receive(:disconnect_oauth)
+        user.update(first_name: "asdfasf")
+      end
+    end
   end
 
   describe '.generate_temporary_user' do
