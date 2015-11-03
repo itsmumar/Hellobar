@@ -117,7 +117,6 @@ var HBQ = function()
           if ( HB.e.pusher ) {
             // handle case where display-condition check has hidden HB.w
             if (HB.w.style.display === "none") {
-              HB.e.pusher.style.height = 0;
               return;
             };
 
@@ -1566,7 +1565,7 @@ var _HB = {
 
         // if the pusher exists, unhide it since it should be hidden at this point
         if (HB.e.pusher != null)
-          HB.showElement(HB.e.pusher);
+          HB.showElement(HB.e.pusher, '');
       };
 
       pullDown.appendChild(pdLink);
@@ -1905,8 +1904,10 @@ var _HB = {
     element.style.display = 'none';
   },
 
-  showElement: function(element) {
-    element.style.display = 'inline';
+  showElement: function(element, display) {
+    if(typeof display === 'undefined')
+      display = 'inline';
+    element.style.display = display;
   },
 
   isAd: function() {
