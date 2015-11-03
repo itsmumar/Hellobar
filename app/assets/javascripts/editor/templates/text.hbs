@@ -44,16 +44,6 @@
 </div>
 
 {{#unless hideNonBarFields}}
-  <label>Image placement</label>
-  <div class="select-wrapper">
-    {{view Ember.Select
-      content=imagePlacementOptions
-      value=model.image_placement
-      optionValuePath='content.value'
-      optionLabelPath='content.label'
-    }}
-  </div>
-
   <label>Upload an image</label>
   <div class="image-upload">
     {{image-upload
@@ -62,4 +52,16 @@
       existingFileName=model.image_file_name
     }}
   </div>
+
+  {{#if showImagePlacementField}}
+    <label>Image placement</label>
+    <div class="select-wrapper">
+      {{view Ember.Select
+        content=imagePlacementOptions
+        value=model.image_placement
+        optionValuePath='content.value'
+        optionLabelPath='content.label'
+      }}
+    </div>
+  {{/if}}
 {{/unless}}
