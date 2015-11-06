@@ -29,6 +29,16 @@
   font-size: 10px;
 }
 
+/* handles close button when image in top right corner */
+#hellobar-slider.image-top .icon-close, #hellobar-slider.image-right .icon-close  {
+  top: 10px;
+  right: 3px;
+}
+
+#hellobar-slider.image-top .slider-content, #hellobar-slider.image-right .slider-content {
+  padding-right: 20px;
+}
+
 /*-----------  Call to Acton Button  -----------*/
 
 #hellobar-slider .hb-cta-style-button {
@@ -71,6 +81,16 @@
 
 #hellobar-slider .hb-logo-wrapper {
   text-transform: uppercase;
+}
+
+/*-----------  Images  -----------*/
+
+#hellobar-slider.image-top .hb-image-wrapper {
+  padding-bottom: 20px;
+}
+
+#hellobar-slider.image-bottom .hb-image-wrapper {
+  padding-top: 20px;
 }
 
 /*-----------  Inputs  -----------*/
@@ -186,6 +206,14 @@
 }
 
 /*-----------  Uploaded Image  -----------*/
+#hellobar-slider .uploaded-image {
+  max-height: 200px;
+}
+
+#hellobar-slider.image-left .hb-image-wrapper, #hellobar-slider.image-right .hb-image-wrapper {
+  text-align: center;
+}
+
 #hellobar-slider.image-left .image-clear-fix, #hellobar-slider.image-right .image-clear-fix {
   display: initial;
   clear: both;

@@ -102,6 +102,10 @@
 
 /*-----------  State: Mobile  -----------*/
 
+#hellobar-modal.image-left .hb-image-wrapper, #hellobar-modal.image-right .hb-image-wrapper {
+  text-align: center;
+}
+
 #hellobar-modal.mobile {
   width: 88%;
   padding: 3em 1.25em 1.25em;

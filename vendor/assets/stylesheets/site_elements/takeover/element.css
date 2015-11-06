@@ -37,6 +37,17 @@
   padding: 12px 40px;
 }
 
+
+/*-----------  Images  -----------*/
+
+#hellobar-takeover.image-bottom .hb-image-wrapper {
+  padding-top: 40px;
+}
+
+#hellobar-takeover .hb-image-wrapper {
+  text-align: center;
+}
+
 /*-----------  Inputs  -----------*/
 
 #hellobar-takeover .hb-input-wrapper {
