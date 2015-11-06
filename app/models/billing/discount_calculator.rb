@@ -1,8 +1,8 @@
 class DiscountCalculator
   attr_reader :discounts
 
-  def initialize(subscription)
-    @user = subscription.payment_method.try(:user)
+  def initialize(subscription, user=nil)
+    @user = user || subscription.payment_method.try(:user)
     @subscription = subscription
     @discounts = subscription.class.defaults[:discounts] || []
     @discounts.sort_by!(&:tier)
@@ -28,7 +28,7 @@ class DiscountCalculator
 
   def discount_index
     subs = active_subscriptions.sort_by! { |x| x.site.created_at }
-    subs.index(@subscription)
+    subs.index(@subscription) || subs.count
   end
 
   def active_subscriptions

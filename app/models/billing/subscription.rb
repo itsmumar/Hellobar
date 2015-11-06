@@ -17,6 +17,12 @@ class Subscription < ActiveRecord::Base
     end
 
     def defaults; {}; end
+
+    def estimated_price(user, schedule)
+      dummy_sub = self.new(schedule: schedule)
+      discount = DiscountCalculator.new(dummy_sub, user).current_discount
+      dummy_sub.amount - discount
+    end
   end
 
   def trial?

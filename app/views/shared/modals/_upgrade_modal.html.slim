@@ -45,8 +45,8 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
         .package-block.pro
           .package-title
             .package-name Pro
-            .package-price.monthly $15/mo
-            .package-price.yearly $12/mo
+            .package-price.monthly #{subscription_cost(Subscription::Pro, :monthly)}/mo
+            .package-price.yearly #{subscription_cost(Subscription::Pro, :yearly)}/mo
 
           .package-features
 
@@ -89,8 +89,8 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
         .package-block.enterprise
           .package-title
             .package-name Enterprise
-            .package-price.monthly $99/mo
-            .package-price.yearly $83/mo
+            .package-price.monthly #{subscription_cost(Subscription::Enterprise, :monthly)}/mo
+            .package-price.yearly #{subscription_cost(Subscription::Enterprise, :yearly)}/mo
 
           .package-features
 
