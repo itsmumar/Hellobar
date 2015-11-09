@@ -10,11 +10,13 @@ class SubscriptionSerializer < ActiveModel::Serializer
   end
 
   def yearly_amount
-    object.class.estimated_price(scope, :yearly)
+    amount = object.class.estimated_price(scope, :yearly)
+    amount_to_string(amount)
   end
 
   def monthly_amount
-    object.class.estimated_price(scope, :monthly)
+    amount = object.class.estimated_price(scope, :monthly)
+    amount_to_string(amount)
   end
 
   def payment_method_details_id
@@ -31,5 +33,11 @@ class SubscriptionSerializer < ActiveModel::Serializer
     else
       nil
     end
+  end
+
+  private
+  def amount_to_string(amount)
+    return "" if amount.nil?
+    "#{'%.2f' % amount}".chomp(".00")
   end
 end
