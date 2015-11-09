@@ -480,3 +480,7 @@ html, body {
 .image-clear-fix {
   display: none;
 }
+
+.image-right .hb-cta, .image-left .hb-cta {
+  white-space: normal;
+}
