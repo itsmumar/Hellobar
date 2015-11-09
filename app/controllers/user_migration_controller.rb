@@ -29,7 +29,7 @@ class UserMigrationController < ApplicationController
 
           if current_wordpress_user.is_pro_user?
             subscription = Subscription::Pro.new(schedule: "monthly")
-            site.change_subscription(subscription, nil, 90)
+            site.change_subscription(subscription, nil, 90.days)
           elsif site_hash[:bar_ids].count >= 10
             site.change_subscription(Subscription::FreePlus.new(schedule: "monthly"))
           else
@@ -49,6 +49,7 @@ class UserMigrationController < ApplicationController
 
     session[:wordpress_user_id] = nil
     url = current_user.sites.any? ? site_site_elements_path(current_user.sites.first, anchor: "upgrade-modal") : new_site_path
+    current_user.sites.each { |site| site.generate_script }
 
     respond_to do |format|
       format.json { render json: { url: url } }
