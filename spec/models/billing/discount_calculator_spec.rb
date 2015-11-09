@@ -39,6 +39,12 @@ describe DiscountCalculator do
         calculator = DiscountCalculator.new(subscription)
         expect(calculator.current_discount).to eq(2)
       end
+
+      it "returns the amount for the next tier for subs that aren't persisted" do
+        subscription = Subscription::Pro.new(schedule: :monthly)
+        calculator = DiscountCalculator.new(subscription, user)
+        expect(calculator.current_discount).to eq(2)
+      end
     end
 
     context "all tiers have been filled" do

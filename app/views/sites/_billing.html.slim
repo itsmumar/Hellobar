@@ -11,7 +11,10 @@ section
     '  plan.
     - if Permissions.view_bills?(current_user, @site)
       - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
-        = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
+        - if @next_bill
+          = bill_estimated_amount(@next_bill)
+        - else
+          = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
         '
         = @site.current_subscription.schedule
         | .

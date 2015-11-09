@@ -20,6 +20,25 @@ describe Subscription do
   fixtures :all
   include SubscriptionHelper
 
+  describe ".estimated_price" do
+    it "returns the subscriptions monthly amount - calculated discounts" do
+      allow_any_instance_of(DiscountCalculator).to receive(:current_discount).and_return(12)
+      expected_result = Subscription::Pro.defaults[:monthly_amount] - 12
+      expect(Subscription::Pro.estimated_price(double(:user), :monthly)).to eq(expected_result)
+    end
+
+    it "returns the subscriptions yearly amount - calculated discounts" do
+      allow_any_instance_of(DiscountCalculator).to receive(:current_discount).and_return(12)
+      expected_result = Subscription::Pro.defaults[:yearly_amount] - 12
+      expect(Subscription::Pro.estimated_price(double(:user), :yearly)).to eq(expected_result)
+    end
+
+    it "returns the subscriptions price if user is nil" do
+      expected_result = Subscription::Pro.defaults[:yearly_amount]
+      expect(Subscription::Pro.estimated_price(nil, :yearly)).to eq(expected_result)
+    end
+  end
+
   describe "#trial?" do
     it "should be true if subscription amount is not 0 and has a paid bill but no payment method" do
       bill = bills(:paid_bill)

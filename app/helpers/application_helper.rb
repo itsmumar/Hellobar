@@ -16,4 +16,10 @@ module ApplicationHelper
       !(params[:controller] == "user" && params[:action] == "edit") &&
       !(params[:controller] == "user" && params[:action] == "update")
   end
+
+  def subscription_cost(subscription, schedule)
+    cost = subscription.estimated_price(current_user, schedule)
+    cost = cost / 12 if schedule == :yearly
+    number_to_currency(cost, precision: 0)
+  end
 end

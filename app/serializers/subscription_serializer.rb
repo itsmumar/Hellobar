@@ -10,11 +10,11 @@ class SubscriptionSerializer < ActiveModel::Serializer
   end
 
   def yearly_amount
-    object.values[:yearly_amount]
+    object.class.estimated_price(scope, :yearly)
   end
 
   def monthly_amount
-    object.values[:monthly_amount]
+    object.class.estimated_price(scope, :monthly)
   end
 
   def payment_method_details_id
