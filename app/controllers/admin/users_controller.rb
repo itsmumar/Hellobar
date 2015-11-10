@@ -8,13 +8,14 @@ class Admin::UsersController < ApplicationController
       @users = User.page(params[:page]).per(24).includes(:authentications)
     else
       users = User.search_by_username(params[:q].strip).includes(:authentications)
-      users += User.search_by_url(params[:q].strip).includes(:authentications)
 
       if params[:q] =~ /\.js$/
         site = Site.find_by_script(params[:q])
         if site
           users += site.owners
         end
+      else
+        users += User.search_by_url(params[:q].strip).includes(:authentications)
       end
 
       if params[:q].strip =~ /\d{4}/
