@@ -160,6 +160,18 @@ describe Site do
     end
   end
 
+  describe "#generate_script" do
+    it "delegates :generate_static_assets to delay" do
+      expect(@site).to receive(:delay).with(:generate_static_assets, anything)
+      @site.generate_script
+    end
+
+    it "calls generate_static_assets if immediately option is specified" do
+      expect(@site).to receive(:generate_static_assets)
+      @site.generate_script(immediately: true)
+    end
+  end
+
   describe "#generate_static_assets" do
     before do
       @mock_storage = double("asset_storage")
