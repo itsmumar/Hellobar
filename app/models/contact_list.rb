@@ -12,7 +12,7 @@ class ContactList < ActiveRecord::Base
   belongs_to :site
   belongs_to :identity
 
-  has_many :site_elements
+  has_many :site_elements, dependent: :destroy
   has_many :contact_list_logs
 
   serialize :data, Hash
@@ -31,6 +31,8 @@ class ContactList < ActiveRecord::Base
   after_save :sync, :if => :data_changed?
   after_save :notify_identity, :if => :identity_id_changed?
   after_destroy :notify_identity
+
+  delegate :count, to: :site_elements, prefix: true
 
   def syncable?
     return false unless identity && data && Hellobar::Settings[:syncable]

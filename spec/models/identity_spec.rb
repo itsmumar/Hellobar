@@ -61,7 +61,7 @@ describe Identity do
   describe "contact lists updated" do
     context "still has referencing contact lists" do
       it "should do nothing" do
-        identity = contact_lists(:zombo).identity
+        identity = contact_lists(:zombo_contacts).identity
         identity.contact_lists_updated
         identity.destroyed?.should be_false
       end

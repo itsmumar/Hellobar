@@ -1,48 +1,24 @@
 require 'spec_helper'
 
-describe ContactListsController, "#num_subscribers" do
-  fixtures :all
-
-  let(:site) { sites(:zombo) }
-
-  describe "get #index" do
-    before do
-      stub_current_user(site.owners.first)
-    end
-
-    it "makes a single API call to get num_subscribers for each list" do
-      Hello::DataAPI.should_receive(:contact_list_totals).once
-
-      get :index, :site_id => site
-
-      assigns(:contact_lists).count.should be > 1
-    end
-
-    it "should set a notice if omniauth.error is present" do
-      allow(Hello::DataAPI).to receive(:contact_list_totals)
-      request.env['omniauth.error'] = double('oauth_error', message: "Invalid Credentials")
-      get :index, site_id: site
-      expect(flash[:error]).to be_present
-    end
-  end
-end
-
 describe ContactListsController, type: :controller do
   fixtures :all
 
   let(:site) { sites(:zombo) }
-  let(:contact_list) { contact_lists(:zombo) }
-  let(:subscribers) { [] } # no subscribers for now
+  let(:contact_list) { contact_lists(:zombo_contacts) }
+  let(:subscribers) { [] }
 
   before do
     user = stub_current_user(site.owners.first)
     site.contact_lists = [ contact_list ]
-    allow_any_instance_of(Identity).to receive(:credentials).and_return("token" => "test")
-    allow_any_instance_of(Identity).to receive(:extra).and_return("metadata" => { "api_endpoint" => "test" })
-    Hello::DataAPI.stub(:get_contacts).and_return([])
+
+    allow_any_instance_of(Identity).to receive(:credentials).and_return(token:  "test")
+    allow_any_instance_of(Identity).to receive(:extra).
+      and_return("metadata" => { "api_endpoint" =>  "test" })
+
+    allow(Hello::DataAPI).to receive(:get_contacts).and_return([])
   end
 
-  describe "GET 'index'" do
+  describe "GET #index" do
     render_views
 
     let(:data_api_response) do
@@ -50,47 +26,88 @@ describe ContactListsController, type: :controller do
     end
 
     before do
-      expect(Hello::DataAPI).to receive(:contact_list_totals).and_return { data_api_response }.at_least(1).times
+      allow(Hello::DataAPI).to receive(:contact_list_totals) { data_api_response }.at_least(1).times
       Hello::DataAPI.stub(lifetime_totals: nil)
     end
 
-    subject { get :index, site_id: site }
-    it { should be_success }
-    its(:body) { should include contact_list.service_provider.name }
-  end
+    it "returns success" do
+      get :index, site_id: site.id
 
-  describe "GET 'show'" do
-    render_views
-
-    let(:data_api_response) do
-      { contact_list.id => 1 }
+      expect(response).to be_success
     end
 
+    it "includes service provider's name" do
+      get :index, site_id: site.id
+
+      expect(response.body).to include(contact_list.service_provider.name)
+    end
+
+    it "makes a single API call to get num_subscribers for each list" do
+      site.contact_lists = [ contact_list, contact_list.dup ]
+      expect(Hello::DataAPI).to receive(:contact_list_totals).once
+
+      get :index, site_id:  site
+    end
+  end
+
+  describe "GET #show" do
     before do
-      expect(Hello::DataAPI).to receive(:get_contacts).and_return { data_api_response }.at_least(1).times
       Hello::DataAPI.stub(lifetime_totals: nil)
       Hello::DataAPI.stub(contact_list_totals: {"1" => 20})
     end
 
-    subject { get :show, site_id: site, id: contact_list }
-    it { should be_success }
-  end
+    it "gets contacts from the api at least once" do
+      expect(Hello::DataAPI).to receive(:get_contacts) {
+        { contact_list.id => 1 }
+      }.at_least(1).times
 
-  describe "POST 'create'" do
-    let!(:created_contact_list) do
-      expect do
-        response = post :create, site_id: site, contact_list: contact_list_params
-        expect(response.status).to eq 201
-      end.to change { ContactList.count }.by 1
-
-      ContactList.last.tap do |list|
-        expect(list).not_to eq(contact_list)
-      end
+      get :show, site_id: site, id: contact_list
     end
 
-    subject { created_contact_list }
+    it "is successful" do
+      get :show, site_id: site, id: contact_list
 
-    context 'oauth esp' do
+      expect(response).to be_success
+    end
+  end
+
+  describe "POST #create" do
+    let(:contact_list_params) do
+      {
+        name: "My Contacts",
+        provider: "0",
+        data: {remote_name: ""},
+        double_optin: "0"
+      }
+    end
+
+    it "is a 201" do
+      post :create, site_id: site, contact_list: contact_list_params
+
+      expect(response.status).to eq(201)
+    end
+
+    it "creates a contact list" do
+      expect {
+        post :create, site_id: site, contact_list: contact_list_params
+      }.to change(ContactList, :count).by(1)
+    end
+
+    it "is not the last contact list" do
+      post :create, site_id: site, contact_list: contact_list_params
+
+      expect(ContactList.last).not_to eq(contact_list)
+    end
+
+    it "sets the name correctly" do
+      post :create, site_id: site, contact_list: contact_list_params
+
+      new_contact_list = ContactList.last
+      expect(new_contact_list.name).to eq("My Contacts")
+    end
+
+
+    context "when email service provider (esp) uses oauth" do
       let(:contact_list_params) do
         {
           provider: "mailchimp",
@@ -99,36 +116,60 @@ describe ContactListsController, type: :controller do
         }
       end
 
-      its(:name) { should == "My contact list" }
-      it 'should add data' do
-        expect(subject.data['remote_id']).to eq "1234"
-        expect(subject.data['remote_name']).to eq "MailChimp Test"
-      end
-      it 'adds provider name' do
-        expect(subject.service_provider.name).to eq "MailChimp"
-      end
-    end
+      it "defaults the name to 'My contact list'" do
+        post :create, site_id: site, contact_list: contact_list_params
 
-    context 'oauth esp with no identity' do
-      before { site.identities.destroy_all }
-
-      let(:contact_list_params) do
-        {
-          provider: "mailchimp",
-          name: "My contact list",
-          data: { remote_id: "1234", remote_name: "Campaign Monitor Test" }
-        }
+        new_contact_list = ContactList.last
+        expect(new_contact_list.name).to eq("My contact list")
       end
 
-      it 'should fail' do
-        expect do
-          response = post :create, site_id: site, contact_list: contact_list_params
+      it "adds remote id to data" do
+        post :create, site_id: site, contact_list: contact_list_params
+
+        new_contact_list = ContactList.last
+        expect(new_contact_list.data['remote_id']).to eq("1234")
+      end
+
+      it "adds remote name to data" do
+        post :create, site_id: site, contact_list: contact_list_params
+
+        new_contact_list = ContactList.last
+        expect(new_contact_list.data['remote_name']).to eq("MailChimp Test")
+      end
+
+      it "adds the service provider name" do
+        post :create, site_id: site, contact_list: contact_list_params
+
+        new_contact_list = ContactList.last
+        expect(new_contact_list.service_provider.name).to eq("MailChimp")
+      end
+
+      context "when no identity object doesn't exit" do
+        before { site.identities.destroy_all }
+
+        let(:contact_list_params) do
+          {
+            provider: "mailchimp",
+            name: "My contact list",
+            data: { remote_id: "1234", remote_name: "Campaign Monitor Test" }
+          }
+        end
+
+        it "returns 400 status" do
+          post :create, site_id: site, contact_list: contact_list_params
+
           expect(response.status).to eq 400
-        end.to change { ContactList.count }.by 0
+        end
+
+        it "returns 400 status" do
+          expect {
+            post :create, site_id: site, contact_list: contact_list_params
+          }.to change { ContactList.count }.by(0)
+        end
       end
     end
 
-    context 'embed code esp' do
+    context "when email service provider (esp) requires embed code" do
       let(:contact_list_params) do
         {
           provider: "mad_mimi",
@@ -137,56 +178,156 @@ describe ContactListsController, type: :controller do
         }
       end
 
-      its(:name) { should == "My embed code contact list" }
-      it 'should add data' do
-        expect(subject.data['embed_code']).to eq '<script type="text/javascript"></script>'
+      it "stores the embed code in the data" do
+          post :create, site_id: site, contact_list: contact_list_params
+
+          new_contact_list = ContactList.last
+          expect(new_contact_list.data['embed_code']).to eq '<script type="text/javascript"></script>'
       end
 
-      context 'embed code is blank' do
-        before { contact_list_params[:data].delete(:embed_code) }
+      context "when the embed code is blank" do
+        before do
+          contact_list_params[:data].delete(:embed_code)
+        end
+
+        it "returns 400 status" do
+          post :create, site_id: site, contact_list: contact_list_params
+
+          expect(response.status).to eq(400)
+        end
+
         it 'should fail' do
-          expect do
-            response = post :create, site_id: site, contact_list: contact_list_params
-            expect(response.status).to eq 400
-          end.to change { ContactList.count }.by 0
+          expect {
+            post :create, site_id: site, contact_list: contact_list_params
+          }.to change { ContactList.count }.by(0)
         end
       end
     end
   end
 
-  describe "PUT 'update'" do
-    let!(:updated_contact_list) do
-      put :update, site_id: site, id: contact_list, contact_list: contact_list_params
-      contact_list.reload
-    end
-
-    context 'oauth esp' do
+  describe "PUT #update" do
+    context "when using oauth as email service provider (esp)" do
       let(:contact_list_params) do
         {
           data: { remote_id: "2", remote_name: "test2" }
         }
       end
 
-      it 'should have updated the remote id and name' do
+      it "updates the remote id and name" do
+        put :update, site_id: site, id: contact_list, contact_list: contact_list_params
+        contact_list.reload
+
         expect(contact_list.data['remote_id']).to eq("2")
+      end
+
+      it "updates the remote name" do
+        put :update, site_id: site, id: contact_list, contact_list: contact_list_params
+        contact_list.reload
+
         expect(contact_list.data['remote_name']).to eq("test2")
       end
     end
 
-    context 'embed_code esp' do
+    context "when esp has embed_code" do
       let(:contact_list) { contact_lists(:embed_code) }
-      let(:contact_list_params) do
-        {
-          data: { embed_code: "asdf" }
-        }
-      end
+      let(:contact_list_params) { { data: { embed_code: "asdf" } } }
 
       it 'keeps the service provider' do
+        put :update, site_id: site, id: contact_list, contact_list: contact_list_params
+        contact_list.reload
+
         expect(contact_list.service_provider.name).to eq "Mad Mimi"
       end
+
       it 'changes the embed code' do
+        put :update, site_id: site, id: contact_list, contact_list: contact_list_params
+        contact_list.reload
+
         expect(contact_list.data['embed_code']).to eq "asdf"
       end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    let(:valid_params) do
+      {
+        id: contact_list.id,
+        site_id: contact_list.site_id,
+        contact_list: { site_elements_action: "0" }
+      }
+    end
+
+    it "returns success" do
+      delete :destroy, valid_params
+
+      expect(response.status).to eq(200)
+    end
+
+    it "responds with contact list id" do
+      delete :destroy, valid_params
+
+      expect_json_response_to_include({ id: contact_list.id })
+    end
+
+    it "creates a DestroyContactList object" do
+      allow(DestroyContactList).to receive(:new).and_call_original
+
+      delete :destroy, valid_params
+
+      expect(DestroyContactList).to have_received(:new)
+    end
+
+    it "calls destroy with site elements action param" do
+      destroyer = setup_destroyer_instance
+      allow(destroyer).to receive(:destroy).and_return(true)
+
+      delete :destroy, valid_params
+
+      expect(destroyer).to have_received(:destroy).with("0")
+    end
+
+    context "when destroy fails" do
+      let(:invalid_params) do
+        valid_params.tap do |params|
+          params[:contact_list][:site_elements_action] = "4"
+        end
+      end
+
+      let(:destroyer) { setup_destroyer_instance }
+
+      before do
+        allow_any_instance_of(ContactList).
+          to receive(:site_elements_count).and_return(2)
+      end
+
+      it "returns the contact list" do
+        delete :destroy, invalid_params
+
+        expect_json_response_to_include({
+          id: contact_list.id,
+          site_id: contact_list.site_id
+        })
+      end
+
+      it "returns error status" do
+        delete :destroy, invalid_params
+
+        expect(response.status).to eq(400)
+      end
+
+      it "responds with the correct error" do
+        delete :destroy, invalid_params
+
+        expect_json_to_have_base_error(
+          I18n.t("services.destroy_contact_list.invalid_site_elements_action")
+        )
+      end
+    end
+
+    def setup_destroyer_instance
+      destroyer = DestroyContactList.new(contact_list)
+      allow(DestroyContactList).to receive(:new).and_return(destroyer)
+      destroyer
     end
   end
 end

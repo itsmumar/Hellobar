@@ -10,6 +10,8 @@ $ ->
     siteID: siteID
     success: (data, modal) ->
       window.location = "/sites/#{siteID}/contact_lists/#{data.id}"
+    destroyed: (modal) ->
+      window.location = "/sites/#{siteID}/contact_lists"
 
   $("#new-contact-list").click (e) ->
     options =

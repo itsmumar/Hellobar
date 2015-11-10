@@ -29,6 +29,10 @@ class @ContactListModal extends Modal
 
     super
 
+  _hasSiteElements: ->
+    num = @$modal.find("#contact_list_site_elements_count").val()
+    parseInt(num) > 0
+
   _initializeTemplates: ->
     @templates =
       main: Handlebars.compile($("#contact-list-modal-template").html())
@@ -54,6 +58,7 @@ class @ContactListModal extends Modal
     @_bindReadyButton(object)
     @_bindSubmit(object)
     @_bindDisconnect(object)
+    @_bindDelete(object)
 
   _bindProviderSelect: (object) ->
     modal = this
@@ -97,6 +102,15 @@ class @ContactListModal extends Modal
       e.preventDefault()
       @_doSubmit(e)
 
+  _bindDelete: (object) ->
+    object.find("a.delete-confirm").click (e) =>
+      e.preventDefault()
+      @_confirmDelete(e)
+
+    object.find("a.delete").click (e) =>
+      e.preventDefault()
+      @_doDelete(e)
+
   _doSubmit: (e) ->
     @_clearErrors()
     submitButton = @$modal.find("a.submit")
@@ -112,6 +126,32 @@ class @ContactListModal extends Modal
         contactList = response.responseJSON
         @_displayErrors(contactList.errors)
         @$modal.find("a.submit").removeAttr("disabled")
+
+  _confirmDelete: (e) =>
+    @$modal.find("#contact-list-form").hide()
+    @$modal.find("#contact-list-delete").show()
+
+    deleteOnly = @$modal.find(".confirm-delete-contact-list")
+    deleteOptions = @$modal.find(".delete-contact-list")
+
+    if @_hasSiteElements()
+      deleteOnly.hide()
+      deleteOptions.show()
+    else
+      deleteOnly.show()
+      deleteOptions.hide()
+
+  _doDelete: (e) =>
+    data = @$modal.find("form.delete-contact-list").serialize()
+
+    $.ajax @options.loadURL,
+      type: 'DELETE'
+      data: data
+      success: (data) =>
+        @options.destroyed(data, this)
+      error: (response) =>
+        data = response.responseJSON
+        @_displayErrors(data.errors)
 
   _getFormData: ->
     remoteListSelect = @$modal.find("#contact_list_remote_list_id")
@@ -186,12 +226,21 @@ class @ContactListModal extends Modal
         @blocks.hellobarOnly.hide()
         @blocks.syncDetails.hide()
 
+  _isNewList: (data) ->
+    data.id < 1
+
+  _setDeleteLinks: (data) ->
+    lnk = @$modal.find("a.delete")
+
+    if @_isNewList(data)
+      lnk.addClass('hidden')
+    else
+      lnk.removeClass('hidden')
+
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)
     @$modal.find("#contact_list_provider").val(data.provider || "0")
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
+    @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
 
-    if data.id < 1
-      @$modal.find(".button.delete").addClass('hidden')
-    else
-      @$modal.find(".button.delete").removeClass('hidden')
+    @_setDeleteLinks(data)

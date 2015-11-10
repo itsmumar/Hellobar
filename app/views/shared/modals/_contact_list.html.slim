@@ -2,7 +2,7 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
 
   .modal-wrapper
 
-    .modal-block
+    .modal-block#contact-list-form
 
       header
         h5= "{{header}}"
@@ -46,10 +46,46 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
             i.icon-settings
             | Fetching data...
 
+      .contact-list-delete-link
+        input type="hidden" id="contact_list_site_elements_count" name="contact_list[site_elements_count]" value="0"
+        a.delete-confirm Delete
+
+
       footer
         a.button.cancel Cancel
-        a.button.delete.hidden Delete
         a.button.submit Done
+
+    .modal-block#contact-list-delete
+      header
+        h5 Delete contact list
+
+      .contact-list-modal
+
+        .flash-block
+          i.icon-close
+
+        .delete-list-block
+          form.delete-contact-list
+            p What do you want to do with associated bars, modals, sliders and takeovers?
+            .radio-wrapper
+              input type="radio" id="contact_list_site_elements_action" name="contact_list[site_elements_action]" value=0 checked="checked"
+              label
+                | Keep associated bars, modals, sliders and takeovers
+                small This will create a new, empty contact list for each
+              input type="radio" id="contact_list_site_elements_action" name="contact_list[site_elements_action]" value=1
+              label
+                | Delete associated bars, modals, sliders and takeovers
+
+
+          .confirm-delete-contact-list
+            p
+              | Are you sure you want to delete this contact list and all
+              '  the contacts in it?
+            small This will not remove any data from an email service.
+
+      footer
+        a.button.cancel Cancel
+        a.button.delete Delete
 
 /-----------  Provider Instructions Template  -----------/
 

@@ -5,11 +5,9 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
     {value: 1, label: 'Names and email addresses'}
   ]
 
-  contactListOptions: (->
-    lists = @get("model.site.contact_lists").slice(0)
-    lists.push({id: 0, name: "New contact list..."})
-    lists
-  ).property("model.site.contact_lists")
+  newContactListOption: [{id: 0, name: "New contact list..."}]
+
+  contactListOptions: Ember.computed.uniq('model.site.contact_lists', 'newContactListOption')
 
   afterSubmitOptions: [
     {value: 0, label: 'Show default message'}
@@ -73,8 +71,19 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
         saveMethod: "PUT"
         editorModel: @get("model")
         success: (data, modal) =>
-          @get("model.site.contact_lists").forEach (list) ->
-            Ember.set(list, "name", data.name) if list.id == data.id
+          for list in @get("model.site.contact_lists")
+            if list.id == data.id
+              Ember.set(list, "name", data.name)
+              break
+
+          modal.close()
+        destroyed: (data, modal) =>
+          lists = @get("model.site.contact_lists")
+
+          for list in lists
+            if list.id == data.id
+              lists.removeObject(list)
+              break
 
           modal.close()
 

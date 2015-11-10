@@ -2,7 +2,7 @@
 
 .contact-list-modal
   @include clearfix()
-  
+
   .name-and-provider-block,
   .provider-instructions-block,
   .provider-instructions-nevermind-block,
@@ -51,12 +51,12 @@
       list-style-type: disc
 
   ul
-  
+
     li
       color: $orange
 
   ol
-  
+
     li
       margin-bottom: 0.5em
 
@@ -91,8 +91,19 @@
 
     .contact-list-modal
       position: relative
-  
+
     .loading-overlay
       opacity: 1
       display: block
       pointer-events: auto
+
+/*-----------  Contact List Delete Link  -----------*/
+
+.contact-list-delete-link
+  text-align: right
+
+#contact-list-delete
+  display: none
+
+  .button.delete
+    @extend %red-button
