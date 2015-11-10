@@ -29,7 +29,7 @@ class Hello::WordpressBar < Hello::WordpressModel
     params[:text_color] = standardize_color(text_color) if text_color.present?
     params[:link_color] = standardize_color(link_color) if link_color.present?
     params[:border_color] = standardize_color(border_color) if border_color.present?
-    params[:button_color] = "e8e7e9"
+    params[:button_color] = button_color
 
     Bar.create!(params)
   end
