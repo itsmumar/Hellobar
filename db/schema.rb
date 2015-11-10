@@ -91,17 +91,19 @@ ActiveRecord::Schema.define(version: 20151012222735) do
 
   create_table "bills", force: true do |t|
     t.integer  "subscription_id"
-    t.integer  "status",                                       default: 0
+    t.integer  "status",                                        default: 0
     t.string   "type"
-    t.decimal  "amount",               precision: 7, scale: 2
+    t.decimal  "amount",               precision: 7,  scale: 2
     t.string   "description"
     t.string   "metadata"
-    t.boolean  "grace_period_allowed",                         default: true
+    t.boolean  "grace_period_allowed",                          default: true
     t.datetime "bill_at"
     t.datetime "start_date"
     t.datetime "end_date"
     t.datetime "status_set_at"
     t.datetime "created_at"
+    t.decimal  "discount",             precision: 10, scale: 0, default: 0
+    t.decimal  "base_amount",          precision: 10, scale: 0
   end
 
   add_index "bills", ["status", "bill_at"], name: "index_bills_on_status_and_bill_at", using: :btree
@@ -250,6 +252,7 @@ ActiveRecord::Schema.define(version: 20151012222735) do
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
+    t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
     t.string   "placement"

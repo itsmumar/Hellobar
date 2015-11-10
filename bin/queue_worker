@@ -31,12 +31,24 @@ end
 # the Rake tasks
 class QueueWorker
   class << self
+    def log_failed_job(job)
+      # We log failed jobs to a file that is specific for the day. This 
+      # makes retrying failed jobs easier
+      # Re-open the file handle every time. Slightly slower, but simpler.
+      File.open(File.join(Rails.root,"log", "failed_jobs.#{Time.now.strftime("%Y-%m-%d")}.log"), "a"){|f| f.puts(job)}
+    end
+
     # We log messages to a file (log/queue_worker.log) or to stdout when just running one
     def log(msg, type = "INFO")
       # If the message is an exception get the backtrace too and set
       # the type to ERRO
+      exception = nil
       if msg.is_a?(Exception)
         type = "ERRO"
+        # Save the msg as an exception before changing the msg to 
+        # a string to be logged. This way we can pass it to Sentry via Raven
+        # later
+        exception = msg
         msg = "#{msg.class}: #{msg.message}\n  #{msg.backtrace.join("\n  ")}"
       end
       # Add in the timestamp and current process name
@@ -46,6 +58,10 @@ class QueueWorker
       else
         # Re-open the file handle every time. Slightly slower, but simpler.
         File.open(File.join(Rails.root,"log", "queue_worker.log"), "a"){|f| f.puts(line)}
+      end
+      if exception
+        # We also want to capture this with Raven, but only after logging to our own file
+        Raven.capture_exception(exception)
       end
     end
   end
@@ -77,7 +93,7 @@ class QueueWorker
       if messages == nil
         messages = []
       elsif !messages.is_a?(Array)
-        messages = [messages] 
+        messages = [messages]
       end
       messages.each do |message|
         begin
@@ -125,15 +141,56 @@ class QueueWorker
             QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect} in #{Time.now.to_f-start_time}s")
           end
         rescue Exception => e
-          # Any failures are logged
+          # Let's see if this is a MySQL connection issue
+          if e.message =~ /closed MySQL connection|Lost connection|MySQL server has gone away/
+            QueueWorker.log("MySQL error processing message[#{message.id}]: #{message.body.inspect} (#{e.message})", "ERRO")
+            # Let's try reconnecting for up to 60 seconds
+            start_time = Time.now
+            sleep_time = 1
+            successful_reconnect = false
+            loop do
+              QueueWorker.log("Attempting to reconnect to MySQL...")
+              begin
+                ActiveRecord::Base.connection.reconnect!
+                User.all.first.email # do a test query
+                successful_reconnect = true # if we made this far with no exception it's working again!
+              rescue Exception => e
+                # still broken
+              end
+              break if successful_reconnect
+              break if Time.now-start_time > 60 # get out of here if we've been trying for a minute
+              sleep sleep_time # sleep a little so we don't hammer the DB
+              # Increase sleep time up to a max time
+              sleep_time += 1 if sleep_time < 10
+            end
+            # Did we reconnect? If so retry the job
+            if successful_reconnect
+              QueueWorker.log("Successfully reconnected to MySQL!")
+              # Try processing the message again
+              retry
+            else
+              QueueWorker.log("Failed to reconnect to MySQL. Exiting...")
+              # With MySQL hosed we might as well just quit. The crontab for
+              # rake queue_worker::resurrect will attempt again in a couple of
+              # minutes
+              $exit_signal_sent = "MySQL FAIL"
+            end
+          end
+          # Any failures are logged during the attempt to execute each message
+          # (just because one message fails doesn't mean they should all fail)
+          # Log the failed job
+          QueueWorker.log_failed_job(message.body)
+          # Log the error message
           QueueWorker.log(e)
         ensure
           # We always delete messages to prevent them from clogging up the system.
           # Any retry logic should go in the task itself
-          message.delete 
+          message.delete
         end
       end
     rescue Exception => e
+      # If we hit this rescue it means that the there was an error
+      # getting the messages from the queue
       QueueWorker.log(e)
     end
   end
@@ -185,7 +242,7 @@ if config[:run_once]
   worker.start
   worker.process_next_job
 else
-  # If we are running in normal (daemonized) mode then we 
+  # If we are running in normal (daemonized) mode then we
   # need to fork this process
   begin
     # Attempt to make a nice process ID if the platform
@@ -216,7 +273,7 @@ else
         # Exit if signal sent
         if $exit_signal_sent
           QueueWorker.log("Exiting due to SIG#{$exit_signal_sent}")
-          break 
+          break
         end
         sleep 0.2 # Sleep a little so we don't overload the CPU when there are no jobs
       end

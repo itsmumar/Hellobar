@@ -56,6 +56,24 @@ describe Site do
       expect(site).to receive(:set_branding_on_site_elements)
       site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
     end
+
+    it "applies the discount when changing subscription to pro and it belongs to a discount tier" do
+      user = create(:user)
+      bills = []
+
+      zero_discount_subs = Subscription::Pro.defaults[:discounts].detect { |x| x.tier == 0 }.slots
+      zero_discount_subs.times do
+        bill = create(:pro_bill, status: :paid)
+        bill.site.users << user
+        user.reload
+        bill.subscription.payment_method.update(user: user)
+        bill.update(discount: bill.calculate_discount)
+      end
+
+      site = create(:site, users: [user])
+      site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), user.payment_methods.first)
+      expect(site.bills.paid.first.discount > 0).to be(true)
+    end
   end
 
   describe "url formatting" do

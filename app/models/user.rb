@@ -24,8 +24,9 @@ class User < ActiveRecord::Base
 
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: {scope: :deleted_at, unless: :deleted? }
+  validate :oauth_email_change, if: :is_oauth_user?
 
-  after_save :disconnect_oauth
+  after_save :disconnect_oauth, if: :is_oauth_user?
 
   before_save do
     if self.status == ACTIVE_STATUS && self.invite_token
@@ -225,6 +226,12 @@ class User < ActiveRecord::Base
   def disconnect_oauth
     if !id_changed? && encrypted_password_changed? && is_oauth_user?
       authentications.destroy_all
+    end
+  end
+
+  def oauth_email_change
+    if !id_changed? && is_oauth_user? && email_changed? && !encrypted_password_changed?
+      errors.add(:email, "cannot be changed without a password.")
     end
   end
 

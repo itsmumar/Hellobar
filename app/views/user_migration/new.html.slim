@@ -23,7 +23,10 @@
   = form_tag "", class: "add-site-for-migration" do
 
     h1 Your Site Information
-    p The new Hello Bar organizes your bars by site. Enter your website URL and timezone below.
+    p
+      ' We found
+      span.bold= @bars.count
+      |  bars. The new Hello Bar organizes your bars by site. Enter your website URL and timezone below.
 
     = text_field_tag :site_url, nil, placeholder: "Your website URL"
 

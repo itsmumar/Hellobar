@@ -117,7 +117,6 @@ var HBQ = function()
           if ( HB.e.pusher ) {
             // handle case where display-condition check has hidden HB.w
             if (HB.w.style.display === "none") {
-              HB.e.pusher.style.height = 0;
               return;
             };
 
@@ -1566,7 +1565,7 @@ var _HB = {
 
         // if the pusher exists, unhide it since it should be hidden at this point
         if (HB.e.pusher != null)
-          HB.showElement(HB.e.pusher);
+          HB.showElement(HB.e.pusher, '');
       };
 
       pullDown.appendChild(pdLink);
@@ -1905,8 +1904,10 @@ var _HB = {
     element.style.display = 'none';
   },
 
-  showElement: function(element) {
-    element.style.display = 'inline';
+  showElement: function(element, display) {
+    if(typeof display === 'undefined')
+      display = 'inline';
+    element.style.display = display;
   },
 
   isAd: function() {
@@ -1943,21 +1944,9 @@ var _HB = {
         siteElement['link_color'] = 'fff';
     }
 
-    var headlines = {
-      ad1: 'Convert more visitors into customers with Hello Bar.',
-      ad2: 'Make money from wasted space on your site: Use Hello Bar.',
-      ad3: 'Your site + Hello Bar = More Profits. Here\'s why...',
-      ad4: 'Hello Bar is really a More-Profits Bar. Here\'s why...',
-      ad5: 'Hello Bar pulls more sales out of your existing site.',
-      ad6: 'Boost your sales easily with Hello Bar.'
-    };
-
-    var headlineSegment = this.sample(Object.keys(headlines));
-    siteElement['headline'] = headlines[headlineSegment];
+    siteElement['headline'] = 'Make money from wasted space on your site: Use Hello Bar.';
     siteElement['link_text'] = 'Get Started';
-
-    params = "hbt=v4_" + headlineSegment + "&sid=" + siteElement.id;
-    siteElement.settings.url = "https://www.hellobar.com?" + params;
+    siteElement.settings.url = "https://www.hellobar.com";
 
     return siteElement;
   },

@@ -1,4 +1,5 @@
 require 'billing_log'
+require 'discount_calculator'
 
 class Subscription < ActiveRecord::Base
   include BillingAuditTrail
@@ -13,6 +14,14 @@ class Subscription < ActiveRecord::Base
       # Just return the defaults for now, in the future we can
       # offer per-site discounts, etc
       return self.defaults
+    end
+
+    def defaults; {}; end
+
+    def estimated_price(user, schedule)
+      dummy_sub = self.new(schedule: schedule)
+      discount = DiscountCalculator.new(dummy_sub, user).current_discount
+      dummy_sub.amount - discount
     end
   end
 
@@ -230,7 +239,14 @@ class Subscription < ActiveRecord::Base
           yearly_amount: 149.0,
           visit_overage: 250_000, # after this many visits in a month
           visit_overage_amount: 25_000, # every X visitors
-          visit_overage_amount: 5.00 # $$$
+          visit_overage_amount: 5.00, # $$$
+          discounts: [
+            DiscountRange.new(5, 0, 0, 0),
+            DiscountRange.new(5, 1, 2, 20),
+            DiscountRange.new(10, 2, 4, 40),
+            DiscountRange.new(10, 3, 6, 60),
+            DiscountRange.new(nil, 4, 8, 80)
+          ]
         }
       end
     end

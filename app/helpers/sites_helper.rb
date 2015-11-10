@@ -47,4 +47,12 @@ module SitesHelper
   def sites_for_team_view
     current_user.sites.sort_by { |site| [site == current_site ? 0 : 1, site.url.downcase]}
   end
+
+  def bill_due_at(bill)
+    bill.due_at.strftime("%-m-%-d-%Y")
+  end
+
+  def bill_estimated_amount(bill)
+    number_to_currency(bill.estimated_amount)
+  end
 end

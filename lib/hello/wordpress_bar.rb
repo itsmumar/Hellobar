@@ -1,5 +1,12 @@
+require 'color'
+
 class Hello::WordpressBar < Hello::WordpressModel
   self.table_name = "hbwp_posts"
+
+  BUTTON_COLORS = {
+    "light-images" => "2d2c29",
+    "default" => "e8e7e9"
+  }
 
   def convert_to_site_element!(rule)
     params = {
@@ -60,6 +67,20 @@ class Hello::WordpressBar < Hello::WordpressModel
 
   def border_color
     hellobar_meta["meta"]["bordercolor"]
+  end
+
+  def button_color
+    color = BUTTON_COLORS[hellobar_meta["meta"]["imageStyle"]]
+
+    if color.nil?
+      if link_color.present?
+        if Color.color_is_bright?(standardize_color(link_color))
+          color = BUTTON_COLORS["light-images"]
+        end
+      end
+    end
+
+    color || BUTTON_COLORS["default"]
   end
 
   def standardize_color(color)

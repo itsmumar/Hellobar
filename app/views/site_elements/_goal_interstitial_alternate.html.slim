@@ -34,6 +34,8 @@
     p
       | Select one of the goals above. You can always change this later.
       = mail_to 'support@hellobar.com', ' Need Help?', subject: "Hello Bar - Getting Started"
+    p
+      small = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete, class: "deemphasize"
 
 javascript:
   if(trackEditorFlow)

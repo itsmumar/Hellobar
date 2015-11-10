@@ -4,6 +4,9 @@
   margin: 0.75em auto
   color: $gray
 
+  &.with-errors
+    margin-bottom: 2em
+
   .default-text
     pointer-events: none
 
@@ -22,7 +25,7 @@
     font-size: 1.75em
 
     &.icon-trash.active
-      color: red
+      color: $red
 
     &.icon-sync
       color: $green
@@ -34,7 +37,7 @@
       transform-origin: 50% 42%
 
   .dz-error-message
-    color: red
+    color: $red
     font-style: italic
     font-size: 0.9em
     margin-top: 10px
@@ -57,8 +60,10 @@
   .dz-error-mark
     display: none
 
-  .dz-filename
+  .dz-filename, .default-text
     text-overflow: ellipsis
     white-space: nowrap
-    width: 70%
     overflow: hidden
+
+  .dz-filename
+    width: 70%

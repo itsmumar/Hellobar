@@ -11,12 +11,17 @@ HelloBar.TextController = Ember.Controller.extend
   imagePlacementOptions: [
     {value: 'top', label: 'Top'}
     {value: 'bottom', label: 'Bottom'}
+    {value: 'left', label: 'Left'}
+    {value: 'right', label: 'Right'}
+    {value: 'above-caption', label: 'Above caption'}
+    {value: 'below-caption', label: 'Below caption'}
   ]
 
   hideNonBarFields: Ember.computed.equal('model.type', 'Bar')
   hideLinkText: Ember.computed.match('model.element_subtype', /social|announcement/)
   showEmailPlaceholderText: Ember.computed.equal('model.element_subtype', 'email')
   showNamePlaceholderText: Ember.computed.equal('model.settings.collect_names', 1)
+  showImagePlacementField: Ember.computed.notEmpty('model.image_url')
 
   trackTextView: (->
     if trackEditorFlow && !Ember.isEmpty(@get('model'))
