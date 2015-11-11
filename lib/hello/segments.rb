@@ -7,7 +7,7 @@ module Hello
       {:key=>'lv', :name=>"Last Visit", :type=>:timestamp},
       {:key=>'nv', :name=>"Number of Visits", :type=>:number, :units=>"visit"},
       {:key=>'lf', :name=>"Life of Visitor", :type=>:number, :units=>"day"},
-      {:key=>'ls', :name=>"Time Since Last Visit", :type=>:number, :units=>"day"},
+      {:key=>'ls', :name=>"Days Since Last Visit", :type=>:number, :units=>"day"},
       {:key=>'rf', :name=>"Referrer URL", :type=>:string, :units=>"url"},
       {:key=>'rd', :name=>"Referrer Domain", :type=>:string, :units=>"domain"},
       {:key=>'or', :name=>"Original Referrer", :type=>:string, :units=>"url"},

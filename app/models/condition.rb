@@ -4,6 +4,7 @@ class Condition < ActiveRecord::Base
   # class name: Hello::Segments::User key
   SEGMENTS = {
     'DateCondition' => 'dt',
+    'LastVisitCondition' => 'ls',
     'DeviceCondition' => 'dv',
     'NumberOfVisitsCondition' => 'nv',
     'ReferrerCondition' => 'rf',
@@ -89,6 +90,7 @@ class Condition < ActiveRecord::Base
   def operand_is_valid
     @@operands ||= {
       "DateCondition"           => %w{ is is_not before after between },
+      "LastVisitCondition"       => %w{ is is_not less_than greater_than between },
       "DeviceCondition"         => %w{ is is_not },
       "NumberOfVisitsCondition" => %w{ is is_not less_than greater_than between },
       "ReferrerCondition"       => %w{ is is_not includes does_not_include },
