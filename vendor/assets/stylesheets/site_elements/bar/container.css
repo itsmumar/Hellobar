@@ -122,20 +122,20 @@
 
 #hellobar-container.HB-Bar.hb-animateIn,
 .hellobar#pull-down.hb-animateIn {
-  animation-name: bounceInDown;
-  -o-animation-name: bounceInDown;
-  -ms-animation-name: bounceInDown;
-  -moz-animation-name: bounceInDown;
-  -webkit-animation-name: bounceInDown;
+  animation-name: hb-bounceInDown;
+  -o-animation-name: hb-bounceInDown;
+  -ms-animation-name: hb-bounceInDown;
+  -moz-animation-name: hb-bounceInDown;
+  -webkit-animation-name: hb-bounceInDown;
 }
 
 #hellobar-container.HB-Bar.hb-animateOut,
 .hellobar#pull-down.hb-animateOut {
-  animation-name: bounceOutUp;
-  -o-animation-name: bounceOutUp;
-  -ms-animation-name: bounceOutUp;
-  -moz-animation-name: bounceOutUp;
-  -webkit-animation-name: bounceOutUp;
+  animation-name: hb-bounceOutUp;
+  -o-animation-name: hb-bounceOutUp;
+  -ms-animation-name: hb-bounceOutUp;
+  -moz-animation-name: hb-bounceOutUp;
+  -webkit-animation-name: hb-bounceOutUp;
 }
 
 /*-----------  Animations (Bottom)  -----------*/
@@ -151,18 +151,18 @@
 
 #hellobar-container.HB-Bar.hb-animateIn.hb-bar-bottom,
 .hellobar#pull-down.hb-animateIn.hb-bar-bottom {
-  animation-name: bounceInUp;
-  -o-animation-name: bounceInUp;
-  -ms-animation-name: bounceInUp;
-  -moz-animation-name: bounceInUp;
-  -webkit-animation-name: bounceInUp;
+  animation-name: hb-bounceInUp;
+  -o-animation-name: hb-bounceInUp;
+  -ms-animation-name: hb-bounceInUp;
+  -moz-animation-name: hb-bounceInUp;
+  -webkit-animation-name: hb-bounceInUp;
 }
 
 #hellobar-container.HB-Bar.hb-animateOut.hb-bar-bottom,
 .hellobar#pull-down.hb-animateOut.hb-bar-bottom {
-  animation-name: bounceOutDown;
-  -o-animation-name: bounceOutDown;
-  -ms-animation-name: bounceOutDown;
-  -moz-animation-name: bounceOutDown;
-  -webkit-animation-name: bounceOutDown;
+  animation-name: hb-bounceOutDown;
+  -o-animation-name: hb-bounceOutDown;
+  -ms-animation-name: hb-bounceOutDown;
+  -moz-animation-name: hb-bounceOutDown;
+  -webkit-animation-name: hb-bounceOutDown;
 }

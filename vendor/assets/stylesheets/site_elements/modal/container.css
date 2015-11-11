@@ -17,17 +17,17 @@
 }
 
 #hellobar-container.HB-Modal.hb-animateIn {
-  animation-name: fadeInDown;
-  -o-animation-name: fadeInDown;
-  -ms-animation-name: fadeInDown;
-  -moz-animation-name: fadeInDown;
-  -webkit-animation-name: fadeInDown;
+  animation-name: hb-fadeInDown;
+  -o-animation-name: hb-fadeInDown;
+  -ms-animation-name: hb-fadeInDown;
+  -moz-animation-name: hb-fadeInDown;
+  -webkit-animation-name: hb-fadeInDown;
 }
 
 #hellobar-container.HB-Modal.hb-animateOut {
-  animation-name: fadeOutUp;
-  -o-animation-name: fadeOutUp;
-  -ms-animation-name: fadeOutUp;
-  -moz-animation-name: fadeOutUp;
-  -webkit-animation-name: fadeOutUp;
+  animation-name: hb-fadeOutUp;
+  -o-animation-name: hb-fadeOutUp;
+  -ms-animation-name: hb-fadeOutUp;
+  -moz-animation-name: hb-fadeOutUp;
+  -webkit-animation-name: hb-fadeOutUp;
 }

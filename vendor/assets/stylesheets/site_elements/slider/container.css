@@ -50,20 +50,20 @@
 
 #hellobar-container.HB-Slider.hb-top-right.hb-animateIn,
 #hellobar-container.HB-Slider.hb-bottom-right.hb-animateIn {
-  animation-name: bounceInLeft;
-  -o-animation-name: bounceInLeft;
-  -ms-animation-name: bounceInLeft;
-  -moz-animation-name: bounceInLeft;
-  -webkit-animation-name: bounceInLeft;
+  animation-name: hb-bounceInLeft;
+  -o-animation-name: hb-bounceInLeft;
+  -ms-animation-name: hb-bounceInLeft;
+  -moz-animation-name: hb-bounceInLeft;
+  -webkit-animation-name: hb-bounceInLeft;
 }
 
 #hellobar-container.HB-Slider.hb-top-right.hb-animateOut,
 #hellobar-container.HB-Slider.hb_bottom-right.hb-animateOut {
-  animation-name: bounceOutRight;
-  -o-animation-name: bounceOutRight;
-  -ms-animation-name: bounceOutRight;
-  -moz-animation-name: bounceOutRight;
-  -webkit-animation-name: bounceOutRight;
+  animation-name: hb-bounceOutRight;
+  -o-animation-name: hb-bounceOutRight;
+  -ms-animation-name: hb-bounceOutRight;
+  -moz-animation-name: hb-bounceOutRight;
+  -webkit-animation-name: hb-bounceOutRight;
 }
 
 /*-----------  Animations: Left  -----------*/
@@ -79,18 +79,18 @@
 
 #hellobar-container.HB-Slider.hb-top-left.hb-animateIn,
 #hellobar-container.HB-Slider.hb-bottom-left.hb-animateIn {
-  animation-name: bounceInRight;
-  -o-animation-name: bounceInRight;
-  -ms-animation-name: bounceInRight;
-  -moz-animation-name: bounceInRight;
-  -webkit-animation-name: bounceInRight;
+  animation-name: hb-bounceInRight;
+  -o-animation-name: hb-bounceInRight;
+  -ms-animation-name: hb-bounceInRight;
+  -moz-animation-name: hb-bounceInRight;
+  -webkit-animation-name: hb-bounceInRight;
 }
 
 #hellobar-container.HB-Slider.hb-top-left.hb-animateOut,
 #hellobar-container.HB-Slider.hb-bottom-left.hb-animateOut {
-  animation-name: bounceOutLeft;
-  -o-animation-name: bounceOutLeft;
-  -ms-animation-name: bounceOutLeft;
-  -moz-animation-name: bounceOutLeft;
-  -webkit-animation-name: bounceOutLeft;
+  animation-name: hb-bounceOutLeft;
+  -o-animation-name: hb-bounceOutLeft;
+  -ms-animation-name: hb-bounceOutLeft;
+  -moz-animation-name: hb-bounceOutLeft;
+  -webkit-animation-name: hb-bounceOutLeft;
 }
