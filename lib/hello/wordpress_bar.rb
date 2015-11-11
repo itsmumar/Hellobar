@@ -62,7 +62,13 @@ class Hello::WordpressBar < Hello::WordpressModel
   end
 
   def link_color
-    hellobar_meta["meta"]["linkcolor"]
+    color = hellobar_meta["meta"]["imageStyle"]
+
+    if color == "light-images"
+      BUTTON_COLORS["default"]
+    else
+      hellobar_meta["meta"]["linkcolor"]
+    end
   end
 
   def border_color
