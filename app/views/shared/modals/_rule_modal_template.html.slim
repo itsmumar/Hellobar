@@ -51,6 +51,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "DateCondition" "date"}}
           | {{option segment "LastVisitCondition" "days since last visit"}}
           | {{option segment "NumberOfVisitsCondition" "number of visits"}}
+          | {{option segment "EveryXSession" "every Nth session"}}
           | {{option segment "ReferrerCondition" "referrer"}}
           | {{option segment "UrlCondition" "URL"}}
           | {{option segment "ReferrerDomainCondition" "Referrer Domain"}}
@@ -61,6 +62,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "UTMTermCondition" "Ad Term"}}
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
+          | {{option operand "every" "every"}}
           | {{option operand "after" "is after"}}
           | {{option operand "before" "is before"}}
           | {{option operand "is" "is"}}
@@ -84,6 +86,9 @@ script#condition-partial type="text/x-handlebars-template"
           | {{else}}
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="date" value="{{value}}"
           | {{/if}}
+        .choice-wrapper.x-sessions
+          input.value.small disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="number" value="{{value}}"
+          |  sessions
         .choice-wrapper.number-of-visits-choice.days-last-visit-choice
           | {{#if is_between}}
           input.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[0]}}"

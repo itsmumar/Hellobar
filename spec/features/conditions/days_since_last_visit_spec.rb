@@ -5,7 +5,8 @@ feature "Days since last visit condition", js: true do
     page.execute_script("
       var d = new Date();
       d.setDate(d.getDate() - (#{days}));
-      HB.setVisitorData('lv', (d.getTime())/1000);")
+      HB.setVisitorData('lv', (d.getTime())/1000);
+    ")
   end
 
   before(:each) do
@@ -14,24 +15,19 @@ feature "Days since last visit condition", js: true do
 
     @test_doesnt_exist = Proc.new do |day|
       visit "#{site_path_to_url(@path)}"
-
       set_lv_cookie(page, day)
-
-      visit "#{site_path_to_url(@path)}"
-
+      visit "#{site_path_to_url(@path)}" # Reload the page
+      sleep(1) # Give time for JS to execute
       expect(page).to_not have_xpath('.//iframe[@id="random-container"]')
     end
 
     @test_does_exist = Proc.new do |day|
       visit "#{site_path_to_url(@path)}"
-
       set_lv_cookie(page, day)
-
       visit "#{site_path_to_url(@path)}"
 
       # force capybara to wait until iframe is loaded
       page.has_xpath?('.//iframe[@id="random-container"]')
-
       within_frame 'random-container' do
         expect(page).to have_content(@element.headline)
       end
