@@ -8,19 +8,29 @@ describe Admin::UsersController do
   end
 
   describe "GET #index" do
-    it "allows admins to search users by site URL" do
+    before(:each) do
       stub_current_admin(@admin)
+    end
 
+    it "allows admins to search users by site URL" do
       get :index, :q => "zombo.com"
 
       expect(assigns(:users).include?(sites(:zombo).owners.first)).to be_true
     end
 
     it "finds deleted users" do
-      stub_current_admin(@admin)
       user = User.create email: "test@test.com", password: 'supers3cr37'
       user.destroy
       get :index, :q => "test"
+
+      expect(assigns(:users).include?(user)).to be_true
+    end
+
+    it "finds users by script" do
+      user = create(:user)
+      site = create(:site)
+      user.sites << site
+      get :index, :q => site.script_name
 
       expect(assigns(:users).include?(user)).to be_true
     end

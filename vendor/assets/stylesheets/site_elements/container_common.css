@@ -23,9 +23,9 @@
   -webkit-animation-fill-mode: forwards;
 }
 
-/*-----------  Animations: BounceInDown  -----------*/
+/*-----------  Animations: hb-bounceInDown  -----------*/
 
-@keyframes bounceInDown {
+@keyframes hb-bounceInDown {
   0%, 60%, 75%, 90%, 100% {
     transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
     -o-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
@@ -70,7 +70,7 @@
   }
 }
 
-@-moz-keyframes bounceInDown {
+@-moz-keyframes hb-bounceInDown {
   0%, 60%, 75%, 90%, 100% {
     -moz-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
   }
@@ -91,7 +91,7 @@
   }
 }
 
-@-webkit-keyframes bounceInDown {
+@-webkit-keyframes hb-bounceInDown {
   0%, 60%, 75%, 90%, 100% {
     -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
   }
@@ -112,9 +112,9 @@
   }
 }
 
-/*-----------  Animations: BounceInDown  -----------*/
+/*-----------  Animations: hb-bounceInDown  -----------*/
 
-@keyframes bounceInUp {
+@keyframes hb-bounceInUp {
   0%, 60%, 75%, 90%, 100% {
     transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
     -o-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
@@ -159,7 +159,7 @@
   }
 }
 
-@-moz-keyframes bounceInUp {
+@-moz-keyframes hb-bounceInUp {
   0%, 60%, 75%, 90%, 100% {
     -moz-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
   }
@@ -180,7 +180,7 @@
   }
 }
 
-@-webkit-keyframes bounceInUp {
+@-webkit-keyframes hb-bounceInUp {
   0%, 60%, 75%, 90%, %100 {
     -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
   }
@@ -201,9 +201,9 @@
   }
 }
 
-/*-----------  Animations: BounceOutUp  -----------*/
+/*-----------  Animations: hb-bounceOutUp  -----------*/
 
-@keyframes bounceOutUp {
+@keyframes hb-bounceOutUp {
   0%, 100% {
     transition-timing-function: ease-in;
     -o-transition-timing-function: ease-in;
@@ -227,7 +227,7 @@
   }
 }
 
-@-moz-keyframes bounceOutUp {
+@-moz-keyframes hb-bounceOutUp {
   0%, 100% {
     -moz-transition-timing-function: ease-in;
   }
@@ -239,7 +239,7 @@
   }
 }
 
-@-webkit-keyframes bounceOutUp {
+@-webkit-keyframes hb-bounceOutUp {
   0%, 100% {
     -webkit-transition-timing-function: ease-in;
   }
@@ -251,9 +251,9 @@
   }
 }
 
-/*-----------  Animations: BounceOutDown  -----------*/
+/*-----------  Animations: hb-bounceOutDown  -----------*/
 
-@keyframes bounceOutDown {
+@@keyframes hb-bounceOutDown {
   0%, 100% {
     transition-timing-function: ease-in;
     -o-transition-timing-function: ease-in;
@@ -269,7 +269,7 @@
   }
 }
 
-@-moz-keyframes bounceOutDown {
+@-moz-keyframes hb-bounceOutDown {
   0%, 100% {
     -moz-transition-timing-function: ease-in;
   }
@@ -281,7 +281,7 @@
   }
 }
 
-@-webkit-keyframes bounceOutDown {
+@-webkit-keyframes hb-bounceOutDown {
   0%, 100% {
     -webkit-transition-timing-function: ease-in;
   }
@@ -293,9 +293,9 @@
   }
 }
 
-/*-----------  Animations: BounceInLeft  -----------*/
+/*-----------  Animations: hb-bounceInLeft  -----------*/
 
-@keyframes bounceInLeft {
+@keyframes hb-bounceInLeft {
   0%, 75%, 100% {
     transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
     -o-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
@@ -326,7 +326,7 @@
   }
 }
 
-@-moz-keyframes bounceInLeft {
+@-moz-keyframes hb-bounceInLeft {
   0%, 75%, 100% {
     -moz-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
   }
@@ -341,7 +341,7 @@
   }
 }
 
-@-webkit-keyframes bounceInLeft {
+@-webkit-keyframes hb-bounceInLeft {
   0%, 75%, 100% {
     -webkit-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
   }
@@ -356,9 +356,9 @@
   }
 }
 
-/*-----------  Animations: BounceOutRight  -----------*/
+/*-----------  Animations: hb-bounceOutRight  -----------*/
 
-@keyframes bounceOutRight {
+@keyframes hb-bounceOutRight {
   0%, 25%, 100% {
     transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
     -o-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
@@ -389,7 +389,7 @@
   }
 }
 
-@-moz-keyframes bounceOutRight {
+@-moz-keyframes hb-bounceOutRight {
   0%, 25%, 100% {
     -moz-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
   }
@@ -404,7 +404,7 @@
   }
 }
 
-@-webkit-keyframes bounceOutRight {
+@-webkit-keyframes hb-bounceOutRight {
   0%, 25%, 100% {
     -webkit-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
   }
@@ -419,9 +419,9 @@
   }
 }
 
-/*-----------  Animations: bounceInRight  -----------*/
+/*-----------  Animations: hb-bounceInRight  -----------*/
 
-@keyframes bounceInRight {
+@keyframes hb-bounceInRight {
   0%, 75%, 100% {
     transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
     -o-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
@@ -452,7 +452,7 @@
   }
 }
 
-@-moz-keyframes bounceInRight {
+@-moz-keyframes hb-bounceInRight {
   0%, 75%, 100% {
     -moz-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
   }
@@ -467,7 +467,7 @@
   }
 }
 
-@-webkit-keyframes bounceInRight {
+@-webkit-keyframes hb-bounceInRight {
   0%, 75%, 100% {
     -webkit-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
   }
@@ -482,9 +482,9 @@
   }
 }
 
-/*-----------  Animations: BounceOutLeft  -----------*/
+/*-----------  Animations: hb-bounceOutLeft  -----------*/
 
-@keyframes bounceOutLeft {
+@keyframes hb-bounceOutLeft {
   0%, 25%, 100% {
     transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
     -o-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
@@ -515,7 +515,7 @@
   }
 }
 
-@-moz-keyframes bounceOutLeft {
+@-moz-keyframes hb-bounceOutLeft {
   0%, 25%, 100% {
     -moz-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
   }
@@ -530,7 +530,7 @@
   }
 }
 
-@-webkit-keyframes bounceOutLeft {
+@-webkit-keyframes hb-bounceOutLeft {
   0%, 25%, 100% {
     -webkit-transition-timing-function: cubic-bezier(0.65, -0.25, 0.325, 1.255);
   }
@@ -545,9 +545,9 @@
   }
 }
 
-/*-----------  Animations: FadeIn  -----------*/
+/*-----------  Animations: hb-fadeIn  -----------*/
 
-@keyframes fadeIn {
+@keyframes hb-fadeIn {
   0%, 100% {
     transition-timing-function: ease-in;
     -o-transition-timing-function: ease-in;
@@ -563,7 +563,7 @@
   }
 }
 
-@-moz-keyframes fadeIn {
+@-moz-keyframes hb-fadeIn {
   0%, 100% {
     -moz-transition-timing-function: ease-in;
   }
@@ -575,7 +575,7 @@
   }
 }
 
-@-webkit-keyframes fadeIn {
+@-webkit-keyframes hb-fadeIn {
   0%, 100% {
     -webkit-transition-timing-function: ease-in;
   }
@@ -587,9 +587,9 @@
   }
 }
 
-/*-----------  Animations: FadeOut  -----------*/
+/*-----------  Animations: hb-fadeOut  -----------*/
 
-@keyframes fadeOut {
+@keyframes hb-fadeOut {
   0%, 100% {
     transition-timing-function: ease-in;
     -o-transition-timing-function: ease-in;
@@ -605,7 +605,7 @@
   }
 }
 
-@-moz-keyframes fadeOut {
+@-moz-keyframes hb-fadeOut {
   0%, 100% {
     -moz-transition-timing-function: ease-in;
   }
@@ -617,7 +617,7 @@
   }
 }
 
-@-webkit-keyframes fadeOut {
+@-webkit-keyframes hb-fadeOut {
   0%, 100% {
     -webkit-transition-timing-function: ease-in;
   }
@@ -629,9 +629,9 @@
   }
 }
 
-/*-----------  Animations: FadeInDown  -----------*/
+/*-----------  Animations: hb-fadeInDown  -----------*/
 
-@keyframes fadeInDown {
+@keyframes hb-fadeInDown {
   0%, 100% {
     transition-timing-function: ease-in;
     -o-transition-timing-function: ease-in;
@@ -651,7 +651,7 @@
   }
 }
 
-@-moz-keyframes fadeInDown {
+@-moz-keyframes hb-fadeInDown {
   0%, 100% {
     -moz-transition-timing-function: ease-in;
   }
@@ -667,7 +667,7 @@
   }
 }
 
-@-webkit-keyframes fadeInDown {
+@-webkit-keyframes hb-fadeInDown {
   0%, 100% {
     -webkit-transition-timing-function: ease-in;
   }
@@ -683,9 +683,9 @@
   }
 }
 
-/*-----------  Animations: FadeOutUp  -----------*/
+/*-----------  Animations: hb-fadeOutUp  -----------*/
 
-@keyframes fadeOutUp {
+@keyframes hb-fadeOutUp {
   0%, 100% {
     transition-timing-function: ease-in;
     -o-transition-timing-function: ease-in;
@@ -705,7 +705,7 @@
   }
 }
 
-@-moz-keyframes fadeOutUp {
+@-moz-keyframes hb-fadeOutUp {
   0%, 100% {
     -moz-transition-timing-function: ease-in;
   }
@@ -721,7 +721,7 @@
   }
 }
 
-@-webkit-keyframes fadeOutUp {
+@-webkit-keyframes hb-fadeOutUp {
   0%, 100% {
     -webkit-transition-timing-function: ease-in;
   }

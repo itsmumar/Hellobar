@@ -15,17 +15,17 @@
 }
 
 #hellobar-container.HB-Takeover.hb-animateIn {
-  animation-name: fadeIn;
-  -o-animation-name: fadeIn;
-  -ms-animation-name: fadeIn;
-  -moz-animation-name: fadeIn;
-  -webkit-animation-name: fadeIn;
+  animation-name: hb-fadeIn;
+  -o-animation-name: hb-fadeIn;
+  -ms-animation-name: hb-fadeIn;
+  -moz-animation-name: hb-fadeIn;
+  -webkit-animation-name: hb-fadeIn;
 }
 
 #hellobar-container.HB-Takeover.hb-animateOut {
-  animation-name: fadeOut;
-  -o-animation-name: fadeOut;
-  -ms-animation-name: fadeOut;
-  -moz-animation-name: fadeOut;
-  -webkit-animation-name: fadeOut;
+  animation-name: hb-fadeOut;
+  -o-animation-name: hb-fadeOut;
+  -ms-animation-name: hb-fadeOut;
+  -moz-animation-name: hb-fadeOut;
+  -webkit-animation-name: hb-fadeOut;
 }
