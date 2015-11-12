@@ -1727,12 +1727,17 @@ var _HB = {
 
     var show = function() {
       HB.showElement(HB.w);
+
       // Next line is a Safari hack.  Couldn't find out why but sometimes safari
       // wouldn't display the contents of the iframe, but toggling the display style fixes this
-      var siteElementNode = HB.getSiteElementDomNode();
-      if(siteElementNode) {
-        siteElementNode.style.display = 'none';
-        siteElementNode.style.display = '';
+      if(HB.isMobileSafari()) {
+        var siteElementNode = HB.getSiteElementDomNode();
+        if(siteElementNode) {
+          siteElementNode.style.display = 'none';
+          setTimeout(function() {
+            siteElementNode.style.display = '';
+          }, 10);
+        }
       }
 
       if (HB.w.className.indexOf("hb-animated") > -1) { HB.animateIn(HB.w) };
