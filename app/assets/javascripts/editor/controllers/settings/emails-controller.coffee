@@ -6,7 +6,6 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   ]
 
   newContactListOption: [{id: 0, name: "New contact list..."}]
-
   contactListOptions: Ember.computed.uniq('model.site.contact_lists', 'newContactListOption')
 
   afterSubmitOptions: [
@@ -24,6 +23,8 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   disableRedirect: Ember.computed.not('model.site.capabilities.after_submit_redirect')
 
   setDefaultListID: (->
+    @set('model.orig_contact_list_id', @get('model.contact_list_id'))
+
     if !@get('model.contact_list_id')
       firstList = @get('model.site.contact_lists')[0]
       listId = if firstList then firstList.id else null
@@ -63,6 +64,8 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   actions:
 
     popEditContactListModal: (id) ->
+      canDelete = (id != @get("model.orig_contact_list_id"))
+
       options =
         id: id
         siteID: siteID
@@ -70,6 +73,7 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
         saveURL: "/sites/#{siteID}/contact_lists/#{id}.json"
         saveMethod: "PUT"
         editorModel: @get("model")
+        canDelete: canDelete
         success: (data, modal) =>
           for list in @get("model.site.contact_lists")
             if list.id == data.id

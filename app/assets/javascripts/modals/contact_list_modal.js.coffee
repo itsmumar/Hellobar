@@ -4,6 +4,7 @@ class @ContactListModal extends Modal
 
   constructor: (@options = {}) ->
     @options.window ||= window
+    @options.canDelete = (@options.canDelete != false)
 
     @_initializeTemplates()
     @_initializeBlocks()
@@ -226,21 +227,10 @@ class @ContactListModal extends Modal
         @blocks.hellobarOnly.hide()
         @blocks.syncDetails.hide()
 
-  _isNewList: (data) ->
-    data.id < 1
-
-  _setDeleteLinks: (data) ->
-    lnk = @$modal.find("a.delete")
-
-    if @_isNewList(data)
-      lnk.addClass('hidden')
-    else
-      lnk.removeClass('hidden')
-
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)
     @$modal.find("#contact_list_provider").val(data.provider || "0")
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
-    @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
 
-    @_setDeleteLinks(data)
+    @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
+    @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete
