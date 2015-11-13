@@ -28,7 +28,7 @@ every :monday, :at => "3:00pm", :roles => [:cron] do
 end
 
 every 24.hours, :at => "12:00am", :roles => [:cron] do
-  rake "site:scripts:generate_all_separately"
+  rake "site:scripts:regenerate_all_active"
 end
 
 every 24.hours, :at => "12:00am", :roles => [:cron] do
