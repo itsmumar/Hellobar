@@ -129,6 +129,12 @@ describe Site do
       expect(site.errors[:url]).not_to be_empty
     end
 
+    it "is invalid with an email" do
+      site = Site.new(:url => "my@website.com")
+      expect(site).not_to be_valid
+      expect(site.errors[:url]).not_to be_empty
+    end
+
     it "is invalid without a url" do
       site = Site.new(:url => "")
       expect(site).not_to be_valid

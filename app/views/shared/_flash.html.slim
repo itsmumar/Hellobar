@@ -1,5 +1,9 @@
 - flash.each do |key, message|
   - next unless message.present?
   .flash-block class=key
-    = message
     i.icon-close
+    - if message.is_a?(Array)
+      - message.each do |msg|
+        div= msg
+    - else
+      = message
