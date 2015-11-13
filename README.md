@@ -100,3 +100,6 @@ To test adding or removing the iframe use
 Watch out for animations and other asyncronous or delayed interactions.
 You may need to fiddle with the `Capybara.default_wait_time` in
 `spec/spec_helper`.
+
+
+this is a test
