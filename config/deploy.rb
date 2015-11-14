@@ -11,6 +11,7 @@ set :rails_env, "production"
 set :ssh_options, { :forward_agent => true }
 set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 set :whenever_roles, %w(app db web)
+set :keep_releases, 15
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
