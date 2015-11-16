@@ -29,7 +29,7 @@ class DestroyContactList
     unless valid_site_elements_action?(action)
       @contact_list.errors.add(
         :base,
-        I18n.t("services.destroy_contact_list.invalid_site_elements_action")
+        "Must specify an action for existing bars, modals, sliders, and takeovers"
       )
     end
   end

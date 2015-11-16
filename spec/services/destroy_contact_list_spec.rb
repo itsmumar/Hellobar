@@ -39,9 +39,9 @@ describe DestroyContactList do
 
           destroyer.destroy(invalid_action)
 
-          expect(destroyer.errors[:base]).to include(I18n.t(
-            "services.destroy_contact_list.invalid_site_elements_action"
-          ))
+          expect(destroyer.errors[:base]).to include(
+            "Must specify an action for existing bars, modals, sliders, and takeovers"
+          )
         end
       end
 

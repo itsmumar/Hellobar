@@ -132,14 +132,14 @@ class @ContactListModal extends Modal
     @$modal.find("#contact-list-form").hide()
     @$modal.find("#contact-list-delete").show()
 
-    deleteOnly = @$modal.find(".confirm-delete-contact-list")
+    confirmOnly = @$modal.find(".confirm-delete-contact-list")
     deleteOptions = @$modal.find(".delete-contact-list")
 
     if @_hasSiteElements()
-      deleteOnly.hide()
+      confirmOnly.hide()
       deleteOptions.show()
     else
-      deleteOnly.show()
+      confirmOnly.show()
       deleteOptions.hide()
 
   _doDelete: (e) =>

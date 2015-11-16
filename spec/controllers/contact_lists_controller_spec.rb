@@ -46,7 +46,7 @@ describe ContactListsController, type: :controller do
       site.contact_lists = [ contact_list, contact_list.dup ]
       expect(Hello::DataAPI).to receive(:contact_list_totals).once
 
-      get :index, site_id:  site
+      get :index, site_id: site
     end
   end
 
@@ -144,7 +144,7 @@ describe ContactListsController, type: :controller do
         expect(new_contact_list.service_provider.name).to eq("MailChimp")
       end
 
-      context "when no identity object doesn't exit" do
+      context "when no identity objects exist" do
         before { site.identities.destroy_all }
 
         let(:contact_list_params) do
@@ -196,7 +196,7 @@ describe ContactListsController, type: :controller do
           expect(response.status).to eq(400)
         end
 
-        it 'should fail' do
+        it "doesn't create a new contact list" do
           expect {
             post :create, site_id: site, contact_list: contact_list_params
           }.to change { ContactList.count }.by(0)
@@ -319,7 +319,7 @@ describe ContactListsController, type: :controller do
         delete :destroy, invalid_params
 
         expect_json_to_have_base_error(
-          I18n.t("services.destroy_contact_list.invalid_site_elements_action")
+          "Must specify an action for existing bars, modals, sliders, and takeovers"
         )
       end
     end

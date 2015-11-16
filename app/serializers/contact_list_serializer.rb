@@ -1,13 +1,13 @@
 class ContactListSerializer < ActiveModel::Serializer
   attributes(
-    :id,
-    :site_id,
-    :name,
-    :errors,
-    :provider,
     :data,
     :double_optin,
-    :site_elements_count
+    :errors,
+    :id,
+    :name,
+    :provider,
+    :site_elements_count,
+    :site_id,
   )
 
   def errors
