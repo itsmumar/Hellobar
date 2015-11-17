@@ -20,7 +20,7 @@
     display: inline-block !important
 
   .select-wrapper
-    
+
     &:before
       bottom: 0
       line-height: 260%
@@ -29,7 +29,7 @@
       margin: 0
 
   /*-----------  Conditions Wrapper  -----------*/
-  
+
   .conditions-wrapper
     padding: 1px 0
     margin-bottom: 0.67em
@@ -68,7 +68,7 @@
           width: 22%
 
         /*-----------  Condition Choices  -----------*/
-      
+
         .rule_conditions_choices
           width: 52%
           text-align: left
@@ -85,7 +85,10 @@
               @include transition(margin-left 0)
 
             &:not(.between)
-              width: 100% !important
+              width: 100%
+
+            &.small
+              width: 41.75%
 
             &[type="date"]
               padding-bottom: 0.33em

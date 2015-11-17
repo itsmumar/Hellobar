@@ -1276,6 +1276,8 @@ var _HB = {
       case "is":
       case "equals":
         return a == b;
+      case "every":
+        return a % b == 0;
       case "is_not":
       case "does_not_equal":
         return a != b;
@@ -1312,7 +1314,9 @@ var _HB = {
   {
     var nowDate = new Date();
     var now = Math.round(nowDate.getTime()/1000);
-    var day = 24*60*60;
+    var hour = 60*60;
+    var day = 24*hour;
+    var newSession = 0;
 
     // Track first visit and most recent visit and time since
     // last visit
@@ -1325,6 +1329,10 @@ var _HB = {
     // of days
     if ( previousVisit )
       HB.setVisitorData("ls", Math.round((now-previousVisit)/day));
+      if(((now - previousVisit) / hour) > 1) {
+        newSession = 1;
+      }
+
     HB.setVisitorData("lv", now);
 
     // Set the life of the visitor in number of days
@@ -1332,6 +1340,9 @@ var _HB = {
 
     // Track number of visitor visits
     HB.setVisitorData("nv", (HB.getVisitorData("nv") || 0)+1);
+
+    // Track number of visitor sessions
+    HB.setVisitorData("ns", (HB.getVisitorData("ns") || 0) + newSession);
 
     // Check for UTM params
     var params = HB.paramsFromString(document.location);

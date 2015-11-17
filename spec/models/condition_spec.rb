@@ -98,6 +98,13 @@ RSpec.describe Condition, type: :model do
         Condition.date_condition_from_params('7/6', '').to_sentence.should == "Date is after 7/6"
       end
     end
+
+    context "is a EveryXSession" do
+      it "ordinalizes the value" do
+        condition = create(:condition, operand: "every", segment: "EveryXSession", value: "5")
+        expect(condition.to_sentence).to eq("Every 5th session")
+      end
+    end
   end
 
   describe "#normalize_url_condition" do
