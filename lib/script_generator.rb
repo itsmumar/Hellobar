@@ -3,6 +3,8 @@ require "hmac-sha1"
 require "hmac-sha2"
 
 class ScriptGenerator < Mustache
+  CLOSE_ARROW_URL = "https://s3.amazonaws.com/hb-assets/arrow_white.png"
+
   class << self
     def load_templates
       self.template_path = "#{Rails.root}/lib/script_generator/"
@@ -162,6 +164,14 @@ class ScriptGenerator < Mustache
     options[:rules] || site.rules.map{|rule| hash_for_rule(rule) }
   end
 
+  def site_element_closable?(site_element)
+    site_element.is_a?(Bar) ? site_element.closable : false
+  end
+
+  def close_arrow_url(site_element)
+    site_element_closable?(site_element) ? CLOSE_ARROW_URL : ""
+  end
+
 private
 
   def hash_for_rule(rule)
@@ -257,7 +267,8 @@ private
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       branding_url: "http://www.hellobar.com?sid=#{site_element.id}",
-      closable: site_element.is_a?(Bar) ? site_element.closable : false,
+      closable: site_element_closable?(site_element),
+      close_arrow_url: close_arrow_url(site_element),
       contact_list_id: site_element.contact_list_id,
       conversion_rate: conversion_rate,
       conversions: conversions,

@@ -2,7 +2,7 @@
   <div class="hb-arrow-wrapper">
     <a href="#"  style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}" id="close_bar" onclick="window.parent.HB.animateOut(window.parent.HB.w);
     if(window.parent.HB.e.pusher != null) window.parent.HB.e.pusher.style.display = 'none'; window.parent.HB.animateIn(window.parent.document.getElementById('pull-down'));" >
-      <img class="hb-arrow" src="{{HB.t(siteElement.closable) ? 'https://s3.amazonaws.com/hb-assets/arrow_white.png' : ''}}" alt="" width="28" height="29" />
+      <img class="hb-arrow" src="{{siteElement.closeArrowUrl}}" alt="" width="28" height="29" />
     </a>
   </div>
 </div>

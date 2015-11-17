@@ -303,4 +303,46 @@ describe ScriptGenerator, '#rules' do
       end
     end
   end
+
+  describe "#site_element_closable?" do
+    context "site_element is not a bar" do
+      let(:site_element) { create(:modal_element) }
+
+      it "returns false" do
+        generator = ScriptGenerator.new(site_element.site)
+        expect(generator.site_element_closable?(site_element)).to be(false)
+      end
+    end
+
+    context "site_element is a bar" do
+      let(:site_element) { create(:bar_element) }
+      let(:generator) { ScriptGenerator.new(site_element.site) }
+
+      it "delegates to closable" do
+        [true, false].each do |bool|
+          site_element.closable = bool
+          expect(generator.site_element_closable?(site_element)).to be(bool)
+        end
+      end
+    end
+  end
+
+  describe "#close_arrow_url" do
+    let(:site_element) { create(:bar_element) }
+    let(:generator) { ScriptGenerator.new(site_element.site) }
+
+    context "site_element is closable" do
+      it "returns the arrow url" do
+        allow(generator).to receive(:site_element_closable?).and_return(true)
+        expect(generator.close_arrow_url(site_element)).to eq(ScriptGenerator::CLOSE_ARROW_URL)
+      end
+    end
+
+    context "site_element is not closable" do
+      it "returns the arrow url" do
+        allow(generator).to receive(:site_element_closable?).and_return(false)
+        expect(generator.close_arrow_url(site_element)).to eq("")
+      end
+    end
+  end
 end
