@@ -120,7 +120,11 @@ class Site < ActiveRecord::Base
   end
 
   def generate_script(options = {})
-    delay :generate_static_assets, options
+    if options[:immediately]
+      generate_static_assets(options)
+    else
+      delay :generate_static_assets, options
+    end
   end
 
   def generate_script_and_check_installation(options = {})
@@ -468,7 +472,6 @@ class Site < ActiveRecord::Base
     normalized_url = self.class.normalize_url(self.url)
     self.url = "#{normalized_url.scheme}://#{normalized_url.normalized_host}"
   rescue Addressable::URI::InvalidURIError
-    false
   end
 
   def generate_read_write_keys

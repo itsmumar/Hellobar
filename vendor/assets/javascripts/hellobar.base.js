@@ -1276,6 +1276,8 @@ var _HB = {
       case "is":
       case "equals":
         return a == b;
+      case "every":
+        return a % b == 0;
       case "is_not":
       case "does_not_equal":
         return a != b;
@@ -1312,7 +1314,9 @@ var _HB = {
   {
     var nowDate = new Date();
     var now = Math.round(nowDate.getTime()/1000);
-    var day = 24*60*60;
+    var hour = 60*60;
+    var day = 24*hour;
+    var newSession = 0;
 
     // Track first visit and most recent visit and time since
     // last visit
@@ -1325,6 +1329,10 @@ var _HB = {
     // of days
     if ( previousVisit )
       HB.setVisitorData("ls", Math.round((now-previousVisit)/day));
+      if(((now - previousVisit) / hour) > 1) {
+        newSession = 1;
+      }
+
     HB.setVisitorData("lv", now);
 
     // Set the life of the visitor in number of days
@@ -1332,6 +1340,9 @@ var _HB = {
 
     // Track number of visitor visits
     HB.setVisitorData("nv", (HB.getVisitorData("nv") || 0)+1);
+
+    // Track number of visitor sessions
+    HB.setVisitorData("ns", (HB.getVisitorData("ns") || 0) + newSession);
 
     // Check for UTM params
     var params = HB.paramsFromString(document.location);
@@ -1727,12 +1738,17 @@ var _HB = {
 
     var show = function() {
       HB.showElement(HB.w);
+
       // Next line is a Safari hack.  Couldn't find out why but sometimes safari
       // wouldn't display the contents of the iframe, but toggling the display style fixes this
-      var siteElementNode = HB.getSiteElementDomNode();
-      if(siteElementNode) {
-        siteElementNode.style.display = 'none';
-        siteElementNode.style.display = '';
+      if(HB.isMobileSafari()) {
+        var siteElementNode = HB.getSiteElementDomNode();
+        if(siteElementNode) {
+          siteElementNode.style.display = 'none';
+          setTimeout(function() {
+            siteElementNode.style.display = '';
+          }, 10);
+        }
       }
 
       if (HB.w.className.indexOf("hb-animated") > -1) { HB.animateIn(HB.w) };

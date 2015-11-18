@@ -129,6 +129,12 @@ describe Site do
       expect(site.errors[:url]).not_to be_empty
     end
 
+    it "is invalid with an email" do
+      site = Site.new(:url => "my@website.com")
+      expect(site).not_to be_valid
+      expect(site.errors[:url]).not_to be_empty
+    end
+
     it "is invalid without a url" do
       site = Site.new(:url => "")
       expect(site).not_to be_valid
@@ -157,6 +163,18 @@ describe Site do
 
       expect(script).to match(/HB_SITE_ID/)
       expect(script).to include(@site.site_elements.first.id.to_s)
+    end
+  end
+
+  describe "#generate_script" do
+    it "delegates :generate_static_assets to delay" do
+      expect(@site).to receive(:delay).with(:generate_static_assets, anything)
+      @site.generate_script
+    end
+
+    it "calls generate_static_assets if immediately option is specified" do
+      expect(@site).to receive(:generate_static_assets)
+      @site.generate_script(immediately: true)
     end
   end
 

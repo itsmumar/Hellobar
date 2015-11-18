@@ -11,6 +11,7 @@ set :rails_env, "production"
 set :ssh_options, { :forward_agent => true }
 set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 set :whenever_roles, %w(app db web)
+set :keep_releases, 15
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -97,6 +98,17 @@ namespace :deploy do
       execute "sudo monit restart all"
     end
   end
+
+  desc "Allows full access to current environment's monitrc by calling chmod 777 on it"
+  task :allow_access_to_monitrc do
+    on roles(:web) do
+      last_release = capture(:ls, '-xt', releases_path).split.first
+      last_release_path = releases_path.join(last_release)
+      execute "sudo chmod 777 #{last_release_path}/config/deploy/monitrc/#{fetch(:stage)}.monitrc"
+    end
+  end
+
+  before :cleanup_rollback, :allow_access_to_monitrc
 
   task :copy_additional_logrotate_files do
     on roles(:web) do

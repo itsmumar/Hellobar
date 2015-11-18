@@ -49,7 +49,9 @@ script#condition-partial type="text/x-handlebars-template"
         select class="condition-segment" name="rule[conditions_attributes][{{index}}][segment]"
           | {{option segment "DeviceCondition" "device"}}
           | {{option segment "DateCondition" "date"}}
+          | {{option segment "LastVisitCondition" "days since last visit"}}
           | {{option segment "NumberOfVisitsCondition" "number of visits"}}
+          | {{option segment "EveryXSession" "every Nth session"}}
           | {{option segment "ReferrerCondition" "referrer"}}
           | {{option segment "UrlCondition" "URL"}}
           | {{option segment "ReferrerDomainCondition" "Referrer Domain"}}
@@ -60,15 +62,16 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "UTMTermCondition" "Ad Term"}}
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
+          | {{option operand "every" "every"}}
           | {{option operand "after" "is after"}}
           | {{option operand "before" "is before"}}
-          | {{option operand "between" "is between"}}
           | {{option operand "is" "is"}}
           | {{option operand "is_not" "is not"}}
           | {{option operand "includes" "includes"}}
           | {{option operand "does_not_include" "does not include"}}
           | {{option operand "less_than" "is less than"}}
           | {{option operand "greater_than" "is greater than"}}
+          | {{option operand "between" "is between"}}
       .rule_conditions_choices
         .choice-wrapper.select-wrapper.device-choice
           select.device.value name="rule[conditions_attributes][{{index}}][value]"
@@ -83,7 +86,10 @@ script#condition-partial type="text/x-handlebars-template"
           | {{else}}
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="date" value="{{value}}"
           | {{/if}}
-        .choice-wrapper.number-of-visits-choice
+        .choice-wrapper.x-sessions
+          input.value.small disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="number" value="{{value}}"
+          |  sessions
+        .choice-wrapper.number-of-visits-choice.days-last-visit-choice
           | {{#if is_between}}
           input.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[0]}}"
           span.and-interjection and

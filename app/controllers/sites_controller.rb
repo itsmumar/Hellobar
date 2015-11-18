@@ -161,7 +161,7 @@ class SitesController < ApplicationController
 
       redirect_to new_site_site_element_path(@site)
     else
-      flash.now[:error] = "There was a problem creating your site."
+      flash.now[:error] = @site.errors.full_messages
       render :action => :new
     end
   end

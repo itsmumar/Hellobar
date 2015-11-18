@@ -105,31 +105,35 @@ class @RuleModal extends Modal
   _validOperands: (segment) -> @_operandMapping[segment]
 
   _operandMapping:
-    'DeviceCondition': ['is', 'is_not']
     'DateCondition': ['is', 'is_not', 'before', 'after', 'between']
+    'DeviceCondition': ['is', 'is_not']
+    'EveryXSession': ['every']
+    'LastVisitCondition': ['is', 'is_not', 'less_than', 'greater_than', 'between']
     'NumberOfVisitsCondition': ['is', 'is_not', 'less_than', 'greater_than', 'between']
     'ReferrerCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'ReferrerDomainCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'SearchTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'ReferrerDomainCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UTMSourceCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMCampaignCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMContentCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UTMSourceCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
 
   _segmentToClassMapping:
-    'DeviceCondition': '.device-choice'
     'DateCondition': '.date-choice'
+    'DeviceCondition': '.device-choice'
+    'EveryXSession': '.x-sessions'
+    'LastVisitCondition': '.days-last-visit-choice'
     'NumberOfVisitsCondition': '.number-of-visits-choice'
     'ReferrerCondition': '.referrer-choice'
+    'ReferrerDomainCondition': '.referrer-domain-choice'
     'SearchTermCondition': '.search-term-choice'
     'UrlCondition': '.url-choice'
-    'ReferrerDomainCondition': '.referrer-domain-choice'
-    'UTMSourceCondition': '.utm-source-choice'
     'UTMCampaignCondition': '.utm-campaign-choice'
-    'UTMMediumCondition': '.utm-medium-choice'
     'UTMContentCondition': '.utm-content-choice'
+    'UTMMediumCondition': '.utm-medium-choice'
+    'UTMSourceCondition': '.utm-source-choice'
     'UTMTermCondition': '.utm-term-choice'
 
   _bindSubmit: ->

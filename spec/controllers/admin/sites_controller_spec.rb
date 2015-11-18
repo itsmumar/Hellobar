@@ -46,7 +46,7 @@ describe Admin::SitesController do
         post_regenerate
 
         expect_json_response_to_include({
-          message: "Site script started generating"
+          message: "Site regenerated"
         })
       end
 

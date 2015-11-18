@@ -4,7 +4,9 @@ class Condition < ActiveRecord::Base
   # class name: Hello::Segments::User key
   SEGMENTS = {
     'DateCondition' => 'dt',
+    'LastVisitCondition' => 'ls',
     'DeviceCondition' => 'dv',
+    'EveryXSession' => 'ns',
     'NumberOfVisitsCondition' => 'nv',
     'ReferrerCondition' => 'rf',
     'SearchTermCondition' => 'st',
@@ -49,13 +51,9 @@ class Condition < ActiveRecord::Base
 
   def to_sentence
     if segment == "UrlCondition"
-      if value.count > 2
-        "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other URLs"
-      elsif value.count == 2
-        "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or 1 other URL"
-      else
-        "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first}"
-      end
+      url_condition_sentence
+    elsif segment == "EveryXSession"
+      every_x_sessions_sentence
     else
       if operand.to_s == 'between'
         "#{segment_data[:name]} is between #{value.first} and #{value.last}"
@@ -75,8 +73,27 @@ class Condition < ActiveRecord::Base
 
   private
 
-  def value_is_valid
+  def url_condition_sentence
+    return "" unless segment == "UrlCondition"
+    if value.count > 2
+      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other URLs"
+    elsif value.count == 2
+      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or 1 other URL"
+    else
+      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first}"
+    end
+  end
 
+  def every_x_sessions_sentence
+    return "" unless segment == "EveryXSession"
+    if value.to_i == 1
+      "Every session"
+    else
+      "Every #{value.to_i.ordinalize} session"
+    end
+  end
+
+  def value_is_valid
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
     elsif segment == 'UrlCondition'
@@ -89,6 +106,8 @@ class Condition < ActiveRecord::Base
   def operand_is_valid
     @@operands ||= {
       "DateCondition"           => %w{ is is_not before after between },
+      "LastVisitCondition"      => %w{ is is_not less_than greater_than between },
+      "EveryXSession"           => %w{ every },
       "DeviceCondition"         => %w{ is is_not },
       "NumberOfVisitsCondition" => %w{ is is_not less_than greater_than between },
       "ReferrerCondition"       => %w{ is is_not includes does_not_include },
