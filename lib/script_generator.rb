@@ -216,7 +216,6 @@ private
       border_color
       button_color
       caption
-      closable
       email_placeholder
       font
       headline
@@ -258,6 +257,7 @@ private
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       branding_url: "http://www.hellobar.com?sid=#{site_element.id}",
+      closable: site_element.is_a?(Bar) ? site_element.closable : false,
       contact_list_id: site_element.contact_list_id,
       conversion_rate: conversion_rate,
       conversions: conversions,
