@@ -4,15 +4,11 @@ FactoryGirl.define do
     type "Bar"
     element_subtype "announcement"
 
-    factory :bar_element, class: "Bar" do
-      type "Bar"
-    end
-
-    factory :modal_element, class: 'Modal' do
+    factory :modal_element do
       type "Modal"
     end
 
-    factory :takeover_element, class: 'Takeover' do
+    factory :takeover_element do
       type "Takeover"
     end
   end
