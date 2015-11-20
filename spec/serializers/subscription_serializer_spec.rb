@@ -39,5 +39,17 @@ describe SubscriptionSerializer do
         expect(serializer.monthly_amount).to eq("1")
       end
     end
+
+    describe "#payment_valid" do
+      it "it false when subscription.problem_with_payment? is true" do
+        allow_any_instance_of(Subscription::Pro).to receive(:problem_with_payment?).and_return(true)
+        expect(serializer.payment_valid).to eq(false)
+      end
+
+      it "it true when subscription.problem_with_payment? is false" do
+        allow_any_instance_of(Subscription::Pro).to receive(:problem_with_payment?).and_return(false)
+        expect(serializer.payment_valid).to eq(true)
+      end
+    end
   end
 end

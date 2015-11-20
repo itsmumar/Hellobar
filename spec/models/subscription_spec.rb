@@ -57,6 +57,22 @@ describe Subscription do
     end
   end
 
+  describe "problem_with_payment?" do
+    context "bill is past due" do
+      it "returns true" do
+        bill = bills(:past_due_bill)
+        expect(bill.subscription.problem_with_payment?).to be(true)
+      end
+    end
+
+    context "all bills are paid" do
+      it "returns true" do
+        bill = bills(:paid_bill)
+        expect(bill.subscription.problem_with_payment?).to be(false)
+      end
+    end
+  end
+
   it "should set defaults if not set" do
     Subscription::Pro.create.visit_overage.should == Subscription::Pro.defaults[:visit_overage]
   end

@@ -66,6 +66,10 @@ class Subscription < ActiveRecord::Base
     @capabilities
   end
 
+  def problem_with_payment?
+    capabilities.instance_of?(Subscription::ProblemWithPayment::Capabilities)
+  end
+
   after_initialize :set_initial_values
   def set_initial_values
     unless self.persisted?

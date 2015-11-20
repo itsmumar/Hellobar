@@ -3,7 +3,7 @@ $ ->
     $(e.target).toggleClass("seeing-more")
     $("tr.more-top-performers").toggle()
 
-  $('a.show-payment-modal').click ->
+  $('.show-payment-modal').click ->
     options =
       package: window.site.current_subscription
       site: window.site
