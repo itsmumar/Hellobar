@@ -64,8 +64,11 @@ class @UpgradeAccountModal extends Modal
       buttonPackage = $(button).data("package")
 
       if buttonPackage.type == @options.site.current_subscription.type
-        $(button).attr("disabled", "disabled")
-        $(button).text("Current Plan")
+        if @options.site.current_subscription.is_trial
+          $(button).text("Enter Billing Info")
+        else
+          $(button).attr("disabled", "disabled")
+          $(button).text("Current Plan")
 
   _invalidPermissions: ->
     @$modal.find("div.button").each (index, button) =>
@@ -74,6 +77,6 @@ class @UpgradeAccountModal extends Modal
         $(button).addClass("disabled-promo")
         $(button).text("Email the account owner to upgrade this site:")
 
-    @$modal.find(".email-links").each (index, element) => 
+    @$modal.find(".email-links").each (index, element) =>
       $(element).addClass("disabled-link")
       $(element).show()

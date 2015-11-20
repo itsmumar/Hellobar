@@ -59,7 +59,12 @@ section
               td= bill.paid_with_payment_method_detail ? bill.paid_with_payment_method_detail.data['number'] : 'n/a'
               td= link_to 'Receipt', bill_path(bill), target: '_blank'
 
-    - if @next_bill && @next_bill.amount > 0
+  - if @next_bill
+    - if @site.current_subscription.trial?
+      | This site is on a trial plan.
+      |  Please enter a payment method by #{bill_due_at(@next_bill)}
+      |  to continue using HelloBar #{@site.current_subscription.values[:name]}.
+    - elsif @next_bill.amount > 0
       small
         ' Next bill is due on
         = bill_due_at(@next_bill)
@@ -68,10 +73,6 @@ section
         '  for a
         = @next_bill.subscription.schedule
         |  subscription.
-  - elsif @next_bill && @site.current_subscription.trial?
-    | This site is on a trial plan.
-    |  Please enter a payment method by #{bill_due_at(@next_bill)}
-    |  to continue using HelloBar #{@site.current_subscription.values[:name]}.
 - elsif @site.is_free?
   ul 
     li

@@ -1,5 +1,6 @@
 class SubscriptionSerializer < ActiveModel::Serializer
-  attributes :schedule, :type, :yearly_amount, :monthly_amount, :payment_method_details_id, :payment_method_number
+  attributes :schedule, :type, :yearly_amount, :monthly_amount
+  attributes :is_trial, :payment_method_details_id, :payment_method_number
 
   def schedule
     object.values[:schedule]
@@ -33,6 +34,10 @@ class SubscriptionSerializer < ActiveModel::Serializer
     else
       nil
     end
+  end
+
+  def is_trial
+    object.trial?
   end
 
   private
