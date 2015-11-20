@@ -122,7 +122,6 @@ describe("HB", function() {
         expect(url).toEqual("/");
       });
 
-      //TODO: why is this taking so long??
       it("returns / when url is index with slash", function() {
         var url = HB.n("http://hellobar.com/", true);
         expect(url).toEqual("/");

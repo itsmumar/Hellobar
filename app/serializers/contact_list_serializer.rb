@@ -1,5 +1,14 @@
 class ContactListSerializer < ActiveModel::Serializer
-  attributes :id, :site_id, :name, :errors, :provider, :data, :double_optin
+  attributes(
+    :data,
+    :double_optin,
+    :errors,
+    :id,
+    :name,
+    :provider,
+    :site_elements_count,
+    :site_id,
+  )
 
   def errors
     object.errors.full_messages

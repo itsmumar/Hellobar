@@ -11,7 +11,7 @@
 <label>Which contact list would you like your emails stored in?</label>
 <div class="select-wrapper">
   {{view Ember.Select
-    content=contactListOptions
+    contentBinding='contactListOptions'
     value=model.contact_list_id
     optionValuePath='content.id'
     optionLabelPath='content.name'

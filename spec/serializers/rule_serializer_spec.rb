@@ -3,7 +3,7 @@ require 'spec_helper'
 describe RuleSerializer do
   fixtures :all
 
-  let(:rule) { rules(:zombo) }
+  let(:rule) { rules(:zombo_rule) }
 
   it 'should include segment' do
     condition = conditions(:date_between)

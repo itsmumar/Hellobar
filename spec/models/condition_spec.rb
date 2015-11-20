@@ -6,7 +6,7 @@ RSpec.describe Condition, type: :model do
 
     it "clears empty values during validation" do
       condition = Condition.new(
-        rule: rules(:zombo),
+        rule: rules(:zombo_rule),
         operand: "is",
         value: ["/foo", "/bar", ""],
         segment: "UrlCondition"

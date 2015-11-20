@@ -6,7 +6,7 @@ describe ContactList do
   let(:site) { sites(:zombo) }
   let(:provider) { 'email' }
   let(:identity) { Identity.new(:site => site, :provider => provider) }
-  let(:contact_list) { contact_lists(:zombo).tap{|c| c.identity = identity} }
+  let(:contact_list) { contact_lists(:zombo_contacts).tap{|c| c.identity = identity} }
   let(:service_provider) { contact_list.service_provider }
 
   before do
@@ -38,7 +38,7 @@ describe ContactList do
     end
 
     it "should use #provider on edit to find the correct identity" do
-      list = contact_lists(:zombo)
+      list = contact_lists(:zombo_contacts)
       list.update_attribute(:identity, identities(:mailchimp))
 
       list.provider = "constantcontact"
@@ -47,7 +47,7 @@ describe ContactList do
     end
 
     it "should not be valid if #provider does not match an existing identity" do
-      list = contact_lists(:zombo)
+      list = contact_lists(:zombo_contacts)
       list.provider = "notanesp"
       list.identity = nil
 
@@ -56,7 +56,7 @@ describe ContactList do
     end
 
     it "should clear the identity if provider is \"0\"" do
-      list = contact_lists(:zombo)
+      list = contact_lists(:zombo_contacts)
       list.identity.should_not be_blank
 
       list.update_attributes(:provider => "0")
@@ -64,7 +64,7 @@ describe ContactList do
     end
 
     it "should notify the old identity when the identity is updated" do
-      cl = contact_lists(:zombo2)
+      cl = contact_lists(:zombo_contacts2)
       old_identity = cl.identity
       old_identity.should_receive(:contact_lists_updated)
       Identity.stub_chain(:where, :first).and_return(old_identity)
@@ -73,7 +73,7 @@ describe ContactList do
     end
 
     it "should message the identity when the contact list is destroyed" do
-      cl = contact_lists(:zombo2)
+      cl = contact_lists(:zombo_contacts2)
       old_identity = cl.identity
       old_identity.should_receive(:contact_lists_updated)
       Identity.stub_chain(:where, :first).and_return(old_identity)
@@ -81,14 +81,13 @@ describe ContactList do
     end
   end
 
-  it "should run email sync_all! correctly" do
-    contact_list.identity.provider = 'mailchimp'
-    contact_list.stub(:oauth?).and_return(true)
-    contact_list.save!
-    contact_list.stub(:syncable? => true)
+  describe "site_elements_count" do
+    let(:num) { 3 }
 
-    expect(service_provider).to receive(:batch_subscribe)
-    contact_list.send :sync_all! # calls #sync_all!
+    it "runs the number of site_elements_count" do
+      num.times { |n| contact_list.site_elements << site_elements(:zombo_email).dup }
+      expect(contact_list.site_elements_count).to eq(3)
+    end
   end
 
   describe "sync_one!" do

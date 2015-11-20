@@ -3,7 +3,7 @@ class ContactListsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_site
-  before_action :load_contact_list, :only => [:show, :update]
+  before_action :load_contact_list, :only => [:show, :update, :destroy]
 
   def index
     @site ||= current_site #Necessary here in case this is a redirect from failed oauth
@@ -12,12 +12,13 @@ class ContactListsController < ApplicationController
     end
 
     @contact_lists = @site.contact_lists
-    @contact_list_totals = Hello::DataAPI.contact_list_totals(@site, @contact_lists) || {}
+    @contact_list_totals =
+      Hello::DataAPI.contact_list_totals(@site, @contact_lists) || {}
   end
 
   def create
     @contact_list = @site.contact_lists.create(contact_list_params)
-    render :json => @contact_list, :status => @contact_list.persisted? ? :created : :bad_request
+    render json: @contact_list, status: @contact_list.persisted? ? :created : :bad_request
   end
 
   def show
@@ -29,19 +30,34 @@ class ContactListsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv  { redirect_to contact_list_csv_url(@contact_list) }
-      format.json { render :json => @contact_list }
+      format.json { render json: @contact_list }
     end
   end
 
   def update
-    status = @contact_list.update_attributes(contact_list_params)
-    render :json => @contact_list, :status => status ? :ok : :bad_request
+    result = @contact_list.update_attributes(contact_list_params)
+    status = result ? :ok : :bad_request
+    render json: @contact_list, status: status
+  end
+
+  def destroy
+    destroyer = DestroyContactList.new(@contact_list)
+
+    if destroyer.destroy(delete_site_elements_action)
+      render json: { id: @contact_list.id }, status: :ok
+    else
+      render json: @contact_list, status: :bad_request
+    end
   end
 
   private
 
   def contact_list_params
     params.require(:contact_list).permit(:name, :provider, {:data => [:remote_id, :remote_name, :embed_code]}, :double_optin)
+  end
+
+  def delete_site_elements_action
+    params[:contact_list][:site_elements_action]
   end
 
   def load_contact_list

@@ -48,7 +48,7 @@ describe Rule do
   describe 'accepting nested condition attributes' do
     fixtures :all
 
-    let(:rule) { rules(:zombo) }
+    let(:rule) { rules(:zombo_rule) }
     let(:site) { sites(:zombo) }
 
     before do
@@ -110,8 +110,8 @@ describe Rule do
   describe "#same_as?" do
     fixtures :all
 
-    let(:rule) { rules(:zombo) }
-    let(:other_rule) { rules(:zombo).clone }
+    let(:rule) { rules(:zombo_rule) }
+    let(:other_rule) { rules(:zombo_rule).clone }
     let(:site) { sites(:zombo) }
 
     it "returns true if neither rule has conditions" do

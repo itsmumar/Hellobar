@@ -193,7 +193,7 @@ describe ScriptGenerator, '#rules' do
   fixtures :all
 
   let(:site) { sites(:zombo) }
-  let(:contact_list) { contact_lists(:zombo) }
+  let(:contact_list) { contact_lists(:zombo_contacts) }
   let(:generator) { ScriptGenerator.new(site) }
 
   it 'returns the proper array of hashes for a sites rules' do
