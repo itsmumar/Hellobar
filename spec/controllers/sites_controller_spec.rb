@@ -104,6 +104,14 @@ describe SitesController do
 
         response.should redirect_to new_site_site_element_path(Site.last)
       end
+
+      it "redirects to the site when using existing url" do
+        site = create(:site, url: "www.test.com")
+        site.users << @user
+        post :create, :site => { url: 'test.com' }
+
+        expect(response).to redirect_to(site_path(site))
+      end
     end
   end
 
