@@ -64,6 +64,14 @@ describe DestroyContactList do
           expect(contact_list_ids).to_not include(last_id)
         end
 
+        it "keeps the site elements" do
+          destroyer = DestroyContactList.new(contact_list)
+
+          expect {
+            destroyer.destroy(DestroyContactList::SITE_ELEMENTS_ACTIONS[:keep])
+          }.not_to change { SiteElement.where("deleted_at is not null").count }
+        end
+
         it "sets all site elements to new list" do
           destroyer = DestroyContactList.new(contact_list)
 
@@ -97,7 +105,7 @@ describe DestroyContactList do
 
           expect {
             destroyer.destroy(DestroyContactList::SITE_ELEMENTS_ACTIONS[:delete])
-          }.to change { SiteElement.count }.by(-1)
+          }.to change { SiteElement.deleted.count }.by(1)
         end
       end
     end
