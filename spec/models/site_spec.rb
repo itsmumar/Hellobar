@@ -83,10 +83,10 @@ describe Site do
       expect(site.url).to eq("http://zombo.com")
     end
 
-    it "uses the supplied protocol if present" do
+    it "always uses http protocol" do
       site = Site.new(:url => "https://zombo.com")
       site.valid?
-      expect(site.url).to eq("https://zombo.com")
+      expect(site.url).to eq("http://zombo.com")
 
       site = Site.new(:url => "http://zombo.com")
       site.valid?
@@ -473,6 +473,20 @@ describe Site do
     it "should return nil if no site exists with that script" do
       allow(Site).to receive(:maximum).and_return(10) # so that it doesn't run forever
       expect(Site.find_by_script("foo")).to be_nil
+    end
+  end
+
+  describe ".normalize_url" do
+    it "should remove www" do
+      expect(Site.normalize_url("http://www.cnn.com").host).to eq("cnn.com")
+    end
+
+    it "should not remove www from other parts of the url" do
+      expect(Site.normalize_url("cnnwww.com/").host).to eq("cnnwww.com")
+    end
+
+    it "should normalize to http" do
+      expect(Site.normalize_url("https://cnn.com").scheme).to eq("http")
     end
   end
 end
