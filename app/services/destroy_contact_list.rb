@@ -1,5 +1,5 @@
 class DestroyContactList
-  SITE_ELEMENTS_ACTIONS = { keep: 0, delete: 1 }
+  SITE_ELEMENTS_ACTIONS = { keep: 0, delete: 1 }.with_indifferent_access
 
   attr_reader :contact_list, :site
 
@@ -20,7 +20,7 @@ class DestroyContactList
     return false unless valid?
 
     handle_site_elements(site_elements_action)
-    @contact_list.destroy
+    destroy_contact_list
   end
 
   private
@@ -41,6 +41,10 @@ class DestroyContactList
   def valid_site_elements_action?(action)
     !has_site_elements? ||
       SITE_ELEMENTS_ACTIONS.values.include?(action.to_i)
+  end
+
+  def destroy_contact_list
+    @contact_list.reload.destroy
   end
 
   def keep_site_elements?(action)
