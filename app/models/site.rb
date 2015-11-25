@@ -287,6 +287,7 @@ class Site < ActiveRecord::Base
   end
 
   def self.normalize_url(url)
+    url = url.sub(/^https?\:\/\//, '').sub(/^www./,'')
     Addressable::URI.heuristic_parse(url)
   end
 

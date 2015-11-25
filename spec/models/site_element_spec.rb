@@ -16,7 +16,7 @@ describe SiteElement do
       element = site_elements(:zombo_traffic)
       element.should be_valid
 
-      element.contact_list = contact_lists(:zombo)
+      element.contact_list = contact_lists(:zombo_contacts)
       element.should be_valid
     end
 

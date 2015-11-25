@@ -6,10 +6,20 @@ module ControllerSpecHelper
   end
 
   def expect_json_to_have_error(attr, message)
-    json_response = parse_json_response
-    errors = json_response[:errors].try(:with_indifferent_access)
+    errors = parse_json_errors.try(:with_indifferent_access)
 
     expect(errors[attr]).to include(message)
+  end
+
+  def expect_json_to_have_base_error(message)
+    errors = parse_json_errors
+
+    expect(errors).to include(message)
+  end
+
+  def parse_json_errors
+    json_response = parse_json_response
+    json_response[:errors]
   end
 
   def parse_json_response

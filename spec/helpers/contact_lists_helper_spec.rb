@@ -6,7 +6,7 @@ describe ContactListsHelper, type: :helper do
   fixtures :all
 
   let(:site) { sites(:zombo) }
-  let(:contact_list) { contact_lists(:zombo) }
+  let(:contact_list) { contact_lists(:zombo_contacts) }
 
   before do
     allow_any_instance_of(Identity).to receive(:credentials).and_return("token" => "test")

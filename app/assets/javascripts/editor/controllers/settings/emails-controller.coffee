@@ -5,11 +5,8 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
     {value: 1, label: 'Names and email addresses'}
   ]
 
-  contactListOptions: (->
-    lists = @get("model.site.contact_lists").slice(0)
-    lists.push({id: 0, name: "New contact list..."})
-    lists
-  ).property("model.site.contact_lists")
+  newContactListOption: [{id: 0, name: "New contact list..."}]
+  contactListOptions: Ember.computed.uniq('model.site.contact_lists', 'newContactListOption')
 
   afterSubmitOptions: [
     {value: 0, label: 'Show default message'}
@@ -26,6 +23,8 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   disableRedirect: Ember.computed.not('model.site.capabilities.after_submit_redirect')
 
   setDefaultListID: (->
+    @set('model.orig_contact_list_id', @get('model.contact_list_id'))
+
     if !@get('model.contact_list_id')
       firstList = @get('model.site.contact_lists')[0]
       listId = if firstList then firstList.id else null
@@ -65,6 +64,8 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
   actions:
 
     popEditContactListModal: (id) ->
+      canDelete = (id != @get("model.orig_contact_list_id"))
+
       options =
         id: id
         siteID: siteID
@@ -72,9 +73,21 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
         saveURL: "/sites/#{siteID}/contact_lists/#{id}.json"
         saveMethod: "PUT"
         editorModel: @get("model")
+        canDelete: canDelete
         success: (data, modal) =>
-          @get("model.site.contact_lists").forEach (list) ->
-            Ember.set(list, "name", data.name) if list.id == data.id
+          for list in @get("model.site.contact_lists")
+            if list.id == data.id
+              Ember.set(list, "name", data.name)
+              break
+
+          modal.close()
+        destroyed: (data, modal) =>
+          lists = @get("model.site.contact_lists")
+
+          for list in lists
+            if list.id == data.id
+              lists.removeObject(list)
+              break
 
           modal.close()
 

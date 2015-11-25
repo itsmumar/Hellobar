@@ -4,6 +4,7 @@ class @ContactListModal extends Modal
 
   constructor: (@options = {}) ->
     @options.window ||= window
+    @options.canDelete = (@options.canDelete != false)
 
     @_initializeTemplates()
     @_initializeBlocks()
@@ -28,6 +29,10 @@ class @ContactListModal extends Modal
       @blocks.hellobarOnly.hide()
 
     super
+
+  _hasSiteElements: ->
+    num = @$modal.find("#contact_list_site_elements_count").val()
+    parseInt(num) > 0
 
   _initializeTemplates: ->
     @templates =
@@ -54,6 +59,7 @@ class @ContactListModal extends Modal
     @_bindReadyButton(object)
     @_bindSubmit(object)
     @_bindDisconnect(object)
+    @_bindDelete(object)
 
   _bindProviderSelect: (object) ->
     modal = this
@@ -97,6 +103,15 @@ class @ContactListModal extends Modal
       e.preventDefault()
       @_doSubmit(e)
 
+  _bindDelete: (object) ->
+    object.find("a.delete-confirm").click (e) =>
+      e.preventDefault()
+      @_confirmDelete(e)
+
+    object.find("a.delete").click (e) =>
+      e.preventDefault()
+      @_doDelete(e)
+
   _doSubmit: (e) ->
     @_clearErrors()
     submitButton = @$modal.find("a.submit")
@@ -112,6 +127,32 @@ class @ContactListModal extends Modal
         contactList = response.responseJSON
         @_displayErrors(contactList.errors)
         @$modal.find("a.submit").removeAttr("disabled")
+
+  _confirmDelete: (e) =>
+    @$modal.find("#contact-list-form").hide()
+    @$modal.find("#contact-list-delete").show()
+
+    confirmOnly = @$modal.find(".confirm-delete-contact-list")
+    deleteOptions = @$modal.find(".delete-contact-list")
+
+    if @_hasSiteElements()
+      confirmOnly.hide()
+      deleteOptions.show()
+    else
+      confirmOnly.show()
+      deleteOptions.hide()
+
+  _doDelete: (e) =>
+    data = @$modal.find("form.delete-contact-list").serialize()
+
+    $.ajax @options.loadURL,
+      type: 'DELETE'
+      data: data
+      success: (data) =>
+        @options.destroyed(data, this)
+      error: (response) =>
+        data = response.responseJSON
+        @_displayErrors(data.errors)
 
   _getFormData: ->
     remoteListSelect = @$modal.find("#contact_list_remote_list_id")
@@ -190,3 +231,6 @@ class @ContactListModal extends Modal
     @$modal.find("#contact_list_name").val(data.name)
     @$modal.find("#contact_list_provider").val(data.provider || "0")
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
+
+    @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
+    @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete
