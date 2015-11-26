@@ -150,6 +150,7 @@ class SitesController < ApplicationController
 
   def create_for_logged_in_user
     if @site.valid? && @site.url_exists?(current_user)
+      flash[:error] = "Url is already in use."
       redirect_to site_path(current_user.sites.where(url: @site.url).first)
     elsif @site.save
       SiteMembership.create!(:site => @site, :user => current_user)

@@ -111,6 +111,7 @@ describe SitesController do
         post :create, :site => { url: 'test.com' }
 
         expect(response).to redirect_to(site_path(site))
+        expect(flash[:error]).to eq("Url is already in use.")
       end
     end
   end
