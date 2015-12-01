@@ -59,15 +59,15 @@ table.rules-wrapper
 
       tr data-rule-id=rule.id
         td.temporary-block.suggestion-block colspan='9'
-          - if @rules.count == 1 && !@site.has_script_installed?
+          - if rule.site_elements.empty?
+            = link_to "Create a bar for this rule", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}"), "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
+          - elsif @rules.count == 1 && !@site.has_script_installed?
             .icon-wrapper
               i.icon-alert
             div
               | Note! Your Hello Bar has not been installed yet!  You won't see any results until it's been installed.
             div
               = link_to "Relax: It's easy! Click here to find out how.", site_install_path(@site)
-          - elsif rule.site_elements.empty?
-            = link_to "Create a bar for this rule", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}"), "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
           - else
             = link_to "A/B test a new bar for this rule to maximize your conversions", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}"), "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
 
