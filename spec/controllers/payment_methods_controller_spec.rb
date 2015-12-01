@@ -28,7 +28,7 @@ describe PaymentMethodsController, '#index' do
     payment_method_ids.should == user.payment_methods.map(&:id)
   end
 
-  it 'reutnrs an array of user payment methods without a site_id as a parameter' do
+  it 'returns an array of user payment methods without a site_id as a parameter' do
     get :index
 
     response.should be_success
