@@ -14,4 +14,14 @@ feature "Trial User", js: true do
     visit site_path(@site)
     expect(page).to have_content('ENJOYING HELLO BAR PRO? CLICK HERE TO KEEP IT.')
   end
+
+  scenario "allows users to downgrade" do
+    allow_any_instance_of(Subscription).to receive(:problem_with_payment?).and_return(true)
+    allow_any_instance_of(Site).to receive(:has_script_installed?).and_return(true)
+    visit site_path(@site)
+    expect(page).to have_content('Want to continue using Hello Bar Pro?')
+    find(".show-downgrade-modal").click
+    click_link("Downgrade")
+    expect(@site.reload.current_subscription).to be_a(Subscription::Free)
+  end
 end

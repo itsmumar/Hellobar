@@ -1,0 +1,11 @@
+script id='downgrade-template' type='text/x-handlebars-template'
+  .modal-wrapper
+    .modal-block      
+      header
+        h5 Are you sure want to downgrade to free?
+      div
+        ' All of your Hello Bar elements will have the Hello Bar branding and will show advertisements
+        ' for Hello Bar to 1 out of 10 visitors.
+
+      footer
+        = link_to "Downgrade", downgrade_site_path(current_site), method: :put, class: "button"

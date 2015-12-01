@@ -9,7 +9,12 @@ $ ->
       site: window.site
     new PaymentModal(options).open()
 
-  $('a.show-upgrade-modal').click ->
+  $('.show-upgrade-modal').click ->
     options =
       site: window.site
     new UpgradeAccountModal(options).open()
+
+  $('.show-downgrade-modal').click ->
+    options =
+      site: window.site
+    new DowngradeSiteModal(options).open()

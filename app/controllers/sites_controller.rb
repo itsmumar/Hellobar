@@ -1,8 +1,9 @@
 class SitesController < ApplicationController
   include SitesHelper
+  include Subscribable
 
   before_action :authenticate_user!, :except => :create
-  before_action :load_site, :only => [:show, :edit, :update, :destroy, :install, :preview_script, :script, :improve, :chart_data, :team]
+  before_action :load_site, :only => [:show, :edit, :update, :destroy, :install, :preview_script, :script, :improve, :chart_data, :team, :downgrade]
   before_action :get_suggestions, :only => :improve
   before_action :get_top_performers, :only => :improve
   before_action :load_bills, :only => :edit
@@ -103,6 +104,11 @@ class SitesController < ApplicationController
     end
 
     render :json => series_with_dates, :root => false
+  end
+
+  def downgrade
+    update_subscription(@site, nil, plan: "free", schedule: "monthly")
+    redirect_to site_path(@site)
   end
 
   private

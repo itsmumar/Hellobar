@@ -3,11 +3,15 @@
 .statistics-page
 
   - if @site.current_subscription.try(:problem_with_payment?)
-    div.suggestion-block.show-payment-modal
-      div
-        ' Want to continue using Hello Bar
+    div.suggestion-block
+      ' Want to continue using Hello Bar
+      = @site.current_subscription.values[:name]
+      ' ?
+
+      a.show-upgrade-modal.button
+        ' Keep Hello Bar
         = @site.current_subscription.values[:name]
-        | ?
-      div Please update your billing information.
+      a.show-downgrade-modal
+        | or downgrade to free.
 
   = render "sites/statistics"

@@ -204,4 +204,16 @@ describe SitesController do
       assigns(:suggestions)["all"].keys.should_not include("high traffic, high conversion")
     end
   end
+
+  describe "PUT downgrade" do
+    it "downgrades a site to free" do
+      stub_current_user(@user)
+      site = @user.sites.last
+      create(:pro_subscription, site: site)
+
+      put :downgrade, id: site.id
+
+      expect(site.current_subscription).to be_a(Subscription::Free)
+    end
+  end
 end
