@@ -141,6 +141,16 @@ describe Subscription do
       @site.capabilities(true).class.should == Subscription::ProblemWithPayment::Capabilities
     end
 
+    it 'should return the right capabilities if a payment issue has been resolved' do
+      @site.change_subscription(@pro, payment_methods(:always_fails))
+      expect(@site.capabilities(true).remove_branding?).to be(false)
+      expect(@site.site_elements.all? { |se| se.show_branding }).to be(true)
+
+      @site.change_subscription(@pro, payment_methods(:always_successful))
+      expect(@site.capabilities(true).remove_branding?).to be(true)
+      expect(@site.site_elements.none? { |se| se.show_branding }).to be(true)
+    end
+
     it "should return the right capabilities if payment is not due yet" do
       success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
 

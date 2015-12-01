@@ -399,24 +399,33 @@ describe Site do
   end
 
   describe "#set_branding_on_site_elements" do
-    it "should set branding based on the current subscription capabilities" do
-      sub = subscriptions(:pro_subscription)
-      se = site_elements(:zombo_traffic)
-      se.rule = sub.site.rules.first
+    let(:subscription) { fail("subscription must be overridden") }
+
+    let(:site) { subscription.site }
+    let(:se) { site_elements(:zombo_traffic) }
+
+    before do
+      se.rule = site.rules.first
       se.show_branding = true
       se.save
-      sub.site.send(:set_branding_on_site_elements)
-      expect(se.reload.show_branding).to be_false
+      site.send(:set_branding_on_site_elements)
+      se.reload
     end
 
-    it "should set branding based on the current subscription capabilities" do
-      sub = subscriptions(:free_subscription)
-      se = site_elements(:zombo_traffic)
-      se.rule = sub.site.rules.first
-      se.show_branding = true
-      se.save
-      sub.site.send(:set_branding_on_site_elements)
-      expect(se.reload.show_branding).to be_true
+    context "when subscription is pro" do
+      let(:subscription) { subscriptions(:pro_subscription) }
+
+      it "does not show branding" do
+        expect(se.show_branding).to be_false
+      end
+    end
+
+    context "when subscription is free" do
+      let(:subscription) { subscriptions(:free_subscription) }
+
+      it "shows branding" do
+        expect(se.show_branding).to be_true
+      end
     end
   end
 
