@@ -6,7 +6,7 @@ feature "Trial User", js: true do
     @site = create(:site)
     @site.users << @user
     subscription = Subscription::Pro.new(schedule: "monthly")
-    @site.change_subscription(subscription, nil, 90.day) # 90 day subscription
+    @site.change_subscription(subscription, nil, 90.day) # 90 day trial subscription
   end
   after { devise_reset }
 
@@ -16,7 +16,7 @@ feature "Trial User", js: true do
   end
 
   scenario "allows users to downgrade" do
-    allow_any_instance_of(Subscription).to receive(:problem_with_payment?).and_return(true)
+    allow_any_instance_of(Subscription::Pro).to receive(:problem_with_payment?).and_return(true)
     allow_any_instance_of(Site).to receive(:has_script_installed?).and_return(true)
     visit site_path(@site)
     expect(page).to have_content('Your subscription has not been renewed')
