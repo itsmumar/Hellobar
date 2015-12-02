@@ -21,7 +21,7 @@ class Site < ActiveRecord::Base
   before_validation :standardize_url
   before_validation :generate_read_write_keys
 
-  before_destroy :blank_out_script
+  before_destroy :generate_blank_static_assets
 
   after_create do
     delay :set_install_type
@@ -143,10 +143,6 @@ class Site < ActiveRecord::Base
 
   def generate_improve_suggestions(options = {})
     delay :generate_all_improve_suggestions, options
-  end
-
-  def blank_out_script(options = {})
-    delay :generate_blank_static_assets, options
   end
 
   def queue_digest_email(options = {})
