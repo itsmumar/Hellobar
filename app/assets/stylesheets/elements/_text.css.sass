@@ -5,9 +5,6 @@ a
   text-decoration: none
   @include transition()
 
-  &:hover
-    text-decoration: none
-
   &[href]
     cursor: pointer
 
@@ -36,7 +33,7 @@ h1
   letter-spacing: -0.033em
   font-weight: $fontWeightLight
 
-h2 
+h2
   font-size: 2.75em
   text-transform: uppercase
 
@@ -71,3 +68,8 @@ ul
 
   li
     list-style: none
+
+/*-----------  Modifiers  -----------*/
+
+.underlined
+  text-decoration: underline

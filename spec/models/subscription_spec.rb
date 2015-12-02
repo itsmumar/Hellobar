@@ -66,7 +66,7 @@ describe Subscription do
     end
 
     context "all bills are paid" do
-      it "returns true" do
+      it "returns false" do
         bill = bills(:paid_bill)
         expect(bill.subscription.problem_with_payment?).to be(false)
       end
