@@ -57,6 +57,13 @@ describe Site do
       site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
     end
 
+    it 'regenerates the script' do
+      site = sites(:horsebike)
+      site.update_attribute(:script_generated_at, 1.day.ago)
+      site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
+      expect(site.needs_script_regeneration?).to be(true)
+    end
+
     it "applies the discount when changing subscription to pro and it belongs to a discount tier" do
       user = create(:user)
       bills = []

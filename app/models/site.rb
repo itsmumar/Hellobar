@@ -27,6 +27,28 @@ class Site < ActiveRecord::Base
     delay :set_install_type
   end
 
+  after_update :regenerate_script, unless: :script_generated_at_changed?
+
+  after_touch do
+    regenerate_script
+  end
+
+  after_commit do
+    generate_script if needs_script_regeneration?
+    @needs_script_regeneration = false
+  end
+
+  def needs_script_regeneration?
+    !!@needs_script_regeneration
+  end
+
+  def regenerate_script
+    # ONLY DO THIS IF IT HAS BEEN GENERATED AT LEAST ONCE.
+    if script_generated_at && (script_generated_at < updated_at) && !destroyed?
+      @needs_script_regeneration = true
+    end
+  end
+
   validates :url, url: true
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true

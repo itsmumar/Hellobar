@@ -284,4 +284,16 @@ describe SiteElement do
       end
     end
   end
+
+  describe "when associated with a site" do
+    let(:site_element) { create(:site_element) }
+    let(:site) { site_element.site }
+
+    it 'forces a script regeneration when changed' do
+      site.update_attribute(:script_generated_at, 1.day.ago)
+      site_element.thank_you_text = "#{site_element.thank_you_text}_changed"
+      site_element.save!
+      expect(site.needs_script_regeneration?).to be(true)
+    end
+  end
 end
