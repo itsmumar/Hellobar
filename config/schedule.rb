@@ -9,10 +9,6 @@ settings_file = "config/settings.yml"
 settings_yaml = File.exists?(settings_file) ? YAML.load_file(settings_file) : {}
 env = settings_yaml["env_name"] || "edge"
 
-every 20.minutes, :roles => [:cron] do
-  rake "internal_metrics:process"
-end
-
 if env == "production"
   every :friday, :at => "2:00pm", :roles => [:cron] do
     rake "internal_metrics:email_weekly"
