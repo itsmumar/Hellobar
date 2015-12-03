@@ -40,7 +40,7 @@ class @Chart
         bullet: "round"
         lineThickness: 2
         valueField: "value"
-        type: "smoothedLine"
+        type: "line"
         bulletBorderAlpha: 1
         hideBulletsCount: 50
         bulletColor: "#FFFFFF"
