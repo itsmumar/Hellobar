@@ -27,15 +27,14 @@ class Site < ActiveRecord::Base
     delay :set_install_type
   end
 
-  after_update :regenerate_script, unless: :script_generated_at_changed?
-
-  after_touch do
-    regenerate_script
-  end
+  after_update :regenerate_script
+  after_touch  :regenerate_script
 
   after_commit do
-    generate_script if needs_script_regeneration?
-    @needs_script_regeneration = false
+    if needs_script_regeneration?
+      generate_script
+      @needs_script_regeneration = false
+    end
   end
 
   def needs_script_regeneration?
@@ -452,7 +451,7 @@ class Site < ActiveRecord::Base
 =end
 
   def generate_static_assets(options = {})
-    update_attribute(:script_attempted_to_generate_at, Time.now)
+    update_column(:script_attempted_to_generate_at, Time.now)
 
     Timeout::timeout(20) do
       generated_script_content = options[:script_content] || script_content(true)
@@ -474,8 +473,7 @@ class Site < ActiveRecord::Base
         end
       end
     end
-
-    update_attribute(:script_generated_at, Time.now)
+    update_column(:script_generated_at, Time.now)
   end
 
   def generate_blank_static_assets
