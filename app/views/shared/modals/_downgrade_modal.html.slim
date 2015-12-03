@@ -8,4 +8,5 @@ script id='downgrade-template' type='text/x-handlebars-template'
         ' for Hello Bar to 1 out of 10 visitors.
 
       footer
+        a.button.cancel.do-not-save Cancel
         = link_to "Downgrade", downgrade_site_path(current_site), method: :put, class: "button"

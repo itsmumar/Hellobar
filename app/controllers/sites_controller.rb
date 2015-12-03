@@ -2,11 +2,11 @@ class SitesController < ApplicationController
   include SitesHelper
   include Subscribable
 
-  before_action :authenticate_user!, :except => :create
-  before_action :load_site, :only => [:show, :edit, :update, :destroy, :install, :preview_script, :script, :improve, :chart_data, :team, :downgrade]
-  before_action :get_suggestions, :only => :improve
-  before_action :get_top_performers, :only => :improve
-  before_action :load_bills, :only => :edit
+  before_action :authenticate_user!, except: :create
+  before_action :load_site, except: [:index, :new, :create]
+  before_action :get_suggestions, only: :improve
+  before_action :get_top_performers, only: :improve
+  before_action :load_bills, only: :edit
 
   skip_before_action :verify_authenticity_token, :only => [:preview_script, :script]
 
