@@ -20,7 +20,7 @@ class Admin::BillsController < ApplicationController
   def refund
     bill = Bill.find(params[:bill_id])
     begin
-      amount = params[:full_amount] ? nil : params[:bill_recurring][:amount].to_f
+      amount = params[:bill_recurring][:amount].to_f
       bill.refund!(nil, amount)
       flash[:success] = "Refund successful: Refunded #{amount} of #{bill.amount}."
     rescue BillingAttempt::InvalidRefund, Bill::InvalidBillingAmount => e

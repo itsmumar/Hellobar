@@ -115,7 +115,6 @@ class Bill < ActiveRecord::Base
   end
 
   # Can optionally specify a partial amount or description
-  # Note: amount must be negative
   def refund!(description = nil, amount=nil)
     successful_billing_attempt.refund!(description, amount)
   end
