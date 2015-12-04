@@ -351,6 +351,13 @@ describe PaymentMethod do
       refund_bill.amount.should == -5
     end
 
+    it "should allow a positive number and treat it as negative" do
+      subscription = subscriptions(:always_successful_subscription)
+      billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
+      refund_bill, refund_attempt = billing_attempt.refund!(nil, 5)
+      refund_bill.amount.should == -5
+    end
+
     it "should let you specify description" do
       subscription = subscriptions(:always_successful_subscription)
       billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
