@@ -12,7 +12,6 @@ class ConditionsController < ApplicationController
     condition = @rule.conditions.new condition_params
 
     if rule.save
-      @site.generate_script
       render :json => rule
     else
       render :json => rule.errors, :status => :unprocessable_entity
@@ -25,7 +24,6 @@ class ConditionsController < ApplicationController
     if rule.editable?
       rp = rule_params.permit!
       if rule.update_conditions(rp.delete("conditions_attributes")) && rule.update_attributes(rp)
-        @site.generate_script
         render :json => rule and return
       end
     end
@@ -38,7 +36,6 @@ class ConditionsController < ApplicationController
     if @site.rules.count == 1
       render :nothing => true, :status => :unprocessable_entity
     elsif rule.editable? && rule.destroy
-      @site.generate_script
       render :nothing => true, :status => :ok
     else
       render :json => rule.errors, :status => :unprocessable_entity

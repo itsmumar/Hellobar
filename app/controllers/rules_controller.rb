@@ -15,7 +15,6 @@ class RulesController < ApplicationController
     rule = @site.rules.new rule_params.permit!
 
     if rule.save
-      @site.generate_script
       render :json => rule
     else
       render :json => rule.errors, :status => :unprocessable_entity
@@ -26,7 +25,6 @@ class RulesController < ApplicationController
     rule = @site.rules.find(params[:id])
 
     if rule.editable? && rule.update_attributes(rule_params.permit!)
-      @site.generate_script
       render :json => rule
     else
       render :json => format_errors(rule.errors), :status => :unprocessable_entity
@@ -39,7 +37,6 @@ class RulesController < ApplicationController
     if @site.rules.count == 1
       render :nothing => true, :status => :unprocessable_entity
     elsif rule.editable? && rule.destroy
-      @site.generate_script
       render :nothing => true, :status => :ok
     else
       render :json => rule.errors, :status => :unprocessable_entity

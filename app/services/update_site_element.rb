@@ -25,7 +25,6 @@ class UpdateSiteElement
       return false
     end
 
-    @element.site.generate_script
     true
   end
 
