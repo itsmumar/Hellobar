@@ -15,7 +15,7 @@ describe UpdateSiteElement do
     end
 
     before do
-      allow_any_instance_of(Site).to receive(:generate_script)
+      allow_any_instance_of(Site).to receive(:regenerate_script)
     end
 
     context "when update is successful" do
@@ -32,7 +32,7 @@ describe UpdateSiteElement do
 
         updater.update(valid_params)
 
-        expect(element.site).to have_received(:generate_script)
+        expect(element.site).to have_received(:regenerate_script)
       end
 
       it "updates the attributes" do
