@@ -94,6 +94,8 @@ class @ContactListModal extends Modal
       localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
 
       @options.window.location = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
+      if @_getFormData().data.api_key
+        @options.window.location += "&api_key=#{@_getFormData().data.api_key}"
 
   _bindSubmit: (object) ->
     object.find("a.submit").click (e) =>
@@ -161,11 +163,25 @@ class @ContactListModal extends Modal
       name: @$modal.find("form #contact_list_name").val()
       provider: @$modal.find("form #contact_list_provider").val()
       double_optin: if @$modal.find("form #contact_list_double_optin").prop("checked") then "1" else "0"
+      data: @_getContactListData()
+    }
+
+  _getContactListData: ->
+    if @_isLocalContactStorage() then return {}
+    data = {
       data:
         remote_id: $(remoteListSelect).val()
         remote_name: $(remoteListSelect).find("option:selected").text()
         embed_code: $('#contact_list_embed_code').val()
     }
+
+    api_key = $('#contact_list_api_key').val()
+    if api_key then data.api_key = api_key
+
+    data
+
+  _isLocalContactStorage: ->
+    formData.provider == "0"
 
   _renderBlock: (name, context, bind = true) ->
     block = @blocks[name].html(@templates[name](context))
@@ -193,6 +209,7 @@ class @ContactListModal extends Modal
       provider: value
       providerName: label
       requiresEmbedCode: option.data('requiresEmbedCode')
+      requiresApiKey: option.data('requiresApiKey')
       contactList: @options.contactList
 
     if value == "0" # user selected "in Hello Bar only"
