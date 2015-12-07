@@ -1943,6 +1943,9 @@ var _HB = {
     // Remove any caption
     siteElement['caption'] = '';
 
+    // Remove any image
+    siteElement['image_url'] = null;
+
     // Set colors for each type
     siteElement['primary_color'] = hellobarColor;
     siteElement['background_color'] = hellobarColor;
