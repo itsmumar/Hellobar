@@ -1,2 +1,17 @@
 .statistics-page
+
+  - if @site.current_subscription.try(:problem_with_payment?)
+    div.info-block
+      ' Your subscription has not been renewed!  Act today to keep using
+      = @site.current_subscription.values[:name]
+      ' .
+
+      a.show-upgrade-modal.button.inline-button
+        ' Keep Hello Bar
+        = @site.current_subscription.values[:name]
+      ' or
+      a.show-downgrade-modal.underlined
+        | downgrade to free
+      | .
+
   = render "sites/statistics"
