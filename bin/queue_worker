@@ -86,7 +86,8 @@ class QueueWorker
   end
 
   # Gets 1-10 messages and processes them
-  def process_next_job
+  def process_next_jobs
+    processed_at_least_one_job_successfully = false
     begin
       # Get the messages
       messages = @queue.receive_message(limit: @config[:run_once] ? 1 : 10, wait_time_seconds: 3, attributes: [:sent_at])
@@ -120,6 +121,7 @@ class QueueWorker
             # Invoke the task
             begin
               Rake.application.invoke_task(task)
+              processed_at_least_one_job_successfully = true
             rescue RuntimeError => error
               if error.message =~ /Don't know how to build task/
                 # Attempt to call the method on the class
@@ -193,6 +195,7 @@ class QueueWorker
       # getting the messages from the queue
       QueueWorker.log(e)
     end
+    return processed_at_least_one_job_successfully
   end
 end
 # Load up Rake and Rails
@@ -240,7 +243,7 @@ puts "Starting #{config[:num_workers]} workers."
 if config[:run_once]
   # If we run once just call process_next_job and quit
   worker.start
-  worker.process_next_job
+  worker.process_next_jobs
 else
   # If we are running in normal (daemonized) mode then we
   # need to fork this process
@@ -269,13 +272,13 @@ else
       worker.start
       loop do
         # Process jobs in a loop
-        worker.process_next_job
+        processed_at_least_one_job_successfully = worker.process_next_jobs
         # Exit if signal sent
         if $exit_signal_sent
           QueueWorker.log("Exiting due to SIG#{$exit_signal_sent}")
           break
         end
-        sleep 0.2 # Sleep a little so we don't overload the CPU when there are no jobs
+        sleep 1.0 unless processed_at_least_one_job_successfully # Sleep a little so we don't overload the CPU when there are no jobs
       end
     end
     # Finish the daemonize bit
