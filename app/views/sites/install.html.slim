@@ -43,7 +43,7 @@
 
     .reveal-block.wordpress-reveal
       strong 1) Download Your Plugin
-      = link_to site_wordpress_plugin_path(@site), :method => :get, :class => "button" do
+      = link_to site_wordpress_plugin_path(@site), method: :get, class: "button" do
         i.icon-download
         span Download
       small 1MB
@@ -62,10 +62,10 @@
     p If someone else manages your website, we can email them the instructions for you.
 
     .reveal-block.developer-reveal
-      = form_tag email_developer_contact_submission_path, :method => :post do |f|
+      = form_tag email_developer_contact_submission_path, method: :post do |f|
         = hidden_field_tag :site_id, @site.id
         label To:
-        = email_field :developer_email, "", :placeholder => "Your developer's email address"
+        = email_field :developer_email, "", placeholder: "Your developer's email address"
         label From:
         pre Hello Bar &lt;contact@hellobar.com&gt;
 
@@ -80,7 +80,7 @@
 
         pre= "Thank you!"
 
-        = submit_tag "Send", :class => "button"
+        = submit_tag "Send", class: "button"
 
   .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "i_need_help"}.to_json
     i.icon-support
@@ -97,4 +97,4 @@
 
         = text_area_tag :message, ""
 
-        = submit_tag "Send", :class => "button"
+        = submit_tag "Send", class: "button", data: { disable_with: "Sending..." }
