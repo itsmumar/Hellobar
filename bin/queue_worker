@@ -38,7 +38,7 @@ class QueueWorker
       File.open(File.join(Rails.root,"log", "failed_jobs.#{Time.now.strftime("%Y-%m-%d")}.log"), "a"){|f| f.puts(job)}
     end
 
-    # We log messages to a file (log/queue_worker.log) or to stdout when just running one
+    # We log messages to a file (QueueWorker::LOG_FILE) or to stdout when just running one
     def log(msg, type = "INFO")
       # If the message is an exception get the backtrace too and set
       # the type to ERRO
@@ -57,7 +57,7 @@ class QueueWorker
         puts line
       else
         # Re-open the file handle every time. Slightly slower, but simpler.
-        File.open(File.join(Rails.root,"log", "queue_worker.log"), "a"){|f| f.puts(line)}
+        File.open(QueueWorker::LOG_FILE, "a"){|f| f.puts(line)}
       end
       if exception
         # We also want to capture this with Raven, but only after logging to our own file

@@ -1,5 +1,6 @@
 class QueueWorker
   STAGES = %w(edge staging production)
+  LOG_FILE = File.join(Rails.root, "log", "queue_worker.log")
 
   module Delay
     def delay(task_name, options={})
