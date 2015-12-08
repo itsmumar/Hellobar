@@ -113,7 +113,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       raise error
     when 214
       # Email already existed in list, don't do anything
-    when -100
+    when -100, -99
       # Email is invalid
     else
       # bubble up to email_synchronizer, which will catch if it is a transient error
