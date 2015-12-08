@@ -28,6 +28,11 @@
         .button.upgrade-account-modal
           | Upgrade Plan
 
+      - elsif current_site.current_subscription.try(:trial?)
+        .button.upgrade-account-modal
+          div Enjoying Hello Bar Pro?
+          div Click here to keep it.
+
       .dropdown-wrapper
         = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
         span.user-name= display_name_for_user(current_user)

@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   get "user/new/:invite_token", :to => "user#new", :as => :invite_user
 
   resources :sites do
+    member do
+      put :downgrade
+    end
+
     get "team"
 
     resource :wordpress_plugin, :controller => :wordpress_plugin
