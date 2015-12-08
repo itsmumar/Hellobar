@@ -38,3 +38,7 @@ end
 every 2.minutes, :roles => [:web, :worker] do
   rake "queue_worker:resurrect"
 end
+
+every 5.minutes, :roles => [:web, :worker] do
+  rake "queue_worker:metrics"
+end

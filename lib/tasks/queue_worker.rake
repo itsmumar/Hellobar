@@ -66,4 +66,72 @@ namespace :queue_worker do
       end
     end
   end
+
+  desc 'Reports queue_worker stats to AWS CloudWatch'
+  task :metrics do
+    # Note: the cutoff time should match how frequently
+    # the metrics are updated
+    cut_off_time = Time.now-5.minutes
+    # Set zero values in case the logs don't have any values
+    stats = {
+      "Errors" => 0,
+      "NumJobsReceived" => 0,
+      "NumJobsProcessed" => 0
+    }
+    # Scan through the log backwards using Efil until
+    # you find a line that doesn't meet the cut_off_time
+    log_line_pattern = /\[(.*?)\] (\d\d\d\d\-\d\d\-\d\d \d\d:\d\d:\d\d UTC) .*? => (.*)/
+    num_lines = 0
+    require 'queue_worker/queue_worker'
+
+    Elif.open(QueueWorker::LOG_FILE) do |file|
+      loop do
+        # Stop processing once we reach the end of the file
+        line = file.gets
+        num_lines += 1
+        break unless line
+        # Parse the line
+        if line =~ log_line_pattern
+          type, date, message = $1, $2, $3
+          date = Time.parse(date)
+          # Stop processing once we reach the cut off date
+          break unless date > cut_off_time
+          if type == "ERRO"
+            stats["Errors"] += 1
+          elsif message =~ /Received/
+            stats["NumJobsReceived"] += 1
+          elsif message =~ /Processed/
+            stats["NumJobsProcessed"] += 1
+          end
+        end
+      end
+    end
+    puts "Scanned #{num_lines} lines of data"
+
+    # Convert the data into the Cloudwatch format
+    metrics = []
+    host = `hostname`.chomp # Get the hostname so we can filter by host
+    stats.each do |name, value|
+      metrics << {
+        metric_name: "QueueWorker#{name}",
+        dimensions: [
+          {name: "Host", value: host}
+        ],
+        value: value,
+        unit: "Count"
+      }
+    end
+
+    # Send the data to Cloudwatch
+    require File.join(Rails.root, "config/initializers/settings.rb")
+    stage = Hellobar::Settings[:env_name]
+    data = {
+      namespace: "HB/#{stage}",
+      metric_data: metrics
+    } 
+    pp data
+    cloudwatch = AWS::CloudWatch::Client.new
+    response = cloudwatch.put_metric_data(data)
+    pp response
+  end
 end
