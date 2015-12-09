@@ -111,15 +111,19 @@ namespace :queue_worker do
     # Convert the data into the Cloudwatch format
     metrics = []
     host = `hostname`.chomp # Get the hostname so we can filter by host
+    dimensions = [
+      [{name: "Host", value: host}],
+      [{name: "System", value: "All"}]
+    ]
     stats.each do |name, value|
-      metrics << {
-        metric_name: "QueueWorker#{name}",
-        dimensions: [
-          {name: "Host", value: host}
-        ],
-        value: value,
-        unit: "Count"
-      }
+      dimensions.each do |dimension|
+        metrics << {
+          metric_name: "QueueWorker#{name}",
+          dimensions: dimension,
+          value: value,
+          unit: "Count"
+        }
+      end
     end
 
     # Send the data to Cloudwatch
