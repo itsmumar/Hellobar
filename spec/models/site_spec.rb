@@ -489,4 +489,39 @@ describe Site do
       expect(Site.normalize_url("https://cnn.com").scheme).to eq("http")
     end
   end
+
+  describe "#had_wordpress_bars?" do
+    it "returns true when some site elements are migrated from wordpress" do
+      site_element = create(:site_element, wordpress_bar_id: 123)
+      expect(site_element.site.had_wordpress_bars?).to be(true)
+    end
+
+    it "returns false when no site elements are migrated from wordpress" do
+      site_element = create(:site_element, wordpress_bar_id: nil)
+      expect(site_element.site.had_wordpress_bars?).to be(false)
+    end
+  end
+
+  describe "#script_installed_on_homepage?" do
+    it "returns true when the script is installed at the url"  do
+      site_element = create(:site_element)
+      site = site_element.site
+      allow(HTTParty).to receive(:get).and_return("<html><script src='#{site_element.site.script_url}'></html>")
+      expect(site.script_installed_on_homepage?).to be(true)
+    end
+
+    it "returns true when the site had wordpress bars and has the old script"  do
+      site_element = create(:site_element, wordpress_bar_id: 123)
+      site = site_element.site
+      allow(HTTParty).to receive(:get).and_return("<html><script src='hellobar.js'></html>")
+      expect(site.script_installed_on_homepage?).to be(true)
+    end
+
+    it "returns false when the site does not have the script"  do
+      site_element = create(:site_element)
+      site = site_element.site
+      allow(HTTParty).to receive(:get).and_return("<html><script src='foobar.js'></html>")
+      expect(site.script_installed_on_homepage?).to be(false)
+    end
+  end
 end

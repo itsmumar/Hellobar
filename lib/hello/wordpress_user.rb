@@ -1,5 +1,6 @@
 class Hello::WordpressUser < Hello::WordpressModel
   self.table_name = "hbwp_users"
+  PRO_TRIAL_PERIOD = 30.days
 
   def self.email_exists?(email)
     @@connected ? (where(['user_email = ? or user_login = ?', email, email]).count >= 1) : false

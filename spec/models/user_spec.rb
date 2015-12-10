@@ -312,4 +312,19 @@ describe User do
       end
     end
   end
+
+  describe "#valid_password?" do
+    let(:user) { create(:user) }
+    let(:old_password) { "$P$BU98UgT90LUAD0WPMirJKodNRXW.G5." }
+
+    it "works for old hellobar passwords" do
+      user.encrypted_password = old_password
+      expect(user.valid_password?("test1234")).to be(true)
+    end
+
+    it "catches bcrypt errors when using old hellobar passwords" do
+      user.encrypted_password = old_password
+      expect(user.valid_password?("wrong password")).to be(false)
+    end
+  end
 end
