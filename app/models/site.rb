@@ -95,7 +95,13 @@ class Site < ActiveRecord::Base
 
   def script_installed_on_homepage?
     response = HTTParty.get(self.url, timeout: 5)
-    response =~ /#{script_name}/
+    if response =~ /#{script_name}/
+      true
+    elsif (had_wordpress_bars? && response =~ /hellobar.js/)
+      true
+    else
+      false
+    end
   rescue
     return false
   end
@@ -313,6 +319,10 @@ class Site < ActiveRecord::Base
 
   def owners
     users.where(site_memberships: { role: Permissions::OWNER } )
+  end
+
+  def had_wordpress_bars?
+    site_elements.where.not(wordpress_bar_id: nil).any?
   end
 
   def self.id_to_script_hash(id)

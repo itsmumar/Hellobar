@@ -109,6 +109,8 @@ class User < ActiveRecord::Base
 
   def valid_password?(password)
     Phpass.new.check(password, encrypted_password) || super
+  rescue BCrypt::Errors::InvalidHash
+    false
   end
 
   def is_oauth_user?
