@@ -49,28 +49,28 @@ describe SiteElementsHelper do
 
   describe "#recent_activity_message" do
     context "with no conversions" do
-      it "uses the right noun to describe conversions for traffic elements" do
+      it "is silent for traffic elements" do
         element = site_elements(:zombo_traffic)
         element.stub(:total_conversions => 0, :total_views => 0)
-        recent_activity_message(element).should =~ /hasn't resulted in any clicks yet/
+        expect(recent_activity_message(element)).to be_nil
       end
 
-      it "uses the right noun to describe conversions for email elements" do
+      it "is silent for email elements" do
         element = site_elements(:zombo_email)
         element.stub(:total_conversions => 0, :total_views => 0)
-        recent_activity_message(element).should =~ /hasn't resulted in any emails collected yet/
+        expect(recent_activity_message(element)).to be_nil
       end
 
-      it "uses the right noun to describe conversions for twitter elements" do
+      it "is silent for twitter elements" do
         element = site_elements(:zombo_twitter)
         element.stub(:total_conversions => 0, :total_views => 0)
-        recent_activity_message(element).should =~ /hasn't resulted in any tweets yet/
+        expect(recent_activity_message(element)).to be_nil
       end
 
-      it "uses the right noun to describe conversions for facebook elements" do
+      it "is silent for facebook elements" do
         element = site_elements(:zombo_facebook)
         element.stub(:total_conversions => 0, :total_views => 0)
-        recent_activity_message(element).should =~ /hasn't resulted in any likes yet/
+        expect(recent_activity_message(element)).to be_nil
       end
     end
 
