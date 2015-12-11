@@ -28,7 +28,7 @@ describe PaymentMethodsController, '#index' do
     payment_method_ids.should == user.payment_methods.map(&:id)
   end
 
-  it 'reutnrs an array of user payment methods without a site_id as a parameter' do
+  it 'returns an array of user payment methods without a site_id as a parameter' do
     get :index
 
     response.should be_success
@@ -59,16 +59,24 @@ describe PaymentMethodsController, '#update' do
   let(:site) { sites(:zombo) }
 
   context 'updating a payment detail' do
-    it 'changes the subscription with the correct payment method and detail' do
+    let(:payment_method) { payment_methods(:always_successful) }
+    let(:data) { PaymentForm.new({}).to_hash }
+    let(:put_params) {
+      { id: payment_method.id, payment_method_details: {}, billing: { plan: 'pro', schedule: 'monthly' }, site_id: site.id }
+    }
+    before do
       Site.any_instance.stub(has_script_installed?: true)
-      payment_method = payment_methods(:always_successful)
-      data = PaymentForm.new({}).to_hash
+      allow(CyberSourceCreditCard).to receive(:new).
+        with(payment_method: payment_method, data: data).
+        and_return(PaymentMethodDetails.new)
+    end
 
+    it 'changes the subscription with the correct payment method and detail' do
       CyberSourceCreditCard.should_receive(:new).
                             with(payment_method: payment_method, data: data).
                             and_return(PaymentMethodDetails.new)
-
-      put :update, id: payment_method.id, payment_method_details: {}, billing: { plan: 'pro', schedule: 'monthly' }, site_id: site.id
+      put :update, put_params
     end
+
   end
 end

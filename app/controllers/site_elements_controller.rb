@@ -43,7 +43,6 @@ class SiteElementsController < ApplicationController
 
     if @site_element.valid?
       @site_element.save!
-      @site.generate_script
       render :json => @site_element, serializer: SiteElementSerializer
     else
       render :json => @site_element, :status => :unprocessable_entity, serializer: SiteElementSerializer
@@ -61,7 +60,6 @@ class SiteElementsController < ApplicationController
 
   def destroy
     @site_element.destroy
-    @site.generate_script
 
     respond_to do |format|
       format.js { head :ok }
@@ -74,7 +72,6 @@ class SiteElementsController < ApplicationController
 
   def toggle_paused
     @site_element.toggle_paused!
-    @site.generate_script
 
     respond_to do |format|
       format.js { head :ok }

@@ -25,7 +25,7 @@ class SiteElement < ActiveRecord::Base
 
   SHORT_SUBTYPES = %w{traffic email social announcement}
 
-  belongs_to :rule
+  belongs_to :rule, touch: true
   belongs_to :contact_list
   belongs_to :active_image, class_name: "ImageUpload"
 

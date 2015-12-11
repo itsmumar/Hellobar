@@ -32,7 +32,7 @@ class Condition < ActiveRecord::Base
     less_than: 'is less than'
   }.with_indifferent_access
 
-  belongs_to :rule, inverse_of: :conditions
+  belongs_to :rule, inverse_of: :conditions, touch: true
 
   before_validation :clear_blank_values
   before_validation :format_string_values

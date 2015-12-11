@@ -145,7 +145,6 @@ class SitesController < ApplicationController
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rule
-      @site.generate_script
 
       redirect_to new_site_site_element_path(@site)
     else
@@ -164,7 +163,6 @@ class SitesController < ApplicationController
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rule
-      @site.generate_script
 
       redirect_to new_site_site_element_path(@site)
     else

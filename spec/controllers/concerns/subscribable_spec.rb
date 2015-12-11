@@ -81,6 +81,22 @@ describe Subscribable, '#update_subscription' do
     include Subscribable
   end
 
+  describe "recovering from a failed payment" do
+    let(:site) { sites(:horsebike) }
+    let(:billing_params) { { plan: 'pro', schedule: 'yearly', trial_period: '60' } }
+    let(:pro) { Subscription::Pro.new(user: users(:joey), site: site) }
+
+    it 'removes the branding from pro subscriptions' do
+      site.change_subscription(pro, payment_methods(:always_fails))
+      expect(site.capabilities(true).remove_branding?).to be(false)
+      expect(site.site_elements.all? { |se| se.show_branding }).to be(true)
+
+      controller.update_subscription(site, payment_methods(:always_successful), billing_params)
+      expect(site.capabilities(true).remove_branding?).to be(true)
+      expect(site.site_elements.none? { |se| se.show_branding }).to be(true)
+    end
+  end
+
   context "trial_period" do
     it 'translates the trial_period to days' do
       billing_params = { plan: 'pro', schedule: 'yearly', trial_period: '60'}
@@ -96,4 +112,5 @@ describe Subscribable, '#update_subscription' do
       controller.update_subscription(site, nil, billing_params)
     end
   end
+
 end
