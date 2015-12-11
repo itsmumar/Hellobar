@@ -25,8 +25,8 @@ class @UpgradeAccountModal extends Modal
     if !@options.site.view_billing then @_invalidPermissions()
     @_bindPackageSelection()
 
-    # I think this is enough to track all upgrade prompts...
-    InternalTracking.track_current_person("Viewed Upgrade", { source: @options.upgradeBenefit })
+    source = @options.source || @options.upgradeBenefit
+    InternalTracking.track_current_person("Viewed Upgrade", { source: source })
 
     super
 

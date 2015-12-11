@@ -12,6 +12,7 @@ $ ->
   $('.show-upgrade-modal').click ->
     options =
       site: window.site
+      source: $(this).data('source')
     new UpgradeAccountModal(options).open()
 
   $('.show-downgrade-modal').click ->
