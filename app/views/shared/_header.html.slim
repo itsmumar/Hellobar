@@ -40,7 +40,7 @@
         .dropdown-block
           = active_link_to 'User Settings', profile_path()
           - if current_site.is_free?
-            = content_tag 'a', 'Upgrade Plan', class: "show-upgrade-modal", data={source: "Header Drop-down"}
+            = content_tag 'a', 'Upgrade Plan', class: "show-upgrade-modal", data: { source: "Header Drop-down" }
           - else
             = content_tag 'a', 'Payment Info', class: "show-payment-modal"
           - if impersonated_user

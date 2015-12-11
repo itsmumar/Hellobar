@@ -32,7 +32,8 @@ describe Subscribable, '#subscription_bill_and_status' do
     serializer = double 'SiteSerializer'
     SiteSerializer.stub new: serializer
 
-    Analytics.should_receive(:track).with(:site, site.id, :change_sub, anything)
+    allow(controller).to receive(:track_upgrade)
+    expect(Analytics).to receive(:track).with(:site, site.id, :change_sub, anything)
 
     controller.subscription_bill_and_status(site, 'payment_method', 'billing_params', nil).should == { bill: bill, site: serializer, is_upgrade: true, status: :ok }
   end
