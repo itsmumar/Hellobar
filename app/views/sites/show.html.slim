@@ -6,7 +6,7 @@
       = @site.current_subscription.values[:name]
       ' .
 
-      a.show-upgrade-modal.button.inline-button data: { source: "Payment Problem" }
+      a.show-upgrade-modal.button.inline-button data={ source: "Payment Problem" }
         ' Keep Hello Bar
         = @site.current_subscription.values[:name]
       ' or
