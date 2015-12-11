@@ -78,6 +78,10 @@ class SiteElement < ActiveRecord::Base
     total_views == 0 ? 0 : total_conversions.to_f / total_views
   end
 
+  def has_converted?
+    total_conversions > 0
+  end
+
   def toggle_paused!
     new_pause_state = !paused?
 
@@ -120,6 +124,10 @@ class SiteElement < ActiveRecord::Base
 
   def after_email_submit_action
     AFTER_EMAIL_ACTION_MAP[settings["after_email_submit_action"]]
+  end
+
+  def is_announcement?
+    element_subtype == "announcement"
   end
 
   private

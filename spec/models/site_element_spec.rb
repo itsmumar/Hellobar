@@ -259,6 +259,21 @@ describe SiteElement do
     end
   end
 
+  describe "#has_converted?" do
+    let(:site) { sites(:zombo) }
+    let(:element) { site_elements(:zombo_traffic) }
+
+    it 'is false when there are no conversions', aggregate_failures: true do
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
+      expect(element).not_to have_converted
+    end
+
+    it 'is true when there are conversions', aggregate_failures: true do
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]])})
+      expect(element).to have_converted
+    end
+  end
+
   describe "#display_thank_you_text" do
     let(:element) { site_elements(:zombo_email) }
 
