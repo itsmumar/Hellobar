@@ -2,6 +2,7 @@ namespace :billing do
   desc 'Runs the recurring billing'
   task :run => :environment do |t, args|
     include ActionView::Helpers::NumberHelper
+
     MIN_RETRY_TIME = 3.days
     MAX_RETRY_TIME = 30.days
     now = Time.now
@@ -80,12 +81,15 @@ namespace :billing do
       billing_report "#{e.class}: #{e.message}\n  #{e.backtrace.collect{|l| "  #{l}"}.join("\n  ")}"
       exit
     ensure
-      emails = %w{imtall@gmail.com}
-      Pony.mail({
-        to: emails.join(", "),
-        subject: "#{now.strftime("%Y-%m-%d")} - #{num_bills} bills processed for #{number_to_currency(amount_successful)} with #{num_failed} failures",
-        body: @billing_report_log.collect{|l| "  #{l}"}.join("\n")
-      })
+      stage = Hellobar::Settings[:env_name]
+      if Rails.env.production? and stage == "production"
+        emails = %w{imtall@gmail.com}
+        Pony.mail({
+          to: emails.join(", "),
+          subject: "#{now.strftime("%Y-%m-%d")} - #{num_bills} bills processed for #{number_to_currency(amount_successful)} with #{num_failed} failures",
+          body: @billing_report_log.collect{|l| "  #{l}"}.join("\n")
+        })
+      end
     end
   end
 end
