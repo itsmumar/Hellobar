@@ -5,7 +5,7 @@ module ServiceProviders
       if opts[:identity]
         identity = opts[:identity]
       elsif opt[:site]
-        identity = opts[:site].identities.where(:provider => 'get_response_api').first
+        identity = opts[:site].identities.find_by_provider!('get_response_api')
         raise "Site does not have a stored GetResponse identity" unless identity
       end
 
@@ -31,7 +31,7 @@ module ServiceProviders
         response_hash.map {|list| {'id' => list['campaignId'], 'name' => list['name']}}
       else
         error_message = JSON.parse(response.body)['codeDescription']
-        log "sync error #{email} sync returned '#{error_message}' with the code #{response.status}"
+        log "getting lists returned '#{error_message}' with the code #{response.status}"
       end
     end
 

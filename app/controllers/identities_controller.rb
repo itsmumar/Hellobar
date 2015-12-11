@@ -27,7 +27,8 @@ class IdentitiesController < ApplicationController
     if params[:api_key]
       #TODO sanitze me?
       identity.api_key = params[:api_key]
-      env["omniauth.params"] = {"redirect_to" => request.referrer}
+      env["omniauth.params"] ||= {}
+      env["omniauth.params"].merge!({"redirect_to" => request.referrer})
     else
       identity.credentials = env["omniauth.auth"]["credentials"]
       identity.extra = env["omniauth.auth"]["extra"]
