@@ -1,0 +1,12 @@
+h1 Upgrade your Hello Bar account<br>to enjoy the latest features.
+p Create Hello Bars that show the right message at the right time to your website visitors.
+
+.start-form
+  - if flash[:error]
+    .error= flash[:error]
+  = form_tag start_user_migration_path do
+    = text_field_tag(:email, "", placeholder: "Your Hello Bar Email")
+    = password_field_tag(:password, "", placeholder: "Your Hello Bar Password")
+    = submit_tag "Get Started"
+
+= render "pages/use_case_blocks"
