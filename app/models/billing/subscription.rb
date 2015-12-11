@@ -4,7 +4,7 @@ require 'discount_calculator'
 class Subscription < ActiveRecord::Base
   include BillingAuditTrail
   belongs_to :user
-  belongs_to :site
+  belongs_to :site, touch: true
   belongs_to :payment_method
   enum schedule: [:monthly, :yearly]
   has_many :bills, -> {order "id"}, inverse_of: :subscription

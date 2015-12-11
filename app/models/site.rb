@@ -27,6 +27,27 @@ class Site < ActiveRecord::Base
     delay :set_install_type
   end
 
+  after_update :regenerate_script
+  after_touch  :regenerate_script
+
+  after_commit do
+    if needs_script_regeneration?
+      generate_script
+      @needs_script_regeneration = false
+    end
+  end
+
+  def needs_script_regeneration?
+    !!@needs_script_regeneration
+  end
+
+  def regenerate_script
+    # ONLY DO THIS IF IT HAS BEEN GENERATED AT LEAST ONCE.
+    if script_generated_at && (script_generated_at < updated_at) && !destroyed?
+      @needs_script_regeneration = true
+    end
+  end
+
   validates :url, url: true
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
@@ -440,7 +461,7 @@ class Site < ActiveRecord::Base
 =end
 
   def generate_static_assets(options = {})
-    update_attribute(:script_attempted_to_generate_at, Time.now)
+    update_column(:script_attempted_to_generate_at, Time.now)
 
     Timeout::timeout(20) do
       generated_script_content = options[:script_content] || script_content(true)
@@ -462,8 +483,7 @@ class Site < ActiveRecord::Base
         end
       end
     end
-
-    update_attribute(:script_generated_at, Time.now)
+    update_column(:script_generated_at, Time.now)
   end
 
   def generate_blank_static_assets

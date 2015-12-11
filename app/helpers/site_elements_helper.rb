@@ -101,14 +101,13 @@ module SiteElementsHelper
     message += "</strong>"
 
     # how many conversions has this site element resulted in?
-    if element.element_subtype == "announcement"
+    if element.is_announcement?
       return "#{message} has already resulted in #{number_with_delimiter(element.total_views)} views.".html_safe
-    elsif conversions == 0
-      conversion_description = site_element_activity_units([element], :plural => true, :verb => true)
-      return "#{message} hasn't resulted in any #{conversion_description} yet.".html_safe
-    else
+    elsif element.has_converted?
       conversion_description = site_element_activity_units([element], :plural => conversions > 1, :verb => true)
       message << " has already resulted in #{number_with_delimiter(conversions)} #{conversion_description}."
+    else
+      return # no conversions, so just be quiet about it.
     end
 
     elements_in_group = element.site.site_elements.where.not(:id => element.id).select{ |e| e.short_subtype == element.short_subtype }

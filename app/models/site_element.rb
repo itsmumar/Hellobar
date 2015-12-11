@@ -25,7 +25,7 @@ class SiteElement < ActiveRecord::Base
 
   SHORT_SUBTYPES = %w{traffic email social announcement}
 
-  belongs_to :rule
+  belongs_to :rule, touch: true
   belongs_to :contact_list
   belongs_to :active_image, class_name: "ImageUpload"
 
@@ -78,6 +78,10 @@ class SiteElement < ActiveRecord::Base
     total_views == 0 ? 0 : total_conversions.to_f / total_views
   end
 
+  def has_converted?
+    total_conversions > 0
+  end
+
   def toggle_paused!
     new_pause_state = !paused?
 
@@ -120,6 +124,10 @@ class SiteElement < ActiveRecord::Base
 
   def after_email_submit_action
     AFTER_EMAIL_ACTION_MAP[settings["after_email_submit_action"]]
+  end
+
+  def is_announcement?
+    element_subtype == "announcement"
   end
 
   private

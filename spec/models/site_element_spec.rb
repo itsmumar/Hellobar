@@ -259,6 +259,21 @@ describe SiteElement do
     end
   end
 
+  describe "#has_converted?" do
+    let(:site) { sites(:zombo) }
+    let(:element) { site_elements(:zombo_traffic) }
+
+    it 'is false when there are no conversions', aggregate_failures: true do
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
+      expect(element).not_to have_converted
+    end
+
+    it 'is true when there are conversions', aggregate_failures: true do
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]])})
+      expect(element).to have_converted
+    end
+  end
+
   describe "#display_thank_you_text" do
     let(:element) { site_elements(:zombo_email) }
 
@@ -282,6 +297,18 @@ describe SiteElement do
         element.stub(:after_email_submit_action).and_return(:something)
         element.display_thank_you_text.should == "test"
       end
+    end
+  end
+
+  describe "when associated with a site" do
+    let(:site_element) { create(:site_element) }
+    let(:site) { site_element.site }
+
+    it 'forces a script regeneration when changed' do
+      site.update_attribute(:script_generated_at, 1.day.ago)
+      site_element.thank_you_text = "#{site_element.thank_you_text}_changed"
+      site_element.save!
+      expect(site.needs_script_regeneration?).to be(true)
     end
   end
 end
