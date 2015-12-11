@@ -107,6 +107,8 @@ Rails.application.routes.draw do
   get "/signup", to: redirect("/")
 
   get "/user_migration", to: "user_migration#new", as: :new_user_migration
+  get "/upgrade", to: "user_migration#upgrade", as: :user_migration_landing
+  post "/start_migration", to: "user_migration#start", as: :start_user_migration
   post "/user_migration", to: "user_migration#create", as: :user_migration
 
   %w( 404 422 500 ).each do |code|

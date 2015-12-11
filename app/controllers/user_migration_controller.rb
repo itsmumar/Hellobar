@@ -1,9 +1,24 @@
 class UserMigrationController < ApplicationController
   layout 'static'
-  before_filter :verify_wordpress_user
+  before_filter :verify_wordpress_user, except: [:upgrade, :start]
 
   def new
     @bars = current_wordpress_user.bars
+  end
+
+  def start
+    email = params[:email]
+    password = params[:password]
+
+    if User.where(email: email).exists?
+      redirect_to login_path, notice: "This email has already been upgraded.  Please log in."
+    elsif wordpress_user = Hello::WordpressUser.authenticate(email, password, !!current_admin)
+      session[:wordpress_user_id] = wordpress_user.id
+      redirect_to new_user_migration_path
+    else
+      flash.now[:error] = "Invalid email or password"
+      render action: :upgrade
+    end
   end
 
   def create
