@@ -5,7 +5,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :type, :element_subtype, :settings, :view_condition,
 
     # text
-    :headline, :caption, :link_text, :font, :thank_you_text, :email_placeholder, :name_placeholder,
+    :headline, :caption, :link_text, :font, :display_thank_you_text, :email_placeholder, :name_placeholder,
 
     # colors
     :background_color, :border_color, :button_color, :link_color, :text_color,
@@ -17,12 +17,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :image_url, :image_placement, :active_image_id, :image_file_name,
 
     # other
-    :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement,
-    :default_email_thank_you
-
-  def default_email_thank_you
-    SiteElement::DEFAULT_EMAIL_THANK_YOU
-  end
+    :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement
 
   def rule
     RuleSerializer.new(object.rule)

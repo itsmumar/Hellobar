@@ -277,6 +277,39 @@ describe SiteElement do
   describe "#display_thank_you_text" do
     let(:element) { site_elements(:zombo_email) }
 
+    context "when it is a free account" do
+      before do
+        allow(element.site).to receive(:is_free?) { true }
+      end
+
+      context "and after_email_submit_action is :show_default_message" do
+        before do
+          allow(element).to receive(:after_email_submit_action) { :show_default_message }
+        end
+
+        it "should return the default message regardless of the thank you text" do
+          element.thank_you_text = "do not show this"
+          element.display_thank_you_text.should == SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU
+        end
+      end
+
+      context "when after_email_submit_action is not :show_default_message" do
+        before do
+          allow(element).to receive(:after_email_submit_action) { :something }
+        end
+
+        it "should return the default message if thank you text not set" do
+          element.thank_you_text = ""
+          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU)
+        end
+
+        it "should return the thank you text" do
+          element.thank_you_text = "show this message"
+          expect(element.display_thank_you_text).to eq("show this message")
+        end
+      end
+    end
+
     context "when after_email_submit_action is :show_default_message" do
       it "should return the default message regardless of the thank you text" do
         element.thank_you_text = "test"

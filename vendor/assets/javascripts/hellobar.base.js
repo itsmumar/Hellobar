@@ -419,7 +419,17 @@ var HB = {
 
         if(!doRedirect) {
           if(targetSiteElement != null)
-            targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
+            var free_default_msg = "If you'd like this sort of bar on your site...";
+            if(thankYouText.match(free_default_msg)) {
+              var btn_class  = ' class="hb-cta hb-cta-style-' + HB.currentSiteElement.link_style + ' ' + HB.currentSiteElement.wiggle + '"';
+              var btn_style  = ' style="color: '+ HB.currentSiteElement.link_color +'; background-color: ' + HB.currentSiteElement.secondary_color + '; border-color: ' + HB.currentSiteElement.secondary_color + ';"';
+              var btn_target = HB.currentSiteElement.open_in_new_window ? ' target=_blank' : ' target=_parent';
+              var button = "<a href='http://www.example.com'"+ btn_class + btn_style + btn_target + ">Click Here</a>"
+              targetSiteElement.innerHTML='<span>' + thankYouText + '&nbsp;' + button + '</span>';
+            } else {
+              targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
+            }
+
           if(removeElement != null) {
             for (var i = 0; i < removeElement.length; i++) {
               HB.hideElement(removeElement[i]);
