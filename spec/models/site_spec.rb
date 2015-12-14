@@ -540,4 +540,24 @@ describe Site do
       expect(site.script_installed_on_homepage?).to be(false)
     end
   end
+
+  describe "after_touch" do
+    context "not destroyed" do
+      it "sets needs_script_regeneration? to true" do
+        site = create(:site)
+        site.touch
+        expect(site.needs_script_regeneration?).to be(true)
+      end
+    end
+
+    context "destroyed" do
+      it "sets needs_script_regeneration? to false" do
+        site = create(:site)
+        allow(site).to receive(:generate_blank_static_assets)
+        site.destroy
+        site.touch
+        expect(site.needs_script_regeneration?).to be(false)
+      end
+    end
+  end
 end

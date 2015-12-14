@@ -42,8 +42,7 @@ class Site < ActiveRecord::Base
   end
 
   def regenerate_script
-    # ONLY DO THIS IF IT HAS BEEN GENERATED AT LEAST ONCE.
-    if script_generated_at && (script_generated_at < updated_at) && !destroyed?
+    if !destroyed?
       @needs_script_regeneration = true
     end
   end
