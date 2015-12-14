@@ -116,6 +116,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def display_thank_you_text
+    return unless is_email?
     if show_default_message?
       default_email_thank_you_text
     else
@@ -138,7 +139,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def default_email_thank_you_text
-    if site.is_free?
+    if site && site.is_free?
       DEFAULT_FREE_EMAIL_THANK_YOU
     else
       DEFAULT_EMAIL_THANK_YOU
