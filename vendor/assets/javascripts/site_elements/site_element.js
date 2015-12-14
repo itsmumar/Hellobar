@@ -248,7 +248,7 @@ SiteElement.prototype.checkForMobileDevice = function(){
 }
 
 
-SiteElement.prototype.setContainerSize: function(container, element, type, isMobile)
+SiteElement.prototype.setContainerSize =  function(container, element, type, isMobile)
 {
   if (HB.e.container == null)
     return;
