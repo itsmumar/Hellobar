@@ -115,12 +115,18 @@ class SiteElement < ActiveRecord::Base
     background_color
   end
 
-  def display_thank_you_text
+  def thank_you_text
     return unless is_email?
     if show_default_message?
       default_email_thank_you_text
     else
-      thank_you_text
+      self[:thank_you_text]
+    end
+  end
+
+  def thank_you_text=(str)
+    unless show_default_message?
+      self[:thank_you_text] = str
     end
   end
 
