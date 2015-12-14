@@ -124,6 +124,14 @@ class SiteElement < ActiveRecord::Base
     end
   end
 
+  def default_email_thank_you_text
+    if site && site.is_free?
+      DEFAULT_FREE_EMAIL_THANK_YOU
+    else
+      DEFAULT_EMAIL_THANK_YOU
+    end
+  end
+
   def after_email_submit_action
     AFTER_EMAIL_ACTION_MAP[settings["after_email_submit_action"]]
   end
@@ -136,14 +144,6 @@ class SiteElement < ActiveRecord::Base
 
   def show_default_message?
     (after_email_submit_action == :show_default_message) || thank_you_text.blank?
-  end
-
-  def default_email_thank_you_text
-    if site && site.is_free?
-      DEFAULT_FREE_EMAIL_THANK_YOU
-    else
-      DEFAULT_EMAIL_THANK_YOU
-    end
   end
 
   def remove_unreferenced_images

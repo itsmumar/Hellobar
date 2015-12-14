@@ -53,7 +53,7 @@
       view Ember.TextField
       class="visible"
       value=model.display_thank_you_text
-      placeholder=model.display_thank_you_text
+      placeholder=model.default_email_thank_you_text
       disabled=true
       maxlength=255
     }}
@@ -63,8 +63,8 @@
     {{else}}
       {{
         view Ember.TextField
-        value=model.thank_you_text
-        placeholder=model.display_thank_you_text
+        value=model.display_thank_you_text
+        placeholder=model.default_email_thank_you_text
         disabled=disableThankYouText
         maxlength=255
       }}
