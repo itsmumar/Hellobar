@@ -277,7 +277,7 @@ private
       tab_side: "right",
       target: site_element.target_segment,
       template_name: "#{site_element.class.name.downcase}_#{site_element.element_subtype}",
-      thank_you_text: SiteElement.sanitize(site_element.display_thank_you_text).gsub(/"/, "&quot;"),
+      thank_you_text: SiteElement.sanitize(site_element.thank_you_text).gsub(/"/, "&quot;"),
       views: views,
       wiggle_wait: 0
     }).select{|key, value| !value.nil? || !value == '' }

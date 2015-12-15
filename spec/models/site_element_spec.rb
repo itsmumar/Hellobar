@@ -274,7 +274,7 @@ describe SiteElement do
     end
   end
 
-  describe "#display_thank_you_text" do
+  describe "#thank_you_text" do
     let(:element) { site_elements(:zombo_email) }
 
     context "when it is a free account" do
@@ -289,7 +289,7 @@ describe SiteElement do
 
         it "should return the default message regardless of the thank you text" do
           element.thank_you_text = "do not show this"
-          element.display_thank_you_text.should == SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU
+          element.thank_you_text.should == SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU
         end
       end
 
@@ -300,12 +300,12 @@ describe SiteElement do
 
         it "should return the default message if thank you text not set" do
           element.thank_you_text = ""
-          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU)
+          expect(element.thank_you_text).to eq(SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU)
         end
 
         it "should return the thank you text" do
           element.thank_you_text = "show this message"
-          expect(element.display_thank_you_text).to eq("show this message")
+          expect(element.thank_you_text).to eq("show this message")
         end
       end
     end
@@ -314,7 +314,7 @@ describe SiteElement do
       it "should return the default message regardless of the thank you text" do
         element.thank_you_text = "test"
         element.stub(:after_email_submit_action).and_return(:show_default_message)
-        element.display_thank_you_text.should == SiteElement::DEFAULT_EMAIL_THANK_YOU
+        element.thank_you_text.should == SiteElement::DEFAULT_EMAIL_THANK_YOU
       end
     end
 
@@ -322,13 +322,13 @@ describe SiteElement do
       it "should return the default message if thank you text not set" do
         element.thank_you_text = ""
         element.stub(:after_email_submit_action).and_return(:something)
-        element.display_thank_you_text.should == SiteElement::DEFAULT_EMAIL_THANK_YOU
+        element.thank_you_text.should == SiteElement::DEFAULT_EMAIL_THANK_YOU
       end
 
       it "should return the thank you text" do
         element.thank_you_text = "test"
         element.stub(:after_email_submit_action).and_return(:something)
-        element.display_thank_you_text.should == "test"
+        element.thank_you_text.should == "test"
       end
     end
   end

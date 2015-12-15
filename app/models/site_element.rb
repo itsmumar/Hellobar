@@ -116,18 +116,15 @@ class SiteElement < ActiveRecord::Base
   end
 
   def thank_you_text
-    return unless is_email?
     if show_default_message?
       default_email_thank_you_text
     else
-      self[:thank_you_text]
+      read_attribute(:thank_you_text).presence || default_email_thank_you_text
     end
   end
 
   def thank_you_text=(str)
-    unless show_default_message?
-      self[:thank_you_text] = str
-    end
+    write_attribute(:thank_you_text, str) unless show_default_message?
   end
 
   def default_email_thank_you_text
@@ -149,7 +146,7 @@ class SiteElement < ActiveRecord::Base
   private
 
   def show_default_message?
-    (after_email_submit_action == :show_default_message) || thank_you_text.blank?
+    (after_email_submit_action == :show_default_message)
   end
 
   def remove_unreferenced_images
@@ -187,7 +184,7 @@ class SiteElement < ActiveRecord::Base
     if after_email_submit_action == :custom_thank_you_text
       if !site.capabilities.custom_thank_you_text?
         errors.add('custom_thank_you_text', 'is a pro feature')
-      elsif !thank_you_text.present?
+      elsif read_attribute(:thank_you_text).blank?
         errors.add('custom_thank_you_text', 'cannot be blank')
       end
     end
