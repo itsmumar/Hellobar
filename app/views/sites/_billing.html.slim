@@ -61,9 +61,10 @@ section
 
   - if @next_bill
     - if @site.current_subscription.trial?
-      | This site is on a trial plan.
-      |  Please enter a payment method by #{bill_due_at(@next_bill)}
-      |  to continue using HelloBar #{@site.current_subscription.values[:name]}.
+      ' This site is on a trial plan.
+      a.show-payment-modal.underlined
+        ' Please enter a payment method by #{bill_due_at(@next_bill)}
+        ' to continue using HelloBar #{@site.current_subscription.values[:name]}.
     - elsif @next_bill.amount > 0
       small
         ' Next bill is due on
