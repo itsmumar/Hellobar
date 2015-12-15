@@ -1,3 +1,5 @@
+if (typeof(HB) == "undefined")
+{
 HB_BACKEND_HOST = "{{hb_backend_host}}";
 
 HB_SITE_ID = {{site_id}};
@@ -5,12 +7,13 @@ HB_WK = "{{site_write_key}}"; // The site's write key
 HB_TZ = "{{site_timezone}}"; // The site's timezone offset in the format "+/-HH:MM"
 HB_PS = "{{pro_secret}}";
 
-{{{hellobar_js}}}
+{{{ie_shims_js}}}
 {{{hellobar_base_js}}}
+{{{crypto_js}}}
+{{{site_element_classes_js}}}
 
 HBInit = function () {
   if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
-    HB = _HB;
     HB.CAP = {{{capabilities_json}}};
     // Protect capabilities from being modified
     if ( typeof(Object.defineProperty) != "undefined")
@@ -43,3 +46,4 @@ HBInit();
 
 if(!HB.isIEXOrLess(8))
   _hbq = new HBQ();
+}
