@@ -71,6 +71,30 @@ HBQ.prototype.push = function()
 var HB = {
   CAP: {}, // Capabilies
 
+  // Creates a class
+  createClass: function(spec)
+  {
+    // Set up the initializer
+    var klass = function()
+    {
+      // Call the initializer
+      if ( this.initialize) this.initialize.apply(this, arguments);
+    }
+    // Copy over the specs
+    for (var key in spec) 
+    {
+      if (spec.hasOwnProperty(key) )
+      {
+        var value = spec[key];
+        if ( typeof(value) == "function" )
+        {
+          klass.prototype[key] = value;
+        }
+      }
+    }
+    return klass;
+  },
+
   // Returns the element or looks it up via getElementById
   $: function(idOrElement)
   {
