@@ -59,7 +59,7 @@ HB.SiteElement = HB.createClass({
 
         // Set wiggle listeners
         if(this.wiggle_button.length > 0)
-          HB.wiggleEventListeners(HB.w);
+          HB.wiggleEventListeners(this.w);
       }.bind(this), 1);
     }.bind(this));
   },
@@ -69,8 +69,8 @@ HB.SiteElement = HB.createClass({
   injectSiteElementHTML: function(html)
   {
     // Remove the containing iframe element if it exists
-    if ( HB.w &&  HB.w.parentNode)
-      HB.w.parentNode.removeChild(HB.w);
+    if ( this.w &&  this.w.parentNode)
+      this.w.parentNode.removeChild(this.w);
 
     // Remove pull-arrow if it exists
     HB.pd = document.getElementById("pull-down")
@@ -78,14 +78,14 @@ HB.SiteElement = HB.createClass({
         HB.pd.parentNode.removeChild(HB.pd);
 
     // Create the iframe container
-    HB.w = document.createElement("iframe");
-    HB.w.src = "about:blank";
-    HB.w.id = HB_PS + "-container";
-    HB.w.className = "HB-" + this.type;
-    HB.w.name = HB_PS + "-container";
-    HB.hideElement(HB.w); // Start all site elements as hidden
+    this.w = document.createElement("iframe");
+    this.w.src = "about:blank";
+    this.w.id = HB_PS + "-container";
+    this.w.className = "HB-" + this.type;
+    this.w.name = HB_PS + "-container";
+    HB.hideElement(this.w); // Start all site elements as hidden
 
-    this.setupIFrame(HB.w)
+    this.setupIFrame(this.w)
 
       // Check if we have any external CSS to add
       if ( HB.extCSS )
@@ -109,9 +109,9 @@ HB.SiteElement = HB.createClass({
       }
 
     // Inject the container into the DOM
-    HB.injectAtTop(HB.w);
+    HB.injectAtTop(this.w);
     // Render the siteElement in the container.
-    var d = HB.w.contentWindow.document;
+    var d = this.w.contentWindow.document;
     d.open();
     d.write("<html><head>" + (HB.css || "") + "</head><body>" + html + "</body></html>");
     d.close();
@@ -141,68 +141,68 @@ HB.SiteElement = HB.createClass({
 
     // Get the relevant elements that might need checking/adjusting
     var containerDocument = frame.document;
-    HB.e = {
+    this.e = {
       container: HB.$("#" + HB_PS + "-container"),
       pusher: HB.$("#hellobar-pusher")
     };
 
     var foundElement = this.getSiteElementDomNode();
     if ( foundElement ) {
-      HB.e.siteElement = foundElement;
-      HB.e.siteElementType = HB.id_type_map[foundElement.id]
+      this.e.siteElement = foundElement;
+      this.e.siteElementType = HB.id_type_map[foundElement.id]
     } else {
-      HB.e.siteElement = null;
-      HB.e.siteElementType = null;
+      this.e.siteElement = null;
+      this.e.siteElementType = null;
     }
 
     // Monitor siteElement height to update HTML/CSS
-    if ( HB.e.siteElement ) {
-      if ( HB.e.siteElement.clientHeight ) {
+    if ( this.e.siteElement ) {
+      if ( this.e.siteElement.clientHeight ) {
 
         // Update the CSS class based on the width
         var wasMobile = HB.isMobileWidth;
 
-        if ( HB.e.siteElementType == "modal" && containerDocument )
+        if ( this.e.siteElementType == "modal" && containerDocument )
           HB.isMobileWidth = (containerDocument.getElementById("hellobar-modal-background").clientWidth <= 640 );
-        else if ( HB.e.siteElementType == "slider" )
-          HB.isMobileWidth = HB.e.siteElement.clientWidth <= 270 || document.body.clientWidth <= 375 || document.body.clientWidth < HB.e.siteElement.clientWidth;
+        else if ( this.e.siteElementType == "slider" )
+          HB.isMobileWidth = this.e.siteElement.clientWidth <= 270 || document.body.clientWidth <= 375 || document.body.clientWidth < this.e.siteElement.clientWidth;
         else
-          HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
+          HB.isMobileWidth = (this.e.siteElement.clientWidth <= 640 );
 
         if ( wasMobile != HB.isMobileWidth ) {
           if ( HB.isMobileWidth ) {
             HB.isMobile = true;
-            HB.addClass(HB.e.siteElement, "mobile");
+            HB.addClass(this.e.siteElement, "mobile");
           } else {
             HB.isMobile = false;
-            HB.removeClass(HB.e.siteElement, "mobile");
+            HB.removeClass(this.e.siteElement, "mobile");
           }
         }
 
         // Adjust the container size
-        this.setContainerSize(HB.e.container, HB.e.siteElement, HB.e.siteElementType, HB.isMobile);
+        this.setContainerSize(this.e.container, this.e.siteElement, this.e.siteElementType, HB.isMobile);
 
         // Bar specific adjustments
-        if ( HB.e.siteElementType == "bar" ) {
+        if ( this.e.siteElementType == "bar" ) {
 
           // Adjust the pusher
-          if ( HB.e.pusher ) {
-            // handle case where display-condition check has hidden HB.w
-            if (HB.w.style.display === "none") {
+          if ( this.e.pusher ) {
+            // handle case where display-condition check has hidden this.w
+            if (this.w.style.display === "none") {
               return;
             };
 
             var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
-              HB.e.pusher.style.height = (HB.e.siteElement.clientHeight + borderPush) + "px";
+              this.e.pusher.style.height = (this.e.siteElement.clientHeight + borderPush) + "px";
           }
 
           // Add multiline class
-          var barBounds = (HB.w.className.indexOf('regular') > -1 ? 32 : 52 );
+          var barBounds = (this.w.className.indexOf('regular') > -1 ? 32 : 52 );
 
-          if ( HB.e.siteElement.clientHeight > barBounds ) {
-            HB.addClass(HB.e.siteElement, "multiline");
+          if ( this.e.siteElement.clientHeight > barBounds ) {
+            HB.addClass(this.e.siteElement, "multiline");
           } else {
-            HB.removeClass(HB.e.siteElement, "multiline");
+            HB.removeClass(this.e.siteElement, "multiline");
           }
         }
       }
@@ -212,21 +212,21 @@ HB.SiteElement = HB.createClass({
 
   setContainerSize:  function(container, element, type, isMobile)
   {
-    if (HB.e.container == null)
+    if (this.e.container == null)
       return;
     if ( type == 'bar' ) {
-      HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
+      this.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
     } else if ( type == 'slider' ) {
       var newWidth = Math.min(HB.maxSliderSize + 24, window.innerWidth - 24);
-      HB.e.container.style.width = (newWidth) + "px";
-      HB.e.container.style.height = (element.clientHeight + 24) + "px";
+      this.e.container.style.width = (newWidth) + "px";
+      this.e.container.style.height = (element.clientHeight + 24) + "px";
     }
   },
 
   getSiteElementDomNode:  function() {
-    if(HB.w && HB.w.contentDocument) {
+    if(this.w && this.w.contentDocument) {
       for(var key in HB.id_type_map) {
-        var el = HB.w.contentDocument.getElementById(key);
+        var el = this.w.contentDocument.getElementById(key);
         if(el != undefined)
           return el;
       }
@@ -241,13 +241,13 @@ HB.SiteElement = HB.createClass({
   checkForDisplaySetting:  function()
   {
     var viewCondition = this.view_condition;
-    var originalDisplay = HB.w.style.display;
+    var originalDisplay = this.w.style.display;
 
     if (document.getElementById('hellobar-preview-container') !== null)
       viewCondition = 'preview';
 
     var show = function() {
-      HB.showElement(HB.w);
+      HB.showElement(this.w);
 
       // Next line is a Safari hack.  Couldn't find out why but sometimes safari
       // wouldn't display the contents of the iframe, but toggling the display style fixes this
@@ -261,8 +261,8 @@ HB.SiteElement = HB.createClass({
         }
       }
 
-      if (HB.w.className.indexOf("hb-animated") > -1) { HB.animateIn(HB.w) };
-    }
+      if (this.w.className.indexOf("hb-animated") > -1) { HB.animateIn(this.w) };
+    }.bind(this);
 
     if (viewCondition === 'wait-5')
     {
@@ -295,7 +295,7 @@ HB.SiteElement = HB.createClass({
     }
     else {
       // No view condition so show immediately (very small delay for animated elements)
-      if (HB.w.className.indexOf("hb-animated") > -1)
+      if (this.w.className.indexOf("hb-animated") > -1)
         setTimeout(show, 500);
       else
         show();
@@ -306,23 +306,23 @@ HB.SiteElement = HB.createClass({
     // Doesn't work IE 9 and earlier
     if (!window.addEventListener || !window.outerWidth || !window.innerWidth) return;
 
-    var original = HB.w.style.position;
+    var original = this.w.style.position;
     var action = function(e) {
       var ratio = (window.outerWidth - 8) / window.innerWidth;
       if (e.scale) {
         // iPhone
-        HB.w.style.position = (e.scale <= 1.03) ? original : 'absolute';
+        this.w.style.position = (e.scale <= 1.03) ? original : 'absolute';
       } else if (typeof window.orientation !== 'undefined') { // Not mobile
         // Android
         if (window.outerWidth <= 480 && ratio <= 1.3) {
-          return HB.w.style.position = original;
+          return this.w.style.position = original;
         }
-        HB.w.style.position = (ratio <= 0.6) ? original : 'absolute';
+        this.w.style.position = (ratio <= 0.6) ? original : 'absolute';
       } else {
         // Desktop
-        HB.w.style.position = (ratio <= 1.3) ? original : 'absolute';
+        this.w.style.position = (ratio <= 1.3) ? original : 'absolute';
       }
-    };
+    }.bind(this);
 
     // iPhone
     window.addEventListener('gesturechange', action);
@@ -332,8 +332,8 @@ HB.SiteElement = HB.createClass({
   },
 
   closeIframe:  function() {
-    if(HB.w != null && HB.w.parentNode != null) {
-      HB.w.parentNode.removeChild(HB.w);
+    if(this.w != null && this.w.parentNode != null) {
+      this.w.parentNode.removeChild(this.w);
       // Sets the dismissed state for the next 15 minutes
       HB.sc("HBDismissed", true, new Date((new Date().getTime() + 1000 * 60 * 15)), "path=/");
     }
@@ -354,12 +354,12 @@ HB.SiteElement = HB.createClass({
       var pdLink = document.createElement("div");
       pdLink.className = "hellobar-arrow";
       pdLink.onclick = function() {
-        HB.animateIn(HB.w);
+        HB.animateIn(this.w);
         HB.animateOut(document.getElementById("pull-down"));
 
         // if the pusher exists, unhide it since it should be hidden at this point
-        if (HB.e.pusher != null)
-          HB.showElement(HB.e.pusher, '');
+        if (this.e.pusher != null)
+          HB.showElement(this.e.pusher, '');
       };
 
       pullDown.appendChild(pdLink);
@@ -372,7 +372,7 @@ HB.SiteElement = HB.createClass({
       return;
     }
 
-    var inputs = HB.w.contentDocument.getElementsByTagName("input");
+    var inputs = this.w.contentDocument.getElementsByTagName("input");
     for (var i = 0; i < inputs.length; i++) {
       inputs[i].addEventListener("focus", this.iosKeyboardShow.bind(this) );
       inputs[i].addEventListener("blur", this.iosKeyboardHide.bind(this) );
@@ -380,15 +380,15 @@ HB.SiteElement = HB.createClass({
   },
 
   iosKeyboardShow: function() {
-    if(HB.e.siteElementType == "slider" || HB.e.siteElementType == "bar") {
-      HB.iosFocusInterval = setTimeout(function() { window.scrollTo(0, HB.w.offsetTop); }, 500);
-    } else if(HB.e.siteElementType == "takeover" || HB.e.siteElementType == "modal") {
-      HB.w.style.position = "absolute";
+    if(this.e.siteElementType == "slider" || this.e.siteElementType == "bar") {
+      HB.iosFocusInterval = setTimeout(function() { window.scrollTo(0, this.w.offsetTop); }, 500);
+    } else if(this.e.siteElementType == "takeover" || this.e.siteElementType == "modal") {
+      this.w.style.position = "absolute";
       HB.iosFocusInterval = setInterval(function() {
-        HB.w.style.height = window.innerHeight + "px";
-        HB.w.style.width = window.innerWidth + "px";
-        HB.w.style.top = window.pageYOffset + "px";
-        HB.w.style.left = window.pageXOffset + "px";
+        this.w.style.height = window.innerHeight + "px";
+        this.w.style.width = window.innerWidth + "px";
+        this.w.style.top = window.pageYOffset + "px";
+        this.w.style.left = window.pageXOffset + "px";
       }, 200);
     }
   },
@@ -399,12 +399,12 @@ HB.SiteElement = HB.createClass({
       HB.iosFocusInterval = null;
     }
 
-    if(HB.e.siteElementType == "takeover" || HB.e.siteElementType == "modal") {
-      HB.w.style.position = "";
-      HB.w.style.height = "";
-      HB.w.style.width = "";
-      HB.w.style.top = "";
-      HB.w.style.left = "";
+    if(this.e.siteElementType == "takeover" || this.e.siteElementType == "modal") {
+      this.w.style.position = "";
+      this.w.style.height = "";
+      this.w.style.width = "";
+      this.w.style.top = "";
+      this.w.style.left = "";
     }
   }
 

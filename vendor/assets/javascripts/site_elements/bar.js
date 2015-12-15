@@ -28,7 +28,7 @@ HB.BarElement = HB.createClass({
       HB.p.id="hellobar-pusher";
       HB.p.className = "hb-" + this.size;
       // shrinks pusher if siteElement hidden by viewCondition rules
-      if (HB.w.style.display === "none") {HB.p.style.height = 0};
+      if (this.w.style.display === "none") {HB.p.style.height = 0};
       HB.injectAtTop(HB.p, this.placement == "bar-bottom");
     }
   },
