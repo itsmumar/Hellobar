@@ -1,13 +1,13 @@
-function SliderElement(props) {
-  SiteElement.call(this, props);
-  this.link_color = "FFFFFF";
-};
+HB.SliderElement = HB.createClass({
+  initialize: function(props)
+  {
+    this.callSuper('initialize', props);
+    this.link_color = "FFFFFF";
+  }, 
 
-SliderElement.prototype = Object.create(SiteElement.prototype);
-SliderElement.prototype.constructor = SliderElement;
-
-SliderElement.prototype.setupIFrame = function(iframe){
-  SiteElement.prototype.setupIFrame.call(this, iframe);
-
-  HB.addClass(iframe, "hb-" + this.placement)
-};
+  setupIFrame: function(iframe)
+  {
+    this.callSuper('setupIFrame', iframe);
+    HB.addClass(iframe, "hb-" + this.placement)
+  }
+}, HB.SiteElement);

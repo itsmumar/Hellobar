@@ -71,16 +71,9 @@ HBQ.prototype.push = function()
 var HB = {
   CAP: {}, // Capabilies
 
-  // Creates a class
-  createClass: function(spec)
+  // Copy functions from spec into klass
+  cpFuncs: function(spec, klass)
   {
-    // Set up the initializer
-    var klass = function()
-    {
-      // Call the initializer
-      if ( this.initialize) this.initialize.apply(this, arguments);
-    }
-    // Copy over the specs
     for (var key in spec) 
     {
       if (spec.hasOwnProperty(key) )
@@ -92,6 +85,35 @@ var HB = {
         }
       }
     }
+  },
+
+  // Creates a class
+  createClass: function(spec, superClass)
+  {
+    // Set up the initializer
+    var klass = function()
+    {
+      // Call the initializer
+      if ( this.initialize) this.initialize.apply(this, arguments);
+    }
+    if ( superClass )
+    {
+      // If we have a super class copy over all those methods
+      HB.cpFuncs(superClass.prototype, klass);
+
+      // Set up the superclass
+      klass.superClass = superClass;
+
+      // Also set up callSuper
+      spec.callSuper = function(name)
+      {
+        this.constructor.superClass.prototype[name].apply(this, Array.prototype.slice.call(arguments, 1));
+      }
+    }
+
+    // Copy over the specs
+    HB.cpFuncs(spec, klass);
+
     return klass;
   },
 
@@ -786,11 +808,11 @@ var HB = {
     var siteElement = {};
 
     // Make a copy of the siteElement
-    var fn = window[siteElementToRender.type + 'Element'];
+    var fn = window.HB[siteElementToRender.type + 'Element'];
     if(typeof fn === 'function') {
-      siteElement = new window[siteElementToRender.type + 'Element'](siteElementToRender)
+      siteElement = new window.HB[siteElementToRender.type + 'Element'](siteElementToRender)
     } else {
-      siteElement = new SiteElement(siteElementToRender)
+      siteElement = new HB.SiteElement(siteElementToRender)
     }
 
     // Call prerender

@@ -1,4 +1,4 @@
-var SiteElement = HB.createClass({
+HB.SiteElement = HB.createClass({
   initialize: function(props)
   {
     for (var key in props) {
