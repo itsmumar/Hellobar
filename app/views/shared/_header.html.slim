@@ -25,11 +25,11 @@
     - unless current_user.temporary?
 
       - if current_site.is_free?
-        .button.upgrade-account-modal
+        .button.upgrade-account-modal data={ source: "Upgrade Plan" }
           | Upgrade Plan
 
       - elsif current_site.current_subscription.try(:trial?)
-        .button.upgrade-account-modal
+        .button.upgrade-account-modal data={ source: "Upgrade Trial" }
           div Enjoying Hello Bar Pro?
           div Click here to keep it.
 
