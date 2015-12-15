@@ -11,6 +11,7 @@
       i.icon-dropdown
       .dropdown-block
         = active_link_to 'Site Settings', (current_user ? edit_site_path(current_site) : root_path)
+        = content_tag 'a', 'Hello Bar PRO', class: "show-upgrade-modal", data: { source: 'Hello Bar PRO' }
         - if current_user.sites.count <= 1
           = link_to 'Add New Site', new_site_path
         - else
