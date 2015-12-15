@@ -4,7 +4,6 @@ describe("HB", function() {
   var element;
 
   beforeEach(function() {
-    HB = _HB;
     element = document.createElement("div");
     document.body.appendChild(element);
   });

@@ -41,7 +41,8 @@ HB.SiteElement = HB.createClass({
       return "<div class='hb-image-wrapper " + this.image_placement + "'><img class='uploaded-image' src=" + this.image_url + " /></div>";
   },
 
-  render: function() {
+  render: function()
+  {
     // Replace all the templated variables
     var html = HB.renderTemplate(HB.getTemplate(this)+"", this);
     // Once the dom is ready we inject the html returned from renderTemplate
@@ -63,7 +64,6 @@ HB.SiteElement = HB.createClass({
       }.bind(this), 1);
     }.bind(this));
   },
-
 
   // Injects the specified HTML for the given siteElement into the page
   injectSiteElementHTML: function(html)

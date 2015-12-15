@@ -11,5 +11,5 @@ adjustedOffset = (hours, date=new Date) -> Math.abs(date.getTimezoneOffset() - (
 utcMillenium = -> new Date(localMillenium().getTime() - ( currentTestBrowserOffset(localMillenium()) * 60000))
 
 test 'zeropad behaves correctly', ->
-  equal _HB.zeropad("5"), "05"
-  equal _HB.zeropad(5), "05"
+  equal HB.zeropad("5"), "05"
+  equal HB.zeropad(5), "05"
