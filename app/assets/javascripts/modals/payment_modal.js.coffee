@@ -100,6 +100,7 @@ class @PaymentModal extends Modal
         site: @options.site
         successCallback: @options.successCallback
         upgradeBenefit: @options.upgradeBenefit
+        source: "Change Plan"
 
       new UpgradeAccountModal(options).open()
       @close()

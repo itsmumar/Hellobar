@@ -11,6 +11,8 @@
       i.icon-dropdown
       .dropdown-block
         = active_link_to 'Site Settings', (current_user ? edit_site_path(current_site) : root_path)
+        - if current_site.is_free?
+          = content_tag 'a', 'Hello Bar PRO', class: "show-upgrade-modal", data: { source: 'Hello Bar PRO' }
         - if current_user.sites.count <= 1
           = link_to 'Add New Site', new_site_path
         - else
@@ -25,11 +27,11 @@
     - unless current_user.temporary?
 
       - if current_site.is_free?
-        .button.upgrade-account-modal
+        .button.upgrade-account-modal data={ source: "Upgrade Plan" }
           | Upgrade Plan
 
       - elsif current_site.current_subscription.try(:trial?)
-        .button.upgrade-account-modal
+        .button.upgrade-account-modal data={ source: "Upgrade Trial" }
           div Enjoying Hello Bar Pro?
           div Click here to keep it.
 
@@ -40,7 +42,7 @@
         .dropdown-block
           = active_link_to 'User Settings', profile_path()
           - if current_site.is_free?
-            = content_tag 'a', 'Upgrade Plan', class: "show-upgrade-modal"
+            = content_tag 'a', 'Upgrade Plan', class: "show-upgrade-modal", data: { source: "Header Drop-down" }
           - else
             = content_tag 'a', 'Payment Info', class: "show-payment-modal"
           - if impersonated_user
