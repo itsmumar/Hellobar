@@ -22,7 +22,7 @@ section
         - # only show "billing schedule" if user is on a plan that actually has one
         = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal'
       - else
-        = link_to 'Upgrade plan', '#', class: 'show-upgrade-modal button'
+        = link_to 'Upgrade plan', '#', class: 'show-upgrade-modal button', data: { source: "Billing Plan Link" }
 
 - if Permissions.view_bills?(current_user, @site)
   section
@@ -74,10 +74,11 @@ section
         = @next_bill.subscription.schedule
         |  subscription.
 - elsif @site.is_free?
-  ul 
+  ul
     li
-      .button-wrapper.promo-label To upgrade your plan, contact the site owner. Your site owner is: 
+      .button-wrapper.promo-label
+        ' To upgrade your plan, contact the site owner. Your site owner is:
     - @site.owners.each do |owner|
       li
-        .button-wrapper.promo-button 
+        .button-wrapper.promo-button
           = mail_to owner.email, owner.name || owner.email

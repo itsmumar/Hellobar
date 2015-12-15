@@ -15,6 +15,8 @@ module Subscribable
        true
       end
 
+      track_upgrade if is_upgrade
+
       response = { bill: bill, site: SiteSerializer.new(site), is_upgrade: is_upgrade, status: :ok }
       response[:old_subscription] = SubscriptionSerializer.new(old_subscription) if old_subscription
 
@@ -56,5 +58,9 @@ module Subscribable
     end
 
     Analytics.track(:site, site.id, :change_sub, props)
+  end
+
+  def track_upgrade
+    Analytics.track(*current_person_type_and_id, "Upgraded")
   end
 end

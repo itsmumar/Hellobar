@@ -24,6 +24,10 @@ class @UpgradeAccountModal extends Modal
     @_disableCurrentPlanButton()
     if !@options.site.view_billing then @_invalidPermissions()
     @_bindPackageSelection()
+
+    source = @options.source || @options.upgradeBenefit
+    InternalTracking.track_current_person("Viewed Upgrade", { source: source })
+
     super
 
   close: (continuing = false) ->
