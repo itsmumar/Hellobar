@@ -39,15 +39,18 @@ class @UpgradeAccountModal extends Modal
     @$modal.find('.button').on 'click', (event) =>
       unless !!$(event.target).attr("disabled")
         packageData = JSON.parse(event.target.dataset.package)
-        packageData.schedule = @chosenSchedule
+        if packageData.type == "free"
+          new DowngradeSiteModal({site: @options.site}).open()
+        else
+          packageData.schedule = @chosenSchedule
 
-        options =
-          package: packageData
-          site: @options.site
-          successCallback: @options.successCallback
-          upgradeBenefit: @options.upgradeBenefit
+          options =
+            package: packageData
+            site: @options.site
+            successCallback: @options.successCallback
+            upgradeBenefit: @options.upgradeBenefit
 
-        new PaymentModal(options).open()
+          new PaymentModal(options).open()
 
       @close(true)
 
