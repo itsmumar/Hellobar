@@ -69,9 +69,9 @@ HB.SiteElement = HB.createClass({
       this.w.parentNode.removeChild(this.w);
 
     // Remove pull-arrow if it exists
-    HB.pd = document.getElementById("pull-down")
-      if ( HB.pd )
-        HB.pd.parentNode.removeChild(HB.pd);
+    HB.pd = document.getElementById("pull-down");
+    if ( HB.pd )
+      HB.pd.parentNode.removeChild(HB.pd);
 
     // Create the iframe container
     this.w = document.createElement("iframe");
@@ -340,8 +340,14 @@ HB.SiteElement = HB.createClass({
   },
 
 
-  closeIframe:  function()
+  close:  function()
   {
+    HB.animateOut(this.w, this.onClosed.bind(this));
+  },
+
+  onClosed: function()
+  {
+    // Remove the element
     if ( this.remove() )
     {
       // Sets the dismissed state for the next 15 minutes
