@@ -14,7 +14,7 @@ feature "Takeover with image", js: true do
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')
 
-    within_frame 'random-container' do
+    within_frame 'random-container-0' do
       expect(page.find('.uploaded-image')['src']).to have_content(element.image_url)
     end
   end
