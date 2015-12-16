@@ -44,12 +44,23 @@ var HBQ = function()
   // Set all the default tracking trackings
   HB.setDefaultSegments();
 
+
+  var i, j;
+  for(i=0;i<HB.rules.length;i++)
+  {
+    for(j=0;j<HB.rules[i].siteElements.length;j++)
+    {
+      HB.addToPage(HB.createSiteElement(HB.rules[i].siteElements[j]));
+    }
+  }
+  /*
   // If a specific element has already been set, use it
   // Otherwise use the tradition apply rules method
   var siteElement = HB.getFixedSiteElement();
   siteElement = siteElement || HB.applyRules();
   if ( siteElement )
     HB.addToPage(HB.createSiteElement(siteElement))
+  */
 }
 
 // Call the function right away once this is loaded

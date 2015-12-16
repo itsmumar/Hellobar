@@ -79,7 +79,7 @@ HB.SiteElement = HB.createClass({
     this.w.src = "about:blank";
     this.w.id = HB_PS + "-container";
     this.w.className = "HB-" + this.type;
-    this.w.name = HB_PS + "-container";
+    this.w.name = HB_PS + "-container-"+this.pageIndex;
     HB.hideElement(this.w); // Start all site elements as hidden
 
     this.setupIFrame(this.w)
@@ -132,14 +132,14 @@ HB.SiteElement = HB.createClass({
 
   checkForMobileDevice: function(){
     // Get the frame
-    var frame = window.frames[HB_PS + "-container"];
+    var frame = window.frames[HB_PS + "-container-"+this.pageIndex];
     if ( !frame )
       return;
 
     // Get the relevant elements that might need checking/adjusting
     var containerDocument = frame.document;
     this.e = {
-      container: HB.$("#" + HB_PS + "-container"),
+      container: this.w,
       pusher: HB.$("#hellobar-pusher")
     };
 
