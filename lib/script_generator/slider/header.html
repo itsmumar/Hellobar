@@ -1,7 +1,7 @@
 <div id="hellobar-slider" class="{{siteElement.placement}} {{siteElement.subtype}} {{siteElement.imagePlacementClass()}}" style="font-family: {{siteElement.font}};">
   <div class="hb-header" style="background-color: #{{siteElement.primary_color}}"></div>
   <div class="slider-content">
-    <a class="icon-close" onclick="window.parent.HB.siteElementsOnPage[{{siteElement.pageIndex}}].close()"></a>
+    <a class="icon-close" onclick="{{siteElement.me}}.close()"></a>
 
     <div class="hb-content-wrapper">
       {{siteElement.imageFor(['left'])}}

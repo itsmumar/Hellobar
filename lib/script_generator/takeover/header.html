@@ -1,6 +1,6 @@
 <div id="hellobar-takeover" style="font-family: {{siteElement.font}};" class="{{siteElement.imagePlacementClass()}}">
   <div class="hb-header" style="background-color: #{{siteElement.primary_color}}"></div>
-  <a class="icon-close" onclick="window.parent.HB.siteElementsOnPage[{{siteElement.pageIndex}}].close()"></a>
+  <a class="icon-close" onclick="{{siteElement.me}}.close()"></a>
 
   <div class="hb-content-wrapper">
     {{siteElement.imageFor(['left'])}}

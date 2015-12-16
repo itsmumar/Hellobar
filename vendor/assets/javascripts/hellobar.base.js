@@ -311,10 +311,10 @@ var HB = {
   },
 
   // Recoards the rule being formed when the visitor clicks the specified element
-  trackClick: function(element)
+  trackClick: function(domElement, siteElement)
   {
-    var url = element.href;
-    HB.converted(function(){if(element.target != "_blank") document.location = url;});
+    var url = domElement.href;
+    HB.converted(siteElement, function(){if(element.target != "_blank") document.location = url;});
   },
 
   // Returns the conversion key used in the cookies to determine if this
@@ -357,9 +357,9 @@ var HB = {
   },
 
   // Called when a conversion happens (e.g. link clicked, email form filled out)
-  converted: function(callback)
+  converted: function(siteElement, callback)
   {
-    var conversionKey = HB.getConversionKey(HB.currentSiteElement);
+    var conversionKey = HB.getConversionKey(siteElement);
     var now = Math.round(new Date().getTime()/1000);
     var conversionCount = (HB.getVisitorData(conversionKey) || 0 ) + 1;
 
@@ -378,7 +378,7 @@ var HB = {
     // Set the last time converted for the site element to now
     HB.setSiteElementData(HB.si, "lc", now);
     // Trigger the event
-    HB.trigger("conversion", HB.currentSiteElement);
+    HB.trigger("conversion", siteElement);
     // Send the data to the backend if this is the first conversion
     if(conversionCount == 1)
       HB.s("g", HB.si, {a:HB.getVisitorAttributes()}, callback);
@@ -401,7 +401,7 @@ var HB = {
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
   // shakes the email field
-  submitEmail: function(emailField, nameField, targetSiteElement, thankYouText, redirect, redirectUrl, removeElement)
+  submitEmail: function(siteElement, emailField, nameField, targetSiteElement, thankYouText, redirect, redirectUrl, removeElement)
   {
     HB.validateEmail(
       emailField.value,
@@ -419,7 +419,7 @@ var HB = {
           }
         }
 
-        HB.recordEmail(emailField.value, nameField.value, function(){
+        HB.recordEmail(siteElement, emailField.value, nameField.value, function(){
           // Successfully saved
         });
 
@@ -444,7 +444,7 @@ var HB = {
   },
 
   // Called to record an email for the rule without validation (also used by submitEmail)
-  recordEmail: function(email, name, callback)
+  recordEmail: function(siteElement, email, name, callback)
   {
     if ( email )
     {
@@ -453,7 +453,7 @@ var HB = {
         emailAndName += ","+name;
 
       // Record the email address to the cnact list and then track that the rule was performed
-      HB.s("c", HB.cli, {e:emailAndName}, function(){HB.converted(callback)});
+      HB.s("c", HB.cli, {e:emailAndName}, function(){HB.converted(this.siteElement, callback)}.bind({siteElement: siteElement}));
     }
   },
 
@@ -825,13 +825,17 @@ var HB = {
         return;
     // Set the page index so it can be referenced
     siteElement.pageIndex = HB.siteElementsOnPage.length;
+
+    // Helper for template that returns the Javascript for a reference
+    // to this object
+    siteElement.me = "window.parent.HB.siteElementsOnPage["+siteElement.pageIndex+"]";
+
     HB.siteElementsOnPage.push(siteElement);
     // Adify if AD load
     if (HB.AD) {
       HB.adifySiteElement(siteElement);
     }
 
-    HB.currentSiteElement = siteElement;
     // Convenience accessors for commonly used attributes
     HB.si = siteElement.id;
     HB.cli = siteElement.contact_list_id;
@@ -851,10 +855,10 @@ var HB = {
   },
 
   // Called when the siteElement is viewed
-  viewed: function()
+  viewed: function(siteElement)
   {
     // Track number of views if not yet converted for this site element
-    if(!HB.didConvert(HB.currentSiteElement))
+    if(!HB.didConvert(siteElement))
       HB.s("v", HB.si, {a:HB.getVisitorAttributes()});
 
     // Record the number of views, first seen and last seen
@@ -864,7 +868,7 @@ var HB = {
       HB.setSiteElementData(HB.si, "fv", now)
     HB.setSiteElementData(HB.si, "lv", now)
     // Trigger siteElement shown event
-    HB.trigger("siteElementshown", HB.currentSiteElement);
+    HB.trigger("siteElementshown", siteElement);
   },
 
   // Injects the specified element at the top of the body tag

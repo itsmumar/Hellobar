@@ -14,7 +14,7 @@
 
     window.fbAsyncInit = function() {
       FB.Event.subscribe('edge.create', function(response) {
-        parent.HB.converted();
+        {{siteElement.me}}.converted();
       });
     };
   </script>

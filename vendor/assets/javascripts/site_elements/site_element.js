@@ -6,6 +6,7 @@ HB.SiteElement = HB.createClass({
     }
   },
 
+
   setupIFrame: function(iframe) {
     if(this.animated) {
       HB.addClass(iframe, "hb-animated");
@@ -48,9 +49,9 @@ HB.SiteElement = HB.createClass({
       setTimeout(function(){
         this.injectSiteElementHTML(html);
         this.setIosKeyboardHandlers();
-        this.setPullDown()
-          // Track the view
-          HB.viewed();
+        this.setPullDown();
+        // Track the view
+        HB.viewed(this);
         // Monitor zoom scale events
         this.hideOnZoom();
 
@@ -188,7 +189,7 @@ HB.SiteElement = HB.createClass({
               return;
             };
 
-            var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
+            var borderPush = HB.t((this.show_border) ? 3 : 0)
               this.e.pusher.style.height = (this.e.siteElement.clientHeight + borderPush) + "px";
           }
 
@@ -422,6 +423,13 @@ HB.SiteElement = HB.createClass({
       this.w.style.top = "";
       this.w.style.left = "";
     }
+  },
+
+  // Necessary convenience method for saying this
+  // SiteElement has converted (used in templates)
+  converted: function()
+  {
+    HB.converted(this);
   }
 
 });

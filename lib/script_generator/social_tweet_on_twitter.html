@@ -9,7 +9,7 @@
         setTimeout(attachTrackingEvents, 100);
       } else {
         twttr.ready(function (twttr) {
-          if (parent.HB) {twttr.events.bind('click', parent.HB.converted);}
+          if (parent.HB) {twttr.events.bind('click', {{siteElement.me}}.converted);}
         });
       }
     };
