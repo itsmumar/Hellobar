@@ -35,9 +35,10 @@ var HBQ = function()
     HB_DNT = true;
   }
 
+  var i;
   // Once initialized replace the existing data with it
   if ( typeof(_hbq) != "undefined" && _hbq && _hbq.length ) {
-    for ( var i=0; i<_hbq.length; i++ )
+    for (i=0; i<_hbq.length; i++ )
       this.push(_hbq[i]);
   }
 
@@ -45,22 +46,18 @@ var HBQ = function()
   HB.setDefaultSegments();
 
 
-  var i, j;
-  for(i=0;i<HB.rules.length;i++)
-  {
-    for(j=0;j<HB.rules[i].siteElements.length;j++)
-    {
-      HB.addToPage(HB.createSiteElement(HB.rules[i].siteElements[j]));
-    }
-  }
-  /*
+  var siteElements = [];
   // If a specific element has already been set, use it
   // Otherwise use the tradition apply rules method
   var siteElement = HB.getFixedSiteElement();
-  siteElement = siteElement || HB.applyRules();
   if ( siteElement )
-    HB.addToPage(HB.createSiteElement(siteElement))
-  */
+    siteElements = [siteElement];
+  else
+    siteElements = HB.applyRules();
+  for(var i=0; i < siteElements.length; i++ )
+  {
+    HB.addToPage(HB.createSiteElement(siteElements[i]));
+  }
 }
 
 // Call the function right away once this is loaded
@@ -940,7 +937,9 @@ var HB = {
   applyRules: function()
   {
     var i,j,siteElement;
-    var possibleSiteElements = [];
+    var visibilityGroups = {};
+    var visibilityGroup;
+    var visibilityGroupNames = [];
     // First get all the site elements from all the rules that the
     // person matches
     for(i=0;i<HB.rules.length;i++)
@@ -961,14 +960,46 @@ var HB = {
 
           if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
           {
-            if ( !possibleSiteElements[siteElement.subtype] )
-              possibleSiteElements[siteElement.subtype] = [];
-            possibleSiteElements[siteElement.subtype].push(siteElement);
+            visibilityGroup = siteElement.type;
+            // For showing multiple elements at the same time a modal and a takeover are the same thing
+            if ( siteElement.type == "Modal" || siteElement.type == "Takeover" )
+              visibilityGroup = "Modal/Takeover";
+            if ( !visibilityGroups[visibilityGroup] )
+            {
+              visibilityGroups[visibilityGroup] = [];
+              visibilityGroupNames.push(visibilityGroup);
+            }
+            visibilityGroups[visibilityGroup].push(siteElement);
           }
         }
       }
-
     }
+    // Now we have all elements that can be shown based on the rules
+    // broken up into visibility groups
+    // The next step is to pick one per visibility group
+    var results = [];
+    for(i=0;i<visibilityGroupNames.length;i++)
+    {
+      siteElement = HB.getBestElement(visibilityGroups[visibilityGroupNames[i]]);
+      if ( siteElement )
+        results.push(siteElement);
+    }
+    return results;
+  },
+
+  // Returns the best element to show from a group of elements
+  getBestElement: function(elements)
+  {
+    var i, siteElement;
+    var possibleSiteElements = {};
+    for(i=0;i<elements.length;i++)
+    {
+      siteElement = elements[i];
+      if ( !possibleSiteElements[siteElement.subtype] )
+        possibleSiteElements[siteElement.subtype] = [];
+      possibleSiteElements[siteElement.subtype].push(siteElement);
+    }
+
     // Now we narrow down based on the "value" of the site elements
     // (collecting emails is considered more valuable than clicking links
     // for example)
@@ -1684,9 +1715,14 @@ var HB = {
 
   isAd: function() {
     if (HB.CAP.preview) return false;
+    // Don't show an ad to a user once they've seen it once
+    if ( HB.getVisitorData("ad") ) return false;
 
     var adFactor = HB.CAP.in_bar_ad_fraction || 0.0; // Don't show an ad unless explictly defined in script
-    return Math.random() >= (1 - adFactor);
+    var showAd = Math.random() >= (1 - adFactor);
+    if ( showAd )
+      HB.setVisitorData("ad", new Date().getTime());
+    return showAd;
   },
 
   adifySiteElement: function(siteElement) {
