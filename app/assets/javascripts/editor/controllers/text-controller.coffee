@@ -22,6 +22,7 @@ HelloBar.TextController = Ember.Controller.extend
   showEmailPlaceholderText: Ember.computed.equal('model.element_subtype', 'email')
   showNamePlaceholderText: Ember.computed.equal('model.settings.collect_names', 1)
   showImagePlacementField: Ember.computed.notEmpty('model.image_url')
+  showQuestionFields: Ember.computed.equal('model.has_question', true)
 
   trackTextView: (->
     if trackEditorFlow && !Ember.isEmpty(@get('model'))
