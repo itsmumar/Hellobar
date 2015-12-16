@@ -844,8 +844,6 @@ var HB = {
     // Adify if AD load
     if (HB.AD) {
       HB.adifySiteElement(siteElement);
-      // Only adify the first element
-      HB.AD = false;
     }
 
     // If there is a #nohb in the has we don't render anything
