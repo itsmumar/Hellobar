@@ -16,6 +16,7 @@ var HBQ = function()
 {
   // Initialize the rules array so it can be pushed into
   HB.rules = [];
+  HB.siteElementsOnPage = [];
   HB.isMobile = false;
   HB.maxSliderSize = 380; /* IF CHANGED, UPDATE SLIDER ELEMENT CSS */
   HB.id_type_map = {
@@ -48,8 +49,7 @@ var HBQ = function()
   var siteElement = HB.getFixedSiteElement();
   siteElement = siteElement || HB.applyRules();
   if ( siteElement )
-    HB.render(siteElement);
-
+    HB.addToPage(HB.createSiteElement(siteElement))
 }
 
 // Call the function right away once this is loaded
@@ -802,25 +802,33 @@ var HB = {
     }
   },
 
-  // Renders the siteElement
-  render: function(siteElementToRender)
+  // Returns a SiteElement object from a hash of data
+  createSiteElement: function(data)
   {
-    var siteElement = {};
-
+    // Sanitize the data
+    data = HB.sanitize(data);
     // Make a copy of the siteElement
-    var fn = window.HB[siteElementToRender.type + 'Element'];
+    var fn = window.HB[data.type + 'Element'];
     if(typeof fn === 'function') {
-      siteElement = new window.HB[siteElementToRender.type + 'Element'](siteElementToRender)
+      siteElement = new window.HB[data.type + 'Element'](data)
     } else {
-      siteElement = new HB.SiteElement(siteElementToRender)
+      siteElement = new HB.SiteElement(data)
     }
+    return siteElement;
+  },
 
-    // Call prerender
-    siteElement.prerender();
-
+  // Adds the SiteElement to the page
+  addToPage: function(siteElement)
+  {
+    // Return if already added to the page
+    if ( typeof(siteElement.pageIndex) != 'undefined' )
+        return;
+    // Set the page index so it can be referenced
+    siteElement.pageIndex = HB.siteElementsOnPage.length;
+    HB.siteElementsOnPage.push(siteElement);
     // Adify if AD load
     if (HB.AD) {
-      siteElement = HB.adifySiteElement(siteElement);
+      HB.adifySiteElement(siteElement);
     }
 
     HB.currentSiteElement = siteElement;
@@ -830,7 +838,16 @@ var HB = {
     // If there is a #nohb in the has we don't render anything
     if ( document.location.hash == "#nohb" )
       return;
-    siteElement.render();
+    siteElement.attach();
+  },
+
+  removeAllSiteElements: function()
+  {
+    for(var i=0;i<HB.siteElementsOnPage.length;i++)
+    {
+      HB.siteElementsOnPage[i].remove();
+    }
+    HB.siteElementsOnPage = [];
   },
 
   // Called when the siteElement is viewed

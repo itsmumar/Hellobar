@@ -20,12 +20,6 @@ HB.SiteElement = HB.createClass({
     this.checkForDisplaySetting();
   },
 
-  prerender: function(){
-    HB.sanitize(this);
-    if(HB.isIEXOrLess(9))
-      this.animated = false;
-  },
-
   imagePlacementClass: function() {
     if(!!this.image_url) {
       return 'image-' + this.image_placement;
@@ -41,8 +35,10 @@ HB.SiteElement = HB.createClass({
       return "<div class='hb-image-wrapper " + this.image_placement + "'><img class='uploaded-image' src=" + this.image_url + " /></div>";
   },
 
-  render: function()
+  attach: function()
   {
+    if(HB.isIEXOrLess(9))
+      this.animated = false;
     // Replace all the templated variables
     var html = HB.renderTemplate(HB.getTemplate(this)+"", this);
     // Once the dom is ready we inject the html returned from renderTemplate
@@ -331,9 +327,23 @@ HB.SiteElement = HB.createClass({
     window.addEventListener('scroll', action);
   },
 
-  closeIframe:  function() {
-    if(this.w != null && this.w.parentNode != null) {
+  remove: function()
+  {
+    if(this.w != null && this.w.parentNode != null)
+    {
       this.w.parentNode.removeChild(this.w);
+      // Note: this should really clean up event listeners
+      // and timers too
+      return true;
+    }
+    return false;
+  },
+
+
+  closeIframe:  function()
+  {
+    if ( this.remove() )
+    {
       // Sets the dismissed state for the next 15 minutes
       HB.sc("HBDismissed", true, new Date((new Date().getTime() + 1000 * 60 * 15)), "path=/");
     }
