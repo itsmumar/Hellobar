@@ -770,7 +770,9 @@ var HB = {
   parseTemplateVar: function(value, siteElement)
   {
     try{value = eval(value)}catch(e){}
-    return (value === undefined ? "" : value);
+    if ( value === undefined || value === null )
+      return "";
+    return value;
   },
 
   // This lets users set a callback for a Hello Bar event specified by eventName (e.g. "siteElementshown")
