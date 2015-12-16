@@ -33,7 +33,7 @@ HB.BarElement = HB.createClass({
     }
   },
 
-  prerender: function(){
+  attach: function(){
     // Disable wiggle on Mobile Safari because it blocks the click action
     if(this.wiggle_button && !HB.isMobileSafari()) {
       this.wiggle = 'wiggle';
@@ -41,8 +41,7 @@ HB.BarElement = HB.createClass({
       this.wiggle = '';
     }
 
-
-    this.callSuper('prerender')
+    this.callSuper('attach')
   }
 
 }, HB.SiteElement);
