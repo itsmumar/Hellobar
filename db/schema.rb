@@ -304,6 +304,13 @@ ActiveRecord::Schema.define(version: 20160119131352) do
     t.integer  "image_upload_id"
     t.string   "image_placement",                 default: "bottom"
     t.integer  "active_image_id"
+    t.string   "question"
+    t.string   "answer1"
+    t.string   "answer2"
+    t.string   "answer1response"
+    t.string   "answer2response"
+    t.string   "answer1link_text"
+    t.string   "answer2link_text"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
