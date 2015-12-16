@@ -371,17 +371,17 @@ var HB = {
     HB.setVisitorData(conversionKey+"_l", now);
 
     // Set the number of conversions for the specific site element
-    HB.setSiteElementData(HB.si, "nc", (HB.getSiteElementData(HB.si, "nc") || 0)+1);
+    HB.setSiteElementData(siteElement.id, "nc", (HB.getSiteElementData(siteElement.id, "nc") || 0)+1);
     // Set the first time converted for the site element if not set
-    if ( !HB.getSiteElementData(HB.si, "fc") )
-      HB.setSiteElementData(HB.si, "fc", now);
+    if ( !HB.getSiteElementData(siteElement.id, "fc") )
+      HB.setSiteElementData(siteElement.id, "fc", now);
     // Set the last time converted for the site element to now
-    HB.setSiteElementData(HB.si, "lc", now);
+    HB.setSiteElementData(siteElement.id, "lc", now);
     // Trigger the event
     HB.trigger("conversion", siteElement);
     // Send the data to the backend if this is the first conversion
     if(conversionCount == 1)
-      HB.s("g", HB.si, {a:HB.getVisitorAttributes()}, callback);
+      HB.s("g", siteElement.id, {a:HB.getVisitorAttributes()}, callback);
     else if(typeof(callback) === typeof(Function))
       callback();
   },
@@ -453,7 +453,7 @@ var HB = {
         emailAndName += ","+name;
 
       // Record the email address to the cnact list and then track that the rule was performed
-      HB.s("c", HB.cli, {e:emailAndName}, function(){HB.converted(this.siteElement, callback)}.bind({siteElement: siteElement}));
+      HB.s("c", siteElement.contact_list_id, {e:emailAndName}, function(){HB.converted(this.siteElement, callback)}.bind({siteElement: siteElement}));
     }
   },
 
@@ -836,9 +836,6 @@ var HB = {
       HB.adifySiteElement(siteElement);
     }
 
-    // Convenience accessors for commonly used attributes
-    HB.si = siteElement.id;
-    HB.cli = siteElement.contact_list_id;
     // If there is a #nohb in the has we don't render anything
     if ( document.location.hash == "#nohb" )
       return;
@@ -859,14 +856,14 @@ var HB = {
   {
     // Track number of views if not yet converted for this site element
     if(!HB.didConvert(siteElement))
-      HB.s("v", HB.si, {a:HB.getVisitorAttributes()});
+      HB.s("v", siteElement.id, {a:HB.getVisitorAttributes()});
 
     // Record the number of views, first seen and last seen
-    HB.setSiteElementData(HB.si, "nv", (HB.getSiteElementData(HB.si, "nv") || 0)+1);
+    HB.setSiteElementData(siteElement.id, "nv", (HB.getSiteElementData(siteElement.id, "nv") || 0)+1);
     var now = Math.round((new Date()).getTime()/1000);
-    if ( !HB.getSiteElementData(HB.si, "fv") )
-      HB.setSiteElementData(HB.si, "fv", now)
-    HB.setSiteElementData(HB.si, "lv", now)
+    if ( !HB.getSiteElementData(siteElement.id, "fv") )
+      HB.setSiteElementData(siteElement.id, "fv", now)
+    HB.setSiteElementData(siteElement.id, "lv", now)
     // Trigger siteElement shown event
     HB.trigger("siteElementshown", siteElement);
   },
