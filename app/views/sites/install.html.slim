@@ -12,7 +12,26 @@
   h5 Installation Methods
 
   - install_help = install_help_data(@site)
-  - if install_help
+  - if @site.had_wordpress_bars?
+    .reveal-wrapper.track-click.activated data-tracking-event="install_page_clicked" data-tracking-props={install_button: "old_hellobar_install"}.to_json
+      i.icon-edit
+      .reveal-title I upgraded my site from the old Hello Bar
+      p
+        ' If you already installed the Hello Bar 1.0 script - you don't need to do anything.
+        | However, if you want to take advantage of the new Hello Bar features, we'd recommend installing the new script.
+
+
+      .reveal-block.myself-reveal
+        ul
+          li Install once and you'll never need to update the Hello Bar code on your site again.
+          li Manage multiple bars and determine which display to which users, all from this dashboard.
+          li Go beyond the bar.  Use our other elements such as sliders and modals.
+
+        p To install Hello Bar, copy and paste the following code right before your closing </body> tag.
+        pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
+        p That's it! You'll never need to update the code on your site again.
+
+  - elsif install_help
     .reveal-wrapper.track-click.activated data-tracking-event="install_page_clicked" data-tracking-props={install_button: "install_help_#{@site.install_type}"}.to_json
       i.icon-edit
       .reveal-title I use #{install_help[0]} to manage my site
