@@ -67,6 +67,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :payment_method_details, only: [] do
+      put 'remove_cc_info'
+    end
+
     resources :users, :only => [:index, :show, :destroy] do
       resources :sites, :only => [:update] do
         member do

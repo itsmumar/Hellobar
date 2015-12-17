@@ -148,11 +148,21 @@ class CyberSourceCreditCard < PaymentMethodDetails
     end
   end
 
-  protected
+  def token_present?
+    data && token.present?
+  end
+
+  def delete_token
+    edited_data = data
+    edited_data['token'] = nil
+    update_columns data: edited_data.to_json
+  end
+
   def token
     data["token"]
   end
 
+  protected
   # ActiveMerchant requires the token in this form
   def formatted_token
     format_token(token)
