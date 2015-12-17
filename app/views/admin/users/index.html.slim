@@ -40,7 +40,12 @@ div.row
             td
               ul
                 - user.payment_method_details.uniq.each do |details|
-                  li= "#{details.brand} X#{details.data["number"][-5,5]}"
+                  li
+                    = "#{details.brand} X#{details.data["number"][-5,5]}"
+                    - if details.token
+                      = link_to "remove", admin_payment_method_detail_remove_cc_info_path(details), :method => :put
+                    - else
+                      = "(token removed)"
             td= user.created_at.strftime("%b %d, %Y")
             td= user.sign_in_count
             td= user.last_sign_in_at.try(:strftime, "%b %d, %Y at %l:%M %p")
