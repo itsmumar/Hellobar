@@ -25,8 +25,7 @@ class @UpgradeAccountModal extends Modal
     if !@options.site.view_billing then @_invalidPermissions()
     @_bindPackageSelection()
 
-    source = @options.source || @options.upgradeBenefit
-    InternalTracking.track_current_person("Viewed Upgrade", { source: source })
+    @source = @options.source || @options.upgradeBenefit
 
     super
 
@@ -45,6 +44,7 @@ class @UpgradeAccountModal extends Modal
           packageData.schedule = @chosenSchedule
 
           options =
+            source: "package-selected"
             package: packageData
             site: @options.site
             successCallback: @options.successCallback

@@ -31,6 +31,8 @@ class @PaymentModal extends Modal
 
   open: ->
     $('body').append(@$modal)
+    @source = @options.source
+
     super
 
   close: ->

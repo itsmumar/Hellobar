@@ -7,6 +7,7 @@ $ ->
     options =
       package: window.site.current_subscription
       site: window.site
+      source: $(this).data('source')
     new PaymentModal(options).open()
 
   $('.show-upgrade-modal').click ->
