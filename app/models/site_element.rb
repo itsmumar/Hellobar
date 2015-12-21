@@ -143,11 +143,11 @@ class SiteElement < ActiveRecord::Base
     element_subtype == "announcement"
   end
 
-  private
-
   def show_default_message?
     (after_email_submit_action == :show_default_message)
   end
+
+  private
 
   def remove_unreferenced_images
     # Done through SQL to ensure references are up to date
