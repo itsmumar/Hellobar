@@ -1,4 +1,7 @@
-iframe#hellobar-container,
+iframe.HB-Bar,
+iframe.HB-Modal,
+iframe.HB-Takeover,
+iframe.HB-Slider,
 div#hellobar-pusher {
-  display: none;
+  display: none !important;
 }

@@ -42,14 +42,8 @@ class UserMigrationController < ApplicationController
 
           SiteMembership.create!(site: site, user: user)
 
-          if current_wordpress_user.is_pro_user?
-            subscription = Subscription::Pro.new(schedule: "monthly")
-            site.change_subscription(subscription, nil, Hello::WordpressUser::PRO_TRIAL_PERIOD)
-          elsif site_hash[:bar_ids].count >= 10
-            site.change_subscription(Subscription::FreePlus.new(schedule: "monthly"))
-          else
-            site.change_subscription(Subscription::Free.new(schedule: "monthly"))
-          end
+          subscription = Subscription::Pro.new(schedule: "monthly")
+          site.change_subscription(subscription, nil, Hello::WordpressUser::PRO_TRIAL_PERIOD)
 
           site_hash[:bar_ids].each do |id|
             if bar = load_wordpress_bar(id)
@@ -63,7 +57,7 @@ class UserMigrationController < ApplicationController
     end
 
     session[:wordpress_user_id] = nil
-    url = current_user.sites.any? ? site_site_elements_path(current_user.sites.first, anchor: "upgrade-modal") : new_site_path
+    url = current_user.sites.any? ? site_site_elements_path(current_user.sites.first, anchor: "migration-complete") : new_site_path
     current_user.sites.each { |site| site.generate_script }
 
     respond_to do |format|

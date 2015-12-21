@@ -20,7 +20,7 @@ section
         | .
       - if @site.requires_payment_method?
         - # only show "billing schedule" if user is on a plan that actually has one
-        = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal'
+        = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal', data: { source: "Change plan or billing" }
       - else
         = link_to 'Upgrade plan', '#', class: 'show-upgrade-modal button', data: { source: "Billing Plan Link" }
 
@@ -30,7 +30,7 @@ section
     p
       - if @site.current_subscription && @site.current_subscription.payment_method
         = @site.current_subscription.payment_method.current_details.data['number']
-        = link_to 'Add or change card', '#', class: 'show-payment-modal'
+        = link_to 'Add or change card', '#', class: 'show-payment-modal', data: {source: "Add or change card"}
       - else
         small
           | (no credit card on file)
@@ -62,7 +62,7 @@ section
   - if @next_bill
     - if @site.current_subscription.trial?
       ' This site is on a trial plan.
-      a.show-payment-modal.underlined
+      a.show-payment-modal.underlined data-source="Please enter payment text"
         ' Please enter a payment method by #{bill_due_at(@next_bill)}
         ' to continue using HelloBar #{@site.current_subscription.values[:name]}.
     - elsif @next_bill.amount > 0
