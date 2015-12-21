@@ -20,6 +20,7 @@ class Site < ActiveRecord::Base
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
+  before_validation :generate_referral_token
 
   before_destroy :generate_blank_static_assets
 
@@ -487,6 +488,10 @@ class Site < ActiveRecord::Base
   def generate_read_write_keys
     self.read_key = SecureRandom.uuid if self.read_key.blank?
     self.write_key = SecureRandom.uuid if self.write_key.blank?
+  end
+
+  def generate_referral_token
+    self.referral_token ||= SecureRandom.hex(8)
   end
 
   def set_branding_on_site_elements
