@@ -22,6 +22,14 @@ class SiteElementSerializer < ActiveModel::Serializer
     # other
     :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement, :default_email_thank_you_text
 
+  def headline
+    question.presence || object.headline
+  end
+
+  def default_email_thank_you
+    SiteElement::DEFAULT_EMAIL_THANK_YOU
+  end
+
   def rule
     RuleSerializer.new(object.rule)
   end

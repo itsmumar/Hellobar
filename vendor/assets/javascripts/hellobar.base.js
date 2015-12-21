@@ -884,6 +884,13 @@ var HB = {
     if ( document.location.hash == "#nohb" )
       return;
     siteElement.attach();
+
+    if(siteElement.has_question) {
+      var cta = d.getElementById('hb-traffic-cta');
+      var headline = d.getElementsByClassName('hb-headline-text')[0]
+      HB.displayQuestion(headline, cta);
+    }
+
   },
 
   removeAllSiteElements: function()
