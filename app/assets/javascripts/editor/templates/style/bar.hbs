@@ -2,6 +2,12 @@
   {{toggle-switch switch=model.show_branding}}
 </label>
 
+{{#unless model.site.capabilities.remove_branding}}
+<label>Hello Bar ads
+  {{toggle-switch switch=model.show_branding}}
+</label>
+{{/unless}}
+
 <label>Animate entry/exit
   {{toggle-switch switch=model.animated}}
 </label>
