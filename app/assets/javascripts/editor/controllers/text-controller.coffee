@@ -51,3 +51,8 @@ HelloBar.TextController = Ember.Controller.extend
     setImageProps: (imageID, imageUrl) ->
       @set('model.active_image_id', imageID)
       @set('model.image_url', imageUrl)
+
+    resetAnswerState: ->
+      prop = @get('model.has_question')
+      @set('model.has_question', !prop)
+      @set('model.has_question', prop)
