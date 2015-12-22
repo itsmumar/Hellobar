@@ -16,8 +16,4 @@ describe Referral do
 
     expect(@referral.body).to include(@user.name)
   end
-
-  it "has a url" do
-    expect(@referral.url).to include(users(:joey).referral_token)
-  end
 end

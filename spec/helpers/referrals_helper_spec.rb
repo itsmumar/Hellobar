@@ -1,15 +1,11 @@
 require 'spec_helper'
 
-# Specs in this file have access to a helper object that includes
-# the ReferralsHelper. For example:
-#
-# describe ReferralsHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 describe ReferralsHelper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  fixtures :all
+  it "Returns a URL" do
+    user = users(:joey)
+    url = helper.referral_url_for_user(user)
+    expect(url).to be_a(String)
+    expect(url).to match(user.referral_token)
+  end
 end
