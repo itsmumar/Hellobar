@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151221190908) do
+ActiveRecord::Schema.define(version: 20151222172150) do
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
     t.string   "ip_address"
@@ -211,6 +211,8 @@ ActiveRecord::Schema.define(version: 20151221190908) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "email"
+    t.string   "state"
   end
 
   add_index "referrals", ["user_id"], name: "index_referrals_on_user_id", using: :btree

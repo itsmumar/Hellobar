@@ -1,5 +1,12 @@
 class Referral < ActiveRecord::Base
+  STATES = {
+    'sent' => 'Invite sent',
+    'signed_up' => 'Signed up',
+    'installed' => 'Installed'
+  }
+
   belongs_to :user
+  validates :state, inclusion: STATES.keys
 
   def invitation_body
     content = <<-TEXT
