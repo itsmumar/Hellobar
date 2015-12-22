@@ -419,6 +419,29 @@ var HB = {
     return false;
   },
 
+  displayQuestion: function(d, headline, cta) {
+    d.getElementById("hb-answer1").onclick = (function() { HB.displayResponse(d,1) });
+    d.getElementById("hb-answer2").onclick = (function() { HB.displayResponse(d,2) });
+
+    headline.textContent = d.getElementById("hb-question").textContent;
+    var answers = d.getElementById("hb-answers");
+
+    if(cta){
+      cta.parentNode.replaceChild(answers, cta);
+    } else {
+      headline.appendChild(answers);
+    }
+    answers.style.display = "";
+  },
+
+  displayResponse: function(d, idx) {
+    var cta = d.querySelector('#hb-answer'+idx+'-response a');
+    var answers = d.getElementById('hb-answers');
+    var headline = d.getElementsByClassName('hb-headline-text')[0];
+    answers.parentNode.replaceChild(cta, answers);
+    headline.textContent = d.getElementById('hb-answer'+idx+'-response').textContent;
+  },
+
   // This takes the the email field, name field, and target siteElement DOM element.
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it

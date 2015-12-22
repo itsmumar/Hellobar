@@ -122,7 +122,7 @@ HB.SiteElement = HB.createClass({
     if(siteElement.has_question) {
       var cta = d.getElementById('hb-traffic-cta');
       var headline = d.getElementsByClassName('hb-headline-text')[0]
-      HB.displayQuestion(headline, cta);
+      HB.displayQuestion(d, headline, cta);
     }
 
     // As the vistor readjust the window size we need to adjust the size of the containing
