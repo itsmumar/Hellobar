@@ -82,7 +82,7 @@ var HB = {
   // Copy functions from spec into klass
   cpFuncs: function(spec, klass)
   {
-    for (var key in spec) 
+    for (var key in spec)
     {
       if (spec.hasOwnProperty(key) )
       {
@@ -409,29 +409,38 @@ var HB = {
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
   // shakes the email field
-  submitEmail: function(siteElement, emailField, nameField, targetSiteElement, thankYouText, redirect, redirectUrl, removeElement)
+  submitEmail: function(siteElement, emailField, nameField, targetSiteElement, thankYouText, redirect, redirectUrl)
   {
     HB.validateEmail(
       emailField.value,
       nameField.value,
       function(){
         var doRedirect = HB.t(redirect);
+        var removeElements;
+        var siteElementDoc = siteElement.w.contentDocument;
 
         if(!doRedirect) {
-          if(targetSiteElement != null)
-            if(HB.currentSiteElement.use_free_email_default_msg) {
-              var btn_class  = ' class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"';
-              var btn_style  = ' style="color: {{siteElement.link_color}}; background-color: {{siteElement.secondary_color}}; border-color: {{siteElement.secondary_color}};"';
-              var btn_target = ' {{siteElement.open_in_new_window ? "target=_blank" : "target=_parent"}}';
-              var button = HB.renderTemplate("<a href='http://www.hellobar.com'"+ btn_class + btn_style + btn_target + ">Click Here</a>", HB.currentSiteElement);
-              targetSiteElement.innerHTML='<span>' + thankYouText + '&nbsp;' + button + '</span>';
-            } else {
-              targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
-            }
+          if(targetSiteElement != null) {
+            if(siteElement.use_free_email_default_msg) {
+              // Hijack the submit button and turn it into a link
+              var btnElement = siteElementDoc.getElementsByClassName('hb-cta')[0];
+              var linkUrl = 'http://www.hellobar.com?hbt=emailSubmittedLink&sid=';
+              btnElement.textContent = 'Click Here';
+              btnElement.href = linkUrl;
+              btnElement.onclick = function() { HB.trackClick(btnElement) };
 
-          if(removeElement != null) {
-            for (var i = 0; i < removeElement.length; i++) {
-              HB.hideElement(removeElement[i]);
+              // Remove the email inputs and subtext
+              removeElements = siteElementDoc.querySelectorAll('.hb-input-block, .hb-secondary-text');
+            } else {
+              // Remove the entire email input wrapper including the button
+              removeElements = siteElementDoc.querySelectorAll('.hb-input-wrapper, .hb-secondary-text');
+            }
+            targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
+          }
+
+          if(removeElements != null) {
+            for (var i = 0; i < removeElements.length; i++) {
+              HB.hideElement(removeElements[i]);
             }
           }
         }
@@ -449,6 +458,7 @@ var HB = {
         HB.shake(emailField);
       }
     );
+    return false;
   },
 
   // Called to validate the email and name. Does not actually submit the email

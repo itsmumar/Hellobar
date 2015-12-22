@@ -115,16 +115,12 @@ class SiteElement < ActiveRecord::Base
     background_color
   end
 
-  def thank_you_text
-    if show_default_message?
+  def display_thank_you_text
+    if show_default_email_message?
       default_email_thank_you_text
     else
       read_attribute(:thank_you_text).presence || default_email_thank_you_text
     end
-  end
-
-  def thank_you_text=(str)
-    write_attribute(:thank_you_text, str) unless show_default_message?
   end
 
   def default_email_thank_you_text
@@ -143,7 +139,7 @@ class SiteElement < ActiveRecord::Base
     element_subtype == "announcement"
   end
 
-  def show_default_message?
+  def show_default_email_message?
     (after_email_submit_action == :show_default_message)
   end
 

@@ -277,9 +277,9 @@ private
       tab_side: "right",
       target: site_element.target_segment,
       template_name: "#{site_element.class.name.downcase}_#{site_element.element_subtype}",
-      thank_you_text: SiteElement.sanitize(site_element.thank_you_text).gsub(/"/, "&quot;"),
+      thank_you_text: SiteElement.sanitize(site_element.display_thank_you_text).gsub(/"/, "&quot;"),
       views: views,
-      use_free_email_default_msg: site_element.show_default_message? && site_element.site.is_free?,
+      use_free_email_default_msg: site_element.show_default_email_message? && site_element.site.is_free?,
       wiggle_wait: 0
     }).select{|key, value| !value.nil? || !value == '' }
   end
