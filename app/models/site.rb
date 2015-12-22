@@ -16,6 +16,8 @@ class Site < ActiveRecord::Base
   has_many :bills, -> {order 'id'}, through: :subscriptions
   has_many :improve_suggestions
   has_many :image_uploads, dependent: :destroy
+  has_many :referrals, dependent: :destroy
+
   acts_as_paranoid
 
   before_validation :standardize_url
@@ -167,6 +169,10 @@ class Site < ActiveRecord::Base
     delay :do_recheck_installation, options
   end
 =end
+
+  def referral_url
+    "https://hellobar.com/invite/accept?token=#{referral_token}"
+  end
 
   def generate_improve_suggestions(options = {})
     delay :generate_all_improve_suggestions, options

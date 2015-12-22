@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :referrals
+
   devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords"}
   get "/auth/:action/callback", :to => "users/omniauth_callbacks", :constraints => { :action => /google_oauth2/ }
 
