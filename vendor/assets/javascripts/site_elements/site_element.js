@@ -377,10 +377,11 @@ HB.SiteElement = HB.createClass({
         // if the pusher exists, unhide it since it should be hidden at this point
         if (this.e.pusher != null)
           HB.showElement(this.e.pusher, '');
-      };
+      }.bind(this);
 
       pullDown.appendChild(pdLink);
       HB.injectAtTop(pullDown);
+      this.pullDown = pullDown;
     }
   },
 
