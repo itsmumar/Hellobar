@@ -7,17 +7,14 @@ class Referral < ActiveRecord::Base
 
   belongs_to :user
   validates :state, inclusion: STATES.keys
-
-  def invitation_body
-    content = <<-TEXT
-If only we could all have friends like #{user.name}. You've been invited to try out a tool called Hello Bar. It allows you to convert more of your website visitors into customers, it grows your following, and it does a bunch of other things for your site.
-
-If you want to try it, you can get it below. Once you install Hello Bar, both you and your friend will enjoy a free month of Hello Bar Pro. (There's also a free version.)
-TEXT
-    content.html_safe
-  end
+  validates :user_id, presence: true
+  validates :email, presence: true
 
   def url
     "https://hellobar.com/invite/accept?token=#{user.referral_token}"
+  end
+
+  def set_standard_body
+    self.body = I18n.t("referral.standard_body", name: user.name)
   end
 end

@@ -7,11 +7,17 @@ describe Referral do
     @referral = @user.referrals.build
   end
 
-  it "can produce an invite body" do
-    @referral.invitation_body.should match(@user.name)
+  it "has no body set by default" do
+    @referral.body.should be_nil
+  end
+
+  it "has a standard body that can be set explicitly" do
+    @referral.set_standard_body
+
+    expect(@referral.body).to match(@user.name)
   end
 
   it "has a url" do
-    @referral.url.should match(users(:joey).referral_token)
+    expect(@referral.url).to match(users(:joey).referral_token)
   end
 end
