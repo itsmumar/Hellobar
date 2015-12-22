@@ -224,19 +224,12 @@ private
   def site_element_settings(site_element)
     settings = %w{
       animated
-      answer1
-      answer1link_text
-      answer1response
-      answer2
-      answer2link_text
-      answer2response
       background_color
       border_color
       button_color
       caption
       email_placeholder
       font
-      has_question
       headline
       image_placement
       link_color
@@ -244,7 +237,6 @@ private
       link_text
       name_placeholder
       placement
-      question
       show_border
       show_branding
       size
@@ -270,6 +262,15 @@ private
     end
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
+      answer1: site_element.answer1,
+      answer1response: site_element.answer1response,
+      answer1link_text: site_element.answer1link_text,
+      answer2: site_element.answer2,
+      answer2response: site_element.answer2response,
+      answer2link_text: site_element.answer2link_text,
+      has_question: site_element.has_question,
+      question: site_element.question,
+
       branding_url: "http://www.hellobar.com?sid=#{site_element.id}",
       closable: site_element.is_a?(Bar) ? site_element.closable : false,
       contact_list_id: site_element.contact_list_id,
