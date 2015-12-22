@@ -42,7 +42,7 @@ Ask question from user first?</label>
 
 {{#if showQuestionFields}}
   <label>What's your question?</label>
-  {{view Ember.TextField value=model.question placeholder="Do you like money?"}}
+  {{view Ember.TextField value=model.question placeholder="First time here?"}}
 
   <label>First Answer</label>
   {{view Ember.TextField value=model.answer1 placeholder="Yes"}}
@@ -51,19 +51,19 @@ Ask question from user first?</label>
   {{view Ember.TextField value=model.answer2 placeholder="No"}}
 
   <label>First Answer Headline</label>
-  {{view Ember.TextField value=model.answer1response placeholder="Then I can teach you how to make more money"}}
+  {{view Ember.TextField value=model.answer1response placeholder="Welcome! Let’s get started..."}}
 
   {{#unless hideLinkText}}
     <label>First Answer Button Text</label>
-    {{view Ember.TextField value=model.answer1link_text placeholder="Let's do it!"}}
+    {{view Ember.TextField value=model.answer1link_text placeholder="Take the tour"}}
   {{/unless}}
 
   <label>Second Answer Headline</label>
-  {{view Ember.TextField value=model.answer2response placeholder="Then I can teach you how to love money"}}
+  {{view Ember.TextField value=model.answer2response placeholder="Welcome back! Check out our new sale."}}
 
   {{#unless hideLinkText}}
     <label>Second Answer Button Text</label>
-    {{view Ember.TextField value=model.answer2link_text placeholder="Cool!"}}
+    {{view Ember.TextField value=model.answer2link_text placeholder="Shop now"}}
   {{/unless}}
 
   <p>
