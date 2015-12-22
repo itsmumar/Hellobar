@@ -119,6 +119,12 @@ HB.SiteElement = HB.createClass({
     if(HB.isIE11())
       HB.addClass(d.body, "hb-paused-animations-ie");
 
+    if(siteElement.has_question) {
+      var cta = d.getElementById('hb-traffic-cta');
+      var headline = d.getElementsByClassName('hb-headline-text')[0]
+      HB.displayQuestion(headline, cta);
+    }
+
     // As the vistor readjust the window size we need to adjust the size of the containing
     // iframe. We do this by checking the the size of the inner div. If the the width
     // of the window is less than or equal to 640 pixels we set the flag isMobileWidth to true.
