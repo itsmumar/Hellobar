@@ -2,10 +2,6 @@
 var context = describe;
 
 describe("HB", function() {
-  beforeEach(function() {
-    HB = _HB;
-  });
-
   describe(".sanitizeConditionValue", function() {
     beforeEach(function() {
       spyOn(HB, 'n');
