@@ -54,7 +54,7 @@ var HBQ = function()
     siteElements = [siteElement];
   else
     siteElements = HB.applyRules();
-  for(var i=0; i < siteElements.length; i++ )
+  for(i=0; i < siteElements.length; i++ )
   {
     HB.addToPage(HB.createSiteElement(siteElements[i]));
   }
@@ -978,11 +978,17 @@ var HB = {
     // broken up into visibility groups
     // The next step is to pick one per visibility group
     var results = [];
-    for(i=0;i<visibilityGroupNames.length;i++)
+    // We need to specify the order that elements appear in. Whichever is first
+    // in the array is on top
+    var visibilityOrder = ["Modal/Takeover", "Slider", "Bar"];
+    for(i=0;i<visibilityOrder.length;i++)
     {
-      siteElement = HB.getBestElement(visibilityGroups[visibilityGroupNames[i]]);
-      if ( siteElement )
-        results.push(siteElement);
+      if ( visibilityGroups[visibilityOrder[i]] )
+      {
+        siteElement = HB.getBestElement(visibilityGroups[visibilityOrder[i]]);
+        if ( siteElement )
+          results.push(siteElement);
+      }
     }
     return results;
   },
