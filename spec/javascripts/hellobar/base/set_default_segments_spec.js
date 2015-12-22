@@ -6,7 +6,6 @@ describe("HB", function() {
   var HOUR = 60 * 60 * 1000;
 
   beforeEach(function() {
-    HB = _HB;
     HB.loadCookies();
   });
 

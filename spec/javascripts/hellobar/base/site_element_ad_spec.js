@@ -8,8 +8,7 @@ describe("HB", function() {
   var WHITE = "fff";
 
   beforeEach(function() {
-    HB = _HB;
-    siteElement = new SiteElement({
+    siteElement = new HB.SiteElement({
       settings: {url: ""},
       template_name: "bar_traffic"
     });

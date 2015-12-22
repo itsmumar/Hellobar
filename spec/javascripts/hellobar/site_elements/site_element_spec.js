@@ -6,7 +6,7 @@ describe("SiteElement", function() {
   describe("#imagePlacementClass", function() {
     siteElement = null;
     beforeEach(function() {
-      siteElement = new SiteElement({});
+      siteElement = new HB.SiteElement({});
     });
 
     context("when image_url is not present", function() {

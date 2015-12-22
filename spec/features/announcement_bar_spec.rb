@@ -11,7 +11,7 @@ feature "Site with an announcement bar", js: true do
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')
 
-    within_frame 'random-container' do
+    within_frame 'random-container-0' do
       expect(page).to have_content(element.headline)
     end
   end

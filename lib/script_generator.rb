@@ -81,7 +81,7 @@ class ScriptGenerator < Mustache
     Hellobar::Settings[:tracking_host]
   end
 
-  def hellobar_js
+  def site_element_classes_js
     js = File.read("#{Rails.root}/vendor/assets/javascripts/site_elements/site_element.js")
 
     klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
@@ -93,6 +93,14 @@ class ScriptGenerator < Mustache
 
   def hellobar_base_js
     File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
+  end
+
+  def ie_shims_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/hellobar_script/ie_shims.js")
+  end
+
+  def crypto_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/hellobar_script/crypto.js")
   end
 
   def hellobar_container_css

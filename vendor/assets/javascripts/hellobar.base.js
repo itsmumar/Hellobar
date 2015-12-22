@@ -16,8 +16,8 @@ var HBQ = function()
 {
   // Initialize the rules array so it can be pushed into
   HB.rules = [];
+  HB.siteElementsOnPage = [];
   HB.isMobile = false;
-  HB.widthCache = 0;
   HB.maxSliderSize = 380; /* IF CHANGED, UPDATE SLIDER ELEMENT CSS */
   HB.id_type_map = {
     "hellobar-bar": "bar",
@@ -35,107 +35,29 @@ var HBQ = function()
     HB_DNT = true;
   }
 
+  var i;
   // Once initialized replace the existing data with it
   if ( typeof(_hbq) != "undefined" && _hbq && _hbq.length ) {
-    for ( var i=0; i<_hbq.length; i++ )
+    for (i=0; i<_hbq.length; i++ )
       this.push(_hbq[i]);
   }
 
   // Set all the default tracking trackings
   HB.setDefaultSegments();
 
+
+  var siteElements = [];
   // If a specific element has already been set, use it
   // Otherwise use the tradition apply rules method
   var siteElement = HB.getFixedSiteElement();
-  siteElement = siteElement || HB.applyRules();
   if ( siteElement )
-    HB.render(siteElement);
-
-  // As the vistor readjust the window size we need to adjust the size of the containing
-  // iframe. We do this by checking the the size of the inner div. If the the width
-  // of the window is less than or equal to 640 pixels we set the flag isMobileWidth to true.
-  // Note: we are not actually detecting a mobile device - just the width of the window.
-  // If isMobileWidth is true we add an additional "mobile" CSS class which is used to
-  // adjust the style of the siteElement.
-  // To accomplish all of this we set up an interval to monitor the size of everything:
-  HB.isMobileWidth = false;
-  var mobileDeviceInterval = setInterval(function(){
-    // Get the frame
-    var frame = window.frames[HB_PS + "-container"];
-    if ( !frame )
-      return;
-
-    // Get the relevant elements that might need checking/adjusting
-    var containerDocument = frame.document;
-    HB.e = {
-      container: HB.$("#" + HB_PS + "-container"),
-      pusher: HB.$("#hellobar-pusher")
-    };
-
-    var foundElement = HB.getSiteElementDomNode();
-    if ( foundElement ) {
-      HB.e.siteElement = foundElement;
-      HB.e.siteElementType = HB.id_type_map[foundElement.id]
-    } else {
-      HB.e.siteElement = null;
-      HB.e.siteElementType = null;
-    }
-
-    // Monitor siteElement height to update HTML/CSS
-    if ( HB.e.siteElement ) {
-      if ( HB.e.siteElement.clientHeight ) {
-
-        // Update the CSS class based on the width
-        var wasMobile = HB.isMobileWidth;
-
-        if ( HB.e.siteElementType == "modal" && containerDocument )
-          HB.isMobileWidth = (containerDocument.getElementById("hellobar-modal-background").clientWidth <= 640 );
-        else if ( HB.e.siteElementType == "slider" )
-          HB.isMobileWidth = HB.e.siteElement.clientWidth <= 270 || document.body.clientWidth <= 375 || document.body.clientWidth < HB.e.siteElement.clientWidth;
-        else
-          HB.isMobileWidth = (HB.e.siteElement.clientWidth <= 640 );
-
-        if ( wasMobile != HB.isMobileWidth ) {
-          HB.widthCache = 0;
-
-          if ( HB.isMobileWidth ) {
-            HB.isMobile = true;
-            HB.addClass(HB.e.siteElement, "mobile");
-          } else {
-            HB.isMobile = false;
-            HB.removeClass(HB.e.siteElement, "mobile");
-          }
-        }
-
-        // Adjust the container size
-        HB.setContainerSize(HB.e.container, HB.e.siteElement, HB.e.siteElementType, HB.isMobile);
-
-        // Bar specific adjustments
-        if ( HB.e.siteElementType == "bar" ) {
-
-          // Adjust the pusher
-          if ( HB.e.pusher ) {
-            // handle case where display-condition check has hidden HB.w
-            if (HB.w.style.display === "none") {
-              return;
-            };
-
-            var borderPush = HB.t((HB.currentSiteElement.show_border) ? 3 : 0)
-            HB.e.pusher.style.height = (HB.e.siteElement.clientHeight + borderPush) + "px";
-          }
-
-          // Add multiline class
-          var barBounds = (HB.w.className.indexOf('regular') > -1 ? 32 : 52 );
-
-          if ( HB.e.siteElement.clientHeight > barBounds ) {
-            HB.addClass(HB.e.siteElement, "multiline");
-          } else {
-            HB.removeClass(HB.e.siteElement, "multiline");
-          }
-        }
-      }
-    }
-  }, 50); // Check screen size every N ms
+    siteElements = [siteElement];
+  else
+    siteElements = HB.applyRules();
+  for(i=0; i < siteElements.length; i++ )
+  {
+    HB.addToPage(HB.createSiteElement(siteElements[i]));
+  }
 }
 
 // Call the function right away once this is loaded
@@ -154,10 +76,54 @@ HBQ.prototype.push = function()
   }
 }
 // Keep everything within the HB namespace
-// **Special case: If a user includes multiple siteElements, to avoid overwriting the first siteElement and causing errors,
-// we manually set _HB to HB later before pushing rules.
-var _HB = {
+var HB = {
   CAP: {}, // Capabilies
+
+  // Copy functions from spec into klass
+  cpFuncs: function(spec, klass)
+  {
+    for (var key in spec) 
+    {
+      if (spec.hasOwnProperty(key) )
+      {
+        var value = spec[key];
+        if ( typeof(value) == "function" )
+        {
+          klass.prototype[key] = value;
+        }
+      }
+    }
+  },
+
+  // Creates a class
+  createClass: function(spec, superClass)
+  {
+    // Set up the initializer
+    var klass = function()
+    {
+      // Call the initializer
+      if ( this.initialize) this.initialize.apply(this, arguments);
+    }
+    if ( superClass )
+    {
+      // If we have a super class copy over all those methods
+      HB.cpFuncs(superClass.prototype, klass);
+
+      // Set up the superclass
+      klass.superClass = superClass;
+
+      // Also set up callSuper
+      spec.callSuper = function(name)
+      {
+        this.constructor.superClass.prototype[name].apply(this, Array.prototype.slice.call(arguments, 1));
+      }
+    }
+
+    // Copy over the specs
+    HB.cpFuncs(spec, klass);
+
+    return klass;
+  },
 
   // Returns the element or looks it up via getElementById
   $: function(idOrElement)
@@ -172,17 +138,6 @@ var _HB = {
   t: function(value)
   {
     return (value && value != "false" && value != "0") ? true : false;
-  },
-
-  getSiteElementDomNode: function() {
-    if(HB.w && HB.w.contentDocument) {
-      for(var key in HB.id_type_map) {
-        var el = HB.w.contentDocument.getElementById(key);
-        if(el != undefined)
-          return el;
-      }
-    }
-    return null;
   },
 
   // Adds the CSS class to the target element
@@ -364,10 +319,10 @@ var _HB = {
   },
 
   // Recoards the rule being formed when the visitor clicks the specified element
-  trackClick: function(element)
+  trackClick: function(domElement, siteElement)
   {
-    var url = element.href;
-    HB.converted(function(){if(element.target != "_blank") document.location = url;});
+    var url = domElement.href;
+    HB.converted(siteElement, function(){if(domElement.target != "_blank") document.location = url;});
   },
 
   // Returns the conversion key used in the cookies to determine if this
@@ -410,9 +365,9 @@ var _HB = {
   },
 
   // Called when a conversion happens (e.g. link clicked, email form filled out)
-  converted: function(callback)
+  converted: function(siteElement, callback)
   {
-    var conversionKey = HB.getConversionKey(HB.currentSiteElement);
+    var conversionKey = HB.getConversionKey(siteElement);
     var now = Math.round(new Date().getTime()/1000);
     var conversionCount = (HB.getVisitorData(conversionKey) || 0 ) + 1;
 
@@ -424,17 +379,17 @@ var _HB = {
     HB.setVisitorData(conversionKey+"_l", now);
 
     // Set the number of conversions for the specific site element
-    HB.setSiteElementData(HB.si, "nc", (HB.getSiteElementData(HB.si, "nc") || 0)+1);
+    HB.setSiteElementData(siteElement.id, "nc", (HB.getSiteElementData(siteElement.id, "nc") || 0)+1);
     // Set the first time converted for the site element if not set
-    if ( !HB.getSiteElementData(HB.si, "fc") )
-      HB.setSiteElementData(HB.si, "fc", now);
+    if ( !HB.getSiteElementData(siteElement.id, "fc") )
+      HB.setSiteElementData(siteElement.id, "fc", now);
     // Set the last time converted for the site element to now
-    HB.setSiteElementData(HB.si, "lc", now);
+    HB.setSiteElementData(siteElement.id, "lc", now);
     // Trigger the event
-    HB.trigger("conversion", HB.currentSiteElement);
+    HB.trigger("conversion", siteElement);
     // Send the data to the backend if this is the first conversion
     if(conversionCount == 1)
-      HB.s("g", HB.si, {a:HB.getVisitorAttributes()}, callback);
+      HB.s("g", siteElement.id, {a:HB.getVisitorAttributes()}, callback);
     else if(typeof(callback) === typeof(Function))
       callback();
   },
@@ -454,7 +409,7 @@ var _HB = {
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
   // shakes the email field
-  submitEmail: function(emailField, nameField, targetSiteElement, thankYouText, redirect, redirectUrl, removeElement)
+  submitEmail: function(siteElement, emailField, nameField, targetSiteElement, thankYouText, redirect, redirectUrl, removeElement)
   {
     HB.validateEmail(
       emailField.value,
@@ -472,7 +427,7 @@ var _HB = {
           }
         }
 
-        HB.recordEmail(emailField.value, nameField.value, function(){
+        HB.recordEmail(siteElement, emailField.value, nameField.value, function(){
           // Successfully saved
         });
 
@@ -497,7 +452,7 @@ var _HB = {
   },
 
   // Called to record an email for the rule without validation (also used by submitEmail)
-  recordEmail: function(email, name, callback)
+  recordEmail: function(siteElement, email, name, callback)
   {
     if ( email )
     {
@@ -506,7 +461,7 @@ var _HB = {
         emailAndName += ","+name;
 
       // Record the email address to the cnact list and then track that the rule was performed
-      HB.s("c", HB.cli, {e:emailAndName}, function(){HB.converted(callback)});
+      HB.s("c", siteElement.contact_list_id, {e:emailAndName}, function(){HB.converted(this.siteElement, callback)}.bind({siteElement: siteElement}));
     }
   },
 
@@ -812,7 +767,9 @@ var _HB = {
   parseTemplateVar: function(value, siteElement)
   {
     try{value = eval(value)}catch(e){}
-    return (value === undefined ? "" : value);
+    if ( value === undefined || value === null )
+      return "";
+    return value;
   },
 
   // This lets users set a callback for a Hello Bar event specified by eventName (e.g. "siteElementshown")
@@ -855,100 +812,70 @@ var _HB = {
     }
   },
 
-  // Renders the siteElement
-  render: function(siteElementToRender)
+  // Returns a SiteElement object from a hash of data
+  createSiteElement: function(data)
   {
-    var siteElement = {};
-
+    // Sanitize the data
+    data = HB.sanitize(data);
     // Make a copy of the siteElement
-    var fn = window[siteElementToRender.type + 'Element'];
+    var fn = window.HB[data.type + 'Element'];
     if(typeof fn === 'function') {
-      siteElement = new window[siteElementToRender.type + 'Element'](siteElementToRender)
+      siteElement = new window.HB[data.type + 'Element'](data)
     } else {
-      siteElement = new SiteElement(siteElementToRender)
+      siteElement = new HB.SiteElement(data)
     }
+    return siteElement;
+  },
 
-    // Call prerender
-    siteElement.prerender();
+  // Adds the SiteElement to the page
+  addToPage: function(siteElement)
+  {
+    // Return if already added to the page
+    if ( typeof(siteElement.pageIndex) != 'undefined' )
+        return;
+    // Set the page index so it can be referenced
+    siteElement.pageIndex = HB.siteElementsOnPage.length;
 
+    // Helper for template that returns the Javascript for a reference
+    // to this object
+    siteElement.me = "window.parent.HB.siteElementsOnPage["+siteElement.pageIndex+"]";
+
+    HB.siteElementsOnPage.push(siteElement);
     // Adify if AD load
     if (HB.AD) {
-      siteElement = HB.adifySiteElement(siteElement);
+      HB.adifySiteElement(siteElement);
     }
 
-    HB.currentSiteElement = siteElement;
-    // Convenience accessors for commonly used attributes
-    HB.si = siteElement.id;
-    HB.cli = siteElement.contact_list_id;
     // If there is a #nohb in the has we don't render anything
     if ( document.location.hash == "#nohb" )
       return;
-    // Replace all the templated variables
-    var html = HB.renderTemplate(this.getTemplate(siteElement)+"", siteElement);
-    // Once the dom is ready we inject the html returned from renderTemplate
-    HB.domReady(function(){
-      // Set an arbitrary timeout to prevent some rendering
-      // conflicts with certain sites
-      setTimeout(function(){
-        HB.injectSiteElementHTML(html, siteElement);
-        HB.setIosKeyboardHandlers();
-        HB.setPullDown(siteElement)
-        // Track the view
-        HB.viewed();
-        // Monitor zoom scale events
-        HB.hideOnZoom();
+    siteElement.attach();
+  },
 
-        // Set wiggle listeners
-        if(siteElement.wiggle_button.length > 0)
-          HB.wiggleEventListeners(HB.w);
-      }, 1);
-    });
+  removeAllSiteElements: function()
+  {
+    for(var i=0;i<HB.siteElementsOnPage.length;i++)
+    {
+      HB.siteElementsOnPage[i].remove();
+    }
+    HB.siteElementsOnPage = [];
   },
 
   // Called when the siteElement is viewed
-  viewed: function()
+  viewed: function(siteElement)
   {
     // Track number of views if not yet converted for this site element
-    if(!HB.didConvert(HB.currentSiteElement))
-      HB.s("v", HB.si, {a:HB.getVisitorAttributes()});
+    if(!HB.didConvert(siteElement))
+      HB.s("v", siteElement.id, {a:HB.getVisitorAttributes()});
 
     // Record the number of views, first seen and last seen
-    HB.setSiteElementData(HB.si, "nv", (HB.getSiteElementData(HB.si, "nv") || 0)+1);
+    HB.setSiteElementData(siteElement.id, "nv", (HB.getSiteElementData(siteElement.id, "nv") || 0)+1);
     var now = Math.round((new Date()).getTime()/1000);
-    if ( !HB.getSiteElementData(HB.si, "fv") )
-      HB.setSiteElementData(HB.si, "fv", now)
-    HB.setSiteElementData(HB.si, "lv", now)
+    if ( !HB.getSiteElementData(siteElement.id, "fv") )
+      HB.setSiteElementData(siteElement.id, "fv", now)
+    HB.setSiteElementData(siteElement.id, "lv", now)
     // Trigger siteElement shown event
-    HB.trigger("siteElementshown", HB.currentSiteElement);
-  },
-
-  hideOnZoom: function() {
-    // Doesn't work IE 9 and earlier
-    if (!window.addEventListener || !window.outerWidth || !window.innerWidth) return;
-
-    var original = HB.w.style.position;
-    var action = function(e) {
-      var ratio = (window.outerWidth - 8) / window.innerWidth;
-      if (e.scale) {
-        // iPhone
-        HB.w.style.position = (e.scale <= 1.03) ? original : 'absolute';
-      } else if (typeof window.orientation !== 'undefined') { // Not mobile
-        // Android
-        if (window.outerWidth <= 480 && ratio <= 1.3) {
-          return HB.w.style.position = original;
-        }
-        HB.w.style.position = (ratio <= 0.6) ? original : 'absolute';
-      } else {
-        // Desktop
-        HB.w.style.position = (ratio <= 1.3) ? original : 'absolute';
-      }
-    };
-
-    // iPhone
-    window.addEventListener('gesturechange', action);
-
-    // Android
-    window.addEventListener('scroll', action);
+    HB.trigger("siteElementshown", siteElement);
   },
 
   // Injects the specified element at the top of the body tag
@@ -963,64 +890,6 @@ var _HB = {
       document.body.appendChild(element);
   },
 
-  // Injects the specified HTML for the given siteElement into the page
-  injectSiteElementHTML: function(html, siteElement)
-  {
-    // Remove the containing iframe element if it exists
-    if ( HB.w &&  HB.w.parentNode)
-      HB.w.parentNode.removeChild(HB.w);
-
-    // Remove pull-arrow if it exists
-    HB.pd = document.getElementById("pull-down")
-    if ( HB.pd )
-      HB.pd.parentNode.removeChild(HB.pd);
-
-    // Create the iframe container
-    HB.w = document.createElement("iframe");
-    HB.w.src = "about:blank";
-    HB.w.id = HB_PS + "-container";
-    HB.w.className = "HB-" + siteElement.type;
-    HB.w.name = HB_PS + "-container";
-    HB.hideElement(HB.w); // Start all site elements as hidden
-
-    siteElement.setupIFrame(HB.w)
-
-    // Check if we have any external CSS to add
-    if ( HB.extCSS )
-    {
-      // If we have already added it, remove it and re-add it
-      if ( HB.extCSSStyle )
-        HB.extCSSStyle.parentNode.removeChild(HB.extCSSStyle);
-      // Create the CSS style tag
-      HB.extCSSStyle = document.createElement('STYLE');
-      HB.extCSSStyle.type="text/css";
-      if(HB.extCSSStyle.styleSheet)
-      {
-        HB.extCSSStyle.styleSheet.cssText=HB.extCSS;
-      }
-      else
-      {
-        HB.extCSSStyle.appendChild(document.createTextNode(HB.extCSS));
-      }
-      var head=document.getElementsByTagName('HEAD')[0];
-      head.appendChild(HB.extCSSStyle);
-    }
-
-    // Inject the container into the DOM
-    HB.injectAtTop(HB.w);
-    // Render the siteElement in the container.
-    var d = HB.w.contentWindow.document;
-    d.open();
-    d.write("<html><head>" + (HB.css || "") + "</head><body>" + html + "</body></html>");
-    d.close();
-    d.body.className = siteElement.type;
-    if(HB.isIEXOrLess(9))
-      HB.addClass(d.body, "hb-old-ie");
-
-    if(HB.isIE11())
-      HB.addClass(d.body, "hb-paused-animations-ie");
-
-  },
 
   // Adds a rule to the list of rules.
   //  matchType: is either "any" or "all" - refers to the conditions
@@ -1068,7 +937,9 @@ var _HB = {
   applyRules: function()
   {
     var i,j,siteElement;
-    var possibleSiteElements = [];
+    var visibilityGroups = {};
+    var visibilityGroup;
+    var visibilityGroupNames = [];
     // First get all the site elements from all the rules that the
     // person matches
     for(i=0;i<HB.rules.length;i++)
@@ -1089,14 +960,52 @@ var _HB = {
 
           if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
           {
-            if ( !possibleSiteElements[siteElement.subtype] )
-              possibleSiteElements[siteElement.subtype] = [];
-            possibleSiteElements[siteElement.subtype].push(siteElement);
+            visibilityGroup = siteElement.type;
+            // For showing multiple elements at the same time a modal and a takeover are the same thing
+            if ( siteElement.type == "Modal" || siteElement.type == "Takeover" )
+              visibilityGroup = "Modal/Takeover";
+            if ( !visibilityGroups[visibilityGroup] )
+            {
+              visibilityGroups[visibilityGroup] = [];
+              visibilityGroupNames.push(visibilityGroup);
+            }
+            visibilityGroups[visibilityGroup].push(siteElement);
           }
         }
       }
-
     }
+    // Now we have all elements that can be shown based on the rules
+    // broken up into visibility groups
+    // The next step is to pick one per visibility group
+    var results = [];
+    // We need to specify the order that elements appear in. Whichever is first
+    // in the array is on top
+    var visibilityOrder = ["Modal/Takeover", "Slider", "Bar"];
+    for(i=0;i<visibilityOrder.length;i++)
+    {
+      if ( visibilityGroups[visibilityOrder[i]] )
+      {
+        siteElement = HB.getBestElement(visibilityGroups[visibilityOrder[i]]);
+        if ( siteElement )
+          results.push(siteElement);
+      }
+    }
+    return results;
+  },
+
+  // Returns the best element to show from a group of elements
+  getBestElement: function(elements)
+  {
+    var i, siteElement;
+    var possibleSiteElements = {};
+    for(i=0;i<elements.length;i++)
+    {
+      siteElement = elements[i];
+      if ( !possibleSiteElements[siteElement.subtype] )
+        possibleSiteElements[siteElement.subtype] = [];
+      possibleSiteElements[siteElement.subtype].push(siteElement);
+    }
+
     // Now we narrow down based on the "value" of the site elements
     // (collecting emails is considered more valuable than clicking links
     // for example)
@@ -1535,16 +1444,6 @@ var _HB = {
     }
   },
 
-  closeIframe: function() {
-    if(HB.w != null && HB.w.parentNode != null) {
-      HB.w.parentNode.removeChild(HB.w);
-      // Sets the dismissed state for the next 15 minutes
-      HB.sc("HBDismissed", true, new Date((new Date().getTime() + 1000 * 60 * 15)), "path=/");
-    }
-
-    HB.trigger("elementDismissed");
-  },
-
   // Delays & restarts wiggle animation before & after mousing over bar
   wiggleEventListeners: function(element){
     $(element)
@@ -1556,32 +1455,6 @@ var _HB = {
           $('#hellobar').find('.hellobar-cta').addClass('wiggle');
         }, 2500);
       });
-  },
-
-  // Create the pulldown arrow element for when a bar is hidden
-  // The pulldown arrow is only created when a site element is closable
-  setPullDown: function(siteElement) {
-    // Create the pull down elements
-    if(siteElement.closable) {
-      var pullDown = document.createElement("div");
-      pullDown.className = "hb-" + siteElement.size + " hellobar " + "hb-" + siteElement.placement;
-      pullDown.id = "pull-down";
-
-      pullDown.style.backgroundColor = "#" + siteElement.background_color;
-      var pdLink = document.createElement("div");
-      pdLink.className = "hellobar-arrow";
-      pdLink.onclick = function() {
-        HB.animateIn(HB.w);
-        HB.animateOut(document.getElementById("pull-down"));
-
-        // if the pusher exists, unhide it since it should be hidden at this point
-        if (HB.e.pusher != null)
-          HB.showElement(HB.e.pusher, '');
-      };
-
-      pullDown.appendChild(pdLink);
-      HB.injectAtTop(pullDown);
-    }
   },
 
   // Parses the zone and returns the offset in seconds. If it can
@@ -1710,86 +1583,6 @@ var _HB = {
 
     return HBCrypto.HmacSHA512(path+"?"+sortedParamPairs.join("|"), key).toString();
 
-  },
-
-  setContainerSize: function(container, element, type, isMobile)
-  {
-    if (HB.e.container == null)
-      return;
-    if ( type == 'bar' ) {
-      HB.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
-    } else if ( type == 'slider' ) {
-      var newWidth = Math.min(HB.maxSliderSize + 24, window.innerWidth - 24);
-      HB.e.container.style.width = (newWidth) + "px";
-      HB.e.container.style.height = (element.clientHeight + 24) + "px";
-    }
-  },
-
-  // Reads the site element's view_condition setting and calls hide/show per selected behavior
-  // if viewCondition is missing or badly formed, siteElement displays immediately by default
-
-  checkForDisplaySetting: function(siteElement)
-  {
-    var viewCondition = siteElement.view_condition;
-    var originalDisplay = HB.w.style.display;
-
-    if (document.getElementById('hellobar-preview-container') !== null)
-      viewCondition = 'preview';
-
-    var show = function() {
-      HB.showElement(HB.w);
-
-      // Next line is a Safari hack.  Couldn't find out why but sometimes safari
-      // wouldn't display the contents of the iframe, but toggling the display style fixes this
-      if(HB.isMobileSafari()) {
-        var siteElementNode = HB.getSiteElementDomNode();
-        if(siteElementNode) {
-          siteElementNode.style.display = 'none';
-          setTimeout(function() {
-            siteElementNode.style.display = '';
-          }, 10);
-        }
-      }
-
-      if (HB.w.className.indexOf("hb-animated") > -1) { HB.animateIn(HB.w) };
-    }
-
-    if (viewCondition === 'wait-5')
-    {
-      setTimeout(show, 5000);
-    }
-    else if (viewCondition === 'wait-10')
-    {
-      setTimeout(show, 10000);
-    }
-    else if (viewCondition === 'wait-60')
-    {
-      setTimeout(show, 60000);
-    }
-    else if (viewCondition === 'scroll-some')
-    {
-      // scroll-some is defined here as "visitor scrolls 300 pixels"
-      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck(300, show)}, 500);
-    }
-    else if (viewCondition === 'scroll-middle')
-    {
-      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck("middle", show)}, 500);
-    }
-    else if (viewCondition === 'scroll-to-bottom')
-    {
-      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck("bottom", show)}, 500);
-    }
-    else if (viewCondition === 'exit-intent')
-    {
-      HB.intentInterval = setInterval(function(){HB.intentCheck("exit", show)}, 100);
-    }
-    else {
-      // No view condition so show immediately (very small delay for animated elements)
-      if (HB.w.className.indexOf("hb-animated") > -1)
-        setTimeout(show, 500);
-      else
-      show();
-    }
   },
 
   // Runs a function if the visitor has scrolled to a given height.
@@ -1928,9 +1721,14 @@ var _HB = {
 
   isAd: function() {
     if (HB.CAP.preview) return false;
+    // Don't show an ad to a user once they've seen it once
+    if ( HB.getVisitorData("ad") ) return false;
 
     var adFactor = HB.CAP.in_bar_ad_fraction || 0.0; // Don't show an ad unless explictly defined in script
-    return Math.random() >= (1 - adFactor);
+    var showAd = Math.random() >= (1 - adFactor);
+    if ( showAd )
+      HB.setVisitorData("ad", new Date().getTime());
+    return showAd;
   },
 
   adifySiteElement: function(siteElement) {
@@ -1974,74 +1772,4 @@ var _HB = {
     return items[ Math.floor(Math.random() * items.length) ];
   },
 
-  setIosKeyboardHandlers: function() {
-    if(!HB.isMobileSafari()) {
-      return;
-    }
-
-    var inputs = HB.w.contentDocument.getElementsByTagName("input");
-    for (var i = 0; i < inputs.length; i++) {
-      inputs[i].addEventListener("focus", HB.iosKeyboardShow );
-      inputs[i].addEventListener("blur", HB.iosKeyboardHide );
-    }
-  },
-
-  iosKeyboardShow: function() {
-    if(HB.e.siteElementType == "slider" || HB.e.siteElementType == "bar") {
-      HB.iosFocusInterval = setTimeout(function() { window.scrollTo(0, HB.w.offsetTop); }, 500);
-    } else if(HB.e.siteElementType == "takeover" || HB.e.siteElementType == "modal") {
-      HB.w.style.position = "absolute";
-      HB.iosFocusInterval = setInterval(function() {
-        HB.w.style.height = window.innerHeight + "px";
-        HB.w.style.width = window.innerWidth + "px";
-        HB.w.style.top = window.pageYOffset + "px";
-        HB.w.style.left = window.pageXOffset + "px";
-      }, 200);
-    }
-  },
-
-  iosKeyboardHide: function() {
-    if(HB.iosFocusInterval != null) {
-      clearInterval(HB.iosFocusInterval);
-      HB.iosFocusInterval = null;
-    }
-
-    if(HB.e.siteElementType == "takeover" || HB.e.siteElementType == "modal") {
-      HB.w.style.position = "";
-      HB.w.style.height = "";
-      HB.w.style.width = "";
-      HB.w.style.top = "";
-      HB.w.style.left = "";
-    }
-  }
 };
-
-
-/*
-CryptoJS v3.1
-code.google.com/p/crypto-js
-(c) 2009-2013 by Jeff Mott. All rights reserved.
-code.google.com/p/crypto-js/wiki/License
-*/
-// We rename this HBCrypto to prevent namespace collisions
-var HBCrypto=HBCrypto||function(a,j){var c={},b=c.lib={},f=function(){},l=b.Base={extend:function(a){f.prototype=this;var d=new f;a&&d.mixIn(a);d.hasOwnProperty("init")||(d.init=function(){d.$super.init.apply(this,arguments)});d.init.prototype=d;d.$super=this;return d},create:function(){var a=this.extend();a.init.apply(a,arguments);return a},init:function(){},mixIn:function(a){for(var d in a)a.hasOwnProperty(d)&&(this[d]=a[d]);a.hasOwnProperty("toString")&&(this.toString=a.toString)},clone:function(){return this.init.prototype.extend(this)}},
-u=b.WordArray=l.extend({init:function(a,d){a=this.words=a||[];this.sigBytes=d!=j?d:4*a.length},toString:function(a){return(a||m).stringify(this)},concat:function(a){var d=this.words,M=a.words,e=this.sigBytes;a=a.sigBytes;this.clamp();if(e%4)for(var b=0;b<a;b++)d[e+b>>>2]|=(M[b>>>2]>>>24-8*(b%4)&255)<<24-8*((e+b)%4);else if(65535<M.length)for(b=0;b<a;b+=4)d[e+b>>>2]=M[b>>>2];else d.push.apply(d,M);this.sigBytes+=a;return this},clamp:function(){var D=this.words,d=this.sigBytes;D[d>>>2]&=4294967295<<
-32-8*(d%4);D.length=a.ceil(d/4)},clone:function(){var a=l.clone.call(this);a.words=this.words.slice(0);return a},random:function(D){for(var d=[],b=0;b<D;b+=4)d.push(4294967296*a.random()|0);return new u.init(d,D)}}),k=c.enc={},m=k.Hex={stringify:function(a){var d=a.words;a=a.sigBytes;for(var b=[],e=0;e<a;e++){var c=d[e>>>2]>>>24-8*(e%4)&255;b.push((c>>>4).toString(16));b.push((c&15).toString(16))}return b.join("")},parse:function(a){for(var d=a.length,b=[],e=0;e<d;e+=2)b[e>>>3]|=parseInt(a.substr(e,
-2),16)<<24-4*(e%8);return new u.init(b,d/2)}},y=k.Latin1={stringify:function(a){var b=a.words;a=a.sigBytes;for(var c=[],e=0;e<a;e++)c.push(String.fromCharCode(b[e>>>2]>>>24-8*(e%4)&255));return c.join("")},parse:function(a){for(var b=a.length,c=[],e=0;e<b;e++)c[e>>>2]|=(a.charCodeAt(e)&255)<<24-8*(e%4);return new u.init(c,b)}},z=k.Utf8={stringify:function(a){try{return decodeURIComponent(escape(y.stringify(a)))}catch(b){throw Error("Malformed UTF-8 data");}},parse:function(a){return y.parse(unescape(encodeURIComponent(a)))}},
-x=b.BufferedBlockAlgorithm=l.extend({reset:function(){this._data=new u.init;this._nDataBytes=0},_append:function(a){"string"==typeof a&&(a=z.parse(a));this._data.concat(a);this._nDataBytes+=a.sigBytes},_process:function(b){var d=this._data,c=d.words,e=d.sigBytes,l=this.blockSize,k=e/(4*l),k=b?a.ceil(k):a.max((k|0)-this._minBufferSize,0);b=k*l;e=a.min(4*b,e);if(b){for(var x=0;x<b;x+=l)this._doProcessBlock(c,x);x=c.splice(0,b);d.sigBytes-=e}return new u.init(x,e)},clone:function(){var a=l.clone.call(this);
-a._data=this._data.clone();return a},_minBufferSize:0});b.Hasher=x.extend({cfg:l.extend(),init:function(a){this.cfg=this.cfg.extend(a);this.reset()},reset:function(){x.reset.call(this);this._doReset()},update:function(a){this._append(a);this._process();return this},finalize:function(a){a&&this._append(a);return this._doFinalize()},blockSize:16,_createHelper:function(a){return function(b,c){return(new a.init(c)).finalize(b)}},_createHmacHelper:function(a){return function(b,c){return(new ja.HMAC.init(a,
-c)).finalize(b)}}});var ja=c.algo={};return c}(Math);
-(function(a){var j=HBCrypto,c=j.lib,b=c.Base,f=c.WordArray,j=j.x64={};j.Word=b.extend({init:function(a,b){this.high=a;this.low=b}});j.WordArray=b.extend({init:function(b,c){b=this.words=b||[];this.sigBytes=c!=a?c:8*b.length},toX32:function(){for(var a=this.words,b=a.length,c=[],m=0;m<b;m++){var y=a[m];c.push(y.high);c.push(y.low)}return f.create(c,this.sigBytes)},clone:function(){for(var a=b.clone.call(this),c=a.words=this.words.slice(0),k=c.length,f=0;f<k;f++)c[f]=c[f].clone();return a}})})();
-(function(){function a(){return f.create.apply(f,arguments)}for(var j=HBCrypto,c=j.lib.Hasher,b=j.x64,f=b.Word,l=b.WordArray,b=j.algo,u=[a(1116352408,3609767458),a(1899447441,602891725),a(3049323471,3964484399),a(3921009573,2173295548),a(961987163,4081628472),a(1508970993,3053834265),a(2453635748,2937671579),a(2870763221,3664609560),a(3624381080,2734883394),a(310598401,1164996542),a(607225278,1323610764),a(1426881987,3590304994),a(1925078388,4068182383),a(2162078206,991336113),a(2614888103,633803317),
-a(3248222580,3479774868),a(3835390401,2666613458),a(4022224774,944711139),a(264347078,2341262773),a(604807628,2007800933),a(770255983,1495990901),a(1249150122,1856431235),a(1555081692,3175218132),a(1996064986,2198950837),a(2554220882,3999719339),a(2821834349,766784016),a(2952996808,2566594879),a(3210313671,3203337956),a(3336571891,1034457026),a(3584528711,2466948901),a(113926993,3758326383),a(338241895,168717936),a(666307205,1188179964),a(773529912,1546045734),a(1294757372,1522805485),a(1396182291,
-2643833823),a(1695183700,2343527390),a(1986661051,1014477480),a(2177026350,1206759142),a(2456956037,344077627),a(2730485921,1290863460),a(2820302411,3158454273),a(3259730800,3505952657),a(3345764771,106217008),a(3516065817,3606008344),a(3600352804,1432725776),a(4094571909,1467031594),a(275423344,851169720),a(430227734,3100823752),a(506948616,1363258195),a(659060556,3750685593),a(883997877,3785050280),a(958139571,3318307427),a(1322822218,3812723403),a(1537002063,2003034995),a(1747873779,3602036899),
-a(1955562222,1575990012),a(2024104815,1125592928),a(2227730452,2716904306),a(2361852424,442776044),a(2428436474,593698344),a(2756734187,3733110249),a(3204031479,2999351573),a(3329325298,3815920427),a(3391569614,3928383900),a(3515267271,566280711),a(3940187606,3454069534),a(4118630271,4000239992),a(116418474,1914138554),a(174292421,2731055270),a(289380356,3203993006),a(460393269,320620315),a(685471733,587496836),a(852142971,1086792851),a(1017036298,365543100),a(1126000580,2618297676),a(1288033470,
-3409855158),a(1501505948,4234509866),a(1607167915,987167468),a(1816402316,1246189591)],k=[],m=0;80>m;m++)k[m]=a();b=b.SHA512=c.extend({_doReset:function(){this._hash=new l.init([new f.init(1779033703,4089235720),new f.init(3144134277,2227873595),new f.init(1013904242,4271175723),new f.init(2773480762,1595750129),new f.init(1359893119,2917565137),new f.init(2600822924,725511199),new f.init(528734635,4215389547),new f.init(1541459225,327033209)])},_doProcessBlock:function(a,b){for(var c=this._hash.words,
-f=c[0],j=c[1],d=c[2],l=c[3],e=c[4],m=c[5],N=c[6],c=c[7],aa=f.high,O=f.low,ba=j.high,P=j.low,ca=d.high,Q=d.low,da=l.high,R=l.low,ea=e.high,S=e.low,fa=m.high,T=m.low,ga=N.high,U=N.low,ha=c.high,V=c.low,r=aa,n=O,G=ba,E=P,H=ca,F=Q,Y=da,I=R,s=ea,p=S,W=fa,J=T,X=ga,K=U,Z=ha,L=V,t=0;80>t;t++){var A=k[t];if(16>t)var q=A.high=a[b+2*t]|0,g=A.low=a[b+2*t+1]|0;else{var q=k[t-15],g=q.high,v=q.low,q=(g>>>1|v<<31)^(g>>>8|v<<24)^g>>>7,v=(v>>>1|g<<31)^(v>>>8|g<<24)^(v>>>7|g<<25),C=k[t-2],g=C.high,h=C.low,C=(g>>>19|
-h<<13)^(g<<3|h>>>29)^g>>>6,h=(h>>>19|g<<13)^(h<<3|g>>>29)^(h>>>6|g<<26),g=k[t-7],$=g.high,B=k[t-16],w=B.high,B=B.low,g=v+g.low,q=q+$+(g>>>0<v>>>0?1:0),g=g+h,q=q+C+(g>>>0<h>>>0?1:0),g=g+B,q=q+w+(g>>>0<B>>>0?1:0);A.high=q;A.low=g}var $=s&W^~s&X,B=p&J^~p&K,A=r&G^r&H^G&H,ka=n&E^n&F^E&F,v=(r>>>28|n<<4)^(r<<30|n>>>2)^(r<<25|n>>>7),C=(n>>>28|r<<4)^(n<<30|r>>>2)^(n<<25|r>>>7),h=u[t],la=h.high,ia=h.low,h=L+((p>>>14|s<<18)^(p>>>18|s<<14)^(p<<23|s>>>9)),w=Z+((s>>>14|p<<18)^(s>>>18|p<<14)^(s<<23|p>>>9))+(h>>>
-0<L>>>0?1:0),h=h+B,w=w+$+(h>>>0<B>>>0?1:0),h=h+ia,w=w+la+(h>>>0<ia>>>0?1:0),h=h+g,w=w+q+(h>>>0<g>>>0?1:0),g=C+ka,A=v+A+(g>>>0<C>>>0?1:0),Z=X,L=K,X=W,K=J,W=s,J=p,p=I+h|0,s=Y+w+(p>>>0<I>>>0?1:0)|0,Y=H,I=F,H=G,F=E,G=r,E=n,n=h+g|0,r=w+A+(n>>>0<h>>>0?1:0)|0}O=f.low=O+n;f.high=aa+r+(O>>>0<n>>>0?1:0);P=j.low=P+E;j.high=ba+G+(P>>>0<E>>>0?1:0);Q=d.low=Q+F;d.high=ca+H+(Q>>>0<F>>>0?1:0);R=l.low=R+I;l.high=da+Y+(R>>>0<I>>>0?1:0);S=e.low=S+p;e.high=ea+s+(S>>>0<p>>>0?1:0);T=m.low=T+J;m.high=fa+W+(T>>>0<J>>>0?1:
-0);U=N.low=U+K;N.high=ga+X+(U>>>0<K>>>0?1:0);V=c.low=V+L;c.high=ha+Z+(V>>>0<L>>>0?1:0)},_doFinalize:function(){var a=this._data,b=a.words,c=8*this._nDataBytes,f=8*a.sigBytes;b[f>>>5]|=128<<24-f%32;b[(f+128>>>10<<5)+30]=Math.floor(c/4294967296);b[(f+128>>>10<<5)+31]=c;a.sigBytes=4*b.length;this._process();return this._hash.toX32()},clone:function(){var a=c.clone.call(this);a._hash=this._hash.clone();return a},blockSize:32});j.SHA512=c._createHelper(b);j.HmacSHA512=c._createHmacHelper(b)})();
-(function(){var a=HBCrypto,j=a.enc.Utf8;a.algo.HMAC=a.lib.Base.extend({init:function(a,b){a=this._hasher=new a.init;"string"==typeof b&&(b=j.parse(b));var f=a.blockSize,l=4*f;b.sigBytes>l&&(b=a.finalize(b));b.clamp();for(var u=this._oKey=b.clone(),k=this._iKey=b.clone(),m=u.words,y=k.words,z=0;z<f;z++)m[z]^=1549556828,y[z]^=909522486;u.sigBytes=k.sigBytes=l;this.reset()},reset:function(){var a=this._hasher;a.reset();a.update(this._iKey)},update:function(a){this._hasher.update(a);return this},finalize:function(a){var b=
-this._hasher;a=b.finalize(a);b.reset();return b.finalize(this._oKey.clone().concat(a))}})})();
-(function(){var k=HBCrypto,b=k.lib,m=b.WordArray,l=b.Hasher,d=[],b=k.algo.SHA1=l.extend({_doReset:function(){this._hash=new m.init([1732584193,4023233417,2562383102,271733878,3285377520])},_doProcessBlock:function(n,p){for(var a=this._hash.words,e=a[0],f=a[1],h=a[2],j=a[3],b=a[4],c=0;80>c;c++){if(16>c)d[c]=n[p+c]|0;else{var g=d[c-3]^d[c-8]^d[c-14]^d[c-16];d[c]=g<<1|g>>>31}g=(e<<5|e>>>27)+b+d[c];g=20>c?g+((f&h|~f&j)+1518500249):40>c?g+((f^h^j)+1859775393):60>c?g+((f&h|f&j|h&j)-1894007588):g+((f^h^
-j)-899497514);b=j;j=h;h=f<<30|f>>>2;f=e;e=g}a[0]=a[0]+e|0;a[1]=a[1]+f|0;a[2]=a[2]+h|0;a[3]=a[3]+j|0;a[4]=a[4]+b|0},_doFinalize:function(){var b=this._data,d=b.words,a=8*this._nDataBytes,e=8*b.sigBytes;d[e>>>5]|=128<<24-e%32;d[(e+64>>>9<<4)+14]=Math.floor(a/4294967296);d[(e+64>>>9<<4)+15]=a;b.sigBytes=4*d.length;this._process();return this._hash},clone:function(){var b=l.clone.call(this);b._hash=this._hash.clone();return b}});k.SHA1=l._createHelper(b);k.HmacSHA1=l._createHmacHelper(b)})();
