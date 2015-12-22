@@ -322,7 +322,7 @@ var HB = {
   trackClick: function(domElement, siteElement)
   {
     var url = domElement.href;
-    HB.converted(siteElement, function(){if(element.target != "_blank") document.location = url;});
+    HB.converted(siteElement, function(){if(domElement.target != "_blank") document.location = url;});
   },
 
   // Returns the conversion key used in the cookies to determine if this
