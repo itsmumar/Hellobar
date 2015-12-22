@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151222174239) do
+ActiveRecord::Schema.define(version: 20151222184317) do
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
     t.string   "ip_address"
@@ -208,15 +208,16 @@ ActiveRecord::Schema.define(version: 20151222174239) do
   add_index "payment_methods", ["user_id"], name: "index_payment_methods_on_user_id", using: :btree
 
   create_table "referrals", force: true do |t|
-    t.integer  "user_id"
+    t.integer  "sender_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email"
     t.string   "state"
     t.text     "body"
+    t.integer  "recipient_id"
   end
 
-  add_index "referrals", ["user_id"], name: "index_referrals_on_user_id", using: :btree
+  add_index "referrals", ["sender_id"], name: "index_referrals_on_sender_id", using: :btree
 
   create_table "rules", force: true do |t|
     t.integer  "site_id"

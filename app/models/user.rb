@@ -16,7 +16,8 @@ class User < ActiveRecord::Base
   has_many :sites, through: :site_memberships
   has_many :site_elements, through: :sites
   has_many :authentications, dependent: :destroy
-  has_many :referrals, dependent: :destroy
+  has_many :sent_referrals, dependent: :destroy, class_name: "Referral", foreign_key: "sender_id"
+  has_one :received_referral, class_name: "Referral", foreign_key: "recipient_id"
 
   acts_as_paranoid
 

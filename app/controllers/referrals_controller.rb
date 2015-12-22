@@ -1,11 +1,11 @@
 class ReferralsController < ApplicationController
   def index
-    @referral = current_user.referrals.build
+    @referral = current_user.sent_referrals.build
     @referral.set_standard_body
   end
 
   def create
-    @referral = current_user.referrals.build(referral_params)
+    @referral = current_user.sent_referrals.build(referral_params)
     @referral.state = "sent"
     if @referral.save
       flash[:success] = "We've sent an invite to your friend. Check back here to see whether they've accepted it and redeem any free months."

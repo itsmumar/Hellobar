@@ -13,7 +13,7 @@ describe ReferralsController do
     it "works" do
       get :index
       expect(response).to be_success
-      expect(response.body).to match(@user.first_name)
+      expect(response.body).to include(@user.first_name)
     end
   end
 
