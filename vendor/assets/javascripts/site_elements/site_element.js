@@ -372,7 +372,7 @@ HB.SiteElement = HB.createClass({
       pdLink.className = "hellobar-arrow";
       pdLink.onclick = function() {
         HB.animateIn(this.w);
-        HB.animateOut(document.getElementById("pull-down"));
+        HB.animateOut(this.pullDown);
 
         // if the pusher exists, unhide it since it should be hidden at this point
         if (this.e.pusher != null)
