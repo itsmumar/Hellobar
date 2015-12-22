@@ -1,6 +1,6 @@
 class ReferralsController < ApplicationController
   def index
-    @referral = current_site.referrals.build
+    @referral = current_user.referrals.build
     render
   end
 end

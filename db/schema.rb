@@ -208,12 +208,12 @@ ActiveRecord::Schema.define(version: 20151221190908) do
   add_index "payment_methods", ["user_id"], name: "index_payment_methods_on_user_id", using: :btree
 
   create_table "referrals", force: true do |t|
-    t.integer  "site_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "referrals", ["site_id"], name: "index_referrals_on_site_id", using: :btree
+  add_index "referrals", ["user_id"], name: "index_referrals_on_user_id", using: :btree
 
   create_table "rules", force: true do |t|
     t.integer  "site_id"
@@ -303,7 +303,6 @@ ActiveRecord::Schema.define(version: 20151221190908) do
     t.datetime "deleted_at"
     t.datetime "script_uninstalled_at"
     t.string   "install_type"
-    t.string   "referral_token"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
@@ -345,6 +344,7 @@ ActiveRecord::Schema.define(version: 20151221190908) do
     t.string   "invite_token"
     t.datetime "invite_token_expire_at"
     t.integer  "wordpress_user_id"
+    t.string   "referral_token"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree

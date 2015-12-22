@@ -411,13 +411,6 @@ describe Site do
     end
   end
 
-  describe "referral token" do
-    it "should be generated for a new site" do
-      site = Site.create(url: "http://abc.com")
-      expect(site.referral_token).to be_a(String)
-    end
-  end
-
   describe "#url_exists?" do
     it "should return false if no other site exists with the url" do
       expect(Site.create(url: "http://abc.com").url_exists?).to be_false

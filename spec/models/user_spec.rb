@@ -327,4 +327,12 @@ describe User do
       expect(user.valid_password?("wrong password")).to be(false)
     end
   end
+
+  describe "referral token" do
+    it "should be generated for a new user" do
+      user = create(:user)
+
+      expect(user.referral_token).to be_a(String)
+    end
+  end
 end

@@ -16,13 +16,11 @@ class Site < ActiveRecord::Base
   has_many :bills, -> {order 'id'}, through: :subscriptions
   has_many :improve_suggestions
   has_many :image_uploads, dependent: :destroy
-  has_many :referrals, dependent: :destroy
 
   acts_as_paranoid
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
-  before_validation :generate_referral_token
 
   before_destroy :generate_blank_static_assets
 
@@ -169,10 +167,6 @@ class Site < ActiveRecord::Base
     delay :do_recheck_installation, options
   end
 =end
-
-  def referral_url
-    "https://hellobar.com/invite/accept?token=#{referral_token}"
-  end
 
   def generate_improve_suggestions(options = {})
     delay :generate_all_improve_suggestions, options
@@ -494,10 +488,6 @@ class Site < ActiveRecord::Base
   def generate_read_write_keys
     self.read_key = SecureRandom.uuid if self.read_key.blank?
     self.write_key = SecureRandom.uuid if self.write_key.blank?
-  end
-
-  def generate_referral_token
-    self.referral_token ||= SecureRandom.hex(8)
   end
 
   def set_branding_on_site_elements
