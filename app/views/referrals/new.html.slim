@@ -1,3 +1,8 @@
+nav.tabs-wrapper
+  = active_link_to 'Send a Referral', new_referral_path(), active: :exclusive
+  = active_link_to 'Manage', referrals_path(), active: :exclusive
+
+
 header
   h1 Get Free Months of Hello Bar Pro
   p For every friend who installs Hello Bar, you <i>both</i> get a free month of Hello Bar Pro.

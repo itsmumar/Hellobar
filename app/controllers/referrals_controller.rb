@@ -1,9 +1,13 @@
 class ReferralsController < ApplicationController
   before_action :authenticate_user!, except: [:accept]
 
-  def index
+  def new
     @referral = current_user.sent_referrals.build
     @referral.set_standard_body
+  end
+
+  def index
+    render text: "Hello"
   end
 
   def create
