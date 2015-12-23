@@ -3,7 +3,6 @@ require 'spec_helper'
 describe ReferralsController do
   fixtures :all
 
-
   describe "GET index" do
     render_views
     before(:each) do
@@ -14,6 +13,11 @@ describe ReferralsController do
       get :index
       expect(response).to be_success
       expect(response.body).to include(@user.first_name)
+    end
+
+    it "shows a link that includes the user's token" do
+      get :index
+      expect(response.body).to include(@user.referral_token.token)
     end
   end
 
@@ -37,18 +41,18 @@ describe ReferralsController do
 
   describe "GET :accept" do
     it "sets the session variable when given a valid token" do
-      get :accept, token: users(:joey).referral_token
+      get :accept, token: referral_tokens(:joey).token
 
       expect(response.status).to redirect_to(root_path)
-      expect(session[:referral_sender_id]).not_to be_nil
-      expect(session[:referral_sender_id]).to be(users(:joey).id)
+      expect(session[:referral_token]).not_to be_nil
+      expect(session[:referral_token]).to be(referral_tokens(:joey).token)
     end
 
     it "does not set the session variable when given an ivalid token" do
       get :accept, token: "wrong"
 
       expect(response.status).to redirect_to(root_path)
-      expect(session[:referral_sender_id]).to be_nil
+      expect(session[:referral_token]).to be_nil
     end
   end
 end

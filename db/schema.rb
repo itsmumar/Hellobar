@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151222184317) do
+ActiveRecord::Schema.define(version: 20151223120252) do
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
     t.string   "ip_address"
@@ -207,6 +207,14 @@ ActiveRecord::Schema.define(version: 20151222184317) do
   add_index "payment_methods", ["deleted_at"], name: "index_payment_methods_on_deleted_at", using: :btree
   add_index "payment_methods", ["user_id"], name: "index_payment_methods_on_user_id", using: :btree
 
+  create_table "referral_tokens", force: true do |t|
+    t.string   "token"
+    t.integer  "tokenizable_id"
+    t.string   "tokenizable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "referrals", force: true do |t|
     t.integer  "sender_id"
     t.datetime "created_at"
@@ -348,7 +356,6 @@ ActiveRecord::Schema.define(version: 20151222184317) do
     t.string   "invite_token"
     t.datetime "invite_token_expire_at"
     t.integer  "wordpress_user_id"
-    t.string   "referral_token"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree

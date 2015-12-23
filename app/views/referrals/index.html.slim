@@ -11,7 +11,7 @@ header
     h2 Here's what they'll see:
     p#subject
       | Subject: #{current_user.name} has invited you to try Hello Bar
-    = f.input :body
+    = f.input :body, label: false
 
     p
       strong Note: If you wish, you can change the above wording to whatever you want to say.

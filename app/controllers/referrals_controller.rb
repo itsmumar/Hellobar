@@ -1,5 +1,5 @@
 class ReferralsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:accept]
+  before_action :authenticate_user!, except: [:accept]
 
   def index
     @referral = current_user.sent_referrals.build
@@ -18,10 +18,8 @@ class ReferralsController < ApplicationController
   end
 
   def accept
-    sender = User.where(referral_token: params[:token]).first
-    if sender.present? && current_user.blank?
-      session[:referral_sender_id] = sender.id
-    end
+    token = ReferralToken.where(token: params[:token]).first
+    session[:referral_token] = params[:token] if token.present?
     redirect_to root_path
   end
 

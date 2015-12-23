@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   has_many :sites, through: :site_memberships
   has_many :site_elements, through: :sites
   has_many :authentications, dependent: :destroy
+  has_one :referral_token, as: :tokenizable
   has_many :sent_referrals, dependent: :destroy, class_name: "Referral", foreign_key: "sender_id"
   has_one :received_referral, class_name: "Referral", foreign_key: "recipient_id"
 
@@ -30,7 +31,7 @@ class User < ActiveRecord::Base
   validate :oauth_email_change, if: :is_oauth_user?
 
   after_save :disconnect_oauth, if: :is_oauth_user?
-  before_validation :generate_referral_token
+  after_create :create_referral_token
 
   before_save do
     if self.status == ACTIVE_STATUS && self.invite_token
@@ -214,10 +215,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-  def generate_referral_token
-    self.referral_token ||= SecureRandom.hex(8)
-  end
 
   def send_team_invite_email(site)
     host = ActionMailer::Base.default_url_options[:host]

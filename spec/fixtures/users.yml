@@ -3,19 +3,15 @@ joey:
   email: joey@polymathic.me
   encrypted_password: "$2a$10$YvYpRtNFkUHIoP28Y8xYWetgDe209r96j32WcrhkI3O766E9buJuu"
   status: <%= User::ACTIVE_STATUS %>
-  referral_token: abcdef
 wootie:
   email: wootie@polymathic.me
   encrypted_password: "$2a$10$YvYpRtNFkUHIoP28Y8xYWetgDe209r96j32WcrhkI3O766E9buJuu"
   status: <%= User::ACTIVE_STATUS %>
-  referral_token: abcde0
 temporary:
   email: crazyrandonstring@mail.com
   encrypted_password: "$2a$10$YvYpRtNFkUHIoP28Y8xYWetgDe209r96j32WcrhkI3O766E9buJuu"
   status: <%= User::TEMPORARY_STATUS %>
-  referral_token: abcde1
 pro:
   email: pro@polymathic.me
   encrypted_password: "$2a$10$YvYpRtNFkUHIoP28Y8xYWetgDe209r96j32WcrhkI3O766E9buJuu"
   status: <%= User::ACTIVE_STATUS %>
-  referral_token: abcde2

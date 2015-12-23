@@ -6,6 +6,6 @@ describe ReferralsHelper do
     user = users(:joey)
     url = helper.referral_url_for_user(user)
     expect(url).to be_a(String)
-    expect(url).to match(user.referral_token)
+    expect(url).to match(user.referral_token.token)
   end
 end
