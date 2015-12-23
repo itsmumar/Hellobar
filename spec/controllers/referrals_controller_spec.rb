@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ReferralsController do
   fixtures :all
 
-  describe "GET new" do
+  describe "GET :new" do
     render_views
     before(:each) do
       @user = stub_current_user(users(:joey))
@@ -11,13 +11,29 @@ describe ReferralsController do
 
     it "works" do
       get :new
+
       expect(response).to be_success
       expect(response.body).to include(@user.first_name)
     end
 
     it "shows a link that includes the user's token" do
       get :new
+
       expect(response.body).to include(@user.referral_token.token)
+    end
+  end
+
+  describe "GET :index" do
+    before(:each) do
+      @user = stub_current_user(users(:joey))
+    end
+
+    it "works" do
+      2.times { create(:referral, sender_id: @user.id) }
+      get :index
+
+      expect(response).to be_success
+      expect(assigns(:referrals).count).to eq(2)
     end
   end
 

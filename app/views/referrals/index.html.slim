@@ -1,0 +1,24 @@
+= render partial: "referrals/tabs"
+
+- if @referrals.total_count == 0
+  header
+    p Your referral URL has not received any visits yet.
+- else
+  header
+    p Here is the status of your referrals:
+
+  section
+    table
+      thead
+        th Email
+        th Invited
+        th Status
+      tbody
+        - @referrals.each do |ref|
+            tr
+              td= ref.email
+              td= distance_of_time_in_words_to_now(ref.created_at)
+              td
+                = icon_for_referral(ref)
+                span.referral-text= text_for_referral(ref)
+    = paginate @referrals

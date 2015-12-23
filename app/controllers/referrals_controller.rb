@@ -7,7 +7,7 @@ class ReferralsController < ApplicationController
   end
 
   def index
-    render text: "Hello"
+    @referrals = current_user.sent_referrals.order("updated_at DESC").page(params[:page])
   end
 
   def create
