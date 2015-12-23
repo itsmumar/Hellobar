@@ -1,4 +1,5 @@
 class Referral < ActiveRecord::Base
+  include ReferralTokenizable
   STATES = {
     'sent' => 'Invite sent',
     'signed_up' => 'Signed up',

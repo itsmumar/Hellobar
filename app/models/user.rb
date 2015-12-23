@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   include BillingAuditTrail
   include UserValidator
+  include ReferralTokenizable
 
   # Remove any sites where this was the last user
   # This must come before any dependent: :destroy
@@ -16,7 +17,6 @@ class User < ActiveRecord::Base
   has_many :sites, through: :site_memberships
   has_many :site_elements, through: :sites
   has_many :authentications, dependent: :destroy
-  has_one :referral_token, as: :tokenizable
   has_many :sent_referrals, dependent: :destroy, class_name: "Referral", foreign_key: "sender_id"
   has_one :received_referral, class_name: "Referral", foreign_key: "recipient_id"
 
@@ -31,7 +31,6 @@ class User < ActiveRecord::Base
   validate :oauth_email_change, if: :is_oauth_user?
 
   after_save :disconnect_oauth, if: :is_oauth_user?
-  after_create :create_referral_token
 
   before_save do
     if self.status == ACTIVE_STATUS && self.invite_token

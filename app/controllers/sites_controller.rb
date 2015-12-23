@@ -135,9 +135,23 @@ class SitesController < ApplicationController
     sign_in(User.generate_temporary_user)
   end
 
+  def handle_referral_token
+    token = ReferralToken.where(token: session[:referral_token]).first
+    if token && token.belongs_to_a?(User)
+      sender = token.tokenizable
+      sender.sent_referrals.create(state: 'signed_up', email: sender.email, recipient: current_user)
+    elsif token && token.belongs_to_a?(Referral)
+      referral = token.tokenizable
+      referral.recipient = current_user
+      referral.state = 'signed_up'
+      referral.save
+    end
+  end
+
   def create_for_temporary_user
     if @site.save
       generate_temporary_logged_in_user
+      handle_referral_token
       Analytics.track(*current_person_type_and_id, "Signed Up", {ip: request.remote_ip, url: @site.url, site_id: @site.id})
 
       SiteMembership.create!(:site => @site, :user => current_user)

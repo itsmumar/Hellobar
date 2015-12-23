@@ -19,7 +19,10 @@ class ReferralsController < ApplicationController
 
   def accept
     token = ReferralToken.where(token: params[:token]).first
-    session[:referral_token] = params[:token] if token.present?
+    if current_user.blank? && token.present?
+      session[:referral_token] = params[:token]
+      flash[:success] = "Success! Your discount will be applied after you create your first site."
+    end
     redirect_to root_path
   end
 
