@@ -31,7 +31,7 @@ every 24.hours, :at => "12:00am", :roles => [:cron] do
   rake "site:improve_suggestions:generate_all_separately"
 end
 
-every 24.hours, :at => "5:00am", :roles => [:cron] do
+every 12.hours, :roles => [:cron] do
   rake "backend:adjust_dynamo_db_capacity"
 end
 
