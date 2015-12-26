@@ -4,9 +4,11 @@ module ServiceProviders
     def initialize(opts = {})
       if opts[:identity]
         identity = opts[:identity]
-      elsif opt[:site]
+      elsif opts[:site]
         identity = opts[:site].identities.find_by_provider!('get_response_api')
         raise "Site does not have a stored GetResponse identity" unless identity
+      else
+        raise "Must provide an identity through the arguments"
       end
 
       api_key = identity.api_key
@@ -25,27 +27,42 @@ module ServiceProviders
     end
 
     def lists
-      response = @client.get 'campaigns'
-      if response.success?
-        response_hash = JSON.parse response.body
-        response_hash.map {|list| {'id' => list['campaignId'], 'name' => list['name']}}
-      else
-        error_message = JSON.parse(response.body)['codeDescription']
-        log "getting lists returned '#{error_message}' with the code #{response.status}"
+      begin
+        response = @client.get 'campaigns'
+
+        if response.success?
+          response_hash = JSON.parse response.body
+          response_hash.map {|list| {'id' => list['campaignId'], 'name' => list['name']}}
+        else
+          error_message = JSON.parse(response.body)['codeDescription']
+          log "getting lists returned '#{error_message}' with the code #{response.status}"
+        end
+
+      rescue Faraday::TimeoutError
+        log "getting lists timed out"
+      rescue => error
+        log "getting lists raised #{error}"
       end
     end
 
     def subscribe(list_id, email, name = nil, double_optin = true)
-      response = @client.post do |request|
-        request.url 'contacts'
-        request.body = {name: name, email: email, campaign: {campaignId: list_id}}
-      end
+      begin
+        response = @client.post do |request|
+          request.url 'contacts'
+          request.body = {name: name, email: email, campaign: {campaignId: list_id}}
+        end
 
-      if response.success?
-        response
-      else
-        error_message = JSON.parse(response.body)['codeDescription']
-        log "sync error #{email} sync returned '#{error_message}' with the code #{response.status}"
+        if response.success?
+          response
+        else
+          error_message = JSON.parse(response.body)['codeDescription']
+          log "sync error #{email} sync returned '#{error_message}' with the code #{response.status}"
+        end
+
+      rescue Faraday::TimeoutError
+        log "sync timed out"
+      rescue => error
+        log "sync raised #{error}"
       end
     end
 
