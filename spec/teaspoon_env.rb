@@ -14,7 +14,7 @@ Teaspoon.configure do |config|
 
   # Fixtures are rendered through a controller, which allows using HAML, RABL/JBuilder, etc. Files in these paths will
   # be rendered as fixtures.
-  config.fixture_paths = ["spec/javascripts/fixtures", "views/shared/modals"]
+  config.fixture_paths = ["spec/javascripts/fixtures"]
 
   # SUITES
   #

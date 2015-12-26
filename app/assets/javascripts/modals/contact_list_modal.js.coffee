@@ -50,8 +50,14 @@ class @ContactListModal extends Modal
       syncDetails: Handlebars.compile(@options.templates.syncDetails)
       remoteListSelect: Handlebars.compile(@options.templates.remoteListSelect)
 
-    @$modal = $(@templates.main({header: if @options.id then "Edit Contact List" else "Where do you want to store the emails we collect?"}))
+    @$modal = $(@templates.main({header: @_header()}))
     @$modal.appendTo($("body"))
+
+  _header: ->
+    if @options.id
+      "Edit Contact List"
+    else
+      "Where do you want to store the emails we collect?"
 
   _initializeBlocks: ->
     @blocks =

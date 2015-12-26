@@ -4,46 +4,91 @@
 
 context = describe
 jasmine.clock().install()
-
-describe "ContactListModal.open", ->
-  templates =
-    main: "<div></div>"
-    instructions: "<div></div>"
-    nevermind: "<div></div>"
-    syncDetails: "<div></div>"
-    removeListSelect: "<div></div>"
-
-  debugger
-  modal = new ContactListModal(
-    siteID: 123
-    templates: templates
-    window: {location: ""}
-  )
-
-  beforeEach ->
-    modal.open()
-    jasmine.clock().tick(1)
-
-  afterEach ->
-    modal.close()
-    jasmine.clock().tick(501)
-
-  it "inserts the modal html", ->
-    expect(modal.$modal.text()).toEqual("sync with an email service")
-    #includes find(@modal.$modal).text(), , "Modal HTML was not rendered"
-
-    #@modal.open()
-
-    #$(document).ajaxComplete =>
-      #@modal.$modal.trigger("ajax-complete")
-
-  #teardown: ->
-    #@modal.$modal.unbind("ajax-complete")
-    #@modal.close()
+templates =
+  main: "<div>This modal is gonna rock your socks off</div>"
+  instructions: "<div></div>"
+  nevermind: "<div></div>"
+  syncDetails: "<div></div>"
+  remoteListSelect: "<div></div>"
 
 
-#test "header is \"Where do you want to store the emails we collect?\" when creating a new list", ->
-  #includes find(@modal.$modal).text(), "Where do you want to store the emails we collect?", "correct message not found in modal"
+describe "ContactListModal", ->
+  context "when opening the modal", ->
+    beforeEach ->
+      @modal = new ContactListModal(
+        siteID: 123
+        templates: templates
+        window: {location: ""}
+      )
+
+      @modal.open()
+      jasmine.clock().tick(1)
+
+    afterEach ->
+      @modal.close()
+      jasmine.clock().tick(501)
+
+    it "inserts the modal html", ->
+      expect(@modal.$modal.text()).toContain("This modal is gonna rock your socks off")
+    #it "attempts to populate contact lists when they are provided"
+    #it "does not attempt to populate contact lists when they are not provided"
+    #it "attempts to load contact lists when url is provided"
+    #it "does not attempt to load contact lits when url is not provided"
+    #it "shows blocks for internal contact storage when internal contact storage is selected"
+    #it "hides blocks for internal contact storage when internal contact storage is not selected"
+
+
+  context "header", ->
+    beforeEach ->
+      @modal = new ContactListModal(
+        siteID: 123
+        templates: templates
+        window: {location: ""}
+      )
+
+    it "shows the correct header when there is no contact list id(new contact list)", ->
+      expect(@modal._header()).toEqual("Where do you want to store the emails we collect?")
+    it "shows the correct header when there is a contact list id(existing contact list)", ->
+      modal = new ContactListModal(
+        siteID: 123
+        templates: templates
+        id: 9001
+        window: {location: ""}
+      )
+
+      expect(modal._header()).toEqual("Edit Contact List")
+
+  context "selecting email provider", ->
+    beforeEach ->
+      @modal = new ContactListModal(
+        siteID: 123
+        templates: templates
+        window: {location: ""}
+      )
+
+    it "renders provider instructions when selecting a provider with no stored identities", ->
+      @modal.close()
+      spyOn(@modal, '_renderBlock')
+      #expect(@modal._renderBlock).toHaveBeenCalled()
+      @modal.open()
+
+    #context "internal storage", ->
+      #context "selecting internal storage"
+
+    #context "oauth ESP", ->
+      #context "selecting oauth ESP"
+      #context "clicking disconnect"
+      #context "clicking I'm ready"
+      #context "do this later"
+    #context "api key ESP", ->
+      #context "selecting api_key ESP"
+      #context "clicking disconnect"
+      #context "clicking I'm ready"
+      #context "do this later"
+    #context "embed code ESP", ->
+      #context "selecting embed code ESP"
+      ## loading remote maybe break apart
+      #
 
 #asyncTest "selecting a provider with no stored identities renders the provider instructions", ->
   #expect(2)

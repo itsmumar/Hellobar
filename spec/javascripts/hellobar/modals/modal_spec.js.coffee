@@ -1,6 +1,5 @@
 #= require modal
 context = describe
-jasmine.clock().install()
 
 describe 'Modal.constructor', ->
   it 'instantiates with passed dom', ->
