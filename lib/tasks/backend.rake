@@ -15,7 +15,7 @@ namespace :backend do
     MIN_UNITS = 1
     MIN_DIFF = 3
     BUFFER = 1.25
-    THROTTLED_CHECK_HOURS = 24
+    THROTTLED_CHECK_HOURS = 4
     THROTTLED_TIME_PERIOD = 5*60
     THROTTLE_DIFF = 1.5 # Increase by X% over current capacity
 
@@ -92,11 +92,11 @@ namespace :backend do
       read_diff = 0 if read_diff.abs < MIN_DIFF
       if table[:throttled_write] and table[:throttled_write] > 50
         output << "\t\tWARN: Writes throttled (#{table[:throttled_write]})"
-        write_diff = (consumed_write*THROTTLE_DIFF) - table[:provisioned_write]
+        write_diff = (table[:provisioned_write]*THROTTLE_DIFF) - table[:provisioned_write]
       end
       if table[:throttled_read] and table[:throttled_read] > 50
         output << "\t\tWARN: Reads throttled (#{table[:Reads]})"
-        read_diff = (consumed_read*THROTTLE_DIFF) - table[:provisioned_read]
+        read_diff = (table[:provisioned_read]*THROTTLE_DIFF) - table[:provisioned_read]
       end
 
       new_read = table[:provisioned_read]+read_diff
