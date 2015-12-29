@@ -8,6 +8,37 @@ Ask question from user first?</label>
   {{view Ember.TextField value=model.headline placeholder="Subscribe to our mailing list" maxlength=255}}
 {{/unless}}
 
+{{#if showQuestionFields}}
+  <label>What's your question?</label>
+  {{view Ember.TextField value=model.question placeholder="First time here?"}}
+
+  <label>First Answer</label>
+  {{view Ember.TextField value=model.answer1 placeholder="Yes"}}
+
+  <label>Second Answer</label>
+  {{view Ember.TextField value=model.answer2 placeholder="No"}}
+
+  <label>First Answer Headline</label>
+  {{view Ember.TextField value=model.answer1response placeholder="Welcome! Let’s get started..."}}
+
+  {{#unless hideLinkText}}
+    <label>First Answer Button Text</label>
+    {{view Ember.TextField value=model.answer1link_text placeholder="Take the tour"}}
+  {{/unless}}
+
+  <label>Second Answer Headline</label>
+  {{view Ember.TextField value=model.answer2response placeholder="Welcome back! Check out our new sale."}}
+
+  {{#unless hideLinkText}}
+    <label>Second Answer Button Text</label>
+    {{view Ember.TextField value=model.answer2link_text placeholder="Shop now"}}
+  {{/unless}}
+
+  <p>
+    <a {{action "resetAnswerState"}}>Reset Answer State</a>
+  </p>
+{{/if}}
+
 {{#unless hideNonBarFields}}
   <label>Caption</label>
   {{view Ember.TextField value=model.caption placeholder="(optional)" maxlength=255}}
@@ -39,37 +70,6 @@ Ask question from user first?</label>
     {{view Ember.TextField value=model.link_text placeholder="OK!" maxlength=255}}
   {{/unless}}
 {{/unless}}
-
-{{#if showQuestionFields}}
-  <label>What's your question?</label>
-  {{view Ember.TextField value=model.question placeholder="First time here?"}}
-
-  <label>First Answer</label>
-  {{view Ember.TextField value=model.answer1 placeholder="Yes"}}
-
-  <label>Second Answer</label>
-  {{view Ember.TextField value=model.answer2 placeholder="No"}}
-
-  <label>First Answer Headline</label>
-  {{view Ember.TextField value=model.answer1response placeholder="Welcome! Let’s get started..."}}
-
-  {{#unless hideLinkText}}
-    <label>First Answer Button Text</label>
-    {{view Ember.TextField value=model.answer1link_text placeholder="Take the tour"}}
-  {{/unless}}
-
-  <label>Second Answer Headline</label>
-  {{view Ember.TextField value=model.answer2response placeholder="Welcome back! Check out our new sale."}}
-
-  {{#unless hideLinkText}}
-    <label>Second Answer Button Text</label>
-    {{view Ember.TextField value=model.answer2link_text placeholder="Shop now"}}
-  {{/unless}}
-
-  <p>
-    <a {{action "resetAnswerState"}}>Reset Answer State</a>
-  </p>
-{{/if}}
 
 <label>Font family</label>
 <div class="select-wrapper">
