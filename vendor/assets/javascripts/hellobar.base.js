@@ -425,8 +425,12 @@ var HB = {
 
     headline.textContent = d.getElementById("hb-question").textContent;
     var answers = d.getElementById("hb-answers");
+    var emailForm = d.getElementsByClassName("hb-input-wrapper")[0];
 
-    if(cta){
+    if(emailForm) {
+      emailForm.parentNode.appendChild(answers);
+      emailForm.style.display = "none";
+    } else if(cta) {
       cta.parentNode.replaceChild(answers, cta);
     } else {
       headline.appendChild(answers);
@@ -436,9 +440,19 @@ var HB = {
 
   displayResponse: function(d, idx) {
     var cta = d.querySelector('#hb-answer'+idx+'-response a');
+    var emailForm = d.getElementsByClassName("hb-input-wrapper")[0];
     var answers = d.getElementById('hb-answers');
     var headline = d.getElementsByClassName('hb-headline-text')[0];
-    answers.parentNode.replaceChild(cta, answers);
+
+    if (emailForm) {
+      // change email submit button text
+      emailForm.getElementsByClassName("hb-cta")[0].textContent = cta.textContent;
+      cta.parentNode.removeChild(cta); // so text doesn't show twice
+      emailForm.style.display = "";
+      answers.parentNode.removeChild(answers);
+    } else {
+      answers.parentNode.replaceChild(cta, answers);
+    }
     headline.textContent = d.getElementById('hb-answer'+idx+'-response').textContent;
   },
 
