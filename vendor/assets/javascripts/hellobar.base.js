@@ -426,6 +426,12 @@ var HB = {
     headline.textContent = d.getElementById("hb-question").textContent;
     var answers = d.getElementById("hb-answers");
     var emailForm = d.getElementsByClassName("hb-input-wrapper")[0];
+    var social = d.getElementsByClassName("hb-social-wrapper");
+
+    for (var i = 0; i < social.length; ++i) {
+        var item = social[i];
+        item.style.display = "none";
+    }
 
     if(emailForm) {
       emailForm.parentNode.appendChild(answers);
@@ -443,6 +449,13 @@ var HB = {
     var emailForm = d.getElementsByClassName("hb-input-wrapper")[0];
     var answers = d.getElementById('hb-answers');
     var headline = d.getElementsByClassName('hb-headline-text')[0];
+
+    var social = d.getElementsByClassName("hb-social-wrapper");
+
+    for (var i = 0; i < social.length; ++i) {
+        var item = social[i];
+        item.style.display = "";
+    }
 
     if (emailForm) {
       // change email submit button text
