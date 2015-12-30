@@ -446,10 +446,10 @@ var HB = {
 
   displayResponse: function(d, idx) {
     var cta = d.querySelector('#hb-answer'+idx+'-response a');
+    var caption = d.querySelector('.hb-text-wrapper .hb-secondary-text');
     var emailForm = d.getElementsByClassName("hb-input-wrapper")[0];
     var answers = d.getElementById('hb-answers');
     var headline = d.getElementsByClassName('hb-headline-text')[0];
-
     var social = d.getElementsByClassName("hb-social-wrapper");
 
     for (var i = 0; i < social.length; ++i) {
@@ -467,6 +467,7 @@ var HB = {
       answers.parentNode.replaceChild(cta, answers);
     }
     headline.textContent = d.getElementById('hb-answer'+idx+'-response').textContent;
+    caption.textContent = d.getElementById('hb-answer'+idx+'-caption').textContent;
   },
 
   // This takes the the email field, name field, and target siteElement DOM element.

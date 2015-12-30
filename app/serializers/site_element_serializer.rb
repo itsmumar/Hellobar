@@ -17,7 +17,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :image_url, :image_placement, :active_image_id, :image_file_name,
 
     # questions/answers/responses
-    :question, :answer1, :answer2, :answer1response, :answer2response, :answer1link_text, :answer2link_text, :has_question,
+    :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :has_question,
 
     # other
     :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement, :default_email_thank_you_text

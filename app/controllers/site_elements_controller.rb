@@ -99,9 +99,11 @@ class SiteElementsController < ApplicationController
     params.require(:site_element).permit(
       :answer1,
       :answer1response,
+      :answer1caption,
       :answer1link_text,
       :answer2,
       :answer2response,
+      :answer2caption,
       :answer2link_text,
       :active_image_id,
       :animated,
