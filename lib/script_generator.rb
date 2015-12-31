@@ -194,7 +194,7 @@ private
 
   def content_template(element_class, type)
     ActiveSupport.escape_html_entities_in_json = false
-    content = (content_header(element_class) + content_markup(element_class, type) + content_footer(element_class) + content_question(element_class)).to_json
+    content = (content_header(element_class) + content_markup(element_class, type) + content_footer(element_class) + content_question).to_json
     ActiveSupport.escape_html_entities_in_json = true
 
     content
@@ -217,8 +217,8 @@ private
     File.read("#{Rails.root}/lib/script_generator/#{element_class}/footer.html")
   end
 
-  def content_question(element_class)
-    File.read("#{Rails.root}/lib/script_generator/#{element_class}/question.html")
+  def content_question
+    File.read("#{Rails.root}/lib/script_generator/question.html")
   end
 
   def site_element_settings(site_element)

@@ -427,47 +427,74 @@ var HB = {
     var answers = d.getElementById("hb-answers");
     var emailForm = d.getElementsByClassName("hb-input-wrapper")[0];
     var social = d.getElementsByClassName("hb-social-wrapper");
+  },
 
-    for (var i = 0; i < social.length; ++i) {
-        var item = social[i];
-        item.style.display = "none";
+  extractQuestionElements: function(d) {
+    return {
+      'questionText':  d.querySelector('#hb-question'),
+      'answers':       d.querySelector('#hb-answers'),
+      'headline':      d.querySelector('.hb-headline-text'),
+      'responseText1': d.querySelector('#hb-answer1-response span'),
+      'responseText2': d.querySelector('#hb-answer2-response span'),
+      'response-cta1': d.querySelector('#hb-answer1-response a'),
+      'response-cta2': d.querySelector('#hb-answer2-response a'),
+      'emailForm':     d.querySelector('.hb-input-wrapper'),
+      'emailFormBtn':  d.querySelector('.hb-input-wrapper .hb-cta'),
+      'caption':       d.querySelector('.hb-text-wrapper .hb-secondary-text'),
+      'captionText1':  d.querySelector('#hb-answer1-caption'),
+      'captionText2':  d.querySelector('#hb-answer2-caption'),
+      'social':        d.querySelectorAll('.hb-social-wrapper')
     }
+  },
 
+  rewriteElementText: function(element, elementText) {
+    if (element && elementText) {
+      element.textContent = elementText.textContent;
+    }
+  },
+
+  rewriteEmailCTA: function(cta, answers, emailFormBtn){
+    HB.rewriteElementText(emailFormBtn, cta);
+    cta.parentNode.removeChild(cta); // so text doesn't show twice
+    answers.parentNode.removeChild(answers);
+  },
+
+  showAnswers: function(headline, answers, emailForm, cta) {
     if(emailForm) {
       emailForm.parentNode.appendChild(answers);
-      emailForm.style.display = "none";
     } else if(cta) {
       cta.parentNode.replaceChild(answers, cta);
     } else {
       headline.appendChild(answers);
     }
-    answers.style.display = "";
+    HB.showElement(answers, "");
+  },
+
+  displayQuestion: function(d, headline, cta) {
+    var elements  = HB.extractQuestionElements(d);
+    // hide original elements to show later
+    HB.hideElement(elements['emailForm']);
+    HB.hideElement(elements['social']);
+    // replace headline with question
+    HB.rewriteElementText(headline, elements['questionText']);
+    // show answers, remove original cta (if any)
+    HB.showAnswers(headline, elements['answers'], elements['emailForm'], cta);
   },
 
   displayResponse: function(d, idx) {
-    var cta = d.querySelector('#hb-answer'+idx+'-response a');
-    var caption = d.querySelector('.hb-text-wrapper .hb-secondary-text');
-    var emailForm = d.getElementsByClassName("hb-input-wrapper")[0];
-    var answers = d.getElementById('hb-answers');
-    var headline = d.getElementsByClassName('hb-headline-text')[0];
-    var social = d.getElementsByClassName("hb-social-wrapper");
-
-    for (var i = 0; i < social.length; ++i) {
-        var item = social[i];
-        item.style.display = "";
-    }
-
-    if (emailForm) {
-      // change email submit button text
-      emailForm.getElementsByClassName("hb-cta")[0].textContent = cta.textContent;
-      cta.parentNode.removeChild(cta); // so text doesn't show twice
-      emailForm.style.display = "";
-      answers.parentNode.removeChild(answers);
+    var elements     = HB.extractQuestionElements(d);
+    var answers      = elements['answers'];
+    var cta          = elements['response-cta'+idx];
+    var emailFormBtn = elements['emailFormBtn'];
+    if (emailFormBtn) {
+      HB.rewriteEmailCTA(cta, answers, emailFormBtn);
     } else {
       answers.parentNode.replaceChild(cta, answers);
     }
-    headline.textContent = d.getElementById('hb-answer'+idx+'-response').textContent;
-    caption.textContent = d.getElementById('hb-answer'+idx+'-caption').textContent;
+    HB.showElement(elements['emailForm'], "");
+    HB.showElement(elements['social'], "");
+    HB.rewriteElementText(elements['headline'], elements['responseText'+idx]);
+    HB.rewriteElementText(elements['caption'], elements['captionText'+idx]);
   },
 
   // This takes the the email field, name field, and target siteElement DOM element.
@@ -1799,13 +1826,26 @@ var HB = {
   },
 
   hideElement: function(element) {
-    element.style.display = 'none';
+    if(element.length == undefined){
+      element.style.display = 'none';
+    } else {
+      for (var i = 0; i < element.length; ++i) {
+        element[i].style.display = 'none';
+      }
+    }
   },
 
   showElement: function(element, display) {
-    if(typeof display === 'undefined')
+    if(typeof display === 'undefined') {
       display = 'inline';
-    element.style.display = display;
+    }
+    if(element.length == undefined){
+      element.style.display = display;
+    } else {
+      for (var i = 0; i < element.length; ++i) {
+        element[i].style.display = display;
+      }
+    }
   },
 
   isAd: function() {
