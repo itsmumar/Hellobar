@@ -17,13 +17,13 @@
 
 <div id="hb-responses" style="display: none;">
   <span id="hb-answer1-response">
-    {{siteElement.answer1response || "Welcome! Let’s get started..."}}
+    <span>{{siteElement.answer1response || "Welcome! Let’s get started..."}}</span>
     <a class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}" onclick="if(window.parent.HB.isPreviewMode) { return false } else { window.parent.HB.trackClick(this); return {{HB.t(siteElement.open_in_new_window) ? 'true' : 'false'}} };"  href="{{siteElement.settings.url}}" {{HB.t(siteElement.open_in_new_window) ? 'target=_blank' : 'target=_parent'}} style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
       {{siteElement.answer1link_text|| "Take the tour"}}
     </a>
   </span>
   <span id="hb-answer2-response">
-    {{siteElement.answer2response|| "Welcome back! Check out our new sale."}}
+    <span>{{siteElement.answer2response|| "Welcome back! Check out our new sale."}}</span>
     <a class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}" onclick="if(window.parent.HB.isPreviewMode) { return false } else { window.parent.HB.trackClick(this); return {{HB.t(siteElement.open_in_new_window) ? 'true' : 'false'}} };"  href="{{siteElement.settings.url}}" {{HB.t(siteElement.open_in_new_window) ? 'target=_blank' : 'target=_parent'}} style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
       {{siteElement.answer2link_text|| "Shop now"}}
     </a>
