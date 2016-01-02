@@ -19,11 +19,13 @@ namespace :backend do
     # of hours checked and the fact that recurring buffer is based on the
     # consumed capacity, while the recent checks the current capacity
     RECURRING_THROTTLED_CHECK_HOURS = 24
-    RECURRING_THROTTLED_TIME_PERIOD = 5*60
+    RECURRING_THROTTLED_TIME_PERIOD = 3*60
     RECURRING_THROTTLE_BUFFER = 1.5 # Increase by X% over consumed capacity
     RECENT_THROTTLED_CHECK_HOURS = 1
     RECENT_THROTTLED_TIME_PERIOD = 5*60
     RECENT_THROTTLE_BUFFER = 1.25 # Increase by X% over current capacity
+    MIN_WRITE_CAPACITY_CURRENT_MONTH = 3_000
+    MIN_READ_CAPACITY_CURRENT_MONTH = 300
 
     tables = Hash.new{|h,k| h[k] = Hash.new{|h2,k2| h2[k2] = 0}}
     table_names = dynamo_db.list_tables["TableNames"]
@@ -118,8 +120,19 @@ namespace :backend do
             read_buffer = RECURRING_THROTTLE_BUFFER
           end
 
-          write_diff = [(consumed_write*write_buffer).round.to_i, MIN_UNITS].max-table[:provisioned_write]
-          read_diff = [(consumed_read*read_buffer).round.to_i, MIN_UNITS].max-table[:provisioned_read]
+          is_current_segment_table = false
+          date = Time.now
+          # Check today
+          is_current_segment_table = true if table_name.to_s == "segments_#{date.year}_#{date.month}"
+          # Check tomorrow too
+          date += 24*60*60
+          is_current_segment_table = true if table_name.to_s == "segments_#{date.year}_#{date.month}"
+
+          min_write = is_current_segment_table ? MIN_WRITE_CAPACITY_CURRENT_MONTH : MIN_UNITS
+          min_read = is_current_segment_table ? MIN_READ_CAPACITY_CURRENT_MONTH : MIN_UNITS
+
+          write_diff = [(consumed_write*write_buffer).round.to_i, min_write].max-table[:provisioned_write]
+          read_diff = [(consumed_read*read_buffer).round.to_i, min_read].max-table[:provisioned_read]
           write_diff = 0 if write_diff.abs < MIN_DIFF
           read_diff = 0 if read_diff.abs < MIN_DIFF
         end
