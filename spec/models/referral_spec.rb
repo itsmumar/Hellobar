@@ -16,4 +16,20 @@ describe Referral do
 
     expect(@referral.body).to include(@user.name)
   end
+
+  it "sends an email as soon as it gets created" do
+    # TODO: expect syntax
+    MailerGateway.should_receive(:send_email) do |*args|
+      args[0].should == 'Referal Invite Initial'
+      args[1].should == "tj@hellobar.com"
+      args[2][:referral_link].should =~ Regexp.new(Hellobar::Settings[:url_base])
+      args[2][:referral_sender].should == @user.email
+      args[2][:referral_body].should == @referral.body
+    end
+
+    @referral.set_standard_body
+    @referral.state = 'sent'
+    @referral.email = 'tj@hellobar.com'
+    @referral.save!
+  end
 end
