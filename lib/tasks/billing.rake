@@ -22,6 +22,11 @@ namespace :billing do
     msg = nil
 
     begin
+      lock_file = File.open(File.join(Rails.root, "tmp", "billing.lock"), File::RDWR|File::CREAT, 0644)
+      result = lock_file.flock(File::LOCK_EX|File::LOCK_NB)
+      if result == false
+        raise "Could not get lock, process already running likely.."
+      end
       billing_report "#{Time.now}"
       billing_report "-"*80
       billing_report "Finding pending bills..."
@@ -77,7 +82,7 @@ namespace :billing do
       billing_report ""
       billing_report ""
     rescue Exception => e
-      billing_report(msg+"ERROR")
+      billing_report(msg.to_s+"ERROR")
       billing_report "#{e.class}: #{e.message}\n  #{e.backtrace.collect{|l| "  #{l}"}.join("\n  ")}"
       exit
     ensure
