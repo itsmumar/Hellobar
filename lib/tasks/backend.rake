@@ -10,7 +10,7 @@ namespace :backend do
       access_key_id: Hellobar::Settings[:aws_access_key_id],
       secret_access_key: Hellobar::Settings[:aws_secret_access_key]
     )
-    NUM_DAYS_TO_ANALYZE = 5
+    NUM_DAYS_TO_ANALYZE = 3
     TIME_PERIOD = 60
     MIN_UNITS = 1
     MIN_DIFF = 3
