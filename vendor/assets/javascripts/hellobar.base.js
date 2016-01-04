@@ -424,10 +424,11 @@ var HB = {
             if(siteElement.use_free_email_default_msg) {
               // Hijack the submit button and turn it into a link
               var btnElement = siteElementDoc.getElementsByClassName('hb-cta')[0];
-              var linkUrl = 'http://www.hellobar.com?hbt=emailSubmittedLink&sid=';
+              var linkUrl = 'http://www.hellobar.com?hbt=emailSubmittedLink&sid=' + HB_SITE_ID;
               btnElement.textContent = 'Click Here';
               btnElement.href = linkUrl;
-              btnElement.onclick = function() { HB.trackClick(btnElement) };
+              btnElement.setAttribute('target', '_parent');
+              btnElement.onclick = null;
 
               // Remove the email inputs and subtext
               removeElements = siteElementDoc.querySelectorAll('.hb-input-block, .hb-secondary-text');

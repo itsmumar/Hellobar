@@ -2,12 +2,14 @@
 var context = describe;
 
 describe("HB", function() {
+
   var element;
   var headlineElement;
   var siteElement;
 
   beforeEach(function() {
     HB.loadCookies();
+    HB_SITE_ID = 1234;
 
     element = document.createElement("div");
     element.innerHTML = "<div id='headline'>Headline</div><div class='hb-input-wrapper'><div class='hb-secondary-text'></div><div class='hb-input-block'></div></div><div><a class='hb-cta'>Submit</a>";
@@ -19,6 +21,7 @@ describe("HB", function() {
 
   afterEach(function() {
     document.body.removeChild(element);
+    HB_SITE_ID = null;
   });
 
   describe(".submitEmail", function() {
