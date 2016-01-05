@@ -41,11 +41,6 @@ class @PaymentModal extends Modal
       @value && 0 != @value.length
     ).length
 
-    if !@_isFree() && $.isEmptyObject(@currentPaymentMethod)
-      if filledOutInputs > 0
-        Intercom('trackEvent', 'upgrade-abandoned');
-      else
-        Intercom('trackEvent', 'upgrade-payment-viewed');
     super
 
   fetchUserPaymentMethods: (siteID) ->

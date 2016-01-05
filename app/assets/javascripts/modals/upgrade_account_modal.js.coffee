@@ -29,11 +29,6 @@ class @UpgradeAccountModal extends Modal
 
     super
 
-  close: (continuing = false) ->
-    if !continuing && @options.site.current_subscription.type == "free"
-      Intercom('trackEvent', 'upgrade-viewed')
-    super
-
   _bindPackageSelection: ->
     @$modal.find('.button').on 'click', (event) =>
       unless !!$(event.target).attr("disabled")
