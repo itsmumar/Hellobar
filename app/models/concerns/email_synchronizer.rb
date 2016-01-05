@@ -58,7 +58,7 @@ module EmailSynchronizer
     name = nil if name == "nil"
 
     perform_sync(log_entry) do
-      if oauth?
+      if oauth? || api_key?
         subscribe(data["remote_id"], email, name, double_optin)
       else
         params = subscribe_params(email, name, double_optin)
