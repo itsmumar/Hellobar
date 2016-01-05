@@ -17,25 +17,18 @@ describe Referral do
     expect(@referral.body).to include(@user.name)
   end
 
-  it "sends an email as soon as it gets created" do
-    # TODO: expect syntax
-    MailerGateway.should_receive(:send_email) do |*args|
-      args[0].should == 'Referal Invite Initial'
-      args[1].should == "tj@hellobar.com"
-      args[2][:referral_link].should =~ Regexp.new(Hellobar::Settings[:url_base])
-      args[2][:referral_sender].should == @user.email
-      args[2][:referral_body].should == @referral.body
-    end
-
-    @referral.set_standard_body
-    @referral.state = 'sent'
-    @referral.email = 'tj@hellobar.com'
-    @referral.save!
-  end
-
   it "is invalid if the email belongs to an existing user" do
     @referral.email = users(:wootie).email
     @referral.state = 'sent'
     @referral.should_not be_valid
+  end
+
+  it "has a URL once it gets saved and has a token" do
+    expect(@referral.url).to be_empty
+    @referral.email = 'random@email.com'
+    @referral.state = 'sent'
+    @referral.save!
+    expect(@referral.url).not_to be_empty
+    expect(@referral.url).to match @referral.referral_token.token
   end
 end

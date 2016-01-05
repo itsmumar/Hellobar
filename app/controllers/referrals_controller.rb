@@ -11,9 +11,12 @@ class ReferralsController < ApplicationController
   end
 
   def create
-    @referral = current_user.sent_referrals.build(referral_params)
-    @referral.state = "sent"
-    if @referral.save
+    @referral = Referrals::Create.run(
+      sender: current_user,
+      params: referral_params,
+      send_emails: true
+    )
+    if @referral.valid?
       flash[:success] = "We've sent an invite to your friend. Check back here to see whether they've accepted it and redeem any free months."
     else
       flash[:error] = "Sorry, but there was a problem while sending this invite."
