@@ -139,7 +139,7 @@ class SitesController < ApplicationController
     token = ReferralToken.where(token: session[:referral_token]).first
     if token && token.belongs_to_a?(User)
       sender = token.tokenizable
-      sender.sent_referrals.create(state: 'signed_up', email: sender.email, recipient: current_user)
+      sender.sent_referrals.create!(state: 'signed_up', email: current_user.email, recipient: current_user)
     elsif token && token.belongs_to_a?(Referral)
       referral = token.tokenizable
       referral.recipient = current_user

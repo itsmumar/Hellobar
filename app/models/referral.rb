@@ -14,6 +14,7 @@ class Referral < ActiveRecord::Base
   validates :state, inclusion: STATES.keys
   validates :sender_id, presence: true
   validates :email, presence: true
+  validate :email_not_already_registered, on: :create
   after_create :send_invitation_email
 
   def set_standard_body
@@ -21,6 +22,15 @@ class Referral < ActiveRecord::Base
   end
 
   private
+
+  def email_not_already_registered
+    return if email.blank?
+    return if recipient && recipient.temporary? # No need to check in this case
+
+    if User.where(email: email).count > 0
+      errors.add(:email, "belongs to a user who's already registered.")
+    end
+  end
 
   def referral_link
     path = Rails.application.routes.url_helpers.accept_referrals_path(token: referral_token.token)

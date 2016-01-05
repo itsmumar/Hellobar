@@ -41,7 +41,8 @@ describe SitesController do
       end
 
       it "creates a new referral if a user's token is given" do
-        user = User.last
+        user = User.new(email: "temporary@email.com")
+        user.stub(temporary?: true)
         User.stub(generate_temporary_user: user)
 
         expect(lambda {

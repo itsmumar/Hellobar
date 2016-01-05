@@ -32,4 +32,10 @@ describe Referral do
     @referral.email = 'tj@hellobar.com'
     @referral.save!
   end
+
+  it "is invalid if the email belongs to an existing user" do
+    @referral.email = users(:wootie).email
+    @referral.state = 'sent'
+    @referral.should_not be_valid
+  end
 end
