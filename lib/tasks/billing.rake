@@ -22,11 +22,20 @@ namespace :billing do
     msg = nil
 
     begin
-      lock_file = File.open(File.join(Rails.root, "tmp", "billing.lock"), File::RDWR|File::CREAT, 0644)
+      lock_file_path = File.join(Rails.root, "tmp", "billing.lock")
+      lock_file = File.open(lock_file_path, File::RDWR|File::CREAT, 0644)
       result = lock_file.flock(File::LOCK_EX|File::LOCK_NB)
       if result == false
         raise "Could not get lock, process already running likely.."
       end
+      # Write this Process ID
+      lock_file.write(Process.pid.to_s)
+      lock_file.fdatasync
+      # Check the pid to make sure we have the lock
+      sleep 3
+      lock_file_pid = File.read(lock_file_path).to_i
+      raise "Expected #{Process.pid} but was #{pid}, so exiting" unless lock_file_pid == Process.pid
+      billing_report "PID matched"
       billing_report "#{Time.now}"
       billing_report "-"*80
       billing_report "Finding pending bills..."
