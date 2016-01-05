@@ -52,8 +52,8 @@
     {{
       view Ember.TextField
       class="visible"
-      value=model.default_email_thank_you
-      placeholder=model.default_email_thank_you
+      value=model.default_email_thank_you_text
+      placeholder=model.default_email_thank_you_text
       disabled=true
       maxlength=255
     }}
@@ -64,7 +64,7 @@
       {{
         view Ember.TextField
         value=model.thank_you_text
-        placeholder=model.default_email_thank_you
+        placeholder=model.default_email_thank_you_text
         disabled=disableThankYouText
         maxlength=255
       }}
