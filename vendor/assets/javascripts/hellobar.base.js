@@ -31,7 +31,12 @@ var HBQ = function()
 
   // Determine AD state
   HB.AD = HB.isAd();
-  if (HB.AD) {
+
+  // Set tracking (uses hb_ignore query parameter)
+  HB.setTracking(location.search);
+
+  // Disable tracking if AD or tracking is manually set to off
+  if (HB.AD || HB.t(HB.gc("disableTracking"))) {
     HB_DNT = true;
   }
 
@@ -82,7 +87,7 @@ var HB = {
   // Copy functions from spec into klass
   cpFuncs: function(spec, klass)
   {
-    for (var key in spec) 
+    for (var key in spec)
     {
       if (spec.hasOwnProperty(key) )
       {
@@ -1771,5 +1776,13 @@ var HB = {
   sample: function(items) {
     return items[ Math.floor(Math.random() * items.length) ];
   },
+
+  // Sets the disableTracking cookie to true or false based on hb_ignore=
+  setTracking: function(queryString) {
+    if(queryString.match(/hb_ignore/i)) {
+      var bool = !!queryString.match(/hb_ignore=true/i);
+      HB.sc("disableTracking", bool, 5*365);
+    }
+  }
 
 };
