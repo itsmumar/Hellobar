@@ -2,6 +2,7 @@ class SiteElement < ActiveRecord::Base
   TYPES = [Bar, Modal, Slider, Takeover]
 
   DEFAULT_EMAIL_THANK_YOU = "Thank you for signing up!"
+  DEFAULT_FREE_EMAIL_THANK_YOU = "#{DEFAULT_EMAIL_THANK_YOU} If you'd like this sort of bar on your site..."
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,
     1 => :custom_thank_you_text,
@@ -115,10 +116,18 @@ class SiteElement < ActiveRecord::Base
   end
 
   def display_thank_you_text
-    if after_email_submit_action == :show_default_message
-      DEFAULT_EMAIL_THANK_YOU
+    if show_default_email_message?
+      default_email_thank_you_text
     else
-      thank_you_text.blank? ? DEFAULT_EMAIL_THANK_YOU : thank_you_text
+      read_attribute(:thank_you_text).presence || default_email_thank_you_text
+    end
+  end
+
+  def default_email_thank_you_text
+    if site && site.is_free?
+      DEFAULT_FREE_EMAIL_THANK_YOU
+    else
+      DEFAULT_EMAIL_THANK_YOU
     end
   end
 
@@ -128,6 +137,10 @@ class SiteElement < ActiveRecord::Base
 
   def is_announcement?
     element_subtype == "announcement"
+  end
+
+  def show_default_email_message?
+    !site.capabilities.custom_thank_you_text? || (after_email_submit_action == :show_default_message)
   end
 
   private
@@ -167,7 +180,7 @@ class SiteElement < ActiveRecord::Base
     if after_email_submit_action == :custom_thank_you_text
       if !site.capabilities.custom_thank_you_text?
         errors.add('custom_thank_you_text', 'is a pro feature')
-      elsif !thank_you_text.present?
+      elsif read_attribute(:thank_you_text).blank?
         errors.add('custom_thank_you_text', 'cannot be blank')
       end
     end

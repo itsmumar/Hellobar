@@ -82,7 +82,7 @@ var HB = {
   // Copy functions from spec into klass
   cpFuncs: function(spec, klass)
   {
-    for (var key in spec) 
+    for (var key in spec)
     {
       if (spec.hasOwnProperty(key) )
       {
@@ -409,20 +409,39 @@ var HB = {
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
   // shakes the email field
-  submitEmail: function(siteElement, emailField, nameField, targetSiteElement, thankYouText, redirect, redirectUrl, removeElement)
+  submitEmail: function(siteElement, emailField, nameField, targetSiteElement, thankYouText, redirect, redirectUrl)
   {
     HB.validateEmail(
       emailField.value,
       nameField.value,
       function(){
         var doRedirect = HB.t(redirect);
+        var removeElements;
+        var siteElementDoc = siteElement.w.contentDocument;
 
         if(!doRedirect) {
-          if(targetSiteElement != null)
+          if(targetSiteElement != null) {
+            if(siteElement.use_free_email_default_msg) {
+              // Hijack the submit button and turn it into a link
+              var btnElement = siteElementDoc.getElementsByClassName('hb-cta')[0];
+              var linkUrl = 'http://www.hellobar.com?hbt=emailSubmittedLink&sid=' + HB_SITE_ID;
+              btnElement.textContent = 'Click Here';
+              btnElement.href = linkUrl;
+              btnElement.setAttribute('target', '_parent');
+              btnElement.onclick = null;
+
+              // Remove the email inputs and subtext
+              removeElements = siteElementDoc.querySelectorAll('.hb-input-block, .hb-secondary-text');
+            } else {
+              // Remove the entire email input wrapper including the button
+              removeElements = siteElementDoc.querySelectorAll('.hb-input-wrapper, .hb-secondary-text');
+            }
             targetSiteElement.innerHTML='<span>' + thankYouText + '</span>';
-          if(removeElement != null) {
-            for (var i = 0; i < removeElement.length; i++) {
-              HB.hideElement(removeElement[i]);
+          }
+
+          if(removeElements != null) {
+            for (var i = 0; i < removeElements.length; i++) {
+              HB.hideElement(removeElements[i]);
             }
           }
         }
@@ -440,6 +459,7 @@ var HB = {
         HB.shake(emailField);
       }
     );
+    return false;
   },
 
   // Called to validate the email and name. Does not actually submit the email
