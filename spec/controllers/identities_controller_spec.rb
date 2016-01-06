@@ -36,4 +36,72 @@ describe IdentitiesController do
       response.body.should == "null"
     end
   end
+
+  describe 'GET :new' do
+    before do
+      request.env["HTTP_REFERER"] = "my_cool_referrer"
+    end
+
+    it 'should redirect to auth path when api_key param is not present' do
+      stub_current_user @identity.site.users.first
+      redirect_path = "/auth/my_cool_provider/?site_id=#{@identity.site.id}&redirect_to=my_cool_referrer"
+
+      get :new, provider: 'my_cool_provider', site_id: @identity.site.id
+
+      expect(controller).to redirect_to(redirect_path)
+    end
+
+    it 'should call create method when api_key param is present' do
+      stub_current_user @identity.site.users.first
+      allow_any_instance_of(Identity).to receive(:provider_config).and_return({name: 'get_response_api'})
+      expect(controller).to receive(:create).and_call_original
+
+      get :new, provider: 'my_cool_provider', site_id: @identity.site.id, api_key: 'my_cool_api_key'
+    end
+  end
+
+  describe 'POST :create' do
+    it 'redirects when identity already exists' do
+      stub_current_user @identity.site.users.first
+      identity = Identity.create! site_id: @identity.site.id, provider: 'get_response_api'
+      allow_any_instance_of(Identity).to receive(:provider_config).and_return({name: 'get_response_api'})
+      post :create, site_id: @identity.site.id, provider: 'get_response_api', api_key: 'my_cool_api_key'
+      expect(response).to redirect_to('http://test.host/sites/483182012/contact_lists')
+    end
+
+    context 'api key identity' do
+      before do
+        request.env["HTTP_REFERER"] = "my_cool_referrer"
+      end
+
+      it 'saves api key on the identity object' do
+        stub_current_user @identity.site.users.first
+        post :create, site_id: @identity.site.id, provider: 'get_response_api', api_key: 'my_cool_api_key'
+
+        expect(Identity.last.api_key).to eq('my_cool_api_key')
+      end
+
+      it 'sets the redirect patch on the oauth object' do
+        stub_current_user @identity.site.users.first
+        post :create, site_id: @identity.site.id, provider: 'get_response_api', api_key: 'my_cool_api_key'
+
+        expect(response).to redirect_to('my_cool_referrer')
+      end
+    end
+
+    context 'oauth identity' do
+      it 'saves credentials on the identity object' do
+        user = User.last
+        site = user.sites.first
+        stub_current_user user
+        allow_any_instance_of(Identity).to receive(:provider_config).and_return({name: 'mailchimp'})
+        allow(controller).to receive(:env).
+          and_return({
+          "omniauth.auth"   => {"credentials" => "my_cool_creds"},
+          "omniauth.params" => {"redirect_to" => "http://test.host/sites/483182012/contact_lists"}})
+        post :create, site_id: site.id, provider: 'mailchimp'
+        expect(Identity.last.credentials).to eq('my_cool_creds')
+      end
+    end
+  end
 end

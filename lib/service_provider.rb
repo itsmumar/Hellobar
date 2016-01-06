@@ -26,11 +26,15 @@ class ServiceProvider
     end
 
     def embed_code?
-      settings[:requires_embed_code] === true
+      settings[:requires_embed_code] == true
+    end
+
+    def api_key?
+      settings[:requires_api_key] == true
     end
 
     def oauth?
-      settings[:oauth] === true
+      settings[:oauth] == true
     end
 
     private
@@ -66,7 +70,7 @@ class ServiceProvider
   def log message
     $stdout.puts "#{Time.current} [#{self.class.name}] " + message
   end
-  
+
   def name
     settings[:name]
   end

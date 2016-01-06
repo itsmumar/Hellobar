@@ -2,7 +2,11 @@ class IdentitiesController < ApplicationController
   before_action :load_site
 
   def new
-    redirect_to "/auth/#{params[:provider]}/?site_id=#{@site.id}&redirect_to=#{request.referrer}"
+    if params[:api_key].blank?
+      redirect_to "/auth/#{params[:provider]}/?site_id=#{@site.id}&redirect_to=#{request.referrer}"
+    else
+      create
+    end
   end
 
   def show
@@ -20,8 +24,15 @@ class IdentitiesController < ApplicationController
       return redirect_to site_contact_lists_path(@site)
     end
 
-    identity.credentials = env["omniauth.auth"]["credentials"]
-    identity.extra = env["omniauth.auth"]["extra"]
+    if params[:api_key]
+      #TODO sanitze me?
+      identity.api_key = params[:api_key]
+      env["omniauth.params"] ||= {}
+      env["omniauth.params"].merge!({"redirect_to" => request.referrer})
+    else
+      identity.credentials = env["omniauth.auth"]["credentials"]
+      identity.extra = env["omniauth.auth"]["extra"]
+    end
 
     if identity.save
       flash[:success] = "We've successfully connected your #{identity.provider_config[:name]} account."

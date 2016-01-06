@@ -5,6 +5,7 @@ class @ContactListModal extends Modal
   constructor: (@options = {}) ->
     @options.window ||= window
     @options.canDelete = (@options.canDelete != false)
+    @options.templates ||= @_loadTemplates()
 
     @_initializeTemplates()
     @_initializeBlocks()
@@ -34,16 +35,29 @@ class @ContactListModal extends Modal
     num = @$modal.find("#contact_list_site_elements_count").val()
     parseInt(num) > 0
 
+  _loadTemplates: ->
+    main: $("#contact-list-modal-template").html()
+    instructions: $("#contact-list-modal-provider-instructions-template").html()
+    nevermind: $("#contact-list-modal-provider-instructions-nevermind-template").html()
+    syncDetails: $("#contact-list-modal-sync-details-template").html()
+    remoteListSelect: $("#contact-list-modal-remote-list-select-template").html()
+
   _initializeTemplates: ->
     @templates =
-      main: Handlebars.compile($("#contact-list-modal-template").html())
-      instructions: Handlebars.compile($("#contact-list-modal-provider-instructions-template").html())
-      nevermind: Handlebars.compile($("#contact-list-modal-provider-instructions-nevermind-template").html())
-      syncDetails: Handlebars.compile($("#contact-list-modal-sync-details-template").html())
-      remoteListSelect: Handlebars.compile($("#contact-list-modal-remote-list-select-template").html())
+      main: Handlebars.compile(@options.templates.main)
+      instructions: Handlebars.compile(@options.templates.instructions)
+      nevermind: Handlebars.compile(@options.templates.nevermind)
+      syncDetails: Handlebars.compile(@options.templates.syncDetails)
+      remoteListSelect: Handlebars.compile(@options.templates.remoteListSelect)
 
-    @$modal = $(@templates.main({header: if @options.id then "Edit Contact List" else "Where do you want to store the emails we collect?"}))
+    @$modal = $(@templates.main({header: @_header()}))
     @$modal.appendTo($("body"))
+
+  _header: ->
+    if @options.id
+      "Edit Contact List"
+    else
+      "Where do you want to store the emails we collect?"
 
   _initializeBlocks: ->
     @blocks =
@@ -93,7 +107,11 @@ class @ContactListModal extends Modal
       localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
       localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
 
-      @options.window.location = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
+      new_path = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
+      api_key = @_getFormData().data.api_key
+      if api_key then new_path += "&api_key=#{api_key}"
+
+      @options.window.location = new_path
 
   _bindSubmit: (object) ->
     object.find("a.submit").click (e) =>
@@ -155,17 +173,27 @@ class @ContactListModal extends Modal
         @_displayErrors(data.errors)
 
   _getFormData: ->
-    remoteListSelect = @$modal.find("#contact_list_remote_list_id")
-
     {
       name: @$modal.find("form #contact_list_name").val()
       provider: @$modal.find("form #contact_list_provider").val()
       double_optin: if @$modal.find("form #contact_list_double_optin").prop("checked") then "1" else "0"
-      data:
-        remote_id: $(remoteListSelect).val()
-        remote_name: $(remoteListSelect).find("option:selected").text()
-        embed_code: $('#contact_list_embed_code').val()
+      data: @_getContactListData()
     }
+
+  _getContactListData: ->
+    if @_isLocalContactStorage() then return {}
+    remoteListSelect = @$modal.find("#contact_list_remote_list_id")
+    data =
+      remote_id: $(remoteListSelect).val()
+      remote_name: $(remoteListSelect).find("option:selected").text()
+      embed_code: $('#contact_list_embed_code').val()
+
+    api_key = $('#contact_list_api_key').val()
+    if api_key then data.api_key = api_key
+    data
+
+  _isLocalContactStorage: ->
+    @$modal.find("form #contact_list_provider").val() == "0"
 
   _renderBlock: (name, context, bind = true) ->
     block = @blocks[name].html(@templates[name](context))
@@ -193,6 +221,7 @@ class @ContactListModal extends Modal
       provider: value
       providerName: label
       requiresEmbedCode: option.data('requiresEmbedCode')
+      requiresApiKey: option.data('requiresApiKey')
       contactList: @options.contactList
 
     if value == "0" # user selected "in Hello Bar only"
