@@ -65,6 +65,7 @@ gem "whenever",                  "~> 0.9.2"
 gem "zip",                       "~> 2.0.2"
 gem "paperclip",                 "~> 4.3"
 gem "elif",                      "~> 0.1"
+gem "thread",                    "~> 0.2.2"
 
 group :development do
   gem "better_errors", "~> 1.1"

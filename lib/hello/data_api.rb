@@ -1,10 +1,11 @@
 require "./config/initializers/settings"
 require "./lib/hello/data_api_helper"
 require "./lib/hello/api_performance"
+require "thread/pool"
 
 module Hello::DataAPI
   class << self
-    API_MAX_SLICE = 20
+    API_MAX_SLICE = 4
 
     # Returns total views and conversions for each site_element, by day for n days.
     # For example, if site element with id 123 had a total of 10 views and 3 conversions yesterday,
@@ -22,12 +23,21 @@ module Hello::DataAPI
       cache_options[:expires_in] = 10.minutes
 
       api_results = Rails.cache.fetch cache_key, cache_options do
+        pool = Thread.pool(4)
         results = {}
+        semaphore = Mutex.new
+
         site_element_ids.each_slice(API_MAX_SLICE) do |ids|
-          path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, ids, site.read_key, num_days)
-          slice_results = get(path, params)
-          results.merge!(slice_results) if !slice_results.nil?
+          pool.process {
+            path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, ids, site.read_key, num_days)
+            slice_results = get(path, params)
+            semaphore.synchronize {
+              results.merge!(slice_results) if !slice_results.nil?
+            }
+          }
         end
+
+        pool.shutdown
         results
       end
 
