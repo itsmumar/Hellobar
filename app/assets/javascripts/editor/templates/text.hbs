@@ -1,7 +1,9 @@
 <h5 class="step-title">Text and Content</h5>
 
-<label>{{input type="checkbox" name="has_question" checked=model.has_question}}
-Ask question from user first?</label>
+<label>
+  {{input type="checkbox" name="has_question" checked=model.has_question}}
+  Boost your conversions by asking a leading question first
+</label>
 
 {{#unless showQuestionFields}}
   <label>Headline</label>
@@ -14,44 +16,57 @@ Ask question from user first?</label>
 {{/unless}}
 
 {{#if showQuestionFields}}
-  <label>What's your question?</label>
-  {{view Ember.TextField value=model.question placeholder="First time here?"}}
+  {{#tab-view}}
+    {{#tab-pane name="Question" previewAction="showQuestion"}}
+      Question and Answers
+      <div id="question" class="tab-content">
+        <label>What's your question?</label>
+        {{view Ember.TextField value=model.question placeholder="First time here?"}}
 
-  <label>First Answer</label>
-  {{view Ember.TextField value=model.answer1 placeholder="Yes"}}
+        <label>First Answer</label>
+        {{view Ember.TextField value=model.answer1 placeholder="Yes"}}
 
-  <label>Second Answer</label>
-  {{view Ember.TextField value=model.answer2 placeholder="No"}}
+        <label>Second Answer</label>
+        {{view Ember.TextField value=model.answer2 placeholder="No"}}
+      </div>
+    {{/tab-pane}}
 
-  <label>First Answer Headline</label>
-  {{view Ember.TextField value=model.answer1response placeholder="Welcome! Let’s get started..."}}
+    {{#tab-pane name="Answer1" previewAction="showResponse1"}}
+      Response to Answer 1
+      <div id="response1" class="tab-content">
+        <label>First Answer Headline</label>
+        {{view Ember.TextField value=model.answer1response placeholder="Welcome! Let’s get started..."}}
 
-  {{#unless hideNonBarFields}}
-    <label>First Answer Caption</label>
-    {{view Ember.TextField value=model.answer1caption placeholder="(optional)" maxlength=255}}
-  {{/unless}}
+        {{#unless hideNonBarFields}}
+          <label>First Answer Caption</label>
+          {{view Ember.TextField value=model.answer1caption placeholder="(optional)" maxlength=255}}
+        {{/unless}}
 
-  {{#unless hideLinkText}}
-    <label>First Answer Button Text</label>
-    {{view Ember.TextField value=model.answer1link_text placeholder="Take the tour"}}
-  {{/unless}}
+        {{#unless hideLinkText}}
+          <label>First Answer Button Text</label>
+          {{view Ember.TextField value=model.answer1link_text placeholder="Take the tour"}}
+        {{/unless}}
+      </div>
+    {{/tab-pane}}
 
-  <label>Second Answer Headline</label>
-  {{view Ember.TextField value=model.answer2response placeholder="Welcome back! Check out our new sale."}}
+    {{#tab-pane name="Answer2" previewAction="showResponse2"}}
+      Response to Answer 2
+      <div id="response2" class="tab-content">
+        <label>Second Answer Headline</label>
+        {{view Ember.TextField value=model.answer2response placeholder="Welcome back! Check out our new sale."}}
 
-  {{#unless hideNonBarFields}}
-    <label>Second Answer Caption</label>
-    {{view Ember.TextField value=model.answer2caption placeholder="(optional)" maxlength=255}}
-  {{/unless}}
+        {{#unless hideNonBarFields}}
+          <label>Second Answer Caption</label>
+          {{view Ember.TextField value=model.answer2caption placeholder="(optional)" maxlength=255}}
+        {{/unless}}
 
-  {{#unless hideLinkText}}
-    <label>Second Answer Button Text</label>
-    {{view Ember.TextField value=model.answer2link_text placeholder="Shop now"}}
-  {{/unless}}
-
-  <p>
-    <a {{action "resetAnswerState"}}>Reset Answer State</a>
-  </p>
+        {{#unless hideLinkText}}
+          <label>Second Answer Button Text</label>
+          {{view Ember.TextField value=model.answer2link_text placeholder="Shop now"}}
+        {{/unless}}
+      </div>
+    {{/tab-pane}}
+  {{/tab-view}}
 {{/if}}
 
 {{#if showNamePlaceholderText}}
@@ -63,6 +78,8 @@ Ask question from user first?</label>
     maxlength=100
   }}
 {{/if}}
+
+<hr/>
 
 {{#if showEmailPlaceholderText}}
   <label>Email placeholder</label>

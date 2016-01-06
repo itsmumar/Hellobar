@@ -52,7 +52,36 @@ HelloBar.TextController = Ember.Controller.extend
       @set('model.active_image_id', imageID)
       @set('model.image_url', imageUrl)
 
-    resetAnswerState: ->
+    showQuestion: ->
+      console.log "DOING: showQuestion"
+      for index, siteElement of HB.siteElementsOnPage
+        setTimeout(@resetQuestion(siteElement), 500)
+      console.log "DONE"
+
+    showResponse1: ->
+      console.log "DOING: showResponse1"
+      @resetQuestion
+      for index, siteElement of HB.siteElementsOnPage
+        setTimeout(@showResponse(siteElement, 1), 500)
+      console.log "DONE"
+
+    showResponse2: ->
+      console.log "DOING: showResponse2"
+      @resetQuestion
+      for index, siteElement of HB.siteElementsOnPage
+        setTimeout(@showResponse(siteElement, 2), 500)
+      console.log "DONE"
+
+  resetQuestion: (se) ->
+    if (se && se.displayResponse)
+      console.log "before"
       prop = @get('model.has_question')
       @set('model.has_question', !prop)
       @set('model.has_question', prop)
+      console.log "after"
+
+  showResponse: (se, idx) ->
+    if (se && se.displayResponse)
+      console.log "before"
+      se.displayResponse(idx)
+      console.log "after"

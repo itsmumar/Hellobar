@@ -120,9 +120,7 @@ HB.SiteElement = HB.createClass({
       HB.addClass(d.body, "hb-paused-animations-ie");
 
     if(siteElement.has_question) {
-      var cta = d.getElementById('hb-traffic-cta');
-      var headline = d.getElementsByClassName('hb-headline-text')[0]
-      HB.displayQuestion(d, headline, cta);
+      this.displayQuestion();
     }
 
     // As the vistor readjust the window size we need to adjust the size of the containing
@@ -470,6 +468,114 @@ HB.SiteElement = HB.createClass({
   converted: function()
   {
     HB.converted(this);
+  },
+
+  originalElements: function() {
+    if (this._originalElements == undefined) {
+      var d = this.w.contentWindow.document;
+      this._originalElements = {
+        'headline':      d.querySelector('.hb-headline-text'),
+        'cta':           d.querySelector('#hb-traffic-cta'),
+        'emailForm':     d.querySelector('.hb-input-wrapper'),
+        'emailFormBtn':  d.querySelector('.hb-input-wrapper .hb-cta'),
+        'caption':       d.querySelector('.hb-text-wrapper .hb-secondary-text'),
+        'social':        d.querySelectorAll('.hb-social-wrapper')
+      }
+    }
+    return this._originalElements;
+  },
+
+  extractQuestionElements: function() {
+    if (this._questionElements == undefined) {
+      var d = this.w.contentWindow.document;
+      this._questionElements = {
+        'questionText':  d.querySelector('#hb-question'),
+        'answers':       d.querySelector('#hb-answers'),
+        'responseText1': d.querySelector('#hb-answer1-response span'),
+        'responseText2': d.querySelector('#hb-answer2-response span'),
+        'response-cta1': d.querySelector('#hb-answer1-response a'),
+        'response-cta2': d.querySelector('#hb-answer2-response a'),
+        'captionText1':  d.querySelector('#hb-answer1-caption'),
+        'captionText2':  d.querySelector('#hb-answer2-caption')
+      }
+    }
+    return this._questionElements;
+  },
+
+  hideOriginalElements: function() {
+    var original = this.originalElements();
+    // hide original elements to show later
+    HB.hideElement(original['emailForm']);
+    HB.hideElement(original['social']);
+  },
+
+  currentHeadline: function() {
+    return this.w.contentWindow.document.querySelector('.hb-headline-text');
+  },
+
+  currentCaption: function() {
+    return this.w.contentWindow.document.querySelector('.hb-text-wrapper .hb-secondary-text');
+  },
+
+  rewriteElementText: function(element, elementText) {
+    if (element && elementText) {
+      element.textContent = elementText.textContent;
+    }
+  },
+
+  rewriteEmailCTA: function(new_cta){
+    var original     = this.originalElements();
+    var emailFormBtn = original['emailFormBtn'];
+    var answers      = this.extractQuestionElements()['answers'];
+
+    this.rewriteElementText(emailFormBtn, new_cta);
+    HB.hideElement(new_cta, "");
+    HB.hideElement(answers, "");
+  },
+
+  showAnswers: function() {
+    var original  = this.originalElements();
+    var emailForm = original['emailForm'];
+    var cta =       original['cta'];
+
+    var elements  = this.extractQuestionElements();
+    var answers = elements['answers'];
+
+    if(emailForm) {
+      emailForm.parentNode.appendChild(answers);
+    } else if(cta) {
+      HB.hideElement(cta);
+      cta.parentNode.appendChild(answers);
+    } else {
+      this.currentHeadline().appendChild(answers);
+    }
+    HB.showElement(answers, "");
+  },
+
+  displayQuestion: function() {
+    var elements  = this.extractQuestionElements();
+    this.hideOriginalElements();
+    this.rewriteElementText(this.currentHeadline(), elements['questionText']);
+    this.showAnswers();
+  },
+
+  displayResponse: function(idx) {
+    var elements     = this.extractQuestionElements();
+    var answers      = elements['answers'];
+    var cta          = elements['response-cta'+idx];
+
+    var original = this.originalElements();
+    var emailFormBtn = original['emailFormBtn'];
+
+    if (emailFormBtn) {
+      this.rewriteEmailCTA(cta, answers, emailFormBtn);
+    } else {
+      answers.parentNode.replaceChild(cta, answers);
+    }
+    HB.showElement(original['emailForm'], "");
+    HB.showElement(original['social'], "");
+    this.rewriteElementText(this.currentHeadline(), elements['responseText'+idx]);
+    this.rewriteElementText(this.currentCaption(), elements['captionText'+idx]);
   }
 
 });
