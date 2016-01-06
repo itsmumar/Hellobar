@@ -495,6 +495,7 @@ GEM
       eventmachine (>= 1.0.0)
       rack (>= 1.0.0)
     thor (0.19.1)
+    thread (0.2.2)
     thread_safe (0.3.5)
     tilt (1.4.1)
     timecop (0.7.1)
@@ -610,6 +611,7 @@ DEPENDENCIES
   slim-rails (~> 2.1.4)
   teaspoon-jasmine
   thin (~> 1.6.2)
+  thread (~> 0.2.2)
   timecop
   twilio-ruby (~> 3.11.5)
   uglifier (= 2.0.1)
