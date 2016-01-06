@@ -28,7 +28,7 @@ feature "User can sign in", js: true do
     OmniAuth.config.add_mock(:google_oauth2, {:uid => '12345'})
     visit new_user_session_path
 
-    click_link 'Sign in with Google'
+    click_link 'google-login-button'
 
     expect(page).to have_content('Sign Out')
 
