@@ -56,6 +56,7 @@ module Hello
     register_test("Video Welcome 2015-9-22", %w{original video}, 5, [75, 25])
     register_test("Quickstart CTA 2015-10-06", %w{original cta}, 6)
     register_test("Upgrade Plan Button 2016-01-05", %w{original power}, 7)
+    register_test("Settings Upsell 2016-01-07", %w{original upsell}, 8)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
