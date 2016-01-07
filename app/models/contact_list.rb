@@ -41,6 +41,8 @@ class ContactList < ActiveRecord::Base
       data["remote_name"] && data["remote_id"]
     elsif embed_code?
       data["embed_code"].present?
+    elsif api_key?
+      identity.api_key? && data["remote_name"] && data["remote_id"]
     end
   end
 
@@ -107,11 +109,15 @@ class ContactList < ActiveRecord::Base
   end
 
   def oauth?
-    service_provider_class.try(:oauth?)
+    service_provider_class.try(:oauth?).present?
   end
 
   def embed_code?
-    service_provider_class.try(:embed_code?)
+    service_provider_class.try(:embed_code?).present?
+  end
+
+  def api_key?
+    service_provider_class.try(:api_key?).present?
   end
 
   private

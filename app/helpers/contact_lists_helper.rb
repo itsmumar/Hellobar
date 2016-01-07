@@ -1,7 +1,16 @@
 module ContactListsHelper
   def options_for_provider_select
-    providers = Hellobar::Settings[:identity_providers].select{|k, v| v[:type] == :email}
-    [["In Hello Bar only", 0]] + providers.map {|k, v| [v[:name], k, requires_embed_code: !!v[:requires_embed_code]] }
+    providers = Hellobar::Settings[:identity_providers].select{|k, v| v[:type] == :email && v[:hidden] != true}
+    providers_array = providers.map do |provider_name, provider_attributes|
+      [
+        provider_attributes[:name],
+        provider_name,
+        requires_embed_code: !!provider_attributes[:requires_embed_code],
+        requires_api_key: !!provider_attributes[:requires_api_key]
+      ]
+    end
+
+    [["In Hello Bar only", 0]] + providers_array
   end
 
   def contact_list_sync_details(contact_list)
