@@ -33,6 +33,16 @@ describe ServiceProviders::GetResponseApi do
         expect(get_respone_api.lists).to eq([{'id' => 1122, 'name' => 'myCoolList'}])
       end
 
+      it 'returns empty array when time out' do
+        allow(client).to receive(:get).and_raise(Faraday::TimeoutError)
+        expect(get_respone_api.lists).to eq([])
+      end
+
+      it 'returns empty array in the event of failed request' do
+        allow(client).to receive(:get).and_return(failure_response)
+        expect(get_respone_api.lists).to eq([])
+      end
+
       it 'handles time out' do
         allow(client).to receive(:get).and_raise(Faraday::TimeoutError)
         expect(get_respone_api).

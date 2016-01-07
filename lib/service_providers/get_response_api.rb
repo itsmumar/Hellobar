@@ -27,12 +27,13 @@ module ServiceProviders
     end
 
     def lists
+      found_lists = []
       begin
         response = @client.get 'campaigns'
 
         if response.success?
           response_hash = JSON.parse response.body
-          response_hash.map {|list| {'id' => list['campaignId'], 'name' => list['name']}}
+          found_lists = response_hash.map {|list| {'id' => list['campaignId'], 'name' => list['name']}}
         else
           error_message = JSON.parse(response.body)['codeDescription']
           log "getting lists returned '#{error_message}' with the code #{response.status}"
@@ -43,6 +44,7 @@ module ServiceProviders
       rescue => error
         log "getting lists raised #{error}"
       end
+      found_lists
     end
 
     def subscribe(list_id, email, name = nil, double_optin = true)
