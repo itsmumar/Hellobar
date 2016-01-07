@@ -1309,10 +1309,14 @@ var HB = {
         // Check for search terms
         HB.setVisitorData("st", referrerParams['query'] || referrerParams['q'] || referrerParams['search'], true);
       }
+
+      // Always set the previous page to the referrer
+      HB.setVisitorData("pp", referrer);
     } else {
       // There is no referrer so set the "rf" and "rd" segments to blank
       HB.setVisitorData("rf", "");
       HB.setVisitorData("rd", "");
+      HB.setVisitorData("pp", "");
     }
     // Set the page URL
     HB.setVisitorData("pu", HB.n(document.location+"", false));
