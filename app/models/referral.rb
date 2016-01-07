@@ -6,6 +6,11 @@ class Referral < ActiveRecord::Base
     'installed' => 'Installed'
   }
 
+  EXPIRES_INTERVAL = 5.days
+  scope :about_to_expire, -> do
+    where(state: 'sent').where(created_at: (EXPIRES_INTERVAL.ago .. (EXPIRES_INTERVAL - 1.day).ago))
+  end
+
   belongs_to :sender, class_name: "User"
   belongs_to :recipient, class_name: "User"
 
@@ -26,6 +31,15 @@ class Referral < ActiveRecord::Base
 
     path = Rails.application.routes.url_helpers.accept_referrals_path(token: referral_token.token)
     Hellobar::Settings[:url_base] + path
+  end
+
+  def expiration_date_string
+    expiration_date = (created_at + EXPIRES_INTERVAL)
+    expiration_date_string = expiration_date.strftime("%B ") + expiration_date.day.ordinalize
+  end
+
+  def accepted?
+    state != 'sent'
   end
 
   private

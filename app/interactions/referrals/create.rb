@@ -21,11 +21,9 @@ class Referrals::Create < Less::Interaction
   end
 
   def send_initial_email
-    expiration_date = (@referral.created_at + 5.days)
-    expiration_date_string = expiration_date.strftime("%B ") + expiration_date.day.ordinalize
     MailerGateway.send_email("Referal Invite Initial", email, {
-      referral_sender: sender.email,
-      referral_expiration_date: expiration_date_string,
+      referral_sender: sender.name,
+      referral_expiration_date: @referral.expiration_date_string,
       referral_body: @referral.body,
       referral_link: @referral.url
     })

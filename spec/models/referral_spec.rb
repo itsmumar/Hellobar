@@ -25,10 +25,72 @@ describe Referral do
 
   it "has a URL once it gets saved and has a token" do
     expect(@referral.url).to be_empty
-    @referral.email = 'random@email.com'
+    @referral.email = Faker::Internet.email
     @referral.state = 'sent'
     @referral.save!
     expect(@referral.url).not_to be_empty
-    expect(@referral.url).to match @referral.referral_token.token
+    expect(@referral.url).to match(@referral.referral_token.token)
+  end
+
+  it "has a formatted expiration date string" do
+    @referral.stub(created_at: Date.new(2016,1,15).to_time)
+    expect(@referral.expiration_date_string).to eq('January 20th')
+  end
+
+  it "is accepted if the state is not sent" do
+    @referral.state = 'signed_up'
+
+    expect(@referral.accepted?).to be_true
+  end
+
+  it "is not accepted if the state is sent" do
+    @referral.state = 'sent'
+
+    expect(@referral.accepted?).to be_false
+  end
+
+  describe "about_to_expire" do
+    before :each do
+      @referral.email = Faker::Internet.email
+      @referral.state = 'sent'
+      @referral.save!
+    end
+
+    it 'does not include referrals older than the interval' do
+      @referral.created_at -= (Referral::EXPIRES_INTERVAL + 1.day)
+      @referral.save!
+
+      expect(Referral.about_to_expire.all).not_to include(@referral)
+    end
+
+    it 'does not include referrals more recent than the interval' do
+      @referral.created_at -= (Referral::EXPIRES_INTERVAL - 2.days)
+      @referral.save!
+
+      expect(Referral.about_to_expire.all).not_to include(@referral)
+    end
+
+    it 'does not include referrals in the interval if they are signed up' do
+      @referral.created_at -= (Referral::EXPIRES_INTERVAL - 1.hour)
+      @referral.state = 'signed_up'
+      @referral.save!
+
+      expect(Referral.about_to_expire.all).not_to include(@referral)
+    end
+
+    it 'does not include referrals in the interval if they have installed' do
+      @referral.created_at -= (Referral::EXPIRES_INTERVAL - 1.hour)
+      @referral.state = 'installed'
+      @referral.save!
+
+      expect(Referral.about_to_expire.all).not_to include(@referral)
+    end
+
+    it 'does not include referrals in the interval if they have installed' do
+      @referral.created_at -= (Referral::EXPIRES_INTERVAL - 1.hour)
+      @referral.save!
+
+      expect(Referral.about_to_expire.all).to include(@referral)
+    end
   end
 end
