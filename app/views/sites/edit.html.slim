@@ -23,7 +23,14 @@ nav.tabs-wrapper
     = link_to "Installation instructions", site_install_path(@site)
 
   .billing-wrapper
-    = render 'billing'
+    h5.page-header.alt Billing
+    - if @site.is_free? && get_ab_variation("Settings Upsell 2016-01-07", current_user) == "upsell"
+      .block.small
+        = render 'billing'
+      .block
+        = render 'upgrade_table'
+    - else
+      = render 'billing'
 
   footer
     = f.button :submit, "Save & Update", :class => "button"
