@@ -1,8 +1,8 @@
 <h5 class="step-title">Text and Content</h5>
 
 <label>
-  {{input type="checkbox" name="has_question" checked=model.has_question}}
   Boost your conversions by asking a leading question first
+  {{toggle-switch switch=model.has_question}}
 </label>
 
 {{#unless showQuestionFields}}
