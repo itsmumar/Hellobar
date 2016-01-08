@@ -9,6 +9,7 @@ class Bill < ActiveRecord::Base
   serialize :metadata, JSON
   belongs_to :subscription, inverse_of: :bills
   has_many :billing_attempts, -> {order 'id'}
+  has_many :coupon_uses
   validates_presence_of :subscription
   include BillingAuditTrail
   delegate :site, to: :subscription
