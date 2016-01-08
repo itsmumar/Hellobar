@@ -22,7 +22,7 @@ HelloBar.TextController = Ember.Controller.extend
   showEmailPlaceholderText: Ember.computed.equal('model.element_subtype', 'email')
   showNamePlaceholderText: Ember.computed.equal('model.settings.collect_names', 1)
   showImagePlacementField: Ember.computed.notEmpty('model.image_url')
-  showQuestionFields: Ember.computed.equal('model.has_question', true)
+  showQuestionFields: Ember.computed.equal('model.use_question', true)
 
   trackTextView: (->
     if trackEditorFlow && !Ember.isEmpty(@get('model'))
@@ -66,22 +66,16 @@ HelloBar.TextController = Ember.Controller.extend
       console.log "DONE"
 
     showResponse2: ->
-      console.log "DOING: showResponse2"
       @resetQuestion
       for index, siteElement of HB.siteElementsOnPage
         setTimeout(@showResponse(siteElement, 2), 500)
-      console.log "DONE"
 
   resetQuestion: (se) ->
     if (se && se.displayResponse)
-      console.log "before"
-      prop = @get('model.has_question')
-      @set('model.has_question', !prop)
-      @set('model.has_question', prop)
-      console.log "after"
+      prop = @get('model.use_question')
+      @set('model.use_question', !prop)
+      @set('model.use_question', prop)
 
   showResponse: (se, idx) ->
     if (se && se.displayResponse)
-      console.log "before"
       se.displayResponse(idx)
-      console.log "after"

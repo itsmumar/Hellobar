@@ -268,7 +268,7 @@ private
       answer2: site_element.answer2,
       answer2response: site_element.answer2response,
       answer2link_text: site_element.answer2link_text,
-      has_question: site_element.has_question,
+      use_question: site_element.use_question,
       question: site_element.question,
 
       branding_url: "http://www.hellobar.com?sid=#{site_element.id}",

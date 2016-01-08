@@ -150,10 +150,6 @@ class SiteElement < ActiveRecord::Base
     !site.capabilities.custom_thank_you_text? || (after_email_submit_action == :show_default_message)
   end
 
-  def has_question
-    question.present?
-  end
-
   private
 
   def remove_unreferenced_images

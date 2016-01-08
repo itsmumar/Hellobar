@@ -119,7 +119,7 @@ HB.SiteElement = HB.createClass({
     if(HB.isIE11())
       HB.addClass(d.body, "hb-paused-animations-ie");
 
-    if(siteElement.has_question) {
+    if(siteElement.use_question) {
       this.displayQuestion();
     }
 

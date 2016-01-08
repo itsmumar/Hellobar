@@ -32,7 +32,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
   renderPreview: ( ->
     Ember.run.debounce(this, @doRenderPreview, 500)
   ).observes(
-    "model.has_question",
+    "model.use_question",
     "model.answer1",
     "model.answer1response",
     "model.answer1caption",
@@ -151,7 +151,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
   setModelIsDirty: ( (obj, keyName) ->
     @set("modelIsDirty", true) if !!@get(keyName)
   ).observesBefore(
-    "model.has_question",
+    "model.use_question",
     "model.answer1",
     "model.answer1response",
     "model.answer1caption",
