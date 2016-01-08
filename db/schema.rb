@@ -313,6 +313,7 @@ ActiveRecord::Schema.define(version: 20160119131352) do
     t.string   "answer2link_text"
     t.string   "answer1caption"
     t.string   "answer2caption"
+    t.boolean  "use_question"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
