@@ -5,6 +5,9 @@ feature "Payment modal interaction", js: true do
   after { devise_reset }
 
   scenario "downgrade to free from pro" do
+    # In the middle of an AB test.  Make sure we use the original
+    allow_any_instance_of(ApplicationController).to receive(:get_ab_variation).and_return("original")
+
     site = @user.sites.first
     site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
     visit edit_site_path(site)
