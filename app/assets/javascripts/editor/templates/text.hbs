@@ -18,7 +18,6 @@
 {{#if showQuestionFields}}
   {{#tab-view}}
     {{#tab-pane name="Question" previewAction="showQuestion"}}
-      Question and Answers
       <div id="question" class="tab-content">
         <label>What's your question?</label>
         {{view Ember.TextField value=model.question placeholder="First time here?"}}
@@ -31,8 +30,7 @@
       </div>
     {{/tab-pane}}
 
-    {{#tab-pane name="Answer1" previewAction="showResponse1"}}
-      Response to Answer 1
+    {{#tab-pane name="Answer 1" previewAction="showResponse1"}}
       <div id="response1" class="tab-content">
         <label>First Answer Headline</label>
         {{view Ember.TextField value=model.answer1response placeholder="Welcome! Let’s get started..."}}
@@ -49,8 +47,7 @@
       </div>
     {{/tab-pane}}
 
-    {{#tab-pane name="Answer2" previewAction="showResponse2"}}
-      Response to Answer 2
+    {{#tab-pane name="Answer 2" previewAction="showResponse2"}}
       <div id="response2" class="tab-content">
         <label>Second Answer Headline</label>
         {{view Ember.TextField value=model.answer2response placeholder="Welcome back! Check out our new sale."}}
@@ -67,6 +64,8 @@
       </div>
     {{/tab-pane}}
   {{/tab-view}}
+
+  <hr/>
 {{/if}}
 
 {{#if showNamePlaceholderText}}
@@ -78,8 +77,6 @@
     maxlength=100
   }}
 {{/if}}
-
-<hr/>
 
 {{#if showEmailPlaceholderText}}
   <label>Email placeholder</label>

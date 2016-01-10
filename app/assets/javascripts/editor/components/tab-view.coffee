@@ -1,5 +1,5 @@
 HelloBar.NavTabComponent = Ember.Component.extend(
-  tagName: 'li'
+  tagName: 'a'
   classNames: [ 'nav-pill' ]
   classNameBindings: [ 'isActive:active' ]
   attributeBindings: ['previewAction']
