@@ -25,9 +25,9 @@ nav.tabs-wrapper
   .billing-wrapper
     h5.page-header.alt Billing
     - if @site.is_free? && get_ab_variation("Settings Upsell 2016-01-07", current_user) == "upsell"
-      .block.small
+      .half-block
         = render 'billing'
-      .block
+      .half-block
         = render 'upgrade_table'
     - else
       = render 'billing'
@@ -36,3 +36,6 @@ nav.tabs-wrapper
     = f.button :submit, "Save & Update", :class => "button"
     - if Permissions.delete_site?(current_user, @site)
       = link_to "Delete Site", site_path(@site), :method => :delete, :class => "button", data: { confirm: "Historical data will be deleted and you will not be able to recover it after this. Are you sure you wish to delete this site?" }
+
+    - if @site.is_free? && get_ab_variation("Settings Upsell 2016-01-07", current_user) == "upsell"
+      .button.show-upgrade-modal(data-source="Billing Upgrade Variation") Find out more
