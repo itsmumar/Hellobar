@@ -19,6 +19,38 @@ describe("HB", function() {
       });
     });
 
+    context("when segment is 'pp'", function() {
+      it("calls HB.n correct when url is absolute (http)", function() {
+        var val = HB.sanitizeConditionValue(
+          "pp",
+          "http://google.com",
+          "http://google.com"
+        );
+
+        expect(HB.n).toHaveBeenCalledWith("http://google.com", false);
+      });
+
+      it("calls HB.n correct when url is absolute (https)", function() {
+        var val = HB.sanitizeConditionValue(
+          "pp",
+          "https://google.com",
+          "https://google.com"
+        );
+
+        expect(HB.n).toHaveBeenCalledWith("https://google.com", false);
+      });
+
+      it("calls HB.n correct when url is relative", function() {
+        var val = HB.sanitizeConditionValue(
+          "pp",
+          "https://google.com/about",
+          "/about"
+        );
+
+        expect(HB.n).toHaveBeenCalledWith("https://google.com/about", true);
+      });
+    });
+
     context("when segment is 'pu'", function() {
       it("calls HB.n correct when url is absolute (http)", function() {
         var val = HB.sanitizeConditionValue(
