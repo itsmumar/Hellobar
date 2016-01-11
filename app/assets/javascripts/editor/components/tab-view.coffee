@@ -2,22 +2,22 @@ HelloBar.NavTabComponent = Ember.Component.extend(
   tagName: 'a'
   classNames: [ 'nav-pill' ]
   classNameBindings: [ 'isActive:active' ]
-  attributeBindings: ['previewAction']
+  attributeBindings: ['onSelection']
   isActive: (->
     @get('paneId') == @get('parentView.activePaneId')
   ).property('paneId', 'parentView.activePaneId')
   click: ->
     @get('parentView').setActivePane @get('paneId')
-    @sendAction('updatePreview', @get('previewAction'))
+    @sendAction('doTabSelected', @get('onSelection'))
     return
 
-  updatePreview: 'updatePreview'
+  doTabSelected: 'doTabSelected'
 )
 
 HelloBar.TabPaneComponent = Ember.Component.extend(
   classNames: [ 'tab-pane' ]
   classNameBindings: [ 'isActive:active' ]
-  attributeBindings: ['previewAction']
+  attributeBindings: ['onSelection']
   isActive: (->
     @get('elementId') == @get('parentView.activePaneId')
   ).property('elementId', 'parentView.activePaneId')
@@ -25,7 +25,7 @@ HelloBar.TabPaneComponent = Ember.Component.extend(
     @get('parentView.panes').pushObject
       paneId: @get('elementId')
       name: @get('name')
-      action: @get('previewAction')
+      action: @get('onSelection')
     if @get('parentView.activePaneId') == null
       @get('parentView').setActivePane @get('elementId')
     return
@@ -48,12 +48,19 @@ HelloBar.TabViewComponent = Ember.Component.extend(
       @set 'activePaneId', paneId
     return
 
-  showQuestion: 'showQuestion'
+  actions:
+    doTabSelected: (action) ->
+      if (action)
+        @sendAction(action)
+
+)
+
+HelloBar.QuestionTabsComponent = HelloBar.TabViewComponent.extend(
+  layoutName: (->
+    'components/tab-view'
+  ).property()
+
+  showQuestion:  'showQuestion'
   showResponse1: 'showResponse1'
   showResponse2: 'showResponse2'
-
-  actions:
-    updatePreview: (action) ->
-      @sendAction(action)
-
 )

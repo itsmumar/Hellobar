@@ -1,7 +1,7 @@
 <nav class="tabs-wrapper">
   {{#each pane in panes}}
-    {{#nav-tab paneId=pane.paneId previewAction=pane.action}}
-      {{pane.name}}
+    {{#nav-tab paneId=pane.paneId onSelection=pane.action}}
+      <a>{{pane.name}}</a>
     {{/nav-tab}}
   {{/each}}
 </nav>
