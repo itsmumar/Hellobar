@@ -52,6 +52,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "LastVisitCondition" "days since last visit"}}
           | {{option segment "NumberOfVisitsCondition" "number of visits"}}
           | {{option segment "EveryXSession" "every Nth session"}}
+          | {{option segment "PreviousPageURL" "previous page url"}}
           | {{option segment "ReferrerCondition" "referrer"}}
           | {{option segment "UrlCondition" "URL"}}
           | {{option segment "ReferrerDomainCondition" "Referrer Domain"}}
@@ -97,6 +98,8 @@ script#condition-partial type="text/x-handlebars-template"
           | {{else}}
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="number" value="{{value}}"
           | {{/if}}
+        .choice-wrapper.previous-page-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="url" value="{{value}}"
         .choice-wrapper.referrer-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="url" value="{{value}}"
         .choice-wrapper.search-term-choice

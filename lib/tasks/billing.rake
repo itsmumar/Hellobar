@@ -34,7 +34,7 @@ namespace :billing do
       # Check the pid to make sure we have the lock
       sleep 3
       lock_file_pid = File.read(lock_file_path).to_i
-      raise "Expected #{Process.pid} but was #{pid}, so exiting" unless lock_file_pid == Process.pid
+      raise "Expected #{Process.pid} but was #{lock_file_pid.inspect}, so exiting" unless lock_file_pid == Process.pid
       billing_report "PID matched"
       billing_report "#{Time.now}"
       billing_report "-"*80

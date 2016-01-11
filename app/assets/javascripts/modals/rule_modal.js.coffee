@@ -110,6 +110,7 @@ class @RuleModal extends Modal
     'EveryXSession': ['every']
     'LastVisitCondition': ['is', 'is_not', 'less_than', 'greater_than', 'between']
     'NumberOfVisitsCondition': ['is', 'is_not', 'less_than', 'greater_than', 'between']
+    'PreviousPageURL': ['includes', 'does_not_include']
     'ReferrerCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'ReferrerDomainCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'SearchTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
@@ -126,6 +127,7 @@ class @RuleModal extends Modal
     'EveryXSession': '.x-sessions'
     'LastVisitCondition': '.days-last-visit-choice'
     'NumberOfVisitsCondition': '.number-of-visits-choice'
+    'PreviousPageURL': '.previous-page-choice'
     'ReferrerCondition': '.referrer-choice'
     'ReferrerDomainCondition': '.referrer-domain-choice'
     'SearchTermCondition': '.search-term-choice'

@@ -1172,7 +1172,7 @@ var HB = {
   // Input is the users value condition
   sanitizeConditionValue: function(segment, value, input)
   {
-    if ( segment == "pu" ) {
+    if ( segment == "pu" || segment == "pp") {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
@@ -1309,10 +1309,14 @@ var HB = {
         // Check for search terms
         HB.setVisitorData("st", referrerParams['query'] || referrerParams['q'] || referrerParams['search'], true);
       }
+
+      // Always set the previous page to the referrer
+      HB.setVisitorData("pp", referrer);
     } else {
       // There is no referrer so set the "rf" and "rd" segments to blank
       HB.setVisitorData("rf", "");
       HB.setVisitorData("rd", "");
+      HB.setVisitorData("pp", "");
     }
     // Set the page URL
     HB.setVisitorData("pu", HB.n(document.location+"", false));
@@ -1637,57 +1641,18 @@ var HB = {
   intentCheck: function(intentSetting, payload) {
     var vistorIntendsTo = false;
 
-    // aliases for readability
-    var yFromBottom = (HB.mouseY - window.innerHeight) * -1;
-    var xFromLeft = HB.mouseX;
-
-     // Caches most recent polling data for reference by rules
-    HB.intentConditionCache.push({ x: HB.mouseX, y: HB.mouseY, yFromBottom: yFromBottom });
-    if (HB.intentConditionCache.length > 5)
-      HB.intentConditionCache.shift();
-    var c = HB.intentConditionCache;
-
     // if intent is set to exit and we have enough mouse position data...
-    if (intentSetting === "exit" && c.length > 2) {
+    if (intentSetting === "exit") {
 
       // catch a keyboard move towards the address bar via onBlur event; resets onBlur state
-      if ( HB.intentBodyBlurEvent ) {
+      if ( HB.intentConditionCache.intentBodyBlurEvent ) {
         vistorIntendsTo = true;
-        HB.intentBodyBlurEvent = false; }
+        HB.intentConditionCache.intentBodyBlurEvent = false;
+      }
 
-      // catches fast mouse move off screentop (same location across polls implies cursor out of viewport)
-      if ((HB.mouseY < 25)
-        && (c[c.length - 1].x === c[c.length - 2].x)
-        && (c[c.length - 1].y === c[c.length - 2].y)
-        && (c[c.length - 1].y === c[c.length - 3].y)
-        && (c[c.length - 1].x === c[c.length - 3].x)) { vistorIntendsTo = true };
-
-      // catches slow move off screentop (requires previous poll to be near edge)
-      if (HB.mouseY < 2 && c[c.length - 2].y < 10) { vistorIntendsTo = true };
-
-      // catches any move towards the back button
-      if ((HB.mouseY / 2) + HB.mouseX < 50) { vistorIntendsTo = true };
-
-      // Windows-ish only rules
-      if (navigator.appVersion.indexOf("Win")!=-1) {
-
-        // catch any move towards Start Menu (bottom left)
-        if (yFromBottom + xFromLeft < 200) { vistorIntendsTo = true };
-      };
-
-      // OSX-ish only rules
-      if (navigator.appVersion.indexOf("Mac")!=-1) {
-
-        // catch slow move towards default Dock position (bottom)
-        if (yFromBottom < 10 && c[c.length - 2].yFromBottom < 15) { vistorIntendsTo = true };
-
-        // catch fast move towards default Dock position (bottom)
-        if ((yFromBottom < 50)
-          && (c[c.length - 1].x === c[c.length - 2].x)
-          && (c[c.length - 1].y === c[c.length - 2].y)
-          && (c[c.length - 1].y === c[c.length - 3].y)
-          && (c[c.length - 1].x === c[c.length - 3].x)) { vistorIntendsTo = true };
-      };
+      if ( HB.intentConditionCache.mousedOut ) {
+        vistorIntendsTo = true;
+      }
 
       //  catch page inactive state
       if ( document.hidden || document.unloaded ) { vistorIntendsTo = true };
@@ -1695,7 +1660,9 @@ var HB = {
       // if on mobile, display the bar after N ms regardless of mouse behavior
       var mobileDelaySetting = 30000;
       var date = new Date();
-      if ( HB.isMobile && date.getTime() - HB.intentStartTime > mobileDelaySetting) { vistorIntendsTo = true };
+      if ( HB.isMobile && date.getTime() - HB.intentConditionCache.intentStartTime > mobileDelaySetting) {
+        vistorIntendsTo = true
+      };
     };
 
     if (vistorIntendsTo) {
@@ -1705,28 +1672,39 @@ var HB = {
   },
 
   initializeIntentListeners: function() {
+    HB.intentConditionCache = {
+      mouseInTime: null,
+      mousedOut: false,
+      intentBodyBlurEvent: false,
+      intentStartTime: (new Date()).getTime()
+    };
 
-    // cache the time when page loads
-    var date = new Date();
-    HB.intentStartTime = date.getTime();
-
-    HB.intentConditionCache = [{},{},{},{},{}];
-    // initialize mouse position near center of window, avoids edge case with no mouse events yet
-    HB.mouseX = 300;
-    HB.mouseY = 300;
-
-    document.onmousemove = function(e) {
-      var event = e || window.event;
-      HB.mouseX = event.clientX;
-      HB.mouseY = event.clientY;
-    }
+    // When a mouse enters the document, reset the mouseOut state and
+    // set the time the document was entered
+    document.body.addEventListener("mouseenter", function(e) {
+      if(!HB.intentConditionCache.mouseInTime) {
+        HB.intentConditionCache.mousedOut = false;
+        HB.intentConditionCache.mouseInTime = new Date();
+      }
+    });
 
     // captures state of whether event has fired (ex: keyboard move to address bar)
     // response to this state defined by rules inside the intentCheck loop
-    document.body.onblur=function(){
-      HB.intentBodyBlurEvent = true;
+    document.body.onblur = function() {
+      HB.intentConditionCache.intentBodyBlurEvent = true;
     };
 
+    // When the mouse leaves the document, check the current time vs when the mouse entered
+    // the document.  If greater than the specified timespan, set the mouseOut state
+    document.body.addEventListener("mouseleave", function(e) {
+      if(HB.intentConditionCache.mouseInTime) {
+        var currentTime = new Date();
+        if(currentTime.getTime() - HB.intentConditionCache.mouseInTime.getTime() > 2000) {
+          HB.intentConditionCache.mouseInTime = null;
+          HB.intentConditionCache.mousedOut = true;
+        }
+      }
+    });
   },
 
   branding_template: function() {
