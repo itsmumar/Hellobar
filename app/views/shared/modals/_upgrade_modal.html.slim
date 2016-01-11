@@ -52,34 +52,46 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
             .package-features
 
-              ul
-                li
-                  i.icon-unbranded
-                  | the Hello Bar logo is removed, so your Bar will always be 100% about you
-                li
-                  i.icon-target
-                  | Target visitors based on what site they came from, which of your pages they visit, and even when they visited them
-                li
-                  i.icon-unlimited
-                  | Unlimited bars means you can really got to town with testing and improvement
-                li
-                  i.icon-pants
-                  | Custom thank you message supports your brand and your exact message
-                li
-                  i.icon-growthbars
-                  | Comprehensive suite of wizards will guide you on how to improve your Bars
-                li
-                  i.icon-pointer
-                  | Deliver tailored content that's activated by your visitors' unique behavior
+              .pro-logos
+                h6 Here are just a few of the companies that profit from the full-featured Hello Bar plan. You can join them:
 
-              .package-status
-                p After 250,000 visits, every 25,000 visits are $5 extra
-                = choose_plan_button(Subscription::Pro.new)
-                .email-links
-                  - if current_site
-                    - current_site.owners.each do |owner|
-                      div
-                        = mail_to owner.email, owner.name || owner.email
+                = image_tag 'pro_logos/udemy.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/search-engine-watch.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/dividend.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/click-z.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/warrior-forum.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/buffer.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/lead-pages.png', :class => 'pro-logo'
+
+              .flex-container
+                ul
+                  li
+                    i.icon-unbranded
+                    | the Hello Bar logo is removed, so your Bar will always be 100% about you
+                  li
+                    i.icon-target
+                    | Target visitors based on what site they came from, which of your pages they visit, and even when they visited them
+                  li
+                    i.icon-unlimited
+                    | Unlimited bars means you can really got to town with testing and improvement
+                  li
+                    i.icon-pants
+                    | Custom thank you message supports your brand and your exact message
+                  li
+                    i.icon-growthbars
+                    | Comprehensive suite of wizards will guide you on how to improve your Bars
+                  li
+                    i.icon-pointer
+                    | Deliver tailored content that's activated by your visitors' unique behavior
+
+                .package-status
+                  p After 250,000 visits, every 25,000 visits are $5 extra
+                  = choose_plan_button(Subscription::Pro.new)
+                  .email-links
+                    - if current_site
+                      - current_site.owners.each do |owner|
+                        div
+                          = mail_to owner.email, owner.name || owner.email
 
           / Enterprise Package
           .package-block.enterprise

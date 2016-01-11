@@ -220,4 +220,65 @@
       .button
         @extend %blue-button
 
-    /*-----------  AB TEST: Company Logos  -----------*/
+  /*-----------  AB TEST: Company Logos  -----------*/
+
+  .with-logos
+
+    .billing-options:after
+      top: -2em
+      right: -2.5em
+      width: 4em
+      height: 4em
+      padding-top: 0.9em
+      background-color: $orange
+      border: 1px solid $white
+      box-shadow: 0 0 7px $orange
+
+    .package-block
+
+      .package-title,
+      .package-features
+        border-color: $grayLightest
+
+      &.pro
+        padding-right: 1.75em
+        margin: 1.5em -1.75em 1.75em
+        border: 1px solid $green
+        border-left-width: 1.75em
+        border-right-width: 0
+
+        .package-title
+          border: none
+
+        .package-features
+          width: 100%
+          border: none
+          @include display(block)
+
+          .pro-logos
+            margin-bottom: $gutter
+
+            h6
+              color: $gray
+              padding: 0 15%
+              line-height: 140%
+              margin-bottom: 1em
+
+            img
+              width: 100px
+              height: auto
+              margin: 0em 1em
+
+          .flex-container
+            @include justify-content(center)
+            @include align-content(center)
+            @include align-items(center)
+            @include flex-flow(row nowrap)
+            @include display(flex)
+
+            ul li
+              padding-right: 3em
+              vertical-align: top
+
+              i.icon-target
+                top: 10%
