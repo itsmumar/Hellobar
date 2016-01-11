@@ -21,13 +21,13 @@
       Question and Answers
       <div id="question" class="tab-content">
         <label>What's your question?</label>
-        {{view Ember.TextField value=model.question placeholder="First time here?"}}
+        {{view Ember.TextField value=model.question placeholder=model.question_placeholder}}
 
         <label>First Answer</label>
-        {{view Ember.TextField value=model.answer1 placeholder="Yes"}}
+        {{view Ember.TextField value=model.answer1 placeholder=model.answer1_placeholder}}
 
         <label>Second Answer</label>
-        {{view Ember.TextField value=model.answer2 placeholder="No"}}
+        {{view Ember.TextField value=model.answer2 placeholder=model.answer2_placeholder}}
       </div>
     {{/tab-pane}}
 
@@ -35,7 +35,7 @@
       Response to Answer 1
       <div id="response1" class="tab-content">
         <label>First Answer Headline</label>
-        {{view Ember.TextField value=model.answer1response placeholder="Welcome! Let’s get started..."}}
+        {{view Ember.TextField value=model.answer1response placeholder=model.answer1response_placeholder}}
 
         {{#unless hideNonBarFields}}
           <label>First Answer Caption</label>
@@ -44,7 +44,7 @@
 
         {{#unless hideLinkText}}
           <label>First Answer Button Text</label>
-          {{view Ember.TextField value=model.answer1link_text placeholder="Take the tour"}}
+          {{view Ember.TextField value=model.answer1link_text placeholder=model.answer1link_text_placeholder}}
         {{/unless}}
       </div>
     {{/tab-pane}}
@@ -53,7 +53,7 @@
       Response to Answer 2
       <div id="response2" class="tab-content">
         <label>Second Answer Headline</label>
-        {{view Ember.TextField value=model.answer2response placeholder="Welcome back! Check out our new sale."}}
+        {{view Ember.TextField value=model.answer2response placeholder=model.answer2response_placeholder}}
 
         {{#unless hideNonBarFields}}
           <label>Second Answer Caption</label>
@@ -62,7 +62,7 @@
 
         {{#unless hideLinkText}}
           <label>Second Answer Button Text</label>
-          {{view Ember.TextField value=model.answer2link_text placeholder="Shop now"}}
+          {{view Ember.TextField value=model.answer2link_text placeholder=model.answer2link_text_placeholder}}
         {{/unless}}
       </div>
     {{/tab-pane}}
