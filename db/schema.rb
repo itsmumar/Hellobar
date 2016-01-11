@@ -241,7 +241,9 @@ ActiveRecord::Schema.define(version: 20160111170931) do
     t.text     "body"
     t.integer  "recipient_id"
     t.integer  "site_id"
-    t.boolean  "available",    default: false
+    t.boolean  "available",                default: false
+    t.datetime "reedemed_by_sender_at"
+    t.datetime "redeemed_by_recipient_at"
   end
 
   add_index "referrals", ["sender_id"], name: "index_referrals_on_sender_id", using: :btree
