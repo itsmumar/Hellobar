@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108175731) do
+ActiveRecord::Schema.define(version: 20160111170931) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -161,6 +161,7 @@ ActiveRecord::Schema.define(version: 20160108175731) do
     t.decimal  "amount",         precision: 7, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "public",                                 default: false
   end
 
   create_table "identities", force: true do |t|
@@ -239,6 +240,8 @@ ActiveRecord::Schema.define(version: 20160108175731) do
     t.string   "state"
     t.text     "body"
     t.integer  "recipient_id"
+    t.integer  "site_id"
+    t.boolean  "available",    default: false
   end
 
   add_index "referrals", ["sender_id"], name: "index_referrals_on_sender_id", using: :btree
