@@ -1172,7 +1172,7 @@ var HB = {
   // Input is the users value condition
   sanitizeConditionValue: function(segment, value, input)
   {
-    if ( segment == "pu" ) {
+    if ( segment == "pu" || segment == "pp") {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
