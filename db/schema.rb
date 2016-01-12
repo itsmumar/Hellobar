@@ -316,6 +316,7 @@ ActiveRecord::Schema.define(version: 20160208211026) do
     t.string   "answer1caption"
     t.string   "answer2caption"
     t.boolean  "use_question",                    default: false
+    t.string   "phone_number"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
