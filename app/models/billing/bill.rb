@@ -98,7 +98,6 @@ class Bill < ActiveRecord::Base
     return true if past_due?(payment_method) and (payment_method.nil? || self.billing_attempts.size > 0)
     # False otherwise
     return false
-
   end
 
   def on_paid
@@ -130,6 +129,7 @@ class Bill < ActiveRecord::Base
 
     self.discount = self.is_a?(Refund) ? 0 : calculate_discount
     self.amount = [self.base_amount - self.discount, 0].max
+    CouponUses::CreateForReferral.run(bill: self)
   end
 
   def estimated_amount

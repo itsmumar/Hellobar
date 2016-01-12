@@ -93,4 +93,29 @@ describe Referral do
       expect(Referral.about_to_expire.all).to include(@referral)
     end
   end
+
+  describe "redeemable_for_user" do
+    before :each do
+      @referral.sender = @user
+      @referral.email = Faker::Internet.email
+      @referral.state = 'installed'
+    end
+
+    it "shows up as the only available one for recipient" do
+      recipient = users(:wootie)
+      @referral.recipient = recipient
+      @referral.save!
+
+      expect(Referral.redeemable_by_user(recipient).count).to eq(1)
+    end
+
+    it "shows up as one of many available one for the sender" do
+      @referral.available = true
+      second = @referral.dup
+      @referral.save!
+      second.save!
+
+      expect(Referral.redeemable_by_user(@user).count).to eq(2)
+    end
+  end
 end

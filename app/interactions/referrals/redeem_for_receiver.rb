@@ -1,14 +1,17 @@
+class Referrals::NotInstalled < StandardError; end
 class Referrals::RedeemForReceiver < Less::Interaction
   expects :site
 
   def run
-    return if user.blank?
     return if subscription.blank?
-    return unless subscription.trial?
+    return if user.blank?
     return unless user.was_referred?
+    raise Referrals::NotInstalled unless user.received_referral.state == 'installed'
 
-    referral.update(redeemed_by_recipient_at: Time.now)
-    site.change_subscription(Subscription::Pro.new(schedule: 'monthly'))
+    sub = Subscription::Pro.new
+    sub.user = user
+    sub.schedule = 'monthly'
+    site.change_subscription(sub)
   end
 
   private

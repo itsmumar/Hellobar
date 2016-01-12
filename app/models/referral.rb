@@ -7,6 +7,14 @@ class Referral < ActiveRecord::Base
   }
 
   EXPIRES_INTERVAL = 5.days
+  scope :redeemable, -> { where(state: 'installed') }
+  scope :redeemable_by_user, ->(user) do
+    redeemable.where(
+      '(redeemed_by_recipient_at IS NULL AND recipient_id = :user_id) OR (sender_id = :user_id AND available = true)',
+      user_id: user.id
+    )
+  end
+
   scope :about_to_expire, -> do
     where(state: 'sent').where(created_at: (EXPIRES_INTERVAL.ago .. (EXPIRES_INTERVAL - 1.day).ago))
   end
@@ -24,7 +32,6 @@ class Referral < ActiveRecord::Base
   def set_standard_body
     self.body = I18n.t("referral.standard_body", name: sender.name)
   end
-
 
   def url
     return "" if referral_token.blank?

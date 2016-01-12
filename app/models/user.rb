@@ -213,6 +213,10 @@ class User < ActiveRecord::Base
     User.with_deleted.where("email like ?", "%#{username}%")
   end
 
+  def was_referred?
+    self.received_referral.present?
+  end
+
   private
 
   def send_team_invite_email(site)

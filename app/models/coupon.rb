@@ -1,5 +1,6 @@
 class Coupon < ActiveRecord::Base
   REFERRAL_LABEL='for_referrals'
+  REFERRAL_AMOUNT = Subscription::Pro.defaults[:monthly_amount]
 
   scope :internal, lambda { where(public: false) }
 
