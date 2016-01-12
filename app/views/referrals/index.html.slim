@@ -13,6 +13,7 @@
         th Email
         th Invited
         th Status
+        th Redeem for
       tbody
         - @referrals.each do |ref|
             tr
@@ -21,4 +22,9 @@
               td
                 = icon_for_referral(ref)
                 span.referral-text= text_for_referral(ref)
+              td
+                - if ref.available?
+                  = render partial: 'redeem', locals: { referral: ref }
+                - else
+                  span Not yet
     = paginate @referrals

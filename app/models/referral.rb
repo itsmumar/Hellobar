@@ -21,6 +21,7 @@ class Referral < ActiveRecord::Base
 
   belongs_to :sender, class_name: "User"
   belongs_to :recipient, class_name: "User"
+  belongs_to :site
 
   has_one :referral_token, as: :tokenizable
 
@@ -49,6 +50,9 @@ class Referral < ActiveRecord::Base
     state != 'sent'
   end
 
+  def redeemable?
+    state == 'installed'
+  end
   private
 
   def email_not_already_registered

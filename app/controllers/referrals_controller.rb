@@ -24,6 +24,16 @@ class ReferralsController < ApplicationController
     redirect_to referrals_path
   end
 
+  def update
+    @referral = current_user.sent_referrals.find(params[:id])
+    if @referral.update_attributes(referral_params)
+      flash[:success] = "Saved!"
+    else
+      flash[:error] = "Sorry, but there was a problem saving your change."
+    end
+    redirect_to referrals_path
+  end
+
   def accept
     token = ReferralToken.where(token: params[:token]).first
     if current_user.blank? && token.present?
@@ -39,6 +49,6 @@ class ReferralsController < ApplicationController
   private
 
   def referral_params
-    params.require(:referral).permit(:email, :body)
+    params.require(:referral).permit(:email, :body, :site_id)
   end
 end
