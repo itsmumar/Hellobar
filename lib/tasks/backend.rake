@@ -23,7 +23,8 @@ namespace :backend do
     RECURRING_THROTTLE_BUFFER = 1.5 # Increase by X% over consumed capacity
     RECENT_THROTTLED_CHECK_HOURS = 1
     RECENT_THROTTLED_TIME_PERIOD = 5*60
-    RECENT_THROTTLE_BUFFER = 1.25 # Increase by X% over current capacity
+    RECENT_THROTTLE_BUFFER = 1.15 # Increase by X% over current capacity
+    MAX_INCREASE = 1_000
     MIN_WRITE_CAPACITY_CURRENT_MONTH = 3_000
     MIN_READ_CAPACITY_CURRENT_MONTH = 300
 
@@ -138,11 +139,11 @@ namespace :backend do
         end
         if table[:recent_throttled_write].to_i > 50
           output << "\t\tWARN: Writes recently throttled (#{table[:recent_throttled_write]})"
-          write_diff = (table[:provisioned_write]*RECENT_THROTTLE_BUFFER) - table[:provisioned_write]
+          write_diff = [(table[:provisioned_write]*RECENT_THROTTLE_BUFFER) - table[:provisioned_write], MAX_INCREASE].min
         end
         if table[:recent_throttled_read].to_i > 50
           output << "\t\tWARN: Reads recently throttled (#{table[:recent_throttled_read]})"
-          read_diff = (table[:provisioned_read]*RECENT_THROTTLE_BUFFER) - table[:provisioned_read]
+          read_diff = [(table[:provisioned_read]*RECENT_THROTTLE_BUFFER) - table[:provisioned_read], MAX_INCREASE].min
         end
 
         new_read = table[:provisioned_read]+read_diff
