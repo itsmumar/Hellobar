@@ -25,7 +25,7 @@ class SiteElement < ActiveRecord::Base
     "question"                        => "Question"
   }
 
-  SHORT_SUBTYPES = %w{traffic email social announcement}
+  SHORT_SUBTYPES = %w{traffic email call social announcement}
 
   belongs_to :rule, touch: true
   belongs_to :contact_list

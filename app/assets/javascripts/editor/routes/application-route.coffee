@@ -64,6 +64,8 @@ HelloBar.ApplicationRoute = Ember.Route.extend
       settings.routeForwarding = 'settings.social'
     else
       switch model.element_subtype
+        when 'call'
+          settings.routeForwarding = 'settings.call'
         when 'email'
           settings.routeForwarding = 'settings.emails'
         when 'traffic'

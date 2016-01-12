@@ -146,6 +146,11 @@ HelloBar.ApplicationController = Ember.Controller.extend
     @set("model.rule_id", parseInt(@get("rule_id")))
   ).observes("rule_id")
 
+  setPhoneDefaults: (->
+    if @get("model.element_subtype") == "call"
+      @set("isMobile", true)
+  ).observes("model.element_subtype")
+
   # Model properties are all updated when the model is initially loaded, but we only want to set this flag on any property changes
   # that happen AFTER that initialization. By using an observesBefore here and only setting the flag if the property being changed
   # is not null or undefined before the change, we avoid setting the flag until the property has had an initial value set.
@@ -219,7 +224,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
       false
 
     toggleMobile: ->
-      @toggleProperty('isMobile')
+      @toggleProperty('isMobile') unless @get("model.element_subtype") == "call"
       false
 
     toggleModal: ->

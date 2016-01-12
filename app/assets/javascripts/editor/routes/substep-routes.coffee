@@ -5,7 +5,7 @@ HelloBar.SettingsStepRoute = Ember.Route.extend
   model: ->
     @modelFor('application')
 
-  # Sets suto-forwarding on the parent step upon selection
+  # Sets auto-forwarding on the parent step upon selection
 
   setupController: (controller, model) ->
     @_super(controller, model)
@@ -19,6 +19,7 @@ HelloBar.SettingsStepRoute = Ember.Route.extend
 HelloBar.SettingsEmailsRoute       = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsSocialRoute       = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsClickRoute        = HelloBar.SettingsStepRoute.extend()
+HelloBar.SettingsCallRoute         = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsFeedbackRoute     = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsAnnouncementRoute = HelloBar.SettingsStepRoute.extend()
 
