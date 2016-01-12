@@ -22,12 +22,4 @@ module ApplicationHelper
     cost = cost / 12 if schedule == :yearly
     number_to_currency(cost, precision: 0)
   end
-
-  def upgrade_modal_AB_class
-    if get_ab_variation("Upgrade Modal Logos 2016-01-10", current_user) == "logos"
-      'upgrade-account-modal with-logos'
-    else
-      'upgrade-account-modal'
-    end
-  end
 end
