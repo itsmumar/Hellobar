@@ -36,6 +36,7 @@
     padding: 10px
 
   .button-wrapper.promo-button
+
     a
       background-color: $blue
       color: $white
@@ -45,58 +46,10 @@
       white-space: nowrap
       font-size: 15px
 
-
   /*-----------  Billing Section  -----------*/
 
   .billing-wrapper
     margin-top: 3.5em
-
-    .block
-      width: 50%
-      display: inline-block
-      vertical-align: top
-
-      &.small
-        width: 40%
-
-      .header
-        margin: 0 0 0.6em
-        color: $red
-        font-size: inherit
-        text-align: center
-        font-weight: 600
-        padding-top: 0
-
-      .footer
-        text-align: center
-        height: 0
-
-        .button
-          margin-top: 4em
-
-      .upgrade-table
-        li
-          color: $gray
-          width: 50%
-          padding: 0.85em 1.5em
-          text-align: left
-          font-size: 0.85em
-          position: relative
-          letter-spacing: 0.033em
-          display: inline-block
-          vertical-align: top
-
-        i
-          left: -10px
-          position: absolute
-          font-size: 1.2em
-          color: $green
-
-    .upgrade-account-modal
-      padding-top: 0.5em
-      padding-bottom: 0.5em
-      text-decoration: none
-      @extend %red-button
 
     section
       margin-bottom: 2em
@@ -105,7 +58,8 @@
         width: 9%
         float: left
         margin-top: 0
-        line-height: 135%
+        min-width: 5em
+        line-height: 155%
 
       > p
         color: $gray
@@ -136,3 +90,41 @@
         font-size: 0.9em
         color: $grayLight
         @include antialiased()
+
+    .half-block
+      width: 50%
+      padding-right: 7%
+      display: inline-block
+      vertical-align: top
+
+      & + .half-block
+        padding-right: 0
+        text-align: center
+
+      table
+        width: 100%
+
+    .upgrade-table
+      margin-right: -5%
+      margin-top: $gutterSm
+
+      li
+        width: 45%
+        color: $gray
+        float: left
+        text-align: left
+        margin-right: 5%
+        font-size: 0.85em
+        position: relative
+        padding: $gutterSm $gutter
+
+      i
+        left: -0.5em
+        position: absolute
+        font-size: 1.2em
+        color: $green
+
+  .show-upgrade-modal
+    left: 75%
+    position: absolute
+    @include transform(translateX(-50%))
