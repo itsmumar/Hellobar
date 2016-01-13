@@ -138,6 +138,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
   modelIsDirty: false
   rule_id: null
 
+  isCallType: Ember.computed.equal('model.element_subtype', 'call')
+
   doneButtonText: (->
     "Save & Publish"
   ).property()
@@ -147,9 +149,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
   ).observes("rule_id")
 
   setPhoneDefaults: (->
-    if @get("model.element_subtype") == "call"
-      @set("isMobile", true)
-  ).observes("model.element_subtype")
+    @set("isMobile", true) if @get("isCallType")
+  ).observes("isCallType")
 
   # Model properties are all updated when the model is initially loaded, but we only want to set this flag on any property changes
   # that happen AFTER that initialization. By using an observesBefore here and only setting the flag if the property being changed
