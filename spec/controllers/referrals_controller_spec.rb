@@ -29,7 +29,7 @@ describe ReferralsController do
     end
 
     it "works" do
-      2.times { create(:referral, sender_id: @user.id) }
+      2.times { create(:referral, sender: @user) }
       get :index
 
       expect(response).to be_success
@@ -69,6 +69,23 @@ describe ReferralsController do
 
       expect(response.status).to redirect_to(root_path)
       expect(session[:referral_token]).to be_nil
+    end
+  end
+
+  describe 'PUT :update' do
+    before(:each) do
+      @user = stub_current_user(users(:joey))
+      @referral = create(:referral, state: 'installed', sender: @user)
+    end
+
+    it 'changes the site id' do
+      put :update, id: @referral.id, referral: {site_id: 1}
+      expect(@referral.reload.site_id).to eq(1)
+    end
+
+    it 'does not change the state' do
+      put :update, id: @referral.id, referral: {state: 'sent'}
+      expect(@referral.reload.state).to eq('installed')
     end
   end
 end

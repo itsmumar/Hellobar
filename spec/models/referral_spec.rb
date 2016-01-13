@@ -118,4 +118,29 @@ describe Referral do
       expect(Referral.redeemable_by_user(@user).count).to eq(2)
     end
   end
+
+  describe 'redeemable? and redeemed?' do
+    before :each do
+      @referral.sender = @user
+      @referral.email = Faker::Internet.email
+    end
+
+    it 'is redeemable when installed and available' do
+      @referral.state = 'installed'
+      @referral.available = true
+      @referral.redeemed_by_sender_at = nil
+
+      expect(@referral.redeemable?).to be_true
+      expect(@referral.redeemed?).to be_false
+    end
+
+    it 'is redeemed when installed and already used' do
+      @referral.state = 'installed'
+      @referral.available = false
+      @referral.redeemed_by_sender_at = Time.now
+
+      expect(@referral.redeemable?).to be_false
+      expect(@referral.redeemed?).to be_true
+    end
+  end
 end
