@@ -1081,6 +1081,8 @@ var HB = {
     // for example)
     if ( possibleSiteElements.email )
       possibleSiteElements = possibleSiteElements.email;
+    else if ( possibleSiteElements.call )
+      possibleSiteElements = possibleSiteElements.call;
     else if ( possibleSiteElements.social )
       possibleSiteElements = possibleSiteElements.social;
     else if ( possibleSiteElements.traffic )

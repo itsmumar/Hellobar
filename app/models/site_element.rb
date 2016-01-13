@@ -11,6 +11,7 @@ class SiteElement < ActiveRecord::Base
 
   # valid bar types and their conversion units
   BAR_TYPES = {
+    "call"                            => "Calls",
     "traffic"                         => "Clicks",
     "email"                           => "Emails",
     "announcement"                    => "Conversions",
