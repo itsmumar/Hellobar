@@ -6,6 +6,8 @@ class Referrals::RedeemForReceiver < Less::Interaction
     return if subscription.blank?
     return if user.blank?
     return unless user.was_referred?
+    user.received_referral.update(available: true)
+
     raise Referrals::NotInstalled unless user.received_referral.state == 'installed'
 
     sub = Subscription::Pro.new
