@@ -9,6 +9,13 @@ class Subscription < ActiveRecord::Base
   enum schedule: [:monthly, :yearly]
   has_many :bills, -> {order "id"}, inverse_of: :subscription
 
+  scope :active, -> do
+    joins(:bills).where(
+      "bills.status = ? AND bills.start_date < ? AND bills.end_date > ?",
+      Bill.statuses["paid"], Time.now, Time.now
+    )
+  end
+
   class << self
     def values_for(site)
       # Just return the defaults for now, in the future we can
@@ -45,6 +52,10 @@ class Subscription < ActiveRecord::Base
   def active_bills(reload=false, date=nil)
     date ||= Time.now
     self.bills(reload).reject{|b| !b.active_during(date)}
+  end
+
+  def active_until
+    self.bills.paid.maximum(:end_date).try(:localtime)
   end
 
   def capabilities(reload=false)
@@ -298,7 +309,7 @@ class Subscription < ActiveRecord::Base
   end
 
   # These need to be in the order of least expensive to most expensive
-  PLANS = [Free, Pro, Enterprise]
+  PLANS = [Free, ProblemWithPayment, Pro, Enterprise]
   class Comparison
     attr_reader :from_subscription, :to_subscription, :direction
     def initialize(from_subscription, to_subscription)

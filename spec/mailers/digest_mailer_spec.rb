@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe DigestMailer do
-  include ActiveSupport::Testing::TimeHelpers
   fixtures :all
 
   describe 'weekly_digest' do

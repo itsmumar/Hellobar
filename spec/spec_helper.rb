@@ -86,6 +86,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include EmbedCodeFileHelper
   config.include Paperclip::Shoulda::Matchers
+  config.include ActiveSupport::Testing::TimeHelpers
   config.include ControllerSpecHelper, type: :controller
 end
 

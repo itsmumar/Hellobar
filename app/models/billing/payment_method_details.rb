@@ -40,6 +40,10 @@ if Rails.env.test?
     def refund(amount_in_dollars, original_transaction_id)
       return true, "fake-refund-id-#{Time.now.to_i} (original: #{original_transaction_id}"
     end
+
+    def data
+      {}
+    end
   end
 
   class AlwaysFailsPaymentMethodDetails < PaymentMethodDetails

@@ -83,6 +83,32 @@ describe Site do
     end
   end
 
+  describe "#highest_tier_active_subscription" do
+    before do
+      @payment_method = create(:payment_method)
+      @site = create(:site)
+      SiteMembership.create(site: @site, user: @payment_method.user, role: "owner")
+    end
+
+    it "returns nil when there are no active subscriptions" do
+      expect(@site.highest_tier_active_subscription).to be(nil)
+    end
+
+    it "returns the highest tier active subscription" do
+      @site.change_subscription(Subscription::Free.new(schedule: 'monthly', user: @payment_method.user), @payment_method)
+      @site.change_subscription(Subscription::Pro.new(schedule: 'monthly', user: @payment_method.user), @payment_method)
+      expect(@site.highest_tier_active_subscription).to be_a(Subscription::Pro)
+    end
+
+    it "returns only active subscriptions" do
+      @site.change_subscription(Subscription::Free.new(schedule: 'yearly'), @payment_method)
+      @site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), @payment_method)
+      travel_to 2.month.from_now do
+        expect(@site.highest_tier_active_subscription).to be_a(Subscription::Free)
+      end
+    end
+  end
+
   describe "url formatting" do
     it "adds the protocol if not present" do
       site = Site.new(:url => "zombo.com")
@@ -352,8 +378,6 @@ describe Site do
   end
 
   describe "calculate_bill" do
-    include ActiveSupport::Testing::TimeHelpers
-
     context "trial_period is specified" do
       it "should set the bill amount to 0" do
         sub = subscriptions(:zombo_subscription)
@@ -381,7 +405,7 @@ describe Site do
         sub = subscriptions(:zombo_subscription)
         travel_to Time.current do
           bill = sub.site.send(:calculate_bill, sub, true)
-          expect(bill.end_date).to eq(Bill::Recurring.next_month(Time.current))
+          expect(bill.end_date).to eq(Bill::Recurring.next_month(Time.current) - 1.hour)
         end
       end
     end
