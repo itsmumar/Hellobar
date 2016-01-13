@@ -11,8 +11,8 @@ HelloBar.ApplicationView = Ember.View.extend
 
   isMobile: Ember.computed.alias('controller.isMobile')
   isFullscreen: Ember.computed.alias('controller.isFullscreen')
-  isCallType: Ember.computed.alias('controller.isCallType')
-  
+  isCallType: Ember.computed.equal('controller.model.element_subtype', 'call')
+
   #-----------  Click Action  -----------#
 
   click: (obj) ->

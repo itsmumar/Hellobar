@@ -1,5 +1,5 @@
 <label>Enter phone number</label>
-{{view Ember.TextField value=model.phone_number placeholder="(555) 555-5555" maxlength=50}}
+{{view Ember.TextField value=controllers.application.phone_number placeholder="(555) 555-5555" maxlength=50}}
 <div class="select-wrapper">
   {{view Ember.Select
     content=HB.countryCodes

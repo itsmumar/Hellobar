@@ -139,8 +139,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
   modelIsDirty: false
   rule_id: null
 
-  isCallType: Ember.computed.equal('model.element_subtype', 'call')
-
   doneButtonText: (->
     "Save & Publish"
   ).property()
@@ -148,10 +146,6 @@ HelloBar.ApplicationController = Ember.Controller.extend
   setRuleID: (->
     @set("model.rule_id", parseInt(@get("rule_id")))
   ).observes("rule_id")
-
-  setPhoneDefaults: (->
-    @set("isMobile", true) if @get("isCallType")
-  ).observes("isCallType")
 
   # Model properties are all updated when the model is initially loaded, but we only want to set this flag on any property changes
   # that happen AFTER that initialization. By using an observesBefore here and only setting the flag if the property being changed
@@ -217,6 +211,25 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.type",
     "model.wiggle_button"
   )
+
+  #-----------  Phone Number Helpers  -----------#
+
+  isCallType: Ember.computed.equal('model.element_subtype', 'call')
+
+  setPhoneDefaults: (->
+    @set("isMobile", true) if @get('model.element_subtype') == 'call'
+  ).observes("model.element_subtype").on("init")
+
+  formatPhoneNumber: (->
+    phone_number = @get("phone_number") || @get("model.phone_number")
+    country_code = @get("model.phone_country_code")
+
+    if isValidNumber(phone_number, country_code)
+      @set("phone_number", formatLocal(country_code, phone_number))
+      @set("model.phone_number", formatE164(country_code, phone_number))
+    else
+      @set("model.phone_number", null)
+  ).observes("model.phone_number", "phone_number", "model.phone_country_code")
 
   #-----------  Actions  -----------#
 

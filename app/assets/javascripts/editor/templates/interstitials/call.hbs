@@ -13,7 +13,7 @@
 
   <h6>What phone number should be dialed?</h6>
   <div class="input-wrapper">
-    {{view Ember.TextField value=model.phone_number placeholder="(555) 555-555" maxlength=255}}
+    {{view Ember.TextField value=controllers.application.phone_number placeholder="(555) 555-555" maxlength=255}}
     <div class="select-wrapper">
       {{view Ember.Select
         content=HB.countryCodes
