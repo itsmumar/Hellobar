@@ -52,17 +52,6 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
             .package-features
 
-              .pro-logos
-                h6 Here are just a few of the companies that profit from the full-featured Hello Bar plan. You can join them:
-
-                = image_tag 'pro_logos/udemy.png', :class => 'pro-logo'
-                = image_tag 'pro_logos/search-engine-watch.png', :class => 'pro-logo'
-                = image_tag 'pro_logos/dividend.png', :class => 'pro-logo'
-                = image_tag 'pro_logos/click-z.png', :class => 'pro-logo'
-                = image_tag 'pro_logos/warrior-forum.png', :class => 'pro-logo'
-                = image_tag 'pro_logos/buffer.png', :class => 'pro-logo'
-                = image_tag 'pro_logos/lead-pages.png', :class => 'pro-logo'
-
               .flex-container
                 ul
                   li
@@ -92,6 +81,17 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
                       - current_site.owners.each do |owner|
                         div
                           = mail_to owner.email, owner.name || owner.email
+
+              .pro-logos
+                h6 Here are just a few of the companies that profit from the full-featured Hello Bar plan. You can join them:
+
+                = image_tag 'pro_logos/udemy.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/search-engine-watch.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/dividend.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/click-z.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/warrior-forum.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/buffer.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/lead-pages.png', :class => 'pro-logo'
 
           / Enterprise Package
           .package-block.enterprise
