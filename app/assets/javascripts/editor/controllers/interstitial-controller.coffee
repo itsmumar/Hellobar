@@ -79,7 +79,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
       when 'call'
         return true if Ember.isEmpty(@get('model.headline'))
         return true if Ember.isEmpty(@get('model.link_text'))
-        return true if Ember.isEmpty(@get('model.phone_number'))
+        return true if !isValidNumber(@get('model.phone_number'), @get('model.phone_country_code'));
       when 'contacts'
         return true if Ember.isEmpty(@get('model.headline'))
         return true if Ember.isEmpty(@get('model.link_text'))
@@ -87,7 +87,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
         if !@get('model.settings.use_location_for_url')
           return true if Ember.isEmpty(@get('model.url_to_like'))
     false
-  ).property('model.settings.url', 'model.link_text', 'model.headline', 'model.phone_number', 'model.settings.url_to_like', 'model.settings.use_location_for_url')
+  ).property('model.settings.url', 'model.link_text', 'model.headline', 'model.phone_number', 'model.settings.url_to_like', 'model.settings.use_location_for_url', 'model.phone_country_code')
 
   #-----------  Actions  -----------#
 
@@ -98,9 +98,10 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
 
     closeEditor: ->
       @setProperties(
-        'interstitialType'      : null
-        'model.headline'        : null
-        'model.link_text'       : null
-        'model.phone_number'    : null
-        'model.element_subtype' : null
+        'interstitialType'         : null
+        'model.element_subtype'    : null
+        'model.headline'           : null
+        'model.link_text'          : null
+        'model.phone_number'       : null
+        'model.phone_country_code' : 'US'
       )

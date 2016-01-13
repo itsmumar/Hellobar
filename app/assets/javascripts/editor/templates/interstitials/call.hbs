@@ -12,7 +12,17 @@
   {{view Ember.TextField value=model.link_text placeholder="Call us now!" maxlength=255}}
 
   <h6>What phone number should be dialed?</h6>
-  {{view Ember.TextField value=model.phone_number placeholder="(555) 555-555" maxlength=255}}
+  <div class="input-wrapper">
+    {{view Ember.TextField value=model.phone_number placeholder="(555) 555-555" maxlength=255}}
+    <div class="select-wrapper">
+      {{view Ember.Select
+        content=HB.countryCodes
+        value=model.phone_country_code
+        optionValuePath='content.code'
+        optionLabelPath='content.name'
+      }}
+    </div>
+  </div>
 
   <div class="step-container">
     <button class="button cancel-button cancel" {{action 'closeEditor'}}>Cancel</button>

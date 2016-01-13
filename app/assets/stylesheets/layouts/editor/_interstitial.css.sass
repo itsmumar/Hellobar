@@ -191,6 +191,21 @@ $transition: 0.75s
       left: 50%
       margin-left: -2.425em
 
+    .input-wrapper
+      @include clearfix()
+
+      > *
+        display: inline-block
+
+      input
+        width: 60%
+        float: left
+
+      .select-wrapper
+        width: 35%
+        float: right
+        margin-top: 0
+
     input
       margin: 0.75em 0 1.5em
 

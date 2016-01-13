@@ -3,7 +3,11 @@ HelloBar.StepView = Ember.View.extend
   # Generates a commone class name for step views for simplified CSS
 
   classNames: ['substep']
-  classNameBindings: ['renderedName']
+  classNameBindings: ['renderedClassName']
+
+  renderedClassName: ( ->
+    return @get('renderedName').split('.')[1]
+  ).property('renderedName')
 
 
 #-----------  Setup Sub-Step Views  -----------#
