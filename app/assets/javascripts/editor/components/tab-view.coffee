@@ -52,7 +52,6 @@ HelloBar.TabViewComponent = Ember.Component.extend(
     doTabSelected: (action) ->
       if (action)
         @sendAction(action)
-
 )
 
 HelloBar.QuestionTabsComponent = HelloBar.TabViewComponent.extend(

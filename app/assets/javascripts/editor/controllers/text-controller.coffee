@@ -53,17 +53,13 @@ HelloBar.TextController = Ember.Controller.extend
       @set('model.image_url', imageUrl)
 
     showQuestion: ->
-      console.log "DOING: showQuestion"
       for index, siteElement of HB.siteElementsOnPage
         setTimeout(@resetQuestion(siteElement), 500)
-      console.log "DONE"
 
     showResponse1: ->
-      console.log "DOING: showResponse1"
       @resetQuestion
       for index, siteElement of HB.siteElementsOnPage
         setTimeout(@showResponse(siteElement, 1), 500)
-      console.log "DONE"
 
     showResponse2: ->
       @resetQuestion
