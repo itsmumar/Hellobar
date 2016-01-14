@@ -17,9 +17,9 @@ class ReferralsController < ApplicationController
       send_emails: true
     )
     if @referral.valid?
-      flash[:success] = "We've sent an invite to your friend. Check back here to see whether they've accepted it and redeem any free months."
+      flash[:success] = I18n.t('referral.created')
     else
-      flash[:error] = "Sorry, but there was a problem while sending this invite."
+      flash[:error] = I18n.t('referral.not_created')
     end
     redirect_to referrals_path
   end
@@ -27,9 +27,10 @@ class ReferralsController < ApplicationController
   def update
     @referral = current_user.sent_referrals.find(params[:id])
     if @referral.update_attributes(referral_params)
-      flash[:success] = "Saved!"
+      Referrals::RedeemForSender.run(site: @referral.site) if @referral.site
+      flash[:success] = I18n.t('referral.saved')
     else
-      flash[:error] = "Sorry, but there was a problem saving your change."
+      flash[:error] = I18n.t('referral.not_saved')
     end
     redirect_to referrals_path
   end
@@ -38,7 +39,7 @@ class ReferralsController < ApplicationController
     token = ReferralToken.where(token: params[:token]).first
     if current_user.blank? && token.present?
       session[:referral_token] = params[:token]
-      flash[:success] = "Success! Your discount will be applied after you create your first site."
+      flash[:success] = I18n.t('referral.accepted')
     else
       # Either they're already in the app, in which case the referral doesn't apply,
       # or the token is wrong. In both cases, just redirect them.

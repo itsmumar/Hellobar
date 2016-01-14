@@ -1,3 +1,12 @@
+# Redeem coupons for a referral recipient.
+#
+# This is a new user. As long as they have installed the widget, move them to a
+# monthly pro subscription.
+#
+# The subscription change will trigger the calculation in Bill#set_final_amount!
+# which will then run CouponUses::ApplyFromReferrals
+#
+
 class Referrals::NotInstalled < StandardError; end
 class Referrals::RedeemForReceiver < Less::Interaction
   expects :site

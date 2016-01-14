@@ -28,7 +28,7 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
       referral.available = true
       referral.redeemed_by_recipient_at = Time.now
       referral.save!
-    elsif r.sender_id == user.id
+    elsif referral.sender_id == user.id
       referral.available = false
       referral.redeemed_by_sender_at = Time.now
       referral.save!
