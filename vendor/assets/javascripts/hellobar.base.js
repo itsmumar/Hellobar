@@ -1826,6 +1826,7 @@ var HB = {
   },
 
   hideElement: function(element) {
+    if(element == null) { return } // do nothing
     if(element.length == undefined){
       element.style.display = 'none';
     } else {
@@ -1836,6 +1837,7 @@ var HB = {
   },
 
   showElement: function(element, display) {
+    if (element == null) { return } // do nothing
     if(typeof display === 'undefined') {
       display = 'inline';
     }

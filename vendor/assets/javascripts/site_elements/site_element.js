@@ -505,12 +505,8 @@ HB.SiteElement = HB.createClass({
   hideOriginalElements: function() {
     var original = this.originalElements();
     // hide original elements to show later
-    if (original['emailForm']) {
-      HB.hideElement(original['emailForm']);
-    }
-    if (original['social']) {
-      HB.hideElement(original['social']);
-    }
+    HB.hideElement(original['emailForm']);
+    HB.hideElement(original['social']);
   },
 
   currentHeadline: function() {
