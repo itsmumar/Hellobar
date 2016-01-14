@@ -133,6 +133,7 @@ class SiteElementsController < ApplicationController
       :text_color,
       :thank_you_text,
       :type,
+      :use_question,
       :view_condition_attribute,
       :view_condition,
       :wiggle_button,
