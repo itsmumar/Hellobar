@@ -9,7 +9,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
       .flash-block
         i.icon-close
 
-      form.upgrade-account-modal
+      form(class=upgrade_modal_AB_class)
 
         .site-title
           | Upgrade {{siteName}}
@@ -41,69 +41,146 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
 
 
-        / Pro Package
-        .package-block.pro
-          .package-title
-            .package-name Pro
-            .package-price.monthly #{subscription_cost(Subscription::Pro, :monthly)}/mo
-            .package-price.yearly #{subscription_cost(Subscription::Pro, :yearly)}/mo
+        - if get_ab_variation("Upgrade Modal Logos 2016-01-10", current_user) == "logos"
 
-          .package-features
+          / Pro Package
+          .package-block.pro
+            .package-title
+              .package-name Pro
+              .package-price.monthly #{subscription_cost(Subscription::Pro, :monthly)}/mo
+              .package-price.yearly #{subscription_cost(Subscription::Pro, :yearly)}/mo
 
-            ul
-              li
-                i.icon-unbranded
-                | Unbranded content
-              li
-                i.icon-pants
-                | Custom thank you message
-              li
-                i.icon-unlimited
-                | Unlimited bars
-              li
-                i.icon-pointer
-                | Behavior activated content
-              li
-                i.icon-growthbars
-                | 10 improve suggestions
-              li
-                i.icon-opportunity
-                | Future improvements
-              li
-                i.icon-target
-                | Custom targeted content
-              li
-                i.icon-thumbsup
-                | Our sincere thanks!
+            .package-features
 
-            .package-status
-              p After 250,000 visits, every 25,000 visits are $5 extra
-              = choose_plan_button(Subscription::Pro.new)
-              .email-links
-                - if current_site
-                  - current_site.owners.each do |owner|
-                    div
-                      = mail_to owner.email, owner.name || owner.email
+              .flex-container
+                ul
+                  li
+                    i.icon-unbranded
+                    | the Hello Bar logo is removed, so your Bar will always be 100% about you
+                  li
+                    i.icon-target
+                    | Target visitors based on what site they came from, which of your pages they visit, and even when they visited them
+                  li
+                    i.icon-unlimited
+                    | Unlimited bars means you can really got to town with testing and improvement
+                  li
+                    i.icon-pants
+                    | Custom thank you message supports your brand and your exact message
+                  li
+                    i.icon-growthbars
+                    | Comprehensive suite of wizards will guide you on how to improve your Bars
+                  li
+                    i.icon-pointer
+                    | Deliver tailored content that's activated by your visitors' unique behavior
 
-        / Enterprise Package
-        .package-block.enterprise
-          .package-title
-            .package-name Enterprise
-            .package-price.monthly #{subscription_cost(Subscription::Enterprise, :monthly)}/mo
-            .package-price.yearly #{subscription_cost(Subscription::Enterprise, :yearly)}/mo
+                .package-status
+                  p After 250,000 visits, every 25,000 visits are $5 extra
+                  = choose_plan_button(Subscription::Pro.new)
+                  .email-links
+                    - if current_site
+                      - current_site.owners.each do |owner|
+                        div
+                          = mail_to owner.email, owner.name || owner.email
 
-          .package-features
+              .pro-logos
+                h6 Here are just a few of the companies that profit from the full-featured Hello Bar plan. You can join them:
 
-            ul
-              li All the benefits of Pro
-              li Future improvements
-              li Unlimited visits
-              li Enterprise integrations
+                = image_tag 'pro_logos/udemy.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/search-engine-watch.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/dividend.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/click-z.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/warrior-forum.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/buffer.png', :class => 'pro-logo'
+                = image_tag 'pro_logos/lead-pages.png', :class => 'pro-logo'
 
-            .package-status
-              = choose_plan_button(Subscription::Enterprise.new)
-              .email-links
-                - if current_site
-                  - current_site.owners.each do |owner|
-                    div
-                      = mail_to owner.email, owner.name || owner.email
+          / Enterprise Package
+          .package-block.enterprise
+            .package-title
+              .package-name Enterprise
+              .package-price.monthly #{subscription_cost(Subscription::Enterprise, :monthly)}/mo
+              .package-price.yearly #{subscription_cost(Subscription::Enterprise, :yearly)}/mo
+
+            .package-features
+
+              ul
+                li All the benefits of Pro
+                li Future improvements
+                li Unlimited visits
+                li Enterprise integrations
+
+              .package-status
+                = choose_plan_button(Subscription::Enterprise.new)
+                .email-links
+                  - if current_site
+                    - current_site.owners.each do |owner|
+                      div
+                        = mail_to owner.email, owner.name || owner.email
+
+        - else
+
+          / Pro Package
+          .package-block.pro
+            .package-title
+              .package-name Pro
+              .package-price.monthly #{subscription_cost(Subscription::Pro, :monthly)}/mo
+              .package-price.yearly #{subscription_cost(Subscription::Pro, :yearly)}/mo
+
+            .package-features
+
+              ul
+                li
+                  i.icon-unbranded
+                  | Unbranded content
+                li
+                  i.icon-pants
+                  | Custom thank you message
+                li
+                  i.icon-unlimited
+                  | Unlimited bars
+                li
+                  i.icon-pointer
+                  | Behavior activated content
+                li
+                  i.icon-growthbars
+                  | 10 improve suggestions
+                li
+                  i.icon-opportunity
+                  | Future improvements
+                li
+                  i.icon-target
+                  | Custom targeted content
+                li
+                  i.icon-thumbsup
+                  | Our sincere thanks!
+
+              .package-status
+                p After 250,000 visits, every 25,000 visits are $5 extra
+                = choose_plan_button(Subscription::Pro.new)
+                .email-links
+                  - if current_site
+                    - current_site.owners.each do |owner|
+                      div
+                        = mail_to owner.email, owner.name || owner.email
+
+          / Enterprise Package
+          .package-block.enterprise
+            .package-title
+              .package-name Enterprise
+              .package-price.monthly #{subscription_cost(Subscription::Enterprise, :monthly)}/mo
+              .package-price.yearly #{subscription_cost(Subscription::Enterprise, :yearly)}/mo
+
+            .package-features
+
+              ul
+                li All the benefits of Pro
+                li Future improvements
+                li Unlimited visits
+                li Enterprise integrations
+
+              .package-status
+                = choose_plan_button(Subscription::Enterprise.new)
+                .email-links
+                  - if current_site
+                    - current_site.owners.each do |owner|
+                      div
+                        = mail_to owner.email, owner.name || owner.email
