@@ -1,4 +1,4 @@
-class CouponUses::CreateForReferral < Less::Interaction
+class CouponUses::ApplyFromReferrals < Less::Interaction
   expects :bill
 
   def run
@@ -25,11 +25,12 @@ class CouponUses::CreateForReferral < Less::Interaction
     CouponUse.create(bill: bill, coupon: Coupon.for_referrals)
 
     if referral.recipient_id == user.id
+      referral.available = true
       referral.redeemed_by_recipient_at = Time.now
       referral.save!
     elsif r.sender_id == user.id
-      referral.redeemed_by_sender_at = Time.now
       referral.available = false
+      referral.redeemed_by_sender_at = Time.now
       referral.save!
     end
   end

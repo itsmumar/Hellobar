@@ -15,6 +15,7 @@ feature "Trial User", js: true do
     expect(page).to have_content('ENJOYING HELLO BAR PRO? CLICK HERE TO KEEP IT.')
   end
 
+  # TODO: this breaks; fix it
   scenario "allows users to downgrade" do
     allow_any_instance_of(Subscription::Pro).to receive(:problem_with_payment?).and_return(true)
     allow_any_instance_of(Site).to receive(:has_script_installed?).and_return(true)
@@ -22,6 +23,8 @@ feature "Trial User", js: true do
     expect(page).to have_content('Your subscription has not been renewed')
     find(".show-downgrade-modal").click
     click_link("Downgrade")
+
+    expect(page).to have_content('Upgrade Plan')
     expect(@site.reload.current_subscription).to be_a(Subscription::Free)
   end
 end

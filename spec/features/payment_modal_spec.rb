@@ -16,6 +16,7 @@ feature "Payment modal interaction", js: true do
     basic_plan.find(".button").click
     click_link("Downgrade")
 
+    expect(page).to have_content('Upgrade Plan')
     expect(site.reload.current_subscription).to be_a(Subscription::Free)
   end
 
@@ -34,5 +35,4 @@ feature "Payment modal interaction", js: true do
     basic_plan.find(".button").click
     expect(page).to have_content "until #{end_date.strftime("%-m-%-d-%Y")}"
   end
-
 end

@@ -129,7 +129,7 @@ class Bill < ActiveRecord::Base
 
     self.discount = self.is_a?(Refund) ? 0 : calculate_discount
     self.amount = [self.base_amount - self.discount, 0].max
-    CouponUses::CreateForReferral.run(bill: self)
+    CouponUses::ApplyFromReferrals.run(bill: self)
   end
 
   def estimated_amount

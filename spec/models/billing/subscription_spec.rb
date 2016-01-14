@@ -72,6 +72,14 @@ describe Subscription do
     end
   end
 
+  describe "subclassing" do
+    it "does not consider Pro a subclass of Free" do
+      sub = Subscription::Pro.new
+
+      expect(sub).not_to be_a(Subscription::Free)
+    end
+  end
+
   describe "#trial?" do
     it "should be true if subscription amount is not 0 and has a paid bill but no payment method" do
       bill = bills(:paid_bill)
