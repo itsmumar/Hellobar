@@ -200,6 +200,10 @@ class Site < ActiveRecord::Base
     self.subscriptions.last
   end
 
+  def highest_tier_active_subscription
+    self.subscriptions.active.to_a.sort.first
+  end
+
   def url_exists?(user=nil)
     if user
       Site.joins(:users).where(url: url, users: {id: user.id}).where.not(id: id).any?
@@ -216,28 +220,9 @@ class Site < ActiveRecord::Base
 
   def capabilities(clear_cache=false)
     @capabilities = nil if clear_cache
-
-    unless @capabilities
-      # See if there are any active paid bills
-      now = Time.now
-      active_paid_bills = []
-      bills(clear_cache).each do |bill|
-        if bill.paid? and bill.is_a?(Bill::Recurring)
-          if bill.active_during(now)
-            active_paid_bills << bill
-          end
-        end
-      end
-      if active_paid_bills.empty?
-        # Return the current subscription's capabilities if we
-        # have one, otherwise just return the free plan capabilities
-        @capabilities = (current_subscription ? current_subscription.capabilities : Subscription::Free::Capabilities.new(nil, self))
-      else
-        # Get the highest paid plan
-        @capabilities = active_paid_bills.collect{|b| b.subscription}.sort.first.capabilities
-      end
-    end
-    return @capabilities
+    @capabilities ||= highest_tier_active_subscription.try(:capabilities)
+    @capabilities ||= subscriptions.last.try(:capabilities)
+    @capabilities ||= Subscription::Free::Capabilities.new(nil, self)
   end
 
   def requires_payment_method?
@@ -252,7 +237,6 @@ class Site < ActiveRecord::Base
   def change_subscription(subscription, payment_method=nil, trial_period=nil)
     raise MissingSubscription.new unless subscription
     transaction do
-      old_subscription = current_subscription
       subscription.site = self
       subscription.payment_method = payment_method
       success = true
@@ -426,7 +410,7 @@ class Site < ActiveRecord::Base
         end
       end
     end
-    bill.start_date = bill.bill_at
+    bill.start_date = bill.bill_at - 1.hour
     bill.end_date = bill.renewal_date
 
     if trial_period

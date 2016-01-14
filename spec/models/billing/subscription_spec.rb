@@ -39,6 +39,37 @@ describe Subscription do
     end
   end
 
+  describe ".active scope" do
+    it "includes subscriptions with paid bills at the current time" do
+      bill = create(:bill, status: :paid, start_date: 1.week.ago, end_date: 1.week.from_now)
+      expect(Subscription.active).to include(bill.subscription)
+    end
+
+    it "does not include unpaid bills" do
+      bill = create(:bill, status: :pending, start_date: 1.week.ago, end_date: 1.week.from_now)
+      expect(Subscription.active).to_not include(bill.subscription)
+    end
+
+    it "does not include bills in a different period" do
+      bill = create(:bill, status: :pending, start_date: 2.week.ago, end_date: 1.week.ago)
+      expect(Subscription.active).to_not include(bill.subscription)
+    end
+  end
+
+  describe ".active_until" do
+    it "gets the max date that the subscription is paid till" do
+      end_date = 4.week.from_now
+      first_bill = create(:bill, status: :paid, start_date: 1.week.ago, end_date: 1.week.from_now)
+      create(:bill, status: :paid, start_date: 1.week.ago, end_date: end_date, subscription: first_bill.subscription)
+      first_bill.subscription.active_until.should be_within(1.second).of(end_date)
+    end
+
+    it "returns nil when there are no paid bills" do
+      bill = create(:bill, status: :pending, start_date: 1.week.ago, end_date: 1.week.from_now)
+      expect(bill.subscription.active_until).to be(nil)
+    end
+  end
+
   describe "#trial?" do
     it "should be true if subscription amount is not 0 and has a paid bill but no payment method" do
       bill = bills(:paid_bill)
@@ -211,6 +242,23 @@ describe Subscription do
 
     it "should let you override the visit_overage for the plan" do
       Subscription::Pro.create(visit_overage: 3).capabilities.visit_overage.should == 3
+    end
+
+    it "gives the greatest capability of all current paid subscriptions" do
+      # Auto pays each of these
+      @site.change_subscription(@enterprise, @payment_method)
+      @site.change_subscription(@pro, @payment_method)
+      @site.change_subscription(@free, @payment_method)
+      expect(@site.capabilities(true)).to be_a(Subscription::Enterprise::Capabilities)
+    end
+
+    it "stays at pro capabilities until bill period is over" do
+      successful, bill = @site.change_subscription(@pro, @payment_method)
+      bill.update_attribute(:end_date, 1.year.from_now)
+      expect(@site.capabilities(true)).to be_a(Subscription::Pro::Capabilities)
+      travel_to 2.year.from_now do
+        expect(@site.capabilities(true)).to be_a(Subscription::Free::Capabilities)
+      end
     end
 
     context '#at_site_element_limit?' do
@@ -427,7 +475,7 @@ describe Site do
       success.should be_true
       bill.should be_pending
       bill.amount.should == @pro.amount
-      bill.start_date.to_i.should == enterprise_bill.end_date.to_i
+      bill.start_date.should be_within(2.hour).of(enterprise_bill.end_date)
       bill.grace_period_allowed.should be_true
       # Should still have enterprise abilities
       @site.current_subscription.should == @pro
@@ -500,7 +548,7 @@ describe Site do
       # Bill should be full amount
       bill2.amount.should == pro_monthly.amount
       # Bill should be due at end of yearly subscription
-      bill2.due_at.should be_within(1.minute).of(bill.due_at+1.year)
+      bill2.due_at.should be_within(2.hour).of(bill.due_at+1.year)
       # Bill should be pending
       bill2.should be_pending
     end
