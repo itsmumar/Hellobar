@@ -543,13 +543,11 @@ HB.SiteElement = HB.createClass({
 
     if(emailForm) {
       emailForm.parentNode.appendChild(answers);
-    } else if(cta) {
-      HB.hideElement(cta);
-      cta.parentNode.appendChild(answers);
     } else {
+      if(cta) { HB.hideElement(cta) }
       this.currentHeadline().appendChild(answers);
     }
-    HB.showElement(answers, "");
+    HB.showElement(answers, "inline-block");
   },
 
   displayQuestion: function() {
@@ -563,15 +561,19 @@ HB.SiteElement = HB.createClass({
     var elements     = this.extractQuestionElements();
     var answers      = elements['answers'];
     var cta          = elements['response-cta'+idx];
+    var other_cta    = elements['response-cta'+(idx == 1 ? 2 : 1)];
 
     var original = this.originalElements();
     var emailFormBtn = original['emailFormBtn'];
 
+    HB.hideElement(answers);
+    HB.hideElement(other_cta);
     if (emailFormBtn) {
       this.rewriteEmailCTA(cta, answers, emailFormBtn);
-    } else {
-      answers.parentNode.replaceChild(cta, answers);
+    } else if (cta.parentNode != this.currentHeadline().parentNode) {
+      this.currentHeadline().parentNode.appendChild(cta);
     }
+    HB.showElement(cta, "");
     HB.showElement(original['emailForm'], "");
     HB.showElement(original['social'], "");
     this.rewriteElementText(this.currentHeadline(), elements['responseText'+idx]);
