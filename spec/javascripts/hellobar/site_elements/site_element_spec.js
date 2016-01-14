@@ -107,7 +107,7 @@ describe("SiteElement", function() {
 
       it("shows the answer choices", function () {
         siteElement.displayQuestion();
-        expect(answers.style.display).toEqual("");
+        expect(answers.style.display).toEqual("inline-block");
       });
     });
 
@@ -162,11 +162,11 @@ describe("SiteElement", function() {
         expect(social.style.display).toEqual("");
       });
 
-      it("replaces the answers with a new cta", function () {
+      it("hides the answers and shows a new cta", function () {
         siteElement.displayResponse(1);
         elements = document.body.children;
         last_element = elements[elements.length - 1];
-        expect(document.querySelector('#hb-answers')).toEqual(null);
+        expect(document.querySelector('#hb-answers').style.display).toEqual('none');
         expect(last_element).toEqual(responseCta1);
       });
 
