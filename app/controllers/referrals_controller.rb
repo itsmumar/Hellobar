@@ -18,10 +18,11 @@ class ReferralsController < ApplicationController
     )
     if @referral.valid?
       flash[:success] = I18n.t('referral.created')
+      redirect_to referrals_path
     else
       flash[:error] = I18n.t('referral.not_created')
+      render action: :new
     end
-    redirect_to referrals_path
   end
 
   def update
