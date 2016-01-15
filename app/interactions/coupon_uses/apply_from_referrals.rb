@@ -6,12 +6,13 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
     return if bill.is_a?(Bill::Refund)
     return unless bill.amount > 0
 
-    referral_iterator = Referral.redeemable_by_user(user).take_while { bill.amount > 0 }
-    referral_iterator.each do |r|
+    referral_iterator = Referral.redeemable_by_user(user).take_while do
       bill.amount -= Coupon::REFERRAL_AMOUNT
       bill.discount += Coupon::REFERRAL_AMOUNT
       bill.amount = 0 if bill.amount < 0
       use_up(r)
+
+      bill.amount > 0
     end
   end
 
