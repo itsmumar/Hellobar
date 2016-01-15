@@ -101,3 +101,19 @@ To test adding or removing the iframe use
 Watch out for animations and other asyncronous or delayed interactions.
 You may need to fiddle with the `Capybara.default_wait_time` in
 `spec/spec_helper`.
+
+## Live testing/QA info
+
+Test site for both edge/staging: http://tjacobs3.github.io/hellobar_testing/
+
+**Edge:**  
+http://edge.hellobar.com/  
+user: edge-test@polymathic.me  
+pword: password  
+site: edge-testing.com
+
+**Staging:**  
+http://staging.hellobar.com/  
+user: staging-test@polymathic.me  
+pword: password  
+site: gewgle.com
