@@ -4,7 +4,7 @@ describe Referrals::RedeemForSender do
   fixtures :all
   before :each do
     @user = users(:joey)
-    @referral = create(:referral, state: 'installed', available: true, sender: @user)
+    @referral = create(:referral, state: 'installed', available_to_sender: true, sender: @user)
   end
 
   it 'should raise an error if there are no referrals available' do
@@ -21,7 +21,7 @@ describe Referrals::RedeemForSender do
     end
 
     it 'should redeem and make the referral unavailable' do
-      expect(@referral.available).to be_false
+      expect(@referral.available_to_sender).to be_false
       expect(@referral.redeemed_by_sender_at).to be_within(2.seconds).of(Time.now)
     end
 
@@ -46,7 +46,7 @@ describe Referrals::RedeemForSender do
     end
 
     it 'should redeem and make the referral unavailable' do
-      expect(@referral.available).to be_false
+      expect(@referral.available_to_sender).to be_false
       expect(@referral.redeemed_by_sender_at).to be_within(2.seconds).of(Time.now)
     end
 

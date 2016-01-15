@@ -23,7 +23,7 @@
                 = icon_for_referral(ref)
                 span.referral-text= text_for_referral(ref)
               td
-                - if ref.redeemable? && ref.available?
+                - if ref.redeemable? && ref.available_to_sender?
                   .select-wrapper
                     = render partial: 'redeem', locals: { referral: ref }
                 - elsif ref.redeemed?

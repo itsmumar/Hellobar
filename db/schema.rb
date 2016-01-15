@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160112183557) do
+ActiveRecord::Schema.define(version: 20160115174717) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -241,7 +241,7 @@ ActiveRecord::Schema.define(version: 20160112183557) do
     t.text     "body"
     t.integer  "recipient_id"
     t.integer  "site_id"
-    t.boolean  "available",                default: false
+    t.boolean  "available_to_sender",      default: false
     t.datetime "redeemed_by_sender_at"
     t.datetime "redeemed_by_recipient_at"
   end

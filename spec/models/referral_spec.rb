@@ -110,7 +110,7 @@ describe Referral do
     end
 
     it "shows up as one of many available one for the sender" do
-      @referral.available = true
+      @referral.available_to_sender = true
       second = @referral.dup
       @referral.save!
       second.save!
@@ -127,7 +127,7 @@ describe Referral do
 
     it 'is redeemable when installed and available' do
       @referral.state = 'installed'
-      @referral.available = true
+      @referral.available_to_sender = true
       @referral.redeemed_by_sender_at = nil
 
       expect(@referral.redeemable?).to be_true
@@ -136,7 +136,7 @@ describe Referral do
 
     it 'is redeemed when installed and already used' do
       @referral.state = 'installed'
-      @referral.available = false
+      @referral.available_to_sender = false
       @referral.redeemed_by_sender_at = Time.now
 
       expect(@referral.redeemable?).to be_false

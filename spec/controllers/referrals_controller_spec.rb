@@ -75,7 +75,7 @@ describe ReferralsController do
   describe 'PUT :update' do
     before(:each) do
       @user = stub_current_user(users(:joey))
-      @referral = create(:referral, state: 'installed', available: true, sender: @user)
+      @referral = create(:referral, state: 'installed', available_to_sender: true, sender: @user)
     end
 
     it 'changes the site id and uses up the referral' do
@@ -83,7 +83,7 @@ describe ReferralsController do
       @referral.reload
 
       expect(@referral.site_id).to eq(sites(:zombo).id)
-      expect(@referral.available).to be_false
+      expect(@referral.available_to_sender).to be_false
       expect(@referral.redeemed_by_sender_at).not_to be_nil
     end
 

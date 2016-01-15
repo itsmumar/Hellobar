@@ -30,11 +30,11 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
 
   def use_up(referral)
     if referral.recipient_id == user.id
-      referral.available = true
+      referral.available_to_sender = true
       referral.redeemed_by_recipient_at = Time.now
       referral.save!
     elsif referral.sender_id == user.id
-      referral.available = false
+      referral.available_to_sender = false
       referral.redeemed_by_sender_at = Time.now
       referral.save!
     end

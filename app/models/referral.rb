@@ -10,7 +10,7 @@ class Referral < ActiveRecord::Base
   scope :redeemable, -> { where(state: 'installed') }
   scope :redeemable_by_user, ->(user) do
     redeemable.where(
-      '(redeemed_by_recipient_at IS NULL AND recipient_id = :user_id) OR (sender_id = :user_id AND available = true)',
+      '(redeemed_by_recipient_at IS NULL AND recipient_id = :user_id) OR (sender_id = :user_id AND available_to_sender = true)',
       user_id: user.id
     )
   end
@@ -51,11 +51,11 @@ class Referral < ActiveRecord::Base
   end
 
   def redeemable?
-    state == 'installed' && available == true && redeemed_by_sender_at == nil
+    state == 'installed' && available_to_sender == true && redeemed_by_sender_at == nil
   end
 
   def redeemed?
-    state == 'installed' && available == false && redeemed_by_sender_at != nil
+    state == 'installed' && available_to_sender == false && redeemed_by_sender_at != nil
   end
 
   private
