@@ -1,5 +1,21 @@
 require 'integration_helper'
 
+feature "User can sign up", js: true do
+  after { devise_reset }
+
+  scenario "through oauth" do
+    OmniAuth.config.add_mock(:google_oauth2, {uid: '12345', info: {email: 'bob@lawblog.com'}})
+    allow_any_instance_of(SiteElementSerializer).to receive(:proxied_url2png).and_return('')
+    visit root_path
+
+    fill_in 'site[url]', with: 'mewgle.com'
+    click_button 'Log in with Google'
+
+    expect(page).to have_content('Sign Out', visible: true)
+    expect(page).to have_content('Use your Hello Bar to collect visitors', visible: true)
+  end
+end
+
 feature "User can sign in", js: true do
   after { devise_reset }
 
