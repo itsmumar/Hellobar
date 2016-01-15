@@ -7,11 +7,56 @@ describe Referrals::RedeemForSender do
     @referral = create(:referral, state: 'installed', available: true, sender: @user)
   end
 
-  it 'should redeem and make the referral unavailable' do
-    Referrals::RedeemForSender.run(site: sites(:zombo))
-    @referral.reload
+  it 'should raise an error if there are no referrals available' do
+    @referral.destroy
+    expect(lambda do
+      Referrals::RedeemForSender.run(site: sites(:past_due_site))
+    end).to raise_error(Referrals::NoAvailableReferrals)
+  end
 
-    expect(@referral.available).to be_false
-    expect(@referral.redeemed_by_sender_at).to be_within(2.seconds).of(Time.now)
+  describe 'redeeming a referral for a site with billing problems' do
+    before :each do
+      Referrals::RedeemForSender.run(site: sites(:past_due_site))
+      @referral.reload
+    end
+
+    it 'should redeem and make the referral unavailable' do
+      expect(@referral.available).to be_false
+      expect(@referral.redeemed_by_sender_at).to be_within(2.seconds).of(Time.now)
+    end
+
+    it 'should mark the latest unpaid bill as paid' do
+      subscription = sites(:past_due_site).current_subscription
+      expect(subscription.problem_with_payment?).to be_false
+    end
+
+    it 'should mark the last bill as paid with an amount of 0.0 and discounted' do
+      bill = bills(:past_due_bill)
+      expect(bill.amount).to eq(0.0)
+      expect(bill.discount).to eq(Coupon::REFERRAL_AMOUNT)
+    end
+  end
+
+  describe 'redeeming a referral for a free site' do
+    before :each do
+      Referrals::RedeemForSender.run(site: sites(:free_site))
+      @referral.reload
+      @subscription = sites(:free_site).current_subscription
+      @bill = @subscription.active_bills.last
+    end
+
+    it 'should redeem and make the referral unavailable' do
+      expect(@referral.available).to be_false
+      expect(@referral.redeemed_by_sender_at).to be_within(2.seconds).of(Time.now)
+    end
+
+    it 'sets the site to a Pro subscription' do
+      expect(@subscription).to be_a(Subscription::Pro)
+    end
+
+    it 'should mark the last bill as paid with an amount of 0.0 and discounted' do
+      expect(@bill.amount).to eq(0.0)
+      expect(@bill.discount).to eq(Coupon::REFERRAL_AMOUNT)
+    end
   end
 end

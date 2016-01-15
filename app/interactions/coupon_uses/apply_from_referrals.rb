@@ -6,11 +6,9 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
     return if bill.is_a?(Bill::Refund)
     return unless bill.amount > 0
 
-    referral_iterator = Referral.redeemable_by_user(user).take_while do
-      bill.amount -= Coupon::REFERRAL_AMOUNT
-      bill.discount += Coupon::REFERRAL_AMOUNT
-      bill.amount = 0 if bill.amount < 0
-      use_up(r)
+    Referral.redeemable_by_user(user).take_while do |referral|
+      apply_referral_coupon
+      use_up(referral)
 
       bill.amount > 0
     end
@@ -22,9 +20,15 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
     bill.subscription.try(:user)
   end
 
-  def use_up(referral)
-    CouponUse.create(bill: bill, coupon: Coupon.for_referrals)
+  def apply_referral_coupon
+    bill.amount -= Coupon::REFERRAL_AMOUNT
+    bill.discount += Coupon::REFERRAL_AMOUNT
+    bill.amount = 0 if bill.amount < 0
 
+    CouponUse.create(bill: bill, coupon: Coupon.for_referrals)
+  end
+
+  def use_up(referral)
     if referral.recipient_id == user.id
       referral.available = true
       referral.redeemed_by_recipient_at = Time.now

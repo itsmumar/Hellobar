@@ -14,7 +14,6 @@ class Referrals::RedeemForSender < Less::Interaction
   expects :site
 
   def run
-    return unless site.present?
     return unless subscription.present?
     return unless user.present?
     raise Referrals::NoAvailableReferrals.new unless has_available_referrals?
@@ -46,10 +45,10 @@ class Referrals::RedeemForSender < Less::Interaction
   end
 
   def subscription
-    site.current_subscription
+    @subscription ||= site.current_subscription
   end
 
   def user
-    subscription.try(:user)
+    @user ||= subscription.user
   end
 end
