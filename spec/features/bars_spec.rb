@@ -26,7 +26,7 @@ feature 'User can create a bar', js: true do
   scenario 'existing user can create a bar' do
     OmniAuth.config.add_mock(:google_oauth2, {:uid => '12345'})
     user = create(:user)
-    site = create(:site, users: [user])
+    site = create(:site, :with_rule, users: [user])
     auth = user.authentications.create({
       provider: 'google_oauth2',
       uid: '12345'
@@ -56,6 +56,7 @@ feature 'User can edit a bar', js: true do
 
   scenario 'user can edit a bar' do
     site = @user.sites.first
+    site.rules << create(:rule)
     create(:site_element, rule: site.rules.first)
 
     visit edit_site_site_element_path(site, site.site_elements.last)
