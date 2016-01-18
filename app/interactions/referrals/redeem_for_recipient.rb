@@ -8,7 +8,7 @@
 #
 
 class Referrals::NotInstalled < StandardError; end
-class Referrals::RedeemForReceiver < Less::Interaction
+class Referrals::RedeemForRecipient < Less::Interaction
   expects :site
 
   def run

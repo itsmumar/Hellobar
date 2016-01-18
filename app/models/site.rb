@@ -81,7 +81,7 @@ class Site < ActiveRecord::Base
     if !script_installed_db? && script_installed_api?
       debug_install("INSTALLED")
       update(script_installed_at: Time.current)
-      Referrals::RedeemForReceiver.run(site: self)
+      Referrals::RedeemForRecipient.run(site: self)
       Analytics.track(:site, self.id, "Installed")
     elsif script_installed_db? && !script_installed_api?
       debug_install("UNINSTALLED")

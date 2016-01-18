@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Referrals::RedeemForReceiver do
+describe Referrals::RedeemForRecipient do
   fixtures :users
   before :each do
     create(:referral_coupon)
@@ -11,7 +11,7 @@ describe Referrals::RedeemForReceiver do
 
   it "subscribes to Pro with a 0.00 bill when referred and installed" do
     referral = create(:referral, recipient: users(:joey), state: 'installed')
-    Referrals::RedeemForReceiver.run(site: @site)
+    Referrals::RedeemForRecipient.run(site: @site)
     bill = @site.current_subscription.active_bills.last
 
     referral.reload
@@ -26,13 +26,13 @@ describe Referrals::RedeemForReceiver do
     create(:referral, recipient: users(:joey), state: 'signed_up')
 
     expect(lambda do
-      Referrals::RedeemForReceiver.run(site: @site)
+      Referrals::RedeemForRecipient.run(site: @site)
     end).to raise_error(Referrals::NotInstalled)
   end
 
   it "raises nothing when no referral exists" do
     expect(lambda do
-      Referrals::RedeemForReceiver.run(site: @site)
+      Referrals::RedeemForRecipient.run(site: @site)
     end).not_to raise_error
     expect(@site.current_subscription).to be_a(Subscription::Free)
   end
