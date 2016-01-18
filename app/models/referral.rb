@@ -6,7 +6,7 @@ class Referral < ActiveRecord::Base
     'installed' => 'Installed'
   }
 
-  EXPIRES_INTERVAL = 5.days
+  FOLLOWUP_INTERVAL = 5.days
   scope :redeemable, -> { where(state: 'installed') }
   scope :redeemable_by_user, ->(user) do
     redeemable.where(
@@ -15,8 +15,8 @@ class Referral < ActiveRecord::Base
     )
   end
 
-  scope :about_to_expire, -> do
-    where(state: 'sent').where(created_at: (EXPIRES_INTERVAL.ago .. (EXPIRES_INTERVAL - 1.day).ago))
+  scope :to_be_followed_up, -> do
+    where(state: 'sent').where(created_at: (FOLLOWUP_INTERVAL.ago .. (FOLLOWUP_INTERVAL - 1.day).ago))
   end
 
   belongs_to :sender, class_name: "User"
@@ -42,7 +42,7 @@ class Referral < ActiveRecord::Base
   end
 
   def expiration_date_string
-    expiration_date = (created_at + EXPIRES_INTERVAL)
+    expiration_date = (created_at + FOLLOWUP_INTERVAL)
     expiration_date_string = expiration_date.strftime("%B ") + expiration_date.day.ordinalize
   end
 

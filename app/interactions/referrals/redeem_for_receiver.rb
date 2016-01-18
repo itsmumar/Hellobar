@@ -1,6 +1,6 @@
 # Redeem coupons for a referral recipient.
 #
-# This is a new user. As long as they have installed the widget, move them to a
+# This is a new user. Since they have installed the widget, move them to a
 # monthly pro subscription.
 #
 # The subscription change will trigger the calculation in Bill#set_final_amount!
@@ -31,7 +31,7 @@ class Referrals::RedeemForReceiver < Less::Interaction
   end
 
   def user
-    subscription.try(:user)
+    subscription.user
   end
 
   def referral

@@ -36,7 +36,7 @@ describe Referrals::SendSecondEmail do
   it "will not send the email for a referral that's too old" do
     expect(MailerGateway).not_to receive :send_email
 
-    @referral.created_at = (Referral::EXPIRES_INTERVAL + 1.day).ago
+    @referral.created_at = (Referral::FOLLOWUP_INTERVAL + 1.day).ago
     Referrals::SendSecondEmail.run(referral: @referral)
   end
 end

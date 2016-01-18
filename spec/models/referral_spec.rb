@@ -57,40 +57,40 @@ describe Referral do
     end
 
     it 'does not include referrals older than the interval' do
-      @referral.created_at -= (Referral::EXPIRES_INTERVAL + 1.day)
+      @referral.created_at -= (Referral::FOLLOWUP_INTERVAL + 1.day)
       @referral.save!
 
-      expect(Referral.about_to_expire.all).not_to include(@referral)
+      expect(Referral.to_be_followed_up.all).not_to include(@referral)
     end
 
     it 'does not include referrals more recent than the interval' do
-      @referral.created_at -= (Referral::EXPIRES_INTERVAL - 2.days)
+      @referral.created_at -= (Referral::FOLLOWUP_INTERVAL - 2.days)
       @referral.save!
 
-      expect(Referral.about_to_expire.all).not_to include(@referral)
+      expect(Referral.to_be_followed_up.all).not_to include(@referral)
     end
 
     it 'does not include referrals in the interval if they are signed up' do
-      @referral.created_at -= (Referral::EXPIRES_INTERVAL - 1.hour)
+      @referral.created_at -= (Referral::FOLLOWUP_INTERVAL - 1.hour)
       @referral.state = 'signed_up'
       @referral.save!
 
-      expect(Referral.about_to_expire.all).not_to include(@referral)
+      expect(Referral.to_be_followed_up.all).not_to include(@referral)
     end
 
     it 'does not include referrals in the interval if they have installed' do
-      @referral.created_at -= (Referral::EXPIRES_INTERVAL - 1.hour)
+      @referral.created_at -= (Referral::FOLLOWUP_INTERVAL - 1.hour)
       @referral.state = 'installed'
       @referral.save!
 
-      expect(Referral.about_to_expire.all).not_to include(@referral)
+      expect(Referral.to_be_followed_up.all).not_to include(@referral)
     end
 
     it 'does not include referrals in the interval if they have installed' do
-      @referral.created_at -= (Referral::EXPIRES_INTERVAL - 1.hour)
+      @referral.created_at -= (Referral::FOLLOWUP_INTERVAL - 1.hour)
       @referral.save!
 
-      expect(Referral.about_to_expire.all).to include(@referral)
+      expect(Referral.to_be_followed_up.all).to include(@referral)
     end
   end
 

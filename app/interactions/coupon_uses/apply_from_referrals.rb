@@ -17,7 +17,7 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
   private
 
   def user
-    bill.subscription.try(:user)
+    bill.subscription.user
   end
 
   def apply_referral_coupon
