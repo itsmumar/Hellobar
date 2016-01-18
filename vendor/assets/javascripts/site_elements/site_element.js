@@ -353,6 +353,30 @@ HB.SiteElement = HB.createClass({
     {
       // Sets the dismissed state for the next 15 minutes
       HB.sc("HBDismissed", true, new Date((new Date().getTime() + 1000 * 60 * 15)), "path=/");
+
+      // Track specific elements longer, for takeovers/modals
+      var expiration, cookie_name, cookie_str, dismissed_elements;
+      if (this.type == "Takeover" || this.type == "Modal") {
+        expiration = 86400000 * 365 * 5; // 5 years
+        cookie_name = "HBDismissedModals";
+      } else {
+        // Track specific elements 24 hours, for bars/sliders
+        expiration = 86400000; // 24 hours
+        cookie_name = "HBDismissedBars";
+      }
+      cookie_str = HB.gc(cookie_name) || "[]";
+      dismissed_elements = JSON.parse(cookie_str) || [];
+      if (dismissed_elements.indexOf(this.id) == -1) {
+        dismissed_elements.push(this.id);
+      }
+      if (dismissed_elements) {
+        HB.sc(
+          cookie_name,
+          JSON.stringify(dismissed_elements),
+          new Date((new Date().getTime() + expiration)),
+          "path=/"
+        );
+      }
     }
 
     HB.trigger("elementDismissed");
