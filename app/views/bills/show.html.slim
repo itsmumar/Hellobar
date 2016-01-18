@@ -44,6 +44,12 @@ main
         | #{@bill.start_date.strftime('%b. %d, %Y')} thru #{@bill.end_date.strftime('%b. %d, %Y')}
       td.right= number_to_currency(@bill.amount)
       td.right= number_to_currency(@bill.amount)
+    - coupons_and_uses(@bill) do |coupon, uses|
+      tr
+        td.left
+          = coupon_label(coupon, uses)
+        td.right Discount
+        td.right= coupon_discount(coupon, uses)
     tr
       th.left
       th.right Invoice Total
