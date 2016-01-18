@@ -22,6 +22,8 @@ class Referrals::RedeemForRecipient < Less::Interaction
     sub.user = user
     sub.schedule = 'monthly'
     site.change_subscription(sub)
+
+    send_success_email_to_sender
   end
 
   private
@@ -36,5 +38,12 @@ class Referrals::RedeemForRecipient < Less::Interaction
 
   def referral
     @referral ||= user.received_referral
+  end
+
+  def send_success_email_to_sender
+    MailerGateway.send_email('Referral Success', {
+      referral_sender: referral.sender.first_name,
+      referral_recipient: user.name,
+    })
   end
 end

@@ -10,15 +10,15 @@
   section
     table#referrals-wrapper
       thead
-        th Email
-        th Invited
-        th Status
-        th Apply a free month to
+        th Friend
+        th When you invited
+        th Current status
+        th Bonuses
       tbody
         - @referrals.each do |ref|
             tr
               td= ref.email
-              td= distance_of_time_in_words_to_now(ref.created_at)
+              td= distance_of_time_in_words_to_now(ref.created_at) + " ago"
               td
                 = icon_for_referral(ref)
                 span.referral-text= text_for_referral(ref)
