@@ -40,18 +40,20 @@ describe Subscription do
   end
 
   describe ".active scope" do
+    let(:pro_subscription) { create(:pro_subscription) }
+
     it "includes subscriptions with paid bills at the current time" do
-      bill = create(:bill, status: :paid, start_date: 1.week.ago, end_date: 1.week.from_now)
+      bill = create(:recurring_bill, subscription: pro_subscription, start_date: 1.week.ago, end_date: 1.week.from_now, status: :paid)
       expect(Subscription.active).to include(bill.subscription)
     end
 
     it "does not include unpaid bills" do
-      bill = create(:bill, status: :pending, start_date: 1.week.ago, end_date: 1.week.from_now)
+      bill = create(:recurring_bill, subscription: pro_subscription, start_date: 1.week.ago, end_date: 1.week.from_now, status: :pending)
       expect(Subscription.active).to_not include(bill.subscription)
     end
 
     it "does not include bills in a different period" do
-      bill = create(:bill, status: :pending, start_date: 2.week.ago, end_date: 1.week.ago)
+      bill = create(:recurring_bill, subscription: pro_subscription, start_date: 2.week.ago, end_date: 1.week.ago, status: :pending)
       expect(Subscription.active).to_not include(bill.subscription)
     end
   end
