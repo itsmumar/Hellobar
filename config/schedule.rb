@@ -32,7 +32,7 @@ every 24.hours, :at => "12:00am", :roles => [:cron] do
 end
 
 every 24.hours, :at => "1:00pm", :roles => [:cron] do
-  rake "referrals:send_reminders"
+  rake "referrals:send_followups"
 end
 
 every 1.hours, :roles => [:cron] do

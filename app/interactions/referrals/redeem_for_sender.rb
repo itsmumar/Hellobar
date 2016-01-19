@@ -11,6 +11,7 @@
 
 class Referrals::NoAvailableReferrals < StandardError ; end
 class Referrals::RedeemForSender < Less::Interaction
+  include Referrals::ProSubscription
   expects :site
 
   def run
@@ -29,13 +30,6 @@ class Referrals::RedeemForSender < Less::Interaction
 
   def has_available_referrals?
     Referral.redeemable_by_user(user).count > 0
-  end
-
-  def new_pro_subscription
-    new_subscription = Subscription::Pro.new
-    new_subscription.user = user
-    new_subscription.schedule = 'monthly'
-    new_subscription
   end
 
   def last_failed_bill

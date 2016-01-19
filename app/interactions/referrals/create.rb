@@ -5,7 +5,6 @@ class Referrals::Create < Less::Interaction
 
   def run
     @referral = sender.sent_referrals.build(params)
-    @referral.state ||= 'sent'
 
     if @referral.save && send_emails
       send_initial_email
