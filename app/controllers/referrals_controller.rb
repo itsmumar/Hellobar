@@ -4,6 +4,7 @@ class ReferralsController < ApplicationController
   def new
     @referral = current_user.sent_referrals.build
     @referral.set_standard_body
+    @referral.set_site_if_only_one
   end
 
   def index

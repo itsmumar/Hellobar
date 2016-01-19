@@ -34,6 +34,12 @@ class Referral < ActiveRecord::Base
     self.body = I18n.t("referral.standard_body", name: sender.name)
   end
 
+  def set_site_if_only_one
+    if sender.sites.count == 1
+      self.site = sender.sites.first
+    end
+  end
+
   def url
     return "" if referral_token.blank?
 

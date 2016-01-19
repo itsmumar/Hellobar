@@ -17,6 +17,16 @@ describe Referral do
     expect(@referral.body).to include(@user.name)
   end
 
+  it "has no site by default" do
+    @referral.site.should be_nil
+  end
+
+  it "has a site if the referral sender only has one site" do
+    @referral.sender = users(:pro)
+    @referral.set_site_if_only_one
+    @referral.site.should_not be_nil
+  end
+
   it "is invalid if the email belongs to an existing user" do
     @referral.email = users(:wootie).email
     @referral.state = 'sent'
