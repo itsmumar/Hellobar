@@ -4,6 +4,5 @@ FactoryGirl.define do
   end
 
   factory :always_successful_billing_details, parent: :payment_method_details, class: "AlwaysSuccessfulPaymentMethodDetails" do
-
   end
 end
