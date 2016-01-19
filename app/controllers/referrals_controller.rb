@@ -18,10 +18,10 @@ class ReferralsController < ApplicationController
       send_emails: true
     )
     if @referral.valid?
-      flash[:success] = I18n.t('referral.created')
+      flash[:success] = I18n.t('referral.flash.created')
       redirect_to referrals_path
     else
-      flash[:error] = I18n.t('referral.not_created')
+      flash[:error] = I18n.t('referral.flash.not_created')
       render action: :new
     end
   end
@@ -30,9 +30,9 @@ class ReferralsController < ApplicationController
     @referral = current_user.sent_referrals.find(params[:id])
     if @referral.update_attributes(referral_params)
       Referrals::RedeemForSender.run(site: @referral.site) if @referral.site
-      flash[:success] = I18n.t('referral.saved')
+      flash[:success] = I18n.t('referral.flash.saved')
     else
-      flash[:error] = I18n.t('referral.not_saved')
+      flash[:error] = I18n.t('referral.flash.not_saved')
     end
     redirect_to referrals_path
   end
@@ -41,7 +41,7 @@ class ReferralsController < ApplicationController
     token = ReferralToken.where(token: params[:token]).first
     if current_user.blank? && token.present?
       session[:referral_token] = params[:token]
-      flash[:success] = I18n.t('referral.accepted')
+      flash[:success] = I18n.t('referral.flash.accepted')
     else
       # Either they're already in the app, in which case the referral doesn't apply,
       # or the token is wrong. In both cases, just redirect them.
