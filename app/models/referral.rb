@@ -24,7 +24,7 @@ class Referral < ActiveRecord::Base
 
   validates :sender_id, presence: true
   validates :email, presence: true
-  validate :email_not_already_registered, on: :create
+  validate :ensure_email_available, on: :create
 
   def set_standard_body
     self.body = I18n.t("referral.standard_body", name: sender.name)
@@ -60,14 +60,26 @@ class Referral < ActiveRecord::Base
     state == 'installed' && available_to_sender == false && redeemed_by_sender_at != nil
   end
 
+  def email_already_registered?
+    return false if email.blank?
+    User.where(email: email).count > 0
+  end
+
+  def email_already_referrred?
+    return false if email.blank?
+    Referral.where(email: email).count > 0
+  end
+
   private
 
-  def email_not_already_registered
+  def ensure_email_available
     return if email.blank?
     return if recipient # If we're creating with a recipient, we don't need to run this check at all
 
     if User.where(email: email).count > 0
       errors.add(:email, "belongs to a user who's already registered.")
+    elsif sender.sent_referrals.where(email: email).count > 0
+      errors.add(:email, "belongs to a user you've already invited.")
     end
   end
 end

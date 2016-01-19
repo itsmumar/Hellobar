@@ -73,8 +73,14 @@ describe Subscription do
   end
 
   describe "subclassing" do
-    it "does not consider Pro a subclass of Free" do
+    it "does not consider Pro to be Free" do
       sub = Subscription::Pro.new
+
+      expect(sub).not_to be_a(Subscription::Free)
+    end
+
+    it "does not consider Enterprise to be Free" do
+      sub = Subscription::Enterprise.new
 
       expect(sub).not_to be_a(Subscription::Free)
     end

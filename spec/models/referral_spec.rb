@@ -59,7 +59,7 @@ describe Referral do
     expect(@referral.accepted?).to be_false
   end
 
-  describe "about_to_expire" do
+  describe "to be followed up" do
     before :each do
       @referral.email = Faker::Internet.email
       @referral.state = 'sent'
@@ -122,6 +122,7 @@ describe Referral do
     it "shows up as one of many available one for the sender" do
       @referral.available_to_sender = true
       second = @referral.dup
+      second.email = Faker::Internet.email
       @referral.save!
       second.save!
 

@@ -15,7 +15,6 @@ feature "Trial User", js: true do
     expect(page).to have_content('ENJOYING HELLO BAR PRO? CLICK HERE TO KEEP IT.')
   end
 
-  # TODO: this breaks; fix it
   scenario "allows users to downgrade" do
     allow_any_instance_of(Subscription::Pro).to receive(:problem_with_payment?).and_return(true)
     allow_any_instance_of(Site).to receive(:has_script_installed?).and_return(true)

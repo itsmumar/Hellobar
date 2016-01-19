@@ -29,7 +29,7 @@ describe ReferralsHelper do
     ref = Referral.new(state: :sent)
     text = helper.text_for_referral(ref)
 
-    expect(text).to match(/sent/i)
+    expect(text).to match(I18n.t('referral.state.sent'))
   end
 
   it "Returns an empty string for a referral with an empty state" do

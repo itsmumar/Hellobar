@@ -27,7 +27,8 @@ en:
       If you want to try it, you can get it below. Once you install Hello Bar, both you and your friend will enjoy a free month of Hello Bar Pro. (There's also a free version.)
     flash:
       created: We've sent an invite to your friend. Check back here to see whether they've accepted it and redeem any free months.
-      not_created: Sorry, but there was a problem while sending this invite. Check the email address you gave us.
+      already_exists: Sorry, but this person is already using HelloBar.
+      not_created: Sorry, but there was a problem while sending this invite. (%{error})
       saved: Saved!
       not_saved: Sorry, but there was a problem saving your change.
       accepted: Success! Your discount will be applied after you create your first site.

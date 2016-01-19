@@ -8,12 +8,12 @@ describe Referrals::Create do
   end
 
   it 'sends an email when we ask it to' do
-    expect(MailerGateway).to receive :send_email do |*args|
-      expect(args[0]).to eq 'Referal Invite Initial'
-      expect(args[1]).to eq 'tj@hellobar.com'
-      expect(args[2][:referral_link]).to match Regexp.new(Hellobar::Settings[:url_base])
-      expect(args[2][:referral_sender]).to eq @user.name
-      expect(args[2][:referral_body]).to eq 'test body'
+    expect(MailerGateway).to receive :send_email do |name, email, params|
+      expect(name).to eq 'Referal Invite Initial'
+      expect(email).to eq 'tj@hellobar.com'
+      expect(params[:referral_link]).to match Regexp.new(Hellobar::Settings[:url_base])
+      expect(params[:referral_sender]).to eq @user.name
+      expect(params[:referral_body]).to eq 'test body'
     end
 
     Referrals::Create.run(

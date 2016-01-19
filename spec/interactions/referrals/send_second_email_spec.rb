@@ -9,11 +9,11 @@ describe Referrals::SendSecondEmail do
   end
 
   it "will send the email under normal circumstances" do
-    expect(MailerGateway).to receive :send_email do |*args|
-      expect(args[0]).to eq 'Referal Invite Second'
-      expect(args[1]).to eq @email
-      expect(args[2][:referral_link]).to match Regexp.new(Hellobar::Settings[:url_base])
-      expect(args[2][:referral_sender]).to eq @user.name
+    expect(MailerGateway).to receive :send_email do |name, email, params|
+      expect(name).to eq 'Referal Invite Second'
+      expect(email).to eq @email
+      expect(params[:referral_link]).to match Regexp.new(Hellobar::Settings[:url_base])
+      expect(params[:referral_sender]).to eq @user.name
     end
 
     Referrals::SendSecondEmail.run(referral: @referral)

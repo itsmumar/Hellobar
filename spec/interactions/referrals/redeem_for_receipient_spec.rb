@@ -22,6 +22,19 @@ describe Referrals::RedeemForRecipient do
     expect(bill.discount).to eq(Coupon::REFERRAL_AMOUNT)
   end
 
+  it "sends out an email to the referral sender when referred" do
+    referral = create(:referral, recipient: users(:joey), state: :installed)
+
+    expect(MailerGateway).to receive(:send_email) do |name, email, params|
+      expect(name).to eq('Referral Success')
+      expect(email).to eq(referral.sender.email)
+      expect(params[:referral_sender]).to eq(referral.sender.first_name)
+      expect(params[:referral_recipient]).to eq(referral.recipient.name)
+    end
+
+    Referrals::RedeemForRecipient.run(site: @site)
+  end
+
   it "raises an exception when referred and merely signed_up" do
     create(:referral, recipient: users(:joey), state: :signed_up)
 

@@ -21,7 +21,7 @@ class ReferralsController < ApplicationController
       flash[:success] = I18n.t('referral.flash.created')
       redirect_to referrals_path
     else
-      flash[:error] = I18n.t('referral.flash.not_created')
+      flash[:error] = I18n.t("referral.flash.not_created", error: @referral.errors.full_messages.join(","))
       render action: :new
     end
   end
