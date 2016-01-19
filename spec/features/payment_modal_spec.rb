@@ -26,7 +26,7 @@ feature "Payment modal interaction", js: true do
     site = @user.sites.first
     payment_method = create(:payment_method, user: @user)
     site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
-    end_date = 1.month.from_now
+    end_date = site.current_subscription.active_until
     visit edit_site_path(site)
     click_link("Change plan or billing schedule")
     find(".different-plan").click

@@ -128,7 +128,7 @@ describe Bill do
       recurring_bill2.should be_pending
       recurring_bill2.start_date.should == aug
       recurring_bill2.bill_at.should == recurring_bill.end_date
-      recurring_bill2.end_date.should == sep
+      recurring_bill2.end_date.should == recurring_bill2.start_date + 1.month
     end
   end
 
