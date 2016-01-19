@@ -140,8 +140,8 @@ describe Referral do
       @referral.available_to_sender = true
       @referral.redeemed_by_sender_at = nil
 
-      expect(@referral.redeemable?).to be_true
-      expect(@referral.redeemed?).to be_false
+      expect(@referral.redeemable_by_sender?).to be_true
+      expect(@referral.redeemed_by_sender?).to be_false
     end
 
     it 'is redeemed when installed and already used' do
@@ -149,8 +149,8 @@ describe Referral do
       @referral.available_to_sender = false
       @referral.redeemed_by_sender_at = Time.now
 
-      expect(@referral.redeemable?).to be_false
-      expect(@referral.redeemed?).to be_true
+      expect(@referral.redeemable_by_sender?).to be_false
+      expect(@referral.redeemed_by_sender?).to be_true
     end
   end
 end

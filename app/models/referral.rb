@@ -52,11 +52,11 @@ class Referral < ActiveRecord::Base
     state != 'sent'
   end
 
-  def redeemable?
+  def redeemable_by_sender?
     state == 'installed' && available_to_sender == true && redeemed_by_sender_at == nil
   end
 
-  def redeemed?
+  def redeemed_by_sender?
     state == 'installed' && available_to_sender == false && redeemed_by_sender_at != nil
   end
 
