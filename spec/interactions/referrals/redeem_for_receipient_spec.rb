@@ -10,7 +10,7 @@ describe Referrals::RedeemForRecipient do
   end
 
   it "subscribes to Pro with a 0.00 bill when referred and installed" do
-    referral = create(:referral, recipient: users(:joey), state: 'installed')
+    referral = create(:referral, recipient: users(:joey), state: :installed)
     Referrals::RedeemForRecipient.run(site: @site)
     bill = @site.current_subscription.active_bills.last
 
@@ -23,7 +23,7 @@ describe Referrals::RedeemForRecipient do
   end
 
   it "raises an exception when referred and merely signed_up" do
-    create(:referral, recipient: users(:joey), state: 'signed_up')
+    create(:referral, recipient: users(:joey), state: :signed_up)
 
     expect(lambda do
       Referrals::RedeemForRecipient.run(site: @site)

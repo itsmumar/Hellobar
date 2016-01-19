@@ -1,22 +1,19 @@
 class Referral < ActiveRecord::Base
   include ReferralTokenizable
-  STATES = {
-    'sent' => 'Invite sent',
-    'signed_up' => 'Signed up',
-    'installed' => 'Installed'
-  }
 
   FOLLOWUP_INTERVAL = 5.days
-  scope :redeemable, -> { where(state: 'installed') }
+
+  enum state: [:sent, :signed_up, :installed]
+
   scope :redeemable_by_user, ->(user) do
-    redeemable.where(
+    installed.where(
       '(redeemed_by_recipient_at IS NULL AND recipient_id = :user_id) OR (sender_id = :user_id AND available_to_sender = true)',
       user_id: user.id
     )
   end
 
   scope :to_be_followed_up, -> do
-    where(state: 'sent').where(created_at: (FOLLOWUP_INTERVAL.ago .. (FOLLOWUP_INTERVAL - 1.day).ago))
+    sent.where(created_at: (FOLLOWUP_INTERVAL.ago .. (FOLLOWUP_INTERVAL - 1.day).ago))
   end
 
   belongs_to :sender, class_name: "User"
@@ -25,7 +22,6 @@ class Referral < ActiveRecord::Base
 
   has_one :referral_token, as: :tokenizable
 
-  validates :state, inclusion: STATES.keys
   validates :sender_id, presence: true
   validates :email, presence: true
   validate :email_not_already_registered, on: :create

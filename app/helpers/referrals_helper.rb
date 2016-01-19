@@ -4,15 +4,18 @@ module ReferralsHelper
   end
 
   def icon_for_referral(referral)
-    if referral.state.in?(Referral::STATES.keys)
-      state = referral.state
-      image_tag "referrals/#{state}.svg", class: "referral-img"
+    if referral.state.present?
+      image_tag "referrals/#{referral.state}.svg", class: "referral-img"
     else
       ""
     end
   end
 
   def text_for_referral(referral)
-    Referral::STATES[referral.state] || ""
+    if referral.state.present?
+      I18n.t("referral.state.#{referral.state}")
+    else
+      ""
+    end
   end
 end

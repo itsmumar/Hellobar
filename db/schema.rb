@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160115174717) do
+ActiveRecord::Schema.define(version: 20160119131352) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -237,13 +237,13 @@ ActiveRecord::Schema.define(version: 20160115174717) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email"
-    t.string   "state"
     t.text     "body"
     t.integer  "recipient_id"
     t.integer  "site_id"
     t.boolean  "available_to_sender",      default: false
     t.datetime "redeemed_by_sender_at"
     t.datetime "redeemed_by_recipient_at"
+    t.integer  "state",                    default: 0
   end
 
   add_index "referrals", ["sender_id"], name: "index_referrals_on_sender_id", using: :btree

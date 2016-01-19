@@ -5,7 +5,7 @@ describe Referrals::SendSecondEmail do
   before :each do
     @user = users(:joey)
     @email = Faker::Internet.email
-    @referral = create(:referral, sender: @user, state: 'sent', email: @email)
+    @referral = create(:referral, sender: @user, state: :sent, email: @email)
   end
 
   it "will send the email under normal circumstances" do

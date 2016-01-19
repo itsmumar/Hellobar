@@ -60,7 +60,7 @@ describe SitesController do
 
       it "updates an existing referral if its token is given" do
         user = User.last
-        ref = create(:referral, state: 'sent')
+        ref = create(:referral, state: :sent)
         User.stub(generate_temporary_user: user)
 
         expect(lambda {

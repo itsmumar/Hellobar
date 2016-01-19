@@ -75,7 +75,7 @@ describe ReferralsController do
   describe 'PUT :update' do
     before(:each) do
       @user = stub_current_user(users(:joey))
-      @referral = create(:referral, state: 'installed', available_to_sender: true, sender: @user)
+      @referral = create(:referral, state: :installed, available_to_sender: true, sender: @user)
     end
 
     it 'changes the site id and uses up the referral' do
@@ -88,7 +88,7 @@ describe ReferralsController do
     end
 
     it 'does not change the state' do
-      put :update, id: @referral.id, referral: {state: 'sent'}
+      put :update, id: @referral.id, referral: {state: 0}
       expect(@referral.reload.state).to eq('installed')
     end
   end

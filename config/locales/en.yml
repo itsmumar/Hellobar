@@ -30,3 +30,7 @@ en:
     saved: Saved!
     not_saved: Sorry, but there was a problem saving your change.
     accepted: Success! Your discount will be applied after you create your first site.
+    state:
+      sent: Sent
+      signed_up: Signed up
+      installed: Installed

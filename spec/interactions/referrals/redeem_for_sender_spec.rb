@@ -4,7 +4,7 @@ describe Referrals::RedeemForSender do
   fixtures :all
   before :each do
     @user = users(:joey)
-    @referral = create(:referral, state: 'installed', available_to_sender: true, sender: @user)
+    @referral = create(:referral, state: :installed, available_to_sender: true, sender: @user)
   end
 
   it 'should raise an error if there are no referrals available' do

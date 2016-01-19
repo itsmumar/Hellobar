@@ -11,29 +11,29 @@ describe ReferralsHelper do
   end
 
   it "Returns an icon for a referral with a valid state" do
-    ref = Referral.new(state: "sent")
+    ref = Referral.new(state: :sent)
     img = helper.icon_for_referral(ref)
 
     expect(img).to match("img")
     expect(img).to match("sent.svg")
   end
 
-  it "Returns an empty string for a referral with an invalid state" do
-    ref = Referral.new(state: "wrong")
+  it "Returns an empty string for a referral with an empty state" do
+    ref = Referral.new(state: nil)
     img = helper.icon_for_referral(ref)
 
     expect(img).to eq("")
   end
 
   it "Returns the text for a referral with a valid state" do
-    ref = Referral.new(state: "sent")
+    ref = Referral.new(state: :sent)
     text = helper.text_for_referral(ref)
 
     expect(text).to match(/sent/i)
   end
 
-  it "Returns an empty string for a referral with an invalid state" do
-    ref = Referral.new(state: "wrong")
+  it "Returns an empty string for a referral with an empty state" do
+    ref = Referral.new(state: nil)
     text = helper.text_for_referral(ref)
 
     expect(text).to eq("")
