@@ -9,7 +9,7 @@ describe Referrals::Create do
 
   it 'sends an email when we ask it to' do
     expect(MailerGateway).to receive :send_email do |name, email, params|
-      expect(name).to eq 'Referal Invite Initial'
+      expect(name).to eq 'Referral Invite Initial'
       expect(email).to eq 'tj@hellobar.com'
       expect(params[:referral_link]).to match Regexp.new("http://hellobar.com/referrals/accept")
       expect(params[:referral_sender]).to eq @user.name

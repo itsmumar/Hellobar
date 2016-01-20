@@ -20,7 +20,7 @@ class Referrals::Create < Less::Interaction
   end
 
   def send_initial_email
-    MailerGateway.send_email('Referal Invite Initial', email, {
+    MailerGateway.send_email('Referral Invite Initial', email, {
       referral_sender: sender.name,
       referral_expiration_date: @referral.expiration_date_string,
       referral_body: @referral.body,
