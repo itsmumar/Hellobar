@@ -22,6 +22,15 @@ describe Referrals::RedeemForRecipient do
     expect(bill.discount).to eq(Coupon::REFERRAL_AMOUNT)
   end
 
+  it "subscribes to Pro with a 0.00 bill but only once" do
+    referral = create(:referral, recipient: users(:joey), state: :installed)
+    Referrals::RedeemForRecipient.run(site: @site)
+
+    @site.stub(:change_subscription)
+    Referrals::RedeemForRecipient.run(site: @site)
+    expect(@site).not_to have_received(:change_subscription)
+  end
+
   it "sends out an email to the referral sender when referred" do
     referral = create(:referral, recipient: users(:joey), state: :installed)
 

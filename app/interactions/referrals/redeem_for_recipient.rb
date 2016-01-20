@@ -12,11 +12,11 @@ class Referrals::RedeemForRecipient < Less::Interaction
   include Referrals::ProSubscription
   expects :site
 
-  # TODO: check that it can run multiple times
   def run
     return if current_subscription.blank?
     return if user.blank?
     return unless user.was_referred?
+    return if already_accepted_referral?
 
     raise Referrals::NotInstalled unless user.received_referral.installed?
 
@@ -25,6 +25,10 @@ class Referrals::RedeemForRecipient < Less::Interaction
   end
 
   private
+
+  def already_accepted_referral?
+    user.received_referral.redeemed_by_recipient_at.present?
+  end
 
   def current_subscription
     @subscription ||= site.subscriptions.first
