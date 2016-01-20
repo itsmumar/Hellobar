@@ -146,7 +146,7 @@ class SitesController < ApplicationController
     elsif token && token.belongs_to_a?(Referral)
       referral = token.tokenizable
       referral.recipient = current_user
-      referral.state = 'signed_up'
+      referral.state = :signed_up
       referral.save
     end
   end

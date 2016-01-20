@@ -7,7 +7,7 @@
 # which will then run CouponUses::ApplyFromReferrals
 #
 
-class Referrals::NotInstalled < StandardError; end
+class Referrals::NotSignedUp < StandardError; end
 class Referrals::RedeemForRecipient < Less::Interaction
   include Referrals::ProSubscription
   expects :site
@@ -18,8 +18,9 @@ class Referrals::RedeemForRecipient < Less::Interaction
     return unless user.was_referred?
     return if already_accepted_referral?
 
-    raise Referrals::NotInstalled unless user.received_referral.installed?
+    raise Referrals::NotSignedUp unless user.received_referral.signed_up?
 
+    user.received_referral.update_attributes(state: :installed, available_to_sender: true)
     site.change_subscription(new_pro_subscription)
     send_success_email_to_sender
   end
@@ -27,7 +28,7 @@ class Referrals::RedeemForRecipient < Less::Interaction
   private
 
   def already_accepted_referral?
-    user.received_referral.redeemed_by_recipient_at.present?
+    user.received_referral.state == :installed || user.received_referral.redeemed_by_recipient_at?
   end
 
   def current_subscription

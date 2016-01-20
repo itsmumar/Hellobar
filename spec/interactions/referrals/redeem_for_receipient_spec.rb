@@ -9,8 +9,8 @@ describe Referrals::RedeemForRecipient do
     @site.change_subscription(build(:free_subscription, user: @user))
   end
 
-  it "subscribes to Pro with a 0.00 bill when referred and installed" do
-    referral = create(:referral, recipient: users(:joey), state: :installed)
+  it "subscribes to Pro with a 0.00 bill when referred and signed_up" do
+    referral = create(:referral, recipient: users(:joey), state: :signed_up)
     Referrals::RedeemForRecipient.run(site: @site)
     bill = @site.current_subscription.active_bills.last
 
@@ -23,7 +23,7 @@ describe Referrals::RedeemForRecipient do
   end
 
   it "subscribes to Pro with a 0.00 bill but only once" do
-    referral = create(:referral, recipient: users(:joey), state: :installed)
+    referral = create(:referral, recipient: users(:joey), state: :signed_up)
     Referrals::RedeemForRecipient.run(site: @site)
 
     @site.stub(:change_subscription)
@@ -32,7 +32,7 @@ describe Referrals::RedeemForRecipient do
   end
 
   it "sends out an email to the referral sender when referred" do
-    referral = create(:referral, recipient: users(:joey), state: :installed)
+    referral = create(:referral, recipient: users(:joey), state: :signed_up)
 
     expect(MailerGateway).to receive(:send_email) do |name, email, params|
       expect(name).to eq('Referral Success')
@@ -44,12 +44,12 @@ describe Referrals::RedeemForRecipient do
     Referrals::RedeemForRecipient.run(site: @site)
   end
 
-  it "raises an exception when referred and merely signed_up" do
-    create(:referral, recipient: users(:joey), state: :signed_up)
+  it "raises an exception when referred and merely sent" do
+    create(:referral, recipient: users(:joey), state: :sent)
 
     expect(lambda do
       Referrals::RedeemForRecipient.run(site: @site)
-    end).to raise_error(Referrals::NotInstalled)
+    end).to raise_error(Referrals::NotSignedUp)
   end
 
   it "raises nothing when no referral exists" do

@@ -31,6 +31,7 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
 
   def use_up(referral)
     if referral.recipient_id == user.id
+      referral.state = :installed
       referral.available_to_sender = true
       referral.redeemed_by_recipient_at = Time.now
       referral.save!
