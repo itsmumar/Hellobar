@@ -12,7 +12,7 @@ describe Referrals::SendSecondEmail do
     expect(MailerGateway).to receive :send_email do |name, email, params|
       expect(name).to eq 'Referal Invite Second'
       expect(email).to eq @email
-      expect(params[:referral_link]).to match Regexp.new(Hellobar::Settings[:url_base])
+      expect(params[:referral_link]).to include("http://hellobar.com/referrals/accept")
       expect(params[:referral_sender]).to eq @user.name
     end
 

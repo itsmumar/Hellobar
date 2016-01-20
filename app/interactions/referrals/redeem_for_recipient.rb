@@ -12,6 +12,7 @@ class Referrals::RedeemForRecipient < Less::Interaction
   include Referrals::ProSubscription
   expects :site
 
+  # TODO: check that it can run multiple times
   def run
     return if current_subscription.blank?
     return if user.blank?

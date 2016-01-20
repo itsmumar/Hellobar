@@ -39,8 +39,10 @@ class Referral < ActiveRecord::Base
   def url
     return "" if referral_token.blank?
 
-    path = Rails.application.routes.url_helpers.accept_referrals_path(token: referral_token.token)
-    Hellobar::Settings[:url_base] + path
+    Rails.application.routes.url_helpers.accept_referrals_url(
+      token: referral_token.token,
+      host: Hellobar::Settings[:host]
+    )
   end
 
   def expiration_date_string
@@ -79,7 +81,7 @@ class Referral < ActiveRecord::Base
     if User.where(email: email).count > 0
       errors.add(:email, "belongs to a user who's already registered.")
     elsif sender.sent_referrals.where(email: email).count > 0
-      errors.add(:email, "belongs to a user you've already invited.")
+      errors.add(:email, "belongs to a user you've already invited..")
     end
   end
 end

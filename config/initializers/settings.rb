@@ -48,7 +48,6 @@ unless defined?(Hellobar::Settings)
     drip_client_id
     drip_secret
     get_response_api_url
-    url_base
   )
 
   keys.each do |key|
