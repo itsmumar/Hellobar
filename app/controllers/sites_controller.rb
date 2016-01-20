@@ -175,6 +175,7 @@ class SitesController < ApplicationController
       flash[:error] = "Url is already in use."
       redirect_to site_path(current_user.sites.where(url: @site.url).first)
     elsif @site.save
+      handle_referral_token
       SiteMembership.create!(:site => @site, :user => current_user)
       Analytics.track(*current_person_type_and_id, "Created Site", {site_id: @site.id})
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
