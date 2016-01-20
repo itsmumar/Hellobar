@@ -997,10 +997,15 @@ var HB = {
             if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
               continue;
             } else {
-              // For bars and sliders, show it again after 24 hours
               var yesterday = new Date(new Date() - 86400000); //24*60*60*1000
               if (lu < lv || lv < yesterday) {
-                continue;
+                // For bars, keep it hidden...
+                if(siteElement.type == "Bar") {
+                  siteElement.view_condition = "stay-hidden"
+                } else {
+                  // For sliders, show it again after 24 hours
+                  continue;
+                }
               }
             }
           }

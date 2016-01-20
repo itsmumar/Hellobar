@@ -1,6 +1,6 @@
   </div>
   <div class="hb-arrow-wrapper">
-    <a href="#"  style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}" id="close_bar" onclick="window.parent.HB.animateOut({{siteElement.me}}.w); if({{siteElement.me}}.e.pusher != null) {{siteElement.me}}.e.pusher.style.display = 'none'; window.parent.HB.animateIn({{siteElement.me}}.pullDown);" >
+    <a href="#"  style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}" id="close_bar" onclick="{{siteElement.me}}.minimize({{siteElement.id}})" >
       <img class="hb-arrow" src="{{HB.t(siteElement.closable) ? 'https://s3.amazonaws.com/hb-assets/arrow_white.png' : ''}}" alt="" width="28" height="29" />
     </a>
   </div>

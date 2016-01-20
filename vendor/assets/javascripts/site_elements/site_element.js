@@ -261,6 +261,11 @@ HB.SiteElement = HB.createClass({
       if (this.w.className.indexOf("hb-animated") > -1) { HB.animateIn(this.w) };
     }.bind(this);
 
+    var showMinimizedBar = function() {
+      HB.hideElement(this.w);
+      HB.animateIn(this.pullDown);
+    }.bind(this);
+
     if (viewCondition === 'wait-5')
     {
       setTimeout(show, 5000);
@@ -289,6 +294,10 @@ HB.SiteElement = HB.createClass({
     else if (viewCondition === 'exit-intent')
     {
       HB.intentInterval = setInterval(function(){HB.intentCheck("exit", show)}, 100);
+    }
+    else if (viewCondition == 'stay-hidden')
+    {
+      setTimeout(showMinimizedBar, 500);
     }
     else {
       // No view condition so show immediately (very small delay for animated elements)
