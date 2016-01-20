@@ -101,9 +101,12 @@ Watch out for animations and other asyncronous or delayed interactions.
 You may need to fiddle with the `Capybara.default_wait_time` in
 `spec/spec_helper`.
 
-**Keep in mind you will need to have ```capybara-webkit``` compiled with QT5(QT 4.8 will break tests)**
+**Keep in mind you will need to have `capybara-webkit` compiled with QT5(QT 4.8 will break tests)**
+
 You can do so this way:
-```gem uninstall --all capybara-webkit
+
+```
+gem uninstall --all capybara-webkit
 brew remove qt
 brew install qt5
 brew linkapps qt5 # optional?
