@@ -23,30 +23,11 @@ class SiteElementSerializer < ActiveModel::Serializer
     # other
     :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement, :default_email_thank_you_text
 
-
-    QUESTION_DEFAULTS = {
-      question: "First time here?",
-      answer1: "Yes",
-      answer2: "No",
-      answer1response: "Welcome! Let’s get started...",
-      answer2response: "Welcome back! Check out our new sale.",
-      answer1link_text: "Take the tour",
-      answer2link_text: "Shop now",
-    }
-
-    %i[
-      question
-      answer1
-      answer2
-      answer1response
-      answer2response
-      answer1link_text
-      answer2link_text
-    ].each do |attr_name|
-      define_method "#{attr_name}_placeholder" do
-        QUESTION_DEFAULTS[attr_name]
-      end
+  SiteElement::QUESTION_DEFAULTS.keys.each do |attr_name|
+    define_method "#{attr_name}_placeholder" do
+      SiteElement::QUESTION_DEFAULTS[attr_name]
     end
+  end
 
   def rule
     RuleSerializer.new(object.rule)

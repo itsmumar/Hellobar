@@ -1,34 +1,34 @@
 <div id="hb-question" style="display: none;">
-  {{siteElement.question || siteElement.question_placeholder}}
+  {{siteElement.question}}
 </div>
 
 <div id="hb-answers" style="display: none;">
   <span>
     <a id="hb-answer1" onclick="{{siteElement.me}}.displayResponse(1)" class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}" style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
-      {{siteElement.answer1 || siteElement.answer1_placeholder}}
+      {{siteElement.answer1}}
     </a>
   </span>
   <span>
     <a id="hb-answer2" onclick="{{siteElement.me}}.displayResponse(2)" class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}" style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
-      {{siteElement.answer2 || siteElement.answer2_placeholder}}
+      {{siteElement.answer2}}
     </a>
   </span>
 </div>
 
 <div id="hb-responses" style="display: none;">
   <span id="hb-answer1-response">
-    <span>{{siteElement.answer1response || siteElement.answer1response_placeholder}}</span>
+    <span>{{siteElement.answer1response}}</span>
     <a class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}" onclick="if(window.parent.HB.isPreviewMode) { return false } else { window.parent.HB.trackClick(this); return {{HB.t(siteElement.open_in_new_window) ? 'true' : 'false'}} };"  href="{{siteElement.settings.url}}" {{HB.t(siteElement.open_in_new_window) ? 'target=_blank' : 'target=_parent'}} style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
-      {{siteElement.answer1link_text || siteElement.answer1link_text_placeholder}}
+      {{siteElement.answer1link_text}}
     </a>
   </span>
   <span id="hb-answer1-caption">
     {{siteElement.answer1caption}}
   </span>
   <span id="hb-answer2-response">
-    <span>{{siteElement.answer2response || siteElement.answer2response_placeholder}}</span>
+    <span>{{siteElement.answer2response}}</span>
     <a class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}" onclick="if(window.parent.HB.isPreviewMode) { return false } else { window.parent.HB.trackClick(this); return {{HB.t(siteElement.open_in_new_window) ? 'true' : 'false'}} };"  href="{{siteElement.settings.url}}" {{HB.t(siteElement.open_in_new_window) ? 'target=_blank' : 'target=_parent'}} style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
-      {{siteElement.answer2link_text || siteElement.answer2link_text_placeholder}}
+      {{siteElement.answer2link_text}}
     </a>
   </span>
   <span id="hb-answer2-caption">
