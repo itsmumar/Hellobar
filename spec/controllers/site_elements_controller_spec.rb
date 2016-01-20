@@ -64,19 +64,19 @@ describe SiteElementsController do
     end
 
     it "creates an updater" do
-      expect(UpdateSiteElement).to receive(:new).and_call_original
+      expect(SiteElements::Update).to receive(:new).and_call_original
 
       post :update, valid_params(element)
     end
 
     it "updates with the params" do
-      updater = double(UpdateSiteElement, update: true, element: element)
-      expect(UpdateSiteElement).to receive(:new).and_return(updater)
+      updater = double(SiteElements::Update, element: element)
       params = valid_params(element)
 
-      post :update, params
+      expect(SiteElements::Update).to receive(:new).and_return(updater)
+      expect(updater).to receive(:run).and_return(true)
 
-      expect(updater).to have_received(:update).with(hash_including(params[:site_element]))
+      post :update, params
     end
 
     context "when updating succeeds" do
@@ -132,14 +132,14 @@ describe SiteElementsController do
     end
 
     def create_successful_updater
-      updater = double(UpdateSiteElement, update: true)
-      expect(UpdateSiteElement).to receive(:new).and_return(updater)
+      updater = double(SiteElements::Update, update: true)
+      expect(SiteElements::Update).to receive(:new).and_return(updater)
       updater
     end
 
     def create_failing_updater
-      updater = double(UpdateSiteElement, update: false)
-      expect(UpdateSiteElement).to receive(:new).and_return(updater)
+      updater = double(SiteElements::Update, update: false)
+      expect(SiteElements::Update).to receive(:new).and_return(updater)
       updater
     end
   end
