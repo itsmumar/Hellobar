@@ -107,7 +107,7 @@ describe("SiteElement", function() {
 
       it("shows the answer choices", function () {
         siteElement.displayQuestion();
-        expect(answers.style.display).toEqual("inline-block");
+        expect(answers.style.display).toEqual("inline");
       });
     });
 

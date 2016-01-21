@@ -547,7 +547,7 @@ HB.SiteElement = HB.createClass({
       if(cta) { HB.hideElement(cta) }
       this.currentHeadline().appendChild(answers);
     }
-    HB.showElement(answers, "inline-block");
+    HB.showElement(answers, "inline");
   },
 
   displayQuestion: function() {
