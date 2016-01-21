@@ -498,6 +498,10 @@ HB.SiteElement = HB.createClass({
         'captionText1':  d.querySelector('#hb-answer1-caption'),
         'captionText2':  d.querySelector('#hb-answer2-caption')
       }
+      if (this.subtype.match(/social|announcement/)) {
+        this._questionElements['response-cta1'] = null;
+        this._questionElements['response-cta2'] = null;
+      }
     }
     return this._questionElements;
   },
@@ -562,7 +566,6 @@ HB.SiteElement = HB.createClass({
     var answers      = elements['answers'];
     var cta          = elements['response-cta'+idx];
     var other_cta    = elements['response-cta'+(idx == 1 ? 2 : 1)];
-
     var original = this.originalElements();
     var emailFormBtn = original['emailFormBtn'];
 
@@ -570,10 +573,10 @@ HB.SiteElement = HB.createClass({
     HB.hideElement(other_cta);
     if (emailFormBtn) {
       this.rewriteEmailCTA(cta, answers, emailFormBtn);
-    } else if (cta.parentNode != this.currentHeadline().parentNode) {
+    } else if (cta && cta.parentNode != this.currentHeadline().parentNode) {
       this.currentHeadline().parentNode.appendChild(cta);
     }
-    HB.showElement(cta, "");
+    if (cta) { HB.showElement(cta, ""); }
     HB.showElement(original['emailForm'], "");
     HB.showElement(original['social'], "");
     this.rewriteElementText(this.currentHeadline(), elements['responseText'+idx]);
