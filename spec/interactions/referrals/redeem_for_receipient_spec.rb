@@ -15,6 +15,8 @@ describe Referrals::RedeemForRecipient do
     bill = @site.current_subscription.active_bills.last
 
     referral.reload
+
+    expect(referral.installed?).to be_true
     expect(referral.redeemed_by_recipient_at).not_to be_nil
     expect(referral.available_to_sender).to be_true
     expect(@site.current_subscription).to be_a(Subscription::Pro)
