@@ -46,12 +46,11 @@ describe Referrals::RedeemForRecipient do
     Referrals::RedeemForRecipient.run(site: @site)
   end
 
-  it "raises an exception when referred and merely sent" do
+  it "raises an exception which is captured in Sentry when referred and merely sent" do
     create(:referral, recipient: users(:joey), state: :sent)
+    expect(Raven).to receive(:capture_exception)
 
-    expect(lambda do
-      Referrals::RedeemForRecipient.run(site: @site)
-    end).to raise_error(Referrals::NotSignedUp)
+    Referrals::RedeemForRecipient.run(site: @site)
   end
 
   it "raises nothing when no referral exists" do

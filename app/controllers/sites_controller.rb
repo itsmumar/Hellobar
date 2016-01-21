@@ -135,26 +135,10 @@ class SitesController < ApplicationController
     sign_in(User.generate_temporary_user)
   end
 
-  def handle_referral_token
-    token = ReferralToken.where(token: session[:referral_token]).first
-    if token && token.belongs_to_a?(User)
-      @referral = Referrals::Create.run(
-        sender: token.tokenizable,
-        params: {email: current_user.email, recipient: current_user, state: 'signed_up'},
-        send_emails: false
-      )
-    elsif token && token.belongs_to_a?(Referral)
-      referral = token.tokenizable
-      referral.recipient = current_user
-      referral.state = :signed_up
-      referral.save
-    end
-  end
-
   def create_for_temporary_user
     if @site.save
       generate_temporary_logged_in_user
-      handle_referral_token
+      Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
       Analytics.track(*current_person_type_and_id, "Signed Up", {ip: request.remote_ip, url: @site.url, site_id: @site.id})
 
       SiteMembership.create!(:site => @site, :user => current_user)
@@ -175,7 +159,7 @@ class SitesController < ApplicationController
       flash[:error] = "Url is already in use."
       redirect_to site_path(current_user.sites.where(url: @site.url).first)
     elsif @site.save
-      handle_referral_token
+      Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
       SiteMembership.create!(:site => @site, :user => current_user)
       Analytics.track(*current_person_type_and_id, "Created Site", {site_id: @site.id})
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
