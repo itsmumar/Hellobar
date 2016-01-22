@@ -264,9 +264,11 @@ private
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
       answer1: site_element.answer1,
       answer1response: site_element.answer1response,
+      answer1caption: site_element.answer1caption,
       answer1link_text: site_element.answer1link_text,
       answer2: site_element.answer2,
       answer2response: site_element.answer2response,
+      answer2caption: site_element.answer2caption,
       answer2link_text: site_element.answer2link_text,
       use_question: site_element.use_question,
       question: site_element.question,
