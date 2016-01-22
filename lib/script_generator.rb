@@ -227,7 +227,6 @@ private
       background_color
       border_color
       button_color
-      caption
       email_placeholder
       font
       headline
@@ -248,6 +247,7 @@ private
       wiggle_button
       wordpress_bar_id
     }
+    settings << 'caption' unless site_element.use_question?
 
     lifetime_totals = @site.lifetime_totals
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil

@@ -29,6 +29,11 @@ class SiteElementSerializer < ActiveModel::Serializer
     end
   end
 
+  def caption
+    # Questions use their own captions.
+    object.caption.presence unless object.use_question?
+  end
+
   def rule
     RuleSerializer.new(object.rule)
   end
