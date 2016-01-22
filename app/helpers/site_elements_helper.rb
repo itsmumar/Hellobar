@@ -24,6 +24,8 @@ module SiteElementsHelper
         {:unit => "click"}
       when "email"
         {:unit => "email", :verb => "collected"}
+      when "call"
+        {:unit => "call"}
       when "social/tweet_on_twitter"
         {:unit => "tweet"}
       when "social/follow_on_twitter"
@@ -77,6 +79,8 @@ module SiteElementsHelper
       "icon-social"
     when "traffic"
       "icon-clicks"
+    when "call"
+      "icon-call"
     end
   end
 
