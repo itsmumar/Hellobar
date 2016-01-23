@@ -61,6 +61,32 @@ describe ServiceProviders::GetResponseApi do
     end
 
     context '#subscribe' do
+      it 'submits email address as name if name is not present' do
+        double_request = double(:request, url: true)
+        double_response = double(:response, success?: true)
+
+        expect(double_request).
+          to receive(:body=).
+          with({name: "Bob", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}}).
+          and_return(double_response)
+
+        allow(client).to receive(:post).and_yield(double_request)
+        get_respone_api.subscribe(1122, 'bobloblaw@lawblog.com', 'Bob')
+      end
+
+      it 'does not submit email address as name if name is present' do
+        double_request = double(:request, url: true)
+        double_response = double(:response, success?: true)
+
+        expect(double_request).
+          to receive(:body=).
+          with({name: "bobloblaw@lawblog.com", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}}).
+          and_return(double_response)
+
+        allow(client).to receive(:post).and_yield(double_request)
+        get_respone_api.subscribe(1122, 'bobloblaw@lawblog.com')
+      end
+
       it 'logs parsed error message in the event of failed request' do
         allow(client).to receive(:post).and_return(failure_response)
         expect(get_respone_api).
