@@ -9,4 +9,7 @@ FactoryGirl.define do
       association :subscription, factory: :pro_subscription
     end
   end
+
+  factory :recurring_bill, parent: :bill, class: 'Bill::Recurring' do
+  end
 end

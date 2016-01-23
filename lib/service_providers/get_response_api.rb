@@ -48,6 +48,8 @@ module ServiceProviders
     end
 
     def subscribe(list_id, email, name = nil, double_optin = true)
+      name ||= email
+
       begin
         response = @client.post do |request|
           request.url 'contacts'
