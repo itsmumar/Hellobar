@@ -29,6 +29,21 @@ HelloBar.TextController = Ember.Controller.extend
       InternalTracking.track_current_person("Editor Flow", {step: "Content Settings", goal: @get("model.element_subtype"), style: @get("model.type")})
   ).observes('model').on('init')
 
+  refreshResponse1: ( ->
+    @send('refreshResponse', 1)
+  ).observes(
+    "model.answer1response",
+    "model.answer1caption",
+    "model.answer1link_text"
+  ).on("init")
+
+  refreshResponse2: ( ->
+    @send('refreshResponse', 2)
+  ).observes(
+    "model.answer2response",
+    "model.answer2caption",
+    "model.answer2link_text"
+  ).on("init")
   #-----------  Step Settings  -----------#
 
   step: 4
@@ -66,6 +81,14 @@ HelloBar.TextController = Ember.Controller.extend
       for index, siteElement of HB.siteElementsOnPage
         setTimeout(@showResponse(siteElement, 2), 500)
 
+    refreshResponse: (idx) ->
+      for index, se of HB.siteElementsOnPage
+        if se && se.displayResponse
+          se.currentHeadline().textContent = @get("model.answer"+idx+"response")
+          se.currentCaption().textContent = @get("model.answer"+idx+"caption")
+          if @get("model.answer"+idx+"link_text")
+            se.w.contentWindow.document.querySelector('.hb-cta').textContent = @get("model.answer"+idx+"link_text")
+
   resetQuestion: (se) ->
     if (se && se.displayResponse)
       prop = @get('model.use_question')
@@ -75,3 +98,4 @@ HelloBar.TextController = Ember.Controller.extend
   showResponse: (se, idx) ->
     if (se && se.displayResponse)
       se.displayResponse(idx)
+      @send('refreshResponse', idx)

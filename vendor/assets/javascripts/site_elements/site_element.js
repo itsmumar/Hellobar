@@ -568,13 +568,15 @@ HB.SiteElement = HB.createClass({
     var other_cta    = elements['response-cta'+(idx == 1 ? 2 : 1)];
     var original = this.originalElements();
     var emailFormBtn = original['emailFormBtn'];
-
     HB.hideElement(answers);
     HB.hideElement(other_cta);
     if (emailFormBtn) {
       this.rewriteEmailCTA(cta, answers, emailFormBtn);
     } else if (cta && cta.parentNode != this.currentHeadline().parentNode) {
       this.currentHeadline().parentNode.appendChild(cta);
+      if(other_cta){
+        elements['responseText'+(idx == 1 ? 2 : 1)].parentNode.appendChild(other_cta);
+      }
     }
     if (cta) { HB.showElement(cta, ""); }
     HB.showElement(original['emailForm'], "");

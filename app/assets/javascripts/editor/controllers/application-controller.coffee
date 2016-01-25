@@ -34,13 +34,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
   ).observes(
     "model.use_question",
     "model.answer1",
-    "model.answer1response",
-    "model.answer1caption",
-    "model.answer1link_text",
     "model.answer2",
-    "model.answer2response",
-    "model.answer2caption",
-    "model.answer2link_text",
     "model.background_color",
     "model.border_color",
     "model.button_color",
