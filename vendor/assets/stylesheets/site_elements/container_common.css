@@ -556,10 +556,10 @@
     -webkit-transition-timing-function: ease-in;
   }
   0% {
-    opacity: 0
+    opacity: 0;
   }
   100% {
-    opacity: 1
+    opacity: 1;
   }
 }
 
@@ -568,10 +568,10 @@
     -moz-transition-timing-function: ease-in;
   }
   0% {
-    opacity: 0
+    opacity: 0;
   }
   100% {
-    opacity: 1
+    opacity: 1;
   }
 }
 
@@ -580,10 +580,10 @@
     -webkit-transition-timing-function: ease-in;
   }
   0% {
-    opacity: 0
+    opacity: 0;
   }
   100% {
-    opacity: 1
+    opacity: 1;
   }
 }
 
@@ -598,10 +598,10 @@
     -webkit-transition-timing-function: ease-in;
   }
   0% {
-    opacity: 1
+    opacity: 1;
   }
   100% {
-    opacity: 0
+    opacity: 0;
   }
 }
 
@@ -610,10 +610,10 @@
     -moz-transition-timing-function: ease-in;
   }
   0% {
-    opacity: 1
+    opacity: 1;
   }
   100% {
-    opacity: 0
+    opacity: 0;
   }
 }
 
@@ -622,10 +622,10 @@
     -webkit-transition-timing-function: ease-in;
   }
   0% {
-    opacity: 1
+    opacity: 1;
   }
   100% {
-    opacity: 0
+    opacity: 0;
   }
 }
 
