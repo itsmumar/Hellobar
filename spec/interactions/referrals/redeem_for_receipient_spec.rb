@@ -4,13 +4,16 @@ describe Referrals::RedeemForRecipient do
   fixtures :users
   before :each do
     create(:referral_coupon)
-    @user = users(:joey)
     @site = create(:site)
-    @site.change_subscription(build(:free_subscription, user: @user))
+    @user = create(:user)
+    SiteMembership.create(site: @site, user: @user, role: 'owner')
+    @site.reload
+
+    @site.change_subscription(build(:free_subscription))
   end
 
   it "subscribes to Pro with a 0.00 bill when referred and signed_up" do
-    referral = create(:referral, recipient: users(:joey), state: :signed_up)
+    referral = create(:referral, recipient: @user, state: :signed_up)
     Referrals::RedeemForRecipient.run(site: @site)
     bill = @site.current_subscription.active_bills.last
 
@@ -25,7 +28,7 @@ describe Referrals::RedeemForRecipient do
   end
 
   it "subscribes to Pro with a 0.00 bill but only once" do
-    referral = create(:referral, recipient: users(:joey), state: :signed_up)
+    referral = create(:referral, recipient: @user, state: :signed_up)
     Referrals::RedeemForRecipient.run(site: @site)
 
     @site.stub(:change_subscription)
@@ -34,10 +37,10 @@ describe Referrals::RedeemForRecipient do
   end
 
   it "sends out an email to the referral sender when referred" do
-    referral = create(:referral, recipient: users(:joey), state: :signed_up)
+    referral = create(:referral, recipient: @user, state: :signed_up)
 
     expect(MailerGateway).to receive(:send_email) do |name, email, params|
-      expect(name).to eq('Referral Success')
+      expect(name).to eq('Referral Successful')
       expect(email).to eq(referral.sender.email)
       expect(params[:referral_sender]).to eq(referral.sender.first_name)
       expect(params[:referral_recipient]).to eq(referral.recipient.name)
@@ -47,7 +50,7 @@ describe Referrals::RedeemForRecipient do
   end
 
   it "raises an exception which is captured in Sentry when referred and merely sent" do
-    create(:referral, recipient: users(:joey), state: :sent)
+    create(:referral, recipient: @user, state: :sent)
     expect(Raven).to receive(:capture_exception)
 
     Referrals::RedeemForRecipient.run(site: @site)

@@ -1,3 +1,4 @@
+require 'uri'
 require 'billing_log'
 require 'site_detector'
 require 'queue_worker/queue_worker'
@@ -477,6 +478,12 @@ class Site < ActiveRecord::Base
 
   def generate_all_improve_suggestions
     ImproveSuggestion.generate_all(self)
+  end
+
+  def normalized_url
+    URI.parse(url).host
+  rescue URI::InvalidURIError
+    url
   end
 
   def standardize_url

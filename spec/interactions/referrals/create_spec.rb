@@ -7,6 +7,20 @@ describe Referrals::Create do
     @user = users(:joey)
   end
 
+  it "gets created with a site id selected if the user has one site" do
+    user = create(:user)
+    site = create(:site)
+    SiteMembership.create(site: site, user: user, role: 'owner')
+
+    ref = Referrals::Create.run(
+      sender: user.reload,
+      params: {email: 'tj@hellobar.com', body: 'test body'},
+      send_emails: true
+    )
+
+    expect(ref.site_id).not_to be_nil
+  end
+
   it 'sends an email when we ask it to' do
     expect(MailerGateway).to receive :send_email do |name, email, params|
       expect(name).to eq 'Referral Invite Initial'
