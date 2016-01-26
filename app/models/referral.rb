@@ -5,11 +5,17 @@ class Referral < ActiveRecord::Base
 
   enum state: [:sent, :signed_up, :installed]
 
-  scope :redeemable_by_user, ->(user) do
-    installed.where(
-      '(redeemed_by_recipient_at IS NULL AND recipient_id = :user_id) OR (sender_id = :user_id AND available_to_sender = true)',
-      user_id: user.id
-    )
+  scope :redeemable_for_site, -> (site) do
+    recipient = site.owners.first
+    if recipient.nil?
+      redeemable_by_sender_for_site(site)
+    else
+      installed.where('(redeemed_by_recipient_at IS NULL AND recipient_id = :recipient_id) OR (available_to_sender = true AND site_id = :site_id)', recipient_id: recipient.id, site_id: site.id)
+    end
+  end
+
+  scope :redeemable_by_sender_for_site, ->(site) do
+    installed.where(available_to_sender: true, site_id: site.id)
   end
 
   scope :to_be_followed_up, -> do

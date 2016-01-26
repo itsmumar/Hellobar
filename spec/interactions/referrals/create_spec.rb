@@ -8,12 +8,10 @@ describe Referrals::Create do
   end
 
   it "gets created with a site id selected if the user has one site" do
-    user = create(:user)
-    site = create(:site)
-    SiteMembership.create(site: site, user: user, role: 'owner')
+    ownership = create(:site_ownership)
 
     ref = Referrals::Create.run(
-      sender: user.reload,
+      sender: ownership.user.reload,
       params: {email: 'tj@hellobar.com', body: 'test body'},
       send_emails: true
     )

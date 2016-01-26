@@ -159,7 +159,7 @@ describe Bill do
       @user = users(:joey)
       @bill.subscription.stub(:user).and_return(@user)
       @refs = (1..3).map do
-        create(:referral, sender: @user, state: 'installed', available_to_sender: true)
+        create(:referral, sender: @user, site: @bill.site, state: 'installed', available_to_sender: true)
       end
     end
 
@@ -176,7 +176,7 @@ describe Bill do
 
       expect do
         @bill.attempt_billing!
-      end.to change { @user.sent_referrals.redeemable_by_user(@user).count }.by(-1)
+      end.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
 
       expect(@bill.amount).to eq(0.0)
       expect(@bill.discount).to eq(15.0)
@@ -188,7 +188,7 @@ describe Bill do
 
       expect do
         @bill.attempt_billing!
-      end.to change { @user.sent_referrals.redeemable_by_user(@user).count }.by(-1)
+      end.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
 
       expect(@bill.amount).to eq(0.0)
       expect(@bill.discount).to eq(15.0)

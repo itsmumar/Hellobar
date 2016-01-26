@@ -104,29 +104,31 @@ describe Referral do
     end
   end
 
-  describe "redeemable_for_user" do
+  describe "redeemable_for_site" do
     before :each do
       @referral.sender = @user
       @referral.email = Faker::Internet.email
       @referral.state = 'installed'
     end
 
-    it "shows up as the only available one for recipient" do
-      recipient = users(:wootie)
-      @referral.recipient = recipient
+    it "shows up as the only available one for the site" do
+      ownership = create(:site_ownership)
+      @referral.recipient = ownership.user
       @referral.save!
 
-      expect(Referral.redeemable_by_user(recipient).count).to eq(1)
+      expect(Referral.redeemable_for_site(ownership.site).count).to eq(1)
     end
 
-    it "shows up as one of many available one for the sender" do
+    it "shows up as one of many available one for the site" do
+      site = create(:site)
       @referral.available_to_sender = true
+      @referral.site = site
       second = @referral.dup
       second.email = Faker::Internet.email
       @referral.save!
       second.save!
 
-      expect(Referral.redeemable_by_user(@user).count).to eq(2)
+      expect(Referral.redeemable_for_site(site).count).to eq(2)
     end
   end
 

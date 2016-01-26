@@ -4,10 +4,9 @@ describe Referrals::RedeemForRecipient do
   fixtures :users
   before :each do
     create(:referral_coupon)
-    @site = create(:site)
-    @user = create(:user)
-    SiteMembership.create(site: @site, user: @user, role: 'owner')
-    @site.reload
+    ownership = create(:site_ownership)
+    @site = ownership.site
+    @user = ownership.user
 
     @site.change_subscription(build(:free_subscription))
   end

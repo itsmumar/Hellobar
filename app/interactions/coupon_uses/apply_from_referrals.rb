@@ -2,11 +2,10 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
   expects :bill
 
   def run
-    return if user.blank?
     return if bill.is_a?(Bill::Refund)
     return unless bill.amount > 0
 
-    Referral.redeemable_by_user(user).take_while do |referral|
+    Referral.redeemable_for_site(bill.site).take_while do |referral|
       apply_referral_coupon
       use_up(referral)
 
@@ -16,8 +15,8 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
 
   private
 
-  def user
-    bill.subscription.user
+  def recipient
+    bill.site.owners.first
   end
 
   def apply_referral_coupon
@@ -30,12 +29,12 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
   end
 
   def use_up(referral)
-    if referral.recipient_id == user.id
+    if recipient && referral.recipient_id == recipient.id
       referral.state = :installed
       referral.available_to_sender = true
       referral.redeemed_by_recipient_at = Time.now
       referral.save!
-    elsif referral.sender_id == user.id
+    elsif referral.available_to_sender && referral.site_id == bill.site_id
       referral.available_to_sender = false
       referral.redeemed_by_sender_at = Time.now
       referral.save!

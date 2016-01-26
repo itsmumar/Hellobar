@@ -86,8 +86,8 @@ describe Site do
   describe "#highest_tier_active_subscription" do
     before do
       @payment_method = create(:payment_method)
-      @site = create(:site)
-      SiteMembership.create(site: @site, user: @payment_method.user, role: "owner")
+      ownership = create(:site_ownership, user: @payment_method.user)
+      @site = ownership.site
     end
 
     it "returns nil when there are no active subscriptions" do

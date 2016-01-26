@@ -2,13 +2,7 @@ require 'spec_helper'
 
 describe Referrals::RedeemForSender do
   fixtures :all
-  before :each do
-    @user = users(:joey)
-    @referral = create(:referral, state: :installed, available_to_sender: true, sender: @user)
-  end
-
   it 'should raise an error if there are no referrals available' do
-    @referral.destroy
     expect(lambda do
       Referrals::RedeemForSender.run(site: sites(:past_due_site))
     end).to raise_error(Referrals::NoAvailableReferrals)
@@ -16,7 +10,11 @@ describe Referrals::RedeemForSender do
 
   describe 'redeeming a referral for a site with billing problems' do
     before :each do
-      Referrals::RedeemForSender.run(site: sites(:past_due_site))
+      ownership = create(:site_ownership, site: sites(:past_due_site))
+      @user = ownership.user
+      @site = ownership.site
+      @referral = create(:referral, state: :installed, available_to_sender: true, sender: @user, site: @site)
+      Referrals::RedeemForSender.run(site: @site)
       @referral.reload
     end
 
@@ -26,7 +24,7 @@ describe Referrals::RedeemForSender do
     end
 
     it 'should mark the latest unpaid bill as paid' do
-      subscription = sites(:past_due_site).current_subscription
+      subscription = @site.current_subscription
       expect(subscription.problem_with_payment?).to be_false
     end
 
@@ -39,9 +37,12 @@ describe Referrals::RedeemForSender do
 
   describe 'redeeming a referral for a free site' do
     before :each do
+      @site = sites(:free_site)
+      @user = users(:joey)
+      @referral = create(:referral, state: :installed, available_to_sender: true, sender: @user, site: @site)
       Referrals::RedeemForSender.run(site: sites(:free_site))
       @referral.reload
-      @subscription = sites(:free_site).current_subscription
+      @subscription = @site.current_subscription
       @bill = @subscription.active_bills.last
     end
 
