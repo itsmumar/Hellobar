@@ -85,7 +85,10 @@ HelloBar.TextController = Ember.Controller.extend
       for index, se of HB.siteElementsOnPage
         if se && se.displayResponse
           se.currentHeadline().textContent = @get("model.answer"+idx+"response")
-          se.currentCaption().textContent = @get("model.answer"+idx+"caption")
+          current_caption_el = se.currentCaption()
+          new_caption_text = @get("model.answer"+idx+"caption")
+          if (current_caption_el && new_caption_text)
+            current_caption_el.textContent = new_caption_text
           if @get("model.answer"+idx+"link_text")
             se.w.contentWindow.document.querySelector('.hb-cta').textContent = @get("model.answer"+idx+"link_text")
 
