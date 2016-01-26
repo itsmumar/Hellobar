@@ -248,14 +248,14 @@ HB.SiteElement = HB.createClass({
 
       // Next line is a Safari hack.  Couldn't find out why but sometimes safari
       // wouldn't display the contents of the iframe, but toggling the display style fixes this
-      if(HB.isMobileSafari()) {
-        var siteElementNode = this.getSiteElementDomNode();
-        if(siteElementNode) {
-          siteElementNode.style.display = 'none';
-          setTimeout(function() {
-            siteElementNode.style.display = '';
-          }, 10);
-        }
+      // UPDATE:  1/25/16 - DP
+      // runnig this hack on all browsers since we had issues with desktop Safari and Chrome
+      var siteElementNode = this.getSiteElementDomNode();
+      if(siteElementNode) {
+        siteElementNode.style.display = 'none';
+        setTimeout(function() {
+          siteElementNode.style.display = '';
+        }, 10);
       }
 
       if (this.w.className.indexOf("hb-animated") > -1) { HB.animateIn(this.w) };
