@@ -52,6 +52,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.name_placeholder",
     "model.placement",
     "model.pushes_page_down",
+    "model.question",
     "model.remains_at_top",
     "model.settings.buffer_message",
     "model.settings.buffer_url",
@@ -173,6 +174,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.name_placeholder"
     "model.placement",
     "model.pushes_page_down",
+    "model.question",
     "model.remains_at_top",
     "model.settings.buffer_message",
     "model.settings.buffer_url",
