@@ -530,6 +530,19 @@ describe Site do
     end
   end
 
+  describe "#normalized_url" do
+    it "returns shorter URLs for different sites" do
+      site = Site.new(url: 'http://asdf.com')
+      expect(site.normalized_url).to eq('asdf.com')
+
+      site = Site.new(url: 'http://www.asdf.com')
+      expect(site.normalized_url).to eq('asdf.com')
+
+      site = Site.new(url: 'http://cs.horse.bike')
+      expect(site.normalized_url).to eq('cs.horse.bike')
+    end
+  end
+
   describe "#had_wordpress_bars?" do
     it "returns true when some site elements are migrated from wordpress" do
       site_element = create(:site_element, wordpress_bar_id: 123)

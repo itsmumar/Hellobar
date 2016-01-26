@@ -120,15 +120,15 @@ describe Referral do
     end
 
     it "shows up as one of many available one for the site" do
-      site = create(:site)
+      ownership = create(:site_ownership)
       @referral.available_to_sender = true
-      @referral.site = site
+      @referral.site = ownership.site
       second = @referral.dup
       second.email = Faker::Internet.email
       @referral.save!
       second.save!
 
-      expect(Referral.redeemable_for_site(site).count).to eq(2)
+      expect(Referral.redeemable_for_site(ownership.site).count).to eq(2)
     end
   end
 

@@ -346,6 +346,12 @@ class Site < ActiveRecord::Base
     nil
   end
 
+  def normalized_url
+    self.class.normalize_url(url).normalized_host
+  rescue Addressable::URI::InvalidURIError
+    url
+  end
+
   private
 
   # Calculates a bill, but does not save or pay the bill. Used by
@@ -478,12 +484,6 @@ class Site < ActiveRecord::Base
 
   def generate_all_improve_suggestions
     ImproveSuggestion.generate_all(self)
-  end
-
-  def normalized_url
-    URI.parse(url).host
-  rescue URI::InvalidURIError
-    url
   end
 
   def standardize_url
