@@ -72,12 +72,10 @@ HelloBar.TextController = Ember.Controller.extend
         setTimeout(@resetQuestion(siteElement), 500)
 
     showResponse1: ->
-      @resetQuestion
       for index, siteElement of HB.siteElementsOnPage
         setTimeout(@showResponse(siteElement, 1), 500)
 
     showResponse2: ->
-      @resetQuestion
       for index, siteElement of HB.siteElementsOnPage
         setTimeout(@showResponse(siteElement, 2), 500)
 

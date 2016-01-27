@@ -103,7 +103,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     )
 
     HB.isPreviewMode = true
-    HB.removeAllSiteElements();
+    HB.removeAllSiteElements()
     HB.addToPage(HB.createSiteElement(previewElement))
     HB.isMobileWidth = "changed"
   )
