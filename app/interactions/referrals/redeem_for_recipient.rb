@@ -22,6 +22,7 @@ class Referrals::RedeemForRecipient < Less::Interaction
 
     user.received_referral.update_attributes(state: :installed, available_to_sender: true)
     site.change_subscription(new_pro_subscription)
+    redeem_for_sender
     send_success_email_to_sender
   rescue Referrals::NotSignedUp => ex
     # This really is an exceptional situation, but because the caller of this interaction,
@@ -33,7 +34,7 @@ class Referrals::RedeemForRecipient < Less::Interaction
   private
 
   def already_accepted_referral?
-    user.received_referral.state == :installed || user.received_referral.redeemed_by_recipient_at?
+    referral.state == :installed || referral.redeemed_by_recipient_at?
   end
 
   def current_subscription
@@ -46,6 +47,11 @@ class Referrals::RedeemForRecipient < Less::Interaction
 
   def referral
     @referral ||= user.received_referral
+  end
+
+  def redeem_for_sender
+    # This will be a no-op if the user is already on Free Pro
+    Referrals::RedeemForSender.run(site: referral.site) if referral.site
   end
 
   def send_success_email_to_sender
