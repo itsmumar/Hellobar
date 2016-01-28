@@ -9,6 +9,7 @@ class Bill < ActiveRecord::Base
   serialize :metadata, JSON
   belongs_to :subscription, inverse_of: :bills
   has_many :billing_attempts, -> {order 'id'}
+  has_many :coupon_uses
   validates_presence_of :subscription
   include BillingAuditTrail
   delegate :site, to: :subscription
@@ -97,7 +98,6 @@ class Bill < ActiveRecord::Base
     return true if past_due?(payment_method) and (payment_method.nil? || self.billing_attempts.size > 0)
     # False otherwise
     return false
-
   end
 
   def on_paid
@@ -129,6 +129,7 @@ class Bill < ActiveRecord::Base
 
     self.discount = self.is_a?(Refund) ? 0 : calculate_discount
     self.amount = [self.base_amount - self.discount, 0].max
+    CouponUses::ApplyFromReferrals.run(bill: self)
   end
 
   def estimated_amount

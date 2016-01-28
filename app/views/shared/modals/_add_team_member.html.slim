@@ -11,7 +11,7 @@ script id='add-team-member-template' type='text/x-handlebars-template'
             = text_field_tag :email, nil, placeholder: "johndoe@example.com"
           .select-wrapper
             = f.label :site_id, "Site to invite to"
-            = select_tag :site_id, options_for_select(sites.map { |s| [display_name_for_site(s), s.id]})
+            = select_tag :site_id, options_for_select(sites.map { |s| [s.normalized_url, s.id]})
 
           footer
             = f.submit "Add User", :class => "button"

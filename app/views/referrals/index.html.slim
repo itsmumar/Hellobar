@@ -1,0 +1,33 @@
+= render partial: "referrals/tabs"
+
+- if @referrals.total_count == 0
+  header
+    p Your referral URL has not received any visits yet.
+- else
+  header
+    p Here is the status of your referrals:
+
+  section
+    table#referrals-wrapper
+      thead
+        th Friend
+        th When you invited
+        th Current status
+        th Apply bonus to
+      tbody
+        - @referrals.each do |ref|
+            tr
+              td= ref.email
+              td= distance_of_time_in_words_to_now(ref.created_at) + " ago"
+              td
+                = icon_for_referral(ref)
+                span.referral-text= text_for_referral(ref)
+              td
+                - if ref.redeemable_by_sender?
+                  .select-wrapper
+                    = render partial: 'redeem', locals: { referral: ref }
+                - elsif ref.redeemed_by_sender?
+                  span Applied to #{ref.site.normalized_url}
+                - else
+                  span Not yet
+    = paginate @referrals

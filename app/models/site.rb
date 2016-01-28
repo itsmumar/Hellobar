@@ -1,3 +1,4 @@
+require 'uri'
 require 'billing_log'
 require 'site_detector'
 require 'queue_worker/queue_worker'
@@ -16,6 +17,7 @@ class Site < ActiveRecord::Base
   has_many :bills, -> {order 'id'}, through: :subscriptions
   has_many :improve_suggestions
   has_many :image_uploads, dependent: :destroy
+
   acts_as_paranoid
 
   before_validation :standardize_url
@@ -80,6 +82,7 @@ class Site < ActiveRecord::Base
     if !script_installed_db? && script_installed_api?
       debug_install("INSTALLED")
       update(script_installed_at: Time.current)
+      Referrals::RedeemForRecipient.run(site: self)
       Analytics.track(:site, self.id, "Installed")
     elsif script_installed_db? && !script_installed_api?
       debug_install("UNINSTALLED")
@@ -341,6 +344,12 @@ class Site < ActiveRecord::Base
     end
 
     nil
+  end
+
+  def normalized_url
+    self.class.normalize_url(url).normalized_host
+  rescue Addressable::URI::InvalidURIError
+    url
   end
 
   private

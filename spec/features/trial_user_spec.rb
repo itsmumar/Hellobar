@@ -22,6 +22,9 @@ feature "Trial User", js: true do
     expect(page).to have_content('Your subscription has not been renewed')
     find(".show-downgrade-modal").click
     click_link("Downgrade")
+
+    expect(page).to have_content('Upgrade Plan')
+    expect(page).to have_content('Get Free Pro')
     expect(@site.reload.current_subscription).to be_a(Subscription::Free)
   end
 end

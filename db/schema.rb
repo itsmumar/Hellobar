@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151205021737) do
+ActiveRecord::Schema.define(version: 20160119131352) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -148,6 +148,22 @@ ActiveRecord::Schema.define(version: 20151205021737) do
   add_index "contact_lists", ["identity_id"], name: "index_contact_lists_on_identity_id", using: :btree
   add_index "contact_lists", ["site_id"], name: "index_contact_lists_on_site_id", using: :btree
 
+  create_table "coupon_uses", force: true do |t|
+    t.integer  "coupon_id"
+    t.integer  "bill_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "coupons", force: true do |t|
+    t.string   "label"
+    t.integer  "available_uses"
+    t.decimal  "amount",         precision: 7, scale: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "public",                                 default: false
+  end
+
   create_table "identities", force: true do |t|
     t.integer  "site_id"
     t.string   "provider"
@@ -208,6 +224,30 @@ ActiveRecord::Schema.define(version: 20151205021737) do
   add_index "payment_methods", ["deleted_at"], name: "index_payment_methods_on_deleted_at", using: :btree
   add_index "payment_methods", ["user_id"], name: "index_payment_methods_on_user_id", using: :btree
 
+  create_table "referral_tokens", force: true do |t|
+    t.string   "token"
+    t.integer  "tokenizable_id"
+    t.string   "tokenizable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "referrals", force: true do |t|
+    t.integer  "sender_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "email"
+    t.text     "body"
+    t.integer  "recipient_id"
+    t.integer  "site_id"
+    t.boolean  "available_to_sender",      default: false
+    t.datetime "redeemed_by_sender_at"
+    t.datetime "redeemed_by_recipient_at"
+    t.integer  "state",                    default: 0
+  end
+
+  add_index "referrals", ["sender_id"], name: "index_referrals_on_sender_id", using: :btree
+
   create_table "rules", force: true do |t|
     t.integer  "site_id"
     t.datetime "created_at"
@@ -249,12 +289,12 @@ ActiveRecord::Schema.define(version: 20151205021737) do
     t.string   "thank_you_text"
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
+    t.integer  "wordpress_bar_id"
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
-    t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
     t.string   "view_condition",                  default: "immediately"

@@ -153,7 +153,10 @@ class Subscription < ActiveRecord::Base
     end
   end
 
-  class Free < self
+  class Base < self
+  end
+
+  class Free < Base
     class Capabilities < Subscription::Capabilities
     end
 
@@ -211,7 +214,7 @@ class Subscription < ActiveRecord::Base
     end
   end
 
-  class Pro < Free
+  class Pro < Base
     class Capabilities < Free::Capabilities
       def remove_branding?
         true
@@ -282,7 +285,7 @@ class Subscription < ActiveRecord::Base
     end
   end
 
-  class Enterprise < Pro
+  class Enterprise < Base
     class Capabilities < Pro::Capabilities
     end
 

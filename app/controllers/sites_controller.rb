@@ -138,6 +138,7 @@ class SitesController < ApplicationController
   def create_for_temporary_user
     if @site.save
       generate_temporary_logged_in_user
+      Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
       Analytics.track(*current_person_type_and_id, "Signed Up", {ip: request.remote_ip, url: @site.url, site_id: @site.id})
 
       SiteMembership.create!(:site => @site, :user => current_user)
@@ -158,6 +159,7 @@ class SitesController < ApplicationController
       flash[:error] = "Url is already in use."
       redirect_to site_path(current_user.sites.where(url: @site.url).first)
     elsif @site.save
+      Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
       SiteMembership.create!(:site => @site, :user => current_user)
       Analytics.track(*current_person_type_and_id, "Created Site", {site_id: @site.id})
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))

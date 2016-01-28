@@ -1,10 +1,4 @@
 module SitesHelper
-  def display_name_for_site(site)
-    URI.parse(site.url).host
-  rescue URI::InvalidURIError
-    site.url
-  end
-
   def site_has_payment_issue?(site)
     site.present? && site.bills_with_payment_issues.present?
   end

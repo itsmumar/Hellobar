@@ -153,6 +153,48 @@ describe Bill do
     end
   end
 
+  describe "set_final_amount" do
+    before :each do
+      @bill = create(:pro_bill)
+      @user = users(:joey)
+      @bill.site.stub(:owners).and_return([@user])
+      @refs = (1..3).map do
+        create(:referral, sender: @user, site: @bill.site, state: 'installed', available_to_sender: true)
+      end
+    end
+
+    it "sets the final amount to 0 if there's a discount for 15.0" do
+      @bill.stub(:calculate_discount).and_return(15.0)
+      @bill.attempt_billing!
+      expect(@bill.amount).to eq(0.0)
+      expect(@bill.discount).to eq(15.0)
+    end
+
+    it "sets the final amount to 0 and uses up one available referral if there's a discount for 2.0" do
+      create(:referral_coupon)
+      @bill.stub(:calculate_discount).and_return(2.0)
+
+      expect do
+        @bill.attempt_billing!
+      end.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
+
+      expect(@bill.amount).to eq(0.0)
+      expect(@bill.discount).to eq(15.0)
+    end
+
+    it "sets the final amount to 0 and uses up one available referral if there's no discount" do
+      create(:referral_coupon)
+      @bill.stub(:calculate_discount).and_return(0.0)
+
+      expect do
+        @bill.attempt_billing!
+      end.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
+
+      expect(@bill.amount).to eq(0.0)
+      expect(@bill.discount).to eq(15.0)
+    end
+  end
+
   describe "#calculate_discount" do
     it "should be 0" do
       user = create(:user)
