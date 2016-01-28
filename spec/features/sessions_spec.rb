@@ -30,7 +30,7 @@ feature "User can sign in", js: true do
 
     click_button 'Sign in'
 
-    expect(page).to have_content('Sign Out')
+    expect(page).to have_content(user.email)
   end
 
   scenario "through oauth" do
@@ -46,7 +46,7 @@ feature "User can sign in", js: true do
 
     click_link 'google-login-button'
 
-    expect(page).to have_content('Sign Out')
+    expect(page).to have_content(user.email)
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end

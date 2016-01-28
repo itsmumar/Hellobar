@@ -6,7 +6,7 @@ RSpec.configure do |config|
   config.include SiteGeneratorHelper
   config.include FeatureHelper
 
-  Capybara.javascript_driver = :webkit
+  Capybara.javascript_driver = :selenium
   OmniAuth.config.test_mode = true
 
   config.before(:all) do

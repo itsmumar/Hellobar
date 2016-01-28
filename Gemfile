@@ -63,7 +63,8 @@ gem "twilio-ruby",               "~> 3.11.5"
 gem "uglifier",                  "2.0.1"
 gem "unf",                       "~> 0.1.4"
 gem "whenever",                  "~> 0.9.2"
-gem "zip",                       "~> 2.0.2"
+gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
+gem 'zip-zip' # will load compatibility for old rubyzip API.
 gem "paperclip",                 "~> 4.3"
 gem "elif",                      "~> 0.1"
 gem "thread",                    "~> 0.2.2"
@@ -78,6 +79,7 @@ group :development, :test do
   gem "byebug"
   gem "capybara"
   gem "capybara-webkit"
+  gem 'selenium-webdriver'
   gem "factory_girl_rails"
   gem "faker"
   gem "metric_fu"
@@ -86,7 +88,6 @@ group :development, :test do
   gem "pry-nav"
   gem "rspec-rails", "~> 2.14"
   gem "simplecov", "~> 0.7.1"
-  #gem "teaspoon", "~> 0.8.0"
   gem "teaspoon-jasmine"
 end
 

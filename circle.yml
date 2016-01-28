@@ -1,7 +1,3 @@
-machine:
-  post:
-    - sudo bash ./$CIRCLE_PROJECT_REPONAME/spec/support/bin/installqt5.sh
-
 ## Customize deployment commands
 database:
   override:
