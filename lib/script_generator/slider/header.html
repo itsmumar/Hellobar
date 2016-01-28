@@ -10,6 +10,6 @@
         <div class="hb-text-wrapper">
           <div class="hb-headline-text">{{siteElement.use_question ? siteElement.question : siteElement.headline}}</div>
           {{siteElement.imageFor(['above-caption'])}}
-          <div class="hb-secondary-text">{{siteElement.caption}}</div>
+          <div class="hb-secondary-text">{{siteElement.use_question ? '' : siteElement.caption}}</div>
           {{siteElement.imageFor(['below-caption'])}}
         </div>
