@@ -30,7 +30,8 @@ feature "User can sign in", js: true do
 
     click_button 'Sign in'
 
-    expect(page).to have_content(user.email)
+    #Why? because we cut off super long emails, that's why
+    expect(page).to have_content(user.email[0...25])
   end
 
   scenario "through oauth" do
@@ -46,7 +47,8 @@ feature "User can sign in", js: true do
 
     click_link 'google-login-button'
 
-    expect(page).to have_content(user.email)
+    #Why? because we cut off super long emails, that's why
+    expect(page).to have_content(user.email[0...25])
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end
