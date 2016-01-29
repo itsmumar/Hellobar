@@ -486,22 +486,20 @@ HB.SiteElement = HB.createClass({
   },
 
   extractQuestionElements: function() {
-    if (this._questionElements == undefined) {
-      var d = this.w.contentWindow.document;
-      this._questionElements = {
-        'questionText':  d.querySelector('#hb-question'),
-        'answers':       d.querySelector('#hb-answers'),
-        'responseText1': d.querySelector('#hb-answer1-response span'),
-        'responseText2': d.querySelector('#hb-answer2-response span'),
-        'response-cta1': d.querySelector('#hb-answer1-response a'),
-        'response-cta2': d.querySelector('#hb-answer2-response a'),
-        'captionText1':  d.querySelector('#hb-answer1-caption'),
-        'captionText2':  d.querySelector('#hb-answer2-caption')
-      }
-      if (this.subtype.match(/social|announcement/)) {
-        this._questionElements['response-cta1'] = null;
-        this._questionElements['response-cta2'] = null;
-      }
+    var d = this.w.contentWindow.document;
+    this._questionElements = {
+      'questionText':  d.querySelector('#hb-question'),
+      'answers':       d.querySelector('#hb-answers'),
+      'responseText1': d.querySelector('#hb-answer1-response span'),
+      'responseText2': d.querySelector('#hb-answer2-response span'),
+      'response-cta1': d.querySelector('#hb-answer1-response a'),
+      'response-cta2': d.querySelector('#hb-answer2-response a'),
+      'captionText1':  d.querySelector('#hb-answer1-caption'),
+      'captionText2':  d.querySelector('#hb-answer2-caption')
+    }
+    if (this.subtype.match(/social|announcement/)) {
+      this._questionElements['response-cta1'] = null;
+      this._questionElements['response-cta2'] = null;
     }
     return this._questionElements;
   },
@@ -543,17 +541,26 @@ HB.SiteElement = HB.createClass({
     var cta =       original['cta'];
 
     var elements  = this.extractQuestionElements();
-    var answers = elements['answers'];
 
     if(emailForm) {
       emailForm.parentNode.appendChild(answers);
     } else {
-      if(cta) { HB.hideElement(cta) }
-      this.currentHeadline().appendChild(answers);
+      // trying to work around Chrome issue.
+      var waitForAnswers = function(me){
+        var elements  = me.extractQuestionElements();
+        if (elements['answers']) {
+          var answers = elements['answers']
+          if(cta) { HB.hideElement(cta) }
+          me.currentHeadline().appendChild(answers);
+          HB.showElement(answers, "inline");
+        } else {
+          setTimeout(function(){waitForAnswers(me)},50);
+        }
+      };
+      waitForAnswers(this);
     }
-    HB.showElement(answers, "inline");
-  },
 
+  },
   displayQuestion: function() {
     var elements  = this.extractQuestionElements();
     this.hideOriginalElements();
