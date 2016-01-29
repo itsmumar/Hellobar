@@ -82,7 +82,9 @@ class SiteElement < ActiveRecord::Base
 
   QUESTION_DEFAULTS.keys.each do |attr_name|
     define_method attr_name do
-      read_attribute(attr_name).presence || QUESTION_DEFAULTS[attr_name]
+      if use_question?
+        read_attribute(attr_name).presence || QUESTION_DEFAULTS[attr_name]
+      end
     end
   end
 
