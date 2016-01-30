@@ -1,5 +1,21 @@
 require 'integration_helper'
 
+feature "User can sign up", js: true do
+  after { devise_reset }
+
+  scenario "through oauth" do
+    OmniAuth.config.add_mock(:google_oauth2, {uid: '12345', info: {email: 'bob@lawblog.com'}})
+    allow_any_instance_of(SiteElementSerializer).to receive(:proxied_url2png).and_return('')
+    visit root_path
+
+    fill_in 'site[url]', with: 'mewgle.com'
+    click_button 'Log in with Google'
+
+    expect(page).to have_content('Sign Out', visible: true)
+    expect(page).to have_content('Use your Hello Bar to collect visitors', visible: true)
+  end
+end
+
 feature "User can sign in", js: true do
   after { devise_reset }
 
@@ -14,7 +30,8 @@ feature "User can sign in", js: true do
 
     click_button 'Sign in'
 
-    expect(page).to have_content('Sign Out')
+    #Why? because we cut off super long emails, that's why
+    expect(page).to have_content(user.email[0...25])
   end
 
   scenario "through oauth" do
@@ -30,7 +47,8 @@ feature "User can sign in", js: true do
 
     click_link 'google-login-button'
 
-    expect(page).to have_content('Sign Out')
+    #Why? because we cut off super long emails, that's why
+    expect(page).to have_content(user.email[0...25])
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end
