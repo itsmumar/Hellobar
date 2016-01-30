@@ -21,3 +21,8 @@ deployment:
     commands:
       - bundle exec cap edge deploy:
           timeout: 600
+  production:
+    branch: production
+    commands:
+      - BRANCH=production bundle exec cap production deploy:
+          timeout: 600
