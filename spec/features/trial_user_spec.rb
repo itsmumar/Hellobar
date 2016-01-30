@@ -26,7 +26,6 @@ feature "Trial User", js: true do
     click_link("Downgrade")
 
     expect(page).to have_content('UPGRADE PLAN')
-    expect(page).to have_content('GET FREE PRO')
     expect(@site.reload.current_subscription).to be_a(Subscription::Free)
   end
 end
