@@ -540,25 +540,23 @@ HB.SiteElement = HB.createClass({
     var emailForm = original['emailForm'];
     var cta =       original['cta'];
 
-    var elements  = this.extractQuestionElements();
-
-    if(emailForm) {
-      emailForm.parentNode.appendChild(answers);
-    } else {
-      // trying to work around Chrome issue.
-      var waitForAnswers = function(me){
-        var elements  = me.extractQuestionElements();
-        if (elements['answers']) {
-          var answers = elements['answers']
+    // trying to work around Chrome issue.
+    var waitForAnswers = function(me){
+      var elements  = me.extractQuestionElements();
+      if (elements['answers']) {
+        var answers = elements['answers']
+        if(emailForm) {
+          emailForm.parentNode.appendChild(answers);
+        } else {
           if(cta) { HB.hideElement(cta) }
           me.currentHeadline().appendChild(answers);
-          HB.showElement(answers, "inline");
-        } else {
-          setTimeout(function(){waitForAnswers(me)},50);
         }
-      };
-      waitForAnswers(this);
-    }
+        HB.showElement(answers, "inline");
+      } else {
+        setTimeout(function(){waitForAnswers(me)},50);
+      }
+    };
+    waitForAnswers(this);
 
   },
   displayQuestion: function() {
