@@ -39,9 +39,10 @@ class PaymentMethodsController < ApplicationController
 
     if payment_method_details.save && payment_method.save
       payment_method.reload # reload so #current_details can be loaded properly
+      changed_subscription = subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription)
 
       respond_to do |format|
-        format.json { render json: subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription) }
+        format.json { render json: changed_subscription }
       end
     else # invalid payment info
       respond_to do |format|
