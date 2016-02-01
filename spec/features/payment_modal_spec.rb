@@ -4,7 +4,6 @@ feature "Payment modal interaction", js: true do
   before { @user = login }
   after { devise_reset }
 
-
   scenario "downgrade to free from pro should say when it's active until" do
     # In the middle of an AB test.  Make sure we use the original
     allow_any_instance_of(ApplicationController).to receive(:get_ab_variation).and_return("original")
