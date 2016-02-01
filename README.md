@@ -2,6 +2,24 @@
 
 Made with love.
 
+## Development
+
+Bundle install all the gems
+
+`bundle install`
+
+Setup your database.yml file
+
+`cp config/database.yml.example config/database.yml`
+
+Setup the settings.yml file
+
+`cp config/settings.yml.example config/settings.yml`
+
+Let rake setup and migrate all your databases
+
+`rake db:setup`
+
 ## Workflow
 
 To add a new feature, make a branch of **master**.  When ready to test, rebase your branch into **master**.
