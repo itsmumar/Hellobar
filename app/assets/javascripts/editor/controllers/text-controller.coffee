@@ -44,6 +44,20 @@ HelloBar.TextController = Ember.Controller.extend
     "model.answer2caption",
     "model.answer2link_text"
   ).on("init")
+
+  setDefaults: ( ->
+    if (@get('model.use_question'))
+      @set('model.question', @get('model.question_placeholder')) unless @get('model.question')
+      @set('model.answer1', @get('model.answer1_placeholder')) unless @get('model.answer1')
+      @set('model.answer2', @get('model.answer2_placeholder')) unless @get('model.answer2')
+      @set('model.answer1response', @get('model.answer1response_placeholder')) unless @get('model.answer1response')
+      @set('model.answer2response', @get('model.answer2response_placeholder')) unless @get('model.answer2response')
+      @set('model.answer1link_text', @get('model.answer1link_text_placeholder')) unless @get('model.answer1link_text')
+      @set('model.answer2link_text', @get('model.answer2link_text_placeholder')) unless @get('model.answer2link_text')
+  ).observes(
+    "model.use_question"
+  ).on("init")
+
   #-----------  Step Settings  -----------#
 
   step: 4
