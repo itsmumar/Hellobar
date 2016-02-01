@@ -40,6 +40,42 @@ describe SitesController do
         temp_user.sites.should include(Site.last)
       end
 
+      it "creates a new referral if a user's token is given" do
+        user = User.new(email: "temporary@email.com")
+        user.stub(temporary?: true)
+        User.stub(generate_temporary_user: user)
+
+        expect(lambda {
+          post(
+            :create,
+            {site: { url: 'temporary-site.com' }},
+            {referral_token: referral_tokens(:joey).token}
+          )
+        }).to change(Referral, :count).by(1)
+
+        ref = Referral.last
+        expect(ref.state).to eq('signed_up')
+        expect(ref.recipient).to eq(user)
+      end
+
+      it "updates an existing referral if its token is given" do
+        user = User.last
+        ref = create(:referral, state: :sent)
+        User.stub(generate_temporary_user: user)
+
+        expect(lambda {
+          post(
+            :create,
+            {site: { url: 'temporary-site.com' }},
+            {referral_token: ref.referral_token.token}
+          )
+        }).not_to change(Referral, :count)
+
+        ref.reload
+        expect(ref.state).to eq('signed_up')
+        expect(ref.recipient).to eq(user)
+      end
+
       it 'redirects to the editor after creation' do
         post :create, :site => { url: 'temporary-site.com' }
 

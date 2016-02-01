@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   include BillingAuditTrail
   include UserValidator
+  include ReferralTokenizable
 
   # Remove any sites where this was the last user
   # This must come before any dependent: :destroy
@@ -16,6 +17,9 @@ class User < ActiveRecord::Base
   has_many :sites, through: :site_memberships
   has_many :site_elements, through: :sites
   has_many :authentications, dependent: :destroy
+  has_many :sent_referrals, dependent: :destroy, class_name: "Referral", foreign_key: "sender_id"
+  has_one :received_referral, class_name: "Referral", foreign_key: "recipient_id"
+
   acts_as_paranoid
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable
@@ -207,6 +211,10 @@ class User < ActiveRecord::Base
 
   def self.search_by_username(username)
     User.with_deleted.where("email like ?", "%#{username}%")
+  end
+
+  def was_referred?
+    self.received_referral.present?
   end
 
   private

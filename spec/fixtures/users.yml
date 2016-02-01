@@ -1,4 +1,5 @@
 joey:
+  first_name: "Joey"
   email: joey@polymathic.me
   encrypted_password: "$2a$10$YvYpRtNFkUHIoP28Y8xYWetgDe209r96j32WcrhkI3O766E9buJuu"
   status: <%= User::ACTIVE_STATUS %>

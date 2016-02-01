@@ -34,6 +34,7 @@
 #= require install_check
 #= require tracking_events
 #= require user_edit
+#= require referrals
 #= require_self
 
 $ ->

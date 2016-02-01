@@ -22,6 +22,10 @@
         i.icon-settings
         | Settings
     li
+      = active_link_to new_referral_path() do
+        i.icon-tip
+        | Get Free Pro
+    li
       = link_to(Hellobar::Settings[:support_location], target: '_blank') do
         i.icon-support
         | Help

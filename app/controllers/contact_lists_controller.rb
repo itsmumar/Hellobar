@@ -41,9 +41,12 @@ class ContactListsController < ApplicationController
   end
 
   def destroy
-    destroyer = DestroyContactList.new(@contact_list)
+    destroyed = ContactLists::Destroy.run(
+      contact_list: @contact_list,
+      site_elements_action: delete_site_elements_action
+    )
 
-    if destroyer.destroy(delete_site_elements_action)
+    if destroyed
       render json: { id: @contact_list.id }, status: :ok
     else
       render json: @contact_list, status: :bad_request

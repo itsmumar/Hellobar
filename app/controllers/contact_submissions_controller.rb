@@ -10,7 +10,7 @@ class ContactSubmissionsController < ApplicationController
       flash[:error] = "Please enter your developer's email address."
     else
       email_params = {
-        :site_url => display_name_for_site(@site),
+        :site_url => @site.normalized_url,
         :script_url => @site.script_url,
         :user_email => current_user.email
       }

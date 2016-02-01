@@ -1,0 +1,25 @@
+= render partial: "referrals/tabs"
+header
+  h1 Get Free Months of Hello Bar Pro
+  p For every friend who installs Hello Bar, you <i>both</i> get a free month of Hello Bar Pro.
+
+= simple_form_for @referral do |f|
+  section
+    h2 Invite friends to Hello Bar via email:
+    = f.input :email, label: false
+
+  section
+    h2 Here's what they'll see:
+    p#subject
+      | Subject: #{current_user.name} has invited you to try Hello Bar
+    = f.input :body, label: false
+
+    p
+      strong Note: If you wish, you can change the above wording to whatever you want to say.
+    = f.hidden_field :site_id
+    = f.submit "Send Invitation", class: "button"
+
+section
+  h2 Your own personal referral link:
+  p If you prefer, you can use this link in your own personal email or social-media tool, and you'll get a free month of Pro for every friend that signs up.
+  input type="text" id="referral_link" class="string" disabled='disabled' value=referral_url_for_user(current_user)

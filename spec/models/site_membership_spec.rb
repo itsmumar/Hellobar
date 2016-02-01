@@ -10,16 +10,14 @@ describe SiteMembership do
     end
 
     it "returns true if there are other owners" do #ie, sites need at least one owner
-      s = sites(:zombo)
-      membership = SiteMembership.create(:site => s, :user => users(:wootie), :role => "owner")
-      SiteMembership.create(:site => s, :user => users(:joey), :role => "owner")
-      membership.can_destroy?.should be_true
+      ownership = create(:site_ownership, site: sites(:zombo), user: users(:wootie))
+      ownership.can_destroy?.should be_true
     end
   end
 
   it "should soft-delete" do
-    membership = SiteMembership.create(:site => sites(:zombo), :user => users(:wootie), :role => "owner")
-    membership.destroy
-    SiteMembership.only_deleted.should include(membership)
+    ownership = create(:site_ownership, site: sites(:zombo), user: users(:wootie))
+    ownership.destroy
+    SiteMembership.only_deleted.should include(ownership)
   end
 end

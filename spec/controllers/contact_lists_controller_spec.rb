@@ -269,21 +269,23 @@ describe ContactListsController, type: :controller do
       expect_json_response_to_include({ id: contact_list.id })
     end
 
-    it "creates a DestroyContactList object" do
-      allow(DestroyContactList).to receive(:new).and_call_original
+    it "creates a ContactLists::Destroy object" do
+      allow(ContactLists::Destroy).to receive(:run).and_call_original
 
       delete :destroy, valid_params
 
-      expect(DestroyContactList).to have_received(:new)
+      expect(ContactLists::Destroy).to have_received(:run)
     end
 
     it "calls destroy with site elements action param" do
-      destroyer = setup_destroyer_instance
-      allow(destroyer).to receive(:destroy).and_return(true)
+      allow(ContactLists::Destroy).to receive(:run).and_return(true)
 
       delete :destroy, valid_params
 
-      expect(destroyer).to have_received(:destroy).with("0")
+      expect(ContactLists::Destroy).to have_received(:run).with(
+        contact_list: contact_list,
+        site_elements_action: "0"
+      )
     end
 
     context "when destroy fails" do
@@ -292,8 +294,6 @@ describe ContactListsController, type: :controller do
           params[:contact_list][:site_elements_action] = "4"
         end
       end
-
-      let(:destroyer) { setup_destroyer_instance }
 
       before do
         allow_any_instance_of(ContactList).
@@ -322,12 +322,6 @@ describe ContactListsController, type: :controller do
           "Must specify an action for existing bars, modals, sliders, and takeovers"
         )
       end
-    end
-
-    def setup_destroyer_instance
-      destroyer = DestroyContactList.new(contact_list)
-      allow(DestroyContactList).to receive(:new).and_return(destroyer)
-      destroyer
     end
   end
 end

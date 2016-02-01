@@ -90,9 +90,9 @@
         pre Hello Bar &lt;contact@hellobar.com&gt;
 
         label Subject:
-        pre.topper= "Please install Hello Bar on #{display_name_for_site(@site)}"
+        pre.topper= "Please install Hello Bar on #{@site.normalized_url}"
 
-        pre= "I just created a Hello Bar for #{display_name_for_site(@site)} and I've asked Hello Bar to email you the instructions for installing it. All you need to do is add the following bit of JavaScript at the end of each page (right before the closing </body> tag):"
+        pre= "I just created a Hello Bar for #{@site.normalized_url} and I've asked Hello Bar to email you the instructions for installing it. All you need to do is add the following bit of JavaScript at the end of each page (right before the closing </body> tag):"
 
         pre= "<script type=\"text/javascript\" src=\"//#{@site.script_url}\" async=\"async\"></script>"
 

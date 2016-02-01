@@ -86,8 +86,8 @@ describe Site do
   describe "#highest_tier_active_subscription" do
     before do
       @payment_method = create(:payment_method)
-      @site = create(:site)
-      SiteMembership.create(site: @site, user: @payment_method.user, role: "owner")
+      ownership = create(:site_ownership, user: @payment_method.user)
+      @site = ownership.site
     end
 
     it "returns nil when there are no active subscriptions" do
@@ -527,6 +527,19 @@ describe Site do
 
     it "should normalize to http" do
       expect(Site.normalize_url("https://cnn.com").scheme).to eq("http")
+    end
+  end
+
+  describe "#normalized_url" do
+    it "returns shorter URLs for different sites" do
+      site = Site.new(url: 'http://asdf.com')
+      expect(site.normalized_url).to eq('asdf.com')
+
+      site = Site.new(url: 'http://www.asdf.com')
+      expect(site.normalized_url).to eq('asdf.com')
+
+      site = Site.new(url: 'http://cs.horse.bike')
+      expect(site.normalized_url).to eq('cs.horse.bike')
     end
   end
 
