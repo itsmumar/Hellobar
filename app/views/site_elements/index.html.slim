@@ -52,10 +52,10 @@ table.rules-wrapper
                       span= rule.site_elements.size
                       = " bar".pluralize(rule.site_elements.size)
 
-      - rule.site_elements.each do |site_element|
-        = render "site_elements/site_element", { :site_element => site_element, :rule => rule }
-
-
+      - elements_grouped_by_type(rule.site_elements).each do |site_elements|
+        - elements_grouped_by_subtype(site_elements).each do |site_elements|
+          - site_elements.each do |site_element|
+            = render "site_elements/site_element", { :site_element => site_element, :rule => rule }
 
       tr data-rule-id=rule.id
         td.temporary-block.suggestion-block colspan='9'

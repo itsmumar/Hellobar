@@ -43,6 +43,13 @@ class SiteElement < ActiveRecord::Base
   scope :paused, -> { where(paused: true) }
   scope :active, -> { where(paused: false) }
   scope :has_performance, -> { where("element_subtype != ?", "announcement") }
+  scope :bars, -> { where(type: "Bar") }
+  scope :sliders, -> { where(type: "Slider") }
+  scope :modals_and_takeovers, -> { where(type: ["Modal", "Takeover"]) }
+  scope :email_subtype, -> { where(element_subtype: "email") }
+  scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }
+  scope :traffic_subtype, -> { where(element_subtype: "traffic") }
+  scope :announcement_subtype, -> { where(element_subtype: "announcement") }
 
   delegate :site, :site_id, to: :rule, allow_nil: true
   delegate :image_uploads, to: :site

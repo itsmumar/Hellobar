@@ -17,6 +17,7 @@ $ ->
   #-----------  Show elements of currently active tab  -----------#
 
   renderBars = ->
+    hideSpacers()
     active = currentSelection()
     if $(".site-element-block").length == 0
       active = null
@@ -31,11 +32,17 @@ $ ->
 
       if showBars.length == 0 && active != null
         hideRule(rule)
-      for bar in showBars
+      for bar, k in showBars
+        nextBar = showBars[k+1]
+        if nextBar && (bar.data('type') != nextBar.data('type'))
+          $("<tr class='spacer'>").insertAfter(bar)
         bar.show()
         bar.removeClass("active paused").addClass(if bar.data('active') then "active" else "paused")
 
     renderGuidance(active)
+
+  hideSpacers = ->
+    $('tr.spacer').remove()
 
   renderGuidance = (active) ->
     $("#active-guidance").hide();
