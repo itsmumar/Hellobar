@@ -89,8 +89,8 @@ describe Identity do
       contact_list.service_provider
     end
 
-    context "madmimi" do
-      let(:provider) { "mad_mimi" }
+    context "madmimi form" do
+      let(:provider) { "mad_mimi_form" }
       it "works" do
         service_provider.list_url.should == 'https://madmimi.com/signups/join/103242'
         service_provider.action_url.should == 'https://madmimi.com/signups/subscribe/103242'

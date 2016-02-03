@@ -6,7 +6,8 @@ module ContactListsHelper
         provider_attributes[:name],
         provider_name,
         requires_embed_code: !!provider_attributes[:requires_embed_code],
-        requires_api_key: !!provider_attributes[:requires_api_key]
+        requires_api_key: !!provider_attributes[:requires_api_key],
+        requires_username: !!provider_attributes[:requires_username]
       ]
     end
 

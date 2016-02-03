@@ -1,5 +1,5 @@
 module ServiceProviders
-  class MadMimi < EmbedCodeProvider
+  class MadMimiForm < EmbedCodeProvider
 
     def list_url
       return nil unless list_form

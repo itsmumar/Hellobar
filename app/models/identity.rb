@@ -14,6 +14,7 @@ class Identity < ActiveRecord::Base
                        :inclusion => {:in => Hellobar::Settings[:identity_providers].keys.map(&:to_s)}
 
   validates :site, :association_exists => true
+  validate :service_provider_valid
 
   scope :by_type, ->(type) {where(:provider => Hellobar::Settings[:identity_providers].select{|k, v| v[:type] == type}.map{|k, v| k.to_s})}
   scope :active, -> { where('credentials IS NOT NULL') }
@@ -48,7 +49,8 @@ class Identity < ActiveRecord::Base
   end
 
   def service_provider(options={})
-    @service_provider ||= service_provider_class.new(:identity => self, :contact_list => options[:contact_list])
+    return nil if service_provider_class.nil?
+    @service_provider ||= service_provider_class.new(identity: self, contact_list: options[:contact_list])
   rescue *EmailSynchronizer::ESP_ERROR_CLASSES => e
     if service_provider_class.oauth?
       Rails.logger.warn "Removing identity #{id}\n#{e.message}"
@@ -63,7 +65,7 @@ class Identity < ActiveRecord::Base
 
   def destroy_and_notify_user
     site.owners.each do |user|
-      MailerGateway.send_email("Integration Sync Error", user.email, {:integration_name => provider_settings[:name], :link => site_contact_lists_url(site, :host => Hellobar::Settings[:host])})
+      MailerGateway.send_email("Integration Sync Error", user.email, {integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host])})
     end
 
     self.destroy
@@ -77,5 +79,14 @@ class Identity < ActiveRecord::Base
   # TODO -Remove once the `embed_code` column is removed from Identities
   def embed_code=(embed_code)
     fail NoMethodError
+  end
+
+  private
+  def service_provider_valid
+    cached_provider = @service_provider
+    if service_provider && !service_provider.valid?
+      errors.add(:provider, "could not be verified.")
+    end
+    @service_provider = cached_provider
   end
 end

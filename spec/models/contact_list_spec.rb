@@ -120,7 +120,7 @@ describe ContactList do
       let(:double_optin) { ContactList.new.double_optin }
 
       it "should sync" do
-        expect(service_provider).to be_a(ServiceProviders::MadMimi)
+        expect(service_provider).to be_a(ServiceProviders::MadMimiForm)
         expect(service_provider).to be_embed_code
         expect(service_provider).to receive(:subscribe_params).with("email@email.com", "Test Testerson", double_optin)
         contact_list.sync_one! "email@email.com", "Test Testerson"

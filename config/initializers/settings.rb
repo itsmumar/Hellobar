@@ -128,11 +128,19 @@ unless defined?(Hellobar::Settings)
       :name => "iContact",
       :requires_embed_code => true
     },
-    :mad_mimi => {
+    :mad_mimi_form => {
       :type => :email,
-      :service_provider_class => "MadMimi",
+      :service_provider_class => "MadMimiForm",
       :name => "Mad Mimi",
-      :requires_embed_code => true
+      :requires_embed_code => true,
+      :hidden => true
+    },
+    :mad_mimi_api => {
+      :type => :email,
+      :service_provider_class => "MadMimiApi",
+      :name => "Mad Mimi API",
+      :requires_api_key => true,
+      :requires_username => true
     },
     :my_emma => {
       :type => :email,
