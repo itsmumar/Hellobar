@@ -578,20 +578,21 @@ HB.SiteElement = HB.createClass({
     HB.hideElement(answers);
     // if we already attached other CTAs, hide them
     HB.hideElement(this.currentHeadline().parentNode.children);
-    // bring back the important stuff firts
-    HB.showElement(this.currentHeadline());
-    HB.showElement(this.currentCaption(), 'block');
 
     if (emailFormBtn) {
       this.rewriteEmailCTA(cta, answers, emailFormBtn);
     } else if (cta && cta.parentNode != this.currentHeadline().parentNode) {
       this.currentHeadline().parentNode.appendChild(cta);
     }
+    this.rewriteElementText(this.currentHeadline(), elements['responseText'+idx]);
+    this.rewriteElementText(this.currentCaption(), elements['captionText'+idx]);
+
+    // make it all visible
     if (cta) { HB.showElement(cta, ""); }
     HB.showElement(original['emailForm'], "");
     HB.showElement(original['social'], "");
-    this.rewriteElementText(this.currentHeadline(), elements['responseText'+idx]);
-    this.rewriteElementText(this.currentCaption(), elements['captionText'+idx]);
+    HB.showElement(this.currentHeadline());
+    HB.showElement(this.currentCaption(), 'block');
   }
 
 });
