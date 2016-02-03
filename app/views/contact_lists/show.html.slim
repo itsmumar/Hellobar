@@ -24,6 +24,12 @@ nav.tabs-wrapper
     a#edit-contact-list.button Edit
     = button_to "Export CSV", site_contact_list_path(@site, @contact_list, :format => :csv), :method => :get, :class => 'button'
 
+- if @contact_list.service_provider
+  .info-block
+    | It may take up to 30 minutes for Hello Bar to sync new contacts to a 3rd party email service provider.
+- else
+  .spacer
+
 table.contacts-table
   thead
     tr

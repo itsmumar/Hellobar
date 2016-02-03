@@ -34,9 +34,11 @@ div.row
                   li
                     = link_to site.normalized_url.html_safe, site.url, target: "_blank"
                     - if site.deleted?
-                      |  (Deleted)
-                    - else
-                      |  (#{site.current_subscription.values[:name]})
+                      '  (Deleted)
+                    - elsif !site.is_free?
+                      '  (#{site.current_subscription.values[:name]})
+                    - if site.users.count > 1
+                      ' (shared)
             td
               ul
                 - user.payment_method_details.uniq.each do |details|
