@@ -487,15 +487,17 @@ HB.SiteElement = HB.createClass({
 
   extractQuestionElements: function() {
     var d = this.w.contentWindow.document;
-    this._questionElements = {
-      'questionText':  d.querySelector('#hb-question'),
-      'answers':       d.querySelector('#hb-answers'),
-      'responseText1': d.querySelector('#hb-answer1-response span'),
-      'responseText2': d.querySelector('#hb-answer2-response span'),
-      'response-cta1': d.querySelector('#hb-answer1-response a'),
-      'response-cta2': d.querySelector('#hb-answer2-response a'),
-      'captionText1':  d.querySelector('#hb-answer1-caption'),
-      'captionText2':  d.querySelector('#hb-answer2-caption')
+    if (this._questionElements == undefined) {
+      this._questionElements = {
+        'questionText':  d.querySelector('#hb-question'),
+        'answers':       d.querySelector('#hb-answers'),
+        'responseText1': d.querySelector('#hb-answer1-response span'),
+        'responseText2': d.querySelector('#hb-answer2-response span'),
+        'response-cta1': d.querySelector('#hb-answer1-response a'),
+        'response-cta2': d.querySelector('#hb-answer2-response a'),
+        'captionText1':  d.querySelector('#hb-answer1-caption'),
+        'captionText2':  d.querySelector('#hb-answer2-caption')
+      }
     }
     if (this.subtype.match(/social|announcement/)) {
       this._questionElements['response-cta1'] = null;
@@ -570,18 +572,18 @@ HB.SiteElement = HB.createClass({
     var elements     = this.extractQuestionElements();
     var answers      = elements['answers'];
     var cta          = elements['response-cta'+idx];
-    var other_cta    = elements['response-cta'+(idx == 1 ? 2 : 1)];
     var original = this.originalElements();
     var emailFormBtn = original['emailFormBtn'];
+
     HB.hideElement(answers);
-    HB.hideElement(other_cta);
+    // if we already attached other CTAs, hide them
+    HB.hideElement(this.currentHeadline().parentNode.children);
+    HB.showElement(this.currentHeadline());
+
     if (emailFormBtn) {
       this.rewriteEmailCTA(cta, answers, emailFormBtn);
     } else if (cta && cta.parentNode != this.currentHeadline().parentNode) {
       this.currentHeadline().parentNode.appendChild(cta);
-      if(other_cta){
-        elements['responseText'+(idx == 1 ? 2 : 1)].parentNode.appendChild(other_cta);
-      }
     }
     if (cta) { HB.showElement(cta, ""); }
     HB.showElement(original['emailForm'], "");
