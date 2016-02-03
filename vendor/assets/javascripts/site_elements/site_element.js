@@ -578,7 +578,9 @@ HB.SiteElement = HB.createClass({
     HB.hideElement(answers);
     // if we already attached other CTAs, hide them
     HB.hideElement(this.currentHeadline().parentNode.children);
+    // bring back the important stuff firts
     HB.showElement(this.currentHeadline());
+    HB.showElement(this.currentCaption(), 'block');
 
     if (emailFormBtn) {
       this.rewriteEmailCTA(cta, answers, emailFormBtn);
