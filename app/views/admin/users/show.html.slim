@@ -6,85 +6,98 @@ div#user_profile
       = link_to "Impersonate User", admin_impersonate_user_path(@user), :method => :post
 
   - @user.sites.with_deleted.each do |site|
-    div.site_title
-      h3
-        | #{site.url} - #{site.deleted? ? "Deleted" : site.current_subscription.values[:name]}
-        - if site.current_subscription.trial?
-          |  Trial
-      - unless site.deleted?
-        a.subscription_link data-id=site.id change plan
-        a.regenerate_link data-url=regenerate_admin_user_site_path(@user, site)
-          | regenerate script
+    div.site-block
+      div.site-title
+        h3
+          | #{site.url} - #{site.deleted? ? "Deleted" : site.current_subscription.values[:name]}
+          - if site.current_subscription.trial?
+            |  Trial
+        - unless site.deleted?
+          a.subscription_link data-id=site.id change plan
+          a.regenerate_link data-url=regenerate_admin_user_site_path(@user, site)
+            | regenerate script
 
-    = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "hidden schedule_form"} do |f|
-      - fields_for :subscription do |sf|
-        table
-          tr
-            th Plan
-            th Schedule
-          tr
-            td
-              - subscriptions.each do |sub|
-                div
-                  = sf.label "#{sub.defaults[:name]}: "
-                  = sf.radio_button 'plan', sub.name.demodulize, checked: site.current_subscription.is_a?(sub)
-            td
-              - Subscription.schedules.each do |name, val|
-                div
-                  = sf.label "#{name.capitalize}: "
-                  = sf.radio_button 'schedule', name, checked: site.current_subscription.schedule == name
-              div= sf.label "Trial period in days.  Leave blank for no trial."
-              div= sf.number_field 'trial_period'
-              = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
-
-    - unless bills_for(site).empty?
-      div.site_section
-        div.title Billing History
-        table
-          tr
-            th ID
-            th Amount
-            th Status
-            th Due At
-            th Receipt
-            th Actions
-            th Bill Duration
-          - bills_for(site).each do |bill, refunds|
+      = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "hidden schedule_form"} do |f|
+        - fields_for :subscription do |sf|
+          table
             tr
-              td= bill.id
+              th Plan
+              th Schedule
+            tr
               td
-                = bill.amount
-                - if refunds.length > 0
-                  - refunds.each do |refund|
-                    br
-                    | (#{refund.amount}) Refunded
-                    span.refund_status
-                      |  (#{refund.status})
-              td= bill.status
-              td= bill.due_at.strftime('%D')
+                - subscriptions.each do |sub|
+                  div
+                    = sf.label "#{sub.defaults[:name]}: "
+                    = sf.radio_button 'plan', sub.name.demodulize, checked: site.current_subscription.is_a?(sub)
               td
-                - if bill.status == :paid && bill.amount != 0
-                  = link_to("view", admin_user_bill_path(@user, bill))
-              td
-                - if bill.status == :pending && bill.amount != 0
-                  = link_to "void", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Void this bill?" }
-                - elsif bill.status == :paid && !bill.instance_of?(Bill::Refund) && bill.amount != 0
-                  a.refund_link data-id=bill.id refund
-                  = form_for bill, url: admin_user_bill_refund_path(@user, bill), method: :put, html: {class: "hidden"} do |f|
-                    = f.label "Refund Amount: "
-                    br
-                    = f.text_field :amount, value: bill.amount
-                    br
-                    = f.submit "Refund", data: { confirm: "Refund this bill?" }
-              td
-                = bill_duration(bill)
+                - Subscription.schedules.each do |name, val|
+                  div
+                    = sf.label "#{name.capitalize}: "
+                    = sf.radio_button 'schedule', name, checked: site.current_subscription.schedule == name
+                div= sf.label "Trial period in days.  Leave blank for no trial."
+                div= sf.number_field 'trial_period'
+                = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
 
-    div.site_section
-      div.title Subscription History
-      - if site.deleted?
-        div= "Deleted on #{site.deleted_at.strftime('%D')}"
-      - site.subscriptions.reverse.each do |sub|
+      - if site.users.count > 1
+        div.site_section
+          div.title Shared By
+          table
+            tr
+              th Email
+              th Permissions
+            - site.site_memberships.each do |site_membership|
+              tr
+                td= link_to site_membership.user.email, admin_user_path(site_membership.user)
+                td= site_membership.role
+
+      - unless bills_for(site).empty?
+        div.site_section
+          div.title Billing History
+          table
+            tr
+              th ID
+              th Amount
+              th Status
+              th Due At
+              th Receipt
+              th Actions
+              th Bill Duration
+            - bills_for(site).each do |bill, refunds|
+              tr
+                td= bill.id
+                td
+                  = bill.amount
+                  - if refunds.length > 0
+                    - refunds.each do |refund|
+                      br
+                      | (#{refund.amount}) Refunded
+                      span.refund_status
+                        |  (#{refund.status})
+                td= bill.status
+                td= bill.due_at.strftime('%D')
+                td
+                  - if bill.status == :paid && bill.amount != 0
+                    = link_to("view", admin_user_bill_path(@user, bill))
+                td
+                  - if bill.status == :pending && bill.amount != 0
+                    = link_to "void", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Void this bill?" }
+                  - elsif bill.status == :paid && !bill.instance_of?(Bill::Refund) && bill.amount != 0
+                    a.refund_link data-id=bill.id refund
+                    = form_for bill, url: admin_user_bill_refund_path(@user, bill), method: :put, html: {class: "hidden"} do |f|
+                      = f.label "Refund Amount: "
+                      br
+                      = f.text_field :amount, value: bill.amount
+                      br
+                      = f.submit "Refund", data: { confirm: "Refund this bill?" }
+                td
+                  = bill_duration(bill)
+
+      div.site_section
+        div.title Subscription History
+        - if site.deleted?
+          div= "Deleted on #{site.deleted_at.strftime('%D')}"
+        - site.subscriptions.reverse.each do |sub|
+          div
+            | Changed to #{sub.values[:name]} on #{sub.created_at.strftime('%D')}
         div
-          | Changed to #{sub.values[:name]} on #{sub.created_at.strftime('%D')}
-      div
-        | Created on #{site.created_at.strftime('%D')}
+          | Created on #{site.created_at.strftime('%D')}
