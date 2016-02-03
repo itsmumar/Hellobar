@@ -112,7 +112,7 @@ namespace :deploy do
 
   task :copy_additional_logrotate_files do
     on roles(:web) do
-      execute "sudo cp #{release_path}/config/deploy/logrotate.d/guaranteed_queue /etc/logrotate.d/"
+      execute "sudo cp #{release_path}/config/deploy/logrotate.d/* /etc/logrotate.d/"
     end
   end
 

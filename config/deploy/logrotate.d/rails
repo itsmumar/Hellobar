@@ -1,0 +1,10 @@
+/mnt/deploy/current/log/production.log {
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+    dateext
+    daily
+    rotate 7
+}
