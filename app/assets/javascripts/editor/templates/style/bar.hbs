@@ -1,9 +1,11 @@
-<label>Hello Bar branding
+<label title="Your bar will contain Hello Bar branding. By turning it off you will receive more clicks and conversions.">
+  Hello Bar branding
   {{toggle-switch switch=model.show_branding}}
 </label>
 
 {{#unless model.site.capabilities.remove_branding}}
-<label>Hello Bar ads
+<label title="1 out of 10 views will be a promotion for Hello Bar. By turning it off you’ll receive 10% more clicks and conversions.">
+  Hello Bar ads
   {{toggle-switch switch=model.show_branding}}
 </label>
 {{/unless}}
