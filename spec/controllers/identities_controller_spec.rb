@@ -63,7 +63,7 @@ describe IdentitiesController do
   describe 'POST :create' do
     it 'redirects when identity already exists' do
       stub_current_user @identity.site.users.first
-      identity = Identity.create! site_id: @identity.site.id, provider: 'get_response_api'
+      identity = Identity.create! site_id: @identity.site.id, provider: 'get_response_api', api_key: "123"
       allow_any_instance_of(Identity).to receive(:provider_config).and_return({name: 'get_response_api'})
       post :create, site_id: @identity.site.id, provider: 'get_response_api', api_key: 'my_cool_api_key'
       expect(response).to redirect_to('http://test.host/sites/483182012/contact_lists')
@@ -95,6 +95,7 @@ describe IdentitiesController do
         site = user.sites.first
         stub_current_user user
         allow_any_instance_of(Identity).to receive(:provider_config).and_return({name: 'mailchimp'})
+        allow_any_instance_of(Identity).to receive(:service_provider).and_return(nil)
         allow(controller).to receive(:env).
           and_return({
           "omniauth.auth"   => {"credentials" => "my_cool_creds"},

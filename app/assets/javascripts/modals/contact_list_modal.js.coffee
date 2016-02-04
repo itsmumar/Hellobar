@@ -107,11 +107,13 @@ class @ContactListModal extends Modal
       localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
       localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
 
-      new_path = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
-      api_key = @_getFormData().data.api_key
-      if api_key then new_path += "&api_key=#{api_key}"
+      newPath = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
+      queryParams = {}
+      queryParams["api_key"] = @_getFormData().data.api_key
+      queryParams["username"] = @_getFormData().data.username
+      newPath += "&" + $.param(queryParams)
 
-      @options.window.location = new_path
+      @options.window.location = newPath
 
   _bindSubmit: (object) ->
     object.find("a.submit").click (e) =>
@@ -189,7 +191,9 @@ class @ContactListModal extends Modal
       embed_code: $('#contact_list_embed_code').val()
 
     api_key = $('#contact_list_api_key').val()
+    username = $('#contact_list_username').val()
     if api_key then data.api_key = api_key
+    if username then data.username = username
     data
 
   _isLocalContactStorage: ->
@@ -222,6 +226,7 @@ class @ContactListModal extends Modal
       providerName: label
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresApiKey: option.data('requiresApiKey')
+      requiresUsername: option.data('requiresUsername')
       contactList: @options.contactList
 
     if value == "0" # user selected "in Hello Bar only"

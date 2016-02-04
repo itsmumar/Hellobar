@@ -32,7 +32,7 @@ describe ContactListsHelper, type: :helper do
 
       it 'has valid results' do
         expect(helper.contact_list_provider_name(contact_list)).to eq "Mad Mimi"
-        expect(helper.contact_list_image(contact_list)).to eq "providers/mad_mimi.png"
+        expect(helper.contact_list_image(contact_list)).to eq "providers/mad_mimi_form.png"
       end
     end
   end

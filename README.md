@@ -148,3 +148,9 @@ http://staging.hellobar.com/
 user: staging-test@polymathic.me  
 pword: password  
 site: gewgle.com
+
+**Production:**
+https://hellobar.com
+user: prodtest@polymathic.me
+pword: password
+site: horse.bike

@@ -25,6 +25,10 @@ class IdentitiesController < ApplicationController
     end
 
     if params[:api_key]
+      if params[:username]
+        identity.credentials = {"username" => params[:username]}
+      end
+
       #TODO sanitze me?
       identity.api_key = params[:api_key]
       env["omniauth.params"] ||= {}
