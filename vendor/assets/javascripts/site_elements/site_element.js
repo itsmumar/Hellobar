@@ -511,6 +511,7 @@ HB.SiteElement = HB.createClass({
     // hide original elements to show later
     HB.hideElement(original['emailForm']);
     HB.hideElement(original['social']);
+    HB.hideElement(this.uploadedImage());
   },
 
   currentHeadline: function() {
@@ -519,6 +520,10 @@ HB.SiteElement = HB.createClass({
 
   currentCaption: function() {
     return this.w.contentWindow.document.querySelector('.hb-text-wrapper .hb-secondary-text');
+  },
+
+  uploadedImage: function() {
+    return this.w.contentWindow.document.querySelector(".hb-image-wrapper img");
   },
 
   rewriteElementText: function(element, elementText) {
@@ -593,6 +598,7 @@ HB.SiteElement = HB.createClass({
     HB.showElement(original['social'], "");
     HB.showElement(this.currentHeadline());
     HB.showElement(this.currentCaption(), 'block');
+    HB.showElement(this.uploadedImage());
   }
 
 });
