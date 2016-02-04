@@ -7,7 +7,7 @@ describe Cleaners::EmbedCode do
   let(:embed_code) { "Test embed code" }
 
   before do
-    subject.provider = 'mad_mimi'
+    subject.provider = 'mad_mimi_form'
     subject.data['embed_code'] = embed_code
     expect(subject.service_provider).not_to be_nil
     subject.save!

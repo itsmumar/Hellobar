@@ -138,7 +138,7 @@ unless defined?(Hellobar::Settings)
     :mad_mimi_api => {
       :type => :email,
       :service_provider_class => "MadMimiApi",
-      :name => "Mad Mimi API",
+      :name => "Mad Mimi",
       :requires_api_key => true,
       :requires_username => true
     },

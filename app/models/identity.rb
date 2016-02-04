@@ -83,7 +83,7 @@ class Identity < ActiveRecord::Base
 
   private
   def service_provider_valid
-    cached_provider = @service_provider
+    cached_provider = @service_provider # Don't cache the results of this
     if service_provider && !service_provider.valid?
       errors.add(:provider, "could not be verified.")
     end

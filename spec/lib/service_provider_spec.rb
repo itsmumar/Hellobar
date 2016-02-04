@@ -41,7 +41,7 @@ describe "service providers" do
   describe ServiceProviders::MadMimiForm do
     subject { described_class.new(identity: identity) }
     its(:name) { should == "Mad Mimi" }
-    its(:key) { should == :mad_mimi }
+    its(:key) { should == :mad_mimi_form }
   end
 
   describe ServiceProviders::MailChimp do

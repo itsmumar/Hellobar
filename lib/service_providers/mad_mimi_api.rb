@@ -13,7 +13,7 @@ module ServiceProviders
 
       api_email = identity.credentials["username"]
       api_key = identity.api_key
-      raise "Identity does not have a stored MadMimi email" unless api_key
+      raise "Identity does not have a stored MadMimi email" unless api_email
       raise "Identity does not have a stored MadMimi API key" unless api_key
 
       @client = MadMimi.new(api_email, api_key, { raise_exceptions: true })
@@ -34,7 +34,7 @@ module ServiceProviders
 
     def batch_subscribe(list_id, subscribers, double_optin = true)
       @client.add_users(
-        subscribers.map { |s| {email: s[:email], name: s[:name] } }
+        subscribers.map { |s| {email: s[:email], name: s[:name], add_list: list_id } }
       )
     end
 

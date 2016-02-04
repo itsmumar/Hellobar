@@ -92,6 +92,7 @@ describe ContactList do
 
   describe "sync_one!" do
     before do
+      allow_any_instance_of(Identity).to receive(:service_provider_valid).and_return(true)
       contact_list.save!
       contact_list.stub(:syncable? => true)
     end
@@ -114,7 +115,7 @@ describe ContactList do
     end
 
     context "embed code provider" do
-      let(:provider) { 'mad_mimi' }
+      let(:provider) { 'mad_mimi_form' }
       let(:contact_list) { contact_lists(:embed_code).tap{|c| c.identity = identity} }
       let(:service_provider) { contact_list.service_provider }
       let(:double_optin) { ContactList.new.double_optin }
