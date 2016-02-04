@@ -574,6 +574,7 @@ HB.SiteElement = HB.createClass({
   },
 
   displayResponse: function(idx) {
+    var other_idx    = idx == 1 ? 2 : 1;
     var elements     = this.extractQuestionElements();
     var answers      = elements['answers'];
     var cta          = elements['response-cta'+idx];
@@ -581,8 +582,14 @@ HB.SiteElement = HB.createClass({
     var emailFormBtn = original['emailFormBtn'];
 
     HB.hideElement(answers);
-    // if we already attached other CTAs, hide them
-    HB.hideElement(this.currentHeadline().parentNode.children);
+
+    // if we already attached other CTAs, put them away
+    var holder = this.w.contentWindow.document.querySelector('#hb-answer' + other_idx + '-response');
+    var old_cta = this.currentHeadline().parentNode.querySelector(':scope > .hb-cta');
+    if (old_cta) {
+      holder.appendChild(old_cta);
+      HB.hideElement(old_cta);
+    }
 
     if (emailFormBtn) {
       this.rewriteEmailCTA(cta, answers, emailFormBtn);
