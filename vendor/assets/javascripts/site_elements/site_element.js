@@ -523,7 +523,7 @@ HB.SiteElement = HB.createClass({
   },
 
   uploadedImage: function() {
-    return this.w.contentWindow.document.querySelector(".hb-image-wrapper img");
+    return this.w.contentWindow.document.querySelector(".hb-image-wrapper");
   },
 
   rewriteElementText: function(element, elementText) {
