@@ -172,7 +172,7 @@ describe ContactListsController, type: :controller do
     context "when email service provider (esp) requires embed code" do
       let(:contact_list_params) do
         {
-          provider: "mad_mimi",
+          provider: "mad_mimi_form",
           name: "My embed code contact list",
           data: { embed_code: '<script type="text/javascript"></script>' }
         }

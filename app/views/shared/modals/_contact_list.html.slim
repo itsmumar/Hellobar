@@ -107,8 +107,14 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   | </ol>
   |
   | {{#if requiresApiKey}}
-  |   <label for="contact_list_api_key">Paste your API key below, then click Done.</label>
-  |   <input type='text' id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}">
+  |   {{#if requiresUsername}}
+  |     <label for="contact_list_api_key">Paste your Username and API key below, then click Done.</label>
+  |     <input type='text' id="contact_list_username" name="contact_list[data][username]" value="{{contactList.data.username}}" placeholder="Your username (eg. email@site.com)">
+  |     <input type='text' id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}" placeholder="Your API key">
+  |   {{else}}
+  |     <label for="contact_list_api_key">Paste your API key below, then click Done.</label>
+  |     <input type='text' id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}">
+  |   {{/if}}
   |   <div>
   |     <a class="button ready">Connect my account</a>
   |   </div>
