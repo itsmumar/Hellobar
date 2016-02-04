@@ -30,6 +30,7 @@ describe("SiteElement", function() {
     siteElement = null;
     beforeEach(function() {
       siteElement = new HB.SiteElement({});
+      siteElement.subtype = 'slider';
       siteElement.w = {
         contentWindow: {'document': document },
       };
