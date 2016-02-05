@@ -157,7 +157,7 @@ describe Bill do
     before :each do
       @bill = create(:pro_bill)
       @user = users(:joey)
-      @bill.site.stub(:owners).and_return([@user])
+      @bill.site.owners << @user
       @refs = (1..3).map do
         create(:referral, sender: @user, site: @bill.site, state: 'installed', available_to_sender: true)
       end
