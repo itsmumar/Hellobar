@@ -130,6 +130,14 @@ describe Referral do
 
       expect(Referral.redeemable_for_site(ownership.site).count).to eq(2)
     end
+
+    it "does not show up if there is no owner" do
+      ownership = create(:site_ownership)
+      ownership.site.owners.delete_all
+      @referral.recipient = ownership.user
+      @referral.save!
+      expect(Referral.redeemable_for_site(ownership.site).count).to eq(0)
+    end
   end
 
   describe 'redeemable? and redeemed?' do
