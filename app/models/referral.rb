@@ -6,8 +6,11 @@ class Referral < ActiveRecord::Base
   enum state: [:sent, :signed_up, :installed]
 
   scope :redeemable_for_site, -> (site) do
-    recipient = site.owners.first
-    installed.where('(redeemed_by_recipient_at IS NULL AND recipient_id = :recipient_id) OR (available_to_sender = true AND site_id = :site_id)', recipient_id: recipient.id, site_id: site.id)
+    possible_recipient_ids = site.owners.pluck(:id)
+    installed.where("
+      (redeemed_by_recipient_at IS NULL AND recipient_id IN (?))
+      OR (available_to_sender = true AND site_id = ?)
+    ", possible_recipient_ids, site.id)
   end
 
   scope :redeemable_by_sender_for_site, ->(site) do
