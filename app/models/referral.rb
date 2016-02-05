@@ -7,7 +7,14 @@ class Referral < ActiveRecord::Base
 
   scope :redeemable_for_site, -> (site) do
     recipient = site.owners.first
-    installed.where('(redeemed_by_recipient_at IS NULL AND recipient_id = :recipient_id) OR (available_to_sender = true AND site_id = :site_id)', recipient_id: recipient.id, site_id: site.id)
+    if recipient
+      installed.where('(redeemed_by_recipient_at IS NULL AND recipient_id = :recipient_id) OR (available_to_sender = true AND site_id = :site_id)', recipient_id: recipient.id, site_id: site.id)
+    else
+      # Provide a false statement which ensures no rows are returned
+      # Is there a better way to do this with scopes?
+      where('1 = 2')
+    end
+
   end
 
   scope :redeemable_by_sender_for_site, ->(site) do
