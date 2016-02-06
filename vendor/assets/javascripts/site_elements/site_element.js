@@ -585,7 +585,14 @@ HB.SiteElement = HB.createClass({
 
     // if we already attached other CTAs, put them away
     var holder = this.w.contentWindow.document.querySelector('#hb-answer' + other_idx + '-response');
-    var old_cta = this.currentHeadline().parentNode.querySelector(':scope > .hb-cta');
+    var old_cta;
+    try {
+      old_cta = this.currentHeadline().parentNode.querySelector(':scope > .hb-cta');
+    }
+    catch(err) {
+      // a bit of a hack, since teaspoon doesn't like ':scope > ...'
+      old_cta = this.w.contentWindow.document.querySelector('.hb-text-wrapper > .hb-cta');
+    }
     if (old_cta) {
       holder.appendChild(old_cta);
       HB.hideElement(old_cta);
