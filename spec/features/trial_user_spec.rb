@@ -16,8 +16,6 @@ feature "Trial User", js: true do
   end
 
   scenario "allows users to downgrade" do
-    # In the middle of an AB test.  Make sure we use the original
-    allow_any_instance_of(ApplicationController).to receive(:get_ab_variation).and_return("original")
     allow_any_instance_of(Subscription::Pro).to receive(:problem_with_payment?).and_return(true)
     allow_any_instance_of(Site).to receive(:has_script_installed?).and_return(true)
     visit site_path(@site)
@@ -25,7 +23,7 @@ feature "Trial User", js: true do
     find(".show-downgrade-modal").click
     click_link("Downgrade")
 
-    expect(page).to have_content('UPGRADE PLAN')
+    expect(page).to have_content('WANT MORE POWER?')
     expect(@site.reload.current_subscription).to be_a(Subscription::Free)
   end
 end

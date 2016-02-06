@@ -29,10 +29,14 @@ nav.tabs-wrapper
         = render 'billing'
       .half-block
         = render 'upgrade_table'
+    - else
+      = render 'billing'
+
 
   footer
     = f.button :submit, "Save & Update", :class => "button"
     - if Permissions.delete_site?(current_user, @site)
       = link_to "Delete Site", site_path(@site), :method => :delete, :class => "button", data: { confirm: "Historical data will be deleted and you will not be able to recover it after this. Are you sure you wish to delete this site?" }
 
+    - if @site.is_free?
       .button.show-upgrade-modal(data-source="Billing Upgrade Variation") Find out more
