@@ -48,6 +48,8 @@ unless defined?(Hellobar::Settings)
     drip_client_id
     drip_secret
     get_response_api_url
+    vr_client_id
+    vr_secret
   )
 
   keys.each do |key|
@@ -147,10 +149,21 @@ unless defined?(Hellobar::Settings)
       :name => "MyEmma",
       :requires_embed_code => true
     },
+    #silly name to support oauth strategy gem
+    :verticalresponse => {
+      :type => :email,
+      :name => 'Vertical Response',
+      :client_id => config[:vr_client_id],
+      :secret => config[:vr_secret],
+      :service_provider_class => "VerticalResponseApi",
+      :supports_double_optin => false,
+      :oauth => true
+    },
     :vertical_response => {
       :type => :email,
       :name => "VerticalResponse",
-      :requires_embed_code => true
+      :requires_embed_code => true,
+      :hidden => true
     }
   }
   config[:analytics_log_file] ||= File.join(Rails.root, "log", "analytics.log")
