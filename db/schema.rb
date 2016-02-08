@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119131352) do
+ActiveRecord::Schema.define(version: 20160208211026) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -113,11 +113,13 @@ ActiveRecord::Schema.define(version: 20160119131352) do
 
   create_table "conditions", force: true do |t|
     t.integer  "rule_id"
-    t.string   "segment",    null: false
-    t.string   "operand",    null: false
+    t.string   "segment",        null: false
+    t.string   "operand",        null: false
     t.text     "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "custom_segment"
+    t.string   "data_type"
   end
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
@@ -301,9 +303,19 @@ ActiveRecord::Schema.define(version: 20160119131352) do
     t.string   "view_condition",                  default: "immediately"
     t.string   "email_placeholder",               default: "Your email",                    null: false
     t.string   "name_placeholder",                default: "Your name",                     null: false
-    t.integer  "image_upload_id"
     t.string   "image_placement",                 default: "bottom"
+    t.integer  "image_upload_id"
     t.integer  "active_image_id"
+    t.string   "question"
+    t.string   "answer1"
+    t.string   "answer2"
+    t.string   "answer1response"
+    t.string   "answer2response"
+    t.string   "answer1link_text"
+    t.string   "answer2link_text"
+    t.string   "answer1caption"
+    t.string   "answer2caption"
+    t.boolean  "use_question"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
