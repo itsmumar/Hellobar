@@ -29,12 +29,8 @@
       - if current_site.is_free?
         = link_to "Get Free Pro", new_referral_path, class: 'button'
         span.divider or
-        - if get_ab_variation("Upgrade Plan Button 2016-01-05", current_user) == "original"
-          .button.show-upgrade-modal data={ source: "Menu Button: Upgrade Plan" }
-            | Upgrade Plan
-        - else
-          .button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
-            | Want More Power?
+        .button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
+          | Want More Power?
 
       - elsif current_site.current_subscription.try(:trial?)
         .button.show-payment-modal data={ source: "Add payment to trial" }

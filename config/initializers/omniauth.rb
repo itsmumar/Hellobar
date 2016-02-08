@@ -5,6 +5,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :constantcontact, Hellobar::Settings[:identity_providers][:constantcontact][:app_key], Hellobar::Settings[:identity_providers][:constantcontact][:app_secret]
   provider :drip, Hellobar::Settings[:identity_providers][:drip][:client_id], Hellobar::Settings[:identity_providers][:drip][:secret]
   provider :google_oauth2, Hellobar::Settings[:google_auth_id], Hellobar::Settings[:google_auth_secret], access_type: "offline", scope: "email, profile, analytics.readonly"
+  provider :verticalresponse, Hellobar::Settings[:identity_providers][:verticalresponse][:client_id], Hellobar::Settings[:identity_providers][:verticalresponse][:secret]
 
   on_failure do |env|
     provider = env["omniauth.error.strategy"].try(:name)
