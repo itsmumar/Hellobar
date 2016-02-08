@@ -312,10 +312,44 @@ class Site < ActiveRecord::Base
     }.merge(@in_bar_ads_config || {})
   end
 
+  module InBarAdABTest
+    SHOW_ADS = :show_ads
+    NO_ADS = :no_ads
+    START_DATE = Time.parse("2016-02-09 00:00:00 PST")
+    END_DATE = Time.parse("2016-02-23 00:00:00 PST")
+
+    class << self
+      def start_date
+        START_DATE
+      end
+
+      def end_date
+        END_DATE
+      end
+
+      def in_bar_ad_ab_test_variant(site)
+        return nil unless site
+        # Find the oldest owner to see if this is a new user/user
+        # and can be in the test
+        user = site.oldest_owner
+        return nil unless user
+        return nil unless user.created_at > start_date
+        return nil unless user.created_at < end_date
+        # 50% see ads, 50% don't - by keying off the user.id we
+        # ensure that the same users always have the same experience
+        # for all their sites
+        user.id % 2 == 0 ? SHOW_ADS : NO_ADS
+      end
+    end
+  end
+
   def show_in_bar_ads?
     config = self.class.in_bar_ads_config
     ad_blacklist    = config[:url_blacklist]
     site_ids        = config[:site_ids]
+
+    # No ads if they are in the A/B test
+    return false if InBarAdABTest.in_bar_ad_ab_test_variant(self) == InBarAdABTest::NO_ADS
 
     is_free? && (ad_blacklist.none? {|b| url.include?(b) })
   end
@@ -326,6 +360,10 @@ class Site < ActiveRecord::Base
 
   def owners
     users.where(site_memberships: { role: Permissions::OWNER } )
+  end
+
+  def oldest_owner
+    self.owners.sort{|a,b| a.created_at <=> b.created_at}.first
   end
 
   def had_wordpress_bars?
