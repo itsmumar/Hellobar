@@ -445,6 +445,11 @@ html, body {
   width: 50%;
 }
 
+.image-left .hb-inner-content.hidden-img{
+  float: inherit;
+  width: inherit;
+}
+
 .image-right .hb-image-wrapper {
   float: right;
   width: 50%;
@@ -454,6 +459,11 @@ html, body {
 .image-right .hb-inner-content {
   float: left;
   width: 50%;
+}
+
+.image-right .hb-inner-content.hidden-img{
+  float: inherit;
+  width: inherit;
 }
 
 .image-bottom .hb-logo-wrapper {

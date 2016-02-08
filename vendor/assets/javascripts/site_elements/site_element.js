@@ -512,6 +512,7 @@ HB.SiteElement = HB.createClass({
     HB.hideElement(original['emailForm']);
     HB.hideElement(original['social']);
     HB.hideElement(this.uploadedImage());
+    this.fixQuestionLayout();
   },
 
   currentHeadline: function() {
@@ -524,6 +525,21 @@ HB.SiteElement = HB.createClass({
 
   uploadedImage: function() {
     return this.w.contentWindow.document.querySelector(".hb-image-wrapper");
+  },
+
+  fixQuestionLayout: function() {
+    var hbc;
+    hbc = this.w.contentWindow.document.querySelector(".image-right .hb-inner-content");
+    if (hbc) { $(hbc).addClass('hidden-img') }
+    hbc = this.w.contentWindow.document.querySelector(".image-left .hb-inner-content");
+
+    if (hbc) { $(hbc).addClass('hidden-img') }
+  },
+
+  restoreQuestionLayout: function() {
+    var hbc;
+    hbc = this.w.contentWindow.document.querySelector(".hb-inner-content.hidden-img");
+    if (hbc) { $(hbc).removeClass('hidden-img') }
   },
 
   rewriteElementText: function(element, elementText) {
@@ -613,6 +629,7 @@ HB.SiteElement = HB.createClass({
     HB.showElement(this.currentHeadline());
     HB.showElement(this.currentCaption(), 'block');
     HB.showElement(this.uploadedImage());
+    this.restoreQuestionLayout();
   }
 
 });
