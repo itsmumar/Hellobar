@@ -13,87 +13,33 @@ describe Site do
     expect(@site.owners.first).to eq(users(:joey))
   end
 
-  describe "#oldest_owner" do
-    it "should return the oldest owner" do
-      @site.owners.length.should == 1
-      joey = users(:joey)
-      wootie = users(:wootie)
-      expect(@site.owners.first).to eq(joey)
-      wootie.created_at = joey.created_at - 1.day
-      wootie.save!(validation: false)
-      wootie.created_at.should < joey.created_at
-      @site.site_memberships.create(user: wootie, role: "owner")
-      @site.owners.length.should == 2
-      expect(@site.oldest_owner).to eq(wootie)
-      # Now change the created at and make sure
-      # the other owner is returned
-      wootie.created_at = joey.created_at + 1.day
-      wootie.save!(validation: false)
-      expect(@site.oldest_owner).to eq(joey)
+  describe "#show_ads_test" do
+    before do
+      @site = create(:site)
+      @owner = create(:user)
+      create(:site_ownership, site: @site, user: @owner)
     end
-  end
 
-  describe "InBarAdABTest" do
-    describe "#in_bar_ad_ab_test_variant" do
-      it "should have return nil if the user has been created before or aferthe cutoff dates" do
-        joey = users(:joey)
-        site = joey.sites.first
-
-        # Created before start date of test
-        Site::InBarAdABTest.stub(:start_date){joey.created_at+1.day}
-        Site::InBarAdABTest.stub(:end_date){joey.created_at+1.day}
-        Site::InBarAdABTest.in_bar_ad_ab_test_variant(site).should be_nil
-
-        # Created within test
-        Site::InBarAdABTest.stub(:start_date){joey.created_at-1.day}
-        Site::InBarAdABTest.stub(:end_date){joey.created_at+1.day}
-        Site::InBarAdABTest.in_bar_ad_ab_test_variant(site).should_not be_nil
-
-        # Created after end date of test
-        Site::InBarAdABTest.stub(:start_date){joey.created_at-3.day}
-        Site::InBarAdABTest.stub(:end_date){joey.created_at-1.day}
-        Site::InBarAdABTest.in_bar_ad_ab_test_variant(site).should be_nil
+    context "owner created at is not within the time frame" do
+      it "returns true" do
+        @owner.update(created_at: 1.year.ago)
+        expect(@site.show_ads_test(Time.now, 1.week.from_now)).to eq(true)
       end
+    end
 
-      it "should not error out without a date stubbed" do
-        Site::InBarAdABTest.start_date.should == Site::InBarAdABTest::START_DATE
-        Site::InBarAdABTest.end_date.should == Site::InBarAdABTest::END_DATE
-        joey = users(:joey)
-        site = joey.sites.first
-        lambda{Site::InBarAdABTest.in_bar_ad_ab_test_variant(site)}.should_not raise_error
-      end
-
-      it "should evenly distribute the A/B test variants" do
-        Site::InBarAdABTest.stub(:start_date){Time.now-1.day}
-        Site::InBarAdABTest.stub(:end_date){Time.now+1.day}
-        results = []
-        4.times do
-          membership = create(:site_membership)
-          user = membership.user
-          site = membership.site
-          results << Site::InBarAdABTest.in_bar_ad_ab_test_variant(site)
+    context "owner created at is within the time frame" do
+      context "owner id is even" do
+        it "returns true" do
+          allow_any_instance_of(User).to receive(:id).and_return(12344)
+          expect(@site.show_ads_test(@owner.created_at - 1.week, @owner.created_at + 1.week)).to eq(true)
         end
-        # Should have two of each
-        results.sort.should == [Site::InBarAdABTest::SHOW_ADS,Site::InBarAdABTest::SHOW_ADS,Site::InBarAdABTest::NO_ADS,Site::InBarAdABTest::NO_ADS].sort
       end
 
-      it "should cause ads to be shown or not" do
-        Site::InBarAdABTest.stub(:start_date){Time.now-1.day}
-        Site::InBarAdABTest.stub(:end_date){Time.now+1.day}
-        users = {}
-        # Create one of each variant
-        2.times do
-          membership = create(:site_membership)
-          user = membership.user
-          site = membership.site
-          variant = Site::InBarAdABTest.in_bar_ad_ab_test_variant(site)
-          users[variant] = user
+      context "owner id is even" do
+        it "returns false" do
+          allow_any_instance_of(User).to receive(:id).and_return(12345)
+          expect(@site.show_ads_test(@owner.created_at - 1.week, @owner.created_at + 1.week)).to eq(false)
         end
-        # Make sure we have both variants
-        users.keys.sort.should == [Site::InBarAdABTest::SHOW_ADS, Site::InBarAdABTest::NO_ADS].sort
-        # Make sure the variants affect show_in_bar_ads?
-        users[Site::InBarAdABTest::SHOW_ADS].sites.first.show_in_bar_ads?.should == true
-        users[Site::InBarAdABTest::NO_ADS].sites.first.show_in_bar_ads?.should == false
       end
     end
   end
@@ -566,6 +512,11 @@ describe Site do
       end
 
       context "should not show" do
+        it "if show_ads_test returns false" do
+          allow(passing_site).to receive(:show_ads_test).and_return(false)
+          expect(passing_site.show_in_bar_ads?).to eq false
+        end
+
         it "if the bar is not free" do
           allow(passing_site).to receive(:is_free?).at_least(:once).and_return(false)
           expect(passing_site.show_in_bar_ads?).to eq false
@@ -582,6 +533,7 @@ describe Site do
 
       context "should show" do
         it "if the bar is free" do
+          allow(passing_site).to receive(:show_ads_test).and_return(true)
           expect(Site.in_bar_ads_config[:show_to_fraction]).to eq 1.0
           expect(passing_site.show_in_bar_ads?).to eq true
         end
