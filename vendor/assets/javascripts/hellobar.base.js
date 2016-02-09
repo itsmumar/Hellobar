@@ -867,28 +867,8 @@ var HB = {
   addToPage: function(siteElement)
   {
     if(siteElement.use_question) {
-      var originalSiteElement = siteElement
-      siteElement = siteElement.dataCopy;
-      siteElement.template_name = siteElement.template_name.split("_")[0] + "_question";
-      siteElement.headline = siteElement.question;
-      siteElement.image_url = null;
-      siteElement = HB.createSiteElement(siteElement);
-
-      siteElement.displayResponse = function(choice) {
-        if(choice == 1) {
-          originalSiteElement.headline = siteElement.answer1response;
-        } else {
-          originalSiteElement.headline = siteElement.answer2response;
-        }
-
-        siteElement.remove();
-        originalSiteElement.use_question = false;
-        originalSiteElement.animated = false;
-        HB.addToPage(originalSiteElement);
-      };
+      siteElement = HB.questionifySiteElement(siteElement);
     }
-
-
     // Return if already added to the page
     if ( typeof(siteElement.pageIndex) != 'undefined' )
         return;
@@ -1807,6 +1787,58 @@ var HB = {
     if ( showAd )
       HB.setVisitorData("ad", new Date().getTime());
     return showAd;
+  },
+
+  // Replaces the site element with the question variation.
+  // Sets the displayResponse callback to show the original element
+  questionifySiteElement: function(siteElement) {
+    // Create a copy of the siteElement
+    var originalSiteElement = siteElement;
+    siteElement = siteElement.dataCopy;
+
+    // Set the template and headline
+    // Remove the image from the question
+    siteElement.template_name = siteElement.template_name.split("_")[0] + "_question";
+    siteElement.headline = siteElement.question;
+    siteElement.caption = null;
+    siteElement.use_question = false;
+    siteElement.image_url = null;
+
+    // Create the new question site element
+    siteElement = HB.createSiteElement(siteElement);
+
+    // Set the callback.  When this is called, it sets the values on the original element
+    // and displays it.
+    siteElement.displayResponse = function(choice) {
+      if(choice === 1) {
+        originalSiteElement.headline = siteElement.answer1response;
+        originalSiteElement.caption = siteElement.answer1caption;
+        originalSiteElement.link_text = siteElement.answer1link_text;
+      } else {
+        originalSiteElement.headline = siteElement.answer2response;
+        originalSiteElement.caption = siteElement.answer2caption;
+        originalSiteElement.link_text = siteElement.answer2link_text;
+      }
+
+      // Dont use the question, otherwise we end up in a loop.
+      // Also, don't animate in since the element will already be on the screen
+      originalSiteElement.use_question = false;
+      originalSiteElement.animated = false;
+
+      // Remove the siteElement and show the original in non preview environments
+      if(!HB.CAP.preview) {
+        siteElement.remove();
+        HB.addToPage(originalSiteElement);
+      }
+    };
+
+    // If showResponse is set the preview environments, skip right to showing the response
+    if(HB.CAP.preview && HB.showResponse) {
+      siteElement.displayResponse(HB.showResponse);
+      siteElement = originalSiteElement;
+    }
+
+    return siteElement;
   },
 
   adifySiteElement: function(siteElement) {

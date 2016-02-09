@@ -1,5 +1,7 @@
 HelloBar.TextController = Ember.Controller.extend
 
+  needs: ['application']
+
   fontOptions: [
     {value: "'Open Sans',sans-serif", label: 'Open Sans'}
     {value: 'Helvetica,sans-serif', label: 'Helvetica'}
@@ -28,22 +30,6 @@ HelloBar.TextController = Ember.Controller.extend
     if trackEditorFlow && !Ember.isEmpty(@get('model'))
       InternalTracking.track_current_person("Editor Flow", {step: "Content Settings", goal: @get("model.element_subtype"), style: @get("model.type")})
   ).observes('model').on('init')
-
-  refreshResponse1: ( ->
-    @send('refreshResponse', 1)
-  ).observes(
-    "model.answer1response",
-    "model.answer1caption",
-    "model.answer1link_text"
-  ).on("init")
-
-  refreshResponse2: ( ->
-    @send('refreshResponse', 2)
-  ).observes(
-    "model.answer2response",
-    "model.answer2caption",
-    "model.answer2link_text"
-  ).on("init")
 
   setDefaults: ( ->
     if (@get('model.use_question'))
@@ -82,36 +68,13 @@ HelloBar.TextController = Ember.Controller.extend
       @set('model.image_url', imageUrl)
 
     showQuestion: ->
-      for index, siteElement of HB.siteElementsOnPage
-        setTimeout(@resetQuestion(siteElement), 500)
+      HB.showResponse = null
+      @get("controllers.application").renderPreview()
 
     showResponse1: ->
-      for index, siteElement of HB.siteElementsOnPage
-        setTimeout(@showResponse(siteElement, 1), 500)
+      HB.showResponse = 1
+      @get("controllers.application").renderPreview()
 
     showResponse2: ->
-      for index, siteElement of HB.siteElementsOnPage
-        setTimeout(@showResponse(siteElement, 2), 500)
-
-    refreshResponse: (idx) ->
-      return
-      for index, se of HB.siteElementsOnPage
-        if se && se.displayResponse
-          se.currentHeadline().textContent = @get("model.answer"+idx+"response")
-          current_caption_el = se.currentCaption()
-          new_caption_text = @get("model.answer"+idx+"caption")
-          if (current_caption_el)
-            current_caption_el.textContent = new_caption_text
-          if @get("model.answer"+idx+"link_text")
-            se.w.contentWindow.document.querySelector('.hb-cta').textContent = @get("model.answer"+idx+"link_text")
-
-  resetQuestion: (se) ->
-    if (se && se.displayResponse)
-      prop = @get('model.use_question')
-      @set('model.use_question', !prop)
-      @set('model.use_question', prop)
-
-  showResponse: (se, idx) ->
-    if (se && se.displayResponse)
-      se.displayResponse(idx)
-      @send('refreshResponse', idx)
+      HB.showResponse = 2
+      @get("controllers.application").renderPreview()
