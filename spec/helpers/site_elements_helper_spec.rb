@@ -281,5 +281,52 @@ describe SiteElementsHelper do
       expect(icon_2).to include("icon-circle")
       expect(icon_3).to include("icon-abtest")
     end
+
+    it "only groups elements with the same type" do
+      variation_1 = site_elements(:zombo_traffic)
+      variation_2 = variation_1.dup
+      variation_3 = variation_1.dup
+
+      variation_2.save
+
+      variation_3.type = "Slider"
+      variation_3.save
+
+      icon_1 = helper.ab_test_icon(variation_1)
+      icon_2 = helper.ab_test_icon(variation_2)
+      icon_3 = helper.ab_test_icon(variation_3)
+
+      expect(icon_1).to include("icon-circle")
+      expect(icon_2).to include("icon-circle")
+      expect(icon_3).to include("icon-abtest")
+    end
   end
+
+  describe "elements_grouped_by_type" do
+    let(:site) { sites(:zombo) }
+
+    it "should group elements by type" do
+      grouped_elements = helper.elements_grouped_by_type(site.site_elements)
+
+      expect(grouped_elements.count).to eq 3
+      expect(grouped_elements[0].count).to eq 4
+      expect(grouped_elements[1].count).to eq 0
+      expect(grouped_elements[2].count).to eq 0
+    end
+  end
+
+  describe "elements_grouped_by_subtype" do
+    let(:site) { sites(:zombo) }
+
+    it "should group elements by subtype" do
+      grouped_elements = helper.elements_grouped_by_subtype(site.site_elements)
+
+      expect(grouped_elements.count).to eq 4
+      expect(grouped_elements[0].count).to eq 1
+      expect(grouped_elements[1].count).to eq 2
+      expect(grouped_elements[2].count).to eq 1
+      expect(grouped_elements[3].count).to eq 0
+    end
+  end
+
 end

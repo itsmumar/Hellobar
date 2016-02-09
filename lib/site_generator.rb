@@ -17,7 +17,7 @@ class SiteGenerator
     str = <<-EOS
       <html>
       <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1”>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
       <style></style>
       </head>
       <body style="background-color: #FFFFFF;">
