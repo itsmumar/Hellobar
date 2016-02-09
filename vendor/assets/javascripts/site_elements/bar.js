@@ -33,6 +33,36 @@ HB.BarElement = HB.createClass({
     }
   },
 
+  minimize: function(se_id){
+    console.log('in minimize');
+    HB.animateOut(this.w, this.onHidden(se_id));
+    if(this.e.pusher != null)
+      this.e.pusher.style.display = 'none';
+    HB.animateIn(this.pullDown);
+  },
+
+  onHidden: function(se_id)
+  {
+    // Track specific elements longer, for takeovers/modals
+    var expiration, cookie_name, cookie_str, dismissed_elements;
+    // Track specific elements 24 hours, for bars/sliders
+    expiration = 86400000; // 24 hours
+    cookie_name = "HBDismissedBars";
+    cookie_str = HB.gc(cookie_name) || "[]";
+    dismissed_elements = JSON.parse(cookie_str) || [];
+    if (dismissed_elements.indexOf(se_id) == -1) {
+      dismissed_elements.push(se_id);
+    }
+    if (dismissed_elements) {
+      HB.sc(
+        cookie_name,
+        JSON.stringify(dismissed_elements),
+        new Date((new Date().getTime() + expiration)),
+        "path=/"
+      );
+    }
+  },
+
   attach: function(){
     // Disable wiggle on Mobile Safari because it blocks the click action
     if(this.wiggle_button && !HB.isMobileSafari()) {
@@ -45,4 +75,3 @@ HB.BarElement = HB.createClass({
   }
 
 }, HB.SiteElement);
-

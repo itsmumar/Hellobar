@@ -50,7 +50,6 @@ var HBQ = function()
   // Set all the default tracking trackings
   HB.setDefaultSegments();
 
-
   var siteElements = [];
   // If a specific element has already been set, use it
   // Otherwise use the tradition apply rules method
@@ -408,6 +407,16 @@ var HB = {
   // Returns true if the visitor previously closed a site element
   didDismissHB: function() {
     return HB.gc("HBDismissed") != null;
+  },
+
+  // Returns true if the visitor previously closed this particular site element
+  didDismissThisHB: function(se) {
+    var cookie_name = (se.type == "Takeover" || se.type == "Modal") ? "HBDismissedModals" : "HBDismissedBars";
+    var cookie_str = HB.gc(cookie_name);
+    if (cookie_str != undefined) {
+      return JSON.parse(cookie_str).indexOf(se.id) >= 0;
+    }
+    return false;
   },
 
   // This takes the the email field, name field, and target siteElement DOM element.
@@ -978,10 +987,36 @@ var HB = {
         {
           siteElement = rule.siteElements[j];
 
-          // Skip the site element if it's a modal / slider / takeover and the
+          var lv = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
+          var lu = new Date(siteElement.updated_at);
+
+          // Skip the site element if they have already seen/dismissed it
+          // and it hasn't been changed since then
+          if (HB.didDismissThisHB(siteElement) && (lu < lv)) {
+            // for modals and takeovers, keep it off
+            if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
+              continue;
+            } else {
+              var yesterday = new Date(new Date() - 86400000); //24*60*60*1000
+              if (lu < lv || lv < yesterday) {
+                // For bars, keep it hidden...
+                if(siteElement.type == "Bar") {
+                  siteElement.view_condition = "stay-hidden"
+                } else {
+                  // For sliders, show it again after 24 hours
+                  continue;
+                }
+              }
+            }
+          }
+
+          // Skip the site element if it's a modal / takeover and the
           // user already dismissed one of those types
-          if(siteElement.type != "Bar" && HB.didDismissHB())
-            continue;
+          if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
+            if (HB.didDismissHB()) {
+              continue;
+            }
+          }
 
           if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
           {

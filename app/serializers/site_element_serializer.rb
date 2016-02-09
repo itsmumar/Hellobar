@@ -17,7 +17,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :image_url, :image_placement, :active_image_id, :image_file_name,
 
     # other
-    :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement, :default_email_thank_you_text
+    :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement, :default_email_thank_you_text
 
   def rule
     RuleSerializer.new(object.rule)
