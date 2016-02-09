@@ -148,7 +148,10 @@ class ScriptGenerator < Mustache
     if options[:templates]
       options[:templates].each { |t| template_names << t.split("_", 2) }
     else
-      site.site_elements.active.each { |se| template_names << [se.class.name.downcase, se.element_subtype]}
+      site.site_elements.active.each do |se|
+        template_names << [se.class.name.downcase, se.element_subtype]
+        template_names << [se.class.name.downcase, 'question'] if se.use_question?
+      end
     end
 
     # Add traffic version of each template for ads
@@ -194,7 +197,7 @@ private
 
   def content_template(element_class, type)
     ActiveSupport.escape_html_entities_in_json = false
-    content = (content_header(element_class) + content_markup(element_class, type) + content_footer(element_class) + content_question).to_json
+    content = (content_header(element_class) + content_markup(element_class, type) + content_footer(element_class)).to_json
     ActiveSupport.escape_html_entities_in_json = true
 
     content
@@ -215,10 +218,6 @@ private
 
   def content_footer(element_class)
     File.read("#{Rails.root}/lib/script_generator/#{element_class}/footer.html")
-  end
-
-  def content_question
-    File.read("#{Rails.root}/lib/script_generator/question.html")
   end
 
   def site_element_settings(site_element)

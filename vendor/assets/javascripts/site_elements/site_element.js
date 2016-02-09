@@ -119,10 +119,6 @@ HB.SiteElement = HB.createClass({
     if(HB.isIE11())
       HB.addClass(d.body, "hb-paused-animations-ie");
 
-    if(siteElement.use_question) {
-      this.displayQuestion();
-    }
-
     // As the vistor readjust the window size we need to adjust the size of the containing
     // iframe. We do this by checking the the size of the inner div. If the the width
     // of the window is less than or equal to 640 pixels we set the flag isMobileWidth to true.
@@ -485,36 +481,6 @@ HB.SiteElement = HB.createClass({
     return this._originalElements;
   },
 
-  extractQuestionElements: function() {
-    var d = this.w.contentWindow.document;
-    if (this._questionElements == undefined) {
-      this._questionElements = {
-        'questionText':  d.querySelector('#hb-question'),
-        'answers':       d.querySelector('#hb-answers'),
-        'responseText1': d.querySelector('#hb-answer1-response span'),
-        'responseText2': d.querySelector('#hb-answer2-response span'),
-        'response-cta1': d.querySelector('#hb-answer1-response a'),
-        'response-cta2': d.querySelector('#hb-answer2-response a'),
-        'captionText1':  d.querySelector('#hb-answer1-caption'),
-        'captionText2':  d.querySelector('#hb-answer2-caption')
-      }
-    }
-    if (this.subtype.match(/social|announcement/)) {
-      this._questionElements['response-cta1'] = null;
-      this._questionElements['response-cta2'] = null;
-    }
-    return this._questionElements;
-  },
-
-  hideOriginalElements: function() {
-    var original = this.originalElements();
-    // hide original elements to show later
-    HB.hideElement(original['emailForm']);
-    HB.hideElement(original['social']);
-    HB.hideElement(this.uploadedImage());
-    this.fixQuestionLayout();
-  },
-
   currentHeadline: function() {
     return this.w.contentWindow.document.querySelector('.hb-headline-text');
   },
@@ -525,111 +491,6 @@ HB.SiteElement = HB.createClass({
 
   uploadedImage: function() {
     return this.w.contentWindow.document.querySelector(".hb-image-wrapper");
-  },
-
-  fixQuestionLayout: function() {
-    var hbc;
-    hbc = this.w.contentWindow.document.querySelector(".image-right .hb-inner-content");
-    if (hbc) { $(hbc).addClass('hidden-img') }
-    hbc = this.w.contentWindow.document.querySelector(".image-left .hb-inner-content");
-
-    if (hbc) { $(hbc).addClass('hidden-img') }
-  },
-
-  restoreQuestionLayout: function() {
-    var hbc;
-    hbc = this.w.contentWindow.document.querySelector(".hb-inner-content.hidden-img");
-    if (hbc) { $(hbc).removeClass('hidden-img') }
-  },
-
-  rewriteElementText: function(element, elementText) {
-    if (element && elementText) {
-      element.textContent = elementText.textContent;
-    }
-  },
-
-  rewriteEmailCTA: function(new_cta){
-    var original     = this.originalElements();
-    var emailFormBtn = original['emailFormBtn'];
-    var answers      = this.extractQuestionElements()['answers'];
-
-    this.rewriteElementText(emailFormBtn, new_cta);
-    HB.hideElement(new_cta, "");
-    HB.hideElement(answers, "");
-  },
-
-  showAnswers: function() {
-    var original  = this.originalElements();
-    var emailForm = original['emailForm'];
-    var cta =       original['cta'];
-
-    // trying to work around Chrome issue.
-    var waitForAnswers = function(me){
-      var elements  = me.extractQuestionElements();
-      if (elements['answers']) {
-        var answers = elements['answers']
-        if(emailForm) {
-          emailForm.parentNode.appendChild(answers);
-        } else {
-          if(cta) { HB.hideElement(cta) }
-          me.currentHeadline().appendChild(answers);
-        }
-        HB.showElement(answers, "inline");
-      } else {
-        setTimeout(function(){waitForAnswers(me)},50);
-      }
-    };
-    waitForAnswers(this);
-
-  },
-  displayQuestion: function() {
-    var elements  = this.extractQuestionElements();
-    this.hideOriginalElements();
-    this.rewriteElementText(this.currentHeadline(), elements['questionText']);
-    this.showAnswers();
-  },
-
-  displayResponse: function(idx) {
-    var other_idx    = idx == 1 ? 2 : 1;
-    var elements     = this.extractQuestionElements();
-    var answers      = elements['answers'];
-    var cta          = elements['response-cta'+idx];
-    var original = this.originalElements();
-    var emailFormBtn = original['emailFormBtn'];
-
-    HB.hideElement(answers);
-
-    // if we already attached other CTAs, put them away
-    var holder = this.w.contentWindow.document.querySelector('#hb-answer' + other_idx + '-response');
-    var old_cta;
-    try {
-      old_cta = this.currentHeadline().parentNode.querySelector(':scope > .hb-cta');
-    }
-    catch(err) {
-      // a bit of a hack, since teaspoon doesn't like ':scope > ...'
-      old_cta = this.w.contentWindow.document.querySelector('.hb-text-wrapper > .hb-cta');
-    }
-    if (old_cta) {
-      holder.appendChild(old_cta);
-      HB.hideElement(old_cta);
-    }
-
-    if (emailFormBtn) {
-      this.rewriteEmailCTA(cta, answers, emailFormBtn);
-    } else if (cta && cta.parentNode != this.currentHeadline().parentNode) {
-      this.currentHeadline().parentNode.appendChild(cta);
-    }
-    this.rewriteElementText(this.currentHeadline(), elements['responseText'+idx]);
-    this.rewriteElementText(this.currentCaption(), elements['captionText'+idx]);
-
-    // make it all visible
-    if (cta) { HB.showElement(cta, ""); }
-    HB.showElement(original['emailForm'], "");
-    HB.showElement(original['social'], "");
-    HB.showElement(this.currentHeadline());
-    HB.showElement(this.currentCaption(), 'block');
-    HB.showElement(this.uploadedImage());
-    this.restoreQuestionLayout();
   }
 
 });

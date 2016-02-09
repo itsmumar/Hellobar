@@ -419,84 +419,6 @@ var HB = {
     return false;
   },
 
-  displayQuestion: function(d, headline, cta) {
-    d.getElementById("hb-answer1").onclick = (function() { HB.displayResponse(d,1) });
-    d.getElementById("hb-answer2").onclick = (function() { HB.displayResponse(d,2) });
-
-    headline.textContent = d.getElementById("hb-question").textContent;
-    var answers = d.getElementById("hb-answers");
-    var emailForm = d.getElementsByClassName("hb-input-wrapper")[0];
-    var social = d.getElementsByClassName("hb-social-wrapper");
-  },
-
-  extractQuestionElements: function(d) {
-    return {
-      'questionText':  d.querySelector('#hb-question'),
-      'answers':       d.querySelector('#hb-answers'),
-      'headline':      d.querySelector('.hb-headline-text'),
-      'responseText1': d.querySelector('#hb-answer1-response span'),
-      'responseText2': d.querySelector('#hb-answer2-response span'),
-      'response-cta1': d.querySelector('#hb-answer1-response a'),
-      'response-cta2': d.querySelector('#hb-answer2-response a'),
-      'emailForm':     d.querySelector('.hb-input-wrapper'),
-      'emailFormBtn':  d.querySelector('.hb-input-wrapper .hb-cta'),
-      'caption':       d.querySelector('.hb-text-wrapper .hb-secondary-text'),
-      'captionText1':  d.querySelector('#hb-answer1-caption'),
-      'captionText2':  d.querySelector('#hb-answer2-caption'),
-      'social':        d.querySelectorAll('.hb-social-wrapper')
-    }
-  },
-
-  rewriteElementText: function(element, elementText) {
-    if (element && elementText) {
-      element.textContent = elementText.textContent;
-    }
-  },
-
-  rewriteEmailCTA: function(cta, answers, emailFormBtn){
-    HB.rewriteElementText(emailFormBtn, cta);
-    cta.parentNode.removeChild(cta); // so text doesn't show twice
-    answers.parentNode.removeChild(answers);
-  },
-
-  showAnswers: function(headline, answers, emailForm, cta) {
-    if(emailForm) {
-      emailForm.parentNode.appendChild(answers);
-    } else if(cta) {
-      cta.parentNode.replaceChild(answers, cta);
-    } else {
-      headline.appendChild(answers);
-    }
-    HB.showElement(answers, "");
-  },
-
-  displayQuestion: function(d, headline, cta) {
-    var elements  = HB.extractQuestionElements(d);
-    // hide original elements to show later
-    HB.hideElement(elements['emailForm']);
-    HB.hideElement(elements['social']);
-    // replace headline with question
-    HB.rewriteElementText(headline, elements['questionText']);
-    // show answers, remove original cta (if any)
-    HB.showAnswers(headline, elements['answers'], elements['emailForm'], cta);
-  },
-
-  displayResponse: function(d, idx) {
-    var elements     = HB.extractQuestionElements(d);
-    var answers      = elements['answers'];
-    var cta          = elements['response-cta'+idx];
-    var emailFormBtn = elements['emailFormBtn'];
-    if (emailFormBtn) {
-      HB.rewriteEmailCTA(cta, answers, emailFormBtn);
-    } else {
-      answers.parentNode.replaceChild(cta, answers);
-    }
-    HB.showElement(elements['emailForm'], "");
-    HB.showElement(elements['social'], "");
-    HB.rewriteElementText(elements['headline'], elements['responseText'+idx]);
-    HB.rewriteElementText(elements['caption'], elements['captionText'+idx]);
-  },
-
   // This takes the the email field, name field, and target siteElement DOM element.
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
@@ -936,12 +858,37 @@ var HB = {
     } else {
       siteElement = new HB.SiteElement(data)
     }
+
+    siteElement.dataCopy = data;
     return siteElement;
   },
 
   // Adds the SiteElement to the page
   addToPage: function(siteElement)
   {
+    if(siteElement.use_question) {
+      var originalSiteElement = siteElement
+      siteElement = siteElement.dataCopy;
+      siteElement.template_name = siteElement.template_name.split("_")[0] + "_question";
+      siteElement.headline = siteElement.question;
+      siteElement.image_url = null;
+      siteElement = HB.createSiteElement(siteElement);
+
+      siteElement.displayResponse = function(choice) {
+        if(choice == 1) {
+          originalSiteElement.headline = siteElement.answer1response;
+        } else {
+          originalSiteElement.headline = siteElement.answer2response;
+        }
+
+        siteElement.remove();
+        originalSiteElement.use_question = false;
+        originalSiteElement.animated = false;
+        HB.addToPage(originalSiteElement);
+      };
+    }
+
+
     // Return if already added to the page
     if ( typeof(siteElement.pageIndex) != 'undefined' )
         return;

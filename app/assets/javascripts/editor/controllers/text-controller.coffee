@@ -94,6 +94,7 @@ HelloBar.TextController = Ember.Controller.extend
         setTimeout(@showResponse(siteElement, 2), 500)
 
     refreshResponse: (idx) ->
+      return
       for index, se of HB.siteElementsOnPage
         if se && se.displayResponse
           se.currentHeadline().textContent = @get("model.answer"+idx+"response")
