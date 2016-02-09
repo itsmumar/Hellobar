@@ -1792,6 +1792,9 @@ var HB = {
   // Replaces the site element with the question variation.
   // Sets the displayResponse callback to show the original element
   questionifySiteElement: function(siteElement) {
+    if(!siteElement.use_question || !siteElement.dataCopy)
+      return siteElement;
+
     // Create a copy of the siteElement
     var originalSiteElement = siteElement;
     siteElement = siteElement.dataCopy;
