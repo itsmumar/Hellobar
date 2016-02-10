@@ -30,7 +30,8 @@ HB.SiteElement = HB.createClass({
   },
 
   imageFor: function(location) {
-    if (!this.image_url || location.indexOf(this.image_placement) == -1)
+    locationIndex = location.indexOf(this.image_placement);
+    if (!this.image_url || locationIndex === undefined || locationIndex === -1)
       return "";
     else
       return "<div class='hb-image-wrapper " + this.image_placement + "'><img class='uploaded-image' src=" + this.image_url + " /></div>";
