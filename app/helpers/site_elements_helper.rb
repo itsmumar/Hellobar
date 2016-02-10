@@ -212,6 +212,6 @@ module SiteElementsHelper
     social_elements = elements.select { |x| x.element_subtype.include?("social") }
     elements = elements.group_by(&:element_subtype)
 
-    [elements["email"], social_elements, elements["traffic"], elements["announcement"]].compact
+    [elements["email"], social_elements, elements["traffic"], elements["call"], elements["announcement"]].compact
   end
 end

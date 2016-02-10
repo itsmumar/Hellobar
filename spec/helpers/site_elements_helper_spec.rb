@@ -318,12 +318,14 @@ describe SiteElementsHelper do
     let(:site) { sites(:zombo) }
 
     it "should group elements by subtype" do
+      create(:site_element, rule: site.rules.first, element_subtype: "call")
       grouped_elements = helper.elements_grouped_by_subtype(site.site_elements)
 
       expect(grouped_elements.count).to eq 3
       expect(grouped_elements[0].count).to eq 1
       expect(grouped_elements[1].count).to eq 2
       expect(grouped_elements[2].count).to eq 1
+      expect(grouped_elements[3].count).to eq 1
     end
   end
 

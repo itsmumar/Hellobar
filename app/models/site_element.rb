@@ -51,6 +51,7 @@ class SiteElement < ActiveRecord::Base
   scope :email_subtype, -> { where(element_subtype: "email") }
   scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }
   scope :traffic_subtype, -> { where(element_subtype: "traffic") }
+  scope :call_subtype, -> { where(element_subtype: "call") }
   scope :announcement_subtype, -> { where(element_subtype: "announcement") }
 
   delegate :site, :site_id, to: :rule, allow_nil: true

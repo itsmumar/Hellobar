@@ -20,6 +20,7 @@ describe ImproveSuggestion do
     @email = site_elements(:zombo_email)
     @twitter = site_elements(:zombo_twitter)
     @facebook = site_elements(:zombo_facebook)
+    @call = create(:site_element, :click_to_call, rule: @site.rules.first)
 
     Hello::DataAPI.stub(suggested_opportunities: {
       "high traffic, low conversion" =>  [["co:USA", 100, 1], ["dv:Mobile", 200, 2], ["rf:http://zombo.com", 130, 4]],
@@ -31,13 +32,14 @@ describe ImproveSuggestion do
   it "should return the site elements into groups for generation" do
     groups = ImproveSuggestion.determine_groups(@site)
 
-    sorted_ids(groups).should == sorted_ids({
-      "all" => [@traffic, @email, @twitter, @facebook],
+    expect(sorted_ids(groups)).to eq(sorted_ids({
+      "all" => [@traffic, @email, @twitter, @facebook, @call],
       "social" => [@twitter, @facebook],
       "email" => [@email],
       "traffic" => [@traffic],
+      "call" => [@call],
       "announcement" => []
-    })
+    }))
   end
 
   it "should let you generate data for a site" do
@@ -54,7 +56,7 @@ describe ImproveSuggestion do
 
   it "should generate all the data" do
     results = ImproveSuggestion.generate_all(@site)
-    results.keys.sort.should == %w{all traffic email social}.sort
+    results.keys.sort.should == %w{all traffic email call social}.sort
   end
 
   it "should not let you update the data too frequently" do
