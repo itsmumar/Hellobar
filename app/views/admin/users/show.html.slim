@@ -4,6 +4,7 @@ div#user_profile
     - unless @user.destroyed?
       = link_to "Destroy User", admin_user_path(@user), method: :delete, data: { confirm: "Are you sure?" }
       = link_to "Impersonate User", admin_impersonate_user_path(@user), :method => :post
+      = link_to "Send Password Reset Email", user_password_path, id: :reset_password, "data-user-email" => @user.email
 
   - @user.sites.with_deleted.each do |site|
     div.site-block
