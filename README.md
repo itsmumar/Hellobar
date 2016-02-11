@@ -123,6 +123,7 @@ You may need to fiddle with the `Capybara.default_wait_time` in
 
 Test site for both edge/staging: http://tjacobs3.github.io/hellobar_testing/
 
+
 **Edge:**  
 http://edge.hellobar.com/  
 user: edge-test@polymathic.me  
