@@ -1,4 +1,19 @@
+deliverPasswordReset = (ahref) ->
+  $link = $(ahref)
+
+  $.ajax
+    method: 'POST'
+    url: $link.attr('href')
+    data:
+      user: { email: $link.data('user-email') }
+    success: ->
+      $link.text('Sent!')
+
 $ ->
+  $('a#reset_password').on 'click', (event) ->
+    event.preventDefault()
+    deliverPasswordReset(this)
+
   $(".refund_link").click ->
     $(@).hide()
     $("#edit_bill_recurring_" + $(@).data("id")).toggleClass("hidden")
