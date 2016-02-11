@@ -16,7 +16,7 @@
 {{/unless}}
 
 {{#if showQuestionFields}}
-  {{#question-tabs}}
+  {{#question-tabs paneSelected=paneSelected}}
     {{#tab-pane name="Question" onSelection="showQuestion"}}
       <div id="question" class="tab-content">
         <label>What's your question?</label>

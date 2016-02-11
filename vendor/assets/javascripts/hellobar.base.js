@@ -1813,6 +1813,12 @@ var HB = {
     // Set the callback.  When this is called, it sets the values on the original element
     // and displays it.
     siteElement.displayResponse = function(choice) {
+      // If showResponse has not been set (ie, not forcing an answer to display)
+      // trigger the answerSelected event
+      if(!HB.showResponse) {
+        HB.trigger("answerSelected", choice);
+      }
+
       if(choice === 1) {
         originalSiteElement.headline = siteElement.answer1response;
         originalSiteElement.caption = siteElement.answer1caption;

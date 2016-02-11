@@ -48,6 +48,12 @@ HelloBar.TabViewComponent = Ember.Component.extend(
       @set 'activePaneId', paneId
     return
 
+  # Listen for paneSelected changes.  When this is changed, grab the pane and
+  # and set it as active.  'paneSelected' is the INDEX of the panes array.
+  paneSelectedChange: (->
+      this.setActivePane(this.get('panes')[this.get('paneSelected')].paneId)
+  ).observes('paneSelected'),
+
   actions:
     doTabSelected: (action) ->
       if (action)

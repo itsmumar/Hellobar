@@ -44,6 +44,13 @@ HelloBar.TextController = Ember.Controller.extend
     "model.use_question"
   ).on("init")
 
+  setHBCallbacks: ( ->
+    # Listen for when question answers are pressed and change the question tabs
+    HB.on "answerSelected", (choice) =>
+      this.set('paneSelected', choice)
+      this.send('showResponse' + choice)
+  ).on("init")
+
   #-----------  Step Settings  -----------#
 
   step: 4
