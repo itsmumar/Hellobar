@@ -14,7 +14,9 @@ describe ConditionSerializer do
       rule_id: nil,
       segment: condition.segment,
       operand: condition.operand,
-      value: condition.value
+      value: condition.value,
+      custom_segment: nil,
+      data_type: nil
     })
   end
 end

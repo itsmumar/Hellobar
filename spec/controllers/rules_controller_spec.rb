@@ -170,7 +170,9 @@ describe RulesController do
             "rule_id" => rule.id,
             "segment" => "DateCondition",
             "operand" => "between",
-            "value" => [(Date.current - 1.day).strftime("%Y-%m-%d"), (Date.current + 1.day).strftime("%Y-%m-%d")]
+            "value" => [(Date.current - 1.day).strftime("%Y-%m-%d"), (Date.current + 1.day).strftime("%Y-%m-%d")],
+            "custom_segment" => nil,
+            "data_type" => nil
           }])
         end
       end
@@ -201,7 +203,9 @@ describe RulesController do
             "rule_id" => rule.id,
             "segment" => "UrlCondition",
             "operand" => "includes",
-            "value" => ["/asdf"]
+            "value" => ["/asdf"],
+            "custom_segment" => nil,
+            "data_type" => nil
           }])
         end
       end

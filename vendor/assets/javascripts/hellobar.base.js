@@ -50,18 +50,7 @@ var HBQ = function()
   // Set all the default tracking trackings
   HB.setDefaultSegments();
 
-  var siteElements = [];
-  // If a specific element has already been set, use it
-  // Otherwise use the tradition apply rules method
-  var siteElement = HB.getFixedSiteElement();
-  if ( siteElement )
-    siteElements = [siteElement];
-  else
-    siteElements = HB.applyRules();
-  for(i=0; i < siteElements.length; i++ )
-  {
-    HB.addToPage(HB.createSiteElement(siteElements[i]));
-  }
+  HB.showSiteElements();
 }
 
 // Call the function right away once this is loaded
@@ -82,6 +71,22 @@ HBQ.prototype.push = function()
 // Keep everything within the HB namespace
 var HB = {
   CAP: {}, // Capabilies
+
+  // Grabs site elements from valid rules and displays them
+  showSiteElements: function() {
+    var siteElements = [];
+    // If a specific element has already been set, use it
+    // Otherwise use the tradition apply rules method
+    var siteElement = HB.getFixedSiteElement();
+    if ( siteElement )
+      siteElements = [siteElement];
+    else
+      siteElements = HB.applyRules();
+    for(i=0; i < siteElements.length; i++ )
+    {
+      HB.addToPage(HB.createSiteElement(siteElements[i]));
+    }
+  },
 
   // Copy functions from spec into klass
   cpFuncs: function(spec, klass)
@@ -1816,6 +1821,12 @@ var HB = {
       var bool = !!queryString.match(/hb_ignore=true/i);
       HB.sc("disableTracking", bool, 5*365);
     }
-  }
+  },
 
+  setCustomConditionValue: function(segmentKey, value) {
+    HB.setVisitorData(segmentKey, value);
+    if(HB.siteElementsOnPage.length === 0) {
+      HB.showSiteElements();
+    }
+  }
 };

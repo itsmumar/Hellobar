@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119131352) do
+ActiveRecord::Schema.define(version: 20160208211026) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -113,11 +113,13 @@ ActiveRecord::Schema.define(version: 20160119131352) do
 
   create_table "conditions", force: true do |t|
     t.integer  "rule_id"
-    t.string   "segment",    null: false
-    t.string   "operand",    null: false
+    t.string   "segment",        null: false
+    t.string   "operand",        null: false
     t.text     "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "custom_segment"
+    t.string   "data_type"
   end
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
