@@ -215,6 +215,13 @@ class @ContactListModal extends Modal
     @_setFormValues(@options.contactList)
     @_loadRemoteLists(listData: @options.contactList)
 
+  _showListInstructions: (context) ->
+    @_renderBlock("nevermind", context).hide()
+    @_renderBlock("instructions", context).show()
+    @blocks.remoteListSelect.hide()
+    @blocks.hellobarOnly.hide()
+    @blocks.syncDetails.hide()
+
   _loadRemoteLists: ({listData, select}) ->
     select ||= @$modal.find("#contact_list_provider")
 
@@ -239,9 +246,7 @@ class @ContactListModal extends Modal
 
     @$modal.trigger 'load'
 
-    $.get "/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
-      @$modal.trigger 'complete'
-
+    $.get("/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
       if data and data.lists # an identity was found for the selected provider
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
@@ -255,11 +260,12 @@ class @ContactListModal extends Modal
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 
       else # no identity found, or an embed provider
-        @_renderBlock("nevermind", defaultContext).hide()
-        @_renderBlock("instructions", defaultContext).show()
-        @blocks.remoteListSelect.hide()
-        @blocks.hellobarOnly.hide()
-        @blocks.syncDetails.hide()
+        @_showListInstructions(defaultContext)
+      ).fail( =>
+        @_showListInstructions(defaultContext)
+      ).always( =>
+        @$modal.trigger 'complete'
+      )
 
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)
