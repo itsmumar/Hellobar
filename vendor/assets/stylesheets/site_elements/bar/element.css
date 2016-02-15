@@ -52,6 +52,10 @@
   padding: 5px 15px;
 }
 
+#hellobar-bar .answer {
+  margin-right: 1em
+}
+
 /*-----------  Social Styling  -----------*/
 
 #hellobar-bar .hb-social-wrapper {
