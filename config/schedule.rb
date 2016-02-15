@@ -53,4 +53,5 @@ end
 
 every 5.minutes, :roles => [:web, :worker] do
   rake "queue_worker:metrics"
+  rake "cloudwatch_metrics:send"
 end
