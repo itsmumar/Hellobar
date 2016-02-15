@@ -1,35 +1,41 @@
+
 <label title="Your bar will contain Hello Bar branding. By turning it off you will receive more clicks and conversions.">
-  Hello Bar branding
   {{toggle-switch switch=model.show_branding}}
+  Hello Bar branding
 </label>
 
 {{#unless model.site.capabilities.remove_branding}}
 <label title="1 out of 10 views will be a promotion for Hello Bar. By turning it off you’ll receive 10% more clicks and conversions.">
-  Hello Bar ads
   {{toggle-switch switch=model.show_branding}}
+  Hello Bar ads
 </label>
 {{/unless}}
 
-<label>Animate entry/exit
+<label>
   {{toggle-switch switch=model.animated}}
+  Animate entry/exit
 </label>
 
 {{#if canWiggle}}
-<label>Wiggle button
+<label>
   {{toggle-switch switch=model.wiggle_button}}
+  Wiggle button
 </label>
 {{/if}}
 
-<label>Allow to hide bar
+<label>
   {{toggle-switch switch=model.closable}}
+  Allow to hide bar
 </label>
 
-<label>{{ pushesText }}
+<label>
   {{toggle-switch switch=model.pushes_page_down}}
+  {{ pushesText }}
 </label>
 
-<label>Remains in place
+<label>
   {{toggle-switch switch=model.remains_at_top}}
+  Remains in place
 </label>
 
 <label>Placement</label>

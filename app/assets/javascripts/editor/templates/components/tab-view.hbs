@@ -1,0 +1,11 @@
+<nav class="tabs-wrapper">
+  {{#each pane in panes}}
+    {{#nav-tab paneId=pane.paneId onSelection=pane.action}}
+      {{pane.name}}
+    {{/nav-tab}}
+  {{/each}}
+</nav>
+
+<div class="tab-content">
+  {{yield}}
+</div>

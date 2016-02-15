@@ -148,7 +148,10 @@ class ScriptGenerator < Mustache
     if options[:templates]
       options[:templates].each { |t| template_names << t.split("_", 2) }
     else
-      site.site_elements.active.each { |se| template_names << [se.class.name.downcase, se.element_subtype]}
+      site.site_elements.active.each do |se|
+        template_names << [se.class.name.downcase, se.element_subtype]
+        template_names << [se.class.name.downcase, 'question'] if se.use_question?
+      end
     end
 
     # Add traffic version of each template for ads
@@ -223,7 +226,6 @@ private
       background_color
       border_color
       button_color
-      caption
       email_placeholder
       font
       headline
@@ -244,6 +246,7 @@ private
       wiggle_button
       wordpress_bar_id
     }
+    settings << 'caption' unless site_element.use_question?
 
     lifetime_totals = @site.lifetime_totals
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
@@ -258,6 +261,17 @@ private
     end
 
     site_element.attributes.select{|key,val| settings.include?(key) }.merge({
+      answer1: site_element.answer1,
+      answer1response: site_element.answer1response,
+      answer1caption: site_element.answer1caption,
+      answer1link_text: site_element.answer1link_text,
+      answer2: site_element.answer2,
+      answer2response: site_element.answer2response,
+      answer2caption: site_element.answer2caption,
+      answer2link_text: site_element.answer2link_text,
+      use_question: site_element.use_question,
+      question: site_element.question,
+
       branding_url: "http://www.hellobar.com?sid=#{site_element.id}",
       closable: site_element.is_a?(Bar) ? site_element.closable : false,
       contact_list_id: site_element.contact_list_id,

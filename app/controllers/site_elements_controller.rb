@@ -97,6 +97,14 @@ class SiteElementsController < ApplicationController
 
   def site_element_params
     params.require(:site_element).permit(
+      :answer1,
+      :answer1response,
+      :answer1caption,
+      :answer1link_text,
+      :answer2,
+      :answer2response,
+      :answer2caption,
+      :answer2link_text,
       :active_image_id,
       :animated,
       :background_color,
@@ -117,6 +125,7 @@ class SiteElementsController < ApplicationController
       :open_in_new_window,
       :placement,
       :pushes_page_down,
+      :question,
       :remains_at_top,
       :rule_id,
       :show_branding,
@@ -124,6 +133,7 @@ class SiteElementsController < ApplicationController
       :text_color,
       :thank_you_text,
       :type,
+      :use_question,
       :view_condition_attribute,
       :view_condition,
       :wiggle_button,

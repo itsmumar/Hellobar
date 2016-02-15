@@ -1,5 +1,6 @@
 //= require hellobar.base
 //= require site_elements/site_element
+
 var context = describe;
 
 describe("SiteElement", function() {
