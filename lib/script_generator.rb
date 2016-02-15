@@ -188,8 +188,9 @@ private
   end
 
   def condition_settings(condition)
+    segment = condition.segment == 'CustomCondition' ? condition.custom_segment : condition.segment_key
     {
-      segment: condition.segment_key,
+      segment: segment,
       operand: condition.operand,
       value: condition.value
     }
