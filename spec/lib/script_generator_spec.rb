@@ -304,3 +304,27 @@ describe ScriptGenerator, '#rules' do
     end
   end
 end
+
+
+describe ScriptGenerator, '#condition_settings' do
+  let(:condition) { create(:condition) }
+  let(:generator) { ScriptGenerator.new(condition.rule.site) }
+
+  it "turns a condition into a hash" do
+    expect(generator.send(:condition_settings, condition)).to eq({
+      segment: condition.segment_key,
+      operand: condition.operand,
+      value: condition.value
+    })
+  end
+
+  it "uses the custom segment for CustomConditions" do
+    condition.segment = 'CustomCondition'
+    condition.custom_segment = 'ABC'
+    expect(generator.send(:condition_settings, condition)).to eq({
+      segment: 'ABC',
+      operand: condition.operand,
+      value: condition.value
+    })
+  end
+end

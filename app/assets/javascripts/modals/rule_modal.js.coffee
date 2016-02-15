@@ -50,7 +50,7 @@ class @RuleModal extends Modal
 
     @_toggleNewConditionMessage()
 
-    @$modal.on 'change', '.rule_conditions_segment, .rule_conditions_operand', ->
+    @$modal.on 'change', '.rule_conditions_segment, .rule_conditions_data_type, .rule_conditions_operand', ->
       $this = $(this)
       $condition = $this.parents('.condition-block:first')
       segment = $condition.find('.condition-segment').val()
@@ -68,6 +68,8 @@ class @RuleModal extends Modal
         index: $condition.data('condition-index')
         segment: segment
         operand: $condition.find('.condition-operand').val()
+        custom_segment: $condition.find('.custom-segment-name-input').val()
+        data_type: $condition.find('.condition-data-type').val() || 'string'
         value: value
 
       $updatedCondition = ruleModal.buildCondition(conditionData, conditionData.index)
@@ -76,11 +78,30 @@ class @RuleModal extends Modal
       $condition.html($updatedCondition.html())
 
   _updateConditionMarkup: ($condition, conditionData) ->
+    @_renderDataTypes($condition, conditionData)
     @_renderOperands($condition, conditionData)
     @_renderValue($condition, conditionData)
+    @_renderCustomSegment($condition, conditionData)
+
+  _renderDataTypes: ($condition, conditionData) ->
+    types = Object.keys(@_dataTypeOperandMapping)
+
+    if conditionData.segment == 'CustomCondition'
+      $condition.find('select.condition-data-type option')
+                # filter and remove all invalid operands for this condition
+                .filter (index, option) ->
+                  $option = $(option)
+                  $.inArray($option.val(), types) == -1
+                .remove()
+    else
+      $condition.find('.rule_conditions_data_type').remove()
 
   _renderOperands: ($condition, conditionData) ->
     validOperands = @filteredOperands(conditionData.segment)
+    if conditionData.segment == 'CustomCondition'
+      validOperands = @_dataTypeOperandMapping[conditionData.data_type]
+    else
+      $condition.find('.custom-segment-text').remove()
 
     $condition.find('select.condition-operand option')
               # filter and remove all invalid operands for this condition
@@ -91,13 +112,24 @@ class @RuleModal extends Modal
 
   _renderValue: ($condition, conditionData) ->
     $condition.find('.choice-wrapper').hide()        # hide the selections by default
-    $condition.find('.value').prop('disabled', true) # disable the values by default
+    $condition.find('.rule_conditions_choices .value').prop('disabled', true) # disable the values by default
 
     classToEnable = @_segmentToClassMapping[conditionData.segment]
+
+    if conditionData.segment == 'CustomCondition'
+      classToEnable = @_dataTypeToClass[conditionData.data_type]
+
     $condition.find(classToEnable)
               .show()
               .find('.value')
               .prop('disabled', false)
+
+  _renderCustomSegment: ($condition, conditionData) ->
+    if conditionData.segment != 'CustomCondition'
+      $condition.find('.custom-segment-name')
+                .hide()
+                .find('.value')
+                .prop('disabled', true)
 
   filteredOperands: (segment) ->
     @_validOperands(segment)
@@ -137,6 +169,16 @@ class @RuleModal extends Modal
     'UTMMediumCondition': '.utm-medium-choice'
     'UTMSourceCondition': '.utm-source-choice'
     'UTMTermCondition': '.utm-term-choice'
+
+  _dataTypeOperandMapping:
+    'string': ['is', 'is_not', 'includes', 'does_not_include']
+    'date': ['is', 'is_not', 'before', 'after', 'between']
+    'number': ['is', 'is_not', 'less_than', 'greater_than']
+
+  _dataTypeToClass:
+    'date': '.date-choice'
+    'string': '.string-choice'
+    'number': '.number-of-visits-choice'
 
   _bindSubmit: ->
     @_unbindSubmit() # clear any existing event bindings to make sure we only have one at a time
@@ -186,6 +228,7 @@ class @RuleModal extends Modal
       conditionData =
         index: nextIndex
         segment: 'DeviceCondition'
+        data_type: 'string'
         operand: 'is'
 
       $condition = @buildCondition(conditionData, nextIndex)

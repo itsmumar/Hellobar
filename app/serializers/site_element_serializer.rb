@@ -16,8 +16,23 @@ class SiteElementSerializer < ActiveModel::Serializer
     # image
     :image_url, :image_placement, :active_image_id, :image_file_name,
 
+    # questions/answers/responses
+    :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,
+    :question_placeholder, :answer1_placeholder, :answer2_placeholder, :answer1response_placeholder, :answer2response_placeholder, :answer1link_text_placeholder, :answer2link_text_placeholder,
+
     # other
     :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile, :open_in_new_window, :placement, :default_email_thank_you_text
+
+  SiteElement::QUESTION_DEFAULTS.keys.each do |attr_name|
+    define_method "#{attr_name}_placeholder" do
+      SiteElement::QUESTION_DEFAULTS[attr_name]
+    end
+  end
+
+  def caption
+    # Questions use their own captions.
+    object.caption.presence unless object.use_question?
+  end
 
   def rule
     RuleSerializer.new(object.rule)

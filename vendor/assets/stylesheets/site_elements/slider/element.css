@@ -83,6 +83,10 @@
   text-transform: uppercase;
 }
 
+#hellobar-slider .answer {
+  margin-right: 1em
+}
+
 /*-----------  Images  -----------*/
 
 #hellobar-slider.image-top .hb-image-wrapper {

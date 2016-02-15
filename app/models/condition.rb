@@ -56,10 +56,11 @@ class Condition < ActiveRecord::Base
     elsif segment == "EveryXSession"
       every_x_sessions_sentence
     else
+      name = segment == "CustomCondition" ? custom_segment : segment_data[:name]
       if operand.to_s == 'between'
-        "#{segment_data[:name]} is between #{value.first} and #{value.last}"
+        "#{name} is between #{value.first} and #{value.last}"
       else
-        "#{segment_data[:name]} #{OPERANDS[operand]} #{value}"
+        "#{name} #{OPERANDS[operand]} #{value}"
       end
     end
   end

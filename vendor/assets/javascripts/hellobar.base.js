@@ -50,18 +50,7 @@ var HBQ = function()
   // Set all the default tracking trackings
   HB.setDefaultSegments();
 
-  var siteElements = [];
-  // If a specific element has already been set, use it
-  // Otherwise use the tradition apply rules method
-  var siteElement = HB.getFixedSiteElement();
-  if ( siteElement )
-    siteElements = [siteElement];
-  else
-    siteElements = HB.applyRules();
-  for(i=0; i < siteElements.length; i++ )
-  {
-    HB.addToPage(HB.createSiteElement(siteElements[i]));
-  }
+  HB.showSiteElements();
 }
 
 // Call the function right away once this is loaded
@@ -82,6 +71,22 @@ HBQ.prototype.push = function()
 // Keep everything within the HB namespace
 var HB = {
   CAP: {}, // Capabilies
+
+  // Grabs site elements from valid rules and displays them
+  showSiteElements: function() {
+    var siteElements = [];
+    // If a specific element has already been set, use it
+    // Otherwise use the tradition apply rules method
+    var siteElement = HB.getFixedSiteElement();
+    if ( siteElement )
+      siteElements = [siteElement];
+    else
+      siteElements = HB.applyRules();
+    for(i=0; i < siteElements.length; i++ )
+    {
+      HB.addToPage(HB.createSiteElement(siteElements[i]));
+    }
+  },
 
   // Copy functions from spec into klass
   cpFuncs: function(spec, klass)
@@ -858,12 +863,17 @@ var HB = {
     } else {
       siteElement = new HB.SiteElement(data)
     }
+
+    siteElement.dataCopy = data;
     return siteElement;
   },
 
   // Adds the SiteElement to the page
   addToPage: function(siteElement)
   {
+    if(siteElement.use_question) {
+      siteElement = HB.questionifySiteElement(siteElement);
+    }
     // Return if already added to the page
     if ( typeof(siteElement.pageIndex) != 'undefined' )
         return;
@@ -1748,13 +1758,28 @@ var HB = {
   },
 
   hideElement: function(element) {
-    element.style.display = 'none';
+    if(element == null) { return } // do nothing
+    if(element.length == undefined){
+      element.style.display = 'none';
+    } else {
+      for (var i = 0; i < element.length; ++i) {
+        element[i].style.display = 'none';
+      }
+    }
   },
 
   showElement: function(element, display) {
-    if(typeof display === 'undefined')
+    if (element == null) { return } // do nothing
+    if(typeof display === 'undefined') {
       display = 'inline';
-    element.style.display = display;
+    }
+    if(element.length == undefined){
+      element.style.display = display;
+    } else {
+      for (var i = 0; i < element.length; ++i) {
+        element[i].style.display = display;
+      }
+    }
   },
 
   isAd: function() {
@@ -1767,6 +1792,67 @@ var HB = {
     if ( showAd )
       HB.setVisitorData("ad", new Date().getTime());
     return showAd;
+  },
+
+  // Replaces the site element with the question variation.
+  // Sets the displayResponse callback to show the original element
+  questionifySiteElement: function(siteElement) {
+    if(!siteElement.use_question || !siteElement.dataCopy)
+      return siteElement;
+
+    // Create a copy of the siteElement
+    var originalSiteElement = siteElement;
+    siteElement = siteElement.dataCopy;
+
+    // Set the template and headline
+    // Remove the image from the question
+    siteElement.template_name = siteElement.template_name.split("_")[0] + "_question";
+    siteElement.headline = siteElement.question;
+    siteElement.caption = null;
+    siteElement.use_question = false;
+    siteElement.image_url = null;
+
+    // Create the new question site element
+    siteElement = HB.createSiteElement(siteElement);
+
+    // Set the callback.  When this is called, it sets the values on the original element
+    // and displays it.
+    siteElement.displayResponse = function(choice) {
+      // If showResponse has not been set (ie, not forcing an answer to display)
+      // trigger the answerSelected event
+      if(!HB.showResponse) {
+        HB.trigger("answerSelected", choice);
+      }
+
+      if(choice === 1) {
+        originalSiteElement.headline = siteElement.answer1response;
+        originalSiteElement.caption = siteElement.answer1caption;
+        originalSiteElement.link_text = siteElement.answer1link_text;
+      } else {
+        originalSiteElement.headline = siteElement.answer2response;
+        originalSiteElement.caption = siteElement.answer2caption;
+        originalSiteElement.link_text = siteElement.answer2link_text;
+      }
+
+      // Dont use the question, otherwise we end up in a loop.
+      // Also, don't animate in since the element will already be on the screen
+      originalSiteElement.use_question = false;
+      originalSiteElement.animated = false;
+
+      // Remove the siteElement and show the original in non preview environments
+      if(!HB.CAP.preview) {
+        siteElement.remove();
+        HB.addToPage(originalSiteElement);
+      }
+    };
+
+    // If showResponse is set the preview environments, skip right to showing the response
+    if(HB.CAP.preview && HB.showResponse) {
+      siteElement.displayResponse(HB.showResponse);
+      siteElement = originalSiteElement;
+    }
+
+    return siteElement;
   },
 
   adifySiteElement: function(siteElement) {
@@ -1816,6 +1902,12 @@ var HB = {
       var bool = !!queryString.match(/hb_ignore=true/i);
       HB.sc("disableTracking", bool, 5*365);
     }
-  }
+  },
 
+  setCustomConditionValue: function(segmentKey, value) {
+    HB.setVisitorData(segmentKey, value);
+    if(HB.siteElementsOnPage.length === 0) {
+      HB.showSiteElements();
+    }
+  }
 };
