@@ -16,7 +16,7 @@ HelloBar.ApplicationView = Ember.View.extend
 
   click: (obj) ->
     isCanvas = $(obj.target)[0].localName == 'canvas'
-    isColorSelect = $(obj.target).closest('.color-select-wrapper').length 
+    isColorSelect = $(obj.target).closest('.color-select-wrapper').length
 
     unless isCanvas || isColorSelect
       @set('controller.focusedColor', null)

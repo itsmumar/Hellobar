@@ -32,6 +32,15 @@ HelloBar.ApplicationController = Ember.Controller.extend
   renderPreview: ( ->
     Ember.run.debounce(this, @doRenderPreview, 500)
   ).observes(
+    "model.use_question",
+    "model.answer1",
+    "model.answer2",
+    "model.answer1response",
+    "model.answer1caption",
+    "model.answer1link_text",
+    "model.answer2response",
+    "model.answer2caption",
+    "model.answer2link_text",
     "model.background_color",
     "model.border_color",
     "model.button_color",
@@ -49,6 +58,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.name_placeholder",
     "model.placement",
     "model.pushes_page_down",
+    "model.question",
     "model.remains_at_top",
     "model.settings.buffer_message",
     "model.settings.buffer_url",
@@ -99,7 +109,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     )
 
     HB.isPreviewMode = true
-    HB.removeAllSiteElements();
+    HB.removeAllSiteElements()
     HB.addToPage(HB.createSiteElement(previewElement))
     HB.isMobileWidth = "changed"
   )
@@ -142,6 +152,15 @@ HelloBar.ApplicationController = Ember.Controller.extend
   setModelIsDirty: ( (obj, keyName) ->
     @set("modelIsDirty", true) if !!@get(keyName)
   ).observesBefore(
+    "model.use_question",
+    "model.answer1",
+    "model.answer1response",
+    "model.answer1caption",
+    "model.answer1link_text",
+    "model.answer2",
+    "model.answer2response",
+    "model.answer2caption",
+    "model.answer2link_text",
     "model.animated",
     "model.background_color",
     "model.border_color",
@@ -161,6 +180,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.name_placeholder"
     "model.placement",
     "model.pushes_page_down",
+    "model.question",
     "model.remains_at_top",
     "model.settings.buffer_message",
     "model.settings.buffer_url",

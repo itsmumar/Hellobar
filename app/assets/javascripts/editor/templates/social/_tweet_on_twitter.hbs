@@ -2,8 +2,8 @@
 {{view Ember.TextField value=model.settings.message_to_tweet placeholder="Check out this great site!"}}
 
 <label>
-  Tweet the URL my visitor is on
   {{toggle-switch switch=model.settings.use_location_for_url}}
+  Tweet the URL my visitor is on
 </label>
 
 <label {{bind-attr class="model.settings.use_location_for_url:disabled"}}>URL to tweet</label>

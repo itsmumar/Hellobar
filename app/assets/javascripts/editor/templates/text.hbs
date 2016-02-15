@@ -1,12 +1,72 @@
 <h5 class="step-title">Text and Content</h5>
 
-<label>Headline</label>
-{{view Ember.TextField value=model.headline placeholder="Subscribe to our mailing list" maxlength=255}}
+<label>
+  {{toggle-switch switch=model.use_question}}
+  Boost your conversions by asking a leading question first
+</label>
 
-{{#unless hideNonBarFields}}
-  <label>Caption</label>
-  {{view Ember.TextField value=model.caption placeholder="(optional)" maxlength=255}}
+{{#unless showQuestionFields}}
+  <label>Headline</label>
+  {{view Ember.TextField value=model.headline placeholder="Subscribe to our mailing list" maxlength=255}}
+
+  {{#unless hideNonBarFields}}
+    <label>Caption</label>
+    {{view Ember.TextField value=model.caption placeholder="(optional)" maxlength=255}}
+  {{/unless}}
 {{/unless}}
+
+{{#if showQuestionFields}}
+  {{#question-tabs paneSelected=paneSelected}}
+    {{#tab-pane name="Question" onSelection="showQuestion"}}
+      <div id="question" class="tab-content">
+        <label>What's your question?</label>
+        {{view Ember.TextField value=model.question placeholder=model.question_placeholder}}
+
+        <label>First Answer</label>
+        {{view Ember.TextField value=model.answer1 placeholder=model.answer1_placeholder}}
+
+        <label>Second Answer</label>
+        {{view Ember.TextField value=model.answer2 placeholder=model.answer2_placeholder}}
+      </div>
+    {{/tab-pane}}
+
+    {{#tab-pane name="Answer 1" onSelection="showResponse1"}}
+      <div id="response1" class="tab-content">
+        <label>First Answer Headline</label>
+        {{view Ember.TextField value=model.answer1response placeholder=model.answer1response_placeholder}}
+
+        {{#unless hideNonBarFields}}
+          <label>First Answer Caption</label>
+          {{view Ember.TextField value=model.answer1caption placeholder="(optional)" maxlength=255}}
+        {{/unless}}
+
+        {{#unless hideLinkText}}
+          <label>First Answer Button Text</label>
+          {{view Ember.TextField value=model.answer1link_text placeholder=model.answer1link_text_placeholder}}
+        {{/unless}}
+      </div>
+    {{/tab-pane}}
+
+    {{#tab-pane name="Answer 2" onSelection="showResponse2"}}
+      <div id="response2" class="tab-content">
+        <label>Second Answer Headline</label>
+        {{view Ember.TextField value=model.answer2response placeholder=model.answer2response_placeholder}}
+
+        {{#unless hideNonBarFields}}
+          <label>Second Answer Caption</label>
+          {{view Ember.TextField value=model.answer2caption placeholder="(optional)" maxlength=255}}
+        {{/unless}}
+
+        {{#unless hideLinkText}}
+          <label>Second Answer Button Text</label>
+          {{view Ember.TextField value=model.answer2link_text placeholder=model.answer2link_text_placeholder}}
+        {{/unless}}
+      </div>
+    {{/tab-pane}}
+  {{/question-tabs}}
+
+  <hr/>
+{{/if}}
 
 {{#if showNamePlaceholderText}}
   <label>Name placeholder</label>
@@ -28,9 +88,11 @@
   }}
 {{/if}}
 
-{{#unless hideLinkText}}
-  <label>Button text</label>
-  {{view Ember.TextField value=model.link_text placeholder="OK!" maxlength=255}}
+{{#unless showQuestionFields}}
+  {{#unless hideLinkText}}
+    <label>Button text</label>
+    {{view Ember.TextField value=model.link_text placeholder="OK!" maxlength=255}}
+  {{/unless}}
 {{/unless}}
 
 <label>Font family</label>

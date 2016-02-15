@@ -291,13 +291,13 @@ ActiveRecord::Schema.define(version: 20160208211026) do
     t.string   "thank_you_text"
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
-    t.integer  "wordpress_bar_id"
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
     t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
+    t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
     t.string   "view_condition",                  default: "immediately"
@@ -306,6 +306,16 @@ ActiveRecord::Schema.define(version: 20160208211026) do
     t.integer  "image_upload_id"
     t.string   "image_placement",                 default: "bottom"
     t.integer  "active_image_id"
+    t.string   "question"
+    t.string   "answer1"
+    t.string   "answer2"
+    t.string   "answer1response"
+    t.string   "answer2response"
+    t.string   "answer1link_text"
+    t.string   "answer2link_text"
+    t.string   "answer1caption"
+    t.string   "answer2caption"
+    t.boolean  "use_question",                    default: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

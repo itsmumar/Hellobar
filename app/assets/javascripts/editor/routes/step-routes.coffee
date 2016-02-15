@@ -26,6 +26,12 @@ HelloBar.StepRoute = Ember.Route.extend
 
 HelloBar.StyleRoute     = HelloBar.StepRoute.extend()
 HelloBar.ColorsRoute    = HelloBar.StepRoute.extend()
-HelloBar.TextRoute      = HelloBar.StepRoute.extend()
 HelloBar.TargetingRoute = HelloBar.StepRoute.extend()
 HelloBar.SettingsRoute  = HelloBar.StepRoute.extend()
+
+HelloBar.TextRoute      = HelloBar.StepRoute.extend
+  # A hack to ensure the preview is in sync with the question tabs
+  setupController: (controller, model) ->
+    @_super(controller, model)
+    if model.use_question
+      controller.send('showQuestion')
