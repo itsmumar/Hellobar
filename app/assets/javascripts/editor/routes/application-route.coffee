@@ -4,6 +4,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
   model: ->
     if localStorage["stashedEditorModel"]
+      $(".goal-interstitial").remove() # Don't show the goal selector if we already have a model
       model = JSON.parse(localStorage["stashedEditorModel"])
       localStorage.removeItem("stashedEditorModel")
       model

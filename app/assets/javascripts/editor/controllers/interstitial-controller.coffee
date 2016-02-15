@@ -94,7 +94,29 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
   actions:
 
     closeInterstitial: ->
-      @transitionToRoute('style')
+      if Ember.isEqual(@get('interstitialType'), 'contacts')
+        baseOptions =
+          id: null
+          siteID: @get('model.site.id')
+          saveURL: "/sites/#{siteID}/contact_lists.json"
+          saveMethod: "POST"
+          editorModel: @get("model")
+          success: (data, modal) =>
+            # Set the site element to use the new list
+            lists = @get("model.site.contact_lists").slice(0)
+            lists.push({id: data.id, name: data.name})
+            @set("model.site.contact_lists", lists)
+            @set("model.contact_list_id", data.id)
+            # Close the modal and transition to the editor
+            @transitionToRoute('style')
+            this.trigger('viewClosed')
+            modal.close()
+
+        new ContactListModal(baseOptions).open()
+      else
+        @transitionToRoute('style')
+        this.trigger('viewClosed')
+
 
     closeEditor: ->
       @setProperties(
