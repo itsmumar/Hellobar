@@ -1368,15 +1368,7 @@ var HB = {
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
     // Detect the device
-    var ua = navigator.userAgent;
-    if (ua.match(/ipad/i))
-      HB.setVisitorData("dv", "tablet");
-    else if (ua.match(/(mobi|phone|ipod|blackberry|docomo)/i))
-      HB.setVisitorData("dv", "mobile");
-    else if (ua.match(/(ipad|kindle|android)/i))
-      HB.setVisitorData("dv", "tablet");
-    else
-      HB.setVisitorData("dv", "computer");
+    HB.setVisitorData("dv", HB.device());
   },
 
   paramsFromString: function(url)
@@ -1705,7 +1697,7 @@ var HB = {
       // if on mobile, display the bar after N ms regardless of mouse behavior
       var mobileDelaySetting = 30000;
       var date = new Date();
-      if ( HB.isMobile && date.getTime() - HB.intentConditionCache.intentStartTime > mobileDelaySetting) {
+      if ( HB.device() === "mobile" && date.getTime() - HB.intentConditionCache.intentStartTime > mobileDelaySetting) {
         vistorIntendsTo = true
       };
     };
@@ -1911,5 +1903,21 @@ var HB = {
     if(HB.siteElementsOnPage.length === 0) {
       HB.showSiteElements();
     }
+  },
+
+  getUserAgent: function() {
+    return navigator.userAgent;
+  },
+
+  device: function() {
+    var ua = HB.getUserAgent();
+    if (ua.match(/ipad/i))
+      return "tablet";
+    else if (ua.match(/(mobi|phone|ipod|blackberry|docomo)/i))
+      return "mobile";
+    else if (ua.match(/(ipad|kindle|android)/i))
+      return "tablet";
+    else
+      return "computer";
   }
 };
