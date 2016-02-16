@@ -109,6 +109,17 @@ describe("HB", function() {
       }));
     });
 
+    it("calls addToPage, disabling tracking the view (since it's already been viewed)", function () {
+      siteElement.animated = true;
+      var result = HB.questionifySiteElement(siteElement);
+      spyOn(HB, 'addToPage');
+      result.displayResponse(2);
+
+      expect(HB.addToPage).toHaveBeenCalledWith(jasmine.objectContaining({
+        dontRecordView: true
+      }));
+    });
+
     it("calls remove() on the result when triggering displayResponse", function () {
       var result = HB.questionifySiteElement(siteElement);
       spyOn(result, 'remove');

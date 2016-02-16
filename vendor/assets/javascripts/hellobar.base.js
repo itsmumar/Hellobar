@@ -1836,8 +1836,10 @@ var HB = {
 
       // Dont use the question, otherwise we end up in a loop.
       // Also, don't animate in since the element will already be on the screen
+      // Also, don't record the view since it's already been recorded
       originalSiteElement.use_question = false;
       originalSiteElement.animated = false;
+      originalSiteElement.dontRecordView = true;
 
       // Remove the siteElement and show the original in non preview environments
       if(!HB.CAP.preview) {

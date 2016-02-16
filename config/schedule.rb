@@ -37,6 +37,7 @@ end
 
 every 1.hours, :roles => [:cron] do
   rake "backend:adjust_dynamo_db_capacity[recent_throttled_only]"
+  rake "cloudwatch_metrics:create_alarms"
 end
 
 every 6.hours, :roles => [:cron] do
@@ -53,4 +54,5 @@ end
 
 every 5.minutes, :roles => [:web, :worker] do
   rake "queue_worker:metrics"
+  rake "cloudwatch_metrics:send"
 end
