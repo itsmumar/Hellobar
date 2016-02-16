@@ -49,4 +49,94 @@ namespace :cloudwatch_metrics do
       metric_data: metrics
     })
   end
+
+  desc 'Creates alarms for disk space and memory'
+  task :create_alarms do
+    instance_id = `ec2metadata --instance-id`
+    instance_id.strip!
+    stage = Hellobar::Settings[:env_name]
+    namespace = "HB/#{stage}"
+
+    require File.join(Rails.root, "config/initializers/settings.rb")
+
+    cloudwatch = AWS::CloudWatch::Client.new(
+      access_key_id: Hellobar::Settings[:aws_access_key_id],
+      secret_access_key: Hellobar::Settings[:aws_secret_access_key]
+    )
+
+    ########################################
+    #### Gather existing alarms
+    ########################################
+    alarm_options = {
+      namespace: namespace, # required
+      dimensions: [
+        {
+          name: "InstanceId", # required
+          value: instance_id, # required
+        },
+      ]
+    }
+
+    diskspace_alarms = cloudwatch.describe_alarms_for_metric(alarm_options.merge(
+      metric_name: "AvailableDiskSpace"
+    ))
+
+    memory_alarms = cloudwatch.describe_alarms_for_metric(alarm_options.merge(
+      metric_name: "FreeMemory"
+    ))
+
+    ########################################
+    #### DISK SPACE Alarm Creation
+    ########################################
+    if diskspace_alarms[:metric_alarms].empty?
+      cloudwatch.put_metric_alarm({
+        alarm_name: "Disk Space Alarm", # required
+        alarm_description: "Alerts when the instance is low on disk space",
+        actions_enabled: true,
+        # ok_actions: ["ResourceName"],
+        alarm_actions: ["arn:aws:sns:us-east-1:199811731772:alarms"],
+        # insufficient_data_actions: ["ResourceName"],
+        metric_name: "AvailableDiskSpace", # required
+        namespace: namespace, # required
+        statistic: "Average", # required, accepts SampleCount, Average, Sum, Minimum, Maximum
+        dimensions: [
+          {
+            name: "InstanceId", # required
+            value: instance_id, # required
+          },
+        ],
+        period: 5 * 60, # required - 5 minutes
+        unit: "Kilobytes", # accepts Seconds, Microseconds, Milliseconds, Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes, Bits, Kilobits, Megabits, Gigabits, Terabits, Percent, Count, Bytes/Second, Kilobytes/Second, Megabytes/Second, Gigabytes/Second, Terabytes/Second, Bits/Second, Kilobits/Second, Megabits/Second, Gigabits/Second, Terabits/Second, Count/Second, None
+        evaluation_periods: 2, # required
+        threshold: 1000000.0, # required - 1GB
+        comparison_operator: "LessThanOrEqualToThreshold", # required, accepts GreaterThanOrEqualToThreshold, GreaterThanThreshold, LessThanThreshold, LessThanOrEqualToThreshold
+      })
+    end
+
+    ########################################
+    #### MEMORY Alarm Creation
+    ########################################
+    if memory_alarms[:metric_alarms].empty?
+      cloudwatch.put_metric_alarm({
+        alarm_name: "Memory Low Alarm", # required
+        alarm_description: "Alerts when the instance is low on memory",
+        actions_enabled: true,
+        alarm_actions: ["arn:aws:sns:us-east-1:199811731772:alarms"],
+        metric_name: "FreeMemory", # required
+        namespace: namespace, # required
+        statistic: "Average", # required, accepts SampleCount, Average, Sum, Minimum, Maximum
+        dimensions: [
+          {
+            name: "InstanceId", # required
+            value: instance_id, # required
+          },
+        ],
+        period: 5 * 60, # required - 5 minutes
+        unit: "Kilobytes", # accepts Seconds, Microseconds, Milliseconds, Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes, Bits, Kilobits, Megabits, Gigabits, Terabits, Percent, Count, Bytes/Second, Kilobytes/Second, Megabytes/Second, Gigabytes/Second, Terabytes/Second, Bits/Second, Kilobits/Second, Megabits/Second, Gigabits/Second, Terabits/Second, Count/Second, None
+        evaluation_periods: 2, # required
+        threshold: 500000.0, # required - 1GB
+        comparison_operator: "LessThanOrEqualToThreshold", # required, accepts GreaterThanOrEqualToThreshold, GreaterThanThreshold, LessThanThreshold, LessThanOrEqualToThreshold
+      })
+    end
+  end
 end
