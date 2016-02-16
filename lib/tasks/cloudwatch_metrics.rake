@@ -33,8 +33,8 @@ namespace :cloudwatch_metrics do
 
     # Convert the data into the Cloudwatch format
     metrics.each do |metric|
-      metric[:dimension] = {name: "InstanceId", value: instance_id}
-      metric[:unit] = "kB"
+      metric[:dimensions] = [{name: "InstanceId", value: instance_id}]
+      metric[:unit] = "Kilobytes"
     end
 
     # Send the data to Cloudwatch
