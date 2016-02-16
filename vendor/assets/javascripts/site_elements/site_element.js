@@ -52,7 +52,9 @@ HB.SiteElement = HB.createClass({
         this.setIosKeyboardHandlers();
         this.setPullDown();
         // Track the view
-        HB.viewed(this);
+        if(!this.dontRecordView) {
+          HB.viewed(this);
+        }
         // Monitor zoom scale events
         this.hideOnZoom();
 
