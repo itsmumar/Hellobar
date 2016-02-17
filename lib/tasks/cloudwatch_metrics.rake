@@ -90,12 +90,10 @@ namespace :cloudwatch_metrics do
     ########################################
     if diskspace_alarms[:metric_alarms].empty?
       cloudwatch.put_metric_alarm({
-        alarm_name: "Disk Space Alarm", # required
+        alarm_name: "Disk Space Alarm - #{instance_id}", # required
         alarm_description: "Alerts when the instance is low on disk space",
         actions_enabled: true,
-        # ok_actions: ["ResourceName"],
         alarm_actions: ["arn:aws:sns:us-east-1:199811731772:alarms"],
-        # insufficient_data_actions: ["ResourceName"],
         metric_name: "AvailableDiskSpace", # required
         namespace: namespace, # required
         statistic: "Average", # required, accepts SampleCount, Average, Sum, Minimum, Maximum
@@ -118,7 +116,7 @@ namespace :cloudwatch_metrics do
     ########################################
     if memory_alarms[:metric_alarms].empty?
       cloudwatch.put_metric_alarm({
-        alarm_name: "Memory Low Alarm", # required
+        alarm_name: "Memory Low Alarm - #{instance_id}", # required
         alarm_description: "Alerts when the instance is low on memory",
         actions_enabled: true,
         alarm_actions: ["arn:aws:sns:us-east-1:199811731772:alarms"],
