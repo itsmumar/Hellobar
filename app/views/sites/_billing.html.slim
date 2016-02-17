@@ -73,9 +73,9 @@ section
 - elsif @site.is_free?
   ul
     li
-      .button-wrapper.promo-label
+      .button-wrapper.promo-label.large
         ' To upgrade your plan, contact the site owner. Your site owner is:
     - @site.owners.each do |owner|
       li
-        .button-wrapper.promo-button
+        .button-wrapper.promo-button.large
           = mail_to owner.email, owner.name || owner.email
