@@ -60,6 +60,8 @@ $transition: 0.75s
       border-radius: 10em
       border: 2px solid transparent
       @include inline-block()
+      margin-left: auto
+      margin-right: auto
 
       &:before
         font-size: 1.85em
@@ -130,6 +132,8 @@ $transition: 0.75s
       box-shadow: 0 0 0 rgba(0,0,0,0)
       @include transition($transition/1.5 all ease-in-out)
       @include flex(0 1 18.5em)
+      @include flex-flow(column nowrap)
+      @include display(flex)
 
       h6
         color: $grayDark
@@ -145,8 +149,7 @@ $transition: 0.75s
         width: 100%
         display: block
         font-size: 0.95em
-        margin-top: 1.33em
-        margin-bottom: -4px
+        margin-top: auto
         border-radius: $radiusLg
         text-transform: uppercase
         font-weight: $fontWeightBold
