@@ -196,10 +196,18 @@ module SiteElementsHelper
   end
 
   def elements_grouped_by_type(elements)
-    [elements.bars, elements.sliders, elements.modals_and_takeovers]
+    elements = elements.group_by(&:type)
+    [
+      elements["Bar"],
+      elements["Slider"],
+      (elements["Modal"] || []) + (elements["Takeover"] || [])
+    ].compact
   end
 
   def elements_grouped_by_subtype(elements)
-    [elements.email_subtype, elements.social_subtype, elements.traffic_subtype, elements.announcement_subtype]
+    social_elements = elements.select { |x| x.element_subtype.include?("social") }
+    elements = elements.group_by(&:element_subtype)
+
+    [elements["email"], social_elements, elements["traffic"], elements["announcement"]].compact
   end
 end

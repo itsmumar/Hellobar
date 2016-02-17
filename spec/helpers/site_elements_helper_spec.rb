@@ -308,10 +308,9 @@ describe SiteElementsHelper do
     it "should group elements by type" do
       grouped_elements = helper.elements_grouped_by_type(site.site_elements)
 
-      expect(grouped_elements.count).to eq 3
+      expect(grouped_elements.count).to eq 2
       expect(grouped_elements[0].count).to eq 4
       expect(grouped_elements[1].count).to eq 0
-      expect(grouped_elements[2].count).to eq 0
     end
   end
 
@@ -321,11 +320,10 @@ describe SiteElementsHelper do
     it "should group elements by subtype" do
       grouped_elements = helper.elements_grouped_by_subtype(site.site_elements)
 
-      expect(grouped_elements.count).to eq 4
+      expect(grouped_elements.count).to eq 3
       expect(grouped_elements[0].count).to eq 1
       expect(grouped_elements[1].count).to eq 2
       expect(grouped_elements[2].count).to eq 1
-      expect(grouped_elements[3].count).to eq 0
     end
   end
 
