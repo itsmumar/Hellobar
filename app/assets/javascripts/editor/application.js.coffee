@@ -314,3 +314,9 @@ HB.countryCodes = [
   { code: "ZM", name: "Zambia" }
   { code: "ZW", name: "Zimbabwe" }
 ]
+
+#----------- Reveal Blocks ----------#
+$('.reveal-wrapper').click (evt) ->
+  unless $(@).hasClass('activated')
+    $('.reveal-wrapper.activated').removeClass('activated')
+    $(@).addClass('activated')
