@@ -19,6 +19,7 @@ var HBQ = function()
   HB.siteElementsOnPage = [];
   HB.isMobile = false;
   HB.maxSliderSize = 380; /* IF CHANGED, UPDATE SLIDER ELEMENT CSS */
+  HB.mobilePreviewWidth = 250;
   HB.id_type_map = {
     "hellobar-bar": "bar",
     "hellobar-modal": "modal",
