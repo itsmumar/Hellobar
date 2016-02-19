@@ -72,7 +72,7 @@
   /*-----------  Dropdown Elements  -----------*/
 
   .dropdown-block
-  
+
     h6
       color: $gray
       font-size: 0.85rem
@@ -93,8 +93,8 @@
         color: $red
 
       &.active
+        font-weight: bold
         color: $black
-        background-color: $white
 
       > i
         color: $grayLight
@@ -104,7 +104,7 @@
 
     > a
       cursor: pointer
-    
+
       &:first-child
         margin-top: -1rem
         padding-top: 0.75rem
@@ -122,7 +122,7 @@
       &:hover i
         color: $red
 
-    ul 
+    ul
 
       li
         @include ellipsis()
@@ -133,3 +133,15 @@
         a
           padding: 0 0 0 1rem
           @include inline-block()
+
+    .pill
+      @include inline-block()
+      margin-left: 2.5em
+      background-color: $green
+      border-radius: 5px
+      font-size: 0.7em
+      padding: 2px 6px
+      text-transform: uppercase
+
+      &.Enterprise
+        background-color: $blue

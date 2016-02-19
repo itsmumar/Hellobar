@@ -1,4 +1,6 @@
 class Users::PasswordsController < Devise::PasswordsController
+  skip_before_action :require_no_authentication, if: proc{|ctrl| current_admin.present? }
+
   layout 'static'
 
   def create
