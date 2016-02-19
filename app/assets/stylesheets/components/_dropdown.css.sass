@@ -99,7 +99,6 @@
       > i
         color: $grayLight
         margin-right: 0.67rem
-        vertical-align: middle
         @include transition()
 
     > a
@@ -127,21 +126,24 @@
       li
         @include ellipsis()
 
+        &.padded
+          padding-bottom: 2px
+
         > [class*='avatar']
           float: left
 
         a
           padding: 0 0 0 1rem
-          @include inline-block()
+          @include inline-block(none)
 
     .pill
       @include inline-block()
-      margin-left: 2.5em
       background-color: $green
-      border-radius: 5px
+      border-radius: 2px
       font-size: 0.7em
-      padding: 2px 6px
+      padding: 1px 4px
       text-transform: uppercase
+      float: right
 
       &.Enterprise
         background-color: $blue

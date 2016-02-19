@@ -19,7 +19,7 @@
           h6 Switch Sites
           ul
             - current_user.sites.sort_by(&:normalized_url).each do |site|
-              li
+              li.padded
                 =active_link_to site.normalized_url, site_path(site)
                 - unless site.is_free?
                   div.pill class=site.current_subscription.values[:name]
