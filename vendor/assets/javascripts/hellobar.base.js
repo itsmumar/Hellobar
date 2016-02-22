@@ -19,6 +19,7 @@ var HBQ = function()
   HB.siteElementsOnPage = [];
   HB.isMobile = false;
   HB.maxSliderSize = 380; /* IF CHANGED, UPDATE SLIDER ELEMENT CSS */
+  HB.mobilePreviewWidth = 250;
   HB.id_type_map = {
     "hellobar-bar": "bar",
     "hellobar-modal": "modal",
@@ -1022,10 +1023,15 @@ var HB = {
 
           // Skip the site element if it's a modal / takeover and the
           // user already dismissed one of those types
-          if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
+          if(siteElement.type == "Modal" || siteElement.type == "Takeover") {
             if (HB.didDismissHB()) {
               continue;
             }
+          }
+
+          // Skip the site element if it's click to call and the device is not mobile
+          if(siteElement.subtype == "call" && HB.getVisitorData("dv") !== "mobile") {
+            continue;
           }
 
           if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
@@ -1081,6 +1087,8 @@ var HB = {
     // for example)
     if ( possibleSiteElements.email )
       possibleSiteElements = possibleSiteElements.email;
+    else if ( possibleSiteElements.call )
+      possibleSiteElements = possibleSiteElements.call;
     else if ( possibleSiteElements.social )
       possibleSiteElements = possibleSiteElements.social;
     else if ( possibleSiteElements.traffic )

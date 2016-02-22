@@ -1,7 +1,7 @@
 HelloBar.ApplicationView = Ember.View.extend
 
   classNames: ['editor-wrapper']
-  classNameBindings: ['isMobile', 'isFullscreen']
+  classNameBindings: ['isMobile', 'isFullscreen', 'isCallType']
 
   #-----------  State Bindings  -----------#
 
@@ -11,6 +11,7 @@ HelloBar.ApplicationView = Ember.View.extend
 
   isMobile: Ember.computed.alias('controller.isMobile')
   isFullscreen: Ember.computed.alias('controller.isFullscreen')
+  isCallType: Ember.computed.equal('controller.model.element_subtype', 'call')
 
   #-----------  Click Action  -----------#
 
