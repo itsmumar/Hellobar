@@ -339,3 +339,54 @@ describe ContactList, "sync!" do
     it { should receive(:sync_all!) } # this one via `delay`
   end
 end
+
+describe ContactList, '#needs_to_reconfigure?' do
+  it 'returns false if not syncable' do
+    list = ContactList.new
+
+    allow(list).to receive(:syncable?) { false }
+
+    expect(list.needs_to_reconfigure?).to eql(false)
+  end
+
+  it 'returns false if syncs with oauth' do
+    list = ContactList.new
+
+    allow(list).to receive(:syncable?) { true }
+    allow(list).to receive(:oauth?) { true }
+
+    expect(list.needs_to_reconfigure?).to eql(false)
+  end
+
+  it 'returns false if syncs with an api_key' do
+    list = ContactList.new
+
+    allow(list).to receive(:syncable?) { true }
+    allow(list).to receive(:oauth?) { false }
+    allow(list).to receive(:api_key?) { true }
+
+    expect(list.needs_to_reconfigure?).to eql(false)
+  end
+
+  it 'returns false when able to generate subscribe params' do
+    list = ContactList.new
+
+    allow(list).to receive(:syncable?) { true }
+    allow(list).to receive(:oauth?) { false }
+    allow(list).to receive(:api_key?) { false }
+    allow(list).to receive(:subscribe_params) { true }
+
+    expect(list.needs_to_reconfigure?).to eql(false)
+  end
+
+  it 'returns true when not able to generate subscribe params' do
+    list = ContactList.new
+
+    allow(list).to receive(:syncable?) { true }
+    allow(list).to receive(:oauth?) { false }
+    allow(list).to receive(:api_key?) { false }
+    allow(list).to receive(:subscribe_params) { raise('hell') }
+
+    expect(list.needs_to_reconfigure?).to eql(true)
+  end
+end
