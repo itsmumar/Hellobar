@@ -56,9 +56,9 @@
         @include inline-block()
 
     /*-----------  Block Types  -----------*/
-    
-    &.views 
-      
+
+    &.views
+
       i
         background-color: $red
 
@@ -66,10 +66,10 @@
         border-color: lighten($red, 33%)
 
       &.activated
-        border-color: $red      
+        border-color: $red
 
-    &.emails 
-      
+    &.emails
+
       i
         background-color: $green
 
@@ -77,10 +77,10 @@
         border-color: lighten($green, 33%)
 
       &.activated
-        border-color: $green   
+        border-color: $green
 
-    &.clicks 
-      
+    &.clicks
+
       i
         background-color: $yellow
 
@@ -88,10 +88,10 @@
         border-color: lighten($yellow, 33%)
 
       &.activated
-        border-color: $yellow   
+        border-color: $yellow
 
-    &.social 
-      
+    &.social
+
       i
         background-color: $blue
 
@@ -99,10 +99,10 @@
         border-color: lighten($blue, 33%)
 
       &.activated
-        border-color: $blue   
+        border-color: $blue
 
-    &.feedback 
-      
+    &.feedback
+
       i
         background-color: $purple
 
@@ -110,7 +110,20 @@
         border-color: lighten($purple, 33%)
 
       &.activated
-        border-color: $purple   
+        border-color: $purple
+
+    &.calls
+
+      i
+        background-color: $purple
+
+      &:hover
+        border-color: lighten($purple, 33%)
+
+      &.activated
+        border-color: $purple
+
+    /*-----------  Block States  -----------*/
 
     &.activated
       cursor: default
@@ -208,7 +221,7 @@
     color: lighten($purple, 25%)
 
   /*-----------  Loading State  -----------*/
-  
+
   &.loading
 
     &:before

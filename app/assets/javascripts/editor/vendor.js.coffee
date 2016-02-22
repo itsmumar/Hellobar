@@ -16,6 +16,7 @@
 #= require jquery_dropper
 #= require imagesloaded
 #= require dropzone.min
+#= require phoneformat.min
 
 #= require handlebars
 #= require handlebars_helpers

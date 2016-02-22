@@ -1,5 +1,5 @@
 - no_branding_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/5e1d01493a72d35002fc11985ec9034a04170ea2_1428695536.png"
-- no_ads_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/b64037fbd4d57265a5703c6d22b33f924957f9dc_1428695541.png"
+- ab_test_image_url = "https://s3.amazonaws.com/scripts.hellobar.com/image_uploads/images/000/010/748/original/abicon.png?1456159565"
 - targeted_bars_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/1382713c95b27339184e8411f64eb70b115211f1_1428695544.png"
 - charts_image_url = "https://s3.amazonaws.com/cms.crazyegg.com/30dfe7a23fd5ce5c9f722684720da8ce4bb377d2_1428695547.png"
 
@@ -110,11 +110,11 @@ tr.lightGrey
                             = link_to "Brand your bar", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Branding", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
                       td
                         div.feature
-                          img src=no_ads_image_url
+                          img src=ab_test_image_url
                           div.content
-                            div.strong Remove ads
-                            div.text Increase results by removing ads.
-                            = link_to "Remove ads", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Remove Ads", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                            div.strong Unlimited bars
+                            div.text A/B test with more variations.
+                            = link_to "Test more bars", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro More Bars", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
                     tr
                       td
                         div.feature

@@ -161,13 +161,16 @@ HB.SiteElement = HB.createClass({
 
         // Update the CSS class based on the width
         var wasMobile = HB.isMobileWidth;
+        var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : document.body.clientWidth;
+
 
         if ( this.e.siteElementType == "modal" && containerDocument )
           HB.isMobileWidth = (containerDocument.getElementById("hellobar-modal-background").clientWidth <= 640 );
         else if ( this.e.siteElementType == "slider" )
-          HB.isMobileWidth = this.e.siteElement.clientWidth <= 270 || document.body.clientWidth <= 375 || document.body.clientWidth < this.e.siteElement.clientWidth;
+          HB.isMobileWidth = this.e.siteElement.clientWidth <= 270 || containerWidth <= 375 || containerWidth < this.e.siteElement.clientWidth;
         else
           HB.isMobileWidth = (this.e.siteElement.clientWidth <= 640 );
+
 
         if ( wasMobile != HB.isMobileWidth ) {
           if ( HB.isMobileWidth ) {
@@ -217,7 +220,8 @@ HB.SiteElement = HB.createClass({
     if ( type == 'bar' ) {
       this.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
     } else if ( type == 'slider' ) {
-      var newWidth = Math.min(HB.maxSliderSize + 24, window.innerWidth - 24);
+      var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : window.innerWidth;
+      var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
       this.e.container.style.width = (newWidth) + "px";
       this.e.container.style.height = (element.clientHeight + 24) + "px";
     }
@@ -434,15 +438,31 @@ HB.SiteElement = HB.createClass({
   },
 
   iosKeyboardShow: function() {
-    if(this.e.siteElementType == "slider" || this.e.siteElementType == "bar") {
-      HB.iosFocusInterval = setTimeout(function() { window.scrollTo(0, this.w.offsetTop); }, 500);
-    } else if(this.e.siteElementType == "takeover" || this.e.siteElementType == "modal") {
+    var element = this;
+
+    if(this.e.siteElementType == "bar") {
+      HB.iosFocusInterval = setTimeout(function() {
+        window.scrollTo(0, this.w.offsetTop);
+      }, 500);
+    }
+    else if(this.e.siteElementType == "slider") {
       this.w.style.position = "absolute";
       HB.iosFocusInterval = setInterval(function() {
-        this.w.style.height = window.innerHeight + "px";
-        this.w.style.width = window.innerWidth + "px";
-        this.w.style.top = window.pageYOffset + "px";
-        this.w.style.left = window.pageXOffset + "px";
+        element.w.style.left = window.pageXOffset + "px";
+        element.w.style.top = window.pageYOffset + "px";
+      }, 200);
+    }
+    else if
+    (
+      this.e.siteElementType == "takeover" ||
+      this.e.siteElementType == "modal"
+    ) {
+      this.w.style.position = "absolute";
+      HB.iosFocusInterval = setInterval(function() {
+        element.w.style.height = window.innerHeight + "px";
+        element.w.style.width = window.innerWidth + "px";
+        element.w.style.left = window.pageXOffset + "px";
+        element.w.style.top = window.pageYOffset + "px";
       }, 200);
     }
   },
@@ -453,7 +473,11 @@ HB.SiteElement = HB.createClass({
       HB.iosFocusInterval = null;
     }
 
-    if(this.e.siteElementType == "takeover" || this.e.siteElementType == "modal") {
+    if(
+      this.e.siteElementType == "takeover" ||
+      this.e.siteElementType == "modal" ||
+      this.e.siteElementType == "slider"
+    ) {
       this.w.style.position = "";
       this.w.style.height = "";
       this.w.style.width = "";

@@ -6,6 +6,7 @@ HelloBar.Router.map ->
     @route 'emails'
     @route 'social'
     @route 'click'
+    @route 'call'
     @route 'feedback'
     @route 'announcement'
 

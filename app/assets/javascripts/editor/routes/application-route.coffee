@@ -64,6 +64,8 @@ HelloBar.ApplicationRoute = Ember.Route.extend
       settings.routeForwarding = 'settings.social'
     else
       switch model.element_subtype
+        when 'call'
+          settings.routeForwarding = 'settings.call'
         when 'email'
           settings.routeForwarding = 'settings.emails'
         when 'traffic'
@@ -89,7 +91,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
     Ember.subscribe 'interstitial.routing',
       before: (name, timestamp, subroute) =>
-        isInterstitial = $.inArray(subroute, ['money', 'contacts', 'facebook']) > -1
+        isInterstitial = $.inArray(subroute, ['money', 'call', 'contacts', 'facebook']) > -1
 
         @disconnectOutlet({
           outlet     : 'interstitial'
