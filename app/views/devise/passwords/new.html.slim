@@ -1,3 +1,5 @@
+- resource.email = cookies.signed[:login_email] if resource.email.blank?
+
 = simple_form_for(resource, as: resource_name, url: user_password_path) do |f|
 
   = render 'shared/flash'
