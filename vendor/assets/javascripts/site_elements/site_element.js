@@ -434,15 +434,31 @@ HB.SiteElement = HB.createClass({
   },
 
   iosKeyboardShow: function() {
-    if(this.e.siteElementType == "slider" || this.e.siteElementType == "bar") {
-      HB.iosFocusInterval = setTimeout(function() { window.scrollTo(0, this.w.offsetTop); }, 500);
-    } else if(this.e.siteElementType == "takeover" || this.e.siteElementType == "modal") {
+    var element = this;
+
+    if(this.e.siteElementType == "bar") {
+      HB.iosFocusInterval = setTimeout(function() {
+        window.scrollTo(0, this.w.offsetTop);
+      }, 500);
+    }
+    else if(this.e.siteElementType == "slider") {
       this.w.style.position = "absolute";
       HB.iosFocusInterval = setInterval(function() {
-        this.w.style.height = window.innerHeight + "px";
-        this.w.style.width = window.innerWidth + "px";
-        this.w.style.top = window.pageYOffset + "px";
-        this.w.style.left = window.pageXOffset + "px";
+        element.w.style.left = window.pageXOffset + "px";
+        element.w.style.top = window.pageYOffset + "px";
+      }, 200);
+    }
+    else if
+    (
+      this.e.siteElementType == "takeover" ||
+      this.e.siteElementType == "modal"
+    ) {
+      this.w.style.position = "absolute";
+      HB.iosFocusInterval = setInterval(function() {
+        element.w.style.height = window.innerHeight + "px";
+        element.w.style.width = window.innerWidth + "px";
+        element.w.style.left = window.pageXOffset + "px";
+        element.w.style.top = window.pageYOffset + "px";
       }, 200);
     }
   },
@@ -453,7 +469,11 @@ HB.SiteElement = HB.createClass({
       HB.iosFocusInterval = null;
     }
 
-    if(this.e.siteElementType == "takeover" || this.e.siteElementType == "modal") {
+    if(
+      this.e.siteElementType == "takeover" ||
+      this.e.siteElementType == "modal" ||
+      this.e.siteElementType == "slider"
+    ) {
       this.w.style.position = "";
       this.w.style.height = "";
       this.w.style.width = "";
