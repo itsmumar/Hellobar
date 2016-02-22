@@ -19,12 +19,13 @@ module Hellobar
     # code (config, etc.)
     # config.autoload_paths += %W(#{config.root}/lib)
 
+    config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
+
     config.sass.preferred_syntax = :sass
     config.action_mailer.default_url_options = { host: "www.hellobar.com" }
 
     config.assets.precompile += ['editor.css', 'static.css', 'admin.css', 'editor/vendor.js', 'editor/application.js', 'ember.js', '*.css.erb', '*.css.sass.erb']
     config.assets.paths << Rails.root.join('vendor', 'assets')
-
 
     config.handlebars.precompile = false
     config.handlebars.templates_root = 'editor/templates'
