@@ -84,7 +84,9 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.text_color",
     "model.type",
     "model.view_condition",
-    "model.wiggle_button"
+    "model.wiggle_button",
+    "isFullscreen",
+    "isMobile"
   ).on("init")
 
   renderPreviewWithAnimations: ( ->
@@ -111,6 +113,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     )
 
     HB.isPreviewMode = true
+    HB.previewMode = if @get('isMobile') then 'mobile' else 'fullscreen'
     HB.removeAllSiteElements()
     HB.addToPage(HB.createSiteElement(previewElement))
     HB.isMobileWidth = "changed"

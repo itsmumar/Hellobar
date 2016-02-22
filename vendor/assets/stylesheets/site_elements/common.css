@@ -157,6 +157,10 @@ html, body {
   opacity: 0.9;
 }
 
+.mobile .hb-cta-style-button {
+  white-space: normal;
+}
+
 /*-----------  Text  -----------*/
 
 .hb-text-wrapper {
