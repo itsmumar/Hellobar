@@ -247,7 +247,7 @@ describe SiteElementsHelper do
       allow(se2).to receive(:total_conversions) { 100 }
       allow(se2).to receive(:total_views)       { 500 }
 
-      Site.any_instance.stub(:site_elements).and_return([se1, se2])
+      Rule.any_instance.stub(:site_elements).and_return([se1, se2])
 
       expect(helper.ab_test_icon(se1)).to include("icon-tip")
       expect(helper.ab_test_icon(se2)).to include("icon-circle")
@@ -259,6 +259,8 @@ describe SiteElementsHelper do
       variation_3 = variation_1.dup
 
       variation_2.save
+      other_rule = create(:rule, site: variation_1.site)
+      variation_3.rule = other_rule
       variation_3.save
 
       allow(variation_3).to receive(:rule_id) { 0 }
