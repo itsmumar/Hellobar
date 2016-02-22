@@ -4,7 +4,7 @@ class Rule < ActiveRecord::Base
     any: 'any'
   }
 
-  belongs_to :site, touch: true
+  belongs_to :site, touch: true, inverse_of: :rules
   has_many :site_elements, dependent: :destroy
   has_many :conditions, dependent: :destroy, inverse_of: :rule
 

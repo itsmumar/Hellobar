@@ -30,6 +30,12 @@
   content: "\e601";
 }
 
+.icon-phone {
+  height: 1.4em;
+  vertical-align: middle;
+  margin-right: 0.5em;
+}
+
 /*-----------  Globals  -----------*/
 
 *, *:after, *:before {
