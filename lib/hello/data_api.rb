@@ -17,7 +17,7 @@ module Hello::DataAPI
     def lifetime_totals(site, site_elements, num_days = 1, cache_options = {})
       return fake_lifetime_totals(site, site_elements, num_days) if Hellobar::Settings[:fake_data_api]
 
-      site_element_ids = site_elements.map(&:id).sort
+      site_element_ids = site_elements.map(&:id).compact.sort
 
       cache_key = "hello:data-api:#{site.id}:#{site_element_ids.sort.join('-')}:lifetime_totals:#{num_days}days:#{site.script_installed_at.to_i}"
       cache_options[:expires_in] = 10.minutes
