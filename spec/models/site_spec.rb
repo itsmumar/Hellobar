@@ -13,37 +13,6 @@ describe Site do
     expect(@site.owners.first).to eq(users(:joey))
   end
 
-  describe "#show_ads_test" do
-    before do
-      @site = create(:site)
-      @owner = create(:user)
-      create(:site_ownership, site: @site, user: @owner)
-    end
-
-    context "owner created at is not within the time frame" do
-      it "returns true" do
-        @owner.update(created_at: 1.year.ago)
-        expect(@site.show_ads_test(Time.now, 1.week.from_now)).to eq(true)
-      end
-    end
-
-    context "owner created at is within the time frame" do
-      context "owner id is even" do
-        it "returns true" do
-          allow_any_instance_of(User).to receive(:id).and_return(12344)
-          expect(@site.show_ads_test(@owner.created_at - 1.week, @owner.created_at + 1.week)).to eq(true)
-        end
-      end
-
-      context "owner id is even" do
-        it "returns false" do
-          allow_any_instance_of(User).to receive(:id).and_return(12345)
-          expect(@site.show_ads_test(@owner.created_at - 1.week, @owner.created_at + 1.week)).to eq(false)
-        end
-      end
-    end
-  end
-
   describe "#create_default_rule" do
     it "creates a rule for the site" do
       site = sites(:horsebike)
@@ -487,56 +456,6 @@ describe Site do
 
       it "shows branding" do
         expect(se.show_branding).to be_true
-      end
-    end
-  end
-
-  describe "#show_in_bar_ads?" do
-    context "ad factor 1.0" do
-      let(:passing_site) do
-        sites(:free_site).tap do |passing_site|
-          passing_site.url = "http://zombo.com"
-        end
-      end
-
-      before do
-        @original_config = Site.in_bar_ads_config
-        Site.in_bar_ads_config = {
-          test_fraction: 1.0,
-          show_to_fraction: 1.0 # show all bars to all people that pass the other restrictions
-        }
-      end
-
-      after do
-        Site.in_bar_ads_config = @original_config
-      end
-
-      context "should not show" do
-        it "if show_ads_test returns false" do
-          allow(passing_site).to receive(:show_ads_test).and_return(false)
-          expect(passing_site.show_in_bar_ads?).to eq false
-        end
-
-        it "if the bar is not free" do
-          allow(passing_site).to receive(:is_free?).at_least(:once).and_return(false)
-          expect(passing_site.show_in_bar_ads?).to eq false
-        end
-
-        it "if the url is on blacklist" do
-          Site.in_bar_ads_config = {
-            url_blacklist: ["asdf.com"]
-          }
-          allow(passing_site).to receive(:url).at_least(:once).and_return("asdf.com")
-          expect(passing_site.show_in_bar_ads?).to eq false
-        end
-      end
-
-      context "should show" do
-        it "if the bar is free" do
-          allow(passing_site).to receive(:show_ads_test).and_return(true)
-          expect(Site.in_bar_ads_config[:show_to_fraction]).to eq 1.0
-          expect(passing_site.show_in_bar_ads?).to eq true
-        end
       end
     end
   end
