@@ -30,6 +30,12 @@
   content: "\e601";
 }
 
+.icon-phone {
+  height: 1.4em;
+  vertical-align: middle;
+  margin-right: 0.5em;
+}
+
 /*-----------  Globals  -----------*/
 
 *, *:after, *:before {
@@ -149,6 +155,10 @@ html, body {
 
 .hb-cta-style-button:hover {
   opacity: 0.9;
+}
+
+.mobile .hb-cta-style-button {
+  white-space: normal;
 }
 
 /*-----------  Text  -----------*/

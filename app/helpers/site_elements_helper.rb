@@ -24,6 +24,8 @@ module SiteElementsHelper
         {:unit => "click"}
       when "email"
         {:unit => "email", :verb => "collected"}
+      when "call"
+        {:unit => "call"}
       when "social/tweet_on_twitter"
         {:unit => "tweet"}
       when "social/follow_on_twitter"
@@ -77,6 +79,8 @@ module SiteElementsHelper
       "icon-social"
     when "traffic"
       "icon-clicks"
+    when "call"
+      "icon-call"
     end
   end
 
@@ -208,6 +212,6 @@ module SiteElementsHelper
     social_elements = elements.select { |x| x.element_subtype.include?("social") }
     elements = elements.group_by(&:element_subtype)
 
-    [elements["email"], social_elements, elements["traffic"], elements["announcement"]].compact
+    [elements["email"], social_elements, elements["traffic"], elements["call"], elements["announcement"]].compact
   end
 end

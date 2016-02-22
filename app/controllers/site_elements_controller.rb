@@ -137,6 +137,7 @@ class SiteElementsController < ApplicationController
       :view_condition_attribute,
       :view_condition,
       :wiggle_button,
+      :phone_number,
       {:settings => settings_keys}
     )
   end

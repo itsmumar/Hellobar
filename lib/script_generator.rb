@@ -227,6 +227,7 @@ private
       link_style
       link_text
       name_placeholder
+      phone_number
       placement
       show_border
       show_branding
@@ -275,6 +276,7 @@ private
       id: site_element.id,
       image_url: site_element.image_url,
       open_in_new_window: site_element.open_in_new_window,
+      phone_number: site_element.phone_number,
       primary_color: site_element.primary_color,
       pushes_page_down: site_element.pushes_page_down,
       remains_at_top: site_element.remains_at_top,
