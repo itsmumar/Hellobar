@@ -191,10 +191,6 @@
   bottom: 6%;
 }
 
-#hellobar-slider.mobile .hb-text-wrapper {
-  padding: 1.67em 0 0 0;
-}
-
 #hellobar-slider.mobile .hb-logo-wrapper .hb-logo-line {
   display: block;
 }
