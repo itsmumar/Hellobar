@@ -58,6 +58,7 @@ feature 'User can edit a bar', js: true do
     site = @user.sites.first
     site.rules << create(:rule)
     create(:site_element, rule: site.rules.first)
+    site.reload
 
     visit edit_site_site_element_path(site, site.site_elements.last)
     page.find('a', text: 'Next').click
