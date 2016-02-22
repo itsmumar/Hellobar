@@ -9,11 +9,9 @@ script id='downgrade-template' type='text/x-handlebars-template'
         - if current_site.highest_tier_active_subscription.instance_of?(Subscription::Pro) || current_site.highest_tier_active_subscription.instance_of?(Subscription::Enterprise)
           ' You will still benefit from the #{current_site.highest_tier_active_subscription.values[:name]} plan
           ' until #{current_site.highest_tier_active_subscription.active_until.strftime("%-m-%-d-%Y")}.
-          ' After that date, all of your Hello Bar elements will have the Hello Bar branding and will show advertisements
-          ' for Hello Bar to 1 out of 10 visitors.
+          ' After that date, all of your Hello Bar elements will have the Hello Bar branding.
         - else
-          ' All of your Hello Bar elements will have the Hello Bar branding and will show advertisements
-          ' for Hello Bar to 1 out of 10 visitors.
+          ' All of your Hello Bar elements will now display Hello Bar branding.
 
         footer
           a.button.cancel.do-not-save Cancel
