@@ -60,6 +60,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.pushes_page_down",
     "model.question",
     "model.remains_at_top",
+    "model.phone_number",
+    "model.phone_country_code",
     "model.settings.buffer_message",
     "model.settings.buffer_url",
     "model.settings.collect_names",
@@ -182,6 +184,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.pushes_page_down",
     "model.question",
     "model.remains_at_top",
+    "model.phone_number",
+    "model.phone_country_code",
     "model.settings.buffer_message",
     "model.settings.buffer_url",
     "model.settings.collect_names",
@@ -208,6 +212,25 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.wiggle_button"
   )
 
+  #-----------  Phone Number Helpers  -----------#
+
+  isCallType: Ember.computed.equal('model.element_subtype', 'call')
+
+  setPhoneDefaults: (->
+    @set("isMobile", true) if @get('model.element_subtype') == 'call'
+  ).observes("model.element_subtype").on("init")
+
+  formatPhoneNumber: (->
+    phone_number = @get("phone_number") || @get("model.phone_number")
+    country_code = @get("model.phone_country_code")
+
+    if isValidNumber(phone_number, country_code)
+      @set("phone_number", formatLocal(country_code, phone_number))
+      @set("model.phone_number", formatE164(country_code, phone_number))
+    else
+      @set("model.phone_number", null)
+  ).observes("model.phone_number", "phone_number", "model.phone_country_code")
+
   #-----------  Actions  -----------#
 
   actions:
@@ -217,7 +240,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
       false
 
     toggleMobile: ->
-      @toggleProperty('isMobile')
+      @toggleProperty('isMobile') unless @get("model.element_subtype") == "call"
       false
 
     toggleModal: ->

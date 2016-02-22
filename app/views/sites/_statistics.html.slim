@@ -18,6 +18,7 @@ h5 Lifetime Totals
 
 .chart-wrapper
   = render "sites/chart_block", {site: @site, totals: @totals, type: :total, chart: "views", icon: "views", days: 7}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :call, chart: "calls", icon: "call", days: 7}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :email, chart: "emails", icon: "contacts", days: 7}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: 7}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: 7}

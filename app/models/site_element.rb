@@ -11,6 +11,7 @@ class SiteElement < ActiveRecord::Base
 
   # valid bar types and their conversion units
   BAR_TYPES = {
+    "call"                            => "Calls",
     "traffic"                         => "Clicks",
     "email"                           => "Emails",
     "announcement"                    => "Conversions",
@@ -25,7 +26,7 @@ class SiteElement < ActiveRecord::Base
     "question"                        => "Question"
   }
 
-  SHORT_SUBTYPES = %w{traffic email social announcement}
+  SHORT_SUBTYPES = %w{traffic email call social announcement}
 
   belongs_to :rule, touch: true
   belongs_to :contact_list
@@ -50,6 +51,7 @@ class SiteElement < ActiveRecord::Base
   scope :email_subtype, -> { where(element_subtype: "email") }
   scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }
   scope :traffic_subtype, -> { where(element_subtype: "traffic") }
+  scope :call_subtype, -> { where(element_subtype: "call") }
   scope :announcement_subtype, -> { where(element_subtype: "announcement") }
 
   delegate :site, :site_id, to: :rule, allow_nil: true
