@@ -1,5 +1,6 @@
 .chart-wrapper
   = render "sites/chart_block", {site: @site, totals: @totals, type: :total, chart: "views", icon: "views", days: nil}
+  = render "sites/chart_block", {site: @site, totals: @totals, type: :call, chart: "calls", icon: "call", days: 7}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :email, chart: "emails", icon: "contacts", days: nil}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: nil}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: nil}

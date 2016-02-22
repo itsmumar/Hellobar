@@ -300,39 +300,6 @@ class Site < ActiveRecord::Base
     Addressable::URI.heuristic_parse(url)
   end
 
-  def self.in_bar_ads_config=(config)
-    @in_bar_ads_config ||= {}
-    @in_bar_ads_config.merge!(config)
-  end
-
-  def self.in_bar_ads_config
-    {
-      show_to_fraction: 0.1,
-      url_blacklist: ["iwillteachyoutoberich.com", "lewishowes.com"]
-    }.merge(@in_bar_ads_config || {})
-  end
-
-  # Remove after test is complete
-  def show_ads_test(start_date=nil, end_date=nil)
-    start_date ||= Time.parse("2016-02-09 00:00:00 PST")
-    end_date ||= Time.parse("2016-02-23 00:00:00 PST")
-
-    user = owners.order(created_at: :desc).first
-    if user && user.created_at > start_date && user.created_at < end_date
-      user.id % 2 == 0
-    else
-      true # Default behaviour: show ads
-    end
-  end
-
-  def show_in_bar_ads?
-    config = self.class.in_bar_ads_config
-    ad_blacklist    = config[:url_blacklist]
-    site_ids        = config[:site_ids]
-
-    is_free? && show_ads_test && (ad_blacklist.none? {|b| url.include?(b) })
-  end
-
   def membership_for_user(user)
     site_memberships.detect { |x| x.user_id == user.id }
   end

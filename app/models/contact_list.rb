@@ -120,6 +120,19 @@ class ContactList < ActiveRecord::Base
     service_provider_class.try(:api_key?).present?
   end
 
+  def needs_to_reconfigure?
+    if syncable? && !oauth? && !api_key?
+      begin
+        subscribe_params('emailfor@user.com', 'Name namerson', true)
+        false
+      rescue
+        true
+      end
+    else
+      false
+    end
+  end
+
   private
   def notify_identity
     old_identity_id = destroyed? ? identity_id : changes[:identity_id].try(:first)
