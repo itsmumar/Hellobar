@@ -57,6 +57,10 @@ class User < ActiveRecord::Base
     new_user
   end
 
+  def self.search_all_versions_for_email(email)
+    User.find_by(email: email) || Hello::WordpressUser.find_by_email(email)
+  end
+
   # dont require the password virtual attribute to be present
   # if we are migrating users from the legacy DB
   def password_required?
