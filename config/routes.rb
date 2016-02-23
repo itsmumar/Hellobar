@@ -6,10 +6,6 @@ Rails.application.routes.draw do
   end
 
   devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords"}
-
-  devise_scope :user do
-    post "/users/find_email", to: "users/sessions#find_email", as: :find_email
-  end
   get "/auth/:action/callback", :to => "users/omniauth_callbacks", :constraints => { :action => /google_oauth2/ }
 
   get "profile", :to => "user#edit", :as => :profile
