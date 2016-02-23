@@ -6,8 +6,6 @@ class Users::OmniauthCallbacksController < ApplicationController
 
     if @user.persisted?
       sign_in @user, event: :authentication
-      cookies.permanent.signed[:login_email] = @user.email
-
       if session[:new_site_url]
         redirect_to continue_create_site_path
       else

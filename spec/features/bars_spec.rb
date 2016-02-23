@@ -33,9 +33,7 @@ feature 'User can create a bar', js: true do
     })
 
     visit new_user_session_path
-
-    fill_in 'Your Email', with: user.email
-    click_button 'Continue'
+    click_link 'google-login-button'
 
     first(:button, 'Create New') .click
     first(:button, 'Select This Goal').click

@@ -26,10 +26,9 @@ feature "User can sign in", js: true do
     visit new_user_session_path
 
     fill_in 'Your Email', with: user.email
-    click_button 'Continue'
-
     fill_in 'Password', with: user.password
-    click_button 'Continue'
+
+    click_button 'Sign in'
 
     #Why? because we cut off super long emails, that's why
     expect(page).to have_content(user.email[0...25])
@@ -46,8 +45,7 @@ feature "User can sign in", js: true do
     OmniAuth.config.add_mock(:google_oauth2, {:uid => '12345'})
     visit new_user_session_path
 
-    fill_in 'Your Email', with: user.email
-    click_button 'Continue'
+    click_link 'google-login-button'
 
     #Why? because we cut off super long emails, that's why
     expect(page).to have_content(user.email[0...25])
