@@ -50,6 +50,15 @@ describe SiteElementsController do
       json = JSON.parse(response.body)
       expect_json_response_to_include({ show_branding: true })
     end
+
+    it "doesn't push an unsaved element into the site.site_elements association" do
+      membership = create(:site_ownership)
+      create(:rule, site: membership.site)
+      stub_current_user(membership.user)
+
+      get :new, site_id: membership.site.id, format: :json
+      expect(assigns(:site_element).site.site_elements.map(&:id)).not_to include(nil)
+    end
   end
 
   describe "POST update" do
