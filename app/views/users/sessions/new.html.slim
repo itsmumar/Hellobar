@@ -28,5 +28,10 @@
     .middle or
     .line
   .devise-links
-    = link_to "/auth/google_oauth2", id: "google-login-button" do
-      = image_tag("btn_google_signin.png")
+    - if resource.email.present?
+      = link_to "Not you?", "#", class: 'clear-last-logged-in'
+    - else
+      br
+      = link_to "Forgot Email?", new_forgot_email_path
+    br
+    = link_to "Sign up for a New Hello Bar Account", root_path

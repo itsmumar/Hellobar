@@ -1,10 +1,35 @@
 class Users::SessionsController < Devise::SessionsController
+  layout 'static'
+
   TEMP_MIGRATION_USERS = [
     "sarangan2@gmail.com",
     "oli@unbounce.com"
   ]
 
-  layout 'static'
+  def new
+    super
+  end
+
+  def find_email
+    email = params[:user].try(:[], :email)
+    cookies.permanent.signed[:login_email] = email
+
+
+    if TEMP_MIGRATION_USERS.include?(email)
+      @user = User.new(email: email)
+    else
+      @user = User.search_all_versions_for_email(email)
+    end
+
+    if @user
+      if auth = @user.authentications.first
+        redirect_to "/auth/#{auth.provider}"
+      end
+    else
+      cookies.delete(:login_email)
+      redirect_to new_user_session_path, alert: "Email doesn't exist."
+    end
+  end
 
   def create
     email = params[:user].try(:[], :email)
@@ -36,5 +61,4 @@ class Users::SessionsController < Devise::SessionsController
       return return_val
     end
   end
-
 end
