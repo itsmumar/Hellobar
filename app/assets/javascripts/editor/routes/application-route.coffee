@@ -47,7 +47,9 @@ HelloBar.ApplicationRoute = Ember.Route.extend
             lists = resolvedModel.site.contact_lists.slice(0)
             lists.push({id: data.id, name: data.name})
             @controller.set("model.site.contact_lists", lists)
-            @controller.set("model.contact_list_id", data.id)
+            setTimeout (=>
+              @controller.set("model.contact_list_id", data.id)
+            ), 100
             modal.$modal.remove()
           close: (modal) =>
             @controller.set("model.contact_list_id", null)

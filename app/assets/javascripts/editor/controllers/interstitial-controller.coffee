@@ -21,7 +21,8 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
         @set('model.headline', "Join our mailing list to stay up to date on our upcoming events")
         @set('model.link_text', "Subscribe")
         @set('model.element_subtype', "email")
-        @createDefaultContactList()
+        if HB_EMAIL_MODAL_TEST == 'original'
+          @createDefaultContactList()
       when 'facebook'
         @set('model.headline', "Like us on Facebook!")
         @set('model.element_subtype', "social/like_on_facebook")
@@ -94,7 +95,17 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
   actions:
 
     closeInterstitial: ->
-      if Ember.isEqual(@get('interstitialType'), 'contacts')
+      transitionToEditor = =>
+        @transitionToRoute('style')
+        @trigger('viewClosed')
+
+      isEmailModalTest = HB_EMAIL_MODAL_TEST == 'modal'
+      isContactGoal = Ember.isEqual(@get('interstitialType'), 'contacts')
+      hasNoContactLists = @get("model.site.contact_lists").length == 0 && $(".contact-list-modal:visible").length == 0
+
+      # Open the contact list modal if the user has selected the email goal
+      # and the the modal test is active and they don't already have a contact list
+      if isEmailModalTest && isContactGoal && hasNoContactLists
         baseOptions =
           id: null
           siteID: @get('model.site.id')
@@ -108,14 +119,12 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
             @set("model.site.contact_lists", lists)
             @set("model.contact_list_id", data.id)
             # Close the modal and transition to the editor
-            @transitionToRoute('style')
-            this.trigger('viewClosed')
             modal.close()
+            transitionToEditor()
 
         new ContactListModal(baseOptions).open()
       else
-        @transitionToRoute('style')
-        this.trigger('viewClosed')
+        transitionToEditor()
 
 
     closeEditor: ->

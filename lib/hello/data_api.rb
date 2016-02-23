@@ -47,7 +47,7 @@ module Hello::DataAPI
     def fake_lifetime_totals(site, site_elements, num_days = 1)
       {}.tap do |hash|
         site_elements.each do |el|
-          rng = Random.new(el.id || 0)
+          rng = Random.new(el.id)
 
           hash[el.id.to_s] = [[rng.rand(100) + 100, rng.rand(90)]]
 

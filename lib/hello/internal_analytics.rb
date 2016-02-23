@@ -58,6 +58,7 @@ module Hello
     register_test("Upgrade Plan Button 2016-01-05", %w{original power}, 7)
     register_test("Settings Upsell 2016-01-07", %w{original upsell}, 8)
     register_test("Upgrade Modal Logos 2016-01-10", %w{original logos}, 9)
+    register_test("Email Modal Interstitial 2016-02-23", %w{original modal}, 10)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
