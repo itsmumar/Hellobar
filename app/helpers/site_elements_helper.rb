@@ -24,6 +24,8 @@ module SiteElementsHelper
         {:unit => "click"}
       when "email"
         {:unit => "email", :verb => "collected"}
+      when "call"
+        {:unit => "call"}
       when "social/tweet_on_twitter"
         {:unit => "tweet"}
       when "social/follow_on_twitter"
@@ -77,6 +79,8 @@ module SiteElementsHelper
       "icon-social"
     when "traffic"
       "icon-clicks"
+    when "call"
+      "icon-call"
     end
   end
 
@@ -152,7 +156,7 @@ module SiteElementsHelper
   end
 
   def ab_test_icon(site_element)
-    elements_in_group = site_element.site.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && site_element.rule_id == se.rule_id && se.type == site_element.type}
+    elements_in_group = site_element.rule.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && se.type == site_element.type}
     elements_in_group.sort! { |a, b| a.created_at <=> b.created_at }
     index = elements_in_group.index(site_element)
 
@@ -208,6 +212,6 @@ module SiteElementsHelper
     social_elements = elements.select { |x| x.element_subtype.include?("social") }
     elements = elements.group_by(&:element_subtype)
 
-    [elements["email"], social_elements, elements["traffic"], elements["announcement"]].compact
+    [elements["email"], social_elements, elements["traffic"], elements["call"], elements["announcement"]].compact
   end
 end

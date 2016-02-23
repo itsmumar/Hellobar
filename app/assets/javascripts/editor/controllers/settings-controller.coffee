@@ -20,6 +20,8 @@ HelloBar.SettingsController = Ember.Controller.extend
     switch @get("routeForwarding")
       when "settings.emails"
         @set("model.element_subtype", "email")
+      when "settings.call"
+        @set("model.element_subtype", "call")
       when "settings.click"
         @set("model.element_subtype", "traffic")
       when "settings.announcement"

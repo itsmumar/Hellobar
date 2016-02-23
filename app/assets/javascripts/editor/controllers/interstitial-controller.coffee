@@ -9,6 +9,10 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
     return false unless @get('model')
 
     switch @get('interstitialType')
+      when 'call'
+        @set('model.headline', null)
+        @set('model.link_text', null)
+        @set('model.element_subtype', "call")
       when 'money'
         @set('model.headline', "Check out our latest sale")
         @set('model.link_text', "Shop Now")
@@ -19,8 +23,8 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
         @set('model.element_subtype', "email")
         @createDefaultContactList()
       when 'facebook'
-        @set('model.element_subtype', "social/like_on_facebook")
         @set('model.headline', "Like us on Facebook!")
+        @set('model.element_subtype', "social/like_on_facebook")
   ).observes('model', 'interstitialType')
 
   #-----------  Facebook Options  -----------#
@@ -69,17 +73,21 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
   inputIsInvalid: ( ->
     switch @get('interstitialType')
       when 'money'
-        return true if @get('model.settings.url').length == 0
-        return true if @get('model.headline').length == 0
-        return true if @get('model.link_text').length == 0
+        return true if Ember.isEmpty(@get('model.settings.url'))
+        return true if Ember.isEmpty(@get('model.headline'))
+        return true if Ember.isEmpty(@get('model.link_text'))
+      when 'call'
+        return true if Ember.isEmpty(@get('model.headline'))
+        return true if Ember.isEmpty(@get('model.link_text'))
+        return true if !isValidNumber(@get('controllers.application.phone_number'), @get('model.phone_country_code'));
       when 'contacts'
-        return true if @get('model.headline').length == 0
-        return true if @get('model.link_text').length == 0
+        return true if Ember.isEmpty(@get('model.headline'))
+        return true if Ember.isEmpty(@get('model.link_text'))
       when 'facebook'
         if !@get('model.settings.use_location_for_url')
-          return true if @get('model.settings.url_to_like').length == 0
+          return true if Ember.isEmpty(@get('model.url_to_like'))
     false
-  ).property('model.settings.url', 'model.link_text', 'model.headline', 'model.settings.url_to_like', 'model.settings.use_location_for_url')
+  ).property('model.settings.url', 'model.link_text', 'model.headline', 'model.settings.url_to_like', 'model.settings.use_location_for_url', 'controllers.application.phone_number', 'model.phone_country_code')
 
   #-----------  Actions  -----------#
 
@@ -89,4 +97,10 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
       @transitionToRoute('style')
 
     closeEditor: ->
-      # maybe reset some of the model parameters set in init() ??
+      @setProperties(
+        'interstitialType'         : null
+        'model.element_subtype'    : null
+        'model.headline'           : null
+        'model.link_text'          : null
+        'model.phone_country_code' : 'US'
+      )

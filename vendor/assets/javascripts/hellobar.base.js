@@ -19,6 +19,7 @@ var HBQ = function()
   HB.siteElementsOnPage = [];
   HB.isMobile = false;
   HB.maxSliderSize = 380; /* IF CHANGED, UPDATE SLIDER ELEMENT CSS */
+  HB.mobilePreviewWidth = 250;
   HB.id_type_map = {
     "hellobar-bar": "bar",
     "hellobar-modal": "modal",
@@ -29,14 +30,11 @@ var HBQ = function()
   // Need to load the serialized cookies
   HB.loadCookies();
 
-  // Determine AD state
-  HB.AD = HB.isAd();
-
   // Set tracking (uses hb_ignore query parameter)
   HB.setTracking(location.search);
 
-  // Disable tracking if AD or tracking is manually set to off
-  if (HB.AD || HB.t(HB.gc("disableTracking"))) {
+  // Disable tracking if tracking is manually set to off
+  if (HB.t(HB.gc("disableTracking"))) {
     HB_DNT = true;
   }
 
@@ -885,10 +883,6 @@ var HB = {
     siteElement.me = "window.parent.HB.siteElementsOnPage["+siteElement.pageIndex+"]";
 
     HB.siteElementsOnPage.push(siteElement);
-    // Adify if AD load
-    if (HB.AD) {
-      HB.adifySiteElement(siteElement);
-    }
 
     // If there is a #nohb in the has we don't render anything
     if ( document.location.hash == "#nohb" )
@@ -1022,10 +1016,15 @@ var HB = {
 
           // Skip the site element if it's a modal / takeover and the
           // user already dismissed one of those types
-          if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
+          if(siteElement.type == "Modal" || siteElement.type == "Takeover") {
             if (HB.didDismissHB()) {
               continue;
             }
+          }
+
+          // Skip the site element if it's click to call and the device is not mobile
+          if(siteElement.subtype == "call" && HB.getVisitorData("dv") !== "mobile") {
+            continue;
           }
 
           if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
@@ -1081,6 +1080,8 @@ var HB = {
     // for example)
     if ( possibleSiteElements.email )
       possibleSiteElements = possibleSiteElements.email;
+    else if ( possibleSiteElements.call )
+      possibleSiteElements = possibleSiteElements.call;
     else if ( possibleSiteElements.social )
       possibleSiteElements = possibleSiteElements.social;
     else if ( possibleSiteElements.traffic )
@@ -1774,18 +1775,6 @@ var HB = {
     }
   },
 
-  isAd: function() {
-    if (HB.CAP.preview) return false;
-    // Don't show an ad to a user once they've seen it once
-    if ( HB.getVisitorData("ad") ) return false;
-
-    var adFactor = HB.CAP.in_bar_ad_fraction || 0.0; // Don't show an ad unless explictly defined in script
-    var showAd = Math.random() >= (1 - adFactor);
-    if ( showAd )
-      HB.setVisitorData("ad", new Date().getTime());
-    return showAd;
-  },
-
   // Replaces the site element with the question variation.
   // Sets the displayResponse callback to show the original element
   questionifySiteElement: function(siteElement) {
@@ -1845,43 +1834,6 @@ var HB = {
       siteElement.displayResponse(HB.showResponse);
       siteElement = originalSiteElement;
     }
-
-    return siteElement;
-  },
-
-  adifySiteElement: function(siteElement) {
-    var hellobarColor = 'e8562a';
-    var elementType = siteElement['template_name'].split('_')[0];
-
-    // Force element subtype to 'traffic'
-    siteElement['template_name'] = elementType + "_traffic";
-
-    // Remove any caption
-    siteElement['caption'] = '';
-
-    // Remove any image
-    siteElement['image_url'] = null;
-
-    // Set colors for each type
-    siteElement['primary_color'] = hellobarColor;
-    siteElement['background_color'] = hellobarColor;
-    siteElement['text_color'] = 'fff';
-    siteElement['button_color'] = 'fff';
-    siteElement['font'] = "'Open Sans',sans-serif";
-
-    switch (elementType) {
-      case 'bar':
-        siteElement['secondary_color'] = 'fff';
-        siteElement['link_color'] = hellobarColor;
-        break;
-      default: // 'modal', 'slider', 'takeover'
-        siteElement['secondary_color'] = hellobarColor;
-        siteElement['link_color'] = 'fff';
-    }
-
-    siteElement['headline'] = 'Make money from wasted space on your site: Use Hello Bar.';
-    siteElement['link_text'] = 'Get Started';
-    siteElement.settings.url = "https://www.hellobar.com";
 
     return siteElement;
   },

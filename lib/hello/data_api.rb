@@ -17,7 +17,7 @@ module Hello::DataAPI
     def lifetime_totals(site, site_elements, num_days = 1, cache_options = {})
       return fake_lifetime_totals(site, site_elements, num_days) if Hellobar::Settings[:fake_data_api]
 
-      site_element_ids = site_elements.map(&:id).sort
+      site_element_ids = site_elements.map(&:id).compact.sort
 
       cache_key = "hello:data-api:#{site.id}:#{site_element_ids.sort.join('-')}:lifetime_totals:#{num_days}days:#{site.script_installed_at.to_i}"
       cache_options[:expires_in] = 10.minutes
@@ -69,17 +69,18 @@ module Hello::DataAPI
     #      :total =>   [[9, 3], [12, 6]],
     #      :email =>   [[3, 1], [4, 2]],
     #      :traffic => [[3, 1], [4, 2]],
-    #      :social =>  [[3, 1], [4, 2]]
+    #      :social =>  [[3, 1], [4, 2]],
+    #      :call =>    [[4, 1], [4, 2]]
     #    }
     #
     def lifetime_totals_by_type(site, site_elements, num_days = 30, cache_options = {})
       data = Hello::DataAPI.lifetime_totals(site, site_elements, num_days, cache_options) || {}
-      totals = {:total => [], :email => [], :social => [], :traffic => []}
+      totals = {:total => [], :email => [], :social => [], :traffic => [], :call => []}
       elements = site.site_elements.where(:id => data.keys)
       ids = {}
 
       # collect the ids of each subtype
-      [:traffic, :email, :social].each do |key|
+      [:traffic, :email, :social, :call].each do |key|
         ids[key] = elements.select{|e| e.short_subtype == key.to_s}.map{|e| e.id.to_s}
       end
 
@@ -99,7 +100,7 @@ module Hello::DataAPI
         end
 
         # do the same for each subset of data, grouped by element subtype
-        [:email, :traffic, :social].each do |key|
+        [:email, :traffic, :social, :call].each do |key|
           type_data = data.select{|k, v| ids[key].include?(k)}
           totals[key] << type_data.inject([0, 0]) do |sum, data_row|
             day_i_data = data_row[1][i]
