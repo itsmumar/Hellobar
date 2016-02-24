@@ -56,6 +56,7 @@ describe Users::ForgotEmailsController, '#create' do
       end
     end
   end
+
   context 'the user is not found' do
     it 'sets the error flash' do
       expect {

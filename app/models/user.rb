@@ -146,40 +146,42 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.find_for_google_oauth2(access_token, signed_in_resource=nil, track_options={})
-      data = access_token["info"]
-      user = User.joins(:authentications).where(authentications: { uid: access_token["uid"], provider: access_token["provider"] }).first
+  def self.find_for_google_oauth2(access_token, original_email=nil, track_options={})
+      info = access_token["info"]
 
-      if user.nil?
-        user = User.where(email: data["email"], status: TEMPORARY_STATUS).first
-        user ||= User.new(email: data["email"])
+      if user = User.joins(:authentications).find_by(authentications: { uid: access_token["uid"], provider: access_token["provider"] })
+        user.first_name = info["first_name"] if info["first_name"].present?
+        user.last_name = info["last_name"] if info["last_name"].present?
+
+        user.save
+      elsif original_email.present? && info["email"] != original_email # the user is trying to login with a different Google account
+        user = User.new
+        user.errors.add(:email, "please login with your #{original_email} Google email")
+      else # create a new user
+        user = User.find_by(email: info["email"], status: TEMPORARY_STATUS) || User.new(email: info["email"])
 
         password = Devise.friendly_token[9,20]
         user.password = password
         user.password_confirmation = password
 
-        user.first_name = data["first_name"]
-        user.last_name = data["last_name"]
+        user.first_name = info["first_name"]
+        user.last_name = info["last_name"]
 
         user.authentications.build(provider: access_token["provider"], uid: access_token["uid"])
         user.status = ACTIVE_STATUS
 
-        user.save
-
-        Analytics.track(:user, user.id, "Signed Up", track_options) if user.valid?
-        Analytics.track(:user, user.id, "Completed Signup", {email: user.email}) if user.valid?
-      else
-        user.first_name = data["first_name"] if data["first_name"].present?
-        user.last_name = data["last_name"] if data["last_name"].present?
-
-        user.save
+        if user.save
+          Analytics.track(:user, user.id, "Signed Up", track_options)
+          Analytics.track(:user, user.id, "Completed Signup", {email: user.email})
+        end
       end
 
+      # update the authentication tokens & expires for this provider
       user.authentications.detect { |x| x.provider == access_token["provider"]}.update(
         refresh_token: access_token["credentials"].refresh_token,
         access_token: access_token["credentials"].token,
         expires_at: Time.at(access_token["credentials"].expires_at)
-      ) if access_token["credentials"]
+      ) if access_token["credentials"] && user.persisted?
 
       user
   end

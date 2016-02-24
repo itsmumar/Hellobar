@@ -1,8 +1,7 @@
 class Users::OmniauthCallbacksController < ApplicationController
   def google_oauth2
-    # You need to implement the method below in your model (e.g. app/models/user.rb)
     track_options = {ip: request.remote_ip, url: session[:new_site_url]}
-    @user = User.find_for_google_oauth2(request.env["omniauth.auth"], current_user, track_options)
+    @user = User.find_for_google_oauth2(request.env["omniauth.auth"], cookies.signed[:login_email], track_options)
 
     if @user.persisted?
       sign_in @user, event: :authentication
