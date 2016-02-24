@@ -14,3 +14,8 @@ $ ->
     $timezone = $('#site_timezone, #user_timezone')
     userTimezone = jstz.determine().name()
     $timezone.val(userTimezone)
+
+  $(document).on 'click', '.clear-last-logged-in', (event) ->
+    $('#user_email').val('') # clear the user email field
+    $(this).remove()         # remove link from DOM
+    return false

@@ -1,4 +1,6 @@
-= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+- resource.email = cookies.signed[:login_email] if resource.email.blank?
+
+= simple_form_for(resource, as: resource_name, url: find_email_path, method: :post) do |f|
 
   = render 'shared/flash'
 
@@ -15,18 +17,8 @@
     p We're excited to have you join the new Hello Bar!
 
   = f.input_field :email, :placeholder => 'Your Email', autofocus: true
-  = f.input_field :password, :placeholder => 'Password'
+  = f.button :submit, "Continue", :class => "button"
 
-  = f.input_field :remember_me, as: :boolean, inline_label: true, label: false
-  = f.button :submit, "Sign in", :class => "button"
-
-  .devise-links
-    = render "devise/shared/links"
-
-  .breaker
-    .line
-    .middle or
-    .line
   .devise-links
     - if resource.email.present?
       = link_to "Not you?", "#", class: 'clear-last-logged-in'
