@@ -35,26 +35,6 @@ class Users::SessionsController < Devise::SessionsController
     super
   end
 
-  def find_email
-    email = params[:user].try(:[], :email)
-    cookies.permanent[:login_email] = email
-
-
-    if TEMP_MIGRATION_USERS.include?(email)
-      @user = User.new(email: email)
-    else
-      @user = User.search_all_versions_for_email(email)
-    end
-
-    if @user
-      if @user.authentications.present?
-        redirect_to "/auth/#{Authentication.joins(:user).where(users: {email: email}).first.provider}"
-      end
-    else
-      redirect_to new_user_session_path, alert: "Email doesn't exist."
-    end
-  end
-
   def create
     email = params[:user].try(:[], :email)
     cookies.permanent[:login_email] = email
