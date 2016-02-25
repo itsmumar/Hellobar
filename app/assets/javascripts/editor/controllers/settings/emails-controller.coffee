@@ -43,7 +43,9 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend
           lists = @get("model.site.contact_lists").slice(0)
           lists.push({id: data.id, name: data.name})
           @set("model.site.contact_lists", lists)
-          @set("model.contact_list_id", data.id)
+          setTimeout (=>
+            @set("model.contact_list_id", data.id)
+          ), 100
           modal.$modal.remove()
         close: (modal) =>
           @set("model.contact_list_id", null)
