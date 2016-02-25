@@ -39,7 +39,23 @@
 
     p
       | Select one of the goals above. You can always change this later.
-      = mail_to 'support@hellobar.com', ' Need Help?', subject: "Hello Bar - Getting Started"
+
+    .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "i_need_help"}.to_json
+      .reveal-title I need help!
+      p Still not sure what to do? Let us help!
+
+      .reveal-block.no-pad.help-reveal
+        p How can we help?
+        p Just fill out the form below and we'll get back to you as soon as we can.
+
+        = form_tag generic_message_contact_submission_path, :method => :post do |f|
+          = hidden_field_tag :site_id, @site.id
+          = hidden_field_tag :return_to, new_site_site_element_path(current_site)
+
+          = text_area_tag :message, ""
+
+          = submit_tag "Send", class: "button", data: { disable_with: "Sending..." }
+
     p
       small = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete, class: "deemphasize"
 
