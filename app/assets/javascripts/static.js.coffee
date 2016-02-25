@@ -7,6 +7,9 @@
 
 #= require user_migration
 #= require flash_message_initializer
+#= require modal
+#= require modals/welcome_back_modal
+#= require welcome_initializer
 
 $ ->
   # Detect User Timezone

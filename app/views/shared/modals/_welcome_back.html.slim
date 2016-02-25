@@ -1,0 +1,22 @@
+script id='welcome-back-modal-template' type='text/x-handlebars-template' data-cookie-present=cookies[:login_email]
+  - if @last_logged_in_user
+    .modal-wrapper
+      .modal-block
+        i.icon-close
+        .flash-block
+          i.icon-close
+
+        header
+          h5 Welcome Back!
+
+        .avatar-block
+          .user-avatar= image_tag gravatar_url_for(@last_logged_in_user), :class => 'user-avatar'
+          .user-email= @last_logged_in_user.email
+
+        .not-you= link_to 'Not you?', '#', class: 'not-last-logged-in-user'
+
+        = simple_form_for(@last_logged_in_user, as: 'user', url: find_email_path, method: :post) do |f|
+          = f.hidden_field :email
+
+          footer
+            = f.button :submit, "Login", class: 'button'

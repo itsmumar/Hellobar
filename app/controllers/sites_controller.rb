@@ -18,6 +18,7 @@ class SitesController < ApplicationController
 
   def create
     @site = Site.new(site_params)
+    cookies.permanent[:registration_url] = params[:site][:url]
 
     if current_user
       create_for_logged_in_user

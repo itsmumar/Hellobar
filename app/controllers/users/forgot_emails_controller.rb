@@ -8,7 +8,7 @@ class Users::ForgotEmailsController < ApplicationController
     @user = User.search_all_versions_for_email(params[:email])
 
     if @user
-      cookies.permanent.signed[:login_email] = @user.email
+      cookies.permanent[:login_email] = @user.email
 
       if @user.status == User::TEMPORARY_STATUS
         sign_in(@user)

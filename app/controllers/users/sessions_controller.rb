@@ -12,7 +12,7 @@ class Users::SessionsController < Devise::SessionsController
 
   def find_email
     email = params[:user].try(:[], :email)
-    cookies.permanent.signed[:login_email] = email
+    cookies.permanent[:login_email] = email
 
 
     if TEMP_MIGRATION_USERS.include?(email)
@@ -37,7 +37,7 @@ class Users::SessionsController < Devise::SessionsController
 
   def find_email
     email = params[:user].try(:[], :email)
-    cookies.permanent.signed[:login_email] = email
+    cookies.permanent[:login_email] = email
 
 
     if TEMP_MIGRATION_USERS.include?(email)
@@ -57,7 +57,7 @@ class Users::SessionsController < Devise::SessionsController
 
   def create
     email = params[:user].try(:[], :email)
-    cookies.permanent.signed[:login_email] = email
+    cookies.permanent[:login_email] = email
 
     if Hello::WordpressUser.email_exists?(email) && User.where(email: email).first.nil?
 

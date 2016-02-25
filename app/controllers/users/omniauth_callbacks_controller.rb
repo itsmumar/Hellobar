@@ -1,11 +1,11 @@
 class Users::OmniauthCallbacksController < ApplicationController
   def google_oauth2
     track_options = {ip: request.remote_ip, url: session[:new_site_url]}
-    @user = User.find_for_google_oauth2(request.env["omniauth.auth"], cookies.signed[:login_email], track_options)
+    @user = User.find_for_google_oauth2(request.env["omniauth.auth"], cookies[:login_email], track_options)
 
     if @user.persisted?
       sign_in @user, event: :authentication
-      cookies.permanent.signed[:login_email] = @user.email
+      cookies.permanent[:login_email] = @user.email
 
       if session[:new_site_url]
         redirect_to continue_create_site_path
