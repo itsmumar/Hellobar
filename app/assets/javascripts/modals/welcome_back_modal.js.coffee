@@ -1,5 +1,5 @@
 class @WelcomeBackModal extends Modal
-  modalName: "welcome-back-modal"
+  modalName: "welcome-back"
   template: -> $("#welcome-back-modal-template")
 
   constructor: (@options = {}) ->
