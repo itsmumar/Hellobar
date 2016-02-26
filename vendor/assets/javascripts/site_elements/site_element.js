@@ -51,10 +51,7 @@ HB.SiteElement = HB.createClass({
         this.injectSiteElementHTML(html);
         this.setIosKeyboardHandlers();
         this.setPullDown();
-        // Track the view
-        if(!this.dontRecordView) {
-          HB.viewed(this);
-        }
+
         // Monitor zoom scale events
         this.hideOnZoom();
 
@@ -252,6 +249,11 @@ HB.SiteElement = HB.createClass({
 
     var show = function() {
       HB.showElement(this.w);
+
+      // Track the view
+      if(!this.dontRecordView) {
+        HB.viewed(this);
+      }
 
       // Next line is a Safari hack.  Couldn't find out why but sometimes safari
       // wouldn't display the contents of the iframe, but toggling the display style fixes this
