@@ -156,7 +156,7 @@ class User < ActiveRecord::Base
         user.save
       elsif original_email.present? && info["email"] != original_email # the user is trying to login with a different Google account
         user = User.new
-        user.errors.add(:email, "please login with your #{original_email} Google email")
+        user.errors.add(:base, "Please log in with your #{original_email} Google email")
       else # create a new user
         user = User.find_by(email: info["email"], status: TEMPORARY_STATUS) || User.new(email: info["email"])
 

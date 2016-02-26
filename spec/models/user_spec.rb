@@ -193,7 +193,7 @@ describe User do
         it "returns a user with an error on the email" do
           user = User.find_for_google_oauth2(token, 'notmy@email.com')
 
-          expect(user.errors[:email]).to include("please login with your notmy@email.com Google email")
+          expect(user.errors[:base]).to include("Please log in with your notmy@email.com Google email")
         end
       end
     end
