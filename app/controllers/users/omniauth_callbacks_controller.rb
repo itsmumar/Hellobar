@@ -14,6 +14,7 @@ class Users::OmniauthCallbacksController < ApplicationController
       end
     else
       if @user.errors.any?
+        cookies.delete(:login_email)
         flash[:error] = @user.errors.full_messages.uniq.join(". ") << "."
       else
         flash[:error] = "We could not authenticate with Google."
