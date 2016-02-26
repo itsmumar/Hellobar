@@ -316,7 +316,8 @@ HB.countryCodes = [
 ]
 
 #----------- Reveal Blocks ----------#
-$('.reveal-wrapper').click (evt) ->
-  unless $(@).hasClass('activated')
-    $('.reveal-wrapper.activated').removeClass('activated')
-    $(@).addClass('activated')
+$ ->
+  $('.reveal-wrapper').on 'click', (evt) ->
+    unless $(@).hasClass('activated')
+      $('.reveal-wrapper.activated').removeClass('activated')
+      $(@).addClass('activated')
