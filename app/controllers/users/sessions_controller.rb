@@ -12,7 +12,6 @@ class Users::SessionsController < Devise::SessionsController
 
   def find_email
     email = params[:user].try(:[], :email)
-    cookies.permanent[:login_email] = email
 
 
     if TEMP_MIGRATION_USERS.include?(email)
@@ -22,6 +21,8 @@ class Users::SessionsController < Devise::SessionsController
     end
 
     if @user
+      cookies.permanent[:login_email] = email
+
       if auth = @user.authentications.first
         redirect_to "/auth/#{auth.provider}"
       end
@@ -37,7 +38,6 @@ class Users::SessionsController < Devise::SessionsController
 
   def create
     email = params[:user].try(:[], :email)
-    cookies.permanent[:login_email] = email
 
     if Hello::WordpressUser.email_exists?(email) && User.where(email: email).first.nil?
 
@@ -62,6 +62,7 @@ class Users::SessionsController < Devise::SessionsController
       redirect_to "/auth/#{Authentication.joins(:user).where(users: {email: email}).first.provider}"
     else
       return_val = super
+      cookies.permanent[:login_email] = email
       # Record log in
       Analytics.track(*current_person_type_and_id, "Logged In", {ip: request.remote_ip})
       return return_val
