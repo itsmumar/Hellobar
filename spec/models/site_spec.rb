@@ -261,44 +261,53 @@ describe Site do
   end
 
   describe "#has_script_installed?" do
-    before do
-      @site.script_installed_at = nil
-      @site.script_uninstalled_at = nil
+    context "when installed" do
+      it 'updates the script_installed_at' do
+        allow(@site).to receive(:script_installed_db?) { false }
+        allow(@site).to receive(:script_installed_api?) { true }
+
+        expect {
+          @site.has_script_installed?
+        }.to change(@site, :script_installed_at)
+      end
+
+      it 'redeems referrals' do
+        allow(@site).to receive(:script_installed_db?) { false }
+        allow(@site).to receive(:script_installed_api?) { true }
+
+        expect(Referrals::RedeemForRecipient).to receive(:run).with(site: @site)
+
+        @site.has_script_installed?
+      end
+
+      it 'tracks the install event' do
+        allow(@site).to receive(:script_installed_db?) { false }
+        allow(@site).to receive(:script_installed_api?) { true }
+
+        expect(Analytics).to receive(:track).with(:site, @site.id, "Installed")
+
+        @site.has_script_installed?
+      end
     end
 
-    it "is true if script is installed according to db, and not still installed according to api" do
-      @site.script_installed_at = 1.week.ago
-      @site.stub(script_installed_api?: true)
+    context "when uninstalled" do
+      it 'updates the script_uninstalled_at' do
+        allow(@site).to receive(:script_installed_db?) { true }
+        allow(@site).to receive(:script_installed_api?) { false }
 
-      expect(@site.has_script_installed?).to be_true
-      expect(@site.script_installed_at).to be_present
-      expect(@site.script_uninstalled_at).to be_nil
-    end
+        expect {
+          @site.has_script_installed?
+        }.to change(@site, :script_uninstalled_at)
+      end
 
-    it "is false if not installed according to db, and not yet installed according to api" do
-      @site.script_installed_at = nil
-      @site.stub(script_installed_api?: false)
+      it 'tracks the uninstall event' do
+        allow(@site).to receive(:script_installed_db?) { true }
+        allow(@site).to receive(:script_installed_api?) { false }
 
-      expect(@site.has_script_installed?).to be_false
-      expect(@site.script_installed_at).to be_nil
-      expect(@site.script_uninstalled_at).to be_nil
-    end
+        expect(Analytics).to receive(:track).with(:site, @site.id, "Uninstalled")
 
-    it "is true if not installed according to db, but installed according to api" do
-      @site.script_installed_at = nil
-      @site.stub(script_installed_api?: true)
-
-      expect(@site.has_script_installed?).to be_true
-      expect(@site.script_installed_at).to be_present
-      expect(@site.script_uninstalled_at).to be_nil
-    end
-
-    it "is false if previously installed, but now uninstalled according to api" do
-      @site.script_installed_at = 1.week.ago
-      @site.stub(script_installed_api?: false)
-
-      expect(@site.has_script_installed?).to be_false
-      expect(@site.script_uninstalled_at).to be_present
+        @site.has_script_installed?
+      end
     end
   end
 
