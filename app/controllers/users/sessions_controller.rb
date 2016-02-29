@@ -21,8 +21,6 @@ class Users::SessionsController < Devise::SessionsController
     end
 
     if @user
-      cookies.permanent[:login_email] = email
-
       if auth = @user.authentications.first
         redirect_to "/auth/#{auth.provider}"
       end
