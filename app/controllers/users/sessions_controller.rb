@@ -21,7 +21,11 @@ class Users::SessionsController < Devise::SessionsController
     end
 
     if @user
-      if auth = @user.authentications.first
+      if @user.status == User::TEMPORARY_STATUS
+        sign_in(@user)
+
+        render 'users/forgot_emails/set_password'
+      elsif auth = @user.authentications.first
         redirect_to "/auth/#{auth.provider}"
       end
     else
