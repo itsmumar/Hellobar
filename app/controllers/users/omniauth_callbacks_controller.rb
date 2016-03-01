@@ -4,7 +4,7 @@ class Users::OmniauthCallbacksController < ApplicationController
 
     @user = User.find_by(email: request.env["omniauth.auth"].info[:email])
 
-    if @user.authentications.exists?
+    if @user && @user.authentications.exists?
       @user = User.find_for_google_oauth2(request.env["omniauth.auth"], cookies[:login_email], track_options)
     end
 
