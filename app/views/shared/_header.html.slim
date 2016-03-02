@@ -20,7 +20,7 @@
           ul
             - current_user.sites.sort_by(&:normalized_url).each do |site|
               li.padded
-                =active_link_to site.normalized_url, site_path(site)
+                =active_link_to truncate(site.normalized_url, length: 26), site_path(site)
                 - unless site.is_free?
                   div.pill class=site.current_subscription.values[:name]
                     = site.current_subscription.values[:name][0..2]
