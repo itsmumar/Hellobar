@@ -50,6 +50,8 @@ unless defined?(Hellobar::Settings)
     get_response_api_url
     vr_client_id
     vr_secret
+    infusionsoft_key
+    infusionsoft_secret
   )
 
   keys.each do |key|
@@ -164,6 +166,14 @@ unless defined?(Hellobar::Settings)
       :name => "VerticalResponse",
       :requires_embed_code => true,
       :hidden => true
+    },
+    :infusionsoft => {
+      :type => :email,
+      :name => "Infusionsoft",
+      :client_id => config[:infusionsoft_key],
+      :secret => config[:infusionsoft_secret],
+      :supports_double_optin => true,
+      :oauth => true
     }
   }
   config[:analytics_log_file] ||= File.join(Rails.root, "log", "analytics.log")

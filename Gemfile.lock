@@ -341,6 +341,9 @@ GEM
     omniauth-google-oauth2 (0.2.6)
       omniauth (> 1.0)
       omniauth-oauth2 (~> 1.1)
+    omniauth-infusionsoft (1.0.3)
+      omniauth (~> 1.0)
+      omniauth-oauth2 (~> 1.1)
     omniauth-oauth (1.0.1)
       oauth
       omniauth (~> 1.0)
@@ -608,6 +611,7 @@ DEPENDENCIES
   omniauth-constantcontact2 (~> 1.0)
   omniauth-createsend (~> 1.0)
   omniauth-google-oauth2 (~> 0.2.6)
+  omniauth-infusionsoft (~> 1.0.3)
   omniauth-mailchimp (~> 1.0)!
   omniauth-verticalresponse (~> 1.0.0)
   paperclip (~> 4.3)
