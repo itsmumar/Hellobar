@@ -1,5 +1,5 @@
 - if @recent_elements.any?
-  h5 Recent Activity
+  h5 style="display:none;" Recent Activity
   table.activity-wrapper
     - @recent_elements.each do |element|
       - recent_activity_msg = recent_activity_message(element)

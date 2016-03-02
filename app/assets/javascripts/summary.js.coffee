@@ -40,6 +40,10 @@ AmCharts.ready ->
         $(".suggestions-wrapper.social").show()
         $(".top-performers-wrapper.social").show()
 
+  # Ensures "Recent Activity" h5 only appears if table rows exist
+  if ($('.statistics-page > table.activity-wrapper > tbody > tr').length != 0)
+    $('.statistics-page > h5').first().show()
+
   # Trigger current chart or default when applicatble
   if $('.chart-wrapper .chart-block').length && typeof(window.CurrentChart) == "undefined"
     $(".chart-wrapper .chart-block").first().click()
