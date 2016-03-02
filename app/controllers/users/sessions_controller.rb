@@ -13,7 +13,6 @@ class Users::SessionsController < Devise::SessionsController
   def find_email
     email = params[:user].try(:[], :email)
 
-
     if TEMP_MIGRATION_USERS.include?(email)
       @user = User.new(email: email)
     else

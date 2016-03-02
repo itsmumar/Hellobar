@@ -74,6 +74,31 @@ describe User do
     end
   end
 
+  describe '.find_and_create_by_referral' do
+    fixtures :users
+
+    it 'returns nil if there are no referrals for the email' do
+      no_user = User.find_and_create_by_referral('asd')
+
+      expect(no_user).to be_nil
+    end
+
+    it 'returns a temporary user with the email that was found' do
+      user = users(:wootie)
+      email_to_invite = 'hello@email.com'
+
+      Referrals::Create.run(
+        sender: user,
+        params: { email: email_to_invite },
+        send_emails: false
+      )
+
+      user = User.find_and_create_by_referral(email_to_invite)
+
+      expect(user.status).to eql(User::TEMPORARY_STATUS)
+    end
+  end
+
   describe '#active?' do
     let(:user) { User.new }
 

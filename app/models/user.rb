@@ -58,7 +58,19 @@ class User < ActiveRecord::Base
   end
 
   def self.search_all_versions_for_email(email)
-    User.find_by(email: email) || Hello::WordpressUser.find_by_email(email)
+    find_by(email: email) ||
+    find_and_create_by_referral(email) ||
+    Hello::WordpressUser.find_by_email(email)
+  end
+
+  def self.find_and_create_by_referral(email)
+    if Referral.find_by(email: email)
+      password = Devise.friendly_token[9,20]
+
+      User.create email: email,
+                  status: TEMPORARY_STATUS,
+                  password: password, password_confirmation: password
+    end
   end
 
   # dont require the password virtual attribute to be present
