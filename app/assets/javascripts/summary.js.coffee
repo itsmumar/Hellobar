@@ -1,5 +1,8 @@
 AmCharts.ready ->
 
+  if $('.statistics-page').length
+    CE_SNAPSHOT_NAME="summary"
+
   # Render appropriate chart on click
   $('body').on 'click', '.chart-block[data-chart]:not(.activated)', (event) ->
     # Don't allow clicking during loading
