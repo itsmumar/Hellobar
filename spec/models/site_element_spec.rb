@@ -126,6 +126,12 @@ describe SiteElement do
     end
   end
 
+  describe "#recent" do
+    it "should only include site elements created within the last 2 weeks" do
+      expect(SiteElement.recent(5).map { |se| se.created_at > 2.weeks.ago }.count).to eq(0)
+    end
+  end
+
   describe "#redirect_has_url" do
     let(:element) { site_elements(:zombo_email) }
 
@@ -199,7 +205,6 @@ describe SiteElement do
       end
     end
   end
-
 
   describe '#toggle_paused!' do
     let(:site_element) { site_elements(:zombo_traffic) }
