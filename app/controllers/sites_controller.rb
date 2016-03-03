@@ -50,7 +50,7 @@ class SitesController < ApplicationController
         session[:current_site] = @site.id
 
         @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, :force => is_page_refresh?)
-        @recent_elements = @site.site_elements.where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC").limit(5)
+        @recent_elements = @site.site_elements.recent(5)
       end
       format.json { render :json => @site }
     end
