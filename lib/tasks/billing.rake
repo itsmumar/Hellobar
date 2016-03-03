@@ -70,7 +70,7 @@ namespace :billing do
                 billing_report(msg+"Skipped: no payment method available")
               else
                 attempt = bill.attempt_billing!
-                if attempt === true or attempt.success?
+                if attempt == true or attempt.success?
                   num_successful += 1
                   amount_successful += bill.amount
                   billing_report(msg+"OK")
