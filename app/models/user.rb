@@ -161,14 +161,14 @@ class User < ActiveRecord::Base
   def self.find_for_google_oauth2(access_token, original_email=nil, track_options={})
     info = access_token["info"]
 
-    if user = User.joins(:authentications).find_by(authentications: { uid: access_token["uid"], provider: access_token["provider"] })
+    if original_email.present? && info["email"] != original_email # the user is trying to login with a different Google account
+      user = User.new
+      user.errors.add(:base, "Please log in with your #{original_email} Google email")
+    elsif user = User.joins(:authentications).find_by(authentications: { uid: access_token["uid"], provider: access_token["provider"] })
       user.first_name = info["first_name"] if info["first_name"].present?
       user.last_name = info["last_name"] if info["last_name"].present?
 
       user.save
-    elsif original_email.present? && info["email"] != original_email # the user is trying to login with a different Google account
-      user = User.new
-      user.errors.add(:base, "Please log in with your #{original_email} Google email")
     else # create a new user
       user = User.find_by(email: info["email"], status: TEMPORARY_STATUS) || User.new(email: info["email"])
 

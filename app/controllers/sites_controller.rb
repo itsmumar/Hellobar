@@ -13,7 +13,7 @@ class SitesController < ApplicationController
   layout :determine_layout
 
   def new
-    @site = Site.new
+    @site = Site.new(url: params[:url])
   end
 
   def create
