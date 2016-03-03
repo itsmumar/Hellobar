@@ -21,6 +21,6 @@
 
   .devise-links
     - if resource.email.present?
-      = link_to "Not you?", "#", class: 'clear-last-logged-in'
+      = link_to "Not you?", "#", class: 'clear-last-logged-in', id: 'not-you'
     br
     = link_to "Sign up for a New Hello Bar Account", root_path

@@ -23,7 +23,7 @@ class @WelcomeBackModal extends Modal
       @_expireLoginCookies()
 
   _expireLoginCookies: ->
-    document.cookie = "login_email=; expires=Thu, 01 Jan 1970 00:00:00 UTC"
+    document.cookie = "login_email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
 
   _clearRegistrationUrl: ->
     $('input[name="site[url]"]').val('')
