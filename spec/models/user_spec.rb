@@ -99,6 +99,33 @@ describe User do
     end
   end
 
+  describe '#new?' do
+    it 'returns true if the user is logging in for the first time and does not have any bars' do
+      user = create(:user)
+      #normaly devise would set it
+      user.sign_in_count = 1
+      user.save
+      expect(user.new?).to be_true
+    end
+
+    it 'returns false if the user logging in for the first time and does have bars' do
+      user = create(:user)
+      site = create(:site, :with_rule, users: [user])
+      site_element = create(:site_element, rule: site.rules.first)
+      #normaly devise would set it
+      user.sign_in_count = 1
+      expect(user.new?).to be_false
+    end
+
+    it 'returns false if the user is not logging in for the first time' do
+      user = create(:user)
+      #normaly devise would set it
+      user.sign_in_count = 2
+      user.save
+      expect(user.new?).to be_false
+    end
+  end
+
   describe '#active?' do
     let(:user) { User.new }
 
