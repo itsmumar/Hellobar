@@ -77,7 +77,7 @@ describe Site do
         bill.update(discount: bill.calculate_discount)
       end
 
-      site = create(:site, users: [user])
+      site = user.sites.create(url: Faker::Internet.url)
       site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), user.payment_methods.first)
       expect(site.bills.paid.first.discount > 0).to be(true)
     end

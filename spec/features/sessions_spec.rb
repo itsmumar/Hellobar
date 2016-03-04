@@ -21,7 +21,7 @@ feature "User can sign in", js: true do
 
   scenario "through email and password" do
     user = create(:user)
-    site = create(:site, users: [user])
+    site = user.sites.create(url: Faker::Internet.url)
 
     visit new_user_session_path
 
@@ -36,7 +36,7 @@ feature "User can sign in", js: true do
 
   scenario "through oauth" do
     user = create(:user)
-    site = create(:site, users: [user])
+    site = user.sites.create(url: Faker::Internet.url)
     auth = user.authentications.create({
       provider: "google_oauth2",
       uid: "12345"
