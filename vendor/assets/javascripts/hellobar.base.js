@@ -592,11 +592,12 @@ var HB = {
   {
     // Don't let any cookies get set without a site ID
     if ( typeof(HB_SITE_ID) == "undefined")
-      HB.cookies = {siteElements:{}, visitor:{}};
+      HB.cookies = {siteElements:{}, visitor:{}, location:{}};
     else
     {
       HB.cookies = {
         visitor: HB.parseCookieValues(HB.gc("hbv_"+HB_SITE_ID)),
+        location: HB.parseCookieValues(HB.gc("hbglc_"+HB_SITE_ID)),
         siteElements: {}
       };
       // We need to parse out the nested site element data
@@ -640,7 +641,15 @@ var HB = {
   // Gets the visitor attribute specified by the key or returns null
   getVisitorData: function(key)
   {
-    return HB.cookies.visitor[key];
+    if (key == undefined) return null;
+
+    if (key.indexOf("gl_") != -1) {
+      return HB.getGeolocationData(key);
+    }
+    else
+    {
+      return HB.cookies.visitor[key];
+    }
   },
 
   // Sets the visitor attribute specified by the key to the value in the HB.cookies hash
@@ -1927,5 +1936,48 @@ var HB = {
       return "tablet";
     else
       return "computer";
+  },
+
+  setGeolocationData: function(locationData) {
+    locationCookie = {
+      'gl_cty' : locationData.city,
+      'gl_ctr' : locationData.countryCode,
+      'gl_rgn' : locationData.region
+    }
+
+    // Don't let any cookies get set without a site ID
+    if ( typeof(HB_SITE_ID) != "undefined")
+    {
+      //refresh geolocation every month on not mobile
+      var expirationDays = 30;
+      //refresh geolocation every day on mobile
+      if ( HB.getVisitorData("dv") === "mobile" )
+        expirationDays = 1;
+      HB.sc("hbglc_"+HB_SITE_ID, HB.serializeCookieValues(locationCookie), expirationDays);
+      HB.loadCookies();
+    }
+  },
+
+  getGeolocationData: function(key) {
+    var cachedLocation = HB.cookies.location[key];
+    if (cachedLocation) return cachedLocation;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', "http://pro.ip-api.com/json?key=WtoYQ0HEZVsiQy9");
+    xhr.send(null);
+
+    xhr.onreadystatechange = function () {
+      var DONE = 4; // readyState 4 means the request is done.
+      var OK = 200; // status 200 is a successful return.
+      if (xhr.readyState === DONE) {
+        if (xhr.status === OK) {
+          response = JSON.parse(xhr.responseText);
+          HB.setGeolocationData(response);
+          HB.showSiteElements();
+        } else {
+          console.log('Error: ' + xhr.status); // An error occurred during the request.
+        }
+      }
+    };
   }
 };

@@ -141,6 +141,9 @@ class @RuleModal extends Modal
     'DeviceCondition': ['is', 'is_not']
     'EveryXSession': ['every']
     'LastVisitCondition': ['is', 'is_not', 'less_than', 'greater_than', 'between']
+    'LocationCityCondition': ['is', 'is_not']
+    'LocationCountryCondition': ['is', 'is_not']
+    'LocationRegionCondition': ['is', 'is_not']
     'NumberOfVisitsCondition': ['is', 'is_not', 'less_than', 'greater_than', 'between']
     'PreviousPageURL': ['includes', 'does_not_include']
     'ReferrerCondition': ['is', 'is_not', 'includes', 'does_not_include']
@@ -160,6 +163,9 @@ class @RuleModal extends Modal
     'DeviceCondition': '.device-choice'
     'EveryXSession': '.x-sessions'
     'LastVisitCondition': '.days-last-visit-choice'
+    'LocationCityCondition': '.location-city-choice'
+    'LocationCountryCondition': '.location-country-choice'
+    'LocationRegionCondition': '.location-region-choice'
     'NumberOfVisitsCondition': '.number-of-visits-choice'
     'PreviousPageURL': '.previous-page-choice'
     'ReferrerCondition': '.referrer-choice'
