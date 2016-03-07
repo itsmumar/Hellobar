@@ -21,8 +21,8 @@ describe User do
 
     it 'can have the same email as someone in the Rails database if the previous user was deleted' do
       email = 'hoogaboo@gmail.com'
-      u = User.create email: email, password: 'supers3cr37'
-      u.destroy
+      user = User.create email: email, password: 'supers3cr37'
+      user.destroy
 
       user = User.create email: email
 
@@ -30,18 +30,18 @@ describe User do
     end
 
     it 'should require a valid email' do
-      u = User.create(email: "test")
-      expect(u.errors.messages[:email]).to include('is invalid')
+      user = User.create(email: "test")
+      expect(user.errors.messages[:email]).to include('is invalid')
     end
 
     it 'should require a password of 9 characters or more' do
-      u = User.create(email: "test@test.com", password: "123")
-      expect(u.errors.messages[:password]).to include('is too short (minimum is 8 characters)')
+      user = User.create(email: "test@test.com", password: "123")
+      expect(user.errors.messages[:password]).to include('is too short (minimum is 8 characters)')
     end
 
     it 'should require password_confirmation to match' do
-      u = User.create(email: "test@test.com", password: "12345678", password_confirmation: "sdaf")
-      expect(u.errors.messages[:password_confirmation]).to include('doesn\'t match Password')
+      user = User.create(email: "test@test.com", password: "12345678", password_confirmation: "sdaf")
+      expect(user.errors.messages[:password_confirmation]).to include('doesn\'t match Password')
     end
 
     context "oauth user" do
@@ -71,6 +71,31 @@ describe User do
       }.to change(User, :count).by(1)
 
       expect(User.last.status).to eq(User::TEMPORARY_STATUS)
+    end
+  end
+
+  describe '.find_and_create_by_referral' do
+    fixtures :users
+
+    it 'returns nil if there are no referrals for the email' do
+      no_user = User.find_and_create_by_referral('asd')
+
+      expect(no_user).to be_nil
+    end
+
+    it 'returns a temporary user with the email that was found' do
+      user = users(:wootie)
+      email_to_invite = 'hello@email.com'
+
+      Referrals::Create.run(
+        sender: user,
+        params: { email: email_to_invite },
+        send_emails: false
+      )
+
+      user = User.find_and_create_by_referral(email_to_invite)
+
+      expect(user.status).to eql(User::TEMPORARY_STATUS)
     end
   end
 
@@ -107,9 +132,9 @@ describe User do
     end
 
     it "should soft-delete" do
-      u = users(:joey)
-      u.destroy
-      expect(User.only_deleted).to include(u)
+      user = users(:joey)
+      user.destroy
+      expect(User.only_deleted).to include(user)
     end
   end
 
@@ -149,22 +174,22 @@ describe User do
 
     context "when user does not exist" do
       it "creates a new user with correct email" do
-        u = User.find_for_google_oauth2(token)
+        user = User.find_for_google_oauth2(token)
 
-        expect(u.email).to eq(email)
+        expect(user.email).to eq(email)
       end
 
       it "creates a new user with one authentication" do
-        u = User.find_for_google_oauth2(token)
+        user = User.find_for_google_oauth2(token)
 
-        expect(u.authentications.count).to eq(1)
+        expect(user.authentications.count).to eq(1)
       end
 
       it "creates a new user with correct provider info" do
-        u = User.find_for_google_oauth2(token)
+        user = User.find_for_google_oauth2(token)
 
-        expect(u.authentications.first.provider).to eq("google_oauth2")
-        expect(u.authentications.first.uid).to eq(uuid)
+        expect(user.authentications.first.provider).to eq("google_oauth2")
+        expect(user.authentications.first.uid).to eq(uuid)
       end
 
       context "when first and last name provided" do
@@ -177,15 +202,23 @@ describe User do
         end
 
         it "set the first name" do
-          u = User.find_for_google_oauth2(token)
+          user = User.find_for_google_oauth2(token)
 
-          expect(u.first_name).to eq(first_name)
+          expect(user.first_name).to eq(first_name)
         end
 
         it "set the last name" do
-          u = User.find_for_google_oauth2(token)
+          user = User.find_for_google_oauth2(token)
 
-          expect(u.last_name).to eq(last_name)
+          expect(user.last_name).to eq(last_name)
+        end
+      end
+
+      context "when the original_email is not match the OAuth email" do
+        it "returns a user with an error on the email" do
+          user = User.find_for_google_oauth2(token, 'notmy@email.com')
+
+          expect(user.errors[:base]).to include("Please log in with your notmy@email.com Google email")
         end
       end
     end

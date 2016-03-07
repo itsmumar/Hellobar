@@ -20,9 +20,10 @@
 
 //-----------  Page Layouts  -----------//
 
-@import 'layouts/common';           // Common Layout Blocks
-@import 'layouts/document';         // Document Layouts
-@import 'layouts/global/footer';    // Global Footer
+@import 'layouts/common';              // Common Layout Blocks
+@import 'layouts/document';            // Document Layouts
+@import 'layouts/global/footer';       // Global Footer
+@import 'layouts/modals/welcome_back'; // welcome back modal
 
 @import 'layouts/pages/*';          // Static Pages (Home, About Us, etc)
 @import 'layouts/devise/*';         // User Account Pages
