@@ -53,6 +53,7 @@ class SiteElement < ActiveRecord::Base
   scope :traffic_subtype, -> { where(element_subtype: "traffic") }
   scope :call_subtype, -> { where(element_subtype: "call") }
   scope :announcement_subtype, -> { where(element_subtype: "announcement") }
+  scope :recent, -> (limit) { where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC").limit(limit).select { |se| se.is_announcement? || se.has_converted? } }
 
   delegate :site, :site_id, to: :rule, allow_nil: true
   delegate :image_uploads, to: :site
