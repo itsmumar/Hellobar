@@ -12,23 +12,22 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
     end
 
     @identity = identity
-    # TODO: Fill in infusion soft api client here
-    @client = nil
+
+    Infusionsoft.configure do |config|
+      config.api_url = @identity.extra['app_url']
+      config.api_key = @identity.api_key
+    end
   end
 
   def lists
+    # Infusionsoft doesn't have the concept of lists, just contacts
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
+    # Infusionsoft.contact_add(email, name)
   end
 
   def batch_subscribe(list_id, subscribers, double_optin = true)
-  end
-
-  def log(message)
-  end
-
-  def handle_error(error)
   end
 end
 

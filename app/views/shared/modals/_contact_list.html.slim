@@ -99,35 +99,41 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |   {{else}}
   |     {{#if requiresApiKey}}
   |       <li>Your API key from {{providerName}}</li>
-  |     {{else}}
+  |     {{/if}}
+  |     {{#if requiresUsername}}
   |       <li>Your {{providerName}} username and password</li>
   |     {{/if}}
   |   {{/if}}
   |   <li>An existing list with {{providerName}} to sync to</li>
   | </ol>
   |
+  | <label for="contact_list_provider_info">Paste the required information below, then click Done.</label>
+  |
+  | {{#if requiresAppUrl}}
+  |   <input type='text' id="contact_list_app_url" name="contact_list[data][app_url]" value="{{contactList.data.app_url}}" placeholder="Your AppURL (eg. tx305.infusionsoft.com)">
+  | {{/if}}
+  |
+  | {{#if requiresUsername}}
+  |   <input type='text' id="contact_list_username" name="contact_list[data][username]" value="{{contactList.data.username}}" placeholder="Your username">
+  | {{/if}}
+  |
   | {{#if requiresApiKey}}
-  |   {{#if requiresUsername}}
-  |     <label for="contact_list_api_key">Paste your Username and API key below, then click Done.</label>
-  |     <input type='text' id="contact_list_username" name="contact_list[data][username]" value="{{contactList.data.username}}" placeholder="Your username (eg. email@site.com)">
   |     <input type='text' id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}" placeholder="Your API key">
-  |   {{else}}
-  |     <label for="contact_list_api_key">Paste your API key below, then click Done.</label>
-  |     <input type='text' id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}">
-  |   {{/if}}
+  | {{/if}}
+  |
+  | {{#if requiresEmbedCode}}
+  |   <textarea id="contact_list_embed_code" name="contact_list[data][embed_code]">{{contactList.data.embed_code}}</textarea>
+  | {{/if}}
+  |
+  | {{#if oauth}}
+  |   <div>
+  |     <a class="button cancel do-this-later">I'll do this later</a>
+  |     <a class="button ready">I'm ready</a>
+  |   </div>
+  | {{else}}
   |   <div>
   |     <a class="button ready">Connect my account</a>
   |   </div>
-  | {{else}}
-  |   {{#if requiresEmbedCode}}
-  |     <label for="contact_list_embed_code">Paste your embed code below, then click Done.</label>
-  |     <textarea id="contact_list_embed_code" name="contact_list[data][embed_code]">{{contactList.data.embed_code}}</textarea>
-  |   {{else}}
-  |     <div>
-  |       <a class="button cancel do-this-later">I'll do this later</a>
-  |       <a class="button ready">I'm ready</a>
-  |     </div>
-  |   {{/if}}
   | {{/if}}
 
 /-----------  No Provider Template  -----------/

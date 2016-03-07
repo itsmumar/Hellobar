@@ -24,11 +24,15 @@ class IdentitiesController < ApplicationController
       return redirect_to site_contact_lists_path(@site)
     end
 
-    if params[:api_key]
-      if params[:username]
-        identity.credentials = {"username" => params[:username]}
-      end
+    if params[:app_url].present?
+      identity.extra = {"app_url" => params[:app_url]}
+    end
 
+    if params[:username]
+      identity.credentials = {"username" => params[:username]}
+    end
+
+    if params[:api_key]
       #TODO sanitze me?
       identity.api_key = params[:api_key]
       env["omniauth.params"] ||= {}

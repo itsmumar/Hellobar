@@ -111,6 +111,7 @@ class @ContactListModal extends Modal
       queryParams = {}
       queryParams["api_key"] = @_getFormData().data.api_key
       queryParams["username"] = @_getFormData().data.username
+      queryParams["app_url"] = @_getFormData().data.app_url
       newPath += "&" + $.param(queryParams)
 
       @options.window.location = newPath
@@ -192,8 +193,11 @@ class @ContactListModal extends Modal
 
     api_key = $('#contact_list_api_key').val()
     username = $('#contact_list_username').val()
+    app_url = $('#contact_list_app_url').val()
+
     if api_key then data.api_key = api_key
     if username then data.username = username
+    if app_url then data.app_url = app_url
     data
 
   _isLocalContactStorage: ->
@@ -231,7 +235,9 @@ class @ContactListModal extends Modal
     defaultContext =
       provider: value
       providerName: label
+      oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
+      requiresAppUrl: option.data('requiresAppUrl')
       requiresApiKey: option.data('requiresApiKey')
       requiresUsername: option.data('requiresUsername')
       contactList: @options.contactList
