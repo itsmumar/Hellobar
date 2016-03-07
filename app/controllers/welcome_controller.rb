@@ -4,6 +4,7 @@ class WelcomeController < ApplicationController
   before_action :require_no_user, only: [:index, :email_quickstart]
 
   def index
+    @last_logged_in_user = User.find_by(email: cookies[:login_email])
     Analytics.track(*current_person_type_and_id, "Homepage")
     set_site_url
   end
@@ -18,9 +19,14 @@ class WelcomeController < ApplicationController
   private
 
   def set_site_url
-    if(session[:new_site_url])
-      @site_url = session[:new_site_url]
+    if stored_url
+      @site_url = stored_url
+
       session.delete(:new_site_url)
     end
+  end
+
+  def stored_url
+    session[:new_site_url] || cookies[:registration_url]
   end
 end

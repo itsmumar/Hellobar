@@ -3,10 +3,14 @@ class Hello::WordpressUser < Hello::WordpressModel
   PRO_TRIAL_PERIOD = 14.days
 
   def self.email_exists?(email)
-    @@connected ? (where(['user_email = ? or user_login = ?', email, email]).count >= 1) : false
+    find_by_email(email).present?
+  end
+
+  def self.find_by_email(email)
+    @@connected ? where(['user_email = ? or user_login = ?', email, email]).first : nil
   rescue ActiveRecord::NoDatabaseError
     Rails.logger.error("Wordpress database configured in database.yml does not exist")
-    false
+    nil
   end
 
   def self.authenticate(email, password, skip_password_check = false)
