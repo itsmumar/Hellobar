@@ -100,6 +100,9 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |     {{#if requiresApiKey}}
   |       <li>Your API key from {{providerName}}</li>
   |     {{/if}}
+  |     {{#if requiresAppUrl}}
+  |       <li>Your Application Url from {{providerName}}</li>
+  |     {{/if}}
   |     {{#if requiresUsername}}
   |       <li>Your {{providerName}} username and password</li>
   |     {{/if}}

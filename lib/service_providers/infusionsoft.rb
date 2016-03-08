@@ -20,14 +20,19 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
   end
 
   def lists
-    # Infusionsoft doesn't have the concept of lists, just contacts
+    []
   end
 
-  def subscribe(list_id, email, name = nil, double_optin = true)
-    # Infusionsoft.contact_add(email, name)
-  end
+  def subscribe(list_id, email, name = nil, double_optin = false)
+    data = { :Email => email }
 
-  def batch_subscribe(list_id, subscribers, double_optin = true)
+    if name
+      fname, lname = name.split
+      data[:FirstName] = fname
+      data[:LastName] = lname
+    end
+
+    Infusionsoft.contact_add_with_dup_check(data, :Email)
   end
 end
 

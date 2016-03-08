@@ -259,7 +259,11 @@ class @ContactListModal extends Modal
         @blocks.nevermind.hide()
         @_renderBlock("syncDetails", $.extend(defaultContext, {identity: data})).show()
         @_renderBlock("instructions", defaultContext).hide()
-        @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
+
+        if data.provider == "infusionsoft"
+          @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).hide()
+        else
+          @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if listData
           @$modal.find("#contact_list_remote_list_id").val(listData.data.remote_id) if listData.data && listData.data.remote_id

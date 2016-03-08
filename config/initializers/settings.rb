@@ -168,7 +168,6 @@ unless defined?(Hellobar::Settings)
     :infusionsoft => {
       :type => :email,
       :name => "Infusionsoft",
-      :supports_double_optin => true,
       :requires_api_key => true,
       :requires_app_url => true
     }
