@@ -2,6 +2,8 @@ class Hello::WordpressUser < Hello::WordpressModel
   self.table_name = "hbwp_users"
   PRO_TRIAL_PERIOD = 14.days
 
+  attr_reader :password # to conform with User so we can reuse forms
+
   def self.email_exists?(email)
     find_by_email(email).present?
   end
@@ -21,6 +23,11 @@ class Hello::WordpressUser < Hello::WordpressModel
     else
       user && Phpass.new.check(password, user.user_pass) ? user : nil
     end
+  end
+
+  def email
+    return user_email if user_email.present?
+    return user_login if user_login.present?
   end
 
   def bars
