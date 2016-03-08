@@ -79,6 +79,10 @@ class User < ActiveRecord::Base
     legacy_migration ? false : super
   end
 
+  def new?
+    sign_in_count == 1 && site_elements.empty?
+  end
+
   def active?
     status == ACTIVE_STATUS
   end

@@ -24,7 +24,7 @@ feature "Manage Bars", js: true do
 
     scenario "shows option for adding new bar when no bars exist" do
       visit site_site_elements_path(@site)
-      expect(page).to have_content("Create a bar for this rule")
+      expect(page).to have_content("Create a new Hello Bar")
     end
   end
 
@@ -35,7 +35,7 @@ feature "Manage Bars", js: true do
 
     scenario "shows option for adding new bar when no bars exist" do
       visit site_site_elements_path(@site)
-      expect(page).to have_content("Create a bar for this rule")
+      expect(page).to have_content("Create a new Hello Bar")
     end
 
     scenario "shows option for a/b testing a bar when site elements exist" do
