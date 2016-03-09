@@ -6,6 +6,7 @@ class SiteMembership < ActiveRecord::Base
   validate :user, :site, presence: true
   validates :role, inclusion: { in: %w(owner admin) }
   validate :user_site_uniqueness
+  validate :user_site_url_uniqueness
   validate :at_least_one_owner_per_site
   validate :updater_permission
 
@@ -30,7 +31,14 @@ class SiteMembership < ActiveRecord::Base
   # Have to write our own because of acts as paranoid
   def user_site_uniqueness
     if site && user && SiteMembership.where(user_id: user.id, site_id: site.id).where.not(id: id).exists?
-      self.errors.add(:user, "user already has a membership to #{site.url}")
+      self.errors.add(:user, "already has a membership to #{site.url}")
+    end
+  end
+
+  # Unique by :site_id was not enough since site urls are not unique
+  def user_site_url_uniqueness
+    if site && user && user.sites.where(url: site.url).any?
+      self.errors.add(:user, "already has a membership to #{site.url}")
     end
   end
 
