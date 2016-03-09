@@ -110,8 +110,9 @@ describe User do
 
     it 'returns false if the user logging in for the first time and does have bars' do
       user = create(:user)
-      site = create(:site, :with_rule, users: [user])
-      site_element = create(:site_element, rule: site.rules.first)
+      site = user.sites.create(url: random_uniq_url)
+      rule = site.rules.create(name: "test rule", match: "all")
+      site_element = create(:site_element, rule: rule)
       #normaly devise would set it
       user.sign_in_count = 1
       expect(user.new?).to be_false
