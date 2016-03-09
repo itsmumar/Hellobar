@@ -21,8 +21,8 @@ describe User do
 
     it 'can have the same email as someone in the Rails database if the previous user was deleted' do
       email = 'hoogaboo@gmail.com'
-      u = User.create email: email, password: 'supers3cr37'
-      u.destroy
+      user = User.create email: email, password: 'supers3cr37'
+      user.destroy
 
       user = User.create email: email
 
@@ -30,18 +30,18 @@ describe User do
     end
 
     it 'should require a valid email' do
-      u = User.create(email: "test")
-      expect(u.errors.messages[:email]).to include('is invalid')
+      user = User.create(email: "test")
+      expect(user.errors.messages[:email]).to include('is invalid')
     end
 
     it 'should require a password of 9 characters or more' do
-      u = User.create(email: "test@test.com", password: "123")
-      expect(u.errors.messages[:password]).to include('is too short (minimum is 8 characters)')
+      user = User.create(email: "test@test.com", password: "123")
+      expect(user.errors.messages[:password]).to include('is too short (minimum is 8 characters)')
     end
 
     it 'should require password_confirmation to match' do
-      u = User.create(email: "test@test.com", password: "12345678", password_confirmation: "sdaf")
-      expect(u.errors.messages[:password_confirmation]).to include('doesn\'t match Password')
+      user = User.create(email: "test@test.com", password: "12345678", password_confirmation: "sdaf")
+      expect(user.errors.messages[:password_confirmation]).to include('doesn\'t match Password')
     end
 
     context "oauth user" do
@@ -71,6 +71,58 @@ describe User do
       }.to change(User, :count).by(1)
 
       expect(User.last.status).to eq(User::TEMPORARY_STATUS)
+    end
+  end
+
+  describe '.find_and_create_by_referral' do
+    fixtures :users
+
+    it 'returns nil if there are no referrals for the email' do
+      no_user = User.find_and_create_by_referral('asd')
+
+      expect(no_user).to be_nil
+    end
+
+    it 'returns a temporary user with the email that was found' do
+      user = users(:wootie)
+      email_to_invite = 'hello@email.com'
+
+      Referrals::Create.run(
+        sender: user,
+        params: { email: email_to_invite },
+        send_emails: false
+      )
+
+      user = User.find_and_create_by_referral(email_to_invite)
+
+      expect(user.status).to eql(User::TEMPORARY_STATUS)
+    end
+  end
+
+  describe '#new?' do
+    it 'returns true if the user is logging in for the first time and does not have any bars' do
+      user = create(:user)
+      #normaly devise would set it
+      user.sign_in_count = 1
+      user.save
+      expect(user.new?).to be_true
+    end
+
+    it 'returns false if the user logging in for the first time and does have bars' do
+      user = create(:user)
+      site = create(:site, :with_rule, users: [user])
+      site_element = create(:site_element, rule: site.rules.first)
+      #normaly devise would set it
+      user.sign_in_count = 1
+      expect(user.new?).to be_false
+    end
+
+    it 'returns false if the user is not logging in for the first time' do
+      user = create(:user)
+      #normaly devise would set it
+      user.sign_in_count = 2
+      user.save
+      expect(user.new?).to be_false
     end
   end
 
@@ -107,9 +159,9 @@ describe User do
     end
 
     it "should soft-delete" do
-      u = users(:joey)
-      u.destroy
-      expect(User.only_deleted).to include(u)
+      user = users(:joey)
+      user.destroy
+      expect(User.only_deleted).to include(user)
     end
   end
 
@@ -149,22 +201,22 @@ describe User do
 
     context "when user does not exist" do
       it "creates a new user with correct email" do
-        u = User.find_for_google_oauth2(token)
+        user = User.find_for_google_oauth2(token)
 
-        expect(u.email).to eq(email)
+        expect(user.email).to eq(email)
       end
 
       it "creates a new user with one authentication" do
-        u = User.find_for_google_oauth2(token)
+        user = User.find_for_google_oauth2(token)
 
-        expect(u.authentications.count).to eq(1)
+        expect(user.authentications.count).to eq(1)
       end
 
       it "creates a new user with correct provider info" do
-        u = User.find_for_google_oauth2(token)
+        user = User.find_for_google_oauth2(token)
 
-        expect(u.authentications.first.provider).to eq("google_oauth2")
-        expect(u.authentications.first.uid).to eq(uuid)
+        expect(user.authentications.first.provider).to eq("google_oauth2")
+        expect(user.authentications.first.uid).to eq(uuid)
       end
 
       context "when first and last name provided" do
@@ -177,15 +229,23 @@ describe User do
         end
 
         it "set the first name" do
-          u = User.find_for_google_oauth2(token)
+          user = User.find_for_google_oauth2(token)
 
-          expect(u.first_name).to eq(first_name)
+          expect(user.first_name).to eq(first_name)
         end
 
         it "set the last name" do
-          u = User.find_for_google_oauth2(token)
+          user = User.find_for_google_oauth2(token)
 
-          expect(u.last_name).to eq(last_name)
+          expect(user.last_name).to eq(last_name)
+        end
+      end
+
+      context "when the original_email is not match the OAuth email" do
+        it "returns a user with an error on the email" do
+          user = User.find_for_google_oauth2(token, 'notmy@email.com')
+
+          expect(user.errors[:base]).to include("Please log in with your notmy@email.com Google email")
         end
       end
     end
@@ -325,6 +385,35 @@ describe User do
     it "catches bcrypt errors when using old hellobar passwords" do
       user.encrypted_password = old_password
       expect(user.valid_password?("wrong password")).to be(false)
+    end
+  end
+
+  describe ".search_all_versions_for_email" do
+    it "returns nil when email is blank" do
+      expect(User).to_not receive(:find_and_create_by_referral)
+
+      expect(User.search_all_versions_for_email('')).to be_nil
+    end
+
+    it "first queries by email" do
+      expect(User).to_not receive(:find_and_create_by_referral)
+      expect(User).to receive(:find_by).with(email: 'email@email.com') { User.new }
+
+      User.search_all_versions_for_email('email@email.com')
+    end
+
+    it "returns a new user if a referred user" do
+      expect(Hello::WordpressUser).to_not receive(:find_by_email)
+      expect(User).to receive(:find_and_create_by_referral).with('email@email.com') { User.new(status: User::TEMPORARY_STATUS) }
+
+      User.search_all_versions_for_email('email@email.com')
+    end
+
+    it "falls back to querying the v1 wordpress database" do
+      email = 'email@email.com'
+      expect(Hello::WordpressUser).to receive(:find_by_email).with(email) { double('wordpress user') }
+
+      User.search_all_versions_for_email(email)
     end
   end
 end

@@ -2,11 +2,17 @@ class Hello::WordpressUser < Hello::WordpressModel
   self.table_name = "hbwp_users"
   PRO_TRIAL_PERIOD = 14.days
 
+  attr_reader :password # to conform with User so we can reuse forms
+
   def self.email_exists?(email)
-    @@connected ? (where(['user_email = ? or user_login = ?', email, email]).count >= 1) : false
+    find_by_email(email).present?
+  end
+
+  def self.find_by_email(email)
+    @@connected ? where(['user_email = ? or user_login = ?', email, email]).first : nil
   rescue ActiveRecord::NoDatabaseError
     Rails.logger.error("Wordpress database configured in database.yml does not exist")
-    false
+    nil
   end
 
   def self.authenticate(email, password, skip_password_check = false)
@@ -17,6 +23,11 @@ class Hello::WordpressUser < Hello::WordpressModel
     else
       user && Phpass.new.check(password, user.user_pass) ? user : nil
     end
+  end
+
+  def email
+    return user_email if user_email.present?
+    return user_login if user_login.present?
   end
 
   def bars

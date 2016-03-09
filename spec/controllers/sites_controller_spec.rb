@@ -7,6 +7,30 @@ describe SitesController do
     @user = users(:joey)
   end
 
+  describe "GET new" do
+    before do
+      stub_current_user(@user)
+    end
+
+    it "sets the site instance variable" do
+      get :new
+
+      expect(assigns[:site]).to_not be_nil
+    end
+
+    it "sets the url if present from the params" do
+      get :new, url: 'site.com'
+
+      expect(assigns[:site].url).to eql('site.com')
+    end
+
+    it "flashes a notice if the url is present in the params" do
+      get :new, url: 'site.com'
+
+      expect(flash[:notice]).to be_present
+    end
+  end
+
   describe "POST create" do
     before do
       mock_storage = double('asset_storage', :create_or_update_file_with_contents => true)
