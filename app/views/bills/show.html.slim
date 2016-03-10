@@ -18,7 +18,10 @@ main
           div= @bill.site.try(:url) || @site.try(:url)
           br
           = @details.data["first_name"] + ' ' + @details.data["last_name"]
-          - if !@details.address.nil?
+          - if @bill.site.invoice_information.present?
+            br
+            = @bill.site.invoice_information.gsub("\r\n", "<br>").html_safe
+          - elsif !@details.address.nil?
             br
             = @details.address.address1
             br

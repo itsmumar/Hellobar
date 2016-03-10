@@ -14,16 +14,17 @@ div#user_profile
           - if site.current_subscription.trial?
             |  Trial
         - unless site.deleted?
-          a.subscription_link data-id=site.id change plan
+          a.subscription_link data-siteid=site.id change plan
           a.regenerate_link data-url=regenerate_admin_user_site_path(@user, site)
             | regenerate script
 
-      = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "hidden schedule_form"} do |f|
-        - fields_for :subscription do |sf|
-          table
-            tr
-              th Plan
-              th Schedule
+      = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "schedule_form edit_site_#{site.id}_form hidden"} do |f|
+        = f.hidden_field :id, value: site.id
+        table
+          tr
+            th Plan
+            th Schedule
+          = fields_for :subscription do |sf|
             tr
               td
                 - subscriptions.each do |sub|
@@ -37,7 +38,7 @@ div#user_profile
                     = sf.radio_button 'schedule', name, checked: site.current_subscription.schedule == name
                 div= sf.label "Trial period in days.  Leave blank for no trial."
                 div= sf.number_field 'trial_period'
-                = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
+                  = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
 
       - if site.users.count > 1
         div.site_section
@@ -53,13 +54,16 @@ div#user_profile
 
       - unless bills_for(site).empty?
         div.site_section
-          div.title= "Custom invoice information (Address, PO Box, etc) #{link_to('add', '#', class: 'add-invoice-info', style: 'margin-left:5px;')}".html_safe
+          div.title
+            = "Custom invoice information (Address, PO Box, etc)"
+            - if site.invoice_information.present?
+              = render "sites/form_remove_invoice_info", site: site
+            - else
+              = link_to('add', '#', class: 'add-invoice-info', style: 'margin-left:5px;')
           - if site.invoice_information.present?
-            = site.invoice_information
+            = site.invoice_information.gsub("\r\n", "<br>").html_safe
           - else
-            = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "hidden add_invoice_form"} do |f|
-              div= f.text_area 'invoice_information', placeholder: "Address, PO Box, etc. Appears below name on invoice.", style: "width: 40%;"
-              div= f.submit "Submit"
+            = render "sites/form", site: site
 
         div.site_section
           div.title Billing History

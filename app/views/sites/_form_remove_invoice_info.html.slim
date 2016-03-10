@@ -1,0 +1,3 @@
+= form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "site_#{site.id}_remove_invoice_info", style: "display:inline;"} do |f|
+  = f.hidden_field :invoice_information, value: ''
+  = link_to 'clear', "#site_#{site.id}_remove_invoice_info", style: 'margin-left:5px;', onclick: "$('.site_#{site.id}_remove_invoice_info').submit();", data: { disable_with: "submitting..." }
