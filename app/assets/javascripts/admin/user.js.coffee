@@ -20,7 +20,6 @@ $ ->
     $(@).closest("tr").toggleClass( "hilight" )
 
   $(".subscription_link").click ->
-    console.log ".edit_site_" + $(this).data("siteid") + "_form"
     $(".edit_site_" + $(this).data("siteid") + "_form").toggleClass("hidden")
 
   $(".add-invoice-info").click (e) ->

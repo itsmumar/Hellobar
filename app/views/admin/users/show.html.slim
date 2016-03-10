@@ -38,7 +38,7 @@ div#user_profile
                     = sf.radio_button 'schedule', name, checked: site.current_subscription.schedule == name
                 div= sf.label "Trial period in days.  Leave blank for no trial."
                 div= sf.number_field 'trial_period'
-                  = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
+                = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
 
       - if site.users.count > 1
         div.site_section

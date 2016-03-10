@@ -6,6 +6,7 @@ class Admin::SitesController < ApplicationController
 
   def update
     begin
+      update_subscription(site, nil, subscription_params)
       site.update_attributes(site_params)
       flash[:success] = "Site and/or subscription has been updated."
     rescue => e
@@ -35,9 +36,12 @@ class Admin::SitesController < ApplicationController
 
   private
 
+    def subscription_params
+      params.require(:subscription).permit(:plan, :schedule, :trial_period)
+    end
+
     def site_params
-      params.require(:site).permit(:id, :url, :opted_in_to_email_digest, :timezone, :invoice_information,
-                    subscription: [:plan, :schedule, :trial_period])
+      params.require(:site).permit(:id, :url, :opted_in_to_email_digest, :timezone, :invoice_information, subscription: [:plan, :schedule, :trial_period])
     end
 
 
