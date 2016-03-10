@@ -20,7 +20,9 @@ class Users::SessionsController < Devise::SessionsController
     end
 
     if @user
-      if @user.status == User::TEMPORARY_STATUS
+      if @user.kind_of?(Hello::WordpressUser)
+        # render find_email
+      elsif @user.status == User::TEMPORARY_STATUS
         sign_in(@user)
 
         render 'users/forgot_emails/set_password'

@@ -110,8 +110,9 @@ describe User do
 
     it 'returns false if the user logging in for the first time and does have bars' do
       user = create(:user)
-      site = create(:site, :with_rule, users: [user])
-      site_element = create(:site_element, rule: site.rules.first)
+      site = user.sites.create(url: random_uniq_url)
+      rule = site.rules.create(name: "test rule", match: "all")
+      site_element = create(:site_element, rule: rule)
       #normaly devise would set it
       user.sign_in_count = 1
       expect(user.new?).to be_false
@@ -385,6 +386,35 @@ describe User do
     it "catches bcrypt errors when using old hellobar passwords" do
       user.encrypted_password = old_password
       expect(user.valid_password?("wrong password")).to be(false)
+    end
+  end
+
+  describe ".search_all_versions_for_email" do
+    it "returns nil when email is blank" do
+      expect(User).to_not receive(:find_and_create_by_referral)
+
+      expect(User.search_all_versions_for_email('')).to be_nil
+    end
+
+    it "first queries by email" do
+      expect(User).to_not receive(:find_and_create_by_referral)
+      expect(User).to receive(:find_by).with(email: 'email@email.com') { User.new }
+
+      User.search_all_versions_for_email('email@email.com')
+    end
+
+    it "returns a new user if a referred user" do
+      expect(Hello::WordpressUser).to_not receive(:find_by_email)
+      expect(User).to receive(:find_and_create_by_referral).with('email@email.com') { User.new(status: User::TEMPORARY_STATUS) }
+
+      User.search_all_versions_for_email('email@email.com')
+    end
+
+    it "falls back to querying the v1 wordpress database" do
+      email = 'email@email.com'
+      expect(Hello::WordpressUser).to receive(:find_by_email).with(email) { double('wordpress user') }
+
+      User.search_all_versions_for_email(email)
     end
   end
 end
