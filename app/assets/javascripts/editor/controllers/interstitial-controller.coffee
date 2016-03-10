@@ -74,19 +74,19 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
   inputIsInvalid: ( ->
     switch @get('interstitialType')
       when 'money'
-        return true if Ember.isEmpty(@get('model.settings.url'))
-        return true if Ember.isEmpty(@get('model.headline'))
-        return true if Ember.isEmpty(@get('model.link_text'))
+        return Ember.isEmpty(@get('model.settings.url'))
+        return Ember.isEmpty(@get('model.headline'))
+        return Ember.isEmpty(@get('model.link_text'))
       when 'call'
-        return true if Ember.isEmpty(@get('model.headline'))
-        return true if Ember.isEmpty(@get('model.link_text'))
-        return true if !isValidNumber(@get('controllers.application.phone_number'), @get('model.phone_country_code'));
+        return Ember.isEmpty(@get('model.headline'))
+        return Ember.isEmpty(@get('model.link_text'))
+        return !isValidNumber(@get('controllers.application.phone_number'), @get('model.phone_country_code'));
       when 'contacts'
-        return true if Ember.isEmpty(@get('model.headline'))
-        return true if Ember.isEmpty(@get('model.link_text'))
+        return Ember.isEmpty(@get('model.headline'))
+        return Ember.isEmpty(@get('model.link_text'))
       when 'facebook'
         if !@get('model.settings.use_location_for_url')
-          return true if Ember.isEmpty(@get('model.url_to_like'))
+          return Ember.isEmpty(@get('model.settings.url_to_like'))
     false
   ).property('model.settings.url', 'model.link_text', 'model.headline', 'model.settings.url_to_like', 'model.settings.use_location_for_url', 'controllers.application.phone_number', 'model.phone_country_code')
 
