@@ -3,7 +3,10 @@
 
   h1 Forgot Email
 
-  = email_field_tag :email, nil, placeholder: 'Your Email', autofocus: true, required: true
+  = text_field_tag :site, nil, placeholder: 'Your website URL', autofocus: true, required: true
+  = text_field_tag :first_name, nil, placeholder: 'First name', required: true
+  = text_field_tag :last_name, nil, placeholder: 'Last name', required: true
+
   = submit_tag "Submit", class: 'button'
 
   .devise-links
