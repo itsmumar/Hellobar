@@ -506,6 +506,12 @@ describe Site do
       site = Site.new(url: 'http://cs.horse.bike')
       expect(site.normalized_url).to eq('cs.horse.bike')
     end
+
+    it "returns the site URL if normalized_url returns nil" do
+      site = Site.new(url: 'https://ca-staging-uk')
+
+      expect(site.normalized_url).to eql('https://ca-staging-uk')
+    end
   end
 
   describe "#had_wordpress_bars?" do
