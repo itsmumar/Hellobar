@@ -324,7 +324,7 @@ class Site < ActiveRecord::Base
   end
 
   def normalized_url
-    self.class.normalize_url(url).normalized_host
+    self.class.normalize_url(url).normalized_host || url
   rescue Addressable::URI::InvalidURIError
     url
   end

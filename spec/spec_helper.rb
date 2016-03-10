@@ -99,6 +99,10 @@ def stub_current_user(user)
   return user
 end
 
+def random_uniq_url
+  Faker::Internet.url.split(".").insert(1, "-#{(0...8).map{65.+(rand(26)).chr}.join.downcase}").insert(2, ".").join
+end
+
 Hellobar::Settings[:host] = "http://hellobar.com"
 Hellobar::Settings[:store_site_scripts_locally] = false
 Hellobar::Settings[:fake_data_api] = false
