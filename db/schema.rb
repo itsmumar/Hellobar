@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160208211026) do
+ActiveRecord::Schema.define(version: 20160309223419) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -291,10 +291,10 @@ ActiveRecord::Schema.define(version: 20160208211026) do
     t.string   "thank_you_text"
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
-    t.integer  "wordpress_bar_id"
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
+    t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
     t.string   "placement"
@@ -350,6 +350,7 @@ ActiveRecord::Schema.define(version: 20160208211026) do
     t.datetime "deleted_at"
     t.datetime "script_uninstalled_at"
     t.string   "install_type"
+    t.text     "invoice_information"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree

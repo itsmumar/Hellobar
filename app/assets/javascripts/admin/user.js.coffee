@@ -23,6 +23,10 @@ $ ->
     $(@).hide()
     $("#edit_site_" + $(@).data("id")).toggleClass("hidden")
 
+  $(".add-invoice-info").click (e) ->
+    e.preventDefault()
+    $(@).parent().next().toggleClass("hidden")
+
   $(".regenerate_link").click (e) ->
     e.preventDefault()
 

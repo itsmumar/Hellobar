@@ -53,6 +53,15 @@ div#user_profile
 
       - unless bills_for(site).empty?
         div.site_section
+          div.title= "Custom invoice information (Address, PO Box, etc) #{link_to('add', '#', class: 'add-invoice-info', style: 'margin-left:5px;')}".html_safe
+          - if site.invoice_information.present?
+            = site.invoice_information
+          - else
+            = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "hidden add_invoice_form"} do |f|
+              div= f.text_area 'invoice_information', placeholder: "Address, PO Box, etc. Appears below name on invoice.", style: "width: 40%;"
+              div= f.submit "Submit"
+
+        div.site_section
           div.title Billing History
           table
             tr
