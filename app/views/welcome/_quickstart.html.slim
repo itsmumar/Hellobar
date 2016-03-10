@@ -4,10 +4,7 @@ h1.subheadline= "Enter your URL below to get started"
 .quickstart-wrapper
   = form_tag sites_path do
     input type="hidden" name="source" value="landing"
-    - if action_name == 'use_cases'
-      input type="text" name="site[url]" placeholder="Your website URL" value=@site_url
-    - else
-      input type="text" name="site[url]" placeholder="Your website URL" autofocus=true value=@site_url
+    input type="text" name="site[url]" placeholder="Your website URL" value=@site_url autofocus=('autofocus' unless local_assigns[:noautofocus] && noautofocus == true)
     - if @signup_type == :email
       button type="submit" Continue, It's Free
     - else
