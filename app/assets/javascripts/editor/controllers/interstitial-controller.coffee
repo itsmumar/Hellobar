@@ -96,7 +96,10 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
 
     closeInterstitial: ->
       transitionToEditor = =>
-        @transitionToRoute('style')
+        if @get("model.element_subtype") == "email"
+          @transitionToRoute("settings.emails")
+        else
+          @transitionToRoute('style')
         @trigger('viewClosed')
 
       isEmailModalTest = HB_EMAIL_MODAL_TEST == 'modal'
