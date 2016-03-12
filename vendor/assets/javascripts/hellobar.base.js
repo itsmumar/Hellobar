@@ -1963,7 +1963,7 @@ var HB = {
     if (cachedLocation) return cachedLocation;
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', "http://pro.ip-api.com/json?key=WtoYQ0HEZVsiQy9");
+    xhr.open('GET', HB_GL_URL);
     xhr.send(null);
 
     xhr.onreadystatechange = function () {
@@ -1974,8 +1974,6 @@ var HB = {
           response = JSON.parse(xhr.responseText);
           HB.setGeolocationData(response);
           HB.showSiteElements();
-        } else {
-          console.log('Error: ' + xhr.status); // An error occurred during the request.
         }
       }
     };

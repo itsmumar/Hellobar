@@ -6,6 +6,7 @@ var context = describe;
 
 describe("HB", function() {
   HB_SITE_ID = 9001;
+  HB_GL_URL = "ip-api.com";
 
   locationResponse = {
     city: "Aztlan",
@@ -23,7 +24,7 @@ describe("HB", function() {
     document.cookie = 'hbs_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   });
 
-  afterEach(function() {
+  afterAll(function() {
     document.cookie = 'hbglc_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     document.cookie = 'hbv_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     document.cookie = 'hbs_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -67,6 +68,10 @@ describe("HB", function() {
         spyOn(HB, 'showSiteElements');
         spyOn(HB, 'setGeolocationData');
 
+        document.cookie = 'hbglc_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        document.cookie = 'hbv_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        document.cookie = 'hbs_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        HB.loadCookies();
         server = sinon.fakeServer.create();
         server.respondWith(
           [
