@@ -34,6 +34,12 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
 
     Infusionsoft.contact_add_with_dup_check(data, :Email)
   end
+
+  def batch_subscribe(list_id, subscribers, double_optin = false)
+    subscribers.each do |subscriber|
+      subscribe(nil, subscriber[:email], subscriber[:name])
+    end
+  end
 end
 
 class Router
