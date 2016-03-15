@@ -297,6 +297,7 @@ ActiveRecord::Schema.define(version: 20160309223419) do
     t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
+    t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
     t.string   "view_condition",                  default: "immediately"
@@ -314,7 +315,7 @@ ActiveRecord::Schema.define(version: 20160309223419) do
     t.string   "answer2link_text"
     t.string   "answer1caption"
     t.string   "answer2caption"
-    t.boolean  "use_question",                    default: false
+    t.boolean  "use_question"
     t.string   "phone_number"
     t.string   "phone_country_code",              default: "US"
   end
