@@ -97,16 +97,16 @@ class SiteElementsController < ApplicationController
 
   def site_element_params
     params.require(:site_element).permit(
-      :answer1,
-      :answer1response,
-      :answer1caption,
-      :answer1link_text,
-      :answer2,
-      :answer2response,
-      :answer2caption,
-      :answer2link_text,
       :active_image_id,
       :animated,
+      :answer1,
+      :answer1caption,
+      :answer1link_text,
+      :answer1response,
+      :answer2,
+      :answer2caption,
+      :answer2link_text,
+      :answer2response,
       :background_color,
       :border_color,
       :button_color,
@@ -123,6 +123,8 @@ class SiteElementsController < ApplicationController
       :link_text,
       :name_placeholder,
       :open_in_new_window,
+      :phone_country_code,
+      :phone_number,
       :placement,
       :pushes_page_down,
       :question,
@@ -137,7 +139,6 @@ class SiteElementsController < ApplicationController
       :view_condition_attribute,
       :view_condition,
       :wiggle_button,
-      :phone_number,
       {:settings => settings_keys}
     )
   end
