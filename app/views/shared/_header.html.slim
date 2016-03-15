@@ -6,7 +6,7 @@
 
 - if current_user && current_site
   .header-nav-wrapper
-    .dropdown-wrapper
+    .dropdown-wrapper#site-selector
       span.site-name= current_site.normalized_url
       i.icon-dropdown
       .dropdown-block
@@ -37,7 +37,7 @@
           div Enjoying Hello Bar Pro?
           div Click here to keep it.
 
-      .dropdown-wrapper
+      .dropdown-wrapper#options-selector
         = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
         span.user-name= display_name_for_user(current_user)
         i.icon-dropdown
