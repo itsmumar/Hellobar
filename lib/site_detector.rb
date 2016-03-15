@@ -24,7 +24,7 @@ class SiteDetector
     else
       nil
     end
-  rescue SocketError
+  rescue
     nil # Couldn't connect to their site, so assume nil
   end
 end
