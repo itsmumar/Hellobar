@@ -25,7 +25,7 @@ class IdentitiesController < ApplicationController
     end
 
     if params[:app_url].present?
-      identity.extra = {"app_url" => params[:app_url]}
+      identity.extra = {"app_url" => sanitize_app_url(params[:app_url])}
     end
 
     if params[:username]
@@ -61,5 +61,9 @@ class IdentitiesController < ApplicationController
 
   def load_site
     @site ||= current_user.sites.find(params[:site_id] || env["omniauth.params"]["site_id"])
+  end
+
+  def sanitize_app_url(app_url)
+    app_url.gsub("https://", "").gsub("http://", "")
   end
 end
