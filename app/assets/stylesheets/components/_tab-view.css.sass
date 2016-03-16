@@ -54,17 +54,17 @@
   *zoom: 1
   border-bottom: 1px solid #ddd
   &:before
-    @extend %extend_1
+    @extend .extend_1
 
   &:after
-    @extend %extend_1
+    @extend .extend_1
     clear: both
 
   > li
     float: left
     margin-bottom: -1px
     > a
-      @extend %extend_2
+      @extend .extend_2
       padding-top: 8px
       padding-bottom: 8px
       line-height: 20px
@@ -80,12 +80,12 @@
 
 
   > .active > a
-    @extend %extend_3
+    @extend .extend_3
     &:hover
-      @extend %extend_3
+      @extend .extend_3
 
     &:focus
-      @extend %extend_3
+      @extend .extend_3
 
 
   .dropdown-toggle .caret
@@ -96,24 +96,24 @@
     border-bottom-color: #555555
 
   .open .dropdown-toggle
-    @extend %extend_4
+    @extend .extend_4
 
 
 .nav-pills
   margin-top: 10px
   *zoom: 1
   &:before
-    @extend %extend_1
+    @extend .extend_1
 
   &:after
-    @extend %extend_1
+    @extend .extend_1
     clear: both
 
   > li
     margin-right: 5px
     float: left
     > a
-      @extend %extend_2
+      @extend .extend_2
       padding: 8px 4px
       margin-top: 2px
       margin-bottom: 2px
@@ -141,7 +141,7 @@
 
 
   .open .dropdown-toggle
-    @extend %extend_4
+    @extend .extend_4
 
 .nav
   .active .dropdown-toggle .caret
@@ -150,19 +150,19 @@
 
   > li.dropdown.open.active > a
     &:hover
-      @extend %extend_4
+      @extend .extend_4
 
     &:focus
-      @extend %extend_4
+      @extend .extend_4
 
 
   > .disabled > a
     color: #999999
     &:hover
-      @extend %extend_6
+      @extend .extend_6
 
     &:focus
-      @extend %extend_6
+      @extend .extend_6
 
 .tab-content
   > .tab-pane
