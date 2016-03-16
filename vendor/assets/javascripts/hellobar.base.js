@@ -27,9 +27,6 @@ var HBQ = function()
     "hellobar-takeover": "takeover"
   }
 
-  // access
-  HB.siteUrl = {}
-
   // Need to load the serialized cookies
   HB.loadCookies();
 
@@ -1207,10 +1204,6 @@ var HB = {
     }
     // Now we need to apply the operands
     // If it's an array of values this is true if the operand is true for any of the values
-
-    //  return false unless the domains are equivalent
-    if (condition.segment == 'pup' && window.location+"" == HB_SITE_URL)
-      return false
 
     // We don't want to mess with the array for the between operand
     if ( condition.operand == "between" )
