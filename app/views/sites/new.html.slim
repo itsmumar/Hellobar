@@ -9,4 +9,6 @@
   = hidden_field_tag :detect_timezone, nil, disabled: true
 
   = f.input :opted_in_to_email_digest, as: :boolean, inline_label: "Send me a weekly email digest of this site's performance", label: false
-  = f.button :submit, "Create Site", :class => "button"
+  = f.button :submit, "Create Site", class: "button"
+
+= link_to "Cancel", root_path, class: 'button'

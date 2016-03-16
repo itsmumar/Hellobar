@@ -324,6 +324,7 @@ HB.SiteElement = HB.createClass({
     var original = this.w.style.position;
     var action = function(e) {
       var ratio = (window.outerWidth - 8) / window.innerWidth;
+
       if (e.scale) {
         // iPhone
         this.w.style.position = (e.scale <= 1.03) ? original : 'absolute';
@@ -335,7 +336,11 @@ HB.SiteElement = HB.createClass({
         this.w.style.position = (ratio <= 0.6) ? original : 'absolute';
       } else {
         // Desktop
-        this.w.style.position = (ratio <= 1.3) ? original : 'absolute';
+        if (this.e && this.e.siteElementType == "slider") {
+          // dont change the position to allow scrolling
+        } else {
+          this.w.style.position = (ratio <= 1.3) ? original : 'absolute';
+        }
       }
     }.bind(this);
 

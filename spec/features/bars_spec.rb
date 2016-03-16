@@ -26,14 +26,17 @@ feature 'User can create a bar', js: true do
   scenario 'existing user can create a bar' do
     OmniAuth.config.add_mock(:google_oauth2, {:uid => '12345'})
     user = create(:user)
-    site = create(:site, :with_rule, users: [user])
+    site = user.sites.create(url: random_uniq_url)
+    create(:rule, site: site)
     auth = user.authentications.create({
       provider: 'google_oauth2',
       uid: '12345'
     })
 
     visit new_user_session_path
-    click_link 'google-login-button'
+
+    fill_in 'Your Email', with: user.email
+    click_button 'Continue'
 
     first(:button, 'Create New') .click
     first(:button, 'Select This Goal').click

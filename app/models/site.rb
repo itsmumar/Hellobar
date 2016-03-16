@@ -79,12 +79,12 @@ class Site < ActiveRecord::Base
 
   # check and report whether script is installed, recording timestamp and tracking event if status has changed
   def has_script_installed?
-    if !script_installed_db? && script_installed_api?
+    if !script_installed_db? && (script_installed_api? || script_installed_on_homepage?)
       debug_install("INSTALLED")
       update(script_installed_at: Time.current)
       Referrals::RedeemForRecipient.run(site: self)
       Analytics.track(:site, self.id, "Installed")
-    elsif script_installed_db? && !script_installed_api?
+    elsif script_installed_db? && !(script_installed_api? || script_installed_on_homepage?)
       debug_install("UNINSTALLED")
       update(script_uninstalled_at: Time.current)
       Analytics.track(:site, self.id, "Uninstalled")
@@ -109,11 +109,8 @@ class Site < ActiveRecord::Base
       (days_with_views < days && days_with_views > 0) ||            # site element was installed in the last n days
         (values.count >= days && values[-days][0] < values.last[0]) # site element received views in the last n days
     end
-    return true if has_new_views
-    # No new views, but if the script is installed and the site has site elements it might
-    # just be a low traffic site
-    return true if self.site_elements.length > 0 and script_installed_on_homepage?
-    return false
+
+    has_new_views
   end
 
   def script_installed_on_homepage?
@@ -327,7 +324,7 @@ class Site < ActiveRecord::Base
   end
 
   def normalized_url
-    self.class.normalize_url(url).normalized_host
+    self.class.normalize_url(url).normalized_host || url
   rescue Addressable::URI::InvalidURIError
     url
   end

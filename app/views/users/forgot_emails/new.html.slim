@@ -1,0 +1,13 @@
+= form_tag forgot_email_path do
+  = render 'shared/flash'
+
+  h1 Forgot Email
+
+  = text_field_tag :site_url, nil, placeholder: 'Your website URL', autofocus: true, required: true
+  = text_field_tag :first_name, nil, placeholder: 'First name', required: true
+  = text_field_tag :last_name, nil, placeholder: 'Last name', required: true
+
+  = submit_tag "Submit", class: 'button'
+
+  .devise-links
+    = link_to "Sign up for New Hello Bar Account", root_path
