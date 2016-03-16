@@ -1208,9 +1208,9 @@ var HB = {
     // Now we need to apply the operands
     // If it's an array of values this is true if the operand is true for any of the values
 
+    //  return false unless the domains are equivalent
     if (condition.segment == 'pup' && window.location+"" == HB_SITE_URL)
       return false
-    //  return false unless the domains are equivalent
 
     // We don't want to mess with the array for the between operand
     if ( condition.operand == "between" )
@@ -1281,7 +1281,6 @@ var HB = {
   {
     var a = HB.sanitizeConditionValue(segment, currentValue, input);
     var b = HB.sanitizeConditionValue(segment, input, input);
-    console.log("operand: " + operand);
 
     switch(operand)
     {
