@@ -4,26 +4,34 @@ require 'site_detector'
 describe SiteDetector do
   it 'should detect a weebly install' do
     s = SiteDetector.new("http://www.a-weebly-example-site.com/")
-    s.site_type.should == :weebly
+    expect(s.site_type).to eq(:weebly)
   end
 
   it 'should detect a wordpress install' do
     s = SiteDetector.new("http://www.wordpress-example-site.io/")
-    s.site_type.should == :wordpress
+    expect(s.site_type).to eq(:wordpress)
   end
 
   it 'should detect a shopify install' do
     s = SiteDetector.new("http://www.calmtheham.com/")
-    s.site_type.should == :shopify
+    expect(s.site_type).to eq(:shopify)
   end
 
   it 'should detect a squarespace install' do
     s = SiteDetector.new("http://blog.lyft.com/")
-    s.site_type.should == :squarespace
+    expect(s.site_type).to eq(:squarespace)
   end
 
   it 'should detect a squarespace install' do
     s = SiteDetector.new("http://skipjacksnauticalliving.blogspot.com/")
-    s.site_type.should == :blogspot
+    expect(s.site_type).to eq(:blogspot)
+  end
+
+  context "can't connect to their site" do
+    it "returns nil" do
+      allow(HTTParty).to receive(:get).and_raise(SocketError)
+      s = SiteDetector.new("http://abc.123.com/")
+      expect(s.site_type).to be_nil
+    end
   end
 end
