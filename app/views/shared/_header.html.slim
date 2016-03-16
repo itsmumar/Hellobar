@@ -7,8 +7,10 @@
 - if current_user && current_site
   .header-nav-wrapper
     .dropdown-wrapper#site-selector
+      div.site-label SITE
       span.site-name= current_site.normalized_url
-      i.icon-dropdown
+      span.caret
+        = image_tag('caret-down.svg')
       .dropdown-block
         = active_link_to 'Site Settings', (current_user ? edit_site_path(current_site) : root_path)
         - if current_site.is_free?
@@ -40,7 +42,8 @@
       .dropdown-wrapper#options-selector
         = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
         span.user-name= display_name_for_user(current_user)
-        i.icon-dropdown
+        span.caret
+          = image_tag('caret-down.svg')
         .dropdown-block
           = active_link_to 'User Settings', profile_path()
           - if current_site.is_free?
@@ -51,11 +54,18 @@
             = active_link_to "Stop Impersonating", admin_unimpersonate_user_path, :method => :delete
           - else
             = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
+  .header-cta
+    a.button
+      | Want more power?
 - elsif current_user
   .header-user-wrapper
     .dropdown-wrapper
       = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
       span.user-name= display_name_for_user(current_user)
-      i.icon-dropdown
+      span.caret
+        = image_tag('caret-down.svg')
       .dropdown-block
         = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
+  .header-cta
+    a.button
+      | Want more power?
