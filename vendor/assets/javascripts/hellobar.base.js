@@ -27,6 +27,9 @@ var HBQ = function()
     "hellobar-takeover": "takeover"
   }
 
+  // access
+  HB.siteUrl = {}
+
   // Need to load the serialized cookies
   HB.loadCookies();
 
@@ -1205,6 +1208,10 @@ var HB = {
     // Now we need to apply the operands
     // If it's an array of values this is true if the operand is true for any of the values
 
+    if (condition.segment == 'pup' && window.location+"" == HB_SITE_URL)
+      return false
+    //  return false unless the domains are equivalent
+
     // We don't want to mess with the array for the between operand
     if ( condition.operand == "between" )
       return HB.applyOperand(currentValue, condition.operand, values, condition.segment);
@@ -1242,7 +1249,7 @@ var HB = {
   // Input is the users value condition
   sanitizeConditionValue: function(segment, value, input)
   {
-    if ( segment == "pu" || segment == "pp") {
+    if ( segment == "pu" || segment == "pp" || segment == "pup") {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
@@ -1274,6 +1281,7 @@ var HB = {
   {
     var a = HB.sanitizeConditionValue(segment, currentValue, input);
     var b = HB.sanitizeConditionValue(segment, input, input);
+    console.log("operand: " + operand);
 
     switch(operand)
     {
@@ -1393,6 +1401,10 @@ var HB = {
     }
     // Set the page URL
     HB.setVisitorData("pu", HB.n(document.location+"", false));
+
+    // Set the page path
+    HB.setVisitorData("pup", HB.n(document.location+"", true));
+
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
     // Detect the device
