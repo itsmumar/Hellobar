@@ -150,7 +150,7 @@ class Condition < ActiveRecord::Base
   end
 
   def normalize_url_condition
-    return if self.segment != "UrlCondition" || self.segment != "UrlPathCondition"
+    return if self.segment != "UrlCondition" && self.segment != "UrlPathCondition"
 
     if self.value.kind_of?(String)
       self.value = normalize_url(self.value)
