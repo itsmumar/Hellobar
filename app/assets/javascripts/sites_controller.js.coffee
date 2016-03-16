@@ -22,7 +22,7 @@ $ ->
     new DowngradeSiteModal(options).open()
 
   $('#hide-btn-old-user-update').click ->
-    $(this).parent().parent().parent().fadeOut()
+    $(this).parents("#old-user-update").fadeOut()
     expireDate = new Date
     expireDate.setDate(expireDate.getDate()+7)
     document.cookie = "dismissUserUpdate= true; expires=" + expireDate.toGMTString()

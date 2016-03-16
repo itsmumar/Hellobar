@@ -1,5 +1,5 @@
 - if current_user && current_user.wordpress_user_id.present? && current_user.created_at > 7.days.ago
-  table style="margin-top:0px; #{'display:none;' if cookies['dismissUserUpdate'] == 'true'}"
+  table#old-user-update style="margin-top:0px; #{'display:none;' if cookies['dismissUserUpdate'] == 'true'}"
     tr
       td.color-flag style="background-color: rgb(232,86,42);"
       td= "**Where did all my views and conversions go?**</br>When we imported your bars from Hello Bar 1.0 we weren't able to copy over your history of views and conversions. However, you'll start tracking new views and conversions as normal.".html_safe
