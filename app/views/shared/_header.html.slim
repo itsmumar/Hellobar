@@ -55,8 +55,9 @@
           - else
             = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
   .header-cta
-    a.button
+    .button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
       | Want more power?
+
 - elsif current_user
   .header-user-wrapper
     .dropdown-wrapper#options-selector
@@ -67,5 +68,5 @@
       .dropdown-block
         = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
   .header-cta
-    a.button
+    .button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
       | Want more power?
