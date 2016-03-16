@@ -38,7 +38,9 @@ HBInit = function () {
   }
 }
 
-HBInit();
+if(HB.scriptIsInstalledProperly()) {
+  HBInit();
+}
 
 {{#rules}}
   _hbq.push(function(){HB.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}})});
