@@ -9,7 +9,7 @@ feature "User can sign up", js: true do
     visit root_path
 
     fill_in 'site[url]', with: 'mewgle.com'
-    click_button 'Log in with Google'
+    click_button 'sign-up-button'
 
     expect(page).to have_content('Sign Out', visible: true)
     expect(page).to have_content('Use your Hello Bar to collect visitors', visible: true)
