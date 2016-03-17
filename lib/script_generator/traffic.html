@@ -5,7 +5,7 @@
   href="{{siteElement.settings.url}}"
   target="{{HB.t(siteElement.open_in_new_window) ? '_blank' : '_parent'}}"
   style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}"
-  rel="nofollow"
+  {{HB.nofollow(siteElement.settings.url) ? 'rel="nofollow"' : ''}}
 >
   {{siteElement.link_text}}
 </a>

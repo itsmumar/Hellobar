@@ -162,6 +162,12 @@ var HB = {
     return (value && value != "false" && value != "0") ? true : false;
   },
 
+  nofollow: function(url)
+  {
+    var regex = /https?:\/\/((?:[\w\d]+\.)+[\w\d]{2,})/i;
+    return regex.exec(location.href)[1] !== regex.exec(url)[1] 
+  },
+
   // Adds the CSS class to the target element
   addClass: function(element, className)
   {
