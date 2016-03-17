@@ -6,10 +6,21 @@ h1.subheadline= "Enter your URL below to get started"
     input type="hidden" name="source" value="landing"
     input type="text" name="site[url]" placeholder="Your website URL" value=@site_url autofocus=('autofocus' unless local_assigns[:noautofocus] && noautofocus == true)
     - if @signup_type == :email
-      button type="submit" Continue, It's Free
+      button type="submit"
+        | Continue, It's Free
     - else
       input type="hidden" name="oauth" value="google_oauth2"
-      button type="submit" Log in with Google
+      button#sign-up-button type="submit"
+        - variation = get_ab_variation("Sign Up Button 2016-03-17")
+        - if variation == "original"
+          | Log in with Google
+        - elsif variation == "sign_up_google"
+          | Sign up with Google
+        - elsif variation == "sign_up"
+          | Sign up
+        - elsif variation == "get_started"
+          | Get started
+
     .clear
   - if flash[:error]
     .error= flash[:error]
