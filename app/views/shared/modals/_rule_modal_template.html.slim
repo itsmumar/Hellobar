@@ -136,7 +136,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{#each value}}
           .url-input-wrapper
             span or
-            input.url.value name="rule[conditions_attributes][{{../index}}][value][]" type="url" value="{{this}}"
+            input.url.value name="rule[conditions_attributes][{{../index}}][value][]" type="url" value="{{this}}" placeholder="/specific_path"
             .url-actions
               a.url-remove –
               a.url-add +
@@ -144,7 +144,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{else}}
           .url-input-wrapper
             span or
-            input.url.value name="rule[conditions_attributes][{{index}}][value][]" type="url" value="{{value}}"
+            input.url.value name="rule[conditions_attributes][{{index}}][value][]" type="url" value="{{value}}" placeholder="/specific_path"
             .url-actions
               a.url-remove –
               a.url-add +
