@@ -78,7 +78,7 @@ var HB = {
     var site_url_anchor = document.createElement("a");
     site_url_anchor.href = window.HB_SITE_URL;
 
-    return this.getLocation().hostname === site_url_anchor.hostname;
+    return HB.n(this.getLocation().hostname) === HB.n(site_url_anchor.hostname);
   },
 
   // Grabs site elements from valid rules and displays them

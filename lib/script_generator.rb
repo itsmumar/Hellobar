@@ -34,6 +34,10 @@ class ScriptGenerator < Mustache
     site.id
   end
 
+  def site_url
+    site.url
+  end
+
   # returns the sites tz offset as "+/-HH:MM"
   def site_timezone
     Time.use_zone(site.timezone) do
