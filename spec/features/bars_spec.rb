@@ -12,7 +12,7 @@ feature 'User can create a bar', js: true do
     visit root_path
 
     fill_in 'site[url]', with: 'mewgle.com'
-    click_button 'Log in with Google'
+    click_button 'sign-up-button'
 
     first(:button, 'Select This Goal').click
     first(:button, 'Continue').click
