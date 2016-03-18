@@ -12,6 +12,7 @@ class Condition < ActiveRecord::Base
     'ReferrerCondition' => 'rf',
     'SearchTermCondition' => 'st',
     'UrlCondition' => 'pu',
+    'UrlQuery' => 'pq',
     'ReferrerDomainCondition' => 'rd',
     'UTMSourceCondition' => 'ad_so',
     'UTMCampaignCondition' => 'ad_ca',
@@ -51,7 +52,7 @@ class Condition < ActiveRecord::Base
   end
 
   def to_sentence
-    if segment == "UrlCondition"
+    if segment == "UrlCondition" || segment == "UrlParams"
       url_condition_sentence
     elsif segment == "EveryXSession"
       every_x_sessions_sentence

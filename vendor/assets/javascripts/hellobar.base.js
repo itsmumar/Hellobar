@@ -980,6 +980,7 @@ var HB = {
     var visibilityGroupNames = [];
     // First get all the site elements from all the rules that the
     // person matches
+
     for(i=0;i<HB.rules.length;i++)
     {
       var rule = HB.rules[i];
@@ -1175,11 +1176,19 @@ var HB = {
   // is true. It gets the current value and applies the operand
   conditionTrue: function(condition)
   {
-    // Need to get the current value
-    var currentValue = HB.getSegmentValue(condition.segment);
+    // Handle for URL Query
+    if ( condition.segment === "pq" )
+    {
+      var conditionKey = condition.value.split("=")[0];
+      var currentValue = HB.getSegmentValue(condition.segment)[conditionKey];
+      var values = condition.value.split("=")[1];
+    }
+    else {
+      var currentValue = HB.getSegmentValue(condition.segment);
+      var values = condition.value;
+    }
     // Now we need to apply the operands
     // If it's an array of values this is true if the operand is true for any of the values
-    var values = condition.value;
 
     // We don't want to mess with the array for the between operand
     if ( condition.operand == "between" )
@@ -1332,6 +1341,9 @@ var HB = {
     HB.setVisitorData('ad_me', params['utm_medium'], true);
     HB.setVisitorData('ad_co', params['utm_content'], true);
     HB.setVisitorData('ad_te', params['utm_term'], true);
+
+    HB.setVisitorData('pq', params, true)
+
     // Set referrer if it is from a different domain (don't count internal referrers)
     if ( document.referrer )
     {
