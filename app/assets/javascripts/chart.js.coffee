@@ -28,7 +28,7 @@ class @Chart
       colors: [@color]
       dataProvider: data
       categoryField: "date"
-      fontFamily: "Open Sans"
+      fontFamily: "proxima-nova"
       autoMargins: false
       marginBottom: 40
       marginRight: 25
