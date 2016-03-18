@@ -3,7 +3,7 @@ class Admin::ContactListsController < ApplicationController
   before_action :require_admin, :load_site
 
   def index
-    @contact_lists = @site.contact_lists
+    @contact_lists = @site.contact_lists.includes(:contact_list_logs)
   end
 
   private
