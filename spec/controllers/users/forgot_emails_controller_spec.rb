@@ -13,7 +13,8 @@ describe Users::ForgotEmailsController, '#create' do
     {
       site_url: 'site.com',
       first_name: 'firstie',
-      last_name: 'lastie'
+      last_name: 'lastie',
+      email: 'la@croix.com'
     }.with_indifferent_access
   end
 

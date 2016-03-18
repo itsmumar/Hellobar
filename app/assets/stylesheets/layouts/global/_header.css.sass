@@ -2,6 +2,7 @@
 
 .global-header
   background-color: $red
+  box-shadow: 0 3px 0 0 rgba(0, 0, 0, 0.2)
   @include clearfix()
 
   .header-logo-block
@@ -19,19 +20,46 @@
       height: 100%
       display: block
 
+  .header-cta
+    height: $headerHeight
+    padding-right: 20px
+    float: right
+    min-width: 100px
+
+    .show-upgrade-modal
+      height: 34px
+      margin-top: 12px
+      border-radius: 4px
+      font-size: 14px
+      background-color: $white
+      box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2)
+      color: $grayDarker
+
   .header-nav-wrapper,
   .header-user-wrapper
     color: $white
     height: $headerHeight
+    padding-left: 20px
+    padding-right: 20px
 
     > *:not(.button)
       @include inline-block()
     span.divider
       margin: 0 0.5rem
 
+    .caret
+      img
+        float: right
+
   .header-nav-wrapper
+    border-left: 1px solid $orangeLight
+    border-right: 1px solid $orangeLight
     float: left
-    padding-left: 0.85em
+    min-width: 350px
+
+    .dropdown-wrapper
+      min-width: inherit
+      padding-top: 10px
 
     .site-avatar
       width: 1.5em
@@ -39,9 +67,12 @@
       margin-right: 1em
       @include inline-block()
 
+    .site-label
+      color: $orangeLightest
+
     .site-name
       color: $white
-      font-size: 1.15em
+      font-size: 18px
       @include antialiased()
 
     .dropdown-block
@@ -55,20 +86,32 @@
         font-size: 0.75em
 
   .header-user-wrapper
+    border-left: 1px solid $orangeLight
     float: right
-    padding-right: 1.5em
+    min-width: 245px
+
+    .dropdown-wrapper
+      min-width: inherit
+      padding-top: 13px
+
+      .caret
+        img
+          padding-top: 15px
 
     .user-avatar
-      width: 2.5em
-      height: 2.5em
-      margin: 0 0.75em
-      border-radius: 10em
-      border: 2px solid $white
+      width: 34px
+      height: 34px
+      margin-right: 0.75em
+      border-radius: 5px
+      border: 1px solid $white
       @include inline-block()
+      box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2)
 
     .user-name
       color: $white
-      font-size: 1.15em
+      font-size: 18px
+      vertical-align: middle
+      display: inline-block
       @include antialiased()
 
     .button
@@ -76,7 +119,6 @@
       font-size: 0.67em
       font-weight: bold
       border-radius: $radiusLg
-      letter-spacing: -0.033em
       text-transform: uppercase
 
     i.icon-notification,

@@ -249,6 +249,7 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0.beta1)
+    infusionsoft (1.1.9)
     ipaddress (0.8.0)
     jbuilder (2.0.7)
       activesupport (>= 3.0.0, < 5)
@@ -594,6 +595,7 @@ DEPENDENCIES
   fog (~> 1.22.1)
   gibbon (~> 1.0.4)
   hashie (~> 2.1.1)
+  infusionsoft
   jbuilder (~> 2.0)
   jquery-rails (~> 3.1.0)
   kaminari (~> 0.15.1)

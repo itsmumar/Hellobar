@@ -33,6 +33,10 @@ class ServiceProvider
       settings[:requires_api_key] == true
     end
 
+    def app_url?
+      settings[:requires_app_url] == true
+    end
+
     def oauth?
       settings[:oauth] == true
     end
