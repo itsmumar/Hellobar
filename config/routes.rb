@@ -90,6 +90,8 @@ Rails.application.routes.draw do
         member do
           post :regenerate
         end
+
+        resources :contact_lists, :only => [:index]
       end
 
       resources :bills, :only => [:show] do
