@@ -14,7 +14,7 @@ header
       | Subject: #{current_user.name} has invited you to try Hello Bar
     = f.input :body, label: false
 
-    p#note
+    p
       strong Note: If you wish, you can change the above wording to whatever you want to say.
     = f.hidden_field :site_id
     = f.submit "Send Invitation", class: "button"

@@ -49,23 +49,3 @@ $ ->
     $timezone = $('#site_timezone, #user_timezone')
     userTimezone = jstz.determine().name()
     $timezone.val(userTimezone)
-
-  siteSelectorEl = $('#site-selector')
-
-  $('html').click (evt) ->
-    siteSelectorEl.removeClass('activated')
-
-  siteSelectorEl.click (evt) ->
-    if evt.target == @
-      evt.stopPropagation()
-      siteSelectorEl.toggleClass('activated')
-
-  optionsSelectorEl = $('#options-selector')
-
-  $('html').click (evt) ->
-    optionsSelectorEl.removeClass('activated')
-
-  optionsSelectorEl.click (evt) ->
-    if evt.target == @
-      evt.stopPropagation()
-      optionsSelectorEl.toggleClass('activated')
