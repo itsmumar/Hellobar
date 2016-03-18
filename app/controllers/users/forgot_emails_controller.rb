@@ -13,6 +13,6 @@ class Users::ForgotEmailsController < ApplicationController
 private
 
   def forgot_email_params
-    params.permit(:site_url, :first_name, :last_name)
+    params.permit(:site_url, :first_name, :last_name, :email)
   end
 end
