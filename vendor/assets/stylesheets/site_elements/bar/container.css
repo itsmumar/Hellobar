@@ -4,9 +4,10 @@
   width: 100%;
   min-height: 40px;
   max-height: 40px; /* This gets overridden by the js */
+  z-index: 15000;
 }
 
-#hellobar-container.HB_Bar.hb-large {
+#hellobar-container.HB-Bar.hb-large {
   min-height: 50px;
   max-height: 50px; /* This gets overridden by the js */
 }
