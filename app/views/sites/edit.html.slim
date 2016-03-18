@@ -22,6 +22,10 @@ nav.tabs-wrapper
   .button-wrapper
     = link_to "Installation instructions", site_install_path(@site)
 
+  - if get_ab_variation("Show Add Site on Edit Site 2016-03-18") == "variant"
+    .add-site-wrapper
+      = link_to "Add New Site", new_site_path, :class => "button", :method => :get
+
   .billing-wrapper
     h5.page-header.alt Billing
     - if @site.is_free?
