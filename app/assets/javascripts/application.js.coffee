@@ -56,8 +56,9 @@ $ ->
     siteSelectorEl.removeClass('activated')
 
   siteSelectorEl.click (evt) ->
-    evt.stopPropagation()
-    siteSelectorEl.toggleClass('activated')
+    if evt.target == @
+      evt.stopPropagation()
+      siteSelectorEl.toggleClass('activated')
 
   optionsSelectorEl = $('#options-selector')
 
@@ -65,5 +66,6 @@ $ ->
     optionsSelectorEl.removeClass('activated')
 
   optionsSelectorEl.click (evt) ->
-    evt.stopPropagation()
-    optionsSelectorEl.toggleClass('activated')
+    if evt.target == @
+      evt.stopPropagation()
+      optionsSelectorEl.toggleClass('activated')
