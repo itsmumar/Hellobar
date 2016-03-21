@@ -276,4 +276,16 @@ describe SitesController do
       expect(site.current_subscription).to be_a(Subscription::Free)
     end
   end
+
+  describe "GET install_redirect" do
+    it "redirects to the current sites install page" do
+      stub_current_user(@user)
+      site = @user.sites.last
+      session[:current_site] = site.id
+
+      get :install_redirect
+
+      expect(controller).to redirect_to(site_install_path(site))
+    end
+  end
 end
