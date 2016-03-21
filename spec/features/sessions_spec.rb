@@ -57,7 +57,7 @@ feature "User can sign in", js: true do
 
   scenario "and sign out" do
     login
-    find('.header-user-wrapper .icon-dropdown').hover
+    find('.header-user-wrapper').click
     page.find(:xpath, "//a[@href='/users/sign_out']").click
     expect(page).to have_content('Signed out successfully')
   end
@@ -67,8 +67,8 @@ feature "User can sign in", js: true do
     user.sites.destroy_all
 
     visit new_site_path
-    find('.header-user-wrapper .icon-dropdown').hover
-    page.find(:xpath, "//a[@href='/users/sign_out']").click
+    find('.header-user-wrapper').click
+    find(:xpath, "//a[@href='/users/sign_out']").click
     expect(page).to have_content('Signed out successfully')
   end
 end
