@@ -56,7 +56,7 @@ class ContactListsController < ApplicationController
   private
 
   def contact_list_params
-    params.require(:contact_list).permit(:name, :provider, {:data => [:remote_id, :remote_name, :embed_code, :api_key]}, :double_optin)
+    params.require(:contact_list).permit(:name, :provider, {:data => [:remote_id, :remote_name, :embed_code, :api_key, :app_url]}, :double_optin)
   end
 
   def delete_site_elements_action

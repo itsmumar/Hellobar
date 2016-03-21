@@ -41,6 +41,8 @@ class ContactList < ActiveRecord::Base
       data["remote_name"] && data["remote_id"]
     elsif embed_code?
       data["embed_code"].present?
+    elsif api_key? && app_url?
+      identity.api_key? && identity.extra['app_url'].present?
     elsif api_key?
       identity.api_key? && data["remote_name"] && data["remote_id"]
     end
@@ -118,6 +120,10 @@ class ContactList < ActiveRecord::Base
 
   def api_key?
     service_provider_class.try(:api_key?).present?
+  end
+
+  def app_url?
+    service_provider_class.try(:app_url?).present?
   end
 
   def needs_to_reconfigure?
