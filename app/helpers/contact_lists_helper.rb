@@ -5,9 +5,11 @@ module ContactListsHelper
       [
         provider_attributes[:name],
         provider_name,
+        requires_app_url: !!provider_attributes[:requires_app_url],
         requires_embed_code: !!provider_attributes[:requires_embed_code],
         requires_api_key: !!provider_attributes[:requires_api_key],
-        requires_username: !!provider_attributes[:requires_username]
+        requires_username: !!provider_attributes[:requires_username],
+        oauth: !!provider_attributes[:oauth]
       ]
     end
 

@@ -49,6 +49,10 @@ var HBQ = function()
   HB.setDefaultSegments();
 
   HB.showSiteElements();
+
+  // HB has finished, run any client defined callback
+  if(typeof HB_READY === 'function')
+    HB_READY();
 }
 
 // Call the function right away once this is loaded
