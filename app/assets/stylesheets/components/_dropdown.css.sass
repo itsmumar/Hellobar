@@ -2,8 +2,7 @@
 
 .dropdown-wrapper
   position: relative
-  cursor: hand
-  cursor: pointer
+  cursor: context-menu
   @include inline-block()
 
   > a,
@@ -58,7 +57,7 @@
 
   /*-----------  Animations  -----------*/
 
-  // &:hover, no longer want this control to show on hover
+  &:hover,
   &.activated
 
     &:before
