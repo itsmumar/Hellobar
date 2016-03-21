@@ -55,6 +55,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "PreviousPageURL" "previous page url"}}
           | {{option segment "ReferrerCondition" "referrer"}}
           | {{option segment "UrlCondition" "URL"}}
+          | {{option segment "UrlQuery" "URL Query"}}
           | {{option segment "ReferrerDomainCondition" "Referrer Domain"}}
           | {{option segment "UTMSourceCondition" "Ad Source"}}
           | {{option segment "UTMCampaignCondition" "Ad Campaign"}}
@@ -148,6 +149,8 @@ script#condition-partial type="text/x-handlebars-template"
               a.url-remove –
               a.url-add +
           | {{/if}}
+        .choice-wrapper.url-query
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}" placeholder="query=value"
 
     | {{#if id}}
     input class="condition-id" name="rule[conditions_attributes][{{index}}][id]" value="{{id}}" type="hidden"
