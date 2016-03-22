@@ -45,6 +45,6 @@ HBInit();
   _hbq.push(function(){HB.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}})});
 {{/rules}}
 
-if(!HB.isIEXOrLess(8) && HB.scriptIsInstalledProperly())
+if(!HB.isIEXOrLess(8) && {{script_is_installed_properly}})
   _hbq = new HBQ();
 }

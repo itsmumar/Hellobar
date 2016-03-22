@@ -38,6 +38,14 @@ class ScriptGenerator < Mustache
     site.url
   end
 
+  def script_is_installed_properly
+    if Rails.env.test?
+      true
+    else
+      "HB.scriptIsInstalledProperly()"
+    end
+  end
+
   # returns the sites tz offset as "+/-HH:MM"
   def site_timezone
     Time.use_zone(site.timezone) do
