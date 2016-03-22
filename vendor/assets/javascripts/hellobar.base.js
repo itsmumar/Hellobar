@@ -1257,6 +1257,7 @@ var HB = {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
+
     return value;
   },
 
@@ -1290,6 +1291,10 @@ var HB = {
     {
       case "is":
       case "equals":
+        if(typeof a === 'string' && typeof b === 'string') {
+          var regex = new RegExp("^" + b.replace("*", ".*") + "$");
+          return !!a.match(regex);
+        }
         return a == b;
       case "every":
         return a % b == 0;
@@ -1297,6 +1302,11 @@ var HB = {
       case "does_not_equal":
         return a != b;
       case "includes":
+        if(typeof a === 'string' && typeof b === 'string') {
+          var regex = new RegExp(b.replace("*", ".*"));
+          return !!a.match(regex);
+        }
+
         return HB.stringify(a).indexOf(HB.stringify(b)) != -1;
       case "does_not_include":
         return HB.stringify(a).indexOf(HB.stringify(b)) == -1;
