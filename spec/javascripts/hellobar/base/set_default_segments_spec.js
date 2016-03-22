@@ -43,5 +43,13 @@ describe("HB", function() {
         expect(HB.getVisitorData("ns")).toEqual(1);
       });
     });
+
+    context("setting the page path", function() {
+      it("sets the path properly", function() {
+        HB.setDefaultSegments();
+
+        expect(HB.getVisitorData("pup")).toEqual('/teaspoon/default/?reporter=console');
+      });
+    });
   });
 });

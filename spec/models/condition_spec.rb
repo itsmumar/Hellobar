@@ -85,6 +85,23 @@ RSpec.describe Condition, type: :model do
   end
 
   describe '#to_sentence' do
+    context "is a UrlCondition" do
+      it "calls #url_condition_sentence" do
+        condition = create(:condition, operand: "is", segment: "UrlCondition", value: ["http://www.wee.com"])
+
+        expect(condition).to receive(:url_condition_sentence) { 'right' }
+        expect(condition.to_sentence).to eql('right')
+      end
+    end
+
+    context "is a UrlPathCondition" do
+      it "calls #url_condition_sentence" do
+        condition = create(:condition, operand: "is", segment: "UrlPathCondition", value: ["/path/to/page"])
+
+        expect(condition).to receive(:url_condition_sentence) { 'right' }
+        expect(condition.to_sentence).to eql('right')
+      end
+    end
     context "is a DateCondition" do
       it "converts 'is between' conditions to sentences" do
         Condition.date_condition_from_params('7/6', '7/13').to_sentence.should == "Date is between 7/6 and 7/13"
@@ -175,6 +192,26 @@ RSpec.describe Condition, type: :model do
         condition = build(:condition, segment: "UrlCondition", value: ["hey.hellobar.com", "about.html"])
         condition.send(:normalize_url_condition)
         expect(condition.value).to eq(["http://hey.hellobar.com", "/about.html"])
+      end
+    end
+
+    context "is a UrlPathCondition" do
+      it "should do nothing if url is already relative" do
+        condition = build(:condition, segment: "UrlPathCondition", value: "/about")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("/about")
+      end
+
+      it "should prepend a / if url is relative" do
+        condition = build(:condition, segment: "UrlPathCondition", value: "about")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("/about")
+      end
+
+      it "should prepend a / if url is relative" do
+        condition = build(:condition, segment: "UrlPathCondition", value: "about.html")
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq("/about.html")
       end
     end
   end
