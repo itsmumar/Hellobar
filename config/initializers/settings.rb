@@ -164,6 +164,12 @@ unless defined?(Hellobar::Settings)
       :name => "VerticalResponse",
       :requires_embed_code => true,
       :hidden => true
+    },
+    :infusionsoft => {
+      :type => :email,
+      :name => "Infusionsoft",
+      :requires_api_key => true,
+      :requires_app_url => true
     }
   }
   config[:analytics_log_file] ||= File.join(Rails.root, "log", "analytics.log")

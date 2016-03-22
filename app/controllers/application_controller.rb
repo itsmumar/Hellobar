@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
     if current_user.sites.any?
       # Use last site viewed if available
       s = cookies[:lsv] && current_user.sites.where(id: cookies[:lsv]).first
-      site_path(s || current_user.sites.last)
+      stored_location_for(resource) || site_path(s || current_user.sites.last)
     else
       new_site_path
     end

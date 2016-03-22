@@ -71,6 +71,8 @@ gem "paperclip",                 "~> 4.3"
 gem "elif",                      "~> 0.1"
 gem "madmimi"
 gem "thread",                    "~> 0.2.2"
+gem "yui-compressor"
+gem "infusionsoft"
 
 group :development do
   gem "better_errors", "~> 1.1"

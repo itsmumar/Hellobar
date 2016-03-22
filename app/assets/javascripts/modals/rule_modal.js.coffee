@@ -147,6 +147,7 @@ class @RuleModal extends Modal
     'ReferrerDomainCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'SearchTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UrlQuery': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMCampaignCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMContentCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']
@@ -164,6 +165,7 @@ class @RuleModal extends Modal
     'ReferrerDomainCondition': '.referrer-domain-choice'
     'SearchTermCondition': '.search-term-choice'
     'UrlCondition': '.url-choice'
+    'UrlQuery': '.url-query'
     'UTMCampaignCondition': '.utm-campaign-choice'
     'UTMContentCondition': '.utm-content-choice'
     'UTMMediumCondition': '.utm-medium-choice'

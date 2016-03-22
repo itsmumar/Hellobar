@@ -14,6 +14,7 @@ module Hello
       {:key=>'rd', :name=>"Referrer Domain", :type=>:string, :units=>"domain"},
       {:key=>'or', :name=>"Original Referrer", :type=>:string, :units=>"url"},
       {:key=>'pu', :name=>"Page URL", :type=>:string, :units=>"url"},
+      {:key=>'pq', :name=>"Page Query", :type=>:string, :units=>"url"},
       {:key=>'st', :name=>"Search Terms", :type=>:string},
       {:key=>'dt', :name=>"Date", :type=>:date},
       {:key=>'ts', :name=>"Date/Time", :type=>:timestamp},
