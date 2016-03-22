@@ -10,7 +10,7 @@ class Admin::SitesController < ApplicationController
       update_subscription(site, nil, subscription_params)
       flash[:success] = "Site and/or subscription has been updated."
     rescue => e
-      flash[:error] = "Error: #{e.message}"
+      flash[:error] = "There was an error trying to update the subscription: #{e.message}"
     end
 
     redirect_to admin_user_path(params[:user_id])
