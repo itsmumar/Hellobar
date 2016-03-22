@@ -17,6 +17,8 @@ Setup the settings.yml file
 
 `cp config/settings.yml.example config/settings.yml`
 
+You'll need to manually add oauth related account keys to settings.yml to be able to run the site locally
+
 Let rake setup and migrate all your databases
 
 `rake db:setup`
@@ -92,7 +94,7 @@ rake test_site:generate[2]
 
 #### Options
 
-To generate a site html file at an arbitary location:
+To generate a site html file at an arbitrary location:
 
 ```
 rake test_site:file[2,'/Users/hb/index.html']
@@ -109,14 +111,14 @@ Integration tests run in the `spec/features` directory.  They use the
 `lib/SiteGenerator` to create an html file in `public/integration`.  The
 file name is a random hex.
 
-Capybara navigates to the public html file in order to test interations.
+Capybara navigates to the public html file in order to test interactions.
 
 To test the content of the iframe use `within_frame`.
 
 To test adding or removing the iframe use
 `page.driver.browser.frame_focus`.
 
-Watch out for animations and other asyncronous or delayed interactions.
+Watch out for animations and other asynchronous or delayed interactions.
 You may need to fiddle with the `Capybara.default_wait_time` in
 `spec/spec_helper`.
 
