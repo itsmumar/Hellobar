@@ -14,7 +14,8 @@ div#user_profile
           - if site.current_subscription.trial?
             |  Trial
         - unless site.deleted?
-          a.subscription_link data-siteid=site.id change plan
+          = link_to "Contact Lists", admin_user_site_contact_lists_path(@user, site), target: "_blank"
+          a.subscription_link data-id=site.id change plan
           a.regenerate_link data-url=regenerate_admin_user_site_path(@user, site)
             | regenerate script
 

@@ -1,0 +1,22 @@
+- @site.contact_lists.each do |contact_list|
+  h4= "#{contact_list.name}    (#{contact_list.id})"
+  h4
+    ' Synced to:
+    = contact_list.identity.try(:provider) || "Hello Bar"
+
+  table.table.table-striped
+    th colspan=2
+      | Last Synced
+    - contact_list.contact_list_logs.where(error: nil).order(created_at: :desc).limit(5).each do |log|
+      tr
+        td= log.email
+        td= log.created_at.strftime("%b %d, %Y at %l:%M %p")
+
+  table.table.table-striped
+    th colspan=3
+      | Recent Errors
+    - contact_list.contact_list_logs.where.not(error: nil).order(created_at: :desc).limit(5).each do |log|
+      tr
+        td= log.email
+        td= log.error
+        td= log.created_at.strftime("%b %d, %Y at %l:%M %p")
