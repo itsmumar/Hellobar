@@ -59,7 +59,7 @@ div#user_profile
             - if site.invoice_information.present?
               = render "sites/form_remove_invoice_info", site: site
             - else
-              = link_to('add', '#', class: 'add-invoice-info', style: 'margin-left:5px;')
+              = link_to('add', '#', class: 'add-invoice-info')
           - if site.invoice_information.present?
             = site.invoice_information.gsub("\r\n", "<br>").html_safe
           - else
