@@ -4,6 +4,6 @@
     i.icon-close
     - if message.is_a?(Array)
       - message.each do |msg|
-        div= msg
+        div= sanitize(msg, attributes: %w{ href target })
     - else
-      = message
+      = sanitize(message, attributes: %w{ href target })

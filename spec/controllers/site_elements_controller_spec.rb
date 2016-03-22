@@ -29,6 +29,16 @@ describe SiteElementsController do
 
       expect_json_to_have_error(:rule, "can't be blank")
     end
+
+    it "sets the success flash message on create" do
+      SiteElement.any_instance.stub(valid?: true, save!: true)
+      site = sites(:zombo)
+      stub_current_user(site.owners.first)
+
+      expect {
+        post :create, :site_id => site.id, :site_element => {:element_subtype => "traffic", :rule_id => 0}
+      }.to change{flash[:success]}.from(nil)
+    end
   end
 
   describe "POST new" do
@@ -93,6 +103,12 @@ describe SiteElementsController do
         post :update, valid_params(element)
 
         expect(response).to be_success
+      end
+
+      it "sets the success flash" do
+        expect {
+          post :update, valid_params(element)
+        }.to change{flash[:success]}.from(nil)
       end
 
       it "sends json of the updated attributes" do

@@ -43,6 +43,8 @@ class SiteElementsController < ApplicationController
 
     if @site_element.valid?
       @site_element.save!
+      flash[:success] = message_to_clear_cache
+
       render :json => @site_element, serializer: SiteElementSerializer
     else
       render :json => @site_element, :status => :unprocessable_entity, serializer: SiteElementSerializer
@@ -52,7 +54,10 @@ class SiteElementsController < ApplicationController
   def update
     updater = SiteElements::Update.new(element: @site_element, params: site_element_params)
     updated = updater.run
+
     if updated
+      flash[:success] = message_to_clear_cache
+
       render :json => updater.element, serializer: SiteElementSerializer
     else
       render :json => @site_element, :status => :unprocessable_entity, serializer: SiteElementSerializer
@@ -81,6 +86,11 @@ class SiteElementsController < ApplicationController
   end
 
   private
+
+  def message_to_clear_cache
+    message = "It may take a few minutes for Hello Bar to show up on your site. "
+    message << "You’ll want to <a href=\"http://www.refreshyourcache.com/en/home\" target=\"_blank\">clear your cache</a> to see your updates."
+  end
 
   def load_site
     super
@@ -136,8 +146,8 @@ class SiteElementsController < ApplicationController
       :thank_you_text,
       :type,
       :use_question,
-      :view_condition_attribute,
       :view_condition,
+      :view_condition_attribute,
       :wiggle_button,
       {:settings => settings_keys}
     )
@@ -145,21 +155,21 @@ class SiteElementsController < ApplicationController
 
   def settings_keys
     [
-      :buffer_url,
+      :after_email_submit_action,
       :buffer_message,
+      :buffer_url,
       :collect_names,
-      :display_when_scroll_percentage,
-      :display_when_scroll_element,
-      :display_when_scroll_type,
       :display_when_delay,
       :display_when_delay_units,
+      :display_when_scroll_element,
+      :display_when_scroll_percentage,
+      :display_when_scroll_type,
       :message_to_tweet,
-      :pinterest_url,
-      :pinterest_image_url,
       :pinterest_description,
-      :pinterest_user_url,
       :pinterest_full_name,
-      :after_email_submit_action,
+      :pinterest_image_url,
+      :pinterest_url,
+      :pinterest_user_url,
       :redirect_url,
       :twitter_handle,
       :url,
@@ -167,7 +177,7 @@ class SiteElementsController < ApplicationController
       :url_to_plus_one,
       :url_to_share,
       :url_to_tweet,
-      :use_location_for_url,
+      :use_location_for_url
     ]
   end
 end
