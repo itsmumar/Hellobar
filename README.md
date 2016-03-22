@@ -142,3 +142,63 @@ https://hellobar.com
 user: prodtest@polymathic.me
 pword: password
 site: horse.bike
+
+
+## Running Hello Bar via Docker
+
+This section assumes that you are using the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) or have the knowledge to set up the various components on your own.
+
+### 1. Update your database.yml file
+
+Your `database.yml` file will need to be updated to reflect the connection information for the database container. The username, password, host, and port should match the following example:
+
+```yml
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: root
+  password: root
+  host: mysql
+  port: 3306
+```
+
+### 2. Build and start the containers
+
+Once your `database.yml` and `settings.yml` files are how you like them, run the following commands in a `Docker Quickstart Terminal`:
+
+```
+docker-compose build
+docker-compose up
+```
+
+This will build your containers and start them up. The first time you run `docker-compose build` it will likely take a while to complete as it updates various libraries and installs the required gems.
+
+`docker-compose up` will then start the containers
+
+### 3. Database setup / one-off commands
+
+If you need to run one-off commands like `rake db:setup`, you can do so using `docker exec <CONTAINER NAME> rake db:setup`
+
+To find the name of the containers that docker-compose has built, use `docker ps` to see output akin to the following:
+
+```bash
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES
+71a3eaa56507        hellobarnew_web     "bundle exec thin sta"   19 minutes ago      Up About a minute   0.0.0.0:80->3000/tcp   hellobarnew_web_1
+ecb9c271c139        mysql               "/entrypoint.sh mysql"   19 minutes ago      Up About a minute   3306/tcp               hellobarnew_db_1
+```
+
+In the above example, `hellobarnew_web_1` is the name of the web container.
+
+### 4. Accessing the dockerized Hello Bar in your browser
+
+`docker-compose up` will automatically set up the app to listen on port 80. You can get the IP address of Docker's VM using `docker-machine ip` on the command line.
+
+In order for the Google OAuth to work properly, you'll need to update your `/etc/hosts` file to map `local.hellobar.com` to your VM's IP address. For example, if your VM IP is `192.168.99.100`, you'll add the following line to `/etc/hosts`
+
+```
+192.168.99.100  local.hellobar.com
+```
+
+Navigating to [local.hellobar.com](http://local.hellobar.com) will then point to your local dockerized copy of Hello Bar

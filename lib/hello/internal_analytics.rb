@@ -61,6 +61,8 @@ module Hello
     register_test("Email Modal Interstitial 2016-02-23", %w{original modal}, 10)
     register_test("Email Modal Interstitial New Users Only 2016-03-04", %w{original modal}, 11)
     register_test("Sign Up Button 2016-03-17", %w{original sign_up_google sign_up get_started}, 12)
+    register_test("Show Add Site on Edit Site 2016-03-18", %w{original variant}, 13)
+    register_test("WordPress Plugin 2016-03-17", %w{original common}, 14)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
