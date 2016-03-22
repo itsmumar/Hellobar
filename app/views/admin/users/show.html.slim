@@ -55,15 +55,9 @@ div#user_profile
       - unless bills_for(site).empty?
         div.site_section
           div.title
-            = "Custom invoice information (Address, PO Box, etc)"
-            - if site.invoice_information.present?
-              = render "sites/form_remove_invoice_info", site: site
-            - else
-              = link_to('add', '#', class: 'add-invoice-info')
-          - if site.invoice_information.present?
-            = site.invoice_information.gsub("\r\n", "<br>").html_safe
-          - else
-            = render "sites/form", site: site
+            | Custom invoice information (Address, PO Box, etc)
+            = add_or_clear_site_info(site)
+          = site_info_or_form(site)
 
         div.site_section
           div.title Billing History
