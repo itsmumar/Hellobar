@@ -204,3 +204,15 @@ In order for the Google OAuth to work properly, you'll need to update your `/etc
 ```
 
 Navigating to [local.hellobar.com](http://local.hellobar.com) will then point to your local dockerized copy of Hello Bar
+
+
+### 5. Enabling SSH within the container
+
+If you need to use SSH from within the web container (e.g. deploying via capistrano), you can use the following commands to add your SSH keys and known hosts to the dockerized environment:
+
+```bash
+$ docker run --rm --volumes-from=hellobarnew_agent_1 -v ~/.ssh:/ssh -it whilp/ssh-agent:latest ssh-add /ssh/id_rsa
+$ docker run --rm --volumes-from=hellobarnew_agent_1 -v ~/.ssh:/ssh -it whilp/ssh-agent:latest cp /ssh/known_hosts /root/.ssh/known_hosts
+```
+
+You'll want to substitute your private key name and agent container (the default is `hellobarnew_agent_1`)

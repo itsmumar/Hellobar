@@ -74,6 +74,17 @@ HBQ.prototype.push = function()
 var HB = {
   CAP: {}, // Capabilies
 
+  getLocation: function() {
+    return window.location;
+  },
+
+  scriptIsInstalledProperly: function() {
+    var site_url_anchor = document.createElement("a");
+    site_url_anchor.href = window.HB_SITE_URL;
+
+    return HB.n(this.getLocation().hostname) === HB.n(site_url_anchor.hostname);
+  },
+
   // Grabs site elements from valid rules and displays them
   showSiteElements: function() {
     var siteElements = [];
