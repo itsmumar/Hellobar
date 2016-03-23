@@ -162,6 +162,17 @@ var HB = {
     return (value && value != "false" && value != "0") ? true : false;
   },
 
+  currentURL: function()
+  {
+    return window.location.href;
+  },
+
+  isExternalURL: function(url)
+  {
+    var regex = /https?:\/\/((?:[\w\d]+\.)+[\w\d]{2,})/i;
+    return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1]; 
+  },
+
   // Adds the CSS class to the target element
   addClass: function(element, className)
   {
