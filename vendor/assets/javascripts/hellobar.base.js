@@ -80,7 +80,7 @@ var HB = {
 
   scriptIsInstalledProperly: function() {
     // return true when viewing in preview pane
-    if (location.hostname.split('.').slice(1,3).join('.') === "hellobar.com"
+    if (location.hostname.split('.').slice(1,3).join('.') === "hellobar.com")
       return true
 
     var site_url_anchor = document.createElement("a");
