@@ -1,5 +1,5 @@
 class QueueWorker
-  STAGES = %w(edge staging production)
+  STAGES = %w(edge staging production designqa)
   LOG_FILE = File.join(Rails.root, "log", "queue_worker.log")
 
   module Delay
