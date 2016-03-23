@@ -1,5 +1,14 @@
 script id="cc-payment-details-template" type="text/x-handlebars-template"
   .payment-form
+    header Site Details
+
+    .site-select
+      .field-row
+        label Site
+        .select-wrapper
+          = select_tag 'site_id', options_for_select(current_user.sites.map{|site| [site.url, site.id] })
+
+  .payment-form
     header Billing Information
 
     .credit-card

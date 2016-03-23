@@ -117,7 +117,7 @@ class @PaymentModal extends Modal
         dataType: 'json'
         url: @_url()
         method: @_method()
-        data: $form.serialize() + "&site_id=#{window.siteID}"
+        data: $form.serialize()
         success: (data, status, xhr) =>
           options =
             successCallback: @options.successCallback
