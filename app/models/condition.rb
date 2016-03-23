@@ -13,6 +13,7 @@ class Condition < ActiveRecord::Base
     'SearchTermCondition' => 'st',
     'UrlCondition' => 'pu',
     'UrlQuery' => 'pq',
+    'UrlPathCondition' => 'pup',
     'ReferrerDomainCondition' => 'rd',
     'UTMSourceCondition' => 'ad_so',
     'UTMCampaignCondition' => 'ad_ca',
@@ -52,7 +53,7 @@ class Condition < ActiveRecord::Base
   end
 
   def to_sentence
-    if segment == "UrlCondition" || segment == "UrlParams"
+    if segment == "UrlCondition" || segment == "UrlPathCondition" || segment == "UrlParams"
       url_condition_sentence
     elsif segment == "EveryXSession"
       every_x_sessions_sentence
@@ -77,7 +78,7 @@ class Condition < ActiveRecord::Base
   private
 
   def url_condition_sentence
-    return "" unless segment == "UrlCondition"
+    return "" unless segment == "UrlCondition" || segment == "UrlPathCondition"
     if value.count > 2
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other URLs"
     elsif value.count == 2
@@ -99,7 +100,7 @@ class Condition < ActiveRecord::Base
   def value_is_valid
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
-    elsif segment == 'UrlCondition'
+    elsif segment == 'UrlCondition' || segment == 'UrlPathCondition'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array)
     else
       errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
@@ -118,6 +119,7 @@ class Condition < ActiveRecord::Base
       "ReferrerDomainCondition" => %w{ is is_not includes does_not_include },
       "SearchTermCondition"     => %w{ is is_not includes does_not_include },
       "UrlCondition"            => %w{ is is_not includes does_not_include },
+      "UrlPathCondition"        => %w{ is is_not includes does_not_include },
       "UtmCondition"            => %w{ is is_not includes does_not_include }
     }
 
@@ -148,7 +150,7 @@ class Condition < ActiveRecord::Base
   end
 
   def normalize_url_condition
-    return if self.segment != "UrlCondition"
+    return if self.segment != "UrlCondition" && self.segment != "UrlPathCondition"
 
     if self.value.kind_of?(String)
       self.value = normalize_url(self.value)

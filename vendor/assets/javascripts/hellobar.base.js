@@ -1253,7 +1253,7 @@ var HB = {
   // Input is the users value condition
   sanitizeConditionValue: function(segment, value, input)
   {
-    if ( segment == "pu" || segment == "pp") {
+    if ( segment == "pu" || segment == "pp" || segment == "pup") {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
@@ -1404,6 +1404,10 @@ var HB = {
     }
     // Set the page URL
     HB.setVisitorData("pu", HB.n(document.location+"", false));
+
+    // Set the page path
+    HB.setVisitorData("pup", HB.n(document.location+"", true));
+
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
     // Detect the device
