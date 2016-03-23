@@ -162,10 +162,15 @@ var HB = {
     return (value && value != "false" && value != "0") ? true : false;
   },
 
-  nofollow: function(url)
+  currentURL: function()
+  {
+    return window.location.href;
+  },
+
+  isExternalURL: function(url)
   {
     var regex = /https?:\/\/((?:[\w\d]+\.)+[\w\d]{2,})/i;
-    return regex.exec(location.href)[1] !== regex.exec(url)[1] 
+    return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1]; 
   },
 
   // Adds the CSS class to the target element
