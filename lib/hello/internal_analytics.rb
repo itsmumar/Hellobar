@@ -63,6 +63,7 @@ module Hello
     register_test("Sign Up Button 2016-03-17", %w{original sign_up_google sign_up get_started}, 12)
     register_test("Show Add Site on Edit Site 2016-03-18", %w{original variant}, 13)
     register_test("WordPress Plugin 2016-03-17", %w{original common}, 14)
+    register_test("Use Cases Variation 2016-03-22", %w{original simple}, 15)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
