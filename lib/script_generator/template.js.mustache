@@ -3,6 +3,7 @@ if (typeof(HB) == "undefined")
 HB_BACKEND_HOST = "{{hb_backend_host}}";
 
 HB_SITE_ID = {{site_id}};
+HB_SITE_URL = "{{site_url}}";
 HB_WK = "{{site_write_key}}"; // The site's write key
 HB_TZ = "{{site_timezone}}"; // The site's timezone offset in the format "+/-HH:MM"
 HB_PS = "{{pro_secret}}";
@@ -44,6 +45,6 @@ HBInit();
   _hbq.push(function(){HB.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}})});
 {{/rules}}
 
-if(!HB.isIEXOrLess(8))
+if(!HB.isIEXOrLess(8) && {{script_is_installed_properly}})
   _hbq = new HBQ();
 }

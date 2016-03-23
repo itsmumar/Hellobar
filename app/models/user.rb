@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   has_many :payment_methods
   has_many :payment_method_details, through: :payment_methods, source: :details
   has_many :site_memberships, dependent: :destroy
-  has_many :sites, through: :site_memberships
+  has_many :sites, -> { distinct }, through: :site_memberships
   has_many :site_elements, through: :sites
   has_many :authentications, dependent: :destroy
   has_many :sent_referrals, dependent: :destroy, class_name: "Referral", foreign_key: "sender_id"
