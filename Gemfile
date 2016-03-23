@@ -93,6 +93,7 @@ group :development, :test do
   gem "pry-nav"
   gem "rspec-rails", "~> 2.14"
   gem "simplecov", "~> 0.7.1"
+  gem "phantomjs"
   gem "teaspoon-jasmine"
 end
 
