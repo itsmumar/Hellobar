@@ -170,7 +170,7 @@ RSpec.describe Condition, type: :model do
         expect(condition.value).to eq("/about")
       end
 
-      it "should prepend a / if url is relative" do
+      it "should prepend a / if url is relative and has an extension" do
         condition = build(:condition, segment: "UrlCondition", value: "about.html")
         condition.send(:normalize_url_condition)
         expect(condition.value).to eq("/about.html")
@@ -208,7 +208,7 @@ RSpec.describe Condition, type: :model do
         expect(condition.value).to eq("/about")
       end
 
-      it "should prepend a / if url is relative" do
+      it "should prepend a / if url is relative and has an extension" do
         condition = build(:condition, segment: "UrlPathCondition", value: "about.html")
         condition.send(:normalize_url_condition)
         expect(condition.value).to eq("/about.html")
