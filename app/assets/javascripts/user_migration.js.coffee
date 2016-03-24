@@ -31,8 +31,8 @@ $ ->
       droppable.find(".drop-area").droppable
         drop: (event, ui) ->
           droppable.find(".wordpress-bar-holder").append(ui.draggable.css("top", 0))
-          if $(".unassigned-wordpress-bars .wordpress-bar").length < 1
-            # enable primary form button if all bars have been assigned to sites
+          # enable primary form button if we have at least 1 bar assigned to sites
+          if $('.wordpress-bar-holder .wordpress-bar').length
             $("form.user-migration-multiple-bars button").prop("disabled", false)
 
       $("p.instructions").html("Drag your bars to your site. <a class='add-site'>Click here to add another site.</a>")

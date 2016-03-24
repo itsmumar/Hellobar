@@ -58,7 +58,7 @@ class @RuleModal extends Modal
       # reset the value if the segment changes
       if $this.hasClass('rule_conditions_segment')
         value = null
-      else if segment == "UrlCondition"
+      else if segment == "UrlCondition" || segment == "UrlPathCondition"
         value = $.map($condition.find('.value:visible'), (field, i) -> $(field).val())
       else
         value = $condition.find('.value:visible').val()
@@ -146,13 +146,14 @@ class @RuleModal extends Modal
     'ReferrerCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'ReferrerDomainCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'SearchTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UrlQuery': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMCampaignCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMContentCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMSourceCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UrlPathCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UrlQuery': ['is', 'is_not', 'includes', 'does_not_include']
 
   _segmentToClassMapping:
     'DateCondition': '.date-choice'
@@ -164,13 +165,14 @@ class @RuleModal extends Modal
     'ReferrerCondition': '.referrer-choice'
     'ReferrerDomainCondition': '.referrer-domain-choice'
     'SearchTermCondition': '.search-term-choice'
-    'UrlCondition': '.url-choice'
-    'UrlQuery': '.url-query'
     'UTMCampaignCondition': '.utm-campaign-choice'
     'UTMContentCondition': '.utm-content-choice'
     'UTMMediumCondition': '.utm-medium-choice'
     'UTMSourceCondition': '.utm-source-choice'
     'UTMTermCondition': '.utm-term-choice'
+    'UrlCondition': '.url-choice'
+    'UrlPathCondition': '.url-choice'
+    'UrlQuery': '.url-query'
 
   _dataTypeOperandMapping:
     'string': ['is', 'is_not', 'includes', 'does_not_include']

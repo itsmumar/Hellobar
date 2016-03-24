@@ -166,6 +166,17 @@ var HB = {
     return (value && value != "false" && value != "0") ? true : false;
   },
 
+  currentURL: function()
+  {
+    return window.location.href;
+  },
+
+  isExternalURL: function(url)
+  {
+    var regex = /https?:\/\/((?:[\w\d]+\.)+[\w\d]{2,})/i;
+    return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1]; 
+  },
+
   // Adds the CSS class to the target element
   addClass: function(element, className)
   {
@@ -1246,7 +1257,7 @@ var HB = {
   // Input is the users value condition
   sanitizeConditionValue: function(segment, value, input)
   {
-    if ( segment == "pu" || segment == "pp") {
+    if ( segment == "pu" || segment == "pp" || segment == "pup") {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
@@ -1397,6 +1408,10 @@ var HB = {
     }
     // Set the page URL
     HB.setVisitorData("pu", HB.n(document.location+"", false));
+
+    // Set the page path
+    HB.setVisitorData("pup", HB.n(document.location+"", true));
+
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
     // Detect the device
