@@ -166,6 +166,17 @@ var HB = {
     return (value && value != "false" && value != "0") ? true : false;
   },
 
+  currentURL: function()
+  {
+    return window.location.href;
+  },
+
+  isExternalURL: function(url)
+  {
+    var regex = /https?:\/\/((?:[\w\d]+\.)+[\w\d]{2,})/i;
+    return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1]; 
+  },
+
   // Adds the CSS class to the target element
   addClass: function(element, className)
   {
@@ -1246,10 +1257,11 @@ var HB = {
   // Input is the users value condition
   sanitizeConditionValue: function(segment, value, input)
   {
-    if ( segment == "pu" || segment == "pp") {
+    if ( segment == "pu" || segment == "pp" || segment == "pup") {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
+
     return value;
   },
 
@@ -1283,6 +1295,10 @@ var HB = {
     {
       case "is":
       case "equals":
+        if(typeof a === 'string' && typeof b === 'string') {
+          var regex = new RegExp("^" + b.replace("*", ".*") + "$");
+          return !!a.match(regex);
+        }
         return a == b;
       case "every":
         return a % b == 0;
@@ -1290,6 +1306,11 @@ var HB = {
       case "does_not_equal":
         return a != b;
       case "includes":
+        if(typeof a === 'string' && typeof b === 'string') {
+          var regex = new RegExp(b.replace("*", ".*"));
+          return !!a.match(regex);
+        }
+
         return HB.stringify(a).indexOf(HB.stringify(b)) != -1;
       case "does_not_include":
         return HB.stringify(a).indexOf(HB.stringify(b)) == -1;
@@ -1397,6 +1418,10 @@ var HB = {
     }
     // Set the page URL
     HB.setVisitorData("pu", HB.n(document.location+"", false));
+
+    // Set the page path
+    HB.setVisitorData("pup", HB.n(document.location+"", true));
+
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
     // Detect the device
