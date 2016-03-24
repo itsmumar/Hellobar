@@ -25,6 +25,7 @@ db/*_dump.sql
 
 # Ignore scratch files
 *_scratch.rb
+*.swp
 
 # Ignore application configuration
 /config/application.yml
@@ -37,3 +38,8 @@ public/*bar_test.html
 public/integration
 public/system
 test_site/public/*.html
+
+# Assets
+/public/assets
+!/public/assets/logo_orange_box.png
+!/public/assets/logo_orange_h.png

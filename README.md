@@ -17,6 +17,8 @@ Setup the settings.yml file
 
 `cp config/settings.yml.example config/settings.yml`
 
+You'll need to manually add oauth related account keys to settings.yml to be able to run the site locally
+
 Let rake setup and migrate all your databases
 
 `rake db:setup`
@@ -92,7 +94,7 @@ rake test_site:generate[2]
 
 #### Options
 
-To generate a site html file at an arbitary location:
+To generate a site html file at an arbitrary location:
 
 ```
 rake test_site:file[2,'/Users/hb/index.html']
@@ -109,14 +111,14 @@ Integration tests run in the `spec/features` directory.  They use the
 `lib/SiteGenerator` to create an html file in `public/integration`.  The
 file name is a random hex.
 
-Capybara navigates to the public html file in order to test interations.
+Capybara navigates to the public html file in order to test interactions.
 
 To test the content of the iframe use `within_frame`.
 
 To test adding or removing the iframe use
 `page.driver.browser.frame_focus`.
 
-Watch out for animations and other asyncronous or delayed interactions.
+Watch out for animations and other asynchronous or delayed interactions.
 You may need to fiddle with the `Capybara.default_wait_time` in
 `spec/spec_helper`.
 
@@ -202,3 +204,15 @@ In order for the Google OAuth to work properly, you'll need to update your `/etc
 ```
 
 Navigating to [local.hellobar.com](http://local.hellobar.com) will then point to your local dockerized copy of Hello Bar
+
+
+### 5. Enabling SSH within the container
+
+If you need to use SSH from within the web container (e.g. deploying via capistrano), you can use the following commands to add your SSH keys and known hosts to the dockerized environment:
+
+```bash
+$ docker run --rm --volumes-from=hellobarnew_agent_1 -v ~/.ssh:/ssh -it whilp/ssh-agent:latest ssh-add /ssh/id_rsa
+$ docker run --rm --volumes-from=hellobarnew_agent_1 -v ~/.ssh:/ssh -it whilp/ssh-agent:latest cp /ssh/known_hosts /root/.ssh/known_hosts
+```
+
+You'll want to substitute your private key name and agent container (the default is `hellobarnew_agent_1`)

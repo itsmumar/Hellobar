@@ -54,8 +54,8 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "EveryXSession" "every Nth session"}}
           | {{option segment "PreviousPageURL" "previous page url"}}
           | {{option segment "ReferrerCondition" "referrer"}}
-          | {{option segment "UrlCondition" "URL"}}
           | {{option segment "UrlQuery" "URL Query"}}
+          | {{option segment "UrlPathCondition" "URL Path"}}
           | {{option segment "ReferrerDomainCondition" "Referrer Domain"}}
           | {{option segment "UTMSourceCondition" "Ad Source"}}
           | {{option segment "UTMCampaignCondition" "Ad Campaign"}}
@@ -136,7 +136,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{#each value}}
           .url-input-wrapper
             span or
-            input.url.value name="rule[conditions_attributes][{{../index}}][value][]" type="url" value="{{this}}"
+            input.url.value name="rule[conditions_attributes][{{../index}}][value][]" type="url" value="{{this}}" placeholder="/specific_path"
             .url-actions
               a.url-remove –
               a.url-add +
@@ -144,7 +144,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{else}}
           .url-input-wrapper
             span or
-            input.url.value name="rule[conditions_attributes][{{index}}][value][]" type="url" value="{{value}}"
+            input.url.value name="rule[conditions_attributes][{{index}}][value][]" type="url" value="{{value}}" placeholder="/specific_path"
             .url-actions
               a.url-remove –
               a.url-add +

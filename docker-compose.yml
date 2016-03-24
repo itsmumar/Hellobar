@@ -6,6 +6,8 @@ services:
       - /var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
+  agent:
+    image: "whilp/ssh-agent"
   web:
     build: .
     command: bundle exec thin start
@@ -15,3 +17,7 @@ services:
       - db:mysql
     volumes:
       - ./:/docker/hellobar
+    volumes_from:
+      - agent
+    environment:
+      SSH_AUTH_SOCK: /root/.ssh/socket

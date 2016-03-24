@@ -74,6 +74,17 @@ HBQ.prototype.push = function()
 var HB = {
   CAP: {}, // Capabilies
 
+  getLocation: function() {
+    return window.location;
+  },
+
+  scriptIsInstalledProperly: function() {
+    var site_url_anchor = document.createElement("a");
+    site_url_anchor.href = window.HB_SITE_URL;
+
+    return HB.n(this.getLocation().hostname) === HB.n(site_url_anchor.hostname);
+  },
+
   // Grabs site elements from valid rules and displays them
   showSiteElements: function() {
     var siteElements = [];
@@ -149,6 +160,17 @@ var HB = {
   t: function(value)
   {
     return (value && value != "false" && value != "0") ? true : false;
+  },
+
+  currentURL: function()
+  {
+    return window.location.href;
+  },
+
+  isExternalURL: function(url)
+  {
+    var regex = /https?:\/\/((?:[\w\d]+\.)+[\w\d]{2,})/i;
+    return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1]; 
   },
 
   // Adds the CSS class to the target element
@@ -1231,7 +1253,7 @@ var HB = {
   // Input is the users value condition
   sanitizeConditionValue: function(segment, value, input)
   {
-    if ( segment == "pu" || segment == "pp") {
+    if ( segment == "pu" || segment == "pp" || segment == "pup") {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
@@ -1382,6 +1404,10 @@ var HB = {
     }
     // Set the page URL
     HB.setVisitorData("pu", HB.n(document.location+"", false));
+
+    // Set the page path
+    HB.setVisitorData("pup", HB.n(document.location+"", true));
+
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
     // Detect the device
