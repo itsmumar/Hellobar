@@ -89,7 +89,7 @@ class SiteElementsController < ApplicationController
 
   def message_to_clear_cache
     message = "It may take a few minutes for Hello Bar to show up on your site. "
-    message << "You’ll want to <a href=\"http://www.refreshyourcache.com/en/home\" target=\"_blank\">clear your cache</a> to see your updates."
+    message << "You’ll want to <a href=\"http://www.refreshyourcache.com/en/home\" target=\"_blank\" style=\"text-decoration: underline;\">clear your cache</a> to see your updates."
   end
 
   def load_site
