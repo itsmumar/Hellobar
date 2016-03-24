@@ -70,6 +70,7 @@ class @PaymentModal extends Modal
       # replace the payment details fragment
       # with linked payment methods & current payment info
       $paymentDetails = $('#payment-details')
+      $paymentDetails.find('.site-select-form').hide() if window.siteID
       $paymentDetails.html(html)
       @_bindLinkedPayment() # make sure we still toggle on linking payment
       @_bindFormSubmission() # make sure we can still submit with the new form!
