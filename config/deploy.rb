@@ -92,23 +92,14 @@ namespace :deploy do
     on roles(:web) do
       execute "sudo service monit stop || sudo apt-get install monit"
       execute "sudo rm /etc/monit/monitrc || true"
-      execute "sudo ln -s /mnt/deploy/current/config/deploy/monitrc/#{fetch(:stage)}.monitrc /etc/monit/monitrc"
+      execute "sudo cp /mnt/deploy/current/config/deploy/monitrc/#{fetch(:stage)}.monitrc /etc/monit/monitrc"
       execute "sudo chown root /etc/monit/monitrc"
       execute "sudo service monit start"
       execute "sudo monit restart all"
     end
   end
 
-  desc "Allows full access to current environment's monitrc by calling chmod 777 on it"
-  task :allow_access_to_monitrc do
-    on roles(:web) do
-      last_release = capture(:ls, '-xt', releases_path).split.first
-      last_release_path = releases_path.join(last_release)
-      execute "sudo chmod 777 #{last_release_path}/config/deploy/monitrc/#{fetch(:stage)}.monitrc"
-    end
-  end
-
-  before :cleanup_rollback, :allow_access_to_monitrc
+  before :cleanup_rollback, :restart_monit
 
   task :copy_additional_logrotate_files do
     on roles(:web) do
