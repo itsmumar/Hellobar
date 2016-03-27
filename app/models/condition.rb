@@ -19,7 +19,10 @@ class Condition < ActiveRecord::Base
     'UTMCampaignCondition' => 'ad_ca',
     'UTMMediumCondition' => 'ad_me',
     'UTMContentCondition' => 'ad_co',
-    'UTMTermCondition' => 'ad_te'
+    'UTMTermCondition' => 'ad_te',
+    'LocationCityCondition' => 'gl_cty',
+    'LocationCountryCondition' => 'gl_ctr',
+    'LocationRegionCondition' => 'gl_rgn',
   }
 
   # stored value: displayed value
@@ -109,18 +112,21 @@ class Condition < ActiveRecord::Base
 
   def operand_is_valid
     @@operands ||= {
-      "DateCondition"           => %w{ is is_not before after between },
-      "LastVisitCondition"      => %w{ is is_not less_than greater_than between },
-      "EveryXSession"           => %w{ every },
-      "DeviceCondition"         => %w{ is is_not },
-      "NumberOfVisitsCondition" => %w{ is is_not less_than greater_than between },
-      "PreviousPageURL"         => %w{ includes does_not_include },
-      "ReferrerCondition"       => %w{ is is_not includes does_not_include },
-      "ReferrerDomainCondition" => %w{ is is_not includes does_not_include },
-      "SearchTermCondition"     => %w{ is is_not includes does_not_include },
-      "UrlCondition"            => %w{ is is_not includes does_not_include },
-      "UrlPathCondition"        => %w{ is is_not includes does_not_include },
-      "UtmCondition"            => %w{ is is_not includes does_not_include }
+      "DateCondition"             => %w{ is is_not before after between },
+      "LastVisitCondition"        => %w{ is is_not less_than greater_than between },
+      "EveryXSession"             => %w{ every },
+      "DeviceCondition"           => %w{ is is_not },
+      "NumberOfVisitsCondition"   => %w{ is is_not less_than greater_than between },
+      "PreviousPageURL"           => %w{ includes does_not_include },
+      "ReferrerCondition"         => %w{ is is_not includes does_not_include },
+      "ReferrerDomainCondition"   => %w{ is is_not includes does_not_include },
+      "SearchTermCondition"       => %w{ is is_not includes does_not_include },
+      "UrlCondition"              => %w{ is is_not includes does_not_include },
+      "UrlPathCondition"          => %w{ is is_not includes does_not_include },
+      "UtmCondition"              => %w{ is is_not includes does_not_include },
+      "LocationCityCondition"     => %w{ is is_not },
+      "LocationCountryCondition"  => %w{ is is_not },
+      "LocationRegionCondition"   => %w{ is is_not }
     }
 
     if @@operands[segment] && !@@operands[segment].include?(operand)

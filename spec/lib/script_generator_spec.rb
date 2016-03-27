@@ -17,10 +17,12 @@ describe ScriptGenerator, '#render' do
   end
 
   it 'renders the backend host variable' do
-    Hellobar::Settings.stub(:[]).with(:tracking_host).and_return("hi-there.hellobar.com")
+    original_setting = Hellobar::Settings[:tracking_host]
+    Hellobar::Settings[:tracking_host] = "hi-there.hellobar.com"
     expected_string = "HB_BACKEND_HOST = \"hi-there.hellobar.com\";"
 
     generator.render.should include(expected_string)
+    Hellobar::Settings[:tracking_host] = original_setting
   end
 
   it 'renders the HB_TZ timezone variable' do
