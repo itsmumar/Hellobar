@@ -83,10 +83,12 @@ var HB = {
     if (HB.CAP.preview)
       return true;
 
-    var site_url_anchor = document.createElement("a");
-    site_url_anchor.href = window.HB_SITE_URL;
+    var hostname = HB.getLocation().hostname;
 
-    return HB.n(this.getLocation().hostname) === HB.n(site_url_anchor.hostname);
+    if (HB.isIpAddress(hostname) || hostname === "localhost")
+      return true;
+
+    return HB.n(hostname) === HB.n(window.HB_SITE_URL);
   },
 
   // Grabs site elements from valid rules and displays them
@@ -1986,5 +1988,13 @@ var HB = {
         }
       }
     };
+  },
+
+  isIpAddress: function(ipaddress)
+  {
+    if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))
+      return true;
+    else
+      return false;
   }
 };
