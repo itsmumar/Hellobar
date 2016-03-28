@@ -48,6 +48,13 @@ class @RuleModal extends Modal
       $condition = ruleModal.buildCondition(conditionData, index)
       ruleModal._addCondition($condition)
 
+    urlCondition = @ruleData.conditions.find (condition) ->
+      condition.segment == "UrlCondition"
+
+    # delete the UrlCondition if the user isn't using it
+    unless urlCondition
+      this.$modal.find('select.condition-segment option[value="UrlCondition"]').remove()
+
     @_toggleNewConditionMessage()
 
     @$modal.on 'change', '.rule_conditions_segment, .rule_conditions_data_type, .rule_conditions_operand', ->
