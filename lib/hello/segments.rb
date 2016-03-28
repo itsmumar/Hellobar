@@ -27,7 +27,10 @@ module Hello
       {:key=>'ad_co', :name=>"Ad Content", :type=>:string},
       {:key=>'ad_te', :name=>"Ad Term", :type=>:string},
       {:key=>'ec', :name=>"Email Conversion", :type=>:conversion, :units=>"conversion"},
-      {:key=>'fl', :name=>"Facebook Like", :type=>:conversion, :units=>"conversion"}
+      {:key=>'fl', :name=>"Facebook Like", :type=>:conversion, :units=>"conversion"},
+      {:key=>'gl_cty', :name=>"Geolocation City", :type=>:string},
+      {:key=>'gl_ctr', :name=>"Geolocation Country", :type=>:string},
+      {:key=>'gl_rgn', :name=>"Geolocation Region", :type=>:string}
     ]
   end
 end

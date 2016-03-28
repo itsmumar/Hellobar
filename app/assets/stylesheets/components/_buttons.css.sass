@@ -65,6 +65,22 @@
   &:hover
     background-color: darken($green, 15%)
 
+/*-----------  Raised Green Alternative  -----------*/
+
+%raised-green-button
+  color: $white
+  font-weight: bold
+  font-size: 0.95em
+  padding-top: 0.67em
+  padding-bottom: 0.67em
+  background-color: $greenDark
+  border: 0 solid transparent
+  border-bottom: 3px solid $greenShadow
+
+  &:hover
+    background-color: lighten($greenDark, 5%)
+    border-bottom: 3px solid lighten($greenShadow, 5%)
+
 /*-----------  Blue Alternative  -----------*/
 
 %blue-button
