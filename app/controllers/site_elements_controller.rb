@@ -140,14 +140,15 @@ class SiteElementsController < ApplicationController
       :question,
       :remains_at_top,
       :rule_id,
+      :show_after_convert,
       :show_branding,
       :size,
       :text_color,
       :thank_you_text,
       :type,
       :use_question,
-      :view_condition,
       :view_condition_attribute,
+      :view_condition,
       :wiggle_button,
       {:settings => settings_keys}
     )

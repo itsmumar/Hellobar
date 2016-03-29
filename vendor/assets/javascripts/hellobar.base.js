@@ -80,13 +80,15 @@ var HB = {
 
   scriptIsInstalledProperly: function() {
     // return true when viewing in preview pane
-    if (location.hostname.split('.').slice(1,3).join('.') === "hellobar.com")
-      return true
+    if (HB.CAP.preview)
+      return true;
 
-    var site_url_anchor = document.createElement("a");
-    site_url_anchor.href = window.HB_SITE_URL;
+    var hostname = HB.getLocation().hostname;
 
-    return HB.n(this.getLocation().hostname) === HB.n(site_url_anchor.hostname);
+    if (HB.isIpAddress(hostname) || hostname === "localhost")
+      return true;
+
+    return HB.n(hostname) === HB.n(window.HB_SITE_URL);
   },
 
   // Grabs site elements from valid rules and displays them
@@ -174,7 +176,7 @@ var HB = {
   isExternalURL: function(url)
   {
     var regex = /https?:\/\/((?:[\w\d]+\.)+[\w\d]{2,})/i;
-    return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1]; 
+    return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1];
   },
 
   // Adds the CSS class to the target element
@@ -949,8 +951,8 @@ var HB = {
     HB.setSiteElementData(siteElement.id, "nv", (HB.getSiteElementData(siteElement.id, "nv") || 0)+1);
     var now = Math.round((new Date()).getTime()/1000);
     if ( !HB.getSiteElementData(siteElement.id, "fv") )
-      HB.setSiteElementData(siteElement.id, "fv", now)
-    HB.setSiteElementData(siteElement.id, "lv", now)
+      HB.setSiteElementData(siteElement.id, "fv", now);
+    HB.setSiteElementData(siteElement.id, "lv", now);
     // Trigger siteElement shown event
     HB.trigger("siteElementshown", siteElement);
   },
@@ -1031,41 +1033,8 @@ var HB = {
         {
           siteElement = rule.siteElements[j];
 
-          var lv = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
-          var lu = new Date(siteElement.updated_at);
-
-          // Skip the site element if they have already seen/dismissed it
-          // and it hasn't been changed since then
-          if (HB.didDismissThisHB(siteElement) && (lu < lv)) {
-            // for modals and takeovers, keep it off
-            if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
-              continue;
-            } else {
-              var yesterday = new Date(new Date() - 86400000); //24*60*60*1000
-              if (lu < lv || lv < yesterday) {
-                // For bars, keep it hidden...
-                if(siteElement.type == "Bar") {
-                  siteElement.view_condition = "stay-hidden"
-                } else {
-                  // For sliders, show it again after 24 hours
-                  continue;
-                }
-              }
-            }
-          }
-
-          // Skip the site element if it's a modal / takeover and the
-          // user already dismissed one of those types
-          if(siteElement.type == "Modal" || siteElement.type == "Takeover") {
-            if (HB.didDismissHB()) {
-              continue;
-            }
-          }
-
-          // Skip the site element if it's click to call and the device is not mobile
-          if(siteElement.subtype == "call" && HB.getVisitorData("dv") !== "mobile") {
+          if(!HB.shouldShowElement(siteElement))
             continue;
-          }
 
           if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
           {
@@ -1100,6 +1069,48 @@ var HB = {
       }
     }
     return results;
+  },
+
+  // Determine if an element should be displayed
+  shouldShowElement: function(siteElement) {
+    var lv = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
+    var lu = new Date(siteElement.updated_at);
+
+    // Skip the site element if they have already seen/dismissed it
+    // and it hasn't been changed since then and the user has not specified
+    // that we show it regardless
+    if ( (HB.didConvert(siteElement) || HB.didDismissThisHB(siteElement)) && lu < lv && !siteElement.show_after_convert) {
+      // for modals and takeovers, keep it off
+      if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
+        return false;
+      } else {
+        var yesterday = new Date(new Date() - 86400000); //24*60*60*1000
+        if (lv > yesterday) {
+          // For bars, keep it hidden...
+          if(siteElement.type == "Bar") {
+            siteElement.view_condition = "stay-hidden";
+          } else {
+            // For sliders, show it again after 24 hours
+            return false;
+          }
+        }
+      }
+    }
+
+    // Skip the site element if it's a modal / takeover and the
+    // user already dismissed one of those types
+    if(siteElement.type == "Modal" || siteElement.type == "Takeover") {
+      if (HB.didDismissHB()) {
+        return false;
+      }
+    }
+
+    // Skip the site element if it's click to call and the device is not mobile
+    if(siteElement.subtype == "call" && HB.getVisitorData("dv") !== "mobile") {
+      return false;
+    }
+
+    return true;
   },
 
   // Returns the best element to show from a group of elements
@@ -1977,5 +1988,13 @@ var HB = {
         }
       }
     };
+  },
+
+  isIpAddress: function(ipaddress)
+  {
+    if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))
+      return true;
+    else
+      return false;
   }
 };

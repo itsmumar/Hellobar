@@ -20,6 +20,13 @@ HelloBar.TargetingController = Ember.Controller.extend
     @send('openRuleModal', {}) unless @get('model.rule_id')
   ).observes('model.rule_id')
 
+  showAfterConvertOptions: [
+    {value: true, label: 'Continue showing even after the visitor responds'}
+    {value: false, label: 'Stop showing after the visitor provides a response'}
+  ]
+
+  hideShowAfterConvertOptions: Ember.computed.equal('model.element_subtype', 'announcement')
+
   actions:
     resetRuleDropdown: (ruleData = {}) ->
       if ruleData.id == undefined
