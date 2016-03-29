@@ -5,6 +5,14 @@
   box-shadow: 0 3px 0 0 rgba(0, 0, 0, 0.2)
   @include clearfix()
 
+  span.divider
+    margin: 0 0.5rem 0 0.5rem
+    color: $white
+    vertical-align: middle
+    vertical-align: -webkit-baseline-middle
+    height: 34px
+    padding-top: 12px
+
   .header-logo-block
     float: left
     width: $sidebarWidth
@@ -26,14 +34,14 @@
     float: right
     min-width: 100px
 
-    .show-upgrade-modal
-      height: 34px
-      margin-top: 12px
-      border-radius: 4px
-      font-size: 14px
-      background-color: $white
-      box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2)
-      color: $grayDarker
+  .button
+    height: 34px
+    margin-top: 12px
+    border-radius: 4px
+    font-size: 14px
+    background-color: $white
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2)
+    color: $grayDarker
 
   .header-nav-wrapper,
   .header-user-wrapper
@@ -44,8 +52,6 @@
 
     > *:not(.button)
       @include inline-block()
-    span.divider
-      margin: 0 0.5rem
 
     .caret
       img

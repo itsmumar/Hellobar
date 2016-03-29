@@ -12,7 +12,7 @@ feature "Trial User", js: true do
 
   scenario "shows a button in the header that prompts user to enter payment" do
     visit site_path(@site)
-    expect(page).to have_content('ENJOYING HELLO BAR PRO? CLICK HERE TO KEEP IT.')
+    expect(page).to have_content('Enjoying Hello Bar Pro?')
   end
 
   scenario "allows users to downgrade" do
@@ -23,7 +23,7 @@ feature "Trial User", js: true do
     find(".show-downgrade-modal").click
     click_link("Downgrade")
 
-    expect(page).to have_content('WANT MORE POWER?')
+    expect(page).to have_content('Want More Power?')
     expect(@site.reload.current_subscription).to be_a(Subscription::Free)
   end
 end

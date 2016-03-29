@@ -27,18 +27,6 @@
 
   .header-user-wrapper
     - unless current_user.temporary?
-
-      - if current_site.is_free?
-        = link_to "Get Free Pro", new_referral_path, class: 'button'
-        span.divider or
-        .button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
-          | Want More Power?
-
-      - elsif current_site.current_subscription.try(:trial?)
-        .button.show-payment-modal data={ source: "Add payment to trial" }
-          div Enjoying Hello Bar Pro?
-          div Click here to keep it.
-
       .dropdown-wrapper
         = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
         span.user-name= display_name_for_user(current_user)
@@ -55,8 +43,17 @@
           - else
             = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
   .header-cta
-    .button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
-      | Want more power?
+    - unless current_user.temporary?
+
+      - if current_site.is_free?
+        = link_to "Get Free Pro", new_referral_path, class: 'button'
+        span.divider or
+        a.button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
+          | Want More Power?
+
+      - elsif current_site.current_subscription.try(:trial?)
+        a.button.show-payment-modal data={ source: "Add payment to trial" }
+          div Enjoying Hello Bar Pro?
 - elsif current_user
   .header-user-wrapper
     .dropdown-wrapper
@@ -67,5 +64,5 @@
       .dropdown-block
         = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
   .header-cta
-    .button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
+    a.button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
       | Want more power?
