@@ -20,7 +20,8 @@ $ ->
     $(@).closest("tr").toggleClass( "hilight" )
 
   $(".subscription_link").click ->
-    $(".edit_site_" + $(this).data("siteid") + "_form").toggleClass("hidden")
+    siteId = $(@).data("siteid")
+    $(".edit_site_form[data-site-id='" + siteId + "']").toggleClass("hidden")
 
   $(".add-invoice-info").click (e) ->
     e.preventDefault()

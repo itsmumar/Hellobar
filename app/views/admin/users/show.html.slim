@@ -19,7 +19,7 @@ div#user_profile
           a.regenerate_link data-url=regenerate_admin_user_site_path(@user, site)
             | regenerate script
 
-      = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "schedule_form edit_site_#{site.id}_form hidden"} do |f|
+      = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "schedule_form edit_site_form hidden"}, data: { "site-id" => site.id } do |f|
         = f.hidden_field :id, value: site.id
         table
           tr
