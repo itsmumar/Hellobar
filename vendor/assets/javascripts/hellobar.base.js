@@ -79,10 +79,16 @@ var HB = {
   },
 
   scriptIsInstalledProperly: function() {
-    var site_url_anchor = document.createElement("a");
-    site_url_anchor.href = window.HB_SITE_URL;
+    // return true when viewing in preview pane
+    if (HB.CAP.preview)
+      return true;
 
-    return HB.n(this.getLocation().hostname) === HB.n(site_url_anchor.hostname);
+    var hostname = HB.getLocation().hostname;
+
+    if (HB.isIpAddress(hostname) || hostname === "localhost")
+      return true;
+
+    return HB.n(hostname) === HB.n(window.HB_SITE_URL);
   },
 
   // Grabs site elements from valid rules and displays them
@@ -170,7 +176,7 @@ var HB = {
   isExternalURL: function(url)
   {
     var regex = /https?:\/\/((?:[\w\d]+\.)+[\w\d]{2,})/i;
-    return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1]; 
+    return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1];
   },
 
   // Adds the CSS class to the target element
@@ -588,11 +594,12 @@ var HB = {
   {
     // Don't let any cookies get set without a site ID
     if ( typeof(HB_SITE_ID) == "undefined")
-      HB.cookies = {siteElements:{}, visitor:{}};
+      HB.cookies = {siteElements:{}, visitor:{}, location:{}};
     else
     {
       HB.cookies = {
         visitor: HB.parseCookieValues(HB.gc("hbv_"+HB_SITE_ID)),
+        location: HB.parseCookieValues(HB.gc("hbglc_"+HB_SITE_ID)),
         siteElements: {}
       };
       // We need to parse out the nested site element data
@@ -636,7 +643,15 @@ var HB = {
   // Gets the visitor attribute specified by the key or returns null
   getVisitorData: function(key)
   {
-    return HB.cookies.visitor[key];
+    if (key == undefined) return null;
+
+    if (key.indexOf("gl_") != -1) {
+      return HB.getGeolocationData(key);
+    }
+    else
+    {
+      return HB.cookies.visitor[key];
+    }
   },
 
   // Sets the visitor attribute specified by the key to the value in the HB.cookies hash
@@ -936,8 +951,8 @@ var HB = {
     HB.setSiteElementData(siteElement.id, "nv", (HB.getSiteElementData(siteElement.id, "nv") || 0)+1);
     var now = Math.round((new Date()).getTime()/1000);
     if ( !HB.getSiteElementData(siteElement.id, "fv") )
-      HB.setSiteElementData(siteElement.id, "fv", now)
-    HB.setSiteElementData(siteElement.id, "lv", now)
+      HB.setSiteElementData(siteElement.id, "fv", now);
+    HB.setSiteElementData(siteElement.id, "lv", now);
     // Trigger siteElement shown event
     HB.trigger("siteElementshown", siteElement);
   },
@@ -1018,41 +1033,8 @@ var HB = {
         {
           siteElement = rule.siteElements[j];
 
-          var lv = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
-          var lu = new Date(siteElement.updated_at);
-
-          // Skip the site element if they have already seen/dismissed it
-          // and it hasn't been changed since then
-          if (HB.didDismissThisHB(siteElement) && (lu < lv)) {
-            // for modals and takeovers, keep it off
-            if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
-              continue;
-            } else {
-              var yesterday = new Date(new Date() - 86400000); //24*60*60*1000
-              if (lu < lv || lv < yesterday) {
-                // For bars, keep it hidden...
-                if(siteElement.type == "Bar") {
-                  siteElement.view_condition = "stay-hidden"
-                } else {
-                  // For sliders, show it again after 24 hours
-                  continue;
-                }
-              }
-            }
-          }
-
-          // Skip the site element if it's a modal / takeover and the
-          // user already dismissed one of those types
-          if(siteElement.type == "Modal" || siteElement.type == "Takeover") {
-            if (HB.didDismissHB()) {
-              continue;
-            }
-          }
-
-          // Skip the site element if it's click to call and the device is not mobile
-          if(siteElement.subtype == "call" && HB.getVisitorData("dv") !== "mobile") {
+          if(!HB.shouldShowElement(siteElement))
             continue;
-          }
 
           if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
           {
@@ -1087,6 +1069,48 @@ var HB = {
       }
     }
     return results;
+  },
+
+  // Determine if an element should be displayed
+  shouldShowElement: function(siteElement) {
+    var lv = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
+    var lu = new Date(siteElement.updated_at);
+
+    // Skip the site element if they have already seen/dismissed it
+    // and it hasn't been changed since then and the user has not specified
+    // that we show it regardless
+    if ( (HB.didConvert(siteElement) || HB.didDismissThisHB(siteElement)) && lu < lv && !siteElement.show_after_convert) {
+      // for modals and takeovers, keep it off
+      if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
+        return false;
+      } else {
+        var yesterday = new Date(new Date() - 86400000); //24*60*60*1000
+        if (lv > yesterday) {
+          // For bars, keep it hidden...
+          if(siteElement.type == "Bar") {
+            siteElement.view_condition = "stay-hidden";
+          } else {
+            // For sliders, show it again after 24 hours
+            return false;
+          }
+        }
+      }
+    }
+
+    // Skip the site element if it's a modal / takeover and the
+    // user already dismissed one of those types
+    if(siteElement.type == "Modal" || siteElement.type == "Takeover") {
+      if (HB.didDismissHB()) {
+        return false;
+      }
+    }
+
+    // Skip the site element if it's click to call and the device is not mobile
+    if(siteElement.subtype == "call" && HB.getVisitorData("dv") !== "mobile") {
+      return false;
+    }
+
+    return true;
   },
 
   // Returns the best element to show from a group of elements
@@ -1257,6 +1281,7 @@ var HB = {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
+
     return value;
   },
 
@@ -1290,6 +1315,10 @@ var HB = {
     {
       case "is":
       case "equals":
+        if(typeof a === 'string' && typeof b === 'string') {
+          var regex = new RegExp("^" + b.replace("*", ".*") + "$");
+          return !!a.match(regex);
+        }
         return a == b;
       case "every":
         return a % b == 0;
@@ -1297,6 +1326,11 @@ var HB = {
       case "does_not_equal":
         return a != b;
       case "includes":
+        if(typeof a === 'string' && typeof b === 'string') {
+          var regex = new RegExp(b.replace("*", ".*"));
+          return !!a.match(regex);
+        }
+
         return HB.stringify(a).indexOf(HB.stringify(b)) != -1;
       case "does_not_include":
         return HB.stringify(a).indexOf(HB.stringify(b)) == -1;
@@ -1913,5 +1947,54 @@ var HB = {
       return "tablet";
     else
       return "computer";
+  },
+
+  setGeolocationData: function(locationData) {
+    locationCookie = {
+      'gl_cty' : locationData.city,
+      'gl_ctr' : locationData.countryCode,
+      'gl_rgn' : locationData.region
+    }
+
+    // Don't let any cookies get set without a site ID
+    if ( typeof(HB_SITE_ID) != "undefined")
+    {
+      //refresh geolocation every month on not mobile
+      var expirationDays = 30;
+      //refresh geolocation every day on mobile
+      if ( HB.getVisitorData("dv") === "mobile" )
+        expirationDays = 1;
+      HB.sc("hbglc_"+HB_SITE_ID, HB.serializeCookieValues(locationCookie), expirationDays);
+      HB.loadCookies();
+    }
+  },
+
+  getGeolocationData: function(key) {
+    var cachedLocation = HB.cookies.location[key];
+    if (cachedLocation) return cachedLocation;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', HB_GL_URL);
+    xhr.send(null);
+
+    xhr.onreadystatechange = function () {
+      var DONE = 4; // readyState 4 means the request is done.
+      var OK = 200; // status 200 is a successful return.
+      if (xhr.readyState === DONE) {
+        if (xhr.status === OK) {
+          response = JSON.parse(xhr.responseText);
+          HB.setGeolocationData(response);
+          HB.showSiteElements();
+        }
+      }
+    };
+  },
+
+  isIpAddress: function(ipaddress)
+  {
+    if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))
+      return true;
+    else
+      return false;
   }
 };

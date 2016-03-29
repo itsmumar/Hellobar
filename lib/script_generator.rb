@@ -92,6 +92,10 @@ class ScriptGenerator < Mustache
     Hellobar::Settings[:tracking_host]
   end
 
+  def geolocation_url
+    Hellobar::Settings[:geolocation_url]
+  end
+
   def site_element_classes_js
     js = File.read("#{Rails.root}/vendor/assets/javascripts/site_elements/site_element.js")
 
@@ -241,6 +245,7 @@ private
       name_placeholder
       phone_number
       placement
+      show_after_convert
       show_border
       show_branding
       size

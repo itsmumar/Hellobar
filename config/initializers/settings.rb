@@ -50,6 +50,7 @@ unless defined?(Hellobar::Settings)
     get_response_api_url
     vr_client_id
     vr_secret
+    geolocation_url
   )
 
   keys.each do |key|

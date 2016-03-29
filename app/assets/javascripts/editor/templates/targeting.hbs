@@ -11,4 +11,16 @@
 </div>
 <p>{{selectedRule.description}}. {{#if selectedRule.editable}}<a class="edit-rule" {{action 'openRuleModal' selectedRule}}>Edit.</a>{{/if}}</p>
 
+{{#unless hideShowAfterConvertOptions}}
+  <label>How often should the Hello Bar be displayed?</label>
+  <div class="select-wrapper">
+    {{view Ember.Select
+      content=showAfterConvertOptions
+      value=model.show_after_convert
+      optionValuePath='content.value'
+      optionLabelPath='content.label'
+    }}
+  </div>
+{{/unless}}
+
 {{outlet}}

@@ -48,6 +48,9 @@ script#condition-partial type="text/x-handlebars-template"
       .select-wrapper.optional.rule_conditions_segment
         select class="condition-segment" name="rule[conditions_attributes][{{index}}][segment]"
           | {{option segment "DeviceCondition" "device"}}
+          | {{option segment "LocationCityCondition" "City"}}
+          | {{option segment "LocationCountryCondition" "Country Code"}}
+          | {{option segment "LocationRegionCondition" "Region/State"}}
           | {{option segment "DateCondition" "date"}}
           | {{option segment "LastVisitCondition" "days since last visit"}}
           | {{option segment "NumberOfVisitsCondition" "number of visits"}}
@@ -130,6 +133,12 @@ script#condition-partial type="text/x-handlebars-template"
         .choice-wrapper.utm-term-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.string-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        .choice-wrapper.location-city-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        .choice-wrapper.location-country-choice
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        .choice-wrapper.location-region-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.url-choice
           | {{#if value}}

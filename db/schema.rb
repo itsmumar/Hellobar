@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160309223419) do
+ActiveRecord::Schema.define(version: 20160329183809) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -297,7 +297,6 @@ ActiveRecord::Schema.define(version: 20160309223419) do
     t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
-    t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
     t.string   "view_condition",                  default: "immediately"
@@ -315,9 +314,10 @@ ActiveRecord::Schema.define(version: 20160309223419) do
     t.string   "answer2link_text"
     t.string   "answer1caption"
     t.string   "answer2caption"
-    t.boolean  "use_question"
+    t.boolean  "use_question",                    default: false
     t.string   "phone_number"
     t.string   "phone_country_code",              default: "US"
+    t.boolean  "show_after_convert",              default: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
@@ -352,6 +352,7 @@ ActiveRecord::Schema.define(version: 20160309223419) do
     t.datetime "script_uninstalled_at"
     t.string   "install_type"
     t.text     "invoice_information"
+    t.datetime "selected_goal_clicked_at"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
@@ -372,6 +373,13 @@ ActiveRecord::Schema.define(version: 20160309223419) do
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
   add_index "subscriptions", ["payment_method_id"], name: "index_subscriptions_on_payment_method_id", using: :btree
   add_index "subscriptions", ["site_id"], name: "index_subscriptions_on_site_id", using: :btree
+
+  create_table "user_onboarding_statuses", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "status_id"
+    t.integer  "sequence_delivered_last"
+    t.datetime "created_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",       null: false

@@ -16,7 +16,7 @@ describe("HB", function() {
     document.body.appendChild(element);
     headlineElement = document.getElementById('headline');
 
-    siteElement = {w: {contentDocument: document}};
+    siteElement = {w: {contentDocument: document}, subtype: 'email'};
   });
 
   afterEach(function() {
