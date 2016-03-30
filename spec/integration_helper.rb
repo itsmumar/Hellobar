@@ -6,7 +6,8 @@ RSpec.configure do |config|
   config.include SiteGeneratorHelper
   config.include FeatureHelper
 
-  Capybara.javascript_driver = :selenium
+  # Don't override the javascript_driver in a dockerized environment
+  Capybara.javascript_driver = :selenium unless ENV['DOCKER']
   OmniAuth.config.test_mode = true
 
   config.before(:all) do
