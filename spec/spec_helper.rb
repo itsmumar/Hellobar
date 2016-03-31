@@ -61,11 +61,6 @@ RSpec.configure do |config|
     Capybara.run_server = false
   end
 
-  # Ensure that the external hellobar script isn't loaded during tests
-  config.before(:each) do |example|
-    allow(ApplicationHelper).to receive(:hellobar_script_tag).and_return('')
-  end
-
   # ## VCR
   config.around(:each) do |example|
     name = example.metadata[:full_description].split(/\s+/, 2).join("/").underscore.gsub(/[^\w\/]+/, "_")
