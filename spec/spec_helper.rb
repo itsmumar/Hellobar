@@ -63,7 +63,7 @@ RSpec.configure do |config|
 
   # Ensure that the external hellobar script isn't loaded during tests
   config.before(:each) do |example|
-    stub(:hellobar_script_tag).and_return('')
+    allow(ApplicationHelper).to receive(:hellobar_script_tag).and_return('')
   end
 
   # ## VCR
