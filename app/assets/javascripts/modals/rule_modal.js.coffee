@@ -38,6 +38,15 @@ class @RuleModal extends Modal
     @_bindRemoveCondition()
     @_bindUrlActions()
 
+  _removeUrlCondition: ->
+    urlCondition = @ruleData.conditions.find (condition) ->
+      condition.segment == "UrlCondition"
+
+    # delete the UrlCondition if the user isn't using it
+    unless urlCondition
+      this.$modal.find('select.condition-segment option[value="UrlCondition"]').remove()
+
+
   _renderContent: ->
     $('body').append(@$modal)
 
@@ -47,6 +56,8 @@ class @RuleModal extends Modal
     for conditionData, index in @ruleData.conditions
       $condition = ruleModal.buildCondition(conditionData, index)
       ruleModal._addCondition($condition)
+
+    @_removeUrlCondition()
 
     @_toggleNewConditionMessage()
 
@@ -260,6 +271,7 @@ class @RuleModal extends Modal
 
   _addCondition: ($condition) ->
     @$modal.find('.conditions-wrapper').append($condition.prop('outerHTML'))
+    @_removeUrlCondition()
 
   _removeCondition: ($condition) ->
     # if persisted, set the hidden destroy field to true for Rails to pick up
