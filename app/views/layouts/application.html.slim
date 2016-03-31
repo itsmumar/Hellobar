@@ -8,7 +8,8 @@ html
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
     = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
-
+    javascript:
+      try{Typekit.load({ async: true });}catch(e){}
     = csrf_meta_tags
 
   body#hb-application
@@ -48,4 +49,3 @@ javascript:
   var currentUser = #{{UserSerializer.new(current_user).to_json}};
   var siteID = "#{@site.try(:id)}";
   var site = #{{SiteSerializer.new(current_site, scope: current_user).to_json}};
-  try{Typekit.load({ async: true });}catch(e){}

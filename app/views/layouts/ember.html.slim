@@ -12,7 +12,8 @@ html
 
     = javascript_include_tag "editor/vendor"
     = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
-
+    javascript:
+      try{Typekit.load({ async: true });}catch(e){}
     = csrf_meta_tags
 
   body#hb-editor
@@ -46,6 +47,3 @@ html
     = javascript_include_tag "editor/application"
 
     = yield
-
-javascript:
-  try{Typekit.load({ async: true });}catch(e){}

@@ -9,6 +9,8 @@ html
     = javascript_include_tag "application"
     = javascript_include_tag "admin"
     = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
+    javascript:
+      try{Typekit.load({ async: true });}catch(e){}
     = csrf_meta_tags
 
   body#hb-admin
@@ -19,6 +21,3 @@ html
       = yield
 
     = render 'shared/alert_template'
-
-javascript:
-  try{Typekit.load({ async: true });}catch(e){}

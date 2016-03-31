@@ -7,11 +7,10 @@ html
 
     = stylesheet_link_tag "receipt", :media => "all"
     = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
+    javascript:
+      try{Typekit.load({ async: true });}catch(e){}
     = csrf_meta_tags
 
   body
     div#hb-receipt
       == yield
-
-javascript:
-  try{Typekit.load({ async: true });}catch(e){}
