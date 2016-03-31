@@ -22,4 +22,8 @@ module ApplicationHelper
     cost = cost / 12 if schedule == :yearly
     number_to_currency(cost, precision: 0)
   end
+
+  def hellobar_script_tag
+    render 'shared/hellobar_script'
+  end
 end
