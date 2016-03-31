@@ -44,9 +44,29 @@ end
 Capybara.default_wait_time = ENV['CI'] ? 30 : 10
 
 RSpec.configure do |config|
+  config.include Capybara::DSL
+
+  # Use a separate container for selenium
+  if ENV['DOCKER']
+    Capybara.register_driver :remote_firefox do |app|
+      Capybara::Selenium::Driver.new(app,
+                                     browser: :remote,
+                                     url: "http://selenium-firefox:4444/wd/hub",
+                                     desired_capabilities: :firefox)
+    end
+
+    Capybara.default_driver = :remote_firefox
+    Capybara.javascript_driver = :remote_firefox
+    Capybara.app_host = "http://web"
+    Capybara.run_server = false
+  end
+
   # ## VCR
   config.around(:each) do |example|
     name = example.metadata[:full_description].split(/\s+/, 2).join("/").underscore.gsub(/[^\w\/]+/, "_")
+
+    # Don't run VCR in a dockerized environment
+    next if ENV['DOCKER']
 
     VCR.use_cassette(name) do
       example.run
