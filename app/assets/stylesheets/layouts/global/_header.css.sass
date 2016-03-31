@@ -28,20 +28,13 @@
       height: 100%
       display: block
 
-  .header-cta
-    height: $headerHeight
-    padding-right: 20px
-    float: right
-    min-width: 100px
-
   .button
     height: 34px
     margin-top: 12px
     border-radius: 4px
     font-size: 14px
     background-color: $white
-    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2)
-    color: $grayDarker
+    color: $orange
 
   .header-nav-wrapper,
   .header-user-wrapper
@@ -92,13 +85,27 @@
         font-size: 0.75em
 
   .header-user-wrapper
-    border-left: 1px solid $orangeLight
     float: right
     min-width: 245px
 
+    .ctas
+      height: $headerHeight
+      padding-right: 20px
+      min-width: 100px
+      border-right: 1px solid $orangeLight
+
+      .button
+        height: 34px
+        margin-top: 12px
+        border-radius: 4px
+        font-size: 14px
+        background-color: $white
+        box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2)
+        color: $grayDark
+
     .dropdown-wrapper
       min-width: inherit
-      padding-top: 13px
+      padding-left: 20px
 
       .caret
         img
@@ -119,13 +126,6 @@
       vertical-align: middle
       display: inline-block
       @include antialiased()
-
-    .button
-      margin-top: 4px
-      font-size: 0.67em
-      font-weight: bold
-      border-radius: $radiusLg
-      text-transform: uppercase
 
     i.icon-notification,
     i.icon-notification-alert
