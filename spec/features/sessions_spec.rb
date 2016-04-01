@@ -17,7 +17,6 @@ feature "User can sign up", js: true do
 end
 
 feature "User can sign in", js: true do
-  before { ApplicationHelper.any_instance.stub(:hellobar_script_tag) { '' } }
   after { devise_reset }
 
   scenario "through email and password" do

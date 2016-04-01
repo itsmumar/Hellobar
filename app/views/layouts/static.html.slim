@@ -9,7 +9,7 @@ html
     = stylesheet_link_tag    "static", :media => "all"
     = javascript_include_tag "static"
  
-    = hellobar_script_tag
+    = render "shared/hellobar_script"
 
     = csrf_meta_tags
 
