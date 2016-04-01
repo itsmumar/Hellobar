@@ -48,27 +48,32 @@ ENV GEM_HOME /usr/local/bundle
 ENV BUNDLE_PATH="$GEM_HOME" \
   BUNDLE_BIN="$GEM_HOME/bin" \
   BUNDLE_SILENCE_ROOT_WARNING=1 \
-  BUNDLE_APP_CONFIG="$GEM_HOME"
+  BUNDLE_APP_CONFIG="$GEM_HOME" \
+  BUNDLE_JOBS=8
 ENV PATH $BUNDLE_BIN:$PATH
 RUN mkdir -p "$GEM_HOME" "$BUNDLE_BIN" \
   && chmod 777 "$GEM_HOME" "$BUNDLE_BIN"
 
-ENV APP=hellobar
+RUN apt-get update \
+ && apt-get -y install python-software-properties software-properties-common \
+ && apt-add-repository ppa:ubuntu-sdk-team/ppa \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends \
+     qtdeclarative5-dev qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x \
+     nodejs mysql-client \
+     sudo \
+ && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /docker/$APP
+ARG APP=app
+
+RUN useradd --shell /bin/bash --create-home $APP \
+ && gpasswd -a $APP $APP \
+ && echo "$APP ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+RUN mkdir -p /docker/$APP && chown -R $APP:$APP /docker/$APP
 WORKDIR /docker/$APP
 
-RUN apt-get update && \
-    apt-get -y install python-software-properties software-properties-common && \
-    apt-add-repository ppa:ubuntu-sdk-team/ppa && \
-    apt-get update && \
-    apt-get install -y \
-       qtdeclarative5-dev qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x \
-       nodejs mysql-client firefox --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
-
-ENV BUNDLE_JOBS=2 \
-    BUNDLE_PATH=/bundle
+USER $APP
 
 COPY Gemfile* /docker/$APP/
 RUN bundle install
