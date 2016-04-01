@@ -1,8 +1,10 @@
 .header-logo-block
   - if current_user && current_site
-    = link_to 'HelloBar', site_path(current_site)
+    = link_to(site_path(current_site)) do
+      = image_tag("hellobar_logo_white.svg")
   - else
-    = link_to 'HelloBar', root_path
+    = link_to(root_path) do
+      = image_tag("hellobar_logo_white.svg")
 
 - if current_user && current_site
   .header-nav-wrapper
