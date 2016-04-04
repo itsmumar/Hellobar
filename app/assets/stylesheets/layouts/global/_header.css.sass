@@ -1,6 +1,8 @@
 /*-----------  Header  -----------*/
 
 .global-header
+  z-index: 1
+  position: relative
   background-color: $red
   box-shadow: 0 3px 0 0 rgba(0, 0, 0, 0.2)
   @include clearfix()
@@ -15,18 +17,16 @@
 
   .header-logo-block
     float: left
-    width: $sidebarWidth
     height: $headerHeight
-    background-repeat: no-repeat
-    background-position: center center
-    background-size: auto $headerHeight/1.95
-    background-image: image-url('hellobar_logo_white.svg')
+
+    img
+      height: 100%
+      max-width: 140px
 
     a
-      opacity: 0
-      width: 100%
       height: 100%
       display: block
+      padding: 10px 20px 10px 35px
 
   .button
     height: 34px
@@ -96,12 +96,10 @@
 
       .button
         height: 34px
-        margin-top: 12px
-        border-radius: 4px
-        font-size: 14px
-        background-color: $white
+        line-height: 22px
         box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2)
-        color: $grayDark
+        border: 0
+        color: $grayDarker
 
     .dropdown-wrapper
       min-width: inherit
@@ -161,4 +159,3 @@
 
       .dropdown-block
         margin-top: 0.55rem !important
-
