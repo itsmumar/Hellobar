@@ -54,6 +54,8 @@ class Site < ActiveRecord::Base
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
 
+  validate :url_is_unique?
+
   scope :script_installed_db, -> do
     where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
   end
@@ -210,6 +212,17 @@ class Site < ActiveRecord::Base
       Site.joins(:users).where(url: url, users: {id: user.id}).where.not(id: id).any?
     else
       Site.where(url: url).where.not(id: id).any?
+    end
+  end
+
+  def url_is_unique?
+    if users.
+      joins(:sites).
+      where(sites: {url: url}).
+      where.not(sites: {id: id}).
+      any?
+
+      errors.add(:url, "is already in use")
     end
   end
 
