@@ -191,6 +191,8 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 ecb9c271c139        mysql               "/entrypoint.sh mysql"   19 minutes ago      Up About a minute   3306/tcp               hellobarnew_db_1
 ```
 
+Note: if you want to set the RAILS_ENV, you can run the commands via bash using something like: `docker exec -it hellobarnew_web_1 /bin/bash -c "RAILS_ENV=test bundle exec rake db:setup"`
+
 In the above example, `hellobarnew_web_1` is the name of the web container.
 
 ### 4. Accessing the dockerized Hello Bar in your browser

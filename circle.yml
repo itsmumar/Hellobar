@@ -19,6 +19,11 @@ test:
     - RAILS_ENV=test bundle exec rake teaspoon
 
 deployment:
+  designqa:
+    branch: designqa
+    commands:
+      - BRANCH=designqa bundle exec cap designqa deploy:
+          timeout: 600
   edge:
     branch: master
     commands:

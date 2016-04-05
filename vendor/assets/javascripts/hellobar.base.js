@@ -1316,7 +1316,7 @@ var HB = {
       case "is":
       case "equals":
         if(typeof a === 'string' && typeof b === 'string') {
-          var regex = new RegExp("^" + b.replace("*", ".*") + "$");
+          var regex = new RegExp("^" + HB.sanitizeRegexString(b).replace("*", ".*") + "$");
           return !!a.match(regex);
         }
         return a == b;
@@ -1327,7 +1327,7 @@ var HB = {
         return a != b;
       case "includes":
         if(typeof a === 'string' && typeof b === 'string') {
-          var regex = new RegExp(b.replace("*", ".*"));
+          var regex = new RegExp(HB.sanitizeRegexString(b).replace("*", ".*"));
           return !!a.match(regex);
         }
 
@@ -1996,5 +1996,10 @@ var HB = {
       return true;
     else
       return false;
+  },
+
+  // Escapes all regex characters EXCEPT for the asterisk
+  sanitizeRegexString: function(str) {
+    return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, "\\$&");
   }
 };
