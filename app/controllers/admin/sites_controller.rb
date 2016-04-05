@@ -7,7 +7,7 @@ class Admin::SitesController < ApplicationController
   def update
     begin
       site.update_attributes(site_params) if params.has_key?(:site)
-      update_subscription(site, nil, subscription_params)
+      update_subscription(site, nil, subscription_params) if params.has_key?(:subscription)
       flash[:success] = "Site and/or subscription has been updated."
     rescue => e
       flash[:error] = "There was an error trying to update the subscription: #{e.message}"
