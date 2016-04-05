@@ -1086,13 +1086,8 @@ var HB = {
       } else {
         var yesterday = new Date(new Date() - 86400000); //24*60*60*1000
         if (lv > yesterday) {
-          // For bars, keep it hidden...
-          if(siteElement.type == "Bar") {
-            siteElement.view_condition = "stay-hidden";
-          } else {
-            // For sliders, show it again after 24 hours
-            return false;
-          }
+          // For sliders and bars, show it again after 24 hours
+          return false;
         }
       }
     }
