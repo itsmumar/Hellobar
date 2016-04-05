@@ -1,0 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
+# Rails cops (so we don't need to run with -R option)
+AllCops:
+  RunRailsCops: true

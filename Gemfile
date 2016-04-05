@@ -78,6 +78,8 @@ group :development do
   gem "better_errors", "~> 1.1"
   gem "binding_of_caller"
   gem "sinatra"
+  gem "rubocop", "~> 0.34.2", require: false
+  gem "hound-tools", "~> 0.0.4", require: false
 end
 
 group :development, :test do
