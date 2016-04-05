@@ -2,7 +2,6 @@ doctype html
 html
   head
     title Hello Bar
-    link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css"
 
     link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
 
@@ -12,7 +11,9 @@ html
     = stylesheet_link_tag    "editor", :media => "all"
 
     = javascript_include_tag "editor/vendor"
-
+    = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
+    javascript:
+      try{Typekit.load({ async: true });}catch(e){}
     = csrf_meta_tags
 
   body#hb-editor
