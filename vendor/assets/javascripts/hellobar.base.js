@@ -1036,19 +1036,16 @@ var HB = {
           if(!HB.shouldShowElement(siteElement))
             continue;
 
-          if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
+          visibilityGroup = siteElement.type;
+          // For showing multiple elements at the same time a modal and a takeover are the same thing
+          if ( siteElement.type == "Modal" || siteElement.type == "Takeover" )
+            visibilityGroup = "Modal/Takeover";
+          if ( !visibilityGroups[visibilityGroup] )
           {
-            visibilityGroup = siteElement.type;
-            // For showing multiple elements at the same time a modal and a takeover are the same thing
-            if ( siteElement.type == "Modal" || siteElement.type == "Takeover" )
-              visibilityGroup = "Modal/Takeover";
-            if ( !visibilityGroups[visibilityGroup] )
-            {
-              visibilityGroups[visibilityGroup] = [];
-              visibilityGroupNames.push(visibilityGroup);
-            }
-            visibilityGroups[visibilityGroup].push(siteElement);
+            visibilityGroups[visibilityGroup] = [];
+            visibilityGroupNames.push(visibilityGroup);
           }
+          visibilityGroups[visibilityGroup].push(siteElement);
         }
       }
     }
@@ -1073,29 +1070,21 @@ var HB = {
 
   // Determine if an element should be displayed
   shouldShowElement: function(siteElement) {
-    var lv = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
-    var lu = new Date(siteElement.updated_at);
+    var lastVisited = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
+    var lastUpdated = new Date(siteElement.updated_at);
 
     // Skip the site element if they have already seen/dismissed it
     // and it hasn't been changed since then and the user has not specified
     // that we show it regardless
-    if ( (HB.didConvert(siteElement) || HB.didDismissThisHB(siteElement)) && lu < lv && !siteElement.show_after_convert) {
-      // for modals and takeovers, keep it off
-      if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
-        return false;
-      } else {
-        var yesterday = new Date(new Date() - 86400000); //24*60*60*1000
-        if (lv > yesterday) {
-          // For sliders and bars, show it again after 24 hours
+    if ( (HB.didConvert(siteElement) || HB.didDismissThisHB(siteElement) || HB.didDismissHB()) && lastUpdated < lastVisited ) {
+      var yesterday = new Date(new Date() - 86400000);
+
+      if(siteElement.show_after_convert) {
+        // Show it again after 24 hours
+        if(lastVisited > yesterday){
           return false;
         }
-      }
-    }
-
-    // Skip the site element if it's a modal / takeover and the
-    // user already dismissed one of those types
-    if(siteElement.type == "Modal" || siteElement.type == "Takeover") {
-      if (HB.didDismissHB()) {
+      } else {
         return false;
       }
     }
