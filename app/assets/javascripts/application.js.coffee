@@ -35,6 +35,7 @@
 #= require tracking_events
 #= require user_edit
 #= require referrals
+#= require header
 #= require_self
 
 $ ->
@@ -49,3 +50,4 @@ $ ->
     $timezone = $('#site_timezone, #user_timezone')
     userTimezone = jstz.determine().name()
     $timezone.val(userTimezone)
+
