@@ -25,7 +25,7 @@ tr.site-element-block class="type-#{site_element.short_subtype}" id="site_elemen
     - else
       = icon
 
-    .dropdown-wrapper.adjusted
+    .dropdown-wrapper.adjusted.hoverable
       i.icon-settings
       .dropdown-block
         = link_to edit_site_site_element_path(site_element, :site_id => @site) do

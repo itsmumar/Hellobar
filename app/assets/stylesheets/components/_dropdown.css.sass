@@ -2,7 +2,8 @@
 
 .dropdown-wrapper
   position: relative
-  cursor: context-menu
+  cursor: hand
+  cursor: pointer
   @include inline-block()
 
   > a,
@@ -56,8 +57,6 @@
       border-bottom-color: $white
 
   /*-----------  Animations  -----------*/
-
-  &:hover,
   &.activated
 
     &:before
@@ -68,6 +67,17 @@
       z-index: 7000
       margin-top: 1rem
       pointer-events: auto
+
+  &.hoverable
+    &:hover
+      &:before
+        content: ''
+
+      .dropdown-block
+        opacity: 1
+        z-index: 7000
+        margin-top: 1rem
+        pointer-events: auto
 
   /*-----------  Dropdown Elements  -----------*/
 
