@@ -22,4 +22,17 @@ feature "Header Navigation", js: true do
     find('.installation-page').click
     expect(page).to_not have_content('Site Settings')
   end
+
+  scenario "does not reveal on :hover due to .no-hover" do
+    login
+    find('.header-nav-wrapper').hover
+    expect(page).to_not have_content('Site Settings')
+  end
+
+  scenario "reveals on :hover if .no-hover is missing" do
+    login
+    page.execute_script("$('.header-nav-wrapper .dropdown-wrapper').removeClass('no-hover')")
+    find('.header-nav-wrapper').hover
+    expect(page).to have_content('Site Settings')
+  end
 end
