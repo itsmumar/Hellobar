@@ -35,4 +35,11 @@ feature "Header Navigation", js: true do
     find('.header-nav-wrapper').hover
     expect(page).to have_content('Site Settings')
   end
+
+  scenario "can expose site nav via click if .no-hover is missing" do
+    login
+    page.execute_script("$('.header-nav-wrapper .dropdown-wrapper').removeClass('no-hover')")
+    find('.header-nav-wrapper').click
+    expect(page).to have_content('Site Settings')
+  end
 end
