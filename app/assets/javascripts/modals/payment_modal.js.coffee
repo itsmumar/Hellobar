@@ -12,6 +12,8 @@ class @PaymentModal extends Modal
     @$modal.on 'load', -> $(this).addClass('loading')
     @$modal.on 'complete', -> $(this).removeClass('loading').finish()
 
+    console.log("CONSTRUCTOR")
+
     @fetchUserPaymentMethods(window.siteID)
 
     @_bindInteractions()
@@ -44,6 +46,8 @@ class @PaymentModal extends Modal
     super
 
   fetchUserPaymentMethods: (siteID) ->
+    console.log("FETCH")
+    console.log(siteID)
     @$modal.trigger('load') # indicate we need to do more work
 
     paymentUrl = "/payment_methods/"
@@ -70,6 +74,8 @@ class @PaymentModal extends Modal
       # replace the payment details fragment
       # with linked payment methods & current payment info
       $paymentDetails = $('#payment-details')
+      console.log("DO I HIDE?")
+      console.log(window.siteID)
       $paymentDetails.find('.site-select-form').hide() if window.siteID
       $paymentDetails.html(html)
       @_bindLinkedPayment() # make sure we still toggle on linking payment
