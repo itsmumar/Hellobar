@@ -12,8 +12,6 @@ class @PaymentModal extends Modal
     @$modal.on 'load', -> $(this).addClass('loading')
     @$modal.on 'complete', -> $(this).removeClass('loading').finish()
 
-    console.log("CONSTRUCTOR")
-
     @fetchUserPaymentMethods(window.siteID)
 
     @_bindInteractions()
