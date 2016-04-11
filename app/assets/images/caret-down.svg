@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="11px" height="6px" viewBox="0 0 11 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: sketchtool 3.5.2 (25235) - http://www.bohemiancoding.com/sketch -->
+    <title>dropdown-selector-icon</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="Welcome" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Hello-Bar---Dashboard---Top-Nav-and-Sidebar-Only" sketch:type="MSArtboardGroup" transform="translate(-504.000000, -27.000000)" fill="#FFFFFF">
+            <g id="Top-Bar-Menu" sketch:type="MSLayerGroup" transform="translate(0.000000, -1.000000)">
+                <g id="dropdown-selector-icon" transform="translate(504.000000, 28.000000)" sketch:type="MSShapeGroup">
+                    <g id="Layer_1">
+                        <path d="M10.5694132,0 L0,0 L5.27670912,6 L10.5694132,0 Z" id="Shape"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

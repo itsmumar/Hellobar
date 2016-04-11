@@ -39,6 +39,14 @@ describe("HB", function() {
         expect(HB.applyOperand("abc", "equals", "*abc")).toEqual(true);
         expect(HB.applyOperand("abcsdf", "equals", "*abc")).toEqual(false);
       });
+
+      it("works with strings that have special regex characters", function () {
+        expect(HB.applyOperand("a+?-^%#1", "equals", "a+?-^%#1")).toEqual(true);
+      });
+
+      it("works with wildcards while ignoring other special regex characters", function () {
+        expect(HB.applyOperand("a+?.-^%#1", "equals", "a*1")).toEqual(true);
+      });
     });
 
     context("operand is includes", function () {
@@ -76,6 +84,14 @@ describe("HB", function() {
         expect(HB.applyOperand("abc", "includes", "*")).toEqual(true);
         expect(HB.applyOperand("abc123", "includes", "b*12")).toEqual(true);
         expect(HB.applyOperand("123", "includes", "*abc")).toEqual(false);
+      });
+
+      it("works with strings that have special regex characters", function () {
+        expect(HB.applyOperand("a+?-^%#1", "includes", "a+?-^%#1")).toEqual(true);
+      });
+
+      it("works with wildcards while ignoring other special regex characters", function () {
+        expect(HB.applyOperand("a+?-.^%#1", "includes", "a*1")).toEqual(true);
       });
     });
   });

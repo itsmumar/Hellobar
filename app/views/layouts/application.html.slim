@@ -2,12 +2,17 @@ doctype html
 html
   head
     title Hello Bar
-    link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css"
 
     link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
 
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
+ 
+    = render "shared/hellobar_script"
+
+    = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
+    javascript:
+      try{Typekit.load({ async: true });}catch(e){}
 
     = csrf_meta_tags
 
