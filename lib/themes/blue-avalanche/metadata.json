@@ -1,0 +1,41 @@
+{
+  "name": "Blue Avalanche",
+  "id": "blue-avalanche",
+  "fonts": [
+    "lato",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "defaults": {
+    "Bar": {
+      "background_color": "FFFFFF",
+      "text_color": "585858",
+      "button_color": "31b5ff",
+      "link_color": "FFFFFF",
+      "font_id": "lato"
+    },
+    "Slider": {
+      "background_color": "FFFFFF",
+      "text_color": "585858",
+      "button_color": "31b5ff",
+      "link_color": "FFFFFF",
+      "font_id": "lato"
+    },
+    "Modal": {
+      "background_color": "FFFFFF",
+      "text_color": "585858",
+      "button_color": "31b5ff",
+      "link_color": "FFFFFF",
+      "font_id": "lato"
+    },
+    "Takeover": {
+      "background_color": "FFFFFF",
+      "text_color": "585858",
+      "button_color": "31b5ff",
+      "link_color": "FFFFFF",
+      "font_id": "lato"
+    }
+  }
+}
