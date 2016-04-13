@@ -45,14 +45,14 @@ $ ->
     $('tr.spacer').remove()
 
   renderGuidance = (active) ->
-    $("#active-guidance").hide();
-    $("#paused-guidance").hide();
+    $("#active-guidance").hide()
+    $("#paused-guidance").hide()
     return if active == null
 
     if active && $(".site-element-block").filter((index) -> $(@).data('active')).length == 0
-      $("#paused-guidance").show();
+      $("#paused-guidance").show()
     else if active == false && $(".site-element-block").filter((index) -> $(@).data('active') == false).length == 0
-      $("#active-guidance").show();
+      $("#active-guidance").show()
 
   hideRule = (rule) ->
     $("tr[data-rule-id='#{rule.id}']").hide()
