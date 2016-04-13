@@ -130,6 +130,13 @@ class @RuleModal extends Modal
     if conditionData.segment == 'CustomCondition'
       classToEnable = @_dataTypeToClass[conditionData.data_type]
 
+    # select the country because country_select is rendered on the server
+    # we must select this manually with JS
+    if conditionData.segment == 'LocationCountryCondition'
+      $condition.find(classToEnable)
+                .find(".value > option[value=#{conditionData.value}]")
+                .attr('selected', 'selected')
+
     $condition.find(classToEnable)
               .show()
               .find('.value')
