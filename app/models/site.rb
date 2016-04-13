@@ -14,6 +14,7 @@ class Site < ActiveRecord::Base
   has_many :identities, dependent: :destroy
   has_many :contact_lists, dependent: :destroy
   has_many :subscriptions, -> {order 'id'}
+  accepts_nested_attributes_for :subscriptions
   has_many :bills, -> {order 'id'}, through: :subscriptions
   has_many :improve_suggestions
   has_many :image_uploads, dependent: :destroy

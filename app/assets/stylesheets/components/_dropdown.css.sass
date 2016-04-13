@@ -2,7 +2,8 @@
 
 .dropdown-wrapper
   position: relative
-  cursor: context-menu
+  cursor: hand
+  cursor: pointer
   @include inline-block()
 
   > a,
@@ -56,8 +57,7 @@
       border-bottom-color: $white
 
   /*-----------  Animations  -----------*/
-
-  &:hover,
+  &:hover:not(.no-hover),
   &.activated
 
     &:before

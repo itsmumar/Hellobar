@@ -22,6 +22,22 @@ module Admin::UsersHelper
     "#{us_short_datetime(bill.start_date)}-#{us_short_datetime(bill.end_date)}"
   end
 
+  def site_info_or_form(site)
+    if site.invoice_information.present?
+      site.invoice_information.gsub("\r\n", "<br>").html_safe
+    else
+      render "sites/form", site: site
+    end
+  end
+
+  def add_or_clear_site_info(site)
+    if site.invoice_information.present?
+      render "sites/form_remove_invoice_info", site: site
+    else
+      link_to('add', '#', class: 'add-invoice-info')
+    end
+  end
+
   private
 
   def us_short_datetime(datetime)
