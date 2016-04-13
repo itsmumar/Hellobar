@@ -67,10 +67,12 @@ class @PaymentModal extends Modal
         html.find('#linked-payment-methods')
             .html(@_buildLinkedPaymentMethods(response.payment_methods))
 
+
       # replace the payment details fragment
       # with linked payment methods & current payment info
       $paymentDetails = $('#payment-details')
       $paymentDetails.html(html)
+      $paymentDetails.find('.site-select-form').hide() if window.siteID
       @_bindLinkedPayment() # make sure we still toggle on linking payment
       @_bindFormSubmission() # make sure we can still submit with the new form!
 
@@ -117,7 +119,7 @@ class @PaymentModal extends Modal
         dataType: 'json'
         url: @_url()
         method: @_method()
-        data: $form.serialize() + "&site_id=#{window.siteID}"
+        data: $form.serialize()
         success: (data, status, xhr) =>
           options =
             successCallback: @options.successCallback
