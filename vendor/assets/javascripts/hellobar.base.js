@@ -1441,7 +1441,7 @@ var HB = {
     HB.setVisitorData("pu", HB.n(document.location+"", false));
 
     // Set the page path
-    HB.setVisitorData("pup", HB.n(document.location+"", true));
+    HB.setVisitorData("pup", HB.n(document.location.pathname, true));
 
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
