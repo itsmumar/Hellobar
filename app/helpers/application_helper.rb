@@ -22,4 +22,8 @@ module ApplicationHelper
     cost = cost / 12 if schedule == :yearly
     number_to_currency(cost, precision: 0)
   end
+
+  def new_user?
+    current_user && current_user.sites.count == 1 && current_user.site_elements.count == 0
+  end
 end
