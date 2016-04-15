@@ -97,6 +97,13 @@ describe("HB", function() {
         server.respond();
         expect(HB.showSiteElements).toHaveBeenCalled();
       });
+
+      it("only makes one request when getting multiple calls", function() {
+        HB.getGeolocationData();
+        HB.getGeolocationData();
+        server.respond();
+        expect(HB.showSiteElements.calls.count()).toEqual(1);
+      });
     });
 
     context("data exists in cookies", function() {
