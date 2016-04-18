@@ -2,10 +2,15 @@ require 'integration_helper'
 
 feature "User can sign up", js: true do
   after { devise_reset }
+  before do
+    allow_any_instance_of(SiteElementSerializer).
+      to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(ApplicationController).
+      to receive(:get_ab_variation).and_return('original')
+  end
 
   scenario "through oauth" do
     OmniAuth.config.add_mock(:google_oauth2, {uid: '12345', info: {email: 'bob@lawblog.com'}})
-    allow_any_instance_of(SiteElementSerializer).to receive(:proxied_url2png).and_return('')
     visit root_path
 
     fill_in 'site[url]', with: 'mewgle.com'
