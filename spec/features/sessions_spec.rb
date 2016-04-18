@@ -6,7 +6,9 @@ feature "User can sign up", js: true do
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
     allow_any_instance_of(ApplicationController).
-      to receive(:get_ab_variation).and_return('original')
+      to receive(:get_ab_variation).
+      with(/Sign Up Button 2016-03-17|Forced Email Path 2016-03-28/).
+      and_return('original')
   end
 
   scenario "through oauth" do
