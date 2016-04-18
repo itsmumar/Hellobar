@@ -1463,8 +1463,14 @@ var HB = {
     {
       var key, value;
       var components = pairs[i].split("=");
-      key = decodeURIComponent(components[0]).toLowerCase();
-      value = decodeURIComponent(components[1]);
+
+      // handle ASCII encoding
+      utf8bytes = unescape(encodeURIComponent(components[0]));
+      key = decodeURIComponent(escape(utf8bytes)).toLowerCase();
+
+      utf8bytes = unescape(encodeURIComponent(components[1]));
+      value = decodeURIComponent(escape(utf8bytes));
+
       params[key] = value;
     }
     return params;
