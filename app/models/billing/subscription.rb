@@ -37,6 +37,17 @@ class Subscription < ActiveRecord::Base
     active_bills.any? { |b| b.amount == 0 && b.paid? }
   end
 
+  def context_for_trial
+    return nil unless self.trial?
+    if self.user.wordpress_user_id.present?
+      "via 1.0 trial"
+    elsif self.user.was_referred?
+      "via referral"
+    else
+      "via admin"
+    end
+  end
+
   def values
     self.class.values_for(site).merge(schedule: schedule)
   end
