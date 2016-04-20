@@ -103,7 +103,7 @@ class ContactList < ActiveRecord::Base
 
     self.identity = if !provider_set? || service_provider_class.nil?
       nil # Don't create an invalid provider
-    elsif embed_code?
+    elsif embed_code? || (provider == "webhooks")
       site.identities.find_or_create_by(provider: provider)
     else
       site.identities.find_by(provider: provider)

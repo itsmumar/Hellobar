@@ -12,6 +12,5 @@ module ServiceProviders
     def name_param
       first_name_param
     end
-    
   end
 end
