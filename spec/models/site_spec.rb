@@ -490,6 +490,10 @@ describe Site do
       expect(Site.normalize_url("cnnwww.com/").host).to eq("cnnwww.com")
     end
 
+    it "should not remove the www1 subdomain" do
+      expect(Site.normalize_url("www1.abc.com/").host).to eq("www1.abc.com")
+    end
+
     it "should normalize to http" do
       expect(Site.normalize_url("https://cnn.com").scheme).to eq("http")
     end

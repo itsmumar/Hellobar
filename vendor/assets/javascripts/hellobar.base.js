@@ -73,6 +73,7 @@ HBQ.prototype.push = function()
 // Keep everything within the HB namespace
 var HB = {
   CAP: {}, // Capabilies
+  geoRequestInProgress: false,
 
   getLocation: function() {
     return window.location;
@@ -1958,8 +1959,11 @@ var HB = {
     if (cachedLocation) return cachedLocation;
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', HB_GL_URL);
-    xhr.send(null);
+    if ( HB.geoRequestInProgress == false ) {
+      xhr.open('GET', HB_GL_URL);
+      xhr.send(null);
+      HB.geoRequestInProgress = true;
+    }
 
     xhr.onreadystatechange = function () {
       var DONE = 4; // readyState 4 means the request is done.
@@ -1968,6 +1972,7 @@ var HB = {
         if (xhr.status === OK) {
           response = JSON.parse(xhr.responseText);
           HB.setGeolocationData(response);
+          HB.geoRequestInProgress = false;
           HB.showSiteElements();
         }
       }
