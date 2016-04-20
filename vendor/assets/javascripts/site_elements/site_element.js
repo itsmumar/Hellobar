@@ -248,6 +248,7 @@ HB.SiteElement = HB.createClass({
       viewCondition = 'preview';
 
     var show = function() {
+      clearInterval(this.displayCheckInterval);
       HB.showElement(this.w);
 
       // Track the view
@@ -290,19 +291,19 @@ HB.SiteElement = HB.createClass({
     else if (viewCondition === 'scroll-some')
     {
       // scroll-some is defined here as "visitor scrolls 300 pixels"
-      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck(300, show)}, 500);
+      this.displayCheckInterval = setInterval(function(){HB.scrollTargetCheck(300, show)}, 500);
     }
     else if (viewCondition === 'scroll-middle')
     {
-      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck("middle", show)}, 500);
+      this.displayCheckInterval = setInterval(function(){HB.scrollTargetCheck("middle", show)}, 500);
     }
     else if (viewCondition === 'scroll-to-bottom')
     {
-      HB.scrollInterval = setInterval(function(){HB.scrollTargetCheck("bottom", show)}, 500);
+      this.displayCheckInterval = setInterval(function(){HB.scrollTargetCheck("bottom", show)}, 500);
     }
     else if (viewCondition === 'exit-intent')
     {
-      HB.intentInterval = setInterval(function(){HB.intentCheck("exit", show)}, 100);
+      this.displayCheckInterval = setInterval(function(){HB.intentCheck("exit", show)}, 100);
     }
     else if (viewCondition == 'stay-hidden')
     {

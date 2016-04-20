@@ -1748,7 +1748,6 @@ var HB = {
     // window.pageYOffset is same as window.scrollY, but with better compatibility.
     if (window.pageYOffset >= scrollTarget || document.body.scrollHeight <= scrollTarget + window.innerHeight) {
       payload();
-      clearInterval(HB.scrollInterval);
     }
   },
 
@@ -1782,7 +1781,6 @@ var HB = {
 
     if (vistorIntendsTo) {
       payload();
-      clearInterval(HB.intentInterval);
     };
   },
 
