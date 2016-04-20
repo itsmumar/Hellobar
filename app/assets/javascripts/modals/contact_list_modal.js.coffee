@@ -103,18 +103,19 @@ class @ContactListModal extends Modal
     object.find("a.ready").click (e) =>
       @_clearErrors()
 
-      # stash the model so that it can be reloaded by the ember app
-      localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
-      localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
+      if @_requiredFieldsAreValid()
+        # stash the model so that it can be reloaded by the ember app
+        localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
+        localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
 
-      newPath = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
-      queryParams = {}
-      queryParams["api_key"] = @_getFormData().data.api_key
-      queryParams["username"] = @_getFormData().data.username
-      queryParams["app_url"] = @_getFormData().data.app_url
-      newPath += "&" + $.param(queryParams)
+        newPath = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
+        queryParams = {}
+        queryParams["api_key"] = @_getFormData().data.api_key
+        queryParams["username"] = @_getFormData().data.username
+        queryParams["app_url"] = @_getFormData().data.app_url
+        newPath += "&" + $.param(queryParams)
 
-      @options.window.location = newPath
+        @options.window.location = newPath
 
   _bindSubmit: (object) ->
     object.find("a.submit").click (e) =>
@@ -284,3 +285,22 @@ class @ContactListModal extends Modal
 
     @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
     @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete
+
+  _validateRequiredField: (element) ->
+    if element.length
+      element.removeClass('invalid-field')
+      if element.val().length == 0
+        element.addClass('invalid-field')
+        return false
+    return true
+
+  _requiredFieldsAreValid: ->
+    validityAry = []
+    validityAry.push @_validateRequiredField($('#contact_list_api_key'))
+    validityAry.push @_validateRequiredField($('#contact_list_app_url'))
+    validityAry.push @_validateRequiredField($('#contact_list_embed_code'))
+
+    if $.inArray(false, validityAry) != -1
+      return false # if any validations are false
+    else
+      return true
