@@ -27,6 +27,7 @@ class ContactList < ActiveRecord::Base
   validate :provider_credentials_exist, :if => :provider_set?
   validate :embed_code_exists?, :if => :embed_code?
   validate :embed_code_valid?, :if => :embed_code?
+  validate :webhook_url_valid?, :if => :is_webhook?
 
   after_save :sync, :if => :data_changed?
   after_save :notify_identity, :if => :identity_id_changed?
@@ -176,6 +177,18 @@ class ContactList < ActiveRecord::Base
       identity.service_provider_class
     elsif provider_set?
       ServiceProvider[provider.to_sym]
+    end
+  end
+
+  def is_webhook?
+    data["webhook_url"].present?
+  end
+
+  def webhook_url_valid?
+    uri = Addressable::URI.parse(data["webhook_url"])
+
+    if !%w{http https}.include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
+      errors.add(:base, "webhook URL is invalid")
     end
   end
 end

@@ -26,6 +26,16 @@ describe ContactList do
     ])
   end
 
+  describe "as a valid object" do
+    it "validates a webhook has a valid URL" do
+      list = build(:contact_list, data: { "webhook_url" => "url" })
+
+      list.valid?
+
+      expect(list.errors[:base]).to include("webhook URL is invalid")
+    end
+  end
+
   describe "associated identity" do
     it "should use #provider on creation to find the correct identity" do
       list = ContactList.create!(
