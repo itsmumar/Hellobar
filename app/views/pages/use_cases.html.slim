@@ -1,6 +1,33 @@
-h1 Hello Bar helps you improve the <br>effectiveness of your website.
-p Create Hello Bars that show the right message at the right time to your website visitors.
+- if get_ab_variation("Use Cases Variation 2016-04-22") == "original"
+  h1 Hello Bar helps you improve the <br>effectiveness of your website.
+  p Create Hello Bars that show the right message at the right time to your website visitors.
 
-= render "use_case_blocks"
+  = render "use_case_blocks"
+
+- else
+
+  h1 Hello Bar helps you improve the <br>effectiveness of your website.
+  p Create Hello Bars that show the right message at the right time to your website visitors.
+
+  .marketing-wrapper
+    .marketing-block
+      = image_tag 'use_cases/bar-example.png', class: 'no-padding'
+      h5 Site Bar
+      p Get a subtle message in front of your visitors without annoying them. Add an email signup box, an announcement, or direct traffic to the most important page on your site.
+
+    .marketing-block
+      = image_tag 'use_cases/modal-example.png', class: 'no-padding'
+      h5 Pop-up
+      p Want a stronger call-to-action? Hello Bar has pop-ups too. Add a time delay to your pop-up so your visitors are engaged first. Or trigger a pop-up when your visitors are about to leave.
+
+    .marketing-block
+      = image_tag 'use_cases/takeover-example.png', class: 'no-padding'
+      h5 Page Takeover
+      p When you absolutely need to get your message in front of your visitors, the Page Takeover guarantees it won’t be missed.
+
+    .marketing-block
+      = image_tag 'use_cases/slider-example.png', class: 'no-padding'
+      h5 Slider
+      p The Slider puts your message in front of your visitors when they’ve reached the bottom of the page and need the next step. It’s the perfect time to deliver your message.
 
 = render 'welcome/quickstart', noautofocus: true
