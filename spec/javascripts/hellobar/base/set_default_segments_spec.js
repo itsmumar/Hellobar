@@ -48,7 +48,7 @@ describe("HB", function() {
       it("sets the path properly", function() {
         HB.setDefaultSegments();
 
-        expect(HB.getVisitorData("pup")).toEqual('/teaspoon/default/?reporter=console');
+        expect(HB.getVisitorData("pup")).toEqual('/teaspoon/default');
       });
     });
   });

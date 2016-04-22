@@ -1425,7 +1425,7 @@ var HB = {
     HB.setVisitorData("pu", HB.n(document.location+"", false));
 
     // Set the page path
-    HB.setVisitorData("pup", HB.n(document.location+"", true));
+    HB.setVisitorData("pup", HB.n(document.location.pathname, true));
 
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
@@ -1738,7 +1738,6 @@ var HB = {
     // window.pageYOffset is same as window.scrollY, but with better compatibility.
     if (window.pageYOffset >= scrollTarget || document.body.scrollHeight <= scrollTarget + window.innerHeight) {
       payload();
-      clearInterval(HB.scrollInterval);
     }
   },
 
@@ -1772,7 +1771,6 @@ var HB = {
 
     if (vistorIntendsTo) {
       payload();
-      clearInterval(HB.intentInterval);
     };
   },
 
@@ -1873,21 +1871,22 @@ var HB = {
       }
 
       if(choice === 1) {
-        originalSiteElement.headline = siteElement.answer1response;
-        originalSiteElement.caption = siteElement.answer1caption;
+        originalSiteElement.headline  = siteElement.answer1response;
+        originalSiteElement.caption   = siteElement.answer1caption;
         originalSiteElement.link_text = siteElement.answer1link_text;
       } else {
-        originalSiteElement.headline = siteElement.answer2response;
-        originalSiteElement.caption = siteElement.answer2caption;
+        originalSiteElement.headline  = siteElement.answer2response;
+        originalSiteElement.caption   = siteElement.answer2caption;
         originalSiteElement.link_text = siteElement.answer2link_text;
       }
 
       // Dont use the question, otherwise we end up in a loop.
       // Also, don't animate in since the element will already be on the screen
       // Also, don't record the view since it's already been recorded
-      originalSiteElement.use_question = false;
-      originalSiteElement.animated = false;
-      originalSiteElement.dontRecordView = true;
+      originalSiteElement.use_question    = false;
+      originalSiteElement.animated        = false;
+      originalSiteElement.dontRecordView  = true;
+      originalSiteElement.view_condition  = 'immediately';
 
       // Remove the siteElement and show the original in non preview environments
       if(!HB.CAP.preview) {
