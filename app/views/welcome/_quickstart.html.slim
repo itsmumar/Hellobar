@@ -1,5 +1,4 @@
-- unless local_assigns[:no_headline] && no_headline == true
-  h1.headline= "Convert more visitors into customers with Hello Bar"
+h1.headline= "Convert more visitors into customers with Hello Bar"
 h1.subheadline= "Enter your URL below to get started"
 
 .quickstart-wrapper
@@ -12,15 +11,7 @@ h1.subheadline= "Enter your URL below to get started"
     - else
       input type="hidden" name="oauth" value="google_oauth2"
       button#sign-up-button type="submit"
-        - variation = get_ab_variation("Sign Up Button 2016-03-17")
-        - if variation == "original"
-          | Log in with Google
-        - elsif variation == "sign_up_google"
-          | Sign up with Google
-        - elsif variation == "sign_up"
-          | Sign up
-        - elsif variation == "get_started"
-          | Get started
+        | Log in with Google
 
     .clear
   - if flash[:error]

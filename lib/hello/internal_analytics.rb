@@ -65,6 +65,7 @@ module Hello
     register_test("WordPress Plugin 2016-03-17", %w{original common}, 14)
     register_test("Use Cases Variation 2016-03-22", %w{original simple}, 15)
     register_test("Forced Email Path 2016-03-28", %w{original force}, 16)
+    register_test("Show Add Site on Edit Site 2016-04-04", %w{original variant}, 17)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
