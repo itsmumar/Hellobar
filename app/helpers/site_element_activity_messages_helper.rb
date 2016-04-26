@@ -1,5 +1,4 @@
 module SiteElementActivityMessagesHelper
-
   def initial_message_text(element)
     message = "<strong>"
     message += link_to "The #{element.short_subtype} bar you added #{time_ago_in_words(element.created_at)} ago", site_site_elements_path(element.site, anchor: "site_element_#{element.id}")
