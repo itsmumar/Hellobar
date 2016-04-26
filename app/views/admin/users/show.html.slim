@@ -76,9 +76,9 @@ div#user_profile
                 td= bill.id
                 td
                   = bill.amount
-                  - if bill.subscription.context_for_trial
+                  - if bill.context_for_trial
                     span.refund_status
-                      |  #{bill.subscription.context_for_trial}
+                      |  #{bill.context_for_trial}
                   - if refunds.length > 0
                     - refunds.each do |refund|
                       br
