@@ -86,21 +86,21 @@ describe Subscription do
     end
   end
 
-  describe "#trial?" do
+  describe "#is_currently_on_trial?" do
     it "should be true if subscription amount is not 0 and has a paid bill but no payment method" do
       bill = bills(:paid_bill)
       bill.update_attribute(:amount, 0)
       bill.subscription.payment_method = nil
-      bill.subscription.trial?.should be_true
+      bill.subscription.is_currently_on_trial?.should be_true
     end
 
     it "should be false if subscription amount is not 0 and paid bill is not 0" do
       bill = bills(:paid_bill)
-      bill.subscription.trial?.should be_false
+      bill.subscription.is_currently_on_trial?.should be_false
     end
 
     it "should be false when there are no paid bills" do
-      subscriptions(:zombo_subscription).trial?.should be_false
+      subscriptions(:zombo_subscription).is_currently_on_trial?.should be_false
     end
   end
 

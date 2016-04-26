@@ -38,7 +38,7 @@ class SubscriptionSerializer < ActiveModel::Serializer
   end
 
   def is_trial
-    object.trial?
+    object.is_currently_on_trial?
   end
 
   def payment_valid

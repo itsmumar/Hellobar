@@ -34,7 +34,7 @@
           a.button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
             | Want More Power?
 
-        - elsif current_site.current_subscription.try(:trial?)
+        - elsif current_site.current_subscription.try(:is_currently_on_trial?)
           a.button.show-payment-modal data={ source: "Add payment to trial" }
             div Enjoying Hello Bar Pro?
 

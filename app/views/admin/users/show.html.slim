@@ -11,7 +11,7 @@ div#user_profile
       div.site-title
         h3
           | #{site.url} - #{site.deleted? ? "Deleted" : site.current_subscription.values[:name]}
-          - if site.current_subscription.trial?
+          - if site.current_subscription.is_currently_on_trial?
             |  Trial
         - unless site.deleted?
           = link_to "Contact Lists", admin_user_site_contact_lists_path(@user, site), target: "_blank"

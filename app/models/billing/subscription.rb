@@ -32,16 +32,16 @@ class Subscription < ActiveRecord::Base
     end
   end
 
-  def trial?
+  def is_currently_on_trial?
     amount != 0 && payment_method.nil? && \
     active_bills.any? { |b| b.amount == 0 && b.paid? }
   end
 
   def context_for_trial
-    return nil unless self.trial?
-    if self.user.wordpress_user_id.present?
+    return nil unless self.is_currently_on_trial?
+    if self.user.try(:wordpress_user_id).present?
       "via 1.0 trial"
-    elsif self.user.was_referred?
+    elsif self.user.try(:was_referred?)
       "via referral"
     else
       "via admin"
