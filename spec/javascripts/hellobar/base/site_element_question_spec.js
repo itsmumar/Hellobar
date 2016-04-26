@@ -120,6 +120,17 @@ describe("HB", function() {
       }));
     });
 
+    it("calls addToPage with the view condition set to immediate", function () {
+      siteElement.view_condition = 'wait-60';
+      var result = HB.questionifySiteElement(siteElement);
+      spyOn(HB, 'addToPage');
+      result.displayResponse(2);
+
+      expect(HB.addToPage).toHaveBeenCalledWith(jasmine.objectContaining({
+        view_condition: 'immediately'
+      }));
+    });
+
     it("calls remove() on the result when triggering displayResponse", function () {
       var result = HB.questionifySiteElement(siteElement);
       spyOn(result, 'remove');

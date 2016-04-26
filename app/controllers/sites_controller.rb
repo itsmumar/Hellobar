@@ -69,7 +69,7 @@ class SitesController < ApplicationController
       redirect_to site_path(@site)
     else
       load_bills
-      flash.now[:error] = "There was a problem updating your settings."
+      flash.now[:error] = @site.errors.full_messages
       render :action => :edit
     end
   end

@@ -1037,19 +1037,16 @@ var HB = {
           if(!HB.shouldShowElement(siteElement))
             continue;
 
-          if ( siteElement.subtype == "traffic" || !HB.didConvert(siteElement) )
+          visibilityGroup = siteElement.type;
+          // For showing multiple elements at the same time a modal and a takeover are the same thing
+          if ( siteElement.type == "Modal" || siteElement.type == "Takeover" )
+            visibilityGroup = "Modal/Takeover";
+          if ( !visibilityGroups[visibilityGroup] )
           {
-            visibilityGroup = siteElement.type;
-            // For showing multiple elements at the same time a modal and a takeover are the same thing
-            if ( siteElement.type == "Modal" || siteElement.type == "Takeover" )
-              visibilityGroup = "Modal/Takeover";
-            if ( !visibilityGroups[visibilityGroup] )
-            {
-              visibilityGroups[visibilityGroup] = [];
-              visibilityGroupNames.push(visibilityGroup);
-            }
-            visibilityGroups[visibilityGroup].push(siteElement);
+            visibilityGroups[visibilityGroup] = [];
+            visibilityGroupNames.push(visibilityGroup);
           }
+          visibilityGroups[visibilityGroup].push(siteElement);
         }
       }
     }
@@ -1074,34 +1071,21 @@ var HB = {
 
   // Determine if an element should be displayed
   shouldShowElement: function(siteElement) {
-    var lv = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
-    var lu = new Date(siteElement.updated_at);
+    var lastVisited = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
+    var lastUpdated = new Date(siteElement.updated_at);
 
     // Skip the site element if they have already seen/dismissed it
     // and it hasn't been changed since then and the user has not specified
     // that we show it regardless
-    if ( (HB.didConvert(siteElement) || HB.didDismissThisHB(siteElement)) && lu < lv && !siteElement.show_after_convert) {
-      // for modals and takeovers, keep it off
-      if((siteElement.type == "Modal" || siteElement.type == "Takeover")) {
-        return false;
-      } else {
-        var yesterday = new Date(new Date() - 86400000); //24*60*60*1000
-        if (lv > yesterday) {
-          // For bars, keep it hidden...
-          if(siteElement.type == "Bar") {
-            siteElement.view_condition = "stay-hidden";
-          } else {
-            // For sliders, show it again after 24 hours
-            return false;
-          }
-        }
-      }
-    }
+    if ( (HB.didConvert(siteElement) || HB.didDismissThisHB(siteElement) || HB.didDismissHB()) && lastUpdated < lastVisited ) {
+      var yesterday = new Date(new Date() - 86400000);
 
-    // Skip the site element if it's a modal / takeover and the
-    // user already dismissed one of those types
-    if(siteElement.type == "Modal" || siteElement.type == "Takeover") {
-      if (HB.didDismissHB()) {
+      if(siteElement.show_after_convert) {
+        // Show it again after 24 hours
+        if(lastVisited > yesterday){
+          return false;
+        }
+      } else {
         return false;
       }
     }
@@ -1441,7 +1425,7 @@ var HB = {
     HB.setVisitorData("pu", HB.n(document.location+"", false));
 
     // Set the page path
-    HB.setVisitorData("pup", HB.n(document.location+"", true));
+    HB.setVisitorData("pup", HB.n(document.location.pathname, true));
 
     // Set the date
     HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
@@ -1463,8 +1447,14 @@ var HB = {
     {
       var key, value;
       var components = pairs[i].split("=");
-      key = decodeURIComponent(components[0]).toLowerCase();
-      value = decodeURIComponent(components[1]);
+
+      // handle ASCII encoding
+      utf8bytes = unescape(encodeURIComponent(components[0]));
+      key = decodeURIComponent(escape(utf8bytes)).toLowerCase();
+
+      utf8bytes = unescape(encodeURIComponent(components[1]));
+      value = decodeURIComponent(escape(utf8bytes));
+
       params[key] = value;
     }
     return params;
@@ -1748,7 +1738,6 @@ var HB = {
     // window.pageYOffset is same as window.scrollY, but with better compatibility.
     if (window.pageYOffset >= scrollTarget || document.body.scrollHeight <= scrollTarget + window.innerHeight) {
       payload();
-      clearInterval(HB.scrollInterval);
     }
   },
 
@@ -1782,7 +1771,6 @@ var HB = {
 
     if (vistorIntendsTo) {
       payload();
-      clearInterval(HB.intentInterval);
     };
   },
 
@@ -1883,21 +1871,22 @@ var HB = {
       }
 
       if(choice === 1) {
-        originalSiteElement.headline = siteElement.answer1response;
-        originalSiteElement.caption = siteElement.answer1caption;
+        originalSiteElement.headline  = siteElement.answer1response;
+        originalSiteElement.caption   = siteElement.answer1caption;
         originalSiteElement.link_text = siteElement.answer1link_text;
       } else {
-        originalSiteElement.headline = siteElement.answer2response;
-        originalSiteElement.caption = siteElement.answer2caption;
+        originalSiteElement.headline  = siteElement.answer2response;
+        originalSiteElement.caption   = siteElement.answer2caption;
         originalSiteElement.link_text = siteElement.answer2link_text;
       }
 
       // Dont use the question, otherwise we end up in a loop.
       // Also, don't animate in since the element will already be on the screen
       // Also, don't record the view since it's already been recorded
-      originalSiteElement.use_question = false;
-      originalSiteElement.animated = false;
-      originalSiteElement.dontRecordView = true;
+      originalSiteElement.use_question    = false;
+      originalSiteElement.animated        = false;
+      originalSiteElement.dontRecordView  = true;
+      originalSiteElement.view_condition  = 'immediately';
 
       // Remove the siteElement and show the original in non preview environments
       if(!HB.CAP.preview) {
