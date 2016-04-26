@@ -92,6 +92,10 @@ class SiteElement < ActiveRecord::Base
     end
   end
 
+  def related_site_elements
+    self.site.site_elements.where.not(:id => self.id).select{ |e| e.short_subtype == self.short_subtype }
+  end
+
   def cloneable_attributes
     attributes.reject { |k,v| NOT_CLONEABLE_ATTRIBUTES.include?(k.to_sym) }
   end

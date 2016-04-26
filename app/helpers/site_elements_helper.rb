@@ -97,63 +97,7 @@ module SiteElementsHelper
     site.site_elements.collect(&:element_subtype)
   end
 
-  def recent_activity_message(element)
-    views, conversions = element.total_views, element.total_conversions
 
-    message = "<strong>"
-    message += link_to "The #{element.short_subtype} bar you added #{time_ago_in_words(element.created_at)} ago", site_site_elements_path(element.site) << "#site_element_#{element.id}"
-    message += "</strong>"
-
-    # how many conversions has this site element resulted in?
-    if element.is_announcement?
-      return "#{message} has already resulted in #{number_with_delimiter(element.total_views)} views.".html_safe
-    elsif element.has_converted?
-      conversion_description = site_element_activity_units([element], :plural => conversions > 1, :verb => true)
-      message << " has already resulted in #{number_with_delimiter(conversions)} #{conversion_description}."
-    else
-      return # no conversions, so just be quiet about it.
-    end
-
-    elements_in_group = element.site.site_elements.where.not(:id => element.id).select{ |e| e.short_subtype == element.short_subtype }
-
-    # how is this site element converting relative to others with the same subtype?
-    unless elements_in_group.empty?
-      group_views, group_conversions = elements_in_group.inject([0, 0]) do |sum, group_element|
-        [sum[0] + group_element.total_views, sum[1] + group_element.total_conversions]
-      end
-
-      conversion_rate = conversions * 1.0 / views
-      group_conversion_rate = group_conversions * 1.0 / group_views
-
-      # dont provide lift number when lift is infinite
-      unless [group_conversion_rate, conversion_rate].any?(&:infinite?)
-        message << " Currently this bar is converting"
-
-        if conversion_rate > group_conversion_rate
-          lift = (conversion_rate - group_conversion_rate) / group_conversion_rate
-          message << " #{number_to_percentage(lift * 100, :precision => 1)}" unless lift.infinite?
-          message << " better than"
-        elsif group_conversion_rate > conversion_rate
-          lift = (group_conversion_rate - conversion_rate) / conversion_rate
-          message << " #{number_to_percentage(lift * 100, :precision => 1)}" unless lift.infinite?
-          message << " worse than"
-        else
-          message << " exactly as well as"
-        end
-
-        message << " your other #{element.short_subtype} bars."
-      end # infinity check
-
-      # is the result significant or not?
-      if difference_is_significant?([element] + elements_in_group)
-        message << " This result is statistically significant."
-      else
-        message << " We don't have enough data yet to know if this is significant."
-      end
-    end
-
-    message.html_safe
-  end
 
   def ab_test_icon(site_element)
     elements_in_group = site_element.rule.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && se.type == site_element.type}
