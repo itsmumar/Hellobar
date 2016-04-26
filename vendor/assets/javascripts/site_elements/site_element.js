@@ -498,7 +498,7 @@ HB.SiteElement = HB.createClass({
   // SiteElement has converted (used in templates)
   converted: function()
   {
-    HB.converted(this);
+    HB.converted(siteElement);
   }
 
 });
