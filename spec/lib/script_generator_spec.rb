@@ -291,18 +291,9 @@ describe ScriptGenerator, '#rules' do
   end
 
   describe '#pro_secret' do
-    context 'preview mode' do
-      it 'returns hellobar' do
-        generator = ScriptGenerator.new('site', { preview: true })
-        expect(generator.pro_secret).to eq("hellobar")
-      end
-    end
-
-    context 'not preview mode' do
-      it 'returns a random string (not hellobar)' do
-        generator = ScriptGenerator.new(create(:site))
-        expect(generator.pro_secret).to_not eq("hellobar")
-      end
+    it 'returns a random string (not hellobar)' do
+      generator = ScriptGenerator.new(create(:site))
+      expect(generator.pro_secret).to_not eq("hellobar")
     end
   end
 end
