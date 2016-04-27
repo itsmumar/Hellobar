@@ -14,8 +14,8 @@ class Site < ActiveRecord::Base
   has_many :identities, dependent: :destroy
   has_many :contact_lists, dependent: :destroy
   has_many :subscriptions, -> {order 'id'}
+  accepts_nested_attributes_for :subscriptions
   has_many :bills, -> {order 'id'}, through: :subscriptions
-  has_many :improve_suggestions
   has_many :image_uploads, dependent: :destroy
 
   acts_as_paranoid
@@ -52,6 +52,8 @@ class Site < ActiveRecord::Base
   validates :url, url: true
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
+
+  validate :url_is_unique?
 
   scope :script_installed_db, -> do
     where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
@@ -167,10 +169,6 @@ class Site < ActiveRecord::Base
   end
 =end
 
-  def generate_improve_suggestions(options = {})
-    delay :generate_all_improve_suggestions, options
-  end
-
   def queue_digest_email(options = {})
     delay :send_digest_email, options
   end
@@ -209,6 +207,17 @@ class Site < ActiveRecord::Base
       Site.joins(:users).where(url: url, users: {id: user.id}).where.not(id: id).any?
     else
       Site.where(url: url).where.not(id: id).any?
+    end
+  end
+
+  def url_is_unique?
+    if users.
+      joins(:sites).
+      where(sites: {url: url}).
+      where.not(sites: {id: id}).
+      any?
+
+      errors.add(:url, "is already in use")
     end
   end
 
@@ -293,7 +302,7 @@ class Site < ActiveRecord::Base
   end
 
   def self.normalize_url(url)
-    url = url.sub(/^https?\:\/\//, '').sub(/^www./,'')
+    url = url.sub(/^https?\:\/\//, '').sub(/^www\./,'')
     Addressable::URI.heuristic_parse(url)
   end
 
@@ -457,10 +466,6 @@ class Site < ActiveRecord::Base
 
   def generate_blank_static_assets
     generate_static_assets(:script_content => "")
-  end
-
-  def generate_all_improve_suggestions
-    ImproveSuggestion.generate_all(self)
   end
 
   def standardize_url

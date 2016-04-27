@@ -60,7 +60,7 @@ gem "sass-rails",                "~> 4.0.3"
 gem "sentry-raven",              "~> 0.9"
 gem "simple_form",               "3.1.0.rc1"
 gem "slim-rails",                "~> 2.1.4"
-gem "thin",                      "~> 1.6.2"
+gem "thin",                      "~> 1.6.4"
 gem "twilio-ruby",               "~> 3.11.5"
 gem "uglifier",                  "2.0.1"
 gem "unf",                       "~> 0.1.4"
@@ -77,6 +77,8 @@ gem "infusionsoft"
 group :development do
   gem "better_errors", "~> 1.1"
   gem "binding_of_caller"
+  gem "hound-tools", "~> 0.0.4", require: false
+  gem "rubocop", "~> 0.34.2", require: false
   gem "sinatra"
 end
 

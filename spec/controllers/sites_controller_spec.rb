@@ -176,6 +176,34 @@ describe SitesController do
     end
   end
 
+  describe "put update" do
+    let(:membership) { create(:site_ownership) }
+    let(:user) { membership.user }
+    let(:site) { membership.site }
+
+    before { stub_current_user(user) }
+
+    it "allows updating the url" do
+      put :update, id: site.id, site: {url: "http://updatedurl.com"}
+
+      expect(site.reload.url).to eq("http://updatedurl.com")
+    end
+
+    it "does not allow updating to existing urls" do
+      new_membership = create(:site_membership, user: user)
+      put :update, id: new_membership.site.id, site: {url: site.url}
+
+      expect(flash[:error]).to include("URL is already in use")
+    end
+
+    it "renders the edit template if the change was rejected" do
+      allow_any_instance_of(Site).to receive(:update_attributes).and_return false
+      put :update, id: site.id, site: {url: "abc"}
+
+      expect(subject).to render_template(:edit)
+    end
+  end
+
   describe "GET show" do
     it "sets current_site session value" do
       Hello::DataAPI.stub(:lifetime_totals => nil)
@@ -236,32 +264,6 @@ describe SitesController do
     before do
       stub_current_user(user)
       Hello::DataAPI.stub(lifetime_totals: nil)
-      ImproveSuggestion.stub(get: {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]]})
-    end
-
-    it "returns all suggestions if site capabilities allow it" do
-      site.capabilities.max_suggestions.should >= 3
-
-      get :improve, :id => site
-
-      assigns(:suggestions)["all"].should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]]}
-    end
-
-    it "restricts the number of improvement suggestions based on the site's capabilities" do
-      capabilities = Subscription::Free::Capabilities.new(nil, site).tap { |c| c.stub(max_suggestions: 2) }
-      Site.any_instance.stub(capabilities: capabilities)
-
-      get :improve, :id => site
-
-      assigns(:suggestions)["all"].should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2]]}
-    end
-
-    it "does not load any empty suggestions" do
-      ImproveSuggestion.stub(get: {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]], "high traffic, high conversion" => []})
-
-      get :improve, :id => site
-
-      assigns(:suggestions)["all"].keys.should_not include("high traffic, high conversion")
     end
   end
 

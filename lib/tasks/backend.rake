@@ -25,8 +25,8 @@ namespace :backend do
     RECENT_THROTTLED_TIME_PERIOD = 5*60
     RECENT_THROTTLE_BUFFER = 1.15 # Increase by X% over current capacity
     MAX_INCREASE = 1_000
-    MIN_WRITE_CAPACITY_CURRENT_MONTH = 3_000
-    MIN_READ_CAPACITY_CURRENT_MONTH = 300
+    MIN_WRITE_CAPACITY_CURRENT_MONTH = 5
+    MIN_READ_CAPACITY_CURRENT_MONTH = 5
 
     tables = Hash.new{|h,k| h[k] = Hash.new{|h2,k2| h2[k2] = 0}}
     table_names = dynamo_db.list_tables["TableNames"]

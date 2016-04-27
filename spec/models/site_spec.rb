@@ -199,6 +199,23 @@ describe Site do
     end
   end
 
+  describe "url_uniqueness" do
+    let(:membership) { create(:site_membership) }
+
+    it "returns false if the url is not unique to the user" do
+      s2 = membership.user.sites.create(url: "different.com")
+      s2.url = membership.site.url
+
+      expect(s2.valid?).to be_false
+    end
+
+    it "returns true if the url is unqiue to the user" do
+      s2 = membership.user.sites.create(url: "uniqueurl.com")
+
+      expect(s2.valid?).to be_true
+    end
+  end
+
   describe "#generate_script" do
     it "delegates :generate_static_assets to delay" do
       expect(@site).to receive(:delay).with(:generate_static_assets, anything)
@@ -488,6 +505,10 @@ describe Site do
 
     it "should not remove www from other parts of the url" do
       expect(Site.normalize_url("cnnwww.com/").host).to eq("cnnwww.com")
+    end
+
+    it "should not remove the www1 subdomain" do
+      expect(Site.normalize_url("www1.abc.com/").host).to eq("www1.abc.com")
     end
 
     it "should normalize to http" do

@@ -6,8 +6,9 @@ class Admin::SitesController < ApplicationController
 
   def update
     begin
-      update_subscription(site, nil, subscription_params)
-      flash[:success] = "Changed subscription of #{site.url} to #{site.current_subscription.values[:name]}"
+      site.update_attributes(site_params) if params.has_key?(:site)
+      update_subscription(site, nil, subscription_params) if params.has_key?(:subscription)
+      flash[:success] = "Site and/or subscription has been updated."
     rescue => e
       flash[:error] = "There was an error trying to update the subscription: #{e.message}"
     end
@@ -34,11 +35,17 @@ class Admin::SitesController < ApplicationController
   end
 
   private
-  def subscription_params
-    params.require(:subscription).permit(:plan, :schedule, :trial_period)
-  end
 
-  def site
-    @site ||= Site.find(params[:id])
-  end
+    def subscription_params
+      params.require(:subscription).permit(:plan, :schedule, :trial_period)
+    end
+
+    def site_params
+      params.require(:site).permit(:id, :url, :opted_in_to_email_digest, :timezone, :invoice_information)
+    end
+
+
+    def site
+      @site ||= Site.find(params[:id])
+    end
 end

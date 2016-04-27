@@ -36,8 +36,8 @@ HB.BarElement = HB.createClass({
   minimize: function(se_id){
     console.log('in minimize');
     HB.animateOut(this.w, this.onHidden(se_id));
-    if(this.e.pusher != null)
-      this.e.pusher.style.display = 'none';
+    if(HB.p != null)
+      HB.p.style.display = 'none';
     HB.animateIn(this.pullDown);
   },
 

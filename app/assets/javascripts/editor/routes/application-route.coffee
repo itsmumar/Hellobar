@@ -56,6 +56,21 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
       new ContactListModal($.extend(baseOptions, options)).open()
 
+  #---------- Contact Interstitial Test -----#
+   renderTemplate: ->
+     @_super()
+     if HB_EMAIL_FLOW_TEST == 'force'
+       controller = this.controllerFor('interstitial')
+       controller.set('interstitialType', 'contacts')
+
+       @render("interstitials/contacts", {
+         into       : 'application'
+         outlet     : 'interstitial'
+         view       : 'interstitial'
+         controller : controller
+         model      : @currentModel
+       })
+
   #-----------  Controller Setup  -----------#
 
   setupController: (controller, model) ->

@@ -134,9 +134,11 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |     <a class="button ready">I'm ready</a>
   |   </div>
   | {{else}}
-  |   <div>
-  |     <a class="button ready">Connect my account</a>
-  |   </div>
+  |   {{#unless requiresEmbedCode}}
+  |     <div>
+  |      <a class="button ready">Connect my account</a>
+  |    </div>
+  |   {{/unless}}
   | {{/if}}
 
 /-----------  No Provider Template  -----------/
