@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :subscription do
     site
+    user
   end
 
   factory :free_subscription, parent: :subscription, class: "Subscription::Free" do

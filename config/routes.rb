@@ -27,6 +27,8 @@ Rails.application.routes.draw do
 
     get "team"
 
+    post :track_selected_goal, to: "tracking#track_selected_goal"
+
     resource :wordpress_plugin, :controller => :wordpress_plugin
 
     put "site_elements/:id/toggle_paused", to: "site_elements#toggle_paused", as: :site_element_toggle_paused
