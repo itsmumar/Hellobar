@@ -170,10 +170,6 @@ class Site < ActiveRecord::Base
   end
 =end
 
-  def generate_improve_suggestions(options = {})
-    delay :generate_all_improve_suggestions, options
-  end
-
   def queue_digest_email(options = {})
     delay :send_digest_email, options
   end
@@ -471,10 +467,6 @@ class Site < ActiveRecord::Base
 
   def generate_blank_static_assets
     generate_static_assets(:script_content => "")
-  end
-
-  def generate_all_improve_suggestions
-    ImproveSuggestion.generate_all(self)
   end
 
   def standardize_url
