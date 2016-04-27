@@ -59,15 +59,4 @@ describe("SiteElement", function() {
       });
     });
   });
-
-  describe("#converted", function() {
-    it("calls converted on HB with correct params", function() {
-      siteElement = new HB.SiteElement({});
-      spyOn(HB, "converted");
-
-      siteElement.converted();
-
-      expect(HB.converted).toHaveBeenCalledWith(siteElement);
-    });
-  });
 });
