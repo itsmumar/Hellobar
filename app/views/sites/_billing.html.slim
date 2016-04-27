@@ -4,7 +4,7 @@ section
     = @site.normalized_url
     '  is on the
     = @site.current_subscription.values[:name]
-    - if @site.current_subscription.is_currently_on_trial?
+    - if @site.current_subscription.currently_on_trial?
       |  Trial
     '  plan.
     - if Permissions.view_bills?(current_user, @site)
@@ -56,7 +56,7 @@ section
               td= link_to 'Receipt', bill_path(bill), target: '_blank'
 
   - if @next_bill
-    - if @site.current_subscription.is_currently_on_trial?
+    - if @site.current_subscription.currently_on_trial?
       ' This site is on a trial plan.
       a.show-payment-modal.underlined data-source="Please enter payment text"
         ' Please enter a payment method by #{bill_due_at(@next_bill)}
