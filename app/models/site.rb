@@ -16,7 +16,6 @@ class Site < ActiveRecord::Base
   has_many :subscriptions, -> {order 'id'}
   accepts_nested_attributes_for :subscriptions
   has_many :bills, -> {order 'id'}, through: :subscriptions
-  has_many :improve_suggestions
   has_many :image_uploads, dependent: :destroy
 
   acts_as_paranoid
@@ -169,10 +168,6 @@ class Site < ActiveRecord::Base
     delay :do_recheck_installation, options
   end
 =end
-
-  def generate_improve_suggestions(options = {})
-    delay :generate_all_improve_suggestions, options
-  end
 
   def queue_digest_email(options = {})
     delay :send_digest_email, options
@@ -471,10 +466,6 @@ class Site < ActiveRecord::Base
 
   def generate_blank_static_assets
     generate_static_assets(:script_content => "")
-  end
-
-  def generate_all_improve_suggestions
-    ImproveSuggestion.generate_all(self)
   end
 
   def standardize_url

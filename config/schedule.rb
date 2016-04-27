@@ -27,10 +27,6 @@ every 24.hours, :at => "12:00am", :roles => [:cron] do
   rake "site:scripts:regenerate_all_active"
 end
 
-every 24.hours, :at => "12:00am", :roles => [:cron] do
-  rake "site:improve_suggestions:generate_all_separately"
-end
-
 every 24.hours, :at => "1:00pm", :roles => [:cron] do
   rake "referrals:send_followups"
 end
