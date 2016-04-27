@@ -16,8 +16,6 @@ module EmailSynchronizer
     "Invalid Mailchimp API Key",
     "This account has been deactivated",
     "122: Revoked OAuth Token",
-    "bad URI",
-    "bad value for range",
     "404 Resource Not Found"
   ]
 
