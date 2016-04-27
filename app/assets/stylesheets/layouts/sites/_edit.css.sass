@@ -3,6 +3,9 @@
 #sites-edit,
 #sites-update
 
+  .hide
+    display: none
+
   form.edit_site
 
     .add-site-wrapper
@@ -71,10 +74,16 @@
         color: $gray
         padding-left: 10%
 
+        #site_invoice_information
+          width: 50%
+
         a:not(.button)
           color: $blue
           margin-left: 0.67em
           text-decoration: underline
+
+        a.no-left-margin
+          margin-left: 0px
 
         .button
           font-size: 0.85em

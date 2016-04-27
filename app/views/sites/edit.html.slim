@@ -29,11 +29,11 @@ nav.tabs-wrapper
     h5.page-header.alt Billing
     - if @site.is_free?
       .half-block
-        = render 'billing'
+        = render 'billing', f: f
       .half-block
         = render 'upgrade_table'
     - else
-      = render 'billing'
+      = render 'billing', f: f
 
 
   footer

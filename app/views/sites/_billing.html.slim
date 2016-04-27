@@ -31,6 +31,19 @@ section
         small
           | (no credit card on file)
 
+  section
+    label Info
+    p
+      - if @site.invoice_information.present?
+        | Customized invoice address
+        = link_to "Change", "#", class: "toggle-site-invoice-information"
+        br
+        span.invoice-information= @site.invoice_information.gsub("\r\n", "<br>").html_safe
+      - else
+        = link_to "Add custom invoice address", "#", class: "toggle-site-invoice-information no-left-margin"
+        br
+      = f.text_area "invoice_information", placeholder: "Full address (leave blank to use address associated with your CC)", class: "hide"
+
   - if !@bills.empty?
     section
       label History
