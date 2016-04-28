@@ -25,17 +25,6 @@ class Bill < ActiveRecord::Base
     self.amount == 0 && self.paid?
   end
 
-  def context_for_trial
-    return nil unless self.during_trial_subscription?
-    if self.subscription.user.try(:wordpress_user_id).present?
-      "via 1.0 trial"
-    elsif self.subscription.user.try(:was_referred?)
-      "via referral"
-    else
-      "via admin"
-    end
-  end
-
   def set_base_amount
     self.base_amount ||= self.amount
   end

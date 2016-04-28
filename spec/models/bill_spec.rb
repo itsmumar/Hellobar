@@ -73,33 +73,17 @@ describe Bill do
     bill.paid_with_payment_method_detail.should == details
   end
 
-  describe "#context_for_trial" do
-    it "should be nil if the subscription is not on trial" do
+  describe "#during_trial_subscription?" do
+    it "should not be on trial subscription" do
       bill = bills(:paid_bill)
-      bill.context_for_trial.should be_nil
+      bill.during_trial_subscription?.should be_false
     end
 
-    it "should display the correct text for v1.0 users on free trial" do
+    it "should be on trial subscription" do
       bill = bills(:paid_bill)
       bill.update_attribute(:amount, 0)
       bill.subscription.payment_method = nil
-      bill.subscription.user.update_attributes(wordpress_user_id: 123)
-      bill.context_for_trial.should eq("via 1.0 trial")
-    end
-
-    it "should display the correct text for referrerd users on free trial" do
-      bill = bills(:paid_bill)
-      bill.update_attribute(:amount, 0)
-      bill.subscription.payment_method = nil
-      bill.subscription.user.stub was_referred?: true
-      bill.context_for_trial.should eq("via referral")
-    end
-
-    it "should display the correct text for admin-assigned free trials" do
-      bill = bills(:paid_bill)
-      bill.update_attribute(:amount, 0)
-      bill.subscription.payment_method = nil
-      bill.context_for_trial.should eq("via admin")
+      bill.during_trial_subscription?.should be_true
     end
   end
 
