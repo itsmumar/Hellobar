@@ -245,7 +245,7 @@ class @ContactListModal extends Modal
       requiresApiKey: option.data('requiresApiKey')
       requiresUsername: option.data('requiresUsername')
       requiresWebhookUrl: option.data('requiresWebhookUrl')
-      webhookIsPost: @options.contactList.data.webhook_method == "post"
+      webhookIsPost: @options.contactList?.data?.webhook_method == "post"
       contactList: @options.contactList
 
     if value == "0" # user selected "in Hello Bar only"
