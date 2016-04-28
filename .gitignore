@@ -13,6 +13,7 @@
 *.sublime-*
 npm-debug.log
 .idea
+.tm_properties
 
 config/settings.yml
 config/database.yml

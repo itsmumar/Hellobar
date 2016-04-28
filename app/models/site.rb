@@ -59,6 +59,10 @@ class Site < ActiveRecord::Base
     where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
   end
 
+  scope :script_not_installed_db, -> do
+    where.not("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
+  end
+
   scope :script_uninstalled_db, -> do
     where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
   end
@@ -82,17 +86,39 @@ class Site < ActiveRecord::Base
   # check and report whether script is installed, recording timestamp and tracking event if status has changed
   def has_script_installed?
     if !script_installed_db? && (script_installed_api? || script_installed_on_homepage?)
-      debug_install("INSTALLED")
-      update(script_installed_at: Time.current)
-      Referrals::RedeemForRecipient.run(site: self)
-      Analytics.track(:site, self.id, "Installed")
+      store_script_installation!
     elsif script_installed_db? && !(script_installed_api? || script_installed_on_homepage?)
-      debug_install("UNINSTALLED")
-      update(script_uninstalled_at: Time.current)
-      Analytics.track(:site, self.id, "Uninstalled")
+      store_script_uninstallation!
     end
 
     script_installed_db?
+  end
+
+  def store_script_installation!
+    debug_install("INSTALLED")
+    update(script_installed_at: Time.current)
+    Referrals::RedeemForRecipient.run(site: self)
+    Analytics.track(:site, self.id, "Installed")
+    onboarding_track_script_installation!
+  end
+
+  def onboarding_track_script_installation!
+    owners.each do |user|
+      user.onboarding_status_setter.installed_script!
+    end
+  end
+
+  def store_script_uninstallation!
+    debug_install("UNINSTALLED")
+    update(script_uninstalled_at: Time.current)
+    Analytics.track(:site, self.id, "Uninstalled")
+    onboarding_track_script_uninstallation!
+  end
+
+  def onboarding_track_script_uninstallation!
+    owners.each do |user|
+      user.onboarding_status_setter.uninstalled_script!
+    end
   end
 
   # is the site's script installed according to the db timestamps?

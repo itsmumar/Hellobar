@@ -25,6 +25,12 @@ end
 
 feature "User can sign in", js: true do
   after { devise_reset }
+  before do
+    allow_any_instance_of(ApplicationController).
+      to receive(:get_ab_variation).
+      with(any_args).
+      and_return('original')
+  end
 
   scenario "through email and password" do
     user = create(:user)
@@ -38,8 +44,7 @@ feature "User can sign in", js: true do
     fill_in 'Password', with: user.password
     click_button 'Continue'
 
-    #Why? because we cut off super long emails, that's why
-    expect(page).to have_content(user.email[0...25])
+    expect(page).to have_content("SELECT YOUR GOAL")
   end
 
   scenario "through oauth" do
@@ -56,8 +61,7 @@ feature "User can sign in", js: true do
     fill_in 'Your Email', with: user.email
     click_button 'Continue'
 
-    #Why? because we cut off super long emails, that's why
-    expect(page).to have_content(user.email[0...25])
+    expect(page).to have_content("SELECT YOUR GOAL")
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end
