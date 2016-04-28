@@ -31,6 +31,10 @@ every 24.hours, :at => "1:00pm", :roles => [:cron] do
   rake "referrals:send_followups"
 end
 
+every 2.hours, :roles => [:cron] do
+  rake "onboarding_campaigns:deliver"
+end
+
 every 1.hours, :roles => [:cron] do
   rake "backend:adjust_dynamo_db_capacity[recent_throttled_only]"
   rake "cloudwatch_metrics:create_alarms"

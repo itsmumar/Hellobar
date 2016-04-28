@@ -3,22 +3,42 @@ class User < ActiveRecord::Base
   include UserValidator
   include ReferralTokenizable
 
-  # Remove any sites where this was the last user
-  # This must come before any dependent: :destroy
-  before_destroy do
-    self.sites.each do |site|
-      site.destroy if site.site_memberships.size <= 1
-    end
-  end
+  # rubocop:disable Style/SingleSpaceBeforeFirstArg
+  after_initialize  :check_if_temporary
+  before_save       :clear_invite_token
+  after_save        :disconnect_oauth, if: :is_oauth_user?
+  after_save        :track_temporary_status_change
+  after_create      :add_to_onboarding_campaign
+  before_destroy    :destroy_orphan_sites_before_active_record_association_callbacks
+  # rubocop:enable Style/SingleSpaceBeforeFirstArg
 
   has_many :payment_methods
   has_many :payment_method_details, through: :payment_methods, source: :details
   has_many :site_memberships, dependent: :destroy
   has_many :sites, -> { distinct }, through: :site_memberships
   has_many :site_elements, through: :sites
+  has_many :subscriptions, through: :sites
   has_many :authentications, dependent: :destroy
   has_many :sent_referrals, dependent: :destroy, class_name: "Referral", foreign_key: "sender_id"
   has_one :received_referral, class_name: "Referral", foreign_key: "recipient_id"
+
+  has_many :onboarding_statuses, -> { order "created_at DESC" }, class_name: "UserOnboardingStatus"
+  has_one :current_onboarding_status, -> { order "created_at DESC" }, class_name: "UserOnboardingStatus"
+
+  scope :join_current_onboarding_status, lambda {
+    joins(:onboarding_statuses).
+    where("user_onboarding_statuses.created_at =
+              (SELECT MAX(user_onboarding_statuses.created_at)
+                      FROM user_onboarding_statuses
+                      WHERE user_onboarding_statuses.user_id = users.id)").
+    group("users.id")
+  }
+
+  scope :onboarding_sequence_before, lambda { |sequence_index|
+    where("user_onboarding_statuses.sequence_delivered_last < #{sequence_index} OR
+           user_onboarding_statuses.sequence_delivered_last IS NULL")
+  }
+
 
   acts_as_paranoid
 
@@ -29,14 +49,6 @@ class User < ActiveRecord::Base
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: {scope: :deleted_at, unless: :deleted? }
   validate :oauth_email_change, if: :is_oauth_user?
-
-  after_save :disconnect_oauth, if: :is_oauth_user?
-
-  before_save do
-    if self.status == ACTIVE_STATUS && self.invite_token
-      self.invite_token = nil
-    end
-  end
 
   attr_accessor :legacy_migration, :timezone
 
@@ -85,12 +97,31 @@ class User < ActiveRecord::Base
     sign_in_count == 1 && site_elements.empty?
   end
 
+  def should_send_to_new_site_element_path?
+    return false unless current_onboarding_status
+
+    [:new, :selected_goal].include?(current_onboarding_status.status_name) &&
+      self.sites.script_not_installed_db.any?
+  end
+
   def active?
     status == ACTIVE_STATUS
   end
 
-  def temporary_email?
+  def temporary?
+    status == TEMPORARY_STATUS
+  end
+
+  def has_temporary_email?
     email.match(/hello\-[0-9]+@hellobar.com/)
+  end
+
+  def has_paying_subscription?
+    subscriptions.active.any?{|subscription| subscription.capabilities.acts_as_paid_subscription? }
+  end
+
+  def onboarding_status_setter
+    @onboarding_status_setter ||= UserOnboardingStatusSetter.new(self, has_paying_subscription?, onboarding_statuses)
   end
 
   def send_devise_notification(notification, *args)
@@ -116,11 +147,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def temporary?
-    status == TEMPORARY_STATUS
-  end
-
-  after_save :track_temporary_status_change
   def track_temporary_status_change
     if @was_temporary and !temporary?
       Analytics.track(:user, self.id, "Completed Signup", {email: self.email})
@@ -128,9 +154,13 @@ class User < ActiveRecord::Base
     end
   end
 
-  after_initialize :check_if_temporary
   def check_if_temporary
     @was_temporary = temporary?
+  end
+
+  def add_to_onboarding_campaign
+    onboarding_status_setter.new_user!
+    onboarding_status_setter.created_site!
   end
 
   def valid_password?(password)
@@ -260,6 +290,18 @@ class User < ActiveRecord::Base
   def disconnect_oauth
     if !id_changed? && encrypted_password_changed? && is_oauth_user?
       authentications.destroy_all
+    end
+  end
+
+  def clear_invite_token
+    if active? && invite_token
+      self.invite_token = nil
+    end
+  end
+
+  def destroy_orphan_sites_before_active_record_association_callbacks
+    sites.each do |site|
+      site.destroy if site.site_memberships.size <= 1
     end
   end
 

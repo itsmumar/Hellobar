@@ -294,9 +294,9 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
-    t.integer  "wordpress_bar_id"
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
+    t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
     t.string   "view_condition",                  default: "immediately"
@@ -351,8 +351,8 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.datetime "deleted_at"
     t.datetime "script_uninstalled_at"
     t.string   "install_type"
-    t.text     "invoice_information"
     t.datetime "selected_goal_clicked_at"
+    t.text     "invoice_information"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
@@ -380,6 +380,8 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.integer  "sequence_delivered_last"
     t.datetime "created_at"
   end
+
+  add_index "user_onboarding_statuses", ["user_id"], name: "index_user_onboarding_statuses_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",       null: false

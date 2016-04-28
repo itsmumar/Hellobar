@@ -18,8 +18,20 @@ RSpec.configure do |config|
     begin
       DatabaseCleaner.start
       FactoryGirl.lint
+
+      Rake.application.rake_require "tasks/onboarding_campaigns"
+      Rake::Task.define_task(:environment)
     ensure
       DatabaseCleaner.clean
     end
   end
+end
+
+def stub_out_get_ab_variations(*variations, &result)
+  variation_matcher = Regexp.new(variations.join("|"))
+
+  allow_any_instance_of(ApplicationController).
+    to receive(:get_ab_variation).
+    with(variation_matcher).
+    and_return(result.call)
 end

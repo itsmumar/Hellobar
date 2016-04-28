@@ -16,6 +16,9 @@ class Subscription < ActiveRecord::Base
       where("bills.type != ?", Bill::Refund.to_s)
   end
 
+  after_initialize :set_initial_values
+  after_create :mark_user_onboarding_as_bought_subscription!
+
   class << self
     def values_for(site)
       # Just return the defaults for now, in the future we can
@@ -81,7 +84,6 @@ class Subscription < ActiveRecord::Base
     capabilities.instance_of?(Subscription::ProblemWithPayment::Capabilities)
   end
 
-  after_initialize :set_initial_values
   def set_initial_values
     unless self.persisted?
       values = self.class.values_for(self.site)
@@ -92,10 +94,20 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  def mark_user_onboarding_as_bought_subscription!
+    if capabilities.acts_as_paid_subscription? && (user || site)
+      (user || site.owners.first).onboarding_status_setter.bought_subscription!
+    end
+  end
+
   class Capabilities
     def initialize(subscription, site)
       @subscription = subscription
       @site = site
+    end
+
+    def acts_as_paid_subscription?
+      false
     end
 
     def remove_branding?
@@ -216,6 +228,10 @@ class Subscription < ActiveRecord::Base
 
   class Pro < Base
     class Capabilities < Free::Capabilities
+      def acts_as_paid_subscription?
+        true
+      end
+
       def remove_branding?
         true
       end
