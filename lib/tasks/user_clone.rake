@@ -3,9 +3,9 @@ namespace :clone do
   task :user, [:api_token, :user_id] => :environment do |t, args|
     host = Hellobar::Settings[:test_cloning].present? ? "www.hellobar.com" : "edge.hellobar.com"
     client = Faraday.new(url: "http://#{host}/api/user_state/#{args[:user_id]}?api_token=#{args[:api_token]}") do |faraday|
-      faraday.request  :url_encoded
+      faraday.request :url_encoded
       faraday.response :logger
-      faraday.adapter  Faraday.default_adapter
+      faraday.adapter Faraday.default_adapter
     end
 
     response = client.get

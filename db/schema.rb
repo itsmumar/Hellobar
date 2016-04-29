@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429203939) do
+ActiveRecord::Schema.define(version: 20160505173916) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -304,8 +304,8 @@ ActiveRecord::Schema.define(version: 20160429203939) do
     t.string   "view_condition",                  default: "immediately"
     t.string   "email_placeholder",               default: "Your email",                    null: false
     t.string   "name_placeholder",                default: "Your name",                     null: false
-    t.string   "image_placement",                 default: "bottom"
     t.integer  "image_upload_id"
+    t.string   "image_placement",                 default: "bottom"
     t.integer  "active_image_id"
     t.string   "question"
     t.string   "answer1"
@@ -316,9 +316,9 @@ ActiveRecord::Schema.define(version: 20160429203939) do
     t.string   "answer2link_text"
     t.string   "answer1caption"
     t.string   "answer2caption"
+    t.boolean  "use_question",                    default: false
     t.string   "phone_number"
     t.string   "phone_country_code",              default: "US"
-    t.boolean  "use_question",                    default: false
     t.boolean  "show_after_convert",              default: false
     t.string   "theme_id"
   end
