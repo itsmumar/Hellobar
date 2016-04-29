@@ -88,7 +88,7 @@ HelloBar.ColorsController = Ember.Controller.extend
 
   step: 3
   prevStep: 'style'
-  nextStep: 'text'
+  nextStep: 'targeting'
 
   #-----------  Color Tracking  -----------#
 
