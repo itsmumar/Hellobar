@@ -13,33 +13,15 @@
 <hr></hr>
 
 {{#tab-view paneSelected=paneSelected}}
+  {{#tab-pane name="Text"}}
+    {{partial "partials/text-pane"}}
+  {{/tab-pane}}
+
   {{#tab-pane name="Colors"}}
-    <div id="" class="tab-content">
-      <label>Background Color</label>
-      {{color-select color=model.background_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
-
-      <label>Text</label>
-      {{color-select color=model.text_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
-
-      <label>Button</label>
-      {{color-select color=model.button_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
-
-      <label>Button Text</label>
-      {{color-select color=model.link_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
-      <br/>
-    </div>
-
+    {{partial "partials/colors-pane"}}
   {{/tab-pane}}
 
   {{#tab-pane name="Image"}}
-    <div id="response1" class="tab-content">
-      <label>Image</label>
-    </div>
-  {{/tab-pane}}
-
-  {{#tab-pane name="Text"}}
-    <div id="response2" class="tab-content">
-      <label>Text</label>
-    </div>
+    {{partial "partials/image-pane"}}
   {{/tab-pane}}
 {{/tab-view}}

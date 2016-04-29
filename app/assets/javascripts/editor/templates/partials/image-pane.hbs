@@ -1,0 +1,25 @@
+{{#if allowImages}}
+  <label>Upload an image</label>
+  <p>Limit images to 300px tall</p>
+  <div class="image-upload">
+    {{image-upload
+      setImageProps="setImageProps"
+      existingURL=model.image_url
+      existingFileName=model.image_file_name
+    }}
+  </div>
+
+  {{#if showImagePlacementField}}
+    <label>Image placement</label>
+    <div class="select-wrapper">
+      {{view Ember.Select
+        content=imagePlacementOptions
+        value=model.image_placement
+        optionValuePath='content.value'
+        optionLabelPath='content.label'
+      }}
+    </div>
+  {{/if}}
+{{else}}
+  <label>Image uploads are not supported for this configuration</label>
+{{/if}}
