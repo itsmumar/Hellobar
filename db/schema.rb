@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160505173916) do
+ActiveRecord::Schema.define(version: 20160429203939) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -37,8 +37,10 @@ ActiveRecord::Schema.define(version: 20160505173916) do
     t.boolean  "locked",                             default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "api_token"
   end
 
+  add_index "admins", ["api_token"], name: "index_admins_on_api_token", using: :btree
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
 
