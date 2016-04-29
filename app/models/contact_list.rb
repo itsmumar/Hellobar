@@ -46,6 +46,8 @@ class ContactList < ActiveRecord::Base
       identity.api_key? && identity.extra['app_url'].present?
     elsif api_key?
       identity.api_key? && data["remote_name"] && data["remote_id"]
+    elsif webhook?
+      true
     end
   end
 
@@ -140,7 +142,12 @@ class ContactList < ActiveRecord::Base
     end
   end
 
+  def webhook?
+    data["webhook_url"].present?
+  end
+
   private
+
   def notify_identity
     old_identity_id = destroyed? ? identity_id : changes[:identity_id].try(:first)
     Identity.where(id: old_identity_id).first.try(:contact_lists_updated) if old_identity_id
@@ -178,10 +185,6 @@ class ContactList < ActiveRecord::Base
     elsif provider_set?
       ServiceProvider[provider.to_sym]
     end
-  end
-
-  def webhook?
-    data["webhook_url"].present?
   end
 
   def webhook_url_valid?
