@@ -1,4 +1,4 @@
-HelloBar.ColorsController = Ember.Controller.extend
+HelloBar.DesignController = Ember.Controller.extend
 
   needs: ['application']
 

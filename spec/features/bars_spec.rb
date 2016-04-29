@@ -98,7 +98,6 @@ feature 'User can edit a bar', js: true do
     visit edit_site_site_element_path(site, site.site_elements.last)
     page.find('a', text: 'Next').click
     page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
     first('.ember-text-field').set('Dear I fear were facing a problem')
     page.find('button', text: 'Save & Publish').click
     expect(page).to have_content('Dear I fear were facing a problem', visible: true)

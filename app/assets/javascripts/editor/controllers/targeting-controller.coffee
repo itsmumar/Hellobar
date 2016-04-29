@@ -82,7 +82,7 @@ HelloBar.TargetingController = Ember.Controller.extend
   #-----------  Step Settings  -----------#
 
   step: 4
-  prevStep: 'colors'
+  prevStep: 'design'
   nextStep: false
 
   #-----------  Sub-Step Selection  -----------#
