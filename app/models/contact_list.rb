@@ -130,6 +130,8 @@ class ContactList < ActiveRecord::Base
   end
 
   def needs_to_reconfigure?
+    return false if webhook?
+
     if syncable? && !oauth? && !api_key?
       begin
         subscribe_params('emailfor@user.com', 'Name namerson', true)
