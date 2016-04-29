@@ -44,7 +44,7 @@ feature "Connect to api ESP", js: true do
 
     page.select 'Webhook (Advanced)', :from => 'Where do you want your contacts stored?'
 
-    fill_in 'contact_list[data][webhook_url]', with: 'http://urltotest.com'
+    fill_in 'contact_list[data][webhook_url]', with: 'http://google.com'
     check "POST request"
 
     page.find(".button.submit").click
@@ -52,7 +52,7 @@ feature "Connect to api ESP", js: true do
     page.find("#edit-contact-list").click
 
     expect(page).to have_content("Webhook (Advanced)")
-    expect(find_field("contact_list[data][webhook_url]").value).to eql("http://urltotest.com")
+    expect(find_field("contact_list[data][webhook_url]").value).to eql("http://google.com")
     expect(find_field("contact_list[data][webhook_method]").selected?).to be_true
 
     Hellobar::Settings[:fake_data_api] = fake_data_api_original
@@ -72,7 +72,7 @@ feature "Connect to api ESP", js: true do
 
     page.select 'Webhook (Advanced)', :from => 'Where do you want your contacts stored?'
 
-    fill_in 'contact_list[data][webhook_url]', with: 'http://urltotest.com'
+    fill_in 'contact_list[data][webhook_url]', with: 'http://google.com'
     check "POST request"
 
     page.find(".button.submit").click
@@ -80,7 +80,7 @@ feature "Connect to api ESP", js: true do
     page.find("#edit-contact-list").click
 
     expect(page).to have_content("Webhook (Advanced)")
-    expect(find_field("contact_list[data][webhook_url]").value).to eql("http://urltotest.com")
+    expect(find_field("contact_list[data][webhook_url]").value).to eql("http://google.com")
     expect(find_field("contact_list[data][webhook_method]").selected?).to be_true
 
     Hellobar::Settings[:fake_data_api] = fake_data_api_original

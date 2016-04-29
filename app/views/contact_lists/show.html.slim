@@ -15,7 +15,7 @@ nav.tabs-wrapper
 
 .service-block
   .service-icon
-    = image_tag contact_list_image(@contact_list)
+    = image_tag contact_list_image(@contact_list) unless @contact_list.webhook?
 
   .service-description
     = contact_list_sync_details(@contact_list)
