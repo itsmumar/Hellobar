@@ -123,6 +123,7 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |   <label for="contact_list_webhook_method">POST request
   |     <input type="checkbox" id="contact_list_webhook_method" name="contact_list[data][webhook_method]" value="{{contactList.data.webhook_method}}" {{#if webhookIsPost}}checked{{/if}}>
   |   </label>
+  |   <small>Each email collected is guaranteed to be sent to the specified URL at least once, but possibly more than once. It is the responsibility of the webhook to take care of possible duplicates.</small>
   | {{/if}}
   |
   | {{#if requiresUsername}}
