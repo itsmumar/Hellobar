@@ -183,7 +183,7 @@ class SitesController < ApplicationController
     @top_performers = {}
     all_elements = @site.site_elements.sort_by{|e| -1 * e.conversion_percentage}
 
-    %w(all social email traffic).each do |name|
+    %w(all social email traffic call).each do |name|
       if name == "all"
         elements = all_elements
       else

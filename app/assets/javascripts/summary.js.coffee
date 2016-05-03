@@ -37,6 +37,9 @@ AmCharts.ready ->
       when "social"
         new SocialChart({siteID, numDays})
         $(".top-performers-wrapper.social").show()
+      when "calls"
+        new CallsChart({siteID, numDays})
+        $(".top-performers-wrapper.call").show()
 
   # Trigger current chart or default when applicatble
   if $('.chart-wrapper .chart-block').length && typeof(window.CurrentChart) == "undefined"
