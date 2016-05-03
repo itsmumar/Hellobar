@@ -66,11 +66,11 @@ module Hello
     register_test("Use Cases Variation 2016-03-22", %w{original simple}, 15)
     register_test("Forced Email Path 2016-03-28", %w{original force}, 16)
     register_test("Show Add Site on Edit Site 2016-04-04", %w{original variant}, 17)
-
     register_test("Create A Bar Reminder New Users Only 2016-03-28",            %w{original campaign}, 18)
     register_test("Configure Your Bar Reminder New Users Only 2016-03-28",      %w{original campaign}, 19)
     register_test("Install The Plugin Drip Campaign New Users Only 2016-03-28", %w{original campaign}, 20)
     register_test("Upgrade Hello Bar Drip Campaign New Users Only 2016-03-28",  %w{original campaign}, 21)
+    register_test("Use Cases Variation 2016-04-22", %w{original types}, 22)
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
