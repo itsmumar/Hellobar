@@ -28,7 +28,7 @@ module EmailSynchronizer
     perform_sync do
       contacts = Hello::DataAPI.get_contacts(self) || []
       contacts.in_groups_of(1000, false).each do |group|
-        if oauth? || api_key?
+        if oauth? || api_key? || webhook?
           group = group.map{ |g| {:email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2]} }
           batch_subscribe(data["remote_id"], group, double_optin)
         else

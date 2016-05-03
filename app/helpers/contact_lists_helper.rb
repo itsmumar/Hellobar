@@ -1,6 +1,6 @@
 module ContactListsHelper
   def options_for_provider_select
-    providers = Hellobar::Settings[:identity_providers].select{|k, v| v[:type] == :email && v[:hidden] != true}
+    providers = Hellobar::Settings[:identity_providers].select{|k, v| v[:hidden] != true}
     providers_array = providers.map do |provider_name, provider_attributes|
       [
         provider_attributes[:name],
@@ -9,6 +9,7 @@ module ContactListsHelper
         requires_embed_code: !!provider_attributes[:requires_embed_code],
         requires_api_key: !!provider_attributes[:requires_api_key],
         requires_username: !!provider_attributes[:requires_username],
+        requires_webhook_url: !!provider_attributes[:requires_webhook_url],
         oauth: !!provider_attributes[:oauth]
       ]
     end
