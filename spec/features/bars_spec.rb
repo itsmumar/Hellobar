@@ -40,7 +40,6 @@ feature 'User can create a bar', js: true do
     fill_in 'Your Email', with: user.email
     click_button 'Continue'
 
-    first(:button, 'Create New') .click
     first(:button, 'Select This Goal').click
     first(:button, 'Continue').click
     first(:button, 'Save & Publish').click

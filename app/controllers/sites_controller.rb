@@ -4,7 +4,6 @@ class SitesController < ApplicationController
 
   before_action :authenticate_user!, except: :create
   before_action :load_site, except: [:index, :new, :create]
-  before_action :get_suggestions, only: :improve
   before_action :get_top_performers, only: :improve
   before_action :load_bills, only: :edit
 
@@ -177,20 +176,6 @@ class SitesController < ApplicationController
     else
       flash.now[:error] = @site.errors.full_messages
       render :action => :new
-    end
-  end
-
-  def get_suggestions
-    @suggestions = {}
-    max = @site.capabilities.max_suggestions
-
-    %w(all social email traffic).each do |name|
-      @suggestions[name] = {}
-      raw_suggestions = ImproveSuggestion.get(@site, name) || {}
-
-      raw_suggestions.each do |k, v|
-        @suggestions[name][k] = v[0, max] unless v.empty?
-      end
     end
   end
 

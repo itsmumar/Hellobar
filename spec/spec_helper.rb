@@ -34,6 +34,9 @@ Dir[Rails.root.join("spec/models/validators/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
+# un-comment this line to see sql statements in console
+# ActiveRecord::Base.logger = Logger.new(STDOUT)
+
 VCR.configure do |c|
   c.ignore_localhost = true
   c.cassette_library_dir = "spec/cassettes"
@@ -42,6 +45,9 @@ VCR.configure do |c|
 end
 
 Capybara.default_wait_time = ENV['CI'] ? 30 : 10
+Capybara::Webkit.configure do |config|
+  config.block_unknown_urls
+end
 
 RSpec.configure do |config|
   config.include Capybara::DSL

@@ -27,6 +27,7 @@ class ContactList < ActiveRecord::Base
   validate :provider_credentials_exist, :if => :provider_set?
   validate :embed_code_exists?, :if => :embed_code?
   validate :embed_code_valid?, :if => :embed_code?
+  validate :webhook_url_valid?, :if => :webhook?
 
   after_save :sync, :if => :data_changed?
   after_save :notify_identity, :if => :identity_id_changed?
@@ -45,6 +46,8 @@ class ContactList < ActiveRecord::Base
       identity.api_key? && identity.extra['app_url'].present?
     elsif api_key?
       identity.api_key? && data["remote_name"] && data["remote_id"]
+    elsif webhook?
+      true
     end
   end
 
@@ -103,7 +106,7 @@ class ContactList < ActiveRecord::Base
 
     self.identity = if !provider_set? || service_provider_class.nil?
       nil # Don't create an invalid provider
-    elsif embed_code?
+    elsif embed_code? || (provider == "webhooks")
       site.identities.find_or_create_by(provider: provider)
     else
       site.identities.find_by(provider: provider)
@@ -127,6 +130,8 @@ class ContactList < ActiveRecord::Base
   end
 
   def needs_to_reconfigure?
+    return false if webhook?
+
     if syncable? && !oauth? && !api_key?
       begin
         subscribe_params('emailfor@user.com', 'Name namerson', true)
@@ -139,7 +144,12 @@ class ContactList < ActiveRecord::Base
     end
   end
 
+  def webhook?
+    data["webhook_url"].present?
+  end
+
   private
+
   def notify_identity
     old_identity_id = destroyed? ? identity_id : changes[:identity_id].try(:first)
     Identity.where(id: old_identity_id).first.try(:contact_lists_updated) if old_identity_id
@@ -176,6 +186,14 @@ class ContactList < ActiveRecord::Base
       identity.service_provider_class
     elsif provider_set?
       ServiceProvider[provider.to_sym]
+    end
+  end
+
+  def webhook_url_valid?
+    uri = Addressable::URI.parse(data["webhook_url"])
+
+    if !%w{http https}.include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ %r((^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix)
+      errors.add(:base, "webhook URL is invalid")
     end
   end
 end

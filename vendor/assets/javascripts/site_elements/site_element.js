@@ -489,5 +489,4 @@ HB.SiteElement = HB.createClass({
   {
     HB.converted(this);
   }
-
 });
