@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe UserHelper do
-  fixtures :all  
+  fixtures :all
   describe "#context_for_trial(user, bill)" do
     it "should be nil if the subscription is not on trial" do
       bill = bills(:paid_bill)
