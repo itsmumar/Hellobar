@@ -1,6 +1,17 @@
 module SiteElementsHelper
   A_OFFSET = "A".ord
 
+  def activity_message(element)
+    if element.has_converted?
+      message = ConversionActivityMessage.new(element).body
+    elsif element.is_announcement?
+      message = AnnouncementActivityMessage.new(element).body
+    else
+      return # no conversions, so just be quiet about it.
+    end
+    message.html_safe
+  end
+
   def total_conversion_text(site_element)
     if site_element.element_subtype == "announcement"
       "--"

@@ -2,6 +2,7 @@ require "./config/initializers/settings"
 
 require "./lib/hello/internal_analytics"
 require "./lib/hello/asset_storage"
+require "./lib/hello/activity_message"
 require "./lib/hello/data_api"
 require "./lib/hello/data_api_helper"
 require "./lib/hello/suggested_opportunities"
