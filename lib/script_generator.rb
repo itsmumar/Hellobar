@@ -57,13 +57,9 @@ class ScriptGenerator < Mustache
   # create their own CSS easily to target the branding
   def pro_secret
     @pro_secret ||= begin
-      if @options[:preview]
-        "hellobar"
-      else
-        random_string = ('a'..'z').to_a[rand(26)]
-        random_string << Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url.to_s.upcase}#{site.id}#{Time.now.to_f}#{rand(1_000_000)}")
-        random_string
-      end
+      random_string = ('a'..'z').to_a[rand(26)]
+      random_string << Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url.to_s.upcase}#{site.id}#{Time.now.to_f}#{rand(1_000_000)}")
+      random_string
     end
   end
 

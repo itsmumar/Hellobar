@@ -127,7 +127,22 @@ class SiteElement < ActiveRecord::Base
   end
 
   def track_creation
-    Analytics.track(:site, self.site_id, "Created Site Element", {site_element_id: self.id, type: self.element_subtype, style: self.type.to_s.downcase})
+    analytics_track_site_element_creation!
+    onboarding_track_site_element_creation!
+  end
+
+  def analytics_track_site_element_creation!
+    Analytics.track(:site, self.site_id, "Created Site Element",
+                    { site_element_id: self.id,
+                      type: self.element_subtype,
+                      style: self.type.to_s.downcase
+                    })
+  end
+
+  def onboarding_track_site_element_creation!
+    self.site.owners.each do |user|
+      user.onboarding_status_setter.created_element!
+    end
   end
 
   def self.all_templates
