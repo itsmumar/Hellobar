@@ -22,26 +22,24 @@ AmCharts.ready ->
     window.CurrentChart = $(this).attr('data-chart')
 
     UrlParams.updateParam('chart', window.CurrentChart)
-    $(".suggestions-wrapper").hide()
     $(".top-performers-wrapper").hide()
 
     switch window.CurrentChart
       when "views"
         new ViewsChart({siteID, numDays})
-        $(".suggestions-wrapper.all").show()
         $(".top-performers-wrapper.all").show()
       when "emails"
         new EmailsChart({siteID, numDays})
-        $(".suggestions-wrapper.email").show()
         $(".top-performers-wrapper.email").show()
       when "clicks"
         new ClicksChart({siteID, numDays})
-        $(".suggestions-wrapper.traffic").show()
         $(".top-performers-wrapper.traffic").show()
       when "social"
         new SocialChart({siteID, numDays})
-        $(".suggestions-wrapper.social").show()
         $(".top-performers-wrapper.social").show()
+      when "calls"
+        new CallsChart({siteID, numDays})
+        $(".top-performers-wrapper.call").show()
 
   # Trigger current chart or default when applicatble
   if $('.chart-wrapper .chart-block').length && typeof(window.CurrentChart) == "undefined"
@@ -59,14 +57,10 @@ $ ->
 
   switch UrlParams.fetch("chart")
     when "emails"
-      $(".suggestions-wrapper.email").show()
       $(".top-performers-wrapper.email").show()
     when "clicks"
-      $(".suggestions-wrapper.traffic").show()
       $(".top-performers-wrapper.traffic").show()
     when "social"
-      $(".suggestions-wrapper.social").show()
       $(".top-performers-wrapper.social").show()
     else
-      $(".suggestions-wrapper.all").show()
       $(".top-performers-wrapper.all").show()

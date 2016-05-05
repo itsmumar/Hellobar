@@ -126,7 +126,7 @@ HB.SiteElement = HB.createClass({
     // If isMobileWidth is true we add an additional "mobile" CSS class which is used to
     // adjust the style of the siteElement.
     // To accomplish all of this we set up an interval to monitor the size of everything:
-    HB.isMobileWidth = false;
+    this.isMobileWidth = false;
     var mobileDeviceInterval = setInterval(this.checkForMobileDevice.bind(this), 50); // Check screen size every N ms
   },
 
@@ -138,71 +138,60 @@ HB.SiteElement = HB.createClass({
 
     // Get the relevant elements that might need checking/adjusting
     var containerDocument = frame.document;
-    this.e = {
-      container: this.w,
-      pusher: HB.$("#hellobar-pusher")
-    };
 
-    var foundElement = this.getSiteElementDomNode();
-    if ( foundElement ) {
-      this.e.siteElement = foundElement;
-      this.e.siteElementType = HB.id_type_map[foundElement.id]
-    } else {
-      this.e.siteElement = null;
-      this.e.siteElementType = null;
-    }
+    var thisElement = this.getSiteElementDomNode();
 
     // Monitor siteElement height to update HTML/CSS
-    if ( this.e.siteElement ) {
-      if ( this.e.siteElement.clientHeight ) {
+    if ( thisElement ) {
+      if ( thisElement.clientHeight ) {
 
         // Update the CSS class based on the width
-        var wasMobile = HB.isMobileWidth;
+        var wasMobile = this.isMobileWidth;
         var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : document.body.clientWidth;
 
 
-        if ( this.e.siteElementType == "modal" && containerDocument )
-          HB.isMobileWidth = (containerDocument.getElementById("hellobar-modal-background").clientWidth <= 640 );
-        else if ( this.e.siteElementType == "slider" )
-          HB.isMobileWidth = this.e.siteElement.clientWidth <= 270 || containerWidth <= 375 || containerWidth < this.e.siteElement.clientWidth;
+        if ( this.type == "Modal" && containerDocument )
+          this.isMobileWidth = (containerDocument.getElementById("hellobar-modal-background").clientWidth <= 640 );
+        else if ( this.type == "Slider" )
+          this.isMobileWidth = thisElement.clientWidth <= 270 || containerWidth <= 375 || containerWidth < thisElement.clientWidth;
         else
-          HB.isMobileWidth = (this.e.siteElement.clientWidth <= 640 );
+          this.isMobileWidth = (thisElement.clientWidth <= 640 );
 
 
-        if ( wasMobile != HB.isMobileWidth ) {
-          if ( HB.isMobileWidth ) {
-            HB.isMobile = true;
-            HB.addClass(this.e.siteElement, "mobile");
+        if ( wasMobile != this.isMobileWidth ) {
+          if ( this.isMobileWidth ) {
+            this.isMobile = true;
+            HB.addClass(thisElement, "mobile");
           } else {
-            HB.isMobile = false;
-            HB.removeClass(this.e.siteElement, "mobile");
+            this.isMobile = false;
+            HB.removeClass(thisElement, "mobile");
           }
         }
 
         // Adjust the container size
-        this.setContainerSize(this.e.container, this.e.siteElement, this.e.siteElementType, HB.isMobile);
+        this.setContainerSize(this.w, thisElement, this.type, this.isMobile);
 
         // Bar specific adjustments
-        if ( this.e.siteElementType == "bar" ) {
+        if ( this.type == "Bar" ) {
 
           // Adjust the pusher
-          if ( this.e.pusher ) {
+          if ( HB.p ) {
             // handle case where display-condition check has hidden this.w
             if (this.w.style.display === "none") {
               return;
             };
 
             var borderPush = HB.t((this.show_border) ? 3 : 0)
-              this.e.pusher.style.height = (this.e.siteElement.clientHeight + borderPush) + "px";
+              HB.p.style.height = (thisElement.clientHeight + borderPush) + "px";
           }
 
           // Add multiline class
           var barBounds = (this.w.className.indexOf('regular') > -1 ? 32 : 52 );
 
-          if ( this.e.siteElement.clientHeight > barBounds ) {
-            HB.addClass(this.e.siteElement, "multiline");
+          if ( thisElement.clientHeight > barBounds ) {
+            HB.addClass(thisElement, "multiline");
           } else {
-            HB.removeClass(this.e.siteElement, "multiline");
+            HB.removeClass(thisElement, "multiline");
           }
         }
       }
@@ -212,15 +201,15 @@ HB.SiteElement = HB.createClass({
 
   setContainerSize:  function(container, element, type, isMobile)
   {
-    if (this.e.container == null)
+    if (container == null)
       return;
-    if ( type == 'bar' ) {
-      this.e.container.style.maxHeight = (element.clientHeight + 8) + "px";
-    } else if ( type == 'slider' ) {
+    if ( type == 'Bar' ) {
+      container.style.maxHeight = (element.clientHeight + 8) + "px";
+    } else if ( type == 'Slider' ) {
       var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : window.innerWidth;
       var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
-      this.e.container.style.width = (newWidth) + "px";
-      this.e.container.style.height = (element.clientHeight + 24) + "px";
+      container.style.width = (newWidth) + "px";
+      container.style.height = (element.clientHeight + 24) + "px";
     }
   },
 
@@ -337,7 +326,7 @@ HB.SiteElement = HB.createClass({
         this.w.style.position = (ratio <= 0.6) ? original : 'absolute';
       } else {
         // Desktop
-        if (this.e && this.e.siteElementType == "slider") {
+        if (this.type == "Slider") {
           // dont change the position to allow scrolling
         } else {
           this.w.style.position = (ratio <= 1.3) ? original : 'absolute';
@@ -423,8 +412,8 @@ HB.SiteElement = HB.createClass({
         HB.animateOut(this.pullDown);
 
         // if the pusher exists, unhide it since it should be hidden at this point
-        if (this.e.pusher != null)
-          HB.showElement(this.e.pusher, '');
+        if (HB.p != null)
+          HB.showElement(HB.p, '');
       }.bind(this);
 
       pullDown.appendChild(pdLink);
@@ -448,12 +437,12 @@ HB.SiteElement = HB.createClass({
   iosKeyboardShow: function() {
     var element = this;
 
-    if(this.e.siteElementType == "bar") {
+    if(this.type == "Bar") {
       HB.iosFocusInterval = setTimeout(function() {
         window.scrollTo(0, this.w.offsetTop);
       }, 500);
     }
-    else if(this.e.siteElementType == "slider") {
+    else if(this.type == "Slider") {
       this.w.style.position = "absolute";
       HB.iosFocusInterval = setInterval(function() {
         element.w.style.left = window.pageXOffset + "px";
@@ -462,8 +451,8 @@ HB.SiteElement = HB.createClass({
     }
     else if
     (
-      this.e.siteElementType == "takeover" ||
-      this.e.siteElementType == "modal"
+      this.type == "Takeover" ||
+      this.type == "Modal"
     ) {
       this.w.style.position = "absolute";
       HB.iosFocusInterval = setInterval(function() {
@@ -482,9 +471,9 @@ HB.SiteElement = HB.createClass({
     }
 
     if(
-      this.e.siteElementType == "takeover" ||
-      this.e.siteElementType == "modal" ||
-      this.e.siteElementType == "slider"
+      this.type == "Takeover" ||
+      this.type == "Modal" ||
+      this.type == "Slider"
     ) {
       this.w.style.position = "";
       this.w.style.height = "";
@@ -500,5 +489,4 @@ HB.SiteElement = HB.createClass({
   {
     HB.converted(this);
   }
-
 });

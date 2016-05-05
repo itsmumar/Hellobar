@@ -894,14 +894,16 @@ var HB = {
   // Returns a SiteElement object from a hash of data
   createSiteElement: function(data)
   {
+    var siteElement;
+
     // Sanitize the data
     data = HB.sanitize(data);
     // Make a copy of the siteElement
     var fn = window.HB[data.type + 'Element'];
     if(typeof fn === 'function') {
-      siteElement = new window.HB[data.type + 'Element'](data)
+      siteElement = new window.HB[data.type + 'Element'](data);
     } else {
-      siteElement = new HB.SiteElement(data)
+      siteElement = new HB.SiteElement(data);
     }
 
     siteElement.dataCopy = data;
@@ -1000,7 +1002,7 @@ var HB = {
         var rule = HB.rules[i];
         for(j=0;j<rule.siteElements.length;j++)
         {
-          siteElement = rule.siteElements[j];
+          var siteElement = rule.siteElements[j];
           if(siteElement.wordpress_bar_id == window.HB_element_id)
             return siteElement;
         }

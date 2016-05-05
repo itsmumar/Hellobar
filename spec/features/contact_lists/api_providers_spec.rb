@@ -30,4 +30,59 @@ feature "Connect to api ESP", js: true do
 
     Hellobar::Settings[:fake_data_api] = fake_data_api_original
   end
+
+  scenario "setting up a new contact list with webhooks" do
+    fake_data_api_original = Hellobar::Settings[:fake_data_api]
+    Hellobar::Settings[:fake_data_api] = true
+
+    site = @user.sites.create(url: random_uniq_url)
+    create(:contact_list, site: site)
+
+    visit site_contact_lists_path(site)
+
+    page.find(".button#new-contact-list").click
+
+    page.select 'Webhook (Advanced)', :from => 'Where do you want your contacts stored?'
+
+    fill_in 'contact_list[data][webhook_url]', with: 'http://google.com'
+    check "POST request"
+
+    page.find(".button.submit").click
+
+    page.find("#edit-contact-list").click
+
+    expect(page).to have_content("Webhook (Advanced)")
+    expect(find_field("contact_list[data][webhook_url]").value).to eql("http://google.com")
+    expect(find_field("contact_list[data][webhook_method]").selected?).to be_true
+
+    Hellobar::Settings[:fake_data_api] = fake_data_api_original
+  end
+
+  scenario "updating an existing contact list to be a webhook" do
+
+    fake_data_api_original = Hellobar::Settings[:fake_data_api]
+    Hellobar::Settings[:fake_data_api] = true
+
+    site = @user.sites.create(url: random_uniq_url)
+    contact_list = create(:contact_list, site: site)
+
+    visit site_contact_list_path(site, contact_list)
+
+    page.find("#edit-contact-list").click
+
+    page.select 'Webhook (Advanced)', :from => 'Where do you want your contacts stored?'
+
+    fill_in 'contact_list[data][webhook_url]', with: 'http://google.com'
+    check "POST request"
+
+    page.find(".button.submit").click
+
+    page.find("#edit-contact-list").click
+
+    expect(page).to have_content("Webhook (Advanced)")
+    expect(find_field("contact_list[data][webhook_url]").value).to eql("http://google.com")
+    expect(find_field("contact_list[data][webhook_method]").selected?).to be_true
+
+    Hellobar::Settings[:fake_data_api] = fake_data_api_original
+  end
 end

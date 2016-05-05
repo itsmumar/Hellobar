@@ -65,6 +65,11 @@ $ ->
   )
 
   buttons.prop('disabled', false).on 'click touch', (evt) ->
+    site_id = $(this).data('site-id')
+    url = '/sites/' + site_id + '/track_selected_goal'
+    $.ajax
+      method: 'POST'
+      url: url
     $(@).closest('.goal-block').addClass('selected')
     wrapper.trigger("toggleGoalSelection")
 

@@ -14,4 +14,8 @@ module FeatureHelper
   def devise_reset
     Warden.test_reset!
   end
+
+  def the_onboarding_campaigns_run
+    UserOnboardingCampaign.deliver_all_onboarding_campaign_email!
+  end
 end
