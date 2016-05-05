@@ -3,14 +3,10 @@ class ActivityMessage
   include ActionView::Helpers::NumberHelper
   include SiteElementsHelper
 
-  attr_reader :body, :site_element
+  attr_reader :site_element, :body
 
   def initialize(site_element)
     @site_element = site_element
-  end
-
-  def site_element
-    @site_element
   end
 
   def body
