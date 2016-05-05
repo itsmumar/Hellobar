@@ -8,9 +8,11 @@ HB.SiteElement = HB.createClass({
 
 
   setupIFrame: function(iframe) {
-    if(this.animated) {
+    if(this.animated)
       HB.addClass(iframe, "hb-animated");
-    }
+
+    if(this.theme_id)
+      HB.addClass(iframe, this.theme_id);
 
     // Any view_condition including string 'intent' will run the intent event listeners
     if (this.view_condition.indexOf('intent') !== -1) {
@@ -58,6 +60,8 @@ HB.SiteElement = HB.createClass({
         // Set wiggle listeners
         if(this.wiggle_button.length > 0)
           HB.wiggleEventListeners(this.w);
+
+        this.useGoogleFont();
       }.bind(this), 1);
     }.bind(this));
   },
@@ -113,6 +117,11 @@ HB.SiteElement = HB.createClass({
     d.write("<html><head>" + (HB.css || "") + "</head><body>" + html + "</body></html>");
     d.close();
     d.body.className = this.type;
+
+    if(this.theme_id)
+      HB.addClass(d.body, this.theme_id);
+
+    // Add IE Specific class overrides
     if(HB.isIEXOrLess(9))
       HB.addClass(d.body, "hb-old-ie");
 
@@ -488,5 +497,17 @@ HB.SiteElement = HB.createClass({
   converted: function()
   {
     HB.converted(this);
+  },
+
+  useGoogleFont: function() {
+    if(!this.google_font) return;
+
+    var link = this.w.contentWindow.document.createElement("LINK");
+    link.href = 'https://fonts.googleapis.com/css?family=' + this.google_font;
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+
+    var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
+    head.appendChild(link);
   }
 });

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160329183809) do
+ActiveRecord::Schema.define(version: 20160505173916) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -273,7 +273,7 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.string   "background_color",                default: "eb593c"
     t.string   "border_color",                    default: "ffffff"
     t.string   "button_color",                    default: "000000"
-    t.string   "font",                            default: "'Open Sans',sans-serif"
+    t.string   "font_id",                         default: "open_sans"
     t.string   "link_color",                      default: "ffffff"
     t.string   "link_style",                      default: "button"
     t.string   "link_text",          limit: 5000, default: "Click Here"
@@ -302,8 +302,8 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.string   "view_condition",                  default: "immediately"
     t.string   "email_placeholder",               default: "Your email",                    null: false
     t.string   "name_placeholder",                default: "Your name",                     null: false
-    t.integer  "image_upload_id"
     t.string   "image_placement",                 default: "bottom"
+    t.integer  "image_upload_id"
     t.integer  "active_image_id"
     t.string   "question"
     t.string   "answer1"
@@ -314,10 +314,11 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.string   "answer2link_text"
     t.string   "answer1caption"
     t.string   "answer2caption"
-    t.boolean  "use_question",                    default: false
     t.string   "phone_number"
     t.string   "phone_country_code",              default: "US"
+    t.boolean  "use_question",                    default: false
     t.boolean  "show_after_convert",              default: false
+    t.string   "theme_id"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
