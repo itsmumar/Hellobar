@@ -1,0 +1,41 @@
+{
+  "name": "Blue Autumn",
+  "id": "blue-autumn",
+  "fonts": [
+    "open_sans",
+    "source_pro",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "defaults": {
+    "Bar": {
+      "background_color": "29b0e0",
+      "text_color": "FFFFFF",
+      "button_color": "f0482c",
+      "link_color": "FFFFFF",
+      "font_id": "open_sans"
+    },
+    "Slider": {
+      "background_color": "29b0e0",
+      "text_color": "FFFFFF",
+      "button_color": "f0482c",
+      "link_color": "FFFFFF",
+      "font_id": "open_sans"
+    },
+    "Modal": {
+      "background_color": "29b0e0",
+      "text_color": "FFFFFF",
+      "button_color": "f0482c",
+      "link_color": "FFFFFF",
+      "font_id": "open_sans"
+    },
+    "Takeover": {
+      "background_color": "29b0e0",
+      "text_color": "FFFFFF",
+      "button_color": "f0482c",
+      "link_color": "FFFFFF",
+      "font_id": "open_sans"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Dark Green Spring",
+  "id": "dark-green-spring",
+  "fonts": [
+    "sintony",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "defaults": {
+    "Bar": {
+      "background_color": "3aba6f",
+      "text_color": "FFFFFF",
+      "button_color": "257543",
+      "link_color": "FFFFFF",
+      "font_id": "sintony"
+    },
+    "Slider": {
+      "background_color": "3aba6f",
+      "text_color": "FFFFFF",
+      "button_color": "257543",
+      "link_color": "FFFFFF",
+      "font_id": "sintony"
+    },
+    "Modal": {
+      "background_color": "3aba6f",
+      "text_color": "FFFFFF",
+      "button_color": "257543",
+      "link_color": "FFFFFF",
+      "font_id": "sintony"
+    },
+    "Takeover": {
+      "background_color": "3aba6f",
+      "text_color": "FFFFFF",
+      "button_color": "257543",
+      "link_color": "FFFFFF",
+      "font_id": "sintony"
+    }
+  }
+}

@@ -42,32 +42,54 @@ describe SiteElementsController do
   end
 
   describe "POST new" do
-    it "defaults branding to false if pro" do
-      subscription = subscriptions(:pro_subscription)
-      stub_current_user(subscription.site.owners.first)
-
-      get :new, :site_id => subscription.site.id, :format => :json
-
-      expect_json_response_to_include({ show_branding: false })
-    end
-
-    it "defaults branding to true if free user" do
-      subscription = subscriptions(:free_subscription)
-      stub_current_user(subscription.site.owners.first)
-
-      get :new, :site_id => subscription.site.id, :format => :json
-
-      json = JSON.parse(response.body)
-      expect_json_response_to_include({ show_branding: true })
-    end
-
-    it "doesn't push an unsaved element into the site.site_elements association" do
-      membership = create(:site_ownership)
-      create(:rule, site: membership.site)
+    it "defaults the font_id to the column default" do
+      membership = create(:site_membership)
       stub_current_user(membership.user)
 
       get :new, site_id: membership.site.id, format: :json
-      expect(assigns(:site_element).site.site_elements.map(&:id)).not_to include(nil)
+
+      default_font_id = SiteElement.columns_hash['font_id'].default
+      expect_json_response_to_include({ font_id: default_font_id })
+    end
+
+    context("pro subscription") do
+      it "defaults branding to false if pro" do
+        subscription = subscriptions(:pro_subscription)
+        stub_current_user(subscription.site.owners.first)
+
+        get :new, :site_id => subscription.site.id, :format => :json
+
+        expect_json_response_to_include({ show_branding: false })
+      end
+    end
+
+    context("free subscription") do
+      let(:subscription) { subscriptions(:free_subscription) }
+      before { stub_current_user(subscription.site.owners.first) }
+
+      it "defaults branding to true if free user" do
+        get :new, :site_id => subscription.site.id, :format => :json
+
+        json = JSON.parse(response.body)
+        expect_json_response_to_include({ show_branding: true })
+      end
+
+      it "sets the theme id to the default theme id" do
+        get :new, :site_id => subscription.site.id, :format => :json
+
+        json = JSON.parse(response.body)
+        default_theme = Theme.where(default_theme: true).first
+        expect_json_response_to_include({ theme_id: default_theme.id })
+      end
+
+      it "doesn't push an unsaved element into the site.site_elements association" do
+        membership = create(:site_ownership)
+        create(:rule, site: membership.site)
+        stub_current_user(membership.user)
+
+        get :new, site_id: membership.site.id, format: :json
+        expect(assigns(:site_element).site.site_elements.map(&:id)).not_to include(nil)
+      end
     end
   end
 

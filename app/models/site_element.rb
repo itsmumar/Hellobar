@@ -1,4 +1,6 @@
 class SiteElement < ActiveRecord::Base
+  extend ActiveHash::Associations::ActiveRecordExtensions
+
   TYPES = [Bar, Modal, Slider, Takeover]
 
   DEFAULT_EMAIL_THANK_YOU = "Thank you for signing up!"
@@ -31,6 +33,8 @@ class SiteElement < ActiveRecord::Base
   belongs_to :rule, touch: true
   belongs_to :contact_list
   belongs_to :active_image, class_name: "ImageUpload"
+  belongs_to :theme
+  belongs_to :font
 
   acts_as_paranoid
 
@@ -156,7 +160,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def secondary_color
-    background_color
+    button_color
   end
 
   def display_thank_you_text

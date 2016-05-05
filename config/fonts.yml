@@ -1,0 +1,60 @@
+-
+  id: open_sans # DO NOT CHANGE WITHOUT UPDATING THE FONT_ID COLUMN DEFAULT
+  name: Open Sans
+  value: "'Open Sans',sans-serif"
+  google_font: 'Open+Sans'
+-
+  id: proxima
+  name: Proxima Nova
+  value: "'proxima-nova',sans-serif"
+-
+  id: helvetica
+  name: Helvetica
+  value: Helvetica,sans-serif
+-
+  id: arial
+  name: Arial
+  value: Arial,Helvetica,sans-serif
+-
+  id: georgia
+  name: Georgia
+  value: Georgia,serif
+-
+  id: sanserif
+  name: 'Sans-Serif'
+  value: Helvetica,Arial,sans-serif
+-
+  id: libre_baskerville
+  name: Libre Baskerville
+  value: "'Libre Baskerville',sans-serif"
+  google_font: 'Libre+Baskerville'
+-
+  id: source_pro
+  name: 'Source Sans Pro'
+  value: "'Source Sans Pro',sans-serif"
+  google_font: 'Source+Sans+Pro'
+-
+  id: roboto
+  name: 'Roboto'
+  value: "'Roboto',sans-serif"
+  google_font: 'Roboto'
+-
+  id: lato
+  name: 'Lato'
+  value: "'Lato',sans-serif"
+  google_font: 'Lato'
+-
+  id: josefin_sans
+  name: 'Josefin Sans'
+  value: "'Josefin Sans',sans-serif"
+  google_font: 'Josefin+Sans'
+-
+  id: montserrat
+  name: 'Montserrat'
+  value: "'Montserrat',sans-serif"
+  google_font: 'Montserrat'
+-
+  id: sintony
+  name: 'Sintony'
+  value: "'Sintony',sans-serif"
+  google_font: 'Sintony'
