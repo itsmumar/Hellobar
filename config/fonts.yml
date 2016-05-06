@@ -58,3 +58,47 @@
   name: 'Sintony'
   value: "'Sintony',sans-serif"
   google_font: 'Sintony'
+-
+  id: unsupported_georgia
+  name: 'Georgia Times'
+  value: "Georgia,Times New Roman,Times,serif"
+-
+  id: unsupported_futura
+  name: 'Futura'
+  value: "Futura,sans-serif"
+-
+  id: unsupported_tahoma
+  name: 'Tahoma'
+  value: "Tahoma,Geneva,sans-serif"
+-
+  id: unsupported_veranda
+  name: 'Veranda'
+  value: "Verdana,Geneva"
+-
+  id: unsupported_lucida_grande
+  name: 'Lucida Grande'
+  value: "Lucida Grande,Lucida Sans Unicode,sans-serif"
+-
+  id: unsupported_trebuchet
+  name: 'Trebuchet MS'
+  value: "Trebuchet MS,sans-serif"
+-
+  id: unsupported_calibri
+  name: 'Calibri'
+  value: "Calibri,sans-serif"
+-
+  id: unsupported_cambria
+  name: 'Cambria'
+  value: "Cambria,serif"
+-
+  id: unsupported_arial_black
+  name: 'Arial Black'
+  value: "Arial Black,Gadget,sans-serif"
+-
+  id: unsupported_times_new_roman
+  name: 'Times New Roman'
+  value: "Times New Roman,Times,serif"
+-
+  id: unsupported_courier_new
+  name: 'Courier New'
+  value: "Courier New,monospace"
