@@ -23,7 +23,9 @@ class SiteElementsController < ApplicationController
 
     @rules = @site.rules.all
     @site_element = SiteElement.new({
+      font_id: SiteElement.columns_hash['font_id'].default,
       rule: @site.rules.first,
+      theme: Theme.where(default_theme: true).first,
       show_branding: !@site.capabilities(true).remove_branding?,
       settings: {url: @site.url, url_to_like: @site.url }
     })
@@ -126,7 +128,7 @@ class SiteElementsController < ApplicationController
       :display_when,
       :element_subtype,
       :email_placeholder,
-      :font,
+      :font_id,
       :headline,
       :image_placement,
       :link_color,
@@ -145,6 +147,7 @@ class SiteElementsController < ApplicationController
       :size,
       :text_color,
       :thank_you_text,
+      :theme_id,
       :type,
       :use_question,
       :view_condition_attribute,
