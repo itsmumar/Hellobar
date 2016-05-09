@@ -73,6 +73,20 @@ describe Bill do
     bill.paid_with_payment_method_detail.should == details
   end
 
+  describe "#during_trial_subscription?" do
+    it "should not be on trial subscription" do
+      bill = bills(:paid_bill)
+      bill.during_trial_subscription?.should be_false
+    end
+
+    it "should be on trial subscription" do
+      bill = bills(:paid_bill)
+      bill.update_attribute(:amount, 0)
+      bill.subscription.payment_method = nil
+      bill.during_trial_subscription?.should be_true
+    end
+  end
+
   describe Bill::Recurring do
     it "should create the next bill once paid" do
       subscription = subscriptions(:zombo_subscription)
