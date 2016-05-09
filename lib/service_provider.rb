@@ -71,7 +71,7 @@ class ServiceProvider
     end
   end
 
-  def log message
+  def log(message)
     $stdout.puts "#{Time.current} [#{self.class.name}] " + message
   end
 

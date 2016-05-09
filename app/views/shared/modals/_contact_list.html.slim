@@ -107,13 +107,23 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |       <li>Your {{providerName}} username and password</li>
   |     {{/if}}
   |   {{/if}}
-  |   <li>An existing list with {{providerName}} to sync to</li>
+  |   {{#unless requiresWebhookUrl}}
+  |     <li>An existing list with {{providerName}} to sync to</li>
+  |   {{/unless}}
   | </ol>
   |
   | <label for="contact_list_provider_info">Paste the required information below, then click Done.</label>
   |
   | {{#if requiresAppUrl}}
   |   <input type='text' id="contact_list_app_url" name="contact_list[data][app_url]" value="{{contactList.data.app_url}}" placeholder="Your AppURL (eg. tx305.infusionsoft.com)">
+  | {{/if}}
+  |
+  | {{#if requiresWebhookUrl}}
+  |   <input type="url" id="contact_list_webhook_url" name="contact_list[data][webhook_url]" value="{{contactList.data.webhook_url}}" placeholder="Your webhook URL">
+  |   <label for="contact_list_webhook_method">POST request
+  |     <input type="checkbox" id="contact_list_webhook_method" name="contact_list[data][webhook_method]" value="{{contactList.data.webhook_method}}" {{#if webhookIsPost}}checked{{/if}}>
+  |   </label>
+  |   <small>Each email collected is guaranteed to be sent to the specified URL at least once, but possibly more than once. It is the responsibility of the webhook to take care of possible duplicates.</small>
   | {{/if}}
   |
   | {{#if requiresUsername}}
@@ -128,16 +138,18 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |   <textarea id="contact_list_embed_code" name="contact_list[data][embed_code]">{{contactList.data.embed_code}}</textarea>
   | {{/if}}
   |
-  | {{#if oauth}}
-  |   <div>
-  |     <a class="button cancel do-this-later">I'll do this later</a>
-  |     <a class="button ready">I'm ready</a>
-  |   </div>
-  | {{else}}
-  |   <div>
-  |     <a class="button ready">Connect my account</a>
-  |   </div>
-  | {{/if}}
+  | {{#unless requiresWebhookUrl}}
+  |   {{#if oauth}}
+  |     <div>
+  |       <a class="button cancel do-this-later">I'll do this later</a>
+  |       <a class="button ready">I'm ready</a>
+  |     </div>
+  |   {{else}}
+  |     <div>
+  |       <a class="button ready">Connect my account</a>
+  |     </div>
+  |   {{/if}}
+  | {{/unless}}
 
 /-----------  No Provider Template  -----------/
 

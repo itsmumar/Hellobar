@@ -194,10 +194,14 @@ class @ContactListModal extends Modal
     api_key = $('#contact_list_api_key').val()
     username = $('#contact_list_username').val()
     app_url = $('#contact_list_app_url').val()
+    webhook_url = $('#contact_list_webhook_url').val()
+    webhook_method = if $('#contact_list_webhook_method').prop('checked') then "post" else "get"
 
     if api_key then data.api_key = api_key
     if username then data.username = username
     if app_url then data.app_url = app_url
+    if webhook_url then data.webhook_url = webhook_url
+    if webhook_method then data.webhook_method = webhook_method
     data
 
   _isLocalContactStorage: ->
@@ -240,6 +244,8 @@ class @ContactListModal extends Modal
       requiresAppUrl: option.data('requiresAppUrl')
       requiresApiKey: option.data('requiresApiKey')
       requiresUsername: option.data('requiresUsername')
+      requiresWebhookUrl: option.data('requiresWebhookUrl')
+      webhookIsPost: @options.contactList?.data?.webhook_method == "post"
       contactList: @options.contactList
 
     if value == "0" # user selected "in Hello Bar only"
@@ -281,6 +287,5 @@ class @ContactListModal extends Modal
     @$modal.find("#contact_list_name").val(data.name)
     @$modal.find("#contact_list_provider").val(data.provider || "0")
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
-
     @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
     @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete

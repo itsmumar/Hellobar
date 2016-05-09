@@ -2,14 +2,17 @@ HelloBar.TextController = Ember.Controller.extend
 
   needs: ['application']
 
-  fontOptions: [
-    {value: "'Open Sans',sans-serif", label: 'Open Sans'}
-    {value: "'proxima-nova',sans-serif", label: 'Proxima Nova'}
-    {value: 'Helvetica,sans-serif', label: 'Helvetica'}
-    {value: 'Arial,Helvetica,sans-serif', label: 'Arial'}
-    {value: 'Georgia,serif', label: 'Georgia'}
-    {value: 'Helvetica,Arial,sans-serif', label: 'Sans-Serif'}
-  ]
+  fontOptions: Ember.computed 'model.theme_id', ->
+    foundTheme = _.find availableThemes, (theme) =>
+      theme.id == @get('model.theme_id')
+
+    if foundTheme && foundTheme.fonts
+      _.map foundTheme.fonts, (fontId) ->
+        _.find availableFonts, (font) ->
+          font.id == fontId
+    else
+      availableFonts
+
 
   imagePlacementOptions: [
     {value: 'top', label: 'Top'}

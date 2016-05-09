@@ -264,32 +264,6 @@ describe SitesController do
     before do
       stub_current_user(user)
       Hello::DataAPI.stub(lifetime_totals: nil)
-      ImproveSuggestion.stub(get: {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]]})
-    end
-
-    it "returns all suggestions if site capabilities allow it" do
-      site.capabilities.max_suggestions.should >= 3
-
-      get :improve, :id => site
-
-      assigns(:suggestions)["all"].should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]]}
-    end
-
-    it "restricts the number of improvement suggestions based on the site's capabilities" do
-      capabilities = Subscription::Free::Capabilities.new(nil, site).tap { |c| c.stub(max_suggestions: 2) }
-      Site.any_instance.stub(capabilities: capabilities)
-
-      get :improve, :id => site
-
-      assigns(:suggestions)["all"].should == {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2]]}
-    end
-
-    it "does not load any empty suggestions" do
-      ImproveSuggestion.stub(get: {"high traffic, low conversion"=>[["a:b", 1, 1], ["a:b", 2, 2], ["a:b", 3, 3]], "high traffic, high conversion" => []})
-
-      get :improve, :id => site
-
-      assigns(:suggestions)["all"].keys.should_not include("high traffic, high conversion")
     end
   end
 

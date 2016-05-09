@@ -57,13 +57,9 @@ class ScriptGenerator < Mustache
   # create their own CSS easily to target the branding
   def pro_secret
     @pro_secret ||= begin
-      if @options[:preview]
-        "hellobar"
-      else
-        random_string = ('a'..'z').to_a[rand(26)]
-        random_string << Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url.to_s.upcase}#{site.id}#{Time.now.to_f}#{rand(1_000_000)}")
-        random_string
-      end
+      random_string = ('a'..'z').to_a[rand(26)]
+      random_string << Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url.to_s.upcase}#{site.id}#{Time.now.to_f}#{rand(1_000_000)}")
+      random_string
     end
   end
 
@@ -119,32 +115,15 @@ class ScriptGenerator < Mustache
   end
 
   def hellobar_container_css
-    css = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/container_common.css"
-    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
-    css << "\n" << klasses.map { |x| site_element_css(x, true) }.join("\n")
-
+    css = read_css_files(container_css_files)
     css = css.gsub("hellobar-container", "#{pro_secret}-container")
 
     CSSMin.minify(css).to_json
   end
 
   def hellobar_element_css
-    css = File.read "#{Rails.root}/vendor/assets/stylesheets/site_elements/common.css"
-    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
-    klasses.each { |x| css << "\n" << site_element_css(x) }
-
+    css = read_css_files(element_css_files)
     CSSMin.minify(css).to_json
-  end
-
-  def site_element_css(element_class, container=false)
-    file = "#{Rails.root}/vendor/assets/stylesheets/site_elements/#{element_class.name.downcase}/"
-    file << (container ? "container.css" : "element.css")
-
-    if File.exist?(file)
-      f = File.read(file)
-      return f unless f.blank?
-    end
-    ""
   end
 
   def branding_templates
@@ -236,7 +215,6 @@ private
       border_color
       button_color
       email_placeholder
-      font
       headline
       image_placement
       link_color
@@ -252,6 +230,7 @@ private
       target
       text_color
       texture
+      theme_id
       type
       view_condition
       wiggle_button
@@ -282,7 +261,8 @@ private
       answer2link_text: site_element.answer2link_text,
       use_question: site_element.use_question,
       question: site_element.question,
-
+      font: site_element.font.value,
+      google_font: site_element.font.google_font,
       branding_url: "http://www.hellobar.com?sid=#{site_element.id}",
       closable: site_element.is_a?(Bar) ? site_element.closable : false,
       contact_list_id: site_element.contact_list_id,
@@ -327,5 +307,43 @@ private
 
   def all_site_elements
     site.rules.map { |r| site_elements_for_rule(r, false) }.flatten
+  end
+
+  def element_classes
+    @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
+  end
+
+  def element_themes
+    @options[:preview] ? Theme.all : all_site_elements.map(&:theme).compact.uniq
+  end
+
+  def container_css_files
+    vendor_root = "#{Rails.root}/vendor/assets/stylesheets/site_elements"
+    files = ["#{vendor_root}/container_common.css"]
+
+    files += element_classes.map { |klass| "#{vendor_root}/#{klass.name.downcase}/container.css" }
+    files += element_themes.map(&:container_css_path)
+  end
+
+  def element_css_files
+    vendor_root = "#{Rails.root}/vendor/assets/stylesheets/site_elements"
+    files = ["#{vendor_root}/common.css"]
+
+    files += element_classes.map { |klass| "#{vendor_root}/#{klass.name.downcase}/element.css" }
+    files += element_themes.map(&:element_css_path)
+  end
+
+  def read_css_files(files)
+    css = files.map do |file|
+      next unless File.exist?(file)
+      raw_css = File.read(file)
+      if file.include?(".scss")
+        raw_css = Sass::Engine.new(raw_css, syntax: :scss).render
+      end
+
+      raw_css
+    end
+
+    css.compact.join("\n")
   end
 end
