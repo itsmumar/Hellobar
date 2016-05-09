@@ -97,6 +97,9 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |   {{#if requiresEmbedCode}}
   |     <li>Your embed code from {{providerName}}</li>
   |   {{else}}
+  |     {{#if requiresAccountId}}
+  |       <li>The id of your account with {{providerName}}</li>
+  |     {{/if}}
   |     {{#if requiresApiKey}}
   |       <li>Your API key from {{providerName}}</li>
   |     {{/if}}
@@ -128,6 +131,10 @@ script id="contact-list-modal-provider-instructions-template" type="text/x-handl
   |
   | {{#if requiresUsername}}
   |   <input type='text' id="contact_list_username" name="contact_list[data][username]" value="{{contactList.data.username}}" placeholder="Your username">
+  | {{/if}}
+  |
+  | {{#if requiresAccountId}}
+  |     <input type='text' id="contact_list_username" name="contact_list[data][username]" value="{{contactList.data.username}}" placeholder="Your Account ID">
   | {{/if}}
   |
   | {{#if requiresApiKey}}
