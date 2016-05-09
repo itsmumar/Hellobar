@@ -77,7 +77,9 @@ module EmailSynchronizer
     # run something immediately after sync
     log_entry.update(completed: true) if log_entry
   rescue *ESP_ERROR_CLASSES => e
-    log_entry.update(completed: false, error: e.to_s) if log_entry
+    if log_entry
+      log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
+    end
 
     if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
       Raven.capture_exception(e)
@@ -90,7 +92,7 @@ module EmailSynchronizer
       raise e
     end
   rescue => e
-    log_entry.update(completed: false, error: e.to_s) if log_entry
+    log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n")) if log_entry
     raise e
   end
 end

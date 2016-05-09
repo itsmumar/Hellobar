@@ -154,6 +154,13 @@ describe ContactList do
       expect(contact_list.contact_list_logs.last.error).to include("this error")
     end
 
+    it "saves the stacktrace in a log entry" do
+      allow(contact_list).to receive(:oauth?) { true }
+      allow(service_provider).to receive(:subscribe).and_raise("this error")
+      expect { contact_list.sync_one! "email@email.com", "Test Testerson"}.to raise_error
+      expect(contact_list.contact_list_logs.last.stacktrace).to_not be_blank
+    end
+
     it "marks a log entry as completed" do
       allow(contact_list).to receive(:oauth?) { true }
       allow(service_provider).to receive(:subscribe)
