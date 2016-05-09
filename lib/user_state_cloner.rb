@@ -60,8 +60,12 @@ class UserStateCloner
 
   def build_site_elements(site_elements_json)
     site_elements_json.map do |site_element_json|
+      font_value = site_element_json.delete(:font)
+      font = Font.find_by(value: font_value)
+
       element = SiteElement.find_or_initialize_by(id: site_element_json[:id])
       element.attributes = site_element_json
+      element.font = font
       element
     end
   end
