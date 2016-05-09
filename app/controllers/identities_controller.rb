@@ -24,22 +24,14 @@ class IdentitiesController < ApplicationController
       return redirect_to site_contact_lists_path(@site)
     end
 
-    if params[:app_url].present?
-      identity.extra = {"app_url" => sanitize_app_url(params[:app_url])}
-    end
-
-    if params[:username]
-      identity.credentials = {"username" => params[:username]}
-    end
+    identity.extra       = extra_from_request
+    identity.credentials = credentials_from_request
 
     if params[:api_key]
       #TODO sanitze me?
       identity.api_key = params[:api_key]
       env["omniauth.params"] ||= {}
       env["omniauth.params"].merge!({"redirect_to" => request.referrer})
-    else
-      identity.credentials = env["omniauth.auth"]["credentials"]
-      identity.extra = env["omniauth.auth"]["extra"]
     end
 
     if identity.save
@@ -58,6 +50,22 @@ class IdentitiesController < ApplicationController
   end
 
   private
+
+  def credentials_from_request
+    if params[:api_key] && params[:username].present?
+      {"username" => params[:username]}
+    else
+      env["omniauth.auth"] && env["omniauth.auth"]["credentials"]
+    end
+  end
+
+  def extra_from_request
+    if params[:app_url].present?
+      {"app_url" => sanitize_app_url(params[:app_url])}
+    else
+      env["omniauth.auth"] && env["omniauth.auth"]["extra"]
+    end
+  end
 
   def load_site
     @site ||= current_user.sites.find(params[:site_id] || env["omniauth.params"]["site_id"])
