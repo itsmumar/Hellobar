@@ -124,6 +124,15 @@ describe ContactList do
       end
     end
 
+    context "webhook" do
+      it "syncs" do
+        allow(contact_list).to receive(:data) { {"webhook_url" => "http://url.com/webhooks"} }
+        expect(service_provider).to receive(:subscribe).with(nil, "email@email.com", "Name Mcnamerson", true)
+
+        contact_list.sync_one!("email@email.com", "Name Mcnamerson")
+      end
+    end
+
     context "embed code provider" do
       let(:provider) { 'mad_mimi_form' }
       let(:contact_list) { contact_lists(:embed_code).tap{|c| c.identity = identity} }
