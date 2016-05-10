@@ -2,7 +2,6 @@ require "./config/initializers/settings"
 
 require "./lib/hello/internal_analytics"
 require "./lib/hello/asset_storage"
-require "./lib/hello/activity_message"
 require "./lib/hello/data_api"
 require "./lib/hello/data_api_helper"
 require "./lib/hello/suggested_opportunities"
@@ -13,6 +12,10 @@ require "./lib/hello/tracking_param"
 require "./lib/hello/wordpress_model"
 require "./lib/hello/wordpress_user"
 require "./lib/analytics"
+
+require "./lib/hello/messages/activity_message"
+require "./lib/hello/messages/announcement_activity_message"
+require "./lib/hello/messages/conversion_activity_message"
 
 require "./lib/hello/user_onboarding_campaigns/user_onboarding_campaign"
 require "./lib/hello/user_onboarding_campaigns/create_a_bar_campaign"

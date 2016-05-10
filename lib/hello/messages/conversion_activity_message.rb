@@ -1,24 +1,3 @@
-class ActivityMessage
-  include ActionView::Helpers::DateHelper
-  include ActionView::Helpers::NumberHelper
-  include SiteElementsHelper
-
-  attr_reader :site_element, :body
-
-  def initialize(site_element)
-    @site_element = site_element
-  end
-
-  def body
-    message = "<strong>"
-    message += "<a href='/sites/#{self.site_element.site.id}/site_elements##{self.site_element.id}'>"
-    message += "The #{self.site_element.short_subtype} bar you added #{time_ago_in_words(self.site_element.created_at)} ago"
-    message += "</a>"
-    message += "</strong>"
-    message
-  end
-end
-
 class ConversionActivityMessage < ActivityMessage
   def body
     message = append_number_of_units_text_to_message(self.site_element, super)
@@ -38,12 +17,8 @@ class ConversionActivityMessage < ActivityMessage
   end
 
   def append_conversion_text_to_message(site_element, related_site_elements, message)
-    group_views, group_conversions = related_site_elements.inject([0, 0]) do |sum, group_site_element|
-      [sum[0] + group_site_element.total_views, sum[1] + group_site_element.total_conversions]
-    end
-    conversion_rate = site_element.total_conversions * 1.0 / site_element.total_views
-    group_conversion_rate = group_conversions * 1.0 / group_views
-
+    conversion_rate = site_element.conversion_rate
+    group_conversion_rate = SiteElement.group_conversion_rate(related_site_elements)
     # dont provide lift number when lift is infinite
     unless [group_conversion_rate, conversion_rate].any?(&:infinite?)
       message = append_comparison_text_to_message(site_element, conversion_rate, group_conversion_rate, message)
@@ -76,20 +51,6 @@ class ConversionActivityMessage < ActivityMessage
     else
       message << " We don't have enough data yet to know if this is significant."
     end
-    message
-  end
-end
-
-class AnnouncementActivityMessage < ActivityMessage
-  def body
-    message = append_number_of_views_text_to_message(element, super)
-    message
-  end
-
-  private
-
-  def append_number_of_views_text_to_message(site_element, message)
-    message = "#{message} has already resulted in #{number_with_delimiter(site_element.total_views)} views."
     message
   end
 end

@@ -92,6 +92,22 @@ class SiteElement < ActiveRecord::Base
     end
   end
 
+  def self.group_view_count(site_elements)
+    site_elements.to_a.sum(&:total_views)
+  end
+
+  def self.group_conversion_count(site_elements)
+    site_elements.to_a.sum(&:total_conversions)
+  end
+
+  def self.group_conversion_rate(site_elements)
+    SiteElement.group_conversion_count(site_elements) * 1.0 / SiteElement.group_view_count(site_elements)
+  end
+
+  def conversion_rate
+    self.total_conversions * 1.0 / self.total_views
+  end
+
   def related_site_elements
     self.site.site_elements.where.not(:id => self.id).select{ |e| e.short_subtype == self.short_subtype }
   end
