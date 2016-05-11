@@ -77,7 +77,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
           obj.$('.gradient-indicator')[0],
           sliderCoordinate
           pickerCoordinate
-        );
+        )
 
         obj.set('color', hex.substring(1))
         obj.set('rgb', rgb)
@@ -157,9 +157,11 @@ HelloBar.ColorPreview = Ember.View.extend
 
   style: ( ->
     color = one.color(@get('color'))
-    'background-color: ' + color.hex()
+    if color.length
+      'background-color: ' + color.hex()
   ).property('color')
 
   mouseUp: ->
     color = one.color(@get('color'))
-    @set('parentView.color', color.hex())
+    if color.length
+      @set('parentView.color', color.hex())

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160505173916) do
+ActiveRecord::Schema.define(version: 20160509123541) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -37,8 +37,10 @@ ActiveRecord::Schema.define(version: 20160505173916) do
     t.boolean  "locked",                             default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "api_token"
   end
 
+  add_index "admins", ["api_token"], name: "index_admins_on_api_token", using: :btree
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
 
@@ -132,6 +134,7 @@ ActiveRecord::Schema.define(version: 20160505173916) do
     t.boolean  "completed",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "stacktrace"
   end
 
   add_index "contact_list_logs", ["contact_list_id"], name: "index_contact_list_logs_on_contact_list_id", using: :btree
@@ -291,19 +294,19 @@ ActiveRecord::Schema.define(version: 20160505173916) do
     t.string   "thank_you_text"
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
+    t.integer  "wordpress_bar_id"
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
-    t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
     t.string   "view_condition",                  default: "immediately"
     t.string   "email_placeholder",               default: "Your email",                    null: false
     t.string   "name_placeholder",                default: "Your name",                     null: false
-    t.string   "image_placement",                 default: "bottom"
     t.integer  "image_upload_id"
+    t.string   "image_placement",                 default: "bottom"
     t.integer  "active_image_id"
     t.string   "question"
     t.string   "answer1"
@@ -314,9 +317,9 @@ ActiveRecord::Schema.define(version: 20160505173916) do
     t.string   "answer2link_text"
     t.string   "answer1caption"
     t.string   "answer2caption"
+    t.boolean  "use_question",                    default: false
     t.string   "phone_number"
     t.string   "phone_country_code",              default: "US"
-    t.boolean  "use_question",                    default: false
     t.boolean  "show_after_convert",              default: false
     t.string   "theme_id"
   end
@@ -352,8 +355,8 @@ ActiveRecord::Schema.define(version: 20160505173916) do
     t.datetime "deleted_at"
     t.datetime "script_uninstalled_at"
     t.string   "install_type"
-    t.datetime "selected_goal_clicked_at"
     t.text     "invoice_information"
+    t.datetime "selected_goal_clicked_at"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree

@@ -40,6 +40,7 @@ unless defined?(Hellobar::Settings)
     sentry_dsn
     store_site_scripts_locally
     syncable
+    test_cloning
     tracking_host
     twilio_password
     twilio_user

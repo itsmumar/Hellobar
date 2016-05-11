@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :api do
+    resources :user_state, only: :show
+  end
+
   devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords"}
 
   devise_scope :user do
