@@ -1,0 +1,11 @@
+<%
+  images = {}
+  Dir.chdir("#{Rails.root}/app/assets/images/") do
+    Dir["**/*.*"].each do |filename|
+      images[filename] = image_path(filename)
+    end
+  end
+%>
+
+window.image_path = (name) ->
+  <%= images.to_json %>[name]

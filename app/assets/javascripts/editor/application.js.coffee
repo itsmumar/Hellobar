@@ -12,6 +12,7 @@
 #= require ./../internal_tracking
 
 #= require ./router
+#= require ./../images
 
 #-----------  Application Initiation  -----------#
 

@@ -10,18 +10,16 @@
   }}
 </div>
 
-<hr></hr>
-
-{{#tab-view paneSelected=paneSelected}}
-  {{#tab-pane name="Text"}}
-    {{partial "partials/text-pane"}}
-  {{/tab-pane}}
-
+{{#tab-view model=model navigationName='design'}}
   {{#tab-pane name="Colors"}}
     {{partial "partials/colors-pane"}}
   {{/tab-pane}}
 
   {{#tab-pane name="Image"}}
     {{partial "partials/image-pane"}}
+  {{/tab-pane}}
+
+  {{#tab-pane name="Text" class="text"}}
+    {{partial "partials/text-pane"}}
   {{/tab-pane}}
 {{/tab-view}}

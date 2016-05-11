@@ -65,7 +65,8 @@ HelloBar.DesignController = Ember.Controller.extend
   setHBCallbacks: ( ->
     # Listen for when question answers are pressed and change the question tabs
     HB.on "answerSelected", (choice) =>
-      this.set('paneSelected', choice)
+      this.set('model.paneSelectedIndex', choice)
+      this.set('paneSelection', (this.get('paneSelection') || 0) + 1)
       this.send('showResponse' + choice)
   ).on("init")
 
