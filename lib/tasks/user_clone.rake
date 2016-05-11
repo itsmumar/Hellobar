@@ -16,4 +16,11 @@ namespace :clone do
       raise 'Bad api token or user id'
     end
   end
+
+  desc "Backfill API tokens for admin accounts"
+  task backfill_api_tokens: :environment do
+    Admin.all.each do |admin|
+      admin.update(api_token: SecureRandom.base64)
+    end
+  end
 end
