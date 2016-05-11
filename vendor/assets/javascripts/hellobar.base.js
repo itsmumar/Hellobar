@@ -1217,7 +1217,7 @@ var HB = {
     {
       var conditionKey = condition.value.split("=")[0];
       var currentValue = HB.getSegmentValue(condition.segment)[conditionKey];
-      var values = condition.value.split("=")[1];
+      var values = condition.value.split("=")[1] || "";
     }
     else {
       var currentValue = HB.getSegmentValue(condition.segment);
@@ -1448,6 +1448,7 @@ var HB = {
     {
       var key, value;
       var components = pairs[i].split("=");
+      components[1] || (components[1] = ''); // default the key to an empty string
 
       // handle ASCII encoding
       utf8bytes = unescape(encodeURIComponent(components[0]));
