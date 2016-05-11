@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160505173916) do
+ActiveRecord::Schema.define(version: 20160509123541) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 20160505173916) do
     t.boolean  "completed",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "stacktrace"
   end
 
   add_index "contact_list_logs", ["contact_list_id"], name: "index_contact_list_logs_on_contact_list_id", using: :btree
