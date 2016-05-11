@@ -1073,31 +1073,30 @@ var HB = {
 
   // Determine if an element should be displayed
   shouldShowElement: function(siteElement) {
-    var lastVisited = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
-    var lastUpdated = new Date(siteElement.updated_at);
-
     // Skip the site element if they have already seen/dismissed it
     // and it hasn't been changed since then and the user has not specified
     // that we show it regardless
-    if ( (HB.didConvert(siteElement) || HB.didDismissThisHB(siteElement) || HB.didDismissHB()) && lastUpdated < lastVisited ) {
-      var yesterday = new Date(new Date() - 86400000);
-
-      if(siteElement.show_after_convert) {
-        // Show it again after 24 hours
-        if(lastVisited > yesterday){
-          return false;
-        }
-      } else {
-        return false;
-      }
-    }
-
-    // Skip the site element if it's click to call and the device is not mobile
-    if(siteElement.subtype == "call" && HB.getVisitorData("dv") !== "mobile") {
+    if ( (HB.convertedOrDismissed(siteElement) && !HB.updatedSinceLastVisit(siteElement)) || HB.nonMobileClickToCall(siteElement) ) {
       return false;
+    } else {
+      return true;
     }
+  },
 
-    return true;
+  nonMobileClickToCall: function(siteElement) {
+    return siteElement.subtype == "call" && HB.getVisitorData("dv") !== "mobile";
+  },
+
+  convertedOrDismissed: function(siteElement) {
+    var converted = HB.didConvert(siteElement) && !siteElement.show_after_convert;
+    return converted || HB.didDismissThisHB(siteElement) || HB.didDismissHB();
+  },
+
+  updatedSinceLastVisit: function(siteElement) {
+    var lastVisited = new Date(HB.getSiteElementData(siteElement.id, "lv")*1000);
+    var lastUpdated = new Date(siteElement.updated_at);
+
+    return lastUpdated > lastVisited;
   },
 
   // Returns the best element to show from a group of elements

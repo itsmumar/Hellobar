@@ -109,9 +109,9 @@ class @ContactListModal extends Modal
 
       newPath = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
       queryParams = {}
-      queryParams["api_key"] = @_getFormData().data.api_key
-      queryParams["username"] = @_getFormData().data.username
-      queryParams["app_url"] = @_getFormData().data.app_url
+      queryParams["api_key"]    = @_getFormData().data.api_key
+      queryParams["username"]   = @_getFormData().data.username
+      queryParams["app_url"]    = @_getFormData().data.app_url
       newPath += "&" + $.param(queryParams)
 
       @options.window.location = newPath
@@ -138,7 +138,6 @@ class @ContactListModal extends Modal
     submitButton = @$modal.find("a.submit")
     submitButton.attr("disabled", true)
     formData = @_getFormData()
-
     $.ajax @options.saveURL,
       type: @options.saveMethod
       data: {contact_list: formData}
@@ -191,16 +190,16 @@ class @ContactListModal extends Modal
       remote_name: $(remoteListSelect).find("option:selected").text()
       embed_code: $('#contact_list_embed_code').val()
 
-    api_key = $('#contact_list_api_key').val()
-    username = $('#contact_list_username').val()
-    app_url = $('#contact_list_app_url').val()
-    webhook_url = $('#contact_list_webhook_url').val()
-    webhook_method = if $('#contact_list_webhook_method').prop('checked') then "post" else "get"
+    api_key         = $('#contact_list_api_key').val()
+    username        = $('#contact_list_username').val()
+    app_url         = $('#contact_list_app_url').val()
+    webhook_url     = $('#contact_list_webhook_url').val()
+    webhook_method  = if $('#contact_list_webhook_method').prop('checked') then "post" else "get"
 
-    if api_key then data.api_key = api_key
-    if username then data.username = username
-    if app_url then data.app_url = app_url
-    if webhook_url then data.webhook_url = webhook_url
+    if api_key        then data.api_key = api_key
+    if username       then data.username = username
+    if app_url        then data.app_url = app_url
+    if webhook_url    then data.webhook_url = webhook_url
     if webhook_method then data.webhook_method = webhook_method
     data
 
@@ -242,6 +241,7 @@ class @ContactListModal extends Modal
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
+      requiresAccountId: option.data('requiresAccountId')
       requiresApiKey: option.data('requiresApiKey')
       requiresUsername: option.data('requiresUsername')
       requiresWebhookUrl: option.data('requiresWebhookUrl')
