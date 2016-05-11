@@ -11,11 +11,12 @@
       p Point visitors to your latest deal, bargain, or giveaway.
       button.button(disabled value='money' data-site-id='#{@site.id}') Select This Goal
 
-    .goal-block
-      i.large-icon.icon-call
-      h6 Talk to Your Visitors
-      p Encourage mobile visitors to give you a ring
-      button.button(disabled value='call' data-site-id='#{@site.id}') Select This Goal
+    - unless current_user.created_after_limitted_goals_ab_test_start_date && get_ab_variation("Onboarding Limitted To Three Goals 2016-05-11") == 'variant'
+      .goal-block
+        i.large-icon.icon-call
+        h6 Talk to Your Visitors
+        p Encourage mobile visitors to give you a ring
+        button.button(disabled value='call' data-site-id='#{@site.id}') Select This Goal
 
     .goal-block
       i.large-icon.icon-contacts
@@ -23,11 +24,12 @@
       p Convert one-time visits into lasting connections.
       button.button(disabled value='contacts' data-site-id='#{@site.id}') Select This Goal
 
-    .goal-block
-      i.large-icon.icon-thumbsup
-      h6 Get Facebook Likes
-      p Expand your social reach to maximize word of mouth.
-      button.button(disabled value='facebook' data-site-id='#{@site.id}') Select This Goal
+    - unless current_user.created_after_limitted_goals_ab_test_start_date && get_ab_variation("Onboarding Limitted To Three Goals 2016-05-11") == 'variant'
+      .goal-block
+        i.large-icon.icon-thumbsup
+        h6 Get Facebook Likes
+        p Expand your social reach to maximize word of mouth.
+        button.button(disabled value='facebook' data-site-id='#{@site.id}') Select This Goal
 
     .goal-block
       i.large-icon.icon-other

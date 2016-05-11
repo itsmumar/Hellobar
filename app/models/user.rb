@@ -55,6 +55,7 @@ class User < ActiveRecord::Base
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
   INVITE_EXPIRE_RATE = 2.week
+  LIMITTED_GOALS_AB_TEST_START_DATE = '2016-05-11'.to_datetime
 
   # returns a user with a random email and password
   def self.generate_temporary_user
@@ -102,6 +103,10 @@ class User < ActiveRecord::Base
 
     [:new, :selected_goal].include?(current_onboarding_status.status_name) &&
       self.sites.script_not_installed_db.any?
+  end
+
+  def created_after_limitted_goals_ab_test_start_date
+    self.created_at > LIMITTED_GOALS_AB_TEST_START_DATE
   end
 
   def active?
