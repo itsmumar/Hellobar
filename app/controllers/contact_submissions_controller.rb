@@ -1,5 +1,5 @@
 class ContactSubmissionsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:new, :create]
 
   include SitesHelper
 
@@ -39,5 +39,20 @@ class ContactSubmissionsController < ApplicationController
     flash[:success] = "Your message has been sent!"
 
     redirect_to params[:return_to]
+  end
+
+  def new
+    render layout: 'static'
+  end
+
+  def create
+    raise ActionController::RoutingError.new('Not Found') unless params[:blank].blank? # Spam catcher
+
+    email_params = params.require(:contact_submission).permit(:name, :email, :message)
+
+    MailerGateway.send_email("Contact Form 2", "support@hellobar.com", email_params)
+    flash[:success] = "Your message has been sent!"
+
+    redirect_to new_contact_submission_path
   end
 end
