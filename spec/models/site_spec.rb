@@ -302,7 +302,6 @@ describe Site do
         allow(@site).to receive(:script_installed_api?) { true }
 
         expect(Analytics).to receive(:track).with(:site, @site.id, "Installed")
-        expect(Analytics).to receive(:track).with(any_args)
 
         @site.has_script_installed?
       end
@@ -323,7 +322,6 @@ describe Site do
         allow(@site).to receive(:script_installed_api?) { false }
 
         expect(Analytics).to receive(:track).with(:site, @site.id, "Uninstalled")
-        expect(Analytics).to receive(:track).with(any_args)
 
         @site.has_script_installed?
       end

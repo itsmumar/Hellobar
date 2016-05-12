@@ -34,6 +34,8 @@ html
 
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
       var trackEditorFlow = #{{new_user?}};
+      var availableThemes = #{{ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).to_json}};
+      var availableFonts = #{{ActiveModel::ArraySerializer.new(Font.all, each_serializer: FontSerializer).to_json}};
 
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'

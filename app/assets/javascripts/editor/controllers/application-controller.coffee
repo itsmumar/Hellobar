@@ -47,7 +47,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.closable",
     "model.element_subtype",
     "model.email_placeholder",
-    "model.font",
+    "model.font_id",
     "model.headline",
     "model.image_placement",
     "model.image_url",
@@ -82,6 +82,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.show_branding",
     "model.size",
     "model.text_color",
+    "model.theme_id",
     "model.type",
     "model.use_question",
     "model.view_condition",
@@ -102,7 +103,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
       primary_color: @get("model.background_color"),
       pushes_page_down: @get("model.pushes_page_down")
       remains_at_top: @get("model.remains_at_top")
-      secondary_color: if @get("model.type") == "Bar" then @get("model.button_color") else @get("model.background_color")
+      secondary_color: @get("model.button_color")
       show_border: false
       size: @get("model.size"),
       subtype: @get("model.element_subtype")
@@ -111,6 +112,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
       thank_you_text: "Thank you for signing up!"
       wiggle_button: @get("model.wiggle_button")
       wiggle_wait: 0
+      font: @getFont().value
+      google_font: @getFont().google_font
     )
 
     HB.isPreviewMode = true
@@ -175,7 +178,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.contact_list_id",
     "model.element_subtype",
     "model.email_placeholder",
-    "model.font",
+    "model.font_id",
     "model.headline",
     "model.image_placement",
     "model.image_url",
@@ -212,10 +215,18 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.show_branding",
     "model.size",
     "model.text_color",
+    "model.theme_id",
     "model.type",
     "model.use_question",
     "model.wiggle_button"
   )
+
+  #---------------- Font Helpers ----------------#
+
+  getFont: ->
+    fontId = @get("model.font_id")
+    _.find availableFonts, (font) ->
+      font.id == fontId
 
   #-----------  Phone Number Helpers  -----------#
 
