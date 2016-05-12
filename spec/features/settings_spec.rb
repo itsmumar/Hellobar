@@ -2,6 +2,8 @@ require "integration_helper"
 
 feature "Manage Settings", js: true do
   before do
+    allow_any_instance_of(ApplicationController).
+      to receive(:get_ab_variation).and_return('original')
     @user = login
     @site = @user.sites.first
     @rule = @site.create_default_rule
