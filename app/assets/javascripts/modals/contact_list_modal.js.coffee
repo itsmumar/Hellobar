@@ -296,9 +296,9 @@ class @ContactListModal extends Modal
 
   _requiredFieldsAreValid: ->
     validityAry = []
-    validityAry.push @_validateRequiredField($('#contact_list_api_key'))
-    validityAry.push @_validateRequiredField($('#contact_list_app_url'))
-    validityAry.push @_validateRequiredField($('#contact_list_embed_code'))
+    validityAry.push @_validateRequiredField($('.contact_list_api_key'))
+    validityAry.push @_validateRequiredField($('.contact_list_app_url'))
+    validityAry.push @_validateRequiredField($('.contact_list_embed_code'))
 
     if $.inArray(false, validityAry) != -1
       return false # if any validations are false
