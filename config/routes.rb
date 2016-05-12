@@ -72,6 +72,9 @@ Rails.application.routes.draw do
 
   get "/auth/:provider/callback", :to => "identities#create"
 
+  resources :contact_submissions, only: [:create]
+  get "/contact", :to => "contact_submissions#new", :as => :new_contact_submission
+
   %w(email_developer generic_message).each do |sub|
     post "/contact_submissions/#{sub}", :to => "contact_submissions##{sub}", :as => "#{sub}_contact_submission"
   end
