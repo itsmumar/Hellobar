@@ -5,13 +5,14 @@ class SiteElementSerializer < ActiveModel::Serializer
     :type, :element_subtype, :settings, :view_condition, :phone_number, :phone_country_code,
 
     # text
-    :headline, :caption, :link_text, :font, :thank_you_text, :email_placeholder, :name_placeholder,
+    :headline, :caption, :link_text, :font_id, :thank_you_text, :email_placeholder, :name_placeholder,
 
     # colors
     :background_color, :border_color, :button_color, :link_color, :text_color,
 
     # style
-    :closable, :show_branding, :pushes_page_down, :remains_at_top, :animated, :wiggle_button,
+    :closable, :show_branding, :pushes_page_down, :remains_at_top,
+    :animated, :wiggle_button, :theme_id,
 
     # image
     :image_url, :image_placement, :active_image_id, :image_file_name,

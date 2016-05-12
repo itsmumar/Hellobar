@@ -1,0 +1,41 @@
+{
+  "name": "Violet",
+  "id": "violet",
+  "fonts": [
+    "josefin_sans",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "defaults": {
+    "Bar": {
+      "background_color": "FFFFFF",
+      "text_color": "9961a8",
+      "button_color": "9961a8",
+      "link_color": "FFFFFF",
+      "font_id": "josefin_sans"
+    },
+    "Slider": {
+      "background_color": "FFFFFF",
+      "text_color": "9961a8",
+      "button_color": "9961a8",
+      "link_color": "FFFFFF",
+      "font_id": "josefin_sans"
+    },
+    "Modal": {
+      "background_color": "FFFFFF",
+      "text_color": "9961a8",
+      "button_color": "9961a8",
+      "link_color": "FFFFFF",
+      "font_id": "josefin_sans"
+    },
+    "Takeover": {
+      "background_color": "FFFFFF",
+      "text_color": "9961a8",
+      "button_color": "9961a8",
+      "link_color": "FFFFFF",
+      "font_id": "josefin_sans"
+    }
+  }
+}
