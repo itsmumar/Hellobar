@@ -25,11 +25,7 @@ deployment:
     commands:
       - BRANCH=designqa bundle exec cap designqa deploy:
           timeout: 600
-  edge:
-    branch: master
-    commands:
-      - bundle exec cap edge deploy:
-          timeout: 600
+
   production:
     branch: production
     commands:

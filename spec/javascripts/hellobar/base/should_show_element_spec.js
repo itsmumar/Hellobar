@@ -45,7 +45,7 @@ describe("HB", function() {
       context("element was updated since it was last viewed", function() {
         it("returns true", function () {
           spyOn(HB, 'getSiteElementData').and.returnValue(100);
-          siteElement.updated_at = (new Date()).getTime();
+          siteElement.updated_at = Date.now();
           siteElement.show_after_convert = false;
           expect(HB.shouldShowElement(siteElement)).toEqual(true);
         });
@@ -53,8 +53,8 @@ describe("HB", function() {
 
       context("element was not updated since it was last viewed", function() {
         beforeEach(function () {
-          HB.setSiteElementData(siteElement.id, "lv",  Math.round((new Date).getTime()/1000));
-          siteElement.updated_at = (new Date()).getTime() - 1000000;
+          HB.setSiteElementData(siteElement.id, "lv", Date.now() / 1000);
+          siteElement.updated_at = Date.now() - 1000000;
         });
 
         context("show_after_convert is false", function() {
@@ -63,29 +63,31 @@ describe("HB", function() {
             expect(HB.shouldShowElement(siteElement)).toEqual(false);
           });
         });
+      });
+    });
 
-        context("show_after_convert is true", function() {
-          it("returns true", function () {
-            siteElement.show_after_convert = true;
-            expect(HB.shouldShowElement(siteElement)).toEqual(true);
-          });
+    context("previous element has been dismissed", function() {
+      beforeEach(function() {
+        spyOn(HB, 'didDismissHB').and.returnValue(true);
+      });
+
+      context("element was updated since it was last viewed", function() {
+        it("returns true", function () {
+          spyOn(HB, 'getSiteElementData').and.returnValue(100);
+          siteElement.updated_at = Date.now();
+          siteElement.show_after_convert = false;
+          expect(HB.shouldShowElement(siteElement)).toEqual(true);
+        });
+      });
+
+      context("element was not updated since it was last viewed", function() {
+        beforeEach(function () {
+          HB.setSiteElementData(siteElement.id, "lv", Date.now() / 1000);
+          siteElement.updated_at = Date.now() - 1000000;
         });
 
-        context("site element is slider", function() {
-          beforeEach(function () {
-            siteElement.type = "Slider";
-          });
-
-          it("returns true for sliders if last viewed was > 1 day ago", function () {
-            var twoDaysAgo = Math.round((new Date).getTime() - (172800000))/1000;
-            HB.setSiteElementData(siteElement.id, "lv", twoDaysAgo);
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(true);
-          });
-
-          it("returns false for sliders if last viewed was < 1 day ago", function () {
-            var currentTime = Math.round((new Date).getTime())/1000;
-            HB.setSiteElementData(siteElement.id, "lv", currentTime);
+        context("show_after_convert is false", function() {
+          it("returns false", function () {
             siteElement.show_after_convert = false;
             expect(HB.shouldShowElement(siteElement)).toEqual(false);
           });
@@ -101,7 +103,7 @@ describe("HB", function() {
       context("element was updated since it was last viewed", function() {
         it("returns true", function () {
           spyOn(HB, 'getSiteElementData').and.returnValue(100);
-          siteElement.updated_at = (new Date()).getTime();
+          siteElement.updated_at = Date.now();
           siteElement.show_after_convert = false;
           expect(HB.shouldShowElement(siteElement)).toEqual(true);
         });
@@ -109,39 +111,12 @@ describe("HB", function() {
 
       context("element was not updated since it was last viewed", function() {
         beforeEach(function () {
-          HB.setSiteElementData(siteElement.id, "lv",  Math.round((new Date).getTime()/1000));
-          siteElement.updated_at = (new Date()).getTime() - 1000000;
+          HB.setSiteElementData(siteElement.id, "lv", Date.now() / 1000);
+          siteElement.updated_at = Date.now() - 1000000;
         });
 
         context("show_after_convert is false", function() {
           it("returns false", function () {
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(false);
-          });
-        });
-
-        context("show_after_convert is true", function() {
-          it("returns true", function () {
-            siteElement.show_after_convert = true;
-            expect(HB.shouldShowElement(siteElement)).toEqual(true);
-          });
-        });
-
-        context("site element is slider", function() {
-          beforeEach(function () {
-            siteElement.type = "Slider";
-          });
-
-          it("returns true for sliders if last viewed was > 1 day ago", function () {
-            var twoDaysAgo = Math.round((new Date).getTime() - (172800000))/1000;
-            HB.setSiteElementData(siteElement.id, "lv", twoDaysAgo);
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(true);
-          });
-
-          it("returns false for sliders if last viewed was < 1 day ago", function () {
-            var currentTime = Math.round((new Date).getTime())/1000;
-            HB.setSiteElementData(siteElement.id, "lv", currentTime);
             siteElement.show_after_convert = false;
             expect(HB.shouldShowElement(siteElement)).toEqual(false);
           });

@@ -1,0 +1,41 @@
+{
+  "name": "French Rose",
+  "id": "french-rose",
+  "fonts": [
+    "source_pro",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "defaults": {
+    "Bar": {
+      "background_color": "FFFFFF",
+      "text_color": "292929",
+      "button_color": "ff5288",
+      "link_color": "FFFFFF",
+      "font_id": "source_pro"
+    },
+    "Slider": {
+      "background_color": "FFFFFF",
+      "text_color": "292929",
+      "button_color": "ff5288",
+      "link_color": "FFFFFF",
+      "font_id": "source_pro"
+    },
+    "Modal": {
+      "background_color": "FFFFFF",
+      "text_color": "292929",
+      "button_color": "ff5288",
+      "link_color": "FFFFFF",
+      "font_id": "source_pro"
+    },
+    "Takeover": {
+      "background_color": "FFFFFF",
+      "text_color": "292929",
+      "button_color": "ff5288",
+      "link_color": "FFFFFF",
+      "font_id": "source_pro"
+    }
+  }
+}

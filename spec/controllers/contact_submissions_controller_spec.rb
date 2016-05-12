@@ -3,6 +3,21 @@ require 'spec_helper'
 describe ContactSubmissionsController do
   fixtures :all
 
+  describe "GET :new" do
+    render_views
+    it "works" do
+      get :new
+      expect(response).to be_success
+      expect(response.body).to include("Send us feedback")
+    end
+  end
+
+  describe "POST :create" do
+    it "raises an error when the spam catcher field 'blank' is not blank" do
+      expect{ post :create, {blank: "not blank", contact_submission: {email: "kaitlen@hellobar.com", name: "Kaitlen", message: "Hi Kaitlen"} }}.to raise_error(ActionController::RoutingError)
+    end
+  end
+
   it "sends a 'email your developer' message" do
     dev_email = "dev@polymathic.me"
     site = sites(:zombo)

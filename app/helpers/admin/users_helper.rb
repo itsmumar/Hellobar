@@ -38,6 +38,17 @@ module Admin::UsersHelper
     end
   end
 
+  def context_for_trial(user, bill)
+    return nil unless bill.during_trial_subscription?
+    if user.try(:wordpress_user_id).present?
+      "via 1.0 trial"
+    elsif user.try(:was_referred?)
+      "via referral"
+    else
+      "via admin"
+    end
+  end
+
   private
 
   def us_short_datetime(datetime)

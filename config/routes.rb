@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :api do
+    resources :user_state, only: :show
+  end
+
   devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords"}
 
   devise_scope :user do
@@ -26,6 +30,8 @@ Rails.application.routes.draw do
     end
 
     get "team"
+
+    post :track_selected_goal, to: "tracking#track_selected_goal"
 
     resource :wordpress_plugin, :controller => :wordpress_plugin
 
@@ -65,6 +71,9 @@ Rails.application.routes.draw do
   get "sites/:id/whats_new", :to => "sites#whats_new", :as => :whats_new
 
   get "/auth/:provider/callback", :to => "identities#create"
+
+  resources :contact_submissions, only: [:create]
+  get "/contact", :to => "contact_submissions#new", :as => :new_contact_submission
 
   %w(email_developer generic_message).each do |sub|
     post "/contact_submissions/#{sub}", :to => "contact_submissions##{sub}", :as => "#{sub}_contact_submission"

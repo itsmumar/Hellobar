@@ -1,28 +1,33 @@
-- if get_ab_variation("Use Cases Variation 2016-03-22") == "original"
+- if get_ab_variation("Use Cases Variation 2016-04-22") == "original"
   h1 Hello Bar helps you improve the <br>effectiveness of your website.
   p Create Hello Bars that show the right message at the right time to your website visitors.
 
   = render "use_case_blocks"
 
-  = render 'welcome/quickstart', noautofocus: true
-
 - else
 
-  h1 Convert more visitors into customers with Hello Bar
+  h1 Hello Bar helps you improve the <br>effectiveness of your website.
+  p Create Hello Bars that show the right message at the right time to your website visitors.
 
-  = image_tag('use_cases/mailbox.png', class: 'use-case')
+  .marketing-wrapper
+    .marketing-block
+      = image_tag 'use_cases/bar-example.png', class: 'no-padding'
+      h5 Site Bar
+      p Get a subtle message in front of your visitors without annoying them. Add an email signup box, an announcement, or direct traffic to the most important page on your site.
 
-  p Instantly boost your email subscribers and new leads by adding Hello Bar to your site.
+    .marketing-block
+      = image_tag 'use_cases/modal-example.png', class: 'no-padding'
+      h5 Pop-up
+      p Want a stronger call-to-action? Hello Bar has pop-ups too. Add a time delay to your pop-up so your visitors are engaged first. Or trigger a pop-up when your visitors are about to leave.
 
-  = image_tag('use_cases/flow.png', class: 'use-case')
+    .marketing-block
+      = image_tag 'use_cases/takeover-example.png', class: 'no-padding'
+      h5 Page Takeover
+      p When you absolutely need to get your message in front of your visitors, the Page Takeover guarantees it won’t be missed.
 
-  p
-    ' Hello Bar has all the pop-ups you need to convert traffic. Use a subtle bar at the top, add a pop-up,
-    | launch a slider at the bottom, or take over the entire page. The choice is yours.
+    .marketing-block
+      = image_tag 'use_cases/slider-example.png', class: 'no-padding'
+      h5 Slider
+      p The Slider puts your message in front of your visitors when they’ve reached the bottom of the page and need the next step. It’s the perfect time to deliver your message.
 
-  = image_tag('use_cases/conversion.png', class: 'use-case')
-
-  p
-    | So easy to use that you can change Hello Bar on the fly. Switch your Hello Bars whenever you want within minutes.
-
-  = render 'welcome/quickstart', noautofocus: true, no_headline: true
+= render 'welcome/quickstart', noautofocus: true

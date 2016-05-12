@@ -16,8 +16,6 @@ module EmailSynchronizer
     "Invalid Mailchimp API Key",
     "This account has been deactivated",
     "122: Revoked OAuth Token",
-    "bad URI",
-    "bad value for range",
     "404 Resource Not Found"
   ]
 
@@ -30,7 +28,7 @@ module EmailSynchronizer
     perform_sync do
       contacts = Hello::DataAPI.get_contacts(self) || []
       contacts.in_groups_of(1000, false).each do |group|
-        if oauth? || api_key?
+        if oauth? || api_key? || webhook?
           group = group.map{ |g| {:email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2]} }
           batch_subscribe(data["remote_id"], group, double_optin)
         else
@@ -58,7 +56,7 @@ module EmailSynchronizer
     name = nil if name == "nil"
 
     perform_sync(log_entry) do
-      if oauth? || api_key?
+      if oauth? || api_key? || webhook?
         subscribe(data["remote_id"], email, name, double_optin)
       else
         params = subscribe_params(email, name, double_optin)
@@ -79,7 +77,9 @@ module EmailSynchronizer
     # run something immediately after sync
     log_entry.update(completed: true) if log_entry
   rescue *ESP_ERROR_CLASSES => e
-    log_entry.update(completed: false, error: e.to_s) if log_entry
+    if log_entry
+      log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
+    end
 
     if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
       Raven.capture_exception(e)
@@ -92,7 +92,7 @@ module EmailSynchronizer
       raise e
     end
   rescue => e
-    log_entry.update(completed: false, error: e.to_s) if log_entry
+    log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n")) if log_entry
     raise e
   end
 end

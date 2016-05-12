@@ -4,7 +4,6 @@ class SitesController < ApplicationController
 
   before_action :authenticate_user!, except: :create
   before_action :load_site, except: [:index, :new, :create]
-  before_action :get_suggestions, only: :improve
   before_action :get_top_performers, only: :improve
   before_action :load_bills, only: :edit
 
@@ -69,7 +68,7 @@ class SitesController < ApplicationController
       redirect_to site_path(@site)
     else
       load_bills
-      flash.now[:error] = "There was a problem updating your settings."
+      flash.now[:error] = @site.errors.full_messages
       render :action => :edit
     end
   end
@@ -180,25 +179,11 @@ class SitesController < ApplicationController
     end
   end
 
-  def get_suggestions
-    @suggestions = {}
-    max = @site.capabilities.max_suggestions
-
-    %w(all social email traffic).each do |name|
-      @suggestions[name] = {}
-      raw_suggestions = ImproveSuggestion.get(@site, name) || {}
-
-      raw_suggestions.each do |k, v|
-        @suggestions[name][k] = v[0, max] unless v.empty?
-      end
-    end
-  end
-
   def get_top_performers
     @top_performers = {}
     all_elements = @site.site_elements.sort_by{|e| -1 * e.conversion_percentage}
 
-    %w(all social email traffic).each do |name|
+    %w(all social email traffic call).each do |name|
       if name == "all"
         elements = all_elements
       else

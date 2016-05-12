@@ -26,6 +26,16 @@ describe ContactList do
     ])
   end
 
+  describe "as a valid object" do
+    it "validates a webhook has a valid URL" do
+      list = build(:contact_list, data: { "webhook_url" => "url" })
+
+      list.valid?
+
+      expect(list.errors[:base]).to include("webhook URL is invalid")
+    end
+  end
+
   describe "associated identity" do
     it "should use #provider on creation to find the correct identity" do
       list = ContactList.create!(
@@ -114,6 +124,15 @@ describe ContactList do
       end
     end
 
+    context "webhook" do
+      it "syncs" do
+        allow(contact_list).to receive(:data) { {"webhook_url" => "http://url.com/webhooks"} }
+        expect(service_provider).to receive(:subscribe).with(nil, "email@email.com", "Name Mcnamerson", true)
+
+        contact_list.sync_one!("email@email.com", "Name Mcnamerson")
+      end
+    end
+
     context "embed code provider" do
       let(:provider) { 'mad_mimi_form' }
       let(:contact_list) { contact_lists(:embed_code).tap{|c| c.identity = identity} }
@@ -142,6 +161,13 @@ describe ContactList do
       allow(service_provider).to receive(:subscribe).and_raise("this error")
       expect { contact_list.sync_one! "email@email.com", "Test Testerson"}.to raise_error
       expect(contact_list.contact_list_logs.last.error).to include("this error")
+    end
+
+    it "saves the stacktrace in a log entry" do
+      allow(contact_list).to receive(:oauth?) { true }
+      allow(service_provider).to receive(:subscribe).and_raise("this error")
+      expect { contact_list.sync_one! "email@email.com", "Test Testerson"}.to raise_error
+      expect(contact_list.contact_list_logs.last.stacktrace).to_not be_blank
     end
 
     it "marks a log entry as completed" do
@@ -207,12 +233,12 @@ describe ContactList do
       end
 
       it "if someone has an invalid list stored, delete the identity and notify them" do
-        contact_list.should_receive(:batch_subscribe).and_raise(URI::InvalidURIError.new("bad URI(is not URI?):"))
+        contact_list.should_receive(:batch_subscribe).and_raise(URI::InvalidURIError.new("404 Resource Not Found"))
         contact_list.identity.should_receive :destroy_and_notify_user
       end
 
       it "if someone's token is no longer valid, or they have deleted their account, delete the identity and notify them" do
-        contact_list.should_receive(:batch_subscribe).and_raise(ArgumentError.new("bad value for range"))
+        contact_list.should_receive(:batch_subscribe).and_raise(ArgumentError.new("This account has been deactivated"))
         contact_list.identity.should_receive :destroy_and_notify_user
       end
     end
@@ -225,22 +251,6 @@ describe ContactList do
       it "if someone has an invalid list stored, delete the identity and notify them" do
         response = OpenStruct.new(:code => 404, :body => "404 Resource Not Found")
         contact_list.should_receive(:batch_subscribe).and_raise(RestClient::ResourceNotFound.new(response))
-        contact_list.identity.should_receive :destroy_and_notify_user
-      end
-    end
-
-    describe "for infusionsoft" do
-      before do
-        allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::Infusionsoft)
-      end
-
-      it "if someone has an invalid list stored, delete the identity and notify them" do
-        contact_list.should_receive(:batch_subscribe).and_raise(URI::InvalidURIError.new("bad URI(is not URI?):"))
-        contact_list.identity.should_receive :destroy_and_notify_user
-      end
-
-      it "if someone's token is no longer valid, or they have deleted their account, delete the identity and notify them" do
-        contact_list.should_receive(:batch_subscribe).and_raise(ArgumentError.new("bad value for range"))
         contact_list.identity.should_receive :destroy_and_notify_user
       end
     end

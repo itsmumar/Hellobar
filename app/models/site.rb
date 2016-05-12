@@ -16,7 +16,6 @@ class Site < ActiveRecord::Base
   has_many :subscriptions, -> {order 'id'}
   accepts_nested_attributes_for :subscriptions
   has_many :bills, -> {order 'id'}, through: :subscriptions
-  has_many :improve_suggestions
   has_many :image_uploads, dependent: :destroy
 
   acts_as_paranoid
@@ -54,8 +53,14 @@ class Site < ActiveRecord::Base
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
 
+  validate :url_is_unique?
+
   scope :script_installed_db, -> do
     where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
+  end
+
+  scope :script_not_installed_db, -> do
+    where.not("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
   end
 
   scope :script_uninstalled_db, -> do
@@ -81,17 +86,39 @@ class Site < ActiveRecord::Base
   # check and report whether script is installed, recording timestamp and tracking event if status has changed
   def has_script_installed?
     if !script_installed_db? && (script_installed_api? || script_installed_on_homepage?)
-      debug_install("INSTALLED")
-      update(script_installed_at: Time.current)
-      Referrals::RedeemForRecipient.run(site: self)
-      Analytics.track(:site, self.id, "Installed")
+      store_script_installation!
     elsif script_installed_db? && !(script_installed_api? || script_installed_on_homepage?)
-      debug_install("UNINSTALLED")
-      update(script_uninstalled_at: Time.current)
-      Analytics.track(:site, self.id, "Uninstalled")
+      store_script_uninstallation!
     end
 
     script_installed_db?
+  end
+
+  def store_script_installation!
+    debug_install("INSTALLED")
+    update(script_installed_at: Time.current)
+    Referrals::RedeemForRecipient.run(site: self)
+    Analytics.track(:site, self.id, "Installed")
+    onboarding_track_script_installation!
+  end
+
+  def onboarding_track_script_installation!
+    owners.each do |user|
+      user.onboarding_status_setter.installed_script!
+    end
+  end
+
+  def store_script_uninstallation!
+    debug_install("UNINSTALLED")
+    update(script_uninstalled_at: Time.current)
+    Analytics.track(:site, self.id, "Uninstalled")
+    onboarding_track_script_uninstallation!
+  end
+
+  def onboarding_track_script_uninstallation!
+    owners.each do |user|
+      user.onboarding_status_setter.uninstalled_script!
+    end
   end
 
   # is the site's script installed according to the db timestamps?
@@ -168,10 +195,6 @@ class Site < ActiveRecord::Base
   end
 =end
 
-  def generate_improve_suggestions(options = {})
-    delay :generate_all_improve_suggestions, options
-  end
-
   def queue_digest_email(options = {})
     delay :send_digest_email, options
   end
@@ -210,6 +233,17 @@ class Site < ActiveRecord::Base
       Site.joins(:users).where(url: url, users: {id: user.id}).where.not(id: id).any?
     else
       Site.where(url: url).where.not(id: id).any?
+    end
+  end
+
+  def url_is_unique?
+    if users.
+      joins(:sites).
+      where(sites: {url: url}).
+      where.not(sites: {id: id}).
+      any?
+
+      errors.add(:url, "is already in use")
     end
   end
 
@@ -458,10 +492,6 @@ class Site < ActiveRecord::Base
 
   def generate_blank_static_assets
     generate_static_assets(:script_content => "")
-  end
-
-  def generate_all_improve_suggestions
-    ImproveSuggestion.generate_all(self)
   end
 
   def standardize_url
