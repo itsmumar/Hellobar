@@ -1,7 +1,10 @@
 require 'integration_helper'
 
 feature "Payment modal interaction", js: true do
-  before { @user = login }
+  before do
+    stub_out_get_ab_variations("Show Add Site on Edit Site 2016-04-04") {"original"}
+    @user = login
+  end
   after { devise_reset }
 
   scenario "downgrade to free from pro should say when it's active until" do

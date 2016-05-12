@@ -30,6 +30,7 @@ unless defined?(Hellobar::Settings)
     mailchimp_client_id
     mailchimp_secret
     main_queue
+    maropost_url
     memcached_server
     recaptcha_private_key
     recaptcha_public_key
@@ -39,6 +40,7 @@ unless defined?(Hellobar::Settings)
     sentry_dsn
     store_site_scripts_locally
     syncable
+    test_cloning
     tracking_host
     twilio_password
     twilio_user
@@ -97,14 +99,6 @@ unless defined?(Hellobar::Settings)
       app_secret: config[:constantcontact_app_secret],
       oauth: true
     },
-    mailchimp: {
-      type: :email,
-      name: 'MailChimp',
-      client_id: config[:mailchimp_client_id],
-      secret: config[:mailchimp_secret],
-      supports_double_optin: true,
-      oauth: true
-    },
     drip: {
       type: :email,
       name: 'Drip',
@@ -131,6 +125,12 @@ unless defined?(Hellobar::Settings)
       name: "iContact",
       requires_embed_code: true
     },
+    infusionsoft: {
+      type: :email,
+      name: "Infusionsoft",
+      requires_api_key: true,
+      requires_app_url: true
+    },
     mad_mimi_form: {
       type: :email,
       service_provider_class: "MadMimiForm",
@@ -144,6 +144,21 @@ unless defined?(Hellobar::Settings)
       name: "Mad Mimi",
       requires_api_key: true,
       requires_username: true
+    },
+    mailchimp: {
+      type: :email,
+      name: 'MailChimp',
+      client_id: config[:mailchimp_client_id],
+      secret: config[:mailchimp_secret],
+      supports_double_optin: true,
+      oauth: true
+    },
+    maropost: {
+      type: :email,
+      service_provider_class: "Maropost",
+      name: "Maropost",
+      requires_account_id: true,
+      requires_api_key: true
     },
     my_emma: {
       type: :email,
@@ -160,23 +175,17 @@ unless defined?(Hellobar::Settings)
       supports_double_optin: false,
       oauth: true
     },
-    vertical_response: {
-      type: :email,
-      name: "VerticalResponse",
-      requires_embed_code: true,
-      hidden: true
-    },
-    infusionsoft: {
-      type: :email,
-      name: "Infusionsoft",
-      requires_api_key: true,
-      requires_app_url: true
-    },
     webhooks: {
       type: :email,
       name: "Webhook (Advanced)",
       service_provider_class: "Webhook",
       requires_webhook_url: true
+    },
+    vertical_response: {
+      type: :email,
+      name: "VerticalResponse",
+      requires_embed_code: true,
+      hidden: true
     }
   }
   config[:analytics_log_file] ||= File.join(Rails.root, "log", "analytics.log")

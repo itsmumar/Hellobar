@@ -63,22 +63,6 @@ describe("HB", function() {
             expect(HB.shouldShowElement(siteElement)).toEqual(false);
           });
         });
-
-        context("show_after_convert is true", function() {
-          it("returns true if last viewed was > 1 day ago", function () {
-            var twoDaysAgo = (Date.now() - 172800000) / 1000;
-            HB.setSiteElementData(siteElement.id, "lv", twoDaysAgo);
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(true);
-          });
-
-          it("returns false for sliders if last viewed was < 1 day ago", function () {
-            var currentTime = Date.now() / 1000;
-            HB.setSiteElementData(siteElement.id, "lv", currentTime);
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(false);
-          });
-        });
       });
     });
 
@@ -108,22 +92,6 @@ describe("HB", function() {
             expect(HB.shouldShowElement(siteElement)).toEqual(false);
           });
         });
-
-        context("show_after_convert is true", function() {
-          it("returns true if last viewed was > 1 day ago", function () {
-            var twoDaysAgo = (Date.now() - 172800000) / 1000;
-            HB.setSiteElementData(siteElement.id, "lv", twoDaysAgo);
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(true);
-          });
-
-          it("returns false for sliders if last viewed was < 1 day ago", function () {
-            var currentTime = Date.now() / 1000;
-            HB.setSiteElementData(siteElement.id, "lv", currentTime);
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(false);
-          });
-        });
       });
     });
 
@@ -149,22 +117,6 @@ describe("HB", function() {
 
         context("show_after_convert is false", function() {
           it("returns false", function () {
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(false);
-          });
-        });
-
-        context("show_after_convert is true", function() {
-          it("returns true if last viewed was > 1 day ago", function () {
-            var twoDaysAgo = (Date.now() - 172800000) / 1000;
-            HB.setSiteElementData(siteElement.id, "lv", twoDaysAgo);
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(true);
-          });
-
-          it("returns false if last viewed was < 1 day ago", function () {
-            var currentTime = Date.now() / 1000;
-            HB.setSiteElementData(siteElement.id, "lv", currentTime);
             siteElement.show_after_convert = false;
             expect(HB.shouldShowElement(siteElement)).toEqual(false);
           });

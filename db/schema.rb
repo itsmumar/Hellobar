@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160329183809) do
+ActiveRecord::Schema.define(version: 20160509123541) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -37,8 +37,10 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.boolean  "locked",                             default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "api_token"
   end
 
+  add_index "admins", ["api_token"], name: "index_admins_on_api_token", using: :btree
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
 
@@ -132,6 +134,7 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.boolean  "completed",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "stacktrace"
   end
 
   add_index "contact_list_logs", ["contact_list_id"], name: "index_contact_list_logs_on_contact_list_id", using: :btree
@@ -273,7 +276,7 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.string   "background_color",                default: "eb593c"
     t.string   "border_color",                    default: "ffffff"
     t.string   "button_color",                    default: "000000"
-    t.string   "font",                            default: "'Open Sans',sans-serif"
+    t.string   "font_id",                         default: "open_sans"
     t.string   "link_color",                      default: "ffffff"
     t.string   "link_style",                      default: "button"
     t.string   "link_text",          limit: 5000, default: "Click Here"
@@ -291,12 +294,12 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.string   "thank_you_text"
     t.boolean  "pushes_page_down",                default: true
     t.boolean  "remains_at_top",                  default: true
+    t.integer  "wordpress_bar_id"
     t.boolean  "open_in_new_window",              default: false
     t.boolean  "animated",                        default: true
     t.boolean  "wiggle_button",                   default: false
     t.string   "type",                            default: "Bar"
     t.string   "caption",                         default: ""
-    t.integer  "wordpress_bar_id"
     t.string   "placement"
     t.datetime "deleted_at"
     t.string   "view_condition",                  default: "immediately"
@@ -318,6 +321,7 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.string   "phone_number"
     t.string   "phone_country_code",              default: "US"
     t.boolean  "show_after_convert",              default: false
+    t.string   "theme_id"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
@@ -351,8 +355,8 @@ ActiveRecord::Schema.define(version: 20160329183809) do
     t.datetime "deleted_at"
     t.datetime "script_uninstalled_at"
     t.string   "install_type"
-    t.datetime "selected_goal_clicked_at"
     t.text     "invoice_information"
+    t.datetime "selected_goal_clicked_at"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
