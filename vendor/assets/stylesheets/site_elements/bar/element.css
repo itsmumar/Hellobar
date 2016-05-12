@@ -82,22 +82,27 @@
 /*-----------  Hide Arrow  -----------*/
 
 #hellobar-bar .hb-arrow-wrapper {
-  width: 8rem;
-  text-align: right;
   padding-left: 1rem;
+  text-align: right;
+  width: 8rem;
 }
 
 #hellobar-bar .hb-arrow-wrapper a {
   display: block;
 }
 
-#hellobar-bar .hb-arrow-wrapper .hb-arrow {
-  width: 28px;
+#hellobar-bar .hb-arrow-wrapper svg {
+  fill: #fff;
   height: 29px;
   opacity: 0.3;
+  width: 28px;
 }
 
-#hellobar-bar .hb-arrow-wrapper .hb-arrow:hover {
+#hellobar-bar .hb-arrow-wrapper.inverted svg {
+  fill: #3C3E3F;
+}
+
+#hellobar-bar .hb-arrow-wrapper svg:hover {
   opacity: 0.6;
 }
 
