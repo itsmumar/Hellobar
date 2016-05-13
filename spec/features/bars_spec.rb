@@ -49,6 +49,37 @@ feature 'User can create a bar', js: true do
   end
 end
 
+feature 'User can toggle colors for a bar', js: true do
+  before do
+    allow_any_instance_of(SiteElementSerializer).
+      to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(ApplicationController).
+      to receive(:get_ab_variation).and_return('original')
+  end
+
+  after { devise_reset }
+
+  scenario 'user can modify the color settings for a bar' do
+    OmniAuth.config.add_mock(:google_oauth2, {uid: '12345', info: {email: 'bob@lawblog.com'}})
+    visit root_path
+
+    fill_in 'site[url]', with: 'mewgle.com'
+    click_button 'sign-up-button'
+
+    first(:button, 'Select This Goal').click
+    first(:button, 'Continue').click
+    page.find('a', text: 'Next').click
+    page.first('.color-select-block input').set('AABBCC')
+    page.find('a', text: 'Prev').click
+    page.find('a', text: 'Next').click
+
+    expect(page).to have_content('Background Color', visible: true)
+    val = page.first('.color-select-block input').value
+    expect(val).to eql('AABBCC')
+    OmniAuth.config.mock_auth[:google_oauth2] = nil
+  end
+end
+
 feature 'User can edit a bar', js: true do
   before do
     @user = login
