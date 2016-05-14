@@ -1319,6 +1319,8 @@ var HB = {
 
         return HB.stringify(a).indexOf(HB.stringify(b)) != -1;
       case "does_not_include":
+        if(typeof a === "undefined" && b === "")
+          return true;
         return HB.stringify(a).indexOf(HB.stringify(b)) == -1;
       case "before":
       case "less_than":
