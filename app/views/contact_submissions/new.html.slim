@@ -1,0 +1,20 @@
+= render "shared/flash"
+.header
+  = link_to root_path
+    .logo_container
+      = image_tag("hellobar_logo_white.svg")
+.content
+  .contact-wrapper
+    h5 We'd like to hear what's on your mind
+    = form_tag "/contact_submissions", class: "contact-form"
+      .title Send us feedback, issues or questions &amp; we'll get back to you as soon as we can.
+      p
+        ' You can also reach us directly at
+        = mail_to "support@hellobar.com", "support@hellobar.com", target: "_blank"
+
+      / spam catcher (since this is an open form)
+      .hidden= text_field_tag :blank
+      = text_field_tag "contact_submission[name]", current_user.try(:name), placeholder: "Your name", required: true
+      = text_field_tag "contact_submission[email]", current_user.try(:email), placeholder: "Your email address", required: true
+      = text_area_tag "contact_submission[message]", nil, placeholder: "What can we help you with?", required: true
+      = submit_tag "Send Message", class: "button", data: { disable_with: "Sending..." }, id: "contact_submission_submit_btn"
