@@ -125,7 +125,7 @@ class SitesController < ApplicationController
       params[:site][:url] ||= session[:new_site_url]
       session.delete(:new_site_url)
     end
-    params.require(:site).permit(:url, :opted_in_to_email_digest, :timezone)
+    params.require(:site).permit(:url, :opted_in_to_email_digest, :timezone, :invoice_information)
   end
 
   # overwrite where we get the params from from ApplicationController
