@@ -93,6 +93,10 @@ describe("HB", function() {
       it("works with wildcards while ignoring other special regex characters", function() {
         expect(HB.applyOperand("a+?-.^%#1", "includes", "a*1")).toEqual(true);
       });
+
+      it("returns false when the value is not present", function() {
+        expect(HB.applyOperand(undefined, "includes", "")).toEqual(false);
+      });
     });
 
     context("operand is does_not_include", function() {

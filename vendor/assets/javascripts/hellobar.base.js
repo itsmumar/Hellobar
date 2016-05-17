@@ -1028,6 +1028,7 @@ var HB = {
     for(i=0;i<HB.rules.length;i++)
     {
       var rule = HB.rules[i];
+
       if ( HB.ruleTrue(rule) )
       {
         // Get all site elements that are a part of this rule that the
@@ -1218,6 +1219,15 @@ var HB = {
       var conditionKey = condition.value.split("=")[0];
       var currentValue = HB.getSegmentValue(condition.segment)[conditionKey];
       var values = condition.value.split("=")[1] || "";
+
+      console.log("condition");
+      console.log(condition);
+      console.log("conditionKey");
+      console.log(conditionKey);
+      console.log("currentValue");
+      console.log(currentValue);
+      console.log("values");
+      console.log(values);
     }
     else {
       var currentValue = HB.getSegmentValue(condition.segment);
@@ -1296,6 +1306,10 @@ var HB = {
   {
     var a = HB.sanitizeConditionValue(segment, currentValue, input);
     var b = HB.sanitizeConditionValue(segment, input, input);
+    console.log("a");
+    console.log(a);
+    console.log("b");
+    console.log(b);
 
     switch(operand)
     {
@@ -1312,6 +1326,8 @@ var HB = {
       case "does_not_equal":
         return a != b;
       case "includes":
+        if(typeof a === "undefined" && b === "")
+           return false;
         if(typeof a === 'string' && typeof b === 'string') {
           var regex = new RegExp(HB.sanitizeRegexString(b).replace("*", ".*"));
           return !!a.match(regex);
