@@ -57,6 +57,11 @@
   background-image: url("https://s3.amazonaws.com/hb-assets/arrow_white.png");
 }
 
+.hellobar#pull-down .hellobar-arrow g {
+  transform: rotate(180deg);
+  transform-origin: 50% 50%;
+}
+
 .hellobar#pull-down.hb-regular .hellobar-arrow {
   width: 21px;
   height: 21px;
