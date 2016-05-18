@@ -10,6 +10,14 @@ RSpec.configure do |config|
   Capybara.javascript_driver = :selenium unless ENV['DOCKER']
   OmniAuth.config.test_mode = true
 
+  config.before(:each) do
+    # allow us to register which get_ab_variation calls we stubbing,
+    # let the rest of the calls pass through to ApplicationController untouched
+    allow_any_instance_of(ApplicationController).to receive(:get_ab_variation).and_call_original
+
+    stub_out_get_ab_variations("WordPress Plugin 2016-03-17") {"original"}
+  end
+
   config.before(:all) do
     setup_site_generator
   end

@@ -32,7 +32,7 @@
           color: $white
           padding: 1.25em
           font-size: 1.1em
-          font-weight: bold
+          font-weight: $fontWeightBold
           text-transform: capitalize
 
           small
@@ -134,7 +134,7 @@
                 color: $grayLighter !important
 
             .cc-name label
-              margin-top: 0 
+              margin-top: 0
 
             .cc-number
               width: 57%
@@ -185,15 +185,15 @@
               float: right
               margin-left: 1em
 
-        label 
+        label
           font-size: 0.8em !important
-          margin: 1.15em 0 0.4em 
+          margin: 1.15em 0 0.4em
 
         input,
         select
           margin-top: 0 !important
           font-size: 0.85em !important
-         
+
       /*----------- Free -----------*/
 
       &.free
@@ -226,7 +226,7 @@
 
       &.enterprise
 
-        .payment-sidebar 
+        .payment-sidebar
 
           header
             background-color: $blue
@@ -243,4 +243,3 @@
 
         .button
           @extend %blue-button
-          

@@ -48,30 +48,32 @@ module Hello
     # ==========================================
     # ==      REGISTER YOUR TESTS HERE        ==
     # ==========================================
-    register_test("Use Cases Amount", %w{more less}, 0)
-    register_test("Account Creation Test 2015-01-21", %w{original orange_header no_orange_header}, 1)
-    register_test("Editor Test 2015-02-23", %w{original interstitial navigation}, 2)
-    register_test("Google Auth 2015-03-10", %w{original google_auth}, 3)
-    register_test("Templated Editor 2015-07-07", %w{original templated}, 4)
-    register_test("Video Welcome 2015-9-22", %w{original video}, 5, [75, 25])
-    register_test("Quickstart CTA 2015-10-06", %w{original cta}, 6)
-    register_test("Upgrade Plan Button 2016-01-05", %w{original power}, 7)
-    register_test("Settings Upsell 2016-01-07", %w{original upsell}, 8)
-    register_test("Upgrade Modal Logos 2016-01-10", %w{original logos}, 9)
-    register_test("Email Modal Interstitial 2016-02-23", %w{original modal}, 10)
-    register_test("Email Modal Interstitial New Users Only 2016-03-04", %w{original modal}, 11)
-    register_test("Sign Up Button 2016-03-17", %w{original sign_up_google sign_up get_started}, 12)
-    register_test("Show Add Site on Edit Site 2016-03-18", %w{original variant}, 13)
-    register_test("WordPress Plugin 2016-03-17", %w{original common}, 14)
-    register_test("Use Cases Variation 2016-03-22", %w{original simple}, 15)
-    register_test("Forced Email Path 2016-03-28", %w{original force}, 16)
-    register_test("Show Add Site on Edit Site 2016-04-04", %w{original variant}, 17)
-    register_test("Create A Bar Reminder New Users Only 2016-03-28",            %w{original campaign}, 18)
-    register_test("Configure Your Bar Reminder New Users Only 2016-03-28",      %w{original campaign}, 19)
-    register_test("Install The Plugin Drip Campaign New Users Only 2016-03-28", %w{original campaign}, 20)
-    register_test("Upgrade Hello Bar Drip Campaign New Users Only 2016-03-28",  %w{original campaign}, 21)
-    register_test("Use Cases Variation 2016-04-22", %w{original types}, 22)
-    register_test("Onboarding Limitted To Three Goals 2016-05-11", %w{original variant}, 23)
+    unless Rails.env.test?
+      register_test("Use Cases Amount",                                           %w{more less}, 0)
+      register_test("Account Creation Test 2015-01-21",                           %w{original orange_header no_orange_header}, 1)
+      register_test("Editor Test 2015-02-23",                                     %w{original interstitial navigation}, 2)
+      register_test("Google Auth 2015-03-10",                                     %w{original google_auth}, 3)
+      register_test("Templated Editor 2015-07-07",                                %w{original templated}, 4)
+      register_test("Video Welcome 2015-9-22",                                    %w{original video}, 5, [75, 25])
+      register_test("Quickstart CTA 2015-10-06",                                  %w{original cta}, 6)
+      register_test("Upgrade Plan Button 2016-01-05",                             %w{original power}, 7)
+      register_test("Settings Upsell 2016-01-07",                                 %w{original upsell}, 8)
+      register_test("Upgrade Modal Logos 2016-01-10",                             %w{original logos}, 9)
+      register_test("Email Modal Interstitial 2016-02-23",                        %w{original modal}, 10)
+      register_test("Email Modal Interstitial New Users Only 2016-03-04",         %w{original modal}, 11)
+      register_test("Sign Up Button 2016-03-17",                                  %w{original sign_up_google sign_up get_started}, 12)
+      register_test("Show Add Site on Edit Site 2016-03-18",                      %w{original variant}, 13)
+      register_test("WordPress Plugin 2016-03-17",                                %w{original common}, 14)
+      register_test("Use Cases Variation 2016-03-22",                             %w{original simple}, 15)
+      register_test("Forced Email Path 2016-03-28",                               %w{original force}, 16)
+      register_test("Show Add Site on Edit Site 2016-04-04",                      %w{original variant}, 17)
+      register_test("Create A Bar Reminder New Users Only 2016-03-28",            %w{original campaign}, 18)
+      register_test("Configure Your Bar Reminder New Users Only 2016-03-28",      %w{original campaign}, 19)
+      register_test("Install The Plugin Drip Campaign New Users Only 2016-03-28", %w{original campaign}, 20)
+      register_test("Upgrade Hello Bar Drip Campaign New Users Only 2016-03-28",  %w{original campaign}, 21)
+      register_test("Use Cases Variation 2016-04-22",                             %w{original types}, 22)
+      register_test("Onboarding Limitted To Three Goals 2016-05-11",              %w{original variant}, 23)
+    end
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
@@ -82,12 +84,12 @@ module Hello
     end
 
     def get_ab_test_value_index_from_cookie(cookie, index)
-      return nil if cookie == nil
+      return if cookie == nil
       value = cookie[index..index]
       if value and value =~ /\d+/
         return value.to_i
       end
-      return nil
+      nil
     end
 
     def get_ab_test_value_index_from_id(ab_test, id)
@@ -146,9 +148,14 @@ module Hello
     def get_ab_variation_without_setting(test_name, user=nil)
       ab_test = get_ab_test(test_name)
       value_index, status = get_ab_variation_index_without_setting(test_name, user)
-      return nil unless value_index
+      return unless value_index
       value = ab_test[:values][value_index]
       return value
+    end
+
+    def get_ab_variation_or_nil(test_name, user = nil)
+      return unless TESTS[test_name]
+      get_ab_variation(test_name, user = nil)
     end
 
     def get_ab_variation(test_name, user = nil)
@@ -176,7 +183,7 @@ module Hello
     end
 
     def visitor_id
-      return nil unless defined?(cookies)
+      return unless defined?(cookies)
 
       unless cookies[VISITOR_ID_COOKIE]
         cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{Time.now.to_f}_#{request.remote_ip}_#{request.env['HTTP_USER_AGENT']}_#{rand(1000)}_id")+USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
@@ -187,10 +194,10 @@ module Hello
     end
 
     def get_user_id_from_cookie
-      return nil unless defined?(cookies)
+      return unless defined?(cookies)
       visitor_id_cookie = cookies[VISITOR_ID_COOKIE]
-      return nil unless visitor_id_cookie
-      return nil unless visitor_id_cookie.length > VISITOR_ID_LENGTH
+      return unless visitor_id_cookie
+      return unless visitor_id_cookie.length > VISITOR_ID_LENGTH
       return visitor_id_cookie[VISITOR_ID_LENGTH..-1]
     end
 
@@ -223,7 +230,7 @@ module Hello
         return i if weight.include?(rand_value)
       end
 
-      return nil
+      nil
     end
   end
 end
