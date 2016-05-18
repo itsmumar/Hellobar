@@ -1,40 +1,74 @@
 .file-upload-container
   width: 100%
-  height: 2em
-  margin: 0.75em auto
+  margin: 0.5em auto
   color: $gray
+  font-weight: normal
+  overflow: auto
+
+  a
+    color: #45b4d6
 
   &.with-errors
     margin-bottom: 2em
 
   .default-text
     pointer-events: none
+    text-align: center
+
+    div
+      margin: 15px 0
+
+  .current-file
+    display: none
+    font-size: 0.89em
+    height: 32px
+    padding: 8px 0.67em
+
+    .name
+      width: 236px
+      height: 100%
+      float: left
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+
+    .file-action
+      cursor: pointer
+      float: right
+
+  &.has-file
+    .current-file
+      display: block
+
+    .file-upload
+      border-top: 0px
+
+  .file-upload, .current-file
+    width: 100%
+    float: left
+    border: 1px solid $grayLighter
 
   .file-upload
     height: 100%
-    width: 85%
     cursor: pointer
-    border: 1px solid $grayLighter
-    float: left
+    border-style: dashed
+    font-size: 0.934em
     padding: 0.45em 0.67em
-    font-size: 0.85em
 
-  .file-action
-    cursor: pointer
-    float: right
-    font-size: 1.75em
+    img
+      margin-top: 20px
 
-    &.icon-trash.active
-      color: $red
-
-    &.icon-sync
-      color: $green
-      @include animation(spin 2s infinite ease-in-out)
-      -webkit-transform-origin: 50% 42%
-      -moz-transform-origin: 50% 42%
-      -ms-transform-origin: 50% 42%
-      -o-transform-origin: 50% 42%
-      transform-origin: 50% 42%
+  .icon-sync
+    display: block
+    color: $green
+    font-size: 30px
+    margin-top: 30px
+    @include animation(spin 2s infinite ease-in-out)
+    -webkit-transform-origin: 50% 42%
+    -moz-transform-origin: 50% 42%
+    -ms-transform-origin: 50% 42%
+    -o-transform-origin: 50% 42%
+    transform-origin: 50% 42%
 
   .dz-error-message
     color: $red
@@ -45,19 +79,10 @@
   .dz-preview
     pointer-events: none
 
-  .dz-image
-    display: none
-
   .dz-size
     float: right
 
-  .dz-progress
-    display: none
-
-  .dz-success-mark
-    display: none
-
-  .dz-error-mark
+  .dz-progress, .dz-details, .dz-success-mark, .dz-error-mark, .dz-image
     display: none
 
   .dz-filename, .default-text

@@ -69,6 +69,8 @@ feature 'User can toggle colors for a bar', js: true do
     first(:button, 'Select This Goal').click
     first(:button, 'Continue').click
     page.find('a', text: 'Next').click
+    page.find('a', text: /colors/i).click
+
     page.first('.color-select-block input').set('AABBCC')
     page.find('a', text: 'Prev').click
     page.find('a', text: 'Next').click
@@ -98,7 +100,8 @@ feature 'User can edit a bar', js: true do
     visit edit_site_site_element_path(site, site.site_elements.last)
     page.find('a', text: 'Next').click
     page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
+    page.find('a', text: /text/i).click
+
     first('.ember-text-field').set('Dear I fear were facing a problem')
     page.find('button', text: 'Save & Publish').click
     expect(page).to have_content('Dear I fear were facing a problem', visible: true)
