@@ -2,6 +2,7 @@ require 'integration_helper'
 
 feature "Onboarding limitted to three goals ab test", js: true do
   before do
+    stub_out_get_ab_variations("Forced Email Path 2016-03-28") {"original"}
     allow_any_instance_of(ApplicationController).to receive(:get_ab_variation).
       with("Onboarding Limitted To Three Goals 2016-05-11").and_return('variant')
     user = create(:user)

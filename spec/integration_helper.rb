@@ -15,7 +15,6 @@ RSpec.configure do |config|
     # let the rest of the calls pass through to ApplicationController untouched
     allow_any_instance_of(ApplicationController).to receive(:get_ab_variation).and_call_original
 
-    stub_out_get_ab_variations("Forced Email Path 2016-03-28") {"original"}
     stub_out_get_ab_variations("WordPress Plugin 2016-03-17") {"original"}
   end
 
