@@ -124,7 +124,7 @@ You may need to fiddle with the `Capybara.default_wait_time` in
 
 ## Live testing/QA info
 
-Test site for both edge/staging: http://tjacobs3.github.io/hellobar_testing/
+Test site for both edge/staging: http://teampolymathic.github.io/hellobar_testing/
 
 
 **Edge:**  
