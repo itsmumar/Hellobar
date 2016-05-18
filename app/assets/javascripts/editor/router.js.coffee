@@ -16,7 +16,7 @@ HelloBar.Router.map ->
     @route 'slider'
     @route 'takeover'
 
-  @route 'colors'
+  @route 'design'
 
   @route 'text'
 
