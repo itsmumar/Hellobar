@@ -3,6 +3,7 @@ require 'integration_helper'
 feature "User can sign up", js: true do
   after { devise_reset }
   before do
+    stub_out_get_ab_variations("Onboarding Limitted To Three Goals 2016-05-11") {"original"}
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
     allow_any_instance_of(ApplicationController).
