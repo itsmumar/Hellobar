@@ -330,5 +330,4 @@ describe SiteElementsHelper do
       expect(grouped_elements[3].count).to eq 1
     end
   end
-
 end
