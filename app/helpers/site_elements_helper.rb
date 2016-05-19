@@ -1,15 +1,69 @@
 module SiteElementsHelper
   A_OFFSET = "A".ord
 
-  def activity_message(element)
-    if element.has_converted?
-      message = ConversionActivityMessage.new(element).body
-    elsif element.is_announcement?
-      message = AnnouncementActivityMessage.new(element).body
-    else
-      return # no conversions, so just be quiet about it.
+  def activity_message_for_conversion(site_element, related_site_elements)
+    message = ""
+    message = activity_message_append_number_of_units(site_element, message)
+    unless related_site_elements.empty?
+      message = activity_message_append_conversion_text(site_element, related_site_elements, message)
     end
-    message.html_safe
+    message
+  end
+
+  def activity_message_append_number_of_units(site_element, message)
+    number_of_units = site_element_activity_units([site_element], :plural => site_element.total_conversions > 1, :verb => true)
+    message << " has already resulted in #{number_with_delimiter(site_element.total_conversions)} #{number_of_units}."
+    message
+  end
+
+  def activity_message_append_conversion_text(site_element, related_site_elements, message)
+    conversion_rate = site_element.conversion_rate
+    group_conversion_rate = site_elements_group_conversion_rate(related_site_elements)
+    # dont provide lift number when lift is infinite
+    unless [group_conversion_rate, conversion_rate].any?(&:infinite?)
+      message = activity_message_append_comparison_text(site_element, conversion_rate, group_conversion_rate, message)
+    end
+    message = activity_message_append_significance_text(site_element, related_site_elements, message)
+    message
+  end
+
+  def activity_message_append_comparison_text(site_element, conversion_rate, group_conversion_rate, message)
+    message << " Currently this bar is converting"
+    if conversion_rate > group_conversion_rate
+      lift = (conversion_rate - group_conversion_rate) / group_conversion_rate
+      message << " #{number_to_percentage(lift * 100, :precision => 1)}" unless lift.infinite?
+      message << " better than"
+    elsif group_conversion_rate > conversion_rate
+      lift = (group_conversion_rate - conversion_rate) / conversion_rate
+      message << " #{number_to_percentage(lift * 100, :precision => 1)}" unless lift.infinite?
+      message << " worse than"
+    else
+      message << " exactly as well as"
+    end
+    message << " your other #{site_element.short_subtype} bars."
+    message
+  end
+
+  def activity_message_append_significance_text(site_element, related_site_elements, message)
+    # is the result significant or not?
+    if difference_is_significant?([site_element] + related_site_elements)
+      message << " This result is statistically significant."
+    else
+      message << " We don't have enough data yet to know if this is significant."
+    end
+    message
+  end
+
+  def site_elements_group_view_count(site_elements)
+    site_elements.to_a.sum(&:total_views)
+  end
+
+  def site_elements_group_conversion_count(site_elements)
+    site_elements.to_a.sum(&:total_conversions)
+  end
+
+  def site_elements_group_conversion_rate(site_elements)
+    site_elements_group_conversion_count(site_elements) * 1.0 / site_elements_group_view_count(site_elements)
   end
 
   def total_conversion_text(site_element)

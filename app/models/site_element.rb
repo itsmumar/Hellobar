@@ -58,6 +58,9 @@ class SiteElement < ActiveRecord::Base
   scope :call_subtype, -> { where(element_subtype: "call") }
   scope :announcement_subtype, -> { where(element_subtype: "announcement") }
   scope :recent, -> (limit) { where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC").limit(limit).select { |se| se.is_announcement? || se.has_converted? } }
+  scope :matching_content, lambda {|*query|
+    matching(:content, *query)
+  }
 
   delegate :site, :site_id, to: :rule, allow_nil: true
   delegate :image_uploads, to: :site
@@ -96,24 +99,18 @@ class SiteElement < ActiveRecord::Base
     end
   end
 
-  def self.group_view_count(site_elements)
-    site_elements.to_a.sum(&:total_views)
-  end
-
-  def self.group_conversion_count(site_elements)
-    site_elements.to_a.sum(&:total_conversions)
-  end
-
-  def self.group_conversion_rate(site_elements)
-    SiteElement.group_conversion_count(site_elements) * 1.0 / SiteElement.group_view_count(site_elements)
-  end
-
   def conversion_rate
-    self.total_conversions * 1.0 / self.total_views
+    total_conversions * 1.0 / total_views
   end
 
   def related_site_elements
-    self.site.site_elements.where.not(:id => self.id).select{ |e| e.short_subtype == self.short_subtype }
+    # self.site.site_elements.where.not(:id => self.id).select{ |e| e.short_subtype == self.short_subtype }
+    self.site.site_elements.where(SiteElement.arel_table[:element_subtype].matches("%#{self.short_subtype}%"))
+    self.site.site_elements.where("element_subtype LIKE ?" , "%#{self.short_subtype}%")
+  end
+
+  def has_activity_message?
+    has_converted? || is_announcement?
   end
 
   def cloneable_attributes
