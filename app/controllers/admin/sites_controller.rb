@@ -44,7 +44,6 @@ class Admin::SitesController < ApplicationController
       params.require(:site).permit(:id, :url, :opted_in_to_email_digest, :timezone, :invoice_information)
     end
 
-
     def site
       @site ||= Site.find(params[:id])
     end

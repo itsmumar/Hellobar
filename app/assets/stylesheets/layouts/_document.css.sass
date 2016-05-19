@@ -10,7 +10,7 @@ body
   color: $grayDark
   font-size: $emBase
   min-width: $maxWidth
-  font-weight: $fontWeightNormal
+  font-weight: $fontWeightLight
   font-family: "proxima-nova", sans-serif
 
 /*-----------  Global  -----------*/
@@ -32,6 +32,7 @@ body
   .global-content
     float: right
     height: 100%
+    @include calc(min-height, '100vh - #{$headerHeight}')
     position: relative
     background-color: $white
     padding: 2.5em 3.5em 5em

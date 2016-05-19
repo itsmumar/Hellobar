@@ -4,7 +4,7 @@ section
     = @site.normalized_url
     '  is on the
     = @site.current_subscription.values[:name]
-    - if @site.current_subscription.trial?
+    - if @site.current_subscription.currently_on_trial?
       |  Trial
     '  plan.
     - if Permissions.view_bills?(current_user, @site)
@@ -31,6 +31,19 @@ section
         small
           | (no credit card on file)
 
+  section
+    label Info
+    p
+      - if @site.invoice_information.present?
+        | Customized invoice address
+        = link_to "Change", "#", class: "toggle-site-invoice-information"
+        br
+        span.invoice-information= @site.invoice_information.gsub("\r\n", "<br>").html_safe
+      - else
+        = link_to "Add custom invoice address", "#", class: "toggle-site-invoice-information no-left-margin"
+        br
+      = form.text_area "invoice_information", placeholder: "Full address (leave blank to use address associated with your CC)", class: "hidden"
+
   - if !@bills.empty?
     section
       label History
@@ -56,7 +69,7 @@ section
               td= link_to 'Receipt', bill_path(bill), target: '_blank'
 
   - if @next_bill
-    - if @site.current_subscription.trial?
+    - if @site.current_subscription.currently_on_trial?
       ' This site is on a trial plan.
       a.show-payment-modal.underlined data-source="Please enter payment text"
         ' Please enter a payment method by #{bill_due_at(@next_bill)}

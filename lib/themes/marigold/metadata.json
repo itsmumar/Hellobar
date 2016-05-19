@@ -1,0 +1,41 @@
+{
+  "name": "Marigold",
+  "id": "marigold",
+  "fonts": [
+    "roboto",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "defaults": {
+    "Bar": {
+      "background_color": "FFFFFF",
+      "text_color": "43464b",
+      "button_color": "f16334",
+      "link_color": "FFFFFF",
+      "font_id": "roboto"
+    },
+    "Slider": {
+      "background_color": "FFFFFF",
+      "text_color": "43464b",
+      "button_color": "f16334",
+      "link_color": "FFFFFF",
+      "font_id": "roboto"
+    },
+    "Modal": {
+      "background_color": "FFFFFF",
+      "text_color": "43464b",
+      "button_color": "f16334",
+      "link_color": "FFFFFF",
+      "font_id": "roboto"
+    },
+    "Takeover": {
+      "background_color": "FFFFFF",
+      "text_color": "43464b",
+      "button_color": "f16334",
+      "link_color": "FFFFFF",
+      "font_id": "roboto"
+    }
+  }
+}

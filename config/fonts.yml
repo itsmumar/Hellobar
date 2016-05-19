@@ -1,0 +1,104 @@
+-
+  id: open_sans # DO NOT CHANGE WITHOUT UPDATING THE FONT_ID COLUMN DEFAULT
+  name: Open Sans
+  value: "'Open Sans',sans-serif"
+  google_font: 'Open+Sans'
+-
+  id: proxima
+  name: Proxima Nova
+  value: "'proxima-nova',sans-serif"
+-
+  id: helvetica
+  name: Helvetica
+  value: Helvetica,sans-serif
+-
+  id: arial
+  name: Arial
+  value: Arial,Helvetica,sans-serif
+-
+  id: georgia
+  name: Georgia
+  value: Georgia,serif
+-
+  id: sanserif
+  name: 'Sans-Serif'
+  value: Helvetica,Arial,sans-serif
+-
+  id: libre_baskerville
+  name: Libre Baskerville
+  value: "'Libre Baskerville',sans-serif"
+  google_font: 'Libre+Baskerville'
+-
+  id: source_pro
+  name: 'Source Sans Pro'
+  value: "'Source Sans Pro',sans-serif"
+  google_font: 'Source+Sans+Pro'
+-
+  id: roboto
+  name: 'Roboto'
+  value: "'Roboto',sans-serif"
+  google_font: 'Roboto'
+-
+  id: lato
+  name: 'Lato'
+  value: "'Lato',sans-serif"
+  google_font: 'Lato'
+-
+  id: josefin_sans
+  name: 'Josefin Sans'
+  value: "'Josefin Sans',sans-serif"
+  google_font: 'Josefin+Sans'
+-
+  id: montserrat
+  name: 'Montserrat'
+  value: "'Montserrat',sans-serif"
+  google_font: 'Montserrat'
+-
+  id: sintony
+  name: 'Sintony'
+  value: "'Sintony',sans-serif"
+  google_font: 'Sintony'
+-
+  id: unsupported_georgia
+  name: 'Georgia Times'
+  value: "Georgia,Times New Roman,Times,serif"
+-
+  id: unsupported_futura
+  name: 'Futura'
+  value: "Futura,sans-serif"
+-
+  id: unsupported_tahoma
+  name: 'Tahoma'
+  value: "Tahoma,Geneva,sans-serif"
+-
+  id: unsupported_veranda
+  name: 'Veranda'
+  value: "Verdana,Geneva"
+-
+  id: unsupported_lucida_grande
+  name: 'Lucida Grande'
+  value: "Lucida Grande,Lucida Sans Unicode,sans-serif"
+-
+  id: unsupported_trebuchet
+  name: 'Trebuchet MS'
+  value: "Trebuchet MS,sans-serif"
+-
+  id: unsupported_calibri
+  name: 'Calibri'
+  value: "Calibri,sans-serif"
+-
+  id: unsupported_cambria
+  name: 'Cambria'
+  value: "Cambria,serif"
+-
+  id: unsupported_arial_black
+  name: 'Arial Black'
+  value: "Arial Black,Gadget,sans-serif"
+-
+  id: unsupported_times_new_roman
+  name: 'Times New Roman'
+  value: "Times New Roman,Times,serif"
+-
+  id: unsupported_courier_new
+  name: 'Courier New'
+  value: "Courier New,monospace"

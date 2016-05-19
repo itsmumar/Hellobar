@@ -24,6 +24,7 @@
 #= require_tree ./modals
 #= require_tree ./charts
 
+#= require site_edit
 #= require contact_lists
 #= require summary
 #= require improve
@@ -35,6 +36,7 @@
 #= require tracking_events
 #= require user_edit
 #= require referrals
+#= require images
 #= require header
 #= require_self
 
@@ -50,4 +52,3 @@ $ ->
     $timezone = $('#site_timezone, #user_timezone')
     userTimezone = jstz.determine().name()
     $timezone.val(userTimezone)
-

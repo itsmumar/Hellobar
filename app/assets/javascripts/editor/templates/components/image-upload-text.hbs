@@ -1,0 +1,19 @@
+<div class="default-text">
+  {{#if uploading}}
+    <i class="icon-sync"></i>
+    <div>
+      Uploading <strong>{{uploading}}</strong>
+    </div>
+  {{else}}
+    <img src="{{image-path 'upload-icon.svg'}}">
+    <div>
+      Drag an image here or <a href="#_">browse</a><br/>
+      {{#if filename}}
+        to replace the uploaded image
+      {{else}}
+        for an image to upload
+      {{/if}}
+    </div>
+    <div><small>Limit images to 300px tall</small></div>
+  {{/if}}
+</div>

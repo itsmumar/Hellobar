@@ -124,6 +124,15 @@ describe ContactList do
       end
     end
 
+    context "webhook" do
+      it "syncs" do
+        allow(contact_list).to receive(:data) { {"webhook_url" => "http://url.com/webhooks"} }
+        expect(service_provider).to receive(:subscribe).with(nil, "email@email.com", "Name Mcnamerson", true)
+
+        contact_list.sync_one!("email@email.com", "Name Mcnamerson")
+      end
+    end
+
     context "embed code provider" do
       let(:provider) { 'mad_mimi_form' }
       let(:contact_list) { contact_lists(:embed_code).tap{|c| c.identity = identity} }
@@ -152,6 +161,13 @@ describe ContactList do
       allow(service_provider).to receive(:subscribe).and_raise("this error")
       expect { contact_list.sync_one! "email@email.com", "Test Testerson"}.to raise_error
       expect(contact_list.contact_list_logs.last.error).to include("this error")
+    end
+
+    it "saves the stacktrace in a log entry" do
+      allow(contact_list).to receive(:oauth?) { true }
+      allow(service_provider).to receive(:subscribe).and_raise("this error")
+      expect { contact_list.sync_one! "email@email.com", "Test Testerson"}.to raise_error
+      expect(contact_list.contact_list_logs.last.stacktrace).to_not be_blank
     end
 
     it "marks a log entry as completed" do

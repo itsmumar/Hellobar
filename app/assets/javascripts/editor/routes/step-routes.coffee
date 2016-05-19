@@ -25,7 +25,7 @@ HelloBar.StepRoute = Ember.Route.extend
 #-----------  Setup Step Routes  -----------#
 
 HelloBar.StyleRoute     = HelloBar.StepRoute.extend()
-HelloBar.ColorsRoute    = HelloBar.StepRoute.extend()
+HelloBar.DesignRoute    = HelloBar.StepRoute.extend()
 HelloBar.TargetingRoute = HelloBar.StepRoute.extend()
 HelloBar.SettingsRoute  = HelloBar.StepRoute.extend()
 
