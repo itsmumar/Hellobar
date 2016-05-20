@@ -188,7 +188,7 @@
   position: absolute;
 }
 
-#hellobar-bar.bar-bottom .hb-arrow-wrapper .hb-arrow {
+#hellobar-bar.bar-bottom .hb-arrow-wrapper svg {
   filter: flipv; /*IE*/
   transform: scaleY(-1);
   -o-transform: scaleY(-1);
