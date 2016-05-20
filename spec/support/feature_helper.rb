@@ -5,7 +5,10 @@ Warden.test_mode!
 module FeatureHelper
   def login(user=nil)
     user ||=  create(:user)
-    site = user.sites.create(url: random_uniq_url) # Setup a site so that it goes directly to summary page
+    unless user.sites.present?
+      site = user.sites.create(url: random_uniq_url) # Setup a site so that it goes directly to summary page
+    end
+
     login_as user, scope: :user, run_callbacks: false
     visit "/"
     user
