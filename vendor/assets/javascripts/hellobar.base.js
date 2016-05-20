@@ -1219,20 +1219,12 @@ var HB = {
       var conditionKey = condition.value.split("=")[0];
       var currentValue = HB.getSegmentValue(condition.segment)[conditionKey];
       var values = condition.value.split("=")[1] || "";
-
-      console.log("condition");
-      console.log(condition);
-      console.log("conditionKey");
-      console.log(conditionKey);
-      console.log("currentValue");
-      console.log(currentValue);
-      console.log("values");
-      console.log(values);
     }
     else {
       var currentValue = HB.getSegmentValue(condition.segment);
       var values = condition.value;
     }
+
     // Now we need to apply the operands
     // If it's an array of values this is true if the operand is true for any of the values
 
@@ -1306,10 +1298,6 @@ var HB = {
   {
     var a = HB.sanitizeConditionValue(segment, currentValue, input);
     var b = HB.sanitizeConditionValue(segment, input, input);
-    console.log("a");
-    console.log(a);
-    console.log("b");
-    console.log(b);
 
     switch(operand)
     {
