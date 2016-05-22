@@ -1457,11 +1457,11 @@ var HB = {
       components[1] || (components[1] = ''); // default the key to an empty string
 
       // handle ASCII encoding
-      utf8bytes = unescape(encodeURIComponent(components[0]));
-      key = decodeURIComponent(escape(utf8bytes)).toLowerCase();
+      var utf8bytes = unescape(encodeURIComponent(components[0]));
+      var key = decodeURIComponent(escape(utf8bytes));
 
-      utf8bytes = unescape(encodeURIComponent(components[1]));
-      value = decodeURIComponent(escape(utf8bytes));
+      var utf8bytes = unescape(encodeURIComponent(components[1]));
+      var value = decodeURIComponent(escape(utf8bytes));
 
       params[key] = value;
     }
