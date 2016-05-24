@@ -5,6 +5,7 @@
       images[filename] = image_path(filename)
     end
   end
+  images = images.sort.to_h
 %>
 
 window.image_path = (name) ->
