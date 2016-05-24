@@ -17,10 +17,8 @@ module SiteElementsHelper
   end
 
   def activity_message_append_conversion_text(site_element, related_site_elements, message)
-    conversion_rate = site_element.conversion_rate
-    group_conversion_rate = site_elements_group_conversion_rate(related_site_elements)
-    unless [group_conversion_rate, conversion_rate].any?(&:infinite?)
-      message = activity_message_append_comparison_text(site_element, conversion_rate, group_conversion_rate, message)
+    unless [site_elements_group_conversion_rate(related_site_elements), site_element.conversion_rate].any?(&:infinite?)
+      message = activity_message_append_comparison_text(site_element, site_element.conversion_rate, site_elements_group_conversion_rate(related_site_elements), message)
     end
     message = activity_message_append_significance_text(site_element, related_site_elements, message)
     message
@@ -135,11 +133,7 @@ module SiteElementsHelper
   end
 
   def style_icon_class_for_element(element)
-    if element.type.downcase == 'bar'
-      'icon-bar'
-    else
-      'icon-modal'
-    end
+    element.type.downcase == 'bar' ? 'icon-bar' : 'icon-modal'
   end
 
   def site_element_subtypes_for_site(site)
@@ -147,16 +141,12 @@ module SiteElementsHelper
     site.site_elements.collect(&:element_subtype)
   end
 
-
-
   def ab_test_icon(site_element)
     elements_in_group = site_element.rule.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && se.type == site_element.type}
     elements_in_group.sort! { |a, b| a.created_at <=> b.created_at }
     index = elements_in_group.index(site_element)
     # site element is paused, its the only site element in the group, or something wacky is going on
-    if index.nil? || elements_in_group.size == 1
-      return "<i class='testing-icon icon-abtest'></i>".html_safe
-    end
+    return "<i class='testing-icon icon-abtest'></i>".html_safe if index.nil? || elements_in_group.size == 1
     letter = (index + A_OFFSET).chr
     winner = elements_in_group.max_by(&:conversion_percentage)
     if difference_is_significant?(elements_in_group) && site_element == winner
