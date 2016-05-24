@@ -116,8 +116,12 @@
 }
 
 #hellobar-slider .hb-input-wrapper.hb-both-inputs .hb-input-block {
-  width: 50%;
+  width: 49.5%;
   display: inline-block;
+}
+
+#hellobar-slider .hb-input-wrapper.hb-both-inputs .hb-input-block:first-child {
+  margin-right: 0.67%;
 }
 
 #hellobar-slider .hb-input-wrapper.hb-both-inputs .hb-input-block + .hb-input-block {
