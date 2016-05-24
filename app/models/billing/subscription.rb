@@ -96,7 +96,7 @@ class Subscription < ActiveRecord::Base
 
   def mark_user_onboarding_as_bought_subscription!
     if capabilities.acts_as_paid_subscription? && (user || site)
-      (user || site.owners.first).onboarding_status_setter.bought_subscription!
+      (user || site.owners.unscoped.first).onboarding_status_setter.bought_subscription!
     end
   end
 
