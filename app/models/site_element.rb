@@ -104,9 +104,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def related_site_elements
-    # self.site.site_elements.where.not(:id => self.id).select{ |e| e.short_subtype == self.short_subtype }
-    self.site.site_elements.where(SiteElement.arel_table[:element_subtype].matches("%#{self.short_subtype}%"))
-    self.site.site_elements.where("element_subtype LIKE ?" , "%#{self.short_subtype}%")
+    self.site.site_elements.where.not(:id => self.id).where(SiteElement.arel_table[:element_subtype].matches("%#{self.short_subtype}%"))
   end
 
   def has_activity_message?

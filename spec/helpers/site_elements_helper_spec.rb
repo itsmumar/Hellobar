@@ -48,63 +48,37 @@ describe SiteElementsHelper do
   end
 
   describe "#helper.activity_message" do
-    context "with no conversions" do
-      it "is silent for traffic elements" do
-        element = create(:site_element, :traffic)
-        element.stub(:total_conversions => 0, :total_views => 0)
-        expect(helper.activity_message(element)).to be_nil
-      end
-
-      it "is silent for email elements" do
-        element = create(:site_element, :email)
-        element.stub(:total_conversions => 0, :total_views => 0)
-        expect(helper.activity_message(element)).to be_nil
-      end
-
-      it "is silent for twitter elements" do
-        element = create(:site_element, :twitter)
-        element.stub(:total_conversions => 0, :total_views => 0)
-        expect(helper.activity_message(element)).to be_nil
-      end
-
-      it "is silent for facebook elements" do
-        element = create(:site_element, :facebook)
-        element.stub(:total_conversions => 0, :total_views => 0)
-        expect(helper.activity_message(element)).to be_nil
-      end
-    end
-
     it "doesn't pluralize when there was only one conversion" do
       element = create(:site_element, :email)
       element.stub(:total_conversions => 1, :total_views => 1)
-      helper.activity_message(element).should =~ /resulted in 1 email collected/
+      helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /resulted in 1 email collected/
     end
 
     context "with multiple conversions" do
       it "returns the correct message for traffic elements" do
         element = create(:site_element, :traffic)
         element.stub(:total_conversions => 5, :total_views => 5)
-        helper.activity_message(element).should =~ /resulted in 5 clicks/
+        helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /resulted in 5 clicks/
       end
 
       it "returns the correct message for email elements" do
         element = create(:site_element, :email)
         element.stub(:total_conversions => 5, :total_views => 5)
-        helper.activity_message(element).should =~ /resulted in 5 emails collected/
+        helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /resulted in 5 emails collected/
       end
 
       it "returns the correct message for twitter elements" do
         Hello::DataAPI.stub(:lifetime_totals => {})
         element = create(:site_element, :twitter)
         element.stub(:total_conversions => 5, :total_views => 5)
-        helper.activity_message(element).should =~ /resulted in 5 tweets/
+        helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /resulted in 5 tweets/
       end
 
       it "returns the correct message for facebook elements" do
         Hello::DataAPI.stub(:lifetime_totals => {})
         element = create(:site_element, :facebook)
         element.stub(:total_conversions => 5, :total_views => 5)
-        helper.activity_message(element).should =~ /resulted in 5 likes/
+        helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /resulted in 5 likes/
       end
     end
 
@@ -116,7 +90,7 @@ describe SiteElementsHelper do
         create(:site_element, :twitter, rule: rule).id.to_s => Hello::DataAPI::Performance.new([[10, 1]])
       })
 
-      helper.activity_message(element).should =~ /converting 400\.0% better than your other social bars/
+      helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /converting 400\.0% better than your other social bars/
     end
 
     it "doesn't show a percentage when comparing against other bars with no conversions" do
@@ -127,7 +101,7 @@ describe SiteElementsHelper do
         create(:site_element, :twitter, rule: rule).id.to_s => Hello::DataAPI::Performance.new([[10, 0]])
       })
 
-      helper.activity_message(element).should =~ /converting better than your other social bars/
+      helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /converting better than your other social bars/
     end
 
     it "doesnt return the conversion rate when it is Infinite" do
@@ -137,7 +111,7 @@ describe SiteElementsHelper do
         create(:site_element, :facebook).id.to_s => Hello::DataAPI::Performance.new([[10, 1]])
       })
 
-      helper.activity_message(element).should_not =~ /Currently this bar is converting/
+      helper.activity_message_for_conversion(element, element.related_site_elements).should_not =~ /Currently this bar is converting/
     end
   end
 
