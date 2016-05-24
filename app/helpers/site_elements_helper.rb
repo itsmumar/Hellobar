@@ -19,7 +19,6 @@ module SiteElementsHelper
   def activity_message_append_conversion_text(site_element, related_site_elements, message)
     conversion_rate = site_element.conversion_rate
     group_conversion_rate = site_elements_group_conversion_rate(related_site_elements)
-    # dont provide lift number when lift is infinite
     unless [group_conversion_rate, conversion_rate].any?(&:infinite?)
       message = activity_message_append_comparison_text(site_element, conversion_rate, group_conversion_rate, message)
     end
@@ -45,7 +44,6 @@ module SiteElementsHelper
   end
 
   def activity_message_append_significance_text(site_element, related_site_elements, message)
-    # is the result significant or not?
     if difference_is_significant?([site_element] + related_site_elements)
       message << " This result is statistically significant."
     else
@@ -67,19 +65,11 @@ module SiteElementsHelper
   end
 
   def total_conversion_text(site_element)
-    if site_element.element_subtype == "announcement"
-      "--"
-    else
-      number_with_delimiter(site_element.total_conversions)
-    end
+    site_element.element_subtype == "announcement" ? "--" : number_with_delimiter(site_element.total_conversions)
   end
 
   def conversion_percent_text(site_element)
-    if site_element.element_subtype == "announcement"
-      "n/a"
-    else
-      number_to_percentage(site_element.conversion_percentage * 100, precision: 1)
-    end
+    site_element.element_subtype == "announcement" ? "n/a" : number_to_percentage(site_element.conversion_percentage * 100, precision: 1)
   end
 
   def site_element_activity_units(elements, opts = {})
@@ -107,18 +97,14 @@ module SiteElementsHelper
         {:unit => "follower", :verb => "gained"}
       end
     end
-
     unit = units.uniq.size == 1 ? units.first[:unit] : "conversion"
     verb = units.uniq.size == 1 ? units.first[:verb] : nil
-
     pluralized_unit = unit.pluralize(opts[:plural] ? 2 : 1)
-
     verb && opts[:verb] ? "#{pluralized_unit} #{verb}" : pluralized_unit
   end
 
   def site_element_age(site_element)
     age = Time.now - site_element.created_at
-
     if age < 1.minute
       units = [(age / 1.second).to_i, "second"]
     elsif age < 1.hour
@@ -130,7 +116,6 @@ module SiteElementsHelper
     else
       units = [(age / 1.year).to_i, "year"]
     end
-
     "#{units[0]} <small>#{units[1].pluralize(units[0])} old</small>".html_safe
   end
 
@@ -168,16 +153,12 @@ module SiteElementsHelper
     elements_in_group = site_element.rule.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && se.type == site_element.type}
     elements_in_group.sort! { |a, b| a.created_at <=> b.created_at }
     index = elements_in_group.index(site_element)
-
     # site element is paused, its the only site element in the group, or something wacky is going on
     if index.nil? || elements_in_group.size == 1
       return "<i class='testing-icon icon-abtest'></i>".html_safe
     end
-
     letter = (index + A_OFFSET).chr
-
     winner = elements_in_group.max_by(&:conversion_percentage)
-
     if difference_is_significant?(elements_in_group) && site_element == winner
       "<i class='testing-icon icon-tip #{site_element.short_subtype}'><span class='numbers'>#{letter}</span></i>".html_safe
     else
@@ -187,14 +168,12 @@ module SiteElementsHelper
 
   def difference_is_significant?(elements)
     values = {}
-
     elements.each_with_index do |element, i|
       values[element.id] = {
         :views => element.total_views,
         :conversions => element.total_conversions
       }
     end
-
     ABAnalyzer::ABTest.new(values).different?
   rescue ABAnalyzer::InsufficientDataError
     false
@@ -220,7 +199,6 @@ module SiteElementsHelper
   def elements_grouped_by_subtype(elements)
     social_elements = elements.select { |x| x.element_subtype.include?("social") }
     elements = elements.group_by(&:element_subtype)
-
     [elements["email"], social_elements, elements["traffic"], elements["call"], elements["announcement"]].compact
   end
 end
