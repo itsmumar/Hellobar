@@ -44,7 +44,7 @@ module Hello
         TESTS[name] = {:values=>values, :index=>index, :weights=>weights, :name=>name, :user_start_date=>user_start_date}
       end
     end
-    
+
     # Hello::RegisteredTests.all.each do |test|
     #   register_test(test)
     # end
