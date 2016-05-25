@@ -30,7 +30,7 @@ html
 
     javascript:
       HB_DNT = 1;
-      HB_EMAIL_FLOW_TEST = "#{{new_user? ? get_ab_variation("Forced Email Path 2016-03-28") : 'original'}}";
+      HB_EMAIL_FLOW_TEST = "original";
 
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
       var trackEditorFlow = #{{new_user?}};
