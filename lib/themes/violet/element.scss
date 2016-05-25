@@ -48,8 +48,7 @@
     }
 
     .hb-cta-style-button {
-      font-size: 22px;            
-      padding: 18px 30px;
+      font-size: 18px;
       border-radius: 10px;
     }
   }
@@ -67,10 +66,12 @@
     }
 
     .hb-cta-style-button {
-      font-size: 22px;
       font-weight: 400;
-      padding: 20px 30px;
       border-radius: 10px;
     }
+
+    .hb-input-block input {
+      font-size: .7em;
+    } 
   }
 }
