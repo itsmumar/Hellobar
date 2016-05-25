@@ -16,7 +16,7 @@ module Hello
 
     class << self
       @@expected_index = 0
-      def register_test(name, values, index, weights=[])
+      def register_test(name, values, index, weights=[], user_start_date=nil)
         raise "Expected index: #{@@expected_index.inspect}, but got index: #{index.inspect}. You either changed the order of the tests, removed a test, added a test out of order, or did not set the index of a test correctly. Please fix and try again" unless index == @@expected_index
         raise "#{name.inspect} has #{values.length} values, but max is #{MAX_VALUES_PER_TEST}" if values.length > MAX_VALUES_PER_TEST
         sum = weights.inject(0){|result, w| result += w}
@@ -41,38 +41,27 @@ module Hello
         end
 
         @@expected_index += 1
-        TESTS[name] = {:values=>values, :index=>index, :weights=>weights, :name=>name}
+        TESTS[name] = {:values=>values, :index=>index, :weights=>weights, :name=>name, :user_start_date=>user_start_date}
       end
     end
+    
+    # Hello::RegisteredTests.all.each do |test|
+    #   register_test(test)
+    # end
 
-    # ==========================================
-    # ==      REGISTER YOUR TESTS HERE        ==
-    # ==========================================
+    # ================================================================
+    # ==      REGISTER YOUR TESTS AT: lib/hello/ab_tests.yml        ==
+    # ================================================================
     unless Rails.env.test?
-      register_test("Use Cases Amount",                                           %w{more less}, 0)
-      register_test("Account Creation Test 2015-01-21",                           %w{original orange_header no_orange_header}, 1)
-      register_test("Editor Test 2015-02-23",                                     %w{original interstitial navigation}, 2)
-      register_test("Google Auth 2015-03-10",                                     %w{original google_auth}, 3)
-      register_test("Templated Editor 2015-07-07",                                %w{original templated}, 4)
-      register_test("Video Welcome 2015-9-22",                                    %w{original video}, 5, [75, 25])
-      register_test("Quickstart CTA 2015-10-06",                                  %w{original cta}, 6)
-      register_test("Upgrade Plan Button 2016-01-05",                             %w{original power}, 7)
-      register_test("Settings Upsell 2016-01-07",                                 %w{original upsell}, 8)
-      register_test("Upgrade Modal Logos 2016-01-10",                             %w{original logos}, 9)
-      register_test("Email Modal Interstitial 2016-02-23",                        %w{original modal}, 10)
-      register_test("Email Modal Interstitial New Users Only 2016-03-04",         %w{original modal}, 11)
-      register_test("Sign Up Button 2016-03-17",                                  %w{original sign_up_google sign_up get_started}, 12)
-      register_test("Show Add Site on Edit Site 2016-03-18",                      %w{original variant}, 13)
-      register_test("WordPress Plugin 2016-03-17",                                %w{original common}, 14)
-      register_test("Use Cases Variation 2016-03-22",                             %w{original simple}, 15)
-      register_test("Forced Email Path 2016-03-28",                               %w{original force}, 16)
-      register_test("Show Add Site on Edit Site 2016-04-04",                      %w{original variant}, 17)
-      register_test("Create A Bar Reminder New Users Only 2016-03-28",            %w{original campaign}, 18)
-      register_test("Configure Your Bar Reminder New Users Only 2016-03-28",      %w{original campaign}, 19)
-      register_test("Install The Plugin Drip Campaign New Users Only 2016-03-28", %w{original campaign}, 20)
-      register_test("Upgrade Hello Bar Drip Campaign New Users Only 2016-03-28",  %w{original campaign}, 21)
-      register_test("Use Cases Variation 2016-04-22",                             %w{original types}, 22)
-      register_test("Onboarding Limitted To Three Goals 2016-05-11",              %w{original variant}, 23)
+      hash = YAML.load(File.read("lib/hello/ab_tests.yml"))
+      hash.each do |registered_test|
+        name            = registered_test["name"]
+        values          = registered_test["values"]
+        index           = registered_test["index"]
+        weights         = registered_test["weights"].present? ? registered_test["weights"] : []
+        user_start_date = registered_test["user_start_date"]
+        register_test(name, values, index, weights, user_start_date)
+      end
     end
 
     def ab_test_cookie_name
@@ -114,7 +103,6 @@ module Hello
 
       return cookie
     end
-
 
     def set_ab_variation(test_name, value)
       # First make sure we have registered this test
@@ -159,6 +147,7 @@ module Hello
     end
 
     def get_ab_variation(test_name, user = nil)
+      return nil unless ab_test_passes_time_constraints?(test_name)
       ab_test = get_ab_test(test_name)
       value_index, status = get_ab_variation_index_without_setting(test_name, user)
       value = nil
@@ -231,6 +220,18 @@ module Hello
       end
 
       nil
+    end
+
+    def ab_test_has_user_start_date_constraint?(test_name)
+      get_ab_test(test_name)[:user_start_date].present?
+    end
+
+    def ab_test_passes_user_start_date_constraint?(test_name)
+      current_user.present? && (current_user.created_at > get_ab_test(test_name)[:user_start_date])
+    end
+
+    def ab_test_passes_time_constraints?(test_name)
+      ab_test_has_user_start_date_constraint?(test_name) ? ab_test_passes_user_start_date_constraint?(test_name) : true
     end
   end
 end
