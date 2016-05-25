@@ -13,6 +13,7 @@ describe Hello::InternalAnalytics do
     @test_index = Hello::InternalAnalytics.class_variable_get("@@expected_index")
     Hello::InternalAnalytics.register_test("Example Test", %w{experiment control}, @test_index)
     Hello::InternalAnalytics.register_test("Weighted Test", %w{experiment control}, @test_index + 1, [10, 90])
+    Hello::InternalAnalytics.register_test("Time Constraint Test", %w{experiment control}, @test_index + 2, [], '2016-05-11'.to_datetime)
 
     @cookies = ActionDispatch::Cookies::CookieJar.new("key_generator")
     @user = users(:joey)
@@ -77,4 +78,18 @@ describe Hello::InternalAnalytics do
       expect(@object.get_ab_test_value_index_from_id(ab_test, 1)).to eq(1)
     end
   end
+
+  describe "ab_test_passes_time_constraints?" do
+    it "passes if no time constraint is given" do
+      expect(@object.ab_test_passes_time_constraints?("Example Test")).to eq(true)
+    end
+
+    it "does not pass if user_start_date time constraint is after the user was created" do
+      @user.update_attributes(created_at: @object.get_ab_test("Time Constraint Test")[:user_start_date] - 10.days)
+      ab_test = @object.get_ab_test("Time Constraint Test")
+      allow_any_instance_of(ModuleTestingClass).to receive(:current_user).and_return(@user)
+      expect(@object.ab_test_passes_time_constraints?("Time Constraint Test")).to eq(false)
+    end
+  end
+
 end
