@@ -48,6 +48,10 @@ var HBQ = function()
   // Set all the default tracking trackings
   HB.setDefaultSegments();
 
+  // HB is about to render elements, run client defined callback
+  if(typeof HB_BEFORE === 'function')
+    HB_BEFORE();
+
   HB.showSiteElements();
 
   // HB has finished, run any client defined callback
