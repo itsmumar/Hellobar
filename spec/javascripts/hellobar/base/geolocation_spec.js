@@ -68,10 +68,7 @@ describe("HB", function() {
         spyOn(HB, 'showSiteElements');
         spyOn(HB, 'setGeolocationData');
 
-        document.cookie = 'hbglc_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        document.cookie = 'hbv_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        document.cookie = 'hbs_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        HB.loadCookies();
+        window.localStorage.clear();
         server = sinon.fakeServer.create();
         server.respondWith(
           [
@@ -108,7 +105,8 @@ describe("HB", function() {
 
     context("data exists in cookies", function() {
       beforeEach(function() {
-        HB.cookies.location = {'gl_cty' : 'Atlantis'};
+        storedLocation = JSON.stringify({'value' : 'Atlantis'});
+        window.localStorage.setItem('gl_cty', storedLocation);
         spyOn(XMLHttpRequest.prototype, 'open').and.stub();
         spyOn(XMLHttpRequest.prototype, 'send').and.stub();
       });

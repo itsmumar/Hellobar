@@ -691,18 +691,45 @@ var HB = {
     HB.saveCookies();
   },
 
+  // gets data from local storage
+  getLocalStorageData: function(name)
+  {
+    localData = window.localStorage.getItem(name);
+    if (localData != null) {
+      parsedData = JSON.parse(localData);
+
+      expDate = new Date(parsedData.expiration);
+      today = new Date;
+      if (today > expDate){
+        window.localStorage.removeItem(name);
+        return null;
+      } else {
+        return parsedData.value;
+      }
+    } else {
+      return null;
+    }
+  },
+
   // Gets a cookie
   gc: function(name)
   {
-    var i,x,y,c=document.cookie.split(";");
-    for (i=0;i<c.length;i++)
-    {
-      x=c[i].substr(0,c[i].indexOf("="));
-      y=c[i].substr(c[i].indexOf("=")+1);
-      x=x.replace(/^\s+|\s+$/g,"");
-      if (x==name)
+    localValue = HB.getLocalStorageData(name);
+    if (localValue != null) {
+      return unescape(localValue);
+    } else {
+      var i,x,y,c=document.cookie.split(";");
+      for (i=0;i<c.length;i++)
       {
-        return unescape(y);
+        x=c[i].substr(0,c[i].indexOf("="));
+        y=c[i].substr(c[i].indexOf("=")+1);
+        x=x.replace(/^\s+|\s+$/g,"");
+        if (x==name)
+        {
+          document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+          HB.sc(name, y)
+          return unescape(y);
+        }
       }
     }
   },
@@ -712,16 +739,18 @@ var HB = {
   sc: function(name,value,exdays,path)
   {
     if ( typeof(HB_NC) != "undefined" )
-      return;
+      {
+        return;
+      } else {
+        var exdate= typeof exdays == "object" ? exdays : new Date();
+        if(typeof exdays == "number")
+          exdate.setDate(exdate.getDate() + exdays);
 
-    var exdate= typeof exdays == "object" ? exdays : new Date();
-
-    if(typeof exdays == "number")
-      exdate.setDate(exdate.getDate() + exdays);
-
-    value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-    value = path == null ? value : value + "; " + path;
-    document.cookie=name + "=" + value;
+        var dataToSave = {};
+        dataToSave.value = value;
+        dataToSave.expiration = exdate;
+        window.localStorage.setItem(name, JSON.stringify(dataToSave));
+      }
   },
 
   // Returns the visitor's unique ID which should be a random value
@@ -1968,7 +1997,7 @@ var HB = {
   },
 
   getGeolocationData: function(key) {
-    var cachedLocation = HB.cookies.location[key];
+    var cachedLocation = HB.gc(key);
     if (cachedLocation) return cachedLocation;
 
     var xhr = new XMLHttpRequest();
