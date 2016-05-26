@@ -61,6 +61,10 @@
       -moz-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
       box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
     }
+
+    .hb-name-input {
+      margin-bottom: 5px;
+    }
   }
 
   #hellobar-takeover {
@@ -85,6 +89,10 @@
 
     .hb-input-block input {
       font-size: .7em;
+    }
+
+    .hb-name-input {
+      margin-bottom: 12px;
     }
   }
 }
