@@ -441,8 +441,8 @@ var HB = {
   },
 
   // Returns true if the visitor previously closed a site element
-  didDismissHB: function() {
-    return HB.gc("HBDismissed") != null;
+  didDismissHB: function(siteElement) {
+    return HB.gc("HBDismissed-" + siteElement.id) != null;
   },
 
   // Returns true if the visitor previously closed this particular site element
@@ -1090,7 +1090,7 @@ var HB = {
 
   convertedOrDismissed: function(siteElement) {
     var converted = HB.didConvert(siteElement) && !siteElement.show_after_convert;
-    return converted || HB.didDismissThisHB(siteElement) || HB.didDismissHB();
+    return converted || HB.didDismissThisHB(siteElement) || HB.didDismissHB(siteElement);
   },
 
   updatedSinceLastVisit: function(siteElement) {

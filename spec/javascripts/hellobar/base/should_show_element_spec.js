@@ -68,7 +68,26 @@ describe("HB", function() {
 
     context("previous element has been dismissed", function() {
       beforeEach(function() {
-        spyOn(HB, 'didDismissHB').and.returnValue(true);
+        var otherElementData = {
+          id: 654321,
+          settings: { url: "" },
+          template_name: "bar_traffic",
+          type: "Modal",
+          subtype: "traffic",
+          show_after_convert: false
+        }
+
+        otherElement = new HB.SiteElement(otherElementData);
+        HB.loadCookies();
+      });
+
+      context("when there is another element to be rendered", function() {
+        it("returns true for the element that was not dismissed", function() {
+          spyOn(HB, 'getSiteElementData').and.returnValue(100);
+          HB.sc("HBDismissed-" + siteElement.id, true, new Date((new Date().getTime() + 1000 * 60 * 15)), "path=/");
+
+          expect(HB.didDismissHB(otherElement)).toEqual(false);
+        });
       });
 
       context("element was updated since it was last viewed", function() {
