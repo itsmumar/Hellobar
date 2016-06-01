@@ -2014,7 +2014,7 @@ var HB = {
   },
 
   getGeolocationData: function(key) {
-    var cachedLocation = HB.gc(key);
+    var cachedLocation = HB.cookies.location[key];
     if (cachedLocation) return cachedLocation;
 
     var xhr = new XMLHttpRequest();

@@ -69,6 +69,7 @@ describe("HB", function() {
         spyOn(HB, 'setGeolocationData');
 
         window.localStorage.clear();
+        HB.cookies.location = {};
         server = sinon.fakeServer.create();
         server.respondWith(
           [
@@ -105,8 +106,7 @@ describe("HB", function() {
 
     context("data exists in cookies", function() {
       beforeEach(function() {
-        storedLocation = JSON.stringify({'value' : 'Atlantis'});
-        window.localStorage.setItem('gl_cty', storedLocation);
+        HB.cookies.location = {'gl_cty' : 'Atlantis'};
         spyOn(XMLHttpRequest.prototype, 'open').and.stub();
         spyOn(XMLHttpRequest.prototype, 'send').and.stub();
       });
