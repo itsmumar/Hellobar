@@ -240,7 +240,10 @@ HelloBar.ApplicationController = Ember.Controller.extend
     phone_number = @get("phone_number") || @get("model.phone_number")
     country_code = @get("model.phone_country_code")
 
-    if isValidNumber(phone_number, country_code)
+    if country_code == "XX" # custom country code
+      @set("model.phone_number", phone_number)
+      @set("phone_number", phone_number)
+    else if isValidNumber(phone_number, country_code)
       @set("phone_number", formatLocal(country_code, phone_number))
       @set("model.phone_number", formatE164(country_code, phone_number))
     else
