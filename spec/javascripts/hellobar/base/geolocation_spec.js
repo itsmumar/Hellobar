@@ -68,10 +68,8 @@ describe("HB", function() {
         spyOn(HB, 'showSiteElements');
         spyOn(HB, 'setGeolocationData');
 
-        document.cookie = 'hbglc_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        document.cookie = 'hbv_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        document.cookie = 'hbs_9001=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        HB.loadCookies();
+        window.localStorage.clear();
+        HB.cookies.location = {};
         server = sinon.fakeServer.create();
         server.respondWith(
           [

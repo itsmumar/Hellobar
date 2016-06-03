@@ -691,18 +691,58 @@ var HB = {
     HB.saveCookies();
   },
 
+  // gets data from local storage
+  getLocalStorageData: function(name)
+  {
+    //read the data(json string)
+    localData = window.localStorage.getItem(name);
+    if (localData != null) {
+      //parse the json string and extract expiration date
+      parsedData = JSON.parse(localData);
+
+      expDate = new Date(parsedData.expiration);
+      today = new Date;
+      if (today > expDate){
+        //remove expired data
+        window.localStorage.removeItem(name);
+        return null;
+      } else {
+        //return valid data
+        return parsedData.value;
+      }
+    } else {
+      return null;
+    }
+  },
+
   // Gets a cookie
   gc: function(name)
   {
-    var i,x,y,c=document.cookie.split(";");
-    for (i=0;i<c.length;i++)
-    {
-      x=c[i].substr(0,c[i].indexOf("="));
-      y=c[i].substr(c[i].indexOf("=")+1);
-      x=x.replace(/^\s+|\s+$/g,"");
-      if (x==name)
+    localValue = HB.getLocalStorageData(name);
+    // return local storage data first
+    if (localValue != null) {
+      return unescape(localValue);
+    } else {
+      //instantiate few vars, and split all cookies into one of them
+      var i,x,y,c = document.cookie.split(";");
+      for (i=0;i<c.length;i++)
       {
-        return unescape(y);
+        //get the key
+        x=c[i].substr(0,c[i].indexOf("="));
+        //get the value
+        y=c[i].substr(c[i].indexOf("=")+1);
+        //strip whitespace
+        x=x.replace(/^\s+|\s+$/g,"");
+        //if value exists in cookies
+        if (x == name)
+        {
+          //expire the cookie
+          document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+          //save value in localstorage
+          HB.sc(name, y)
+          //return value
+          return unescape(y);
+        }
       }
     }
   },
@@ -711,17 +751,23 @@ var HB = {
   // exdays can be number of days or a date object
   sc: function(name,value,exdays,path)
   {
+    //no idea what HB_NC is
     if ( typeof(HB_NC) != "undefined" )
-      return;
+      {
+        return;
+      } else {
+        //set date to today?? if number of days to expiration has not been passed
+        var exdate= typeof exdays == "object" ? exdays : new Date();
+        if(typeof exdays == "number")
+          //conver days to expiration to date
+          exdate.setDate(exdate.getDate() + exdays);
 
-    var exdate= typeof exdays == "object" ? exdays : new Date();
-
-    if(typeof exdays == "number")
-      exdate.setDate(exdate.getDate() + exdays);
-
-    value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-    value = path == null ? value : value + "; " + path;
-    document.cookie=name + "=" + value;
+        var dataToSave = {};
+        dataToSave.value = value;
+        dataToSave.expiration = exdate;
+        //save data and expiration date as a string
+        window.localStorage.setItem(name, JSON.stringify(dataToSave));
+      }
   },
 
   // Returns the visitor's unique ID which should be a random value
