@@ -47,25 +47,26 @@ script#condition-partial type="text/x-handlebars-template"
     .condition-ruleset
       .select-wrapper.optional.rule_conditions_segment
         select class="condition-segment" name="rule[conditions_attributes][{{index}}][segment]"
-          | {{option segment "DeviceCondition" "device"}}
+          | {{option segment "UTMCampaignCondition" "Ad Campaign"}}
+          | {{option segment "UTMContentCondition" "Ad Content"}}
+          | {{option segment "UTMMediumCondition" "Ad Medium"}}
+          | {{option segment "UTMSourceCondition" "Ad Source"}}
+          | {{option segment "UTMTermCondition" "Ad Term"}}
           | {{option segment "LocationCityCondition" "City"}}
           | {{option segment "LocationCountryCondition" "Country Code"}}
-          | {{option segment "LocationRegionCondition" "Region/State"}}
           | {{option segment "DateCondition" "date"}}
           | {{option segment "LastVisitCondition" "days since last visit"}}
-          | {{option segment "NumberOfVisitsCondition" "number of visits"}}
+          | {{option segment "DeviceCondition" "device"}}
           | {{option segment "EveryXSession" "every Nth session"}}
+          | {{option segment "NumberOfVisitsCondition" "number of visits"}}
           | {{option segment "PreviousPageURL" "previous page url"}}
           | {{option segment "ReferrerCondition" "referrer"}}
-          | {{option segment "UrlCondition" "URL"}}
-          | {{option segment "UrlQuery" "URL Query"}}
-          | {{option segment "UrlPathCondition" "URL Path"}}
           | {{option segment "ReferrerDomainCondition" "Referrer Domain"}}
-          | {{option segment "UTMSourceCondition" "Ad Source"}}
-          | {{option segment "UTMCampaignCondition" "Ad Campaign"}}
-          | {{option segment "UTMMediumCondition" "Ad Medium"}}
-          | {{option segment "UTMContentCondition" "Ad Content"}}
-          | {{option segment "UTMTermCondition" "Ad Term"}}
+          | {{option segment "LocationRegionCondition" "Region/State"}}
+          | {{option segment "TimeCondition" "Time"}}
+          | {{option segment "UrlCondition" "URL"}}
+          | {{option segment "UrlPathCondition" "URL Path"}}
+          | {{option segment "UrlQuery" "URL Query"}}
           | {{option segment "CustomCondition" "Custom"}}
       .custom-segment-name
         | Segment name is: 
@@ -139,6 +140,11 @@ script#condition-partial type="text/x-handlebars-template"
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.location-country-choice.select-wrapper
           = country_select('rule', 'conditions_attributes', { priority_countries: ["US"] }, { disabled: "disabled", name: "rule[conditions_attributes][{{index}}][value]", class: "value" })
+        .choice-wrapper.time-choice.select-wrapper
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[0]}}"
+          span minutes
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[1]}}"
+          span hours
         .choice-wrapper.location-region-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.url-choice
