@@ -9,6 +9,23 @@ FactoryGirl.define do
       phone_number Faker::PhoneNumber.cell_phone
     end
 
+    trait :traffic do
+      element_subtype "traffic"
+    end
+
+    trait :email do
+      element_subtype "email"
+      contact_list
+    end
+
+    trait :twitter do
+      element_subtype "social/tweet_on_twitter"
+    end
+
+    trait :facebook do
+      element_subtype "social/like_on_facebook"
+    end
+
     factory :modal_element do
       type "Modal"
     end
