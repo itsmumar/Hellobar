@@ -50,9 +50,12 @@
 
     .hb-cta-style-button {
       font-size: 18px;
-      font-weight: 700;          
-      padding: 18px 30px;
+      font-weight: 700;
       border-radius: 10px;
+    }
+
+    .hb-name-input {
+      margin-bottom: 5px;
     }
   }
 
@@ -69,10 +72,16 @@
     }
 
     .hb-cta-style-button {
-      font-size: 20px;
       font-weight: 700;
-      padding: 20px 30px;
       border-radius: 10px;
-    }        
+    }
+
+    .hb-input-block input {
+      font-size: .7em;
+    }
+    
+    .hb-name-input {
+      margin-bottom: 12px;
+    }  
   }
 }

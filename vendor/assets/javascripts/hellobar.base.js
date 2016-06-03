@@ -1028,6 +1028,7 @@ var HB = {
     for(i=0;i<HB.rules.length;i++)
     {
       var rule = HB.rules[i];
+
       if ( HB.ruleTrue(rule) )
       {
         // Get all site elements that are a part of this rule that the
@@ -1217,12 +1218,13 @@ var HB = {
     {
       var conditionKey = condition.value.split("=")[0];
       var currentValue = HB.getSegmentValue(condition.segment)[conditionKey];
-      var values = condition.value.split("=")[1];
+      var values = condition.value.split("=")[1] || "";
     }
     else {
       var currentValue = HB.getSegmentValue(condition.segment);
       var values = condition.value;
     }
+
     // Now we need to apply the operands
     // If it's an array of values this is true if the operand is true for any of the values
 
@@ -1312,6 +1314,8 @@ var HB = {
       case "does_not_equal":
         return a != b;
       case "includes":
+        if(typeof a === "undefined" && b === "")
+           return false;
         if(typeof a === 'string' && typeof b === 'string') {
           var regex = new RegExp(HB.sanitizeRegexString(b).replace("*", ".*"));
           return !!a.match(regex);
@@ -1319,6 +1323,8 @@ var HB = {
 
         return HB.stringify(a).indexOf(HB.stringify(b)) != -1;
       case "does_not_include":
+        if(typeof a === "undefined" && b === "")
+          return true;
         return HB.stringify(a).indexOf(HB.stringify(b)) == -1;
       case "before":
       case "less_than":
@@ -1448,13 +1454,14 @@ var HB = {
     {
       var key, value;
       var components = pairs[i].split("=");
+      components[1] || (components[1] = ''); // default the key to an empty string
 
       // handle ASCII encoding
-      utf8bytes = unescape(encodeURIComponent(components[0]));
-      key = decodeURIComponent(escape(utf8bytes)).toLowerCase();
+      var utf8bytes = unescape(encodeURIComponent(components[0]));
+      var key = decodeURIComponent(escape(utf8bytes));
 
-      utf8bytes = unescape(encodeURIComponent(components[1]));
-      value = decodeURIComponent(escape(utf8bytes));
+      var utf8bytes = unescape(encodeURIComponent(components[1]));
+      var value = decodeURIComponent(escape(utf8bytes));
 
       params[key] = value;
     }

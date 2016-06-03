@@ -1,0 +1,7 @@
+strong
+  = link_to "/sites/#{element.site.id}/site_elements##{element.id}" do
+    ' The
+    = element.short_subtype
+    '  bar you added
+    = time_ago_in_words(element.created_at)
+    |  ago
