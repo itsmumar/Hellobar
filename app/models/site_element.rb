@@ -58,6 +58,9 @@ class SiteElement < ActiveRecord::Base
   scope :call_subtype, -> { where(element_subtype: "call") }
   scope :announcement_subtype, -> { where(element_subtype: "announcement") }
   scope :recent, -> (limit) { where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC").limit(limit).select { |se| se.is_announcement? || se.has_converted? } }
+  scope :matching_content, lambda {|*query|
+    matching(:content, *query)
+  }
 
   delegate :site, :site_id, to: :rule, allow_nil: true
   delegate :image_uploads, to: :site
@@ -94,6 +97,18 @@ class SiteElement < ActiveRecord::Base
         read_attribute(attr_name).presence || QUESTION_DEFAULTS[attr_name]
       end
     end
+  end
+
+  def conversion_rate
+    total_conversions * 1.0 / total_views
+  end
+
+  def related_site_elements
+    self.site.site_elements.where.not(:id => self.id).where(SiteElement.arel_table[:element_subtype].matches("%#{self.short_subtype}%"))
+  end
+
+  def has_activity_message?
+    has_converted? || is_announcement?
   end
 
   def cloneable_attributes
