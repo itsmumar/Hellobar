@@ -4,7 +4,6 @@ require 'email_integration_helper'
 feature "New User Onboarding email campaigns" do
   before do
     UserOnboardingStatusSetter.any_instance.stub(:in_campaign_ab_test?).and_return(true)
-    stub_out_get_ab_variations("WordPress Plugin 2016-03-17") {"original"}
     record_mailer_gateway_request_history!
   end
   let!(:user)         {login}
