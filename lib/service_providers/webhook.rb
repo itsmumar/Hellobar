@@ -18,8 +18,12 @@ module ServiceProviders
       method = contact_list.data["webhook_method"].downcase.to_sym
 
       client.public_send(method) do |request|
-        request.params[:email] = email
-        request.params[:name] = name
+        if method == :get
+          request.params[:email] = email
+          request.params[:name] = name
+        else
+          request.body = {name: name, email: email}
+        end
       end
     end
 

@@ -2,15 +2,15 @@
 http_interactions:
 - request:
     method: post
-    uri: http://google.com/?email=dmitriy%2Bperson100@polymathic.me&name=First%20Last
+    uri: http://google.com/
     body:
       encoding: UTF-8
-      string: ''
+      string: email=dmitriy%2Bperson100%40polymathic.me&name=First+Last
     headers:
       User-Agent:
       - Faraday v0.9.0
-      Content-Length:
-      - '0'
+      Content-Type:
+      - application/x-www-form-urlencoded
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -23,13 +23,13 @@ http_interactions:
       Allow:
       - GET, HEAD
       Date:
-      - Fri, 29 Apr 2016 19:02:18 GMT
+      - Fri, 27 May 2016 21:26:10 GMT
       Content-Type:
       - text/html; charset=UTF-8
       Server:
       - gws
       Content-Length:
-      - '1651'
+      - '1589'
       X-Xss-Protection:
       - 1; mode=block
       X-Frame-Options:
@@ -71,22 +71,21 @@ http_interactions:
         LWxhYmVsPUdvb2dsZT48L3NwYW4+PC9hPgogIDxwPjxiPjQwNS48L2I+IDxp
         bnM+VGhhdOKAmXMgYW4gZXJyb3IuPC9pbnM+CiAgPHA+VGhlIHJlcXVlc3Qg
         bWV0aG9kIDxjb2RlPlBPU1Q8L2NvZGU+IGlzIGluYXBwcm9wcmlhdGUgZm9y
-        IHRoZSBVUkwgPGNvZGU+Lz9lbWFpbD1kbWl0cml5JTJCcGVyc29uMTAwJTQw
-        cG9seW1hdGhpYy5tZSZhbXA7bmFtZT1GaXJzdCtMYXN0PC9jb2RlPi4gIDxp
-        bnM+VGhhdOKAmXMgYWxsIHdlIGtub3cuPC9pbnM+Cg==
+        IHRoZSBVUkwgPGNvZGU+LzwvY29kZT4uICA8aW5zPlRoYXTigJlzIGFsbCB3
+        ZSBrbm93LjwvaW5zPgo=
     http_version: 
-  recorded_at: Fri, 29 Apr 2016 19:02:18 GMT
+  recorded_at: Fri, 27 May 2016 21:26:09 GMT
 - request:
     method: post
-    uri: http://google.com/?email=dmitriy%2Bperson99@polymathic.me&name=Dr%20Pepper
+    uri: http://google.com/
     body:
       encoding: UTF-8
-      string: ''
+      string: email=dmitriy%2Bperson99%40polymathic.me&name=Dr+Pepper
     headers:
       User-Agent:
       - Faraday v0.9.0
-      Content-Length:
-      - '0'
+      Content-Type:
+      - application/x-www-form-urlencoded
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -99,13 +98,13 @@ http_interactions:
       Allow:
       - GET, HEAD
       Date:
-      - Fri, 29 Apr 2016 19:02:18 GMT
+      - Fri, 27 May 2016 21:26:10 GMT
       Content-Type:
       - text/html; charset=UTF-8
       Server:
       - gws
       Content-Length:
-      - '1649'
+      - '1589'
       X-Xss-Protection:
       - 1; mode=block
       X-Frame-Options:
@@ -147,9 +146,8 @@ http_interactions:
         LWxhYmVsPUdvb2dsZT48L3NwYW4+PC9hPgogIDxwPjxiPjQwNS48L2I+IDxp
         bnM+VGhhdOKAmXMgYW4gZXJyb3IuPC9pbnM+CiAgPHA+VGhlIHJlcXVlc3Qg
         bWV0aG9kIDxjb2RlPlBPU1Q8L2NvZGU+IGlzIGluYXBwcm9wcmlhdGUgZm9y
-        IHRoZSBVUkwgPGNvZGU+Lz9lbWFpbD1kbWl0cml5JTJCcGVyc29uOTklNDBw
-        b2x5bWF0aGljLm1lJmFtcDtuYW1lPURyK1BlcHBlcjwvY29kZT4uICA8aW5z
-        PlRoYXTigJlzIGFsbCB3ZSBrbm93LjwvaW5zPgo=
+        IHRoZSBVUkwgPGNvZGU+LzwvY29kZT4uICA8aW5zPlRoYXTigJlzIGFsbCB3
+        ZSBrbm93LjwvaW5zPgo=
     http_version: 
-  recorded_at: Fri, 29 Apr 2016 19:02:18 GMT
+  recorded_at: Fri, 27 May 2016 21:26:09 GMT
 recorded_with: VCR 2.9.0

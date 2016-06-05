@@ -1,33 +1,19 @@
 require 'integration_helper'
+require 'service_provider_integration_helper'
 
 feature "MailChimp Integration" do
-  before do
-    VCR.eject_cassette
+  include_context "service provider request setup"
 
-    stub_request(:any, /.*api.mailchimp.com.*/).
-      to_return(status: 200, body: %({"status":"200"}), headers: {})
-
-    VCR.turned_off do
-      service_provider.subscribe("123", "email@example.com", "name", optin)
-    end
-  end
-
-  let(:identity) {
-    Identity.new(provider: "mailchimp",
-                 extra: {"metadata" => {}},
-                 credentials: {},
-                 site: site)
-  }
-
-  let(:service_provider) { identity.service_provider}
-  let(:site) { create(:site) }
+  let(:provider)         { "mailchimp" }
+  let(:api_domain)       { "api.mailchimp.com" }
 
   context "un-specified double-optin parameter" do
-    let(:optin) {nil}
-
     it "sends double-optin" do
       expect(a_request(:post, /.*api.mailchimp.com.*/).
-                  with({double_optin: true})
+               with do |req|
+                 params = JSON.parse req.body
+                 params["double_optin"] == true
+               end
             ).to have_been_made.once
     end
   end
@@ -37,7 +23,10 @@ feature "MailChimp Integration" do
 
     it "sends double-optin" do
       expect(a_request(:post, /.*api.mailchimp.com.*/).
-                  with({double_optin: false})
+               with do |req|
+                 params = JSON.parse req.body
+                 params["double_optin"] == false
+               end
             ).to have_been_made.once
     end
   end
