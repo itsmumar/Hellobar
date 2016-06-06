@@ -1284,7 +1284,7 @@ var HB = {
       var values = condition.value.split("=")[1] || "";
     }
     else if ( condition.segment === "tc" )
-      return timeConditionTrue(condition);
+      return HB.timeConditionTrue(condition);
     else {
       var currentValue = HB.getSegmentValue(condition.segment);
       var values = condition.value;
