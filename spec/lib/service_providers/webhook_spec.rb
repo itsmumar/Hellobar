@@ -38,12 +38,12 @@ describe ServiceProviders::Webhook, "subscribe" do
   it "sends the email and name params" do
     webhook = ServiceProviders::Webhook.new(contact_list: contact_list)
     client = Faraday.new
+    request = double("request")
     allow(Faraday).to receive(:new) { client }
-    allow(client).to receive(:post).and_yield(client)
+    allow(client).to receive(:post).and_yield(request)
 
+    expect(request).to receive(:body=).with(hash_including(email: "email@email.com", name: 'name'))
     webhook.subscribe(nil, 'email@email.com', 'name')
-
-    expect(client.params).to eql('email' => 'email@email.com', 'name' => 'name')
   end
 end
 

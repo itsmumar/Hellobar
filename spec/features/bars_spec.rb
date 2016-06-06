@@ -65,6 +65,36 @@ feature 'User can create a site element', js: true do
   end
 end
 
+feature 'User can set a phone number for click to call', js: true do
+  before do
+    allow_any_instance_of(SiteElementSerializer).
+      to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(ApplicationController).
+      to receive(:get_ab_variation).and_return('original')
+  end
+
+  after { devise_reset }
+
+  scenario 'the site sets a custom country so they can use 1800' do
+    membership = create(:site_membership, :with_site_rule)
+    user = membership.user
+    login(user)
+
+    find(:button, 'Create New').click
+    find('button[value=call]').click
+    all('input')[0].set('Hello from Hello Bar')
+    all('input')[1].set('Button McButtonson')
+    all('input')[2].set('18001231234')
+    find('select').select('Custom')
+    find('button', text: 'Continue').click
+    find('button', text: 'Save & Publish').click
+
+    element = SiteElement.last
+
+    expect(element.phone_number).to eql('18001231234')
+  end
+end
+
 feature 'User can toggle colors for a site element', js: true do
   before do
     allow_any_instance_of(SiteElementSerializer).

@@ -62,28 +62,14 @@
     p If you use WordPress you'll love our zero-configuration custom plugin. Just download, install and you're done.
 
     .reveal-block.wordpress-reveal
-      - if get_ab_variation("WordPress Plugin 2016-03-17") == "original"
-        strong 1) Download Your Plugin
-        = link_to site_wordpress_plugin_path(@site), method: :get, class: "button" do
-          i.icon-download
-          span Download
-        small 1MB
+      strong 1) Download Your Plugin
+      = link_to site_wordpress_plugin_path(@site), method: :get, class: "button" do
+        i.icon-download
+        span Download
+      small 1MB
 
-        strong 2) Install Your Plugin
-        p= "Now you just need to install the .zip file you downloaded it by uploading it to your WordPress site. The plugin was preconfigured specifically for your site (#{@site.url}). After you install and activate there are no settings to adjust!"
-
-      - else
-        strong 1) Install the Hello Bar plugin from within WordPress
-        = link_to "#{@site.url}/wp-admin/plugin-install.php?tab=search&type=author&s=hellobar", method: :get, class: "button" do
-          i.icon-export
-          span Install Hello Bar
-        
-        p
-          | If you'd prefer to install the plugin yourself, you can download 
-          = link_to "the ZIP file for the WordPress plugin here.", "https://wordpress.org/plugins/hellobar/"
-
-        strong 2) Copy and paste this snippet into the plugin:
-        pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
+      strong 2) Install Your Plugin
+      p= "Now you just need to install the .zip file you downloaded it by uploading it to your WordPress site. The plugin was preconfigured specifically for your site (#{@site.url}). After you install and activate there are no settings to adjust!"
 
       p
         strong Need More Help?
