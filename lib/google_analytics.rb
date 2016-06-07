@@ -21,7 +21,9 @@ class GoogleAnalytics
 
   # what if we don't have an exact url match?
   def get_latest_pageviews(url)
-    if account = find_account_by_url(url)
+    account = find_account_by_url(url)
+
+    if account
       # what if you have multiple profiles?
       profile = account.web_properties.find{|property| property.website_url == url }.profiles.first
       ids = "ga:#{profile.id}"
