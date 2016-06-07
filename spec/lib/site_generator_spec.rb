@@ -56,7 +56,7 @@ describe SiteGenerator do
 
       html = generator.generate_html
 
-      expect(html).to include(site.script_content)
+      expect(html).to include(site.script_content(false))
     end
   end
 
