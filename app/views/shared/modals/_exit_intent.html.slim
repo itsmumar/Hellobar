@@ -1,0 +1,8 @@
+= if current_user && !current_user.has_paying_subscription?
+  script id='exit-intent-modal-template' type='text/x-handlebars-template'
+    .modal-wrapper
+      .modal-block
+        header
+          h5 Dont leave!
+        footer
+          | Or else...
