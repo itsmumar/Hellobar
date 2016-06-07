@@ -39,6 +39,10 @@
       font-weight: bold;
       border-radius: 30px;
     }
+
+    .hb-name-input {
+      margin-bottom: 5px;
+    }
   }
 
   #hellobar-takeover {
@@ -60,5 +64,9 @@
     .hb-input-block input {
       font-size: .7em;
     } 
+    
+    .hb-name-input {
+      margin-bottom: 12px;
+    }
   }
 }

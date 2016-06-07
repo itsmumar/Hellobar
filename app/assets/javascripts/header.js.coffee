@@ -19,7 +19,7 @@ $ ->
     dropdown      = userSelectorEl.find('.dropdown-wrapper')
     childElements = [@, dropdown]
 
-    if evt.target.getAttribute('href') != "/users/sign_out"
+    if (evt.target.getAttribute('href') != "/users/sign_out") && (evt.target.getAttribute('href') != "/admin/users/unimpersonate")
       if $.inArray(evt.target, childElements)
         siteSelectorEl.find('.dropdown-wrapper').removeClass('activated')
         evt.stopPropagation()
