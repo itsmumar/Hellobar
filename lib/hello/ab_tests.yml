@@ -1,98 +1,98 @@
 -
   name: Use Cases Amount
-  values: [more less]
+  values: [more, less]
   index: 0
 -
   name: Account Creation Test 2015-01-21
-  values: [original orange_header no_orange_header]
+  values: [original, orange_header, no_orange_header]
   index: 1
 -
   name: Editor Test 2015-02-23
-  values: [original interstitial navigation]
+  values: [original, interstitial, navigation]
   index: 2
 -
   name: Google Auth 2015-03-10
-  values: [original google_auth]
+  values: [original, google_auth]
   index: 3
 -
   name: Templated Editor 2015-07-07
-  values: [original templated]
+  values: [original, templated]
   index: 4
 -
   name: Video Welcome 2015-9-22
-  values: [original video]
+  values: [original, video]
   index: 5
   weights: [75, 25]
 -
   name: Quickstart CTA 2015-10-06
-  values: [original cta]
+  values: [original, cta]
   index: 6
 -
   name: Upgrade Plan Button 2016-01-05
-  values: [original power]
+  values: [original, power]
   index: 7
 -
   name: Settings Upsell 2016-01-07
-  values: [original upsell]
+  values: [original, upsell]
   index: 8
 -
   name: Upgrade Modal Logos 2016-01-10
-  values: [original logos]
+  values: [original, logos]
   index: 9
 -
   name: Email Modal Interstitial 2016-02-23
-  values: [original modal]
+  values: [original, modal]
   index: 10
 -
   name: Email Modal Interstitial New Users Only 2016-03-04
-  values: [original modal]
+  values: [original, modal]
   index: 11
 -
   name: Sign Up Button 2016-03-17
-  values: [original sign_up_google sign_up get_started]
+  values: [original, sign_up_google sign_up get_started]
   index: 12
 -
   name: Show Add Site on Edit Site 2016-03-18
-  values: [original variant]
+  values: [original, variant]
   index: 13
 -
   name: WordPress Plugin 2016-03-17
-  values: [original common]
+  values: [original, common]
   index: 14
 -
   name: Use Cases Variation 2016-03-22
-  values: [original simple]
+  values: [original, simple]
   index: 15
 -
   name: Forced Email Path 2016-03-28
-  values: [original force]
+  values: [original, force]
   index: 16
 -
   name: Show Add Site on Edit Site 2016-04-04
-  values: [original variant]
+  values: [original, variant]
   index: 17
 -
   name: Create A Bar Reminder New Users Only 2016-03-28
-  values: [original campaign]
+  values: [original, campaign]
   index: 18
 -
   name: Configure Your Bar Reminder New Users Only 2016-03-28
-  values: [original campaign]
+  values: [original, campaign]
   index: 19
 -
   name: Install The Plugin Drip Campaign New Users Only 2016-03-28
-  values: [original campaign]
+  values: [original, campaign]
   index: 20
 -
   name: Upgrade Hello Bar Drip Campaign New Users Only 2016-03-28
-  values: [original campaign]
+  values: [original, campaign]
   index: 21
 -
   name: Use Cases Variation 2016-04-22
-  values: [original types]
+  values: [original, types]
   index: 22
 -
   name: Onboarding Limitted To Three Goals 2016-05-11
-  values: [original variant]
+  values: [original, variant]
   index: 23
   user_start_date: 2016-05-11
