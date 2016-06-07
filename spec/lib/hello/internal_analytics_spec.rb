@@ -72,7 +72,7 @@ describe Hello::InternalAnalytics do
   describe "get_ab_test_value_index_from_id" do
     it "receives an array of values" do
       ab_test = @object.get_ab_test("Weighted Test")
-      expect(ab_test[:values].kind_of?(Array)).to eq(true)
+      expect(ab_test[:values].is_a?(Array)).to eq(true)
     end
 
     it "uses weights to determine index when available" do
