@@ -1,6 +1,6 @@
 #ember-root
 
-- if params[:element_to_copy_id].blank? && get_ab_variation("Forced Email Path 2016-03-28") == 'original'
+- if render_interstitial?
   = render "site_elements/goal_interstitial_alternate"
 
 javascript:

@@ -38,8 +38,8 @@
     border: 3px solid #202020;
 
     .hb-headline-text {
-      font-size: 32px;
-      line-height: 44px;
+      font-size: 30px;
+      line-height: 42px;
     }
 
     .hb-secondary-text {
@@ -49,16 +49,19 @@
     }
 
     .hb-cta-style-button {
-      font-size: 22px;
-      padding: 18px 30px;
+      font-size: 18px;
       border-radius: 0px;
+    }
+
+    .hb-name-input {
+      margin-bottom: 5px;
     }
   }
 
   #hellobar-takeover {
     .hb-headline-text {
-      font-size: 38px;
-      line-height: 54px;
+      font-size: 36px;
+      line-height: 52px;
     }
 
     .hb-secondary-text {
@@ -68,10 +71,16 @@
     }
 
     .hb-cta-style-button {
-      font-size: 22px;
       font-weight: 400;
-      padding: 20px 30px;
       border-radius: 0px;
+    }
+
+    .hb-input-block input {
+      font-size: .7em;
+    }
+    
+    .hb-name-input {
+      margin-bottom: 12px;
     }
   }
 }

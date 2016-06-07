@@ -87,6 +87,16 @@ describe ReferralsController do
       expect(@referral.redeemed_by_sender_at).not_to be_nil
     end
 
+    it 'still counts towards sites that have since been deleted' do
+      sites(:zombo).update(deleted_at: Time.now) # simulate delete
+      put :update, id: @referral.id, referral: {site_id: sites(:zombo).id}
+      @referral.reload
+
+      expect(@referral.site_id).to eq(sites(:zombo).id)
+      expect(@referral.available_to_sender).to be_false
+      expect(@referral.redeemed_by_sender_at).not_to be_nil
+    end
+
     it 'does not change the state' do
       put :update, id: @referral.id, referral: {state: 0}
       expect(@referral.reload.state).to eq('installed')

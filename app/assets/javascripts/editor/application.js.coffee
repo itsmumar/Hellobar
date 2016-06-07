@@ -12,6 +12,7 @@
 #= require ./../internal_tracking
 
 #= require ./router
+#= require ./../images
 
 #-----------  Application Initiation  -----------#
 
@@ -318,6 +319,7 @@ HB.countryCodes = [
   { code: "YU", name: "Yugoslavia" }
   { code: "ZM", name: "Zambia" }
   { code: "ZW", name: "Zimbabwe" }
+  { code: "XX", name: "Custom" }
 ]
 
 #----------- Reveal Blocks ----------#

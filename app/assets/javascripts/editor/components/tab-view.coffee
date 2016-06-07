@@ -7,7 +7,7 @@ HelloBar.NavTabComponent = Ember.Component.extend(
     @get('paneId') == @get('parentView.activePaneId')
   ).property('paneId', 'parentView.activePaneId')
   click: ->
-    @get('parentView').setActivePane @get('paneId')
+    @get('parentView').setActivePane @get('paneId'), @get('name')
     @sendAction('doTabSelected', @get('onSelection'))
     return
 
@@ -26,33 +26,37 @@ HelloBar.TabPaneComponent = Ember.Component.extend(
       paneId: @get('elementId')
       name: @get('name')
       action: @get('onSelection')
+    if @get('parentView.model.' + @get('parentView.currentTabNameAttribute')) == @get('name')
+      @get('parentView').setActivePane @get('elementId'), @get('name')
     if @get('parentView.activePaneId') == null
-      @get('parentView').setActivePane @get('elementId')
+      @get('parentView').setActivePane @get('elementId'), @get('name')
     return
 )
 
 HelloBar.TabViewComponent = Ember.Component.extend(
   classNames: [ 'tab-view' ]
+  attributeBindings: ['model', 'navigationName']
   activePaneId: null
   layoutName: (->
     'components/tab-view'
   ).property()
   didInsertElement: ->
     @set 'panes', []
+    @set 'currentTabNameAttribute', 'current_' + @get('navigationName') + '_tab_name'
     return
-  setActivePane: (paneId) ->
-    if @get('activePaneId') != null
-      if paneId != @get('activePaneId')
-        @set 'activePaneId', paneId
-    else
+  setActivePane: (paneId, name) ->
+    if @get('activePaneId') == null
       @set 'activePaneId', paneId
-    return
+    else if paneId != @get('activePaneId')
+      @set 'activePaneId', paneId
+      @set('model.' + @get('currentTabNameAttribute') , name)
 
   # Listen for paneSelected changes.  When this is changed, grab the pane and
-  # and set it as active.  'paneSelected' is the INDEX of the panes array.
+  # and set it as active.
   paneSelectedChange: (->
-      this.setActivePane(this.get('panes')[this.get('paneSelected')].paneId)
-  ).observes('paneSelected'),
+    pane = this.get('panes')[this.get('model.paneSelectedIndex')]
+    this.setActivePane(pane.paneId, pane.name)
+  ).observes('paneSelectionCount')
 
   actions:
     doTabSelected: (action) ->

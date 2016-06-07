@@ -34,10 +34,14 @@ HB.BarElement = HB.createClass({
   },
 
   minimize: function(se_id){
-    console.log('in minimize');
     HB.animateOut(this.w, this.onHidden(se_id));
     if(HB.p != null)
       HB.p.style.display = 'none';
+
+    if(HB.colorIsBright(this.primary_color)) {
+      $(this.pullDown).addClass('inverted');
+    }
+
     HB.animateIn(this.pullDown);
   },
 

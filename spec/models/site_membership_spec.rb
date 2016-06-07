@@ -4,14 +4,20 @@ describe SiteMembership do
   fixtures :all
 
   describe "validations" do
-    let!(:user) { create(:user) }
+    let(:site_membership)           { create(:site_membership) }
+    let(:duplicate_site)            { create(:site, url: site_membership.site.url) }
+    let(:duplicate_site_membership) { build(:site_membership, site: duplicate_site, user: user) }
+    let!(:user)                     { site_membership.user }
 
-    it "#user_site_url_uniqueness" do
-      site1 = Site.create(:url => "zombo.com")
-      site2 = Site.create(:url => "zombo.com")
-      site_membership1 = user.site_memberships.create(site: site1, role: "owner")
-      site_membership2 = user.site_memberships.create(site: site2, role: "owner")
-      expect(site_membership2.errors.messages[:user]).to include("already has a membership to http://zombo.com")
+    it "is valid" do
+      expect(site_membership).to be_valid
+    end
+
+    it "catches duplicate site urls" do
+      expect(duplicate_site_membership.valid?).to eq(false)
+      expect(duplicate_site_membership.errors.full_messages).to(
+        include("User already has a membership to #{duplicate_site.url}")
+      )
     end
   end
 

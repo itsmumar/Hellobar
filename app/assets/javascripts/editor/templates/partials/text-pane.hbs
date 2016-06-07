@@ -1,6 +1,4 @@
-<h5 class="step-title">Text and Content</h5>
-
-<label>
+<label class="questions">
   {{toggle-switch switch=model.use_question}}
   Boost your conversions by asking a leading question first
 </label>
@@ -9,14 +7,14 @@
   <label>Headline</label>
   {{view Ember.TextField value=model.headline placeholder="Subscribe to our mailing list" maxlength=255}}
 
-  {{#unless hideNonBarFields}}
+  {{#unless isABar}}
     <label>Caption</label>
     {{view Ember.TextField value=model.caption placeholder="(optional)" maxlength=255}}
   {{/unless}}
 {{/unless}}
 
 {{#if showQuestionFields}}
-  {{#question-tabs paneSelected=paneSelected}}
+  {{#question-tabs model=model paneSelectionCount=paneSelection navigationName='question'}}
     {{#tab-pane name="Question" onSelection="showQuestion"}}
       <div id="question" class="tab-content">
         <label>What's your question?</label>
@@ -35,7 +33,7 @@
         <label>First Answer Headline</label>
         {{view Ember.TextField value=model.answer1response placeholder=model.answer1response_placeholder}}
 
-        {{#unless hideNonBarFields}}
+        {{#unless isABar}}
           <label>First Answer Caption</label>
           {{view Ember.TextField value=model.answer1caption placeholder="(optional)" maxlength=255}}
         {{/unless}}
@@ -52,7 +50,7 @@
         <label>Second Answer Headline</label>
         {{view Ember.TextField value=model.answer2response placeholder=model.answer2response_placeholder}}
 
-        {{#unless hideNonBarFields}}
+        {{#unless isABar}}
           <label>Second Answer Caption</label>
           {{view Ember.TextField value=model.answer2caption placeholder="(optional)" maxlength=255}}
         {{/unless}}
@@ -104,27 +102,3 @@
     optionLabelPath='content.name'
   }}
 </div>
-
-{{#unless hideNonBarFields}}
-  <label>Upload an image</label>
-  <p>Limit images to 300px tall</p>
-  <div class="image-upload">
-    {{image-upload
-      setImageProps="setImageProps"
-      existingURL=model.image_url
-      existingFileName=model.image_file_name
-    }}
-  </div>
-
-  {{#if showImagePlacementField}}
-    <label>Image placement</label>
-    <div class="select-wrapper">
-      {{view Ember.Select
-        content=imagePlacementOptions
-        value=model.image_placement
-        optionValuePath='content.value'
-        optionLabelPath='content.label'
-      }}
-    </div>
-  {{/if}}
-{{/unless}}

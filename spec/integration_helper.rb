@@ -1,5 +1,6 @@
 # INTEGRATION
 require 'spec_helper'
+require 'webmock/rspec'
 
 RSpec.configure do |config|
   config.include Capybara::DSL
@@ -14,8 +15,6 @@ RSpec.configure do |config|
     # allow us to register which get_ab_variation calls we stubbing,
     # let the rest of the calls pass through to ApplicationController untouched
     allow_any_instance_of(ApplicationController).to receive(:get_ab_variation).and_call_original
-
-    stub_out_get_ab_variations("WordPress Plugin 2016-03-17") {"original"}
   end
 
   config.before(:all) do

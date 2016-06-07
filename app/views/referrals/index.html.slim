@@ -27,7 +27,8 @@
                   .select-wrapper
                     = render partial: 'redeem', locals: { referral: ref }
                 - elsif ref.redeemed_by_sender?
-                  span Applied to #{ref.site.normalized_url}
+                  - site = Site.unscoped.find(ref.site_id)
+                  span Applied to #{site.normalized_url}
                 - else
                   span Not yet
     = paginate @referrals

@@ -441,8 +441,8 @@ var HB = {
   },
 
   // Returns true if the visitor previously closed a site element
-  didDismissHB: function() {
-    return HB.gc("HBDismissed") != null;
+  didDismissHB: function(siteElement) {
+    return HB.gc("HBDismissed-" + siteElement.id) != null;
   },
 
   // Returns true if the visitor previously closed this particular site element
@@ -691,18 +691,58 @@ var HB = {
     HB.saveCookies();
   },
 
+  // gets data from local storage
+  getLocalStorageData: function(name)
+  {
+    //read the data(json string)
+    localData = window.localStorage.getItem(name);
+    if (localData != null) {
+      //parse the json string and extract expiration date
+      parsedData = JSON.parse(localData);
+
+      expDate = new Date(parsedData.expiration);
+      today = new Date;
+      if (today > expDate){
+        //remove expired data
+        window.localStorage.removeItem(name);
+        return null;
+      } else {
+        //return valid data
+        return parsedData.value;
+      }
+    } else {
+      return null;
+    }
+  },
+
   // Gets a cookie
   gc: function(name)
   {
-    var i,x,y,c=document.cookie.split(";");
-    for (i=0;i<c.length;i++)
-    {
-      x=c[i].substr(0,c[i].indexOf("="));
-      y=c[i].substr(c[i].indexOf("=")+1);
-      x=x.replace(/^\s+|\s+$/g,"");
-      if (x==name)
+    localValue = HB.getLocalStorageData(name);
+    // return local storage data first
+    if (localValue != null) {
+      return unescape(localValue);
+    } else {
+      //instantiate few vars, and split all cookies into one of them
+      var i,x,y,c = document.cookie.split(";");
+      for (i=0;i<c.length;i++)
       {
-        return unescape(y);
+        //get the key
+        x=c[i].substr(0,c[i].indexOf("="));
+        //get the value
+        y=c[i].substr(c[i].indexOf("=")+1);
+        //strip whitespace
+        x=x.replace(/^\s+|\s+$/g,"");
+        //if value exists in cookies
+        if (x == name)
+        {
+          //expire the cookie
+          document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+          //save value in localstorage
+          HB.sc(name, y)
+          //return value
+          return unescape(y);
+        }
       }
     }
   },
@@ -711,17 +751,23 @@ var HB = {
   // exdays can be number of days or a date object
   sc: function(name,value,exdays,path)
   {
+    //no idea what HB_NC is
     if ( typeof(HB_NC) != "undefined" )
-      return;
+      {
+        return;
+      } else {
+        //set date to today?? if number of days to expiration has not been passed
+        var exdate= typeof exdays == "object" ? exdays : new Date();
+        if(typeof exdays == "number")
+          //conver days to expiration to date
+          exdate.setDate(exdate.getDate() + exdays);
 
-    var exdate= typeof exdays == "object" ? exdays : new Date();
-
-    if(typeof exdays == "number")
-      exdate.setDate(exdate.getDate() + exdays);
-
-    value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-    value = path == null ? value : value + "; " + path;
-    document.cookie=name + "=" + value;
+        var dataToSave = {};
+        dataToSave.value = value;
+        dataToSave.expiration = exdate;
+        //save data and expiration date as a string
+        window.localStorage.setItem(name, JSON.stringify(dataToSave));
+      }
   },
 
   // Returns the visitor's unique ID which should be a random value
@@ -1028,6 +1074,7 @@ var HB = {
     for(i=0;i<HB.rules.length;i++)
     {
       var rule = HB.rules[i];
+
       if ( HB.ruleTrue(rule) )
       {
         // Get all site elements that are a part of this rule that the
@@ -1089,7 +1136,7 @@ var HB = {
 
   convertedOrDismissed: function(siteElement) {
     var converted = HB.didConvert(siteElement) && !siteElement.show_after_convert;
-    return converted || HB.didDismissThisHB(siteElement) || HB.didDismissHB();
+    return converted || HB.didDismissThisHB(siteElement) || HB.didDismissHB(siteElement);
   },
 
   updatedSinceLastVisit: function(siteElement) {
@@ -1217,12 +1264,13 @@ var HB = {
     {
       var conditionKey = condition.value.split("=")[0];
       var currentValue = HB.getSegmentValue(condition.segment)[conditionKey];
-      var values = condition.value.split("=")[1];
+      var values = condition.value.split("=")[1] || "";
     }
     else {
       var currentValue = HB.getSegmentValue(condition.segment);
       var values = condition.value;
     }
+
     // Now we need to apply the operands
     // If it's an array of values this is true if the operand is true for any of the values
 
@@ -1312,6 +1360,8 @@ var HB = {
       case "does_not_equal":
         return a != b;
       case "includes":
+        if(typeof a === "undefined" && b === "")
+           return false;
         if(typeof a === 'string' && typeof b === 'string') {
           var regex = new RegExp(HB.sanitizeRegexString(b).replace("*", ".*"));
           return !!a.match(regex);
@@ -1319,6 +1369,8 @@ var HB = {
 
         return HB.stringify(a).indexOf(HB.stringify(b)) != -1;
       case "does_not_include":
+        if(typeof a === "undefined" && b === "")
+          return true;
         return HB.stringify(a).indexOf(HB.stringify(b)) == -1;
       case "before":
       case "less_than":
@@ -1448,13 +1500,14 @@ var HB = {
     {
       var key, value;
       var components = pairs[i].split("=");
+      components[1] || (components[1] = ''); // default the key to an empty string
 
       // handle ASCII encoding
-      utf8bytes = unescape(encodeURIComponent(components[0]));
-      key = decodeURIComponent(escape(utf8bytes)).toLowerCase();
+      var utf8bytes = unescape(encodeURIComponent(components[0]));
+      var key = decodeURIComponent(escape(utf8bytes));
 
-      utf8bytes = unescape(encodeURIComponent(components[1]));
-      value = decodeURIComponent(escape(utf8bytes));
+      var utf8bytes = unescape(encodeURIComponent(components[1]));
+      var value = decodeURIComponent(escape(utf8bytes));
 
       params[key] = value;
     }

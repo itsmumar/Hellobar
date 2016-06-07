@@ -374,7 +374,7 @@ HB.SiteElement = HB.createClass({
     if ( this.remove() )
     {
       // Sets the dismissed state for the next 15 minutes
-      HB.sc("HBDismissed", true, new Date((new Date().getTime() + 1000 * 60 * 15)), "path=/");
+      HB.sc("HBDismissed-" + this.id, true, new Date((new Date().getTime() + 1000 * 60 * 15)), "path=/");
 
       // Track specific elements longer, for takeovers/modals
       var expiration, cookie_name, cookie_str, dismissed_elements;

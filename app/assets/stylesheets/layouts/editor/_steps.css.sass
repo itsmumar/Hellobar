@@ -34,7 +34,7 @@
 
   .tabs-wrapper
     padding: 0 0.75em
-    margin: 1em -0.75em -0.5em
+    margin: $gutterSm -0.75em -0.5em
     border-bottom: $borderLight
 
     a
@@ -205,9 +205,13 @@
 
   .text.ember-view
 
-    label .toggle-switch
-      margin-top: 0.33em
-      margin-bottom: $gutterSm
+    label
+
+      &.questions
+        margin: $gutter 0
+
+      .toggle-switch
+        margin-top: 0.33em
 
   /*-----------  Step: Targeting  -----------*/
 

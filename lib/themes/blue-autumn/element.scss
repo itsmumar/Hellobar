@@ -43,8 +43,8 @@
     border-radius: 10px;
 
     .hb-headline-text {
-      font-size: 34px;
-      line-height: 44px;
+      font-size: 32px;
+      line-height: 42px;
     }
 
     .hb-secondary-text {
@@ -54,20 +54,23 @@
     }
 
     .hb-cta-style-button {
-      font-size: 22px;            
+      font-size: 18px;
       font-weight: 700;
-      padding: 18px 30px;
       border-radius: 10px;
       -webkit-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
       -moz-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
       box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
     }
+
+    .hb-name-input {
+      margin-bottom: 5px;
+    }
   }
 
   #hellobar-takeover {
     .hb-headline-text {
-      font-size: 40px;
-      line-height: 54px;
+      font-size: 38px;
+      line-height: 52px;
     }
 
     .hb-secondary-text {
@@ -77,13 +80,19 @@
     }
 
     .hb-cta-style-button {
-      font-size: 22px;
       font-weight: 700;
-      padding: 20px 30px;
       border-radius: 10px;
       -webkit-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
       -moz-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
       box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
+    }
+
+    .hb-input-block input {
+      font-size: .7em;
+    }
+
+    .hb-name-input {
+      margin-bottom: 12px;
     }
   }
 }

@@ -36,6 +36,7 @@
 #= require tracking_events
 #= require user_edit
 #= require referrals
+#= require images
 #= require header
 #= require_self
 
