@@ -49,7 +49,7 @@ class ScriptGenerator < Mustache
   # returns the sites tz offset as "+/-HH:MM"
   def site_timezone
     Time.use_zone(site.timezone) do
-      Time.zone.formatted_offset
+      Time.zone.now.formatted_offset
     end
   end
 
