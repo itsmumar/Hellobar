@@ -15,8 +15,18 @@ class GoogleAnalytics
     @analytics.authorization = client
   end
 
+  def self.normalize_url(url)
+    normalized_url = Site.normalize_url(url)
+
+    "#{normalized_url.scheme}://#{normalized_url.normalized_host}"
+  end
+
   def find_account_by_url(url)
-    analytics.list_account_summaries.items.find{|item| item.web_properties.map(&:website_url).include?(url) }
+    analytics.list_account_summaries.items.find do |item|
+      urls = item.web_properties.map(&:website_url).map{|url| self.class.normalize_url(url) }
+
+      urls.include?(url)
+    end
   end
 
   # what if we don't have an exact url match?
@@ -25,7 +35,10 @@ class GoogleAnalytics
 
     if account
       # what if you have multiple profiles?
-      profile = account.web_properties.find{|property| property.website_url == url }.profiles.first
+      profile = account.web_properties.find do |property|
+        self.class.normalize_url(property.website_url) == url
+      end.profiles.first
+
       ids = "ga:#{profile.id}"
       start_date = '30daysAgo'
       end_date = 'today'

@@ -17,6 +17,15 @@
   </div>
 </div>
 
+<aside>
+  {{#if hasEnoughSubscribers}}
+    <small>Hey! Did you know that with your {{monthlyPageviews}} views per month, Hello Bar can typically get you:</small>
+    <h5>{{calculatedSubscribers}} new subscribers each month</h5>
+  {{else}}
+    <small>Hey! Did you know that Hello Bar typically converts 0.5% of your views to email subscribers? That can really add up!</small>
+  {{/if}}
+</aside>
+
 <footer>
   <p>
     You can always change this later.

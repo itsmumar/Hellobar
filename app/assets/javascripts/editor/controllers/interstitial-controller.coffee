@@ -6,6 +6,18 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
   interstitialType: Ember.computed.alias('controllers.application.interstitialType')
   forceContacts: HB_EMAIL_FLOW_TEST == 'force'
 
+  monthlyPageviews: ( ->
+    @get('model.site.monthly_pageviews')
+  ).property()
+
+  hasEnoughSubscribers: ( ->
+    @get('monthlyPageviews') > 1000
+  ).property()
+
+  calculatedSubscribers: ( ->
+    @get('monthlyPageviews') * 0.005
+  ).property()
+
   setDefaults: ( ->
     return false unless @get('model')
 
