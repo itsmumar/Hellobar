@@ -1261,8 +1261,8 @@ var HB = {
 
   timeConditionTrue: function(condition) {
     var currentSiteTime = HB.nowInTimezone(),
-        conditionHour = condition.value[0],
-        conditionMinute = condition.value[1];
+        conditionHour = parseInt(condition.value[0]),
+        conditionMinute = parseInt(condition.value[1]);
 
     if (HB.applyOperand(currentSiteTime.getHours(), condition.operand, conditionHour, condition.segment))
       return true;

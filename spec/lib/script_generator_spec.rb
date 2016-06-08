@@ -29,7 +29,8 @@ describe ScriptGenerator do
 
     it 'renders the HB_TZ timezone variable' do
       site.stub timezone: 'America/Chicago'
-      expected_string = "HB_TZ = \"-06:00\";"
+      Time.zone = 'America/Chicago'
+      expected_string = "HB_TZ = \"#{Time.zone.now.formatted_offset}\";"
 
       generator.render.should include(expected_string)
     end
