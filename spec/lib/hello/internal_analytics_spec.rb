@@ -70,11 +70,6 @@ describe Hello::InternalAnalytics do
   end
 
   describe "get_ab_test_value_index_from_id" do
-    it "receives an array of values" do
-      ab_test = @object.get_ab_test("Weighted Test")
-      expect(ab_test[:values].is_a?(Array)).to eq(true)
-    end
-
     it "uses weights to determine index when available" do
       ab_test = @object.get_ab_test("Weighted Test")
       # person id 4 evaluates to rand_value 6, so it should return the first test value
