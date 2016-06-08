@@ -142,9 +142,9 @@ script#condition-partial type="text/x-handlebars-template"
           = country_select('rule', 'conditions_attributes', { priority_countries: ["US"] }, { disabled: "disabled", name: "rule[conditions_attributes][{{index}}][value]", class: "value" })
         .choice-wrapper.time-choice.select-wrapper
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[0]}}"
-          span minutes
-          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[1]}}"
           span hours
+          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[1]}}"
+          span minutes
         .choice-wrapper.location-region-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.url-choice
