@@ -1,4 +1,4 @@
-class @DontLeaveModal extends Modal
+class @ExitIntentModal extends Modal
 
   modalName: 'exit-intent'
 

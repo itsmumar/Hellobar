@@ -93,6 +93,16 @@ class User < ActiveRecord::Base
     legacy_migration ? false : super
   end
 
+  def can_view_exit_intent_modal?
+    if self.has_paying_subscription?
+      false
+    elsif self.exit_intent_modal_last_shown_at.present?
+      self.exit_intent_modal_last_shown_at < 30.days.ago # only show once every 30 days
+    else
+      true
+    end
+  end
+
   def new?
     sign_in_count == 1 && site_elements.empty?
   end
