@@ -103,6 +103,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def most_viewed_site_element
+    self.site_elements.sort_by {|site_element| site_element.total_views }.reverse.first
+  end
+
   def new?
     sign_in_count == 1 && site_elements.empty?
   end

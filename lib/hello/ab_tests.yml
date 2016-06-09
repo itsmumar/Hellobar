@@ -150,3 +150,9 @@
   values:
     - original
     - variant
+-
+  index: 24
+  name: Exit Intent Pop-up Based on Bar Goals 2016-06-08
+  values:
+    - original
+    - pop_up

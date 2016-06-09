@@ -7,9 +7,10 @@ $ ->
     else
       false
 
+  # user scrolls past the top of the screen (exit intent)
   $('body').on 'mouseleave', (e) ->
     if e.offsetY - $(window).scrollTop() < 0 && !exit_intent_triggered && exit_intent_modal_present()
-      new ExitIntentModal().open()
+      new ExitIntentModal({site: window.site}).open()
       user_id = $('#exit-intent-modal-template').data('user-id')
       url = '/users/' + user_id + '/update_exit_intent'
       $.ajax
