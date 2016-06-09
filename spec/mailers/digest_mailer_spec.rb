@@ -4,6 +4,10 @@ describe DigestMailer do
   fixtures :all
 
   describe 'weekly_digest' do
+    before do
+      allow_any_instance_of(DigestMailer).to receive(:get_ab_test) { 'original' }
+    end
+
     let(:site) { sites(:zombo) }
     let(:user) { site.owners.first }
     let(:mail) { DigestMailer.weekly_digest(site, user) }

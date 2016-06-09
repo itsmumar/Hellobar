@@ -1,6 +1,7 @@
 class DigestMailer < ActionMailer::Base
   include Roadie::Rails::Mailer
   include EmailDigestHelper
+  include Hello::InternalAnalytics
   add_template_helper(EmailDigestHelper)
   default from: "from@example.com"
 
@@ -24,6 +25,7 @@ class DigestMailer < ActionMailer::Base
     # Get the totals for the elements with views
     @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @sorted_elements, @site.capabilities.num_days_improve_data)
     @conversion_header = conversion_header(@sorted_elements)
+    @render_upgrade_cta = get_ab_test("Upgrade CTA in HB Digest Email 2016-06-09")
 
     roadie_mail(
       to: "", # Doesn't matter, we're sending the results through Grand Central
