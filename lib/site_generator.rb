@@ -38,7 +38,7 @@ class SiteGenerator
       <script>
     EOS
 
-    str += @site.script_content
+    str += @site.script_content(false)
     str += "</script><p>Generated on #{Time.now}</p></body></html>"
     str
   end
