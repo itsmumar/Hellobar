@@ -140,11 +140,13 @@ script#condition-partial type="text/x-handlebars-template"
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.location-country-choice.select-wrapper
           = country_select('rule', 'conditions_attributes', { priority_countries: ["US"] }, { disabled: "disabled", name: "rule[conditions_attributes][{{index}}][value]", class: "value" })
-        .choice-wrapper.time-choice.select-wrapper
-          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[0]}}"
-          span hours
-          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[1]}}"
-          span minutes
+        .choice-wrapper.time-choice
+          .select-wrapper.time-select
+            = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..23).map(&:to_i)), { disabled: true, class: 'value' }
+          span
+            | :
+          .select-wrapper.time-select
+            = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..59).map(&:to_i)), { disabled: true, class: 'value' }
         .choice-wrapper.location-region-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.url-choice

@@ -136,6 +136,15 @@ class @RuleModal extends Modal
       $condition.find(classToEnable)
                 .find(".value > option[value=#{conditionData.value}]")
                 .attr('selected', 'selected')
+    else if conditionData.segment == 'TimeCondition'
+      # select the correct hour
+      $condition.find(classToEnable)
+                .find(".value:first > option[value=#{conditionData.value[0]}]")
+                .attr('selected', 'selected')
+      # select the correct minute
+      $condition.find(classToEnable)
+                .find(".value:last > option[value=#{conditionData.value[1]}]")
+                .attr('selected', 'selected')
 
     $condition.find(classToEnable)
               .show()
