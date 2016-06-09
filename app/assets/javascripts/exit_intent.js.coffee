@@ -7,7 +7,7 @@ $ ->
     else
       false
 
-  # user scrolls past the top of the screen (exit intent)
+  # user moves mouse past the top of the screen (exit intent)
   $('body').on 'mouseleave', (e) ->
     if e.offsetY - $(window).scrollTop() < 0 && !exit_intent_triggered && exit_intent_modal_present()
       new ExitIntentModal({site: window.site}).open()

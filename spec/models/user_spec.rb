@@ -99,6 +99,48 @@ describe User do
     end
   end
 
+  describe '#can_view_exit_intent_modal?' do
+    it 'returns false if user has paying subscription' do
+      user = create(:user)
+      site = user.sites.create(url: random_uniq_url)
+      rule = site.rules.create(name: "test rule", match: "all")
+      site_element = create(:site_element, rule: rule)
+      site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
+      expect(user.can_view_exit_intent_modal?).to eq(false)
+    end
+
+    it 'returns false if user has viewed modal within 30 days' do
+      user = create(:user)
+      site = user.sites.create(url: random_uniq_url)
+      rule = site.rules.create(name: "test rule", match: "all")
+      site_element = create(:site_element, rule: rule)
+      user.update_attributes(exit_intent_modal_last_shown_at: 29.days.ago)
+      expect(user.can_view_exit_intent_modal?).to eq(false)
+    end
+
+    it 'returns true if user doesnt have paying subscription and hasnt viewed within 30 days' do
+      user = create(:user)
+      site = user.sites.create(url: random_uniq_url)
+      rule = site.rules.create(name: "test rule", match: "all")
+      site_element = create(:site_element, rule: rule)
+      user.update_attributes(exit_intent_modal_last_shown_at: 31.days.ago)
+      expect(user.can_view_exit_intent_modal?).to eq(true)
+    end
+  end
+
+  describe '#most_viewed_site_element' do
+    it 'returns the site element that has the most views' do
+      user = create(:user)
+      site = user.sites.create(url: random_uniq_url)
+      rule = site.rules.create(name: "test rule", match: "all")
+      site_element = create(:site_element, rule: rule)
+      site_element_w_more_views = create(:site_element, rule: rule)
+      site_element.stub(total_views: 5)
+      site_element_w_more_views.stub(total_views: 10)
+      expect(user.most_viewed_site_element.id).to eq(site_element_w_more_views.id)
+    end
+  end
+
   describe '#new?' do
     it 'returns true if the user is logging in for the first time and does not have any bars' do
       user = create(:user)
