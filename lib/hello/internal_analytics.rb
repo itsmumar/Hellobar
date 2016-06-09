@@ -45,10 +45,6 @@ module Hello
       end
     end
 
-    # Hello::RegisteredTests.all.each do |test|
-    #   register_test(test)
-    # end
-
     # ================================================================
     # ==      REGISTER YOUR TESTS AT: lib/hello/ab_tests.yml        ==
     # ================================================================

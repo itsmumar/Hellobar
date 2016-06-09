@@ -6,34 +6,58 @@
   .goal-wrapper
 
     .goal-block
-      i.large-icon.icon-clicks
-      h6 Drive Traffic
-      p Use your Hello Bar to drive more traffic to a specific URL
-      button.button(disabled value='click') Select This Goal
+      i.large-icon.icon-money
+      h6 Promote a Sale/Discount
+      p Point visitors to your latest deal, bargain, or giveaway.
+      button.button(disabled value='money' data-site-id='#{@site.id}') Select This Goal
+
+    - unless get_ab_variation("Onboarding Limitted To Three Goals 2016-05-11") == 'variant'
+      .goal-block
+        i.large-icon.icon-call
+        h6 Talk to Your Visitors
+        p Encourage mobile visitors to give you a ring
+        button.button(disabled value='call' data-site-id='#{@site.id}') Select This Goal
 
     .goal-block
       i.large-icon.icon-contacts
-      h6 Collect Email
-      p Use your Hello Bar to collect visitors' emails addresses
-      button.button(disabled value='emails') Select This Goal
+      h6 Grow Your Mailing List
+      p Convert one-time visits into lasting connections.
+      button.button(disabled value='contacts' data-site-id='#{@site.id}') Select This Goal
+
+    - unless get_ab_variation("Onboarding Limitted To Three Goals 2016-05-11") == 'variant'
+      .goal-block
+        i.large-icon.icon-thumbsup
+        h6 Get Facebook Likes
+        p Expand your social reach to maximize word of mouth.
+        button.button(disabled value='facebook' data-site-id='#{@site.id}') Select This Goal
 
     .goal-block
-      i.large-icon.icon-social
-      h6 Connect & Share
-      p Use your Hello Bar to point visitors to your social media channels
-      button.button(disabled value='social') Select This Goal
-
-    .goal-block
-      i.large-icon.icon-megaphone
-      h6 Show an Announcement
-      p Use your Hello Bar to display an announcent to your visitors
-      button.button(disabled value='announcement') Select This Goal
+      i.large-icon.icon-other
+      h6 Other
+      p Don't see your goal?  Customize Hello Bar to fit your needs.
+      button.button(disabled value='other' data-site-id='#{@site.id}') Select This Goal
 
   footer
 
     p
       | Select one of the goals above. You can always change this later.
-      = mail_to 'support@hellobar.com', ' Need Help?', subject: "Hello Bar - Getting Started"
+
+    .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "i_need_help"}.to_json
+      .reveal-title I need help!
+      p Still not sure what to do? Let us help!
+
+      .reveal-block.no-pad.help-reveal
+        p How can we help?
+        p Just fill out the form below and we'll get back to you as soon as we can.
+
+        = form_tag generic_message_contact_submission_path, :method => :post do |f|
+          = hidden_field_tag :site_id, @site.id
+          = hidden_field_tag :return_to, new_site_site_element_path(current_site)
+
+          = text_area_tag :message, ""
+
+          = submit_tag "Send", class: "button", data: { disable_with: "Sending..." }
+
     p
       small = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete, class: "deemphasize"
 
