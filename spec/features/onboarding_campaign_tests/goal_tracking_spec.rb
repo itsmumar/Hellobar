@@ -3,6 +3,7 @@ require 'integration_helper'
 feature "User onboarding statuses get updated as they select a goal for their first Hello Bar" do
 
   before do
+    stub_out_get_ab_variations("Forced Email Path 2016-03-28", "Onboarding Limitted To Three Goals 2016-05-11") {"original"}
     # initialize the environment in the necessary order before testing
     user
     goals
