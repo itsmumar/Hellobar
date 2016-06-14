@@ -7,6 +7,8 @@ feature 'User can create a site element', js: true do
       to receive(:proxied_url2png).and_return('')
     allow_any_instance_of(ApplicationController).
       to receive(:get_ab_variation).and_return('original')
+    allow_any_instance_of(SiteSerializer).
+      to receive(:monthly_pageviews).and_return(nil)
   end
 
   scenario 'new user can create a site element' do
@@ -69,6 +71,8 @@ feature 'User can set a phone number for click to call', js: true do
   before do
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(ApplicationController).
+      to receive(:get_ab_variation).and_return('original')
   end
 
   after { devise_reset }
@@ -99,6 +103,8 @@ feature 'User can toggle colors for a site element', js: true do
       to receive(:proxied_url2png).and_return('')
     allow_any_instance_of(ApplicationController).
       to receive(:get_ab_variation).and_return('original')
+    allow_any_instance_of(SiteSerializer).
+      to receive(:monthly_pageviews).and_return(nil)
   end
 
   after { devise_reset }
@@ -131,6 +137,8 @@ feature 'User can edit a site element', js: true do
     @user = login
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(SiteSerializer).
+      to receive(:monthly_pageviews).and_return(nil)
   end
 
   after { devise_reset }

@@ -25,7 +25,7 @@ class GoogleAnalytics
     analytics.list_account_summaries.items.find do |item|
       urls = item.web_properties.map(&:website_url).map{|web_url| self.class.normalize_url(web_url) }
 
-      urls.include?(url)
+      urls.include?(self.class.normalize_url(url))
     end
   end
 
@@ -36,7 +36,7 @@ class GoogleAnalytics
     if account
       # what if you have multiple profiles?
       profile = account.web_properties.find do |property|
-        self.class.normalize_url(property.website_url) == url
+        self.class.normalize_url(property.website_url) == self.class.normalize_url(url)
       end.profiles.first
 
       ids = "ga:#{profile.id}"

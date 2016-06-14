@@ -9,6 +9,8 @@ class SiteSerializer < ActiveModel::Serializer
   has_many :rules, serializer: RuleSerializer
 
   def monthly_pageviews
+    return unless scope # we require a logged in user
+
     google = scope.authentications.find{|auth| auth.provider == "google_oauth2" }
 
     if google
