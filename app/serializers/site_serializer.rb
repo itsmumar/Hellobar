@@ -3,7 +3,7 @@ class SiteSerializer < ActiveModel::Serializer
 
   attributes :id, :url, :contact_lists, :capabilities, :display_name
   attributes :current_subscription, :has_script_installed?, :num_site_elements
-  attributes :view_billing
+  attributes :view_billing, :timezone
 
   has_many :rules, serializer: RuleSerializer
 
