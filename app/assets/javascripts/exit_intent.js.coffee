@@ -2,10 +2,7 @@ $ ->
   exit_intent_triggered = false
 
   exit_intent_modal_present = ->
-    if $('#exit-intent-modal-template').length > 0
-      true
-    else
-      false
+    $('#exit-intent-modal-template').length > 0
 
   # user moves mouse past the top of the screen (exit intent)
   $('body').on 'mouseleave', (e) ->
