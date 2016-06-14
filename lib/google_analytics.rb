@@ -23,7 +23,7 @@ class GoogleAnalytics
 
   def find_account_by_url(url)
     analytics.list_account_summaries.items.find do |item|
-      urls = item.web_properties.map(&:website_url).map{|url| self.class.normalize_url(url) }
+      urls = item.web_properties.map(&:website_url).map{|web_url| self.class.normalize_url(web_url) }
 
       urls.include?(url)
     end
