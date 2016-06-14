@@ -1,5 +1,5 @@
-- if allow_exit_intent_modal?(current_user)
-  - element_subtype = most_viewed_site_element_subtype(current_user)
+- if allow_exit_intent_modal?
+  - element_subtype = current_user.most_viewed_site_element_subtype
   - if element_subtype
     script id='exit-intent-modal-template' type='text/x-handlebars-template' data={ 'user-id' => current_user.id }
       .modal-wrapper

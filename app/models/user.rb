@@ -107,6 +107,12 @@ class User < ActiveRecord::Base
     self.site_elements.sort_by {|site_element| site_element.total_views }.reverse.first
   end
 
+  def most_viewed_site_element_subtype
+    subtype = self.most_viewed_site_element.try(:element_subtype)
+    subtype = "social" if subtype && subtype.include?("social")
+    subtype
+  end
+
   def new?
     sign_in_count == 1 && site_elements.empty?
   end

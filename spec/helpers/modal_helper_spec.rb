@@ -12,21 +12,15 @@ describe ModalHelper do
         site = @user.sites.create(url: random_uniq_url)
         allow_any_instance_of(ModalHelper).to receive(:get_ab_variation).and_return('pop_up')
         @user.stub(:can_view_exit_intent_modal?).and_return(true)
-        expect(helper.allow_exit_intent_modal?(@user)).to eq(true)
+        expect(helper.allow_exit_intent_modal?).to eq(true)
       end
 
       it "returns false if user has 'original' ab test variation" do
         site = @user.sites.create(url: random_uniq_url)
         allow_any_instance_of(ModalHelper).to receive(:get_ab_variation).and_return('original')
         @user.stub(:can_view_exit_intent_modal?).and_return(true)
-        expect(helper.allow_exit_intent_modal?(@user)).to eq(false)
+        expect(helper.allow_exit_intent_modal?).to eq(false)
       end
     end
   end
-
-  describe "most_viewed_site_element_subtype" do
-
-  end
-
-
 end
