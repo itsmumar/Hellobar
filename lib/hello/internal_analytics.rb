@@ -48,16 +48,14 @@ module Hello
     # ================================================================
     # ==      REGISTER YOUR TESTS AT: lib/hello/ab_tests.yml        ==
     # ================================================================
-    unless Rails.env.test?
-      hash = YAML.load(File.read("lib/hello/ab_tests.yml"))
-      hash.each do |registered_test|
-        name            = registered_test["name"]
-        values          = registered_test["values"]
-        index           = registered_test["index"]
-        weights         = registered_test["weights"].present? ? registered_test["weights"] : []
-        user_start_date = registered_test["user_start_date"]
-        register_test(name, values, index, weights, user_start_date)
-      end
+    hash = YAML.load(File.read("lib/hello/ab_tests.yml"))
+    hash.each do |registered_test|
+      name            = registered_test["name"]
+      values          = registered_test["values"]
+      index           = registered_test["index"]
+      weights         = registered_test["weights"].present? ? registered_test["weights"] : []
+      user_start_date = registered_test["user_start_date"]
+      register_test(name, values, index, weights, user_start_date)
     end
 
     def ab_test_cookie_name
@@ -143,7 +141,6 @@ module Hello
     end
 
     def get_ab_variation(test_name, user = nil)
-      return nil if Rails.env.test?
       return nil unless ab_test_passes_time_constraints?(test_name)
       ab_test = get_ab_test(test_name)
       value_index, status = get_ab_variation_index_without_setting(test_name, user)

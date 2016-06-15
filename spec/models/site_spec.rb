@@ -301,6 +301,7 @@ describe Site do
         allow(@site).to receive(:script_installed_db?) { false }
         allow(@site).to receive(:script_installed_api?) { true }
 
+        expect(Analytics).to receive(:track).with(:visitor, nil, "Upgrade Hello Bar Drip Campaign New Users Only 2016-03-28", {:value=>"campaign"})
         expect(Analytics).to receive(:track).with(:site, @site.id, "Installed")
 
         @site.has_script_installed?
@@ -321,6 +322,7 @@ describe Site do
         allow(@site).to receive(:script_installed_db?) { true }
         allow(@site).to receive(:script_installed_api?) { false }
 
+        expect(Analytics).to receive(:track).with(:visitor, nil, "Install The Plugin Drip Campaign New Users Only 2016-03-28", {:value=>"original"})
         expect(Analytics).to receive(:track).with(:site, @site.id, "Uninstalled")
 
         @site.has_script_installed?
