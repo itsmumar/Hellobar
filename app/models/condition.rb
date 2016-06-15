@@ -81,6 +81,18 @@ class Condition < ActiveRecord::Base
     Hello::Segments::User.find { |s| s[:key] == segment_key } || {}
   end
 
+  def timezone_offset
+    return unless segment == 'TimeCondition'
+
+    if value[2] == 'visitor'
+      'visitor'
+    else
+      Time.use_zone(value[2]) do
+        Time.zone.now.formatted_offset
+      end
+    end
+  end
+
   private
 
   def url_condition_sentence

@@ -1260,14 +1260,15 @@ var HB = {
   },
 
   timeConditionTrue: function(condition) {
-    var currentSiteTime = HB.nowInTimezone(),
-        conditionHour = parseInt(condition.value[0]),
-        conditionMinute = parseInt(condition.value[1]);
+    var conditionHour = parseInt(condition.value[0]),
+        conditionMinute = parseInt(condition.value[1]),
+        conditionZoneOffset = condition.timezone_offset,
+        currentConditionTime = HB.nowInTimezone(conditionZoneOffset)
 
-    if (HB.applyOperand(currentSiteTime.getHours(), condition.operand, conditionHour, condition.segment))
+    if (HB.applyOperand(currentConditionTime.getHours(), condition.operand, conditionHour, condition.segment))
       return true;
-    else if (currentSiteTime.getHours() === conditionHour)
-      return HB.applyOperand(currentSiteTime.getMinutes(), condition.operand, conditionMinute, condition.segment)
+    else if (currentConditionTime.getHours() === conditionHour)
+      return HB.applyOperand(currentConditionTime.getMinutes(), condition.operand, conditionMinute, condition.segment)
     else
       return false;
   },

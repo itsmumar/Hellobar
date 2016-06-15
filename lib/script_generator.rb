@@ -176,11 +176,18 @@ private
 
   def condition_settings(condition)
     segment = condition.segment == 'CustomCondition' ? condition.custom_segment : condition.segment_key
-    {
+
+    settings = {
       segment: segment,
       operand: condition.operand,
       value: condition.value
     }
+
+    if condition.timezone_offset.present?
+      settings.merge(timezone_offset: condition.timezone_offset)
+    else
+      settings
+    end
   end
 
   def content_template(element_class, type)

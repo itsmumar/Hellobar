@@ -248,3 +248,29 @@ RSpec.describe Condition, type: :model do
     end
   end
 end
+
+describe Condition, '#timezone_offset' do
+  let(:condition) { Condition.new(segment: 'TimeCondition') }
+
+  it 'returns nil if the condition is not a TimeCondition' do
+    condition.segment = 'not time condition'
+
+    expect(condition.timezone_offset).to be_nil
+  end
+
+  it 'returns visitor if the condition is set to user the visitors timezone' do
+    condition.value = [1, 2, 'visitor']
+
+    expect(condition.timezone_offset).to eql('visitor')
+  end
+
+  it 'returns the correct timezone offset when a TimeCondition and has the timezone set' do
+    condition.value = [1, 2, 'America/Chicago']
+
+    expected_offset = Time.use_zone('America/Chicago') do
+      Time.zone.now.formatted_offset
+    end
+
+    expect(condition.timezone_offset).to eql(expected_offset)
+  end
+end

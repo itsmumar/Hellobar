@@ -355,5 +355,18 @@ describe ScriptGenerator do
         value: condition.value
       })
     end
+
+    it "adds the timezone offset when present for TimeConditions" do
+      allow(condition).to receive(:timezone_offset) { "9999" }
+
+      condition.segment = 'CustomCondition'
+      condition.custom_segment = 'ABC'
+      expect(generator.send(:condition_settings, condition)).to eq({
+        segment: 'ABC',
+        operand: condition.operand,
+        value: condition.value,
+        timezone_offset: condition.timezone_offset
+      })
+    end
   end
 end
