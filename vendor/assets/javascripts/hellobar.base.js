@@ -976,6 +976,10 @@ var HB = {
     // to this object
     siteElement.me = "window.parent.HB.siteElementsOnPage["+siteElement.pageIndex+"]";
 
+    // skip adding to the page if it is already on the page
+    if(HB.siteElementsOnPage.indexOf(siteElement) !== -1)
+      return;
+
     HB.siteElementsOnPage.push(siteElement);
 
     // If there is a #nohb in the has we don't render anything

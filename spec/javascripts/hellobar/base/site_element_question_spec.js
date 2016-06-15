@@ -47,6 +47,23 @@ describe("HB", function() {
         expect(HB.questionifySiteElement).toHaveBeenCalled();
       });
     });
+
+    context("considering whether or not to add this to the page", function() {
+      it("adds the element to the page if not added already", function() {
+        siteElement.use_question = false;
+        HB.addToPage(siteElement);
+
+        expect(HB.siteElementsOnPage.length).toEqual(1);
+      });
+
+      it("does not add the element to the page if already added", function() {
+        siteElement.use_question = false;
+        HB.addToPage(siteElement);
+        HB.addToPage(siteElement);
+
+        expect(HB.siteElementsOnPage.length).toEqual(1);
+      });
+    });
   });
 
   describe("HB.questionifySiteElement", function() {
