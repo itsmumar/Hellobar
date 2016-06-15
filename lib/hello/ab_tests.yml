@@ -1,0 +1,158 @@
+-
+  index: 0
+  name: Use Cases Amount
+  values:
+    - more
+    - less
+-
+  index: 1
+  name: Account Creation Test 2015-01-21
+  values:
+    - original
+    - orange_header
+    - no_orange_header
+-
+  index: 2
+  name: Editor Test 2015-02-23
+  values:
+    - original
+    - interstitial
+    - navigation
+-
+  index: 3
+  name: Google Auth 2015-03-10
+  values:
+    - original
+    - google_auth
+-
+  index: 4
+  name: Templated Editor 2015-07-07
+  values:
+    - original
+    - templated
+-
+  index: 5
+  name: Video Welcome 2015-9-22
+  values:
+    - original
+    - video
+  weights:
+    - 75
+    - 25
+-
+  index: 6
+  name: Quickstart CTA 2015-10-06
+  values:
+    - original
+    - cta
+-
+  index: 7
+  name: Upgrade Plan Button 2016-01-05
+  values:
+    - original
+    - power
+-
+  index: 8
+  name: Settings Upsell 2016-01-07
+  values:
+    - original
+    - upsell
+-
+  index: 9
+  name: Upgrade Modal Logos 2016-01-10
+  values:
+    - original
+    - logos
+-
+  index: 10
+  name: Email Modal Interstitial 2016-02-23
+  values:
+    - original
+    - modal
+-
+  index: 11
+  name: Email Modal Interstitial New Users Only 2016-03-04
+  values:
+    - original
+    - modal
+-
+  index: 12
+  name: Sign Up Button 2016-03-17
+  values:
+    - original
+    - sign_up_google
+    - sign_up
+    - get_started
+-
+  index: 13
+  name: Show Add Site on Edit Site 2016-03-18
+  values:
+    - original
+    - variant
+-
+  index: 14
+  name: WordPress Plugin 2016-03-17
+  values:
+    - original
+    - common
+-
+  index: 15
+  name: Use Cases Variation 2016-03-22
+  values:
+    - original
+    - simple
+-
+  index: 16
+  name: Forced Email Path 2016-03-28
+  values:
+    - original
+    - force
+-
+  index: 17
+  name: Show Add Site on Edit Site 2016-04-04
+  values:
+    - original
+    - variant
+-
+  index: 18
+  name: Create A Bar Reminder New Users Only 2016-03-28
+  values:
+    - original
+    - campaign
+-
+  index: 19
+  name: Configure Your Bar Reminder New Users Only 2016-03-28
+  values:
+    - original
+    - campaign
+-
+  index: 20
+  name: Install The Plugin Drip Campaign New Users Only 2016-03-28
+  values:
+    - original
+    - campaign
+-
+  index: 21
+  name: Upgrade Hello Bar Drip Campaign New Users Only 2016-03-28
+  values:
+    - original
+    - campaign
+-
+  index: 22
+  name: Use Cases Variation 2016-04-22
+  values:
+    - original
+    - types
+-
+  index: 23
+  name: Use Cases Variation 2016-06-08
+  values:
+    - original
+    - types
+-
+  index: 24
+  name: Onboarding Limitted To Three Goals 2016-05-11
+  user_start_date: 2016-05-11
+  values:
+    - original
+    - variant
