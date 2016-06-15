@@ -18,14 +18,28 @@ class UserStateCloner
   def save
     user.save
     sites.each(&:save)
+    upgrade_sites_to_pro(sites)
     site_memberships.each(&:save)
     rules.each(&:save)
-    site_elements.each(&:save)
+    site_elements.each(&:save!)
     payment_methods.each(&:save)
+  rescue ActiveRecord::RecordNotUnique
+    Rails.logger.info "Rubocop is annoying and makes me do this."
+  end
+
+  def upgrade_sites_to_pro(sites)
+    sites.each do |site|
+      Subscription::Pro.create(
+        user: user,
+        site: site,
+        type: 'Subscription::Pro'
+      )
+    end
   end
 
   def build_user(user_json)
     user_json.merge! password: 'password'
+    user_json.delete(:state)
 
     user = User.find_or_initialize_by(id: user_json[:id])
     user.attributes = user_json
@@ -53,15 +67,21 @@ class UserStateCloner
       rule_json.delete(:description)
 
       rule = Rule.find_or_initialize_by(id: rule_json[:id])
+      conditions_attrs = rule_json.delete(:conditions)
+      conditions = conditions_attrs.map do |condition_attrs|
+        Condition.new(condition_attrs)
+      end
+
       rule.attributes = rule_json
+      rule.conditions = conditions
       rule
     end
   end
 
   def build_site_elements(site_elements_json)
     site_elements_json.map do |site_element_json|
-      font_value = site_element_json.delete(:font)
-      font = Font.find_by(value: font_value)
+      font_id = site_element_json.delete(:font_id)
+      font = Font.find_by(value: font_id) || Font.find_by(id: font_id)
 
       element = SiteElement.find_or_initialize_by(id: site_element_json[:id])
       element.attributes = site_element_json

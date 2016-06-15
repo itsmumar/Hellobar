@@ -145,13 +145,19 @@
     - types
 -
   index: 23
+  name: Use Cases Variation 2016-06-08
+  values:
+    - original
+    - types
+-
+  index: 24
   name: Onboarding Limitted To Three Goals 2016-05-11
   user_start_date: 2016-05-11
   values:
     - original
     - variant
 -
-  index: 24
+  index: 25
   name: Exit Intent Pop-up Based on Bar Goals 2016-06-08
   values:
     - original
