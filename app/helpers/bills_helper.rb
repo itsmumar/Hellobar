@@ -15,9 +15,9 @@ module BillsHelper
     number_to_currency(-1 * uses * coupon.amount)
   end
 
-  def bill_address_info(bill, details)
-    if bill.site.invoice_information.present?
-      "<br>" + bill.site.invoice_information.gsub("\r\n", "<br>")
+  def bill_address_info(site, details)
+    if site.invoice_information.present?
+      "<br>" + site.invoice_information.gsub("\r\n", "<br>")
     elsif details.address.present?
       "<br>" + details.address.address1 +
       "<br>" + details.address.city + ' ' + details.address.state + ' ' + details.address.zip + ' ' + details.address.country
