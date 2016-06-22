@@ -5,7 +5,7 @@ describe DigestMailer do
 
   describe 'weekly_digest' do
     before do
-      allow_any_instance_of(DigestMailer).to receive(:get_ab_test) { 'original' }
+      allow_any_instance_of(DigestMailer).to receive(:get_ab_variation) { 'original' }
     end
 
     let(:site) { sites(:zombo) }
