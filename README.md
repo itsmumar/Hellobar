@@ -131,19 +131,19 @@ Test site for both edge/staging: http://teampolymathic.github.io/hellobar_testin
 http://edge.hellobar.com/  
 user: edge-test@polymathic.me  
 pword: password  
-site: edge-testing.com
+site: teampolymathic.github.com
 
 **Staging:**  
 http://staging.hellobar.com/  
 user: staging-test@polymathic.me  
 pword: password  
-site: gewgle.com
+site: teampolymathic.github.com
 
 **Production:**
 https://hellobar.com
 user: prodtest@polymathic.me
 pword: password
-site: horse.bike
+site: teampolymathic.github.com
 
 
 ## Running Hello Bar via Docker
