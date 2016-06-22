@@ -142,11 +142,11 @@ script#condition-partial type="text/x-handlebars-template"
           = country_select('rule', 'conditions_attributes', { priority_countries: ["US"] }, { disabled: "disabled", name: "rule[conditions_attributes][{{index}}][value]", class: "value" })
         .choice-wrapper.time-choice
           .select-wrapper.time-select
-            = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..23).map(&:to_i)), { disabled: true, class: 'value' }
+            = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..23).map{|i| i.to_s.rjust(2, '0') }), { disabled: true, class: 'value' }
           span
             | :
           .select-wrapper.time-select
-            = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..59).map(&:to_i)), { disabled: true, class: 'value' }
+            = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..59).map{|i| i.to_s.rjust(2, '0') }), { disabled: true, class: 'value' }
           .select-wrapper.time-select.timezone
             - timezones = [["Use visitor's timezone", "visitor"]] + ActiveSupport::TimeZone.all.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
             = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select(timezones), { disabled: true, class: 'value' }
