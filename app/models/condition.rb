@@ -4,25 +4,26 @@ class Condition < ActiveRecord::Base
   # class name: Hello::Segments::User key
   SEGMENTS = {
     'DateCondition' => 'dt',
-    'LastVisitCondition' => 'ls',
     'DeviceCondition' => 'dv',
     'EveryXSession' => 'ns',
-    'NumberOfVisitsCondition' => 'nv',
-    'PreviousPageURL' => 'pp',
-    'ReferrerCondition' => 'rf',
-    'SearchTermCondition' => 'st',
-    'UrlCondition' => 'pu',
-    'UrlQuery' => 'pq',
-    'UrlPathCondition' => 'pup',
-    'ReferrerDomainCondition' => 'rd',
-    'UTMSourceCondition' => 'ad_so',
-    'UTMCampaignCondition' => 'ad_ca',
-    'UTMMediumCondition' => 'ad_me',
-    'UTMContentCondition' => 'ad_co',
-    'UTMTermCondition' => 'ad_te',
+    'LastVisitCondition' => 'ls',
     'LocationCityCondition' => 'gl_cty',
     'LocationCountryCondition' => 'gl_ctr',
     'LocationRegionCondition' => 'gl_rgn',
+    'NumberOfVisitsCondition' => 'nv',
+    'PreviousPageURL' => 'pp',
+    'ReferrerCondition' => 'rf',
+    'ReferrerDomainCondition' => 'rd',
+    'SearchTermCondition' => 'st',
+    'TimeCondition' => 'tc',
+    'UTMCampaignCondition' => 'ad_ca',
+    'UTMContentCondition' => 'ad_co',
+    'UTMMediumCondition' => 'ad_me',
+    'UTMSourceCondition' => 'ad_so',
+    'UTMTermCondition' => 'ad_te',
+    'UrlCondition' => 'pu',
+    'UrlPathCondition' => 'pup',
+    'UrlQuery' => 'pq'
   }
 
   # stored value: displayed value
@@ -60,6 +61,8 @@ class Condition < ActiveRecord::Base
       url_condition_sentence
     elsif segment == "EveryXSession"
       every_x_sessions_sentence
+    elsif segment == "TimeCondition"
+      "#{segment_data[:name]} #{OPERANDS[operand]} #{value[0]}:#{value[1]}"
     else
       name = segment == "CustomCondition" ? custom_segment : segment_data[:name]
       if operand.to_s == 'between'
@@ -76,6 +79,18 @@ class Condition < ActiveRecord::Base
 
   def segment_data
     Hello::Segments::User.find { |s| s[:key] == segment_key } || {}
+  end
+
+  def timezone_offset
+    return unless segment == 'TimeCondition'
+
+    if value[2] == 'visitor'
+      'visitor'
+    else
+      Time.use_zone(value[2]) do
+        Time.zone.now.formatted_offset
+      end
+    end
   end
 
   private
@@ -103,7 +118,7 @@ class Condition < ActiveRecord::Base
   def value_is_valid
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
-    elsif segment == 'UrlCondition' || segment == 'UrlPathCondition'
+    elsif segment == 'UrlCondition' || segment == 'UrlPathCondition' || segment == 'TimeCondition'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array)
     else
       errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
@@ -113,20 +128,21 @@ class Condition < ActiveRecord::Base
   def operand_is_valid
     @@operands ||= {
       "DateCondition"             => %w{ is is_not before after between },
-      "LastVisitCondition"        => %w{ is is_not less_than greater_than between },
-      "EveryXSession"             => %w{ every },
       "DeviceCondition"           => %w{ is is_not },
+      "EveryXSession"             => %w{ every },
+      "LastVisitCondition"        => %w{ is is_not less_than greater_than between },
+      "LocationCityCondition"     => %w{ is is_not },
+      "LocationCountryCondition"  => %w{ is is_not },
+      "LocationRegionCondition"   => %w{ is is_not },
       "NumberOfVisitsCondition"   => %w{ is is_not less_than greater_than between },
       "PreviousPageURL"           => %w{ includes does_not_include },
       "ReferrerCondition"         => %w{ is is_not includes does_not_include },
       "ReferrerDomainCondition"   => %w{ is is_not includes does_not_include },
       "SearchTermCondition"       => %w{ is is_not includes does_not_include },
+      "TimeCondition"             => %w{ before after },
       "UrlCondition"              => %w{ is is_not includes does_not_include },
       "UrlPathCondition"          => %w{ is is_not includes does_not_include },
-      "UtmCondition"              => %w{ is is_not includes does_not_include },
-      "LocationCityCondition"     => %w{ is is_not },
-      "LocationCountryCondition"  => %w{ is is_not },
-      "LocationRegionCondition"   => %w{ is is_not }
+      "UtmCondition"              => %w{ is is_not includes does_not_include }
     }
 
     if @@operands[segment] && !@@operands[segment].include?(operand)

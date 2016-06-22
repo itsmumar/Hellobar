@@ -49,7 +49,7 @@ class ScriptGenerator < Mustache
   # returns the sites tz offset as "+/-HH:MM"
   def site_timezone
     Time.use_zone(site.timezone) do
-      Time.zone.formatted_offset
+      Time.zone.now.formatted_offset
     end
   end
 
@@ -176,11 +176,18 @@ private
 
   def condition_settings(condition)
     segment = condition.segment == 'CustomCondition' ? condition.custom_segment : condition.segment_key
-    {
+
+    settings = {
       segment: segment,
       operand: condition.operand,
       value: condition.value
     }
+
+    if condition.timezone_offset.present?
+      settings.merge(timezone_offset: condition.timezone_offset)
+    else
+      settings
+    end
   end
 
   def content_template(element_class, type)

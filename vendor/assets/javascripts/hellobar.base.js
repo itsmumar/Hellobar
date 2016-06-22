@@ -1263,6 +1263,20 @@ var HB = {
     return true;
   },
 
+  timeConditionTrue: function(condition) {
+    var conditionHour = parseInt(condition.value[0]),
+        conditionMinute = parseInt(condition.value[1]),
+        conditionZoneOffset = condition.timezone_offset,
+        currentConditionTime = HB.nowInTimezone(conditionZoneOffset)
+
+    if (HB.applyOperand(currentConditionTime.getHours(), condition.operand, conditionHour, condition.segment))
+      return true;
+    else if (currentConditionTime.getHours() === conditionHour)
+      return HB.applyOperand(currentConditionTime.getMinutes(), condition.operand, conditionMinute, condition.segment)
+    else
+      return false;
+  },
+
   // Determines if the condition (a rule is made of one or more conditions)
   // is true. It gets the current value and applies the operand
   conditionTrue: function(condition)
@@ -1274,6 +1288,8 @@ var HB = {
       var currentValue = HB.getSegmentValue(condition.segment)[conditionKey];
       var values = condition.value.split("=")[1] || "";
     }
+    else if ( condition.segment === "tc" )
+      return HB.timeConditionTrue(condition);
     else {
       var currentValue = HB.getSegmentValue(condition.segment);
       var values = condition.value;
