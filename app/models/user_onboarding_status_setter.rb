@@ -34,7 +34,7 @@ class UserOnboardingStatusSetter
                     recent_status(:installed_script).sequence_delivered_last) || nil
 
     create_status_if_able!(:installed_script,
-                           "Upgrade Hello Bar Drip Campaign New Users Only 2016-03-28",
+                           nil,
                            last_sequence)
   end
 
