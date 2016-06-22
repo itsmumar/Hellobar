@@ -29,7 +29,8 @@ describe ScriptGenerator do
 
     it 'renders the HB_TZ timezone variable' do
       site.stub timezone: 'America/Chicago'
-      expected_string = "HB_TZ = \"-06:00\";"
+      Time.zone = 'America/Chicago'
+      expected_string = "HB_TZ = \"#{Time.zone.now.formatted_offset}\";"
 
       generator.render.should include(expected_string)
     end
@@ -352,6 +353,19 @@ describe ScriptGenerator do
         segment: 'ABC',
         operand: condition.operand,
         value: condition.value
+      })
+    end
+
+    it "adds the timezone offset when present for TimeConditions" do
+      allow(condition).to receive(:timezone_offset) { "9999" }
+
+      condition.segment = 'CustomCondition'
+      condition.custom_segment = 'ABC'
+      expect(generator.send(:condition_settings, condition)).to eq({
+        segment: 'ABC',
+        operand: condition.operand,
+        value: condition.value,
+        timezone_offset: condition.timezone_offset
       })
     end
   end

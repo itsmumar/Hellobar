@@ -30,7 +30,8 @@ module Hello
       {:key=>'fl', :name=>"Facebook Like", :type=>:conversion, :units=>"conversion"},
       {:key=>'gl_cty', :name=>"Geolocation City", :type=>:string},
       {:key=>'gl_ctr', :name=>"Geolocation Country", :type=>:string},
-      {:key=>'gl_rgn', :name=>"Geolocation Region", :type=>:string}
+      {:key=>'gl_rgn', :name=>"Geolocation Region", :type=>:string},
+      {:key=>'tc', :name=>"Time", :type=>:string}
     ]
   end
 end

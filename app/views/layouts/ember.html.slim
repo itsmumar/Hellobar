@@ -51,3 +51,6 @@ html
     = javascript_include_tag "editor/application"
 
     = yield
+
+javascript:
+  var site = #{{SiteSerializer.new(current_site, scope: current_user).to_json}};

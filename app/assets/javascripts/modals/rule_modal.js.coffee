@@ -136,6 +136,24 @@ class @RuleModal extends Modal
       $condition.find(classToEnable)
                 .find(".value > option[value=#{conditionData.value}]")
                 .attr('selected', 'selected')
+    else if conditionData.segment == 'TimeCondition'
+      # select the correct hour
+      hourValue = conditionData.value?[0] || 0
+      minuteValue = conditionData.value?[1] || 0
+      timezoneValue = conditionData.value?[2] || window.site.timezone || "visitor"
+
+      $condition.find(classToEnable)
+                .find(".value:eq(0) > option[value=#{hourValue}]")
+                .attr('selected', 'selected')
+
+      # select the correct minute
+      $condition.find(classToEnable)
+                .find(".value:eq(1) > option[value=#{minuteValue}]")
+                .attr('selected', 'selected')
+
+      $condition.find(classToEnable)
+                .find(".value:eq(2) > option[value=\"#{timezoneValue}\"]")
+                .attr('selected', 'selected')
 
     $condition.find(classToEnable)
               .show()
@@ -167,6 +185,7 @@ class @RuleModal extends Modal
     'ReferrerCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'ReferrerDomainCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'SearchTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'TimeCondition': ['before', 'after']
     'UTMCampaignCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMContentCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']
@@ -189,6 +208,7 @@ class @RuleModal extends Modal
     'ReferrerCondition': '.referrer-choice'
     'ReferrerDomainCondition': '.referrer-domain-choice'
     'SearchTermCondition': '.search-term-choice'
+    'TimeCondition': '.time-choice'
     'UTMCampaignCondition': '.utm-campaign-choice'
     'UTMContentCondition': '.utm-content-choice'
     'UTMMediumCondition': '.utm-medium-choice'
