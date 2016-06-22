@@ -64,7 +64,11 @@ namespace :billing do
             else
               # Attempt the billing
               msg = "Attempting to bill #{bill.id}: #{bill.subscription.site.url} for #{number_to_currency(bill.amount)}..."
-              if bill.amount != 0 and !bill.subscription.payment_method
+              if bill.amount != 0 and bill.subscription.payment_method and (!bill.subscription.payment_method.current_details or !bill.subscription.payment_method.current_details.token)
+                num_failed += 1
+                amount_failed += bill.amount
+                billing_report(msg+"Skipped: no payment method details available")
+              elsif bill.amount != 0 and !bill.subscription.payment_method
                 num_failed += 1
                 amount_failed += bill.amount
                 billing_report(msg+"Skipped: no payment method available")
