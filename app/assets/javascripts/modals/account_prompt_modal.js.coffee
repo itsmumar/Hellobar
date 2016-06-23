@@ -28,8 +28,11 @@ class @AccountPromptModal extends Modal
 
     if flash.length
       message = flash.text()
-      flash.remove()
-      @_displayErrors([message])
+
+      # do not reroute the flash to tell users to clear their cache
+      if message.indexOf('cache') == -1
+        flash.remove()
+        @_displayErrors([message])
 
   _attachTracking: ->
     @$modal.find("input#user_email").keyup (event) =>
