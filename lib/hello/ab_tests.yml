@@ -156,3 +156,9 @@
   values:
     - original
     - variant
+-
+  index: 25
+  name: Upgrade CTA in HB Digest Email 2016-06-09
+  values:
+    - original
+    - variant
