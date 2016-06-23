@@ -92,46 +92,5 @@ feature "One User In all onboarding Campaigns" do
         expect(email_received_a_number_of_days_after(user, start_date, index)).to eq(email)
       end
     end
-
-    scenario "the user receives the Upgrade campaign email" do
-      {
-        16 => ["Drip Campaign: Upgrade 1"],
-        17 => ["Drip Campaign: Upgrade 2"],
-        18 => ["Drip Campaign: Upgrade 3"],
-        19 => ["Drip Campaign: Upgrade 4"],
-        20 => ["Drip Campaign: Upgrade 5"],
-        21 => ["Drip Campaign: Upgrade 6"],
-        22 => ["Drip Campaign: Upgrade 7"],
-        23 => ["Drip Campaign: Upgrade 8"],
-        24 => []
-      }.each do |index, email|
-        expect(email_received_a_number_of_days_after(user, start_date, index)).to eq(email)
-      end
-    end
   end
-
-  feature "with more than one site" do
-    before do
-      create(:site_ownership, user: user)
-      transition_user_through_onboarding(user)
-    end
-
-    scenario "the user receives the Upgrade campaign email with an extra 9th email" do
-      {
-        16 => ["Drip Campaign: Upgrade 1"],
-        17 => ["Drip Campaign: Upgrade 2"],
-        18 => ["Drip Campaign: Upgrade 3"],
-        19 => ["Drip Campaign: Upgrade 4"],
-        20 => ["Drip Campaign: Upgrade 5"],
-        21 => ["Drip Campaign: Upgrade 6"],
-        22 => ["Drip Campaign: Upgrade 7"],
-        23 => ["Drip Campaign: Upgrade 8"],
-        24 => ["Drip Campaign: Upgrade 9"],
-        25 => []
-      }.each do |index, email|
-        expect(email_received_a_number_of_days_after(user, start_date, index)).to eq(email)
-      end
-    end
-  end
-
 end

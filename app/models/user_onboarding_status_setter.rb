@@ -30,12 +30,7 @@ class UserOnboardingStatusSetter
   end
 
   def installed_script!
-    last_sequence = (recent_status(:installed_script) &&
-                    recent_status(:installed_script).sequence_delivered_last) || nil
-
-    create_status_if_able!(:installed_script,
-                           nil,
-                           last_sequence)
+    create_status_if_able!(:installed_script)
   end
 
   def uninstalled_script!

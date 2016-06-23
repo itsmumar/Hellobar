@@ -5,8 +5,7 @@ class UserOnboardingCampaign
     [
       ConfigureYourBarCampaign,
       CreateABarCampaign,
-      InstallThePluginCampaign,
-      UpgradeHelloBarCampaign
+      InstallThePluginCampaign
     ]
   end
 
