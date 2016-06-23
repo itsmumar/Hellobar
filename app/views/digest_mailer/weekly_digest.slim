@@ -91,48 +91,70 @@ tr.lightGrey
         td colspan="3"
           div.heightPadding
       - if @site.is_free?
-        tr
-          td colspan="3"
-            table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
-              tr
-                td.alignCenter.orangeText style="font-size: 15px; padding: 15px 0; "
-                  | Get more #{@conversion_header.downcase} with Hello Bar Pro
-              tr
-                td
-                  table.proFeaturesTable cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
-                    tr
-                      td
-                        div.feature
-                          img src=no_branding_image_url
-                          div.content
-                            div.strong Brand it as your bar
-                            div.text No Hello Bar logo in your bar, it's all yours!
-                            = link_to "Brand your bar", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Branding", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
-                      td
-                        div.feature
-                          img src=ab_test_image_url
-                          div.content
-                            div.strong Unlimited bars
-                            div.text A/B test with more variations.
-                            = link_to "Test more bars", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro More Bars", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
-                    tr
-                      td
-                        div.feature
-                          img src=targeted_bars_image_url
-                          div.content
-                            div.strong Targeted messages
-                            div.text Show different visitors different messages.
-                            = link_to "Customize now", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Targeted Bars", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
-                      td
-                        div.feature
-                          img src=charts_image_url
-                          div.content
-                            div.strong Better stats
-                            div.text See tips to improve your marketing.
-                            = link_to "Get better stats", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Stats", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
-              tr
-                td.alignCenter style="font-size: 15px; padding: 15px 0; font-weight: lighter; color: #222222;"
-                  span style="line-height: 24px; height: 24px; margin-right: 10px;"
-                    | Get all the pro features for $15/mo
-                  = link_to "Start using Hello Bar Pro", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Start", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+        - if @render_upgrade_cta == 'original'
+          tr
+            td colspan="3"
+              table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
+                tr
+                  td.alignCenter.orangeText style="font-size: 15px; padding: 15px 0; "
+                    | Get more #{@conversion_header.downcase} with Hello Bar Pro
+                tr
+                  td
+                    table.proFeaturesTable cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 1px solid #EDEDED"
+                      tr
+                        td
+                          div.feature
+                            img src=no_branding_image_url
+                            div.content
+                              div.strong Brand it as your bar
+                              div.text No Hello Bar logo in your bar, it's all yours!
+                              = link_to "Brand your bar", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Branding", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                        td
+                          div.feature
+                            img src=ab_test_image_url
+                            div.content
+                              div.strong Unlimited bars
+                              div.text A/B test with more variations.
+                              = link_to "Test more bars", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro More Bars", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                      tr
+                        td
+                          div.feature
+                            img src=targeted_bars_image_url
+                            div.content
+                              div.strong Targeted messages
+                              div.text Show different visitors different messages.
+                              = link_to "Customize now", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Targeted Bars", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                        td
+                          div.feature
+                            img src=charts_image_url
+                            div.content
+                              div.strong Better stats
+                              div.text See tips to improve your marketing.
+                              = link_to "Get better stats", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Stats", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                tr
+                  td.alignCenter style="font-size: 15px; padding: 15px 0; font-weight: lighter; color: #222222;"
+                    span style="line-height: 24px; height: 24px; margin-right: 10px;"
+                      | Get all the pro features for $15/mo
+                    = link_to "Start using Hello Bar Pro", edit_site_path(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Start", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+        - else # variant
+          tr
+            td.alignCenter colspan="3" style="font-size: 16px; font-family: HelveticaNeue-Bold;"
+              | Instantly get more customers with the same amount of traffic
+          tr
+            td colspan="3"
+              table cellpadding="0" cellspacing="0" style="height: 60px; width: 100%; border-collapse: collapse; border: 1px solid #EDEDED; margin-top: 25px;"
+                tr style="background-color: #f6f6f6;"
+                  td.alignCenter style="font-size: 14px; padding: 15px 0; font-family: HelveticaNeue;"
+                    | Upgrade to Hello Bar Pro and make your bars more effective:
+                tr
+                  td
+                    ul style="font-size: 12px; font-family: HelveticaNeue; width: 356px; position: relative; left: 70px; line-height: 20px;"
+                      li style="margin-top: 30px;" Bars without the Hello Bar logo
+                      li style="margin-top: 10px;" Unlimited bars
+                      li style="margin-top: 10px;" Target bars by device, location, URL, or traffice source
+                      li style="margin-top: 10px;" Custom thank-you messages
+                tr
+                  td.alignCenter style="font-size: 15px; padding: 25px 0 50px 0; font-weight: lighter; color: #222222;"
+                    span style="line-height: 8px; height: 24px; margin-right: 10px; font-family: HelveticaNeue-Bold"
+                    = link_to "Upgrade Your Hello Bar", edit_site_path(@site, upgrade: true, trk: Hello::TrackingParam.encode_tracker(@user.id, "Pro Start", "Email Template" => EmailDigestHelper.template_name(@site))), class: "button largeButton", style: "background-color: #4dd485; width: 200px; height: 36px; border-radius: 4px; font-size: 16px; line-height: 38px;"
   td

@@ -1,4 +1,18 @@
 $ ->
+  if window.location.search.indexOf("upgrade=true") != -1
+    options =
+      package:
+        is_trial: false
+        monthly_amount: "15"
+        payment_valid: true
+        schedule: "yearly"
+        type: "pro"
+        yearly_amount: "149"
+      site: window.site
+      source: "package-selected"
+
+    new PaymentModal(options).open()
+
   $("tr.see-more a").click (e) ->
     $(e.target).toggleClass("seeing-more")
     $("tr.more-top-performers").toggle()
