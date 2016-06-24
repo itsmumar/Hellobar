@@ -26,7 +26,7 @@ class UserOnboardingStatusSetter
   end
 
   def created_element!
-    create_status_if_able!(:created_element, "Install The Plugin Drip Campaign New Users Only 2016-03-28")
+    create_status_if_able!(:created_element)
   end
 
   def installed_script!
@@ -34,12 +34,7 @@ class UserOnboardingStatusSetter
   end
 
   def uninstalled_script!
-    last_sequence = (recent_status(:created_element) &&
-                    recent_status(:created_element).sequence_delivered_last) || nil
-
-    create_status_if_able!(:created_element,
-                           "Install The Plugin Drip Campaign New Users Only 2016-03-28",
-                           last_sequence)
+    create_status_if_able!(:created_element)
   end
 
   def bought_subscription!

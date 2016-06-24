@@ -130,7 +130,6 @@
   name: Install The Plugin Drip Campaign New Users Only 2016-03-28
   values:
     - original
-    - campaign
 -
   index: 21
   name: Upgrade Hello Bar Drip Campaign New Users Only 2016-03-28

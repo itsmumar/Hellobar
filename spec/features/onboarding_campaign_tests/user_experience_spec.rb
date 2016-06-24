@@ -73,24 +73,5 @@ feature "One User In all onboarding Campaigns" do
     scenario "the user does not receive email on day 3" do
       expect(email_received_a_number_of_days_after(user, start_date)).to eq([])
     end
-
-    scenario "the user receives the Install campaign email" do
-      {
-        4 => ["Drip Campaign: Install 1"],
-        5 => ["Drip Campaign: Install 2"],
-        6 => ["Drip Campaign: Install 3"],
-        7 => ["Drip Campaign: Install 4"],
-        8 => [],
-        9 => ["Drip Campaign: Install 5"],
-        10 => [],
-        11 => [],
-        12 => ["Drip Campaign: Install 6"],
-        13 => [],
-        14 => ["Drip Campaign: Install 7"],
-        15 => []
-      }.each do |index, email|
-        expect(email_received_a_number_of_days_after(user, start_date, index)).to eq(email)
-      end
-    end
   end
 end
