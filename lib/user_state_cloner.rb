@@ -16,6 +16,7 @@ class UserStateCloner
   end
 
   def save
+    ActiveRecord::Base.record_timestamps = false # use the DB timestamps
     user.save
     sites.each(&:save)
     upgrade_sites_to_pro(sites)
@@ -23,6 +24,7 @@ class UserStateCloner
     rules.each(&:save)
     site_elements.each(&:save!)
     payment_methods.each(&:save)
+    ActiveRecord::Base.record_timestamps = true # generate timestamps
   rescue ActiveRecord::RecordNotUnique
     Rails.logger.info "Rubocop is annoying and makes me do this."
   end

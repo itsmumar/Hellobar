@@ -127,16 +127,16 @@ You may need to fiddle with the `Capybara.default_wait_time` in
 Test site for both edge/staging: http://teampolymathic.github.io/hellobar_testing/
 
 
-**Edge:**  
-http://edge.hellobar.com/  
-user: edge-test@polymathic.me  
-pword: password  
+**Edge:**
+http://edge.hellobar.com/
+user: edge-test@polymathic.me
+pword: password
 site: teampolymathic.github.com
 
-**Staging:**  
-http://staging.hellobar.com/  
-user: staging-test@polymathic.me  
-pword: password  
+**Staging:**
+http://staging.hellobar.com/
+user: staging-test@polymathic.me
+pword: password
 site: teampolymathic.github.com
 
 **Production:**
