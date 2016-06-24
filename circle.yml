@@ -13,11 +13,12 @@ database:
     - bundle exec rake db:setup --trace
 
 test:
+  pre:
+    - bundle exec rubocop
   override:
     - RAILS_ENV=test bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
   post:
     - RAILS_ENV=test bundle exec rake teaspoon
-    - bundle exec rubocop
 
 deployment:
   designqa:
