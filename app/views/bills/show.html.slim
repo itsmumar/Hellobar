@@ -15,10 +15,10 @@ main
       strong To:
       div
         address
-          div= @bill.site.try(:url) || @site.try(:url)
+          div= @site.url
           br
           = @details.data["first_name"] + ' ' + @details.data["last_name"]
-          = bill_address_info(@bill, @details).html_safe
+          = bill_address_info(@site, @details).html_safe
     div.right
       strong Invoice:
       div Invoice #: #{@bill.id}
