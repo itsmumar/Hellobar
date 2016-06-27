@@ -3,13 +3,8 @@ require 'integration_helper'
 feature "User can sign up", js: true do
   after { devise_reset }
   before do
-    stub_out_get_ab_variations("Onboarding Limitted To Three Goals 2016-05-11") {"original"}
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
-    allow_any_instance_of(ApplicationController).
-      to receive(:get_ab_variation).
-      with("Sign Up Button 2016-03-17").
-      and_return('original')
   end
 
   scenario "through oauth" do
@@ -26,12 +21,6 @@ end
 
 feature "User can sign in", js: true do
   after { devise_reset }
-  before do
-    allow_any_instance_of(ApplicationController).
-      to receive(:get_ab_variation).
-      with(any_args).
-      and_return('original')
-  end
 
   scenario "through email and password" do
     user = create(:user)

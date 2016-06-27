@@ -104,6 +104,20 @@ HelloBar.ApplicationRoute = Ember.Route.extend
       else
         style.routeForwarding = if model.id then 'style.bar' else false
 
+    targeting = @controllerFor('targeting')
+    if model.id
+      switch model.preset_rule_name
+        when 'Everyone'
+          targeting.routeForwarding = 'targeting.everyone'
+        when 'Mobile Visitors'
+          targeting.routeForwarding = 'targeting.mobile'
+        when 'Homepage Visitors'
+          targeting.routeForwarding = 'targeting.homepage'
+        when 'Saved'
+          targeting.routeForwarding = 'targeting.saved'
+        else
+          targeting.routeForwarding = false
+
     # Subscribes to outside action used by interstitial
     # to route ember app through selection
 

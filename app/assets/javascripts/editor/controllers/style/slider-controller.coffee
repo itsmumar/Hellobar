@@ -1,4 +1,4 @@
-HelloBar.StyleSliderController = Ember.Controller.extend HelloBar.HasPlacement, HelloBar.HasTriggerOptions,
+HelloBar.StyleSliderController = Ember.Controller.extend HelloBar.HasPlacement, HelloBar.HasTriggerOptions, HelloBar.AfterConvertOptions,
 
   placementOptions: [
     {value: 'bottom-right', label: 'Bottom Right'}

@@ -21,7 +21,8 @@ HelloBar.Router.map ->
   @route 'text'
 
   @resource 'targeting', ->
-    @route 'immediately'
-    @route 'leaving'
-    @route 'scroll'
-    @route 'delay'
+    @route 'everyone'
+    @route 'mobile'
+    @route 'homepage'
+    @route 'custom'
+    @route 'saved'

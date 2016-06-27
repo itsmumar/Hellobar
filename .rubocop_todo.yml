@@ -160,6 +160,8 @@ Metrics/MethodLength:
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:
   Max: 175
+  Exclude:
+    - 'lib/hello/internal_analytics.rb'
 
 # Offense count: 1
 # Configuration parameters: CountKeywordArgs.

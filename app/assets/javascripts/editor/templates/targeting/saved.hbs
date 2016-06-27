@@ -1,0 +1,17 @@
+<div class="select-wrapper">
+  {{view Ember.Select
+    content=controllers.targeting.ruleOptions
+    value=model.rule_id
+    optionValuePath='content.id'
+    optionLabelPath='content.name'
+  }}
+</div>
+
+{{#if controllers.targeting.selectedRule}}
+  <p>
+    {{controllers.targeting.selectedRule.description}}.
+    {{#if controllers.targeting.selectedRule.editable}}
+      <a class="edit-rule" {{action 'openRuleModal' controllers.targeting.selectedRule}}>Edit.</a>
+    {{/if}}
+  </p>
+{{/if}}

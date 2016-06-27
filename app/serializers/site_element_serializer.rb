@@ -6,6 +6,7 @@ class SiteElementSerializer < ActiveModel::Serializer
 
     # text
     :headline, :caption, :link_text, :font_id, :thank_you_text, :email_placeholder, :name_placeholder,
+    :preset_rule_name,
 
     # colors
     :background_color, :border_color, :button_color, :link_color, :text_color,
@@ -38,6 +39,16 @@ class SiteElementSerializer < ActiveModel::Serializer
 
   def rule
     RuleSerializer.new(object.rule)
+  end
+
+  def preset_rule_name
+    return "" unless object.rule
+
+    if rule.editable
+      "Saved"
+    else
+      rule.name
+    end
   end
 
   def site

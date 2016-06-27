@@ -139,7 +139,7 @@ module Hello
 
     def get_ab_variation_or_nil(test_name, user = nil)
       return unless TESTS[test_name]
-      get_ab_variation(test_name, user = nil)
+      get_ab_variation(test_name, user)
     end
 
     def get_ab_variation(test_name, user = nil)

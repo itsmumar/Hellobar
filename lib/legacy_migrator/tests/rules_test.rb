@@ -17,7 +17,7 @@ describe "migration of legacy rules to goals" do
     legacy_site = LegacyMigrator::LegacySite.find(site.id)
 
     assert_equal 0, legacy_site.goals.count
-    assert_equal 1, site.rules.count
+    assert_equal 3, site.rules.count
   end
 
   it "creates a DateCondition if end_date is specified on goal" do
@@ -106,7 +106,7 @@ describe "migration of legacy rules to goals" do
 
   it "merges goals that have no conditions" do
     site = Site.find(2012)
-    assert_equal 1, site.rules.count
+    assert_equal 3, site.rules.count
     assert_equal "Everyone", site.rules.first.name
   end
 

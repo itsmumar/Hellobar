@@ -45,6 +45,7 @@ class SiteElement < ActiveRecord::Base
   validate :site_is_capable_of_creating_element, unless: :persisted?
   validate :redirect_has_url, if: :is_email?
   validate :has_thank_you_text, if: :is_email?
+  validate :subscription_for_custom_targeting
 
   scope :paused, -> { where(paused: true) }
   scope :active, -> { where(paused: false) }
@@ -246,6 +247,16 @@ class SiteElement < ActiveRecord::Base
       elsif read_attribute(:thank_you_text).blank?
         errors.add('custom_thank_you_text', 'cannot be blank')
       end
+    end
+  end
+
+  def has_custom_targeting?
+    rule && rule.conditions.any?
+  end
+
+  def subscription_for_custom_targeting
+    if has_custom_targeting? && !site.capabilities.custom_targeted_bars?
+      errors.add(:site, 'subscription does not support custom targeting. Upgrade subscription.')
     end
   end
 end

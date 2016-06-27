@@ -23,4 +23,31 @@ namespace :site do
       end
     end
   end
+
+  namespace :rules do
+    desc 'Make sure all sites have all of the default rule presets'
+    task :add_presets => :environment do |t, args|
+      Site.all.each do |site|
+        site.rules.defaults.each do |rule|
+          finder_params = {name: rule.name, editable: false}
+          rule.save! unless site.rules.find_by(finder_params)
+        end
+      end
+
+      invalid_sites = Site.joins(:rules).
+                           where("rules.editable = ?", false).
+                           group("sites.id").
+                           having("count(rules.id) != ?", Rule.defaults.size)
+
+      unless invalid_sites.to_a.size == 0
+        raise "All sites must have 3 default/un-editable rules"
+      end
+    end
+
+    desc 'Remove rule presents from all sites'
+    task :remove_specific_presets => :environment do |t, args|
+      Rule.where(name: "Mobile Visitors", editable: false).destroy_all
+      Rule.where(name: "Homepage Visitors", editable: false).destroy_all
+    end
+  end
 end

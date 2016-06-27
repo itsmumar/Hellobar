@@ -38,7 +38,7 @@ class UserMigrationController < ApplicationController
       site_hashes.each do |site_hash|
         Site.new(url: site_hash[:url], timezone: site_hash[:timezone]).tap do |site|
           site.save!
-          site.create_default_rule
+          site.create_default_rules
 
           SiteMembership.create!(site: site, user: user)
 

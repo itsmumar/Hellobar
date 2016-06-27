@@ -62,7 +62,7 @@ table.rules-wrapper
         td.temporary-block.suggestion-block colspan='9'
           - if rule.site_elements.empty?
             = link_to "Create a new Hello Bar", new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}"), "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
-          - elsif @rules.count == 1 && !@site.has_script_installed?
+          - elsif !@site.has_custom_rules? && !@site.has_script_installed?
             .icon-wrapper
               i.icon-alert
             div
