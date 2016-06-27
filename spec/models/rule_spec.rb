@@ -1,29 +1,62 @@
 require 'spec_helper'
 
 describe Rule do
-  describe ".default" do
-    it "creates a new unsaved rule" do
-      rule = Rule.default
+  describe ".defaults" do
+    let(:defaults)         { Rule.defaults }
+    let(:everyone)         { defaults[0] }
+    let(:mobile)           { defaults[1] }
+    let(:homepage)         { defaults[2] }
 
-      expect(rule).to be_new_record
+    it "creates new unsaved rules" do
+      defaults.each do |rule|
+        expect(rule).to be_new_record
+      end
     end
 
-    it "sets name to Everyone" do
-      rule = Rule.default
-
-      expect(rule.name).to eq("Everyone")
+    it "sets the default rule names" do
+      expect(everyone.name).to eq("Everyone")
+      expect(mobile.name).to eq("Mobile Visitors")
+      expect(homepage.name).to eq("Homepage Visitors")
     end
 
     it "matches all" do
-      rule = Rule.default
-
-      expect(rule.match).to eq(Rule::MATCH_ON[:all])
+      defaults.each do |rule|
+        expect(rule.match).to eq(Rule::MATCH_ON[:all])
+      end
     end
 
     it "is not editable" do
-      rule = Rule.default
+      defaults.each do |rule|
+        expect(rule.editable).to be_false
+      end
+    end
 
-      expect(rule.editable).to be_false
+    describe "mobile rule" do
+      let(:mobile_condition) { mobile.conditions[0]}
+
+      it "sets conditions" do
+        expect(mobile.conditions.size).to eq(1)
+      end
+
+      it "sets the mobile rule's condition to filter for mobile traffic" do
+        expect(mobile_condition.segment).to eq("DeviceCondition")
+        expect(mobile_condition.operand).to eq("is")
+        expect(mobile_condition.value).to eq("mobile")
+      end
+    end
+
+    describe "homepage rule" do
+      let(:homepage_condition) { homepage.conditions[0]}
+
+      it "sets conditions" do
+        expect(homepage.conditions.size).to eq(1)
+      end
+
+      it "sets the mobile rule's condition to filter for mobile traffic" do
+        expect(homepage_condition.segment).to eq("UrlPathCondition")
+        expect(homepage_condition.operand).to eq("is")
+        expect(homepage_condition.value).to eq(["/"])
+      end
     end
   end
 

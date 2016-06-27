@@ -50,7 +50,6 @@
     .step-link-block
       opacity: 1
       display: block
-      overflow: hidden
       position: relative
       max-height: 5.5em
       margin-bottom: 0.67em
@@ -94,6 +93,7 @@
         opacity: 0
         max-height: 0
         margin-bottom: 0
+        overflow: hidden
 
       .step-link-block.active
         margin-bottom: 0
@@ -216,6 +216,78 @@
   /*-----------  Step: Targeting  -----------*/
 
   .targeting.ember-view
+
+    .step-link-wrapper
+
+      &.is-selected
+        border: none
+
+        .saved-rule:not(.active)
+          padding-top: 0
+          border-top: 0
+
+      .change-selection
+        margin-top: 10px
+
+      .substep
+
+        .select-wrapper, p
+          margin-top: 0
+          width: 82%
+          float: right
+
+    .step-link-block
+      max-height: none
+
+      &.saved-rule:not(.active)
+        padding-top: 25px
+        border-top: 1px solid $grayLightest
+
+      &.can-target
+
+        .paid
+          display: none
+
+        .left-condense
+
+          .left
+            max-width: 100%
+
+      i
+        color: $grayLight
+        font-size: 2em
+
+        &.hellobar-icon-people
+          font-size: 40px
+          left: -5px
+
+        &.hellobar-icon-mobile-phone
+          font-size: 34px
+          left: 2px
+
+        &.hellobar-icon-saved-segment
+          font-size: 34px
+
+      p
+        padding-right: 10%
+
+      .paid
+        font-weight: 700
+        line-height: 8px
+        font-size: 10px
+        padding: 5px 9px
+        margin-left: 10px
+
+      .left-condense
+
+        .left
+          max-width: 50%
+          display: inline-block
+
+        .paid
+          margin-left: 0
+          position: relative
+          bottom: 18px
 
     .substep
       margin-top: 0.33em

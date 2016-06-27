@@ -5,6 +5,10 @@ Made with love.
 
 ## Development
 
+install dependancies (fontforge and ttfautohint support local compilation of font files)
+
+`brew install fontforge ttfautohint eot-utils`
+
 Bundle install all the gems
 
 `bundle install`
@@ -22,6 +26,10 @@ You'll need to manually add oauth related account keys to settings.yml to be abl
 Let rake setup and migrate all your databases
 
 `rake db:setup`
+
+### Front End
+
+To add a new icon to the custom icon font file - add the icon svg file to app/assets/icons and run the icons:compile rake task.
 
 ## Workflow
 

@@ -160,3 +160,9 @@
   values:
     - original
     - variant
+-
+  index: 25
+  name: Targeting UI Variation 2016-06-13
+  values:
+    - original
+    - variant

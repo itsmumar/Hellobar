@@ -13,13 +13,13 @@ describe Site do
     expect(@site.owners.first).to eq(users(:joey))
   end
 
-  describe "#create_default_rule" do
-    it "creates a rule for the site" do
+  describe "#create_default_rules" do
+    it "creates rules for the site" do
       site = sites(:horsebike)
 
       expect {
-        site.create_default_rule
-      }.to change { site.rules.count }.by(1)
+        site.create_default_rules
+      }.to change { site.rules.count }.by(3)
     end
   end
 
