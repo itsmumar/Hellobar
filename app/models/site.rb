@@ -214,10 +214,17 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def create_default_rule
-    rule = rules.default
-    rule.save!
-    rule
+  def create_default_rules
+    default_rules = rules.defaults
+    default_rules.each do |rule|
+      rule.save!
+    end
+
+    default_rules.first
+  end
+
+  def has_custom_rules?
+    rules.map(&:editable).any?
   end
 
   def current_subscription

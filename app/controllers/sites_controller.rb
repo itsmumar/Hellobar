@@ -151,7 +151,7 @@ class SitesController < ApplicationController
       Analytics.track(*current_person_type_and_id, "Created Site", {site_id: @site.id})
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
-      @site.create_default_rule
+      @site.create_default_rules
 
       redirect_to new_site_site_element_path(@site)
     else
@@ -170,7 +170,7 @@ class SitesController < ApplicationController
       Analytics.track(*current_person_type_and_id, "Created Site", {site_id: @site.id})
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
-      @site.create_default_rule
+      @site.create_default_rules
 
       redirect_to new_site_site_element_path(@site)
     else

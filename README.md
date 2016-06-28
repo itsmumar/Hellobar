@@ -5,6 +5,10 @@ Made with love.
 
 ## Development
 
+install dependancies (fontforge and ttfautohint support local compilation of font files)
+
+`brew install fontforge ttfautohint eot-utils`
+
 Bundle install all the gems
 
 `bundle install`
@@ -22,6 +26,10 @@ You'll need to manually add oauth related account keys to settings.yml to be abl
 Let rake setup and migrate all your databases
 
 `rake db:setup`
+
+### Front End
+
+To add a new icon to the custom icon font file - add the icon svg file to app/assets/icons and run the icons:compile rake task.
 
 ## Workflow
 
@@ -127,16 +135,16 @@ You may need to fiddle with the `Capybara.default_wait_time` in
 Test site for both edge/staging: http://teampolymathic.github.io/hellobar_testing/
 
 
-**Edge:**  
-http://edge.hellobar.com/  
-user: edge-test@polymathic.me  
-pword: password  
+**Edge:**
+http://edge.hellobar.com/
+user: edge-test@polymathic.me
+pword: password
 site: teampolymathic.github.com
 
-**Staging:**  
-http://staging.hellobar.com/  
-user: staging-test@polymathic.me  
-pword: password  
+**Staging:**
+http://staging.hellobar.com/
+user: staging-test@polymathic.me
+pword: password
 site: teampolymathic.github.com
 
 **Production:**

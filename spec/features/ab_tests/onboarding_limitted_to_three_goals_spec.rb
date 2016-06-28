@@ -2,7 +2,6 @@ require 'integration_helper'
 
 feature "Onboarding limitted to three goals ab test", js: true do
   before do
-    stub_out_get_ab_variations("Forced Email Path 2016-03-28") {"original"}
     user = create(:user)
     @site = user.sites.create(url: random_uniq_url)
     visit new_user_session_path

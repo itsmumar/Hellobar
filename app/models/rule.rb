@@ -22,8 +22,15 @@ class Rule < ActiveRecord::Base
                        },
                        if: "priority.present?"
 
-  def self.default
-    Rule.new(name: "Everyone", match: MATCH_ON[:all], editable: false)
+  def self.defaults
+    everyone = Rule.new(name: "Everyone",          match: MATCH_ON[:all], editable: false)
+    mobile =   Rule.new(name: "Mobile Visitors",   match: MATCH_ON[:all], editable: false)
+    homepage = Rule.new(name: "Homepage Visitors", match: MATCH_ON[:all], editable: false)
+
+    mobile.conditions.build segment: 'DeviceCondition',  operand: :is, value: "mobile"
+    homepage.conditions.build segment: 'UrlPathCondition', operand: :is, value: ["/"]
+
+    [everyone, mobile, homepage]
   end
 
   def self.create_from_segment(site, segment)

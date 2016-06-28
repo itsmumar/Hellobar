@@ -11,7 +11,7 @@ describe  Hello::DataAPI do
 
   describe ".lifetime_totals_by_type" do
     let(:site) { sites(:zombo) }
-    let(:call_element) { create(:site_element, :click_to_call, rule: site.rules.first) }
+    let(:call_element) { create(:site_element, :click_to_call, rule: site.rules.last) }
 
     it "rolls up lifetime totals by site element type" do
       allow(Hello::DataAPI).to receive(:lifetime_totals).and_return({

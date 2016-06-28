@@ -156,7 +156,7 @@ describe SitesController do
         post :create, :site => {:url => "newzombo.com"}
 
         site = @user.sites.last
-        site.rules.size.should == 1
+        site.rules.size.should == 3
       end
 
       it "redirects to the editor" do

@@ -196,7 +196,7 @@ describe ScriptGenerator do
     context "site element has a theme" do
       use_theme_fixtures
       before do
-        create(:site_element, rule: site.rules.first, theme_id: 'beige-test')
+        create(:site_element, rule: site.rules.last, theme_id: 'beige-test')
       end
 
       it 'includes the container theme css' do

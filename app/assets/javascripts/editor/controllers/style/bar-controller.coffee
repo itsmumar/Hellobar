@@ -1,4 +1,4 @@
-HelloBar.StyleBarController = Ember.Controller.extend HelloBar.HasPlacement, HelloBar.HasTriggerOptions,
+HelloBar.StyleBarController = Ember.Controller.extend HelloBar.HasPlacement, HelloBar.HasTriggerOptions, HelloBar.AfterConvertOptions,
 
   sizeOptions: [
     {value: 'large', label: 'Large - 50px height, 17px font'}

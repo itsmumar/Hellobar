@@ -2,12 +2,7 @@ class UserOnboardingCampaign
   attr_reader :user, :onboarding_status, :sites, :onboarding_status_name
 
   def self.onboarding_campaign_classes
-    [
-      ConfigureYourBarCampaign,
-      CreateABarCampaign,
-      InstallThePluginCampaign,
-      UpgradeHelloBarCampaign
-    ]
+    [ConfigureYourBarCampaign, CreateABarCampaign]
   end
 
   def self.deliver_all_onboarding_campaign_email!
