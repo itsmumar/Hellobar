@@ -104,7 +104,7 @@ class User < ActiveRecord::Base
   end
 
   def most_viewed_site_element
-    self.site_elements.sort_by {|site_element| site_element.total_views }.reverse.first
+    self.site_elements.sort_by {|site_element| site_element.total_views }.last
   end
 
   def most_viewed_site_element_subtype

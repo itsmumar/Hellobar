@@ -3,7 +3,7 @@ class ExitIntentController < ApplicationController
 
   def update
     user = User.find(params[:user_id])
-    user.update_attributes(exit_intent_modal_last_shown_at: Time.zone.now) if user
+    user.update_attributes(exit_intent_modal_last_shown_at: Time.zone.now)
     respond_to do |format|
       format.js { render nothing: true }
     end
