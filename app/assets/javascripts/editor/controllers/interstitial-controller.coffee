@@ -4,10 +4,10 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
 
   showInterstitial: Ember.computed.alias('controllers.application.showInterstitial')
   interstitialType: Ember.computed.alias('controllers.application.interstitialType')
-  forceContacts: HB_EMAIL_FLOW_TEST == 'force'
+  forceContacts: (HB_EMAIL_FLOW_TEST == 'force')
 
   monthlyPageviews: ( ->
-    @get('model.site.monthly_pageviews')
+    @get('model.site.monthly_pageviews').toLocaleString()
   ).property()
 
   hasEnoughSubscribers: ( ->
@@ -15,7 +15,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
   ).property()
 
   calculatedSubscribers: ( ->
-    @get('monthlyPageviews') * 0.005
+    Math.round(@get('monthlyPageviews') * 0.005).toLocaleString()
   ).property()
 
   setDefaults: ( ->
@@ -120,6 +120,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
       transitionToEditor()
 
     closeEditor: ->
+      console.log 'here'
       @setProperties(
         'interstitialType'         : null
         'model.element_subtype'    : null

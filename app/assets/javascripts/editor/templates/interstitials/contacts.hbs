@@ -2,29 +2,32 @@
   <h5>Grow Your Mailing List</h5>
 </header>
 
-<div class="goal-wrapper template-form">
-  <i class="large-icon icon-contacts"></i>
+<div class="interstitial-side-by-side">
+  <div class="goal-wrapper template-form">
+    <i class="large-icon icon-contacts"></i>
 
-  <h6>What should your Hello Bar say?</h6>
-  {{view Ember.TextField value=model.headline placeholder="Join our mailing list to stay up to date on our upcoming events" maxlength=255}}
+    <h6>What should your Hello Bar say?</h6>
+    {{view Ember.TextField value=model.headline placeholder="Join our mailing list to stay up to date on our upcoming events" maxlength=255}}
 
-  <h6>What should the button say?</h6>
-  {{view Ember.TextField value=model.link_text placeholder="Subscribe" maxlength=255}}
+    <h6>What should the button say?</h6>
+    {{view Ember.TextField value=model.link_text placeholder="Subscribe" maxlength=255}}
 
-  <div class="step-container">
-    <button {{bind-attr class=":high-priority :button :cancel-button :cancel forceContacts:invisible"}} {{action 'closeEditor'}}>Cancel</button>
-    <button class="button save-editor" {{action 'closeInterstitial'}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
+    <div class="step-container">
+      <button {{bind-attr class=":high-priority :button :cancel-button :cancel forceContacts:invisible"}} {{action 'closeEditor'}}>Cancel</button>
+      <button class="button save-editor" {{action 'closeInterstitial'}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
+    </div>
   </div>
-</div>
 
-<aside>
-  {{#if hasEnoughSubscribers}}
-    <small>Hey! Did you know that with your {{monthlyPageviews}} views per month, Hello Bar can typically get you:</small>
-    <h5>{{calculatedSubscribers}} new subscribers each month</h5>
-  {{else}}
-    <small>Hey! Did you know that Hello Bar typically converts 0.5% of your views to email subscribers? That can really add up!</small>
-  {{/if}}
-</aside>
+  <aside>
+    {{#if hasEnoughSubscribers}}
+      <small>Hey! Did you know that with your {{monthlyPageviews}} views per month, Hello Bar can typically get you:</small>
+      <strong>{{calculatedSubscribers}} new subscribers each month</strong>
+    {{else}}
+      <small>Hey! Did you know that Hello Bar typically converts 0.5% of your views to email subscribers?</small>
+      <strong>That can really add up!</strong>
+    {{/if}}
+  </aside>
+</div>
 
 <footer>
   <p>
