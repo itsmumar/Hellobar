@@ -4,7 +4,9 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
 
   showInterstitial: Ember.computed.alias('controllers.application.showInterstitial')
   interstitialType: Ember.computed.alias('controllers.application.interstitialType')
+
   forceContacts: (HB_EMAIL_FLOW_TEST == 'force')
+  showEmailVolume: (HB_ONBOARDING_EMAIL_VOLUME == 'messaging')
 
   monthlyPageviews: ( ->
     @get('model.site.monthly_pageviews').toLocaleString()

@@ -18,15 +18,17 @@
     </div>
   </div>
 
-  <aside>
-    {{#if hasEnoughSubscribers}}
-      <small>Hey! Did you know that with your {{monthlyPageviews}} views per month, Hello Bar can typically get you:</small>
-      <strong>{{calculatedSubscribers}} new subscribers each month</strong>
-    {{else}}
-      <small>Hey! Did you know that Hello Bar typically converts 0.5% of your views to email subscribers?</small>
-      <strong>That can really add up!</strong>
-    {{/if}}
-  </aside>
+  {{#if showEmailVolume}}
+    <aside>
+      {{#if hasEnoughSubscribers}}
+        <small>Hey! Did you know that with your {{monthlyPageviews}} views per month, Hello Bar can typically get you:</small>
+        <strong>{{calculatedSubscribers}} new subscribers each month</strong>
+      {{else}}
+        <small>Hey! Did you know that Hello Bar typically converts 0.5% of your views to email subscribers?</small>
+        <strong>That can really add up!</strong>
+      {{/if}}
+    </aside>
+  {{/if}}
 </div>
 
 <footer>
