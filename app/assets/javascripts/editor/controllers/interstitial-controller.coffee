@@ -94,7 +94,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
       when 'call'
         return Ember.isEmpty(@get('model.headline'))
         return Ember.isEmpty(@get('model.link_text'))
-        return !isValidNumber(@get('controllers.application.phone_number'), @get('model.phone_country_code'));
+        return !isValidNumber(@get('controllers.application.phone_number'), @get('model.phone_country_code'))
       when 'contacts'
         return Ember.isEmpty(@get('model.headline'))
         return Ember.isEmpty(@get('model.link_text'))
@@ -122,7 +122,6 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
       transitionToEditor()
 
     closeEditor: ->
-      console.log 'here'
       @setProperties(
         'interstitialType'         : null
         'model.element_subtype'    : null
