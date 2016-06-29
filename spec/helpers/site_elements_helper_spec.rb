@@ -120,6 +120,7 @@ describe SiteElementsHelper do
       @bars = {
         :traffic =>                 SiteElement.new(:element_subtype => "traffic"),
         :email =>                   SiteElement.new(:element_subtype => "email"),
+        :announcement =>            SiteElement.new(:element_subtype => "announcement"),
         :tweet_on_twitter =>        SiteElement.new(:element_subtype => "social/tweet_on_twitter"),
         :follow_on_twitter =>       SiteElement.new(:element_subtype => "social/follow_on_twitter"),
         :like_on_facebook =>        SiteElement.new(:element_subtype => "social/like_on_facebook"),
@@ -134,6 +135,7 @@ describe SiteElementsHelper do
     it "returns the correct units for all bar types" do
       site_element_activity_units(@bars[:traffic]).should == "click"
       site_element_activity_units(@bars[:email]).should == "email"
+      site_element_activity_units(@bars[:announcement]).should == "view"
       site_element_activity_units(@bars[:tweet_on_twitter]).should == "tweet"
       site_element_activity_units(@bars[:follow_on_twitter]).should == "follower"
       site_element_activity_units(@bars[:like_on_facebook]).should == "like"
@@ -147,6 +149,7 @@ describe SiteElementsHelper do
     it "optionally adds an appropriate verb" do
       site_element_activity_units(@bars[:traffic], :verb => true).should == "click"
       site_element_activity_units(@bars[:email], :verb => true).should == "email collected"
+      site_element_activity_units(@bars[:announcement], :verb => true).should == "view"
       site_element_activity_units(@bars[:tweet_on_twitter], :verb => true).should == "tweet"
       site_element_activity_units(@bars[:follow_on_twitter], :verb => true).should == "follower gained"
       site_element_activity_units(@bars[:like_on_facebook], :verb => true).should == "like"
@@ -161,6 +164,7 @@ describe SiteElementsHelper do
     it "pluralizes correctly with verb" do
       site_element_activity_units(@bars[:traffic], :plural => true, :verb => true).should == "clicks"
       site_element_activity_units(@bars[:email], :plural => true, :verb => true).should == "emails collected"
+      site_element_activity_units(@bars[:announcement], :plural => true, :verb => true).should == "views"
       site_element_activity_units(@bars[:tweet_on_twitter], :plural => true, :verb => true).should == "tweets"
       site_element_activity_units(@bars[:follow_on_twitter], :plural => true, :verb => true).should == "followers gained"
       site_element_activity_units(@bars[:like_on_facebook], :plural => true, :verb => true).should == "likes"
@@ -175,6 +179,7 @@ describe SiteElementsHelper do
     it "optionally pluralizes the units" do
       site_element_activity_units(@bars[:traffic], :plural => true).should == "clicks"
       site_element_activity_units(@bars[:email], :plural => true).should == "emails"
+      site_element_activity_units(@bars[:announcement], :plural => true).should == "views"
       site_element_activity_units(@bars[:tweet_on_twitter], :plural => true).should == "tweets"
       site_element_activity_units(@bars[:follow_on_twitter], :plural => true).should == "followers"
       site_element_activity_units(@bars[:like_on_facebook], :plural => true).should == "likes"
