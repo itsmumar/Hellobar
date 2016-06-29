@@ -12,12 +12,10 @@ RSpec.configure do |config|
   OmniAuth.config.test_mode = true
 
   config.before(:each) do
-    # allow us to register which get_ab_variation calls we stubbing,
-    # let the rest of the calls pass through to ApplicationController untouched
     allow_any_instance_of(ApplicationController).to receive(:get_ab_variation).and_call_original
     stub_out_get_ab_variations("Targeting UI Variation 2016-06-13") {"original"}
     stub_out_get_ab_variations("Onboarding Limitted To Three Goals 2016-05-11") {"original"}
-    sub_out_get_ab_variations("Onboarding Email Volume 2016-06-28") { "original" }
+    stub_out_get_ab_variations("Onboarding Email Volume 2016-06-28") { "original" }
 
     allow_any_instance_of(SiteSerializer).
       to receive(:monthly_pageviews).and_return(nil)
