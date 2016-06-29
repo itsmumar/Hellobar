@@ -79,6 +79,8 @@ module SiteElementsHelper
         {:unit => "email", :verb => "collected"}
       when "call"
         {:unit => "call"}
+      when "announcement"
+        {:unit => "view"}
       when "social/tweet_on_twitter"
         {:unit => "tweet"}
       when "social/follow_on_twitter"
@@ -93,6 +95,8 @@ module SiteElementsHelper
         {:unit => "pin"}
       when "social/follow_on_pinterest"
         {:unit => "follower", :verb => "gained"}
+      else
+        raise "#{element.element_subtype} not configured in this helper"
       end
     end
     unit = units.uniq.size == 1 ? units.first[:unit] : "conversion"
