@@ -29,6 +29,13 @@ describe GoogleAnalytics, "#find_account_by_url" do
 
     expect(service.find_account_by_url("www.site.com")).to eql(nil)
   end
+
+  it "returns nil if the user doesnt have a Google Analytics account" do
+    service = GoogleAnalytics.new
+    allow(service.analytics).to receive(:list_account_summaries).and_raise(Google::Apis::ClientError.new("insufficientPermissions: User does not have any Google Analytics account."))
+
+    expect(service.find_account_by_url("www.site.com")).to eql(nil)
+  end
 end
 
 describe GoogleAnalytics, "#get_latest_pageviews" do

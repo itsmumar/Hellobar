@@ -9,7 +9,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
   showEmailVolume: (HB_ONBOARDING_EMAIL_VOLUME == 'messaging')
 
   monthlyPageviews: ( ->
-    @get('model.site.monthly_pageviews').toLocaleString()
+    (@get('model.site.monthly_pageviews') || "").toLocaleString()
   ).property()
 
   hasEnoughSubscribers: ( ->
