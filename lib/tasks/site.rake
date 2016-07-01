@@ -27,20 +27,29 @@ namespace :site do
   namespace :rules do
     desc 'Make sure all sites have all of the default rule presets'
     task :add_presets => :environment do |t, args|
-      Site.all.each do |site|
-        site.rules.defaults.each do |rule|
-          finder_params = {name: rule.name, editable: false}
-          rule.save! unless site.rules.find_by(finder_params)
-        end
+
+      sites_without_mobile_rule = Site.joins("LEFT OUTER JOIN rules ON rules.site_id = sites.id AND rules.name = 'Mobile Visitors'").
+                                       where("rules.id IS NULL")
+
+      sites_without_mobile_rule.find_each do |site|
+        # disable script generation while adding rule presets to sites
+        def site.generate_script; nil; end # rubocop:disable Style/SingleLineMethods
+
+        mobile_rule = site.rules.defaults[1]
+        finder_params = {name: mobile_rule.name, editable: false}
+        mobile_rule.save! unless site.rules.find_by(finder_params)
       end
 
-      invalid_sites = Site.joins(:rules).
-                           where("rules.editable = ?", false).
-                           group("sites.id").
-                           having("count(rules.id) != ?", Rule.defaults.size)
+      sites_without_homepage_rule = Site.joins("LEFT OUTER JOIN rules ON rules.site_id = sites.id AND rules.name = 'Homepage Visitors'").
+                                         where("rules.id IS NULL")
 
-      unless invalid_sites.to_a.size == 0
-        raise "All sites must have 3 default/un-editable rules"
+      sites_without_homepage_rule.find_each do |site|
+        # disable script generation while adding rule presets to sites
+        def site.generate_script; nil; end # rubocop:disable Style/SingleLineMethods
+
+        homepage_rule = site.rules.defaults[2]
+        finder_params = {name: homepage_rule.name, editable: false}
+        homepage_rule.save! unless site.rules.find_by(finder_params)
       end
     end
 
