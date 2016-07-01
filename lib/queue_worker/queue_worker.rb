@@ -1,5 +1,6 @@
 class QueueWorker
   STAGES = %w(edge staging production designqa)
+  VIEW_ATTRIBUTES = %w(ApproximateNumberOfMessages ApproximateNumberOfMessagesDelayed DelaySeconds)
   LOG_FILE = File.join(Rails.root, "log", "queue_worker.log")
 
   module Delay
@@ -21,6 +22,25 @@ class QueueWorker
       else
         QueueWorker.send_sqs_message(body, nil, queue)
       end
+    end
+  end
+
+  def self.queue_attributes(queue_name_filter=nil)
+    sqs = AWS::SQS.new(access_key_id: Hellobar::Settings[:aws_access_key_id], secret_access_key: Hellobar::Settings[:aws_secret_access_key])
+
+    queue_name_filter ||= Hellobar::Settings[:main_queue]
+    queues = filtered_queues(sqs, queue_name_filter)
+
+    queues.collect do |queue|
+      sqs.client.get_queue_attributes(queue_url: queue.url, attribute_names: VIEW_ATTRIBUTES)
+    end
+  end
+
+  def self.filtered_queues(sqs_interface, queue_name_filter)
+    raise "requires an instance of AWS::SQS" unless sqs_interface.is_a?(AWS::SQS)
+
+    sqs_interface.queues.select do |queue|
+      queue.url.split('/').last.include?(queue_name_filter)
     end
   end
 
