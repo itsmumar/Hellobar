@@ -153,8 +153,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
       # If the subroute was a subcategory of social, we have to trigger the transition
       # now so that when they drop into the editor they'll be in the right category
 
-      if subroute == 'facebook'
-        @transitionTo("settings.social")
+      @replaceWith("settings.social") if subroute == 'facebook'
 
   #-----------  Actions  -----------#
 
