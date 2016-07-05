@@ -148,10 +148,14 @@ module Hello
       value_index, status = get_ab_variation_index_without_setting(test_name, user)
       value = nil
 
+      user ||= current_user if defined?(current_user)
+
       if status == :new
         if defined?(cookies)
           cookie_value = set_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index], value_index)
           cookies.permanent[ab_test_cookie_name.to_sym] = cookie_value
+        elsif user.blank?
+          raise "Cookies or user must be present for A/B test"
         end
 
         # Get the value

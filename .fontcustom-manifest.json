@@ -1,7 +1,7 @@
 {
   "checksum": {
-    "previous": "e676a8bda1a97121d165c2025a53c5ddb23dfa2eb2b42c5c1027c74946b7b96e",
-    "current": "e676a8bda1a97121d165c2025a53c5ddb23dfa2eb2b42c5c1027c74946b7b96e"
+    "previous": "9d02f96226873c2e0194e2a60c87eb62e5b09b4e910bfdb658dc8c9c03d62c02",
+    "current": "9d02f96226873c2e0194e2a60c87eb62e5b09b4e910bfdb658dc8c9c03d62c02"
   },
   "fonts": [
     "app/assets/fonts/hellobar-icons.ttf",
@@ -29,6 +29,10 @@
     "settings-knobs": {
       "codepoint": 61700,
       "source": "app/assets/icons/settings-knobs.svg"
+    },
+    "trophy": {
+      "codepoint": 61701,
+      "source": "app/assets/icons/trophy.svg"
     }
   },
   "options": {
