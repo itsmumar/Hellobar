@@ -3,7 +3,7 @@ FactoryGirl.define do
     rule
     type "Bar"
     element_subtype "announcement"
-
+    
     trait :click_to_call do
       element_subtype "call"
       phone_number Faker::PhoneNumber.cell_phone

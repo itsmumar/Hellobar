@@ -48,14 +48,16 @@ module Hello
     # ================================================================
     # ==      REGISTER YOUR TESTS AT: lib/hello/ab_tests.yml        ==
     # ================================================================
-    hash = YAML.load(File.read("lib/hello/ab_tests.yml"))
-    hash.each do |registered_test|
-      name            = registered_test["name"]
-      values          = registered_test["values"]
-      index           = registered_test["index"]
-      weights         = registered_test["weights"].present? ? registered_test["weights"] : []
-      user_start_date = registered_test["user_start_date"]
-      register_test(name, values, index, weights, user_start_date)
+    unless Rails.env.test?
+      hash = YAML.load(File.read("lib/hello/ab_tests.yml"))
+      hash.each do |registered_test|
+        name            = registered_test["name"]
+        values          = registered_test["values"]
+        index           = registered_test["index"]
+        weights         = registered_test["weights"].present? ? registered_test["weights"] : []
+        user_start_date = registered_test["user_start_date"]
+        register_test(name, values, index, weights, user_start_date)
+      end
     end
 
     def ab_test_cookie_name
