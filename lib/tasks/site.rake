@@ -27,14 +27,20 @@ namespace :site do
   namespace :rules do
     desc 'Make sure all sites have all of the default rule presets'
     task :add_presets => :environment do |t, args|
+      # disable script generation while adding rule presets to sites
+      # removing the method from site instances does not work, saving rules must be instantiating new Site objects
+      class Site
+        def do_not_generate_script(options = {})
+          "skipping script generation"
+        end
+        alias_method :original_generate_script, :generate_script
+        alias_method :generate_script, :do_not_generate_script
+      end
 
       sites_without_mobile_rule = Site.joins("LEFT OUTER JOIN rules ON rules.site_id = sites.id AND rules.name = 'Mobile Visitors'").
                                        where("rules.id IS NULL")
 
       sites_without_mobile_rule.find_each do |site|
-        # disable script generation while adding rule presets to sites
-        def site.generate_script; nil; end # rubocop:disable Style/SingleLineMethods
-
         mobile_rule = site.rules.defaults[1]
         finder_params = {name: mobile_rule.name, editable: false}
         mobile_rule.save! unless site.rules.find_by(finder_params)
@@ -44,12 +50,15 @@ namespace :site do
                                          where("rules.id IS NULL")
 
       sites_without_homepage_rule.find_each do |site|
-        # disable script generation while adding rule presets to sites
-        def site.generate_script; nil; end # rubocop:disable Style/SingleLineMethods
-
         homepage_rule = site.rules.defaults[2]
         finder_params = {name: homepage_rule.name, editable: false}
         homepage_rule.save! unless site.rules.find_by(finder_params)
+      end
+
+      # Enable script generateion again
+      # Class objects are not reloaded between spec runs
+      class Site
+        alias_method :generate_script, :original_generate_script
       end
     end
 
