@@ -42,6 +42,7 @@ feature "Manage Bars", js: true do
       create(:site_element, rule: @rule)
 
       visit site_site_elements_path(@site)
+      wait_for_ajax
       expect(page).to have_content("A/B test a new bar for this rule")
     end
   end
