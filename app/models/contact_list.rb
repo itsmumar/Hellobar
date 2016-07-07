@@ -29,7 +29,6 @@ class ContactList < ActiveRecord::Base
   validate :embed_code_valid?, :if => :embed_code?
   validate :webhook_url_valid?, :if => :webhook?
 
-  after_save :sync, :if => :data_changed?
   after_save :notify_identity, :if => :identity_id_changed?
   after_destroy :notify_identity
 
