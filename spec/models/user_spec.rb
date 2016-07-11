@@ -99,6 +99,45 @@ describe User do
     end
   end
 
+  describe '#can_view_exit_intent_modal?' do
+    let!(:user) { create(:user) }
+    let!(:site) { create(:site, :with_rule) }
+    let!(:site_membership) { create(:site_membership, site: site, user: user) }
+    let!(:site_element) { create(:site_element, rule: site.rules.first) }
+
+    it 'returns false if user has paying subscription' do
+      site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
+      expect(user.can_view_exit_intent_modal?).to eq(false)
+    end
+
+    it 'returns false if user has viewed modal within 30 days' do
+      user.update_attributes(exit_intent_modal_last_shown_at: 29.days.ago)
+      expect(user.can_view_exit_intent_modal?).to eq(false)
+    end
+
+    it 'returns true if user doesnt have paying subscription and hasnt viewed within 30 days' do
+      user.update_attributes(exit_intent_modal_last_shown_at: 31.days.ago)
+      expect(user.can_view_exit_intent_modal?).to eq(true)
+    end
+  end
+
+  describe '#most_viewed_site_element' do
+    let!(:user) { create(:user) }
+    let!(:site) { create(:site, :with_rule) }
+    let!(:site_membership) { create(:site_membership, site: site, user: user) }
+    let!(:site_element) { create(:site_element, rule: site.rules.first) }
+
+    before do
+      site_element.stub(total_views: 5)
+      @site_element_w_more_views = create(:site_element, rule: site.rules.first)
+      @site_element_w_more_views.stub(total_views: 10)
+    end
+
+    it 'returns the site element that has the most views' do
+      expect(user.most_viewed_site_element.id).to eq(@site_element_w_more_views.id)
+    end
+  end
+
   describe '#new?' do
     it 'returns true if the user is logging in for the first time and does not have any bars' do
       user = create(:user)

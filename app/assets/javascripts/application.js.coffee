@@ -26,6 +26,7 @@
 
 #= require site_edit
 #= require contact_lists
+#= require exit_intent
 #= require summary
 #= require improve
 #= require sites_controller
