@@ -7,7 +7,7 @@ html
 
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
- 
+
     = render "shared/hellobar_script"
 
     = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
@@ -43,6 +43,7 @@ html
     = render "shared/modals/payment_confirmation"
     = render "shared/modals/account_prompt"
     = render "shared/modals/add_team_member"
+    = render "shared/modals/exit_intent"
     = render "shared/qualaroo"
 
     - if show_account_prompt? && !impersonated_user
