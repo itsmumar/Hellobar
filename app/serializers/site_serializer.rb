@@ -4,8 +4,20 @@ class SiteSerializer < ActiveModel::Serializer
   attributes :id, :url, :contact_lists, :capabilities, :display_name
   attributes :current_subscription, :has_script_installed?, :num_site_elements
   attributes :view_billing, :timezone
+  attributes :monthly_pageviews
 
   has_many :rules, serializer: RuleSerializer
+
+  def monthly_pageviews
+    return unless scope # we require a logged in user
+
+    google = scope.authentications.find{|auth| auth.provider == "google_oauth2" }
+
+    if google
+      analytics = GoogleAnalytics.new(google.access_token)
+      analytics.get_latest_pageviews(object.url)
+    end
+  end
 
   def contact_lists
     object.contact_lists.map do |list|

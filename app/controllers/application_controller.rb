@@ -12,6 +12,13 @@ class ApplicationController < ActionController::Base
   before_action :track_h_visit
   after_action :store_last_requested_path
 
+  rescue_from ::Google::Apis::AuthorizationError do |exception|
+    if exception.to_s.match(/Unauthorized/)
+      sign_out current_user             # kill cookies
+      redirect_to "/auth/google_oauth2" # log in again to refresh token
+    end
+  end
+
   def access_token
     @access_token ||= Digest::SHA256.hexdigest(["hellobar", remote_ip, user_agent, access_cookie, "a776b"].join)
   end
