@@ -17,9 +17,6 @@ class SiteSerializer < ActiveModel::Serializer
       analytics = GoogleAnalytics.new(google.access_token)
       analytics.get_latest_pageviews(object.url)
     end
-  rescue Google::Apis::AuthorizationError => e
-    Rails.logger.info(e.to_s) # shut up Rubocop
-    # user needs to reauthenticate with Google
   end
 
   def contact_lists
