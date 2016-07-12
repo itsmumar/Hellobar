@@ -5,7 +5,10 @@ describe DigestMailer do
 
   describe 'weekly_digest' do
     before do
-      allow_any_instance_of(DigestMailer).to receive(:get_ab_variation) { 'original' }
+      allow_any_instance_of(DigestMailer).to(
+        receive(:get_ab_variation).
+        with("Upgrade CTA in HB Digest Email 2016-06-09", anything) { 'original' }
+      )
     end
 
     let(:site) { sites(:zombo) }

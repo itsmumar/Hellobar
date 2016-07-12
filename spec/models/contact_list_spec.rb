@@ -354,18 +354,6 @@ describe ContactList, "embed code" do
   end
 end
 
-describe ContactList, "sync!" do
-  fixtures :all
-
-  subject { contact_lists(:embed_code) }
-
-  context "embed_code changed" do
-    after { subject.update_attribute :data, { "embed_code" => "new embed code" } }
-    it { should receive(:sync) }
-    it { should receive(:sync_all!) } # this one via `delay`
-  end
-end
-
 describe ContactList, '#needs_to_reconfigure?' do
   it 'returns false if not syncable' do
     list = ContactList.new

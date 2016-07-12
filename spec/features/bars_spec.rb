@@ -5,8 +5,6 @@ feature 'User can create a site element', js: true do
   before do
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
-    allow_any_instance_of(ApplicationController).
-      to receive(:get_ab_variation).and_return('original')
   end
 
   scenario 'new user can create a site element' do

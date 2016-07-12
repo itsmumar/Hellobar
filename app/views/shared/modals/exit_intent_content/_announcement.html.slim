@@ -1,0 +1,10 @@
+.title
+  | Double your announcement impact!
+.header-footer-block
+  .header
+    | Upgrade Hello Bar to increase the effectiveness
+    br
+    | of your announcements. You'll get:
+  .footer
+    = render 'shared/modals/exit_intent_content/list'
+    = choose_plan_button(Subscription::Pro.new, 'Upgrade to get the right message to the right people')

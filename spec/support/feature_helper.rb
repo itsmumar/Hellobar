@@ -21,4 +21,14 @@ module FeatureHelper
   def the_onboarding_campaigns_run
     UserOnboardingCampaign.deliver_all_onboarding_campaign_email!
   end
+
+  def wait_for_ajax
+    Timeout.timeout(2) do
+      loop until finished_all_ajax_requests?
+    end
+  end
+
+  def finished_all_ajax_requests?
+    page.evaluate_script('jQuery.active').zero?
+  end
 end
