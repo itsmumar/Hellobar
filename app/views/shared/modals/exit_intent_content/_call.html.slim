@@ -1,0 +1,10 @@
+.title
+  | Double your phone calls!
+.header-footer-block
+  .header
+    | Upgrade Hello Bar to increase the number of
+    br
+    | visitors that call you. You'll get:
+  .footer
+    = render 'shared/modals/exit_intent_content/list'
+    = choose_plan_button(Subscription::Pro.new, 'Upgrade to get more phone calls')
