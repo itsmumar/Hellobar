@@ -109,3 +109,25 @@ describe ApplicationController, '#require_no_user' do
     response.should_not be_redirect
   end
 end
+
+describe ApplicationController, 'rescue_from errors' do
+  fixtures :all
+
+  controller do
+    def index; render nothing: true; end
+  end
+
+  it 'logs the current user out' do
+    allow(controller).to receive(:index) { raise Google::Apis::AuthorizationError.new('Unauthorized') }
+
+    expect(get :index).to redirect_to("/auth/google_oauth2")
+  end
+
+  it 'redirects the user to log in again to refresh the access token' do
+    allow(controller).to receive(:index) { raise Google::Apis::AuthorizationError.new('Unauthorized') }
+
+    expect(controller).to receive(:sign_out)
+
+    get :index
+  end
+end

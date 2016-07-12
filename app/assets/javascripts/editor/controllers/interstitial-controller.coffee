@@ -4,7 +4,29 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
 
   showInterstitial: Ember.computed.alias('controllers.application.showInterstitial')
   interstitialType: Ember.computed.alias('controllers.application.interstitialType')
-  forceContacts: HB_EMAIL_FLOW_TEST == 'force'
+
+  forceContacts: (HB_EMAIL_FLOW_TEST == 'force')
+  showEmailVolume: (HB_ONBOARDING_EMAIL_VOLUME == 'messaging')
+
+  monthlyPageviews: ( ->
+    @get('model.site.monthly_pageviews') || 0
+  ).property()
+
+  formattedMonthlyPageviews: ( ->
+    @get('monthlyPageviews').toLocaleString()
+  ).property()
+
+  hasEnoughSubscribers: ( ->
+    @get('monthlyPageviews') > 1000
+  ).property()
+
+  calculatedSubscribers: ( ->
+    Math.round(@get('monthlyPageviews') * 0.005)
+  ).property()
+
+  formattedCalculatedSubscribers: ( ->
+    @get('calculatedSubscribers').toLocaleString()
+  ).property()
 
   setDefaults: ( ->
     return false unless @get('model')
@@ -80,7 +102,7 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
       when 'call'
         return Ember.isEmpty(@get('model.headline'))
         return Ember.isEmpty(@get('model.link_text'))
-        return !isValidNumber(@get('controllers.application.phone_number'), @get('model.phone_country_code'));
+        return !isValidNumber(@get('controllers.application.phone_number'), @get('model.phone_country_code'))
       when 'contacts'
         return Ember.isEmpty(@get('model.headline'))
         return Ember.isEmpty(@get('model.link_text'))

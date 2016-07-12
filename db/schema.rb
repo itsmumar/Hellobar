@@ -385,6 +385,8 @@ ActiveRecord::Schema.define(version: 20160607202931) do
     t.datetime "created_at"
   end
 
+  add_index "user_onboarding_statuses", ["user_id"], name: "index_user_onboarding_statuses_on_user_id", using: :btree
+
   create_table "users", force: true do |t|
     t.string   "email",                           default: "",       null: false
     t.string   "encrypted_password",              default: "",       null: false
