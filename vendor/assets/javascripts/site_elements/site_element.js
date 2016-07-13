@@ -282,6 +282,10 @@ HB.SiteElement = HB.createClass({
     {
       setTimeout(show, 10000);
     }
+    else if (viewCondition === 'wait-30')
+    {
+      setTimeout(show, 30000);
+    }
     else if (viewCondition === 'wait-60')
     {
       setTimeout(show, 60000);
