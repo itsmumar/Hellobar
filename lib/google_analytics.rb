@@ -42,6 +42,8 @@ class GoogleAnalytics
     if account
       # what if you have multiple profiles?
       profile = account.web_properties.find do |property|
+        next unless property.website_url.present?
+
         self.class.normalize_url(property.website_url) == self.class.normalize_url(url)
       end.profiles.first
 
