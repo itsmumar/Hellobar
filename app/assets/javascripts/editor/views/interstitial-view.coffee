@@ -17,9 +17,7 @@ HelloBar.InterstitialView = Ember.View.extend
   #-----------  Removal Animation  -----------#
 
   click: (evt) ->
-    switch evt.target.className
-
-      when 'button cancel-button cancel'
-        $('.goal-interstitial').trigger("toggleGoalSelection")
+    if evt.target.className.indexOf('cancel-button') > -1
+      $('.goal-interstitial').trigger("toggleGoalSelection")
 
     return false
