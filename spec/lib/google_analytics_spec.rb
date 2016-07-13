@@ -30,6 +30,16 @@ describe GoogleAnalytics, "#find_account_by_url" do
     expect(service.find_account_by_url("www.site.com")).to eql(nil)
   end
 
+  it "does not raise an error if the web property has a nil website_url" do
+    service = GoogleAnalytics.new
+    account = double("item", web_properties: [double("property", website_url: nil)])
+    response = double("response", items: [account])
+    analytics = double("analytics", list_account_summaries: response)
+    allow(service).to receive(:analytics) { analytics }
+
+    expect(service.find_account_by_url("www.site.com")).to_not raise_error
+  end
+
   it "returns nil if the user doesnt have a Google Analytics account" do
     service = GoogleAnalytics.new
     allow(service.analytics).to receive(:list_account_summaries).and_raise(Google::Apis::ClientError.new("insufficientPermissions: User does not have any Google Analytics account."))
