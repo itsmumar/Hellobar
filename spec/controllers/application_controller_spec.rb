@@ -117,17 +117,28 @@ describe ApplicationController, 'rescue_from errors' do
     def index; render nothing: true; end
   end
 
-  it 'logs the current user out' do
-    allow(controller).to receive(:index) { raise Google::Apis::AuthorizationError.new('Unauthorized') }
+  context "Google::Apis::AuthorizationError" do
+    it 'logs the current user out' do
+      allow(controller).to receive(:index) { raise Google::Apis::AuthorizationError.new('Unauthorized') }
 
-    expect(get :index).to redirect_to("/auth/google_oauth2")
-  end
+      expect(get :index).to redirect_to("/auth/google_oauth2")
+    end
 
-  it 'redirects the user to log in again to refresh the access token' do
-    allow(controller).to receive(:index) { raise Google::Apis::AuthorizationError.new('Unauthorized') }
+    it 'redirects the user to log in again to refresh the access token' do
+      allow(controller).to receive(:index) { raise Google::Apis::AuthorizationError.new('Unauthorized') }
 
-    expect(controller).to receive(:sign_out)
+      expect(controller).to receive(:sign_out)
 
-    get :index
+      get :index
+    end
+
+    it 'does NOT redirect an impersonated user to log in again ' do
+      allow(controller).to receive(:index) { raise Google::Apis::AuthorizationError.new('Unauthorized') }
+      allow(controller).to receive(:impersonated_user) { User.new }
+
+      expect(controller).to_not receive(:sign_out)
+
+      get :index
+    end
   end
 end
