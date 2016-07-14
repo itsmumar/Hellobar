@@ -67,6 +67,8 @@ feature 'User can set a phone number for click to call', js: true do
   before do
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(ApplicationController).
+      to receive(:get_ab_variation).and_return('original')
   end
 
   after { devise_reset }

@@ -14,4 +14,9 @@ FactoryGirl.define do
     schedule :monthly
     payment_method
   end
+
+  factory :enterprise_subscription, parent: :subscription, class: "Subscription::Enterprise" do
+    schedule :monthly
+    payment_method
+  end
 end

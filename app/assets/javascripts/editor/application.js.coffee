@@ -74,7 +74,7 @@ $ ->
     $(@).closest('.goal-block').addClass('selected')
     wrapper.trigger("toggleGoalSelection")
 
-    Ember.instrument('interstitial.routing', $(@).val())
+    $('#ember-root').trigger('interstitial:selection', $(@).val())
 
 #-----------  Phone Data  -----------#
 
