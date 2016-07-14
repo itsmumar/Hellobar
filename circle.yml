@@ -16,7 +16,12 @@ test:
   pre:
     - bundle exec rubocop
   override:
-    - RAILS_ENV=test bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
+    -
+      RAILS_ENV=test bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml:
+        parallel: true
+        files:
+          - spec/**/*.rb
+          - spec/features/**/*.rb
   post:
     - RAILS_ENV=test bundle exec rake teaspoon
 
