@@ -14,6 +14,7 @@ feature "Manage Settings", js: true do
 
   context "add custom invoice address" do
     scenario "updates when input is given" do
+      wait_for_ajax
       page.find('a', text: "Add custom invoice address").click
       fill_in "site_invoice_information", :with => "my cool address"
       click_button("Save & Update")
