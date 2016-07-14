@@ -724,6 +724,7 @@ DEPENDENCIES
   thread (~> 0.2.2)
   timecop
   twilio-ruby (~> 3.11.5)
+  tzinfo-data
   uglifier (= 2.0.1)
   unf (~> 0.1.4)
   vcr
@@ -733,3 +734,6 @@ DEPENDENCIES
   yui-compressor
   zip-zip
   zonebie (~> 0.5.1)
+
+BUNDLED WITH
+   1.12.5
