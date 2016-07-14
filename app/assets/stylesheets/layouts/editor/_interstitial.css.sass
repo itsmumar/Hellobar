@@ -181,12 +181,12 @@ $transition: 0.75s
 
   .template-form
     width: 50%
-    margin: 6em auto 4em
-    background-color: white
-    border-radius: 5px
-    padding: 4.5em 2em 2em 2em
     display: block
     position: relative
+    margin: 6em auto 4em
+    background-color: white
+    border-radius: $radiusLg
+    padding: 4.5em 2em 2em 2em
 
     .large-icon
       position: absolute
@@ -229,3 +229,38 @@ $transition: 0.75s
 
   p
     font-size: 1em
+
+  /*-----------  Side-by-Side  -----------*/
+
+  .interstitial-side-by-side
+    width: 52em
+    margin: 6em auto 4em
+    @include display(flex)
+    @include align-items(flex-start)
+    @include justify-content(space-between)
+
+    .template-form
+      width: auto
+      margin: 0 auto
+      max-width: 42.67rem
+      @include flex(1 0 auto)
+
+    aside
+      color: $grayDark
+      margin-left: 2em
+      padding: 1.5em 2em 2em
+      border-radius: $radiusLg
+      background-color: $white
+      @include flex(0 1 15.75em)
+      @include antialiased()
+
+      small
+        display: block
+        line-height: 160%
+        font-size: 0.85rem
+        margin-bottom: 1rem
+
+      strong
+        display: block
+        line-height: 110%
+        font-size: 1.25rem

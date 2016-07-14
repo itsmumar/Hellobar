@@ -1,0 +1,10 @@
+.title
+  | Double your email subscriptions!
+.header-footer-block
+  .header
+    | Upgrade Hello Bar to increase the number of
+    br
+    | visitors that give you their emails. You'll get:
+  .footer
+    = render 'shared/modals/exit_intent_content/list'
+    = choose_plan_button(Subscription::Pro.new, 'Upgrade to get more emails')

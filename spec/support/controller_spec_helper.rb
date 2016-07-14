@@ -1,4 +1,6 @@
 module ControllerSpecHelper
+  require 'support/ab_test_config'
+
   def expect_json_response_to_include(json)
     json_response = parse_json_response
 
