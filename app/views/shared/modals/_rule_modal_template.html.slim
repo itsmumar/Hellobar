@@ -52,7 +52,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "UTMMediumCondition" "Ad Medium"}}
           | {{option segment "UTMSourceCondition" "Ad Source"}}
           | {{option segment "UTMTermCondition" "Ad Term"}}
-          | {{option segment "LocationCityCondition" "City"}}
+          / | {{option segment "LocationCityCondition" "City"}}
           | {{option segment "LocationCountryCondition" "Country Code"}}
           | {{option segment "DateCondition" "date"}}
           | {{option segment "LastVisitCondition" "days since last visit"}}
@@ -62,17 +62,17 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "PreviousPageURL" "previous page url"}}
           | {{option segment "ReferrerCondition" "referrer"}}
           | {{option segment "ReferrerDomainCondition" "Referrer Domain"}}
-          | {{option segment "LocationRegionCondition" "Region/State"}}
+          / | {{option segment "LocationRegionCondition" "Region/State"}}
           | {{option segment "TimeCondition" "Time"}}
           | {{option segment "UrlCondition" "URL"}}
           | {{option segment "UrlPathCondition" "URL Path"}}
           | {{option segment "UrlQuery" "URL Query"}}
           | {{option segment "CustomCondition" "Custom"}}
       .custom-segment-name
-        | Segment name is: 
+        | Segment name is:
         input.custom-segment-name-input name="rule[conditions_attributes][{{index}}][custom_segment]" type="text" value="{{custom_segment}}"
       .select-wrapper.optional.rule_conditions_data_type
-        | The data type is: 
+        | The data type is:
         select class="condition-data-type" name="rule[conditions_attributes][{{index}}][data_type]"
           | {{option data_type "date" "date"}}
           | {{option data_type "number" "number"}}
