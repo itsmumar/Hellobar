@@ -13,9 +13,11 @@ class ApplicationController < ActionController::Base
   after_action :store_last_requested_path
 
   rescue_from ::Google::Apis::AuthorizationError do |exception|
-    if exception.to_s.match(/Unauthorized/)
-      sign_out current_user             # kill cookies
-      redirect_to "/auth/google_oauth2" # log in again to refresh token
+    unless impersonated_user # impersonating users will give incorrect access_tokens
+      if exception.to_s.match(/Unauthorized/)
+        sign_out current_user             # kill cookies
+        redirect_to "/auth/google_oauth2" # log in again to refresh token
+      end
     end
   end
 
