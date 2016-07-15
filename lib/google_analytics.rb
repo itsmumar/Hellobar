@@ -33,6 +33,8 @@ class GoogleAnalytics
     else
       raise error
     end
+  rescue ActionView::Template::Error => error
+    nil # handle for timeouts
   end
 
   # what if we don't have an exact url match?
