@@ -15,7 +15,7 @@ class ContactSubmissionsController < ApplicationController
         :user_email => current_user.email
       }
 
-      MailerGateway.send_email("Contact Developer 2", params[:developer_email], email_params)
+      MailerGateway.send_email("Contact Developer 2", params[:developer_email].first, email_params)
       flash[:success] = "We've sent the installation instructions to your developer!"
     end
 
