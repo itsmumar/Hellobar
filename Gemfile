@@ -79,6 +79,7 @@ gem "verticalresponse",          "~> 0.1.6"
 gem "whenever",                  "~> 0.9.2"
 gem "yui-compressor"
 gem "zip-zip" # will load compatibility for old rubyzip API.
+gem "tzinfo-data", platforms: [:mingw, :mswin] # fixing tzinfo-related bug on Windows platform
 
 group :development do
   gem "better_errors", "~> 1.1"

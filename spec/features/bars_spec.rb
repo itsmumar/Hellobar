@@ -87,6 +87,7 @@ feature 'User can set a phone number for click to call', js: true do
     find('button', text: 'Continue').click
     find('button', text: 'Save & Publish').click
 
+    expect(page).to have_css('html') # waits for next page load
     element = SiteElement.last
 
     expect(element.phone_number).to eql('18001231234')
