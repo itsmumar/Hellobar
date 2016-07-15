@@ -82,4 +82,18 @@ describe GoogleAnalytics, "#get_latest_pageviews" do
 
     expect(service.get_latest_pageviews('http://www.site.com')).to_not raise_error
   end
+
+  it "does not raise an error if google analytics returns nil rows" do
+    service = GoogleAnalytics.new
+    rows = double("rows", rows: nil)
+    analytics = double("analytics", get_ga_data: rows)
+    profile = double('profile', id: 1)
+    property_without_url = double('web property', website_url: nil, profiles: [profile])
+    property = double('web property', website_url: "http://www.site.com", profiles: [profile])
+    account = double('account', web_properties: [property_without_url, property])
+    allow(service).to receive(:find_account_by_url) { account }
+    allow(service).to receive(:analytics) { analytics }
+
+    expect(service.get_latest_pageviews('http://www.site.com')).to_not raise_error
+  end
 end
