@@ -11,11 +11,16 @@ class SiteSerializer < ActiveModel::Serializer
   def monthly_pageviews
     return unless scope # we require a logged in user
 
-    google = scope.authentications.find{|auth| auth.provider == "google_oauth2" }
+    cache_key = "google:analytics:pageviews:#{object.id}:#{scope.id}"
+    cache_options = { expires_in: 7.days }
 
-    if google
-      analytics = GoogleAnalytics.new(google.access_token)
-      analytics.get_latest_pageviews(object.url)
+    Rails.cache.fetch(cache_key, cache_options) do
+      google = scope.authentications.find{|auth| auth.provider == "google_oauth2" }
+
+      if google
+        analytics = GoogleAnalytics.new(google.access_token)
+        analytics.get_latest_pageviews(object.url)
+      end
     end
   end
 
