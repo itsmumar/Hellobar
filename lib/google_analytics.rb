@@ -23,7 +23,9 @@ class GoogleAnalytics
 
   def find_account_by_url(url)
     analytics.list_account_summaries.items.find do |item|
-      urls = item.web_properties.map(&:website_url).compact.map{|web_url| self.class.normalize_url(web_url) }
+      web_properties = item.web_properties
+      next if web_properties.blank?
+      urls = web_properties.map(&:website_url).compact.map{|web_url| self.class.normalize_url(web_url) }
 
       urls.include?(self.class.normalize_url(url))
     end
@@ -33,6 +35,8 @@ class GoogleAnalytics
     else
       raise error
     end
+  rescue ActionView::Template::Error => error
+    nil # handle for timeouts
   end
 
   # what if we don't have an exact url match?
@@ -52,7 +56,7 @@ class GoogleAnalytics
       end_date = 'today'
       metrics = 'ga:pageviews'
 
-      analytics.get_ga_data(ids, start_date, end_date, metrics).rows.first.first.to_i
+      analytics.get_ga_data(ids, start_date, end_date, metrics).rows.try(:first).try(:first).to_i
     end
   end
 end
