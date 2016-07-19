@@ -18,20 +18,30 @@ describe ContactSubmissionsController do
     end
   end
 
-  it "sends a 'email your developer' message" do
-    dev_email = "dev@polymathic.me"
-    site = sites(:zombo)
-    user = stub_current_user(site.owners.first)
+  describe "email_developer" do
+    let!(:site) { sites(:zombo) }
+    let!(:user) { stub_current_user(site.owners.first) }
+    before do
+      @email_params = {
+        :site_url => "zombo.com",
+        :script_url => site.script_url,
+        :user_email => user.email
+      }
+    end
 
-    email_params = {
-      :site_url => "zombo.com",
-      :script_url => site.script_url,
-      :user_email => user.email
-    }
+    it "sends an 'email your developer' message from email array" do
+      dev_email_params = ["dev@polymathic.me"]
 
-    MailerGateway.should_receive(:send_email).with("Contact Developer 2", dev_email, email_params)
+      MailerGateway.should_receive(:send_email).with("Contact Developer 2", "dev@polymathic.me", @email_params)
+      post :email_developer, :developer_email => dev_email_params, :site_id => site.id
+    end
 
-    post :email_developer, :developer_email => dev_email, :site_id => site.id
+    it "sends an 'email your developer' message from email string" do
+      dev_email_params = "dev@polymathic.me"
+
+      MailerGateway.should_receive(:send_email).with("Contact Developer 2", "dev@polymathic.me", @email_params)
+      post :email_developer, :developer_email => dev_email_params, :site_id => site.id
+    end
   end
 
   it "sends a generic message" do
