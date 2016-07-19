@@ -1277,6 +1277,16 @@ var HB = {
       return false;
   },
 
+  geoLocationConditionTrue: function(condition) {
+    var currentValue = HB.getSegmentValue(condition.segment);
+
+    // geolocation conditions are undefined until the geolocation request completes
+    if (typeof currentValue === "undefined")
+      return false
+
+    return HB.applyOperand(currentValue, condition.operand, condition.value, condition.segment)
+  },
+
   // Determines if the condition (a rule is made of one or more conditions)
   // is true. It gets the current value and applies the operand
   conditionTrue: function(condition)
@@ -1290,6 +1300,8 @@ var HB = {
     }
     else if ( condition.segment === "tc" )
       return HB.timeConditionTrue(condition);
+    else if ( condition.segment === "gl_ctr" )
+      return HB.geoLocationConditionTrue(condition);
     else {
       var currentValue = HB.getSegmentValue(condition.segment);
       var values = condition.value;
