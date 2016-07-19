@@ -46,6 +46,13 @@ describe GoogleAnalytics, "#find_account_by_url" do
 
     expect(service.find_account_by_url("www.site.com")).to eql(nil)
   end
+
+  it "handles google unauthorized error" do
+    service = GoogleAnalytics.new
+    allow(service.analytics).to receive(:list_account_summaries).and_raise(Google::Apis::AuthorizationError.new("Unauthorized"))
+
+    expect(service.find_account_by_url("www.site.com")).to_not raise_error
+  end
 end
 
 describe GoogleAnalytics, "#get_latest_pageviews" do
