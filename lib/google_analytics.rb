@@ -29,8 +29,6 @@ class GoogleAnalytics
 
       urls.include?(self.class.normalize_url(url))
     end
-  rescue Google::Apis::AuthorizationError => error
-    nil
   rescue Google::Apis::ClientError => error
     if error.to_s.match(/insufficientPermissions/)
       nil # handle for when a user doesn't have a Google Analytics account
