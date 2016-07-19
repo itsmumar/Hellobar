@@ -29,6 +29,8 @@ class GoogleAnalytics
 
       urls.include?(self.class.normalize_url(url))
     end
+  rescue Google::Apis::AuthorizationError => error
+    nil
   rescue Google::Apis::ClientError => error
     if error.to_s.match(/insufficientPermissions/)
       nil # handle for when a user doesn't have a Google Analytics account
@@ -37,6 +39,10 @@ class GoogleAnalytics
     end
   rescue ActionView::Template::Error => error
     nil # handle for timeouts
+  rescue => e
+    Rails.logger.warn e.inspect
+    Rails.logger.warn e.message
+    raise e
   end
 
   # what if we don't have an exact url match?
