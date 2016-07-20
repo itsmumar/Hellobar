@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: {scope: :deleted_at, unless: :deleted? }
   validate :oauth_email_change, if: :is_oauth_user?
 
-  attr_accessor :legacy_migration, :timezone, :is_impersonated?
+  attr_accessor :legacy_migration, :timezone, :is_impersonated
 
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
