@@ -131,14 +131,5 @@ describe ApplicationController, 'rescue_from errors' do
 
       get :index
     end
-
-    it 'does NOT redirect an impersonated user to log in again ' do
-      allow(controller).to receive(:index) { raise Google::Apis::AuthorizationError.new('Unauthorized') }
-      allow(controller).to receive(:impersonated_user) { User.new }
-
-      expect(controller).to_not receive(:sign_out)
-
-      get :index
-    end
   end
 end

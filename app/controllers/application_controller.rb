@@ -13,7 +13,9 @@ class ApplicationController < ActionController::Base
   after_action :store_last_requested_path
 
   rescue_from ::Google::Apis::AuthorizationError do |exception|
-    unless impersonated_user # impersonating users will give incorrect access_tokens
+    if impersonated_user
+      raise exception # we can't authenticate for impersonated users
+    else
       if exception.to_s.match(/Unauthorized/)
         sign_out current_user             # kill cookies
         redirect_to "/auth/google_oauth2" # log in again to refresh token
@@ -89,7 +91,13 @@ class ApplicationController < ActionController::Base
   end
 
   def impersonated_user
-    current_admin && session[:impersonated_user] ? User.find_by_id(session[:impersonated_user]) : nil
+    if current_admin && session[:impersonated_user]
+      impersonated_user = User.find_by_id(session[:impersonated_user])
+      impersonated_user.is_impersonated = true
+      impersonated_user
+    else
+      nil
+    end
   end
 
   def current_site
