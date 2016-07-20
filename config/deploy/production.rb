@@ -8,4 +8,4 @@ set :ssh_options, {
 
 # slack notification integration
 set :slack_webhook, "https://hooks.slack.com/services/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"
-set :slack_channel, ['#hello-bar', '#hb-deployments']
+set :slack_channel, ['#hello-bar', '#hb-deployments', '#public-hb']

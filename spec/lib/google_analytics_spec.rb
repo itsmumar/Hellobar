@@ -37,14 +37,27 @@ describe GoogleAnalytics, "#find_account_by_url" do
     analytics = double("analytics", list_account_summaries: response)
     allow(service).to receive(:analytics) { analytics }
 
-    expect(service.find_account_by_url("www.site.com")).to_not raise_error
+    expect{service.find_account_by_url("www.site.com")}.to_not raise_error
   end
 
-  it "returns nil if the user doesnt have a Google Analytics account" do
+  it "returns nil if the user doesn't have a Google Analytics account" do
     service = GoogleAnalytics.new
     allow(service.analytics).to receive(:list_account_summaries).and_raise(Google::Apis::ClientError.new("insufficientPermissions: User does not have any Google Analytics account."))
 
     expect(service.find_account_by_url("www.site.com")).to eql(nil)
+  end
+
+  it "handles unexpected errors" do
+    class Google::Apis::UnExpectedError < Google::Apis::Error
+    end
+    error = Google::Apis::UnExpectedError.new("Un-handled Error")
+
+    service = GoogleAnalytics.new
+    allow(service.analytics).to receive(:list_account_summaries).and_raise(error)
+
+    expect(Rails.logger).to receive(:warn).with(error.inspect).once
+    expect(Rails.logger).to receive(:warn).with("Un-handled Error").once
+    expect{service.find_account_by_url("www.site.com")}.to raise_error(Google::Apis::UnExpectedError)
   end
 end
 
@@ -80,7 +93,7 @@ describe GoogleAnalytics, "#get_latest_pageviews" do
     allow(service).to receive(:find_account_by_url) { account }
     allow(service).to receive(:analytics) { analytics }
 
-    expect(service.get_latest_pageviews('http://www.site.com')).to_not raise_error
+    expect{service.get_latest_pageviews('http://www.site.com')}.to_not raise_error
   end
 
   it "does not raise an error if google analytics returns nil rows" do
@@ -94,6 +107,6 @@ describe GoogleAnalytics, "#get_latest_pageviews" do
     allow(service).to receive(:find_account_by_url) { account }
     allow(service).to receive(:analytics) { analytics }
 
-    expect(service.get_latest_pageviews('http://www.site.com')).to_not raise_error
+    expect{service.get_latest_pageviews('http://www.site.com')}.to_not raise_error
   end
 end
