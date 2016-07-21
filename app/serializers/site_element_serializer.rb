@@ -89,7 +89,7 @@ class SiteElementSerializer < ActiveModel::Serializer
       errors = object.errors[attribute]
 
       if attribute == :element_subtype && errors.include?("can't be blank")
-        messages << "You must select a type in the \"settings\" section"
+        messages << "You must select your goal in the \"goals\" section"
         next
       end
 
@@ -99,7 +99,7 @@ class SiteElementSerializer < ActiveModel::Serializer
       end
 
       if attribute == :contact_list && errors.include?("can't be blank")
-        messages << "You must select a contact list to sync with in the \"settings\" section"
+        messages << "You must select a contact list to sync with in the \"goals\" section"
         next
       end
 
