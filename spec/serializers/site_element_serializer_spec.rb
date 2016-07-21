@@ -10,7 +10,7 @@ describe SiteElementSerializer do
     element.valid?
 
     serializer = SiteElementSerializer.new(element)
-    serializer.as_json[:full_error_messages].should == ["You must select a type in the \"settings\" section"]
+    serializer.as_json[:full_error_messages].should == ["You must select your goal in the \"goals\" section"]
   end
 
   it "passes the scope to the site serializer" do
