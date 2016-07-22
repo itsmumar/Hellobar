@@ -974,10 +974,18 @@ var HB = {
 
     // Helper for template that returns the Javascript for a reference
     // to this object
-    siteElement.me = "window.parent.HB.siteElementsOnPage["+siteElement.pageIndex+"]";
+    siteElement.me = "window.parent.HB.findSiteElementOnPageById("+siteElement.id+")";
 
     // skip adding to the page if it is already on the page
     if(HB.siteElementsOnPage.indexOf(siteElement) !== -1)
+      return;
+
+    // skip adding to the page if it is already on the page (by ID)
+    elementOnPage = HB.siteElementsOnPage.reduce( function(found, existingElement){
+      return found || existingElement.id === siteElement.id
+    }, false);
+
+    if(elementOnPage === true)
       return;
 
     HB.siteElementsOnPage.push(siteElement);
@@ -986,6 +994,20 @@ var HB = {
     if ( document.location.hash == "#nohb" )
       return;
     siteElement.attach();
+  },
+
+  findSiteElementOnPageById: function(site_element_id)
+  {
+    var lookup = {};
+    for (var i = 0, len = HB.siteElementsOnPage.length; i < len; i++) {
+      lookup[HB.siteElementsOnPage[i].id] = HB.siteElementsOnPage[i];
+    };
+
+    if (lookup[site_element_id] === undefined) {
+      return null;
+    } else {
+      return lookup[site_element_id];
+    }
   },
 
   removeAllSiteElements: function()
@@ -1981,6 +2003,8 @@ var HB = {
       // Remove the siteElement and show the original in non preview environments
       if(!HB.CAP.preview) {
         siteElement.remove();
+        // also remove siteElement object from HB.siteElementsOnPage array
+        HB.siteElementsOnPage.splice(HB.siteElementsOnPage.indexOf(siteElement), 1);
         HB.addToPage(originalSiteElement);
       }
     };

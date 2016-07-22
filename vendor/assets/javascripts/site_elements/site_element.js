@@ -158,8 +158,7 @@ HB.SiteElement = HB.createClass({
         var wasMobile = this.isMobileWidth;
         var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : document.body.clientWidth;
 
-
-        if ( this.type == "Modal" && containerDocument )
+        if ( this.type == "Modal" && containerDocument && !!containerDocument.getElementById("hellobar-modal-background") )
           this.isMobileWidth = (containerDocument.getElementById("hellobar-modal-background").clientWidth <= 640 );
         else if ( this.type == "Slider" )
           this.isMobileWidth = thisElement.clientWidth <= 270 || containerWidth <= 375 || containerWidth < thisElement.clientWidth;
