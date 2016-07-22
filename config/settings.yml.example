@@ -35,3 +35,4 @@ loggly_url: https://logs-01.loggly.com/inputs/[your-customer-token]/tag/[your-ra
 sentry_dsn: sentry-dsn-endpoint
 support_location: "http://support.hellobar.com/"
 maropost_url: "http://api.maropost.com/"
+fake_data_api: true

@@ -8,8 +8,11 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
   inFocus: false
   isSelecting: false
 
-  cssStyle: (->
-    'background-color:#' + @get('color')
+  #-----------  Background Styling  -----------#
+
+  cssStyle: ( () ->
+    color = one.color(@get('color'))
+    return "background-color: #{color.hex()}" if color && color.hex()
   ).property('color')
 
   #-----------  RGB Observer  -----------#
@@ -26,7 +29,6 @@ HelloBar.ColorSelectComponent = Ember.Component.extend
       hex = hex.replace('#', '')
       hex = hex.substring(0, 6)
       @set('color', hex)
-
 
     rgb = @getRGB()
 
@@ -157,11 +159,9 @@ HelloBar.ColorPreview = Ember.View.extend
 
   style: ( ->
     color = one.color(@get('color'))
-    if color.length
-      'background-color: ' + color.hex()
+    return "background-color: #{color.hex()}" if color && color.hex()
   ).property('color')
 
   mouseUp: ->
     color = one.color(@get('color'))
-    if color.length
-      @set('parentView.color', color.hex())
+    @set('parentView.color', color.hex()) if color && color.hex()

@@ -168,6 +168,19 @@
     - variant
 -
   index: 27
+  name: Onboarding Email Volume 2016-06-28
+  user_start_date: 2016-06-28
+  values:
+    - original
+    - messaging
+-
+  index: 28
+  name: Exit Intent Pop-up Based on Bar Goals 2016-06-08
+  values:
+    - original
+    - pop_up
+-
+  index: 29
   name: Pricing Modal Copy 2016-07-07
   values:
     - original

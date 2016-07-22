@@ -29,7 +29,7 @@ module ServiceProviders
     def lists
       found_lists = []
       begin
-        response = @client.get 'campaigns'
+        response = @client.get 'campaigns', { perPage: 500 }
 
         if response.success?
           response_hash = JSON.parse response.body

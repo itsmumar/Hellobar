@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: {scope: :deleted_at, unless: :deleted? }
   validate :oauth_email_change, if: :is_oauth_user?
 
-  attr_accessor :legacy_migration, :timezone
+  attr_accessor :legacy_migration, :timezone, :is_impersonated
 
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
@@ -91,6 +91,26 @@ class User < ActiveRecord::Base
   # if we are migrating users from the legacy DB
   def password_required?
     legacy_migration ? false : super
+  end
+
+  def can_view_exit_intent_modal?
+    if self.has_paying_subscription?
+      false
+    elsif self.exit_intent_modal_last_shown_at.present?
+      self.exit_intent_modal_last_shown_at < 30.days.ago # only show once every 30 days
+    else
+      true
+    end
+  end
+
+  def most_viewed_site_element
+    self.site_elements.sort_by {|site_element| site_element.total_views }.last
+  end
+
+  def most_viewed_site_element_subtype
+    subtype = self.most_viewed_site_element.try(:element_subtype)
+    subtype = "social" if subtype && subtype.include?("social")
+    subtype
   end
 
   def new?

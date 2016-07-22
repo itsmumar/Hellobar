@@ -4,8 +4,32 @@ class SiteSerializer < ActiveModel::Serializer
   attributes :id, :url, :contact_lists, :capabilities, :display_name
   attributes :current_subscription, :has_script_installed?, :num_site_elements
   attributes :view_billing, :timezone
+  attributes :monthly_pageviews
 
   has_many :rules, serializer: RuleSerializer
+
+  def monthly_pageviews
+    return unless scope # we require a logged in user
+
+    cache_key = "google:analytics:pageviews:#{object.id}:#{scope.id}"
+    cache_options = { expires_in: 7.days }
+
+    Rails.cache.fetch(cache_key, cache_options) do
+      google = scope.authentications.find{|auth| auth.provider == "google_oauth2" }
+
+      if google
+        analytics = GoogleAnalytics.new(google.access_token)
+        analytics.get_latest_pageviews(object.url)
+      end
+    end
+
+  rescue Google::Apis::AuthorizationError => error # user has not authenticated with the needed permissions
+    if scope.is_impersonated
+      nil # while impersonating we can't authenticate
+    else
+      raise error # the error needs to bubble up to the controller to cause the user to re-authenticate
+    end
+  end
 
   def contact_lists
     object.contact_lists.map do |list|
