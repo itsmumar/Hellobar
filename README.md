@@ -255,6 +255,12 @@ Watch out for animations and other asynchronous or delayed interactions.
 You may need to fiddle with the `Capybara.default_wait_time` in
 `spec/spec_helper`.
 
+## JavaScript tests
+
+Teaspoon runs the *_spec.js files in spec/javascripts/
+
+The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
+
 ## Live testing/QA info
 
 Test site for both edge/staging: http://teampolymathic.github.io/hellobar_testing/
