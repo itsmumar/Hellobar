@@ -504,7 +504,7 @@ var HB = {
           // Successfully saved
         });
 
-        HB.trigger("emailEntered", siteElement, emailField.value, nameField,value);
+        HB.trigger("emailEntered", siteElement, emailField.value, nameField.value);
 
         if(doRedirect) {
           window.location.href = redirectUrl;
