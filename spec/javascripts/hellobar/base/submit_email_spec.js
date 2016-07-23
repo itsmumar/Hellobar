@@ -112,5 +112,14 @@ describe("HB", function() {
         });
       });
     });
+
+    context("emailEntered callback", function() {
+      it("triggers the emailEntered callback", function() {
+        spyOn(HB, 'trigger')
+
+        HB.submitEmail(siteElement, {value: 'myEmail@test.com'}, {}, headlineElement, "", false, "");
+        expect(HB.trigger).toHaveBeenCalledWith('emailEntered', jasmine.any(Object), "myEmail@test.com", undefined);
+      });
+    });
   });
 });
