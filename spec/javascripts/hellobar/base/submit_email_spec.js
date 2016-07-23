@@ -113,12 +113,12 @@ describe("HB", function() {
       });
     });
 
-    context("emailEntered callback", function() {
-      it("triggers the emailEntered callback", function() {
+    context("emailSubmitted callback", function() {
+      it("triggers the emailSubmitted callback", function() {
         spyOn(HB, 'trigger')
 
         HB.submitEmail(siteElement, {value: 'myEmail@test.com'}, {}, headlineElement, "", false, "");
-        expect(HB.trigger).toHaveBeenCalledWith('emailEntered', jasmine.any(Object), "myEmail@test.com", undefined);
+        expect(HB.trigger).toHaveBeenCalledWith('emailSubmitted', jasmine.any(Object), "myEmail@test.com", undefined);
       });
     });
   });

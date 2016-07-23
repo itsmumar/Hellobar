@@ -404,7 +404,8 @@ HB.SiteElement = HB.createClass({
       }
     }
 
-    HB.trigger("closed", this);
+    HB.trigger("elementDismissed"); // Old-style trigger
+    HB.trigger("closed", this); // New trigger
   },
 
   // Create the pulldown arrow element for when a bar is hidden
