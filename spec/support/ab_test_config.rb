@@ -11,6 +11,7 @@ RSpec.configure do |config|
     stub_out_get_ab_variations("Onboarding Limitted To Three Goals 2016-05-11") {"original"}
     stub_out_get_ab_variations("Exit Intent Pop-up Based on Bar Goals 2016-06-08") {"original"}
     stub_out_get_ab_variations("Onboarding Email Volume 2016-06-28") {"original"}
+    stub_out_get_ab_variations("Pricing Modal Copy 2016-07-07") {"original"}
   end
 end
 
