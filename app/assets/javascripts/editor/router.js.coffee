@@ -29,6 +29,6 @@ HelloBar.Router.map ->
     
   @route 'interstitial', ->
     @route 'call'
-    @route 'promote'
+    @route 'money', path: 'promote'
     @route 'contacts'
     @route 'facebook'
