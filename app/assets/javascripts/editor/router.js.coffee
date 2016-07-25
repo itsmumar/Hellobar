@@ -2,7 +2,7 @@ HelloBar.Router.map ->
 
   @route 'home', {path: '/'}
 
-  @resource 'settings', ->
+  @route 'settings', ->
     @route 'emails'
     @route 'social'
     @route 'click'
@@ -10,7 +10,7 @@ HelloBar.Router.map ->
     @route 'feedback'
     @route 'announcement'
 
-  @resource 'style', ->
+  @route 'style', ->
     @route 'bar'
     @route 'modal'
     @route 'slider'
@@ -20,9 +20,15 @@ HelloBar.Router.map ->
 
   @route 'text'
 
-  @resource 'targeting', ->
+  @route 'targeting', ->
     @route 'everyone'
     @route 'mobile'
     @route 'homepage'
     @route 'custom'
     @route 'saved'
+    
+  @route 'interstitial', ->
+    @route 'call'
+    @route 'promote'
+    @route 'contacts'
+    @route 'facebook'

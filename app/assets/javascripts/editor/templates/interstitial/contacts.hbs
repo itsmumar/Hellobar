@@ -13,7 +13,8 @@
     {{view Ember.TextField value=model.link_text placeholder="Subscribe" maxlength=255}}
 
     <div class="step-container">
-      <button {{bind-attr class=":high-priority :button :cancel-button :cancel forceContacts:invisible"}} {{action 'closeEditor'}}>Cancel</button>
+        {{#link-to "interstitial"}}Cancel{{/link-to}}
+      <!--button {{bind-attr class=":high-priority :button :cancel-button :cancel forceContacts:invisible"}} {{action 'closeEditor'}}>Cancel</button-->
       <button class="button save-editor" {{action 'closeInterstitial'}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
     </div>
   </div>

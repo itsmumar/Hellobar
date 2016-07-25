@@ -25,7 +25,8 @@
   </div>
 
   <div class="step-container">
-    <button class="button cancel-button cancel" {{action 'closeEditor'}}>Cancel</button>
+      {{#link-to "interstitial"}}Cancel{{/link-to}}
+    <!--button class="button cancel-button cancel" {{action 'closeEditor'}}>Cancel</button-->
     <button class="button save-editor" {{action 'closeInterstitial'}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
   </div>
 </div>

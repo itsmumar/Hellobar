@@ -137,3 +137,5 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
         'model.link_text'          : null
         'model.phone_country_code' : 'US'
       )
+
+HelloBar.InterstitialCallController = HelloBar.InterstitialController.extend()

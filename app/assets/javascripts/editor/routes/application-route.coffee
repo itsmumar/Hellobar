@@ -4,7 +4,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
   model: ->
     if localStorage["stashedEditorModel"]
-      $(".goal-interstitial").remove() # Don't show the goal selector if we already have a model
+      #$(".goal-interstitial").remove() # Don't show the goal selector if we already have a model
       model = JSON.parse(localStorage["stashedEditorModel"])
       localStorage.removeItem("stashedEditorModel")
       model
@@ -64,7 +64,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
       controller = this.controllerFor('interstitial')
       controller.set('interstitialType', 'contacts')
 
-      @render("interstitials/contacts", {
+      @render("interstitial/contacts", {
         into       : 'application'
         outlet     : 'interstitial'
         view       : 'interstitial'
@@ -142,7 +142,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
       controller.set('showInterstitial', true)
       controller.set('interstitialType', subroute)
 
-      @render("interstitials/#{subroute}", {
+      @render("interstitial/#{subroute}", {
         into       : 'application'
         outlet     : 'interstitial'
         view       : 'interstitial'

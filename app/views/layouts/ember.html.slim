@@ -43,6 +43,8 @@ html
     - if current_user
       = render "shared/modals/account_prompt"
 
+    = yield
+
     - if Rails.env.development?
       = javascript_include_tag "ember"
     - else
@@ -51,7 +53,6 @@ html
     = javascript_include_tag "dropper_trios"
     = javascript_include_tag "editor/application"
 
-    = yield
 
 javascript:
   var site = #{{SiteSerializer.new(current_site, scope: current_user).to_json}};

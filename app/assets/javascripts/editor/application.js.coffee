@@ -71,10 +71,10 @@ $ ->
     $.ajax
       method: 'POST'
       url: url
-    $(@).closest('.goal-block').addClass('selected')
-    wrapper.trigger("toggleGoalSelection")
-
-    $('#ember-root').trigger('interstitial:selection', $(@).val())
+#    $(@).closest('.goal-block').addClass('selected')
+#    wrapper.trigger("toggleGoalSelection")
+#
+#    $('#ember-root').trigger('interstitial:selection', $(@).val())
 
 #-----------  Phone Data  -----------#
 
