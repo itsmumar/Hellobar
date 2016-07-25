@@ -22,7 +22,7 @@
   {{view Ember.TextField value=model.settings.url_to_like placeholder=model.site.url maxlength=255 classBinding="showFacebookUrl:enabled:hidden"}}
 
   <div class="step-container">
-      {{#link-to "interstitial"}}Cancel{{/link-to}}
+      {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
     <button class="button save-editor" {{action 'closeInterstitial'}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
   </div>
 </div>

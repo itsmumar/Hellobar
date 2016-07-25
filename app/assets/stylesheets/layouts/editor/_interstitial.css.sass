@@ -9,7 +9,7 @@ $transition: 0.75s
   height: 100%
   position: fixed
   z-index: 800000
-  overflow: scroll
+  overflow: auto
   text-align: center
   min-width: $maxWidth
   background-color: $grayLightest
@@ -141,7 +141,7 @@ $transition: 0.75s
         padding: 0 0.5em
         font-size: 0.8em
 
-      button
+      .button
         width: 100%
         display: block
         font-size: 0.95em
@@ -218,6 +218,9 @@ $transition: 0.75s
       text-align: left
       margin: 0.5em 0
 
+      .button
+        cursor: pointer
+
     .button.save-editor
       float: right
 
@@ -264,3 +267,6 @@ $transition: 0.75s
         display: block
         line-height: 110%
         font-size: 1.25rem
+
+body > canvas
+  display: none //hook to hide strange canvas tag appearing at the end of <body>

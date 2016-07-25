@@ -1,34 +1,16 @@
 HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
-
   needs: ['application']
 
-  showInterstitial: Ember.computed.alias('controllers.application.showInterstitial')
-  interstitialType: Ember.computed.alias('controllers.application.interstitialType')
-
-  forceContacts: (HB_EMAIL_FLOW_TEST == 'force')
-  showEmailVolume: (HB_ONBOARDING_EMAIL_VOLUME == 'messaging')
-
-  monthlyPageviews: ( ->
-    @get('model.site.monthly_pageviews') || 0
+  global: ( ->
+    window
   ).property()
-
-  formattedMonthlyPageviews: ( ->
-    @get('monthlyPageviews').toLocaleString()
-  ).property()
-
-  hasEnoughSubscribers: ( ->
-    @get('monthlyPageviews') > 1000
-  ).property()
-
-  calculatedSubscribers: ( ->
-    Math.round(@get('monthlyPageviews') * 0.005)
-  ).property()
-
-  formattedCalculatedSubscribers: ( ->
-    @get('calculatedSubscribers').toLocaleString()
+  
+  csrfToken: ( ->
+    $('meta[name="csrf-token"]').attr('content')
   ).property()
 
   setDefaults: ( ->
+    debugger;
     return false unless @get('model')
 
     switch @get('interstitialType')
@@ -49,47 +31,6 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
         @set('model.headline', "Like us on Facebook!")
         @set('model.element_subtype', "social/like_on_facebook")
   ).observes('model', 'interstitialType')
-
-  #-----------  Facebook Options  -----------#
-
-  showFacebookUrl: false
-  facebookLikeOptions: [
-    {value: 'homepage', label: 'Home Page'}
-    {value: 'use_location_for_url', label: 'Current Page Visitor is Viewing'}
-    {value: 'other', label: 'Other'}
-  ]
-
-  selectedFacebookLikeOptions: ( (key, value) ->
-    if arguments.length > 1
-      @set('showFacebookUrl', false)
-      @set('model.settings.use_location_for_url', false)
-
-      if value == 'homepage'
-        @set('model.settings.url_to_like', @get('model.site.url'))
-      else if value == 'use_location_for_url'
-        @set('model.settings.use_location_for_url', true)
-      else
-        @set('showFacebookUrl', true)
-      return value
-    else
-      'homepage'
-  ).property()
-
-  #-----------  Email Template Defaults  -----------#
-
-  createDefaultContactList: ->
-    if @get("model.site.contact_lists").length == 0 || @get("model.contact_list_id") == 0
-      if @get("model.site.contact_lists").length > 0
-        @set("model.contact_list_id", @get("model.site.contact_lists")[0].id)
-      else
-        $.ajax "/sites/#{@get('model.site.id')}/contact_lists.json",
-          type: "POST"
-          data: {contact_list: {name: "My Contacts", provider: 0, double_optin: 0}}
-          success: (data) =>
-            @set("model.site.contact_lists", [data])
-            @set("model.contact_list_id", data.id)
-          error: (response) =>
-            # Failed to create default list.  Without a list set a user will see the ContactListModal
 
   #-----------  Input Validation  -----------#
 
@@ -138,4 +79,68 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
         'model.phone_country_code' : 'US'
       )
 
+# CONTACTS
+HelloBar.InterstitialContactsController = HelloBar.InterstitialController.extend
+  forceContacts: (HB_EMAIL_FLOW_TEST == 'force')
+  showEmailVolume: (HB_ONBOARDING_EMAIL_VOLUME == 'messaging')
+
+  monthlyPageviews: ( ->
+    @get('model.site.monthly_pageviews') || 0
+  ).property()
+
+  formattedMonthlyPageviews: ( ->
+    @get('monthlyPageviews').toLocaleString()
+  ).property()
+
+  hasEnoughSubscribers: ( ->
+    @get('monthlyPageviews') > 1000
+  ).property()
+
+  calculatedSubscribers: ( ->
+    Math.round(@get('monthlyPageviews') * 0.005)
+  ).property()
+
+  formattedCalculatedSubscribers: ( ->
+    @get('calculatedSubscribers').toLocaleString()
+  ).property()
+
+  createDefaultContactList: ->
+    if @get("model.site.contact_lists").length == 0 || @get("model.contact_list_id") == 0
+      if @get("model.site.contact_lists").length > 0
+        @set("model.contact_list_id", @get("model.site.contact_lists")[0].id)
+      else
+        $.ajax "/sites/#{@get('model.site.id')}/contact_lists.json",
+          type: "POST"
+          data: {contact_list: {name: "My Contacts", provider: 0, double_optin: 0}}
+          success: (data) =>
+            @set("model.site.contact_lists", [data])
+            @set("model.contact_list_id", data.id)
+          error: (response) =>
+            # Failed to create default list.  Without a list set a user will see the ContactListModal
+
+HelloBar.InterstitialFacebookController = HelloBar.InterstitialController.extend
+  showFacebookUrl: false
+  facebookLikeOptions: [
+    {value: 'homepage', label: 'Home Page'}
+    {value: 'use_location_for_url', label: 'Current Page Visitor is Viewing'}
+    {value: 'other', label: 'Other'}
+  ]
+
+  selectedFacebookLikeOptions: ( (key, value) ->
+    if arguments.length > 1
+      @set('showFacebookUrl', false)
+      @set('model.settings.use_location_for_url', false)
+
+      if value == 'homepage'
+        @set('model.settings.url_to_like', @get('model.site.url'))
+      else if value == 'use_location_for_url'
+        @set('model.settings.use_location_for_url', true)
+      else
+        @set('showFacebookUrl', true)
+      return value
+    else
+      'homepage'
+  ).property()
+
+HelloBar.InterstitialIndexController = HelloBar.InterstitialController.extend()
 HelloBar.InterstitialCallController = HelloBar.InterstitialController.extend()

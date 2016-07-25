@@ -7,15 +7,15 @@
         <i class="large-icon icon-money"></i>
         <h6>Promote a Sale/Discount</h6>
         <p>Point visitors to your latest deal, bargain, or giveaway.</p>
-        {{#link-to "interstitial.promote"}}Select This Goal{{/link-to}}
+        {{#link-to "interstitial.promote" classNames="button"}}Select This Goal{{/link-to}}
     </div>
 
-    {{#unless onboardingLimitedVariant}}
+    {{#unless global.HB_DATA.onboardingLimitedVariant}}
     <div class="goal-block">
         <i class="large-icon icon-call"></i>
         <h6>Talk to Your Visitors</h6>
         <p>Encourage mobile visitors to give you a ring.</p>
-        {{#link-to "interstitial.call"}}Select This Goal{{/link-to}}
+        {{#link-to "interstitial.call" classNames="button"}}Select This Goal{{/link-to}}
     </div>
     {{/unless}}
 
@@ -23,15 +23,15 @@
         <i class="large-icon icon-contacts"></i>
         <h6>Grow Your Mailing List</h6>
         <p>Convert one-time visits into lasting connections.</p>
-        {{#link-to "interstitial.contacts"}}Select This Goal{{/link-to}}
+        {{#link-to "interstitial.contacts" classNames="button"}}Select This Goal{{/link-to}}
     </div>
 
-    {{#unless onboardingLimitedVariant}}
+    {{#unless global.HB_DATA.onboardingLimitedVariant}}
     <div class="goal-block">
         <i class="large-icon icon-thumbsup"></i>
         <h6>Get Facebook Likes</h6>
         <p>Expand your social reach to maximize word of mouth.</p>
-        {{#link-to "interstitial.facebook"}}Select This Goal{{/link-to}}
+        {{#link-to "interstitial.facebook" classNames="button"}}Select This Goal{{/link-to}}
     </div>
     {{/unless}}
 
@@ -39,7 +39,7 @@
         <i class="large-icon icon-other"></i>
         <h6>Other</h6>
         <p>Don't see your goal?  Customize Hello Bar to fit your needs.</p>
-        {{#link-to "settings"}}Select This Goal{{/link-to}}
+        {{#link-to "settings" classNames="button"}}Select This Goal{{/link-to}}
     </div>
 </div>
 
@@ -59,20 +59,19 @@
             <p>
                 Just fill out the form below and we'll get back to you as soon as we can.
             </p>
-            <!--
-
-= form_tag generic_message_contact_submission_path, :method => :post do |f|
-= hidden_field_tag :site_id, @site.id
-= hidden_field_tag :return_to, new_site_site_element_path(current_site)
-
-= text_area_tag :message, ""
-
-= submit_tag "Send", class: "button", data: { disable_with: "Sending..." }
--->
+            <form action="/contact_submissions/generic_message" method="post">
+                <input name="authenticity_token" type="hidden" value="{{unbound csrfToken}}"/>
+                <input name="site_id" type="hidden" value="{{unbound global.siteID}}"/>
+                <input name="return_to" type="hidden" value="/sites/{{unbound global.siteID}}/site_elements/new"}}/>
+                <textarea name="message"></textarea>
+                <input type="submit" name="commit" class="button" data-disable-with="Sending..." value="Send"/>
+            </form>
         </div>
     </div>
 
     <p>
-        Link<!--small = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete, class: "deemphasize"-->
+        <small>
+            <a href="/users/sign_out" data-method="delete" class="deemphasize">Sign Out</a>
+        </small>
     </p>
 </footer>

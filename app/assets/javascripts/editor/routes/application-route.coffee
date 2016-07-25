@@ -58,11 +58,11 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
   #---------- Contact Interstitial Test -----#
 
-  renderTemplate: ->
+  renderTemplate: -> #???
     @_super()
     if HB_EMAIL_FLOW_TEST == 'force'
-      controller = this.controllerFor('interstitial')
-      controller.set('interstitialType', 'contacts')
+#      controller = this.controllerFor('interstitial')
+#      controller.set('interstitialType', 'contacts')
 
       @render("interstitial/contacts", {
         into       : 'application'
@@ -139,8 +139,8 @@ HelloBar.ApplicationRoute = Ember.Route.extend
     if isInterstitial
       InternalTracking.track_current_person('Template Selected', {template: subroute})
 
-      controller.set('showInterstitial', true)
-      controller.set('interstitialType', subroute)
+#      controller.set('showInterstitial', true)
+#      controller.set('interstitialType', subroute)
 
       @render("interstitial/#{subroute}", {
         into       : 'application'

@@ -1,4 +1,13 @@
-#HelloBar.InterstitialView = Ember.View.extend
+HelloBar.InterstitialView = Ember.View.extend
+  click: (e) ->
+    $target = $(e.target)
+    $reveal = $target.closest(".reveal-wrapper")
+
+    if $reveal.length
+      $reveal.addClass("activated")
+      
+  didInsertElement: () ->
+    InternalTracking.track_current_person("Editor Flow", {step: "Choose Goal"}) if trackEditorFlow
 #
 #  classNames: ['goal-interstitial']
 #  classNameBindings: ['transitioning']
