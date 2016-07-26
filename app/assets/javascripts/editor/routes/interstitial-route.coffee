@@ -3,16 +3,14 @@ HelloBar.InterstitialRoute = Ember.Route.extend
     @modelFor("application")
 
   renderTemplate: ->
-    @render {
+    @render
       outlet: "interstitial" # render main interstitial template inside of "interstitial" outlet
-    }
 
 
 NestedInterstitialRoute = HelloBar.InterstitialRoute.extend
   renderTemplate: ->
-    @render {
+    @render
       into: "interstitial" # render sub-interstitial templates into main "interstitial" template
-    }
 
   setupController: (controller, model) ->
     @_super(controller, model)

@@ -8,6 +8,8 @@ HelloBar.InterstitialView = Ember.View.extend
       
   didInsertElement: () ->
     InternalTracking.track_current_person("Editor Flow", {step: "Choose Goal"}) if trackEditorFlow
+
+
 #
 #  classNames: ['goal-interstitial']
 #  classNameBindings: ['transitioning']
