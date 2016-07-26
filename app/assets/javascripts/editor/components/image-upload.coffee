@@ -2,6 +2,7 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
   dropzoneInstance: null
   classNames: ['file-upload-container']
   classNameBindings: ['hasFile:has-file', 'errorState:with-errors']
+  useThemeImage: null
 
   hasFile: Ember.computed 'existingFileName', ->
     if @get('existingFileName') == "uploading"
@@ -20,11 +21,16 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
     if file and file.status == "uploading"
       return file.name
 
+  removeDefaultImage:( ->
+    if !@get('useThemeImage') && !@get('hasUserChosenImage') then @send('removeDropzoneImages')
+  ).observes('useThemeImage').on('init')
+
   actions:
     removeDropzoneImages: ->
       @set('existingFileName', null)
       @sendAction('setImageProps', null, '')
-      @get('dropzoneInstance').removeAllFiles()
+      dropzone = @get('dropzoneInsance')
+      if dropzone then dropzone.removeAllFiles()
 
   didInsertElement: ->
     @insertDropzone()
@@ -43,7 +49,7 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       success: (file, res) =>
         @set('existingFileName', file.name)
-        @sendAction('setImageProps', res.id, res.url)
+        @sendAction('setImageProps', res.id, res.url, 'custom')
       sending: (file, xhr, formData) =>
         @set('existingFileName', "uploading")
         formData.append('site_element_id', siteID)
