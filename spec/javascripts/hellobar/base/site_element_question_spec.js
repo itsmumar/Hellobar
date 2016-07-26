@@ -20,7 +20,8 @@ describe("HB", function() {
       answer1link_text: "Answer 1 Link Text",
       answer2response: "Answer 2 Response",
       answer2caption: "Answer 2 Caption",
-      answer2link_text: "Answer 2 Link Text"
+      answer2link_text: "Answer 2 Link Text",
+      id: "1"
     }
 
     siteElement = new HB.SiteElement(siteElementData);
@@ -28,7 +29,6 @@ describe("HB", function() {
 
     spyOn(siteElement, 'attach');
   });
-
 
   describe("HB.addToPage", function() {
     context("element does not have a question", function() {
@@ -62,6 +62,25 @@ describe("HB", function() {
         HB.addToPage(siteElement);
 
         expect(HB.siteElementsOnPage.length).toEqual(1);
+      });
+    });
+  });
+
+  describe("HB.findSiteElementOnPageById", function() {
+    context("when element exists in array", function() {
+      it("returns the element found", function() {
+        HB.siteElementsOnPage.push(siteElement);
+        var result = HB.findSiteElementOnPageById(siteElement.id);
+
+        expect(result).toEqual(siteElement);
+      });
+    });
+
+    context("when element does not exists in array", function() {
+      it("returns null", function() {
+        HB.siteElementsOnPage.push(siteElement);
+
+        expect(HB.findSiteElementOnPageById("2")).toEqual(null);
       });
     });
   });
@@ -155,5 +174,22 @@ describe("HB", function() {
 
       expect(result.remove).toHaveBeenCalled();
     });
+
+    context("callbacks", function() {
+      beforeEach(function() {
+        var result = HB.questionifySiteElement(siteElement);
+        spyOn(HB, 'trigger');
+        result.displayResponse(2);
+      });
+
+      it("triggers the answerSelected callback", function() {
+        expect(HB.trigger).toHaveBeenCalledWith('answerSelected', 2);
+      });
+
+      it("triggers the answered callback", function() {
+        expect(HB.trigger).toHaveBeenCalledWith('answered', jasmine.any(Object), 2);
+      });
+    });
+
   });
 });
