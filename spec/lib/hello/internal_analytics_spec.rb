@@ -6,9 +6,10 @@ end
 describe Hello::InternalAnalytics do
   fixtures :all
 
-  before do
+  before(:each) do
     Hello::InternalAnalytics.send(:remove_const, "TESTS")
     Hello::InternalAnalytics::TESTS = {}
+    Hello::InternalAnalytics.class_variable_set(:@@expected_index, 0)
   end
 
   context "class methods" do
