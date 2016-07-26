@@ -174,5 +174,22 @@ describe("HB", function() {
 
       expect(result.remove).toHaveBeenCalled();
     });
+
+    context("callbacks", function() {
+      beforeEach(function() {
+        var result = HB.questionifySiteElement(siteElement);
+        spyOn(HB, 'trigger');
+        result.displayResponse(2);
+      });
+
+      it("triggers the answerSelected callback", function() {
+        expect(HB.trigger).toHaveBeenCalledWith('answerSelected', 2);
+      });
+
+      it("triggers the answered callback", function() {
+        expect(HB.trigger).toHaveBeenCalledWith('answered', jasmine.any(Object), 2);
+      });
+    });
+
   });
 });
