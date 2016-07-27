@@ -1,13 +1,6 @@
 CSS_TRANSITION = 750 # when changing please update it in "_interstitial.css.sass" as well
 
 HelloBar.InterstitialView = Ember.View.extend
-  click: (e) ->
-    $target = $(e.target)
-    $reveal = $target.closest(".reveal-wrapper")
-
-    if $reveal.length
-      $reveal.addClass("activated")
-      
   didInsertElement: () ->
     InternalTracking.track_current_person("Editor Flow", {step: "Choose Goal"}) if trackEditorFlow
 
@@ -17,7 +10,7 @@ HelloBar.InterstitialView = Ember.View.extend
 SubInterstitialView = Ember.View.extend
   classNames: ["interstitial-container"]
   baseZIndex: 10000 # should equal to z-index specified in "_interstitial.css.sass"
-  routeName: null
+  routeName: null # route name related to the view
 
   willAnimateIn: () ->
     @$el.addClass("transitioning no-transition") # set initial state immediately
@@ -27,7 +20,7 @@ SubInterstitialView = Ember.View.extend
     setTimeout done, CSS_TRANSITION
     
   didAnimateIn: () ->
-    SubInterstitialView.lastRoute = @routeName
+    SubInterstitialView.lastRoute = @routeName # save last route name to enlarge its block on index view
 
   animateOut: (done) ->
     @$el.addClass "transitioning"
@@ -36,39 +29,33 @@ SubInterstitialView = Ember.View.extend
 HelloBar.InterstitialIndexView = SubInterstitialView.extend
   willAnimateIn: () ->
     @_super()
-    if SubInterstitialView.lastRoute
+    if SubInterstitialView.lastRoute # specific css animation for previously selected interstitial goal block
       this.$(".goal-block[data-route=#{SubInterstitialView.lastRoute}]").addClass("selected")
 
   click: (e) ->
     $target = $(e.target)
-    if $target.is(".goal-block .button")
+    $reveal = $target.closest(".reveal-wrapper")
+
+    if $reveal.length # open reveal block
+      $reveal.addClass("activated")
+      return
+
+    if $target.is(".goal-block .button") # mark selected goal block to use specific css animation for it
       this.$(".goal-block.selected").removeClass("selected")
       $target.closest(".goal-block").addClass("selected")
+
+      route = $target.closest(".goal-block").data("route")
+      InternalTracking.track_current_person("Template Selected", {template: route}) if route
+      return
+
+HelloBar.InterstitialMoneyView = SubInterstitialView.extend
+  routeName: "money"
+
+HelloBar.InterstitialCallView = SubInterstitialView.extend
+  routeName: "call"
 
 HelloBar.InterstitialContactsView = SubInterstitialView.extend
   routeName: "contacts"
 
-#
-#  classNames: ['goal-interstitial']
-#  classNameBindings: ['transitioning']
-#
-#  isTransitioning: false
-#
-#  closeView: ->
-#    @set('transitioning', true)
-#    setTimeout =>
-#      @$().remove()
-#    , 1000
-#
-#  didInsertElement: ->
-#    @get('controller').on('viewClosed', this, this.closeView)
-#
-#  #-----------  Removal Animation  -----------#
-#
-#  click: (evt) ->
-#    if evt.target.className.indexOf('cancel-button') > -1
-#      $('.goal-interstitial').trigger("toggleGoalSelection")
-#
-#    return false
-#
-#HelloBar.InterstitialIndexView = HelloBar.InterstitialView.extend()
+HelloBar.InterstitialFacebookView = SubInterstitialView.extend
+  routeName: "facebook"

@@ -6,6 +6,24 @@ HelloBar.InterstitialRoute = Ember.Route.extend
     @render
       outlet: "interstitial" # render main interstitial template inside of "interstitial" outlet
 
+  # Set sub-step forwarding on interstitial load
+  setSettingsForwarding: (model) ->
+    settings = @controllerFor("settings")
+    
+    if /^social/.test model.element_subtype
+      settings.routeForwarding = "settings.social"
+    else
+      switch model.element_subtype
+        when "call"
+          settings.routeForwarding = "settings.call"
+        when "email"
+          settings.routeForwarding = "settings.emails"
+        when "traffic"
+          settings.routeForwarding = "settings.click"
+        when "announcement"
+          settings.routeForwarding = "settings.announcement"
+        else
+          settings.routeForwarding = false
 
 NestedInterstitialRoute = HelloBar.InterstitialRoute.extend
   renderTemplate: ->
@@ -15,8 +33,8 @@ NestedInterstitialRoute = HelloBar.InterstitialRoute.extend
   setupController: (controller, model) ->
     @_super(controller, model)
 
-    if controller.setDefaults
-      controller.setDefaults()
+    controller.setDefaults()
+    @setSettingsForwarding(model)
 
     unless @ instanceof HelloBar.InterstitialIndexRoute
       $.ajax

@@ -15,16 +15,9 @@
   {{view Ember.TextField value=model.settings.url placeholder=model.site.url maxlength=510}}
 
   <div class="step-container">
-      {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
-    <button class="button save-editor" {{action 'closeInterstitial'}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
+    {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
+    <button class="button save-editor" {{action "closeInterstitial"}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
   </div>
 </div>
-
-<footer>
-  <p>
-    You can always change this later.
-    <a href="mailto:support@hellobar.com?subject=Hello%20Bar%20-%20Getting%20Started">Need Help?</a>
-  <p>
-</footer>
 
 {{partial "partials/interstitial-footer"}}

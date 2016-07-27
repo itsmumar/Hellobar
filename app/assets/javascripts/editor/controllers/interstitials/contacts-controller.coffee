@@ -52,17 +52,10 @@ HelloBar.InterstitialContactsController = Ember.Controller.extend
       Ember.isEmpty(@get("model.link_text"))
     )
   ).property(
-    "model.settings.url",
     "model.link_text",
-    "model.headline",
-    "model.settings.url_to_like",
-    "model.settings.use_location_for_url",
-    "controllers.application.phone_number",
-    "model.phone_country_code"
+    "model.headline"
   )
 
   actions:
-
     closeInterstitial: ->
       @transitionToRoute("settings.emails")
-      #@trigger("viewClosed")
