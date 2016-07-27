@@ -1,5 +1,7 @@
 #= require_self
 
+#= require ember-animate
+
 #= require_tree ./controllers
 #= require_tree ./views
 #= require_tree ./components

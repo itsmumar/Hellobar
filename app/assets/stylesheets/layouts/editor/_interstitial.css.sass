@@ -1,6 +1,6 @@
 /*-----------  Goal Interstitial  -----------*/
 
-$transition: 0.75s
+$transition: 0.75s //when changing please update it in "interstitial-view.coffee" as well
 
 .goal-interstitial
   top: 0
@@ -13,7 +13,6 @@ $transition: 0.75s
   text-align: center
   min-width: $maxWidth
   background-color: $grayLightest
-  @include transition($transition all ease-in-out)
 
   header
     padding: 1em
@@ -133,8 +132,9 @@ $transition: 0.75s
       @include display(flex)
 
       h6
-        color: $grayDark
         margin: 1.5em 0 0.33em
+        font-size: 1em
+        color: $grayDark
 
       p
         color: $gray
@@ -146,6 +146,7 @@ $transition: 0.75s
         display: block
         font-size: 0.95em
         margin-top: auto
+        padding: .45em
         border-radius: $radiusLg
         text-transform: uppercase
         font-weight: $fontWeightBold
@@ -160,22 +161,38 @@ $transition: 0.75s
         i
           @include animation(jingle 0.67s ease-out 1)
 
-  /*-----------  Selection Fade  -----------*/
+  .interstitial-container
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    z-index: 10000 //should equal to baseZIndex variable specified in "interstitial-view.coffee"
+    @include transition($transition opacity ease-in-out)
 
-  &.transitioning
-    opacity: 0
-    pointer-events: none
+    &.no-transition //force no transition delay when preparing setting views to initial state before transitioning
+      @include transition(none)
 
-    header,
-    footer
-      @include filter(blur(2px))
+      header,
+      footer,
+      .goal-block
+        @include transition(none)
 
-    .goal-block
-      @include transform(scale(0.75))
-      @include filter(blur(2px))
+    &.transitioning
+      opacity: 0
+      pointer-events: none
+      z-index: 10001
 
-      &.selected
-        @include transform(scale(1.15))
+      header,
+      footer
+        @include filter(blur(2px))
+
+      .goal-block
+        @include transform(scale(0.75))
+        @include filter(blur(2px))
+
+        &.selected
+          @include transform(scale(1.15))
 
   /*-----------  Template Forms  -----------*/
 
