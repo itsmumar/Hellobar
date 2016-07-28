@@ -216,7 +216,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.theme_id",
     "model.type",
     "model.use_question",
-    "model.wiggle_button"
+    "model.wiggle_button",
+    "model.use_default_image"
   )
 
   #---------------- Font Helpers ----------------#

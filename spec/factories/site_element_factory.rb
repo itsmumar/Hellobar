@@ -4,6 +4,14 @@ FactoryGirl.define do
     type "Bar"
     element_subtype "announcement"
 
+    factory :modal_element do
+      type "Modal"
+    end
+
+    factory :takeover_element do
+      type "Takeover"
+    end
+
     trait :click_to_call do
       element_subtype "call"
       phone_number Faker::PhoneNumber.cell_phone
@@ -24,14 +32,6 @@ FactoryGirl.define do
 
     trait :facebook do
       element_subtype "social/like_on_facebook"
-    end
-
-    factory :modal_element do
-      type "Modal"
-    end
-
-    factory :takeover_element do
-      type "Takeover"
     end
   end
 end

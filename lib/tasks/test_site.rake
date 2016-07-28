@@ -42,4 +42,10 @@ namespace :test_site do
   task :run do
     ruby "#{HbTestSite.run_file}"
   end
+
+  desc "Runs the test site generation and a Sinatra server"
+  task :run_fresh do
+    Rake::Task["test_site:generate"].invoke
+    Rake::Task["test_site:run"].invoke
+  end
 end
