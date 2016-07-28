@@ -9,7 +9,7 @@
     = f.text_field :url, placeholder: "Your website URL"
 
     .select-wrapper
-      = f.select :timezone, ActiveSupport::TimeZone.all.map{ |tz| [tz.to_s, tz.tzinfo.identifier] }
+      = f.select :timezone, time_zone_options
 
     = hidden_field_tag :detect_timezone, nil, disabled: true
 
@@ -31,7 +31,7 @@
     = text_field_tag :site_url, nil, placeholder: "Your website URL"
 
     .select-wrapper
-      = select_tag :site_timezone, ActiveSupport::TimeZone.all.map{ |tz| "<option value='#{tz.tzinfo.identifier}'>#{tz.to_s}</option>" }.join.html_safe
+      = select_tag :site_timezone, filtered_timezone_list.map{ |tz| "<option value='#{tz.tzinfo.identifier}'>#{tz.to_s}</option>" }.join.html_safe
     = hidden_field_tag :detect_timezone, nil, disabled: true
 
     button class="button" Add Site
