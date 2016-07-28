@@ -38,9 +38,9 @@ feature 'User can create a site element', js: true do
     fill_in 'Your Email', with: user.email
     click_button 'Continue'
 
-    first(:button, 'Select This Goal').click
-    first(:button, 'Continue').click
-    first(:button, 'Save & Publish').click
+    first(:a, 'Select This Goal').click
+    first(:a, 'Continue').click
+    first(:a, 'Save & Publish').click
 
     expect(page).to have_content('Summary', visible: true)
     OmniAuth.config.mock_auth[:google_oauth2] = nil
