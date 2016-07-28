@@ -32,10 +32,13 @@ class SiteSerializer < ActiveModel::Serializer
   end
 
   def contact_lists
+    providers = Hellobar::Settings[:identity_providers].reject{|provider, values| values[:hidden] }
     object.contact_lists.map do |list|
+      provider_name = list.identity_id && Identity.find(list.identity_id).provider.titlecase
       {
         :id => list.id,
-        :name => list.name
+        :name => list.name,
+        :provider => provider_name || 'Hello Bar'
       }
     end
   end

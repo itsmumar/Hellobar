@@ -1,8 +1,10 @@
 class @ContactListModal extends Modal
 
-  modalName: 'contact-list'
-
   constructor: (@options = {}) ->
+    # A/B Variant
+    @isVariant = (window.HB_EMAIL_INTEGRATION_TEST && HB_EMAIL_INTEGRATION_TEST == 'variant')
+    @modalName = if @isVariant then 'contact-list-variant' else 'contact-list'
+
     @options.window ||= window
     @options.canDelete = (@options.canDelete != false)
     @options.templates ||= @_loadTemplates()
@@ -10,7 +12,7 @@ class @ContactListModal extends Modal
     @_initializeTemplates()
     @_initializeBlocks()
 
-    @$modal.on 'load',   -> $(this).addClass('loading')
+    @$modal.on 'load', -> $(this).addClass('loading')
     @$modal.on 'complete', -> $(this).removeClass('loading').finish()
 
     super(@$modal)
@@ -23,11 +25,7 @@ class @ContactListModal extends Modal
     @_loadContactList() if @options.loadURL
     @_populateContactList() if @options.contactList
     @_bindInteractions(@$modal)
-
-    if @$modal.find("#contact_list_provider").val() == "0"
-      @blocks.hellobarOnly.show()
-    else
-      @blocks.hellobarOnly.hide()
+    @_setBlockVisibilty(true)
 
     super
 
@@ -35,45 +33,160 @@ class @ContactListModal extends Modal
     num = @$modal.find("#contact_list_site_elements_count").val()
     parseInt(num) > 0
 
+  _setBlockVisibilty: (initital = false)->
+    listVal = @$modal.find("#contact_list_provider").val()
+
+    # A/B Variant
+    if @isVariant
+      if initital
+        @blocks.iconListing.show()
+        @blocks.hellobarOnly.hide()
+        @blocks.selectListing.hide()
+      else if listVal == "0"
+        @blocks.iconListing.hide()
+        @blocks.hellobarOnly.show()
+        @blocks.selectListing.hide()
+      else
+        @blocks.iconListing.hide()
+        @blocks.hellobarOnly.hide()
+        @blocks.selectListing.show()
+    else
+      if listVal == "0"
+        @blocks.hellobarOnly.show()
+      else
+        @blocks.hellobarOnly.hide()
+
+    @_setSideIcon() if initital && listVal != "0"
+
   _loadTemplates: ->
-    main: $("#contact-list-modal-template").html()
-    instructions: $("#contact-list-modal-provider-instructions-template").html()
-    nevermind: $("#contact-list-modal-provider-instructions-nevermind-template").html()
-    syncDetails: $("#contact-list-modal-sync-details-template").html()
-    remoteListSelect: $("#contact-list-modal-remote-list-select-template").html()
+    # A/B Variant
+    if @isVariant
+      return {
+        main             : $("#contact-list-variant-modal-template").html()
+        instructions     : $("#contact-list-variant-modal-provider-instructions-template").html()
+        nevermind        : $("#contact-list-variant-modal-provider-instructions-nevermind-template").html()
+        syncDetails      : $("#contact-list-variant-modal-sync-details-template").html()
+        remoteListSelect : $("#contact-list-variant-modal-remote-list-select-template").html()
+      }
+    else
+      return {
+        main             : $("#contact-list-modal-template").html()
+        instructions     : $("#contact-list-modal-provider-instructions-template").html()
+        nevermind        : $("#contact-list-modal-provider-instructions-nevermind-template").html()
+        syncDetails      : $("#contact-list-modal-sync-details-template").html()
+        remoteListSelect : $("#contact-list-modal-remote-list-select-template").html()
+      }
 
   _initializeTemplates: ->
     @templates =
-      main: Handlebars.compile(@options.templates.main)
-      instructions: Handlebars.compile(@options.templates.instructions)
-      nevermind: Handlebars.compile(@options.templates.nevermind)
-      syncDetails: Handlebars.compile(@options.templates.syncDetails)
-      remoteListSelect: Handlebars.compile(@options.templates.remoteListSelect)
+      main             : Handlebars.compile(@options.templates.main)
+      instructions     : Handlebars.compile(@options.templates.instructions)
+      nevermind        : Handlebars.compile(@options.templates.nevermind)
+      syncDetails      : Handlebars.compile(@options.templates.syncDetails)
+      remoteListSelect : Handlebars.compile(@options.templates.remoteListSelect)
 
     @$modal = $(@templates.main({header: @_header()}))
     @$modal.appendTo($("body"))
 
   _header: ->
-    if @options.id
+    # A/B Variant
+    if @isVariant
+      "Set up your contact list and integration"
+    else if @options.id
       "Edit Contact List"
     else
       "Where do you want to store the emails we collect?"
 
   _initializeBlocks: ->
+    # A/B Variant: iconListing, selectListing
     @blocks =
-      instructions: @$modal.find(".provider-instructions-block")
-      nevermind: @$modal.find(".provider-instructions-nevermind-block")
-      syncDetails: @$modal.find(".sync-details-block")
-      remoteListSelect: @$modal.find(".remote-list-select-block")
-      hellobarOnly: @$modal.find(".hellobar-only")
+      iconListing      : @$modal.find(".primary-selection-block")
+      selectListing    : @$modal.find(".secondary-selection-block")
+      instructions     : @$modal.find(".provider-instructions-block")
+      nevermind        : @$modal.find(".provider-instructions-nevermind-block")
+      syncDetails      : @$modal.find(".sync-details-block")
+      remoteListSelect : @$modal.find(".remote-list-select-block")
+      hellobarOnly     : @$modal.find(".hellobar-only")
 
   _bindInteractions: (object) ->
+    if @isVariant
+      @_bindCustomEvents(object)
+      @_bindShowExpandedList(object)
+      @_bindProviderRadio(object)
+      @_bindSelectIcons(object)
+      @_bindHbSelection(object)
+
     @_bindProviderSelect(object)
     @_bindDoThisLater(object)
     @_bindReadyButton(object)
     @_bindSubmit(object)
     @_bindDisconnect(object)
     @_bindDelete(object)
+
+  # A/B Variant - Handles custom event triggers for new UI pieces
+  _bindCustomEvents: (object) ->
+    selectList  = object.find('#contact_list_provider')
+
+    object.on 'provider:connected', (evt) =>
+      selectList.parent().addClass('connected')
+      @blocks.selectListing.show()
+      @blocks.hellobarOnly.hide()
+      @blocks.iconListing.hide()
+
+    object.on 'provider:disconnected', (evt) ->
+      selectList.parent().removeClass('connected')
+
+  # A/B Variant - Handles the expanded icon list toggling
+  _bindShowExpandedList: (object) ->
+    providerList = object.find('.contact-list-radio-wrapper')
+    expandLabel  = object.find('.show-expanded-providers')
+
+    expandLabel.on 'click', (evt) ->
+      providerList.toggleClass('expanded')
+
+  # A/B Variant - Handles the icon block selections
+  _bindProviderRadio: (object) ->
+    radioInputs = object.find('input[type = radio][name = "contact_list[provider]"]')
+    selectList  = object.find('#contact_list_provider')
+    blocks      = @blocks
+
+    radioInputs.on 'change', (e) ->
+      selectList.val(this.value).trigger('change')
+      blocks.iconListing.hide()
+      blocks.selectListing.show()
+
+  # A/B Variant - Handles the select dropdown icon rendering
+  _bindSelectIcons: (object) ->
+    selectList = object.find('#contact_list_provider')
+
+    selectList.on 'change', (e) =>
+      selectList.parent().removeClass('connected')
+      @_setBlockVisibilty()
+      @_setSideIcon()
+
+  # A/B Variant - Set the icon beside the dropdown
+  _setSideIcon: ->
+    provider  = @$modal.find('#contact_list_provider').val()
+    listImage = @$modal.find(".contact-list-radio-block.#{provider}-provider img").clone()
+
+    @$modal.find('.select-side-icon').html(listImage)
+
+  # A/B Variant - Handles the "I don't use these tools" HB integration selection
+  _bindHbSelection: (object) ->
+    useHbOnly    = object.find('.use-hello-bar-email-lists')
+    noHbOnly     = object.find('.back-to-providers')
+    providerList = object.find('.contact-list-radio-wrapper')
+    selectList   = object.find('#contact_list_provider')
+    blocks       = @blocks
+
+    useHbOnly.on 'click', (evt) ->
+      selectList.val('0').trigger('change')
+
+    noHbOnly.on 'click', (evt) ->
+      providerList.addClass('expanded')
+      blocks.selectListing.hide()
+      blocks.hellobarOnly.hide()
+      blocks.iconListing.show()
 
   _bindProviderSelect: (object) ->
     modal = this
@@ -90,6 +203,7 @@ class @ContactListModal extends Modal
           modal.blocks.instructions.show()
           modal.blocks.syncDetails.hide()
           modal.blocks.remoteListSelect.hide()
+          modal.$modal.trigger('provider:disconnected')
         error: (response) =>
           console.log("Could not disconnect identity", response)
 
@@ -110,9 +224,9 @@ class @ContactListModal extends Modal
 
         newPath = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
         queryParams = {}
-        queryParams["api_key"] = @_getFormData().data.api_key
+        queryParams["api_key"]  = @_getFormData().data.api_key
         queryParams["username"] = @_getFormData().data.username
-        queryParams["app_url"] = @_getFormData().data.app_url
+        queryParams["app_url"]  = @_getFormData().data.app_url
         newPath += "&" + $.param(queryParams)
 
         @options.window.location = newPath
@@ -136,9 +250,11 @@ class @ContactListModal extends Modal
 
   _doSubmit: (e) ->
     @_clearErrors()
+
     submitButton = @$modal.find("a.submit")
     submitButton.attr("disabled", true)
     formData = @_getFormData()
+
     $.ajax @options.saveURL,
       type: @options.saveMethod
       data: {contact_list: formData}
@@ -177,19 +293,19 @@ class @ContactListModal extends Modal
 
   _getFormData: ->
     {
-      name: @$modal.find("form #contact_list_name").val()
-      provider: @$modal.find("form #contact_list_provider").val()
-      double_optin: if @$modal.find("form #contact_list_double_optin").prop("checked") then "1" else "0"
-      data: @_getContactListData()
+      name         : @$modal.find("form #contact_list_name").val()
+      provider     : @$modal.find("form #contact_list_provider").val()
+      double_optin : if @$modal.find("form #contact_list_double_optin").prop("checked") then "1" else "0"
+      data         : @_getContactListData()
     }
 
   _getContactListData: ->
     if @_isLocalContactStorage() then return {}
     remoteListSelect = @$modal.find("#contact_list_remote_list_id")
     data =
-      remote_id: $(remoteListSelect).val()
-      remote_name: $(remoteListSelect).find("option:selected").text()
-      embed_code: $('#contact_list_embed_code').val()
+      remote_id   : $(remoteListSelect).val()
+      remote_name : $(remoteListSelect).find("option:selected").text()
+      embed_code  : $('#contact_list_embed_code').val()
 
     api_key         = $('#contact_list_api_key').val()
     username        = $('#contact_list_username').val()
@@ -237,17 +353,17 @@ class @ContactListModal extends Modal
     option = $(select).find("option:selected")
     label = option.text()
     defaultContext =
-      provider: value
-      providerName: label
-      oauth: option.data('oauth')
-      requiresEmbedCode: option.data('requiresEmbedCode')
-      requiresAppUrl: option.data('requiresAppUrl')
-      requiresAccountId: option.data('requiresAccountId')
-      requiresApiKey: option.data('requiresApiKey')
-      requiresUsername: option.data('requiresUsername')
-      requiresWebhookUrl: option.data('requiresWebhookUrl')
-      webhookIsPost: @options.contactList?.data?.webhook_method == "post"
-      contactList: @options.contactList
+      provider           : value
+      providerName       : label
+      oauth              : option.data('oauth')
+      requiresEmbedCode  : option.data('requiresEmbedCode')
+      requiresAppUrl     : option.data('requiresAppUrl')
+      requiresAccountId  : option.data('requiresAccountId')
+      requiresApiKey     : option.data('requiresApiKey')
+      requiresUsername   : option.data('requiresUsername')
+      requiresWebhookUrl : option.data('requiresWebhookUrl')
+      webhookIsPost      : @options.contactList?.data?.webhook_method == "post"
+      contactList        : @options.contactList
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.hellobarOnly.show()
@@ -264,6 +380,7 @@ class @ContactListModal extends Modal
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
+        @$modal.trigger('provider:connected')
         @_renderBlock("syncDetails", $.extend(defaultContext, {identity: data})).show()
         @_renderBlock("instructions", defaultContext).hide()
 
@@ -286,10 +403,10 @@ class @ContactListModal extends Modal
 
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)
-    @$modal.find("#contact_list_provider").val(data.provider || "0")
+    @$modal.find("#contact_list_provider").val(data.provider || "0").trigger('change')
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
     @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
-    @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete
+    @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete && @options.id
 
   _validateRequiredField: (element) ->
     if element.length

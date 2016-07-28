@@ -1,0 +1,13 @@
+<div class="select-block">
+  {{currentChoice.label}}
+  {{#if currentChoice.isPro}}<span class="pro-tag">PRO</span>{{/if}}
+</div>
+
+<div class="custom-select-dropdown">
+  {{#each option in options}}
+    {{#view HelloBar.CustomSelectOption option=option}}
+      {{option.label}}
+      {{#if option.isPro}}<span class="pro-tag">PRO</span>{{/if}}
+    {{/view}}
+  {{/each}}
+</div>

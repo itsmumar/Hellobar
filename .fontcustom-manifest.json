@@ -1,7 +1,7 @@
 {
   "checksum": {
-    "previous": "9d02f96226873c2e0194e2a60c87eb62e5b09b4e910bfdb658dc8c9c03d62c02",
-    "current": "9d02f96226873c2e0194e2a60c87eb62e5b09b4e910bfdb658dc8c9c03d62c02"
+    "previous": "b41117930aba36f71107f1a28432915f78760762c19634e4b41e99aa20194987",
+    "current": "b41117930aba36f71107f1a28432915f78760762c19634e4b41e99aa20194987"
   },
   "fonts": [
     "app/assets/fonts/hellobar-icons.ttf",
@@ -10,9 +10,25 @@
     "app/assets/fonts/hellobar-icons.eot"
   ],
   "glyphs": {
+    "check-mark": {
+      "codepoint": 61702,
+      "source": "app/assets/icons/check-mark.svg"
+    },
     "house": {
       "codepoint": 61696,
       "source": "app/assets/icons/house.svg"
+    },
+    "list": {
+      "codepoint": 61703,
+      "source": "app/assets/icons/list.svg"
+    },
+    "mail": {
+      "codepoint": 61704,
+      "source": "app/assets/icons/mail.svg"
+    },
+    "mail-extra": {
+      "codepoint": 61705,
+      "source": "app/assets/icons/mail-extra.svg"
     },
     "mobile-phone": {
       "codepoint": 61697,

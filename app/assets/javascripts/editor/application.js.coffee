@@ -22,13 +22,13 @@ window.HelloBar = Ember.Application.create
 #-----------  Debounce/Throttle Observers  -----------#
 
 Ember.debouncedObserver = (keys..., time, func) ->
-  Em.observer ->
-    Em.run.debounce @, func, time
+  Ember.observer ->
+    Ember.run.debounce @, func, time
   , keys...
 
 Ember.throttledObserver = (keys..., time, func) ->
-  Em.observer ->
-    Em.run.throttle @, func, time
+  Ember.observer ->
+    Ember.run.throttle @, func, time
   , keys...
 
 #-----------  Preview Injection  -----------#
@@ -323,6 +323,7 @@ HB.countryCodes = [
 ]
 
 #----------- Reveal Blocks ----------#
+
 $ ->
   $('.reveal-wrapper').on 'click', (evt) ->
     unless $(@).hasClass('activated')

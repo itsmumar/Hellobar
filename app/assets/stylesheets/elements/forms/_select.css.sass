@@ -6,7 +6,8 @@
   margin: 0.75em auto
   background-color: $white
 
-  select
+  select,
+  .select-block
     cursor: pointer
     color: $grayDarker
     padding-right: 2.67em
@@ -22,24 +23,24 @@
   &:before
     right: 1rem
     content: 'b'
+    color: $gray
     bottom: 0.75em
     line-height: 300%
     font-size: 0.75em
-    color: $grayDarker
     position: absolute
     pointer-events: none
     font-family: 'hellobar'
     @include transition()
 
   &:hover:before
-    color: $grayDarker
+    color: $grayDark
 
 label + .select-wrapper
   margin-top: 0
 
 /*-----------  Error States  -----------*/
 
-.has-error 
+.has-error
   span > input,
   span > textarea
 
@@ -54,7 +55,7 @@ label + .select-wrapper
 
 span.select-wrapper
   margin: 0 0.5em !important
-  
+
   &:before
     line-height: 350%
 
@@ -70,10 +71,10 @@ span.select-wrapper
 /*-----------  Application States  -----------*/
 
 #hb-application
-  
+
   span.select-wrapper
     margin: 0 0.5em !important
-    
+
     &:before
       bottom: 0
       line-height: 150%
