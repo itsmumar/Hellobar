@@ -50,10 +50,14 @@ module ServiceProviders
     def subscribe(list_id, email, name = nil, double_optin = true)
       name ||= email
 
+      # do we need to find the list?
+      cycle_day = @list.data['cycle_day']
+      cycle_day = cycle_day.present? ? cycle_day.to_i : nil
+
       begin
         response = @client.post do |request|
           request.url 'contacts'
-          request.body = {name: name, email: email, campaign: {campaignId: list_id}}
+          request.body = {name: name, email: email, cycle_day: cycle_day, campaign: {campaignId: list_id}}
         end
 
         if response.success?
