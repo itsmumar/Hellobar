@@ -52,9 +52,10 @@ module ServiceProviders
     def subscribe(list_id, email, name = nil, double_optin = true)
       name ||= email
 
-      # do we need to find the list?
-      cycle_day = @contact_list.data['cycle_day']
-      cycle_day = cycle_day.present? ? cycle_day.to_i : nil
+      if @contact_list.present?
+        cycle_day = @contact_list.data['cycle_day']
+        cycle_day = cycle_day.present? ? cycle_day.to_i : nil
+      end
 
       begin
         response = @client.post do |request|
