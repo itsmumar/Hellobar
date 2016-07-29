@@ -11,6 +11,8 @@ module ServiceProviders
         raise "Must provide an identity through the arguments"
       end
 
+      @contact_list = opts[:contact_list]
+
       api_key = identity.api_key
       raise "Identity does not have a stored GetResponse API key" unless api_key
 
@@ -51,7 +53,7 @@ module ServiceProviders
       name ||= email
 
       # do we need to find the list?
-      cycle_day = @list.data['cycle_day']
+      cycle_day = @contact_list.data['cycle_day']
       cycle_day = cycle_day.present? ? cycle_day.to_i : nil
 
       begin
