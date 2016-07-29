@@ -34,9 +34,7 @@ describe("HB", function() {
             var c = {matchType: "all", conditions: [6, 7, 8]};
             var d = {matchType: "all", conditions: []};
             var output = HB.filterMostRelevantRules([a, b, c, d]);
-            expect(output).toContain(a);
-            expect(output).toContain(c);
-            expect(output.length).toEqual(2);
+            expect(output).toEqual([a, c]);
         });
 
         it("'any' rules: rule with 1 condition is more relevant than rule with no conditions", function() {
@@ -69,9 +67,7 @@ describe("HB", function() {
             var d = {matchType: "any", conditions: [1, 2, 3, 4]};
             var e = {matchType: "any", conditions: [1, 2, 3]};
             var output = HB.filterMostRelevantRules([a, b, c, d, e]);
-            expect(output).toContain(a);
-            expect(output).toContain(e);
-            expect(output.length).toEqual(2);
+            expect(output).toEqual([a, e]);
         });
 
         it("'all/any' rules: 'any' rule with 1 condition is more relevant than 'all' rule with no conditions", function() {
@@ -85,9 +81,7 @@ describe("HB", function() {
             var a = {matchType: "all", conditions: []};
             var b = {matchType: "any", conditions: []};
             var output = HB.filterMostRelevantRules([a, b]);
-            expect(output).toContain(a);
-            expect(output).toContain(b);
-            expect(output.length).toEqual(2);
+            expect(output).toEqual([a, b]);
         });
 
         it("'all/any' rules: should return both 'all' and 'any' rules having 1 condition", function() {
@@ -96,9 +90,7 @@ describe("HB", function() {
             var c = {matchType: "all", conditions: [1]};
             var d = {matchType: "any", conditions: [1]};
             var output = HB.filterMostRelevantRules([a, b, c, d]);
-            expect(output).toContain(c);
-            expect(output).toContain(d);
-            expect(output.length).toEqual(2);
+            expect(output).toEqual([c, d]);
         });
 
         it("'all/any' rules: 'all' rule is more relevant than 'any' rule having more than 1 condition", function() {
@@ -117,14 +109,12 @@ describe("HB", function() {
             var d = {matchType: "all", conditions: [1]};
             var e = {matchType: "all", conditions: [2, 3, 4]};
             var output = HB.filterMostRelevantRules([a, b, c, d, e]);
-            expect(output).toContain(c);
-            expect(output).toContain(e);
-            expect(output.length).toEqual(2);
+            expect(output).toEqual([c, e]);
         });
     });
 
     describe(".filterMostRelevantElements()", function() {
-        it("should return conditional element compared to element shown to everyone", function() {
+        it("should return conditional element rather than element shown to everyone", function() {
             var a = {
                 rule: {matchType: "all", conditions: []}
             };
@@ -152,25 +142,7 @@ describe("HB", function() {
                 rule: {matchType: "all", conditions: [1, 2]}
             };
             var output = HB.filterMostRelevantElements([a, b, c, d, e]);
-            expect(output).toContain(b);
-            expect(output).toContain(e);
-            expect(output.length).toEqual(2);
-        });
-
-        it("should call 'filterMostRelevantRules' with rules array", function() {
-            var a = {
-                rule: {matchType: "all", conditions: []}
-            };
-            var b = {
-                rule: {matchType: "any", conditions: [1, 2]}
-            };
-            var c = {
-                rule: {matchType: "any", conditions: [1]}
-            };
-
-            spyOn(HB, "filterMostRelevantRules");
-            HB.filterMostRelevantElements([a, b, c]);
-            expect(HB.mostRecentCall.args[0]).toEqual([a.rule, b.rule, c.rule]);
+            expect(output).toEqual([b, e]);
         });
     });
 });

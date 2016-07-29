@@ -1183,7 +1183,7 @@ var HB = {
   // Returns the best element to show from a group of elements
   getBestElement: function(elements)
   {
-    elements = this.filterMostRelevantElements(elements);
+    elements = HB.filterMostRelevantElements(elements);
 
     var i, siteElement;
     var possibleSiteElements = {};
@@ -1268,7 +1268,7 @@ var HB = {
       return element.rule;
     });
 
-    rules = this.filterMostRelevantRules(rules);
+    rules = HB.filterMostRelevantRules(rules);
 
     // filter elements that correspond to the most relevant set of rules
     return elements.filter(function(element) {
@@ -1283,42 +1283,29 @@ var HB = {
   filterMostRelevantRules: function(rules) {
     if (rules.length <= 1)
         return rules;
-    //TODO: try another algorithm using relevanceWeight = 1*x if "all" OR 1/x if "any"
-    //1. Sort array so that the most relevant rules come first
-    rules.sort(function(a, b) {
-      if (a.conditions.length == 0) //if A matches everything, then B should come first
-        return 1; // (even if B also matches everything - in that case order doesn't matter)
 
-      if (b.conditions.length == 0) //if B matches everything, then A should come first
-        return -1;
+    var basis = 10; //basic multiplier for weight calculation
+    var groups = {}; //hash of weight:rules pairs
 
-      if (a.matchType == "all")
-        if (b.matchType == "any") //A comes first; "all" has higher priority over "any"
-          return -1;
-        else //both have "all" matching type; maximum conditions number is more relevant
-          return a.conditions.length >= b.conditions.length ? -1 : 1;
+    //Step 1: Go through the array, calculate each rule's weight and put it into the appropriate group
+    rules.forEach(function(rule) {
+      var weight;
+      if (rule.conditions.length == 0) //the least relevant rule - it matches everything
+        weight = 0;
+      else
+        //for "all" rule - the more conditions it has, the more relevant it is, the higher weight it should have (multiplication)
+        //for "any" rule - the more conditions it has, the less relevant it is, the lower weight it should have (division)
+        weight = rule.matchType == "all" ? basis*rule.conditions.length : basis/rule.conditions.length;
 
-      if (a.matchType == "any")
-        if (b.matchType == "all") //B comes first
-          return 1;
-        else //both have "any" matching type; minimum conditions number is more relevant
-          return a.conditions.length <= b.conditions.length ? -1 : 1;
+      if (!groups[weight])
+        groups[weight] = [];
+
+      groups[weight].push(rule);
     });
 
-    var result = [rules[0]]; //the very first rule is the most relevant
-    var conditions = rules[0].conditions.length;
-
-    //2. There might be more than 1 rule having similar relevance
-    for (var i=1; i < rules.length; i++)
-    {
-      var r = rules[i];
-      if (r.conditions.length == conditions)
-        result.push(r);
-      else
-        break;
-    }
-
-    return result;
+    //Step 2: Find the maximum weight and return the corresponding group of rules
+    var maxWeight = Math.max.apply(null, Object.keys(groups));
+    return groups[maxWeight];
   },
 
   // Checkes if the rule is true by checking each of the conditions and
