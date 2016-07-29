@@ -1183,6 +1183,8 @@ var HB = {
   // Returns the best element to show from a group of elements
   getBestElement: function(elements)
   {
+    elements = this.filterMostRelevantElements(elements);
+
     var i, siteElement;
     var possibleSiteElements = {};
     for(i=0;i<elements.length;i++)
@@ -1196,18 +1198,12 @@ var HB = {
     // Now we narrow down based on the "value" of the site elements
     // (collecting emails is considered more valuable than clicking links
     // for example)
-    if ( possibleSiteElements.email )
-      possibleSiteElements = possibleSiteElements.email;
-    else if ( possibleSiteElements.call )
-      possibleSiteElements = possibleSiteElements.call;
-    else if ( possibleSiteElements.social )
-      possibleSiteElements = possibleSiteElements.social;
-    else if ( possibleSiteElements.traffic )
-      possibleSiteElements = possibleSiteElements.traffic;
-    else if ( possibleSiteElements.announcement )
-      possibleSiteElements = possibleSiteElements.announcement;
-    else
-      return; // Should not reach here - if we do there is nothing to show
+    possibleSiteElements =
+      possibleSiteElements.email ||
+      possibleSiteElements.call ||
+      possibleSiteElements.social ||
+      possibleSiteElements.traffic ||
+      possibleSiteElements.announcement;
 
     // If we have no elements then stop
     if ( !possibleSiteElements || possibleSiteElements.length == 0 )
@@ -1259,6 +1255,70 @@ var HB = {
       // Return the top value
       return possibleSiteElements[0];
     }
+  },
+
+  // Get elements that are most relevant, namely they meet the most narrow set of rules.
+  // For example, having 2 similar modals: one set to be shown to everybody (0 conditions),
+  // and another - to mobile visitors only (1 condition), we should always show the latter on mobile devices.
+  filterMostRelevantElements: function(elements) {
+    if (elements.length <= 1)
+        return elements; //no need to filter
+
+    var rules = elements.map(function(element) {
+      return element.rule;
+    });
+
+    rules = this.filterMostRelevantRules(rules);
+
+    // filter elements that correspond to the most relevant set of rules
+    return elements.filter(function(element) {
+      return rules.indexOf(element.rule) >= 0;
+    });
+  },
+
+  // Find the most relevant (narrow) set of rules.
+  // For "all" rules the most narrow set is one with the maximum number of conditions (X and Y and Z < X and Y)
+  // For "any" rules the most narrow set is one with the minimum number of conditions (X or Y < X or Y or Z), except for 0
+  // When the 2 kinds of rules intersect, "and" has always higher priority (X and Y < X or Y).
+  filterMostRelevantRules: function(rules) {
+    if (rules.length <= 1)
+        return rules;
+    //TODO: try another algorithm using relevanceWeight = 1*x if "all" OR 1/x if "any"
+    //1. Sort array so that the most relevant rules come first
+    rules.sort(function(a, b) {
+      if (a.conditions.length == 0) //if A matches everything, then B should come first
+        return 1; // (even if B also matches everything - in that case order doesn't matter)
+
+      if (b.conditions.length == 0) //if B matches everything, then A should come first
+        return -1;
+
+      if (a.matchType == "all")
+        if (b.matchType == "any") //A comes first; "all" has higher priority over "any"
+          return -1;
+        else //both have "all" matching type; maximum conditions number is more relevant
+          return a.conditions.length >= b.conditions.length ? -1 : 1;
+
+      if (a.matchType == "any")
+        if (b.matchType == "all") //B comes first
+          return 1;
+        else //both have "any" matching type; minimum conditions number is more relevant
+          return a.conditions.length <= b.conditions.length ? -1 : 1;
+    });
+
+    var result = [rules[0]]; //the very first rule is the most relevant
+    var conditions = rules[0].conditions.length;
+
+    //2. There might be more than 1 rule having similar relevance
+    for (var i=1; i < rules.length; i++)
+    {
+      var r = rules[i];
+      if (r.conditions.length == conditions)
+        result.push(r);
+      else
+        break;
+    }
+
+    return result;
   },
 
   // Checkes if the rule is true by checking each of the conditions and
