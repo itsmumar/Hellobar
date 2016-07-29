@@ -14,9 +14,9 @@ feature 'User can create a site element', js: true do
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
 
-    first(:button, 'Select This Goal').click
-    first(:button, 'Continue').click
-    first(:button, 'Save & Publish').click
+    first(:a, 'Select This Goal').click
+    first(:a, 'Continue').click
+    first(:a, 'Save & Publish').click
 
     expect(page).to have_content('Summary', visible: true)
 
