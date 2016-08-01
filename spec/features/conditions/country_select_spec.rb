@@ -51,7 +51,7 @@ feature "Render the country select for the Rule modal", js: true do
     page.find('a', text: 'Next').click
     page.find('a', text: 'Edit.').click
 
-    select('Country Code')
+    select('Country')
     value = find('#rule_conditions_attributes').value
 
     expect(value).to eql('AR')
