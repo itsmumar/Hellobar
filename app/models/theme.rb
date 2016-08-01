@@ -12,6 +12,10 @@ class Theme < ActiveHash::Base
     Dir["#{directory}/*"].detect { |f| f.include?(ELEMENT_CSS_FILENAME) }
   end
 
+  def with_image?
+    image["default_url"].present?
+  end
+
   def self.sorted
     all.sort_by{ |t| [t.default_theme ? 0 : 1, t.name] }
   end

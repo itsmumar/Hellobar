@@ -1,5 +1,6 @@
 class IdentitySerializer < ActiveModel::Serializer
-  attributes :id, :site_id, :provider, :lists, :supports_double_optin, :embed_code, :oauth
+  attributes :id, :site_id, :provider, :lists, :supports_double_optin, :embed_code, :oauth,
+             :supports_cycle_day
 
   delegate :service_provider, to: :object
 
@@ -11,6 +12,10 @@ class IdentitySerializer < ActiveModel::Serializer
 
   def supports_double_optin
     service_provider.class.settings[:supports_double_optin]
+  end
+
+  def supports_cycle_day
+    service_provider.class == ServiceProviders::GetResponseApi
   end
 
   def embed_code

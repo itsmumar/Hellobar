@@ -7,7 +7,11 @@
 [data-icon]:before { content: attr(data-icon); }
 
 [data-icon]:before,
+.hellobar-icon-check-mark:before,
 .hellobar-icon-house:before,
+.hellobar-icon-list:before,
+.hellobar-icon-mail:before,
+.hellobar-icon-mail-extra:before,
 .hellobar-icon-mobile-phone:before,
 .hellobar-icon-people:before,
 .hellobar-icon-saved-segment:before,
@@ -27,14 +31,22 @@
   font-smoothing: antialiased;
 }
 
+.hellobar-icon-check-mark:before { content: "\f106"; }
 .hellobar-icon-house:before { content: "\f100"; }
+.hellobar-icon-list:before { content: "\f107"; }
+.hellobar-icon-mail:before { content: "\f108"; }
+.hellobar-icon-mail-extra:before { content: "\f109"; }
 .hellobar-icon-mobile-phone:before { content: "\f101"; }
 .hellobar-icon-people:before { content: "\f102"; }
 .hellobar-icon-saved-segment:before { content: "\f103"; }
 .hellobar-icon-settings-knobs:before { content: "\f104"; }
 .hellobar-icon-trophy:before { content: "\f105"; }
 
+$font-hellobar-icons-check-mark: "\f106";
 $font-hellobar-icons-house: "\f100";
+$font-hellobar-icons-list: "\f107";
+$font-hellobar-icons-mail: "\f108";
+$font-hellobar-icons-mail-extra: "\f109";
 $font-hellobar-icons-mobile-phone: "\f101";
 $font-hellobar-icons-people: "\f102";
 $font-hellobar-icons-saved-segment: "\f103";

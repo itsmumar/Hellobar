@@ -25,13 +25,13 @@ describe ContactListsHelper, type: :helper do
       ContactList.new(name: "asdf", site: site, data: EMBED_DATA)
     end
 
-    context 'Mad Mimi' do
+    context 'MadMimi' do
       before do
         contact_list.identity = identities(:mad_mimi)
       end
 
       it 'has valid results' do
-        expect(helper.contact_list_provider_name(contact_list)).to eq "Mad Mimi"
+        expect(helper.contact_list_provider_name(contact_list)).to eq "MadMimi"
         expect(helper.contact_list_image(contact_list)).to eq "providers/mad_mimi_form.png"
       end
     end

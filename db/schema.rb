@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160607202931) do
+ActiveRecord::Schema.define(version: 20160615175842) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -190,9 +190,12 @@ ActiveRecord::Schema.define(version: 20160607202931) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "site_id"
+    t.string   "preuploaded_url"
+    t.string   "theme_id"
   end
 
   add_index "image_uploads", ["site_id"], name: "index_image_uploads_on_site_id", using: :btree
+  add_index "image_uploads", ["theme_id"], name: "index_image_uploads_on_theme_id", unique: true, using: :btree
 
   create_table "improve_suggestions", force: true do |t|
     t.integer  "site_id"
@@ -322,6 +325,7 @@ ActiveRecord::Schema.define(version: 20160607202931) do
     t.string   "phone_country_code",              default: "US"
     t.boolean  "show_after_convert",              default: false
     t.string   "theme_id"
+    t.boolean  "use_default_image",               default: true,                            null: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

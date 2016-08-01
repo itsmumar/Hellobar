@@ -130,10 +130,12 @@ HelloBar.InterstitialController = Ember.Controller.extend Ember.Evented,
       transitionToEditor()
 
     closeEditor: ->
-      @setProperties(
-        'interstitialType'         : null
-        'model.element_subtype'    : null
-        'model.headline'           : null
-        'model.link_text'          : null
-        'model.phone_country_code' : 'US'
-      )
+      setTimeout ->
+        Ember.setProperties(
+          'interstitialType'         : null
+          'model.element_subtype'    : null
+          'model.headline'           : null
+          'model.link_text'          : null
+          'model.phone_country_code' : 'US'
+        )
+      , 500

@@ -11,6 +11,8 @@ module ServiceProviders
         raise "Must provide an identity through the arguments"
       end
 
+      @contact_list = opts[:contact_list]
+
       api_key = identity.api_key
       raise "Identity does not have a stored GetResponse API key" unless api_key
 
@@ -50,10 +52,15 @@ module ServiceProviders
     def subscribe(list_id, email, name = nil, double_optin = true)
       name ||= email
 
+      if @contact_list.present?
+        cycle_day = @contact_list.data['cycle_day']
+        cycle_day = cycle_day.present? ? cycle_day.to_i : nil
+      end
+
       begin
         response = @client.post do |request|
           request.url 'contacts'
-          request.body = {name: name, email: email, campaign: {campaignId: list_id}}
+          request.body = {name: name, email: email, cycle_day: cycle_day, campaign: {campaignId: list_id}}
         end
 
         if response.success?

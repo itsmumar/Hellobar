@@ -35,6 +35,8 @@ HB.SiteElement = HB.createClass({
     locationIndex = location.indexOf(this.image_placement);
     if (!this.image_url || locationIndex === undefined || locationIndex === -1)
       return "";
+    else if (this.image_placement == 'background')
+      return "<div class='hb-image-wrapper " + this.image_placement + "' style='background-image:url(" + this.image_url + ");'></div>";
     else
       return "<div class='hb-image-wrapper " + this.image_placement + "'><img class='uploaded-image' src=" + this.image_url + " /></div>";
   },
@@ -404,7 +406,8 @@ HB.SiteElement = HB.createClass({
       }
     }
 
-    HB.trigger("elementDismissed");
+    HB.trigger("elementDismissed"); // Old-style trigger
+    HB.trigger("closed", this); // New trigger
   },
 
   // Create the pulldown arrow element for when a bar is hidden
@@ -451,7 +454,7 @@ HB.SiteElement = HB.createClass({
 
     if(this.type == "Bar") {
       HB.iosFocusInterval = setTimeout(function() {
-        window.scrollTo(0, this.w.offsetTop);
+        window.scrollTo(0, element.w.offsetTop);
       }, 500);
     }
     else if(this.type == "Slider") {
@@ -466,13 +469,7 @@ HB.SiteElement = HB.createClass({
       this.type == "Takeover" ||
       this.type == "Modal"
     ) {
-      this.w.style.position = "absolute";
-      HB.iosFocusInterval = setInterval(function() {
-        element.w.style.height = window.innerHeight + "px";
-        element.w.style.width = window.innerWidth + "px";
-        element.w.style.left = window.pageXOffset + "px";
-        element.w.style.top = window.pageYOffset + "px";
-      }, 200);
+      this.updateStyleFor(false);
     }
   },
 
@@ -487,11 +484,43 @@ HB.SiteElement = HB.createClass({
       this.type == "Modal" ||
       this.type == "Slider"
     ) {
+      this.updateStyleFor(true);
+    }
+  },
+
+  updateStyleFor: function(reset) {
+    var element = this;
+    var contentDocument = element.w.contentDocument;
+    var hbModal = contentDocument.getElementById('hellobar-modal');
+
+    if (reset) {
       this.w.style.position = "";
       this.w.style.height = "";
       this.w.style.width = "";
       this.w.style.top = "";
       this.w.style.left = "";
+
+      hbModal.style.overflowY = "";
+      hbModal.style.maxHeight = "";
+      hbModal.style.top = "";
+    } else {
+      this.w.style.position = "absolute";
+      HB.iosFocusInterval = setInterval(function() {
+        // adjust iframe
+        element.w.style.height = window.innerHeight + "px";
+        element.w.style.width = window.innerWidth + "px";
+        element.w.style.left = window.pageXOffset + "px";
+        element.w.style.top = window.pageYOffset + "px";
+
+        // adjust hellobar modal
+        if (element.type == "Modal" && element.placement == "middle") {
+          var modalMaxHeight = hbModal.getElementsByClassName('hb-text-wrapper')[0].clientHeight;
+          hbModal.style.overflowY = "scroll";
+          hbModal.style.maxHeight = modalMaxHeight + "px";
+          hbModal.style.top = modalMaxHeight/2 + "px";
+        }
+
+      }, 200);
     }
   },
 
@@ -504,13 +533,21 @@ HB.SiteElement = HB.createClass({
 
   useGoogleFont: function() {
     if(!this.google_font) return;
+    var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
 
     var link = this.w.contentWindow.document.createElement("LINK");
     link.href = 'https://fonts.googleapis.com/css?family=' + this.google_font;
     link.rel = 'stylesheet';
     link.type = 'text/css';
 
-    var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
     head.appendChild(link);
+
+    // if is mobile safari, prevent from zooming
+    if (HB.isMobileSafari()) {
+      var meta = this.w.contentWindow.document.createElement("META");
+      meta.name ="viewport" ;
+      meta.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+      head.appendChild(meta);
+    }
   }
 });

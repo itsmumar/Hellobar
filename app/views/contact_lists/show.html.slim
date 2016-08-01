@@ -1,4 +1,7 @@
-= render "shared/modals/contact_list"
+- if get_ab_variation('Email Integration UI 2016-06-22', current_user) == 'original'
+  = render "shared/modals/contact_list"
+- else
+  = render "shared/modals/contact_list_variant"
 
 nav.tabs-wrapper
   = link_to 'Contacts', site_contact_lists_path(current_site)
@@ -15,7 +18,7 @@ nav.tabs-wrapper
 
 .service-block
   .service-icon
-    = image_tag contact_list_image(@contact_list) unless @contact_list.webhook?
+    = image_tag contact_list_image(@contact_list)
 
   .service-description
     = contact_list_sync_details(@contact_list)

@@ -154,7 +154,9 @@ using credentials you've set in the command.
 
 ### Front End
 
-To add a new icon to the custom icon font file - add the icon svg file to app/assets/icons and run the icons:compile rake task.
+NOTE: install fontforge locally first with `brew install fontforge ttfautohint`
+To add a new icon to the custom icon font file - add the icon svg file to app/assets/icons and run
+`rake icon:compile`
 
 ## Workflow
 
@@ -254,6 +256,12 @@ To test adding or removing the iframe use
 Watch out for animations and other asynchronous or delayed interactions.
 You may need to fiddle with the `Capybara.default_wait_time` in
 `spec/spec_helper`.
+
+## JavaScript tests
+
+Teaspoon runs the *_spec.js files in spec/javascripts/
+
+The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
 
 ## Live testing/QA info
 
