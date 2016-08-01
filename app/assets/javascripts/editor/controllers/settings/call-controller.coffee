@@ -1,3 +1,3 @@
-HelloBar.SettingsCallController  = Ember.Controller.extend
+HelloBar.SettingsCallController = Ember.Controller.extend
 
   needs: ['application']

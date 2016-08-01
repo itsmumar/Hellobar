@@ -153,6 +153,7 @@ class SiteElementsController < ApplicationController
       :view_condition_attribute,
       :view_condition,
       :wiggle_button,
+      :use_default_image,
       {:settings => settings_keys}
     )
   end

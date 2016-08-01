@@ -3,6 +3,10 @@ require 'spec_helper'
 describe ReferralsController do
   fixtures :all
 
+  before do
+    stub_out_get_ab_variations('Email Integration UI 2016-06-22') {"original"}
+  end
+
   describe "GET :new" do
     render_views
     before(:each) do

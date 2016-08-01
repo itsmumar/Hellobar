@@ -37,5 +37,10 @@
       "link_color": "FFFFFF",
       "font_id": "sintony"
     }
+  },
+  "image": {
+    "upload_copy": "Recommended minimum is 750 x 900",
+    "position_default": "left",
+    "position_selectable": true
   }
 }

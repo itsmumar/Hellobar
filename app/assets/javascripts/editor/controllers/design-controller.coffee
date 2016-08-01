@@ -1,33 +1,108 @@
 HelloBar.DesignController = Ember.Controller.extend
 
   needs: ['application']
+  init: ->
+    # Consume computed property so its observers will trigger
+    @get('currentTheme')
+
+  #-----------  Step Settings  -----------#
+
+  step: 3
+  prevStep: 'style'
+  nextStep: 'targeting'
+
+  imagePlacementOptions: [
+    { value: 'top', label: 'Top' }
+    { value: 'bottom', label: 'Bottom' }
+    { value: 'left', label: 'Left' }
+    { value: 'right', label: 'Right' }
+    { value: 'above-caption', label: 'Above Caption' }
+    { value: 'below-caption', label: 'Below Caption' }
+  ]
 
   #-------------- Helpers ----------------#
 
-  # get currently selected theme
-  # foundTheme = _.find availableThemes, (theme) =>
-  #   theme.id == @get('model.theme_id')
-
   isABar: Ember.computed.equal('model.type', 'Bar')
+
+  allowImages: Ember.computed 'model.type', ->
+    return this.get('model.type') != "Bar"
+
+  themeWithImage: Ember.computed 'currentTheme.image_upload_id', ->
+    !!@get('currentTheme.image_upload_id')
+
+  useThemeImage: Ember.computed 'model.use_default_image', ->
+    @get('model.use_default_image') && @get('themeWithImage')
+
+  hasUserChosenImage: Ember.computed 'model.image_url', 'model.image_type', ->
+    @get('model.image_url') && @get('model.image_type') != 'default'
+
+  getImagePlacement: ->
+    positionIsSelectable  = @get('currentTheme.image.position_selectable')
+    imageIsbackground     = (@get('model.image_placement') == 'background')
+    positionIsEmpty       = Ember.isEmpty(@get('model.image_placement'))
+
+    if !positionIsSelectable
+      @get('currentTheme.image.position_default')
+    else if imageIsbackground || positionIsEmpty
+      @get('currentTheme.image.position_default')
+    else
+      @get('model.image_placement')
 
   #----------- Theme Settings  -----------#
 
   themeOptions: availableThemes
 
-  themeChanged: Ember.observer 'model.theme_id', ->
-    @set('themeChangeCount', (@get('themeChangeCount') || 0) + 1)
-    if @get('themeChangeCount') > 1
-      @applyThemeDefaults()
+  currentTheme: Ember.computed('model.theme_id', 'themeOptions', ->
+    _.find(@get('themeOptions'), (theme) => theme.id == @get('model.theme_id'))
+  )
 
-  applyThemeDefaults: ->
-    foundTheme = _.find availableThemes, (theme) =>
-      theme.id == @get('model.theme_id')
+  # Editor UI Properties
+  imageUploadCopy         : Ember.computed.oneWay('currentTheme.image.upload_copy')
+  showImagePlacementField : Ember.computed.oneWay('currentTheme.image.position_selectable')
 
-    if foundTheme && foundTheme.defaults[@get('model.type')]
-      _.each foundTheme.defaults[@get('model.type')], (value, key) =>
+  # Site Element Theme Properties
+  themeChanged: Ember.observer('currentTheme', ->
+    Ember.run.next(@, ->
+      themeStyleDefaults = @get('currentTheme.defaults')[@get('model.type')] || {}
+
+      _.each themeStyleDefaults, (value, key) =>
         @set("model.#{key}", value)
 
+      @setProperties
+        'model.image_placement'   : @getImagePlacement()
+        'model.use_default_image' : false
+
+      unless @get('hasUserChosenImage')
+        if @get('themeWithImage')
+          @setDefaultImage()
+          @setProperties('model.use_default_image' : true)
+        else
+          @send('setImageProps', null, '')
+    )
+  )
+
+  defaultImageToggled: ( ->
+    if @get('useThemeImage') then @setDefaultImage()
+  ).observes('model.use_default_image').on('init')
+
+  setDefaultImage: ->
+    imageID  = @get('currentTheme.image_upload_id')
+    imageUrl = @get('currentTheme.image.default_url')
+    @send('setImageProps', imageID, imageUrl, 'default')
+
+  # Workaround for known Ember.Select issues: https://github.com/emberjs/ember.js/issues/4150
+  emberSelectWorkaround: Ember.observer('currentTheme', ->
+    @set('showImagePlacementField', false)
+    Ember.run.next(@, ->
+      @set('showImagePlacementField', @get('currentTheme.image.position_selectable'))
+    )
+  )
+
   #-----------  Text Settings  -----------#
+
+  hideLinkText             : Ember.computed.match('model.element_subtype', /social|announcement/)
+  showEmailPlaceholderText : Ember.computed.equal('model.element_subtype', 'email')
+  showNamePlaceholderText  : Ember.computed.equal('model.settings.collect_names', 1)
 
   fontOptions: Ember.computed 'model.theme_id', ->
     foundTheme = _.find availableThemes, (theme) =>
@@ -40,27 +115,20 @@ HelloBar.DesignController = Ember.Controller.extend
     else
       availableFonts
 
-  hideLinkText: Ember.computed.match('model.element_subtype', /social|announcement/)
-  showEmailPlaceholderText: Ember.computed.equal('model.element_subtype', 'email')
-  showNamePlaceholderText: Ember.computed.equal('model.settings.collect_names', 1)
-  showImagePlacementField: Ember.computed.notEmpty('model.image_url')
-
   #-----------  Questions Settings  -----------#
 
   showQuestionFields: Ember.computed.equal('model.use_question', true)
 
   setQuestionDefaults: ( ->
     if (@get('model.use_question'))
-      @set('model.question', @get('model.question_placeholder')) unless @get('model.question')
-      @set('model.answer1', @get('model.answer1_placeholder')) unless @get('model.answer1')
-      @set('model.answer2', @get('model.answer2_placeholder')) unless @get('model.answer2')
-      @set('model.answer1response', @get('model.answer1response_placeholder')) unless @get('model.answer1response')
-      @set('model.answer2response', @get('model.answer2response_placeholder')) unless @get('model.answer2response')
+      @set('model.question'        , @get('model.question_placeholder')) unless @get('model.question')
+      @set('model.answer1'         , @get('model.answer1_placeholder')) unless @get('model.answer1')
+      @set('model.answer2'         , @get('model.answer2_placeholder')) unless @get('model.answer2')
+      @set('model.answer1response' , @get('model.answer1response_placeholder')) unless @get('model.answer1response')
+      @set('model.answer2response' , @get('model.answer2response_placeholder')) unless @get('model.answer2response')
       @set('model.answer1link_text', @get('model.answer1link_text_placeholder')) unless @get('model.answer1link_text')
       @set('model.answer2link_text', @get('model.answer2link_text_placeholder')) unless @get('model.answer2link_text')
-  ).observes(
-    "model.use_question"
-  ).on("init")
+  ).observes('model.use_question').on('init')
 
   setHBCallbacks: ( ->
     # Listen for when question answers are pressed and change the question tabs
@@ -69,27 +137,6 @@ HelloBar.DesignController = Ember.Controller.extend
       this.set('paneSelection', (this.get('paneSelection') || 0) + 1)
       this.send('showResponse' + choice)
   ).on("init")
-
-
-  #-----------  Image Settings  -----------#
-
-  allowImages: Ember.computed 'model.type', ->
-    return this.get('model.type') != "Bar"
-
-  imagePlacementOptions: [
-    {value: 'top', label: 'Top'}
-    {value: 'bottom', label: 'Bottom'}
-    {value: 'left', label: 'Left'}
-    {value: 'right', label: 'Right'}
-    {value: 'above-caption', label: 'Above caption'}
-    {value: 'below-caption', label: 'Below caption'}
-  ]
-
-  #-----------  Step Settings  -----------#
-
-  step: 3
-  prevStep: 'style'
-  nextStep: 'targeting'
 
   #-----------  Color Tracking  -----------#
 
@@ -127,9 +174,12 @@ HelloBar.DesignController = Ember.Controller.extend
           controller.set('model.site.capabilities', this.site.capabilities)
       ).open()
 
-    setImageProps: (imageID, imageUrl) ->
-      @set('model.active_image_id', imageID)
-      @set('model.image_url', imageUrl)
+    setImageProps: (imageID, imageUrl, imageType = null) ->
+      @setProperties
+        'model.active_image_id'   : imageID
+        'model.image_placement'   : @getImagePlacement()
+        'model.image_url'         : imageUrl
+        'model.image_type'        : imageType
 
     showQuestion: ->
       HB.showResponse = null
