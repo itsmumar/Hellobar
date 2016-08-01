@@ -154,7 +154,9 @@ using credentials you've set in the command.
 
 ### Front End
 
-To add a new icon to the custom icon font file - add the icon svg file to app/assets/icons and run the icons:compile rake task.
+NOTE: install fontforge locally first with `brew install fontforge ttfautohint`
+To add a new icon to the custom icon font file - add the icon svg file to app/assets/icons and run
+`rake icon:compile`
 
 ## Workflow
 

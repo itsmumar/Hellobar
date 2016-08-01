@@ -134,14 +134,14 @@ unless defined?(Hellobar::Settings)
     mad_mimi_form: {
       type: :email,
       service_provider_class: "MadMimiForm",
-      name: "Mad Mimi",
+      name: "MadMimi",
       requires_embed_code: true,
       hidden: true
     },
     mad_mimi_api: {
       type: :email,
       service_provider_class: "MadMimiApi",
-      name: "Mad Mimi",
+      name: "MadMimi",
       requires_api_key: true,
       requires_username: true
     },
@@ -177,7 +177,7 @@ unless defined?(Hellobar::Settings)
     },
     webhooks: {
       type: :email,
-      name: "Webhook (Advanced)",
+      name: "Webhooks",
       service_provider_class: "Webhook",
       requires_webhook_url: true
     },

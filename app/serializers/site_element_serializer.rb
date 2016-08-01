@@ -16,7 +16,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :animated, :wiggle_button, :theme_id,
 
     # image
-    :image_url, :image_placement, :active_image_id, :image_file_name,
+    :image_url, :image_placement, :active_image_id, :image_file_name, :use_default_image,
 
     # questions/answers/responses
     :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,

@@ -5,7 +5,7 @@
   = f.text_field :url, :placeholder => "Your URL (www.mysite.com)"
 
   .select-wrapper
-    = f.select :timezone, ActiveSupport::TimeZone.all.map{ |tz| [tz.to_s, tz.tzinfo.identifier] }
+    = f.select :timezone, time_zone_options
   = hidden_field_tag :detect_timezone, nil, disabled: true
 
   = f.input :opted_in_to_email_digest, as: :boolean, inline_label: "Send me a weekly email digest of this site's performance", label: false

@@ -35,6 +35,8 @@ HB.SiteElement = HB.createClass({
     locationIndex = location.indexOf(this.image_placement);
     if (!this.image_url || locationIndex === undefined || locationIndex === -1)
       return "";
+    else if (this.image_placement == 'background')
+      return "<div class='hb-image-wrapper " + this.image_placement + "' style='background-image:url(" + this.image_url + ");'></div>";
     else
       return "<div class='hb-image-wrapper " + this.image_placement + "'><img class='uploaded-image' src=" + this.image_url + " /></div>";
   },
@@ -404,7 +406,8 @@ HB.SiteElement = HB.createClass({
       }
     }
 
-    HB.trigger("elementDismissed");
+    HB.trigger("elementDismissed"); // Old-style trigger
+    HB.trigger("closed", this); // New trigger
   },
 
   // Create the pulldown arrow element for when a bar is hidden

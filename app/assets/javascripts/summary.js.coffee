@@ -62,5 +62,8 @@ $ ->
       $(".top-performers-wrapper.traffic").show()
     when "social"
       $(".top-performers-wrapper.social").show()
+    when "calls"
+      $(".suggestions-wrapper.calls").show()
+      $(".top-performers-wrapper.calls").show()
     else
       $(".top-performers-wrapper.all").show()
