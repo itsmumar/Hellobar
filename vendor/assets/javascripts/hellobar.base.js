@@ -1109,7 +1109,7 @@ var HB = {
     {
       var rule = HB.rules[i];
 
-      if ( HB.ruleTrue(rule) )
+      if ( rule.siteElements.length && HB.ruleTrue(rule) )
       {
         // Get all site elements that are a part of this rule that the
         // visitor has not done
@@ -2076,11 +2076,25 @@ var HB = {
       HB.sc("hbglc_"+HB_SITE_ID, HB.serializeCookieValues(locationCookie), expirationDays);
       HB.loadCookies();
     }
+    
+    return locationCookie;
   },
 
+  /**
+   * Try getting geolocation data.
+   * If it's already saved in HB.cookies, then retrieve it.
+   * Otherwise send a request and save response to HB.cookies.location and HB.tmpLocationData variables.
+   * We need the latter for cases when setting cookies/localStorage data is disabled on current browser for some reason
+   * (otherwise we'd have an infinite loop from HB.showSiteElements() to HB.getGeolocationData() and back)
+   * @param key
+   * @returns {*}
+     */
   getGeolocationData: function(key) {
     var cachedLocation = HB.cookies.location[key];
-    if (cachedLocation) return cachedLocation;
+    if (cachedLocation)
+      return cachedLocation;
+    else if (HB.tmpLocationData && HB.tmpLocationData[key])
+      return HB.tmpLocationData[key];
 
     var xhr = new XMLHttpRequest();
     if ( HB.geoRequestInProgress == false ) {
@@ -2094,8 +2108,8 @@ var HB = {
       var OK = 200; // status 200 is a successful return.
       if (xhr.readyState === DONE) {
         if (xhr.status === OK) {
-          response = JSON.parse(xhr.responseText);
-          HB.setGeolocationData(response);
+          var response = JSON.parse(xhr.responseText);
+          HB.tmpLocationData = HB.setGeolocationData(response); //store location data in memory (until the page is not reloaded)
           HB.geoRequestInProgress = false;
           HB.showSiteElements();
         }
