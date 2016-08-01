@@ -122,6 +122,7 @@ class @ContactListModal extends Modal
     @_bindSubmit(object)
     @_bindDisconnect(object)
     @_bindDelete(object)
+    @_bindCycleDay(object)
 
   # A/B Variant - Handles custom event triggers for new UI pieces
   _bindCustomEvents: (object) ->
@@ -248,6 +249,13 @@ class @ContactListModal extends Modal
       e.preventDefault()
       @_doDelete(e)
 
+  _bindCycleDay: (object) ->
+    object.find("input#contact_list_cycle_day_enabled").on "change", (event) ->
+      cycleDayEnabled = $(event.target).prop('checked')
+
+      $("input#contact_list_cycle_day").prop("disabled", !cycleDayEnabled)
+                                       .toggle(cycleDayEnabled)
+
   _doSubmit: (e) ->
     @_clearErrors()
 
@@ -312,12 +320,20 @@ class @ContactListModal extends Modal
     app_url         = $('#contact_list_app_url').val()
     webhook_url     = $('#contact_list_webhook_url').val()
     webhook_method  = if $('#contact_list_webhook_method').prop('checked') then "post" else "get"
+    $cycle_day = $('#contact_list_cycle_day')
+
+    if $('#contact_list_cycle_day_enabled').prop('checked')
+      cycle_day = $cycle_day.val()
+    else
+      cycle_day = null
 
     if api_key        then data.api_key = api_key
     if username       then data.username = username
     if app_url        then data.app_url = app_url
     if webhook_url    then data.webhook_url = webhook_url
     if webhook_method then data.webhook_method = webhook_method
+    if cycle_day      then data.cycle_day = cycle_day
+
     data
 
   _isLocalContactStorage: ->
@@ -352,18 +368,23 @@ class @ContactListModal extends Modal
     value = $(select).val()
     option = $(select).find("option:selected")
     label = option.text()
+    cycle_day = @options.contactList?.data?.cycle_day
+    cycle_day_enabled = cycle_day != undefined
+
     defaultContext =
-      provider           : value
-      providerName       : label
-      oauth              : option.data('oauth')
-      requiresEmbedCode  : option.data('requiresEmbedCode')
-      requiresAppUrl     : option.data('requiresAppUrl')
-      requiresAccountId  : option.data('requiresAccountId')
-      requiresApiKey     : option.data('requiresApiKey')
-      requiresUsername   : option.data('requiresUsername')
-      requiresWebhookUrl : option.data('requiresWebhookUrl')
-      webhookIsPost      : @options.contactList?.data?.webhook_method == "post"
-      contactList        : @options.contactList
+      provider: value
+      providerName: label
+      oauth: option.data('oauth')
+      requiresEmbedCode: option.data('requiresEmbedCode')
+      requiresAppUrl: option.data('requiresAppUrl')
+      requiresAccountId: option.data('requiresAccountId')
+      requiresApiKey: option.data('requiresApiKey')
+      requiresUsername: option.data('requiresUsername')
+      requiresWebhookUrl: option.data('requiresWebhookUrl')
+      webhookIsPost: @options.contactList?.data?.webhook_method == "post"
+      contactList: @options.contactList
+      cycleDayEnabled: cycle_day_enabled
+      cycleDay: cycle_day || 0
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.hellobarOnly.show()
@@ -388,6 +409,9 @@ class @ContactListModal extends Modal
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).hide()
         else
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
+          $cycle_day = $('#contact_list_cycle_day')
+          if ($cycle_day).length
+            $cycle_day.toggle(cycle_day_enabled)
 
         if listData
           @$modal.find("#contact_list_remote_list_id").val(listData.data.remote_id) if listData.data && listData.data.remote_id
