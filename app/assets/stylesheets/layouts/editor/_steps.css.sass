@@ -3,6 +3,9 @@
 .editor-wrapper .step-wrapper
   background-color: $white
 
+  label
+    @include antialiased()
+
   .step-title
     text-align: center
     line-height: 2.5em
@@ -46,6 +49,75 @@
       &.active
         color: #e8562a
 
+  /*-----------  Radio Blocks  -----------*/
+
+  .radio-blocks-wrapper
+
+    .radio-block
+      font-weight: bold
+      @extend %outlined-block
+
+      i::before
+        bottom: -2px
+        position: relative
+
+      &::after
+        right: 1rem
+        color: $green
+        position: absolute
+        font-size: 1.25rem
+        font-weight: lighter
+        @include transition()
+        @include vertical-align()
+        @include use-hb-icon('\f106')
+
+      & + .radio-block
+        margin-top: 0.33rem
+
+        i
+          position: relative
+
+          &::after
+            right: 1px
+            bottom: 0px
+            content: '+'
+            line-height: 0
+            font-size: 0.67rem
+            position: absolute
+            border-radius: 10em
+            background-color: $white
+            border: 1px solid $green
+            padding: 4px 1px 3px 1px
+
+    /*-----------  STATE: Is Selected  -----------*/
+
+    &:not(.is-selected)
+
+      .radio-block:first-child
+        opacity: 1
+        border-color: $gray
+
+        &::after
+          opacity: 1
+
+      .radio-block:last-child
+
+        &::after
+          opacity: 0
+
+    &.is-selected
+
+      .radio-block:first-child
+
+        &::after
+          opacity: 0
+
+      .radio-block:last-child
+        opacity: 1
+        border-color: $gray
+
+        &::after
+          opacity: 1
 
   /*-----------  Step Links  -----------*/
 
@@ -192,6 +264,17 @@
 
       .select-wrapper
         margin-top: 0
+
+    .substep.emails-variant
+
+      > label
+        margin-top: 2em
+        margin-bottom: 0.5em
+
+        &.small
+          margin-bottom: 0
+          font-size: 0.75em
+          margin-top: 1.25em
 
   /*-----------  Step: Style  -----------*/
 

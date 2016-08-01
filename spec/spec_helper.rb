@@ -143,6 +143,25 @@ def random_uniq_url
   Faker::Internet.url.split(".").insert(1, "-#{(0...8).map{65.+(rand(26)).chr}.join.downcase}").insert(2, ".").join
 end
 
+def stub_out_get_ab_variations(*variations, &result)
+  variation_matcher = Regexp.new(variations.join("|"))
+
+  allow_any_instance_of(ApplicationController).
+    to receive(:get_ab_variation).
+    with(variation_matcher).
+    and_return(result.call)
+
+  allow_any_instance_of(ApplicationController).
+    to receive(:get_ab_variation).
+    with(variation_matcher, anything).
+    and_return(result.call)
+
+  allow_any_instance_of(ApplicationController).
+    to receive(:get_ab_variation_or_nil).
+    with(variation_matcher).
+    and_return(result.call)
+end
+
 Hellobar::Settings[:host] = "http://hellobar.com"
 Hellobar::Settings[:store_site_scripts_locally] = false
 Hellobar::Settings[:fake_data_api] = false

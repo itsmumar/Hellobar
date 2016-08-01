@@ -27,7 +27,7 @@ HelloBar.SettingsController = Ember.Controller.extend
       when "settings.announcement"
         @set("model.element_subtype", "announcement")
       when "settings.social"
-        @set("model.element_subtype", null)
+        @set("model.element_subtype", "social/like_on_facebook")
     InternalTracking.track_current_person("Editor Flow", {step: "Goal Settings", goal: @get("model.element_subtype")}) if trackEditorFlow
   ).observes('routeForwarding')
 

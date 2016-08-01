@@ -1,4 +1,7 @@
-= render "shared/modals/contact_list"
+- if get_ab_variation('Email Integration UI 2016-06-22', current_user) == 'original'
+  = render "shared/modals/contact_list"
+- else
+  = render "shared/modals/contact_list_variant"
 
 - if @contact_lists.any?
 
@@ -20,7 +23,7 @@
             |  (Disconnected. Please reconfigure)
         td
           span = contact_list_provider_name(list)
-          = image_tag contact_list_image(list) unless list.webhook?
+          = image_tag contact_list_image(list)
         td= @contact_list_totals[list.id.to_s] || 0
         td= list.created_at.strftime("%-m-%-d-%Y")
 

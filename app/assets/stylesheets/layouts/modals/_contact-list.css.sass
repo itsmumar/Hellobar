@@ -112,3 +112,360 @@
     .radio-wrapper
       input[type=radio], label
         margin-bottom: 20px
+
+#contact-list-variant-form + #contact-list-delete
+  position: absolute
+  box-shadow: 0.33em 0.33em 15em rgba($grayDarker, 0.33)
+  @include center-align()
+
+/*-----------  Contact List Provider Selection  -----------*/
+
+#contact-list-variant-form
+  width: 48.5rem
+  padding-left: 2.25rem
+  padding-right: 2.25rem
+
+  > header,
+  > footer
+    margin-left: 0
+    margin-right: 0
+    padding-left: 0
+    padding-right: 0
+
+  > footer
+    margin-top: 2.25rem
+    position: relative
+
+    .delete-confirm
+      top: 2rem
+      color: $orangeLight
+      position: absolute
+      font-size: 0.85rem
+      padding-left: 1rem
+      text-decoration: underline
+
+      &:hover
+        color: $orange
+
+  button,
+  .button
+    padding: 0.55em 1.33em
+
+    &.ready
+      margin-top: 1rem
+
+  label
+    line-height: 100%
+    font-weight: normal
+
+    small
+      font-size: 75%
+      color: $grayLight
+      font-style: italic
+
+  #{$all-text-inputs}
+    margin-bottom: 0
+    padding-top: 0.58em
+    padding-bottom: 0.58em
+
+    @include placeholder
+      color: $grayLighter
+      font-weight: $fontWeightLight
+
+    &.contact_list_api_key
+      float: left
+      width: 21rem
+
+      & + .ready
+        float: right
+        margin-top: 0.75em
+
+  textarea
+    height: 9rem
+    font-size: 85%
+    margin-bottom: 0
+    font-family: monospace
+
+    @include placeholder
+      color: $grayLighter
+
+  input[type='checkbox']
+    font-size: 85%
+    margin-top: 0.4rem
+    @include inline-block()
+
+    & + label
+      width: auto
+      font-size: 85%
+      padding-left: 0
+      margin-top: 0.5rem
+      @include inline-block()
+
+      & + small
+        opacity: 0.9
+        display: block
+        line-height: 150%
+        color: $grayLight
+        margin-top: 0.67rem
+        font-weight: $fontWeightLight
+
+  .provider-instructions-block
+    width: 28rem
+    @include clearfix()
+
+  /*-----------  Select Dropdown  -----------*/
+
+  form
+
+    #{$all-text-inputs}
+      width: 28rem
+
+    .select-wrapper
+      width: 28rem
+      margin-left: 0
+      margin-bottom: 0
+      position: relative
+
+      &::before
+        bottom: 0.33rem
+
+      .select-side-icon
+        top: 0.75rem
+        width: 2.9rem
+        height: 2.9rem
+        margin: -1px 0 0 0
+        position: absolute
+        background-color: $white
+        border: 1px solid $grayLighter
+
+        img
+          width: 1.5rem
+          height: auto
+          position: absolute
+          @include center-align()
+
+        & + select
+          height: 2.9rem
+          margin-bottom: 0
+          font-weight: normal
+          padding-left: 3.75rem
+          @include antialiased()
+
+      .is-connected
+        right: 4rem
+        color: $green
+        display: none
+        opacity: 0.75
+        bottom: 0.9rem
+        font-size: 0.85rem
+        position: absolute
+        pointer-events: none
+
+        i
+          font-size: 1rem
+          line-height: 80%
+          margin-right: 0.5rem
+          vertical-align: middle
+      &.connected
+        border-color: $green
+
+        .is-connected
+          display: block
+
+  /*-----------  HelloBar Only  -----------*/
+
+  .hellobar-only
+
+    .icon-back2
+      color: $blue
+      font-size: 0.67em
+      margin-right: 0.5em
+      margin-bottom: -1px
+
+    .hellobar-selection-wrapper
+      width: 28rem
+      margin: 0.675rem 0 0.85rem
+      @include clearfix()
+
+      .hellobar-icon
+        float: left
+        width: 3.33rem
+        height: 3.5rem
+        position: relative
+        margin-right: 1rem
+        border-radius: $radiusLg
+        border: 1px solid $grayLighter
+
+        img
+          height: auto
+          width: 2.5rem
+          position: absolute
+          @include center-align()
+
+      small
+        top: 0.5rem
+        position: relative
+        margin-top: 0.75rem
+        color: lighten($gray, 10%)
+
+  /*-----------  Sync Details  -----------*/
+
+  .remote-list-select-block
+    width: 28rem
+    margin-top: 0.75rem
+
+    .select-wrapper
+      margin-bottom: 0
+
+      &::before
+        bottom: 0.25rem
+
+      select
+        margin-bottom: 0.25rem
+
+  .sync-details-block
+    width: 28rem
+
+    small
+      color: lighten($gray, 10%)
+
+      & + div
+        margin: 1.25rem 0 0.5rem
+
+/*-----------  Contact List Provider Selection  -----------*/
+
+.contact-list-radio-wrapper
+  margin-bottom: 1rem
+  @include display(flex)
+  @include flex-wrap(wrap)
+  @include justify-content(flex-start)
+  @include align-content(flex-start)
+  @include align-items(flex-start)
+
+  .contact-list-radio-block
+    height: 7em
+    display: none
+    overflow: hidden
+    position: relative
+    border: $borderLighter
+    margin-top: 0.67rem
+    margin-right: 0.67rem
+    border-radius: $radiusSm
+    @include transition(color 0.25s ease-in, border 0.25s ease-in)
+
+    input[type="radio"]
+      display: none
+
+    label
+      margin: 0
+      padding: 0
+      width: 100%
+      height: 100%
+      cursor: pointer
+      position: absolute
+
+      .interior-float
+        margin: 0
+        width: 100%
+        padding: 0.5em
+        position: absolute
+        text-align: center
+        @include vertical-align()
+
+        img
+          height: auto
+          width: 3.33rem
+          margin-bottom: 0.25rem
+
+        span
+          color: $gray
+          display: block
+          font-size: 0.8rem
+          font-weight: normal
+          @include ellipsis()
+          @include transition()
+
+    &:hover
+      cursor: pointer
+      border-color: $gray
+
+      span
+        color: $grayDark !important
+
+    &.mailchimp-provider
+      display: block
+      @include order(1)
+      @include flex(0 0 8.75rem)
+
+    &.aweber-provider
+      display: block
+      @include order(2)
+      @include flex(0 0 8.75rem)
+
+    &.get_response_api-provider
+      display: block
+      @include order(3)
+      @include flex(0 0 8.75rem)
+
+    &:last-child
+      display: block
+      @include order(4)
+      @include flex(0 0 8.75rem)
+
+  /*-----------  STATE: Expanded  -----------*/
+
+  &.expanded
+
+    .contact-list-radio-block
+      height: 5.67em
+      display: block
+      @include order(unset)
+      @include flex(0 0 6.67rem)
+
+      label
+        font-size: 85%
+
+        img
+          width: 2.6rem
+
+      &.createsend-provider,
+      &.constantcontact-provider,
+      &.verticalresponse-provider
+
+        label span
+          font-size: 67%
+          margin-bottom: -5px
+
+      &:nth-child(6n+6)
+        margin-right: 0
+
+      &:last-child
+        display: none
+
+/*-----------  Editor Tweaks  -----------*/
+
+body#hb-editor #contact-list-variant-form
+
+  #{$all-text-inputs},
+  textarea,
+  select,
+  .select-block
+    color: $grayDark !important
+    font-size: 0.9em !important
+    margin: 0.75em auto 0 !important
+    border-color: $grayLighter !important
+
+  .contact_list,
+  .primary-selection-block,
+  .secondary-selection-block,
+  .provider-instructions-block,
+  .remote-list-select-block,
+  .sync-details-block,
+  .hellobar-only
+
+    > label:not([for='contact_list_webhook_method'])
+      font-size: 1em !important
+      margin-top: 1.5em !important
+
+  .secondary-selection-block > .select-wrapper::before
+    line-height: 300% !important

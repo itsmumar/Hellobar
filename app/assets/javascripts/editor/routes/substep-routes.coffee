@@ -16,7 +16,6 @@ HelloBar.SettingsStepRoute = Ember.Route.extend
 
 #-----------  Setup Sub-Step Routes  -----------#
 
-HelloBar.SettingsEmailsRoute       = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsSocialRoute       = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsClickRoute        = HelloBar.SettingsStepRoute.extend()
 HelloBar.SettingsCallRoute         = HelloBar.SettingsStepRoute.extend()
@@ -33,3 +32,27 @@ HelloBar.TargetingMobileRoute      = HelloBar.SettingsStepRoute.extend()
 HelloBar.TargetingHomepageRoute    = HelloBar.SettingsStepRoute.extend()
 HelloBar.TargetingCustomRoute      = HelloBar.SettingsStepRoute.extend()
 HelloBar.TargetingSavedRoute       = HelloBar.SettingsStepRoute.extend()
+HelloBar.TargetingLeavingRoute     = HelloBar.SettingsStepRoute.extend()
+HelloBar.TargetingScrollRoute      = HelloBar.SettingsStepRoute.extend()
+HelloBar.TargetingDelayRoute       = HelloBar.SettingsStepRoute.extend()
+
+# Switch controllers based upon Email Ingration UI test
+HelloBar.SettingsEmailsRoute = HelloBar.SettingsStepRoute.extend
+
+  controllerName: ->
+    if (HB_EMAIL_INTEGRATION_TEST == 'variant')
+      'settingsEmailsVariant'
+    else
+      'settingsEmails'
+
+  renderTemplate: (controller, model) ->
+    if (HB_EMAIL_INTEGRATION_TEST == 'variant')
+      @render('settings/emails-variant', {
+        model: model
+        view: 'step'
+      })
+    else
+      @render('settings/emails', {
+        model: model
+        view: 'step'
+      })

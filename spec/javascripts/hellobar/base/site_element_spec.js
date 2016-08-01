@@ -22,4 +22,22 @@ describe("siteElement", function() {
       expect(HB.viewed).not.toHaveBeenCalled();
     });
   });
+
+  describe("siteElement.onClosed", function() {
+    context("callbacks", function() {
+      beforeEach(function() {
+        spyOn(HB, 'trigger');
+        siteElement.onClosed();
+      });
+
+      it("triggers the elementDismissed callback", function() {
+        expect(HB.trigger).toHaveBeenCalledWith('elementDismissed');
+      });
+
+      it("triggers the converted callback", function() {
+        expect(HB.trigger).toHaveBeenCalledWith('closed', siteElement);
+      });
+    });
+
+  });
 });

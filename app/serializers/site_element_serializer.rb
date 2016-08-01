@@ -16,7 +16,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :animated, :wiggle_button, :theme_id,
 
     # image
-    :image_url, :image_placement, :active_image_id, :image_file_name,
+    :image_url, :image_placement, :active_image_id, :image_file_name, :use_default_image,
 
     # questions/answers/responses
     :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,
@@ -89,7 +89,7 @@ class SiteElementSerializer < ActiveModel::Serializer
       errors = object.errors[attribute]
 
       if attribute == :element_subtype && errors.include?("can't be blank")
-        messages << "You must select a type in the \"settings\" section"
+        messages << "You must select your goal in the \"goals\" section"
         next
       end
 
@@ -99,7 +99,7 @@ class SiteElementSerializer < ActiveModel::Serializer
       end
 
       if attribute == :contact_list && errors.include?("can't be blank")
-        messages << "You must select a contact list to sync with in the \"settings\" section"
+        messages << "You must select a contact list to sync with in the \"goals\" section"
         next
       end
 

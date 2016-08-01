@@ -22,7 +22,7 @@ script id='account-prompt-modal-template' type='text/x-handlebars-template'
           .thirds
             label Timezone
             .select-wrapper
-              = select 'user', 'timezone', ActiveSupport::TimeZone.all.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
+              = select 'user', 'timezone', time_zone_options
 
         = hidden_field_tag :detect_timezone
 
@@ -66,4 +66,4 @@ script id='alternate-account-prompt-modal-template' type='text/x-handlebars-temp
         .tz-select
           label Timezone
           .select-wrapper
-            = select 'user', 'timezone', ActiveSupport::TimeZone.all.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
+            = select 'user', 'timezone', time_zone_options

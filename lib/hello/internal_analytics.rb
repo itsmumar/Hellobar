@@ -43,22 +43,24 @@ module Hello
         @@expected_index += 1
         TESTS[name] = {:values=>values, :index=>index, :weights=>weights, :name=>name, :user_start_date=>user_start_date}
       end
+
+      def load_ab_tests
+        hash = YAML.load(File.read("lib/hello/ab_tests.yml"))
+        hash.each do |registered_test|
+          name            = registered_test["name"]
+          values          = registered_test["values"]
+          index           = registered_test["index"]
+          weights         = registered_test["weights"].present? ? registered_test["weights"] : []
+          user_start_date = registered_test["user_start_date"]
+          register_test(name, values, index, weights, user_start_date)
+        end
+      end
     end
 
     # ================================================================
     # ==      REGISTER YOUR TESTS AT: lib/hello/ab_tests.yml        ==
     # ================================================================
-    unless Rails.env.test?
-      hash = YAML.load(File.read("lib/hello/ab_tests.yml"))
-      hash.each do |registered_test|
-        name            = registered_test["name"]
-        values          = registered_test["values"]
-        index           = registered_test["index"]
-        weights         = registered_test["weights"].present? ? registered_test["weights"] : []
-        user_start_date = registered_test["user_start_date"]
-        register_test(name, values, index, weights, user_start_date)
-      end
-    end
+    Hello::InternalAnalytics.load_ab_tests unless Rails.env.test?
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
