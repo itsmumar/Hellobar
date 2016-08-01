@@ -26,4 +26,12 @@ module ApplicationHelper
   def new_user?
     current_user && current_user.sites.count == 1 && current_user.site_elements.count == 0
   end
+
+  def time_zone_options
+    filtered_timezone_list.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
+  end
+
+  def filtered_timezone_list
+    ActiveSupport::TimeZone.all.uniq(&:tzinfo)
+  end
 end
