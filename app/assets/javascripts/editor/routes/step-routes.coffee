@@ -5,10 +5,6 @@ HelloBar.StepRoute = Ember.Route.extend
   model: ->
     @modelFor('application')
 
-  afterModel: (model) ->
-    unless HB_DATA.skipInterstitial or model.element_subtype
-      @replaceWith("interstitial") # redirect to interstitial to select a goal unless it's rememebered in model
-
   # Updates the current step in the application controller. Currently
   # being used to keep the step navigation component tracking correctly.
   # Also auto-forwards to an appropriate sub-step route if one has been
@@ -24,6 +20,16 @@ HelloBar.StepRoute = Ember.Route.extend
       nextRoute    : controller.nextStep
 
     @replaceWith(controller.routeForwarding) unless !controller.routeForwarding
+
+  actions:
+
+    didTransition: (t) ->
+      model = @model()
+      currentRoute = @controllerFor("application").get("currentRouteName")
+
+      # redirect to interstitial to select a goal after a page refresh unless it's rememebered in model
+      # currentRoute==undefined indicates page refresh
+      @replaceWith("interstitial") unless currentRoute or HB_DATA.skipInterstitial or model.element_subtype
 
 
 #-----------  Setup Step Routes  -----------#
