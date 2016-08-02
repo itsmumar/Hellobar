@@ -55,12 +55,12 @@ Teaspoon.configure do |config|
     coverage.output_path = "tmp/teaspoon"
 
     coverage.ignore = [
-        %r{/lib/ruby/gems/},
-        %r{/spec/javascripts/spec_helper.coffee},
-        # exclude all vendor assets except for hellobar.base and site_elements subfolder - they are covered with tests
-        %r{/vendor/assets/(?!javascripts/(hellobar|site_elements))},
-        # exclude project's javascripts to focus only on generated code
-        %r{/app/assets/javascripts/}
+      %r{/lib/ruby/gems/},
+      %r{/spec/javascripts/spec_helper.coffee},
+      # exclude all vendor assets except for hellobar.base and site_elements subfolder - they are covered with tests
+      %r{/vendor/assets/(?!javascripts/(hellobar|site_elements))},
+      # exclude project's javascripts to focus only on generated code
+      %r{/app/assets/javascripts/}
     ]
   end
 end
