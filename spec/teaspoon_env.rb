@@ -54,8 +54,12 @@ Teaspoon.configure do |config|
     coverage.reports = ["text-summary", "html"]
     coverage.output_path = "tmp/teaspoon"
 
-    # Assets to be ignored when generating coverage reports. Accepts an array of filenames or regular expressions. The
-    # default excludes assets from vendor, gems and support libraries.
-    #coverage.ignore = [%r{/lib/ruby/gems/}, %r{/vendor/assets/}, %r{/support/}, %r{/(.+)_helper.}]
+    coverage.ignore = [
+        %r{/lib/ruby/gems/},
+        %r{/spec/javascripts/spec_helper.coffee},
+        %r{/vendor/assets/(?!javascripts/(hellobar|site_elements))}, # exclude all vendor assets except for hellobar.base
+                                                                     # and site_elements subfolder - they are covered with tests
+        %r{/app/assets/javascripts/} # exclude project's javascripts to focus only on generated code
+    ]
   end
 end
