@@ -1109,7 +1109,7 @@ var HB = {
     {
       var rule = HB.rules[i];
 
-      if ( HB.ruleTrue(rule) )
+      if ( rule.siteElements.length && HB.ruleTrue(rule) )
       {
         // Get all site elements that are a part of this rule that the
         // visitor has not done
@@ -1183,6 +1183,8 @@ var HB = {
   // Returns the best element to show from a group of elements
   getBestElement: function(elements)
   {
+    elements = HB.filterMostRelevantElements(elements);
+
     var i, siteElement;
     var possibleSiteElements = {};
     for(i=0;i<elements.length;i++)
@@ -1196,18 +1198,12 @@ var HB = {
     // Now we narrow down based on the "value" of the site elements
     // (collecting emails is considered more valuable than clicking links
     // for example)
-    if ( possibleSiteElements.email )
-      possibleSiteElements = possibleSiteElements.email;
-    else if ( possibleSiteElements.call )
-      possibleSiteElements = possibleSiteElements.call;
-    else if ( possibleSiteElements.social )
-      possibleSiteElements = possibleSiteElements.social;
-    else if ( possibleSiteElements.traffic )
-      possibleSiteElements = possibleSiteElements.traffic;
-    else if ( possibleSiteElements.announcement )
-      possibleSiteElements = possibleSiteElements.announcement;
-    else
-      return; // Should not reach here - if we do there is nothing to show
+    possibleSiteElements =
+      possibleSiteElements.email ||
+      possibleSiteElements.call ||
+      possibleSiteElements.social ||
+      possibleSiteElements.traffic ||
+      possibleSiteElements.announcement;
 
     // If we have no elements then stop
     if ( !possibleSiteElements || possibleSiteElements.length == 0 )
@@ -1259,6 +1255,57 @@ var HB = {
       // Return the top value
       return possibleSiteElements[0];
     }
+  },
+
+  // Get elements that are most relevant, namely they meet the most narrow set of rules.
+  // For example, having 2 similar modals: one set to be shown to everybody (0 conditions),
+  // and another - to mobile visitors only (1 condition), we should always show the latter on mobile devices.
+  filterMostRelevantElements: function(elements) {
+    if (elements.length <= 1)
+        return elements; //no need to filter
+
+    var rules = elements.map(function(element) {
+      return element.rule;
+    });
+
+    rules = HB.filterMostRelevantRules(rules);
+
+    // filter elements that correspond to the most relevant set of rules
+    return elements.filter(function(element) {
+      return rules.indexOf(element.rule) >= 0;
+    });
+  },
+
+  // Find the most relevant (narrow) set of rules.
+  // For "all" rules the most narrow set is one with the maximum number of conditions (X and Y and Z < X and Y)
+  // For "any" rules the most narrow set is one with the minimum number of conditions (X or Y < X or Y or Z), except for 0
+  // When the 2 kinds of rules intersect, "and" has always higher priority (X and Y < X or Y).
+  filterMostRelevantRules: function(rules) {
+    if (rules.length <= 1)
+        return rules;
+
+    var basis = 10; //basic multiplier for weight calculation
+    var groups = {}; //hash of weight:rules pairs
+
+    //Step 1: Go through the array, calculate each rule's weight and put it into the appropriate group
+    rules.forEach(function(rule) {
+      var weight;
+      if (rule.conditions.length == 0) //the least relevant rule - it matches everything
+        weight = 0;
+      else
+        //for "all" rule - the more conditions it has, the more relevant it is, the higher weight it should have (multiplication)
+        //for "any" rule - the more conditions it has, the less relevant it is, the lower weight it should have (division)
+        weight = rule.matchType == "all" ? basis*rule.conditions.length : basis/rule.conditions.length;
+
+      if (!groups[weight])
+        groups[weight] = [];
+
+      groups[weight].push(rule);
+    });
+
+    //Step 2: Find the maximum weight and return the corresponding group of rules
+    var maxWeight = Math.max.apply(null, Object.keys(groups));
+    return groups[maxWeight];
   },
 
   // Checkes if the rule is true by checking each of the conditions and
@@ -2076,11 +2123,25 @@ var HB = {
       HB.sc("hbglc_"+HB_SITE_ID, HB.serializeCookieValues(locationCookie), expirationDays);
       HB.loadCookies();
     }
+    
+    return locationCookie;
   },
 
+  /**
+   * Try getting geolocation data.
+   * If it's already saved in HB.cookies, then retrieve it.
+   * Otherwise send a request and save response to HB.cookies.location and HB.tmpLocationData variables.
+   * We need the latter for cases when setting cookies/localStorage data is disabled on current browser for some reason
+   * (otherwise we'd have an infinite loop from HB.showSiteElements() to HB.getGeolocationData() and back)
+   * @param key
+   * @returns {*}
+     */
   getGeolocationData: function(key) {
     var cachedLocation = HB.cookies.location[key];
-    if (cachedLocation) return cachedLocation;
+    if (cachedLocation)
+      return cachedLocation;
+    else if (HB.tmpLocationData && HB.tmpLocationData[key])
+      return HB.tmpLocationData[key];
 
     var xhr = new XMLHttpRequest();
     if ( HB.geoRequestInProgress == false ) {
@@ -2094,8 +2155,8 @@ var HB = {
       var OK = 200; // status 200 is a successful return.
       if (xhr.readyState === DONE) {
         if (xhr.status === OK) {
-          response = JSON.parse(xhr.responseText);
-          HB.setGeolocationData(response);
+          var response = JSON.parse(xhr.responseText);
+          HB.tmpLocationData = HB.setGeolocationData(response); //store location data in memory (until the page is not reloaded)
           HB.geoRequestInProgress = false;
           HB.showSiteElements();
         }

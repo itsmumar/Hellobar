@@ -17,7 +17,12 @@ html
     = csrf_meta_tags
 
   body#hb-editor
-    = render "shared/modals/contact_list"
+    - if get_ab_variation('Email Integration UI 2016-06-22', current_user) == 'original'
+      = render "shared/modals/contact_list"
+    - else
+      = render "shared/modals/contact_list_variant"
+      
+    = render "shared/modals/contact_list_variant"
     = render "shared/modals/editor_errors"
     = render "shared/modals/unsaved_changes"
     = render "shared/modals/temp_user_unsaved_changes"
@@ -32,6 +37,7 @@ html
       HB_DNT = 1;
       HB_EMAIL_FLOW_TEST = "original";
       HB_ONBOARDING_EMAIL_VOLUME = "#{get_ab_variation('Onboarding Email Volume 2016-06-28', current_user)}";
+      HB_EMAIL_INTEGRATION_TEST = "#{get_ab_variation('Email Integration UI 2016-06-22', current_user)}";
 
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
       var trackEditorFlow = #{{new_user?}};

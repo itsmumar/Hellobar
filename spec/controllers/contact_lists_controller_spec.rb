@@ -15,6 +15,8 @@ describe ContactListsController, type: :controller do
     allow_any_instance_of(Identity).to receive(:extra).
       and_return("metadata" => { "api_endpoint" =>  "test" })
 
+    stub_out_get_ab_variations('Email Integration UI 2016-06-22') {"original"}
+
     allow(Hello::DataAPI).to receive(:get_contacts).and_return([])
   end
 
@@ -236,7 +238,7 @@ describe ContactListsController, type: :controller do
         put :update, site_id: site, id: contact_list, contact_list: contact_list_params
         contact_list.reload
 
-        expect(contact_list.service_provider.name).to eq "Mad Mimi"
+        expect(contact_list.service_provider.name).to eq "MadMimi"
       end
 
       it 'changes the embed code' do

@@ -53,7 +53,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{option segment "UTMSourceCondition" "Ad Source"}}
           | {{option segment "UTMTermCondition" "Ad Term"}}
           / | {{option segment "LocationCityCondition" "City"}}
-          | {{option segment "LocationCountryCondition" "Country Code"}}
+          | {{option segment "LocationCountryCondition" "Country"}}
           | {{option segment "DateCondition" "date"}}
           | {{option segment "LastVisitCondition" "days since last visit"}}
           | {{option segment "DeviceCondition" "device"}}
@@ -148,7 +148,7 @@ script#condition-partial type="text/x-handlebars-template"
           .select-wrapper.time-select
             = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..59).map{|i| i.to_s.rjust(2, '0') }), { disabled: true, class: 'value' }
           .select-wrapper.time-select.timezone
-            - timezones = [["Use visitor's timezone", "visitor"]] + ActiveSupport::TimeZone.all.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
+            - timezones = [["Use visitor's timezone", "visitor"]] + time_zone_options
             = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select(timezones), { disabled: true, class: 'value' }
         .choice-wrapper.location-region-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"

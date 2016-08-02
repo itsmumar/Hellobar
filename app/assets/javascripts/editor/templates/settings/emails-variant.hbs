@@ -1,0 +1,54 @@
+<label>Choose input fields</label>
+<div {{bind-attr class="collectNames:is-selected :radio-blocks-wrapper"}}>
+  <div class="radio-block" {{action 'collectEmail'}}>
+    <i class="hellobar-icon-mail"></i>
+    <div>Email addresses only</div>
+  </div>
+  <div class="radio-block" {{action 'collectEmailsAndNames'}}>
+    <i class="hellobar-icon-mail"></i>
+    <div>Names and email addresses</div>
+  </div>
+</div>
+
+<label>Choose your contact list and integration</label>
+{{contact-list-select
+  value=model.contact_list_id
+  options=model.site.contact_lists
+  setList="setContactList"
+  editList="openEmailListPopup"
+}}
+
+<label>Design your "Thank You" message</label>
+{{custom-pro-select
+  choice=afterSubmitChoice
+  options=afterSubmitOptions
+  action="setModelAfterSubmitValue"
+}}
+
+{{#if showRedirectUrlInput}}
+  <label class="small">Redirect URL</label>
+  {{view Ember.TextField
+    name='after_email_input'
+    value=model.settings.redirect_url
+    placeholder="http://www.example.com"
+    maxlength=255
+  }}
+{{else}}
+  {{#if showCustomMessage}}
+    <label class="small">Custom message</label>
+    {{view Ember.TextField
+      name='after_email_input'
+      value=model.thank_you_text
+      placeholder=model.default_email_thank_you_text
+      maxlength=255
+    }}
+  {{else}}
+    {{view Ember.TextField
+      name='after_email_input'
+      value=model.default_email_thank_you_text
+      placeholder=model.default_email_thank_you_text
+      maxlength=255
+      disabled=true
+    }}
+  {{/if}}
+{{/if}}

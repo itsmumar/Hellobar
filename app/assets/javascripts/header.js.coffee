@@ -1,26 +1,7 @@
 $ ->
-  siteSelectorEl = $('.header-nav-wrapper')
-  userSelectorEl = $('.header-user-wrapper')
+  $(document.body).on "click", (evt) ->
+    $dropdown = $(evt.target).closest("header .dropdown-wrapper")
+    if $dropdown.length
+      $dropdown.toggleClass("activated")
 
-  $('html').click (evt) ->
-    siteSelectorEl.find('.dropdown-wrapper').removeClass('activated')
-    userSelectorEl.find('.dropdown-wrapper').removeClass('activated')
-
-  siteSelectorEl.click (evt) ->
-    dropdown      = siteSelectorEl.find('.dropdown-wrapper')
-    childElements = [@, dropdown]
-
-    if $.inArray(evt.target, childElements)
-      evt.stopPropagation()
-      userSelectorEl.find('.dropdown-wrapper').removeClass('activated')
-      dropdown.toggleClass('activated')
-
-  userSelectorEl.click (evt) ->
-    dropdown      = userSelectorEl.find('.dropdown-wrapper')
-    childElements = [@, dropdown]
-
-    if (evt.target.getAttribute('href') != "/users/sign_out") && (evt.target.getAttribute('href') != "/admin/users/unimpersonate")
-      if $.inArray(evt.target, childElements)
-        siteSelectorEl.find('.dropdown-wrapper').removeClass('activated')
-        evt.stopPropagation()
-        dropdown.toggleClass('activated')
+    $("header .dropdown-wrapper.activated").not($dropdown).removeClass("activated")

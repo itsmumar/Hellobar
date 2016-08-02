@@ -8,6 +8,16 @@
   @else
     @include prefixer(font-smoothing, subpixel-antialiased, webkit moz ms o spec)
 
+/*-----------  Icon Mixin  -----------*/
+
+@mixin use-icon($content: "")
+  content: $content
+  font-family: "hellobar"
+
+@mixin use-hb-icon($content: "")
+  content: $content
+  font-family: "hellobar-icons"
+
 /*-----------  Custom Icon Font  -----------*/
 
 @font-face
