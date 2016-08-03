@@ -4,8 +4,8 @@ HelloBar.InterstitialCallController = Ember.Controller.extend
   setDefaults: ->
     return false unless @get("model")
 
-    @set("model.headline", null)
-    @set("model.link_text", null)
+    @set("model.headline", "Talk to us to find out more")
+    @set("model.link_text", "Call Now")
     @set("model.element_subtype", "call")
     
   inputIsInvalid: ( ->
