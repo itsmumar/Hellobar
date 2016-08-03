@@ -1,7 +1,6 @@
 HelloBar.InterstitialContactsController = Ember.Controller.extend
   needs: ["application"]
 
-  forceContacts: (HB_EMAIL_FLOW_TEST == "force")
   showEmailVolume: (HB_ONBOARDING_EMAIL_VOLUME == "messaging")
 
   monthlyPageviews: ( ->

@@ -13,9 +13,7 @@
     {{view Ember.TextField value=model.link_text placeholder="Subscribe" maxlength=255}}
 
     <div class="step-container">
-      {{#unless forceContacts}}
-        {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
-      {{/unless}}
+      {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
       <button class="button save-editor" {{action 'closeInterstitial'}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
     </div>
   </div>
