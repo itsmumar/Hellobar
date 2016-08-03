@@ -1,9 +1,6 @@
 HelloBar.DesignController = Ember.Controller.extend
 
   needs: ['application']
-  init: ->
-    # Consume computed property so its observers will trigger
-    @get('currentTheme')
 
   #-----------  Step Settings  -----------#
 
