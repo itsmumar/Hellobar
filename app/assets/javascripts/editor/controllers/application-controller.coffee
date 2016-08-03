@@ -151,8 +151,9 @@ HelloBar.ApplicationController = Ember.Controller.extend
   ).property()
 
   setRuleID: (->
-    @set("model.rule_id", parseInt(@get("rule_id")))
-  ).observes("rule_id")
+    ruleId = parseInt(@get("rule_id"))
+    @set("model.rule_id", ruleId) if @get("model")
+  ).observes("rule_id", "model")
 
   # Model properties are all updated when the model is initially loaded, but we only want to set this flag on any property changes
   # that happen AFTER that initialization. By using an observesBefore here and only setting the flag if the property being changed
