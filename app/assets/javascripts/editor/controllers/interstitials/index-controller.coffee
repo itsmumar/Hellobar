@@ -9,11 +9,17 @@ HelloBar.InterstitialIndexController = Ember.Controller.extend
     $("meta[name=csrf-token]").attr("content")
   ).property()
 
-  # Reset defaults when transitioning to interstitial index (called from intersitial-route on controller setup)
+  afterModel: (() ->
+    # default values are defined in DB schema (shema.rb); we remember them here
+    @defaults =
+      "model.headline": @model.headline
+      "model.link_text": @model.link_text
+      "model.element_subtype": @model.element_subtype
+      "model.phone_country_code": @model.phone_country_code
+  ).observes("model")
+
+# Reset defaults when transitioning to interstitial index (called from intersitial-route on controller setup)
   setDefaults: ->
     return false unless @get("model")
-    
-    @set("model.headline", null)
-    @set("model.link_text", null)
-    @set("model.element_subtype", null)
-    @set("model.phone_country_code", "US")
+
+    @setProperties(@defaults)
