@@ -47,7 +47,7 @@ Teaspoon.configure do |config|
   # - with the rake task: rake teaspoon USE_COVERAGE=[coverage_name]
   # - with the cli: teaspoon --coverage=[coverage_name]
 
-  config.use_coverage = true
+  config.use_coverage = false # not use coverage by default unless it's set up on CircleCI
 
   config.coverage do |coverage|
     # Available: text-summary, text, html, lcov, lcovonly, cobertura, teamcity
