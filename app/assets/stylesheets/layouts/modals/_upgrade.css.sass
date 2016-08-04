@@ -126,15 +126,18 @@
           color: $gray
           padding: 0.85em
           text-align: left
-          font-size: 0.85em
+          font-size: 12.8px
+          line-height: 1.88
+          padding-top: 0px
+          padding-bottom: 0px
           position: relative
           @include inline-block()
 
           &:before
             top: 45%
-            left: -8px
-            width: 6px
-            height: 6px
+            left: -13px
+            width: 3px
+            height: 3px
             content: ''
             position: absolute
             border-radius: 10em
@@ -206,18 +209,36 @@
 
       .package-features
 
-        li
-          @include antialiased(false)
+        ul
+          padding-bottom: 10px
 
-          i
-            top: 18%
-            left: -1em
-            color: $green
-            font-size: 1.67em
-            position: absolute
+          li
+            padding-top: 5px
+            padding-bottom: 5px
 
-          &:before
-            display: none
+            .info
+              position: relative
+              top: 6px
+
+            .info-plus
+              position: relative
+              top: 11px
+
+            i
+              top: 18%
+              left: -1em
+              color: $green
+              font-size: 1.67em
+              position: absolute
+
+            &:before
+              display: none
+
+          li.thin
+            padding-bottom: 0px
+
+          li.adjusted-down
+            margin-top: 10px
 
     /*-----------  Enterprise Package  -----------*/
 
