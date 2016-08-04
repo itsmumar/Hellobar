@@ -22,7 +22,18 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 
 SimpleCov.coverage_dir('tmp/metric_fu/coverage/')
 
-SimpleCov.start
+SimpleCov.start do
+  add_group "Models", "app/models"
+  add_group "Controllers", "app/controllers"
+  add_group "Helpers", "app/helpers"
+  add_group "Interactions", "app/interactions"
+  add_group "Mailers", "app/mailers"
+  add_group "Serializers", "app/serializers"
+  add_group "lib", "lib"
+  add_filter '/spec/'
+  add_filter '/config/'
+  add_filter '/vendor/'
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
