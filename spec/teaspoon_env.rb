@@ -73,9 +73,9 @@ Teaspoon.configure do |config|
     coverage.output_path = "tmp/teaspoon"
 
     coverage.ignore = [
-        %r{/lib/ruby/gems/},
-        %r{/spec/javascripts/spec_helper.coffee},
-        %r{/vendor/assets/}
+      %r{/lib/ruby/gems/},
+      %r{/spec/javascripts/spec_helper.coffee},
+      %r{/vendor/assets/}
     ]
   end
 end
