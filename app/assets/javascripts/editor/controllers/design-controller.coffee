@@ -68,8 +68,6 @@ HelloBar.DesignController = Ember.Controller.extend
       return
 
     Ember.run.next(@, ->
-
-      console.log "before themeChanged", @get("model")
       themeStyleDefaults = @get('currentTheme.defaults')[@get('model.type')] || {}
 
       _.each themeStyleDefaults, (value, key) =>
@@ -85,8 +83,6 @@ HelloBar.DesignController = Ember.Controller.extend
           @setProperties('model.use_default_image' : true)
         else
           @send('setImageProps', null, '')
-
-      console.log "themeChanged", @get("model")
     )
   )
 
