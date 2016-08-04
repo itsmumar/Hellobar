@@ -2,10 +2,6 @@ HelloBar.DesignController = Ember.Controller.extend
 
   needs: ['application']
 
-  init: ->
-    @_preventChanging = true # set flag to prevent "themeChanged" observer from triggering
-    @get("currentTheme") # compute current theme now to trigger all observers and set initial state
-
   #-----------  Step Settings  -----------#
 
   step: 3
@@ -63,10 +59,6 @@ HelloBar.DesignController = Ember.Controller.extend
 
   # Site Element Theme Properties
   themeChanged: Ember.observer('currentTheme', ->
-    if @_preventChanging
-      delete @_preventChanging # skip processing when triggered first time
-      return
-
     Ember.run.next(@, ->
       themeStyleDefaults = @get('currentTheme.defaults')[@get('model.type')] || {}
 
