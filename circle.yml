@@ -22,7 +22,7 @@ test:
         files:
           - spec/**/*_spec.rb
   post:
-    - RAILS_ENV=test bundle exec rake teaspoon
+    - RAILS_ENV=test bundle exec rake teaspoon --suite=default
 
 deployment:
   designqa:

@@ -49,7 +49,9 @@ Teaspoon.configure do |config|
 
   config.use_coverage = false # not use coverage by default unless it's set up on CircleCI
 
-  config.coverage do |coverage|
+  # coverage of the "Generator" segment; includes `hellobar.base.js` and `site_elements`
+  # files in `vendor/assets/javascripts/` directory
+  config.coverage :generator do |coverage|
     # Available: text-summary, text, html, lcov, lcovonly, cobertura, teamcity
     coverage.reports = ["text-summary", "html"]
     coverage.output_path = "tmp/teaspoon"
@@ -61,6 +63,19 @@ Teaspoon.configure do |config|
       %r{/vendor/assets/(?!javascripts/(hellobar|site_elements))},
       # exclude project's javascripts to focus only on generated code
       %r{/app/assets/javascripts/}
+    ]
+  end
+
+  # coverage of the "Project" segment; includes `assets/javascripts/` files
+  config.coverage :project do |coverage|
+    # Available: text-summary, text, html, lcov, lcovonly, cobertura, teamcity
+    coverage.reports = ["text-summary", "html"]
+    coverage.output_path = "tmp/teaspoon"
+
+    coverage.ignore = [
+        %r{/lib/ruby/gems/},
+        %r{/spec/javascripts/spec_helper.coffee},
+        %r{/vendor/assets/}
     ]
   end
 end
