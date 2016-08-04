@@ -70,7 +70,8 @@ class @UpgradeAccountModal extends Modal
           $(button).text("Enter Billing Info")
         else
           $(button).attr("disabled", "disabled")
-          $(button).text("Current Plan")
+          prefix = $(button).closest(".package-status").data('btn-prefix') || ""
+          $(button).text(prefix + "Current Plan")
 
   _invalidPermissions: ->
     @$modal.find("div.button").each (index, button) =>
