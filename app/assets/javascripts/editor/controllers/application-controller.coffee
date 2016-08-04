@@ -152,7 +152,9 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   setRuleID: (->
     ruleId = parseInt(@get("rule_id"))
-    @set("model.rule_id", ruleId) if @get("model")
+    # if both model and rule_id parameter exist
+    if @get("model") and ruleId >= 0
+      @set("model.rule_id", ruleId)
   ).observes("rule_id", "model")
 
   # Model properties are all updated when the model is initially loaded, but we only want to set this flag on any property changes
