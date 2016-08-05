@@ -1,6 +1,6 @@
+#= require application
 #= require modal
 #= require modals/contact_list_modal
-# require support/jasmine-jquery-2.1.0
 
 context = describe
 jasmine.clock().install()

@@ -196,7 +196,8 @@ $ ->
   # Returns the currently active tab
   # active = true, paused = false, all = null
   currentSelection = ->
-    selection = $('a.element-filter.active').attr('href').replace(/\W/g, '')
+    target = $('a.element-filter.active').attr('href')
+    selection = target && target.replace(/\W/g, '')
     return null if selection == "all"
     selection == "active"
 
