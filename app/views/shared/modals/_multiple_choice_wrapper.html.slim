@@ -1,13 +1,12 @@
-- type ||= "text"
-- placeholder ||= false
-- className ||= false
+- class_name ||= false
 
-.choice-wrapper.multiple-choice class=className
+.choice-wrapper.multiple-choice class=class_name
   | {{#if value}}
   | {{#each value}}
   .multiple-input-wrapper
     span or
-    input.url.value name="rule[conditions_attributes][{{../index}}][value][]" type=type value="{{this}}" placeholder=placeholder
+    = yield
+
     .multiple-choice-actions
       a.choice-remove –
       a.choice-add +
@@ -15,7 +14,8 @@
   | {{else}}
   .multiple-input-wrapper
     span or
-    input.url.value name="rule[conditions_attributes][{{index}}][value][]" type=type value="{{value}}" placeholder=placeholder
+    = yield
+
     .multiple-choice-actions
       a.choice-remove –
       a.choice-add +

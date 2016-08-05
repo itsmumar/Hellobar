@@ -138,8 +138,17 @@ script#condition-partial type="text/x-handlebars-template"
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.location-city-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
-        .choice-wrapper.location-country-choice.select-wrapper
-          = country_select('rule', 'conditions_attributes', { priority_countries: ["US"] }, { disabled: "disabled", name: "rule[conditions_attributes][{{index}}][value]", class: "value" })
+
+        /= render :partial => "shared/modals/multiple_choice_wrapper", :locals => {\
+            type: "custom",
+            className: "location-country-choice select-wrapper"\
+          } do |name|
+          = country_select('rule', 'conditions_attributes', {priority_countries: ["US"]}, {\
+              disabled: "disabled",
+              name: name,
+              class: "value"\
+            })
+
         .choice-wrapper.time-choice
           .select-wrapper.time-select
             = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..23).map{|i| i.to_s.rjust(2, '0') }), { disabled: true, class: 'value' }
@@ -153,11 +162,8 @@ script#condition-partial type="text/x-handlebars-template"
         .choice-wrapper.location-region-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
 
-        = render :partial => "shared/modals/multiple_choice_wrapper", :locals => {\
-            type: "url",
-            placeholder: "/specific_path",
-            className: "url-choice"\
-          }
+        = render :partial => "shared/modals/multiple_choice_wrapper" do
+          input.value name="name" type="url"  placeholder="/specific_path"
 
         .choice-wrapper.url-query
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}" placeholder="query=value"
