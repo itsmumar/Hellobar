@@ -1,0 +1,22 @@
+- type ||= "text"
+- placeholder ||= false
+- className ||= false
+
+.choice-wrapper.multiple-choice class=className
+  | {{#if value}}
+  | {{#each value}}
+  .multiple-input-wrapper
+    span or
+    input.url.value name="rule[conditions_attributes][{{../index}}][value][]" type=type value="{{this}}" placeholder=placeholder
+    .multiple-choice-actions
+      a.choice-remove –
+      a.choice-add +
+  | {{/each}}
+  | {{else}}
+  .multiple-input-wrapper
+    span or
+    input.url.value name="rule[conditions_attributes][{{index}}][value][]" type=type value="{{value}}" placeholder=placeholder
+    .multiple-choice-actions
+      a.choice-remove –
+      a.choice-add +
+  | {{/if}}

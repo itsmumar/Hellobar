@@ -152,24 +152,13 @@ script#condition-partial type="text/x-handlebars-template"
             = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select(timezones), { disabled: true, class: 'value' }
         .choice-wrapper.location-region-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
-        .choice-wrapper.url-choice
-          | {{#if value}}
-          | {{#each value}}
-          .url-input-wrapper
-            span or
-            input.url.value name="rule[conditions_attributes][{{../index}}][value][]" type="url" value="{{this}}" placeholder="/specific_path"
-            .url-actions
-              a.url-remove –
-              a.url-add +
-          | {{/each}}
-          | {{else}}
-          .url-input-wrapper
-            span or
-            input.url.value name="rule[conditions_attributes][{{index}}][value][]" type="url" value="{{value}}" placeholder="/specific_path"
-            .url-actions
-              a.url-remove –
-              a.url-add +
-          | {{/if}}
+
+        = render :partial => "shared/modals/multiple_choice_wrapper", :locals => {\
+            type: "url",
+            placeholder: "/specific_path",
+            className: "url-choice"\
+          }
+
         .choice-wrapper.url-query
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}" placeholder="query=value"
 
