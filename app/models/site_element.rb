@@ -219,9 +219,9 @@ class SiteElement < ActiveRecord::Base
     element_subtype == "email"
   end
 
-  def lifetime_totals
+  def lifetime_totals(opts = {})
     return nil if site.nil?
-    site.lifetime_totals.try(:[], id.to_s)
+    site.lifetime_totals(opts).try(:[], id.to_s)
   end
 
   def site_is_capable_of_creating_element

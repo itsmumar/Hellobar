@@ -191,3 +191,9 @@
   values:
     - original
     - variant
+-
+  index: 31
+  name: Upgrade Pop-up for Active Users 2016-08
+  values:
+    - original
+    - pop_up

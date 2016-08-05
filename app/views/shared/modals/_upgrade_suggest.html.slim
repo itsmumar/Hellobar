@@ -1,0 +1,27 @@
+- if current_user.present?
+  script id='upgrade-suggest-modal-template' type='text/x-handlebars-template' data={ 'user-id' => current_user.id }
+    .modal-wrapper
+      .modal-block
+        i.icon-close
+        .title
+          | Instantly get more customers
+          br
+          | with the same amount of traffic
+        .header-footer-block
+          .header
+            | Upgrade to Hello Bar Pro and make your bars more effective:
+          .footer
+            ul
+              li
+                .bullet &bull;
+                | Bars without the Hello Bar logo
+              li
+                .bullet &bull;
+                | Unlimited bars
+              li
+                .bullet &bull;
+                | Target bars by device, location, URL, or traffic source
+              li
+                .bullet &bull;
+                | Custom thank-you messages
+            = choose_plan_button(Subscription::Pro.new, 'Upgrade Your Hello Bar')
