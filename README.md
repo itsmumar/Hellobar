@@ -263,6 +263,17 @@ Teaspoon runs the *_spec.js files in spec/javascripts/
 
 The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
 
+Tests are divided in 2 groups: `generator` (tests `hellobar.base.js` and some other files) and `project` 
+(tests `assets/javascripts/` files).
+
+To get the coverage of Generator:
+
+> teaspoon --suite=generator --coverage=generator
+
+Coverage of Project:
+
+> teaspoon --suite=project --coverage=project
+
 ## Live testing/QA info
 
 Test site for both edge/staging: http://teampolymathic.github.io/hellobar_testing/
