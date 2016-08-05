@@ -139,14 +139,13 @@ script#condition-partial type="text/x-handlebars-template"
         .choice-wrapper.location-city-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
 
-        /= render :partial => "shared/modals/multiple_choice_wrapper", :locals => {\
-            type: "custom",
-            className: "location-country-choice select-wrapper"\
-          } do |name|
-          = country_select('rule', 'conditions_attributes', {priority_countries: ["US"]}, {\
+        = render layout: "shared/modals/multiple_choice_wrapper",
+                 locals: {class_name: "location-country-choice select-wrapper"} do |name|
+          = country_select("rule", "conditions_attributes", {priority_countries: ["US"]}, {\
               disabled: "disabled",
+              id: nil,
               name: name,
-              class: "value"\
+              class: "value location-country-select"\
             })
 
         .choice-wrapper.time-choice
@@ -162,8 +161,8 @@ script#condition-partial type="text/x-handlebars-template"
         .choice-wrapper.location-region-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
 
-        = render :partial => "shared/modals/multiple_choice_wrapper" do
-          input.value name="name" type="url"  placeholder="/specific_path"
+        = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "url-choice"}  do |name, value|
+          input.value name=name value=value type="url"  placeholder="/specific_path"
 
         .choice-wrapper.url-query
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}" placeholder="query=value"

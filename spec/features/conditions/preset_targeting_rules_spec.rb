@@ -98,7 +98,7 @@ feature "Users can use site element targeting rule presets", js: true do
 
         page.find('a', text: 'Edit.').click
 
-        value = find('#rule_conditions_attributes').value
+        value = find('.location-country-select').value
         expect(value).to eql('AR')
       end
     end

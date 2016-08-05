@@ -27,7 +27,7 @@ feature "Render the country select for the Rule modal", js: true do
     page.find('a', text: '+').click
 
     select('Country')
-    value = find('#rule_conditions_attributes').value
+    value = find('.location-country-select').value
 
     expect(value).to eql('US')
   end
@@ -52,7 +52,7 @@ feature "Render the country select for the Rule modal", js: true do
     page.find('a', text: 'Edit.').click
 
     select('Country')
-    value = find('#rule_conditions_attributes').value
+    value = find('.location-country-select').value
 
     expect(value).to eql('AR')
   end

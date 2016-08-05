@@ -5,7 +5,8 @@
   | {{#each value}}
   .multiple-input-wrapper
     span or
-    = yield
+
+    = yield "rule[conditions_attributes][{{../index}}][value][]", "{{this}}"
 
     .multiple-choice-actions
       a.choice-remove –
@@ -14,7 +15,8 @@
   | {{else}}
   .multiple-input-wrapper
     span or
-    = yield
+
+    = yield "rule[conditions_attributes][{{index}}][value][]", "{{value}}"
 
     .multiple-choice-actions
       a.choice-remove –
