@@ -2,7 +2,6 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
   dropzoneInstance: null
   classNames: ['file-upload-container']
   classNameBindings: ['hasFile:has-file', 'errorState:with-errors']
-  useThemeImage: null
 
   hasFile: Ember.computed 'existingFileName', ->
     if @get('existingFileName') == "uploading"
@@ -22,8 +21,8 @@ HelloBar.ImageUploadComponent = Ember.Component.extend
       return file.name
 
   removeDefaultImage:( ->
-    if !@get('useThemeImage') && !@get('hasUserChosenImage') then @send('removeDropzoneImages')
-  ).observes('useThemeImage').on('init')
+    if !@get('hasUserChosenImage') then @send('removeDropzoneImages')
+  ).on('init')
 
   actions:
     removeDropzoneImages: ->
