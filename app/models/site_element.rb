@@ -116,8 +116,8 @@ class SiteElement < ActiveRecord::Base
     attributes.reject { |k,v| NOT_CLONEABLE_ATTRIBUTES.include?(k.to_sym) }
   end
 
-  def total_views
-    lifetime_totals.try(:views) || 0
+  def total_views(opts = {})
+    lifetime_totals(opts).try(:views) || 0
   end
 
   def total_conversions
