@@ -26,6 +26,8 @@ class Condition < ActiveRecord::Base
     'UrlQuery' => 'pq'
   }
 
+  ARRAY_VALUES_SEGMENTS = %w{UrlCondition UrlPathCondition TimeCondition LocationCountryCondition}
+
   # stored value: displayed value
   OPERANDS = {
     after: 'is after',
@@ -118,7 +120,7 @@ class Condition < ActiveRecord::Base
   def value_is_valid
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
-    elsif segment == 'UrlCondition' || segment == 'UrlPathCondition' || segment == 'TimeCondition'
+    elsif ARRAY_VALUES_SEGMENTS.include?(segment)
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array)
     else
       errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
