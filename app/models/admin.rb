@@ -2,31 +2,28 @@ class Admin < ActiveRecord::Base
   LOCKDOWN_KEY_EXPIRY = 2.hours
   MAX_ACCESS_TOKENS = 10
   MAX_LOGIN_ATTEMPTS = 4
-  MAX_MOBILE_CODES = 6
   MAX_SESSION_TIME = 4.hours
   MAX_TIME_BEFORE_NEEDS_NEW_PASSWORD = 90.days
   MAX_TIME_TO_VALIDATE_ACCESS_TOKEN = 15.minutes
   MIN_PASSWORD_LENGTH = 8
-  MOBILE_CODE_DIGITS = 6
-  MOBILE_CODE_EXPIRY = 1.day
   SALT = "thisismyawesomesaltgoducks"
+  ISSUER = "HelloBar"
 
   include Rails.application.routes.url_helpers
 
-  validates :mobile_phone, format: /\+1\d{10}/
   validates :password_hashed, presence: true
 
-  before_validation :standardize_mobile_phone, :set_default_password, on: :create
+  before_validation :set_default_password, on: :create
 
   serialize :valid_access_tokens, Hash
 
   class << self
-    def make(email, mobile_phone)
-      Admin.new(:email => email, :mobile_phone => mobile_phone)
+    def make(email, initial_password)
+      Admin.new(:email => email, :initial_password => initial_password)
     end
 
-    def make!(email, mobile_phone)
-      make(email, mobile_phone).tap{|a| a.save!}
+    def make!(email, initial_password)
+      make(email, initial_password).tap{|a| a.save!}
     end
 
     def validate_session(access_token, token)
@@ -71,7 +68,7 @@ class Admin < ActiveRecord::Base
     end
 
     def unlock_all!
-      Admin.update_all(login_attempts: 0, locked: 0, mobile_codes_sent: 0)
+      Admin.update_all(login_attempts: 0, locked: 0, authentication_code: "")
     end
   end
 
@@ -79,37 +76,13 @@ class Admin < ActiveRecord::Base
     update_attribute(:session_token, "")
   end
 
-  # Returns true if we have never successfully logged in from this access_token or it has
-  # been more than MAX_TIME_FOR_MOBILE_CODE since you have
-  def needs_mobile_code?(access_token)
+  def needs_otp_code?(access_token)
     token = valid_access_tokens[access_token]
-    token.nil? || token[1].nil? || (Time.now.to_i - token[1]) > MOBILE_CODE_EXPIRY
+    token.nil? || token[1].nil? || authentication_code.nil?
   end
 
-  # Creates a new MOBILE_CODE_DIGITS-digit mobile code, saves it and sends it as a text message
-  # Also increments mobile_codes_sent. If that reaches MAX_MOBILE_CODES then the
-  # admin gets locked
-  def send_new_mobile_code!
-    return false if locked?
-
-    self.mobile_codes_sent += 1
-
-    if mobile_codes_sent > MAX_MOBILE_CODES
-      lock!
-      return false
-    end
-
-    # Create the mobile code
-    self.mobile_code = rand.to_s[2..(MOBILE_CODE_DIGITS + 1)]
-
-    # Send the SMS
-    Twilio::REST::Client.new(Hellobar::Settings[:twilio_user], Hellobar::Settings[:twilio_password]).account.sms.messages.create(
-      :body => "Access code: #{mobile_code}",
-      :to => mobile_phone,
-      :from => "+14157952691"
-    )
-
-    save!
+  def generate_new_otp
+    authentication_policy.otp
   end
 
   # Sends an email that includes a validate link for the given access_token. The email
@@ -176,18 +149,18 @@ If this is not you, this may be an attack and you should lock down the admin by 
     update_attribute(:valid_access_tokens, updated_access_tokens)
   end
 
-  # Validates the access_token, password and mobile_code (which might not be required)
+  # Validates the access_token, password and otp_code
   # Makes sure not locked
   # Also increases the login_attempts and locks it down if reaches MAX_LOGIN_ATTEMPTS
   # If this is a valid login then we call login!. Returns true if everything
   # is valid, false otherwise
-  def validate_login(access_token, password, mobile_code)
+  def validate_login(access_token, password, entered_otp)
     update_attribute(:login_attempts, login_attempts + 1)
 
     lock! if login_attempts > MAX_LOGIN_ATTEMPTS
 
     if locked? ||
-        (needs_mobile_code?(access_token) && mobile_code != self.mobile_code) ||
+        (needs_otp_code?(access_token) && !valid_authentication_otp?(entered_otp)) ||
         password_hashed != encrypt_password(password) ||
         !has_validated_access_token?(access_token)
 
@@ -196,6 +169,16 @@ If this is not you, this may be an attack and you should lock down the admin by 
       login!(access_token)
       return true
     end
+  end
+
+  def valid_authentication_otp?(otp)
+    if authentication_policy.otp_valid?(otp)
+      self.authentication_code = otp
+      save!
+      return true
+    end
+
+    return false
   end
 
   def reset_password!(unencrypted_password)
@@ -216,14 +199,13 @@ If this is not you, this may be an attack and you should lock down the admin by 
     })
   end
 
-  # Reset mobile_codes_sent, login_attempts, and set session_access_token, session_token,
+  # Reset login_attempts, and set session_access_token, session_token,
   # and session_last_active
   def login!(access_token)
     return false if locked?
 
     now = Time.now.to_i
     update_attributes(
-      :mobile_codes_sent => 0,
       :login_attempts => 0,
       :session_token => Digest::SHA256.hexdigest([now, rand(10_000), access_token, self.email, rand(10_000)].collect{|t| t.to_s}.join("")),
       :session_access_token => access_token
@@ -241,7 +223,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def unlock!
-    update_attributes(locked: false, login_attempts: 0, mobile_codes_sent: 0)
+    update_attributes(locked: false, login_attempts: 0, authentication_code: nil)
   end
 
   def has_validated_access_token?(access_token)
@@ -262,7 +244,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def encrypt_password(plaintext)
-    Digest::SHA256.hexdigest("#{SALT}#{plaintext}#{email}#{mobile_phone}")
+    Digest::SHA256.hexdigest("#{SALT}#{plaintext}#{email}#{initial_password}")
   end
 
   def access_token_key(token, timestamp)
@@ -272,14 +254,11 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
   private
 
-  def standardize_mobile_phone
-    return if mobile_phone.try :match, /^\+/
-    self.mobile_phone = mobile_phone.gsub(/\D/,"")
-    self.mobile_phone = "1#{mobile_phone}" unless mobile_code =~ /^1|\+/
-    self.mobile_phone = "+#{mobile_phone}" unless mobile_code =~ /^\+/
+  def authentication_policy
+    @authentication_policy ||= ::AdminAuthenticationPolicy.new(self)
   end
 
   def set_default_password
-    set_password(mobile_phone) if new_record? && password_hashed.blank?
+    set_password(initial_password) if new_record? && password_hashed.blank?
   end
 end
