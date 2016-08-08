@@ -25,6 +25,6 @@ class AdminAuthenticationPolicy
   end
 
   def rotp_secret
-    Rails.application.secrets[:rotp_secret_key_base]
+    Hellobar::Settings[:rotp_secret_key_base] || Rails.application.secrets[:rotp_secret_key_base]
   end
 end
