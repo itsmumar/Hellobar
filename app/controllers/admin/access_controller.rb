@@ -61,15 +61,12 @@ class Admin::AccessController < ApplicationController
     return redirect_to(admin_locked_path) if @admin.locked?
     return render(:validate_access_token) unless @admin.has_validated_access_token?(access_token)
 
-    if @admin.validate_login(access_token, params[:admin_password], params[:otp])
+    if @admin.validate_login(access_token, params[:admin_password], params[:mobile_code])
       # Successful login
       session[:admin_token] = @admin.session_token
       redirect_to admin_path
     else
       flash.now[:error] = "Invalid mobile code or password or too many attempts"
-
-      # This OTP is used to render barcode for Google Authenticator.
-      @otp = @admin.generate_new_otp
       render :step2
     end
   end
@@ -106,8 +103,8 @@ class Admin::AccessController < ApplicationController
     # If they have validated the access token then we
     # can render step 2
     if admin.has_validated_access_token?(access_token)
-      if admin.needs_otp_code?(access_token)
-        @otp = admin.generate_new_otp
+      if admin.needs_mobile_code?(access_token)
+        admin.send_new_mobile_code!
       end
     else
       admin.send_validate_access_token_email!(access_token)
@@ -118,7 +115,6 @@ class Admin::AccessController < ApplicationController
     # (exceeds attempts)
     return redirect_to(admin_locked_path) if admin.locked?
 
-    @admin = admin
     render(:step2)
   end
 

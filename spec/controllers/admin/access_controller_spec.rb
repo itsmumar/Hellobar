@@ -44,12 +44,12 @@ describe Admin::AccessController do
   end
 
   describe "POST process_step1" do
-    it "generate a new OTP to admin if they need one" do
+    it "sends a new mobile code to admin if they need one" do
       Admin.stub(:where).and_return([@admin])
       @admin.stub(:has_validated_access_token?).and_return(true)
-      @admin.stub(:needs_otp_code?).and_return(true)
+      @admin.stub(:needs_mobile_code?).and_return(true)
 
-      @admin.should_receive(:generate_new_otp)
+      @admin.should_receive(:send_new_mobile_code!)
 
       post :process_step1, :login_email => @admin.email
     end

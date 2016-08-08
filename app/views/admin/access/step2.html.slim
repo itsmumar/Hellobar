@@ -4,11 +4,8 @@ div.row
     h1 Enter Password
 
     = simple_form_for :admin_authenticate, {:url => admin_authenticate_path} do |f|
-      - if @admin.present? && @admin.needs_otp_code?(access_token)
-        = render partial: "authentication_code"
-
-      - if !@admin || @admin.needs_otp_code?(access_token)
-        = f.input :otp, :input_html => {:name => :otp}
+      - if !@admin || @admin.needs_mobile_code?(access_token)
+        = f.input :mobile_code, :as => :password, :input_html => {:name => :mobile_code}
 
       = f.input :password, :input_html => {:name => :admin_password}
       = f.button :submit, "Continue", :class => "btn btn-primary"
