@@ -1116,6 +1116,10 @@ var HB = {
         for(j=0;j<rule.siteElements.length;j++)
         {
           siteElement = rule.siteElements[j];
+
+          if(!HB.shouldShowElement(siteElement))
+            continue;
+
           visibilityGroup = siteElement.type;
           // For showing multiple elements at the same time a modal and a takeover are the same thing
           if ( siteElement.type == "Modal" || siteElement.type == "Takeover" )
@@ -1129,7 +1133,6 @@ var HB = {
         }
       }
     }
-
     // Now we have all elements that can be shown based on the rules
     // broken up into visibility groups
     // The next step is to pick one per visibility group
@@ -1139,11 +1142,10 @@ var HB = {
     var visibilityOrder = ["Modal/Takeover", "Slider", "Bar"];
     for(i=0;i<visibilityOrder.length;i++)
     {
-      var visibleElements = visibilityGroups[visibilityOrder[i]];
-      if ( visibleElements )
+      if ( visibilityGroups[visibilityOrder[i]] )
       {
-        siteElement = HB.getBestElement(visibleElements);
-        if ( siteElement && HB.shouldShowElement(siteElement))
+        siteElement = HB.getBestElement(visibilityGroups[visibilityOrder[i]]);
+        if ( siteElement )
           results.push(siteElement);
       }
     }
@@ -2126,7 +2128,7 @@ var HB = {
       HB.sc("hbglc_"+HB_SITE_ID, HB.serializeCookieValues(locationCookie), expirationDays);
       HB.loadCookies();
     }
-
+    
     return locationCookie;
   },
 

@@ -53,7 +53,6 @@ unless defined?(Hellobar::Settings)
     vr_client_id
     vr_secret
     geolocation_url
-    rotp_secret_key_base
   )
 
   keys.each do |key|
