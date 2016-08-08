@@ -153,7 +153,7 @@ class Condition < ActiveRecord::Base
   end
 
   def clear_blank_values
-    self.value = value.select{|v| !v.blank?} if value.kind_of?(Array)
+    self.value = value.select{|v| !v.blank?}.uniq if value.kind_of?(Array)
   end
 
   def self.date_condition_from_params(start_date, end_date)

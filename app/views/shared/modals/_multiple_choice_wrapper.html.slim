@@ -2,7 +2,7 @@
 
 .choice-wrapper.multiple-choice class=class_name
   | {{#if value}}
-  | {{#each value}}
+  | {{#each (toArray value)}}
   .multiple-input-wrapper
     span or
 

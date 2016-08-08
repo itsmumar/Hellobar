@@ -132,10 +132,15 @@ class @RuleModal extends Modal
 
     # select the country because country_select is rendered on the server
     # we must select this manually with JS
+    # country data should be initialized as array.
     if conditionData.segment == 'LocationCountryCondition'
-      $condition.find(classToEnable)
-                .find(".value > option[value=#{conditionData.value}]")
-                .attr('selected', 'selected')
+      dataValue = (if typeof conditionData.value == "object" \
+                      then conditionData.value \
+                      else [conditionData.value]) || []
+      for value, index in dataValue
+        $($condition.find(classToEnable)
+                    .find(".value > option[value=#{value}]")[index])
+                    .attr('selected', 'selected')
     else if conditionData.segment == 'TimeCondition'
       # select the correct hour
       hourValue = conditionData.value?[0] || 0
