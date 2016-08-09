@@ -1,7 +1,7 @@
 require 'integration_helper'
 
 feature "Render the country select for the Rule modal", js: true do
-  before do
+  before(:each) do
     @user = login
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
@@ -37,7 +37,7 @@ feature "Render the country select for the Rule modal", js: true do
     payment_method = create(:payment_method, user: @user)
     site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
     custom_rule = create(:rule)
-    custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: 'AR')
+    custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: ['AR'])
     site.rules << custom_rule
 
     element = create(:site_element, rule: custom_rule)
