@@ -50,15 +50,4 @@ Rails.application.configure do
       }
     }
   end
-
-  Pony.options = {
-    :from => 'Localhost: Hello Bar Support <support@localhost.com>',
-    :via => :smtp,
-    :via_options => {
-      :address              => '127.0.0.1',
-      :port                 => 1025,
-      :authentication       => :plain,
-      :domain               => "localhost"
-    }
-  }
 end
