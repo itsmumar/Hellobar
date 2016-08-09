@@ -42,7 +42,7 @@ feature "Users can use site element targeting rule presets", js: true do
       payment_method = create(:payment_method, user: @user)
       site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
 
-      custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: 'AR')
+      custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: ['AR'])
       site.rules << custom_rule
     end
 
