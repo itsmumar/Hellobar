@@ -68,7 +68,7 @@ class Admin < ActiveRecord::Base
     end
 
     def unlock_all!
-      Admin.update_all(login_attempts: 0, locked: 0, authentication_code: "")
+      Admin.update_all(login_attempts: 0, locked: 0)
     end
   end
 
@@ -77,8 +77,7 @@ class Admin < ActiveRecord::Base
   end
 
   def needs_otp_code?(access_token)
-    token = valid_access_tokens[access_token]
-    token.nil? || token[1].nil? || authentication_code.nil?
+    authentication_code.blank?
   end
 
   def generate_new_otp
@@ -159,16 +158,14 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
     lock! if login_attempts > MAX_LOGIN_ATTEMPTS
 
-    if locked? ||
-        (needs_otp_code?(access_token) && !valid_authentication_otp?(entered_otp)) ||
-        password_hashed != encrypt_password(password) ||
-        !has_validated_access_token?(access_token)
+    return false if locked? ||
+                    !valid_authentication_otp?(entered_otp) ||
+                    password_hashed != encrypt_password(password) ||
+                    !has_validated_access_token?(access_token)
 
-      return false
-    else
-      login!(access_token)
-      return true
-    end
+
+    login!(access_token)
+    return true
   end
 
   def valid_authentication_otp?(otp)
@@ -223,7 +220,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def unlock!
-    update_attributes(locked: false, login_attempts: 0, authentication_code: nil)
+    update_attributes(locked: false, login_attempts: 0)
   end
 
   def has_validated_access_token?(access_token)

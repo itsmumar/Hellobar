@@ -160,12 +160,6 @@ describe Admin do
       admin.unlock!
       expect(admin.reload.login_attempts).to be(0)
     end
-
-    it "should set admin mobile_codes_sent to 0" do
-      admin = create(:admin, authentication_code: "123")
-      admin.unlock!
-      expect(admin.reload.authentication_code).to be(nil)
-    end
   end
 
   describe ".unlock_all!" do
@@ -179,12 +173,6 @@ describe Admin do
       create(:admin, login_attempts: 2)
       Admin.unlock_all!
       expect(Admin.where("login_attempts > 0").count).to be(0)
-    end
-
-    it "should reset admin authentication_code" do
-      create(:admin, authentication_code: "123")
-      Admin.unlock_all!
-      expect(Admin.where.not(authentication_code: "").count).to be(0)
     end
   end
 end

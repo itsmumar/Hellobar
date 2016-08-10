@@ -66,7 +66,7 @@ class Admin::AccessController < ApplicationController
       session[:admin_token] = @admin.session_token
       redirect_to admin_path
     else
-      flash.now[:error] = "Invalid mobile code or password or too many attempts"
+      flash.now[:error] = "Invalid OTP or password or too many attempts"
 
       # This OTP is used to render barcode for Google Authenticator.
       @otp = @admin.generate_new_otp
