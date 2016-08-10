@@ -128,6 +128,12 @@ html, body {
   right: 10px;
 }
 
+#hellobar-modal.dark .icon-close,
+#hellobar-slider.dark .icon-close,
+#hellobar-takeover.dark .icon-close {
+  color: #ffffff;
+}
+
 /*-----------  Main Content  -----------*/
 
 .hb-content-wrapper {

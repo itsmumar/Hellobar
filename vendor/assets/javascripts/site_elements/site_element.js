@@ -549,5 +549,31 @@ HB.SiteElement = HB.createClass({
       meta.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
       head.appendChild(meta);
     }
+  },
+
+  brightnessClass: function() {
+    if (this.getBrightness(this.background_color) < 0.25) //an empirical value most suitable for all backgrounds
+      return "dark";
+    else
+      return "bright";
+  },
+
+  //get brightness of site element by its background color using specific formula from "preview-controller.coffee" file
+  getBrightness: function(x) {
+    var rgb = [ //transform hex string to array
+        x[0] + x[1],
+        x[2] + x[3],
+        x[4] + x[5]
+    ];
+
+
+    rgb.forEach(function(hex, i) {
+      var dec = parseInt(hex, 16); //hex to decimal
+      var val = dec/255; //decimal to fraction
+
+      rgb[i] = val < 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+    });
+
+    return (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]);
   }
 });
