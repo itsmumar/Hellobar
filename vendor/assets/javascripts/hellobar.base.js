@@ -106,7 +106,7 @@ var HB = {
       siteElements = [siteElement];
     else
       siteElements = HB.applyRules();
-    for(i=0; i < siteElements.length; i++ )
+    for(var i=0; i < siteElements.length; i++ )
     {
       HB.addToPage(HB.createSiteElement(siteElements[i]));
     }
@@ -1116,10 +1116,6 @@ var HB = {
         for(j=0;j<rule.siteElements.length;j++)
         {
           siteElement = rule.siteElements[j];
-
-          if(!HB.shouldShowElement(siteElement))
-            continue;
-
           visibilityGroup = siteElement.type;
           // For showing multiple elements at the same time a modal and a takeover are the same thing
           if ( siteElement.type == "Modal" || siteElement.type == "Takeover" )
@@ -1133,6 +1129,7 @@ var HB = {
         }
       }
     }
+
     // Now we have all elements that can be shown based on the rules
     // broken up into visibility groups
     // The next step is to pick one per visibility group
@@ -1142,10 +1139,11 @@ var HB = {
     var visibilityOrder = ["Modal/Takeover", "Slider", "Bar"];
     for(i=0;i<visibilityOrder.length;i++)
     {
-      if ( visibilityGroups[visibilityOrder[i]] )
+      var visibleElements = visibilityGroups[visibilityOrder[i]];
+      if ( visibleElements )
       {
-        siteElement = HB.getBestElement(visibilityGroups[visibilityOrder[i]]);
-        if ( siteElement )
+        siteElement = HB.getBestElement(visibleElements);
+        if ( siteElement && HB.shouldShowElement(siteElement))
           results.push(siteElement);
       }
     }
@@ -1956,8 +1954,13 @@ var HB = {
 
     // captures state of whether event has fired (ex: keyboard move to address bar)
     // response to this state defined by rules inside the intentCheck loop
-    document.body.onblur = function() {
-      HB.intentConditionCache.intentBodyBlurEvent = true;
+    window.onblur = function() {
+      //use timeout because not all browser render document.activeElement reference immediately
+      setTimeout(function() {
+        //if active (focused) element after blur event is "body", it means focus has gone outside of the document
+        //otherwise active element could be a link, an input, an iframe, etc. In that case we don't trigger intent
+        HB.intentConditionCache.intentBodyBlurEvent = document.activeElement === document.body;
+      }, 0);
     };
 
     // When the mouse leaves the document, check the current time vs when the mouse entered
@@ -2123,7 +2126,7 @@ var HB = {
       HB.sc("hbglc_"+HB_SITE_ID, HB.serializeCookieValues(locationCookie), expirationDays);
       HB.loadCookies();
     }
-    
+
     return locationCookie;
   },
 
