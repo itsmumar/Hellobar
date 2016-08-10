@@ -555,15 +555,16 @@ HB.SiteElement = HB.createClass({
     if (this.getBrightness(this.background_color) < 0.25) //an empirical value most suitable for all backgrounds
       return "dark";
     else
-      return "bright";
+      return "light";
   },
 
   //get brightness of site element by its background color using specific formula from "preview-controller.coffee" file
   getBrightness: function(x) {
+    x = x || "";
     var rgb = [ //transform hex string to array
-        x[0] + x[1],
-        x[2] + x[3],
-        x[4] + x[5]
+      x[0] + x[1],
+      x[2] + x[3],
+      x[4] + x[5]
     ];
 
 
