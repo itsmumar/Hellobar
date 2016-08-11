@@ -26,7 +26,7 @@ class Condition < ActiveRecord::Base
     'UrlQuery' => 'pq'
   }
 
-  ARRAY_VALUES_SEGMENTS = %w{UrlCondition UrlPathCondition TimeCondition LocationCountryCondition}
+  MULTIPLE_CHOICE_SEGMENTS = %w{UrlCondition UrlPathCondition LocationCountryCondition}
 
   # stored value: displayed value
   OPERANDS = {
@@ -59,8 +59,8 @@ class Condition < ActiveRecord::Base
   end
 
   def to_sentence
-    if segment == "UrlCondition" || segment == "UrlPathCondition" || segment == "UrlParams"
-      url_condition_sentence
+    if MULTIPLE_CHOICE_SEGMENTS.include?(segment)
+      multiple_condition_sentence
     elsif segment == "EveryXSession"
       every_x_sessions_sentence
     elsif segment == "TimeCondition"
@@ -97,12 +97,9 @@ class Condition < ActiveRecord::Base
 
   private
 
-  def url_condition_sentence
-    return "" unless segment == "UrlCondition" || segment == "UrlPathCondition"
-    if value.count > 2
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other URLs"
-    elsif value.count == 2
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or 1 other URL"
+  def multiple_condition_sentence
+    if value.count >= 2
+      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other#{value.count == 2 ? '' : 's'}"
     else
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first}"
     end
@@ -120,7 +117,7 @@ class Condition < ActiveRecord::Base
   def value_is_valid
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
-    elsif ARRAY_VALUES_SEGMENTS.include?(segment)
+    elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) or segment == "TimeCondition" # time condition is also array, but not with multiple choice
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array)
     else
       errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
