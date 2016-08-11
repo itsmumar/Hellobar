@@ -59,4 +59,65 @@ describe("SiteElement", function() {
       });
     });
   });
+
+  describe("#getBrightness", function() {
+    var siteElement = new HB.SiteElement({});
+    var precision = 3;
+    //These values are not some standard.
+    //They were calculated by our "getBrightness" function when it was created, so we should expect them in output
+    var map = {
+      "": NaN,
+      "fff": NaN,
+      "ffffff": 1,
+      "000000": 0,
+      "888888": .246,
+      "eeeeee": .855,
+      "B34242": .139,
+      "5AB342": .348,
+      "155B62": .085
+    };
+    map[undefined] = NaN;
+
+    for (var input in map) {
+      var output = map[input];
+
+      it("should return " + output + " for #" + input, (function(input, output) {
+        return function() {
+          if (isNaN(output))
+            expect(siteElement.getBrightness(input)).toBeNaN();
+          else
+            expect(siteElement.getBrightness(input)).toBeCloseTo(output, precision);
+        }
+      })(input, output));
+    }
+  });
+
+  describe("#brightnessClass", function() {
+    var siteElement = new HB.SiteElement({});
+    var light = "light",
+        dark = "dark";
+    //map of values that we consider to be light or dark
+    var map = {
+      "": light, //default value is light
+      "ffffff": light,
+      "000000": dark,
+      "888888": dark,
+      "999999": light,
+      "5AB342": light,
+      "EB593C": light,
+      "CB4E35": dark,
+      "4D8589": dark
+    };
+
+    for (var input in map) {
+      var output = map[input];
+
+      it("value #" + input + " is considered as " + output, (function(input, output) {
+        return function() {
+          siteElement.background_color = input;
+          expect(siteElement.brightnessClass()).toBe(output);
+        }
+      })(input, output));
+    }
+  });
 });

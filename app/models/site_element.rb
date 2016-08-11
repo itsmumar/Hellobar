@@ -116,8 +116,8 @@ class SiteElement < ActiveRecord::Base
     attributes.reject { |k,v| NOT_CLONEABLE_ATTRIBUTES.include?(k.to_sym) }
   end
 
-  def total_views
-    lifetime_totals.try(:views) || 0
+  def total_views(opts = {})
+    lifetime_totals(opts).try(:views) || 0
   end
 
   def total_conversions
@@ -219,9 +219,9 @@ class SiteElement < ActiveRecord::Base
     element_subtype == "email"
   end
 
-  def lifetime_totals
+  def lifetime_totals(opts = {})
     return nil if site.nil?
-    site.lifetime_totals.try(:[], id.to_s)
+    site.lifetime_totals(opts).try(:[], id.to_s)
   end
 
   def site_is_capable_of_creating_element
