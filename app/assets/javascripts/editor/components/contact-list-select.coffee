@@ -2,7 +2,9 @@ HelloBar.ContactListSelectComponent = Ember.Component.extend
 
   classNames        : ['contact-list-wrapper']
   classNameBindings : ['isOpen:is-open', 'hasContactList:has-list']
+  attributeBindings : ['tabindex'] # to make component focusable
 
+  tabindex: -1
   isOpen         : false
   hasContactList : Ember.computed.gt('options.length', 0)
 
@@ -17,6 +19,9 @@ HelloBar.ContactListSelectComponent = Ember.Component.extend
     list = @get('options').findBy('id', value)
     @set('selectedList', list || @get('options.firstObject'))
   ).observes('value').on('init')
+
+  focusOut: ->
+    @set('isOpen', false)
 
   actions:
 
