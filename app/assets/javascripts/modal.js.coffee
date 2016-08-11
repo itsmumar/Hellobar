@@ -45,6 +45,23 @@ class @Modal
       @_clearErrors()
       callback.call(this) if $(event.target).hasClass('modal-wrapper')
 
+  _bindUpgradePackageSelection: (defOptions = {}, schedule = 'yearly')->
+    @$modal.find('.button').on 'click', (event) =>
+      unless !!$(event.target).attr("disabled")
+        packageData = JSON.parse(event.target.dataset.package)
+        packageData.schedule = schedule
+
+        options =
+          source: "package-selected"
+          package: packageData
+          site: defOptions.site
+          successCallback: defOptions.successCallback
+          upgradeBenefit: defOptions.upgradeBenefit
+
+        new PaymentModal(options).open()
+
+      @close(true)
+
   #-----------  Error State Helpers  -----------#
 
   _bindErrorEvents: ->
