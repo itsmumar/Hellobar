@@ -99,7 +99,7 @@ class Condition < ActiveRecord::Base
 
   def multiple_condition_sentence
     # value might be not an array for old rules created before value type was changed
-    if not value.kind_of?(Array) or value.count == 1
+    if !value.kind_of?(Array) or value.count == 1
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value.kind_of?(Array) ? value.first : value}"
     else
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other#{value.count == 2 ? '' : 's'}"
