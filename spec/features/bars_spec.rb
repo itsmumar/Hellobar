@@ -58,6 +58,9 @@ feature 'User can create a site element', js: true do
       visit new_site_site_element_path(user.sites.first,
                                        anchor: "/settings/#{anchor}",
                                        skip_interstitial: true)
+      if anchor == "emails"
+        page.find('a', text: 'Done').click
+      end
       expect(page).to have_content(header, visible: true)
     end
   end
