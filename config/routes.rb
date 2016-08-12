@@ -18,7 +18,8 @@ Rails.application.routes.draw do
     post "/users/forgot_email", to: "users/forgot_emails#create", as: :forgot_email
   end
 
-  post "/users/:user_id/update_exit_intent", to: "exit_intent#update", as: :update_user_exit_intent
+  post "/users/:user_id/update_exit_intent", to: "user_campaign#update_exit_intent", as: :update_user_exit_intent
+  post "/users/:user_id/update_upgrade_suggest", to: "user_campaign#update_upgrade_suggest", as: :update_user_upgrade_suggest
 
   get "/auth/:action/callback", :to => "users/omniauth_callbacks", :constraints => { :action => /google_oauth2/ }
 

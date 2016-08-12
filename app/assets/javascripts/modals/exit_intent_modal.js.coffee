@@ -10,22 +10,6 @@ class @ExitIntentModal extends Modal
     super(@$modal)
 
   open: ->
-    @_bindPackageSelection()
+    @_bindUpgradePackageSelection(@options);
     super
 
-  _bindPackageSelection: ->
-    @$modal.find('.button').on 'click', (event) =>
-      unless !!$(event.target).attr("disabled")
-        packageData = JSON.parse(event.target.dataset.package)
-        packageData.schedule = 'yearly'
-
-        options =
-          source: "package-selected"
-          package: packageData
-          site: @options.site
-          successCallback: @options.successCallback
-          upgradeBenefit: @options.upgradeBenefit
-
-        new PaymentModal(options).open()
-
-      @close(true)

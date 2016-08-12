@@ -94,13 +94,11 @@ class User < ActiveRecord::Base
   end
 
   def can_view_exit_intent_modal?
-    if self.has_paying_subscription?
-      false
-    elsif self.exit_intent_modal_last_shown_at.present?
-      self.exit_intent_modal_last_shown_at < 30.days.ago # only show once every 30 days
-    else
-      true
-    end
+    user_upgrade_policy.should_show_exit_intent_modal?
+  end
+
+  def can_view_upgrade_suggest_modal?
+    user_upgrade_policy.should_show_upgrade_suggest_modal?
   end
 
   def most_viewed_site_element
@@ -292,6 +290,10 @@ class User < ActiveRecord::Base
   end
 
   private
+
+  def user_upgrade_policy
+    @user_upgrade_policy ||= ::UserUpgradePolicy.new(self, has_paying_subscription?)
+  end
 
   def send_team_invite_email(site)
     host = ActionMailer::Base.default_url_options[:host]
