@@ -15,12 +15,13 @@
   #hellobar-takeover {
     border-radius: 0px;
 
-    a.icon-close {
-      color: white;
-      opacity: 0.67;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-      -moz-text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-      -webkit-text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    &.dark {
+      a.icon-close {
+        opacity: 0.67;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        -moz-text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        -webkit-text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      }
     }
 
     .hb-secondary-text {

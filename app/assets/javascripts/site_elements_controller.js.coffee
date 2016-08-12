@@ -1,4 +1,6 @@
 $ ->
+  # prevent this script from executing on other pages
+  return unless $("#site_elements-index").length > 0
 
   highlightBar = (elementId) ->
     # Add the highlight animation to the bar
@@ -24,6 +26,7 @@ $ ->
 
     for i, rule of rules()
       showRule(rule)
+      updateRuleLinks(rule)
       showBars = []
       for bar in rule.site_elements
         bar = $(bar)
@@ -193,7 +196,8 @@ $ ->
   # Returns the currently active tab
   # active = true, paused = false, all = null
   currentSelection = ->
-    selection = $('a.element-filter.active').attr('href').replace(/\W/g, '')
+    target = $('a.element-filter.active').attr('href')
+    selection = target && target.replace(/\W/g, '')
     return null if selection == "all"
     selection == "active"
 
@@ -202,10 +206,21 @@ $ ->
     $('.rules-wrapper .rule-block').each (index, rule) ->
       id = $(rule).data('rule-id')
       result.push({
-        element: $(rule), id: id,
-        site_elements: $(".site-element-block[data-rule-id='#{id}']")
+        element: $(rule),
+        id: id,
+        site_elements: $(".site-element-block[data-rule-id=#{id}]")
       })
     result
+
+  updateRuleLinks = (rule) ->
+    suggestions = $(".rules-wrapper [data-rule-id=#{rule.id}] > .suggestion-block")
+
+    if rule.site_elements.length == 0
+      suggestions.children("[data-display-when=empty]").show()
+      suggestions.children("[data-display-when=any]").hide()
+    else
+      suggestions.children("[data-display-when=empty]").hide()
+      suggestions.children("[data-display-when=any]").show()
 
   #-----------  View Paused Bars  -----------#
 
