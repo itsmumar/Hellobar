@@ -2,7 +2,6 @@
 require 'erb'
 
 class MissingSpecGenerator
-
   def spec_file(spec_path, file_name, spec_template, namespace)
     spec_name = file_name.gsub('.rb', '') + '_spec.rb'
     if File.exist?("#{spec_path}/#{spec_name}")
@@ -15,18 +14,20 @@ class MissingSpecGenerator
       spec = spec_file.result(binding)
       puts spec
       FileUtils.mkdir_p(spec_path) unless File.exist?(spec_path)
-      File.open("#{spec_path}/#{spec_name}", 'w') {|f| f.write(spec) }
+      File.open("#{spec_path}/#{spec_name}", 'w') { |f| f.write(spec) }
       puts "\n"
     end
   end
 
   def traverse_specs(path, spec_template, namespace = '')
     Dir.open(Rails.root + 'app/' + path).each do |file_name|
-      unless file_name.match(/^\./) #skip hidden folders (.svn)
+      unless file_name.match(/^\./) # skip hidden folders (.svn)
         if File.directory?(Rails.root + 'app/' + path + '/' + file_name)
-          traverse_specs("#{path}/#{file_name}", spec_template, "#{namespace}#{file_name.camelcase}::")
+          traverse_specs("#{path}/#{file_name}", spec_template,
+                         "#{namespace}#{file_name.camelcase}::")
         else
-          spec_file("#{Rails.root}/spec/#{path}", file_name, spec_template, namespace)
+          spec_file("#{Rails.root}/spec/#{path}",
+                    file_name, spec_template, namespace)
         end
       end
     end
@@ -60,9 +61,7 @@ class MissingSpecGenerator
   def generate_missing_model_specs
     model_template = %q{require 'spec_helper'
       describe <%= class_name %> do
-        before(:each) do
-          @valid_attributes = { }
-        end
+        before(:each) { @valid_attributes = { } }
         it "should create a new instance given valid attributes" do
           <%= class_name %>.create!(@valid_attributes)
         end
@@ -70,5 +69,4 @@ class MissingSpecGenerator
       }.gsub(/^      /, '')
     traverse_specs('models', model_template)
   end
-
 end
