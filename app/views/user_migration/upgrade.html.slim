@@ -5,7 +5,7 @@ p Create Hello Bars that show the right message at the right time to your websit
   - if flash[:error]
     .error= flash[:error]
   = form_tag start_user_migration_path do
-    = text_field_tag(:email, "", placeholder: "Your Hello Bar Email")
+    = text_field_tag(:email, params[:email], placeholder: "Your Hello Bar Email")
     = password_field_tag(:password, "", placeholder: "Your Hello Bar Password")
     = submit_tag "Get Started"
 

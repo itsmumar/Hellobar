@@ -4,9 +4,11 @@
   = form_for Site.new, url: user_migration_path do |f|
 
     h1 Your Site Information
-    p The new Hello Bar organizes your bars by site. Enter your website URL and timezone below.
+    p The new Hello Bar organizes your bars by site. 
+    p 
+      b Enter your website URL and timezone below.
 
-    = f.text_field :url, placeholder: "Your website URL"
+    = f.text_field :url, placeholder: "Your website URL (e.g. 'mysite.com')"
 
     .select-wrapper
       = f.select :timezone, time_zone_options
@@ -26,9 +28,12 @@
     p
       ' We found
       span.bold= @bars.count
-      |  bars. The new Hello Bar organizes your bars by site. Enter your website URL and timezone below.
+      |  bars. The new Hello Bar organizes your bars by site. 
+      
+    p 
+      b Enter your website URL and timezone below.
 
-    = text_field_tag :site_url, nil, placeholder: "Your website URL"
+    = text_field_tag :site_url, nil, placeholder: "Your website URL (e.g. 'mysite.com')"
 
     .select-wrapper
       = select_tag :site_timezone, filtered_timezone_list.map{ |tz| "<option value='#{tz.tzinfo.identifier}'>#{tz.to_s}</option>" }.join.html_safe
