@@ -133,6 +133,7 @@ Rails.application.routes.draw do
   get '/amazon' => 'pages#use_cases'
   get '/terms-of-use' => 'pages#terms_of_use'
   get '/privacy-policy' => 'pages#privacy_policy'
+  get '/migrate-faq' => 'pages#migrate_faq'
   get '/logged_out' => 'pages#logout_confirmation', as: :logout_confirmation
 
   get "/heartbeat" => "heartbeat#index"
