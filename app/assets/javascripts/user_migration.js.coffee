@@ -66,7 +66,7 @@ $ ->
   $("form.user-migration-multiple-bars").submit (event) ->
     event.preventDefault()
 
-    $(event.target).find("button").prop("disabled", true).html("Upgrading your Hello Bar account...")
+    $(event.target).find("button").prop("disabled", true).html("Upgrading your Hello Bar account, please wait...")
 
     sites = []
 
