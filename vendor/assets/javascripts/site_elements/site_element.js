@@ -494,11 +494,12 @@ HB.SiteElement = HB.createClass({
   updateStyleFor: function(reset) {
     var element = this;
     var contentDocument = element.w.contentDocument;
-    var hbModal = contentDocument.getElementById('hellobar-modal');
+    var hbModal = contentDocument.getElementById('hellobar-modal') || contentDocument.getElementById('hellobar-takeover');
 
     if (reset) {
       this.w.style.position = "";
       this.w.style.height = "";
+      this.w.style.maxHeight = "";
       this.w.style.width = "";
       this.w.style.left = "";
       this.w.style.top = "";
@@ -517,14 +518,14 @@ HB.SiteElement = HB.createClass({
 
       element.w.style.position = "absolute";
       HB.iosFocusInterval = setInterval(function() {
-        // adjust iframe
         element.w.style.height = window.innerHeight + "px";
+        element.w.style.maxHeight = window.innerHeight + "px";
         element.w.style.width =  window.innerWidth + "px";
         element.w.style.left = "0";
         element.w.style.top = "0";
         element.w.style["-webkit-transform"] = "scale(0.9)";
 
-        if (hbModal) {
+        if (hbModal != undefined && hbModal != null) {
           hbModal.style.position = "absolute";
           hbModal.style.overflowY = "scroll";
           hbModal.style.maxHeight = "100%";
@@ -536,10 +537,9 @@ HB.SiteElement = HB.createClass({
         }
       }, 0);
 
-      if (this.type == "Modal") {
-        hbModal.scrollIntoView({block: "start"});
-        window.scrollTo(0, window.innerHeight);
-      }
+      hbModal.scrollIntoView();
+      contentDocument.getElementsByClassName('hb-content-wrapper')[0].scrollIntoView();
+      window.scrollTo(0, window.innerHeight/2);
     }
     return false;
   },
