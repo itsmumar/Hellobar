@@ -32,8 +32,30 @@ $ ->
         drop: (event, ui) ->
           droppable.find(".wordpress-bar-holder").append(ui.draggable.css("top", 0))
           # enable primary form button if we have at least 1 bar assigned to sites
-          if $('.wordpress-bar-holder .wordpress-bar').length
-            $("form.user-migration-multiple-bars button").prop("disabled", false)
+          num_bars = $('.wordpress-bar-holder .wordpress-bar').length
+          unassigned_bars = $('.unassigned-wordpress-bars .wordpress-bar').length
+          if num_bars
+            button_text = "Migrate "
+
+            if unassigned_bars == 0
+              button_text += "all "
+
+            button_text += num_bars+" Hello Bar"
+
+            if num_bars > 1
+              button_text += "s"
+            else
+              button_text += ""
+
+            if unassigned_bars > 0
+              button_text += ". "+unassigned_bars+" Hello Bar"
+              if unassigned_bars > 1
+                button_text += "s"
+              else
+                button_text += ""
+              button_text += " will not be migrated"
+
+            $("form.user-migration-multiple-bars button").prop("disabled", false).html(button_text)
 
       $("p.instructions").html("Drag your bars to your site. <a class='add-site'>Click here to add another site.</a>")
 
@@ -44,7 +66,7 @@ $ ->
   $("form.user-migration-multiple-bars").submit (event) ->
     event.preventDefault()
 
-    $(event.target).find("button").prop("disabled", true)
+    $(event.target).find("button").prop("disabled", true).html("Upgrading your Hello Bar account, please wait...")
 
     sites = []
 
