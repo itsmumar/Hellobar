@@ -138,8 +138,16 @@ script#condition-partial type="text/x-handlebars-template"
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.location-city-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
-        .choice-wrapper.location-country-choice.select-wrapper
-          = country_select('rule', 'conditions_attributes', { priority_countries: ["US"] }, { disabled: "disabled", name: "rule[conditions_attributes][{{index}}][value]", class: "value" })
+
+        = render layout: "shared/modals/multiple_choice_wrapper",
+                 locals: {class_name: "location-country-choice select-wrapper"} do |name|
+          = country_select("rule", "conditions_attributes", {priority_countries: ["US"]}, {\
+              disabled: "disabled",
+              id: nil,
+              name: name,
+              class: "value location-country-select"\
+            })
+
         .choice-wrapper.time-choice
           .select-wrapper.time-select
             = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..23).map{|i| i.to_s.rjust(2, '0') }), { disabled: true, class: 'value' }
@@ -152,24 +160,10 @@ script#condition-partial type="text/x-handlebars-template"
             = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select(timezones), { disabled: true, class: 'value' }
         .choice-wrapper.location-region-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
-        .choice-wrapper.url-choice
-          | {{#if value}}
-          | {{#each value}}
-          .url-input-wrapper
-            span or
-            input.url.value name="rule[conditions_attributes][{{../index}}][value][]" type="url" value="{{this}}" placeholder="/specific_path"
-            .url-actions
-              a.url-remove –
-              a.url-add +
-          | {{/each}}
-          | {{else}}
-          .url-input-wrapper
-            span or
-            input.url.value name="rule[conditions_attributes][{{index}}][value][]" type="url" value="{{value}}" placeholder="/specific_path"
-            .url-actions
-              a.url-remove –
-              a.url-add +
-          | {{/if}}
+
+        = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "url-choice"}  do |name, value|
+          input.value name=name value=value type="url"  placeholder="/specific_path"
+
         .choice-wrapper.url-query
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}" placeholder="query=value"
 

@@ -3,6 +3,8 @@ require 'color'
 class Hello::WordpressBar < Hello::WordpressModel
   self.table_name = "hbwp_posts"
 
+  DEFAULT_FONT = "arial"
+
   BUTTON_COLORS = {
     "dark" => "2d2c29",
     "light" => "e8e7e9"
@@ -14,11 +16,10 @@ class Hello::WordpressBar < Hello::WordpressModel
       element_subtype: "traffic",
       link_text: hellobar_meta["linktext"],
       headline: post_content,
-      font: hellobar_meta["meta"]["fontFamily"],
+      font: Font.guess(hellobar_meta["meta"]["fontFamily"]) || Font.find(DEFAULT_FONT),
       created_at: post_date,
       wordpress_bar_id: id,
       show_border: hellobar_meta["meta"]["border"] == "1",
-      font: hellobar_meta["meta"]["fontFamily"].presence || "Helvetica,Arial,sans-serif",
       paused: paused?,
       settings: {
         url: link_url

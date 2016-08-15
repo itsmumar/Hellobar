@@ -130,13 +130,13 @@ describe Rule do
     it 'builds out a URL condition with 2 URLs' do
       condition = conditions(:url_includes)
       condition.value = ["/foo", "/bar"]
-      expect(condition.to_sentence).to eq "Page URL includes /foo or 1 other URL"
+      expect(condition.to_sentence).to eq "Page URL includes /foo or 1 other"
     end
 
     it 'builds out a URL condition with > 2 URLs' do
       condition = conditions(:url_includes)
       condition.value = ["/foo", "/bar", "/baz"]
-      expect(condition.to_sentence).to eq "Page URL includes /foo or 2 other URLs"
+      expect(condition.to_sentence).to eq "Page URL includes /foo or 2 others"
     end
   end
 

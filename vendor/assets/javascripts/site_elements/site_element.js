@@ -449,7 +449,8 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  iosKeyboardShow: function() {
+  iosKeyboardShow: function(e) {
+    e.preventDefault();
     var element = this;
 
     if(this.type == "Bar") {
@@ -473,7 +474,9 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  iosKeyboardHide:  function() {
+  iosKeyboardHide:  function(e) {
+    e.preventDefault();
+
     if(HB.iosFocusInterval != null) {
       clearInterval(HB.iosFocusInterval);
       HB.iosFocusInterval = null;
@@ -491,38 +494,57 @@ HB.SiteElement = HB.createClass({
   updateStyleFor: function(reset) {
     var element = this;
     var contentDocument = element.w.contentDocument;
-    var hbModal = contentDocument.getElementById('hellobar-modal');
+    var hbModal = contentDocument.getElementById('hellobar-modal') || contentDocument.getElementById('hellobar-takeover');
 
     if (reset) {
       this.w.style.position = "";
       this.w.style.height = "";
+      this.w.style.maxHeight = "";
       this.w.style.width = "";
-      this.w.style.top = "";
       this.w.style.left = "";
+      this.w.style.top = "";
+      this.w.style["-webkit-transform"] = "";
 
+      hbModal.style.position = "";
       hbModal.style.overflowY = "";
       hbModal.style.maxHeight = "";
+      hbModal.style.height = "";
       hbModal.style.top = "";
+      hbModal.style.left = "";
+      hbModal.style.transform = "";
+      hbModal.style.width = "";
     } else {
-      this.w.style.position = "absolute";
+      var modalMaxHeight = hbModal.getElementsByClassName('hb-text-wrapper')[0].clientHeight;
+
+      element.w.style.position = "absolute";
       HB.iosFocusInterval = setInterval(function() {
-        // adjust iframe
         element.w.style.height = window.innerHeight + "px";
-        element.w.style.width = window.innerWidth + "px";
-        element.w.style.left = window.pageXOffset + "px";
-        element.w.style.top = window.pageYOffset + "px";
+        element.w.style.maxHeight = window.innerHeight + "px";
+        element.w.style.width =  window.innerWidth + "px";
+        element.w.style.left = "0";
+        element.w.style.top = "0";
+        element.w.style["-webkit-transform"] = "scale(0.9)";
 
-        // adjust hellobar modal
-        if (element.type == "Modal" && element.placement == "middle") {
-          var modalMaxHeight = hbModal.getElementsByClassName('hb-text-wrapper')[0].clientHeight;
+        if (hbModal != undefined && hbModal != null) {
+          hbModal.style.position = "absolute";
           hbModal.style.overflowY = "scroll";
-          hbModal.style.maxHeight = modalMaxHeight + "px";
-          hbModal.style.top = modalMaxHeight/2 + "px";
+          hbModal.style.maxHeight = "100%";
+          hbModal.style.height = "100%";
+          hbModal.style.top = "0";
+          hbModal.style.left = "0";
+          hbModal.style.transform = "none";
+          hbModal.style.width = "100%";
         }
+      }, 0);
 
-      }, 200);
+      hbModal.scrollIntoView();
+      contentDocument.getElementsByClassName('hb-content-wrapper')[0].scrollIntoView();
+      window.scrollTo(0, window.innerHeight/2);
     }
+    return false;
   },
+
+
 
   // Necessary convenience method for saying this
   // SiteElement has converted (used in templates)
