@@ -1353,9 +1353,9 @@ var HB = {
 
     // geolocation conditions are undefined until the geolocation request completes
     if (typeof currentValue === "undefined")
-      return false
+      return false;
 
-    return HB.applyOperand(currentValue, condition.operand, condition.value, condition.segment)
+    return HB.applyOperands(currentValue, condition.operand, condition.value, condition.segment)
   },
 
   // Determines if the condition (a rule is made of one or more conditions)
@@ -1374,8 +1374,8 @@ var HB = {
     else if ( condition.segment === "gl_ctr" )
       return HB.geoLocationConditionTrue(condition);
     else {
-      var currentValue = HB.getSegmentValue(condition.segment);
-      var values = condition.value;
+      currentValue = HB.getSegmentValue(condition.segment);
+      values = condition.value;
     }
 
     // Now we need to apply the operands
@@ -1385,32 +1385,7 @@ var HB = {
     if ( condition.operand == "between" )
       return HB.applyOperand(currentValue, condition.operand, values, condition.segment);
 
-    // Put the value in an array if it is not an array
-    if ( typeof(values) != "object" || typeof(values.length) != "number" )
-      values = [values];
-
-    // For negative/excluding operands we use "and" logic:
-    if ( condition.operand.match(/not/) )
-    {
-      // Must be true for all so a single false means it is false for whole condition
-      for(i=0;i<values.length;i++)
-      {
-        if (!HB.applyOperand(currentValue, condition.operand, values[i], condition.segment))
-          return false;
-      }
-      return true;
-    }
-    else
-    {
-      // For including/positive operands we use "or" logic
-      // Must be true for just one, so a single true is true for condition
-      for(i=0;i<values.length;i++)
-      {
-        if (HB.applyOperand(currentValue, condition.operand, values[i], condition.segment))
-          return true;
-      }
-      return false;
-    }
+    return HB.applyOperands(currentValue, condition.operand, values, condition.segment);
   },
 
   // Sanitizes the value parameter based on the segment and input
@@ -1444,6 +1419,36 @@ var HB = {
 
     // All other segment names
     return HB.getVisitorData(segmentName);
+  },
+
+  // Applies the operand specified to the array of possible values
+  applyOperands: function(currentValue, operand, values, segment) {
+    // Put the value in an array if it is not an array
+    if ( typeof(values) != "object" || typeof(values.length) != "number" )
+      values = [values];
+
+    // For negative/excluding operands we use "and" logic:
+    if (operand.match(/not/))
+    {
+      // Must be true for all so a single false means it is false for whole condition
+      for(var i=0; i<values.length; i++)
+      {
+        if (!HB.applyOperand(currentValue, operand, values[i], segment))
+          return false;
+      }
+      return true;
+    }
+    else
+    {
+      // For including/positive operands we use "or" logic
+      // Must be true for just one, so a single true is true for condition
+      for(i=0; i<values.length; i++)
+      {
+        if (HB.applyOperand(currentValue, operand, values[i], segment))
+          return true;
+      }
+      return false;
+    }
   },
 
   // Applies the operand specified to the arguments passed in

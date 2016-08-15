@@ -36,7 +36,7 @@ class @RuleModal extends Modal
     @_bindSubmit()
     @_bindAddCondition()
     @_bindRemoveCondition()
-    @_bindUrlActions()
+    @_bindMultipleChoiceActions()
 
   _removeUrlCondition: ->
     urlCondition = @ruleData.conditions.find (condition) ->
@@ -132,10 +132,15 @@ class @RuleModal extends Modal
 
     # select the country because country_select is rendered on the server
     # we must select this manually with JS
+    # country data should be initialized as array.
     if conditionData.segment == 'LocationCountryCondition'
-      $condition.find(classToEnable)
-                .find(".value > option[value=#{conditionData.value}]")
-                .attr('selected', 'selected')
+      dataValue = (if typeof conditionData.value == "object" \
+                      then conditionData.value \
+                      else [conditionData.value]) || []
+      for value, index in dataValue
+        $($condition.find(classToEnable)
+                    .find(".value > option[value=#{value}]")[index])
+                    .attr('selected', 'selected')
     else if conditionData.segment == 'TimeCondition'
       # select the correct hour
       hourValue = conditionData.value?[0] || 0
@@ -316,12 +321,12 @@ class @RuleModal extends Modal
 
   #-----------  Adding / Subtracting URLs  -----------#
 
-  _bindUrlActions: ->
-    @$modal.on 'click', '.url-add', (event) ->
+  _bindMultipleChoiceActions: ->
+    @$modal.on 'click', '.choice-add', (event) ->
       event.preventDefault()
 
-      $inputWrapper = $(this).closest('.url-choice')
-      $inputBlock   = $(this).closest('.url-input-wrapper')
+      $inputWrapper = $(this).closest('.multiple-choice')
+      $inputBlock   = $(this).closest('.multiple-input-wrapper')
 
       $inputBlock.clone()
                  .css({opacity: 0, maxHeight: 0})
@@ -329,8 +334,8 @@ class @RuleModal extends Modal
                  .animate({opacity: 1, maxHeight: '3em'}, 200)
                  .find('input').val(null)
 
-    @$modal.on 'click', '.url-remove', (event) ->
+    @$modal.on 'click', '.choice-remove', (event) ->
       event.preventDefault()
 
-      $(this).closest('.url-input-wrapper')
+      $(this).closest('.multiple-input-wrapper')
              .animate({opacity: 0, maxHeight: 0}, 200, -> $(@).remove())

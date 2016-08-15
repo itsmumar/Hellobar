@@ -14,4 +14,5 @@ script id='add-team-member-template' type='text/x-handlebars-template'
             = select_tag :site_id, options_for_select(sites.map { |s| [s.normalized_url, s.id]})
 
           footer
-            = f.submit "Add User", :class => "button"
+            a.cancel.button href="#" Cancel
+            = f.submit "Add User", :class => "button align-right"

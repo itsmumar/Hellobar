@@ -8,3 +8,9 @@ Handlebars.registerHelper 'option', (method, value, text) ->
 
 Handlebars.registerHelper 'image-path', (image) ->
   new Handlebars.SafeString(window.image_path(image))
+
+Handlebars.registerHelper 'toArray', (item) ->
+  if typeof item == "object"
+    return item
+  else
+    return [item]

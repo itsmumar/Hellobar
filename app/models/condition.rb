@@ -26,6 +26,8 @@ class Condition < ActiveRecord::Base
     'UrlQuery' => 'pq'
   }
 
+  MULTIPLE_CHOICE_SEGMENTS = %w{UrlCondition UrlPathCondition LocationCountryCondition}
+
   # stored value: displayed value
   OPERANDS = {
     after: 'is after',
@@ -57,8 +59,8 @@ class Condition < ActiveRecord::Base
   end
 
   def to_sentence
-    if segment == "UrlCondition" || segment == "UrlPathCondition" || segment == "UrlParams"
-      url_condition_sentence
+    if MULTIPLE_CHOICE_SEGMENTS.include?(segment)
+      multiple_condition_sentence
     elsif segment == "EveryXSession"
       every_x_sessions_sentence
     elsif segment == "TimeCondition"
@@ -95,14 +97,12 @@ class Condition < ActiveRecord::Base
 
   private
 
-  def url_condition_sentence
-    return "" unless segment == "UrlCondition" || segment == "UrlPathCondition"
-    if value.count > 2
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other URLs"
-    elsif value.count == 2
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or 1 other URL"
+  def multiple_condition_sentence
+    # value might be not an array for old rules created before value type was changed
+    if !value.kind_of?(Array) or value.count == 1
+      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.kind_of?(Array) ? value.first : value}"
     else
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first}"
+      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other#{value.count == 2 ? '' : 's'}"
     end
   end
 
@@ -118,7 +118,7 @@ class Condition < ActiveRecord::Base
   def value_is_valid
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
-    elsif segment == 'UrlCondition' || segment == 'UrlPathCondition' || segment == 'TimeCondition'
+    elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) or segment == "TimeCondition" # time condition is also array, but not with multiple choice
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array)
     else
       errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
@@ -151,7 +151,7 @@ class Condition < ActiveRecord::Base
   end
 
   def clear_blank_values
-    self.value = value.select{|v| !v.blank?} if value.kind_of?(Array)
+    self.value = value.select{|v| !v.blank?}.uniq if value.kind_of?(Array)
   end
 
   def self.date_condition_from_params(start_date, end_date)
