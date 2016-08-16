@@ -5,18 +5,21 @@ feature 'User can create a site element', js: true do
   before do
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
+
+    @select_goal_label = 'Select This Goal'
   end
 
   scenario 'new user can create a site element' do
-    OmniAuth.config.add_mock(:google_oauth2, {uid: '12345', info: {email: 'bob@lawblog.com'}})
+    user_email = 'bob@lawblog.com'
+    OmniAuth.config.add_mock(:google_oauth2, {uid: '12345', info: {email: user_email}})
     visit root_path
 
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
 
-    first(:a, 'Select This Goal').click
-    first(:a, 'Continue').click
-    first(:a, 'Save & Publish').click
+    first('.goal-block').click_link(@select_goal_label)
+    page.find('button', text: 'Continue').click
+    page.find('button', text: 'Save & Publish').click
 
     expect(page).to have_content('Summary', visible: true)
 
@@ -38,9 +41,9 @@ feature 'User can create a site element', js: true do
     fill_in 'Your Email', with: user.email
     click_button 'Continue'
 
-    first(:a, 'Select This Goal').click
-    first(:a, 'Continue').click
-    first(:a, 'Save & Publish').click
+    first('.goal-block').click_link(@select_goal_label)
+    page.find('button', text: 'Continue').click
+    page.find('button', text: 'Save & Publish').click
 
     expect(page).to have_content('Summary', visible: true)
     OmniAuth.config.mock_auth[:google_oauth2] = nil
@@ -58,9 +61,7 @@ feature 'User can create a site element', js: true do
       visit new_site_site_element_path(user.sites.first,
                                        anchor: "/settings/#{anchor}",
                                        skip_interstitial: true)
-      if anchor == "emails"
-        page.find('a', text: 'Done').click
-      end
+
       expect(page).to have_content(header, visible: true)
     end
   end
@@ -79,21 +80,27 @@ feature 'User can set a phone number for click to call', js: true do
   scenario 'the site sets a custom country so they can use 1800' do
     membership = create(:site_membership, :with_site_rule)
     user = membership.user
+    phone_number = '+1-2025550144'
     login(user)
 
-    find(:button, 'Create New').click
-    find('button[value=call]').click
+    within('form.button_to') do
+      click_button('Create New')
+    end
+
+    first(".goal-block[data-route='call']").click_link(@select_goal_label)
+
+    find('select').select('Custom')
     all('input')[0].set('Hello from Hello Bar')
     all('input')[1].set('Button McButtonson')
-    all('input')[2].set('18001231234')
-    find('select').select('Custom')
+    all('input')[2].set(phone_number)
+
     find('button', text: 'Continue').click
     find('button', text: 'Save & Publish').click
 
     expect(page).to have_css('html') # waits for next page load
     element = SiteElement.last
 
-    expect(element.phone_number).to eql('18001231234')
+    expect(element.phone_number).to eql(phone_number)
   end
 end
 
@@ -114,8 +121,9 @@ feature 'User can toggle colors for a site element', js: true do
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
 
-    first(:button, 'Select This Goal').click
-    first(:button, 'Continue').click
+    first('.goal-block').click_link(@select_goal_label)
+
+    page.find('button', text: 'Continue').click
     page.find('a', text: 'Next').click
     page.find('a', text: /colors/i).click
 

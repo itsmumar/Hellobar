@@ -2,14 +2,11 @@ HelloBar.InterstitialRoute = Ember.Route.extend
   model: ->
     @modelFor("application")
 
-  renderTemplate: ->
-    @render
-      outlet: "interstitial" # render main interstitial template inside of "interstitial" outlet
 
   # Set sub-step forwarding on interstitial load
   setSettingsForwarding: (model) ->
     settings = @controllerFor("settings")
-    
+
     if /^social/.test model.element_subtype
       settings.routeForwarding = "settings.social"
     else
@@ -42,8 +39,8 @@ NestedInterstitialRoute = HelloBar.InterstitialRoute.extend
         url: "/sites/#{siteID}/track_selected_goal"
 
 
-HelloBar.InterstitialIndexRoute = NestedInterstitialRoute.extend()
-HelloBar.InterstitialMoneyRoute = NestedInterstitialRoute.extend()
+HelloBar.InterstitialIndexRoute    = NestedInterstitialRoute.extend()
+HelloBar.InterstitialMoneyRoute    = NestedInterstitialRoute.extend()
 HelloBar.InterstitialContactsRoute = NestedInterstitialRoute.extend()
-HelloBar.InterstitialCallRoute = NestedInterstitialRoute.extend()
+HelloBar.InterstitialCallRoute     = NestedInterstitialRoute.extend()
 HelloBar.InterstitialFacebookRoute = NestedInterstitialRoute.extend()

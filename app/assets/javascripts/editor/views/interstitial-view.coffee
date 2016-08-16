@@ -18,7 +18,7 @@ SubInterstitialView = Ember.View.extend
   animateIn: (done) ->
     @$el.removeClass("transitioning no-transition")
     setTimeout done, CSS_TRANSITION
-    
+
   didAnimateIn: () ->
     SubInterstitialView.lastRoute = @routeName # save last route name to enlarge its block on index view
 

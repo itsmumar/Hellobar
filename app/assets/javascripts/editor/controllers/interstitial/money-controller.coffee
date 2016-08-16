@@ -7,7 +7,7 @@ HelloBar.InterstitialMoneyController = Ember.Controller.extend
     @set("model.headline", "Check out our latest sale")
     @set("model.link_text", "Shop Now")
     @set("model.element_subtype", "traffic")
-    
+
   inputIsInvalid: ( ->
     return !!(
       Ember.isEmpty(@get("model.headline")) ||

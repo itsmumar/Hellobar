@@ -4,7 +4,7 @@ HelloBar.InterstitialIndexController = Ember.Controller.extend
   global: ( ->
     window
   ).property()
-  
+
   csrfToken: ( ->
     $("meta[name=csrf-token]").attr("content")
   ).property()

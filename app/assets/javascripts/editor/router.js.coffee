@@ -26,7 +26,7 @@ HelloBar.Router.map ->
     @route 'homepage'
     @route 'custom'
     @route 'saved'
-    
+
   @route 'interstitial', ->
     @route 'call'
     @route 'money', path: 'promote'
