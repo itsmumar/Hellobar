@@ -1,0 +1,24 @@
+- class_name ||= false
+
+.choice-wrapper.multiple-choice class=class_name
+  | {{#if value}}
+  | {{#each (toArray value)}}
+  .multiple-input-wrapper
+    span or
+
+    = yield "rule[conditions_attributes][{{../index}}][value][]", "{{this}}"
+
+    .multiple-choice-actions
+      a.choice-remove –
+      a.choice-add +
+  | {{/each}}
+  | {{else}}
+  .multiple-input-wrapper
+    span or
+
+    = yield "rule[conditions_attributes][{{index}}][value][]", "{{value}}"
+
+    .multiple-choice-actions
+      a.choice-remove –
+      a.choice-add +
+  | {{/if}}
