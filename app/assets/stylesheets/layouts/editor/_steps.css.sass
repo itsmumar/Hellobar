@@ -70,6 +70,9 @@
         @include transition()
         @include vertical-align()
         @include use-hb-icon('\f106')
+      
+      i.hellobar-icon-mail
+        color: #666
 
       & + .radio-block
         margin-top: 0.33rem
@@ -88,6 +91,15 @@
             background-color: $white
             border: 1px solid $green
             padding: 4px 1px 3px 1px
+
+        i.hellobar-icon-mail
+          color: #666
+
+          &::after
+            border: 1px solid #666
+
+
+          
 
     /*-----------  STATE: Is Selected  -----------*/
 
