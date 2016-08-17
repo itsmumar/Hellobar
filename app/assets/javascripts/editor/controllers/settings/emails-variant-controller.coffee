@@ -2,13 +2,13 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
 
   collectNames : Ember.computed.alias('model.settings.collect_names')
 
-  init: ->
+  # set 'afterSubmitChoice' property only after model is ready
+  afterModel: (->
     # Set Initial After Email Submission Choice
     modelVal  = @get('model.settings.after_email_submit_action') || 0
     selection = @get('afterSubmitOptions').findBy('value', modelVal)
     @set('afterSubmitChoice', selection.key)
-
-    @_super()
+  ).observes('model')
 
   #-----------  After Email Submit  -----------#
 
