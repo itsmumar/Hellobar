@@ -46,7 +46,15 @@ HelloBar.InterstitialIndexView = SubInterstitialView.extend
 
       route = $target.closest(".goal-block").data("route")
       InternalTracking.track_current_person("Template Selected", {template: route}) if route
+
+      @_track_selected_goal()
+
       return
+
+  _track_selected_goal: ->
+    $.ajax
+      method: "POST"
+      url: "/sites/#{siteID}/track_selected_goal"
 
 HelloBar.InterstitialMoneyView = SubInterstitialView.extend
   routeName: "money"

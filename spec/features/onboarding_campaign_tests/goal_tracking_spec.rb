@@ -15,7 +15,7 @@ feature "User onboarding statuses get updated as they select a goal for their fi
     page.all(".goal-interstitial h6").collect{|header| header.text}
   end
   let(:onboarding_status_setter) do
-    UserOnboardingStatusSetter.new(user,true, UserOnboardingStatus.none)
+    UserOnboardingStatusSetter.new(user, true, UserOnboardingStatus.none)
   end
 
   scenario "Each goal click is tracked", js: true, dd: true do
@@ -28,9 +28,9 @@ feature "User onboarding statuses get updated as they select a goal for their fi
 
   def click_through_all_goal_interstitial_options
     goals.each do |goal|
-      page.find(:xpath, "//h6[contains(text(),'#{goal}')]/following-sibling::button").click
-      page.driver.go_back
-      page.find(".global-sidebar form .button").click
+      page.find(:xpath, "//h6[contains(text(),'#{goal}')]/following-sibling::a").click
+      wait_for_ajax
+      visit new_site_site_element_path(user.sites.first)
     end
   end
 

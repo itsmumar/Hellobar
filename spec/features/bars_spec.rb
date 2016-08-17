@@ -125,7 +125,7 @@ feature 'User can toggle colors for a site element', js: true do
 
     page.find('button', text: 'Continue').click
     page.find('a', text: 'Next').click
-    page.find('a', text: /colors/i).click
+    page.find('a', text: /Colors/i).click
 
     page.first('.color-select-block input').set('AABBCC')
     page.find('a', text: 'Prev').click
@@ -156,7 +156,7 @@ feature 'User can edit a site element', js: true do
     visit edit_site_site_element_path(site, site.site_elements.last)
     page.find('a', text: 'Next').click
     page.find('a', text: 'Next').click
-    page.find('a', text: /text/i).click
+    page.find('a', text: /Text/i).click
 
     first('.ember-text-field').set('Dear I fear were facing a problem')
     page.find('button', text: 'Save & Publish').click

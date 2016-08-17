@@ -18,7 +18,16 @@ feature "User can sign up", js: true do
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
 
-    expect(page).to have_content('Sign Out', visible: true)
+    user_site = User.find_by(email: 'bob@lawblog.com').sites.first
+
+    visit site_path user_site
+
+    within('.header-user-wrapper') do
+      find('.dropdown-wrapper').click
+      expect(page).to have_content('Sign Out', visible: true)
+    end
+
+    visit new_site_site_element_path(user_site, anchor: "/settings", skip_interstitial: true)
     expect(page).to have_content('Use your Hello Bar to collect visitors', visible: true)
   end
 end

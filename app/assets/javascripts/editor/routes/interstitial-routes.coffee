@@ -2,6 +2,9 @@ HelloBar.InterstitialRoute = Ember.Route.extend
   model: ->
     @modelFor("application")
 
+  renderTemplate: ->
+    @render
+      outlet: "interstitial" # render main interstitial template inside of "interstitial" outlet
 
   # Set sub-step forwarding on interstitial load
   setSettingsForwarding: (model) ->
@@ -33,10 +36,6 @@ NestedInterstitialRoute = HelloBar.InterstitialRoute.extend
     controller.setDefaults()
     @setSettingsForwarding(model)
 
-    unless @ instanceof HelloBar.InterstitialIndexRoute
-      $.ajax
-        method: "POST"
-        url: "/sites/#{siteID}/track_selected_goal"
 
 
 HelloBar.InterstitialIndexRoute    = NestedInterstitialRoute.extend()
