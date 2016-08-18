@@ -16,3 +16,8 @@ $ ->
   if $("#install_page").length
     siteId = $("#install_page").data("site-id")
     checkInstalled(siteId, null)
+
+    $("form").on("submit", (e) ->
+      if not e.target.checkValidity()
+        e.preventDefault() # explicitly prevent invalid form submission for Safari browser
+    )

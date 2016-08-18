@@ -115,6 +115,6 @@
         = hidden_field_tag :site_id, @site.id
         = hidden_field_tag :return_to, site_path(@site)
 
-        = text_area_tag :message, ""
+        = text_area_tag :message, "", required: true
 
         = submit_tag "Send", class: "button", data: { disable_with: "Sending..." }
