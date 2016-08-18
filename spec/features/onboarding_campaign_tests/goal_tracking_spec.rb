@@ -31,6 +31,9 @@ feature "User onboarding statuses get updated as they select a goal for their fi
       page.find(:xpath, "//h6[contains(text(),'#{goal}')]/following-sibling::a").click
       wait_for_ajax
       page.driver.go_back
+      if page.has_button?('Create New')
+        page.click_button('Create New')
+      end
     end
   end
 
