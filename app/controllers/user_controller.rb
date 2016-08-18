@@ -116,6 +116,11 @@ class UserController < ApplicationController
         user.errors.add(:current_password, "is incorrect")
         return false
       end
+      # forbid setting new password equal to the old one
+      if !user.is_oauth_user? && params[:user][:current_password] == params[:user][:password]
+        user.errors.add(:new_password, "should not match the old one")
+        return false
+      end
       true
     else
       # If the user is not active then they must supply an email and password
