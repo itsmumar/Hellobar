@@ -30,7 +30,7 @@ feature "User onboarding statuses get updated as they select a goal for their fi
     goals.each do |goal|
       page.find(:xpath, "//h6[contains(text(),'#{goal}')]/following-sibling::a").click
       wait_for_ajax
-      visit new_site_site_element_path(user.sites.first)
+      page.driver.go_back
     end
   end
 
