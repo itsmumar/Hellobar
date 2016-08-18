@@ -29,7 +29,12 @@ feature "User onboarding statuses get updated as they select a goal for their fi
   def click_through_all_goal_interstitial_options
     goals.each do |goal|
       wait_for_ajax
-      first(".goal-block[data-route='#{goal}'] .button").click
+      button = first(".goal-block[data-route='#{goal}'] .button")
+      unless button
+        sleep 0.5
+        first(".goal-block[data-route='#{goal}'] .button").click
+      end
+      button.click
       page.driver.go_back
 
       if page.has_button?('Create New')
