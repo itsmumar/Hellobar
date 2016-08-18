@@ -12,7 +12,7 @@ feature "User onboarding statuses get updated as they select a goal for their fi
   let(:user) {login}
   let(:goals) do
     page.find(".global-sidebar form .button").click
-    page.all(".goal-block").collect{|block|block['data-route']}
+    page.all(".goal-block").collect{|block| block['data-route']}
   end
   let(:onboarding_status_setter) do
     UserOnboardingStatusSetter.new(user, true, UserOnboardingStatus.none)
@@ -28,14 +28,8 @@ feature "User onboarding statuses get updated as they select a goal for their fi
 
   def click_through_all_goal_interstitial_options
     goals.each do |goal|
-      within (".goal-block[data-route='#{goal}']") do
-        button = first(".button")
-         unless button
-          # give the UI some time to finish loading controls.
-          sleep 1
-          button = first(".button")
-        end
-
+      within ".goal-block[data-route='#{goal}']" do
+        button = find_button
         builder = page.driver.browser.action
         builder.key_down(:control)
         builder.click(button.native)
@@ -45,5 +39,18 @@ feature "User onboarding statuses get updated as they select a goal for their fi
         builder.perform
       end
     end
+  end
+
+  def find_button
+    button = first(".button")
+    unless button
+      # give the UI some time to finish loading controls.
+      3.times do
+        button = first(".button")
+        sleep 0.2
+        break if button
+      end
+    end
+    button
   end
 end
