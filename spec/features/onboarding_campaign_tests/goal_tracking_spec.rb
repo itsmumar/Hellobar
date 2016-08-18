@@ -12,7 +12,7 @@ feature "User onboarding statuses get updated as they select a goal for their fi
   let(:user) {login}
   let(:goals) do
     page.find(".global-sidebar form .button").click
-    page.all(".goal-interstitial h6").collect{|header| header.text}
+    page.all(".goal-block").collect{|block|block['data-route']}
   end
   let(:onboarding_status_setter) do
     UserOnboardingStatusSetter.new(user, true, UserOnboardingStatus.none)
@@ -28,10 +28,13 @@ feature "User onboarding statuses get updated as they select a goal for their fi
 
   def click_through_all_goal_interstitial_options
     goals.each do |goal|
-      page.find(:xpath, "//h6[contains(text(),'#{goal}')]/following-sibling::a").click
       wait_for_ajax
-      sleep 0.5
-      visit new_site_site_element_path(user.sites.first)
+      first(".goal-block[data-route='#{goal}'] .button").click
+      page.driver.go_back
+
+      if page.has_button?('Create New')
+        page.click_button('Create New')
+      end
     end
   end
 end
