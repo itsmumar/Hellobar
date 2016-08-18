@@ -17,9 +17,12 @@ feature 'User can create a site element', js: true do
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
 
+    sleep 0.2
+
     first('.goal-block').click_link(@select_goal_label)
-    page.find('button', text: 'Continue').click
-    page.find('button', text: 'Save & Publish').click
+
+    click_button 'Continue'
+    click_button 'Save & Publish'
 
     expect(page).to have_content('Summary', visible: true)
 
@@ -37,13 +40,15 @@ feature 'User can create a site element', js: true do
     })
 
     visit new_user_session_path
-
     fill_in 'Your Email', with: user.email
-    click_button 'Continue'
 
+    click_button 'Continue'
     first('.goal-block').click_link(@select_goal_label)
-    page.find('button', text: 'Continue').click
-    page.find('button', text: 'Save & Publish').click
+
+    sleep 0.2
+
+    click_button 'Continue'
+    click_button 'Save & Publish'
 
     expect(page).to have_content('Summary', visible: true)
     OmniAuth.config.mock_auth[:google_oauth2] = nil
@@ -120,16 +125,20 @@ feature 'User can toggle colors for a site element', js: true do
 
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
-
     first('.goal-block').click_link(@select_goal_label)
 
-    page.find('button', text: 'Continue').click
-    page.find('a', text: 'Next').click
-    page.find('a', text: /Colors/i).click
+    sleep 0.3
+
+    click_button 'Continue'
+    click_link 'Next'
+
+    within('.tabs-wrapper') do
+      find('a', text: /Colors/i).click
+    end
 
     page.first('.color-select-block input').set('AABBCC')
-    page.find('a', text: 'Prev').click
-    page.find('a', text: 'Next').click
+    click_link 'Prev'
+    click_link 'Next'
 
     expect(page).to have_content('Background Color', visible: true)
     val = page.first('.color-select-block input').value
@@ -154,9 +163,15 @@ feature 'User can edit a site element', js: true do
     site.reload
 
     visit edit_site_site_element_path(site, site.site_elements.last)
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
-    page.find('a', text: /Text/i).click
+
+    2.times do
+      page.find('a', text: 'Next').click
+      sleep 0.1
+    end
+
+    within('.tabs-wrapper') do
+      find('a', text: /Text/i).click
+    end
 
     first('.ember-text-field').set('Dear I fear were facing a problem')
     page.find('button', text: 'Save & Publish').click
