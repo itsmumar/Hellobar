@@ -16,25 +16,13 @@ Your performance this week for <%= @site.url %>
 Get more conversions by visiting <%= site_site_elements_url(@site) %>
 
 <% if @site.is_free? %>
-  <%- if @render_upgrade_cta == 'original' -%>
-    Get 4x more <%= @conversion_header.downcase %> by upgrading to Pro!
-    * Brand it as your bar!  No Hello Bar logo in your bar.  It's all yours!
-    * Remove Ads! Increase your results by removing ads.
-    * Targeted messages! Show different messages to different users.
-    * Better stats! See tips to improve your marketing.
+  Get 4x more <%= @conversion_header.downcase %> by upgrading to Pro!
+  * Brand it as your bar!  No Hello Bar logo in your bar.  It's all yours!
+  * Remove Ads! Increase your results by removing ads.
+  * Targeted messages! Show different messages to different users.
+  * Better stats! See tips to improve your marketing.
 
-    Get all the Pro features for $15.  Visit <%= edit_site_url(@site) %>
-  <%- else -%>
-    Instantly get more customers with the same amount of traffic
-
-    Upgrade Hello Bar Pro and make your bars more effective:
-    * Bars without the Hello Bar logo
-    * Unlimited bars
-    * Target bars by device, location, URL, or traffice source
-    * Custom thank-you messages
-
-    Upgrade Your Hello Bar. Visit <%= edit_site_url(@site, upgrade: true) %>
-  <%- end -%>
+  Get all the Pro features for $15.  Visit <%= edit_site_url(@site) %>
 <% end %>
 
 
