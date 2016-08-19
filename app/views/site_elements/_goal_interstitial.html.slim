@@ -54,7 +54,8 @@
 
           = text_area_tag :message, ""
 
-          = submit_tag "Send", class: "button", data: { disable_with: "Sending..." }
+          = button_tag "Cancel", class: "button cancel", type: "button"
+          = submit_tag "Send", class: "button send", data: { disable_with: "Sending..." }
 
     p
       small = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete, class: "deemphasize"

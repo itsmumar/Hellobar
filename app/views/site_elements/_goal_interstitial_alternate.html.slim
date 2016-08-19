@@ -54,6 +54,7 @@
 
           = text_area_tag :message, ""
 
+          = button_tag "Cancel", class: "button cancel", type: "button"
           = submit_tag "Send", class: "button", data: { disable_with: "Sending..." }
 
     p
