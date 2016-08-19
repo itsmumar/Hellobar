@@ -199,10 +199,12 @@
 
 /*-----------  State: Mobile  -----------*/
 
-
-#hellobar-bar.mobile .hb-logo-wrapper,
-#hellobar-bar.mobile .hb-arrow-wrapper {
+#hellobar-bar.mobile .hb-logo-wrapper {
   display: none;
+}
+
+#hellobar-bar.mobile .hb-arrow-wrapper {
+  width: auto;
 }
 
 #hellobar-bar.mobile .hb-input-wrapper .hb-input-block input {
