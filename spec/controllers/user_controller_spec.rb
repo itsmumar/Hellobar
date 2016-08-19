@@ -11,6 +11,7 @@ describe UserController do
 
         unless @user.valid_password?(@current_password) # update password only if it was changed in some test
           @user.update_attributes(password: @current_password, password_confirmation: @current_password)
+        end
 
         stub_current_user(@user)
       end
