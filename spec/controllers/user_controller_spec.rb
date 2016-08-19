@@ -9,9 +9,8 @@ describe UserController do
         @user = users(:joey)
         @current_password = "current_pass"
 
-        unless @user.valid_password?(@current_password) # update password only if it was changed in some test
-          @user.update_attributes(password: @current_password, password_confirmation: @current_password)
-        end
+        # update password only if it was changed in some test
+        @user.update_attributes(password: @current_password, password_confirmation: @current_password) unless @user.valid_password?(@current_password)
 
         stub_current_user(@user)
       end
