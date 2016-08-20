@@ -52,9 +52,10 @@
           = hidden_field_tag :site_id, @site.id
           = hidden_field_tag :return_to, new_site_site_element_path(current_site)
 
-          = text_area_tag :message, ""
+          = text_area_tag :message, "", required: true
 
-          = submit_tag "Send", class: "button", data: { disable_with: "Sending..." }
+          = button_tag "Cancel", class: "button cancel", type: "button"
+          = submit_tag "Send", class: "button send", data: { disable_with: "Sending..." }
 
     p
       small = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete, class: "deemphasize"

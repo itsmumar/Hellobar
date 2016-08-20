@@ -326,6 +326,9 @@ HB.countryCodes = [
 
 $ ->
   $('.reveal-wrapper').on 'click', (evt) ->
-    unless $(@).hasClass('activated')
+    if $(@).hasClass('activated')
+      if $(evt.target).is(".cancel")
+        $(@).removeClass('activated')
+    else
       $('.reveal-wrapper.activated').removeClass('activated')
       $(@).addClass('activated')
