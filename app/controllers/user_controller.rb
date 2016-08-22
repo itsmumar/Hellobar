@@ -112,9 +112,16 @@ class UserController < ApplicationController
     # If the user is active then they must supply a current_password
     # to update the password.
     if user.active?
-      if !user.is_oauth_user? && user_params[:password].present? && !user.valid_password?(params[:user][:current_password])
-        user.errors.add(:current_password, "is incorrect")
-        return false
+      if !user.is_oauth_user? && user_params[:password].present?
+        unless user.valid_password?(params[:user][:current_password])
+          user.errors.add(:current_password, "is incorrect")
+          return false
+        end
+        # forbid setting new password equal to the old one
+        if params[:user][:current_password] == params[:user][:password]
+          user.errors.add(:new_password, "should not match the old one")
+          return false
+        end
       end
       true
     else
