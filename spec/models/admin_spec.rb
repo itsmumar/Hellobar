@@ -7,14 +7,9 @@ describe Admin do
     @admin = admins(:joey)
   end
 
-  it "can create a new record from email and mobile phone" do
+  it "can create a new record from email and initial password" do
     admin = Admin.make!("newadmin@polymathic.me", "5553211234")
     admin.should be_valid
-  end
-
-  it "standardizes mobile phone on validation" do
-    admin = Admin.new(:mobile_phone => "(555) 123-1234").tap{|a| a.valid?}
-    admin.mobile_phone.should == "+15551231234"
   end
 
   describe "::validate_session" do
@@ -59,49 +54,21 @@ describe Admin do
     end
   end
 
-  describe "needs_mobile_code?" do
+  describe "needs_otp_code?" do
     it "returns false if we've validated this access token recently" do
       @admin.stub(:valid_access_tokens).and_return({"token" => [1.minute.ago.to_i, 1.minute.ago.to_i]})
-      @admin.needs_mobile_code?("token").should be_false
+      @admin.stub(:authentication_code).and_return("123")
+      @admin.needs_otp_code?("token").should be_false
     end
 
     it "returns true if we've never validated this access token" do
       @admin.stub(:valid_access_tokens).and_return({})
-      @admin.needs_mobile_code?("token").should be_true
+      @admin.needs_otp_code?("token").should be_true
     end
 
     it "returns true if we validated this access token too long ago" do
       @admin.stub(:valid_access_tokens).and_return({"token" => [1.year.ago.to_i, 1.year.ago.to_i]})
-      @admin.needs_mobile_code?("token").should be_true
-    end
-  end
-
-  describe "send_new_mobile_code!" do
-    it "sends a mobile code" do
-      twilio = double(:twilio)
-      Twilio::REST::Client.stub_chain("new.account.sms.messages").and_return(twilio)
-
-      twilio.should_receive(:create).with(
-        :body => anything,
-        :to => @admin.mobile_phone,
-        :from => "+14157952691"
-      )
-
-      @admin.send_new_mobile_code!
-    end
-
-    it "sends no code if the admin is locked" do
-      @admin.stub(:locked?).and_return(true)
-      @admin.send_new_mobile_code!.should be_false
-    end
-
-    it "locks the admin if too many codes have been sent" do
-      @admin.mobile_codes_sent = Admin::MAX_MOBILE_CODES + 1
-
-      Twilio::REST::Client.should_receive(:new).never
-      @admin.should_receive(:lock!)
-
-      @admin.send_new_mobile_code!
+      @admin.needs_otp_code?("token").should be_true
     end
   end
 
@@ -119,7 +86,7 @@ describe Admin do
       @admin.update_attribute(:login_attempts, Admin::MAX_LOGIN_ATTEMPTS)
       @admin.should_not be_locked
 
-      @admin.validate_login("token", "password", @admin.mobile_code)
+      @admin.validate_login("token", "password", "123")
 
       @admin.should be_locked
       @admin.login_attempts.should == Admin::MAX_LOGIN_ATTEMPTS + 1
@@ -127,26 +94,27 @@ describe Admin do
 
     it "returns false if locked" do
       @admin.stub(:locked?).and_return(true)
-      @admin.validate_login("token", "password", @admin.mobile_code).should be_false
+      @admin.validate_login("token", "password", @admin.initial_password).should be_false
     end
 
     it "returns false if mobile code does not match" do
-      @admin.stub(:needs_mobile_code?).and_return(true)
+      @admin.stub(:needs_otp_code?).and_return(true)
       @admin.validate_login("token", "password", "notthecode").should be_false
     end
 
     it "returns false if the wrong password is used" do
-      @admin.validate_login("token", "notthepassword", @admin.mobile_code).should be_false
+      @admin.validate_login("token", "notthepassword", @admin.initial_password).should be_false
     end
 
     it "returns false if the access token is invalid" do
-      @admin.validate_login("notthetoken", "password", @admin.mobile_code).should be_false
+      @admin.validate_login("notthetoken", "password", @admin.initial_password).should be_false
     end
 
     it "logs the admin in if all params are valid" do
-      @admin.stub(:needs_mobile_code?).and_return(true)
+      @admin.stub(:needs_otp_code?).and_return(true)
+      @admin.stub(:valid_authentication_otp?).with("123").and_return(true)
       @admin.should_receive(:login!)
-      @admin.validate_login("token", "password", @admin.mobile_code).should be_true
+      @admin.validate_login("token", "password", "123").should be_true
     end
   end
 
@@ -163,7 +131,6 @@ describe Admin do
 
   it "login! logs the admin in" do
     @admin.update_attributes(
-      :mobile_codes_sent => 2,
       :login_attempts => 2,
       :session_token => "",
       :session_access_token => ""
@@ -175,10 +142,10 @@ describe Admin do
     @admin.login!("new_token")
     @admin.reload
 
-    @admin.mobile_codes_sent.should == 0
     @admin.login_attempts.should == 0
     @admin.session_token.should_not be_blank
     @admin.session_access_token.should_not be_blank
+    @admin.authentication_code.should be_blank
   end
 
   describe "#unlock!" do
@@ -193,12 +160,6 @@ describe Admin do
       admin.unlock!
       expect(admin.reload.login_attempts).to be(0)
     end
-
-    it "should set admin mobile_codes_sent to 0" do
-      admin = create(:admin, mobile_codes_sent: 2)
-      admin.unlock!
-      expect(admin.reload.mobile_codes_sent).to be(0)
-    end
   end
 
   describe ".unlock_all!" do
@@ -212,12 +173,6 @@ describe Admin do
       create(:admin, login_attempts: 2)
       Admin.unlock_all!
       expect(Admin.where("login_attempts > 0").count).to be(0)
-    end
-
-    it "should set all admin mobile_codes_sent to 0" do
-      create(:admin, mobile_codes_sent: 2)
-      Admin.unlock_all!
-      expect(Admin.where("mobile_codes_sent > 0").count).to be(0)
     end
   end
 end

@@ -82,6 +82,9 @@ gem "yui-compressor"
 gem "zip-zip" # will load compatibility for old rubyzip API.
 gem "tzinfo-data", platforms: [:mingw, :mswin] # fixing tzinfo-related bug on Windows platform
 
+gem "rqrcode"
+gem "rotp"
+
 group :development do
   gem "better_errors", "~> 1.1"
   gem "binding_of_caller"
