@@ -59,7 +59,6 @@ $ ->
   # Confirmation modals
   $('[data-confirm-text]').click (evt) ->
     $t = $(evt.target)
-    redirect = $t.data('confirm-redirect')
 
     new ConfirmModal({
       title: $t.data('confirm-title'),
