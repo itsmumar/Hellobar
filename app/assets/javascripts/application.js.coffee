@@ -55,3 +55,16 @@ $ ->
     $timezone = $('#site_timezone, #user_timezone')
     userTimezone = jstz.determine().name()
     $timezone.val(userTimezone)
+
+  # Confirmation modals
+  $('[data-confirm-text]').click (evt) ->
+    $t = $(evt.target)
+
+    new ConfirmModal({
+      title: $t.data('confirm-title'),
+      text: $t.data('confirm-text'),
+      url: $t.data('confirm-url'),
+      method: $t.data('confirm-method')
+    }).open()
+
+    evt.preventDefault()

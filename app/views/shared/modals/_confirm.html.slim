@@ -1,0 +1,16 @@
+script id='confirm-modal-template' type='text/x-handlebars-template'
+  .modal-wrapper
+    .modal-block
+      header
+        h5
+          |{{title}}
+
+      .content
+        |{{text}}
+
+      footer
+        a.button.cancel href="#"
+          |{{cancelBtnText}}
+        form
+          a.button.confirm  href="{{url}}" data-method="{{method}}" rel="nofollow"
+            |{{confirmBtnText}}
