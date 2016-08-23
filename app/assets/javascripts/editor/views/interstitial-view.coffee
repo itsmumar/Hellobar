@@ -36,7 +36,9 @@ HelloBar.InterstitialIndexView = SubInterstitialView.extend
     $target = $(e.target)
     $reveal = $target.closest(".reveal-wrapper")
 
-    if $reveal.length # open reveal block
+    if $target.is(".cancel")
+      $reveal.removeClass("activated")
+    else if $reveal.length # open reveal block
       $reveal.addClass("activated")
       return
 
