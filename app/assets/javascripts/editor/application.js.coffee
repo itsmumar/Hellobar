@@ -301,3 +301,14 @@ HB.countryCodes = [
   { code: "ZW", name: "Zimbabwe" }
   { code: "XX", name: "Custom" }
 ]
+
+#----------- Reveal Blocks ----------#
+
+$ ->
+  $('.reveal-wrapper').on 'click', (evt) ->
+    if $(@).hasClass('activated')
+      if $(evt.target).is(".cancel")
+        $(@).removeClass('activated')
+    else
+      $('.reveal-wrapper.activated').removeClass('activated')
+      $(@).addClass('activated')
