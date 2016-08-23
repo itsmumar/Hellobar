@@ -38,7 +38,7 @@ nav.tabs-wrapper
   footer
     = form.button :submit, "Save & Update", :class => "button"
     - if Permissions.delete_site?(current_user, @site)
-      a.button [href="#" data-confirm-url=site_path(@site) data-confirm-method="delete" data-confirm-redirect="/sites"
+      a.button [href="#" data-confirm-url=site_path(@site) data-confirm-method="delete"
         data-confirm-text="Historical data will be deleted and you will not be able to recover it after this. Are you sure you wish to delete this site?"]
           |Delete Site
 
