@@ -23,21 +23,20 @@ ActiveRecord::Schema.define(version: 20160805043902) do
 
   create_table "admins", force: true do |t|
     t.string   "email"
-    t.string   "mobile_phone"
+    t.string   "initial_password"
     t.string   "password_hashed"
-    t.string   "mobile_code"
     t.string   "session_token"
     t.string   "session_access_token"
     t.string   "permissions_json"
     t.datetime "password_last_reset"
     t.datetime "session_last_active"
-    t.integer  "mobile_codes_sent",                  default: 0
     t.integer  "login_attempts",                     default: 0
     t.string   "valid_access_tokens",  limit: 18000
     t.boolean  "locked",                             default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "api_token"
+    t.string   "authentication_code"
   end
 
   add_index "admins", ["api_token"], name: "index_admins_on_api_token", using: :btree
