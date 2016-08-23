@@ -1,5 +1,7 @@
 #= require_self
 
+#= require ember-animate
+
 #= require_tree ./controllers
 #= require_tree ./views
 #= require_tree ./components
@@ -53,28 +55,6 @@ $ ->
     setHeight()
 
   setHeight()
-
-#-----------  Goal Interstitial  -----------#
-
-$ ->
-
-  wrapper = $('.goal-interstitial')
-  buttons = $('.goal-block button')
-
-  wrapper.on("toggleGoalSelection", ->
-    wrapper.toggleClass('transitioning')
-  )
-
-  buttons.prop('disabled', false).on 'click touch', (evt) ->
-    site_id = $(this).data('site-id')
-    url = '/sites/' + site_id + '/track_selected_goal'
-    $.ajax
-      method: 'POST'
-      url: url
-    $(@).closest('.goal-block').addClass('selected')
-    wrapper.trigger("toggleGoalSelection")
-
-    $('#ember-root').trigger('interstitial:selection', $(@).val())
 
 #-----------  Phone Data  -----------#
 
@@ -321,14 +301,3 @@ HB.countryCodes = [
   { code: "ZW", name: "Zimbabwe" }
   { code: "XX", name: "Custom" }
 ]
-
-#----------- Reveal Blocks ----------#
-
-$ ->
-  $('.reveal-wrapper').on 'click', (evt) ->
-    if $(@).hasClass('activated')
-      if $(evt.target).is(".cancel")
-        $(@).removeClass('activated')
-    else
-      $('.reveal-wrapper.activated').removeClass('activated')
-      $(@).addClass('activated')

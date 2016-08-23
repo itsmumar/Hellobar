@@ -21,7 +21,7 @@ html
       = render "shared/modals/contact_list"
     - else
       = render "shared/modals/contact_list_variant"
-      
+
     = render "shared/modals/contact_list_variant"
     = render "shared/modals/editor_errors"
     = render "shared/modals/unsaved_changes"
@@ -35,7 +35,6 @@ html
 
     javascript:
       HB_DNT = 1;
-      HB_EMAIL_FLOW_TEST = "original";
       HB_ONBOARDING_EMAIL_VOLUME = "#{get_ab_variation('Onboarding Email Volume 2016-06-28', current_user)}";
       HB_EMAIL_INTEGRATION_TEST = "#{get_ab_variation('Email Integration UI 2016-06-22', current_user)}";
 
@@ -49,15 +48,16 @@ html
     - if current_user
       = render "shared/modals/account_prompt"
 
+    = yield
+
     - if Rails.env.development?
       = javascript_include_tag "ember"
     - else
-      script src='//cdnjs.cloudflare.com/ajax/libs/ember.js/1.7.0-beta.1/ember.prod.js'
+      script src='//cdnjs.cloudflare.com/ajax/libs/ember.js/1.7.1/ember.prod.js'
 
     = javascript_include_tag "dropper_trios"
     = javascript_include_tag "editor/application"
 
-    = yield
 
 javascript:
   var site = #{{SiteSerializer.new(current_site, scope: current_user).to_json}};

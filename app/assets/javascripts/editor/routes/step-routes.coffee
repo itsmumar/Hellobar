@@ -21,6 +21,16 @@ HelloBar.StepRoute = Ember.Route.extend
 
     @replaceWith(controller.routeForwarding) unless !controller.routeForwarding
 
+  actions:
+
+    didTransition: (t) ->
+      model = @model()
+      currentRoute = @controllerFor("application").get("currentRouteName")
+
+      # redirect to interstitial to select a goal after a page refresh unless it's rememebered in model
+      # currentRoute==undefined indicates page refresh
+      @replaceWith("interstitial") unless currentRoute or HB_DATA.skipInterstitial or model.element_subtype
+
 
 #-----------  Setup Step Routes  -----------#
 

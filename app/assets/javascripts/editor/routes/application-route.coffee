@@ -4,7 +4,6 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
   model: ->
     if localStorage["stashedEditorModel"]
-      $(".goal-interstitial").remove() # Don't show the goal selector if we already have a model
       model = JSON.parse(localStorage["stashedEditorModel"])
       localStorage.removeItem("stashedEditorModel")
       model
@@ -56,26 +55,9 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
       new ContactListModal($.extend(baseOptions, options)).open()
 
-  #---------- Contact Interstitial Test -----#
-
-  renderTemplate: ->
-    @_super()
-    if HB_EMAIL_FLOW_TEST == 'force'
-      controller = this.controllerFor('interstitial')
-      controller.set('interstitialType', 'contacts')
-
-      @render("interstitials/contacts", {
-        into       : 'application'
-        outlet     : 'interstitial'
-        view       : 'interstitial'
-        controller : controller
-        model      : @currentModel
-      })
-
   #-----------  Controller Setup  -----------#
 
   setupController: (controller, model) ->
-
     # Set sub-step forwarding on application load
     settings = @controllerFor('settings')
     if /^social/.test model.element_subtype
@@ -118,42 +100,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend
         else
           targeting.routeForwarding = false
 
-    # Subscribes to outside action used by interstitial
-    # to route ember app through selection
-
-    $('#ember-root').on 'interstitial:selection', (evt, subroute) =>
-      @_interstitialRouting(controller, model, subroute)
-
     @_super(controller, model)
-
-  #-----------  Interstitial Routing  -----------#
-
-  _interstitialRouting: (controller, model, subroute) ->
-    isInterstitial = $.inArray(subroute, ['money', 'call', 'contacts', 'facebook']) > -1
-
-    @disconnectOutlet({
-      outlet     : 'interstitial'
-      parentView : 'application'
-    })
-
-    if isInterstitial
-      InternalTracking.track_current_person('Template Selected', {template: subroute})
-
-      controller.set('showInterstitial', true)
-      controller.set('interstitialType', subroute)
-
-      @render("interstitials/#{subroute}", {
-        into       : 'application'
-        outlet     : 'interstitial'
-        view       : 'interstitial'
-        controller : 'interstitial'
-        model      : model
-      })
-
-      # If the subroute was a subcategory of social, we have to trigger the transition
-      # now so that when they drop into the editor they'll be in the right category
-
-      @replaceWith("settings.social") if subroute == 'facebook'
 
   #-----------  Actions  -----------#
 

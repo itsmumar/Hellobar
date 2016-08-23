@@ -6,10 +6,10 @@
   <i class="large-icon icon-call"></i>
 
   <h6>What should your Hello Bar say?</h6>
-  {{view Ember.TextField value=model.headline placeholder="Easily customize your order by talking to a real human!" maxlength=255}}
+  {{view Ember.TextField value=model.headline placeholder="Talk to us to find out more" maxlength=255}}
 
   <h6>What should the button say?</h6>
-  {{view Ember.TextField value=model.link_text placeholder="Call us now!" maxlength=255}}
+  {{view Ember.TextField value=model.link_text placeholder="Call Now" maxlength=255}}
 
   <h6>What phone number should be dialed?</h6>
   <div class="input-wrapper">
@@ -25,14 +25,10 @@
   </div>
 
   <div class="step-container">
-    <button class="button cancel-button cancel" {{action 'closeEditor'}}>Cancel</button>
+      {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
+    <!--button class="button cancel-button cancel" {{action 'closeEditor'}}>Cancel</button-->
     <button class="button save-editor" {{action 'closeInterstitial'}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
   </div>
 </div>
 
-<footer>
-  <p>
-    You can always change this later.
-    <a href="mailto:support@hellobar.com?subject=Hello%20Bar%20-%20Getting%20Started">Need Help?</a>
-  <p>
-</footer>
+{{partial "partials/interstitial-footer"}}

@@ -1,6 +1,6 @@
 /*-----------  Goal Interstitial  -----------*/
 
-$transition: 0.75s
+$transition: 0.75s //when changing please update it in "interstitial-view.coffee" as well
 
 .goal-interstitial
   top: 0
@@ -9,11 +9,10 @@ $transition: 0.75s
   height: 100%
   position: fixed
   z-index: 800000
-  overflow: scroll
+  overflow: auto
   text-align: center
   min-width: $maxWidth
   background-color: $grayLightest
-  @include transition($transition all ease-in-out)
 
   header
     padding: 1em
@@ -140,19 +139,21 @@ $transition: 0.75s
       @include display(flex)
 
       h6
-        color: $grayDark
         margin: 1.5em 0 0.33em
+        font-size: 1em
+        color: $grayDark
 
       p
         color: $gray
         padding: 0 0.5em
         font-size: 0.8em
 
-      button
+      .button
         width: 100%
         display: block
         font-size: 0.95em
         margin-top: auto
+        padding: .45em
         border-radius: $radiusLg
         text-transform: uppercase
         font-weight: $fontWeightBold
@@ -167,22 +168,38 @@ $transition: 0.75s
         i
           @include animation(jingle 0.67s ease-out 1)
 
-  /*-----------  Selection Fade  -----------*/
+  .interstitial-container
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    z-index: 10000 //should equal to baseZIndex variable specified in "interstitial-view.coffee"
+    @include transition($transition opacity ease-in-out)
 
-  &.transitioning
-    opacity: 0
-    pointer-events: none
+    &.no-transition //force no transition delay when preparing setting views to initial state before transitioning
+      @include transition(none)
 
-    header,
-    footer
-      @include filter(blur(2px))
+      header,
+      footer,
+      .goal-block
+        @include transition(none)
 
-    .goal-block
-      @include transform(scale(0.75))
-      @include filter(blur(2px))
+    &.transitioning
+      opacity: 0
+      pointer-events: none
+      z-index: 10001
 
-      &.selected
-        @include transform(scale(1.15))
+      header,
+      footer
+        @include filter(blur(2px))
+
+      .goal-block
+        @include transform(scale(0.75))
+        @include filter(blur(2px))
+
+        &.selected
+          @include transform(scale(1.15))
 
   /*-----------  Template Forms  -----------*/
 
@@ -224,6 +241,9 @@ $transition: 0.75s
       width: 100%
       text-align: left
       margin: 0.5em 0
+
+      a.active.button
+        cursor: pointer
 
     .button.save-editor
       float: right
@@ -271,3 +291,6 @@ $transition: 0.75s
         display: block
         line-height: 110%
         font-size: 1.25rem
+
+body > canvas
+  display: none //hook to hide strange canvas tag appearing at the end of <body>

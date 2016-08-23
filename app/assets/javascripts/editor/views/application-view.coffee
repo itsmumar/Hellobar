@@ -16,7 +16,7 @@ HelloBar.ApplicationView = Ember.View.extend
   #-----------  Click Action  -----------#
 
   click: (obj) ->
-    isCanvas = $(obj.target)[0].localName == 'canvas'
+    isCanvas = obj.target.localName == 'canvas'
     isColorSelect = $(obj.target).closest('.color-select-wrapper').length
 
     unless isCanvas || isColorSelect
