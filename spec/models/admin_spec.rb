@@ -55,20 +55,20 @@ describe Admin do
   end
 
   describe "needs_otp_code?" do
-    it "returns false if we've validated this access token recently" do
-      @admin.stub(:valid_access_tokens).and_return({"token" => [1.minute.ago.to_i, 1.minute.ago.to_i]})
+    it "returns false if we've both authentication_code and rotp_secret_base added" do
+      @admin.stub(:rotp_secret_base).and_return("whateverkey")
       @admin.stub(:authentication_code).and_return("123")
-      @admin.needs_otp_code?("token").should be_false
+      @admin.needs_otp_code?().should be_false
     end
 
-    it "returns true if we've never validated this access token" do
-      @admin.stub(:valid_access_tokens).and_return({})
-      @admin.needs_otp_code?("token").should be_true
+    it "returns true if don't have rotp_secret_base added" do
+      @admin.stub(:rotp_secret_base).and_return(nil)
+      @admin.needs_otp_code?().should be_true
     end
 
-    it "returns true if we validated this access token too long ago" do
-      @admin.stub(:valid_access_tokens).and_return({"token" => [1.year.ago.to_i, 1.year.ago.to_i]})
-      @admin.needs_otp_code?("token").should be_true
+    it "returns true if we don't have authentication_code added" do
+      @admin.stub(:authentication_code).and_return(nil)
+      @admin.needs_otp_code?().should be_true
     end
   end
 
@@ -97,7 +97,7 @@ describe Admin do
       @admin.validate_login("token", "password", @admin.initial_password).should be_false
     end
 
-    it "returns false if mobile code does not match" do
+    it "returns false if otp is not valid" do
       @admin.stub(:needs_otp_code?).and_return(true)
       @admin.validate_login("token", "password", "notthecode").should be_false
     end

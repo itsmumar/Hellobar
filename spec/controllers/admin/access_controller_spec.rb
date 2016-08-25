@@ -44,16 +44,6 @@ describe Admin::AccessController do
   end
 
   describe "POST process_step1" do
-    it "generate a new OTP to admin if they need one" do
-      Admin.stub(:where).and_return([@admin])
-      @admin.stub(:has_validated_access_token?).and_return(true)
-      @admin.stub(:needs_otp_code?).and_return(true)
-
-      @admin.should_receive(:generate_new_otp)
-
-      post :process_step1, :login_email => @admin.email
-    end
-
     it "sends a \"validate access code\" email to admin if they need one" do
       Admin.stub(:where).and_return([@admin])
       @admin.stub(:has_validated_access_token?).and_return(false)
@@ -96,7 +86,7 @@ describe Admin::AccessController do
     it "moves on to step two if valid params are passed" do
       Admin.stub(:where).and_return([@admin])
       @admin.stub(:has_validated_access_token?).and_return(true)
-      @admin.stub(:needs_mobile_code?).and_return(false)
+      @admin.stub(:needs_otp_code?).and_return(false)
 
       @admin.should_receive(:validate_access_token).and_return(true)
 

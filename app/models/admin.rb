@@ -15,7 +15,7 @@ class Admin < ActiveRecord::Base
 
   before_validation :set_default_password, on: :create
 
-  after_create :generate_rotp_secret_base
+  after_create :generate_rotp_secret_base!
 
   serialize :valid_access_tokens, Hash
 
