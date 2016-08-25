@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160805043902) do
+ActiveRecord::Schema.define(version: 20160825163853) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20160805043902) do
     t.datetime "updated_at"
     t.string   "api_token"
     t.string   "authentication_code"
+    t.string   "rotp_secret_base"
   end
 
   add_index "admins", ["api_token"], name: "index_admins_on_api_token", using: :btree
