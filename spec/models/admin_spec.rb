@@ -58,17 +58,17 @@ describe Admin do
     it "returns false if we've both authentication_code and rotp_secret_base added" do
       @admin.stub(:rotp_secret_base).and_return("whateverkey")
       @admin.stub(:authentication_code).and_return("123")
-      @admin.needs_otp_code?().should be_false
+      @admin.needs_otp_code?.should be_false
     end
 
     it "returns true if don't have rotp_secret_base added" do
       @admin.stub(:rotp_secret_base).and_return(nil)
-      @admin.needs_otp_code?().should be_true
+      @admin.needs_otp_code?.should be_true
     end
 
     it "returns true if we don't have authentication_code added" do
       @admin.stub(:authentication_code).and_return(nil)
-      @admin.needs_otp_code?().should be_true
+      @admin.needs_otp_code?.should be_true
     end
   end
 

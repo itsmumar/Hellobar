@@ -83,9 +83,7 @@ class Admin < ActiveRecord::Base
   end
 
   def generate_new_otp!
-    self.authentication_code = authentication_policy.generate_otp
-    save!
-    self.authentication_code
+    authentication_policy.generate_otp
   end
 
   # Sends an email that includes a validate link for the given access_token. The email
@@ -154,11 +152,13 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
   # Validates the access_token, password and otp_code
   # Makes sure not locked
+  # Save entered_otp, so next time user won't see the barcode rendered again.
   # Also increases the login_attempts and locks it down if reaches MAX_LOGIN_ATTEMPTS
   # If this is a valid login then we call login!. Returns true if everything
   # is valid, false otherwise
   def validate_login(access_token, password, entered_otp)
     update_attribute(:login_attempts, login_attempts + 1)
+    update_attribute(:authentication_code, entered_otp)
 
     lock! if login_attempts > MAX_LOGIN_ATTEMPTS
 
@@ -266,7 +266,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def generate_rotp_secret_base!
-    # each admin will have a separate key base, stored as hashed.
+    # each admin will have a separate key base, stored as encrypted string.
     if self.rotp_secret_base.blank?
       self.rotp_secret_base = active_support_encryptor.encrypt_and_sign(ROTP::Base32.random_base32)
       save!
