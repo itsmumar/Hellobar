@@ -128,6 +128,10 @@ var HB = {
     }
   },
 
+  isMobileDevice: function() {
+    return HB.getVisitorData("dv") === "mobile";
+  },
+
   // Creates a class
   createClass: function(spec, superClass)
   {
@@ -1163,7 +1167,7 @@ var HB = {
   },
 
   nonMobileClickToCall: function(siteElement) {
-    return siteElement.subtype == "call" && HB.getVisitorData("dv") !== "mobile";
+    return siteElement.subtype == "call" && !HB.isMobileDevice();
   },
 
   convertedOrDismissed: function(siteElement) {
@@ -1198,7 +1202,7 @@ var HB = {
     // for example)
     possibleSiteElements =
       possibleSiteElements.email ||
-      possibleSiteElements.call ||
+      HB.isMobileDevice() && possibleSiteElements.call || // consider "call" elements only on mobile devices
       possibleSiteElements.social ||
       possibleSiteElements.traffic ||
       possibleSiteElements.announcement;
