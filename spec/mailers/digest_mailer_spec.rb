@@ -4,13 +4,6 @@ describe DigestMailer do
   fixtures :all
 
   describe 'weekly_digest' do
-    before do
-      allow_any_instance_of(DigestMailer).to(
-        receive(:get_ab_variation).
-        with("Upgrade CTA in HB Digest Email 2016-06-09", anything) { 'original' }
-      )
-    end
-
     let(:site) { sites(:zombo) }
     let(:user) { site.owners.first }
     let(:mail) { DigestMailer.weekly_digest(site, user) }

@@ -60,4 +60,60 @@ describe("HB.geoLocationConditionTrue", function() {
       expect(HB.geoLocationConditionTrue(condition)).toEqual(false);
     });
   });
+
+  context("operand is applied to array of values", function() {
+    beforeEach(function() {
+      condition.value = ["US", "UA", "GB"];
+      condition.operand = "is";
+    });
+
+    it("returns true when the current country is one of the condition's countries", function() {
+      var currentCountry = "GB";
+      spyOn(HB, "getSegmentValue").and.returnValue(currentCountry);
+
+      expect(HB.geoLocationConditionTrue(condition)).toEqual(true);
+    });
+
+    it("returns false when the current country is not one of the condition's countries", function() {
+      var currentCountry = "UY";
+      spyOn(HB, "getSegmentValue").and.returnValue(currentCountry);
+
+      expect(HB.geoLocationConditionTrue(condition)).toEqual(false);
+    });
+
+    it("returns false when the current country is undefined", function() {
+      var currentCountry = undefined;
+      spyOn(HB, "getSegmentValue").and.returnValue(currentCountry);
+
+      expect(HB.geoLocationConditionTrue(condition)).toEqual(false);
+    });
+  });
+
+  context("operand is_not applied to array of values", function() {
+    beforeEach(function() {
+      condition.value = ["US", "UA", "GB"];
+      condition.operand = "is_not";
+    });
+
+    it("returns false when the current country is one of the condition's countries", function() {
+      var currentCountry = "GB";
+      spyOn(HB, "getSegmentValue").and.returnValue(currentCountry);
+
+      expect(HB.geoLocationConditionTrue(condition)).toEqual(false);
+    });
+
+    it("returns true when the current country is not one of the condition's countries", function() {
+      var currentCountry = "UY";
+      spyOn(HB, "getSegmentValue").and.returnValue(currentCountry);
+
+      expect(HB.geoLocationConditionTrue(condition)).toEqual(true);
+    });
+
+    it("returns false when the current country is undefined", function() {
+      var currentCountry = undefined;
+      spyOn(HB, "getSegmentValue").and.returnValue(currentCountry);
+
+      expect(HB.geoLocationConditionTrue(condition)).toEqual(false);
+    });
+  });
 });

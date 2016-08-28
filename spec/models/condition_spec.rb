@@ -89,7 +89,7 @@ RSpec.describe Condition, type: :model do
       it "calls #url_condition_sentence" do
         condition = create(:condition, operand: "is", segment: "UrlCondition", value: ["http://www.wee.com"])
 
-        expect(condition).to receive(:url_condition_sentence) { 'right' }
+        expect(condition).to receive(:multiple_condition_sentence) { 'right' }
         expect(condition.to_sentence).to eql('right')
       end
     end
@@ -98,7 +98,7 @@ RSpec.describe Condition, type: :model do
       it "calls #url_condition_sentence" do
         condition = create(:condition, operand: "is", segment: "UrlPathCondition", value: ["/path/to/page"])
 
-        expect(condition).to receive(:url_condition_sentence) { 'right' }
+        expect(condition).to receive(:multiple_condition_sentence) { 'right' }
         expect(condition.to_sentence).to eql('right')
       end
     end

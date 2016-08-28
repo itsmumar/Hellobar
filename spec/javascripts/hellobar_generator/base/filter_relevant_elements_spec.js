@@ -114,6 +114,17 @@ describe("HB", function() {
     });
 
     describe(".filterMostRelevantElements()", function() {
+        it("should return empty array for an empty array", function() {
+            var output = HB.filterMostRelevantElements([]);
+            expect(output).toEqual([]);
+        });
+
+        it("should return same array for an array with a single element", function() {
+            var a = {rule: {}};
+            var output = HB.filterMostRelevantElements([a]);
+            expect(output).toEqual([a]);
+        });
+
         it("should return conditional element rather than element shown to everyone", function() {
             var a = {
                 rule: {matchType: "all", conditions: []}

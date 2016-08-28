@@ -13,7 +13,7 @@
     {{view Ember.TextField value=model.link_text placeholder="Subscribe" maxlength=255}}
 
     <div class="step-container">
-      <button {{bind-attr class=":high-priority :button :cancel-button :cancel forceContacts:invisible"}} {{action 'closeEditor'}}>Cancel</button>
+      {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
       <button class="button save-editor" {{action 'closeInterstitial'}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
     </div>
   </div>
@@ -31,9 +31,4 @@
   {{/if}}
 </div>
 
-<footer>
-  <p>
-    You can always change this later.
-    <a href="mailto:support@hellobar.com?subject=Hello%20Bar%20-%20Getting%20Started">Need Help?</a>
-  <p>
-</footer>
+{{partial "partials/interstitial-footer"}}
