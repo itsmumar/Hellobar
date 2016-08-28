@@ -60,7 +60,7 @@ module ServiceProviders
       begin
         response = @client.post do |request|
           request.url 'contacts'
-          request.body = {name: name, email: email, cycle_day: cycle_day, campaign: {campaignId: list_id}}
+          request.body = {name: name, email: email, dayOfCycle: cycle_day, campaign: {campaignId: list_id}}
         end
 
         if response.success?
