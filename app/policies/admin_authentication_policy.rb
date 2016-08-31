@@ -1,30 +1,19 @@
 class AdminAuthenticationPolicy
-  attr_accessor :otp
-
   def initialize(resource)
     @admin = resource
-    @otp = generate_otp
   end
 
   def otp_valid?(otp)
     totp.verify(otp)
   end
 
-  private
-
-  def totp
-    @totp ||= initialize_totp
-  end
-
   def generate_otp
     totp.provisioning_uri(@admin.email)
   end
 
-  def initialize_totp
-    ROTP::TOTP.new rotp_secret, issuer: Admin::ISSUER
-  end
+  private
 
-  def rotp_secret
-    Hellobar::Settings[:rotp_secret_key_base] || Rails.application.secrets[:rotp_secret_key_base]
+  def totp
+    @totp ||= ROTP::TOTP.new(@admin.decrypted_rotp_secret_base, issuer: Admin::ISSUER)
   end
 end

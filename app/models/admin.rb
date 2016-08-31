@@ -15,6 +15,8 @@ class Admin < ActiveRecord::Base
 
   before_validation :set_default_password, on: :create
 
+  after_create :generate_rotp_secret_base!
+
   serialize :valid_access_tokens, Hash
 
   class << self
@@ -76,12 +78,12 @@ class Admin < ActiveRecord::Base
     update_attribute(:session_token, "")
   end
 
-  def needs_otp_code?(access_token)
-    authentication_code.blank?
+  def needs_otp_code?
+    authentication_code.blank? || rotp_secret_base.blank?
   end
 
-  def generate_new_otp
-    authentication_policy.otp
+  def generate_new_otp!
+    authentication_policy.generate_otp
   end
 
   # Sends an email that includes a validate link for the given access_token. The email
@@ -150,11 +152,13 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
   # Validates the access_token, password and otp_code
   # Makes sure not locked
+  # Save entered_otp, so next time user won't see the barcode rendered again.
   # Also increases the login_attempts and locks it down if reaches MAX_LOGIN_ATTEMPTS
   # If this is a valid login then we call login!. Returns true if everything
   # is valid, false otherwise
   def validate_login(access_token, password, entered_otp)
     update_attribute(:login_attempts, login_attempts + 1)
+    update_attribute(:authentication_code, entered_otp)
 
     lock! if login_attempts > MAX_LOGIN_ATTEMPTS
 
@@ -169,13 +173,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def valid_authentication_otp?(otp)
-    if authentication_policy.otp_valid?(otp)
-      self.authentication_code = otp
-      save!
-      return true
-    end
-
-    return false
+    authentication_policy.otp_valid?(otp)
   end
 
   def reset_password!(unencrypted_password)
@@ -248,6 +246,9 @@ If this is not you, this may be an attack and you should lock down the admin by 
     Digest::SHA256.hexdigest(["validate_access_token", email, token, timestamp, "a6b3b"].join)
   end
 
+  def decrypted_rotp_secret_base
+    active_support_encryptor.decrypt_and_verify(generate_rotp_secret_base!)
+  end
 
   private
 
@@ -255,7 +256,21 @@ If this is not you, this may be an attack and you should lock down the admin by 
     @authentication_policy ||= ::AdminAuthenticationPolicy.new(self)
   end
 
+  def active_support_encryptor
+    key_to_encrypt = Digest::SHA256.hexdigest("#{SALT}#{email}#{initial_password}")
+    @encryptor ||= ActiveSupport::MessageEncryptor.new(key_to_encrypt)
+  end
+
   def set_default_password
     set_password(initial_password) if new_record? && password_hashed.blank?
+  end
+
+  def generate_rotp_secret_base!
+    # each admin will have a separate key base, stored as encrypted string.
+    if self.rotp_secret_base.blank?
+      self.rotp_secret_base = active_support_encryptor.encrypt_and_sign(ROTP::Base32.random_base32)
+      save!
+    end
+    self.rotp_secret_base
   end
 end
