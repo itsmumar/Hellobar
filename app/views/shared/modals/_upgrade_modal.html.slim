@@ -32,18 +32,12 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-features
 
             ul
-              - if get_ab_variation("Pricing Modal Copy 2016-07-07") == "variant"
-                li Hello Bar logo on each bar
-                li No bar targeting
-                li Limit of 10 bars
-                li No custom thank you messages
-              - else
-                li= "{{#if showFreePlus}}Unlimited bars{{else}}Limit of 10 bars{{/if}}"
-                li Limited customization
-                li HelloBar logo on all content
-                li.placeholder-list-item ----------
+              li Hello Bar logo on each bar
+              li No bar targeting
+              li Limit of 10 bars
+              li No custom thank you messages
 
-            .package-status(data-btn-prefix='#{ get_ab_variation("Pricing Modal Copy 2016-07-07") == "variant" ? "Your " : "" }')
+            .package-status(data-btn-prefix='Your ')
               = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
 
 
@@ -57,48 +51,23 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-features
 
             ul
-              - if get_ab_variation("Pricing Modal Copy 2016-07-07") == "variant"
-                li.thin
-                  i.icon-unbranded
-                  span.info No Hello Bar Logo
-                li.thin
-                  i.icon-opportunity
-                  span.info Custom thank you messages
-                li.thin
-                  i.icon-unlimited
-                  span.info Unlimited bars
-                li.thin.adjusted-down
-                  i.icon-thumbsup
-                  span.info-plus 250,000 visits/mo ($5/mo for each additional 25,000 visits)
-                li.thin
-                  i.icon-target
-                  span.info-plus Target bars by device, location, URL, or traffic source
-              - else
-                li
-                  i.icon-unbranded
-                  span.info Unbranded content
-                li
-                  i.icon-pointer
-                  span.info Behavior activated content
-                li
-                  i.icon-unlimited
-                  span.info Unlimited bars
-                li
-                  i.icon-target
-                  span.info Custom targeted content
-                li
-                  i.icon-opportunity
-                  span.info Future improvements
-                li
-                  i.icon-thumbsup
-                  span.info Our sincere thanks!
-                li
-                  i.icon-pants
-                  span.info Custom thank you message
+              li.thin
+                i.icon-unbranded
+                span.info No Hello Bar Logo
+              li.thin
+                i.icon-opportunity
+                span.info Custom thank you messages
+              li.thin
+                i.icon-unlimited
+                span.info Unlimited bars
+              li.thin.adjusted-down
+                i.icon-thumbsup
+                span.info-plus 250,000 visits/mo ($5/mo for each additional 25,000 visits)
+              li.thin
+                i.icon-target
+                span.info-plus Target bars by device, location, URL, or traffic source
 
             .package-status
-              - unless get_ab_variation("Pricing Modal Copy 2016-07-07") == "variant"
-                p After 250,000 visits, every 25,000 visits are $5 extra
               = choose_plan_button(Subscription::Pro.new)
               .email-links
                 - if current_site
@@ -116,16 +85,10 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-features
 
             ul
-              - if get_ab_variation("Pricing Modal Copy 2016-07-07") == "variant"
-                li Unlimited visits
-                li.placeholder-list-item --------------------------
-                li All the benefits of Pro
-                li.placeholder-list-item --------------------------
-              - else
-                li All the benefits of Pro
-                li Future improvements
-                li Unlimited visits
-                li Enterprise integrations
+              li Unlimited visits
+              li.placeholder-list-item --------------------------
+              li All the benefits of Pro
+              li.placeholder-list-item --------------------------
 
             .package-status
               = choose_plan_button(Subscription::Enterprise.new)
