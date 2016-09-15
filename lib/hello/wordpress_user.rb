@@ -51,6 +51,34 @@ class Hello::WordpressUser < Hello::WordpressModel
     ).tap{ |u| u.save(validate: false) }
   end
 
+  def converted?
+    User.where(email: user_email).first ? true : false
+  end
+
+  def force_convert
+    # Get all the old bars
+    old_bars = self.bars
+    # Convert self to user
+    user = convert_to_user
+    # Create a temporary site (since we don't know their actual URL)
+    site = Site.new(url: "mysite.com")
+    site.save!
+    # Create the default URLs
+    site.create_default_rules
+    # Associate the site to the user
+    SiteMembership.create!(site: site, user: user)
+    # Create a free trial subscription
+    subscription = Subscription::Pro.new(schedule: "monthly")
+    site.change_subscription(subscription, nil, Hello::WordpressUser::PRO_TRIAL_PERIOD)
+    # Add all the bars
+    new_bars = []
+    old_bars.each do |bar|
+      new_bars << bar.convert_to_site_element!(site.rules.first)
+    end
+    # Return the user
+    return user, site, new_bars
+  end
+
   def is_pro_user?
     Hello::WordpressUserMeta.where(user_id: id, meta_key: "hellobar_vip_user").first.try(:meta_value) == "1" || \
     Hello::WordpressUserMeta.where(user_id: id, meta_key: "hbwp_s2member_subscr_id").first.try(:meta_value) != nil

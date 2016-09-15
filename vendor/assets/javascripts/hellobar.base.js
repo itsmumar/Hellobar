@@ -93,7 +93,9 @@ var HB = {
     if (HB.isIpAddress(hostname) || hostname === "localhost")
       return true;
 
-    return HB.n(hostname) === HB.n(window.HB_SITE_URL);
+    // If the site is the generic one used for force converts
+    // we still want to show the bar
+    return HB_SITE_URL == "http://mysite.com" || HB.n(hostname) === HB.n(window.HB_SITE_URL);
   },
 
   // Grabs site elements from valid rules and displays them
