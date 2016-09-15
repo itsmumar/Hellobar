@@ -31,21 +31,24 @@ class Hello::WordpressUser < Hello::WordpressModel
   end
 
   def bars
-    all_bars = Hello::WordpressBar.where(post_author: id, post_type: "hellobar")
+    unless @bars
+      all_bars = Hello::WordpressBar.where(post_author: id, post_type: "hellobar")
 
-    all_bars.select do |bar|
-      if bar.post_parent.present? && bar.post_parent != 0
-        parent = all_bars.find{|b| b.id == bar.post_parent}
-        parent && parent.post_status != "trash" && bar.post_status != "trash"
-      else
-        bar.post_status != "trash"
+      @bars = all_bars.select do |bar|
+        if bar.post_parent.present? && bar.post_parent != 0
+          parent = all_bars.find{|b| b.id == bar.post_parent}
+          parent && parent.post_status != "trash" && bar.post_status != "trash"
+        else
+          bar.post_status != "trash"
+        end
       end
     end
+    @bars
   end
 
   def convert_to_user
     User.new(
-      email: user_email,
+      email: self.email,
       encrypted_password: user_pass,
       wordpress_user_id: id
     ).tap{ |u| u.save(validate: false) }
