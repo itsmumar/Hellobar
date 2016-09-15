@@ -3,7 +3,7 @@ require 'yaml'
 lock "3.2.1"
 
 set :application, "hellobar"
-set :repo_url, "git@github.com:CrazyEggInc/hellobar_new.git"
+set :repo_url, "git@github.com:Hello-bar/hellobar_new.git"
 set :deploy_to, "/mnt/deploy"
 set :linked_files, %w{config/database.yml config/secrets.yml config/settings.yml config/application.yml}
 set :linked_dirs, %w{log tmp/pids}
