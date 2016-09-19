@@ -32,6 +32,10 @@ Let rake setup and migrate all your databases
 
 See [wiki](https://github.com/CrazyEggInc/hellobar_new/wiki/Windows-Environment-Setup)
 
+### Ubuntu (Linux)
+
+See [wiki](https://github.com/Hello-bar/hellobar_new/wiki/Application-Setup-on-Ubuntu-(Linux))
+
 ### Front End
 
 NOTE: install fontforge locally first with `brew install fontforge ttfautohint`
