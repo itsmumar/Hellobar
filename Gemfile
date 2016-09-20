@@ -97,7 +97,7 @@ group :development, :test do
   gem "byebug"
   gem "capybara"
   gem "capybara-webkit"
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '~> 2.53.4'
   gem "factory_girl_rails"
   gem "faker"
   gem "metric_fu"
