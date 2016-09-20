@@ -31,4 +31,13 @@ module FeatureHelper
   def finished_all_ajax_requests?
     page.evaluate_script('jQuery.active').zero?
   end
+
+  def scroll_and_click(link_label, scroll_class)
+    page.execute_script("var step = $('.#{scroll_class}'); step.scrollTop(step.height())")
+    page.find('a', text: link_label).click
+  end
+
+  def bypass_setup_steps(count)
+    count.times { scroll_and_click('Next', 'step-wrapper') }
+  end
 end
