@@ -20,23 +20,47 @@ describe SiteElementsController do
   end
 
   describe "POST create" do
+    before(:each) do
+      @site = sites(:zombo)
+      stub_current_user(@site.owners.first)
+    end
+
     it "sets the correct error if a rule is not provided" do
       Site.any_instance.stub(:generate_script => true)
-      site = sites(:zombo)
-      stub_current_user(site.owners.first)
 
-      post :create, :site_id => site.id, :site_element => {:element_subtype => "traffic", :rule_id => 0}
+      post :create, :site_id => @site.id, :site_element => {:element_subtype => "traffic", :rule_id => 0}
 
       expect_json_to_have_error(:rule, "can't be blank")
     end
 
+    it "sets `fields_to_collect` under `settings` and return back" do
+      settings = {
+        "fields_to_collect" => [
+          {
+            "id"    => "fieldid1",
+            "type"  => "name",
+            "label" => "Name"
+          },
+          {
+            "id"    => "fieldid3",
+            "type"  => "phone",
+            "label" => "phone"
+          }
+        ]
+      }
+
+      post :create, :site_id => @site.id, :site_element => { :element_subtype => "traffic",
+                                                             :rule_id => 0,
+                                                             :settings => settings }
+
+      expect_json_response_to_include({ settings: settings })
+    end
+
     it "sets the success flash message on create" do
       SiteElement.any_instance.stub(valid?: true, save!: true)
-      site = sites(:zombo)
-      stub_current_user(site.owners.first)
 
       expect {
-        post :create, :site_id => site.id, :site_element => {:element_subtype => "traffic", :rule_id => 0}
+        post :create, :site_id => @site.id, :site_element => {:element_subtype => "traffic", :rule_id => 0}
       }.to change{flash[:success]}.from(nil)
     end
   end
