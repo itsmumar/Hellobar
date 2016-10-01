@@ -1,6 +1,8 @@
 require 'integration_helper'
 
 feature 'User can create a site element', js: true do
+  extend FeatureHelper
+
   after { devise_reset }
   before do
     allow_any_instance_of(SiteElementSerializer).
@@ -163,11 +165,7 @@ feature 'User can edit a site element', js: true do
     site.reload
 
     visit edit_site_site_element_path(site, site.site_elements.last)
-
-    2.times do
-      page.find('a', text: 'Next').click
-      sleep 0.1
-    end
+    bypass_setup_steps(2)
 
     within('.tabs-wrapper') do
       find('a', text: /Text/i).click

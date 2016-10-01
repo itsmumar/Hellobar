@@ -1,6 +1,8 @@
 require 'integration_helper'
 
 feature "Hide the URL Condition from the Rule Modal", js: true do
+  extend FeatureHelper
+
   before do
     @user = login
     allow_any_instance_of(SiteElementSerializer).
@@ -18,11 +20,8 @@ feature "Hide the URL Condition from the Rule Modal", js: true do
     site.reload
 
     visit edit_site_site_element_path(site, element.id)
+    bypass_setup_steps(4)
 
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
     page.find('a', text: 'Edit.').click
     page.find('a', text: '+').click
 
@@ -42,11 +41,8 @@ feature "Hide the URL Condition from the Rule Modal", js: true do
     site.reload
 
     visit edit_site_site_element_path(site, element.id)
+    bypass_setup_steps(4)
 
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
     page.find('a', text: 'Edit.').click
 
     expect(page).to have_content("URL")

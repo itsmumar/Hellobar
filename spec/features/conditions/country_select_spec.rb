@@ -1,6 +1,8 @@
 require 'integration_helper'
 
 feature "Render the country select for the Rule modal", js: true do
+  extend FeatureHelper
+
   before(:each) do
     @user = login
     allow_any_instance_of(SiteElementSerializer).
@@ -18,11 +20,8 @@ feature "Render the country select for the Rule modal", js: true do
     site.reload
 
     visit edit_site_site_element_path(site, element.id)
+    bypass_setup_steps(4)
 
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
     page.find('a', text: 'Edit.').click
     page.find('a', text: '+').click
 
@@ -44,11 +43,8 @@ feature "Render the country select for the Rule modal", js: true do
     site.reload
 
     visit edit_site_site_element_path(site, element.id)
+    bypass_setup_steps(4)
 
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
-    page.find('a', text: 'Next').click
     page.find('a', text: 'Edit.').click
 
     select('Country')
