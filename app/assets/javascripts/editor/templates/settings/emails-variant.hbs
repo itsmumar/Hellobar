@@ -15,9 +15,11 @@
         <div {{bind-attr class="field.enabled:is-selected :item-block"}}>
             <span>{{ field.label }}</span>
             <span class="buttons">
-                <a href="javascript:void(0)" class="remove-button">
+                {{#if field.removable }}
+                <a href="javascript:void(0)" class="remove-button" {{action 'removeFieldToCollect' field}}>
                     <i class="icon-close"></i>
                 </a>
+                {{/if}}
                 <a href="javascript:void(0)" class="select-button" {{action 'toggleFieldToCollect' field}}>
                     <i class="hellobar-icon-check-mark"></i>
                 </a>

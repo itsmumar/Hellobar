@@ -153,17 +153,23 @@
           &.select-button
             display: none
             i
-              font-size: 120%
+              font-size: 105%
+              color: #C6C6C6
           &.remove-button
             display: none
             i
-              font-size: 80%
+              top: -2px
+              font-size: 75%
               color: #C6C6C6
 
       &.is-selected
         .buttons
           a.select-button
             display: inline
+            i
+              color: #54d388
+              &::before
+                font-weight: 700
           //a.remove-button
           //  display: inline
       &:hover
