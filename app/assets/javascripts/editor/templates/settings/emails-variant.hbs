@@ -1,13 +1,29 @@
 <label>Choose input fields</label>
-<div {{bind-attr class="collectNames:is-selected :radio-blocks-wrapper"}}>
+<!--<div {{bind-attr class="collectNames:is-selected :radio-blocks-wrapper"}}>
   <div class="radio-block" {{action 'collectEmail'}}>
     <i class="hellobar-icon-mail"></i>
     <div>Email addresses only</div>
   </div>
   <div class="radio-block" {{action 'collectEmailsAndNames'}}>
     <i class="hellobar-icon-mail"></i>
-    <div>Names and email addresses</div>
+    <div>Names and email addresses - 1</div>
   </div>
+</div>-->
+
+<div class="multiselect-wrapper">
+    {{#each field in preparedFields }}
+        <div {{bind-attr class="field.enabled:is-selected :item-block"}}>
+            <span>{{ field.label }}</span>
+            <span class="buttons">
+                <a href="javascript:void(0)" class="remove-button">
+                    <i class="icon-close"></i>
+                </a>
+                <a href="javascript:void(0)" class="select-button" {{action 'toggleFieldToCollect' field}}>
+                    <i class="hellobar-icon-check-mark"></i>
+                </a>
+            </span>
+        </div>
+    {{/each}}
 </div>
 
 <label>Choose your contact list and integration</label>

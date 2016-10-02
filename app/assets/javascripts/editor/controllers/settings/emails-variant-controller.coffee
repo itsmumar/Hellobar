@@ -1,9 +1,52 @@
 HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
 
+  # TODO remove this
   collectNames : Ember.computed.alias('model.settings.collect_names')
+
+  builtinFieldDefinitions: {
+    'builtin-name': {
+      label: 'Name'
+    },
+    'builtin-email': {
+      label: 'Email'
+    },
+    'builtin-phone': {
+      label: 'Phone'
+    }
+  }
+
+  # TODO remove this
+  init: ->
+    window.testController = this
 
   # set 'afterSubmitChoice' property only after model is ready
   afterModel: (->
+    # TODO this is mock fields data. It should be replaced with real data from server
+    fields = [
+      {
+        "id": "some-long-id-1",
+        "type": "builtin-email",
+        "enabled": true
+      },
+      {
+        "id": "some-long-id-2",
+        "type": "builtin-phone",
+        "enabled": true
+      },
+      {
+        "id": "some-long-id-3",
+        "type": "builtin-name",
+        "enabled": false
+      },
+      {
+        "id": "some-long-id-4",
+        "type": "text",
+        label: "Your favorite writer",
+        "enabled": true
+      }
+    ]
+    @set('model.settings.fields_to_collect', fields)
+
     # Set Initial After Email Submission Choice
     modelVal  = @get('model.settings.after_email_submit_action') || 0
     selection = @get('afterSubmitOptions').findBy('value', modelVal)
@@ -40,11 +83,28 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
     }]
   ).property('model.site.capabilities.custom_thank_you_text', 'model.site.capabilities.after_submit_redirect')
 
+  preparedFields: (->
+    @get('model.settings.fields_to_collect').map( (field) => {
+      id: field.id,
+      label: if @builtinFieldDefinitions[field.type] then @builtinFieldDefinitions[field.type].label else field.label,
+      enabled: field.enabled,
+      enabnedCanBeChanged: true # TODO
+    })).property('model.settings.fields_to_collect')
+
   #-----------  Actions  -----------#
 
   actions:
 
+    toggleFieldToCollect: (field) ->
+      Ember.set(field, 'enabled', not field.enabled)
+      null
+
+    test: ->
+      console.log('Test', arguments)
+      console.log('Equals', arguments[0] == arguments[1])
+
     collectEmail: ->
+      #alert('Cool')
       @set('collectNames', 0)
 
     collectEmailsAndNames: ->
