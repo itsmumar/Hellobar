@@ -26,6 +26,19 @@
             </span>
         </div>
     {{/each}}
+    {{#if newFieldToCollect}}
+        <div class="item-block new-item-prototype">
+            {{input type="text" placeholder="Input field name and hit Enter"
+            value=newFieldToCollect.label
+            autofocus="autofocus" style=""
+            insert-newline="onNewFieldToCollectEnterPressed"
+            escape-press="onNewFieldToCollectEscapePressed"}}
+        </div>
+    {{else}}
+        <div class="item-block add" {{action 'addFieldToCollect'}}>
+            Add field
+        </div>
+    {{/if}}
 </div>
 
 <label>Choose your contact list and integration</label>

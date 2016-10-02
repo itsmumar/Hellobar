@@ -3,6 +3,8 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
   # TODO remove this
   collectNames : Ember.computed.alias('model.settings.collect_names')
 
+  newFieldToCollect: null
+
   builtinFieldDefinitions: {
     'builtin-name': {
       label: 'Name'
@@ -41,7 +43,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       {
         "id": "some-long-id-4",
         "type": "text",
-        label: "Your favorite writer",
+        "label": "Your favorite writer",
         "enabled": true
       }
     ]
@@ -104,12 +106,35 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       newFields = _.reject(fields, (f) -> f.id == field.id)
       @set('model.settings.fields_to_collect', newFields)
 
+    addFieldToCollect: ->
+      @set('newFieldToCollect', {
+        id: _.uniqueId('field_'),
+        type: 'text',
+        label: '',
+        enabled: true,
+        removable: true
+      })
+
+
+    onNewFieldToCollectEnterPressed: () ->
+      console.log('label = ', @newFieldToCollect.label)
+      newFields = @get('model.settings.fields_to_collect').concat([@newFieldToCollect])
+      @set('model.settings.fields_to_collect', newFields)
+      console.log(newFields)
+      @set('newFieldToCollect', null)
+
+
+    onNewFieldToCollectEscapePressed: () ->
+      @set('newFieldToCollect', null)
+
+
+    # TODO remove
     test: ->
       console.log('Test', arguments)
       console.log('Equals', arguments[0] == arguments[1])
 
     collectEmail: ->
-      #alert('Cool')
+      #alert('Cool') TODO remove
       @set('collectNames', 0)
 
     collectEmailsAndNames: ->
