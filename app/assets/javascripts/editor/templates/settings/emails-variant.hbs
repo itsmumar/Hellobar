@@ -2,7 +2,7 @@
 
 <div class="multiselect-wrapper">
     {{#each field in preparedFields }}
-        <div {{bind-attr class="field.enabled:is-selected :item-block"}}>
+        <div {{bind-attr class="field.is_enabled:is-selected :item-block"}}>
             <span>{{ field.label }}</span>
             <span class="buttons">
                 {{#if field.removable }}

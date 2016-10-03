@@ -27,17 +27,17 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
         {
           "id": "some-long-id-1",
           "type": "builtin-email",
-          "enabled": true
+          "is_enabled": true
         },
         {
           "id": "some-long-id-2",
           "type": "builtin-phone",
-          "enabled": true
+          "is_enabled": true
         },
         {
           "id": "some-long-id-3",
           "type": "builtin-name",
-          "enabled": false
+          "is_enabled": false
         }
       ]
       @set('model.settings.fields_to_collect', fields)
@@ -82,7 +82,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
     @get('model.settings.fields_to_collect').map( (field) => {
       id: field.id,
       label: if @builtinFieldDefinitions[field.type] then @builtinFieldDefinitions[field.type].label else field.label,
-      enabled: field.enabled,
+      is_enabled: field.is_enabled,
       removable: field.type.indexOf('builtin-') != 0
     })).property('model.settings.fields_to_collect')
 
@@ -93,7 +93,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
     toggleFieldToCollect: (field) ->
       fields = @get('model.settings.fields_to_collect')
       fieldToChange = _.find(fields, (f) -> f.id == field.id)
-      fieldToChange.enabled = not fieldToChange.enabled
+      fieldToChange.is_enabled = not fieldToChange.is_enabled
       @notifyPropertyChange('model.settings.fields_to_collect')
       null
 
@@ -107,7 +107,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
         id: _.uniqueId('field_') + '_' + Date.now(),
         type: 'text',
         label: '',
-        enabled: true
+        is_enabled: true
       })
 
 
