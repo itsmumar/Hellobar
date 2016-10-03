@@ -3,6 +3,46 @@ require 'spec_helper'
 describe SiteElementsController do
   fixtures :all
 
+  let(:settings) do
+    {
+      "fields_to_collect" => [
+        {
+          "id"          => "fieldid1",
+          "type"        => "builtin-name",
+          "label"       => "Name",
+          "is_enabled"  => true
+        },
+        {
+          "id"          => "fieldid3",
+          "type"        => "builtin-phone",
+          "label"       => "phone",
+          "is_enabled"  => true
+        }
+      ]
+    }
+  end
+
+  let(:manipulated_settings) do
+    {
+      "fields_to_collect" => [
+        {
+          "id"          => "fieldid1",
+          "type"        => "builtin-name",
+          "label"       => "Name",
+          "is_enabled"  => true,
+          "wrong_field" => "wrong_field"
+        },
+        {
+          "id"          => "fieldid3",
+          "type"        => "builtin-phone",
+          "label"       => "phone",
+          "is_enabled"  => true,
+          "wrong_field" => "wrong_field"
+        }
+      ]
+    }
+  end
+
   describe "GET show" do
     it "serializes a site_element to json" do
       element = site_elements(:zombo_traffic)
@@ -23,42 +63,6 @@ describe SiteElementsController do
     before(:each) do
       @site = sites(:zombo)
       stub_current_user(@site.owners.first)
-    end
-
-    let(:settings) do
-      {
-        "fields_to_collect" => [
-          {
-            "id"    => "fieldid1",
-            "type"  => "name",
-            "label" => "Name"
-          },
-          {
-            "id"    => "fieldid3",
-            "type"  => "phone",
-            "label" => "phone"
-          }
-        ]
-      }
-    end
-
-    let(:manipulated_settings) do
-      {
-        "fields_to_collect" => [
-          {
-            "id"          => "fieldid1",
-            "type"        => "name",
-            "label"       => "Name",
-            "wrong_field" => "wrong_field"
-          },
-          {
-            "id"          => "fieldid3",
-            "type"        => "phone",
-            "label"       => "phone",
-            "wrong_field" => "wrong_field"
-          }
-        ]
-      }
     end
 
     it "sets the correct error if a rule is not provided" do
@@ -204,6 +208,27 @@ describe SiteElementsController do
 
         json_response = parse_json_response
         expect(json_response[:id]).not_to eq(email_element.id)
+      end
+
+      context "updates `fields_to_collect`" do
+        before(:each) do
+          @params = valid_params(element)
+        end
+
+        it "with valid attrs" do
+          @params[:site_element][:settings] = settings
+          post :update, @params
+
+          expect(response).to be_success
+          expect_json_response_to_include({ settings: settings })
+        end
+
+        it "with whitelisted attrs only and ignore the others " do
+          @params[:site_element][:settings] = manipulated_settings
+          post :update, @params
+
+          expect_json_response_to_include({ "settings" => settings })
+        end
       end
     end
 
