@@ -25,7 +25,7 @@ describe SiteElementsController do
       stub_current_user(@site.owners.first)
     end
 
-    let(:settings) do 
+    let(:settings) do
       {
         "fields_to_collect" => [
           {
@@ -46,15 +46,15 @@ describe SiteElementsController do
       {
         "fields_to_collect" => [
           {
-            "id"    => "fieldid1",
-            "type"  => "name",
-            "label" => "Name",
+            "id"          => "fieldid1",
+            "type"        => "name",
+            "label"       => "Name",
             "wrong_field" => "wrong_field"
           },
           {
-            "id"    => "fieldid3",
-            "type"  => "phone",
-            "label" => "phone",
+            "id"          => "fieldid3",
+            "type"        => "phone",
+            "label"       => "phone",
             "wrong_field" => "wrong_field"
           }
         ]
