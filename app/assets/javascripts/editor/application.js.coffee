@@ -1,6 +1,7 @@
 #= require_self
 
 #= require ember-animate
+#= require sortable/Sortable
 
 #= require_tree ./controllers
 #= require_tree ./views
