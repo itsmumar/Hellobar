@@ -163,13 +163,7 @@ class SiteElementsController < ApplicationController
       :after_email_submit_action,
       :buffer_message,
       :buffer_url,
-      { fields_to_collect: [
-                              :id,
-                              :type,
-                              :label,
-                              :is_enabled
-                            ]
-      },
+      { fields_to_collect: [:id, :type, :label, :is_enabled] },
       :display_when_delay,
       :display_when_delay_units,
       :display_when_scroll_element,
