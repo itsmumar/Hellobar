@@ -43,6 +43,23 @@ describe SiteElementsController do
     }
   end
 
+  let(:settings_custom_fields) do
+    settings["fields_to_collect"] += [{
+      "id"          => "fieldid4",
+      "type"        => "custom-company-name",
+      "label"       => "Company Name",
+      "is_enabled"  => true
+    },
+    {
+      "id"          => "fieldid5",
+      "type"        => "custom-address",
+      "label"       => "Address",
+      "is_enabled"  => false
+    }]
+
+    { "fields_to_collect" => settings["fields_to_collect"] }
+  end
+
   describe "GET show" do
     it "serializes a site_element to json" do
       element = site_elements(:zombo_traffic)
@@ -86,7 +103,16 @@ describe SiteElementsController do
       post :create, :site_id => @site.id, :site_element => { :element_subtype => "traffic",
                                                              :rule_id => 0,
                                                              :settings => manipulated_settings }
+
       expect_json_response_to_include({ settings: settings })
+    end
+
+    it 'accepts custom fields' do
+      post :create, :site_id => @site.id, :site_element => { :element_subtype => "traffic",
+                                                             :rule_id => 0,
+                                                             :settings => settings_custom_fields }
+
+      expect_json_response_to_include({ settings: settings_custom_fields })
     end
 
     it "sets the success flash message on create" do
@@ -223,11 +249,18 @@ describe SiteElementsController do
           expect_json_response_to_include({ settings: settings })
         end
 
-        it "with whitelisted attrs only and ignore the others " do
+        it "with whitelisted attrs only and ignore the others" do
           @params[:site_element][:settings] = manipulated_settings
           post :update, @params
 
           expect_json_response_to_include({ "settings" => settings })
+        end
+
+        it "with cutom fields too" do
+          @params[:site_element][:settings] = settings_custom_fields
+          post :update, @params
+
+          expect_json_response_to_include({ "settings" => settings_custom_fields })
         end
       end
     end
