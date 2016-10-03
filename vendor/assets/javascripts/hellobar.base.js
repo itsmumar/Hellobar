@@ -466,6 +466,39 @@ var HB = {
     return false;
   },
 
+  /**
+   * Creates a field for collecting information
+   * @param field
+   */
+  createInputFieldHtml: function (field) {
+    function label() {
+      switch (field.type) {
+        case 'builtin-name':
+          return 'Name';
+        case 'builtin-email':
+          return 'Email';
+        case 'builtin-phone':
+          return 'Phone';
+        default:
+          return HB.sanitize({ label: field.label }).label;
+      }
+    }
+    function additionalCssClasses() {
+      switch (field.type) {
+        default:
+          return '';
+      }
+    }
+    function id() {
+      return 'f_' + field.id;
+    }
+    var html = '<div class="hb-input-block ' + additionalCssClasses() + '">' +
+      '<label for="' + id() + '">' + label() + '</label>' +
+      '<input id="' + id() + '" type="text" placeholder="' + label() + '" />' +
+      '</div>';
+    return html;
+  },
+
   // This takes the the email field, name field, and target siteElement DOM element.
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
