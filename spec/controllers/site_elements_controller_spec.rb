@@ -25,16 +25,8 @@ describe SiteElementsController do
       stub_current_user(@site.owners.first)
     end
 
-    it "sets the correct error if a rule is not provided" do
-      Site.any_instance.stub(:generate_script => true)
-
-      post :create, :site_id => @site.id, :site_element => {:element_subtype => "traffic", :rule_id => 0}
-
-      expect_json_to_have_error(:rule, "can't be blank")
-    end
-
-    it "sets `fields_to_collect` under `settings` and return back" do
-      settings = {
+    let(:settings) do 
+      {
         "fields_to_collect" => [
           {
             "id"    => "fieldid1",
@@ -48,11 +40,48 @@ describe SiteElementsController do
           }
         ]
       }
+    end
+
+    let(:manipulated_settings) do
+      {
+        "fields_to_collect" => [
+          {
+            "id"    => "fieldid1",
+            "type"  => "name",
+            "label" => "Name",
+            "wrong_field" => "wrong_field"
+          },
+          {
+            "id"    => "fieldid3",
+            "type"  => "phone",
+            "label" => "phone",
+            "wrong_field" => "wrong_field"
+          }
+        ]
+      }
+    end
+
+    it "sets the correct error if a rule is not provided" do
+      Site.any_instance.stub(:generate_script => true)
+
+      post :create, :site_id => @site.id, :site_element => {:element_subtype => "traffic", :rule_id => 0}
+
+      expect_json_to_have_error(:rule, "can't be blank")
+    end
+
+    it "sets `fields_to_collect` under `settings` and return back" do
 
       post :create, :site_id => @site.id, :site_element => { :element_subtype => "traffic",
                                                              :rule_id => 0,
                                                              :settings => settings }
 
+      expect_json_response_to_include({ settings: settings })
+    end
+
+    it 'accepts whitelisted fields only' do
+      post :create, :site_id => @site.id, :site_element => { :element_subtype => "traffic",
+                                                             :rule_id => 0,
+                                                             :settings => manipulated_settings }
       expect_json_response_to_include({ settings: settings })
     end
 
