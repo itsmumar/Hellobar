@@ -44,18 +44,20 @@ describe SiteElementsController do
   end
 
   let(:settings_custom_fields) do
-    settings["fields_to_collect"] += [{
-      "id"          => "fieldid4",
-      "type"        => "custom-company-name",
-      "label"       => "Company Name",
-      "is_enabled"  => true
-    },
-    {
-      "id"          => "fieldid5",
-      "type"        => "custom-address",
-      "label"       => "Address",
-      "is_enabled"  => false
-    }]
+    settings["fields_to_collect"] += [
+      {
+        "id"          => "fieldid4",
+        "type"        => "custom-company-name",
+        "label"       => "Company Name",
+        "is_enabled"  => true
+      },
+      {
+        "id"          => "fieldid5",
+        "type"        => "custom-address",
+        "label"       => "Address",
+        "is_enabled"  => false
+      }
+    ]
 
     { "fields_to_collect" => settings["fields_to_collect"] }
   end
