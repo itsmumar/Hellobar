@@ -94,7 +94,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       fields = @get('model.settings.fields_to_collect')
       fieldToChange = _.find(fields, (f) -> f.id == field.id)
       fieldToChange.is_enabled = not fieldToChange.is_enabled
-      @notifyPropertyChange('model.settings.fields_to_collect')
+      @set('model.settings.fields_to_collect', Ember.copy(fields))
       null
 
     removeFieldToCollect: (field) ->

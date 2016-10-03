@@ -62,6 +62,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     "model.settings.buffer_message",
     "model.settings.buffer_url",
     "model.settings.collect_names",
+    "model.settings.fields_to_collect",
     "model.settings.link_url",
     "model.settings.message_to_tweet",
     "model.settings.pinterest_description",
