@@ -1,5 +1,18 @@
 HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
 
+  init: ->
+    Ember.run.schedule('afterRender', this, =>
+      sortableGroupElement = Ember.$('.js-fields-to-collect');
+      sortable = new Sortable(sortableGroupElement[0], {
+        draggable: '.item-block',
+        onEnd: (evt) =>
+          fields = Ember.copy(@get('model.settings.fields_to_collect'))
+          elementsToMove = fields.splice(evt.oldIndex, 1)
+          fields.splice(evt.newIndex, 0, elementsToMove[0])
+          @set('model.settings.fields_to_collect', fields)
+      })
+    )
+
   # TODO remove this
   collectNames : Ember.computed.alias('model.settings.collect_names')
 

@@ -1,6 +1,6 @@
 <label>Choose input fields</label>
 
-<div class="multiselect-wrapper">
+<div class="multiselect-wrapper js-fields-to-collect">
     {{#each field in preparedFields }}
         <div {{bind-attr class="field.is_enabled:is-selected :item-block" data-field-type=field.type}}>
             <span>{{ field.label }}</span>
