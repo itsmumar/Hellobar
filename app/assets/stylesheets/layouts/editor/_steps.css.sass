@@ -136,6 +136,11 @@
       font-weight: normal
       @extend %outlined-block
 
+      &[data-field-type=builtin-email]
+        .buttons
+          a.select-button
+            cursor: default
+
       &.add
         color: #54d388
         border-top-color: #54d388

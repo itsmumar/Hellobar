@@ -83,7 +83,8 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       id: field.id,
       label: if @builtinFieldDefinitions[field.type] then @builtinFieldDefinitions[field.type].label else field.label,
       is_enabled: field.is_enabled,
-      removable: field.type.indexOf('builtin-') != 0
+      removable: field.type.indexOf('builtin-') != 0,
+      type: field.type
     })).property('model.settings.fields_to_collect')
 
   #-----------  Actions  -----------#
@@ -91,6 +92,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
   actions:
 
     toggleFieldToCollect: (field) ->
+      if field.type == 'builtin-email' then return
       fields = @get('model.settings.fields_to_collect')
       fieldToChange = _.find(fields, (f) -> f.id == field.id)
       fieldToChange.is_enabled = not fieldToChange.is_enabled
