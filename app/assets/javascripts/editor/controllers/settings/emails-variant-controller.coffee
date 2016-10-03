@@ -17,37 +17,30 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
     }
   }
 
-  # TODO remove this
-  init: ->
-    window.testController = this
-
   # set 'afterSubmitChoice' property only after model is ready
   afterModel: (->
-    # TODO this is mock fields data. It should be replaced with real data from server
-    fields = [
-      {
-        "id": "some-long-id-1",
-        "type": "builtin-email",
-        "enabled": true
-      },
-      {
-        "id": "some-long-id-2",
-        "type": "builtin-phone",
-        "enabled": true
-      },
-      {
-        "id": "some-long-id-3",
-        "type": "builtin-name",
-        "enabled": false
-      },
-      {
-        "id": "some-long-id-4",
-        "type": "text",
-        "label": "Your favorite writer",
-        "enabled": true
-      }
-    ]
-    @set('model.settings.fields_to_collect', fields)
+    fields = @get('model.settings.fields_to_collect')
+    console.log('fields = ', fields)
+    if _.isEmpty(fields)
+      # TODO this is mock fields data. It should be replaced with real data from server
+      fields = [
+        {
+          "id": "some-long-id-1",
+          "type": "builtin-email",
+          "enabled": true
+        },
+        {
+          "id": "some-long-id-2",
+          "type": "builtin-phone",
+          "enabled": true
+        },
+        {
+          "id": "some-long-id-3",
+          "type": "builtin-name",
+          "enabled": false
+        }
+      ]
+      @set('model.settings.fields_to_collect', fields)
 
     # Set Initial After Email Submission Choice
     modelVal  = @get('model.settings.after_email_submit_action') || 0
@@ -127,14 +120,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
     onNewFieldToCollectEscapePressed: () ->
       @set('newFieldToCollect', null)
 
-
-    # TODO remove
-    test: ->
-      console.log('Test', arguments)
-      console.log('Equals', arguments[0] == arguments[1])
-
     collectEmail: ->
-      #alert('Cool') TODO remove
       @set('collectNames', 0)
 
     collectEmailsAndNames: ->
