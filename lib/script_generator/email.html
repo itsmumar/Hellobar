@@ -1,6 +1,6 @@
 <div class="hb-input-wrapper {{HB.t(siteElement.settings.collect_names) ? 'hb-both-inputs' : ''}}">
 
-{{ siteElement.settings.fields_to_collect.filter(function(field) { return field.is_enabled }).map(function(field) { return HB.createInputFieldHtml(field); }).join('') }}
+{{ siteElement.settings.fields_to_collect ? siteElement.settings.fields_to_collect.filter(function(field) { return field.is_enabled }).map(function(field) { return HB.createInputFieldHtml(field); }).join('') : '' }}
 
   <a class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}" onclick="if(window.parent.HB.isPreviewMode) { return false } else { window.parent.HB.submitEmail({{siteElement.me}}, document.getElementById('hb_email'), document.getElementById('hb_name'), document.getElementById('hb_msg_container') || document.getElementsByClassName('hb-headline-text')[0], {{siteElement.thank_you_text}}, {{siteElement.email_redirect}}, '{{siteElement.settings.redirect_url}}'); return false; }" href="#" style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
     {{siteElement.link_text}}
