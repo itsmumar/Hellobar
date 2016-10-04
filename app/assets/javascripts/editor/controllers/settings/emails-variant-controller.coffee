@@ -10,6 +10,9 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
           elementsToMove = fields.splice(evt.oldIndex, 1)
           fields.splice(evt.newIndex, 0, elementsToMove[0])
           @set('model.settings.fields_to_collect', fields)
+          setTimeout(()=>
+            sortableGroupElement.find('.item-block[draggable="false"]').remove()
+          , 0)
       })
     )
 
