@@ -127,10 +127,9 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
 
 
     onNewFieldToCollectEnterPressed: () ->
-      console.log('label = ', @newFieldToCollect.label)
+      if not @newFieldToCollect.label then return
       newFields = @get('model.settings.fields_to_collect').concat([@newFieldToCollect])
       @set('model.settings.fields_to_collect', newFields)
-      console.log(newFields)
       @set('newFieldToCollect', null)
 
 
