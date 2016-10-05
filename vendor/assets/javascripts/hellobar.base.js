@@ -470,13 +470,13 @@ var HB = {
    * Creates a field for collecting information
    * @param field
    */
-  createInputFieldHtml: function (field) {
+  createInputFieldHtml: function (field, barModel) {
     function label() {
       switch (field.type) {
         case 'builtin-name':
-          return 'Name';
+          return barModel.name_placeholder || 'Name';
         case 'builtin-email':
-          return 'Email';
+          return barModel.email_placeholder || 'Email';
         case 'builtin-phone':
           return 'Phone';
         default:
