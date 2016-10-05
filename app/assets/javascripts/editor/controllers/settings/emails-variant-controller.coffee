@@ -36,7 +36,6 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
   # set 'afterSubmitChoice' property only after model is ready
   afterModel: (->
     fields = @get('model.settings.fields_to_collect')
-    console.log('fields = ', fields)
     if _.isEmpty(fields)
       # TODO this is mock fields data. It should be replaced with real data from server
       fields = [
@@ -48,7 +47,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
         {
           "id": "some-long-id-2",
           "type": "builtin-phone",
-          "is_enabled": true
+          "is_enabled": false
         },
         {
           "id": "some-long-id-3",
