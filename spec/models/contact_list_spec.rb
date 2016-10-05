@@ -181,7 +181,7 @@ describe ContactList do
   end
 
   it "should handle invalid JSON correctly" do
-    contact_list.update_column :data, "{\"url\":\"http://yoursite.com/goal\",\"collect_names\":0,\"does_not_include\":[\","
+    contact_list.update_column :data, "{\"url\":\"http://yoursite.com/goal\",does_not_include\":[\","
 
     -> { contact_list.reload.data }.should raise_error
   end

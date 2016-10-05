@@ -74,6 +74,81 @@ feature 'User can create a site element', js: true do
   end
 end
 
+feature "User can enable/disable/add fields for `Collect Email` goal. Create Site Element with", js: true do
+  before(:each) do
+    allow_any_instance_of(SiteElementSerializer).
+      to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(ApplicationController).
+      to receive(:get_ab_variation).and_return('variant')
+
+    membership = create(:site_membership, :with_site_rule)
+    user = membership.user
+    user.upgrade_suggest_modal_last_shown_at = Time.now
+    login(user)
+  end
+
+  def create_new_site_element
+    within('form.button_to') do
+      click_button('Create New')
+    end
+
+    find('.goal-block[data-route="contacts"]').click_link(@select_goal_label)
+    click_button 'Continue'
+
+    @phone_field = find('.item-block[data-field-type="builtin-phone"]')
+    @phone_field.find('.hellobar-icon-check-mark').click if @phone_field[:class].include?('is-selected')
+
+    @name_field = find('.item-block[data-field-type="builtin-name"]')
+    @name_field.find('.hellobar-icon-check-mark').click  if @name_field[:class].include?('is-selected')
+  end
+
+  scenario 'only built-in-email enabled' do
+    create_new_site_element
+    click_button 'Save & Publish'
+    expect(page).to have_content('Summary', visible: true)
+    se = SiteElement.last
+    se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
+    expect(se_settings['builtin-phone']).to eq(false)
+  end
+
+  scenario 'built-in-phone enabled' do
+    create_new_site_element
+    @phone_field.hover
+    @phone_field.find('.hellobar-icon-check-mark').click
+    click_button 'Save & Publish'
+    expect(page).to have_content('Summary', visible: true)
+    se = SiteElement.last
+    se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
+    expect(se_settings['builtin-phone']).to eq(true)
+  end
+
+  scenario 'built-in-name enabled' do
+    create_new_site_element
+    @name_field.hover
+    @name_field.find('.hellobar-icon-check-mark').click
+    click_button 'Save & Publish'
+    expect(page).to have_content('Summary', visible: true)
+    se = SiteElement.last
+    se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
+    expect(se_settings['builtin-name']).to eq(true)
+  end
+
+  scenario 'only multiple built-in fields enabled' do
+    create_new_site_element
+    @name_field.hover
+    @name_field.find('.hellobar-icon-check-mark').click
+    @phone_field.hover
+    @phone_field.find('.hellobar-icon-check-mark').click
+    click_button 'Save & Publish'
+    expect(page).to have_content('Summary', visible: true)
+    se = SiteElement.last
+    se_settings = se.settings['fields_to_collect'].map{|a| [a['type'],a['is_enabled']]}.to_h
+    expect(se_settings['builtin-phone']).to eq(true)
+    expect(se_settings['builtin-name']).to eq(true)
+    expect(se_settings['builtin-email']).to eq(true)
+  end
+end
+
 feature 'User can set a phone number for click to call', js: true do
   before do
     allow_any_instance_of(SiteElementSerializer).
@@ -165,6 +240,7 @@ feature 'User can edit a site element', js: true do
     site.reload
 
     visit edit_site_site_element_path(site, site.site_elements.last)
+
     bypass_setup_steps(2)
 
     within('.tabs-wrapper') do
