@@ -85,6 +85,7 @@ feature "User can enable/disable/add fields for `Collect Email` goal. Create Sit
     user = membership.user
     user.upgrade_suggest_modal_last_shown_at = Time.now
     login(user)
+    create_new_site_element
   end
 
   def create_new_site_element
@@ -103,7 +104,6 @@ feature "User can enable/disable/add fields for `Collect Email` goal. Create Sit
   end
 
   scenario 'only built-in-email enabled' do
-    create_new_site_element
     click_button 'Save & Publish'
     expect(page).to have_content('Summary', visible: true)
     se = SiteElement.last
@@ -112,7 +112,6 @@ feature "User can enable/disable/add fields for `Collect Email` goal. Create Sit
   end
 
   scenario 'built-in-phone enabled' do
-    create_new_site_element
     @phone_field.hover
     @phone_field.find('.hellobar-icon-check-mark').click
     click_button 'Save & Publish'
@@ -123,7 +122,6 @@ feature "User can enable/disable/add fields for `Collect Email` goal. Create Sit
   end
 
   scenario 'built-in-name enabled' do
-    create_new_site_element
     @name_field.hover
     @name_field.find('.hellobar-icon-check-mark').click
     click_button 'Save & Publish'
@@ -134,7 +132,6 @@ feature "User can enable/disable/add fields for `Collect Email` goal. Create Sit
   end
 
   scenario 'only multiple built-in fields enabled' do
-    create_new_site_element
     @name_field.hover
     @name_field.find('.hellobar-icon-check-mark').click
     @phone_field.hover
@@ -146,6 +143,25 @@ feature "User can enable/disable/add fields for `Collect Email` goal. Create Sit
     expect(se_settings['builtin-phone']).to eq(true)
     expect(se_settings['builtin-name']).to eq(true)
     expect(se_settings['builtin-email']).to eq(true)
+  end
+
+  scenario 'custom field' do
+    input_field = '.new-item-prototype > input'
+
+    find('div.item-block.add', text: 'Add field').click
+    find(input_field).set('Age')
+    find(input_field).native.send_keys(:return)
+
+    click_button 'Save & Publish'
+    expect(page).to have_content('Summary', visible: true)
+
+    find('a', text: 'Manage').click
+    find('.dropdown-wrapper.adjusted').hover
+    find('.dropdown-wrapper.adjusted').find('a', text: 'Edit').click
+
+    expect(page).to have_content('Age')
+    expect(page).to have_css('.item-block[data-field-type="text"] .hellobar-icon-check-mark')
+    expect(page).to have_content('Add field')
   end
 end
 
