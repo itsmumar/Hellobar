@@ -471,17 +471,29 @@ var HB = {
    * @param field
    */
   createInputFieldHtml: function (field, barModel) {
-    function label() {
+    function fieldAttrs() {
+      var label   = '';
+      var type    = 'text';
+      var pattern = '(...)';
+
       switch (field.type) {
         case 'builtin-name':
-          return barModel.name_placeholder || 'Name';
+          label = barModel.name_placeholder || 'Name';
+          break;
         case 'builtin-email':
-          return barModel.email_placeholder || 'Email';
+          label = barModel.email_placeholder || 'Email';
+          type  = 'email';
+          break;
         case 'builtin-phone':
-          return 'Phone';
+          label   = 'Phone';
+          type    = 'tel';
+          pattern = '^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$';
+          break;
         default:
-          return HB.sanitize({ label: field.label }).label;
+          label = HB.sanitize({ label: field.label }).label;
       }
+
+      return { label: label, type: type, pattern: pattern }
     }
     function additionalCssClasses() {
       switch (field.type) {
@@ -492,10 +504,15 @@ var HB = {
     function id() {
       return 'f_' + field.id;
     }
+
+    var fieldAttrs = fieldAttrs();
+
     var html = '<div class="hb-input-block ' + additionalCssClasses() + '">' +
-      '<label for="' + id() + '">' + label() + '</label>' +
-      '<input id="' + id() + '" type="text" placeholder="' + label() + '" />' +
+      '<label for="' + id() + '">' + fieldAttrs.label + '</label>' +
+      '<input id="' + id() + '" type="' + fieldAttrs.type + '" pattern="' +
+      fieldAttrs.pattern + '" placeholder="' + fieldAttrs.label + '" />' +
       '</div>';
+
     return html;
   },
 
