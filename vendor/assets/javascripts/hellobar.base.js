@@ -474,7 +474,7 @@ var HB = {
     function fieldAttrs() {
       var label   = '';
       var type    = 'text';
-      var pattern = '(...)';
+      var pattern = '.*';
 
       switch (field.type) {
         case 'builtin-name':
