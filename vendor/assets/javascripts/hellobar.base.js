@@ -497,12 +497,14 @@ var HB = {
     }
     function additionalCssClasses() {
       switch (field.type) {
+        case 'builtin-email':
+          return 'builtin-email';
         default:
           return '';
       }
     }
     function id() {
-      return 'f_' + field.id;
+      return field.type === 'builtin-email' ? 'f-builtin-email' : 'f-' + field.id;
     }
 
     var fieldAttrs = fieldAttrs();
@@ -520,12 +522,11 @@ var HB = {
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
   // shakes the email field
-  submitEmail: function(siteElement, emailField, nameField, targetSiteElement, thankYouText, redirect, redirectUrl)
+  submitEmail: function(siteElement, formElement, targetSiteElement, thankYouText, redirect, redirectUrl)
   {
     HB.validateEmail(
-      emailField.value,
-      nameField.value,
-      function(){
+      formElement.querySelector('#f-builtin-email').value,
+      function() {
         var doRedirect = HB.t(redirect);
         var removeElements;
         var siteElementDoc = siteElement.w.contentDocument;
@@ -541,7 +542,7 @@ var HB = {
               btnElement.setAttribute('target', '_parent');
               btnElement.onclick = null;
 
-              // Remove the email inputs and subtext
+              // Remove all the fields
               removeElements = siteElementDoc.querySelectorAll('.hb-input-block, .hb-secondary-text');
             } else {
               // Remove the entire email input wrapper including the button
@@ -556,27 +557,31 @@ var HB = {
             }
           }
         }
-
-        HB.recordEmail(siteElement, emailField.value, nameField.value, function(){
+        var values = [];
+        formElement.querySelectorAll('input').forEach(function(input) {
+          values.push(input.value);
+        });
+        HB.recordEmail(siteElement, values, function() {
           // Successfully saved
         });
 
-        HB.trigger("emailSubmitted", siteElement, emailField.value, nameField.value);
+        HB.trigger("emailSubmitted", siteElement, values);
 
         if(doRedirect) {
           window.location.href = redirectUrl;
         }
       },
-      function(){
+      function() {
         // Fail
-        HB.shake(emailField);
+        // TODO generalize for all the fields
+        // HB.shake(emailField);
       }
     );
     return false;
   },
 
-  // Called to validate the email and name. Does not actually submit the email
-  validateEmail: function(email, name, successCallback, failCallback)
+  // Called to validate the email. Does not actually submit the email
+  validateEmail: function(email, successCallback, failCallback)
   {
     if ( email && email.match(/.+@.+\..+/) && !email.match(/,/))
       successCallback();
@@ -585,16 +590,18 @@ var HB = {
   },
 
   // Called to record an email for the rule without validation (also used by submitEmail)
-  recordEmail: function(siteElement, email, name, callback)
-  {
-    if ( email )
-    {
-      var emailAndName = email;
-      if ( name )
-        emailAndName += ","+name;
+  recordEmail: function (siteElement, values, callback) {
+    if (values && values.length > 0) {
+      var sanitizedValues = values.map(function(value) {
+        // Replace all the commas with spaces as the comma symbol is a delimiter
+        return value.replace(/\,/g, ' ');
+      });
+      var joinedValues = sanitizedValues.join(',');
 
       // Record the email address to the cnact list and then track that the rule was performed
-      HB.s("c", siteElement.contact_list_id, {e:emailAndName}, function(){HB.converted(this.siteElement, callback)}.bind({siteElement: siteElement}));
+      HB.s("c", siteElement.contact_list_id, {e: joinedValues}, function () {
+        HB.converted(this.siteElement, callback)
+      }.bind({siteElement: siteElement}));
     }
   },
 
