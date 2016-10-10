@@ -483,7 +483,7 @@ var HB = {
         case 'builtin-email':
           label   = barModel.email_placeholder || 'Email';
           type    = 'email';
-          pattern = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$';
+          pattern = '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$';
           break;
         case 'builtin-phone':
           label   = 'Phone';
@@ -513,7 +513,7 @@ var HB = {
     var html = '<div class="hb-input-block ' + additionalCssClasses() + '">' +
       '<label for="' + id() + '">' + fieldAttrs.label + '</label>' +
       '<input id="' + id() + '" type="' + fieldAttrs.type + '" pattern="' +
-      fieldAttrs.pattern + '" placeholder="' + fieldAttrs.label + '" />' +
+      fieldAttrs.pattern + '" placeholder="' + fieldAttrs.label + '"' + (field.type == "builtin-email" ? "required" : "") + ' />' +
       '</div>';
 
     return html;
