@@ -483,11 +483,12 @@ var HB = {
         case 'builtin-email':
           label   = barModel.email_placeholder || 'Email';
           type    = 'email';
+          pattern = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$';
           break;
         case 'builtin-phone':
           label   = 'Phone';
           type    = 'tel';
-          pattern = '^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$';
+          pattern = '^((\([0-9]{2,3}\)[-\. ]*)|([0-9]{2,4})[-\. ]*)*?[0-9]{3,4}?[.\- ]*[0-9]{3,4}?$'
           break;
         default:
           label = HB.sanitize({ label: field.label }).label;

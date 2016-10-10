@@ -545,8 +545,6 @@ HB.SiteElement = HB.createClass({
     return false;
   },
 
-
-
   // Necessary convenience method for saying this
   // SiteElement has converted (used in templates)
   converted: function()
@@ -575,7 +573,6 @@ HB.SiteElement = HB.createClass({
   },
 
   useCountryIdentifier: function() {
-    /* Return from here if this is not a CollectEmail bar */
     var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
 
     var intTelStyle = this.w.contentWindow.document.createElement("LINK");
