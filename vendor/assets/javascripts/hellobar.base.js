@@ -481,8 +481,8 @@ var HB = {
           label = barModel.name_placeholder || 'Name';
           break;
         case 'builtin-email':
-          label = barModel.email_placeholder || 'Email';
-          type  = 'email';
+          label   = barModel.email_placeholder || 'Email';
+          type    = 'email';
           break;
         case 'builtin-phone':
           label   = 'Phone';

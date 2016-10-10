@@ -64,6 +64,7 @@ HB.SiteElement = HB.createClass({
           HB.wiggleEventListeners(this.w);
 
         this.useGoogleFont();
+        this.useCountryIdentifier();
       }.bind(this), 1);
     }.bind(this));
   },
@@ -571,6 +572,56 @@ HB.SiteElement = HB.createClass({
       meta.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
       head.appendChild(meta);
     }
+  },
+
+  useCountryIdentifier: function() {
+    /* Return from here if this is not a CollectEmail bar */
+    var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
+
+    var intTelStyle = this.w.contentWindow.document.createElement("LINK");
+    intTelStyle.href = '//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/css/intlTelInput.css';
+    intTelStyle.rel = 'stylesheet';
+    intTelStyle.type = 'text/css';
+    head.appendChild(intTelStyle);
+
+    var intTelCStyle = this.w.contentWindow.document.createElement("STYLE");
+    intTelCStyle.type = 'text/css';
+    styleForPng = 'iti-flag { background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/img/flags.png"); }'
+    intTelCStyle.appendChild(document.createTextNode(styleForPng));
+    head.appendChild(intTelCStyle);
+
+    var initializerJs = document.createElement("script");
+    innerInitJs = 'jQuery = parent.jQuery; $ = parent.$';
+    initializerJs.innerHTML = innerInitJs;
+    initializerJs.type = 'text/javascript';
+    head.appendChild(initializerJs);
+
+    var intTelscript = this.w.contentWindow.document.createElement("SCRIPT");
+    intTelscript.src = '//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/intlTelInput.min.js';
+    intTelscript.type = 'text/javascript';
+    head.appendChild(intTelscript);
+
+    var script = this.w.contentWindow.document.createElement("SCRIPT");
+    script.type = "text/javascript";
+    script.innerHTML = '$(function() { \
+                          var inputField = $("iframe").contents().find("input[type=\'tel\']"); \
+                          setTimeout(function() { \
+                            if(inputField.length > 0) { \
+                              inputField.intlTelInput({ \
+                                initialCountry: "auto", \
+                                geoIpLookup: function(callback) { \
+                                  $.get("http://ipinfo.io", function() {}, "jsonp") \
+                                  .always(function(resp) { \
+                                    var countryCode = (resp && resp.country) ? resp.country : ""; \
+                                    inputField.intlTelInput("setCountry", countryCode); \
+                                  }); \
+                                }, \
+                                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/utils.js"}); \
+                              } \
+                            }, 500); \
+                          });'
+
+    head.appendChild(script);
   },
 
   brightnessClass: function() {
