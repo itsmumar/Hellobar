@@ -488,7 +488,7 @@ var HB = {
         case 'builtin-phone':
           label   = 'Phone';
           type    = 'tel';
-          pattern = '^((\([0-9]{2,3}\)[-\. ]*)|([0-9]{2,4})[-\. ]*)*?[0-9]{3,4}?[.\- ]*[0-9]{3,4}?$'
+          pattern = '^((\([0-9]{2,3}\)[-\. ]*)|([0-9]{2,4})[-\. ]*)*?[0-9]{3,4}?[-\. ]*[0-9]{3,4}?$';
           break;
         default:
           label = HB.sanitize({ label: field.label }).label;
