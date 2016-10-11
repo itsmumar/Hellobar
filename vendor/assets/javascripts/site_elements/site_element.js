@@ -595,10 +595,10 @@ HB.SiteElement = HB.createClass({
     // initializerJs.type = 'text/javascript';
     // head.appendChild(initializerJs);
 
-    var intTelscript = this.w.contentWindow.document.createElement("SCRIPT");
-    intTelscript.src = '//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/intlTelInput.min.js';
-    intTelscript.type = 'text/javascript';
-    head.appendChild(intTelscript);
+    //var intTelscript = this.w.contentWindow.document.createElement("SCRIPT");
+    //intTelscript.src = '//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/intlTelInput.min.js';
+    //intTelscript.type = 'text/javascript';
+    //head.appendChild(intTelscript);
 
     // var script = this.w.contentWindow.document.createElement("SCRIPT");
     // script.type = "text/javascript";

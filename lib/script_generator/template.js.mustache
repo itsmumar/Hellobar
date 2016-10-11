@@ -11,9 +11,10 @@ HB_GL_URL = "{{geolocation_url}}"
 
 {{{ie_shims_js}}}
 {{{jquery_lib}}}
-var $ = window.jQuery;
-console.log('jQuery', $);
+var jQuerySaved = window.jQuery;
 jQuery.noConflict(true);
+var jQuery = jQuerySaved;
+var $ = jQuerySaved;
 {{{intl_tel_input}}}
 {{{initialize_phone_field}}}
 {{{hellobar_base_js}}}

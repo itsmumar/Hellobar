@@ -115,15 +115,16 @@ class ScriptGenerator < Mustache
   end
 
   def jquery_lib
-    open('http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5.min.js') {|f| f.read }
+    open('http://code.jquery.com/jquery-2.2.4.js') {|f| f.read }
   end
 
   def intl_tel_input
-    open('http://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/intlTelInput.min.js') {|f| f.read }
+    open('http://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/intlTelInput.js') {|f| f.read }
   end
 
   def initialize_phone_field
-    File.read("#{Rails.root}/assets/javascripts/initialize_phone_field.js")
+    File.read("#{Rails.root}/app/assets/javascripts/initialize_phone_field.js")
+    #return "Qwerty"
   end
 
   def hellobar_container_css
