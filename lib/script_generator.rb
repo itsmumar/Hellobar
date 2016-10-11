@@ -124,7 +124,6 @@ class ScriptGenerator < Mustache
 
   def initialize_phone_field
     File.read("#{Rails.root}/app/assets/javascripts/initialize_phone_field.js")
-    #return "Qwerty"
   end
 
   def hellobar_container_css
