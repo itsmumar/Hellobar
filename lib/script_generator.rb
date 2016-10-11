@@ -123,7 +123,7 @@ class ScriptGenerator < Mustache
   end
 
   def initialize_phone_field
-    File.read("#{Rails.root}/vendor/assets/javascripts/initialize_phone_field.js")
+    File.read("#{Rails.root}/assets/javascripts/initialize_phone_field.js")
   end
 
   def hellobar_container_css
