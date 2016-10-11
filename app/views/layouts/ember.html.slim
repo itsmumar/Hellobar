@@ -36,7 +36,7 @@ html
     javascript:
       HB_DNT = 1;
       HB_ONBOARDING_EMAIL_VOLUME = "#{get_ab_variation('Onboarding Email Volume 2016-06-28', current_user)}";
-      HB_EMAIL_INTEGRATION_TEST = "#{get_ab_variation('Email Integration UI 2016-06-22', current_user)}";
+      HB_EMAIL_INTEGRATION_TEST = "variant";
 
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
       var trackEditorFlow = #{{new_user?}};
