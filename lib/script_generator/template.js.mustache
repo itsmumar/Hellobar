@@ -10,6 +10,12 @@ HB_PS = "{{pro_secret}}";
 HB_GL_URL = "{{geolocation_url}}"
 
 {{{ie_shims_js}}}
+{{{jquery_lib}}}
+var $ = window.jQuery;
+console.log('jQuery', $);
+jQuery.noConflict(true);
+{{{intl_tel_input}}}
+{{{initialize_phone_field}}}
 {{{hellobar_base_js}}}
 {{{crypto_js}}}
 {{{site_element_classes_js}}}

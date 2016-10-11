@@ -583,43 +583,45 @@ HB.SiteElement = HB.createClass({
 
     var intTelCStyle = this.w.contentWindow.document.createElement("STYLE");
     intTelCStyle.type = 'text/css';
-    styleForPng = 'iti-flag { background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/img/flags.png"); }'
+    styleForPng = 'iti-flag { background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/img/flags.png"); } \
+                   .intl-tel-input.allow-dropdown { width: 100%; } \
+                   .country-name { color: #999 }'
     intTelCStyle.appendChild(document.createTextNode(styleForPng));
     head.appendChild(intTelCStyle);
 
-    var initializerJs = document.createElement("script");
-    innerInitJs = 'jQuery = parent.jQuery; $ = parent.$';
-    initializerJs.innerHTML = innerInitJs;
-    initializerJs.type = 'text/javascript';
-    head.appendChild(initializerJs);
+    // var initializerJs = this.w.contentWindow.document.createElement("SCRIPT");
+    // innerInitJs = 'jQuery = parent.jQuery; $ = parent.$;';
+    // initializerJs.innerHTML = innerInitJs;
+    // initializerJs.type = 'text/javascript';
+    // head.appendChild(initializerJs);
 
     var intTelscript = this.w.contentWindow.document.createElement("SCRIPT");
     intTelscript.src = '//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/intlTelInput.min.js';
     intTelscript.type = 'text/javascript';
     head.appendChild(intTelscript);
 
-    var script = this.w.contentWindow.document.createElement("SCRIPT");
-    script.type = "text/javascript";
-    script.innerHTML = '$(function() { \
-                          var inputField = $("iframe").contents().find("input[type=\'tel\']"); \
-                          setTimeout(function() { \
-                            if(inputField.length > 0) { \
-                              inputField.intlTelInput({ \
-                                initialCountry: "auto", \
-                                autoPlaceholder: "aggressive", \
-                                geoIpLookup: function(callback) { \
-                                  $.get("http://ipinfo.io", function() {}, "jsonp") \
-                                  .always(function(resp) { \
-                                    var countryCode = (resp && resp.country) ? resp.country : ""; \
-                                    inputField.intlTelInput("setCountry", countryCode); \
-                                  }); \
-                                }, \
-                                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/utils.js"}); \
-                              } \
-                            }, 1000); \
-                          });'
-
-    head.appendChild(script);
+    // var script = this.w.contentWindow.document.createElement("SCRIPT");
+    // script.type = "text/javascript";
+    // script.innerHTML = '$(function() { \
+    //                       var inputField = $("iframe").contents().find("input[type=\'tel\']"); \
+    //                       setTimeout(function() { \
+    //                         if(inputField.length > 0) { \
+    //                           inputField.intlTelInput({ \
+    //                             initialCountry: "auto", \
+    //                             autoPlaceholder: "aggressive", \
+    //                             geoIpLookup: function(callback) { \
+    //                               $.get("http://ipinfo.io", function() {}, "jsonp") \
+    //                               .always(function(resp) { \
+    //                                 var countryCode = (resp && resp.country) ? resp.country : ""; \
+    //                                 inputField.intlTelInput("setCountry", countryCode); \
+    //                               }); \
+    //                             }, \
+    //                             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/utils.js"}); \
+    //                           } \
+    //                         }, 500); \
+    //                       });'
+    //
+    // head.appendChild(script);
   },
 
   brightnessClass: function() {
