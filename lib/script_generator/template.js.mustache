@@ -1,58 +1,68 @@
-if (typeof(HB) == "undefined")
-{
-HB_BACKEND_HOST = "{{hb_backend_host}}";
+(function() {
+  if (typeof(HB) == "undefined") {
+    HB_BACKEND_HOST = "{{hb_backend_host}}";
 
-HB_SITE_ID = {{site_id}};
-HB_SITE_URL = "{{site_url}}";
-HB_WK = "{{site_write_key}}"; // The site's write key
-HB_TZ = "{{site_timezone}}"; // The site's timezone offset in the format "+/-HH:MM"
-HB_PS = "{{pro_secret}}";
-HB_GL_URL = "{{geolocation_url}}"
+    HB_SITE_ID = {{site_id}};
+    HB_SITE_URL = "{{site_url}}";
+    HB_WK = "{{site_write_key}}"; // The site's write key
+    HB_TZ = "{{site_timezone}}"; // The site's timezone offset in the format "+/-HH:MM"
+    HB_PS = "{{pro_secret}}";
+    HB_GL_URL = "{{geolocation_url}}"
 
-{{{ie_shims_js}}}
-{{{jquery_lib}}}
-var jQuerySaved = window.jQuery;
-jQuery.noConflict(true);
-var jQuery = jQuerySaved;
-var $ = jQuerySaved;
-{{{intl_tel_input}}}
-{{{initialize_phone_field}}}
-{{{hellobar_base_js}}}
-{{{crypto_js}}}
-{{{site_element_classes_js}}}
+    {{{ie_shims_js}}}
+    {{{jquery_lib}}}
+    var jQuerySaved = window.jQuery;
+    window.jQuery.noConflict(true);
+    var jQuery = jQuerySaved;
+    var $ = jQuerySaved;
 
-HBInit = function () {
-  if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
-    HB.CAP = {{{capabilities_json}}};
-    // Protect capabilities from being modified
-    if ( typeof(Object.defineProperty) != "undefined")
-    {
-      try{Object.defineProperty(HB, 'CAP', {writable:false, configurable: false});}catch(e){};
-      for(var p in HB.CAP)
-      {
-        try{Object.defineProperty(HB.CAP, p, {writable:false, configurable: false})}catch(e){};
+    {{{intl_tel_input}}}
+
+    (function($) {
+
+      {{{hellobar_base_js}}}
+      {{{crypto_js}}}
+      {{{site_element_classes_js}}}
+      {{{initialize_phone_field}}}
+
+      HBInit = function () {
+        if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
+          HB.CAP = {{{capabilities_json}}};
+          // Protect capabilities from being modified
+          if ( typeof(Object.defineProperty) != "undefined")
+          {
+            try{Object.defineProperty(HB, 'CAP', {writable:false, configurable: false});}catch(e){};
+            for(var p in HB.CAP)
+            {
+              try{Object.defineProperty(HB.CAP, p, {writable:false, configurable: false})}catch(e){};
+            }
+          }
+
+          {{#templates}}
+            HB.setTemplate("{{name}}", {{{markup}}});
+          {{/templates}}
+
+          {{#branding_templates}}
+            HB.setBrandingTemplate("{{name}}", {{{markup}}});
+          {{/branding_templates}}
+
+          HB.addCSS({{{hellobar_element_css}}});
+          HB.extCSS = {{{hellobar_container_css}}};
+        }
       }
-    }
 
-    {{#templates}}
-      HB.setTemplate("{{name}}", {{{markup}}});
-    {{/templates}}
+      HBInit();
 
-    {{#branding_templates}}
-      HB.setBrandingTemplate("{{name}}", {{{markup}}});
-    {{/branding_templates}}
+      {{#rules}}
+        _hbq.push(function(){HB.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}})});
+      {{/rules}}
 
-    HB.addCSS({{{hellobar_element_css}}});
-    HB.extCSS = {{{hellobar_container_css}}};
+      if(!HB.isIEXOrLess(8) && {{script_is_installed_properly}}) {
+        _hbq = new HBQ();
+      }
+
+    })(jQuery);
+
   }
-}
 
-HBInit();
-
-{{#rules}}
-  _hbq.push(function(){HB.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}})});
-{{/rules}}
-
-if(!HB.isIEXOrLess(8) && {{script_is_installed_properly}})
-  _hbq = new HBQ();
-}
+})();

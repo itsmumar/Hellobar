@@ -2249,3 +2249,4 @@ var HB = {
     return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, "\\$&");
   }
 };
+window.HB = HB;

@@ -140,6 +140,7 @@ HB.SiteElement = HB.createClass({
     // To accomplish all of this we set up an interval to monitor the size of everything:
     this.isMobileWidth = false;
     var mobileDeviceInterval = setInterval(this.checkForMobileDevice.bind(this), 50); // Check screen size every N ms
+    HB.initializePhoneFields();
   },
 
   checkForMobileDevice: function(){
