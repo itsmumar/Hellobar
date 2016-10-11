@@ -12,7 +12,6 @@ HB.initializePhoneFields = function () {
       if (inputField.length > 0) {
         inputField.intlTelInput({
           initialCountry: "auto",
-          autoPlaceholder: "aggressive",
           geoIpLookup: function (callback) {
             $.get("http://ipinfo.io", function () {
             }, "jsonp")
