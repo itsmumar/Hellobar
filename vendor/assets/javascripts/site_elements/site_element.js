@@ -612,7 +612,6 @@ HB.SiteElement = HB.createClass({
                                   .always(function(resp) { \
                                     var countryCode = (resp && resp.country) ? resp.country : ""; \
                                     inputField.intlTelInput("setCountry", countryCode); \
-                                    debugger;\
                                   }); \
                                 }, \
                                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/utils.js"}); \
