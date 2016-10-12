@@ -128,6 +128,10 @@
   display: inline-block;
 }
 
+#hellobar-bar .hb-input-wrapper .hb-input-block {
+  margin-bottom: 0;
+}
+
 #hellobar-bar .hb-input-wrapper .hb-input-block input {
   height: 2.3em;
   font-size: 0.67em;
