@@ -13,7 +13,7 @@ HB.initializePhoneFields = function () {
         inputField.intlTelInput({
           initialCountry: "auto",
           geoIpLookup: function (callback) {
-            $.get("http://ipinfo.io", function () {
+            $.get("//ipinfo.io", function () {
             }, "jsonp")
               .always(function (resp) {
                 var countryCode = (resp && resp.country) ? resp.country : "";
