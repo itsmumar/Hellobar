@@ -190,6 +190,7 @@ html, body {
   width: 100%;
   position: relative;
   vertical-align: middle;
+  margin-bottom: 10px;
 }
 
 .hb-input-wrapper .hb-input-block label {
