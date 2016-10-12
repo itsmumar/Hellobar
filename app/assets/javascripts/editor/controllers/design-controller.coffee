@@ -100,7 +100,8 @@ HelloBar.DesignController = Ember.Controller.extend
   hideLinkText             : Ember.computed.match('model.element_subtype', /social|announcement/)
   showEmailPlaceholderText : Ember.computed.equal('model.element_subtype', 'email')
   showNamePlaceholderText  : Ember.computed('model.settings.fields_to_collect', () ->
-    _.find(@get('model.settings.fields_to_collect'), (field) -> field.type == 'builtin-name').is_enabled
+    nameField = _.find(@get('model.settings.fields_to_collect'), (field) -> field.type == 'builtin-name')
+    nameField and nameField.is_enabled
   )
 
   fontOptions: Ember.computed 'model.theme_id', ->
