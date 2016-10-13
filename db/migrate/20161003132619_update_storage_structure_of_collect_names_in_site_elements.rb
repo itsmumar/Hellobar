@@ -17,7 +17,7 @@ class UpdateStorageStructureOfCollectNamesInSiteElements < ActiveRecord::Migrati
           phone_exists = true if ftc["type"] == "builtin-phone"
         end
 
-        site_element.settings.delete(:collect_names) if exists
+        site_element.settings.delete(:collect_names) if name_exists
       else
         site_element.settings.delete(:collect_names)
         site_element.settings[:fields_to_collect] = [{ id: ((0...10).map { ('a'..'z').to_a[rand(6)] }.join),
