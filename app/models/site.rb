@@ -34,7 +34,7 @@ class Site < ActiveRecord::Base
 
   after_commit do
     if needs_script_regeneration?
-      generate_script
+      generate_script(:immediately => true)
       @needs_script_regeneration = false
     end
   end
