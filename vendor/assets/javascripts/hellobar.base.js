@@ -525,8 +525,9 @@ var HB = {
   // shakes the email field
   submitEmail: function(siteElement, formElement, targetSiteElement, thankYouText, redirect, redirectUrl)
   {
+    var emailField = formElement ? formElement.querySelector('#f-builtin-email') : null;
     HB.validateEmail(
-      formElement.querySelector('#f-builtin-email').value,
+      emailField ? emailField.value : '',
       function() {
         var doRedirect = HB.t(redirect);
         var removeElements;
