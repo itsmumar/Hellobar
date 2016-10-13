@@ -31,7 +31,7 @@ class UpdateStorageStructureOfCollectNamesInSiteElements < ActiveRecord::Migrati
 
       site_element.settings[:fields_to_collect] << { id: ((0...10).map { ('a'..'z').to_a[rand(6)] }.join),
                                                     type: "builtin-phone",
-                                                    is_enabled: true }  unless phone_exists
+                                                    is_enabled: false }  unless phone_exists
 
       site_element.save
     end
