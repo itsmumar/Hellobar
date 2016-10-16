@@ -2,6 +2,7 @@
 
 #= require ember-animate
 #= require sortable/Sortable
+#= require nouislider/nouislider
 
 #= require_tree ./controllers
 #= require_tree ./views
