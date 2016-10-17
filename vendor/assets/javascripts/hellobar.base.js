@@ -1778,6 +1778,31 @@ var HB = {
     return .2126 * rgb[0] + .7152 * rgb[1] + 0.0722 * rgb[2];
   },
 
+  barSizeCssClass: function(size) {
+    if (size === 'large' || size === 'regular') {
+      return size;
+    }
+    var sizeAsInt = parseInt(size);
+    if (sizeAsInt < 40) {
+      return 'regular';
+    } else if (sizeAsInt >= 40 && sizeAsInt < 70) {
+      return 'large';
+    } else {
+      return 'x-large';
+    }
+  },
+
+  barHeight: function(size) {
+    switch (size) {
+      case 'large':
+        return '50px';
+      case 'regular':
+        return '30px';
+      default:
+        return size + 'px';
+    }
+  },
+
   animateIn: function(element, time){
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
