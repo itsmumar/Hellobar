@@ -77,3 +77,13 @@ HelloBar.PreviewController = Ember.Controller.extend
       rgb[i] = if val < 0.03928 then val / 12.92 else Math.pow((val + 0.055) / 1.055, 2.4)
 
     return (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2])
+
+  autoAdjustPushHeight: (->
+    height = (size) ->
+      switch size
+        when 'large' then '50px'
+        when 'regular' then '30px'
+        else size + 'px'
+    $('#hellobar-preview-container .preview-image').css('border-top-width', height(@get('model.size')))
+  ).observes('model.size')
+
