@@ -474,7 +474,6 @@ var HB = {
     function fieldAttrs() {
       var label   = '';
       var type    = 'text';
-      var pattern = '.*';
 
       switch (field.type) {
         case 'builtin-name':
@@ -483,18 +482,16 @@ var HB = {
         case 'builtin-email':
           label   = barModel.email_placeholder || 'Email';
           type    = 'email';
-          pattern = '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$';
           break;
         case 'builtin-phone':
           label   = 'Phone';
           type    = 'tel';
-          pattern = '^((\([0-9]{2,3}\)[-\s\.]*)|([0-9]{2,4})[-\s\.]*)*?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$';
           break;
         default:
           label = HB.sanitize({ label: field.label }).label;
       }
 
-      return { label: label, type: type, pattern: pattern }
+      return { label: label, type: type }
     }
     function additionalCssClasses() {
       switch (field.type) {
@@ -512,8 +509,8 @@ var HB = {
 
     var html = '<div class="hb-input-block ' + additionalCssClasses() + '">' +
       '<label for="' + id() + '">' + fieldAttrs.label + '</label>' +
-      '<input id="' + id() + '" type="' + fieldAttrs.type + '" pattern="' +
-      fieldAttrs.pattern + '" placeholder="' + fieldAttrs.label + '"' + (field.type == "builtin-email" ? "required" : "") + ' />' +
+      '<input id="' + id() + '" type="' + fieldAttrs.type + '" placeholder="' +
+      fieldAttrs.label + '"' + (field.type == "builtin-email" ? "required" : "") + ' />' +
       '</div>';
 
     return html;
@@ -575,8 +572,7 @@ var HB = {
       },
       function() {
         // Fail
-        // TODO generalize for all the fields
-        // HB.shake(emailField);
+        HB.shake(emailField);
       }
     );
     return false;
