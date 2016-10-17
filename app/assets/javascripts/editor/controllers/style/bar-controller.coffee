@@ -1,12 +1,5 @@
 HelloBar.StyleBarController = Ember.Controller.extend HelloBar.HasPlacement, HelloBar.HasTriggerOptions, HelloBar.AfterConvertOptions,
 
-  # TODO REMOVE
-  ###sizeOptions: [
-    {value: 'large', label: 'Large - 50px height, 17px font'}
-    {value: 'regular', label: 'Regular - 30px height, 14px font'}
-  ]###
-  #customValue: 'StyleBarController_custom_value'
-
   placementOptions: [
     {value: 'bar-top', label: 'Top'}
     {value: 'bar-bottom', label: 'Bottom'}
@@ -30,6 +23,5 @@ HelloBar.StyleBarController = Ember.Controller.extend HelloBar.HasPlacement, Hel
 
   actions:
     barSizeUpdated: (value) ->
-      preparedValue = parseInt(value).toString()
-      console.log('sizeUpdated', preparedValue)
-      @set('model.size', preparedValue)
+      console.log('sizeUpdated', value)
+      @set('model.size', value)
