@@ -5,6 +5,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       sortableGroupElement = Ember.$('.js-fields-to-collect');
       sortable = new Sortable(sortableGroupElement[0], {
         draggable: '.item-block',
+        filter: '.denied',
         onEnd: (evt) =>
           fields = Ember.copy(@get('model.settings.fields_to_collect'))
           elementsToMove = fields.splice(evt.oldIndex, 1)
@@ -63,6 +64,15 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
     @set('afterSubmitChoice', selection.key)
   ).observes('model')
 
+  onElementTypeChange: (->
+    if @get('isBarType')
+      fields = Ember.copy(@get('model.settings.fields_to_collect'))
+      fields and fields.forEach((field) ->
+        field and field.type and field.type.indexOf('builtin-') != 0 and field.is_enabled = false
+      )
+      @set('model.settings.fields_to_collect', fields)
+  ).observes('model.type')
+
   #-----------  After Email Submit  -----------#
 
   showCustomMessage    : Ember.computed.equal('afterSubmitChoice', 'custom_message')
@@ -93,14 +103,22 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
     }]
   ).property('model.site.capabilities.custom_thank_you_text', 'model.site.capabilities.after_submit_redirect')
 
-  preparedFields: (->
+  preparedFieldDescriptors: (->
     @get('model.settings.fields_to_collect').map( (field) => {
-      id: field.id,
-      label: if @builtinFieldDefinitions[field.type] then @builtinFieldDefinitions[field.type].label else field.label,
-      is_enabled: field.is_enabled,
+      field: {
+        id: field.id,
+        label: if @builtinFieldDefinitions[field.type] then @builtinFieldDefinitions[field.type].label else field.label,
+        is_enabled: field.is_enabled,
+        type: field.type
+      },
+      denied: @get('isBarType') and field.type.indexOf('builtin-') != 0,
       removable: field.type.indexOf('builtin-') != 0,
-      type: field.type
-    })).property('model.settings.fields_to_collect')
+
+    })).property('model.settings.fields_to_collect', 'model.type', 'isBarType')
+
+  isBarType: (->
+    @get('model.type') == 'Bar'
+  ).property('model.type')
 
   #-----------  Actions  -----------#
 
@@ -120,13 +138,13 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       @set('model.settings.fields_to_collect', newFields)
 
     addFieldToCollect: ->
-      @set('newFieldToCollect', {
-        id: _.uniqueId('field_') + '_' + Date.now(),
-        type: 'text',
-        label: '',
-        is_enabled: true
-      })
-
+      if not @get('isBarType')
+        @set('newFieldToCollect', {
+          id: _.uniqueId('field_') + '_' + Date.now(),
+          type: 'text',
+          label: '',
+          is_enabled: true
+        })
 
     onNewFieldToCollectEnterPressed: () ->
       if not @newFieldToCollect.label then return
