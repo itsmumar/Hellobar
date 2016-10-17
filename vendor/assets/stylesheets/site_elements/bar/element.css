@@ -251,6 +251,32 @@
   height: 21px;
 }
 
+
+/*-----------  Size: X-Large -----------*/
+
+#hellobar-bar.x-large {
+  height: 70px;
+  font-size: 19px;
+}
+
+#hellobar-bar.x-large .hb-logo-wrapper {
+}
+
+#hellobar-bar.x-large .hb-cta-style-button {
+}
+
+#hellobar-bar.x-large .hb-social-wrapper {
+}
+
+#hellobar-bar.x-large .hb-social-wrapper.hb-google-wrapper {
+}
+
+#hellobar-bar.x-large .hb-input-wrapper .hb-input-block input {
+}
+
+#hellobar-bar.x-large .hb-arrow-wrapper .hb-arrow {
+}
+
 /*-----------  Animations: Button Wiggle  -----------*/
 
 #hellobar-bar .hb-cta.wiggle {
