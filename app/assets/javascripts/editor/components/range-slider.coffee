@@ -13,6 +13,8 @@ HelloBar.RangeSliderComponent = Ember.Component.extend
 
   context: Ember.computed(() -> this)
 
+  # ----- Component lifecycle methods -----
+
   didInsertElement: ->
     startValue = @start or @min
     el = this.$('.js-slider')[0]
@@ -37,6 +39,16 @@ HelloBar.RangeSliderComponent = Ember.Component.extend
     )
     @updateLayout()
 
+  willDestroyElement: ->
+    if @slider
+      @sliderEvents.forEach((event) =>
+        @slider.off(event)
+      )
+      @slider.destroy()
+
+
+  # ----- DOM updating methods -----
+
   updateLayout: ->
     $slider = this.$('.js-slider')
     $ll = this.$('.js-left-label')
@@ -49,10 +61,4 @@ HelloBar.RangeSliderComponent = Ember.Component.extend
   updateHandleValue: (value) ->
     this.$('.noUi-handle').text(value)
 
-  willDestroyElement: ->
-    if @slider
-      @sliderEvents.forEach((event) =>
-        @slider.off(event)
-      )
-      @slider.destroy()
 
