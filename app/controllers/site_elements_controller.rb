@@ -164,6 +164,7 @@ class SiteElementsController < ApplicationController
       :buffer_message,
       :buffer_url,
       { fields_to_collect: [:id, :type, :label, :is_enabled] },
+      { cookie_settings: [:duration, :success_duration] },
       :display_when_delay,
       :display_when_delay_units,
       :display_when_scroll_element,
