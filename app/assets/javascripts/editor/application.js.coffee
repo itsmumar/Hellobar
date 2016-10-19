@@ -37,6 +37,11 @@ Ember.throttledObserver = (keys..., time, func) ->
 
 #-----------  Preview Injection  -----------#
 
+HB._listeners = []
+
+HB.addPreviewInjectionListener = (listener) ->
+  HB._listeners.push(listener)
+
 HB.injectAtTop = (element) ->
   container = HB.$("#hellobar-preview-container")
 
@@ -44,6 +49,8 @@ HB.injectAtTop = (element) ->
     container.insertBefore(element, container.children[0])
   else
     container.appendChild(element)
+
+  HB._listeners.forEach((listener) -> listener(container))
 
 #-----------  Set Application Height  -----------#
 

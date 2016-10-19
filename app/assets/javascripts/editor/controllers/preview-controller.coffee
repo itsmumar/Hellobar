@@ -2,6 +2,11 @@ HelloBar.PreviewController = Ember.Controller.extend
 
   needs: ['application']
 
+  init: ->
+    HB.addPreviewInjectionListener((container) =>
+      @adjustPushHeight()
+    )
+
   #-----------  Template Properties  -----------#
 
   isMobile      : Ember.computed.alias('controllers.application.isMobile')
@@ -78,12 +83,12 @@ HelloBar.PreviewController = Ember.Controller.extend
 
     return (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2])
 
-  autoAdjustPushHeight: (->
+
+  adjustPushHeight: ->
     height = (size) ->
       switch size
         when 'large' then '50px'
         when 'regular' then '30px'
         else size + 'px'
     $('#hellobar-preview-container .preview-image').css('border-top-width', height(@get('model.size')))
-  ).observes('model.size')
 
