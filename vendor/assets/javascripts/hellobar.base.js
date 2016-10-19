@@ -428,6 +428,8 @@ var HB = {
     // Record last time converted for the visitor for this type of conversion
     HB.setVisitorData(conversionKey+"_l", now);
 
+    HB.setVisibilityControlCookie('success', siteElement);
+
     // Set the number of conversions for the specific site element
     HB.setSiteElementData(siteElement.id, "nc", (HB.getSiteElementData(siteElement.id, "nc") || 0)+1);
     // Set the first time converted for the site element if not set
@@ -443,6 +445,65 @@ var HB = {
       HB.s("g", siteElement.id, {a:HB.getVisitorAttributes()}, callback);
     else if(typeof(callback) === typeof(Function))
       callback();
+  },
+
+  /**
+   * Generates a name for visibility control cookie
+   * @param cookieType {string}
+   * @param siteElementId {number}
+   * @returns {string}
+   */
+  visibilityControlCookieName: function(cookieType, siteElementId) {
+    return 'HB-visibilityControl-' + cookieType + '-' + siteElementId;
+  },
+
+  /**
+   * Stores visibility control information with corresponding expiration date.
+   * siteElement.settings.cookie_settings is used to calculate expiration.
+   * @param {string} cookieType
+   * @param {object} siteElement
+   */
+  setVisibilityControlCookie: function(cookieType, siteElement) {
+    function settingName() {
+      switch (cookieType) {
+        case 'dismiss':
+          return 'duration';
+        case 'success':
+          return 'success_duration';
+        default:
+          return 'duration';
+      }
+    }
+    function getDayCountFromSettings() {
+      return siteElement && siteElement.settings && siteElement.settings.cookie_settings
+        && siteElement.settings.cookie_settings[settingName()];
+    }
+
+    var dayCount = getDayCountFromSettings();
+    dayCount = parseInt(dayCount);
+    if (dayCount > 0) {
+      var cookieName = HB.visibilityControlCookieName(cookieType, siteElement.id);
+      var cookieValue = new Date().toString();
+      HB.sc(cookieName, cookieValue, dayCount);
+    }
+  },
+
+  /**
+   * Checks if the site element should be shown considering visibility control cookies.
+   * If at least one visibility control cookie prohibits the element then it won't be shown.
+   * @param siteElement
+   * @returns {boolean}
+   */
+  checkVisibilityControlCookies: function(siteElement) {
+    var supportedCookieTypes = ['dismiss', 'success'];
+    var result = true;
+    supportedCookieTypes.forEach(function(cookieType) {
+      var cookieName = HB.visibilityControlCookieName(cookieType, siteElement.id);
+      if (HB.gc(cookieName)) {
+        result = false;
+      }
+    });
+    return result;
   },
 
   // Returns true if the visitor did this conversion or not
@@ -1216,7 +1277,9 @@ var HB = {
     // Skip the site element if they have already seen/dismissed it
     // and it hasn't been changed since then and the user has not specified
     // that we show it regardless
-    if ( (HB.convertedOrDismissed(siteElement) && !HB.updatedSinceLastVisit(siteElement)) || HB.nonMobileClickToCall(siteElement) ) {
+    if ( ((!HB.checkVisibilityControlCookies(siteElement) || HB.convertedOrDismissed(siteElement))
+      && !HB.updatedSinceLastVisit(siteElement))
+      || HB.nonMobileClickToCall(siteElement) ) {
       return false;
     } else {
       return true;
