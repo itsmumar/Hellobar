@@ -55,18 +55,12 @@
     </a>
   </div>
 
-  {{!--
-  {{#popup-hint-trigger}}
-    <p>Here's sample hint with some <strong>formatting</strong>.</p>
-  {{/popup-hint-trigger}}
-  --}}
-
   <label>
     <span>Cookie Duration</span>
     {{#popup-hint-trigger}}
-      <p>Here's sample hint with some <strong>formatting</strong>.</p>
-      <p>Here's sample hint with some <strong>formatting</strong>.</p>
-      <p>Here's sample hint with some <strong>formatting</strong>.</p>
+      <p>The number of days before the optin will display <br>
+      again once the user exits your campaign. <br>
+      <strong>Change to 0 to prevent cookies from being set.</strong></p>
     {{/popup-hint-trigger}}
   </label>
   {{
@@ -76,7 +70,14 @@
     maxlength=5
   }}
 
-  <label>Success Cookie Duration</label>
+  <label>
+    <span>Success Cookie Duration</span>
+    {{#popup-hint-trigger}}
+      <p>The number of days before the optin will display <br>
+        again once the user successfully opts in to your <br>
+        campaign. <strong>Change to 0 to prevent success <br> cookies from being set.</strong></p>
+    {{/popup-hint-trigger}}
+  </label>
   {{
   view Ember.TextField
     value=365
