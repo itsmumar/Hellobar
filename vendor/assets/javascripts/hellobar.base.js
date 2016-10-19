@@ -560,7 +560,8 @@ var HB = {
           }
         }
         var values = [];
-        formElement.querySelectorAll('input').forEach(function(input) {
+        values.push(emailField.value)
+        formElement.querySelectorAll('input:not(#f-builtin-email)').forEach(function(input) {
           values.push(input.value);
         });
         HB.recordEmail(siteElement, values, function() {
