@@ -150,6 +150,16 @@ HelloBar.TargetingController = Ember.Controller.extend
       return true
   ).property('routeForwarding')
 
+  afterModel: (->
+    cookieSettings = @get('model.settings.cookie_settings')
+    if _.isEmpty(cookieSettings)
+      cookieSettings = {
+        duration: 30,
+        success_duration: 365
+      }
+      @set('model.settings.cookie_settings', cookieSettings)
+  ).observes('model')
+
   #-----------  Actions  -----------#
 
   actions:
