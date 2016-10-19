@@ -65,7 +65,7 @@
   </label>
   {{
   view Ember.TextField
-    value=30
+    value=model.settings.cookie_settings.duration
     placeholder="Cookie Duration"
     maxlength=5
     type="number"
@@ -81,7 +81,7 @@
   </label>
   {{
   view Ember.TextField
-    value=365
+    value=model.settings.cookie_settings.success_duration
     placeholder="Success Cookie Duration"
     maxlength=5
     type="number"
