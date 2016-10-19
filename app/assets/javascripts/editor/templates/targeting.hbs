@@ -61,6 +61,29 @@
   {{/popup-hint-trigger}}
   --}}
 
+  <label>
+    <span>Cookie Duration</span>
+    {{#popup-hint-trigger}}
+      <p>Here's sample hint with some <strong>formatting</strong>.</p>
+      <p>Here's sample hint with some <strong>formatting</strong>.</p>
+      <p>Here's sample hint with some <strong>formatting</strong>.</p>
+    {{/popup-hint-trigger}}
+  </label>
+  {{
+  view Ember.TextField
+    value=30
+    placeholder="Cookie Duration"
+    maxlength=5
+  }}
+
+  <label>Success Cookie Duration</label>
+  {{
+  view Ember.TextField
+    value=365
+    placeholder="Success Cookie Duration"
+    maxlength=5
+  }}
+
 
 {{else}}
 
