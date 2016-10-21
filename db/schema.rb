@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161003132619) do
+ActiveRecord::Schema.define(version: 20161021165118) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -323,7 +323,6 @@ ActiveRecord::Schema.define(version: 20161003132619) do
     t.boolean  "use_question",                    default: false
     t.string   "phone_number"
     t.string   "phone_country_code",              default: "US"
-    t.boolean  "show_after_convert",              default: false
     t.string   "theme_id"
     t.boolean  "use_default_image",               default: true,                            null: false
   end

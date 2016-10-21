@@ -10,7 +10,9 @@ namespace :site do
     desc 'Schedule a re-generation of all active site scripts'
     task :regenerate_all_active => :environment do |t, args|
       Site.script_installed_db.each do |site|
-        if site.script_generated_at > 3.hour.ago
+        script_generated_at = site.script_generated_at
+
+        if script_generated_at.present? && script_generated_at > 3.hour.ago
           site.check_installation(queue_name: Hellobar::Settings[:low_priority_queue])
         else
           site.generate_script_and_check_installation(queue_name: Hellobar::Settings[:low_priority_queue])
