@@ -85,10 +85,23 @@ HelloBar.PreviewController = Ember.Controller.extend
 
 
   adjustPushHeight: ->
-    height = (size) ->
+    height = (size) =>
       switch size
         when 'large' then '50px'
         when 'regular' then '30px'
         else size + 'px'
-    $('#hellobar-preview-container .preview-image').css('border-top-width', height(@get('model.size')))
+    cssProperty = () =>
+      switch @get('model.placement')
+        when 'bar-top' then 'border-top-width'
+        when 'bar-bottom' then 'border-bottom-width'
+        else null
 
+    property = cssProperty()
+    if (property)
+      css = {
+        'border-top-width': '0',
+        'border-bottom-width': '0'
+      }
+      pushHeight = if @get('model.pushes_page_down') then height(@get('model.size')) else '0'
+      css[property] = pushHeight
+      $('#hellobar-preview-container .preview-image').css(css)
