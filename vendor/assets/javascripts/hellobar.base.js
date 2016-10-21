@@ -1278,8 +1278,7 @@ var HB = {
     // Skip the site element if they have already seen/dismissed it
     // and it hasn't been changed since then and the user has not specified
     // that we show it regardless
-    if ( ((!HB.checkVisibilityControlCookies(siteElement) || HB.convertedOrDismissed(siteElement))
-      && !HB.updatedSinceLastVisit(siteElement))
+    if ( (!HB.checkVisibilityControlCookies(siteElement) && !HB.updatedSinceLastVisit(siteElement))
       || HB.nonMobileClickToCall(siteElement) ) {
       return false;
     } else {
@@ -1291,6 +1290,9 @@ var HB = {
     return siteElement.subtype == "call" && !HB.isMobileDevice();
   },
 
+  /**
+   * @deprecated This was used previously to determine if we need to show/hide the bar
+   */
   convertedOrDismissed: function(siteElement) {
     var converted = HB.didConvert(siteElement) && !siteElement.show_after_convert;
     return converted || HB.didDismissThisHB(siteElement) || HB.didDismissHB(siteElement);
