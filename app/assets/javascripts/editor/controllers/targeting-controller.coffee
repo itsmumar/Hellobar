@@ -153,10 +153,18 @@ HelloBar.TargetingController = Ember.Controller.extend
   afterModel: (->
     cookieSettings = @get('model.settings.cookie_settings')
     if _.isEmpty(cookieSettings)
-      cookieSettings = {
-        duration: 30,
-        success_duration: 365
-      }
+      elementType = @get('model.type')
+      if elementType == 'Modal' or elementType == 'Takeover'
+        cookieSettings = {
+          duration: 1825,
+          success_duration: 365
+        }
+      else
+        cookieSettings = {
+          duration: 30,
+          success_duration: 365
+        }
+
       @set('model.settings.cookie_settings', cookieSettings)
   ).observes('model')
 
