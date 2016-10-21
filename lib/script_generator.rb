@@ -242,7 +242,6 @@ private
       name_placeholder
       phone_number
       placement
-      show_after_convert
       show_border
       show_branding
       size

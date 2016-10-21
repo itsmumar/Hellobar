@@ -142,7 +142,6 @@ class SiteElementsController < ApplicationController
       :question,
       :remains_at_top,
       :rule_id,
-      :show_after_convert,
       :show_branding,
       :size,
       :text_color,

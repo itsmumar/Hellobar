@@ -24,7 +24,7 @@ class SiteElementSerializer < ActiveModel::Serializer
 
     # other
     :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile,
-    :open_in_new_window, :placement, :default_email_thank_you_text, :show_after_convert
+    :open_in_new_window, :placement, :default_email_thank_you_text
 
   SiteElement::QUESTION_DEFAULTS.keys.each do |attr_name|
     define_method "#{attr_name}_placeholder" do
