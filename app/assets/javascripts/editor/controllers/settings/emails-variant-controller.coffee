@@ -69,7 +69,8 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
     if @get('isBarType')
       fields = Ember.copy(@get('model.settings.fields_to_collect'))
       fields and fields.forEach((field) ->
-        field and field.type and field.type.indexOf('builtin-') != 0 and field.is_enabled = false
+        if (field and field.type and field.type.indexOf('builtin-') != 0)
+          field.is_enabled = false
       )
       @set('model.settings.fields_to_collect', fields)
   ).observes('model.type')
