@@ -34,7 +34,8 @@ HelloBar.ApplicationRoute = Ember.Route.extend
 
           success: (data, modal) =>
             resolvedModel.site.contact_lists.forEach (list) ->
-              Ember.set(list, "name", data.name) if list.id == data.id
+              if list.id == data.id
+                Ember.set(list, "name", data.name)
 
             modal.close()
       else
