@@ -44,12 +44,12 @@ HelloBar.TargetingController = Ember.Controller.extend
   # if/when conclude the a/b test "Targeting UI Variation 2016-06-13" with 'variant'
   # revert this controller to the previous version if we conclude with 'original'
 
-  trackUpgrade: ( ->
+  trackUpgrade: ->
     InternalTracking.track_current_person("Editor Flow", {
                                                           step: "Choose Targeting Type - Converted to Pro",
                                                           ui: if @get('targetingUiVariant') then 'variant' else 'original'
                                                          })
-  )
+  
 
   canUseRuleModal: ( ->
     @get("model.site.capabilities.custom_targeted_bars")
