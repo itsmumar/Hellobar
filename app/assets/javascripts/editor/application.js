@@ -25,15 +25,27 @@ window.HelloBar = Ember.Application.create({
 
 //-----------  Debounce/Throttle Observers  -----------#
 
-//Ember.debouncedObserver = (keys..., time, func) ->
-//  Ember.observer ->
-//    Ember.run.debounce @, func, time
-//  , keys...
-//
-//Ember.throttledObserver = (keys..., time, func) ->
-//  Ember.observer ->
-//    Ember.run.throttle @, func, time
-//  , keys...
+const slice = [].slice;
+
+Ember.debouncedObserver = function () {
+  let func, i, keys, time;
+  keys = 3 <= arguments.length ?
+    slice.call(arguments, 0, i = arguments.length - 2) :
+    (i = 0, []), time = arguments[i++], func = arguments[i++];
+  return Ember.observer.apply(Ember, [function () {
+    return Ember.run.debounce(this, func, time);
+  }].concat(slice.call(keys)));
+};
+
+Ember.throttledObserver = function () {
+  let func, i, keys, time;
+  keys = 3 <= arguments.length ?
+    slice.call(arguments, 0, i = arguments.length - 2) :
+    (i = 0, []), time = arguments[i++], func = arguments[i++];
+  return Ember.observer.apply(Ember, [function () {
+    return Ember.run.throttle(this, func, time);
+  }].concat(slice.call(keys)));
+};
 
 //-----------  Preview Injection  -----------#
 
