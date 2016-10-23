@@ -18,8 +18,8 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       })
     )
 
-  # TODO remove this
-  collectNames : Ember.computed.alias('model.settings.collect_names')
+# TODO remove this
+  collectNames: Ember.computed.alias('model.settings.collect_names')
 
   newFieldToCollect: null
 
@@ -35,11 +35,11 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
     }
   }
 
-  # set 'afterSubmitChoice' property only after model is ready
+# set 'afterSubmitChoice' property only after model is ready
   afterModel: (->
     fields = @get('model.settings.fields_to_collect')
     if _.isEmpty(fields)
-      # TODO this is mock fields data. It should be replaced with real data from server
+# TODO this is mock fields data. It should be replaced with real data from server
       fields = [
         {
           "id": "some-long-id-1",
@@ -60,7 +60,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       @set('model.settings.fields_to_collect', fields)
 
     # Set Initial After Email Submission Choice
-    modelVal  = @get('model.settings.after_email_submit_action') || 0
+    modelVal = @get('model.settings.after_email_submit_action') || 0
     selection = @get('afterSubmitOptions').findBy('value', modelVal)
     @set('afterSubmitChoice', selection.key)
   ).observes('model')
@@ -75,46 +75,46 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       @set('model.settings.fields_to_collect', fields)
   ).observes('model.type')
 
-  #-----------  After Email Submit  -----------#
+#-----------  After Email Submit  -----------#
 
-  showCustomMessage    : Ember.computed.equal('afterSubmitChoice', 'custom_message')
-  showRedirectUrlInput : Ember.computed.equal('afterSubmitChoice', 'redirect')
+  showCustomMessage: Ember.computed.equal('afterSubmitChoice', 'custom_message')
+  showRedirectUrlInput: Ember.computed.equal('afterSubmitChoice', 'redirect')
 
   setModelChoice: ( ->
-    choice    = @get('afterSubmitChoice')
+    choice = @get('afterSubmitChoice')
     selection = @get('afterSubmitOptions').findBy('key', choice)
     @set('model.settings.after_email_submit_action', selection.value)
   ).observes('afterSubmitChoice', 'afterSubmitOptions')
 
   afterSubmitOptions: ( ->
     [{
-      value : 0
-      key   : 'default_message'
-      label : 'Show default message'
-      isPro : false
-    },{
-      value : 1
-      key   : 'custom_message'
-      label : 'Show a custom message'
-      isPro : !@get('model.site.capabilities.custom_thank_you_text')
-    },{
-      value : 2
-      key   : 'redirect'
-      label : 'Redirect the visitor to a url'
-      isPro : !@get('model.site.capabilities.after_submit_redirect')
+      value: 0
+      key: 'default_message'
+      label: 'Show default message'
+      isPro: false
+    }, {
+      value: 1
+      key: 'custom_message'
+      label: 'Show a custom message'
+      isPro: !@get('model.site.capabilities.custom_thank_you_text')
+    }, {
+      value: 2
+      key: 'redirect'
+      label: 'Redirect the visitor to a url'
+      isPro: !@get('model.site.capabilities.after_submit_redirect')
     }]
   ).property('model.site.capabilities.custom_thank_you_text', 'model.site.capabilities.after_submit_redirect')
 
   preparedFieldDescriptors: (->
-    @get('model.settings.fields_to_collect').map( (field) => {
-      field: {
-        id: field.id,
-        label: if @builtinFieldDefinitions[field.type] then @builtinFieldDefinitions[field.type].label else field.label,
-        is_enabled: field.is_enabled,
-        type: field.type
-      },
-      denied: @get('isBarType') and field.type.indexOf('builtin-') != 0,
-      removable: field.type.indexOf('builtin-') != 0,
+    @get('model.settings.fields_to_collect').map((field) => {
+    field: {
+      id: field.id,
+      label: if @builtinFieldDefinitions[field.type] then @builtinFieldDefinitions[field.type].label else field.label,
+      is_enabled: field.is_enabled,
+      type: field.type
+    },
+    denied: @get('isBarType') and field.type.indexOf('builtin-') != 0,
+    removable: field.type.indexOf('builtin-') != 0,
 
     })).property('model.settings.fields_to_collect', 'model.type', 'isBarType')
 
@@ -122,9 +122,9 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
     @get('model.type') == 'Bar'
   ).property('model.type')
 
-  #-----------  Actions  -----------#
+#-----------  Actions  -----------#
 
-  actions:
+  actions: {
 
     toggleFieldToCollect: (field) ->
       if field.type == 'builtin-email' then return
@@ -171,9 +171,9 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       if selection.isPro
         controller = @
         new UpgradeAccountModal(
-          site            : @get('model.site')
-          upgradeBenefit  : selection.key == 'redirect' ? 'redirect to a custom url' : 'customize your thank you text'
-          successCallback : ->
+          site: @get('model.site')
+          upgradeBenefit: selection.key == 'redirect' ? 'redirect to a custom url': 'customize your thank you text'
+          successCallback: ->
             controller.set('model.site.capabilities', this.site.capabilities)
             controller.set('afterSubmitChoice', selection.key)
         ).open()
@@ -184,15 +184,15 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
       siteID = window.siteID
 
       if listID
-        # Edit Existing Contact List
+# Edit Existing Contact List
         new ContactListModal({
-          id          : listID
-          siteID      : siteID
-          loadURL     : "/sites/#{siteID}/contact_lists/#{listID}.json"
-          saveURL     : "/sites/#{siteID}/contact_lists/#{listID}.json"
-          saveMethod  : "PUT"
-          editorModel : @get("model")
-          canDelete   : (listID != @get("model.orig_contact_list_id"))
+          id: listID
+          siteID: siteID
+          loadURL: "/sites/#{siteID}/contact_lists/#{listID}.json"
+          saveURL: "/sites/#{siteID}/contact_lists/#{listID}.json"
+          saveMethod: "PUT"
+          editorModel: @get("model")
+          canDelete: (listID != @get("model.orig_contact_list_id"))
 
           success: (data, modal) =>
             for list in @get("model.site.contact_lists")
@@ -211,17 +211,17 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
         }).open()
 
       else
-        # New Contact List
+# New Contact List
         InternalTracking.track_current_person("Editor Flow", {
-          step : "Contact List Settings"
-          goal : @get("model.element_subtype")
+          step: "Contact List Settings"
+          goal: @get("model.element_subtype")
         }) if trackEditorFlow
 
         new ContactListModal({
-          siteID      : siteID
-          saveURL     : "/sites/#{siteID}/contact_lists.json"
-          saveMethod  : "POST"
-          editorModel : @get("model")
+          siteID: siteID
+          saveURL: "/sites/#{siteID}/contact_lists.json"
+          saveMethod: "POST"
+          editorModel: @get("model")
 
           success: (data, modal) =>
             lists = @get("model.site.contact_lists").slice(0)
@@ -234,3 +234,4 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend
 
           close: (modal) => @set("model.contact_list_id", null)
         }).open()
+  }
