@@ -102,8 +102,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     Ember.run.debounce(this, @doRenderPreview, true, 500)
   ).observes("model.animated").on("init")
 
-  doRenderPreview: ( (withAnimations = false) ->
-    HelloBar.inlineEditing.cleanup()
+  doRenderPreview: (withAnimations = false) ->
     previewElement = $.extend({}, @get("model"),
       animated: withAnimations && @get("model.animated")
       hide_destination: true
@@ -129,7 +128,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     HB.removeAllSiteElements()
     HB.addToPage(HB.createSiteElement(previewElement))
     HB.isMobileWidth = "changed"
-  )
+
 
   # Sets a callback on the preview script to rerender the preview after the user
   # closes the element
@@ -280,7 +279,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   #-----------  Actions  -----------#
 
-  actions:
+  actions: {
 
     toggleFullscreen: ->
       @toggleProperty('isFullscreen')
@@ -313,3 +312,5 @@ HelloBar.ApplicationController = Ember.Controller.extend
           new UnsavedChangesModal(options).open()
         else
           window.location = dashboardURL
+  }
+  
