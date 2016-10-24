@@ -58,10 +58,11 @@ HelloBar.TabViewComponent = Ember.Component.extend(
     this.setActivePane(pane.paneId, pane.name)
   ).observes('paneSelectionCount')
 
-  actions:
+  actions: {
     doTabSelected: (action) ->
       if (action)
         @sendAction(action)
+  }
 )
 
 HelloBar.QuestionTabsComponent = HelloBar.TabViewComponent.extend(
