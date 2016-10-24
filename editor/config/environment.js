@@ -4,7 +4,7 @@ module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'editor',
     environment: environment,
-    rootURL: '/editor',
+    rootURL: '/editor/',
     locationType: 'auto',
     EmberENV: {
       FEATURES: {
