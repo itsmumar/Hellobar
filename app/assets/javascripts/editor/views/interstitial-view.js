@@ -2,7 +2,9 @@ let CSS_TRANSITION = 750; // when changing please update it in "_interstitial.cs
 
 HelloBar.InterstitialView = Ember.View.extend({
   didInsertElement() {
-    if (trackEditorFlow) { return InternalTracking.track_current_person("Editor Flow", {step: "Choose Goal"}); }
+    if (trackEditorFlow) {
+      return InternalTracking.track_current_person("Editor Flow", {step: "Choose Goal"});
+    }
   },
 
   animateOut(done) {
@@ -58,7 +60,9 @@ HelloBar.InterstitialIndexView = SubInterstitialView.extend({
       $target.closest(".goal-block").addClass("selected");
 
       let route = $target.closest(".goal-block").data("route");
-      if (route) { InternalTracking.track_current_person("Template Selected", {template: route}); }
+      if (route) {
+        InternalTracking.track_current_person("Template Selected", {template: route});
+      }
 
       this._track_selected_goal();
 
@@ -75,13 +79,17 @@ HelloBar.InterstitialIndexView = SubInterstitialView.extend({
 });
 
 HelloBar.InterstitialMoneyView = SubInterstitialView.extend({
-  routeName: "money"});
+  routeName: "money"
+});
 
 HelloBar.InterstitialCallView = SubInterstitialView.extend({
-  routeName: "call"});
+  routeName: "call"
+});
 
 HelloBar.InterstitialContactsView = SubInterstitialView.extend({
-  routeName: "contacts"});
+  routeName: "contacts"
+});
 
 HelloBar.InterstitialFacebookView = SubInterstitialView.extend({
-  routeName: "facebook"});
+  routeName: "facebook"
+});

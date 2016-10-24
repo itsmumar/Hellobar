@@ -8,9 +8,9 @@ HelloBar.StepNavigationComponent = Ember.Component.extend({
 
   routes: ['settings', 'style', 'design', 'targeting'],
 
-  routeLinks: (function() {
+  routeLinks: (function () {
     return $.map(this.get('routes'), (route, i) => {
-      return {route, past: (i+1 < this.get('current'))};
+      return {route, past: (i + 1 < this.get('current'))};
     });
   }).property('current'),
 

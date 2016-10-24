@@ -7,7 +7,7 @@ Ember.RadioButton = Ember.View.extend({
     return this.set("selection", this.$().val());
   },
 
-  checked: (function() {
+  checked: (function () {
     return this.get("value") === this.get("selection");
   }).property()
 });

@@ -2,23 +2,23 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
 
   init() {
     return Ember.run.schedule('afterRender', this, () => {
-      let sortable;
-      let sortableGroupElement = Ember.$('.js-fields-to-collect');
-      return sortable = new Sortable(sortableGroupElement[0], {
-        draggable: '.item-block',
-        filter: '.denied',
-        onEnd: evt => {
-          let fields = Ember.copy(this.get('model.settings.fields_to_collect'));
-          let elementsToMove = fields.splice(evt.oldIndex, 1);
-          fields.splice(evt.newIndex, 0, elementsToMove[0]);
-          this.set('model.settings.fields_to_collect', fields);
-          return setTimeout(()=> {
-            return sortableGroupElement.find('.item-block[draggable="false"]').remove();
+        let sortable;
+        let sortableGroupElement = Ember.$('.js-fields-to-collect');
+        return sortable = new Sortable(sortableGroupElement[0], {
+          draggable: '.item-block',
+          filter: '.denied',
+          onEnd: evt => {
+            let fields = Ember.copy(this.get('model.settings.fields_to_collect'));
+            let elementsToMove = fields.splice(evt.oldIndex, 1);
+            fields.splice(evt.newIndex, 0, elementsToMove[0]);
+            this.set('model.settings.fields_to_collect', fields);
+            return setTimeout(()=> {
+                return sortableGroupElement.find('.item-block[draggable="false"]').remove();
+              }
+              , 0);
           }
-          , 0);
-        }
-      });
-    }
+        });
+      }
     );
   },
 
@@ -40,7 +40,7 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
   },
 
 // set 'afterSubmitChoice' property only after model is ready
-  afterModel: (function() {
+  afterModel: (function () {
     let fields = this.get('model.settings.fields_to_collect');
     if (_.isEmpty(fields)) {
 // TODO this is mock fields data. It should be replaced with real data from server
@@ -70,10 +70,10 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
     return this.set('afterSubmitChoice', selection.key);
   }).observes('model'),
 
-  onElementTypeChange: (function() {
+  onElementTypeChange: (function () {
     if (this.get('isBarType')) {
       let fields = Ember.copy(this.get('model.settings.fields_to_collect'));
-      fields && fields.forEach(function(field) {
+      fields && fields.forEach(function (field) {
         if (field && field.type && field.type.indexOf('builtin-') !== 0) {
           return field.is_enabled = false;
         }
@@ -87,13 +87,13 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
   showCustomMessage: Ember.computed.equal('afterSubmitChoice', 'custom_message'),
   showRedirectUrlInput: Ember.computed.equal('afterSubmitChoice', 'redirect'),
 
-  setModelChoice: ( function() {
+  setModelChoice: ( function () {
     let choice = this.get('afterSubmitChoice');
     let selection = this.get('afterSubmitOptions').findBy('key', choice);
     return this.set('model.settings.after_email_submit_action', selection.value);
   }).observes('afterSubmitChoice', 'afterSubmitOptions'),
 
-  afterSubmitOptions: ( function() {
+  afterSubmitOptions: ( function () {
     return [{
       value: 0,
       key: 'default_message',
@@ -112,20 +112,21 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
     }];
   }).property('model.site.capabilities.custom_thank_you_text', 'model.site.capabilities.after_submit_redirect'),
 
-  preparedFieldDescriptors: (function() {
+  preparedFieldDescriptors: (function () {
     return this.get('model.settings.fields_to_collect').map(field => ({
-    field: {
-      id: field.id,
-      label: this.builtinFieldDefinitions[field.type] ? this.builtinFieldDefinitions[field.type].label : field.label,
-      is_enabled: field.is_enabled,
-      type: field.type
-    },
-    denied: this.get('isBarType') && field.type.indexOf('builtin-') !== 0,
-    removable: field.type.indexOf('builtin-') !== 0,
+      field: {
+        id: field.id,
+        label: this.builtinFieldDefinitions[field.type] ? this.builtinFieldDefinitions[field.type].label : field.label,
+        is_enabled: field.is_enabled,
+        type: field.type
+      },
+      denied: this.get('isBarType') && field.type.indexOf('builtin-') !== 0,
+      removable: field.type.indexOf('builtin-') !== 0,
 
-    }));}).property('model.settings.fields_to_collect', 'model.type', 'isBarType'),
+    }));
+  }).property('model.settings.fields_to_collect', 'model.type', 'isBarType'),
 
-  isBarType: (function() {
+  isBarType: (function () {
     return this.get('model.type') === 'Bar';
   }).property('model.type'),
 
@@ -134,7 +135,9 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
   actions: {
 
     toggleFieldToCollect(field) {
-      if (field.type === 'builtin-email') { return; }
+      if (field.type === 'builtin-email') {
+        return;
+      }
       let fields = this.get('model.settings.fields_to_collect');
       let fieldToChange = _.find(fields, f => f.id === field.id);
       fieldToChange.is_enabled = !fieldToChange.is_enabled;
@@ -160,7 +163,9 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
     },
 
     onNewFieldToCollectEnterPressed() {
-      if (!this.newFieldToCollect.label) { return; }
+      if (!this.newFieldToCollect.label) {
+        return;
+      }
       let newFields = this.get('model.settings.fields_to_collect').concat([this.newFieldToCollect]);
       this.set('model.settings.fields_to_collect', newFields);
       return this.set('newFieldToCollect', null);
@@ -241,10 +246,12 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
 
       } else {
 // New Contact List
-        if (trackEditorFlow) { InternalTracking.track_current_person("Editor Flow", {
-          step: "Contact List Settings",
-          goal: this.get("model.element_subtype")
-        }); }
+        if (trackEditorFlow) {
+          InternalTracking.track_current_person("Editor Flow", {
+            step: "Contact List Settings",
+            goal: this.get("model.element_subtype")
+          });
+        }
 
         return new ContactListModal({
           siteID,
@@ -257,8 +264,8 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
             lists.push({id: data.id, name: data.name});
             this.set("model.site.contact_lists", lists);
             setTimeout(( () => {
-              return this.set("model.contact_list_id", data.id);
-            }
+                return this.set("model.contact_list_id", data.id);
+              }
             ), 100);
             return modal.$modal.remove();
           },
@@ -267,4 +274,5 @@ HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
         }).open();
       }
     }
-  }});
+  }
+});

@@ -14,7 +14,7 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend({
     {value: 2, label: 'Redirect the visitor to a url'}
   ],
 
-  showDefaultMessage: (function() {
+  showDefaultMessage: (function () {
     let action_index = this.get("model.settings.after_email_submit_action");
     return action_index === 0;
   }).property("model.settings.after_email_submit_action"),
@@ -22,7 +22,7 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend({
   disableThankYouText: Ember.computed.not('model.site.capabilities.custom_thank_you_text'),
   disableRedirect: Ember.computed.not('model.site.capabilities.after_submit_redirect'),
 
-  setDefaultListID: (function() {
+  setDefaultListID: (function () {
     this.set('model.orig_contact_list_id', this.get('model.contact_list_id'));
 
     if (!this.get('model.contact_list_id')) {
@@ -33,7 +33,7 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend({
     }
   }).observes('model.site.contact_lists'),
 
-  popNewContactListModal: (function() {
+  popNewContactListModal: (function () {
     if ((this.get("model.site.contact_lists").length === 0 || this.get("model.contact_list_id") === 0) && $(".contact-list-modal:visible").length === 0) {
       let options = {
         siteID: window.siteID,
@@ -45,8 +45,8 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend({
           lists.push({id: data.id, name: data.name});
           this.set("model.site.contact_lists", lists);
           setTimeout((() => {
-            return this.set("model.contact_list_id", data.id);
-          }
+              return this.set("model.contact_list_id", data.id);
+            }
           ), 100);
           return modal.$modal.remove();
         },
@@ -55,17 +55,22 @@ HelloBar.SettingsEmailsController = Ember.Controller.extend({
         }
       };
 
-      if (trackEditorFlow) { InternalTracking.track_current_person("Editor Flow", {step: "Contact List Settings", goal: this.get("model.element_subtype")}); }
+      if (trackEditorFlow) {
+        InternalTracking.track_current_person("Editor Flow", {
+          step: "Contact List Settings",
+          goal: this.get("model.element_subtype")
+        });
+      }
       return new ContactListModal(options).open();
     }
   }).observes("model.contact_list_id"),
 
-  showEditContactListLink: (function() {
+  showEditContactListLink: (function () {
     let id = this.get("model.contact_list_id");
     return id && id !== 0;
   }).property("model.contact_list_id"),
 
-  showRedirectUrlInput: (function() {
+  showRedirectUrlInput: (function () {
     return this.get("model.settings.after_email_submit_action") === 2;
   }).property("model.settings.after_email_submit_action"),
 

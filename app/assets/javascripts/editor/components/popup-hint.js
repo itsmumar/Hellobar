@@ -6,7 +6,7 @@ HelloBar.PopupHintComponent = Ember.Component.extend({
 
   visible: false,
 
-  onVisibleChange: (function() {
+  onVisibleChange: (function () {
     let value = this.get('visible');
     let $element = this.$();
     if (value) {

@@ -6,7 +6,7 @@ HelloBar.StepView = Ember.View.extend({
 
   // Observe protected features
 
-  updateProFeature: ( function() {
+  updateProFeature: ( function () {
     let isBranded = this.get('controller.model.show_branding');
     let canRemoveBranding = this.get('controller.model.site.capabilities.remove_branding');
 
@@ -34,7 +34,7 @@ HelloBar.StepView = Ember.View.extend({
 
 //-----------  Setup Step Views  -----------#
 
-HelloBar.SettingsView  = HelloBar.StepView.extend();
-HelloBar.StyleView     = HelloBar.StepView.extend();
-HelloBar.ColorsView    = HelloBar.StepView.extend();
+HelloBar.SettingsView = HelloBar.StepView.extend();
+HelloBar.StyleView = HelloBar.StepView.extend();
+HelloBar.ColorsView = HelloBar.StepView.extend();
 HelloBar.TargetingView = HelloBar.StepView.extend();

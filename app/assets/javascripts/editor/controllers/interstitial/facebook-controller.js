@@ -6,7 +6,7 @@ HelloBar.InterstitialFacebookController = Ember.Controller.extend({
     {value: "other", label: "Other"}
   ],
 
-  selectedFacebookLikeOptions: ( function(key, value) {
+  selectedFacebookLikeOptions: ( function (key, value) {
     if (arguments.length > 1) {
       this.set("showFacebookUrl", false);
       this.set("model.settings.use_location_for_url", false);
@@ -25,13 +25,15 @@ HelloBar.InterstitialFacebookController = Ember.Controller.extend({
   }).property(),
 
   setDefaults() {
-    if (!this.get("model")) { return false; }
+    if (!this.get("model")) {
+      return false;
+    }
 
     this.set("model.headline", "Like us on Facebook!");
     return this.set("model.element_subtype", "social/like_on_facebook");
   },
 
-  inputIsInvalid: ( function() {
+  inputIsInvalid: ( function () {
     return !!(
       !this.get("model.settings.use_location_for_url") &&
       Ember.isEmpty(this.get("model.settings.url_to_like"))

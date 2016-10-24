@@ -3,7 +3,7 @@ HelloBar.SettingsController = Ember.Controller.extend({
   //-----------  Step Settings  -----------#
 
   needs: ['application'],
-  cannotContinue: ( function() {
+  cannotContinue: ( function () {
     return this.set('controllers.application.cannotContinue', Ember.isEmpty(this.get('model.element_subtype')));
   }).observes('model.element_subtype'),
 
@@ -14,7 +14,7 @@ HelloBar.SettingsController = Ember.Controller.extend({
 
   //-----------  Sub-Step Selection  -----------#
 
-  setSubtype: (function() {
+  setSubtype: (function () {
     switch (this.get("routeForwarding")) {
       case "settings.emails":
         this.set("model.element_subtype", "email");
@@ -32,7 +32,12 @@ HelloBar.SettingsController = Ember.Controller.extend({
         this.set("model.element_subtype", "social/like_on_facebook");
         break;
     }
-    if (trackEditorFlow) { return InternalTracking.track_current_person("Editor Flow", {step: "Goal Settings", goal: this.get("model.element_subtype")}); }
+    if (trackEditorFlow) {
+      return InternalTracking.track_current_person("Editor Flow", {
+        step: "Goal Settings",
+        goal: this.get("model.element_subtype")
+      });
+    }
   }).observes('routeForwarding'),
 
   // Sets a property which tells the route to forward to a previously

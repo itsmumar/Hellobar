@@ -2,14 +2,16 @@ HelloBar.InterstitialMoneyController = Ember.Controller.extend({
   needs: ["application"],
 
   setDefaults() {
-    if (!this.get("model")) { return false; }
+    if (!this.get("model")) {
+      return false;
+    }
 
     this.set("model.headline", "Check out our latest sale");
     this.set("model.link_text", "Shop Now");
     return this.set("model.element_subtype", "traffic");
   },
 
-  inputIsInvalid: ( function() {
+  inputIsInvalid: ( function () {
     return !!(
       Ember.isEmpty(this.get("model.headline")) ||
       Ember.isEmpty(this.get("model.link_text")) ||

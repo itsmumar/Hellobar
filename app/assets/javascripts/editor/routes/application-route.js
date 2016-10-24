@@ -36,7 +36,7 @@ HelloBar.ApplicationRoute = Ember.Route.extend({
           saveMethod: "PUT",
 
           success: (data, modal) => {
-            resolvedModel.site.contact_lists.forEach(function(list) {
+            resolvedModel.site.contact_lists.forEach(function (list) {
               if (list.id === data.id) {
                 return Ember.set(list, "name", data.name);
               }
@@ -55,8 +55,8 @@ HelloBar.ApplicationRoute = Ember.Route.extend({
             lists.push({id: data.id, name: data.name});
             this.controller.set("model.site.contact_lists", lists);
             setTimeout((() => {
-              return this.controller.set("model.contact_list_id", data.id);
-            }
+                return this.controller.set("model.contact_list_id", data.id);
+              }
             ), 100);
             return modal.$modal.remove();
           },
@@ -144,7 +144,14 @@ HelloBar.ApplicationRoute = Ember.Route.extend({
 
     saveSiteElement() {
       this.set("saveCount", this.get("saveCount") + 1);
-      if (trackEditorFlow) { InternalTracking.track_current_person("Editor Flow", {step: "Save Bar", goal: this.currentModel.element_subtype, style: this.currentModel.type, save_attempts: this.get("saveCount")}); }
+      if (trackEditorFlow) {
+        InternalTracking.track_current_person("Editor Flow", {
+          step: "Save Bar",
+          goal: this.currentModel.element_subtype,
+          style: this.currentModel.type,
+          save_attempts: this.get("saveCount")
+        });
+      }
 
       if (window.barID) {
         var url = `/sites/${window.siteID}/site_elements/${window.barID}.json`;
@@ -161,7 +168,14 @@ HelloBar.ApplicationRoute = Ember.Route.extend({
         data: JSON.stringify(this.currentModel),
 
         success: () => {
-          if (trackEditorFlow) { InternalTracking.track_current_person("Editor Flow", {step: "Completed", goal: this.currentModel.element_subtype, style: this.currentModel.type, save_attempts: this.get("saveCount")}); }
+          if (trackEditorFlow) {
+            InternalTracking.track_current_person("Editor Flow", {
+              step: "Completed",
+              goal: this.currentModel.element_subtype,
+              style: this.currentModel.type,
+              save_attempts: this.get("saveCount")
+            });
+          }
           if (this.controller.get("model.site.num_site_elements") === 0) {
             return window.location = `/sites/${window.siteID}`;
           } else {

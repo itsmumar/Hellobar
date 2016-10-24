@@ -4,20 +4,20 @@ HelloBar.PreviewController = Ember.Controller.extend({
 
   init() {
     return HB.addPreviewInjectionListener(container => {
-      return this.adjustPushHeight();
-    }
+        return this.adjustPushHeight();
+      }
     );
   },
 
   //-----------  Template Properties  -----------#
 
-  isMobile      : Ember.computed.alias('controllers.application.isMobile'),
-  isPushed      : Ember.computed.alias('model.pushes_page_down'),
-  barSize       : Ember.computed.alias('model.size'),
-  barPosition   : Ember.computed.alias('model.placement'),
-  elementType   : Ember.computed.alias('model.type'),
+  isMobile: Ember.computed.alias('controllers.application.isMobile'),
+  isPushed: Ember.computed.alias('model.pushes_page_down'),
+  barSize: Ember.computed.alias('model.size'),
+  barPosition: Ember.computed.alias('model.placement'),
+  elementType: Ember.computed.alias('model.type'),
 
-  previewStyleString: ( function() {
+  previewStyleString: ( function () {
     if (this.get('isMobile')) {
       return `background-image:url(${this.get('model.site_preview_image_mobile')})`;
     } else {
@@ -25,7 +25,7 @@ HelloBar.PreviewController = Ember.Controller.extend({
     }
   }).property('isMobile', 'model.site_preview_image', 'model.site_preview_image_mobile'),
 
-  previewImageURL: ( function() {
+  previewImageURL: ( function () {
     if (this.get('isMobile')) {
       return `${this.get('model.site_preview_image_mobile')}`;
     } else {
@@ -37,13 +37,17 @@ HelloBar.PreviewController = Ember.Controller.extend({
 
   colorPalette: Ember.computed.alias('controllers.application.colorPalette'),
 
-  setSiteColors: ( function() {
-    if (this.get('model.id') || window.elementToCopyID) { return false; }
-    
+  setSiteColors: ( function () {
+    if (this.get('model.id') || window.elementToCopyID) {
+      return false;
+    }
+
     let colorPalette = this.get('colorPalette');
     let dominantColor = this.get('dominantColor');
 
-    if (Ember.isEmpty(colorPalette) || Ember.isEmpty(dominantColor)) { return false; }
+    if (Ember.isEmpty(colorPalette) || Ember.isEmpty(dominantColor)) {
+      return false;
+    }
 
     //----------- Primary Color  -----------#
 
@@ -57,7 +61,7 @@ HelloBar.PreviewController = Ember.Controller.extend({
       }
     }
 
-    this.set('model.background_color', one.color(primaryColor).hex().replace('#',''));
+    this.set('model.background_color', one.color(primaryColor).hex().replace('#', ''));
 
     //----------- Other Colors  -----------#
 
@@ -66,22 +70,22 @@ HelloBar.PreviewController = Ember.Controller.extend({
 
     if (this.brightness(primaryColor) < 0.5) {
       return this.setProperties({
-        'model.text_color'   : white,
-        'model.button_color' : white,
-        'model.link_color'   : one.color(primaryColor).hex().replace('#','')
+        'model.text_color': white,
+        'model.button_color': white,
+        'model.link_color': one.color(primaryColor).hex().replace('#', '')
       });
     } else {
       colorPalette.sort((a, b) => {
-        return this.brightness(a) - this.brightness(b);
-      }
+          return this.brightness(a) - this.brightness(b);
+        }
       );
 
-      let darkest = this.brightness(colorPalette[0]) >= 0.5 ? black : one.color(colorPalette[0]).hex().replace('#','');
+      let darkest = this.brightness(colorPalette[0]) >= 0.5 ? black : one.color(colorPalette[0]).hex().replace('#', '');
 
       return this.setProperties({
-        'model.text_color'   : darkest,
-        'model.button_color' : darkest,
-        'model.link_color'   : white
+        'model.text_color': darkest,
+        'model.button_color': darkest,
+        'model.link_color': white
       });
     }
   }).observes('colorPalette'),
@@ -89,7 +93,7 @@ HelloBar.PreviewController = Ember.Controller.extend({
   brightness(color) {
     let rgb = Ember.copy(color);
 
-    [0, 1, 2].forEach(function(i) {
+    [0, 1, 2].forEach(function (i) {
       let val = rgb[i] / 255;
       return rgb[i] = val < 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
     });
@@ -101,16 +105,22 @@ HelloBar.PreviewController = Ember.Controller.extend({
   adjustPushHeight() {
     let height = size => {
       switch (size) {
-        case 'large': return '50px';
-        case 'regular': return '30px';
-        default: return size + 'px';
+        case 'large':
+          return '50px';
+        case 'regular':
+          return '30px';
+        default:
+          return size + 'px';
       }
     };
     let cssProperty = () => {
       switch (this.get('model.placement')) {
-        case 'bar-top': return 'border-top-width';
-        case 'bar-bottom': return 'border-bottom-width';
-        default: return null;
+        case 'bar-top':
+          return 'border-top-width';
+        case 'bar-bottom':
+          return 'border-bottom-width';
+        default:
+          return null;
       }
     };
 

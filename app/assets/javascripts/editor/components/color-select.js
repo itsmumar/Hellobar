@@ -10,9 +10,11 @@ HelloBar.ColorSelectComponent = Ember.Component.extend({
 
   //-----------  Background Styling  -----------#
 
-  cssStyle: ( function() {
+  cssStyle: ( function () {
     let color = one.color(this.get('color'));
-    if (color && color.hex()) { return `background-color: ${color.hex()}`; }
+    if (color && color.hex()) {
+      return `background-color: ${color.hex()}`;
+    }
   }).property('color'),
 
   //-----------  RGB Observer  -----------#
@@ -21,23 +23,23 @@ HelloBar.ColorSelectComponent = Ember.Component.extend({
     return this.setRGB();
   },
 
-  setRGB: Ember.throttledObserver('color', 75, function() {
-    // Only work with full colors, also, strip out any hash marks pasted in
-    let hex = this.get('color');
-    if (hex.length < 6) {
-      return;
-    } else if (hex.length > 6) {
-      hex = hex.replace('#', '');
-      hex = hex.substring(0, 6);
-      this.set('color', hex);
+  setRGB: Ember.throttledObserver('color', 75, function () {
+      // Only work with full colors, also, strip out any hash marks pasted in
+      let hex = this.get('color');
+      if (hex.length < 6) {
+        return;
+      } else if (hex.length > 6) {
+        hex = hex.replace('#', '');
+        hex = hex.substring(0, 6);
+        this.set('color', hex);
+      }
+
+      let rgb = this.getRGB();
+
+      this.set('rVal', parseInt(rgb[1], 16));
+      this.set('gVal', parseInt(rgb[2], 16));
+      return this.set('bVal', parseInt(rgb[3], 16));
     }
-
-    let rgb = this.getRGB();
-
-    this.set('rVal', parseInt(rgb[1], 16));
-    this.set('gVal', parseInt(rgb[2], 16));
-    return this.set('bVal', parseInt(rgb[3], 16));
-  }
   ),
 
   //-----------  Hex/RGB Conversion  -----------#
@@ -51,24 +53,24 @@ HelloBar.ColorSelectComponent = Ember.Component.extend({
     return result || ['ffffff', 'ff', 'ff', 'ff'];
   },
 
-  setHex: Ember.debouncedObserver('rVal', 'gVal', 'bVal', 'hexVal', 150, function() {
-    let r = parseInt(this.get('rVal'));
-    let g = parseInt(this.get('gVal'));
-    let b = parseInt(this.get('bVal'));
+  setHex: Ember.debouncedObserver('rVal', 'gVal', 'bVal', 'hexVal', 150, function () {
+      let r = parseInt(this.get('rVal'));
+      let g = parseInt(this.get('gVal'));
+      let b = parseInt(this.get('bVal'));
 
-    let gradRGB = this.get('rgb');
-    let inputRGB = {r, g, b};
+      let gradRGB = this.get('rgb');
+      let inputRGB = {r, g, b};
 
-    if (JSON.stringify(gradRGB) !== JSON.stringify(inputRGB)) {
-      let hex = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-      return this.gradient.setHex(`#${hex}`);
+      if (JSON.stringify(gradRGB) !== JSON.stringify(inputRGB)) {
+        let hex = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        return this.gradient.setHex(`#${hex}`);
+      }
     }
-  }
   ),
 
   //-----------  Wrap Color Gradient  -----------#
 
-  setupGradient: ( function() {
+  setupGradient: ( function () {
     let obj = this;
 
     ColorPicker.fixIndicators(
@@ -80,7 +82,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend({
       obj.$('.slider')[0],
       obj.$('.gradient')[0],
 
-      function(hex, hsv, rgb, pickerCoordinate, sliderCoordinate) {
+      function (hex, hsv, rgb, pickerCoordinate, sliderCoordinate) {
         ColorPicker.positionIndicators(
           obj.$('.slider-indicator')[0],
           obj.$('.gradient-indicator')[0],
@@ -98,21 +100,21 @@ HelloBar.ColorSelectComponent = Ember.Component.extend({
 
   //-----------  Push 'Recent' Changes to Controller  -----------#
 
-  updateRecent: Ember.debouncedObserver('color', 75, function() {
-    let color = this.get('color');
-    let recent = this.get('recentColors');
+  updateRecent: Ember.debouncedObserver('color', 75, function () {
+      let color = this.get('color');
+      let recent = this.get('recentColors');
 
-    if (recent.indexOf(color) <= -1) {
-      recent.shiftObject();
-      recent.pushObject(this.get('color'));
-      return this.set('recentColors', recent);
+      if (recent.indexOf(color) <= -1) {
+        recent.shiftObject();
+        recent.pushObject(this.get('color'));
+        return this.set('recentColors', recent);
+      }
     }
-  }
   ),
 
   //-----------  Screenshot Eye-Dropper  -----------#
 
-  eyeDropper: ( function() {
+  eyeDropper: ( function () {
     if (this.get('isSelecting')) {
       return $('.preview-image-for-colorpicker').dropperTrios({
         selector: $('.preview-image-for-colorpicker'),
@@ -126,7 +128,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend({
     }
   }).observes('isSelecting').on('didInsertElement'),
 
-  togglePreview: ( function() {
+  togglePreview: ( function () {
     if (this.get('isSelecting')) {
       // Hide the preview frame for Modal and Takeovers so that they can select colors
       return $(`#${window.HB_PS}-container.HB-Takeover, #${window.HB_PS}-container.HB-Modal`).fadeOut();
@@ -138,7 +140,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend({
 
   //-----------  Component State Switching  -----------#
 
-  observeSiblings: ( function() {
+  observeSiblings: ( function () {
     if (this.get('inFocus') && (this.get('focusedColor') !== this.get('elementId'))) {
       this.set('isSelecting', false);
       return this.set('inFocus', false);
@@ -147,7 +149,7 @@ HelloBar.ColorSelectComponent = Ember.Component.extend({
 
   //-----------  Actions  -----------#
 
-  resetOnDestruction: ( function() {
+  resetOnDestruction: ( function () {
     $('.preview-image-for-colorpicker').dropperClean();
     this.set('isSelecting', false);
     return this.togglePreview();
@@ -178,7 +180,7 @@ HelloBar.ColorPreview = Ember.View.extend({
   classNames: ['color-preview'],
   attributeBindings: ['style'],
 
-  style: ( function() {
+  style: ( function () {
     let color = one.color(this.get('color'));
     if (color && color.hex()) {
       return `background-color: ${color.hex()}`;

@@ -5,7 +5,7 @@ HelloBar.InterstitialIndexController = Ember.Controller.extend({
 
   csrfToken: ( () => $("meta[name=csrf-token]").attr("content")).property(),
 
-  afterModel: (function() {
+  afterModel: (function () {
     // default values are defined in DB schema (shema.rb); we remember them here
     return this.defaults = {
       "model.headline": this.model.headline,
@@ -17,7 +17,9 @@ HelloBar.InterstitialIndexController = Ember.Controller.extend({
 
 // Reset defaults when transitioning to interstitial index (called from intersitial-route on controller setup)
   setDefaults() {
-    if (!this.get("model")) { return false; }
+    if (!this.get("model")) {
+      return false;
+    }
 
     return this.setProperties(this.defaults);
   }

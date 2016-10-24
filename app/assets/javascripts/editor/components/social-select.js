@@ -17,7 +17,7 @@ HelloBar.SocialOption = Ember.View.extend({
 
   classNameBindings: ['content.service', 'isSelected'],
 
-  isSelected: ( function() {
+  isSelected: ( function () {
     return Ember.isEqual(this.get('content.value'), this.get('parentView.selection'));
   }).property('parentView.selection'),
 

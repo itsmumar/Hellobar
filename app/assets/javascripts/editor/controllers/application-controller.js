@@ -3,7 +3,9 @@ HelloBar.ApplicationController = Ember.Controller.extend({
   //-----------  User  -----------#
 
   currentUser: ( () => window.currentUser).property(),
-  isTemporaryUser: ( function() { return this.get('currentUser') && this.get('currentUser').status === 'temporary';  }).property('currentUser'),
+  isTemporaryUser: ( function () {
+    return this.get('currentUser') && this.get('currentUser').status === 'temporary';
+  }).property('currentUser'),
 
   //-----------  Step Tracking  -----------#
 
@@ -27,7 +29,7 @@ HelloBar.ApplicationController = Ember.Controller.extend({
 
   // Render the element in the preview pane whenever style-affecting attributes change
 
-  renderPreview: ( function() {
+  renderPreview: ( function () {
     return Ember.run.debounce(this, this.doRenderPreview, 500);
   }).observes(
     "model.answer1",
@@ -90,30 +92,30 @@ HelloBar.ApplicationController = Ember.Controller.extend({
     "isMobile"
   ).on("init"),
 
-  renderPreviewWithAnimations: ( function() {
+  renderPreviewWithAnimations: ( function () {
     return Ember.run.debounce(this, this.doRenderPreview, true, 500);
   }).observes("model.animated").on("init"),
 
   doRenderPreview(withAnimations = false) {
     let previewElement = $.extend({}, this.get("model"), {
-      animated: withAnimations && this.get("model.animated"),
-      hide_destination: true,
-      open_in_new_window: this.get("model.open_in_new_window"),
-      primary_color: this.get("model.background_color"),
-      pushes_page_down: this.get("model.pushes_page_down"),
-      remains_at_top: this.get("model.remains_at_top"),
-      secondary_color: this.get("model.button_color"),
-      show_border: false,
-      size: this.get("model.size"),
-      subtype: this.get("model.element_subtype"),
-      tab_side: "right",
-      template_name: this.get("model.type").toLowerCase() + "_" + (this.get("model.element_subtype") || "traffic"),
-      thank_you_text: "Thank you for signing up!",
-      wiggle_button: this.get("model.wiggle_button"),
-      wiggle_wait: 0,
-      font: this.getFont().value,
-      google_font: this.getFont().google_font
-    }
+        animated: withAnimations && this.get("model.animated"),
+        hide_destination: true,
+        open_in_new_window: this.get("model.open_in_new_window"),
+        primary_color: this.get("model.background_color"),
+        pushes_page_down: this.get("model.pushes_page_down"),
+        remains_at_top: this.get("model.remains_at_top"),
+        secondary_color: this.get("model.button_color"),
+        show_border: false,
+        size: this.get("model.size"),
+        subtype: this.get("model.element_subtype"),
+        tab_side: "right",
+        template_name: this.get("model.type").toLowerCase() + "_" + (this.get("model.element_subtype") || "traffic"),
+        thank_you_text: "Thank you for signing up!",
+        wiggle_button: this.get("model.wiggle_button"),
+        wiggle_wait: 0,
+        font: this.getFont().value,
+        google_font: this.getFont().google_font
+      }
     );
 
     HB.isPreviewMode = true;
@@ -126,9 +128,9 @@ HelloBar.ApplicationController = Ember.Controller.extend({
 
   // Sets a callback on the preview script to rerender the preview after the user
   // closes the element
-  setRerenderOnClose: ( function() {
+  setRerenderOnClose: ( function () {
     let that = this;
-    let callback = function() {
+    let callback = function () {
       let delayedFunc = () => Ember.run.debounce(that, that.doRenderPreview, false, 500);
       return setTimeout(delayedFunc, 1000);
     };
@@ -150,7 +152,7 @@ HelloBar.ApplicationController = Ember.Controller.extend({
 
   doneButtonText: (() => "Save & Publish").property(),
 
-  setRuleID: (function() {
+  setRuleID: (function () {
     let ruleId = parseInt(this.get("rule_id"));
     // if both model and rule_id parameter exist
     if (this.get("model") && ruleId >= 0) {
@@ -162,8 +164,10 @@ HelloBar.ApplicationController = Ember.Controller.extend({
   // that happen AFTER that initialization. By using an observesBefore here and only setting the flag if the property being changed
   // is not null or undefined before the change, we avoid setting the flag until the property has had an initial value set.
 
-  setModelIsDirty: ( function(obj, keyName) {
-    if (!!this.get(keyName)) { return this.set("modelIsDirty", true); }
+  setModelIsDirty: ( function (obj, keyName) {
+    if (!!this.get(keyName)) {
+      return this.set("modelIsDirty", true);
+    }
   }).observesBefore(
     "model.animated",
     "model.answer1",
@@ -238,11 +242,13 @@ HelloBar.ApplicationController = Ember.Controller.extend({
 
   isCallType: Ember.computed.equal('model.element_subtype', 'call'),
 
-  setPhoneDefaults: (function() {
-    if (this.get('model.element_subtype') === 'call') { return this.set("isMobile", true); }
+  setPhoneDefaults: (function () {
+    if (this.get('model.element_subtype') === 'call') {
+      return this.set("isMobile", true);
+    }
   }).observes("model.element_subtype").on("init"),
 
-  formatPhoneNumber: (function() {
+  formatPhoneNumber: (function () {
     let phone_number = this.get("phone_number") || this.get("model.phone_number");
     let country_code = this.get("model.phone_country_code");
 
@@ -267,7 +273,9 @@ HelloBar.ApplicationController = Ember.Controller.extend({
     },
 
     toggleMobile() {
-      if (this.get("model.element_subtype") !== "call") { this.toggleProperty('isMobile'); }
+      if (this.get("model.element_subtype") !== "call") {
+        this.toggleProperty('isMobile');
+      }
       return false;
     },
 
@@ -301,5 +309,6 @@ HelloBar.ApplicationController = Ember.Controller.extend({
         }
       }
     }
-  }});
+  }
+});
   

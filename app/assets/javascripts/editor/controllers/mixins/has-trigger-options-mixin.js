@@ -10,4 +10,5 @@ HelloBar.HasTriggerOptions = Ember.Mixin.create({
     {value: 'scroll-middle', label: 'After scrolling to middle'},
     {value: 'scroll-to-bottom', label: 'After scrolling to bottom'},
     {value: 'exit-intent', label: 'User intends to leave'}
-  ]});
+  ]
+});

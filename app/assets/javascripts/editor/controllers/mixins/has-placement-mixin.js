@@ -1,6 +1,6 @@
 HelloBar.HasPlacement = Ember.Mixin.create({
 
-  selectedPlacement: ( function(key, value) {
+  selectedPlacement: ( function (key, value) {
 
     if (arguments.length > 1) {
       this.set('model.placement', value);
@@ -10,7 +10,9 @@ HelloBar.HasPlacement = Ember.Mixin.create({
 
       for (let i = 0; i < this.placementOptions.length; i++) {
         let val = this.placementOptions[i];
-        if (current_placement === val.value) { return current_placement; }
+        if (current_placement === val.value) {
+          return current_placement;
+        }
       }
 
       if (this.placementOptions !== null && this.placementOptions.length > 0) {
@@ -22,7 +24,7 @@ HelloBar.HasPlacement = Ember.Mixin.create({
     }
   }).property(),
 
-  selectedTrigger: ( function(key, value) {
+  selectedTrigger: ( function (key, value) {
 
     if (arguments.length > 1) {
       this.set('model.view_condition', value);
@@ -32,7 +34,9 @@ HelloBar.HasPlacement = Ember.Mixin.create({
 
       for (let i = 0; i < this.triggerOptions.length; i++) {
         let val = this.triggerOptions[i];
-        if (current_trigger === val.value) { return current_trigger; }
+        if (current_trigger === val.value) {
+          return current_trigger;
+        }
       }
 
       if (this.triggerOptions !== null && this.triggerOptions.length > 0) {

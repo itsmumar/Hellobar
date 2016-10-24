@@ -3,11 +3,11 @@ HelloBar.CustomProSelectComponent = Ember.Component.extend({
   isOpen: false,
   tabindex: -1,
 
-  classNames        : ['custom-select-wrapper'],
-  classNameBindings : ['isOpen:is-open'],
-  attributeBindings : ['tabindex'], // to make component focusable
+  classNames: ['custom-select-wrapper'],
+  classNameBindings: ['isOpen:is-open'],
+  attributeBindings: ['tabindex'], // to make component focusable
 
-  _setSelectedOption: ( function() {
+  _setSelectedOption: ( function () {
     return this.set('currentChoice', this.get('options').findBy('key', this.get('choice')));
   }).observes('choice').on('init'),
 

@@ -13,7 +13,7 @@ HelloBar.StyleController = Ember.Controller.extend({
 
   routeForwarding: false,
 
-  setType: (function() {
+  setType: (function () {
     switch (this.get('routeForwarding')) {
       case 'style.modal':
         this.set('model.type', 'Modal');
@@ -27,11 +27,21 @@ HelloBar.StyleController = Ember.Controller.extend({
       default:
         this.set('model.type', 'Bar');
     }
-    if (trackEditorFlow) { return InternalTracking.track_current_person("Editor Flow", {step: "Style Settings", goal: this.get("model.element_subtype")}); }
+    if (trackEditorFlow) {
+      return InternalTracking.track_current_person("Editor Flow", {
+        step: "Style Settings",
+        goal: this.get("model.element_subtype")
+      });
+    }
   }).observes('routeForwarding'),
 
-  trackStyleView: (function() {
-    if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) { return InternalTracking.track_current_person("Editor Flow", {step: "Choose Style", goal: this.get("model.element_subtype")}); }
+  trackStyleView: (function () {
+    if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) {
+      return InternalTracking.track_current_person("Editor Flow", {
+        step: "Choose Style",
+        goal: this.get("model.element_subtype")
+      });
+    }
   }).observes('model').on('init'),
 
   actions: {

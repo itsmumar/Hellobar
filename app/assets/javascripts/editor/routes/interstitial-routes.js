@@ -5,7 +5,8 @@ HelloBar.InterstitialRoute = Ember.Route.extend({
 
   renderTemplate() {
     return this.render({
-      outlet: "interstitial"}); // render main interstitial template inside of "interstitial" outlet
+      outlet: "interstitial"
+    }); // render main interstitial template inside of "interstitial" outlet
   },
 
   // Set sub-step forwarding on interstitial load
@@ -34,7 +35,8 @@ HelloBar.InterstitialRoute = Ember.Route.extend({
 let NestedInterstitialRoute = HelloBar.InterstitialRoute.extend({
   renderTemplate() {
     return this.render({
-      into: "interstitial"}); // render sub-interstitial templates into main "interstitial" template
+      into: "interstitial"
+    }); // render sub-interstitial templates into main "interstitial" template
   },
 
   setupController(controller, model) {
@@ -46,9 +48,8 @@ let NestedInterstitialRoute = HelloBar.InterstitialRoute.extend({
 });
 
 
-
-HelloBar.InterstitialIndexRoute    = NestedInterstitialRoute.extend();
-HelloBar.InterstitialMoneyRoute    = NestedInterstitialRoute.extend();
+HelloBar.InterstitialIndexRoute = NestedInterstitialRoute.extend();
+HelloBar.InterstitialMoneyRoute = NestedInterstitialRoute.extend();
 HelloBar.InterstitialContactsRoute = NestedInterstitialRoute.extend();
-HelloBar.InterstitialCallRoute     = NestedInterstitialRoute.extend();
+HelloBar.InterstitialCallRoute = NestedInterstitialRoute.extend();
 HelloBar.InterstitialFacebookRoute = NestedInterstitialRoute.extend();

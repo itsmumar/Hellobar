@@ -21,7 +21,7 @@
 //= require handlebars
 //= require handlebars_helpers
 
-$(function() {
+$(function () {
 
   //-----------  Old IE Detection  -----------#
 

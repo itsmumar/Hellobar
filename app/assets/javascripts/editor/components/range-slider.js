@@ -11,7 +11,9 @@ HelloBar.RangeSliderComponent = Ember.Component.extend({
   leftLabel: null,
   rightLabel: null,
 
-  context: Ember.computed(function() { return this; }),
+  context: Ember.computed(function () {
+    return this;
+  }),
 
   // ----- Component lifecycle methods -----
 
@@ -29,16 +31,16 @@ HelloBar.RangeSliderComponent = Ember.Component.extend({
     let slider = el.noUiSlider;
     this.set('slider', slider);
     this.sliderEvents.forEach(event => {
-      if (!Ember.isEmpty(this.get(event))) {
-        return slider.on(event, (values, handle) => {
-          let value = this.get('slider').get();
-          value = value ? parseInt(value).toString() : '0';
-          this.updateHandleValue(value);
-          return this.sendAction(event, value);
+        if (!Ember.isEmpty(this.get(event))) {
+          return slider.on(event, (values, handle) => {
+              let value = this.get('slider').get();
+              value = value ? parseInt(value).toString() : '0';
+              this.updateHandleValue(value);
+              return this.sendAction(event, value);
+            }
+          );
         }
-        );
       }
-    }
     );
     return this.updateLayout();
   },
@@ -46,8 +48,8 @@ HelloBar.RangeSliderComponent = Ember.Component.extend({
   willDestroyElement() {
     if (this.slider) {
       this.sliderEvents.forEach(event => {
-        return this.slider.off(event);
-      }
+          return this.slider.off(event);
+        }
       );
       return this.slider.destroy();
     }

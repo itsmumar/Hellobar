@@ -2,7 +2,7 @@ HelloBar.TargetingController = Ember.Controller.extend({
 
   targetingUiVariant: (() => window.targetingUiVariant).property('model'),
 
-  trackTargetingView: (function() {
+  trackTargetingView: (function () {
     if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) {
       return InternalTracking.track_current_person("Editor Flow", {step: "Targeting Step"});
     }
@@ -10,20 +10,20 @@ HelloBar.TargetingController = Ember.Controller.extend({
 
   //-------------- Helpers ----------------#
 
-  defaultRules: ( function() {
+  defaultRules: ( function () {
     let rules = this.get('model.site.rules').filter(rule => rule.editable === false);
-    return rules.reduce(function(hash, rule) {
-        hash[rule.name]= rule;
+    return rules.reduce(function (hash, rule) {
+        hash[rule.name] = rule;
         return hash;
       }
-    , {});
+      , {});
   }).property(),
 
-  customRules: ( function() {
+  customRules: ( function () {
     return this.get('model.site.rules').filter(rule => rule.editable === true);
   }).property("model.site.rules"),
 
-  hasCustomRules: ( function() {
+  hasCustomRules: ( function () {
     return this.get('customRules').length > 0;
   }).property("model.site.rules"),
 
@@ -37,7 +37,7 @@ HelloBar.TargetingController = Ember.Controller.extend({
     return this.set('routeForwarding', newRoute);
   },
 
-  onSubRoute: (function() {
+  onSubRoute: (function () {
     return (this.get('routeForwarding') || "").split('.').length > 1;
   }).property('routeForwarding'),
 
@@ -48,17 +48,17 @@ HelloBar.TargetingController = Ember.Controller.extend({
 
   trackUpgrade() {
     return InternalTracking.track_current_person("Editor Flow", {
-                                                          step: "Choose Targeting Type - Converted to Pro",
-                                                          ui: this.get('targetingUiVariant') ? 'variant' : 'original'
-                                                         });
+      step: "Choose Targeting Type - Converted to Pro",
+      ui: this.get('targetingUiVariant') ? 'variant' : 'original'
+    });
   },
-  
 
-  canUseRuleModal: ( function() {
+
+  canUseRuleModal: ( function () {
     return this.get("model.site.capabilities.custom_targeted_bars");
   }).property("model.site.capabilities.custom_targeted_bars"),
 
-  popNewRuleModal: (function() {
+  popNewRuleModal: (function () {
     if (!this.get('targetingUiVariant') && !this.get('model.rule_id')) {
       return this.send('openRuleModalOriginal', {});
     }
@@ -73,24 +73,24 @@ HelloBar.TargetingController = Ember.Controller.extend({
 
   //-----------  New/Edit Rule Modal  -----------#
 
-  canTarget: ( function() {
+  canTarget: ( function () {
     return this.get("model.site.capabilities.custom_targeted_bars");
   }).property("model.site.capabilities.custom_targeted_bars"),
 
-  ruleOptions: ( function() {
+  ruleOptions: ( function () {
     let rules = this.get("model.site.rules").slice().filter(rule => rule.editable === true);
     rules.unshift({name: "Choose a saved rule...", description: "?", editable: true});
     return rules;
   }).property("model.site.rules"),
 
-  ruleOptionsOriginal: ( function() {
+  ruleOptionsOriginal: ( function () {
     let rules = this.get("model.site.rules").slice();
     rules = rules.filter(rule => rule.name !== "Mobile Visitors" && rule.name !== "Homepage Visitors");
     rules.push({name: "Other...", description: "?", editable: true});
     return rules;
   }).property("model.site.rules"),
 
-  selectedRule: (function() {
+  selectedRule: (function () {
     let selectedRuleId;
     if (!(selectedRuleId = this.get('model.rule_id'))) {
       return null;
@@ -98,7 +98,7 @@ HelloBar.TargetingController = Ember.Controller.extend({
     return this.get("ruleOptions").find(rule => rule.id === selectedRuleId);
   }).property("model.rule_id", "model.site.rules"),
 
-  selectedRuleOriginal: (function() {
+  selectedRuleOriginal: (function () {
     let selectedRuleId = this.get('model.rule_id');
     return this.get("ruleOptionsOriginal").find(rule => rule.id === selectedRuleId);
   }).property("model.rule_id", "model.site.rules"),
@@ -116,9 +116,13 @@ HelloBar.TargetingController = Ember.Controller.extend({
 
   routeForwarding: false,
 
-  setRule: (function() {
-    if (!this.get('targetingUiVariant')) { return; }
-    if (this.get("showUpgradeModal")) { return; }
+  setRule: (function () {
+    if (!this.get('targetingUiVariant')) {
+      return;
+    }
+    if (this.get("showUpgradeModal")) {
+      return;
+    }
 
     let defaultRules = this.get('defaultRules');
     let customRules = this.get('customRules');
@@ -139,13 +143,13 @@ HelloBar.TargetingController = Ember.Controller.extend({
         break;
       case 'targeting.saved':
         if (!__in__(this.get('model.rule'), ((() => {
-          let result = [];
-          for (let name in customRules) {
-            let rule = customRules[name];
-            result.push(rule);
-          }
-          return result;
-        })()))) {
+            let result = [];
+            for (let name in customRules) {
+              let rule = customRules[name];
+              result.push(rule);
+            }
+            return result;
+          })()))) {
           this.associateRuleToModel(null);
         }
         break;
@@ -153,25 +157,30 @@ HelloBar.TargetingController = Ember.Controller.extend({
         this.associateRuleToModel(null);
     }
 
-    if (trackEditorFlow) { return InternalTracking.track_current_person("Editor Flow", {step: "Choose Targeting Type", targeting: this.get('routeForwarding')}); }
+    if (trackEditorFlow) {
+      return InternalTracking.track_current_person("Editor Flow", {
+        step: "Choose Targeting Type",
+        targeting: this.get('routeForwarding')
+      });
+    }
   }).observes('routeForwarding'),
 
-  showUpgradeModal: (function() {
+  showUpgradeModal: (function () {
     let newRoute = this.get('routeForwarding');
 
     if (newRoute === 'targeting' || newRoute === 'targeting.everyone' || this.get("canTarget")) {
       return false;
     } else {
       InternalTracking.track_current_person("Editor Flow", {
-                                                            step: "Choose Targeting Type - Upgrade Modal",
-                                                            targeting: newRoute
-                                                           });
+        step: "Choose Targeting Type - Upgrade Modal",
+        targeting: newRoute
+      });
       this.send("openUpgradeModal", newRoute);
       return true;
     }
   }).property('routeForwarding'),
 
-  afterModel: (function() {
+  afterModel: (function () {
     let cookieSettings = this.get('model.settings.cookie_settings');
     if (_.isEmpty(cookieSettings)) {
       let elementType = this.get('model.type');
@@ -259,14 +268,24 @@ HelloBar.TargetingController = Ember.Controller.extend({
     resetRuleDropdownOriginal(ruleData = {}) {
       if (ruleData.id === undefined) {
         let firstRule = this.get('model.site.rules')[0];
-        if (!firstRule) { firstRule = { id: null }; }
+        if (!firstRule) {
+          firstRule = {id: null};
+        }
         return this.set('model.rule_id', firstRule.id);
       }
     },
 
     openRuleModalOriginal(ruleData) {
-      if (trackEditorFlow) { InternalTracking.track_current_person("Editor Flow", {step: "Edit Targeting", goal: this.get("model.element_subtype"), style: this.get("model.type")}); }
-      if (!this.get("canUseRuleModal")) { return this.send("openUpgradeModalOriginal", ruleData); }
+      if (trackEditorFlow) {
+        InternalTracking.track_current_person("Editor Flow", {
+          step: "Edit Targeting",
+          goal: this.get("model.element_subtype"),
+          style: this.get("model.type")
+        });
+      }
+      if (!this.get("canUseRuleModal")) {
+        return this.send("openUpgradeModalOriginal", ruleData);
+      }
 
       ruleData.siteID = window.siteID;
       let controller = this;

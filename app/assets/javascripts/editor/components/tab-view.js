@@ -1,9 +1,9 @@
 HelloBar.NavTabComponent = Ember.Component.extend({
   tagName: 'a',
-  classNames: [ 'nav-pill' ],
-  classNameBindings: [ 'isActive:active' ],
+  classNames: ['nav-pill'],
+  classNameBindings: ['isActive:active'],
   attributeBindings: ['onSelection'],
-  isActive: (function() {
+  isActive: (function () {
     return this.get('paneId') === this.get('parentView.activePaneId');
   }).property('paneId', 'parentView.activePaneId'),
   click() {
@@ -15,10 +15,10 @@ HelloBar.NavTabComponent = Ember.Component.extend({
 });
 
 HelloBar.TabPaneComponent = Ember.Component.extend({
-  classNames: [ 'tab-pane' ],
-  classNameBindings: [ 'isActive:active' ],
+  classNames: ['tab-pane'],
+  classNameBindings: ['isActive:active'],
   attributeBindings: ['onSelection'],
-  isActive: (function() {
+  isActive: (function () {
     return this.get('elementId') === this.get('parentView.activePaneId');
   }).property('elementId', 'parentView.activePaneId'),
   didInsertElement() {
@@ -37,7 +37,7 @@ HelloBar.TabPaneComponent = Ember.Component.extend({
 });
 
 HelloBar.TabViewComponent = Ember.Component.extend({
-  classNames: [ 'tab-view' ],
+  classNames: ['tab-view'],
   attributeBindings: ['model', 'navigationName'],
   activePaneId: null,
   layoutName: (() => 'components/tab-view').property(),
@@ -50,13 +50,13 @@ HelloBar.TabViewComponent = Ember.Component.extend({
       return this.set('activePaneId', paneId);
     } else if (paneId !== this.get('activePaneId')) {
       this.set('activePaneId', paneId);
-      return this.set(`model.${this.get('currentTabNameAttribute')}` , name);
+      return this.set(`model.${this.get('currentTabNameAttribute')}`, name);
     }
   },
 
   // Listen for paneSelected changes.  When this is changed, grab the pane and
   // and set it as active.
-  paneSelectedChange: (function() {
+  paneSelectedChange: (function () {
     let pane = this.get('panes')[this.get('model.paneSelectedIndex')];
     return this.setActivePane(pane.paneId, pane.name);
   }).observes('paneSelectionCount'),
@@ -73,7 +73,7 @@ HelloBar.TabViewComponent = Ember.Component.extend({
 HelloBar.QuestionTabsComponent = HelloBar.TabViewComponent.extend({
   layoutName: (() => 'components/tab-view').property(),
 
-  showQuestion:  'showQuestion',
+  showQuestion: 'showQuestion',
   showResponse1: 'showResponse1',
   showResponse2: 'showResponse2'
 });

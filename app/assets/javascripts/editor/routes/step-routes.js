@@ -36,7 +36,8 @@ HelloBar.StepRoute = Ember.Route.extend({
         return this.replaceWith("interstitial");
       }
     }
-  }});
+  }
+});
 
 
 //-----------  Setup Step Routes  -----------#
