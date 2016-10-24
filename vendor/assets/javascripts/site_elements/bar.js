@@ -1,16 +1,15 @@
 HB.BarElement = HB.createClass({
-  initialize: function(props)
-  {
+  initialize: function (props) {
     this.callSuper("initialize", props);
   },
 
-  setupIFrame: function(iframe){
+  setupIFrame: function (iframe) {
     this.callSuper('setupIFrame', iframe)
     HB.addClass(iframe, "hb-" + this.size);
     HB.addClass(iframe, "hb-" + this.placement);
     HB.addClass(iframe, (HB.t(this.remains_at_top) ? " remains-in-place" : ""));
 
-    if ( this.animated ) {
+    if (this.animated) {
       HB.addClass(iframe, "hellobar");
     }
 
@@ -18,35 +17,37 @@ HB.BarElement = HB.createClass({
     iframe.setAttribute("frameBorder", 0); // IE 9 and less
 
     // Remove the pusher if it exists
-    if ( HB.p )
+    if (HB.p)
       HB.p.parentNode.removeChild(HB.p);
     HB.p = null;
 
     // Create the pusher (which pushes the page down) if needed
-    if ( HB.t(this.pushes_page_down) ) {
+    if (HB.t(this.pushes_page_down)) {
       HB.p = document.createElement("div");
-      HB.p.id="hellobar-pusher";
+      HB.p.id = "hellobar-pusher";
       HB.p.className = "hb-" + this.size;
       // shrinks pusher if siteElement hidden by viewCondition rules
-      if (this.w.style.display === "none") {HB.p.style.height = 0};
+      if (this.w.style.display === "none") {
+        HB.p.style.height = 0
+      }
+      ;
       HB.injectAtTop(HB.p, this.placement == "bar-bottom");
     }
   },
 
-  minimize: function(se_id){
+  minimize: function (se_id) {
     HB.animateOut(this.w, this.onHidden(se_id));
-    if(HB.p != null)
+    if (HB.p != null)
       HB.p.style.display = 'none';
 
-    if(HB.colorIsBright(this.primary_color)) {
+    if (HB.colorIsBright(this.primary_color)) {
       $(this.pullDown).addClass('inverted');
     }
 
     HB.animateIn(this.pullDown);
   },
 
-  onHidden: function(se_id)
-  {
+  onHidden: function (se_id) {
     // Track specific elements longer, for takeovers/modals
     var expiration, cookie_name, cookie_str, dismissed_elements;
     // Track specific elements 24 hours, for bars/sliders
@@ -67,9 +68,9 @@ HB.BarElement = HB.createClass({
     }
   },
 
-  attach: function(){
+  attach: function () {
     // Disable wiggle on Mobile Safari because it blocks the click action
-    if(this.wiggle_button && !HB.isMobileSafari()) {
+    if (this.wiggle_button && !HB.isMobileSafari()) {
       this.wiggle = 'wiggle';
     } else {
       this.wiggle = '';
