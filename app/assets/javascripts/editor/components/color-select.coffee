@@ -159,9 +159,11 @@ HelloBar.ColorPreview = Ember.View.extend
 
   style: ( ->
     color = one.color(@get('color'))
-    return "background-color: #{color.hex()}" if color && color.hex()
+    if color && color.hex()
+      return "background-color: #{color.hex()}"
   ).property('color')
 
   mouseUp: ->
     color = one.color(@get('color'))
-    @set('parentView.color', color.hex()) if color && color.hex()
+    if color && color.hex()
+      @set('parentView.color', color.hex())
