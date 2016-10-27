@@ -60,10 +60,10 @@ HelloBar.DesignController = Ember.Controller.extend
   # Site Element Theme Properties
   themeChanged: Ember.observer('currentTheme', ->
     Ember.run.next(@, ->
-      themeStyleDefaults = @get('currentTheme.defaults')[@get('model.type')] || {}
-
-      _.each themeStyleDefaults, (value, key) =>
-        @set("model.#{key}", value)
+#      themeStyleDefaults = @get('currentTheme.defaults')[@get('model.type')] || {}
+#
+#      _.each themeStyleDefaults, (value, key) =>
+#        @set("model.#{key}", value)
 
       @setProperties
         'model.image_placement'   : @getImagePlacement()

@@ -1,5 +1,17 @@
 HelloBar.ApplicationController = Ember.Controller.extend
 
+  init: ->
+    # TODO remove
+    window.testController = this
+#    Ember.run.next(=>
+#      if not @get('model.theme_id')
+#        @set('model.theme_id', 'classics')
+#    )
+    Ember.run.next(=>
+      @applyCurrentTheme()
+    )
+
+
   #-----------  User  -----------#
 
   currentUser: ( -> window.currentUser ).property()
@@ -252,6 +264,18 @@ HelloBar.ApplicationController = Ember.Controller.extend
     else
       @set("model.phone_number", null)
   ).observes("model.phone_number", "phone_number", "model.phone_country_code")
+
+  applyCurrentTheme: ->
+    allThemes = availableThemes
+    currentThemeId = @get('model.theme_id')
+    currentTheme = _.find(allThemes, (theme) => currentThemeId == theme.id)
+    themeStyleDefaults = currentTheme.defaults[@get('model.type')] || {}
+    _.each themeStyleDefaults, (value, key) =>
+      @set("model.#{key}", value)
+
+  onCurrentThemeChanged: (->
+    @applyCurrentTheme()
+  ).observes('model.theme_id')
 
   #-----------  Actions  -----------#
 
