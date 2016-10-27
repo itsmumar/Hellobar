@@ -84,7 +84,7 @@
 #hellobar-bar .hb-arrow-wrapper {
   padding-left: 1rem;
   text-align: right;
-  width: 8rem;
+  float: right;
 }
 
 #hellobar-bar .hb-arrow-wrapper a {
