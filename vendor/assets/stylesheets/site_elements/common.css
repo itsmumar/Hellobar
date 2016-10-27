@@ -98,7 +98,6 @@ form {
 
 /*-----------  Close Buttons  -----------*/
 
-#hellobar-bar .icon-close,
 #hellobar-modal .icon-close,
 #hellobar-slider .icon-close,
 #hellobar-takeover .icon-close {
@@ -121,7 +120,6 @@ form {
   -webkit-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
 }
 
-#hellobar-bar .icon-close,
 #hellobar-modal .icon-close:hover,
 #hellobar-slider .icon-close:hover,
 #hellobar-takeover .icon-close:hover {
@@ -138,11 +136,6 @@ form {
 #hellobar-slider.dark .icon-close,
 #hellobar-takeover.dark .icon-close {
   color: #ffffff;
-}
-
-#hellobar-bar .icon-close {
-  font-size: 12px;
-  top: inherit;
 }
 
 /*-----------  Main Content  -----------*/
