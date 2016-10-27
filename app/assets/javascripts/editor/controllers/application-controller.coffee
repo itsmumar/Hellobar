@@ -1,12 +1,6 @@
 HelloBar.ApplicationController = Ember.Controller.extend
 
   init: ->
-    # TODO remove
-    window.testController = this
-#    Ember.run.next(=>
-#      if not @get('model.theme_id')
-#        @set('model.theme_id', 'classics')
-#    )
     Ember.run.next(=>
       @applyCurrentTheme()
     )
