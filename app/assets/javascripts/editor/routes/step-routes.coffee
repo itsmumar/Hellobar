@@ -31,6 +31,11 @@ HelloBar.StepRoute = Ember.Route.extend
       # currentRoute==undefined indicates page refresh
       @replaceWith("interstitial") unless currentRoute or HB_DATA.skipInterstitial or model.element_subtype
 
+      # TODO create more generic solution after refactoring to a newer Ember
+      newRoute = @routeName
+      if (not newRoute) or newRoute.indexOf('style') != 0
+        HelloBar.bus.trigger('hellobar.core.rightPane.hide')
+
 
 #-----------  Setup Step Routes  -----------#
 

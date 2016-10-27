@@ -1,0 +1,5 @@
+{{#each theme in themes}}
+  <div {{bind-attr data-theme-id=theme.id }} class="theme-tile-wrapper">
+    {{theme-tile theme=theme}}
+  </div>
+{{/each}}

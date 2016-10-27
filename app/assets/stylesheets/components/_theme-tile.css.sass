@@ -1,0 +1,41 @@
+.theme-tile
+  display: block
+  position: relative
+  background-color: #696969
+  padding: 10px
+  height: calc(100vw * 3.0 / 29.0)
+
+  img
+    display: block
+    box-shadow: 2px 2px 2px #565656
+
+  .theme-name
+    position: absolute
+    bottom: 10px
+    left: 0
+    right: 0
+    text-align: center
+    color: #f9f9f9
+    font-size: 0.7em
+
+  .button-overlay
+    display: none
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+    bottom: 0
+    background-color: rgba(50, 50, 50, 0.6)
+    text-align: center
+    justify-content: center
+
+    &.visible
+      display: flex
+
+    .button
+      display: block
+      padding: 10px 20px
+      align-self: center
+      background-color: #54d388
+      color: white
+

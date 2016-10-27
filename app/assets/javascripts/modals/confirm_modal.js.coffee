@@ -18,6 +18,7 @@ class @ConfirmModal extends Modal
     @options.text ||= "Are you sure?"
     @options.confirmBtnText ||= "Confirm"
     @options.cancelBtnText ||= "Cancel"
+    @options.showCloseIcon ||= false
 
   _bindEvents: ->
     @$modal.find(".confirm").click (evt) =>

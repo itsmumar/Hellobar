@@ -1,6 +1,13 @@
 script id='confirm-modal-template' type='text/x-handlebars-template'
   .modal-wrapper
     .modal-block
+
+      |{{#if showCloseIcon}}
+
+      i.icon-close
+
+      |{{/if}}
+
       header
         h5
           |{{title}}
