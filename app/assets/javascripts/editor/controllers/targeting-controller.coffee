@@ -111,7 +111,7 @@ HelloBar.TargetingController = Ember.Controller.extend
   routeForwarding: false
 
   setRule: (->
-    return unless @get('targetingUiVariant')
+    # return unless @get('targetingUiVariant') # Not sure why we are maintaining multiple version of UIs. Removing it.
     return if @get("showUpgradeModal")
 
     defaultRules = @get('defaultRules')
