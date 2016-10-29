@@ -43,6 +43,7 @@
 
       a
         display: block
+        position: relative
         color: $grayLight
         width: $linkWidth
         line-height: $linkWidth
@@ -50,11 +51,26 @@
 
         &:hover
           color: $red
+          .caption
+            color: $red
 
         &.active
           color: $red
           pointer-events: none
           background-color: $white
+          .caption
+            color: $red
+
+        .caption
+          display: block
+          position: absolute
+          bottom: 0.6em
+          left: 0
+          right: 0
+          font-size: 0.5em
+          line-height: 0.5em
+          color: #c7c7c7
+
 
         i
           width: 100%
@@ -62,6 +78,20 @@
           font-size: 1.67em
           margin-bottom: -0.25em
           @include inline-block()
+
+      &.step-style
+        a
+          .caption
+            bottom: 1.2em
+      &.step-content
+        a
+          .caption
+            bottom: 1.2em
+      &.step-targeting
+        a
+          .caption
+            bottom: 1.5em
+
 
       .hover-tip
         top: 28%
@@ -100,6 +130,17 @@
       .toggle-fullscreen
         @include clearfix()
 
+        .caption
+          display: block
+          position: absolute
+          bottom: 0.5em
+          left: 0
+          right: 0
+          pointer-events: none
+          font-size: 0.5em
+          line-height: 0.5em
+          color: #c7c7c7
+
         a
           width: 200%
           margin-left: -100%
@@ -109,6 +150,10 @@
           i
             width: 50%
             float: left
+
+        &:hover
+          .caption
+            color: $red
 
       .toggle-mobile a i
 
