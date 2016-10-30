@@ -117,9 +117,7 @@ HelloBar.TargetingController = Ember.Controller.extend({
   routeForwarding: false,
 
   setRule: (function () {
-    if (!this.get('targetingUiVariant')) {
-      return;
-    }
+    // return unless @get('targetingUiVariant') # Not sure why we are maintaining multiple version of UIs. Removing it.
     if (this.get("showUpgradeModal")) {
       return;
     }

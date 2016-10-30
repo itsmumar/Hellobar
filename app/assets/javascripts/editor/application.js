@@ -4,6 +4,7 @@
 //= require sortable/Sortable
 //= require nouislider/nouislider
 
+//= require_tree ./services
 //= require_tree ./controllers
 //= require_tree ./views
 //= require_tree ./components

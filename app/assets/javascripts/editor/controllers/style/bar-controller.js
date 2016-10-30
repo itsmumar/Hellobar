@@ -31,7 +31,6 @@ HelloBar.StyleBarController = Ember.Controller.extend(HelloBar.HasPlacement, Hel
 
     actions: {
       barSizeUpdated(value) {
-        console.log('sizeUpdated', value);
         return this.set('model.size', value);
       }
     }

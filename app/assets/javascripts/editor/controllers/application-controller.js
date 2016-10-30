@@ -1,5 +1,13 @@
 HelloBar.ApplicationController = Ember.Controller.extend({
 
+  init() {
+    return Ember.run.next(() => {
+        return this.applyCurrentTheme();
+      }
+    );
+  },
+
+
   //-----------  User  -----------#
 
   currentUser: ( () => window.currentUser).property(),
@@ -262,6 +270,21 @@ HelloBar.ApplicationController = Ember.Controller.extend({
       return this.set("model.phone_number", null);
     }
   }).observes("model.phone_number", "phone_number", "model.phone_country_code"),
+
+  applyCurrentTheme() {
+    let allThemes = availableThemes;
+    let currentThemeId = this.get('model.theme_id');
+    let currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
+    let themeStyleDefaults = currentTheme.defaults[this.get('model.type')] || {};
+    return _.each(themeStyleDefaults, (value, key) => {
+        return this.set(`model.${key}`, value);
+      }
+    );
+  },
+
+  onCurrentThemeChanged: (function () {
+    return this.applyCurrentTheme();
+  }).observes('model.theme_id'),
 
   //-----------  Actions  -----------#
 

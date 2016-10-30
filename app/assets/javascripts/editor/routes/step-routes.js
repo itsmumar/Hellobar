@@ -33,7 +33,14 @@ HelloBar.StepRoute = Ember.Route.extend({
       // redirect to interstitial to select a goal after a page refresh unless it's rememebered in model
       // currentRoute==undefined indicates page refresh
       if (!(currentRoute || HB_DATA.skipInterstitial || model.element_subtype)) {
-        return this.replaceWith("interstitial");
+        this.replaceWith("interstitial");
+      }
+
+      // TODO create more generic solution after refactoring to a newer Ember
+      let newRoute = this.routeName;
+
+      if ((!newRoute) || (newRoute.indexOf('style') !== 0)) {
+        return HelloBar.bus.trigger('hellobar.core.rightPane.hide');
       }
     }
   }
