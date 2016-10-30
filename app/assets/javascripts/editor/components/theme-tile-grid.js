@@ -2,7 +2,8 @@ HelloBar.ThemeTileGridComponent = Ember.Component.extend({
 
   themes: availableThemes,
 
-  classNames: ['theme-tile-grid']});
+  classNames: ['theme-tile-grid']
+});
 
 
 

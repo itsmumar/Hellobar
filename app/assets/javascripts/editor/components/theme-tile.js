@@ -4,7 +4,7 @@ HelloBar.ThemeTileComponent = Ember.Component.extend({
 
   theme: null,
 
-  imageSrc: (function() {
+  imageSrc: (function () {
     return `/assets/themes/tiles/modal/${this.get('theme.id')}.png`;
   }).property('theme'),
 
@@ -24,9 +24,10 @@ HelloBar.ThemeTileComponent = Ember.Component.extend({
 
   actions: {
     select() {
-      HelloBar.bus.trigger('hellobar.core.bar.themeChanged', { themeId: this.get('theme.id') });
+      HelloBar.bus.trigger('hellobar.core.bar.themeChanged', {themeId: this.get('theme.id')});
       return HelloBar.bus.trigger('hellobar.core.rightPane.hide');
     }
-  }});
+  }
+});
 
 

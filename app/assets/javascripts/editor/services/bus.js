@@ -17,8 +17,8 @@ HelloBar.bus = {
     let callbacks = this._events[eventName];
     if (callbacks) {
       return callbacks.forEach(callback =>
-        setTimeout(() => callback(params)
-        , 0)
+          setTimeout(() => callback(params)
+            , 0)
       );
     }
   }
