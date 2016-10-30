@@ -1,0 +1,10 @@
+<%= render_ember_app :editor do |head, body| %>
+  <% head.append do %>
+    <%= csrf_meta_tags %>
+    <meta name="test" content="test">
+  <% end %>
+
+  <% body.append do %>
+    TEST
+  <% end %>
+<% end %>
