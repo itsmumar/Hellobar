@@ -44,3 +44,9 @@ test_site/public/*.html
 /public/assets
 !/public/assets/logo_orange_box.png
 !/public/assets/logo_orange_h.png
+
+# Frontend files and folders
+node_modules
+bower_components
+tmp
+out

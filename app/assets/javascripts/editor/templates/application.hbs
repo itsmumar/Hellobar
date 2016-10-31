@@ -1,19 +1,32 @@
 <nav class="links-wrapper">
   <ul class="step-links">
-    <li>
-      {{#link-to 'settings'}}<i class="hellobar-icon hellobar-icon-trophy"></i>{{/link-to}}
+    <li class="step-settings">
+      {{#link-to 'settings'}}
+        <i class="hellobar-icon hellobar-icon-trophy"></i>
+        <div class="caption">Goals</div>
+      {{/link-to}}
       <div class="hover-tip">Goals</div>
     </li>
-    <li>
-      {{#link-to 'style'}}<i class="icon-style"></i>{{/link-to}}
+    <li class="step-style">
+      {{#link-to 'style'}}
+        <i class="icon-style"></i>
+        <div class="caption">Style</div>
+      {{/link-to}}
       <div class="hover-tip">Style</div>
     </li>
-    <li>
-      {{#link-to 'design'}}<i class="icon-content"></i>{{/link-to}}
+    <li class="step-content">
+      {{!-- TODO we should rename route and controllers/components to 'Content' later --}}
+      {{#link-to 'design'}}
+        <i class="icon-content"></i>
+        <div class="caption">Content</div>
+      {{/link-to}}
       <div class="hover-tip">Design &amp; Content</div>
     </li>
-    <li>
-      {{#link-to 'targeting'}}<i class="icon-views"></i>{{/link-to}}
+    <li class="step-targeting">
+      {{#link-to 'targeting'}}
+        <i class="icon-views"></i>
+        <div class="caption">Targeting</div>
+      {{/link-to}}
       <div class="hover-tip">Targeting</div>
     </li>
   </ul>
@@ -24,14 +37,33 @@
         <i class="icon-back2"></i>
         <i class="icon-back2"></i>
       </a>
+      <div class="caption">
+        {{#if isFullscreen}}
+          Show Sidebar
+        {{else}}
+          Hide Sidebar
+        {{/if}}
+      </div>
     </li>
     <li class="toggle-mobile">
       <a {{action 'toggleMobile'}}>
         <i class="icon-desktop"></i>
         <i class="icon-mobile"></i>
       </a>
+      <div class="caption">
+        {{#if isMobile}}
+          Desktop View
+        {{else}}
+          Mobile View
+        {{/if}}
+      </div>
     </li>
-    <li><a {{action "closeEditor"}}><i class="icon-close"></i></a></li>
+    <li>
+      <a {{action "closeEditor"}}>
+        <i class="icon-close"></i>
+        <div class="caption">Close</div>
+      </a>
+    </li>
   </ul>
 </nav>
 

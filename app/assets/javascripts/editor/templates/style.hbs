@@ -13,6 +13,14 @@
     <p>Pop up a window in the middle of the screen</p>
   {{/link-to}}
 
+  {{#if shouldShowThemeInfo}}
+  <p class="theme-selector">
+    <span class="label">Theme:</span>
+    <span>{{ currentThemeName }}</span>
+    <a href="javascript:void(0)" class="action-link" {{action "changeTheme"}}>[change theme]</a>
+  </p>
+  {{/if}}
+
   {{#link-to 'style.slider' class='step-link-block'}}
     <i class="icon-modal"></i>
     <h6>Slider</h6>
