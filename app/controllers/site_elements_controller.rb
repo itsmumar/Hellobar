@@ -153,8 +153,28 @@ class SiteElementsController < ApplicationController
       :view_condition,
       :wiggle_button,
       :use_default_image,
-      {:settings => settings_keys}
+      {settings: settings_keys},
+      {content: content_keys},
+      {appearance: appearance_keys}
     )
+  end
+
+  def appearance_keys
+    [
+      {current_theme_id: []},
+      {themes: [
+        
+      ]}
+    ]
+  end
+
+  def content_keys
+    [
+      {header: [:text]},
+      {action_button: [:text]},
+      {additional_link: [:text, :href]},
+      {number: [:text, :placeholder]}
+    ]
   end
 
   def settings_keys
