@@ -46,7 +46,8 @@
         position: relative
         color: $grayLight
         width: $linkWidth
-        line-height: $linkWidth
+        line-height: 1em
+        padding: 0.55em 0 1.65em 0
         background-color: $grayLightest
 
         &:hover
@@ -64,11 +65,11 @@
         .caption
           display: block
           position: absolute
-          bottom: 0.6em
+          bottom: 0.63em
           left: 0
           right: 0
-          font-size: 0.5em
-          line-height: 0.5em
+          font-size: 0.63em
+          line-height: 0.63em
           color: #c7c7c7
 
 
@@ -82,15 +83,15 @@
       &.step-style
         a
           .caption
-            bottom: 1.2em
+            bottom: 0.8em
       &.step-content
         a
           .caption
-            bottom: 1.2em
+            bottom: 0.85em
       &.step-targeting
         a
           .caption
-            bottom: 1.5em
+            bottom: 1.2em
 
 
       .hover-tip
@@ -125,6 +126,16 @@
 
       li
         overflow: hidden
+        a
+          padding: 0.5em 0 2.8em 0
+        &.toggle-mobile
+          a
+            padding: 0.5em 0 2.8em 0
+          .caption
+            bottom: 0.4em
+        &.close-editor
+          a
+            padding: 0.3em 0 1.7em 0
 
       .toggle-mobile,
       .toggle-fullscreen
@@ -133,12 +144,12 @@
         .caption
           display: block
           position: absolute
-          bottom: 0.5em
+          bottom: 0.8em
           left: 0
           right: 0
           pointer-events: none
-          font-size: 0.5em
-          line-height: 0.5em
+          font-size: 0.63em
+          line-height: 0.63em
           color: #c7c7c7
 
         a
