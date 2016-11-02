@@ -325,8 +325,7 @@ ActiveRecord::Schema.define(version: 20161102031039) do
     t.string   "phone_country_code",              default: "US"
     t.string   "theme_id"
     t.boolean  "use_default_image",               default: true,                            null: false
-    t.text     "content"
-    t.text     "appearance"
+    t.text     "blocks"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

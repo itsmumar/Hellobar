@@ -154,36 +154,19 @@ class SiteElementsController < ApplicationController
       :wiggle_button,
       :use_default_image,
       {settings: settings_keys},
-      {content: content_keys},
-      {appearance: appearance_keys}
+      {blocks: blocks_keys}
     )
   end
 
-  def appearance_keys
+  def blocks_keys
     [
-      :current_theme_id,
-      {themes: [
-        {
-          :'french-rose' => {
-            header: [
-              :css_classes,
-              {styles: [:'background-color', :'border-color']}
-            ],
-            action_button: {
-              styles: [:padding]
-            }
-          }
-        }
-      ]}
-    ]
-  end
-
-  def content_keys
-    [
-      {header: [:text]},
-      {action_button: [:text]},
-      {additional_link: [:text, :href]},
-      {number: [:text, :placeholder]}
+      :id,
+      {content: [:text, :href]},
+      themes: [
+          :id,
+          :css_classes,
+          {styles: [:background_color, :border_color]}
+      ]
     ]
   end
 
