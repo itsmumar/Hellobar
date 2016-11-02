@@ -161,9 +161,19 @@ class SiteElementsController < ApplicationController
 
   def appearance_keys
     [
-      {current_theme_id: []},
+      :current_theme_id,
       {themes: [
-        
+        {
+          :'french-rose' => {
+            header: [
+              :css_classes,
+              {styles: [:'background-color', :'border-color']}
+            ],
+            action_button: {
+              styles: [:padding]
+            }
+          }
+        }
       ]}
     ]
   end
