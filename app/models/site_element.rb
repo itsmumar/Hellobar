@@ -69,6 +69,7 @@ class SiteElement < ActiveRecord::Base
   delegate :image_file_name, to: :active_image, allow_nil: true
 
   serialize :settings, Hash
+  serialize :blocks, Array
 
   after_create :track_creation
   after_save :remove_unreferenced_images

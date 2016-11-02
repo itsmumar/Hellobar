@@ -153,8 +153,21 @@ class SiteElementsController < ApplicationController
       :view_condition,
       :wiggle_button,
       :use_default_image,
-      {:settings => settings_keys}
+      {settings: settings_keys},
+      {blocks: blocks_keys}
     )
+  end
+
+  def blocks_keys
+    [
+      :id,
+      {content: [:text, :href]},
+      themes: [
+          :id,
+          :css_classes,
+          {styles: [:background_color, :border_color]}
+      ]
+    ]
   end
 
   def settings_keys

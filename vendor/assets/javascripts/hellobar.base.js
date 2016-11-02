@@ -619,9 +619,13 @@ var HB = {
         }
         var values = [];
         values.push(emailField.value)
-        formElement.querySelectorAll('input:not(#f-builtin-email)').forEach(function(input) {
-          values.push(input.value);
-        });
+        var inputs = siteElementDoc.querySelectorAll('input:not(#f-builtin-email)');
+        if (inputs) {
+          for (var inputIndex = 0; inputIndex < inputs.length; inputIndex++) {
+            var input = inputs[inputIndex];
+            input && values.push(input.value);
+          }
+        }
         HB.recordEmail(siteElement, values, function() {
           // Successfully saved
         });
