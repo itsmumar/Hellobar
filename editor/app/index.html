@@ -11,10 +11,18 @@
 
     <link rel="stylesheet" href="{{rootURL}}assets/vendor.css">
     <link rel="stylesheet" href="{{rootURL}}assets/editor.css">
+    <script type="type/javascript">
+      // TODO can we make it local?
+      window.HB_DATA = {
+
+      };
+    </script>
 
     {{content-for "head-footer"}}
   </head>
   <body>
+    <div id="ember-root"></div>
+
     {{content-for "body"}}
 
     <script src="{{rootURL}}assets/vendor.js"></script>
