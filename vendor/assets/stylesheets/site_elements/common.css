@@ -549,3 +549,6 @@ form {
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.58);
 }
 
+.hb-input-wrapper .hb-input-block.hb-editable-block-input input {
+  color: #c3c3c3;
+}

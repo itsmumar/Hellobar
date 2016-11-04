@@ -5,7 +5,7 @@ HelloBar.PreviewController = Ember.Controller.extend
   init: ->
     HB.addPreviewInjectionListener((container) =>
       @adjustPushHeight()
-      HelloBar.inlineEditing.instantiateFroala()
+      HelloBar.inlineEditing.initializeInlineEditing()
     )
 
   #-----------  Template Properties  -----------#

@@ -568,8 +568,9 @@ var HB = {
 
     var fieldAttrs = fieldAttrs();
 
-    var html = '<div class="hb-input-block hb-editable-block hb-editable-block-without-formatting ' +
-      additionalCssClasses() + '">' +
+    var html = '<div class="hb-input-block hb-editable-block hb-editable-block-input ' +
+      additionalCssClasses() + '" ' +
+      'data-hb-editable-block="' + id() + '">' +
       '<label for="' + id() + '">' + fieldAttrs.label + '</label>' +
       '<input id="' + id() + '" type="' + fieldAttrs.type + '" placeholder="' +
       fieldAttrs.label + '"' + (field.type == "builtin-email" ? "required" : "") + ' />' +
