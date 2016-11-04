@@ -60,6 +60,7 @@ HelloBar.StyleController = Ember.Controller.extend
       HelloBar.bus.trigger('hellobar.core.rightPane.show', {componentName: 'theme-tile-grid', componentOptions: {}})
     else
       HelloBar.bus.trigger('hellobar.core.rightPane.hide')
+    HelloBar.inlineEditing.initializeInlineEditing()
   ).observes('model.type')
 
   isModalType: (->

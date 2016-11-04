@@ -40,6 +40,7 @@ HelloBar.inlineEditing = {
       @modelAdapter = null
 
   initializeInlineEditing: ->
+    @cleanup()
     setTimeout(=>
       $iframe = $('#hellobar-preview-container > iframe')
       if $iframe.length > 0
@@ -49,14 +50,10 @@ HelloBar.inlineEditing = {
             @instantiateFroala($iframe, $iframeBody)
             @initializeInputEditing($iframe, $iframeBody)
           )
-    , 0)
+    , 500)
 
   instantiateFroala: ($iframe, $iframeBody)->
-    if @$currentFroalaInstances and @$currentFroalaInstances.length > 0
-      @$currentFroalaInstances.off('froalaEditor.contentChanged')
-      @$currentFroalaInstances.off('froalaEditor.blur')
-      @$currentFroalaInstances.off('froalaEditor.destroy')
-
+    @cleanupFroala()
     $froala = $('.hb-editable-block-with-formatting', $iframeBody).add('.hb-editable-block-without-formatting',
       $iframeBody).froalaEditor({
       key: froalaKey,
@@ -83,14 +80,29 @@ HelloBar.inlineEditing = {
     @$currentFroalaInstances = $froala
 
   initializeInputEditing: ($iframe, $iframeBody)->
-    if @$currentInputInstances and @$currentInputInstances.length > 0
-      @$currentInputInstances.off('blur')
+    @cleanupInputs()
     $('.hb-editable-block-input input', $iframeBody).blur((evt) =>
       $target = $(evt.currentTarget)
       blockId = $target.closest('[data-hb-editable-block]').attr('data-hb-editable-block')
       content = $target.val()
       @handleContentChange(blockId, content)
     )
+
+  cleanupInputs: ->
+    if @$currentInputInstances and @$currentInputInstances.length > 0
+      @$currentInputInstances.off('blur')
+
+  cleanupFroala: ->
+    if @$currentFroalaInstances and @$currentFroalaInstances.length > 0
+      @$currentFroalaInstances.off('froalaEditor.contentChanged')
+      @$currentFroalaInstances.off('froalaEditor.blur')
+      @$currentFroalaInstances.off('froalaEditor.destroy')
+      @$currentFroalaInstances.froalaEditor('destroy')
+
+
+  cleanup: ->
+    @cleanupFroala()
+    @cleanupInputs()
 
 
   handleContentChange: (blockId, content) ->
