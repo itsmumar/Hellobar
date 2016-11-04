@@ -537,3 +537,8 @@ form {
 .hb-editable-block:hover {
   box-shadow: 0 0 8px #54d388;
 }
+
+.dark .hb-editable-block:hover {
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.58);
+}
+

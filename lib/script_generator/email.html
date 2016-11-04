@@ -2,7 +2,7 @@
   <div id="hb-fields-form">
     {{ siteElement.settings.fields_to_collect ? siteElement.settings.fields_to_collect.filter(function(field) { return field.is_enabled }).map(function(field) { return HB.createInputFieldHtml(field, siteElement); }).join('') : '' }}
 
-    <a class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}  hb-editable-block hb-editable-block-without-formatting"
+    <a class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
        data-hb-editable-block="action_link"
             onclick="if(window.parent.HB.isPreviewMode) {
                        return false;
@@ -17,7 +17,9 @@
                     }"
            href="#"
            style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
+      <div class="hb-text-holder hb-editable-block hb-editable-block-without-formatting" data-hb-editable-block="action_link">
       {{siteElement.link_text}}
+      </div>
     </a>
   <div>
 </div>

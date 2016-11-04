@@ -92,6 +92,11 @@
 }
 
 #hellobar-modal .hb-cta-style-button {
+  padding: 0;
+}
+
+#hellobar-modal .hb-cta-style-button .hb-text-holder {
+  border-radius: inherit;
   padding: 8px 20px;
 }
 
