@@ -65,6 +65,9 @@ HB.SiteElement = HB.createClass({
 
         this.useGoogleFont();
         this.useCountryIdentifier();
+        if (HB.CAP.preview) {
+          this.useFroala();
+        }
       }.bind(this), 1);
     }.bind(this));
   },
@@ -216,7 +219,7 @@ HB.SiteElement = HB.createClass({
     if (container == null)
       return;
     if ( type == 'Bar' ) {
-      container.style.maxHeight = (element.clientHeight + 8) + "px";
+      container.style.maxHeight = (element.clientHeight + 100) + "px";
     } else if ( type == 'Slider' ) {
       var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : window.innerWidth;
       var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
@@ -575,6 +578,23 @@ HB.SiteElement = HB.createClass({
     }
   },
 
+  addCss: function(href) {
+    var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
+    var link = this.w.contentWindow.document.createElement("LINK");
+    link.href = href;
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    head.appendChild(link);
+  },
+
+  addJs: function(href) {
+    var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
+    var script = this.w.contentWindow.document.createElement("SCRIPT");
+    script.src = href;
+    script.type = 'text/javascript';
+    head.appendChild(script);
+  },
+
   useCountryIdentifier: function() {
     var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
 
@@ -591,6 +611,13 @@ HB.SiteElement = HB.createClass({
                    .country-name { color: #999 }'
     intTelCStyle.appendChild(document.createTextNode(styleForPng));
     head.appendChild(intTelCStyle);
+  },
+
+  useFroala: function() {
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_editor.min.css');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_style.css');
+    //this.addJs('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/js/froala_editor.min.js');
   },
 
   brightnessClass: function() {

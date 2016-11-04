@@ -178,7 +178,7 @@ form {
 }
 
 .hb-text-wrapper .hb-headline-text {
-  font-weight: 600;
+  /*font-weight: 600;*/
   font-size: 1.25em;
 }
 
@@ -525,4 +525,15 @@ form {
 
 .image-right .hb-cta, .image-left .hb-cta {
   white-space: normal;
+}
+
+/*-----------  Editable Blocks  -----------*/
+
+.hb-editable-block > .fr-wrapper p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.hb-editable-block:hover {
+  box-shadow: 0 0 8px #54d388;
 }

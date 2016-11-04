@@ -568,7 +568,8 @@ var HB = {
 
     var fieldAttrs = fieldAttrs();
 
-    var html = '<div class="hb-input-block ' + additionalCssClasses() + '">' +
+    var html = '<div class="hb-input-block hb-editable-block hb-editable-block-without-formatting ' +
+      additionalCssClasses() + '">' +
       '<label for="' + id() + '">' + fieldAttrs.label + '</label>' +
       '<input id="' + id() + '" type="' + fieldAttrs.type + '" placeholder="' +
       fieldAttrs.label + '"' + (field.type == "builtin-email" ? "required" : "") + ' />' +
@@ -978,10 +979,10 @@ var HB = {
 
   // Takes each string value in the siteElement and escapes HTML < > chars
   // with the matching symbol
-  sanitize: function(siteElement){
+  sanitize: function(siteElement, whitelist) {
     for (var k in siteElement){
       if (siteElement.hasOwnProperty(k) && siteElement[k]) {
-        if (siteElement[k].replace) {
+        if (siteElement[k].replace && !(whitelist && (whitelist.indexOf(k) >= 0))) {
           siteElement[k] = siteElement[k].replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g, '&quot;');
         } else if(!Array.isArray(siteElement[k])) {
           siteElement[k] = HB.sanitize(siteElement[k]);
@@ -1076,8 +1077,10 @@ var HB = {
   {
     var siteElement;
 
+    var whitelistedProperties = ['headline', 'caption', 'link_text'];
+
     // Sanitize the data
-    data = HB.sanitize(data);
+    data = HB.sanitize(data, whitelistedProperties);
     // Make a copy of the siteElement
     var fn = window.HB[data.type + 'Element'];
     if(typeof fn === 'function') {
@@ -2339,6 +2342,10 @@ var HB = {
   // Escapes all regex characters EXCEPT for the asterisk
   sanitizeRegexString: function(str) {
     return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, "\\$&");
+  },
+
+  stringLiteral: function(s) {
+    return s ? '\'' + s.replace(/\'/g, ' ') + '\'' : 'null';
   }
 };
 window.HB = HB;

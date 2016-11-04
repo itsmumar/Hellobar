@@ -1,6 +1,7 @@
 <a
   id="hb-traffic-cta"
-  class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
+  class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}} hb-editable-block hb-editable-block-without-formatting"
+  data-hb-editable-block="action_link"
   onclick="if(window.parent.HB.isPreviewMode) { return false } else { window.parent.HB.trackClick(this, {{siteElement.me}}); return {{HB.t(siteElement.open_in_new_window) ? 'true' : 'false'}} };"
   href="{{siteElement.settings.url}}"
   target="{{HB.t(siteElement.open_in_new_window) ? '_blank' : '_parent'}}"

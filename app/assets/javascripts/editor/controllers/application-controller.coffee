@@ -4,6 +4,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
     Ember.run.next(=>
       @applyCurrentTheme()
     )
+    HelloBar.inlineEditing.setModelHandler(this)
 
 
   #-----------  User  -----------#
