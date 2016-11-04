@@ -2,7 +2,8 @@ HelloBar.ApplicationController = Ember.Controller.extend
 
   init: ->
     Ember.run.next(=>
-      @applyCurrentTheme()
+      if @get('model.id') == null
+        @applyCurrentTheme()
     )
     HelloBar.inlineEditing.setModelHandler(this)
 
@@ -269,7 +270,11 @@ HelloBar.ApplicationController = Ember.Controller.extend
       @set("model.#{key}", value)
 
   onCurrentThemeChanged: (->
-    @applyCurrentTheme()
+    if @get('originalTheme').theme_id == @get('model.theme_id')
+      _.each @get('originalTheme'), (value, key) =>
+        @set("model.#{key}", value)
+    else
+      @applyCurrentTheme()
   ).observes('model.theme_id')
 
   #-----------  Actions  -----------#
