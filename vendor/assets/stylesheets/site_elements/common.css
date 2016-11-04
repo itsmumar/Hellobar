@@ -529,6 +529,13 @@ form {
 
 /*-----------  Editable Blocks  -----------*/
 
+.hb-editable-block > .fr-wrapper {
+  min-width: 100px;
+}
+
+.hb-editable-block > .fr-wrapper > .fr-placeholder {
+}
+
 .hb-editable-block > .fr-wrapper p {
   margin-top: 0;
   margin-bottom: 0;

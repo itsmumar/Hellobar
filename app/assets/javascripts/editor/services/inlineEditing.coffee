@@ -44,6 +44,8 @@ HelloBar.inlineEditing = {
               key: froalaKey,
               toolbarInline: true,
               toolbarButtons: ['bold', 'italic', 'underline'],
+              htmlAllowedTags: ['p', 'strong', 'em', 'u', 'input', 'label'],
+              enter: $.FroalaEditor.ENTER_P,
               multiLine: false,
               initOnClick: true,
               zIndex: 9888,
