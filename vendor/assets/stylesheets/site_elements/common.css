@@ -161,6 +161,7 @@ form {
   margin: 1.75em auto 0;
   text-decoration: none;
   padding: 0.67em 1.33em;
+  overflow: hidden;
 }
 
 .hb-cta-style-button:hover {
