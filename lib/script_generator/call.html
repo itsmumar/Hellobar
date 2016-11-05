@@ -6,5 +6,7 @@
   <img class="icon-phone"
     src="{{HB.colorIsBright(siteElement.secondary_color) ? 'https://s3.amazonaws.com/assets.hellobar.com/dark-phone.png' : 'https://s3.amazonaws.com/assets.hellobar.com/white-phone.png'}}"
   />
-  <span>{{siteElement.link_text}}</span>
+  <div class="hb-text-holder hb-editable-block hb-editable-block-without-formatting" data-hb-editable-block="action_link">
+    {{siteElement.link_text}}
+  </div>
 </a>
