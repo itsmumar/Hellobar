@@ -3,7 +3,7 @@ froalaKey = 'Qg1Ti1LXd2URVJh1DWXG=='
 
 class ModelAdapter
   constructor: (@modelHandler) ->
-    #window.modelHandler = @modelHandler
+    window.modelHandler = @modelHandler
 
   handleContentChange: (blockId, content) ->
     console.log('handleContentChange', blockId, content)
@@ -18,6 +18,7 @@ class ModelAdapter
       console.log('handleContentChange fields = ', fields, ', fieldToChange = ', fieldToChange)
       if fieldToChange
         fieldToChange.label = content
+        @modelHandler.notifyPropertyChange('model.settings.fields_to_collect')
     else
       switch blockId
         when 'headline' then @modelHandler.get('model').headline = content
