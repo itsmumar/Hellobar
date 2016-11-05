@@ -63,7 +63,7 @@ HelloBar.inlineEditing = {
       htmlAllowedTags: ['p', 'strong', 'em', 'u', 'input', 'label'],
       enter: $.FroalaEditor.ENTER_P,
       multiLine: false,
-      initOnClick: true,
+      initOnClick: false,
       zIndex: 9888,
       scrollableContainer: $iframeBody[0]
     });
