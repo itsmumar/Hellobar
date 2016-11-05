@@ -3,17 +3,18 @@ froalaKey = 'Qg1Ti1LXd2URVJh1DWXG=='
 
 class ModelAdapter
   constructor: (@modelHandler) ->
+    #window.modelHandler = @modelHandler
 
   handleContentChange: (blockId, content) ->
     console.log('handleContentChange', blockId, content)
     if blockId and blockId.indexOf('f-') == 0
       fields = @modelHandler.get('model.settings.fields_to_collect')
-
+      fieldIdToChange = blockId.substring(2)
       fieldToChange = null
       if blockId == 'f-builtin-email'
         fieldToChange = _.find(fields, (f) -> f.type == 'builtin-email')
       else
-        fieldToChange = _.find(fields, (f) -> f.id == blockId)
+        fieldToChange = _.find(fields, (f) -> f.id == fieldIdToChange)
       console.log('handleContentChange fields = ', fields, ', fieldToChange = ', fieldToChange)
       if fieldToChange
         fieldToChange.label = content
