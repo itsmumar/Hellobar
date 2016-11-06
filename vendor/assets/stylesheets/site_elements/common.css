@@ -535,6 +535,16 @@ form {
 }
 
 .hb-editable-block > .fr-wrapper > .fr-placeholder {
+  width: 100%;
+  text-align: inherit;
+}
+
+.hb-editable-block.hb-editable-block-optional > .fr-wrapper > .fr-placeholder {
+  visibility: hidden;
+}
+
+.hb-editable-block.hb-editable-block-optional:hover > .fr-wrapper > .fr-placeholder {
+  visibility: visible;
 }
 
 .hb-editable-block > .fr-wrapper p {
