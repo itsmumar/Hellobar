@@ -89,6 +89,17 @@ HelloBar.inlineEditing = {
     )
     @$currentFroalaInstances = $froala
 
+    $('.hb-editable-block-with-formatting', $iframeBody).add('.hb-editable-block-without-formatting', $iframeBody).each(->
+      $editableElement = $(this)
+      editor = $editableElement.data('froala.editor')
+      newOptions = {}
+      placeholder = $editableElement.attr('data-hb-inline-editor-placeholder')
+      if placeholder
+        newOptions.placeholderText = placeholder
+      $.extend(editor.opts, newOptions)
+      $editableElement.find('.fr-placeholder').text(placeholder)
+    )
+
   initializeInputEditing: ($iframe, $iframeBody)->
     @cleanupInputs()
     $('.hb-editable-block-input input', $iframeBody).blur((evt) =>
