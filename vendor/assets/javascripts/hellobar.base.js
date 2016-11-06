@@ -533,27 +533,28 @@ var HB = {
    */
   createInputFieldHtml: function (field, barModel) {
     function fieldAttrs() {
-      var label   = '';
-      var type    = 'text';
+      var label = '';
+      var type = 'text';
 
       switch (field.type) {
         case 'builtin-name':
-          label = barModel.name_placeholder || 'Name';
+          label = field.label || barModel.name_placeholder || 'Name';
           break;
         case 'builtin-email':
-          label   = barModel.email_placeholder || 'Email';
-          type    = 'email';
+          label = field.label || barModel.email_placeholder || 'Email';
+          type = HB.CAP.preview ? 'text' : 'email';
           break;
         case 'builtin-phone':
-          label   = 'Phone';
-          type    = 'tel';
+          label = field.label || 'Phone';
+          type = 'tel';
           break;
         default:
-          label = HB.sanitize({ label: field.label }).label;
+          label = HB.sanitize({label: field.label}).label;
       }
 
-      return { label: label, type: type }
+      return {label: label, type: type}
     }
+
     function additionalCssClasses() {
       switch (field.type) {
         case 'builtin-email':
@@ -562,6 +563,7 @@ var HB = {
           return '';
       }
     }
+
     function id() {
       return field.type === 'builtin-email' ? 'f-builtin-email' : 'f-' + field.id;
     }
@@ -573,7 +575,8 @@ var HB = {
       'data-hb-editable-block="' + id() + '">' +
       '<label for="' + id() + '">' + fieldAttrs.label + '</label>' +
       '<input id="' + id() + '" type="' + fieldAttrs.type + '" placeholder="' +
-      fieldAttrs.label + '"' + (field.type == "builtin-email" ? "required" : "") + ' />' +
+      fieldAttrs.label + '" ' + (field.type == 'builtin-email' ? 'required' : '') +
+      ' value="' + (HB.CAP.preview ? fieldAttrs.label : '') + '" />' +
       '</div>';
 
     return html;

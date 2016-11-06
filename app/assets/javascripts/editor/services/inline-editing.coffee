@@ -2,8 +2,7 @@
 froalaKey = 'Qg1Ti1LXd2URVJh1DWXG=='
 
 class ModelAdapter
-  constructor: (@modelHandler) ->
-    window.modelHandler = @modelHandler
+  constructor: (@modelHandler, @service) ->
 
   handleContentChange: (blockId, content) ->
     console.log('handleContentChange', blockId, content)
@@ -19,6 +18,10 @@ class ModelAdapter
       if fieldToChange
         fieldToChange.label = content
         @modelHandler.notifyPropertyChange('model.settings.fields_to_collect')
+        if @service.fieldChangeListeners
+          @service.fieldChangeListeners.forEach((listener) ->
+            listener.notifyPropertyChange('model.settings.fields_to_collect')
+          )
     else
       switch blockId
         when 'headline' then @modelHandler.get('model').headline = content
@@ -31,15 +34,20 @@ HelloBar.inlineEditing = {
   modelHandler: null
   modelAdapter: null
 
+  fieldChangeListeners: []
+
   $currentFroalaInstances: null
   $currentInputInstances: null
 
   setModelHandler: (modelHandler) ->
     @modelHandler = modelHandler
     if modelHandler
-      @modelAdapter = new ModelAdapter(modelHandler)
+      @modelAdapter = new ModelAdapter(modelHandler, this)
     else
       @modelAdapter = null
+
+  addFieldChangeListener: (listener) ->
+    @fieldChangeListeners.push(listener)
 
   initializeInlineEditing: ->
     @cleanup()
