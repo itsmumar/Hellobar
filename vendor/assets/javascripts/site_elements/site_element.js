@@ -124,8 +124,13 @@ HB.SiteElement = HB.createClass({
     d.close();
     d.body.className = this.type;
 
-    if(this.theme_id)
+    if(this.theme_id) {
       HB.addClass(d.body, this.theme_id);
+    }
+
+    if (HB.CAP.preview) {
+      HB.addClass(d.body, 'preview-mode');
+    }
 
     // Add IE Specific class overrides
     if(HB.isIEXOrLess(9))
