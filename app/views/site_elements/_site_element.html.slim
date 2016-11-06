@@ -1,7 +1,7 @@
 tr.site-element-block class="type-#{site_element.short_subtype}" id="site_element_#{site_element.id}" data-rule-id=rule.id data-active=(!site_element.paused?).to_s data-type=site_element.type.downcase
   td.color-flag style="background-color: ##{site_element.background_color}"
   td
-    p= site_element.use_question? ? site_element.question : site_element.headline
+    p= (site_element.use_question? ? site_element.question : site_element.headline).html_safe
   td
     span.num= site_element_age(site_element)
   td
