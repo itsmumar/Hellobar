@@ -5,7 +5,6 @@ class ModelAdapter
   constructor: (@modelHandler, @service) ->
 
   handleContentChange: (blockId, content) ->
-    console.log('handleContentChange', blockId, content)
     if blockId and blockId.indexOf('f-') == 0
       fields = @modelHandler.get('model.settings.fields_to_collect')
       fieldIdToChange = blockId.substring(2)
@@ -14,7 +13,6 @@ class ModelAdapter
         fieldToChange = _.find(fields, (f) -> f.type == 'builtin-email')
       else
         fieldToChange = _.find(fields, (f) -> f.id == fieldIdToChange)
-      console.log('handleContentChange fields = ', fields, ', fieldToChange = ', fieldToChange)
       if fieldToChange
         fieldToChange.label = content
         @modelHandler.notifyPropertyChange('model.settings.fields_to_collect')
@@ -82,9 +80,6 @@ HelloBar.inlineEditing = {
       blockId = $target.attr('data-hb-editable-block')
       @handleContentChange(blockId, content)
     )
-    # This can be used for @set data model synchronization
-    # $froala.on('froalaEditor.blur', (e, editor) ->
-    # )
     $froala.on('froalaEditor.destroy', (e, editor) =>
     )
     @$currentFroalaInstances = $froala
