@@ -1,4 +1,4 @@
-<a
+<{{ HB.CAP.preview ? 'div' : 'a' }}
   id="hb-traffic-cta"
   class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
   onclick="if(window.parent.HB.isPreviewMode) { return false } else { window.parent.HB.trackClick(this, {{siteElement.me}}); return {{HB.t(siteElement.open_in_new_window) ? 'true' : 'false'}} };"
