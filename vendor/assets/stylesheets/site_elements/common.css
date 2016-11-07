@@ -533,6 +533,10 @@ form {
   min-width: 100px;
 }
 
+.hb-editable-block, .hb-editable-block > .fr-wrapper, .hb-editable-block > .fr-wrapper > .fr-element {
+  outline: none;
+}
+
 .hb-editable-block > .fr-wrapper > .fr-placeholder {
   width: 100%;
   text-align: inherit;
