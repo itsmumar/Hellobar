@@ -546,7 +546,7 @@ form {
   visibility: visible;
 }
 
-.hb-editable-block > .fr-wrapper p {
+.hb-editable-block > .fr-wrapper p, .hb-editable-block p {
   margin-top: 0;
   margin-bottom: 0;
 }
