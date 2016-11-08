@@ -81,6 +81,7 @@ gem "whenever",                  "~> 0.9.2"
 gem "yui-compressor"
 gem "zip-zip" # will load compatibility for old rubyzip API.
 gem "tzinfo-data", platforms: [:mingw, :mswin] # fixing tzinfo-related bug on Windows platform
+gem 'rails-html-sanitizer'
 
 gem "rqrcode"
 gem "rotp"

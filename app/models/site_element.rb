@@ -11,6 +11,9 @@ class SiteElement < ActiveRecord::Base
     2 => :redirect
   }
 
+  WHITELISTED_TAGS = %w(bold p)
+  WHITELISTED_ATTRS = %w(style)
+
   # valid bar types and their conversion units
   BAR_TYPES = {
     "call"                            => "Calls",
@@ -99,6 +102,19 @@ class SiteElement < ActiveRecord::Base
         read_attribute(attr_name).presence || QUESTION_DEFAULTS[attr_name]
       end
     end
+  end
+
+  def caption=(c_value)
+    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
+    c_value = white_list_sanitizer.sanitize(c_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
+    write_attribute(:caption, c_value)
+  end
+
+  def headline=(h_value)
+    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
+    h_value = white_list_sanitizer.sanitize(h_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
+    h_value = 'Hello. Add your message here.' if h_value.empty?
+    write_attribute(:headline, h_value)
   end
 
   def conversion_rate
