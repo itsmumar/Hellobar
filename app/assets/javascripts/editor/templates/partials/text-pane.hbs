@@ -3,16 +3,6 @@
   Boost your conversions by asking a leading question first
 </label>
 
-{{#unless showQuestionFields}}
-  <label>Headline</label>
-  {{view Ember.TextField value=model.headline placeholder="Subscribe to our mailing list" maxlength=255}}
-
-  {{#unless isABar}}
-    <label>Caption</label>
-    {{view Ember.TextField value=model.caption placeholder="(optional)" maxlength=255}}
-  {{/unless}}
-{{/unless}}
-
 {{#if showQuestionFields}}
   {{#question-tabs model=model paneSelectionCount=paneSelection navigationName='question'}}
     {{#tab-pane name="Question" onSelection="showQuestion"}}
@@ -65,33 +55,6 @@
 
   <hr/>
 {{/if}}
-
-{{#if showNamePlaceholderText}}
-  <label>Name placeholder</label>
-  {{
-    view Ember.TextField
-    value=model.name_placeholder
-    placeholder="Your name"
-    maxlength=100
-  }}
-{{/if}}
-
-{{#if showEmailPlaceholderText}}
-  <label>Email placeholder</label>
-  {{
-    view Ember.TextField
-    value=model.email_placeholder
-    placeholder="Your email"
-    maxlength=100
-  }}
-{{/if}}
-
-{{#unless showQuestionFields}}
-  {{#unless hideLinkText}}
-    <label>Button text</label>
-    {{view Ember.TextField value=model.link_text placeholder="OK!" maxlength=255}}
-  {{/unless}}
-{{/unless}}
 
 <label>Font family</label>
 <div class="select-wrapper">

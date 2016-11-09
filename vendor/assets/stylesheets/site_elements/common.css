@@ -161,6 +161,7 @@ form {
   margin: 1.75em auto 0;
   text-decoration: none;
   padding: 0.67em 1.33em;
+  overflow: hidden;
 }
 
 .hb-cta-style-button:hover {
@@ -178,7 +179,6 @@ form {
 }
 
 .hb-text-wrapper .hb-headline-text {
-  font-weight: 600;
   font-size: 1.25em;
 }
 
@@ -525,4 +525,44 @@ form {
 
 .image-right .hb-cta, .image-left .hb-cta {
   white-space: normal;
+}
+
+/*-----------  Editable Blocks  -----------*/
+
+.hb-editable-block > .fr-wrapper {
+  min-width: 100px;
+}
+
+.hb-editable-block, .hb-editable-block > .fr-wrapper, .hb-editable-block > .fr-wrapper > .fr-element {
+  outline: none;
+}
+
+.hb-editable-block > .fr-wrapper > .fr-placeholder {
+  width: 100%;
+  text-align: inherit;
+}
+
+.hb-editable-block.hb-editable-block-optional > .fr-wrapper > .fr-placeholder {
+  visibility: hidden;
+}
+
+.hb-editable-block.hb-editable-block-optional:hover > .fr-wrapper > .fr-placeholder {
+  visibility: visible;
+}
+
+.hb-editable-block > .fr-wrapper p, .hb-editable-block p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.preview-mode .hb-editable-block:hover {
+  box-shadow: 0 0 8px #54d388;
+}
+
+.preview-mode .dark .hb-editable-block:hover {
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.58);
+}
+
+.preview-mode .hb-input-wrapper .hb-input-block.hb-editable-block-input input {
+  color: #c3c3c3;
 }

@@ -3,6 +3,7 @@
 #= require ember-animate
 #= require sortable/Sortable
 #= require nouislider/nouislider
+#= require ../../../../vendor/assets/froala/froala_editor.min
 
 #= require_tree ./services
 #= require_tree ./controllers
