@@ -11,8 +11,8 @@ class SiteElement < ActiveRecord::Base
     2 => :redirect
   }
 
-  WHITELISTED_TAGS = %w(bold p)
-  WHITELISTED_ATTRS = %w(style)
+  WHITELISTED_TAGS = %w(p strong em u a s sub sup img span ul ol li br hr table tbody tr th td blockquote)
+  WHITELISTED_ATTRS = %w(style class href target alt src)
 
   # valid bar types and their conversion units
   BAR_TYPES = {
