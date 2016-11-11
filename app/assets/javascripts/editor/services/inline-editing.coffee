@@ -84,14 +84,14 @@ HelloBar.inlineEditing = {
         $iframeBody = $($iframe[0].contentDocument.body)
         if $iframeBody.length > 0
           $($iframe[0].contentDocument).ready(=>
-            @instantiateFroala($iframe, $iframeBody)
+            @instantiateFroala($iframe, $iframeBody, elementType)
             @initializeInputEditing($iframe, $iframeBody)
           )
     , 500)
 
-  instantiateFroala: ($iframe, $iframeBody)->
+  instantiateFroala: ($iframe, $iframeBody, elementType)->
     @cleanupFroala()
-    $simpleFroala = $('.hb-editable-block-with-simple-formatting', $iframeBody).froalaEditor({
+    simpleFroalaOptions = {
       key: froalaKey,
       toolbarInline: true,
       toolbarVisibleWithoutSelection: true,
@@ -104,29 +104,34 @@ HelloBar.inlineEditing = {
       enter: $.FroalaEditor.ENTER_P,
       multiLine: false,
       initOnClick: false,
-      zIndex: 9888,
-      scrollableContainer: $iframeBody[0]
-    })
-    $fullFroala = $('.hb-editable-block-with-full-formatting', $iframeBody).froalaEditor({
+      zIndex: 9888
+    }
+    fullFroalaOptions = {
       key: froalaKey,
       toolbarInline: true,
       toolbarVisibleWithoutSelection: true,
       toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
-        'fontFamily', 'fontSize', 'color', '-',
-        'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
-        'insertHR', 'insertLink', 'emoticons', '-',
-        'undo', 'redo', 'clearFormatting', 'selectAll'
+                       'fontFamily', 'fontSize', 'color', '-',
+                       'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
+                       'insertHR', 'insertLink', 'emoticons', '-',
+                       'undo', 'redo', 'clearFormatting', 'selectAll'
       ],
       # TODO enable this restriction, verify tag list
-#      htmlAllowedTags: [
-#        'p', 'strong', 'em', 'u', 'input', 'label'
-#      ],
+      #      htmlAllowedTags: [
+      #        'p', 'strong', 'em', 'u', 'input', 'label'
+      #      ],
       enter: $.FroalaEditor.ENTER_P,
       multiLine: true,
       initOnClick: false,
       zIndex: 9888,
+    }
+    $simpleFroala = $('.hb-editable-block-with-simple-formatting', $iframeBody).froalaEditor($.extend({
       scrollableContainer: $iframeBody[0]
-    })
+    }, simpleFroalaOptions))
+    $fullFroala = $('.hb-editable-block-with-full-formatting', $iframeBody).froalaEditor($.extend({
+      scrollableContainer: $iframeBody[0]
+    }, if elementType == 'Bar' then simpleFroalaOptions else fullFroalaOptions))
+
     $froala = $simpleFroala.add($fullFroala)
     $froala.on('froalaEditor.contentChanged', (e, editor) =>
       $target = $(e.currentTarget)
