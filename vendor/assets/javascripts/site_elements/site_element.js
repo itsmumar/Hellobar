@@ -622,7 +622,9 @@ HB.SiteElement = HB.createClass({
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css');
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_editor.min.css');
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_style.css');
-    //this.addJs('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/js/froala_editor.min.js');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/colors.min.css');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/emoticons.css');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/image.min.css');
   },
 
   brightnessClass: function() {

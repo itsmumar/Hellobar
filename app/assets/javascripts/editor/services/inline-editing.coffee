@@ -62,18 +62,43 @@ HelloBar.inlineEditing = {
 
   instantiateFroala: ($iframe, $iframeBody)->
     @cleanupFroala()
-    $froala = $('.hb-editable-block-with-formatting', $iframeBody).add('.hb-editable-block-without-formatting',
-      $iframeBody).froalaEditor({
+    $simpleFroala = $('.hb-editable-block-with-simple-formatting', $iframeBody).froalaEditor({
       key: froalaKey,
       toolbarInline: true,
-      toolbarButtons: ['bold', 'italic', 'underline'],
-      htmlAllowedTags: ['p', 'strong', 'em', 'u', 'input', 'label'],
+      toolbarVisibleWithoutSelection: true,
+      toolbarButtons: [
+        'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
+        'fontFamily', 'fontSize', 'color', '-',
+        'undo', 'redo', 'clearFormatting', 'selectAll', '|', 'emoticons'
+      ],
+      #htmlAllowedTags: ['p', 'strong', 'em', 'u', 'input', 'label'],
       enter: $.FroalaEditor.ENTER_P,
       multiLine: false,
       initOnClick: false,
       zIndex: 9888,
       scrollableContainer: $iframeBody[0]
-    });
+    })
+    $fullFroala = $('.hb-editable-block-with-full-formatting', $iframeBody).froalaEditor({
+      key: froalaKey,
+      toolbarInline: true,
+      toolbarVisibleWithoutSelection: true,
+      toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
+        'fontFamily', 'fontSize', 'color', '-',
+        'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
+        'insertHR', 'insertLink', 'emoticons', '-',
+        'undo', 'redo', 'clearFormatting', 'selectAll'
+      ],
+      # TODO enable this restriction, verify tag list
+#      htmlAllowedTags: [
+#        'p', 'strong', 'em', 'u', 'input', 'label'
+#      ],
+      enter: $.FroalaEditor.ENTER_P,
+      multiLine: true,
+      initOnClick: false,
+      zIndex: 9888,
+      scrollableContainer: $iframeBody[0]
+    })
+    $froala = $simpleFroala.add($fullFroala)
     $froala.on('froalaEditor.contentChanged', (e, editor) =>
       $target = $(e.currentTarget)
       content = $target.froalaEditor('html.get')
@@ -84,7 +109,7 @@ HelloBar.inlineEditing = {
     )
     @$currentFroalaInstances = $froala
 
-    $('.hb-editable-block-with-formatting', $iframeBody).add('.hb-editable-block-without-formatting', $iframeBody).each(->
+    $froala.each(->
       $editableElement = $(this)
       editor = $editableElement.data('froala.editor')
       newOptions = {}
