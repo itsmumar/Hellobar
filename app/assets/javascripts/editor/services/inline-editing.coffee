@@ -26,7 +26,8 @@ class ModelAdapter
 
   purgeHtmlMarkup: (htmlFragment) ->
     htmlFragment = htmlFragment or ''
-    htmlFragment = htmlFragment.replace(/\<\/p\>/g, ' </p>')
+    htmlFragment = htmlFragment.replace(/\<\/p\>/g, '</p> ')
+    htmlFragment = htmlFragment.replace(/\<\/li\>/g, '</li> ')
     text = $('<div>' + htmlFragment + '</div>').text()
     if text then text.replace(/\s+/g,' ') else ''
 
@@ -98,9 +99,11 @@ HelloBar.inlineEditing = {
       toolbarButtons: [
         'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
         'fontFamily', 'fontSize', 'color', '-',
-        'undo', 'redo', 'clearFormatting', 'selectAll', '|', 'emoticons'
+        'undo', 'redo', 'clearFormatting', 'selectAll', '|', 'insertLink', 'emoticons'
       ],
-      #htmlAllowedTags: ['p', 'strong', 'em', 'u', 'input', 'label'],
+      htmlAllowedTags: [
+        'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
+      ],
       enter: $.FroalaEditor.ENTER_P,
       multiLine: false,
       initOnClick: false,
@@ -116,10 +119,10 @@ HelloBar.inlineEditing = {
                        'insertHR', 'insertLink', 'emoticons', '-',
                        'undo', 'redo', 'clearFormatting', 'selectAll'
       ],
-      # TODO enable this restriction, verify tag list
-      #      htmlAllowedTags: [
-      #        'p', 'strong', 'em', 'u', 'input', 'label'
-      #      ],
+      htmlAllowedTags: [
+        'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'ul', 'ol', 'li',
+        'a', 'br', 'hr', 'table', 'tbody',  'tr', 'th', 'td', 'blockquote'
+      ],
       enter: $.FroalaEditor.ENTER_P,
       multiLine: true,
       initOnClick: false,
