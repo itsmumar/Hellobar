@@ -303,7 +303,7 @@ class @ContactListModal extends Modal
     {
       name         : @$modal.find("form #contact_list_name").val()
       provider     : @$modal.find("form #contact_list_provider").val()
-      double_optin : if @$modal.find("form #contact_list_double_optin").prop("checked") then "1" else "0"
+      double_optin : if @$modal.find("#contact_list_double_optin").prop("checked") then "1" else "0"
       data         : @_getContactListData()
     }
 
