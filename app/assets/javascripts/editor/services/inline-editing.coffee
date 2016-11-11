@@ -2,7 +2,35 @@
 froalaKey = 'Qg1Ti1LXd2URVJh1DWXG=='
 
 class ModelAdapter
+
+  lastElementType: null
+  fullFeaturedHeadline: null
+  shortenedHeadline: null
+
   constructor: (@modelHandler, @service) ->
+
+  trackElementTypeChange: (newElementType) ->
+    if @lastElementType and @lastElementType != 'Bar' and newElementType == 'Bar'
+      headline = @modelHandler.get('model.headline')
+      @fullFeaturedHeadlineBackup = headline
+      @shortenedHeadline = @purgeHtmlMarkup(headline).substring(0, 60)
+      @modelHandler.set('model.headline', @shortenedHeadline)
+
+    if @lastElementType == 'Bar' and newElementType != 'Bar'
+      if (@modelHandler.get('model.headline') == @shortenedHeadline) and @fullFeaturedHeadlineBackup
+        @modelHandler.set('model.headline', @fullFeaturedHeadlineBackup)
+        @fullFeaturedHeadlineBackup = null
+        @shortenedHeadline = null
+
+    @lastElementType = newElementType
+
+  purgeHtmlMarkup: (htmlFragment) ->
+    htmlFragment = htmlFragment or ''
+    htmlFragment = htmlFragment.replace(/\<\/p\>/g, ' </p>')
+    text = $('<div>' + htmlFragment + '</div>').text()
+    if text then text.replace(/\s+/g,' ') else ''
+
+
 
   handleContentChange: (blockId, content) ->
     if blockId and blockId.indexOf('f-') == 0
@@ -47,8 +75,9 @@ HelloBar.inlineEditing = {
   addFieldChangeListener: (listener) ->
     @fieldChangeListeners.push(listener)
 
-  initializeInlineEditing: ->
+  initializeInlineEditing: (elementType) ->
     @cleanup()
+    @modelAdapter.trackElementTypeChange(elementType)
     setTimeout(=>
       $iframe = $('#hellobar-preview-container > iframe')
       if $iframe.length > 0

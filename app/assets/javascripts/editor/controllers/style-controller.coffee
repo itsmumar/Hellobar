@@ -56,11 +56,12 @@ HelloBar.StyleController = Ember.Controller.extend
   ).observes('model').on('init')
 
   onElementTypeChanged: (->
-    if @get('model.type') == 'Modal'
+    elementType = @get('model.type')
+    if elementType == 'Modal'
       HelloBar.bus.trigger('hellobar.core.rightPane.show', {componentName: 'theme-tile-grid', componentOptions: {}})
     else
       HelloBar.bus.trigger('hellobar.core.rightPane.hide')
-    HelloBar.inlineEditing.initializeInlineEditing()
+    HelloBar.inlineEditing.initializeInlineEditing(elementType)
   ).observes('model.type')
 
   isModalType: (->
