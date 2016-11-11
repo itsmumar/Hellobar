@@ -56,12 +56,3 @@
   <hr/>
 {{/if}}
 
-<label>Font family</label>
-<div class="select-wrapper">
-  {{view Ember.Select
-    content=fontOptions
-    value=model.font_id
-    optionValuePath='content.id'
-    optionLabelPath='content.name'
-  }}
-</div>
