@@ -10,7 +10,7 @@
                                                     document.getElementById('hb-fields-form'),
                                                     (document.getElementById('hb_msg_container') || document.getElementsByClassName('hb-headline-text')[0]),
                                                     {{HB.stringLiteral(siteElement.thank_you_text)}},
-                                                    {{HB.stringLiteral(siteElement.email_redirect)}},
+                                                    {{siteElement.email_redirect}},
                                                     {{HB.stringLiteral(siteElement.settings.redirect_url)}});
                       return false;
                     }"
