@@ -117,6 +117,12 @@ class SiteElement < ActiveRecord::Base
     write_attribute(:headline, h_value)
   end
 
+  def link_text=(lt_value)
+    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
+    lt_value = white_list_sanitizer.sanitize(lt_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
+    write_attribute(:link_text, lt_value)
+  end
+
   def conversion_rate
     total_conversions * 1.0 / total_views
   end
