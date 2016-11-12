@@ -42,6 +42,14 @@ class ModelAdapter
       'model.image_url': null
     })
 
+  handleImageReplaced: (responseObject) ->
+    @modelHandler.setProperties({
+      'model.active_image_id': responseObject.id,
+      'model.image_placement': @modelHandler.get('model.image_placement'),
+      'model.image_type': 'custom',
+      'model.image_url': responseObject.url
+    })
+
   handleContentChange: (blockId, content) ->
     if blockId and blockId.indexOf('f-') == 0
       fields = @modelHandler.get('model.settings.fields_to_collect')
@@ -180,7 +188,11 @@ HelloBar.inlineEditing = {
       htmlAllowedTags: ['p', 'div', 'img']
       multiLine: false,
       initOnClick: false,
-      zIndex: 9888
+      zIndex: 9888,
+      imageUploadURL: "/sites/#{siteID}/image_uploads",
+      requestHeaders: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      }
     }
     $simpleFroala = $('.hb-editable-block-with-simple-formatting', $iframeBody).froalaEditor($.extend({
       scrollableContainer: $iframeBody[0]
@@ -192,24 +204,33 @@ HelloBar.inlineEditing = {
       scrollableContainer: $iframeBody[0]
     }, imageFroalaOptions))
 
-    $froala = $simpleFroala.add($fullFroala)
-    $froala.on('froalaEditor.contentChanged', (e, editor) =>
+    $imageFroala.on('froalaEditor.image.uploaded', (e, editor, response) =>
+      #console.log(e, editor, response)
+      responseObject = JSON.parse(response)
+      @modelAdapter and @modelAdapter.handleImageReplaced(responseObject)
+      false
+    )
+
+    $textFroala = $simpleFroala.add($fullFroala)
+    $textFroala.on('froalaEditor.contentChanged', (e, editor) =>
       $target = $(e.currentTarget)
       content = $target.froalaEditor('html.get')
       blockId = $target.attr('data-hb-editable-block')
       @handleContentChange(blockId, content)
     )
-    $froala.on('froalaEditor.destroy', (e, editor) =>
+    $textFroala.on('froalaEditor.destroy', (e, editor) =>
     )
-    @$currentFroalaInstances = $froala
+
+    $allFroala = $($textFroala).add($imageFroala)
+    @$currentFroalaInstances = $allFroala
 
     #TODO remove
     window.f = {
       $: $,
-      $froala: $froala
+      $allFroala: $allFroala
     }
 
-    $froala.each(->
+    $textFroala.each(->
       $editableElement = $(this)
       editor = $editableElement.data('froala.editor')
       newOptions = {}
@@ -237,6 +258,7 @@ HelloBar.inlineEditing = {
     if @$currentFroalaInstances and @$currentFroalaInstances.length > 0
       @$currentFroalaInstances.off('froalaEditor.contentChanged')
       @$currentFroalaInstances.off('froalaEditor.blur')
+      @$currentFroalaInstances.off('froalaEditor.image.uploaded')
       @$currentFroalaInstances.off('froalaEditor.destroy')
       @$currentFroalaInstances.froalaEditor('destroy')
 
