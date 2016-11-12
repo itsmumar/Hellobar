@@ -34,6 +34,14 @@ class ModelAdapter
   handleImagePlacementChange: (imagePlacement) ->
     @modelHandler.set('model.image_placement', imagePlacement)
 
+  handleImageRemoval: () ->
+    @modelHandler.setProperties({
+      'model.active_image_id': null,
+      'model.image_placement': @modelHandler.get('model.image_placement'),
+      'model.image_type': 'custom',
+      'model.image_url': null
+    })
+
   handleContentChange: (blockId, content) ->
     if blockId and blockId.indexOf('f-') == 0
       fields = @modelHandler.get('model.settings.fields_to_collect')
@@ -90,6 +98,16 @@ HelloBar.inlineEditing = {
         #console.log(this, cmd, val)
         #this.image.exitEdit()
         that.modelAdapter.handleImagePlacementChange(val)
+    })
+    $.FroalaEditor.DefineIcon('imageRemoveCustom', {NAME: 'trash'});
+    $.FroalaEditor.RegisterCommand('imageRemoveCustom', {
+      title: 'Remove image',
+      icon: 'imageRemoveCustom',
+      undo: false,
+      focus: false,
+      refreshAfterCallback: false,
+      callback: () ->
+        that.modelAdapter.handleImageRemoval()
     })
 
   setModelHandler: (modelHandler) ->
@@ -158,7 +176,7 @@ HelloBar.inlineEditing = {
       key: froalaKey,
       toolbarInline: true,
       toolbarButtons: [],
-      imageEditButtons: ['imageReplace', 'imagePosition', 'imageRemove']
+      imageEditButtons: ['imageReplace', 'imagePosition', 'imageRemoveCustom']
       htmlAllowedTags: ['p', 'div', 'img']
       multiLine: false,
       initOnClick: false,
