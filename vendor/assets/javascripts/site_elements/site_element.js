@@ -34,11 +34,13 @@ HB.SiteElement = HB.createClass({
   imageFor: function(location) {
     locationIndex = location.indexOf(this.image_placement);
     if (!this.image_url || locationIndex === undefined || locationIndex === -1)
-      return "";
+      return '';
     else if (this.image_placement == 'background')
-      return "<div class='hb-image-wrapper " + this.image_placement + "' style='background-image:url(" + this.image_url + ");'></div>";
+      return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url("' + this.image_url + '");></div>';
     else
-      return "<div class='hb-image-wrapper " + this.image_placement + "'><img class='uploaded-image' src=" + this.image_url + " /></div>";
+      return '<div class="hb-image-wrapper ' + this.image_placement
+        + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="uploaded-image" src="'
+        + this.image_url + '" /></div></div>';
   },
 
   attach: function()

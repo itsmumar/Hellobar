@@ -128,12 +128,25 @@ HelloBar.inlineEditing = {
       initOnClick: false,
       zIndex: 9888,
     }
+    imageFroalaOptions = {
+      key: froalaKey,
+      toolbarInline: true,
+      toolbarButtons: [],
+      imageEditButtons: ['imageReplace', 'imageAlign', 'imageRemove']
+      htmlAllowedTags: ['p', 'div', 'img']
+      multiLine: false,
+      initOnClick: false,
+      zIndex: 9888
+    }
     $simpleFroala = $('.hb-editable-block-with-simple-formatting', $iframeBody).froalaEditor($.extend({
       scrollableContainer: $iframeBody[0]
     }, simpleFroalaOptions))
     $fullFroala = $('.hb-editable-block-with-full-formatting', $iframeBody).froalaEditor($.extend({
       scrollableContainer: $iframeBody[0]
     }, if elementType == 'Bar' then simpleFroalaOptions else fullFroalaOptions))
+    $imageFroala = $('.hb-editable-block-image', $iframeBody).froalaEditor($.extend({
+      scrollableContainer: $iframeBody[0]
+    }, imageFroalaOptions))
 
     $froala = $simpleFroala.add($fullFroala)
     $froala.on('froalaEditor.contentChanged', (e, editor) =>

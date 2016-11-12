@@ -566,3 +566,13 @@ form {
 .preview-mode .hb-input-wrapper .hb-input-block.hb-editable-block-input input {
   color: #c3c3c3;
 }
+
+.hb-editable-block.hb-editable-block-image {
+
+}
+
+.hb-image-holder {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
