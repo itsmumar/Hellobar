@@ -31,7 +31,8 @@ class ModelAdapter
     text = $('<div>' + htmlFragment + '</div>').text()
     if text then text.replace(/\s+/g,' ') else ''
 
-
+  handleImagePlacementChange: (imagePlacement) ->
+    @modelHandler.set('model.image_placement', imagePlacement)
 
   handleContentChange: (blockId, content) ->
     if blockId and blockId.indexOf('f-') == 0
@@ -65,6 +66,31 @@ HelloBar.inlineEditing = {
 
   $currentFroalaInstances: null
   $currentInputInstances: null
+
+  customizeFroala: ->
+    that = this
+    $.FroalaEditor.DefineIcon('imageReplace', {NAME: 'image'});
+    $.FroalaEditor.DefineIcon('imagePosition', {NAME: 'align-justify'});
+    $.FroalaEditor.RegisterCommand('imagePosition', {
+      title: 'Image position',
+      type: 'dropdown',
+      focus: false,
+      undo: false,
+      refreshAfterCallback: true,
+      options: {
+        'top': 'Top',
+        'bottom': 'Bottom',
+        'left': 'Left',
+        'right': 'Right',
+        'above-caption': 'Above Caption',
+        'below-caption': 'Below Caption'
+      },
+      callback: (cmd, val) ->
+        # TODO remove
+        #console.log(this, cmd, val)
+        #this.image.exitEdit()
+        that.modelAdapter.handleImagePlacementChange(val)
+    })
 
   setModelHandler: (modelHandler) ->
     @modelHandler = modelHandler
@@ -132,7 +158,7 @@ HelloBar.inlineEditing = {
       key: froalaKey,
       toolbarInline: true,
       toolbarButtons: [],
-      imageEditButtons: ['imageReplace', 'imageAlign', 'imageRemove']
+      imageEditButtons: ['imageReplace', 'imagePosition', 'imageRemove']
       htmlAllowedTags: ['p', 'div', 'img']
       multiLine: false,
       initOnClick: false,
@@ -158,6 +184,12 @@ HelloBar.inlineEditing = {
     $froala.on('froalaEditor.destroy', (e, editor) =>
     )
     @$currentFroalaInstances = $froala
+
+    #TODO remove
+    window.f = {
+      $: $,
+      $froala: $froala
+    }
 
     $froala.each(->
       $editableElement = $(this)
@@ -201,3 +233,8 @@ HelloBar.inlineEditing = {
       @modelAdapter.handleContentChange(blockId, content)
 
 }
+
+Ember.run.next(->
+  HelloBar.inlineEditing.customizeFroala()
+)
+
