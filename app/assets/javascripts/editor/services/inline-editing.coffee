@@ -103,15 +103,8 @@ class InlineImageManagementPane
       editor.popups.show('image.insert', r.left + r.width / 2, r.top)
 
   editImage: ->
-    #editor = @$pane.find('.image-holder').data('froala.editor')
-    #imageHolder = @$pane.find('.image-holder')[0]
     image = @$pane.find('.image-holder .image')[0]
     if image
-      #window.editor = editor
-      #console.log('show inline toolbar with two buttons')
-      #editor.selection.setAtStart(image)
-      #editor.selection.setAtEnd(image)
-      #editor.toolbar.showInline(null, true)
       event = document.createEvent('Events')
       event.initEvent('click', true, false)
       image.dispatchEvent(event)
