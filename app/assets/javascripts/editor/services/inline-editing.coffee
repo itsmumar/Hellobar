@@ -91,8 +91,11 @@ class InlineImageManagementPane
     #@$pane.find('.hb-editable-block-image').froalaEditor('events.focus')
     editor = @$pane.find('.image-holder').data('froala.editor')
     imageHolder = @$pane.find('.image-holder')[0]
-    if editor and imageHolder
+    image = @$pane.find('.image-holder .image')[0]
+    if editor and imageHolder and image
       r = imageHolder.getBoundingClientRect()
+      editor.selection.setAtStart(image)
+      editor.selection.setAtEnd(image)
       editor.image.showInsertPopup()
       editor.popups.show('image.insert', r.left + r.width / 2, r.top)
 
@@ -220,8 +223,10 @@ HelloBar.inlineEditing = {
     }
     imageFroalaOptions = {
       key: froalaKey,
+      pluginsEnabled: ['image'],
       toolbarInline: true,
       toolbarButtons: [],
+      imageInsertButtons: ['imageUpload'],
       imageEditButtons: ['imageReplace', 'imagePosition', 'imageRemoveCustom']
       htmlAllowedTags: ['p', 'div', 'img']
       multiLine: false,
