@@ -36,7 +36,7 @@ HB.SiteElement = HB.createClass({
     if (!this.image_url || locationIndex === undefined || locationIndex === -1)
       return '';
     else if (this.image_placement == 'background')
-      return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url("' + this.image_url + '");></div>';
+      return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url(' + this.image_url + ');></div>';
     else
       return '<div class="hb-image-wrapper ' + this.image_placement
         + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="uploaded-image" src="'
@@ -151,6 +151,8 @@ HB.SiteElement = HB.createClass({
     this.isMobileWidth = false;
     var mobileDeviceInterval = setInterval(this.checkForMobileDevice.bind(this), 50); // Check screen size every N ms
     HB.initializePhoneFields();
+
+    //console.log('site_element = ', this);
   },
 
   checkForMobileDevice: function(){
@@ -201,7 +203,7 @@ HB.SiteElement = HB.createClass({
             // handle case where display-condition check has hidden this.w
             if (this.w.style.display === "none") {
               return;
-            };
+            }
 
             var borderPush = HB.t((this.show_border) ? 3 : 0)
               HB.p.style.height = (thisElement.clientHeight + borderPush) + "px";

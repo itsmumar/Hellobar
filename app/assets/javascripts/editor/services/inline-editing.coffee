@@ -72,10 +72,14 @@ class ModelAdapter
         when 'action_link' then @modelHandler.get('model').link_text = content
         when 'caption' then @modelHandler.get('model').caption = content
 
+  activeImageId: ->
+    @modelHandler.get('model.active_image_id')
+
 
 class InlineImageManagementPane
-  constructor: ($iframe, $iframeBody) ->
+  constructor: ($iframe, $iframeBody, hasImage) ->
     @$pane = $('<div></div>').addClass('inline-image-management-pane')
+    hasImage and (@$pane.addClass('image-loaded'))
     $('<a href="javascript:void(0)" data-action="add-image"><i class="fa fa-image"></i><span>add image</span></a>').appendTo(@$pane)
     $('<a href="javascript:void(0)" data-action="edit-image"><i class="fa fa-image"></i><span>edit image</span></a>').appendTo(@$pane)
     $('<div class="image-holder hb-editable-block hb-editable-block-image"><img class="image" src=""></div>').appendTo(@$pane)
@@ -171,21 +175,22 @@ HelloBar.inlineEditing = {
 
   initializeInlineEditing: (elementType) ->
     @cleanup()
-    @modelAdapter.trackElementTypeChange(elementType)
+    @modelAdapter and @modelAdapter.trackElementTypeChange(elementType)
     setTimeout(=>
       $iframe = $('#hellobar-preview-container > iframe')
       if $iframe.length > 0
         $iframeBody = $($iframe[0].contentDocument.body)
         if $iframeBody.length > 0
           $($iframe[0].contentDocument).ready(=>
-            @instantiateInlineImageManagementPane($iframe, $iframeBody, elementType)
+            hasImage = if @modelAdapter then !!@modelAdapter.activeImageId() else false
+            @instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage)
             @instantiateFroala($iframe, $iframeBody, elementType)
             @initializeInputEditing($iframe, $iframeBody)
           )
     , 500)
 
-  instantiateInlineImageManagementPane: ($iframe, $iframeBody, elementType) ->
-    @inlineImageManagementPane = new InlineImageManagementPane($iframe, $iframeBody)
+  instantiateInlineImageManagementPane: ($iframe, $iframeBody, elementType, hasImage) ->
+    @inlineImageManagementPane = new InlineImageManagementPane($iframe, $iframeBody, hasImage)
 
   instantiateFroala: ($iframe, $iframeBody, elementType)->
     @cleanupFroala()
