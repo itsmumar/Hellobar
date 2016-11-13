@@ -76,7 +76,8 @@ class ModelAdapter
 class InlineImageManagementPane
   constructor: ($iframe, $iframeBody) ->
     @$pane = $('<div></div>').addClass('inline-image-management-pane')
-    $('<a href="javascript:void(0)" data-action="add-image"><i class="fa fa-image"></i><span>Add class</span></a>').appendTo(@$pane)
+    $('<a href="javascript:void(0)" data-action="add-image"><i class="fa fa-image"></i><span>add image</span></a>').appendTo(@$pane)
+    $('<a href="javascript:void(0)" data-action="edit-image"><i class="fa fa-image"></i><span>edit image</span></a>').appendTo(@$pane)
     $('<div class="image-holder hb-editable-block hb-editable-block-image"><img class="image" src=""></div>').appendTo(@$pane)
     $container = $iframeBody.find('.js-hellobar-element')
     $container.append(@$pane)
@@ -87,8 +88,6 @@ class InlineImageManagementPane
         when 'edit-image' then @editImage()
     )
   addImage: ->
-    console.log('addImage')
-    #@$pane.find('.hb-editable-block-image').froalaEditor('events.focus')
     editor = @$pane.find('.image-holder').data('froala.editor')
     imageHolder = @$pane.find('.image-holder')[0]
     image = @$pane.find('.image-holder .image')[0]
@@ -100,7 +99,12 @@ class InlineImageManagementPane
       editor.popups.show('image.insert', r.left + r.width / 2, r.top)
 
   editImage: ->
-    console.log('editImage')
+    editor = @$pane.find('.image-holder').data('froala.editor')
+    imageHolder = @$pane.find('.image-holder')[0]
+    image = @$pane.find('.image-holder .image')[0]
+    if editor and imageHolder and image
+      console.log('show inline toolbar with two buttons')
+
 
   destroy: ->
     @$pane.off('click')
