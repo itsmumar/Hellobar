@@ -586,6 +586,10 @@ form {
 
 }
 
+.inline-image-management-pane .fr-image-resizer.fr-active {
+  display: none;
+}
+
 .inline-image-management-pane a {
   color: #d2d2d2;
   text-decoration: none;
