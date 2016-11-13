@@ -72,6 +72,38 @@ class ModelAdapter
         when 'action_link' then @modelHandler.get('model').link_text = content
         when 'caption' then @modelHandler.get('model').caption = content
 
+
+class InlineImageManagementPane
+  constructor: ($iframe, $iframeBody) ->
+    @$pane = $('<div></div>').addClass('inline-image-management-pane')
+    $('<a href="javascript:void(0)" data-action="add-image"><i class="fa fa-image"></i><span>Add class</span></a>').appendTo(@$pane)
+    $('<div class="image-holder hb-editable-block hb-editable-block-image"><img class="image" src=""></div>').appendTo(@$pane)
+    $container = $iframeBody.find('.js-hellobar-element')
+    $container.append(@$pane)
+    @$pane.on('click', '[data-action]', (evt) =>
+      action = $(evt.currentTarget).attr('data-action')
+      switch action
+        when 'add-image' then @addImage()
+        when 'edit-image' then @editImage()
+    )
+  addImage: ->
+    console.log('addImage')
+    #@$pane.find('.hb-editable-block-image').froalaEditor('events.focus')
+    editor = @$pane.find('.image-holder').data('froala.editor')
+    imageHolder = @$pane.find('.image-holder')[0]
+    if editor and imageHolder
+      r = imageHolder.getBoundingClientRect()
+      editor.image.showInsertPopup()
+      editor.popups.show('image.insert', r.left + r.width / 2, r.top)
+
+  editImage: ->
+    console.log('editImage')
+
+  destroy: ->
+    @$pane.off('click')
+    @$pane.remove()
+
+
 # TODO Convert to service after upgrading to Ember 2
 HelloBar.inlineEditing = {
 
@@ -82,6 +114,8 @@ HelloBar.inlineEditing = {
 
   $currentFroalaInstances: null
   $currentInputInstances: null
+
+  inlineImageManagementPane: null
 
   customizeFroala: ->
     that = this
@@ -137,10 +171,14 @@ HelloBar.inlineEditing = {
         $iframeBody = $($iframe[0].contentDocument.body)
         if $iframeBody.length > 0
           $($iframe[0].contentDocument).ready(=>
+            @instantiateInlineImageManagementPane($iframe, $iframeBody, elementType)
             @instantiateFroala($iframe, $iframeBody, elementType)
             @initializeInputEditing($iframe, $iframeBody)
           )
     , 500)
+
+  instantiateInlineImageManagementPane: ($iframe, $iframeBody, elementType) ->
+    @inlineImageManagementPane = new InlineImageManagementPane($iframe, $iframeBody)
 
   instantiateFroala: ($iframe, $iframeBody, elementType)->
     @cleanupFroala()
@@ -227,7 +265,8 @@ HelloBar.inlineEditing = {
     #TODO remove
     window.f = {
       $: $,
-      $allFroala: $allFroala
+      $allFroala: $allFroala,
+      $iframeBody: $iframeBody
     }
 
     $textFroala.each(->
@@ -264,6 +303,7 @@ HelloBar.inlineEditing = {
 
 
   cleanup: ->
+    @inlineImageManagementPane and @inlineImageManagementPane.destroy()
     @cleanupFroala()
     @cleanupInputs()
 

@@ -527,7 +527,7 @@ form {
   white-space: normal;
 }
 
-/*-----------  Editable Blocks  -----------*/
+/*-----------  Inline Editing -----------*/
 
 .hb-editable-block > .fr-wrapper {
   min-width: 100px;
@@ -576,3 +576,27 @@ form {
   margin: 0;
   padding: 0;
 }
+
+.inline-image-management-pane {
+  display: block;
+  position: absolute;
+  top: 10px;
+
+}
+
+.inline-image-management-pane a {
+  color: #d2d2d2;
+  text-decoration: none;
+  font-size: 80%;
+}
+
+.inline-image-management-pane a .fa {
+  margin-right: 0.5em;
+}
+
+.inline-image-management-pane .image-holder .image {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
