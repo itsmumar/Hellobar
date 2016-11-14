@@ -82,7 +82,7 @@ class InlineImageManagementPane
     hasImage and (@$pane.addClass('image-loaded'))
     $('<a href="javascript:void(0)" data-action="add-image"><i class="fa fa-image"></i><span>add image</span></a>').appendTo(@$pane)
     $('<a href="javascript:void(0)" data-action="edit-image"><i class="fa fa-image"></i><span>edit image</span></a>').appendTo(@$pane)
-    $('<div class="image-holder hb-editable-block hb-editable-block-image"><img class="image" src=""></div>').appendTo(@$pane)
+    $('<div class="image-holder hb-editable-block hb-editable-block-image hb-editable-block-image-without-placement"><img class="image" src=""></div>').appendTo(@$pane)
     $container = $iframeBody.find('.js-hellobar-element')
     $container.append(@$pane)
     @$pane.on('click', '[data-action]', (evt) =>
@@ -255,6 +255,16 @@ HelloBar.inlineEditing = {
     $imageFroala = $('.hb-editable-block-image', $iframeBody).froalaEditor($.extend({
       scrollableContainer: $iframeBody[0]
     }, imageFroalaOptions))
+
+    ###$imageFroala.add($('.hb-editable-block-image-without-placement', $iframeBody).froalaEditor($.extend({}, imageFroalaOptions, {
+      imageEditButtons: ['imageReplace', 'imageRemoveCustom'],
+      scrollableContainer: $iframeBody[0]
+    })))###
+    imageEditorWithoutPlacement = $('.hb-editable-block-image-without-placement', $iframeBody).data('froala.editor')
+    $.extend(imageEditorWithoutPlacement.opts, {
+      imageEditButtons: ['imageReplace', 'imageRemoveCustom']
+    })
+
 
     $imageFroala.on('froalaEditor.image.uploaded', (e, editor, response) =>
       #console.log(e, editor, response)

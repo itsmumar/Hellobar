@@ -583,7 +583,15 @@ form {
   top: 15px;
   left: 80px;
   right: 80px;
+  text-align: center;
+}
 
+#hellobar-bar .inline-image-management-pane {
+  display: none;
+}
+
+#hellobar-slider .inline-image-management-pane {
+  top: 3px;
 }
 
 .inline-image-management-pane .fr-image-resizer.fr-active {
