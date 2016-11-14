@@ -62,14 +62,6 @@ HelloBar.DesignController = Ember.Controller.extend
     Ember.run.next(@, ->
       @setProperties
         'model.image_placement'   : @getImagePlacement()
-        'model.use_default_image' : false
-
-      unless @get('hasUserChosenImage')
-        if @get('themeWithImage')
-          @setDefaultImage()
-          @setProperties('model.use_default_image' : true)
-        else
-          @send('setImageProps', null, '')
     )
   )
 
