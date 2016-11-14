@@ -201,7 +201,7 @@ HelloBar.inlineEditing = {
       toolbarButtons: [
         'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
         'fontFamily', 'fontSize', 'color', '-',
-        'undo', 'redo', 'clearFormatting', 'selectAll', '|', 'insertLink', 'emoticons'
+        'undo', 'redo', 'clearFormatting', 'selectAll', '|', 'insertLink'
       ],
       htmlAllowedTags: [
         'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
@@ -218,7 +218,7 @@ HelloBar.inlineEditing = {
       toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
                        'fontFamily', 'fontSize', 'color', '-',
                        'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
-                       'insertHR', 'insertLink', 'emoticons', '-',
+                       'insertHR', 'insertLink', '-',
                        'undo', 'redo', 'clearFormatting', 'selectAll'
       ],
       htmlAllowedTags: [
