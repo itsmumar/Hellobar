@@ -51,6 +51,7 @@ class ModelAdapter
     })
 
   handleContentChange: (blockId, content) ->
+    content = @preprocessContent(content)
     if blockId and blockId.indexOf('f-') == 0
       fields = @modelHandler.get('model.settings.fields_to_collect')
       fieldIdToChange = blockId.substring(2)
@@ -71,6 +72,11 @@ class ModelAdapter
         when 'headline' then @modelHandler.get('model').headline = content
         when 'action_link' then @modelHandler.get('model').link_text = content
         when 'caption' then @modelHandler.get('model').caption = content
+
+  preprocessContent: (content)->
+    $content = $('<div>' + content + '</div>')
+    $content.find('a').filter(-> $(this).attr('target') != '_blank').each(-> $(this).attr('target', '_top'))
+    $content.html()
 
   activeImageId: ->
     @modelHandler.get('model.active_image_id')
