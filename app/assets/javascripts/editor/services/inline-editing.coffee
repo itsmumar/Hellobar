@@ -201,7 +201,7 @@ HelloBar.inlineEditing = {
       toolbarButtons: [
         'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
         'fontFamily', 'fontSize', 'color', '-',
-        'undo', 'redo', 'clearFormatting', 'selectAll', '|', 'insertLink'
+        'undo', 'redo', 'clearFormatting', 'selectAll'
       ],
       htmlAllowedTags: [
         'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
