@@ -228,8 +228,8 @@ HB.SiteElement = HB.createClass({
     if (container == null)
       return;
     if ( type == 'Bar' ) {
-      container.style.maxHeight = (element.clientHeight + (HB.CAP.preview ? 280 : 8)) + 'px';
-      HB.CAP.preview && (container.style.height = (element.clientHeight + 280) + 'px');
+      container.style.maxHeight = (element.clientHeight + (HB.CAP.preview ? 350 : 8)) + 'px';
+      HB.CAP.preview && (container.style.height = (element.clientHeight + 350) + 'px');
     } else if ( type == 'Slider' ) {
       var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : window.innerWidth;
       var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
