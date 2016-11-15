@@ -189,7 +189,8 @@ HelloBar.inlineEditing = {
         if $iframeBody.length > 0
           $($iframe[0].contentDocument).ready(=>
             hasImage = if @modelAdapter then !!@modelAdapter.activeImageId() else false
-            @instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage)
+            # NOTE So far we don't use InlineImageManagementPane, we need to make final desicion later
+            #@instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage)
             @instantiateFroala($iframe, $iframeBody, elementType)
             @initializeInputEditing($iframe, $iframeBody)
           )
@@ -262,14 +263,11 @@ HelloBar.inlineEditing = {
       scrollableContainer: $iframeBody[0]
     }, imageFroalaOptions))
 
-    ###$imageFroala.add($('.hb-editable-block-image-without-placement', $iframeBody).froalaEditor($.extend({}, imageFroalaOptions, {
-      imageEditButtons: ['imageReplace', 'imageRemoveCustom'],
-      scrollableContainer: $iframeBody[0]
-    })))###
-    imageEditorWithoutPlacement = $('.hb-editable-block-image-without-placement', $iframeBody).data('froala.editor')
+    # NOTE This was used previously to support image uploading inline
+    ###imageEditorWithoutPlacement = $('.hb-editable-block-image-without-placement', $iframeBody).data('froala.editor')
     $.extend(imageEditorWithoutPlacement.opts, {
       imageEditButtons: ['imageReplace', 'imageRemoveCustom']
-    })
+    })###
 
 
     $imageFroala.on('froalaEditor.image.uploaded', (e, editor, response) =>
