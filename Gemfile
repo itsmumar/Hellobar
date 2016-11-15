@@ -92,6 +92,7 @@ group :development do
   gem "hound-tools", "~> 0.0.4", require: false
   gem "rubocop", "~> 0.34.2", require: false
   gem "sinatra"
+  gem 'brakeman', :require => false
 end
 
 group :development, :test do
