@@ -14,13 +14,19 @@ HelloBar.CustomProSelectComponent = Ember.Component.extend
   focusOut: ->
     @set("isOpen", false)
 
-  click: (event) ->
-    event.stopPropagation()
+  click: ->
     @toggleProperty("isOpen")
 
   actions:
 
     optionSelected: (option) ->
-      (typeof event == 'object') and (event.stopPropagation())
       @sendAction('action', option)
-      @set("isOpen", false)
+
+#-----------  Custom Select Child Views  -----------#
+
+HelloBar.CustomSelectOption = Ember.View.extend
+
+  classNames: ['custom-select-option']
+
+  click: ->
+    @get('parentView').send('optionSelected', @get('option'))

@@ -5,9 +5,9 @@
 
 <div class="custom-select-dropdown">
   {{#each option in options}}
-    <div class="custom-select-option" {{action 'optionSelected' option bubbles=false}}>
+    {{#view HelloBar.CustomSelectOption option=option}}
       {{option.label}}
       {{#if option.isPro}}<span class="pro-tag">PRO</span>{{/if}}
-    </div>
+    {{/view}}
   {{/each}}
 </div>
