@@ -2,9 +2,56 @@
 froalaKey = 'Qg1Ti1LXd2URVJh1DWXG=='
 
 class ModelAdapter
+
+  lastElementType: null
+  fullFeaturedHeadline: null
+  shortenedHeadline: null
+
   constructor: (@modelHandler, @service) ->
 
+  trackElementTypeChange: (newElementType) ->
+    if @lastElementType and @lastElementType != 'Bar' and newElementType == 'Bar'
+      headline = @modelHandler.get('model.headline')
+      @fullFeaturedHeadlineBackup = headline
+      @shortenedHeadline = @purgeHtmlMarkup(headline).substring(0, 60)
+      @modelHandler.set('model.headline', @shortenedHeadline)
+
+    if @lastElementType == 'Bar' and newElementType != 'Bar'
+      if (@modelHandler.get('model.headline') == @shortenedHeadline) and @fullFeaturedHeadlineBackup
+        @modelHandler.set('model.headline', @fullFeaturedHeadlineBackup)
+        @fullFeaturedHeadlineBackup = null
+        @shortenedHeadline = null
+
+    @lastElementType = newElementType
+
+  purgeHtmlMarkup: (htmlFragment) ->
+    htmlFragment = htmlFragment or ''
+    htmlFragment = htmlFragment.replace(/\<\/p\>/g, '</p> ')
+    htmlFragment = htmlFragment.replace(/\<\/li\>/g, '</li> ')
+    text = $('<div>' + htmlFragment + '</div>').text()
+    if text then text.replace(/\s+/g,' ') else ''
+
+  handleImagePlacementChange: (imagePlacement) ->
+    @modelHandler.set('model.image_placement', imagePlacement)
+
+  handleImageRemoval: () ->
+    @modelHandler.setProperties({
+      'model.active_image_id': null,
+      'model.image_placement': @modelHandler.get('model.image_placement'),
+      'model.image_type': 'custom',
+      'model.image_url': null
+    })
+
+  handleImageReplaced: (responseObject) ->
+    @modelHandler.setProperties({
+      'model.active_image_id': responseObject.id,
+      'model.image_placement': @modelHandler.get('model.image_placement'),
+      'model.image_type': 'custom',
+      'model.image_url': responseObject.url
+    })
+
   handleContentChange: (blockId, content) ->
+    content = @preprocessContent(content)
     if blockId and blockId.indexOf('f-') == 0
       fields = @modelHandler.get('model.settings.fields_to_collect')
       fieldIdToChange = blockId.substring(2)
@@ -26,6 +73,54 @@ class ModelAdapter
         when 'action_link' then @modelHandler.get('model').link_text = content
         when 'caption' then @modelHandler.get('model').caption = content
 
+  preprocessContent: (content)->
+    $content = $('<div>' + content + '</div>')
+    $content.find('a').filter(-> $(this).attr('target') != '_blank').each(-> $(this).attr('target', '_top'))
+    $content.html()
+
+  activeImageId: ->
+    @modelHandler.get('model.active_image_id')
+
+
+class InlineImageManagementPane
+  constructor: ($iframe, $iframeBody, hasImage) ->
+    @$pane = $('<div></div>').addClass('inline-image-management-pane')
+    hasImage and (@$pane.addClass('image-loaded'))
+    $('<a href="javascript:void(0)" data-action="add-image"><i class="fa fa-image"></i><span>add image</span></a>').appendTo(@$pane)
+    $('<a href="javascript:void(0)" data-action="edit-image"><i class="fa fa-image"></i><span>edit image</span></a>').appendTo(@$pane)
+    $('<div class="image-holder hb-editable-block hb-editable-block-image hb-editable-block-image-without-placement"><img class="image" src=""></div>').appendTo(@$pane)
+    $container = $iframeBody.find('.js-hellobar-element')
+    $container.append(@$pane)
+    @$pane.on('click', '[data-action]', (evt) =>
+      action = $(evt.currentTarget).attr('data-action')
+      switch action
+        when 'add-image' then @addImage()
+        when 'edit-image' then @editImage()
+    )
+  addImage: ->
+    editor = @$pane.find('.image-holder').data('froala.editor')
+    imageHolder = @$pane.find('.image-holder')[0]
+    image = @$pane.find('.image-holder .image')[0]
+    if editor and imageHolder and image
+      r = imageHolder.getBoundingClientRect()
+      editor.selection.setAtStart(image)
+      editor.selection.setAtEnd(image)
+      editor.image.showInsertPopup()
+      editor.popups.show('image.insert', r.left + r.width / 2, r.top)
+
+  editImage: ->
+    image = @$pane.find('.image-holder .image')[0]
+    if image
+      event = document.createEvent('Events')
+      event.initEvent('click', true, false)
+      image.dispatchEvent(event)
+
+
+  destroy: ->
+    @$pane.off('click')
+    @$pane.remove()
+
+
 # TODO Convert to service after upgrading to Ember 2
 HelloBar.inlineEditing = {
 
@@ -37,6 +132,43 @@ HelloBar.inlineEditing = {
   $currentFroalaInstances: null
   $currentInputInstances: null
 
+  inlineImageManagementPane: null
+
+  customizeFroala: ->
+    that = this
+    $.FroalaEditor.DefineIcon('imageReplace', {NAME: 'image'});
+    $.FroalaEditor.DefineIcon('imagePosition', {NAME: 'align-justify'});
+    $.FroalaEditor.RegisterCommand('imagePosition', {
+      title: 'Image position',
+      type: 'dropdown',
+      focus: false,
+      undo: false,
+      refreshAfterCallback: true,
+      options: {
+        'top': 'Top',
+        'bottom': 'Bottom',
+        'left': 'Left',
+        'right': 'Right',
+        'above-caption': 'Above Caption',
+        'below-caption': 'Below Caption'
+      },
+      callback: (cmd, val) ->
+        # TODO remove
+        #console.log(this, cmd, val)
+        #this.image.exitEdit()
+        that.modelAdapter.handleImagePlacementChange(val)
+    })
+    $.FroalaEditor.DefineIcon('imageRemoveCustom', {NAME: 'trash'});
+    $.FroalaEditor.RegisterCommand('imageRemoveCustom', {
+      title: 'Remove image',
+      icon: 'imageRemoveCustom',
+      undo: false,
+      focus: false,
+      refreshAfterCallback: false,
+      callback: () ->
+        that.modelAdapter.handleImageRemoval()
+    })
+
   setModelHandler: (modelHandler) ->
     @modelHandler = modelHandler
     if modelHandler
@@ -47,44 +179,125 @@ HelloBar.inlineEditing = {
   addFieldChangeListener: (listener) ->
     @fieldChangeListeners.push(listener)
 
-  initializeInlineEditing: ->
+  initializeInlineEditing: (elementType) ->
     @cleanup()
+    @modelAdapter and @modelAdapter.trackElementTypeChange(elementType)
     setTimeout(=>
       $iframe = $('#hellobar-preview-container > iframe')
       if $iframe.length > 0
         $iframeBody = $($iframe[0].contentDocument.body)
         if $iframeBody.length > 0
           $($iframe[0].contentDocument).ready(=>
-            @instantiateFroala($iframe, $iframeBody)
+            hasImage = if @modelAdapter then !!@modelAdapter.activeImageId() else false
+            # NOTE So far we don't use InlineImageManagementPane, we need to make final desicion later
+            #@instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage)
+            @instantiateFroala($iframe, $iframeBody, elementType)
             @initializeInputEditing($iframe, $iframeBody)
           )
     , 500)
 
-  instantiateFroala: ($iframe, $iframeBody)->
+  instantiateInlineImageManagementPane: ($iframe, $iframeBody, elementType, hasImage) ->
+    @inlineImageManagementPane = new InlineImageManagementPane($iframe, $iframeBody, hasImage)
+
+  instantiateFroala: ($iframe, $iframeBody, elementType)->
     @cleanupFroala()
-    $froala = $('.hb-editable-block-with-formatting', $iframeBody).add('.hb-editable-block-without-formatting',
-      $iframeBody).froalaEditor({
+    simpleFroalaOptions = {
       key: froalaKey,
       toolbarInline: true,
-      toolbarButtons: ['bold', 'italic', 'underline'],
-      htmlAllowedTags: ['p', 'strong', 'em', 'u', 'input', 'label'],
+      toolbarVisibleWithoutSelection: true,
+      toolbarButtons: [
+        'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
+        'fontFamily', 'fontSize', 'color', '-',
+        'undo', 'redo', 'clearFormatting', 'selectAll'
+      ],
+      htmlAllowedTags: [
+        'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
+      ],
       enter: $.FroalaEditor.ENTER_P,
       multiLine: false,
       initOnClick: false,
+      zIndex: 9888
+    }
+    fullFroalaOptions = {
+      key: froalaKey,
+      toolbarInline: true,
+      toolbarVisibleWithoutSelection: true,
+      toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
+                       'fontFamily', 'fontSize', 'color', '-',
+                       'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
+                       'insertHR', 'insertLink', '-',
+                       'undo', 'redo', 'clearFormatting', 'selectAll'
+      ],
+      htmlAllowedTags: [
+        'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'ul', 'ol', 'li',
+        'a', 'br', 'hr', 'table', 'tbody',  'tr', 'th', 'td', 'blockquote'
+      ],
+      enter: $.FroalaEditor.ENTER_P,
+      multiLine: true,
+      initOnClick: false,
       zIndex: 9888,
+    }
+    imageFroalaOptions = {
+      key: froalaKey,
+      pluginsEnabled: ['image'],
+      toolbarInline: true,
+      toolbarButtons: ['bold', 'italic', 'underline'],
+      imageInsertButtons: ['imageUpload'],
+      imageEditButtons: ['imageReplace', 'imagePosition', 'imageRemoveCustom']
+      htmlAllowedTags: ['p', 'div', 'img']
+      multiLine: false,
+      initOnClick: false,
+      zIndex: 9888,
+      imageUploadURL: "/sites/#{siteID}/image_uploads",
+      requestHeaders: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      }
+    }
+    $simpleFroala = $('.hb-editable-block-with-simple-formatting', $iframeBody).froalaEditor($.extend({
       scrollableContainer: $iframeBody[0]
-    });
-    $froala.on('froalaEditor.contentChanged', (e, editor) =>
+    }, simpleFroalaOptions))
+    $fullFroala = $('.hb-editable-block-with-full-formatting', $iframeBody).froalaEditor($.extend({
+      scrollableContainer: $iframeBody[0]
+    }, if elementType == 'Bar' then simpleFroalaOptions else fullFroalaOptions))
+    $imageFroala = $('.hb-editable-block-image', $iframeBody).froalaEditor($.extend({
+      scrollableContainer: $iframeBody[0]
+    }, imageFroalaOptions))
+
+    # NOTE This was used previously to support image uploading inline
+    ###imageEditorWithoutPlacement = $('.hb-editable-block-image-without-placement', $iframeBody).data('froala.editor')
+    $.extend(imageEditorWithoutPlacement.opts, {
+      imageEditButtons: ['imageReplace', 'imageRemoveCustom']
+    })###
+
+
+    $imageFroala.on('froalaEditor.image.uploaded', (e, editor, response) =>
+      #console.log(e, editor, response)
+      responseObject = JSON.parse(response)
+      @modelAdapter and @modelAdapter.handleImageReplaced(responseObject)
+      false
+    )
+
+    $textFroala = $simpleFroala.add($fullFroala)
+    $textFroala.on('froalaEditor.contentChanged', (e, editor) =>
       $target = $(e.currentTarget)
       content = $target.froalaEditor('html.get')
       blockId = $target.attr('data-hb-editable-block')
       @handleContentChange(blockId, content)
     )
-    $froala.on('froalaEditor.destroy', (e, editor) =>
+    $textFroala.on('froalaEditor.destroy', (e, editor) =>
     )
-    @$currentFroalaInstances = $froala
 
-    $('.hb-editable-block-with-formatting', $iframeBody).add('.hb-editable-block-without-formatting', $iframeBody).each(->
+    $allFroala = $($textFroala).add($imageFroala)
+    @$currentFroalaInstances = $allFroala
+
+    #TODO remove
+    window.f = {
+      $: $,
+      $allFroala: $allFroala,
+      $iframeBody: $iframeBody
+    }
+
+    $textFroala.each(->
       $editableElement = $(this)
       editor = $editableElement.data('froala.editor')
       newOptions = {}
@@ -112,11 +325,13 @@ HelloBar.inlineEditing = {
     if @$currentFroalaInstances and @$currentFroalaInstances.length > 0
       @$currentFroalaInstances.off('froalaEditor.contentChanged')
       @$currentFroalaInstances.off('froalaEditor.blur')
+      @$currentFroalaInstances.off('froalaEditor.image.uploaded')
       @$currentFroalaInstances.off('froalaEditor.destroy')
       @$currentFroalaInstances.froalaEditor('destroy')
 
 
   cleanup: ->
+    @inlineImageManagementPane and @inlineImageManagementPane.destroy()
     @cleanupFroala()
     @cleanupInputs()
 
@@ -126,3 +341,8 @@ HelloBar.inlineEditing = {
       @modelAdapter.handleContentChange(blockId, content)
 
 }
+
+Ember.run.next(->
+  HelloBar.inlineEditing.customizeFroala()
+)
+

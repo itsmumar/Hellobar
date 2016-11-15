@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161102031039) do
+ActiveRecord::Schema.define(version: 20161108002059) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -272,44 +272,44 @@ ActiveRecord::Schema.define(version: 20161102031039) do
   create_table "site_elements", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "element_subtype",                                                           null: false
+    t.string   "element_subtype",                                             null: false
     t.string   "target_segment"
-    t.boolean  "closable",                        default: false
-    t.boolean  "show_border",                     default: false
-    t.string   "background_color",                default: "eb593c"
-    t.string   "border_color",                    default: "ffffff"
-    t.string   "button_color",                    default: "000000"
-    t.string   "font_id",                         default: "open_sans"
-    t.string   "link_color",                      default: "ffffff"
-    t.string   "link_style",                      default: "button"
-    t.string   "link_text",          limit: 5000, default: "Click Here"
-    t.string   "headline",           limit: 5000, default: "Hello. Add your message here."
-    t.string   "size",                            default: "large"
+    t.boolean  "closable",                            default: false
+    t.boolean  "show_border",                         default: false
+    t.string   "background_color",                    default: "eb593c"
+    t.string   "border_color",                        default: "ffffff"
+    t.string   "button_color",                        default: "000000"
+    t.string   "font_id",                             default: "open_sans"
+    t.string   "link_color",                          default: "ffffff"
+    t.string   "link_style",                          default: "button"
+    t.string   "link_text",          limit: 5000,     default: "Click Here"
+    t.text     "headline",           limit: 16777215
+    t.string   "size",                                default: "large"
     t.string   "target"
-    t.string   "text_color",                      default: "ffffff"
-    t.string   "texture",                         default: "none"
-    t.boolean  "paused",                          default: false
+    t.string   "text_color",                          default: "ffffff"
+    t.string   "texture",                             default: "none"
+    t.boolean  "paused",                              default: false
     t.integer  "rule_id"
     t.text     "settings"
-    t.boolean  "show_branding",                   default: true
+    t.boolean  "show_branding",                       default: true
     t.integer  "contact_list_id"
-    t.string   "display_when",                    default: "immediately"
+    t.string   "display_when",                        default: "immediately"
     t.string   "thank_you_text"
-    t.boolean  "pushes_page_down",                default: true
-    t.boolean  "remains_at_top",                  default: true
+    t.boolean  "pushes_page_down",                    default: true
+    t.boolean  "remains_at_top",                      default: true
     t.integer  "wordpress_bar_id"
-    t.boolean  "open_in_new_window",              default: false
-    t.boolean  "animated",                        default: true
-    t.boolean  "wiggle_button",                   default: false
-    t.string   "type",                            default: "Bar"
-    t.string   "caption",                         default: ""
+    t.boolean  "open_in_new_window",                  default: false
+    t.boolean  "animated",                            default: true
+    t.boolean  "wiggle_button",                       default: false
+    t.string   "type",                                default: "Bar"
+    t.text     "caption",            limit: 16777215
     t.string   "placement"
     t.datetime "deleted_at"
-    t.string   "view_condition",                  default: "immediately"
-    t.string   "email_placeholder",               default: "Your email",                    null: false
-    t.string   "name_placeholder",                default: "Your name",                     null: false
+    t.string   "view_condition",                      default: "immediately"
+    t.string   "email_placeholder",                   default: "Your email",  null: false
+    t.string   "name_placeholder",                    default: "Your name",   null: false
     t.integer  "image_upload_id"
-    t.string   "image_placement",                 default: "bottom"
+    t.string   "image_placement",                     default: "bottom"
     t.integer  "active_image_id"
     t.string   "question"
     t.string   "answer1"
@@ -320,12 +320,14 @@ ActiveRecord::Schema.define(version: 20161102031039) do
     t.string   "answer2link_text"
     t.string   "answer1caption"
     t.string   "answer2caption"
-    t.boolean  "use_question",                    default: false
+    t.boolean  "use_question",                        default: false
     t.string   "phone_number"
-    t.string   "phone_country_code",              default: "US"
+    t.string   "phone_country_code",                  default: "US"
     t.string   "theme_id"
-    t.boolean  "use_default_image",               default: true,                            null: false
+    t.boolean  "use_default_image",                   default: true,          null: false
     t.text     "blocks"
+    t.text     "content"
+    t.text     "appearance"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

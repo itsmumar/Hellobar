@@ -34,11 +34,13 @@ HB.SiteElement = HB.createClass({
   imageFor: function(location) {
     locationIndex = location.indexOf(this.image_placement);
     if (!this.image_url || locationIndex === undefined || locationIndex === -1)
-      return "";
+      return '';
     else if (this.image_placement == 'background')
-      return "<div class='hb-image-wrapper " + this.image_placement + "' style='background-image:url(" + this.image_url + ");'></div>";
+      return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url(' + this.image_url + ');></div>';
     else
-      return "<div class='hb-image-wrapper " + this.image_placement + "'><img class='uploaded-image' src=" + this.image_url + " /></div>";
+      return '<div class="hb-image-wrapper ' + this.image_placement
+        + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="uploaded-image" src="'
+        + this.image_url + '" /></div></div>';
   },
 
   attach: function()
@@ -149,6 +151,8 @@ HB.SiteElement = HB.createClass({
     this.isMobileWidth = false;
     var mobileDeviceInterval = setInterval(this.checkForMobileDevice.bind(this), 50); // Check screen size every N ms
     HB.initializePhoneFields();
+
+    //console.log('site_element = ', this);
   },
 
   checkForMobileDevice: function(){
@@ -199,7 +203,7 @@ HB.SiteElement = HB.createClass({
             // handle case where display-condition check has hidden this.w
             if (this.w.style.display === "none") {
               return;
-            };
+            }
 
             var borderPush = HB.t((this.show_border) ? 3 : 0)
               HB.p.style.height = (thisElement.clientHeight + borderPush) + "px";
@@ -224,7 +228,8 @@ HB.SiteElement = HB.createClass({
     if (container == null)
       return;
     if ( type == 'Bar' ) {
-      container.style.maxHeight = (element.clientHeight + (HB.CAP.preview ? 150 : 8)) + 'px';
+      container.style.maxHeight = (element.clientHeight + (HB.CAP.preview ? 350 : 8)) + 'px';
+      HB.CAP.preview && (container.style.height = (element.clientHeight + 350) + 'px');
     } else if ( type == 'Slider' ) {
       var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : window.innerWidth;
       var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
@@ -622,7 +627,9 @@ HB.SiteElement = HB.createClass({
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css');
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_editor.min.css');
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_style.css');
-    //this.addJs('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/js/froala_editor.min.js');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/colors.min.css');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/emoticons.css');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/image.min.css');
   },
 
   brightnessClass: function() {

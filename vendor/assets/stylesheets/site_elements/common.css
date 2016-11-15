@@ -527,7 +527,7 @@ form {
   white-space: normal;
 }
 
-/*-----------  Editable Blocks  -----------*/
+/*-----------  Inline Editing -----------*/
 
 .hb-editable-block > .fr-wrapper {
   min-width: 100px;
@@ -566,3 +566,65 @@ form {
 .preview-mode .hb-input-wrapper .hb-input-block.hb-editable-block-input input {
   color: #c3c3c3;
 }
+
+.hb-editable-block.hb-editable-block-image {
+
+}
+
+.hb-image-holder {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.inline-image-management-pane {
+  display: block;
+  position: absolute;
+  top: 15px;
+  left: 80px;
+  right: 80px;
+  text-align: center;
+}
+
+#hellobar-bar .inline-image-management-pane {
+  display: none;
+}
+
+#hellobar-slider .inline-image-management-pane {
+  top: 3px;
+}
+
+.inline-image-management-pane .fr-image-resizer.fr-active {
+  display: none;
+}
+
+.inline-image-management-pane a {
+  color: #d2d2d2;
+  text-decoration: none;
+  font-size: 80%;
+}
+
+.inline-image-management-pane a[data-action="edit-image"] {
+  display: none;
+}
+
+.inline-image-management-pane a .fa {
+  margin-right: 0.5em;
+}
+
+.inline-image-management-pane .image-holder .image {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.inline-image-management-pane.image-loaded a[data-action="add-image"] {
+  display: none;
+}
+
+.french-rose .inline-image-management-pane.image-loaded a[data-action="edit-image"] {
+  display: inline-block;
+}
+
+
+

@@ -20,12 +20,17 @@ HelloBar.StyleController = Ember.Controller.extend
       @set('themeSelectionInProgress', false)
     )
 
-  currentThemeName: (->
+  currentTheme: (->
     allThemes = availableThemes
     currentThemeId = @get('model.theme_id')
     currentTheme = _.find(allThemes, (theme) => currentThemeId == theme.id)
-    if currentTheme then currentTheme.name else ''
+    currentTheme
   ).property('model.theme_id')
+
+  currentThemeName: (->
+    theme = @get('currentTheme')
+    if theme then theme.name else ''
+  ).property('currentTheme')
 
   shouldShowThemeInfo: (->
     @get('isModalType') and not @get('themeSelectionInProgress')
@@ -56,12 +61,36 @@ HelloBar.StyleController = Ember.Controller.extend
   ).observes('model').on('init')
 
   onElementTypeChanged: (->
-    if @get('model.type') == 'Modal'
+    elementType = @get('model.type')
+    if elementType == 'Modal'
       HelloBar.bus.trigger('hellobar.core.rightPane.show', {componentName: 'theme-tile-grid', componentOptions: {}})
     else
       HelloBar.bus.trigger('hellobar.core.rightPane.hide')
-    HelloBar.inlineEditing.initializeInlineEditing()
+    HelloBar.inlineEditing.initializeInlineEditing(elementType)
   ).observes('model.type')
+
+
+  #--- Theme change handling moved from design-controller ---
+  themeChanged: Ember.observer('currentThemeName', ->
+    Ember.run.next(@, ->
+      @setProperties
+        'model.image_placement'   : @getImagePlacement()
+        #'model.use_default_image' : false
+    )
+  )
+
+  getImagePlacement: ->
+    positionIsSelectable  = @get('currentTheme.image.position_selectable')
+    imageIsbackground     = (@get('model.image_placement') == 'background')
+    positionIsEmpty       = Ember.isEmpty(@get('model.image_placement'))
+    if !positionIsSelectable
+      @get('currentTheme.image.position_default')
+    else if imageIsbackground || positionIsEmpty
+      @get('currentTheme.image.position_default')
+    else
+      @get('model.image_placement')
+
+  #-------------------------------------------------------------
 
   isModalType: (->
     @get('model.type') == 'Modal'
