@@ -103,6 +103,7 @@ HelloBar.ApplicationController = Ember.Controller.extend
   ).observes("model.animated").on("init")
 
   doRenderPreview: ( (withAnimations = false) ->
+    HelloBar.inlineEditing.cleanup()
     previewElement = $.extend({}, @get("model"),
       animated: withAnimations && @get("model.animated")
       hide_destination: true
