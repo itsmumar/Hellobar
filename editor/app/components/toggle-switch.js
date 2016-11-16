@@ -1,4 +1,6 @@
-HelloBar.ToggleSwitchComponent = Ember.Component.extend({
+import Ember from 'ember';
+
+export default Ember.Component.extend({
 
   classNames: ['toggle-switch'],
   classNameBindings: ['displayValue:is-selected'],

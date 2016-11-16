@@ -1,4 +1,11 @@
-HelloBar.RightPaneComponent = Ember.Component.extend({
+import Ember from 'ember';
+
+import '../services/bus';
+
+export default Ember.Component.extend({
+
+  bus: Ember.inject.service(),
+
   classNames: ['right-pane'],
   classNameBindings: ['componentIsDefined:visible'],
 
@@ -16,14 +23,15 @@ HelloBar.RightPaneComponent = Ember.Component.extend({
   }),
 
   init() {
-    HelloBar.bus.subscribe('hellobar.core.rightPane.show', params => {
+    this._super(...arguments);
+    this.get('bus').subscribe('hellobar.core.rightPane.show', params => {
         return this.setProperties({
           componentName: params.componentName,
           componentOptions: params.componentOptions
         });
       }
     );
-    return HelloBar.bus.subscribe('hellobar.core.rightPane.hide', params => {
+    this.get('bus').subscribe('hellobar.core.rightPane.hide', params => {
         return this.setProperties({
           componentName: null,
           componentOptions: null

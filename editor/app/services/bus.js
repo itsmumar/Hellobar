@@ -1,6 +1,14 @@
-// TODO this is a temporary solution until refactoring is done
-// (we need to upgrade Ember version in order to use services and bus pattern)
-HelloBar.bus = {
+import Ember from 'ember';
+
+console.log('bus service definition');
+
+export default Ember.Service.extend({
+
+  init() {
+    // TODO remove this
+    console.log('bus service initialized.');
+  },
+
   _events: {},
   subscribe(eventName, callback) {
     if (!this._events[eventName]) {
@@ -22,4 +30,5 @@ HelloBar.bus = {
       );
     }
   }
-};
+});
+

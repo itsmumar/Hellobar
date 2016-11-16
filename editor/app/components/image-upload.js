@@ -1,4 +1,6 @@
-HelloBar.ImageUploadComponent = Ember.Component.extend({
+import Ember from 'ember';
+
+export default Ember.Component.extend({
   dropzoneInstance: null,
   classNames: ['file-upload-container'],
   classNameBindings: ['hasFile:has-file', 'errorState:with-errors'],

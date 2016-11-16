@@ -1,4 +1,6 @@
-HelloBar.RangeSliderComponent = Ember.Component.extend({
+import Ember from 'ember';
+
+export default Ember.Component.extend({
 
   classNames: ['range-slider'],
 

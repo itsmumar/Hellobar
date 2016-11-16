@@ -1,7 +1,11 @@
-let announcementKeyPrefix = 'HB-announcement-';
+const announcementKeyPrefix = 'HB-announcement-';
 
-// TODO Convert to service after upgrading to Ember 2
-HelloBar.announcementTracking = {
+export default Ember.Service.extend({
+
+  init() {
+    // TODO remove
+    console.log('announcemnt-tracking service initialized');
+  },
 
   wasAnnouncementClosedByCurrentUser(announcementName) {
     return !!localStorage.getItem(announcementKeyPrefix + announcementName);
@@ -10,5 +14,5 @@ HelloBar.announcementTracking = {
   closeAnnouncement(announcementName) {
     return localStorage.setItem(announcementKeyPrefix + announcementName, 'closed');
   }
+});
 
-};

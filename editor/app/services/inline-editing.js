@@ -1,5 +1,7 @@
+import Ember from 'ember';
+
 // Froala Editor license key
-let froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
+const froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
 
 class ModelAdapter {
 
@@ -146,9 +148,7 @@ class InlineImageManagementPane {
   }
 }
 
-
-// TODO Convert to service after upgrading to Ember 2
-HelloBar.inlineEditing = {
+export default Ember.Service.extend({
 
   modelHandler: null,
   modelAdapter: null,
@@ -159,6 +159,10 @@ HelloBar.inlineEditing = {
   $currentInputInstances: null,
 
   inlineImageManagementPane: null,
+
+  init() {
+    Ember.run.next(() => HelloBar.inlineEditing.customizeFroala());
+  },
 
   customizeFroala() {
     let that = this;
@@ -391,7 +395,7 @@ HelloBar.inlineEditing = {
     }
   }
 
-};
+});
 
-Ember.run.next(() => HelloBar.inlineEditing.customizeFroala());
+
 

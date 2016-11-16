@@ -2,6 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
 
+  announcementTracking: Ember.inject.service(),
+
   currentAnnouncementName: 'inline-editing',
   currentAnnouncementWasClosed: false,
 
@@ -13,7 +15,9 @@ export default Ember.Component.extend({
   elementId: 'announcement-container',
 
   announcementToShow: (function() {
-    if (this.currentAnnouncementWasClosed || HelloBar.announcementTracking.wasAnnouncementClosedByCurrentUser(this.currentAnnouncementName)) {
+    if (true) {
+    // TODO uncomment this (this.announcementTracking doesn't work so far)
+    //if (this.currentAnnouncementWasClosed || this.announcementTracking.wasAnnouncementClosedByCurrentUser(this.currentAnnouncementName)) {
       return null;
     } else {
       return this.currentAnnouncementName;

@@ -1,4 +1,6 @@
-HelloBar.ContactListSelectComponent = Ember.Component.extend({
+import Ember from 'ember';
+
+export default Ember.Component.extend({
 
   classNames: ['contact-list-wrapper'],
   classNameBindings: ['isOpen:is-open', 'hasContactList:has-list'],

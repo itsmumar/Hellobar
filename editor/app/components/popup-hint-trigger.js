@@ -1,4 +1,6 @@
-HelloBar.PopupHintTriggerComponent = Ember.Component.extend({
+import Ember from 'ember';
+
+export default Ember.Component.extend({
 
   classNames: ['popup-hint-trigger'],
 
