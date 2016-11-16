@@ -113,7 +113,7 @@ class SiteElement < ActiveRecord::Base
   def headline=(h_value)
     white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
     h_value = white_list_sanitizer.sanitize(h_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    h_value = 'Hello. Add your message here.' if h_value.empty?
+    h_value = 'Hello. Add your message here.' if h_value.blank?
     write_attribute(:headline, h_value)
   end
 
