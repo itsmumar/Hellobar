@@ -1,10 +1,13 @@
 HelloBar.ApplicationController = Ember.Controller.extend({
 
   init() {
-    return Ember.run.next(() => {
-        return this.applyCurrentTheme();
+    Ember.run.next(() => {
+        if (this.get('model.id') === null) {
+          return this.applyCurrentTheme();
+        }
       }
     );
+    return HelloBar.inlineEditing.setModelHandler(this);
   },
 
 
@@ -283,7 +286,14 @@ HelloBar.ApplicationController = Ember.Controller.extend({
   },
 
   onCurrentThemeChanged: (function () {
-    return this.applyCurrentTheme();
+    if (this.get('originalTheme').theme_id === this.get('model.theme_id')) {
+      return _.each(this.get('originalTheme'), (value, key) => {
+          return this.set(`model.${key}`, value);
+        }
+      );
+    } else {
+      return this.applyCurrentTheme();
+    }
   }).observes('model.theme_id'),
 
   //-----------  Actions  -----------#
@@ -334,4 +344,3 @@ HelloBar.ApplicationController = Ember.Controller.extend({
     }
   }
 });
-  

@@ -1,6 +1,7 @@
 HelloBar.SettingsEmailsVariantController = Ember.Controller.extend({
 
   init() {
+    HelloBar.inlineEditing.addFieldChangeListener(this);
     return Ember.run.schedule('afterRender', this, () => {
         let sortable;
         let sortableGroupElement = Ember.$('.js-fields-to-collect');

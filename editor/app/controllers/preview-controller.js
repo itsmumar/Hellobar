@@ -4,7 +4,8 @@ HelloBar.PreviewController = Ember.Controller.extend({
 
   init() {
     return HB.addPreviewInjectionListener(container => {
-        return this.adjustPushHeight();
+        this.adjustPushHeight();
+        return HelloBar.inlineEditing.initializeInlineEditing(this.get('model.type'));
       }
     );
   },

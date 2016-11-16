@@ -25,16 +25,21 @@ HelloBar.StyleController = Ember.Controller.extend({
     );
   },
 
-  currentThemeName: (function () {
+  currentTheme: (function () {
     let allThemes = availableThemes;
     let currentThemeId = this.get('model.theme_id');
     let currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
-    if (currentTheme) {
-      return currentTheme.name;
+    return currentTheme;
+  }).property('model.theme_id'),
+
+  currentThemeName: (function () {
+    let theme = this.get('currentTheme');
+    if (theme) {
+      return theme.name;
     } else {
       return '';
     }
-  }).property('model.theme_id'),
+  }).property('currentTheme'),
 
   shouldShowThemeInfo: (function () {
     return this.get('isModalType') && !this.get('themeSelectionInProgress');
@@ -79,15 +84,42 @@ HelloBar.StyleController = Ember.Controller.extend({
   }).observes('model').on('init'),
 
   onElementTypeChanged: (function () {
-    if (this.get('model.type') === 'Modal') {
-      return HelloBar.bus.trigger('hellobar.core.rightPane.show', {
-        componentName: 'theme-tile-grid',
-        componentOptions: {}
-      });
+    let elementType = this.get('model.type');
+    if (elementType === 'Modal') {
+      HelloBar.bus.trigger('hellobar.core.rightPane.show', {componentName: 'theme-tile-grid', componentOptions: {}});
     } else {
-      return HelloBar.bus.trigger('hellobar.core.rightPane.hide');
+      HelloBar.bus.trigger('hellobar.core.rightPane.hide');
     }
+    return HelloBar.inlineEditing.initializeInlineEditing(elementType);
   }).observes('model.type'),
+
+
+  //--- Theme change handling moved from design-controller ---
+  themeChanged: Ember.observer('currentThemeName', function () {
+      return Ember.run.next(this, function () {
+          return this.setProperties({
+            'model.image_placement': this.getImagePlacement()
+          });
+        }
+        //'model.use_default_image' : false
+      );
+    }
+  ),
+
+  getImagePlacement() {
+    let positionIsSelectable = this.get('currentTheme.image.position_selectable');
+    let imageIsbackground = (this.get('model.image_placement') === 'background');
+    let positionIsEmpty = Ember.isEmpty(this.get('model.image_placement'));
+    if (!positionIsSelectable) {
+      return this.get('currentTheme.image.position_default');
+    } else if (imageIsbackground || positionIsEmpty) {
+      return this.get('currentTheme.image.position_default');
+    } else {
+      return this.get('model.image_placement');
+    }
+  },
+
+  //-------------------------------------------------------------
 
   isModalType: (function () {
     return this.get('model.type') === 'Modal';

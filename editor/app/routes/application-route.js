@@ -73,6 +73,14 @@ HelloBar.ApplicationRoute = Ember.Route.extend({
   //-----------  Controller Setup  -----------#
 
   setupController(controller, model) {
+    this.controller.set('originalTheme', {
+      "theme_id": model.theme_id,
+      "button_color": model.button_color,
+      "background_color": model.background_color,
+      "text_color": model.text_color,
+      "link_color": model.link_color
+    });
+
     // Set sub-step forwarding on application load
     let settings = this.controllerFor('settings');
     if (/^social/.test(model.element_subtype)) {
