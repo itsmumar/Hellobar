@@ -1,4 +1,6 @@
-HelloBar.AnnouncementContainerComponent = Ember.Component.extend({
+import Ember from 'ember';
+
+export default Ember.Component.extend({
 
   currentAnnouncementName: 'inline-editing',
   currentAnnouncementWasClosed: false,
