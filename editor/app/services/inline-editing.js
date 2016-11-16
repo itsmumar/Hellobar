@@ -3,13 +3,12 @@ let froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
 
 class ModelAdapter {
 
-  lastElementType = null;
-  fullFeaturedHeadline = null;
-  shortenedHeadline = null;
-
   constructor(modelHandler, service) {
     this.modelHandler = modelHandler;
     this.service = service;
+    this.lastElementType = null;
+    this.fullFeaturedHeadline = null;
+    this.shortenedHeadline = null;
   }
 
   trackElementTypeChange(newElementType) {
