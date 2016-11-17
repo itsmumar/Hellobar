@@ -2,8 +2,23 @@
 /* global require, module */
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-module.exports = function(defaults) {
+module.exports = function (defaults) {
   var app = new EmberApp(defaults, {
+    sassOptions: {
+      includePaths: [
+        '../app/assets/stylesheets',
+        '../app/assets/stylesheets/settings',
+        '../app/assets/stylesheets/elements',
+        '../app/assets/stylesheets/elements/forms',
+        '../app/assets/stylesheets/components',
+        '../app/assets/stylesheets/layouts/editor',
+        'bower_components/bourbon/app/assets/stylesheets',
+        'bower_components/normalize-css',
+        'bower_components/jquery-minicolors',
+        'bower_components/nouislider/distribute',
+        'bower_components/froala-wysiwyg-editor/css'
+      ]
+    }
     // Add options here
   });
 
