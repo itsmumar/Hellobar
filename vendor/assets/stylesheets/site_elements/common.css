@@ -567,6 +567,11 @@ form {
   color: #c3c3c3;
 }
 
+.Bar.french-rose a#hb-answer1,
+.Bar.french-rose a#hb-answer2 {
+  width: 25%;
+}
+
 .hb-editable-block.hb-editable-block-image {
 
 }
@@ -625,6 +630,3 @@ form {
 .french-rose .inline-image-management-pane.image-loaded a[data-action="edit-image"] {
   display: inline-block;
 }
-
-
-
