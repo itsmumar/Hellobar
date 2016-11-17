@@ -1,6 +1,6 @@
 class AddBlocksToSiteElement < ActiveRecord::Migration
   THEME_IDS = ["green-timberline", "blue-autumn", "french-rose", "violet",
-                "dark-green-spring", "marigold"]
+               "dark-green-spring", "marigold"]
   BAR_THEMES = ["classy", "hellobar-classic"]
   OPEN_TAGS = "<p><strong>"
   CLOSE_TAGS = "</strong></p>"
