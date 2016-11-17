@@ -1,5 +1,14 @@
-HelloBar.InterstitialCallController = Ember.Controller.extend({
+import Ember from 'ember';
+
+console.log('call-controller definition');
+
+export default Ember.Controller.extend({
   needs: ["application"],
+
+  init() {
+    // TODO remove
+    console.log('call-controller init');
+  },
 
   setDefaults() {
     if (!this.get("model")) {
@@ -26,6 +35,9 @@ HelloBar.InterstitialCallController = Ember.Controller.extend({
   actions: {
     closeInterstitial() {
       return this.transitionToRoute("style");
+    },
+    selectCountry() {
+
     }
   }
 });
