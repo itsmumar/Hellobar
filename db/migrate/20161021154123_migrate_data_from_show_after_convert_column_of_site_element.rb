@@ -10,7 +10,7 @@ class MigrateDataFromShowAfterConvertColumnOfSiteElement < ActiveRecord::Migrati
       if site_element.show_after_convert
         site_element.settings[:cookie_settings] = { duration: 0, success_duration: 0 }
       else
-        site_element.settings[:cookie_settings] = case(site_element.type)
+        site_element.settings[:cookie_settings] = case site_element.type
                                                   when "Bar", "Slider"
                                                     { duration: 1 } # 1 day
                                                   when "Modal", "Takeover"

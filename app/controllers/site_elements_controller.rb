@@ -163,9 +163,9 @@ class SiteElementsController < ApplicationController
       :id,
       {content: [:text, :href]},
       themes: [
-          :id,
-          :css_classes,
-          {styles: [:background_color, :border_color]}
+        :id,
+        :css_classes,
+        {styles: [:background_color, :border_color]}
       ]
     ]
   end
