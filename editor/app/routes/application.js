@@ -113,35 +113,35 @@ export default Ember.Route.extend({
     let style = this.controllerFor('style');
     switch (model.type) {
       case 'Takeover':
-        style.routeForwarding = 'style.takeover';
+        Ember.set(style, 'routeForwarding','style.takeover');
         break;
       case 'Slider':
-        style.routeForwarding = 'style.slider';
+        Ember.set(style, 'routeForwarding', 'style.slider');
         break;
       case 'Modal':
-        style.routeForwarding = 'style.modal';
+        Ember.set(style, 'routeForwarding', 'style.modal');
         break;
       default:
-        style.routeForwarding = model.id ? 'style.bar' : false;
+        Ember.set(style, 'routeForwarding', model.id ? 'style.bar' : false);
     }
 
     let targeting = this.controllerFor('targeting');
     if (model.id) {
       switch (model.preset_rule_name) {
         case 'Everyone':
-          targeting.routeForwarding = 'targeting.everyone';
+          Ember.set(targeting, 'routeForwarding', 'targeting.everyone');
           break;
         case 'Mobile Visitors':
-          targeting.routeForwarding = 'targeting.mobile';
+          Ember.set(targeting, 'routeForwarding', 'targeting.mobile');
           break;
         case 'Homepage Visitors':
-          targeting.routeForwarding = 'targeting.homepage';
+          Ember.set(targeting, 'routeForwarding', 'targeting.homepage');
           break;
         case 'Saved':
-          targeting.routeForwarding = 'targeting.saved';
+          Ember.set(targeting, 'routeForwarding', 'targeting.saved');
           break;
         default:
-          targeting.routeForwarding = false;
+          Ember.set(targeting, 'routeForwarding', false);
       }
     }
 
