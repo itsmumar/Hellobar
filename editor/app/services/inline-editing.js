@@ -161,7 +161,7 @@ export default Ember.Service.extend({
   inlineImageManagementPane: null,
 
   init() {
-    Ember.run.next(() => HelloBar.inlineEditing.customizeFroala());
+    Ember.run.next(() => this.customizeFroala());
   },
 
   customizeFroala() {

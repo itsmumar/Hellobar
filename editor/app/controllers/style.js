@@ -2,6 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
+  inlineEditing: Ember.inject.service(),
+
   //-----------  Step Settings  -----------#
 
   step: 2,
@@ -92,7 +94,7 @@ export default Ember.Controller.extend({
     } else {
       HelloBar.bus.trigger('hellobar.core.rightPane.hide');
     }
-    return HelloBar.inlineEditing.initializeInlineEditing(elementType);
+    return this.get('inlineEditing').initializeInlineEditing(elementType);
   }).observes('model.type'),
 
 

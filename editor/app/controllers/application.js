@@ -2,6 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
+  inlineEditing: Ember.inject.service(),
+
   init() {
     Ember.run.next(() => {
         if (this.get('model.id') === null) {
@@ -9,7 +11,7 @@ export default Ember.Controller.extend({
         }
       }
     );
-    return HelloBar.inlineEditing.setModelHandler(this);
+    return this.get('inlineEditing').setModelHandler(this);
   },
 
 
@@ -122,7 +124,7 @@ export default Ember.Controller.extend({
         size: this.get("model.size"),
         subtype: this.get("model.element_subtype"),
         tab_side: "right",
-        template_name: this.get("model.type").toLowerCase() + "_" + (this.get("model.element_subtype") || "traffic"),
+        template_name: (this.get("model.type") || 'bar').toLowerCase() + "_" + (this.get("model.element_subtype") || "traffic"),
         thank_you_text: "Thank you for signing up!",
         wiggle_button: this.get("model.wiggle_button"),
         wiggle_wait: 0,
@@ -141,7 +143,8 @@ export default Ember.Controller.extend({
 
   // Sets a callback on the preview script to rerender the preview after the user
   // closes the element
-  setRerenderOnClose: ( function () {
+  // TODO better way is to deny element closing at all
+  /*setRerenderOnClose: ( function () {
     let that = this;
     let callback = function () {
       let delayedFunc = () => Ember.run.debounce(that, that.doRenderPreview, false, 500);
@@ -149,7 +152,7 @@ export default Ember.Controller.extend({
     };
 
     return HB.on("elementDismissed", callback);
-  }).on('init'),
+  }).on('init'),*/
 
   //-----------  State Default  -----------#
 
@@ -177,7 +180,8 @@ export default Ember.Controller.extend({
   // that happen AFTER that initialization. By using an observesBefore here and only setting the flag if the property being changed
   // is not null or undefined before the change, we avoid setting the flag until the property has had an initial value set.
 
-  setModelIsDirty: ( function (obj, keyName) {
+  // TODO adopt to Ember 2
+  /*setModelIsDirty: ( function (obj, keyName) {
     if (!!this.get(keyName)) {
       return this.set("modelIsDirty", true);
     }
@@ -241,7 +245,7 @@ export default Ember.Controller.extend({
     "model.use_question",
     "model.wiggle_button",
     "model.use_default_image"
-  ),
+  ),*/
 
   //---------------- Font Helpers ----------------#
 

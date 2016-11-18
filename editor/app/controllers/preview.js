@@ -2,12 +2,14 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
+  inlineEditing: Ember.inject.service(),
+
   needs: ['application'],
 
   init() {
     return HB.addPreviewInjectionListener(container => {
         this.adjustPushHeight();
-        return HelloBar.inlineEditing.initializeInlineEditing(this.get('model.type'));
+        return this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
       }
     );
   },

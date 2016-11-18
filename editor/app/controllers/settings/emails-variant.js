@@ -2,8 +2,10 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
+  inlineEditing: Ember.inject.service(),
+
   init() {
-    HelloBar.inlineEditing.addFieldChangeListener(this);
+    this.get('inlineEditing').addFieldChangeListener(this);
     return Ember.run.schedule('afterRender', this, () => {
         let sortable;
         let sortableGroupElement = Ember.$('.js-fields-to-collect');
