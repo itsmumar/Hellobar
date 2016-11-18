@@ -1,4 +1,6 @@
-HelloBar.StepRoute = Ember.Route.extend({
+import Ember from 'ember';
+
+export default Ember.Route.extend({
 
 // All step routes simply use the model loaded the the ApplicationRoute
 
@@ -49,6 +51,9 @@ HelloBar.StepRoute = Ember.Route.extend({
 
 //-----------  Setup Step Routes  -----------#
 
+/*
+TODO adopt this:
+
 HelloBar.StyleRoute = HelloBar.StepRoute.extend();
 HelloBar.DesignRoute = HelloBar.StepRoute.extend();
 HelloBar.TargetingRoute = HelloBar.StepRoute.extend();
@@ -63,3 +68,4 @@ HelloBar.TextRoute = HelloBar.StepRoute.extend({
     }
   }
 });
+*/

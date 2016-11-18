@@ -1,4 +1,6 @@
-HelloBar.SettingsStepRoute = Ember.Route.extend({
+import Ember from 'ember';
+
+export default Ember.Route.extend({
 
   // Tells the sub-steps to use the model associated w/ it's parent step
 
@@ -18,6 +20,9 @@ HelloBar.SettingsStepRoute = Ember.Route.extend({
 
 
 //-----------  Setup Sub-Step Routes  -----------#
+
+/*
+TODO adopt this:
 
 HelloBar.SettingsSocialRoute = HelloBar.SettingsStepRoute.extend();
 HelloBar.SettingsClickRoute = HelloBar.SettingsStepRoute.extend();
@@ -64,3 +69,4 @@ HelloBar.SettingsEmailsRoute = HelloBar.SettingsStepRoute.extend({
     }
   }
 });
+*/
