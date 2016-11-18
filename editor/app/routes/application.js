@@ -2,7 +2,11 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
 
+  api: Ember.inject.service(),
+
   saveCount: 0,
+
+  // TODO check other API calls and move them to api service
 
   model() {
     if (localStorage["stashedEditorModel"]) {
@@ -10,11 +14,11 @@ export default Ember.Route.extend({
       localStorage.removeItem("stashedEditorModel");
       return model;
     } else if (window.barID) {
-      return Ember.$.getJSON(`/sites/${window.siteID}/site_elements/${window.barID}.json`);
+      return this.get('api').siteElement(window.barID);
     } else if (window.elementToCopyID) {
-      return Ember.$.getJSON(`/sites/${window.siteID}/site_elements/${window.elementToCopyID}.json`);
+      return this.get('api').siteElement(window.elementToCopyID);
     } else {
-      return Ember.$.getJSON(`/sites/${window.siteID}/site_elements/new.json`);
+      return this.get('api').newSiteElement();
     }
   },
 
