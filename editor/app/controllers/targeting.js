@@ -17,8 +17,7 @@ export default Ember.Controller.extend({
     return rules.reduce(function (hash, rule) {
         hash[rule.name] = rule;
         return hash;
-      }
-      , {});
+      }, {});
   }).property(),
 
   customRules: ( function () {

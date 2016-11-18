@@ -15,9 +15,7 @@ export default Ember.Component.extend({
   elementId: 'announcement-container',
 
   announcementToShow: (function() {
-    if (true) {
-    // TODO uncomment this (this.announcementTracking doesn't work so far)
-    //if (this.currentAnnouncementWasClosed || this.announcementTracking.wasAnnouncementClosedByCurrentUser(this.currentAnnouncementName)) {
+    if (this.currentAnnouncementWasClosed || this.get('announcementTracking').wasAnnouncementClosedByCurrentUser(this.currentAnnouncementName)) {
       return null;
     } else {
       return this.currentAnnouncementName;
@@ -34,13 +32,12 @@ export default Ember.Component.extend({
   didInsertElement() {
     return setTimeout(() => {
       return this.set('buttonsAreVisible', true);
-    }
-    , 5000);
+    }, 5000);
   },
 
   actions: {
     closeCurrentAnnouncement() {
-      HelloBar.announcementTracking.closeAnnouncement(this.currentAnnouncementName);
+      this.get('announcementTracking').closeAnnouncement(this.currentAnnouncementName);
       return this.set('currentAnnouncementWasClosed', true);
     }
   }
