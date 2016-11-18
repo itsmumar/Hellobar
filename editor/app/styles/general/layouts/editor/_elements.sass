@@ -1,0 +1,361 @@
+/*-----------  Editor Elements  -----------*/
+
+.editor-wrapper
+
+  h6
+    font-size: 0.95em
+    line-height: 133%
+    color: $grayDark
+
+  p
+    color: $gray
+    font-size: 0.8em
+    line-height: 150%
+
+  .hidden
+    opacity: 0
+
+  .invisible
+    visibility: hidden
+
+  /*-----------  Buttons  -----------*/
+
+  .button
+    @extend %green-button
+
+    &[disabled]
+      @extend %darkgray-button
+      background-color: $grayLight
+
+  .cancel-button
+    @extend %gray-button
+
+  /*-----------  Color Select  -----------*/
+
+  .color-select
+    position: relative
+    @include user-select(none)
+
+    .color-select-spacer
+      height: 2.67em
+      display: block
+
+    .color-select-wrapper
+      top: 0
+      left: 0
+      width: 100%
+      padding: 0.33em
+      overflow: hidden
+      font-size: 0.85em
+      max-height: 2.67em
+      position: absolute
+      margin: 0.5em auto
+      background-color: $white
+      border: 1px solid $grayLighter
+      @include transition(0.15s ease-in-out)
+      @extend .select-wrapper
+
+      &:before
+        top: 0.25em
+        bottom: auto
+        color: $gray
+        line-height: 300%
+
+      .color-select-block
+        color: $gray
+        cursor: pointer
+        line-height: 1.85em
+        padding-bottom: 0.5em
+        text-transform: uppercase
+
+        .color-preview
+          width: 2.5em
+          height: 1.75em
+          margin-right: 0.67em
+          border: 1px solid $grayLight
+          @include inline-block()
+
+        .hash-mark
+          margin-right: -0.25em
+          top: 1px
+          position: relative
+
+        input
+          width: 70%
+          margin: 0px
+          border: 1px solid $white
+          color: $gray
+          text-transform: uppercase
+          font-size: 0.95em
+          padding: 0.25em 0.3em
+
+          &:focus
+            border: 1px solid $grayLight
+
+      .color-dropdown
+        width: 95%
+        opacity: 0
+        margin: 0 auto
+        padding: 0.67em 0
+        border-top: 1px solid $grayLightest
+        @include transition(0.25s ease-in-out)
+
+        .color-preview-row
+          @include clearfix()
+
+          ul
+            width: 69%
+            margin-bottom: 0.5em
+            // TODO uncomment and adopt
+            //cursor: url(<%= asset_path "eyedropper.svg" %>) 0 18, auto
+            @include justify-content(space-between)
+            @include align-items(stretch)
+            @include flex-flow(row nowrap)
+            @include display(flex)
+
+
+            .color-preview
+              width: 22%
+              height: 1.1em
+              border-radius: $radiusSm
+              border: 1px solid $grayLight
+              @include inline-block()
+
+          small
+            width: 25%
+            float: right
+            color: $grayLight
+            line-height: 1.67em
+
+        .color-picker
+          padding-top: 0.33em
+          @include clearfix()
+
+          .slider-wrapper,
+          .gradient-wrapper
+            height: 11.75em
+            cursor: pointer
+            position: relative
+            border: 1px solid $grayLighter
+            @include inline-block()
+
+          .gradient-wrapper
+            width: 11.75em
+
+            .gradient
+              width: 100%
+              height: 100%
+
+            .gradient-indicator
+              width: 8px
+              height: 8px
+              position: absolute
+              border-radius: 1em
+              border: 1px solid $white
+              box-shadow: 1px 1px 5px rgba($black, 0.4)
+
+          .slider-wrapper
+            width: 1.33em
+            margin-left: 0.33em
+
+            .slider
+              width: 100%
+              height: 100%
+
+            .slider-indicator
+              width: 17px
+              height: 5px
+              cursor: pointer
+              margin-left: -1px
+              position: absolute
+              border: 1px solid $white
+              box-shadow: 1px 1px 5px rgba($black, 0.4)
+
+          .rgb-wrapper
+            width: 25%
+            float: right
+
+            .rgb-block
+              position: relative
+              margin-top: 0.25em
+
+              h6
+                top: 0.5em
+                left: 0.5em
+                color: $gray
+                position: absolute
+                @include inline-block(inherit)
+
+              input
+                margin: 0
+                width: 100%
+                padding: 0.5em
+                text-align: right
+                border-radius: $radiusSm
+                border: 1px solid $grayLighter
+
+              &:first-child
+                margin-top: 1px
+
+            .eyedrop-button
+              width: 100%
+              color: $gray
+              display: block
+              cursor: pointer
+              margin-top: 2.67em
+              text-align: center
+              border-radius: $radiusSm
+              border: 1px solid $grayLighter
+
+              i:before
+                line-height: 2em
+
+              &:hover
+                color: $grayDark
+                border-color: $gray
+
+    &.in-focus
+
+      .color-select-wrapper
+        z-index: 900
+        max-height: 21em
+        box-shadow: $shadowSubtle
+
+        &:before
+          color: $grayDark
+          @include transform(rotate(-180deg))
+
+        .color-dropdown
+          opacity: 1
+
+    &.is-selecting
+
+      .eyedrop-button
+        color: $green !important
+        border-color: $green !important
+
+  /*-----------  Social Select -----------*/
+
+  .social-select
+    margin-top: 0.5em
+
+    li
+      opacity: 1
+      clear: both
+      padding: 0.5em
+      line-height: 0
+      color: $grayLight
+      cursor: pointer
+      max-height: 2em
+      margin: 0 -0.5em
+      border-radius: 10em
+      padding: 1em 0.5em 1.1em
+      @include transition(0.67s)
+      @include antialiased()
+
+      i
+        top: -0.5em
+        float: left
+        font-size: 1.5em
+        margin-right: 0.5rem
+
+      &.twitter
+
+        i
+          color: $twitter
+
+        &:hover
+          color: $twitter
+          background-color: rgba($twitter, 0.08)
+
+      &.facebook
+
+        i
+          color: $facebook
+
+        &:hover
+          color: $facebook
+          background-color: rgba($facebook, 0.08)
+
+      &.linkedin
+
+        i
+          color: $linkedin
+
+        &:hover
+          color: $linkedin
+          background-color: rgba($linkedin, 0.08)
+
+      &.google
+
+        i
+          color: $google
+
+        &:hover
+          color: $google
+          background-color: rgba($google, 0.08)
+
+      &.pinterest
+
+        i
+          color: $pinterest
+
+        &:hover
+          color: $pinterest
+          background-color: rgba($pinterest, 0.08)
+
+      &.buffer
+
+        i
+          color: $buffer
+
+        &:hover
+          color: $buffer
+          background-color: rgba($buffer, 0.08)
+
+      i.icon-close
+        top: -1px
+        color: $white
+        display: none
+        width: 1.33em
+        height: 1.33em
+        font-size: 0.67em
+        text-align: center
+        margin-left: 0.5rem
+        border-radius: 10em
+        background-color: $grayLighter
+        @include transition(0.67s)
+
+        &:before
+          top: 3px
+          font-size: 0.7em
+          font-weight: $fontWeightBold
+          position: relative
+
+        &:hover
+          background-color: $grayLight
+
+    &.is-selected
+
+      li
+        color: $gray
+
+        &:not(.is-selected)
+          opacity: 0
+          max-height: 0
+          padding-top: 0
+          padding-bottom: 0
+          overflow: hidden
+
+        &.is-selected
+          cursor: default
+
+          .icon-close
+            top: -0.67em
+            float: right
+            cursor: pointer
+            @include inline-block()
+
+          &:hover
+            color: $gray
+            background-color: transparent
