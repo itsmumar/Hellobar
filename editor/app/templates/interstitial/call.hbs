@@ -15,7 +15,9 @@
   <div class="input-wrapper">
     {{input value=controllers.application.phone_number placeholder="(555) 555-555" maxlength=255}}
     <div class="select-wrapper">
-      TODO insert select component!
+      {{#power-select options=countries onchange=(action "selectCountry") as |country|}}
+        {{country.name}}
+      {{/power-select}}
     </div>
   </div>
 

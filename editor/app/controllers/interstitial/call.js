@@ -7,7 +7,7 @@ export default Ember.Controller.extend({
 
   init() {
     // TODO remove
-    console.log('call-controller init');
+    console.log('call-controller init countries = ', HB.countryCodes, 'this = ', this);
   },
 
   setDefaults() {
@@ -32,12 +32,15 @@ export default Ember.Controller.extend({
     "model.phone_country_code"
   ),
 
+  countries: HB.countryCodes,
+
   actions: {
     closeInterstitial() {
       return this.transitionToRoute("style");
     },
-    selectCountry() {
-
+    selectCountry(country) {
+      // TODO handle action
+      console.log('Country selected: ', country);
     }
   }
 });
