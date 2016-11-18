@@ -1,4 +1,6 @@
-HelloBar.HasTriggerOptions = Ember.Mixin.create({
+import Ember from 'ember';
+
+export default Ember.Mixin.create({
 
   triggerOptions: [
     {value: 'immediately', label: 'Immediately'},

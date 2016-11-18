@@ -1,4 +1,6 @@
-HelloBar.AfterConvertOptions = Ember.Mixin.create({
+import Ember from 'ember';
+
+export default Ember.Mixin.create({
 
   showAfterConvertOptions: [
     {value: true, label: 'Continue showing even after the visitor responds'},
