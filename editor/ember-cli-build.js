@@ -11,7 +11,7 @@ module.exports = function (defaults) {
         '../app/assets/stylesheets/elements',
         '../app/assets/stylesheets/elements/forms',
         '../app/assets/stylesheets/components',
-        '../app/assets/stylesheets/layouts/editor',
+        //'../app/assets/stylesheets/layouts/editor',
         'bower_components/bourbon/app/assets/stylesheets',
         'bower_components/normalize-css',
         'bower_components/jquery-minicolors',

@@ -1,3 +1,5 @@
+console.log('Application View declaration');
+
 HelloBar.ApplicationView = Ember.View.extend({
 
   classNames: ['editor-wrapper'],

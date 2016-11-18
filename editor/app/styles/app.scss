@@ -51,13 +51,13 @@
 @import 'components/_toggle-switch.css.sass';
 
 // layouts/editor styles
-@import '_common.css.sass';
+@import 'layouts/editor/_common.css.sass';
 //@import '_elements.css.sass.erb';
-@import '_forms.css.sass';
-@import '_ie.css.sass';
-@import '_interstitial.css.sass';
+@import 'layouts/editor/_forms.css.sass';
+@import 'layouts/editor/_ie.css.sass';
+@import 'layouts/editor/_interstitial.css.sass';
 //@import '_preview.css.sass.erb';
-@import '_steps.css.sass';
+@import 'layouts/editor/_steps.css.sass';
 
 .test {
   color: red
