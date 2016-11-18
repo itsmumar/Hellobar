@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 const announcementKeyPrefix = 'HB-announcement-';
 
 export default Ember.Service.extend({
