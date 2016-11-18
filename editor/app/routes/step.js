@@ -2,6 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
 
+  bus: Ember.inject.service(),
+
 // All step routes simply use the model loaded the the ApplicationRoute
 
   model() {
@@ -42,7 +44,7 @@ export default Ember.Route.extend({
       let newRoute = this.routeName;
 
       if ((!newRoute) || (newRoute.indexOf('style') !== 0)) {
-        return HelloBar.bus.trigger('hellobar.core.rightPane.hide');
+        this.get('bus').trigger('hellobar.core.rightPane.hide');
       }
     }
   }

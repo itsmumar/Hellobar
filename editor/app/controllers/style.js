@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
+  bus: Ember.inject.service(),
   inlineEditing: Ember.inject.service(),
 
   //-----------  Step Settings  -----------#
@@ -13,17 +14,17 @@ export default Ember.Controller.extend({
   themeSelectionInProgress: false,
 
   init() {
-    HelloBar.bus.subscribe('hellobar.core.bar.themeChanged', params => {
+    this.get('bus').subscribe('hellobar.core.bar.themeChanged', params => {
         return this.set('model.theme_id', params.themeId);
       }
     );
-    HelloBar.bus.subscribe('hellobar.core.rightPane.show', params => {
+    this.get('bus').subscribe('hellobar.core.rightPane.show', params => {
         if (params.componentName === 'theme-tile-grid') {
           return this.set('themeSelectionInProgress', true);
         }
       }
     );
-    return HelloBar.bus.subscribe('hellobar.core.rightPane.hide', params => {
+    this.get('bus').subscribe('hellobar.core.rightPane.hide', params => {
         return this.set('themeSelectionInProgress', false);
       }
     );
@@ -90,11 +91,11 @@ export default Ember.Controller.extend({
   onElementTypeChanged: (function () {
     let elementType = this.get('model.type');
     if (elementType === 'Modal') {
-      HelloBar.bus.trigger('hellobar.core.rightPane.show', {componentName: 'theme-tile-grid', componentOptions: {}});
+      this.get('bus').trigger('hellobar.core.rightPane.show', {componentName: 'theme-tile-grid', componentOptions: {}});
     } else {
-      HelloBar.bus.trigger('hellobar.core.rightPane.hide');
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
     }
-    return this.get('inlineEditing').initializeInlineEditing(elementType);
+    this.get('inlineEditing').initializeInlineEditing(elementType);
   }).observes('model.type'),
 
 
@@ -147,7 +148,7 @@ export default Ember.Controller.extend({
         showCloseIcon: true,
         confirm() {
           confirmModal.close();
-          return HelloBar.bus.trigger('hellobar.core.rightPane.show', {
+          this.get('bus').trigger('hellobar.core.rightPane.show', {
             componentName: 'theme-tile-grid',
             componentOptions: {}
           });

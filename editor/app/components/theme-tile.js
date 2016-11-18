@@ -2,6 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
 
+  bus: Ember.inject.service(),
+
   classNames: ['theme-tile'],
 
   theme: null,
@@ -26,8 +28,8 @@ export default Ember.Component.extend({
 
   actions: {
     select() {
-      HelloBar.bus.trigger('hellobar.core.bar.themeChanged', {themeId: this.get('theme.id')});
-      return HelloBar.bus.trigger('hellobar.core.rightPane.hide');
+      this.get('bus').trigger('hellobar.core.bar.themeChanged', {themeId: this.get('theme.id')});
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
     }
   }
 });
