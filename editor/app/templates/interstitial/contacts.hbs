@@ -7,10 +7,10 @@
     <i class="large-icon icon-contacts"></i>
 
     <h6>What should your Hello Bar say?</h6>
-    {{view Ember.TextField value=model.headline placeholder="Join our mailing list to stay up to date on our upcoming events" maxlength=255}}
+    {{input value=model.headline placeholder="Join our mailing list to stay up to date on our upcoming events" maxlength=255}}
 
     <h6>What should the button say?</h6>
-    {{view Ember.TextField value=model.link_text placeholder="Subscribe" maxlength=255}}
+    {{input value=model.link_text placeholder="Subscribe" maxlength=255}}
 
     <div class="step-container">
       {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
