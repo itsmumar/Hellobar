@@ -17,6 +17,7 @@ HelloBar.CustomProSelectComponent = Ember.Component.extend
   click: (event) ->
     event.stopPropagation()
     @toggleProperty("isOpen")
+    @.$el.find('.custom-select-dropdown').toggleClass('is-visible')
 
   actions:
 
@@ -24,3 +25,4 @@ HelloBar.CustomProSelectComponent = Ember.Component.extend
       (typeof event == 'object') and (event.stopPropagation())
       @sendAction('action', option)
       @set("isOpen", false)
+      @.$el.find('.custom-select-dropdown').removeClass('is-visible')
