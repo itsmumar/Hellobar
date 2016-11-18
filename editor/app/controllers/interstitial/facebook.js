@@ -1,4 +1,6 @@
-HelloBar.InterstitialFacebookController = Ember.Controller.extend({
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
   showFacebookUrl: false,
   facebookLikeOptions: [
     {value: "homepage", label: "Home Page"},
