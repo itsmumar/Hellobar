@@ -4,9 +4,10 @@ export default Ember.Controller.extend({
 
   //-----------  Step Settings  -----------#
 
-  needs: ['application'],
+  applicationController: Ember.inject.controller('application'),
+
   cannotContinue: ( function () {
-    return this.set('controllers.application.cannotContinue', Ember.isEmpty(this.get('model.element_subtype')));
+    return this.set('applicationController.cannotContinue', Ember.isEmpty(this.get('model.element_subtype')));
   }).observes('model.element_subtype'),
 
   step: 1,
