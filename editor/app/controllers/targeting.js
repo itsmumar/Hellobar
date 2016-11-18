@@ -1,4 +1,6 @@
-HelloBar.TargetingController = Ember.Controller.extend({
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
 
   targetingUiVariant: (() => window.targetingUiVariant).property('model'),
 

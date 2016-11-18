@@ -1,4 +1,6 @@
-HelloBar.StyleBarController = Ember.Controller.extend(HelloBar.HasPlacement, HelloBar.HasTriggerOptions, HelloBar.AfterConvertOptions, {
+import Ember from 'ember';
+
+export default Ember.Controller.extend(HelloBar.HasPlacement, HelloBar.HasTriggerOptions, HelloBar.AfterConvertOptions, {
 
     placementOptions: [
       {value: 'bar-top', label: 'Top'},

@@ -1,4 +1,6 @@
-HelloBar.SettingsEmailsController = Ember.Controller.extend({
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
 
   collectionOptions: [
     {value: 0, label: 'Just email addresses'},

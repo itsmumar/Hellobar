@@ -1,4 +1,6 @@
-HelloBar.SettingsSocialController = Ember.Controller.extend({
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
 
   socialOptions: [
     {value: "social/tweet_on_twitter", label: 'Tweet on Twitter', service: 'twitter', icon: 'icon-twitter-circled'},

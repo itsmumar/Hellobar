@@ -1,4 +1,6 @@
-HelloBar.StyleController = Ember.Controller.extend({
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
 
   //-----------  Step Settings  -----------#
 
