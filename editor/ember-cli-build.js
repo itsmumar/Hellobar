@@ -36,5 +36,17 @@ module.exports = function (defaults) {
   // along with the exports of each module as its value.
   app.import('bower_components/phoneformat/dist/phone-format.min.js');
 
+  app.import('bower_components/froala-wysiwyg-editor/js/froala_editor.min.js');
+  app.import('bower_components/froala-wysiwyg-editor/js/plugins/align.min.js');
+  app.import('bower_components/froala-wysiwyg-editor/js/plugins/colors.min.js');
+  app.import('bower_components/froala-wysiwyg-editor/js/plugins/emoticons.min.js');
+  app.import('bower_components/froala-wysiwyg-editor/js/plugins/font_family.min.js');
+  app.import('bower_components/froala-wysiwyg-editor/js/plugins/font_size.min.js');
+  app.import('bower_components/froala-wysiwyg-editor/js/plugins/image.min.js');
+  app.import('bower_components/froala-wysiwyg-editor/js/plugins/line_breaker.min.js');
+  app.import('bower_components/froala-wysiwyg-editor/js/plugins/link.min.js');
+  app.import('bower_components/froala-wysiwyg-editor/js/plugins/lists.min.js');
+  app.import('bower_components/froala-wysiwyg-editor/js/plugins/quote.min.js');
+
   return app.toTree();
 };
