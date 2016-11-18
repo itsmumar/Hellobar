@@ -87,6 +87,17 @@
       &:last-of-type
         padding-bottom: 0.75rem
 
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active)
+  body
+    .custom-select-wrapper
+      .contact-list-dropdown,
+      .custom-select-dropdown
+        pointer-events: none
+
+      .contact-list-dropdown.is-visible,
+      .custom-select-dropdown.is-visible
+        pointer-events: auto
+
 /*-----------  Contact List  -----------*/
 
 .contact-list-wrapper
