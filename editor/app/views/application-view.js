@@ -1,5 +1,5 @@
-console.log('Application View declaration');
-
+// TODO we don't need this class anymore
+// TODO remove
 HelloBar.ApplicationView = Ember.View.extend({
 
   classNames: ['editor-wrapper'],
