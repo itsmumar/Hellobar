@@ -1,10 +1,12 @@
 import Ember from 'ember';
 
+// TODO remove
 console.log('interstitial route definition');
 
 export default Ember.Route.extend({
 
   init() {
+    // TODO remove
     console.log('interstitial route init');
   },
 
