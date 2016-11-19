@@ -20,25 +20,24 @@
 
 /*-----------  Custom Icon Font  -----------*/
 
-// TODO implement dynamic substitution:
-//@font-face
-//  font-family: "hellobar"
-//  src: url(<%= asset_path "hellobar.eot" %>)
-//  src: url(<%= asset_path "hellobar.eot?#iefix" %>) format("embedded-opentype"), url(<%= asset_path "hellobar.woff" %>) format("woff"), url(<%= asset_path "hellobar.ttf" %>) format("truetype"), url(<%= asset_path "hellobar.svg#hellobar" %>) format("svg")
-//  font-weight: normal
-//  font-style: normal
-//
-//@font-face
-//  font-family: "hellobar-icons"
-//  src: url(<%= asset_path "hellobar-icons.eot" %>)
-//  src: url(<%= asset_path "hellobar-icons.eot?#iefix" %>) format("embedded-opentype"), url(<%= asset_path "hellobar-icons.woff" %>) format("woff"), url(<%= asset_path "hellobar-icons.ttf" %>) format("truetype"), url(<%= asset_path "hellobar-icons.svg#hellobar-icons" %>) format("svg")
-//  font-weight: normal
-//  font-style: normal
-//
-//@media screen and (-webkit-min-device-pixel-ratio:0)
-//@font-face
-//  font-family: "hellobar-icons"
-//  src: url(<%= asset_path "hellobar-icons.svg#hellobar-icons" %>) format("svg")
+@font-face
+  font-family: "hellobar"
+  src: url(/editor/fonts/hellobar.eot)
+  src: url(/editor/fonts/hellobar.eot?#iefix) format("embedded-opentype"), url(/editor/fonts/hellobar.woff) format("woff"), url(/editor/fonts/hellobar.ttf) format("truetype"), url(/editor/fonts/hellobar.svg#hellobar) format("svg")
+  font-weight: normal
+  font-style: normal
+
+@font-face
+  font-family: "hellobar-icons"
+  src: url(/editor/fonts/hellobar-icons.eot)
+  src: url(/editor/fonts/hellobar-icons.eot?#iefix) format("embedded-opentype"), url(/editor/fonts/hellobar-icons.woff) format("woff"), url(/editor/fonts/hellobar-icons.ttf) format("truetype"), url(/editor/fonts/hellobar-icons.svg#hellobar-icons) format("svg")
+  font-weight: normal
+  font-style: normal
+
+@media screen and (-webkit-min-device-pixel-ratio:0)
+@font-face
+  font-family: "hellobar-icons"
+  src: url(/editor/fonts/hellobar-icons.svg#hellobar-icons) format("svg")
 
 [data-icon]:before
   font-family: 'hellobar' !important

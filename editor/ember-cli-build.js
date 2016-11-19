@@ -43,5 +43,15 @@ module.exports = function (defaults) {
   app.import('bower_components/froala-wysiwyg-editor/js/plugins/lists.min.js');
   app.import('bower_components/froala-wysiwyg-editor/js/plugins/quote.min.js');
 
+  app.import('vendor/fonts/hellobar.eot', {destDir: 'fonts'});
+  app.import('vendor/fonts/hellobar.svg', {destDir: 'fonts'});
+  app.import('vendor/fonts/hellobar.ttf', {destDir: 'fonts'});
+  app.import('vendor/fonts/hellobar.woff', {destDir: 'fonts'});
+
+  app.import('vendor/fonts/hellobar-icons.eot', {destDir: 'fonts'});
+  app.import('vendor/fonts/hellobar-icons.svg', {destDir: 'fonts'});
+  app.import('vendor/fonts/hellobar-icons.ttf', {destDir: 'fonts'});
+  app.import('vendor/fonts/hellobar-icons.woff', {destDir: 'fonts'});
+
   return app.toTree();
 };
