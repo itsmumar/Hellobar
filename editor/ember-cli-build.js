@@ -7,11 +7,6 @@ module.exports = function (defaults) {
     sassOptions: {
       includePaths: [
         '../app/assets/stylesheets',
-        '../app/assets/stylesheets/settings',
-        '../app/assets/stylesheets/elements',
-        '../app/assets/stylesheets/elements/forms',
-        '../app/assets/stylesheets/components',
-        //'../app/assets/stylesheets/layouts/editor',
         'bower_components/bourbon/app/assets/stylesheets',
         'bower_components/normalize-css',
         'bower_components/jquery-minicolors',
