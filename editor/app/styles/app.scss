@@ -42,6 +42,11 @@
 @import 'components/_theme-tile.css.sass';
 @import 'components/_toggle-switch.css.sass';
 
+@import 'layouts/_common.css.sass';
+@import 'layouts/_document.css.sass';
+
+// TODO: @import 'layouts/modals/*';
+
 // layouts/editor styles
 @import 'layouts/editor/_common.css.sass';
 @import 'general/layouts/editor/elements';
