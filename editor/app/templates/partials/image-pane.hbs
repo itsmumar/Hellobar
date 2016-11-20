@@ -22,15 +22,17 @@
     {{#if showImagePlacementField}}
       <label>Image placement</label>
       <div class="select-wrapper">
-        {{view Ember.Select
-          content=imagePlacementOptions
-          value=model.image_placement
-          optionValuePath='content.value'
-          optionLabelPath='content.label'
-        }}
+        {{#power-select options=imagePlacementOptions
+          selected=selectedImagePlacementOption
+          renderInPlace=true
+          searchEnabled=false
+          onchange=(action "selectImagePlacement") as |option|}}
+          {{option.label}}
+        {{/power-select}}
       </div>
     {{/if}}
   {{/unless}}
 {{else}}
-  <label>Site Bars do not support images. You'll need to use a Modal, Slider, or Page Takeover to upload an image.</label>
+  <label>Site Bars do not support images.
+    You'll need to use a Modal, Slider, or Page Takeover to upload an image.</label>
 {{/if}}

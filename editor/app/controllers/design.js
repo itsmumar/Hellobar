@@ -22,6 +22,12 @@ export default Ember.Controller.extend({
     {value: 'below-caption', label: 'Below Caption'}
   ],
 
+  selectedImagePlacementOption: (function() {
+    const imagePlacement = this.get('model.image_placement');
+    const options = this.get('imagePlacementOptions');
+    return _.find(options, imagePlacement);
+  }).property('model.image_placement'),
+
   //-------------- Helpers ----------------#
 
   isABar: Ember.computed.equal('model.type', 'Bar'),
@@ -209,6 +215,10 @@ export default Ember.Controller.extend({
     selectTheme(theme) {
       // TODO handle action (set model.theme_id)
       console.log(theme);
+    },
+
+    selectImagePlacement(imagePlacement) {
+      this.set('model.image_placement', imagePlacement.value);
     },
 
     eyeDropperSelected() {
