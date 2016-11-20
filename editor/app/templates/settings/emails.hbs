@@ -1,13 +1,13 @@
 <label>Choose input fields</label>
 
 <div class="multiselect-wrapper js-fields-to-collect">
-  {{#each descriptor in preparedFieldDescriptors }}
+  {{#each preparedFieldDescriptors as |descriptor| }}
     {{#if descriptor.denied}}
       <div class="item-block denied">
         <span>{{ descriptor.field.label }}</span>
       </div>
     {{else}}
-      <div {{bind-attr class="descriptor.field.is_enabled:is-selected :item-block" data-field-type=field.type}}>
+      <div class={{descriptor.classes}} {{bind-attr data-field-type=field.type}}>
         <span>{{ descriptor.field.label }}</span>
         <span class="buttons">
             {{#if descriptor.removable }}
@@ -34,7 +34,7 @@
       escape-press="onNewFieldToCollectEscapePressed"}}
     </div>
   {{else}}
-    <div {{bind-attr class=":item-block :add isBarType:denied"}} {{action 'addFieldToCollect'}}>
+    <div class="{{addFieldCssClasses}}" {{action 'addFieldToCollect'}}>
       Add field
     </div>
   {{/if}}

@@ -128,6 +128,7 @@ export default Ember.Controller.extend({
       },
       denied: this.get('isBarType') && field.type.indexOf('builtin-') !== 0,
       removable: field.type.indexOf('builtin-') !== 0,
+      classes: 'item-block' + (field.is_enabled ? ' is-selected' : '')
 
     }));
   }).property('model.settings.fields_to_collect', 'model.type', 'isBarType'),
@@ -135,6 +136,10 @@ export default Ember.Controller.extend({
   isBarType: (function () {
     return this.get('model.type') === 'Bar';
   }).property('model.type'),
+
+  addFieldCssClasses: (function() {
+    return 'item-block add' + (this.get('isBarType') ? ' denied' : '');
+  }).property('isBarType'),
 
 //-----------  Actions  -----------#
 
