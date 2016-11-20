@@ -11,7 +11,8 @@ module.exports = function (defaults) {
         'bower_components/normalize-css',
         'bower_components/jquery-minicolors',
         'bower_components/nouislider/distribute',
-        'bower_components/froala-wysiwyg-editor/css'
+        'bower_components/froala-wysiwyg-editor/css',
+        'vendor'
       ]
     }
     // Add options here
