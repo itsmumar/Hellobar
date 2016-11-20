@@ -203,6 +203,11 @@ export default Ember.Controller.extend({
 
   actions: {
 
+    selectTheme(theme) {
+      // TODO handle action (set model.theme_id)
+      console.log(theme);
+    },
+
     eyeDropperSelected() {
       let type = this.get('model.type');
       if (type === 'Modal' || type === 'Takeover') {

@@ -2,12 +2,10 @@
 
 <label>Theme</label>
 <div class="select-wrapper">
-  {{view Ember.Select
-    content=themeOptions
-    value=model.theme_id
-    optionValuePath='content.id'
-    optionLabelPath='content.name'
-  }}
+  {{#power-select options=themeOptions onchange=(action "selectTheme") as |theme|}}
+    {{theme.name}}
+  {{/power-select}}
+
 </div>
 
 {{#tab-view model=model navigationName='design'}}
