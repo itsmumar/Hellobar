@@ -1,11 +1,8 @@
 <label>Enter phone number</label>
-{{view Ember.TextField value=controllers.application.phone_number placeholder="(555) 555-5555" maxlength=50}}
+{{input value=controllers.application.phone_number placeholder="(555) 555-5555" maxlength=50}}
 <div class="select-wrapper">
-  {{view Ember.Select
-    content=HB.countryCodes
-    value=model.phone_country_code
-    optionValuePath='content.code'
-    optionLabelPath='content.name'
-  }}
+  {{#power-select options=countries searchField="name" onchange=(action "selectCallCountryCall") as |country|}}
+    {{country.name}}
+  {{/power-select}}
 </div>
 <p>This is the phone number that will be dialed</p>
