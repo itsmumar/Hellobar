@@ -21,7 +21,7 @@
 
 // Form styles (app/assets/stylesheets/elements/forms)
 @import 'elements/forms/_forms.css.sass';
-//@import '_inputs.css.sass'; TODO fix issue with box-shadow mixin
+@import 'elements/forms/_inputs.css.sass';
 @import 'elements/forms/_select.css.sass';
 @import 'elements/forms/_selectors.css.sass';
 
