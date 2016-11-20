@@ -22,20 +22,10 @@ export default Ember.Component.extend({
   },
 
   actions: {
-
     optionSelected(option) {
       return this.sendAction('action', option);
     }
   }
 });
 
-//-----------  Custom Select Child Views  -----------#
 
-HelloBar.CustomSelectOption = Ember.View.extend({
-
-  classNames: ['custom-select-option'],
-
-  click() {
-    return this.get('parentView').send('optionSelected', this.get('option'));
-  }
-});

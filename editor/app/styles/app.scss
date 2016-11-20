@@ -28,10 +28,11 @@
 // These are base component styles (from app/assets/stylesheets)
 @import 'components/_outlined-block.sass';
 @import 'components/_buttons.css.sass';
+@import 'components/_hint.css.sass';
 
 // These are editor's components
 @import 'components/_announcement-container.css.sass';
-@import 'components/_custom-select.sass';
+@import 'components/_custom-pro-select.sass';
 @import 'components/_image-upload.css.sass';
 @import 'components/_popup-hint-trigger.css.sass';
 @import 'components/_popup-hint.css.sass';
