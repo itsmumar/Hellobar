@@ -1,73 +1,90 @@
-<label>What do you want to collect from visitors?</label>
-<div class="select-wrapper">
-  {{view Ember.Select
-    content=collectionOptions
-    value=model.settings.collect_names
-    optionValuePath='content.value'
-    optionLabelPath='content.label'
-  }}
+<label>Choose input fields</label>
+
+<div class="multiselect-wrapper js-fields-to-collect">
+  {{#each descriptor in preparedFieldDescriptors }}
+    {{#if descriptor.denied}}
+      <div class="item-block denied">
+        <span>{{ descriptor.field.label }}</span>
+      </div>
+    {{else}}
+      <div {{bind-attr class="descriptor.field.is_enabled:is-selected :item-block" data-field-type=field.type}}>
+        <span>{{ descriptor.field.label }}</span>
+        <span class="buttons">
+            {{#if descriptor.removable }}
+              <a href="javascript:void(0)" class="remove-button" {{action 'removeFieldToCollect' descriptor.field}}>
+                <i class="icon-close"></i>
+              </a>
+            {{/if}}
+          <a href="javascript:void(0)" class="select-button" {{action 'toggleFieldToCollect' descriptor.field}}>
+            <i class="hellobar-icon-check-mark"></i>
+          </a>
+        </span>
+      </div>
+    {{/if}}
+  {{/each}}
 </div>
 
-<label>Which contact list would you like your emails stored in?</label>
-<div class="select-wrapper">
-  {{view Ember.Select
-    contentBinding='contactListOptions'
-    value=model.contact_list_id
-    optionValuePath='content.id'
-    optionLabelPath='content.name'
-    prompt="Please select a list"
-  }}
+<div class="multiselect-wrapper">
+  {{#if newFieldToCollect}}
+    <div class="item-block new-item-prototype">
+      {{input type="text" placeholder="Input field name and hit Enter"
+      value=newFieldToCollect.label
+      autofocus="autofocus" style=""
+      insert-newline="onNewFieldToCollectEnterPressed"
+      escape-press="onNewFieldToCollectEscapePressed"}}
+    </div>
+  {{else}}
+    <div {{bind-attr class=":item-block :add isBarType:denied"}} {{action 'addFieldToCollect'}}>
+      Add field
+    </div>
+  {{/if}}
 </div>
 
-{{#if showEditContactListLink}}
-  <p>
-    <a {{action "popEditContactListModal" model.contact_list_id}}>Edit this list</a>
-  </p>
+{{#if isBarType}}
+  <div class="hint">
+    In order to add custom fields please select Modal, Slider or Takeover type on Style tab.
+  </div>
 {{/if}}
 
-<label>After visitor submits their email ...</label>
-<div class="select-wrapper">
-  {{view Ember.Select
-    content=afterSubmitOptions
-    value=model.settings.after_email_submit_action
-    optionValuePath='content.value'
-    optionLabelPath='content.label'
-  }}
-</div>
+<label>Choose your contact list and integration</label>
+{{contact-list-select
+  value=model.contact_list_id
+  options=model.site.contact_lists
+  setList="setContactList"
+  editList="openEmailListPopup"
+}}
+
+<label>Design your "Thank You" message</label>
+{{custom-pro-select
+  choice=afterSubmitChoice
+  options=afterSubmitOptions
+  action="setModelAfterSubmitValue"
+}}
 
 {{#if showRedirectUrlInput}}
-  {{#if disableRedirect}}
-    <p><a {{action "openUpgradeModal" "redirect"}}>Upgrade required.</a></p>
-  {{else}}
-    {{
-      view Ember.TextField
-      value=model.settings.redirect_url
-      placeholder="http://www.example.com"
-      disabled=disableRedirect
+  <label class="small">Redirect URL</label>
+  {{input
+    name='after_email_input'
+    value=model.settings.redirect_url
+    placeholder="http://www.example.com"
+    maxlength=255
+  }}
+{{else}}
+  {{#if showCustomMessage}}
+    <label class="small">Custom message</label>
+    {{input
+      name='after_email_input'
+      value=model.thank_you_text
+      placeholder=model.default_email_thank_you_text
       maxlength=255
     }}
-  {{/if}}
-{{else}}
-  {{#if showDefaultMessage}}
-    {{
-      view Ember.TextField
-      class="visible"
+  {{else}}
+    {{input
+      name='after_email_input'
       value=model.default_email_thank_you_text
       placeholder=model.default_email_thank_you_text
-      disabled=true
       maxlength=255
+      disabled=true
     }}
-  {{else}}
-    {{#if disableThankYouText}}
-      <p><a {{action "openUpgradeModal" "thank_you"}}>Upgrade required.</a></p>
-    {{else}}
-      {{
-        view Ember.TextField
-        value=model.thank_you_text
-        placeholder=model.default_email_thank_you_text
-        disabled=disableThankYouText
-        maxlength=255
-      }}
-    {{/if}}
   {{/if}}
 {{/if}}
