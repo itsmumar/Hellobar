@@ -3,6 +3,8 @@ import _ from 'lodash/lodash';
 
 export default Ember.Controller.extend({
 
+  applicationController: Ember.inject.controller('application'),
+
   needs: ['application'],
 
   //-----------  Step Settings  -----------#
@@ -163,6 +165,7 @@ export default Ember.Controller.extend({
 
   setHBCallbacks: ( () =>
       // Listen for when question answers are pressed and change the question tabs
+      // TODO refactor (use ivy-tabs features)
       HB.on && HB.on("answerSelected", choice => {
           this.set('model.paneSelectedIndex', choice);
           this.set('paneSelection', (this.get('paneSelection') || 0) + 1);
@@ -238,17 +241,20 @@ export default Ember.Controller.extend({
 
     showQuestion() {
       HB.showResponse = null;
-      return this.get("controllers.application").renderPreview();
+      this.set('questionTabSelection', 'TabQuestion');
+      return this.get('applicationController').renderPreview();
     },
 
     showResponse1() {
       HB.showResponse = 1;
-      return this.get("controllers.application").renderPreview();
+      this.set('questionTabSelection', 'TabAnswer1');
+      return this.get('applicationController').renderPreview();
     },
 
     showResponse2() {
       HB.showResponse = 2;
-      return this.get("controllers.application").renderPreview();
+      this.set('questionTabSelection', 'TabAnswer2');
+      return this.get('applicationController').renderPreview();
     }
   }
 });

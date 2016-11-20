@@ -8,16 +8,23 @@
 
 </div>
 
-{{#tab-view model=model navigationName='design'}}
-  {{#tab-pane name="Colors"}}
+{{#ivy-tabs selection=selection as |tabs|}}
+  {{#tabs.tablist as |tablist|}}
+    {{#tablist.tab "TabColors" on-select=(action (mut selection))}}Colors{{/tablist.tab}}
+    {{#tablist.tab "TabImage" on-select=(action (mut selection))}}Image{{/tablist.tab}}
+    {{#tablist.tab "TabText" on-select=(action (mut selection))}}Text{{/tablist.tab}}
+  {{/tabs.tablist}}
+
+  {{#tabs.tabpanel "TabColors"}}
     {{partial "partials/colors-pane"}}
-  {{/tab-pane}}
+  {{/tabs.tabpanel}}
 
-  {{#tab-pane name="Image"}}
+  {{#tabs.tabpanel "TabImage"}}
     {{partial "partials/image-pane"}}
-  {{/tab-pane}}
+  {{/tabs.tabpanel}}
 
-  {{#tab-pane name="Text" class="text"}}
+  {{#tabs.tabpanel "TabText"}}
     {{partial "partials/text-pane"}}
-  {{/tab-pane}}
-{{/tab-view}}
+  {{/tabs.tabpanel}}
+{{/ivy-tabs}}
+
