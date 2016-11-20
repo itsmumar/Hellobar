@@ -63,7 +63,7 @@
 
 {{#if showRedirectUrlInput}}
   <label class="small">Redirect URL</label>
-  {{view Ember.TextField
+  {{input
     name='after_email_input'
     value=model.settings.redirect_url
     placeholder="http://www.example.com"
@@ -72,14 +72,14 @@
 {{else}}
   {{#if showCustomMessage}}
     <label class="small">Custom message</label>
-    {{view Ember.TextField
+    {{input
       name='after_email_input'
       value=model.thank_you_text
       placeholder=model.default_email_thank_you_text
       maxlength=255
     }}
   {{else}}
-    {{view Ember.TextField
+    {{input
       name='after_email_input'
       value=model.default_email_thank_you_text
       placeholder=model.default_email_thank_you_text
