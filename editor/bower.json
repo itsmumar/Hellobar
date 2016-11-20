@@ -9,6 +9,7 @@
     "nouislider": "^9.0.0",
     "froala-wysiwyg-editor": "^2.3.5",
     "phoneformat": "phoneformat-js#^1.0.3",
-    "color": "^3.0.4"
+    "color": "^3.0.4",
+    "Sortable": "sortablejs#^1.4.2"
   }
 }

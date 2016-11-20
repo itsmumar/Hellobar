@@ -31,6 +31,7 @@ module.exports = function (defaults) {
   // along with the exports of each module as its value.
   app.import('bower_components/phoneformat/dist/phone-format.min.js');
   app.import('bower_components/color/one-color.js');
+  app.import('bower_components/Sortable/Sortable.js');
   app.import('bower_components/flexi-color-picker/colorpicker.js');
   app.import('vendor/dropper_trios.js');
 
