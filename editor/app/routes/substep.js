@@ -45,28 +45,5 @@ HelloBar.TargetingScrollRoute = HelloBar.SettingsStepRoute.extend();
 HelloBar.TargetingDelayRoute = HelloBar.SettingsStepRoute.extend();
 
 // Switch controllers based upon Email Ingration UI test
-HelloBar.SettingsEmailsRoute = HelloBar.SettingsStepRoute.extend({
-
-  controllerName() {
-    if (HB_EMAIL_INTEGRATION_TEST === 'variant') {
-      return 'settingsEmailsVariant';
-    } else {
-      return 'settingsEmails';
-    }
-  },
-
-  renderTemplate(controller, model) {
-    if (HB_EMAIL_INTEGRATION_TEST === 'variant') {
-      return this.render('settings/emails-variant', {
-        model,
-        view: 'step'
-      });
-    } else {
-      return this.render('settings/emails', {
-        model,
-        view: 'step'
-      });
-    }
-  }
-});
+HelloBar.SettingsEmailsRoute = HelloBar.SettingsStepRoute.extend();
 */
