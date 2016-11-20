@@ -49,13 +49,3 @@ export default Ember.Component.extend({
   }
 });
 
-//-----------  Contact List Child Views  -----------#
-
-HelloBar.ContactListOption = Ember.View.extend({
-
-  classNames: ['contact-list-option'],
-
-  click() {
-    return this.get('parentView').send('listSelected', this.get('option.id'));
-  }
-});
