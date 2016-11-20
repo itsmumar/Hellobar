@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 
 export default Ember.Controller.extend({
   showFacebookUrl: false,
@@ -8,25 +9,15 @@ export default Ember.Controller.extend({
     {value: "other", label: "Other"}
   ],
 
-  selectedFacebookLikeOptions: ( function (key, value) {
-    if (arguments.length > 1) {
-      this.set("showFacebookUrl", false);
-      this.set("model.settings.use_location_for_url", false);
+  selectedFacebookLikeValue: "homepage",
 
-      if (value === "homepage") {
-        this.set("model.settings.url_to_like", this.get("model.site.url"));
-      } else if (value === "use_location_for_url") {
-        this.set("model.settings.use_location_for_url", true);
-      } else {
-        this.set("showFacebookUrl", true);
-      }
-      return value;
-    } else {
-      return "homepage";
-    }
-  }).property(),
+  selectedFacebookLikeOption: ( function() {
+    const value = this.get('selectedFacebookLikeValue');
+    const options = this.get('facebookLikeOptions');
+    return _.find(options, (option) => option.value === value);
+  }).property('selectedFacebookLikeValue'),
 
-  setDefaults() {
+    setDefaults() {
     if (!this.get("model")) {
       return false;
     }
@@ -48,6 +39,22 @@ export default Ember.Controller.extend({
   actions: {
     closeInterstitial() {
       return this.transitionToRoute("style");
+    },
+    selectFacebookLikeOption(option) {
+      const value = option.value;
+      this.set('selectedFacebookLikeValue', option.value);
+
+      this.set("showFacebookUrl", false);
+      this.set("model.settings.use_location_for_url", false);
+
+      if (value === "homepage") {
+        this.set("model.settings.url_to_like", this.get("model.site.url"));
+      } else if (value === "use_location_for_url") {
+        this.set("model.settings.use_location_for_url", true);
+      } else {
+        this.set("showFacebookUrl", true);
+      }
+
     }
   }
 });

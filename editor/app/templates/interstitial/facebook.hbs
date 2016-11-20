@@ -9,21 +9,25 @@
   {{input value=model.headline placeholder="Like us on Facebook!" maxlength=255}}
 
   <h6>What URL do you want users to Like on Facebook?</h6>
+
   <div {{bind-attr class="showFacebookUrl:nospace:bottom-spacer"}}>
     <div class="select-wrapper">
-      {{view Ember.Select
-        content=facebookLikeOptions
-        value=selectedFacebookLikeOptions
-        optionValuePath='content.value'
-        optionLabelPath='content.label'
-      }}
+
+      {{#power-select options=facebookLikeOptions selected=selectedFacebookLikeOption
+      renderInPlace=true
+      searchEnabled=false
+      onchange=(action "selectFacebookLikeOption") as |option|}}
+        {{option.label}}
+      {{/power-select}}
+
     </div>
   </div>
   {{input value=model.settings.url_to_like placeholder=model.site.url maxlength=255 classBinding="showFacebookUrl:enabled:hidden"}}
 
   <div class="step-container">
     {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
-    <button class="button save-editor" {{action "closeInterstitial"}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
+    <button class="button save-editor" {{action "closeInterstitial"}} {{bind-attr disabled=inputIsInvalid}}>Continue
+    </button>
   </div>
 </div>
 
