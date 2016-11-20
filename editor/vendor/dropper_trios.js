@@ -2,42 +2,49 @@
 //
 // Copyright 2015 Matt Manske
 // Copyright 2010 Jean-Luc Delatre (a.k.a Favonius, a.k.a Kevembuangga)
-// 
+//
 // [JLD] heavy refurbishing, even changing the API...
 //
 // Dual licensed under the MIT and GPL licenses:
 // http://www.opensource.org/licenses/mit-license.php
 // http://www.gnu.org/licenses/gpl.html
 
-( function($) {
+(function ($) {
 
   let rgbToHex;
-  let config          = {};
-  let dropper_image   = null;
-  let dropper_canvas  = null;
+  let config = {};
+  let dropper_image = null;
+  let dropper_canvas = null;
   let dropper_context = null;
-  let hover_spyglass  = null;
-  let canvas_failure  = false;
+  let hover_spyglass = null;
+  let canvas_failure = false;
 
   let defaults = {
-    clickCallback(color, evt) { return false; },
-    mouseMoveCallback(color, evt) { return false; },
-    mouseOutCallback(color, evt) { return false; },
-    selector          : $('#background-image'),
-    hover_size        : 20
+    clickCallback(color, evt) {
+      return false;
+    },
+    mouseMoveCallback(color, evt) {
+      return false;
+    },
+    mouseOutCallback(color, evt) {
+      return false;
+    },
+    selector: $('#background-image'),
+    hover_size: 20
   };
 
   defaults.selector.length = 0;
 
   //-----------  jQuery Function  -----------#
 
-  $.fn.dropperTrios = function(settings = {}) {
+  $.fn.dropperTrios = function (settings = {}) {
 
     dropperAbort();
 
     config = $.extend({}, defaults, settings);
-    
-    $('body').append(`'<div class='dropperTrios_spyglass' style='width:${config.hover_size}px; height:${config.hover_size}px; display:none'></div>`);
+    let style = `width:${config.hover_size}px; height:${config.hover_size}px; display:none`;
+
+    $('body').append(`'<div class="dropperTrios_spyglass" style="${style}"></div>`);
     hover_spyglass = $('.dropperTrios_spyglass');
 
     if (config.selector && config.selector.length) {
@@ -55,7 +62,7 @@
 
   //-----------  Abort Previous Instances  -----------#
 
-  var dropperAbort = function() {
+  var dropperAbort = function () {
     let image_data = [];
 
     if (dropper_canvas) {
@@ -73,7 +80,7 @@
 
   //-----------  Setup Canvas  -----------#
 
-  var setupCanvas = function() {
+  var setupCanvas = function () {
     dropper_image = this;
 
     dropper_canvas = document.createElement('canvas');
@@ -96,7 +103,7 @@
 
   //-----------  Mimic Background "Cover" Display  -----------#
 
-  var drawImageCanvas = function(ctx, img) {
+  var drawImageCanvas = function (ctx, img) {
     let dy;
     let img_ratio = img.height / img.width;
     let ctx_ratio = ctx.canvas.height / ctx.canvas.width;
@@ -124,38 +131,36 @@
   };
 
   //-----------  Event Binding  -----------#
-  
+
   var bindEvents = () =>
     $(dropper_canvas)
       .mousemove(mouseMove)
       .mouseenter(mouseMove)
       .mouseleave(mouseLeave)
-      .mousedown(mouseDown)
-  ;
+      .mousedown(mouseDown);
 
   let unbindEvents = () =>
     $(dropper_canvas)
       .unbind('mousemove')
       .unbind('mouseleave')
       .unbind('mouseenter')
-      .unbind('mousedown')
-  ;
+      .unbind('mousedown');
 
   //-----------  Mouse Events  -----------#
 
-  var mouseMove = function(evt) {
+  var mouseMove = function (evt) {
     let color = colorFromData(evt);
     return hover_spyglass.css({
-      'top'              : evt.pageY - 25,
-      'left'             : evt.pageX - 25,
-      'background-color' : `#${color}`,
-      'position'         : 'absolute'
+      'top': evt.pageY - 25,
+      'left': evt.pageX - 25,
+      'background-color': `#${color}`,
+      'position': 'absolute'
     }).show();
   };
 
   var mouseLeave = evt => hover_spyglass.hide();
 
-  var mouseDown = function(evt) {
+  var mouseDown = function (evt) {
     let color = colorFromData(evt);
     config.clickCallback(color, evt);
     return false;
@@ -163,7 +168,7 @@
 
   //-----------  Helper Functions  -----------#
 
-  var colorFromData = function(evt) {
+  var colorFromData = function (evt) {
     let pos = findPosition();
     let x = evt.pageX - (pos.x);
     let y = evt.pageY - (pos.y);
@@ -176,7 +181,7 @@
 
   //-----------  Color Helpers  -----------#
 
-  var findPosition = function() {
+  var findPosition = function () {
     let cur_top;
     let obj = dropper_canvas;
     let cur_left = cur_top = 0;
@@ -194,7 +199,7 @@
     return undefined;
   };
 
-  return rgbToHex = function(r, g, b) {
+  return rgbToHex = function (r, g, b) {
     if (r > 255 || g > 255 || b > 255) {
       throw 'Invalid color component';
     }
