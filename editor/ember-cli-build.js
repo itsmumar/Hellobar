@@ -30,6 +30,9 @@ module.exports = function (defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
   app.import('bower_components/phoneformat/dist/phone-format.min.js');
+  app.import('bower_components/color/one-color.js');
+  app.import('bower_components/flexi-color-picker/colorpicker.js');
+  app.import('vendor/dropper_trios.js');
 
   app.import('bower_components/froala-wysiwyg-editor/js/froala_editor.min.js');
   app.import('bower_components/froala-wysiwyg-editor/js/plugins/align.min.js');

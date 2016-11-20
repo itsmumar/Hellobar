@@ -12,7 +12,7 @@
       <small>Site colors</small>
       <ul>
         {{#each siteColors}}
-          {{view HelloBar.ColorPreview color=this}}
+          {{component 'color-select-preview' color=this}}
         {{/each}}
       </ul>
     </div>
@@ -21,7 +21,7 @@
       <small>Recent</small>
       <ul>
         {{#each recentColors}}
-          {{view HelloBar.ColorPreview color=this}}
+          {{component 'color-select-preview' color=this}}
         {{/each}}
       </ul>
     </div>

@@ -8,6 +8,7 @@
     "jquery-minicolors": "^2.2.4",
     "nouislider": "^9.0.0",
     "froala-wysiwyg-editor": "^2.3.5",
-    "phoneformat": "phoneformat-js#^1.0.3"
+    "phoneformat": "phoneformat-js#^1.0.3",
+    "color": "^3.0.4"
   }
 }
