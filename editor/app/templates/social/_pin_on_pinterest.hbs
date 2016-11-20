@@ -4,10 +4,10 @@
 </label>
 
 <label {{bind-attr class="model.settings.use_location_for_url:disabled"}}>URL to pin</label>
-{{view Ember.TextField value=model.settings.pinterest_url placeholder="example.com" disabled=model.settings.use_location_for_url}}
+{{input value=model.settings.pinterest_url placeholder="example.com" disabled=model.settings.use_location_for_url}}
 
 <label>Image URL (optional)</label>
-{{view Ember.TextField value=model.settings.pinterest_image_url placeholder="example.com/image.png"}}
+{{input value=model.settings.pinterest_image_url placeholder="example.com/image.png"}}
 
 <label>Description</label>
-{{view Ember.TextField value=model.settings.pinterest_description placeholder="Check out this great site!"}}
+{{input value=model.settings.pinterest_description placeholder="Check out this great site!"}}
