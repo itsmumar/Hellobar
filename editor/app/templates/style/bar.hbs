@@ -33,12 +33,13 @@
 
 <label>Placement</label>
 <div class="select-wrapper">
-  {{view Ember.Select
-    content=placementOptions
-    value=selectedPlacement
-    optionValuePath='content.value'
-    optionLabelPath='content.label'
-  }}
+  {{#power-select options=placementOptions
+    selected=selectedPlacementOption
+    renderInPlace=true
+    searchEnabled=false
+    onchange=(action "selectPlacement") as |option|}}
+    {{option.label}}
+  {{/power-select}}
 </div>
 
 <label>Bar Size</label>
@@ -48,11 +49,12 @@
 
 <label>When does it display? <a {{action "popDelayTootlipModal"}} class="tooltip-label">(what's this?)</a></label>
 <div class="select-wrapper">
-  {{view Ember.Select
-    content=triggerOptions
-    value=selectedTrigger
-    optionValuePath='content.value'
-    optionLabelPath='content.label'
-  }}
+  {{#power-select options=triggerOptions
+    selected=selectedTriggerOption
+    renderInPlace=true
+    searchEnabled=false
+    onchange=(action "selectTrigger") as |option|}}
+    {{option.label}}
+  {{/power-select}}
 </div>
 

@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 
 export default Ember.Mixin.create({
 
@@ -12,5 +13,21 @@ export default Ember.Mixin.create({
     {value: 'scroll-middle', label: 'After scrolling to middle'},
     {value: 'scroll-to-bottom', label: 'After scrolling to bottom'},
     {value: 'exit-intent', label: 'User intends to leave'}
-  ]
+  ],
+
+  selectedTriggerOption: (function() {
+    const viewCondition = this.get('model.view_condition');
+    return _.find(this.get('triggerOptions'), (option) => option.value === viewCondition);
+  }).property('model.view_condition'),
+
+  actions: {
+    popDelayTootlipModal() {
+      // TODO import this class
+      return new DelayTooltipModal().open();
+    },
+
+    selectTrigger(triggerOption) {
+      this.set('model.view_condition', triggerOption.value);
+    }
+  }
 });

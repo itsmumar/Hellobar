@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 
 import AfterConvertOptions from '../mixins/after-convert-options-mixin';
 import HasPlacement from '../mixins/has-placement-mixin';
@@ -16,12 +17,12 @@ export default Ember.Controller.extend(HasPlacement, HasTriggerOptions, AfterCon
     }).property("model.element_subtype"),
 
     pushesText: (function () {
-      if (this.get('selectedPlacement') === 'bar-top') {
+      if (this.get('model.placement') === 'bar-top') {
         return 'Pushes page down';
       } else {
         return 'Pushes page up';
       }
-    }).property('selectedPlacement'),
+    }).property('model.placement'),
 
     adoptedBarSize: (function () {
       let size = this.get('model.size');
