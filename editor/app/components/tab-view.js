@@ -1,14 +1,20 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-  classNames: ['tab-view'],
+
+  componentRegistry: Ember.inject.service(),
+
+  classNames: ['tab-view', 'js-tab-view'],
   attributeBindings: ['model', 'navigationName'],
   activePaneId: null,
   layoutName: (() => 'components/tab-view').property(),
+
   didInsertElement() {
     this.set('panes', []);
     this.set('currentTabNameAttribute', `current_${this.get('navigationName')}_tab_name`);
+    this.get('componentRegistry').register(this);
   },
+
   setActivePane(paneId, name) {
     if (this.get('activePaneId') === null) {
       return this.set('activePaneId', paneId);
