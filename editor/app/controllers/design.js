@@ -163,7 +163,7 @@ export default Ember.Controller.extend({
 
   setHBCallbacks: ( () =>
       // Listen for when question answers are pressed and change the question tabs
-      HB.on("answerSelected", choice => {
+      HB.on && HB.on("answerSelected", choice => {
           this.set('model.paneSelectedIndex', choice);
           this.set('paneSelection', (this.get('paneSelection') || 0) + 1);
           return this.send(`showResponse${choice}`);
