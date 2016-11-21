@@ -2,7 +2,8 @@ import Ember from 'ember';
 import ENV from 'editor/config/environment';
 
 const apiBaseConfiguration = {
-  'development': 'http://localhost:3000',
+  //'development': 'http://localhost:3000',
+  'development': 'http://localhost:3001',
   '*': ''
 };
 
