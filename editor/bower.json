@@ -10,6 +10,7 @@
     "froala-wysiwyg-editor": "^2.3.5",
     "phoneformat": "phoneformat-js#^1.0.3",
     "color": "^3.0.4",
-    "Sortable": "sortablejs#^1.4.2"
+    "Sortable": "sortablejs#^1.4.2",
+    "flexi-color-picker": "^1.0.3"
   }
 }
