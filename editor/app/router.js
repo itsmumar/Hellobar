@@ -9,9 +9,25 @@ const Router = Ember.Router.extend({
     const route = this.currentRouteName;
     const parentRoute = route.split('.')[0];
     const controller = this.container.lookup('controller:' + parentRoute);
+
+    this._updateRouteForwarding(controller, route);
+    this._updateStepNavigation(controller);
+
+    // TODO uncomment and adopt:
+    /*if ((!newRoute) || (newRoute.indexOf('style') !== 0)) {
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
+    }*/
+    // TODO remove this line
+    console.log('onTransition controller=', controller);
+  }.on('didTransition'),
+
+  _updateRouteForwarding(controller, route) {
     if (controller && (!_.isUndefined(controller.get('routeForwarding'))) && !_.endsWith(route, '.index')) {
       controller.set('routeForwarding', route);
     }
+  },
+
+  _updateStepNavigation(controller) {
     if (controller.step) {
       const applicationController = this.container.lookup('controller:application');
       applicationController.setProperties({
@@ -21,13 +37,8 @@ const Router = Ember.Router.extend({
         nextRoute: controller.nextStep
       });
     }
-    // TODO uncomment and adopt:
-    /*if ((!newRoute) || (newRoute.indexOf('style') !== 0)) {
-      this.get('bus').trigger('hellobar.core.rightPane.hide');
-    }*/
-    // TODO remove this line
-    console.log('onTransition controller=', controller);
-  }.on('didTransition')
+  }
+  
 });
 
 Router.map(function () {
