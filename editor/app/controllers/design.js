@@ -211,7 +211,8 @@ export default Ember.Controller.extend({
   actions: {
 
     selectTheme(theme) {
-      // TODO handle action (set model.theme_id)
+      this.set('model.theme_id', theme.id);
+      // TODO remove:
       console.log(theme);
     },
 
