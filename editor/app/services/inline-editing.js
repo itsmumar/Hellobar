@@ -116,8 +116,7 @@ class InlineImageManagementPane {
         case 'add-image': return this.addImage();
         case 'edit-image': return this.editImage();
       }
-    }
-    );
+    });
   }
   addImage() {
     let editor = this.$pane.find('.image-holder').data('froala.editor');
@@ -183,9 +182,6 @@ export default Ember.Service.extend({
         'below-caption': 'Below Caption'
       },
       callback(cmd, val) {
-        // TODO remove
-        //console.log(this, cmd, val)
-        //this.image.exitEdit()
         return that.modelAdapter.handleImagePlacementChange(val);
       }
     });
@@ -233,8 +229,7 @@ export default Ember.Service.extend({
           );
         }
       }
-    }
-    , 500);
+    }, 500);
   },
 
   instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage) {
@@ -277,7 +272,7 @@ export default Ember.Service.extend({
       enter: $.FroalaEditor.ENTER_P,
       multiLine: true,
       initOnClick: false,
-      zIndex: 9888,
+      zIndex: 9888
     };
     let imageFroalaOptions = {
       key: froalaKey,
@@ -317,8 +312,7 @@ export default Ember.Service.extend({
       let responseObject = JSON.parse(response);
       this.modelAdapter && this.modelAdapter.handleImageReplaced(responseObject);
       return false;
-    }
-    );
+    });
 
     let $textFroala = $simpleFroala.add($fullFroala);
     $textFroala.on('froalaEditor.contentChanged', (e, editor) => {
@@ -326,10 +320,8 @@ export default Ember.Service.extend({
       let content = $target.froalaEditor('html.get');
       let blockId = $target.attr('data-hb-editable-block');
       return this.handleContentChange(blockId, content);
-    }
-    );
-    $textFroala.on('froalaEditor.destroy', (e, editor) => {}
-    );
+    });
+    $textFroala.on('froalaEditor.destroy', (e, editor) => {});
 
     let $allFroala = $($textFroala).add($imageFroala);
     this.$currentFroalaInstances = $allFroala;

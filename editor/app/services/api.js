@@ -13,6 +13,7 @@ const getApiBase = () => (ENV.environment && apiBaseConfiguration[ENV.environmen
 
 const apiBase = getApiBase();
 
+// TODO remove this
 console.log('apiBase = ', apiBase);
 
 export default Ember.Service.extend({

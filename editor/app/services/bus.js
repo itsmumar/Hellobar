@@ -1,13 +1,6 @@
 import Ember from 'ember';
 
-console.log('bus service definition');
-
 export default Ember.Service.extend({
-
-  init() {
-    // TODO remove this
-    console.log('bus service initialized.');
-  },
 
   _events: {},
   subscribe(eventName, callback) {
@@ -22,12 +15,11 @@ export default Ember.Service.extend({
   },
 
   trigger(eventName, params) {
-    let callbacks = this._events[eventName];
+    const callbacks = this._events[eventName];
     if (callbacks) {
-      return callbacks.forEach(callback =>
-          setTimeout(() => callback(params)
-            , 0)
-      );
+      return callbacks.forEach(callback => {
+        setTimeout(() => callback(params), 0)
+      });
     }
   }
 });
