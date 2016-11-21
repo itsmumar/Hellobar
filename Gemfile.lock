@@ -141,7 +141,7 @@ GEM
       sexp_processor (~> 4.1)
     climate_control (0.0.3)
       activesupport (>= 3.0)
-    cocaine (0.5.8)
+    cocaine (0.5.7)
       climate_control (>= 0.0.3, < 1.0)
     code_analyzer (0.4.5)
       sexp_processor
@@ -189,12 +189,6 @@ GEM
       faraday_middleware (~> 0.9)
       json (~> 1.8)
     elif (0.1.0)
-    ember-cli-rails (0.7.4)
-      cocaine (~> 0.5.8)
-      ember-cli-rails-assets (~> 0.6.2)
-      html_page (~> 0.1.0)
-      railties (>= 3.2, < 5)
-    ember-cli-rails-assets (0.6.2)
     ember-data-source (1.0.0.beta.14)
       ember-source
     ember-rails (0.16.4)
@@ -286,7 +280,6 @@ GEM
     hound-tools (0.0.6)
       rubocop (~> 0.25)
       thor
-    html_page (0.1.0)
     httparty (0.13.1)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
@@ -354,7 +347,7 @@ GEM
     mime-types (1.25.1)
     mimemagic (0.3.0)
     mini_portile2 (2.1.0)
-    minitest (5.9.1)
+    minitest (5.8.0)
     money (6.3.0)
       i18n (>= 0.6.4, <= 0.7.0.dev)
     multi_json (1.11.2)
@@ -677,7 +670,6 @@ DEPENDENCIES
   devise (~> 3.2.4)
   drip-ruby (~> 0.0.3)
   elif (~> 0.1)
-  ember-cli-rails (~> 0.7.4)
   ember-rails (~> 0.16.4)
   ember-source (~> 1.7.1)
   factory_girl_rails

@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  mount_ember_app :editor, to: "/editor"
+  #mount_ember_app :editor, to: "/editor"
 
   resources :referrals do
     collection do
