@@ -146,14 +146,14 @@ export default Ember.Controller.extend({
   // closes the element
   // TODO better way is to deny element closing at all
   /*setRerenderOnClose: ( function () {
-    let that = this;
-    let callback = function () {
-      let delayedFunc = () => Ember.run.debounce(that, that.doRenderPreview, false, 500);
-      return setTimeout(delayedFunc, 1000);
-    };
+   let that = this;
+   let callback = function () {
+   let delayedFunc = () => Ember.run.debounce(that, that.doRenderPreview, false, 500);
+   return setTimeout(delayedFunc, 1000);
+   };
 
-    return HB.on("elementDismissed", callback);
-  }).on('init'),*/
+   return HB.on("elementDismissed", callback);
+   }).on('init'),*/
 
   //-----------  State Default  -----------#
 
@@ -183,70 +183,70 @@ export default Ember.Controller.extend({
 
   // TODO adopt to Ember 2
   /*setModelIsDirty: ( function (obj, keyName) {
-    if (!!this.get(keyName)) {
-      return this.set("modelIsDirty", true);
-    }
-  }).observesBefore(
-    "model.animated",
-    "model.answer1",
-    "model.answer1caption",
-    "model.answer1link_text",
-    "model.answer1response",
-    "model.answer2",
-    "model.answer2caption",
-    "model.answer2link_text",
-    "model.answer2response",
-    "model.background_color",
-    "model.border_color",
-    "model.button_color",
-    "model.caption",
-    "model.closable",
-    "model.contact_list_id",
-    "model.element_subtype",
-    "model.email_placeholder",
-    "model.font_id",
-    "model.headline",
-    "model.image_placement",
-    "model.image_url",
-    "model.link_color",
-    "model.link_style",
-    "model.link_text",
-    "model.name_placeholder",
-    "model.phone_country_code",
-    "model.phone_number",
-    "model.placement",
-    "model.pushes_page_down",
-    "model.question",
-    "model.remains_at_top",
-    "model.settings.buffer_message",
-    "model.settings.buffer_url",
-    "model.settings.collect_names",
-    "model.settings.link_url",
-    "model.settings.message_to_tweet",
-    "model.settings.pinterest_description",
-    "model.settings.pinterest_full_name",
-    "model.settings.pinterest_image_url",
-    "model.settings.pinterest_url",
-    "model.settings.pinterest_user_url",
-    "model.settings.redirect_url",
-    "model.settings.redirect",
-    "model.settings.twitter_handle",
-    "model.settings.url_to_like",
-    "model.settings.url_to_plus_one",
-    "model.settings.url_to_share",
-    "model.settings.url_to_tweet",
-    "model.settings.url",
-    "model.settings.use_location_for_url",
-    "model.show_after_convert",
-    "model.show_branding",
-    "model.size",
-    "model.text_color",
-    "model.theme_id",
-    "model.type",
-    "model.use_question",
-    "model.wiggle_button",
-    "model.use_default_image"
-  ),*/
+   if (!!this.get(keyName)) {
+   return this.set("modelIsDirty", true);
+   }
+   }).observesBefore(
+   "model.animated",
+   "model.answer1",
+   "model.answer1caption",
+   "model.answer1link_text",
+   "model.answer1response",
+   "model.answer2",
+   "model.answer2caption",
+   "model.answer2link_text",
+   "model.answer2response",
+   "model.background_color",
+   "model.border_color",
+   "model.button_color",
+   "model.caption",
+   "model.closable",
+   "model.contact_list_id",
+   "model.element_subtype",
+   "model.email_placeholder",
+   "model.font_id",
+   "model.headline",
+   "model.image_placement",
+   "model.image_url",
+   "model.link_color",
+   "model.link_style",
+   "model.link_text",
+   "model.name_placeholder",
+   "model.phone_country_code",
+   "model.phone_number",
+   "model.placement",
+   "model.pushes_page_down",
+   "model.question",
+   "model.remains_at_top",
+   "model.settings.buffer_message",
+   "model.settings.buffer_url",
+   "model.settings.collect_names",
+   "model.settings.link_url",
+   "model.settings.message_to_tweet",
+   "model.settings.pinterest_description",
+   "model.settings.pinterest_full_name",
+   "model.settings.pinterest_image_url",
+   "model.settings.pinterest_url",
+   "model.settings.pinterest_user_url",
+   "model.settings.redirect_url",
+   "model.settings.redirect",
+   "model.settings.twitter_handle",
+   "model.settings.url_to_like",
+   "model.settings.url_to_plus_one",
+   "model.settings.url_to_share",
+   "model.settings.url_to_tweet",
+   "model.settings.url",
+   "model.settings.use_location_for_url",
+   "model.show_after_convert",
+   "model.show_branding",
+   "model.size",
+   "model.text_color",
+   "model.theme_id",
+   "model.type",
+   "model.use_question",
+   "model.wiggle_button",
+   "model.use_default_image"
+   ),*/
 
   //---------------- Font Helpers ----------------#
 
@@ -302,6 +302,30 @@ export default Ember.Controller.extend({
       return this.applyCurrentTheme();
     }
   }).observes('model.theme_id'),
+
+  updateProFeature: ( function () {
+    const isBranded = this.get('model.show_branding');
+    const canRemoveBranding = this.get('model.site.capabilities.remove_branding');
+
+    if (!canRemoveBranding && !isBranded) {
+      this.set('model.show_branding', true);
+      return this.promptUpgrade('show_branding', isBranded, 'remove branding');
+    }
+  }).observes('model.show_branding'),
+
+  // Upgrade modal promot for protected features
+
+  promptUpgrade(attr, val, message) {
+    const view = this;
+    return new UpgradeAccountModal({
+      site: this.get('model.site'),
+      successCallback() {
+        view.set('model.site.capabilities', this.site.capabilities); // update site with new capabilities
+        return view.set(`model.${attr}`, val);
+      },
+      upgradeBenefit: message
+    }).open();
+  },
 
   //-----------  Actions  -----------#
 
