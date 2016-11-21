@@ -5,7 +5,7 @@
     <a disabled class="button">Prev</a>
   {{/if}}
 
-  {{#each obj in routeLinks}}
+  {{#each routeLinks as |obj| }}
     {{link-to '' obj.route classNameBindings="obj.past:past :nav-dot"}}
   {{/each}}
 

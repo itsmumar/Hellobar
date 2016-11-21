@@ -12,6 +12,19 @@ const Router = Ember.Router.extend({
     if (controller && (!_.isUndefined(controller.get('routeForwarding'))) && !_.endsWith(route, '.index')) {
       controller.set('routeForwarding', route);
     }
+    if (controller.step) {
+      const applicationController = this.container.lookup('controller:application');
+      applicationController.setProperties({
+        isFullscreen: false,
+        currentStep: controller.step,
+        prevRoute: controller.prevStep,
+        nextRoute: controller.nextStep
+      });
+    }
+    // TODO uncomment and adopt:
+    /*if ((!newRoute) || (newRoute.indexOf('style') !== 0)) {
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
+    }*/
     // TODO remove this line
     console.log('onTransition controller=', controller);
   }.on('didTransition')
