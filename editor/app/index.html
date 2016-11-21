@@ -16,7 +16,9 @@
     window.HB_DATA = {};
     // TODO this is temporary solution:
     window.trackEditorFlow = false;
-    window.siteID = window.location.pathname.split('/')[2]; // TODO: fix it properly
+    var loc = window.location;
+    window.emberRootURL = loc.host + loc.pathname;
+    window.siteID = loc.pathname.split('/')[2]; // TODO: fix it properly
     window.availableFonts = [{
       "id": "open_sans",
       "name": "Open Sans",
