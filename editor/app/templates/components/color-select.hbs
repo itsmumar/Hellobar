@@ -2,7 +2,7 @@
 
 <div class="color-select-wrapper">
   <div class="color-select-block" {{action 'toggleFocus'}}>
-    <span class="color-preview" {{bind-attr style=cssStyle}}></span>
+    <span class="color-preview" style={{cssStyle}}></span>
     <span class="hash-mark">#</span>
     {{input value=color class='hex-val' maxlength=7}}
   </div>

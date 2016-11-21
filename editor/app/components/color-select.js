@@ -13,7 +13,7 @@ export default Ember.Component.extend({
   cssStyle: ( function () {
     let color = one.color(this.get('color'));
     if (color && color.hex()) {
-      return `background-color: ${color.hex()}`;
+      return Ember.String.htmlSafe(`background-color: ${color.hex()}`);
     }
   }).property('color'),
 
