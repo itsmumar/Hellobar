@@ -9,7 +9,9 @@ const Router = Ember.Router.extend({
     const route = this.currentRouteName;
     const parentRoute = route.split('.')[0];
     const controller = this.container.lookup('controller:' + parentRoute);
-    controller && (!_.isUndefined(controller.get('routeForwarding'))) && (controller.set('routeForwarding', route));
+    if (controller && (!_.isUndefined(controller.get('routeForwarding'))) && !_.endsWith(route, '.index')) {
+      controller.set('routeForwarding', route);
+    }
     // TODO remove this line
     console.log('onTransition controller=', controller);
   }.on('didTransition')
