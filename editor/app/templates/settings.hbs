@@ -1,8 +1,7 @@
 <div class="settings ember-view">
 
   <h5 class="step-title">Goals</h5>
-  <!-- <div { {bind-attr class="routeForwarding:is-selected :step-link-wrapper"}}> -->
-  <div class="step-link-wrapper">
+  <div class="{{goalListCssClasses}}">
     {{#link-to 'settings.emails' class='step-link-block'}}
       <i class="icon-contacts"></i>
       <h6>Collect Email</h6>

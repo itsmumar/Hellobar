@@ -48,6 +48,12 @@ export default Ember.Controller.extend({
 
   routeForwarding: false,
 
+  goalListCssClasses: (function() {
+    let classes = ['step-link-wrapper'];
+    this.get('routeForwarding') && (classes.push('is-selected'));
+    return classes.join(' ');
+  }).property('routeForwarding'),
+
   actions: {
 
     changeSettings() {

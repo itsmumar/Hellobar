@@ -1,9 +1,18 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 import config from './config/environment';
 
 const Router = Ember.Router.extend({
   location: config.locationType,
-  rootURL: config.rootURL
+  rootURL: config.rootURL,
+  onTransition: function() {
+    const route = this.currentRouteName;
+    const parentRoute = route.split('.')[0];
+    const controller = this.container.lookup('controller:' + parentRoute);
+    controller && (!_.isUndefined(controller.get('routeForwarding'))) && (controller.set('routeForwarding', route));
+    // TODO remove this line
+    console.log('onTransition controller=', controller);
+  }.on('didTransition')
 });
 
 Router.map(function () {
