@@ -31,6 +31,7 @@
 @import 'components/_buttons.css.sass';
 @import 'components/_hint.css.sass';
 @import 'components/_icons.css.sass';
+@import 'components/_reveal.css.sass';
 
 // These are editor's components
 @import 'components/_announcement-container.css.sass';
@@ -58,7 +59,3 @@
 @import 'layouts/editor/_interstitial.css.sass';
 @import 'general/layouts/editor/preview';
 @import 'layouts/editor/_steps.css.sass';
-
-.test {
-  color: red
-}
