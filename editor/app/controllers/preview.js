@@ -139,5 +139,25 @@ export default Ember.Controller.extend({
       css[property] = pushHeight;
       return $('#hellobar-preview-container .preview-image').css(css);
     }
+  },
+
+  // TODO decide when we need to call this method
+  afterElementInserted() {
+    function formatRGB(rgbArray) {
+      rgbArray.push(1);
+      return rgbArray;
+    }
+
+    let colorThief = new ColorThief();
+    let image = $('.preview-image-for-colorpicker').get(0);
+
+    return imagesLoaded(image, () => {
+        let dominantColor = formatRGB(colorThief.getColor(image));
+        let colorPalette = colorThief.getPalette(image, 4).map(color => formatRGB(color));
+
+        this.set('controller.dominantColor', dominantColor);
+        return this.set('controller.colorPalette', colorPalette);
+      }
+    );
   }
 });
