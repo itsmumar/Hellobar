@@ -43,6 +43,12 @@ export default Ember.Controller.extend({
     return (this.get('routeForwarding') || "").split('.').length > 1;
   }).property('routeForwarding'),
 
+  targetingListCssClasses: (function() {
+    let classes = ['step-link-wrapper'];
+    this.get('routeForwarding') && (classes.push('is-selected'));
+    return classes.join(' ');
+  }).property('routeForwarding'),
+
   //-----------  Original UI Support  -----------#
   // remove these functions and all code paths where targetingUiVariant == false and/or fucntion names match *Original
   // if/when conclude the a/b test "Targeting UI Variation 2016-06-13" with 'variant'
