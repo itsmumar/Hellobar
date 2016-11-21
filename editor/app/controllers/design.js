@@ -5,8 +5,6 @@ export default Ember.Controller.extend({
 
   applicationController: Ember.inject.controller('application'),
 
-  needs: ['application'],
-
   //-----------  Step Settings  -----------#
 
   step: 3,
@@ -183,8 +181,8 @@ export default Ember.Controller.extend({
   //-----------  Color Tracking  -----------#
 
   recentColors: ['ffffff', 'ffffff', 'ffffff', 'ffffff'],
-  siteColors: Ember.computed.alias('controllers.application.colorPalette'),
-  focusedColor: Ember.computed.alias('controllers.application.focusedColor'),
+  siteColors: Ember.computed.alias('applicationController.colorPalette'),
+  focusedColor: Ember.computed.alias('applicationController.focusedColor'),
 
   showAdditionalColors: Ember.computed.equal('model.type', 'Bar'),
 

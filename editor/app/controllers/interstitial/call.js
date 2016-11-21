@@ -3,11 +3,10 @@ import Ember from 'ember';
 console.log('call-controller definition');
 
 export default Ember.Controller.extend({
-  needs: ["application"],
+
+  applicationController: Ember.inject.controller('application'),
 
   init() {
-    // TODO remove
-    console.log('call-controller init countries = ', HB.countryCodes, 'this = ', this);
   },
 
   setDefaults() {
@@ -23,12 +22,12 @@ export default Ember.Controller.extend({
   inputIsInvalid: ( function () {
     return !!(
       Ember.isEmpty(this.get("model.headline")) ||
-      Ember.isEmpty(this.get("model.link_text")) || !isValidNumber(this.get("controllers.application.phone_number"), this.get("model.phone_country_code"))
+      Ember.isEmpty(this.get("model.link_text")) || !isValidNumber(this.get("applicationController.phone_number"), this.get("model.phone_country_code"))
     );
   }).property(
     "model.link_text",
     "model.headline",
-    "controllers.application.phone_number",
+    "applicationController.phone_number",
     "model.phone_country_code"
   ),
 

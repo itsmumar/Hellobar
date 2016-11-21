@@ -2,8 +2,6 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
-  needs: ["application"],
-
   showEmailVolume: (HB_ONBOARDING_EMAIL_VOLUME === "messaging"),
 
   monthlyPageviews: ( function () {

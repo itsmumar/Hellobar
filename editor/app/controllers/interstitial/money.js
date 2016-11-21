@@ -1,7 +1,6 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  needs: ["application"],
 
   setDefaults() {
     if (!this.get("model")) {

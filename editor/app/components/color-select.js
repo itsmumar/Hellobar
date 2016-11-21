@@ -2,8 +2,6 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
 
-  needs: ['colors'],
-
   classNames: ['color-select'],
   classNameBindings: ['inFocus', 'isSelecting'],
 

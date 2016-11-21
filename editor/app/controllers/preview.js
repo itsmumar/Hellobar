@@ -2,9 +2,9 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
-  inlineEditing: Ember.inject.service(),
+  applicationController: Ember.inject.controller('application'),
 
-  needs: ['application'],
+  inlineEditing: Ember.inject.service(),
 
   init() {
     return HB.addPreviewInjectionListener(container => {
@@ -16,7 +16,7 @@ export default Ember.Controller.extend({
 
   //-----------  Template Properties  -----------#
 
-  isMobile: Ember.computed.alias('controllers.application.isMobile'),
+  isMobile: Ember.computed.alias('applicationController.isMobile'),
   isPushed: Ember.computed.alias('model.pushes_page_down'),
   barSize: Ember.computed.alias('model.size'),
   barPosition: Ember.computed.alias('model.placement'),
@@ -40,7 +40,7 @@ export default Ember.Controller.extend({
 
   //-----------  Color Intelligence  -----------#
 
-  colorPalette: Ember.computed.alias('controllers.application.colorPalette'),
+  colorPalette: Ember.computed.alias('applicationController.colorPalette'),
 
   setSiteColors: ( function () {
     if (this.get('model.id') || window.elementToCopyID) {
