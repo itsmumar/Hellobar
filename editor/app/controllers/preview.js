@@ -7,7 +7,7 @@ export default Ember.Controller.extend({
   inlineEditing: Ember.inject.service(),
 
   init() {
-    return HB.addPreviewInjectionListener(container => {
+    HB.addPreviewInjectionListener(container => {
         this.adjustPushHeight();
         return this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
       }
@@ -159,5 +159,15 @@ export default Ember.Controller.extend({
         return this.set('controller.colorPalette', colorPalette);
       }
     );
-  }
+  },
+
+  previewContainerCssClasses: (function() {
+    let classes = [];
+    classes.push(this.get('barPosition'));
+    classes.push(this.get('barSize'));
+    classes.push(this.get('elementType'));
+    this.get('isPushed') && classes.push('is-pushed');
+    this.get('isMobile') && classes.push('hellobar-preview-container-mobile');
+    return classes.join(' ');
+  }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile')
 });
