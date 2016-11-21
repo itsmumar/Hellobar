@@ -17,6 +17,9 @@
     // TODO this is temporary solution:
     window.trackEditorFlow = false;
     window.siteID = window.location.pathname.split('/')[2] || '12345'; // TODO: fix it properly
+    window.image_path = function (fileName) {
+      return '/editor/assets/images/' + fileName;
+    };
     window.availableFonts = [{
       "id": "open_sans",
       "name": "Open Sans",

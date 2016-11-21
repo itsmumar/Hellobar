@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 
   announcementTracking: Ember.inject.service(),
+  imaging: Ember.inject.service(),
 
   currentAnnouncementName: 'inline-editing',
   currentAnnouncementWasClosed: false,
@@ -23,7 +24,7 @@ export default Ember.Component.extend({
   }).property('currentAnnouncement', 'currentAnnouncementWasClosed'),
 
   announcementImageSrc: (function() {
-    return `/assets/announcements/${this.get('currentAnnouncementName')}.png`;
+    return this.get('imaging').imagePath(`announcements/${this.get('currentAnnouncementName')}.png`);
   }).property('currentAnnouncementName'),
 
 
