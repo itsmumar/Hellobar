@@ -7,10 +7,10 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  {{content-for "head"}}
 
-  <link rel="stylesheet" href="{{rootURL}}assets/vendor.css">
-  <link rel="stylesheet" href="{{rootURL}}assets/editor.css">
+
+  <link rel="stylesheet" href="/assets/editor/vendor.css">
+  <link rel="stylesheet" href="/assets/editor/editor.css">
   <script type="text/javascript">
     // TODO can we make it local?
     window.HB_DATA = {};
@@ -534,16 +534,16 @@
     try { Typekit.load({ async: true }); } catch (e) {}
   </script>
 
-  {{content-for "head-footer"}}
+
 </head>
 <body id="hb-editor">
 <div id="ember-root"></div>
 
-{{content-for "body"}}
 
-<script src="{{rootURL}}assets/vendor.js"></script>
-<script src="{{rootURL}}assets/editor.js"></script>
 
-{{content-for "body-footer"}}
+<script src="/assets/editor/vendor.js"></script>
+<script src="/assets/editor/editor.js"></script>
+
+<div id="ember-basic-dropdown-wormhole"></div>
 </body>
 </html>
