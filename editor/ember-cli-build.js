@@ -23,7 +23,8 @@ module.exports = function (defaults) {
         'bower_components/froala-wysiwyg-editor/css',
         'vendor'
       ]
-    }
+    },
+    storeConfigInMeta: false
     // Add options here
   });
 
