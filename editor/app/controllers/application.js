@@ -134,11 +134,15 @@ export default Ember.Controller.extend({
       }
     );
 
+    previewElement = _.defaultsDeep({}, previewElement);
+
     HB.isPreviewMode = true;
     HB.previewMode = this.get('isMobile') ? 'mobile' : 'fullscreen';
-    HB.removeAllSiteElements();
-    HB.addToPage(HB.createSiteElement(previewElement));
-    return HB.isMobileWidth = "changed";
+    if (HB.removeAllSiteElements) {
+      HB.removeAllSiteElements();
+      HB.addToPage(HB.createSiteElement(previewElement));
+    }
+    HB.isMobileWidth = "changed";
   },
 
 
