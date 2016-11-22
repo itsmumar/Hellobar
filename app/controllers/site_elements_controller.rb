@@ -1,5 +1,6 @@
 class SiteElementsController < ApplicationController
   before_action :authenticate_user!
+  before_action :force_trailing_slash, :only => [:new, :edit]
   before_action :load_site
   before_action :load_site_element, :only => [:show, :edit, :update, :destroy, :toggle_paused]
 
@@ -101,6 +102,10 @@ class SiteElementsController < ApplicationController
 
   def determine_layout
     %w(new edit).include?(action_name) ? "ember" : "application"
+  end
+
+  def force_trailing_slash
+    redirect_to request.original_url + '/' unless request.original_url.match(/\/$/)
   end
 
   def load_site_element
