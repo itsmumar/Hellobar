@@ -23,6 +23,7 @@ export default Ember.Component.extend({
     let isColorSelect = $(obj.target).closest('.color-select-wrapper').length;
 
     if (!isCanvas && !isColorSelect) {
+      // TODO improve this
       return this.set('applicationController.focusedColor', null);
     }
   }

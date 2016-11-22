@@ -75,13 +75,28 @@ HB.injectAtTop = function (element) {
 $(function () {
 
   let setHeight = function () {
-    let height = $(window).height() - $('.header-wrapper').height();
+    // TODO it seems that we don't have .header-wrapper in editor SPA
+    let height = $(window).height() - ($('.header-wrapper').height() || 0);
     return $('#ember-root').height(height);
   };
 
   $(window).resize(() => setHeight());
 
-  return setHeight();
+  setHeight();
+
+  // Workaround for setting styles for application view
+  Ember.run.next(() => {
+    function waitForChildren() {
+      const $rootChildren = $('#ember-root').children();
+      if ($rootChildren.length > 0) {
+        $rootChildren.css('height', '100%');
+      } else {
+        Ember.run.later(waitForChildren, 80);
+      }
+    }
+    waitForChildren();
+  });
+
 });
 
 //-----------  Phone Data  -----------#
