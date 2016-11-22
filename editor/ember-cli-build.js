@@ -60,15 +60,19 @@ module.exports = function (defaults) {
   app.import('bower_components/froala-wysiwyg-editor/js/plugins/lists.min.js');
   app.import('bower_components/froala-wysiwyg-editor/js/plugins/quote.min.js');
 
-  app.import('vendor/fonts/hellobar.eot', {destDir: 'fonts'});
-  app.import('vendor/fonts/hellobar.svg', {destDir: 'fonts'});
-  app.import('vendor/fonts/hellobar.ttf', {destDir: 'fonts'});
-  app.import('vendor/fonts/hellobar.woff', {destDir: 'fonts'});
+  //var fontsDir = (EmberApp.env() === 'development') ? 'fonts' : '.';
+  //console.log('fontsDir = ', fontsDir);
+  var fontsDir = 'fonts';
 
-  app.import('vendor/fonts/hellobar-icons.eot', {destDir: 'fonts'});
-  app.import('vendor/fonts/hellobar-icons.svg', {destDir: 'fonts'});
-  app.import('vendor/fonts/hellobar-icons.ttf', {destDir: 'fonts'});
-  app.import('vendor/fonts/hellobar-icons.woff', {destDir: 'fonts'});
+  app.import('vendor/fonts/hellobar.eot', {destDir: fontsDir });
+  app.import('vendor/fonts/hellobar.svg', {destDir: fontsDir });
+  app.import('vendor/fonts/hellobar.ttf', {destDir: fontsDir });
+  app.import('vendor/fonts/hellobar.woff', {destDir: fontsDir });
+
+  app.import('vendor/fonts/hellobar-icons.eot', {destDir: fontsDir });
+  app.import('vendor/fonts/hellobar-icons.svg', {destDir: fontsDir });
+  app.import('vendor/fonts/hellobar-icons.ttf', {destDir: fontsDir });
+  app.import('vendor/fonts/hellobar-icons.woff', {destDir: fontsDir });
 
   return app.toTree();
 };
