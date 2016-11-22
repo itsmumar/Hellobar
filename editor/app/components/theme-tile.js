@@ -3,13 +3,14 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 
   bus: Ember.inject.service(),
+  imaging: Ember.inject.service(),
 
   classNames: ['theme-tile'],
 
   theme: null,
 
   imageSrc: (function () {
-    return `/assets/themes/tiles/modal/${this.get('theme.id')}.png`;
+    return this.get('imaging').imagePath(`themes/tiles/modal/${this.get('theme.id')}.png`);
   }).property('theme'),
 
   init() {
