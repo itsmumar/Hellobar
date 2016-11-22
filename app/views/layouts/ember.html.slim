@@ -1,0 +1,66 @@
+doctype html
+html
+  head
+    title Hello Bar
+
+    link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
+
+    - if defined?(preview_script_path)
+      = javascript_include_tag preview_script_path(@site)
+
+    = stylesheet_link_tag    "editor/editor", "editor/vendor", :media => "all"
+
+    = javascript_include_tag "editor/vendor", "editor/editor"
+    = javascript_include_tag "editor/editor-require"
+    = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
+    javascript:
+      try{Typekit.load({ async: true });}catch(e){}
+    = csrf_meta_tags
+
+  body#hb-editor
+    - if get_ab_variation('Email Integration UI 2016-06-22', current_user) == 'original'
+      = render "shared/modals/contact_list"
+    - else
+      = render "shared/modals/contact_list_variant"
+
+    = render "shared/modals/contact_list_variant"
+    = render "shared/modals/confirm"
+    = render "shared/modals/editor_errors"
+    = render "shared/modals/unsaved_changes"
+    = render "shared/modals/temp_user_unsaved_changes"
+    = render "shared/modals/upgrade_modal"
+    = render "shared/modals/payment_modal"
+    = render "shared/modals/delay_tooltip"
+    = render "shared/modals/payment_confirmation"
+    = render "shared/gtm"
+    = render "shared/crazy_egg"
+
+    javascript:
+      HB_DNT = 1;
+      HB_ONBOARDING_EMAIL_VOLUME = "#{get_ab_variation('Onboarding Email Volume 2016-06-28', current_user)}";
+      HB_EMAIL_INTEGRATION_TEST = "variant";
+
+      var currentUser = #{{UserSerializer.new(current_user).to_json}};
+      var trackEditorFlow = #{{new_user?}};
+      var availableThemes = #{{ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).to_json}};
+      var availableFonts = #{{ActiveModel::ArraySerializer.new(Font.all, each_serializer: FontSerializer).to_json}};
+      window.emberRootURL = window.location.pathname;
+
+    = render 'shared/modals/rule_modal_template'
+    = render 'shared/alert_template'
+    - if current_user
+      = render "shared/modals/account_prompt"
+    = render :partial => "shared/hotjar"
+
+    = yield
+
+    - if Rails.env.development?
+      = javascript_include_tag "ember"
+    - else
+      script src='//cdnjs.cloudflare.com/ajax/libs/ember.js/1.7.1/ember.prod.js'
+
+    = javascript_include_tag "dropper_trios"
+
+
+javascript:
+  var site = #{{SiteSerializer.new(current_site, scope: current_user).to_json}};
