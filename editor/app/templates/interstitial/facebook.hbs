@@ -10,7 +10,7 @@
 
   <h6>What URL do you want users to Like on Facebook?</h6>
 
-  <div {{bind-attr class="showFacebookUrl:nospace:bottom-spacer"}}>
+  <div class="{{if showFacebookUrl 'nospace' 'bottom-spacer'}}">
     <div class="select-wrapper">
 
       {{#power-select options=facebookLikeOptions selected=selectedFacebookLikeOption
@@ -26,7 +26,8 @@
 
   <div class="step-container">
     {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
-    <button class="button save-editor" {{action "closeInterstitial"}} {{bind-attr disabled=inputIsInvalid}}>Continue
+    <button class="button save-editor" {{action "closeInterstitial"}} disabled={{inputIsInvalid}}>
+      Continue
     </button>
   </div>
 </div>

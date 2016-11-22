@@ -3,7 +3,7 @@
   Pin the URL my visitor is on
 </label>
 
-<label {{bind-attr class="model.settings.use_location_for_url:disabled"}}>URL to pin</label>
+<label class="{{if model.settings.use_location_for_url 'disabled'}}">URL to pin</label>
 {{input value=model.settings.pinterest_url placeholder="example.com" disabled=model.settings.use_location_for_url}}
 
 <label>Image URL (optional)</label>

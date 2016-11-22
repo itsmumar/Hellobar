@@ -16,7 +16,7 @@
 
   <div class="step-container">
     {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
-    <button class="button save-editor" {{action "closeInterstitial"}} {{bind-attr disabled=inputIsInvalid}}>Continue</button>
+    <button class="button save-editor" {{action "closeInterstitial"}} disabled={{inputIsInvalid}}>Continue</button>
   </div>
 </div>
 

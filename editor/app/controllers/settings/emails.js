@@ -20,8 +20,7 @@ export default Ember.Controller.extend({
             this.set('model.settings.fields_to_collect', fields);
             return setTimeout(()=> {
                 return sortableGroupElement.find('.item-block[draggable="false"]').remove();
-              }
-              , 0);
+              }, 0);
           }
         });
       }
@@ -127,9 +126,7 @@ export default Ember.Controller.extend({
         type: field.type
       },
       denied: this.get('isBarType') && field.type.indexOf('builtin-') !== 0,
-      removable: field.type.indexOf('builtin-') !== 0,
-      classes: 'item-block' + (field.is_enabled ? ' is-selected' : '')
-
+      removable: field.type.indexOf('builtin-') !== 0
     }));
   }).property('model.settings.fields_to_collect', 'model.type', 'isBarType'),
 

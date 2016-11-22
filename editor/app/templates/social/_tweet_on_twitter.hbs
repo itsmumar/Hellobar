@@ -6,5 +6,5 @@
   Tweet the URL my visitor is on
 </label>
 
-<label {{bind-attr class="model.settings.use_location_for_url:disabled"}}>URL to tweet</label>
+<label class="{{if model.settings.use_location_for_url 'disabled'}}">URL to tweet</label>
 {{input value=model.settings.url_to_tweet placeholder="example.com" disabled=model.settings.use_location_for_url}}

@@ -16,7 +16,7 @@
   {{/if}}
 </nav>
 
-<button class="button save-editor" {{bind-attr disabled=saveSubmitted}} {{action "saveSiteElement"}}>
+<button class="button save-editor" disabled={{saveSubmitted}} {{action "saveSiteElement"}}>
   {{#if saveSubmitted}}
     Saving...
   {{else}}

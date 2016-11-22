@@ -7,7 +7,7 @@
         <span>{{ descriptor.field.label }}</span>
       </div>
     {{else}}
-      <div class={{descriptor.classes}} {{bind-attr data-field-type=field.type}}>
+      <div class="item-block {{if descriptor.field.is_enabled 'is-selected'}}" data-field-type={{descriptor.field.type}}>
         <span>{{ descriptor.field.label }}</span>
         <span class="buttons">
             {{#if descriptor.removable }}
