@@ -17,7 +17,7 @@
     // TODO this is temporary solution:
     window.trackEditorFlow = false;
     var loc = window.location;
-    window.emberRootURL = loc.host + loc.pathname;
+    window.emberRootURL = loc.pathname;
     window.siteID = loc.pathname.split('/')[2]; // TODO: fix it properly
     window.availableFonts = [{
       "id": "open_sans",
