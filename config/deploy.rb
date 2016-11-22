@@ -13,6 +13,8 @@ set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 set :whenever_roles, %w(app db web)
 set :keep_releases, 15
 
+set :ember_app_path, "#{release_path}/editor"
+
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
@@ -154,6 +156,11 @@ namespace :prerequisites do
   task :install do
     on roles(:web) do
       execute "sudo apt-get -y install imagemagick"
+
+      execute "curl -sL https://deb.nodesource.com/setup | sudo bash -"
+      execute "sudo apt-get install -y nodejs"
+      execute "sudo npm install -g bower"
+      execute "sudo npm install -g ember-cli"
     end
   end
 end
