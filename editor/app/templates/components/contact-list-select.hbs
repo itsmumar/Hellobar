@@ -9,7 +9,7 @@
   </div>
 
   <div class="contact-list-dropdown" {{action 'toggleOpen'}}>
-    {{#each option in options}}
+    {{#each options as |option| }}
       {{#if option}}
         {{#contact-list-select-option parentView=this option=option}}
           <div>
