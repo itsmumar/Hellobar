@@ -60,6 +60,11 @@ module.exports = function (defaults) {
   app.import('bower_components/froala-wysiwyg-editor/js/plugins/lists.min.js');
   app.import('bower_components/froala-wysiwyg-editor/js/plugins/quote.min.js');
 
+
+  // This is needed to support non-SPA modals etc.
+  app.import('bower_components/handlebars/handlebars.min.js');
+
+
   //var fontsDir = (EmberApp.env() === 'development') ? 'fonts' : '.';
   //console.log('fontsDir = ', fontsDir);
   var fontsDir = 'fonts';

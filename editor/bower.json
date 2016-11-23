@@ -12,6 +12,7 @@
     "color": "^3.0.4",
     "Sortable": "sortablejs#^1.4.2",
     "flexi-color-picker": "^1.0.3",
-    "dropzone": "^4.3.0"
+    "dropzone": "^4.3.0",
+    "handlebars": "1.3.0"
   }
 }

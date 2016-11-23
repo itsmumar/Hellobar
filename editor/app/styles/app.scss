@@ -32,6 +32,7 @@
 @import 'components/_hint.css.sass';
 @import 'components/_icons.css.sass';
 @import 'components/_reveal.css.sass';
+@import 'components/_modal.css.sass';
 
 // These are editor's components
 @import 'components/_announcement-container.css.sass';
@@ -59,3 +60,16 @@
 @import 'layouts/editor/_interstitial.css.sass';
 @import 'general/layouts/editor/preview';
 @import 'layouts/editor/_steps.css.sass';
+
+@import 'layouts/modals/_account-prompt.css.sass';
+@import 'layouts/modals/_confirm.css.sass';
+@import 'layouts/modals/_contact-list.css.sass';
+@import 'layouts/modals/_editor-error.css.sass';
+@import 'layouts/modals/_migration-complete.css.sass';
+@import 'layouts/modals/_payment.css.sass';
+@import 'layouts/modals/_payment-confirmation.css.sass';
+@import 'layouts/modals/_rules.css.sass';
+@import 'layouts/modals/_upgrade.css.sass';
+@import 'layouts/modals/_user-campaign.css.sass';
+@import 'layouts/modals/_welcome_back.css.sass';
+
