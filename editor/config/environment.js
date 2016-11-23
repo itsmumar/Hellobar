@@ -4,8 +4,8 @@ module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'editor',
     environment: environment,
-    rootURL: '/sites/2/site_elements/8/edit/',
-    locationType: 'auto',
+    rootURL: '/editor',
+    locationType: 'hash',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
