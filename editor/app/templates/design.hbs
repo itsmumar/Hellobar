@@ -2,7 +2,7 @@
 
 <label>Theme</label>
 <div class="select-wrapper">
-  {{#power-select selected=currentTheme options=themeOptions onchange=(action "selectTheme") as |theme|}}
+  {{#power-select selected=currentTheme options=themeOptions renderInPlace=true onchange=(action "selectTheme") as |theme|}}
     {{theme.name}}
   {{/power-select}}
 
