@@ -1,3 +1,5 @@
+'use strict';
+
 // jQuery Background Image Color Selection Plug-In
 //
 // Copyright 2015 Matt Manske
@@ -11,24 +13,25 @@
 
 (function ($) {
 
-  let rgbToHex;
-  let config = {};
-  let dropper_image = null;
-  let dropper_canvas = null;
-  let dropper_context = null;
-  let hover_spyglass = null;
-  let canvas_failure = false;
+  var rgbToHex = void 0;
+  var config = {};
+  var dropper_image = null;
+  var dropper_canvas = null;
+  var dropper_context = null;
+  var hover_spyglass = null;
+  var canvas_failure = false;
 
-  let defaults = {
-    clickCallback(color, evt) {
+  var defaults = {
+    clickCallback: function clickCallback(color, evt) {
       return false;
     },
-    mouseMoveCallback(color, evt) {
+    mouseMoveCallback: function mouseMoveCallback(color, evt) {
       return false;
     },
-    mouseOutCallback(color, evt) {
+    mouseOutCallback: function mouseOutCallback(color, evt) {
       return false;
     },
+
     selector: $('#background-image'),
     hover_size: 20
   };
@@ -37,14 +40,16 @@
 
   //-----------  jQuery Function  -----------#
 
-  $.fn.dropperTrios = function (settings = {}) {
+  $.fn.dropperTrios = function () {
+    var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
 
     dropperAbort();
 
     config = $.extend({}, defaults, settings);
-    let style = `width:${config.hover_size}px; height:${config.hover_size}px; display:none`;
+    var style = 'width:' + config.hover_size + 'px; height:' + config.hover_size + 'px; display:none';
 
-    $('body').append(`'<div class="dropperTrios_spyglass" style="${style}"></div>`);
+    $('body').append('\'<div class="dropperTrios_spyglass" style="' + style + '"></div>');
     hover_spyglass = $('.dropperTrios_spyglass');
 
     if (config.selector && config.selector.length) {
@@ -58,12 +63,14 @@
     return config.selector;
   };
 
-  $.fn.dropperClean = () => dropperAbort();
+  $.fn.dropperClean = function () {
+    return dropperAbort();
+  };
 
   //-----------  Abort Previous Instances  -----------#
 
-  var dropperAbort = function () {
-    let image_data = [];
+  var dropperAbort = function dropperAbort() {
+    var image_data = [];
 
     if (dropper_canvas) {
       $(dropper_canvas).remove();
@@ -80,7 +87,7 @@
 
   //-----------  Setup Canvas  -----------#
 
-  var setupCanvas = function () {
+  var setupCanvas = function setupCanvas() {
     dropper_image = this;
 
     dropper_canvas = document.createElement('canvas');
@@ -103,13 +110,13 @@
 
   //-----------  Mimic Background "Cover" Display  -----------#
 
-  var drawImageCanvas = function (ctx, img) {
-    let dy;
-    let img_ratio = img.height / img.width;
-    let ctx_ratio = ctx.canvas.height / ctx.canvas.width;
+  var drawImageCanvas = function drawImageCanvas(ctx, img) {
+    var dy = void 0;
+    var img_ratio = img.height / img.width;
+    var ctx_ratio = ctx.canvas.height / ctx.canvas.width;
 
-    let width_ratio = img.width / ctx.canvas.width;
-    let height_ratio = img.height / ctx.canvas.height;
+    var width_ratio = img.width / ctx.canvas.width;
+    var height_ratio = img.height / ctx.canvas.height;
 
     if (ctx_ratio > img_ratio) {
       var sy = 0;
@@ -123,68 +130,64 @@
       var sHeight = Math.round(ctx.canvas.height * width_ratio);
     }
 
-    let dx = dy = 0;
-    let dWidth = ctx.canvas.width;
-    let dHeight = ctx.canvas.height;
+    var dx = dy = 0;
+    var dWidth = ctx.canvas.width;
+    var dHeight = ctx.canvas.height;
 
     return ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
   };
 
   //-----------  Event Binding  -----------#
 
-  var bindEvents = () =>
-    $(dropper_canvas)
-      .mousemove(mouseMove)
-      .mouseenter(mouseMove)
-      .mouseleave(mouseLeave)
-      .mousedown(mouseDown);
+  var bindEvents = function bindEvents() {
+    return $(dropper_canvas).mousemove(mouseMove).mouseenter(mouseMove).mouseleave(mouseLeave).mousedown(mouseDown);
+  };
 
-  let unbindEvents = () =>
-    $(dropper_canvas)
-      .unbind('mousemove')
-      .unbind('mouseleave')
-      .unbind('mouseenter')
-      .unbind('mousedown');
+  var unbindEvents = function unbindEvents() {
+    return $(dropper_canvas).unbind('mousemove').unbind('mouseleave').unbind('mouseenter').unbind('mousedown');
+  };
 
   //-----------  Mouse Events  -----------#
 
-  var mouseMove = function (evt) {
-    let color = colorFromData(evt);
+  var mouseMove = function mouseMove(evt) {
+    var color = colorFromData(evt);
     return hover_spyglass.css({
       'top': evt.pageY - 25,
       'left': evt.pageX - 25,
-      'background-color': `#${color}`,
+      'background-color': '#' + color,
       'position': 'absolute'
     }).show();
   };
 
-  var mouseLeave = evt => hover_spyglass.hide();
+  var mouseLeave = function mouseLeave(evt) {
+    return hover_spyglass.hide();
+  };
 
-  var mouseDown = function (evt) {
-    let color = colorFromData(evt);
+  var mouseDown = function mouseDown(evt) {
+    var color = colorFromData(evt);
     config.clickCallback(color, evt);
     return false;
   };
 
   //-----------  Helper Functions  -----------#
 
-  var colorFromData = function (evt) {
-    let pos = findPosition();
-    let x = evt.pageX - (pos.x);
-    let y = evt.pageY - (pos.y);
-    let coord = `x=${x}, y=${y}`;
-    let p = dropper_context.getImageData(x, y, 1, 1).data;
-    let color = (`000000${rgbToHex(p[0], p[1], p[2])}`).slice(-6);
+  var colorFromData = function colorFromData(evt) {
+    var pos = findPosition();
+    var x = evt.pageX - pos.x;
+    var y = evt.pageY - pos.y;
+    var coord = 'x=' + x + ', y=' + y;
+    var p = dropper_context.getImageData(x, y, 1, 1).data;
+    var color = ('000000' + rgbToHex(p[0], p[1], p[2])).slice(-6);
 
     return color;
   };
 
   //-----------  Color Helpers  -----------#
 
-  var findPosition = function () {
-    let cur_top;
-    let obj = dropper_canvas;
-    let cur_left = cur_top = 0;
+  var findPosition = function findPosition() {
+    var cur_top = void 0;
+    var obj = dropper_canvas;
+    var cur_left = cur_top = 0;
 
     if (obj.offsetParent) {
       while (true) {
@@ -194,17 +197,16 @@
           break;
         }
       }
-      return {x: cur_left, y: cur_top};
+      return { x: cur_left, y: cur_top };
     }
     return undefined;
   };
 
-  return rgbToHex = function (r, g, b) {
+  return rgbToHex = function rgbToHex(r, g, b) {
     if (r > 255 || g > 255 || b > 255) {
       throw 'Invalid color component';
     }
 
-    return ((r << 16) | (g << 8) | b).toString(16);
+    return (r << 16 | g << 8 | b).toString(16);
   };
-
 })(jQuery);
