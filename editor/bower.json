@@ -13,6 +13,7 @@
     "Sortable": "sortablejs#^1.4.2",
     "flexi-color-picker": "^1.0.3",
     "dropzone": "^4.3.0",
-    "handlebars": "1.3.0"
+    "handlebars": "1.3.0",
+    "jquery": "2.2.4"
   }
 }
