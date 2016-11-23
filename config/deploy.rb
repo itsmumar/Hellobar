@@ -13,7 +13,8 @@ set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 set :whenever_roles, %w(app db web)
 set :keep_releases, 15
 
-set :ember_app_path, "#{release_path}/editor"
+# Using `lambda` for lazy assigment. http://stackoverflow.com/a/25850619/1047207
+set :ember_app_path, lambda { "#{release_path}/editor" }
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -108,6 +109,11 @@ namespace :deploy do
       execute "sudo cp #{release_path}/config/deploy/logrotate.d/* /etc/logrotate.d/"
     end
   end
+
+  # TODO: Move node and bower dependencies to some shared folder
+  before 'assets:precompile', 'node:npm_install'
+  before 'assets:precompile', 'node:bower_install'
+  before 'assets:precompile', 'ember:build'
 
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
