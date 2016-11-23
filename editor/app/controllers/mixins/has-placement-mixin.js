@@ -18,7 +18,6 @@ export default Ember.Mixin.create({
 
   actions: {
     selectPlacement(placementOption) {
-      console.log('selectPlacemen', placementOption);
       placementOption && placementOption.value && this.set('model.placement', placementOption.value);
     }
   }

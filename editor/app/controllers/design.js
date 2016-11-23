@@ -75,7 +75,12 @@ export default Ember.Controller.extend({
 
   // Editor UI Properties
   imageUploadCopy: Ember.computed.oneWay('currentTheme.image.upload_copy'),
-  showImagePlacementField: Ember.computed.oneWay('currentTheme.image.position_selectable'),
+
+  // TODO remove this
+  //showImagePlacementField: Ember.computed.oneWay('currentTheme.image.position_selectable'),
+  // TODO right now we hide the image placement dropdown, after that we'll need to remove it completely as we want to do it inline
+  showImagePlacementField: false,
+
 
   // Site Element Theme Properties
   themeChanged: Ember.observer('currentTheme', function () {
@@ -99,16 +104,6 @@ export default Ember.Controller.extend({
     let imageUrl = this.get('currentTheme.image.default_url');
     return this.send('setImageProps', imageID, imageUrl, 'default');
   },
-
-  // Workaround for known Ember.Select issues: https://github.com/emberjs/ember.js/issues/4150
-  emberSelectWorkaround: Ember.observer('currentTheme', function () {
-      this.set('showImagePlacementField', false);
-      return Ember.run.next(this, function () {
-          return this.set('showImagePlacementField', this.get('currentTheme.image.position_selectable'));
-        }
-      );
-    }
-  ),
 
   //-----------  Text Settings  -----------#
 
