@@ -78,7 +78,7 @@ gem "uglifier",                  "2.0.1"
 gem "unf",                       "~> 0.1.4"
 gem "verticalresponse",          "~> 0.1.6"
 gem "whenever",                  "~> 0.9.2"
-gem "yui-compressor"
+# gem "yui-compressor"
 gem "zip-zip" # will load compatibility for old rubyzip API.
 gem "tzinfo-data", platforms: [:mingw, :mswin] # fixing tzinfo-related bug on Windows platform
 gem 'rails-html-sanitizer'
