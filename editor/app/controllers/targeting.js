@@ -125,50 +125,53 @@ export default Ember.Controller.extend({
   routeForwarding: false,
 
   setRule: (function () {
-    // return unless @get('targetingUiVariant') # Not sure why we are maintaining multiple version of UIs. Removing it.
-    if (this.get("showUpgradeModal")) {
+    if (this.get('showUpgradeModal')) {
       return;
     }
 
-    let defaultRules = this.get('defaultRules');
-    let customRules = this.get('customRules');
+    Ember.run.next(() => {
 
-    switch (this.get('routeForwarding')) {
-      case 'targeting.everyone':
-        this.associateRuleToModel(defaultRules["Everyone"]);
-        break;
-      case 'targeting.mobile':
-        this.associateRuleToModel(defaultRules["Mobile Visitors"]);
-        break;
-      case 'targeting.homepage':
-        this.associateRuleToModel(defaultRules["Homepage Visitors"]);
-        break;
-      case 'targeting.custom':
-        this.associateRuleToModel(null);
-        this.send('openRuleModal');
-        break;
-      case 'targeting.saved':
-        if (!__in__(this.get('model.rule'), ((() => {
-            let result = [];
-            for (let name in customRules) {
-              let rule = customRules[name];
-              result.push(rule);
-            }
-            return result;
-          })()))) {
+      let defaultRules = this.get('defaultRules');
+      let customRules = this.get('customRules');
+
+      switch (this.get('routeForwarding')) {
+        case 'targeting.everyone':
+          this.associateRuleToModel(defaultRules["Everyone"]);
+          break;
+        case 'targeting.mobile':
+          this.associateRuleToModel(defaultRules["Mobile Visitors"]);
+          break;
+        case 'targeting.homepage':
+          this.associateRuleToModel(defaultRules["Homepage Visitors"]);
+          break;
+        case 'targeting.custom':
           this.associateRuleToModel(null);
-        }
-        break;
-      default:
-        this.associateRuleToModel(null);
-    }
+          this.send('openRuleModal');
+          break;
+        case 'targeting.saved':
+          if (!__in__(this.get('model.rule'), ((() => {
+              let result = [];
+              for (let name in customRules) {
+                let rule = customRules[name];
+                result.push(rule);
+              }
+              return result;
+            })()))) {
+            this.associateRuleToModel(null);
+          }
+          break;
+        default:
+          this.associateRuleToModel(null);
+      }
 
-    if (trackEditorFlow) {
-      return InternalTracking.track_current_person("Editor Flow", {
-        step: "Choose Targeting Type",
-        targeting: this.get('routeForwarding')
-      });
-    }
+      if (trackEditorFlow) {
+        return InternalTracking.track_current_person("Editor Flow", {
+          step: "Choose Targeting Type",
+          targeting: this.get('routeForwarding')
+        });
+      }
+    });
+
   }).observes('routeForwarding'),
 
   showUpgradeModal: (function () {

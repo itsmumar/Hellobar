@@ -6,24 +6,30 @@ const Router = Ember.Router.extend({
   location: config.locationType,
   rootURL: window.emberRootURL,
   onTransition: function() {
+    const owner = Ember.getOwner(this);
     const route = this.currentRouteName;
     const parentRoute = route.split('.')[0];
-    const controller = this.container.lookup('controller:' + parentRoute);
-
-    this._updateRouteForwarding(controller, route);
-    this._updateStepNavigation(controller);
+    if (owner.lookup('route:application').get('currentModel')) {
+      const controller = this.container.lookup('controller:' + parentRoute);
+      this._updateRouteForwarding(controller, route);
+      this._updateStepNavigation(controller);
+    }
 
     // TODO uncomment and adopt:
     /*if ((!newRoute) || (newRoute.indexOf('style') !== 0)) {
       this.get('bus').trigger('hellobar.core.rightPane.hide');
     }*/
     // TODO remove this line
-    console.log('onTransition controller=', controller);
+    //console.log('onTransition controller=', controller);
   }.on('didTransition'),
 
   _updateRouteForwarding(controller, route) {
-    if (controller && (!_.isUndefined(controller.get('routeForwarding'))) && !_.endsWith(route, '.index')) {
-      controller.set('routeForwarding', route);
+    console.log('_updateRouteForwarding controller = ', controller, ' routeForwarding = ', controller.get('routeForwarding'), ' route = ', route);
+    if (controller && (!_.isUndefined(controller.get('routeForwarding')))) {
+      if (_.includes(route, '.')) {
+        controller.set('routeForwarding', route);
+      }
+
     }
   },
 

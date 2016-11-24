@@ -18,29 +18,38 @@ export default Ember.Controller.extend({
   //-----------  Sub-Step Selection  -----------#
 
   setSubtype: (function () {
-    switch (this.get("routeForwarding")) {
-      case "settings.emails":
-        this.set("model.element_subtype", "email");
-        break;
-      case "settings.call":
-        this.set("model.element_subtype", "call");
-        break;
-      case "settings.click":
-        this.set("model.element_subtype", "traffic");
-        break;
-      case "settings.announcement":
-        this.set("model.element_subtype", "announcement");
-        break;
-      case "settings.social":
-        this.set("model.element_subtype", "social/like_on_facebook");
-        break;
-    }
-    if (trackEditorFlow) {
-      return InternalTracking.track_current_person("Editor Flow", {
-        step: "Goal Settings",
-        goal: this.get("model.element_subtype")
-      });
-    }
+    Ember.run.next(() => {
+      //if (!_.includes(this.get('routeForwarding'), '.')) {
+      //  this.set('routeForwarding', false);
+      //  return;
+      //}
+      switch (this.get("routeForwarding")) {
+        case "settings.emails":
+          this.set("model.element_subtype", "email");
+          break;
+        case "settings.call":
+          this.set("model.element_subtype", "call");
+          break;
+        case "settings.click":
+          this.set("model.element_subtype", "traffic");
+          break;
+        case "settings.announcement":
+          this.set("model.element_subtype", "announcement");
+          break;
+        case "settings.social":
+          this.set("model.element_subtype", "social/like_on_facebook");
+          break;
+      }
+      this.notifyPropertyChange('model.element_subtype');
+      if (trackEditorFlow) {
+        return InternalTracking.track_current_person("Editor Flow", {
+          step: "Goal Settings",
+          goal: this.get("model.element_subtype")
+        });
+      }
+    });
+    //};
+    //applyRouteForwarding();
   }).observes('routeForwarding'),
 
   // Sets a property which tells the route to forward to a previously

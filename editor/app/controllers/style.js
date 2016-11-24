@@ -59,25 +59,35 @@ export default Ember.Controller.extend({
   routeForwarding: false,
 
   setType: (function () {
-    switch (this.get('routeForwarding')) {
-      case 'style.modal':
-        this.set('model.type', 'Modal');
-        break;
-      case 'style.slider':
-        this.set('model.type', 'Slider');
-        break;
-      case 'style.takeover':
-        this.set('model.type', 'Takeover');
-        break;
-      default:
-        this.set('model.type', 'Bar');
-    }
-    if (trackEditorFlow) {
-      return InternalTracking.track_current_person("Editor Flow", {
-        step: "Style Settings",
-        goal: this.get("model.element_subtype")
-      });
-    }
+    var applyRouteForwarding = () => {
+
+      if (!this.get('model')) {
+        setTimeout(applyRouteForwarding, 100);
+        return;
+      }
+
+      switch (this.get('routeForwarding')) {
+        case 'style.modal':
+          this.set('model.type', 'Modal');
+          break;
+        case 'style.slider':
+          this.set('model.type', 'Slider');
+          break;
+        case 'style.takeover':
+          this.set('model.type', 'Takeover');
+          break;
+        default:
+          this.set('model.type', 'Bar');
+      }
+      if (trackEditorFlow) {
+        return InternalTracking.track_current_person("Editor Flow", {
+          step: "Style Settings",
+          goal: this.get("model.element_subtype")
+        });
+      }
+    };
+    applyRouteForwarding();
+
   }).observes('routeForwarding'),
 
   trackStyleView: (function () {

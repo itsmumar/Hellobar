@@ -15,7 +15,11 @@
   <div class="input-wrapper">
     {{input value=controllers.application.phone_number placeholder="(555) 555-555" maxlength=255}}
     <div class="select-wrapper">
-      {{#power-select options=countries searchField="name" onchange=(action "selectCountry") as |country|}}
+      {{#power-select options=countries
+        selected=selectedCountry
+        searchField="name"
+        renderInPlace=true
+        onchange=(action "selectCountry") as |country|}}
         {{country.name}}
       {{/power-select}}
     </div>

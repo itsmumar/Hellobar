@@ -1,13 +1,9 @@
 import Ember from 'ember';
-
-console.log('call-controller definition');
+import _ from 'lodash/lodash';
 
 export default Ember.Controller.extend({
 
   applicationController: Ember.inject.controller('application'),
-
-  init() {
-  },
 
   setDefaults() {
     if (!this.get("model")) {
@@ -33,13 +29,16 @@ export default Ember.Controller.extend({
 
   countries: HB.countryCodes,
 
+  selectedCountry: function() {
+    return _.find(this.get('countries'), (country) => country.code === this.get('model.phone_country_code'))
+  }.property('countries', 'model.phone_country_code'),
+
   actions: {
     closeInterstitial() {
       return this.transitionToRoute("style");
     },
     selectCountry(country) {
-      // TODO handle action
-      console.log('Country selected: ', country);
+      this.set('model.phone_country_code', country.code);
     }
   }
 });
