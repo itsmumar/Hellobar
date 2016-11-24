@@ -21,12 +21,15 @@ HelloBar.ContactListSelectComponent = Ember.Component.extend
   ).observes('value').on('init')
 
   focusOut: ->
+    event.stopPropagation()
     @set('isOpen', false)
 
   actions:
 
     toggleOpen: ->
+      (typeof event == 'object') and (event.stopPropagation())
       @toggleProperty('isOpen')
+      @.$el.find('.contact-list-dropdown').toggleClass('is-visible')
 
     newList: ->
       @sendAction('editList')
@@ -35,14 +38,8 @@ HelloBar.ContactListSelectComponent = Ember.Component.extend
       @sendAction('editList', @get('selectedList.id'))
 
     listSelected: (value) ->
+      (typeof event == 'object') and (event.stopPropagation())
       @sendAction('setList', value)
       @set('value', value)
-
-#-----------  Contact List Child Views  -----------#
-
-HelloBar.ContactListOption = Ember.View.extend
-
-  classNames: ['contact-list-option']
-
-  click: ->
-    @get('parentView').send('listSelected', @get('option.id'))
+      @set('isOpen', false)
+      @.$el.find('.contact-list-dropdown').toggleClass('is-visible')

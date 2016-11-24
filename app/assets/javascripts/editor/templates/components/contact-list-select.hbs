@@ -11,12 +11,12 @@
   <div class="contact-list-dropdown" {{action 'toggleOpen'}}>
     {{#each option in options}}
       {{#if option}}
-        {{#view HelloBar.ContactListOption option=option}}
+        <div class="contact-list-option" {{action 'listSelected' option.id bubbles=false}}>
           <div>
             <div class="contact-list-title">{{option.name}}</div>
             <em>{{option.provider}}</em>
           </div>
-        {{/view}}
+        </div>
       {{/if}}
     {{/each}}
   </div>
