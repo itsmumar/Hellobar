@@ -1,7 +1,11 @@
 class ProxyController < ApplicationController
   def proxy
-    result = Net::HTTP.get_response(proxy_url)
-    send_data result.body, disposition: :inline, type: 'image/png', filename: 'image.png'
+    if Rails.env.production?
+      result = Net::HTTP.get_response(proxy_url)
+      send_data result.body, disposition: :inline, type: 'image/png', filename: 'image.png'
+    else
+      render text: "ok"
+    end
   end
 
   private
