@@ -114,6 +114,7 @@ namespace :deploy do
   before 'assets:precompile', 'node:npm_install'
   before 'assets:precompile', 'node:bower_install'
   before 'assets:precompile', 'ember:build'
+  after 'assets:precompile', 'ember:move_non_digest_fonts'
 
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
