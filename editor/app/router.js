@@ -3,6 +3,9 @@ import _ from 'lodash/lodash';
 import config from './config/environment';
 
 const Router = Ember.Router.extend({
+
+  bus: Ember.inject.service('bus'),
+
   location: config.locationType,
   rootURL: window.emberRootURL,
   onTransition: function() {
@@ -13,19 +16,19 @@ const Router = Ember.Router.extend({
       const controller = owner.lookup('controller:' + parentRoute);
       this._applyRoute(controller, routeName);
       this._updateStepNavigation(controller);
+      this._updateRightPaneVisibility(routeName);
     }
-
-    // TODO uncomment and adopt:
-    /*if ((!newRoute) || (newRoute.indexOf('style') !== 0)) {
-      this.get('bus').trigger('hellobar.core.rightPane.hide');
-    }*/
-    // TODO remove this line
-    //console.log('onTransition controller=', controller);
   }.on('didTransition'),
 
   _applyRoute(controller, routeName) {
     if (controller && _.isFunction(controller.applyRoute)) {
       controller.applyRoute(routeName);
+    }
+  },
+
+  _updateRightPaneVisibility(routeName) {
+    if ((!routeName) || (routeName.indexOf('style') !== 0)) {
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
     }
   },
 
