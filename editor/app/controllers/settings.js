@@ -19,6 +19,7 @@ export default Ember.Controller.extend({
   goalSelectionInProgress: false,
 
   applyRoute (routeName) {
+    console.log('settings.applyRoute routeName = ', routeName, 'subtype = ', this.get('model.element_subtype'));
     const routeByElementSubtype = (elementSubtype) => {
       if (/^social/.test(elementSubtype)) {
         return 'settings.social';
@@ -38,35 +39,37 @@ export default Ember.Controller.extend({
       }
     };
     if (_.endsWith(routeName, '.index')) {
-      const newRouteName = routeByElementSubtype(this.set('model.element_subtype'));
+      // We hit the index route. Redirect if required
+      const newRouteName = routeByElementSubtype(this.get('model.element_subtype'));
       if (newRouteName) {
-        this.router.transitionTo(newRouteName);
+        this.transitionToRoute(newRouteName);
       } else {
         this.set('goalSelectionInProgress', true);
       }
     } else {
+      // We hit route for given goal. Update model accordingly
       switch (routeName) {
-        case "settings.emails":
-          this.set("model.element_subtype", "email");
+        case 'settings.emails':
+          this.set('model.element_subtype', 'email');
           break;
-        case "settings.call":
-          this.set("model.element_subtype", "call");
+        case 'settings.call':
+          this.set('model.element_subtype', 'call');
           break;
-        case "settings.click":
-          this.set("model.element_subtype", "traffic");
+        case 'settings.click':
+          this.set('model.element_subtype', 'traffic');
           break;
-        case "settings.announcement":
-          this.set("model.element_subtype", "announcement");
+        case 'settings.announcement':
+          this.set('model.element_subtype', 'announcement');
           break;
-        case "settings.social":
-          this.set("model.element_subtype", "social/like_on_facebook");
+        case 'settings.social':
+          this.set('model.element_subtype', 'social/like_on_facebook');
           break;
       }
       this.set('goalSelectionInProgress', false);
       if (trackEditorFlow) {
-        return InternalTracking.track_current_person("Editor Flow", {
-          step: "Goal Settings",
-          goal: this.get("model.element_subtype")
+        return InternalTracking.track_current_person('Editor Flow', {
+          step: 'Goal Settings',
+          goal: this.get('model.element_subtype')
         });
       }
     }

@@ -7,7 +7,7 @@ export default Ember.Controller.extend({
 
   trackTargetingView: (function () {
     if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) {
-      return InternalTracking.track_current_person("Editor Flow", {step: "Targeting Step"});
+      return InternalTracking.track_current_person('Editor Flow', {step: 'Targeting Step'});
     }
   }).observes('model').on('init'),
 
@@ -23,11 +23,11 @@ export default Ember.Controller.extend({
 
   customRules: ( function () {
     return this.get('model.site.rules').filter(rule => rule.editable === true);
-  }).property("model.site.rules"),
+  }).property('model.site.rules'),
 
   hasCustomRules: ( function () {
     return this.get('customRules').length > 0;
-  }).property("model.site.rules"),
+  }).property('model.site.rules'),
 
   associateRuleToModel(rule) {
     this.set('model.rule_id', rule && rule.id);
@@ -36,18 +36,13 @@ export default Ember.Controller.extend({
 
   navigateRoute(newRoute) {
     this.transitionToRoute(newRoute);
-    return this.set('routeForwarding', newRoute);
   },
-
-  onSubRoute: (function () {
-    return (this.get('routeForwarding') || "").split('.').length > 1;
-  }).property('routeForwarding'),
 
   targetingListCssClasses: (function() {
     let classes = ['step-link-wrapper'];
-    this.get('routeForwarding') && (classes.push('is-selected'));
+    !this.get('targetingSelectionInProgress') && (classes.push('is-selected'));
     return classes.join(' ');
-  }).property('routeForwarding'),
+  }).property('targetingSelectionInProgress'),
 
   //-----------  Original UI Support  -----------#
   // remove these functions and all code paths where targetingUiVariant == false and/or fucntion names match *Original
@@ -55,16 +50,18 @@ export default Ember.Controller.extend({
   // revert this controller to the previous version if we conclude with 'original'
 
   trackUpgrade() {
-    return InternalTracking.track_current_person("Editor Flow", {
-      step: "Choose Targeting Type - Converted to Pro",
-      ui: this.get('targetingUiVariant') ? 'variant' : 'original'
-    });
+    if (trackEditorFlow) {
+      return InternalTracking.track_current_person('Editor Flow', {
+        step: 'Choose Targeting Type - Converted to Pro',
+        ui: this.get('targetingUiVariant') ? 'variant' : 'original'
+      });
+    }
   },
 
 
   canUseRuleModal: ( function () {
-    return this.get("model.site.capabilities.custom_targeted_bars");
-  }).property("model.site.capabilities.custom_targeted_bars"),
+    return this.get('model.site.capabilities.custom_targeted_bars');
+  }).property('model.site.capabilities.custom_targeted_bars'),
 
   popNewRuleModal: (function () {
     if (!this.get('targetingUiVariant') && !this.get('model.rule_id')) {
@@ -82,34 +79,34 @@ export default Ember.Controller.extend({
   //-----------  New/Edit Rule Modal  -----------#
 
   canTarget: ( function () {
-    return this.get("model.site.capabilities.custom_targeted_bars");
-  }).property("model.site.capabilities.custom_targeted_bars"),
+    return this.get('model.site.capabilities.custom_targeted_bars');
+  }).property('model.site.capabilities.custom_targeted_bars'),
 
   ruleOptions: ( function () {
-    let rules = this.get("model.site.rules").slice().filter(rule => rule.editable === true);
-    rules.unshift({name: "Choose a saved rule...", description: "?", editable: true});
+    let rules = this.get('model.site.rules').slice().filter(rule => rule.editable === true);
+    rules.unshift({name: 'Choose a saved rule...', description: '?', editable: true});
     return rules;
-  }).property("model.site.rules"),
+  }).property('model.site.rules'),
 
   ruleOptionsOriginal: ( function () {
-    let rules = this.get("model.site.rules").slice();
-    rules = rules.filter(rule => rule.name !== "Mobile Visitors" && rule.name !== "Homepage Visitors");
-    rules.push({name: "Other...", description: "?", editable: true});
+    let rules = this.get('model.site.rules').slice();
+    rules = rules.filter(rule => rule.name !== 'Mobile Visitors' && rule.name !== 'Homepage Visitors');
+    rules.push({name: 'Other...', description: '?', editable: true});
     return rules;
-  }).property("model.site.rules"),
+  }).property('model.site.rules'),
 
   selectedRule: (function () {
     let selectedRuleId;
     if (!(selectedRuleId = this.get('model.rule_id'))) {
       return null;
     }
-    return this.get("ruleOptions").find(rule => rule.id === selectedRuleId);
-  }).property("model.rule_id", "model.site.rules"),
+    return this.get('ruleOptions').find(rule => rule.id === selectedRuleId);
+  }).property('model.rule_id', 'model.site.rules'),
 
   selectedRuleOriginal: (function () {
     let selectedRuleId = this.get('model.rule_id');
-    return this.get("ruleOptionsOriginal").find(rule => rule.id === selectedRuleId);
-  }).property("model.rule_id", "model.site.rules"),
+    return this.get('ruleOptionsOriginal').find(rule => rule.id === selectedRuleId);
+  }).property('model.rule_id', 'model.site.rules'),
 
   //-----------  Step Settings  -----------#
 
@@ -117,32 +114,52 @@ export default Ember.Controller.extend({
   prevStep: 'design',
   nextStep: false,
 
-  //-----------  Sub-Step Selection  -----------#
 
-  // Sets a property which tells the route to forward to a previously
-  // selected child-route/sub-step
+  targetingSelectionInProgress: false,
 
-  routeForwarding: false,
+  applyRoute(routeName) {
+    const routeByTargeting = (presetRuleName) => {
+      switch (presetRuleName) {
+        case 'Everyone':
+          return 'targeting.everyone';
+        case 'Mobile Visitors':
+          return 'targeting.mobile';
+        case 'Homepage Visitors':
+          return 'targeting.homepage';
+        case 'Saved':
+          return 'targeting.saved';
+        default:
+          return null;
+      }
+    };
+    if (_.endsWith(routeName, '.index')) {
+      // We hit the index route. Redirect if required
+      const newRouteName = routeByTargeting(this.get('model.preset_rule_name'));
+      if (newRouteName) {
+        this.transitionToRoute(newRouteName);
+      } else {
+        this.set('targetingSelectionInProgress', true);
+      }
+    } else {
 
-  setRule: (function () {
-    if (this.get('showUpgradeModal')) {
-      return;
-    }
+      if (this.showUpgradeModal(routeName)) {
+        // If account is free then we show Upgrade Dialog and cannot proceed with targeting setting
+        return;
+      }
 
-    Ember.run.next(() => {
-
+      // We hit route for given targeting. Update model accordingly
       let defaultRules = this.get('defaultRules');
       let customRules = this.get('customRules');
 
-      switch (this.get('routeForwarding')) {
+      switch (routeName) {
         case 'targeting.everyone':
-          this.associateRuleToModel(defaultRules["Everyone"]);
+          this.associateRuleToModel(defaultRules['Everyone']);
           break;
         case 'targeting.mobile':
-          this.associateRuleToModel(defaultRules["Mobile Visitors"]);
+          this.associateRuleToModel(defaultRules['Mobile Visitors']);
           break;
         case 'targeting.homepage':
-          this.associateRuleToModel(defaultRules["Homepage Visitors"]);
+          this.associateRuleToModel(defaultRules['Homepage Visitors']);
           break;
         case 'targeting.custom':
           this.associateRuleToModel(null);
@@ -163,31 +180,31 @@ export default Ember.Controller.extend({
         default:
           this.associateRuleToModel(null);
       }
+      this.set('targetingSelectionInProgress', false);
 
       if (trackEditorFlow) {
-        return InternalTracking.track_current_person("Editor Flow", {
-          step: "Choose Targeting Type",
-          targeting: this.get('routeForwarding')
+        return InternalTracking.track_current_person('Editor Flow', {
+          step: 'Choose Targeting Type',
+          targeting: this.get(routeName)
         });
       }
-    });
+    }
+  },
 
-  }).observes('routeForwarding'),
-
-  showUpgradeModal: (function () {
-    let newRoute = this.get('routeForwarding');
-
-    if (newRoute === 'targeting' || newRoute === 'targeting.everyone' || this.get("canTarget")) {
+  showUpgradeModal(newRoute) {
+    if (newRoute === 'targeting.index' || newRoute === 'targeting' || newRoute === 'targeting.everyone' || this.get('canTarget')) {
       return false;
     } else {
-      InternalTracking.track_current_person("Editor Flow", {
-        step: "Choose Targeting Type - Upgrade Modal",
-        targeting: newRoute
-      });
-      this.send("openUpgradeModal", newRoute);
+      if (trackEditorFlow) {
+        InternalTracking.track_current_person('Editor Flow', {
+          step: 'Choose Targeting Type - Upgrade Modal',
+          targeting: newRoute
+        });
+      }
+      this.send('openUpgradeModal', newRoute);
       return true;
     }
-  }).property('routeForwarding'),
+  },
 
   afterModel: (function () {
     let cookieSettings = this.get('model.settings.cookie_settings');
@@ -223,18 +240,18 @@ export default Ember.Controller.extend({
       }
     },
 
-    openUpgradeModal(successRoute = "targeting") {
+    openUpgradeModal(successRoute = 'targeting') {
       let controller = this;
-      controller.send("resetRuleDropdown");
+      controller.send('resetRuleDropdown');
 
       let options = {
-        site: controller.get("model.site"),
+        site: controller.get('model.site'),
         successCallback() {
           controller.set('model.site.capabilities', this.site.capabilities);
-          controller.send("trackUpgrade");
-          return controller.send("navigateRoute", successRoute);
+          controller.send('trackUpgrade');
+          return controller.send('navigateRoute', successRoute);
         },
-        upgradeBenefit: "create custom-targeted rules"
+        upgradeBenefit: 'create custom-targeted rules'
       };
       return new UpgradeAccountModal(options).open();
     },
@@ -250,20 +267,20 @@ export default Ember.Controller.extend({
           let updatedRule = controller.get('model.site.rules').find(rule => rule.id === ruleData.id);
 
           if (updatedRule) {
-            Ember.set(updatedRule, "conditions", ruleData.conditions);
-            Ember.set(updatedRule, "description", ruleData.description);
-            Ember.set(updatedRule, "name", ruleData.name);
-            Ember.set(updatedRule, "match", ruleData.match);
-            Ember.set(updatedRule, "priority", ruleData.priority);
+            Ember.set(updatedRule, 'conditions', ruleData.conditions);
+            Ember.set(updatedRule, 'description', ruleData.description);
+            Ember.set(updatedRule, 'name', ruleData.name);
+            Ember.set(updatedRule, 'match', ruleData.match);
+            Ember.set(updatedRule, 'priority', ruleData.priority);
           } else { // we created a new rule
             controller.get('model.site.rules').push(ruleData);
           }
 
-          controller.send("associateRuleToModel", ruleData);
+          controller.send('associateRuleToModel', ruleData);
           return controller.notifyPropertyChange('model.site.rules');
         },
         close() {
-          return controller.send("resetRuleDropdown", ruleData);
+          return controller.send('resetRuleDropdown', ruleData);
         }
       };
 
@@ -286,14 +303,14 @@ export default Ember.Controller.extend({
 
     openRuleModalOriginal(ruleData) {
       if (trackEditorFlow) {
-        InternalTracking.track_current_person("Editor Flow", {
-          step: "Edit Targeting",
-          goal: this.get("model.element_subtype"),
-          style: this.get("model.type")
+        InternalTracking.track_current_person('Editor Flow', {
+          step: 'Edit Targeting',
+          goal: this.get('model.element_subtype'),
+          style: this.get('model.type')
         });
       }
-      if (!this.get("canUseRuleModal")) {
-        return this.send("openUpgradeModalOriginal", ruleData);
+      if (!this.get('canUseRuleModal')) {
+        return this.send('openUpgradeModalOriginal', ruleData);
       }
 
       ruleData.siteID = window.siteID;
@@ -306,12 +323,13 @@ export default Ember.Controller.extend({
           let updatedRule = controller.get('model.site.rules').find(rule => rule.id === ruleData.id);
 
           if (updatedRule) {
-            Ember.set(updatedRule, "conditions", ruleData.conditions);
-            Ember.set(updatedRule, "description", ruleData.description);
-            Ember.set(updatedRule, "name", ruleData.name);
-            Ember.set(updatedRule, "match", ruleData.match);
-            Ember.set(updatedRule, "priority", ruleData.priority);
-          } else { // we created a new rule
+            Ember.set(updatedRule, 'conditions', ruleData.conditions);
+            Ember.set(updatedRule, 'description', ruleData.description);
+            Ember.set(updatedRule, 'name', ruleData.name);
+            Ember.set(updatedRule, 'match', ruleData.match);
+            Ember.set(updatedRule, 'priority', ruleData.priority);
+          } else {
+            // we created a new rule
             controller.get('model.site.rules').push(ruleData);
           }
 
@@ -319,7 +337,7 @@ export default Ember.Controller.extend({
           return controller.notifyPropertyChange('model.site.rules');
         },
         close() {
-          return controller.send("resetRuleDropdownOriginal", ruleData);
+          return controller.send('resetRuleDropdownOriginal', ruleData);
         }
       };
 
@@ -328,15 +346,15 @@ export default Ember.Controller.extend({
 
     openUpgradeModalOriginal(ruleData = {}) {
       let controller = this;
-      controller.send("resetRuleDropdownOriginal", ruleData);
+      controller.send('resetRuleDropdownOriginal', ruleData);
 
       let options = {
-        site: controller.get("model.site"),
+        site: controller.get('model.site'),
         successCallback() {
           controller.set('model.site.capabilities', this.site.capabilities);
-          return controller.send("trackUpgrade");
+          return controller.send('trackUpgrade');
         },
-        upgradeBenefit: "create custom-targeted rules"
+        upgradeBenefit: 'create custom-targeted rules'
       };
       return new UpgradeAccountModal(options).open();
     }

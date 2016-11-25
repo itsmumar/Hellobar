@@ -89,39 +89,11 @@ export default Ember.Route.extend({
 
     // Set sub-step forwarding on application load
 
-    let style = this.controllerFor('style');
-    switch (model.type) {
-      case 'Takeover':
-        Ember.set(style, 'routeForwarding','style.takeover');
-        break;
-      case 'Slider':
-        Ember.set(style, 'routeForwarding', 'style.slider');
-        break;
-      case 'Modal':
-        Ember.set(style, 'routeForwarding', 'style.modal');
-        break;
-      default:
-        Ember.set(style, 'routeForwarding', model.id ? 'style.bar' : false);
-    }
+
 
     let targeting = this.controllerFor('targeting');
     if (model.id) {
-      switch (model.preset_rule_name) {
-        case 'Everyone':
-          Ember.set(targeting, 'routeForwarding', 'targeting.everyone');
-          break;
-        case 'Mobile Visitors':
-          Ember.set(targeting, 'routeForwarding', 'targeting.mobile');
-          break;
-        case 'Homepage Visitors':
-          Ember.set(targeting, 'routeForwarding', 'targeting.homepage');
-          break;
-        case 'Saved':
-          Ember.set(targeting, 'routeForwarding', 'targeting.saved');
-          break;
-        default:
-          Ember.set(targeting, 'routeForwarding', false);
-      }
+
     }
 
     return this._super(controller, model);

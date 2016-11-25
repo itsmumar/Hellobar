@@ -51,22 +51,36 @@ export default Ember.Controller.extend({
     return this.get('isModalType') && !this.get('themeSelectionInProgress');
   }).property('themeSelectionInProgress', 'isModalType'),
 
-  //-----------  Sub-Step Selection  -----------#
+  elementTypeSelectionInProgress: false,
+  userSelectedElementTypeExplicitly: false,
+  seeingElementFirstTime: true,
 
-  // Sets a property which tells the route to forward to a previously
-  // selected child route (ie. sub-step)
-
-  routeForwarding: false,
-
-  setType: (function () {
-    var applyRouteForwarding = () => {
-
-      if (!this.get('model')) {
-        setTimeout(applyRouteForwarding, 100);
-        return;
+  applyRoute (routeName) {
+    const routeByElementType = (elementType, elementId) => {
+      switch (elementType) {
+        case 'Takeover':
+          return 'style.takeover';
+        case 'Slider':
+          return 'style.slider';
+        case 'Modal':
+          return 'style.modal';
+        case 'Bar':
+          return (!this.userSelectedElementTypeExplicitly && !elementId) ? null : 'style.bar';
+        default:
+          return null;
       }
-
-      switch (this.get('routeForwarding')) {
+    };
+    if (_.endsWith(routeName, '.index')) {
+      // We hit the index route. Redirect if required
+      const newRouteName = routeByElementType(this.get('model.type'), this.get('model.id'));
+      if (newRouteName) {
+        this.transitionToRoute(newRouteName);
+      } else {
+        this.set('elementTypeSelectionInProgress', true);
+      }
+    } else {
+      // We hit route for given element type. Update model accordingly
+      switch (routeName) {
         case 'style.modal':
           this.set('model.type', 'Modal');
           break;
@@ -79,22 +93,22 @@ export default Ember.Controller.extend({
         default:
           this.set('model.type', 'Bar');
       }
+      this.set('elementTypeSelectionInProgress', false);
+      this.set('userSelectedElementTypeExplicitly', true);
       if (trackEditorFlow) {
-        return InternalTracking.track_current_person("Editor Flow", {
-          step: "Style Settings",
-          goal: this.get("model.element_subtype")
+        return InternalTracking.track_current_person('Editor Flow', {
+          step: 'Style Settings',
+          goal: this.get('model.element_subtype')
         });
       }
-    };
-    applyRouteForwarding();
-
-  }).observes('routeForwarding'),
+    }
+  },
 
   trackStyleView: (function () {
     if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) {
-      return InternalTracking.track_current_person("Editor Flow", {
-        step: "Choose Style",
-        goal: this.get("model.element_subtype")
+      return InternalTracking.track_current_person('Editor Flow', {
+        step: 'Choose Style',
+        goal: this.get('model.element_subtype')
       });
     }
   }).observes('model').on('init'),
@@ -135,11 +149,11 @@ export default Ember.Controller.extend({
     }
   },
 
-  elementTypeListCssClasses: (function() {
+  elementTypeListCssClasses: (function () {
     let classes = ['step-link-wrapper'];
-    this.get('routeForwarding') && (classes.push('is-selected'));
+    !this.get('elementTypeSelectionInProgress') && (classes.push('is-selected'));
     return classes.join(' ');
-  }).property('routeForwarding'),
+  }).property('elementTypeSelectionInProgress'),
 
   //-------------------------------------------------------------
 
@@ -150,8 +164,7 @@ export default Ember.Controller.extend({
   actions: {
 
     changeStyle() {
-      this.set('routeForwarding', false);
-      this.transitionToRoute('style');
+      this.set('elementTypeSelectionInProgress', true);
       return false;
     },
 
