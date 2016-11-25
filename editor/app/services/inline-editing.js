@@ -287,6 +287,7 @@ export default Ember.Service.extend({
       initOnClick: false,
       zIndex: 9888,
       imageUploadURL: `/sites/${siteID}/image_uploads`,
+      imageResize: false,
       requestHeaders: {
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       }
