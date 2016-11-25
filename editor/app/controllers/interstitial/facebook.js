@@ -28,12 +28,14 @@ export default Ember.Controller.extend({
 
   inputIsInvalid: ( function () {
     return !!(
-      !this.get("model.settings.use_location_for_url") &&
-      Ember.isEmpty(this.get("model.settings.url_to_like"))
+      Ember.isEmpty(this.get("model.headline")) ||
+      (!this.get("model.settings.use_location_for_url") &&
+      Ember.isEmpty(this.get("model.settings.url_to_like")))
     );
   }).property(
     "model.settings.use_location_for_url",
-    "model.settings.url_to_like"
+    "model.settings.url_to_like",
+    "model.headline"
   ),
 
   actions: {
