@@ -42,10 +42,6 @@ export default Ember.Controller.extend({
   focusedColor: null,
 
 
-  isMobile: Ember.computed.alias('controller.isMobile'),
-  isFullscreen: Ember.computed.alias('controller.isFullscreen'),
-  isCallType: Ember.computed.equal('controller.model.element_subtype', 'call'),
-
   //-----------  Element Preview  -----------#
 
   // Render the element in the preview pane whenever style-affecting attributes change
