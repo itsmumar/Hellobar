@@ -169,8 +169,9 @@ export default Ember.Controller.extend({
     },
 
     changeTheme() {
+      const controller = this;
       let confirmModal = null;
-      let modalOptions = {
+      const modalOptions = {
         title: 'Are you sure you want to change the theme?',
         text: 'We will save the content and style of your current theme before the update',
         confirmBtnText: 'Yes, Change The Theme',
@@ -178,7 +179,7 @@ export default Ember.Controller.extend({
         showCloseIcon: true,
         confirm() {
           confirmModal.close();
-          this.get('bus').trigger('hellobar.core.rightPane.show', {
+          controller.get('bus').trigger('hellobar.core.rightPane.show', {
             componentName: 'theme-tile-grid',
             componentOptions: {}
           });
