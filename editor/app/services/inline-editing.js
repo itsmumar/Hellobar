@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 
 // Froala Editor license key
 const froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
