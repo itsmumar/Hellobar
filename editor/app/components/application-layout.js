@@ -11,10 +11,7 @@ export default Ember.Component.extend({
   // and uses them to generate state-specific classes for CSS. All
   // animations are handled by CSS transitions and toggleing classes.
 
-  // TODO uncomment and adopt?
-  //isMobile: Ember.computed.alias('controller.isMobile'),
-  //isFullscreen: Ember.computed.alias('controller.isFullscreen'),
-  //isCallType: Ember.computed.equal('controller.model.element_subtype', 'call'),
+
 
   //-----------  Click Action  -----------#
 
