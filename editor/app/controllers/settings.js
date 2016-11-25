@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 
 export default Ember.Controller.extend({
 
@@ -15,15 +16,36 @@ export default Ember.Controller.extend({
   nextStep: 'style',
   hasSideArrows: ( () => false).property(),
 
-  //-----------  Sub-Step Selection  -----------#
+  goalSelectionInProgress: false,
 
-  setSubtype: (function () {
-    Ember.run.next(() => {
-      //if (!_.includes(this.get('routeForwarding'), '.')) {
-      //  this.set('routeForwarding', false);
-      //  return;
-      //}
-      switch (this.get("routeForwarding")) {
+  applyRoute (routeName) {
+    const routeByElementSubtype = (elementSubtype) => {
+      if (/^social/.test(elementSubtype)) {
+        return 'settings.social';
+      } else {
+        switch (elementSubtype) {
+          case 'call':
+            return 'settings.call';
+          case 'email':
+            return 'settings.emails';
+          case 'traffic':
+            return 'settings.click';
+          case 'announcement':
+            return 'settings.announcement';
+          default:
+            return null;
+        }
+      }
+    };
+    if (_.endsWith(routeName, '.index')) {
+      const newRouteName = routeByElementSubtype(this.set('model.element_subtype'));
+      if (newRouteName) {
+        this.router.transitionTo(newRouteName);
+      } else {
+        this.set('goalSelectionInProgress', true);
+      }
+    } else {
+      switch (routeName) {
         case "settings.emails":
           this.set("model.element_subtype", "email");
           break;
@@ -40,34 +62,25 @@ export default Ember.Controller.extend({
           this.set("model.element_subtype", "social/like_on_facebook");
           break;
       }
-      this.notifyPropertyChange('model.element_subtype');
+      this.set('goalSelectionInProgress', false);
       if (trackEditorFlow) {
         return InternalTracking.track_current_person("Editor Flow", {
           step: "Goal Settings",
           goal: this.get("model.element_subtype")
         });
       }
-    });
-    //};
-    //applyRouteForwarding();
-  }).observes('routeForwarding'),
+    }
+  },
 
-  // Sets a property which tells the route to forward to a previously
-  // selected child route (ie. sub-step)
-
-  routeForwarding: false,
-
-  goalListCssClasses: (function() {
+  goalListCssClasses: (function () {
     let classes = ['step-link-wrapper'];
-    this.get('routeForwarding') && (classes.push('is-selected'));
+    !this.get('goalSelectionInProgress') && (classes.push('is-selected'));
     return classes.join(' ');
-  }).property('routeForwarding'),
+  }).property('goalSelectionInProgress'),
 
   actions: {
-
     changeSettings() {
-      this.set('routeForwarding', false);
-      this.transitionToRoute('settings');
+      this.set('goalSelectionInProgress', true);
       return false;
     }
   }

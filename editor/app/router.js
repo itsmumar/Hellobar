@@ -7,11 +7,11 @@ const Router = Ember.Router.extend({
   rootURL: window.emberRootURL,
   onTransition: function() {
     const owner = Ember.getOwner(this);
-    const route = this.currentRouteName;
-    const parentRoute = route.split('.')[0];
+    const routeName = this.currentRouteName;
+    const parentRoute = routeName.split('.')[0];
     if (owner.lookup('route:application').get('currentModel')) {
-      const controller = this.container.lookup('controller:' + parentRoute);
-      this._updateRouteForwarding(controller, route);
+      const controller = owner.lookup('controller:' + parentRoute);
+      this._applyRoute(controller, routeName);
       this._updateStepNavigation(controller);
     }
 
@@ -23,19 +23,15 @@ const Router = Ember.Router.extend({
     //console.log('onTransition controller=', controller);
   }.on('didTransition'),
 
-  _updateRouteForwarding(controller, route) {
-    console.log('_updateRouteForwarding controller = ', controller, ' routeForwarding = ', controller.get('routeForwarding'), ' route = ', route);
-    if (controller && (!_.isUndefined(controller.get('routeForwarding')))) {
-      if (_.includes(route, '.')) {
-        controller.set('routeForwarding', route);
-      }
-
+  _applyRoute(controller, routeName) {
+    if (controller && _.isFunction(controller.applyRoute)) {
+      controller.applyRoute(routeName);
     }
   },
 
   _updateStepNavigation(controller) {
     if (controller.step) {
-      const applicationController = this.container.lookup('controller:application');
+      const applicationController = Ember.getOwner(this).lookup('controller:application');
       applicationController.setProperties({
         isFullscreen: false,
         currentStep: controller.step,

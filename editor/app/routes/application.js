@@ -88,30 +88,6 @@ export default Ember.Route.extend({
     });
 
     // Set sub-step forwarding on application load
-    let settings = this.controllerFor('settings');
-    let settingsRoute;
-    if (/^social/.test(model.element_subtype)) {
-      settingsRoute = 'settings.social';
-    } else {
-      switch (model.element_subtype) {
-        case 'call':
-          settingsRoute = 'settings.call';
-          break;
-        case 'email':
-          settingsRoute = 'settings.emails';
-          break;
-        case 'traffic':
-          settingsRoute = 'settings.click';
-          break;
-        case 'announcement':
-          settingsRoute = 'settings.announcement';
-          break;
-        default:
-          settingsRoute = false;
-      }
-    }
-    Ember.set(settings, 'routeForwarding', settingsRoute);
-    settingsRoute && this.router.transitionTo(settingsRoute);
 
     let style = this.controllerFor('style');
     switch (model.type) {
