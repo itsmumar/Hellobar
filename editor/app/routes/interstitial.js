@@ -1,14 +1,6 @@
 import Ember from 'ember';
 
-// TODO remove
-console.log('interstitial route definition');
-
 export default Ember.Route.extend({
-
-  init() {
-    // TODO remove
-    console.log('interstitial route init');
-  },
 
   model() {
     return this.modelFor("application");
@@ -42,31 +34,3 @@ export default Ember.Route.extend({
     }
   }
 });
-
-// TODO where to put this block?
-/*
-let NestedInterstitialRoute = HelloBar.InterstitialRoute.extend({
-  renderTemplate() {
-    return this.render({
-      into: "interstitial"
-    }); // render sub-interstitial templates into main "interstitial" template
-  },
-
-  setupController(controller, model) {
-    this._super(controller, model);
-
-    controller.setDefaults();
-    return this.setSettingsForwarding(model);
-  }
-});
-*/
-
-
-// TODO remove this?
-/*
-HelloBar.InterstitialIndexRoute = NestedInterstitialRoute.extend();
-HelloBar.InterstitialMoneyRoute = NestedInterstitialRoute.extend();
-HelloBar.InterstitialContactsRoute = NestedInterstitialRoute.extend();
-HelloBar.InterstitialCallRoute = NestedInterstitialRoute.extend();
-HelloBar.InterstitialFacebookRoute = NestedInterstitialRoute.extend();
-*/

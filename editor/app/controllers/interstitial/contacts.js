@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
-  showEmailVolume: (HB_ONBOARDING_EMAIL_VOLUME === "messaging"),
+  showEmailVolume: false,
 
   monthlyPageviews: ( function () {
     return this.get("model.site.monthly_pageviews") || 0;
