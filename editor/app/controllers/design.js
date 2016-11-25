@@ -207,8 +207,6 @@ export default Ember.Controller.extend({
 
     selectTheme(theme) {
       this.set('model.theme_id', theme.id);
-      // TODO remove:
-      console.log(theme);
     },
 
     selectImagePlacement(imagePlacement) {
