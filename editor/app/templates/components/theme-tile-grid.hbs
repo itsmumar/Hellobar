@@ -1,5 +1,23 @@
-{{#each themes as |theme| }}
-  <div data-theme-id="{{theme.id}}" class="theme-tile-wrapper">
-    {{theme-tile theme=theme}}
-  </div>
-{{/each}}
+<div class="section-header">
+  <h3>Themes</h3>
+  <div class="description">Predefined styles for the default modal bar</div>
+</div>
+<div class="section">
+  {{#each genericThemes as |theme| }}
+    <div data-theme-id="{{theme.id}}" class="theme-tile-wrapper">
+      {{theme-tile theme=theme}}
+    </div>
+  {{/each}}
+</div>
+
+<div class="section-header">
+  <h3>Templates</h3>
+  <div class="description">Modal bar templates customized for different goals</div>
+</div>
+<div class="section">
+  {{#each templateThemes as |theme| }}
+    <div data-theme-id="{{theme.id}}" class="theme-tile-wrapper">
+      {{theme-tile theme=theme}}
+    </div>
+  {{/each}}
+</div>

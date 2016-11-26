@@ -129,6 +129,7 @@
     window.availableThemes = [{
       "id": "classic",
       "name": "Hello Bar Classic",
+      "type": "generic",
       "defaults": {
         "Bar": {
           "background_color": "E8562A",
@@ -209,6 +210,7 @@
     }, {
       "id": "blue-avalanche",
       "name": "Blue Avalanche",
+      "type": "generic",
       "defaults": {
         "Bar": {
           "background_color": "FFFFFF",
@@ -249,6 +251,7 @@
     }, {
       "id": "classy",
       "name": "Classy",
+      "type": "generic",
       "defaults": {
         "Bar": {
           "background_color": "FFFFFF",
@@ -528,12 +531,19 @@
         "position_selectable": true
       },
       "image_upload_id": null
+    }, {
+      "id": "traffic-growth",
+      "name": "Traffic Growth",
+      "type": "template"
     }];
     window.HB_ONBOARDING_EMAIL_VOLUME = 'messaging';
   </script>
   <script src="https://use.typekit.net/qzg5yph.js" type="text/javascript"></script>
   <script>
-    try { Typekit.load({ async: true }); } catch (e) {}
+    try {
+      Typekit.load({async: true});
+    } catch (e) {
+    }
   </script>
 
   {{content-for "head-footer"}}
