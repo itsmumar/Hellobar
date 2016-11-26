@@ -287,14 +287,17 @@ export default Ember.Controller.extend({
   }).observes("model.phone_number", "phone_number", "model.phone_country_code"),
 
   applyCurrentTheme() {
-    let allThemes = availableThemes;
-    let currentThemeId = this.get('model.theme_id');
-    let currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
-    let themeStyleDefaults = currentTheme.defaults[this.get('model.type')] || {};
-    return _.each(themeStyleDefaults, (value, key) => {
-        return this.set(`model.${key}`, value);
-      }
-    );
+    const allThemes = availableThemes;
+    const currentThemeId = this.get('model.theme_id');
+    const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
+    const currentThemeType = this.get('model.type');
+    if (currentTheme.defaults && currentTheme.defaults[currentThemeType]) {
+      let themeStyleDefaults = currentTheme.defaults[currentThemeType] || {};
+      _.each(themeStyleDefaults, (value, key) => {
+          return this.set(`model.${key}`, value);
+        }
+      );
+    }
   },
 
   onCurrentThemeChanged: (function () {

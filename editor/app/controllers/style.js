@@ -32,19 +32,15 @@ export default Ember.Controller.extend({
   },
 
   currentTheme: (function () {
-    let allThemes = availableThemes;
-    let currentThemeId = this.get('model.theme_id');
-    let currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
+    const allThemes = availableThemes;
+    const currentThemeId = this.get('model.theme_id');
+    const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
     return currentTheme;
   }).property('model.theme_id'),
 
   currentThemeName: (function () {
-    let theme = this.get('currentTheme');
-    if (theme) {
-      return theme.name;
-    } else {
-      return '';
-    }
+    const theme = this.get('currentTheme');
+    return theme ? theme.name : '';
   }).property('currentTheme'),
 
   shouldShowThemeInfo: (function () {

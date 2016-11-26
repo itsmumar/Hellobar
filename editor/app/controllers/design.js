@@ -73,6 +73,16 @@ export default Ember.Controller.extend({
     }
   ),
 
+  currentThemeIsGeneric: function() {
+    const currentTheme = this.get('currentTheme');
+    return currentTheme ? currentTheme.type === 'generic' : false;
+  }.property('currentTheme'),
+
+  currentThemeIsTemplate: function() {
+    const currentTheme = this.get('currentTheme');
+    return currentTheme ? currentTheme.type === 'template' : false;
+  }.property('currentTheme'),
+
   // Editor UI Properties
   imageUploadCopy: Ember.computed.oneWay('currentTheme.image.upload_copy'),
 
