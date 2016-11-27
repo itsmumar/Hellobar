@@ -177,23 +177,27 @@ class ScriptGenerator < Mustache
       end
     end
 
-    template_names.map do |name|
-      # TODO: Please fix me - Bad Code
-      canonical_name = if name[2] == 'generic'
-                         name.first(2).join('_')
-                       else
-                         # This supports only 1 template (traffic_growth)
-                         unless duplicating
-                           duplicating = true
-                           name[1]
-                         end
-                       end
+    template_names =  template_names.map do |name|
+                        # TODO: Please fix me - Bad Code
+                        canonical_name = if name[2] == 'generic'
+                                           name.first(2).join('_')
+                                         else
+                                           # This supports only 1 template (traffic_growth)
+                                           unless duplicating
+                                             duplicating = true
+                                             name[1]
+                                           end
+                                         end
 
-      {
-        name: canonical_name,
-        markup: content_template(name[0], name[1], name[2])
-      }
-    end
+                        if canonical_name.present?
+                          {
+                            name: canonical_name,
+                            markup: content_template(name[0], name[1], name[2])
+                          }
+                        end
+                      end
+    template_names.delete(nil)
+    template_names                         
   end
 
   def rules
