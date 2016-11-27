@@ -157,13 +157,19 @@ class ScriptGenerator < Mustache
   def templates
     template_names = Set.new
     templates = Theme.where(type: 'template').collect(&:name)
-    category = 'generic'
+    duplicating = false
 
     if options[:templates]
-      options[:templates].each { |t| template_names << t.split("_", 2) }
+      options[:templates].each { |t|
+        temp_name = t.split("_", 2)
+        category = 'generic'
+        category = 'template' if templates.include?(temp_name[1].titleize)
+        template_names << (temp_name << category)
+      }
     else
       site.site_elements.active.each do |se|
         subtype = se.element_subtype
+        category = 'generic'
         category = 'template' if templates.include?(subtype.titleize)
 
         template_names << [se.class.name.downcase, subtype, category]
@@ -172,8 +178,19 @@ class ScriptGenerator < Mustache
     end
 
     template_names.map do |name|
+      # TODO: Please fix me - Bad Code
+      canonical_name = if name[2] == 'generic'
+                         name.first(2).join('_')
+                       else
+                         # This supports only 1 template (traffic_growth)
+                         unless duplicating
+                           duplicating = true
+                           name[1]
+                         end
+                       end
+
       {
-        name: name.join('_'),
+        name: canonical_name,
         markup: content_template(name[0], name[1], name[2])
       }
     end
