@@ -5,6 +5,8 @@ export default Ember.Controller.extend({
 
   applicationController: Ember.inject.controller('application'),
 
+  theming: Ember.inject.service(),
+
   //-----------  Step Settings  -----------#
 
   step: 3,
@@ -20,7 +22,7 @@ export default Ember.Controller.extend({
     {value: 'below-caption', label: 'Below Caption'}
   ],
 
-  selectedImagePlacementOption: (function() {
+  selectedImagePlacementOption: (function () {
     const imagePlacement = this.get('model.image_placement');
     const options = this.get('imagePlacementOptions');
     return _.find(options, imagePlacement);
@@ -66,19 +68,21 @@ export default Ember.Controller.extend({
 
   //----------- Theme Settings  -----------#
 
-  themeOptions: availableThemes,
+  themeOptions: function () {
+    return this.get('theming').availableThemes();
+  }.property(),
 
   currentTheme: Ember.computed('model.theme_id', 'themeOptions', function () {
       return _.find(this.get('themeOptions'), theme => theme.id === this.get('model.theme_id'));
     }
   ),
 
-  currentThemeIsGeneric: function() {
+  currentThemeIsGeneric: function () {
     const currentTheme = this.get('currentTheme');
     return currentTheme ? currentTheme.type === 'generic' : false;
   }.property('currentTheme'),
 
-  currentThemeIsTemplate: function() {
+  currentThemeIsTemplate: function () {
     const currentTheme = this.get('currentTheme');
     return currentTheme ? currentTheme.type === 'template' : false;
   }.property('currentTheme'),
@@ -175,12 +179,12 @@ export default Ember.Controller.extend({
   setHBCallbacks: ( () =>
       // Listen for when question answers are pressed and change the question tabs
       // TODO refactor (use ivy-tabs features)
-      HB.on && HB.on("answerSelected", choice => {
-          this.set('model.paneSelectedIndex', choice);
-          this.set('paneSelection', (this.get('paneSelection') || 0) + 1);
-          return this.send(`showResponse${choice}`);
-        }
-      )
+    HB.on && HB.on("answerSelected", choice => {
+        this.set('model.paneSelectedIndex', choice);
+        this.set('paneSelection', (this.get('paneSelection') || 0) + 1);
+        return this.send(`showResponse${choice}`);
+      }
+    )
   ).on("init"),
 
   //-----------  Color Tracking  -----------#

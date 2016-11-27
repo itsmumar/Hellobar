@@ -3,7 +3,11 @@ import _ from 'lodash/lodash';
 
 export default Ember.Component.extend({
 
-  allThemes: availableThemes,
+  theming: Ember.inject.service(),
+
+  allThemes: function () {
+    return this.get('theming').availableThemes();
+  }.property(),
 
   genericThemes: function () {
     return _.filter(this.get('allThemes'), (theme) => theme.type === 'generic');

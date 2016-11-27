@@ -5,6 +5,8 @@ export default Ember.Controller.extend({
 
   inlineEditing: Ember.inject.service(),
 
+  theming: Ember.inject.service(),
+
   init() {
     Ember.run.next(() => {
         if (this.get('model.id') === null) {
@@ -287,7 +289,7 @@ export default Ember.Controller.extend({
   }).observes("model.phone_number", "phone_number", "model.phone_country_code"),
 
   applyCurrentTheme() {
-    const allThemes = availableThemes;
+    const allThemes = this.get('theming').availableThemes();
     const currentThemeId = this.get('model.theme_id');
     const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
     const currentThemeType = this.get('model.type');

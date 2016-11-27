@@ -5,6 +5,7 @@ export default Ember.Controller.extend({
 
   bus: Ember.inject.service(),
   inlineEditing: Ember.inject.service(),
+  theming: Ember.inject.service(),
 
   //-----------  Step Settings  -----------#
 
@@ -32,7 +33,7 @@ export default Ember.Controller.extend({
   },
 
   currentTheme: (function () {
-    const allThemes = availableThemes;
+    const allThemes = this.get('theming').availableThemes();
     const currentThemeId = this.get('model.theme_id');
     const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
     return currentTheme;
