@@ -9,21 +9,22 @@ export default Ember.Controller.extend({
   init() {
     this.get('inlineEditing').addFieldChangeListener(this);
     return Ember.run.schedule('afterRender', this, () => {
-        let sortable;
-        let sortableGroupElement = Ember.$('.js-fields-to-collect');
-        return sortable = new Sortable(sortableGroupElement[0], {
-          draggable: '.item-block',
-          filter: '.denied',
-          onEnd: evt => {
-            let fields = Ember.copy(this.get('model.settings.fields_to_collect'));
-            let elementsToMove = fields.splice(evt.oldIndex, 1);
-            fields.splice(evt.newIndex, 0, elementsToMove[0]);
-            this.set('model.settings.fields_to_collect', fields);
-            return setTimeout(()=> {
-                return sortableGroupElement.find('.item-block[draggable="false"]').remove();
+        const $sortableGroupElement = Ember.$('.js-fields-to-collect');
+        if ($sortableGroupElement.length > 0) {
+          new Sortable($sortableGroupElement[0], {
+            draggable: '.item-block',
+            filter: '.denied',
+            onEnd: evt => {
+              let fields = Ember.copy(this.get('model.settings.fields_to_collect'));
+              let elementsToMove = fields.splice(evt.oldIndex, 1);
+              fields.splice(evt.newIndex, 0, elementsToMove[0]);
+              this.set('model.settings.fields_to_collect', fields);
+              return setTimeout(()=> {
+                return $sortableGroupElement.find('.item-block[draggable="false"]').remove();
               }, 0);
-          }
-        });
+            }
+          });
+        }
       }
     );
   },
