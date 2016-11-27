@@ -156,20 +156,25 @@ class ScriptGenerator < Mustache
 
   def templates
     template_names = Set.new
+    templates = Theme.where(type: 'template').collect(&:name)
+    category = 'generic'
 
     if options[:templates]
       options[:templates].each { |t| template_names << t.split("_", 2) }
     else
       site.site_elements.active.each do |se|
-        template_names << [se.class.name.downcase, se.element_subtype]
-        template_names << [se.class.name.downcase, 'question'] if se.use_question?
+        subtype = se.element_subtype
+        category = 'template' if templates.include?(subtype.titleize)
+
+        template_names << [se.class.name.downcase, subtype, category]
+        template_names << [se.class.name.downcase, 'question', category] if se.use_question?
       end
     end
 
     template_names.map do |name|
       {
         name: name.join('_'),
-        markup: content_template(name[0], name[1])
+        markup: content_template(name[0], name[1], name[2])
       }
     end
   end
@@ -208,12 +213,16 @@ private
     end
   end
 
-  def content_template(element_class, type)
+  def content_template(element_class, type, category = 'generic')
     ActiveSupport.escape_html_entities_in_json = false
 
-    content = (content_header(element_class) +
-                content_markup(element_class, type) +
-                content_footer(element_class)).to_json
+    content = if category == 'generic'
+                (content_header(element_class) +
+                  content_markup(element_class, type) +
+                  content_footer(element_class)).to_json
+              else
+                content_markup(element_class, type).to_json
+              end
 
     ActiveSupport.escape_html_entities_in_json = true
 
