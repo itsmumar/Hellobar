@@ -4,6 +4,7 @@ import _ from 'lodash/lodash';
 export default Ember.Controller.extend({
 
   inlineEditing: Ember.inject.service(),
+  applicationController: Ember.inject.controller('application'),
 
   init() {
     this.get('inlineEditing').addFieldChangeListener(this);
@@ -29,6 +30,8 @@ export default Ember.Controller.extend({
 
 // TODO remove this
   collectNames: Ember.computed.alias('model.settings.collect_names'),
+
+  currentThemeIsGeneric: Ember.computed.alias('applicationController.currentThemeIsGeneric'),
 
   newFieldToCollect: null,
 

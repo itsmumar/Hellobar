@@ -47,10 +47,12 @@
       {{/if}}
     {{/link-to}}
 
-    <a {{action 'changeSettings'}} class="change-selection">
-      <i class="icon-back1"></i>
-      Change Goal
-    </a>
+    {{#if currentThemeIsGeneric}}
+      <a {{action 'changeSettings'}} class="change-selection">
+        <i class="icon-back1"></i>
+        Change Goal
+      </a>
+    {{/if}}
   </div>
 
   {{outlet}}

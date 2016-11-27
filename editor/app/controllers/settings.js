@@ -75,6 +75,8 @@ export default Ember.Controller.extend({
     }
   },
 
+  currentThemeIsGeneric: Ember.computed.alias('applicationController.currentThemeIsGeneric'),
+
   goalListCssClasses: (function () {
     let classes = ['step-link-wrapper'];
     !this.get('goalSelectionInProgress') && (classes.push('is-selected'));
