@@ -72,20 +72,9 @@ export default Ember.Controller.extend({
     return this.get('theming').availableThemes();
   }.property(),
 
-  currentTheme: Ember.computed('model.theme_id', 'themeOptions', function () {
-      return _.find(this.get('themeOptions'), theme => theme.id === this.get('model.theme_id'));
-    }
-  ),
-
-  currentThemeIsGeneric: function () {
-    const currentTheme = this.get('currentTheme');
-    return currentTheme ? currentTheme.type === 'generic' : false;
-  }.property('currentTheme'),
-
-  currentThemeIsTemplate: function () {
-    const currentTheme = this.get('currentTheme');
-    return currentTheme ? currentTheme.type === 'template' : false;
-  }.property('currentTheme'),
+  currentThemeIsGeneric: Ember.computed.alias('applicationController.currentThemeIsGeneric'),
+  currentThemeIsTemplate: Ember.computed.alias('applicationController.currentThemeIsTemplate'),
+  currentTheme: Ember.computed.alias('applicationController.currentTheme'),
 
   // Editor UI Properties
   imageUploadCopy: Ember.computed.oneWay('currentTheme.image.upload_copy'),

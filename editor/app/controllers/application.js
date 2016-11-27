@@ -4,7 +4,6 @@ import _ from 'lodash/lodash';
 export default Ember.Controller.extend({
 
   inlineEditing: Ember.inject.service(),
-
   theming: Ember.inject.service(),
 
   init() {
@@ -301,6 +300,30 @@ export default Ember.Controller.extend({
       );
     }
   },
+
+  currentTheme: (function () {
+    const allThemes = this.get('theming').availableThemes();
+    const currentThemeId = this.get('model.theme_id');
+    const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
+    return currentTheme;
+  }).property('model.theme_id'),
+
+  currentThemeName: (function () {
+    const theme = this.get('currentTheme');
+    return theme ? theme.name : '';
+  }).property('currentTheme'),
+
+  currentThemeIsGeneric: function () {
+    const currentTheme = this.get('currentTheme');
+    return currentTheme ? currentTheme.type === 'generic' : false;
+  }.property('currentTheme'),
+
+  currentThemeIsTemplate: function () {
+    const currentTheme = this.get('currentTheme');
+    return currentTheme ? currentTheme.type === 'template' : false;
+  }.property('currentTheme'),
+
+
 
   onCurrentThemeChanged: (function () {
     if (this.get('originalTheme').theme_id === this.get('model.theme_id')) {
