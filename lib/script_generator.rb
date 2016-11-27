@@ -133,6 +133,11 @@ class ScriptGenerator < Mustache
     CSSMin.minify(css).to_json
   end
 
+  def hellobar_template_container_css
+    css = read_css_files(template_common_css_files)
+    CSSMin.minify(css).to_json
+  end
+
   def hellobar_element_css
     css = read_css_files(element_css_files)
     CSSMin.minify(css).to_json
@@ -151,11 +156,17 @@ class ScriptGenerator < Mustache
 
   def templates
     template_names = Set.new
+    templates = Theme.where(type: 'template').collect(&:name)
+    category = 'generic'
+
     if options[:templates]
       options[:templates].each { |t| template_names << t.split("_", 2) }
     else
       site.site_elements.active.each do |se|
-        template_names << [se.class.name.downcase, se.element_subtype]
+        subtype = se.element_subtype
+        category = 'template' if templates.include?(subtype.titleize)
+
+        template_names << [se.class.name.downcase, subtype]
         template_names << [se.class.name.downcase, 'question'] if se.use_question?
       end
     end
@@ -163,7 +174,7 @@ class ScriptGenerator < Mustache
     template_names.map do |name|
       {
         name: name.join('_'),
-        markup: content_template(name[0], name[1])
+        markup: content_template(name[0], name[1], category)
       }
     end
   end
@@ -202,9 +213,17 @@ private
     end
   end
 
-  def content_template(element_class, type)
+  def content_template(element_class, type, category = 'generic')
     ActiveSupport.escape_html_entities_in_json = false
-    content = (content_header(element_class) + content_markup(element_class, type) + content_footer(element_class)).to_json
+
+    content = if category == 'generic'
+                (content_header(element_class) +
+                  content_markup(element_class, type) +
+                  content_footer(element_class)).to_json
+              else
+                content_markup(element_class, type)
+              end
+
     ActiveSupport.escape_html_entities_in_json = true
 
     content
@@ -341,6 +360,11 @@ private
 
     files += element_classes.map { |klass| "#{vendor_root}/#{klass.name.downcase}/container.css" }
     files += element_themes.map(&:container_css_path)
+  end
+
+  def template_common_css_files
+    vendor_root = "#{Rails.root}/vendor/assets/stylesheets/site_elements"
+    files = ["#{vendor_root}/template_common.css"]
   end
 
   def element_css_files

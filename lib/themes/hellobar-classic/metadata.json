@@ -1,5 +1,6 @@
 {
   "name": "Hello Bar Classic",
+  "type": "generic",
   "id": "classic",
   "default_theme": true,
   "fonts": [

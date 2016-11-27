@@ -1,5 +1,6 @@
 {
   "name": "Marigold",
+  "type": "generic",
   "id": "marigold",
   "fonts": [
     "roboto",

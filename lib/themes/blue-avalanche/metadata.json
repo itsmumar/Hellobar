@@ -1,5 +1,6 @@
 {
   "name": "Blue Avalanche",
+  "type": "generic",
   "id": "blue-avalanche",
   "fonts": [
     "lato",

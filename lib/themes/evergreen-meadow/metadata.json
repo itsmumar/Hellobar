@@ -1,5 +1,6 @@
 {
   "name": "Evergreen Meadow",
+  "type": "generic",
   "id": "evergreen-meadow",
   "fonts": [
     "montserrat",

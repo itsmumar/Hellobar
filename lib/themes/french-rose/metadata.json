@@ -1,5 +1,6 @@
 {
   "name": "French Rose",
+  "type": "generic",
   "id": "french-rose",
   "fonts": [
     "source_pro",

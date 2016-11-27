@@ -18,6 +18,7 @@ class SiteElement < ActiveRecord::Base
   BAR_TYPES = {
     "call"                            => "Calls",
     "traffic"                         => "Clicks",
+    "traffic_growth"                  => "Clicks",
     "email"                           => "Emails",
     "announcement"                    => "Conversions",
     "social/tweet_on_twitter"         => "Tweets",

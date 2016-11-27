@@ -1,5 +1,6 @@
 {
   "name": "Violet",
+  "type": "generic",
   "id": "violet",
   "fonts": [
     "josefin_sans",
