@@ -164,3 +164,41 @@
 #hellobar-template.traffic-growth .hb-logo svg path {
   fill: #b4b4b4;
 }
+
+
+#hellobar-template.traffic-growth .thank-you-headline {
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: 800;
+  margin-top: 161px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  color: #f03554;
+
+}
+
+#hellobar-template.traffic-growth .thank-you-secondary-text {
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: 800;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  color: #f03554;
+
+}
+
+#hellobar-template.traffic-growth  .go-hellobar-button-wrapper {
+  margin-bottom: 80px;
+}
+
+#hellobar-template.traffic-growth  .go-hellobar-button {
+  display: inline-block;
+  padding: 18px 50px;
+  background-color: #f03554;
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 18px;
+  line-height: 18px;
+  border-radius: 8px;
+}
