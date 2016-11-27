@@ -4,7 +4,7 @@ class SiteElement < ActiveRecord::Base
   TYPES = [Bar, Modal, Slider, Takeover]
 
   DEFAULT_EMAIL_THANK_YOU = "Thank you for signing up!"
-  DEFAULT_FREE_EMAIL_THANK_YOU = "#{DEFAULT_EMAIL_THANK_YOU} If you'd like this sort of bar on your site..."
+  DEFAULT_FREE_EMAIL_THANK_YOU = "#{DEFAULT_EMAIL_THANK_YOU} If you would like this sort of bar on your site..."
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,
     1 => :custom_thank_you_text,
