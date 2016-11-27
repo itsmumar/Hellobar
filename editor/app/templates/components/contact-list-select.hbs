@@ -11,12 +11,12 @@
   <div class="contact-list-dropdown" {{action 'toggleOpen'}}>
     {{#each options as |option| }}
       {{#if option}}
-        {{#contact-list-select-option parentView=this option=option}}
+        <div class="contact-list-option" {{action 'listSelected' option.id bubbles=false}}>
           <div>
             <div class="contact-list-title">{{option.name}}</div>
             <em>{{option.provider}}</em>
           </div>
-        {{/contact-list-select-option}}
+        </div>
       {{/if}}
     {{/each}}
   </div>
