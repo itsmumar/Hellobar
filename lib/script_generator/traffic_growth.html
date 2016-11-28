@@ -38,7 +38,7 @@
           <input id="f-builtin-email" type="text" placeholder="Your email" required="" value="">
         </div>
 
-        <a class="hb-cta hb-cta-style-button" href="#">
+        <a class="hb-cta hb-cta-style-button" href="javascript:void(0)">
           <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
                data-hb-editable-block="blocks.action_link" data-hb-inline-editor-placeholder="Subscribe">
             {{siteElement.blockContent('action_link').text}}
@@ -46,10 +46,11 @@
         </a>
       </div>
 
-      <a href="#" class="reject-link">
+      <a href="javascript:void(0)" class="reject-link">
         <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
              data-hb-editable-block="blocks.reject_link"
-             data-hb-inline-editor-placeholder="No, I do not want to grow my blog traffic">
+             data-hb-inline-editor-placeholder="No, I do not want to grow my blog traffic"
+             onclick="{{siteElement.me}}.close()">
           {{siteElement.blockContent('reject_link').text}}
         </div>
       </a>
