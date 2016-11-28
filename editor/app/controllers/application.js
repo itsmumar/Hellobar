@@ -328,9 +328,10 @@ export default Ember.Controller.extend({
   onCurrentThemeChanged: (function () {
     if (this.get('currentThemeIsTemplate')) {
       this.set('model.element_subtype', 'email');
+      this.get('inlineEditing').initializeBlocks(this.get('model'), this.get('model.theme_id'));
     }
     if (this.get('originalTheme').theme_id === this.get('model.theme_id')) {
-      return _.each(this.get('originalTheme'), (value, key) => {
+      _.each(this.get('originalTheme'), (value, key) => {
           return this.set(`model.${key}`, value);
         }
       );

@@ -42,6 +42,17 @@ HB.SiteElement = HB.createClass({
         + this.image_url + '" /></div></div>';
   },
 
+  blockContent: function (blockId) {
+    var blocks = this.blocks || [];
+    var foundBlock = null;
+    for (var i = 0; i < blocks.length; i++) {
+      if (blocks[i].id === blockId) {
+        foundBlock = blocks[i];
+      }
+    }
+    return foundBlock.content ? foundBlock.content : {};
+  },
+
   attach: function () {
     var that = this;
     if (HB.isIEXOrLess(9)) {
@@ -135,7 +146,7 @@ HB.SiteElement = HB.createClass({
     d.close();
     d.body.className = this.type;
 
-    if(this.theme_id) {
+    if (this.theme_id) {
       HB.addClass(d.body, this.theme_id);
     }
 
@@ -235,10 +246,10 @@ HB.SiteElement = HB.createClass({
   setContainerSize: function (container, element, type, isMobile) {
     if (container == null)
       return;
-    if ( type == 'Bar' ) {
+    if (type == 'Bar') {
       container.style.maxHeight = (element.clientHeight + (HB.CAP.preview ? 350 : 8)) + 'px';
       HB.CAP.preview && (container.style.height = (element.clientHeight + 350) + 'px');
-    } else if ( type == 'Slider' ) {
+    } else if (type == 'Slider') {
       var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : window.innerWidth;
       var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
       container.style.width = (newWidth) + "px";
@@ -590,7 +601,7 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  addCss: function(href) {
+  addCss: function (href) {
     var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
     var link = this.w.contentWindow.document.createElement("LINK");
     link.href = href;
@@ -599,7 +610,7 @@ HB.SiteElement = HB.createClass({
     head.appendChild(link);
   },
 
-  addJs: function(href) {
+  addJs: function (href) {
     var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
     var script = this.w.contentWindow.document.createElement("SCRIPT");
     script.src = href;

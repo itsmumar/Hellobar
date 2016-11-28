@@ -12,24 +12,23 @@
     <div class="hb-inner-content">
 
       <div class="headline-first hb-editable-block hb-editable-block-with-limited-formatting"
-           data-hb-editable-block="headline-first" data-hb-inline-editor-placeholder="Grow your blog traffic by">
-        Grow your blog traffic by
+           data-hb-editable-block="blocks.headline_first" data-hb-inline-editor-placeholder="Grow your blog traffic by">
+        {{siteElement.blockContent('headline_first').text}}
       </div>
       <div class="headline-second hb-editable-block hb-editable-block-with-limited-formatting"
-           data-hb-editable-block="headline-second" data-hb-inline-editor-placeholder="300%">
-        300%
+           data-hb-editable-block="blocks.headline_second" data-hb-inline-editor-placeholder="300%">
+        {{siteElement.blockContent('headline_second').text}}
       </div>
 
       <div class="headline-third hb-editable-block hb-editable-block-with-limited-formatting"
-           data-hb-editable-block="headline-third" data-hb-inline-editor-placeholder="with our free tool">
-        with our free tool
+           data-hb-editable-block="blocks.headline_third" data-hb-inline-editor-placeholder="with our free tool">
+        {{siteElement.blockContent('headline_third').text}}
       </div>
 
       <div
           class="hb-secondary-text hb-editable-block hb-editable-block-optional hb-editable-block-with-limited-formatting"
-          data-hb-editable-block="caption" data-hb-inline-editor-placeholder="Optional caption">
-        Subscribe to our weekly newsletter
-        to receive the latest freebies in your inbox!
+          data-hb-editable-block="blocks.caption" data-hb-inline-editor-placeholder="Optional caption">
+        {{siteElement.blockContent('caption').text}}
       </div>
 
       <div id="hb-fields-form" class="form-block">
@@ -41,17 +40,17 @@
 
         <a class="hb-cta hb-cta-style-button" href="#">
           <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
-               data-hb-editable-block="action_link" data-hb-inline-editor-placeholder="Subscribe">
-            Subscribe
+               data-hb-editable-block="blocks.action_link" data-hb-inline-editor-placeholder="Subscribe">
+            {{siteElement.blockContent('action_link').text}}
           </div>
         </a>
       </div>
 
       <a href="#" class="reject-link">
         <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
-             data-hb-editable-block="reject_link"
+             data-hb-editable-block="blocks.reject_link"
              data-hb-inline-editor-placeholder="No, I do not want to grow my blog traffic">
-          No, I don't want to grow my blog traffic
+          {{siteElement.blockContent('reject_link').text}}
         </div>
       </a>
 
