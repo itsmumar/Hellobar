@@ -48,7 +48,7 @@
   line-height: 25px;
   max-height: 30px;
   white-space: nowrap;
-  font-weight: 800;
+  /*font-weight: 800;*/
   margin-bottom: 18px;
   text-transform: uppercase;
   color: #f03554;
@@ -59,8 +59,8 @@
   line-height: 100px;
   max-height: 140px;
   white-space: nowrap;
-  font-weight: 800;
-  margin-bottom: 18px;
+  /*font-weight: 800;*/
+  margin-bottom: 30px;
   text-transform: uppercase;
   color: #f03554;
 }
@@ -70,7 +70,7 @@
   line-height: 22px;
   max-height: 31px;
   white-space: nowrap;
-  font-weight: 900;
+  /*font-weight: 900;*/
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #f03554;
@@ -151,7 +151,7 @@
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   font-size: 22px;
-  font-weight: 800;
+  /*font-weight: 800;*/
   text-decoration: none;
 }
 

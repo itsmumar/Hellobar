@@ -6,31 +6,31 @@ export default {
     {
       id: 'headline_first',
       content: {
-        text: 'Grow your blog traffic by'
+        text: '<strong>Grow your blog traffic by</strong>'
       }
     },
     {
       id: 'headline_second',
       content: {
-        text: '300%'
+        text: '<strong>300%</strong>'
       }
     },
     {
       id: 'headline_third',
       content: {
-        text: 'with our free tool'
+        text: '<strong>with our free tool</strong>'
       }
     },
     {
       id: 'caption',
       content: {
-        text: 'Subscribe to our weekly newsletter to receive the latest freebies in your inbox!'
+        text: '<strong>Subscribe to our weekly newsletter to receive the latest freebies in your inbox!</strong>'
       }
     },
     {
       id: 'action_link',
       content: {
-        text: 'Subscribe'
+        text: '<strong>Subscribe</strong>'
       }
     },
     {
