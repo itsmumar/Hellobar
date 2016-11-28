@@ -912,7 +912,7 @@ var HB = {
     return HB.getTemplateByName(siteElement.template_name);
   },
 
-  getTemplateByName(templateName) {
+  getTemplateByName: function (templateName) {
     return HB.templateHTML[templateName];
   },
 
