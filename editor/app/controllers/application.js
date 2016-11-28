@@ -341,11 +341,18 @@ export default Ember.Controller.extend({
     }
   }).observes('model.theme_id'),
 
+  previousElementType: null,
+
   onElementTypeChanged: function () {
+    const elementType = this.get('model.type');
     const currentTheme = this.get('currentTheme');
-    if (currentTheme.type === 'template') {
-      this.set('model.theme_id', this.get('theming').defaultGenericTheme().id);
+    const previousElementType = this.get('previousElementType');
+    if (elementType && previousElementType && elementType !== previousElementType) {
+      if (currentTheme.type === 'template') {
+        this.set('model.theme_id', this.get('theming').defaultGenericTheme().id);
+      }
     }
+    this.set('previousElementType', elementType);
   }.observes('model.type'),
 
 
