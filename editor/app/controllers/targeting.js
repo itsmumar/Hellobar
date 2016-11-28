@@ -169,7 +169,7 @@ export default Ember.Controller.extend({
           this.send('openRuleModal');
           break;
         case 'targeting.saved':
-          if (!__in__(this.get('model.rule'), ((() => {
+          /*if (!__in__(this.get('model.rule'), ((() => {
               let result = [];
               for (let name in customRules) {
                 let rule = customRules[name];
@@ -178,7 +178,7 @@ export default Ember.Controller.extend({
               return result;
             })()))) {
             this.associateRuleToModel(null);
-          }
+          }*/
           this.set('model.preset_rule_name', 'Saved');
           break;
         default:
