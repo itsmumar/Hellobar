@@ -295,6 +295,7 @@ private
       view_condition
       wiggle_button
       wordpress_bar_id
+      blocks
     }
     settings << 'caption' unless site_element.use_question?
 
@@ -347,7 +348,8 @@ private
       views: views,
       updated_at: site_element.updated_at.to_f * 1000,
       use_free_email_default_msg: site_element.show_default_email_message? && site_element.site.is_free?,
-      wiggle_wait: 0
+      wiggle_wait: 0,
+      blocks: site_element.blocks
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
