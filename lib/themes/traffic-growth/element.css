@@ -19,9 +19,11 @@
 }
 
 #hellobar-template.traffic-growth .icon-close {
-  top: 15px;
-  right: 10px;
+  position: absolute;
+  top: 25px;
+  right: 25px;
   font-size: 12px;
+  color: #364556;
 }
 
 #hellobar-template.traffic-growth.middle {
