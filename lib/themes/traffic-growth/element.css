@@ -25,14 +25,21 @@
 }
 
 #hellobar-template.traffic-growth.middle {
-  /*top: 50%;
-  transform: translate(-50%,-50%);
-  -o-transform: translate(-50%,-50%);
-  -ms-transform: translate(-50%,-50%);
-  -moz-transform: translate(-50%,-50%);
-  -webkit-transform: translate(-50%,-50%);*/
-  top: 20px;
-  -webkit-transform: translate(-50%, 0);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+
+#hellobar-template.traffic-growth.top {
+  top: 5%;
+  transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
 }
 
 #hellobar-template.traffic-growth .headline-first {
