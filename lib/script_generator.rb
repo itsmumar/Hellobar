@@ -169,13 +169,10 @@ class ScriptGenerator < Mustache
       }
     else
       site.site_elements.active.each do |se|
-        category = 'generic'
-        subtype = se.element_subtype
-        # Considering that `blocks` field is getting used only by `templates`
-        if se.theme_id == 'traffic-growth'
-          category = 'template'
-          subtype = 'traffic_growth'
-        end
+        theme_id = se.theme_id
+        theme = Theme.where(id: theme_id).first
+        category = theme.type
+        subtype = (category == 'template' ? theme_id.underscore : se.element_subtype)
 
         template_names << [se.class.name.downcase, subtype, category]
         template_names << [se.class.name.downcase, 'question', category] if se.use_question?
