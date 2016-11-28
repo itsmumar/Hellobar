@@ -341,6 +341,14 @@ export default Ember.Controller.extend({
     }
   }).observes('model.theme_id'),
 
+  onElementTypeChanged: function () {
+    const currentTheme = this.get('currentTheme');
+    if (currentTheme.type === 'template') {
+      this.set('model.theme_id', this.get('theming').defaultGenericTheme().id);
+    }
+  }.observes('model.type'),
+
+
   updateProFeature: ( function () {
     const isBranded = this.get('model.show_branding');
     const canRemoveBranding = this.get('model.site.capabilities.remove_branding');
