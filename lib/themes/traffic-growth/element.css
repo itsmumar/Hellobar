@@ -44,7 +44,10 @@
 
 #hellobar-template.traffic-growth .headline-first {
   font-size: 30px;
-  line-height: 20px;
+  line-height: 25px;
+  max-height: 30px;
+  white-space: nowrap;
+  overflow: hidden;
   font-weight: 800;
   margin-bottom: 18px;
   text-transform: uppercase;
@@ -54,6 +57,9 @@
 #hellobar-template.traffic-growth .headline-second {
   font-size: 140px;
   line-height: 100px;
+  max-height: 140px;
+  white-space: nowrap;
+  overflow: hidden;
   font-weight: 800;
   margin-bottom: 18px;
   text-transform: uppercase;
@@ -63,6 +69,9 @@
 #hellobar-template.traffic-growth .headline-third {
   font-size: 31px;
   line-height: 22px;
+  max-height: 31px;
+  white-space: nowrap;
+  overflow: hidden;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -72,7 +81,8 @@
 #hellobar-template.traffic-growth .hb-secondary-text {
   color: #49596a;
   font-size: 22px;
-  /*font-weight: 600;*/
+  max-height: 94px;
+  overflow: hidden;
   font-weight: 400;
   padding: 20px 70px;
 }
@@ -152,6 +162,10 @@
   position: relative;
   margin: 17px 0;
   font-size: 16px;
+  line-height: 16px;
+  max-height: 16px;
+  white-space: nowrap;
+  overflow: hidden;
   font-weight: 400;
   color: #6d849c;
   letter-spacing: 1px;
@@ -182,7 +196,6 @@
   margin-bottom: 20px;
   text-transform: uppercase;
   color: #f03554;
-
 }
 
 #hellobar-template.traffic-growth .thank-you-secondary-text {
@@ -192,7 +205,6 @@
   margin-bottom: 40px;
   text-transform: uppercase;
   color: #f03554;
-
 }
 
 #hellobar-template.traffic-growth  .go-hellobar-button-wrapper {

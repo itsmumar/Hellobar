@@ -239,7 +239,7 @@ export default Ember.Service.extend({
 
   instantiateFroala($iframe, $iframeBody, elementType){
     this.cleanupFroala();
-    let simpleFroalaOptions = {
+    const simpleFroalaOptions = {
       key: froalaKey,
       toolbarInline: true,
       toolbarVisibleWithoutSelection: true,
@@ -256,7 +256,7 @@ export default Ember.Service.extend({
       initOnClick: false,
       zIndex: 9888
     };
-    let fullFroalaOptions = {
+    const fullFroalaOptions = {
       key: froalaKey,
       toolbarInline: true,
       toolbarVisibleWithoutSelection: true,
@@ -275,7 +275,23 @@ export default Ember.Service.extend({
       initOnClick: false,
       zIndex: 9888
     };
-    let imageFroalaOptions = {
+    const limitedFroalaOptions = {
+      key: froalaKey,
+      toolbarInline: true,
+      toolbarVisibleWithoutSelection: true,
+      toolbarButtons: [
+        'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'color', '-',
+        'undo', 'redo', 'clearFormatting', 'selectAll'
+      ],
+      htmlAllowedTags: [
+        'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
+      ],
+      enter: $.FroalaEditor.ENTER_P,
+      multiLine: false,
+      initOnClick: false,
+      zIndex: 9888
+    };
+    const imageFroalaOptions = {
       key: froalaKey,
       pluginsEnabled: ['image'],
       toolbarInline: true,
@@ -292,54 +308,42 @@ export default Ember.Service.extend({
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       }
     };
-    let $simpleFroala = $('.hb-editable-block-with-simple-formatting', $iframeBody).froalaEditor($.extend({
+    const $simpleFroala = $('.hb-editable-block-with-simple-formatting', $iframeBody).froalaEditor($.extend({
       scrollableContainer: $iframeBody[0]
     }, simpleFroalaOptions));
-    let $fullFroala = $('.hb-editable-block-with-full-formatting', $iframeBody).froalaEditor($.extend({
+    const $fullFroala = $('.hb-editable-block-with-full-formatting', $iframeBody).froalaEditor($.extend({
       scrollableContainer: $iframeBody[0]
     }, elementType === 'Bar' ? simpleFroalaOptions : fullFroalaOptions));
-    let $imageFroala = $('.hb-editable-block-image', $iframeBody).froalaEditor($.extend({
+    const $imageFroala = $('.hb-editable-block-image', $iframeBody).froalaEditor($.extend({
       scrollableContainer: $iframeBody[0]
     }, imageFroalaOptions));
-
-    // NOTE This was used previously to support image uploading inline
-    /*imageEditorWithoutPlacement = $('.hb-editable-block-image-without-placement', $iframeBody).data('froala.editor')
-    $.extend(imageEditorWithoutPlacement.opts, {
-      imageEditButtons: ['imageReplace', 'imageRemoveCustom']
-    })*/
-
+    const $limitedFroala = $('.hb-editable-block-with-limited-formatting', $iframeBody).froalaEditor($.extend({
+      scrollableContainer: $iframeBody[0]
+    }, limitedFroalaOptions));
 
     $imageFroala.on('froalaEditor.image.uploaded', (e, editor, response) => {
-      //console.log(e, editor, response)
-      let responseObject = JSON.parse(response);
+      const responseObject = JSON.parse(response);
       this.modelAdapter && this.modelAdapter.handleImageReplaced(responseObject);
       return false;
     });
 
-    let $textFroala = $simpleFroala.add($fullFroala);
+    const $textFroala = $simpleFroala.add($fullFroala).add($limitedFroala);
     $textFroala.on('froalaEditor.contentChanged', (e, editor) => {
-      let $target = $(e.currentTarget);
-      let content = $target.froalaEditor('html.get');
-      let blockId = $target.attr('data-hb-editable-block');
+      const $target = $(e.currentTarget);
+      const content = $target.froalaEditor('html.get');
+      const blockId = $target.attr('data-hb-editable-block');
       return this.handleContentChange(blockId, content);
     });
     $textFroala.on('froalaEditor.destroy', (e, editor) => {});
 
-    let $allFroala = $($textFroala).add($imageFroala);
+    const $allFroala = $($textFroala).add($imageFroala);
     this.$currentFroalaInstances = $allFroala;
 
-    //TODO remove
-    window.f = {
-      $,
-      $allFroala,
-      $iframeBody
-    };
-
     return $textFroala.each(function() {
-      let $editableElement = $(this);
-      let editor = $editableElement.data('froala.editor');
-      let newOptions = {};
-      let placeholder = $editableElement.attr('data-hb-inline-editor-placeholder');
+      const $editableElement = $(this);
+      const editor = $editableElement.data('froala.editor');
+      const newOptions = {};
+      const placeholder = $editableElement.attr('data-hb-inline-editor-placeholder');
       if (placeholder) {
         newOptions.placeholderText = placeholder;
       }
