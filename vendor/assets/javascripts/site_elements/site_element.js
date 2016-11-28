@@ -17,7 +17,6 @@ HB.SiteElement = HB.createClass({
     if (this.view_condition.indexOf('intent') !== -1) {
       HB.initializeIntentListeners();
     }
-    ;
 
     // Starts setIntervals that check display setting conditions
     this.checkForDisplaySetting();
@@ -44,10 +43,24 @@ HB.SiteElement = HB.createClass({
   },
 
   attach: function () {
-    if (HB.isIEXOrLess(9))
+    var that = this;
+    if (HB.isIEXOrLess(9)) {
       this.animated = false;
-    // Replace all the templated variables
-    var html = HB.renderTemplate(HB.getTemplate(this) + "", this);
+    }
+
+    function generateHtml() {
+      var template = '';
+      // TODO now theme id for new template is hard-coded. We need good and flexible solution for the future
+      if (that.theme_id === 'traffic-growth') {
+        template = HB.getTemplateByName('traffic_growth');
+      } else {
+        template = HB.getTemplate(that);
+      }
+      // Replace all the template variables
+      return HB.renderTemplate(template, that);
+    }
+
+    var html = generateHtml();
     // Once the dom is ready we inject the html returned from renderTemplate
     HB.domReady(function () {
       // Set an arbitrary timeout to prevent some rendering
@@ -80,28 +93,29 @@ HB.SiteElement = HB.createClass({
       this.w.parentNode.removeChild(this.w);
 
     // Remove pull-arrow if it exists
-    HB.pd = document.getElementById("pull-down");
+    HB.pd = document.getElementById('pull-down');
     if (HB.pd)
       HB.pd.parentNode.removeChild(HB.pd);
 
     // Create the iframe container
-    this.w = document.createElement("iframe");
-    this.w.src = "about:blank";
-    this.w.id = HB_PS + "-container";
-    this.w.className = "HB-" + this.type;
-    this.w.name = HB_PS + "-container-" + this.pageIndex;
+    this.w = document.createElement('iframe');
+    this.w.src = 'about:blank';
+    this.w.id = HB_PS + '-container';
+    this.w.className = 'HB-' + this.type;
+    this.w.name = HB_PS + '-container-' + this.pageIndex;
     HB.hideElement(this.w); // Start all site elements as hidden
 
-    this.setupIFrame(this.w)
+    this.setupIFrame(this.w);
 
     // Check if we have any external CSS to add
     if (HB.extCSS) {
       // If we have already added it, remove it and re-add it
-      if (HB.extCSSStyle)
+      if (HB.extCSSStyle) {
         HB.extCSSStyle.parentNode.removeChild(HB.extCSSStyle);
+      }
       // Create the CSS style tag
       HB.extCSSStyle = document.createElement('STYLE');
-      HB.extCSSStyle.type = "text/css";
+      HB.extCSSStyle.type = 'text/css';
       if (HB.extCSSStyle.styleSheet) {
         HB.extCSSStyle.styleSheet.cssText = HB.extCSS;
       }
@@ -117,7 +131,7 @@ HB.SiteElement = HB.createClass({
     // Render the siteElement in the container.
     var d = this.w.contentWindow.document;
     d.open();
-    d.write("<html><head>" + (HB.css || "") + "</head><body>" + html + "</body></html>");
+    d.write('<html><head>' + (HB.css || '') + '</head><body>' + html + '</body></html>');
     d.close();
     d.body.className = this.type;
 
@@ -131,10 +145,10 @@ HB.SiteElement = HB.createClass({
 
     // Add IE Specific class overrides
     if (HB.isIEXOrLess(9))
-      HB.addClass(d.body, "hb-old-ie");
+      HB.addClass(d.body, 'hb-old-ie');
 
     if (HB.isIE11())
-      HB.addClass(d.body, "hb-paused-animations-ie");
+      HB.addClass(d.body, 'hb-paused-animations-ie');
 
     // As the vistor readjust the window size we need to adjust the size of the containing
     // iframe. We do this by checking the the size of the inner div. If the the width

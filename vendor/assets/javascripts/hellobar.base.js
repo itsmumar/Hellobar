@@ -906,7 +906,11 @@ var HB = {
   //
   // By default this just returns the HB.templateHTML variable for the given rule type
   getTemplate: function (siteElement) {
-    return HB.templateHTML[siteElement.template_name];
+    return HB.getTemplateByName(siteElement.template_name);
+  },
+
+  getTemplateByName(templateName) {
+    return HB.templateHTML[templateName];
   },
 
   // Sets the branding HTML.
@@ -1015,6 +1019,7 @@ var HB = {
 
     var whitelistedProperties = ['headline', 'caption', 'link_text'];
 
+    // TODO do we need to sanitize blocks property?
     // Sanitize the data
     data = HB.sanitize(data, whitelistedProperties);
     // Make a copy of the siteElement
