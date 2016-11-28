@@ -156,10 +156,11 @@ class ScriptGenerator < Mustache
 
   def templates
     template_names = Set.new
-    templates = Theme.where(type: 'template').collect(&:name)
     duplicating = false
 
     if options[:templates]
+      templates = Theme.where(type: 'template').collect(&:name)
+
       options[:templates].each { |t|
         temp_name = t.split("_", 2)
         category = 'generic'
@@ -168,9 +169,13 @@ class ScriptGenerator < Mustache
       }
     else
       site.site_elements.active.each do |se|
-        subtype = se.element_subtype
         category = 'generic'
-        category = 'template' if templates.include?(subtype.titleize)
+        subtype = se.element_subtype
+        # Considering that `blocks` field is getting used only by `templates`
+        if se.theme_id == 'traffic-growth'
+          category = 'template'
+          subtype = 'traffic_growth'
+        end
 
         template_names << [se.class.name.downcase, subtype, category]
         template_names << [se.class.name.downcase, 'question', category] if se.use_question?
@@ -197,7 +202,7 @@ class ScriptGenerator < Mustache
                         end
                       end
     template_names.delete(nil)
-    template_names                         
+    template_names
   end
 
   def rules

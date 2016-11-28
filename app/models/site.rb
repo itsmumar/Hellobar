@@ -174,7 +174,7 @@ class Site < ActiveRecord::Base
   end
 
   def generate_script(options = {})
-    if options[:immediately] || Rails.env.development?
+    if options[:immediately]
       generate_static_assets(options)
     else
       delay :generate_static_assets, options
