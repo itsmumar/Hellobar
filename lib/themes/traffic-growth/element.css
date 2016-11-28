@@ -22,6 +22,7 @@
   right: 25px;
   font-size: 12px;
   color: #364556;
+  cursor: pointer;
 }
 
 #hellobar-template.traffic-growth.middle {

@@ -401,6 +401,9 @@ HB.SiteElement = HB.createClass({
 
 
   close: function () {
+    if (HB.preventElementClosing) {
+      return;
+    }
     HB.animateOut(this.w, this.onClosed.bind(this));
   },
 

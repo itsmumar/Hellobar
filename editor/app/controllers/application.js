@@ -139,6 +139,7 @@ export default Ember.Controller.extend({
     previewElement = JSON.parse(JSON.stringify(previewElement));
 
     HB.isPreviewMode = true;
+    HB.preventElementClosing = true;
     HB.previewMode = this.get('isMobile') ? 'mobile' : 'fullscreen';
     if (HB.removeAllSiteElements) {
       HB.removeAllSiteElements();
