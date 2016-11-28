@@ -5,13 +5,17 @@ export default Ember.Controller.extend({
 
   targetingController: Ember.inject.controller('targeting'),
 
-  ruleOptions: Ember.computed('targetingController.ruleOptions'),
+  ruleOptions: function() {
+    const options = this.get('targetingController.ruleOptions');
+    return options || [];
+  }.property('targetingController.ruleOptions'),
 
   selectedRuleOption: (function() {
     const ruleId = this.get('model.rule_id');
     const options = this.get('ruleOptions');
-    return _.find(options, (option) => option.id === ruleId);
-  }).property('model.rule_id'),
+    const selectedOption = _.find(options, (option) => option.id === ruleId);
+    return selectedOption || options[0];
+  }).property('model.rule_id', 'ruleOptions'),
 
   actions: {
 

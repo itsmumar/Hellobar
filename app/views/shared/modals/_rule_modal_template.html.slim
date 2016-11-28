@@ -21,8 +21,8 @@ script id="rule-modal" type="text/x-handlebars-template"
           ' Show to people who match
           span.select-wrapper
             select#rule_match name="rule[match]"
-              | {{option match "all" "all"}}
-              | {{option match "any" "any"}}
+              | {{rule-option match "all" "all"}}
+              | {{rule-option match "any" "any"}}
           | of the following conditions.
         .conditions-wrapper
           / conditions placeholder
@@ -47,56 +47,56 @@ script#condition-partial type="text/x-handlebars-template"
     .condition-ruleset
       .select-wrapper.optional.rule_conditions_segment
         select class="condition-segment" name="rule[conditions_attributes][{{index}}][segment]"
-          | {{option segment "UTMCampaignCondition" "Ad Campaign"}}
-          | {{option segment "UTMContentCondition" "Ad Content"}}
-          | {{option segment "UTMMediumCondition" "Ad Medium"}}
-          | {{option segment "UTMSourceCondition" "Ad Source"}}
-          | {{option segment "UTMTermCondition" "Ad Term"}}
-          / | {{option segment "LocationCityCondition" "City"}}
-          | {{option segment "LocationCountryCondition" "Country"}}
-          | {{option segment "DateCondition" "date"}}
-          | {{option segment "LastVisitCondition" "days since last visit"}}
-          | {{option segment "DeviceCondition" "device"}}
-          | {{option segment "EveryXSession" "every Nth session"}}
-          | {{option segment "NumberOfVisitsCondition" "number of visits"}}
-          | {{option segment "PreviousPageURL" "previous page url"}}
-          | {{option segment "ReferrerCondition" "referrer"}}
-          | {{option segment "ReferrerDomainCondition" "Referrer Domain"}}
-          / | {{option segment "LocationRegionCondition" "Region/State"}}
-          | {{option segment "TimeCondition" "Time"}}
-          | {{option segment "UrlCondition" "URL"}}
-          | {{option segment "UrlPathCondition" "URL Path"}}
-          | {{option segment "UrlQuery" "URL Query"}}
-          | {{option segment "CustomCondition" "Custom"}}
+          | {{rule-option segment "UTMCampaignCondition" "Ad Campaign"}}
+          | {{rule-option segment "UTMContentCondition" "Ad Content"}}
+          | {{rule-option segment "UTMMediumCondition" "Ad Medium"}}
+          | {{rule-option segment "UTMSourceCondition" "Ad Source"}}
+          | {{rule-option segment "UTMTermCondition" "Ad Term"}}
+          / | {{rule-option segment "LocationCityCondition" "City"}}
+          | {{rule-option segment "LocationCountryCondition" "Country"}}
+          | {{rule-option segment "DateCondition" "date"}}
+          | {{rule-option segment "LastVisitCondition" "days since last visit"}}
+          | {{rule-option segment "DeviceCondition" "device"}}
+          | {{rule-option segment "EveryXSession" "every Nth session"}}
+          | {{rule-option segment "NumberOfVisitsCondition" "number of visits"}}
+          | {{rule-option segment "PreviousPageURL" "previous page url"}}
+          | {{rule-option segment "ReferrerCondition" "referrer"}}
+          | {{rule-option segment "ReferrerDomainCondition" "Referrer Domain"}}
+          / | {{rule-option segment "LocationRegionCondition" "Region/State"}}
+          | {{rule-option segment "TimeCondition" "Time"}}
+          | {{rule-option segment "UrlCondition" "URL"}}
+          | {{rule-option segment "UrlPathCondition" "URL Path"}}
+          | {{rule-option segment "UrlQuery" "URL Query"}}
+          | {{rule-option segment "CustomCondition" "Custom"}}
       .custom-segment-name
         | Segment name is:
         input.custom-segment-name-input name="rule[conditions_attributes][{{index}}][custom_segment]" type="text" value="{{custom_segment}}"
       .select-wrapper.optional.rule_conditions_data_type
         | The data type is:
         select class="condition-data-type" name="rule[conditions_attributes][{{index}}][data_type]"
-          | {{option data_type "date" "date"}}
-          | {{option data_type "number" "number"}}
-          | {{option data_type "string" "string"}}
+          | {{rule-option data_type "date" "date"}}
+          | {{rule-option data_type "number" "number"}}
+          | {{rule-option data_type "string" "string"}}
       .custom-segment-text
         ' The value
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
-          | {{option operand "every" "every"}}
-          | {{option operand "after" "is after"}}
-          | {{option operand "before" "is before"}}
-          | {{option operand "is" "is"}}
-          | {{option operand "is_not" "is not"}}
-          | {{option operand "includes" "includes"}}
-          | {{option operand "does_not_include" "does not include"}}
-          | {{option operand "less_than" "is less than"}}
-          | {{option operand "greater_than" "is greater than"}}
-          | {{option operand "between" "is between"}}
+          | {{rule-option operand "every" "every"}}
+          | {{rule-option operand "after" "is after"}}
+          | {{rule-option operand "before" "is before"}}
+          | {{rule-option operand "is" "is"}}
+          | {{rule-option operand "is_not" "is not"}}
+          | {{rule-option operand "includes" "includes"}}
+          | {{rule-option operand "does_not_include" "does not include"}}
+          | {{rule-option operand "less_than" "is less than"}}
+          | {{rule-option operand "greater_than" "is greater than"}}
+          | {{rule-option operand "between" "is between"}}
       .rule_conditions_choices
         .choice-wrapper.select-wrapper.device-choice
           select.device.value name="rule[conditions_attributes][{{index}}][value]"
-            | {{option value "mobile" "mobile"}}
-            | {{option value "tablet" "tablet"}}
-            | {{option value "computer" "computer"}}
+            | {{rule-option value "mobile" "mobile"}}
+            | {{rule-option value "tablet" "tablet"}}
+            | {{rule-option value "computer" "computer"}}
         .choice-wrapper.date-choice
           | {{#if is_between}}
           input.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value.[0]}}"

@@ -31,7 +31,7 @@ export default Ember.Controller.extend({
 
   associateRuleToModel(rule) {
     this.set('model.rule_id', rule && rule.id);
-    return this.set('model.rule', rule);
+    this.set('model.rule', rule);
   },
 
   navigateRoute(newRoute) {
@@ -231,12 +231,12 @@ export default Ember.Controller.extend({
   actions: {
 
     resetRuleDropdown(ruleData = {}) {
+      this.set('targetingSelectionInProgress', true);
       if (ruleData.id === undefined) {
         this.associateRuleToModel(null);
-        return this.navigateRoute('targeting');
       } else {
         this.associateRuleToModel(ruleData);
-        return this.navigateRoute('targeting.saved');
+        this.navigateRoute('targeting.saved');
       }
     },
 
@@ -276,7 +276,7 @@ export default Ember.Controller.extend({
             controller.get('model.site.rules').push(ruleData);
           }
 
-          controller.send('associateRuleToModel', ruleData);
+          controller.associateRuleToModel(ruleData);
           return controller.notifyPropertyChange('model.site.rules');
         },
         close() {
