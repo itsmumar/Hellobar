@@ -154,12 +154,15 @@ export default Ember.Controller.extend({
       switch (routeName) {
         case 'targeting.everyone':
           this.associateRuleToModel(defaultRules['Everyone']);
+          this.set('model.preset_rule_name', 'Everyone');
           break;
         case 'targeting.mobile':
           this.associateRuleToModel(defaultRules['Mobile Visitors']);
+          this.set('model.preset_rule_name', 'Mobile Visitors');
           break;
         case 'targeting.homepage':
           this.associateRuleToModel(defaultRules['Homepage Visitors']);
+          this.set('model.preset_rule_name', 'Homepage Visitors');
           break;
         case 'targeting.custom':
           this.associateRuleToModel(null);
@@ -176,6 +179,7 @@ export default Ember.Controller.extend({
             })()))) {
             this.associateRuleToModel(null);
           }
+          this.set('model.preset_rule_name', 'Saved');
           break;
         default:
           this.associateRuleToModel(null);
@@ -257,6 +261,7 @@ export default Ember.Controller.extend({
     },
 
     openRuleModal(ruleData = {}) {
+      const isNewRule = _.isEmpty(ruleData);
       ruleData.siteID = window.siteID;
       let controller = this;
 
@@ -280,7 +285,7 @@ export default Ember.Controller.extend({
           return controller.notifyPropertyChange('model.site.rules');
         },
         close() {
-          return controller.send('resetRuleDropdown', ruleData);
+          isNewRule && controller.send('resetRuleDropdown', ruleData);
         }
       };
 
