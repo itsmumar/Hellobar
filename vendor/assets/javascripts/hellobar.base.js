@@ -554,7 +554,7 @@ var HB = {
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
   // shakes the email field
-  submitEmail: function (siteElement, formElement, targetSiteElement, thankYouText, redirect, redirectUrl) {
+  submitEmail: function (siteElement, formElement, targetSiteElement, thankYouText, redirect, redirectUrl, thankYouCssClass) {
     var emailField = formElement ? formElement.querySelector('#f-builtin-email') : null;
     HB.validateEmail(
       emailField ? emailField.value : '',
@@ -564,7 +564,7 @@ var HB = {
         var siteElementDoc = siteElement.w.contentDocument;
 
         if (!doRedirect) {
-          if (targetSiteElement != null) {
+          if ((targetSiteElement != null) && thankYouText) {
             if (siteElement.use_free_email_default_msg) {
               // Hijack the submit button and turn it into a link
               var btnElement = siteElementDoc.getElementsByClassName('hb-cta')[0];
@@ -582,6 +582,9 @@ var HB = {
             }
             targetSiteElement.innerHTML = '<span>' + thankYouText + '</span>';
           }
+          if (thankYouCssClass) {
+            HB.addClass(siteElement.getSiteElementDomNode(), thankYouCssClass);
+          }
 
           if (removeElements != null) {
             for (var i = 0; i < removeElements.length; i++) {
@@ -590,7 +593,7 @@ var HB = {
           }
         }
         var values = [];
-        values.push(emailField.value)
+        values.push(emailField.value);
         var inputs = siteElementDoc.querySelectorAll('input:not(#f-builtin-email)');
         if (inputs) {
           for (var inputIndex = 0; inputIndex < inputs.length; inputIndex++) {

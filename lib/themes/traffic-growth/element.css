@@ -208,11 +208,11 @@
   color: #f03554;
 }
 
-#hellobar-template.traffic-growth  .go-hellobar-button-wrapper {
+#hellobar-template.traffic-growth .go-hellobar-button-wrapper {
   margin-bottom: 80px;
 }
 
-#hellobar-template.traffic-growth  .go-hellobar-button {
+#hellobar-template.traffic-growth .go-hellobar-button {
   display: inline-block;
   padding: 18px 50px;
   background-color: #f03554;
@@ -222,4 +222,30 @@
   font-size: 18px;
   line-height: 18px;
   border-radius: 8px;
+}
+
+
+#hellobar-template.traffic-growth .thank-you-headline,
+#hellobar-template.traffic-growth .thank-you-secondary-text,
+#hellobar-template.traffic-growth .go-hellobar-button-wrapper {
+  display: none;
+}
+
+#hellobar-template.traffic-growth.thank-you {
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/background-thank-you.jpeg);
+}
+
+#hellobar-template.traffic-growth.thank-you .thank-you-headline,
+#hellobar-template.traffic-growth.thank-you .thank-you-secondary-text,
+#hellobar-template.traffic-growth.thank-you .go-hellobar-button-wrapper {
+  display: block;
+}
+
+#hellobar-template.traffic-growth.thank-you .headline-first,
+#hellobar-template.traffic-growth.thank-you .headline-second,
+#hellobar-template.traffic-growth.thank-you .headline-third,
+#hellobar-template.traffic-growth.thank-you .hb-secondary-text,
+#hellobar-template.traffic-growth.thank-you .form-block,
+#hellobar-template.traffic-growth.thank-you .reject-link {
+  display: none;
 }

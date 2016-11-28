@@ -38,12 +38,25 @@
           <input id="f-builtin-email" type="text" placeholder="Your email" required="" value="">
         </div>
 
-        <a class="hb-cta hb-cta-style-button" href="javascript:void(0)">
+        <{{ HB.CAP.preview ? 'div' : 'a' }} class="hb-cta hb-cta-style-button">
           <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
-               data-hb-editable-block="blocks.action_link" data-hb-inline-editor-placeholder="Subscribe">
+               data-hb-editable-block="blocks.action_link"
+               data-hb-inline-editor-placeholder="Subscribe"
+               onclick="if(window.parent.HB.isPreviewMode) {
+                       return false;
+                     } else {
+                       window.parent.HB.submitEmail({{siteElement.me}},
+                                                    document.getElementById('hb-fields-form'),
+                                                    null,
+                                                    null,
+                                                    {{siteElement.email_redirect}},
+                                                    {{HB.stringLiteral(siteElement.settings.redirect_url)}},
+                                                    'thank-you');
+                      return false;
+                    }">
             {{siteElement.blockContent('action_link').text}}
           </div>
-        </a>
+        </{{ HB.CAP.preview ? 'div' : 'a' }}>
       </div>
 
       <a href="javascript:void(0)" class="reject-link">
@@ -54,6 +67,23 @@
           {{siteElement.blockContent('reject_link').text}}
         </div>
       </a>
+
+      <div class="thank-you-headline">
+        Thank you for signing up!
+      </div>
+
+
+      <div class="thank-you-secondary-text">
+        If you would like this sort of bar on your site...
+      </div>
+
+      <div class="go-hellobar-button-wrapper">
+        <a class="go-hellobar-button" target="_blank" href="http://hellobar.com">
+          <div class="hb-text-holder">
+            Click here
+          </div>
+        </a>
+      </div>
 
       <div class="hb-logo">
         <a target="_blank" href="http://hellobar.com">

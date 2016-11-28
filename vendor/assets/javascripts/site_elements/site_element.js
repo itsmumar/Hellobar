@@ -171,8 +171,6 @@ HB.SiteElement = HB.createClass({
     this.isMobileWidth = false;
     var mobileDeviceInterval = setInterval(this.checkForMobileDevice.bind(this), 50); // Check screen size every N ms
     HB.initializePhoneFields();
-
-    //console.log('site_element = ', this);
   },
 
   checkForMobileDevice: function () {
@@ -258,11 +256,17 @@ HB.SiteElement = HB.createClass({
   },
 
   getSiteElementDomNode: function () {
+    var el;
     if (this.w && this.w.contentDocument) {
       for (var key in HB.id_type_map) {
-        var el = this.w.contentDocument.getElementById(key);
-        if (el != undefined)
+        el = this.w.contentDocument.getElementById(key);
+        if (el) {
           return el;
+        }
+      }
+      el = this.w.contentDocument.getElementById('hellobar-template');
+      if (el) {
+        return el;
       }
     }
     return null;
