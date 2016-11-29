@@ -51,12 +51,14 @@ class SimpleModelAdapter {
   }
 
   handleImageRemoval() {
-    return this.modelHandler.setProperties({
+     this.modelHandler.setProperties({
       'model.active_image_id': null,
       'model.image_placement': this.modelHandler.get('model.image_placement'),
       'model.image_type': 'custom',
       'model.image_url': null
     });
+
+    window.parent.$('.file-upload-container .icon-trash').click();
   }
 
   handleImageReplaced(responseObject) {
@@ -460,6 +462,3 @@ export default Ember.Service.extend({
   }
 
 });
-
-
-
