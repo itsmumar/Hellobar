@@ -1,19 +1,3 @@
-<div class="select-block">
-  {{currentChoice.label}}
-  {{#if currentChoice.isPro}}<span class="pro-tag">PRO</span>{{/if}}
-</div>
-
-<div class="custom-select-dropdown">
-  {{#each options as |option| }}
-    {{#custom-pro-select-option parentView=this option=option}}
-      {{option.label}}
-      {{#if option.isPro}}<span class="pro-tag">PRO</span>{{/if}}
-    {{/custom-pro-select-option}}
-  {{/each}}
-</div>
-
-<hr>
-
 {{#power-select options=options
   selected=calculatedSelectedOption
   renderInPlace=true
