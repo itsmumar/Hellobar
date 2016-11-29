@@ -18,7 +18,7 @@ export default Ember.Component.extend({
         return null;
       }
     }
-  }.property('selectedOption'),
+  }.property('selectedOption', 'options'),
 
   actions: {
     selectOption(option) {

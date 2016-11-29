@@ -1,27 +1,22 @@
 {{#if hasContactList}}
 
-  <div class="contact-list-block" {{action 'toggleOpen'}}>
-    <i class="hellobar-icon-list"></i>
-    <div>
-      <div class="contact-list-title">{{selectedList.name}}</div>
-      <em>{{selectedList.provider}}</em>
+  {{#power-select options=options
+    selected=calculatedSelectedOption
+    renderInPlace=true
+    searchEnabled=false
+    onchange=(action "selectOption") as |option|}}
+    {{option.label}}
+    <div class="contact-list-block">
+      <i class="hellobar-icon-list"></i>
+      <div>
+        <div class="contact-list-title">{{option.name}}</div>
+        <em>{{option.provider}}</em>
+      </div>
     </div>
-  </div>
+  {{/power-select}}
 
-  <div class="contact-list-dropdown" {{action 'toggleOpen'}}>
-    {{#each options as |option| }}
-      {{#if option}}
-        <div class="contact-list-option" {{action 'listSelected' option.id bubbles=false}}>
-          <div>
-            <div class="contact-list-title">{{option.name}}</div>
-            <em>{{option.provider}}</em>
-          </div>
-        </div>
-      {{/if}}
-    {{/each}}
-  </div>
 
-  <small>
+  <small class="actions">
     <a {{action 'editList'}}>Edit list</a>
     <a {{action 'newList'}}>Create new Contact List...</a>
   </small>
