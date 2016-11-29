@@ -24,7 +24,7 @@ export default {
     {
       id: 'caption',
       content: {
-        text: '<strong>Subscribe to our weekly newsletter to receive the latest freebies in your inbox!</strong>'
+        text: 'Subscribe to our weekly newsletter to receive the latest freebies in your inbox!'
       }
     },
     {
