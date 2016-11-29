@@ -19,7 +19,6 @@ export default Ember.Controller.extend({
   goalSelectionInProgress: false,
 
   applyRoute (routeName) {
-    console.log('settings.applyRoute routeName = ', routeName, 'subtype = ', this.get('model.element_subtype'));
     const routeByElementSubtype = (elementSubtype) => {
       if (/^social/.test(elementSubtype)) {
         return 'settings.social';

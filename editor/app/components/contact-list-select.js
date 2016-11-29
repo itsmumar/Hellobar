@@ -10,7 +10,6 @@ export default Ember.Component.extend({
   selectedOption: null,
 
   calculatedSelectedOption: function() {
-    console.log('calculatedSelectedOption', this.get('selectedOption'), this.get('options'));
     const selectedOption = this.get('selectedOption');
     if (selectedOption) {
       return selectedOption;
