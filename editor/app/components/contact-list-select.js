@@ -25,7 +25,8 @@ export default Ember.Component.extend({
   }).observes('value').on('init'),
 
   focusOut() {
-    return this.set('isOpen', false);
+    (typeof event !== 'undefined') && event.stopPropagation();
+    this.set('isOpen', false);
   },
 
   actions: {
@@ -43,8 +44,11 @@ export default Ember.Component.extend({
     },
 
     listSelected(value) {
+      (typeof event !== 'undefined') && event.stopPropagation();
       this.sendAction('setList', value);
-      return this.set('value', value);
+      this.set('value', value);
+      this.set('isOpen', false);
+      this.$el.find('.contact-list-dropdown').toggleClass('is-visible');
     }
   }
 });
