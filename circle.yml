@@ -36,3 +36,16 @@ deployment:
     commands:
       - BRANCH=production bundle exec cap production deploy:
           timeout: 2400
+
+  edge:
+    branch: develop
+    commands:
+      - BRANCH=develop bundle exec cap edge deploy:
+          timeout: 900
+
+general:
+  branches:
+    only:
+      - develop # list of branches to build
+      - master
+      # - /feature-.*/ # or regexes
