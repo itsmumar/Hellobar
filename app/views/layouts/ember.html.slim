@@ -54,11 +54,6 @@ html
 
     = yield
 
-    - if Rails.env.development?
-      = javascript_include_tag "ember"
-    - else
-      script src='//cdnjs.cloudflare.com/ajax/libs/ember.js/1.7.1/ember.prod.js'
-
     = javascript_include_tag "dropper_trios"
 
 
