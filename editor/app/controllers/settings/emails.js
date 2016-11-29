@@ -96,6 +96,11 @@ export default Ember.Controller.extend({
   showCustomMessage: Ember.computed.equal('afterSubmitChoice', 'custom_message'),
   showRedirectUrlInput: Ember.computed.equal('afterSubmitChoice', 'redirect'),
 
+  afterSubmitOptionSelected: function() {
+    const afterSubmitChoiceAsString = this.get('afterSubmitChoice');
+    return _.find(this.get('afterSubmitOptions'), (option) => option.key === afterSubmitChoiceAsString);
+  }.property('afterSubmitChoice', 'afterSubmitOptions'),
+
   setModelChoice: ( function () {
     let choice = this.get('afterSubmitChoice');
     let selection = this.get('afterSubmitOptions').findBy('key', choice);

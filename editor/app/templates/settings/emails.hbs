@@ -61,9 +61,9 @@
 
 <label>Design your "Thank You" message</label>
 {{custom-pro-select
-  choice=afterSubmitChoice
+  selectedOption=afterSubmitOptionSelected
   options=afterSubmitOptions
-  action="setModelAfterSubmitValue"
+  onchange=(action "setModelAfterSubmitValue")
 }}
 
 {{#if showRedirectUrlInput}}

@@ -2,35 +2,28 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
 
-  isOpen: false,
-  tabindex: -1,
+  classNames: ['custom-pro-select'],
 
-  classNames: ['custom-select-wrapper'],
-  classNameBindings: ['isOpen:is-open'],
-  attributeBindings: ['tabindex'], // to make component focusable
+  selectedOption: null,
 
-  _setSelectedOption: ( function () {
-    return this.set('currentChoice', this.get('options').findBy('key', this.get('choice')));
-  }).observes('choice').on('init'),
-
-  focusOut() {
-    return this.set("isOpen", false);
-  },
-
-  click(event) {
-    event.stopPropagation();
-    this.toggleProperty("isOpen");
-    this.$el.find('.custom-select-dropdown').toggleClass('is-visible');
-  },
+  calculatedSelectedOption: function() {
+    const selectedOption = this.get('selectedOption');
+    if (selectedOption) {
+      return selectedOption;
+    } else {
+      const options = this.get('options');
+      if (options && options.length > 0) {
+        return options[0];
+      } else {
+        return null;
+      }
+    }
+  }.property('selectedOption'),
 
   actions: {
-    optionSelected(option) {
-      (typeof event !== 'undefined') && event.stopPropagation();
-      this.sendAction('action', option);
-      this.set("isOpen", false);
-      this.$el.find('.custom-select-dropdown').removeClass('is-visible');
+    selectOption(option) {
+      this.sendAction('onchange', option);
     }
   }
 });
-
 

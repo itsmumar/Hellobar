@@ -2,7 +2,7 @@ import Ember from 'ember';
 import ENV from 'editor/config/environment';
 
 const apiBaseConfiguration = {
-  'development': 'http://localhost:3000',
+  'development': 'http://localhost:3001',
   '*': ''
 };
 
@@ -11,9 +11,6 @@ const getApiBase = () => (ENV.environment && apiBaseConfiguration[ENV.environmen
   apiBaseConfiguration['*'];
 
 const apiBase = getApiBase();
-
-// TODO remove this
-console.log('apiBase = ', apiBase);
 
 export default Ember.Service.extend({
   newSiteElement() {
