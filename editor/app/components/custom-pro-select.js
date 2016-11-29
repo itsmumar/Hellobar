@@ -17,13 +17,18 @@ export default Ember.Component.extend({
     return this.set("isOpen", false);
   },
 
-  click() {
-    return this.toggleProperty("isOpen");
+  click(event) {
+    event.stopPropagation();
+    this.toggleProperty("isOpen");
+    this.$el.find('.custom-select-dropdown').toggleClass('is-visible');
   },
 
   actions: {
     optionSelected(option) {
-      return this.sendAction('action', option);
+      (typeof event !== 'undefined') && event.stopPropagation();
+      this.sendAction('action', option);
+      this.set("isOpen", false);
+      this.$el.find('.custom-select-dropdown').removeClass('is-visible');
     }
   }
 });
