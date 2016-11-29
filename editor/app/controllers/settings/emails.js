@@ -147,6 +147,15 @@ export default Ember.Controller.extend({
     return 'item-block add' + (this.get('isBarType') ? ' denied' : '');
   }).property('isBarType'),
 
+
+  selectedContactList: function() {
+    console.log('Hey', this.get('model.contact_list_id'), this.get('model.site.contact_lists'));
+    const contactListId = this.get('model.contact_list_id');
+    const contactLists = this.get('model.site.contact_lists');
+    return _.find(contactLists, (contactList) => contactList.id === contactListId);
+  }.property('model.contact_list_id', 'model.site.contact_lists'),
+
+
 //-----------  Actions  -----------#
 
   actions: {
@@ -222,13 +231,6 @@ export default Ember.Controller.extend({
     setContactList(listID) {
       return this.set('model.contact_list_id', listID);
     },
-
-    selectedContactList: function() {
-      console.log('Hey', this.get('model.contact_list_id'), this.get('model.site.contact_lists'));
-      const contactListId = this.get('model.contact_list_id');
-      const contactLists = this.get('model.site.contact_lists');
-      return _.find(contactLists, (contactList) => contactList.id === contactListId);
-    }.property('model.contact_list_id', 'model.site.contact_lists'),
 
     openEmailListPopup(listID = 0) {
       let { siteID } = window;

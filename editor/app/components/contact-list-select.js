@@ -10,6 +10,7 @@ export default Ember.Component.extend({
   selectedOption: null,
 
   calculatedSelectedOption: function() {
+    console.log('calculatedSelectedOption', this.get('selectedOption'), this.get('options'));
     const selectedOption = this.get('selectedOption');
     if (selectedOption) {
       return selectedOption;
@@ -24,17 +25,11 @@ export default Ember.Component.extend({
   }.property('selectedOption', 'options'),
 
   init() {
-    if (this.get('hasContactList') && Ember.isEmpty(this.get('value'))) {
+    if (this.get('hasContactList') && Ember.isEmpty(this.get('selectedOption'))) {
       this.sendAction('setList', this.get('options.firstObject.id'));
     }
     return this._super();
   },
-
-  _setSelectedList: ( function () {
-    let value = this.get('value') || 0;
-    let list = this.get('options').findBy('id', value);
-    return this.set('selectedList', list || this.get('options.firstObject'));
-  }).observes('value').on('init'),
 
   actions: {
 
@@ -43,7 +38,7 @@ export default Ember.Component.extend({
     },
 
     editList() {
-      return this.sendAction('editList', this.get('selectedList.id'));
+      return this.sendAction('editList', this.get('calculatedSelectedOption.id'));
     },
 
     selectOption(option) {
@@ -51,4 +46,3 @@ export default Ember.Component.extend({
     }
   }
 });
-
