@@ -216,13 +216,13 @@ export default Ember.Controller.extend({
       let elementType = this.get('model.type');
       if (elementType === 'Modal' || elementType === 'Takeover') {
         cookieSettings = {
-          duration: 1825,
-          success_duration: 365
+          duration: 0,
+          success_duration: 0
         };
       } else {
         cookieSettings = {
-          duration: 30,
-          success_duration: 365
+          duration: 0,
+          success_duration: 0
         };
       }
 
