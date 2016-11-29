@@ -4,10 +4,10 @@
 </div>
 
 <div class="custom-select-dropdown">
-  {{#each option in options}}
-    <div class="custom-select-option" {{action 'optionSelected' option bubbles=false}}>
+  {{#each options as |option| }}
+    {{#custom-pro-select-option parentView=this option=option}}
       {{option.label}}
       {{#if option.isPro}}<span class="pro-tag">PRO</span>{{/if}}
-    </div>
+    {{/custom-pro-select-option}}
   {{/each}}
 </div>
