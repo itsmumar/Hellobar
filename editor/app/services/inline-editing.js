@@ -200,7 +200,8 @@ class InlineImageManagementPane {
 export default Ember.Service.extend({
 
   modelHandler: null,
-  modelAdapter: null,
+  simpleModelAdapter: null,
+  blockBasedModelAdapter: null,
 
   fieldChangeListeners: [],
 
@@ -232,7 +233,7 @@ export default Ember.Service.extend({
         'below-caption': 'Below Caption'
       },
       callback(cmd, val) {
-        return that.modelAdapter.handleImagePlacementChange(val);
+        return that.simpleModelAdapter.handleImagePlacementChange(val);
       }
     });
     $.FroalaEditor.DefineIcon('imageRemoveCustom', {NAME: 'trash'});
