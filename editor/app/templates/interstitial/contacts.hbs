@@ -1,0 +1,34 @@
+<header>
+  <h5>Grow Your Mailing List</h5>
+</header>
+
+<div class="interstitial-side-by-side">
+  <div class="goal-wrapper template-form">
+    <i class="large-icon icon-contacts"></i>
+
+    <h6>What should your Hello Bar say?</h6>
+    {{input value=model.headline placeholder="Join our mailing list to stay up to date on our upcoming events" maxlength=255}}
+
+    <h6>What should the button say?</h6>
+    {{input value=model.link_text placeholder="Subscribe" maxlength=255}}
+
+    <div class="step-container">
+      {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
+      <button class="button save-editor" {{action 'closeInterstitial'}} disabled={{inputIsInvalid}}>Continue</button>
+    </div>
+  </div>
+
+  {{#if showEmailVolume}}
+    <aside>
+      {{#if hasEnoughSubscribers}}
+        <small>Hey! Did you know that with your {{formattedMonthlyPageviews}} views per month, Hello Bar can typically get you:</small>
+        <strong>{{formattedCalculatedSubscribers}} new subscribers each month</strong>
+      {{else}}
+        <small>Hey! Did you know that Hello Bar typically converts 0.5% of your views to email subscribers?</small>
+        <strong>That can really add up!</strong>
+      {{/if}}
+    </aside>
+  {{/if}}
+</div>
+
+{{partial "partials/interstitial-footer"}}

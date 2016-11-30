@@ -1,0 +1,16 @@
+#hellobar-modal-background {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.85);
+}
+
+#hellobar-template .hb-logo-wrapper.original svg, #hellobar-template .hb-logo-wrapper.animated svg {
+  width: 3em;
+  height: 1.95em;
+  border-radius: 3px;
+}
+

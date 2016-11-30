@@ -1,0 +1,40 @@
+<h5 class="step-title">Design &amp; Content</h5>
+
+{{#if currentThemeIsGeneric}}
+  <label>Theme</label>
+  <div class="select-wrapper">
+    {{#power-select selected=currentTheme
+      options=themeOptions
+      searchEnabled=false
+      renderInPlace=true
+      onchange=(action "selectTheme") as |theme|}}
+      {{theme.name}}
+    {{/power-select}}
+
+  </div>
+
+  {{#ivy-tabs selection=selection as |tabs|}}
+    {{#tabs.tablist as |tablist|}}
+      {{#tablist.tab "TabColors" on-select=(action (mut selection))}}Colors{{/tablist.tab}}
+      {{#tablist.tab "TabImage" on-select=(action (mut selection))}}Image{{/tablist.tab}}
+      {{#tablist.tab "TabText" on-select=(action (mut selection))}}Text{{/tablist.tab}}
+    {{/tabs.tablist}}
+
+    {{#tabs.tabpanel "TabColors"}}
+      {{partial "partials/colors-pane"}}
+    {{/tabs.tabpanel}}
+
+    {{#tabs.tabpanel "TabImage"}}
+      {{partial "partials/image-pane"}}
+    {{/tabs.tabpanel}}
+
+    {{#tabs.tabpanel "TabText"}}
+      {{partial "partials/text-pane"}}
+    {{/tabs.tabpanel}}
+  {{/ivy-tabs}}
+
+{{/if}}
+
+{{#if currentThemeIsTemplate}}
+  {{no-content-parameters}}
+{{/if}}

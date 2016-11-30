@@ -147,7 +147,7 @@ Teaspoon runs the *_spec.js files in spec/javascripts/
 
 The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
 
-Tests are divided in 2 groups: `generator` (tests `hellobar.base.js` and some other files) and `project` 
+Tests are divided in 2 groups: `generator` (tests `hellobar.base.js` and some other files) and `project`
 (tests `assets/javascripts/` files).
 
 To get the coverage of Generator:
@@ -181,6 +181,14 @@ user: prodtest@polymathic.me
 pword: password
 site: teampolymathic.github.com
 
+
+## Generate Reports
+### 1. Generate Application Security Vulnerabilities Report
+
+From the terminal, go to your root of the app and run following command
+```
+brakeman
+```
 
 ## Running Hello Bar via Docker
 

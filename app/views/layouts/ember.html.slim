@@ -8,9 +8,10 @@ html
     - if defined?(preview_script_path)
       = javascript_include_tag preview_script_path(@site)
 
-    = stylesheet_link_tag    "editor", :media => "all"
+    = stylesheet_link_tag    "editor/editor", "editor/vendor", :media => "all"
 
-    = javascript_include_tag "editor/vendor"
+    = javascript_include_tag "editor/vendor", "editor/editor"
+    = javascript_include_tag "editor/editor-require"
     = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
     javascript:
       try{Typekit.load({ async: true });}catch(e){}
@@ -43,6 +44,7 @@ html
       var trackEditorFlow = #{{new_user?}};
       var availableThemes = #{{ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).to_json}};
       var availableFonts = #{{ActiveModel::ArraySerializer.new(Font.all, each_serializer: FontSerializer).to_json}};
+      window.emberRootURL = window.location.pathname;
 
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'
@@ -52,13 +54,7 @@ html
 
     = yield
 
-    - if Rails.env.development?
-      = javascript_include_tag "ember"
-    - else
-      script src='//cdnjs.cloudflare.com/ajax/libs/ember.js/1.7.1/ember.prod.js'
-
     = javascript_include_tag "dropper_trios"
-    = javascript_include_tag "editor/application"
 
 
 javascript:

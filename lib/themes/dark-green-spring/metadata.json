@@ -1,5 +1,6 @@
 {
   "name": "Dark Green Spring",
+  "type": "generic",
   "id": "dark-green-spring",
   "fonts": [
     "sintony",

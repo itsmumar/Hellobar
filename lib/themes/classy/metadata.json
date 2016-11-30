@@ -1,5 +1,6 @@
 {
   "name": "Classy",
+  "type": "generic",
   "id": "classy",
   "fonts": [
     "libre_baskerville",

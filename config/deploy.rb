@@ -13,6 +13,9 @@ set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 set :whenever_roles, %w(app db web)
 set :keep_releases, 15
 
+# Using `lambda` for lazy assigment. http://stackoverflow.com/a/25850619/1047207
+set :ember_app_path, lambda { "#{release_path}/editor" }
+
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
@@ -107,6 +110,12 @@ namespace :deploy do
     end
   end
 
+  # TODO: Move node and bower dependencies to some shared folder
+  before 'assets:precompile', 'node:npm_install'
+  before 'assets:precompile', 'node:bower_install'
+  before 'assets:precompile', 'ember:build'
+  after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
+
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
 
@@ -154,6 +163,11 @@ namespace :prerequisites do
   task :install do
     on roles(:web) do
       execute "sudo apt-get -y install imagemagick"
+
+      execute "curl -sL https://deb.nodesource.com/setup | sudo bash -"
+      execute "sudo apt-get install -y nodejs"
+      execute "sudo npm install -g bower"
+      execute "sudo npm install -g ember-cli"
     end
   end
 end

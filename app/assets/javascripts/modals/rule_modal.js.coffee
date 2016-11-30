@@ -139,7 +139,7 @@ class @RuleModal extends Modal
                       else [conditionData.value]) || []
       for value, index in dataValue
         $($condition.find(classToEnable)
-                    .find(".value > option[value=#{value}]")[index])
+                    .find(".value > option[value=\"#{value}\"]")[index])
                     .attr('selected', 'selected')
     else if conditionData.segment == 'TimeCondition'
       # select the correct hour
@@ -148,12 +148,12 @@ class @RuleModal extends Modal
       timezoneValue = conditionData.value?[2] || window.site.timezone || "visitor"
 
       $condition.find(classToEnable)
-                .find(".value:eq(0) > option[value=#{hourValue}]")
+                .find(".value:eq(0) > option[value=\"#{hourValue}\"]")
                 .attr('selected', 'selected')
 
       # select the correct minute
       $condition.find(classToEnable)
-                .find(".value:eq(1) > option[value=#{minuteValue}]")
+                .find(".value:eq(1) > option[value=\"#{minuteValue}\"]")
                 .attr('selected', 'selected')
 
       $condition.find(classToEnable)

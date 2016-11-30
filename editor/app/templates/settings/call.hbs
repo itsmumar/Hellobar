@@ -1,0 +1,12 @@
+<label>Enter phone number</label>
+{{input value=controllers.application.phone_number placeholder="(555) 555-5555" maxlength=50}}
+<div class="select-wrapper">
+  {{#power-select options=countries
+    selected=selectedCountry
+    renderInPlace=true
+    searchField="name"
+    onchange=(action "selectCallCountryCall") as |country|}}
+    {{country.name}}
+  {{/power-select}}
+</div>
+<p>This is the phone number that will be dialed</p>

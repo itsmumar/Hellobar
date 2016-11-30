@@ -133,6 +133,11 @@ class ScriptGenerator < Mustache
     CSSMin.minify(css).to_json
   end
 
+  def hellobar_template_container_css
+    css = read_css_files(template_common_css_files)
+    CSSMin.minify(css).to_json
+  end
+
   def hellobar_element_css
     css = read_css_files(element_css_files)
     CSSMin.minify(css).to_json
@@ -151,21 +156,50 @@ class ScriptGenerator < Mustache
 
   def templates
     template_names = Set.new
+    duplicating = false
+
     if options[:templates]
-      options[:templates].each { |t| template_names << t.split("_", 2) }
+      templates = Theme.where(type: 'template').collect(&:name)
+
+      options[:templates].each { |t|
+        temp_name = t.split("_", 2)
+        category = 'generic'
+        category = 'template' if templates.include?(temp_name[1].titleize)
+        template_names << (temp_name << category)
+      }
     else
       site.site_elements.active.each do |se|
-        template_names << [se.class.name.downcase, se.element_subtype]
-        template_names << [se.class.name.downcase, 'question'] if se.use_question?
+        theme_id = se.theme_id
+        theme = Theme.where(id: theme_id).first
+        category = theme.type
+        subtype = (category == 'template' ? theme_id.underscore : se.element_subtype)
+
+        template_names << [se.class.name.downcase, subtype, category]
+        template_names << [se.class.name.downcase, 'question', category] if se.use_question?
       end
     end
 
-    template_names.map do |name|
-      {
-        name: name.join('_'),
-        markup: content_template(name[0], name[1])
-      }
-    end
+    template_names =  template_names.map do |name|
+                        # TODO: Please fix me - Bad Code
+                        canonical_name = if name[2] == 'generic'
+                                           name.first(2).join('_')
+                                         else
+                                           # This supports only 1 template (traffic_growth)
+                                           unless duplicating
+                                             duplicating = true
+                                             name[1]
+                                           end
+                                         end
+
+                        if canonical_name.present?
+                          {
+                            name: canonical_name,
+                            markup: content_template(name[0], name[1], name[2])
+                          }
+                        end
+                      end
+    template_names.delete(nil)
+    template_names
   end
 
   def rules
@@ -202,9 +236,17 @@ private
     end
   end
 
-  def content_template(element_class, type)
+  def content_template(element_class, type, category = 'generic')
     ActiveSupport.escape_html_entities_in_json = false
-    content = (content_header(element_class) + content_markup(element_class, type) + content_footer(element_class)).to_json
+
+    content = if category == 'generic'
+                (content_header(element_class) +
+                  content_markup(element_class, type) +
+                  content_footer(element_class)).to_json
+              else
+                content_markup(element_class, type).to_json
+              end
+
     ActiveSupport.escape_html_entities_in_json = true
 
     content
@@ -253,6 +295,7 @@ private
       view_condition
       wiggle_button
       wordpress_bar_id
+      blocks
     }
     settings << 'caption' unless site_element.use_question?
 
@@ -305,7 +348,8 @@ private
       views: views,
       updated_at: site_element.updated_at.to_f * 1000,
       use_free_email_default_msg: site_element.show_default_email_message? && site_element.site.is_free?,
-      wiggle_wait: 0
+      wiggle_wait: 0,
+      blocks: site_element.blocks
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
@@ -341,6 +385,11 @@ private
 
     files += element_classes.map { |klass| "#{vendor_root}/#{klass.name.downcase}/container.css" }
     files += element_themes.map(&:container_css_path)
+  end
+
+  def template_common_css_files
+    vendor_root = "#{Rails.root}/vendor/assets/stylesheets/site_elements"
+    files = ["#{vendor_root}/template_common.css"]
   end
 
   def element_css_files

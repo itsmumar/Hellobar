@@ -195,4 +195,19 @@ module SiteElementsHelper
     elements = elements.group_by(&:element_subtype)
     [elements["email"], social_elements, elements["traffic"], elements["call"], elements["announcement"]].compact
   end
+
+  def render_headline(site_element)
+    # Condering `blocks` field will be present only for `templates`
+    headline = if site_element.blocks.present?
+                 h = ''
+                 site_element.blocks.each { |block|
+                   h += "#{block['content']['text']} " if block['id'].include?('headline')
+                 }
+                 h
+               else
+                 site_element.headline
+               end
+
+    strip_tags(site_element.use_question? ? site_element.question : headline).html_safe
+  end
 end

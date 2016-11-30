@@ -1,4 +1,4 @@
-Handlebars.registerHelper 'option', (method, value, text) ->
+Handlebars.registerHelper 'rule-option', (method, value, text) ->
   $option = $('<option>')
   $option.val(value)
          .text(text)

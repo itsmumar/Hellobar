@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+
+  #mount_ember_app :editor, to: "/editor"
+
   resources :referrals do
     collection do
       get :accept
@@ -40,6 +43,8 @@ Rails.application.routes.draw do
 
     put "site_elements/:id/toggle_paused", to: "site_elements#toggle_paused", as: :site_element_toggle_paused
     resources :site_elements
+    get "site_elements/:id/edit/*path", to: "site_elements#edit"
+    get "site_elements/new/*path", to: "site_elements#new"
 
     resources :image_uploads, only: [:create]
 

@@ -1,5 +1,6 @@
 {
   "name": "Green Timberline",
+  "type": "generic",
   "id": "green-timberline",
   "fonts": [
     "source_pro",

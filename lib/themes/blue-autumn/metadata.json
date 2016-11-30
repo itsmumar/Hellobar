@@ -1,5 +1,6 @@
 {
   "name": "Blue Autumn",
+  "type": "generic",
   "id": "blue-autumn",
   "fonts": [
     "open_sans",

@@ -1,0 +1,20 @@
+{
+  "id": "traffic-growth",
+  "type": "template",
+  "element_type": "Modal",
+  "name": "Traffic Growth",
+  "defaults": {
+    "Modal": {
+      "button_color": "F03554"
+    }
+  },
+  "files": {
+    "html": {
+      "main": "traffic-growth.html",
+      "thank_you": "traffic-growth-thank-you.html"
+    },
+    "css": [
+      "traffic-growth.css"
+    ]
+  }
+}

@@ -4,7 +4,7 @@ class SiteElement < ActiveRecord::Base
   TYPES = [Bar, Modal, Slider, Takeover]
 
   DEFAULT_EMAIL_THANK_YOU = "Thank you for signing up!"
-  DEFAULT_FREE_EMAIL_THANK_YOU = "#{DEFAULT_EMAIL_THANK_YOU} If you'd like this sort of bar on your site..."
+  DEFAULT_FREE_EMAIL_THANK_YOU = "#{DEFAULT_EMAIL_THANK_YOU} If you would like this sort of bar on your site..."
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,
     1 => :custom_thank_you_text,
@@ -18,6 +18,7 @@ class SiteElement < ActiveRecord::Base
   BAR_TYPES = {
     "call"                            => "Calls",
     "traffic"                         => "Clicks",
+    "traffic_growth"                  => "Clicks",
     "email"                           => "Emails",
     "announcement"                    => "Conversions",
     "social/tweet_on_twitter"         => "Tweets",
@@ -113,7 +114,7 @@ class SiteElement < ActiveRecord::Base
   def headline=(h_value)
     white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
     h_value = white_list_sanitizer.sanitize(h_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    h_value = 'Hello. Add your message here.' if h_value.empty?
+    h_value = 'Hello. Add your message here.' if h_value.blank?
     write_attribute(:headline, h_value)
   end
 

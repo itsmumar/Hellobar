@@ -1,0 +1,31 @@
+{{#if hasContactList}}
+
+  {{#power-select options=options
+    selected=calculatedSelectedOption
+    renderInPlace=true
+    searchEnabled=false
+    onchange=(action "selectOption") as |option|}}
+    {{option.label}}
+    <div class="contact-list-block">
+      <i class="hellobar-icon-list"></i>
+      <div>
+        <div class="contact-list-title">{{option.name}}</div>
+        <em>{{option.provider}}</em>
+      </div>
+    </div>
+  {{/power-select}}
+
+
+  <small class="actions">
+    <a {{action 'editList'}}>Edit list</a>
+    <a {{action 'newList'}}>Create new Contact List...</a>
+  </small>
+
+{{else}}
+
+  <div class="contact-list-block" {{action 'newList'}}>
+    <i>+</i>
+    <div>Create a list and integration</div>
+  </div>
+
+{{/if}}

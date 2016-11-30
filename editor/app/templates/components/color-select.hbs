@@ -1,0 +1,59 @@
+<div class="color-select-spacer"></div>
+
+<div class="color-select-wrapper">
+  <div class="color-select-block" {{action 'toggleFocus'}}>
+    <span class="color-preview" style={{cssStyle}}></span>
+    <span class="hash-mark">#</span>
+    {{input value=color class='hex-val' maxlength=7}}
+  </div>
+
+  <div class="color-dropdown">
+    <div class="color-preview-row">
+      <small>Site colors</small>
+      <ul>
+        {{#each siteColors}}
+          {{component 'color-select-preview' color=this}}
+        {{/each}}
+      </ul>
+    </div>
+
+    <div class="color-preview-row">
+      <small>Recent</small>
+      <ul>
+        {{#each recentColors}}
+          {{component 'color-select-preview' color=this}}
+        {{/each}}
+      </ul>
+    </div>
+
+    <div class="color-picker">
+      <div class="gradient-wrapper">
+        <div class="gradient"></div>
+        <div class="gradient-indicator"></div>
+      </div>
+      <div class="slider-wrapper">
+        <div class="slider"></div>
+        <div class="slider-indicator"></div>
+      </div>
+
+      <div class="rgb-wrapper">
+        <div class="rgb-block">
+          <h6>R</h6>
+          {{input type='number' value=rVal class='r-val' min=0 max=255 step=1 maxlength=3}}
+        </div>
+        <div class="rgb-block">
+          <h6>G</h6>
+          {{input type='number' value=gVal class='g-val' min=0 max=255 step=1 maxlength=3}}
+        </div>
+        <div class="rgb-block">
+          <h6>B</h6>
+          {{input type='number' value=bVal class='b-val' min=0 max=255 step=1 maxlength=3}}
+        </div>
+
+        <a class="eyedrop-button" {{action 'toggleSelecting'}}>
+          <i class="icon-eyedropper"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

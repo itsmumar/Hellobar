@@ -1,37 +1,36 @@
 HB.SiteElement = HB.createClass({
-  initialize: function(props)
-  {
+  initialize: function (props) {
     for (var key in props) {
       this[key] = props[key];
     }
   },
 
 
-  setupIFrame: function(iframe) {
-    if(this.animated)
+  setupIFrame: function (iframe) {
+    if (this.animated)
       HB.addClass(iframe, "hb-animated");
 
-    if(this.theme_id)
+    if (this.theme_id)
       HB.addClass(iframe, this.theme_id);
 
     // Any view_condition including string 'intent' will run the intent event listeners
     if (this.view_condition.indexOf('intent') !== -1) {
       HB.initializeIntentListeners();
-    };
+    }
 
     // Starts setIntervals that check display setting conditions
     this.checkForDisplaySetting();
   },
 
-  imagePlacementClass: function() {
-    if(!!this.image_url) {
+  imagePlacementClass: function () {
+    if (!!this.image_url) {
       return 'image-' + this.image_placement;
     } else {
       return '';
     }
   },
 
-  imageFor: function(location) {
+  imageFor: function (location) {
     locationIndex = location.indexOf(this.image_placement);
     if (!this.image_url || locationIndex === undefined || locationIndex === -1)
       return '';
@@ -43,17 +42,41 @@ HB.SiteElement = HB.createClass({
         + this.image_url + '" /></div></div>';
   },
 
-  attach: function()
-  {
-    if(HB.isIEXOrLess(9))
+  blockContent: function (blockId) {
+    var blocks = this.blocks || [];
+    var foundBlock = null;
+    for (var i = 0; i < blocks.length; i++) {
+      if (blocks[i].id === blockId) {
+        foundBlock = blocks[i];
+      }
+    }
+    return foundBlock.content ? foundBlock.content : {};
+  },
+
+  attach: function () {
+    var that = this;
+    if (HB.isIEXOrLess(9)) {
       this.animated = false;
-    // Replace all the templated variables
-    var html = HB.renderTemplate(HB.getTemplate(this)+"", this);
+    }
+
+    function generateHtml() {
+      var template = '';
+      // TODO now theme id for new template is hard-coded. We need good and flexible solution for the future
+      if (that.theme_id === 'traffic-growth') {
+        template = HB.getTemplateByName('traffic_growth');
+      } else {
+        template = HB.getTemplate(that);
+      }
+      // Replace all the template variables
+      return HB.renderTemplate(template, that);
+    }
+
+    var html = generateHtml();
     // Once the dom is ready we inject the html returned from renderTemplate
-    HB.domReady(function(){
+    HB.domReady(function () {
       // Set an arbitrary timeout to prevent some rendering
       // conflicts with certain sites
-      setTimeout(function(){
+      setTimeout(function () {
         this.injectSiteElementHTML(html);
         this.setIosKeyboardHandlers();
         this.setPullDown();
@@ -62,7 +85,7 @@ HB.SiteElement = HB.createClass({
         this.hideOnZoom();
 
         // Set wiggle listeners
-        if(this.wiggle_button.length > 0)
+        if (this.wiggle_button.length > 0)
           HB.wiggleEventListeners(this.w);
 
         this.useGoogleFont();
@@ -75,58 +98,55 @@ HB.SiteElement = HB.createClass({
   },
 
   // Injects the specified HTML for the given siteElement into the page
-  injectSiteElementHTML: function(html)
-  {
+  injectSiteElementHTML: function (html) {
     // Remove the containing iframe element if it exists
-    if ( this.w &&  this.w.parentNode)
+    if (this.w && this.w.parentNode)
       this.w.parentNode.removeChild(this.w);
 
     // Remove pull-arrow if it exists
-    HB.pd = document.getElementById("pull-down");
-    if ( HB.pd )
+    HB.pd = document.getElementById('pull-down');
+    if (HB.pd)
       HB.pd.parentNode.removeChild(HB.pd);
 
     // Create the iframe container
-    this.w = document.createElement("iframe");
-    this.w.src = "about:blank";
-    this.w.id = HB_PS + "-container";
-    this.w.className = "HB-" + this.type;
-    this.w.name = HB_PS + "-container-"+this.pageIndex;
+    this.w = document.createElement('iframe');
+    this.w.src = 'about:blank';
+    this.w.id = HB_PS + '-container';
+    this.w.className = 'HB-' + this.type;
+    this.w.name = HB_PS + '-container-' + this.pageIndex;
     HB.hideElement(this.w); // Start all site elements as hidden
 
-    this.setupIFrame(this.w)
+    this.setupIFrame(this.w);
 
-      // Check if we have any external CSS to add
-      if ( HB.extCSS )
-      {
-        // If we have already added it, remove it and re-add it
-        if ( HB.extCSSStyle )
-          HB.extCSSStyle.parentNode.removeChild(HB.extCSSStyle);
-        // Create the CSS style tag
-        HB.extCSSStyle = document.createElement('STYLE');
-        HB.extCSSStyle.type="text/css";
-        if(HB.extCSSStyle.styleSheet)
-        {
-          HB.extCSSStyle.styleSheet.cssText=HB.extCSS;
-        }
-        else
-        {
-          HB.extCSSStyle.appendChild(document.createTextNode(HB.extCSS));
-        }
-        var head=document.getElementsByTagName('HEAD')[0];
-        head.appendChild(HB.extCSSStyle);
+    // Check if we have any external CSS to add
+    if (HB.extCSS) {
+      // If we have already added it, remove it and re-add it
+      if (HB.extCSSStyle) {
+        HB.extCSSStyle.parentNode.removeChild(HB.extCSSStyle);
       }
+      // Create the CSS style tag
+      HB.extCSSStyle = document.createElement('STYLE');
+      HB.extCSSStyle.type = 'text/css';
+      if (HB.extCSSStyle.styleSheet) {
+        HB.extCSSStyle.styleSheet.cssText = HB.extCSS;
+      }
+      else {
+        HB.extCSSStyle.appendChild(document.createTextNode(HB.extCSS));
+      }
+      var head = document.getElementsByTagName('HEAD')[0];
+      head.appendChild(HB.extCSSStyle);
+    }
 
     // Inject the container into the DOM
     HB.injectAtTop(this.w);
     // Render the siteElement in the container.
     var d = this.w.contentWindow.document;
     d.open();
-    d.write("<html><head>" + (HB.css || "") + "</head><body>" + html + "</body></html>");
+    d.write('<html><head>' + (HB.css || '') + '</head><body>' + html + '</body></html>');
     d.close();
     d.body.className = this.type;
 
-    if(this.theme_id) {
+    if (this.theme_id) {
       HB.addClass(d.body, this.theme_id);
     }
 
@@ -135,11 +155,11 @@ HB.SiteElement = HB.createClass({
     }
 
     // Add IE Specific class overrides
-    if(HB.isIEXOrLess(9))
-      HB.addClass(d.body, "hb-old-ie");
+    if (HB.isIEXOrLess(9))
+      HB.addClass(d.body, 'hb-old-ie');
 
-    if(HB.isIE11())
-      HB.addClass(d.body, "hb-paused-animations-ie");
+    if (HB.isIE11())
+      HB.addClass(d.body, 'hb-paused-animations-ie');
 
     // As the vistor readjust the window size we need to adjust the size of the containing
     // iframe. We do this by checking the the size of the inner div. If the the width
@@ -151,14 +171,12 @@ HB.SiteElement = HB.createClass({
     this.isMobileWidth = false;
     var mobileDeviceInterval = setInterval(this.checkForMobileDevice.bind(this), 50); // Check screen size every N ms
     HB.initializePhoneFields();
-
-    //console.log('site_element = ', this);
   },
 
-  checkForMobileDevice: function(){
+  checkForMobileDevice: function () {
     // Get the frame
-    var frame = window.frames[HB_PS + "-container-"+this.pageIndex];
-    if ( !frame )
+    var frame = window.frames[HB_PS + "-container-" + this.pageIndex];
+    if (!frame)
       return;
 
     // Get the relevant elements that might need checking/adjusting
@@ -167,23 +185,23 @@ HB.SiteElement = HB.createClass({
     var thisElement = this.getSiteElementDomNode();
 
     // Monitor siteElement height to update HTML/CSS
-    if ( thisElement ) {
-      if ( thisElement.clientHeight ) {
+    if (thisElement) {
+      if (thisElement.clientHeight) {
 
         // Update the CSS class based on the width
         var wasMobile = this.isMobileWidth;
         var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : document.body.clientWidth;
 
-        if ( this.type == "Modal" && containerDocument && !!containerDocument.getElementById("hellobar-modal-background") )
+        if (this.type == "Modal" && containerDocument && !!containerDocument.getElementById("hellobar-modal-background"))
           this.isMobileWidth = (containerDocument.getElementById("hellobar-modal-background").clientWidth <= 640 );
-        else if ( this.type == "Slider" )
+        else if (this.type == "Slider")
           this.isMobileWidth = thisElement.clientWidth <= 270 || containerWidth <= 375 || containerWidth < thisElement.clientWidth;
         else
           this.isMobileWidth = (thisElement.clientWidth <= 640 );
 
 
-        if ( wasMobile != this.isMobileWidth ) {
-          if ( this.isMobileWidth ) {
+        if (wasMobile != this.isMobileWidth) {
+          if (this.isMobileWidth) {
             this.isMobile = true;
             HB.addClass(thisElement, "mobile");
           } else {
@@ -196,23 +214,23 @@ HB.SiteElement = HB.createClass({
         this.setContainerSize(this.w, thisElement, this.type, this.isMobile);
 
         // Bar specific adjustments
-        if ( this.type == "Bar" ) {
+        if (this.type == "Bar") {
 
           // Adjust the pusher
-          if ( HB.p ) {
+          if (HB.p) {
             // handle case where display-condition check has hidden this.w
             if (this.w.style.display === "none") {
               return;
             }
 
             var borderPush = HB.t((this.show_border) ? 3 : 0)
-              HB.p.style.height = (thisElement.clientHeight + borderPush) + "px";
+            HB.p.style.height = (thisElement.clientHeight + borderPush) + "px";
           }
 
           // Add multiline class
           var barBounds = (this.w.className.indexOf('regular') > -1 ? 32 : 52 );
 
-          if ( thisElement.clientHeight > barBounds ) {
+          if (thisElement.clientHeight > barBounds) {
             HB.addClass(thisElement, "multiline");
           } else {
             HB.removeClass(thisElement, "multiline");
@@ -223,14 +241,13 @@ HB.SiteElement = HB.createClass({
   },
 
 
-  setContainerSize:  function(container, element, type, isMobile)
-  {
+  setContainerSize: function (container, element, type, isMobile) {
     if (container == null)
       return;
-    if ( type == 'Bar' ) {
+    if (type == 'Bar') {
       container.style.maxHeight = (element.clientHeight + (HB.CAP.preview ? 350 : 8)) + 'px';
       HB.CAP.preview && (container.style.height = (element.clientHeight + 350) + 'px');
-    } else if ( type == 'Slider' ) {
+    } else if (type == 'Slider') {
       var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : window.innerWidth;
       var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
       container.style.width = (newWidth) + "px";
@@ -238,12 +255,18 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  getSiteElementDomNode:  function() {
-    if(this.w && this.w.contentDocument) {
-      for(var key in HB.id_type_map) {
-        var el = this.w.contentDocument.getElementById(key);
-        if(el != undefined)
+  getSiteElementDomNode: function () {
+    var el;
+    if (this.w && this.w.contentDocument) {
+      for (var key in HB.id_type_map) {
+        el = this.w.contentDocument.getElementById(key);
+        if (el) {
           return el;
+        }
+      }
+      el = this.w.contentDocument.getElementById('hellobar-template');
+      if (el) {
+        return el;
       }
     }
     return null;
@@ -253,20 +276,19 @@ HB.SiteElement = HB.createClass({
   // Reads the site element's view_condition setting and calls hide/show per selected behavior
   // if viewCondition is missing or badly formed, siteElement displays immediately by default
 
-  checkForDisplaySetting:  function()
-  {
+  checkForDisplaySetting: function () {
     var viewCondition = this.view_condition;
     var originalDisplay = this.w.style.display;
 
     if (document.getElementById('hellobar-preview-container') !== null)
       viewCondition = 'preview';
 
-    var show = function() {
+    var show = function () {
       clearInterval(this.displayCheckInterval);
       HB.showElement(this.w);
 
       // Track the view
-      if(!this.dontRecordView) {
+      if (!this.dontRecordView) {
         HB.viewed(this);
       }
 
@@ -275,56 +297,57 @@ HB.SiteElement = HB.createClass({
       // UPDATE:  1/25/16 - DP
       // runnig this hack on all browsers since we had issues with desktop Safari and Chrome
       var siteElementNode = this.getSiteElementDomNode();
-      if(siteElementNode) {
+      if (siteElementNode) {
         siteElementNode.style.display = 'none';
-        setTimeout(function() {
+        setTimeout(function () {
           siteElementNode.style.display = '';
         }, 10);
       }
 
-      if (this.w.className.indexOf("hb-animated") > -1) { HB.animateIn(this.w) };
+      if (this.w.className.indexOf("hb-animated") > -1) {
+        HB.animateIn(this.w)
+      }
     }.bind(this);
 
-    var showMinimizedBar = function() {
+    var showMinimizedBar = function () {
       HB.hideElement(this.w);
       HB.animateIn(this.pullDown);
     }.bind(this);
 
-    if (viewCondition === 'wait-5')
-    {
+    if (viewCondition === 'wait-5') {
       setTimeout(show, 5000);
     }
-    else if (viewCondition === 'wait-10')
-    {
+    else if (viewCondition === 'wait-10') {
       setTimeout(show, 10000);
     }
-    else if (viewCondition === 'wait-30')
-    {
+    else if (viewCondition === 'wait-30') {
       setTimeout(show, 30000);
     }
-    else if (viewCondition === 'wait-60')
-    {
+    else if (viewCondition === 'wait-60') {
       setTimeout(show, 60000);
     }
-    else if (viewCondition === 'scroll-some')
-    {
+    else if (viewCondition === 'scroll-some') {
       // scroll-some is defined here as "visitor scrolls 300 pixels"
-      this.displayCheckInterval = setInterval(function(){HB.scrollTargetCheck(300, show)}, 500);
+      this.displayCheckInterval = setInterval(function () {
+        HB.scrollTargetCheck(300, show)
+      }, 500);
     }
-    else if (viewCondition === 'scroll-middle')
-    {
-      this.displayCheckInterval = setInterval(function(){HB.scrollTargetCheck("middle", show)}, 500);
+    else if (viewCondition === 'scroll-middle') {
+      this.displayCheckInterval = setInterval(function () {
+        HB.scrollTargetCheck("middle", show)
+      }, 500);
     }
-    else if (viewCondition === 'scroll-to-bottom')
-    {
-      this.displayCheckInterval = setInterval(function(){HB.scrollTargetCheck("bottom", show)}, 500);
+    else if (viewCondition === 'scroll-to-bottom') {
+      this.displayCheckInterval = setInterval(function () {
+        HB.scrollTargetCheck("bottom", show)
+      }, 500);
     }
-    else if (viewCondition === 'exit-intent')
-    {
-      this.displayCheckInterval = setInterval(function(){HB.intentCheck("exit", show)}, 100);
+    else if (viewCondition === 'exit-intent') {
+      this.displayCheckInterval = setInterval(function () {
+        HB.intentCheck("exit", show)
+      }, 100);
     }
-    else if (viewCondition == 'stay-hidden')
-    {
+    else if (viewCondition == 'stay-hidden') {
       setTimeout(showMinimizedBar, 500);
     }
     else {
@@ -336,12 +359,12 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  hideOnZoom:  function() {
+  hideOnZoom: function () {
     // Doesn't work IE 9 and earlier
     if (!window.addEventListener || !window.outerWidth || !window.innerWidth) return;
 
     var original = this.w.style.position;
-    var action = function(e) {
+    var action = function (e) {
       var ratio = (window.outerWidth - 8) / window.innerWidth;
 
       if (e.scale) {
@@ -370,10 +393,8 @@ HB.SiteElement = HB.createClass({
     window.addEventListener('scroll', action);
   },
 
-  remove: function()
-  {
-    if(this.w != null && this.w.parentNode != null)
-    {
+  remove: function () {
+    if (this.w != null && this.w.parentNode != null) {
       this.w.parentNode.removeChild(this.w);
       // Note: this should really clean up event listeners
       // and timers too
@@ -383,16 +404,16 @@ HB.SiteElement = HB.createClass({
   },
 
 
-  close:  function()
-  {
+  close: function () {
+    if (HB.preventElementClosing) {
+      return;
+    }
     HB.animateOut(this.w, this.onClosed.bind(this));
   },
 
-  onClosed: function()
-  {
+  onClosed: function () {
     // Remove the element
-    if ( this.remove() )
-    {
+    if (this.remove()) {
       // Sets the dismissed state for the next 15 minutes
       HB.sc("HBDismissed-" + this.id, true, new Date((new Date().getTime() + 1000 * 60 * 15)), "path=/");
 
@@ -429,9 +450,9 @@ HB.SiteElement = HB.createClass({
 
   // Create the pulldown arrow element for when a bar is hidden
   // The pulldown arrow is only created when a site element is closable
-  setPullDown: function() {
+  setPullDown: function () {
     // Create the pull down elements
-    if(this.closable) {
+    if (this.closable) {
       var pullDown = document.createElement("div");
       pullDown.className = "hb-" + this.size + " hellobar " + "hb-" + this.placement;
       pullDown.id = "pull-down";
@@ -439,7 +460,7 @@ HB.SiteElement = HB.createClass({
       pullDown.style.backgroundColor = "#" + this.background_color;
       var pdLink = document.createElement("div");
       pdLink.className = "hellobar-arrow";
-      pdLink.onclick = function() {
+      pdLink.onclick = function () {
         HB.animateIn(this.w);
         HB.animateOut(this.pullDown);
 
@@ -454,30 +475,30 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  setIosKeyboardHandlers: function() {
-    if(!HB.isMobileSafari()) {
+  setIosKeyboardHandlers: function () {
+    if (!HB.isMobileSafari()) {
       return;
     }
 
     var inputs = this.w.contentDocument.getElementsByTagName("input");
     for (var i = 0; i < inputs.length; i++) {
-      inputs[i].addEventListener("focus", this.iosKeyboardShow.bind(this) );
-      inputs[i].addEventListener("blur", this.iosKeyboardHide.bind(this) );
+      inputs[i].addEventListener("focus", this.iosKeyboardShow.bind(this));
+      inputs[i].addEventListener("blur", this.iosKeyboardHide.bind(this));
     }
   },
 
-  iosKeyboardShow: function(e) {
+  iosKeyboardShow: function (e) {
     e.preventDefault();
     var element = this;
 
-    if(this.type == "Bar") {
-      HB.iosFocusInterval = setTimeout(function() {
+    if (this.type == "Bar") {
+      HB.iosFocusInterval = setTimeout(function () {
         window.scrollTo(0, element.w.offsetTop);
       }, 500);
     }
-    else if(this.type == "Slider") {
+    else if (this.type == "Slider") {
       this.w.style.position = "absolute";
-      HB.iosFocusInterval = setInterval(function() {
+      HB.iosFocusInterval = setInterval(function () {
         element.w.style.left = window.pageXOffset + "px";
         element.w.style.top = window.pageYOffset + "px";
       }, 200);
@@ -491,15 +512,15 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  iosKeyboardHide:  function(e) {
+  iosKeyboardHide: function (e) {
     e.preventDefault();
 
-    if(HB.iosFocusInterval != null) {
+    if (HB.iosFocusInterval != null) {
       clearInterval(HB.iosFocusInterval);
       HB.iosFocusInterval = null;
     }
 
-    if(
+    if (
       this.type == "Takeover" ||
       this.type == "Modal" ||
       this.type == "Slider"
@@ -508,7 +529,7 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  updateStyleFor: function(reset) {
+  updateStyleFor: function (reset) {
     var element = this;
     var contentDocument = element.w.contentDocument;
     var hbModal = contentDocument.getElementById('hellobar-modal') || contentDocument.getElementById('hellobar-takeover');
@@ -534,10 +555,10 @@ HB.SiteElement = HB.createClass({
       var modalMaxHeight = hbModal.getElementsByClassName('hb-text-wrapper')[0].clientHeight;
 
       element.w.style.position = "absolute";
-      HB.iosFocusInterval = setInterval(function() {
+      HB.iosFocusInterval = setInterval(function () {
         element.w.style.height = window.innerHeight + "px";
         element.w.style.maxHeight = window.innerHeight + "px";
-        element.w.style.width =  window.innerWidth + "px";
+        element.w.style.width = window.innerWidth + "px";
         element.w.style.left = "0";
         element.w.style.top = "0";
         element.w.style["-webkit-transform"] = "scale(0.9)";
@@ -556,20 +577,19 @@ HB.SiteElement = HB.createClass({
 
       hbModal.scrollIntoView();
       contentDocument.getElementsByClassName('hb-content-wrapper')[0].scrollIntoView();
-      window.scrollTo(0, window.innerHeight/2);
+      window.scrollTo(0, window.innerHeight / 2);
     }
     return false;
   },
 
   // Necessary convenience method for saying this
   // SiteElement has converted (used in templates)
-  converted: function()
-  {
+  converted: function () {
     HB.converted(this);
   },
 
-  useGoogleFont: function() {
-    if(!this.google_font) return;
+  useGoogleFont: function () {
+    if (!this.google_font) return;
     var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
 
     var link = this.w.contentWindow.document.createElement("LINK");
@@ -582,13 +602,13 @@ HB.SiteElement = HB.createClass({
     // if is mobile safari, prevent from zooming
     if (HB.isMobileSafari()) {
       var meta = this.w.contentWindow.document.createElement("META");
-      meta.name ="viewport" ;
+      meta.name = "viewport";
       meta.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
       head.appendChild(meta);
     }
   },
 
-  addCss: function(href) {
+  addCss: function (href) {
     var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
     var link = this.w.contentWindow.document.createElement("LINK");
     link.href = href;
@@ -597,7 +617,7 @@ HB.SiteElement = HB.createClass({
     head.appendChild(link);
   },
 
-  addJs: function(href) {
+  addJs: function (href) {
     var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
     var script = this.w.contentWindow.document.createElement("SCRIPT");
     script.src = href;
@@ -605,7 +625,7 @@ HB.SiteElement = HB.createClass({
     head.appendChild(script);
   },
 
-  useCountryIdentifier: function() {
+  useCountryIdentifier: function () {
     var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
 
     var intTelStyle = this.w.contentWindow.document.createElement("LINK");
@@ -623,7 +643,7 @@ HB.SiteElement = HB.createClass({
     head.appendChild(intTelCStyle);
   },
 
-  useFroala: function() {
+  useFroala: function () {
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css');
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_editor.min.css');
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_style.css');
@@ -632,7 +652,7 @@ HB.SiteElement = HB.createClass({
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/image.min.css');
   },
 
-  brightnessClass: function() {
+  brightnessClass: function () {
     if (this.getBrightness(this.background_color) < 0.25) //an empirical value most suitable for all backgrounds
       return "dark";
     else
@@ -640,7 +660,7 @@ HB.SiteElement = HB.createClass({
   },
 
   //get brightness of site element by its background color using specific formula from "preview-controller.coffee" file
-  getBrightness: function(x) {
+  getBrightness: function (x) {
     x = x || "";
     var rgb = [ //transform hex string to array
       x[0] + x[1],
@@ -649,9 +669,9 @@ HB.SiteElement = HB.createClass({
     ];
 
 
-    rgb.forEach(function(hex, i) {
+    rgb.forEach(function (hex, i) {
       var dec = parseInt(hex, 16); //hex to decimal
-      var val = dec/255; //decimal to fraction
+      var val = dec / 255; //decimal to fraction
 
       rgb[i] = val < 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
     });
