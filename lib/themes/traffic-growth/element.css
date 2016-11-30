@@ -10,7 +10,7 @@
   text-align: center;
   font-size: 16px;
   box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.15);
-  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/background.jpeg);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/background.jpeg);
   background-size: cover;
   color: #585858;
   font-family: 'Montserrat', sans-serif;
@@ -228,7 +228,7 @@
 }
 
 #hellobar-template.traffic-growth.thank-you {
-  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/background-thank-you.jpeg);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/background-thank-you.jpeg);
 }
 
 #hellobar-template.traffic-growth.thank-you .thank-you-headline,
