@@ -105,7 +105,7 @@ class SiteElementsController < ApplicationController
   end
 
   def force_trailing_slash
-    redirect_to request.original_url + '/' unless request.original_url.match(/\/$/)
+    redirect_to request.original_url + '/' if !request.original_url.match(/\/$/) && request.format.symbol != :json
   end
 
   def load_site_element
