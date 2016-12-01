@@ -1,6 +1,7 @@
 <%
   images = {}
-  Dir.chdir("#{Rails.root}/app/assets/images/") do
+  imageBasePath = "#{Rails.root}/app/assets/images/"
+  Dir.chdir(imageBasePath) do
     Dir["**/*.*"].each do |filename|
       images[filename] = image_path(filename)
     end

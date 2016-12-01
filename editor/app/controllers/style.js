@@ -104,11 +104,13 @@ export default Ember.Controller.extend({
 
   onElementTypeChanged: (function () {
     let elementType = this.get('model.type');
-    if (elementType === 'Modal') {
-      this.get('bus').trigger('hellobar.core.rightPane.show', {componentName: 'theme-tile-grid', componentOptions: {}});
-    } else {
-      this.get('bus').trigger('hellobar.core.rightPane.hide');
-    }
+    this.get('bus').trigger('hellobar.core.rightPane.show', {
+      componentName: 'theme-tile-grid',
+      componentOptions: { elementType }
+    });
+    /*else {
+     this.get('bus').trigger('hellobar.core.rightPane.hide');
+     }*/
     this.get('inlineEditing').initializeInlineEditing(elementType);
   }).observes('model.type'),
 

@@ -7,11 +7,20 @@ export default Ember.Component.extend({
 
   classNames: ['theme-tile'],
 
+  /**
+   * @property {object} Theme object. Required property.
+   */
   theme: null,
 
+  /**
+   * @property {string} Element type (Bar, Modal, Slider, Takeover). Required property.
+   */
+  elementType: null,
+
   imageSrc: (function () {
-    return this.get('imaging').imagePath(`themes/tiles/modal/${this.get('theme.id')}.png`);
-  }).property('theme'),
+    const elementTypeFolder = (this.get('elementType') || '').toLowerCase();
+    return this.get('imaging').imagePath(`themes/tiles/${elementTypeFolder}/${this.get('theme.id')}.png`);
+  }).property('theme', 'elementType'),
 
   init() {
     return this._super();
