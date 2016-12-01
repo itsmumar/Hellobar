@@ -40,11 +40,6 @@ export default Ember.Component.extend({
     );
   },
 
-  // TODO refactor this to generic solution after upgrading to Ember 2
-  isThemeTileGridShown: (function () {
-    return this.get('componentName') === 'theme-tile-grid';
-  }).property('componentName'),
-
   onComponentNameChange: (function () {
     // TODO refactor this jQuery usage after upgrading to Ember 2
     if (this.get('componentIsDefined')) {
