@@ -105,7 +105,13 @@ class SiteElementsController < ApplicationController
   end
 
   def force_trailing_slash
-    redirect_to request.original_url + '/' if !request.original_url.match(/\/$/) && request.format.symbol != :json
+    url = if Rails.env.production?
+            request.original_url.gsub(/\Ahttp:/, 'https:')
+          else
+            request.original_url
+          end
+
+    redirect_to url + '/' unless request.original_url.match(/\/\z/)
   end
 
   def load_site_element
