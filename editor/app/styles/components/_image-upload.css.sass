@@ -20,6 +20,7 @@
 
   .current-file
     display: none
+    position: relative
     font-size: 0.89em
     height: 32px
     padding: 8px 0.67em
@@ -34,8 +35,9 @@
 
     .file-action
       cursor: pointer
-      float: right
-      top: -15px
+      position: absolute
+      top: 7px
+      right: 7px
 
   &.has-file
     .current-file
