@@ -36,9 +36,21 @@ export default Ember.Controller.extend({
   currentTheme: Ember.computed.alias('applicationController.currentTheme'),
   currentThemeName: Ember.computed.alias('applicationController.currentThemeName'),
 
-  shouldShowThemeInfo: (function () {
-    return this.get('isModalType') && !this.get('themeSelectionInProgress');
-  }).property('themeSelectionInProgress', 'isModalType'),
+  shouldShowBarThemeInfo: function() {
+    return this.get('model.type') === 'Bar' && !this.get('themeSelectionInProgress');
+  }.property('themeSelectionInProgress', 'model.type'),
+
+  shouldShowModalThemeInfo: function() {
+    return this.get('model.type') === 'Modal' && !this.get('themeSelectionInProgress');
+  }.property('themeSelectionInProgress', 'model.type'),
+
+  shouldShowSliderThemeInfo: function() {
+    return this.get('model.type') === 'Slider' && !this.get('themeSelectionInProgress');
+  }.property('themeSelectionInProgress', 'model.type'),
+
+  shouldShowTakeoverThemeInfo: function() {
+    return this.get('model.type') === 'Takeover' && !this.get('themeSelectionInProgress');
+  }.property('themeSelectionInProgress', 'model.type'),
 
   elementTypeSelectionInProgress: false,
   userSelectedElementTypeExplicitly: false,
