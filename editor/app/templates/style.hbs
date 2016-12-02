@@ -14,12 +14,9 @@
       <p>Pop up a window in the middle of the screen</p>
     {{/link-to}}
 
+    {{theming/theme-info theme=currentTheme onChangeTheme=(action "changeTheme")}}
     {{#if shouldShowThemeInfo}}
-    <p class="theme-selector">
-      <span class="label">Theme:</span>
-      <span>{{ currentThemeName }}</span>
-      <a href="javascript:void(0)" class="action-link" {{action "changeTheme"}}>[change theme]</a>
-    </p>
+
     {{/if}}
 
     {{#link-to 'style.slider' class='step-link-block'}}
