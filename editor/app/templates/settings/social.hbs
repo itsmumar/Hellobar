@@ -1,7 +1,10 @@
-<label>Would you like your visitors to...</label>
-{{social-select options=socialOptions selection=selectedSocialSubtype}}
+<div class="substep social">
 
-{{#if selectedSocialSubtype}}
-  {{partial selectedSocialSubtype}}
-{{/if}}
+  <label>Would you like your visitors to...</label>
+  {{social-select options=socialOptions selection=selectedSocialSubtype}}
 
+  {{#if selectedSocialSubtype}}
+    {{partial selectedSocialSubtype}}
+  {{/if}}
+
+</div>
