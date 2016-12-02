@@ -172,7 +172,9 @@ export default Ember.Controller.extend({
           confirmModal.close();
           controller.get('bus').trigger('hellobar.core.rightPane.show', {
             componentName: 'theme-tile-grid',
-            componentOptions: {}
+            componentOptions: {
+              elementType: controller.get('model.type')
+            }
           });
         }
 
