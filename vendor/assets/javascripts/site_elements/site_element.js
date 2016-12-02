@@ -89,7 +89,6 @@ HB.SiteElement = HB.createClass({
           HB.wiggleEventListeners(this.w);
 
         this.useGoogleFont();
-        this.useCountryIdentifier();
         if (HB.CAP.preview) {
           this.useFroala();
         }
@@ -170,7 +169,6 @@ HB.SiteElement = HB.createClass({
     // To accomplish all of this we set up an interval to monitor the size of everything:
     this.isMobileWidth = false;
     var mobileDeviceInterval = setInterval(this.checkForMobileDevice.bind(this), 50); // Check screen size every N ms
-    HB.initializePhoneFields();
   },
 
   checkForMobileDevice: function () {
@@ -623,24 +621,6 @@ HB.SiteElement = HB.createClass({
     script.src = href;
     script.type = 'text/javascript';
     head.appendChild(script);
-  },
-
-  useCountryIdentifier: function () {
-    var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
-
-    var intTelStyle = this.w.contentWindow.document.createElement("LINK");
-    intTelStyle.href = '//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/css/intlTelInput.css';
-    intTelStyle.rel = 'stylesheet';
-    intTelStyle.type = 'text/css';
-    head.appendChild(intTelStyle);
-
-    var intTelCStyle = this.w.contentWindow.document.createElement("STYLE");
-    intTelCStyle.type = 'text/css';
-    styleForPng = 'iti-flag { background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/img/flags.png"); } \
-                   .intl-tel-input.allow-dropdown { width: 100%; } \
-                   .country-name { color: #999 }'
-    intTelCStyle.appendChild(document.createTextNode(styleForPng));
-    head.appendChild(intTelCStyle);
   },
 
   useFroala: function () {

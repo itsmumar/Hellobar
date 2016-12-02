@@ -118,14 +118,6 @@ class ScriptGenerator < Mustache
     open('http://code.jquery.com/jquery-2.2.4.js') {|f| f.read }
   end
 
-  def intl_tel_input
-    open('http://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.0/js/intlTelInput.js') {|f| f.read }
-  end
-
-  def initialize_phone_field
-    File.read("#{Rails.root}/app/assets/javascripts/initialize_phone_field.js")
-  end
-
   def hellobar_container_css
     css = read_css_files(container_css_files)
     css = css.gsub("hellobar-container", "#{pro_secret}-container")

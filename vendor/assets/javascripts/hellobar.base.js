@@ -598,11 +598,6 @@ var HB = {
         if (inputs) {
           for (var inputIndex = 0; inputIndex < inputs.length; inputIndex++) {
             var input = inputs[inputIndex];
-            // 'tel' type is only available to inbuilt phone field where country code dropdown exists
-            if($(input).attr('type') == 'tel') {
-              var countryCode = siteElementDoc.querySelectorAll("ul.country-list li.country.active span.dial-code")[0].innerText;
-              input.value = countryCode + input.value;
-            }
             input && values.push(input.value);
           }
         }
