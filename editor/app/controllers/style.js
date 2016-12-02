@@ -36,21 +36,27 @@ export default Ember.Controller.extend({
   currentTheme: Ember.computed.alias('applicationController.currentTheme'),
   currentThemeName: Ember.computed.alias('applicationController.currentThemeName'),
 
+  _shouldShowThemeInfoForElementType(elementType) {
+    return this.get('model.type') === elementType
+      && !this.get('themeSelectionInProgress')
+      && !this.get('elementTypeSelectionInProgress');
+  },
+
   shouldShowBarThemeInfo: function() {
-    return this.get('model.type') === 'Bar' && !this.get('themeSelectionInProgress');
-  }.property('themeSelectionInProgress', 'model.type'),
+    return this._shouldShowThemeInfoForElementType('Bar');
+  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
 
   shouldShowModalThemeInfo: function() {
-    return this.get('model.type') === 'Modal' && !this.get('themeSelectionInProgress');
-  }.property('themeSelectionInProgress', 'model.type'),
+    return this._shouldShowThemeInfoForElementType('Modal');
+  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
 
   shouldShowSliderThemeInfo: function() {
-    return this.get('model.type') === 'Slider' && !this.get('themeSelectionInProgress');
-  }.property('themeSelectionInProgress', 'model.type'),
+    return this._shouldShowThemeInfoForElementType('Slider');
+  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
 
   shouldShowTakeoverThemeInfo: function() {
-    return this.get('model.type') === 'Takeover' && !this.get('themeSelectionInProgress');
-  }.property('themeSelectionInProgress', 'model.type'),
+    return this._shouldShowThemeInfoForElementType('Takeover');
+  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
 
   elementTypeSelectionInProgress: false,
   userSelectedElementTypeExplicitly: false,
