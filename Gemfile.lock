@@ -1,21 +1,24 @@
 GIT
-  remote: git://github.com/colinyoung/rake_running.git
+  remote: https://github.com/colinyoung/rake_running.git
   revision: 12d47fe692ffb8cc4112ec25c6b0a9595123c3c3
+  ref: 12d47fe692ffb8cc4112ec25c6b0a9595123c3c3
   specs:
     rake_running (0.0.1)
       rake
 
 GIT
-  remote: git://github.com/floomoon/omniauth-mailchimp.git
+  remote: https://github.com/floomoon/omniauth-mailchimp.git
   revision: 239e08d3297cf637b5b0b77b419fdc8461239378
+  ref: 239e08d3297cf637b5b0b77b419fdc8461239378
   specs:
     omniauth-mailchimp (1.0.3)
       omniauth (~> 1.0)
       omniauth-oauth2
 
 GIT
-  remote: git://github.com/stefanpenner/country_select.git
+  remote: https://github.com/stefanpenner/country_select.git
   revision: 79755038ca61dafdfebf4c55346d4a2085f98479
+  ref: 79755038ca61dafdfebf4c55346d4a2085f98479
   specs:
     country_select (2.1.0)
       countries (~> 0.9, >= 0.9.3)
@@ -160,8 +163,9 @@ GEM
       json (~> 1.8, >= 1.8.1)
       mime-types (~> 1.25, >= 1.25.1)
       rest-client (~> 1.6, >= 1.6.7)
-    countries (0.9.3)
+    countries (0.11.5)
       currencies (~> 0.4.2)
+      i18n_data (~> 0.7.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     createsend (3.4.0)
@@ -286,6 +290,7 @@ GEM
     httpclient (2.8.0)
     hurley (0.2)
     i18n (0.7.0.beta1)
+    i18n_data (0.7.0)
     infusionsoft (1.1.9)
     ipaddress (0.8.0)
     jbuilder (2.0.7)
@@ -661,7 +666,7 @@ DEPENDENCIES
   capybara-webkit
   coffee-rails (~> 4.0.0)
   constantcontact (~> 1.1.2)
-  country_select (~> 2.1.0)!
+  country_select!
   createsend (~> 3.4.0)
   cssmin (~> 1.0.3)
   dalli (~> 2.7.2)
@@ -699,7 +704,7 @@ DEPENDENCIES
   omniauth-constantcontact2 (~> 1.0)
   omniauth-createsend (~> 1.0)
   omniauth-google-oauth2 (~> 0.2.6)
-  omniauth-mailchimp (~> 1.0)!
+  omniauth-mailchimp!
   omniauth-verticalresponse (~> 1.0.0)
   paperclip (~> 4.3)
   paranoia (~> 2.0)
@@ -714,7 +719,7 @@ DEPENDENCIES
   rack-ssl-enforcer (~> 0.2.8)
   rails (= 4.1.5)
   rails-html-sanitizer
-  rake_running (~> 0.0.1)!
+  rake_running!
   rb-readline (~> 0.5.1)
   recaptcha (~> 0.3.6)
   render_anywhere (~> 0.0.9)
