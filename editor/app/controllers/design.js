@@ -68,16 +68,6 @@ export default Ember.Controller.extend({
 
   //----------- Theme Settings  -----------#
 
-  themeOptions: function () {
-    // Show only `generic` themes
-    var arr = Ember.A();
-    this.get('theming').availableThemes().forEach(function(theme) {
-      if(theme.type == 'generic') { arr.pushObject(theme); };
-    });
-
-    return arr;
-  }.property(),
-
   currentThemeIsGeneric: Ember.computed.alias('applicationController.currentThemeIsGeneric'),
   currentThemeIsTemplate: Ember.computed.alias('applicationController.currentThemeIsTemplate'),
   currentTheme: Ember.computed.alias('applicationController.currentTheme'),

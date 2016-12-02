@@ -1,17 +1,6 @@
 <h5 class="step-title">Design &amp; Content</h5>
 
 {{#if currentThemeIsGeneric}}
-  <label>Theme</label>
-  <div class="select-wrapper">
-    {{#power-select selected=currentTheme
-      options=themeOptions
-      searchEnabled=false
-      renderInPlace=true
-      onchange=(action "selectTheme") as |theme|}}
-      {{theme.name}}
-    {{/power-select}}
-
-  </div>
 
   {{#ivy-tabs selection=selection as |tabs|}}
     {{#tabs.tablist as |tablist|}}
