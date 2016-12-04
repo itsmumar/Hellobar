@@ -179,7 +179,7 @@ class Subscription < ActiveRecord::Base
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: 25_000, # after this many visits in a month
-          visit_overage_amount: 10, # every X visitors
+          # visit_overage_amount: 10, # every X visitors
           visit_overage_amount: nil # ads
         }
       end
@@ -200,7 +200,7 @@ class Subscription < ActiveRecord::Base
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: 25_000, # after this many visits in a month
-          visit_overage_amount: 10, # every X visitors
+          # visit_overage_amount: 10, # every X visitors
           visit_overage_amount: nil # ads
         }
       end
@@ -272,7 +272,7 @@ class Subscription < ActiveRecord::Base
           monthly_amount: 15.0,
           yearly_amount: 149.0,
           visit_overage: 250_000, # after this many visits in a month
-          visit_overage_amount: 25_000, # every X visitors
+          # visit_overage_amount: 25_000, # every X visitors
           visit_overage_amount: 5.00, # $$$
           discounts: [
             DiscountRange.new(5, 0, 0, 0),
@@ -294,7 +294,7 @@ class Subscription < ActiveRecord::Base
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: 250_000, # after this many visits in a month
-          visit_overage_amount: 25_000, # every X visitors
+          # visit_overage_amount: 25_000, # every X visitors
           visit_overage_amount: 0.0 # $$$
         }
       end
@@ -312,7 +312,7 @@ class Subscription < ActiveRecord::Base
           monthly_amount: 99.0,
           yearly_amount: 999.0,
           visit_overage: nil, # unlimited
-          visit_overage_amount: nil, # unlimited
+          # visit_overage_amount: nil, # unlimited
           visit_overage_amount: nil # unlimited
         }
       end
