@@ -25,14 +25,27 @@ test:
     - RAILS_ENV=test SUITE=default bundle exec rake teaspoon
 
 deployment:
-  designqa:
-    branch: designqa
+  edge:
+    branch: develop
     commands:
-      - BRANCH=designqa bundle exec cap designqa deploy:
-          timeout: 600
+      - BRANCH=develop bundle exec cap edge deploy:
+          timeout: 900
+  # designqa:
+  #   branch: designqa
+  #   commands:
+  #     - BRANCH=designqa bundle exec cap designqa deploy:
+  #         timeout: 600
+  #
+  # production:
+  #   branch: production
+  #   commands:
+  #     - BRANCH=production bundle exec cap production deploy:
+  #         timeout: 2400
 
-  production:
-    branch: production
-    commands:
-      - BRANCH=production bundle exec cap production deploy:
-          timeout: 2400
+
+general:
+  branches:
+    only:
+      - develop # list of branches to build
+      - master
+      # - /feature-.*/ # or regexes
