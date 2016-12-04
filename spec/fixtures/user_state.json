@@ -279,6 +279,10 @@
                 "label": "Bio"
               }
             ],
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            },
             "url":"http://subscribe.bitsbox.com",
             "url_to_like":"http://subscribe.bitsbox.com"
          },
@@ -313,7 +317,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":false,
          "theme_id":"classic"
       },
       {
@@ -352,6 +355,10 @@
                 "label": "Bio"
               }
             ],
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            },
             "url":"http://subscribe.bitsbox.com",
             "url_to_like":"http://subscribe.bitsbox.com"
          },
@@ -386,7 +393,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":false,
          "theme_id":"classic"
       },
       {
@@ -420,6 +426,10 @@
                 "label": "Name"
               }
             ],
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            },
             "url":"http://subscribe.bitsbox.com",
             "url_to_like":"http://subscribe.bitsbox.com"
          },
@@ -454,7 +464,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":false,
          "theme_id":"classic"
       },
       {
@@ -493,6 +502,10 @@
                 "label": "Bio"
               }
             ],
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            },
             "url":"http://subscribe.bitsbox.com",
             "url_to_like":"http://subscribe.bitsbox.com"
          },
@@ -527,7 +540,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":false,
          "theme_id":"classic"
       },
       {
@@ -566,6 +578,10 @@
                 "label": "Bio"
               }
             ],
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            },
             "url":"http://subscribe.bitsbox.com",
             "url_to_like":"http://subscribe.bitsbox.com"
          },
@@ -600,7 +616,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":false,
          "theme_id":"classic"
       },
       {
@@ -644,6 +659,10 @@
                 "label": "Bio"
               }
             ],
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            },
             "url":"http://subscribe.bitsbox.com",
             "url_to_like":"http://subscribe.bitsbox.com"
          },
@@ -678,7 +697,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":false,
          "theme_id":"classic"
       },
       {
@@ -722,6 +740,10 @@
                 "label": "Bio"
               }
             ],
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            },
             "url":"http://subscribe.bitsbox.com",
             "url_to_like":"http://subscribe.bitsbox.com"
          },
@@ -756,7 +778,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":false,
          "theme_id":"classic"
       },
       {
@@ -795,6 +816,10 @@
                 "label": "Bio"
               }
             ],
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            },
             "url":"http://bitsbox.com",
             "url_to_like":"http://bitsbox.com"
          },
@@ -829,7 +854,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":false,
          "theme_id":"classic"
       },
       {
@@ -868,6 +892,10 @@
                 "label": "Phone"
               }
             ],
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            },
             "url":"http://bitsbox.com",
             "url_to_like":"http://bitsbox.com"
          },
@@ -902,7 +930,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":false,
          "theme_id":"classic"
       },
       {
@@ -929,7 +956,11 @@
          "rule_id":339566,
          "settings":{
             "url":"http://subscribe.bitsbox.com/ac/FRIENDLYBOX",
-            "url_to_like":"http://subscribe.bitsbox.com"
+            "url_to_like":"http://subscribe.bitsbox.com",
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            }
          },
          "show_branding":false,
          "contact_list_id":null,
@@ -962,7 +993,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":true,
          "theme_id":"blue-avalanche"
       },
       {
@@ -1006,6 +1036,10 @@
                 "label": "Bio"
               }
             ],
+            "cookie_settings": {
+              "duration": 0,
+              "success_duration": 0
+            },
             "url":"http://subscribe.bitsbox.com",
             "url_to_like":"http://subscribe.bitsbox.com"
          },
@@ -1040,7 +1074,6 @@
          "use_question":false,
          "phone_number":null,
          "phone_country_code":"US",
-         "show_after_convert":false,
          "theme_id":"blue-autumn"
       }
    ],

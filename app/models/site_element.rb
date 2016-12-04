@@ -33,6 +33,7 @@ class SiteElement < ActiveRecord::Base
   }
 
   SHORT_SUBTYPES = %w{traffic email call social announcement}
+  THEMES_TEMPLATES = %w{traffic_growth}
 
   belongs_to :rule, touch: true
   belongs_to :contact_list
@@ -189,10 +190,14 @@ class SiteElement < ActiveRecord::Base
     [].tap do |templates|
       TYPES.each do |type|
         BAR_TYPES.keys.each do |subtype|
-          templates << "#{type.name.downcase}_#{subtype}"
+          if THEMES_TEMPLATES.include?(subtype)
+            templates << subtype
+          else
+            templates << "#{type.name.downcase}_#{subtype}"
+          end
         end
       end
-    end
+    end.uniq
   end
 
   def primary_color

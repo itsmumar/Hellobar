@@ -8,11 +8,16 @@ describe("HB", function() {
   beforeEach(function() {
     var siteElementData = {
       id: 123456,
-      settings: { url: "" },
+      settings: {
+        url: "",
+        cookie_settings: {
+          duration: 0,
+          success_duration: 0
+        }
+      },
       template_name: "bar_traffic",
       type: "Modal",
       subtype: "traffic",
-      show_after_convert: false
     }
 
     siteElement = new HB.SiteElement(siteElementData);
@@ -46,7 +51,10 @@ describe("HB", function() {
         it("returns true", function () {
           spyOn(HB, 'getSiteElementData').and.returnValue(100);
           siteElement.updated_at = Date.now();
-          siteElement.show_after_convert = false;
+          siteElement.settings.cookie_settings = {
+                                                   duration: 0,
+                                                   success_duration: 0
+                                                 };
           expect(HB.shouldShowElement(siteElement)).toEqual(true);
         });
       });
@@ -56,13 +64,6 @@ describe("HB", function() {
           HB.setSiteElementData(siteElement.id, "lv", Date.now() / 1000);
           siteElement.updated_at = Date.now() - 1000000;
         });
-
-        context("show_after_convert is false", function() {
-          it("returns false", function () {
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(false);
-          });
-        });
       });
     });
 
@@ -70,11 +71,16 @@ describe("HB", function() {
       beforeEach(function() {
         var otherElementData = {
           id: 654321,
-          settings: { url: "" },
+          settings: {
+            url: "",
+            cookie_settings: {
+              duration: 0,
+              success_duration: 0
+            }
+          },
           template_name: "bar_traffic",
           type: "Modal",
-          subtype: "traffic",
-          show_after_convert: false
+          subtype: "traffic"
         }
 
         otherElement = new HB.SiteElement(otherElementData);
@@ -94,7 +100,10 @@ describe("HB", function() {
         it("returns true", function () {
           spyOn(HB, 'getSiteElementData').and.returnValue(100);
           siteElement.updated_at = Date.now();
-          siteElement.show_after_convert = false;
+          siteElement.settings.cookie_settings = {
+                                                  duration: 0,
+                                                  success_duration: 0
+                                                };
           expect(HB.shouldShowElement(siteElement)).toEqual(true);
         });
       });
@@ -103,13 +112,6 @@ describe("HB", function() {
         beforeEach(function () {
           HB.setSiteElementData(siteElement.id, "lv", Date.now() / 1000);
           siteElement.updated_at = Date.now() - 1000000;
-        });
-
-        context("show_after_convert is false", function() {
-          it("returns false", function () {
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(false);
-          });
         });
       });
     });
@@ -123,7 +125,10 @@ describe("HB", function() {
         it("returns true", function () {
           spyOn(HB, 'getSiteElementData').and.returnValue(100);
           siteElement.updated_at = Date.now();
-          siteElement.show_after_convert = false;
+          siteElement.settings.cookie_settings = {
+                                                   duration: 0,
+                                                   success_duration: 0
+                                                 };
           expect(HB.shouldShowElement(siteElement)).toEqual(true);
         });
       });
@@ -132,13 +137,6 @@ describe("HB", function() {
         beforeEach(function () {
           HB.setSiteElementData(siteElement.id, "lv", Date.now() / 1000);
           siteElement.updated_at = Date.now() - 1000000;
-        });
-
-        context("show_after_convert is false", function() {
-          it("returns false", function () {
-            siteElement.show_after_convert = false;
-            expect(HB.shouldShowElement(siteElement)).toEqual(false);
-          });
         });
       });
     });

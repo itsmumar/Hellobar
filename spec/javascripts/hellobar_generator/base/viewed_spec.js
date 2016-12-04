@@ -8,11 +8,16 @@ describe("HB", function() {
   beforeEach(function() {
     var siteElementData = {
       id: 123456,
-      settings: { url: "" },
+      settings: {
+        url: "",
+        cookie_settings: {
+          duration: 0,
+          success_duration: 0
+        }
+      },
       template_name: "bar_traffic",
       type: "Modal",
-      subtype: "traffic",
-      show_after_convert: false
+      subtype: "traffic"
     }
 
     siteElement = new HB.SiteElement(siteElementData);

@@ -163,7 +163,7 @@ class ScriptGenerator < Mustache
       site.site_elements.active.each do |se|
         theme_id = se.theme_id
         theme = Theme.where(id: theme_id).first
-        category = theme.type
+        category = theme.try(:type)
         subtype = (category == 'template' ? theme_id.underscore : se.element_subtype)
 
         template_names << [se.class.name.downcase, subtype, category]
