@@ -115,7 +115,7 @@ class ScriptGenerator < Mustache
   end
 
   def jquery_lib
-    open('http://code.jquery.com/jquery-2.2.4.js') {|f| f.read }
+    File.read("#{Rails.root}/vendor/assets/javascripts/jquery-2.2.4.js")
   end
 
   def hellobar_container_css
