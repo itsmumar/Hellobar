@@ -10,8 +10,7 @@
   },
   "files": {
     "html": {
-      "main": "traffic-growth.html",
-      "thank_you": "traffic-growth-thank-you.html"
+      "main": "traffic-growth.html"
     },
     "css": [
       "traffic-growth.css"

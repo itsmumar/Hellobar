@@ -115,7 +115,7 @@ class ScriptGenerator < Mustache
   end
 
   def jquery_lib
-    open('http://code.jquery.com/jquery-2.2.4.js') {|f| f.read }
+    File.read("#{Rails.root}/vendor/assets/javascripts/jquery-2.2.4.js")
   end
 
   def hellobar_container_css
@@ -163,7 +163,7 @@ class ScriptGenerator < Mustache
       site.site_elements.active.each do |se|
         theme_id = se.theme_id
         theme = Theme.where(id: theme_id).first
-        category = theme.type
+        category = theme.try(:type)
         subtype = (category == 'template' ? theme_id.underscore : se.element_subtype)
 
         template_names << [se.class.name.downcase, subtype, category]

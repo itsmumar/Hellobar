@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :site_element do
     rule
     type "Bar"
+    theme_id "classic"
     element_subtype "announcement"
 
     factory :modal_element do

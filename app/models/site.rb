@@ -335,9 +335,7 @@ class Site < ActiveRecord::Base
   end
 
   def self.normalize_url(url)
-    uri = Addressable::URI.parse(url)
-    url = url.sub(/^https?\:\/\//, '').sub(/^www\./,'')
-    Addressable::URI.heuristic_parse(url, {:scheme => uri.scheme})
+    Addressable::URI.heuristic_parse(url)
   end
 
   def membership_for_user(user)
