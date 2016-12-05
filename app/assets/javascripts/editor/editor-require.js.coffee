@@ -4,4 +4,4 @@
 #= require ./../internal_tracking
 #= require ../images
 #= require ../handlebars_helpers
-
+#= require jquery_ujs
