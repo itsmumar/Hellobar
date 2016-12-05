@@ -32,7 +32,7 @@ export default Ember.Component.extend({
     const elementType = this.get('elementType');
     return _.filter(this.get('allThemes'),
       (theme) => theme.type === 'template' && (theme.element_type === elementType || _.includes(theme.element_type, elementType)))
-  }.property('allThemes'),
+  }.property('allThemes', 'elementType'),
 
   hasAnyTemplateThemes: function() {
     const templateThemes = this.get('templateThemes');
