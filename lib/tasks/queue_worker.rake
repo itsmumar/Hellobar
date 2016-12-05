@@ -12,7 +12,7 @@ namespace :queue_worker do
       num_workers = options[0]
       additional_options = options[1] || ""
       puts "Starting #{num_workers} workers for #{queue.inspect}"
-      cmd = "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec bin/queue_worker -- -q #{queue} -n #{num_workers} #{additional_options}"
+      cmd = "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec bin/queue_worker -q #{queue} -n #{num_workers} #{additional_options}"
       puts cmd
       `#{cmd}`
     end
@@ -60,7 +60,7 @@ namespace :queue_worker do
       num_workers_needed = num_workers-num_workers_found
       puts "Found #{num_workers_found}. Starting #{num_workers_needed}..."
       if num_workers_needed > 0
-        cmd = "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec bin/queue_worker -- -q #{queue} -n #{num_workers_needed} #{additional_options}"
+        cmd = "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec bin/queue_worker -q #{queue} -n #{num_workers_needed} #{additional_options}"
         puts cmd
         `#{cmd}`
       end
@@ -132,7 +132,7 @@ namespace :queue_worker do
     data = {
       namespace: "HB/#{stage}",
       metric_data: metrics
-    } 
+    }
     pp data
     cloudwatch = AWS::CloudWatch::Client.new(
       access_key_id: Hellobar::Settings[:aws_access_key_id],

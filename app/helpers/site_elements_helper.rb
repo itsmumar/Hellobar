@@ -200,9 +200,9 @@ module SiteElementsHelper
     # Condering `blocks` field will be present only for `templates`
     headline = if site_element.blocks.present?
                  h = ''
-                 site_element.blocks.each { |block|
+                 site_element.blocks.each do |block|
                    h += "#{block['content']['text']} " if block['id'].include?('headline')
-                 }
+                 end
                  h
                else
                  site_element.headline
