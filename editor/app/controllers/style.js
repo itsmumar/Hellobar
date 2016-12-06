@@ -18,17 +18,24 @@ export default Ember.Controller.extend({
 
   init() {
     this.get('bus').subscribe('hellobar.core.bar.themeChanged', params => {
-        return this.set('model.theme_id', params.themeId);
+        this.set('model.theme_id', params.themeId);
+        if (!this.get('model.type')) {
+          this.set('model.type', params.elementType);
+        }
+        this.set('userSelectedElementTypeExplicitly', true);
+        Ember.run.next(() => {
+          this.applyRoute('style.index');
+        });
       }
     );
     this.get('bus').subscribe('hellobar.core.rightPane.show', params => {
         if (params.componentName === 'theme-tile-grid') {
-          return this.set('themeSelectionInProgress', true);
+          this.set('themeSelectionInProgress', true);
         }
       }
     );
     this.get('bus').subscribe('hellobar.core.rightPane.hide', params => {
-        return this.set('themeSelectionInProgress', false);
+        this.set('themeSelectionInProgress', false);
       }
     );
   },

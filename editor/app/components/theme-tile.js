@@ -38,7 +38,10 @@ export default Ember.Component.extend({
 
   actions: {
     select() {
-      this.get('bus').trigger('hellobar.core.bar.themeChanged', {themeId: this.get('theme.id')});
+      this.get('bus').trigger('hellobar.core.bar.themeChanged', {
+        themeId: this.get('theme.id'),
+        elementType: this.get('elementType')
+      });
       this.get('bus').trigger('hellobar.core.rightPane.hide');
     }
   }
