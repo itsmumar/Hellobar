@@ -3,6 +3,7 @@ import ENV from 'editor/config/environment';
 
 const apiBaseConfiguration = {
   'development': "http://" + window.location.host,
+  //'development': "http://localhost:3001",
   '*': ''
 };
 
