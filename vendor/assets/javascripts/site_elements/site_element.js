@@ -63,7 +63,7 @@ HB.SiteElement = HB.createClass({
 
       var template = '';
       // TODO now theme id for new template is hard-coded. We need good and flexible solution for the future
-      if (that.theme_id === 'traffic-growth') {
+      if (that.theme.id === 'traffic-growth') {
         template = HB.getTemplateByName('modal_traffic_growth');
       } else {
         template = HB.getTemplate(that);
