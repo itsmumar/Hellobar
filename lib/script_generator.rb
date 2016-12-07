@@ -157,23 +157,20 @@ class ScriptGenerator < Mustache
       site.site_elements.active.each do |se|
         theme_id      = se.theme_id
         theme         = Theme.where(id: theme_id).first
-        element_types = theme.element_types
         category      = theme.type.to_sym
-        subtype       = (category == :template ? theme_id : se.element_subtype)
+        subtype       = (category == :template ? theme_id.underscore : se.element_subtype)
 
         template_names << [se.class.name.downcase, subtype, category]
         template_names << [se.class.name.downcase, 'question', category] if se.use_question?
       end
     end
 
-    template_names =  template_names.map do |name|
-                          {
-                            name: name.first(2).join('_'),
-                            markup: content_template(name[0], name[1], name[2])
-                          }
-                      end
-
-    template_names
+    template_names.map do |name|
+        {
+          name: name.first(2).join('_'),
+          markup: content_template(name[0], name[1], name[2])
+        }
+    end
   end
 
   def rules
