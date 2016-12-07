@@ -1,0 +1,107 @@
+#hellobar-template.website-checklist {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  color: #333333;
+  font-size: 17px;
+  box-sizing: border-box;
+  text-align: center;
+
+}
+
+#hellobar-template.website-checklist.bar {
+  display: table;
+  background-image: linear-gradient(to top, #e0ddd4, #d9f3f2), linear-gradient(#ffffff, #ffffff);
+  width: 100%;
+  min-height: 50px;
+
+}
+
+#hellobar-template.website-checklist.bar .content-wrapper {
+  display: table-cell;
+  width: 100%;
+  vertical-align: middle;
+  text-align: center;
+  padding: .3em .5em .3em .5em;
+}
+
+#hellobar-template.website-checklist.bar .inner-wrapper {
+  display: inline-block;
+  width: auto;
+
+}
+
+#hellobar-template.website-checklist.bar .inner-wrapper .headline-text {
+  display: inline-block;
+  margin-right: 20px;
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+#hellobar-template.website-checklist.bar .inner-wrapper .caption-text {
+  display: inline-block;
+  position: relative;
+  top: -4px;
+  font-size: 13px;
+}
+
+#hellobar-template.website-checklist.bar .inner-wrapper .form-block {
+  display: inline-block;
+  position: relative;
+  top: -2px;
+  margin-left: 20px;
+}
+
+#hellobar-template.website-checklist.bar .inner-wrapper .form-block .builtin-email {
+  display: inline-block;
+  background-color: #f1f2f4;
+  border: solid 1px rgba(189, 221, 220, 0.47);
+}
+
+#hellobar-template.website-checklist.bar .inner-wrapper .form-block .builtin-email label {
+  display: none;
+}
+
+#hellobar-template.website-checklist.bar .inner-wrapper .form-block .builtin-email input {
+  padding: 12px 8px 8px 40px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 11px;
+  color: #313741;
+}
+
+#hellobar-template.website-checklist.bar .inner-wrapper .form-block .cta {
+  display: inline-block;
+  position: relative;
+  top: -1px;
+  padding: 10px 20px;
+  border-radius: 3px;
+  background-color: #f04343;
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+#hellobar-template.website-checklist.bar .hb-arrow-wrapper svg {
+  fill: #666;
+  height: 29px;
+  opacity: .3;
+  width: 28px;
+}
+
+#hellobar-template.website-checklist.bar .hb-arrow-wrapper {
+  padding-left: 1rem;
+  text-align: right;
+  float: right;
+}
+
+#hellobar-template.website-checklist.bar .hb-logo-wrapper {
+  float: left;
+  width: 28px;
+  margin-top: 0;
+  font-size: 12px;
+  font-weight: normal;
+  padding-right: 1rem;
+}
+

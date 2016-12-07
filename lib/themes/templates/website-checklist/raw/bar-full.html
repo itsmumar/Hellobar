@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="../element.css" rel="stylesheet" type="text/css">
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,800,800i&subset=latin-ext');
+
+    * {
+      margin: 0;
+      padding: 0;
+
+    }
+  </style>
+
+</head>
+<body>
+
+
+<div id="hellobar-template"
+     class="js-hellobar-element bar website-checklist {{HB.barSizeCssClass(siteElement.size)}} {{HB.t(siteElement.show_border) ? 'has_border' : ''}} {{HB.t(siteElement.remains_at_top) ? 'remains_in_place' : ''}} {{siteElement.placement}}"
+     style="height: {{HB.barHeight(siteElement.size)}};">
+  <div class="content-wrapper">
+    <div class="hb-logo-wrapper" style="{{(HB.t(siteElement.show_branding) || !HB.CAP.no_b) ? '' : 'display:none'}}">
+      <!--{{HB.renderTemplate(HB.getBrandingTemplate(HB.branding_template()), siteElement)}}-->
+      H
+    </div>
+
+    <div class="hb-arrow-wrapper {{HB.colorIsBright(siteElement.primary_color) ? 'inverted' : ''}}">
+      <a href="#" style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}" id="close_bar"
+         onclick="{{siteElement.me}}.minimize({{siteElement.id}})">
+        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           width="315px" height="315px" viewBox="43.611 92.5 315 315" enable-background="new 43.611 92.5 315 315" xml:space="preserve">
+          <g>
+            <path d="M49.611,92.5c-3.3,0-6,2.7-6,6v303c0,3.3,2.7,6,6,6h303c3.3,0,6-2.7,6-6v-303c0-3.3-2.7-6-6-6H49.611z M229.611,254.334
+            c-3.3,0-6,2.7-6,6V360c0,3.3-2.7,6-6,6h-33c-3.3,0-6-2.7-6-6v-99.666c0-3.3-2.7-6-6-6H99.195c-3.3,0-4.197-2.01-1.994-4.467
+            l99.904-111.4c2.203-2.457,5.809-2.457,8.012,0l99.903,111.4c2.203,2.457,1.306,4.467-1.994,4.467H229.611z"/>
+          </g>
+        </svg>
+      </a>
+    </div>
+
+    <div class="inner-wrapper">
+      <div class="headline-text hb-editable-block hb-editable-block-with-full-formatting"
+           data-hb-editable-block="blocks.headline"
+           data-hb-inline-editor-placeholder="Headline">
+        <span style="font-weight: 400">The best ever</span>
+        <span style="color: #f04343"><strong>Website Checklist</strong></span>
+      </div>
+
+      <div class="caption-text hb-editable-block hb-editable-block-with-full-formatting"
+           data-hb-editable-block="blocks.caption"
+           data-hb-inline-editor-placeholder="Secondary text">
+        For Getting Your Website Online
+      </div>
+
+      <div id="hb-fields-form" class="form-block">
+        <div class="hb-input-block hb-editable-block hb-editable-block-input builtin-email"
+             data-hb-editable-block="f-builtin-email">
+          <label for="f-builtin-email">Your email address...</label>
+          <input id="f-builtin-email" type="text" placeholder="Your email address..." required="" value="">
+        </div>
+
+        <div class="cta">
+          <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
+               data-hb-editable-block="action_link" data-hb-inline-editor-placeholder="Subscribe">
+            Download now
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+</div>
+</body>
+</html>
