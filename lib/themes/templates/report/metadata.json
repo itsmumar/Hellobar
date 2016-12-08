@@ -1,0 +1,6 @@
+{
+  "id": "report",
+  "type": "template",
+  "element_types": ["Modal", "Bar", "Slider", "Takeover"],
+  "name": "Report"
+}
