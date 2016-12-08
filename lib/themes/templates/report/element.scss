@@ -1,187 +1,187 @@
-#hellobar-template.report {
+$headerColor: #fff663;
+$inputColor: #313741;
+$inputPlaceholderColor: #c3c3c3;
+$ctaColor: #3b376c;
+$ctaBackgroundColor: #fff200;
+
+#hellobar-template.report.modal {
   display: block;
   position: fixed;
-  left: 50%;
-  width: 735px;
+  // TODO uncomment
+  //left: 50%;
+  width: 1018px;
   height: 520px;
   box-sizing: border-box;
   margin: 0 auto;
-  padding: 50px 60px 0 60px;
+
   text-align: center;
   font-size: 16px;
-  box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.15);
-  /*background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/background.jpeg);*/
+  //box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.15);
   background-size: cover;
   color: #585858;
-  font-family: 'Montserrat', sans-serif;
-}
-
-#hellobar-template.report .icon-close {
-  position: absolute;
-  top: 25px;
-  right: 25px;
-  font-size: 12px;
-  color: #364556;
-  cursor: pointer;
-}
-
-#hellobar-template.report.middle {
-  top: 50%;
-  transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-}
-
-#hellobar-template.report.top {
-  top: 5%;
-  transform: translateX(-50%);
-  -o-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  -moz-transform: translateX(-50%);
-  -webkit-transform: translateX(-50%);
-}
-
-#hellobar-template.report .headline-first {
-  font-size: 30px;
-  line-height: 25px;
-  max-height: 30px;
-  white-space: nowrap;
-  /*font-weight: 800;*/
-  margin-bottom: 18px;
-  text-transform: uppercase;
-  color: #f03554;
-}
-
-#hellobar-template.report .headline-second {
-  font-size: 140px;
-  line-height: 100px;
-  max-height: 140px;
-  white-space: nowrap;
-  /*font-weight: 800;*/
-  margin-bottom: 30px;
-  text-transform: uppercase;
-  color: #f03554;
-}
-
-#hellobar-template.report .headline-third {
-  font-size: 31px;
-  line-height: 22px;
-  max-height: 31px;
-  white-space: nowrap;
-  /*font-weight: 900;*/
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #f03554;
-}
-
-#hellobar-template.report .hb-secondary-text {
-  color: #49596a;
-  font-size: 22px;
-  max-height: 94px;
-  overflow: hidden;
-  font-weight: 400;
-  padding: 20px 70px;
-}
-
-#hellobar-template.report .form-block {
-  position: relative;
-  /*width: 608px;*/
-  height: 77px;
-  background-color: #193247;
+  font-family: 'Kanit', sans-serif;
   border-radius: 5px;
-  /*box-shadow: inset 0px 3px 3px 0 rgba(0, 0, 0, 0.32);*/
-}
+  //overflow: hidden;
 
-#hellobar-template.report .builtin-email {
-  width: 100%;
-  margin-right: 232px;
-  box-sizing: border-box;
-}
 
-#hellobar-template.report .builtin-email label {
-  display: none;
-}
+  // TODO uncomment
+  /*&.middle {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+  }
 
-#hellobar-template.report .builtin-email input {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 232px;
-  text-align: left;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #6d849c;
-  font-size: 16px;
-  padding: 28px;
+  &.top {
+    top: 5%;
+    transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+  }*/
+
+  .icon-close {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    font-size: 12px;
+    color: #364556;
+    cursor: pointer;
+  }
+
+  .image-wrapper {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 458px;
+    height: 520px;
+  }
+
+  .inner-content {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 458px;
+    height: 520px;
+    box-sizing: border-box;
+    padding: 40px 70px 0 70px;
+    background: url(../assets/background.jpg);
+    background-size: cover;
+  }
+
+  .headline-first {
+    font-size: 72px;
+    line-height: 60px;
+    //max-height: 30px;
+    font-weight: 600;
+    /*font-weight: 800;*/
+    padding-bottom: 15px;
+
+    text-transform: uppercase;
+    color: $headerColor;
+  }
+
+  .headline-second {
+    font-size: 36px;
+    line-height: 36px;
+    padding: 13px 0;
+    border: 2px solid #4c4b5e;
+    border-left: none;
+    border-right: none;
+    color: white;
+  }
+
+  .secondary-text {
+    color: white;
+    font-size: 18px;
+    line-height: 23px;
+    //max-height: 94px;
+    //overflow: hidden;
+    font-weight: 400;
+    padding: 14px 0 17px 0;
+  }
+
+  .form-block {
+    position: relative;
+    background-color: #193247;
+    border-radius: 5px;
+    margin-bottom: 11px;
+
+    .builtin-email {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: white;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      label {
+        display: none;
+      }
+      input {
+        display: block;
+        text-align: left;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: $inputColor;
+        font-size: 16px;
+        padding: 18px 18px 18px 65px;
+      }
+    }
+
+  }
+
+  .cta {
+    width: 100%;
+    padding: 24px;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: $ctaBackgroundColor;
+    color: $ctaColor;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .hellobar-logo {
+    display: inline-block;
+    width: 34px;
+    height: 23px;
+    border-radius: 3px;
+    svg {
+      border-radius: 3px;
+      path {
+        fill: #b4b4b4;
+      }
+    }
+  }
+
 }
 
 ::-webkit-input-placeholder {
-  color: #6d849c;
+  color: $inputPlaceholderColor;
 }
 
 :-moz-placeholder {
-  color: #6d849c;
+  color: $inputPlaceholderColor;
   opacity: 1;
 }
 
 ::-moz-placeholder {
-  color: #6d849c;
+  color: $inputPlaceholderColor;
   opacity: 1;
 }
 
 :-ms-input-placeholder {
-  color: #6d849c;
-}
-
-#hellobar-template.report .hb-cta-style-button {
-  position: absolute;
-  right: -1px;
-  top: 0;
-  bottom: 0;
-  width: 232px;
-  padding: 24px;
-  margin: 0;
-  box-sizing: border-box;
-  background-color: #f03554;
-  color: white;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  font-size: 22px;
-  /*font-weight: 800;*/
-  text-decoration: none;
-}
-
-#hellobar-template.report .reject-link {
-  display: block;
-  position: relative;
-  margin: 17px 0;
-  font-size: 16px;
-  line-height: 16px;
-  max-height: 16px;
-  white-space: nowrap;
-  font-weight: 400;
-  color: #6d849c;
-  letter-spacing: 1px;
-  text-decoration: none;
-}
-
-#hellobar-template.report .hb-logo {
-  display: inline-block;
-  width: 34px;
-  height: 23px;
-  border-radius: 3px;
-}
-
-#hellobar-template.report .hb-logo svg {
-  border-radius: 3px;
-}
-
-#hellobar-template.report .hb-logo svg path {
-  fill: #b4b4b4;
+  color: $inputPlaceholderColor;
 }
 
 
@@ -189,10 +189,10 @@
   font-size: 40px;
   line-height: 40px;
   font-weight: 800;
-  margin-top: 161px;
+  margin-top: 126px;
   margin-bottom: 20px;
   text-transform: uppercase;
-  color: #f03554;
+  color: $headerColor;
 }
 
 #hellobar-template.report .thank-you-secondary-text {
@@ -201,7 +201,7 @@
   font-weight: 800;
   margin-bottom: 40px;
   text-transform: uppercase;
-  color: #f03554;
+  color: $headerColor;
 }
 
 #hellobar-template.report .go-hellobar-button-wrapper {
@@ -211,8 +211,8 @@
 #hellobar-template.report .go-hellobar-button {
   display: inline-block;
   padding: 18px 50px;
-  background-color: #f03554;
-  color: white;
+  background-color: $headerColor;
+  color: $ctaColor;
   text-decoration: none;
   text-transform: uppercase;
   font-size: 18px;
@@ -240,7 +240,7 @@
 #hellobar-template.report.thank-you .headline-first,
 #hellobar-template.report.thank-you .headline-second,
 #hellobar-template.report.thank-you .headline-third,
-#hellobar-template.report.thank-you .hb-secondary-text,
+#hellobar-template.report.thank-you .secondary-text,
 #hellobar-template.report.thank-you .form-block,
 #hellobar-template.report.thank-you .reject-link {
   display: none;
