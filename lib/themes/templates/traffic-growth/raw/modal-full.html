@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">-->
-  <!--<link href="https://fonts.googleapis.com/css?family=Raleway:400,700,800,900&amp;subset=latin-ext" rel="stylesheet">-->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:400,700,800,900&amp;subset=latin-ext"
         rel="stylesheet">
-  <link href="../../vendor/assets/stylesheets/site_elements/template_common.css" rel="stylesheet" type="text/css">
-  <link href="../themes/traffic-growth/element.css" rel="stylesheet" type="text/css">
+  <script src="../../../node_modules/sass.js/dist/sass.sync.js" type="text/javascript"></script>
+  <script src="../../../node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    $.ajax('../element.scss').then(function (scss) {
+      Sass.compile(scss, function (cssObject) {
+        $('<style></style>').attr('type', 'text/css').text(cssObject.text).appendTo($('head'));
+      });
+    });
+  </script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
 
 </head>
 <body>
