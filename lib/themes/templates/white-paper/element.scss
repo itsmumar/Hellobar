@@ -1,0 +1,146 @@
+#hellobar-template.white-paper {
+  display: block;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 16px;
+  color: #585858;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+}
+
+#hellobar-template.white-paper.modal {
+  position: fixed;
+  left: 50%;
+  width: 1041px;
+  height: 520px;
+  margin: 0 auto;
+  padding: 50px 60px 0 60px;
+  background-image: url(../assets/modal-background.png);
+  background-size: cover;
+
+  &.middle {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+  }
+
+  &.top {
+    top: 5%;
+    transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+  }
+
+  .headline-first {
+    position: absolute;
+    left: 520px;
+    top: 55px;
+    width: 385px;
+    font-size: 46px;
+
+    line-height: 50px;
+    max-height: 80px;
+    letter-spacing: -1px;
+    text-align: left;
+    margin-bottom: 22px;
+    text-transform: uppercase;
+    color: #ffffff;
+  }
+
+  .caption-text {
+    position: absolute;
+    left: 521px;
+    top: 216px;
+    font-size: 19px;
+    line-height: 30px;
+    text-align: left;
+    color: #ffffff;
+    font-weight: 400;
+    width: 408px;
+
+  }
+
+  .builtin-email {
+    width: 100%;
+    margin-right: 232px;
+    box-sizing: border-box;
+
+    label {
+      display: none;
+    }
+
+    input {
+      position: absolute;
+      left: 522px;
+      top: 302px;
+      text-align: left;
+      border: none;
+      width: 365px;
+      background: #ffffff;
+      color: #313741;
+      font-size: 14px;
+      padding: 22px 28px;
+      font-weight: 400;
+      border-radius: 5px;
+      height: 28px;
+    }
+  }
+
+  .cta {
+    position: absolute;
+    left: 522px;
+    top: 386px;
+    width: 365px;
+    height: 28px;
+    padding: 22px 28px;
+    margin: 0;
+    text-transform: uppercase;
+    background-color: #ffa800;
+    color: white;
+    font-size: 20px;
+    font-weight: 800;
+    text-decoration: none;
+    letter-spacing: 1.6px;
+    border-radius: 5px;
+  }
+
+  .aside-image {
+    position: absolute;
+    left: 35px;
+    top: 34px;
+  }
+
+  .icon-close {
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 12px;
+    height: 12px;
+    background: url(../assets/close.png);
+    cursor: pointer;
+  }
+
+  .hb-logo {
+    display: inline-block;
+    position: absolute;
+    left: 720px;
+    bottom: 22px;
+    width: 34px;
+    height: 23px;
+    border-radius: 3px;
+
+    svg {
+      border-radius: 3px;
+      path {
+        fill: #ffffff;
+      }
+    }
+  }
+
+}
