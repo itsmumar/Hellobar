@@ -187,13 +187,11 @@ $ctaBackgroundColor: #fff200;
 
 /* ---- Modal styles ---- */
 #hellobar-template.report.modal {
-  // TODO uncomment
-  //left: 50%;
+  left: 50%;
   width: 1018px;
   height: 520px;
 
-  // TODO uncomment
-  /*&.middle {
+  &.middle {
     top: 50%;
     transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
@@ -209,7 +207,7 @@ $ctaBackgroundColor: #fff200;
     -ms-transform: translateX(-50%);
     -moz-transform: translateX(-50%);
     -webkit-transform: translateX(-50%);
-  }*/
+  }
 
   .image-wrapper {
     width: 458px;
