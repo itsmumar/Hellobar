@@ -1,69 +1,16 @@
-#hellobar-template.coupon-code .main-content {
-
-}
-
-#hellobar-template.coupon-code .headline-first {
-  display: block;
-
-  font-size: 71px;
-  line-height: 75px;
-  max-height: 280px;
-  font-family: 'Oswald', sans-serif;
-  margin-bottom: 18px;
-  text-transform: uppercase;
-  text-align: center;
-  color: #333333;
-
-}
-
-#hellobar-template.coupon-code .headline-first-red {
-  color: #f03554;
-}
-
-#hellobar-template.coupon-code .headline-second {
-  display: block;
-  padding-bottom: 20px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 21px;
-  color: #6d849c;
-  text-align: center;
-
-  letter-spacing: -1px;
-}
-
-#hellobar-template.coupon-code .reject-link {
-  display: block;
-  font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
-  color: #6d849c;
-  text-align: center;
-  margin-bottom: 20px;
-  cursor: pointer;
-}
-
-#hellobar-template.coupon-code .builtin-email input {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 232px;
-  text-align: left;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #6d849c;
-  font-size: 16px;
-  padding: 24px;
-}
+$textColor: #6d849c;
+$darkHeaderColor: #333333;
+$redHeaderColor: #f03554;
 
 #hellobar-template.coupon-code {
+
   display: block;
   position: fixed;
   left: 50%;
   width: 680px;
   box-sizing: border-box;
   margin: 0 auto;
-  padding: 50px 0px 20px 0px;
+  padding: 50px 0 20px 0;
   text-align: center;
   font-size: 16px;
   border: 1px solid #a3a3a3;
@@ -71,72 +18,143 @@
   background-size: cover;
   color: #585858;
   font-family: 'Montserrat', sans-serif;
+
+  .headline-first {
+    display: block;
+
+    font-size: 71px;
+    line-height: 75px;
+    max-height: 280px;
+    font-family: 'Oswald', sans-serif;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+    text-align: center;
+    color: $darkHeaderColor;
+  }
+
+  .headline-first-red {
+    color: $redHeaderColor;
+  }
+
+  .headline-second {
+    display: block;
+    padding-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 21px;
+    color: $textColor;
+    text-align: center;
+    letter-spacing: -1px;
+  }
+
+  .reject-link {
+    display: block;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    color: $textColor;
+    text-align: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  .form-block {
+    position: relative;
+    width: 500px;
+    height: 65px;
+    background-color: #eeeeef;
+    margin-left: 90px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+
+  .builtin-email {
+    width: 100%;
+    margin-right: 232px;
+    box-sizing: border-box;
+    label {
+      display: none;
+    }
+    input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 232px;
+      text-align: left;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: $textColor;
+      font-size: 16px;
+      padding: 24px;
+    }
+  }
+
+  .cta {
+    position: absolute;
+    right: -1px;
+    top: 0;
+    bottom: 0;
+    width: 190px;
+    padding-top: 18px;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #f03554;
+    color: white;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .reject-link {
+    display: block;
+    position: relative;
+    margin: 17px 0;
+    font-size: 16px;
+    line-height: 16px;
+    max-height: 16px;
+    white-space: nowrap;
+    font-weight: 400;
+    color: #6d849c;
+    letter-spacing: 1px;
+    text-decoration: none;
+  }
+
+  .hb-logo {
+    display: inline-block;
+    width: 34px;
+    height: 23px;
+    border-radius: 3px;
+
+    svg {
+      border-radius: 3px;
+      path {
+        fill: #b4b4b4;
+      }
+    }
+  }
+
 }
 
+#hellobar-template.coupon-code.modal {
+  &.middle {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+  }
 
-#hellobar-template.coupon-code.middle {
-  top: 50%;
-  transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-}
-
-#hellobar-template.coupon-code.top {
-  top: 5%;
-  transform: translateX(-50%);
-  -o-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  -moz-transform: translateX(-50%);
-  -webkit-transform: translateX(-50%);
-}
-
-
-
-#hellobar-template.coupon-code .hb-secondary-text {
-  color: #49596a;
-  font-size: 22px;
-  max-height: 94px;
-  overflow: hidden;
-  font-weight: 400;
-  padding: 20px 70px;
-}
-
-#hellobar-template.coupon-code .form-block {
-  position: relative;
-  width: 500px;
-  height: 65px;
-  background-color: #eeeeef;
-  margin-left: 90px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-
-}
-
-#hellobar-template.coupon-code .builtin-email {
-  width: 100%;
-  margin-right: 232px;
-  box-sizing: border-box;
-}
-
-#hellobar-template.coupon-code .builtin-email label {
-  display: none;
-}
-
-#hellobar-template.coupon-code .builtin-email input {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 232px;
-  text-align: left;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #6d849c;
-  font-size: 16px;
-  padding: 28px;
+  &.top {
+    top: 5%;
+    transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+  }
 }
 
 ::-webkit-input-placeholder {
@@ -157,55 +175,9 @@
   color: #6d849c;
 }
 
-#hellobar-template.coupon-code .hb-cta-style-button {
-  position: absolute;
-  right: -1px;
-  top: 0;
-  bottom: 0;
-  width: 190px;
-  padding-top: 18px;
-  margin: 0;
-  box-sizing: border-box;
-  background-color: #f03554;
-  color: white;
-  border-radius: 5px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 20px;
-  /*font-weight: 800;*/
-  text-decoration: none;
-}
 
-#hellobar-template.coupon-code1 .reject-link {
-  display: block;
-  position: relative;
-  margin: 17px 0;
-  font-size: 16px;
-  line-height: 16px;
-  max-height: 16px;
-  white-space: nowrap;
-  font-weight: 400;
-  color: #6d849c;
-  letter-spacing: 1px;
-  text-decoration: none;
-}
-
-#hellobar-template.coupon-code .hb-logo {
-  display: inline-block;
-  width: 34px;
-  height: 23px;
-  border-radius: 3px;
-}
-
-#hellobar-template.coupon-code .hb-logo svg {
-  border-radius: 3px;
-}
-
-#hellobar-template.coupon-code .hb-logo svg path {
-  fill: #b4b4b4;
-
-}
-
-
+// TODO uncomment and improve Thank you code
+/*
 #hellobar-template.coupon-code .thank-you-headline {
   font-size: 40px;
   line-height: 40px;
@@ -241,7 +213,6 @@
   border-radius: 8px;
 }
 
-
 #hellobar-template.coupon-code .thank-you-headline,
 #hellobar-template.coupon-code .thank-you-secondary-text,
 #hellobar-template.coupon-code .go-hellobar-button-wrapper {
@@ -266,3 +237,4 @@
 #hellobar-template.coupon-code.thank-you .reject-link {
   display: none;
 }
+*/
