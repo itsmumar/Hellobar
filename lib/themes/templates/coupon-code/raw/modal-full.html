@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Oswald:400,700&amp;subset=latin-ext" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:400,700,800,900&amp;subset=latin-ext"
+        rel="stylesheet">
+
+  <script src="../../../node_modules/sass.js/dist/sass.sync.js" type="text/javascript"></script>
+  <script src="../../../node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    $.ajax('../element.scss').then(function (scss) {
+      Sass.compile(scss, function (cssObject) {
+        $('<style></style>').attr('type', 'text/css').text(cssObject.text).appendTo($('head'));
+      });
+    });
+  </script>
+
+</head>
+<body>
+
+<div id="hellobar-modal-background"></div>
+
+<div id="hellobar-template" class="js-hellobar-element middle light coupon-code">
+
+  <a class="icon-close" onclick="window.parent.HB.findSiteElementOnPageById(null).close()"></a>
+
+  <div class="hb-content-wrapper">
+
+
+    <div class="headline-first hb-editable-block hb-editable-block-with-limited-formatting"
+         data-hb-editable-block="headline-first" data-hb-inline-editor-placeholder="">
+      <span class="headline-first-red">Get 30% off</span>
+      <span>your next purchase</span>
+    </div>
+
+
+    <div class="headline-second hb-editable-block hb-editable-block-with-limited-formatting"
+         data-hb-editable-block="headline-second" data-hb-inline-editor-placeholder="">
+      Valid for all clothing items through December 2016
+    </div>
+
+
+    <div id="hb-fields-form" class="form-block">
+      <div class="hb-input-block hb-editable-block hb-editable-block-input builtin-email"
+           data-hb-editable-block="f-builtin-email">
+
+        <label for="f-builtin-email">Your Email address</label>
+        <input id="f-builtin-email" type="text" placeholder="Your Email address" required="" value="">
+      </div>
+
+      <a class="hb-cta hb-cta-style-button" href="#">
+        <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
+             data-hb-editable-block="action_link" data-hb-inline-editor-placeholder="Subscribe">
+          Redeem Now
+        </div>
+      </a>
+    </div>
+
+
+    <div class="reject-link"
+         data-hb-editable-block="reject_link"
+         data-hb-inline-editor-placeholder="No, I do not want to grow my blog traffic">
+      No, Thanks! I want to pay full price.
+    </div>
+
+    <div class="hb-logo">
+      <a href="http://hellobar.com" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 40 26.1" enable-background="new 0 0 40 26.1" xml:space="preserve" class="hellobar-logo animated">
+        <g>
+         <path d="M39.5 0h-39C0.2 0 0 0.2 0 0.5v25.1c0 0.3 0.2 0.5 0.5 0.5h39c0.3 0 0.5-0.2 0.5-0.5V0.5C40 0.2 39.8 0 39.5 0z M33.8 8.6 h-4.3v9h4.3v2.8H21.7v-2.8h4.7V14H13.6v3.6h4.7v2.8h-12v-2.8h4.3v-9H6.2V5.7h12v2.8h-4.7v2.9h12.9V8.6h-4.7V5.7h12.1V8.6z"></path>
+        </g>
+          </svg>
+      </a>
+
+    </div>
+
+
+  </div>
+
+</div>
+</body>
+</html>
