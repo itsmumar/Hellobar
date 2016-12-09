@@ -13,7 +13,7 @@ gem "bootstrap-sass",            "~> 3.1.1"
 gem "bourbon",                   "~> 3.2.0"
 gem "capistrano-bundler",        "~> 1.1.2"
 gem "capistrano-rails",          "~> 1.1"
-gem "capistrano",                '3.2.1'
+gem "capistrano",                "~> 3.1"
 gem "coffee-rails",              "~> 4.0.0"
 gem "constantcontact",           "~> 1.1.2"
 gem "country_select",            github: 'stefanpenner/country_select', ref: '79755038ca61dafdfebf4c55346d4a2085f98479'
