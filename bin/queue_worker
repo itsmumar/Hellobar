@@ -32,7 +32,7 @@ end
 class QueueWorker
   class << self
     def log_failed_job(job)
-      # We log failed jobs to a file that is specific for the day. This 
+      # We log failed jobs to a file that is specific for the day. This
       # makes retrying failed jobs easier
       # Re-open the file handle every time. Slightly slower, but simpler.
       File.open(File.join(Rails.root,"log", "failed_jobs.#{Time.now.strftime("%Y-%m-%d")}.log"), "a"){|f| f.puts(job)}
@@ -45,7 +45,7 @@ class QueueWorker
       exception = nil
       if msg.is_a?(Exception)
         type = "ERRO"
-        # Save the msg as an exception before changing the msg to 
+        # Save the msg as an exception before changing the msg to
         # a string to be logged. This way we can pass it to Sentry via Raven
         # later
         exception = msg
@@ -221,9 +221,9 @@ OptionParser.new do |opts|
     $queue_worker_logger = :stdout
     config[:num_workers] = 1
   end
-  opts.on('--skip-old', 'If included skip messages older than 24 hours') do |skip_old|
-    config[:skip_old] = true
-  end
+  # opts.on('--skip-old', 'If included skip messages older than 24 hours') do |skip_old|
+  #   config[:skip_old] = true
+  # end
 end.parse!
 
 # If there was any crazy exception not caught, better log it
