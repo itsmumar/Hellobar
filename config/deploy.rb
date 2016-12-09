@@ -11,7 +11,7 @@ set :rails_env, "production"
 set :ssh_options, { :forward_agent => true }
 set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 set :whenever_roles, %w(app db web)
-set :keep_releases, 15
+set :keep_releases, 50
 
 # Using `lambda` for lazy assigment. http://stackoverflow.com/a/25850619/1047207
 set :ember_app_path, lambda { "#{release_path}/editor" }
