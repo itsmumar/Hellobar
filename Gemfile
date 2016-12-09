@@ -17,6 +17,7 @@ gem "capistrano",                "~> 3.1"
 gem "coffee-rails",              "~> 4.0.0"
 gem "constantcontact",           "~> 1.1.2"
 gem "country_select",            github: 'stefanpenner/country_select', ref: '79755038ca61dafdfebf4c55346d4a2085f98479'
+gem 'countries', '0.9.3'
 gem "createsend",                "~> 3.4.0"
 gem "cssmin",                    "~> 1.0.3"
 gem "dalli",                     "~> 2.7.2"
