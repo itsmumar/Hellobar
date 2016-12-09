@@ -380,8 +380,10 @@ $defaultColor: #3a3a49;
 
   .headline-wrapper {
     display: inline-block;
-    text-align: left;
+    position: relative;
+    top: 4px;
     margin-right: 20px;
+    text-align: left;
   }
 
   .headline-first {
@@ -408,6 +410,8 @@ $defaultColor: #3a3a49;
   .form-block {
     display: inline-block;
     margin-left: 20px;
+    position: relative;
+    top: -6px;
     .builtin-email {
       display: inline-block;
       width: auto;
@@ -416,16 +420,51 @@ $defaultColor: #3a3a49;
       label {
       }
       input {
+        width: 200px;
         padding: 10px;
         font-size: 11px;
       }
     }
   }
+
   .cta {
     display: inline-block;
     width: auto;
-    padding: 10px;
+    padding: 9px;
     font-size: 11px;
     border-radius: 3px;
+    cursor: pointer;
   }
+
+  .hellobar-logo {
+    position: relative;
+    top: 4px;
+    width: 43px;
+    height: 29px;
+    border-radius: 3px;
+    svg {
+      border-radius: 3px;
+      path {
+        fill: white;
+      }
+    }
+  }
+
+  .buttons {
+    float: right;
+    position: relative;
+    top: 8px;
+    .icon-close {
+    }
+    .hb-arrow-wrapper {
+      svg {
+        width: 43px;
+        height: 29px;
+        path {
+          fill: #787878;
+        }
+      }
+    }
+  }
+
 }
