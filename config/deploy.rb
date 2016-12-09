@@ -1,6 +1,6 @@
 require 'yaml'
 
-lock "3.6.1"
+lock "3.2.1"
 
 set :application, "hellobar"
 set :repo_url, "git@github.com:Hello-bar/hellobar_new.git"
