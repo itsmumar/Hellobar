@@ -94,6 +94,7 @@ $defaultColor: #3a3a49;
     letter-spacing: 1px;
     text-decoration: none;
     text-transform: uppercase;
+    cursor: pointer;
   }
 
   .hellobar-logo {
@@ -433,7 +434,6 @@ $defaultColor: #3a3a49;
     padding: 9px;
     font-size: 11px;
     border-radius: 3px;
-    cursor: pointer;
   }
 
   .hellobar-logo {
@@ -457,6 +457,9 @@ $defaultColor: #3a3a49;
     .icon-close {
     }
     .hb-arrow-wrapper {
+      #close-bar {
+        cursor: pointer;
+      }
       svg {
         width: 43px;
         height: 29px;
@@ -468,3 +471,108 @@ $defaultColor: #3a3a49;
   }
 
 }
+
+
+/* ---- Takeover styles ---- */
+#hellobar-takeover-background.report {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $defaultColor;
+}
+
+#hellobar-template.report.takeover {
+  background-color: $defaultColor;
+  border-radius: 0;
+  border: 1px solid #4c4b5e;
+  left: 50%;
+  width: 1018px;
+  height: 522px;
+
+
+  &.middle {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+  }
+
+  &.top {
+    top: 5%;
+    transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+  }
+
+
+
+  .image-wrapper {
+    width: 458px;
+    height: 520px;
+    img {
+      display: block;
+      width: 458px;
+    }
+  }
+
+  .inner-content {
+    left: 458px;
+    height: 520px;
+    padding: 40px 70px 0 70px;
+    background-color: $defaultColor;
+  }
+
+  .headline-first {
+    font-size: 72px;
+    line-height: 60px;
+    padding-bottom: 15px;
+  }
+
+  .headline-second {
+    font-size: 36px;
+    line-height: 36px;
+    padding: 13px 0;
+  }
+
+  .secondary-text {
+    font-size: 18px;
+    line-height: 23px;
+    padding: 14px 0 17px 0;
+  }
+
+  .form-block {
+    margin-bottom: 11px;
+    .builtin-email {
+      border-radius: 5px;
+      margin-bottom: 15px;
+      label {
+
+      }
+      input {
+        font-size: 16px;
+        padding: 18px 18px 18px 65px;
+      }
+    }
+  }
+
+  .cta {
+    padding: 24px;
+    border-radius: 5px;
+    font-size: 20px;
+  }
+
+  .hellobar-logo {
+    svg {
+      path {
+
+      }
+    }
+  }
+}
+
