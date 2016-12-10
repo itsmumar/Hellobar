@@ -3,14 +3,14 @@ require 'integration_helper'
 feature "Users can select design themes for SiteElements", js: true do
   before do
     @user = login
-    visit new_site_site_element_path(@user.sites.first, skip_interstitial: true, anchor: "style")
+    visit new_site_site_element_path(@user.sites.first) + "/#/style"
     page.find('a', text: /#{subtype}/i).click
     page.find('a', text: 'Next').click
   end
   let(:subtype)            { "Modal" }
   let(:first_select_input) { page.first("select") }
   let(:themes)             { Theme.all }
-  let(:theme_options)      { themes.collect{|t| t.name} }
+  let(:theme_options)      { themes.collect{|t| t.name if t.type == 'generic'} }
   let(:default_theme)      { Theme.find('classic') }
   let(:themes_with_images) { [Theme.find('marigold'), Theme.find('french-rose')] }
 

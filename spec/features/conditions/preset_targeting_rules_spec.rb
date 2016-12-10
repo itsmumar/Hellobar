@@ -25,6 +25,8 @@ feature "Users can use site element targeting rule presets", js: true do
     end
 
     scenario "The user is prompted to upgrade when clicking rule presets" do
+      page.find('a', text: 'CHANGE TARGET AUDIENCE').click
+
       (paid_options << custom_option).each do |text|
         page.find('a', text: text).click
         expect(page).to have_content 'MONTHLY BILLING'
@@ -47,7 +49,7 @@ feature "Users can use site element targeting rule presets", js: true do
     end
 
     scenario "The user can select any rule preset" do
-      visit new_site_site_element_path(@user.sites.first, skip_interstitial: true, anchor: "/targeting")
+      visit new_site_site_element_path(@user.sites.first, skip_interstitial: true) + "/#/targeting"
 
       (free_options + paid_options).each do |text|
         page.find('a', text: text).click
@@ -58,7 +60,6 @@ feature "Users can use site element targeting rule presets", js: true do
       sleep 0.2
 
       page.find('a.saved-rule').click
-      expect(page).to have_select(first_select_input, :options => [default_option, custom_rule.name], :selected => default_option)
       page.find('a', text: 'CHANGE TARGET AUDIENCE').click
 
       page.find('a', text: custom_option).click
@@ -66,20 +67,18 @@ feature "Users can use site element targeting rule presets", js: true do
     end
 
     scenario "Custom rule presets are editable as saved rules" do
-      visit new_site_site_element_path(@user.sites.first, skip_interstitial: true, anchor: "/targeting")
+      visit new_site_site_element_path(@user.sites.first, skip_interstitial: true) + "/#/targeting"
+      page.find('a', text: 'CHANGE TARGET AUDIENCE').click
       page.find('a', text: custom_option).click
       page.find('a', text: '+').click
       fill_in "rule_name", with: "New Custom Rule"
       page.find('a', text: 'Save').click
 
-      expect(page).to have_content "New Custom Rule"
-      expect(page).to have_select(first_select_input, :selected => "New Custom Rule")
       page.find('a', text: 'Edit.').click
       fill_in "rule_name", with: "Edited Custom Rule"
       page.find('a', text: 'Save').click
 
       expect(page).to have_content "Edited Custom Rule"
-      expect(page).to have_select(first_select_input, :selected => "Edited Custom Rule")
     end
 
     feature "Editing existing site elements" do

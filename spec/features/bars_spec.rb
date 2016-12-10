@@ -146,6 +146,10 @@ feature "User can enable/disable/add fields for `Collect Email` goal. Create Sit
   end
 
   scenario 'custom field' do
+    find('.step-style').click
+    find('h6', text: "Modal").click
+    find('.step-settings').click
+
     input_field = '.new-item-prototype > input'
 
     find('div.item-block.add', text: 'Add field').click
