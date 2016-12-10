@@ -58,9 +58,12 @@ module ServiceProviders
       end
 
       begin
+        request_body = {name: name, email: email, campaign: {campaignId: list_id}}
+        request_body.merge({dayOfCycle: cycle_day}) if cycle_day
+
         response = @client.post do |request|
           request.url 'contacts'
-          request.body = {name: name, email: email, dayOfCycle: cycle_day, campaign: {campaignId: list_id}}
+          request.body = request_body
         end
 
         if response.success?
