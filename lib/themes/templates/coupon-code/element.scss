@@ -3,30 +3,21 @@ $darkHeaderColor: #333333;
 $redHeaderColor: #f03554;
 
 #hellobar-template.coupon-code {
-
   display: block;
   position: fixed;
   left: 50%;
-  width: 680px;
   box-sizing: border-box;
-  margin: 0 auto;
-  padding: 50px 0 20px 0;
   text-align: center;
   font-size: 16px;
   border: 1px solid #a3a3a3;
-  background: #ffffff;
   background-size: cover;
   color: #585858;
   font-family: 'Montserrat', sans-serif;
 
   .headline-first {
     display: block;
-
-    font-size: 71px;
-    line-height: 75px;
-    max-height: 280px;
     font-family: 'Oswald', sans-serif;
-    margin-bottom: 18px;
+
     text-transform: uppercase;
     text-align: center;
     color: $darkHeaderColor;
@@ -38,32 +29,20 @@ $redHeaderColor: #f03554;
 
   .headline-second {
     display: block;
-    padding-bottom: 20px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 21px;
     color: $textColor;
     text-align: center;
     letter-spacing: -1px;
   }
 
   .reject-link {
-    display: block;
-    font-size: 16px;
-    font-family: 'Montserrat', sans-serif;
-    color: $textColor;
-    text-align: center;
-    margin-bottom: 20px;
-    cursor: pointer;
+
   }
 
   .form-block {
     position: relative;
-    width: 500px;
-    height: 65px;
     background-color: #eeeeef;
-    margin-left: 90px;
-    margin-bottom: 20px;
-    border-radius: 5px;
+
   }
 
   .builtin-email {
@@ -84,8 +63,8 @@ $redHeaderColor: #f03554;
       border: none;
       outline: none;
       color: $textColor;
-      font-size: 16px;
-      padding: 24px;
+
+
     }
   }
 
@@ -94,15 +73,14 @@ $redHeaderColor: #f03554;
     right: -1px;
     top: 0;
     bottom: 0;
-    width: 190px;
-    padding-top: 18px;
+
     margin: 0;
     box-sizing: border-box;
     background-color: #f03554;
     color: white;
-    border-radius: 5px;
+
     font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
+
     text-decoration: none;
     cursor: pointer;
   }
@@ -110,15 +88,18 @@ $redHeaderColor: #f03554;
   .reject-link {
     display: block;
     position: relative;
-    margin: 17px 0;
-    font-size: 16px;
+
     line-height: 16px;
     max-height: 16px;
     white-space: nowrap;
     font-weight: 400;
-    color: #6d849c;
+
     letter-spacing: 1px;
     text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    color: $textColor;
+    text-align: center;
+    cursor: pointer;
   }
 
   .hb-logo {
@@ -138,6 +119,10 @@ $redHeaderColor: #f03554;
 }
 
 #hellobar-template.coupon-code.modal {
+  width: 680px;
+  padding: 50px 0 20px 0;
+  background: #ffffff;
+  margin-bottom: 18px;
   &.middle {
     top: 50%;
     transform: translate(-50%, -50%);
@@ -155,6 +140,93 @@ $redHeaderColor: #f03554;
     -moz-transform: translateX(-50%);
     -webkit-transform: translateX(-50%);
   }
+
+  .headline-first {
+    font-size: 71px;
+    line-height: 75px;
+    max-height: 280px;
+    margin-bottom: 20px;
+  }
+
+  .headline-second {
+    padding-bottom: 30px;
+    font-size: 21px;
+  }
+
+  .form-block {
+    width: 500px;
+    margin-left: 90px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    height: 65px;
+  }
+
+  .cta{
+    width: 190px;
+    padding-top: 18px;
+    border-radius: 5px;
+    font-size: 20px;
+  }
+
+  .reject-link {
+    font-size: 16px;
+    margin-bottom: 23px;
+    margin-top: 10px;
+  }
+
+  .builtin-email {
+    input{
+      font-size: 16px;
+      padding: 24px;
+    }
+  }
+}
+
+#hellobar-template.coupon-code.slider {
+  background-color: #ebf7fe;
+  width: 380px;
+  padding: 22px 0 10px 0;
+
+  .headline-first {
+    font-size: 34px;
+    line-height: 39px;
+    max-height: 140px;
+
+    padding: 0 30px;
+  }
+
+  .headline-second {
+    margin: 10px 0 15px 0;
+    font-size: 13px;
+  }
+
+  .form-block {
+    width: 300px;
+    margin-left: 40px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    height: 30px;
+  }
+
+  .cta {
+    width: 110px;
+    padding-top: 8px;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+
+  .reject-link {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .builtin-email {
+    input{
+      font-size: 10px;
+      padding: 13px;
+    }
+  }
+
 }
 
 ::-webkit-input-placeholder {
