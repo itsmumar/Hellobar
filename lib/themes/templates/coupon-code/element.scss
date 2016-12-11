@@ -229,22 +229,78 @@ $redHeaderColor: #f03554;
 
 }
 
-::-webkit-input-placeholder {
-  color: #6d849c;
+#hellobar-takeover-background.coupon-code {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
 }
 
-:-moz-placeholder {
-  color: #6d849c;
-  opacity: 1;
-}
+#hellobar-template.coupon-code.takeover {
+  width: 680px;
+  padding: 50px 0 20px 0;
+  background: #ffffff;
+  margin-bottom: 18px;
+  border: none;
+  &.middle {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+  }
 
-::-moz-placeholder {
-  color: #6d849c;
-  opacity: 1;
-}
+  &.top {
+    top: 5%;
+    transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+  }
 
-:-ms-input-placeholder {
-  color: #6d849c;
+  .headline-first {
+    font-size: 71px;
+    line-height: 75px;
+    max-height: 280px;
+    margin-bottom: 20px;
+  }
+
+  .headline-second {
+    padding-bottom: 30px;
+    font-size: 21px;
+  }
+
+  .form-block {
+    width: 500px;
+    margin-left: 90px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    height: 65px;
+  }
+
+  .cta{
+    width: 190px;
+    padding-top: 18px;
+    border-radius: 5px;
+    font-size: 20px;
+  }
+
+  .reject-link {
+    font-size: 16px;
+    margin-bottom: 23px;
+    margin-top: 10px;
+  }
+
+  .builtin-email {
+    input{
+      font-size: 16px;
+      padding: 24px;
+    }
+  }
 }
 
 
