@@ -127,6 +127,7 @@ describe SiteElement do
   end
 
   describe "#recent" do
+    before { SiteElement.destroy_all }
     it "should only include site elements created within the last 2 weeks" do
       expect(SiteElement.recent(5).map { |se| se.created_at > 2.weeks.ago }.count).to eq(0)
     end

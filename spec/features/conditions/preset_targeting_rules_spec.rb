@@ -16,7 +16,7 @@ feature "Users can use site element targeting rule presets", js: true do
 
   feature "Free subscription sites" do
     before do
-      visit new_site_site_element_path(site, anchor: "/targeting", skip_interstitial: true)
+      visit new_site_site_element_path(site) + "/#/targeting?skip_interstitial=true"
     end
 
     scenario "The user can select free options" do
@@ -49,7 +49,7 @@ feature "Users can use site element targeting rule presets", js: true do
     end
 
     scenario "The user can select any rule preset" do
-      visit new_site_site_element_path(@user.sites.first, skip_interstitial: true) + "/#/targeting"
+      visit new_site_site_element_path(@user.sites.first) + "/#/targeting?skip_interstitial=true"
 
       (free_options + paid_options).each do |text|
         page.find('a', text: text).click
@@ -67,7 +67,7 @@ feature "Users can use site element targeting rule presets", js: true do
     end
 
     scenario "Custom rule presets are editable as saved rules" do
-      visit new_site_site_element_path(@user.sites.first, skip_interstitial: true) + "/#/targeting"
+      visit new_site_site_element_path(@user.sites.first) + "/#/targeting?skip_interstitial=true"
       page.find('a', text: 'CHANGE TARGET AUDIENCE').click
       page.find('a', text: custom_option).click
       page.find('a', text: '+').click
@@ -86,17 +86,16 @@ feature "Users can use site element targeting rule presets", js: true do
 
       scenario "With a preset rule" do
         element = create(:site_element, rule: preset_rule)
-        visit edit_site_site_element_path(site, element.id, skip_interstitial: true, anchor: "/targeting")
+        visit edit_site_site_element_path(site, element.id) + "/#/targeting?skip_interstitial=true"
 
         expect(page).to have_content preset_rule.name
       end
 
       scenario "With a custom rule" do
         element = create(:site_element, rule: custom_rule)
-        visit edit_site_site_element_path(site, element.id, skip_interstitial: true, anchor: "/targeting")
+        visit edit_site_site_element_path(site, element.id) + "/#/targeting?skip_interstitial=true"
 
         expect(page).to have_content custom_rule.name
-        expect(page).to have_select(first_select_input, :selected => custom_rule.name)
 
         page.find('a', text: 'Edit.').click
 
