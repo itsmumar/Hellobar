@@ -54,24 +54,19 @@
       display: none;
     }
     input {
-
       text-align: left;
       background: transparent;
       border: none;
       outline: none;
       color: #6d849c;
-
     }
-
   }
 
   .cta {
-
     margin: 0;
     box-sizing: border-box;
     background-color: #f03554;
     color: white;
-
     text-decoration: none;
   }
 
@@ -109,7 +104,6 @@
   background-image: url(../assets/modal-background.jpeg);
 
   .icon-close {
-
   }
 
   .headline-first {
@@ -149,7 +143,6 @@
   .builtin-email {
     margin-right: 232px;
     label {
-
     }
     input {
       position: absolute;
@@ -319,8 +312,131 @@
       }
     }
   }
+}
+
+#hellobar-takeover-background.traffic-growth {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  // TODO uncomment
+  //background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/takeover-background.jpg);
+  background-image: url(../assets/takeover-background.jpg);
+  background-size: cover;
 
 }
+#hellobar-template.traffic-growth.takeover {
+  left: 50%;
+  width: 735px;
+  height: 520px;
+  padding: 50px 60px 0 60px;
+  background: none;
+  box-shadow: none;
+
+  &.middle {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+  }
+
+  &.top {
+    top: 5%;
+    transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+  }
+
+
+  .icon-close {
+  }
+
+  .headline-first {
+    font-size: 30px;
+    line-height: 25px;
+    max-height: 30px;
+    margin-bottom: 18px;
+    white-space: nowrap;
+  }
+
+  .headline-second {
+    font-size: 140px;
+    line-height: 100px;
+    max-height: 140px;
+    margin-bottom: 30px;
+
+  }
+
+  .headline-third {
+    font-size: 31px;
+    line-height: 22px;
+    max-height: 31px;
+    letter-spacing: 1px;
+  }
+
+  .secondary-text {
+    font-size: 22px;
+    max-height: 94px;
+    padding: 20px 70px;
+  }
+
+  .form-block {
+    height: 77px;
+    border-radius: 5px;
+  }
+
+  .builtin-email {
+    margin-right: 232px;
+    label {
+    }
+    input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 232px;
+      font-size: 16px;
+      padding: 28px;
+    }
+  }
+
+  .cta {
+    position: absolute;
+    right: -1px;
+    top: 0;
+    bottom: 0;
+    width: 232px;
+    padding: 24px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-size: 22px;
+  }
+
+  .reject-link {
+    margin: 17px 0;
+    font-size: 16px;
+    line-height: 16px;
+    max-height: 16px;
+    letter-spacing: 1px;
+  }
+
+  .hb-logo {
+    width: 34px;
+    height: 23px;
+    svg {
+      path {
+        fill: #b4b4b4;
+      }
+    }
+  }
+}
+
+
 
 #hellobar-template.traffic-growth .thank-you-headline {
   font-size: 40px;
