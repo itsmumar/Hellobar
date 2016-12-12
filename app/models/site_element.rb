@@ -32,10 +32,14 @@ class SiteElement < ActiveRecord::Base
     "question"                        => "Question",
 
     # themes type `template`
-    "traffic_growth"                  => "Clicks"
+    "coupon_code"                     => "Clicks",
+    "report"                          => "Clicks",
+    "traffic_growth"                  => "Clicks",
+    "website_checklist"               => "Clicks",
+    "white_paper"                     => "Clicks"
   }
 
-  TEMPLATE_NAMES = %w(traffic_growth)
+  TEMPLATE_NAMES = %w(coupon_code report traffic_growth website_checklist white_paper)
   SHORT_SUBTYPES = %w{traffic email call social announcement}
 
   belongs_to :rule, touch: true
