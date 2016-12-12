@@ -17,7 +17,7 @@ $defaultColor: #3a3a49;
   font-family: 'Kanit', sans-serif;
   border-radius: 5px;
 
-  .icon-close {
+  .button-close {
     position: absolute;
     top: 25px;
     right: 25px;
@@ -353,7 +353,7 @@ $defaultColor: #3a3a49;
   background: $defaultColor;
   border-radius: 0;
 
-  .icon-close {
+  .button-close {
 
   }
 
@@ -454,7 +454,7 @@ $defaultColor: #3a3a49;
     float: right;
     position: relative;
     top: 8px;
-    .icon-close {
+    .button-close {
     }
     .hb-arrow-wrapper {
       #close-bar {

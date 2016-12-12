@@ -14,7 +14,7 @@ $redHeaderColor: #f03554;
   color: #585858;
   font-family: 'Montserrat', sans-serif;
 
-  .icon-close {
+  .button-close {
     position: absolute;
     background-repeat: no-repeat;
     background-size: cover;
@@ -149,7 +149,7 @@ $redHeaderColor: #f03554;
     -webkit-transform: translateX(-50%);
   }
 
-  .icon-close {
+  .button-close {
     width: 14px;
     height: 14px;
     top: 25px;
@@ -226,7 +226,7 @@ $redHeaderColor: #f03554;
     left: 20px;
   }
 
-  .icon-close {
+  .button-close {
     width: 10px;
     height: 10px;
     top: 28px;
@@ -287,7 +287,7 @@ $redHeaderColor: #f03554;
   bottom: 0;
   background: white;
 
-  .icon-close {
+  .button-close {
     position: fixed;
     width: 26px;
     height: 26px;
