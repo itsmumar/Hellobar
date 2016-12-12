@@ -14,6 +14,9 @@ class SiteElementSerializer < ActiveModel::Serializer
     # style
     :closable, :show_branding, :pushes_page_down, :remains_at_top,
     :animated, :wiggle_button, :theme,
+    # re-adding `theme_id` as according to FE dev, removing attr this introducing lots of changes
+    # TODO: Remove this attr once FE update their code to use `theme.id` instead of `theme_id`
+    :theme_id,
 
     # image
     :image_url, :image_placement, :active_image_id, :image_file_name, :use_default_image,
