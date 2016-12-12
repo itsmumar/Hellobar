@@ -109,6 +109,7 @@ RSpec.configure do |config|
   # assumes rails API root path is not used (since ember now hosted from it)
   dist_path = Rails.root.join('editor/dist')
   config.before(:suite, type: :feature) do
+    Dir.mkdir(dist_path)
     Dir.chdir 'editor' do
       builder = spawn("ember build --environment=production -output-path=#{dist_path}")
       _pid, status = Process.wait2(builder)
@@ -117,8 +118,7 @@ RSpec.configure do |config|
   end
 
   config.after(:suite, type: :feature) do
-    `git clean -fd #{dist_path}`
-    `git checkout #{dist_path}`
+    `rm -rf #{dist_path}`
   end
 
   # ## Mock Framework
