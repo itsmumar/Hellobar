@@ -1,0 +1,6 @@
+{
+  "id": "white-paper",
+  "type": "template",
+  "element_types": ["Bar", "Modal", "Slider", "Takeover"],
+  "name": "White Paper"
+}
