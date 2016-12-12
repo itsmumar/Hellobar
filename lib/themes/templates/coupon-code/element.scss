@@ -199,9 +199,31 @@ $redHeaderColor: #f03554;
 }
 
 #hellobar-template.coupon-code.slider {
+  position: fixed;
+  left: auto;
   background-color: #ebf7fe;
   width: 380px;
   padding: 22px 0 10px 0;
+
+  &.bottom-right {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  &.bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+
+  &.top-right{
+    top: 20px;
+    right: 20px;
+  }
+
+  &.top-left {
+    top: 20px;
+    left: 20px;
+  }
 
   .icon-close {
     width: 10px;
