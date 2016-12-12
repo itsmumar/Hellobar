@@ -65,5 +65,31 @@ export default {
         text: 'No, Thanks! I want to pay full price'
       }
     }
+  ],
+  'report': [
+    {
+      id: 'headline_first',
+      content: {
+        text: '<strong>Grow Your Business</strong>'
+      }
+    },
+    {
+      id: 'headline_second',
+      content: {
+        text: 'with Email Marketing'
+      }
+    },
+    {
+      id: 'caption',
+      content: {
+        text: 'Enter your email address below and get my completely free report'
+      }
+    },
+    {
+      id: 'action_link',
+      content: {
+        text: '<strong>Get free report</strong>'
+      }
+    }
   ]
 };

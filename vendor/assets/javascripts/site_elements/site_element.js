@@ -50,7 +50,7 @@ HB.SiteElement = HB.createClass({
         foundBlock = blocks[i];
       }
     }
-    return foundBlock.content ? foundBlock.content : {};
+    return (foundBlock && foundBlock.content) ? foundBlock.content : {};
   },
 
   attach: function () {

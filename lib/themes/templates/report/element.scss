@@ -43,7 +43,7 @@ $defaultColor: #3a3a49;
   }
 
   .headline-first {
-    font-weight: 600;
+    //font-weight: 600;
     text-transform: uppercase;
     color: $headerColor;
   }
@@ -90,7 +90,7 @@ $defaultColor: #3a3a49;
     box-sizing: border-box;
     background-color: $ctaBackgroundColor;
     color: $ctaColor;
-    font-weight: 600;
+    //font-weight: 600;
     letter-spacing: 1px;
     text-decoration: none;
     text-transform: uppercase;
@@ -223,7 +223,8 @@ $defaultColor: #3a3a49;
     left: 458px;
     height: 520px;
     padding: 40px 70px 0 70px;
-    background: url(../assets/modal-background.jpg);
+    //background: url(../assets/modal-background.jpg);
+    background: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/report/modal-background.jpg);
   }
 
   .headline-first {
@@ -277,8 +278,30 @@ $defaultColor: #3a3a49;
 
 /* ---- Slider styles ---- */
 #hellobar-template.report.slider {
+  position: fixed;
+  left: auto;
   width: 380px;
   height: 238px;
+
+  &.bottom-right {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  &.bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+
+  &.top-right{
+    top: 20px;
+    right: 20px;
+  }
+
+  &.top-left {
+    top: 20px;
+    left: 20px;
+  }
 
   .image-wrapper {
     width: 135px;
@@ -315,7 +338,7 @@ $defaultColor: #3a3a49;
   }
 
   .form-block {
-    margin-bottom: 0;
+    margin-bottom: 4px;
     .builtin-email {
       border-radius: 2px;
       margin-bottom: 7px;
