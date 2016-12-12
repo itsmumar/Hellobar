@@ -5,23 +5,22 @@
 
 <div id="hellobar-modal-background"></div>
 
-<div id="hellobar-template" class="js-hellobar-element modal middle coupon-code">
+<div id="hellobar-template" class="js-hellobar-element modal coupon-code {{siteElement.placement}}">
 
-  <a class="icon-close" onclick="window.parent.HB.findSiteElementOnPageById(null).close()"></a>
+  <div class="icon-close" onclick="{{siteElement.me}}.close()"></div>
 
   <div class="hb-content-wrapper">
 
 
     <div class="headline-first hb-editable-block hb-editable-block-with-limited-formatting"
-         data-hb-editable-block="headline-first" data-hb-inline-editor-placeholder="">
-      <span class="headline-first-red">Get 30% off</span>
-      <span>your next purchase</span>
+         data-hb-editable-block="blocks.headline_first" data-hb-inline-editor-placeholder="Get 30% off">
+      {{siteElement.blockContent('headline_first').text}}
     </div>
 
 
     <div class="headline-second hb-editable-block hb-editable-block-with-limited-formatting"
-         data-hb-editable-block="headline-second" data-hb-inline-editor-placeholder="">
-      Valid for all clothing items through December 2016
+         data-hb-editable-block="blocks.headline_second" data-hb-inline-editor-placeholder="Valid for all clothing items through December 2016">
+      {{siteElement.blockContent('headline_second').text}}
     </div>
 
 
@@ -35,17 +34,17 @@
 
       <div class="cta">
         <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
-             data-hb-editable-block="action_link" data-hb-inline-editor-placeholder="Subscribe">
-          Redeem Now
+             data-hb-editable-block="blocks.action_link" data-hb-inline-editor-placeholder="Redeem Now">
+          {{siteElement.blockContent('action_link').text}}
         </div>
       </div>
     </div>
 
 
-    <div class="reject-link"
-         data-hb-editable-block="reject_link"
-         data-hb-inline-editor-placeholder="No, I do not want to grow my blog traffic">
-      No, Thanks! I want to pay full price.
+    <div class="reject-link hb-editable-block hb-editable-block-with-limited-formatting"
+         data-hb-editable-block="blocks.reject_link"
+         data-hb-inline-editor-placeholder="No, Thanks! I want to pay full price.">
+      {{siteElement.blockContent('reject_link').text}}
     </div>
 
     <div class="hb-logo">
@@ -58,7 +57,6 @@
       </a>
 
     </div>
-
 
   </div>
 

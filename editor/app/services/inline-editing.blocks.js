@@ -39,5 +39,31 @@ export default {
         text: 'No, I do not want to grow my blog traffic'
       }
     }
+  ],
+  'coupon-code': [
+    {
+      id: 'headline_first',
+      content: {
+        text: '<span style="color: #f03554">Get 30% off</span> your next purchase'
+      }
+    },
+    {
+      id: 'headline_second',
+      content: {
+        text: 'Valid for all clothing items through December 2016'
+      }
+    },
+    {
+      id: 'action_link',
+      content: {
+        text: '<strong>Redeem Now</strong>'
+      }
+    },
+    {
+      id: 'reject_link',
+      content: {
+        text: 'No, Thanks! I want to pay full price'
+      }
+    }
   ]
 };
