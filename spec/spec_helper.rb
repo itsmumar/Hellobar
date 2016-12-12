@@ -104,6 +104,23 @@ RSpec.configure do |config|
     end
   end
 
+  # build ember, hijack rails public/ directory to host ember app
+  # this way no need to change settings or run any servers
+  # assumes rails API root path is not used (since ember now hosted from it)
+  dist_path = Rails.root.join('editor/dist')
+  config.before(:suite, type: :feature) do
+    Dir.chdir 'editor' do
+      builder = spawn("ember build --environment=production -output-path=#{dist_path}")
+      _pid, status = Process.wait2(builder)
+      fail "non-zero exit status #{status}" unless status == 0
+    end
+  end
+
+  config.after(:suite, type: :feature) do
+    `git clean -fd #{dist_path}`
+    `git checkout #{dist_path}`
+  end
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
