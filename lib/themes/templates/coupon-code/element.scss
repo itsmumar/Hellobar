@@ -14,6 +14,13 @@ $redHeaderColor: #f03554;
   color: #585858;
   font-family: 'Montserrat', sans-serif;
 
+  .icon-close {
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+  }
+
   .headline-first {
     display: block;
     font-family: 'Oswald', sans-serif;
@@ -123,6 +130,7 @@ $redHeaderColor: #f03554;
   padding: 50px 0 20px 0;
   background: #ffffff;
   margin-bottom: 18px;
+
   &.middle {
     top: 50%;
     transform: translate(-50%, -50%);
@@ -139,6 +147,14 @@ $redHeaderColor: #f03554;
     -ms-transform: translateX(-50%);
     -moz-transform: translateX(-50%);
     -webkit-transform: translateX(-50%);
+  }
+
+  .icon-close {
+    width: 14px;
+    height: 14px;
+    top: 25px;
+    right: 25px;
+    background-image: url(../assets/modal-close.png);
   }
 
   .headline-first {
@@ -187,6 +203,14 @@ $redHeaderColor: #f03554;
   width: 380px;
   padding: 22px 0 10px 0;
 
+  .icon-close {
+    width: 10px;
+    height: 10px;
+    top: 28px;
+    right: 28px;
+    background-image: url(../assets/slider-close.png);
+  }
+
   .headline-first {
     font-size: 34px;
     line-height: 39px;
@@ -218,87 +242,101 @@ $redHeaderColor: #f03554;
   .reject-link {
     font-size: 11px;
     margin-bottom: 10px;
+    letter-spacing: 0;
   }
 
   .builtin-email {
-    input{
+    input {
       font-size: 10px;
       padding: 13px;
+      color: #6d849c;
     }
   }
 
 }
 
-#hellobar-takeover-background.coupon-code {
+#hellobar-template.coupon-code.takeover {
   position: fixed;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
   background: white;
-}
 
-#hellobar-template.coupon-code.takeover {
-  width: 680px;
-  padding: 50px 0 20px 0;
-  background: #ffffff;
-  margin-bottom: 18px;
-  border: none;
-  &.middle {
-    top: 50%;
-    transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
+  .icon-close {
+    position: fixed;
+    width: 26px;
+    height: 26px;
+    top: 50px;
+    right: 50px;
+    background-image: url(../assets/takeover-close.png);
   }
 
-  &.top {
-    top: 5%;
-    transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -webkit-transform: translateX(-50%);
-  }
+  .takeover-content {
+    position: fixed;
+    left: 50%;
+    width: 680px;
+    padding: 50px 0 20px 0;
+    background: #ffffff;
+    margin-bottom: 18px;
+    border: none;
 
-  .headline-first {
-    font-size: 71px;
-    line-height: 75px;
-    max-height: 280px;
-    margin-bottom: 20px;
-  }
+    &.middle {
+      top: 50%;
+      transform: translate(-50%, -50%);
+      -o-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+    }
 
-  .headline-second {
-    padding-bottom: 30px;
-    font-size: 21px;
-  }
+    &.top {
+      top: 5%;
+      transform: translateX(-50%);
+      -o-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      -moz-transform: translateX(-50%);
+      -webkit-transform: translateX(-50%);
+    }
 
-  .form-block {
-    width: 500px;
-    margin-left: 90px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    height: 65px;
-  }
+    .headline-first {
+      font-size: 71px;
+      line-height: 75px;
+      max-height: 280px;
+      margin-bottom: 20px;
+    }
 
-  .cta{
-    width: 190px;
-    padding-top: 18px;
-    border-radius: 5px;
-    font-size: 20px;
-  }
+    .headline-second {
+      padding-bottom: 30px;
+      font-size: 21px;
+    }
 
-  .reject-link {
-    font-size: 16px;
-    margin-bottom: 23px;
-    margin-top: 10px;
-  }
+    .form-block {
+      width: 500px;
+      margin-left: 90px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      height: 65px;
+    }
 
-  .builtin-email {
-    input{
+    .cta {
+      width: 190px;
+      padding-top: 18px;
+      border-radius: 5px;
+      font-size: 20px;
+    }
+
+    .reject-link {
       font-size: 16px;
-      padding: 24px;
+      margin-bottom: 23px;
+      margin-top: 10px;
+    }
+
+    .builtin-email {
+      input {
+        font-size: 16px;
+        padding: 24px;
+      }
     }
   }
 }
