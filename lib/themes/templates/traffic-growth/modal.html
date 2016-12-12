@@ -4,7 +4,7 @@
 
 <div id="hellobar-modal-background"></div>
 
-<div id="hellobar-template" class="js-hellobar-element {{siteElement.placement}} light traffic-growth">
+<div id="hellobar-template" class="js-hellobar-element traffic-growth modal {{siteElement.placement}}">
 
   <div class="button-close" onclick="{{siteElement.me}}.close()"></div>
 
@@ -15,6 +15,7 @@
            data-hb-editable-block="blocks.headline_first" data-hb-inline-editor-placeholder="Grow your blog traffic by">
         {{siteElement.blockContent('headline_first').text}}
       </div>
+
       <div class="headline-second hb-editable-block hb-editable-block-with-limited-formatting"
            data-hb-editable-block="blocks.headline_second" data-hb-inline-editor-placeholder="300%">
         {{siteElement.blockContent('headline_second').text}}
@@ -26,7 +27,7 @@
       </div>
 
       <div
-          class="hb-secondary-text hb-editable-block hb-editable-block-optional hb-editable-block-with-limited-formatting"
+          class="secondary-text hb-editable-block hb-editable-block-optional hb-editable-block-with-limited-formatting"
           data-hb-editable-block="blocks.caption" data-hb-inline-editor-placeholder="Optional caption">
         {{siteElement.blockContent('caption').text}}
       </div>
@@ -38,25 +39,13 @@
           <input id="f-builtin-email" type="text" placeholder="Your email" required="" value="" autocomplete="off">
         </div>
 
-        <{{ HB.CAP.preview ? 'div' : 'a' }} class="hb-cta hb-cta-style-button">
+        <div class="cta" onclick="{{siteElement.me}}.handleCtaClick()">
           <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
                data-hb-editable-block="blocks.action_link"
-               data-hb-inline-editor-placeholder="Subscribe"
-               onclick="if(window.parent.HB.isPreviewMode) {
-                       return false;
-                     } else {
-                       window.parent.HB.submitEmail({{siteElement.me}},
-                                                    document.getElementById('hb-fields-form'),
-                                                    null,
-                                                    null,
-                                                    {{siteElement.email_redirect}},
-                                                    {{HB.stringLiteral(siteElement.settings.redirect_url)}},
-                                                    'thank-you');
-                      return false;
-                    }">
+               data-hb-inline-editor-placeholder="Subscribe">
             {{siteElement.blockContent('action_link').text}}
           </div>
-        </{{ HB.CAP.preview ? 'div' : 'a' }}>
+        </div>
       </div>
 
       <a href="javascript:void(0)" class="reject-link">

@@ -668,5 +668,19 @@ HB.SiteElement = HB.createClass({
     });
 
     return (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]);
+  },
+
+  handleCtaClick: function() {
+    var hb = window.HB || window.parent.HB;
+    if (hb.isPreviewMode) {
+      return false;
+    } else {
+      hb.submitEmail(this,
+        document.getElementById('hb-fields-form'),
+        null, null, this.email_redirect,
+        hb.stringLiteral(this.settings.redirect_url), 'thank-you');
+      return false;
+    }
   }
+
 });

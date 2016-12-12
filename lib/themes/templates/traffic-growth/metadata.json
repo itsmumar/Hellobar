@@ -1,6 +1,6 @@
 {
   "id": "traffic-growth",
   "type": "template",
-  "element_types": ["Bar", "Modal", "Slider", "Takeover"],
+  "element_types": ["Modal", "Slider", "Takeover"],
   "name": "Traffic Growth"
 }

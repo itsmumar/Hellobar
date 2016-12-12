@@ -99,9 +99,8 @@
   width: 735px;
   height: 520px;
   padding: 50px 60px 0 60px;
-  // TODO uncomment
-  //background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/modal-background.jpeg);
-  background-image: url(../assets/modal-background.jpeg);
+  //background-image: url(../assets/modal-background.jpeg);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/modal-background.jpeg);
 
   .button-close {
   }
@@ -223,11 +222,32 @@
 }
 
 #hellobar-template.traffic-growth.slider {
-  left: 50%;
+  left: auto;
   width: 380px;
   height: 239px;
   padding: 52px 36px 0 36px;
-  background-image: url(../assets/slider-background.jpg);
+  //background-image: url(../assets/slider-background.jpg);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/slider-background.jpg);
+
+  &.bottom-right {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  &.bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+
+  &.top-right{
+    top: 20px;
+    right: 20px;
+  }
+
+  &.top-left {
+    top: 20px;
+    left: 20px;
+  }
 
   .button-close {
 
@@ -297,10 +317,10 @@
     background-color: #f03554;
     font-size: 11px;
     color: white;
-    padding: 9px 20px;
+    padding: 9px 4px;
     position: relative;
     top: 1px;
-    font-weight: 800;
+    //font-weight: 800;
   }
 
   .hb-logo {
@@ -314,123 +334,115 @@
   }
 }
 
-#hellobar-takeover-background.traffic-growth {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  // TODO uncomment
-  //background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/takeover-background.jpg);
-  background-image: url(../assets/takeover-background.jpg);
-  background-size: cover;
-}
 
 #hellobar-template.traffic-growth.takeover {
-  left: 50%;
-  width: 735px;
-  height: 520px;
-  padding: 50px 60px 0 60px;
-  background: none;
-  box-shadow: none;
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  //background-image: url(../assets/takeover-background.jpg);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/takeover-background.jpg);
+  background-size: cover;
 
-  &.middle {
-    top: 50%;
-    transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-  }
+  .takeover-content {
+    position: fixed;
+    left: 50%;
+    width: 735px;
+    height: 520px;
+    padding: 50px 60px 0 60px;
+    background: none;
+    box-shadow: none;
 
-  &.top {
-    top: 5%;
-    transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -webkit-transform: translateX(-50%);
-  }
-
-
-  .button-close {
-  }
-
-  .headline-first {
-    font-size: 30px;
-    line-height: 25px;
-    max-height: 30px;
-    margin-bottom: 18px;
-    white-space: nowrap;
-  }
-
-  .headline-second {
-    font-size: 140px;
-    line-height: 100px;
-    max-height: 140px;
-    margin-bottom: 30px;
-
-  }
-
-  .headline-third {
-    font-size: 31px;
-    line-height: 22px;
-    max-height: 31px;
-    letter-spacing: 1px;
-  }
-
-  .secondary-text {
-    font-size: 22px;
-    max-height: 94px;
-    padding: 20px 70px;
-  }
-
-  .form-block {
-    height: 77px;
-    border-radius: 5px;
-  }
-
-  .builtin-email {
-    margin-right: 232px;
-    label {
+    &.middle {
+      top: 50%;
+      transform: translate(-50%, -50%);
+      -o-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
     }
-    input {
+
+    .button-close {
+    }
+
+    .headline-first {
+      font-size: 30px;
+      line-height: 25px;
+      max-height: 30px;
+      margin-bottom: 18px;
+      white-space: nowrap;
+    }
+
+    .headline-second {
+      font-size: 140px;
+      line-height: 100px;
+      max-height: 140px;
+      margin-bottom: 30px;
+
+    }
+
+    .headline-third {
+      font-size: 31px;
+      line-height: 22px;
+      max-height: 31px;
+      letter-spacing: 1px;
+    }
+
+    .secondary-text {
+      font-size: 22px;
+      max-height: 94px;
+      padding: 20px 70px;
+    }
+
+    .form-block {
+      height: 77px;
+      border-radius: 5px;
+    }
+
+    .builtin-email {
+      margin-right: 232px;
+      label {
+      }
+      input {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 232px;
+        font-size: 16px;
+        padding: 28px;
+      }
+    }
+
+    .cta {
       position: absolute;
-      left: 0;
+      right: -1px;
       top: 0;
       bottom: 0;
-      right: 232px;
-      font-size: 16px;
-      padding: 28px;
+      width: 232px;
+      padding: 24px;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      font-size: 22px;
     }
-  }
 
-  .cta {
-    position: absolute;
-    right: -1px;
-    top: 0;
-    bottom: 0;
-    width: 232px;
-    padding: 24px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    font-size: 22px;
-  }
+    .reject-link {
+      margin: 17px 0;
+      font-size: 16px;
+      line-height: 16px;
+      max-height: 16px;
+      letter-spacing: 1px;
+    }
 
-  .reject-link {
-    margin: 17px 0;
-    font-size: 16px;
-    line-height: 16px;
-    max-height: 16px;
-    letter-spacing: 1px;
-  }
-
-  .hb-logo {
-    width: 34px;
-    height: 23px;
-    svg {
-      path {
-        fill: #b4b4b4;
+    .hb-logo {
+      width: 34px;
+      height: 23px;
+      svg {
+        path {
+          fill: #b4b4b4;
+        }
       }
     }
   }

@@ -1,0 +1,68 @@
+<style>
+  @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:400,700,800,900&subset=latin-ext);
+</style>
+
+<div id="hellobar-template" class="js-hellobar-element traffic-growth slider {{siteElement.placement}}">
+
+  <div class="button-close" onclick="{{siteElement.me}}.close()"></div>
+
+  <div class="hb-content-wrapper">
+    <div class="hb-inner-content">
+
+      <div class="upper-block">
+
+        <div class="headline">
+          <div class="headline-first hb-editable-block hb-editable-block-with-limited-formatting"
+               data-hb-editable-block="blocks.headline_first" data-hb-inline-editor-placeholder="Grow your blog traffic by">
+            {{siteElement.blockContent('headline_first').text}}
+          </div>
+
+          <div class="headline-second hb-editable-block hb-editable-block-with-limited-formatting"
+               data-hb-editable-block="blocks.headline_second" data-hb-inline-editor-placeholder="300%">
+            {{siteElement.blockContent('headline_second').text}}
+          </div>
+
+          <div class="headline-third hb-editable-block hb-editable-block-with-limited-formatting"
+               data-hb-editable-block="blocks.headline_third" data-hb-inline-editor-placeholder="with our free tool">
+            {{siteElement.blockContent('headline_third').text}}
+          </div>
+        </div>
+
+        <div
+            class="secondary-text hb-editable-block hb-editable-block-optional hb-editable-block-with-limited-formatting"
+            data-hb-editable-block="blocks.caption" data-hb-inline-editor-placeholder="Optional caption">
+          {{siteElement.blockContent('caption').text}}
+        </div>
+
+      </div>
+
+      <div id="hb-fields-form" class="form-block">
+        <div class="hb-input-block hb-editable-block hb-editable-block-input builtin-email"
+             data-hb-editable-block="f-builtin-email">
+          <label for="f-builtin-email">Your email</label>
+          <input id="f-builtin-email" type="text" placeholder="Your email" required="" value="" autocomplete="off">
+        </div>
+
+        <div class="cta" onclick="{{siteElement.me}}.handleCtaClick()">
+          <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
+               data-hb-editable-block="blocks.action_link"
+               data-hb-inline-editor-placeholder="Subscribe">
+            {{siteElement.blockContent('action_link').text}}
+          </div>
+        </div>
+      </div>
+
+      <div class="hb-logo">
+        <a href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 40 26.1" enable-background="new 0 0 40 26.1" xml:space="preserve" class="hellobar-logo animated">
+    <g>
+      <path d="M39.5 0h-39C0.2 0 0 0.2 0 0.5v25.1c0 0.3 0.2 0.5 0.5 0.5h39c0.3 0 0.5-0.2 0.5-0.5V0.5C40 0.2 39.8 0 39.5 0z M33.8 8.6 h-4.3v9h4.3v2.8H21.7v-2.8h4.7V14H13.6v3.6h4.7v2.8h-12v-2.8h4.3v-9H6.2V5.7h12v2.8h-4.7v2.9h12.9V8.6h-4.7V5.7h12.1V8.6z"></path>
+    </g>
+  </svg>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+</div>
