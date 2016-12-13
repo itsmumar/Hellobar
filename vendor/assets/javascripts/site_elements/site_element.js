@@ -30,16 +30,26 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  imageFor: function (location) {
+  imageFor: function (location, options) {
+    var that = this;
+    options = options || {};
+    function imageSrc() {
+      return that.image_url ? that.image_url : options.defaultImgSrc;
+    }
     locationIndex = location.indexOf(this.image_placement);
-    if (!this.image_url || locationIndex === undefined || locationIndex === -1)
+    if (!options.defaultImgSrc && (!this.image_url || locationIndex === undefined || locationIndex === -1)) {
       return '';
-    else if (this.image_placement == 'background')
-      return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url(' + this.image_url + ');></div>';
-    else
+    }
+    else if (this.image_placement == 'background') {
+      return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url(' + imageSrc() + ');></div>';
+    } else {
+      var imgClasses = [];
+      (!options.themeType || options.themeType === 'generic') && imgClasses.push('uploaded-image');
       return '<div class="hb-image-wrapper ' + this.image_placement
-        + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="uploaded-image" src="'
-        + this.image_url + '" /></div></div>';
+        + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="'
+        + imgClasses.join(' ')
+        + '" src="' + imageSrc() + '" /></div></div>';
+    }
   },
 
   blockContent: function (blockId) {
