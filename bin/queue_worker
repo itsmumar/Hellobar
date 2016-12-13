@@ -221,9 +221,9 @@ OptionParser.new do |opts|
     $queue_worker_logger = :stdout
     config[:num_workers] = 1
   end
-  # opts.on('--skip-old', 'If included skip messages older than 24 hours') do |skip_old|
-  #   config[:skip_old] = true
-  # end
+  opts.on('--skip-old', 'If included skip messages older than 24 hours') do |skip_old|
+    config[:skip_old] = true
+  end
 end.parse!
 
 # If there was any crazy exception not caught, better log it
