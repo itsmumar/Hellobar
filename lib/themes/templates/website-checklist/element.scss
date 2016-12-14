@@ -9,10 +9,6 @@
   .button-close {
     z-index: 100000;
   }
-
-  //.fr-view img.aside-image {
-  //  max-width: none;
-  //}
 }
 
 #hellobar-template.website-checklist.bar {
@@ -187,7 +183,6 @@
     margin-bottom: 15px;
     .builtin-email {
       width: 100%;
-      //margin-right: 232px;
       box-sizing: border-box;
       margin-bottom: 10px;
 
@@ -196,13 +191,9 @@
       }
 
       input {
-        //position: absolute;
-        //left: 56px;
-        //top: 226px;
         width: 100%;
         text-align: left;
         border: none;
-        //width: 360px;
         background: #f3f3f3;
         outline: none;
         color: #6d849c;
@@ -213,9 +204,6 @@
 
     .cta {
       display: block;
-      //position: absolute;
-      //left: 56px;
-      //top: 300px;
       width: 100%;
       padding: 20px 28px;
       margin: 0;
@@ -261,9 +249,7 @@
 
   .hb-logo {
     display: inline-block;
-    //position: absolute;
     text-align: center;
-    //bottom: 12px;
     width: 34px;
     height: 23px;
     border-radius: 3px;
@@ -294,7 +280,6 @@
     width: 815px;
     height: 415px;
     padding: 50px 0 20px 0;
-    //background: #ffffff;
     margin-bottom: 18px;
     border: none;
 
@@ -359,13 +344,9 @@
         }
 
         input {
-          //position: absolute;
-          //left: 56px;
-          //top: 226px;
           width: 100%;
           text-align: left;
           border: none;
-          //width: 360px;
           background: #f3f3f3;
           outline: none;
           color: #6d849c;
@@ -376,9 +357,6 @@
 
       .cta {
         display: block;
-        //position: absolute;
-        //left: 56px;
-        //top: 300px;
         width: 100%;
         padding: 20px 28px;
         margin: 0;
@@ -424,9 +402,7 @@
 
     .hb-logo {
       display: inline-block;
-      //position: absolute;
       text-align: center;
-      //bottom: 12px;
       width: 34px;
       height: 23px;
       border-radius: 3px;
@@ -512,7 +488,6 @@
     margin-bottom: 12px;
     .builtin-email {
       width: 100%;
-      //margin-right: 232px;
       box-sizing: border-box;
       margin-bottom: 10px;
 
@@ -522,13 +497,9 @@
 
       input {
         width: 100%;
-        //position: absolute;
-        //left: 28px;
-        //top: 120px;
         box-sizing: border-box;
         text-align: left;
         border: none;
-        //width: 165px;
         background: #f3f3f3;
         outline: none;
         color: #6d849c;
@@ -543,10 +514,6 @@
       width: 100%;
       margin-bottom: 12px;
       box-sizing: border-box;
-      //position: absolute;
-      //left: 28px;
-      //top: 160px;
-      //width: 165px;
       padding: 10px 14px;
       text-transform: uppercase;
       background-color: #f04343;
@@ -604,9 +571,6 @@
 
   .hb-logo {
     display: inline-block;
-    //position: absolute;
-    //left: 120px;
-    //bottom: 20px;
     width: 24px;
     height: 14px;
     border-radius: 3px;
