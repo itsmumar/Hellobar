@@ -12,12 +12,12 @@
       <div class="hb-inner-content">
 
         <div class="headline-first hb-editable-block hb-editable-block-with-limited-formatting"
-             data-hb-editable-block="blocks.headline-first"
+             data-hb-editable-block="blocks.headline_first"
              data-hb-inline-editor-placeholder="The best ever website checklist">
           {{siteElement.blockContent('headline_first').text}}
         </div>
         <div class="headline-second hb-editable-block hb-editable-block-with-limited-formatting"
-             data-hb-editable-block="blocks.headline-second"
+             data-hb-editable-block="blocks.headline_second"
              data-hb-inline-editor-placeholder="For Getting Your Website Online">
           {{siteElement.blockContent('headline_second').text}}
         </div>
@@ -33,7 +33,7 @@
 
           <a class="cta" href="#">
             <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
-                 data-hb-editable-block="blocks.action_link" data-hb-inline-editor-placeholder="Download now!">
+                 data-hb-editable-block="blocks.action_link" data-hb-inline-editor-placeholdber="Download now!">
               {{siteElement.blockContent('action_link').text}}
             </div>
           </a>
@@ -53,8 +53,7 @@
 
       </div>
     </div>
-    <img class="aside-image"
-         src="https://s3.amazonaws.com/assets.hellobar.com/themes/templates/website-checklist/image.png" alt=""/>
+    {{siteElement.imageFor(['default'], { defaultImgSrc: 'https://s3.amazonaws.com/assets.hellobar.com/themes/templates/website-checklist/image.png', themeType: 'template', classes: 'aside-image'}) }}
 
     <div class="button-close"></div>
 
