@@ -102,7 +102,7 @@ export default {
     {
       id: 'headline_second',
       content: {
-        text: 'For Getting Your Website Online'
+        text: '<strong>For Getting Your Website Online</strong>'
       }
     },
     {

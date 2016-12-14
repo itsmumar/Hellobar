@@ -1,45 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,800,800i&amp;subset=latin-ext" rel="stylesheet">-->
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,800,800i&subset=latin-ext');
+</style>
+<div id="hellobar-template" class="js-hellobar-element website-checklist slider {{siteElement.placement}}">
 
-  <script src="../../../node_modules/sass.js/dist/sass.sync.js" type="text/javascript"></script>
-  <script src="../../../node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    $.ajax('../element.scss').then(function (scss) {
-      Sass.compile(scss, function (cssObject) {
-        $('<style></style>').attr('type', 'text/css').text(cssObject.text).appendTo($('head'));
-      });
-    });
-  </script>
-  <style>
-    @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,800,800i&subset=latin-ext');
-
-    * {
-      margin: 0;
-      padding: 0;
-
-    }
-  </style>
-
-</head>
-<body>
-
-<div id="hellobar-template" class="js-hellobar-element website-checklist slider middle">
-
-  <a class="button-close" onclick="window.parent.HB.findSiteElementOnPageById(null).close()"></a>
+  <div class="button-close" onclick="{{siteElement.me}}.close()"></div>
 
   <div class="hb-content-wrapper">
     <div class="hb-inner-content">
 
       <div class="headline-first hb-editable-block hb-editable-block-with-limited-formatting"
-           data-hb-editable-block="headline-first" data-hb-inline-editor-placeholder="Grow your blog traffic by">
-        The best ever
-        <span class="headline-first-red-extra">website checklist</span>
+           data-hb-editable-block="blocks.headline_first" data-hb-inline-editor-placeholder="The best ever website checklist">
+        {{siteElement.blockContent('headline_first').text}}
       </div>
+
       <div class="headline-second hb-editable-block hb-editable-block-with-limited-formatting"
-           data-hb-editable-block="headline-second" data-hb-inline-editor-placeholder="300%">
-        For Getting Your Website Online
+           data-hb-editable-block="blocks.headline_second" data-hb-inline-editor-placeholder="For Getting Your Website Online">
+        {{siteElement.blockContent('headline_second').text}}
       </div>
 
       <div id="hb-fields-form" class="form-block">
@@ -53,8 +29,8 @@
 
         <a class="cta" href="#">
           <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
-               data-hb-editable-block="action_link" data-hb-inline-editor-placeholder="Download now">
-            Download now!
+               data-hb-editable-block="action_link" data-hb-inline-editor-placeholder="Download now!">
+            {{siteElement.blockContent('action_link').text}}
           </div>
         </a>
 
@@ -76,10 +52,8 @@
 
   </div>
   <div class="aside-image-wrapper">
-    <img class="aside-image" src="../assets/slider-image.png" alt=""/>
+    {{siteElement.imageFor(['default'], { defaultImgSrc: 'https://s3.amazonaws.com/assets.hellobar.com/themes/templates/website-checklist/slider-image.png', themeType: 'template', classes: 'aside-image'}) }}
   </div>
   <div class="button-close"></div>
 
 </div>
-</body>
-</html>

@@ -1,0 +1,15 @@
+{
+  "id": "website-checklist",
+  "type": "template",
+  "element_types": ["Modal", "Slider", "Takeover"],
+  "name": "Website Checklist",
+  "defaults": {
+    "Modal": {
+    }
+  },
+  "image": {
+    "upload_copy": "Recommended minimum is 750 x 900",
+    "position_default": "default",
+    "position_selectable": false
+  }
+}

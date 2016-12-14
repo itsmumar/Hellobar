@@ -45,6 +45,7 @@ HB.SiteElement = HB.createClass({
     } else {
       var imgClasses = [];
       (!options.themeType || options.themeType === 'generic') && imgClasses.push('uploaded-image');
+      (options.classes) && imgClasses.push(options.classes);
       return '<div class="hb-image-wrapper ' + this.image_placement
         + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="'
         + imgClasses.join(' ')

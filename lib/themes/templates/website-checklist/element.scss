@@ -5,6 +5,14 @@
   font-size: 17px;
   box-sizing: border-box;
   text-align: center;
+
+  .button-close {
+    z-index: 100000;
+  }
+
+  //.fr-view img.aside-image {
+  //  max-width: none;
+  //}
 }
 
 #hellobar-template.website-checklist.bar {
@@ -121,7 +129,7 @@
   padding: 50px 60px 0 60px;
   text-align: center;
   font-size: 16px;
-  background-image: url(../assets/modal-background.png);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/website-checklist/modal-background.png);
   background-size: cover;
   color: #585858;
   font-family: 'Open Sans', sans-serif;
@@ -167,59 +175,57 @@
     font-size: 18px;
     line-height: 25px;
     white-space: nowrap;
-    margin-bottom: 65px;
+    margin-bottom: 54px;
     margin-left: 5px;
     text-align: left;
     color: #333333;
 
   }
 
-  .hb-secondary-text {
-    color: #49596a;
-    font-size: 22px;
-    max-height: 94px;
-    overflow: hidden;
-    font-weight: 400;
-    padding: 20px 70px;
-  }
+  .form-block {
+    width: 413px;
+    margin-bottom: 15px;
+    .builtin-email {
+      width: 100%;
+      //margin-right: 232px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
 
-  .builtin-email {
-    width: 100%;
-    margin-right: 232px;
-    box-sizing: border-box;
+      label {
+        display: none;
+      }
 
-    label {
-      display: none;
+      input {
+        //position: absolute;
+        //left: 56px;
+        //top: 226px;
+        width: 100%;
+        text-align: left;
+        border: none;
+        //width: 360px;
+        background: #f3f3f3;
+        outline: none;
+        color: #6d849c;
+        font-size: 16px;
+        padding: 20px 28px;
+      }
     }
 
-    input {
-      position: absolute;
-      left: 56px;
-      top: 226px;
-      text-align: left;
-      border: none;
-      width: 360px;
-      background: #f3f3f3;
-      outline: none;
-      color: #6d849c;
-      font-size: 16px;
+    .cta {
+      display: block;
+      //position: absolute;
+      //left: 56px;
+      //top: 300px;
+      width: 100%;
       padding: 20px 28px;
+      margin: 0;
+      text-transform: uppercase;
+      background-color: #f04343;
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+      text-decoration: none;
     }
-  }
-
-  .cta {
-    position: absolute;
-    left: 56px;
-    top: 300px;
-    width: 360px;
-    padding: 20px 28px;
-    margin: 0;
-    text-transform: uppercase;
-    background-color: #f04343;
-    color: white;
-    font-size: 18px;
-    font-weight: 800;
-    text-decoration: none;
   }
 
   .aside-image {
@@ -235,7 +241,7 @@
     top: 20px;
     width: 28px;
     height: 28px;
-    background: url(../assets/close.png);
+    background: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/website-checklist/close.png);
     cursor: pointer;
   }
 
@@ -255,9 +261,9 @@
 
   .hb-logo {
     display: inline-block;
-    position: absolute;
+    //position: absolute;
     text-align: center;
-    bottom: 12px;
+    //bottom: 12px;
     width: 34px;
     height: 23px;
     border-radius: 3px;
@@ -271,12 +277,175 @@
 
 }
 
+/* --- Takeover styles --- */
+#hellobar-template.website-checklist.takeover {
+
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/website-checklist/modal-background.png);
+  background-size: cover;
+
+  .takeover-content {
+    position: fixed;
+    left: 50%;
+    width: 815px;
+    height: 415px;
+    padding: 50px 0 20px 0;
+    //background: #ffffff;
+    margin-bottom: 18px;
+    border: none;
+
+    &.middle {
+      top: 50%;
+      transform: translate(-50%, -50%);
+      -o-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+    }
+
+    &.top {
+      top: 5%;
+      transform: translateX(-50%);
+      -o-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      -moz-transform: translateX(-50%);
+      -webkit-transform: translateX(-50%);
+    }
+
+    .headline-first {
+      width: 416px;
+      font-size: 43px;
+
+      line-height: 50px;
+      max-height: 80px;
+      letter-spacing: -1px;
+      text-align: left;
+      margin-bottom: 22px;
+      text-transform: uppercase;
+      color: #333333;
+    }
+
+    .headline-first-red-extra {
+      color: #f04343;
+      font-weight: 800;
+    }
+
+    .headline-second {
+      font-size: 18px;
+      line-height: 25px;
+      white-space: nowrap;
+      margin-bottom: 54px;
+      margin-left: 5px;
+      text-align: left;
+      color: #333333;
+
+    }
+
+    .form-block {
+      width: 413px;
+      margin-bottom: 15px;
+      .builtin-email {
+        width: 100%;
+        //margin-right: 232px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+
+        label {
+          display: none;
+        }
+
+        input {
+          //position: absolute;
+          //left: 56px;
+          //top: 226px;
+          width: 100%;
+          text-align: left;
+          border: none;
+          //width: 360px;
+          background: #f3f3f3;
+          outline: none;
+          color: #6d849c;
+          font-size: 16px;
+          padding: 20px 28px;
+        }
+      }
+
+      .cta {
+        display: block;
+        //position: absolute;
+        //left: 56px;
+        //top: 300px;
+        width: 100%;
+        padding: 20px 28px;
+        margin: 0;
+        text-transform: uppercase;
+        background-color: #f04343;
+        color: white;
+        font-size: 18px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+    }
+
+    .aside-image {
+      position: absolute;
+      right: 61px;
+      top: 91px;
+    }
+
+    .button-close {
+      display: block;
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      width: 28px;
+      height: 28px;
+      background: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/website-checklist/close.png);
+      cursor: pointer;
+    }
+
+    .reject-link {
+      display: block;
+      position: relative;
+      margin: 17px 0;
+      font-size: 16px;
+      line-height: 16px;
+      max-height: 16px;
+      white-space: nowrap;
+      font-weight: 400;
+      color: #6d849c;
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
+
+    .hb-logo {
+      display: inline-block;
+      //position: absolute;
+      text-align: center;
+      //bottom: 12px;
+      width: 34px;
+      height: 23px;
+      border-radius: 3px;
+      svg {
+        border-radius: 3px;
+        path {
+          fill: #b4b4b4;
+        }
+      }
+    }
+
+  }
+}
 
 /* ---- Slider styles ---- */
 #hellobar-template.website-checklist.slider {
   display: block;
   position: fixed;
-  left: 50%;
+  left: auto;
   width: 380px;
   height: 239px;
   box-sizing: border-box;
@@ -284,28 +453,30 @@
   padding: 28px 29px 0 29px;
   text-align: center;
   font-size: 16px;
-  background-image: url(../assets/modal-background.png);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/website-checklist/modal-background.png);
   background-size: cover;
   color: #585858;
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
 
-  &.middle {
-    top: 50%;
-    transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
+  &.bottom-right {
+    bottom: 20px;
+    right: 20px;
   }
 
-  &.top {
-    top: 5%;
-    transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -webkit-transform: translateX(-50%);
+  &.bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+
+  &.top-right{
+    top: 20px;
+    right: 20px;
+  }
+
+  &.top-left {
+    top: 20px;
+    left: 20px;
   }
 
   .headline-first {
@@ -329,62 +500,65 @@
     font-size: 11px;
     line-height: 13px;
     white-space: nowrap;
-    margin-bottom: 15px;
+    margin-bottom: 27px;
     letter-spacing: 1px;
     text-align: left;
     color: #333333;
 
   }
 
-  .hb-secondary-text {
-    color: #49596a;
-    font-size: 22px;
-    max-height: 94px;
-    overflow: hidden;
-    font-weight: 400;
-    padding: 20px 70px;
-  }
+  .form-block {
+    width: 195px;
+    margin-bottom: 12px;
+    .builtin-email {
+      width: 100%;
+      //margin-right: 232px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
 
-  .builtin-email {
-    width: 100%;
-    margin-right: 232px;
-    box-sizing: border-box;
+      label {
+        display: none;
+      }
 
-    label {
-      display: none;
+      input {
+        width: 100%;
+        //position: absolute;
+        //left: 28px;
+        //top: 120px;
+        box-sizing: border-box;
+        text-align: left;
+        border: none;
+        //width: 165px;
+        background: #f3f3f3;
+        outline: none;
+        color: #6d849c;
+        font-size: 9px;
+        padding: 10px 14px;
+        border-radius: 2px;
+      }
     }
 
-    input {
-      position: absolute;
-      left: 28px;
-      top: 120px;
-      text-align: left;
-      border: none;
-      width: 165px;
-      background: #f3f3f3;
-      outline: none;
-      color: #6d849c;
-      font-size: 9px;
+    .cta {
+      display: block;
+      width: 100%;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+      //position: absolute;
+      //left: 28px;
+      //top: 160px;
+      //width: 165px;
       padding: 10px 14px;
+      text-transform: uppercase;
+      background-color: #f04343;
+      color: white;
+      font-size: 9px;
+      font-weight: 800;
+      text-decoration: none;
       border-radius: 2px;
     }
   }
 
-  .cta {
-    position: absolute;
-    left: 28px;
-    top: 160px;
-    width: 165px;
-    padding: 10px 14px;
-    margin: 0;
-    text-transform: uppercase;
-    background-color: #f04343;
-    color: white;
-    font-size: 9px;
-    font-weight: 800;
-    text-decoration: none;
-    border-radius: 2px;
-  }
+
 
   .aside-image-wrapper {
     position: absolute;
@@ -409,7 +583,7 @@
     top: 10px;
     width: 24px;
     height: 24px;
-    background: url(../assets/slider-close.png);
+    background: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/website-checklist/slider-close.png);
     background-size: cover;
     cursor: pointer;
   }
@@ -430,9 +604,9 @@
 
   .hb-logo {
     display: inline-block;
-    position: absolute;
-    left: 120px;
-    bottom: 20px;
+    //position: absolute;
+    //left: 120px;
+    //bottom: 20px;
     width: 24px;
     height: 14px;
     border-radius: 3px;
