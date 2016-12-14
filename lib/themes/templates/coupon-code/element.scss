@@ -34,7 +34,7 @@ $redHeaderColor: #f03554;
     color: $redHeaderColor;
   }
 
-  .headline-second {
+  .caption {
     display: block;
     font-family: 'Montserrat', sans-serif;
     color: $textColor;
@@ -165,7 +165,7 @@ $redHeaderColor: #f03554;
     margin-bottom: 20px;
   }
 
-  .headline-second {
+  .caption {
     padding-bottom: 30px;
     font-size: 21px;
   }
@@ -243,7 +243,7 @@ $redHeaderColor: #f03554;
     padding: 0 30px;
   }
 
-  .headline-second {
+  .caption {
     margin: 10px 0 15px 0;
     font-size: 13px;
   }
@@ -331,7 +331,7 @@ $redHeaderColor: #f03554;
       margin-bottom: 20px;
     }
 
-    .headline-second {
+    .caption {
       padding-bottom: 30px;
       font-size: 21px;
     }
@@ -421,7 +421,7 @@ $redHeaderColor: #f03554;
 }
 
 #hellobar-template.coupon-code.thank-you .headline-first,
-#hellobar-template.coupon-code.thank-you .headline-second,
+#hellobar-template.coupon-code.thank-you .caption,
 #hellobar-template.coupon-code.thank-you .headline-third,
 #hellobar-template.coupon-code.thank-you .hb-secondary-text,
 #hellobar-template.coupon-code.thank-you .form-block,

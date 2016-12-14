@@ -48,7 +48,7 @@ export default {
       }
     },
     {
-      id: 'headline_second',
+      id: 'caption',
       content: {
         text: 'Valid for all clothing items through December 2016'
       }
@@ -89,6 +89,26 @@ export default {
       id: 'action_link',
       content: {
         text: '<strong>Get free report</strong>'
+      }
+    }
+  ],
+  'website-checklist': [
+    {
+      id: 'headline_first',
+      content: {
+        text: 'The best ever <strong><span style="color: #f04343">website checklist</span></strong>'
+      }
+    },
+    {
+      id: 'headline_second',
+      content: {
+        text: 'For Getting Your Website Online'
+      }
+    },
+    {
+      id: 'action_link',
+      content: {
+        text: '<strong>Download now!</strong>'
       }
     }
   ]
