@@ -104,12 +104,10 @@ RSpec.configure do |config|
     end
   end
 
-  # build ember, hijack rails public/ directory to host ember app
-  # this way no need to change settings or run any servers
-  # assumes rails API root path is not used (since ember now hosted from it)
   dist_path = Rails.root.join('editor/dist')
-  config.before(:suite, type: :feature) do
-    Dir.mkdir(dist_path)
+  config.before(:suite) do
+    Dir.mkdir(dist_path) unless File.directory?(dist_path)
+
     Dir.chdir 'editor' do
       builder = spawn("ember build --environment=production -output-path=#{dist_path}")
       _pid, status = Process.wait2(builder)
@@ -117,7 +115,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.after(:suite, type: :feature) do
+  config.after(:suite) do
     `rm -rf #{dist_path}`
   end
 
