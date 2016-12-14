@@ -328,7 +328,8 @@ private
       updated_at: site_element.updated_at.to_f * 1000,
       use_free_email_default_msg: site_element.show_default_email_message? && site_element.site.is_free?,
       wiggle_wait: 0,
-      blocks: site_element.blocks
+      blocks: site_element.blocks,
+      theme: site_element.theme
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
