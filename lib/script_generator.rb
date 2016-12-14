@@ -329,7 +329,7 @@ private
       use_free_email_default_msg: site_element.show_default_email_message? && site_element.site.is_free?,
       wiggle_wait: 0,
       blocks: site_element.blocks,
-      theme: site_element.theme
+      theme: site_element.theme.attributes
     }).select{|key, value| !value.nil? || !value == '' }
   end
 
