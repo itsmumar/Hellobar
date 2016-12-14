@@ -555,6 +555,10 @@ form {
   margin-bottom: 0;
 }
 
+body .fr-toolbar .fr-command.fr-btn span, body .fr-popup .fr-command.fr-btn span {
+  display: none;
+}
+
 .preview-mode .hb-editable-block:hover {
   box-shadow: 0 0 8px #54d388;
 }
