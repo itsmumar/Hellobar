@@ -376,6 +376,12 @@ $defaultColor: #3a3a49;
   background: $defaultColor;
   border-radius: 0;
 
+  &.bar-bottom {
+    top: auto;
+    bottom: 0;
+    position: absolute;
+  }
+
   .button-close {
 
   }
