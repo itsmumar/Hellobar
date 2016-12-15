@@ -17,6 +17,7 @@ test:
     # - bundle exec rubocop
     - npm install -g ember-cli
     - cd editor && npm install && bower install && cd ..
+    - Dir.mkdir('editor/dist') && cd editor && ember build --environment=production -output-path='editor/dist'
   override:
     -
       RAILS_ENV=test bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml:

@@ -104,21 +104,6 @@ RSpec.configure do |config|
     end
   end
 
-  dist_path = Rails.root.join('editor/dist')
-  config.before(:suite) do
-    Dir.mkdir(dist_path) unless File.directory?(dist_path)
-
-    Dir.chdir 'editor' do
-      builder = spawn("ember build --environment=production -output-path=#{dist_path}")
-      _pid, status = Process.wait2(builder)
-      fail "non-zero exit status #{status}" unless status == 0
-    end
-  end
-
-  config.after(:suite) do
-    `rm -rf #{dist_path}`
-  end
-
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
