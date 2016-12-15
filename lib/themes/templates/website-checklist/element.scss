@@ -382,10 +382,14 @@
       }
     }
 
-    .aside-image {
+    .hb-image-wrapper {
       position: absolute;
       right: 61px;
       top: 91px;
+    }
+
+    .aside-image {
+      position: relative;
     }
 
     .button-close {
