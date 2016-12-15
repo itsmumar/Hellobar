@@ -14,7 +14,7 @@ database:
 
 test:
   pre:
-    - bundle exec rubocop
+#    - bundle exec rubocop
     - npm install -g ember-cli
     - cd editor && npm install && bower install && cd ..
   override:
