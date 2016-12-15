@@ -25,6 +25,8 @@ $defaultColor: #3a3a49;
     font-size: 12px;
     color: #364556;
     cursor: pointer;
+    background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/white-paper/close.png);
+    background-size: cover;
   }
 
   .image-wrapper {
@@ -211,6 +213,11 @@ $defaultColor: #3a3a49;
     -webkit-transform: translateX(-50%);
   }
 
+  .button-close {
+    width: 12px;
+    height: 12px;
+  }
+
   .image-wrapper {
     width: 458px;
     height: 520px;
@@ -302,6 +309,13 @@ $defaultColor: #3a3a49;
   &.top-left {
     top: 20px;
     left: 20px;
+  }
+
+  .button-close {
+    width: 10px;
+    height: 10px;
+    top: 15px;
+    right: 15px;
   }
 
   .image-wrapper {
@@ -540,7 +554,10 @@ $defaultColor: #3a3a49;
     -webkit-transform: translateX(-50%);
   }
 
-
+  .button-close {
+    width: 12px;
+    height: 12px;
+  }
 
   .image-wrapper {
     width: 458px;
