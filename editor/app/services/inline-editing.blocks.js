@@ -111,5 +111,25 @@ export default {
         text: '<strong>Download now!</strong>'
       }
     }
+  ],
+  'white-paper': [
+    {
+      id: 'headline_first',
+      content: {
+        text: '<strong>15 conversion secrets that will help you</strong>'
+      }
+    },
+    {
+      id: 'caption',
+      content: {
+        text: 'The fact is that a given website\'s conversion problems can stem from many different areas'
+      }
+    },
+    {
+      id: 'action_link',
+      content: {
+        text: '<strong>Download now!</strong>'
+      }
+    }
   ]
 };

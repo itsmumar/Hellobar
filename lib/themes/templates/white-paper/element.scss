@@ -15,7 +15,7 @@
   height: 520px;
   margin: 0 auto;
   padding: 50px 60px 0 60px;
-  background-image: url(../assets/modal-background.png);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/white-paper/modal-background.png);
   background-size: cover;
 
   &.middle {
@@ -36,38 +36,42 @@
     -webkit-transform: translateX(-50%);
   }
 
-  .headline-first {
-    position: absolute;
-    left: 520px;
-    top: 55px;
-    width: 385px;
-    font-size: 46px;
+  .inner-content {
+   margin-left: 455px;
+   padding-top: 20px;
+   padding-right: 30px;
+  }
 
+
+  .headline-first {
+    width: 100%;
+    font-size: 46px;
     line-height: 50px;
-    max-height: 80px;
+    max-height: 180px;
     letter-spacing: -1px;
     text-align: left;
-    margin-bottom: 22px;
+    margin-bottom: 10px;
     text-transform: uppercase;
     color: #ffffff;
   }
 
   .caption-text {
-    position: absolute;
-    left: 521px;
-    top: 216px;
     font-size: 19px;
     line-height: 30px;
     text-align: left;
     color: #ffffff;
     font-weight: 400;
-    width: 408px;
+    width: 100%;
+  }
 
+  .form-block {
+   
+    padding: 20px 20px 20px 0px;
   }
 
   .builtin-email {
     width: 100%;
-    margin-right: 232px;
+    
     box-sizing: border-box;
 
     label {
@@ -75,30 +79,28 @@
     }
 
     input {
-      position: absolute;
-      left: 522px;
-      top: 302px;
+      display: block;
       text-align: left;
       border: none;
-      width: 365px;
       background: #ffffff;
+      width: 100%;
       color: #313741;
       font-size: 14px;
-      padding: 22px 28px;
+      padding: 22px 20px;
+      margin-bottom: 20px;
       font-weight: 400;
       border-radius: 5px;
-      height: 28px;
+      height: 65px;
+      box-sizing: border-box;
+     
     }
   }
 
   .cta {
-    position: absolute;
-    left: 522px;
-    top: 386px;
-    width: 365px;
-    height: 28px;
-    padding: 22px 28px;
-    margin: 0;
+    display: block;
+    width: 100%;
+    height: 65px;
+    padding: 20px 0px;
     text-transform: uppercase;
     background-color: #ffa800;
     color: white;
@@ -107,29 +109,37 @@
     text-decoration: none;
     letter-spacing: 1.6px;
     border-radius: 5px;
+    box-sizing: border-box;
   }
 
-  .aside-image {
+  .hb-image-wrapper {
     position: absolute;
     left: 35px;
     top: 34px;
+    height: 485px;
+  }
+
+  .aside-image {
+    //position: absolute;
+    //left: 35px;
+    //top: 34px;
   }
 
   .button-close {
     display: block;
     position: absolute;
-    right: 20px;
-    top: 20px;
+    right: 30px;
+    top: 30px;
     width: 12px;
     height: 12px;
-    background: url(../assets/close.png);
+    background: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/white-paper/close.png);
     cursor: pointer;
   }
 
   .hb-logo {
     display: inline-block;
-    position: absolute;
-    left: 720px;
+    align: center;
+    
     bottom: 22px;
     width: 34px;
     height: 23px;
@@ -153,7 +163,7 @@
   width: 380px;
   height: 239px;
   margin: 0 auto;
-  background-image: url(../assets/modal-background.png);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/white-paper/modal-background.png);
   background-size: cover;
 
   &.middle {
@@ -174,69 +184,69 @@
     -webkit-transform: translateX(-50%);
   }
 
+  .inner-content {
+   margin-left: 160px;
+   padding-top: 27px;
+   padding-right: 30px;
+   
+  }
+ 
   .headline-first {
-    position: absolute;
-    left: 159px;
-    top: 31px;
-    width: 200px;
+    
+    width: 100%;
     font-size: 15px;
     line-height: 20px;
     max-height: 40px;
     text-align: left;
-    margin-bottom: 11px;
+    margin-bottom: 5px;
     text-transform: uppercase;
     color: #ffffff;
   }
 
   .caption-text {
-    position: absolute;
-    left: 159px;
-    top: 75px;
+    
     font-size: 11px;
     line-height: 15px;
     letter-spacing: 0.5px;
     text-align: left;
     color: #ffffff;
     font-weight: 500;
-    width: 195px;
-
+    width: 100%;
+    margin-bottom: 10px;
   }
 
   .builtin-email {
     width: 100%;
     margin-right: 232px;
     box-sizing: border-box;
-
+     display: block;
     label {
       display: none;
     }
 
-    input {
-      position: absolute;
-      left: 159px;
-      top: 127px;
+    input { 
       text-align: left;
       border: none;
-      width: 165px;
+      width: 100%;
       background: #f3f3f3;
       color: #313741;
       font-size: 9px;
       padding: 11px 14px;
       font-weight: 500;
       border-radius: 2px;
-      height: 14px;
+      height: 34px;
       letter-spacing: 0.7;
+      box-sizing: border-box;
+      margin-bottom: 8px;
     }
   }
 
   .cta {
-    position: absolute;
-    left: 159px;
-    top: 170px;
-    width: 165px;
-    height: 14px;
+    display: block;
+    width: 100%;
+    height: 34px;
     padding: 11px 14px;
-    margin: 0;
+    margin-bottom: 8px;
     text-transform: uppercase;
     background-color: #ffa800;
     color: white;
@@ -245,6 +255,7 @@
     text-decoration: none;
     letter-spacing: 1px;
     border-radius: 2px;
+    box-sizing: border-box;
   }
 
   .aside-image-wrapper {
@@ -254,13 +265,13 @@
     overflow: hidden;
     height: 213px;
     width: 142px;
-
+   
   }
 
   .aside-image {
     position: relative;
     left: -47px;
-
+    
   }
 
   .button-close {
@@ -271,15 +282,13 @@
     width: 12px;
     height: 12px;
     background-size: cover;
-    background: url(../assets/close.png);
+    background: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/white-paper/close.png);
     cursor: pointer;
   }
 
   .hb-logo {
     display: inline-block;
-    position: absolute;
-    left: 245px;
-    bottom: 12px;
+    text-align: center;
     width: 24px;
     height: 14px;
     border-radius: 3px;
