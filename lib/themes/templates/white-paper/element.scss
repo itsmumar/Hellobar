@@ -5,7 +5,6 @@
   font-size: 16px;
   color: #585858;
   font-family: 'Open Sans', sans-serif;
-  font-weight: 800;
 }
 
 #hellobar-template.white-paper.modal {
@@ -60,13 +59,11 @@
     line-height: 30px;
     text-align: left;
     color: #ffffff;
-    font-weight: 400;
     width: 100%;
   }
 
   .form-block {
-   
-    padding: 20px 20px 20px 0px;
+    padding: 20px 20px 20px 0;
   }
 
   .builtin-email {
@@ -88,7 +85,6 @@
       font-size: 14px;
       padding: 22px 20px;
       margin-bottom: 20px;
-      font-weight: 400;
       border-radius: 5px;
       height: 65px;
       box-sizing: border-box;
@@ -100,12 +96,11 @@
     display: block;
     width: 100%;
     height: 65px;
-    padding: 20px 0px;
+    padding: 20px 0;
     text-transform: uppercase;
     background-color: #ffa800;
     color: white;
     font-size: 20px;
-    font-weight: 800;
     text-decoration: none;
     letter-spacing: 1.6px;
     border-radius: 5px;
@@ -116,7 +111,9 @@
     position: absolute;
     left: 35px;
     top: 34px;
+    width: 441px;
     height: 485px;
+    overflow: hidden;
   }
 
   .aside-image {
@@ -138,8 +135,7 @@
 
   .hb-logo {
     display: inline-block;
-    align: center;
-    
+    text-align: center;
     bottom: 22px;
     width: 34px;
     height: 23px;
@@ -159,40 +155,41 @@
 
 #hellobar-template.white-paper.slider {
   position: fixed;
-  left: 50%;
+  left: auto;
   width: 380px;
   height: 239px;
   margin: 0 auto;
   background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/white-paper/modal-background.png);
   background-size: cover;
 
-  &.middle {
-    top: 50%;
-    transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
+  &.bottom-right {
+    bottom: 20px;
+    right: 20px;
   }
 
-  &.top {
-    top: 5%;
-    transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -webkit-transform: translateX(-50%);
+  &.bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+
+  &.top-right {
+    top: 20px;
+    right: 20px;
+  }
+
+  &.top-left {
+    top: 20px;
+    left: 20px;
   }
 
   .inner-content {
-   margin-left: 160px;
-   padding-top: 27px;
-   padding-right: 30px;
-   
+    margin-left: 160px;
+    padding-top: 27px;
+    padding-right: 30px;
+
   }
  
   .headline-first {
-    
     width: 100%;
     font-size: 15px;
     line-height: 20px;
@@ -204,13 +201,11 @@
   }
 
   .caption-text {
-    
     font-size: 11px;
     line-height: 15px;
     letter-spacing: 0.5px;
     text-align: left;
     color: #ffffff;
-    font-weight: 500;
     width: 100%;
     margin-bottom: 10px;
   }
@@ -232,10 +227,8 @@
       color: #313741;
       font-size: 9px;
       padding: 11px 14px;
-      font-weight: 500;
       border-radius: 2px;
       height: 34px;
-      letter-spacing: 0.7;
       box-sizing: border-box;
       margin-bottom: 8px;
     }
@@ -251,7 +244,6 @@
     background-color: #ffa800;
     color: white;
     font-size: 11px;
-    font-weight: 800;
     text-decoration: none;
     letter-spacing: 1px;
     border-radius: 2px;
@@ -270,8 +262,6 @@
 
   .aside-image {
     position: relative;
-    left: -47px;
-    
   }
 
   .button-close {
@@ -302,3 +292,155 @@
   }
 
 }
+
+
+#hellobar-template.white-paper.takeover {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/white-paper/modal-background.png);
+  background-size: cover;
+
+  .takeover-content {
+    position: fixed;
+    left: 50%;
+    width: 1041px;
+    height: 520px;
+    margin: 0 auto;
+    padding: 50px 60px 0 60px;
+
+    &.middle {
+      top: 50%;
+      transform: translate(-50%, -50%);
+      -o-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+    }
+
+    &.top {
+      top: 5%;
+      transform: translateX(-50%);
+      -o-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      -moz-transform: translateX(-50%);
+      -webkit-transform: translateX(-50%);
+    }
+
+    .inner-content {
+      margin-left: 455px;
+      padding-top: 20px;
+      padding-right: 30px;
+    }
+
+
+    .headline-first {
+      width: 100%;
+      font-size: 46px;
+      line-height: 50px;
+      max-height: 180px;
+      letter-spacing: -1px;
+      text-align: left;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .caption-text {
+      font-size: 19px;
+      line-height: 30px;
+      text-align: left;
+      color: #ffffff;
+      width: 100%;
+    }
+
+    .form-block {
+      padding: 20px 20px 20px 0;
+    }
+
+    .builtin-email {
+      width: 100%;
+
+      box-sizing: border-box;
+
+      label {
+        display: none;
+      }
+
+      input {
+        display: block;
+        text-align: left;
+        border: none;
+        background: #ffffff;
+        width: 100%;
+        color: #313741;
+        font-size: 14px;
+        padding: 22px 20px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        height: 65px;
+        box-sizing: border-box;
+
+      }
+    }
+
+    .cta {
+      display: block;
+      width: 100%;
+      height: 65px;
+      padding: 20px 0;
+      text-transform: uppercase;
+      background-color: #ffa800;
+      color: white;
+      font-size: 20px;
+      text-decoration: none;
+      letter-spacing: 1.6px;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    .hb-image-wrapper {
+      position: absolute;
+      left: 35px;
+      top: 34px;
+      width: 441px;
+      height: 485px;
+      overflow: hidden;
+    }
+
+    .aside-image {
+    }
+
+    .button-close {
+      display: block;
+      position: absolute;
+      right: 30px;
+      top: 30px;
+      width: 12px;
+      height: 12px;
+      background: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/white-paper/close.png);
+      cursor: pointer;
+    }
+
+    .hb-logo {
+      display: inline-block;
+      text-align: center;
+      bottom: 22px;
+      width: 34px;
+      height: 23px;
+      border-radius: 3px;
+
+      svg {
+        border-radius: 3px;
+        path {
+          fill: #ffffff;
+        }
+      }
+    }
+  }
+
+}
+
+
