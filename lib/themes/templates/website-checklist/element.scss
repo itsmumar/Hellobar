@@ -9,6 +9,14 @@
   .button-close {
     z-index: 100000;
   }
+
+  input {
+    box-sizing: border-box;
+  }
+
+  .cta {
+    box-sizing: border-box;
+  }
 }
 
 #hellobar-template.website-checklist.bar {
@@ -216,10 +224,15 @@
     }
   }
 
-  .aside-image {
+  .hb-image-wrapper {
     position: absolute;
     right: 61px;
     top: 91px;
+    width: 302px;
+  }
+
+  .aside-image {
+    position: relative;
   }
 
   .button-close {
@@ -527,7 +540,7 @@
 
 
 
-  .aside-image-wrapper {
+  .hb-image-wrapper {
     position: absolute;
     left: 232px;
     top: 20px;
