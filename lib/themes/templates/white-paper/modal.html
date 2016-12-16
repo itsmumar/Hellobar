@@ -30,7 +30,7 @@
           <input id="f-builtin-email" type="text" placeholder="Your Email Address..." required="" value="">
         </div>
 
-        <div class="cta" href="#">
+        <div class="cta" onclick="{{siteElement.me}}.handleCtaClick()">
           <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
                data-hb-editable-block="blocks.action_link" data-hb-inline-editor-placeholder="Download now">
             {{siteElement.blockContent('action_link').text}}

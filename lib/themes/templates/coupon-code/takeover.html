@@ -31,7 +31,7 @@
           <input id="f-builtin-email" type="text" placeholder="Your Email address" required="" value="" autocomplete="off">
         </div>
 
-        <div class="cta">
+        <div class="cta" onclick="{{siteElement.me}}.handleCtaClick()">
           <div class="hb-text-holder hb-editable-block hb-editable-block-with-limited-formatting"
                data-hb-editable-block="blocks.action_link" data-hb-inline-editor-placeholder="Redeem Now">
             {{siteElement.blockContent('action_link').text}}
