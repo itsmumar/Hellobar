@@ -1,4 +1,5 @@
-$headlineColor: #f03554;
+$defaultColor: #f03554;
+$headlineColor: $defaultColor;
 $ctaColor: $headlineColor;
 
 #hellobar-template.traffic-growth {
@@ -12,10 +13,6 @@ $ctaColor: $headlineColor;
   background-size: cover;
   color: #585858;
   font-family: 'Montserrat', sans-serif;
-
-  .thank-you-container {
-    display: none;
-  }
 
   .button-close {
     position: absolute;
@@ -45,7 +42,7 @@ $ctaColor: $headlineColor;
     color: $headlineColor;
   }
 
-  .secondary-text {
+  .caption {
     color: #49596a;
     overflow: hidden;
   }
@@ -136,7 +133,7 @@ $ctaColor: $headlineColor;
     letter-spacing: 1px;
   }
 
-  .secondary-text {
+  .caption {
     font-size: 22px;
     max-height: 94px;
     padding: 20px 70px;
@@ -297,7 +294,7 @@ $ctaColor: $headlineColor;
     // font-weight: 800;
   }
 
-  .secondary-text {
+  .caption {
     margin-left: 120px;
     padding-top: 20px;
     font-size: 11px;
@@ -398,7 +395,7 @@ $ctaColor: $headlineColor;
       letter-spacing: 1px;
     }
 
-    .secondary-text {
+    .caption {
       font-size: 22px;
       max-height: 94px;
       padding: 20px 70px;
@@ -456,6 +453,12 @@ $ctaColor: $headlineColor;
   }
 }
 
+#hellobar-template.traffic-growth {
+  .thank-you-container {
+    display: none;
+  }
+}
+
 #hellobar-template.traffic-growth.thank-you {
 
   .thank-you-container {
@@ -466,14 +469,14 @@ $ctaColor: $headlineColor;
     .headline-first {
       display: block;
     }
-    .secondary-text {
+    .caption {
       display: block;
       margin: 0 0 1em 0;
     }
     .cta.go-hellobar-button {
       display: inline-block;
       position: relative;
-      background-color: $headlineColor;
+      background-color: $defaultColor;
       color: white;
       left: auto;
       top: auto;
@@ -487,7 +490,7 @@ $ctaColor: $headlineColor;
   .headline-first,
   .headline-second,
   .headline-third,
-  .secondary-text,
+  .caption,
   .form-block,
   .reject-link,
   .hb-logo {
