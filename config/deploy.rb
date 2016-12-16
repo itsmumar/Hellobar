@@ -13,11 +13,20 @@ set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 set :whenever_roles, %w(app db web)
 set :keep_releases, 50
 
+set :ssh_options, {
+  forward_agent: true
+}
+
 # Using `lambda` for lazy assigment. http://stackoverflow.com/a/25850619/1047207
 set :ember_app_path, lambda { "#{release_path}/editor" }
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+
+set :slackistrano, {
+ channel: '#deploys',
+ webhook: 'https://hooks.slack.com/services/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'
+}
 
 namespace :deploy do
   desc "Restart application"

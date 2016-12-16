@@ -11,9 +11,8 @@ gem "aweber",                    "~> 1.6.1"
 gem "aws-sdk",                   "~> 1.66.0"
 gem "bootstrap-sass",            "~> 3.1.1"
 gem "bourbon",                   "~> 3.2.0"
-gem "capistrano-bundler",        "~> 1.1.2"
-gem "capistrano-rails",          "~> 1.1"
-gem "capistrano",                "~> 3.1"
+
+
 gem "coffee-rails",              "~> 4.0.0"
 gem "constantcontact",           "~> 1.1.2"
 gem "country_select",            github: 'stefanpenner/country_select', ref: '79755038ca61dafdfebf4c55346d4a2085f98479'
@@ -75,7 +74,6 @@ gem "sass-rails",                "~> 4.0.3"
 gem "sentry-raven",              "~> 0.9"
 gem "signet",                    "~> 0.7.0"
 gem "simple_form",               "3.1.0.rc1"
-# gem "slackistrano",              "~> 2.0.1"
 gem "slim-rails",                "~> 2.1.4"
 gem "thin",                      "~> 1.6.4"
 gem "thread",                    "~> 0.2.2"
@@ -99,6 +97,12 @@ group :development do
   gem "rubocop", "~> 0.34.2", require: false
   gem "sinatra"
   gem 'brakeman', :require => false
+
+  # Deployment
+  gem "capistrano-bundler",        "~> 1.1.2"
+  gem "capistrano-rails",          "~> 1.1"
+  gem "capistrano",                "~> 3.6.1"
+  gem "slackistrano"
 end
 
 group :development, :test do
