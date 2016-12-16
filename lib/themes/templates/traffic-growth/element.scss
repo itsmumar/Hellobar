@@ -22,10 +22,12 @@ $ctaColor: $headlineColor;
     font-size: 12px;
     color: #364556;
     cursor: pointer;
+    background-image: url(../assets/close.png);
+    //background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/close.png);
+    background-size: cover;
   }
 
   .headline-first {
-
     text-transform: uppercase;
     color: $headlineColor;
   }
@@ -108,6 +110,8 @@ $ctaColor: $headlineColor;
   background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/modal-background.jpeg);
 
   .button-close {
+    width: 16px;
+    height: 16px;
   }
 
   .headline-first {
@@ -255,7 +259,10 @@ $ctaColor: $headlineColor;
   }
 
   .button-close {
-
+    top: 16px;
+    right: 16px;
+    width: 12px;
+    height: 12px;
   }
 
   .upper-block:after {
@@ -322,7 +329,7 @@ $ctaColor: $headlineColor;
     background-color: $ctaColor;
     font-size: 11px;
     color: white;
-    padding: 9px 4px;
+    padding: 9px 16px;
     position: relative;
     top: 1px;
     //font-weight: 800;
@@ -370,6 +377,8 @@ $ctaColor: $headlineColor;
     }
 
     .button-close {
+      width: 24px;
+      height: 24px;
     }
 
     .headline-first {
