@@ -25,7 +25,9 @@ $defaultColor: #3a3a49;
     font-size: 12px;
     color: #364556;
     cursor: pointer;
-    background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/white-paper/close.png);
+    //background-image: url(../assets/close.png);
+    //background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/white-paper/close.png);
+    background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/report/close.png);
     background-size: cover;
   }
 
@@ -501,8 +503,8 @@ $defaultColor: #3a3a49;
   }
 
   .button-close {
-    width: 12px;
-    height: 12px;
+    width: 16px;
+    height: 16px;
   }
 
   .image-wrapper {
