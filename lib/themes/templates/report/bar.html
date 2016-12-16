@@ -4,8 +4,6 @@
 
 <div id="hellobar-template" class="js-hellobar-element report bar {{siteElement.placement}}">
 
-  <div class="button-close" onclick="{{siteElement.me}}.close()"></div>
-
   <div class="content-wrapper">
 
     <div class="hellobar-logo">
@@ -20,7 +18,7 @@
     </div>
 
     <div class="buttons">
-      <div class="button-close"></div>
+      <div class="button-close" onclick="{{siteElement.me}}.close()"></div>
       <div class="hb-arrow-wrapper">
         <div href="#" style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}" id="close-bar" onclick="{{siteElement.me}}.minimize({{siteElement.id}})">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"

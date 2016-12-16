@@ -341,10 +341,6 @@ $defaultColor: #3a3a49;
     position: absolute;
   }
 
-  .button-close {
-
-  }
-
   .hellobar-logo {
     float: left;
   }
@@ -442,7 +438,13 @@ $defaultColor: #3a3a49;
     float: right;
     position: relative;
     top: 8px;
+    padding-right: 6px;
     .button-close {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      top: 10px;
+      left: 0;
     }
     .hb-arrow-wrapper {
       #close-bar {
