@@ -7,8 +7,6 @@ export default Ember.Controller.extend({
   theming: Ember.inject.service(),
 
   init() {
-    // TODO remove
-    //console.log('applicationController', this);
 
     Ember.run.next(() => {
         if (this.get('model.id') === null) {
