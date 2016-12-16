@@ -8,7 +8,7 @@
 
   <div class="button-close" onclick="{{siteElement.me}}.close()"></div>
 
-  <div class="hb-content-wrapper">
+  <div class="content-wrapper">
     <div class="inner-content">
 
       <div class="headline-first hb-editable-block hb-editable-block-with-limited-formatting"
@@ -17,7 +17,7 @@
         {{siteElement.blockContent('headline_first').text}}
       </div>
 
-      <div class="caption-text hb-editable-block hb-editable-block-with-limited-formatting"
+      <div class="caption hb-editable-block hb-editable-block-with-limited-formatting"
            data-hb-editable-block="blocks.caption"
            data-hb-inline-editor-placeholder="The fact is that a given website's conversion problems can stem from many different areas">
         {{siteElement.blockContent('caption').text}}
@@ -46,7 +46,22 @@
     </g>
   </svg>
         </a>
+      </div>
 
+      <div class="thank-you-container">
+        <div class="headline-first">
+          Thank you for signing up!
+        </div>
+        <div class="caption">
+          If you would like this sort of bar on your site...
+        </div>
+        <div class="go-hellobar-button-wrapper">
+          <a class="go-hellobar-button cta" target="_blank" href="http://hellobar.com">
+            <div class="hb-text-holder">
+              Click here
+            </div>
+          </a>
+        </div>
       </div>
 
     </div>
