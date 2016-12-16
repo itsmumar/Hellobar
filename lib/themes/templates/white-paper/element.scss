@@ -8,6 +8,11 @@ $ctaColor: $defaultColor;
   font-size: 16px;
   color: #585858;
   font-family: 'Open Sans', sans-serif;
+  
+  .aside-image {
+    width: 100%;
+  }
+
 }
 
 #hellobar-template.white-paper.modal {
@@ -255,7 +260,7 @@ $ctaColor: $defaultColor;
 
   .aside-image-wrapper {
     position: absolute;
-    left: 0px;
+    left: 0;
     top: 10px;
     overflow: hidden;
     height: 213px;
