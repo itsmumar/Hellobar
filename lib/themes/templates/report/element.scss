@@ -58,7 +58,7 @@ $defaultColor: #3a3a49;
     color: white;
   }
 
-  .secondary-text {
+  .caption {
     color: white;
     font-weight: 400;
 
@@ -112,62 +112,6 @@ $defaultColor: #3a3a49;
       }
     }
   }
-
-  .thank-you-headline {
-    font-size: 40px;
-    line-height: 40px;
-    font-weight: 800;
-    margin-top: 126px;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    color: $headerColor;
-  }
-
-  .thank-you-secondary-text {
-    font-size: 18px;
-    line-height: 18px;
-    font-weight: 800;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-    color: $headerColor;
-  }
-
-  .go-hellobar-button-wrapper {
-    margin-bottom: 80px;
-  }
-
-  .go-hellobar-button {
-    display: inline-block;
-    padding: 18px 50px;
-    background-color: $headerColor;
-    color: $ctaColor;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 18px;
-    line-height: 18px;
-    border-radius: 8px;
-  }
-
-  .thank-you-headline,
-  .thank-you-secondary-text,
-  .go-hellobar-button-wrapper {
-    display: none;
-  }
-
-  #hellobar-template.report.thank-you .thank-you-headline,
-  #hellobar-template.report.thank-you .thank-you-secondary-text,
-  #hellobar-template.report.thank-you .go-hellobar-button-wrapper {
-    display: block;
-  }
-
-  #hellobar-template.report.thank-you .headline-first,
-  #hellobar-template.report.thank-you .headline-second,
-  #hellobar-template.report.thank-you .secondary-text,
-  #hellobar-template.report.thank-you .form-block {
-    display: none;
-  }
-
-
 }
 
 ::-webkit-input-placeholder {
@@ -247,7 +191,7 @@ $defaultColor: #3a3a49;
     padding: 13px 0;
   }
 
-  .secondary-text {
+  .caption {
     font-size: 18px;
     line-height: 23px;
     padding: 14px 0 17px 0;
@@ -346,7 +290,7 @@ $defaultColor: #3a3a49;
     padding: 6px 0;
   }
 
-  .secondary-text {
+  .caption {
     font-size: 11px;
     line-height: 16px;
     padding: 6px 0 8px 0;
@@ -444,7 +388,7 @@ $defaultColor: #3a3a49;
     line-height: 13px;
   }
 
-  .secondary-text {
+  .caption {
     display: inline-block;
     width: 200px;
     font-size: 12px;
@@ -587,7 +531,7 @@ $defaultColor: #3a3a49;
     padding: 13px 0;
   }
 
-  .secondary-text {
+  .caption {
     font-size: 18px;
     line-height: 23px;
     padding: 14px 0 17px 0;
@@ -619,6 +563,72 @@ $defaultColor: #3a3a49;
       path {
 
       }
+    }
+  }
+}
+
+/* ---- "Thank you" styles ---- */
+#hellobar-template.report {
+  .thank-you-container {
+    display: none;
+  }
+}
+
+#hellobar-template.report.thank-you {
+  .thank-you-container {
+    display: block;
+    height: 100%;
+    margin-top: 2em;
+
+    .headline-first {
+      display: block;
+    }
+    .caption {
+      display: block;
+      margin: 0;
+    }
+    .cta.go-hellobar-button {
+      display: inline-block;
+      position: relative;
+      background-color: $ctaBackgroundColor;
+      color: $ctaColor;
+      left: auto;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      width: auto;
+      padding: 1em 3em;
+    }
+  }
+
+  .headline-first,
+  .headline-second,
+  .headline-third,
+  .caption,
+  .form-block,
+  .reject-link,
+  .hb-logo,
+  .hellobar-logo {
+    display: none;
+  }
+}
+
+#hellobar-template.report.bar.thank-you {
+  .thank-you-container {
+    margin-top: 0;
+    .headline-first {
+      display: inline-block;
+    }
+    .caption {
+      position: relative;
+      top: 4px;
+      display: inline-block;
+      margin: 0 3em;
+    }
+    .go-hellobar-button-wrapper {
+      position: relative;
+      top: -2px;
+      display: inline-block;
     }
   }
 }
