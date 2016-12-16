@@ -1,3 +1,6 @@
+$headlineColor: #f03554;
+$ctaColor: $headlineColor;
+
 #hellobar-template.traffic-growth {
   display: block;
   position: fixed;
@@ -9,6 +12,10 @@
   background-size: cover;
   color: #585858;
   font-family: 'Montserrat', sans-serif;
+
+  .thank-you-container {
+    display: none;
+  }
 
   .button-close {
     position: absolute;
@@ -23,19 +30,19 @@
   .headline-first {
 
     text-transform: uppercase;
-    color: #f03554;
+    color: $headlineColor;
   }
 
   .headline-second {
     white-space: nowrap;
     text-transform: uppercase;
-    color: #f03554;
+    color: $headlineColor;
   }
 
   .headline-third {
     white-space: nowrap;
     text-transform: uppercase;
-    color: #f03554;
+    color: $headlineColor;
   }
 
   .secondary-text {
@@ -315,7 +322,7 @@
   .cta {
     display: inline-block;
     border-radius: 3px;
-    background-color: #f03554;
+    background-color: $ctaColor;
     font-size: 11px;
     color: white;
     padding: 9px 4px;
@@ -449,64 +456,47 @@
   }
 }
 
-
-
-#hellobar-template.traffic-growth .thank-you-headline {
-  font-size: 40px;
-  line-height: 40px;
-  font-weight: 800;
-  margin-top: 161px;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  color: #f03554;
-}
-
-#hellobar-template.traffic-growth .thank-you-secondary-text {
-  font-size: 18px;
-  line-height: 18px;
-  font-weight: 800;
-  margin-bottom: 40px;
-  text-transform: uppercase;
-  color: #f03554;
-}
-
-#hellobar-template.traffic-growth .go-hellobar-button-wrapper {
-  margin-bottom: 80px;
-}
-
-#hellobar-template.traffic-growth .go-hellobar-button {
-  display: inline-block;
-  padding: 18px 50px;
-  background-color: #f03554;
-  color: white;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 18px;
-  line-height: 18px;
-  border-radius: 8px;
-}
-
-#hellobar-template.traffic-growth .thank-you-headline,
-#hellobar-template.traffic-growth .thank-you-secondary-text,
-#hellobar-template.traffic-growth .go-hellobar-button-wrapper {
-  display: none;
-}
-
 #hellobar-template.traffic-growth.thank-you {
+
+  .thank-you-container {
+    display: block;
+    height: 100%;
+    margin-top: 2em;
+
+    .headline-first {
+      display: block;
+    }
+    .secondary-text {
+      display: block;
+      margin: 0 0 1em 0;
+    }
+    .cta.go-hellobar-button {
+      display: inline-block;
+      position: relative;
+      background-color: $headlineColor;
+      color: white;
+      left: auto;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      width: auto;
+      padding: 1em 3em;
+    }
+  }
+
+  .headline-first,
+  .headline-second,
+  .headline-third,
+  .secondary-text,
+  .form-block,
+  .reject-link,
+  .hb-logo {
+    display: none;
+  }
+
+}
+
+#hellobar-template.traffic-growth.modal.thank-you {
   background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/background-thank-you.jpeg);
 }
 
-#hellobar-template.traffic-growth.thank-you .thank-you-headline,
-#hellobar-template.traffic-growth.thank-you .thank-you-secondary-text,
-#hellobar-template.traffic-growth.thank-you .go-hellobar-button-wrapper {
-  display: block;
-}
-
-#hellobar-template.traffic-growth.thank-you .headline-first,
-#hellobar-template.traffic-growth.thank-you .headline-second,
-#hellobar-template.traffic-growth.thank-you .headline-third,
-#hellobar-template.traffic-growth.thank-you .secondary-text,
-#hellobar-template.traffic-growth.thank-you .form-block,
-#hellobar-template.traffic-growth.thank-you .reject-link {
-  display: none;
-}
