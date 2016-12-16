@@ -687,7 +687,7 @@ HB.SiteElement = HB.createClass({
       return false;
     } else {
       hb.submitEmail(this,
-        document.getElementById('hb-fields-form'),
+        this.w.contentDocument.getElementById('hb-fields-form'),
         null, null, this.email_redirect,
         hb.stringLiteral(this.settings.redirect_url), 'thank-you');
       return false;
