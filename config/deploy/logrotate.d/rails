@@ -6,5 +6,5 @@
     copytruncate
     dateext
     daily
-    rotate 7
+    rotate 50
 }
