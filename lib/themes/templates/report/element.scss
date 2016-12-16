@@ -167,6 +167,7 @@ $defaultColor: #3a3a49;
   .image-wrapper {
     width: 458px;
     height: 520px;
+    overflow: hidden;
     img {
       display: block;
       width: 458px;
@@ -267,6 +268,7 @@ $defaultColor: #3a3a49;
   .image-wrapper {
     width: 135px;
     height: 238px;
+    overflow: hidden;
     img {
       display: block;
       width: 135px;
@@ -510,6 +512,7 @@ $defaultColor: #3a3a49;
   .image-wrapper {
     width: 458px;
     height: 520px;
+    overflow: hidden;
     img {
       display: block;
       width: 458px;
