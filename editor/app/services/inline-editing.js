@@ -488,6 +488,8 @@ export default Ember.Service.extend({
       const foundModelBlock = _.find(model.blocks, (modelBlock) => modelBlock.id === defaultBlock.id);
       if (!foundModelBlock) {
         model.blocks.push(_.cloneDeep(defaultBlock));
+      } else {
+        _.extend(foundModelBlock, _.cloneDeep(defaultBlock));
       }
     });
   }
