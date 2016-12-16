@@ -168,7 +168,7 @@ describe SitesController do
       it "redirects to the site when using existing url" do
         site = create(:site, url: "www.test.com")
         site.users << @user
-        post :create, :site => { url: 'test.com' }
+        post :create, :site => { url: 'www.test.com' }
 
         expect(response).to redirect_to(site_path(site))
         expect(flash[:error]).to eq("Url is already in use.")

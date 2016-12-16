@@ -205,7 +205,7 @@ module SiteElementsHelper
                  end
                  h
                else
-                 site_element.headline
+                 site_element.headline || ''
                end
 
     strip_tags(site_element.use_question? ? site_element.question : headline).html_safe

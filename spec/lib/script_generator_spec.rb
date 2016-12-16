@@ -96,7 +96,7 @@ describe ScriptGenerator do
 
         generator = ScriptGenerator.new site
 
-        generator.render.scan('setTemplate').size.should == 3
+        generator.render.scan('setTemplate').size.should == 2
       end
     end
 

@@ -16,7 +16,8 @@ feature "Connect to api ESP", js: true do
     visit site_contact_list_path(site, contact_list)
 
     page.find("#edit-contact-list").click
-    page.select 'MadMimi', :from => 'Where do you want your contacts stored?'
+    page.find('a', text: "Nevermind, I want to view all tools").click
+    page.find('.mad_mimi_api-provider label').click
 
     fill_in 'contact_list[data][username]', with: 'tj+madmimitest@polymathic.me'
     fill_in 'contact_list[data][api_key]', with: '12225410b3e4b656e09ce7760bfaa240'
@@ -77,7 +78,9 @@ feature "Connect to api ESP", js: true do
     visit site_contact_list_path(site, contact_list)
 
     page.find("#edit-contact-list").click
-    page.select 'Webhooks', :from => 'Where do you want your contacts stored?'
+
+    page.find('a', text: "Nevermind, I want to view all tools").click
+    page.find('.webhooks-provider label').click
 
     fill_in 'contact_list[data][webhook_url]', with: 'http://google.com'
     check "POST request"

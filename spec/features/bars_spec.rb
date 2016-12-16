@@ -18,6 +18,7 @@ feature 'User can create a site element', js: true do
 
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
+    User.last.site_memberships << create(:site_membership, :with_site_rule)
 
     sleep 0.2
 
@@ -65,10 +66,7 @@ feature 'User can create a site element', js: true do
       social:       "Social",
       announcement: "Announcement"
     }.each do |anchor, header|
-      visit new_site_site_element_path(user.sites.first,
-                                       anchor: "/settings/#{anchor}",
-                                       skip_interstitial: true)
-
+      visit new_site_site_element_path(user.sites.first) + "/#/settings/#{anchor}?skip_interstitial=true"
       expect(page).to have_content(header, visible: true)
     end
   end
@@ -146,6 +144,10 @@ feature "User can enable/disable/add fields for `Collect Email` goal. Create Sit
   end
 
   scenario 'custom field' do
+    find('.step-style').click
+    find('h6', text: "Modal").click
+    find('.step-settings').click
+
     input_field = '.new-item-prototype > input'
 
     find('div.item-block.add', text: 'Add field').click
@@ -178,7 +180,7 @@ feature 'User can set a phone number for click to call', js: true do
   scenario 'the site sets a custom country so they can use 1800' do
     membership = create(:site_membership, :with_site_rule)
     user = membership.user
-    phone_number = '+1-2025550144'
+    phone_number = '+12025550144'
     login(user)
 
     within('form.button_to') do
@@ -187,7 +189,6 @@ feature 'User can set a phone number for click to call', js: true do
 
     first(".goal-block[data-route='call']").click_link(@select_goal_label)
 
-    find('select').select('Custom')
     all('input')[0].set('Hello from Hello Bar')
     all('input')[1].set('Button McButtonson')
     all('input')[2].set(phone_number)
@@ -195,7 +196,7 @@ feature 'User can set a phone number for click to call', js: true do
     find('button', text: 'Continue').click
     find('button', text: 'Save & Publish').click
 
-    expect(page).to have_css('html') # waits for next page load
+    expect(page).to have_content('Get Free Pro') # waits for next page load
     element = SiteElement.last
 
     expect(element.phone_number).to eql(phone_number)
@@ -225,7 +226,7 @@ feature 'User can toggle colors for a site element', js: true do
     click_button 'Continue'
     click_link 'Next'
 
-    within('.tabs-wrapper') do
+    within('.step-wrapper') do
       find('a', text: /Colors/i).click
     end
 
@@ -259,12 +260,14 @@ feature 'User can edit a site element', js: true do
 
     bypass_setup_steps(2)
 
-    within('.tabs-wrapper') do
+    within('.step-wrapper') do
       find('a', text: /Text/i).click
+      find('.questions .toggle-floater').click
     end
 
-    first('.ember-text-field').set('Dear I fear were facing a problem')
+    value = 'Dear I fear because were facing a problem'
+    first('.ember-text-field').set(value)
     page.find('button', text: 'Save & Publish').click
-    expect(page).to have_content('Dear I fear were facing a problem', visible: true)
+    expect(page).to have_content(value, visible: true)
   end
 end
