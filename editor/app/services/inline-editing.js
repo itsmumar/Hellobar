@@ -144,6 +144,7 @@ class BlockBasedModelAdapter {
           text: content
         };
       }
+      delete foundBlock.isDefault;
     } else {
       console.warn(`Block ${blockId} not found in the current template blocks.`);
     }
@@ -486,10 +487,11 @@ export default Ember.Service.extend({
     const blocks = defaultBlocks[themeId];
     _.each(blocks, (defaultBlock) => {
       const foundModelBlock = _.find(model.blocks, (modelBlock) => modelBlock.id === defaultBlock.id);
+      const clonedDefaultBlock = _.defaultsDeep({isDefault: true}, defaultBlock);
       if (!foundModelBlock) {
-        model.blocks.push(_.cloneDeep(defaultBlock));
+        model.blocks.push(clonedDefaultBlock);
       } else {
-        _.extend(foundModelBlock, _.cloneDeep(defaultBlock));
+        foundModelBlock.isDefault && _.extend(foundModelBlock, clonedDefaultBlock);
       }
     });
   }

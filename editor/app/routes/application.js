@@ -108,6 +108,10 @@ export default Ember.Route.extend({
   actions: {
 
     saveSiteElement() {
+      const prepareModel = () => {
+        _.each(this.currentModel.blocks, (block) => delete block.isDefault);
+      };
+
       this.set("saveCount", this.get("saveCount") + 1);
       if (trackEditorFlow) {
         InternalTracking.track_current_person("Editor Flow", {
@@ -125,6 +129,8 @@ export default Ember.Route.extend({
         var url = `/sites/${window.siteID}/site_elements.json`;
         var method = "POST";
       }
+
+      prepareModel();
 
       return Ember.$.ajax({
         type: method,
