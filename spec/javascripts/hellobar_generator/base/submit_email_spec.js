@@ -105,15 +105,17 @@ describe("HB", function() {
         beforeEach(function() {
           spyOn(HB, 'recordEmail');
           spyOn(HB, 'shake');
-          emailField.value = "";
-          HB.submitEmail(siteElement, formElement, targetSiteElement, thankYouText, "", false, "");
         });
 
         it("does not call recordEmail", function() {
+          emailField.value = "";
+          HB.submitEmail(siteElement, formElement, targetSiteElement, thankYouText, "", false, "");
           expect(HB.recordEmail).not.toHaveBeenCalled();
         });
 
         it("shakes the email input", function() {
+          emailField.value = "aol.com";
+          HB.submitEmail(siteElement, formElement, targetSiteElement, thankYouText, "", false, "");
           expect(HB.shake).toHaveBeenCalledWith(emailField);
         });
       });
