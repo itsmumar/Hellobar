@@ -9,7 +9,15 @@ export default Ember.Mixin.create({
   },
 
   setupController(controller, model) {
+    this._track_selected_goal();
     this._super(controller, model);
     controller.setDefaults();
+  },
+
+  _track_selected_goal() {
+    return $.ajax({
+      method: "POST",
+      url: `/sites/${siteID}/track_selected_goal`
+    });
   }
 });
