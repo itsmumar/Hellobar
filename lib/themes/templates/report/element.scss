@@ -186,18 +186,21 @@ $defaultColor: #3a3a49;
     font-size: 72px;
     line-height: 60px;
     padding-bottom: 15px;
+    max-height: 135px;
   }
 
   .headline-second {
     font-size: 36px;
     line-height: 36px;
     padding: 13px 0;
+    max-height: 62px;
   }
 
   .caption {
     font-size: 18px;
     line-height: 23px;
     padding: 14px 0 17px 0;
+    max-height: 77px;
   }
 
   .form-block {
@@ -219,6 +222,7 @@ $defaultColor: #3a3a49;
     padding: 24px;
     border-radius: 5px;
     font-size: 20px;
+    max-height: 78px;
   }
 
   .hellobar-logo {
@@ -286,18 +290,21 @@ $defaultColor: #3a3a49;
     font-size: 30px;
     line-height: 25px;
     padding-bottom: 6px;
+    max-height: 56px;
   }
 
   .headline-second {
     font-size: 16px;
     line-height: 16px;
     padding: 6px 0;
+    max-height: 28px;
   }
 
   .caption {
     font-size: 11px;
     line-height: 16px;
     padding: 6px 0 8px 0;
+    max-height: 46px;
   }
 
   .form-block {
@@ -319,6 +326,7 @@ $defaultColor: #3a3a49;
     padding: 8px;
     border-radius: 2px;
     font-size: 10px;
+    max-height: 31px;
   }
 
   .hellobar-logo {
@@ -379,6 +387,7 @@ $defaultColor: #3a3a49;
     display: block;
     font-size: 24px;
     line-height: 24px;
+    max-height: 24px;
   }
 
   .headline-second {
@@ -386,6 +395,7 @@ $defaultColor: #3a3a49;
     border: none;
     font-size: 13px;
     line-height: 13px;
+    max-height: 13px;
   }
 
   .caption {
@@ -394,6 +404,7 @@ $defaultColor: #3a3a49;
     font-size: 12px;
     line-height: 16px;
     text-align: left;
+    max-height: 32px;
   }
 
   .form-block {
@@ -422,6 +433,7 @@ $defaultColor: #3a3a49;
     padding: 9px;
     font-size: 11px;
     border-radius: 3px;
+    max-height: 34px;
   }
 
   .hellobar-logo {
