@@ -284,6 +284,7 @@ $ctaColor: $headlineColor;
   .headline-first {
     font-size: 12px;
     line-height: 14px;
+    max-height: 28px;
     //font-weight: 800;
   }
 
@@ -291,6 +292,7 @@ $ctaColor: $headlineColor;
     font-size: 36px;
     letter-spacing: -1px;
     line-height: 34px;
+    max-height: 34px;
     margin-bottom: 2px;
     // font-weight: 800;
   }
@@ -298,6 +300,7 @@ $ctaColor: $headlineColor;
   .headline-third {
     font-size: 10px;
     line-height: 10px;
+    max-height: 10px;
     // font-weight: 800;
   }
 
@@ -305,11 +308,13 @@ $ctaColor: $headlineColor;
     margin-left: 120px;
     padding-top: 20px;
     font-size: 11px;
+    max-height: 62px;
   }
 
   .form-block {
     background: none;
     margin-bottom: 10px;
+    max-height: 33px;
   }
 
   .builtin-email {
@@ -329,7 +334,7 @@ $ctaColor: $headlineColor;
     background-color: $ctaColor;
     font-size: 11px;
     color: white;
-    padding: 9px 16px;
+    padding: 9px 4px;
     position: relative;
     top: 1px;
     //font-weight: 800;
