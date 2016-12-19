@@ -21,7 +21,7 @@ feature "New User Onboarding email campaigns" do
     page.all(".goal-block .button").to_a.first.click
 
     the_onboarding_campaigns_run
-    expect_user_to_only_recieve(user, "Drip Campaign: Create a bar")
+    expect_user_to_only_recieve(user, "Drip Campaign: Configure your bar")
   end
 
   scenario "user added to an existing site" do
