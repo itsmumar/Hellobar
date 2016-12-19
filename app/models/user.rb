@@ -144,6 +144,8 @@ class User < ActiveRecord::Base
   end
 
   def add_to_infusionsoft
+    #adds new user to hb's infusionsoft account for markerting reasons
+    #also adds them to group 103 "Customer Tags -> opted into Hello Bar"
     hb_infusionsoft = Infusionsoft.new
     hb_infusionsoft.api_url = Hellobar::Settings[:hb_infusionsoft_url]
     hb_infusionsoft.api_key= Hellobar::Settings[:hb_infusionsoft_key]
