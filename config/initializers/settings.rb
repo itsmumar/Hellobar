@@ -54,6 +54,8 @@ unless defined?(Hellobar::Settings)
     vr_secret
     geolocation_url
     rotp_secret_key_base
+    hb_infusionsoft_url
+    hb_infusionsoft_key
   )
 
   keys.each do |key|
