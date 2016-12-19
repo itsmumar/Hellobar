@@ -14,7 +14,7 @@ describe("SiteElement", function() {
       it("returns div element", function() {
         siteElement.image_url = "myCoolURL";
         siteElement.image_placement = "top";
-        expectedDiv = "<div class='hb-image-wrapper top'><img class='uploaded-image' src=myCoolURL /></div>"
+        expectedDiv = '<div class="hb-image-wrapper top"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="uploaded-image" src="myCoolURL" /></div></div>'
         expect(siteElement.imageFor(['top'])).toEqual(expectedDiv);
       });
     });
