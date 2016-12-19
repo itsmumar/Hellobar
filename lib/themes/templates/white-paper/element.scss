@@ -54,7 +54,7 @@ $ctaColor: $defaultColor;
     width: 100%;
     font-size: 46px;
     line-height: 50px;
-    max-height: 180px;
+    max-height: 150px;
     letter-spacing: -1px;
     text-align: left;
     margin-bottom: 10px;
@@ -68,6 +68,7 @@ $ctaColor: $defaultColor;
     text-align: left;
     color: #ffffff;
     width: 100%;
+    max-height: 60px;
   }
 
   .form-block {
@@ -113,6 +114,7 @@ $ctaColor: $defaultColor;
     letter-spacing: 1.6px;
     border-radius: 5px;
     box-sizing: border-box;
+    max-height: 85px;
   }
 
   .hb-image-wrapper {
@@ -201,11 +203,11 @@ $ctaColor: $defaultColor;
     width: 100%;
     font-size: 15px;
     line-height: 20px;
-    max-height: 40px;
     text-align: left;
     margin-bottom: 5px;
     text-transform: uppercase;
     color: #ffffff;
+    max-height: 40px;
   }
 
   .caption {
@@ -216,6 +218,7 @@ $ctaColor: $defaultColor;
     color: #ffffff;
     width: 100%;
     margin-bottom: 10px;
+    max-height: 45px;
   }
 
   .builtin-email {
@@ -256,6 +259,7 @@ $ctaColor: $defaultColor;
     letter-spacing: 1px;
     border-radius: 2px;
     box-sizing: border-box;
+    max-height: 34px;
   }
 
   .aside-image-wrapper {
