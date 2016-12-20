@@ -10,10 +10,10 @@ class User < ActiveRecord::Base
   after_save        :disconnect_oauth, if: :is_oauth_user?
   after_save        :track_temporary_status_change
 
-  after_create do
-    :add_to_onboarding_campaign
-    delay :add_to_infusionsoft
-  end
+  after_create :add_to_onboarding_campaign
+  after_create :add_to_infusionsoft_in_background
+
+
   before_destroy    :destroy_orphan_sites_before_active_record_association_callbacks
   # rubocop:enable Style/SingleSpaceBeforeFirstArg
 
@@ -143,14 +143,18 @@ class User < ActiveRecord::Base
     subscriptions.active.any?{|subscription| subscription.capabilities.acts_as_paid_subscription? }
   end
 
+  def add_to_infusionsoft_in_background
+    delay :add_to_infusionsoft
+  end
+
   def add_to_infusionsoft
-    #adds new user to hb's infusionsoft account for markerting reasons
-    #also adds them to group 103 "Customer Tags -> opted into Hello Bar"
-    hb_infusionsoft = Infusionsoft.new
-    hb_infusionsoft.api_url = Hellobar::Settings[:hb_infusionsoft_url]
-    hb_infusionsoft.api_key= Hellobar::Settings[:hb_infusionsoft_key]
-    contact_id = hb_infusionsoft.contact_add({:FirstName => self.first_name, :LastName => self.last_name, :Email => self.email})
-    hb_infusionsoft.contact_add_to_group(contact_id, 103)
+    Infusionsoft.configure do |config|
+      config.api_url = Hellobar::Settings[:hb_infusionsoft_url]
+      config.api_key = Hellobar::Settings[:hb_infusionsoft_key]
+    end
+    data = {:FirstName => self.first_name, :LastName => self.last_name, :Email => self.email}
+    contact_id = Infusionsoft.contact_add_with_dup_check(data, :Email)
+    Infusionsoft.contact_add_to_group(contact_id, Hellobar::Settings[:hb_infusionsoft_deafult_group])
   end
 
   def onboarding_status_setter
