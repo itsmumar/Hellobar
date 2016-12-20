@@ -42,6 +42,14 @@
       {{theming/theme-info theme=currentTheme onChangeTheme=(action "changeTheme")}}
     {{/if}}
 
+    {{#link-to 'style.custom' class='step-link-block'}}
+      <i class="icon-modal"><></i>
+      <h6>Custom HTML</h6>
+      <p>Custom HTML</p>
+    {{/link-to}}
+
+
+
     <a {{action 'changeStyle'}} class="change-selection">
       <i class="icon-back1"></i>
       Change Type

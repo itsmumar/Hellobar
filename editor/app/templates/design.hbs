@@ -1,29 +1,33 @@
 <h5 class="step-title">Design &amp; Content</h5>
 
-{{#if currentThemeIsGeneric}}
+{{#if isCustom}}
+These are some instructions about doing your custom templating.
+{{else}}
+  {{#if currentThemeIsGeneric}}
 
-  {{#ivy-tabs selection=selection as |tabs|}}
-    {{#tabs.tablist as |tablist|}}
-      {{#tablist.tab "TabColors" on-select=(action (mut selection))}}Colors{{/tablist.tab}}
-      {{#tablist.tab "TabImage" on-select=(action (mut selection))}}Image{{/tablist.tab}}
-      {{#tablist.tab "TabText" on-select=(action (mut selection))}}Text{{/tablist.tab}}
-    {{/tabs.tablist}}
+    {{#ivy-tabs selection=selection as |tabs|}}
+      {{#tabs.tablist as |tablist|}}
+        {{#tablist.tab "TabColors" on-select=(action (mut selection))}}Colors{{/tablist.tab}}
+        {{#tablist.tab "TabImage" on-select=(action (mut selection))}}Image{{/tablist.tab}}
+        {{#tablist.tab "TabText" on-select=(action (mut selection))}}Text{{/tablist.tab}}
+      {{/tabs.tablist}}
 
-    {{#tabs.tabpanel "TabColors"}}
-      {{partial "partials/colors-pane"}}
-    {{/tabs.tabpanel}}
+      {{#tabs.tabpanel "TabColors"}}
+        {{partial "partials/colors-pane"}}
+      {{/tabs.tabpanel}}
 
-    {{#tabs.tabpanel "TabImage"}}
-      {{partial "partials/image-pane"}}
-    {{/tabs.tabpanel}}
+      {{#tabs.tabpanel "TabImage"}}
+        {{partial "partials/image-pane"}}
+      {{/tabs.tabpanel}}
 
-    {{#tabs.tabpanel "TabText"}}
-      {{partial "partials/text-pane"}}
-    {{/tabs.tabpanel}}
-  {{/ivy-tabs}}
+      {{#tabs.tabpanel "TabText"}}
+        {{partial "partials/text-pane"}}
+      {{/tabs.tabpanel}}
+    {{/ivy-tabs}}
 
-{{/if}}
+  {{/if}}
 
-{{#if currentThemeIsTemplate}}
-  {{no-content-parameters}}
+  {{#if currentThemeIsTemplate}}
+    {{no-content-parameters}}
+  {{/if}}
 {{/if}}

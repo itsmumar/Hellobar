@@ -312,6 +312,7 @@ export default Ember.Controller.extend({
     return currentTheme;
   }).property('model.theme_id'),
 
+
   currentThemeName: (function () {
     const theme = this.get('currentTheme');
     return theme ? theme.name : '';

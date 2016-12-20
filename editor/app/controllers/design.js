@@ -31,6 +31,7 @@ export default Ember.Controller.extend({
   //-------------- Helpers ----------------#
 
   isABar: Ember.computed.equal('model.type', 'Bar'),
+  isCustom: Ember.computed.equal('model.type', 'Custom'),
 
   allowImages: Ember.computed('model.type', function () {
       return this.get('model.type') !== "Bar";

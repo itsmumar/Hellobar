@@ -1,3 +1,13 @@
+#hellobar-container.HB-Custom {
+  top: 0;
+  left: 0;
+  position: fixed;
+  _position: absolute;
+  _top: expression(eval(document.body.scrollTop));
+  width: 100%;
+  height: 100%;
+}
+
 #hellobar-container.HB-Modal {
   top: 0;
   left: 0;

@@ -504,7 +504,8 @@ HB.SiteElement = HB.createClass({
     else if
     (
       this.type == "Takeover" ||
-      this.type == "Modal"
+      this.type == "Modal" ||
+      this.type == "Custom"
     ) {
       this.updateStyleFor(false);
     }
@@ -521,7 +522,8 @@ HB.SiteElement = HB.createClass({
     if (
       this.type == "Takeover" ||
       this.type == "Modal" ||
-      this.type == "Slider"
+      this.type == "Slider" ||
+      this.type == "Custom"
     ) {
       this.updateStyleFor(true);
     }
@@ -530,7 +532,7 @@ HB.SiteElement = HB.createClass({
   updateStyleFor: function (reset) {
     var element = this;
     var contentDocument = element.w.contentDocument;
-    var hbModal = contentDocument.getElementById('hellobar-modal') || contentDocument.getElementById('hellobar-takeover');
+    var hbModal = contentDocument.getElementById('hellobar-modal') || contentDocument.getElementById('hellobar-takeover')|| contentDocument.getElementById('hellobar-custom');
 
     if (reset) {
       this.w.style.position = "";

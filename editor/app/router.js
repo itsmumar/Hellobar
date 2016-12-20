@@ -63,6 +63,7 @@ Router.map(function () {
       this.route('bar');
       this.route('modal');
       this.route('slider');
+      this.route('custom');
       return this.route('takeover');
     }
   );

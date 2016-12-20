@@ -1,0 +1,3 @@
+class Custom < SiteElement
+
+end
