@@ -249,6 +249,7 @@ private
   end
 
   def content_markup(element_class, type)
+    return '' if element_class == 'custom'
     fname = "#{Rails.root}/lib/script_generator/#{element_class}/#{type.gsub("/", "_").underscore}.html"
     if File.exist?(fname)
       File.read(fname)

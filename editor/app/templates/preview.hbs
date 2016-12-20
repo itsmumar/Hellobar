@@ -1,20 +1,38 @@
-<div class="preview-wrapper" style="background: #f6f6f6 url({{image-path "iphone-bg.png"}})  center center no-repeat">
-  {{announcement-container}}
 
-  {{right-pane}}
 
-  <div id="hellobar-preview-container" class={{previewContainerCssClasses}}>
+<div class="preview-wrapper">
+  <div  id="container" style="width: 100%; margin: auto;">
+      <div id="first" style="width: 50%; float: left; height: 300px; padding-right:10px;"><h6>HTML</h6>{{input value=model.settings.url placeholder=model.site.url maxlength=510}}</div>
+      <div id="second" style="width: 50%; float: left;height: 300px;"><h6>CSS</h6><textarea style="height:90%" id="customCssText" ></textarea></div>
+      <div id="clear" style="clear: both;"></div>
+  </div>
 
-    <div class="preview-wrapper">
+    <div id="clear" style="clear: both;"></div>
 
-      <div class="preview-message">
-        <i class="icon-settings"></i>
-        Site preview loading...
+  <div class="preview-wrapper" style="background: #f6f6f6 url({{image-path "iphone-bg.png"}})  center center no-repeat">
+
+
+    {{announcement-container}}
+
+
+    {{right-pane}}
+
+    <div id="hellobar-preview-container" class={{previewContainerCssClasses}}>
+
+      <div class="preview-wrapper">
+
+        <div class="preview-message">
+          <i class="icon-settings"></i>
+          Site preview loading...
+        </div>
       </div>
+
+
+
+
+      <div class="preview-image" style={{previewStyleString}}></div>
+
+      <img class="preview-image-for-colorpicker" src={{previewImageURL}} />
     </div>
-
-    <div class="preview-image" style={{previewStyleString}}></div>
-
-    <img class="preview-image-for-colorpicker" src={{previewImageURL}} />
   </div>
 </div>

@@ -12,6 +12,7 @@ export default Ember.Component.extend({
 
   theming: Ember.inject.service(),
 
+
   elementType: function() {
     return this.get('options.elementType');
   }.property('options.elementType'),
@@ -40,4 +41,3 @@ export default Ember.Component.extend({
   }.property('templateThemes')
 
 });
-

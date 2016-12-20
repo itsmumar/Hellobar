@@ -40,6 +40,7 @@ export default Ember.Controller.extend({
     );
   },
 
+  isCustom: Ember.computed.equal('model.type', 'Custom'),
   currentTheme: Ember.computed.alias('applicationController.currentTheme'),
   currentThemeName: Ember.computed.alias('applicationController.currentThemeName'),
 
@@ -65,6 +66,10 @@ export default Ember.Controller.extend({
     return this._shouldShowThemeInfoForElementType('Takeover');
   }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
 
+  shouldShowCustomThemeInfo: function() {
+    return this._shouldShowThemeInfoForElementType('Custom');
+  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
+
   elementTypeSelectionInProgress: false,
   userSelectedElementTypeExplicitly: false,
   seeingElementFirstTime: true,
@@ -72,6 +77,8 @@ export default Ember.Controller.extend({
   applyRoute (routeName) {
     const routeByElementType = (elementType, elementId) => {
       switch (elementType) {
+        case 'Custom':
+          return 'style.custom';
         case 'Takeover':
           return 'style.takeover';
         case 'Slider':
@@ -97,6 +104,9 @@ export default Ember.Controller.extend({
       switch (routeName) {
         case 'style.modal':
           this.set('model.type', 'Modal');
+          break;
+        case 'style.custom':
+          this.set('model.type', 'Custom');
           break;
         case 'style.slider':
           this.set('model.type', 'Slider');
@@ -129,15 +139,21 @@ export default Ember.Controller.extend({
 
   onElementTypeChanged: (function () {
     let elementType = this.get('model.type');
-    this.get('bus').trigger('hellobar.core.rightPane.show', {
-      componentName: 'theme-tile-grid',
-      componentOptions: { elementType }
-    });
-    /*else {
-     this.get('bus').trigger('hellobar.core.rightPane.hide');
-     }*/
+    if (elementType == 'Custom') {
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
+    } else {
+      this.get('bus').trigger('hellobar.core.rightPane.show', {
+        componentName: 'theme-tile-grid',
+        componentOptions: { elementType }
+      });
+
+     }
     this.get('inlineEditing').initializeInlineEditing(elementType);
   }).observes('model.type'),
+
+  onHtmlChanged: (function () {
+    this.get('applicationController').renderPreview()
+  }).observes('model.settings.url'),
 
 
   //--- Theme change handling moved from design-controller ---
@@ -209,4 +225,3 @@ export default Ember.Controller.extend({
     }
   }
 });
-

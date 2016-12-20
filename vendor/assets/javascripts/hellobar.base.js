@@ -26,7 +26,8 @@ var HBQ = function () {
     "hellobar-bar": "bar",
     "hellobar-modal": "modal",
     "hellobar-slider": "slider",
-    "hellobar-takeover": "takeover"
+    "hellobar-takeover": "takeover",
+    "hellobar-custom": "custom"
   }
 
   // Need to load the serialized cookies
@@ -1191,7 +1192,7 @@ var HB = {
     var results = [];
     // We need to specify the order that elements appear in. Whichever is first
     // in the array is on top
-    var visibilityOrder = ["Modal/Takeover", "Slider", "Bar"];
+    var visibilityOrder = ["Custom","Modal/Takeover", "Slider", "Bar"];
     for (i = 0; i < visibilityOrder.length; i++) {
       var visibleElements = visibilityGroups[visibilityOrder[i]];
       if (visibleElements) {

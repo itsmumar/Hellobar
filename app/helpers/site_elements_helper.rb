@@ -186,7 +186,8 @@ module SiteElementsHelper
     [
       elements["Bar"],
       elements["Slider"],
-      (elements["Modal"] || []) + (elements["Takeover"] || [])
+      (elements["Modal"] || []) + (elements["Takeover"] || []),
+      elements["Custom"]
     ].compact
   end
 
