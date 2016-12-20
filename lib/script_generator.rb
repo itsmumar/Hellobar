@@ -236,6 +236,7 @@ private
       fname = "#{Rails.root}/lib/script_generator/#{type.gsub("/", "_").underscore}.html" unless File.exist?(fname)
     else
       fname = "#{Rails.root}/lib/themes/#{category.to_s.pluralize}/#{type.gsub('_', '-')}/#{element_class}.html"
+      fname = "#{Rails.root}/lib/themes/#{category.to_s.pluralize}/#{type.gsub('_', '-')}/element.html" unless File.exist?(fname)
     end
 
     File.read(fname)
