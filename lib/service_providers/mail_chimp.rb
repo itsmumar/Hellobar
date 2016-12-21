@@ -12,17 +12,27 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
 
     @identity = identity
-    @client = Gibbon::API.new(identity.credentials['token'], :api_endpoint => identity.extra['metadata']['api_endpoint'])
+    @client = Gibbon::Request.new({
+                api_key: identity.credentials['token'],
+                api_endpoint: identity.extra['metadata']['api_endpoint']
+              })
   end
 
   def lists
-    @lists ||= @client.lists.list(:start => 0, :limit => 100)['data']
+    @lists ||= @client.lists.retrieve(params: { offset: 0, count: 100 })['lists']
   rescue Gibbon::MailChimpError => error
     handle_error(error)
   end
 
   def email_exists?(list_id, email)
-    @client.lists.member_info({:id => list_id, :emails => [{:email => email}]})["success_count"] == 1
+    member_id = Digest::MD5.hexdigest(email)
+    !!@client.lists(list_id).members(member_id).retrieve
+  rescue Gibbon::MailChimpError => error
+    if error.status_code == 404
+      false
+    else
+      handle_error(error)
+    end
   end
 
   def subscriber_statuses(list_id, emails)
@@ -42,16 +52,17 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
-    opts = {:id => list_id, :email => {:email => email}, :double_optin => double_optin}
+    opts = { email_address: email }
+    opts[:status] = (double_optin ?  "pending" : "subscribed")
 
     if name.present?
       split = name.split(' ', 2)
-      opts[:merge_vars] = {:NAME => name, :FNAME => split[0], :LNAME => split[1]}
+      opts[:merge_fields] = {:NAME => name, :FNAME => split[0], :LNAME => split[1]}
     end
 
     retry_on_timeout do
       begin
-        @client.lists.subscribe(opts).tap do |result|
+        @client.lists(list_id).members.create(body: opts).tap do |result|
           log result
         end
       rescue Gibbon::MailChimpError => error
