@@ -1,3 +1,5 @@
+require 'queue_worker/queue_worker'
+
 class User < ActiveRecord::Base
   include BillingAuditTrail
   include UserValidator
