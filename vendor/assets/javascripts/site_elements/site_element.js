@@ -249,7 +249,13 @@ HB.SiteElement = HB.createClass({
       var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : window.innerWidth;
       var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
       container.style.width = (newWidth) + "px";
-      container.style.height = (element.clientHeight + 24) + "px";
+      container.style.height = (element.clientHeight + 124) + "px";
+
+      // Increase <iframe> bounds for non-mobile preview (so that Froala editor
+      // controls are visible/usable)
+      if (HB.CAP.preview && HB.previewMode !== "mobile") {
+        container.style.height = (element.clientHeight + 450) + "px";
+      }
     }
   },
 
