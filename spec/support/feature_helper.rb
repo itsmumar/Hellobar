@@ -1,7 +1,6 @@
 include Warden::Test::Helpers
 Warden.test_mode!
 
-
 module FeatureHelper
   def login(user=nil)
     user ||=  create(:user)
