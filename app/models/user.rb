@@ -156,7 +156,7 @@ class User < ActiveRecord::Base
     end
     data = {:FirstName => self.first_name, :LastName => self.last_name, :Email => self.email}
     contact_id = Infusionsoft.contact_add_with_dup_check(data, :Email)
-    Infusionsoft.contact_add_to_group(contact_id, Hellobar::Settings[:hb_infusionsoft_deafult_group])
+    Infusionsoft.contact_add_to_group(contact_id, Hellobar::Settings[:hb_infusionsoft_default_group])
   end
 
   def onboarding_status_setter
