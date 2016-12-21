@@ -56,7 +56,7 @@ unless defined?(Hellobar::Settings)
     rotp_secret_key_base
     hb_infusionsoft_url
     hb_infusionsoft_key
-    hb_infusionsoft_deafult_group
+    hb_infusionsoft_default_group
   )
 
   keys.each do |key|
