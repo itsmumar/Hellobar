@@ -36,3 +36,6 @@ sentry_dsn: sentry-dsn-endpoint
 support_location: "http://support.hellobar.com/"
 maropost_url: "http://api.maropost.com/"
 fake_data_api: true
+hb_infusionsoft_key: 7428f50b4c59218cdff564229dfa541b
+hb_infusionsoft_url: xl349.infusionsoft.com
+hb_infusionsoft_default_group: 103

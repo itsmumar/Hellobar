@@ -8,14 +8,10 @@ set :deploy_to, "/mnt/deploy"
 set :linked_files, %w{config/database.yml config/secrets.yml config/settings.yml config/application.yml}
 set :linked_dirs, %w{log tmp/pids}
 set :rails_env, "production"
-set :ssh_options, { :forward_agent => true }
+set :ssh_options, { forward_agent: true }
 set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 set :whenever_roles, %w(app db web)
 set :keep_releases, 50
-
-set :ssh_options, {
-  forward_agent: true
-}
 
 # Using `lambda` for lazy assigment. http://stackoverflow.com/a/25850619/1047207
 set :ember_app_path, lambda { "#{release_path}/editor" }
@@ -125,6 +121,7 @@ namespace :deploy do
   before 'assets:precompile', 'ember:build'
   after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
 
+  after :publishing, :tag_release
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
 
@@ -163,6 +160,16 @@ namespace :deploy do
   task :start_nginx_maintenance do
     on roles(:web) do
       execute "sudo nginx -c /mnt/deploy/current/config/nginx/maintenance.conf"
+    end
+  end
+
+  task :tag_release do
+    run_locally do
+      stage = fetch :stage
+      current_revision = fetch :current_revision
+
+      strategy.git "branch -f #{ stage } #{ current_revision }"
+      strategy.git "push -f origin #{ stage }"
     end
   end
 end

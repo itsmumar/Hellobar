@@ -26,8 +26,8 @@ test:
         parallel: true
         files:
           - spec/**/*_spec.rb
-  # post:
-  #   - RAILS_ENV=test SUITE=default bundle exec rake teaspoon
+  post:
+    - RAILS_ENV=test SUITE=default bundle exec rake teaspoon
 
 deployment:
   designqa:

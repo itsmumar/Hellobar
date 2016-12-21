@@ -43,6 +43,7 @@ export default Ember.Controller.extend({
       if (newRouteName) {
         this.transitionToRoute(newRouteName);
       } else {
+        $.ajax({ method: "POST", url: `/sites/${siteID}/track_selected_goal` });
         this.set('goalSelectionInProgress', true);
       }
     } else {

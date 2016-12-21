@@ -22,7 +22,8 @@ feature "User onboarding statuses get updated as they select a goal for their fi
     User.any_instance.stub(:onboarding_status_setter) {onboarding_status_setter}
     expect(goals.size > 1).to be_true
 
-    expect(onboarding_status_setter).to receive(:selected_goal!).exactly(goals.size).times
+    # As "Others" is not a goal actually, avoid tracking expectation for "Others" goal.
+    expect(onboarding_status_setter).to receive(:selected_goal!).exactly(goals.size - 1).times
     click_through_all_goal_interstitial_options
     visit site_path user.sites.first
   end

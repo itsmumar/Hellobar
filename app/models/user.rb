@@ -1,14 +1,21 @@
+require 'queue_worker/queue_worker'
+
 class User < ActiveRecord::Base
   include BillingAuditTrail
   include UserValidator
   include ReferralTokenizable
+  include QueueWorker::Delay
 
   # rubocop:disable Style/SingleSpaceBeforeFirstArg
   after_initialize  :check_if_temporary
   before_save       :clear_invite_token
   after_save        :disconnect_oauth, if: :is_oauth_user?
   after_save        :track_temporary_status_change
-  after_create      :add_to_onboarding_campaign
+
+  after_create :add_to_onboarding_campaign
+  after_create :add_to_infusionsoft_in_background
+
+
   before_destroy    :destroy_orphan_sites_before_active_record_association_callbacks
   # rubocop:enable Style/SingleSpaceBeforeFirstArg
 
@@ -136,6 +143,20 @@ class User < ActiveRecord::Base
 
   def has_paying_subscription?
     subscriptions.active.any?{|subscription| subscription.capabilities.acts_as_paid_subscription? }
+  end
+
+  def add_to_infusionsoft_in_background
+    delay :add_to_infusionsoft
+  end
+
+  def add_to_infusionsoft
+    Infusionsoft.configure do |config|
+      config.api_url = Hellobar::Settings[:hb_infusionsoft_url]
+      config.api_key = Hellobar::Settings[:hb_infusionsoft_key]
+    end
+    data = {:FirstName => self.first_name, :LastName => self.last_name, :Email => self.email}
+    contact_id = Infusionsoft.contact_add_with_dup_check(data, :Email)
+    Infusionsoft.contact_add_to_group(contact_id, Hellobar::Settings[:hb_infusionsoft_default_group])
   end
 
   def onboarding_status_setter
