@@ -11,8 +11,6 @@ gem "aweber",                    "~> 1.6.1"
 gem "aws-sdk",                   "~> 1.66.0"
 gem "bootstrap-sass",            "~> 3.1.1"
 gem "bourbon",                   "~> 3.2.0"
-
-
 gem "coffee-rails",              "~> 4.0.0"
 gem "constantcontact",           "~> 1.1.2"
 gem "country_select",            github: 'stefanpenner/country_select', ref: '79755038ca61dafdfebf4c55346d4a2085f98479'
@@ -108,7 +106,7 @@ end
 group :development, :test do
   gem "byebug"
   gem "capybara"
-  gem "capybara-webkit"
+  gem "capybara-webkit", '~> 1.11.1'
   gem 'selenium-webdriver', '~> 2.53.4' # Ubuntu firefox compatible version: 47.0.1
   gem "factory_girl_rails"
   gem "faker"
