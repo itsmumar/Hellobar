@@ -1,4 +1,11 @@
-## Customize deployment commands
+# CircleCI configuration
+general:
+  branches:
+    ignore:
+      - staging
+      - edge
+      - production
+
 database:
   override:
     - mkdir -p config
