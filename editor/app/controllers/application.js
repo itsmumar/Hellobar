@@ -109,8 +109,11 @@ export default Ember.Controller.extend({
     "model.use_question",
     "model.view_condition",
     "model.wiggle_button",
+    "model.custom_html",
+    "model.custom_css",
     "isFullscreen",
     "isMobile"
+
   ).on("init"),
 
   renderPreviewWithAnimations: ( function () {

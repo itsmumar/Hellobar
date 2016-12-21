@@ -322,6 +322,8 @@ private
       contact_list_id: site_element.contact_list_id,
       conversion_rate: conversion_rate,
       conversions: conversions,
+      custom_html: site_element.custom_html,
+      custom_css: site_element.custom_css,
       email_redirect: site_element.after_email_submit_action == :redirect,
       hide_destination: true,
       id: site_element.id,
