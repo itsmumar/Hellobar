@@ -637,3 +637,12 @@ body .fr-popup .fr-color-set .fr-command > span.fr-sr-only {
 .french-rose .inline-image-management-pane.image-loaded a[data-action="edit-image"] {
   display: inline-block;
 }
+
+/*-----------  Froala Content Styles  -----------*/
+a.fr-strong {
+  font-weight: 700;
+}
+
+a.fr-green {
+  color: green;
+}
