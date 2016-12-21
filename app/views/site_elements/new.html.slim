@@ -10,4 +10,4 @@ javascript:
 
 - unless params[:element_to_copy_id].blank?
   javascript:
-    window.elementToCopyID = #{params[:element_to_copy_id]}
+    window.elementToCopyID = #{params[:element_to_copy_id].to_i}
