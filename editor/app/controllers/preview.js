@@ -21,6 +21,8 @@ export default Ember.Controller.extend({
   barSize: Ember.computed.alias('model.size'),
   barPosition: Ember.computed.alias('model.placement'),
   elementType: Ember.computed.alias('model.type'),
+  isCustom: Ember.computed.equal('model.type', 'Custom'),
+
 
   previewStyleString: ( function () {
     if (this.get('isMobile')) {
