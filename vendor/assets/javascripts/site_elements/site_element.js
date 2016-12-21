@@ -60,6 +60,7 @@ HB.SiteElement = HB.createClass({
     }
 
     function generateHtml() {
+
       var template = '';
       // TODO now theme id for new template is hard-coded. We need good and flexible solution for the future
       if (that.theme_id === 'traffic-growth') {
@@ -68,18 +69,30 @@ HB.SiteElement = HB.createClass({
         template = HB.getTemplate(that);
       }
       // Replace all the template variables
+    //  if (that.type === 'Cssdustom') {
+       //this is dumb
+    //   return that.custom_html.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, "\"");
+    //  } else {
       return HB.renderTemplate(template, that);
+    //  }
     }
 
     var html = generateHtml();
     // Once the dom is ready we inject the html returned from renderTemplate
     HB.domReady(function () {
+
       // Set an arbitrary timeout to prevent some rendering
       // conflicts with certain sites
       setTimeout(function () {
         this.injectSiteElementHTML(html);
         this.setIosKeyboardHandlers();
         this.setPullDown();
+        if (this.type === 'Custom') {
+          //html = this.custom_html.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, "\"");
+          //jquery decoding
+          decoded_html = $("<div />").html(this.custom_html).text();
+          $(this.w).contents().find('#custom-html').html(decoded_html);
+        }
 
         // Monitor zoom scale events
         this.hideOnZoom();
