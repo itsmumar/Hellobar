@@ -690,3 +690,14 @@ $ctaColor: $defaultColor;
     margin-top: 0;
   }
 }
+
+#hellobar-template.website-checklist.thank-you {
+  .headline-first,
+  .headline-second,
+  .headline-third,
+  .caption,
+  .cta,
+  .reject-link {
+    max-height: none !important;
+  }
+}

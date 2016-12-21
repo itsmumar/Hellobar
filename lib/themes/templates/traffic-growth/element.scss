@@ -518,3 +518,13 @@ $ctaColor: $headlineColor;
   background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/background-thank-you.jpeg);
 }
 
+#hellobar-template.traffic-growth.thank-you {
+  .headline-first,
+  .headline-second,
+  .headline-third,
+  .caption,
+  .cta,
+  .reject-link {
+    max-height: none !important;
+  }
+}

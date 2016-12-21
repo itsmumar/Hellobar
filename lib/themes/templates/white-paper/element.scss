@@ -532,3 +532,14 @@ $ctaColor: $defaultColor;
     margin-top: 0;
   }
 }
+
+#hellobar-template.white-paper.thank-you {
+  .headline-first,
+  .headline-second,
+  .headline-third,
+  .caption,
+  .cta,
+  .reject-link {
+    max-height: none !important;
+  }
+}
