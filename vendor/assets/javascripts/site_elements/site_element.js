@@ -689,14 +689,19 @@ HB.SiteElement = HB.createClass({
       hb.submitEmail(this,
         this.w.contentDocument.getElementById('hb-fields-form'),
         null, null, this.email_redirect,
-        hb.stringLiteral(this.settings.redirect_url), 'thank-you');
+        this.settings.redirect_url, 'thank-you');
       return false;
     }
   },
 
   thankYouMessage: function() {
-    var text = this.thank_you_text || 'Thank you for signing up!';
-    return (text && text.indexOf('\'') === 0) ? text.substring(1, text.length - 1) : text;
+    return this.unquotedValue('thank_you_text', 'Thank you for signing up!');
+  },
+
+  unquotedValue: function(propertyName, defaultValue) {
+    var value = this[propertyName] || defaultValue;
+    return (value && value.indexOf('\'') === 0) ? value.substring(1, value.length - 1) : value;
   }
+
 
 });
