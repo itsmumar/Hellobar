@@ -692,6 +692,11 @@ HB.SiteElement = HB.createClass({
         hb.stringLiteral(this.settings.redirect_url), 'thank-you');
       return false;
     }
+  },
+
+  thankYouMessage: function() {
+    var text = this.thank_you_text || 'Thank you for signing up!';
+    return (text && text.indexOf('\'') === 0) ? text.substring(1, text.length - 1) : text;
   }
 
 });
