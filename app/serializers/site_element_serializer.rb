@@ -23,7 +23,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :question_placeholder, :answer1_placeholder, :answer2_placeholder, :answer1response_placeholder, :answer2response_placeholder, :answer1link_text_placeholder, :answer2link_text_placeholder,
 
     #custom
-    :custom_html, :custom_css,
+    :custom_html, :custom_css, :custom_js,
 
     # other
     :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile,

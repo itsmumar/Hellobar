@@ -111,6 +111,7 @@ export default Ember.Controller.extend({
     "model.wiggle_button",
     "model.custom_html",
     "model.custom_css",
+    "model.custom_js",
     "isFullscreen",
     "isMobile"
 

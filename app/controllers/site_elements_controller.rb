@@ -166,6 +166,7 @@ class SiteElementsController < ApplicationController
       :use_default_image,
       :custom_html,
       :custom_css,
+      :custom_js,
       {settings: settings_keys},
       {blocks: blocks_keys}
     )

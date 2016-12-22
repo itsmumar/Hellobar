@@ -90,8 +90,8 @@ HB.SiteElement = HB.createClass({
         if (this.type === 'Custom') {
           //html = this.custom_html.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, "\"");
           //jquery decoding
-          decoded_html = $("<div />").html(this.custom_html).text();
-          $(this.w).contents().find('#custom-html').html(decoded_html);
+          //decoded_html = $("<div />").html(this.custom_html).text();
+          //$(this.w).contents().find('#custom-html').html(decoded_html);
         }
 
         // Monitor zoom scale events

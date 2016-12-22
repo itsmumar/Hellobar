@@ -324,6 +324,7 @@ private
       conversions: conversions,
       custom_html: site_element.custom_html,
       custom_css: site_element.custom_css,
+      custom_js: site_element.custom_js,
       email_redirect: site_element.after_email_submit_action == :redirect,
       hide_destination: true,
       id: site_element.id,

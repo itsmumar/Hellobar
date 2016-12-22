@@ -328,6 +328,7 @@ ActiveRecord::Schema.define(version: 20161221033100) do
     t.text     "blocks"
     t.text     "custom_html"
     t.text     "custom_css"
+    t.text     "custom_js"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
