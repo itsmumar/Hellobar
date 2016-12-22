@@ -38,6 +38,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   def subscriber_statuses(list_id, emails)
     {}.tap do |result|
       emails.each { |e| result[e] = nil }
+      # @client.lists(list_id).members.retrieve(params: {count: 100})
 
       emails.each_slice(50) do |email_group|
         email_arr = email_group.map { |x| {email: x} }
@@ -52,13 +53,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
-    opts = { email_address: email }
-    opts[:status] = (double_optin ?  "pending" : "subscribed")
-
-    if name.present?
-      split = name.split(' ', 2)
-      opts[:merge_fields] = {:NAME => name, :FNAME => split[0], :LNAME => split[1]}
-    end
+    opts = hashify_options(email, name, double_optin)
 
     retry_on_timeout do
       begin
@@ -73,19 +68,37 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
   def batch_subscribe(list_id, subscribers, double_optin = true)
-    log "Sending #{subscribers.size} emails to remote service."
+    log "Queuing #{subscribers.size} emails to remote service."
 
-    batch = subscribers.map do |subscriber|
-      {:EMAIL => {:email => subscriber[:email]}}.tap do |entry|
-        if subscriber[:name]
-          split = subscriber[:name].split(' ', 2)
-          entry[:merge_vars] = {:NAME => subscriber[:name], :FNAME => split[0], :LNAME => split[1], :CREATEDAT => subscriber[:created_at]}
-        end
-      end
+    bodies = subscribers.map do |subscriber|
+      hashify_options(subscriber[:email], subscriber[:name], double_optin)
     end
 
-    @client.lists.batch_subscribe({:id => list_id, :batch => batch, :double_optin => double_optin}).tap do |result|
-      log handle_result(result)
+    operations = bodies.map do |body|
+                   {
+                     method: "POST",
+                     path: "lists/#{list_id}/members",
+                     body: body.to_json
+                   }
+                 end
+
+    retry_on_timeout do
+      batch_id = @client.batches.create(body: { operations: operations })["id"]
+      repeat_index = 1
+      batch_response = nil
+
+      loop do
+        sleep(10 * repeat_index)
+
+        puts "Checking batch job status #{repeat_index.ordinalize} time..."
+        batch_response = @client.batches(batch_id).retrieve
+        break if batch_response['status'] == 'finished'
+        repeat_index += 1
+      end
+
+      batch_response.tap do |result|
+        log handle_result(result)
+      end
     end
   end
 
@@ -116,7 +129,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   end
 
   def handle_error(error)
-    case error.code
+    case error.status_code
     when 250
       catch_required_merge_var_error!(error)
     when 104, 200, 101 #Invalid_ApiKey, Invalid List, Deactivated Account
@@ -148,6 +161,18 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   end
 
   private
+
+  def hashify_options(email, name, double_optin)
+    opts = { email_address: email }
+    opts[:status] = (double_optin ?  "pending" : "subscribed")
+
+    if name.present?
+      split = name.split(' ', 2)
+      opts[:merge_fields] = {:FNAME => split[0], :LNAME => split[1] || ""}
+    end
+
+    opts
+  end
 
   def catch_required_merge_var_error!(error)
     # pause identity by deleting it
