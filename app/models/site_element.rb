@@ -32,11 +32,11 @@ class SiteElement < ActiveRecord::Base
     "question"                        => "Question",
 
     # themes type `template`
-    "coupon_code"                     => "Clicks",
-    "report"                          => "Clicks",
+    #"coupon_code"                     => "Clicks",
+    #"report"                          => "Clicks",
     "traffic_growth"                  => "Clicks",
-    "website_checklist"               => "Clicks",
-    "white_paper"                     => "Clicks"
+    #"website_checklist"               => "Clicks",
+    #"white_paper"                     => "Clicks"
   }
 
   TEMPLATE_NAMES = %w(coupon_code report traffic_growth website_checklist white_paper)
