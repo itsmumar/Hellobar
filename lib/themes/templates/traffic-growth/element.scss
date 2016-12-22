@@ -212,6 +212,117 @@ $ctaColor: $headlineColor;
 
 }
 
+
+@media screen and (max-width: 768px) {
+  #hellobar-template.traffic-growth.modal {
+    width: 375px;
+    height: 165px;
+    padding: 25px 30px 0 30px;
+    //background-image: url(../assets/modal-background-mobile.jpg);
+    // TODO uncomment
+    //background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/modal-background-mobile.jpg);
+    background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/slider-background.jpg);
+
+    .button-close {
+      top: 16px;
+      right: 16px;
+      width: 12px;
+      height: 12px;
+    }
+
+    .text-content-block:after {
+      clear: both;
+      display: block;
+      content: '';
+    }
+
+    .text-content-block {
+      margin-bottom: 12px;
+    }
+
+    .headline {
+      float: left;
+      width: 115px;
+
+    }
+
+    .headline-first {
+      font-size: 12px;
+      line-height: 14px;
+      margin-bottom: 0;
+      white-space: normal;
+      max-height: 28px;
+    }
+
+    .headline-second {
+      font-size: 36px;
+      letter-spacing: -1px;
+      line-height: 34px;
+      margin-bottom: 2px;
+      max-height: 34px;
+    }
+
+    .headline-third {
+      font-size: 10px;
+      line-height: 10px;
+      max-height: 10px;
+    }
+
+    .caption {
+      margin-left: 120px;
+      padding: 20px 0 0 0;
+      font-size: 11px;
+      max-height: 62px;
+    }
+
+    .form-block {
+      background: none;
+      margin-bottom: 10px;
+      max-height: 33px;
+    }
+
+    .builtin-email {
+      display: inline-block;
+      background-color: #193247;
+      border-radius: 3px;
+      width: 195px;
+      margin: 0;
+      input {
+        display: inline-block;
+        position: static;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        font-size: 9px;
+        padding: 11px;
+      }
+    }
+
+    .cta {
+      display: inline-block;
+      border-radius: 3px;
+      background-color: $ctaColor;
+      font-size: 11px;
+      color: white;
+      padding: 9px 4px;
+      position: relative;
+      top: 1px;
+      width: auto;
+    }
+
+    .reject-link {
+      display: none;
+    }
+
+    .hb-logo {
+      display: none;
+    }
+
+  }
+}
+
+
 ::-webkit-input-placeholder {
   color: #6d849c;
 }
@@ -265,13 +376,13 @@ $ctaColor: $headlineColor;
     height: 12px;
   }
 
-  .upper-block:after {
+  .text-content-block:after {
     clear: both;
     display: block;
     content: '';
   }
 
-  .upper-block {
+  .text-content-block {
     margin-bottom: 30px;
   }
 
@@ -292,8 +403,8 @@ $ctaColor: $headlineColor;
     font-size: 36px;
     letter-spacing: -1px;
     line-height: 34px;
-    max-height: 34px;
     margin-bottom: 2px;
+    max-height: 34px;
     // font-weight: 800;
   }
 
