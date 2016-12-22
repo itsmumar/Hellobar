@@ -2,9 +2,4 @@
 {{siteElement.custom_css}}
 </style>
 
-<div>{{siteElement.custom_html.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, "\"");}}</div>
-
-<script>
-  var hbInstance = {{siteElement.me}}
-  {{siteElement.custom_js}}
-</script>
+<div>{{siteElement.custom_html.replace(/&amp;/g, '&').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&quot;/g, '\'');}}</div>
