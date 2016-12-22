@@ -168,6 +168,7 @@ namespace :deploy do
       stage = fetch :stage
       current_revision = fetch :current_revision
 
+      strategy.git "remote update"
       strategy.git "branch -f #{ stage } #{ current_revision }"
       strategy.git "push -f origin #{ stage }"
     end
