@@ -1,6 +1,0 @@
-{
-  "id": "coupon-code",
-  "type": "template",
-  "element_types": ["Modal", "Slider", "Takeover"],
-  "name": "Coupon Code"
-}
