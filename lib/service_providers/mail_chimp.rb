@@ -19,7 +19,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   end
 
   def lists
-    @lists ||= @client.lists.retrieve(params: { offset: 0, count: 100 })['lists']
+    @lists ||= @client.lists.retrieve(params: { count: 100 })['lists']
   rescue Gibbon::MailChimpError => error
     handle_error(error)
   end
@@ -35,22 +35,23 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
   end
 
-  def subscriber_statuses(list_id, emails)
-    {}.tap do |result|
-      emails.each { |e| result[e] = nil }
-      # @client.lists(list_id).members.retrieve(params: {count: 100})
-
-      emails.each_slice(50) do |email_group|
-        email_arr = email_group.map { |x| {email: x} }
-        @client.lists.member_info(id: list_id, emails: email_arr)["data"].each do |r|
-          result[r["email"]] = r["status"]
-        end
-      end
-    end
-  rescue => e
-    Rails.logger.warn("#{site.url} - #{e.message}")
-    {}
-  end
+  # TODO: Need to update this method according to API v3
+  # def subscriber_statuses(list_id, emails)
+  #   {}.tap do |result|
+  #     emails.each { |e| result[e] = nil }
+  #     # @client.lists(list_id).members.retrieve(params: {count: 100})
+  #
+  #     emails.each_slice(50) do |email_group|
+  #       email_arr = email_group.map { |x| {email: x} }
+  #       @client.lists.member_info(id: list_id, emails: email_arr)["data"].each do |r|
+  #         result[r["email"]] = r["status"]
+  #       end
+  #     end
+  #   end
+  # rescue => e
+  #   Rails.logger.warn("#{site.url} - #{e.message}")
+  #   {}
+  # end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
     opts = hashify_options(email, name, double_optin)
@@ -83,22 +84,25 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
                  end
 
     retry_on_timeout do
-      batch_id = @client.batches.create(body: { operations: operations })["id"]
-      repeat_index = 1
-      batch_response = nil
-
-      loop do
-        sleep(10 * repeat_index)
-
-        puts "Checking batch job status #{repeat_index.ordinalize} time..."
-        batch_response = @client.batches(batch_id).retrieve
-        break if batch_response['status'] == 'finished'
-        repeat_index += 1
-      end
-
-      batch_response.tap do |result|
-        log handle_result(result)
-      end
+      # It will enqueue batch operation job to mailchimp and will process
+      # in background. We are not bothering about the results as we don't
+      # do anything with that except logging it into logs.
+      @client.batches.create(body: { operations: operations })
+      # repeat_index = 1
+      # batch_response = nil
+      #
+      # loop do
+      #   sleep(10 * repeat_index)
+      #
+      #   puts "Checking batch job status #{repeat_index.ordinalize} time..."
+      #   batch_response = @client.batches(batch_id).retrieve
+      #   break if batch_response['status'] == 'finished'
+      #   repeat_index += 1
+      # end
+      #
+      # batch_response.tap do |result|
+      #   log handle_result(result)
+      # end
     end
   end
 
