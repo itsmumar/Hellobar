@@ -73,7 +73,7 @@ describe  Hello::DataAPI do
       allow(Hello::DataAPI).to receive(:get)
 
       # Weird Rails' cache behaviour, it would not yield the block in spec runs
-      expect(Rails.cache).to receive(:fetch).and_yield
+      allow(Rails.cache).to receive(:fetch).and_yield
 
       expect(Hello::DataAPIHelper::RequestParts).to receive(:get_contacts)
         .with(site_id, id, read_key, limit, 0)
