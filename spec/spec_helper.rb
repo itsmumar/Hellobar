@@ -69,7 +69,7 @@ Capybara::Webkit.configure do |config|
 end
 
 # Wait longer than the default 2 seconds for Ajax requests to finish
-Capybara.default_max_wait_time = ENV['CI'] ? 30 : 10
+Capybara.default_max_wait_time = ENV['CI'] ? 30 : 20
 
 RSpec.configure do |config|
   # Use a separate container for selenium
