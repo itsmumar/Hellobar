@@ -159,8 +159,8 @@ class CustomHtmlModelAdapter {
   handleContentChange(blockId, content) {
     //const model = this.modelHandler.get('model');
     //model.custom_html = content;
-    this.modelHandler.set('model.custom_html', content);
-    console.log('CustomHtmlModelAdapter: custom_html = ', content);
+    const customHtml = html_beautify(content);
+    this.modelHandler.set('model.custom_html', customHtml);
   }
 }
 
