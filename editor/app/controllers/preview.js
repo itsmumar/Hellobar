@@ -171,5 +171,15 @@ export default Ember.Controller.extend({
     this.get('isPushed') && classes.push('is-pushed');
     this.get('isMobile') && classes.push('hellobar-preview-container-mobile');
     return classes.join(' ');
-  }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile')
+  }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile'),
+
+  actions: {
+    changeCustomHtmlCode(source) {
+      this.setProperties({
+        'model.custom_html': source.customHtml || '',
+        'model.custom_css': source.customCss || '',
+        'model.custom_js': source.customJs || ''
+      });
+    }
+  }
 });

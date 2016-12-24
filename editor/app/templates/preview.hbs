@@ -3,18 +3,8 @@
 
 <div class="preview-wrapper">
   {{#if isCustom}}
-  <div  id="container" style="width: 100%; margin: 15px;">
-      <div id="first" style="width: 33.3%; float: left; height: 400px;"><h6>HTML</h6>{{textarea value=model.custom_html style="height:90%" class="code-input" id="custom-html-input"}}</div>
-      <div id="second" style="width: 33.3%; float: left;height: 400px;"><h6>CSS</h6>{{textarea value=model.custom_css style="height:90%" class="code-input" id="custom-css-input"}}</div>
-      <div id="third" style="width: 33.3%; float: left;height: 400px;"><h6>JS</h6>{{textarea value=model.custom_js style="height:90%" class="code-input" id="custom-js-input"}}</div>
-
-      <div id="clear" style="clear: both;"></div>
-  </div>
-
-    <div id="clear" style="clear: both;"></div>
-
-
-
+    {{custom-html/custom-html-editor customHtml=model.custom_html customCss=model.custom_css customJs=model.custom_js
+    action="changeCustomHtmlCode"}}
   {{/if}}
 
   <div class="preview-wrapper" style="background: #f6f6f6 url({{image-path "iphone-bg.png"}})  center center no-repeat">
