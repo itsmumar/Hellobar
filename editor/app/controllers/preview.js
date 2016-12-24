@@ -11,10 +11,6 @@ export default Ember.Controller.extend({
         return this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
       }
     );
-    this.get('inlineEditing').addCustomHtmlChangeListener((customHtml) => {
-      this.get('customHtmlEditor').set('customHtml', customHtml);
-    });
-
   },
 
   //-----------  Template Properties  -----------#
@@ -176,17 +172,4 @@ export default Ember.Controller.extend({
     return classes.join(' ');
   }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile'),
 
-  actions: {
-    changeCustomHtmlCode(source) {
-      this.setProperties({
-        'model.custom_html': source.customHtml || '',
-        'model.custom_css': source.customCss || '',
-        'model.custom_js': source.customJs || ''
-      });
-    },
-
-    customHtmlEditorInitialized(component) {
-      this.set('customHtmlEditor', component);
-    }
-  }
 });

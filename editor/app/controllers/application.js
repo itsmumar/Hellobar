@@ -51,7 +51,11 @@ export default Ember.Controller.extend({
   // Render the element in the preview pane whenever style-affecting attributes change
 
   renderPreview: ( function () {
-    return Ember.run.debounce(this, this.doRenderPreview, 500);
+    if (this.shouldSkipPreviewUpdate) {
+      this.shouldSkipPreviewUpdate = false;
+    } else {
+      return Ember.run.debounce(this, this.doRenderPreview, 500);
+    }
   }).observes(
     "model.answer1",
     "model.answer1caption",
@@ -153,6 +157,12 @@ export default Ember.Controller.extend({
       HB.addToPage(HB.createSiteElement(previewElement));
     }
     HB.isMobileWidth = "changed";
+  },
+
+  shouldSkipPreviewUpdate: false,
+
+  requestPreviewUpdateSkipping() {
+    this.shouldSkipPreviewUpdate = true;
   },
 
 

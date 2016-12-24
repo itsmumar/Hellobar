@@ -6,12 +6,6 @@ import Ember from 'ember';
  */
 export default Ember.Component.extend({
 
-  didInsertElement() {
-    Ember.run.next(() => {
-      this.sendAction('onInitialized', this);
-    });
-  },
-
   classNames: ['custom-html-editor'],
 
   /**

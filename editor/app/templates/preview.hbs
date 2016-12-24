@@ -5,7 +5,6 @@
   {{#if isCustom}}
     {{custom-html/custom-html-editor
       customHtml=model.custom_html customCss=model.custom_css customJs=model.custom_js
-      onInitialized=(action "customHtmlEditorInitialized")
       action="changeCustomHtmlCode"}}
   {{/if}}
 

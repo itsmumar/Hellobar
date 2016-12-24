@@ -161,8 +161,8 @@ class CustomHtmlModelAdapter {
 
   handleContentChange(blockId, content) {
     const customHtml = html_beautify(content);
-    const model = this.modelHandler.get('model');
-    model.custom_html = customHtml;
+    this.modelHandler.requestPreviewUpdateSkipping();
+    this.modelHandler.set('model.custom_html', customHtml);
     this.service.customHtmlChangeListeners.forEach((listener) => listener(customHtml));
   }
 }
