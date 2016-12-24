@@ -1,3 +1,5 @@
+require 'rubygems/package'
+
 class ServiceProviders::MailChimp < ServiceProviders::Email
   include ActionView::Helpers::SanitizeHelper
 
@@ -35,23 +37,55 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
   end
 
-  # TODO: Need to update this method according to API v3
-  # def subscriber_statuses(list_id, emails)
-  #   {}.tap do |result|
-  #     emails.each { |e| result[e] = nil }
-  #     # @client.lists(list_id).members.retrieve(params: {count: 100})
-  #
-  #     emails.each_slice(50) do |email_group|
-  #       email_arr = email_group.map { |x| {email: x} }
-  #       @client.lists.member_info(id: list_id, emails: email_arr)["data"].each do |r|
-  #         result[r["email"]] = r["status"]
-  #       end
-  #     end
-  #   end
-  # rescue => e
-  #   Rails.logger.warn("#{site.url} - #{e.message}")
-  #   {}
-  # end
+  # TODO: Need to improve the performance of this method.
+  # MailChimp API v3 doesn't provide any single API to fetch multiple members
+  # by their emails
+  def subscriber_statuses(list_id, emails)
+    result = {}
+    batch_response = nil
+    repeat_index = 1
+    batch_id = nil
+    temp_file = 'tarball.tar.gz'
+    operations = emails.map do |email|
+                   {
+                     method: "GET",
+                     path: "lists/#{list_id}/members/#{Digest::MD5.hexdigest(email)}"
+                   }
+                 end
+
+    retry_on_timeout do
+      batch_id = @client.batches.create(body: { operations: operations })['id']
+    end
+
+    # BAD BAD BAD way of doing this in API v3
+    loop do
+      sleep(10 * repeat_index)
+
+      puts "Checking batch job status #{repeat_index.ordinalize} time..."
+      batch_response = @client.batches(batch_id).retrieve
+      break if batch_response['status'] == 'finished'
+      repeat_index += 1
+    end
+
+    response_body_url = batch_response['response_body_url']
+    open(temp_file, 'wb') { |f| f.write(open(response_body_url).read) }
+    gz = Zlib::GzipReader.open(File.join(Rails.root, temp_file))
+    uncompressed = Gem::Package::TarReader.new(gz)
+    responses = uncompressed.map(&:read)
+    responses.delete(nil)
+
+    responses.each do |response|
+      response = JSON.parse(response)
+      next unless response.present?
+      response = JSON.parse(response[0]['response'])
+      result[response['email_address']] = response['status']
+    end
+
+    result
+  rescue => e
+    Rails.logger.warn("#{site.url} - #{e.message}")
+    {}
+  end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
     opts = hashify_options(email, name, double_optin)
