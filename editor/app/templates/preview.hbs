@@ -3,8 +3,10 @@
 
 <div class="preview-wrapper">
   {{#if isCustom}}
-    {{custom-html/custom-html-editor customHtml=model.custom_html customCss=model.custom_css customJs=model.custom_js
-    action="changeCustomHtmlCode"}}
+    {{custom-html/custom-html-editor
+      customHtml=model.custom_html customCss=model.custom_css customJs=model.custom_js
+      onInitialized=(action "customHtmlEditorInitialized")
+      action="changeCustomHtmlCode"}}
   {{/if}}
 
   <div class="preview-wrapper" style="background: #f6f6f6 url({{image-path "iphone-bg.png"}})  center center no-repeat">

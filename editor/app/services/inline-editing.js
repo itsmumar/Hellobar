@@ -85,7 +85,7 @@ class SimpleModelAdapter {
         fieldToChange.label = content;
         this.modelHandler.notifyPropertyChange('model.settings.fields_to_collect');
         if (this.service.fieldChangeListeners) {
-          return this.service.fieldChangeListeners.forEach(listener => listener.notifyPropertyChange('model.settings.fields_to_collect'));
+          return this.service.fieldChangeListeners.forEach(listener => listener(fieldToChange, content));
         }
       }
     } else {
@@ -157,10 +157,10 @@ class CustomHtmlModelAdapter {
   }
 
   handleContentChange(blockId, content) {
-    //const model = this.modelHandler.get('model');
-    //model.custom_html = content;
     const customHtml = html_beautify(content);
-    this.modelHandler.set('model.custom_html', customHtml);
+    const model = this.modelHandler.get('model');
+    model.custom_html = customHtml;
+    this.service.customHtmlChangeListeners.forEach((listener) => listener(customHtml));
   }
 }
 
@@ -224,6 +224,7 @@ export default Ember.Service.extend({
   customHtmlModelAdapter: null,
 
   fieldChangeListeners: [],
+  customHtmlChangeListeners: [],
 
   $currentFroalaInstances: null,
   $currentInputInstances: null,
@@ -283,7 +284,11 @@ export default Ember.Service.extend({
   },
 
   addFieldChangeListener(listener) {
-    return this.fieldChangeListeners.push(listener);
+    this.fieldChangeListeners.push(listener);
+  },
+
+  addCustomHtmlChangeListener(listener) {
+    this.customHtmlChangeListeners.push(listener);
   },
 
   initializeInlineEditing(elementType) {
