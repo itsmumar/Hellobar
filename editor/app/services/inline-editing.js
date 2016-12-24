@@ -5,6 +5,9 @@ import defaultBlocks from './inline-editing.blocks';
 // Froala Editor license key
 const froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
 
+/**
+ * Simple model adapter that performs basic inline editing data management
+ */
 class SimpleModelAdapter {
 
   constructor(modelHandler, service) {
