@@ -148,6 +148,23 @@ class BlockBasedModelAdapter {
 }
 
 /**
+ * Model adapter that provides inline editing support for Custom HTML elements
+ */
+class CustomHtmlModelAdapter {
+  constructor(modelHandler, service) {
+    this.modelHandler = modelHandler;
+    this.service = service;
+  }
+
+  handleContentChange(blockId, content) {
+    //const model = this.modelHandler.get('model');
+    //model.custom_html = content;
+    this.modelHandler.set('model.custom_html', content);
+    console.log('CustomHtmlModelAdapter: custom_html = ', content);
+  }
+}
+
+/**
  * @deprecated
  */
 class InlineImageManagementPane {
@@ -204,6 +221,7 @@ export default Ember.Service.extend({
   modelHandler: null,
   simpleModelAdapter: null,
   blockBasedModelAdapter: null,
+  customHtmlModelAdapter: null,
 
   fieldChangeListeners: [],
 
@@ -256,9 +274,11 @@ export default Ember.Service.extend({
     if (modelHandler) {
       this.simpleModelAdapter = new SimpleModelAdapter(modelHandler, this);
       this.blockBasedModelAdapter = new BlockBasedModelAdapter(modelHandler, this);
+      this.customHtmlModelAdapter = new CustomHtmlModelAdapter(modelHandler, this);
     } else {
       this.simpleModelAdapter = null;
       this.blockBasedModelAdapter = null;
+      this.customHtmlModelAdapter = null;
     }
   },
 
@@ -443,7 +463,9 @@ export default Ember.Service.extend({
 
 
   handleContentChange(blockId, content) {
-    if (blockId && _.startsWith(blockId, 'blocks.')) {
+    if (blockId === 'custom_html') {
+      this.customHtmlModelAdapter && this.customHtmlModelAdapter.handleContentChange(blockId, content);
+    } else if (blockId && _.startsWith(blockId, 'blocks.')) {
       this.blockBasedModelAdapter && this.blockBasedModelAdapter.handleContentChange(blockId, content);
     } else {
       this.simpleModelAdapter && this.simpleModelAdapter.handleContentChange(blockId, content);
