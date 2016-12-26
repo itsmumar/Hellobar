@@ -3,7 +3,6 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 
   applicationController: Ember.inject.controller('application'),
-
   inlineEditing: Ember.inject.service(),
 
   init() {
@@ -171,5 +170,6 @@ export default Ember.Controller.extend({
     this.get('isPushed') && classes.push('is-pushed');
     this.get('isMobile') && classes.push('hellobar-preview-container-mobile');
     return classes.join(' ');
-  }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile')
+  }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile'),
+
 });
