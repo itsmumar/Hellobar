@@ -307,7 +307,7 @@ class Subscription < ActiveRecord::Base
   class ProManaged < Pro
     class Capabilities < Pro::Capabilities
       def custom_html?
-        false
+        true
       end
     end
     class << self
