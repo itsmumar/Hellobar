@@ -121,7 +121,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rspec_junit_formatter', '~> 0.2.2'
+  gem 'rspec_junit_formatter'
   gem "database_cleaner", '~> 1.3'
   gem "fivemat"
   gem "timecop"

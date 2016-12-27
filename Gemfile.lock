@@ -724,7 +724,7 @@ DEPENDENCIES
   rotp
   rqrcode
   rspec-rails (~> 2.14)
-  rspec_junit_formatter (~> 0.2.2)
+  rspec_junit_formatter
   rubocop (~> 0.34.2)
   ruby-hmac
   rubyzip (>= 1.0.0)
