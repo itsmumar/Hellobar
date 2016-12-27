@@ -44,11 +44,17 @@ export default Ember.Controller.extend({
   currentTheme: Ember.computed.alias('applicationController.currentTheme'),
   currentThemeName: Ember.computed.alias('applicationController.currentThemeName'),
 
+
+
   _shouldShowThemeInfoForElementType(elementType) {
     return this.get('model.type') === elementType
       && !this.get('themeSelectionInProgress')
       && !this.get('elementTypeSelectionInProgress');
   },
+
+  canUseCustomHtml:  function () {
+    return this.get('model.site.capabilities.custom_html') === true;
+  }.property('model.site.capabilities.custom_html'),
 
   shouldShowBarThemeInfo: function() {
     return this._shouldShowThemeInfoForElementType('Bar');
