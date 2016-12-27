@@ -130,16 +130,17 @@ export default Ember.Controller.extend({
       }
     };
 
-    let property = cssProperty();
+    const property = cssProperty();
+    const css = {
+      'border-top-width': '0',
+      'border-bottom-width': '0'
+    };
     if (property) {
-      let css = {
-        'border-top-width': '0',
-        'border-bottom-width': '0'
-      };
-      let pushHeight = this.get('model.pushes_page_down') ? height(this.get('model.size')) : '0';
+      const pushHeight = (this.get('model.type') === 'Bar' && this.get('model.pushes_page_down')) ? height(this.get('model.size')) : '0';
       css[property] = pushHeight;
-      return $('#hellobar-preview-container .preview-image').css(css);
     }
+    return $('#hellobar-preview-container .preview-image').css(css);
+
   },
 
   // TODO decide when we need to call this method
