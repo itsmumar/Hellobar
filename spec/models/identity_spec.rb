@@ -24,7 +24,7 @@ describe Identity do
     end
 
     it "uses the provider name to get the API client class" do
-      Gibbon::API.stubs(:new => double("gibbon"))
+      Gibbon::Request.stubs(:new => double("gibbon"))
 
       identity = Identity.new(:provider => "mailchimp", :extra => {"metadata" => {}}, :credentials => {})
       identity.service_provider.should be_an_instance_of ServiceProviders::MailChimp
@@ -35,7 +35,7 @@ describe Identity do
 
     describe "service provider" do
       it "should call destroy_and_notify_user when it encounters an error" do
-        Gibbon::API.stubs(:new => double("gibbon"))
+        Gibbon::Request.stubs(:new => double("gibbon"))
 
         identity = Identity.new(:provider => "mailchimp", :extra => {"metadata" => {}}, :credentials => {})
         ServiceProviders::MailChimp.should_receive(:new).and_raise(Gibbon::MailChimpError)
