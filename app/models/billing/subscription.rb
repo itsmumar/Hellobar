@@ -263,6 +263,9 @@ class Subscription < ActiveRecord::Base
       def num_days_improve_data
         365
       end
+      def custom_html?
+        false
+      end
     end
 
     class << self
@@ -294,6 +297,27 @@ class Subscription < ActiveRecord::Base
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: 250_000, # after this many visits in a month
+          # visit_overage_amount: 25_000, # every X visitors
+          visit_overage_amount: 0.0 # $$$
+        }
+      end
+    end
+  end
+
+  class ProManaged < Pro
+    class Capabilities < Pro::Capabilities
+      def custom_html?
+        false
+      end
+    end
+    class << self
+
+      def defaults
+        {
+          name: "Pro Managed",
+          monthly_amount: 0.0,
+          yearly_amount: 0.0,
+          visit_overage: nil, # after this many visits in a month
           # visit_overage_amount: 25_000, # every X visitors
           visit_overage_amount: 0.0 # $$$
         }
