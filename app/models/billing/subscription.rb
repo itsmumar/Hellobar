@@ -158,6 +158,10 @@ class Subscription < ActiveRecord::Base
       @subscription ? @subscription.visit_overage_amount : parent_class.values_for(@site)[:visit_overage_amount]
     end
 
+    def custom_html?
+      false
+    end
+
     protected
 
     def parent_class
