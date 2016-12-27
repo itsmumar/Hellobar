@@ -136,6 +136,7 @@ form {
 #hellobar-slider.dark .icon-close,
 #hellobar-takeover.dark .icon-close {
   color: #ffffff;
+  opacity: 0.8;
 }
 
 /*-----------  Main Content  -----------*/
