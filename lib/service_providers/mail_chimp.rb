@@ -1,5 +1,3 @@
-require 'rubygems/package'
-
 class ServiceProviders::MailChimp < ServiceProviders::Email
   include ActionView::Helpers::SanitizeHelper
 
@@ -94,21 +92,6 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       # in background. We are not bothering about the results as we don't
       # do anything with that except logging it into logs.
       @client.batches.create(body: { operations: operations })
-      # repeat_index = 1
-      # batch_response = nil
-      #
-      # loop do
-      #   sleep(10 * repeat_index)
-      #
-      #   puts "Checking batch job status #{repeat_index.ordinalize} time..."
-      #   batch_response = @client.batches(batch_id).retrieve
-      #   break if batch_response['status'] == 'finished'
-      #   repeat_index += 1
-      # end
-      #
-      # batch_response.tap do |result|
-      #   log handle_result(result)
-      # end
     end
   end
 
