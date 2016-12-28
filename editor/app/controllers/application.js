@@ -51,7 +51,11 @@ export default Ember.Controller.extend({
   // Render the element in the preview pane whenever style-affecting attributes change
 
   renderPreview: ( function () {
-    return Ember.run.debounce(this, this.doRenderPreview, 500);
+    if (this.shouldSkipPreviewUpdate) {
+      this.shouldSkipPreviewUpdate = false;
+    } else {
+      return Ember.run.debounce(this, this.doRenderPreview, 500);
+    }
   }).observes(
     "model.answer1",
     "model.answer1caption",
@@ -109,8 +113,12 @@ export default Ember.Controller.extend({
     "model.use_question",
     "model.view_condition",
     "model.wiggle_button",
+    "model.custom_html",
+    "model.custom_css",
+    "model.custom_js",
     "isFullscreen",
     "isMobile"
+
   ).on("init"),
 
   renderPreviewWithAnimations: ( function () {
@@ -149,6 +157,12 @@ export default Ember.Controller.extend({
       HB.addToPage(HB.createSiteElement(previewElement));
     }
     HB.isMobileWidth = "changed";
+  },
+
+  shouldSkipPreviewUpdate: false,
+
+  requestPreviewUpdateSkipping() {
+    this.shouldSkipPreviewUpdate = true;
   },
 
 
@@ -311,6 +325,7 @@ export default Ember.Controller.extend({
     const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
     return currentTheme;
   }).property('model.theme_id'),
+
 
   currentThemeName: (function () {
     const theme = this.get('currentTheme');

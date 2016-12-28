@@ -8,7 +8,7 @@
   height: 100%;
 }
 
-#hellobar-container.HB-Modal {
+#hellobar-container.HB-Custom {
   top: 0;
   left: 0;
   position: fixed;
@@ -20,13 +20,13 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar-container.HB-Modal.hb-animated {
+#hellobar-container.HB-Custom.hb-animated {
   opacity: 0;
   height: 110%;
   margin-top: -5%;
 }
 
-#hellobar-container.HB-Modal.hb-animateIn {
+#hellobar-container.HB-Custom.hb-animateIn {
   animation-name: hb-fadeInDown;
   -o-animation-name: hb-fadeInDown;
   -ms-animation-name: hb-fadeInDown;
@@ -34,7 +34,7 @@
   -webkit-animation-name: hb-fadeInDown;
 }
 
-#hellobar-container.HB-Modal.hb-animateOut {
+#hellobar-container.HB-Custom.hb-animateOut {
   animation-name: hb-fadeOutUp;
   -o-animation-name: hb-fadeOutUp;
   -ms-animation-name: hb-fadeOutUp;

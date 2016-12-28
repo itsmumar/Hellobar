@@ -1,25 +1,32 @@
+{{# if isCustom}}
 <div class="section-header">
   <h3>Themes</h3>
-  <div class="description">Predefined styles for the default bar</div>
+  <div class="description">There are currently no predifined themes for Custom HTML</div>
 </div>
-<div class="section">
-  {{#each genericThemes as |theme| }}
-    <div data-theme-id="{{theme.id}}" class="theme-tile-wrapper">
-      {{theme-tile theme=theme elementType=elementType}}
+{{ else }}
+    <div class="section-header">
+      <h3>Themes {{elementType}}</h3>
+      <div class="description">Predefined styles for the default bar</div>
     </div>
-  {{/each}}
-</div>
+    <div class="section">
+      {{#each genericThemes as |theme| }}
+        <div data-theme-id="{{theme.id}}" class="theme-tile-wrapper">
+          {{theme-tile theme=theme elementType=elementType}}
+        </div>
+      {{/each}}
+    </div>
 
-{{#if hasAnyTemplateThemes}}
-  <div class="section-header">
-    <h3>Templates</h3>
-    <div class="description">Modals designed for growing your mailing list</div>
-  </div>
-  <div class="section">
-    {{#each templateThemes as |theme| }}
-      <div data-theme-id="{{theme.id}}" class="theme-tile-wrapper">
-        {{theme-tile theme=theme elementType=elementType}}
+    {{#if hasAnyTemplateThemes}}
+      <div class="section-header">
+        <h3>Templates</h3>
+        <div class="description">Modals designed for growing your mailing list</div>
       </div>
-    {{/each}}
-  </div>
+      <div class="section">
+        {{#each templateThemes as |theme| }}
+          <div data-theme-id="{{theme.id}}" class="theme-tile-wrapper">
+            {{theme-tile theme=theme elementType=elementType}}
+          </div>
+        {{/each}}
+      </div>
+    {{/if}}
 {{/if}}
