@@ -6,9 +6,10 @@ Made with love.
 
 ### Mac OS
 
-install dependancies (fontforge and ttfautohint support local compilation of font files)
+Install dependancies (fontforge and ttfautohint support local compilation of font files)
 
 `brew install fontforge ttfautohint eot-utils`
+
 
 Bundle install all the gems
 
@@ -28,6 +29,57 @@ Let rake setup and migrate all your databases
 
 `rake db:setup`
 
+
+It is advised to run the application locally using the `local.hellobar.com` domain with an additional entry in `/etc/hosts`,
+so that it resolves into `127.0.0.1`.
+
+You need to visit https://console.developers.google.com/apis/credentials?project=hellobar-oauth
+and setup or use existing Google OAuth credentials to be able to log in.
+
+You need to add `google_auth_id` and `google_auth_secret` into `config/settings.yml`.
+
+
+#### Front-end
+
+Install `node.js` together with `npm`:
+
+```
+brew install node
+```
+
+Install `bower` and `ember-cli` globally:
+
+```
+npm install -g ember-cli
+npm install -g bower
+```
+
+Install all dependencies:
+
+```
+cd editor/
+npm install
+bower install
+```
+
+Then build the Ember application:
+
+```
+ember build --environment=production
+```
+
+The above command will build the js/css files for the Ember part of the application.
+It will store it in `editor/dist/assets`.
+This directory is then being included by Rails in the assets pipeline.
+
+In development, it is recommended to use the `--watch` option, like this:
+
+```
+ember build --environment=production --watch
+```
+
+
+
 ### MS Windows
 
 See [wiki](https://github.com/CrazyEggInc/hellobar_new/wiki/Windows-Environment-Setup)
@@ -36,19 +88,39 @@ See [wiki](https://github.com/CrazyEggInc/hellobar_new/wiki/Windows-Environment-
 
 See [wiki](https://github.com/Hello-bar/hellobar_new/wiki/Application-Setup-on-Ubuntu-(Linux))
 
-### Front End
+### Icon font
 
 NOTE: install fontforge locally first with `brew install fontforge ttfautohint`
+
 To add a new icon to the custom icon font file - add the icon svg file to app/assets/icons and run
 `rake icon:compile`
 
+
 ## Workflow
 
-To add a new feature, make a branch of **master**.  When ready to test, rebase your branch into **master**.
+To add a new feature, make a branch off of **master**.  When ready to test, rebase your branch into **master**.
 
-When ready to deploy to production, merge **master** into **production** and use capistrano to deploy the **production** branch.
 
-```BRANCH=production cap production deploy```
+## Deployments
+
+To do a production deploy:
+
+```
+cap production deploy BRANCH=master
+```
+
+To do a staging deploy:
+
+```
+cap staging deploy BRANCH=some-branch
+```
+
+To do an edge deploy:
+
+```
+cap edge deploy BRANCH=other-branch
+```
+
 
 ## Provisioning a new Hello Bar server
 
