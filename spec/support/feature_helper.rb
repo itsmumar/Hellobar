@@ -1,5 +1,12 @@
 include Warden::Test::Helpers
+
 Warden.test_mode!
+
+RSpec.configure do |config|
+  config.after(:each, type: :feature) do
+    Warden.test_reset!
+  end
+end
 
 module FeatureHelper
   def login(user=nil)
@@ -11,10 +18,6 @@ module FeatureHelper
     login_as user, scope: :user, run_callbacks: false
     visit "/"
     user
-  end
-
-  def devise_reset
-    Warden.test_reset!
   end
 
   def the_onboarding_campaigns_run

@@ -5,8 +5,6 @@ feature "Payment modal interaction", js: true do
     @user = login
   end
 
-  after { devise_reset }
-
   scenario "downgrade to free from pro should say when it's active until" do
     site = @user.sites.first
     payment_method = create(:payment_method, user: @user)

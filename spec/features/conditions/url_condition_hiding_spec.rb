@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature "Hide the URL Condition from the Rule Modal", js: true do
+feature "Hide the URL Condition from the Rule Modal", :js do
   extend FeatureHelper
 
   before do

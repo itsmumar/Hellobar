@@ -2,7 +2,6 @@ require 'integration_helper'
 
 feature "Install Instructions", js: true do
   before { @user = login }
-  after { devise_reset }
 
   scenario "fetch install code" do
     site = @user.sites.first

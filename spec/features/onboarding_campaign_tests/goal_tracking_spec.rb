@@ -12,10 +12,6 @@ feature "User onboarding statuses get updated as they select a goal for their fi
     User.any_instance.stub(:onboarding_status_setter).and_return onboarding_status_setter
   end
 
-  after do
-    devise_reset
-  end
-
   scenario 'Goal click is tracked' do
     expect(onboarding_status_setter).to receive(:selected_goal!)
 

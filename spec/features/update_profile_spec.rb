@@ -3,7 +3,6 @@ require 'integration_helper'
 feature "Update Profile", js: true do
   context "is not an oauth user" do
     before { @user = login }
-    after { devise_reset }
 
     scenario "updates name without updating password" do
       visit profile_path
@@ -36,7 +35,6 @@ feature "Update Profile", js: true do
       @user = create(:authentication).user
       login(@user)
     end
-    after { devise_reset }
 
     scenario "email field is be disabled when loading the page" do
       visit profile_path

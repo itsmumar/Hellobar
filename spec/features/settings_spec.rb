@@ -14,10 +14,6 @@ feature "Manage Settings", :js do
     visit edit_site_path(@site)
   end
 
-  after do
-    devise_reset
-  end
-
   scenario "it allows adding new custom invoice address" do
     page.find('a', text: "Add custom invoice address").click
 

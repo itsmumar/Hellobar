@@ -14,10 +14,6 @@ feature "User can sign up", :js do
       and_return('original')
   end
 
-  after do
-    devise_reset
-  end
-
   scenario "through oauth" do
     OmniAuth.config.add_mock(:google_oauth2, { uid: '12345', info: { email: user.email } })
     visit root_path
@@ -35,8 +31,6 @@ feature "User can sign up", :js do
 end
 
 feature "User can sign in", js: true do
-  after { devise_reset }
-
   scenario "through email and password" do
     user = create(:user)
     site = user.sites.create(url: random_uniq_url)

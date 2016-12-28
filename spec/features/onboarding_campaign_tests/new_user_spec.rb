@@ -11,10 +11,6 @@ feature "New User Onboarding email campaigns" do
     record_mailer_gateway_request_history!
   end
 
-  after do
-    devise_reset
-  end
-
   xscenario "user bails on creating their first bar" do
     the_onboarding_campaigns_run
 

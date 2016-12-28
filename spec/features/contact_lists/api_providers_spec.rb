@@ -2,7 +2,6 @@ require 'integration_helper'
 
 feature "Connect to api ESP", js: true do
   before { @user = login }
-  after { devise_reset }
 
   #----------  MadMimi - Original  ----------#
 

@@ -14,10 +14,6 @@ feature 'Adding and editing bars', :js do
       to receive(:get_ab_variation).and_return('original')
   end
 
-  after do
-    devise_reset
-  end
-
   scenario 'new user can create a site element' do
     OmniAuth.config.add_mock(:google_oauth2, { uid: '12345', info: { email: user.email } })
 

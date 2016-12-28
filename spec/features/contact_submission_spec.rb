@@ -20,7 +20,6 @@ feature 'Contact Submission' do
     fill_in "contact_submission[name]", with: "Homer Simpson"
     fill_in "contact_submission[message]", with: "Test"
     find("#contact_submission_submit_btn").click
-    devise_reset
 
     expect(@sent_email.last[:params][:email]).to eq(user.email)
   end

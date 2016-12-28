@@ -2,7 +2,6 @@ require 'integration_helper'
 
 feature "Header Navigation", js: true do
   before { login }
-  after { devise_reset }
 
   xscenario "can expose site nav via click" do
     find('.header-nav-wrapper').click
