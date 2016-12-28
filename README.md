@@ -96,6 +96,56 @@ To add a new icon to the custom icon font file - add the icon svg file to app/as
 `rake icon:compile`
 
 
+## Running specs
+
+To run specs locally you need to have QT 5.5+ installed locally. Installation instructions can be found here:
+
+https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit
+
+
+### Rails' specs
+
+Integration tests run in the `spec/features` directory.  They use the
+`lib/SiteGenerator` to create an html file in `public/integration`.  The
+file name is a random hex.
+
+Capybara navigates to the public html file in order to test interactions.
+
+To test the content of the iframe use `within_frame`.
+
+To test adding or removing the iframe use
+`page.driver.browser.frame_focus`.
+
+Watch out for animations and other asynchronous or delayed interactions.
+You may need to fiddle with the `Capybara.default_max_wait_time` in
+`spec/spec_helper`.
+
+Running Rails' specs:
+
+```
+bundle exec rspec spec
+```
+
+
+## JavaScript tests
+
+Teaspoon runs the *_spec.js files in spec/javascripts/
+
+The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
+
+Tests are divided in 2 groups: `generator` (tests `hellobar.base.js` and some other files) and `project`
+(tests `assets/javascripts/` files).
+
+To get the coverage of Generator:
+
+> teaspoon --suite=generator --coverage=generator
+
+Coverage of Project:
+
+> teaspoon --suite=project --coverage=project
+
+
+
 ## Workflow
 
 To add a new feature, make a branch off of **master**.  When ready to test, rebase your branch into **master**.
@@ -196,39 +246,6 @@ The above method is used by the capybara integration tests.
 All of these rake tasks use the `lib/SiteGenerator.rb` class as well as
 an `HbTestSite` class defined within the rake task itself.
 
-### Automated (integration) tests
-
-Integration tests run in the `spec/features` directory.  They use the
-`lib/SiteGenerator` to create an html file in `public/integration`.  The
-file name is a random hex.
-
-Capybara navigates to the public html file in order to test interactions.
-
-To test the content of the iframe use `within_frame`.
-
-To test adding or removing the iframe use
-`page.driver.browser.frame_focus`.
-
-Watch out for animations and other asynchronous or delayed interactions.
-You may need to fiddle with the `Capybara.default_wait_time` in
-`spec/spec_helper`.
-
-## JavaScript tests
-
-Teaspoon runs the *_spec.js files in spec/javascripts/
-
-The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
-
-Tests are divided in 2 groups: `generator` (tests `hellobar.base.js` and some other files) and `project`
-(tests `assets/javascripts/` files).
-
-To get the coverage of Generator:
-
-> teaspoon --suite=generator --coverage=generator
-
-Coverage of Project:
-
-> teaspoon --suite=project --coverage=project
 
 ## Live testing/QA info
 
