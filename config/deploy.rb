@@ -8,7 +8,6 @@ set :deploy_to, "/mnt/deploy"
 set :linked_files, %w{config/database.yml config/secrets.yml config/settings.yml config/application.yml}
 set :linked_dirs, %w{log tmp/pids}
 set :rails_env, "production"
-set :ssh_options, { forward_agent: true }
 set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 set :whenever_roles, %w(app db web)
 set :keep_releases, 50
@@ -168,6 +167,7 @@ namespace :deploy do
       stage = fetch :stage
       current_revision = fetch :current_revision
 
+      strategy.git "remote update"
       strategy.git "branch -f #{ stage } #{ current_revision }"
       strategy.git "push -f origin #{ stage }"
     end

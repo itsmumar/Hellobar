@@ -249,6 +249,7 @@ private
   end
 
   def content_markup(element_class, type)
+    return '' if element_class == 'custom'
     fname = "#{Rails.root}/lib/script_generator/#{element_class}/#{type.gsub("/", "_").underscore}.html"
     if File.exist?(fname)
       File.read(fname)
@@ -321,6 +322,9 @@ private
       contact_list_id: site_element.contact_list_id,
       conversion_rate: conversion_rate,
       conversions: conversions,
+      custom_html: site_element.custom_html,
+      custom_css: site_element.custom_css,
+      custom_js: site_element.custom_js,
       email_redirect: site_element.after_email_submit_action == :redirect,
       hide_destination: true,
       id: site_element.id,

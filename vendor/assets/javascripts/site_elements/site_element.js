@@ -60,6 +60,7 @@ HB.SiteElement = HB.createClass({
     }
 
     function generateHtml() {
+
       var template = '';
       // TODO now theme id for new template is hard-coded. We need good and flexible solution for the future
       if (that.theme_id === 'traffic-growth') {
@@ -67,13 +68,17 @@ HB.SiteElement = HB.createClass({
       } else {
         template = HB.getTemplate(that);
       }
-      // Replace all the template variables
       return HB.renderTemplate(template, that);
     }
 
     var html = generateHtml();
+    if (this.type === 'Custom') {
+      var customJs = (this.custom_js || '').replace(/&amp;/g, '&').replace(/&gt;/g, '>').replace(/&lt;/g, '<');
+      html = html + '<script>var hbElement=window.parent.HB.findSiteElementOnPageById(' + this.id + '); ' + customJs + '<\/script>'
+    }
     // Once the dom is ready we inject the html returned from renderTemplate
     HB.domReady(function () {
+
       // Set an arbitrary timeout to prevent some rendering
       // conflicts with certain sites
       setTimeout(function () {
@@ -248,8 +253,11 @@ HB.SiteElement = HB.createClass({
     } else if (type == 'Slider') {
       var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : window.innerWidth;
       var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
-      container.style.width = (newWidth) + "px";
-      container.style.height = (element.clientHeight + 24) + "px";
+      container.style.width = (newWidth) + 'px';
+
+      // Increase <iframe> bounds for non-mobile preview (so that Froala editor
+      // controls are visible/usable)
+      container.style.height = (element.clientHeight + (HB.CAP.preview && HB.previewMode !== 'mobile' ? 450 : 124)) + 'px';
     }
   },
 
@@ -504,7 +512,8 @@ HB.SiteElement = HB.createClass({
     else if
     (
       this.type == "Takeover" ||
-      this.type == "Modal"
+      this.type == "Modal" ||
+      this.type == "Custom"
     ) {
       this.updateStyleFor(false);
     }
@@ -521,7 +530,8 @@ HB.SiteElement = HB.createClass({
     if (
       this.type == "Takeover" ||
       this.type == "Modal" ||
-      this.type == "Slider"
+      this.type == "Slider" ||
+      this.type == "Custom"
     ) {
       this.updateStyleFor(true);
     }
@@ -530,7 +540,7 @@ HB.SiteElement = HB.createClass({
   updateStyleFor: function (reset) {
     var element = this;
     var contentDocument = element.w.contentDocument;
-    var hbModal = contentDocument.getElementById('hellobar-modal') || contentDocument.getElementById('hellobar-takeover');
+    var hbModal = contentDocument.getElementById('hellobar-modal') || contentDocument.getElementById('hellobar-takeover')|| contentDocument.getElementById('hellobar-custom');
 
     if (reset) {
       this.w.style.position = "";
@@ -626,7 +636,8 @@ HB.SiteElement = HB.createClass({
   useFroala: function () {
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css');
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_editor.min.css');
-    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_style.css');
+    //removeing this and cherry picking styles in common.css
+    //this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_style.css');
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/colors.min.css');
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/emoticons.css');
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/image.min.css');

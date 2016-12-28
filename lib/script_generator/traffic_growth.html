@@ -85,7 +85,7 @@
         </a>
       </div>
 
-      <div class="hb-logo {{HB.branding_template()}}">
+      <div class="hb-logo {{HB.branding_template()}}" style="{{(HB.t(siteElement.show_branding) || !HB.CAP.no_b) ? '' : 'display:none'}}">
         {{HB.renderTemplate(HB.getBrandingTemplate(HB.branding_template()), siteElement)}}
       </div>
     </div>
