@@ -32,12 +32,16 @@ feature "Users can select design themes for SiteElements", js: true do
         end
       end
 
+      expect(page).to have_content 'Themes'
+
       # select the theme
       within "div[data-theme-id='#{theme.id}']" do
         find('a', visible: false).trigger 'click'
       end
 
       find(".icon-content").click
+
+      expect(page).to have_content 'DESIGN & CONTENT'
 
       background_color = theme.defaults[subtype]["background_color"]
 
