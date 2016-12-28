@@ -43,10 +43,10 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     result = {}
 
     conditions = emails.map { |email| "email LIKE '%#{email}%'" }.join(' OR ')
-    contact_list_logs = contact_list.contact_list_logs.where(conditions)
+    contact_list_logs = contact_list.contact_list_logs.select(:email).where(conditions).pluck(:email)
 
     emails.each do |email|
-      if contact_list_logs.includes?(email) || contact_list_logs.includes?("\"#{email}\"")
+      if contact_list_logs.include?(email) || contact_list_logs.include?("\"#{email}\"")
         result[email] = 'Sent'
       else
         result[email] = 'Unsynced'
