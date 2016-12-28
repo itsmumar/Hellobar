@@ -8,7 +8,6 @@ set :deploy_to, "/mnt/deploy"
 set :linked_files, %w{config/database.yml config/secrets.yml config/settings.yml config/application.yml}
 set :linked_dirs, %w{log tmp/pids}
 set :rails_env, "production"
-set :ssh_options, { forward_agent: true }
 set :branch, ENV["REVISION"] || ENV["BRANCH"] || "master"
 set :whenever_roles, %w(app db web)
 set :keep_releases, 50
