@@ -1,7 +1,7 @@
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
 
-  TYPES = [Bar, Modal, Slider, Takeover]
+  TYPES = [Bar, Modal, Slider, Takeover, Custom]
 
   DEFAULT_EMAIL_THANK_YOU = "Thank you for signing up!"
   DEFAULT_FREE_EMAIL_THANK_YOU = "#{DEFAULT_EMAIL_THANK_YOU} If you would like this sort of bar on your site..."
@@ -56,6 +56,7 @@ class SiteElement < ActiveRecord::Base
   scope :has_performance, -> { where("element_subtype != ?", "announcement") }
   scope :bars, -> { where(type: "Bar") }
   scope :sliders, -> { where(type: "Slider") }
+  scope :custom_elements, -> { where(type: "Custom") }
   scope :modals_and_takeovers, -> { where(type: ["Modal", "Takeover"]) }
   scope :email_subtype, -> { where(element_subtype: "email") }
   scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }

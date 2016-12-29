@@ -7,7 +7,9 @@ export default Ember.Controller.extend({
   applicationController: Ember.inject.controller('application'),
 
   init() {
-    this.get('inlineEditing').addFieldChangeListener(this);
+    this.get('inlineEditing').addFieldChangeListener(() => {
+      this.notifyPropertyChange('model.settings.fields_to_collect');
+    });
     return Ember.run.schedule('afterRender', this, () => {
         const $sortableGroupElement = Ember.$('.js-fields-to-collect');
         if ($sortableGroupElement.length > 0) {

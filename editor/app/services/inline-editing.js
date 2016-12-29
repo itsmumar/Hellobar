@@ -5,6 +5,9 @@ import defaultBlocks from './inline-editing.blocks';
 // Froala Editor license key
 const froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
 
+/**
+ * Simple model adapter that performs basic inline editing data management
+ */
 class SimpleModelAdapter {
 
   constructor(modelHandler, service) {
@@ -85,7 +88,7 @@ class SimpleModelAdapter {
         fieldToChange.label = content;
         this.modelHandler.notifyPropertyChange('model.settings.fields_to_collect');
         if (this.service.fieldChangeListeners) {
-          return this.service.fieldChangeListeners.forEach(listener => listener.notifyPropertyChange('model.settings.fields_to_collect'));
+          return this.service.fieldChangeListeners.forEach(listener => listener(fieldToChange, content));
         }
       }
     } else {
@@ -148,6 +151,23 @@ class BlockBasedModelAdapter {
 }
 
 /**
+ * Model adapter that provides inline editing support for Custom HTML elements
+ */
+class CustomHtmlModelAdapter {
+  constructor(modelHandler, service) {
+    this.modelHandler = modelHandler;
+    this.service = service;
+  }
+
+  handleContentChange(blockId, content) {
+    const customHtml = html_beautify(content);
+    this.modelHandler.requestPreviewUpdateSkipping();
+    this.modelHandler.set('model.custom_html', customHtml);
+    this.service.customHtmlChangeListeners.forEach((listener) => listener(customHtml));
+  }
+}
+
+/**
  * @deprecated
  */
 class InlineImageManagementPane {
@@ -204,8 +224,10 @@ export default Ember.Service.extend({
   modelHandler: null,
   simpleModelAdapter: null,
   blockBasedModelAdapter: null,
+  customHtmlModelAdapter: null,
 
   fieldChangeListeners: [],
+  customHtmlChangeListeners: [],
 
   $currentFroalaInstances: null,
   $currentInputInstances: null,
@@ -256,14 +278,20 @@ export default Ember.Service.extend({
     if (modelHandler) {
       this.simpleModelAdapter = new SimpleModelAdapter(modelHandler, this);
       this.blockBasedModelAdapter = new BlockBasedModelAdapter(modelHandler, this);
+      this.customHtmlModelAdapter = new CustomHtmlModelAdapter(modelHandler, this);
     } else {
       this.simpleModelAdapter = null;
       this.blockBasedModelAdapter = null;
+      this.customHtmlModelAdapter = null;
     }
   },
 
   addFieldChangeListener(listener) {
-    return this.fieldChangeListeners.push(listener);
+    this.fieldChangeListeners.push(listener);
+  },
+
+  addCustomHtmlChangeListener(listener) {
+    this.customHtmlChangeListeners.push(listener);
   },
 
   initializeInlineEditing(elementType) {
@@ -443,7 +471,9 @@ export default Ember.Service.extend({
 
 
   handleContentChange(blockId, content) {
-    if (blockId && _.startsWith(blockId, 'blocks.')) {
+    if (blockId === 'custom_html') {
+      this.customHtmlModelAdapter && this.customHtmlModelAdapter.handleContentChange(blockId, content);
+    } else if (blockId && _.startsWith(blockId, 'blocks.')) {
       this.blockBasedModelAdapter && this.blockBasedModelAdapter.handleContentChange(blockId, content);
     } else {
       this.simpleModelAdapter && this.simpleModelAdapter.handleContentChange(blockId, content);
