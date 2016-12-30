@@ -87,7 +87,7 @@ namespace :deploy do
     end
   end
 
-  task :stop_queue_workers do
+  task :start_queue_workers do
     on roles(:web) do
       as :hellobar do
         execute "cd #{release_path} && RAILS_ENV=production bundle exec rake queue_worker:start"
