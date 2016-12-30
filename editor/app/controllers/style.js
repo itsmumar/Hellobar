@@ -53,8 +53,7 @@ export default Ember.Controller.extend({
   },
 
   canUseCustomHtml:  function () {
-    return true;
-    //return this.get('model.site.capabilities.custom_html') === true;
+    return this.get('model.site.capabilities.custom_html') === true;
   }.property('model.site.capabilities.custom_html'),
 
   shouldShowBarThemeInfo: function() {
