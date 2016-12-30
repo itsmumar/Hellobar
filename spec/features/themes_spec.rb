@@ -1,57 +1,34 @@
 require 'integration_helper'
 
-feature "Users can select design themes for SiteElements", js: true do
-  given(:subtype) { "Modal" }
-  given(:themes) { Theme.where(type: "generic") }
-  given(:default_theme) { Theme.find('classic') }
-  given(:themes_with_images) { [Theme.find('marigold'), Theme.find('french-rose')] }
+feature 'Users can select a design theme for SiteElements', :js do
+  given(:subtype) { 'Modal' }
+  given(:theme_id) { 'blue-autumn' }
+  given(:themes) { Theme.where(type: 'generic') }
+  given(:theme) { themes.detect { |theme| theme.id == theme_id } }
 
   before do
     @user = login
-
-    visit new_site_site_element_path(@user.sites.first) + "/#/style"
-
-    find('a', text: /#{subtype}/i).click
   end
 
-  scenario "Selecting a theme updates the color palette" do
-    # We don't show `classy` theme on UI.
-    # `classic` theme's defaults gets updated according to target site color themes.
-    # So, ignoring these themes in test suite.
-    themes.each do |theme|
-      themes.delete(theme) if theme.id == "classy" || theme.id == 'classic'
+  scenario 'selecting a theme updates the color palette in the UI' do
+    visit new_site_site_element_path(@user.sites.first) + '/#/style'
+
+    find('a', text: /#{ subtype }/i).click
+
+    expect(page).to have_content 'Themes'
+
+    # select the theme
+    within "div[data-theme-id='#{ theme_id }']" do
+      find('a', visible: false).trigger 'click'
     end
 
-    themes.each do |theme|
-      # close annoucement if exists
-      announcement_container = first(".announcement-container")
+    click_on 'Content'
 
-      if announcement_container
-        within(announcement_container) do
-          find('a.close-announcement').click
-        end
-      end
+    expect(page).to have_content 'DESIGN & CONTENT'
 
-      expect(page).to have_content 'Themes'
+    background_color = theme.defaults[subtype]["background_color"]
 
-      # select the theme
-      within "div[data-theme-id='#{theme.id}']" do
-        find('a', visible: false).trigger 'click'
-      end
-
-      find(".icon-content").click
-
-      expect(page).to have_content 'DESIGN & CONTENT'
-
-      background_color = theme.defaults[subtype]["background_color"]
-
-      # verify the `background_color`
-      expect(first('.color-select-block input').value).to match(/#{ background_color }/i)
-
-      # reset current theme settings
-      find(".icon-style").click
-      find("a", text: '[change theme]').click
-      find("a", text: 'Yes, Change The Theme').click
-    end
+    # verify the `background_color`
+    expect(first('.color-select-block input').value).to match(/#{ background_color }/i)
   end
 end
