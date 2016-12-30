@@ -18,7 +18,7 @@ def expect_no_email(user)
 end
 
 def expect_user_to_only_recieve(user, email_type)
-  expect(@email_history.size).to be(1)
+  expect(@email_history.size).to eq 1
   expect(@email_history.first).to include(user.email => [email_type])
 end
 

@@ -2,7 +2,6 @@ require 'integration_helper'
 
 feature "App handles oauth error", js: true do
   before { @user = login }
-  after { devise_reset }
 
   scenario "and redirects to contact list " do
     OmniAuth.config.mock_auth[:mailchimp] = :invalid_credentials

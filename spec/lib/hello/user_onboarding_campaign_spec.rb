@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe UserOnboardingCampaign do
-  describe 'UserOnboardingCampaign.deliver_all_onboarding_campaign_email' do
+  describe 'UserOnboardingCampaign.deliver_all_onboarding_campaign_email!' do
     before do
       klass = UserOnboardingCampaign.onboarding_campaign_classes.first
       klass.stub(:users).and_return([double("User", current_onboarding_status: nil)])
@@ -40,6 +40,5 @@ describe UserOnboardingCampaign do
         UserOnboardingCampaign.deliver_all_onboarding_campaign_email!
       end
     end
-
   end
 end

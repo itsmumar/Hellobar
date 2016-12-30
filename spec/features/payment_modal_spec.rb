@@ -5,8 +5,6 @@ feature "Payment modal interaction", js: true do
     @user = login
   end
 
-  after { devise_reset }
-
   scenario "downgrade to free from pro should say when it's active until" do
     site = @user.sites.first
     payment_method = create(:payment_method, user: @user)
@@ -15,7 +13,7 @@ feature "Payment modal interaction", js: true do
     visit edit_site_path(site)
     click_link("Change plan or billing schedule")
     find(".different-plan").click
-    basic_plan = find(".package-block.basic", visible: true)
+    basic_plan = find(".package-block.basic")
     basic_plan.find(".button").click
     expect(page).to have_content "until #{end_date.strftime("%-m-%-d-%Y")}"
   end
@@ -33,7 +31,7 @@ feature "Payment modal interaction", js: true do
     pro_plan.find(".button").click
 
     page.find('.submit').click
-    page.find('a', visible: true, text: "OK").click
+    page.find('a', text: "OK").click
     expect(page).to have_content "is on the Pro plan"
   end
 end

@@ -8,7 +8,6 @@ feature "Trial User", js: true do
     subscription = Subscription::Pro.new(schedule: "monthly")
     @site.change_subscription(subscription, nil, 90.day) # 90 day trial subscription
   end
-  after { devise_reset }
 
   scenario "shows a button in the header that prompts user to enter payment" do
     visit site_path(@site)

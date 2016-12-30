@@ -23,7 +23,6 @@ class UserOnboardingCampaign
          where("user_onboarding_statuses.status_id = ?", users_status_key)
   end
 
-
   def initialize(user, onboarding_status)
     raise "onboarding status required" unless onboarding_status.is_a?(UserOnboardingStatus)
 
