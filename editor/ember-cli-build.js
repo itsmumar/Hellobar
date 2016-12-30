@@ -21,10 +21,17 @@ module.exports = function (defaults) {
         'bower_components/jquery-minicolors',
         'bower_components/nouislider/distribute',
         'bower_components/froala-wysiwyg-editor/css',
+        'node_modules',
         'vendor'
       ]
     },
-    storeConfigInMeta: false
+    storeConfigInMeta: false,
+    nodeAssets: {
+      'codemirror': {
+        srcDir: 'lib',
+        'import': ['codemirror.css']
+      }
+    }
     // Add options here
   });
 
