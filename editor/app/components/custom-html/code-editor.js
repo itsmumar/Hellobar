@@ -27,15 +27,21 @@ export default Ember.Component.extend({
    */
   value: null,
 
+  _editorInstance: null,
+
   didInsertElement() {
-    const editor = CodeMirror(this.$('.js-editor-container')[0], {
+    this._editorInstance = CodeMirror(this.$('.js-editor-container')[0], {
       lineNumbers: true,
       mode: this.editorMode,
       value: this.value || ''
     });
-    editor.on('change', () => {
-      this.set('value', editor.getValue());
+    this._editorInstance.on('change', () => {
+      this.set('value', this._editorInstance.getValue());
     });
+  },
+
+  willDestroyElement() {
+    this._editorInstance.off('change');
   }
 
 });
