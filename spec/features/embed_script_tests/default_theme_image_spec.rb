@@ -1,8 +1,6 @@
 require 'integration_helper'
 
 feature "Theme with default image", js: true do
-  before { Capybara.current_driver = :webkit }
-  after { Capybara.current_driver = :selenium }
   scenario "shows the default image" do
     theme_yaml = YAML.load_file("spec/support/themes.yml")
     theme = Theme.new(theme_yaml["with_default_image"])

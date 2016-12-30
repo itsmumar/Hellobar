@@ -8,7 +8,9 @@ require 'metric_fu/metrics/rcov/simplecov_formatter'
 require 'database_cleaner'
 require 'paperclip/matchers'
 
-Zonebie.set_random_timezone
+require 'capybara/rspec'
+require 'capybara/rails'
+require 'capybara/webkit'
 
 # All metrics should be in the same dir. YOU MADE ME DO THIS, METRIC_FU!
 SimpleCov::Formatter::MetricFu.send(:define_method, :coverage_file_path) do
@@ -55,16 +57,23 @@ VCR.configure do |c|
   c.default_cassette_options = {:record => :none} # *TEMPORARILY* set to :new_episodes if you add a spec that makes a network request
 end
 
-Capybara.default_wait_time = ENV['CI'] ? 30 : 10
+# Use Webkit as js driver
+Capybara.javascript_driver = :webkit
+
 Capybara::Webkit.configure do |config|
   config.block_unknown_urls
+  config.timeout = 60
+  config.skip_image_loading
 end
 
-RSpec.configure do |config|
-  config.include Capybara::DSL
+# Wait longer than the default 2 seconds for Ajax requests to finish
+Capybara.default_max_wait_time = ENV['CI'] ? 30 : 20
 
+RSpec.configure do |config|
   # Use a separate container for selenium
   if ENV['DOCKER']
+    require 'selenium-webdriver'
+
     Capybara.register_driver :remote_firefox do |app|
       Capybara::Selenium::Driver.new(app,
                                      browser: :remote,
@@ -90,20 +99,6 @@ RSpec.configure do |config|
     end
   end
 
-  config.after(:each) do
-    if example.exception && example.metadata[:js]
-      meta = example.metadata
-      filename = File.basename(meta[:file_path])
-      line_number = meta[:line_number]
-      screenshot_name = "screenshot-#{filename}-#{line_number}.png"
-      screenshot_path = "#{ENV.fetch('CIRCLE_ARTIFACTS', Rails.root.join('tmp/capybara'))}/#{screenshot_name}"
-
-      page.save_screenshot(screenshot_path)
-
-      puts meta[:full_description] + "\n Screenshot: #{screenshot_path}"
-    end
-  end
-
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -111,6 +106,9 @@ RSpec.configure do |config|
   # config.mock_with :mocha
   # config.mock_with :flexmock
   # config.mock_with :rr
+
+  # Allow tagging js specs using just symbols
+  config.treat_symbols_as_metadata_keys_with_true_values = true
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

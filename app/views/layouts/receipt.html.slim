@@ -6,9 +6,9 @@ html
     link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
 
     = stylesheet_link_tag "receipt", :media => "all"
-    = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
-    javascript:
-      try{Typekit.load({ async: true });}catch(e){}
+
+    = render 'shared/typekit'
+
     = csrf_meta_tags
 
   body

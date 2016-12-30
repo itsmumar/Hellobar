@@ -3,7 +3,6 @@ require 'integration_helper'
 feature "Contact list modal", js: true do
   let!(:site) { create(:site, :with_rule) }
   before { @user = login }
-  after { devise_reset }
 
   context "has been opened" do
     before do

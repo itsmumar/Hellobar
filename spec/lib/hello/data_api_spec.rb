@@ -60,25 +60,4 @@ describe  Hello::DataAPI do
       expect(for_comparison(result)).to eq({total: [], traffic: [], email: [], social: [], call: []})
     end
   end
-
-  describe '.get_contacts' do
-    let(:contact_list) { create :contact_list }
-    let(:id) { contact_list.id }
-    let(:site_id) { contact_list.site_id }
-    let(:read_key) { contact_list.site.read_key }
-    let(:limit) { 5 }
-
-    it 'passes 0 to DynamoDB for the `from_timestamp` param as default' do
-      # TODO this needs a separate VCR casette
-      allow(Hello::DataAPI).to receive(:get)
-
-      # Weird Rails' cache behaviour, it would not yield the block in spec runs
-      expect(Rails.cache).to receive(:fetch).and_yield
-
-      expect(Hello::DataAPIHelper::RequestParts).to receive(:get_contacts)
-        .with(site_id, id, read_key, limit, 0)
-
-      Hello::DataAPI.get_contacts(contact_list, limit)
-    end
-  end
 end

@@ -177,15 +177,12 @@ module Hello::DataAPI
     # get_contacts(contact_list)
     # => [["person100@gmail.com", "person name", 1388534400], ["person99@gmail.com", "person name", 1388534399]]
     #
-    # `from_timestamp` cannot be `nil` as sometimes it will result in
-    # `HB::URLResponder::InvalidTimestamp` error
-    def get_contacts(contact_list, limit=nil, from_timestamp = 0, cache_options = {})
+    def get_contacts(contact_list, limit=nil, from_timestamp = nil, cache_options = {})
       return fake_get_contacts(contact_list) if Hellobar::Settings[:fake_data_api]
-
       cache_key = "hello:data-api:#{contact_list.site_id}:contact_list-#{contact_list.id}:from#{from_timestamp}:limit#{limit}"
       cache_options[:expires_in] = 10.minutes
 
-      Rails.cache.fetch(cache_key, cache_options) do
+      Rails.cache.fetch cache_key, cache_options do
         path, params = Hello::DataAPIHelper::RequestParts.get_contacts(contact_list.site_id, contact_list.id, contact_list.site.read_key, limit, from_timestamp)
         get(path, params)
       end

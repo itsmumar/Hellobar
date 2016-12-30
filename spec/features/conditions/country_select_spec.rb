@@ -1,12 +1,14 @@
 require 'integration_helper'
 
-feature "Render the country select for the Rule modal", js: true do
+feature "Render the country select for the Rule modal", :js do
   extend FeatureHelper
 
   before(:each) do
     @user = login
+
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
+
     stub_out_get_ab_variations("Targeting UI Variation 2016-06-13") {"variant"}
   end
 
@@ -20,7 +22,7 @@ feature "Render the country select for the Rule modal", js: true do
     site.reload
 
     visit edit_site_site_element_path(site, element.id)
-    bypass_setup_steps(4)
+    bypass_setup_steps(3)
 
     page.find('a', text: 'Edit.').click
     page.find('a', text: '+').click
@@ -43,13 +45,14 @@ feature "Render the country select for the Rule modal", js: true do
     site.reload
 
     visit edit_site_site_element_path(site, element.id)
-    bypass_setup_steps(4)
+    bypass_setup_steps(3)
+
+    expect(page).to have_content 'Geolocation Country is AR'
 
     page.find('a', text: 'Edit.').click
 
-    select('Country')
-    value = find('.location-country-select').value
+    expect(page).to have_content 'EDIT RULE'
 
-    expect(value).to eql('AR')
+    expect(find('.location-country-select').value).to eql('AR')
   end
 end

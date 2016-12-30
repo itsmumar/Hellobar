@@ -1,8 +1,6 @@
 require 'integration_helper'
 
 feature "Takeover with image", js: true do
-  before { Capybara.current_driver = :webkit }
-  after { Capybara.current_driver = :selenium }
   scenario "shows the image" do
     element = FactoryGirl.create(:takeover_element, image_placement: 'bottom')
     image = create(:image_upload, :with_valid_image, site: element.site)

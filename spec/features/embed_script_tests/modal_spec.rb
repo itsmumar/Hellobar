@@ -1,8 +1,6 @@
 require 'integration_helper'
 
 feature "Site with a modal", js: true do
-  before { Capybara.current_driver = :webkit }
-  after { Capybara.current_driver = :selenium }
   scenario "removes iframe when modal is closed" do
     element = FactoryGirl.create(:modal_element)
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')

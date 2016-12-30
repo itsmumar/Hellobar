@@ -8,9 +8,8 @@ html
     = stylesheet_link_tag    "admin", :media => "all"
     = javascript_include_tag "application"
     = javascript_include_tag "admin"
-    = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
-    javascript:
-      try{Typekit.load({ async: true });}catch(e){}
+    = render 'shared/typekit'
+
     = csrf_meta_tags
 
   body#hb-admin

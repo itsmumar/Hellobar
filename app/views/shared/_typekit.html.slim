@@ -1,0 +1,5 @@
+- unless Rails.env.test?
+  = javascript_include_tag "https://use.typekit.net/qzg5yph.js"
+
+  javascript:
+    try{Typekit.load({ async: true });}catch(e){}
