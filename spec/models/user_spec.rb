@@ -21,12 +21,14 @@ describe User do
 
     it 'can have the same email as someone in the Rails database if the previous user was deleted' do
       email = 'hoogaboo@gmail.com'
-      user = User.create email: email, password: 'supers3cr37'
+
+      user = create :user, email: email
       user.destroy
 
-      user = User.create email: email
+      new_user = create :user, email: email
 
-      expect(user.errors.messages[:email]).to be_nil
+      expect(new_user).to be_valid
+      expect(new_user).to be_persisted
     end
 
     it 'should require a valid email' do
