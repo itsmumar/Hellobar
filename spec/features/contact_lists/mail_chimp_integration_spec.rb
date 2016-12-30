@@ -12,7 +12,7 @@ feature "MailChimp Integration" do
       expect(a_request(:post, /.*api.mailchimp.com.*/).
                with do |req|
                  params = JSON.parse req.body
-                 params["double_optin"] == true
+                 params["status"] == 'pending'
                end
             ).to have_been_made.once
     end
@@ -25,7 +25,7 @@ feature "MailChimp Integration" do
       expect(a_request(:post, /.*api.mailchimp.com.*/).
                with do |req|
                  params = JSON.parse req.body
-                 params["double_optin"] == false
+                 params["status"] == 'subscribed'
                end
             ).to have_been_made.once
     end

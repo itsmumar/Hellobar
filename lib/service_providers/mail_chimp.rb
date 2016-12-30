@@ -12,46 +12,57 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
 
     @identity = identity
-    @client = Gibbon::API.new(identity.credentials['token'], :api_endpoint => identity.extra['metadata']['api_endpoint'])
+    @client = Gibbon::Request.new({
+                api_key: identity.credentials['token'],
+                api_endpoint: identity.extra['metadata']['api_endpoint']
+              })
   end
 
   def lists
-    @lists ||= @client.lists.list(:start => 0, :limit => 100)['data']
+    @lists ||= @client.lists.retrieve(params: { count: 100 })['lists']
   rescue Gibbon::MailChimpError => error
     handle_error(error)
   end
 
   def email_exists?(list_id, email)
-    @client.lists.member_info({:id => list_id, :emails => [{:email => email}]})["success_count"] == 1
+    member_id = Digest::MD5.hexdigest(email)
+    !!@client.lists(list_id).members(member_id).retrieve
+  rescue Gibbon::MailChimpError => error
+    if error.status_code == 404
+      false
+    else
+      handle_error(error)
+    end
   end
 
-  def subscriber_statuses(list_id, emails)
-    {}.tap do |result|
-      emails.each { |e| result[e] = nil }
+  # TODO: This method should be moved to concerns once same rule gets
+  # applied to all other providers
+  def subscriber_statuses(contact_list, emails)
+    result = {}
 
-      emails.each_slice(50) do |email_group|
-        email_arr = email_group.map { |x| {email: x} }
-        @client.lists.member_info(id: list_id, emails: email_arr)["data"].each do |r|
-          result[r["email"]] = r["status"]
-        end
+    conditions = emails.map { |email| "email LIKE '%#{email}%'" }.join(' OR ')
+    contact_list_logs = contact_list.contact_list_logs.select(:email).where(conditions).pluck(:email)
+
+    emails.each do |email|
+      if contact_list_logs.include?(email) || contact_list_logs.include?("\"#{email}\"")
+        result[email] = 'Sent'
+      else
+        result[email] = 'Unsynced'
       end
     end
+
+    result
   rescue => e
-    Rails.logger.warn("#{site.url} - #{e.message}")
+    Rails.logger.warn("#{contact_list.site.url} - #{e.message}")
     {}
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
-    opts = {:id => list_id, :email => {:email => email}, :double_optin => double_optin}
-
-    if name.present?
-      split = name.split(' ', 2)
-      opts[:merge_vars] = {:NAME => name, :FNAME => split[0], :LNAME => split[1]}
-    end
+    opts = hashify_options(email, name, double_optin)
 
     retry_on_timeout do
       begin
-        @client.lists.subscribe(opts).tap do |result|
+        @client.lists(list_id).members.create(body: opts).tap do |result|
           log result
         end
       rescue Gibbon::MailChimpError => error
@@ -62,19 +73,25 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
   def batch_subscribe(list_id, subscribers, double_optin = true)
-    log "Sending #{subscribers.size} emails to remote service."
+    log "Queuing #{subscribers.size} emails to remote service."
 
-    batch = subscribers.map do |subscriber|
-      {:EMAIL => {:email => subscriber[:email]}}.tap do |entry|
-        if subscriber[:name]
-          split = subscriber[:name].split(' ', 2)
-          entry[:merge_vars] = {:NAME => subscriber[:name], :FNAME => split[0], :LNAME => split[1], :CREATEDAT => subscriber[:created_at]}
-        end
-      end
+    bodies = subscribers.map do |subscriber|
+      hashify_options(subscriber[:email], subscriber[:name], double_optin)
     end
 
-    @client.lists.batch_subscribe({:id => list_id, :batch => batch, :double_optin => double_optin}).tap do |result|
-      log handle_result(result)
+    operations = bodies.map do |body|
+                   {
+                     method: "POST",
+                     path: "lists/#{list_id}/members",
+                     body: body.to_json
+                   }
+                 end
+
+    retry_on_timeout do
+      # It will enqueue batch operation job to mailchimp and will process
+      # in background. We are not bothering about the results as we don't
+      # do anything with that except logging it into logs.
+      @client.batches.create(body: { operations: operations })
     end
   end
 
@@ -105,7 +122,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   end
 
   def handle_error(error)
-    case error.code
+    case error.status_code
     when 250
       catch_required_merge_var_error!(error)
     when 104, 200, 101 #Invalid_ApiKey, Invalid List, Deactivated Account
@@ -137,6 +154,18 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   end
 
   private
+
+  def hashify_options(email, name, double_optin)
+    opts = { email_address: email }
+    opts[:status] = (double_optin ?  "pending" : "subscribed")
+
+    if name.present?
+      split = name.split(' ', 2)
+      opts[:merge_fields] = {:FNAME => split[0], :LNAME => split[1] || ""}
+    end
+
+    opts
+  end
 
   def catch_required_merge_var_error!(error)
     # pause identity by deleting it

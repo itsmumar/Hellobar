@@ -13,7 +13,7 @@ shared_context "service provider request setup" do
   let(:identity) {
     Identity.new(provider: provider,
                  extra: {"metadata" => {}},
-                 credentials: {},
+                 credentials: {'token' => 'foobar-token'},
                  site: site)
   }
 
@@ -21,7 +21,7 @@ shared_context "service provider request setup" do
   let(:email)            { "email@example.com" }
   let(:name)             { "JohnDoe" }
   let(:optin)            { true }
-  let(:service_provider) { identity.service_provider}
+  let(:service_provider) { identity.service_provider }
   let(:site)             { create(:site) }
 
 end
