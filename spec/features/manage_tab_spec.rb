@@ -8,8 +8,6 @@ feature "Manage Bars", js: true do
     allow_any_instance_of(Site).to receive(:lifetime_totals).and_return({"1" => [[1,0]]})
   end
 
-  after { devise_reset }
-
   context "script is not installed" do
     before do
       allow_any_instance_of(Site).to receive(:has_script_installed?).and_return(false)

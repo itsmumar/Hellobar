@@ -1,8 +1,6 @@
 require 'integration_helper'
 
 feature "Visit click to call on desktop browser", js: true do
-  before { Capybara.current_driver = :webkit }
-  after { Capybara.current_driver = :selenium }
   scenario "doesn't show the site element" do
     element = FactoryGirl.create(:modal_element, element_subtype: 'call', phone_number: '(555)-555-5555')
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
@@ -15,8 +13,6 @@ feature "Visit click to call on desktop browser", js: true do
 end
 
 feature "Visit click to call on mobile browser", js: true do
-  before { Capybara.current_driver = :webkit }
-  after { Capybara.current_driver = :selenium }
   scenario "shows the click to call site element" do
     element = FactoryGirl.create(:modal_element, element_subtype: 'call', phone_number: '(555)-555-5555')
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')

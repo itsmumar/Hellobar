@@ -6,9 +6,10 @@ Made with love.
 
 ### Mac OS
 
-install dependancies (fontforge and ttfautohint support local compilation of font files)
+Install dependancies (fontforge and ttfautohint support local compilation of font files)
 
 `brew install fontforge ttfautohint eot-utils`
+
 
 Bundle install all the gems
 
@@ -28,6 +29,57 @@ Let rake setup and migrate all your databases
 
 `rake db:setup`
 
+
+It is advised to run the application locally using the `local.hellobar.com` domain with an additional entry in `/etc/hosts`,
+so that it resolves into `127.0.0.1`.
+
+You need to visit https://console.developers.google.com/apis/credentials?project=hellobar-oauth
+and setup or use existing Google OAuth credentials to be able to log in.
+
+You need to add `google_auth_id` and `google_auth_secret` into `config/settings.yml`.
+
+
+#### Front-end
+
+Install `node.js` together with `npm`:
+
+```
+brew install node
+```
+
+Install `bower` and `ember-cli` globally:
+
+```
+npm install -g ember-cli
+npm install -g bower
+```
+
+Install all dependencies:
+
+```
+cd editor/
+npm install
+bower install
+```
+
+Then build the Ember application:
+
+```
+ember build --environment=production
+```
+
+The above command will build the js/css files for the Ember part of the application.
+It will store it in `editor/dist/assets`.
+This directory is then being included by Rails in the assets pipeline.
+
+In development, it is recommended to use the `--watch` option, like this:
+
+```
+ember build --environment=production --watch
+```
+
+
+
 ### MS Windows
 
 See [wiki](https://github.com/CrazyEggInc/hellobar_new/wiki/Windows-Environment-Setup)
@@ -36,19 +88,89 @@ See [wiki](https://github.com/CrazyEggInc/hellobar_new/wiki/Windows-Environment-
 
 See [wiki](https://github.com/Hello-bar/hellobar_new/wiki/Application-Setup-on-Ubuntu-(Linux))
 
-### Front End
+### Icon font
 
 NOTE: install fontforge locally first with `brew install fontforge ttfautohint`
+
 To add a new icon to the custom icon font file - add the icon svg file to app/assets/icons and run
 `rake icon:compile`
 
+
+## Running specs
+
+To run specs locally you need to have QT 5.5+ installed locally. Installation instructions can be found here:
+
+https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit
+
+
+### Rails' specs
+
+Integration tests run in the `spec/features` directory.  They use the
+`lib/SiteGenerator` to create an html file in `public/integration`.  The
+file name is a random hex.
+
+Capybara navigates to the public html file in order to test interactions.
+
+To test the content of the iframe use `within_frame`.
+
+To test adding or removing the iframe use
+`page.driver.browser.frame_focus`.
+
+Watch out for animations and other asynchronous or delayed interactions.
+You may need to fiddle with the `Capybara.default_max_wait_time` in
+`spec/spec_helper`.
+
+Running Rails' specs:
+
+```
+bundle exec rspec spec
+```
+
+
+## JavaScript tests
+
+Teaspoon runs the *_spec.js files in spec/javascripts/
+
+The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
+
+Tests are divided in 2 groups: `generator` (tests `hellobar.base.js` and some other files) and `project`
+(tests `assets/javascripts/` files).
+
+To get the coverage of Generator:
+
+> teaspoon --suite=generator --coverage=generator
+
+Coverage of Project:
+
+> teaspoon --suite=project --coverage=project
+
+
+
 ## Workflow
 
-To add a new feature, make a branch of **master**.  When ready to test, rebase your branch into **master**.
+To add a new feature, make a branch off of **master**.  When ready to test, rebase your branch into **master**.
 
-When ready to deploy to production, merge **master** into **production** and use capistrano to deploy the **production** branch.
 
-```BRANCH=production cap production deploy```
+## Deployments
+
+To do a production deploy:
+
+```
+cap production deploy BRANCH=master
+```
+
+To do a staging deploy:
+
+```
+cap staging deploy BRANCH=some-branch
+```
+
+To do an edge deploy:
+
+```
+cap edge deploy BRANCH=other-branch
+```
+
 
 ## Provisioning a new Hello Bar server
 
@@ -124,39 +246,6 @@ The above method is used by the capybara integration tests.
 All of these rake tasks use the `lib/SiteGenerator.rb` class as well as
 an `HbTestSite` class defined within the rake task itself.
 
-### Automated (integration) tests
-
-Integration tests run in the `spec/features` directory.  They use the
-`lib/SiteGenerator` to create an html file in `public/integration`.  The
-file name is a random hex.
-
-Capybara navigates to the public html file in order to test interactions.
-
-To test the content of the iframe use `within_frame`.
-
-To test adding or removing the iframe use
-`page.driver.browser.frame_focus`.
-
-Watch out for animations and other asynchronous or delayed interactions.
-You may need to fiddle with the `Capybara.default_wait_time` in
-`spec/spec_helper`.
-
-## JavaScript tests
-
-Teaspoon runs the *_spec.js files in spec/javascripts/
-
-The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
-
-Tests are divided in 2 groups: `generator` (tests `hellobar.base.js` and some other files) and `project`
-(tests `assets/javascripts/` files).
-
-To get the coverage of Generator:
-
-> teaspoon --suite=generator --coverage=generator
-
-Coverage of Project:
-
-> teaspoon --suite=project --coverage=project
 
 ## Live testing/QA info
 

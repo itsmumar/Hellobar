@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature "Site with a question modal", js: true do
+feature "Site with a question modal", :js do
   before do
     @element = FactoryGirl.create(:modal_element,
       use_question: true,
@@ -25,8 +25,8 @@ feature "Site with a question modal", js: true do
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')
 
-    within_frame('random-container-0') do
-      expect(page.html).to have_content(@element.question)
-    end
+    page.driver.browser.frame_focus("random-container-0")
+
+    expect(page).to have_content(@element.question)
   end
 end

@@ -4,12 +4,9 @@ require 'webmock/rspec'
 require 'support/ab_test_config'
 
 RSpec.configure do |config|
-  config.include Capybara::DSL
   config.include SiteGeneratorHelper
   config.include FeatureHelper
 
-  # Don't override the javascript_driver in a dockerized environment
-  Capybara.javascript_driver = :selenium unless ENV['DOCKER']
   OmniAuth.config.test_mode = true
 
   config.before(:all) do

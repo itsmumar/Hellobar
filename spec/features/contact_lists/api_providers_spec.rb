@@ -2,7 +2,6 @@ require 'integration_helper'
 
 feature "Connect to api ESP", js: true do
   before { @user = login }
-  after { devise_reset }
 
   #----------  MadMimi - Original  ----------#
 
@@ -15,21 +14,21 @@ feature "Connect to api ESP", js: true do
 
     visit site_contact_list_path(site, contact_list)
 
-    page.find("#edit-contact-list").click
-    page.find('a', text: "Nevermind, I want to view all tools").click
-    page.find('.mad_mimi_api-provider label').click
+    find("#edit-contact-list").click
+    find('a', text: "Nevermind, I want to view all tools").click
+    find('.mad_mimi_api-provider label').click
 
     fill_in 'contact_list[data][username]', with: 'tj+madmimitest@polymathic.me'
     fill_in 'contact_list[data][api_key]', with: '12225410b3e4b656e09ce7760bfaa240'
 
-    page.find(".button.ready").click
-    page.select 'TEST LIST', :from => 'Choose a MadMimi list to sync with'
-    page.find(".button.submit").click
+    find(".button.ready").click
+    select 'TEST LIST', :from => 'Choose a MadMimi list to sync with'
+    find(".button.submit").click
 
     expect(page).to have_content('MadMimi list "TEST LIST"')
 
-    page.find("#edit-contact-list").click
-    page.find(".button.unlink").click
+    find("#edit-contact-list").click
+    find(".button.unlink").click
 
     Hellobar::Settings[:fake_data_api] = fake_data_api_original
   end
@@ -47,21 +46,21 @@ feature "Connect to api ESP", js: true do
 
     visit site_contact_list_path(site, contact_list)
 
-    page.find("#edit-contact-list").click
-    page.find("a", text: "Nevermind, I want to view all tools").click
-    page.find("label", text: "MadMimi").click
+    find("#edit-contact-list").click
+    find("a", text: "Nevermind, I want to view all tools").click
+    find("label", text: "MadMimi").click
 
     fill_in 'contact_list[data][username]', with: 'tj+madmimitest@polymathic.me'
     fill_in 'contact_list[data][api_key]', with: '12225410b3e4b656e09ce7760bfaa240'
 
-    page.find(".button.ready").click
-    page.select 'TEST LIST', :from => 'Choose a MadMimi list to sync with'
-    page.find(".button.submit").click
+    find(".button.ready").click
+    select 'TEST LIST', :from => 'Choose a MadMimi list to sync with'
+    find(".button.submit").click
 
     expect(page).to have_content('MadMimi list "TEST LIST"')
 
-    page.find("#edit-contact-list").click
-    page.find(".button.unlink").click
+    find("#edit-contact-list").click
+    find(".button.unlink").click
 
     Hellobar::Settings[:fake_data_api] = fake_data_api_original
   end
@@ -77,21 +76,21 @@ feature "Connect to api ESP", js: true do
 
     visit site_contact_list_path(site, contact_list)
 
-    page.find("#edit-contact-list").click
+    find("#edit-contact-list").click
 
-    page.find('a', text: "Nevermind, I want to view all tools").click
-    page.find('.webhooks-provider label').click
+    find('a', text: "Nevermind, I want to view all tools").click
+    find('.webhooks-provider label').click
 
     fill_in 'contact_list[data][webhook_url]', with: 'http://google.com'
     check "POST request"
-    page.find(".button.submit").click
+    find(".button.submit").click
     expect(page).to have_selector("input[value='Export CSV']")
 
-    page.find("#edit-contact-list").click
+    find("#edit-contact-list").click
 
     expect(page).to have_content('POST request')
-    expect(find_field("contact_list[data][webhook_url]").value).to eql("http://google.com")
-    expect(find_field("contact_list[data][webhook_method]").selected?).to be_true
+    expect(find('#contact_list_webhook_url').value).to eq "http://google.com"
+    expect(find('#contact_list_provider').value).to eq 'webhooks'
 
     Hellobar::Settings[:fake_data_api] = fake_data_api_original
   end
@@ -108,19 +107,19 @@ feature "Connect to api ESP", js: true do
     contact_list = create(:contact_list, site: site)
 
     visit site_contact_list_path(site, contact_list)
-    page.find("#edit-contact-list").click
+    find("#edit-contact-list").click
 
-    page.find("a", text: "Nevermind, I want to view all tools").click
-    page.find("label", text: "Webhooks").click
+    find("a", text: "Nevermind, I want to view all tools").click
+    find("label", text: "Webhooks").click
     fill_in 'contact_list[data][webhook_url]', with: 'http://google.com'
     check "POST request"
 
-    page.find(".button.submit").click
-    page.find("#edit-contact-list").click
+    find(".button.submit").click
+    find("#edit-contact-list").click
 
     expect(page).to have_content('Webhook URL')
-    expect(find_field("contact_list[data][webhook_url]").value).to eql("http://google.com")
-    expect(find_field("contact_list[data][webhook_method]").selected?).to be_true
+    expect(find('#contact_list_webhook_url').value).to eq "http://google.com"
+    expect(find('#contact_list_provider').value).to eq 'webhooks'
 
     Hellobar::Settings[:fake_data_api] = fake_data_api_original
   end

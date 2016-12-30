@@ -3,7 +3,6 @@ require 'integration_helper'
 feature "Update Profile", js: true do
   context "is not an oauth user" do
     before { @user = login }
-    after { devise_reset }
 
     scenario "updates name without updating password" do
       visit profile_path
@@ -36,7 +35,6 @@ feature "Update Profile", js: true do
       @user = create(:authentication).user
       login(@user)
     end
-    after { devise_reset }
 
     scenario "email field is be disabled when loading the page" do
       visit profile_path
@@ -73,7 +71,6 @@ feature "Update Profile", js: true do
       fill_in 'New Password', with: "abc123abc"
       fill_in 'Repeat Password', with: "abc123abc"
       click_button 'Save & Update'
-      page.driver.browser.switch_to.alert.accept
       expect(page).to have_content('Your settings have been updated.')
     end
   end
