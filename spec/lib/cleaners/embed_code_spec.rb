@@ -18,6 +18,6 @@ describe Cleaners::EmbedCode do
       "<html><body><iframe><form>“I want to go to the gym”, he said.</form></iframe></body></html>"
     }
 
-    its(:data) { should == { 'embed_code' => '<html><body><iframe><form>"I want to go to the gym", he said.</form></iframe></body></html>' } }
+    its(:data) { should == { 'embed_code' => embed_code.tr!('“”', '"') } }
   end
 end
