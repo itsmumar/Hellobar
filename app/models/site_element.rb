@@ -1,7 +1,7 @@
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
 
-  TYPES = [Bar, Modal, Slider, Takeover, Custom]
+  TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade]
 
   DEFAULT_EMAIL_THANK_YOU = "Thank you for signing up!"
   DEFAULT_FREE_EMAIL_THANK_YOU = "#{DEFAULT_EMAIL_THANK_YOU} If you would like this sort of bar on your site..."
@@ -51,8 +51,10 @@ class SiteElement < ActiveRecord::Base
   validate :has_thank_you_text, if: :is_email?
   validate :subscription_for_custom_targeting
 
-  scope :paused, -> { where(paused: true) }
-  scope :active, -> { where(paused: false) }
+  scope :paused, -> { where("paused = true and type != 'ContentUpgrade'") }
+  scope :active, -> { where("paused = false and type != 'ContentUpgrade'") }
+  scope :paused_content_upgrades, -> { where("paused = true and type = 'ContentUpgrade'") }
+  scope :active_content_upgrades, -> { where("paused = false and type = 'ContentUpgrade'") }
   scope :has_performance, -> { where("element_subtype != ?", "announcement") }
   scope :bars, -> { where(type: "Bar") }
   scope :sliders, -> { where(type: "Slider") }

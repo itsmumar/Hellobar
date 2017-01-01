@@ -1,0 +1,3 @@
+class ContentUpgrade < SiteElement
+
+end

@@ -35,6 +35,8 @@
             }
           }
 
+          HB.CONTENT_UPGRADES  = {{{content_upgrades_json}}}
+
           {{#templates}}
             HB.setTemplate("{{name}}", {{{markup}}});
           {{/templates}}
@@ -42,6 +44,10 @@
           {{#branding_templates}}
             HB.setBrandingTemplate("{{name}}", {{{markup}}});
           {{/branding_templates}}
+
+          {{#content_upgrade_template}}
+            HB.setContentUpgradeTemplate("{{name}}", {{{markup}}});
+          {{/content_upgrade_template}}
 
           HB.addCSS({{{hellobar_element_css}}});
           HB.addCSS({{{hellobar_template_container_css}}});
