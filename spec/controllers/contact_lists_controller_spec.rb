@@ -180,11 +180,11 @@ describe ContactListsController, type: :controller do
         }
       end
 
-      it "stores the embed code in the data" do
+      it "clean-ups the embed code" do
           post :create, site_id: site, contact_list: contact_list_params
 
           new_contact_list = ContactList.last
-          expect(new_contact_list.data['embed_code']).to eq '<script type="text/javascript"></script>'
+          expect(new_contact_list.data['embed_code']).to be_nil
       end
 
       context "when the embed code is blank" do
@@ -232,7 +232,8 @@ describe ContactListsController, type: :controller do
 
     context "when esp has embed_code" do
       let(:contact_list) { contact_lists(:embed_code) }
-      let(:contact_list_params) { { data: { embed_code: "asdf" } } }
+      let(:embed_code) { '<html><body><iframe><form>Here I am</form></iframe></body></html>' }
+      let(:contact_list_params) { { data: { embed_code: embed_code } } }
 
       it 'keeps the service provider' do
         put :update, site_id: site, id: contact_list, contact_list: contact_list_params
@@ -245,7 +246,7 @@ describe ContactListsController, type: :controller do
         put :update, site_id: site, id: contact_list, contact_list: contact_list_params
         contact_list.reload
 
-        expect(contact_list.data['embed_code']).to eq "asdf"
+        expect(contact_list.data['embed_code']).to eq embed_code
       end
     end
   end

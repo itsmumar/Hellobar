@@ -177,7 +177,9 @@ class ContactList < ActiveRecord::Base
   end
 
   def embed_code_valid?
-    service_provider && service_provider.embed_code_valid?
+    unless service_provider.try(:embed_code_valid?)
+      errors.add(:base, "Embed code is invalid")
+    end
   end
 
   def service_provider_class

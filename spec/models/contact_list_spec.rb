@@ -335,22 +335,22 @@ describe ContactList, "embed code" do
   context "invalid" do
     let(:embed_code) { "asdf" }
     its(:data) { should == { 'embed_code' => 'asdf' } }
-    its(:embed_code_valid?) { should == false }
+    its(:embed_code_valid?) { should == ['Embed code is invalid'] }
   end
 
   context "invalid" do
     let(:embed_code) { "<<asdfasdf>>>" }
-    its(:embed_code_valid?) { should == false }
+    its(:embed_code_valid?) { should == ['Embed code is invalid'] }
   end
 
   context "invalid" do
     let(:embed_code) { "<from></from>" }
-    its(:embed_code_valid?) { should == false }
+    its(:embed_code_valid?) { should == ['Embed code is invalid'] }
   end
 
   context "valid" do
     let(:embed_code) { "<form></form>" }
-    its(:embed_code_valid?) { should == true }
+    its(:embed_code_valid?) { should == nil }
   end
 end
 
