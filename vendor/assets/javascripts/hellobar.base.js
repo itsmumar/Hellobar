@@ -113,6 +113,14 @@ var HB = {
     }
   },
 
+  //
+  showContentUpgrade: function (id) {
+    siteElement = HB.CONTENT_UPGRADES[id]
+    var tpl =  HB.contentUpgradeTemplates['contentupgrade']
+    content =  HB.renderTemplate(tpl, siteElement)
+    document.getElementById('hb-cu-'+id).outerHTML = content;
+  },
+
   // Copy functions from spec into klass
   cpFuncs: function (spec, klass) {
     for (var key in spec) {
@@ -892,6 +900,7 @@ var HB = {
   // A global variable to store templates
   templateHTML: {},
   brandingTemplates: {},
+  contentUpgradeTemplates: {},
 
   // Sets the template HTML. Note if you override getTemplate this will have
   // no affect
@@ -920,6 +929,16 @@ var HB = {
   getBrandingTemplate: function (type) {
     return HB.brandingTemplates[type];
   },
+
+  // Sets the content upgrade HTML.
+  setContentUpgradeTemplate: function (type, html) {
+    HB.contentUpgradeTemplates[type] = html;
+  },
+
+  getContentUpgradeTemplate: function (type) {
+    return HB.contentUpgradeTemplates[type];
+  },
+
 
   // Takes each string value in the siteElement and escapes HTML < > chars
   // with the matching symbol
