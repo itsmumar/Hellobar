@@ -1,0 +1,9 @@
+<h2>Content Upgrades</h2>
+<%= link_to('Add a New Content Upgrade', new_site_content_upgrade_path(@site.id)) %>
+<%= link_to('Edit Content Upgrade Styles', style_editor_site_content_upgrades_path(@site.id)) %>
+<ul>
+<% @content_upgrades.each do |content_upgrade| %>
+<li><%= link_to(content_upgrade.id, edit_site_content_upgrade_path(@site.id, content_upgrade.id)) %><li>
+
+<% end %>
+</ul>

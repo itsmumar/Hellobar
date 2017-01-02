@@ -1,0 +1,2 @@
+module ContentUpgradeHelper
+end
