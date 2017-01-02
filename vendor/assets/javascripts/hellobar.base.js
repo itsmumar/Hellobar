@@ -1016,7 +1016,7 @@ var HB = {
   createSiteElement: function (data) {
     var siteElement;
 
-    var whitelistedProperties = ['headline', 'caption', 'link_text'];
+    var whitelistedProperties = ['headline', 'caption', 'link_text', 'custom_html', 'custom_css', 'custom_js'];
 
     // TODO do we need to sanitize blocks property?
     // Sanitize the data

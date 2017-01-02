@@ -73,7 +73,7 @@ HB.SiteElement = HB.createClass({
 
     var html = generateHtml();
     if (this.type === 'Custom') {
-      var customJs = (this.custom_js || '').replace(/&amp;/g, '&').replace(/&gt;/g, '>').replace(/&lt;/g, '<');
+      var customJs = this.custom_js || '';
       html = html + '<script>var hbElement=window.parent.HB.findSiteElementOnPageById(' + this.id + '); ' + customJs + '<\/script>'
     }
     // Once the dom is ready we inject the html returned from renderTemplate
