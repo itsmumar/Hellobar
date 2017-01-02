@@ -162,6 +162,10 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def content_upgrades?
+      false
+    end
+
     protected
 
     def parent_class
@@ -311,6 +315,10 @@ class Subscription < ActiveRecord::Base
   class ProManaged < Pro
     class Capabilities < Pro::Capabilities
       def custom_html?
+        true
+      end
+
+      def content_upgrades?
         true
       end
     end
