@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-CY_MAD_MIMI_EMBED_CODE = '<iframe src="https://madmimi.com/signups/103242/iframe" scrolling="no" frameborder="0" height="405" width="400"></iframe>'
+CY_MAD_MIMI_EMBED_CODE = '<html><body><iframe><form>Here I am</form></iframe></body></html>'
 
 require 'rake'
 load 'lib/tasks/contact_list.rake'
