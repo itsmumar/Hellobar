@@ -6,6 +6,9 @@ Made with love.
 
 ### Mac OS
 
+HelloBar runs on Ruby version 2.1.9, so it is recommended to install the exact same version locally.
+
+
 Install dependancies (fontforge and ttfautohint support local compilation of font files)
 
 `brew install fontforge ttfautohint eot-utils`
@@ -93,7 +96,10 @@ See [wiki](https://github.com/Hello-bar/hellobar_new/wiki/Application-Setup-on-U
 NOTE: install fontforge locally first with `brew install fontforge ttfautohint`
 
 To add a new icon to the custom icon font file - add the icon svg file to app/assets/icons and run
-`rake icon:compile`
+
+```
+rake icon:compile
+```
 
 
 ## Running specs
@@ -103,7 +109,7 @@ To run specs locally you need to have QT 5.5+ installed locally. Installation in
 https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit
 
 
-### Rails' specs
+### Rails specs
 
 Integration tests run in the `spec/features` directory.  They use the
 `lib/SiteGenerator` to create an html file in `public/integration`.  The
@@ -120,35 +126,50 @@ Watch out for animations and other asynchronous or delayed interactions.
 You may need to fiddle with the `Capybara.default_max_wait_time` in
 `spec/spec_helper`.
 
-Running Rails' specs:
+Running Rails specs:
 
 ```
 bundle exec rspec spec
 ```
 
 
-## JavaScript tests
+## Javaccript specs
 
 Teaspoon runs the *_spec.js files in spec/javascripts/
 
 The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
 
-Tests are divided in 2 groups: `generator` (tests `hellobar.base.js` and some other files) and `project`
-(tests `assets/javascripts/` files).
+To run the whole suite of Javascript specs execute:
+
+```
+rake teaspoon
+```
+
+
+Tests are divided into two groups:
+
+* `generator` (tests `hellobar.base.js` and some other files)
+* `project` (tests `assets/javascripts/` files).
 
 To get the coverage of Generator:
 
-> teaspoon --suite=generator --coverage=generator
+```
+teaspoon --suite=generator --coverage=generator
+```
 
 Coverage of Project:
 
-> teaspoon --suite=project --coverage=project
+```
+teaspoon --suite=project --coverage=project
+```
 
 
 
 ## Workflow
 
-To add a new feature, make a branch off of **master**.  When ready to test, rebase your branch into **master**.
+To add a new feature, make a branch off of **master** and open a new pull request at GitHub with your changes.
+Be sure to include a link to the JIRA card in the description and place the JIRA card number as a prefix in
+your pull request name, like this: `[XOHB-1083] Switch to https Ruby gem sources`.
 
 
 ## Deployments
