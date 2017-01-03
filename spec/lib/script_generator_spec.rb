@@ -81,7 +81,7 @@ describe ScriptGenerator do
       end
 
       it 'renders only the setTemplate definition and 1 call per bar type' do
-        bar = Bar.new(element_subtype: 'traffic')
+        bar = Bar.new(element_subtype: 'traffic', theme_id: 'classic')
         site.stub(site_elements: double('site_elements', active: [bar, bar], none?: true ))
 
         generator = ScriptGenerator.new site
@@ -90,13 +90,13 @@ describe ScriptGenerator do
       end
 
       it 'renders the setTemplate definition and 1 call per bar type for multiple types' do
-        traffic_bar = Bar.new(element_subtype: 'traffic')
-        email_bar = Bar.new(element_subtype: 'email')
+        traffic_bar = Bar.new(element_subtype: 'traffic', theme_id: 'classic')
+        email_bar = Bar.new(element_subtype: 'email', theme_id: 'classic')
         site.stub site_elements: double('site_elements', active: [traffic_bar, email_bar], none?: true)
 
         generator = ScriptGenerator.new site
 
-        generator.render.scan('setTemplate').size.should == 2
+        generator.render.scan('setTemplate').size.should == 3
       end
     end
 
