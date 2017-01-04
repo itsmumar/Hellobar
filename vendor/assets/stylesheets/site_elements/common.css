@@ -668,6 +668,10 @@ a.barlinkwhite {
   color: white;
 }
 
+a.barlinkblack {
+  color: black;
+}
+
 a.barlinkorange {
   color: #f76504;
 }
