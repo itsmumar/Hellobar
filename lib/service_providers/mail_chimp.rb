@@ -47,7 +47,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       if contact_list_logs.include?(email) || contact_list_logs.include?("\"#{email}\"")
         result[email] = 'Sent'
       else
-        result[email] = 'Unsynced'
+        result[email] = 'Not sent'
       end
     end
 
