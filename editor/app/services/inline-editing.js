@@ -328,7 +328,9 @@ export default Ember.Service.extend({
         barlinkmutedblue: 'Muted Blue',
         barlinkorange: 'Orange',
         barlinkgreen: 'Green',
-        barlinkred: 'Red'
+        barlinkred: 'Red',
+        barlinkwhite: 'White',
+        barlinkblack: 'Black'
       },
       linkMultipleStyles: false,
       toolbarInline: true,
@@ -353,7 +355,9 @@ export default Ember.Service.extend({
         barlinkmutedblue: 'Muted Blue',
         barlinkorange: 'Orange',
         barlinkgreen: 'Green',
-        barlinkred: 'Red'
+        barlinkred: 'Red',
+        barlinkwhite: 'White',
+        barlinkblack: 'Black'
       },
       linkMultipleStyles: false,
       toolbarInline: true,
