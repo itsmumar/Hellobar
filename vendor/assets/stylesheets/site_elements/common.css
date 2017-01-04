@@ -647,3 +647,31 @@ a.fr-strong {
 a.fr-green {
   color: green;
 }
+
+a.barlinkstrong {
+  font-weight: 700;
+}
+
+a.barlinkgreen {
+  color: green;
+}
+
+a.barlinkblue {
+  color: blue;
+}
+
+a.barlinkmutedblue {
+  color: #2d82b9;
+}
+
+a.barlinkwhite {
+  color: white;
+}
+
+a.barlinkorange {
+  color: #f76504;
+}
+
+a.barlinkred {
+  color: red;
+}
