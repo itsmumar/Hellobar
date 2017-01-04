@@ -62,12 +62,6 @@
   fill: white;
 }
 
-.hellobar#pull-down.hb-large .hellobar-arrow {
-  width: 28px;
-  height: 28px;
-  background-size: 28px 28px;
-}
-
 .hellobar#pull-down.hb-bar-bottom {
   top: auto;
   bottom: -4px;
