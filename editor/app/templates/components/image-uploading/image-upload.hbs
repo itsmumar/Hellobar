@@ -3,7 +3,7 @@
   <img class="file-action icon-trash" {{action "removeDropzoneImages"}} src="{{image-path 'delete.svg'}}">
 </div>
 <div class="file-upload" id="dropzone-preview">
-  {{image-upload-text
+  {{image-uploading/image-upload-text
     filename=existingFileName
     uploading=isUploading
     imageUploadCopy=imageUploadCopy

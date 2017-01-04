@@ -62,11 +62,11 @@
 
   <label>
     <span>Cookie Duration</span>
-    {{#popup-hint-trigger}}
+    {{#hints/popup-hint-trigger}}
       <p>The number of days before the optin will display <br>
         again once the user exits your campaign. <br>
         <strong>Change to 0 to prevent cookies from being set.</strong></p>
-    {{/popup-hint-trigger}}
+    {{/hints/popup-hint-trigger}}
   </label>
   {{input value=model.settings.cookie_settings.duration
     placeholder="Cookie Duration"
@@ -76,11 +76,11 @@
 
   <label>
     <span>Success Cookie Duration</span>
-    {{#popup-hint-trigger}}
+    {{#hints/popup-hint-trigger}}
       <p>The number of days before the optin will display <br>
         again once the user successfully opts in to your <br>
         campaign. <strong>Change to 0 to prevent success <br> cookies from being set.</strong></p>
-    {{/popup-hint-trigger}}
+    {{/hints/popup-hint-trigger}}
   </label>
   {{input value=model.settings.cookie_settings.success_duration
     placeholder="Success Cookie Duration"
