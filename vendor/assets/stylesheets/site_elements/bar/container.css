@@ -62,6 +62,10 @@
   fill: white;
 }
 
+.hellobar#pull-down.inverted .hellobar-arrow svg {
+  fill: #3C3E3F;
+}
+
 .hellobar#pull-down.hb-bar-bottom {
   top: auto;
   bottom: -4px;
