@@ -323,11 +323,19 @@ export default Ember.Service.extend({
     this.cleanupFroala();
     const simpleFroalaOptions = {
       key: froalaKey,
+      linkStyles: {
+        barlinkblue: 'Blue',
+        barlinkmutedblue: 'Muted Blue',
+        barlinkorange: 'Orange',
+        barlinkgreen: 'Green',
+        barlinkred: 'Red'
+      },
+      linkMultipleStyles: false,
       toolbarInline: true,
       toolbarVisibleWithoutSelection: true,
       toolbarButtons: [
         'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
-        'fontFamily', 'fontSize', 'color', '-',
+        'fontFamily', 'fontSize', 'color', 'insertLink', '-',
         'undo', 'redo', 'clearFormatting', 'selectAll'
       ],
       htmlAllowedTags: [
@@ -340,6 +348,14 @@ export default Ember.Service.extend({
     };
     const fullFroalaOptions = {
       key: froalaKey,
+      linkStyles: {
+        barlinkblue: 'Blue',
+        barlinkmutedblue: 'Muted Blue',
+        barlinkorange: 'Orange',
+        barlinkgreen: 'Green',
+        barlinkred: 'Red'
+      },
+      linkMultipleStyles: false,
       toolbarInline: true,
       toolbarVisibleWithoutSelection: true,
       toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
