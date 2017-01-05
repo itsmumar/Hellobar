@@ -11,7 +11,7 @@
     <div class="section">
       {{#each genericThemes as |theme| }}
         <div data-theme-id="{{theme.id}}" class="theme-tile-wrapper">
-          {{theme-tile theme=theme elementType=elementType}}
+          {{theming/theme-tile theme=theme elementType=elementType}}
         </div>
       {{/each}}
     </div>
@@ -24,7 +24,7 @@
       <div class="section">
         {{#each templateThemes as |theme| }}
           <div data-theme-id="{{theme.id}}" class="theme-tile-wrapper">
-            {{theme-tile theme=theme elementType=elementType}}
+            {{theming/theme-tile theme=theme elementType=elementType}}
           </div>
         {{/each}}
       </div>

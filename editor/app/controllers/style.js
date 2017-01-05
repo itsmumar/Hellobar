@@ -29,7 +29,7 @@ export default Ember.Controller.extend({
       }
     );
     this.get('bus').subscribe('hellobar.core.rightPane.show', params => {
-        if (params.componentName === 'theme-tile-grid') {
+        if (params.componentName === 'theming/theme-tile-grid') {
           this.set('themeSelectionInProgress', true);
         }
       }
@@ -149,7 +149,7 @@ export default Ember.Controller.extend({
       this.get('bus').trigger('hellobar.core.rightPane.hide');
     } else {
       this.get('bus').trigger('hellobar.core.rightPane.show', {
-        componentName: 'theme-tile-grid',
+        componentName: 'theming/theme-tile-grid',
         componentOptions: { elementType }
       });
 
@@ -218,7 +218,7 @@ export default Ember.Controller.extend({
         confirm() {
           confirmModal.close();
           controller.get('bus').trigger('hellobar.core.rightPane.show', {
-            componentName: 'theme-tile-grid',
+            componentName: 'theming/theme-tile-grid',
             componentOptions: {
               elementType: controller.get('model.type')
             }

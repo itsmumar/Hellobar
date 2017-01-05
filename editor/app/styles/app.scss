@@ -37,21 +37,21 @@
 
 // These are editor's components
 @import 'components/_announcement-container.css.sass';
-@import 'components/_custom-pro-select.sass';
-@import 'components/_contact-list-select.sass';
-@import 'components/_image-upload.css.sass';
 @import 'components/_no-content-parameters.sass';
-@import 'components/_popup-hint-trigger.css.sass';
-@import 'components/_popup-hint.css.sass';
 @import 'components/_range-slider.css.sass';
 @import 'components/_right-pane.css.sass';
 @import 'components/_tab-view.css.sass';
-@import 'components/_theme-tile-grid.css.sass';
-@import 'components/_theme-tile.css.sass';
+@import 'components/_toggle-switch.css.sass';
+@import 'components/selection/_custom-pro-select.sass';
+@import 'components/selection/_contact-list-select.sass';
+@import 'components/image-uploading/_image-upload.css.sass';
+@import 'components/hints/_popup-hint-trigger.css.sass';
+@import 'components/hints/_popup-hint.css.sass';
 @import 'components/custom-html/_custom-html-editor.sass';
 @import 'components/custom-html/_code-editor.sass';
 @import 'components/theming/_theme-info.sass';
-@import 'components/_toggle-switch.css.sass';
+@import 'components/theming/_theme-tile-grid.css.sass';
+@import 'components/theming/_theme-tile.css.sass';
 
 @import 'layouts/_common.css.sass';
 @import 'layouts/_document.css.sass';
