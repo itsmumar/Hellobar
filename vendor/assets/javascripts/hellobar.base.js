@@ -177,26 +177,49 @@ var HB = {
     return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1];
   },
 
-  // Adds the CSS class to the target element
+  /**
+   * Adds the CSS class to the target element
+   * @param element {Element}
+   * @param className {string}
+   */
   addClass: function (element, className) {
     element = HB.$(element);
     if (element.className.indexOf(className) < 0) {
-      element.className += " " + className;
+      element.className += ' ' + className;
     }
   },
 
-  // Remove the CSS class name from the element
+  /**
+   * Removes the CSS class from the target element
+   * @param element {Element}
+   * @param className {string}
+   */
   removeClass: function (element, className) {
     element = HB.$(element);
     // Get all the CSS class names and then add them
     // back by building a new array minus the target CSS class name
-    var classNames = element.className.split(" ");
+    var classNames = element.className.split(' ');
     var newClassNames = [];
     for (var i = 0; i < classNames.length; i++) {
-      if (classNames[i] != className)
+      if (classNames[i] !== className) {
         newClassNames.push(classNames[i]);
+      }
     }
-    element.className = newClassNames.join(" ");
+    element.className = newClassNames.join(' ');
+  },
+
+  /**
+   * Adds/removes CSS class for the target element
+   * @param element {Element}
+   * @param className {string}
+   * @param shouldBeSet {boolean} if true then CSS class should be added otherwise CSS class should be removed
+   */
+  setClass: function(element, className, shouldBeSet) {
+    shouldBeSet ? HB.addClass(element, className) : HB.removeClass(element, className);
+  },
+
+  windowWidth: function() {
+    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   },
 
   // Adds CSS to the page
@@ -1074,7 +1097,6 @@ var HB = {
     for (var i = 0, len = HB.siteElementsOnPage.length; i < len; i++) {
       lookup[HB.siteElementsOnPage[i].id] = HB.siteElementsOnPage[i];
     }
-    ;
 
     if (lookup[site_element_id] === undefined) {
       return null;
@@ -1176,8 +1198,8 @@ var HB = {
           siteElement = rule.siteElements[j];
           visibilityGroup = siteElement.type;
           // For showing multiple elements at the same time a modal and a takeover are the same thing
-          if (siteElement.type == "Modal" || siteElement.type == "Takeover")
-            visibilityGroup = "Modal/Takeover";
+          if (siteElement.type === 'Modal' || siteElement.type === 'Takeover')
+            visibilityGroup = 'Modal/Takeover';
           if (!visibilityGroups[visibilityGroup]) {
             visibilityGroups[visibilityGroup] = [];
             visibilityGroupNames.push(visibilityGroup);
@@ -1193,33 +1215,58 @@ var HB = {
     var results = [];
     // We need to specify the order that elements appear in. Whichever is first
     // in the array is on top
-    var visibilityOrder = ["Custom","Modal/Takeover", "Slider", "Bar"];
+    var visibilityOrder = ['Custom', 'Modal/Takeover', 'Slider', 'Bar'];
     for (i = 0; i < visibilityOrder.length; i++) {
       var visibleElements = visibilityGroups[visibilityOrder[i]];
       if (visibleElements) {
         siteElement = HB.getBestElement(visibleElements);
-        if (siteElement && HB.shouldShowElement(siteElement))
+        if (siteElement && HB.shouldShowElement(siteElement)) {
           results.push(siteElement);
+        }
       }
     }
     return results;
   },
 
-  // Determine if an element should be displayed
-  shouldShowElement: function (siteElement) {
+  nonMobileClickToCall: function (siteElementData) {
+    return siteElementData.subtype === 'call' && !HB.isMobileDevice();
+  },
+
+  /**
+   * Determines if the screen width is considered mobile for given element
+   * @param siteElementData {object}
+   * @returns {boolean}
+   */
+  isMobileWidth: function(siteElementData) {
+    var windowWidth = HB.windowWidth();
+    if (siteElementData.type === 'Modal') {
+      return windowWidth <= 640;
+    } else if (siteElementData.type === 'Slider') {
+      return windowWidth <= 375;
+    } else {
+      return windowWidth <= 640;
+    }
+  },
+
+  /**
+   * Determines if an element should be displayed
+   * @param siteElementData {object}
+   * @returns {boolean}
+   */
+  shouldShowElement: function (siteElementData) {
+    function shouldHideElementConsideringTypeAndScreenWidth() {
+      return (siteElementData.type !== 'Bar' && HB.isMobileWidth(siteElementData));
+    }
     // Skip the site element if they have already seen/dismissed it
     // and it hasn't been changed since then and the user has not specified
     // that we show it regardless
-    if ((!HB.checkVisibilityControlCookies(siteElement) && !HB.updatedSinceLastVisit(siteElement))
-      || HB.nonMobileClickToCall(siteElement)) {
+    if ((!HB.checkVisibilityControlCookies(siteElementData) && !HB.updatedSinceLastVisit(siteElementData))
+      || shouldHideElementConsideringTypeAndScreenWidth()
+      || HB.nonMobileClickToCall(siteElementData)) {
       return false;
     } else {
       return true;
     }
-  },
-
-  nonMobileClickToCall: function (siteElement) {
-    return siteElement.subtype == "call" && !HB.isMobileDevice();
   },
 
   /**

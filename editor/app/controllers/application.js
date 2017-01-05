@@ -156,7 +156,6 @@ export default Ember.Controller.extend({
       HB.removeAllSiteElements();
       HB.addToPage(HB.createSiteElement(previewElement));
     }
-    HB.isMobileWidth = "changed";
   },
 
   shouldSkipPreviewUpdate: false,
