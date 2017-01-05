@@ -233,6 +233,27 @@ HB.SiteElement = HB.createClass({
     }
   },
 
+  nonMobileClickToCall: function () {
+    return this.subtype === 'call' && !HB.isMobileDevice();
+  },
+
+  // Determine if an element should be displayed
+  shouldShowElement: function () {
+    var that = this;
+    function shouldHideElementConsideringTypeAndScreenWidth() {
+      return (that.type !== 'Bar' && that.isMobileWidth());
+    }
+    // Skip the site element if they have already seen/dismissed it
+    // and it hasn't been changed since then and the user has not specified
+    // that we show it regardless
+    if ((!HB.checkVisibilityControlCookies(this) && !HB.updatedSinceLastVisit(this))
+      || shouldHideElementConsideringTypeAndScreenWidth()
+      || this.nonMobileClickToCall(this)) {
+      return false;
+    } else {
+      return true;
+    }
+  },
 
   setContainerSize: function (container, element, type, isMobile) {
     if (container == null)

@@ -1184,8 +1184,8 @@ var HB = {
           siteElement = rule.siteElements[j];
           visibilityGroup = siteElement.type;
           // For showing multiple elements at the same time a modal and a takeover are the same thing
-          if (siteElement.type == "Modal" || siteElement.type == "Takeover")
-            visibilityGroup = "Modal/Takeover";
+          if (siteElement.type === 'Modal' || siteElement.type === 'Takeover')
+            visibilityGroup = 'Modal/Takeover';
           if (!visibilityGroups[visibilityGroup]) {
             visibilityGroups[visibilityGroup] = [];
             visibilityGroupNames.push(visibilityGroup);
@@ -1201,37 +1201,17 @@ var HB = {
     var results = [];
     // We need to specify the order that elements appear in. Whichever is first
     // in the array is on top
-    var visibilityOrder = ["Custom","Modal/Takeover", "Slider", "Bar"];
+    var visibilityOrder = ['Custom', 'Modal/Takeover', 'Slider', 'Bar'];
     for (i = 0; i < visibilityOrder.length; i++) {
       var visibleElements = visibilityGroups[visibilityOrder[i]];
       if (visibleElements) {
         siteElement = HB.getBestElement(visibleElements);
-        if (siteElement && HB.shouldShowElement(siteElement))
+        if (siteElement && siteElement.shouldShowElement()) {
           results.push(siteElement);
+        }
       }
     }
     return results;
-  },
-
-  // Determine if an element should be displayed
-  shouldShowElement: function (siteElement) {
-    function shouldHideElementConsideringTypeAndScreenWidth() {
-      return (siteElement.type !== 'Bar' && siteElement.isMobileWidth());
-    }
-    // Skip the site element if they have already seen/dismissed it
-    // and it hasn't been changed since then and the user has not specified
-    // that we show it regardless
-    if ((!HB.checkVisibilityControlCookies(siteElement) && !HB.updatedSinceLastVisit(siteElement))
-      || shouldHideElementConsideringTypeAndScreenWidth()
-      || HB.nonMobileClickToCall(siteElement)) {
-      return false;
-    } else {
-      return true;
-    }
-  },
-
-  nonMobileClickToCall: function (siteElement) {
-    return siteElement.subtype == "call" && !HB.isMobileDevice();
   },
 
   /**
