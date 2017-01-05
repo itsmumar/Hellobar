@@ -1096,7 +1096,6 @@ var HB = {
     for (var i = 0, len = HB.siteElementsOnPage.length; i < len; i++) {
       lookup[HB.siteElementsOnPage[i].id] = HB.siteElementsOnPage[i];
     }
-    ;
 
     if (lookup[site_element_id] === undefined) {
       return null;
@@ -1220,12 +1219,53 @@ var HB = {
       var visibleElements = visibilityGroups[visibilityOrder[i]];
       if (visibleElements) {
         siteElement = HB.getBestElement(visibleElements);
-        if (siteElement && siteElement.shouldShowElement()) {
+        if (siteElement && HB.shouldShowElement(siteElement)) {
           results.push(siteElement);
         }
       }
     }
     return results;
+  },
+
+  nonMobileClickToCall: function (siteElementData) {
+    return siteElementData.subtype === 'call' && !HB.isMobileDevice();
+  },
+
+  /**
+   * Determines if the screen width is considered mobile for given element
+   * @param siteElementData {object}
+   * @returns {boolean}
+   */
+  isMobileWidth: function(siteElementData) {
+    var windowWidth = HB.windowWidth();
+    if (siteElementData.type === 'Modal') {
+      return windowWidth <= 640;
+    } else if (siteElementData.type === 'Slider') {
+      return windowWidth <= 375;
+    } else {
+      return windowWidth <= 640;
+    }
+  },
+
+  /**
+   * Determines if an element should be displayed
+   * @param siteElementData {object}
+   * @returns {boolean}
+   */
+  shouldShowElement: function (siteElementData) {
+    function shouldHideElementConsideringTypeAndScreenWidth() {
+      return (siteElementData.type !== 'Bar' && HB.isMobileWidth(siteElementData));
+    }
+    // Skip the site element if they have already seen/dismissed it
+    // and it hasn't been changed since then and the user has not specified
+    // that we show it regardless
+    if ((!HB.checkVisibilityControlCookies(siteElementData) && !HB.updatedSinceLastVisit(siteElementData))
+      || shouldHideElementConsideringTypeAndScreenWidth()
+      || HB.nonMobileClickToCall(siteElementData)) {
+      return false;
+    } else {
+      return true;
+    }
   },
 
   /**

@@ -170,7 +170,7 @@ HB.SiteElement = HB.createClass({
       HB.addClass(d.body, 'hb-paused-animations-ie');
 
     // As the vistor readjust the window size we need to adjust the size of the containing
-    // iframe. 
+    // iframe.
     setTimeout(function() {
       that.adjustForCurrentWidth();
     }, 1);
@@ -178,21 +178,6 @@ HB.SiteElement = HB.createClass({
       that.adjustForCurrentWidth();
     }.bind(this);
     window.addEventListener('resize', this.onWindowResize);
-  },
-
-  /**
-   * Determines if the screen width is considered mobile
-   * @returns {boolean}
-   */
-  isMobileWidth: function() {
-    var windowWidth = HB.windowWidth();
-    if (this.type === 'Modal') {
-      return windowWidth <= 640;
-    } else if (this.type === 'Slider') {
-      return windowWidth <= 375;
-    } else {
-      return windowWidth <= 640;
-    }
   },
 
   /**
@@ -210,7 +195,7 @@ HB.SiteElement = HB.createClass({
     // Monitor siteElement height to update HTML/CSS
     if (thisElement) {
       if (thisElement.clientHeight) {
-        var isMobile = this.isMobileWidth();
+        var isMobile = HB.isMobileWidth(this);
         // Update the CSS class based on the width
         HB.setClass(thisElement, 'mobile', isMobile);
 
@@ -234,31 +219,6 @@ HB.SiteElement = HB.createClass({
           HB.setClass(thisElement, 'multiline', thisElement.clientHeight > barBounds);
         }
       }
-    }
-  },
-
-  nonMobileClickToCall: function () {
-    return this.subtype === 'call' && !HB.isMobileDevice();
-  },
-
-  /**
-   * Determines if an element should be displayed
-   * @returns {boolean}
-   */
-  shouldShowElement: function () {
-    var that = this;
-    function shouldHideElementConsideringTypeAndScreenWidth() {
-      return (that.type !== 'Bar' && that.isMobileWidth());
-    }
-    // Skip the site element if they have already seen/dismissed it
-    // and it hasn't been changed since then and the user has not specified
-    // that we show it regardless
-    if ((!HB.checkVisibilityControlCookies(this) && !HB.updatedSinceLastVisit(this))
-      || shouldHideElementConsideringTypeAndScreenWidth()
-      || this.nonMobileClickToCall(this)) {
-      return false;
-    } else {
-      return true;
     }
   },
 
