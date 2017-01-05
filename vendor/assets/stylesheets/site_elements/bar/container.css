@@ -29,7 +29,7 @@
 .hellobar#pull-down {
   top: -4px;
   right: 10px;
-  padding: 3px 4px 1px;
+  padding: 3px;
   z-index: 16999;
   overflow: hidden;
   position: absolute;
@@ -69,7 +69,6 @@
 .hellobar#pull-down.hb-bar-bottom {
   top: auto;
   bottom: -4px;
-  padding: 1px 4px 3px;
   position: fixed;
   border-radius: 5px 5px 0 0;
 
