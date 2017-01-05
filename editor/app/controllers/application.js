@@ -7,8 +7,6 @@ export default Ember.Controller.extend({
   theming: Ember.inject.service(),
 
   init() {
-    // TODO remove
-    //console.log('applicationController', this);
 
     Ember.run.next(() => {
         if (this.get('model.id') === null) {
@@ -126,6 +124,7 @@ export default Ember.Controller.extend({
   }).observes("model.animated").on("init"),
 
   doRenderPreview(withAnimations = false) {
+    const currentTheme = this.get('currentTheme');
     let previewElement = $.extend({}, this.get("model"), {
         animated: withAnimations && this.get("model.animated"),
         hide_destination: true,
@@ -143,7 +142,8 @@ export default Ember.Controller.extend({
         wiggle_button: this.get("model.wiggle_button"),
         wiggle_wait: 0,
         font: this.getFont().value,
-        google_font: this.getFont().google_font
+        google_font: this.getFont().google_font,
+        theme: currentTheme
       }
     );
 

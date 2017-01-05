@@ -10,8 +10,8 @@ HB.SiteElement = HB.createClass({
     if (this.animated)
       HB.addClass(iframe, "hb-animated");
 
-    if (this.theme_id)
-      HB.addClass(iframe, this.theme_id);
+    if (this.theme.id)
+      HB.addClass(iframe, this.theme.id);
 
     // Any view_condition including string 'intent' will run the intent event listeners
     if (this.view_condition.indexOf('intent') !== -1) {
@@ -30,16 +30,27 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  imageFor: function (location) {
+  imageFor: function (location, options) {
+    var that = this;
+    options = options || {};
+    function imageSrc() {
+      return that.image_url ? that.image_url : options.defaultImgSrc;
+    }
     locationIndex = location.indexOf(this.image_placement);
-    if (!this.image_url || locationIndex === undefined || locationIndex === -1)
+    if (!options.defaultImgSrc && (!this.image_url || locationIndex === undefined || locationIndex === -1)) {
       return '';
-    else if (this.image_placement == 'background')
-      return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url(' + this.image_url + ');></div>';
-    else
+    }
+    else if (this.image_placement == 'background') {
+      return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url(' + imageSrc() + ');></div>';
+    } else {
+      var imgClasses = [];
+      (!options.themeType || options.themeType === 'generic') && imgClasses.push('uploaded-image');
+      (options.classes) && imgClasses.push(options.classes);
       return '<div class="hb-image-wrapper ' + this.image_placement
-        + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="uploaded-image" src="'
-        + this.image_url + '" /></div></div>';
+        + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="'
+        + imgClasses.join(' ')
+        + '" src="' + imageSrc() + '" /></div></div>';
+    }
   },
 
   blockContent: function (blockId) {
@@ -50,7 +61,7 @@ HB.SiteElement = HB.createClass({
         foundBlock = blocks[i];
       }
     }
-    return foundBlock.content ? foundBlock.content : {};
+    return (foundBlock && foundBlock.content) ? foundBlock.content : {};
   },
 
   attach: function () {
@@ -62,9 +73,9 @@ HB.SiteElement = HB.createClass({
     function generateHtml() {
 
       var template = '';
-      // TODO now theme id for new template is hard-coded. We need good and flexible solution for the future
-      if (that.theme_id === 'traffic-growth') {
-        template = HB.getTemplateByName('traffic_growth');
+      if (that.theme && that.theme.type === 'template') {
+        var templateName = that.type.toLowerCase() + '_' + that.theme.id.replace(/\-/g, '_');
+        template = HB.getTemplateByName(templateName);
       } else {
         template = HB.getTemplate(that);
       }
@@ -150,8 +161,8 @@ HB.SiteElement = HB.createClass({
     d.close();
     d.body.className = this.type;
 
-    if (this.theme_id) {
-      HB.addClass(d.body, this.theme_id);
+    if (this.theme.id) {
+      HB.addClass(d.body, this.theme.id);
     }
 
     if (HB.CAP.preview) {
@@ -668,5 +679,29 @@ HB.SiteElement = HB.createClass({
     });
 
     return (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]);
+  },
+
+  handleCtaClick: function() {
+    var hb = window.HB || window.parent.HB;
+    if (hb.isPreviewMode) {
+      return false;
+    } else {
+      hb.submitEmail(this,
+        this.w.contentDocument.getElementById('hb-fields-form'),
+        null, null, this.email_redirect,
+        this.settings.redirect_url, 'thank-you');
+      return false;
+    }
+  },
+
+  thankYouMessage: function() {
+    return this.unquotedValue('thank_you_text', 'Thank you for signing up!');
+  },
+
+  unquotedValue: function(propertyName, defaultValue) {
+    var value = this[propertyName] || defaultValue;
+    return (value && value.indexOf('\'') === 0) ? value.substring(1, value.length - 1) : value;
   }
+
+
 });

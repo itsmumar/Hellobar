@@ -971,6 +971,7 @@ var HB = {
     try {
       value = eval(value)
     } catch (e) {
+      HB.isPreviewMode && console.log('Templating error: ', e);
     }
     if (value === undefined || value === null)
       return "";

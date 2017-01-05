@@ -558,7 +558,6 @@ form {
 
 body .fr-toolbar .fr-command.fr-btn span,
 body .fr-popup .fr-command.fr-btn span,
-body .fr-popup .fr-color-set .fr-command > span.fr-sr-only,
 body .fr-popup .fr-color-set .fr-command > span.fr-sr-only {
   display: none;
 }
