@@ -5,6 +5,9 @@ HB.SiteElement = HB.createClass({
     }
   },
 
+  frameName: function() {
+    return HB_PS + '-container-' + this.pageIndex;
+  },
 
   setupIFrame: function (iframe) {
     if (this.animated)
@@ -103,6 +106,7 @@ HB.SiteElement = HB.createClass({
 
   // Injects the specified HTML for the given siteElement into the page
   injectSiteElementHTML: function (html) {
+    var that = this;
     // Remove the containing iframe element if it exists
     if (this.w && this.w.parentNode)
       this.w.parentNode.removeChild(this.w);
@@ -117,7 +121,7 @@ HB.SiteElement = HB.createClass({
     this.w.src = 'about:blank';
     this.w.id = HB_PS + '-container';
     this.w.className = 'HB-' + this.type;
-    this.w.name = HB_PS + '-container-' + this.pageIndex;
+    this.w.name = this.frameName();
     HB.hideElement(this.w); // Start all site elements as hidden
 
     this.setupIFrame(this.w);
@@ -174,70 +178,56 @@ HB.SiteElement = HB.createClass({
     // To accomplish all of this we set up an interval to monitor the size of everything:
     this.isMobileWidth = false;
     var mobileDeviceInterval = setInterval(this.checkForMobileDevice.bind(this), 50); // Check screen size every N ms
+    setTimeout(function() {
+      that.adjustForCurrentWidth();
+    }, 1);
+    this.onWindowResize = function() {
+      that.adjustForCurrentWidth();
+    }.bind(this);
+    window.addEventListener('resize', this.onWindowResize);
   },
 
-  checkForMobileDevice: function () {
-    // Get the frame
-    var frame = window.frames[HB_PS + "-container-" + this.pageIndex];
-    if (!frame)
-      return;
+  isMobileWidth: function() {
+    var windowWidth = HB.windowWidth();
+    if (this.type === 'Modal') {
+      return windowWidth <= 640;
+    } else if (this.type === 'Slider') {
+      return windowWidth <= 375;
+    } else {
+      return windowWidth <= 640;
+    }
+  },
 
-    // Get the relevant elements that might need checking/adjusting
-    var containerDocument = frame.document;
+  onWindowResize: null,
 
+  adjustForCurrentWidth: function () {
     var thisElement = this.getSiteElementDomNode();
 
     // Monitor siteElement height to update HTML/CSS
     if (thisElement) {
       if (thisElement.clientHeight) {
-
+        var isMobile = this.isMobileWidth();
         // Update the CSS class based on the width
-        var wasMobile = this.isMobileWidth;
-        var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : document.body.clientWidth;
-
-        if (this.type == "Modal" && containerDocument && !!containerDocument.getElementById("hellobar-modal-background"))
-          this.isMobileWidth = (containerDocument.getElementById("hellobar-modal-background").clientWidth <= 640 );
-        else if (this.type == "Slider")
-          this.isMobileWidth = thisElement.clientWidth <= 270 || containerWidth <= 375 || containerWidth < thisElement.clientWidth;
-        else
-          this.isMobileWidth = (thisElement.clientWidth <= 640 );
-
-
-        if (wasMobile != this.isMobileWidth) {
-          if (this.isMobileWidth) {
-            this.isMobile = true;
-            HB.addClass(thisElement, "mobile");
-          } else {
-            this.isMobile = false;
-            HB.removeClass(thisElement, "mobile");
-          }
-        }
+        HB.setClass(thisElement, 'mobile', isMobile);
 
         // Adjust the container size
-        this.setContainerSize(this.w, thisElement, this.type, this.isMobile);
+        this.setContainerSize(this.w, thisElement, this.type, isMobile);
 
         // Bar specific adjustments
-        if (this.type == "Bar") {
-
+        if (this.type === 'Bar') {
           // Adjust the pusher
           if (HB.p) {
             // handle case where display-condition check has hidden this.w
-            if (this.w.style.display === "none") {
+            if (this.w.style.display === 'none') {
               return;
             }
-
-            var borderPush = HB.t((this.show_border) ? 3 : 0)
-            HB.p.style.height = (thisElement.clientHeight + borderPush) + "px";
+            var borderPush = HB.t((this.show_border) ? 3 : 0);
+            HB.p.style.height = (thisElement.clientHeight + borderPush) + 'px';
           }
 
           // Add multiline class
           var barBounds = (this.w.className.indexOf('regular') > -1 ? 32 : 52 );
-
-          if (thisElement.clientHeight > barBounds) {
-            HB.addClass(thisElement, "multiline");
-          } else {
-            HB.removeClass(thisElement, "multiline");
-          }
+          HB.setClass(thisElement, 'multiline', thisElement.clientHeight > barBounds);
         }
       }
     }
@@ -400,6 +390,7 @@ HB.SiteElement = HB.createClass({
   },
 
   remove: function () {
+    this.onWindowResize && window.removeEventListener('resize', this.onWindowResize);
     if (this.w != null && this.w.parentNode != null) {
       this.w.parentNode.removeChild(this.w);
       // Note: this should really clean up event listeners

@@ -181,7 +181,7 @@ var HB = {
   addClass: function (element, className) {
     element = HB.$(element);
     if (element.className.indexOf(className) < 0) {
-      element.className += " " + className;
+      element.className += ' ' + className;
     }
   },
 
@@ -190,13 +190,22 @@ var HB = {
     element = HB.$(element);
     // Get all the CSS class names and then add them
     // back by building a new array minus the target CSS class name
-    var classNames = element.className.split(" ");
+    var classNames = element.className.split(' ');
     var newClassNames = [];
     for (var i = 0; i < classNames.length; i++) {
-      if (classNames[i] != className)
+      if (classNames[i] !== className) {
         newClassNames.push(classNames[i]);
+      }
     }
-    element.className = newClassNames.join(" ");
+    element.className = newClassNames.join(' ');
+  },
+
+  setClass: function(element, className, shouldBeSet) {
+    shouldBeSet ? HB.addClass(element, className) : HB.removeClass(element, className);
+  },
+
+  windowWidth: function() {
+    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   },
 
   // Adds CSS to the page
