@@ -1216,8 +1216,7 @@ var HB = {
   // Determine if an element should be displayed
   shouldShowElement: function (siteElement) {
     function shouldHideElementConsideringTypeAndScreenWidth() {
-      var mobileThresholdWidth = 610; // Value that is considered to be maximum mobile screen width (in px)
-      return (siteElement.type !== 'Bar' && screen.width <= mobileThresholdWidth);
+      return (siteElement.type !== 'Bar' && siteElement.isMobileWidth());
     }
     // Skip the site element if they have already seen/dismissed it
     // and it hasn't been changed since then and the user has not specified
