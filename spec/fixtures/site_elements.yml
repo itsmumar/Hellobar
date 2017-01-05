@@ -1,13 +1,17 @@
 zombo_traffic:
   rule: zombo_rule
+  theme_id: classic
   element_subtype: traffic
 zombo_email:
   rule: zombo_rule
+  theme_id: classic
   element_subtype: email
   contact_list: zombo_contacts
 zombo_twitter:
   rule: zombo_rule
+  theme_id: classic
   element_subtype: social/tweet_on_twitter
 zombo_facebook:
   rule: zombo_rule
+  theme_id: classic
   element_subtype: social/like_on_facebook

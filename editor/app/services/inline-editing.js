@@ -144,6 +144,7 @@ class BlockBasedModelAdapter {
           text: content
         };
       }
+      delete foundBlock.isDefault;
     } else {
       console.warn(`Block ${blockId} not found in the current template blocks.`);
     }
@@ -323,11 +324,21 @@ export default Ember.Service.extend({
     this.cleanupFroala();
     const simpleFroalaOptions = {
       key: froalaKey,
+      linkStyles: {
+        barlinkblue: 'Blue',
+        barlinkmutedblue: 'Muted Blue',
+        barlinkorange: 'Orange',
+        barlinkgreen: 'Green',
+        barlinkred: 'Red',
+        barlinkwhite: 'White',
+        barlinkblack: 'Black'
+      },
+      linkMultipleStyles: false,
       toolbarInline: true,
       toolbarVisibleWithoutSelection: true,
       toolbarButtons: [
         'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
-        'fontFamily', 'fontSize', 'color', '-',
+        'fontFamily', 'fontSize', 'color', 'insertLink', '-',
         'undo', 'redo', 'clearFormatting', 'selectAll'
       ],
       htmlAllowedTags: [
@@ -340,6 +351,16 @@ export default Ember.Service.extend({
     };
     const fullFroalaOptions = {
       key: froalaKey,
+      linkStyles: {
+        barlinkblue: 'Blue',
+        barlinkmutedblue: 'Muted Blue',
+        barlinkorange: 'Orange',
+        barlinkgreen: 'Green',
+        barlinkred: 'Red',
+        barlinkwhite: 'White',
+        barlinkblack: 'Black'
+      },
+      linkMultipleStyles: false,
       toolbarInline: true,
       toolbarVisibleWithoutSelection: true,
       toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
@@ -486,8 +507,11 @@ export default Ember.Service.extend({
     const blocks = defaultBlocks[themeId];
     _.each(blocks, (defaultBlock) => {
       const foundModelBlock = _.find(model.blocks, (modelBlock) => modelBlock.id === defaultBlock.id);
+      const clonedDefaultBlock = _.defaultsDeep({isDefault: true}, defaultBlock);
       if (!foundModelBlock) {
-        model.blocks.push(_.cloneDeep(defaultBlock));
+        model.blocks.push(clonedDefaultBlock);
+      } else {
+        foundModelBlock.isDefault && _.extend(foundModelBlock, clonedDefaultBlock);
       }
     });
   }

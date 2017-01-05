@@ -5,10 +5,12 @@ module ThemeMacros
       Theme.data = [{
         name: "Beige Test",
         id: "beige-test",
+        type: "generic",
         directory: Rails.root.join('spec', 'fixtures', 'themes', 'beige')
       },{
         name: "Classic",
         id: "classic",
+        type: "generic",
         default_theme: true,
         directory: Rails.root.join('spec', 'fixtures', 'themes', 'classic')
       }]

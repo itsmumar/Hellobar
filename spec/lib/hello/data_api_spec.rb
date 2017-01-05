@@ -60,4 +60,41 @@ describe  Hello::DataAPI do
       expect(for_comparison(result)).to eq({total: [], traffic: [], email: [], social: [], call: []})
     end
   end
+
+  describe '.get_contacts' do
+    let(:contact_list) { create :contact_list }
+    let(:id) { contact_list.id }
+    let(:site_id) { contact_list.site_id }
+    let(:read_key) { contact_list.site.read_key }
+    let(:limit) { 5 }
+    let(:get_contacts) do
+      VCR.use_cassette("contact_list/get_contacts") do
+        Hello::DataAPI.get_contacts(contact_list, limit)
+      end
+    end
+
+    before(:each) do
+      allow(Hello::DataAPIHelper::RequestParts).to receive(:get_contacts)
+        .with(site_id, id, read_key, limit, nil)
+        .and_return(["/e/GIHiEM2QmS/qvpJXYvS6",
+                     {"l" => 5, "d" => 1481207259, "t" => 1482071362,
+                      "s" => "2981a1d7a8745e492943f561d4a6aef30de" +
+                             "889af48cd4c32e6c0a4b56abf400e30f4f8" +
+                             "115fb091130f2e5925106a6e50485f67e73" +
+                             "a3ffe9f0260cd1cd80c1c2c"}])
+    end
+
+    it 'should cache `Hello::DataAPIHelper::RequestParts.get_contacts`' do
+      # Weird Rails' cache behaviour, it would not yield the block in spec runs
+      expect(Rails.cache).to receive(:fetch).and_yield
+      expect(Hello::DataAPIHelper::RequestParts).to receive(:get_contacts)
+        .with(site_id, id, read_key, limit, nil).once
+
+      2.times { get_contacts }
+    end
+
+    it 'should return 5 contact records' do
+      expect(get_contacts.count).to eq(limit)
+    end
+  end
 end

@@ -5,13 +5,16 @@ HB.SiteElement = HB.createClass({
     }
   },
 
+  frameName: function() {
+    return HB_PS + '-container-' + this.pageIndex;
+  },
 
   setupIFrame: function (iframe) {
     if (this.animated)
       HB.addClass(iframe, "hb-animated");
 
-    if (this.theme_id)
-      HB.addClass(iframe, this.theme_id);
+    if (this.theme.id)
+      HB.addClass(iframe, this.theme.id);
 
     // Any view_condition including string 'intent' will run the intent event listeners
     if (this.view_condition.indexOf('intent') !== -1) {
@@ -30,16 +33,27 @@ HB.SiteElement = HB.createClass({
     }
   },
 
-  imageFor: function (location) {
+  imageFor: function (location, options) {
+    var that = this;
+    options = options || {};
+    function imageSrc() {
+      return that.image_url ? that.image_url : options.defaultImgSrc;
+    }
     locationIndex = location.indexOf(this.image_placement);
-    if (!this.image_url || locationIndex === undefined || locationIndex === -1)
+    if (!options.defaultImgSrc && (!this.image_url || locationIndex === undefined || locationIndex === -1)) {
       return '';
-    else if (this.image_placement == 'background')
-      return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url(' + this.image_url + ');></div>';
-    else
+    }
+    else if (this.image_placement == 'background') {
+      return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url(' + imageSrc() + ');></div>';
+    } else {
+      var imgClasses = [];
+      (!options.themeType || options.themeType === 'generic') && imgClasses.push('uploaded-image');
+      (options.classes) && imgClasses.push(options.classes);
       return '<div class="hb-image-wrapper ' + this.image_placement
-        + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="uploaded-image" src="'
-        + this.image_url + '" /></div></div>';
+        + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="'
+        + imgClasses.join(' ')
+        + '" src="' + imageSrc() + '" /></div></div>';
+    }
   },
 
   blockContent: function (blockId) {
@@ -50,7 +64,7 @@ HB.SiteElement = HB.createClass({
         foundBlock = blocks[i];
       }
     }
-    return foundBlock.content ? foundBlock.content : {};
+    return (foundBlock && foundBlock.content) ? foundBlock.content : {};
   },
 
   attach: function () {
@@ -62,9 +76,9 @@ HB.SiteElement = HB.createClass({
     function generateHtml() {
 
       var template = '';
-      // TODO now theme id for new template is hard-coded. We need good and flexible solution for the future
-      if (that.theme_id === 'traffic-growth') {
-        template = HB.getTemplateByName('traffic_growth');
+      if (that.theme && that.theme.type === 'template') {
+        var templateName = that.type.toLowerCase() + '_' + that.theme.id.replace(/\-/g, '_');
+        template = HB.getTemplateByName(templateName);
       } else {
         template = HB.getTemplate(that);
       }
@@ -103,6 +117,7 @@ HB.SiteElement = HB.createClass({
 
   // Injects the specified HTML for the given siteElement into the page
   injectSiteElementHTML: function (html) {
+    var that = this;
     // Remove the containing iframe element if it exists
     if (this.w && this.w.parentNode)
       this.w.parentNode.removeChild(this.w);
@@ -117,7 +132,7 @@ HB.SiteElement = HB.createClass({
     this.w.src = 'about:blank';
     this.w.id = HB_PS + '-container';
     this.w.className = 'HB-' + this.type;
-    this.w.name = HB_PS + '-container-' + this.pageIndex;
+    this.w.name = this.frameName();
     HB.hideElement(this.w); // Start all site elements as hidden
 
     this.setupIFrame(this.w);
@@ -150,8 +165,8 @@ HB.SiteElement = HB.createClass({
     d.close();
     d.body.className = this.type;
 
-    if (this.theme_id) {
-      HB.addClass(d.body, this.theme_id);
+    if (this.theme.id) {
+      HB.addClass(d.body, this.theme.id);
     }
 
     if (HB.CAP.preview) {
@@ -166,83 +181,57 @@ HB.SiteElement = HB.createClass({
       HB.addClass(d.body, 'hb-paused-animations-ie');
 
     // As the vistor readjust the window size we need to adjust the size of the containing
-    // iframe. We do this by checking the the size of the inner div. If the the width
-    // of the window is less than or equal to 640 pixels we set the flag isMobileWidth to true.
-    // Note: we are not actually detecting a mobile device - just the width of the window.
-    // If isMobileWidth is true we add an additional "mobile" CSS class which is used to
-    // adjust the style of the siteElement.
-    // To accomplish all of this we set up an interval to monitor the size of everything:
-    this.isMobileWidth = false;
-    var mobileDeviceInterval = setInterval(this.checkForMobileDevice.bind(this), 50); // Check screen size every N ms
+    // iframe.
+    setTimeout(function() {
+      that.adjustForCurrentWidth();
+    }, 1);
+    this.onWindowResize = function() {
+      that.adjustForCurrentWidth();
+    }.bind(this);
+    window.addEventListener('resize', this.onWindowResize);
   },
 
-  checkForMobileDevice: function () {
-    // Get the frame
-    var frame = window.frames[HB_PS + "-container-" + this.pageIndex];
-    if (!frame)
-      return;
+  /**
+   * This is handler for 'resize' event of window.
+   * Initially value if null, initialization is delayed
+   */
+  onWindowResize: null,
 
-    // Get the relevant elements that might need checking/adjusting
-    var containerDocument = frame.document;
-
+  /**
+   * Makes adjustments for the current window width
+   */
+  adjustForCurrentWidth: function () {
     var thisElement = this.getSiteElementDomNode();
 
     // Monitor siteElement height to update HTML/CSS
     if (thisElement) {
       if (thisElement.clientHeight) {
-
+        var isMobile = HB.isMobileWidth(this);
         // Update the CSS class based on the width
-        var wasMobile = this.isMobileWidth;
-        var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : document.body.clientWidth;
-
-        if (this.type == "Modal" && containerDocument && !!containerDocument.getElementById("hellobar-modal-background"))
-          this.isMobileWidth = (containerDocument.getElementById("hellobar-modal-background").clientWidth <= 640 );
-        else if (this.type == "Slider")
-          this.isMobileWidth = thisElement.clientWidth <= 270 || containerWidth <= 375 || containerWidth < thisElement.clientWidth;
-        else
-          this.isMobileWidth = (thisElement.clientWidth <= 640 );
-
-
-        if (wasMobile != this.isMobileWidth) {
-          if (this.isMobileWidth) {
-            this.isMobile = true;
-            HB.addClass(thisElement, "mobile");
-          } else {
-            this.isMobile = false;
-            HB.removeClass(thisElement, "mobile");
-          }
-        }
+        HB.setClass(thisElement, 'mobile', isMobile);
 
         // Adjust the container size
-        this.setContainerSize(this.w, thisElement, this.type, this.isMobile);
+        this.setContainerSize(this.w, thisElement, this.type, isMobile);
 
         // Bar specific adjustments
-        if (this.type == "Bar") {
-
+        if (this.type === 'Bar') {
           // Adjust the pusher
           if (HB.p) {
             // handle case where display-condition check has hidden this.w
-            if (this.w.style.display === "none") {
+            if (this.w.style.display === 'none') {
               return;
             }
-
-            var borderPush = HB.t((this.show_border) ? 3 : 0)
-            HB.p.style.height = (thisElement.clientHeight + borderPush) + "px";
+            var borderPush = HB.t((this.show_border) ? 3 : 0);
+            HB.p.style.height = (thisElement.clientHeight + borderPush) + 'px';
           }
 
           // Add multiline class
           var barBounds = (this.w.className.indexOf('regular') > -1 ? 32 : 52 );
-
-          if (thisElement.clientHeight > barBounds) {
-            HB.addClass(thisElement, "multiline");
-          } else {
-            HB.removeClass(thisElement, "multiline");
-          }
+          HB.setClass(thisElement, 'multiline', thisElement.clientHeight > barBounds);
         }
       }
     }
   },
-
 
   setContainerSize: function (container, element, type, isMobile) {
     if (container == null)
@@ -400,6 +389,7 @@ HB.SiteElement = HB.createClass({
   },
 
   remove: function () {
+    this.onWindowResize && window.removeEventListener('resize', this.onWindowResize);
     if (this.w != null && this.w.parentNode != null) {
       this.w.parentNode.removeChild(this.w);
       // Note: this should really clean up event listeners
@@ -668,5 +658,29 @@ HB.SiteElement = HB.createClass({
     });
 
     return (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]);
+  },
+
+  handleCtaClick: function() {
+    var hb = window.HB || window.parent.HB;
+    if (hb.isPreviewMode) {
+      return false;
+    } else {
+      hb.submitEmail(this,
+        this.w.contentDocument.getElementById('hb-fields-form'),
+        null, null, this.email_redirect,
+        this.settings.redirect_url, 'thank-you');
+      return false;
+    }
+  },
+
+  thankYouMessage: function() {
+    return this.unquotedValue('thank_you_text', 'Thank you for signing up!');
+  },
+
+  unquotedValue: function(propertyName, defaultValue) {
+    var value = this[propertyName] || defaultValue;
+    return (value && value.indexOf('\'') === 0) ? value.substring(1, value.length - 1) : value;
   }
+
+
 });
