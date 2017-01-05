@@ -1206,10 +1206,15 @@ var HB = {
 
   // Determine if an element should be displayed
   shouldShowElement: function (siteElement) {
+    function shouldHideElementConsideringTypeAndScreenWidth() {
+      var mobileThresholdWidth = 610; // Value that is considered to be maximum mobile screen width (in px)
+      return (siteElement.type !== 'Bar' && screen.width <= mobileThresholdWidth);
+    }
     // Skip the site element if they have already seen/dismissed it
     // and it hasn't been changed since then and the user has not specified
     // that we show it regardless
     if ((!HB.checkVisibilityControlCookies(siteElement) && !HB.updatedSinceLastVisit(siteElement))
+      || shouldHideElementConsideringTypeAndScreenWidth()
       || HB.nonMobileClickToCall(siteElement)) {
       return false;
     } else {
