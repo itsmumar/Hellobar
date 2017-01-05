@@ -170,14 +170,7 @@ HB.SiteElement = HB.createClass({
       HB.addClass(d.body, 'hb-paused-animations-ie');
 
     // As the vistor readjust the window size we need to adjust the size of the containing
-    // iframe. We do this by checking the the size of the inner div. If the the width
-    // of the window is less than or equal to 640 pixels we set the flag isMobileWidth to true.
-    // Note: we are not actually detecting a mobile device - just the width of the window.
-    // If isMobileWidth is true we add an additional "mobile" CSS class which is used to
-    // adjust the style of the siteElement.
-    // To accomplish all of this we set up an interval to monitor the size of everything:
-    this.isMobileWidth = false;
-    var mobileDeviceInterval = setInterval(this.checkForMobileDevice.bind(this), 50); // Check screen size every N ms
+    // iframe. 
     setTimeout(function() {
       that.adjustForCurrentWidth();
     }, 1);
@@ -187,6 +180,10 @@ HB.SiteElement = HB.createClass({
     window.addEventListener('resize', this.onWindowResize);
   },
 
+  /**
+   * Determines if the screen width is considered mobile
+   * @returns {boolean}
+   */
   isMobileWidth: function() {
     var windowWidth = HB.windowWidth();
     if (this.type === 'Modal') {
@@ -198,8 +195,15 @@ HB.SiteElement = HB.createClass({
     }
   },
 
+  /**
+   * This is handler for 'resize' event of window.
+   * Initially value if null, initialization is delayed
+   */
   onWindowResize: null,
 
+  /**
+   * Makes adjustments for the current window width
+   */
   adjustForCurrentWidth: function () {
     var thisElement = this.getSiteElementDomNode();
 
@@ -237,7 +241,10 @@ HB.SiteElement = HB.createClass({
     return this.subtype === 'call' && !HB.isMobileDevice();
   },
 
-  // Determine if an element should be displayed
+  /**
+   * Determines if an element should be displayed
+   * @returns {boolean}
+   */
   shouldShowElement: function () {
     var that = this;
     function shouldHideElementConsideringTypeAndScreenWidth() {

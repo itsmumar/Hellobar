@@ -177,7 +177,11 @@ var HB = {
     return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1];
   },
 
-  // Adds the CSS class to the target element
+  /**
+   * Adds the CSS class to the target element
+   * @param element {Element}
+   * @param className {string}
+   */
   addClass: function (element, className) {
     element = HB.$(element);
     if (element.className.indexOf(className) < 0) {
@@ -185,7 +189,11 @@ var HB = {
     }
   },
 
-  // Remove the CSS class name from the element
+  /**
+   * Removes the CSS class from the target element
+   * @param element {Element}
+   * @param className {string}
+   */
   removeClass: function (element, className) {
     element = HB.$(element);
     // Get all the CSS class names and then add them
@@ -200,6 +208,12 @@ var HB = {
     element.className = newClassNames.join(' ');
   },
 
+  /**
+   * Adds/removes CSS class for the target element
+   * @param element {Element}
+   * @param className {string}
+   * @param shouldBeSet {boolean} if true then CSS class should be added otherwise CSS class should be removed
+   */
   setClass: function(element, className, shouldBeSet) {
     shouldBeSet ? HB.addClass(element, className) : HB.removeClass(element, className);
   },
