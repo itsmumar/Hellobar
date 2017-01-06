@@ -180,14 +180,17 @@ HB.SiteElement = HB.createClass({
     if (HB.isIE11())
       HB.addClass(d.body, 'hb-paused-animations-ie');
 
-    // As the vistor readjust the window size we need to adjust the size of the containing
-    // iframe.
     var adjustmentHandler = function() {
       that.adjustForCurrentWidth();
     };
+    // This will do initial readjustment (with minimal time delay)
     setTimeout(adjustmentHandler, 1);
+    // This interval will execute additional delayed readjustments
+    // (we need this because we don't know exact moment of time when readjustment should happen,
+    // because we can have animations etc)
     this.adjustmentInterval = setInterval(adjustmentHandler, 500);
 
+    // Besides that we'll execute readjustment procedure when window size changes
     this.onWindowResize = function() {
       that.adjustForCurrentWidth();
     }.bind(this);
