@@ -182,9 +182,12 @@ HB.SiteElement = HB.createClass({
 
     // As the vistor readjust the window size we need to adjust the size of the containing
     // iframe.
-    setTimeout(function() {
+    var adjustmentHandler = function() {
       that.adjustForCurrentWidth();
-    }, 1);
+    };
+    setTimeout(adjustmentHandler, 1);
+    this.adjustmentInterval = setInterval(adjustmentHandler, 500);
+
     this.onWindowResize = function() {
       that.adjustForCurrentWidth();
     }.bind(this);
@@ -196,6 +199,11 @@ HB.SiteElement = HB.createClass({
    * Initially value if null, initialization is delayed
    */
   onWindowResize: null,
+
+  /**
+   * Interval id for size adjustment callback
+   */
+  adjustmentInterval: null,
 
   /**
    * Makes adjustments for the current window width
@@ -390,6 +398,7 @@ HB.SiteElement = HB.createClass({
 
   remove: function () {
     this.onWindowResize && window.removeEventListener('resize', this.onWindowResize);
+    this.adjustmentInterval && clearInterval(this.adjustmentInterval);
     if (this.w != null && this.w.parentNode != null) {
       this.w.parentNode.removeChild(this.w);
       // Note: this should really clean up event listeners
