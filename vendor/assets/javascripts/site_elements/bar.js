@@ -55,9 +55,11 @@ HB.BarElement = HB.createClass({
     cookie_name = "HBDismissedBars";
     cookie_str = HB.gc(cookie_name) || "[]";
     dismissed_elements = JSON.parse(cookie_str) || [];
+
     if (dismissed_elements.indexOf(se_id) == -1) {
       dismissed_elements.push(se_id);
     }
+
     if (dismissed_elements) {
       HB.sc(
         cookie_name,
@@ -66,6 +68,11 @@ HB.BarElement = HB.createClass({
         "path=/"
       );
     }
+
+    // The above HBDismissedBars cookie is currently being *ignored* when
+    // displaying a bar (dead code) so instead set a regular visibility cookie
+    // based on user settings
+    HB.setVisibilityControlCookie('dismiss', this);
   },
 
   attach: function () {

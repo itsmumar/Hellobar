@@ -425,11 +425,14 @@ HB.SiteElement = HB.createClass({
         expiration = 86400000; // 24 hours
         cookie_name = "HBDismissedBars";
       }
+
       cookie_str = HB.gc(cookie_name) || "[]";
       dismissed_elements = JSON.parse(cookie_str) || [];
+
       if (dismissed_elements.indexOf(this.id) == -1) {
         dismissed_elements.push(this.id);
       }
+
       if (dismissed_elements) {
         HB.sc(
           cookie_name,

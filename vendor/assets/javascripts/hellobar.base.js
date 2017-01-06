@@ -474,6 +474,7 @@ var HB = {
 
     var dayCount = getDayCountFromSettings();
     dayCount = parseInt(dayCount);
+
     if (dayCount > 0) {
       var cookieName = HB.visibilityControlCookieName(cookieType, siteElement.id);
       var cookieValue = new Date().toString();
@@ -1271,6 +1272,7 @@ var HB = {
 
   /**
    * @deprecated This was used previously to determine if we need to show/hide the bar
+   * TODO remove this method as it seems to not being used at all
    */
   convertedOrDismissed: function (siteElement) {
     var converted = HB.didConvert(siteElement) && !siteElement.show_after_convert;
