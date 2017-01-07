@@ -30,7 +30,8 @@ class IdentitiesController < ApplicationController
     service_provider = identity.service_provider
     if service_provider.respond_to? :accounts
       account = service_provider.accounts.first
-      identity.extra["account_id"] = account['id']
+      identity.extra["account_id"] = account.id
+      identity.extra["account_name"] = account.name
     end
 
     if params[:api_key]

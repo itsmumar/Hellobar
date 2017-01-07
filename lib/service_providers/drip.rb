@@ -14,33 +14,38 @@ class ServiceProviders::Drip < ServiceProviders::Email
     @identity = identity
     @client = Drip::Client.new do |c|
       c.access_token = identity.credentials['token']
+      c.account_id   = identity.extra['account_id']
     end
   end
 
   def accounts
-    response = @client.connection.get("accounts")
-    @accounts ||= response.body["accounts"]
+    response = @client.accounts
+    @accounts ||= response.accounts
   end
 
   # TODO: confirm the pagination process
   def campaigns
-    campaigns_path = "#{@identity.extra['account_id']}/campaigns?status=active"
-    response = @client.connection.get(campaigns_path)
-    @campaigns ||= response.body["campaigns"]
+    response = @client.campaigns
+    camps = response.campaigns
+
+    @campaigns ||= if camps.count > 0
+      camps.map(&:raw_attributes)
+    else
+      extra = @identity.extra
+      [{ 'id' => extra['account_id'], 'name' => extra['account_name'] }]
+    end
   end
   alias_method :lists, :campaigns
 
   def subscribe(list_id, email, name = nil, double_optin = true)
     @client.account_id = list_id
 
-    opts = {new_email: email}
+    opts = { new_email: email }
 
     if name.present?
       split = name.split(' ', 2)
       opts[:custom_fields] = {"name" => name, "fname" => split[0], "lname" => split[1]}
     end
-
-
 
     retry_on_timeout do
       @client.create_or_update_subscriber(email, opts)
