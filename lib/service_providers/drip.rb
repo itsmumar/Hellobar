@@ -25,21 +25,12 @@ class ServiceProviders::Drip < ServiceProviders::Email
 
   # TODO: confirm the pagination process
   def campaigns
-    response = @client.campaigns
-    camps = response.campaigns
-
-    @campaigns ||= if camps.count > 0
-      camps.map(&:raw_attributes)
-    else
-      extra = @identity.extra
-      [{ 'id' => extra['account_id'], 'name' => extra['account_name'] }]
-    end
+    response = @client.campaigns(status: 'active')
+    @campaigns ||= response.campaigns.map(&:raw_attributes)
   end
   alias_method :lists, :campaigns
 
-  def subscribe(list_id, email, name = nil, double_optin = true)
-    @client.account_id = list_id
-
+  def subscribe(campaign_id, email, name = nil, double_optin = true)
     opts = { new_email: email }
 
     if name.present?
@@ -48,7 +39,13 @@ class ServiceProviders::Drip < ServiceProviders::Email
     end
 
     retry_on_timeout do
-      @client.create_or_update_subscriber(email, opts)
+      if campaign_id
+        opts.merge!(double_optin: double_optin)
+        @client.subscribe(email, campaign_id, opts)
+      else
+        # Add subscriber to global account list
+        @client.create_or_update_subscriber(email, opts)
+      end
     end
   end
 
