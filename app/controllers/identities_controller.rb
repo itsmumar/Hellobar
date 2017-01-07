@@ -27,6 +27,12 @@ class IdentitiesController < ApplicationController
     identity.extra       = extra_from_request
     identity.credentials = credentials_from_request
 
+    service_provider = identity.service_provider
+    if service_provider.respond_to? :accounts
+      account = service_provider.accounts.first
+      identity.extra["account_id"] = account['id']
+    end
+
     if params[:api_key]
       #TODO sanitze me?
       identity.api_key = params[:api_key]

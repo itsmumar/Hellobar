@@ -21,7 +21,14 @@ class ServiceProviders::Drip < ServiceProviders::Email
     response = @client.connection.get("accounts")
     @accounts ||= response.body["accounts"]
   end
-  alias_method :lists, :accounts
+
+  # TODO: confirm the pagination process
+  def campaigns
+    campaigns_path = "#{@identity.extra['account_id']}/campaigns?status=active"
+    response = @client.connection.get(campaigns_path)
+    @campaigns ||= response.body["campaigns"]
+  end
+  alias_method :lists, :campaigns
 
   def subscribe(list_id, email, name = nil, double_optin = true)
     @client.account_id = list_id
