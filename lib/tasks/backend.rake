@@ -172,7 +172,7 @@ namespace :backend do
     email_message << "Total: #{fm grand_total_diff}"
     puts email_message.join("\n")
     unless ENV['noop']
-      emails = %w{imtall@gmail.com}
+      emails = %w{mailmanager@hellobar.com}
       if grand_total_diff != 0
         Pony.mail({
           to: emails.join(", "),
