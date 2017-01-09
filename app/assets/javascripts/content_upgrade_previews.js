@@ -10,7 +10,7 @@
       var html = '<div class="content-upgrade-offer-preview js-root"></div>';
 
       function getOptions($element) {
-        return $element.data('options');
+        return $element.data('options') || {};
       }
 
       function parseHeadline(rawHeadline) {
@@ -21,7 +21,7 @@
       }
 
       function updateElement($element, model) {
-        var rawHeadline = getValueFromModel(model, getOptions($element), 'headline');
+        var rawHeadline = getValueFromModel(model, getOptions($element).defaultModel, 'headline');
         var parsedHeadline = parseHeadline(rawHeadline);
         $('.js-root', $element).html(parsedHeadline);
       }
@@ -82,7 +82,7 @@
         '</div>';
 
       function getOptions($element) {
-        return $element.data('options');
+        return $element.data('options') || {};
       }
 
       function getFromModel($element, model, property) {
