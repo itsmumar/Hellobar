@@ -1,4 +1,4 @@
-require "spec_helper"
+require "integration_helper"
 
 describe ServiceProviders::Drip do
 
