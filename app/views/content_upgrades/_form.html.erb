@@ -1,22 +1,194 @@
-<p>Some form things</p>
+<style>
+  /* TODO externalize to CSS file */
+
+  .content-upgrade-form .columns:after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+
+  .content-upgrade-form .form-column {
+    float: left;
+    width: 400px;
+  }
+
+  .content-upgrade-form h3 {
+    margin: 16px 0 4px 0;
+    text-transform: uppercase;
+    color: #909090;
+    font-size: 15px;
+  }
+
+  .content-upgrade-form .preview-column {
+    margin-left: 460px;
+  }
+
+  .content-upgrade-form .preview-column .preview-container {
+    padding: 20px 0;
+  }
+
+  #hb-application .content-upgrade-form .field-wrapper {
+    margin-bottom: 4px;
+  }
+
+  #hb-application .content-upgrade-form .field-wrapper > label {
+    font-weight: 400;
+    color: #a3a3a3;
+    margin: 0 0 4px 0;
+  }
+
+  #hb-application .content-upgrade-form .field-wrapper > input,
+  #hb-application .content-upgrade-form .form-column .field-wrapper > textarea {
+    margin: 0;
+  }
+
+  .content-upgrade-form .buttons {
+    margin-top: 8px;
+  }
+
+  .content-upgrade-form .buttons a {
+    margin-right: 8px;
+  }
+
+  .content-upgrade-form .buttons .save {
+    padding: 8px 16px;
+    background-color: #e8562a;
+    color: white;
+    text-decoration: none;
+  }
+
+  .content-upgrade-form .buttons .list {
+    color: #e8562a;
+    text-decoration: underline;
+  }
+
+
+</style>
+
+<script type="text/javascript">
+
+  $(function () {
+    function setPlaceholder(elementId, placeholder) {
+      $('#' + elementId).attr('placeholder', placeholder);
+    }
+
+    var defaultOfferModel = {
+      headline: 'Content Upgrade Offer Headline'
+    };
+    var offerModel = {
+      headline: ''
+    };
+    var $offerPreview = $('.js-offer-preview-container').contentUpgradeOfferPreview({
+      defaultModel: defaultOfferModel
+    });
+    $('#offer-headline').attr('placeholder', defaultOfferModel.headline).on('keydown', function (evt) {
+      setTimeout(function () {
+        offerModel.headline = $(evt.currentTarget).val();
+        $offerPreview.contentUpgradeOfferPreview('update', offerModel);
+      });
+    });
+
+    var defaultModalModel = {
+      caption: 'Almost there! Please fill in this form and click the button below to gain access',
+      headline: 'Enter your details to download cheatsheet of 10 useful tools to craft beautiful graphics for social media',
+      cta: 'Download Now >>',
+      spamDisclaimer: 'We hate SPAM and promise to keep your email address safe'
+    };
+    var modalModel = {
+      caption: '',
+      headline: '',
+      cta: '',
+      spamDisclaimer: ''
+    };
+    var $modalPreview = $('.js-modal-preview-container').contentUpgradeModalPreview({
+      defaultModel: defaultModalModel
+    });
+    $('.js-modal-input[data-property]').each(function () {
+      var $this = $(this);
+      setPlaceholder($this.attr('id'), defaultModalModel[$this.attr('data-property')]);
+    }).on('keydown', function (evt) {
+      var $this = $(this);
+      setTimeout(function () {
+        modalModel[$this.attr('data-property')] = $(evt.currentTarget).val();
+        $modalPreview.contentUpgradeModalPreview('update', modalModel);
+      }, 1);
+    });
+
+  });
+</script>
 
 <form>
-  <h3>Offer Headline</h3>
+  <div class="content-upgrade-form">
 
-  <div class="field-wrapper">
-    <label for="offer-headline">Your link should look like</label>
-    <input id="offer-headline" type="text">
-  </div>
+    <div class="columns">
+      <div class="form-column">
 
-  <h3>Modal Elements</h3>
+        <h3>Offer Headline</h3>
 
-  <div class="field-wrapper">
-    <label for="caption-text">Caption Text</label>
-    <input id="caption-text" type="text">
+        <div class="field-wrapper">
+          <label for="offer-headline">Your link should look like {{link text}}</label>
+          <input id="offer-headline" type="text" data-property="headline">
+        </div>
+
+        <h3>Modal Elements</h3>
+
+        <div class="field-wrapper">
+          <label for="caption">Caption Text</label>
+          <input id="caption" type="text" class="js-modal-input" data-property="caption">
+        </div>
+
+        <div class="field-wrapper">
+          <label for="headline">Headline Text</label>
+          <input id="headline" type="text" class="js-modal-input" data-property="headline">
+        </div>
+
+        <div class="field-wrapper">
+          <label for="name-placeholder">Name Placeholder</label>
+          <input id="name-placeholder" type="text" class="js-modal-input" data-property="namePlaceholder">
+        </div>
+
+        <div class="field-wrapper">
+          <label for="email-placeholder">Email Placeholder</label>
+          <input id="email-placeholder" type="text" class="js-modal-input" data-property="emailPlaceholder">
+        </div>
+
+        <div class="field-wrapper">
+          <label for="cta">Button Text</label>
+          <input id="cta" type="text" class="js-modal-input" data-property="cta">
+        </div>
+
+        <div class="field-wrapper">
+          <label for="spam-disclaimer">Spam Disclaimer</label>
+          <input id="spam-disclaimer" type="text" class="js-modal-input" data-property="spamDisclaimer">
+        </div>
+
+
+        <h3>Choose Content</h3>
+
+        <div class="field-wrapper">
+          <label for="content">Content Made in HelloBar</label>
+          <input id="content" type="text">
+        </div>
+
+        <textarea></textarea>
+
+      </div>
+
+      <div class="preview-column">
+        <h3>Content Upgrade Offer</h3>
+
+        <div class="js-offer-preview-container preview-container"></div>
+        <h3>Content Upgrade Modal</h3>
+
+        <div class="js-modal-preview-container preview-container"></div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <a href="javascript:void(0)" class="save">Save</a>
+      <a href="javascript:void(0)" class="list">List</a>
+    </div>
+
   </div>
 
 </form>
-
-
-
-<input type="submit" value="Save">

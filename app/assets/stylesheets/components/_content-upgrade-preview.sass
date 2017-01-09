@@ -1,0 +1,77 @@
+$lightBlueColor: #3498db
+
+.content-upgrade-offer-preview
+  max-width: 400px
+  padding: 20px
+  color: black
+  background-color: #ffd219
+  a
+    color: black
+    text-decoration: underline
+
+.content-upgrade-modal-preview
+  max-width: 400px
+  padding: 20px
+  background-color: #404157
+  text-align: center
+  font-size: 13px
+
+  .progress-bar
+    position: relative
+    height: 20px
+    font-size: 90%
+    &:before
+      display: block
+      position: absolute
+      left: 0
+      top: 0
+      bottom: 0
+      width: 60%
+      content: '60%'
+      padding-top: 2px
+      background-color: $lightBlueColor
+      color: white
+    &:after
+      display: block
+      position: absolute
+      right: 0
+      top: 0
+      bottom: 0
+      width: 40%
+      content: ''
+      background-color: white
+
+  .caption
+    color: white
+    border-bottom: solid 1px white
+    font-size: 100%
+    padding: 8px 0
+    margin: 8px 0
+
+  .headline
+    color: white
+    font-size: 150%
+    font-weight: 700
+
+  .form
+    padding: 0 30px
+
+  input
+    display: block
+    width: 100%
+    margin: 6px auto
+
+  .cta
+    display: inline-block
+    padding: 10px 20px
+    background-color: $lightBlueColor
+    color: white
+    text-transform: uppercase
+    font-weight: 700
+    cursor: pointer
+
+  .spam-disclaimer
+    margin-top: 8px
+    color: #9c9c9d
+    font-size: 90%
+
