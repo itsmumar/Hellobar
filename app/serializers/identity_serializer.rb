@@ -6,7 +6,7 @@ class IdentitySerializer < ActiveModel::Serializer
 
   def lists
     if service_provider.respond_to? :lists
-      service_provider.lists.map{|l| {:name => l["name"], :id => l["id"]}}
+      service_provider.lists.map { |l| { :name => l["name"], :id => l["id"] } }
     end
   end
 

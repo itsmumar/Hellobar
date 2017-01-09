@@ -50,18 +50,9 @@ class ServiceProviders::Drip < ServiceProviders::Email
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
-  def batch_subscribe(list_id, subscribers, double_optin = true)
-    @client.account_id = list_id
-
-    batch = subscribers.map do |subscriber|
-      {email: subscriber[:email], new_email: subscriber[:email]}.tap do |entry|
-        if subscriber[:name].present?
-          split = subscriber[:name].split(' ', 2)
-          entry[:custom_fields] = {:name => subscriber[:name], :fname => split[0], :lname => split[1]}
-        end
-      end
+  def batch_subscribe(campaign_id, subscribers, double_optin = true)
+    subscribers.each do |subscriber|
+      subscribe(campaign_id, subscriber[:email], subscriber[:name], double_optin)
     end
-
-    @client.create_or_update_subscribers(batch)
   end
 end

@@ -27,12 +27,7 @@ class IdentitiesController < ApplicationController
     identity.extra       = extra_from_request
     identity.credentials = credentials_from_request
 
-    service_provider = identity.service_provider
-    if service_provider.respond_to? :accounts
-      account = service_provider.accounts.first
-      identity.extra["account_id"] = account.id
-      identity.extra["account_name"] = account.name
-    end
+    add_account_details(identity)
 
     if params[:api_key]
       #TODO sanitze me?
@@ -71,6 +66,16 @@ class IdentitiesController < ApplicationController
       {"app_url" => sanitize_app_url(params[:app_url])}
     else
       env["omniauth.auth"] && env["omniauth.auth"]["extra"]
+    end
+  end
+
+  def add_account_details(identity)
+    service_provider = identity.service_provider
+
+    if service_provider.respond_to? :accounts
+      account = service_provider.accounts.first
+      identity.extra["account_id"] = account.id
+      identity.extra["account_name"] = account.name
     end
   end
 
