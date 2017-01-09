@@ -374,6 +374,7 @@ class @ContactListModal extends Modal
     defaultContext =
       provider: value
       providerName: label
+      providerNameLabel: (label + ' ' + (if label == 'Drip' then 'campaign' else 'list'))
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')

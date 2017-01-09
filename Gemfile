@@ -19,7 +19,7 @@ gem "createsend",                "~> 3.4.0"
 gem "cssmin",                    "~> 1.0.3"
 gem "dalli",                     "~> 2.7.2"
 gem "devise",                    "~> 3.2.4"
-gem "drip-ruby",                 "~> 0.0.3", require: 'drip'
+gem "drip-ruby",                 "~> 0.0.7", require: 'drip'
 gem "elif",                      "~> 0.1"
 gem "ember-rails",               "~> 0.16.4"
 gem "ember-source",              "~> 1.7.1"
