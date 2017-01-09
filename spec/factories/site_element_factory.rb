@@ -34,5 +34,9 @@ FactoryGirl.define do
     trait :facebook do
       element_subtype "social/like_on_facebook"
     end
+
+    trait :closable do
+      closable true
+    end
   end
 end

@@ -474,6 +474,7 @@ var HB = {
 
     var dayCount = getDayCountFromSettings();
     dayCount = parseInt(dayCount);
+
     if (dayCount > 0) {
       var cookieName = HB.visibilityControlCookieName(cookieType, siteElement.id);
       var cookieValue = new Date().toString();
@@ -1255,8 +1256,23 @@ var HB = {
    */
   shouldShowElement: function (siteElementData) {
     function shouldHideElementConsideringTypeAndScreenWidth() {
+      // A topbar is the only style which is displayed on all screen sizes
       return (siteElementData.type !== 'Bar' && HB.isMobileWidth(siteElementData));
     }
+
+    // Treat hidden elements *DIFFERENTLY* -- i.e. show them (even though
+    // visibility control cookie is *set*) *but* show them minimized
+    if ((siteElementData.type === 'Bar') // Bars only
+      && !HB.checkVisibilityControlCookies(siteElementData) // with a visibility cookie set (user hid it)
+      && !HB.updatedSinceLastVisit(siteElementData) // not updated since last visit
+      && !shouldHideElementConsideringTypeAndScreenWidth() // eligible for mobile
+      && !HB.nonMobileClickToCall(siteElementData)) { // something
+
+      // show, but in a hidden (minimized) state
+      siteElementData.view_condition = 'stay-hidden';
+      return true;
+    }
+
     // Skip the site element if they have already seen/dismissed it
     // and it hasn't been changed since then and the user has not specified
     // that we show it regardless
@@ -1271,6 +1287,7 @@ var HB = {
 
   /**
    * @deprecated This was used previously to determine if we need to show/hide the bar
+   * TODO remove this method as it seems to not being used at all
    */
   convertedOrDismissed: function (siteElement) {
     var converted = HB.didConvert(siteElement) && !siteElement.show_after_convert;

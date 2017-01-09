@@ -437,11 +437,14 @@ HB.SiteElement = HB.createClass({
         expiration = 86400000; // 24 hours
         cookie_name = "HBDismissedBars";
       }
+
       cookie_str = HB.gc(cookie_name) || "[]";
       dismissed_elements = JSON.parse(cookie_str) || [];
+
       if (dismissed_elements.indexOf(this.id) == -1) {
         dismissed_elements.push(this.id);
       }
+
       if (dismissed_elements) {
         HB.sc(
           cookie_name,
@@ -464,18 +467,27 @@ HB.SiteElement = HB.createClass({
       var pullDown = document.createElement("div");
       pullDown.className = "hb-" + this.size + " hellobar " + "hb-" + this.placement;
       pullDown.id = "pull-down";
-
       pullDown.style.backgroundColor = "#" + this.background_color;
+
       var pdLink = document.createElement("div");
       pdLink.className = "hellobar-arrow";
       pdLink.onclick = function () {
         HB.animateIn(this.w);
         HB.animateOut(this.pullDown);
 
+        // expire (i.e. delete) the VisibilityControl cookie
+        // (because the user has asked the bar to be shown again)
+        var cookieName = HB.visibilityControlCookieName('dismiss', this.id);
+        HB.sc(cookieName, JSON.stringify({}), new Date().toString());
+
         // if the pusher exists, unhide it since it should be hidden at this point
-        if (HB.p != null)
+        if (HB.p != null) {
           HB.showElement(HB.p, '');
+        }
       }.bind(this);
+
+      var svgArrow = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="11px" height="11px" viewBox="43.611 92.5 315 315" enable-background="new 43.611 92.5 315 315" xml:space="preserve"> <g> <path d="M49.611,92.5c-3.3,0-6,2.7-6,6v303c0,3.3,2.7,6,6,6h303c3.3,0,6-2.7,6-6v-303c0-3.3-2.7-6-6-6H49.611z M229.611,254.334 c-3.3,0-6,2.7-6,6V360c0,3.3-2.7,6-6,6h-33c-3.3,0-6-2.7-6-6v-99.666c0-3.3-2.7-6-6-6H99.195c-3.3,0-4.197-2.01-1.994-4.467 l99.904-111.4c2.203-2.457,5.809-2.457,8.012,0l99.903,111.4c2.203,2.457,1.306,4.467-1.994,4.467H229.611z"/> </g> </svg>';
+      pdLink.innerHTML = svgArrow;
 
       pullDown.appendChild(pdLink);
       HB.injectAtTop(pullDown);
