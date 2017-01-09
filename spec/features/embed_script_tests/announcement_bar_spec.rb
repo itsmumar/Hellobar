@@ -35,5 +35,15 @@ feature 'Site with a closable announcement topbar', :js do
       # has headline again
       expect(page).to have_content(element.headline)
     end
+
+    # reload the page and expect the bar to be visible
+    visit "#{ site_path_to_url(path) }"
+
+    # force capybara to wait until iframe is loaded
+    page.has_xpath?('.//iframe[@id="random-container"]')
+
+    within_frame 'random-container-0' do
+      expect(page).to have_content(element.headline)
+    end
   end
 end
