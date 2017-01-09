@@ -70,9 +70,9 @@ class IdentitiesController < ApplicationController
   end
 
   def add_account_details(identity)
-    service_provider = identity.service_provider
 
-    if service_provider.respond_to? :accounts
+    if identity.provider == 'drip'
+      service_provider = identity.service_provider
       account = service_provider.accounts.first
       identity.extra["account_id"] = account.id
       identity.extra["account_name"] = account.name
