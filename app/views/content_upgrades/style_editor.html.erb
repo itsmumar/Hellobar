@@ -1,6 +1,138 @@
+<script type="text/javascript">
+
+  $(function () {
+    var defaultOfferModel = {
+      headline: 'Content Upgrade Offer Headline'
+    };
+    var $offerPreview = $('.js-offer-preview-container').contentUpgradeOfferPreview({
+      defaultModel: defaultOfferModel
+    });
+
+    var defaultModalModel = {
+      caption: 'Almost there! Please fill in this form and click the button below to gain access',
+      headline: 'Enter your details to download cheatsheet of 10 useful tools to craft beautiful graphics for social media',
+      cta: 'Download Now >>',
+      spamDisclaimer: 'We hate SPAM and promise to keep your email address safe'
+    };
+    var $modalPreview = $('.js-modal-preview-container').contentUpgradeModalPreview({
+      defaultModel: defaultModalModel
+    });
+
+  });
+
+</script>
+
 <h2>Style Editor</h2>
 
 
 <%= form_tag update_styles_site_content_upgrades_path(@site.id), method: "post" do %>
 
 <% end %>
+
+<form>
+  <div class="content-upgrade-form">
+
+    <div class="columns">
+      <div class="form-column">
+
+        <h3>Offer Headline</h3>
+
+        <div class="field-wrapper">
+          <label for="offer-background-color">Background Color</label>
+          <input id="offer-background-color" type="text">
+        </div>
+
+        <div class="field-wrapper">
+          <label for="offer-border-color">Border Color</label>
+          <input id="offer-border-color" type="text">
+        </div>
+
+        <div class="select-wrapper">
+          <label for="offer-border-width">Border Thickness</label>
+          <select id="offer-border-width">
+            <option value="1px">1px</option>
+            <option value="2px">2px</option>
+            <option value="3px">3px</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <label for="offer-border-thickness">Border Style</label>
+          <select id="offer-border-thickness">
+            <option value="none">None</option>
+            <option value="solid">Solid</option>
+            <option value="dotted">Dotted</option>
+            <option value="dashed">Dashed</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <label for="offer-border-radius">Border Radius</label>
+          <select id="offer-border-radius">
+            <option value="1">1px</option>
+            <option value="2">2px</option>
+            <option value="3">3px</option>
+          </select>
+        </div>
+
+
+        <h3>Modal Elements</h3>
+
+        <div class="field-wrapper">
+          <label for="modal-background-color">Background Color</label>
+          <input id="modal-background-color" type="text">
+        </div>
+
+        <div class="field-wrapper">
+          <label for="modal-border-color">Border Color</label>
+          <input id="modal-border-color" type="text">
+        </div>
+
+        <div class="select-wrapper">
+          <label for="modal-border-width">Border Thickness</label>
+          <select id="modal-border-width">
+            <option value="1px">1px</option>
+            <option value="2px">2px</option>
+            <option value="3px">3px</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <label for="modal-border-thickness">Border Style</label>
+          <select id="modal-border-thickness">
+            <option value="none">None</option>
+            <option value="solid">Solid</option>
+            <option value="dotted">Dotted</option>
+            <option value="dashed">Dashed</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <label for="modal-border-radius">Border Radius</label>
+          <select id="modal-border-radius">
+            <option value="1">1px</option>
+            <option value="2">2px</option>
+            <option value="3">3px</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="preview-column">
+        <h3>Content Upgrade Offer</h3>
+
+        <div class="js-offer-preview-container preview-container"></div>
+        <h3>Content Upgrade Modal</h3>
+
+        <div class="js-modal-preview-container preview-container"></div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <a href="javascript:void(0)" class="save">Save</a>
+      <a href="javascript:void(0)" class="list">List</a>
+    </div>
+
+  </div>
+
+</form>

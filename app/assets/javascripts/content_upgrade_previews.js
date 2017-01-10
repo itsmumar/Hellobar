@@ -20,10 +20,20 @@
         return s;
       }
 
-      function updateElement($element, model) {
+      function updateElement($element, model, styles) {
+        // Update model
         var rawHeadline = getValueFromModel(model, getOptions($element).defaultModel, 'headline');
         var parsedHeadline = parseHeadline(rawHeadline);
-        $('.js-root', $element).html(parsedHeadline);
+        var $root = $('.js-root', $element);
+        $root.html(parsedHeadline);
+        // Update styles
+        if (styles) {
+          styles.offerBackgroundColor && $root.css('background-color', styles.offerBackgroundColor);
+          styles.offerBorderColor && $root.css('border-color', styles.offerBorderColor);
+          styles.offerBorderWidth && $root.css('border-width', styles.offerBorderWidth);
+          styles.offerBorderStyle && $root.css('border-style', styles.offerBorderStyle);
+          styles.offerBorderRadius && $root.css('border-style', styles.offerBorderRadius);
+        }
       }
 
       var methods = {
@@ -44,9 +54,9 @@
             $(this).empty();
           });
         },
-        update: function (model) {
+        update: function (model, styles) {
           return this.each(function () {
-            updateElement($(this), model);
+            updateElement($(this), model, styles);
           });
         }
 
