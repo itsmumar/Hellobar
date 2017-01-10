@@ -4,8 +4,16 @@
     var defaultOfferModel = {
       headline: 'Content Upgrade Offer Headline'
     };
+    var offerStyles = {
+      offerBackgroundColor: '#ffd219',
+      offerBorderColor: '#ffd219',
+      offerBorderWidth: '1px',
+      offerBorderStyle: 'none',
+      offerBorderRadius: '0px'
+    };
     var $offerPreview = $('.js-offer-preview-container').contentUpgradeOfferPreview({
-      defaultModel: defaultOfferModel
+      defaultModel: defaultOfferModel,
+      defaultStyles: offerStyles
     });
 
     var defaultModalModel = {
@@ -13,6 +21,13 @@
       headline: 'Enter your details to download cheatsheet of 10 useful tools to craft beautiful graphics for social media',
       cta: 'Download Now >>',
       spamDisclaimer: 'We hate SPAM and promise to keep your email address safe'
+    };
+    var modalStyles = {
+      offerBackgroundColor: '#404157',
+      offerBorderColor: '#404157',
+      offerBorderWidth: '1px',
+      offerBorderStyle: 'none',
+      offerBorderRadius: '0px'
     };
     var $modalPreview = $('.js-modal-preview-container').contentUpgradeModalPreview({
       defaultModel: defaultModalModel
@@ -57,8 +72,8 @@
         </div>
 
         <div class="select-wrapper">
-          <label for="offer-border-thickness">Border Style</label>
-          <select id="offer-border-thickness">
+          <label for="offer-border-style">Border Style</label>
+          <select id="offer-border-style">
             <option value="none">None</option>
             <option value="solid">Solid</option>
             <option value="dotted">Dotted</option>

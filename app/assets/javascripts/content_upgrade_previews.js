@@ -45,7 +45,7 @@
             $container.data('options', opts);
             $container.append(html);
             options.defaultModel && setTimeout(function () {
-              $container.contentUpgradeOfferPreview('update', options.defaultModel);
+              $container.contentUpgradeOfferPreview('update', options.defaultModel, options.defaultStyles);
             }, 1);
           });
         },
@@ -99,13 +99,20 @@
         return getValueFromModel(model, getOptions($element).defaultModel, property);
       }
 
-      function updateElement($element, model) {
+      function updateElement($element, model, styles) {
         $('.caption', $element).text(getFromModel($element, model, 'caption'));
         $('.headline', $element).text(getFromModel($element, model, 'headline'));
         $('.name', $element).attr('placeholder', getFromModel($element, model, 'namePlaceholder'));
         $('.email', $element).attr('placeholder', getFromModel($element, model, 'emailPlaceholder'));
         $('.cta', $element).text(getFromModel($element, model, 'cta'));
         $('.spam-disclaimer', $element).text(getFromModel($element, model, 'spamDisclaimer'));
+        if (styles) {
+          styles.modalBackgroundColor && $root.css('background-color', styles.modalBackgroundColor);
+          styles.modalBorderColor && $root.css('border-color', styles.modalBorderColor);
+          styles.modalBorderWidth && $root.css('border-width', styles.modalBorderWidth);
+          styles.modalBorderStyle && $root.css('border-style', styles.modalBorderStyle);
+          styles.modalBorderRadius && $root.css('border-style', styles.modalBorderRadius);
+        }
       }
 
       var methods = {
@@ -117,7 +124,7 @@
             $container.data('options', opts);
             $container.append(html);
             options.defaultModel && setTimeout(function () {
-              $container.contentUpgradeModalPreview('update', options.defaultModel);
+              $container.contentUpgradeModalPreview('update', options.defaultModel, options.defaultStyles);
             }, 1);
           });
         },
@@ -126,9 +133,9 @@
             $(this).empty();
           });
         },
-        update: function (model) {
+        update: function (model, styles) {
           return this.each(function () {
-            updateElement($(this), model);
+            updateElement($(this), model, styles);
           });
         }
       };
