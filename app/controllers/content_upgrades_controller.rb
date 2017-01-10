@@ -15,14 +15,18 @@ class ContentUpgradesController < ApplicationController
   end
 
   def create
-    @content_upgrade = SiteElement.new
+    @content_upgrade = SiteElement.new(content_upgrade_params)
+
+    @content_upgrade.save!
+
     flash[:success] = "Your content upgrade has been saved."
     redirect_to site_content_upgrades_path(@site.id)
   end
 
   def update
+    @content_upgrade.update_attributes!(content_upgrade_params)
+    flash[:success] = "Your content upgrade has been saved."
     redirect_to site_content_upgrades_path(@site.id)
-
   end
 
   def destroy
@@ -35,6 +39,18 @@ class ContentUpgradesController < ApplicationController
   end
 
   private
+
+  def content_upgrade_params
+    {
+      type: 'ContentUpgrade',
+      element_subtype: 'announcement',
+      headline: params[:Headline],
+      caption: params[:caption],
+      name_placeholder: params[:name_placeholder],
+      email_placeholder: params[:email_placeholder],
+      rule: @site.rules.first
+    }
+  end
 
   def load_site
     super

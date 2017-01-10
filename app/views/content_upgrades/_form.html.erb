@@ -68,7 +68,6 @@
 </style>
 <script src="//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/js/froala_editor.pkgd.min.js" type="text/javascript"></script>
 
-<form>
   <div class="content-upgrade-form">
 
     <div class="columns">
@@ -78,39 +77,39 @@
 
         <div class="field-wrapper">
           <label for="offer-headline">Your link should look like {{link text}}</label>
-          <input id="offer-headline" type="text" data-property="headline">
+          <input name="offer_headline" id="offer-headline" type="text" data-property="headline">
         </div>
 
         <h3>Modal Elements</h3>
 
         <div class="field-wrapper">
           <label for="caption">Caption Text</label>
-          <input id="caption" type="text" class="js-modal-input" data-property="caption">
+          <input name="caption" id="caption" type="text" class="js-modal-input" data-property="caption" value="<%= @content_upgrade.caption %>">
         </div>
 
         <div class="field-wrapper">
           <label for="headline">Headline Text</label>
-          <input id="headline" type="text" class="js-modal-input" data-property="headline">
+          <input name="headline" id="headline" type="text" class="js-modal-input" data-property="headline">
         </div>
 
         <div class="field-wrapper">
           <label for="name-placeholder">Name Placeholder</label>
-          <input id="name-placeholder" type="text" class="js-modal-input" data-property="namePlaceholder">
+          <input name="name_placeholder"  id="name-placeholder" type="text" class="js-modal-input" data-property="namePlaceholder">
         </div>
 
         <div class="field-wrapper">
           <label for="email-placeholder">Email Placeholder</label>
-          <input id="email-placeholder" type="text" class="js-modal-input" data-property="emailPlaceholder">
+          <input name="email_placeholder"  id="email-placeholder" type="text" class="js-modal-input" data-property="emailPlaceholder">
         </div>
 
         <div class="field-wrapper">
           <label for="cta">Button Text</label>
-          <input id="cta" type="text" class="js-modal-input" data-property="cta">
+          <input name="button-text"  id="cta" type="text" class="js-modal-input" data-property="cta">
         </div>
 
         <div class="field-wrapper">
           <label for="spam-disclaimer">Spam Disclaimer</label>
-          <input id="spam-disclaimer" type="text" class="js-modal-input" data-property="spamDisclaimer">
+          <input name="disclaimer"  id="spam-disclaimer" type="text" class="js-modal-input" data-property="spamDisclaimer">
         </div>
 
 
@@ -142,10 +141,8 @@
     </div>
 
     <div class="buttons">
-      <a href="javascript:void(0)" class="save">Save</a>
-      <a href="javascript:void(0)" class="list">List</a>
+      <input type="submit" class="save" value="Save">
+      <%= link_to('List', site_content_upgrades_path(@site.id), :class => "list") %>
     </div>
 
   </div>
-
-</form>

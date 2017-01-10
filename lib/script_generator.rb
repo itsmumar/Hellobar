@@ -83,7 +83,11 @@ class ScriptGenerator < Mustache
   def content_upgrades_json
     cu_json = {}
     site.site_elements.active_content_upgrades.each do |cu|
-      cu_json[cu.id] = cu.settings
+      content = {
+        headline: cu.headline,
+        caption: cu.caption
+      }
+      cu_json[cu.id] = content
     end
     cu_json.to_json
   end
