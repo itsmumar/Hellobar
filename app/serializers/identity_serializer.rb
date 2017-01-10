@@ -1,6 +1,7 @@
 class IdentitySerializer < ActiveModel::Serializer
   attributes :id, :site_id, :provider, :lists, :supports_double_optin, :embed_code, :oauth,
              :supports_cycle_day
+  has_many :contact_lists
 
   delegate :service_provider, to: :object
 

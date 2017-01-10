@@ -147,6 +147,10 @@ class ContactList < ActiveRecord::Base
     data["webhook_url"].present?
   end
 
+  def tags
+    data["tags"] || []
+  end
+
   private
 
   def notify_identity

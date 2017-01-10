@@ -27,6 +27,7 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
             p
               small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
             .remote-list-select-block
+            .tag-select-block
 
         .provider-instructions-block
           / Empty
@@ -191,6 +192,55 @@ script id="contact-list-modal-remote-list-select-template" type="text/x-handleba
   |     <input type="checkbox" name="contact_list[double_optin]" id="contact_list_double_optin" value="1"> Use double opt-in? (recommended)
   |   </label>
   | {{/if}}
+
+script id="contact-list-modal-tag-select-template" type="text/x-handlebars-template"
+
+  | <label for="contact_list_remote_list_id"">Apply Tags (Optional) <span class="button paid" style="margin-left: 8px; padding: 0.25em 1em;">PAID</span></label>
+  | {{#if tags}}
+  |   {{#each tags}}
+  |     <div class="select-wrapper"">
+  |       <div>
+  |         <select class="contact-list-tag" name="contact_list[remote_list_id]" {{#if freePlan}}disabled{{/if}}>
+  |           <option disabled selected value>Select ...</option>
+  |           {{#unless freePlan}}
+  |             {{#each ../../identity.lists}}
+  |               {{option ../../. id name}}
+  |             {{/each}}
+  |           {{/unless}}
+  |         </select>
+  |         {{#unless freePlan}}<i class="icon-close" data-js-action="remove-tag"></i>{{/unless}}
+  |       </div>
+  |     </div>
+  |   {{/each}}
+  | {{else}}
+  |   <div class="select-wrapper" style="position: relative;">
+  |     <div>
+  |       <select class="contact-list-tag" name="contact_list[remote_list_id]" {{#if freePlan}}disabled{{/if}}>
+  |         <option disabled selected value>Select ...</option>
+  |         {{#unless freePlan}}
+  |           {{#each identity.lists}}
+  |             <option value="{{id}}">{{name}}</option>
+  |           {{/each}}
+  |         {{/unless}}
+  |       </select>
+  |     </div>
+  |   </div>
+  | {{/if}}
+  | {{#unless freePlan}}<a href="#add-tag" data-js-action="add-tag" style="color: #45b4d6;">+ Add tag</a>{{/unless}}
+
+script id="tag-dropdown-template" type="text/x-handlebars-template"
+
+  | <div class="select-wrapper" style="position: relative;">
+  |   <div>
+  |     <select class="contact-list-tag" name="contact_list[remote_list_id]">
+  |       <option disabled selected value>Select ...</option>
+  |       {{#each identity.lists}}
+  |         <option value="{{id}}">{{name}}</option>
+  |       {{/each}}
+  |     </select>
+  |     <i class="icon-close" data-js-action="remove-tag"></i>
+  |   </div>
+  | </div>
 
 /-----------  Sync Details  -----------/
 

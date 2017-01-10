@@ -67,6 +67,7 @@ class @ContactListModal extends Modal
         nevermind        : $("#contact-list-variant-modal-provider-instructions-nevermind-template").html()
         syncDetails      : $("#contact-list-variant-modal-sync-details-template").html()
         remoteListSelect : $("#contact-list-variant-modal-remote-list-select-template").html()
+        tagListSelect    : $("#contact-list-variant-modal-tag-select-template").html()
       }
     else
       return {
@@ -75,6 +76,7 @@ class @ContactListModal extends Modal
         nevermind        : $("#contact-list-modal-provider-instructions-nevermind-template").html()
         syncDetails      : $("#contact-list-modal-sync-details-template").html()
         remoteListSelect : $("#contact-list-modal-remote-list-select-template").html()
+        tagListSelect    : $("#contact-list-modal-tag-select-template").html()
       }
 
   _initializeTemplates: ->
@@ -84,6 +86,7 @@ class @ContactListModal extends Modal
       nevermind        : Handlebars.compile(@options.templates.nevermind)
       syncDetails      : Handlebars.compile(@options.templates.syncDetails)
       remoteListSelect : Handlebars.compile(@options.templates.remoteListSelect)
+      tagListSelect    : Handlebars.compile(@options.templates.tagListSelect)
 
     @$modal = $(@templates.main({header: @_header()}))
     @$modal.appendTo($("body"))
@@ -107,6 +110,7 @@ class @ContactListModal extends Modal
       syncDetails      : @$modal.find(".sync-details-block")
       remoteListSelect : @$modal.find(".remote-list-select-block")
       hellobarOnly     : @$modal.find(".hellobar-only")
+      tagListSelect    : @$modal.find(".tag-select-block")
 
   _bindInteractions: (object) ->
     if @isVariant
@@ -122,6 +126,8 @@ class @ContactListModal extends Modal
     @_bindSubmit(object)
     @_bindDisconnect(object)
     @_bindDelete(object)
+    @_bindTagAddition(object)
+    @_bindTagRemove(object)
     @_bindCycleDay(object)
 
   # A/B Variant - Handles custom event triggers for new UI pieces
@@ -256,6 +262,26 @@ class @ContactListModal extends Modal
       $("input#contact_list_cycle_day").prop("disabled", !cycleDayEnabled)
                                        .toggle(cycleDayEnabled)
 
+  _bindTagAddition: (object) ->
+    object.on "click", "a[data-js-action=add-tag]", (event) =>
+      event.preventDefault()
+
+      source = $('script#tag-dropdown-template').html()
+      template = Handlebars.compile(source)
+      newMarkup = template(identity: @options.identity)
+      $previous = object.find(".select-wrapper:last")
+
+      $(newMarkup).insertAfter($previous)
+
+  _bindTagRemove: (object) ->
+    object.on "click", "i[data-js-action=remove-tag]", (event) ->
+      # hide the remove-tag link, hide and remove the select
+      $(event.target)
+        .hide()
+        .prev()
+        .hide()
+        .remove()
+
   _doSubmit: (e) ->
     @_clearErrors()
 
@@ -321,6 +347,7 @@ class @ContactListModal extends Modal
     webhook_url     = $('#contact_list_webhook_url').val()
     webhook_method  = if $('#contact_list_webhook_method').prop('checked') then "post" else "get"
     $cycle_day = $('#contact_list_cycle_day')
+    tags            = (tag.value for tag in $(".contact-list-tag"))
 
     if $('#contact_list_cycle_day_enabled').prop('checked')
       cycle_day = $cycle_day.val()
@@ -333,6 +360,7 @@ class @ContactListModal extends Modal
     if webhook_url    then data.webhook_url = webhook_url
     if webhook_method then data.webhook_method = webhook_method
     if cycle_day      then data.cycle_day = cycle_day
+    if tags.length    then data.tags = tags
 
     data
 
@@ -359,6 +387,7 @@ class @ContactListModal extends Modal
     @_renderBlock("nevermind", context).hide()
     @_renderBlock("instructions", context).show()
     @blocks.remoteListSelect.hide()
+    @blocks.tagListSelect.hide()
     @blocks.hellobarOnly.hide()
     @blocks.syncDetails.hide()
 
@@ -386,6 +415,7 @@ class @ContactListModal extends Modal
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
       cycleDay: cycle_day || 0
+      tags: @options.contactList?.data?.tags
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.hellobarOnly.show()
@@ -393,6 +423,7 @@ class @ContactListModal extends Modal
       @blocks.nevermind.hide()
       @blocks.syncDetails.hide()
       @blocks.remoteListSelect.hide()
+      @blocks.tagListSelect.hide()
       return
 
     @$modal.trigger 'load'
@@ -402,12 +433,14 @@ class @ContactListModal extends Modal
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
+        @blocks.tagListSelect.hide()
         @$modal.trigger('provider:connected')
         @_renderBlock("syncDetails", $.extend(defaultContext, {identity: data})).show()
         @_renderBlock("instructions", defaultContext).hide()
+        @options.identity = data
 
         if data.provider == "infusionsoft"
-          @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).hide()
+          @_renderBlock("tagListSelect", $.extend(defaultContext, {identity: data}), false).show()
         else
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
           $cycle_day = $('#contact_list_cycle_day')

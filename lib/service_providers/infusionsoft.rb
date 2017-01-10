@@ -20,7 +20,9 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
   end
 
   def lists
-    []
+    @lists ||= Infusionsoft.data_query('ContactGroup', 1_000, 0, {}, %w{ GroupName Id }).
+      map { |result| { 'name' => result['GroupName'], 'id' => result['Id'] } }.
+      sort_by { |result| result['name'] }
   end
 
   def subscribe(list_id, email, name = nil, double_optin = false)
@@ -32,12 +34,16 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
       data[:LastName] = lname
     end
 
-    Infusionsoft.contact_add_with_dup_check(data, :Email)
+    infusionsoft_user_id = Infusionsoft.contact_add_with_dup_check(data, :Email)
+
+    @contact_list.tags.each do |tag_id|
+      Infusionsoft.contact_add_to_group(infusionsoft_user_id, tag_id)
+    end
   end
 
   def batch_subscribe(list_id, subscribers, double_optin = false)
     subscribers.each do |subscriber|
-      subscribe(nil, subscriber[:email], subscriber[:name])
+      subscribe(list_id, subscriber[:email], subscriber[:name])
     end
   end
 end

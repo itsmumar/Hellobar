@@ -1,0 +1,74 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://ft319.infusionsoft.com/api/xmlrpc
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" ?><methodCall><methodName>DataService.query</methodName><params><param><value><string>79f110f74f0db4767710ccec533347b0</string></value></param><param><value><string>ContactGroup</string></value></param><param><value><i4>1000</i4></value></param><param><value><i4>0</i4></value></param><param><value><struct/></value></param><param><value><array><data><value><string>GroupName</string></value><value><string>Id</string></value></data></array></value></param></params></methodCall>
+    headers:
+      User-Agent:
+      - Infusionsoft-1.1.9 (RubyGem)
+      Content-Type:
+      - text/xml; charset=utf-8
+      Content-Length:
+      - '500'
+      Connection:
+      - keep-alive
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - Apache-Coyote/1.1
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache, no-store
+      Expires:
+      - Mon, 25 Jul 2016 22:48:28 GMT
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Type:
+      - text/xml;charset=UTF-8
+      Content-Length:
+      - '560'
+      Vary:
+      - Accept-Encoding
+      Date:
+      - Mon, 25 Jul 2016 22:48:27 GMT
+      Set-Cookie:
+      - app-lb=!U+B1kXm2AESkaPvrjfnY7K/Z+Br7292PfSuC2nVetcxhI/jnPMDfuJtZwZXu/KzM4pMFY8S2hLKCt9EeDQMyjSIY80j6ZkHcAdWys7E6DscK4C5qml4pfRN0xH/L6prge23m9AiQm0b3uQnYyMsmocJbJkS3R6s=;
+        path=/
+    body:
+      encoding: UTF-8
+      string: <?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><value><array><data><value><struct><member><name>GroupName</name><value>6/01/2016
+        2:40 AM</value></member><member><name>Id</name><value><i4>107</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>6/10/2016
+        12:15 AM</value></member><member><name>Id</name><value><i4>133</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Activist</value></member><member><name>Id</name><value><i4>123</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>awlist3827639</value></member><member><name>Id</name><value><i4>103</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>awlist4296471</value></member><member><name>Id</name><value><i4>105</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Delivered
+        Custom Meal Plan</value></member><member><name>Id</name><value><i4>139</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Downloaded
+        Cookbook</value></member><member><name>Id</name><value><i4>143</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Downloaded
+        Grocery List</value></member><member><name>Id</name><value><i4>141</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Early
+        Riser</value></member><member><name>Id</name><value><i4>125</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Emotional
+        Eater</value></member><member><name>Id</name><value><i4>129</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Extrovert</value></member><member><name>Id</name><value><i4>121</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Home
+        Page Form</value></member><member><name>Id</name><value><i4>113</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Interest
+        - Email Series</value></member><member><name>Id</name><value><i4>101</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>New
+        Customer</value></member><member><name>Id</name><value><i4>93</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>New
+        Lead</value></member><member><name>Id</name><value><i4>92</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Nurture
+        Subscriber</value></member><member><name>Id</name><value><i4>91</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Pending
+        Custom Meal Plan</value></member><member><name>Id</name><value><i4>137</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Purchased
+        Custom Meal Plan</value></member><member><name>Id</name><value><i4>135</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>QUIZ</value></member><member><name>Id</name><value><i4>131</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Sidebar</value></member><member><name>Id</name><value><i4>115</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Structured
+        Eater</value></member><member><name>Id</name><value><i4>127</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Thrive
+        Leads</value></member><member><name>Id</name><value><i4>119</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Trigger
+        Custom Meal Plan Delivery</value></member><member><name>Id</name><value><i4>145</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Trigger
+        Purchased Custom Meal Plan</value></member><member><name>Id</name><value><i4>147</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>[category:AWeber
+        Lists]awlist3827639</value></member><member><name>Id</name><value><i4>109</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>[category:AWeber
+        Lists]awlist4296471</value></member><member><name>Id</name><value><i4>111</i4></value></member></struct></value></data></array></value></param></params></methodResponse>
+    http_version:
+  recorded_at: Mon, 25 Jul 2016 22:48:29 GMT
+recorded_with: VCR 2.9.0

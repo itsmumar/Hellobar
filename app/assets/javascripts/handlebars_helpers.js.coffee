@@ -2,7 +2,7 @@ Handlebars.registerHelper 'rule-option', (method, value, text) ->
   $option = $('<option>')
   $option.val(value)
          .text(text)
-  $option.attr('selected', 'selected') if method == value
+  $option.attr('selected', 'selected') if String(method) == String(value)
 
   new Handlebars.SafeString($option.prop('outerHTML'))
 
