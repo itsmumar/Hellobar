@@ -56,6 +56,9 @@ script id="contact-list-variant-modal-template" type="text/x-handlebars-template
         .remote-list-select-block
           / Empty
 
+        .tag-select-block
+          / Empty
+
         .sync-details-block
           / Empty
 
@@ -187,6 +190,51 @@ script id="contact-list-variant-modal-remote-list-select-template" type="text/x-
   |   </label>
   | {{/if}}
 
+script id="contact-list-variant-modal-tag-select-template" type="text/x-handlebars-template"
+
+  | <label for="contact_list_remote_list_ids">Apply Tags (Optional)</label>
+  | {{#if tags}}
+  |   {{#each tags}}
+  |     <div class="select-wrapper"">
+  |       <div>
+  |         <select class="contact-list-tag" name="contact_list[remote_list_id]" {{#if freePlan}}disabled{{/if}}>
+  |           <option disabled selected value>Select ...</option>
+  |           {{#each ../../identity.lists}}
+  |             {{option ../../. id name}}
+  |           {{/each}}
+  |         </select>
+  |         <i class="icon-close" data-js-action="remove-tag"></i>
+  |       </div>
+  |     </div>
+  |   {{/each}}
+  | {{else}}
+  |   <div class="select-wrapper" style="position: relative;">
+  |     <div>
+  |       <select class="contact-list-tag" name="contact_list[remote_list_id]">
+  |         <option disabled selected value>Select ...</option>
+  |         {{#each identity.lists}}
+  |           <option value="{{id}}">{{name}}</option>
+  |         {{/each}}
+  |       </select>
+  |     </div>
+  |   </div>
+  | {{/if}}
+  | <a href="#add-tag" data-js-action="add-tag" style="color: #45b4d6;">+ Add tag</a>
+
+script id="tag-dropdown-template" type="text/x-handlebars-template"
+
+  | <div class="select-wrapper" style="position: relative;">
+  |   <div>
+  |     <select class="contact-list-tag" name="contact_list[remote_list_id]">
+  |       <option disabled selected value>Select ...</option>
+  |       {{#each identity.lists}}
+  |         <option value="{{id}}">{{name}}</option>
+  |       {{/each}}
+  |     </select>
+  |     <i class="icon-close" data-js-action="remove-tag"></i>
+  |   </div>
+  | </div>
+
 /-----------  Sync Details  -----------/
 
 script id="contact-list-variant-modal-sync-details-template" type="text/x-handlebars-template"
@@ -194,7 +242,4 @@ script id="contact-list-variant-modal-sync-details-template" type="text/x-handle
   small After a subscriber signs up to your Hello Bar, they will be added to this list.
   div
     a.button.cancel.unlink data-identity-id="{{identity.id}}" Disconnect {{providerName}}
-  small Disconnecting your {{providerName}} account will prevent Hello Bar from automattically pushing subscriptions to your list.
-
-script id="contact-list-variant-modal-tag-select-template" type="text/x-handlebars-template"
-  div Some template content
+  small Disconnecting your {{providerName}} account will prevent Hello Bar from automatically pushing subscriptions to your list.

@@ -202,31 +202,27 @@ script id="contact-list-modal-tag-select-template" type="text/x-handlebars-templ
   |       <div>
   |         <select class="contact-list-tag" name="contact_list[remote_list_id]" {{#if freePlan}}disabled{{/if}}>
   |           <option disabled selected value>Select ...</option>
-  |           {{#unless freePlan}}
-  |             {{#each ../../identity.lists}}
-  |               {{option ../../. id name}}
-  |             {{/each}}
-  |           {{/unless}}
+  |           {{#each ../../identity.lists}}
+  |             {{option ../../. id name}}
+  |           {{/each}}
   |         </select>
-  |         {{#unless freePlan}}<i class="icon-close" data-js-action="remove-tag"></i>{{/unless}}
+  |         <i class="icon-close" data-js-action="remove-tag"></i>
   |       </div>
   |     </div>
   |   {{/each}}
   | {{else}}
   |   <div class="select-wrapper" style="position: relative;">
   |     <div>
-  |       <select class="contact-list-tag" name="contact_list[remote_list_id]" {{#if freePlan}}disabled{{/if}}>
+  |       <select class="contact-list-tag" name="contact_list[remote_list_id]">
   |         <option disabled selected value>Select ...</option>
-  |         {{#unless freePlan}}
-  |           {{#each identity.lists}}
-  |             <option value="{{id}}">{{name}}</option>
-  |           {{/each}}
-  |         {{/unless}}
+  |         {{#each identity.lists}}
+  |           <option value="{{id}}">{{name}}</option>
+  |         {{/each}}
   |       </select>
   |     </div>
   |   </div>
   | {{/if}}
-  | {{#unless freePlan}}<a href="#add-tag" data-js-action="add-tag" style="color: #45b4d6;">+ Add tag</a>{{/unless}}
+  | <a href="#add-tag" data-js-action="add-tag" style="color: #45b4d6;">+ Add tag</a>
 
 script id="tag-dropdown-template" type="text/x-handlebars-template"
 
