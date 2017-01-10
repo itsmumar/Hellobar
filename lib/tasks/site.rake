@@ -9,7 +9,7 @@ namespace :site do
 
     desc 'Schedule a re-generation of all active site scripts'
     task :regenerate_all_active => :environment do |t, args|
-      Site.script_installed_db.each do |site|
+      Site.script_installed_db.find_each do |site|
         script_generated_at = site.script_generated_at
 
         if script_generated_at.present? && script_generated_at > 3.hour.ago
