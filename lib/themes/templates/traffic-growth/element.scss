@@ -75,6 +75,7 @@ $ctaColor: $headlineColor;
     background-color: #f03554;
     color: white;
     text-decoration: none;
+    cursor: pointer;
   }
 
   .reject-link {
@@ -588,6 +589,13 @@ $ctaColor: $headlineColor;
 
 #hellobar-template.traffic-growth.thank-you {
 
+  &.paid-account .thank-you-container {
+    margin-top: 5em;
+    .thank-you-button-wrapper {
+      margin-top: 3em;
+    }
+  }
+
   .thank-you-container {
     display: block;
     height: 100%;
@@ -600,7 +608,7 @@ $ctaColor: $headlineColor;
       display: block;
       margin: 0 0 1em 0;
     }
-    .cta.go-hellobar-button {
+    .cta.thank-you-button {
       display: inline-block;
       position: relative;
       background-color: $defaultColor;
@@ -612,6 +620,7 @@ $ctaColor: $headlineColor;
       width: auto;
       padding: 1em 3em;
       font-weight: 800;
+      border-radius: 5px;
     }
   }
 
