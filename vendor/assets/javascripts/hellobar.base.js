@@ -115,10 +115,12 @@ var HB = {
 
   //
   showContentUpgrade: function (id) {
-    siteElement = HB.CONTENT_UPGRADES[id]
-    var tpl =  HB.contentUpgradeTemplates['contentupgrade']
-    content =  HB.renderTemplate(tpl, siteElement)
-    document.getElementById('hb-cu-'+id).outerHTML = content;
+    if (HB.CONTENT_UPGRADES[id]){
+      siteElement = HB.CONTENT_UPGRADES[id]
+      var tpl =  HB.contentUpgradeTemplates['contentupgrade']
+      content =  HB.renderTemplate(tpl, siteElement)
+      document.getElementById('hb-cu-'+id).outerHTML = content;
+    }
   },
 
   // Copy functions from spec into klass
