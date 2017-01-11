@@ -1,7 +1,7 @@
 (function ($) {
 
   function getValueFromModel(model, defaultModel, property) {
-    return model[property] || (defaultModel || {})[property] || '';
+    return (model || {})[property] || (defaultModel || {})[property] || '';
   }
 
   $.fn.extend({
@@ -20,10 +20,20 @@
         return s;
       }
 
-      function updateElement($element, model) {
+      function updateElement($element, model, styles) {
+        // Update model
         var rawHeadline = getValueFromModel(model, getOptions($element).defaultModel, 'headline');
         var parsedHeadline = parseHeadline(rawHeadline);
-        $('.js-root', $element).html(parsedHeadline);
+        var $root = $('.js-root', $element);
+        $root.html(parsedHeadline);
+        // Update styles
+        if (styles) {
+          styles.offerBackgroundColor && $root.css('background-color', styles.offerBackgroundColor);
+          styles.offerBorderColor && $root.css('border-color', styles.offerBorderColor);
+          styles.offerBorderWidth && $root.css('border-width', styles.offerBorderWidth);
+          styles.offerBorderStyle && $root.css('border-style', styles.offerBorderStyle);
+          styles.offerBorderRadius && $root.css('border-radius', styles.offerBorderRadius);
+        }
       }
 
       var methods = {
@@ -35,7 +45,7 @@
             $container.data('options', opts);
             $container.append(html);
             options.defaultModel && setTimeout(function () {
-              $container.contentUpgradeOfferPreview('update', options.defaultModel);
+              $container.contentUpgradeOfferPreview('update', options.defaultModel, options.defaultStyles);
             }, 1);
           });
         },
@@ -44,9 +54,9 @@
             $(this).empty();
           });
         },
-        update: function (model) {
+        update: function (model, styles) {
           return this.each(function () {
-            updateElement($(this), model);
+            updateElement($(this), model, styles);
           });
         }
 
@@ -89,13 +99,21 @@
         return getValueFromModel(model, getOptions($element).defaultModel, property);
       }
 
-      function updateElement($element, model) {
+      function updateElement($element, model, styles) {
+        var $root = $('.js-root', $element);
         $('.caption', $element).text(getFromModel($element, model, 'caption'));
         $('.headline', $element).text(getFromModel($element, model, 'headline'));
         $('.name', $element).attr('placeholder', getFromModel($element, model, 'namePlaceholder'));
         $('.email', $element).attr('placeholder', getFromModel($element, model, 'emailPlaceholder'));
         $('.cta', $element).text(getFromModel($element, model, 'cta'));
         $('.spam-disclaimer', $element).text(getFromModel($element, model, 'spamDisclaimer'));
+        if (styles) {
+          styles.modalBackgroundColor && $root.css('background-color', styles.modalBackgroundColor);
+          styles.modalBorderColor && $root.css('border-color', styles.modalBorderColor);
+          styles.modalBorderWidth && $root.css('border-width', styles.modalBorderWidth);
+          styles.modalBorderStyle && $root.css('border-style', styles.modalBorderStyle);
+          styles.modalBorderRadius && $root.css('border-radius', styles.modalBorderRadius);
+        }
       }
 
       var methods = {
@@ -107,7 +125,7 @@
             $container.data('options', opts);
             $container.append(html);
             options.defaultModel && setTimeout(function () {
-              $container.contentUpgradeModalPreview('update', options.defaultModel);
+              $container.contentUpgradeModalPreview('update', options.defaultModel, options.defaultStyles);
             }, 1);
           });
         },
@@ -116,9 +134,9 @@
             $(this).empty();
           });
         },
-        update: function (model) {
+        update: function (model, styles) {
           return this.each(function () {
-            updateElement($(this), model);
+            updateElement($(this), model, styles);
           });
         }
       };
