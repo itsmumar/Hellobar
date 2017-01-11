@@ -1,7 +1,7 @@
 (function ($) {
 
   function getValueFromModel(model, defaultModel, property) {
-    return model[property] || (defaultModel || {})[property] || '';
+    return (model || {})[property] || (defaultModel || {})[property] || '';
   }
 
   $.fn.extend({
@@ -32,7 +32,7 @@
           styles.offerBorderColor && $root.css('border-color', styles.offerBorderColor);
           styles.offerBorderWidth && $root.css('border-width', styles.offerBorderWidth);
           styles.offerBorderStyle && $root.css('border-style', styles.offerBorderStyle);
-          styles.offerBorderRadius && $root.css('border-style', styles.offerBorderRadius);
+          styles.offerBorderRadius && $root.css('border-radius', styles.offerBorderRadius);
         }
       }
 
