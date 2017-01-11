@@ -100,6 +100,7 @@
       }
 
       function updateElement($element, model, styles) {
+        var $root = $('.js-root', $element);
         $('.caption', $element).text(getFromModel($element, model, 'caption'));
         $('.headline', $element).text(getFromModel($element, model, 'headline'));
         $('.name', $element).attr('placeholder', getFromModel($element, model, 'namePlaceholder'));
@@ -111,7 +112,7 @@
           styles.modalBorderColor && $root.css('border-color', styles.modalBorderColor);
           styles.modalBorderWidth && $root.css('border-width', styles.modalBorderWidth);
           styles.modalBorderStyle && $root.css('border-style', styles.modalBorderStyle);
-          styles.modalBorderRadius && $root.css('border-style', styles.modalBorderRadius);
+          styles.modalBorderRadius && $root.css('border-radius', styles.modalBorderRadius);
         }
       }
 

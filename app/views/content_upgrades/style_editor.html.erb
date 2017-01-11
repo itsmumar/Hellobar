@@ -124,6 +124,8 @@
             <option value="1px">1px</option>
             <option value="2px">2px</option>
             <option value="3px">3px</option>
+            <option value="4px">4px</option>
+            <option value="5px">5px</option>
           </select>
         </div>
 
@@ -132,17 +134,19 @@
 
         <div class="field-wrapper">
           <label for="modal-background-color">Background Color</label>
-          <input id="modal-background-color" type="text">
+          <input id="modal-background-color" type="color" class="js-color-picker-field color-picker-field"
+                 value="#404157" data-property="modalBackgroundColor" data-styles="modal">
         </div>
 
         <div class="field-wrapper">
           <label for="modal-border-color">Border Color</label>
-          <input id="modal-border-color" type="text">
+          <input id="modal-border-color" type="color" class="js-color-picker-field color-picker-field"
+                 value="#404157" data-property="modalBorderColor" data-styles="modal">
         </div>
 
         <div class="select-wrapper">
           <label for="modal-border-width">Border Thickness</label>
-          <select id="modal-border-width">
+          <select id="modal-border-width" data-property="modalBorderWidth" data-styles="modal">
             <option value="1px">1px</option>
             <option value="2px">2px</option>
             <option value="3px">3px</option>
@@ -150,8 +154,8 @@
         </div>
 
         <div class="select-wrapper">
-          <label for="modal-border-thickness">Border Style</label>
-          <select id="modal-border-thickness">
+          <label for="modal-border-style">Border Style</label>
+          <select id="modal-border-style" data-property="modalBorderStyle" data-styles="modal">
             <option value="none">None</option>
             <option value="solid">Solid</option>
             <option value="dotted">Dotted</option>
@@ -161,10 +165,13 @@
 
         <div class="select-wrapper">
           <label for="modal-border-radius">Border Radius</label>
-          <select id="modal-border-radius">
-            <option value="1">1px</option>
-            <option value="2">2px</option>
-            <option value="3">3px</option>
+          <select id="modal-border-radius" data-property="modalBorderRadius" data-styles="modal">
+            <option value="0px">0px</option>
+            <option value="1px">1px</option>
+            <option value="2px">2px</option>
+            <option value="3px">3px</option>
+            <option value="4px">4px</option>
+            <option value="5px">5px</option>
           </select>
         </div>
 
