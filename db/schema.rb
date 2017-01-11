@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170110214354) do
+ActiveRecord::Schema.define(version: 20170111034928) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -368,6 +368,7 @@ ActiveRecord::Schema.define(version: 20170110214354) do
     t.string   "install_type"
     t.text     "invoice_information"
     t.datetime "selected_goal_clicked_at"
+    t.text     "settings"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
