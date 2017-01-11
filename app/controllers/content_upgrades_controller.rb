@@ -4,7 +4,7 @@ class ContentUpgradesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
   before_action :verify_capability, only: [:create, :update]
-  before_action :load_content_upgrade, only: [:edit, :update, :destroy]
+  before_action :load_content_upgrade, only: [:show, :edit, :update, :destroy]
 
   def index
     @content_upgrades = @site.site_elements.active_content_upgrades
@@ -14,10 +14,17 @@ class ContentUpgradesController < ApplicationController
     @content_upgrade = SiteElement.new
   end
 
-  def create
-    @content_upgrade = SiteElement.new(content_upgrade_params)
+  def show
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: "file_name"   # Excluding ".pdf" extension.
+      end
+    end
+  end
 
-    @content_upgrade.save!
+  def create
+    @content_upgrade = SiteElement.create!(content_upgrade_params)
 
     flash[:success] = "Your content upgrade has been saved."
     redirect_to site_content_upgrades_path(@site.id)
@@ -25,6 +32,7 @@ class ContentUpgradesController < ApplicationController
 
   def update
     @content_upgrade.update_attributes!(content_upgrade_params)
+
     flash[:success] = "Your content upgrade has been saved."
     redirect_to site_content_upgrades_path(@site.id)
   end
@@ -44,8 +52,13 @@ class ContentUpgradesController < ApplicationController
     {
       type: 'ContentUpgrade',
       element_subtype: 'announcement',
-      headline: params[:Headline],
+      offer_text: params[:offer_text],
+      offer_headline: params[:offer_headline],
+      headline: params[:headline],
       caption: params[:caption],
+      disclaimer: params[:disclaimer],
+      content: params[:content],
+      link_text: params[:button_text],
       name_placeholder: params[:name_placeholder],
       email_placeholder: params[:email_placeholder],
       rule: @site.rules.first

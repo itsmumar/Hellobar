@@ -88,6 +88,9 @@ gem 'rails-html-sanitizer'
 gem "rqrcode"
 gem "rotp"
 
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
+
 group :development do
   gem "better_errors", "~> 1.1"
   gem "binding_of_caller"
