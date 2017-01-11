@@ -1,3 +1,5 @@
+require 'fog'
+
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
 
@@ -80,6 +82,7 @@ class SiteElement < ActiveRecord::Base
 
   after_create :track_creation
   after_save :remove_unreferenced_images
+  after_save :update_s3_content
 
   NOT_CLONEABLE_ATTRIBUTES = [
     :element_subtype,
@@ -234,7 +237,38 @@ class SiteElement < ActiveRecord::Base
     !site.capabilities.custom_thank_you_text? || (after_email_submit_action == :show_default_message)
   end
 
+  def content_upgrade_key
+    "#{Site.id_to_script_hash(site.id)}/#{self.id}.pdf"
+  end
+
   private
+
+  def update_s3_content
+    #don't do this unless you need to
+    return if self.type != 'ContentUpgrade'
+    return if self.content.blank?
+    return unless self.content_changed?
+    
+    pdf = WickedPdf.new.pdf_from_string(self.content)
+
+    # create a connection
+    connection = Fog::Storage.new({
+      provider:               "AWS",
+      aws_access_key_id:      Hellobar::Settings[:aws_access_key_id] || "fake_access_key_id",
+      aws_secret_access_key:  Hellobar::Settings[:aws_secret_access_key] || "fake_secret_access_key",
+      path_style: true
+    })
+
+   directory = connection.directories.get(Hellobar::Settings[:s3_content_upgrades_bucket])
+
+    file = directory.files.create(
+      :key    => content_upgrade_key,
+      :body   => pdf,
+      :public => true
+    )
+
+    file.save
+  end
 
   def remove_unreferenced_images
     # Done through SQL to ensure references are up to date

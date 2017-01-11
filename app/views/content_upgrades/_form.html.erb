@@ -77,7 +77,7 @@
 
         <div class="field-wrapper">
           <label for="offer-headline">Your link should look like {{link text}}</label>
-          <input name="offer_headline" id="offer-headline" type="text" data-property="headline">
+          <input name="offer_headline" id="offer-headline" type="text" data-property="headline" value="<%= @content_upgrade.offer_headline %>">
         </div>
 
         <h3>Modal Elements</h3>
@@ -89,35 +89,35 @@
 
         <div class="field-wrapper">
           <label for="headline">Headline Text</label>
-          <input name="headline" id="headline" type="text" class="js-modal-input" data-property="headline">
+          <input name="headline" id="headline" type="text" class="js-modal-input" data-property="headline"  value="<%= @content_upgrade.headline %>">
         </div>
 
         <div class="field-wrapper">
           <label for="name-placeholder">Name Placeholder</label>
-          <input name="name_placeholder"  id="name-placeholder" type="text" class="js-modal-input" data-property="namePlaceholder">
+          <input name="name_placeholder"  id="name-placeholder" type="text" class="js-modal-input" data-property="namePlaceholder"  value="<%= @content_upgrade.name_placeholder %>">
         </div>
 
         <div class="field-wrapper">
           <label for="email-placeholder">Email Placeholder</label>
-          <input name="email_placeholder"  id="email-placeholder" type="text" class="js-modal-input" data-property="emailPlaceholder">
+          <input name="email_placeholder"  id="email-placeholder" type="text" class="js-modal-input" data-property="emailPlaceholder"  value="<%= @content_upgrade.email_placeholder %>">
         </div>
 
         <div class="field-wrapper">
           <label for="cta">Button Text</label>
-          <input name="button-text"  id="cta" type="text" class="js-modal-input" data-property="cta">
+          <input name="button_text"  id="cta" type="text" class="js-modal-input" data-property="cta"  value="<%= @content_upgrade.link_text %>">
         </div>
 
         <div class="field-wrapper">
           <label for="spam-disclaimer">Spam Disclaimer</label>
-          <input name="disclaimer"  id="spam-disclaimer" type="text" class="js-modal-input" data-property="spamDisclaimer">
+          <input name="disclaimer"  id="spam-disclaimer" type="text" class="js-modal-input" data-property="spamDisclaimer"  value="<%= @content_upgrade.disclaimer %>">
         </div>
 
 
         <h3>Choose Content</h3>
 
         <div class="select-wrapper">
-          <label for="content">Content Made in HelloBar</label>
-          <select id="content">
+          <label for="existing-content">Content Made in HelloBar</label>
+          <select id="existing-content">
             <option value="">Select content...</option>
             <option value="1">Content 1</option>
             <option value="2">Content 2</option>
@@ -137,7 +137,7 @@
     </div>
 
     <div class="js-froala-editor-container">
-      <textarea id="content-edit"></textarea>
+      <textarea id="content-edit" name="content"><%= @content_upgrade.content %></textarea>
     </div>
 
     <div class="buttons">
