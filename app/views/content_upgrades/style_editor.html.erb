@@ -16,7 +16,7 @@
       headline: 'Content Upgrade Offer Headline'
     };
     var offerStyles = {
-      offerBackgroundColor: '#ffd219',
+      offerBackgroundColor: '<%= @styles['offer_bg_color'] || '#504157' %>',
       offerBorderColor: '#ffd219',
       offerBorderWidth: '1px',
       offerBorderStyle: 'none',
@@ -34,7 +34,7 @@
       spamDisclaimer: 'We hate SPAM and promise to keep your email address safe'
     };
     var modalStyles = {
-      modalBackgroundColor: '#404157',
+      modalBackgroundColor: '<%= @styles['modal_bg_color'] || '#404157' %>',
       modalBorderColor: '#404157',
       modalBorderWidth: '1px',
       modalBorderStyle: 'none',
@@ -78,7 +78,7 @@
 
 <% end %>
 
-<form>
+<%= form_tag(update_styles_site_content_upgrades_path(@site.id))%>
   <div class="content-upgrade-form">
 
     <div class="columns">
@@ -88,13 +88,13 @@
 
         <div class="field-wrapper">
           <label for="offer-background-color">Background Color</label>
-          <input id="offer-background-color" type="color" class="js-color-picker-field color-picker-field"
-                 value="#404157" data-property="offerBackgroundColor" data-styles="offer">
+          <input name="offer_bg_color" id="offer-background-color" type="color" class="js-color-picker-field color-picker-field"
+                 value="<%= @styles['offer_bg_color'] || '#504157' %>"  data-property="offerBackgroundColor" data-styles="offer">
         </div>
 
         <div class="field-wrapper">
           <label for="offer-border-color">Border Color</label>
-          <input id="offer-border-color" type="color" class="js-color-picker-field color-picker-field"
+          <input name="offer_border_color" id="offer-border-color" type="color" class="js-color-picker-field color-picker-field"
                  value="#404157" data-property="offerBorderColor" data-styles="offer">
         </div>
 
@@ -134,8 +134,8 @@
 
         <div class="field-wrapper">
           <label for="modal-background-color">Background Color</label>
-          <input id="modal-background-color" type="color" class="js-color-picker-field color-picker-field"
-                 value="#404157" data-property="modalBackgroundColor" data-styles="modal">
+          <input name="modal_bg_color" id="modal-background-color" type="color" class="js-color-picker-field color-picker-field"
+                 value="<%= @styles['modal_bg_color'] || '#404157' %>" data-property="modalBackgroundColor" data-styles="modal">
         </div>
 
         <div class="field-wrapper">
@@ -188,8 +188,8 @@
     </div>
 
     <div class="buttons">
-      <a href="javascript:void(0)" class="save">Save</a>
-      <a href="javascript:void(0)" class="list">List</a>
+      <input type="submit" class="save" value="Save">
+      <%= link_to('List', site_content_upgrades_path(@site.id), :class => "list") %>
     </div>
 
   </div>

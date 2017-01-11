@@ -41,9 +41,20 @@ class ContentUpgradesController < ApplicationController
   end
 
   def style_editor
+    @styles = @site.get_content_upgrade_styles
   end
 
   def update_styles
+    style_params = {
+       offer_bg_color: params[:offer_bg_color],
+       offer_border_color: params[:offer_border_color],
+       modal_bg_color: params[:modal_bg_color]
+     }
+
+    @site.update_content_upgrade_styles!(style_params)
+
+    flash[:success] = "Content Upgrade styles have been saved."
+    redirect_to site_content_upgrades_path(@site.id)
   end
 
   private
