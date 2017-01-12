@@ -275,11 +275,8 @@ class @ContactListModal extends Modal
 
   _bindTagRemove: (object) ->
     object.on "click", "i[data-js-action=remove-tag]", (event) ->
-      # hide the remove-tag link, hide and remove the select
       $(event.target)
-        .hide()
-        .prev()
-        .hide()
+        .parents('.select-wrapper')
         .remove()
 
   _doSubmit: (e) ->
@@ -440,7 +437,15 @@ class @ContactListModal extends Modal
         @options.identity = data
 
         if data.provider == "infusionsoft"
-          @_renderBlock("tagListSelect", $.extend(defaultContext, {identity: data}), false).show()
+          infusionsoftContext = $.extend(true, {}, defaultContext, {identity: data})
+          infusionsoftContext.preparedLists = (infusionsoftContext.tags or []).map((tag) =>
+            clonedLists = $.extend(true, [], infusionsoftContext.identity.lists)
+            clonedLists.forEach((list) =>
+              list.isSelected = if String(list.id) == tag then true else false
+            )
+            { tag: tag, lists: clonedLists}
+          )
+          @_renderBlock("tagListSelect", infusionsoftContext, false).show()
         else
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
           $cycle_day = $('#contact_list_cycle_day')

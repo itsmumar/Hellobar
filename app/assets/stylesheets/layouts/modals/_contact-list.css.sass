@@ -41,11 +41,6 @@
   .select-wrapper
     margin: 0
 
-    .icon-close
-      position: absolute
-      left: 335px
-      bottom: 13px
-
   ul, ol
     font-size: 0.9em
     margin-left: 1em
@@ -122,6 +117,32 @@
   position: absolute
   box-shadow: 0.33em 0.33em 15em rgba($grayDarker, 0.33)
   @include center-align()
+
+/*-----------  Tags Selector for InfusionSoft  -----------*/
+
+.tag-select-block
+  .select-wrapper
+    position: relative
+    width: 28em
+    margin-left: 0
+
+    select.contact-list-tag
+      height: 2.9rem
+      margin-bottom: 0
+      font-weight: normal
+      font-size: 1em
+      @include antialiased()
+
+    .icon-close
+      position: absolute
+      left: 435px
+      bottom: 13px
+
+      &:before
+        color: #919191
+
+      &:hover
+        cursor: pointer
 
 /*-----------  Contact List Provider Selection  -----------*/
 

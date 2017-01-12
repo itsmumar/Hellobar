@@ -194,13 +194,17 @@ script id="contact-list-variant-modal-tag-select-template" type="text/x-handleba
 
   | <label for="contact_list_remote_list_ids">Apply Tags (Optional)</label>
   | {{#if tags}}
-  |   {{#each tags}}
+  |   {{#each preparedLists}}
   |     <div class="select-wrapper"">
   |       <div>
-  |         <select class="contact-list-tag" name="contact_list[remote_list_id]" {{#if freePlan}}disabled{{/if}}>
+  |         <select class="contact-list-tag" name="contact_list[remote_list_id]">
   |           <option disabled selected value>Select ...</option>
-  |           {{#each ../../identity.lists}}
-  |             {{option ../../. id name}}
+  |           {{#each lists}}
+  |             {{#if isSelected}}
+  |               <option value="{{id}}" selected>{{name}}</option>
+  |             {{else}}
+  |               <option value="{{id}}">{{name}}</option>
+  |             {{/if}}
   |           {{/each}}
   |         </select>
   |         <i class="icon-close" data-js-action="remove-tag"></i>
@@ -208,7 +212,7 @@ script id="contact-list-variant-modal-tag-select-template" type="text/x-handleba
   |     </div>
   |   {{/each}}
   | {{else}}
-  |   <div class="select-wrapper" style="position: relative;">
+  |   <div class="select-wrapper">
   |     <div>
   |       <select class="contact-list-tag" name="contact_list[remote_list_id]">
   |         <option disabled selected value>Select ...</option>
