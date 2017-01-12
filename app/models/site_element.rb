@@ -241,6 +241,10 @@ class SiteElement < ActiveRecord::Base
     "#{Site.id_to_script_hash(site.id)}/#{self.id}.pdf"
   end
 
+  def content_upgrade_download_link
+  "https://s3.amazonaws.com/#{Hellobar::Settings[:s3_content_upgrades_bucket]}/#{Site.id_to_script_hash(site.id)}/#{self.id}.pdf"
+  end
+
   private
 
   def update_s3_content
@@ -248,7 +252,7 @@ class SiteElement < ActiveRecord::Base
     return if self.type != 'ContentUpgrade'
     return if self.content.blank?
     return unless self.content_changed?
-    
+
     pdf = WickedPdf.new.pdf_from_string(self.content)
 
     # create a connection

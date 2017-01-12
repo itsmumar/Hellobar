@@ -84,8 +84,15 @@ class ScriptGenerator < Mustache
     cu_json = {}
     site.site_elements.active_content_upgrades.each do |cu|
       content = {
-        offer_headline: cu.offer_headline,
-        caption: cu.caption
+        id: cu.id,
+        offer_headline: cu.offer_headline.to_s.gsub('{{','<a href="#">').gsub('}}','</a>'),
+        caption: cu.caption,
+        headline: cu.headline,
+        disclaimer: cu.disclaimer,
+        link_text: cu.link_text,
+        email_placeholder: cu.email_placeholder,
+        name_placeholder: cu.name_placeholder,
+        download_link: cu.content_upgrade_download_link
       }
       cu_json[cu.id] = content
     end
