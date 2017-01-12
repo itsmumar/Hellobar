@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/colinyoung/rake_running.git
+  remote: git://github.com/colinyoung/rake_running.git
   revision: 12d47fe692ffb8cc4112ec25c6b0a9595123c3c3
   ref: 12d47fe692ffb8cc4112ec25c6b0a9595123c3c3
   specs:
@@ -7,7 +7,7 @@ GIT
       rake
 
 GIT
-  remote: https://github.com/floomoon/omniauth-mailchimp.git
+  remote: git://github.com/floomoon/omniauth-mailchimp.git
   revision: 239e08d3297cf637b5b0b77b419fdc8461239378
   ref: 239e08d3297cf637b5b0b77b419fdc8461239378
   specs:
@@ -16,7 +16,7 @@ GIT
       omniauth-oauth2
 
 GIT
-  remote: https://github.com/stefanpenner/country_select.git
+  remote: git://github.com/stefanpenner/country_select.git
   revision: 79755038ca61dafdfebf4c55346d4a2085f98479
   ref: 79755038ca61dafdfebf4c55346d4a2085f98479
   specs:

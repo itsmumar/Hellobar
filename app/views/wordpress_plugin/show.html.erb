@@ -32,4 +32,10 @@ function add_hellobar_script()
 
 add_action( 'wp_footer',  'add_hellobar_script');
 
+function add_content_upgrade_script( $atts ) {
+    return '[hellobar_content_upgrade id="'+$atts[\'id\']+'"]'
+}
+
+add_shortcode('hb_content_upgrade', 'add_content_upgrade_script');
+
 ?>

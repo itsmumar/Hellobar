@@ -8,7 +8,8 @@
     function initializeFroala() {
       var froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
       $('#content-edit').froalaEditor({
-        key: froalaKey
+        key: froalaKey,
+        heightMin: 400,
       });
     }
 
@@ -113,15 +114,14 @@
         </div>
 
 
-        <h3>Choose Content</h3>
+        <h3>Choose Contact List</h3>
 
         <div class="select-wrapper">
-          <label for="existing-content">Content Made in HelloBar</label>
-          <select id="existing-content">
-            <option value="">Select content...</option>
-            <option value="1">Content 1</option>
-            <option value="2">Content 2</option>
-          </select>
+          <select id="contact-list" name="contact_list_id">
+            <%= @site.contact_lists.each do |list|%>
+            <option value="<%= list.id %>" <% if @content_upgrade.contact_list_id == list.id %>selected="selected"<% end %>><%= list.name %></option>
+            <% end %>
+=          </select>
         </div>
 
       </div>

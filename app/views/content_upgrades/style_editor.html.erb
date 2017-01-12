@@ -133,6 +133,12 @@
         <h3>Modal Elements</h3>
 
         <div class="field-wrapper">
+          <label for="modal-background-color">Progress Color</label>
+          <input name="modal_bg_color" id="modal-background-color" type="color" class="js-color-picker-field color-picker-field"
+                 value="<%= @styles['modal_bg_color'] || '#404157' %>" data-property="modalBackgroundColor" data-styles="modal">
+        </div>
+
+        <div class="field-wrapper">
           <label for="modal-background-color">Background Color</label>
           <input name="modal_bg_color" id="modal-background-color" type="color" class="js-color-picker-field color-picker-field"
                  value="<%= @styles['modal_bg_color'] || '#404157' %>" data-property="modalBackgroundColor" data-styles="modal">

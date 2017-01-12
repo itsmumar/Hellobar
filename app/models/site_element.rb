@@ -245,6 +245,14 @@ class SiteElement < ActiveRecord::Base
   "https://s3.amazonaws.com/#{Hellobar::Settings[:s3_content_upgrades_bucket]}/#{Site.id_to_script_hash(site.id)}/#{self.id}.pdf"
   end
 
+  def content_upgrade_script_tag
+    '<script id="hb-cu-'+self.id.to_s+'">window.onload = function() {HB.showContentUpgrade('+self.id.to_s+')};</script>'
+  end
+
+  def content_upgrade_wp_shortcode
+    '[hellobar_content_upgrade id="'+self.id.to_s+'"]'
+  end
+
   private
 
   def update_s3_content

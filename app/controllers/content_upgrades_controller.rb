@@ -62,7 +62,7 @@ class ContentUpgradesController < ApplicationController
   def content_upgrade_params
     {
       type: 'ContentUpgrade',
-      element_subtype: 'announcement',
+      element_subtype: 'email',
       offer_text: params[:offer_text],
       offer_headline: params[:offer_headline],
       headline: params[:headline],
@@ -72,6 +72,7 @@ class ContentUpgradesController < ApplicationController
       link_text: params[:button_text],
       name_placeholder: params[:name_placeholder],
       email_placeholder: params[:email_placeholder],
+      contact_list_id: params[:contact_list_id],
       rule: @site.rules.first
     }
   end
