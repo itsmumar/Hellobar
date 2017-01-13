@@ -98,7 +98,7 @@ margin: auto;
 .content-upgrade-modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 900000; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
@@ -112,15 +112,15 @@ margin: auto;
 
 
 <div onclick="document.getElementById('hb-cu-modal-{{siteElement.id}}').style.display = 'inline';" class="content-upgrade-offer-preview" style="padding:20px; background-color: {{siteStyles.offer_bg_color}}; border-color: rgb(255, 210, 25); border-width: 1px; border-style: none; border-radius: 0px;">{{siteElement.offer_headline}}e</div>
-<div class="content-upgrade-modal" id="hb-cu-modal-{{siteElement.id}}">
-<div class="content-upgrade-modal-preview js-root" style="max-width: 400px; background-color: {{siteStyles.modal_bg_color}};; border-color: rgb(64, 65, 87); border-width: 1px; border-style: none; border-radius: 0px;">
+<div onclick="" class="content-upgrade-modal" id="hb-cu-modal-{{siteElement.id}}">
+<div onclick="" class="content-upgrade-modal-preview js-root" style="max-width: 400px; background-color: {{siteStyles.modal_bg_color}};; border-color: rgb(64, 65, 87); border-width: 1px; border-style: none; border-radius: 0px;">
   <div class="progress-bar"></div>
   <div class="caption">{{siteElement.caption}}</div>
   <div class="headline">{{siteElement.headline}}</div>
   <div class="form">
     <input class="name" placeholder="{{siteElement.name_placeholder}}">
     <input class="email" placeholder="{{siteElement.email_placeholder}}">
-    <div class="cta"><a href="{{siteElement.download_link}}">{{siteElement.link_text}}</a></div>
+    <div class="cta" ><a href="{{siteElement.download_link}}">{{siteElement.link_text}}</a></div>
   </div>
   <div class="spam-disclaimer">{{siteElement.disclaimer}}</div>
 </div>
