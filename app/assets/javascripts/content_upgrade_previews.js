@@ -115,6 +115,7 @@
           styles.modalBorderStyle && $root.css('border-style', styles.modalBorderStyle);
           styles.modalBorderRadius && $root.css('border-radius', styles.modalBorderRadius);
           styles.modalTextColor && $root.css('color', styles.modalTextColor);
+          styles.modalTextColor && $root.find('.caption').css('border-bottom-color', styles.modalTextColor);
           styles.modalDisclaimerTextColor && $root.find('.spam-disclaimer').css('color', styles.modalDisclaimerTextColor);
           styles.modalButtonColor && $root.find('.progress-bar').css('background-color', styles.modalButtonColor);
           styles.modalButtonColor && $root.find('.cta').css('background-color', styles.modalButtonColor);
