@@ -43,7 +43,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
 
   def batch_subscribe(_, subscribers, double_optin = false)
     subscribers.each do |subscriber|
-      subscribe(_, subscriber[:email], subscriber[:name])
+      subscribe(nil, subscriber[:email], subscriber[:name])
     end
   end
 end

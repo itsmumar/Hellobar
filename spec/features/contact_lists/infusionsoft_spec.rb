@@ -22,7 +22,6 @@ feature "Infusionsoft Integration", js: true do
     page.find("#edit-contact-list").click
     page.find("a", text: "Nevermind, I want to view all tools").click
     page.find(".infusionsoft-provider").click
-    # page.select 'Infusionsoft', from: 'Where do you want your contacts stored?'
 
     fill_in 'contact_list[data][app_url]', with: 'ft319.infusionsoft.com'
     fill_in 'contact_list[data][api_key]', with: '79f110f74f0db4767710ccec533347b0'
