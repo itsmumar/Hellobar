@@ -6,7 +6,7 @@ $lightBlueColor: #3498db
   color: black
   background-color: #ffd219
   a
-    color: black
+    color: inherit
     text-decoration: underline
 
 .content-upgrade-modal-preview
@@ -15,11 +15,13 @@ $lightBlueColor: #3498db
   background-color: #404157
   text-align: center
   font-size: 13px
+  color: white
 
   .progress-bar
     position: relative
     height: 20px
     font-size: 90%
+    background-color: $lightBlueColor
     &:before
       display: block
       position: absolute
@@ -29,7 +31,7 @@ $lightBlueColor: #3498db
       width: 60%
       content: '60%'
       padding-top: 2px
-      background-color: $lightBlueColor
+      background-color: inherit
       color: white
     &:after
       display: block
@@ -42,14 +44,14 @@ $lightBlueColor: #3498db
       background-color: white
 
   .caption
-    color: white
+    color: inherit
     border-bottom: solid 1px white
     font-size: 100%
     padding: 8px 0
     margin: 8px 0
 
   .headline
-    color: white
+    color: inherit
     font-size: 150%
     font-weight: 700
 
