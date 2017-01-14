@@ -73,6 +73,180 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.js" type="text/javascript"></script>
 <style type="text/css">
   @import url("//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css");
+  .alert {
+    text-align: center;
+    padding: 2em;
+    font-weight: 600;
+    clear: both;
+    background: #ffffb6;
+    font-size: 18px;
+  }
+
+  #leadpages-form {
+    background: white;
+    position: relative;
+    display: block;
+    margin: 0px auto;
+    padding: 5pt 10pt 10pt;
+    max-width: 850px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+a#leadpages-close-button {
+    z-index: 1;
+    top: -9px;
+    right: -9px;
+}
+
+#leadpages-close-button {
+    display: block;
+    font-size: 16pt;
+    position: absolute;
+    top: -9pt;
+    right: -9pt;
+    width: 18pt;
+    height: 18pt;
+    color: white;
+    line-height: 20pt;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: baseline;
+    cursor: pointer;
+    background: black;
+    border: 2pt solid white;
+    -webkit-border-radius: 18pt;
+    -moz-border-radius: 18pt;
+    border-radius: 18pt;
+}
+
+  #leadpages-form-wrapper {
+    display: block;
+    padding: 10pt;
+    text-align: center;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 10pt;
+}
+</style>
+
+<style>
+.content-upgrade-modal-preview {
+  left: 0
+  top: -100%
+  width: 100%
+  height: 100%
+  z-index: 900000
+  position: fixed
+  overflow-x: auto
+  overflow-y: scroll
+  font-family: "proxima-nova", sans-serif;
+}
+/* line 8, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-offer-preview a {
+  color: black;
+  text-decoration: underline;
+}
+
+/* line 12, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-modal-preview {
+  padding: 20px;
+  background-color: #404157;
+  text-align: center;
+  font-size: 13px;
+  background-color: #fefefe;
+margin: auto;
+border-style: solid;
+border-width: 1px;
+border-color: #efefef;
+max-width: 670px;
+}
+/* line 19, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-modal-preview .progress-bar {
+  position: relative;
+  height: 20px;
+  font-size: 90%;
+}
+/* line 23, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-modal-preview .progress-bar:before {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 60%;
+  content: "60%";
+  padding-top: 2px;
+  background-color: #3498db;
+  color: white;
+}
+/* line 34, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-modal-preview .progress-bar:after {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  content: "";
+  background-color: white;
+}
+/* line 44, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-modal-preview .caption {
+  color: white;
+  border-bottom: solid 1px white;
+  font-size: 100%;
+  padding: 8px 0;
+  margin: 8px 0;
+}
+/* line 51, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-modal-preview .headline {
+  color: #333;
+  font-size: 150%;
+  font-weight: 700;
+}
+/* line 56, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-modal-preview .form {
+  padding: 0 30px;
+}
+/* line 59, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-modal-preview input {
+  display: block;
+  width: 100%;
+  margin: 6px auto;
+}
+/* line 64, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-modal-preview .cta {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+}
+/* line 73, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
+.content-upgrade-modal-preview .spam-disclaimer {
+  margin-top: 8px;
+  color: #9c9c9d;
+  font-size: 90%;
+}
+.content-upgrade-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 900000; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
 </style>
 
 <h2>Style Editor</h2>
@@ -140,71 +314,9 @@
         </div>
 
 
-        <h3>Modal Elements</h3>
-
-        <!--<div class="field-wrapper">
-          <label for="modal-background-color">Progress Color</label>
-          <input name="modal_bg_color" id="modal-background-color" type="color" class="js-color-picker-field color-picker-field"
-                 value="<%= @styles['modal_bg_color'] || '#404157' %>" data-property="modalBackgroundColor" data-styles="modal">
-        </div>-->
 
         <div class="field-wrapper">
-          <label for="modal-background-color">Background Color</label>
-          <input name="modal_bg_color" id="modal-background-color" type="color" class="js-color-picker-field color-picker-field"
-                 value="<%= @styles['modal_bg_color'] || '#404157' %>" data-property="modalBackgroundColor" data-styles="modal">
-        </div>
-
-        <div class="field-wrapper">
-          <label for="modal-border-color">Border Color</label>
-          <input id="modal-border-color" type="color" class="js-color-picker-field color-picker-field"
-                 value="#404157" data-property="modalBorderColor" data-styles="modal">
-        </div>
-
-        <div class="select-wrapper">
-          <label for="modal-border-width">Border Thickness</label>
-          <select id="modal-border-width" data-property="modalBorderWidth" data-styles="modal">
-            <option value="1px">1px</option>
-            <option value="2px">2px</option>
-            <option value="3px">3px</option>
-          </select>
-        </div>
-
-        <div class="select-wrapper">
-          <label for="modal-border-style">Border Style</label>
-          <select id="modal-border-style" data-property="modalBorderStyle" data-styles="modal">
-            <option value="none">None</option>
-            <option value="solid">Solid</option>
-            <option value="dotted">Dotted</option>
-            <option value="dashed">Dashed</option>
-          </select>
-        </div>
-
-        <div class="select-wrapper">
-          <label for="modal-border-radius">Border Radius</label>
-          <select id="modal-border-radius" data-property="modalBorderRadius" data-styles="modal">
-            <option value="0px">0px</option>
-            <option value="1px">1px</option>
-            <option value="2px">2px</option>
-            <option value="3px">3px</option>
-            <option value="4px">4px</option>
-            <option value="5px">5px</option>
-          </select>
-        </div>
-
-        <div class="field-wrapper">
-          <label for="modal-text-color">Text Color</label>
-          <input id="modal-text-color" type="color" class="js-color-picker-field color-picker-field"
-                 value="#ffffff" data-property="modalTextColor" data-styles="modal">
-        </div>
-
-        <div class="field-wrapper">
-          <label for="modal-disclaimer-text-color">Disclaimer Text Color</label>
-          <input id="modal-disclaimer-text-color" type="color" class="js-color-picker-field color-picker-field"
-                 value="#ffffff" data-property="modalDisclaimerTextColor" data-styles="modal">
-        </div>
-
-        <div class="field-wrapper">
-          <label for="modal-button-color">Button/Progress Bar Color</label>
+          <label for="modal-button-color">Modal Button Color</label>
           <input id="modal-button-color" type="color" class="js-color-picker-field color-picker-field"
                  value="#ffffff" data-property="modalButtonColor" data-styles="modal">
         </div>
@@ -216,8 +328,103 @@
 
         <div class="js-offer-preview-container preview-container"></div>
         <h3>Content Upgrade Modal</h3>
+        <p class="alert"><span style="color: #ff6600;"><span style="color: #000000;"><a href="https://neilpatel.leadpages.co/leadbox/145e4e633f72a2%3A1608bbe48346dc/5630806479339520/" target="_blank" data-leadbox="https://neilpatel.leadpages.co/leadbox/145e4e633f72a2%3A1608bbe48346dc/5630806479339520/" data-leadbox-id="145e4e633f72a2:1608bbe48346dc">Download this cheat sheet</a><script data-leadbox="145e4e633f72a2:1608bbe48346dc" data-url="https://neilpatel.leadpages.co/leadbox/145e4e633f72a2%3A1608bbe48346dc/5630806479339520/" data-config="%7B%7D" type="text/javascript" src="https://neilpatel.leadpages.co/leadbox-1477666660.js"></script> to learn how to identify untapped marketing channels and gain first mover’s advantage.</span></span></p>
 
-        <div class="js-modal-preview-container preview-container"></div>
+        <div class="js-modal-preview-container preview-container">
+
+<div class="content-upgrade-modal-preview" >
+  <div class=""><img id="leadpages-form-header-image" src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif"></div>
+  <div class="caption">Almost there!!! Please fill in this form and click the button below to gain access</div>
+  <div class="headline">Enter your details to download cheatsheet of 10 useful tools to craft beautiful graphics for social media</div>
+  <div class="form">
+    <input class="name" placeholder="">
+    <input class="email" placeholder="">
+    <div class="cta">Download Now &gt;&gt;</div></div>
+    <div class="spam-disclaimer">We hate SPAM and promise to keep your email address safe</div>
+  </div>
+
+
+          <div id="leadpages-form-wrapper" style="padding-bottom: 0px; padding-top: 37px;">
+              <form action="https://im242.infusionsoft.com/app/form/process/a8cc783aa25a073236a5746be5b9fbe5" data-action="/forms/pixel/5707050738778112/" method="POST" class="form-horizontal no-image" id="leadpages-form" style="background-color: rgb(255, 255, 255); border-style: solid; border-width: 1pt; border-color: rgb(255, 255, 255)" accept-charset="utf-8" novalidate="true">
+                  <a id="leadpages-close-button" href="http://neilpatel.com/blog/how-to-improve-the-quality-of-your-b2b-ppc-leads/">×</a>
+                      <div id="leadpages-form-header">
+
+                          <img id="leadpages-form-header-image" src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif">
+
+
+
+                          <div id="leadpages-form-header-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 10pt; letter-spacing: ; display: block">
+
+                              Almost there! Please complete this form and click
+                              the button below to gain instant access.
+                          </div>
+
+                      </div>
+
+                  <div class="leadbox-content-wrapper">
+                      <div id="leadpages-form-title" style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif; font-size: 18pt; letter-spacing: 0em; display: block">
+
+
+                                  <div style="text-align: center">
+                                  <strong>asdfasfasdsfd!</strong></div>
+
+                      </div>
+                      <div id="leadpages-fieldset-wrapper">
+                          <fieldset id="leadpages-fieldset">
+
+
+
+
+
+
+
+
+                                      <div class="control-group" id="leadpages-container-inf-field-FirstName">
+                                          <div class="controls">
+              <input type="text" name="inf_field_FirstName" value="" id="inf-field-FirstName" placeholder="First Name" data-source="leadpages-first_name" data-role="first_name" required="required">
+          </div>
+                                                  <span class="error-container" id="leadpages-error-inf-field-FirstName"></span>
+                                      </div>
+
+
+
+                                      <div class="control-group" id="leadpages-container-inf-field-Email">
+                                          <div class="controls">
+              <input type="email" name="inf_field_Email" value="" id="inf-field-Email" placeholder="Email" data-source="leadpages-email" data-role="email" required="required">
+          </div>
+                                                  <span class="error-container" id="leadpages-error-inf-field-Email"></span>
+                                      </div>
+
+
+
+
+              <div class="hidden-input-container" id="leadpages-container-ContentUpgrade">
+                  <input type="hidden" name="ContentUpgrade" value="Content Upgrade" data-role="hidden" data-source="leadpages-hidden">
+              </div>
+
+
+
+                              <div class="control-group">
+                                  <div class="controls">
+                                      <button id="leadpages-submit-button" type="submit" style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif; font-size: 14pt; letter-spacing: 0em; background-color: rgb(18, 133, 221); border-style: solid; border-width: 0pt; border-top-width: 0pt; border-right-width: 0pt; border-bottom-width: 0pt; border-left-width: 0pt; border-color: rgb(221, 221, 221); text-shadow: rgb(18, 133, 221) 2px 2px 0px">
+
+                                  <div style="text-align: center">Download now<span class="raquo">»</span></div>
+
+                                      </button>
+                                  </div>
+                              </div>
+                              <div class="leadpages-spacer">- -</div>
+                          </fieldset>
+                      </div>
+                      <div id="leadpages-privacy-policy" style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif; font-size: 10pt; letter-spacing: 0em">
+                           We hate SPAM and promise to keep your email address safe.<div></div>
+                      </div>
+                  </div>
+                  <div class="leadpages-spacer">- -</div>
+              </form>
+          </div>
+
+        </div>
       </div>
     </div>
 
