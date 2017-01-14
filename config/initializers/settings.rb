@@ -79,6 +79,13 @@ unless defined?(Hellobar::Settings)
   end
 
   config[:identity_providers] = {
+    active_campaign: {
+      type: :email,
+      name: "Active Campaign",
+      requires_api_key: true,
+      requires_app_url: true,
+      service_provider_class: "ActiveCampaign"
+    },
     aweber: {
       type: :email,
       name: 'AWeber',
