@@ -37,18 +37,15 @@ feature "Infusionsoft Integration", js: true do
 
   scenario "adding tags" do
     connect_infusionsoft
+    selector = 'select.contact-list-tag'
 
-    page.all('select.contact-list-tag').first.select('Activist')
-
+    page.find(selector).select('Activist')
     page.find("a[data-js-action='add-tag']").click
-
-    page.all('select.contact-list-tag').last.select('Extrovert')
-
+    page.all(selector).last.select('Extrovert')
     page.find('.button.submit').click
 
     page.find('#edit-contact-list').click
 
-    expect(page).to have_content('Activist')
-    expect(page).to have_content('Extrovert')
+    page.assert_selector(selector, :count => 2)
   end
 end

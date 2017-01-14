@@ -343,8 +343,8 @@ class @ContactListModal extends Modal
     app_url         = $('#contact_list_app_url').val()
     webhook_url     = $('#contact_list_webhook_url').val()
     webhook_method  = if $('#contact_list_webhook_method').prop('checked') then "post" else "get"
-    $cycle_day = $('#contact_list_cycle_day')
     tags            = (tag.value for tag in $(".contact-list-tag"))
+    $cycle_day      = $('#contact_list_cycle_day')
 
     if $('#contact_list_cycle_day_enabled').prop('checked')
       cycle_day = $cycle_day.val()
