@@ -22,6 +22,7 @@
     }
 
     load_styles();
+    $('.hb-cu-modal').show();
 
   });
 
@@ -44,7 +45,7 @@
 </style>
 
 <style>
-.content-upgrade-modal-preview {
+.hb-cu-modal {
   left: 0
   top: -100%
   width: 100%
@@ -54,37 +55,32 @@
   overflow-x: auto
   overflow-y: scroll
   font-family: "proxima-nova", sans-serif;
-}
-/* line 8, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-offer-preview a {
-  color: black;
-  text-decoration: underline;
-}
-
-/* line 12, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview {
   padding: 20px;
   background-color: #404157;
   text-align: center;
   font-size: 13px;
   background-color: #fefefe;
-margin: auto;
-border-style: solid;
-border-width: 1px;
-border-color: #efefef;
-max-width: 670px;
+  margin: auto;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #efefef;
+  max-width: 670px;
+  display: none;
+}
+.hb-cu-offer a {
+  color: black;
+  text-decoration: underline;
 }
 
 
-/* line 44, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
 
-.content-upgrade-modal-preview .progress {
+.hb-cu-modal .progress {
   padding: 5px;
   margin: auto;
   width: 95%;
 }
 
-.content-upgrade-modal-preview .caption {
+.hb-cu-modal .caption {
   margin: auto;
   color: #000;
   border-bottom: solid 1px #ccc;
@@ -93,8 +89,7 @@ max-width: 670px;
   width: 85%;
   max-width:520px;
 }
-/* line 51, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .headline {
+.hb-cu-modal .headline {
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
 font-size: 18pt;
 letter-spacing: 0em;
@@ -105,12 +100,12 @@ letter-spacing: 0em;
   max-width: 500px;
   margin: auto;
 }
-/* line 56, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .form {
+
+.hb-cu-modal .form {
   padding: 0 30px;
 }
-/* line 59, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview input {
+
+.hb-cu-modal input {
   padding: 13px;
   max-width: 450px;
   margin: auto;
@@ -121,8 +116,7 @@ letter-spacing: 0em;
   border: 1pt solid #C9D7DD;
 }
 
-/* line 64, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .cta {
+.hb-cu-modal .cta {
   display: inline-block;
   padding: 10px 20px;
   background-color: #1285dd;
@@ -136,8 +130,8 @@ letter-spacing: 0em;
   max-width: 450px;
   margin-top:5px;
 }
-/* line 73, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .spam-disclaimer {
+
+.hb-cu-modal .spam-disclaimer {
   margin-top: 8px;
   color: #9c9c9d;
   font-size: 14px;
@@ -250,8 +244,8 @@ letter-spacing: 0em;
         <p id="offer" class="alert">Do you produce content often? <a href="#">Download this how to guide</a> to create content that people will bookmark and remember.</p>
 
 <div id="offer-preview" style="background-color:#eee; padding:50px;">
-<div class="content-upgrade-modal-preview hb-cu-modal" >
-  <div style="background-color: #CCC;">
+<div class="hb-cu-modal hb-cu-modal" >
+  <div>
   <a id="hb-cu-close-button" href="">×</a>
 </div>
   <div class="progress"><img src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif"></div>
