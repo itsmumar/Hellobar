@@ -155,6 +155,26 @@ letter-spacing: 0em;
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
+
+#hb-cu-close-button {
+    margin-top: -16px;
+    margin-right: -16px;
+    display: inline-block;
+    font-size: 18pt;
+    float: right;
+    width: 20pt;
+    height: 20pt;
+    color: #ccc;
+    padding-left: 1px;
+    line-height: 18pt;
+    text-decoration: none;
+    cursor: pointer;
+    background: #fff;
+    border: 2pt solid white;
+    -webkit-border-radius: 18pt;
+    -moz-border-radius: 18pt;
+    border-radius: 18pt;
+}
 </style>
 
 <h2>Style Editor</h2>
@@ -170,68 +190,58 @@ letter-spacing: 0em;
         <div class="field-wrapper">
           <label for="offer-background-color">Offer Background Color</label>
           <input name="offer_bg_color" id="offer-background-color" type="color" class="style-input js-color-picker-field color-picker-field"
-                 value="<%= @styles['offer_bg_color'] || '#504157' %>" >
+                 value="<%= @styles['offer_bg_color'] || '#ffffb6' %>" >
         </div>
 
         <div class="field-wrapper">
           <label for="offer-text-color">Offer Text Color</label>
-          <input id="offer-text-color" type="color" class="js-color-picker-field color-picker-field"
-                 value="#ffffff" class="style-input">
+          <input  name="offer_text_color"  id="offer-text-color" type="color" class="js-color-picker-field color-picker-field"
+                 value="<%= @styles['offer_text_color'] || '#666' %>" class="style-input">
         </div>
 
         <div class="field-wrapper">
           <label for="offer-link-color">Offer Link Color</label>
-          <input id="offer-link-color" type="color" class="style-input js-color-picker-field color-picker-field" value="#ffffff" >
+          <input  name="offer_link_color"  id="offer-link-color" type="color" class="style-input js-color-picker-field color-picker-field" value="<%= @styles['offer_link_color'] || '#1285dd' %>" >
         </div>
 
         <div class="field-wrapper">
           <label for="offer-border-color">Offer Border Color</label>
-          <input name="offer-border-color" id="offer-border-color" type="color" class="style-input js-color-picker-field color-picker-field"
-                 value="#404157" data-property="offerBorderColor" data-styles="offer">
+          <input name="offer_border_color" id="offer-border-color" type="color" class="style-input js-color-picker-field color-picker-field"
+                 value="<%= @styles['offer_border_color'] || '#fff' %>"data-property="offerBorderColor" data-styles="offer">
         </div>
 
         <div class="select-wrapper">
           <label for="offer-border-width">Offer Border Thickness</label>
-          <select id="offer-border-width" class="style-input">
-            <option value="0px">0px</option>
-            <option value="1px">1px</option>
-            <option value="2px">2px</option>
-            <option value="3px">3px</option>
-            <option value="4px">4px</option>
-            <option value="5px">5px</option>
+          <select  name="offer_border_width" id="offer-border-width" class="style-input">
+            <% (0..20).each do |n| %>
+            <option value="<%=n%>px" <% if @styles['offer_border_width'] && @styles['offer_border_width'] == n+'px' %>selected="selected"<% end %>><%=n%>px</option>
+            <% end %>
           </select>
         </div>
 
+
         <div class="select-wrapper">
           <label for="offer-border-style">Offer Border Style</label>
-          <select id="offer-border-style" class="style-input">
-            <option value="solid">Solid</option>
-            <option value="dotted">Dotted</option>
-            <option value="dashed">Dashed</option>
+          <select  name="offer_border_style" id="offer-border-style" class="style-input">
+            <% ['solid', 'dotted', 'dashed', 'double'].each do |style| %>
+            <option value="<%=style%>" <% if @styles['offer_border_style'] && @styles['offer_border_style'] == style %>selected="selected"<% end %>><%=style%></option>
+            <% end %>
           </select>
         </div>
 
         <div class="select-wrapper">
           <label for="offer-border-radius">Offer Border Radius</label>
-          <select id="offer-border-radius" class="style-input">
-            <option value="0px">0px</option>
-            <option value="1px">1px</option>
-            <option value="2px">2px</option>
-            <option value="3px">3px</option>
-            <option value="4px">4px</option>
-            <option value="5px">5px</option>
-            <option value="6px">6px</option>
-            <option value="7px">7px</option>
-            <option value="8px">8px</option>
-            <option value="9px">9px</option>
-            <option value="10px">10px</option>
+          <select name="offer_border_radius" id="offer-border-radius" class="style-input">
+            <% (0..20).each do |n| %>
+            <option value="<%=n%>px" <% if @styles['offer_border_radius'] && @styles['offer_border_radius'] == n+'px' %>selected="selected"<% end %>><%=n%>px</option>
+            <% end %>
           </select>
         </div>
 
 
         <div class="field-wrapper">
           <label for="modal-button-color">Modal Button Color</label>
-          <input id="modal-button-color" type="color" class="style-input js-color-picker-field color-picker-field" value="#ffffff">
+          <input name="modal_button_color" id="modal-button-color" type="color" class="style-input js-color-picker-field color-picker-field" value="<%= @styles['modal_button_color'] || '#1285dd' %>">
         </div>
 
       </div>
@@ -241,7 +251,10 @@ letter-spacing: 0em;
 
 <div id="offer-preview" style="background-color:#eee; padding:50px;">
 <div class="content-upgrade-modal-preview hb-cu-modal" >
-  <div class="progress"><img id="leadpages-form-header-image" src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif"></div>
+  <div style="background-color: #CCC;">
+  <a id="hb-cu-close-button" href="">×</a>
+</div>
+  <div class="progress"><img src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif"></div>
   <div class="caption">Almost there! Please complete this form and click the button below to gain instant access.</div>
   <div class="headline">Enter your details to download this how to guide to create content that people will bookmark and remember!</div>
   <div class="form">
