@@ -341,14 +341,6 @@ export default Ember.Controller.extend({
     return currentTheme ? currentTheme.type === 'template' : false;
   }.property('currentTheme'),
 
-  isTopBarStyle: function() {
-    return this.get('model.type') === 'Bar';
-  }.property('model.type'),
-
-  isNotTopBarStyle: function() {
-    return this.get('model.type') !== 'Bar';
-  }.property('model.type'),
-
   onCurrentThemeChanged: (function () {
     if (this.get('currentThemeIsTemplate')) {
       this.set('model.element_subtype', 'email');
@@ -364,6 +356,14 @@ export default Ember.Controller.extend({
     }
   }).observes('model.theme_id'),
 
+  isTopBarStyle: function() {
+    return this.get('model.type') === 'Bar';
+  }.property('model.type'),
+
+  isNotTopBarStyle: function() {
+    return this.get('model.type') !== 'Bar';
+  }.property('model.type'),
+
   previousElementType: null,
 
   onElementTypeChanged: function () {
@@ -376,6 +376,9 @@ export default Ember.Controller.extend({
       }
     }
     this.set('previousElementType', elementType);
+    if (elementType !== 'Bar' && currentTheme.type === 'generic' && this.get('isMobile')) {
+      this.toggleProperty('isMobile');
+    }
   }.observes('model.type'),
 
 
