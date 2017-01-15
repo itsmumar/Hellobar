@@ -341,7 +341,13 @@ export default Ember.Controller.extend({
     return currentTheme ? currentTheme.type === 'template' : false;
   }.property('currentTheme'),
 
+  isTopBarStyle: function() {
+    return this.get('model.type') === 'Bar';
+  }.property('model.type'),
 
+  isNotTopBarStyle: function() {
+    return this.get('model.type') !== 'Bar';
+  }.property('model.type'),
 
   onCurrentThemeChanged: (function () {
     if (this.get('currentThemeIsTemplate')) {
