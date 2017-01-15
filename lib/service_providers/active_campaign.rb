@@ -14,24 +14,27 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
     @identity = identity
 
     @client = ::ActiveCampaign::Client.new(
-                api_endpoint: 'https://' + @identity.extra['app_url'],
+                api_endpoint: 'https://' + @identity.extra['app_url'] + '/admin/api.php',
                 api_key: @identity.api_key)
   end
 
   def lists
-    @client.list_list ids: 'all'
+    response = @client.list_list ids: 'all'
+    response['results']
   end
 
   def subscribe(list_id, email, name = nil, double_optin = false)
-    data = { :Email => email }
+    contact = {}
+    contact[:email] = email
+    contact["p[#{list_id}]"] = list_id if list_id
 
     if name
       fname, lname = name.split
-      data[:FirstName] = fname
-      data[:LastName] = lname
+      contact[:first_name] = fname
+      contact[:last_name] = lname
     end
 
-    Infusionsoft.contact_add_with_dup_check(data, :Email)
+    @client.contact_sync(contact)
   end
 
   def batch_subscribe(list_id, subscribers, double_optin = false)
@@ -40,7 +43,3 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
     end
   end
 end
-
-# class Router
-#   include Rails.application.routes.url_helpers
-# end
