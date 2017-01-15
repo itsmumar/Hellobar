@@ -1,0 +1,52 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://hellobar.api-us1.com/admin/api.php?api_action=list_list&api_key=dea2f200e17b9a3205f3353030b7d8ad55852aa3ccec6d7c4120482c8e8feb5fd527cff3&api_output=json&ids=all
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - ActiveCampaign Ruby Gem 0.1.14
+      Accept:
+      - "*/*"
+      Date:
+      - Sun, 15 Jan 2017 13:41:31 GMT
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Powered-By:
+      - PHP/5.3.3
+      Set-Cookie:
+      - PHPSESSID=h6pbgs61s7opjtrh4im3hihpu1; path=/; HttpOnly
+      - em_acp_globalauth_cookie=49b714b8d13f4e0f8fe50079d37c57291; path=/; domain=hellobar.api-us1.com;
+        secure
+      - em_acp_globalauth_cookie=deleted; expires=Sat, 16-Jan-2016 13:41:32 GMT; path=/;
+        domain=hellobar.api-us1.com
+      Expires:
+      - Thu, 19 Nov 1981 08:52:00 GMT
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - no-store, max-age=0, must-revalidate
+      Connection:
+      - close
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sun, 15 Jan 2017 13:41:33 GMT
+      Server:
+      - lighttpd/1.4.37
+    body:
+      encoding: UTF-8
+      string: '{"0":{"id":"1","name":"HB List1","cdate":"2017-01-14 16:29:52","private":"0","userid":"1","subscriber_count":0},"1":{"id":"2","name":"HB
+        List2","cdate":"2017-01-15 16:09:31","private":"0","userid":"1","subscriber_count":3},"result_code":1,"result_message":"Success:
+        Something is returned","result_output":"json"}'
+    http_version: 
+  recorded_at: Sun, 15 Jan 2017 13:41:33 GMT
+recorded_with: VCR 2.9.0
