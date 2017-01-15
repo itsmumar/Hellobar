@@ -5,16 +5,18 @@ describe ServiceProviders::ActiveCampaign do
                                 :api_key => "dea2f200e17b9a3205f3353030b7d8ad55852aa3ccec6d7c4120482c8e8feb5fd527cff3",
                                 :extra => { "app_url" => "hellobar.api-us1.com" }) }
   let(:service_provider) { identity.service_provider }
-  let(:contact_list) { ContactList.new }
   let(:cassette_base) { 'service_providers/active_campaign' }
   let(:client) { service_provider.instance_variable_get(:@client) }
 
-  # before do
-  #   allow(Infusionsoft).to receive(:contact_add_with_dup_check) { 1 }
-  # end
-
   describe "#lists" do
-    it "should make a call to ActiveCampaign for lists" do
+    it "should call `list_list`" do
+      VCR.use_cassette(cassette_base + '/lists') do
+        expect(client).to receive(:list_list).and_return({'results': []})
+        service_provider.lists
+      end
+    end
+
+    it "should return lists" do
       VCR.use_cassette(cassette_base + '/lists') do
         expect(service_provider.lists.count).to eq(2)
       end
@@ -23,47 +25,49 @@ describe ServiceProviders::ActiveCampaign do
 
   describe "#subscribe" do
     context "NOT having `list_id`" do
-      let(:email) { "test@test.com" }
-      before(:each) do
-        @data = { email: email }
-        service_provider.instance_variable_set(:@contact_list, contact_list)
-      end
-
-      it "should call contact_sync and add new contact" do
-        # expect(client).to receive(:contact_sync).with(@data)
+      it "should call contact_sync" do
+        email = "test@test.com"
+        expect(client).to receive(:contact_sync).with({ email: email })
 
         VCR.use_cassette(cassette_base + '/contact_sync') do
-          response = service_provider.subscribe(nil, email)
+          service_provider.subscribe(nil, email)
+        end
+      end
+
+      it "should new contact with email" do
+        VCR.use_cassette(cassette_base + '/contact_sync') do
+          response = service_provider.subscribe(nil, "test@test.com")
           expect(response['result_message']).to eq('Contact added')
         end
       end
 
       it "should add email and name" do
-        VCR.use_cassette(cassette_base + '/contact_sync') do
-          service_provider.subscribe(nil, email, "Test User")
-
-          name_attrs = { :first_name => "Test", :last_name => "User" }
-          # expect(client).to receive(:contact_sync).with(@data.merge(name_attrs))
+        VCR.use_cassette(cassette_base + '/contact_sync_with_name') do
+          response = service_provider.subscribe(nil, "test1@test.com", "Test User")
+          expect(response['result_message']).to eq('Contact added')
         end
       end
     end
 
-    # context "having `list_id`" do
-    #   it "should add user to the list, when `list_id` is present" do
-    #     contact_list.data = { "remote_id" => 1 }
-    #     service_provider.instance_variable_set(:@contact_list, contact_list)
-    #
-    #     expect(ActiveCampaign).to receive(:contact_sync).exactly(3).times { nil }
-    #
-    #     service_provider.subscribe(nil, "test@test.com")
-    #   end
-    #
-    #   it "should add user to global list when `list_id` is unavailable" do
-    #     expect(ActiveCampaign).to_not receive(:contact_sync)
-    #     service_provider.instance_variable_set(:@contact_list, contact_list)
-    #
-    #     service_provider.subscribe(nil, "test@test.com")
-    #   end
-    # end
+    context "having `list_id`" do
+      it "should add user to the list, when `list_id` is present" do
+        VCR.use_cassette(cassette_base + '/contact_sync_with_list_id') do
+          response = service_provider.subscribe(nil, "test2@test.com", "Test User")
+          expect(response['result_message']).to eq('Contact added')
+        end
+      end
+    end
+  end
+
+  describe "#batch_subscribe" do
+    it "should call `contact_sync` 3 times" do
+      expect(client).to receive(:contact_sync).exactly(2).times
+
+      VCR.use_cassette(cassette_base + '/contact_sync_with_name') do
+        subscribers = [{email: 'raj.kumar+99@crossover.com', name: 'R K'},
+                       {email: 'raj.kumar+98@crossover.com', name: 'RK'}]
+        service_provider.batch_subscribe(nil, subscribers)
+      end
+    end
   end
 end
