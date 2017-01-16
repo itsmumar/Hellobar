@@ -74,11 +74,6 @@ export default Ember.Controller.extend({
       ];
       this.set('model.settings.fields_to_collect', fields);
     }
-
-    // Set Initial After Email Submission Choice
-    let modelVal = this.get('model.settings.after_email_submit_action') || 0;
-    let selection = this.get('afterSubmitOptions').findBy('value', modelVal);
-    return this.set('afterSubmitChoice', selection.key);
   }).observes('model'),
 
   onElementTypeChange: (function () {
@@ -92,41 +87,6 @@ export default Ember.Controller.extend({
       return this.set('model.settings.fields_to_collect', fields);
     }
   }).observes('model.type'),
-
-//-----------  After Email Submit  -----------#
-
-  showCustomMessage: Ember.computed.equal('afterSubmitChoice', 'custom_message'),
-  showRedirectUrlInput: Ember.computed.equal('afterSubmitChoice', 'redirect'),
-
-  afterSubmitOptionSelected: function() {
-    const afterSubmitChoiceAsString = this.get('afterSubmitChoice');
-    return _.find(this.get('afterSubmitOptions'), (option) => option.key === afterSubmitChoiceAsString);
-  }.property('afterSubmitChoice', 'afterSubmitOptions'),
-
-  setModelChoice: ( function () {
-    let choice = this.get('afterSubmitChoice');
-    let selection = this.get('afterSubmitOptions').findBy('key', choice);
-    return this.set('model.settings.after_email_submit_action', selection.value);
-  }).observes('afterSubmitChoice', 'afterSubmitOptions'),
-
-  afterSubmitOptions: ( function () {
-    return [{
-      value: 0,
-      key: 'default_message',
-      label: 'Show default message',
-      isPro: false
-    }, {
-      value: 1,
-      key: 'custom_message',
-      label: 'Show a custom message',
-      isPro: !this.get('model.site.capabilities.custom_thank_you_text')
-    }, {
-      value: 2,
-      key: 'redirect',
-      label: 'Redirect the visitor to a url',
-      isPro: !this.get('model.site.capabilities.after_submit_redirect')
-    }];
-  }).property('model.site.capabilities.custom_thank_you_text', 'model.site.capabilities.after_submit_redirect'),
 
   preparedFieldDescriptors: (function () {
     return this.get('model.settings.fields_to_collect').map(field => ({
@@ -209,24 +169,6 @@ export default Ember.Controller.extend({
 
     collectEmailsAndNames() {
       return this.set('collectNames', 1);
-    },
-
-
-    setModelAfterSubmitValue(selection) {
-      if (selection.isPro) {
-        let left;
-        let controller = this;
-        return new UpgradeAccountModal({
-          site: this.get('model.site'),
-          upgradeBenefit: (left = selection.key === 'redirect') != null ? left : {'redirect to a custom url': 'customize your thank you text'},
-          successCallback() {
-            controller.set('model.site.capabilities', this.site.capabilities);
-            return controller.set('afterSubmitChoice', selection.key);
-          }
-        }).open();
-      } else {
-        return this.set('afterSubmitChoice', selection.key);
-      }
     },
 
     setContactList(listID) {
