@@ -142,15 +142,12 @@
 
   $(function () {
 
-    $("input").on("keyup",function(){
+    $("input, textarea").on("keyup",function(){
         loadContent();
-    });
-
-    $("#input-offer-headline").on("keyup",function(){
-        loadContent();
-        //this preserves the link color inthe headline.
+        //this helps the link stay good when edited
         loadStyles();
     });
+
 
     function loadContent() {
         $('.hb-cu-offer').html(parseHeadline($('#input-offer-headline').val()));
@@ -195,9 +192,9 @@
 </script>
 
 
-<p id="offer" class="alert hb-cu-offer">Want more related content? <a href="#">Get instant access</a> now.</p>
+<p id="hb-cu-offer" class="hb-cu-offer">Want more related content? <a href="#">Get instant access</a> now.</p>
 
-<div id="offer-preview" style="background-color:#eee; padding:50px;">
+<div id="hb-cu-offer-preview" style="background-color:#eee; padding:50px;">
   <div class="hb-cu-modal hb-cu-modal" >
     <div>
       <a id="hb-cu-close-button" href="">×</a>

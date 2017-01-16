@@ -30,23 +30,19 @@
     <div class="columns">
       <div class="form-column">
 
-        <h3>Offer Headline</h3>
 
         <div class="field-wrapper">
-          <label for="offer-headline">Your link should look like {{link text}}</label>
+          <label for="offer-headline">Offer Headline - Links should look like {{link text}}</label>
           <textarea name="offer_headline" id="input-offer-headline" ><%= @content_upgrade.offer_headline %></textarea>
         </div>
-
-        <h3>Modal Elements</h3>
-
         <div class="field-wrapper">
           <label for="caption">Caption Text</label>
-          <input name="caption" id="input-caption" type="text" class="js-modal-input" value="<%= @content_upgrade.caption %>">
+          <textarea name="caption" id="input-caption" style="min-height:50px; height: 50px"><%= @content_upgrade.caption %></textarea>
         </div>
 
         <div class="field-wrapper">
           <label for="headline">Headline Text</label>
-          <input name="headline" id="input-headline" type="text"  value="<%= @content_upgrade.headline %>">
+          <textarea name="headline" id="input-headline"  style="min-height:50px; height: 50px"><%= @content_upgrade.caption %></textarea>
         </div>
 
         <div class="field-wrapper">
