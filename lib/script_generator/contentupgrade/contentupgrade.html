@@ -1,127 +1,186 @@
-<style>
-.content-upgrade-modal-preview {
+<style type="text/css">
+  .hb-cu-offer {
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    text-align: center;
+    padding: 2em;
+    font-weight: 600;
+    font-size: 18px;
+    color: {{siteStyles.offer_text_color}};
+    background-color: {{siteStyles.offer_bg_color}};
+    border-color: {{siteStyles.offer_border_color}};
+    border-width: {{siteStyles.offer_border_width}};
+    border-style: {{siteStyles.offer_border_style}};
+    border-radius: {{siteStyles.offer_border_radius}};
+  }
+
+  .hb-cu-offer a{
+    color: {{siteStyles.offer_link_color}};
+    text-decoration: none;
+  }
+
+  .hb-cu-offer a:hover{
+    text-decoration: underline;
+  }
+
+.hb-cu-modal {
   left: 0
-  top: -100%
   width: 100%
-  height: 100%
+  position: relative;
+  max-height: calc(100% - 100px);
+  position: fixed;
+    top: 50%;
+    left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 900000
-  position: fixed
   overflow-x: auto
   overflow-y: scroll
-  font-family: "proxima-nova", sans-serif;
-}
-/* line 8, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-offer-preview a {
-  color: black;
-  text-decoration: underline;
-}
-
-/* line 12, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
   padding: 20px;
-  background-color: #404157;
   text-align: center;
   font-size: 13px;
   background-color: #fefefe;
-margin: auto;
+  margin: 0px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #efefef;
+  max-width: 670px;
 }
-/* line 19, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .progress-bar {
-  position: relative;
-  height: 20px;
-  font-size: 90%;
+
+.hb-cu-modal .progress {
+  padding: 5px;
+  padding-top: 10px;
+  margin: auto;
+  width: 95%;
 }
-/* line 23, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .progress-bar:before {
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 60%;
-  content: "60%";
-  padding-top: 2px;
-  background-color: #3498db;
-  color: white;
+
+.hb-cu-modal .progress img{
+  width: 100%;
 }
-/* line 34, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .progress-bar:after {
-  display: block;
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 40%;
-  content: "";
-  background-color: white;
-}
-/* line 44, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .caption {
-  color: white;
-  border-bottom: solid 1px white;
-  font-size: 100%;
+
+.hb-cu-modal .caption {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  margin: auto;
+  color: #000;
+  border-bottom: solid 1px #ccc;
+  font-size: 10pt;
   padding: 8px 0;
-  margin: 8px 0;
+  width: 85%;
+  max-width:520px;
 }
-/* line 51, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .headline {
-  color: white;
-  font-size: 150%;
+.hb-cu-modal .headline {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-size: 18pt;
+  letter-spacing: 0em;
+  color: #333;
+  font-size: 18pt;
   font-weight: 700;
+  padding: 30px;
+  max-width: 500px;
+  margin: auto;
 }
-/* line 56, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .form {
+
+.hb-cu-modal .form {
   padding: 0 30px;
 }
-/* line 59, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview input {
-  display: block;
+
+.hb-cu-modal input {
+  padding: 13px;
   width: 100%;
-  margin: 6px auto;
+  max-width: 450px;
+  margin: auto;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  color: #201D1D;
+  background: white;
+  border: 1pt solid #C9D7DD;
+  display: block;
 }
-/* line 64, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .cta {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #3498db;
+
+.hb-cu-modal .cta {
+  padding: 13px;
+  width: 100%;
+  max-width: 450px;
+  margin: auto;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  color: #201D1D;
+  background: {{siteStyles.modal_button_color}};
+  display: block;
   color: white;
   text-transform: uppercase;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
   font-weight: 700;
   cursor: pointer;
+  padding: 20px;
+  font-size: 18px;
+  margin-top:5px;
+  border: 0 !important;
+    border-radius: 0;
+    -webkit-appearance: none;
 }
-/* line 73, /Users/swrainey/apps/hellobar_new/app/assets/stylesheets/components/_content-upgrade-preview.sass */
-.content-upgrade-modal-preview .spam-disclaimer {
+
+.cta:focus {
+   outline: none;
+}
+
+.hb-cu-modal .spam-disclaimer {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
   margin-top: 8px;
   color: #9c9c9d;
-  font-size: 90%;
+  font-size: 14px;
 }
-.content-upgrade-modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 90000; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+.hb-cu-modal-container {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 900000; /* Sit on top */
+  padding:0px;
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+#hb-cu-close-button {
+  margin-top: -16px;
+  margin-right: -16px;
+  display: inline-block;
+  font-size: 18pt;
+  float: right;
+  width: 20pt;
+  height: 20pt;
+  color: #ccc;
+  padding-left: 1px;
+  line-height: 18pt;
+  text-decoration: none;
+  cursor: pointer;
+  background: #fff;
+  border: 2pt solid white;
+  -webkit-border-radius: 18pt;
+  -moz-border-radius: 18pt;
+  border-radius: 18pt;
 }
 </style>
 
 
-<div onclick="document.getElementById('hb-cu-modal-{{siteElement.id}}').style.display = 'inline';" class="content-upgrade-offer-preview" style="padding:20px; background-color: {{siteStyles.offer_bg_color}}; border-color: rgb(255, 210, 25); border-width: 1px; border-style: none; border-radius: 0px;">{{siteElement.offer_headline}}e</div>
-<div onclick="" class="content-upgrade-modal" id="hb-cu-modal-{{siteElement.id}}">
-<div onclick="" class="content-upgrade-modal-preview js-root" style="max-width: 400px; background-color: {{siteStyles.modal_bg_color}};; border-color: rgb(64, 65, 87); border-width: 1px; border-style: none; border-radius: 0px;">
-  <div class="progress-bar"></div>
-  <div class="caption">{{siteElement.caption}}</div>
-  <div class="headline">{{siteElement.headline}}</div>
-  <div class="form">
-    <input class="name" placeholder="{{siteElement.name_placeholder}}">
-    <input class="email" placeholder="{{siteElement.email_placeholder}}">
-    <div class="cta" ><a href="{{siteElement.download_link}}">{{siteElement.link_text}}</a></div>
+<p onclick="document.getElementById('hb-cu-modal-{{siteElement.id}}').style.display = 'inline';" class="hb-cu-offer" style=" ">{{siteElement.offer_headline}}</p>
+<div onclick="" class="hb-cu-modal-container" id="hb-cu-modal-{{siteElement.id}}">
+
+<div onclick="" class="hb-cu-modal">
+    <div>
+      <a id="hb-cu-close-button" href="">×</a>
+    </div>
+    <div class="progress"><img src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif"></div>
+    <div class="caption">Almost there! Please complete this form and click the button below to gain instant access.</div>
+    <div class="headline">Enter your details to download this how to guide to create content that people will bookmark and remember!</div>
+    <div class="form">
+      <input class="name" placeholder="First Name">
+      <input class="email" placeholder="Email">
+      <button class="cta">Download Now</button>
+    </div>
+    <div class="spam-disclaimer">We hate SPAM and promise to keep your email address safe.</div>
   </div>
-  <div class="spam-disclaimer">{{siteElement.disclaimer}}</div>
-</div>
 </div>
