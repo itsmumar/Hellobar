@@ -1,9 +1,12 @@
 <label>Design your "Thank You" message</label>
-{{selection/custom-pro-select
-  selectedOption=afterSubmitOptionSelected
-  options=afterSubmitOptions
-  onchange=(action "setModelAfterSubmitValue")
-}}
+{{#power-select options=afterSubmitOptions
+  selected=afterSubmitOptionSelected
+  renderInPlace=true
+  searchEnabled=false
+  onchange=(action "changeAfterSubmitValue") as |option|}}
+  {{option.label}}
+  {{#if option.isPro}}<span class="pro-tag">PRO</span>{{/if}}
+{{/power-select}}
 
 {{#if showRedirectUrlInput}}
   <label class="small">Redirect URL</label>
