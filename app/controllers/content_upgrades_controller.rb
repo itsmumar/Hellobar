@@ -18,7 +18,7 @@ class ContentUpgradesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "file_name"   # Excluding ".pdf" extension.
+        render pdf: "content_upgrade_#{id}"   # Excluding ".pdf" extension.
       end
     end
   end
@@ -47,8 +47,13 @@ class ContentUpgradesController < ApplicationController
   def update_styles
     style_params = {
        offer_bg_color: params[:offer_bg_color],
+       offer_text_color: params[:offer_text_color],
+       offer_link_color: params[:offer_link_color],
        offer_border_color: params[:offer_border_color],
-       modal_bg_color: params[:modal_bg_color]
+       offer_border_width: params[:offer_border_width],
+       offer_border_style: params[:offer_border_style],
+       offer_border_radius: params[:offer_border_radius],
+       modal_button_color: params[:modal_button_color],
      }
 
     @site.update_content_upgrade_styles!(style_params)

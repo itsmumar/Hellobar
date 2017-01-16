@@ -210,7 +210,7 @@
           <label for="offer-border-width">Offer Border Thickness</label>
           <select  name="offer_border_width" id="offer-border-width" class="style-input">
             <% (0..20).each do |n| %>
-            <option value="<%=n%>px" <% if @styles['offer_border_width'] && @styles['offer_border_width'] == n+'px' %>selected="selected"<% end %>><%=n%>px</option>
+            <option value="<%=n%>px" <% if @styles['offer_border_width'] && @styles['offer_border_width'] == n.to_s+'px' %>selected="selected"<% end %>><%=n%>px</option>
             <% end %>
           </select>
         </div>
@@ -229,7 +229,7 @@
           <label for="offer-border-radius">Offer Border Radius</label>
           <select name="offer_border_radius" id="offer-border-radius" class="style-input">
             <% (0..20).each do |n| %>
-            <option value="<%=n%>px" <% if @styles['offer_border_radius'] && @styles['offer_border_radius'] == n+'px' %>selected="selected"<% end %>><%=n%>px</option>
+            <option value="<%=n%>px" <% if @styles['offer_border_radius'] && @styles['offer_border_radius'] == n.to_s+'px' %>selected="selected"<% end %>><%=n%>px</option>
             <% end %>
           </select>
         </div>
