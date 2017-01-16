@@ -4,7 +4,7 @@
     text-align: center;
     padding: 2em;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 16px;
     color: {{siteStyles.offer_text_color}};
     background-color: {{siteStyles.offer_bg_color}};
     border-color: {{siteStyles.offer_border_color}};
@@ -19,7 +19,9 @@
   }
 
   .hb-cu-offer a:hover{
+    color: {{siteStyles.offer_link_color}};
     text-decoration: underline;
+    box-shadow: none;
   }
 
 .hb-cu-modal {
@@ -33,7 +35,7 @@
   z-index: 900000
   overflow-y: scroll
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
-  padding: 13px;
+  padding: 20px;
   text-align: center;
   font-size: 13px;
   background-color: #fefefe;
@@ -143,8 +145,8 @@
 }
 
 #hb-cu-close-button {
-  margin-top: -22px;
-  margin-right: -22px;
+  margin-top: -32px;
+  margin-right: -32px;
   display: inline-block;
   font-size: 16pt;
   float: right;
@@ -180,5 +182,23 @@
       <button class="cta" onclick="location.href='{{siteElement.download_link}}'">Download Now</button>
     </div>
     <div class="spam-disclaimer">We hate SPAM and promise to keep your email address safe.</div>
+
+    <a href="http://hellobar.com" target="_parent" >
+  <div class="hb-cu-powered-by-line" style="width: 100%; padding: 20px;">
+    <div class="hb-logo" style="float:left; width: 40%; text-align:right;" >
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 40 26.1" enable-background="new 0 0 40 26.1" xml:space="preserve" class="hellobar-logo" style="width: 1.45em; height: 1.25em;">
+        <g>
+          <path d="M39.5 0h-39C0.2 0 0 0.2 0 0.5v25.1c0 0.3 0.2 0.5 0.5 0.5h39c0.3 0 0.5-0.2 0.5-0.5V0.5C40 0.2 39.8 0 39.5 0z M33.8 8.6 h-4.3v9h4.3v2.8H21.7v-2.8h4.7V14H13.6v3.6h4.7v2.8h-12v-2.8h4.3v-9H6.2V5.7h12v2.8h-4.7v2.9h12.9V8.6h-4.7V5.7h12.1V8.6z"></path>
+        </g>
+      </svg>
+    </div>
+    <div class='hb-cu-powered-by'  style="width: 40%; text-align:left; padding-left: 5px; float:left; text-decoration: none; color: #666; line-height: 18px; font-size:12px; font-family: 'Open Sans', Helvetica, Arial, sans-serif;">
+      powered by <span style="color:{{siteStyles.modal_button_color}};">Hello Bar<span>
+    </div>
+  <div>
+
   </div>
+
+
+
 </div>
