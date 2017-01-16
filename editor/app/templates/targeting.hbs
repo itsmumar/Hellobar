@@ -9,15 +9,17 @@
       <p>Show your Hello Bar to everyone on every page of your site.</p>
     {{/link-to}}
 
-    {{#link-to 'targeting.mobile' classBinding="canTarget:can-target" class='step-link-block'}}
-      <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
-      <h6>
-        Mobile Visitors
-        <span class="button paid">PAID</span>
-      </h6>
+    {{#if isTopBarStyle}}
+      {{#link-to 'targeting.mobile' classBinding="canTarget:can-target" class='step-link-block'}}
+        <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
+        <h6>
+          Mobile Visitors
+          <span class="button paid">PAID</span>
+        </h6>
 
-      <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
-    {{/link-to}}
+        <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
+      {{/link-to}}
+    {{/if}}
 
     {{#link-to 'targeting.homepage' classBinding="canTarget:can-target" class='step-link-block'}}
       <i class="hellobar-icon hellobar-icon-house"></i>

@@ -3,6 +3,8 @@ import _ from 'lodash/lodash';
 
 export default Ember.Controller.extend({
 
+  applicationController: Ember.inject.controller('application'),
+
   targetingUiVariant: (() => window.targetingUiVariant).property('model'),
 
   trackTargetingView: (function () {
@@ -229,6 +231,8 @@ export default Ember.Controller.extend({
       return this.set('model.settings.cookie_settings', cookieSettings);
     }
   }).observes('model'),
+
+  isTopBarStyle: Ember.computed.alias('applicationController.isTopBarStyle'),
 
   //-----------  Actions  -----------#
 
