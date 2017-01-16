@@ -61,13 +61,13 @@ export default Ember.Component.extend({
     setModelAfterSubmitValue(selection) {
       if (selection.isPro) {
         let left;
-        const controller = this;
+        const component = this;
         new UpgradeAccountModal({
           site: this.get('model.site'),
           upgradeBenefit: (left = selection.key === 'redirect') != null ? left : {'redirect to a custom url': 'customize your thank you text'},
           successCallback() {
-            controller.set('model.site.capabilities', this.site.capabilities);
-            controller.set('afterSubmitChoice', selection.key);
+            component.set('model.site.capabilities', this.site.capabilities);
+            component.set('afterSubmitChoice', selection.key);
           }
         }).open();
       } else {
