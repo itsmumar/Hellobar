@@ -1,34 +1,16 @@
-<script type="text/javascript">
-
-  $(function () {
-
-    <% if @styles %>
-    $("#offer").css("background-color", "<%= @styles['offer_bg_color'] %>");
-    $("#offer").css("color","<%= @styles['offer_text_color'] %>");
-    $("#offer a").css("color","<%= @styles['offer_link_color'] %>");
-    $("#modal-button").css("background-color","<%= @styles['modal_button_color'] %>");
-    $("#offer").css("border-color","<%= @styles['offer_border_color'] %>");
-    $("#offer").css("border-style","<%= @styles['offer_border_style'] %>");
-    $("#offer").css("border-width","<%= @styles['offer_border_width'] %>");
-    $("#offer").css("border-radius","<%= @styles['offer_border_radius'] %>");
-    <% end %>
-
-
-    $('.hb-cu-modal').show();
-
-  });
-</script>
-
 <style type="text/css">
-  .alert {
+  .hb-cu-offer {
     text-align: center;
     padding: 2em;
     font-weight: 600;
-    background: #ffffb6;
     font-size: 18px;
   }
 
-  .alert a:hover{
+  .hb-cu-offer a:link{
+    text-decoration: none;
+  }
+
+  .hb-cu-offer a:hover{
     text-decoration: underline;
   }
 
@@ -53,11 +35,6 @@
   border-color: #efefef;
   max-width: 670px;
   display: none;
-}
-
-.hb-cu-offer a {
-  color: black;
-  text-decoration: underline;
 }
 
 .hb-cu-modal .progress {
@@ -125,58 +102,114 @@
   color: #9c9c9d;
   font-size: 14px;
 }
-.content-upgrade-modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 900000; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+.hb-cu-modal-container {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 900000; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
 #hb-cu-close-button {
-    margin-top: -16px;
-    margin-right: -16px;
-    display: inline-block;
-    font-size: 18pt;
-    float: right;
-    width: 20pt;
-    height: 20pt;
-    color: #ccc;
-    padding-left: 1px;
-    line-height: 18pt;
-    text-decoration: none;
-    cursor: pointer;
-    background: #fff;
-    border: 2pt solid white;
-    -webkit-border-radius: 18pt;
-    -moz-border-radius: 18pt;
-    border-radius: 18pt;
+  margin-top: -16px;
+  margin-right: -16px;
+  display: inline-block;
+  font-size: 18pt;
+  float: right;
+  width: 20pt;
+  height: 20pt;
+  color: #ccc;
+  padding-left: 1px;
+  line-height: 18pt;
+  text-decoration: none;
+  cursor: pointer;
+  background: #fff;
+  border: 2pt solid white;
+  -webkit-border-radius: 18pt;
+  -moz-border-radius: 18pt;
+  border-radius: 18pt;
 }
 </style>
 
 
+<script type="text/javascript">
 
-<p id="offer" class="alert">Do you produce content often? <a href="#">Download this how to guide</a> to create content that people will bookmark and remember.</p>
+  $(function () {
+
+    $("input").on("keyup",function(){
+        loadContent();
+    });
+
+    $("#input-offer-headline").on("keyup",function(){
+        loadContent();
+        //this preserves the link color inthe headline.
+        loadStyles();
+    });
+
+    function loadContent() {
+        $('.hb-cu-offer').html(parseHeadline($('#input-offer-headline').val()));
+        $('.hb-cu-modal .caption').text($('#input-caption').val());
+        $('.hb-cu-modal .headline').text($('#input-headline').val());
+        $('.hb-cu-modal .name').attr("placeholder", $('#input-name-placeholder').val());
+        $('.hb-cu-modal .email').attr("placeholder", $('#input-email-placeholder').val());
+        $('.hb-cu-modal .cta').text($('#input-button-text').val());
+        $('.hb-cu-modal .spam-disclaimer').text($('#input-spam-disclaimer').val());
+    }
+
+    function parseHeadline(rawHeadline) {
+        var s = $('<div></div>').text(rawHeadline).html();
+        s = rawHeadline.replace(/{{/g, '<a href="javascript:void(0)">');
+        s = s.replace(/}}/g, '</a>');
+        return s;
+    }
+
+
+    <% if @content_upgrade %>
+      //go ahead and load default content
+      loadContent();
+    <% end %>
+
+    <% if @styles %>
+      function loadStyles() {
+        $(".hb-cu-offer").css("background-color", "<%= @styles['offer_bg_color'] %>");
+        $(".hb-cu-offer").css("color","<%= @styles['offer_text_color'] %>");
+        $(".hb-cu-offer a").css("color","<%= @styles['offer_link_color'] %>");
+        $(".hb-cu-modal .cta").css("background-color","<%= @styles['modal_button_color'] %>");
+        $(".hb-cu-offer").css("border-color","<%= @styles['offer_border_color'] %>");
+        $(".hb-cu-offer").css("border-style","<%= @styles['offer_border_style'] %>");
+        $(".hb-cu-offer").css("border-width","<%= @styles['offer_border_width'] %>");
+        $(".hb-cu-offer").css("border-radius","<%= @styles['offer_border_radius'] %>");
+      }
+      loadStyles();
+    <% end %>
+
+    $('.hb-cu-modal').show();
+
+  });
+</script>
+
+
+<p id="offer" class="alert hb-cu-offer">Want more related content? <a href="#">Get instant access</a> now.</p>
 
 <div id="offer-preview" style="background-color:#eee; padding:50px;">
-<div class="hb-cu-modal hb-cu-modal" >
-<div>
-<a id="hb-cu-close-button" href="">×</a>
-</div>
-<div class="progress"><img src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif"></div>
-<div class="caption">Almost there! Please complete this form and click the button below to gain instant access.</div>
-<div class="headline">Enter your details to download this how to guide to create content that people will bookmark and remember!</div>
-<div class="form">
-<input class="name" placeholder="First Name">
-<input class="email" placeholder="Email">
-<div id="modal-button" class="cta">Download Now &gt;&gt;</div>
-</div>
-<div class="spam-disclaimer">We hate SPAM and promise to keep your email address safe</div>
-</div>
+  <div class="hb-cu-modal hb-cu-modal" >
+    <div>
+      <a id="hb-cu-close-button" href="">×</a>
+    </div>
+    <div class="progress"><img src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif"></div>
+    <div class="caption">Almost there! Please complete this form and click the button below to gain instant access.</div>
+    <div class="headline">Enter your details to download this how to guide to create content that people will bookmark and remember!</div>
+    <div class="form">
+      <input class="name" placeholder="First Name">
+      <input class="email" placeholder="Email">
+      <div id="modal-button" class="cta">Download Now &gt;&gt;</div>
+    </div>
+    <div class="spam-disclaimer">We hate SPAM and promise to keep your email address safe.</div>
+  </div>
 </div>

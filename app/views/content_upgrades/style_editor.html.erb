@@ -3,35 +3,33 @@
   $(function () {
 
     $("input").on("change",function(){
-      load_styles();
+        load_styles();
     });
 
     $("select").on("change",function(){
-      load_styles();
+        load_styles();
     });
 
     function load_styles(){
-      $("#offer").css("background-color",$("#offer-background-color").val());
-      $("#offer").css("color",$("#offer-text-color").val());
-      $("#offer a").css("color",$("#offer-link-color").val());
-      $("#modal-button").css("background-color",$("#modal-button-color").val());
-      $("#offer").css("border-color",$("#offer-border-color").val());
-      $("#offer").css("border-style",$("#offer-border-style").val());
-      $("#offer").css("border-width",$("#offer-border-width").val());
-      $("#offer").css("border-radius",$("#offer-border-radius").val());
+        $(".hb-cu-offer").css("background-color",$("#offer-background-color").val());
+        $(".hb-cu-offer").css("color",$("#offer-text-color").val());
+        $(".hb-cu-offer a").css("color",$("#offer-link-color").val());
+        $(".hb-cu-modal cta").css("background-color",$("#modal-button-color").val());
+        $(".hb-cu-offer").css("border-color",$("#offer-border-color").val());
+        $(".hb-cu-offer").css("border-style",$("#offer-border-style").val());
+        $(".hb-cu-offer").css("border-width",$("#offer-border-width").val());
+        $(".hb-cu-offer").css("border-radius",$("#offer-border-radius").val());
     }
 
     load_styles();
-    $('.hb-cu-modal').show();
 
+    $('.hb-cu-modal').show();
   });
 
 </script>
 
 
-
 <h2>Style Editor</h2>
-
 
 <%= form_tag update_styles_site_content_upgrades_path(@site.id), method: "post" do %>
   <div class="content-upgrade-form">
@@ -90,7 +88,6 @@
             <% end %>
           </select>
         </div>
-
 
         <div class="field-wrapper">
           <label for="modal-button-color">Modal Button Color</label>

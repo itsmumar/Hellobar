@@ -13,6 +13,14 @@ class ContentUpgradesController < ApplicationController
   def new
     @content_upgrade = SiteElement.new
     @styles = @site.get_content_upgrade_styles
+    #Some Defualts
+    @content_upgrade.name_placeholder = 'First Name'
+    @content_upgrade.email_placeholder = 'Your Email'
+    @content_upgrade.disclaimer = 'We hate SPAM and promise to keep your email address safe.'
+    @content_upgrade.link_text = "Download Now"
+    @content_upgrade.headline = "Enter your email to download this free guide right now."
+    @content_upgrade.caption = "Almost there! Please complete this form and click the button below to gain instant access."
+
   end
 
   def edit
@@ -79,7 +87,7 @@ class ContentUpgradesController < ApplicationController
       caption: params[:caption],
       disclaimer: params[:disclaimer],
       content: params[:content],
-      link_text: params[:button_text],
+      link_text: params[:link_text],
       name_placeholder: params[:name_placeholder],
       email_placeholder: params[:email_placeholder],
       contact_list_id: params[:contact_list_id],

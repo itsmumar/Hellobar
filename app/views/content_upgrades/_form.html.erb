@@ -11,19 +11,6 @@
       });
     }
 
-    function load_styles(){
-      $("#offer").css("background-color",$("#offer-background-color").val());
-      $("#offer").css("color",$("#offer-text-color").val());
-      $("#offer a").css("color",$("#offer-link-color").val());
-      $("#modal-button").css("background-color",$("#modal-button-color").val());
-      $("#offer").css("border-color",$("#offer-border-color").val());
-      $("#offer").css("border-style",$("#offer-border-style").val());
-      $("#offer").css("border-width",$("#offer-border-width").val());
-      $("#offer").css("border-radius",$("#offer-border-radius").val());
-    }
-
-    load_styles();
-    $('.hb-cu-modal').show();
     initializeFroala();
 
   });
@@ -47,50 +34,39 @@
 
         <div class="field-wrapper">
           <label for="offer-headline">Your link should look like {{link text}}</label>
-          <input name="offer_headline" id="offer-headline" type="text" data-property="headline" value="<%= @content_upgrade.offer_headline %>">
+          <textarea name="offer_headline" id="input-offer-headline" ><%= @content_upgrade.offer_headline %></textarea>
         </div>
 
         <h3>Modal Elements</h3>
 
         <div class="field-wrapper">
           <label for="caption">Caption Text</label>
-          <input name="caption" id="caption" type="text" class="js-modal-input" data-property="caption" value="<%= @content_upgrade.caption %>">
+          <input name="caption" id="input-caption" type="text" class="js-modal-input" value="<%= @content_upgrade.caption %>">
         </div>
 
         <div class="field-wrapper">
           <label for="headline">Headline Text</label>
-          <input name="headline" id="headline" type="text" class="js-modal-input" data-property="headline"  value="<%= @content_upgrade.headline %>">
+          <input name="headline" id="input-headline" type="text"  value="<%= @content_upgrade.headline %>">
         </div>
 
         <div class="field-wrapper">
           <label for="name-placeholder">Name Placeholder</label>
-          <input name="name_placeholder"  id="name-placeholder" type="text" class="js-modal-input" data-property="namePlaceholder"  value="<%= @content_upgrade.name_placeholder %>">
+          <input name="name_placeholder"  id="input-name-placeholder" type="text"   value="<%= @content_upgrade.name_placeholder %>">
         </div>
 
         <div class="field-wrapper">
           <label for="email-placeholder">Email Placeholder</label>
-          <input name="email_placeholder"  id="email-placeholder" type="text" class="js-modal-input" data-property="emailPlaceholder"  value="<%= @content_upgrade.email_placeholder %>">
+          <input name="email_placeholder"  id="input-email-placeholder" type="text"   value="<%= @content_upgrade.email_placeholder %>">
         </div>
 
         <div class="field-wrapper">
           <label for="cta">Button Text</label>
-          <input name="button_text"  id="cta" type="text" class="js-modal-input" data-property="cta"  value="<%= @content_upgrade.link_text %>">
+          <input name="link_text"  id="input-button-text" type="text"value="<%= @content_upgrade.link_text %>">
         </div>
 
         <div class="field-wrapper">
           <label for="spam-disclaimer">Spam Disclaimer</label>
-          <input name="disclaimer"  id="spam-disclaimer" type="text" class="js-modal-input" data-property="spamDisclaimer"  value="<%= @content_upgrade.disclaimer %>">
-        </div>
-
-
-        <h3>Choose Contact List</h3>
-
-        <div class="select-wrapper">
-          <select id="contact-list" name="contact_list_id">
-            <%= @site.contact_lists.each do |list|%>
-            <option value="<%= list.id %>" <% if @content_upgrade.contact_list_id == list.id %>selected="selected"<% end %>><%= list.name %></option>
-            <% end %>
-          </select>
+          <input name="disclaimer"  id="input-spam-disclaimer" type="text"  value="<%= @content_upgrade.disclaimer %>">
         </div>
 
       </div>
@@ -100,9 +76,25 @@
 
     </div>
 
+    <hr />
+
+    <h3>Choose Contact List</h3>
+
+    <div class="select-wrapper">
+      <select id="contact-list" name="contact_list_id">
+        <%= @site.contact_lists.each do |list|%>
+        <option value="<%= list.id %>" <% if @content_upgrade.contact_list_id == list.id %>selected="selected"<% end %>><%= list.name %></option>
+        <% end %>
+      </select>
+    </div>
+
+    <h3>PDF Download Content</h3>
     <div class="js-froala-editor-container">
       <textarea id="content-edit" name="content"><%= @content_upgrade.content %></textarea>
     </div>
+
+
+
 
     <div class="buttons">
       <input type="submit" class="save" value="Save">
