@@ -1,60 +1,29 @@
 <script type="text/javascript">
 
   $(function () {
-    function setPlaceholder(elementId, placeholder) {
-      $('#' + elementId).attr('placeholder', placeholder);
-    }
 
     function initializeFroala() {
       var froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
       $('#content-edit').froalaEditor({
         key: froalaKey,
         heightMin: 400,
+        width: 800,
       });
     }
 
-    var defaultOfferModel = {
-      headline: 'Content Upgrade Offer Headline'
-    };
-    var offerModel = {
-      headline: ''
-    };
-    var $offerPreview = $('.js-offer-preview-container').contentUpgradeOfferPreview({
-      defaultModel: defaultOfferModel
-    });
-    $('#offer-headline').attr('placeholder', defaultOfferModel.headline).on('keydown', function (evt) {
-      setTimeout(function () {
-        offerModel.headline = $(evt.currentTarget).val();
-        $offerPreview.contentUpgradeOfferPreview('update', offerModel);
-      });
-    });
+    function load_styles(){
+      $("#offer").css("background-color",$("#offer-background-color").val());
+      $("#offer").css("color",$("#offer-text-color").val());
+      $("#offer a").css("color",$("#offer-link-color").val());
+      $("#modal-button").css("background-color",$("#modal-button-color").val());
+      $("#offer").css("border-color",$("#offer-border-color").val());
+      $("#offer").css("border-style",$("#offer-border-style").val());
+      $("#offer").css("border-width",$("#offer-border-width").val());
+      $("#offer").css("border-radius",$("#offer-border-radius").val());
+    }
 
-    var defaultModalModel = {
-      caption: 'Almost there! Please fill in this form and click the button below to gain access',
-      headline: 'Enter your details to download cheatsheet of 10 useful tools to craft beautiful graphics for social media',
-      cta: 'Download Now >>',
-      spamDisclaimer: 'We hate SPAM and promise to keep your email address safe'
-    };
-    var modalModel = {
-      caption: '',
-      headline: '',
-      cta: '',
-      spamDisclaimer: ''
-    };
-    var $modalPreview = $('.js-modal-preview-container').contentUpgradeModalPreview({
-      defaultModel: defaultModalModel
-    });
-    $('.js-modal-input[data-property]').each(function () {
-      var $this = $(this);
-      setPlaceholder($this.attr('id'), defaultModalModel[$this.attr('data-property')]);
-    }).on('keydown', function (evt) {
-      var $this = $(this);
-      setTimeout(function () {
-        modalModel[$this.attr('data-property')] = $(evt.currentTarget).val();
-        $modalPreview.contentUpgradeModalPreview('update', modalModel);
-      }, 1);
-    });
-
+    load_styles();
+    $('.hb-cu-modal').show();
     initializeFroala();
 
   });
@@ -121,19 +90,14 @@
             <%= @site.contact_lists.each do |list|%>
             <option value="<%= list.id %>" <% if @content_upgrade.contact_list_id == list.id %>selected="selected"<% end %>><%= list.name %></option>
             <% end %>
-=          </select>
+          </select>
         </div>
 
       </div>
 
       <div class="preview-column">
-        <h3>Content Upgrade Offer</h3>
+        <%= render :partial => 'preview' %>
 
-        <div class="js-offer-preview-container preview-container"></div>
-        <h3>Content Upgrade Modal</h3>
-
-        <div class="js-modal-preview-container preview-container"></div>
-      </div>
     </div>
 
     <div class="js-froala-editor-container">

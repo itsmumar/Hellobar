@@ -12,6 +12,11 @@ class ContentUpgradesController < ApplicationController
 
   def new
     @content_upgrade = SiteElement.new
+    @styles = @site.get_content_upgrade_styles
+  end
+
+  def edit
+    @styles = @site.get_content_upgrade_styles
   end
 
   def show
