@@ -163,7 +163,8 @@ class SitesController < ApplicationController
   def create_for_logged_in_user
     if @site.valid? && @site.url_exists?(current_user)
       flash[:error] = "Url is already in use."
-      redirect_to site_path(current_user.sites.where(url: @site.url).first)
+      sites = current_user.sites.merge(Site.ignored_protocol_url(@site.url))
+      redirect_to site_path(sites.first)
     elsif @site.save
       Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
       SiteMembership.create!(:site => @site, :user => current_user)
