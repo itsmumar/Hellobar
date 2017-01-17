@@ -19,7 +19,7 @@ class Site < ActiveRecord::Base
   has_many :image_uploads, dependent: :destroy
 
   scope :protocol_ignored_url, ->(url) {
-    host = self.normalize_url(url).normalized_host
+    host = normalize_url(url).normalized_host if url.include?('http')
     where("sites.url = ? OR sites.url = ?", "https://#{host}", "http://#{host}")
   }
 
@@ -344,7 +344,6 @@ class Site < ActiveRecord::Base
   end
 
   def self.normalize_url(url)
-    byebug
     Addressable::URI.heuristic_parse(url)
   end
 
