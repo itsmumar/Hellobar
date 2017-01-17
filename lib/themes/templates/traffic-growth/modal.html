@@ -36,7 +36,7 @@
         <div class="hb-input-block hb-editable-block hb-editable-block-input builtin-email"
              data-hb-editable-block="f-builtin-email">
           <label for="f-builtin-email">Your email</label>
-          <input id="f-builtin-email" type="text" placeholder="Your email" required="" value="" autocomplete="off">
+          <input id="f-builtin-email" type="text" placeholder="Your email" {{HB.isPreviewMode ? '' : 'required'}} value="" autocomplete="off">
         </div>
 
         <div class="cta" onclick="{{siteElement.me}}.handleCtaClick()">
