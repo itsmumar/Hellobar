@@ -316,8 +316,8 @@ class @RuleModal extends Modal
       )
       $('.conditions-wrapper .condition-hint').remove()
       $mobileDeviceConditions.each(->
-        $(this).prepend('<div class="condition-hint">Only topbar style Hello Bars can be shown on mobile device.</div>')      )
-
+        $(this).prepend('<div class="condition-hint">Only topbar style Hello Bars can be shown on mobile devices.</div>')
+      )
     , 1)
 
   #-----------  Render a Condition to the Page  -----------#
