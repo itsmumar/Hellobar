@@ -8,12 +8,18 @@
   <tr>
     <th>Offer</th>
     <th>WP Script Tag</th>
+    <th>Views</th>
+    <th>Conversions</th>
+    <th>%</th>
     <th>PDF</th>
   </tr>
 <% @content_upgrades.each do |content_upgrade| %>
 <tr>
  <td><%= link_to(content_upgrade.offer_headline, edit_site_content_upgrade_path(@site.id, content_upgrade.id)) %></td>
  <td><input type="text" value="<%= content_upgrade.content_upgrade_script_tag %>"></td>
+ <td><%= content_upgrade.total_views %></td>
+ <td><%= content_upgrade.total_conversions %></td>
+ <td><% if content_upgrade.total_conversions > 0 %><%=(content_upgrade.total_views.to_i/content_upgrade.total_conversions.to_i).to_i %>%<%end%></td>
  <td><a href="<%= content_upgrade.content_upgrade_download_link %>" target="_blank">View PDF</a></td>
 </tr>
 <% end %>
