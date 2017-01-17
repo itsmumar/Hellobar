@@ -437,7 +437,7 @@ class @ContactListModal extends Modal
         @_renderBlock("instructions", defaultContext).hide()
         @options.identity = data
 
-        if data.provider == "infusionsoft"
+        if data.provider == "infusionsoft" or data.provider == "convert_kit"
           infusionsoftContext = $.extend(true, {}, defaultContext, {identity: data})
           infusionsoftContext.preparedLists = (infusionsoftContext.tags or []).map((tag) =>
             clonedLists = $.extend(true, [], infusionsoftContext.identity.lists)
