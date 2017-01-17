@@ -10,6 +10,7 @@ templates =
   nevermind: "<div></div>"
   syncDetails: "<div></div>"
   remoteListSelect: "<div></div>"
+  tagListSelect: "<div></div>"
 
 
 describe "ContactListModal", ->
