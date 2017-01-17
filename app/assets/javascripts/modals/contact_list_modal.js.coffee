@@ -375,6 +375,7 @@ class @ContactListModal extends Modal
       provider: value
       providerName: label
       providerNameLabel: (label + ' ' + (if label == 'Drip' then 'campaign' else 'list'))
+      isProviderConvertKit: (label == 'ConvertKit')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')

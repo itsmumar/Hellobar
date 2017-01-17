@@ -51,7 +51,6 @@ unless defined?(Hellobar::Settings)
     drip_client_id
     drip_secret
     get_response_api_url
-    convert_kit_url
     vr_client_id
     vr_secret
     geolocation_url

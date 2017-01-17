@@ -17,7 +17,7 @@ module ServiceProviders
       raise "Identity does not have a stored ConvertKit API secret key" unless api_key
 
       client_settings = {
-        url: Hellobar::Settings[:convert_kit_url]
+        url: 'https://api.convertkit.com/v3/'
       }
 
       @client = Faraday.new(client_settings) do |faraday|
