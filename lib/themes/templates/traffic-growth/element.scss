@@ -1,0 +1,652 @@
+$defaultColor: #f03554;
+$headlineColor: $defaultColor;
+$ctaColor: $headlineColor;
+
+#hellobar-template.traffic-growth {
+  display: block;
+  position: fixed;
+  box-sizing: border-box;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 16px;
+  box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.15);
+  background-size: cover;
+  color: #585858;
+  font-family: 'Montserrat', sans-serif;
+
+  .button-close {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    z-index: 100000;
+    font-size: 12px;
+    color: #364556;
+    cursor: pointer;
+    //background-image: url(../assets/close.png);
+    background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/close.png);
+    background-size: cover;
+  }
+
+  .headline-first {
+    text-transform: uppercase;
+    color: $headlineColor;
+  }
+
+  .headline-second {
+    white-space: nowrap;
+    text-transform: uppercase;
+    color: $headlineColor;
+  }
+
+  .headline-third {
+    white-space: nowrap;
+    text-transform: uppercase;
+    color: $headlineColor;
+  }
+
+  .caption {
+    color: #49596a;
+    overflow: hidden;
+  }
+
+  .form-block {
+    position: relative;
+    background-color: #193247;
+  }
+
+  .builtin-email {
+    width: 100%;
+    box-sizing: border-box;
+    label {
+      display: none;
+    }
+    input {
+      text-align: left;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #6d849c;
+    }
+  }
+
+  .cta {
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #f03554;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .reject-link {
+    display: block;
+    position: relative;
+    white-space: nowrap;
+    color: #6d849c;
+    text-decoration: none;
+  }
+
+  .hb-logo {
+    display: inline-block;
+    width: 34px;
+    height: 23px;
+    border-radius: 3px;
+    svg {
+      border-radius: 3px;
+      path {
+        fill: #b4b4b4;
+      }
+    }
+  }
+
+}
+
+#hellobar-template.traffic-growth.modal {
+
+  left: 50%;
+  width: 735px;
+  height: 520px;
+  padding: 50px 60px 0 60px;
+  //background-image: url(../assets/modal-background.jpeg);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/modal-background.jpeg);
+
+  .button-close {
+    width: 16px;
+    height: 16px;
+  }
+
+  .headline-first {
+    font-size: 30px;
+    line-height: 25px;
+    max-height: 30px;
+    margin-bottom: 18px;
+    white-space: nowrap;
+  }
+
+  .headline-second {
+    font-size: 140px;
+    line-height: 100px;
+    max-height: 140px;
+    margin-bottom: 30px;
+
+  }
+
+  .headline-third {
+    font-size: 31px;
+    line-height: 22px;
+    max-height: 31px;
+    letter-spacing: 1px;
+  }
+
+  .caption {
+    font-size: 22px;
+    max-height: 94px;
+    padding: 20px 70px;
+  }
+
+  .form-block {
+    height: 77px;
+    border-radius: 5px;
+  }
+
+  .builtin-email {
+    margin-right: 232px;
+    label {
+    }
+    input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 232px;
+      font-size: 16px;
+      padding: 28px;
+    }
+  }
+
+  .cta {
+    position: absolute;
+    right: -1px;
+    top: 0;
+    bottom: 0;
+    width: 232px;
+    padding: 24px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-size: 22px;
+  }
+
+  .reject-link {
+    margin: 17px 0;
+    font-size: 16px;
+    line-height: 16px;
+    max-height: 16px;
+    letter-spacing: 1px;
+  }
+
+  .hb-logo {
+    width: 34px;
+    height: 23px;
+    svg {
+      path {
+        fill: #b4b4b4;
+      }
+    }
+  }
+
+  &.middle {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+  }
+  &.top {
+    top: 5%;
+    transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+  }
+
+}
+
+
+/*
+@media screen and (max-width: 768px) {
+  #hellobar-template.traffic-growth.modal {
+    width: 375px;
+    height: 165px;
+    padding: 25px 30px 0 30px;
+    //background-image: url(../assets/modal-background-mobile.jpg);
+    // TODO uncomment
+    //background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/modal-background-mobile.jpg);
+    background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/slider-background.jpg);
+
+    .button-close {
+      top: 16px;
+      right: 16px;
+      width: 12px;
+      height: 12px;
+    }
+
+    .text-content-block:after {
+      clear: both;
+      display: block;
+      content: '';
+    }
+
+    .text-content-block {
+      margin-bottom: 12px;
+    }
+
+    .headline {
+      float: left;
+      width: 115px;
+
+    }
+
+    .headline-first {
+      font-size: 12px;
+      line-height: 14px;
+      margin-bottom: 0;
+      white-space: normal;
+      max-height: 28px;
+    }
+
+    .headline-second {
+      font-size: 36px;
+      letter-spacing: -1px;
+      line-height: 34px;
+      margin-bottom: 2px;
+      max-height: 34px;
+    }
+
+    .headline-third {
+      font-size: 10px;
+      line-height: 10px;
+      max-height: 10px;
+    }
+
+    .caption {
+      margin-left: 120px;
+      padding: 20px 0 0 0;
+      font-size: 11px;
+      max-height: 62px;
+    }
+
+    .form-block {
+      background: none;
+      margin-bottom: 10px;
+      max-height: 33px;
+    }
+
+    .builtin-email {
+      display: inline-block;
+      background-color: #193247;
+      border-radius: 3px;
+      width: 195px;
+      margin: 0;
+      input {
+        display: inline-block;
+        position: static;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        font-size: 9px;
+        padding: 11px;
+      }
+    }
+
+    .cta {
+      display: inline-block;
+      border-radius: 3px;
+      background-color: $ctaColor;
+      font-size: 11px;
+      color: white;
+      padding: 9px 4px;
+      position: relative;
+      top: 1px;
+      width: auto;
+    }
+
+    .reject-link {
+      display: none;
+    }
+
+    .hb-logo {
+      display: none;
+    }
+
+  }
+}
+*/
+
+
+::-webkit-input-placeholder {
+  color: #6d849c;
+}
+
+:-moz-placeholder {
+  color: #6d849c;
+  opacity: 1;
+}
+
+::-moz-placeholder {
+  color: #6d849c;
+  opacity: 1;
+}
+
+:-ms-input-placeholder {
+  color: #6d849c;
+}
+
+#hellobar-template.traffic-growth.slider {
+  left: auto;
+  width: 380px;
+  height: 239px;
+  padding: 52px 36px 0 36px;
+  //background-image: url(../assets/slider-background.jpg);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/slider-background.jpg);
+
+  &.bottom-right {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  &.bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+
+  &.top-right{
+    top: 20px;
+    right: 20px;
+  }
+
+  &.top-left {
+    top: 20px;
+    left: 20px;
+  }
+
+  .button-close {
+    top: 16px;
+    right: 16px;
+    width: 12px;
+    height: 12px;
+  }
+
+  .text-content-block:after {
+    clear: both;
+    display: block;
+    content: '';
+  }
+
+  .text-content-block {
+    margin-bottom: 30px;
+  }
+
+  .headline {
+    float: left;
+    width: 115px;
+
+  }
+
+  .headline-first {
+    font-size: 12px;
+    line-height: 14px;
+    max-height: 28px;
+    //font-weight: 800;
+  }
+
+  .headline-second {
+    font-size: 36px;
+    letter-spacing: -1px;
+    line-height: 34px;
+    margin-bottom: 2px;
+    max-height: 34px;
+    // font-weight: 800;
+  }
+
+  .headline-third {
+    font-size: 10px;
+    line-height: 10px;
+    max-height: 10px;
+    // font-weight: 800;
+  }
+
+  .caption {
+    margin-left: 120px;
+    padding-top: 20px;
+    font-size: 11px;
+    max-height: 62px;
+  }
+
+  .form-block {
+    background: none;
+    margin-bottom: 10px;
+    max-height: 33px;
+  }
+
+  .builtin-email {
+    display: inline-block;
+    background-color: #193247;
+    border-radius: 3px;
+    width: 195px;
+    input {
+      font-size: 9px;
+      padding: 11px;
+    }
+  }
+
+  .cta {
+    display: inline-block;
+    border-radius: 3px;
+    background-color: $ctaColor;
+    font-size: 11px;
+    color: white;
+    padding: 9px 4px;
+    position: relative;
+    top: 1px;
+    //font-weight: 800;
+  }
+
+  .hb-logo {
+    width: 28px;
+    height: 19px;
+    svg {
+      path {
+        fill: #cccccc;
+      }
+    }
+  }
+}
+
+
+#hellobar-template.traffic-growth.takeover {
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  //background-image: url(../assets/takeover-background.jpg);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/takeover-background.jpg);
+  background-size: cover;
+
+  .takeover-content {
+    position: fixed;
+    left: 50%;
+    width: 735px;
+    height: 520px;
+    padding: 50px 60px 0 60px;
+    background: none;
+    box-shadow: none;
+
+    &.middle {
+      top: 50%;
+      transform: translate(-50%, -50%);
+      -o-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+    }
+
+    .button-close {
+      width: 24px;
+      height: 24px;
+    }
+
+    .headline-first {
+      font-size: 30px;
+      line-height: 25px;
+      max-height: 30px;
+      margin-bottom: 18px;
+      white-space: nowrap;
+    }
+
+    .headline-second {
+      font-size: 140px;
+      line-height: 100px;
+      max-height: 140px;
+      margin-bottom: 30px;
+
+    }
+
+    .headline-third {
+      font-size: 31px;
+      line-height: 22px;
+      max-height: 31px;
+      letter-spacing: 1px;
+    }
+
+    .caption {
+      font-size: 22px;
+      max-height: 94px;
+      padding: 20px 70px;
+    }
+
+    .form-block {
+      height: 77px;
+      border-radius: 5px;
+    }
+
+    .builtin-email {
+      margin-right: 232px;
+      label {
+      }
+      input {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 232px;
+        font-size: 16px;
+        padding: 28px;
+      }
+    }
+
+    .cta {
+      position: absolute;
+      right: -1px;
+      top: 0;
+      bottom: 0;
+      width: 232px;
+      padding: 24px;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      font-size: 22px;
+    }
+
+    .reject-link {
+      margin: 17px 0;
+      font-size: 16px;
+      line-height: 16px;
+      max-height: 16px;
+      letter-spacing: 1px;
+    }
+
+    .hb-logo {
+      width: 34px;
+      height: 23px;
+      svg {
+        path {
+          fill: #b4b4b4;
+        }
+      }
+    }
+  }
+}
+
+#hellobar-template.traffic-growth {
+  .thank-you-container {
+    display: none;
+  }
+}
+
+#hellobar-template.traffic-growth.thank-you {
+
+  &.paid-account .thank-you-container {
+    margin-top: 5em;
+    .thank-you-button-wrapper {
+      margin-top: 3em;
+    }
+  }
+
+  .thank-you-container {
+    display: block;
+    height: 100%;
+    margin-top: 2em;
+
+    .headline-first {
+      display: block;
+    }
+    .caption {
+      display: block;
+      margin: 0 0 1em 0;
+    }
+    .cta.thank-you-button {
+      display: inline-block;
+      position: relative;
+      background-color: $defaultColor;
+      color: white;
+      left: auto;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      width: auto;
+      padding: 1em 3em;
+      font-weight: 800;
+      border-radius: 5px;
+    }
+  }
+
+  .headline-first,
+  .headline-second,
+  .headline-third,
+  .caption,
+  .form-block,
+  .reject-link,
+  .hb-logo {
+    display: none;
+  }
+
+}
+
+#hellobar-template.traffic-growth.modal.thank-you {
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/background-thank-you.jpeg);
+}
+
+#hellobar-template.traffic-growth.thank-you {
+  .headline-first,
+  .headline-second,
+  .headline-third,
+  .caption,
+  .cta,
+  .reject-link {
+    max-height: none !important;
+  }
+}

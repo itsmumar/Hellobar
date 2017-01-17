@@ -62,7 +62,7 @@ export default Ember.Controller.extend({
           this.set('model.element_subtype', 'announcement');
           break;
         case 'settings.social':
-          this.set('model.element_subtype', 'social/like_on_facebook');
+          (!_.startsWith(this.get('model.element_subtype'), 'social/')) && this.set('model.element_subtype', 'social/like_on_facebook');
           break;
       }
       this.set('goalSelectionInProgress', false);

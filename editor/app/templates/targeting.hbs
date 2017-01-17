@@ -9,15 +9,17 @@
       <p>Show your Hello Bar to everyone on every page of your site.</p>
     {{/link-to}}
 
-    {{#link-to 'targeting.mobile' classBinding="canTarget:can-target" class='step-link-block'}}
-      <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
-      <h6>
-        Mobile Visitors
-        <span class="button paid">PAID</span>
-      </h6>
+    {{#if isTopBarStyle}}
+      {{#link-to 'targeting.mobile' classBinding="canTarget:can-target" class='step-link-block'}}
+        <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
+        <h6>
+          Mobile Visitors
+          <span class="button paid">PAID</span>
+        </h6>
 
-      <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
-    {{/link-to}}
+        <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
+      {{/link-to}}
+    {{/if}}
 
     {{#link-to 'targeting.homepage' classBinding="canTarget:can-target" class='step-link-block'}}
       <i class="hellobar-icon hellobar-icon-house"></i>
@@ -62,11 +64,11 @@
 
   <label>
     <span>Cookie Duration</span>
-    {{#popup-hint-trigger}}
+    {{#hints/popup-hint-trigger}}
       <p>The number of days before the optin will display <br>
         again once the user exits your campaign. <br>
         <strong>Change to 0 to prevent cookies from being set.</strong></p>
-    {{/popup-hint-trigger}}
+    {{/hints/popup-hint-trigger}}
   </label>
   {{input value=model.settings.cookie_settings.duration
     placeholder="Cookie Duration"
@@ -76,11 +78,11 @@
 
   <label>
     <span>Success Cookie Duration</span>
-    {{#popup-hint-trigger}}
+    {{#hints/popup-hint-trigger}}
       <p>The number of days before the optin will display <br>
         again once the user successfully opts in to your <br>
         campaign. <strong>Change to 0 to prevent success <br> cookies from being set.</strong></p>
-    {{/popup-hint-trigger}}
+    {{/hints/popup-hint-trigger}}
   </label>
   {{input value=model.settings.cookie_settings.success_duration
     placeholder="Success Cookie Duration"

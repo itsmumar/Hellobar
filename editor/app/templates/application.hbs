@@ -51,20 +51,22 @@
           {{/if}}
         </div>
       </li>
-      <li class="toggle-mobile">
-        <a {{action 'toggleMobile'}}>
-          <i class="icon-desktop"></i>
-          <i class="icon-mobile"></i>
-        </a>
+      {{#if isTopBarStyle}}
+        <li class="toggle-mobile">
+          <a {{action 'toggleMobile'}}>
+            <i class="icon-desktop"></i>
+            <i class="icon-mobile"></i>
+          </a>
 
-        <div class="caption">
-          {{#if isMobile}}
-            Desktop
-          {{else}}
-            Mobile
-          {{/if}}
-        </div>
-      </li>
+          <div class="caption">
+            {{#if isMobile}}
+              Desktop
+            {{else}}
+              Mobile
+            {{/if}}
+          </div>
+        </li>
+      {{/if}}
       <li class="close-editor">
         <a {{action "closeEditor"}}>
           <i class="icon-close"></i>
@@ -79,7 +81,7 @@
     <div class="step-wrapper">
       {{outlet}}
 
-      {{step-navigation action='saveSiteElement' current=currentStep
+      {{navigation/step-navigation action='saveSiteElement' current=currentStep
       prev=prevRoute next=nextRoute saveSubmitted=saveSubmitted
       doneButtonText=doneButtonText cannotContinue=cannotContinue}}
     </div>

@@ -18,9 +18,9 @@ class SiteElement < ActiveRecord::Base
 
   # valid bar types and their conversion units
   BAR_TYPES = {
+    # themes type `generic`
     "call"                            => "Calls",
     "traffic"                         => "Clicks",
-    "traffic_growth"                  => "Clicks",
     "email"                           => "Emails",
     "announcement"                    => "Conversions",
     "social/tweet_on_twitter"         => "Tweets",
@@ -31,9 +31,13 @@ class SiteElement < ActiveRecord::Base
     "social/follow_on_pinterest"      => "Follows",
     "social/share_on_buffer"          => "Shares",
     "social/share_on_linkedin"        => "Shares",
-    "question"                        => "Question"
+    "question"                        => "Question",
+
+    # themes type `template`
+    "traffic_growth"                  => "Clicks"
   }
 
+  TEMPLATE_NAMES = %w(traffic_growth)
   SHORT_SUBTYPES = %w{traffic email call social announcement}
 
   belongs_to :rule, touch: true
@@ -195,7 +199,14 @@ class SiteElement < ActiveRecord::Base
     [].tap do |templates|
       TYPES.each do |type|
         BAR_TYPES.keys.each do |subtype|
-          templates << "#{type.name.downcase}_#{subtype}"
+          if TEMPLATE_NAMES.include?(subtype)
+            types = Theme.where(id: subtype.gsub('_', '-')).first.element_types
+            if types.include?(type.to_s)
+              templates << "#{type.name.downcase}_#{subtype}"
+            end
+          else
+            templates << "#{type.name.downcase}_#{subtype}"
+          end
         end
       end
     end

@@ -226,13 +226,7 @@ describe SitesController do
       response.should be_success
 
       SiteElement.all_templates.each do |template|
-        # TODO: Update this test case after merging `XOHB-676-new-templates-for-all-styles` (templating engine)
-        # This should only say `response.body.should include("HB.setTemplate(\"#{template}\"")`
-        if template.include?('traffic_growth')
-          response.body.should include("HB.setTemplate(\"traffic_growth\"")
-        else
-          response.body.should include("HB.setTemplate(\"#{template}\"")
-        end
+        response.body.should include("HB.setTemplate(\"#{template}\"")
       end
     end
   end

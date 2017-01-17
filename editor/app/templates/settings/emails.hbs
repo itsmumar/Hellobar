@@ -55,7 +55,7 @@
 
 
   <label>Choose your contact list and integration</label>
-  {{contact-list-select
+  {{selection/contact-list-select
     selectedOption=selectedContactList
     options=model.site.contact_lists
     setList="setContactList"
@@ -63,7 +63,7 @@
   }}
 
   <label>Design your "Thank You" message</label>
-  {{custom-pro-select
+  {{selection/custom-pro-select
     selectedOption=afterSubmitOptionSelected
     options=afterSubmitOptions
     onchange=(action "setModelAfterSubmitValue")

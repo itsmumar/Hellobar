@@ -4,7 +4,7 @@ export default Ember.Component.extend({
 
   classNames: ['step-navigation'],
 
-  layoutName: ( () => 'components/step-navigation1').property(),
+  layoutName: ( () => 'components/navigation/step-navigation1').property(),
 
   //-----------  Routing  -----------#
 

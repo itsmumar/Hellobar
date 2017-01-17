@@ -48,9 +48,9 @@ html
 
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'
+
     - if current_user
       = render "shared/modals/account_prompt"
-    = render :partial => "shared/hotjar"
 
     = yield
 

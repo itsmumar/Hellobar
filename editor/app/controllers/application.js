@@ -7,8 +7,6 @@ export default Ember.Controller.extend({
   theming: Ember.inject.service(),
 
   init() {
-    // TODO remove
-    //console.log('applicationController', this);
 
     Ember.run.next(() => {
         if (this.get('model.id') === null) {
@@ -126,6 +124,7 @@ export default Ember.Controller.extend({
   }).observes("model.animated").on("init"),
 
   doRenderPreview(withAnimations = false) {
+    const currentTheme = this.get('currentTheme');
     let previewElement = $.extend({}, this.get("model"), {
         animated: withAnimations && this.get("model.animated"),
         hide_destination: true,
@@ -143,7 +142,8 @@ export default Ember.Controller.extend({
         wiggle_button: this.get("model.wiggle_button"),
         wiggle_wait: 0,
         font: this.getFont().value,
-        google_font: this.getFont().google_font
+        google_font: this.getFont().google_font,
+        theme: currentTheme
       }
     );
 
@@ -156,7 +156,6 @@ export default Ember.Controller.extend({
       HB.removeAllSiteElements();
       HB.addToPage(HB.createSiteElement(previewElement));
     }
-    HB.isMobileWidth = "changed";
   },
 
   shouldSkipPreviewUpdate: false,
@@ -342,8 +341,6 @@ export default Ember.Controller.extend({
     return currentTheme ? currentTheme.type === 'template' : false;
   }.property('currentTheme'),
 
-
-
   onCurrentThemeChanged: (function () {
     if (this.get('currentThemeIsTemplate')) {
       this.set('model.element_subtype', 'email');
@@ -359,6 +356,14 @@ export default Ember.Controller.extend({
     }
   }).observes('model.theme_id'),
 
+  isTopBarStyle: function() {
+    return this.get('model.type') === 'Bar';
+  }.property('model.type'),
+
+  isNotTopBarStyle: function() {
+    return this.get('model.type') !== 'Bar';
+  }.property('model.type'),
+
   previousElementType: null,
 
   onElementTypeChanged: function () {
@@ -371,6 +376,9 @@ export default Ember.Controller.extend({
       }
     }
     this.set('previousElementType', elementType);
+    if (elementType !== 'Bar' && currentTheme.type === 'generic' && this.get('isMobile')) {
+      this.toggleProperty('isMobile');
+    }
   }.observes('model.type'),
 
 

@@ -7,6 +7,9 @@ import HasTriggerOptions from '../mixins/has-trigger-options-mixin';
 
 export default Ember.Controller.extend(HasPlacement, HasTriggerOptions, AfterConvertOptions, {
 
+    applicationController: Ember.inject.controller('application'),
+    currentThemeIsGeneric: Ember.computed.alias('applicationController.currentThemeIsGeneric'),
+
     placementOptions: [
       {value: 'bar-top', label: 'Top'},
       {value: 'bar-bottom', label: 'Bottom'}

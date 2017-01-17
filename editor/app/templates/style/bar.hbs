@@ -44,11 +44,15 @@
     {{/power-select}}
   </div>
 
-  <label>Bar Size</label>
+  {{#if currentThemeIsGeneric}}
 
-  <div class="slider-wrapper">
-    {{range-slider min=30 max=110 start=adoptedBarSize update="barSizeUpdated" leftLabel="small" rightLabel="large"}}
-  </div>
+    <label>Bar Size</label>
+
+    <div class="slider-wrapper">
+      {{range-slider min=30 max=110 start=adoptedBarSize update="barSizeUpdated" leftLabel="small" rightLabel="large"}}
+    </div>
+
+  {{/if}}
 
   <label>When does it display? <a {{action "popDelayTootlipModal"}} class="tooltip-label">(what's this?)</a></label>
 
