@@ -37,6 +37,7 @@ class @RuleModal extends Modal
     @_bindAddCondition()
     @_bindRemoveCondition()
     @_bindMultipleChoiceActions()
+    @_bindSelectionChanges()
 
   _removeUrlCondition: ->
     urlCondition = @ruleData.conditions.find (condition) ->
@@ -288,6 +289,7 @@ class @RuleModal extends Modal
 
       @_addCondition($condition)
       @_toggleNewConditionMessage()
+      @_updateConditionHints()
 
   _bindRemoveCondition: ->
     ruleModal = this
@@ -298,6 +300,25 @@ class @RuleModal extends Modal
       $condition = $(this).parents('.condition-block:first')
       ruleModal._removeCondition($condition)
       ruleModal._toggleNewConditionMessage()
+      ruleModal._updateConditionHints()
+
+  _bindSelectionChanges: ->
+    @$modal.on 'change', 'select', (event) =>
+      @_updateConditionHints()
+
+  _updateConditionHints: ->
+    setTimeout(->
+      $mobileDeviceConditions = $('.conditions-wrapper .condition-block:visible').filter(->
+        $this = $(this)
+        return $this.find('.condition-segment').val() == 'DeviceCondition' and
+            $this.find('.condition-operand').val() == 'is' and
+            $this.find('.rule_conditions_choices select').val() == 'mobile'
+      )
+      $('.conditions-wrapper .condition-hint').remove()
+      $mobileDeviceConditions.each(->
+        $(this).prepend('<div class="condition-hint">Only topbar style Hello Bars can be shown on mobile device.</div>')      )
+
+    , 1)
 
   #-----------  Render a Condition to the Page  -----------#
 
