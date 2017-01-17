@@ -185,7 +185,7 @@
         <input id="f-builtin-email" class="email" placeholder="Email">
 
         <button class="cta"
-                onclick="window.parent.HB.submitEmail(document.getElementById('hb-cu-modal-{{siteElement.id}}'),
+                onclick="window.parent.HB.submitEmail(HB.CONTENT_UPGRADES[{{siteElement.id}}],
                                                         document.getElementById('hb-fields-form'),
                                                         (document.getElementById('hb_msg_container') || document.getElementsByClassName('hb-headline-text')[0]),
                                                         {{HB.stringLiteral(siteElement.thank_you_text)}},
