@@ -51,6 +51,7 @@ unless defined?(Hellobar::Settings)
     drip_client_id
     drip_secret
     get_response_api_url
+    convert_kit_url
     vr_client_id
     vr_secret
     geolocation_url
@@ -103,6 +104,12 @@ unless defined?(Hellobar::Settings)
       app_key: config[:constantcontact_app_key],
       app_secret: config[:constantcontact_app_secret],
       oauth: true
+    },
+    convert_kit: {
+      type: :email,
+      name: "ConvertKit",
+      service_provider_class: "ConvertKit",
+      requires_api_key: true
     },
     drip: {
       type: :email,
