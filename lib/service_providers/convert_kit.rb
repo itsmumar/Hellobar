@@ -11,6 +11,7 @@ module ServiceProviders
         raise "Must provide an identity through the arguments"
       end
 
+      @contact_list = opts[:contact_list]
       @identity = identity
 
       api_key = @identity.api_key
@@ -50,10 +51,37 @@ module ServiceProviders
       forms
     end
 
+    def tags
+      found_tags = []
+
+      begin
+        response = make_api_call('get', 'tags')
+
+        if response.success?
+          response_hash = JSON.parse response.body
+          found_tags = response_hash['tags'].map { |form| {'id' => form['id'], 'name' => form['name']}}
+        else
+          error_message = JSON.parse(response.body)['error']
+          log "getting tags returned '#{error_message}' with the code #{response.status}"
+        end
+
+      rescue Faraday::TimeoutError
+        log "getting tags timed out"
+      rescue => error
+        log "getting tags raised #{error}"
+      end
+
+      found_tags
+    end
+
     # NOTE: `double_optin` depends on the ConvertKit account form settings.
     # No effect of `double_optin` from API
     def subscribe(form_id, email, name = nil, double_optin = false)
-      body = { api_key: @identity.api_key, email: email }
+      body = {
+        api_key: @identity.api_key,
+        email: email,
+        tags: @contact_list.tags.join(',')
+      }
 
       if name.present?
         split = name.split(' ', 2)
