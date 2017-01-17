@@ -113,6 +113,18 @@ var HB = {
     }
   },
 
+  //
+  showContentUpgrade: function (id) {
+    if (HB.CONTENT_UPGRADES[id]){
+      siteElement = HB.CONTENT_UPGRADES[id];
+      siteStyles = HB.CONTENT_UPGRADES_STYLES;
+      var tpl =  HB.contentUpgradeTemplates['contentupgrade'];
+      content =  HB.renderTemplate(tpl, siteElement);
+      content =  HB.renderTemplate(content, siteStyles);
+      document.getElementById('hb-cu-'+id).outerHTML = content;
+    }
+  },
+
   // Copy functions from spec into klass
   cpFuncs: function (spec, klass) {
     for (var key in spec) {
@@ -586,7 +598,8 @@ var HB = {
       function () {
         var doRedirect = HB.t(redirect);
         var removeElements;
-        var siteElementDoc = siteElement.w.contentDocument;
+
+        var siteElementDoc = siteElement;
 
         if (!doRedirect) {
           if ((targetSiteElement != null) && thankYouText) {
@@ -916,6 +929,7 @@ var HB = {
   // A global variable to store templates
   templateHTML: {},
   brandingTemplates: {},
+  contentUpgradeTemplates: {},
 
   // Sets the template HTML. Note if you override getTemplate this will have
   // no affect
@@ -944,6 +958,16 @@ var HB = {
   getBrandingTemplate: function (type) {
     return HB.brandingTemplates[type];
   },
+
+  // Sets the content upgrade HTML.
+  setContentUpgradeTemplate: function (type, html) {
+    HB.contentUpgradeTemplates[type] = html;
+  },
+
+  getContentUpgradeTemplate: function (type) {
+    return HB.contentUpgradeTemplates[type];
+  },
+
 
   // Takes each string value in the siteElement and escapes HTML < > chars
   // with the matching symbol

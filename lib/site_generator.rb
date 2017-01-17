@@ -22,9 +22,10 @@ class SiteGenerator
       </head>
       <body style="background-color: #FFFFFF;">
       <a onclick="console.log('BUTTON PUSHED')">HERE</a>
-      <div style="height:500px;background-color: yellow">TOP OF PAGE CONTENT</div>
+      <div style="height:500px;background-color: yellow">TOP OF PAGE CONTENT<script id="hb-cu-1">window.onload = function() {HB.showContentUpgrade(1)};</script></div>
       <div style="height:500px;">Content</div>
-      <div style="height:500px;background-color: #eee">Content</div>
+      <div style="height:500px;background-color: #eee">
+</div>
       <div style="height:500px;">Content</div>
       <div style="height:500px;background-color: #eee">Content</div>
       <div style="height:500px;">Content</div>

@@ -1,0 +1,20 @@
+<h2>Content Upgrades</h2>
+<ul>
+
+<li><%= link_to('+ Add New Content Upgrade', new_site_content_upgrade_path(@site.id)) %></li>
+<li style="float: right;"><%= link_to('Style Editor', style_editor_site_content_upgrades_path(@site.id)) %></li>
+</ul>
+<table>
+  <tr>
+    <th>Offer</th>
+    <th>WP Script Tag</th>
+    <th>PDF</th>
+  </tr>
+<% @content_upgrades.each do |content_upgrade| %>
+<tr>
+ <td><%= link_to(content_upgrade.offer_headline, edit_site_content_upgrade_path(@site.id, content_upgrade.id)) %></td>
+ <td><input type="text" value="<%= content_upgrade.content_upgrade_script_tag %>"></td>
+ <td><a href="<%= content_upgrade.content_upgrade_download_link %>" target="_blank">View PDF</a></td>
+</tr>
+<% end %>
+</table>

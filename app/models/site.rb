@@ -370,6 +370,29 @@ class Site < ActiveRecord::Base
     url
   end
 
+  def get_settings
+    begin
+      JSON.parse(settings)
+    rescue
+      return {}
+    end
+  end
+
+  def update_content_upgrade_styles!(style_params)
+    site_settings = get_settings
+    site_settings['content_upgrade'] = style_params
+
+    self.update_attribute(:settings, site_settings.to_json)
+  end
+
+  def get_content_upgrade_styles
+   begin
+     return JSON.parse(settings)['content_upgrade']
+   rescue
+     return {}
+   end
+  end
+
   private
 
   # Calculates a bill, but does not save or pay the bill. Used by
@@ -515,4 +538,6 @@ class Site < ActiveRecord::Base
   def set_branding_on_site_elements
     site_elements.update_all(show_branding: !capabilities(true).remove_branding?)
   end
+
+
 end
