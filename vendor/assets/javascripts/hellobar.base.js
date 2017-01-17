@@ -117,7 +117,7 @@ var HB = {
   showContentUpgrade: function (id) {
     if (HB.CONTENT_UPGRADES[id]){
       siteElement = HB.CONTENT_UPGRADES[id];
-      HB.viewed(siteElement)
+      HB.viewed(siteElement);
       siteStyles = HB.CONTENT_UPGRADES_STYLES;
       var tpl =  HB.contentUpgradeTemplates['contentupgrade'];
       content =  HB.renderTemplate(tpl, siteElement);
