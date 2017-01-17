@@ -574,7 +574,8 @@ var HB = {
       function () {
         var doRedirect = HB.t(redirect);
         var removeElements;
-        var siteElementDoc = siteElement.w.contentDocument;
+
+        var siteElementDoc = siteElement;
 
         if (!doRedirect) {
           if ((targetSiteElement != null) && thankYouText) {
