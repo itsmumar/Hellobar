@@ -85,6 +85,7 @@ class ScriptGenerator < Mustache
     site.site_elements.active_content_upgrades.each do |cu|
       content = {
         id: cu.id,
+        type: 'ContentUpgrade',
         offer_headline: cu.offer_headline.to_s.gsub('{{','<a href="#">').gsub('}}','</a>'),
         caption: cu.caption,
         headline: cu.headline,

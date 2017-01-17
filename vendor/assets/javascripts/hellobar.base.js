@@ -598,8 +598,14 @@ var HB = {
       function () {
         var doRedirect = HB.t(redirect);
         var removeElements;
+        console.log(siteElement);
+        if (siteElement.type == 'ContentUpgrade') {
+          var siteElementDoc = document.getElementById('hb-cu-modal-'+siteElement.id);
+        } else {
+          var siteElementDoc = siteElement.w.contentDocument;
+        }
 
-        var siteElementDoc = siteElement;
+
 
         if (!doRedirect) {
           if ((targetSiteElement != null) && thankYouText) {
