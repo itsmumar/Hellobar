@@ -395,6 +395,10 @@ export default Ember.Controller.extend({
 
   onElementSubtypeChanged: function() {
     this._checkMobileProperty();
+    const elementSubtype = this.get('model.element_subtype');
+    if (elementSubtype === 'call') {
+      this.set('model.type', 'Bar');
+    }
   }.observes('model.element_subtype'),
 
   updateProFeature: ( function () {
