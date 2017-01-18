@@ -210,6 +210,7 @@ class @ContactListModal extends Modal
           modal.blocks.instructions.show()
           modal.blocks.syncDetails.hide()
           modal.blocks.remoteListSelect.hide()
+          modal.blocks.tagListSelect.hide()
           modal.$modal.trigger('provider:disconnected')
         error: (response) =>
           console.log("Could not disconnect identity", response)
@@ -372,7 +373,9 @@ class @ContactListModal extends Modal
 
   _loadContactList: ->
     $.get @options.loadURL, (contactList) =>
-      @options.contactList = $.extend(@options.contactList, data: contactList.data, name: contactList.name, id: contactList.id)
+      @options.contactList = $.extend(@options.contactList, data: contactList.data,
+                                      name: contactList.name, id: contactList.id,
+                                      provider: contactList.provider)
       @_setFormValues(contactList)
       @_loadRemoteLists(listData: contactList)
 
@@ -395,6 +398,7 @@ class @ContactListModal extends Modal
     option = $(select).find("option:selected")
     label = option.text()
     cycle_day = @options.contactList?.data?.cycle_day
+    originalProvider = @options.contactList?.provider
     cycle_day_enabled = cycle_day != undefined
 
     defaultContext =
@@ -412,7 +416,7 @@ class @ContactListModal extends Modal
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
       cycleDay: cycle_day || 0
-      tags: @options.contactList?.data?.tags
+      tags: if value == originalProvider then @options.contactList?.data?.tags else []
       providerNameLabel: (label + ' ' + switch label
                                           when 'Drip' then 'campaign'
                                           when 'ConvertKit' then 'form'
@@ -434,21 +438,22 @@ class @ContactListModal extends Modal
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
+        @blocks.remoteListSelect.hide()
         @blocks.tagListSelect.hide()
         @$modal.trigger('provider:connected')
         @_renderBlock("syncDetails", $.extend(defaultContext, {identity: data})).show()
         @_renderBlock("instructions", defaultContext).hide()
         @options.identity = data
 
-        if data.provider == "infusionsoft" or data.provider == "convert_kit"
-          if data.provider == "convert_kit"
+        if data.provider == "infusionsoft" or defaultContext.isProviderConvertKit
+          if defaultContext.isProviderConvertKit
             @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
           tagsContext = $.extend(true, {}, defaultContext, {identity: data})
           tagsContext.preparedLists = (tagsContext.tags or []).map((tag) =>
             clonedTags = $.extend(true, [], tagsContext.identity.tags)
             clonedTags.forEach((clonedTag) =>
-              clonedTag.isSelected = if String(clonedTag.id) == tag then true else false
+              clonedTag.isSelected = (String(clonedTag.id) == tag)
             )
             { tag: tag, lists: clonedTags}
           )

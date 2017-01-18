@@ -153,7 +153,14 @@ class ContactList < ActiveRecord::Base
 
   private
 
+  def update_tags(name, value)
+    self.data[name] = value
+    update_column(:data, self.data)
+  end
+
   def notify_identity
+    update_tags("tags", []) # reset tags
+
     old_identity_id = destroyed? ? identity_id : changes[:identity_id].try(:first)
     Identity.where(id: old_identity_id).first.try(:contact_lists_updated) if old_identity_id
   end
