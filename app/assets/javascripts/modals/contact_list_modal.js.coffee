@@ -400,7 +400,6 @@ class @ContactListModal extends Modal
     defaultContext =
       provider: value
       providerName: label
-      providerNameLabel: (label + ' ' + (if label == 'Drip' then 'campaign' else 'list'))
       isProviderConvertKit: (label == 'ConvertKit')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
@@ -414,6 +413,10 @@ class @ContactListModal extends Modal
       cycleDayEnabled: cycle_day_enabled
       cycleDay: cycle_day || 0
       tags: @options.contactList?.data?.tags
+      providerNameLabel: (label + ' ' + switch label
+                                          when 'Drip' then 'campaign'
+                                          when 'ConvertKit' then 'form'
+                                          else 'list')
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.hellobarOnly.show()
@@ -427,7 +430,7 @@ class @ContactListModal extends Modal
     @$modal.trigger 'load'
 
     $.get("/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
-      if data and data.lists # an identity was found for the selected provider
+      if data and (data.lists or data.tags) # an identity was found for the selected provider
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
@@ -438,15 +441,18 @@ class @ContactListModal extends Modal
         @options.identity = data
 
         if data.provider == "infusionsoft" or data.provider == "convert_kit"
-          infusionsoftContext = $.extend(true, {}, defaultContext, {identity: data})
-          infusionsoftContext.preparedLists = (infusionsoftContext.tags or []).map((tag) =>
-            clonedLists = $.extend(true, [], infusionsoftContext.identity.lists)
-            clonedLists.forEach((list) =>
-              list.isSelected = if String(list.id) == tag then true else false
+          if data.provider == "convert_kit"
+            @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
+
+          tagsContext = $.extend(true, {}, defaultContext, {identity: data})
+          tagsContext.preparedLists = (tagsContext.tags or []).map((tag) =>
+            clonedTags = $.extend(true, [], tagsContext.identity.tags)
+            clonedTags.forEach((clonedTag) =>
+              clonedTag.isSelected = if String(clonedTag.id) == tag then true else false
             )
-            { tag: tag, lists: clonedLists}
+            { tag: tag, lists: clonedTags}
           )
-          @_renderBlock("tagListSelect", infusionsoftContext, false).show()
+          @_renderBlock("tagListSelect", tagsContext, false).show()
         else
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
           $cycle_day = $('#contact_list_cycle_day')

@@ -195,14 +195,14 @@ script id="contact-list-modal-remote-list-select-template" type="text/x-handleba
 
 script id="contact-list-modal-tag-select-template" type="text/x-handlebars-template"
 
-  | <label for="contact_list_remote_list_id"">Apply Tags (Optional) <span class="button paid" style="margin-left: 8px; padding: 0.25em 1em;">PAID</span></label>
+  | <label for="contact_list_remote_list_id"">Apply Tags (Optional)</label>
   | {{#if tags}}
   |   {{#each tags}}
   |     <div class="select-wrapper"">
   |       <div>
   |         <select class="contact-list-tag" name="contact_list[remote_list_id]">
   |           <option disabled selected value>Select ...</option>
-  |           {{#each ../../identity.lists}}
+  |           {{#each ../../identity.tags}}
   |             {{option ../../. id name}}
   |           {{/each}}
   |         </select>
@@ -215,7 +215,7 @@ script id="contact-list-modal-tag-select-template" type="text/x-handlebars-templ
   |     <div>
   |       <select class="contact-list-tag" name="contact_list[remote_list_id]">
   |         <option disabled selected value>Select ...</option>
-  |         {{#each identity.lists}}
+  |         {{#each identity.tags}}
   |           <option value="{{id}}">{{name}}</option>
   |         {{/each}}
   |       </select>
