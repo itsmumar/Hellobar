@@ -9,10 +9,10 @@ describe ServiceProviders::Infusionsoft do
     allow(Infusionsoft).to receive(:contact_add_with_dup_check) { 1 }
   end
 
-  describe "#lists" do
+  describe "#tags" do
     it "should make a call to Infusionsoft for their tags" do
       expect(Infusionsoft).to receive(:data_query) { [] }
-      service_provider.lists
+      service_provider.tags
     end
   end
 
