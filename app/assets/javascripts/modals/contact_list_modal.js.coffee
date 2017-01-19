@@ -270,7 +270,7 @@ class @ContactListModal extends Modal
       source = $('script#tag-dropdown-template').html()
       template = Handlebars.compile(source)
       newMarkup = template(identity: @options.identity)
-      $previous = object.find(".select-wrapper:last")
+      $previous = object.find(".tag-select-block a").prev()
 
       $(newMarkup).insertAfter($previous)
 
@@ -416,7 +416,10 @@ class @ContactListModal extends Modal
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
       cycleDay: cycle_day || 0
-      tags: if value == originalProvider then @options.contactList?.data?.tags else []
+      tags: if value == originalProvider && @options.contactList?.data?.tags.length > 0
+              @options.contactList?.data?.tags
+            else
+              [null]
       providerNameLabel: (label + ' ' + switch label
                                           when 'Drip' then 'campaign'
                                           when 'ConvertKit' then 'form'
@@ -448,9 +451,8 @@ class @ContactListModal extends Modal
         if data.provider == "infusionsoft" or defaultContext.isProviderConvertKit
           if defaultContext.isProviderConvertKit
             @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
-
           tagsContext = $.extend(true, {}, defaultContext, {identity: data})
-          tagsContext.preparedLists = (tagsContext.tags or []).map((tag) =>
+          tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
             clonedTags = $.extend(true, [], tagsContext.identity.tags)
             clonedTags.forEach((clonedTag) =>
               clonedTag.isSelected = (String(clonedTag.id) == tag)

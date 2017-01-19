@@ -231,7 +231,7 @@ script id="tag-dropdown-template" type="text/x-handlebars-template"
   |   <div>
   |     <select class="contact-list-tag" name="contact_list[remote_list_id]">
   |       <option disabled selected value>Select ...</option>
-  |       {{#each identity.lists}}
+  |       {{#each identity.tags}}
   |         <option value="{{id}}">{{name}}</option>
   |       {{/each}}
   |     </select>
