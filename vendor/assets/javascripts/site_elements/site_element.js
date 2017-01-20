@@ -704,6 +704,14 @@ HB.SiteElement = HB.createClass({
   unquotedValue: function(propertyName, defaultValue) {
     var value = this[propertyName] || defaultValue;
     return (value && value.indexOf('\'') === 0) ? value.substring(1, value.length - 1) : value;
+  },
+
+  accountCssClass: function() {
+    return this.use_free_email_default_msg ? 'free-account' : 'paid-account';
+  },
+
+  brandingCssClass: function() {
+    return (HB.t(this.show_branding) || !HB.CAP.no_b) ? 'show-branding' : 'dont-show-branding';
   }
 
 

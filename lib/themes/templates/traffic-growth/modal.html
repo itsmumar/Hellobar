@@ -4,7 +4,7 @@
 
 <div id="hellobar-modal-background"></div>
 
-<div id="hellobar-template" class="js-hellobar-element traffic-growth modal {{siteElement.placement}} {{siteElement.use_free_email_default_msg ? 'free-account' : 'paid-account'}}">
+<div id="hellobar-template" class="js-hellobar-element traffic-growth modal {{siteElement.placement}} {{siteElement.accountCssClass()}}">
 
   <div class="button-close" onclick="{{siteElement.me}}.close()"></div>
 

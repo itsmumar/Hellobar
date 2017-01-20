@@ -31,6 +31,12 @@
     .slider-content {
       padding: 18px 25px 18px 20px;
     }
+
+    &.show-branding.image-bottom, &.show-branding.image-right {
+      .slider-content {
+        padding-bottom: 38px;
+      }
+    }
   }
 
   #hellobar-modal {
