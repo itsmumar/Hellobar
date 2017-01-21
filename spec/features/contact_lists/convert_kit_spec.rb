@@ -3,11 +3,16 @@ require 'service_provider_integration_helper'
 
 feature "ConvertKit Integration", js: true do
   before do
+    @fake_data_api_original = Hellobar::Settings[:fake_data_api]
+    Hellobar::Settings[:fake_data_api] = true
     @user = login
   end
 
+  after do
+    Hellobar::Settings[:fake_data_api] = @fake_data_api_original
+  end
+
   def connect_convert_kit
-    allow(Hello::DataAPI).to receive(:get).and_return(HashWithIndifferentAccess.new("1": 10))
     site = @user.sites.create(url: random_uniq_url)
     contact_list = create(:contact_list, site: site)
 
