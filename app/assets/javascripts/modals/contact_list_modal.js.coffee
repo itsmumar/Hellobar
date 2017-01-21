@@ -400,6 +400,7 @@ class @ContactListModal extends Modal
     cycle_day = @options.contactList?.data?.cycle_day
     originalProvider = @options.contactList?.provider
     cycle_day_enabled = cycle_day != undefined
+    hasTags = @options.contactList?.data?.hasOwnProperty('tags')
 
     defaultContext =
       provider: value
@@ -416,7 +417,7 @@ class @ContactListModal extends Modal
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
       cycleDay: cycle_day || 0
-      tags: if value == originalProvider && @options.contactList?.data?.tags.length > 0
+      tags: if hasTags && value == originalProvider && @options.contactList?.data?.tags.length > 0
               @options.contactList?.data?.tags
             else
               [null]
