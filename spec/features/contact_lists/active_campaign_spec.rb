@@ -1,13 +1,12 @@
 require 'integration_helper'
 require 'service_provider_integration_helper'
 
-feature "ConvertKit Integration", js: true do
+feature "ActiveCampaign Integration", js: true do
   before do
     @user = login
   end
 
-  def connect_convert_kit
-    allow(Hello::DataAPI).to receive(:get).and_return(HashWithIndifferentAccess.new("1": 10))
+  def connect_active_campaign
     site = @user.sites.create(url: random_uniq_url)
     contact_list = create(:contact_list, site: site)
 
@@ -15,27 +14,29 @@ feature "ConvertKit Integration", js: true do
 
     page.find("#edit-contact-list").click
     page.find("a", text: "Nevermind, I want to view all tools").click
-    page.find(".convert_kit-provider").click
+    page.find(".active_campaign-provider").click
 
-    fill_in 'contact_list[data][api_key]', with: 'OgSSj78Ql5mPI5AxH51li8kRhjvd9seZ_AnGmKZ_xlg'
+    fill_in 'contact_list[data][app_url]', with: 'hellobar.api-us1.com'
+    fill_in 'contact_list[data][api_key]', with: 'dea2f200e17b9a3205f3353030b7d8ad55852aa3ccec6d7c4120482c8e8feb5fd527cff3'
 
     page.find(".button.ready").click
   end
 
   scenario "connecting to Active Campaign" do
-    connect_convert_kit
+    connect_active_campaign
 
-    expect(page).to have_content('Choose a ConvertKit form to sync with')
+    expect(page).to have_content('Choose a Active Campaign list to sync with')
   end
 
   scenario "select list" do
-    connect_convert_kit
+    connect_active_campaign
+    selector = 'select#contact_list_remote_list_id'
 
-    page.find('select#contact_list_remote_list_id').select('XO')
+    page.find(selector).select('HB List2')
     page.find('.button.submit').click
 
     page.find('#edit-contact-list').click
 
-    expect(page).to have_content("XO")
+    expect(page).to have_content("HB List2")
   end
 end
