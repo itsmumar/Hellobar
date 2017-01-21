@@ -116,11 +116,10 @@ describe Site do
       expect(site.url).to eq("http://zombo.com")
     end
 
-    # Not converting the protocol, keeping original, hence commented
-    xit "always uses http protocol" do
+    it "keeps original protocol" do
       site = Site.new(:url => "https://zombo.com")
       site.valid?
-      expect(site.url).to eq("http://zombo.com")
+      expect(site.url).to eq("https://zombo.com")
 
       site = Site.new(:url => "http://zombo.com")
       site.valid?
@@ -448,11 +447,23 @@ describe Site do
       expect(Site.new(url: "http://abc.com").url_exists?).to be_true
     end
 
+    it "should return true if another site exists even with other protocol" do
+      Site.create(url: "http://abc.com")
+      expect(Site.new(url: "https://abc.com").url_exists?).to be_true
+    end
+
     it "should scope to user if user is given" do
       u1 = users(:joey)
       u1.sites.create(url: "http://abc.com")
       u2 = users(:wootie)
       expect(u2.sites.build(url: "http://abc.com").url_exists?(u2)).to be_false
+    end
+
+    it "should ignore protocol if user scoped call" do
+      u1 = users(:joey)
+      u1.sites.create(url: "http://abc.com")
+      u2 = users(:wootie)
+      expect(u2.sites.build(url: "https://abc.com").url_exists?(u2)).to be_false
     end
   end
 

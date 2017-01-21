@@ -3,6 +3,11 @@
 {{#if isCustom}}
 These are some instructions about doing your custom templating.
 {{else}}
+
+  {{#if shouldShowThankYouEditor}}
+    {{thank-you/thank-you-editor model=model}}
+  {{/if}}
+
   {{#if currentThemeIsGeneric}}
 
     {{#ivy-tabs selection=selection as |tabs|}}
@@ -30,4 +35,5 @@ These are some instructions about doing your custom templating.
   {{#if currentThemeIsTemplate}}
     {{no-content-parameters}}
   {{/if}}
+
 {{/if}}
