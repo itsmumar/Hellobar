@@ -26,7 +26,7 @@ export default Ember.Controller.extend({
   actions: {
 
     setContactList(listId) {
-      return this.set('model.contact_list_id', listId);
+      this.set('model.contact_list_id', listId);
     },
 
     openEmailListPopup(listId = 0) {
@@ -34,7 +34,7 @@ export default Ember.Controller.extend({
 
       if (listId) {
         // Edit Existing Contact List
-        return new ContactListModal({
+        new ContactListModal({
           id: listId,
           siteID,
           loadURL: `/sites/${siteID}/contact_lists/${listId}.json`,
@@ -52,7 +52,7 @@ export default Ember.Controller.extend({
                 break;
               }
             }
-            return modal.close();
+            modal.close();
           },
 
           destroyed: (data, modal) => {
@@ -64,7 +64,7 @@ export default Ember.Controller.extend({
                 break;
               }
             }
-            return modal.close();
+            modal.close();
           }
         }).open();
 
@@ -88,10 +88,10 @@ export default Ember.Controller.extend({
             lists.push({id: data.id, name: data.name});
             this.set('model.site.contact_lists', lists);
             setTimeout(( () => {
-                return this.set('model.contact_list_id', data.id);
+                this.set('model.contact_list_id', data.id);
               }
             ), 100);
-            return modal.$modal.remove();
+            modal.$modal.remove();
           },
 
           close: modal => this.set('model.contact_list_id', null)

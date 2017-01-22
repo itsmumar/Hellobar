@@ -17,11 +17,11 @@ export default Ember.Component.extend({
         draggable: '.item-block',
         filter: '.denied',
         onEnd: evt => {
-          let fields = Ember.copy(this.get('model.settings.fields_to_collect'));
-          let elementsToMove = fields.splice(evt.oldIndex, 1);
+          const fields = Ember.copy(this.get('model.settings.fields_to_collect'));
+          const elementsToMove = fields.splice(evt.oldIndex, 1);
           fields.splice(evt.newIndex, 0, elementsToMove[0]);
           this.set('model.settings.fields_to_collect', fields);
-          return setTimeout(()=> {
+          setTimeout(()=> {
             return $sortableGroupElement.find('.item-block[draggable="false"]').remove();
           }, 0);
         }
@@ -31,9 +31,8 @@ export default Ember.Component.extend({
   },
 
   _initializeFields() {
-    let fields = this.get('model.settings.fields_to_collect');
-    if (_.isEmpty(fields)) {
-      fields = [
+    if (_.isEmpty(this.get('model.settings.fields_to_collect'))) {
+      const defaultFields = [
         {
           "id": "some-long-id-1",
           "type": "builtin-email",
@@ -50,7 +49,7 @@ export default Ember.Component.extend({
           "is_enabled": false
         }
       ];
-      this.set('model.settings.fields_to_collect', fields);
+      this.set('model.settings.fields_to_collect', defaultFields);
     }
   },
 
@@ -68,19 +67,19 @@ export default Ember.Component.extend({
     }
   },
 
-  onElementTypeChange: (function () {
+  onElementTypeChange: function () {
     if (this.get('isBarType')) {
-      let fields = Ember.copy(this.get('model.settings.fields_to_collect'));
-      fields && fields.forEach(function (field) {
+      const fields = Ember.copy(this.get('model.settings.fields_to_collect'));
+      _.each(fields, (field) => {
         if (field && field.type && field.type.indexOf('builtin-') !== 0) {
-          return field.is_enabled = false;
+          field.is_enabled = false;
         }
       });
-      return this.set('model.settings.fields_to_collect', fields);
+      this.set('model.settings.fields_to_collect', fields);
     }
-  }).observes('model.type'),
+  }.observes('model.type'),
 
-  preparedFieldDescriptors: (function () {
+  preparedFieldDescriptors: function () {
     return _.map(this.get('model.settings.fields_to_collect'), field => ({
       field: {
         id: field.id,
@@ -91,32 +90,29 @@ export default Ember.Component.extend({
       denied: this.get('isBarType') && field.type.indexOf('builtin-') !== 0,
       removable: field.type.indexOf('builtin-') !== 0
     }));
-  }).property('model.settings.fields_to_collect', 'model.type', 'isBarType'),
+  }.property('model.settings.fields_to_collect', 'model.type', 'isBarType'),
 
-  isBarType: (function () {
-    return this.get('model.type') === 'Bar';
-  }).property('model.type'),
+  isBarType: Ember.computed.equal('model.type', 'Bar'),
 
-  addFieldCssClasses: (function() {
+  addFieldCssClasses: function() {
     return 'item-block add' + (this.get('isBarType') ? ' denied' : '');
-  }).property('isBarType'),
+  }.property('isBarType'),
 
   actions: {
     toggleFieldToCollect(field) {
       if (field.type === 'builtin-email') {
         return;
       }
-      let fields = this.get('model.settings.fields_to_collect');
-      let fieldToChange = _.find(fields, f => f.id === field.id);
+      const fields = this.get('model.settings.fields_to_collect');
+      const fieldToChange = _.find(fields, f => f.id === field.id);
       fieldToChange.is_enabled = !fieldToChange.is_enabled;
       this.set('model.settings.fields_to_collect', Ember.copy(fields));
-      return null;
     },
 
     removeFieldToCollect(field) {
-      let fields = this.get('model.settings.fields_to_collect');
-      let newFields = _.reject(fields, f => f.id === field.id);
-      return this.set('model.settings.fields_to_collect', newFields);
+      const fields = this.get('model.settings.fields_to_collect');
+      const newFields = _.reject(fields, f => f.id === field.id);
+      this.set('model.settings.fields_to_collect', newFields);
     },
 
     addFieldToCollect() {
@@ -134,15 +130,14 @@ export default Ember.Component.extend({
       if (!this.newFieldToCollect.label) {
         return;
       }
-      let newFields = this.get('model.settings.fields_to_collect').concat([this.newFieldToCollect]);
+      const newFields = this.get('model.settings.fields_to_collect').concat([this.newFieldToCollect]);
       this.set('model.settings.fields_to_collect', newFields);
-      return this.set('newFieldToCollect', null);
+      this.set('newFieldToCollect', null);
     },
-
 
     onNewFieldToCollectEscapePressed() {
-      return this.set('newFieldToCollect', null);
-    },
+      this.set('newFieldToCollect', null);
+    }
 
   }
 
