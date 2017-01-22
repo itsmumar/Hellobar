@@ -4,10 +4,11 @@ import _ from 'lodash/lodash';
 export default Ember.Controller.extend({
 
   inlineEditing: Ember.inject.service(),
+  bus: Ember.inject.service(),
   applicationController: Ember.inject.controller('application'),
 
   init() {
-    this.get('inlineEditing').addFieldChangeListener(() => {
+    this.get('bus').subscribe('hellobar.core.fields.changed', (params) => {
       this.notifyPropertyChange('model.settings.fields_to_collect');
     });
   },

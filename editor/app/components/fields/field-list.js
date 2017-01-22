@@ -5,6 +5,8 @@ export default Ember.Component.extend({
 
   classNames: ['field-list'],
 
+  bus: Ember.inject.service(),
+
   /**
    * @property {object} Main element model
    */
@@ -28,6 +30,14 @@ export default Ember.Component.extend({
       });
     }
     this._initializeFields();
+    this._fieldChangeHandler = () => {
+      this.notifyPropertyChange('model.settings.fields_to_collect');
+    };
+    this.get('bus').subscribe('hellobar.core.fields.changed', this._fieldChangeHandler);
+  },
+
+  willDestroyElement() {
+    this._fieldChangeHandler && this.get('bus').unsubscribe('hellobar.core.fields.changed', this._fieldChangeHandler);
   },
 
   _initializeFields() {
