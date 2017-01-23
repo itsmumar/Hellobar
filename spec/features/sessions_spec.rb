@@ -75,8 +75,9 @@ feature "User can sign in", js: true do
   end
 
   scenario "user with no sites can sign out" do
-    user = login
-    user.sites.destroy_all
+    user = create :user
+
+    login_as user, scope: :user, run_callbacks: false
 
     visit root_path
 
