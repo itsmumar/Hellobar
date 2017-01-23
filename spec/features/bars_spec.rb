@@ -22,8 +22,6 @@ feature 'Adding and editing bars', :js do
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
 
-    User.last.site_memberships << create(:site_membership, :with_site_rule)
-
     expect(page).to have_content 'Are you sure you want to add the site'
 
     click_on 'Create Site'
