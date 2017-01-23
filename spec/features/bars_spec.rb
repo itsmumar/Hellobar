@@ -220,6 +220,10 @@ feature 'Adding and editing bars', :js do
 
     within('.step-wrapper') do
       first('.color-select-block input').set color
+
+      # make sure the color is set there by clicking to show the dropdown
+      # and then hide it
+      2.times { first('.color-select-wrapper').trigger 'click' }
     end
 
     click_link 'Next'
