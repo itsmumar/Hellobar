@@ -245,19 +245,29 @@ HB.SiteElement = HB.createClass({
   },
 
   setContainerSize: function (container, element, type, isMobile) {
-    if (container == null)
+    if (!container) {
       return;
-    if (type == 'Bar') {
-      container.style.maxHeight = (element.clientHeight + (HB.CAP.preview ? 350 : 8)) + 'px';
-      HB.CAP.preview && (container.style.height = (element.clientHeight + 350) + 'px');
-    } else if (type == 'Slider') {
-      var containerWidth = HB.previewMode === 'mobile' ? HB.mobilePreviewWidth : window.innerWidth;
-      var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
-      container.style.width = (newWidth) + 'px';
+    }
 
-      // Increase <iframe> bounds for non-mobile preview (so that Froala editor
-      // controls are visible/usable)
-      container.style.height = (element.clientHeight + (HB.CAP.preview && HB.previewMode !== 'mobile' ? 450 : 124)) + 'px';
+    if (HB.CAP.preview) {
+      container.style.display = 'block';
+      container.style.position = 'absolute';
+      container.style.width = '100%';
+      container.style.height = '100%';
+      container.style.maxHeight = 'none';
+      container.style.top = 0;
+      container.style.bottom = 0;
+      container.style.left = 0;
+      container.style.right = 0;
+    } else {
+      if (type === 'Bar') {
+        container.style.maxHeight = (element.clientHeight + 8) + 'px';
+      } else if (type === 'Slider') {
+        var containerWidth = window.innerWidth;
+        var newWidth = Math.min(HB.maxSliderSize + 24, containerWidth - 24);
+        container.style.width = newWidth + 'px';
+        container.style.height = (element.clientHeight + 124) + 'px';
+      }
     }
   },
 
