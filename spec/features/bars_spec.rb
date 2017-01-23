@@ -198,6 +198,8 @@ feature 'Adding and editing bars', :js do
   end
 
   scenario 'User can modify the color settings for a bar' do
+    color = 'AABBCC'
+
     OmniAuth.config.add_mock(:google_oauth2, {uid: '12345', info: {email: 'bob@lawblog.com'}})
     visit root_path
 
@@ -211,20 +213,24 @@ feature 'Adding and editing bars', :js do
     expect(page).to have_content 'PROMOTE A SALE'
 
     click_button 'Continue'
+
+    expect(page).to have_content 'Themes'
+
     click_link 'Next'
 
     within('.step-wrapper') do
-      click_on 'Colors'
-      page.first('.color-select-block input').set('AABBCC')
+      first('.color-select-block input').set color
     end
 
-    click_link 'Prev'
     click_link 'Next'
+
+    expect(page).to have_content 'TARGETING'
+
+    click_on 'Content'
 
     expect(page).to have_content('Background Color')
 
-    val = page.first('.color-select-block input').value
-    expect(val).to eql('AABBCC')
+    expect(first('.color-select-block input').value).to eql color
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end
