@@ -80,6 +80,30 @@ class ScriptGenerator < Mustache
     capabilities.to_json
   end
 
+  def content_upgrades_json
+    cu_json = {}
+    site.site_elements.active_content_upgrades.each do |cu|
+      content = {
+        id: cu.id,
+        type: 'ContentUpgrade',
+        offer_headline: cu.offer_headline.to_s.gsub('{{','<a href="#">').gsub('}}','</a>'),
+        caption: cu.caption,
+        headline: cu.headline,
+        disclaimer: cu.disclaimer,
+        link_text: cu.link_text,
+        email_placeholder: cu.email_placeholder,
+        name_placeholder: cu.name_placeholder,
+        contact_list_id: cu.contact_list_id,
+        download_link: cu.content_upgrade_download_link      }
+      cu_json[cu.id] = content
+    end
+    cu_json.to_json
+  end
+
+  def content_upgrades_styles_json
+    site.get_content_upgrade_styles.to_json
+  end
+
   def site_write_key
     site.write_key
   end
@@ -138,6 +162,16 @@ class ScriptGenerator < Mustache
         ActiveSupport.escape_html_entities_in_json = true
         r << {name: f.split(".html").first.split("/").last, markup: content}
       end
+    end
+  end
+
+  def content_upgrade_template
+    [].tap do |r|
+      f = "#{Rails.root}/lib/script_generator/contentupgrade/contentupgrade.html"
+      ActiveSupport.escape_html_entities_in_json = false
+      content = File.read(f).to_json
+      ActiveSupport.escape_html_entities_in_json = true
+      r << {name: f.split(".html").first.split("/").last, markup: content}
     end
   end
 

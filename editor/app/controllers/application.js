@@ -341,8 +341,6 @@ export default Ember.Controller.extend({
     return currentTheme ? currentTheme.type === 'template' : false;
   }.property('currentTheme'),
 
-
-
   onCurrentThemeChanged: (function () {
     if (this.get('currentThemeIsTemplate')) {
       this.set('model.element_subtype', 'email');
@@ -358,6 +356,27 @@ export default Ember.Controller.extend({
     }
   }).observes('model.theme_id'),
 
+  isTopBarStyle: function() {
+    return this.get('model.type') === 'Bar';
+  }.property('model.type'),
+
+  isNotTopBarStyle: function() {
+    return this.get('model.type') !== 'Bar';
+  }.property('model.type'),
+
+  _checkMobileProperty() {
+    const elementType = this.get('model.type');
+    const currentTheme = this.get('currentTheme');
+    const elementSubtype = this.get('model.element_subtype');
+    const isMobile = this.get('isMobile');
+    if (elementType !== 'Bar' && currentTheme.type === 'generic' && elementSubtype !== 'call' && isMobile) {
+      this.toggleProperty('isMobile');
+    }
+    if (elementSubtype === 'call' && !isMobile) {
+      this.toggleProperty('isMobile');
+    }
+  },
+
   previousElementType: null,
 
   onElementTypeChanged: function () {
@@ -370,8 +389,17 @@ export default Ember.Controller.extend({
       }
     }
     this.set('previousElementType', elementType);
+    this._checkMobileProperty();
   }.observes('model.type'),
 
+
+  onElementSubtypeChanged: function() {
+    this._checkMobileProperty();
+    const elementSubtype = this.get('model.element_subtype');
+    if (elementSubtype === 'call') {
+      this.set('model.type', 'Bar');
+    }
+  }.observes('model.element_subtype'),
 
   updateProFeature: ( function () {
     const isBranded = this.get('model.show_branding');
@@ -397,6 +425,10 @@ export default Ember.Controller.extend({
     }).open();
   },
 
+  shouldShowMobileDesktopSwitch: function() {
+    return this.get('isTopBarStyle') && !this.get('isCallType');
+  }.property('isTopBarStyle', 'isCallType'),
+
   //-----------  Actions  -----------#
 
   actions: {
@@ -407,9 +439,7 @@ export default Ember.Controller.extend({
     },
 
     toggleMobile() {
-      if (this.get("model.element_subtype") !== "call") {
-        this.toggleProperty('isMobile');
-      }
+      this.toggleProperty('isMobile');
       return false;
     },
 

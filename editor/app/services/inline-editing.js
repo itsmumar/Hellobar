@@ -86,10 +86,11 @@ class SimpleModelAdapter {
       }
       if (fieldToChange) {
         fieldToChange.label = content;
-        this.modelHandler.notifyPropertyChange('model.settings.fields_to_collect');
-        if (this.service.fieldChangeListeners) {
-          return this.service.fieldChangeListeners.forEach(listener => listener(fieldToChange, content));
-        }
+        this.service.get('bus').trigger('hellobar.core.fields.changed', {
+          fields: fields,
+          changedField: fieldToChange,
+          content: content
+        });
       }
     } else {
       switch (blockId) {
@@ -222,12 +223,13 @@ class InlineImageManagementPane {
 
 export default Ember.Service.extend({
 
+  bus: Ember.inject.service(),
+
   modelHandler: null,
   simpleModelAdapter: null,
   blockBasedModelAdapter: null,
   customHtmlModelAdapter: null,
 
-  fieldChangeListeners: [],
   customHtmlChangeListeners: [],
 
   $currentFroalaInstances: null,
@@ -285,10 +287,6 @@ export default Ember.Service.extend({
       this.blockBasedModelAdapter = null;
       this.customHtmlModelAdapter = null;
     }
-  },
-
-  addFieldChangeListener(listener) {
-    this.fieldChangeListeners.push(listener);
   },
 
   addCustomHtmlChangeListener(listener) {

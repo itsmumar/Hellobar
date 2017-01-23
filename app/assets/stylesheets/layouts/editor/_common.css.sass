@@ -93,31 +93,6 @@
           .caption
             bottom: 1.2em
 
-
-      .hover-tip
-        top: 28%
-        left: 100%
-        opacity: 0
-        color: $white
-        font-size: 0.7em
-        line-height: 2.2em
-        position: absolute
-        white-space: nowrap
-        pointer-events: none
-        border-radius: $radiusSm
-        background: $grayDarker
-        font-weight: $fontWeightBold
-        padding: 0.2em 1.33em 0.25em 0.75em
-        @include left-arrow(0.67em, $grayDarker)
-        @include transition(0.5s)
-        @include antialiased()
-
-      &:hover
-
-        a:not(.active) ~ .hover-tip
-          left: 133%
-          opacity: 1
-
     .step-links
       padding: 3em 0
 

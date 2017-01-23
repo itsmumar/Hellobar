@@ -1,0 +1,6 @@
+<h2>New Content Upgrade</h2>
+
+
+<%= form_for(@content_upgrade, :url => site_content_upgrades_path(@site.id), :html => {:class => '', :method => :post }) do |form| %>
+  <%= render :partial => 'form', :locals => {:form => form } %>
+<% end %>

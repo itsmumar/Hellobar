@@ -18,6 +18,11 @@ class Site < ActiveRecord::Base
   has_many :bills, -> {order 'id'}, through: :subscriptions
   has_many :image_uploads, dependent: :destroy
 
+  scope :protocol_ignored_url, ->(url) {
+    host = normalize_url(url).normalized_host if url.include?('http')
+    where("sites.url = ? OR sites.url = ?", "https://#{host}", "http://#{host}")
+  }
+
   acts_as_paranoid
 
   before_validation :standardize_url
@@ -237,16 +242,20 @@ class Site < ActiveRecord::Base
 
   def url_exists?(user=nil)
     if user
-      Site.joins(:users).where(url: url, users: {id: user.id}).where.not(id: id).any?
+      Site.joins(:users)
+      .merge(Site.protocol_ignored_url(self.url))
+      .where(users: {id: user.id})
+      .where.not(id: id)
+      .any?
     else
-      Site.where(url: url).where.not(id: id).any?
+      Site.where.not(id: id).merge(Site.protocol_ignored_url(self.url)).any?
     end
   end
 
   def url_is_unique?
     if users.
       joins(:sites).
-      where(sites: {url: url}).
+      merge(Site.protocol_ignored_url(self.url)).
       where.not(sites: {id: id}).
       any?
 
@@ -368,6 +377,29 @@ class Site < ActiveRecord::Base
     self.class.normalize_url(url).normalized_host || url
   rescue Addressable::URI::InvalidURIError
     url
+  end
+
+  def get_settings
+    begin
+      JSON.parse(settings)
+    rescue
+      return {}
+    end
+  end
+
+  def update_content_upgrade_styles!(style_params)
+    site_settings = get_settings
+    site_settings['content_upgrade'] = style_params
+
+    self.update_attribute(:settings, site_settings.to_json)
+  end
+
+  def get_content_upgrade_styles
+   begin
+     return JSON.parse(settings)['content_upgrade']
+   rescue
+     return {}
+   end
   end
 
   private
@@ -515,4 +547,6 @@ class Site < ActiveRecord::Base
   def set_branding_on_site_elements
     site_elements.update_all(show_branding: !capabilities(true).remove_branding?)
   end
+
+
 end

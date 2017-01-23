@@ -35,6 +35,7 @@ unless defined?(Hellobar::Settings)
     recaptcha_private_key
     recaptcha_public_key
     s3_bucket
+    s3_content_upgrades_bucket
     script_cdn_url
     sendgrid_password
     sentry_dsn
