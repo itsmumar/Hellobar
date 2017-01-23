@@ -638,6 +638,10 @@ body .fr-popup .fr-color-set .fr-command > span.fr-sr-only {
   display: inline-block;
 }
 
+span.fr-selected-color {
+  display: none;
+}
+
 /*-----------  Froala Content Styles  -----------*/
 a.fr-strong {
   font-weight: 700;
