@@ -1,0 +1,112 @@
+<script type="text/javascript">
+
+  $(function () {
+
+    $("input").on("change",function(){
+        load_styles();
+    });
+
+    $("select").on("change",function(){
+        load_styles();
+    });
+
+    function load_styles(){
+        $(".hb-cu-offer").css("background-color",$("#offer-background-color").val());
+        $(".hb-cu-offer").css("color",$("#offer-text-color").val());
+        $(".hb-cu-offer a").css("color",$("#offer-link-color").val());
+        $(".hb-cu-modal .cta").css("background-color",$("#modal-button-color").val());
+        $(".hb-cu-offer").css("border-color",$("#offer-border-color").val());
+        $(".hb-cu-offer").css("border-style",$("#offer-border-style").val());
+        $(".hb-cu-offer").css("border-width",$("#offer-border-width").val());
+        $(".hb-cu-offer").css("border-radius",$("#offer-border-radius").val());
+    }
+
+    load_styles();
+
+    $('.hb-cu-modal').show();
+  });
+
+</script>
+
+
+<h2>Style Editor</h2>
+
+<%= form_tag update_styles_site_content_upgrades_path(@site.id), method: "post" do %>
+  <div class="content-upgrade-form">
+
+    <div class="columns">
+      <div class="form-column">
+
+
+        <div class="field-wrapper">
+          <label for="offer-background-color">Offer Background Color</label>
+          <input name="offer_bg_color" id="offer-background-color" type="color" class="style-input js-color-picker-field color-picker-field"
+                 value="<%= @styles['offer_bg_color'] || '#ffffb6' %>" >
+        </div>
+
+        <div class="field-wrapper">
+          <label for="offer-text-color">Offer Text Color</label>
+          <input  name="offer_text_color"  id="offer-text-color" type="color" class="js-color-picker-field color-picker-field"
+                 value="<%= @styles['offer_text_color'] || '#666' %>" class="style-input">
+        </div>
+
+        <div class="field-wrapper">
+          <label for="offer-link-color">Offer Link Color</label>
+          <input  name="offer_link_color"  id="offer-link-color" type="color" class="style-input js-color-picker-field color-picker-field" value="<%= @styles['offer_link_color'] || '#1285dd' %>" >
+        </div>
+
+        <div class="field-wrapper">
+          <label for="offer-border-color">Offer Border Color</label>
+          <input name="offer_border_color" id="offer-border-color" type="color" class="style-input js-color-picker-field color-picker-field"
+                 value="<%= @styles['offer_border_color'] || '#fff' %>"data-property="offerBorderColor" data-styles="offer">
+        </div>
+
+        <div class="select-wrapper">
+          <label for="offer-border-width">Offer Border Thickness</label>
+          <select  name="offer_border_width" id="offer-border-width" class="style-input">
+            <% (0..20).each do |n| %>
+            <option value="<%=n%>px" <% if @styles['offer_border_width'] && @styles['offer_border_width'] == n.to_s+'px' %>selected="selected"<% end %>><%=n%>px</option>
+            <% end %>
+          </select>
+        </div>
+
+
+        <div class="select-wrapper">
+          <label for="offer-border-style">Offer Border Style</label>
+          <select  name="offer_border_style" id="offer-border-style" class="style-input">
+            <% ['solid', 'dotted', 'dashed', 'double'].each do |style| %>
+            <option value="<%=style%>" <% if @styles['offer_border_style'] && @styles['offer_border_style'] == style %>selected="selected"<% end %>><%=style%></option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <label for="offer-border-radius">Offer Border Radius</label>
+          <select name="offer_border_radius" id="offer-border-radius" class="style-input">
+            <% (0..20).each do |n| %>
+            <option value="<%=n%>px" <% if @styles['offer_border_radius'] && @styles['offer_border_radius'] == n.to_s+'px' %>selected="selected"<% end %>><%=n%>px</option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="field-wrapper">
+          <label for="modal-button-color">Modal Button Color</label>
+          <input name="modal_button_color" id="modal-button-color" type="color" class="style-input js-color-picker-field color-picker-field" value="<%= @styles['modal_button_color'] || '#1285dd' %>">
+        </div>
+
+      </div>
+
+      <div class="preview-column" style="max-width:900px;">
+        <%= render :partial => 'preview' %>
+      </div>
+
+    </div>
+
+    <div class="buttons">
+      <input type="submit" class="save" value="Save">
+      <%= link_to('List', site_content_upgrades_path(@site.id), :class => "list") %>
+    </div>
+
+  </div>
+
+<% end %>

@@ -76,6 +76,9 @@ export default Ember.Controller.extend({
     return this._shouldShowThemeInfoForElementType('Custom');
   }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
 
+  onlyTopBarStyleIsAvailable: Ember.computed.equal('model.element_subtype', 'call'),
+  notOnlyTopBarStyleIsAvailable: Ember.computed.not('onlyTopBarStyleIsAvailable'),
+
   elementTypeSelectionInProgress: false,
   userSelectedElementTypeExplicitly: false,
   seeingElementFirstTime: true,
@@ -92,7 +95,7 @@ export default Ember.Controller.extend({
         case 'Modal':
           return 'style.modal';
         case 'Bar':
-          return (!this.userSelectedElementTypeExplicitly && !elementId) ? null : 'style.bar';
+          return (!this.userSelectedElementTypeExplicitly && !elementId && this.get('notOnlyTopBarStyleIsAvailable')) ? null : 'style.bar';
         default:
           return null;
       }

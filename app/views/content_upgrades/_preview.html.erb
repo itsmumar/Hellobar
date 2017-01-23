@@ -1,0 +1,220 @@
+<style type="text/css">
+  html .hb-cu-offer, body .hb-cu-offer{
+    text-align: center;
+    padding: 2em;
+    font-weight: 600;
+    font-size: 1em;
+    margin: 0;
+	  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+	  vertical-align:  middle;
+    line-height: 1;
+  }
+
+
+  body .hb-cu-offer a, html .hb-cu-offer a{
+    text-decoration: none;
+  }
+
+  body .hb-cu-offer a:hover, html .hb-cu-offer a:hover{
+    text-decoration: underline;
+  }
+
+.hb-cu-modal {
+  left: 0
+  top: -100%
+  width: 100%
+  height: 100%
+  z-index: 900000
+  position: fixed
+  overflow-x: auto
+  overflow-y: scroll
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  padding: 20px;
+  background-color: #404157;
+  text-align: center;
+  font-size: 13px;
+  background-color: #fefefe;
+  margin: auto;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #efefef;
+  max-width: 670px;
+  display: none;
+}
+
+.hb-cu-modal .progress {
+  padding: 5px;
+  padding-top: 10px;
+  margin: auto;
+  width: 95%;
+}
+
+.hb-cu-modal .progress img{
+  width: 100%;
+}
+
+.hb-cu-modal .caption {
+  margin: auto;
+  color: #000;
+  border-bottom: solid 1px #ccc;
+  font-size: 10pt;
+  padding: 8px 0;
+  width: 85%;
+  max-width:520px;
+}
+.hb-cu-modal .headline {
+  font-size: 18pt;
+  letter-spacing: 0em;
+  color: #333;
+  font-size: 18pt;
+  font-weight: 700;
+  padding: 30px;
+  max-width: 500px;
+  margin: auto;
+}
+
+.hb-cu-modal .form {
+  padding: 0 30px;
+}
+
+.hb-cu-modal input {
+  padding: 13px;
+  width: 100%;
+  max-width: 450px;
+  margin: auto;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  color: #201D1D;
+  background: white;
+  border: 1pt solid #C9D7DD;
+  display: block;
+}
+
+.hb-cu-modal .cta {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #1285dd;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  padding: 20px;
+  font-size: 18px;
+  max-width: 450px;
+  margin-top:5px;
+}
+
+.hb-cu-modal .spam-disclaimer {
+  margin-top: 8px;
+  color: #9c9c9d;
+  font-size: 14px;
+}
+.hb-cu-modal-container {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 900000; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+#hb-cu-close-button {
+  margin-top: -16px;
+  margin-right: -16px;
+  display: inline-block;
+  font-size: 18pt;
+  float: right;
+  width: 20pt;
+  height: 20pt;
+  color: #ccc;
+  padding-left: 1px;
+  line-height: 18pt;
+  text-decoration: none;
+  cursor: pointer;
+  background: #fff;
+  border: 2pt solid white;
+  -webkit-border-radius: 18pt;
+  -moz-border-radius: 18pt;
+  border-radius: 18pt;
+}
+</style>
+
+
+<script type="text/javascript">
+
+  $(function () {
+
+    $("input, textarea").on("keyup",function(){
+        loadContent();
+        //this helps the link stay good when edited
+        loadStyles();
+    });
+
+
+    function loadContent() {
+        $('.hb-cu-offer').html(parseHeadline($('#input-offer-headline').val()));
+        $('.hb-cu-modal .caption').text($('#input-caption').val());
+        $('.hb-cu-modal .headline').text($('#input-headline').val());
+        $('.hb-cu-modal .name').attr("placeholder", $('#input-name-placeholder').val());
+        $('.hb-cu-modal .email').attr("placeholder", $('#input-email-placeholder').val());
+        $('.hb-cu-modal .cta').text($('#input-button-text').val());
+        $('.hb-cu-modal .spam-disclaimer').text($('#input-spam-disclaimer').val());
+    }
+
+    function parseHeadline(rawHeadline) {
+        var s = $('<div></div>').text(rawHeadline).html();
+        s = rawHeadline.replace(/{{/g, '<a href="javascript:void(0)">');
+        s = s.replace(/}}/g, '</a>');
+        return s;
+    }
+
+
+    <% if @content_upgrade %>
+      //go ahead and load default content
+      loadContent();
+    <% end %>
+
+    <% if @styles %>
+      function loadStyles() {
+        $(".hb-cu-offer").css("background-color", "<%= @styles['offer_bg_color'] %>");
+        $(".hb-cu-offer").css("color","<%= @styles['offer_text_color'] %>");
+        $(".hb-cu-offer a").css("color","<%= @styles['offer_link_color'] %>");
+        $(".hb-cu-modal .cta").css("background-color","<%= @styles['modal_button_color'] %>");
+        $(".hb-cu-offer").css("border-color","<%= @styles['offer_border_color'] %>");
+        $(".hb-cu-offer").css("border-style","<%= @styles['offer_border_style'] %>");
+        $(".hb-cu-offer").css("border-width","<%= @styles['offer_border_width'] %>");
+        $(".hb-cu-offer").css("border-radius","<%= @styles['offer_border_radius'] %>");
+      }
+      loadStyles();
+    <% end %>
+
+    $('.hb-cu-modal').show();
+
+  });
+</script>
+
+
+<p id="hb-cu-offer" class="hb-cu-offer">Want more related content? <a href="#">Get instant access</a> now.</p>
+
+<div id="hb-cu-offer-preview" style="background-color:#eee; padding:50px;">
+  <div class="hb-cu-modal hb-cu-modal" >
+    <div>
+      <a id="hb-cu-close-button" href="">×</a>
+    </div>
+    <div class="progress"><img src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif"></div>
+    <div class="caption">Almost there! Please complete this form and click the button below to gain instant access.</div>
+    <div class="headline">Enter your details to download this how to guide to create content that people will bookmark and remember!</div>
+    <div class="form">
+      <input class="name" placeholder="First Name">
+      <input class="email" placeholder="Email">
+      <div id="modal-button" class="cta">Download Now</div>
+    </div>
+    <div class="spam-disclaimer">We hate SPAM and promise to keep your email address safe.</div>
+  </div>
+</div>

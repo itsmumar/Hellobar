@@ -1,8 +1,0 @@
-{{#power-select options=options
-  selected=calculatedSelectedOption
-  renderInPlace=true
-  searchEnabled=false
-  onchange=(action "selectOption") as |option|}}
-  {{option.label}}
-  {{#if option.isPro}}<span class="pro-tag">PRO</span>{{/if}}
-{{/power-select}}

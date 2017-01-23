@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161221033100) do
+ActiveRecord::Schema.define(version: 20170111034928) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -329,6 +329,10 @@ ActiveRecord::Schema.define(version: 20161221033100) do
     t.text     "custom_html"
     t.text     "custom_css"
     t.text     "custom_js"
+    t.string   "offer_headline"
+    t.string   "offer_text"
+    t.string   "disclaimer"
+    t.text     "content"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
@@ -364,6 +368,7 @@ ActiveRecord::Schema.define(version: 20161221033100) do
     t.string   "install_type"
     t.text     "invoice_information"
     t.datetime "selected_goal_clicked_at"
+    t.text     "settings"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree

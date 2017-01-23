@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :user_state, only: :show
   end
 
+
   devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords"}
 
   devise_scope :user do
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
 
     get "team"
 
+
     post :track_selected_goal, to: "tracking#track_selected_goal"
 
     resource :wordpress_plugin, :controller => :wordpress_plugin
@@ -45,6 +47,13 @@ Rails.application.routes.draw do
     resources :site_elements
     get "site_elements/:id/edit/*path", to: "site_elements#edit"
     get "site_elements/new/*path", to: "site_elements#new"
+
+    resources :content_upgrades do
+      collection do
+        get :style_editor
+        post :update_styles
+      end
+    end
 
     resources :image_uploads, only: [:create]
 

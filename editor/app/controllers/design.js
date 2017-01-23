@@ -203,6 +203,9 @@ export default Ember.Controller.extend({
     }
   }).observes('model').on('init'),
 
+  //--------- Thank you editor support -----
+  shouldShowThankYouEditor: Ember.computed.equal('model.element_subtype', 'email'),
+
   actions: {
 
     selectTheme(theme) {
