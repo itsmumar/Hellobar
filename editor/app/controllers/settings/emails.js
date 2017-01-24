@@ -21,6 +21,17 @@ export default Ember.Controller.extend({
     return _.find(contactLists, (contactList) => contactList.id === contactListId);
   }.property('model.contact_list_id', 'model.site.contact_lists'),
 
+  onElementTypeChange: function () {
+    if (this.get('model.type') === 'Bar') {
+      const fields = Ember.copy(this.get('model.settings.fields_to_collect'));
+      _.each(fields, (field) => {
+        if (field && field.type && field.type.indexOf('builtin-') !== 0) {
+          field.is_enabled = false;
+        }
+      });
+      this.set('model.settings.fields_to_collect', fields);
+    }
+  }.observes('model.type'),
 
 //-----------  Actions  -----------#
 

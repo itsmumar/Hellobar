@@ -77,18 +77,6 @@ export default Ember.Component.extend({
     }
   },
 
-  onElementTypeChange: function () {
-    if (this.get('isBarType')) {
-      const fields = Ember.copy(this.get('model.settings.fields_to_collect'));
-      _.each(fields, (field) => {
-        if (field && field.type && field.type.indexOf('builtin-') !== 0) {
-          field.is_enabled = false;
-        }
-      });
-      this.set('model.settings.fields_to_collect', fields);
-    }
-  }.observes('model.type'),
-
   preparedFieldDescriptors: function () {
     return _.map(this.get('model.settings.fields_to_collect'), field => ({
       field: {
