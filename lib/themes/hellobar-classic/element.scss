@@ -14,4 +14,12 @@
       margin-bottom: 12px;
     }
   }
+
+  #hellobar-slider {
+    &.show-branding.image-bottom, &.show-branding.image-right {
+      .slider-content {
+        padding-bottom: 38px;
+      }
+    }
+  }
 }
