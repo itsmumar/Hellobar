@@ -404,3 +404,17 @@ describe ContactList, '#needs_to_reconfigure?' do
     expect(list.needs_to_reconfigure?).to eql(true)
   end
 end
+
+describe ContactList, "#tags" do
+  it "returns an empty array when no tags have been saved" do
+    contact_list = ContactList.new
+
+    expect(contact_list.tags).to eql([])
+  end
+
+  it "returns the tags that have been already saved" do
+    contact_list = ContactList.new data: { "tags" => %w{ 1 2 3 } }
+
+    expect(contact_list.tags).to eql(%w{ 1 2 3 })
+  end
+end

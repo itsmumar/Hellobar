@@ -1,0 +1,98 @@
+.field-list
+  .multiselect-wrapper
+    .item-block
+      font-weight: normal
+      padding: 0.5em 4.9em 0.5em 0.67em
+      @extend %outlined-block
+
+      &[data-field-type=builtin-email]
+        .buttons
+          a.select-button
+            cursor: default
+
+      &.denied
+        cursor: default
+        color: #c3c3c3 !important
+        border-color: #c3c3c3 !important
+        outline: none
+
+      &.add
+        color: #54d388
+        border-top-color: #54d388
+        border-style: dotted
+        text-decoration: underline
+
+
+      &.new-item-prototype
+        padding-right: 0.67em
+        input
+          margin: 0
+          padding: 0
+          border: none
+          font-size: 15px
+
+      i::before
+        bottom: -2px
+        position: relative
+
+      .buttons
+        right: 1rem
+        position: absolute
+        font-size: 1.25rem
+        font-weight: lighter
+        @include transition()
+        @include vertical-align()
+
+        a
+          text-decoration: none
+          &.select-button
+            display: none
+            i
+              font-size: 105%
+              color: #c6c6c6
+              &::after
+                display: none
+          &.remove-button
+            display: none
+            i
+              top: -2px
+              font-size: 75%
+              color: #c6c6c6
+              &::after
+                display: none
+
+      &.is-selected
+        .buttons
+          a.select-button
+            display: inline
+            i
+              color: #54d388
+              &::before
+                font-weight: 700
+      &:hover
+        .buttons
+          a.select-button
+            display: inline
+          a.remove-button
+            display: inline
+
+      & + .item-block
+        margin-top: 0.33rem
+
+        i
+          position: relative
+
+          &::after
+            right: 1px
+            bottom: 0
+            content: '+'
+            line-height: 0
+            font-size: 0.67rem
+            position: absolute
+            border-radius: 10em
+            background-color: $white
+            border: 1px solid $green
+            padding: 4px 1px 3px 1px
+
+          &::after
+            border: 1px solid #666
