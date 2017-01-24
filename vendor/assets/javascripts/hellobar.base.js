@@ -599,7 +599,6 @@ var HB = {
       function () {
         var doRedirect = HB.t(redirect);
         var removeElements;
-        console.log(siteElement);
         if (siteElement.type == 'ContentUpgrade') {
           var siteElementDoc = document.getElementById('hb-cu-modal-'+siteElement.id);
         } else {

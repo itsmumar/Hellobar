@@ -1,58 +1,8 @@
 <div class="substep emails">
 
   {{#if currentThemeIsGeneric}}
-
-    <label>Choose input fields</label>
-
-    <div class="multiselect-wrapper js-fields-to-collect">
-      {{#each preparedFieldDescriptors as |descriptor| }}
-        {{#if descriptor.denied}}
-          <div class="item-block denied">
-            <span>{{ descriptor.field.label }}</span>
-          </div>
-        {{else}}
-          <div class="item-block {{if descriptor.field.is_enabled 'is-selected'}}"
-               data-field-type={{descriptor.field.type}}>
-            <span>{{ descriptor.field.label }}</span>
-          <span class="buttons">
-              {{#if descriptor.removable }}
-                <a href="javascript:void(0)" class="remove-button" {{action 'removeFieldToCollect' descriptor.field}}>
-                  <i class="icon-close"></i>
-                </a>
-              {{/if}}
-            <a href="javascript:void(0)" class="select-button" {{action 'toggleFieldToCollect' descriptor.field}}>
-              <i class="hellobar-icon-check-mark"></i>
-            </a>
-          </span>
-          </div>
-        {{/if}}
-      {{/each}}
-    </div>
-
-    <div class="multiselect-wrapper">
-      {{#if newFieldToCollect}}
-        <div class="item-block new-item-prototype">
-          {{input type="text" placeholder="Input field name and hit Enter"
-          value=newFieldToCollect.label
-          autofocus="autofocus" style=""
-          insert-newline="onNewFieldToCollectEnterPressed"
-          escape-press="onNewFieldToCollectEscapePressed"}}
-        </div>
-      {{else}}
-        <div class="{{addFieldCssClasses}}" {{action 'addFieldToCollect'}}>
-          Add field
-        </div>
-      {{/if}}
-    </div>
-
-    {{#if isBarType}}
-      <div class="hint">
-        In order to add custom fields please select Modal, Slider or Takeover type on Style tab.
-      </div>
-    {{/if}}
-
+    {{fields/field-list model=model}}
   {{/if}}
-
 
   <label>Choose your contact list and integration</label>
   {{selection/contact-list-select
