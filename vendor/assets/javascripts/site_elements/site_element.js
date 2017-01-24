@@ -649,12 +649,12 @@ HB.SiteElement = HB.createClass({
 
   useFroala: function () {
     this.addCss('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css');
-    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_editor.min.css');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/froala_editor.min.css');
     //removeing this and cherry picking styles in common.css
-    //this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/froala_style.css');
-    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/colors.min.css');
-    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/emoticons.css');
-    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.3.5/css/plugins/image.min.css');
+    //this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/froala_style.css');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/plugins/colors.min.css');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/plugins/emoticons.css');
+    this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/plugins/image.min.css');
   },
 
   brightnessClass: function () {

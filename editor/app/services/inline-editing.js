@@ -20,7 +20,7 @@ class SimpleModelAdapter {
 
   trackElementTypeChange(newElementType) {
     if (this.lastElementType && this.lastElementType !== 'Bar' && newElementType === 'Bar') {
-      let headline = this.modelHandler.get('model.headline');
+      const headline = this.modelHandler.get('model.headline');
       this.fullFeaturedHeadlineBackup = headline;
       this.shortenedHeadline = this.purgeHtmlMarkup(headline).substring(0, 60);
       this.modelHandler.set('model.headline', this.shortenedHeadline);
@@ -41,7 +41,7 @@ class SimpleModelAdapter {
     htmlFragment = htmlFragment || '';
     htmlFragment = htmlFragment.replace(/\<\/p\>/g, '</p> ');
     htmlFragment = htmlFragment.replace(/\<\/li\>/g, '</li> ');
-    let text = $(`<div>${htmlFragment}</div>`).text();
+    const text = $(`<div>${htmlFragment}</div>`).text();
     if (text) {
       return text.replace(/\s+/g, ' ');
     } else {
@@ -76,14 +76,11 @@ class SimpleModelAdapter {
   handleContentChange(blockId, content) {
     content = this.preprocessContent(content);
     if (blockId && blockId.indexOf('f-') === 0) {
-      let fields = this.modelHandler.get('model.settings.fields_to_collect');
-      let fieldIdToChange = blockId.substring(2);
-      let fieldToChange = null;
-      if (blockId === 'f-builtin-email') {
-        fieldToChange = _.find(fields, f => f.type === 'builtin-email');
-      } else {
-        fieldToChange = _.find(fields, f => f.id === fieldIdToChange);
-      }
+      const fields = this.modelHandler.get('model.settings.fields_to_collect');
+      const fieldIdToChange = blockId.substring(2);
+      const fieldToChange = (blockId === 'f-builtin-email') ?
+        _.find(fields, f => f.type === 'builtin-email') :
+        _.find(fields, f => f.id === fieldIdToChange);
       if (fieldToChange) {
         fieldToChange.label = content;
         this.service.get('bus').trigger('hellobar.core.fields.changed', {
@@ -179,10 +176,10 @@ class InlineImageManagementPane {
     $('<a href="javascript:void(0)" data-action="add-image"><i class="fa fa-image"></i><span>add image</span></a>').appendTo(this.$pane);
     $('<a href="javascript:void(0)" data-action="edit-image"><i class="fa fa-image"></i><span>edit image</span></a>').appendTo(this.$pane);
     $('<div class="image-holder hb-editable-block hb-editable-block-image hb-editable-block-image-without-placement"><img class="image" src=""></div>').appendTo(this.$pane);
-    let $container = $iframeBody.find('.js-hellobar-element');
+    const $container = $iframeBody.find('.js-hellobar-element');
     $container.append(this.$pane);
     this.$pane.on('click', '[data-action]', evt => {
-      let action = $(evt.currentTarget).attr('data-action');
+      const action = $(evt.currentTarget).attr('data-action');
       switch (action) {
         case 'add-image':
           return this.addImage();
@@ -193,11 +190,11 @@ class InlineImageManagementPane {
   }
 
   addImage() {
-    let editor = this.$pane.find('.image-holder').data('froala.editor');
-    let imageHolder = this.$pane.find('.image-holder')[0];
-    let image = this.$pane.find('.image-holder .image')[0];
+    const editor = this.$pane.find('.image-holder').data('froala.editor');
+    const imageHolder = this.$pane.find('.image-holder')[0];
+    const image = this.$pane.find('.image-holder .image')[0];
     if (editor && imageHolder && image) {
-      let r = imageHolder.getBoundingClientRect();
+      const r = imageHolder.getBoundingClientRect();
       editor.selection.setAtStart(image);
       editor.selection.setAtEnd(image);
       editor.image.showInsertPopup();
@@ -206,18 +203,18 @@ class InlineImageManagementPane {
   }
 
   editImage() {
-    let image = this.$pane.find('.image-holder .image')[0];
+    const image = this.$pane.find('.image-holder .image')[0];
     if (image) {
       let event = document.createEvent('Events');
       event.initEvent('click', true, false);
-      return image.dispatchEvent(event);
+      image.dispatchEvent(event);
     }
   }
 
 
   destroy() {
     this.$pane.off('click');
-    return this.$pane.remove();
+    this.$pane.remove();
   }
 }
 
@@ -242,7 +239,7 @@ export default Ember.Service.extend({
   },
 
   customizeFroala() {
-    let that = this;
+    const that = this;
     $.FroalaEditor.DefineIcon('imageReplace', {NAME: 'image'});
     $.FroalaEditor.DefineIcon('imagePosition', {NAME: 'align-justify'});
     $.FroalaEditor.RegisterCommand('imagePosition', {
@@ -260,7 +257,7 @@ export default Ember.Service.extend({
         'below-caption': 'Below Caption'
       },
       callback(cmd, val) {
-        return that.simpleModelAdapter.handleImagePlacementChange(val);
+        that.simpleModelAdapter.handleImagePlacementChange(val);
       }
     });
     $.FroalaEditor.DefineIcon('imageRemoveCustom', {NAME: 'trash'});
@@ -271,7 +268,7 @@ export default Ember.Service.extend({
       focus: false,
       refreshAfterCallback: false,
       callback() {
-        return that.simpleModelAdapter.handleImageRemoval();
+        that.simpleModelAdapter.handleImageRemoval();
       }
     });
   },
@@ -297,12 +294,12 @@ export default Ember.Service.extend({
     this.cleanup();
     this.simpleModelAdapter && this.simpleModelAdapter.trackElementTypeChange(elementType);
     return setTimeout(() => {
-      let $iframe = $('#hellobar-preview-container > iframe');
+      const $iframe = $('#hellobar-preview-container > iframe');
       if ($iframe.length > 0) {
-        let $iframeBody = $($iframe[0].contentDocument.body);
+        const $iframeBody = $($iframe[0].contentDocument.body);
         if ($iframeBody.length > 0) {
           return $($iframe[0].contentDocument).ready(() => {
-              let hasImage = this.simpleModelAdapter ? !!this.simpleModelAdapter.activeImageId() : false;
+              const hasImage = this.simpleModelAdapter ? !!this.simpleModelAdapter.activeImageId() : false;
               // NOTE So far we don't use InlineImageManagementPane, we need to make final desicion later
               //@instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage)
               this.instantiateFroala($iframe, $iframeBody, elementType);
@@ -439,7 +436,8 @@ export default Ember.Service.extend({
     });
 
     const $allFroala = $($textFroala).add($imageFroala);
-    this.$currentFroalaInstances = $allFroala;
+    this.$currentFroalaInstances = this.$currentFroalaInstances || $();
+    this.$currentFroalaInstances.add($allFroala);
 
     return $textFroala.each(function () {
       const $editableElement = $(this);
@@ -457,10 +455,10 @@ export default Ember.Service.extend({
   initializeInputEditing($iframe, $iframeBody){
     this.cleanupInputs();
     return $('.hb-editable-block-input input', $iframeBody).blur(evt => {
-        let $target = $(evt.currentTarget);
-        let blockId = $target.closest('[data-hb-editable-block]').attr('data-hb-editable-block');
-        let content = $target.val();
-        return this.handleContentChange(blockId, content);
+        const $target = $(evt.currentTarget);
+        const blockId = $target.closest('[data-hb-editable-block]').attr('data-hb-editable-block');
+        const content = $target.val();
+        this.handleContentChange(blockId, content);
       }
     );
   },
@@ -477,7 +475,9 @@ export default Ember.Service.extend({
       this.$currentFroalaInstances.off('froalaEditor.blur');
       this.$currentFroalaInstances.off('froalaEditor.image.uploaded');
       this.$currentFroalaInstances.off('froalaEditor.destroy');
-      return this.$currentFroalaInstances.froalaEditor('destroy');
+      this.$currentFroalaInstances.froalaEditor('destroy');
+      this.$currentFroalaInstances.remove();
+      this.$currentFroalaInstances = $();
     }
   },
 
@@ -485,7 +485,7 @@ export default Ember.Service.extend({
   cleanup() {
     this.inlineImageManagementPane && this.inlineImageManagementPane.destroy();
     this.cleanupFroala();
-    return this.cleanupInputs();
+    this.cleanupInputs();
   },
 
 
