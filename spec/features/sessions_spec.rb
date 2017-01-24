@@ -67,18 +67,25 @@ feature "User can sign in", js: true do
 
   scenario "and sign out" do
     login
+
     find('.header-user-wrapper .dropdown-wrapper').click
     page.find(:xpath, "//a[@href='/users/sign_out']").click
+
     expect(page).to have_content('Signed out successfully')
   end
 
   scenario "user with no sites can sign out" do
-    user = login
-    user.sites.destroy_all
+    user = create :user
 
-    visit new_site_path
+    login_as user, scope: :user, run_callbacks: false
+
+    visit root_path
+
+    expect(page).to have_content 'Create A New Site'
+
     find('.header-user-wrapper .dropdown-wrapper').click
     find(:xpath, "//a[@href='/users/sign_out']").click
+
     expect(page).to have_content('Signed out successfully')
   end
 end
