@@ -217,10 +217,7 @@ export default Ember.Controller.extend({
     },
 
     eyeDropperSelected() {
-      let type = this.get('model.type');
-      if (type === 'Modal' || type === 'Takeover') {
-        this.set('focusedColor', null);
-      }
+      this.set('focusedColor', null);
       return false;
     },
 

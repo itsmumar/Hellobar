@@ -120,21 +120,23 @@ export default Ember.Component.extend({
         selector: $('.preview-image-for-colorpicker'),
         clickCallback: color => {
           this.set('color', color);
-          return this.sendAction('eyeDropperSelected');
+          this.sendAction('eyeDropperSelected');
+          this.set('isSelecting', false);
+          $('.preview-image-for-colorpicker').dropperClean();
         }
       });
     } else {
-      return $('.preview-image-for-colorpicker').dropperClean();
+      $('.preview-image-for-colorpicker').dropperClean();
     }
   }).observes('isSelecting').on('didInsertElement'),
 
   togglePreview: ( function () {
     if (this.get('isSelecting')) {
       // Hide the preview frame for Modal and Takeovers so that they can select colors
-      return $(`#${window.HB_PS}-container.HB-Takeover, #${window.HB_PS}-container.HB-Modal`).fadeOut();
+      return $(`\#${window.HB_PS}-container.HB-Takeover, \#${window.HB_PS}-container.HB-Modal`).fadeOut();
     } else {
       // Show the Modal and Takeover in case it was hidden
-      return $(`#${window.HB_PS}-container.HB-Takeover, #${window.HB_PS}-container.HB-Modal`).fadeIn();
+      return $(`\#${window.HB_PS}-container.HB-Takeover, \#${window.HB_PS}-container.HB-Modal`).fadeIn();
     }
   }).observes('isSelecting'),
 
@@ -158,7 +160,7 @@ export default Ember.Component.extend({
   actions: {
 
     toggleFocus() {
-      if (!(this.get('inFocus') && $(`#${this.get('elementId')} input:focus`).length)) {
+      if (!(this.get('inFocus') && $(`\#${this.get('elementId')} input:focus`).length)) {
         this.set('focusedColor', this.get('elementId'));
         this.set('isSelecting', false);
         return this.toggleProperty('inFocus');
