@@ -11,8 +11,8 @@
     <div class="color-preview-row">
       <small>Site colors</small>
       <ul>
-        {{#each siteColors}}
-          {{component 'selection/color-select-preview' color=this}}
+        {{#each siteColors as |color|}}
+          {{component 'selection/color-select-preview' color=color}}
         {{/each}}
       </ul>
     </div>
@@ -20,8 +20,8 @@
     <div class="color-preview-row">
       <small>Recent</small>
       <ul>
-        {{#each recentColors}}
-          {{component 'selection/color-select-preview' color=this}}
+        {{#each recentColors as |color|}}
+          {{component 'selection/color-select-preview' color=color}}
         {{/each}}
       </ul>
     </div>

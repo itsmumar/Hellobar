@@ -54,6 +54,8 @@ module.exports = function (defaults) {
   app.import('bower_components/nouislider/distribute/nouislider.js');
   app.import('bower_components/js-beautify/js/lib/beautify-html.js');
   app.import('bower_components/flexi-color-picker/colorpicker.js');
+  app.import('bower_components/imagesloaded/imagesloaded.pkgd.js');
+  app.import('bower_components/color-thief/dist/color-thief.min.js');
   app.import('vendor/dropper_trios.js');
 
   app.import('bower_components/froala-wysiwyg-editor/js/froala_editor.min.js');

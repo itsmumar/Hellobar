@@ -16,12 +16,11 @@ export default Ember.Component.extend({
   //-----------  Click Action  -----------#
 
   click(obj) {
-    let isCanvas = obj.target.localName === 'canvas';
-    let isColorSelect = $(obj.target).closest('.color-select-wrapper').length;
+    const isCanvas = obj.target.localName === 'canvas';
+    const isColorSelect = $(obj.target).closest('.color-select-wrapper').length;
 
     if (!isCanvas && !isColorSelect) {
-      // TODO improve this
-      return this.set('applicationController.focusedColor', null);
+      this.set('applicationController.focusedColor', null);
     }
   }
 

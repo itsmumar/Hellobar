@@ -11,6 +11,9 @@ export default Ember.Controller.extend({
         return this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
       }
     );
+    Ember.run.next(() => {
+      this.detectColorPalette();
+    });
   },
 
   //-----------  Template Properties  -----------#
@@ -143,22 +146,21 @@ export default Ember.Controller.extend({
 
   },
 
-  // TODO decide when we need to call this method
-  afterElementInserted() {
+  detectColorPalette() {
     function formatRGB(rgbArray) {
       rgbArray.push(1);
       return rgbArray;
     }
 
-    let colorThief = new ColorThief();
-    let image = $('.preview-image-for-colorpicker').get(0);
+    const colorThief = new ColorThief();
+    const image = $('.preview-image-for-colorpicker').get(0);
 
     return imagesLoaded(image, () => {
-        let dominantColor = formatRGB(colorThief.getColor(image));
-        let colorPalette = colorThief.getPalette(image, 4).map(color => formatRGB(color));
+        const dominantColor = formatRGB(colorThief.getColor(image));
+        const colorPalette = colorThief.getPalette(image, 4).map(color => formatRGB(color));
 
-        this.set('controller.dominantColor', dominantColor);
-        return this.set('controller.colorPalette', colorPalette);
+        this.set('applicationController.dominantColor', dominantColor);
+        this.set('applicationController.colorPalette', colorPalette);
       }
     );
   },
