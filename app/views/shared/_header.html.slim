@@ -18,13 +18,16 @@
         - if current_site.is_free?
           = content_tag 'a', 'Hello Bar PRO', class: "show-upgrade-modal", data: { source: 'Hello Bar PRO' }
         h6= current_user.sites.count <= 1 ? "Sites" : "Switch Sites"
+
         ul
           - current_user.sites.sort_by(&:normalized_url).each do |site|
             li.padded
-              =active_link_to site.normalized_url, site_path(site)
               - unless site.is_free?
                 div.pill class=site.current_subscription.values[:name]
                   = site.current_subscription.values[:name][0..2]
+
+              = active_link_to site.normalized_url, site_path(site)
+
         = button_to "Add New Site", new_site_path, :class => "button", :method => :get
 
   .header-user-wrapper
