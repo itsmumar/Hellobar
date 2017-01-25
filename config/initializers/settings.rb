@@ -111,6 +111,12 @@ unless defined?(Hellobar::Settings)
       app_secret: config[:constantcontact_app_secret],
       oauth: true
     },
+    convert_kit: {
+      type: :email,
+      name: "ConvertKit",
+      service_provider_class: "ConvertKit",
+      requires_api_key: true
+    },
     drip: {
       type: :email,
       name: 'Drip',

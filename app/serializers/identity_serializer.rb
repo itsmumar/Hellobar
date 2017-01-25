@@ -1,5 +1,5 @@
 class IdentitySerializer < ActiveModel::Serializer
-  attributes :id, :site_id, :provider, :lists, :supports_double_optin, :embed_code, :oauth,
+  attributes :id, :site_id, :provider, :lists, :tags, :supports_double_optin, :embed_code, :oauth,
              :supports_cycle_day
   # has_many :contact_lists
 
@@ -7,7 +7,13 @@ class IdentitySerializer < ActiveModel::Serializer
 
   def lists
     if service_provider.respond_to? :lists
-      service_provider.lists.map { |l| { :name => l["name"], :id => l["id"] } }
+      filter_keys(service_provider.lists)
+    end
+  end
+
+  def tags
+    if service_provider.respond_to? :tags
+      filter_keys(service_provider.tags)
     end
   end
 
@@ -25,5 +31,10 @@ class IdentitySerializer < ActiveModel::Serializer
 
   def oauth
     service_provider.oauth?
+  end
+
+  private
+  def filter_keys(arr)
+    arr.map { |a| { :name => a["name"], :id => a["id"] } }
   end
 end

@@ -210,6 +210,7 @@ class @ContactListModal extends Modal
           modal.blocks.instructions.show()
           modal.blocks.syncDetails.hide()
           modal.blocks.remoteListSelect.hide()
+          modal.blocks.tagListSelect.hide()
           modal.$modal.trigger('provider:disconnected')
         error: (response) =>
           console.log("Could not disconnect identity", response)
@@ -269,7 +270,7 @@ class @ContactListModal extends Modal
       source = $('script#tag-dropdown-template').html()
       template = Handlebars.compile(source)
       newMarkup = template(identity: @options.identity)
-      $previous = object.find(".select-wrapper:last")
+      $previous = object.find(".tag-select-block a").prev()
 
       $(newMarkup).insertAfter($previous)
 
@@ -372,7 +373,9 @@ class @ContactListModal extends Modal
 
   _loadContactList: ->
     $.get @options.loadURL, (contactList) =>
-      @options.contactList = $.extend(@options.contactList, data: contactList.data, name: contactList.name, id: contactList.id)
+      @options.contactList = $.extend(@options.contactList, data: contactList.data,
+                                      name: contactList.name, id: contactList.id,
+                                      provider: contactList.provider)
       @_setFormValues(contactList)
       @_loadRemoteLists(listData: contactList)
 
@@ -395,12 +398,14 @@ class @ContactListModal extends Modal
     option = $(select).find("option:selected")
     label = option.text()
     cycle_day = @options.contactList?.data?.cycle_day
+    originalProvider = @options.contactList?.provider
     cycle_day_enabled = cycle_day != undefined
+    hasTags = @options.contactList?.data?.hasOwnProperty('tags')
 
     defaultContext =
       provider: value
       providerName: label
-      providerNameLabel: (label + ' ' + (if label == 'Drip' then 'campaign' else 'list'))
+      isProviderConvertKit: (label == 'ConvertKit')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
@@ -412,7 +417,14 @@ class @ContactListModal extends Modal
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
       cycleDay: cycle_day || 0
-      tags: @options.contactList?.data?.tags
+      tags: if hasTags && value == originalProvider && @options.contactList?.data?.tags.length > 0
+              @options.contactList?.data?.tags
+            else
+              [null]
+      providerNameLabel: (label + ' ' + switch label
+                                          when 'Drip' then 'campaign'
+                                          when 'ConvertKit' then 'form'
+                                          else 'list')
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.hellobarOnly.show()
@@ -426,26 +438,29 @@ class @ContactListModal extends Modal
     @$modal.trigger 'load'
 
     $.get("/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
-      if data and data.lists # an identity was found for the selected provider
+      if data and (data.lists or data.tags) # an identity was found for the selected provider
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
+        @blocks.remoteListSelect.hide()
         @blocks.tagListSelect.hide()
         @$modal.trigger('provider:connected')
         @_renderBlock("syncDetails", $.extend(defaultContext, {identity: data})).show()
         @_renderBlock("instructions", defaultContext).hide()
         @options.identity = data
 
-        if data.provider == "infusionsoft"
-          infusionsoftContext = $.extend(true, {}, defaultContext, {identity: data})
-          infusionsoftContext.preparedLists = (infusionsoftContext.tags or []).map((tag) =>
-            clonedLists = $.extend(true, [], infusionsoftContext.identity.lists)
-            clonedLists.forEach((list) =>
-              list.isSelected = if String(list.id) == tag then true else false
+        if data.provider == "infusionsoft" or defaultContext.isProviderConvertKit
+          if defaultContext.isProviderConvertKit
+            @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
+          tagsContext = $.extend(true, {}, defaultContext, {identity: data})
+          tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
+            clonedTags = $.extend(true, [], tagsContext.identity.tags)
+            clonedTags.forEach((clonedTag) =>
+              clonedTag.isSelected = (String(clonedTag.id) == tag)
             )
-            { tag: tag, lists: clonedLists}
+            { tag: tag, lists: clonedTags}
           )
-          @_renderBlock("tagListSelect", infusionsoftContext, false).show()
+          @_renderBlock("tagListSelect", tagsContext, false).show()
         else
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
           $cycle_day = $('#contact_list_cycle_day')

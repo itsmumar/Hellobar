@@ -145,7 +145,7 @@ script id="contact-list-variant-modal-provider-instructions-template" type="text
   |     <label for="contact_list_api_key">API Key</label>
   |     <input type='text' class="contact_list_api_key_extended" id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}" />
   |   {{else}}
-  |     <label for="contact_list_api_key">Enter your API key from {{providerName}}</label>
+  |     <label for="contact_list_api_key">Enter your API {{#if isProviderConvertKit}}secret{{/if}} key from {{providerName}}</label>
   |     <input type='text' class="contact_list_api_key" id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}" />
   |   {{/if}}{{/if}}{{/if}}
   | {{/if}}
@@ -231,7 +231,7 @@ script id="tag-dropdown-template" type="text/x-handlebars-template"
   |   <div>
   |     <select class="contact-list-tag" name="contact_list[remote_list_id]">
   |       <option disabled selected value>Select ...</option>
-  |       {{#each identity.lists}}
+  |       {{#each identity.tags}}
   |         <option value="{{id}}">{{name}}</option>
   |       {{/each}}
   |     </select>
