@@ -114,6 +114,10 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def closable?
+      false
+    end
+
     def custom_targeted_bars?
       false
     end
@@ -241,6 +245,10 @@ class Subscription < ActiveRecord::Base
       end
 
       def remove_branding?
+        true
+      end
+
+      def closable?
         true
       end
 
