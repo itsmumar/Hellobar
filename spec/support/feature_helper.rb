@@ -38,6 +38,10 @@ module FeatureHelper
     count.times { scroll_and_click('Next', 'step-wrapper') }
   end
 
+  def submit_form
+    find('input[name="commit"]').click
+  end
+
   private
 
   def scroll_and_click(link_label, scroll_class)
