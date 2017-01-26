@@ -197,7 +197,7 @@ class Subscription < ActiveRecord::Base
   class FreePlus < Free
     class Capabilities < Free::Capabilities
       def max_site_elements
-        1.0 / 0.0 # infinity
+        Float::INFINITY
       end
     end
 
@@ -265,12 +265,13 @@ class Subscription < ActiveRecord::Base
       end
 
       def max_site_elements
-        1.0 / 0.0 # infinity
+        Float::INFINITY
       end
 
       def num_days_improve_data
         365
       end
+
       def custom_html?
         false
       end
