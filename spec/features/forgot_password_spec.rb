@@ -24,23 +24,23 @@ feature 'Forgot password', :js do
 
   scenario 'invalid token' do
     visit @reset_password_path + "invalid-characters"
-    expect(page).to have_content('Change Your Password')
-
-    fill_in 'user_password',              with: 'newpassword'
-    fill_in 'user_password_confirmation', with: 'newpassword'
-    submit_form
+    fill_form
 
     expect(page).to have_content('Reset password token is invalid')
   end
 
   scenario 'successfully reset password' do
     visit @reset_password_path
+    fill_form
+
+    expect(page).to have_content('Your password was changed successfully. You are now signed in')
+  end
+
+  def fill_form
     expect(page).to have_content('Change Your Password')
 
     fill_in 'user_password',              with: 'newpassword'
     fill_in 'user_password_confirmation', with: 'newpassword'
     submit_form
-
-    expect(page).to have_content('Your password was changed successfully. You are now signed in')
   end
 end
