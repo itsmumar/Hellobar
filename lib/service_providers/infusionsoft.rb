@@ -46,6 +46,12 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
       subscribe(nil, subscriber[:email], subscriber[:name])
     end
   end
+
+  def valid?
+    !!tags
+  rescue
+    false
+  end
 end
 
 class Router

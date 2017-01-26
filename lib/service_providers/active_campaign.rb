@@ -42,4 +42,10 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
       subscribe(list_id, subscriber[:email], subscriber[:name])
     end
   end
+
+  def valid?
+    !!lists
+  rescue
+    false
+  end
 end

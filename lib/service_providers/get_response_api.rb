@@ -28,7 +28,7 @@ module ServiceProviders
       end
     end
 
-    def lists
+    def lists(strict = false)
       found_lists = []
       begin
         response = @client.get 'campaigns', { perPage: 500 }
@@ -39,12 +39,14 @@ module ServiceProviders
         else
           error_message = JSON.parse(response.body)['codeDescription']
           log "getting lists returned '#{error_message}' with the code #{response.status}"
+          raise error_message if strict && response.status == 401
         end
 
       rescue Faraday::TimeoutError
         log "getting lists timed out"
       rescue => error
         log "getting lists raised #{error}"
+        raise error if strict && error.message == "Authorization Failed"
       end
       found_lists
     end
@@ -84,6 +86,13 @@ module ServiceProviders
       subscribers.each do |subscriber|
         subscribe(list_id, subscriber[:email], subscriber[:name])
       end
+    end
+
+    def valid?
+      lists(true)
+      true
+    rescue
+      false
     end
   end
 end

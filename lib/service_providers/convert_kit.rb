@@ -28,7 +28,7 @@ module ServiceProviders
       end
     end
 
-    def lists
+    def lists(strict = false)
       forms = []
 
       begin
@@ -40,12 +40,14 @@ module ServiceProviders
         else
           error_message = JSON.parse(response.body)['error']
           log "getting forms returned '#{error_message}' with the code #{response.status}"
+          raise error_message if strict && response.status == 401
         end
 
       rescue Faraday::TimeoutError
         log "getting forms timed out"
       rescue => error
         log "getting forms raised #{error}"
+        raise error if strict && error.message == "Authorization Failed"
       end
 
       forms
@@ -59,7 +61,7 @@ module ServiceProviders
 
         if response.success?
           response_hash = JSON.parse response.body
-          found_tags = response_hash['tags'].map { |form| {'id' => form['id'], 'name' => form['name']}}
+          found_tags = response_hash['tags'].map { |tag| {'id' => tag['id'], 'name' => tag['name']}}
         else
           error_message = JSON.parse(response.body)['error']
           log "getting tags returned '#{error_message}' with the code #{response.status}"
@@ -114,6 +116,13 @@ module ServiceProviders
       subscribers.each do |subscriber|
         subscribe(form_id, subscriber[:email], subscriber[:name])
       end
+    end
+
+    def valid?
+      lists(true)
+      true
+    rescue
+      false
     end
 
     private

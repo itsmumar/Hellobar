@@ -13,7 +13,7 @@ module ServiceProviders
       end
     end
 
-    def lists
+    def lists(strict = false)
       found_lists = []
       begin
         response = @client.get "accounts/#{@account_id}/lists.json",
@@ -22,16 +22,18 @@ module ServiceProviders
 
         if response.success?
           response_hash = JSON.parse response.body
-          found_lists = response_hash.collect{|list| {'id' => list['id'], 'name' => list['name']} }
+          found_lists = response_hash.collect { |list| { 'id' => list['id'], 'name' => list['name'] } }
         else
           error_message = response.body
           log "getting lists returned '#{error_message}' with the code #{response.status}"
+          raise error_message if strict && response.status == 401
         end
 
       rescue Faraday::TimeoutError
         log "getting lists timed out"
       rescue => error
         log "getting lists raised #{error}"
+        raise error if strict && error.message == "Authorization Failed"
       end
 
       found_lists
@@ -73,6 +75,13 @@ module ServiceProviders
       subscribers.each do |subscriber|
         subscribe(list_id, subscriber[:email], subscriber[:name])
       end
+    end
+
+    def valid?
+      lists(true)
+      true
+    rescue
+      false
     end
 
     private
