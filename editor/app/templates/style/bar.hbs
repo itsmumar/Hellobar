@@ -1,33 +1,33 @@
 <div class="substep bar">
-  <label
+  <label class="show_branding"
       title="Your bar will contain Hello Bar branding. By turning it off you will receive more clicks and conversions.">
     {{toggle-switch switch=model.show_branding}}
     Hello Bar branding
   </label>
 
-  <label>
+  <label class="animated">
     {{toggle-switch switch=model.animated}}
     Animate entry/exit
   </label>
 
   {{#if canWiggle}}
-    <label>
+    <label class="wiggle_button">
       {{toggle-switch switch=model.wiggle_button}}
       Wiggle button
     </label>
   {{/if}}
 
-  <label>
+  <label class="closable">
     {{toggle-switch switch=model.closable}}
-    Allow to hide bar
+    Allow to hide a bar
   </label>
 
-  <label>
+  <label class="pushes_page_down">
     {{toggle-switch switch=model.pushes_page_down}}
     {{ pushesText }}
   </label>
 
-  <label>
+  <label class="remains_at_top">
     {{toggle-switch switch=model.remains_at_top}}
     Remains in place
   </label>
