@@ -437,9 +437,9 @@ export default Ember.Service.extend({
 
     const $allFroala = $($textFroala).add($imageFroala);
     this.$currentFroalaInstances = this.$currentFroalaInstances || $();
-    this.$currentFroalaInstances.add($allFroala);
+    this.$currentFroalaInstances = this.$currentFroalaInstances.add($allFroala);
 
-    return $textFroala.each(function () {
+    $textFroala.each(function () {
       const $editableElement = $(this);
       const editor = $editableElement.data('froala.editor');
       const newOptions = {};
@@ -448,7 +448,7 @@ export default Ember.Service.extend({
         newOptions.placeholderText = placeholder;
       }
       $.extend(editor.opts, newOptions);
-      return $editableElement.find('.fr-placeholder').text(placeholder);
+      $editableElement.find('.fr-placeholder').text(placeholder);
     });
   },
 
@@ -476,7 +476,6 @@ export default Ember.Service.extend({
       this.$currentFroalaInstances.off('froalaEditor.image.uploaded');
       this.$currentFroalaInstances.off('froalaEditor.destroy');
       this.$currentFroalaInstances.froalaEditor('destroy');
-      this.$currentFroalaInstances.remove();
       this.$currentFroalaInstances = $();
     }
   },

@@ -153,6 +153,7 @@ export default Ember.Controller.extend({
     HB.preventElementClosing = true;
     HB.previewMode = this.get('isMobile') ? 'mobile' : 'fullscreen';
     if (HB.removeAllSiteElements) {
+      this.get('inlineEditing').cleanup();
       HB.removeAllSiteElements();
       HB.addToPage(HB.createSiteElement(previewElement));
     }
