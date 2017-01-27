@@ -402,15 +402,25 @@ export default Ember.Controller.extend({
     }
   }.observes('model.element_subtype'),
 
-  updateProFeature: ( function () {
+  promptUpgradeWhenRemovingBranding: (function () {
     const isBranded = this.get('model.show_branding');
     const canRemoveBranding = this.get('model.site.capabilities.remove_branding');
 
-    if (!canRemoveBranding && !isBranded) {
+    if (!isBranded && !canRemoveBranding) {
       this.set('model.show_branding', true);
-      return this.promptUpgrade('show_branding', isBranded, 'remove branding');
+      this.promptUpgrade('show_branding', isBranded, 'remove branding');
     }
   }).observes('model.show_branding'),
+
+  promptUpgradeWhenEnablingHiding: (function () {
+    const isClosable = this.get('model.closable');
+    const canBeClosable = this.get('model.site.capabilities.closable');
+
+    if (isClosable && !canBeClosable) {
+      this.set('model.closable', false);
+      this.promptUpgrade('closable', isClosable, 'allow hiding a bar');
+    }
+  }).observes('model.closable'),
 
   // Upgrade modal promot for protected features
 

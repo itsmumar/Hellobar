@@ -28,6 +28,7 @@ class SiteElementsController < ApplicationController
       rule: @site.rules.first,
       theme: Theme.where(default_theme: true).first,
       show_branding: !@site.capabilities(true).remove_branding?,
+      closable: false,
       settings: {url: @site.url, url_to_like: @site.url }
     })
 

@@ -81,6 +81,7 @@ In development, it is recommended to use the `--watch` option, like this:
 ember build --environment=production --watch
 ```
 
+(in OS X it also helps to install watchman in this case: `brew install watchman`).
 
 
 ### MS Windows

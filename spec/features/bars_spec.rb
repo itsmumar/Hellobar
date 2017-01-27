@@ -1,8 +1,6 @@
 require 'integration_helper'
 
 feature 'Adding and editing bars', :js do
-  extend FeatureHelper
-
   given(:select_goal_label) { 'Select This Goal' }
   given(:email) { 'bob@lawblog.com' }
   given(:user) { create :user, email: email }
