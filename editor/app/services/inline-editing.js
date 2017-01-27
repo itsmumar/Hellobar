@@ -317,9 +317,10 @@ export default Ember.Service.extend({
 
   instantiateFroala($iframe, $iframeBody, elementType){
     this.cleanupFroala();
-    const simpleFroalaOptions = {
-      key: froalaKey,
-      linkStyles: {
+
+    const textFroala = (requestedMode) => {
+      const mode = (elementType === 'Bar' && requestedMode === 'full') ? 'simple' : requestedMode;
+      const linkStyles = {
         barlinkblue: 'Blue',
         barlinkmutedblue: 'Muted Blue',
         barlinkorange: 'Orange',
@@ -327,129 +328,117 @@ export default Ember.Service.extend({
         barlinkred: 'Red',
         barlinkwhite: 'White',
         barlinkblack: 'Black'
-      },
-      linkMultipleStyles: false,
-      toolbarInline: true,
-      toolbarVisibleWithoutSelection: true,
-      toolbarButtons: [
-        'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
-        'fontFamily', 'fontSize', 'color', 'insertLink', '-',
-        'undo', 'redo', 'clearFormatting', 'selectAll'
-      ],
-      htmlAllowedTags: [
-        'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
-      ],
-      enter: $.FroalaEditor.ENTER_P,
-      multiLine: false,
-      initOnClick: false,
-      zIndex: 9888
+      };
+      const toolbarButtons = {
+        'simple': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
+          'fontFamily', 'fontSize', 'color', 'insertLink', '-',
+          'undo', 'redo', 'clearFormatting', 'selectAll'
+        ],
+        'simple-no-link': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
+          'fontFamily', 'fontSize', 'color', '-',
+          'undo', 'redo', 'clearFormatting', 'selectAll'
+        ],
+        'full': [
+          'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
+          'fontFamily', 'fontSize', 'color', '-',
+          'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
+          'insertHR', 'insertLink', '-',
+          'undo', 'redo', 'clearFormatting', 'selectAll'
+        ],
+        'limited': [
+          'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'color', '-',
+          'undo', 'redo', 'clearFormatting', 'selectAll'
+        ]
+      };
+      const htmlAllowedTags = {
+        'simple': [
+          'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
+        ],
+        'simple-no-link': [
+          'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'br'
+        ],
+        'full': [
+          'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'ul', 'ol', 'li',
+          'a', 'br', 'hr', 'table', 'tbody', 'tr', 'th', 'td', 'blockquote'
+        ],
+        'limited': [
+          'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
+        ]
+      };
+      const froalaOptions = {
+        key: froalaKey,
+        linkStyles: mode === 'limited' ? undefined : linkStyles,
+        linkMultipleStyles: false,
+        toolbarInline: true,
+        toolbarVisibleWithoutSelection: true,
+        toolbarButtons: toolbarButtons[mode],
+        htmlAllowedTags: htmlAllowedTags[mode],
+        enter: $.FroalaEditor.ENTER_P,
+        multiLine: mode === 'full',
+        initOnClick: false,
+        zIndex: 9888
+      };
+      const $textFroala = $(`.hb-editable-block-with-${requestedMode}-formatting`, $iframeBody).froalaEditor($.extend({
+        scrollableContainer: $iframeBody[0]
+      }, froalaOptions));
+      $textFroala.on('froalaEditor.contentChanged', (e, editor) => {
+        const $target = $(e.currentTarget);
+        const content = $target.froalaEditor('html.get');
+        const blockId = $target.attr('data-hb-editable-block');
+        this.handleContentChange(blockId, content);
+      });
+      $textFroala.each(function () {
+        const $editableElement = $(this);
+        const editor = $editableElement.data('froala.editor');
+        const newOptions = {};
+        const placeholder = $editableElement.attr('data-hb-inline-editor-placeholder');
+        if (placeholder) {
+          newOptions.placeholderText = placeholder;
+        }
+        $.extend(editor.opts, newOptions);
+        $editableElement.find('.fr-placeholder').text(placeholder);
+      });
+      return $textFroala;
     };
-    const fullFroalaOptions = {
-      key: froalaKey,
-      linkStyles: {
-        barlinkblue: 'Blue',
-        barlinkmutedblue: 'Muted Blue',
-        barlinkorange: 'Orange',
-        barlinkgreen: 'Green',
-        barlinkred: 'Red',
-        barlinkwhite: 'White',
-        barlinkblack: 'Black'
-      },
-      linkMultipleStyles: false,
-      toolbarInline: true,
-      toolbarVisibleWithoutSelection: true,
-      toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
-        'fontFamily', 'fontSize', 'color', '-',
-        'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
-        'insertHR', 'insertLink', '-',
-        'undo', 'redo', 'clearFormatting', 'selectAll'
-      ],
-      htmlAllowedTags: [
-        'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'ul', 'ol', 'li',
-        'a', 'br', 'hr', 'table', 'tbody', 'tr', 'th', 'td', 'blockquote'
-      ],
-      enter: $.FroalaEditor.ENTER_P,
-      multiLine: true,
-      initOnClick: false,
-      zIndex: 9888
-    };
-    const limitedFroalaOptions = {
-      key: froalaKey,
-      toolbarInline: true,
-      toolbarVisibleWithoutSelection: true,
-      toolbarButtons: [
-        'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'color', '-',
-        'undo', 'redo', 'clearFormatting', 'selectAll'
-      ],
-      htmlAllowedTags: [
-        'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
-      ],
-      enter: $.FroalaEditor.ENTER_P,
-      multiLine: false,
-      initOnClick: false,
-      zIndex: 9888
-    };
-    const imageFroalaOptions = {
-      key: froalaKey,
-      pluginsEnabled: ['image'],
-      toolbarInline: true,
-      toolbarButtons: ['bold', 'italic', 'underline'],
-      imageInsertButtons: ['imageUpload'],
-      imageEditButtons: ['imageReplace', 'imagePosition', 'imageRemoveCustom'],
-      htmlAllowedTags: ['p', 'div', 'img'],
-      multiLine: false,
-      initOnClick: false,
-      zIndex: 9888,
-      imageUploadURL: `/sites/${siteID}/image_uploads`,
-      imageResize: false,
-      requestHeaders: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-      }
-    };
-    const $simpleFroala = $('.hb-editable-block-with-simple-formatting', $iframeBody).froalaEditor($.extend({
-      scrollableContainer: $iframeBody[0]
-    }, simpleFroalaOptions));
-    const $fullFroala = $('.hb-editable-block-with-full-formatting', $iframeBody).froalaEditor($.extend({
-      scrollableContainer: $iframeBody[0]
-    }, elementType === 'Bar' ? simpleFroalaOptions : fullFroalaOptions));
-    const $imageFroala = $('.hb-editable-block-image', $iframeBody).froalaEditor($.extend({
-      scrollableContainer: $iframeBody[0]
-    }, imageFroalaOptions));
-    const $limitedFroala = $('.hb-editable-block-with-limited-formatting', $iframeBody).froalaEditor($.extend({
-      scrollableContainer: $iframeBody[0]
-    }, limitedFroalaOptions));
 
-    $imageFroala.on('froalaEditor.image.uploaded', (e, editor, response) => {
-      const responseObject = JSON.parse(response);
-      this.simpleModelAdapter && this.simpleModelAdapter.handleImageReplaced(responseObject);
-      return false;
-    });
+    const imageFroala = () => {
+      const imageFroalaOptions = {
+        key: froalaKey,
+        pluginsEnabled: ['image'],
+        toolbarInline: true,
+        toolbarButtons: ['bold', 'italic', 'underline'],
+        imageInsertButtons: ['imageUpload'],
+        imageEditButtons: ['imageReplace', 'imagePosition', 'imageRemoveCustom'],
+        htmlAllowedTags: ['p', 'div', 'img'],
+        multiLine: false,
+        initOnClick: false,
+        zIndex: 9888,
+        imageUploadURL: `/sites/${siteID}/image_uploads`,
+        imageResize: false,
+        requestHeaders: {
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        }
+      };
+      const $imageFroala = $('.hb-editable-block-image', $iframeBody).froalaEditor($.extend({
+        scrollableContainer: $iframeBody[0]
+      }, imageFroalaOptions));
+      $imageFroala.on('froalaEditor.image.uploaded', (e, editor, response) => {
+        const responseObject = JSON.parse(response);
+        this.simpleModelAdapter && this.simpleModelAdapter.handleImageReplaced(responseObject);
+        return false;
+      });
+      return $imageFroala;
+    };
 
-    const $textFroala = $simpleFroala.add($fullFroala).add($limitedFroala);
-    $textFroala.on('froalaEditor.contentChanged', (e, editor) => {
-      const $target = $(e.currentTarget);
-      const content = $target.froalaEditor('html.get');
-      const blockId = $target.attr('data-hb-editable-block');
-      return this.handleContentChange(blockId, content);
-    });
-    $textFroala.on('froalaEditor.destroy', (e, editor) => {
-    });
+    const $allFroala = $()
+      .add(textFroala('simple'))
+      .add(textFroala('simple-no-link'))
+      .add(textFroala('full'))
+      .add(textFroala('limited'))
+      .add(imageFroala());
 
-    const $allFroala = $($textFroala).add($imageFroala);
     this.$currentFroalaInstances = this.$currentFroalaInstances || $();
     this.$currentFroalaInstances = this.$currentFroalaInstances.add($allFroala);
-
-    $textFroala.each(function () {
-      const $editableElement = $(this);
-      const editor = $editableElement.data('froala.editor');
-      const newOptions = {};
-      const placeholder = $editableElement.attr('data-hb-inline-editor-placeholder');
-      if (placeholder) {
-        newOptions.placeholderText = placeholder;
-      }
-      $.extend(editor.opts, newOptions);
-      $editableElement.find('.fr-placeholder').text(placeholder);
-    });
   },
 
   initializeInputEditing($iframe, $iframeBody){
