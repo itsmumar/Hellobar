@@ -64,7 +64,7 @@ feature "Payment modal interaction", :js do
 
       click_on 'Bar'
 
-      find('.show_branding .toggle-off').click
+      find('.toggle-showing-branding .toggle-off').click
 
       expect(page).to have_content "Upgrade #{ site.normalized_url } to remove branding"
     end
@@ -84,7 +84,7 @@ feature "Payment modal interaction", :js do
 
       click_on 'Bar'
 
-      find('.closable .toggle-on').click
+      find('.toggle-hiding .toggle-on').click
 
       expect(page).to have_content "Upgrade #{ site.normalized_url } to allow hiding a bar"
     end
