@@ -40,14 +40,15 @@ module ServiceProviders
         else
           error_message = JSON.parse(response.body)['error']
           log "getting forms returned '#{error_message}' with the code #{response.status}"
-          raise error_message if strict && response.status == 401
+          raise error_message if strict
         end
 
       rescue Faraday::TimeoutError
         log "getting forms timed out"
+        raise 'Timeout' if strict
       rescue => error
         log "getting forms raised #{error}"
-        raise error if strict && error.message == "Authorization Failed"
+        raise error if strict
       end
 
       forms
