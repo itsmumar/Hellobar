@@ -173,14 +173,20 @@ describe Subscription do
 
   describe Subscription::Capabilities do
     fixtures :all
+
     before do
       setup_subscriptions
     end
 
     it "should return default capabilities for plan" do
-      @site.capabilities(true).class.should == Subscription::Free::Capabilities
+      capabilities = @site.capabilities(true)
+
+      expect(capabilities).to be_a Subscription::Free::Capabilities
+      expect(capabilities.closable?).to be_false
+
       @site.change_subscription(@pro, @payment_method)
-      @site.capabilities(true).class.should == Subscription::Pro::Capabilities
+
+      expect(@site.capabilities(true)).to be_a Subscription::Pro::Capabilities
     end
 
     it "should return ProblemWithPayment capabilities if on a paid plan and payment has not been made" do
@@ -190,12 +196,18 @@ describe Subscription do
 
     it 'should return the right capabilities if a payment issue has been resolved' do
       @site.change_subscription(@pro, payment_methods(:always_fails))
-      expect(@site.capabilities(true).remove_branding?).to be(false)
-      expect(@site.site_elements.all? { |se| se.show_branding }).to be(true)
+
+      expect(@site.capabilities(true).remove_branding?).to be_false
+      expect(@site.capabilities(true).closable?).to be_false
+      expect(@site.site_elements.all? { |se| se.show_branding }).to be_true
+      expect(@site.site_elements.all? { |se| se.closable }).to be_true
 
       @site.change_subscription(@pro, payment_methods(:always_successful))
-      expect(@site.capabilities(true).remove_branding?).to be(true)
-      expect(@site.site_elements.none? { |se| se.show_branding }).to be(true)
+
+      expect(@site.capabilities(true).remove_branding?).to be_true
+      expect(@site.capabilities(true).closable?).to be_true
+      expect(@site.site_elements.none? { |se| se.show_branding }).to be_true
+      expect(@site.site_elements.none? { |se| se.closable }).to be_true
     end
 
     it "should return the right capabilities if payment is not due yet" do
