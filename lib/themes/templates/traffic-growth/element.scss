@@ -603,6 +603,8 @@ $ctaColor: $headlineColor;
 
     .headline-first {
       display: block;
+      white-space: normal;
+      line-height: 35px;
     }
     .caption {
       display: block;
