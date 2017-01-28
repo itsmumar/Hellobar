@@ -1,0 +1,52 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.convertkit.com/v3/forms?api_secret=invalid-key
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Server:
+      - Cowboy
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - 4cc8914a-885e-47d5-864f-5b0ebee7ef25
+      X-Runtime:
+      - '0.078903'
+      Vary:
+      - Accept-Encoding, Origin
+      Date:
+      - Sat, 28 Jan 2017 17:17:12 GMT
+      X-Rack-Cache:
+      - miss
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 vegur
+    body:
+      encoding: ASCII-8BIT
+      string: '{"error":"Authorization Failed","message":"API Key not valid"}'
+    http_version: 
+  recorded_at: Sat, 28 Jan 2017 17:17:12 GMT
+recorded_with: VCR 2.9.0

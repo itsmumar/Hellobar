@@ -69,7 +69,7 @@ http_interactions:
         Purchased Custom Meal Plan</value></member><member><name>Id</name><value><i4>147</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>[category:AWeber
         Lists]awlist3827639</value></member><member><name>Id</name><value><i4>109</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>[category:AWeber
         Lists]awlist4296471</value></member><member><name>Id</name><value><i4>111</i4></value></member></struct></value></data></array></value></param></params></methodResponse>
-    http_version:
+    http_version: 
   recorded_at: Mon, 25 Jul 2016 22:54:40 GMT
 - request:
     method: post
@@ -140,6 +140,176 @@ http_interactions:
         Purchased Custom Meal Plan</value></member><member><name>Id</name><value><i4>147</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>[category:AWeber
         Lists]awlist3827639</value></member><member><name>Id</name><value><i4>109</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>[category:AWeber
         Lists]awlist4296471</value></member><member><name>Id</name><value><i4>111</i4></value></member></struct></value></data></array></value></param></params></methodResponse>
-    http_version:
+    http_version: 
   recorded_at: Tue, 26 Jul 2016 04:55:38 GMT
+- request:
+    method: post
+    uri: https://ft319.infusionsoft.com/api/xmlrpc
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" ?><methodCall><methodName>DataService.query</methodName><params><param><value><string>79f110f74f0db4767710ccec533347b0</string></value></param><param><value><string>ContactGroup</string></value></param><param><value><i4>1000</i4></value></param><param><value><i4>0</i4></value></param><param><value><struct/></value></param><param><value><array><data><value><string>GroupName</string></value><value><string>Id</string></value></data></array></value></param></params></methodCall>
+    headers:
+      User-Agent:
+      - Infusionsoft-1.1.9 (RubyGem)
+      Content-Type:
+      - text/xml; charset=utf-8
+      Content-Length:
+      - '500'
+      Connection:
+      - keep-alive
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store
+      Content-Type:
+      - text/xml;charset=UTF-8
+      Date:
+      - Sat, 28 Jan 2017 17:16:37 GMT
+      Expires:
+      - Sat, 28 Jan 2017 17:16:38 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache-Coyote/1.1
+      Set-Cookie:
+      - app-lb=!Xfh16LAyL1tGsOyo5jOubDF73jfI715szvJiZ/E7gzOyHcJ5+ZKqbL/v/izVbW58XeMu/18QEyuyjhqvEU0zVnXw2AbJMnTykcAbrjLsb68/0b54mLfbGPDwGbvR31t6aeQQ1/Nb7wdgZ3pFqCxKFMMiMkTEyNk=;
+        path=/
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - SAMEORIGIN
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: <?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><value><array><data><value><struct><member><name>GroupName</name><value>[category:AWeber
+        Lists]awlist3827639</value></member><member><name>Id</name><value><i4>109</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>[category:AWeber
+        Lists]awlist4296471</value></member><member><name>Id</name><value><i4>111</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>1
+        click upsell Unlimited Coaching</value></member><member><name>Id</name><value><i4>305</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>1st
+        Credit Auto Charge Failed</value></member><member><name>Id</name><value><i4>341</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>2nd
+        Credit Auto Charge Failed</value></member><member><name>Id</name><value><i4>343</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>3rd
+        Credit Auto Charge Failed</value></member><member><name>Id</name><value><i4>345</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>6/01/2016
+        2:40 AM</value></member><member><name>Id</name><value><i4>107</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>6/10/2016
+        12:15 AM</value></member><member><name>Id</name><value><i4>133</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Activist</value></member><member><name>Id</name><value><i4>123</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Activist
+        Engagment</value></member><member><name>Id</name><value><i4>311</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Ascension
+        Complete</value></member><member><name>Id</name><value><i4>205</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Ascension
+        start</value></member><member><name>Id</name><value><i4>323</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>awlist3827639</value></member><member><name>Id</name><value><i4>103</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>awlist4296471</value></member><member><name>Id</name><value><i4>105</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Cancel
+        Subscription via Billing Automation</value></member><member><name>Id</name><value><i4>349</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Cancelled
+        Subscription</value></member><member><name>Id</name><value><i4>339</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Men - Gain - Activist</value></member><member><name>Id</name><value><i4>285</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Men - Gain - Early Riser</value></member><member><name>Id</name><value><i4>287</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Men - Gain - Emotional Eater</value></member><member><name>Id</name><value><i4>283</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Men - Gain - Extrovert</value></member><member><name>Id</name><value><i4>275</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Men - Gain - Structured Eater</value></member><member><name>Id</name><value><i4>289</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Men - Lose - Activist</value></member><member><name>Id</name><value><i4>257</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Men - Lose - Early Riser</value></member><member><name>Id</name><value><i4>263</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Men - Lose - Emotional Eater</value></member><member><name>Id</name><value><i4>271</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Men - Lose - Extrovert</value></member><member><name>Id</name><value><i4>253</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Men - Lose - Structured Eater</value></member><member><name>Id</name><value><i4>267</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Women - Gain - Activist</value></member><member><name>Id</name><value><i4>237</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Women - Gain - Early Riser</value></member><member><name>Id</name><value><i4>241</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Women - Gain - Emotional Eater</value></member><member><name>Id</name><value><i4>249</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Women - Gain - Structured Eater</value></member><member><name>Id</name><value><i4>245</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Women - Lose - Activist</value></member><member><name>Id</name><value><i4>215</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Women - Lose - Early Riser</value></member><member><name>Id</name><value><i4>219</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Women - Lose - Emotional Eater</value></member><member><name>Id</name><value><i4>229</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Women - Lose - Extrovert</value></member><member><name>Id</name><value><i4>211</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Women - Lose - Structured Eater</value></member><member><name>Id</name><value><i4>223</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>COMPLETED
+        - Women Gain - Extrovert</value></member><member><name>Id</name><value><i4>233</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Completed
+        Questionnaire</value></member><member><name>Id</name><value><i4>337</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Delivered
+        Custom Meal Plan</value></member><member><name>Id</name><value><i4>139</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Didn't
+        add 1 click upsell Unlimited coaching</value></member><member><name>Id</name><value><i4>307</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Downloaded
+        Cookbook</value></member><member><name>Id</name><value><i4>143</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Downloaded
+        Grocery List</value></member><member><name>Id</name><value><i4>141</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Early
+        Riser</value></member><member><name>Id</name><value><i4>125</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Emotional
+        Eater</value></member><member><name>Id</name><value><i4>129</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Extrovert</value></member><member><name>Id</name><value><i4>121</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Home
+        Page Form</value></member><member><name>Id</name><value><i4>113</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Men - Gain - Activist</value></member><member><name>Id</name><value><i4>277</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Men - Gain - Early Riser</value></member><member><name>Id</name><value><i4>259</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Men - Gain - Emotional Eater</value></member><member><name>Id</name><value><i4>281</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Men - Gain - Extrovert</value></member><member><name>Id</name><value><i4>273</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Men - Gain - Structured Eater</value></member><member><name>Id</name><value><i4>279</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Men - Lose - Activist</value></member><member><name>Id</name><value><i4>255</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Men - Lose - Early Riser</value></member><member><name>Id</name><value><i4>261</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Men - Lose - Emotional Eater</value></member><member><name>Id</name><value><i4>269</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Men - Lose - Extrovert</value></member><member><name>Id</name><value><i4>251</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Men - Lose - Structured Eater</value></member><member><name>Id</name><value><i4>265</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Gain - Activist</value></member><member><name>Id</name><value><i4>235</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Gain - Early Riser</value></member><member><name>Id</name><value><i4>239</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Gain - Emotional Eater</value></member><member><name>Id</name><value><i4>247</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Gain - Extrovert</value></member><member><name>Id</name><value><i4>231</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Gain - Structured Eater</value></member><member><name>Id</name><value><i4>243</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Lose - Activist</value></member><member><name>Id</name><value><i4>213</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Lose - Early Riser</value></member><member><name>Id</name><value><i4>217</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Lose - Emotional Eater</value></member><member><name>Id</name><value><i4>225</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Lose - Emotional Eater</value></member><member><name>Id</name><value><i4>227</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Lose - Extrovert</value></member><member><name>Id</name><value><i4>209</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        - Women - Lose - Structured Eater</value></member><member><name>Id</name><value><i4>221</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>IN
+        Women - Lose - Extrovert</value></member><member><name>Id</name><value><i4>207</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Interest
+        - Email Series</value></member><member><name>Id</name><value><i4>101</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Last
+        Credit Auto Charge Failed</value></member><member><name>Id</name><value><i4>347</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Man
+        Gain Activist Engage</value></member><member><name>Id</name><value><i4>329</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Man
+        Gain Early Riser Engage</value></member><member><name>Id</name><value><i4>331</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Man
+        Gain Emotional Eater Engage</value></member><member><name>Id</name><value><i4>335</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Man
+        Gain Extrovert Engage</value></member><member><name>Id</name><value><i4>327</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Man
+        Gain Structured Eater Engage</value></member><member><name>Id</name><value><i4>333</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Gain</value></member><member><name>Id</name><value><i4>197</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Gain - Activist</value></member><member><name>Id</name><value><i4>167</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Gain - Early Riser</value></member><member><name>Id</name><value><i4>171</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Gain - Emotional Eater</value></member><member><name>Id</name><value><i4>175</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Gain - Extrovert</value></member><member><name>Id</name><value><i4>169</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Gain - Structured Eater</value></member><member><name>Id</name><value><i4>173</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        gain extrovert</value></member><member><name>Id</name><value><i4>325</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Lose</value></member><member><name>Id</name><value><i4>199</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Lose - Activist</value></member><member><name>Id</name><value><i4>159</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Lose - Early Riser</value></member><member><name>Id</name><value><i4>161</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Lose - Emotional Eater</value></member><member><name>Id</name><value><i4>163</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Lose - Extrovert</value></member><member><name>Id</name><value><i4>157</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Men
+        Lose - Structured Eater</value></member><member><name>Id</name><value><i4>165</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>New
+        Customer</value></member><member><name>Id</name><value><i4>93</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>New
+        Lead</value></member><member><name>Id</name><value><i4>92</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Not
+        received ascension</value></member><member><name>Id</name><value><i4>303</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Nurture
+        Subscriber</value></member><member><name>Id</name><value><i4>91</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Original
+        Source - Not Received Ascension</value></member><member><name>Id</name><value><i4>299</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Other
+        Lead Source</value></member><member><name>Id</name><value><i4>297</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Pending
+        Custom Meal Plan</value></member><member><name>Id</name><value><i4>137</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Purchased
+        Custom Meal Plan</value></member><member><name>Id</name><value><i4>135</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Purchased
+        Unlimited Email Coaching</value></member><member><name>Id</name><value><i4>295</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>QUIZ</value></member><member><name>Id</name><value><i4>131</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Quiz
+        campaign women lose activist engagment</value></member><member><name>Id</name><value><i4>313</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Received
+        Ascension</value></member><member><name>Id</name><value><i4>301</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Sidebar</value></member><member><name>Id</name><value><i4>115</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Structured
+        Eater</value></member><member><name>Id</name><value><i4>127</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Thrive
+        Leads</value></member><member><name>Id</name><value><i4>119</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Trigger
+        Custom Meal Plan Delivery</value></member><member><name>Id</name><value><i4>145</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Trigger
+        Purchased Custom Meal Plan</value></member><member><name>Id</name><value><i4>147</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Trigger
+        Purchased Email Coaching</value></member><member><name>Id</name><value><i4>293</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>WC
+        Meal Plan Purchased</value></member><member><name>Id</name><value><i4>291</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>WCDQuiz2
+        - COMPLETE</value></member><member><name>Id</name><value><i4>353</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>WCDQuiz2
+        - IN</value></member><member><name>Id</name><value><i4>351</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Gain</value></member><member><name>Id</name><value><i4>201</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Gain - Activist</value></member><member><name>Id</name><value><i4>177</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Gain - Early Riser</value></member><member><name>Id</name><value><i4>185</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Gain - Emotional Eater</value></member><member><name>Id</name><value><i4>179</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Gain - Extrovert</value></member><member><name>Id</name><value><i4>183</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Gain - Structured Eater</value></member><member><name>Id</name><value><i4>181</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Lose</value></member><member><name>Id</name><value><i4>203</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Lose - Activist</value></member><member><name>Id</name><value><i4>191</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Lose - Early Riser</value></member><member><name>Id</name><value><i4>193</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Lose - Emotional Eater</value></member><member><name>Id</name><value><i4>189</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Lose - Extrovert</value></member><member><name>Id</name><value><i4>195</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Lose - Extrovert - Engagement</value></member><member><name>Id</name><value><i4>309</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>Women
+        Lose - Structured Eater</value></member><member><name>Id</name><value><i4>187</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>women
+        lose activist engagment</value></member><member><name>Id</name><value><i4>315</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>women
+        lose early riser engage</value></member><member><name>Id</name><value><i4>317</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>women
+        lose emotional eater engage</value></member><member><name>Id</name><value><i4>321</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>women
+        lose structure eater engage</value></member><member><name>Id</name><value><i4>319</i4></value></member></struct></value></data></array></value></param></params></methodResponse>
+    http_version: 
+  recorded_at: Sat, 28 Jan 2017 17:16:38 GMT
 recorded_with: VCR 2.9.0

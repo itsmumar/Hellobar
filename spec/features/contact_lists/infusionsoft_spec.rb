@@ -2,6 +2,8 @@ require 'integration_helper'
 require 'service_provider_integration_helper'
 
 feature "Infusionsoft Integration", js: true do
+  let(:provider) { 'infusionsoft' }
+
   before do
     @fake_data_api_original = Hellobar::Settings[:fake_data_api]
     Hellobar::Settings[:fake_data_api] = true
@@ -9,24 +11,16 @@ feature "Infusionsoft Integration", js: true do
   end
 
   after do
-    # devise_reset
     Hellobar::Settings[:fake_data_api] = @fake_data_api_original
   end
 
-  def connect_infusionsoft
-    site = @user.sites.create(url: random_uniq_url)
-    contact_list = create(:contact_list, site: site)
-
-    visit site_contact_list_path(site, contact_list)
-
-    page.find("#edit-contact-list").click
-    page.find("a", text: "Nevermind, I want to view all tools").click
-    page.find(".infusionsoft-provider").click
-
-    fill_in 'contact_list[data][app_url]', with: 'ft319.infusionsoft.com'
-    fill_in 'contact_list[data][api_key]', with: '79f110f74f0db4767710ccec533347b0'
+  scenario "invalid form details" do
+    open_provider_form(@user, provider)
+    fill_in 'contact_list[data][app_url]', with: 'invalid.infusionsoft.com'
+    fill_in 'contact_list[data][api_key]', with: 'invalid-key'
 
     page.find(".button.ready").click
+    expect(page).to have_content('There was a problem connecting your Infusionsoft account')
   end
 
   scenario "connecting to Infusionsoft" do
@@ -47,5 +41,14 @@ feature "Infusionsoft Integration", js: true do
     page.find('#edit-contact-list').click
 
     page.assert_selector(selector, :count => 2)
+  end
+
+  private
+  def connect_infusionsoft
+    open_provider_form(@user, provider)
+    fill_in 'contact_list[data][app_url]', with: 'ft319.infusionsoft.com'
+    fill_in 'contact_list[data][api_key]', with: '79f110f74f0db4767710ccec533347b0'
+
+    page.find(".button.ready").click
   end
 end

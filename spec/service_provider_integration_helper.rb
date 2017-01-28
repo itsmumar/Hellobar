@@ -23,5 +23,15 @@ shared_context "service provider request setup" do
   let(:optin)            { true }
   let(:service_provider) { identity.service_provider }
   let(:site)             { create(:site) }
+end
 
+def open_provider_form(user, pname)
+  site = user.sites.create(url: random_uniq_url)
+  contact_list = create(:contact_list, site: site)
+
+  visit site_contact_list_path(site, contact_list)
+
+  page.find("#edit-contact-list").click
+  page.find("a", text: "Nevermind, I want to view all tools").click
+  page.find(".#{pname}-provider").click
 end
