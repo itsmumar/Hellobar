@@ -28,53 +28,30 @@ module ServiceProviders
       end
     end
 
-    def lists(strict = false)
-      forms = []
+    def lists
+      response = make_api_call('get', 'forms')
 
-      begin
-        response = make_api_call('get', 'forms')
-
-        if response.success?
-          response_hash = JSON.parse response.body
-          forms = response_hash['forms'].map { |form| {'id' => form['id'], 'name' => form['name']}}
-        else
-          error_message = JSON.parse(response.body)['error']
-          log "getting forms returned '#{error_message}' with the code #{response.status}"
-          raise error_message if strict
-        end
-
-      rescue Faraday::TimeoutError
-        log "getting forms timed out"
-        raise 'Timeout' if strict
-      rescue => error
-        log "getting forms raised #{error}"
-        raise error if strict
+      if response.success?
+        response_hash = JSON.parse response.body
+        response_hash['forms'].map { |form| {'id' => form['id'], 'name' => form['name']}}
+      else
+        error_message = JSON.parse(response.body)['error']
+        log "getting forms returned '#{error_message}' with the code #{response.status}"
+        raise error_message
       end
-
-      forms
     end
 
     def tags
-      found_tags = []
+      response = make_api_call('get', 'tags')
 
-      begin
-        response = make_api_call('get', 'tags')
-
-        if response.success?
-          response_hash = JSON.parse response.body
-          found_tags = response_hash['tags'].map { |tag| {'id' => tag['id'], 'name' => tag['name']}}
-        else
-          error_message = JSON.parse(response.body)['error']
-          log "getting tags returned '#{error_message}' with the code #{response.status}"
-        end
-
-      rescue Faraday::TimeoutError
-        log "getting tags timed out"
-      rescue => error
-        log "getting tags raised #{error}"
+      if response.success?
+        response_hash = JSON.parse response.body
+        found_tags = response_hash['tags'].map { |tag| {'id' => tag['id'], 'name' => tag['name']}}
+      else
+        error_message = JSON.parse(response.body)['error']
+        log "getting tags returned '#{error_message}' with the code #{response.status}"
+        raise error_message
       end
-
-      found_tags
     end
 
     # NOTE: `double_optin` depends on the ConvertKit account form settings.
@@ -120,9 +97,9 @@ module ServiceProviders
     end
 
     def valid?
-      lists(true)
-      true
-    rescue
+      !!lists
+    rescue => error
+      log "getting tags raised #{error}"
       false
     end
 

@@ -449,6 +449,10 @@ class @ContactListModal extends Modal
         @_renderBlock("instructions", defaultContext).hide()
         @options.identity = data
 
+        if data.lists[0].error != undefined || data.tags[0].error != undefined
+          $('footer a.submit').attr('disabled', 'disabled')
+          $('.flash-block').addClass('error show').text('There was a problem connecting your ' + label + ' account. Please try again later.')
+
         if data.provider == "infusionsoft" or defaultContext.isProviderConvertKit
           if defaultContext.isProviderConvertKit
             @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
