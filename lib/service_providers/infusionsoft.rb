@@ -49,7 +49,8 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
 
   def valid?
     !!tags
-  rescue
+  rescue => error
+    log "Getting lists raised #{error}"
     false
   end
 end

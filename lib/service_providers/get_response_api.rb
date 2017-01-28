@@ -28,27 +28,17 @@ module ServiceProviders
       end
     end
 
-    def lists(strict = false)
-      found_lists = []
-      begin
-        response = @client.get 'campaigns', { perPage: 500 }
+    def lists
+      response = @client.get 'campaigns', { perPage: 500 }
 
-        if response.success?
-          response_hash = JSON.parse response.body
-          found_lists = response_hash.map {|list| {'id' => list['campaignId'], 'name' => list['name']}}
-        else
-          error_message = JSON.parse(response.body)['codeDescription']
-          log "getting lists returned '#{error_message}' with the code #{response.status}"
-          raise error_message if strict && response.status == 401
-        end
-
-      rescue Faraday::TimeoutError
-        log "getting lists timed out"
-      rescue => error
-        log "getting lists raised #{error}"
-        raise error if strict && error.message == "Authorization Failed"
+      if response.success?
+        response_hash = JSON.parse response.body
+        response_hash.map { |list| { 'id' => list['campaignId'], 'name' => list['name'] } }
+      else
+        error_message = JSON.parse(response.body)['codeDescription']
+        log "getting lists returned '#{error_message}' with the code #{response.status}"
+        raise error_message
       end
-      found_lists
     end
 
     def subscribe(list_id, email, name = nil, double_optin = true)
@@ -89,9 +79,9 @@ module ServiceProviders
     end
 
     def valid?
-      lists(true)
-      true
-    rescue
+      !!lists
+    rescue => error
+      log "Getting lists raised #{error}"
       false
     end
   end
