@@ -6,6 +6,10 @@ general:
       - edge
       - production
 
+checkout:
+  post:
+    - cp config/settings.yml.example config/settings.yml
+
 machine:
   ruby:
     version: 2.1.9
@@ -31,6 +35,7 @@ test:
     - cd editor && npm install
     - cd editor && bower install
     - cd editor && ember build --environment=production
+
   override:
     -
       RAILS_ENV=test bundle exec rspec -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml:
