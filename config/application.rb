@@ -8,6 +8,9 @@ Bundler.require(*Rails.groups)
 
 module Hellobar
   class Application < Rails::Application
+    # Require Hellobar::Settings so that we can use them in this config file
+    require File.join(Rails.root, 'config/initializers', 'settings.rb')
+
     # We'll handle our own errors
     config.exceptions_app = self.routes
 
@@ -22,7 +25,7 @@ module Hellobar
     config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
 
     config.sass.preferred_syntax = :sass
-    config.action_mailer.default_url_options = { host: "www.hellobar.com" }
+    config.action_mailer.default_url_options = { host: Hellobar::Settings[:host] }
 
     config.assets.precompile += ['editor.css', 'static.css', 'admin.css', 'editor/vendor.js', 'editor/application.js', 'ember.js', '*.css.erb', '*.css.sass.erb']
     config.assets.paths << Rails.root.join('vendor', 'assets')
@@ -31,7 +34,7 @@ module Hellobar
     config.handlebars.templates_root = 'editor/templates'
 
     config.to_prepare do
-        Devise::SessionsController.layout proc{ |controller| action_name == 'new' ? 'static' : 'application' }
+      Devise::SessionsController.layout proc{ |controller| action_name == 'new' ? 'static' : 'application' }
     end
 
     config.generators do |g|
