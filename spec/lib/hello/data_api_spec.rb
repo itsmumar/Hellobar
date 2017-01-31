@@ -61,6 +61,31 @@ describe  Hello::DataAPI do
     end
   end
 
+  describe '.contact_list_totals' do
+    let(:site) { create :site }
+    let(:list_size) { Hello::DataAPI::API_MAX_SLICE + 1 }
+    let(:contact_lists) { create_list :contact_list, list_size, site: site }
+
+    it 'slices up contact lists ids into multiple requests based on API_MAX_SLICE' do
+      expect(Hello::DataAPI).to receive(:get).exactly(:twice).and_return {}
+
+      Hello::DataAPI.contact_list_totals site, contact_lists
+    end
+
+    it 'merges the results from multiple API requests into a single Hash' do
+      stats_request_one = Hash[contact_lists.first.id => 7]
+      stats_request_two = Hash[contact_lists.last.id => 6]
+      stats = stats_request_one.merge stats_request_two
+
+      allow(Hello::DataAPI).to receive(:get).
+        and_return stats_request_one, stats_request_two
+
+      result = Hello::DataAPI.contact_list_totals site, contact_lists
+
+      expect(result).to eq stats
+    end
+  end
+
   describe '.get_contacts' do
     let(:contact_list) { create :contact_list }
     let(:id) { contact_list.id }
