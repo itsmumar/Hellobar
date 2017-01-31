@@ -153,13 +153,6 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     result
   end
 
-  def valid?
-    !!lists
-  rescue => error
-    log "Getting lists raised #{error}"
-    false
-  end
-
   private
 
   def hashify_options(email, name, double_optin)

@@ -12,14 +12,14 @@ describe ServiceProviders::ConvertKit do
 
   describe "#tags" do
     it "should make a call to ConvertKit for their tags" do
-      expect(client).to receive(:get) { [] }
+      expect(client).to receive(:get) { double("response", success?: true, status: 200, body: { "tags" => [] }.to_json) }
       service_provider.tags
     end
   end
 
   describe "#lists" do
     it "should make a call to ConvertKit for their lists" do
-      expect(client).to receive(:get) { [] }
+      expect(client).to receive(:get) { double("response", success?: true, status: 200, body: { "forms" => [] }.to_json) }
       service_provider.lists
     end
   end

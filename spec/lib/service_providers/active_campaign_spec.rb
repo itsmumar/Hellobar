@@ -11,7 +11,7 @@ describe ServiceProviders::ActiveCampaign do
   describe "#lists" do
     it "should call `list_list`" do
       VCR.use_cassette(cassette_base + '/lists') do
-        expect(client).to receive(:list_list).and_return({'results' => []})
+        expect(client).to receive(:list_list).and_return({'result_code' => 1})
         service_provider.lists
       end
     end
