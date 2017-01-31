@@ -35,20 +35,12 @@ describe ServiceProviders::GetResponseApi do
 
       it 'raise exception when time out' do
         allow(client).to receive(:get).and_raise(Faraday::TimeoutError)
-        expect(get_respone_api.lists).to raise_error(Faraday::TimeoutError)
+        expect { get_respone_api.lists }.to raise_error(Faraday::TimeoutError)
       end
 
-      it 'returns empty array in the event of failed request' do
+      it 'raise exception when invalid credentials' do
         allow(client).to receive(:get).and_return(failure_response)
-        expect(get_respone_api.lists).to raise_error(RuntimeError)
-      end
-
-      it 'handles time out' do
-        allow(client).to receive(:get).and_raise(Faraday::TimeoutError)
-        expect(get_respone_api).
-          to receive(:log).
-          with("getting lists timed out")
-        get_respone_api.lists
+        expect { get_respone_api.lists }.to raise_error('things went really bad')
       end
 
       it 'logs parsed error message in the event of failed request' do
@@ -56,7 +48,7 @@ describe ServiceProviders::GetResponseApi do
         expect(get_respone_api).
           to receive(:log).
           with("getting lists returned 'things went really bad' with the code 500")
-        get_respone_api.lists
+        expect { get_respone_api.lists }.to raise_error(RuntimeError)
       end
     end
 
