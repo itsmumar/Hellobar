@@ -85,8 +85,6 @@ describe  Hello::DataAPI do
     end
 
     it 'should cache `Hello::DataAPIHelper::RequestParts.get_contacts`' do
-      # Weird Rails' cache behaviour, it would not yield the block in spec runs
-      expect(Rails.cache).to receive(:fetch).and_yield
       expect(Hello::DataAPIHelper::RequestParts).to receive(:get_contacts)
         .with(site_id, id, read_key, limit, nil).once
 
