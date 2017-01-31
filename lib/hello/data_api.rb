@@ -4,9 +4,10 @@ require "./lib/hello/api_performance"
 require "thread/pool"
 
 module Hello::DataAPI
-  class << self
-    API_MAX_SLICE = 4
+  # Include this many different IDs in one Data API request
+  API_MAX_SLICE = 4
 
+  class << self
     # Returns total views and conversions for each site_element, by day for n days.
     # For example, if site element with id 123 had a total of 10 views and 3 conversions yesterday,
     # and received 5 more views and 1 more conversion today, the response would look like:
@@ -32,7 +33,7 @@ module Hello::DataAPI
             path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, ids, site.read_key, num_days)
             slice_results = get(path, params)
             semaphore.synchronize {
-              results.merge!(slice_results) if !slice_results.nil?
+              results.merge!(slice_results) if slice_results
             }
           }
         end
@@ -131,8 +132,15 @@ module Hello::DataAPI
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
-        path, params = Hello::DataAPIHelper::RequestParts.contact_list_totals(site.id, contact_list_ids, site.read_key)
-        get(path, params)
+        results = {}
+
+        contact_list_ids.each_slice(API_MAX_SLICE) do |ids|
+          path, params = Hello::DataAPIHelper::RequestParts.contact_list_totals(site.id, ids, site.read_key)
+          slice_results = get(path, params)
+          results.merge!(slice_results) if slice_results
+        end
+
+        results
       end
     end
 
