@@ -440,6 +440,71 @@ export default Ember.Controller.extend({
     return this.get('isTopBarStyle') && !this.get('isCallType');
   }.property('isTopBarStyle', 'isCallType'),
 
+  /* ---------- Color management -------- */
+  setSiteColors: function () {
+
+    const brightness = (color) => {
+      let rgb = Ember.copy(color);
+      [0, 1, 2].forEach((i) => {
+        let val = rgb[i] / 255;
+        return rgb[i] = val < 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+      });
+      return ((0.2126 * rgb[0]) + (0.7152 * rgb[1]) + (0.0722 * rgb[2]));
+    };
+
+    if (this.get('model.id') || window.elementToCopyID) {
+      return;
+    }
+
+    let colorPalette = this.get('colorPalette');
+    let dominantColor = this.get('dominantColor');
+
+    if (Ember.isEmpty(colorPalette) || Ember.isEmpty(dominantColor)) {
+      return;
+    }
+
+    //----------- Primary Color  -----------#
+
+    let primaryColor = dominantColor;
+
+    for (let i = 0; i < colorPalette.length; i++) {
+      let color = colorPalette[i];
+      if (Math.abs(color[0] - color[1]) > 10 || Math.abs(color[1] - color[2]) > 10 || Math.abs(color[0] - color[2]) > 10) {
+        primaryColor = color;
+        break;
+      }
+    }
+
+    this.set('model.background_color', one.color(primaryColor).hex().replace('#', ''));
+
+    //----------- Other Colors  -----------#
+
+    let white = 'ffffff';
+    let black = '000000';
+
+    if (this.brightness(primaryColor) < 0.5) {
+      return this.setProperties({
+        'model.text_color': white,
+        'model.button_color': white,
+        'model.link_color': one.color(primaryColor).hex().replace('#', '')
+      });
+    } else {
+      colorPalette.sort((a, b) => {
+          return brightness(a) - brightness(b);
+        }
+      );
+
+      let darkest = brightness(colorPalette[0]) >= 0.5 ? black : one.color(colorPalette[0]).hex().replace('#', '');
+
+      return this.setProperties({
+        'model.text_color': darkest,
+        'model.button_color': darkest,
+        'model.link_color': white
+      });
+    }
+  }.observes('colorPalette'),
+
+
   //-----------  Actions  -----------#
 
   actions: {
