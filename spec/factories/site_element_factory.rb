@@ -5,6 +5,12 @@ FactoryGirl.define do
     theme_id "classic"
     element_subtype "announcement"
 
+    trait :bar
+
+    trait :slider do
+      type "Slider"
+    end
+
     factory :modal_element do
       type "Modal"
     end
