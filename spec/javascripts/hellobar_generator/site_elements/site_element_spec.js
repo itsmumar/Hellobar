@@ -98,6 +98,35 @@ describe("SiteElement", function() {
     });
   });
 
+  describe("#setPullDown", function() {
+    var siteElement = new HB.SiteElement({
+      id: 123,
+      type: 'Bar',
+      size: 50,
+      placement: 'bar-top',
+      closable: true
+    });
+
+    it("creates a pullDown element and injects it at the top of the page", function() {
+      siteElement.setPullDown();
+
+      pullDown = document.querySelector('#pull-down.se-' + siteElement.id);
+
+      expect(pullDown.className).toContain('hellobar');
+      expect(pullDown.className).toContain('hb-' + siteElement.size);
+      expect(pullDown.className).toContain('hb-' + siteElement.placement);
+    });
+
+    it("assigns `inverted` css class when background color is bright", function() {
+      siteElement.primary_color = 'white';
+      siteElement.setPullDown();
+
+      pullDown = document.querySelector('#pull-down.se-' + siteElement.id);
+
+      expect(pullDown.className).toContain('inverted');
+    });
+  });
+
   describe("#getBrightness", function() {
     var siteElement = new HB.SiteElement({});
     var precision = 3;
