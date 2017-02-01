@@ -17,8 +17,10 @@ HB.BarElement = HB.createClass({
     iframe.setAttribute("frameBorder", 0); // IE 9 and less
 
     // Remove the pusher if it exists
-    if (HB.p)
+    if (HB.p) {
       HB.p.parentNode.removeChild(HB.p);
+    }
+
     HB.p = null;
 
     // Create the pusher (which pushes the page down) if needed
@@ -26,17 +28,19 @@ HB.BarElement = HB.createClass({
       HB.p = document.createElement("div");
       HB.p.id = "hellobar-pusher";
       HB.p.className = "hb-" + this.size;
+
       // shrinks pusher if siteElement hidden by viewCondition rules
       if (this.w.style.display === "none") {
         HB.p.style.height = 0
       }
-      ;
+
       HB.injectAtTop(HB.p, this.placement == "bar-bottom");
     }
   },
 
-  minimize: function (se_id) {
-    HB.animateOut(this.w, this.onHidden(se_id));
+  minimize: function () {
+    HB.animateOut(this.w, this.onHidden());
+
     if (HB.p != null)
       HB.p.style.display = 'none';
 
@@ -47,7 +51,7 @@ HB.BarElement = HB.createClass({
     HB.animateIn(this.pullDown);
   },
 
-  onHidden: function (se_id) {
+  onHidden: function () {
     // Track specific elements longer, for takeovers/modals
     var expiration, cookie_name, cookie_str, dismissed_elements;
     // Track specific elements 24 hours, for bars/sliders
@@ -56,8 +60,8 @@ HB.BarElement = HB.createClass({
     cookie_str = HB.gc(cookie_name) || "[]";
     dismissed_elements = JSON.parse(cookie_str) || [];
 
-    if (dismissed_elements.indexOf(se_id) == -1) {
-      dismissed_elements.push(se_id);
+    if (dismissed_elements.indexOf(this.id) == -1) {
+      dismissed_elements.push(this.id);
     }
 
     if (dismissed_elements) {
