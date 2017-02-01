@@ -58,7 +58,7 @@
 }
 
 #hellobar-container.HB-Slider.hb-top-right.hb-animateOut,
-#hellobar-container.HB-Slider.hb_bottom-right.hb-animateOut {
+#hellobar-container.HB-Slider.hb-bottom-right.hb-animateOut {
   animation-name: hb-bounceOutRight;
   -o-animation-name: hb-bounceOutRight;
   -ms-animation-name: hb-bounceOutRight;
