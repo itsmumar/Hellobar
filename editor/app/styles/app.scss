@@ -42,14 +42,15 @@
 @import 'components/_right-pane.css.sass';
 @import 'components/_tab-view.css.sass';
 @import 'components/_toggle-switch.css.sass';
-@import 'components/selection/_contact-list-select.sass';
-@import 'components/thank-you/_thank-you-editor.sass';
-@import 'components/image-uploading/_image-upload.css.sass';
-@import 'components/hints/_popup-hint-trigger.css.sass';
-@import 'components/hints/_popup-hint.css.sass';
 @import 'components/custom-html/_custom-html-editor.sass';
 @import 'components/custom-html/_code-editor.sass';
 @import 'components/fields/_field-list.sass';
+@import 'components/hints/_popup-hint-trigger.css.sass';
+@import 'components/hints/_popup-hint.css.sass';
+@import 'components/image-uploading/_image-upload.css.sass';
+@import 'components/preview/_preview-area.sass';
+@import 'components/selection/_contact-list-select.sass';
+@import 'components/thank-you/_thank-you-editor.sass';
 @import 'components/theming/_theme-info.sass';
 @import 'components/theming/_theme-tile-grid.css.sass';
 @import 'components/theming/_theme-tile.css.sass';
@@ -65,7 +66,6 @@
 @import 'layouts/editor/_forms.css.sass';
 @import 'layouts/editor/_ie.css.sass';
 @import 'layouts/editor/_interstitial.css.sass';
-@import 'general/layouts/editor/preview';
 @import 'layouts/editor/_steps.css.sass';
 
 @import 'layouts/modals/_account-prompt.css.sass';

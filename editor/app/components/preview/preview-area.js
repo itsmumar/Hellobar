@@ -1,14 +1,16 @@
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
+export default Ember.Component.extend({
+
+  classNames: ['preview-area'],
 
   applicationController: Ember.inject.controller('application'),
   inlineEditing: Ember.inject.service(),
 
-  init() {
+  didInsertElement() {
     HB.addPreviewInjectionListener(container => {
         this.adjustPushHeight();
-        return this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
+        this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
       }
     );
     Ember.run.next(() => {
@@ -67,7 +69,7 @@ export default Ember.Controller.extend({
     };
 
     const property = cssProperty();
-    const css = {
+    nsonst css = {
       'border-top-width': '0',
       'border-bottom-width': '0'
     };
@@ -106,6 +108,6 @@ export default Ember.Controller.extend({
     this.get('isPushed') && classes.push('is-pushed');
     this.get('isMobile') && classes.push('hellobar-preview-container-mobile');
     return classes.join(' ');
-  }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile'),
+  }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile')
 
 });

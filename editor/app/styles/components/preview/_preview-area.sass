@@ -1,17 +1,22 @@
-.dropperTrios_spyglass
-  z-index: 1000
-  border: 1px solid $black
-  border-radius: 10em
-  box-shadow: $shadow
+.preview-area
+  width: 100%
+  height: 100%
+  overflow: hidden
+  position: relative
+  background-color: $grayLightest
 
 .editor-wrapper
+
+  .dropperTrios_spyglass
+    z-index: 1000
+    border: 1px solid $black
+    border-radius: 10em
+    box-shadow: $shadow
 
   .preview-wrapper
     width: 100%
     height: 100%
-    overflow: hidden
     position: relative
-    background-color: $grayLightest
 
     #hellobar-preview-container
       top: 0
@@ -24,9 +29,9 @@
         position: relative
 
       iframe
-        z-index: 8
         width: 100%
         position: absolute
+        z-index: 8
 
       #hellobar-pusher
         display: none !important
@@ -98,9 +103,6 @@
         position: absolute
         @include transition()
 
-    canvas
-      cursor: url(<%= asset_path "eyedropper.svg" %>) 0 18, auto
-
   /*-----------  Fullscreen State  -----------*/
 
   &.is-fullscreen
@@ -111,9 +113,6 @@
   /*-----------  Mobile State  -----------*/
 
   &.is-mobile
-
-    .preview-wrapper
-      background: $grayLightest url(<%= asset_path "iphone-bg.png" %>) center center no-repeat
 
     .preview-image
       width: 232px !important
