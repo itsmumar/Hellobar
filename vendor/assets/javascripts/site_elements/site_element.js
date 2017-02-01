@@ -122,8 +122,8 @@ HB.SiteElement = HB.createClass({
     if (this.w && this.w.parentNode)
       this.w.parentNode.removeChild(this.w);
 
-    // Remove pull-arrow if it exists
-    HB.pd = document.getElementById('pull-down');
+    // Remove the pull-down element (for this particular site_element)
+    HB.pd = document.querySelector('#pull-down.se-' + this.id);
     if (HB.pd)
       HB.pd.parentNode.removeChild(HB.pd);
 
@@ -183,8 +183,10 @@ HB.SiteElement = HB.createClass({
     var adjustmentHandler = function() {
       that.adjustForCurrentWidth();
     };
+
     // This will do initial readjustment (with minimal time delay)
     setTimeout(adjustmentHandler, 1);
+
     // This interval will execute additional delayed readjustments
     // (we need this because we don't know exact moment of time when readjustment should happen,
     // because we can have animations etc)
@@ -421,7 +423,6 @@ HB.SiteElement = HB.createClass({
     return false;
   },
 
-
   close: function () {
     if (HB.preventElementClosing) {
       return;
@@ -475,9 +476,9 @@ HB.SiteElement = HB.createClass({
     // Create the pull down elements
     if (this.closable) {
       var pullDown = document.createElement("div");
-      pullDown.className = "hb-" + this.size + " hellobar " + "hb-" + this.placement;
       pullDown.id = "pull-down";
       pullDown.style.backgroundColor = "#" + this.background_color;
+      pullDown.className = "hb-" + this.size + " hellobar " + "hb-" + this.placement + ' se-' + this.id;
 
       var pdLink = document.createElement("div");
       pdLink.className = "hellobar-arrow";
