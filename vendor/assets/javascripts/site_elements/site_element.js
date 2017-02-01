@@ -470,7 +470,7 @@ HB.SiteElement = HB.createClass({
     HB.trigger("closed", this); // New trigger
   },
 
-  // Create the pulldown arrow element for when a bar is hidden
+  // Create the pulldown arrow element for when a bar/slider is hidden
   // The pulldown arrow is only created when a site element is closable
   setPullDown: function () {
     // Create the pull down elements
