@@ -69,7 +69,7 @@ export default Ember.Component.extend({
     };
 
     const property = cssProperty();
-    nsonst css = {
+    const css = {
       'border-top-width': '0',
       'border-bottom-width': '0'
     };
