@@ -480,6 +480,10 @@ HB.SiteElement = HB.createClass({
       pullDown.style.backgroundColor = "#" + this.background_color;
       pullDown.className = "hb-" + this.size + " hellobar " + "hb-" + this.placement + ' se-' + this.id;
 
+      if (HB.colorIsBright(this.primary_color)) {
+        pullDown.className += ' inverted'
+      }
+
       var pdLink = document.createElement("div");
       pdLink.className = "hellobar-arrow";
       pdLink.onclick = function () {

@@ -44,10 +44,6 @@ HB.BarElement = HB.createClass({
     if (HB.p != null)
       HB.p.style.display = 'none';
 
-    if (HB.colorIsBright(this.primary_color)) {
-      $(this.pullDown).addClass('inverted');
-    }
-
     HB.animateIn(this.pullDown);
   },
 
