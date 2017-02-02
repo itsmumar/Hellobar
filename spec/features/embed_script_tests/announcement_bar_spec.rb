@@ -18,10 +18,10 @@ feature 'Site with a closable announcement topbar', :js do
       # has headline
       expect(page).to have_content element.headline
 
-      expect(page).to have_selector '#close_bar'
+      expect(page).to have_selector '.icon-close'
 
       # hide the bar
-      find('#close_bar').trigger 'click'
+      find('.icon-close').trigger 'click'
     end
 
     # show the bar again
