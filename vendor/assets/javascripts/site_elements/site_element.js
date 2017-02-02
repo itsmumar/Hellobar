@@ -532,7 +532,7 @@ HB.SiteElement = HB.createClass({
       }, 500);
     }
     else if (this.type == "Slider") {
-      this.w.style.position = "absolute";
+      this.w.style.position = "fixed";
       HB.iosFocusInterval = setInterval(function () {
         element.w.style.left = window.pageXOffset + "px";
         element.w.style.top = window.pageYOffset + "px";
@@ -591,7 +591,12 @@ HB.SiteElement = HB.createClass({
     } else {
       var modalMaxHeight = hbModal.getElementsByClassName('hb-text-wrapper')[0].clientHeight;
 
-      element.w.style.position = "absolute";
+      if (this.type == 'Slider') {
+        element.w.style.position = "fixed";
+      } else {
+        element.w.style.position = "absolute";
+      }
+
       HB.iosFocusInterval = setInterval(function () {
         element.w.style.height = window.innerHeight + "px";
         element.w.style.maxHeight = window.innerHeight + "px";
