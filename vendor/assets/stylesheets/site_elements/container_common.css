@@ -309,7 +309,7 @@
 
 /*-----------  Animations: hb-bounceOutDown  -----------*/
 
-@@keyframes hb-bounceOutDown {
+@keyframes hb-bounceOutDown {
   0%, 100% {
     transition-timing-function: ease-in;
     -o-transition-timing-function: ease-in;
@@ -318,10 +318,18 @@
     -webkit-transition-timing-function: ease-in;
   }
   0% {
-    bottom: 0px;
+    transform: none;
+    -o-transform: none;
+    -ms-transform: none;
+    -moz-transform: none;
+    -webkit-transform: none;
   }
   100% {
-    bottom: -500px;
+    transform: translate3d(0, 500px, 0);
+    -o-transform: translate3d(0, 500px, 0);
+    -ms-transform: translate3d(0, 500px, 0);
+    -moz-transform: translate3d(0, 500px, 0);
+    -webkit-transform: translate3d(0, 500px, 0);
   }
 }
 
@@ -330,10 +338,10 @@
     -moz-transition-timing-function: ease-in;
   }
   0% {
-    bottom: 0px;
+    -moz-transform: none;
   }
   100% {
-    bottom: -500px;
+    -moz-transform: translate3d(0, 500px, 0);
   }
 }
 
@@ -342,10 +350,10 @@
     -webkit-transition-timing-function: ease-in;
   }
   0% {
-    bottom: 0px;
+    -webkit-transform: none;
   }
   100% {
-    bottom: -500px;
+    -webkit-transform: translate3d(0, 500px, 0);
   }
 }
 
