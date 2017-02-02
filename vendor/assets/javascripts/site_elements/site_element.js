@@ -501,7 +501,7 @@ HB.SiteElement = HB.createClass({
         }
       }.bind(this);
 
-      var svgArrow = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="11px" height="11px" viewBox="43.611 92.5 315 315" enable-background="new 43.611 92.5 315 315" xml:space="preserve"> <g> <path d="M49.611,92.5c-3.3,0-6,2.7-6,6v303c0,3.3,2.7,6,6,6h303c3.3,0,6-2.7,6-6v-303c0-3.3-2.7-6-6-6H49.611z M229.611,254.334 c-3.3,0-6,2.7-6,6V360c0,3.3-2.7,6-6,6h-33c-3.3,0-6-2.7-6-6v-99.666c0-3.3-2.7-6-6-6H99.195c-3.3,0-4.197-2.01-1.994-4.467 l99.904-111.4c2.203-2.457,5.809-2.457,8.012,0l99.903,111.4c2.203,2.457,1.306,4.467-1.994,4.467H229.611z"/> </g> </svg>';
+      var svgArrow = '<svg xmlns="http://www.w3.org/2000/svg" width="11px" height="11px" viewBox="43.6 92.5 315 315"><path d="M49.6 92.5c-3.3 0-6 2.7-6 6v303c0 3.3 2.7 6 6 6h303c3.3 0 6-2.7 6-6v-303c0-3.3-2.7-6-6-6H49.6zM229.6 254.3c-3.3 0-6 2.7-6 6V360c0 3.3-2.7 6-6 6h-33c-3.3 0-6-2.7-6-6v-99.7c0-3.3-2.7-6-6-6H99.2c-3.3 0-4.2-2-2-4.5l99.9-111.4c2.2-2.5 5.8-2.5 8 0l99.9 111.4c2.2 2.5 1.3 4.5-2 4.5H229.6z"/></svg>';
       pdLink.innerHTML = svgArrow;
 
       pullDown.appendChild(pdLink);
