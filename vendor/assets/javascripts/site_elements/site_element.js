@@ -610,7 +610,7 @@ HB.SiteElement = HB.createClass({
           hbModal.style.transform = "none";
           hbModal.style.width = "100%";
         }
-      }, 0);
+      }, 500);
 
       hbModal.scrollIntoView();
       contentDocument.getElementsByClassName('hb-content-wrapper')[0].scrollIntoView();
