@@ -481,7 +481,7 @@ HB.SiteElement = HB.createClass({
       pullDown.className = "hb-" + this.size + " hellobar " + "hb-" + this.placement + ' se-' + this.id;
 
       if (HB.colorIsBright(this.primary_color)) {
-        pullDown.className += ' inverted'
+        pullDown.className += ' inverted';
       }
 
       var pdLink = document.createElement("div");
@@ -496,7 +496,7 @@ HB.SiteElement = HB.createClass({
         HB.sc(cookieName, JSON.stringify({}), new Date().toString());
 
         // if the pusher exists, unhide it since it should be hidden at this point
-        if (HB.p != null) {
+        if (HB.p) {
           HB.showElement(HB.p, '');
         }
       }.bind(this);
