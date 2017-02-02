@@ -40,8 +40,11 @@
 }
 
 .hellobar#pull-down .hellobar-arrow {
-  opacity: 0.3;
   cursor: pointer;
+  display: flex;
+  height: 11px;
+  opacity: 0.3;
+  width: 11px;
 
   filter: flipv; /*IE*/
   transform: scaleY(-1);
