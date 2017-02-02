@@ -122,8 +122,8 @@ HB.SiteElement = HB.createClass({
     if (this.w && this.w.parentNode)
       this.w.parentNode.removeChild(this.w);
 
-    // Remove pull-arrow if it exists
-    HB.pd = document.getElementById('pull-down');
+    // Remove the pull-down element (for this particular site_element)
+    HB.pd = document.querySelector('#pull-down.se-' + this.id);
     if (HB.pd)
       HB.pd.parentNode.removeChild(HB.pd);
 
@@ -183,8 +183,10 @@ HB.SiteElement = HB.createClass({
     var adjustmentHandler = function() {
       that.adjustForCurrentWidth();
     };
+
     // This will do initial readjustment (with minimal time delay)
     setTimeout(adjustmentHandler, 1);
+
     // This interval will execute additional delayed readjustments
     // (we need this because we don't know exact moment of time when readjustment should happen,
     // because we can have animations etc)
@@ -421,7 +423,6 @@ HB.SiteElement = HB.createClass({
     return false;
   },
 
-
   close: function () {
     if (HB.preventElementClosing) {
       return;
@@ -469,15 +470,19 @@ HB.SiteElement = HB.createClass({
     HB.trigger("closed", this); // New trigger
   },
 
-  // Create the pulldown arrow element for when a bar is hidden
+  // Create the pulldown arrow element for when a bar/slider is hidden
   // The pulldown arrow is only created when a site element is closable
   setPullDown: function () {
     // Create the pull down elements
     if (this.closable) {
       var pullDown = document.createElement("div");
-      pullDown.className = "hb-" + this.size + " hellobar " + "hb-" + this.placement;
       pullDown.id = "pull-down";
       pullDown.style.backgroundColor = "#" + this.background_color;
+      pullDown.className = "hb-" + this.size + " hellobar " + "hb-" + this.placement + ' se-' + this.id;
+
+      if (HB.colorIsBright(this.primary_color)) {
+        pullDown.className += ' inverted';
+      }
 
       var pdLink = document.createElement("div");
       pdLink.className = "hellobar-arrow";
@@ -491,7 +496,7 @@ HB.SiteElement = HB.createClass({
         HB.sc(cookieName, JSON.stringify({}), new Date().toString());
 
         // if the pusher exists, unhide it since it should be hidden at this point
-        if (HB.p != null) {
+        if (HB.p) {
           HB.showElement(HB.p, '');
         }
       }.bind(this);

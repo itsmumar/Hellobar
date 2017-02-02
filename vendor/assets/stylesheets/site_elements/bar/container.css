@@ -26,49 +26,9 @@
 
 /*-----------  Pull-Downs  -----------*/
 
-.hellobar#pull-down {
-  top: -4px;
-  right: 10px;
-  padding: 3px;
-  z-index: 16999;
-  overflow: hidden;
-  position: absolute;
-  border-radius: 0 0 5px 5px;
-
-  transform: translateY(-40px);
-  -o-transform: translateY(-40px);
-  -ms-transform: translateY(-40px);
-  -moz-transform: translateY(-40px);
-  -webkit-transform: translateY(-40px);
-}
-
-.hellobar#pull-down .hellobar-arrow {
-  opacity: 0.3;
-  cursor: pointer;
-
-  filter: flipv; /*IE*/
-  transform: scaleY(-1);
-  -o-transform: scaleY(-1);
-  -ms-transform: scaleY(-1);
-  -moz-transform: scaleY(-1);
-  -webkit-transform: scaleY(-1);
-}
-
-.hellobar#pull-down .hellobar-arrow:hover {
-  opacity: 0.6;
-}
-
-.hellobar#pull-down .hellobar-arrow svg {
-  fill: white;
-}
-
-.hellobar#pull-down.inverted .hellobar-arrow svg {
-  fill: #3C3E3F;
-}
-
 .hellobar#pull-down.hb-bar-bottom {
   top: auto;
-  bottom: -4px;
+  bottom: -1px;
   position: fixed;
   border-radius: 5px 5px 0 0;
 
@@ -109,8 +69,7 @@
 
 /*-----------  Animations  -----------*/
 
-#hellobar-container.HB-Bar.hb-animated,
-.hellobar#pull-down.hb-animated {
+#hellobar-container.HB-Bar.hb-animated {
   animation-duration: 1s;
   -o-animation-duration: 1s;
   -ms-animation-duration: 1s;
@@ -137,15 +96,6 @@
 }
 
 /*-----------  Animations (Bottom)  -----------*/
-
-#hellobar-container.HB-Bar.hb-animated.hb-bar-bottom,
-.hellobar#pull-down.hb-animated.hb-bar-bottom {
-  animation-duration: 1s;
-  -o-animation-duration: 1s;
-  -ms-animation-duration: 1s;
-  -moz-animation-duration: 1s;
-  -webkit-animation-duration: 1s;
-}
 
 #hellobar-container.HB-Bar.hb-animateIn.hb-bar-bottom,
 .hellobar#pull-down.hb-animateIn.hb-bar-bottom {

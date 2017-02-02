@@ -4,6 +4,44 @@
 var context = describe;
 
 describe("SiteElement", function() {
+  describe("#checkForDisplaySettings", function() {
+    beforeEach(function() {
+      iframe_window = {className: "my-cool-class"};
+      iframe_window.style = jasmine.createSpy('style');
+      siteElement = new HB.SiteElement({w: iframe_window, view_condition: ""});
+      spyOn(HB, "viewed")
+    });
+
+    it("records a view", function () {
+      siteElement.checkForDisplaySetting();
+      expect(HB.viewed).toHaveBeenCalled();
+    });
+
+    it("does not record a view when don't record view is set", function () {
+      siteElement.dontRecordView = true;
+      siteElement.checkForDisplaySetting();
+      expect(HB.viewed).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("#onClosed", function() {
+    context("callbacks", function() {
+      beforeEach(function() {
+        spyOn(HB, 'trigger');
+        siteElement.onClosed();
+      });
+
+      it("triggers the elementDismissed callback", function() {
+        expect(HB.trigger).toHaveBeenCalledWith('elementDismissed');
+      });
+
+      it("triggers the converted callback", function() {
+        expect(HB.trigger).toHaveBeenCalledWith('closed', siteElement);
+      });
+    });
+
+  });
+
   describe("#imageFor", function() {
     siteElement = null;
     beforeEach(function() {
@@ -57,6 +95,35 @@ describe("SiteElement", function() {
         siteElement.image_placement = "left"
         expect(siteElement.imagePlacementClass()).toEqual("image-left");
       });
+    });
+  });
+
+  describe("#setPullDown", function() {
+    var siteElement = new HB.SiteElement({
+      id: 123,
+      type: 'Bar',
+      size: 50,
+      placement: 'bar-top',
+      closable: true
+    });
+
+    it("creates a pullDown element and injects it at the top of the page", function() {
+      siteElement.setPullDown();
+
+      pullDown = document.querySelector('#pull-down.se-' + siteElement.id);
+
+      expect(pullDown.className).toContain('hellobar');
+      expect(pullDown.className).toContain('hb-' + siteElement.size);
+      expect(pullDown.className).toContain('hb-' + siteElement.placement);
+    });
+
+    it("assigns `inverted` css class when background color is bright", function() {
+      siteElement.primary_color = 'white';
+      siteElement.setPullDown();
+
+      pullDown = document.querySelector('#pull-down.se-' + siteElement.id);
+
+      expect(pullDown.className).toContain('inverted');
     });
   });
 
