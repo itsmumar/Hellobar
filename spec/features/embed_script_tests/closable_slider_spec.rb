@@ -1,7 +1,7 @@
 require 'integration_helper'
 
-feature 'Site with a closable announcement topbar', :js do
-  given(:element) { FactoryGirl.create :site_element, :bar, :closable }
+feature 'Site with a closable slider', :js do
+  given(:element) { FactoryGirl.create :site_element, :slider, :closable }
   given(:path) { generate_file_and_return_path(element.site.id) }
 
   before do
@@ -20,11 +20,11 @@ feature 'Site with a closable announcement topbar', :js do
 
       expect(page).to have_selector '.icon-close'
 
-      # hide the bar
+      # hide the slider
       find('.icon-close').trigger 'click'
     end
 
-    # show the bar again
+    # show the slider again
     expect(page).to have_selector '#pull-down'
     find('#pull-down').trigger 'click'
 
@@ -36,7 +36,7 @@ feature 'Site with a closable announcement topbar', :js do
       expect(page).to have_content element.headline
     end
 
-    # reload the page and expect the bar to be visible
+    # reload the page and expect the slider to be visible
     visit "#{ site_path_to_url(path) }"
 
     # force capybara to wait until iframe is loaded

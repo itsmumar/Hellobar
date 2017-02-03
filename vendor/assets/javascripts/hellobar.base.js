@@ -1291,8 +1291,8 @@ var HB = {
     }
 
     // Treat hidden elements *DIFFERENTLY* -- i.e. show them (even though
-    // visibility control cookie is *set*) *but* show them minimized
-    if ((siteElementData.type === 'Bar') // Bars only
+    // the visibility control cookie is *set*) *but* show them minimized
+    if ((siteElementData.type === 'Bar' || siteElementData.type === 'Slider') // Bars & Sliders only
       && !HB.checkVisibilityControlCookies(siteElementData) // with a visibility cookie set (user hid it)
       && !HB.updatedSinceLastVisit(siteElementData) // not updated since last visit
       && !shouldHideElementConsideringTypeAndScreenWidth() // eligible for mobile
@@ -2064,7 +2064,6 @@ var HB = {
       if (document.hidden || document.unloaded) {
         vistorIntendsTo = true
       }
-      ;
 
       // if on mobile, display the bar after N ms regardless of mouse behavior
       var mobileDelaySetting = 30000;
@@ -2072,14 +2071,11 @@ var HB = {
       if (HB.device() === "mobile" && date.getTime() - HB.intentConditionCache.intentStartTime > mobileDelaySetting) {
         vistorIntendsTo = true
       }
-      ;
     }
-    ;
 
     if (vistorIntendsTo) {
       payload();
     }
-    ;
   },
 
   initializeIntentListeners: function () {

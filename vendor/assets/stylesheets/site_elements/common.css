@@ -98,6 +98,7 @@ form {
 
 /*-----------  Close Buttons  -----------*/
 
+#hellobar-bar .icon-close,
 #hellobar-modal .icon-close,
 #hellobar-slider .icon-close,
 #hellobar-takeover .icon-close {
@@ -120,6 +121,7 @@ form {
   -webkit-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
 }
 
+#hellobar-bar .icon-close:hover,
 #hellobar-modal .icon-close:hover,
 #hellobar-slider .icon-close:hover,
 #hellobar-takeover .icon-close:hover {
@@ -132,6 +134,7 @@ form {
   right: 10px;
 }
 
+#hellobar-bar.dark .icon-close,
 #hellobar-modal.dark .icon-close,
 #hellobar-slider.dark .icon-close,
 #hellobar-takeover.dark .icon-close {

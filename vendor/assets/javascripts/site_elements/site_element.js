@@ -122,8 +122,8 @@ HB.SiteElement = HB.createClass({
     if (this.w && this.w.parentNode)
       this.w.parentNode.removeChild(this.w);
 
-    // Remove pull-arrow if it exists
-    HB.pd = document.getElementById('pull-down');
+    // Remove the pull-down element (for this particular site_element)
+    HB.pd = document.querySelector('#pull-down.se-' + this.id);
     if (HB.pd)
       HB.pd.parentNode.removeChild(HB.pd);
 
@@ -183,8 +183,10 @@ HB.SiteElement = HB.createClass({
     var adjustmentHandler = function() {
       that.adjustForCurrentWidth();
     };
+
     // This will do initial readjustment (with minimal time delay)
     setTimeout(adjustmentHandler, 1);
+
     // This interval will execute additional delayed readjustments
     // (we need this because we don't know exact moment of time when readjustment should happen,
     // because we can have animations etc)
@@ -421,7 +423,6 @@ HB.SiteElement = HB.createClass({
     return false;
   },
 
-
   close: function () {
     if (HB.preventElementClosing) {
       return;
@@ -469,15 +470,19 @@ HB.SiteElement = HB.createClass({
     HB.trigger("closed", this); // New trigger
   },
 
-  // Create the pulldown arrow element for when a bar is hidden
+  // Create the pulldown arrow element for when a bar/slider is hidden
   // The pulldown arrow is only created when a site element is closable
   setPullDown: function () {
     // Create the pull down elements
     if (this.closable) {
       var pullDown = document.createElement("div");
-      pullDown.className = "hb-" + this.size + " hellobar " + "hb-" + this.placement;
       pullDown.id = "pull-down";
       pullDown.style.backgroundColor = "#" + this.background_color;
+      pullDown.className = "hb-" + this.size + " hellobar " + "hb-" + this.placement + ' se-' + this.id;
+
+      if (HB.colorIsBright(this.primary_color)) {
+        pullDown.className += ' inverted';
+      }
 
       var pdLink = document.createElement("div");
       pdLink.className = "hellobar-arrow";
@@ -491,12 +496,12 @@ HB.SiteElement = HB.createClass({
         HB.sc(cookieName, JSON.stringify({}), new Date().toString());
 
         // if the pusher exists, unhide it since it should be hidden at this point
-        if (HB.p != null) {
+        if (HB.p) {
           HB.showElement(HB.p, '');
         }
       }.bind(this);
 
-      var svgArrow = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="11px" height="11px" viewBox="43.611 92.5 315 315" enable-background="new 43.611 92.5 315 315" xml:space="preserve"> <g> <path d="M49.611,92.5c-3.3,0-6,2.7-6,6v303c0,3.3,2.7,6,6,6h303c3.3,0,6-2.7,6-6v-303c0-3.3-2.7-6-6-6H49.611z M229.611,254.334 c-3.3,0-6,2.7-6,6V360c0,3.3-2.7,6-6,6h-33c-3.3,0-6-2.7-6-6v-99.666c0-3.3-2.7-6-6-6H99.195c-3.3,0-4.197-2.01-1.994-4.467 l99.904-111.4c2.203-2.457,5.809-2.457,8.012,0l99.903,111.4c2.203,2.457,1.306,4.467-1.994,4.467H229.611z"/> </g> </svg>';
+      var svgArrow = '<svg xmlns="http://www.w3.org/2000/svg" width="11px" height="11px" viewBox="43.6 92.5 315 315"><path d="M49.6 92.5c-3.3 0-6 2.7-6 6v303c0 3.3 2.7 6 6 6h303c3.3 0 6-2.7 6-6v-303c0-3.3-2.7-6-6-6H49.6zM229.6 254.3c-3.3 0-6 2.7-6 6V360c0 3.3-2.7 6-6 6h-33c-3.3 0-6-2.7-6-6v-99.7c0-3.3-2.7-6-6-6H99.2c-3.3 0-4.2-2-2-4.5l99.9-111.4c2.2-2.5 5.8-2.5 8 0l99.9 111.4c2.2 2.5 1.3 4.5-2 4.5H229.6z"/></svg>';
       pdLink.innerHTML = svgArrow;
 
       pullDown.appendChild(pdLink);
@@ -527,7 +532,7 @@ HB.SiteElement = HB.createClass({
       }, 500);
     }
     else if (this.type == "Slider") {
-      this.w.style.position = "absolute";
+      this.w.style.position = "fixed";
       HB.iosFocusInterval = setInterval(function () {
         element.w.style.left = window.pageXOffset + "px";
         element.w.style.top = window.pageYOffset + "px";
@@ -586,7 +591,12 @@ HB.SiteElement = HB.createClass({
     } else {
       var modalMaxHeight = hbModal.getElementsByClassName('hb-text-wrapper')[0].clientHeight;
 
-      element.w.style.position = "absolute";
+      if (this.type == 'Slider') {
+        element.w.style.position = "fixed";
+      } else {
+        element.w.style.position = "absolute";
+      }
+
       HB.iosFocusInterval = setInterval(function () {
         element.w.style.height = window.innerHeight + "px";
         element.w.style.maxHeight = window.innerHeight + "px";
@@ -605,7 +615,7 @@ HB.SiteElement = HB.createClass({
           hbModal.style.transform = "none";
           hbModal.style.width = "100%";
         }
-      }, 0);
+      }, 500);
 
       hbModal.scrollIntoView();
       contentDocument.getElementsByClassName('hb-content-wrapper')[0].scrollIntoView();

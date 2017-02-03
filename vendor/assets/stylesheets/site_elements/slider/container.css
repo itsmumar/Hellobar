@@ -5,7 +5,7 @@
   _top: expression(eval(document.body.scrollTop));
 }
 
-/*-----------  Placements: Right  -----------*/
+/*-----------  Placements  ------------------*/
 
 #hellobar-container.HB-Slider.hb-top-left,
 #hellobar-container.HB-Slider.hb-bottom-left {
@@ -27,9 +27,74 @@
   bottom: 0;
 }
 
+/*-----------  Pull-Downs: Right  ----*/
+
+.hellobar#pull-down.hb-top-right,
+.hellobar#pull-down.hb-bottom-right {
+  left: auto;
+  right: 0;
+  position: fixed;
+  border-radius: 5px 0 0 5px;
+
+  transform: translateX(20px);
+  -o-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  -moz-transform: translateX(20px);
+  -webkit-transform: translateX(20px);
+}
+
+.hellobar#pull-down.hb-top-right {
+  top: 60px;
+  bottom: auto;
+}
+
+.hellobar#pull-down.hb-bottom-right {
+  top: auto;
+  bottom: 60px;
+}
+
+.hellobar#pull-down.hb-top-right .hellobar-arrow,
+.hellobar#pull-down.hb-bottom-right .hellobar-arrow {
+  transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+}
+
+/*-----------  Pull-Downs: Left  -----*/
+
+.hellobar#pull-down.hb-top-left,
+.hellobar#pull-down.hb-bottom-left {
+  left: 0;
+  right: auto;
+  position: fixed;
+  border-radius: 0 5px 5px 0;
+
+  transform: translateX(-20px);
+  -o-transform: translateX(-20px);
+  -ms-transform: translateX(-20px);
+  -moz-transform: translateX(-20px);
+  -webkit-transform: translateX(-20px);
+}
+
+.hellobar#pull-down.hb-top-left {
+  top: 60px;
+  bottom: auto;
+}
+
+.hellobar#pull-down.hb-bottom-left {
+  top: auto;
+  bottom: 60px;
+}
+
+.hellobar#pull-down.hb-top-left .hellobar-arrow,
+.hellobar#pull-down.hb-bottom-left .hellobar-arrow {
+  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+}
+
 /*-----------  Animations  -----------*/
 
-#hellobar-container.HB-Slider.hb-animated {
+#hellobar-container.HB-Slider.hb-animated,
+.hellobar#pull-down.hb-animated {
   animation-duration: 0.5s;
   -o-animation-duration: 0.5s;
   -ms-animation-duration: 0.5s;
@@ -49,7 +114,9 @@
 }
 
 #hellobar-container.HB-Slider.hb-top-right.hb-animateIn,
-#hellobar-container.HB-Slider.hb-bottom-right.hb-animateIn {
+#hellobar-container.HB-Slider.hb-bottom-right.hb-animateIn,
+.hellobar#pull-down.hb-top-right.hb-animateIn,
+.hellobar#pull-down.hb-bottom-right.hb-animateIn {
   animation-name: hb-bounceInLeft;
   -o-animation-name: hb-bounceInLeft;
   -ms-animation-name: hb-bounceInLeft;
@@ -58,7 +125,9 @@
 }
 
 #hellobar-container.HB-Slider.hb-top-right.hb-animateOut,
-#hellobar-container.HB-Slider.hb_bottom-right.hb-animateOut {
+#hellobar-container.HB-Slider.hb-bottom-right.hb-animateOut,
+.hellobar#pull-down.hb-top-right.hb-animateOut,
+.hellobar#pull-down.hb-bottom-right.hb-animateOut {
   animation-name: hb-bounceOutRight;
   -o-animation-name: hb-bounceOutRight;
   -ms-animation-name: hb-bounceOutRight;
@@ -78,7 +147,9 @@
 }
 
 #hellobar-container.HB-Slider.hb-top-left.hb-animateIn,
-#hellobar-container.HB-Slider.hb-bottom-left.hb-animateIn {
+#hellobar-container.HB-Slider.hb-bottom-left.hb-animateIn,
+.hellobar#pull-down.hb-top-left.hb-animateIn,
+.hellobar#pull-down.hb-bottom-left.hb-animateIn {
   animation-name: hb-bounceInRight;
   -o-animation-name: hb-bounceInRight;
   -ms-animation-name: hb-bounceInRight;
@@ -87,7 +158,9 @@
 }
 
 #hellobar-container.HB-Slider.hb-top-left.hb-animateOut,
-#hellobar-container.HB-Slider.hb-bottom-left.hb-animateOut {
+#hellobar-container.HB-Slider.hb-bottom-left.hb-animateOut,
+.hellobar#pull-down.hb-top-left.hb-animateOut,
+.hellobar#pull-down.hb-bottom-left.hb-animateOut {
   animation-name: hb-bounceOutLeft;
   -o-animation-name: hb-bounceOutLeft;
   -ms-animation-name: hb-bounceOutLeft;

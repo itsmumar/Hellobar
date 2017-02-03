@@ -167,6 +167,14 @@
       .icon-close:before
         font-size: 0.75em
 
+  /*-----------  Pull-down for sliders  ---*/
+
+  .hellobar#pull-down
+    z-index: 1
+
+    &.hb-bottom-left, &.hb-top-left
+      left: $linkWidth + $stepWidth + 0.25em
+
   /*-----------  Main Viewport  -----------*/
 
   .viewport-wrapper
@@ -187,6 +195,7 @@
       padding: 0 2em 2em
       max-width: $stepWidth
       border-right: $border
+      z-index: 10
       @include transition(0.25s)
       @include flex(1 0 auto)
 
@@ -202,6 +211,10 @@
 
     .step-wrapper
       margin-left: -$stepWidth
+
+    .hellobar#pull-down
+      &.hb-bottom-left, &.hb-top-left
+        left: $linkWidth + 0.25em
 
   &.is-mobile
 
