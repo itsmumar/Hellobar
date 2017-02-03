@@ -6,6 +6,17 @@ export default Ember.Component.extend({
 
   applicationController: Ember.inject.controller('application'),
   inlineEditing: Ember.inject.service(),
+  imaging: Ember.inject.service(),
+
+  /**
+   * @property {object} main application model
+   */
+  model: null,
+
+  /**
+   * @property {boolean} true if mobile preview mode is selected, otherwise false
+   */
+  isMobile: null,
 
   didInsertElement() {
     HB.addPreviewInjectionListener(container => {
@@ -20,7 +31,6 @@ export default Ember.Component.extend({
 
   //-----------  Template Properties  -----------#
 
-  isMobile: Ember.computed.alias('applicationController.isMobile'),
   isPushed: Ember.computed.alias('model.pushes_page_down'),
   barSize: Ember.computed.alias('model.size'),
   barPosition: Ember.computed.alias('model.placement'),
@@ -108,6 +118,16 @@ export default Ember.Component.extend({
     this.get('isPushed') && classes.push('is-pushed');
     this.get('isMobile') && classes.push('hellobar-preview-container-mobile');
     return classes.join(' ');
-  }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile')
+  }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile'),
+
+  componentBackground: function() {
+    const backgroundColor = '#f6f6f6';
+    if (this.get('isMobile')) {
+      const phoneImageUrl = this.get('imaging').imagePath('iphone-bg.png');
+      return `${backgroundColor} url(${phoneImageUrl}) center center no-repeat`;
+    } else {
+      return backgroundColor;
+    }
+  }.property('isMobile')
 
 });
