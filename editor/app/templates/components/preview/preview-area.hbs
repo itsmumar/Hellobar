@@ -1,29 +1,27 @@
-<div class="preview-wrapper">
-  {{#if isCustom}}
-    {{custom-html/custom-html-editor
-    customHtml=model.custom_html customCss=model.custom_css customJs=model.custom_js
-    action="changeCustomHtmlCode"}}
-  {{/if}}
+{{#if isCustom}}
+  {{custom-html/custom-html-editor
+  customHtml=model.custom_html customCss=model.custom_css customJs=model.custom_js
+  action="changeCustomHtmlCode"}}
+{{/if}}
 
-  <div class="preview-wrapper" style="background: {{componentBackground}}">
+<div class="preview-wrapper" style="background: {{componentBackground}}">
 
-    {{announcement-container}}
+  {{announcement-container}}
 
-    {{right-pane}}
+  {{right-pane}}
 
-    <div id="hellobar-preview-container" class={{previewContainerCssClasses}}>
+  <div id="hellobar-preview-container" class={{previewContainerCssClasses}}>
 
-      <div class="preview-wrapper">
+    <div class="preview-wrapper">
 
-        <div class="preview-message">
-          <i class="icon-settings"></i>
-          Site preview loading...
-        </div>
+      <div class="preview-message">
+        <i class="icon-settings"></i>
+        Site preview loading...
       </div>
-
-      <div class="preview-image" style={{previewStyleString}}></div>
-
-      <img class="preview-image-for-colorpicker" src={{previewImageURL}} />
     </div>
+
+    <div class="preview-image" style={{previewStyleString}}></div>
+
+    <img class="preview-image-for-colorpicker" src={{previewImageURL}}/>
   </div>
 </div>
