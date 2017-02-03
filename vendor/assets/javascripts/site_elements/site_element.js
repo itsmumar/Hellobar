@@ -732,7 +732,10 @@ HB.SiteElement = HB.createClass({
 
   brandingCssClass: function() {
     return (HB.t(this.show_branding) || !HB.CAP.no_b) ? 'show-branding' : 'dont-show-branding';
-  }
+  },
 
+  closableCssClass: function() {
+    return this.closable ? 'closable' : '';
+  }
 
 });

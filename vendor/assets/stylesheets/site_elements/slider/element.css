@@ -26,6 +26,11 @@
 /*-----------  Close Buttons  -----------*/
 
 #hellobar-slider .icon-close {
+  display: none;
+}
+
+#hellobar-slider.closable .icon-close {
+  display: inline;
   font-size: 10px;
 }
 
