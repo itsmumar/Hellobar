@@ -124,7 +124,7 @@ export default Ember.Component.extend({
       }
     },
 
-    onNewFieldToCollectEnterPressed() {
+    confirmAddingFieldToCollect() {
       if (!this.newFieldToCollect.label) {
         return;
       }
@@ -133,7 +133,7 @@ export default Ember.Component.extend({
       this.set('newFieldToCollect', null);
     },
 
-    onNewFieldToCollectEscapePressed() {
+    cancelAddingFieldToCollect() {
       this.set('newFieldToCollect', null);
     }
 
