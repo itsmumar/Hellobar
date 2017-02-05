@@ -13,8 +13,13 @@ export default Ember.Controller.extend({
         fieldName: 'phone_number',
         validator: (model) => {
           if (Ember.get(model, 'element_subtype') === 'call') {
-            if (!Ember.get(model, 'phone_number')) {
+            const phoneNumber = Ember.get(model, 'phone_number');
+            if (!phoneNumber) {
               return 'Phone number is required';
+            }
+            const countryCode = Ember.get(model, 'phone_country_code');
+            if (!isValidNumber(phoneNumber, countryCode)) {
+              return 'Wrong phone number for specified country';
             }
           }
           return null;
