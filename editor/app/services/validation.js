@@ -11,6 +11,16 @@ export default Ember.Service.extend({
 
   _validations: {},
 
+  /**
+   * Adds validation to registry
+   * @param validationName {string} Unique validation name
+   * @param rules {array} Validation rules. Each rule is specified with descriptor object.
+   * @example
+   * validationService.add('person-validation', [
+   *   { fieldName: 'firstName', validator: 'required' }
+   *   { fieldName: 'age', validator: (person) => (person.age >= 16) ? null : 'Too young' }
+   * ]);
+   */
   add(validationName, rules) {
     if (this._validations[validationName]) {
       this.remove(validationName);
@@ -22,10 +32,29 @@ export default Ember.Service.extend({
     };
   },
 
+  /**
+   * Removes validation from registry
+   * @param validationName {string} Unique validation name
+   */
   remove(validationName) {
     delete this._validations[validationName];
   },
 
+  /**
+   * Performs validation
+   * @param validationName {string} Unique validation name
+   * @param objectToValidate {object} Model to be validated
+   * @returns {Ember.RSVP.Promise}
+   * @example
+   * validationService.validate('person-validation', {
+   *   firstName: 'Peter',
+   *   age: 28
+   * }).then(() => {
+   *   // Validation was successful
+   * }, () => {
+   *   // Validation failed
+   * })
+   */
   validate(validationName, objectToValidate) {
     const validation = this._validations[validationName];
     let failedRules = [];
@@ -76,6 +105,9 @@ export default Ember.Service.extend({
     }
   },
 
+  /**
+   * Shouldn't be called explicitly
+   */
   registerMessage(messageComponent) {
     this._findFieldByComponentAndRun(messageComponent, (field) => {
       const messageComponents = (field.messageComponents = field.messageComponents || []);
@@ -83,6 +115,9 @@ export default Ember.Service.extend({
     });
   },
 
+  /**
+   * Shouldn't be called explicitly
+   */
   unregisterMessage(messageComponent) {
     this._findFieldByComponentAndRun(messageComponent, (field) => {
       field.messageComponents = _.without(field.messageComponents, messageComponent);
