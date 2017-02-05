@@ -11,7 +11,14 @@ export default Ember.Controller.extend({
     const validationRules = [
       {
         fieldName: 'phone_number',
-        validator: 'required'
+        validator: (model) => {
+          if (Ember.get(model, 'element_subtype') === 'call') {
+            if (!Ember.get(model, 'phone_number')) {
+              return 'Phone number is required';
+            }
+          }
+          return null;
+        }
       }
     ];
     this.get('validation').add('main', validationRules);
