@@ -4,6 +4,7 @@ import _ from 'lodash/lodash';
 export default Ember.Route.extend({
 
   api: Ember.inject.service(),
+  validation: Ember.inject.service(),
 
   saveCount: 0,
 
@@ -103,7 +104,7 @@ export default Ember.Route.extend({
   //-----------  Actions  -----------#
 
   // Actions bubble up the routers from most specific to least specific.
-  // In order to catch all the actions (beacuse they happen in different
+  // In order to catch all the actions (because they happen in different
   // routes), the action catch was places in the top-most application route.
 
   actions: {
@@ -113,54 +114,63 @@ export default Ember.Route.extend({
         _.each(this.currentModel.blocks, (block) => delete block.isDefault);
       };
 
-      this.set("saveCount", this.get("saveCount") + 1);
-      if (trackEditorFlow) {
-        InternalTracking.track_current_person("Editor Flow", {
-          step: "Save Bar",
-          goal: this.currentModel.element_subtype,
-          style: this.currentModel.type,
-          save_attempts: this.get("saveCount")
-        });
-      }
-
-      if (window.barID) {
-        var url = `/sites/${window.siteID}/site_elements/${window.barID}.json`;
-        var method = "PUT";
-      } else {
-        var url = `/sites/${window.siteID}/site_elements.json`;
-        var method = "POST";
-      }
-
-      prepareModel();
-
-      return Ember.$.ajax({
-        type: method,
-        url,
-        contentType: "application/json",
-        data: JSON.stringify(this.currentModel),
-
-        success: () => {
-          if (trackEditorFlow) {
-            InternalTracking.track_current_person("Editor Flow", {
-              step: "Completed",
-              goal: this.currentModel.element_subtype,
-              style: this.currentModel.type,
-              save_attempts: this.get("saveCount")
-            });
-          }
-          if (this.controller.get("model.site.num_site_elements") === 0) {
-            return window.location = `/sites/${window.siteID}`;
-          } else {
-            return window.location = `/sites/${window.siteID}/site_elements`;
-          }
-        },
-
-        error: data => {
-          this.controller.toggleProperty('saveSubmitted');
-          this.controller.set("model.errors", data.responseJSON.errors);
-          return new EditorErrorsModal({errors: data.responseJSON.full_error_messages}).open();
+      this.get('validation').validate('main', this.currentModel).then(() => {
+        // Successful validation
+        this.controller.toggleProperty('saveSubmitted');
+        // TODO enable button
+        this.set('saveCount', this.get('saveCount') + 1);
+        if (trackEditorFlow) {
+          InternalTracking.track_current_person('Editor Flow', {
+            step: 'Save Bar',
+            goal: this.currentModel.element_subtype,
+            style: this.currentModel.type,
+            save_attempts: this.get('saveCount')
+          });
         }
+
+        if (window.barID) {
+          var url = `/sites/${window.siteID}/site_elements/${window.barID}.json`;
+          var method = 'PUT';
+        } else {
+          var url = `/sites/${window.siteID}/site_elements.json`;
+          var method = 'POST';
+        }
+
+        prepareModel();
+
+        return Ember.$.ajax({
+          type: method,
+          url,
+          contentType: 'application/json',
+          data: JSON.stringify(this.currentModel),
+
+          success: () => {
+            if (trackEditorFlow) {
+              InternalTracking.track_current_person('Editor Flow', {
+                step: 'Completed',
+                goal: this.currentModel.element_subtype,
+                style: this.currentModel.type,
+                save_attempts: this.get('saveCount')
+              });
+            }
+            if (this.controller.get('model.site.num_site_elements') === 0) {
+              window.location = `/sites/${window.siteID}`;
+            } else {
+              window.location = `/sites/${window.siteID}/site_elements`;
+            }
+          },
+
+          error: data => {
+            this.controller.toggleProperty('saveSubmitted');
+            this.controller.set("model.errors", data.responseJSON.errors);
+            new EditorErrorsModal({errors: data.responseJSON.full_error_messages}).open();
+          }
+        });
+      }, () => {
+        // Validation failed
+        // TODO disable button
       });
+
     }
   }
 });

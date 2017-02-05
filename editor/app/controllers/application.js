@@ -5,16 +5,23 @@ export default Ember.Controller.extend({
 
   inlineEditing: Ember.inject.service(),
   theming: Ember.inject.service(),
+  validation: Ember.inject.service(),
 
   init() {
-
+    const validationRules = [
+      {
+        fieldName: 'phone_number',
+        validator: 'required'
+      }
+    ];
+    this.get('validation').add('main', validationRules);
     Ember.run.next(() => {
         if (this.get('model.id') === null) {
           return this.applyCurrentTheme();
         }
       }
     );
-    return this.get('inlineEditing').setModelHandler(this);
+    this.get('inlineEditing').setModelHandler(this);
   },
 
 
@@ -290,20 +297,21 @@ export default Ember.Controller.extend({
     }
   }).observes("model.element_subtype").on("init"),
 
-  formatPhoneNumber: (function () {
-    let phone_number = this.get("phone_number") || this.get("model.phone_number");
-    let country_code = this.get("model.phone_country_code");
+  formatPhoneNumber: function () {
+    const phoneNumber = this.get('phone_number') || this.get('model.phone_number');
+    const countryCode = this.get('model.phone_country_code');
 
-    if (country_code === "XX") { // custom country code
-      this.set("model.phone_number", phone_number);
-      return this.set("phone_number", phone_number);
-    } else if (isValidNumber(phone_number, country_code)) {
-      this.set("phone_number", formatLocal(country_code, phone_number));
-      return this.set("model.phone_number", formatE164(country_code, phone_number));
+    if (countryCode === 'XX') { // custom country code
+      this.set('model.phone_number', phoneNumber);
+      this.set('phone_number', phoneNumber);
+    } else if (isValidNumber(phoneNumber, countryCode)) {
+      this.set('phone_number', formatLocal(countryCode, phoneNumber));
+      this.set('model.phone_number', formatE164(countryCode, phoneNumber));
     } else {
-      return this.set("model.phone_number", null);
+      this.set('phone_number', phoneNumber);
+      this.set('model.phone_number', phoneNumber);
     }
-  }).observes("model.phone_number", "phone_number", "model.phone_country_code"),
+  }.observes('model.phone_number', 'phone_number', 'model.phone_country_code'),
 
   applyCurrentTheme() {
     const allThemes = this.get('theming').availableThemes();
@@ -457,11 +465,6 @@ export default Ember.Controller.extend({
     toggleModal() {
       this.set('modal', null);
       return false;
-    },
-
-    saveSiteElement() {
-      this.toggleProperty('saveSubmitted');
-      return true;
     },
 
     closeEditor() {
