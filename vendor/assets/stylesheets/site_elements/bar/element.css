@@ -24,6 +24,15 @@
 
 /*-----------  Close Buttons  -----------*/
 
+#hellobar-bar .hb-close-wrapper {
+  display: none;
+}
+
+#hellobar-bar.closable .hb-close-wrapper {
+  display: table-cell;
+  width: 1.6em;
+}
+
 #hellobar-bar .icon-close {
   font-size: 12px;
   top: 11px;
@@ -124,7 +133,6 @@
 /*-----------  Logos  -----------*/
 
 #hellobar-bar .hb-logo-wrapper {
-  width: 8rem;
   margin-top: 0;
   font-size: 12px;
   text-align: left;

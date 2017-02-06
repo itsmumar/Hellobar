@@ -1,4 +1,6 @@
-<div id="hellobar-bar" class="js-hellobar-element {{HB.barSizeCssClass(siteElement.size)}} {{HB.t(siteElement.show_border) ? 'has_border' : ''}} {{HB.t(siteElement.remains_at_top) ? 'remains_in_place' : ''}} {{siteElement.placement}} {{siteElement.accountCssClass()}} {{siteElement.brandingCssClass()}}" style="background-color: #{{siteElement.primary_color}}; color: #{{siteElement.text_color}}; font-family: {{siteElement.font}}; border-color: #{{siteElement.border_color}}; height: {{HB.barHeight(siteElement.size)}};">
+<div id="hellobar-bar" class="js-hellobar-element {{HB.barSizeCssClass(siteElement.size)}} {{HB.t(siteElement.show_border) ? 'has_border' : ''}} {{siteElement.placement}} {{siteElement.accountCssClass()}} {{siteElement.brandingCssClass()}} {{siteElement.closableCssClass()}}"
+  style="background-color: #{{siteElement.primary_color}}; color: #{{siteElement.text_color}}; font-family: {{siteElement.font}}; border-color: #{{siteElement.border_color}}; height: {{HB.barHeight(siteElement.size)}};">
+
   <div class="hb-logo-wrapper {{HB.colorIsBright(siteElement.primary_color) ? 'hb-logo-inverted' : ''}} {{HB.branding_template()}}" style="{{(HB.t(siteElement.show_branding) || !HB.CAP.no_b) ? '' : 'display:none'}}">
     {{HB.renderTemplate(HB.getBrandingTemplate(HB.branding_template()), siteElement)}}
   </div>
@@ -12,5 +14,3 @@
         {{siteElement.headline}}
       </div>
     </div>
-
-    <a class="icon-close" onclick="{{siteElement.me}}.minimize()" style="{{HB.t(siteElement.closable) ? '' : 'display:none'}}"></a>
