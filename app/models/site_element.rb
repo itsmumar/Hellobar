@@ -34,7 +34,7 @@ class SiteElement < ActiveRecord::Base
     "question"                        => "Question",
 
     # themes type `template`
-    "traffic_growth"                  => "Clicks"
+    "traffic_growth"                  => "Emails"
   }
 
   TEMPLATE_NAMES = %w(traffic_growth)
