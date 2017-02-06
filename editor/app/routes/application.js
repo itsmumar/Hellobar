@@ -95,6 +95,9 @@ export default Ember.Route.extend({
     saveSiteElement() {
       const prepareModel = () => {
         _.each(this.currentModel.blocks, (block) => delete block.isDefault);
+        if (this.currentModel.phone_number && this.currentModel.phone_country_code) {
+          this.currentModel.phone_number = formatE164(this.currentModel.phone_country_code, this.currentModel.phone_number);
+        }
       };
 
       this.get('validation').validate('main', this.currentModel).then(() => {
@@ -148,6 +151,8 @@ export default Ember.Route.extend({
             new EditorErrorsModal({errors: data.responseJSON.full_error_messages}).open();
           }
         });
+      }, () => {
+        // Validation failed
       });
 
     }

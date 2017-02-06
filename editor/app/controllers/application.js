@@ -225,20 +225,12 @@ export default Ember.Controller.extend({
   }).observes("model.element_subtype").on("init"),
 
   formatPhoneNumber: function () {
-    const phoneNumber = this.get('phone_number') || this.get('model.phone_number');
+    const phoneNumber = this.get('model.phone_number');
     const countryCode = this.get('model.phone_country_code');
-
-    if (countryCode === 'XX') { // custom country code
-      this.set('model.phone_number', phoneNumber);
-      this.set('phone_number', phoneNumber);
-    } else if (isValidNumber(phoneNumber, countryCode)) {
-      this.set('phone_number', formatLocal(countryCode, phoneNumber));
-      this.set('model.phone_number', formatE164(countryCode, phoneNumber));
-    } else {
-      this.set('phone_number', phoneNumber);
-      this.set('model.phone_number', phoneNumber);
+    if (countryCode !== 'XX' && isValidNumber(phoneNumber, countryCode)) {
+      this.set('model.phone_number', formatLocal(countryCode, phoneNumber));
     }
-  }.observes('model.phone_number', 'phone_number', 'model.phone_country_code'),
+  }.observes('model.phone_number', 'model.phone_country_code'),
 
   applyCurrentTheme() {
     const allThemes = this.get('theming').availableThemes();
