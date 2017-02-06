@@ -2,8 +2,6 @@
 #= require jquery_ujs
 #= require bootstrap
 #= require zeropad.jquery
-#= require handlebars
-#= require handlebars_helpers
 #= require moment
 #= require amcharts/amcharts
 #= require amcharts/serial
