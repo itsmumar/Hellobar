@@ -115,6 +115,7 @@ group :development, :test do
   gem "minitest"
   gem "pry"
   gem "pry-nav"
+  gem "pry-doc"
   gem "rspec-rails", "~> 2.14"
   gem "simplecov", "~> 0.7.1"
   gem "phantomjs"
