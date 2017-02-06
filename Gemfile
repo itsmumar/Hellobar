@@ -89,6 +89,9 @@ gem "rotp"
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
+# Handlebars templates in Rails assets pipeline (js modals)
+gem 'handlebars_assets'
+
 group :development do
   gem "better_errors", "~> 1.1"
   gem "binding_of_caller"
