@@ -59,15 +59,13 @@ HB._listeners = [];
 HB.addPreviewInjectionListener = listener => HB._listeners.push(listener);
 
 HB.injectAtTop = function (element) {
-  let container = HB.$("#hellobar-preview-container");
-
+  const container = HB.$("#hellobar-preview-container");
   if (container.children[0]) {
     container.insertBefore(element, container.children[0]);
   } else {
     container.appendChild(element);
   }
-
-  return HB._listeners.forEach(listener => listener(container));
+  HB._listeners.forEach(listener => listener(container));
 };
 
 //-----------  Set Application Height  -----------#

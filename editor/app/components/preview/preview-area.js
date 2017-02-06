@@ -1,14 +1,27 @@
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
+export default Ember.Component.extend({
+
+  classNames: ['preview-area'],
 
   applicationController: Ember.inject.controller('application'),
   inlineEditing: Ember.inject.service(),
+  imaging: Ember.inject.service(),
 
-  init() {
+  /**
+   * @property {object} main application model
+   */
+  model: null,
+
+  /**
+   * @property {boolean} true if mobile preview mode is selected, otherwise false
+   */
+  isMobile: null,
+
+  didInsertElement() {
     HB.addPreviewInjectionListener(container => {
         this.adjustPushHeight();
-        return this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
+        this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
       }
     );
     Ember.run.next(() => {
@@ -18,7 +31,6 @@ export default Ember.Controller.extend({
 
   //-----------  Template Properties  -----------#
 
-  isMobile: Ember.computed.alias('applicationController.isMobile'),
   isPushed: Ember.computed.alias('model.pushes_page_down'),
   barSize: Ember.computed.alias('model.size'),
   barPosition: Ember.computed.alias('model.placement'),
@@ -43,73 +55,6 @@ export default Ember.Controller.extend({
   }).property('isMobile', 'model.site_preview_image', 'model.site_preview_image_mobile'),
 
   //-----------  Color Intelligence  -----------#
-
-  colorPalette: Ember.computed.alias('applicationController.colorPalette'),
-
-  setSiteColors: ( function () {
-    if (this.get('model.id') || window.elementToCopyID) {
-      return false;
-    }
-
-    let colorPalette = this.get('colorPalette');
-    let dominantColor = this.get('dominantColor');
-
-    if (Ember.isEmpty(colorPalette) || Ember.isEmpty(dominantColor)) {
-      return false;
-    }
-
-    //----------- Primary Color  -----------#
-
-    let primaryColor = dominantColor;
-
-    for (let i = 0; i < colorPalette.length; i++) {
-      let color = colorPalette[i];
-      if (Math.abs(color[0] - color[1]) > 10 || Math.abs(color[1] - color[2]) > 10 || Math.abs(color[0] - color[2]) > 10) {
-        primaryColor = color;
-        break;
-      }
-    }
-
-    this.set('model.background_color', one.color(primaryColor).hex().replace('#', ''));
-
-    //----------- Other Colors  -----------#
-
-    let white = 'ffffff';
-    let black = '000000';
-
-    if (this.brightness(primaryColor) < 0.5) {
-      return this.setProperties({
-        'model.text_color': white,
-        'model.button_color': white,
-        'model.link_color': one.color(primaryColor).hex().replace('#', '')
-      });
-    } else {
-      colorPalette.sort((a, b) => {
-          return this.brightness(a) - this.brightness(b);
-        }
-      );
-
-      let darkest = this.brightness(colorPalette[0]) >= 0.5 ? black : one.color(colorPalette[0]).hex().replace('#', '');
-
-      return this.setProperties({
-        'model.text_color': darkest,
-        'model.button_color': darkest,
-        'model.link_color': white
-      });
-    }
-  }).observes('colorPalette'),
-
-  brightness(color) {
-    let rgb = Ember.copy(color);
-
-    [0, 1, 2].forEach(function (i) {
-      let val = rgb[i] / 255;
-      return rgb[i] = val < 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
-    });
-
-    return ((0.2126 * rgb[0]) + (0.7152 * rgb[1]) + (0.0722 * rgb[2]));
-  },
-
 
   adjustPushHeight() {
     let height = size => {
@@ -174,5 +119,15 @@ export default Ember.Controller.extend({
     this.get('isMobile') && classes.push('hellobar-preview-container-mobile');
     return classes.join(' ');
   }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile'),
+
+  componentBackground: function() {
+    const backgroundColor = '#f6f6f6';
+    if (this.get('isMobile')) {
+      const phoneImageUrl = this.get('imaging').imagePath('iphone-bg.png');
+      return `${backgroundColor} url(${phoneImageUrl}) center center no-repeat`;
+    } else {
+      return backgroundColor;
+    }
+  }.property('isMobile')
 
 });
