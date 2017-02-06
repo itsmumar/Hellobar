@@ -48,7 +48,7 @@ GEM
       activesupport (>= 2.2.2)
     active_link_to (1.0.2)
       actionpack
-    active_model_serializers (0.9.3)
+    active_model_serializers (0.9.6)
       activemodel (>= 3.2)
     active_utils (2.2.3)
       activesupport (>= 2.3.11)
@@ -635,7 +635,7 @@ DEPENDENCIES
   active_campaign (~> 0.1.14)
   active_hash
   active_link_to (~> 1.0.2)
-  active_model_serializers (~> 0.9.3)
+  active_model_serializers
   activemerchant (~> 1.44.1)
   addressable (~> 2.3.6)
   avatar (~> 0.2.0)
