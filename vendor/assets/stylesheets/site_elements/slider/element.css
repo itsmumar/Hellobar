@@ -74,9 +74,6 @@
 }
 
 #hellobar-slider.email .hb-logo-wrapper.original, #hellobar-slider.email .hb-logo-wrapper.animated {
-  position: initial;
-  right: initial;
-  bottom: initial;
 }
 
 #hellobar-slider .hb-logo-wrapper.original:hover, #hellobar-slider .hb-logo-wrapper.animated:hover {
@@ -229,6 +226,7 @@
 }
 
 #hellobar-slider.image-left .image-clear-fix, #hellobar-slider.image-right .image-clear-fix {
-  display: initial;
+  display: block;
   clear: both;
+  content: '';
 }
