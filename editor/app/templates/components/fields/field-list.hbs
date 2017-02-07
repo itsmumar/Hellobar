@@ -32,8 +32,10 @@
       value=newFieldToCollect.label
       class="js-new-field"
       autofocus="autofocus" style=""
-      insert-newline="onNewFieldToCollectEnterPressed"
-      escape-press="onNewFieldToCollectEscapePressed"}}
+      insert-newline="confirmAddingFieldToCollect"
+      escape-press="cancelAddingFieldToCollect"
+      focus-out="confirmAddingFieldToCollect"}}
+
     </div>
   {{else}}
     <div class="{{addFieldCssClasses}}" {{action 'addFieldToCollect'}}>
