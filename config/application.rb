@@ -30,9 +30,6 @@ module Hellobar
     config.assets.precompile += ['editor.css', 'static.css', 'admin.css', 'editor/vendor.js', 'editor/application.js', 'ember.js', '*.css.erb', '*.css.sass.erb']
     config.assets.paths << Rails.root.join('vendor', 'assets')
 
-    config.handlebars.precompile = false
-    config.handlebars.templates_root = 'editor/templates'
-
     config.to_prepare do
       Devise::SessionsController.layout proc{ |controller| action_name == 'new' ? 'static' : 'application' }
     end

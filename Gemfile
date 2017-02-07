@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gem "abanalyzer"
 gem "active_hash"
 gem "active_link_to",            "~> 1.0.2"
-gem "active_model_serializers",  "~> 0.9.3"
+gem "active_model_serializers"
 gem "activemerchant",            "~> 1.44.1"
 gem "addressable",               "~> 2.3.6", :require => "addressable/uri"
 gem "avatar",                    "~> 0.2.0"
@@ -21,8 +21,6 @@ gem "dalli",                     "~> 2.7.2"
 gem "devise",                    "~> 3.2.4"
 gem "drip-ruby",                 "~> 0.0.7", require: 'drip'
 gem "elif",                      "~> 0.1"
-gem "ember-rails",               "~> 0.16.4"
-gem "ember-source",              "~> 1.7.1"
 gem "figaro",                    "~> 1.0.0"
 gem "fog",                       "~> 1.22.1"
 gem "fontcustom",                "~> 1.3.8"
@@ -31,7 +29,6 @@ gem "google-api-client",         "0.9.8"
 gem "hashie",                    "~> 2.1.1"
 gem "active_campaign",           "~> 0.1.14"
 gem "infusionsoft",              "~> 1.1.9"
-gem "jbuilder",                  "~> 2.0"
 gem "jquery-rails",              "~> 3.1.0"
 gem "jwt",                       "~> 1.5.0"
 gem "kaminari",                  "~> 0.15.1"
@@ -92,6 +89,9 @@ gem "rotp"
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
+# Handlebars templates in Rails assets pipeline (js modals)
+gem 'handlebars_assets'
+
 group :development do
   gem "better_errors", "~> 1.1"
   gem "binding_of_caller"
@@ -118,6 +118,7 @@ group :development, :test do
   gem "minitest"
   gem "pry"
   gem "pry-nav"
+  gem "pry-doc"
   gem "rspec-rails", "~> 2.14"
   gem "simplecov", "~> 0.7.1"
   gem "phantomjs"
