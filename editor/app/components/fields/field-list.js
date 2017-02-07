@@ -115,11 +115,15 @@ export default Ember.Component.extend({
 
     addFieldToCollect() {
       if (!this.get('isBarType')) {
-        return this.set('newFieldToCollect', {
+        this.set('newFieldToCollect', {
           id: _.uniqueId('field_') + '_' + Date.now(),
           type: 'text',
           label: '',
           is_enabled: true
+        });
+        Ember.run.next(() => {
+          const $newField = this.$('.js-new-field');
+          ($newField && $newField.length > 0) && $newField[0].focus();
         });
       }
     },
