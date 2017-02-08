@@ -96,6 +96,10 @@ export default Ember.Component.extend({
     return 'item-block add' + (this.get('isBarType') ? ' denied' : '');
   }.property('isBarType'),
 
+  _cancelAddingFieldToCollect() {
+    this.set('newFieldToCollect', null);
+  },
+
   actions: {
     toggleFieldToCollect(field) {
       if (field.type === 'builtin-email') {
@@ -130,6 +134,7 @@ export default Ember.Component.extend({
 
     confirmAddingFieldToCollect() {
       if (!this.newFieldToCollect.label) {
+        this._cancelAddingFieldToCollect();
         return;
       }
       const newFields = this.get('model.settings.fields_to_collect').concat([this.newFieldToCollect]);
@@ -138,7 +143,7 @@ export default Ember.Component.extend({
     },
 
     cancelAddingFieldToCollect() {
-      this.set('newFieldToCollect', null);
+      this._cancelAddingFieldToCollect();
     }
 
   }
