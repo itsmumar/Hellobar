@@ -2,7 +2,7 @@
 // user's page in the embed script (ensuring that it is present). This allows users
 // to push function calls into the _hbq array, e.g.:
 //
-//    _hbq.push(function(){alert("Hello Bar has loaded!");});
+//    _hbq.push(function(){alert('Hello Bar has loaded!');});
 //
 // Because _hbq is defined on the page this will never error out - even if the HB script
 // fails to load. Once the HB script loads we replace the _hbq variable with a custom HBQ
@@ -10,7 +10,7 @@
 //
 
 // When HBQ is initialized we also kickstart the initialization process of Hello Bar:
-if (typeof(_hbq) == 'undefined') {
+if (typeof(_hbq) === 'undefined') {
   _hbq = [];
 }
 
@@ -23,11 +23,11 @@ var HBQ = function () {
   /* IF CHANGED, UPDATE SLIDER ELEMENT CSS */
   HB.mobilePreviewWidth = 250;
   HB.id_type_map = {
-    "hellobar-bar": "bar",
-    "hellobar-modal": "modal",
-    "hellobar-slider": "slider",
-    "hellobar-takeover": "takeover",
-    "hellobar-custom": "custom"
+    'hellobar-bar': 'bar',
+    'hellobar-modal': 'modal',
+    'hellobar-slider': 'slider',
+    'hellobar-takeover': 'takeover',
+    'hellobar-custom': 'custom'
   }
 
   // Need to load the serialized cookies
@@ -37,13 +37,13 @@ var HBQ = function () {
   HB.setTracking(location.search);
 
   // Disable tracking if tracking is manually set to off
-  if (HB.t(HB.gc("disableTracking"))) {
+  if (HB.t(HB.gc('disableTracking'))) {
     HB_DNT = true;
   }
 
   var i;
   // Once initialized replace the existing data with it
-  if (typeof(_hbq) != "undefined" && _hbq && _hbq.length) {
+  if (typeof(_hbq) != 'undefined' && _hbq && _hbq.length) {
     for (i = 0; i < _hbq.length; i++)
       this.push(_hbq[i]);
   }
@@ -64,7 +64,7 @@ var HBQ = function () {
 
 // Call the function right away once this is loaded
 HBQ.prototype.push = function () {
-  if (arguments.length == 1 && typeof(arguments[0]) == "function")
+  if (arguments.length === 1 && typeof(arguments[0]) === 'function')
     (arguments[0])();
   else {
     var originalArgs = [];
@@ -90,12 +90,12 @@ var HB = {
 
     var hostname = HB.getLocation().hostname;
 
-    if (HB.isIpAddress(hostname) || hostname === "localhost")
+    if (HB.isIpAddress(hostname) || hostname === 'localhost')
       return true;
 
     // If the site is the generic one used for force converts
     // we still want to show the bar
-    return HB_SITE_URL == "http://mysite.com" || HB.n(hostname) === HB.n(window.HB_SITE_URL);
+    return HB_SITE_URL === 'http://mysite.com' || HB.n(hostname) === HB.n(window.HB_SITE_URL);
   },
 
   // Grabs site elements from valid rules and displays them
@@ -131,7 +131,7 @@ var HB = {
     for (var key in spec) {
       if (spec.hasOwnProperty(key)) {
         var value = spec[key];
-        if (typeof(value) == "function") {
+        if (typeof(value) === 'function') {
           klass.prototype[key] = value;
         }
       }
@@ -139,7 +139,7 @@ var HB = {
   },
 
   isMobileDevice: function () {
-    return HB.getVisitorData("dv") === "mobile";
+    return HB.getVisitorData('dv') === 'mobile';
   },
 
   // Creates a class
@@ -170,15 +170,15 @@ var HB = {
 
   // Returns the element or looks it up via getElementById
   $: function (idOrElement) {
-    if (typeof(idOrElement) == "string")
-      return document.getElementById(idOrElement.replace("#", ""));
+    if (typeof(idOrElement) === 'string')
+      return document.getElementById(idOrElement.replace('#', ''));
     else
       return idOrElement;
   },
 
-  // Returns whether or not a setting is true (treats "false" and string "0" as the boolean false)
+  // Returns whether or not a setting is true (treats 'false' and string '0' as the boolean false)
   t: function (value) {
-    return (value && value != "false" && value != "0") ? true : false;
+    return (value && value != 'false' && value != '0') ? true : false;
   },
 
   currentURL: function () {
@@ -237,92 +237,99 @@ var HB = {
 
   // Adds CSS to the page
   addCSS: function (css) {
-    if (!css) return;
-    if (!HB.css)
-      HB.css = "";
+    if (!css) {
+      return;
+    }
+    if (!HB.css) {
+      HB.css = '';
+    }
     // Update CSS related to hellobar logo
-    css = css.split("hellobar-logo-wrapper").join("hellobar-logo-wrapper_" + HB_PS);
+    css = css.split('hellobar-logo-wrapper').join('hellobar-logo-wrapper_' + HB_PS);
 
-    HB.css += "<style>" + css + "</style>";
+    HB.css += '<style>' + css + '</style>';
   },
 
   // Takes a URL and returns normalized domain (downcase and strip www)
   getNDomain: function (url) {
-    if (!url)
-      return "";
-    url = url + "";
-    if (url.indexOf("/") == 0)
-      return "";
-    return url.replace(/.*?\:\/\//, "").replace(/(.*?)\/.*/, "$1").replace(/www\./i, "").toLowerCase();
+    if (!url) {
+      return '';
+    }
+    url = url + '';
+    if (url.indexOf('/') === 0) {
+      return '';
+    }
+    return url.replace(/.*?\:\/\//, '').replace(/(.*?)\/.*/, '$1').replace(/www\./i, '').toLowerCase();
   },
 
   // Normalizes a URL so that "https://www.google.com/#foo" becomes "http://google.com"
   // Also sorts the params alphabetically
   n: function (url, pathOnly) {
-    url = (url + "").toLowerCase();
+    url = (url + '').toLowerCase();
     // Add trailing slash when we think it's needed
     if (url.match(/^https?:\/\/[^\/?]*$/i) ||
       url.match(/^[^\/]*\.(com|edu|gov|us|net|io)$/i))
-      url += "/";
+      url += '/';
 
     //normalize query string to start with slash
-    url = url.replace(/([^\/])\?/, "$1/?")
+    url = url.replace(/([^\/])\?/, '$1/?')
 
     // Get rid of things that make no difference in the URL (such as protocol and anchor)
     url = url.
-      replace(/https?:\/\//, "").
-      replace(/^www\./, "").
-      replace(/\#.*/, "");
+      replace(/https?:\/\//, '').
+      replace(/^www\./, '').
+      replace(/\#.*/, '');
 
     // Strip the host if pathOnly
     if (pathOnly) {
       // Unless it starts with a slash
-      if (!url.match(/^\//))
-        url = url.replace(/.*?\//, "/");
+      if (!url.match(/^\//)) {
+        url = url.replace(/.*?\//, '/');
+      }
     }
 
-    if (url == "/" || url == "/?")
+    if (url === '/' || url === '/?') {
       return url;
+    }
 
     // If no query string just return the URL
-    if (url.indexOf("?") === -1)
+    if (url.indexOf('?') === -1)
       return HB.stripTrailingSlash(url);
 
     // Get the params
-    var urlParts = url.split("?");
+    var urlParts = url.split('?');
 
     // If no params just return the URL with ?
     if (!urlParts[1])
-      return HB.stripTrailingSlash(urlParts[0]) + "?";
+      return HB.stripTrailingSlash(urlParts[0]) + '?';
 
     // Sort the params
-    var sortedParams = urlParts[1].split("&").sort().join("&");
-    return HB.stripTrailingSlash(urlParts[0] + "/") + "?" + sortedParams;
+    var sortedParams = urlParts[1].split('&').sort().join('&');
+    return HB.stripTrailingSlash(urlParts[0] + '/') + '?' + sortedParams;
   },
 
   stripTrailingSlash: function (urlPart) {
-    return urlPart.replace(/(.+)\/$/i, "$1");
+    return urlPart.replace(/(.+)\/$/i, '$1');
   },
 
   // Returns true if the specified url matches the source pattern
   umatch: function (srcPattern, url) {
-    if (srcPattern.indexOf("?") == -1) // srcPattern does not have any query params...
-      return HB.n(srcPattern, true) == HB.n(url, true).split("?")[0]; // ...so ignore them in the url
+    if (srcPattern.indexOf('?') === -1) // srcPattern does not have any query params...
+      return HB.n(srcPattern, true) == HB.n(url, true).split('?')[0]; // ...so ignore them in the url
     // Otherwise URLs must match exactly
     return HB.n(srcPattern, true) == HB.n(url, true);
   },
 
   getVisitorAttributes: function () {
     // Ignore first and last view timestamps and email and social conversions
-    var ignoredAttributes = "fv lv ec sc dt";
+    var ignoredAttributes = 'fv lv ec sc dt';
     // Ignore first and last converted timestamps and number of traffic conversions
     var ignoredAttributePattern = /(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/
     var attributes = {};
     // Remove ignored attributes
     for (var k in HB.cookies.visitor) {
       var value = HB.cookies.visitor[k];
-      if ((typeof(value) == 'string' || typeof(value) == 'number' || typeof(value) == 'boolean') && ignoredAttributes.indexOf(k) == -1 && !k.match(ignoredAttributePattern)) {
-        attributes[k.toLowerCase()] = (HB.cookies.visitor[k] + "").toLowerCase().substr(0, 150);
+      if ((typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') && ignoredAttributes.indexOf(k) === -1 && !k.match(ignoredAttributePattern)) {
+        attributes[k.toLowerCase()] = (HB.cookies.visitor[k] + '').toLowerCase().substr(0, 150);
       }
     }
     return HB.serializeCookieValues(attributes);
@@ -332,26 +339,26 @@ var HB = {
   s: function (path, itemID, params, callback) {
     // If we are not tracking or this or no site ID then just issue the
     // callback without sending any data
-    if (typeof(HB_DNT) != "undefined" || typeof(HB_SITE_ID) == "undefined" || typeof(HB_WK) == "undefined") {
-      if (callback && typeof(callback) == "function")
+    if (typeof(HB_DNT) != 'undefined' || typeof(HB_SITE_ID) === 'undefined' || typeof(HB_WK) === 'undefined') {
+      if (callback && typeof(callback) === 'function')
         callback();
       return;
     }
     // Build the URL
-    var url = "/" + path + "/" + HB.obfID(HB_SITE_ID);
+    var url = '/' + path + '/' + HB.obfID(HB_SITE_ID);
     if (itemID)
-      url += "/" + HB.obfID(itemID);
+      url += '/' + HB.obfID(itemID);
     var now = Math.round(new Date().getTime() / 1000)
 
-    params["t"] = now; // Timestamp
-    params["v"] = HB.i(); // visitor UUID
-    params["f"] = "i" // Make sure we return an image
+    params['t'] = now; // Timestamp
+    params['v'] = HB.i(); // visitor UUID
+    params['f'] = 'i' // Make sure we return an image
 
     // Sign the URL
-    params["s"] = HB.signature(HB_WK, url, params);
+    params['s'] = HB.signature(HB_WK, url, params);
 
     // Add the query string
-    url += "?" + HB.paramsToString(params);
+    url += '?' + HB.paramsToString(params);
 
     var img = document.createElement('img');
     img.style.display = 'none';
@@ -373,14 +380,14 @@ var HB = {
 
   // Returns the URL for the backend server (e.g. "hi.hellobar.com").
   hi: function (url) {
-    return (document.location.protocol == "https:" ? "https" : "http") + "://" + HB_BACKEND_HOST + url;
+    return (document.location.protocol === 'https:' ? 'https' : 'http') + '://' + HB_BACKEND_HOST + url;
   },
 
   // Recoards the rule being formed when the visitor clicks the specified element
   trackClick: function (domElement, siteElement) {
     var url = domElement.href;
     HB.converted(siteElement, function () {
-      if (domElement.target != "_blank") document.location = url;
+      if (domElement.target != '_blank') document.location = url;
     });
   },
 
@@ -388,15 +395,15 @@ var HB = {
   // conversion has already happened or not
   getConversionKey: function (siteElement) {
     switch (siteElement.subtype) {
-      case "email":
-        return "ec";
-      case "social":
-        return "sc";
-      case "traffic":
+      case 'email':
+        return 'ec';
+      case 'social':
+        return 'sc';
+      case 'traffic':
         // Need to make sure this is unique per URL
         // getShortestKey returns either the raw URL or
         // a SHA1 hash of the URL - whichever is shorter
-        return "l-" + HB.getShortestKeyForURL(siteElement.settings.url);
+        return 'l-' + HB.getShortestKeyForURL(siteElement.settings.url);
       // -------------------------------------------------------
       // IMPORTANT - if you add other conversion keys you need to
       // update the ignoredAttributePattern in getVisitorAttributes
@@ -408,16 +415,18 @@ var HB = {
   getShortestKeyForURL: function (url) {
     // If the URL is a path already or it's on the same domain
     // strip to just the path
-    if (url.indexOf("/") == 0 || HB.getNDomain(url) == HB.getNDomain(document.location))
+    if (url.indexOf('/') === 0 || HB.getNDomain(url) == HB.getNDomain(document.location)) {
       url = HB.n(url, true);
-    else
+    } else {
       url = HB.n(url); // Get full URL
+    }
     // If the URL is shorter than 40 chars just return it
-    if (url.length > 40)
-      return HBCrypto.SHA1(url).toString()
-    else
+    if (url.length > 40) {
+      return HBCrypto.SHA1(url).toString();
+    } else {
       return url;
-    // Otherwise return a SHA1 hash of the URL
+      // Otherwise return a SHA1 hash of the URL
+    }
   },
 
   // Called when a conversion happens (e.g. link clicked, email form filled out)
@@ -429,25 +438,25 @@ var HB = {
     // Set the number of conversions for the visitor for this type of conversion
     HB.setVisitorData(conversionKey, conversionCount);
     // Record first time converted, unless already set for the visitor for this type of conversion
-    HB.setVisitorData(conversionKey + "_f", now);
+    HB.setVisitorData(conversionKey + '_f', now);
     // Record last time converted for the visitor for this type of conversion
-    HB.setVisitorData(conversionKey + "_l", now);
+    HB.setVisitorData(conversionKey + '_l', now);
 
     HB.setVisibilityControlCookie('success', siteElement);
 
     // Set the number of conversions for the specific site element
-    HB.setSiteElementData(siteElement.id, "nc", (HB.getSiteElementData(siteElement.id, "nc") || 0) + 1);
+    HB.setSiteElementData(siteElement.id, 'nc', (HB.getSiteElementData(siteElement.id, 'nc') || 0) + 1);
     // Set the first time converted for the site element if not set
-    if (!HB.getSiteElementData(siteElement.id, "fc"))
-      HB.setSiteElementData(siteElement.id, "fc", now);
+    if (!HB.getSiteElementData(siteElement.id, 'fc'))
+      HB.setSiteElementData(siteElement.id, 'fc', now);
     // Set the last time converted for the site element to now
-    HB.setSiteElementData(siteElement.id, "lc", now);
+    HB.setSiteElementData(siteElement.id, 'lc', now);
     // Trigger the event
-    HB.trigger("conversion", siteElement); // Old-style trigger
-    HB.trigger("converted", siteElement); // Updated trigger
+    HB.trigger('conversion', siteElement); // Old-style trigger
+    HB.trigger('converted', siteElement); // Updated trigger
     // Send the data to the backend if this is the first conversion
-    if (conversionCount == 1)
-      HB.s("g", siteElement.id, {a: HB.getVisitorAttributes()}, callback);
+    if (conversionCount === 1)
+      HB.s('g', siteElement.id, {a: HB.getVisitorAttributes()}, callback);
     else if (typeof(callback) === typeof(Function))
       callback();
   },
@@ -520,12 +529,12 @@ var HB = {
 
   // Returns true if the visitor previously closed a site element
   didDismissHB: function (siteElement) {
-    return HB.gc("HBDismissed-" + siteElement.id) != null;
+    return HB.gc('HBDismissed-' + siteElement.id) != null;
   },
 
   // Returns true if the visitor previously closed this particular site element
   didDismissThisHB: function (se) {
-    var cookie_name = (se.type == "Takeover" || se.type == "Modal") ? "HBDismissedModals" : "HBDismissedBars";
+    var cookie_name = (se.type === 'Takeover' || se.type === 'Modal') ? 'HBDismissedModals' : 'HBDismissedBars';
     var cookie_str = HB.gc(cookie_name);
     if (cookie_str != undefined) {
       return JSON.parse(cookie_str).indexOf(se.id) >= 0;
@@ -581,7 +590,7 @@ var HB = {
       'data-hb-editable-block="' + id() + '">' +
       '<label for="' + id() + '">' + fieldAttrs.label + '</label>' +
       '<input id="' + id() + '" type="' + fieldAttrs.type + '" placeholder="' +
-      fieldAttrs.label + '" ' + (field.type == 'builtin-email' ? 'required' : '') +
+      fieldAttrs.label + '" ' + (field.type === 'builtin-email' ? 'required' : '') +
       ' value="' + (HB.CAP.preview ? fieldAttrs.label : '') + '" />' +
       '</div>';
 
@@ -599,7 +608,7 @@ var HB = {
       function () {
         var doRedirect = HB.t(redirect);
         var removeElements;
-        if (siteElement.type == 'ContentUpgrade') {
+        if (siteElement.type === 'ContentUpgrade') {
           var siteElementDoc = document.getElementById('hb-cu-modal-'+siteElement.id);
         } else {
           var siteElementDoc = siteElement.w.contentDocument;
@@ -649,7 +658,7 @@ var HB = {
           // Successfully saved
         });
 
-        HB.trigger("emailSubmitted", siteElement, values);
+        HB.trigger('emailSubmitted', siteElement, values);
 
         if (doRedirect) {
           window.location.href = redirectUrl;
@@ -681,7 +690,7 @@ var HB = {
       var joinedValues = sanitizedValues.join(',');
 
       // Record the email address to the cnact list and then track that the rule was performed
-      HB.s("c", siteElement.contact_list_id, {e: joinedValues}, function () {
+      HB.s('c', siteElement.contact_list_id, {e: joinedValues}, function () {
         HB.converted(this.siteElement, callback)
       }.bind({siteElement: siteElement}));
     }
@@ -691,21 +700,21 @@ var HB = {
   // serializes it into a string
   serializeCookieValues: function (hash) {
     if (!hash)
-      return "";
+      return '';
     var pairs = [];
     for (var key in hash) {
       var value = hash[key];
-      if (typeof(value) != "function" && typeof(value) != "object") {
-        // Key can not contain ":", but value can
-        pairs.push(HB.sanitizeCookieValue(key).replace(/:/g, "-") + ":" + HB.sanitizeCookieValue(value));
+      if (typeof(value) != 'function' && typeof(value) != 'object') {
+        // Key can not contain ':', but value can
+        pairs.push(HB.sanitizeCookieValue(key).replace(/:/g, '-') + ':' + HB.sanitizeCookieValue(value));
       }
     }
-    return pairs.join("|");
+    return pairs.join('|');
   },
 
   // Replaces all chars used within the serialization schema with a space
   sanitizeCookieValue: function (value) {
-    return (value + "").replace(/[\^\|\,\;\n\r]/g, " ");
+    return (value + '').replace(/[\^\|\,\;\n\r]/g, ' ');
   },
 
   // Called by parseCookies. Takes a string (either visitor or siteElement) and
@@ -713,12 +722,12 @@ var HB = {
   parseCookieValues: function (string) {
     if (!string)
       return {};
-    var pairs = string.split("|");
+    var pairs = string.split('|');
     var results = {};
     for (var i = 0; i < pairs.length; i++) {
-      var data = pairs[i].split(":");
+      var data = pairs[i].split(':');
       var key = data[0];
-      var value = data.slice(1, data.length).join(":");
+      var value = data.slice(1, data.length).join(':');
 
       results[key] = HB.parseValue(value);
     }
@@ -727,10 +736,11 @@ var HB = {
 
   // Convert value to a number if it makes sense
   parseValue: function (value) {
-    if (parseInt(value, 10) == value)
+    if (parseInt(value, 10) == value) {
       value = parseInt(value, 10);
-    else if (parseFloat(value) == value)
+    } else if (parseFloat(value) == value) {
       value = parseFloat(value);
+    }
     return value;
   },
 
@@ -738,20 +748,20 @@ var HB = {
   // in the format of {siteElements:{...}}, visitor:{...}}
   loadCookies: function () {
     // Don't let any cookies get set without a site ID
-    if (typeof(HB_SITE_ID) == "undefined")
+    if (typeof(HB_SITE_ID) === 'undefined')
       HB.cookies = {siteElements: {}, visitor: {}, location: {}};
     else {
       HB.cookies = {
-        visitor: HB.parseCookieValues(HB.gc("hbv_" + HB_SITE_ID)),
-        location: HB.parseCookieValues(HB.gc("hbglc_" + HB_SITE_ID)),
+        visitor: HB.parseCookieValues(HB.gc('hbv_' + HB_SITE_ID)),
+        location: HB.parseCookieValues(HB.gc('hbglc_' + HB_SITE_ID)),
         siteElements: {}
       };
       // We need to parse out the nested site element data
-      var siteElementData = (HB.gc("hbs_" + HB_SITE_ID) || "").split("^");
+      var siteElementData = (HB.gc('hbs_' + HB_SITE_ID) || '').split('^');
       for (var i = 0; i < siteElementData.length; i++) {
         var raw = siteElementData[i];
         if (raw) {
-          var partIndex = raw.indexOf("|");
+          var partIndex = raw.indexOf('|');
           var id = raw.slice(0, partIndex);
           var data = raw.slice(partIndex + 1);
           HB.cookies.siteElements[id] = HB.parseCookieValues(data);
@@ -763,26 +773,28 @@ var HB = {
   // Saves HB.cookies into the actual cookie
   saveCookies: function () {
     // Don't let any cookies get set without a site ID
-    if (typeof(HB_SITE_ID) != "undefined") {
-      HB.sc("hbv_" + HB_SITE_ID, HB.serializeCookieValues(HB.cookies.visitor), 365 * 5);
+    if (typeof(HB_SITE_ID) != 'undefined') {
+      HB.sc('hbv_' + HB_SITE_ID, HB.serializeCookieValues(HB.cookies.visitor), 365 * 5);
       // We encode the site elements as:
       // site_element_id|data^site_element_id|data...
       var siteElementData = [];
       for (var k in HB.cookies.siteElements) {
         var value = HB.cookies.siteElements[k];
-        if (typeof(value) != "function") {
-          siteElementData.push(k + "|" + HB.serializeCookieValues(value));
+        if (typeof(value) != 'function') {
+          siteElementData.push(k + '|' + HB.serializeCookieValues(value));
         }
       }
-      HB.sc("hbs_" + HB_SITE_ID, siteElementData.join("^"), 365 * 5);
+      HB.sc('hbs_' + HB_SITE_ID, siteElementData.join('^'), 365 * 5);
     }
   },
 
   // Gets the visitor attribute specified by the key or returns null
   getVisitorData: function (key) {
-    if (key == undefined) return null;
+    if (!key) {
+      return null;
+    }
 
-    if (key.indexOf("gl_") != -1) {
+    if (key.indexOf('gl_') != -1) {
       return HB.getGeolocationData(key);
     }
     else {
@@ -803,7 +815,7 @@ var HB = {
   getSiteElementData: function (siteElementID, key) {
     if (!siteElementID)
       return;
-    siteElementID = siteElementID + "";
+    siteElementID = siteElementID + '';
     var s = HB.cookies.siteElements;
     if (!s[siteElementID])
       s[siteElementID] = {}
@@ -815,7 +827,7 @@ var HB = {
   setSiteElementData: function (siteElementID, key, value) {
     if (!siteElementID)
       return;
-    siteElementID = siteElementID + "";
+    siteElementID = siteElementID + '';
     var s = HB.cookies.siteElements;
     if (!s[siteElementID])
       s[siteElementID] = {}
@@ -854,18 +866,18 @@ var HB = {
       return unescape(localValue);
     } else {
       //instantiate few vars, and split all cookies into one of them
-      var i, x, y, c = document.cookie.split(";");
+      var i, x, y, c = document.cookie.split(';');
       for (i = 0; i < c.length; i++) {
         //get the key
-        x = c[i].substr(0, c[i].indexOf("="));
+        x = c[i].substr(0, c[i].indexOf('='));
         //get the value
-        y = c[i].substr(c[i].indexOf("=") + 1);
+        y = c[i].substr(c[i].indexOf('=') + 1);
         //strip whitespace
-        x = x.replace(/^\s+|\s+$/g, "");
+        x = x.replace(/^\s+|\s+$/g, '');
         //if value exists in cookies
         if (x == name) {
           //expire the cookie
-          document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+          document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
           //save value in localstorage
           HB.sc(name, y)
           //return value
@@ -879,14 +891,15 @@ var HB = {
   // exdays can be number of days or a date object
   sc: function (name, value, exdays, path) {
     //no idea what HB_NC is
-    if (typeof(HB_NC) != "undefined") {
+    if (typeof(HB_NC) != 'undefined') {
       return;
     } else {
       //set date to today?? if number of days to expiration has not been passed
-      var exdate = typeof exdays == "object" ? exdays : new Date();
-      if (typeof exdays == "number")
-      //conver days to expiration to date
+      var exdate = typeof exdays === 'object' ? exdays : new Date();
+      if (typeof exdays === 'number') {
+        //conver days to expiration to date
         exdate.setDate(exdate.getDate() + exdays);
+      }
 
       var dataToSave = {};
       dataToSave.value = value;
@@ -900,7 +913,7 @@ var HB = {
   i: function () {
     var uuid;
     // Check if we have a cookie
-    if (uuid = HB.gc("hbuid"))
+    if (uuid = HB.gc('hbuid'))
       return uuid; // If so return that
     // Otherwise generate a new value
     var d = new Date().getTime();
@@ -910,7 +923,7 @@ var HB = {
       return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
     });
     // Set it in the cookie
-    HB.sc("hbuid", uuid, 5 * 365);
+    HB.sc('hbuid', uuid, 5 * 365);
 
     // Return it
     return uuid;
@@ -999,17 +1012,19 @@ var HB = {
     var myNav = navigator.userAgent.toLowerCase();
     var version = (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
 
-    if (isNaN(version) || version == null || version == false)
+    if (isNaN(version) || version == null || version == false) {
       return false;
+    }
 
-    if (version <= x)
+    if (version <= x) {
       return true;
+    }
   },
 
   // Returns true if the device is using mobile safari (ie, ipad / iphone)
   isMobileSafari: function () {
     var ua = navigator.userAgent.toLowerCase();
-    return (ua.indexOf("safari") > -1 && (ua.indexOf("iphone") > -1 || ua.indexOf("ipad") > -1));
+    return (ua.indexOf('safari') > -1 && (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1));
   },
 
   // Renders the html template for the siteElement by calling HB.parseTemplateVar for
@@ -1028,7 +1043,7 @@ var HB = {
       HB.isPreviewMode && console.log('Templating error: ', e);
     }
     if (value === undefined || value === null)
-      return "";
+      return '';
     return value;
   },
 
@@ -1101,7 +1116,7 @@ var HB = {
 
     // Helper for template that returns the Javascript for a reference
     // to this object
-    siteElement.me = "window.parent.HB.findSiteElementOnPageById(" + siteElement.id + ")";
+    siteElement.me = 'window.parent.HB.findSiteElementOnPageById(' + siteElement.id + ')';
 
     // skip adding to the page if it is already on the page
     if (HB.siteElementsOnPage.indexOf(siteElement) !== -1)
@@ -1118,7 +1133,7 @@ var HB = {
     HB.siteElementsOnPage.push(siteElement);
 
     // If there is a #nohb in the has we don't render anything
-    if (document.location.hash == "#nohb")
+    if (document.location.hash === '#nohb')
       return;
     siteElement.attach();
   },
@@ -1147,17 +1162,17 @@ var HB = {
   viewed: function (siteElement) {
     // Track number of views if not yet converted for this site element
     if (!HB.didConvert(siteElement))
-      HB.s("v", siteElement.id, {a: HB.getVisitorAttributes()});
+      HB.s('v', siteElement.id, {a: HB.getVisitorAttributes()});
 
     // Record the number of views, first seen and last seen
-    HB.setSiteElementData(siteElement.id, "nv", (HB.getSiteElementData(siteElement.id, "nv") || 0) + 1);
+    HB.setSiteElementData(siteElement.id, 'nv', (HB.getSiteElementData(siteElement.id, 'nv') || 0) + 1);
     var now = Math.round((new Date()).getTime() / 1000);
-    if (!HB.getSiteElementData(siteElement.id, "fv"))
-      HB.setSiteElementData(siteElement.id, "fv", now);
-    HB.setSiteElementData(siteElement.id, "lv", now);
+    if (!HB.getSiteElementData(siteElement.id, 'fv'))
+      HB.setSiteElementData(siteElement.id, 'fv', now);
+    HB.setSiteElementData(siteElement.id, 'lv', now);
     // Trigger siteElement shown event
-    HB.trigger("siteElementShown", siteElement); // Old-style trigger
-    HB.trigger("shown", siteElement); // New trigger
+    HB.trigger('siteElementShown', siteElement); // Old-style trigger
+    HB.trigger('shown', siteElement); // New trigger
   },
 
   // Injects the specified element at the top of the body tag
@@ -1173,12 +1188,12 @@ var HB = {
 
 
   // Adds a rule to the list of rules.
-  //  matchType: is either "any" or "all" - refers to the conditions
+  //  matchType: is either 'any' or 'all' - refers to the conditions
   //  conditions: serialized array of conditions for the rule to be true
   //  siteElements: serialized array of siteElements if the rule is true
   addRule: function (matchType, conditions, siteElements) {
     // First check to see if siteElements is an array, and make it one if it is not
-    if (Object.prototype.toString.call(siteElements) !== "[object Array]")
+    if (Object.prototype.toString.call(siteElements) !== '[object Array]')
       siteElements = [siteElements];
 
     // Create the rule
@@ -1198,7 +1213,7 @@ var HB = {
         var rule = HB.rules[i];
         for (j = 0; j < rule.siteElements.length; j++) {
           var siteElement = rule.siteElements[j];
-          if (siteElement.wordpress_bar_id == window.HB_element_id)
+          if (siteElement.wordpress_bar_id === window.HB_element_id)
             return siteElement;
         }
       }
@@ -1315,17 +1330,8 @@ var HB = {
     }
   },
 
-  /**
-   * @deprecated This was used previously to determine if we need to show/hide the bar
-   * TODO remove this method as it seems to not being used at all
-   */
-  convertedOrDismissed: function (siteElement) {
-    var converted = HB.didConvert(siteElement) && !siteElement.show_after_convert;
-    return converted || HB.didDismissThisHB(siteElement) || HB.didDismissHB(siteElement);
-  },
-
   updatedSinceLastVisit: function (siteElement) {
-    var lastVisited = new Date(HB.getSiteElementData(siteElement.id, "lv") * 1000);
+    var lastVisited = new Date(HB.getSiteElementData(siteElement.id, 'lv') * 1000);
     var lastUpdated = new Date(siteElement.updated_at);
 
     return lastUpdated > lastVisited;
@@ -1339,8 +1345,9 @@ var HB = {
     var possibleSiteElements = {};
     for (i = 0; i < elements.length; i++) {
       siteElement = elements[i];
-      if (!possibleSiteElements[siteElement.subtype])
+      if (!possibleSiteElements[siteElement.subtype]) {
         possibleSiteElements[siteElement.subtype] = [];
+      }
       possibleSiteElements[siteElement.subtype].push(siteElement);
     }
 
@@ -1349,30 +1356,36 @@ var HB = {
     // for example)
     possibleSiteElements =
       possibleSiteElements.email ||
-      HB.isMobileDevice() && possibleSiteElements.call || // consider "call" elements only on mobile devices
+      HB.isMobileDevice() && possibleSiteElements.call || // consider 'call' elements only on mobile devices
       possibleSiteElements.social ||
       possibleSiteElements.traffic ||
       possibleSiteElements.announcement;
 
     // If we have no elements then stop
-    if (!possibleSiteElements || possibleSiteElements.length == 0)
+    if (!possibleSiteElements || possibleSiteElements.length === 0) {
       return;
+    }
+
     // If we only have one element just show it
-    if (possibleSiteElements.length == 1)
+    if (possibleSiteElements.length === 1) {
       return possibleSiteElements[0];
+    }
+
     // First we should see if the visitor has seen any of these site elements
     // If so we should show them the same element again for a consistent
     // user experience.
     for (i = 0; i < possibleSiteElements.length; i++) {
-      if (HB.getSiteElementData(possibleSiteElements[i].id, "nv"))
+      if (HB.getSiteElementData(possibleSiteElements[i].id, 'nv')) {
         return possibleSiteElements[i];
+      }
     }
     // We have more than one possibility so first we check for site elements
     // with less than 1000 views
     var siteElementsWithoutEnoughViews = [];
     for (i = 0; i < possibleSiteElements.length; i++) {
-      if (possibleSiteElements[i].views < 1000)
+      if (possibleSiteElements[i].views < 1000) {
         siteElementsWithoutEnoughViews.push(possibleSiteElements[i]);
+      }
     }
     // If we have at least one element without enough views pick
     // randomly from them
@@ -1405,8 +1418,9 @@ var HB = {
   // For example, having 2 similar modals: one set to be shown to everybody (0 conditions),
   // and another - to mobile visitors only (1 condition), we should always show the latter on mobile devices.
   filterMostRelevantElements: function (elements) {
-    if (elements.length <= 1)
+    if (elements.length <= 1) {
       return elements; //no need to filter
+    }
 
     var rules = elements.map(function (element) {
       return element.rule;
@@ -1425,8 +1439,9 @@ var HB = {
   // For "any" rules the most narrow set is one with the minimum number of conditions (X or Y < X or Y or Z), except for 0
   // When the 2 kinds of rules intersect, "and" has always higher priority (X and Y < X or Y).
   filterMostRelevantRules: function (rules) {
-    if (rules.length <= 1)
+    if (rules.length <= 1) {
       return rules;
+    }
 
     var basis = 10; //basic multiplier for weight calculation
     var groups = {}; //hash of weight:rules pairs
@@ -1434,12 +1449,14 @@ var HB = {
     //Step 1: Go through the array, calculate each rule's weight and put it into the appropriate group
     rules.forEach(function (rule) {
       var weight;
-      if (rule.conditions.length == 0) //the least relevant rule - it matches everything
+      if (rule.conditions.length === 0) {
+        //the least relevant rule - it matches everything
         weight = 0;
-      else
-      //for "all" rule - the more conditions it has, the more relevant it is, the higher weight it should have (multiplication)
-      //for "any" rule - the more conditions it has, the less relevant it is, the lower weight it should have (division)
-        weight = rule.matchType == "all" ? basis * rule.conditions.length : basis / rule.conditions.length;
+      } else {
+        //for "all" rule - the more conditions it has, the more relevant it is, the higher weight it should have (multiplication)
+        //for "any" rule - the more conditions it has, the less relevant it is, the lower weight it should have (division)
+        weight = rule.matchType === 'all' ? basis * rule.conditions.length : basis / rule.conditions.length;
+      }
 
       if (!groups[weight])
         groups[weight] = [];
@@ -1459,19 +1476,19 @@ var HB = {
       if (HB.conditionTrue(rule.conditions[i])) {
         // If we just need to match any condition and we have matched
         // one then return true
-        if (rule.matchType == "any")
+        if (rule.matchType === 'any')
           return true;
       }
       else {
         // We didn't match a condition. Return false if we needed to
         // match all of them
-        if (rule.matchType != "any")
+        if (rule.matchType != 'any')
           return false;
       }
     }
     // If we needed to match any condition (and we had at least one)
     // and didn't yet return false
-    if (rule.matchType == "any" && rule.conditions.length > 0)
+    if (rule.matchType === 'any' && rule.conditions.length > 0)
       return false;
     return true;
   },
@@ -1494,7 +1511,7 @@ var HB = {
     var currentValue = HB.getSegmentValue(condition.segment);
 
     // geolocation conditions are undefined until the geolocation request completes
-    if (typeof currentValue === "undefined")
+    if (typeof currentValue === 'undefined')
       return false;
 
     return HB.applyOperands(currentValue, condition.operand, condition.value, condition.segment)
@@ -1504,14 +1521,14 @@ var HB = {
   // is true. It gets the current value and applies the operand
   conditionTrue: function (condition) {
     // Handle for URL Query
-    if (condition.segment === "pq") {
-      var conditionKey = condition.value.split("=")[0];
+    if (condition.segment === 'pq') {
+      var conditionKey = condition.value.split('=')[0];
       var currentValue = HB.getSegmentValue(condition.segment)[conditionKey];
-      var values = condition.value.split("=")[1] || "";
+      var values = condition.value.split('=')[1] || '';
     }
-    else if (condition.segment === "tc")
+    else if (condition.segment === 'tc')
       return HB.timeConditionTrue(condition);
-    else if (condition.segment === "gl_ctr")
+    else if (condition.segment === 'gl_ctr')
       return HB.geoLocationConditionTrue(condition);
     else {
       currentValue = HB.getSegmentValue(condition.segment);
@@ -1522,7 +1539,7 @@ var HB = {
     // If it's an array of values this is true if the operand is true for any of the values
 
     // We don't want to mess with the array for the between operand
-    if (condition.operand == "between")
+    if (condition.operand === 'between')
       return HB.applyOperand(currentValue, condition.operand, values, condition.segment);
 
     return HB.applyOperands(currentValue, condition.operand, values, condition.segment);
@@ -1532,7 +1549,7 @@ var HB = {
   // Value is the value to sanitize
   // Input is the users value condition
   sanitizeConditionValue: function (segment, value, input) {
-    if (segment == "pu" || segment == "pp" || segment == "pup") {
+    if (segment === 'pu' || segment === 'pp' || segment === 'pup') {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
@@ -1544,16 +1561,16 @@ var HB = {
   // value
   getSegmentValue: function (segmentName) {
     // Convert long names to short names
-    if (segmentName == "url")
-      segmentName = "pu";
-    else if (segmentName == "device")
-      segmentName = "dv";
-    else if (segmentName == "country")
-      segmentName = "co";
-    else if (segmentName == "referrer" || segmentName == "referer")
-      segmentName = "rf";
-    else if (segmentName == "date")
-      segmentName = "dt";
+    if (segmentName === 'url')
+      segmentName = 'pu';
+    else if (segmentName === 'device')
+      segmentName = 'dv';
+    else if (segmentName === 'country')
+      segmentName = 'co';
+    else if (segmentName === 'referrer' || segmentName === 'referer')
+      segmentName = 'rf';
+    else if (segmentName === 'date')
+      segmentName = 'dt';
 
     // All other segment names
     return HB.getVisitorData(segmentName);
@@ -1562,7 +1579,7 @@ var HB = {
   // Applies the operand specified to the array of possible values
   applyOperands: function (currentValue, operand, values, segment) {
     // Put the value in an array if it is not an array
-    if (typeof(values) != "object" || typeof(values.length) != "number")
+    if (typeof(values) != 'object' || typeof(values.length) != 'number')
       values = [values];
 
     // For negative/excluding operands we use "and" logic:
@@ -1591,43 +1608,43 @@ var HB = {
     var b = HB.sanitizeConditionValue(segment, input, input);
 
     switch (operand) {
-      case "is":
-      case "equals":
+      case 'is':
+      case 'equals':
         if (typeof a === 'string' && typeof b === 'string') {
-          var regex = new RegExp("^" + HB.sanitizeRegexString(b).replace("*", ".*") + "$");
+          var regex = new RegExp('^' + HB.sanitizeRegexString(b).replace('*', '.*') + '$');
           return !!a.match(regex);
         }
         return a == b;
-      case "every":
+      case 'every':
         return a % b == 0;
-      case "is_not":
-      case "does_not_equal":
+      case 'is_not':
+      case 'does_not_equal':
         return a != b;
-      case "includes":
-        if (typeof a === "undefined" && b === "")
+      case 'includes':
+        if (typeof a === 'undefined' && b === '')
           return false;
         if (typeof a === 'string' && typeof b === 'string') {
-          var regex = new RegExp(HB.sanitizeRegexString(b).replace("*", ".*"));
+          var regex = new RegExp(HB.sanitizeRegexString(b).replace('*', '.*'));
           return !!a.match(regex);
         }
 
         return HB.stringify(a).indexOf(HB.stringify(b)) != -1;
-      case "does_not_include":
-        if (typeof a === "undefined" && b === "")
+      case 'does_not_include':
+        if (typeof a === 'undefined' && b === '')
           return true;
         return HB.stringify(a).indexOf(HB.stringify(b)) == -1;
-      case "before":
-      case "less_than":
+      case 'before':
+      case 'less_than':
         return a < b;
-      case "less_than_or_equal":
+      case 'less_than_or_equal':
         return a <= b;
-      case "after":
-      case "greater_than":
+      case 'after':
+      case 'greater_than':
         return a > b;
-      case "greater_than_or_equal":
+      case 'greater_than_or_equal':
         return a >= b;
-      case "between":
-      case "is_between":
+      case 'between':
+      case 'is_between':
         return a >= b[0] && a <= b[1];
     }
   },
@@ -1635,7 +1652,7 @@ var HB = {
   // Returns a normalized string value
   // Used for applying operands
   stringify: function (o) {
-    return (o + "").toLowerCase();
+    return (o + '').toLowerCase();
   },
 
   // This just sets the default segments/tracking data for the visitor
@@ -1649,29 +1666,29 @@ var HB = {
 
     // Track first visit and most recent visit and time since
     // last visit
-    if (!HB.getVisitorData("fv"))
-      HB.setVisitorData("fv", now);
+    if (!HB.getVisitorData('fv'))
+      HB.setVisitorData('fv', now);
     // Get the previous visit
-    var previousVisit = HB.getVisitorData("lv");
+    var previousVisit = HB.getVisitorData('lv');
 
     // Set the time since the last visit as the number
     // of days
     if (previousVisit)
-      HB.setVisitorData("ls", Math.round((now - previousVisit) / day));
+      HB.setVisitorData('ls', Math.round((now - previousVisit) / day));
     if (((now - previousVisit) / hour) > 1) {
       newSession = 1;
     }
 
-    HB.setVisitorData("lv", now);
+    HB.setVisitorData('lv', now);
 
     // Set the life of the visitor in number of days
-    HB.setVisitorData("lf", Math.round((now - HB.getVisitorData("fv")) / day));
+    HB.setVisitorData('lf', Math.round((now - HB.getVisitorData('fv')) / day));
 
     // Track number of visitor visits
-    HB.setVisitorData("nv", (HB.getVisitorData("nv") || 0) + 1);
+    HB.setVisitorData('nv', (HB.getVisitorData('nv') || 0) + 1);
 
     // Track number of visitor sessions
-    HB.setVisitorData("ns", (HB.getVisitorData("ns") || 0) + newSession);
+    HB.setVisitorData('ns', (HB.getVisitorData('ns') || 0) + newSession);
 
     // Check for UTM params
     var params = HB.paramsFromString(document.location);
@@ -1688,56 +1705,56 @@ var HB = {
     if (document.referrer) {
       var tld = HB.getTLD().toLowerCase();
       // Check to ensure that the tld is not present in the
-      var referrer = (document.referrer + "").replace(/.*?\:\/\//, "").replace(/www\./i, "").toLowerCase().substr(0, 150);
-      var referrerDomain = referrer.replace(/(.*?)\/.*/, "$1");
+      var referrer = (document.referrer + '').replace(/.*?\:\/\//, '').replace(/www\./i, '').toLowerCase().substr(0, 150);
+      var referrerDomain = referrer.replace(/(.*?)\/.*/, '$1');
       if (referrerDomain.indexOf(tld) == -1) {
         // This is an external referrer
         // Set the original referrer if not set
-        if (!HB.getVisitorData("or"))
-          HB.setVisitorData("or", referrer);
+        if (!HB.getVisitorData('or'))
+          HB.setVisitorData('or', referrer);
         // Set the full current referrer
-        HB.setVisitorData("rf", referrer);
+        HB.setVisitorData('rf', referrer);
         // Set the referrer domain
-        HB.setVisitorData("rd", referrerDomain);
+        HB.setVisitorData('rd', referrerDomain);
 
         // Check for search terms
         var referrerParams = HB.paramsFromString(document.referer);
         // Check for search terms
-        HB.setVisitorData("st", referrerParams['query'] || referrerParams['q'] || referrerParams['search'], true);
+        HB.setVisitorData('st', referrerParams['query'] || referrerParams['q'] || referrerParams['search'], true);
       }
 
       // Always set the previous page to the referrer
-      HB.setVisitorData("pp", referrer);
+      HB.setVisitorData('pp', referrer);
     } else {
-      // There is no referrer so set the "rf" and "rd" segments to blank
-      HB.setVisitorData("rf", "");
-      HB.setVisitorData("rd", "");
-      HB.setVisitorData("pp", "");
+      // There is no referrer so set the 'rf' and 'rd' segments to blank
+      HB.setVisitorData('rf', '');
+      HB.setVisitorData('rd', '');
+      HB.setVisitorData('pp', '');
     }
     // Set the page URL
-    HB.setVisitorData("pu", HB.n(document.location + "", false));
+    HB.setVisitorData('pu', HB.n(document.location + '', false));
 
     // Set the page path
-    HB.setVisitorData("pup", HB.n(document.location.pathname, true));
+    HB.setVisitorData('pup', HB.n(document.location.pathname, true));
 
     // Set the date
-    HB.setVisitorData("dt", (HB.ymd(HB.nowInTimezone())));
+    HB.setVisitorData('dt', (HB.ymd(HB.nowInTimezone())));
     // Detect the device
-    HB.setVisitorData("dv", HB.device());
+    HB.setVisitorData('dv', HB.device());
   },
 
   paramsFromString: function (url) {
     var params = {};
     if (!url)
       return params;
-    url += ""; // cast to string
-    var query = url.indexOf("?") == -1 ? url : url.split("?")[1];
+    url += ''; // cast to string
+    var query = url.indexOf('?') == -1 ? url : url.split('?')[1];
     if (!query)
       return params;
-    var pairs = query.split("&");
+    var pairs = query.split('&');
     for (var i = 0; i < pairs.length; i++) {
       var key, value;
-      var components = pairs[i].split("=");
+      var components = pairs[i].split('=');
       components[1] || (components[1] = ''); // default the key to an empty string
 
       // handle ASCII encoding
@@ -1755,11 +1772,11 @@ var HB = {
   paramsToString: function (params) {
     var pairs = [];
     for (var k in params) {
-      if (typeof(params[k]) != "function") {
-        pairs.push(encodeURIComponent(k) + "=" + encodeURIComponent(params[k]));
+      if (typeof(params[k]) != 'function') {
+        pairs.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k]));
       }
     }
-    return pairs.join("&");
+    return pairs.join('&');
   },
 
   // This code returns the root domain of the current site so "www.yahoo.co.jp" will return "yahoo.co.jp" and "blog.kissmetrics.com
@@ -1794,7 +1811,7 @@ var HB = {
       var x = origX;
       var numShakes = 0;
       // Set the positioning to relevant
-      element.style.position = "relative";
+      element.style.position = 'relative';
       var interval = setInterval(function () {
         velocity += acceleration;
         if (x - origX >= maxTravel && acceleration > 0)
@@ -1806,10 +1823,10 @@ var HB = {
         x += velocity;
         if (numShakes >= 2 && x >= origX) {
           clearInterval(interval);
-          element.style.left = origX + "px";
+          element.style.left = origX + 'px';
           element.style.position = origPosition;
         }
-        element.style.left = Math.round(x) + "px";
+        element.style.left = Math.round(x) + 'px';
       }, 5);
     })(HB.$(element));
   },
@@ -1865,9 +1882,9 @@ var HB = {
   animateIn: function (element, time) {
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
-      element.classList.remove("hb-animateOut");
-      element.classList.add("hb-animated");
-      element.classList.add("hb-animateIn");
+      element.classList.remove('hb-animateOut');
+      element.classList.add('hb-animated');
+      element.classList.add('hb-animateIn');
     }
 
     HB.showElement(element); // unhide if hidden
@@ -1876,9 +1893,9 @@ var HB = {
   animateOut: function (element, callback) {
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
-      element.classList.remove("hb-animateIn");
-      element.classList.add("hb-animated");
-      element.classList.add("hb-animateOut");
+      element.classList.remove('hb-animateIn');
+      element.classList.add('hb-animated');
+      element.classList.add('hb-animateOut');
     } // else just hide
     else {
       HB.hideElement(element);
@@ -1908,18 +1925,18 @@ var HB = {
   // Valid formats for zone are:
   // "HHMM", "+HHMM", "-HHMM", "HH:MM", "+HH:MM and "-HH:MM".
   parseTimezone: function (zone) {
-    if (!zone || typeof(zone) != "string")
+    if (!zone || typeof(zone) != 'string')
       return null;
     // Add + if missing +/-
     if (zone[0] != '+' && zone[0] != '-')
-      zone = "+" + zone;
-    if (zone.indexOf(":") == -1)
-      zone = zone.slice(0, zone.length - 2) + ":" + zone.slice(zone.length - 2);
+      zone = '+' + zone;
+    if (zone.indexOf(':') == -1)
+      zone = zone.slice(0, zone.length - 2) + ':' + zone.slice(zone.length - 2);
     if (!zone.match(/^[\+-]\d{1,2}:\d\d$/))
       return null;
     // Parse it
-    var parts = zone.split(":");
-    var signMultiplier = zone[0] == "+" ? 1 : -1;
+    var parts = zone.split(':');
+    var signMultiplier = zone[0] == '+' ? 1 : -1;
     var hour = Math.abs(parseInt(parts[0], 10));
     var minute = parseInt(parts[1], 10);
 
@@ -1936,7 +1953,7 @@ var HB = {
   // timezone
   nowInTimezone: function (zone) {
     // If no zone is specified try the HB_TZ variable
-    if (!zone && typeof(HB_TZ) == "string")
+    if (!zone && typeof(HB_TZ) == 'string')
       zone = HB_TZ;
     var zoneOffset = HB.parseTimezone(zone);
     if (zoneOffset === null)
@@ -1946,27 +1963,27 @@ var HB = {
   },
 
   ymd: function (date) {
-    if (typeof date === "undefined") date = new Date();
+    if (typeof date === 'undefined') date = new Date();
     var m = date.getMonth() + 1;
-    return date.getFullYear() + "-" + this.zeropad(m) + "-" + this.zeropad(date.getDate());
+    return date.getFullYear() + '-' + this.zeropad(m) + '-' + this.zeropad(date.getDate());
   },
 
   // Copied from zeropad.jquery.js
   zeropad: function (string, length) {
     // default to 2
     string = string.toString();
-    if (typeof length === "undefined" && string.length == 1) length = 2;
+    if (typeof length === 'undefined' && string.length == 1) length = 2;
     length = length || string.length;
-    return string.length >= length ? string : this.zeropad("0" + string, length);
+    return string.length >= length ? string : this.zeropad('0' + string, length);
   },
 
   // Takes an input ID and returns an obfuscated ID
   // This is the required format for IDs for hi.hellobar.com
   obfID: function (number) {
-    var SEP = "-";
-    var ZERO_ENCODE = "_";
-    var ENCODE = "S6pjZ9FbD8RmIvT3rfzVWAloJKMqg7CcGe1OHULNuEkiQByns5d4Y0PhXw2xta";
-    var id = number + "";
+    var SEP = '-';
+    var ZERO_ENCODE = '_';
+    var ENCODE = 'S6pjZ9FbD8RmIvT3rfzVWAloJKMqg7CcGe1OHULNuEkiQByns5d4Y0PhXw2xta';
+    var id = number + '';
     var outputs = [];
     var initialInputs = [id.slice(0, 3), id.slice(3, 6), id.slice(6, 9)];
     var inputs = [];
@@ -1976,10 +1993,10 @@ var HB = {
         inputs.push(initialInputs[i]);
     }
     for (i = 0; i < inputs.length; i++) {
-      var output = "";
-      var chars = inputs[i].split("");
+      var output = '';
+      var chars = inputs[i].split('');
       for (var c = 0; c < chars.length; c++) {
-        if (chars[c] != "0")
+        if (chars[c] != '0')
           break;
         output += ZERO_ENCODE;
       }
@@ -2010,13 +2027,13 @@ var HB = {
     // space as "+" and another as "%20" for example
     var sortedParamPairs = [];
     for (var k in params) {
-      if (typeof(params[k]) != 'function' && k != "s") {
-        sortedParamPairs.push(k + "=" + params[k]);
+      if (typeof(params[k]) != 'function' && k != 's') {
+        sortedParamPairs.push(k + '=' + params[k]);
       }
     }
     sortedParamPairs.sort();
 
-    return HBCrypto.HmacSHA512(path + "?" + sortedParamPairs.join("|"), key).toString();
+    return HBCrypto.HmacSHA512(path + '?' + sortedParamPairs.join('|'), key).toString();
 
   },
 
@@ -2025,11 +2042,11 @@ var HB = {
     // scrollTarget of "bottom" and "middle" are computed during check, in case page size changes;
     // scrollTarget also accepts distance from top in pixels
 
-    if (scrollTarget === "bottom") {
+    if (scrollTarget === 'bottom') {
       // arbitrary 300 pixels subtracted from page height to assume visitor will not scroll through a footer
       scrollTarget = (document.body.scrollHeight - window.innerHeight - 300);
     }
-    else if (scrollTarget === "middle") {
+    else if (scrollTarget === 'middle') {
       // triggers just before middle of page - feels right due to polling rate
       scrollTarget = ((document.body.scrollHeight - (window.innerHeight * 2)) / 2);
     }
@@ -2048,7 +2065,7 @@ var HB = {
     var vistorIntendsTo = false;
 
     // if intent is set to exit and we have enough mouse position data...
-    if (intentSetting === "exit") {
+    if (intentSetting === 'exit') {
 
       // catch a keyboard move towards the address bar via onBlur event; resets onBlur state
       if (HB.intentConditionCache.intentBodyBlurEvent) {
@@ -2068,7 +2085,7 @@ var HB = {
       // if on mobile, display the bar after N ms regardless of mouse behavior
       var mobileDelaySetting = 30000;
       var date = new Date();
-      if (HB.device() === "mobile" && date.getTime() - HB.intentConditionCache.intentStartTime > mobileDelaySetting) {
+      if (HB.device() === 'mobile' && date.getTime() - HB.intentConditionCache.intentStartTime > mobileDelaySetting) {
         vistorIntendsTo = true
       }
     }
@@ -2088,7 +2105,7 @@ var HB = {
 
     // When a mouse enters the document, reset the mouseOut state and
     // set the time the document was entered
-    document.body.addEventListener("mouseenter", function (e) {
+    document.body.addEventListener('mouseenter', function (e) {
       if (!HB.intentConditionCache.mouseInTime) {
         HB.intentConditionCache.mousedOut = false;
         HB.intentConditionCache.mouseInTime = new Date();
@@ -2108,7 +2125,7 @@ var HB = {
 
     // When the mouse leaves the document, check the current time vs when the mouse entered
     // the document.  If greater than the specified timespan, set the mouseOut state
-    document.body.addEventListener("mouseleave", function (e) {
+    document.body.addEventListener('mouseleave', function (e) {
       if (HB.intentConditionCache.mouseInTime) {
         var currentTime = new Date();
         if (currentTime.getTime() - HB.intentConditionCache.mouseInTime.getTime() > 2000) {
@@ -2120,7 +2137,7 @@ var HB = {
   },
 
   branding_template: function () {
-    var stored = HB.gc("b_template");
+    var stored = HB.gc('b_template');
     return stored != null ? stored : HB.CAP.b_variation;
   },
 
@@ -2165,7 +2182,7 @@ var HB = {
 
     // Set the template and headline
     // Remove the image from the question
-    siteElement.template_name = siteElement.template_name.split("_")[0] + "_question";
+    siteElement.template_name = siteElement.template_name.split('_')[0] + '_question';
     siteElement.headline = siteElement.question;
     siteElement.caption = null;
     siteElement.use_question = false;
@@ -2180,8 +2197,8 @@ var HB = {
       // If showResponse has not been set (ie, not forcing an answer to display)
       // trigger the answerSelected event
       if (!HB.showResponse) {
-        HB.trigger("answerSelected", choice); // Old-style trigger
-        HB.trigger("answered", siteElement, choice); // New trigger
+        HB.trigger('answerSelected', choice); // Old-style trigger
+        HB.trigger('answered', siteElement, choice); // New trigger
       }
 
       if (choice === 1) {
@@ -2228,7 +2245,7 @@ var HB = {
   setTracking: function (queryString) {
     if (queryString.match(/hb_ignore/i)) {
       var bool = !!queryString.match(/hb_ignore=true/i);
-      HB.sc("disableTracking", bool, 5 * 365);
+      HB.sc('disableTracking', bool, 5 * 365);
     }
   },
 
@@ -2246,13 +2263,13 @@ var HB = {
   device: function () {
     var ua = HB.getUserAgent();
     if (ua.match(/ipad/i))
-      return "tablet";
+      return 'tablet';
     else if (ua.match(/(mobi|phone|ipod|blackberry|docomo)/i))
-      return "mobile";
+      return 'mobile';
     else if (ua.match(/(ipad|kindle|android)/i))
-      return "tablet";
+      return 'tablet';
     else
-      return "computer";
+      return 'computer';
   },
 
   setGeolocationData: function (locationData) {
@@ -2263,13 +2280,13 @@ var HB = {
     }
 
     // Don't let any cookies get set without a site ID
-    if (typeof(HB_SITE_ID) != "undefined") {
+    if (typeof(HB_SITE_ID) != 'undefined') {
       //refresh geolocation every month on not mobile
       var expirationDays = 30;
       //refresh geolocation every day on mobile
-      if (HB.getVisitorData("dv") === "mobile")
+      if (HB.getVisitorData('dv') === 'mobile')
         expirationDays = 1;
-      HB.sc("hbglc_" + HB_SITE_ID, HB.serializeCookieValues(locationCookie), expirationDays);
+      HB.sc('hbglc_' + HB_SITE_ID, HB.serializeCookieValues(locationCookie), expirationDays);
       HB.loadCookies();
     }
 
@@ -2322,7 +2339,7 @@ var HB = {
 
   // Escapes all regex characters EXCEPT for the asterisk
   sanitizeRegexString: function (str) {
-    return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, "\\$&");
+    return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&');
   },
 
   stringLiteral: function(s) {
