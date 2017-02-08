@@ -49,7 +49,7 @@
     config = $.extend({}, defaults, settings);
     var style = 'width:' + config.hover_size + 'px; height:' + config.hover_size + 'px; display:none';
 
-    $('body').append('\'<div class="dropperTrios_spyglass" style="' + style + '"></div>');
+    $('body').append('<div class="dropperTrios_spyglass" style="' + style + '"></div>');
     hover_spyglass = $('.dropperTrios_spyglass');
 
     if (config.selector && config.selector.length) {

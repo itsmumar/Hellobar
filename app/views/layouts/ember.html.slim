@@ -54,8 +54,5 @@ html
 
     = yield
 
-    = javascript_include_tag "dropper_trios"
-
-
 javascript:
   var site = #{{SiteSerializer.new(current_site, scope: current_user).to_json}};
