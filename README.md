@@ -2,6 +2,9 @@
 
 Made with love.
 
+[![CircleCI](https://circleci.com/gh/Hello-bar/hellobar_new.svg?style=svg&circle-token=a40215cbc1e8ef0718fced860063731f53206e73)](https://circleci.com/gh/Hello-bar/hellobar_new)
+
+
 ## Environment Setup
 
 ### Mac OS
