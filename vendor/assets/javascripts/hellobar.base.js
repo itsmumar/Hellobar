@@ -10,7 +10,7 @@
 //
 
 // When HBQ is initialized we also kickstart the initialization process of Hello Bar:
-if (typeof(_hbq) == 'undefined') {
+if (typeof(_hbq) === 'undefined') {
   _hbq = [];
 }
 
@@ -64,7 +64,7 @@ var HBQ = function () {
 
 // Call the function right away once this is loaded
 HBQ.prototype.push = function () {
-  if (arguments.length == 1 && typeof(arguments[0]) == "function")
+  if (arguments.length === 1 && typeof(arguments[0]) === "function")
     (arguments[0])();
   else {
     var originalArgs = [];
@@ -95,7 +95,7 @@ var HB = {
 
     // If the site is the generic one used for force converts
     // we still want to show the bar
-    return HB_SITE_URL == "http://mysite.com" || HB.n(hostname) === HB.n(window.HB_SITE_URL);
+    return HB_SITE_URL === "http://mysite.com" || HB.n(hostname) === HB.n(window.HB_SITE_URL);
   },
 
   // Grabs site elements from valid rules and displays them
@@ -131,7 +131,7 @@ var HB = {
     for (var key in spec) {
       if (spec.hasOwnProperty(key)) {
         var value = spec[key];
-        if (typeof(value) == "function") {
+        if (typeof(value) === "function") {
           klass.prototype[key] = value;
         }
       }
@@ -170,7 +170,7 @@ var HB = {
 
   // Returns the element or looks it up via getElementById
   $: function (idOrElement) {
-    if (typeof(idOrElement) == "string")
+    if (typeof(idOrElement) === "string")
       return document.getElementById(idOrElement.replace("#", ""));
     else
       return idOrElement;
@@ -248,11 +248,13 @@ var HB = {
 
   // Takes a URL and returns normalized domain (downcase and strip www)
   getNDomain: function (url) {
-    if (!url)
+    if (!url) {
       return "";
+    }
     url = url + "";
-    if (url.indexOf("/") == 0)
+    if (url.indexOf("/") === 0) {
       return "";
+    }
     return url.replace(/.*?\:\/\//, "").replace(/(.*?)\/.*/, "$1").replace(/www\./i, "").toLowerCase();
   },
 
@@ -277,12 +279,14 @@ var HB = {
     // Strip the host if pathOnly
     if (pathOnly) {
       // Unless it starts with a slash
-      if (!url.match(/^\//))
+      if (!url.match(/^\//)) {
         url = url.replace(/.*?\//, "/");
+      }
     }
 
-    if (url == "/" || url == "/?")
+    if (url === "/" || url === "/?") {
       return url;
+    }
 
     // If no query string just return the URL
     if (url.indexOf("?") === -1)
@@ -306,7 +310,7 @@ var HB = {
 
   // Returns true if the specified url matches the source pattern
   umatch: function (srcPattern, url) {
-    if (srcPattern.indexOf("?") == -1) // srcPattern does not have any query params...
+    if (srcPattern.indexOf("?") === -1) // srcPattern does not have any query params...
       return HB.n(srcPattern, true) == HB.n(url, true).split("?")[0]; // ...so ignore them in the url
     // Otherwise URLs must match exactly
     return HB.n(srcPattern, true) == HB.n(url, true);
@@ -321,7 +325,7 @@ var HB = {
     // Remove ignored attributes
     for (var k in HB.cookies.visitor) {
       var value = HB.cookies.visitor[k];
-      if ((typeof(value) == 'string' || typeof(value) == 'number' || typeof(value) == 'boolean') && ignoredAttributes.indexOf(k) == -1 && !k.match(ignoredAttributePattern)) {
+      if ((typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') && ignoredAttributes.indexOf(k) === -1 && !k.match(ignoredAttributePattern)) {
         attributes[k.toLowerCase()] = (HB.cookies.visitor[k] + "").toLowerCase().substr(0, 150);
       }
     }
@@ -332,8 +336,8 @@ var HB = {
   s: function (path, itemID, params, callback) {
     // If we are not tracking or this or no site ID then just issue the
     // callback without sending any data
-    if (typeof(HB_DNT) != "undefined" || typeof(HB_SITE_ID) == "undefined" || typeof(HB_WK) == "undefined") {
-      if (callback && typeof(callback) == "function")
+    if (typeof(HB_DNT) != "undefined" || typeof(HB_SITE_ID) === "undefined" || typeof(HB_WK) === "undefined") {
+      if (callback && typeof(callback) === "function")
         callback();
       return;
     }
@@ -373,7 +377,7 @@ var HB = {
 
   // Returns the URL for the backend server (e.g. "hi.hellobar.com").
   hi: function (url) {
-    return (document.location.protocol == "https:" ? "https" : "http") + "://" + HB_BACKEND_HOST + url;
+    return (document.location.protocol === "https:" ? "https" : "http") + "://" + HB_BACKEND_HOST + url;
   },
 
   // Recoards the rule being formed when the visitor clicks the specified element
@@ -408,16 +412,18 @@ var HB = {
   getShortestKeyForURL: function (url) {
     // If the URL is a path already or it's on the same domain
     // strip to just the path
-    if (url.indexOf("/") == 0 || HB.getNDomain(url) == HB.getNDomain(document.location))
+    if (url.indexOf("/") === 0 || HB.getNDomain(url) == HB.getNDomain(document.location)) {
       url = HB.n(url, true);
-    else
+    } else {
       url = HB.n(url); // Get full URL
+    }
     // If the URL is shorter than 40 chars just return it
-    if (url.length > 40)
-      return HBCrypto.SHA1(url).toString()
-    else
+    if (url.length > 40) {
+      return HBCrypto.SHA1(url).toString();
+    } else {
       return url;
-    // Otherwise return a SHA1 hash of the URL
+      // Otherwise return a SHA1 hash of the URL
+    }
   },
 
   // Called when a conversion happens (e.g. link clicked, email form filled out)
@@ -446,7 +452,7 @@ var HB = {
     HB.trigger("conversion", siteElement); // Old-style trigger
     HB.trigger("converted", siteElement); // Updated trigger
     // Send the data to the backend if this is the first conversion
-    if (conversionCount == 1)
+    if (conversionCount === 1)
       HB.s("g", siteElement.id, {a: HB.getVisitorAttributes()}, callback);
     else if (typeof(callback) === typeof(Function))
       callback();
@@ -525,7 +531,7 @@ var HB = {
 
   // Returns true if the visitor previously closed this particular site element
   didDismissThisHB: function (se) {
-    var cookie_name = (se.type == "Takeover" || se.type == "Modal") ? "HBDismissedModals" : "HBDismissedBars";
+    var cookie_name = (se.type === "Takeover" || se.type === "Modal") ? "HBDismissedModals" : "HBDismissedBars";
     var cookie_str = HB.gc(cookie_name);
     if (cookie_str != undefined) {
       return JSON.parse(cookie_str).indexOf(se.id) >= 0;
@@ -581,7 +587,7 @@ var HB = {
       'data-hb-editable-block="' + id() + '">' +
       '<label for="' + id() + '">' + fieldAttrs.label + '</label>' +
       '<input id="' + id() + '" type="' + fieldAttrs.type + '" placeholder="' +
-      fieldAttrs.label + '" ' + (field.type == 'builtin-email' ? 'required' : '') +
+      fieldAttrs.label + '" ' + (field.type === 'builtin-email' ? 'required' : '') +
       ' value="' + (HB.CAP.preview ? fieldAttrs.label : '') + '" />' +
       '</div>';
 
@@ -599,7 +605,7 @@ var HB = {
       function () {
         var doRedirect = HB.t(redirect);
         var removeElements;
-        if (siteElement.type == 'ContentUpgrade') {
+        if (siteElement.type === 'ContentUpgrade') {
           var siteElementDoc = document.getElementById('hb-cu-modal-'+siteElement.id);
         } else {
           var siteElementDoc = siteElement.w.contentDocument;
@@ -727,10 +733,11 @@ var HB = {
 
   // Convert value to a number if it makes sense
   parseValue: function (value) {
-    if (parseInt(value, 10) == value)
+    if (parseInt(value, 10) == value) {
       value = parseInt(value, 10);
-    else if (parseFloat(value) == value)
+    } else if (parseFloat(value) == value) {
       value = parseFloat(value);
+    }
     return value;
   },
 
@@ -738,7 +745,7 @@ var HB = {
   // in the format of {siteElements:{...}}, visitor:{...}}
   loadCookies: function () {
     // Don't let any cookies get set without a site ID
-    if (typeof(HB_SITE_ID) == "undefined")
+    if (typeof(HB_SITE_ID) === "undefined")
       HB.cookies = {siteElements: {}, visitor: {}, location: {}};
     else {
       HB.cookies = {
@@ -780,7 +787,9 @@ var HB = {
 
   // Gets the visitor attribute specified by the key or returns null
   getVisitorData: function (key) {
-    if (key == undefined) return null;
+    if (!key) {
+      return null;
+    }
 
     if (key.indexOf("gl_") != -1) {
       return HB.getGeolocationData(key);
@@ -883,10 +892,11 @@ var HB = {
       return;
     } else {
       //set date to today?? if number of days to expiration has not been passed
-      var exdate = typeof exdays == "object" ? exdays : new Date();
-      if (typeof exdays == "number")
-      //conver days to expiration to date
+      var exdate = typeof exdays === "object" ? exdays : new Date();
+      if (typeof exdays === "number") {
+        //conver days to expiration to date
         exdate.setDate(exdate.getDate() + exdays);
+      }
 
       var dataToSave = {};
       dataToSave.value = value;
@@ -999,11 +1009,13 @@ var HB = {
     var myNav = navigator.userAgent.toLowerCase();
     var version = (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
 
-    if (isNaN(version) || version == null || version == false)
+    if (isNaN(version) || version == null || version == false) {
       return false;
+    }
 
-    if (version <= x)
+    if (version <= x) {
       return true;
+    }
   },
 
   // Returns true if the device is using mobile safari (ie, ipad / iphone)
@@ -1118,7 +1130,7 @@ var HB = {
     HB.siteElementsOnPage.push(siteElement);
 
     // If there is a #nohb in the has we don't render anything
-    if (document.location.hash == "#nohb")
+    if (document.location.hash === "#nohb")
       return;
     siteElement.attach();
   },
@@ -1198,7 +1210,7 @@ var HB = {
         var rule = HB.rules[i];
         for (j = 0; j < rule.siteElements.length; j++) {
           var siteElement = rule.siteElements[j];
-          if (siteElement.wordpress_bar_id == window.HB_element_id)
+          if (siteElement.wordpress_bar_id === window.HB_element_id)
             return siteElement;
         }
       }
@@ -1315,15 +1327,6 @@ var HB = {
     }
   },
 
-  /**
-   * @deprecated This was used previously to determine if we need to show/hide the bar
-   * TODO remove this method as it seems to not being used at all
-   */
-  convertedOrDismissed: function (siteElement) {
-    var converted = HB.didConvert(siteElement) && !siteElement.show_after_convert;
-    return converted || HB.didDismissThisHB(siteElement) || HB.didDismissHB(siteElement);
-  },
-
   updatedSinceLastVisit: function (siteElement) {
     var lastVisited = new Date(HB.getSiteElementData(siteElement.id, "lv") * 1000);
     var lastUpdated = new Date(siteElement.updated_at);
@@ -1339,8 +1342,9 @@ var HB = {
     var possibleSiteElements = {};
     for (i = 0; i < elements.length; i++) {
       siteElement = elements[i];
-      if (!possibleSiteElements[siteElement.subtype])
+      if (!possibleSiteElements[siteElement.subtype]) {
         possibleSiteElements[siteElement.subtype] = [];
+      }
       possibleSiteElements[siteElement.subtype].push(siteElement);
     }
 
@@ -1355,24 +1359,30 @@ var HB = {
       possibleSiteElements.announcement;
 
     // If we have no elements then stop
-    if (!possibleSiteElements || possibleSiteElements.length == 0)
+    if (!possibleSiteElements || possibleSiteElements.length === 0) {
       return;
+    }
+
     // If we only have one element just show it
-    if (possibleSiteElements.length == 1)
+    if (possibleSiteElements.length === 1) {
       return possibleSiteElements[0];
+    }
+
     // First we should see if the visitor has seen any of these site elements
     // If so we should show them the same element again for a consistent
     // user experience.
     for (i = 0; i < possibleSiteElements.length; i++) {
-      if (HB.getSiteElementData(possibleSiteElements[i].id, "nv"))
+      if (HB.getSiteElementData(possibleSiteElements[i].id, "nv")) {
         return possibleSiteElements[i];
+      }
     }
     // We have more than one possibility so first we check for site elements
     // with less than 1000 views
     var siteElementsWithoutEnoughViews = [];
     for (i = 0; i < possibleSiteElements.length; i++) {
-      if (possibleSiteElements[i].views < 1000)
+      if (possibleSiteElements[i].views < 1000) {
         siteElementsWithoutEnoughViews.push(possibleSiteElements[i]);
+      }
     }
     // If we have at least one element without enough views pick
     // randomly from them
@@ -1405,8 +1415,9 @@ var HB = {
   // For example, having 2 similar modals: one set to be shown to everybody (0 conditions),
   // and another - to mobile visitors only (1 condition), we should always show the latter on mobile devices.
   filterMostRelevantElements: function (elements) {
-    if (elements.length <= 1)
+    if (elements.length <= 1) {
       return elements; //no need to filter
+    }
 
     var rules = elements.map(function (element) {
       return element.rule;
@@ -1425,8 +1436,9 @@ var HB = {
   // For "any" rules the most narrow set is one with the minimum number of conditions (X or Y < X or Y or Z), except for 0
   // When the 2 kinds of rules intersect, "and" has always higher priority (X and Y < X or Y).
   filterMostRelevantRules: function (rules) {
-    if (rules.length <= 1)
+    if (rules.length <= 1) {
       return rules;
+    }
 
     var basis = 10; //basic multiplier for weight calculation
     var groups = {}; //hash of weight:rules pairs
@@ -1434,12 +1446,14 @@ var HB = {
     //Step 1: Go through the array, calculate each rule's weight and put it into the appropriate group
     rules.forEach(function (rule) {
       var weight;
-      if (rule.conditions.length == 0) //the least relevant rule - it matches everything
+      if (rule.conditions.length === 0) {
+        //the least relevant rule - it matches everything
         weight = 0;
-      else
-      //for "all" rule - the more conditions it has, the more relevant it is, the higher weight it should have (multiplication)
-      //for "any" rule - the more conditions it has, the less relevant it is, the lower weight it should have (division)
-        weight = rule.matchType == "all" ? basis * rule.conditions.length : basis / rule.conditions.length;
+      } else {
+        //for "all" rule - the more conditions it has, the more relevant it is, the higher weight it should have (multiplication)
+        //for "any" rule - the more conditions it has, the less relevant it is, the lower weight it should have (division)
+        weight = rule.matchType === "all" ? basis * rule.conditions.length : basis / rule.conditions.length;
+      }
 
       if (!groups[weight])
         groups[weight] = [];
@@ -1459,7 +1473,7 @@ var HB = {
       if (HB.conditionTrue(rule.conditions[i])) {
         // If we just need to match any condition and we have matched
         // one then return true
-        if (rule.matchType == "any")
+        if (rule.matchType === "any")
           return true;
       }
       else {
@@ -1471,7 +1485,7 @@ var HB = {
     }
     // If we needed to match any condition (and we had at least one)
     // and didn't yet return false
-    if (rule.matchType == "any" && rule.conditions.length > 0)
+    if (rule.matchType === "any" && rule.conditions.length > 0)
       return false;
     return true;
   },
@@ -1522,7 +1536,7 @@ var HB = {
     // If it's an array of values this is true if the operand is true for any of the values
 
     // We don't want to mess with the array for the between operand
-    if (condition.operand == "between")
+    if (condition.operand === "between")
       return HB.applyOperand(currentValue, condition.operand, values, condition.segment);
 
     return HB.applyOperands(currentValue, condition.operand, values, condition.segment);
@@ -1532,7 +1546,7 @@ var HB = {
   // Value is the value to sanitize
   // Input is the users value condition
   sanitizeConditionValue: function (segment, value, input) {
-    if (segment == "pu" || segment == "pp" || segment == "pup") {
+    if (segment === "pu" || segment === "pp" || segment === "pup") {
       var relative = /^\//.test(input);
       value = HB.n(value, relative);
     }
@@ -1544,15 +1558,15 @@ var HB = {
   // value
   getSegmentValue: function (segmentName) {
     // Convert long names to short names
-    if (segmentName == "url")
+    if (segmentName === "url")
       segmentName = "pu";
-    else if (segmentName == "device")
+    else if (segmentName === "device")
       segmentName = "dv";
-    else if (segmentName == "country")
+    else if (segmentName === "country")
       segmentName = "co";
-    else if (segmentName == "referrer" || segmentName == "referer")
+    else if (segmentName === "referrer" || segmentName === "referer")
       segmentName = "rf";
-    else if (segmentName == "date")
+    else if (segmentName === "date")
       segmentName = "dt";
 
     // All other segment names
