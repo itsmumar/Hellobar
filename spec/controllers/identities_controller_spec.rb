@@ -62,7 +62,7 @@ describe IdentitiesController do
 
   describe 'POST :create' do
     it 'redirects when identity already exists' do
-      api_key = '796aea075924b6621b99d7eb1c575335'
+      api_key = 'valid-get-response-key'
       stub_current_user @identity.site.users.first
       identity = Identity.create! site_id: @identity.site.id, provider: 'get_response_api', api_key: api_key
       allow_any_instance_of(Identity).to receive(:provider_config).and_return({name: 'get_response_api'})
@@ -76,10 +76,10 @@ describe IdentitiesController do
       end
 
       it 'saves api key on the identity object' do
-        api_key = 'eb3f555d079096f24f1f7a5a7f24c43c24b0f46e3770bbf662d6724b4d2900197893549c'
+        api_key = 'valid-active-campaign-key'
         stub_current_user @identity.site.users.first
         post :create, site_id: @identity.site.id, provider: 'active_campaign',
-                        api_key: api_key, app_url: "crossover.api-us1.com"
+                        api_key: api_key, app_url: "test.api-us.com"
 
         expect(Identity.last.api_key).to eq(api_key)
       end

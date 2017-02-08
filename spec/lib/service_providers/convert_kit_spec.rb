@@ -3,7 +3,7 @@ require "spec_helper"
 describe ServiceProviders::ConvertKit do
   let(:identity) { Identity.new(
                                 :provider => "convert_kit",
-                                :api_key => "OgSSj78Ql5mPI5AxH51li8kRhjvd9seZ_AnGmKZ_xlg"
+                                :api_key => "valid-convertkit-key"
                                 )
                  }
   let(:service_provider) { identity.service_provider }

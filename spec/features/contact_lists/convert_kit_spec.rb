@@ -42,7 +42,7 @@ feature "ConvertKit Integration", js: true do
   private
   def connect_convert_kit
     open_provider_form(@user, provider)
-    fill_in 'contact_list[data][api_key]', with: 'OgSSj78Ql5mPI5AxH51li8kRhjvd9seZ_AnGmKZ_xlg'
+    fill_in 'contact_list[data][api_key]', with: 'valid-convertkit-key'
 
     page.find(".button.ready").click
   end

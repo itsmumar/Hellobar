@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://hellobar.api-us1.com/admin/api.php?api_action=list_list&api_key=dea2f200e17b9a3205f3353030b7d8ad55852aa3ccec6d7c4120482c8e8feb5fd527cff3&api_output=json&ids=all
+    uri: https://test.api-us.com/admin/api.php?api_action=list_list&api_key=valid-active-campaign-key&api_output=json&ids=all
     body:
       encoding: UTF-8
       string: ''
@@ -22,10 +22,10 @@ http_interactions:
       - PHP/5.3.3
       Set-Cookie:
       - PHPSESSID=jm24l71rdni5dnncl10r2tp681; path=/; HttpOnly
-      - em_acp_globalauth_cookie=49b714b8d13f4e0f8fe50079d37c57291; path=/; domain=hellobar.api-us1.com;
+      - em_acp_globalauth_cookie=49b714b8d13f4e0f8fe50079d37c57291; path=/; domain=test.api-us.com;
         secure
       - em_acp_globalauth_cookie=deleted; expires=Fri, 22-Jan-2016 16:16:06 GMT; path=/;
-        domain=hellobar.api-us1.com
+        domain=test.api-us.com
       Expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
       Pragma:
@@ -51,7 +51,7 @@ http_interactions:
   recorded_at: Sat, 21 Jan 2017 16:16:07 GMT
 - request:
     method: get
-    uri: https://hellobar.api-us1.com/admin/api.php?api_action=list_list&api_key=dea2f200e17b9a3205f3353030b7d8ad55852aa3ccec6d7c4120482c8e8feb5fd527cff3&api_output=json&ids=all
+    uri: https://test.api-us.com/admin/api.php?api_action=list_list&api_key=valid-active-campaign-key&api_output=json&ids=all
     body:
       encoding: UTF-8
       string: ''
@@ -71,10 +71,10 @@ http_interactions:
       - PHP/5.3.3
       Set-Cookie:
       - PHPSESSID=t3vv2c0kev82kqoci6pgddde72; path=/; HttpOnly
-      - em_acp_globalauth_cookie=49b714b8d13f4e0f8fe50079d37c57291; path=/; domain=hellobar.api-us1.com;
+      - em_acp_globalauth_cookie=49b714b8d13f4e0f8fe50079d37c57291; path=/; domain=test.api-us.com;
         secure
       - em_acp_globalauth_cookie=deleted; expires=Fri, 29-Jan-2016 17:04:29 GMT; path=/;
-        domain=hellobar.api-us1.com
+        domain=test.api-us.com
       Expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
       Pragma:
