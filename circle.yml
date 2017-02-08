@@ -25,6 +25,7 @@ database:
 
 test:
   pre:
+    - cp config/settings.yml.example config/settings.yml
     # - bundle exec rubocop
     - bundle exec brakeman
     - npm install -g ember-cli
