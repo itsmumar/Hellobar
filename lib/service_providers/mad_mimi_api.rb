@@ -20,8 +20,7 @@ module ServiceProviders
     end
 
     def lists
-      lists = client.lists["lists"].try(:[], "list")
-      lists.blank? ? [] : lists
+      client.lists["lists"]["list"]
     end
 
     def subscribe(list_id, email, name = nil, double_optin = true)
@@ -39,9 +38,9 @@ module ServiceProviders
     end
 
     def valid?
-      lists
-      true
-    rescue
+      !!lists
+    rescue => error
+      log "Getting lists raised #{error}"
       false
     end
   end

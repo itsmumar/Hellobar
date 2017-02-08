@@ -180,7 +180,9 @@ script id="contact-list-variant-modal-remote-list-select-template" type="text/x-
   | <div class="select-wrapper">
   |   <select id="contact_list_remote_list_id" name="contact_list[remote_list_id]">
   |     {{#each identity.lists}}
-  |       <option value="{{id}}">{{name}}</option>
+  |       {{#unless error}}
+  |         <option value="{{id}}">{{name}}</option>
+  |       {{/unless}}
   |     {{/each}}
   |   </select>
   | </div>

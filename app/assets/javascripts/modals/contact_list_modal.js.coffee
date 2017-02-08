@@ -438,7 +438,7 @@ class @ContactListModal extends Modal
     @$modal.trigger 'load'
 
     $.get("/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
-      if data and (data.lists or data.tags) # an identity was found for the selected provider
+      if data and (lists = data.lists or tags = data.tags) # an identity was found for the selected provider
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
@@ -448,6 +448,10 @@ class @ContactListModal extends Modal
         @_renderBlock("syncDetails", $.extend(defaultContext, {identity: data})).show()
         @_renderBlock("instructions", defaultContext).hide()
         @options.identity = data
+
+        if (lists && lists[0].error != undefined) || (tags && data.tags[0].error != undefined)
+          $('footer a.submit').attr('disabled', 'disabled')
+          $('.flash-block').addClass('error show').text('There was a problem connecting your ' + label + ' account. Please try again later.')
 
         if data.provider == "infusionsoft" or defaultContext.isProviderConvertKit
           if defaultContext.isProviderConvertKit

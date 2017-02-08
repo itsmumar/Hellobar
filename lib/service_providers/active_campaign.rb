@@ -20,7 +20,12 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
 
   def lists
     response = @client.list_list ids: 'all'
-    response['results']
+
+    if response['result_code'] == 1
+      response['results']
+    else
+      raise response['result_message']
+    end
   end
 
   def subscribe(list_id, email, name = nil, double_optin = false)
@@ -41,5 +46,12 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
     subscribers.each do |subscriber|
       subscribe(list_id, subscriber[:email], subscriber[:name])
     end
+  end
+
+  def valid?
+    !!lists
+  rescue => error
+    log "Getting lists raised #{error}"
+    false
   end
 end

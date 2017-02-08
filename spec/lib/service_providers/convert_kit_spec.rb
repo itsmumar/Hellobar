@@ -3,7 +3,7 @@ require "spec_helper"
 describe ServiceProviders::ConvertKit do
   let(:identity) { Identity.new(
                                 :provider => "convert_kit",
-                                :api_key => "OgSSj78Ql5mPI5AxH51li8kRhjvd9seZ_AnGmKZ_xlg"
+                                :api_key => "valid-convertkit-key"
                                 )
                  }
   let(:service_provider) { identity.service_provider }
@@ -12,14 +12,14 @@ describe ServiceProviders::ConvertKit do
 
   describe "#tags" do
     it "should make a call to ConvertKit for their tags" do
-      expect(client).to receive(:get) { [] }
+      expect(client).to receive(:get) { double("response", success?: true, status: 200, body: { "tags" => [] }.to_json) }
       service_provider.tags
     end
   end
 
   describe "#lists" do
     it "should make a call to ConvertKit for their lists" do
-      expect(client).to receive(:get) { [] }
+      expect(client).to receive(:get) { double("response", success?: true, status: 200, body: { "forms" => [] }.to_json) }
       service_provider.lists
     end
   end

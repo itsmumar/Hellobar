@@ -20,19 +20,19 @@ feature "Contact list modal", js: true do
     end
 
     it "should update with correct provider instructions" do
-      select "GetResponse", from: "contact_list_provider"
-      expect(page).to have_content "Your API key from GetResponse"
+      page.find(".get_response_api-provider").click
+      expect(page).to have_content "your API key from GetResponse"
     end
 
     it "should not submit form with api key blank" do
-      select "GetResponse", from: "contact_list_provider"
+      page.find(".get_response_api-provider").click
       fill_in 'contact_list_api_key', with: ''
       find(".provider-instructions-block a.button").click
-      expect(page).to have_content "Your API key from GetResponse"
+      expect(page).to have_content "your API key from GetResponse"
     end
 
     it "should connect account" do
-      select "GetResponse", from: "contact_list_provider"
+      page.find(".get_response_api-provider").click
       fill_in 'contact_list_api_key', with: 'myapikey'
       find(".provider-instructions-block a.button").click
       expect(page).to have_content "Disconnect GetResponse"

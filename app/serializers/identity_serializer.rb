@@ -1,7 +1,6 @@
 class IdentitySerializer < ActiveModel::Serializer
   attributes :id, :site_id, :provider, :lists, :tags, :supports_double_optin, :embed_code, :oauth,
              :supports_cycle_day
-  # has_many :contact_lists
 
   delegate :service_provider, to: :object
 
@@ -9,12 +8,16 @@ class IdentitySerializer < ActiveModel::Serializer
     if service_provider.respond_to? :lists
       filter_keys(service_provider.lists)
     end
+  rescue => error
+    log_exception(error)
   end
 
   def tags
     if service_provider.respond_to? :tags
       filter_keys(service_provider.tags)
     end
+  rescue => error
+    log_exception(error)
   end
 
   def supports_double_optin
@@ -36,5 +39,12 @@ class IdentitySerializer < ActiveModel::Serializer
   private
   def filter_keys(arr)
     arr.map { |a| { :name => a["name"], :id => a["id"] } }
+  end
+
+  def log_exception(error)
+    error_message = error.message
+    service_provider.log(error_message)
+
+    [{ error: error.message }]
   end
 end

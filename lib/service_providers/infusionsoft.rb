@@ -20,7 +20,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
   end
 
   def tags
-    @tags ||= Infusionsoft.data_query('ContactGroup', 1_000, 0, {}, %w{ GroupName Id }).
+    Infusionsoft.data_query('ContactGroup', 1_000, 0, {}, %w{ GroupName Id }).
       map { |result| { 'name' => result['GroupName'], 'id' => result['Id'] } }.
       sort_by { |result| result['name'] }
   end
@@ -45,6 +45,13 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
     subscribers.each do |subscriber|
       subscribe(nil, subscriber[:email], subscriber[:name])
     end
+  end
+
+  def valid?
+    !!tags
+  rescue => error
+    log "Getting lists raised #{error}"
+    false
   end
 end
 

@@ -21,6 +21,7 @@ constantcontact_app_key: constantcontact-app-key
 constantcontact_app_secret: contantcontact-app-secret
 mailchimp_client_id: mailchimp-client-id
 mailchimp_secret: mailchimp-secret
+get_response_api_url: https://getresponse-api-url.com
 dynamo_tables:
   email: "env_emails"
   bar_current: "env_current"
