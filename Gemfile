@@ -110,7 +110,7 @@ end
 group :development, :test do
   gem "byebug"
   gem "capybara"
-  gem "capybara-webkit", '~> 1.11.1'
+  gem "capybara-webkit"
   gem 'selenium-webdriver', '~> 2.53.4' # Ubuntu firefox compatible version: 47.0.1
   gem "factory_girl_rails"
   gem "faker"
