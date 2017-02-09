@@ -4,15 +4,16 @@ import _ from 'lodash/lodash';
 export default Ember.Route.extend({
 
   api: Ember.inject.service(),
+  validation: Ember.inject.service(),
 
   saveCount: 0,
 
   // TODO check other API calls and move them to api service
 
   model() {
-    if (localStorage["stashedEditorModel"]) {
-      let model = JSON.parse(localStorage["stashedEditorModel"]);
-      localStorage.removeItem("stashedEditorModel");
+    if (localStorage['stashedEditorModel']) {
+      const model = JSON.parse(localStorage['stashedEditorModel']);
+      localStorage.removeItem('stashedEditorModel');
       return model;
     } else if (window.barID) {
       return this.get('api').siteElement(window.barID);
@@ -26,54 +27,46 @@ export default Ember.Route.extend({
   //-----------  Parse JSON Model  -----------#
 
   afterModel(resolvedModel) {
-    if (localStorage["stashedContactList"]) {
-      let contactList = JSON.parse(localStorage["stashedContactList"]);
-      localStorage.removeItem("stashedContactList");
+    if (localStorage['stashedContactList']) {
+      const contactList = JSON.parse(localStorage['stashedContactList']);
+      localStorage.removeItem('stashedContactList');
 
-      let baseOptions = {
+      const baseOptions = {
         id: contactList.id,
         siteID,
         editorModel: resolvedModel,
         contactList
       };
 
-      if (contactList.id) {
-        var options = {
-          saveURL: `/sites/${siteID}/contact_lists/${contactList.id}.json`,
-          saveMethod: "PUT",
-
-          success: (data, modal) => {
-            resolvedModel.site.contact_lists.forEach(function (list) {
-              if (list.id === data.id) {
-                return Ember.set(list, "name", data.name);
-              }
-            });
-
-            return modal.close();
-          }
-        };
-      } else {
-        var options = {
-          saveURL: `/sites/${siteID}/contact_lists.json`,
-          saveMethod: "POST",
-
-          success: (data, modal) => {
-            let lists = resolvedModel.site.contact_lists.slice(0);
-            lists.push({id: data.id, name: data.name});
-            this.controller.set("model.site.contact_lists", lists);
-            setTimeout((() => {
-                return this.controller.set("model.contact_list_id", data.id);
-              }
-            ), 100);
-            return modal.$modal.remove();
-          },
-          close: modal => {
-            return this.controller.set("model.contact_list_id", null);
-          }
-        };
-      }
-
-      return new ContactListModal($.extend(baseOptions, options)).open();
+      const options = contactList.id ? {
+        saveURL: `/sites/${siteID}/contact_lists/${contactList.id}.json`,
+        saveMethod: 'PUT',
+        success: (data, modal) => {
+          resolvedModel.site.contact_lists.forEach((list) => {
+            if (list.id === data.id) {
+              Ember.set(list, 'name', data.name);
+            }
+          });
+          modal.close();
+        }
+      } : {
+        saveURL: `/sites/${siteID}/contact_lists.json`,
+        saveMethod: 'POST',
+        success: (data, modal) => {
+          let lists = resolvedModel.site.contact_lists.slice(0);
+          lists.push({id: data.id, name: data.name});
+          this.controller.set('model.site.contact_lists', lists);
+          setTimeout((() => {
+              this.controller.set('model.contact_list_id', data.id);
+            }
+          ), 100);
+          modal.$modal.remove();
+        },
+        close: modal => {
+          this.controller.set('model.contact_list_id', null);
+        }
+      };
+      new ContactListModal($.extend(baseOptions, options)).open();
     }
   },
 
@@ -88,22 +81,13 @@ export default Ember.Route.extend({
       "link_color": model.link_color
     });
 
-    // Set sub-step forwarding on application load
-
-
-
-    let targeting = this.controllerFor('targeting');
-    if (model.id) {
-
-    }
-
     return this._super(controller, model);
   },
 
   //-----------  Actions  -----------#
 
   // Actions bubble up the routers from most specific to least specific.
-  // In order to catch all the actions (beacuse they happen in different
+  // In order to catch all the actions (because they happen in different
   // routes), the action catch was places in the top-most application route.
 
   actions: {
@@ -111,56 +95,66 @@ export default Ember.Route.extend({
     saveSiteElement() {
       const prepareModel = () => {
         _.each(this.currentModel.blocks, (block) => delete block.isDefault);
+        if (this.currentModel.phone_number && this.currentModel.phone_country_code) {
+          this.currentModel.phone_number = formatE164(this.currentModel.phone_country_code, this.currentModel.phone_number);
+        }
       };
 
-      this.set("saveCount", this.get("saveCount") + 1);
-      if (trackEditorFlow) {
-        InternalTracking.track_current_person("Editor Flow", {
-          step: "Save Bar",
-          goal: this.currentModel.element_subtype,
-          style: this.currentModel.type,
-          save_attempts: this.get("saveCount")
-        });
-      }
-
-      if (window.barID) {
-        var url = `/sites/${window.siteID}/site_elements/${window.barID}.json`;
-        var method = "PUT";
-      } else {
-        var url = `/sites/${window.siteID}/site_elements.json`;
-        var method = "POST";
-      }
-
-      prepareModel();
-
-      return Ember.$.ajax({
-        type: method,
-        url,
-        contentType: "application/json",
-        data: JSON.stringify(this.currentModel),
-
-        success: () => {
-          if (trackEditorFlow) {
-            InternalTracking.track_current_person("Editor Flow", {
-              step: "Completed",
-              goal: this.currentModel.element_subtype,
-              style: this.currentModel.type,
-              save_attempts: this.get("saveCount")
-            });
-          }
-          if (this.controller.get("model.site.num_site_elements") === 0) {
-            return window.location = `/sites/${window.siteID}`;
-          } else {
-            return window.location = `/sites/${window.siteID}/site_elements`;
-          }
-        },
-
-        error: data => {
-          this.controller.toggleProperty('saveSubmitted');
-          this.controller.set("model.errors", data.responseJSON.errors);
-          return new EditorErrorsModal({errors: data.responseJSON.full_error_messages}).open();
+      this.get('validation').validate('main', this.currentModel).then(() => {
+        // Successful validation
+        this.controller.toggleProperty('saveSubmitted');
+        this.set('saveCount', this.get('saveCount') + 1);
+        if (trackEditorFlow) {
+          InternalTracking.track_current_person('Editor Flow', {
+            step: 'Save Bar',
+            goal: this.currentModel.element_subtype,
+            style: this.currentModel.type,
+            save_attempts: this.get('saveCount')
+          });
         }
+
+        const ajaxParams = window.barID ? {
+          url: `/sites/${window.siteID}/site_elements/${window.barID}.json`,
+          method: 'PUT'
+        } : {
+          url: `/sites/${window.siteID}/site_elements.json`,
+          method: 'POST'
+        };
+
+        prepareModel();
+
+        return Ember.$.ajax({
+          type: ajaxParams.method,
+          url: ajaxParams.url,
+          contentType: 'application/json',
+          data: JSON.stringify(this.currentModel),
+
+          success: () => {
+            if (trackEditorFlow) {
+              InternalTracking.track_current_person('Editor Flow', {
+                step: 'Completed',
+                goal: this.currentModel.element_subtype,
+                style: this.currentModel.type,
+                save_attempts: this.get('saveCount')
+              });
+            }
+            if (this.controller.get('model.site.num_site_elements') === 0) {
+              window.location = `/sites/${window.siteID}`;
+            } else {
+              window.location = `/sites/${window.siteID}/site_elements`;
+            }
+          },
+
+          error: data => {
+            this.controller.toggleProperty('saveSubmitted');
+            this.controller.set('model.errors', data.responseJSON.errors);
+            new EditorErrorsModal({errors: data.responseJSON.full_error_messages}).open();
+          }
+        });
+      }, () => {
+        // Validation failed
       });
+
     }
   }
 });

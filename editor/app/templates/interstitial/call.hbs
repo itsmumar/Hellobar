@@ -13,7 +13,7 @@
 
   <h6>What phone number should be dialed?</h6>
   <div class="input-wrapper">
-    {{input value=applicationController.phone_number placeholder="(555) 555-555" maxlength=255}}
+    {{input value=model.phone_number placeholder="(555) 555-555" maxlength=255}}
     <div class="select-wrapper">
       {{#power-select options=countries
         selected=selectedCountry
@@ -26,8 +26,7 @@
   </div>
 
   <div class="step-container">
-      {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
-    <!--button class="button cancel-button cancel" {{action 'closeEditor'}}>Cancel</button-->
+    {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
     <button class="button save-editor" {{action 'closeInterstitial'}} disabled={{inputIsInvalid}}>Continue</button>
   </div>
 </div>

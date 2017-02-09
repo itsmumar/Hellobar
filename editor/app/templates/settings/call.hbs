@@ -1,7 +1,8 @@
 <div class="substep call">
 
   <label>Enter phone number</label>
-  {{input value=applicationController.phone_number placeholder="(555) 555-5555" maxlength=50}}
+  {{input value=model.phone_number placeholder="(555) 555-5555" maxlength=50}}
+  {{validation/validation-message fieldName="phone_number" validationName="main"}}
   <div class="select-wrapper">
     {{#power-select options=countries
       selected=selectedCountry

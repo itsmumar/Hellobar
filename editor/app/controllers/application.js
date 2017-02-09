@@ -5,16 +5,35 @@ export default Ember.Controller.extend({
 
   inlineEditing: Ember.inject.service(),
   theming: Ember.inject.service(),
+  validation: Ember.inject.service(),
 
   init() {
-
+    const validationRules = [
+      {
+        fieldName: 'phone_number',
+        validator: (model) => {
+          if (Ember.get(model, 'element_subtype') === 'call') {
+            const phoneNumber = Ember.get(model, 'phone_number');
+            if (!phoneNumber) {
+              return 'Phone number is required';
+            }
+            const countryCode = Ember.get(model, 'phone_country_code');
+            if (!isValidNumber(phoneNumber, countryCode)) {
+              return 'Wrong phone number for specified country';
+            }
+          }
+          return null;
+        }
+      }
+    ];
+    this.get('validation').add('main', validationRules);
     Ember.run.next(() => {
         if (this.get('model.id') === null) {
           return this.applyCurrentTheme();
         }
       }
     );
-    return this.get('inlineEditing').setModelHandler(this);
+    this.get('inlineEditing').setModelHandler(this);
   },
 
 
@@ -165,20 +184,6 @@ export default Ember.Controller.extend({
     this.shouldSkipPreviewUpdate = true;
   },
 
-
-  // Sets a callback on the preview script to rerender the preview after the user
-  // closes the element
-  // TODO better way is to deny element closing at all
-  /*setRerenderOnClose: ( function () {
-   let that = this;
-   let callback = function () {
-   let delayedFunc = () => Ember.run.debounce(that, that.doRenderPreview, false, 500);
-   return setTimeout(delayedFunc, 1000);
-   };
-
-   return HB.on("elementDismissed", callback);
-   }).on('init'),*/
-
   //-----------  State Default  -----------#
 
   // Tracks global application states & catches actions
@@ -201,77 +206,6 @@ export default Ember.Controller.extend({
     }
   }).observes("rule_id", "model"),
 
-  // Model properties are all updated when the model is initially loaded, but we only want to set this flag on any property changes
-  // that happen AFTER that initialization. By using an observesBefore here and only setting the flag if the property being changed
-  // is not null or undefined before the change, we avoid setting the flag until the property has had an initial value set.
-
-  // TODO adopt to Ember 2
-  /*setModelIsDirty: ( function (obj, keyName) {
-   if (!!this.get(keyName)) {
-   return this.set("modelIsDirty", true);
-   }
-   }).observesBefore(
-   "model.animated",
-   "model.answer1",
-   "model.answer1caption",
-   "model.answer1link_text",
-   "model.answer1response",
-   "model.answer2",
-   "model.answer2caption",
-   "model.answer2link_text",
-   "model.answer2response",
-   "model.background_color",
-   "model.border_color",
-   "model.button_color",
-   "model.caption",
-   "model.closable",
-   "model.contact_list_id",
-   "model.element_subtype",
-   "model.email_placeholder",
-   "model.font_id",
-   "model.headline",
-   "model.image_placement",
-   "model.image_url",
-   "model.link_color",
-   "model.link_style",
-   "model.link_text",
-   "model.name_placeholder",
-   "model.phone_country_code",
-   "model.phone_number",
-   "model.placement",
-   "model.pushes_page_down",
-   "model.question",
-   "model.remains_at_top",
-   "model.settings.buffer_message",
-   "model.settings.buffer_url",
-   "model.settings.collect_names",
-   "model.settings.link_url",
-   "model.settings.message_to_tweet",
-   "model.settings.pinterest_description",
-   "model.settings.pinterest_full_name",
-   "model.settings.pinterest_image_url",
-   "model.settings.pinterest_url",
-   "model.settings.pinterest_user_url",
-   "model.settings.redirect_url",
-   "model.settings.redirect",
-   "model.settings.twitter_handle",
-   "model.settings.url_to_like",
-   "model.settings.url_to_plus_one",
-   "model.settings.url_to_share",
-   "model.settings.url_to_tweet",
-   "model.settings.url",
-   "model.settings.use_location_for_url",
-   "model.show_after_convert",
-   "model.show_branding",
-   "model.size",
-   "model.text_color",
-   "model.theme_id",
-   "model.type",
-   "model.use_question",
-   "model.wiggle_button",
-   "model.use_default_image"
-   ),*/
-
   //---------------- Font Helpers ----------------#
 
   getFont() {
@@ -290,20 +224,13 @@ export default Ember.Controller.extend({
     }
   }).observes("model.element_subtype").on("init"),
 
-  formatPhoneNumber: (function () {
-    let phone_number = this.get("phone_number") || this.get("model.phone_number");
-    let country_code = this.get("model.phone_country_code");
-
-    if (country_code === "XX") { // custom country code
-      this.set("model.phone_number", phone_number);
-      return this.set("phone_number", phone_number);
-    } else if (isValidNumber(phone_number, country_code)) {
-      this.set("phone_number", formatLocal(country_code, phone_number));
-      return this.set("model.phone_number", formatE164(country_code, phone_number));
-    } else {
-      return this.set("model.phone_number", null);
+  formatPhoneNumber: function () {
+    const phoneNumber = this.get('model.phone_number');
+    const countryCode = this.get('model.phone_country_code');
+    if (countryCode !== 'XX' && isValidNumber(phoneNumber, countryCode)) {
+      this.set('model.phone_number', formatLocal(countryCode, phoneNumber));
     }
-  }).observes("model.phone_number", "phone_number", "model.phone_country_code"),
+  }.observes('model.phone_number', 'model.phone_country_code'),
 
   applyCurrentTheme() {
     const allThemes = this.get('theming').availableThemes();
@@ -522,11 +449,6 @@ export default Ember.Controller.extend({
     toggleModal() {
       this.set('modal', null);
       return false;
-    },
-
-    saveSiteElement() {
-      this.toggleProperty('saveSubmitted');
-      return true;
     },
 
     closeEditor() {
