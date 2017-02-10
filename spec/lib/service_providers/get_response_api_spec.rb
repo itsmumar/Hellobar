@@ -85,7 +85,7 @@ describe ServiceProviders::GetResponseApi do
 
         expect(double_request).
           to receive(:body=).
-          with({name: "Bob", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}}).
+          with({name: "Bob", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}, :tags=>[]}).
           and_return(double_response)
 
         allow(client).to receive(:post).and_yield(double_request)
@@ -98,7 +98,7 @@ describe ServiceProviders::GetResponseApi do
 
         expect(double_request).
           to receive(:body=).
-          with({name: "bobloblaw@lawblog.com", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}}).
+          with({name: "bobloblaw@lawblog.com", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}, :tags=>[]}).
           and_return(double_response)
 
         allow(client).to receive(:post).and_yield(double_request)
