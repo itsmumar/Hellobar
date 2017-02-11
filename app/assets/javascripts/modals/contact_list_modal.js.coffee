@@ -2,7 +2,7 @@ class @ContactListModal extends Modal
 
   constructor: (@options = {}) ->
     # A/B Variant
-    @isVariant = (window.HB_EMAIL_INTEGRATION_TEST && HB_EMAIL_INTEGRATION_TEST == 'variant')
+    @isVariant = true
     @modalName = if @isVariant then 'contact-list-variant' else 'contact-list'
 
     @options.window ||= window
@@ -425,7 +425,8 @@ class @ContactListModal extends Modal
       providerNameLabel: (label + ' ' + switch label
                                           when 'Drip' then 'campaign'
                                           when 'ConvertKit' then 'form'
-                                          else 'list')
+                                          else 'list'
+      )
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.hellobarOnly.show()

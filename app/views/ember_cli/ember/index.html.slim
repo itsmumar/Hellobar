@@ -43,8 +43,6 @@ html
       // TODO remove this or replace with constant value
       HB_ONBOARDING_EMAIL_VOLUME = "#{get_ab_variation('Onboarding Email Volume 2016-06-28', current_user)}";
 
-      HB_EMAIL_INTEGRATION_TEST = "variant";
-
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
       var trackEditorFlow = #{{new_user?}};
       var availableThemes = #{{ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).to_json}};

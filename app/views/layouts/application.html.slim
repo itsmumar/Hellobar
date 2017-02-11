@@ -49,8 +49,6 @@ html
         new AccountPromptModal().open();
 
 javascript:
-  HB_EMAIL_INTEGRATION_TEST = "variant";
-
   var currentUser = #{{UserSerializer.new(current_user).to_json}};
   var siteID = "#{@site.try(:id)}";
   var site = #{{SiteSerializer.new(current_site, scope: current_user).to_json}};
