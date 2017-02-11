@@ -21,9 +21,9 @@ html
     - if get_ab_variation('Email Integration UI 2016-06-22', current_user) == 'original'
       = render "shared/modals/contact_list"
     - else
-      = render "shared/modals/contact_list_variant"
+      = render "shared/modals/contact_list"
 
-    = render "shared/modals/contact_list_variant"
+    = render "shared/modals/contact_list"
     = render "shared/modals/confirm"
     = render "shared/modals/editor_errors"
     = render "shared/modals/unsaved_changes"
