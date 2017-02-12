@@ -12,7 +12,6 @@ class SiteGenerator
     end
   end
 
-
   def generate_html
     str = <<-EOS
       <html>
@@ -22,25 +21,25 @@ class SiteGenerator
       </head>
       <body style="background-color: #FFFFFF;">
       <a onclick="console.log('BUTTON PUSHED')">HERE</a>
-      <div style="height:500px;background-color: yellow">TOP OF PAGE CONTENT<script id="hb-cu-1">window.onload = function() {HB.showContentUpgrade(1)};</script></div>
+      <div style="height:500px; background-color: yellow;">TOP OF PAGE CONTENT<script id="hb-cu-2">window.onload = function() {HB.showContentUpgrade(1)};</script></div>
       <div style="height:500px;">Content</div>
-      <div style="height:500px;background-color: #eee">
+      <div style="height:500px; background-color: #eee;">
 </div>
       <div style="height:500px;">Content</div>
-      <div style="height:500px;background-color: #eee">Content</div>
+      <div style="height:500px; background-color: #eee;">Content</div>
       <div style="height:500px;">Content</div>
-      <div style="height:500px;background-color: #eee">Content</div>
+      <div style="height:500px; background-color: #eee;">Content</div>
       <div style="height:500px;">Content</div>
-      <div style="height:500px;background-color: #eee">Content</div>
+      <div style="height:500px; background-color: #eee;">Content</div>
       <div style="height:500px;">Content</div>
-      <div style="height:500px;background-color: #eee">Content</div>
+      <div style="height:500px; background-color: #eee;">Content</div>
       <div style="height:500px;">Content</div>
-      <div style="height:500px;background-color: pink">BOTTOM OF PAGE CONTENT</div>
+      <div style="height:500px; background-color: pink;">BOTTOM OF PAGE CONTENT</div>
       <script>
     EOS
 
     str += @site.script_content(false)
-    str += "</script><p>Generated on #{Time.now}</p></body></html>"
+    str += "</script><p>Generated on #{ Time.current }</p></body></html>"
     str
   end
 

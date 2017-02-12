@@ -4,19 +4,24 @@ FactoryGirl.define do
     type "Bar"
     theme_id "classic"
     element_subtype "announcement"
+    headline 'Hello, HelloBar!'
+    placement 'bar-top'
 
     trait :bar
 
     trait :slider do
       type "Slider"
+      placement 'top-left'
     end
 
     factory :modal_element do
       type "Modal"
+      placement nil
     end
 
     factory :takeover_element do
       type "Takeover"
+      placement nil
     end
 
     trait :click_to_call do

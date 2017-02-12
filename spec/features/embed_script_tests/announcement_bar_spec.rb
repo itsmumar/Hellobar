@@ -12,10 +12,9 @@ feature 'Site with a closable announcement topbar', :js do
     visit "#{ site_path_to_url(path) }"
 
     # force capybara to wait until iframe is loaded
-    page.has_xpath?('.//iframe[@id="random-container"]')
+    expect(page).to have_selector "#random-container"
 
     within_frame 'random-container-0' do
-      # has headline
       expect(page).to have_content element.headline
 
       expect(page).to have_selector '.icon-close'
@@ -24,26 +23,11 @@ feature 'Site with a closable announcement topbar', :js do
       find('.icon-close').trigger 'click'
     end
 
+    expect(page).to have_selector "#random-container", visible: false
+
     # show the bar again
-    expect(page).to have_selector '#pull-down'
     find('#pull-down').trigger 'click'
 
-    # force capybara to wait until iframe is loaded
-    page.has_xpath?('.//iframe[@id="random-container"]')
-
-    within_frame 'random-container-0' do
-      # has headline again
-      expect(page).to have_content element.headline
-    end
-
-    # reload the page and expect the bar to be visible
-    visit "#{ site_path_to_url(path) }"
-
-    # force capybara to wait until iframe is loaded
-    page.has_xpath?('.//iframe[@id="random-container"]')
-
-    within_frame 'random-container-0' do
-      expect(page).to have_content element.headline
-    end
+    expect(page).to have_selector "#random-container"
   end
 end

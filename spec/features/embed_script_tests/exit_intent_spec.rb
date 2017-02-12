@@ -2,11 +2,10 @@ require 'integration_helper'
 
 feature "element with exit intent", js: true do
   let(:element) { FactoryGirl.create(:site_element, view_condition: "exit-intent") }
+
   before do
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
   end
-
-  after { Capybara.current_driver = :selenium }
 
   scenario "shows when document is blurred" do
     path = generate_file_and_return_path(element.site.id)
