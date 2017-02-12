@@ -16,6 +16,7 @@ describe ServiceProviders::GetResponseApi do
     let(:client) {Faraday.new}
     let(:success_body) {}
     let(:success_response) {double :response, success?: true, body: [{campaignId: 1122, name: 'myCoolList'}].to_json}
+    let(:tags_success_response) {double :response, success?: true, body: [{tagId: 1122, name: 'myHotTag'}].to_json}
     let(:failure_response) {
       double :response,
       success?: false,
@@ -52,6 +53,31 @@ describe ServiceProviders::GetResponseApi do
       end
     end
 
+    context "#tags" do
+      it 'returns hash array of hashes of ids and names' do
+        allow(client).to receive(:get).and_return(tags_success_response)
+        expect(get_respone_api.tags).to eq([{'id' => 1122, 'name' => 'myHotTag'}])
+      end
+
+      it 'raise exception when time out' do
+        allow(client).to receive(:get).and_raise(Faraday::TimeoutError)
+        expect { get_respone_api.tags }.to raise_error(Faraday::TimeoutError)
+      end
+
+      it 'raise exception when invalid credentials' do
+        allow(client).to receive(:get).and_return(failure_response)
+        expect { get_respone_api.tags }.to raise_error('things went really bad')
+      end
+
+      it 'logs parsed error message in the event of failed request' do
+        allow(client).to receive(:get).and_return(failure_response)
+        expect(get_respone_api).
+          to receive(:log).
+          with("getting lists returned 'things went really bad' with the code 500")
+        expect { get_respone_api.tags }.to raise_error(RuntimeError)
+      end
+    end
+
     context '#subscribe' do
       it 'submits email address as name if name is not present' do
         double_request = double(:request, url: true)
@@ -59,7 +85,7 @@ describe ServiceProviders::GetResponseApi do
 
         expect(double_request).
           to receive(:body=).
-          with({name: "Bob", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}}).
+          with({name: "Bob", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}, :tags=>[]}).
           and_return(double_response)
 
         allow(client).to receive(:post).and_yield(double_request)
@@ -72,7 +98,7 @@ describe ServiceProviders::GetResponseApi do
 
         expect(double_request).
           to receive(:body=).
-          with({name: "bobloblaw@lawblog.com", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}}).
+          with({name: "bobloblaw@lawblog.com", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}, :tags=>[]}).
           and_return(double_response)
 
         allow(client).to receive(:post).and_yield(double_request)
