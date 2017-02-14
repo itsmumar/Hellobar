@@ -44,7 +44,7 @@ feature "ActiveCampaign Integration", js: true do
   private
   def connect_active_campaign
     open_provider_form(@user, provider)
-    fill_in 'contact_list[data][app_url]', with: 'test.api-us.com'
+    fill_in 'contact_list[data][app_url]', with: 'hellobar.api-us1.com'
     fill_in 'contact_list[data][api_key]', with: 'valid-active-campaign-key'
 
     page.find(".button.ready").click

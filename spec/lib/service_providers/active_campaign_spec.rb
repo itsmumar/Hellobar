@@ -3,7 +3,7 @@ require "spec_helper"
 describe ServiceProviders::ActiveCampaign do
   let(:identity) { Identity.new(:provider => "active_campaign",
                                 :api_key => "valid-active-campaign-key",
-                                :extra => { "app_url" => "test.api-us.com" }) }
+                                :extra => { "app_url" => "hellobar.api-us1.com" }) }
   let(:service_provider) { identity.service_provider }
   let(:cassette_base) { 'service_providers/active_campaign' }
   let(:client) { service_provider.instance_variable_get(:@client) }

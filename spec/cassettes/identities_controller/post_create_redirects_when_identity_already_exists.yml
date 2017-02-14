@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://getresponse-api-url.com/campaigns?perPage=500
+    uri: https://api.getresponse.com/v3/campaigns?perPage=500
     body:
       encoding: US-ASCII
       string: ''
@@ -46,7 +46,7 @@ http_interactions:
         [
             {
                 "campaignId": "nA2DE",
-                "href": "https://getresponse-api-url.com/campaigns/nA2DE",
+                "href": "https://api.getresponse.com/v3/campaigns/nA2DE",
                 "name": "xohellobaredge",
                 "description": "xohellobaredge",
                 "languageCode": "EN",

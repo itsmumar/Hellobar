@@ -46,7 +46,7 @@ feature "Infusionsoft Integration", js: true do
   private
   def connect_infusionsoft
     open_provider_form(@user, provider)
-    fill_in 'contact_list[data][app_url]', with: 'test.infusionsoft.com'
+    fill_in 'contact_list[data][app_url]', with: 'ft319.infusionsoft.com'
     fill_in 'contact_list[data][api_key]', with: 'valid-infusionsoft-key'
 
     page.find(".button.ready").click

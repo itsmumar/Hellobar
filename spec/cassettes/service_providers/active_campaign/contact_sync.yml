@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://test.api-us.com/admin/api.php?api_action=contact_sync&api_key=valid-active-campaign-key&api_output=json
+    uri: https://hellobar.api-us1.com/admin/api.php?api_action=contact_sync&api_key=valid-active-campaign-key&api_output=json
     body:
       encoding: UTF-8
       string: email=test%40test.com
@@ -26,10 +26,10 @@ http_interactions:
       - PHPSESSID=n97ma2v8mklqpnm3hp2ma2c9t7; path=/; HttpOnly
       - cmp25236280=5ee8bc43337886e685b8edf0c1b18bce; expires=Tue, 14-Feb-2017 14:23:08
         GMT; path=/
-      - em_acp_globalauth_cookie=49b714b8d13f4e0f8fe50079d37c57291; path=/; domain=test.api-us.com;
+      - em_acp_globalauth_cookie=49b714b8d13f4e0f8fe50079d37c57291; path=/; domain=hellobar.api-us1.com;
         secure
       - em_acp_globalauth_cookie=deleted; expires=Sat, 16-Jan-2016 14:23:07 GMT; path=/;
-        domain=test.api-us.com
+        domain=hellobar.api-us1.com
       Expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
       Pragma:
