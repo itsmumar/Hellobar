@@ -329,7 +329,7 @@ HB.SiteElement = HB.createClass({
 
     var showMinimizedBar = function () {
       HB.hideElement(this.w);
-      HB.animateIn(this.pullDown);
+      this.pullDown && HB.animateIn(this.pullDown);
     }.bind(this);
 
     if (viewCondition === 'wait-5') {
