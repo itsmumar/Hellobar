@@ -52,8 +52,7 @@ module ServiceProviders
           email: email,
           campaign: {
             campaignId: list_id
-          },
-          tags: tags
+          }
         }
 
         request_body.merge({dayOfCycle: cycle_day}) if cycle_day
@@ -64,7 +63,19 @@ module ServiceProviders
         end
 
         if response.success?
-          response
+          if tags.any?
+            # The line below will NOT WORK if the list uses double opt-in
+            # (because the user won't be able to confirm his subscription before
+            # this line is executed; in effect, no contact data will be returned
+            # by GetResponse; so unfortunately we cannot reliably assign tags
+            # for users at GetResponse ):
+            contact = fetch_contact email: email
+            contact_id = contact['contactId']
+
+            assign_tags contact_id: contact_id, tags: tags
+          else
+            response
+          end
         else
           error_message = JSON.parse(response.body)['codeDescription']
           log "sync error #{email} sync returned '#{error_message}' with the code #{response.status}"
@@ -91,6 +102,7 @@ module ServiceProviders
     end
 
     private
+
     def fetch_resource(resource)
       response = @client.get resource.pluralize, { perPage: 500 }
 
@@ -99,7 +111,31 @@ module ServiceProviders
         response_hash.map { |entity| { 'id' => entity["#{resource}Id"], 'name' => entity['name'] } }
       else
         error_message = JSON.parse(response.body)['codeDescription']
-        log "getting lists returned '#{error_message}' with the code #{response.status}"
+        log "getting lists returned '#{ error_message }' with the code #{ response.status }"
+        raise error_message
+      end
+    end
+
+    def fetch_contact email:
+      response = @client.get 'contacts', { query: { email: email } }
+
+      if response.success?
+        JSON.parse(response.body).first
+      else
+        error_message = JSON.parse(response.body)['codeDescription']
+        log "fetching contact returned '#{ error_message }' with the code #{ response.status }"
+        raise error_message
+      end
+    end
+
+    def assign_tags contact_id:, tags:
+      response = @client.post "contacts/#{ contact_id }", { tags: tags }
+
+      if response.success?
+        JSON.parse response.body
+      else
+        error_message = JSON.parse(response.body)['codeDescription']
+        log "assign tags returned '#{ error_message }' with the code #{ response.status }"
         raise error_message
       end
     end
