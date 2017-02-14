@@ -29,28 +29,33 @@ module ServiceProviders
     end
 
     def lists
-      response = @client.get 'campaigns', { perPage: 500 }
+      fetch_resource('campaign')
+    end
 
-      if response.success?
-        response_hash = JSON.parse response.body
-        response_hash.map { |list| { 'id' => list['campaignId'], 'name' => list['name'] } }
-      else
-        error_message = JSON.parse(response.body)['codeDescription']
-        log "getting lists returned '#{error_message}' with the code #{response.status}"
-        raise error_message
-      end
+    def tags
+      fetch_resource('tag')
     end
 
     def subscribe(list_id, email, name = nil, double_optin = true)
       name ||= email
+      tags = []
 
       if @contact_list.present?
+        tags = @contact_list.tags.map { |tag| { tagId: tag } }
         cycle_day = @contact_list.data['cycle_day']
         cycle_day = cycle_day.present? ? cycle_day.to_i : nil
       end
 
       begin
-        request_body = {name: name, email: email, campaign: {campaignId: list_id}}
+        request_body = {
+          name: name,
+          email: email,
+          campaign: {
+            campaignId: list_id
+          },
+          tags: tags
+        }
+
         request_body.merge({dayOfCycle: cycle_day}) if cycle_day
 
         response = @client.post do |request|
@@ -83,6 +88,20 @@ module ServiceProviders
     rescue => error
       log "Getting lists raised #{error}"
       false
+    end
+
+    private
+    def fetch_resource(resource)
+      response = @client.get resource.pluralize, { perPage: 500 }
+
+      if response.success?
+        response_hash = JSON.parse response.body
+        response_hash.map { |entity| { 'id' => entity["#{resource}Id"], 'name' => entity['name'] } }
+      else
+        error_message = JSON.parse(response.body)['codeDescription']
+        log "getting lists returned '#{error_message}' with the code #{response.status}"
+        raise error_message
+      end
     end
   end
 end
