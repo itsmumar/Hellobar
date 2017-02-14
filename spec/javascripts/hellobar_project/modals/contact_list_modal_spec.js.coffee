@@ -41,7 +41,7 @@ describe "ContactListModal", ->
       )
 
     it "shows the correct header when there is no contact list id(new contact list)", ->
-      expect(@modal._header()).toEqual("Where do you want to store the emails we collect?")
+      expect(@modal._header()).toEqual("Set up your contact list and integration")
 
     it "shows the correct header when there is a contact list id(existing contact list)", ->
       modal = new ContactListModal(
@@ -51,4 +51,4 @@ describe "ContactListModal", ->
         window: {location: ""}
       )
 
-      expect(modal._header()).toEqual("Edit Contact List")
+      expect(modal._header()).toEqual("Set up your contact list and integration")
