@@ -406,7 +406,6 @@ class @ContactListModal extends Modal
       provider: value
       providerName: label
       isProviderConvertKit: (label == 'ConvertKit')
-      isProviderGetResponse: (label == 'GetResponse')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
@@ -454,8 +453,8 @@ class @ContactListModal extends Modal
           $('footer a.submit').attr('disabled', 'disabled')
           $('.flash-block').addClass('error show').text('There was a problem connecting your ' + label + ' account. Please try again later.')
 
-        if data.provider == "infusionsoft" or defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse
-          if defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse
+        if data.provider == "infusionsoft" or defaultContext.isProviderConvertKit
+          if defaultContext.isProviderConvertKit
             @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
           tagsContext = $.extend(true, {}, defaultContext, {identity: data})
           tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
@@ -468,10 +467,9 @@ class @ContactListModal extends Modal
           @_renderBlock("tagListSelect", tagsContext, false).show()
         else
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
-
-        $cycle_day = $('#contact_list_cycle_day')
-        if ($cycle_day).length
-          $cycle_day.toggle(cycle_day_enabled)
+          $cycle_day = $('#contact_list_cycle_day')
+          if ($cycle_day).length
+            $cycle_day.toggle(cycle_day_enabled)
 
         if listData
           @$modal.find("#contact_list_remote_list_id").val(listData.data.remote_id) if listData.data && listData.data.remote_id

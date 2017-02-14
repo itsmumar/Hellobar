@@ -44,10 +44,9 @@ module ServiceProviders
     def tags
       response = make_api_call('get', 'tags')
 
-
       if response.success?
         response_hash = JSON.parse response.body
-        response_hash['tags'].map { |tag| {'id' => tag['id'], 'name' => tag['name']}}
+        found_tags = response_hash['tags'].map { |tag| {'id' => tag['id'], 'name' => tag['name']}}
       else
         error_message = JSON.parse(response.body)['error']
         log "getting tags returned '#{error_message}' with the code #{response.status}"
