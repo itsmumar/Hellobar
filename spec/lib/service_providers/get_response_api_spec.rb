@@ -2,12 +2,14 @@ require 'spec_helper'
 
 describe ServiceProviders::GetResponseApi do
   it 'raises an error if no identity is provided' do
-    expect{ServiceProviders::GetResponseApi.new}.to raise_error('Must provide an identity through the arguments')
+    expect { ServiceProviders::GetResponseApi.new }.
+      to raise_error 'Must provide an identity through the arguments'
   end
 
   it 'raises error if identity is missing api key' do
     identity = Identity.new site_id: 1, provider: 'get_response_api'
-    expect{ServiceProviders::GetResponseApi.new(identity: identity)}.to raise_error('Identity does not have a stored GetResponse API key')
+    expect { ServiceProviders::GetResponseApi.new(identity: identity) }.
+      to raise_error 'Identity does not have a stored GetResponse API key'
   end
 
   context 'remote requests' do
@@ -79,29 +81,35 @@ describe ServiceProviders::GetResponseApi do
     end
 
     context '#subscribe' do
-      it 'submits email address as name if name is not present' do
-        double_request = double(:request, url: true)
-        double_response = double(:response, success?: true)
+      let(:successful_response) { double(:response, success?: true) }
 
-        expect(double_request).
-          to receive(:body=).
-          with({name: "Bob", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}, :tags=>[]}).
-          and_return(double_response)
+      it 'submits name and email address if both are present' do
+        request_body = {
+            name: "Bob",
+            email: "bobloblaw@lawblog.com",
+            campaign: {
+              campaignId: 1122
+            }
+          }
 
-        allow(client).to receive(:post).and_yield(double_request)
+        allow(client).to receive(:post).with('contacts', request_body).
+          and_return successful_response
+
         get_respone_api.subscribe(1122, 'bobloblaw@lawblog.com', 'Bob')
       end
 
-      it 'does not submit email address as name if name is present' do
-        double_request = double(:request, url: true)
-        double_response = double(:response, success?: true)
+      it 'submits email address as name if no name is present' do
+        request_body = {
+          name: "bobloblaw@lawblog.com",
+          email: "bobloblaw@lawblog.com",
+          campaign: {
+            campaignId: 1122
+          }
+        }
 
-        expect(double_request).
-          to receive(:body=).
-          with({name: "bobloblaw@lawblog.com", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}, :tags=>[]}).
-          and_return(double_response)
+        allow(client).to receive(:post).with('contacts', request_body).
+          and_return successful_response
 
-        allow(client).to receive(:post).and_yield(double_request)
         get_respone_api.subscribe(1122, 'bobloblaw@lawblog.com')
       end
 
