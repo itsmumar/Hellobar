@@ -345,7 +345,8 @@ export default Ember.Controller.extend({
 
     if (isClosable && !canBeClosable) {
       this.set('model.closable', false);
-      this.promptUpgrade('closable', isClosable, 'allow hiding a bar');
+      const elementTypeName = (this.get('model.type') || 'Bar').toLowerCase();
+      this.promptUpgrade('closable', isClosable, `allow hiding a ${elementTypeName}`);
     }
   }).observes('model.closable'),
 
