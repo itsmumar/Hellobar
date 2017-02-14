@@ -1,0 +1,66 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://ft319.infusionsoft.com/api/xmlrpc
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" ?><methodCall><methodName>DataService.query</methodName><params><param><value><string>invalid-key</string></value></param><param><value><string>ContactGroup</string></value></param><param><value><i4>1000</i4></value></param><param><value><i4>0</i4></value></param><param><value><struct/></value></param><param><value><array><data><value><string>GroupName</string></value><value><string>Id</string></value></data></array></value></param></params></methodCall>
+    headers:
+      User-Agent:
+      - Infusionsoft-1.1.9 (RubyGem)
+      Content-Type:
+      - text/xml; charset=utf-8
+      Content-Length:
+      - '479'
+      Connection:
+      - keep-alive
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Cache-Control:
+      - no-cache, no-store
+      Content-Type:
+      - text/html;charset=UTF-8
+      Date:
+      - Tue, 14 Feb 2017 19:59:44 GMT
+      Expires:
+      - Tue, 14 Feb 2017 19:59:45 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache-Coyote/1.1
+      Set-Cookie:
+      - JSESSIONID=BFF940E44451A23CEA99F12DEC24A98A; Path=/; Secure; HttpOnly
+      - app-lb=!0AYqh2w+isr9EDCo5jOubDF73jfI74WqUYu6SCmnBoaio0utjroSKAEWVP0c0lvysjHIZ1iPhRxt5pYXWd0g4lFitMy+q+43nlnkhLNxygDOvpKPAyi7+y2wQj/MaVwhzREnNREFpVagDun9HYQSol/pNfuGmFY=;
+        path=/
+      Vary:
+      - Accept-Encoding
+      X-Cnection:
+      - close
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "<!DOCTYPE html>\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">\r\n<head>\r\n
+        \  <title>Application not available</title>\r\n   <meta http-equiv=\"Content-type\"
+        content=\"text/html; charset=UTF-8\" />\r\n   <style>\r\n   \t\tbody{\r\n\t\t\tfont-family:
+        Arial, Helvetica, sans-serif;\r\n\t\t\tfont-size: 14px;\r\n\t\t}\r\n   \t\t#wrapper{\r\n\t\t\twidth:
+        524px;\r\n\t\t\tmargin: 0 auto;\r\n\t\t}\r\n\t\t#contentWrapper{\r\n\t\t\tpadding:
+        0px 20px 20px 20px;\r\n\t\t\tborder: 2px solid #000000;\r\n\t\t}\r\n   </style>\r\n</head>\r\n<body>\r\n<div
+        id=\"wrapper\">\r\n<div><img src=\"/error/disabled/header-blk.jpg?b=1.62.0.48\"
+        border=\"0\" /></div>\r\n<div id=\"contentWrapper\">\r\n<h3>We're Sorry!</h3>\r\n<br>\n
+        This application is not currently available. If you are the owner of <b>https://ft319.infusionsoft.com</b>
+        then please call Infusionsoft at <b>866-800-0004</b> to discuss the status
+        of this application.\n<br>\n</div>\r\n<div><img src=\"/error/disabled/footer-blk.jpg?b=1.62.0.48\"
+        border=\"0\" /></div>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n"
+    http_version:
+  recorded_at: Tue, 14 Feb 2017 19:59:45 GMT
+recorded_with: VCR 2.9.0

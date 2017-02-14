@@ -16,7 +16,7 @@ feature "Infusionsoft Integration", js: true do
 
   scenario "invalid form details" do
     open_provider_form(@user, provider)
-    fill_in 'contact_list[data][app_url]', with: 'invalid.infusionsoft.com'
+    fill_in 'contact_list[data][app_url]', with: 'ft319.infusionsoft.com'
     fill_in 'contact_list[data][api_key]', with: 'invalid-key'
 
     page.find(".button.ready").click
@@ -44,8 +44,10 @@ feature "Infusionsoft Integration", js: true do
   end
 
   private
+
   def connect_infusionsoft
     open_provider_form(@user, provider)
+
     fill_in 'contact_list[data][app_url]', with: 'ft319.infusionsoft.com'
     fill_in 'contact_list[data][api_key]', with: 'valid-infusionsoft-key'
 

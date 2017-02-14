@@ -22,7 +22,7 @@ feature "ConvertKit Integration", js: true do
     expect(page).to have_content('There was a problem connecting your ConvertKit account')
   end
 
-  scenario "connecting to Active Campaign" do
+  scenario "connecting to Convert Kit" do
     connect_convert_kit
 
     expect(page).to have_content('Choose a ConvertKit form to sync with')
@@ -40,8 +40,10 @@ feature "ConvertKit Integration", js: true do
   end
 
   private
+
   def connect_convert_kit
     open_provider_form(@user, provider)
+
     fill_in 'contact_list[data][api_key]', with: 'valid-convertkit-key'
 
     page.find(".button.ready").click

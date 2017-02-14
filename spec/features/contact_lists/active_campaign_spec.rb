@@ -1,7 +1,7 @@
 require 'integration_helper'
 require 'service_provider_integration_helper'
 
-feature "ActiveCampaign Integration", js: true do
+feature "ActiveCampaign Integration", :js do
   let(:provider) { 'active_campaign' }
 
   before do
@@ -16,7 +16,7 @@ feature "ActiveCampaign Integration", js: true do
 
   scenario "invalid form details" do
     open_provider_form(@user, provider)
-    fill_in 'contact_list[data][app_url]', with: 'invalid.api.url.com'
+    fill_in 'contact_list[data][app_url]', with: 'hellobar.api-us1.com'
     fill_in 'contact_list[data][api_key]', with: 'invalid-key'
 
     page.find(".button.ready").click
@@ -42,8 +42,10 @@ feature "ActiveCampaign Integration", js: true do
   end
 
   private
+
   def connect_active_campaign
     open_provider_form(@user, provider)
+
     fill_in 'contact_list[data][app_url]', with: 'hellobar.api-us1.com'
     fill_in 'contact_list[data][api_key]', with: 'valid-active-campaign-key'
 
