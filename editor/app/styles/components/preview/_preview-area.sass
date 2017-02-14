@@ -19,6 +19,10 @@
     height: 100%
     position: relative
 
+    .bar-bottom, .modal, .slider, .takeover
+      #hellobar-pusher
+        display: none !important
+
     #hellobar-preview-container
       top: 0
       width: 100%
@@ -28,82 +32,93 @@
 
       canvas
         z-index: 10
-        position: relative
+        position: absolute
+        top: 0
+        left: 0
 
       iframe
         width: 100%
         position: absolute
         z-index: 2
 
-      #hellobar-pusher
-        display: none !important
-
       .preview-wrapper
-        top: 0
-        left: 0
+        // top: 0
+        // left: 0
         width: 100%
         height: 100%
-        position: absolute
+        // position: absolute
         box-shadow: inset 0 0 1em rgba(0,0,0,0.15)
 
-        .preview-message
-          left: 0
-          right: 0
-          position: absolute
-          text-align: center
-          @include vertical-align()
+      .loading-message
+        // left: 0
+        // right: 0
+        // position: absolute
+        text-align: center
+        // top: 50%
+        height: 100%
+        // @include transform(translateY(40%))
+        position: absolute
+        top: 50%
+        left: 50%
+        // z-index: 2
 
-          i:before
-            display: block
-            font-size: 2.75em
-            @include animation(spin 2s infinite ease-in-out)
+        &.hidden
+          @include transition(opacity 1s)
+
+        i:before
+          display: block
+          font-size: 2.75em
+          @include animation(spin 2s infinite ease-in-out)
 
       .preview-image
-        top: 0
-        left: 0
+        // top: 0
+        // left: 0
         width: 100%
         height: 100%
         margin-top: 0
         border-width: 0
-        position: absolute
+        // position: absolute
         border-style: solid
-        border-color: $white
+        border-color: transparent
         background-size: cover
         background-repeat: no-repeat
         background-position: center top
+        background-color: $grayLightest
+        // background-image: url("http://www.planwallpaper.com/static/images/Desktop-Wallpaper-HD2_tIdhAuz.jpg") !important
+        // z-index: 3
 
       .preview-image-for-colorpicker
         top: -99999px
         left: -99999px
         width: initial
         position: absolute
+        // background-image: url("https://static.pexels.com/photos/36487/above-adventure-aerial-air.jpg") !important
 
-      &.is-pushed.Bar
+      &.is-pushed.bar
         overflow: hidden
 
-        canvas
-          margin-top: -12px
+        // canvas
+          // margin-top: -12px
 
-        &.bar-top
+        // &.bar-top
+        //   &.regular .preview-image
+        //     border-top-width: 29px
+        //
+        //   &.large .preview-image
+        //     border-top-width: 49px
+        //
+        // &.bar-bottom
+        //
+        //   &.regular .preview-image
+        //     border-bottom-width: 29px
+        //
+        //   &.large .preview-image
+        //     border-bottom-width: 49px
 
-          &.regular .preview-image
-            border-top-width: 29px
-
-          &.large .preview-image
-            border-top-width: 49px
-
-        &.bar-bottom
-
-          &.regular .preview-image
-            border-bottom-width: 29px
-
-          &.large .preview-image
-            border-bottom-width: 49px
-
-      iframe.bar-bottom
-        bottom: -1px
-        position: absolute
-        @include transition()
+      // iframe.bar-bottom
+      //   bottom: -1px
+      //   position: absolute
+      //   @include transition()
 
   /*-----------  Fullscreen State  -----------*/
 
@@ -134,5 +149,5 @@
         padding-left: 0 !important
         position: absolute !important
 
-      &.is-pushed.Bar.bar-top .preview-image
+      &.is-pushed.bar.bar-top .preview-image
         top: -12px !important
