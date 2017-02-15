@@ -1,9 +1,7 @@
 class @ContactListModal extends Modal
 
   constructor: (@options = {}) ->
-    # A/B Variant
-    @isVariant = (window.HB_EMAIL_INTEGRATION_TEST && HB_EMAIL_INTEGRATION_TEST == 'variant')
-    @modalName = if @isVariant then 'contact-list-variant' else 'contact-list'
+    @modalName = 'contact-list'
 
     @options.window ||= window
     @options.canDelete = (@options.canDelete != false)
@@ -36,48 +34,30 @@ class @ContactListModal extends Modal
   _setBlockVisibilty: (initital = false)->
     listVal = @$modal.find("#contact_list_provider").val()
 
-    # A/B Variant
-    if @isVariant
-      if initital
-        @blocks.iconListing.show()
-        @blocks.hellobarOnly.hide()
-        @blocks.selectListing.hide()
-      else if listVal == "0"
-        @blocks.iconListing.hide()
-        @blocks.hellobarOnly.show()
-        @blocks.selectListing.hide()
-      else
-        @blocks.iconListing.hide()
-        @blocks.hellobarOnly.hide()
-        @blocks.selectListing.show()
+    if initital
+      @blocks.iconListing.show()
+      @blocks.hellobarOnly.hide()
+      @blocks.selectListing.hide()
+    else if listVal == "0"
+      @blocks.iconListing.hide()
+      @blocks.hellobarOnly.show()
+      @blocks.selectListing.hide()
     else
-      if listVal == "0"
-        @blocks.hellobarOnly.show()
-      else
-        @blocks.hellobarOnly.hide()
+      @blocks.iconListing.hide()
+      @blocks.hellobarOnly.hide()
+      @blocks.selectListing.show()
 
     @_setSideIcon() if initital && listVal != "0"
 
   _loadTemplates: ->
-    # A/B Variant
-    if @isVariant
-      return {
-        main             : $("#contact-list-variant-modal-template").html()
-        instructions     : $("#contact-list-variant-modal-provider-instructions-template").html()
-        nevermind        : $("#contact-list-variant-modal-provider-instructions-nevermind-template").html()
-        syncDetails      : $("#contact-list-variant-modal-sync-details-template").html()
-        remoteListSelect : $("#contact-list-variant-modal-remote-list-select-template").html()
-        tagListSelect    : $("#contact-list-variant-modal-tag-select-template").html()
-      }
-    else
-      return {
-        main             : $("#contact-list-modal-template").html()
-        instructions     : $("#contact-list-modal-provider-instructions-template").html()
-        nevermind        : $("#contact-list-modal-provider-instructions-nevermind-template").html()
-        syncDetails      : $("#contact-list-modal-sync-details-template").html()
-        remoteListSelect : $("#contact-list-modal-remote-list-select-template").html()
-        tagListSelect    : $("#contact-list-modal-tag-select-template").html()
-      }
+    return {
+      main             : $("#contact-list-variant-modal-template").html()
+      instructions     : $("#contact-list-variant-modal-provider-instructions-template").html()
+      nevermind        : $("#contact-list-variant-modal-provider-instructions-nevermind-template").html()
+      syncDetails      : $("#contact-list-variant-modal-sync-details-template").html()
+      remoteListSelect : $("#contact-list-variant-modal-remote-list-select-template").html()
+      tagListSelect    : $("#contact-list-variant-modal-tag-select-template").html()
+    }
 
   _initializeTemplates: ->
     @templates =
@@ -91,17 +71,9 @@ class @ContactListModal extends Modal
     @$modal = $(@templates.main({header: @_header()}))
     @$modal.appendTo($("body"))
 
-  _header: ->
-    # A/B Variant
-    if @isVariant
-      "Set up your contact list and integration"
-    else if @options.id
-      "Edit Contact List"
-    else
-      "Where do you want to store the emails we collect?"
+  _header: -> "Set up your contact list and integration"
 
   _initializeBlocks: ->
-    # A/B Variant: iconListing, selectListing
     @blocks =
       iconListing      : @$modal.find(".primary-selection-block")
       selectListing    : @$modal.find(".secondary-selection-block")
@@ -113,12 +85,11 @@ class @ContactListModal extends Modal
       tagListSelect    : @$modal.find(".tag-select-block")
 
   _bindInteractions: (object) ->
-    if @isVariant
-      @_bindCustomEvents(object)
-      @_bindShowExpandedList(object)
-      @_bindProviderRadio(object)
-      @_bindSelectIcons(object)
-      @_bindHbSelection(object)
+    @_bindCustomEvents(object)
+    @_bindShowExpandedList(object)
+    @_bindProviderRadio(object)
+    @_bindSelectIcons(object)
+    @_bindHbSelection(object)
 
     @_bindProviderSelect(object)
     @_bindDoThisLater(object)
@@ -424,7 +395,8 @@ class @ContactListModal extends Modal
       providerNameLabel: (label + ' ' + switch label
                                           when 'Drip' then 'campaign'
                                           when 'ConvertKit' then 'form'
-                                          else 'list')
+                                          else 'list'
+      )
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.hellobarOnly.show()

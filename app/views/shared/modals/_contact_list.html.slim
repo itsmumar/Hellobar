@@ -1,33 +1,51 @@
-script id="contact-list-modal-template" type="text/x-handlebars-template"
+script id="contact-list-variant-modal-template" type="text/x-handlebars-template"
 
   .modal-wrapper
 
-    .modal-block#contact-list-form
+    .modal-block#contact-list-variant-form
 
       header
         h5= "{{header}}"
 
-      .contact-list-modal
+      .contact-list-variant-modal
 
         .flash-block
           i.icon-close
 
         .name-and-provider-block
           form.contact_list
-            label for="contact_list_name" Name
+            label for="contact_list_name" What would you like to name your List?
             input type="text" id="contact_list_name" name="contact_list[name]" value="My Contacts"
 
-            label for="contact_list_provider" Where do you want your contacts stored?
+            .primary-selection-block
+              label After Hello Bar collects an email address, where should we send it?
+              .contact-list-radio-wrapper
+                - options_for_provider_select.drop(1).each do |text, value, data|
+                  div class="contact-list-radio-block #{value}-provider"
+                    = radio_button_tag 'contact_list[provider]', value, false, data
+                    = label_tag "contact_list[provider]_#{value}" do
+                      .interior-float
+                        = image_tag "providers/#{value}.png"
+                        span= text
 
-            .select-wrapper
-              select id="contact_list_provider" name="contact_list[provider]"
-                - options_for_provider_select.each do |text, value, data|
-                  = content_tag :option, text, value: value, data: data
+                .contact-list-radio-block
+                  label.show-expanded-providers
+                    .interior-float
+                      span View all tools
 
-            p
-              small You can choose to keep your contacts in Hello Bar, or sync with an email service like MailChimp.
-            .remote-list-select-block
-            .tag-select-block
+              a.small.use-hello-bar-email-lists I don't use any of these email tools
+
+            .secondary-selection-block
+              label for="contact_list_provider" Sync email subscribers
+              .select-wrapper
+                .select-side-icon
+                select id="contact_list_provider" name="contact_list[provider]"
+                  option.hidden disabled="true" Select one...
+                  - options_for_provider_select.each do |text, value, data|
+                    = content_tag :option, text, value: value, data: data
+                .is-connected
+                  i.hellobar-icon-check-mark
+                  | Connected
 
         .provider-instructions-block
           / Empty
@@ -35,32 +53,38 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
         .provider-instructions-nevermind-block
           / Empty
 
+        .remote-list-select-block
+          / Empty
+
+        .tag-select-block
+          / Empty
+
         .sync-details-block
           / Empty
 
         .hellobar-only
-          p If you use an email service like MailChimp, select it from the list on the left and we'll sync your contacts there.
-          p If not, no worries. We'll store your contacts in Hello Bar for now and you can change this setting later if you want.
+          label After Hello Bar collects an email address, where should we send it?
+          .hellobar-selection-wrapper
+            .hellobar-icon
+              = image_tag "providers/hellobar.png"
+            small We will store your email addresses in Hello Bar. You can download the emails from the Contacts dashboard whenever you want
 
-        .loading-overlay
-          .loading-message
-            i.icon-settings
-            | Fetching data...
+          i.icon-back2
+          a.small.back-to-providers Nevermind, I want to view all tools
 
       .contact-list-delete-link
         input type="hidden" id="contact_list_site_elements_count" name="contact_list[site_elements_count]" value="0"
-        a.delete-confirm.hidden Delete
-
 
       footer
         a.button.cancel Cancel
+        a.delete-confirm.hidden Delete this contact list
         a.button.submit Done
 
     .modal-block#contact-list-delete
       header
         h5 Delete contact list
 
-      .contact-list-modal
+      .contact-list-variant-modal
 
         .flash-block
           i.icon-close
@@ -90,78 +114,59 @@ script id="contact-list-modal-template" type="text/x-handlebars-template"
 
 /-----------  Provider Instructions Template  -----------/
 
-script id="contact-list-modal-provider-instructions-template" type="text/x-handlebars-template"
+script id="contact-list-variant-modal-provider-instructions-template" type="text/x-handlebars-template"
 
-  | <p>To integrate with {{providerName}} you'll need:</p>
-  |
-  | <ol>
-  |   {{#if requiresEmbedCode}}
-  |     <li>Your embed code from {{providerName}}</li>
-  |   {{else}}
-  |     {{#if requiresAccountId}}
-  |       <li>The id of your account with {{providerName}}</li>
-  |     {{/if}}
-  |     {{#if requiresApiKey}}
-  |       <li>Your API key from {{providerName}}</li>
-  |     {{/if}}
-  |     {{#if requiresAppUrl}}
-  |       <li>Your Application Url from {{providerName}}</li>
-  |     {{/if}}
-  |     {{#if requiresUsername}}
-  |       <li>Your {{providerName}} username and password</li>
-  |     {{/if}}
-  |   {{/if}}
-  |   {{#unless requiresWebhookUrl}}
-  |     <li>An existing list with {{providerName}} to sync to</li>
-  |   {{/unless}}
-  | </ol>
-  |
-  | <label for="contact_list_provider_info">Paste the required information below, then click Done.</label>
-  |
-  | {{#if requiresAppUrl}}
-  |   <input type='text' class="contact_list_app_url" id="contact_list_app_url" name="contact_list[data][app_url]" value="{{contactList.data.app_url}}" placeholder="Your AppURL (eg. tx305.infusionsoft.com)">
-  | {{/if}}
-  |
   | {{#if requiresWebhookUrl}}
-  |   <input type="url" id="contact_list_webhook_url" name="contact_list[data][webhook_url]" value="{{contactList.data.webhook_url}}" placeholder="Your webhook URL">
-  |   <label for="contact_list_webhook_method">POST request
-  |     <input type="checkbox" id="contact_list_webhook_method" name="contact_list[data][webhook_method]" value="{{contactList.data.webhook_method}}" {{#if webhookIsPost}}checked{{/if}}>
-  |   </label>
+  |   <label for="contact_list_username">Webhook URL</label>
+  |   <input type="url" id="contact_list_webhook_url" name="contact_list[data][webhook_url]" value="{{contactList.data.webhook_url}}" placeholder="http://example.com/webhook-callback">
+  |   <input type="checkbox" id="contact_list_webhook_method" name="contact_list[data][webhook_method]" value="{{contactList.data.webhook_method}}" {{#if webhookIsPost}}checked{{/if}}>
+  |   <label for="contact_list_webhook_method">POST request</label>
   |   <small>Each email collected is guaranteed to be sent to the specified URL at least once, but possibly more than once. It is the responsibility of the webhook to take care of possible duplicates.</small>
   | {{/if}}
   |
   | {{#if requiresUsername}}
-  |   <input type='text' class="contact_list_username" id="contact_list_username" name="contact_list[data][username]" value="{{contactList.data.username}}" placeholder="Your username">
+  |   <label for="contact_list_username">Username <small>– this can be your {{providerName}} username or email address</small></label>
+  |   <input type='text' class="contact_list_username" id="contact_list_username" name="contact_list[data][username]" value="{{contactList.data.username}}" placeholder="username@example.com" />
   | {{/if}}
   |
   | {{#if requiresAccountId}}
-  |     <input type='text' id="contact_list_username" name="contact_list[data][username]" value="{{contactList.data.username}}" placeholder="Your Account ID">
+  |   <label for="contact_list_username">{{providerName}} Account ID</label>
+  |   <input type='text' id="contact_list_username" name="contact_list[data][username]" value="{{contactList.data.username}}" />
   | {{/if}}
   |
   | {{#if requiresApiKey}}
-  |     <input type='text' class="contact_list_api_key" id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}" placeholder="Your API key">
+  |   {{#if requiresAppUrl}}
+  |     <label for="contact_list_api_key">{{providerName}} API Key</label>
+  |     <input type='text' class="contact_list_api_key_extended" id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}" placeholder="873d71nf01n734cgh662hu" />
+  |   {{else}} {{#if requiresUsername}}
+  |     <label for="contact_list_api_key">{{providerName}} API Key <small>– You can find your Secret API Key within {{providerName}} > Account > API tab</small></label>
+  |     <input type='text' class="contact_list_api_key_extended" id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}" placeholder="873d71nf01n734cgh662hu" />
+  |   {{else}} {{#if requiresAccountId}}
+  |     <label for="contact_list_api_key">API Key</label>
+  |     <input type='text' class="contact_list_api_key_extended" id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}" />
+  |   {{else}}
+  |     <label for="contact_list_api_key">Enter your API {{#if isProviderConvertKit}}secret{{/if}} key from {{providerName}}</label>
+  |     <input type='text' class="contact_list_api_key" id="contact_list_api_key" name="contact_list[data][api_key]" value="{{contactList.data.api_key}}" />
+  |   {{/if}}{{/if}}{{/if}}
+  | {{/if}}
+  |
+  | {{#if requiresAppUrl}}
+  |   <label for="contact_list_api_key">{{providerName}} API URL</label>
+  |   <input type='text' class="contact_list_app_url" id="contact_list_app_url" name="contact_list[data][app_url]" value="{{contactList.data.app_url}}" placeholder="http://yourcompany.infusionsoft.com">
   | {{/if}}
   |
   | {{#if requiresEmbedCode}}
-  |   <textarea class="contact_list_embed_code" id="contact_list_embed_code" name="contact_list[data][embed_code]">{{contactList.data.embed_code}}</textarea>
+  |   <label for="contact_list_api_key">Enter your embed code from {{providerName}}</label>
+  |   <textarea class="contact_list_embed_code" id="contact_list_embed_code" name="contact_list[data][embed_code]" placeholder="Paste your embed code here">{{contactList.data.embed_code}}</textarea>
   | {{/if}}
   |
   | {{#unless requiresWebhookUrl}}
-  |   {{#if oauth}}
-  |     <div>
-  |       <a class="button cancel do-this-later">I'll do this later</a>
-  |       <a class="button ready">I'm ready</a>
-  |     </div>
-  |   {{else}}
-  |     <div>
-  |       <a class="button ready">Connect my account</a>
-  |     </div>
-  |   {{/if}}
+  |   <a class="button ready">Connect</a>
   | {{/unless}}
 
 /-----------  No Provider Template  -----------/
 
-script id="contact-list-modal-provider-instructions-nevermind-template" type="text/x-handlebars-template"
+script id="contact-list-variant-modal-provider-instructions-nevermind-template" type="text/x-handlebars-template"
 
   p No worries!
   p We'll store all of your contacts in Hello Bar for now.
@@ -169,41 +174,39 @@ script id="contact-list-modal-provider-instructions-nevermind-template" type="te
 
 /-----------  Remote List Template  -----------/
 
-script id="contact-list-modal-remote-list-select-template" type="text/x-handlebars-template"
+script id="contact-list-variant-modal-remote-list-select-template" type="text/x-handlebars-template"
 
-  | <label for="contact_list_remote_list_id">Choose a {{providerName}} list to sync with</label>
+  | <label for="contact_list_remote_list_id">Choose a {{providerNameLabel}} to sync with</label>
   | <div class="select-wrapper">
   |   <select id="contact_list_remote_list_id" name="contact_list[remote_list_id]">
   |     {{#each identity.lists}}
-  |       <option value="{{id}}">{{name}}</option>
+  |       {{#unless error}}
+  |         <option value="{{id}}">{{name}}</option>
+  |       {{/unless}}
   |     {{/each}}
   |   </select>
   | </div>
-  | {{#if identity.supports_cycle_day}}
-  |   <label for="contact_list_cycle_day_enabled">
-  |     <input type="checkbox" name="contact_list[cycle_day_enabled]" id="contact_list_cycle_day_enabled" value="1" {{#if cycleDayEnabled}}checked{{/if}}> Use cycle day?
-  |   </label>
-  |   <label for="contact_list_cycle_day_value">
-  |     <input type="number" name="contact_list[cycle_day]" id="contact_list_cycle_day" value="{{cycleDay}}">
-  |   </label>
-  | {{/if}}
   | {{#if identity.supports_double_optin}}
   |   <label for="contact_list_double_optin">
   |     <input type="checkbox" name="contact_list[double_optin]" id="contact_list_double_optin" value="1"> Use double opt-in? (recommended)
   |   </label>
   | {{/if}}
 
-script id="contact-list-modal-tag-select-template" type="text/x-handlebars-template"
+script id="contact-list-variant-modal-tag-select-template" type="text/x-handlebars-template"
 
-  | <label for="contact_list_remote_list_id"">Apply Tags (Optional)</label>
+  | <label for="contact_list_remote_list_ids">Apply Tags (Optional)</label>
   | {{#if tags}}
-  |   {{#each tags}}
+  |   {{#each preparedLists}}
   |     <div class="select-wrapper"">
   |       <div>
   |         <select class="contact-list-tag" name="contact_list[remote_list_id]">
   |           <option disabled selected value>Select ...</option>
-  |           {{#each ../../identity.tags}}
-  |             {{option ../../. id name}}
+  |           {{#each lists}}
+  |             {{#if isSelected}}
+  |               <option value="{{id}}" selected>{{name}}</option>
+  |             {{else}}
+  |               <option value="{{id}}">{{name}}</option>
+  |             {{/if}}
   |           {{/each}}
   |         </select>
   |         <i class="icon-close" data-js-action="remove-tag"></i>
@@ -211,11 +214,11 @@ script id="contact-list-modal-tag-select-template" type="text/x-handlebars-templ
   |     </div>
   |   {{/each}}
   | {{else}}
-  |   <div class="select-wrapper" style="position: relative;">
+  |   <div class="select-wrapper">
   |     <div>
   |       <select class="contact-list-tag" name="contact_list[remote_list_id]">
   |         <option disabled selected value>Select ...</option>
-  |         {{#each identity.tags}}
+  |         {{#each identity.lists}}
   |           <option value="{{id}}">{{name}}</option>
   |         {{/each}}
   |       </select>
@@ -240,8 +243,9 @@ script id="tag-dropdown-template" type="text/x-handlebars-template"
 
 /-----------  Sync Details  -----------/
 
-script id="contact-list-modal-sync-details-template" type="text/x-handlebars-template"
+script id="contact-list-variant-modal-sync-details-template" type="text/x-handlebars-template"
 
-  p Whenever a visitor to your site enters their email address into your Hello Bar, we'll automatically sync it with your {{providerName}} account.
+  small After a subscriber signs up to your Hello Bar, they will be added to this list.
   div
     a.button.cancel.unlink data-identity-id="{{identity.id}}" Disconnect {{providerName}}
+  small Disconnecting your {{providerName}} account will prevent Hello Bar from automatically pushing subscriptions to your list.
