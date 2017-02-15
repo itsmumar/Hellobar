@@ -5,6 +5,7 @@
   max-width: 380px; /* IF CHANGED, UPDATE maxSliderSize HELLOBAR.BASE.JS */
   position: absolute;
   width: 95%;
+  min-height: 120px;
 }
 
 #hellobar-slider .slider-content {
