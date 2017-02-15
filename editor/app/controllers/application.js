@@ -410,7 +410,7 @@ export default Ember.Controller.extend({
     let white = 'ffffff';
     let black = '000000';
 
-    if (this.brightness(primaryColor) < 0.5) {
+    if (brightness(primaryColor) < 0.5) {
       return this.setProperties({
         'model.text_color': white,
         'model.button_color': white,
