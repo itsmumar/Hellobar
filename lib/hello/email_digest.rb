@@ -3,7 +3,7 @@ module Hello::EmailDigest
 
   class << self
     def send(site)
-      site.owners.each do |owner|
+      site.owners_and_admins.each do |owner|
         mailer = mailer_for_site(site, owner)
         return if mailer.nil? || mailer.is_a?(ActionMailer::Base::NullMail) || mailer.html_part.nil?
 
