@@ -22,9 +22,9 @@ module ServiceProviders
       }
 
       @client = Faraday.new(client_settings) do |faraday|
-        faraday.request  :url_encoded
-        faraday.response :logger unless Rails.env.production?
-        faraday.adapter  Faraday.default_adapter
+        faraday.request :url_encoded
+        faraday.response :logger unless Rails.env.test?
+        faraday.adapter Faraday.default_adapter
       end
     end
 

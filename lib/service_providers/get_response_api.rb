@@ -96,7 +96,7 @@ module ServiceProviders
     def client
       @client ||= Faraday.new(client_settings) do |faraday|
         faraday.request :url_encoded
-        faraday.response :logger
+        faraday.response :logger unless Rails.env.test?
         faraday.adapter Faraday.default_adapter
       end
     end
