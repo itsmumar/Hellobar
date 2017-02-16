@@ -9,7 +9,7 @@ describe IdentitiesController do
 
   before do
     @identity = identities(:mailchimp)
-    @identity.extra = {"metadata" => { 'api_endpoint' => 'test.mailchimp.com' }}
+    @identity.extra = { 'metadata' => { 'api_endpoint' => 'https://us3.api.mailchimp.com' } }
     @identity.save
   end
 
@@ -62,7 +62,7 @@ describe IdentitiesController do
 
   describe 'POST :create' do
     it 'redirects when identity already exists' do
-      api_key = 'valid-get-response-key'
+      api_key = 'my_cool_api_key'
       stub_current_user @identity.site.users.first
       identity = Identity.create! site_id: @identity.site.id, provider: 'get_response_api', api_key: api_key
       allow_any_instance_of(Identity).to receive(:provider_config).and_return({name: 'get_response_api'})
@@ -79,14 +79,15 @@ describe IdentitiesController do
         api_key = 'valid-active-campaign-key'
         stub_current_user @identity.site.users.first
         post :create, site_id: @identity.site.id, provider: 'active_campaign',
-                        api_key: api_key, app_url: "test.api-us.com"
+                        api_key: api_key, app_url: "crossover.api-us1.com"
 
         expect(Identity.last.api_key).to eq(api_key)
       end
 
       it 'sets the redirect patch on the oauth object' do
+        api_key = 'my_cool_api_key'
         stub_current_user @identity.site.users.first
-        post :create, site_id: @identity.site.id, provider: 'get_response_api', api_key: 'my_cool_api_key'
+        post :create, site_id: @identity.site.id, provider: 'get_response_api', api_key: api_key
 
         expect(response).to redirect_to('my_cool_referrer')
       end

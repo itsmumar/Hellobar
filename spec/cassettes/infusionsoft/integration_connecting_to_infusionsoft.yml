@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://test.infusionsoft.com/api/xmlrpc
+    uri: https://ft319.infusionsoft.com/api/xmlrpc
     body:
       encoding: UTF-8
       string: |
@@ -69,11 +69,11 @@ http_interactions:
         Purchased Custom Meal Plan</value></member><member><name>Id</name><value><i4>147</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>[category:AWeber
         Lists]awlist3827639</value></member><member><name>Id</name><value><i4>109</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>[category:AWeber
         Lists]awlist4296471</value></member><member><name>Id</name><value><i4>111</i4></value></member></struct></value></data></array></value></param></params></methodResponse>
-    http_version: 
+    http_version:
   recorded_at: Mon, 25 Jul 2016 22:48:29 GMT
 - request:
     method: post
-    uri: https://test.infusionsoft.com/api/xmlrpc
+    uri: https://ft319.infusionsoft.com/api/xmlrpc
     body:
       encoding: UTF-8
       string: |
@@ -239,6 +239,6 @@ http_interactions:
         lose early riser engage</value></member><member><name>Id</name><value><i4>317</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>women
         lose emotional eater engage</value></member><member><name>Id</name><value><i4>321</i4></value></member></struct></value><value><struct><member><name>GroupName</name><value>women
         lose structure eater engage</value></member><member><name>Id</name><value><i4>319</i4></value></member></struct></value></data></array></value></param></params></methodResponse>
-    http_version: 
+    http_version:
   recorded_at: Sat, 28 Jan 2017 17:16:02 GMT
 recorded_with: VCR 2.9.0

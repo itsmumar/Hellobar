@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://test.api-us.com/admin/api.php?api_action=contact_sync&api_key=valid-active-campaign-key&api_output=json
+    uri: https://hellobar.api-us1.com/admin/api.php?api_action=contact_sync&api_key=valid-active-campaign-key&api_output=json
     body:
       encoding: UTF-8
       string: email=test1%40test.com&first_name=Test&last_name=User
@@ -26,10 +26,10 @@ http_interactions:
       - PHPSESSID=cmdteqa0pg290b29diqi0089q4; path=/; HttpOnly
       - cmp25236280=57d6c3e78902b84b5dd4a4f9acd55ff3; expires=Tue, 14-Feb-2017 17:31:21
         GMT; path=/
-      - em_acp_globalauth_cookie=49b714b8d13f4e0f8fe50079d37c57291; path=/; domain=test.api-us.com;
+      - em_acp_globalauth_cookie=49b714b8d13f4e0f8fe50079d37c57291; path=/; domain=hellobar.api-us1.com;
         secure
       - em_acp_globalauth_cookie=deleted; expires=Sat, 16-Jan-2016 17:31:20 GMT; path=/;
-        domain=test.api-us.com
+        domain=hellobar.api-us1.com
       Expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
       Pragma:
@@ -50,6 +50,6 @@ http_interactions:
       encoding: UTF-8
       string: '{"subscriber_id":6,"sendlast_should":0,"sendlast_did":0,"result_code":1,"result_message":"Contact
         added","result_output":"json"}'
-    http_version: 
+    http_version:
   recorded_at: Sun, 15 Jan 2017 17:31:21 GMT
 recorded_with: VCR 2.9.0

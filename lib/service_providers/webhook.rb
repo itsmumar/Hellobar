@@ -9,7 +9,7 @@ module ServiceProviders
     def client
       @client ||= Faraday.new(url: contact_list.data["webhook_url"]) do |faraday|
         faraday.request :url_encoded
-        faraday.response :logger
+        faraday.response :logger unless Rails.env.test?
         faraday.adapter Faraday.default_adapter
       end
     end

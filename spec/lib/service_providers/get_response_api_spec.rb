@@ -2,20 +2,29 @@ require 'spec_helper'
 
 describe ServiceProviders::GetResponseApi do
   it 'raises an error if no identity is provided' do
-    expect{ServiceProviders::GetResponseApi.new}.to raise_error('Must provide an identity through the arguments')
+    expect { ServiceProviders::GetResponseApi.new }.
+      to raise_error 'Must provide an identity through the arguments'
   end
 
   it 'raises error if identity is missing api key' do
     identity = Identity.new site_id: 1, provider: 'get_response_api'
-    expect{ServiceProviders::GetResponseApi.new(identity: identity)}.to raise_error('Identity does not have a stored GetResponse API key')
+    expect { ServiceProviders::GetResponseApi.new(identity: identity) }.
+      to raise_error 'Identity does not have a stored GetResponse API key'
   end
 
-  context 'remote requests' do
+  context 'remote requests', :skip do
+    let(:campaign_id) { 1122 }
+    let(:contact_id) { 'contactId' }
+    let(:name) { 'Bob' }
+    let(:email) { 'bobloblaw@lawblog.com' }
+    let(:tag_id) { 'tagId' }
+    let(:tag_name) { 'new_lead' }
     let(:identity) {Identity.new site_id: 1, provider: 'get_response_api', api_key: 'my_cool_api_key'}
     let(:get_respone_api) {ServiceProviders::GetResponseApi.new(identity: identity)}
     let(:client) {Faraday.new}
     let(:success_body) {}
-    let(:success_response) {double :response, success?: true, body: [{campaignId: 1122, name: 'myCoolList'}].to_json}
+    let(:success_response) {double :response, success?: true, body: [{campaignId: campaign_id, name: 'myCoolList'}].to_json}
+    let(:tags_success_response) {double :response, success?: true, body: [{ tagId: tag_id, name: tag_name }].to_json}
     let(:failure_response) {
       double :response,
       success?: false,
@@ -30,7 +39,7 @@ describe ServiceProviders::GetResponseApi do
     context '#lists' do
       it 'returns hash array of hashes of ids and names' do
         allow(client).to receive(:get).and_return(success_response)
-        expect(get_respone_api.lists).to eq([{'id' => 1122, 'name' => 'myCoolList'}])
+        expect(get_respone_api.lists).to eq([{'id' => campaign_id, 'name' => 'myCoolList'}])
       end
 
       it 'raise exception when time out' do
@@ -52,47 +61,101 @@ describe ServiceProviders::GetResponseApi do
       end
     end
 
-    context '#subscribe' do
-      it 'submits email address as name if name is not present' do
-        double_request = double(:request, url: true)
-        double_response = double(:response, success?: true)
-
-        expect(double_request).
-          to receive(:body=).
-          with({name: "Bob", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}}).
-          and_return(double_response)
-
-        allow(client).to receive(:post).and_yield(double_request)
-        get_respone_api.subscribe(1122, 'bobloblaw@lawblog.com', 'Bob')
+    context "#tags" do
+      it 'returns hash array of hashes of ids and names' do
+        allow(client).to receive(:get).and_return(tags_success_response)
+        expect(get_respone_api.tags).to eq([{'id' => tag_id, 'name' => tag_name}])
       end
 
-      it 'does not submit email address as name if name is present' do
-        double_request = double(:request, url: true)
-        double_response = double(:response, success?: true)
+      it 'raise exception when time out' do
+        allow(client).to receive(:get).and_raise(Faraday::TimeoutError)
+        expect { get_respone_api.tags }.to raise_error(Faraday::TimeoutError)
+      end
 
-        expect(double_request).
-          to receive(:body=).
-          with({name: "bobloblaw@lawblog.com", email: "bobloblaw@lawblog.com", campaign: {campaignId: 1122}}).
-          and_return(double_response)
+      it 'raise exception when invalid credentials' do
+        allow(client).to receive(:get).and_return(failure_response)
+        expect { get_respone_api.tags }.to raise_error('things went really bad')
+      end
 
-        allow(client).to receive(:post).and_yield(double_request)
-        get_respone_api.subscribe(1122, 'bobloblaw@lawblog.com')
+      it 'logs parsed error message in the event of failed request' do
+        allow(client).to receive(:get).and_return(failure_response)
+        expect(get_respone_api).
+          to receive(:log).
+          with("getting lists returned 'things went really bad' with the code 500")
+        expect { get_respone_api.tags }.to raise_error(RuntimeError)
+      end
+    end
+
+    context '#subscribe' do
+      let(:successful_response) { double(:response, success?: true) }
+      let(:request_body) do
+        {
+          name: name,
+          email: email,
+          campaign: {
+            campaignId: campaign_id
+          }
+        }
+      end
+      let(:contact_list) { create :contact_list, :with_tags }
+
+      it 'submits name and email address if both are present' do
+        allow(client).to receive(:post).with('contacts', request_body).
+          and_return successful_response
+
+        get_respone_api.subscribe(campaign_id, email, name)
+      end
+
+      it 'submits email address as name if no name is present' do
+        allow(client).to receive(:post).with('contacts', request_body.merge(name: email)).
+          and_return successful_response
+
+        get_respone_api.subscribe(campaign_id, email)
+      end
+
+      it 'assign selected tags to the recently/previously added and confirmed contact' do
+        api = ServiceProviders::GetResponseApi.new({ identity: identity, contact_list: contact_list })
+
+        latest_contacts_successful_response = double :response, {
+          success?: true,
+          body: [
+            {
+              contactId: contact_id,
+              email: email
+            }
+          ].to_json
+        }
+
+        tags = contact_list.tags.map { |tag| { tagId: tag } }
+
+        expect(client).to receive(:post).with('contacts', request_body).
+          and_return successful_response
+        expect(client).to receive(:get).
+          and_return latest_contacts_successful_response
+        expect(client).to receive(:post).with("contacts/#{ contact_id }", { tags: tags }).
+          and_return latest_contacts_successful_response
+
+        api.subscribe(campaign_id, email, name)
       end
 
       it 'logs parsed error message in the event of failed request' do
         allow(client).to receive(:post).and_return(failure_response)
+
         expect(get_respone_api).
           to receive(:log).
-          with("sync error bobloblaw@lawblog.com sync returned 'things went really bad' with the code 500")
-        get_respone_api.subscribe(1122, 'bobloblaw@lawblog.com')
+          with("sync error #{ email } sync returned 'things went really bad' with the code 500")
+
+        get_respone_api.subscribe(campaign_id, email)
       end
 
       it 'handles time out' do
         allow(client).to receive(:post).and_raise(Faraday::TimeoutError)
+
         expect(get_respone_api).
           to receive(:log).
           with("sync timed out")
-        get_respone_api.subscribe(1122, 'bobloblaw@lawblog.com')
+
+        get_respone_api.subscribe(campaign_id, email)
       end
     end
   end
