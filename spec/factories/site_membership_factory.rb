@@ -8,7 +8,7 @@ FactoryGirl.define do
       role 'owner'
     end
 
-    factory :site_adminship do
+    trait :admin do
       user
       role 'admin'
     end
@@ -18,5 +18,7 @@ FactoryGirl.define do
       association :site, :with_rule
       user
     end
+
+    factory :site_admin, traits: [:admin]
   end
 end
