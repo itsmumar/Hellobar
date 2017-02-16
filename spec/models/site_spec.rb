@@ -15,7 +15,7 @@ describe Site do
 
   describe '#owners_and_admins' do
     it "should return site's owners & admins" do
-      create(:site_admin, :site => @site)
+      create(:site_membership, :admin, :site => @site)
       %w(owner admin).each do |role|
         expect(@site.owners_and_admins.where(site_memberships: { role: role}).count).to eq(1)
       end

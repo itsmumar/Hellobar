@@ -18,7 +18,5 @@ FactoryGirl.define do
       association :site, :with_rule
       user
     end
-
-    factory :site_admin, traits: [:admin]
   end
 end
