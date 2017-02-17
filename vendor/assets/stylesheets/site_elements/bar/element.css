@@ -18,6 +18,10 @@
   vertical-align: middle;
 }
 
+#hellobar-bar .hb-logo-wrapper {
+  width: 0.01%;
+}
+
 #hellobar-bar .hb-arrow {
   border-width: 0px;
 }
