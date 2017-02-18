@@ -82,6 +82,27 @@ module ServiceProviders
       end
     end
 
+    def redress_tagging
+      contacts = contacts_with_tags(10)
+      subscribers = subscribers_with_tags(30)
+      subscribers_ids = subscribers.collect { |subscriber| subscriber["contactId"] }
+
+      contacts.each do |contact|
+        found_subscriber = subscribers.map do |subscriber|
+          return subscriber if subscriber["contactId"] == contact["contactId"]
+        end
+
+        if found_subscriber
+          subscriber_tags = found_subscriber["tags"].map { |tag| tag["tagId"] }
+          contact_tags = contact["tags"].map { |tag| tag["tagId"] }
+
+          unless subscriber_tags.sort == contact_tags.sort
+            assign_tags contact_id: contact["contactId"], tags: subscriber_tags
+          end
+        end
+      end
+    end
+
     def valid?
       !!lists
     rescue => error
@@ -108,6 +129,57 @@ module ServiceProviders
           'X-Auth-Token' => "api-key #{ api_key }"
         }
       }
+    end
+
+    def contacts_with_tags(count = 10)
+      contacts = fetch_latest_contacts(count)
+      merge_tags(contacts)
+
+      # Comment me
+      # contacts = [{"contactId"=>"PMwlAP", "email"=>"suram17022@gmail.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}, {"tagId"=>"pJub", "name"=>"new_lead", "href"=>"https://api.getresponse.com/v3/tags/pJub", "color"=>""}, {"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PM9yT7", "email"=>"suram20171702@gmail.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}, {"tagId"=>"pJub", "name"=>"new_lead", "href"=>"https://api.getresponse.com/v3/tags/pJub", "color"=>""}, {"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PMiZSm", "email"=>"suram17021@gmail.com", "tags"=>[{"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PMinwr", "email"=>"suram1702@gmail.com", "tags"=>[{"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PMZbgF", "email"=>"xoishb@gmail.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}, {"tagId"=>"pJub", "name"=>"new_lead", "href"=>"https://api.getresponse.com/v3/tags/pJub", "color"=>""}, {"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PMZC7r", "email"=>"crossover.hellobar@gmail.com", "tags"=>[{"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PMZFem", "email"=>"hellobarqa@gmail.com", "tags"=>[{"tagId"=>"pJub", "name"=>"new_lead", "href"=>"https://api.getresponse.com/v3/tags/pJub", "color"=>""}]}, {"contactId"=>"PMZ56E", "email"=>"hellobareng@gmail.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}]}, {"contactId"=>"PQATOL", "email"=>"hellobardev@gmail.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}]}, {"contactId"=>"PQ5IE5", "email"=>"pawel.goscicki+feb16@crossover.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}]}]
+    end
+
+    def merge_tags(contacts)
+      contacts.map do |contact|
+        contact["tags"] = contact_details(contact["contactId"])["tags"]
+      end
+
+      contacts
+    end
+
+    def subscribers_with_tags(count = 10)
+      subscribers = @contact_list.subscribers(30).map do |subscriber|
+        search_by_email(subscriber[:email])
+      end
+
+      merge_tags(subscribers)
+
+      # Comment me
+      # [{"contactId"=>"PMwlAP", "href"=>"https://api.getresponse.com/v3/contacts/PMwlAP", "name"=>"170220172", "email"=>"suram17022@gmail.com", "note"=>nil, "origin"=>"api", "dayOfCycle"=>nil, "changedOn"=>"2017-02-17T11:42:34+0000", "timeZone"=>"Australia/Sydney", "ipAddress"=>"220.240.36.173", "activities"=>"https://api.getresponse.com/v3/contacts/PMwlAP/activities", "campaign"=>{"campaignId"=>"TWVsq", "href"=>"https://api.getresponse.com/v3/campaigns/TWVsq", "name"=>"sergeyshakhov"}, "createdOn"=>"2017-02-17T11:36:16+0000", "scoring"=>nil, "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}, {"tagId"=>"pJub", "name"=>"new_lead", "href"=>"https://api.getresponse.com/v3/tags/pJub", "color"=>""}, {"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PM9yT7", "href"=>"https://api.getresponse.com/v3/contacts/PM9yT7", "name"=>"201717022017", "email"=>"suram20171702@gmail.com", "note"=>nil, "origin"=>"api", "dayOfCycle"=>nil, "changedOn"=>"2017-02-17T11:42:38+0000", "timeZone"=>"Australia/Sydney", "ipAddress"=>"220.240.36.173", "activities"=>"https://api.getresponse.com/v3/contacts/PM9yT7/activities", "campaign"=>{"campaignId"=>"TWVsq", "href"=>"https://api.getresponse.com/v3/campaigns/TWVsq", "name"=>"sergeyshakhov"}, "createdOn"=>"2017-02-17T11:27:32+0000", "scoring"=>nil, "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}, {"tagId"=>"pJub", "name"=>"new_lead", "href"=>"https://api.getresponse.com/v3/tags/pJub", "color"=>""}, {"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}]
+    end
+
+    def search_by_email(email)
+      response = client.get 'contacts', { query: { email: email } }
+
+      if response.success?
+        (JSON.parse response.body).first
+      else
+        error_message = JSON.parse(response.body)['codeDescription']
+        log "getting lists returned '#{ error_message }' with the code #{ response.status }"
+        raise error_message
+      end
+    end
+
+    def contact_details(contact_id)
+      response = client.get "contacts/#{contact_id}"
+
+      if response.success?
+        JSON.parse response.body
+      else
+        error_message = JSON.parse(response.body)['codeDescription']
+        log "getting lists returned '#{ error_message }' with the code #{ response.status }"
+        raise error_message
+      end
     end
 
     def fetch_resource(resource)
