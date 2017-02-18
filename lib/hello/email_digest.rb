@@ -3,8 +3,8 @@ module Hello::EmailDigest
 
   class << self
     def send(site)
-      site.owners_and_admins.each do |owner|
-        mailer = mailer_for_site(site, owner)
+      site.owners_and_admins.each do |recipient|
+        mailer = mailer_for_site(site, recipient)
         return if mailer.nil? || mailer.is_a?(ActionMailer::Base::NullMail) || mailer.html_part.nil?
 
         end_date = EmailDigestHelper.date_of_previous("Sunday")
@@ -15,8 +15,8 @@ module Hello::EmailDigest
                     site_url: site.url,
                     date: start_date.strftime("%b %-d") + " - " + end_date.strftime(end_date.month == start_date.month ? "%-d, %Y" : "%b %-d, %Y")}
 
-        Analytics.track(:user, owner.id, "Sent Email", {"Email Template"=>EmailDigestHelper.template_name(site)})
-        MailerGateway.send_email(EmailDigestHelper.template_name(site), owner.email, options)
+        Analytics.track(:user, recipient.id, "Sent Email", {"Email Template"=>EmailDigestHelper.template_name(site)})
+        MailerGateway.send_email(EmailDigestHelper.template_name(site), recipient.email, options)
       end
     end
 

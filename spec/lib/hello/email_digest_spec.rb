@@ -32,6 +32,19 @@ describe Hello::EmailDigest do
       DigestMailer.should_receive(:weekly_digest).and_return(nil)
       Hello::EmailDigest.mailer_for_site(site, site.users.first)
     end
+
+    it "should attempt to send digest email to admins and owners" do
+      site = sites(:zombo)
+      create(:site_membership, :admin, :site => site)
+      site.stub(has_script_installed?: true)
+
+      mail = Mail.new
+      mail.html_part = Mail::Part.new
+      allow(DigestMailer).to receive(:weekly_digest).and_return(mail)
+      expect(DigestMailer).to receive(:weekly_digest).twice
+
+      Hello::EmailDigest.send(site)
+    end
   end
 
 end
