@@ -17,7 +17,7 @@ html
 
     = csrf_meta_tags
 
-  body#hb-editor
+  body#hb-editor.loading
     - if get_ab_variation('Email Integration UI 2016-06-22', current_user) == 'original'
       = render "shared/modals/contact_list"
     - else
