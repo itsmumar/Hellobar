@@ -48,11 +48,7 @@ export default Ember.Component.extend({
   isCustom: Ember.computed.equal('model.type', 'Custom'),
 
   previewStyleString: (function () {
-    if (this.get('isMobile')) {
-      return `background-image:url(${this.get('model.site_preview_image_mobile')})`;
-    } else {
-      return `background-image:url(${this.get('model.site_preview_image')})`;
-    }
+    return `background-image: url(${ this.get('previewImageURL') })`;
   }).property('isMobile', 'model.site_preview_image', 'model.site_preview_image_mobile'),
 
   previewImageURL: (function () {
