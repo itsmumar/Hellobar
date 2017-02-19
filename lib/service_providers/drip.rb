@@ -30,6 +30,11 @@ class ServiceProviders::Drip < ServiceProviders::Email
   end
   alias_method :lists, :campaigns
 
+  def tags
+    response = @client.tags
+    response.tags.map(&:raw_attributes)
+  end
+
   def subscribe(campaign_id, email, name = nil, double_optin = true)
     opts = { new_email: email }
 
