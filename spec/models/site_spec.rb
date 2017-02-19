@@ -13,6 +13,15 @@ describe Site do
     expect(@site.owners.first).to eq(users(:joey))
   end
 
+  describe '#owners_and_admins' do
+    it "should return site's owners & admins" do
+      create(:site_membership, :admin, :site => @site)
+      %w(owner admin).each do |role|
+        expect(@site.owners_and_admins.where(site_memberships: { role: role}).count).to eq(1)
+      end
+    end
+  end
+
   describe "#create_default_rules" do
     it "creates rules for the site" do
       site = sites(:horsebike)

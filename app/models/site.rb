@@ -355,6 +355,10 @@ class Site < ActiveRecord::Base
     users.where(site_memberships: { role: Permissions::OWNER } )
   end
 
+  def owners_and_admins
+    users.where("site_memberships.role = 'admin' OR site_memberships.role = 'owner'")
+  end
+
   def had_wordpress_bars?
     site_elements.where.not(wordpress_bar_id: nil).any?
   end
