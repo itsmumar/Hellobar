@@ -12,6 +12,7 @@ class ServiceProviders::Drip < ServiceProviders::Email
     end
 
     @identity = identity
+    @contact_list = opts[:contact_list]
     @client = Drip::Client.new do |c|
       c.access_token = identity.credentials['token']
       c.account_id   = identity.extra['account_id']
@@ -32,11 +33,11 @@ class ServiceProviders::Drip < ServiceProviders::Email
 
   def tags
     response = @client.tags
-    response.tags.map(&:raw_attributes)
+    response.body['tags'].map { |tag| { 'id' => tag, 'name' => tag } }
   end
 
   def subscribe(campaign_id, email, name = nil, double_optin = true)
-    opts = { new_email: email }
+    opts = { new_email: email, tags: @contact_list.tags }
 
     if name.present?
       split = name.split(' ', 2)
