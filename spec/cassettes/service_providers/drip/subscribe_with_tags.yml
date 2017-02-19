@@ -1,0 +1,64 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.getdrip.com/v2/4773344/campaigns/98654057/subscribers
+    body:
+      encoding: UTF-8
+      string: '{"subscribers":[{"new_email":"raj.kumar+9@crossover.com","tags":[],"custom_fields":{"name":"Test
+        Mname User","fname":"Test","lname":"Mname User"},"double_optin":false,"email":"raj.kumar+9@crossover.com"}]}'
+    headers:
+      User-Agent:
+      - Drip Ruby v0.0.7
+      Content-Type:
+      - application/vnd.api+json
+      Accept:
+      - "*/*"
+      Authorization:
+      - Bearer fake_key
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/vnd.api+json; charset=utf-8
+      Date:
+      - Sun, 19 Feb 2017 14:48:40 GMT
+      Etag:
+      - W/"31c02c79a5a7677d07d1d45e57e9467b"
+      Location:
+      - https://api.getdrip.com/v2/4773344/subscribers/g54g2chxvjdu5mowbi2n
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Ratelimit-Limit:
+      - '3600'
+      X-Ratelimit-Remaining:
+      - '3593'
+      X-Request-Id:
+      - 31395e20-2211-4cae-9df4-8e2ff306940a
+      X-Runtime:
+      - '0.181418'
+      X-Xss-Protection:
+      - 1; mode=block
+      Content-Length:
+      - '651'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"links":{"subscribers.account":"https://api.getdrip.com/v2/accounts/{subscribers.account}"},"subscribers":[{"id":"g54g2chxvjdu5mowbi2n","href":"https://api.getdrip.com/v2/8056783/subscribers/g54g2chxvjdu5mowbi2n","status":"active","email":"raj.kumar+9@crossover.com","time_zone":null,"utc_offset":0,"visitor_uuid":null,"custom_fields":{"fname":"Test","lname":"Mname
+        User","name":"Test Mname User"},"tags":[],"created_at":"2017-02-19T14:48:40Z","ip_address":null,"user_agent":null,"lifetime_value":null,"original_referrer":null,"landing_url":null,"prospect":null,"base_lead_score":null,"lead_score":null,"user_id":null,"links":{"account":"8056783"}}]}'
+    http_version:
+  recorded_at: Sun, 19 Feb 2017 14:48:40 GMT
+recorded_with: VCR 2.9.0
