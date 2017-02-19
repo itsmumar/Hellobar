@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://test.api-us.com/admin/api.php?api_action=list_list&api_key=valid-active-campaign-key&api_output=json&ids=all
+    uri: https://crossover.api-us1.com/admin/api.php?api_action=list_list&api_key=valid-active-campaign-key&api_output=json&ids=all
     body:
       encoding: UTF-8
       string: ''
@@ -22,10 +22,10 @@ http_interactions:
       - PHP/5.3.3
       Set-Cookie:
       - PHPSESSID=c9nmgldv6gd1hh8vd4l9r2sjb6; path=/; HttpOnly
-      - em_acp_globalauth_cookie=8aba3407396deab25ec0850f918c36831; path=/; domain=test.api-us.com;
+      - em_acp_globalauth_cookie=8aba3407396deab25ec0850f918c36831; path=/; domain=crossover.api-us1.com;
         secure
       - em_acp_globalauth_cookie=deleted; expires=Sun, 31-Jan-2016 20:58:05 GMT; path=/;
-        domain=test.api-us.com
+        domain=crossover.api-us1.com
       Expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
       Pragma:
@@ -47,6 +47,6 @@ http_interactions:
       string: '{"0":{"id":"1","name":"HelloBar List","cdate":"2017-01-25 17:47:54","private":"0","userid":"1","subscriber_count":7},"1":{"id":"2","name":"Pawe\u0142''s
         Test List","cdate":"2017-01-25 23:01:59","private":"0","userid":"1","subscriber_count":1},"result_code":1,"result_message":"Success:
         Something is returned","result_output":"json"}'
-    http_version: 
+    http_version:
   recorded_at: Mon, 30 Jan 2017 20:58:06 GMT
 recorded_with: VCR 2.9.0

@@ -6,6 +6,7 @@ export default Ember.Controller.extend({
   inlineEditing: Ember.inject.service(),
   theming: Ember.inject.service(),
   validation: Ember.inject.service(),
+  bus: Ember.inject.service(),
 
   init() {
     const validationRules = [
@@ -34,6 +35,13 @@ export default Ember.Controller.extend({
       }
     );
     this.get('inlineEditing').setModelHandler(this);
+    this._subscribeToBusEvents();
+  },
+
+  _subscribeToBusEvents() {
+    this.get('bus').subscribe('hellobar.core.application.initialized', params => {
+      $('body').removeClass('loading');
+    });
   },
 
 

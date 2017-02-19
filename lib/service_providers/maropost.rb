@@ -8,7 +8,7 @@ module ServiceProviders
 
       @client = Faraday.new(url: Hellobar::Settings[:maropost_url]) do |faraday|
         faraday.request :json
-        faraday.response :logger
+        faraday.response :logger unless Rails.env.test?
         faraday.adapter Faraday.default_adapter
       end
     end

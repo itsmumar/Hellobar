@@ -5,13 +5,11 @@ export default Ember.Component.extend({
   classNames: ['editor-wrapper'],
   classNameBindings: ['isMobile', 'isFullscreen', 'isCallType'],
 
-  //-----------  State Bindings  -----------#
+  bus: Ember.inject.service(),
 
-  // Tracks the application state properties from the application router
-  // and uses them to generate state-specific classes for CSS. All
-  // animations are handled by CSS transitions and toggleing classes.
-
-
+  didRender() {
+    Ember.run.next(() => this.get('bus').trigger('hellobar.core.application.initialized'));
+  },
 
   //-----------  Click Action  -----------#
 

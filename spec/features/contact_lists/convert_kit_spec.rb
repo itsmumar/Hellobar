@@ -1,7 +1,7 @@
 require 'integration_helper'
 require 'service_provider_integration_helper'
 
-feature "ConvertKit Integration", js: true do
+feature "ConvertKit integration", :js do
   let(:provider) { 'convert_kit' }
 
   before do
@@ -18,32 +18,30 @@ feature "ConvertKit Integration", js: true do
     open_provider_form(@user, provider)
     fill_in 'contact_list[data][api_key]', with: 'invalid-key'
 
-    page.find(".button.ready").click
+    find(".button.ready").click
     expect(page).to have_content('There was a problem connecting your ConvertKit account')
   end
 
-  scenario "connecting to Active Campaign" do
-    connect_convert_kit
+  scenario "connecting to Convert Kit and selecting a list" do
+    connect_to_provider
 
     expect(page).to have_content('Choose a ConvertKit form to sync with')
-  end
 
-  scenario "select list" do
-    connect_convert_kit
+    find('select#contact_list_remote_list_id').select('XO')
+    find('.button.submit').click
 
-    page.find('select#contact_list_remote_list_id').select('XO')
-    page.find('.button.submit').click
-
-    page.find('#edit-contact-list').click
+    find('#edit-contact-list').click
 
     expect(page).to have_content("XO")
   end
 
   private
-  def connect_convert_kit
+
+  def connect_to_provider
     open_provider_form(@user, provider)
+
     fill_in 'contact_list[data][api_key]', with: 'valid-convertkit-key'
 
-    page.find(".button.ready").click
+    find(".button.ready").click
   end
 end
