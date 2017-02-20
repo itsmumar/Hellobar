@@ -19,6 +19,10 @@
     height: 100%
     position: relative
 
+    .bar-bottom, .modal, .slider, .takeover
+      #hellobar-pusher
+        display: none !important
+
     #hellobar-preview-container
       top: 0
       width: 100%
@@ -28,49 +32,48 @@
 
       canvas
         z-index: 10
-        position: relative
+        position: absolute
+        top: 0
+        left: 0
 
       iframe
         width: 100%
         position: absolute
-        z-index: 2
-
-      #hellobar-pusher
-        display: none !important
+        z-index: 3
 
       .preview-wrapper
-        top: 0
-        left: 0
         width: 100%
         height: 100%
-        position: absolute
         box-shadow: inset 0 0 1em rgba(0,0,0,0.15)
 
-        .preview-message
-          left: 0
-          right: 0
-          position: absolute
-          text-align: center
-          @include vertical-align()
+      .loading-message
+        text-align: center
+        position: absolute
+        top: 50%
+        right: 50%
+        z-index: 1
+        min-width: 160px
+        // perspective is set to eliminate font blurring
+        @include transform(perspective(1px) translateX(50%) translateY(-50%))
 
-          i:before
-            display: block
-            font-size: 2.75em
-            @include animation(spin 2s infinite ease-in-out)
+        i:before
+          display: block
+          font-size: 2.75em
+          @include animation(spin 2s infinite ease-in-out)
 
       .preview-image
-        top: 0
-        left: 0
         width: 100%
         height: 100%
         margin-top: 0
         border-width: 0
-        position: absolute
         border-style: solid
-        border-color: $white
+        border-color: transparent
         background-size: cover
         background-repeat: no-repeat
         background-position: center top
+        background-color: transparent
+        position: relative
+        z-index: 2
 
       .preview-image-for-colorpicker
         top: -99999px
@@ -78,32 +81,8 @@
         width: initial
         position: absolute
 
-      &.is-pushed.Bar
+      &.is-pushed.bar
         overflow: hidden
-
-        canvas
-          margin-top: -12px
-
-        &.bar-top
-
-          &.regular .preview-image
-            border-top-width: 29px
-
-          &.large .preview-image
-            border-top-width: 49px
-
-        &.bar-bottom
-
-          &.regular .preview-image
-            border-bottom-width: 29px
-
-          &.large .preview-image
-            border-bottom-width: 49px
-
-      iframe.bar-bottom
-        bottom: -1px
-        position: absolute
-        @include transition()
 
   /*-----------  Fullscreen State  -----------*/
 
@@ -134,5 +113,5 @@
         padding-left: 0 !important
         position: absolute !important
 
-      &.is-pushed.Bar.bar-top .preview-image
+      &.is-pushed.bar.bar-top .preview-image
         top: -12px !important
