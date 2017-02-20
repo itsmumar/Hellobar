@@ -55,14 +55,16 @@ module ServiceProviders
             # we will tag the two most recently added contacts (we could tag
             # only the most recent one, but there could be some race conditions)
             # This is a little bit of a hack, but it should give us 95% of what
-            # is required when it comes to tagging
-            contacts = fetch_latest_contacts
+            # is required when it comes to tagging.
+            # We add tags only to contacts which are also stored at HelloBar,
+            # so that unknown origin contacts at GR won’t get tagged by us
+            # https://crossover.atlassian.net/browse/XOHB-1397
+            contacts = fetch_latest_contacts(20)
+            subscribers = @contact_list.subscribers(10)
 
-            contacts.each do |contact|
-              assign_tags contact_id: contact["contactId"], tags: tags
+            find_union(contacts, subscribers, 2).each do |contact|
+              assign_tags contact_id: contact["contactId"], tags: @contact_list.tags
             end
-
-            redress_tagging
           else
             response
           end
@@ -81,17 +83,6 @@ module ServiceProviders
     def batch_subscribe(list_id, subscribers, double_optin = true)
       subscribers.each do |subscriber|
         subscribe(list_id, subscriber[:email], subscriber[:name])
-      end
-    end
-
-    # https://crossover.atlassian.net/browse/XOHB-1397
-    def redress_tagging
-      contacts = fetch_latest_contacts(20)
-      subscribers = @contact_list.subscribers(10)
-
-      found_contacts = find_union(contacts, subscribers, 2)
-      found_contacts.each do |contact|
-        assign_tags contact_id: contact["contactId"], tags: @contact_list.tags
       end
     end
 
@@ -131,7 +122,7 @@ module ServiceProviders
           found_contacts << contact if subscriber["email"] == contact["email"]
         end
 
-        break if found_contacts.count <= count
+        break if found_contacts.count == count
       end
 
       found_contacts
