@@ -8,7 +8,7 @@
   <div class="hb-content-wrapper">
     <div class="hb-text-wrapper">
       <div id="hb_msg_container"
-           class="hb-headline-text hb-editable-block hb-editable-block-with-full-formatting"
+           class="hb-headline-text {{HB.t(siteElement.questionified) ? '' : 'hb-editable-block hb-editable-block-with-full-formatting'}}"
            data-hb-editable-block="headline"
            data-hb-inline-editor-placeholder="Headline">
         {{siteElement.headline}}
