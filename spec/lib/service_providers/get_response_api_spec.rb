@@ -128,6 +128,8 @@ describe ServiceProviders::GetResponseApi do
 
         tags = contact_list.tags.map { |tag| { tagId: tag } }
 
+        expect(contact_list).to receive(:subscribers).
+          and_return([{ :contactId => "contactId", :email => "bobloblaw@lawblog.com" }])
         expect(client).to receive(:post).with('contacts', request_body).
           and_return successful_response
         expect(client).to receive(:get).

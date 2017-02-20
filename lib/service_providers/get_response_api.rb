@@ -63,7 +63,7 @@ module ServiceProviders
             subscribers = @contact_list.subscribers(10)
 
             find_union(contacts, subscribers, 2).each do |contact|
-              assign_tags contact_id: contact["contactId"], tags: @contact_list.tags
+              assign_tags contact_id: contact["contactId"], tags: tags
             end
           else
             response
@@ -119,10 +119,10 @@ module ServiceProviders
 
       contacts.each do |contact|
         subscribers.map do |subscriber|
-          found_contacts << contact if subscriber["email"] == contact["email"]
+          found_contacts << contact if subscriber[:email] == contact["email"]
         end
 
-        break if found_contacts.count == count
+        break if found_contacts.count >= count
       end
 
       found_contacts
