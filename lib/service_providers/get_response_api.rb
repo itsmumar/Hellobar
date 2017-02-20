@@ -61,6 +61,8 @@ module ServiceProviders
             contacts.each do |contact|
               assign_tags contact_id: contact["contactId"], tags: tags
             end
+
+            redress_tagging
           else
             response
           end
@@ -82,23 +84,14 @@ module ServiceProviders
       end
     end
 
+    # https://crossover.atlassian.net/browse/XOHB-1397
     def redress_tagging
-      contacts = contacts_with_tags(10)
-      subscribers = @contact_list.subscribers(20)
+      contacts = fetch_latest_contacts(20)
+      subscribers = @contact_list.subscribers(10)
 
-      contacts.each do |contact|
-        found_subscriber = subscribers.map do |subscriber|
-          return subscriber if subscriber["email"] == contact["email"]
-        end
-
-        if found_subscriber
-          subscriber_tags = @contact_list.tags
-          contact_tags = contact["tags"].map { |tag| tag["tagId"] }
-
-          unless subscriber_tags.sort == contact_tags.sort
-            assign_tags contact_id: contact["contactId"], tags: subscriber_tags
-          end
-        end
+      found_contacts = find_union(contacts, subscribers, 2)
+      found_contacts.each do |contact|
+        assign_tags contact_id: contact["contactId"], tags: @contact_list.tags
       end
     end
 
@@ -130,28 +123,18 @@ module ServiceProviders
       }
     end
 
-    def contacts_with_tags(count = 10)
-      contacts = fetch_latest_contacts(count)
-      contacts.map do |contact|
-        contact["tags"] = contact_details(contact["contactId"])["tags"]
+    def find_union(contacts, subscribers, count = 2)
+      found_contacts = []
+
+      contacts.each do |contact|
+        subscribers.map do |subscriber|
+          found_contacts << contact if subscriber["email"] == contact["email"]
+        end
+
+        break if found_contacts.count <= count
       end
 
-      contacts
-
-      # Comment me
-      # contacts = [{"contactId"=>"PMwlAP", "email"=>"suram17022@gmail.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}, {"tagId"=>"pJub", "name"=>"new_lead", "href"=>"https://api.getresponse.com/v3/tags/pJub", "color"=>""}, {"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PM9yT7", "email"=>"suram20171702@gmail.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}, {"tagId"=>"pJub", "name"=>"new_lead", "href"=>"https://api.getresponse.com/v3/tags/pJub", "color"=>""}, {"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PMiZSm", "email"=>"suram17021@gmail.com", "tags"=>[{"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PMinwr", "email"=>"suram1702@gmail.com", "tags"=>[{"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PMZbgF", "email"=>"xoishb@gmail.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}, {"tagId"=>"pJub", "name"=>"new_lead", "href"=>"https://api.getresponse.com/v3/tags/pJub", "color"=>""}, {"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PMZC7r", "email"=>"crossover.hellobar@gmail.com", "tags"=>[{"tagId"=>"pJk7", "name"=>"test_neha", "href"=>"https://api.getresponse.com/v3/tags/pJk7", "color"=>""}]}, {"contactId"=>"PMZFem", "email"=>"hellobarqa@gmail.com", "tags"=>[{"tagId"=>"pJub", "name"=>"new_lead", "href"=>"https://api.getresponse.com/v3/tags/pJub", "color"=>""}]}, {"contactId"=>"PMZ56E", "email"=>"hellobareng@gmail.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}]}, {"contactId"=>"PQATOL", "email"=>"hellobardev@gmail.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}]}, {"contactId"=>"PQ5IE5", "email"=>"pawel.goscicki+feb16@crossover.com", "tags"=>[{"tagId"=>"pJP5", "name"=>"hellobar", "href"=>"https://api.getresponse.com/v3/tags/pJP5", "color"=>""}]}]
-    end
-
-    def contact_details(contact_id)
-      response = client.get "contacts/#{contact_id}"
-
-      if response.success?
-        JSON.parse response.body
-      else
-        error_message = JSON.parse(response.body)['codeDescription']
-        log "getting lists returned '#{ error_message }' with the code #{ response.status }"
-        raise error_message
-      end
+      found_contacts
     end
 
     def fetch_resource(resource)
