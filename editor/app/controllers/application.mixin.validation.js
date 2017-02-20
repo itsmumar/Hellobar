@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-// GLOBALS: isValidNumber functions
+// GLOBALS: isValidNumber function
 
 export default Ember.Mixin.create({
 
@@ -27,6 +27,5 @@ export default Ember.Mixin.create({
     ];
     this.get('validation').add('main', validationRules);
   }
-
 
 });
