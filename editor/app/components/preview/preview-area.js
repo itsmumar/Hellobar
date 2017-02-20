@@ -9,21 +9,7 @@ export default Ember.Component.extend({
   imaging: Ember.inject.service(),
 
   model: null,
-
   isMobile: null,
-
-  init() {
-    this._super(...arguments);
-    console.log('init called');
-    console.log($);
-    console.log($('.preview-image'));
-
-    // this.hideLoadingMessage();
-    $('.preview-image').on('load', function() {
-      console.log('loaded');
-      $('.loading-message').addClass('hidden');
-    });
-  },
 
   didInsertElement() {
     HB.addPreviewInjectionListener(container => {
@@ -33,9 +19,6 @@ export default Ember.Component.extend({
 
     Ember.run.next(() => {
       this.detectColorPalette();
-
-      // assume we can hide loading message when Preview component is loaded
-      // setTimeout(this.hideLoadingMessage, 1500);
     });
   },
 
@@ -71,34 +54,30 @@ export default Ember.Component.extend({
     const image = $('.preview-image-for-colorpicker').get(0);
 
     return imagesLoaded(image, () => {
-        const dominantColor = formatRGB(colorThief.getColor(image));
-        const colorPalette = colorThief.getPalette(image, 4).map(color => formatRGB(color));
+      const dominantColor = formatRGB(colorThief.getColor(image));
+      const colorPalette = colorThief.getPalette(image, 4).map(color => formatRGB(color));
 
-        this.set('applicationController.dominantColor', dominantColor);
-        this.set('applicationController.colorPalette', colorPalette);
-      }
-    );
-  },
-
-  hideLoadingMessage () {
-    // $('#hellobar-preview-container .loading-message').addClass('hidden');
-
-    // hide loading message when preview image has loaded
-    // $('.preview-image').on('load', function () {
+      this.set('applicationController.dominantColor', dominantColor);
+      this.set('applicationController.colorPalette', colorPalette);
+    });
   },
 
   previewContainerCssClasses: (function () {
     let classes = [];
+
     classes.push(this.get('barPosition'));
     classes.push(this.get('barSize'));
     classes.push(this.get('elementType').toLowerCase());
+
     this.get('isPushed') && classes.push('is-pushed');
     this.get('isMobile') && classes.push('hellobar-preview-container-mobile');
+
     return classes.join(' ');
   }).property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile'),
 
   componentBackground: function () {
     const backgroundColor = '#f6f6f6';
+
     if (this.get('isMobile')) {
       const phoneImageUrl = this.get('imaging').imagePath('iphone-bg.png');
       return `${backgroundColor} url(${phoneImageUrl}) center center no-repeat`;
