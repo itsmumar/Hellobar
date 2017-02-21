@@ -1,0 +1,60 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.getdrip.com/v2/4773344/tags
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Drip Ruby v0.0.7
+      Content-Type:
+      - application/vnd.api+json
+      Accept:
+      - "*/*"
+      Authorization:
+      - Bearer fake_key
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/vnd.api+json; charset=utf-8
+      Date:
+      - Sun, 19 Feb 2017 14:38:36 GMT
+      Etag:
+      - W/"f64acdd7fdf2df0a2c05d8884ffe88ed"
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Ratelimit-Limit:
+      - '3600'
+      X-Ratelimit-Remaining:
+      - '3594'
+      X-Request-Id:
+      - 8e2709bf-29ea-415b-950f-d9c282670b91
+      X-Runtime:
+      - '0.027493'
+      X-Xss-Protection:
+      - 1; mode=block
+      Content-Length:
+      - '56'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"tags":["test-tag1","test-tag1,test-tag2","test-tag2"]}'
+    http_version:
+  recorded_at: Sun, 19 Feb 2017 14:38:36 GMT
+recorded_with: VCR 2.9.0

@@ -378,6 +378,7 @@ class @ContactListModal extends Modal
       providerName: label
       isProviderConvertKit: (label == 'ConvertKit')
       isProviderGetResponse: (label == 'GetResponse')
+      isProviderDrip: (label == 'Drip')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
@@ -421,13 +422,14 @@ class @ContactListModal extends Modal
         @_renderBlock("syncDetails", $.extend(defaultContext, {identity: data})).show()
         @_renderBlock("instructions", defaultContext).hide()
         @options.identity = data
+        showListsAndTags = defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse or defaultContext.isProviderDrip
 
         if (lists && lists[0].error != undefined) || (tags && data.tags[0].error != undefined)
           $('footer a.submit').attr('disabled', 'disabled')
           $('.flash-block').addClass('error show').text('There was a problem connecting your ' + label + ' account. Please try again later.')
 
-        if data.provider == "infusionsoft" or defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse
-          if defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse
+        if data.provider == "infusionsoft" or showListsAndTags
+          if showListsAndTags
             @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
           tagsContext = $.extend(true, {}, defaultContext, {identity: data})
           tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
