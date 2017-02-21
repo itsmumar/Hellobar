@@ -17,6 +17,7 @@ class Site < ActiveRecord::Base
   accepts_nested_attributes_for :subscriptions
   has_many :bills, -> {order 'id'}, through: :subscriptions
   has_many :image_uploads, dependent: :destroy
+  has_many :autofills, dependent: :destroy
 
   scope :protocol_ignored_url, ->(url) {
     host = normalize_url(url).normalized_host if url.include?('http')

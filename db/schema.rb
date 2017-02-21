@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170111034928) do
+ActiveRecord::Schema.define(version: 20170221212712) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -57,6 +57,17 @@ ActiveRecord::Schema.define(version: 20170111034928) do
 
   add_index "authentications", ["uid"], name: "index_authentications_on_uid", using: :btree
   add_index "authentications", ["user_id"], name: "index_authentications_on_user_id", using: :btree
+
+  create_table "autofills", force: true do |t|
+    t.integer  "site_id",           null: false
+    t.string   "name",              null: false
+    t.string   "listen_selector",   null: false
+    t.string   "populate_selector", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "autofills", ["site_id"], name: "index_autofills_on_site_id", using: :btree
 
   create_table "billing_attempts", force: true do |t|
     t.integer  "bill_id"
