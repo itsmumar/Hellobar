@@ -129,6 +129,7 @@ group :test do
   gem 'rspec_junit_formatter'
   gem "database_cleaner", '~> 1.3'
   gem "fivemat"
+  gem 'shoulda-matchers'
   gem "timecop"
   gem "vcr"
   gem "webmock"
