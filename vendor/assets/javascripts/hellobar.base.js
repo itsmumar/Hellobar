@@ -2180,6 +2180,8 @@ var HB = {
     var originalSiteElement = siteElement;
     siteElement = siteElement.dataCopy;
 
+    siteElement.questionified = true;
+
     // Set the template and headline
     // Remove the image from the question
     siteElement.template_name = siteElement.template_name.split('_')[0] + '_question';
