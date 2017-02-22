@@ -57,7 +57,7 @@ export default Ember.Service.extend({
    */
   validate(validationName, objectToValidate) {
     const validation = this._validations[validationName];
-    let failedRules = [];
+    let failures = [];
     _.each(validation.rules, (rule) => {
       const { validator, fieldName } = rule;
       const valuePath = rule.valuePath || fieldName;
@@ -79,7 +79,10 @@ export default Ember.Service.extend({
 
       const errorMessageText = validatorFunction()(objectToValidate, valuePath);
       if (errorMessageText) {
-        failedRules.push(rule);
+        failures.push({
+          rule,
+          error: errorMessageText
+        });
       }
       const messageComponents = _.get(validation, `fields.${fieldName}.messageComponents`);
       _.each(messageComponents, (component) => {
@@ -87,7 +90,7 @@ export default Ember.Service.extend({
       });
     });
     return new Ember.RSVP.Promise((resolve, reject) => {
-      _.isEmpty(failedRules) ? resolve() : reject(failedRules);
+      _.isEmpty(failures) ? resolve() : reject(failures);
     });
   },
 
