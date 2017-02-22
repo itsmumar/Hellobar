@@ -170,6 +170,10 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def input_tracking?
+      false
+    end
+
     protected
 
     def parent_class
@@ -328,6 +332,10 @@ class Subscription < ActiveRecord::Base
       end
 
       def content_upgrades?
+        true
+      end
+
+      def input_tracking?
         true
       end
     end
