@@ -160,7 +160,9 @@ export default Ember.Controller.extend({
         return this.set('model.answer2link_text', this.get('model.answer2link_text_placeholder'));
       }
     } else {
-      HB.showResponse = null;
+      Ember.run.next(() => {
+        HB.showResponse = null;
+      });
     }
   }).observes('model.use_question').on('init'),
 
