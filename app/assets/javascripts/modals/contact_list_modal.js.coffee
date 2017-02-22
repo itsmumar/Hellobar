@@ -378,6 +378,7 @@ class @ContactListModal extends Modal
       providerName: label
       isProviderConvertKit: (label == 'ConvertKit')
       isProviderGetResponse: (label == 'GetResponse')
+      showTagTextfield: (label == 'AWeber')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
@@ -426,8 +427,9 @@ class @ContactListModal extends Modal
           $('footer a.submit').attr('disabled', 'disabled')
           $('.flash-block').addClass('error show').text('There was a problem connecting your ' + label + ' account. Please try again later.')
 
-        if data.provider == "infusionsoft" or defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse
-          if defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse
+        showListsAndTags = defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse or defaultContext.showTagTextfield
+        if data.provider == "infusionsoft" or showListsAndTags
+          if showListsAndTags
             @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
           tagsContext = $.extend(true, {}, defaultContext, {identity: data})
           tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
@@ -437,6 +439,7 @@ class @ContactListModal extends Modal
             )
             { tag: tag, lists: clonedTags}
           )
+
           @_renderBlock("tagListSelect", tagsContext, false).show()
         else
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
