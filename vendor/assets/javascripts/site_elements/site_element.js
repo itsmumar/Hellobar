@@ -736,6 +736,10 @@ HB.SiteElement = HB.createClass({
 
   closableCssClass: function() {
     return this.closable ? 'closable' : '';
+  },
+
+  questionOrAnswerIsShown: function() {
+    return HB.t(this.questionified) || HB.showResponse;
   }
 
 });

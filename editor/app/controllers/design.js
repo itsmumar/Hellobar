@@ -159,6 +159,8 @@ export default Ember.Controller.extend({
       if (!this.get('model.answer2link_text')) {
         return this.set('model.answer2link_text', this.get('model.answer2link_text_placeholder'));
       }
+    } else {
+      HB.showResponse = null;
     }
   }).observes('model.use_question').on('init'),
 
