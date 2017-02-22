@@ -29,10 +29,18 @@
       = link_to(Hellobar::Settings[:support_location], target: '_blank') do
         i.icon-support
         | Help
+
     - if current_site.capabilities.content_upgrades?
       li
         = active_link_to site_content_upgrades_path(current_site) do
+          i.icon-opportunity
           | Content Upgrades
+
+    - if current_site.capabilities.input_tracking?
+      li
+        = active_link_to site_autofills_path(current_site) do
+          i.icon-views
+          | Input Tracking
 
 
   = button_to "Create New", new_site_site_element_path(:site_id => current_site), :class => "button", :method => :get, "data-prompt-upgrade" => current_site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"

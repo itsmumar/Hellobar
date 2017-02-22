@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  #mount_ember_app :editor, to: "/editor"
-
   resources :referrals do
     collection do
       get :accept
@@ -54,6 +52,8 @@ Rails.application.routes.draw do
         post :update_styles
       end
     end
+
+    resources :autofills, only: [:index, :new, :create, :edit, :update, :destroy]
 
     resources :image_uploads, only: [:create]
 
