@@ -118,6 +118,27 @@ describe Site do
     end
   end
 
+  describe '#has_pro_managed_subscription?' do
+    it 'returns true if the site has a ProManaged subscription' do
+      site = build_stubbed :site
+      subscription = build_stubbed :subscription, :pro_managed
+
+      expect(site).to receive(:subscriptions).and_return [subscription]
+
+      expect(site).to have_pro_managed_subscription
+    end
+
+    it 'returns false if the site does not have a ProManaged subscription' do
+      site = build_stubbed :site
+      free = build_stubbed :subscription, :free
+      pro = build_stubbed :subscription, :pro
+
+      expect(site).to receive(:subscriptions).and_return [free, pro]
+
+      expect(site).not_to have_pro_managed_subscription
+    end
+  end
+
   describe "url formatting" do
     it "adds the protocol if not present" do
       site = Site.new(:url => "zombo.com")

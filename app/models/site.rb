@@ -234,11 +234,15 @@ class Site < ActiveRecord::Base
   end
 
   def current_subscription
-    self.subscriptions.last
+    subscriptions.last
   end
 
   def highest_tier_active_subscription
-    self.subscriptions.active.to_a.sort.first
+    subscriptions.active.to_a.sort.first
+  end
+
+  def has_pro_managed_subscription?
+    subscriptions.any? { |s| s.class == Subscription::ProManaged }
   end
 
   def url_exists?(user=nil)

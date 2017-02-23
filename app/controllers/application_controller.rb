@@ -56,6 +56,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_pro_managed_subscription
+    redirect_to root_path unless current_site.has_pro_managed_subscription?
+  end
+
   def require_no_user
     if current_user
       if current_user.sites.empty?
