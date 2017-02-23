@@ -7,15 +7,44 @@
    * Abstracts out the way of storing input values (currently localStorage is used).
    */
   function ValueStorage() {
+    var expirationDays = 1;
+
     function fieldToKey(field) {
-      return field.name + '__' + encodeURI(field.listen_selector) + '__' + encodeURI(field.populate_selector);
+      return 'HB_input_' + field.site_id + '_' + field.id;
+    }
+
+    function dateToTimestamp(date) {
+      return date.toISOString();
+    }
+
+    function currentTimestamp() {
+      return dateToTimestamp(new Date());
+    }
+
+    function expirationTimestamp() {
+      var date = new Date();
+      date.setDate(date.getDate() + expirationDays);
+      return dateToTimestamp(date);
     }
 
     this.save = function (field, value) {
-      localStorage.setItem(fieldToKey(field), value);
+      localStorage.setItem(fieldToKey(field), JSON.stringify({
+        value: value,
+        expirationTimestamp: expirationTimestamp()
+      }));
     };
     this.restore = function (field) {
-      return localStorage.getItem(fieldToKey(field));
+      var key = fieldToKey(field);
+      var storedObjectAsString = localStorage.getItem(key);
+      if (storedObjectAsString) {
+        var storedObject = JSON.parse(storedObjectAsString);
+        if (storedObject.expirationTimestamp > currentTimestamp()) {
+          return storedObject.value;
+        } else {
+          localStorage.removeItem(key);
+        }
+      }
+      return undefined;
     };
   }
 
@@ -115,6 +144,7 @@
         populateValues();
         initializeValueCollection();
       }
+
       document.body ? setTimeout(doLoad, 0) : document.addEventListener('DOMContentLoaded', function (evt) {
         doLoad();
       });
