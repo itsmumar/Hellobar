@@ -1,6 +1,7 @@
 class AutofillsController < ApplicationController
 
   before_action :authenticate_user!
+  before_action :require_pro_managed_subscription
   before_action :load_site
   before_action :load_autofill, only: [:edit, :update, :destroy]
 

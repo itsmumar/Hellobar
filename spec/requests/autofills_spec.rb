@@ -4,11 +4,30 @@ describe "Autofills requests" do
 
   context 'when unauthenticated' do
     describe 'GET :index' do
-      it 'responds with redirection to login page' do
+      it 'responds with a redirect to the login page' do
         get site_autofills_path 1
 
         expect(response).to be_a_redirect
         expect(response.location).to include 'sign_in'
+      end
+    end
+  end
+
+  context 'when authenticated but without ProManaged subscription' do
+    let!(:subscription) { create :subscription, :pro }
+    let(:user) { subscription.user }
+    let(:site) { subscription.site }
+    let!(:site_membership) { create :site_membership, site: site, user: user }
+
+    before do
+      login_as user, scope: :user, run_callbacks: false
+    end
+
+    describe 'GET :index' do
+      it 'responds with a redirect to the root path' do
+        get site_autofills_path site
+
+        expect(response).to be_a_redirect
       end
     end
   end
