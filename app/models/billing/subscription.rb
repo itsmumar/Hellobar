@@ -283,10 +283,6 @@ class Subscription < ActiveRecord::Base
       def num_days_improve_data
         365
       end
-
-      def custom_html?
-        false
-      end
     end
 
     class << self
@@ -339,8 +335,8 @@ class Subscription < ActiveRecord::Base
         true
       end
     end
-    class << self
 
+    class << self
       def defaults
         {
           name: "Pro Managed",
