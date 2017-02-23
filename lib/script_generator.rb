@@ -130,6 +130,10 @@ class ScriptGenerator < Mustache
     File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
   end
 
+  def input_tracking_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/input_tracking/input_tracking.js")
+  end
+
   def ie_shims_js
     File.read("#{Rails.root}/vendor/assets/javascripts/hellobar_script/ie_shims.js")
   end
