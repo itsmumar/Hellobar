@@ -421,6 +421,7 @@ class @ContactListModal extends Modal
         @$modal.trigger('provider:connected')
         @_renderBlock("syncDetails", $.extend(defaultContext, {identity: data})).show()
         @_renderBlock("instructions", defaultContext).hide()
+        data.showTagTextfield = defaultContext.showTagTextfield
         @options.identity = data
 
         if (lists && lists[0].error != undefined) || (tags && data.tags[0].error != undefined)
