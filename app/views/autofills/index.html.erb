@@ -1,0 +1,35 @@
+<div class="autofills">
+
+<h1>Input Tracking Autofill Rules</h1>
+
+<table>
+
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Listen selector</th>
+      <th>Populate selector</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @autofills.each do |autofill| %>
+      <tr>
+        <td><%= autofill.name %>
+        <td><%= autofill.listen_selector %>
+        <td><%= autofill.populate_selector %>
+        <td><%= link_to 'Edit', edit_site_autofill_path(current_site, autofill) %>
+        <td><%= link_to 'Destroy', site_autofill_path(current_site, autofill), data: {:confirm => 'Are you sure?'}, :method => :delete %>
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>
+
+<p>
+  <%= link_to 'New Autofill Rule', new_site_autofill_path(current_site), class: 'button' %>
+</p>
+
+</div>

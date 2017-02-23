@@ -1,0 +1,14 @@
+<%= simple_form_for([current_site, @autofill]) do |f| %>
+
+  <div class="form-inputs">
+    <%= f.input :name, input_html: { maxlength: 255 }, placeholder: 'Name or label for this rule' %>
+    <%= f.input :listen_selector, input_html: { maxlength: 255 }, placeholder: 'CSS selector (comma separated fields) to listen to' %>
+    <%= f.input :populate_selector, input_html: { maxlength: 255 }, placeholder: 'CSS selector (comma separated fields) to populate data to' %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+    <%= link_to 'Cancel', site_autofills_path(current_site), class: 'button' %>
+  </div>
+
+<% end %>

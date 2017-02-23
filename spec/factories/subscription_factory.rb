@@ -4,17 +4,14 @@ FactoryGirl.define do
     user
 
     trait :free do
-      amount 0.0
-      schedule :monthly
-      payment_method
-
       initialize_with { Subscription::Free.new }
     end
 
-    trait :pro_managed do
-      schedule :monthly
-      payment_method
+    trait :pro do
+      initialize_with { Subscription::Pro.new }
+    end
 
+    trait :pro_managed do
       initialize_with { Subscription::ProManaged.new }
     end
   end

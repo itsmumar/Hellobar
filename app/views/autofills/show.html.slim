@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Site:
+  = @autofill.site_id
+p
+  strong Name:
+  = @autofill.name
+p
+  strong Listen selector:
+  = @autofill.listen_selector
+p
+  strong Populate selector:
+  = @autofill.populate_selector
+
+= link_to 'Edit', edit_autofill_path(@autofill)
+'|
+= link_to 'Back', autofills_path

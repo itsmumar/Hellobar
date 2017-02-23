@@ -9,15 +9,20 @@ FactoryGirl.define do
 
     trait :with_free_subscription do
       after(:create) do |user|
-        create(:free_subscription, user: user)
+        create :subscription, :free, user: user
       end
     end
 
     trait :with_pro_subscription do
       after(:create) do |user|
-        create(:pro_subscription, user: user)
+        create :subscription, :pro, user: user
       end
     end
 
+    trait :with_pro_managed_subscription do
+      after(:create) do |user|
+        create :subscription, :pro_managed, user: user
+      end
+    end
   end
 end
