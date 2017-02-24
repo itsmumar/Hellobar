@@ -20,7 +20,7 @@ feature 'Autofills' do
   scenario 'Adding, listing, editing and destroying an autofill' do
     visit root_path
 
-    click_on 'Input Tracking'
+    click_on 'Autofills'
 
     expect(page).to have_content 'Autofill Rules'
 

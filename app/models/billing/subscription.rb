@@ -170,7 +170,7 @@ class Subscription < ActiveRecord::Base
       false
     end
 
-    def input_tracking?
+    def autofills?
       false
     end
 
@@ -331,7 +331,7 @@ class Subscription < ActiveRecord::Base
         true
       end
 
-      def input_tracking?
+      def autofills?
         true
       end
     end

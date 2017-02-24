@@ -24,11 +24,11 @@
           i.icon-opportunity
           | Content Upgrades
 
-    - if current_site.capabilities.input_tracking?
+    - if current_site.capabilities.autofills?
       li
         = active_link_to site_autofills_path(current_site) do
           i.icon-views
-          | Input Tracking
+          | Autofills
 
     li
       = active_link_to edit_site_path(current_site) do
