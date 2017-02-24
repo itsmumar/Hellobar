@@ -7,7 +7,7 @@
    * Abstracts out the way of storing input values (currently localStorage is used).
    */
   function ValueStorage() {
-    var expirationDays = 1;
+    var expirationDays = 30;
 
     function fieldToKey(field) {
       return 'HB_input_' + field.site_id + '_' + field.id;
