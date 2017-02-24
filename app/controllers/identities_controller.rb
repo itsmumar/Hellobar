@@ -70,7 +70,6 @@ class IdentitiesController < ApplicationController
   end
 
   def add_account_details(identity)
-
     if identity.provider == 'drip'
       service_provider = identity.service_provider
       account = service_provider.accounts.first

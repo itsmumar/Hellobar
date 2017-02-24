@@ -6,7 +6,6 @@
   &.loading
     @include animation(barberpole 5s linear infinite)
 
-
 .editor-wrapper
   width: 100%
   height: 100%
@@ -15,10 +14,6 @@
   .tooltip-label
     font-size: 0.9em
     color: $grayLight
-
-  // > [class*='-wrapper']
-  //   overflow-y: auto
-  //   overflow-x: hidden
 
   .select-wrapper
     margin-bottom: 0
@@ -74,7 +69,6 @@
           font-size: 0.63em
           line-height: 0.63em
           color: #c7c7c7
-
 
         i
           width: 100%
@@ -173,7 +167,7 @@
   /*-----------  Pull-down for sliders  ---*/
 
   .hellobar#pull-down
-    z-index: 3
+    z-index: 4
 
     &.hb-bottom-left, &.hb-top-left
       left: $linkWidth + $stepWidth + 0.25em
@@ -192,7 +186,7 @@
     /*-----------  Steps  -----------*/
 
     .step-wrapper
-      overflow-y: scroll
+      overflow-y: auto
       overflow-x: hidden
       width: $stepWidth
       padding: 0 2em 2em

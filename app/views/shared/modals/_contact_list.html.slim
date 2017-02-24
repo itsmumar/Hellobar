@@ -186,11 +186,6 @@ script id="contact-list-variant-modal-remote-list-select-template" type="text/x-
   |     {{/each}}
   |   </select>
   | </div>
-  | {{#if identity.supports_double_optin}}
-  |   <label for="contact_list_double_optin">
-  |     <input type="checkbox" name="contact_list[double_optin]" id="contact_list_double_optin" value="1"> Use double opt-in? (recommended)
-  |   </label>
-  | {{/if}}
 
 script id="contact-list-variant-modal-tag-select-template" type="text/x-handlebars-template"
 
@@ -252,7 +247,11 @@ script id="tag-dropdown-template" type="text/x-handlebars-template"
 /-----------  Sync Details  -----------/
 
 script id="contact-list-variant-modal-sync-details-template" type="text/x-handlebars-template"
-
+  | {{#if identity.supports_double_optin}}
+  |   <label for="contact_list_double_optin">
+  |     <input type="checkbox" name="contact_list[double_optin]" id="contact_list_double_optin" value="1"> Use double opt-in? (recommended)
+  |   </label>
+  | {{/if}}
   small After a subscriber signs up to your Hello Bar, they will be added to this list.
   div
     a.button.cancel.unlink data-identity-id="{{identity.id}}" Disconnect {{providerName}}

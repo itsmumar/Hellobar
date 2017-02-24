@@ -379,6 +379,7 @@ class @ContactListModal extends Modal
       isProviderConvertKit: (label == 'ConvertKit')
       isProviderGetResponse: (label == 'GetResponse')
       showTagTextfield: (label == 'AWeber')
+      isProviderDrip: (label == 'Drip')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
@@ -423,6 +424,7 @@ class @ContactListModal extends Modal
         @_renderBlock("instructions", defaultContext).hide()
         data.showTagTextfield = defaultContext.showTagTextfield
         @options.identity = data
+        showListsAndTags = defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse or defaultContext.isProviderDrip
 
         if (lists && lists[0].error != undefined) || (tags && data.tags[0].error != undefined)
           $('footer a.submit').attr('disabled', 'disabled')
