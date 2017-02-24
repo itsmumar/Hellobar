@@ -448,8 +448,17 @@ class @ContactListModal extends Modal
           $cycle_day.toggle(cycle_day_enabled)
 
         if listData
-          @$modal.find("#contact_list_remote_list_id").val(listData.data.remote_id) if listData.data && listData.data.remote_id
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
+
+          if listData.data
+            optId = lists[0].id
+            if listData.data.remote_id
+              @$modal.find("#contact_list_remote_list_id option").map((_, opt) =>
+                optValue = $(opt).val()
+                if optValue == listData.data.remote_id
+                  return optId = optValue
+              )
+            @$modal.find("#contact_list_remote_list_id").val(optId)
 
       else # no identity found, or an embed provider
         @_showListInstructions(defaultContext)
