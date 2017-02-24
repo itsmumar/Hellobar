@@ -74,9 +74,8 @@
   function initializeValueCollection() {
     function initializeValueCollectionForDocument(doc) {
       forAllFields(function (field) {
-        var elements = getElements(doc, field.listen_selector);
-        if (elements && elements.length === 1) {
-          var elementToTrack = elements[0];
+        var elementsToTrack = getElements(doc, field.listen_selector);
+        Array.prototype.forEach.call(elementsToTrack, function(elementToTrack) {
           var blurHandler = function (evt) {
             if (evt && evt.target) {
               var value = evt.target.value;
@@ -90,9 +89,7 @@
             handler: blurHandler,
             element: elementToTrack
           });
-        } else if (elements && elements.length > 1) {
-          console.warn('WARNING: Multiple elements detected for selector ' + field.listen_selector);
-        }
+        });
       });
     }
 
