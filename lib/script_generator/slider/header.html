@@ -14,7 +14,7 @@
       <div class="hb-inner-content">
         {{siteElement.imageFor(['top'])}}
         <div class="hb-text-wrapper">
-          <div class="hb-headline-text {{HB.t(siteElement.questionified) ? '' : 'hb-editable-block hb-editable-block-with-full-formatting'}}"
+          <div class="hb-headline-text {{siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-full-formatting'}}"
                data-hb-editable-block="headline"
                data-hb-inline-editor-placeholder="Headline">
             {{siteElement.headline}}
