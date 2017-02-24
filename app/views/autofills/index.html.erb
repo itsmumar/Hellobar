@@ -17,11 +17,11 @@
   <tbody>
     <% @autofills.each do |autofill| %>
       <tr>
-        <td><%= autofill.name %>
-        <td><%= autofill.listen_selector %>
-        <td><%= autofill.populate_selector %>
-        <td><%= link_to 'Edit', edit_site_autofill_path(current_site, autofill) %>
-        <td><%= link_to 'Destroy', site_autofill_path(current_site, autofill), data: {:confirm => 'Are you sure?'}, :method => :delete %>
+        <td><%= autofill.name %></td>
+        <td><%= autofill.listen_selector %></td>
+        <td><%= autofill.populate_selector %></td>
+        <td><%= link_to 'Edit', edit_site_autofill_path(current_site, autofill) %></td>
+        <td><%= link_to 'Destroy', site_autofill_path(current_site, autofill), data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
       </tr>
     <% end %>
   </tbody>
