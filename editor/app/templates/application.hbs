@@ -77,9 +77,15 @@
     <div class="step-wrapper">
       {{outlet}}
 
-      {{navigation/step-navigation action='saveSiteElement' current=currentStep
-      prev=prevRoute next=nextRoute saveSubmitted=saveSubmitted
-      doneButtonText=doneButtonText cannotContinue=cannotContinue}}
+      {{navigation/step-navigation
+      action='saveSiteElement'
+      current=currentStep
+      prev=prevRoute
+      next=nextRoute
+      saveSubmitted=saveSubmitted
+      doneButtonText=doneButtonText
+      cannotContinue=cannotContinue
+      validationMessages=validationMessages}}
     </div>
 
     {{preview/preview-area model=model isMobile=isMobile}}

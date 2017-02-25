@@ -1,0 +1,33 @@
+$errorColor: #d33434
+$paddingSize: 10px
+
+.validation-summary
+  display: none
+  position: relative
+  padding: $paddingSize
+  border-radius: $paddingSize/2
+  background-color: $errorColor
+  color: #dedede
+
+  &.visible
+    display: block
+
+  &:before
+    display: block
+    position: absolute
+    content: ''
+    left: 46%
+    top: -$paddingSize/2
+    width: $paddingSize
+    height: $paddingSize
+    transform: rotate(45deg)
+    -webkit-transform: rotate(45deg)
+    -ms-transform: rotate(45deg)
+    background-color: $errorColor
+
+  > p
+    padding: 0 !important
+    margin: 0
+    color: white !important
+
+

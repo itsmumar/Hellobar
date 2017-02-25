@@ -102,6 +102,7 @@ export default Ember.Route.extend({
 
       this.get('validation').validate('main', this.currentModel).then(() => {
         // Successful validation
+        this.controller.set('validationMessages', null);
         this.controller.toggleProperty('saveSubmitted');
         this.set('saveCount', this.get('saveCount') + 1);
         if (trackEditorFlow) {
@@ -151,8 +152,9 @@ export default Ember.Route.extend({
             new EditorErrorsModal({errors: data.responseJSON.full_error_messages}).open();
           }
         });
-      }, () => {
+      }, (failures) => {
         // Validation failed
+        this.controller.set('validationMessages', failures.map(failure => failure.error));
       });
 
     }
