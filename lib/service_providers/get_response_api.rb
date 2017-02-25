@@ -55,10 +55,14 @@ module ServiceProviders
             # we will tag the two most recently added contacts (we could tag
             # only the most recent one, but there could be some race conditions)
             # This is a little bit of a hack, but it should give us 95% of what
-            # is required when it comes to tagging
-            contacts = fetch_latest_contacts
+            # is required when it comes to tagging.
+            # We add tags only to contacts which are also stored at HelloBar,
+            # so that unknown origin contacts at GR won’t get tagged by us
+            # https://crossover.atlassian.net/browse/XOHB-1397
+            contacts = fetch_latest_contacts(20)
+            subscribers = @contact_list.subscribers(10)
 
-            contacts.each do |contact|
+            find_union(contacts, subscribers, 2).each do |contact|
               assign_tags contact_id: contact["contactId"], tags: tags
             end
           else
@@ -108,6 +112,20 @@ module ServiceProviders
           'X-Auth-Token' => "api-key #{ api_key }"
         }
       }
+    end
+
+    def find_union(contacts, subscribers, count = 2)
+      found_contacts = []
+
+      contacts.each do |contact|
+        subscribers.map do |subscriber|
+          found_contacts << contact if subscriber[:email] == contact["email"]
+        end
+
+        break if found_contacts.count >= count
+      end
+
+      found_contacts
     end
 
     def fetch_resource(resource)

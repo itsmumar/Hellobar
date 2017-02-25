@@ -110,6 +110,46 @@ describe ApplicationController, '#require_no_user' do
   end
 end
 
+describe ApplicationController, '#require_pro_managed_subscription' do
+  controller do
+    before_action :require_pro_managed_subscription
+
+    def index
+      render nothing: true
+    end
+  end
+
+  it 'redirects a user without a ProManaged subscription' do
+    user = build_stubbed :user
+    site = build_stubbed :site
+    subscription = build_stubbed :subscription, :pro
+
+    expect(site).to receive(:subscriptions).and_return [subscription]
+
+    allow(controller).to receive(:current_user).and_return user
+    allow(controller).to receive(:current_site).and_return site
+
+    get :index
+
+    expect(response).to redirect_to root_path
+  end
+
+  it 'does not redirect a user with ProManaged subscription' do
+    user = build_stubbed :user
+    site = build_stubbed :site
+    subscription = build_stubbed :subscription, :pro_managed
+
+    expect(site).to receive(:subscriptions).and_return [subscription]
+
+    allow(controller).to receive(:current_user).and_return user
+    allow(controller).to receive(:current_site).and_return site
+
+    get :index
+
+    expect(response).to be_successful
+  end
+end
+
 describe ApplicationController, 'rescue_from errors' do
   fixtures :all
 

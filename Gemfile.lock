@@ -538,6 +538,8 @@ GEM
       hashie (>= 1.1.0)
       uuidtools
     sexp_processor (4.4.3)
+    shoulda-matchers (3.1.1)
+      activesupport (>= 4.0.0)
     signet (0.7.2)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -727,6 +729,7 @@ DEPENDENCIES
   sass-rails (~> 4.0.3)
   selenium-webdriver (~> 2.53.4)
   sentry-raven (~> 0.9)
+  shoulda-matchers
   signet (~> 0.7.0)
   simple_form (= 3.1.0.rc1)
   simplecov (~> 0.7.1)
