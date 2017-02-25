@@ -289,6 +289,26 @@ describe Subscription do
       end
     end
 
+    context 'Subscription::ProManaged capabilities' do
+      specify 'Subscription::Free does not have ProManaged capabilities' do
+        subscription = build_stubbed :subscription, :free
+        capabilities = subscription.capabilities
+
+        expect(capabilities.custom_html?).to be_false
+        expect(capabilities.content_upgrades?).to be_false
+        expect(capabilities.autofills?).to be_false
+      end
+
+      specify 'ProManaged plan has certain custom capabilities' do
+        subscription = build_stubbed :subscription, :pro_managed
+        capabilities = subscription.capabilities
+
+        expect(capabilities.custom_html?).to be_true
+        expect(capabilities.content_upgrades?).to be_true
+        expect(capabilities.autofills?).to be_true
+      end
+    end
+
     context '#at_site_element_limit?' do
       it 'returns true when it has as many site elements as it can have' do
         @site.capabilities.at_site_element_limit?.should be_false
@@ -317,6 +337,7 @@ end
 
 describe Site do
   include SubscriptionHelper
+
   it "should return Free capabilities if no subscription" do
     Site.new.capabilities.class.should == Subscription::Free::Capabilities
   end
@@ -331,6 +352,7 @@ describe Site do
 
   describe "change_subscription" do
     fixtures :all
+
     before do
       setup_subscriptions
     end

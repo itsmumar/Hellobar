@@ -170,6 +170,10 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def autofills?
+      false
+    end
+
     protected
 
     def parent_class
@@ -279,10 +283,6 @@ class Subscription < ActiveRecord::Base
       def num_days_improve_data
         365
       end
-
-      def custom_html?
-        false
-      end
     end
 
     class << self
@@ -330,9 +330,13 @@ class Subscription < ActiveRecord::Base
       def content_upgrades?
         true
       end
-    end
-    class << self
 
+      def autofills?
+        true
+      end
+    end
+
+    class << self
       def defaults
         {
           name: "Pro Managed",
