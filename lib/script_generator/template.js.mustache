@@ -67,11 +67,11 @@
 
     })(jQuery);
 
-    // Input tracking support
+    // Autofills
     (function () {
-      var mockFields = [{ id: 1212, site_id: 123, name: 'test_field', listen_selector: '#f-builtin-email', populate_selector: '#f-builtin-email' }];
+      var autofills = {{{autofills_json}}}
       var module = {{{autofills_js}}};
-      module.configuration().fields(mockFields);
+      module.configuration().fields(autofills);
       module.load();
     })();
 
