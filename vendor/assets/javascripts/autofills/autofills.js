@@ -38,7 +38,7 @@
       var storedObjectAsString = localStorage.getItem(key);
       if (storedObjectAsString) {
         var storedObject = JSON.parse(storedObjectAsString);
-        if (storedObject.expirationTimestamp > currentTimestamp()) {
+        if (storedObject.expiration > currentTimestamp()) {
           return storedObject.value;
         } else {
           localStorage.removeItem(key);
