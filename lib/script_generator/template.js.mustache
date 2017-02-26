@@ -68,7 +68,7 @@
     })(jQuery);
 
     // Autofills
-    (function () {
+    !HB.CAP.preview && (function () {
       var autofills = {{{autofills_json}}};
       var module = {{{autofills_js}}};
       module.configuration().autofills(autofills);
