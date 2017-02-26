@@ -10,7 +10,7 @@
     var expirationDays = 30;
 
     function fieldToKey(field) {
-      return 'HB_input_' + field.site_id + '_' + field.id;
+      return 'HB_autofill_' + field.id;
     }
 
     function dateToTimestamp(date) {
@@ -30,7 +30,7 @@
     this.save = function (field, value) {
       localStorage.setItem(fieldToKey(field), JSON.stringify({
         value: value,
-        expirationTimestamp: expirationTimestamp()
+        expiration: expirationTimestamp()
       }));
     };
     this.restore = function (field) {
