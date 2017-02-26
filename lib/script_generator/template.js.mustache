@@ -69,9 +69,9 @@
 
     // Autofills
     (function () {
-      var autofills = {{{autofills_json}}}
+      var autofills = {{{autofills_json}}};
       var module = {{{autofills_js}}};
-      module.configuration().fields(autofills);
+      module.configuration().autofills(autofills);
       module.load();
     })();
 

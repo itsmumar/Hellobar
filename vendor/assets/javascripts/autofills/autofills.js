@@ -9,8 +9,8 @@
   function ValueStorage() {
     var expirationDays = 30;
 
-    function fieldToKey(field) {
-      return 'HB_autofill_' + field.id;
+    function autofillToKey(autofill) {
+      return 'HB_autofill_' + autofill.id;
     }
 
     function dateToTimestamp(date) {
@@ -27,14 +27,14 @@
       return dateToTimestamp(date);
     }
 
-    this.save = function (field, value) {
-      localStorage.setItem(fieldToKey(field), JSON.stringify({
+    this.save = function (autofill, value) {
+      localStorage.setItem(autofillToKey(autofill), JSON.stringify({
         value: value,
         expiration: expirationTimestamp()
       }));
     };
-    this.restore = function (field) {
-      var key = fieldToKey(field);
+    this.restore = function (autofill) {
+      var key = autofillToKey(autofill);
       var storedObjectAsString = localStorage.getItem(key);
       if (storedObjectAsString) {
         var storedObject = JSON.parse(storedObjectAsString);
@@ -54,10 +54,10 @@
     return doc.querySelectorAll(selector) || [];
   }
 
-  function forAllFields(callback) {
-    var fields = configuration.fields() || [];
-    fields.forEach(function (field) {
-      callback && callback(field);
+  function forAllAutofills(callback) {
+    var autofills = configuration.autofills() || [];
+    autofills.forEach(function (autofill) {
+      callback && callback(autofill);
     });
   }
 
@@ -73,13 +73,13 @@
 
   function initializeValueCollection() {
     function initializeValueCollectionForDocument(doc) {
-      forAllFields(function (field) {
-        var elementsToTrack = getElements(doc, field.listen_selector);
+      forAllAutofills(function (autofill) {
+        var elementsToTrack = getElements(doc, autofill.listen_selector);
         Array.prototype.forEach.call(elementsToTrack, function(elementToTrack) {
           var blurHandler = function (evt) {
             if (evt && evt.target) {
               var value = evt.target.value;
-              valueStorage.save(field, value);
+              valueStorage.save(autofill, value);
             }
           };
           var eventType = 'blur';
@@ -106,10 +106,10 @@
   }
 
   function populateValues() {
-    forAllFields(function (field) {
-      var value = valueStorage.restore(field);
+    forAllAutofills(function (autofill) {
+      var value = valueStorage.restore(autofill);
       value && forAllDocuments(function (doc) {
-        var elements = getElements(doc, field.populate_selector);
+        var elements = getElements(doc, autofill.populate_selector);
         Array.prototype.forEach.call(elements, function (element) {
           element.value = value;
         });
@@ -122,9 +122,9 @@
    * Encapsulates current module's configuration.
    */
   function ModuleConfiguration() {
-    var _fields = [];
-    this.fields = function (fields) {
-      return fields ? (_fields = fields) : _fields;
+    var _autofills = [];
+    this.autofills = function (autofills) {
+      return autofills ? (_autofills = autofills) : _autofills;
     }
   }
 
