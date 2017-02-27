@@ -10,7 +10,7 @@
     var expirationDays = 30;
 
     function autofillToKey(autofill) {
-      return 'HB_autofill_' + autofill.id;
+      return 'HB-autofill-' + autofill.id;
     }
 
     function dateToTimestamp(date) {
