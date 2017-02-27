@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Rule do
+
+  it_behaves_like 'a model triggering script regeneration'
+
   describe ".defaults" do
     let(:defaults)         { Rule.defaults }
     let(:everyone)         { defaults[0] }
@@ -211,15 +214,4 @@ describe Rule do
     end
   end
 
-  describe "when associated with a site" do
-    let(:rule) { create(:rule) }
-    let(:site) { rule.site }
-
-    it 'forces a script regeneration when changed' do
-      site.update_attribute(:script_generated_at, 1.day.ago)
-      rule.name = "#{rule.name}_changed"
-      rule.save!
-      expect(site.needs_script_regeneration?).to be(true)
-    end
-  end
 end
