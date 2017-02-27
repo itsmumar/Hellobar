@@ -130,6 +130,14 @@ class ScriptGenerator < Mustache
     File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
   end
 
+  def autofills_json
+    site.autofills.to_json
+  end
+
+  def autofills_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/autofills/autofills.js")
+  end
+
   def ie_shims_js
     File.read("#{Rails.root}/vendor/assets/javascripts/hellobar_script/ie_shims.js")
   end
@@ -211,7 +219,7 @@ class ScriptGenerator < Mustache
     options[:rules] || site.rules.map { |rule| hash_for_rule(rule) }
   end
 
-private
+  private
 
   def hash_for_rule(rule)
     {
