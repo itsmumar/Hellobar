@@ -192,18 +192,22 @@ script id="contact-list-variant-modal-tag-select-template" type="text/x-handleba
   | <label for="contact_list_remote_list_ids">Apply Tags (Optional)</label>
   | {{#if tags}}
   |   {{#each preparedLists}}
-  |     <div class="select-wrapper"">
+  |     <div class="select-wrapper {{#if ../showTagTextfield}}textfield-wrapper{{/if}}">
   |       <div>
-  |         <select class="contact-list-tag" name="contact_list[remote_list_id]">
-  |           <option disabled selected value>Select ...</option>
-  |           {{#each lists}}
-  |             {{#if isSelected}}
-  |               <option value="{{id}}" selected>{{name}}</option>
-  |             {{else}}
-  |               <option value="{{id}}">{{name}}</option>
-  |             {{/if}}
-  |           {{/each}}
-  |         </select>
+  |         {{#if ../showTagTextfield}}
+  |           <input type="text" class="contact-list-tag" name="contact_list[remote_list_id]" value={{tag}}>
+  |         {{else}}
+  |           <select class="contact-list-tag" name="contact_list[remote_list_id]">
+  |             <option disabled selected value>Select ...</option>
+  |             {{#each lists}}
+  |               {{#if isSelected}}
+  |                 <option value="{{id}}" selected>{{name}}</option>
+  |               {{else}}
+  |                 <option value="{{id}}">{{name}}</option>
+  |               {{/if}}
+  |             {{/each}}
+  |           </select>
+  |         {{/if}}
   |         <i class="icon-close" data-js-action="remove-tag"></i>
   |       </div>
   |     </div>
@@ -224,14 +228,18 @@ script id="contact-list-variant-modal-tag-select-template" type="text/x-handleba
 
 script id="tag-dropdown-template" type="text/x-handlebars-template"
 
-  | <div class="select-wrapper" style="position: relative;">
+  | <div class="select-wrapper {{#if identity.showTagTextfield}}textfield-wrapper{{/if}}" style="position: relative;">
   |   <div>
-  |     <select class="contact-list-tag" name="contact_list[remote_list_id]">
-  |       <option disabled selected value>Select ...</option>
-  |       {{#each identity.tags}}
-  |         <option value="{{id}}">{{name}}</option>
-  |       {{/each}}
-  |     </select>
+  |     {{#if identity.showTagTextfield}}
+  |       <input type="text" class="contact-list-tag" name="contact_list[remote_list_id]">
+  |     {{else}}
+  |       <select class="contact-list-tag" name="contact_list[remote_list_id]">
+  |         <option disabled selected value>Select ...</option>
+  |         {{#each identity.tags}}
+  |           <option value="{{id}}">{{name}}</option>
+  |         {{/each}}
+  |       </select>
+  |     {{/if}}
   |     <i class="icon-close" data-js-action="remove-tag"></i>
   |   </div>
   | </div>
