@@ -130,7 +130,6 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.include Devise::TestHelpers, type: :controller
-  config.include FactoryGirl::Syntax::Methods
   config.include EmbedCodeFileHelper
   config.include Paperclip::Shoulda::Matchers
   config.include ActiveSupport::Testing::TimeHelpers
@@ -149,7 +148,7 @@ def stub_current_user(user)
 end
 
 def random_uniq_url
-  Faker::Internet.url.split(".").insert(1, "-#{(0...8).map{65.+(rand(26)).chr}.join.downcase}").insert(2, ".").join
+  'http://url.net'.split(".").insert(1, "-#{ (0...8).map{65.+(rand(26)).chr}.join.downcase }").insert(2, ".").join
 end
 
 def stub_out_get_ab_variations(*variations, &result)

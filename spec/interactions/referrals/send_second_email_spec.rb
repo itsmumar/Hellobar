@@ -4,7 +4,7 @@ describe Referrals::SendSecondEmail do
   fixtures :all
   before :each do
     @user = users(:joey)
-    @email = Faker::Internet.email
+    @email = 'user@hellobar.com'
     @referral = create(:referral, sender: @user, state: :sent, email: @email)
   end
 

@@ -2,7 +2,7 @@ require 'integration_helper'
 
 feature "Site with a question modal", :js do
   before do
-    @element = FactoryGirl.create(:modal_element,
+    @element = create(:modal_element,
       use_question: true,
       question: "What is 1+1?",
       answer1: "its 2",

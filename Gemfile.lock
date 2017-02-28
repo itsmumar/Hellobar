@@ -200,13 +200,11 @@ GEM
     eventmachine (1.2.0.1)
     excon (0.36.0)
     execjs (2.0.2)
-    factory_girl (4.4.0)
+    factory_girl (4.8.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.4.1)
-      factory_girl (~> 4.4.0)
+    factory_girl_rails (4.8.0)
+      factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    faker (1.5.0)
-      i18n (~> 0.5)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.11.0.1)
@@ -592,7 +590,7 @@ GEM
       rack (~> 1.0)
     thor (0.19.4)
     thread (0.2.2)
-    thread_safe (0.3.5)
+    thread_safe (0.3.6)
     tilt (1.4.1)
     timecop (0.7.1)
     timers (4.0.4)
@@ -670,7 +668,6 @@ DEPENDENCIES
   drip-ruby (~> 0.0.10)
   elif (~> 0.1)
   factory_girl_rails
-  faker
   figaro (~> 1.0.0)
   fivemat
   fog (~> 1.22.1)

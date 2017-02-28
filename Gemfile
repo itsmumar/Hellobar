@@ -113,7 +113,6 @@ group :development, :test do
   gem "capybara-webkit"
   gem 'selenium-webdriver', '~> 2.53.4' # Ubuntu firefox compatible version: 47.0.1
   gem "factory_girl_rails"
-  gem "faker"
   gem "metric_fu"
   gem "minitest"
   gem "pry"
