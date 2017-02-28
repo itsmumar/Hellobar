@@ -42,7 +42,7 @@ class IdentitiesController < ApplicationController
       flash[:error] = "There was a problem connecting your #{identity.provider_config[:name]} account. Please try again later."
     end
 
-    redirect_to env["omniauth.params"]["redirect_to"]
+    redirect_to after_auth_redirect_url
   end
 
   def destroy
@@ -84,5 +84,11 @@ class IdentitiesController < ApplicationController
 
   def sanitize_app_url(app_url)
     app_url.gsub("https://", "").gsub("http://", "")
+  end
+
+  def after_auth_redirect_url
+    url = env["omniauth.params"]["redirect_to"]
+    url += '#/settings/emails' if url.include?('/site_elements/')
+    url
   end
 end
