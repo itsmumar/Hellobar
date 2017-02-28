@@ -1,7 +1,8 @@
 FactoryGirl.define do
   factory :rule do
-    site
     name "test rule"
     match "all"
+
+    site
   end
 end
