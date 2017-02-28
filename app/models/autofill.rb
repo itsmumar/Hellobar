@@ -1,6 +1,6 @@
 class Autofill < ActiveRecord::Base
 
-   belongs_to :site
+   belongs_to :site, touch: true
 
    validates :site, presence: true
    validates :name, presence: true

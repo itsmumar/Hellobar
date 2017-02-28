@@ -52,6 +52,8 @@ class Condition < ActiveRecord::Base
   validate :value_is_valid
   validate :operand_is_valid
 
+  delegate :site, to: :rule
+
   def operand
     value = read_attribute(:operand)
 

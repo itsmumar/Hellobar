@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 RSpec.describe Condition, type: :model do
+
+  it_behaves_like 'a model triggering script regeneration'
+
   describe '#validating the value format' do
     fixtures :all
 
@@ -233,18 +236,6 @@ RSpec.describe Condition, type: :model do
       condition = build(:condition, segment: "ReferrerCondition", value: 1)
       condition.send(:format_string_values)
       expect(condition.value).to eq(1)
-    end
-  end
-
-  describe "when associated with a site" do
-    let(:condition) { create(:condition, operand: :is, segment: "SearchTermCondition", value: "foo") }
-    let(:site) { condition.rule.site }
-
-    it 'forces a script regeneration when changed' do
-      site.update_attribute(:script_generated_at, 1.day.ago)
-      condition.value = "#{condition.value}_changed"
-      condition.save!
-      expect(site.needs_script_regeneration?).to be(true)
     end
   end
 end
