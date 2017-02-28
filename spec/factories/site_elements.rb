@@ -1,11 +1,12 @@
 FactoryGirl.define do
   factory :site_element do
-    rule
     type 'Bar'
     theme_id 'classic'
     element_subtype 'announcement'
     headline 'Hello, HelloBar!'
     placement 'bar-top'
+
+    rule
 
     trait :bar
 
@@ -35,6 +36,7 @@ FactoryGirl.define do
 
     trait :email do
       element_subtype 'email'
+      settings Hash[fields_to_collect: [{ type: 'builtin-email', is_enabled: true }]]
 
       contact_list
     end
