@@ -1,7 +1,7 @@
 require 'integration_helper'
 
 feature 'Site with a closable announcement topbar', :js do
-  given(:element) { FactoryGirl.create :site_element, :bar, :closable }
+  given(:element) { create :site_element, :bar, :closable }
   given(:path) { generate_file_and_return_path(element.site.id) }
 
   before do

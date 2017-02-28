@@ -9,11 +9,7 @@ feature "Theme with default image", js: true do
       preuploaded_url: theme.image["default_url"],
       image_file_name: "french-rose-default.jpg"
     )
-    element = FactoryGirl.create(
-      :modal_element,
-      theme_id: theme.id,
-      use_default_image: true
-    )
+    element = create :modal_element, theme_id: theme.id, use_default_image: true
     element.update(active_image: image)
 
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
@@ -32,7 +28,7 @@ feature "Theme with default image", js: true do
   scenario "shows uploaded image" do
     theme_yaml = YAML.load_file("spec/support/themes.yml")
     theme = Theme.new(theme_yaml["with_default_image"])
-    element = FactoryGirl.create(
+    element = create(
       :modal_element,
       image_placement: 'bottom',
       theme_id: theme.id,

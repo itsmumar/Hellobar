@@ -10,7 +10,7 @@ feature "Every x number of sessions condition", js: true do
   end
 
   before(:each) do
-    @element = FactoryGirl.create(:site_element)
+    @element = create(:site_element)
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
 
     @test_doesnt_exist = Proc.new do |day|

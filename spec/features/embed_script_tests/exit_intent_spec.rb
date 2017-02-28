@@ -1,7 +1,7 @@
 require 'integration_helper'
 
 feature "element with exit intent", js: true do
-  let(:element) { FactoryGirl.create(:site_element, view_condition: "exit-intent") }
+  let(:element) { create(:site_element, view_condition: "exit-intent") }
 
   before do
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
