@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :referral do
-    email { Faker::Internet.email }
+    sequence(:email) { |i| "referral#{ i }@hellobar.com" }
     sender { create(:user) }
-    state { 'signed_up' }
+    state 'signed_up'
   end
 end

@@ -35,7 +35,7 @@ describe Referral do
 
   it "has a URL once it gets saved and has a token" do
     expect(@referral.url).to be_empty
-    @referral.email = Faker::Internet.email
+    @referral.email = 'referral@hellobar.com'
     @referral.state = 'sent'
     @referral.save!
     expect(@referral.url).not_to be_empty
@@ -61,7 +61,7 @@ describe Referral do
 
   describe "to be followed up" do
     before :each do
-      @referral.email = Faker::Internet.email
+      @referral.email = 'referral@hellobar.com'
       @referral.state = 'sent'
       @referral.save!
     end
@@ -107,7 +107,7 @@ describe Referral do
   describe "redeemable_for_site" do
     before :each do
       @referral.sender = @user
-      @referral.email = Faker::Internet.email
+      @referral.email = 'referral@hellobar.com'
       @referral.state = 'installed'
     end
 
@@ -124,7 +124,7 @@ describe Referral do
       @referral.available_to_sender = true
       @referral.site = ownership.site
       second = @referral.dup
-      second.email = Faker::Internet.email
+      second.email = 'second-referral@hellobar.com'
       @referral.save!
       second.save!
 
@@ -143,7 +143,7 @@ describe Referral do
   describe 'redeemable? and redeemed?' do
     before :each do
       @referral.sender = @user
-      @referral.email = Faker::Internet.email
+      @referral.email = 'referral@hellobar.com'
     end
 
     it 'is redeemable when installed and available' do

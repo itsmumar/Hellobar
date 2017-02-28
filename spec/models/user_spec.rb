@@ -228,7 +228,7 @@ describe User do
   end
 
   describe ".find_for_google_oauth2" do
-    let(:email) { Faker::Internet.email }
+    let(:email) { 'user@hellobar.com' }
     let(:uuid) { SecureRandom.uuid }
 
     let(:token) do
@@ -262,8 +262,8 @@ describe User do
       end
 
       context "when first and last name provided" do
-        let(:first_name) { Faker::Name.first_name }
-        let(:last_name) { Faker::Name.last_name }
+        let(:first_name) { 'John' }
+        let(:last_name) { 'Doe' }
 
         before do
           token["info"]["first_name"] = first_name
@@ -302,8 +302,8 @@ describe User do
       end
 
       context "when name not set & names passed" do
-        let(:first_name) { Faker::Name.first_name }
-        let(:last_name) { Faker::Name.last_name }
+        let(:first_name) { 'John' }
+        let(:last_name) { 'Doe' }
 
         before do
           token["info"]["first_name"] = first_name

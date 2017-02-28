@@ -26,7 +26,7 @@ FactoryGirl.define do
 
     trait :click_to_call do
       element_subtype 'call'
-      phone_number Faker::PhoneNumber.cell_phone
+      phone_number '1-367-399-4120'
     end
 
     trait :traffic do
