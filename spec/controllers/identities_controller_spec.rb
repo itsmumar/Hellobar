@@ -96,7 +96,7 @@ describe IdentitiesController do
     context 'oauth identity' do
       before(:each) do
         user = User.last
-        site = user.sites.first
+        @site = user.sites.first
         stub_current_user user
         allow_any_instance_of(Identity).to receive(:provider_config).and_return({name: 'mailchimp'})
         allow_any_instance_of(Identity).to receive(:service_provider).and_return(nil)
@@ -107,7 +107,7 @@ describe IdentitiesController do
           and_return({
           "omniauth.auth"   => {"credentials" => "my_cool_creds"},
           "omniauth.params" => {"redirect_to" => "http://test.host/sites/483182012/site_elements/12312/new"}})
-        post :create, site_id: site.id, provider: 'mailchimp'
+        post :create, site_id: @site.id, provider: 'mailchimp'
         expect(Identity.last.credentials).to eq('my_cool_creds')
       end
 
@@ -117,16 +117,16 @@ describe IdentitiesController do
             and_return({
             "omniauth.auth"   => {"credentials" => "my_cool_creds"},
             "omniauth.params" => {"redirect_to" => "http://test.host/sites/483182012/site_elements/12312/new"}})
-          post :create, site_id: site.id, provider: 'mailchimp'
+          post :create, site_id: @site.id, provider: 'mailchimp'
           expect(response).to redirect_to(controller.env["omniauth.params"]["redirect_to"] + '#/settings/emails')
         end
 
-        it 'to referrer'
+        it 'to referrer' do
           allow(controller).to receive(:env).
             and_return({
             "omniauth.auth"   => {"credentials" => "my_cool_creds"},
             "omniauth.params" => {"redirect_to" => "http://test.host/sites/483182012/contact_lists"}})
-          post :create, site_id: site.id, provider: 'mailchimp'
+          post :create, site_id: @site.id, provider: 'mailchimp'
           expect(response).to redirect_to(controller.env["omniauth.params"]["redirect_to"])
         end
       end
