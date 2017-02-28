@@ -130,7 +130,6 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.include Devise::TestHelpers, type: :controller
-  config.include FactoryGirl::Syntax::Methods
   config.include EmbedCodeFileHelper
   config.include Paperclip::Shoulda::Matchers
   config.include ActiveSupport::Testing::TimeHelpers
