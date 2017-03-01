@@ -3,6 +3,7 @@
   position: fixed;
   _position: absolute;
   _top: expression(eval(document.body.scrollTop));
+  z-index: 10000000;
 }
 
 /*-----------  Placements  ------------------*/

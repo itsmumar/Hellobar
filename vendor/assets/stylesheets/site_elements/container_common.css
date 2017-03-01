@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   border: none;
-  z-index: 17000;
   overflow: hidden;
   position: absolute;
 }
@@ -27,7 +26,7 @@
   top: -1px;
   right: 10px;
   padding: 3px;
-  z-index: 16999;
+  z-index: 10000002;
   overflow: hidden;
   position: absolute;
   border-radius: 0 0 5px 5px;
