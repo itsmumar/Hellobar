@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
 
     find_by(email: email) ||
       find_and_create_by_referral(email) ||
-      Hello::WordpressUser.find_by_email(email)
+      Hello::WordpressUser.find_by(email: email)
   end
 
   def self.find_and_create_by_referral(email)

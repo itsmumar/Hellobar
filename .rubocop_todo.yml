@@ -150,27 +150,6 @@ Rails/Date:
     - 'spec/lib/hello/api_performance_spec.rb'
     - 'spec/models/referral_spec.rb'
 
-# Offense count: 17
-# Cop supports --auto-correct.
-# Configuration parameters: Whitelist.
-# Whitelist: find_by_sql
-Rails/DynamicFindBy:
-  Exclude:
-    - 'app/controllers/admin/users_controller.rb'
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/contact_submissions_controller.rb'
-    - 'app/controllers/tracking_controller.rb'
-    - 'app/models/site.rb'
-    - 'app/models/user.rb'
-    - 'app/serializers/theme_serializer.rb'
-    - 'lib/hello/wordpress_user.rb'
-    - 'lib/legacy_migrator/tests/users_test.rb'
-    - 'lib/service_providers/convert_kit.rb'
-    - 'lib/service_providers/get_response_api.rb'
-    - 'lib/service_providers/mad_mimi_api.rb'
-    - 'lib/service_providers/maropost.rb'
-    - 'spec/models/site_spec.rb'
-
 # Offense count: 67
 Rails/FilePath:
   Enabled: false

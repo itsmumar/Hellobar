@@ -5,7 +5,7 @@ class Hello::WordpressUser < Hello::WordpressModel
   attr_reader :password # to conform with User so we can reuse forms
 
   def self.email_exists?(email)
-    find_by_email(email).present?
+    find_by(email: email).present?
   end
 
   def self.find_by_email(email)

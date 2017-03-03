@@ -5,7 +5,7 @@ describe 'migration of legacy users' do
     @site = Site.where(url: 'http://zombo.com').first
     @legacy_site = LegacyMigrator::LegacySite.find(@site.id)
     @user = @site.owners.first
-    @legacy_user = LegacyMigrator::LegacyUser.find_by_email(@user.email)
+    @legacy_user = LegacyMigrator::LegacyUser.find_by(email: @user.email)
   end
 
   it 'migrates basic attributes' do
@@ -21,8 +21,8 @@ describe 'migration of legacy users' do
 
   it 'associates multiple sites with the correct user' do
     email = 'wootie@polymathic.me'
-    wootie = User.find_by_email(email)
-    legacy_wootie = LegacyMigrator::LegacyUser.find_by_email(email)
+    wootie = User.find_by(email: email)
+    legacy_wootie = LegacyMigrator::LegacyUser.find_by(email: email)
 
     num_sites = legacy_wootie.accounts.first.sites.count
 

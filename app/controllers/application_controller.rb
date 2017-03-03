@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
 
   def impersonated_user
     if current_admin && session[:impersonated_user]
-      impersonated_user = User.find_by_id(session[:impersonated_user])
+      impersonated_user = User.find_by(id: session[:impersonated_user])
       impersonated_user.is_impersonated = true
       impersonated_user
     end

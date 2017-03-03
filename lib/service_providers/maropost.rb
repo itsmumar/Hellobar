@@ -84,7 +84,7 @@ module ServiceProviders
       raise 'Must provide an identity' unless options[:identity] || options[:site]
       return options[:identity] if options[:identity]
 
-      identity = options[:site].identities.find_by_provider!('maropost')
+      identity = options[:site].identities.find_by!(provider: 'maropost')
       return identity if identity
 
       raise 'Site does not have a stored Maropost identity'
