@@ -1314,13 +1314,6 @@ Style/SpaceInsideStringInterpolation:
     - 'spec/support/failed_spec_screenshot.rb'
 
 # Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: SupportedStyles.
-# SupportedStyles: use_perl_names, use_english_names
-Style/SpecialGlobalVars:
-  EnforcedStyle: use_perl_names
-
-# Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase
 Style/VariableName:
