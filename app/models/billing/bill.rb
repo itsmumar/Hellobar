@@ -33,7 +33,7 @@ class Bill < ActiveRecord::Base
     raise InvalidBillingAmount, "Amount was: #{amount.inspect}" if !amount or amount < 0
   end
 
-  alias :void! :voided!
+  alias void! voided!
   def status=(value)
     value = value.to_sym
     return if status == value
@@ -68,7 +68,7 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  alias :orig_status :status
+  alias orig_status status
   def status
     orig_status.to_sym
   end

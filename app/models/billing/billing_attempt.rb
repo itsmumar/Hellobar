@@ -67,7 +67,7 @@ class BillingAttempt < ActiveRecord::Base
     self
   end
 
-  alias :orig_status :status
+  alias orig_status status
   def status
     orig_status.to_sym
   end
@@ -75,5 +75,5 @@ class BillingAttempt < ActiveRecord::Base
   def success?
     status == :success
   end
-  alias :successful? :success?
+  alias successful? success?
 end

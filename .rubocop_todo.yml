@@ -314,17 +314,6 @@ Style/AccessorMethodName:
     - 'lib/hello/internal_analytics.rb'
     - 'lib/script_generator.rb'
 
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: prefer_alias, prefer_alias_method
-Style/Alias:
-  Exclude:
-    - 'app/models/billing/bill.rb'
-    - 'app/models/billing/billing_attempt.rb'
-    - 'app/models/identity.rb'
-    - 'lib/service_providers/drip.rb'
-
 # Offense count: 32
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedHashRocketStyle, SupportedHashRocketStyles, EnforcedColonStyle, SupportedColonStyles, EnforcedLastArgumentHashStyle, SupportedLastArgumentHashStyles.

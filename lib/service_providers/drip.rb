@@ -29,7 +29,7 @@ class ServiceProviders::Drip < ServiceProviders::Email
     response = @client.campaigns(status: 'active')
     @campaigns ||= response.campaigns.map(&:raw_attributes)
   end
-  alias_method :lists, :campaigns
+  alias lists campaigns
 
   def tags
     response = @client.tags

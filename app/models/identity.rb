@@ -40,7 +40,7 @@ class Identity < ActiveRecord::Base
   def provider_settings
     service_provider_class.settings
   end
-  alias :provider_config :provider_settings
+  alias provider_config provider_settings
 
   def as_json(options = nil)
     extra['raw_info'].select! { |k, _| %w(user_id username).include? k } if extra['raw_info']
