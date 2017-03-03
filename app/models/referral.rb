@@ -5,21 +5,8 @@ class Referral < ActiveRecord::Base
 
   enum state: [:sent, :signed_up, :installed]
 
-  scope :redeemable_for_site, ->(site) do
-    possible_recipient_ids = site.owners.pluck(:id)
-    installed.where("
-      (redeemed_by_recipient_at IS NULL AND recipient_id IN (?))
-      OR (available_to_sender = true AND site_id = ?)
-    ", possible_recipient_ids, site.id)
-  end
-
-  scope :redeemable_by_sender_for_site, ->(site) do
-    installed.where(available_to_sender: true, site_id: site.id)
-  end
-
-  scope :to_be_followed_up, -> do
-    sent.where(created_at: (FOLLOWUP_INTERVAL.ago..(FOLLOWUP_INTERVAL - 1.day).ago))
-  end
+  scope :redeemable_by_sender_for_site, ->(site) { installed.where(available_to_sender: true, site_id: site.id) }
+  scope :to_be_followed_up, -> { sent.where(created_at: (FOLLOWUP_INTERVAL.ago..(FOLLOWUP_INTERVAL - 1.day).ago)) }
 
   belongs_to :sender, class_name: 'User'
   belongs_to :recipient, class_name: 'User'
@@ -30,6 +17,14 @@ class Referral < ActiveRecord::Base
   validates :sender_id, presence: true
   validates :email, presence: true
   validate :ensure_email_available, on: :create
+
+  def self.redeemable_for_site(site)
+    possible_recipient_ids = site.owners.pluck(:id)
+    installed.where('
+      (redeemed_by_recipient_at IS NULL AND recipient_id IN (?))
+      OR (available_to_sender = true AND site_id = ?)
+    ', possible_recipient_ids, site.id)
+  end
 
   def set_standard_body
     self.body = I18n.t('referral.standard_body', name: sender.name)

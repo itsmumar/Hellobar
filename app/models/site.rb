@@ -15,14 +15,10 @@ class Site < ActiveRecord::Base
   has_many :contact_lists, dependent: :destroy
   has_many :subscriptions, -> { order 'id' }
   accepts_nested_attributes_for :subscriptions
+
   has_many :bills, -> { order 'id' }, through: :subscriptions
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
-
-  scope :protocol_ignored_url, ->(url) {
-    host = normalize_url(url).normalized_host if url.include?('http')
-    where('sites.url = ? OR sites.url = ?', "https://#{host}", "http://#{host}")
-  }
 
   acts_as_paranoid
 
@@ -45,30 +41,44 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def needs_script_regeneration?
-    !!@needs_script_regeneration
-  end
-
-  def regenerate_script
-    @needs_script_regeneration = true if !destroyed?
-  end
-
   validates :url, url: true
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
 
   validate :url_is_unique?
 
-  scope :script_installed_db, -> do
-    where('script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)')
+  def self.protocol_ignored_url(url)
+    host = normalize_url(url).normalized_host if url.include?('http')
+    where('sites.url = ? OR sites.url = ?', "https://#{host}", "http://#{host}")
   end
 
-  scope :script_not_installed_db, -> do
-    where.not('script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)')
+  def self.script_installed_db
+    where(
+      'script_installed_at IS NOT NULL
+      AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
+    )
   end
 
-  scope :script_uninstalled_db, -> do
-    where('script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)')
+  def self.script_not_installed_db
+    where.not(
+      'script_installed_at IS NOT NULL
+      AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
+    )
+  end
+
+  def self.script_uninstalled_db
+    where(
+      'script_installed_at IS NOT NULL
+      AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
+    )
+  end
+
+  def needs_script_regeneration?
+    !!@needs_script_regeneration
+  end
+
+  def regenerate_script
+    @needs_script_regeneration = true if !destroyed?
   end
 
   # We are getting bad analytics data regarding installs and uninstalls

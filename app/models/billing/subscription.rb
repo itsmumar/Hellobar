@@ -9,18 +9,18 @@ class Subscription < ActiveRecord::Base
   enum schedule: [:monthly, :yearly]
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
 
-  scope :active, -> do
-    joins(:bills)
-      .where(
-        'bills.status = ? AND bills.start_date < ? AND bills.end_date > ?',
-        Bill.statuses['paid'], Time.now, Time.now)
-      .where('bills.type != ?', Bill::Refund.to_s)
-  end
-
   after_initialize :set_initial_values
   after_create :mark_user_onboarding_as_bought_subscription!
 
   class << self
+    def active
+      joins(:bills)
+        .where(
+          'bills.status = ? AND bills.start_date < ? AND bills.end_date > ?',
+          Bill.statuses['paid'], Time.now, Time.now)
+        .where('bills.type != ?', Bill::Refund.to_s)
+    end
+
     def values_for(_site)
       # Just return the defaults for now, in the future we can
       # offer per-site discounts, etc
