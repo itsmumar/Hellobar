@@ -178,19 +178,6 @@ Rails/OutputSafety:
     - 'app/helpers/contact_lists_helper.rb'
     - 'app/helpers/site_elements_helper.rb'
 
-# Offense count: 11
-# Cop supports --auto-correct.
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/ReadWriteAttribute:
-  Exclude:
-    - 'app/models/billing/bill.rb'
-    - 'app/models/condition.rb'
-    - 'app/models/site_element.rb'
-    - 'app/models/site_elements/bar.rb'
-    - 'app/models/site_elements/modal.rb'
-    - 'app/models/site_elements/slider.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

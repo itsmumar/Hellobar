@@ -41,7 +41,7 @@ class Bill < ActiveRecord::Base
     audit << "Changed Bill[#{id}] status from #{status.inspect} to #{value.inspect}"
     status_value = Bill.statuses[value.to_sym]
     raise InvalidStatus, "Invalid status: #{value.inspect}" unless status_value
-    write_attribute(:status, status_value)
+    self[:status] = status_value
     self.status_set_at = Time.now
 
     if status == :paid

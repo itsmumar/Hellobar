@@ -55,7 +55,7 @@ class Condition < ActiveRecord::Base
   delegate :site, to: :rule
 
   def operand
-    value = read_attribute(:operand)
+    value = self[:operand]
 
     value.to_s if value
   end

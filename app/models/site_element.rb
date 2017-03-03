@@ -109,29 +109,27 @@ class SiteElement < ActiveRecord::Base
 
   QUESTION_DEFAULTS.keys.each do |attr_name|
     define_method attr_name do
-      if use_question?
-        read_attribute(attr_name).presence || QUESTION_DEFAULTS[attr_name]
-      end
+      self[attr_name].presence || QUESTION_DEFAULTS[attr_name] if use_question?
     end
   end
 
   def caption=(c_value)
     white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
     c_value = white_list_sanitizer.sanitize(c_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    write_attribute(:caption, c_value)
+    self[:caption] = c_value
   end
 
   def headline=(h_value)
     white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
     h_value = white_list_sanitizer.sanitize(h_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
     h_value = 'Hello. Add your message here.' if h_value.blank?
-    write_attribute(:headline, h_value)
+    self[:headline] = h_value
   end
 
   def link_text=(lt_value)
     white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
     lt_value = white_list_sanitizer.sanitize(lt_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    write_attribute(:link_text, lt_value)
+    self[:link_text] = lt_value
   end
 
   def conversion_rate
@@ -225,7 +223,7 @@ class SiteElement < ActiveRecord::Base
     if show_default_email_message?
       default_email_thank_you_text
     else
-      read_attribute(:thank_you_text).presence || default_email_thank_you_text
+      self[:thank_you_text].presence || default_email_thank_you_text
     end
   end
 
@@ -330,7 +328,7 @@ class SiteElement < ActiveRecord::Base
     if after_email_submit_action == :custom_thank_you_text
       if !site.capabilities.custom_thank_you_text?
         errors.add('custom_thank_you_text', 'is a pro feature')
-      elsif read_attribute(:thank_you_text).blank?
+      elsif self[:thank_you_text].blank?
         errors.add('custom_thank_you_text', 'cannot be blank')
       end
     end

@@ -1,5 +1,5 @@
 class Slider < SiteElement
   def placement
-    read_attribute(:placement) || 'bottom-right'
+    self[:placement] || 'bottom-right'
   end
 end
