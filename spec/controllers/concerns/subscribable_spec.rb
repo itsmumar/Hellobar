@@ -90,11 +90,11 @@ describe Subscribable, '#update_subscription' do
     it 'removes the branding from pro subscriptions' do
       site.change_subscription(pro, payment_methods(:always_fails))
       expect(site.capabilities(true).remove_branding?).to be(false)
-      expect(site.site_elements.all? { |se| se.show_branding }).to be(true)
+      expect(site.site_elements.all?(&:show_branding)).to be(true)
 
       controller.update_subscription(site, payment_methods(:always_successful), billing_params)
       expect(site.capabilities(true).remove_branding?).to be(true)
-      expect(site.site_elements.none? { |se| se.show_branding }).to be(true)
+      expect(site.site_elements.none?(&:show_branding)).to be(true)
     end
   end
 

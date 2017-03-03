@@ -30,7 +30,7 @@ class LegacyMigrator
       threads << save_to_db(@migrated_identities)
       threads << save_to_db(@migrated_contact_lists)
       threads << save_to_db(@migrated_rules)
-      threads.each{|t| t.join}
+      threads.each(&:join)
       save_to_db(@rules_to_migrate_later) # must happen after initial rules are created to prevent ID collision
       puts "[#{Time.now}] Done writing"
       # Probably a good idea to load the subscriptions into the site object for

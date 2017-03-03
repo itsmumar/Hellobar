@@ -199,15 +199,15 @@ describe Subscription do
 
       expect(@site.capabilities(true).remove_branding?).to be_false
       expect(@site.capabilities(true).closable?).to be_false
-      expect(@site.site_elements.all? { |se| se.show_branding }).to be_true
-      expect(@site.site_elements.all? { |se| se.closable }).to be_true
+      expect(@site.site_elements.all?(&:show_branding)).to be_true
+      expect(@site.site_elements.all?(&:closable)).to be_true
 
       @site.change_subscription(@pro, payment_methods(:always_successful))
 
       expect(@site.capabilities(true).remove_branding?).to be_true
       expect(@site.capabilities(true).closable?).to be_true
-      expect(@site.site_elements.none? { |se| se.show_branding }).to be_true
-      expect(@site.site_elements.none? { |se| se.closable }).to be_true
+      expect(@site.site_elements.none?(&:show_branding)).to be_true
+      expect(@site.site_elements.none?(&:closable)).to be_true
     end
 
     it "should return the right capabilities if payment is not due yet" do

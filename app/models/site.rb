@@ -222,9 +222,7 @@ class Site < ActiveRecord::Base
 
   def create_default_rules
     default_rules = rules.defaults
-    default_rules.each do |rule|
-      rule.save!
-    end
+    default_rules.each(&:save!)
 
     default_rules.first
   end

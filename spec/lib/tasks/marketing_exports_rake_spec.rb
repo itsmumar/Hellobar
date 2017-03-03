@@ -37,7 +37,7 @@ describe "marketing:export_recent_logins_with_plan" do
     subject.invoke
 
     files.each do |plan, user|
-      other_emails = (files.values - [user]  + [@user_too_old]).collect{|u| u.email}
+      other_emails = (files.values - [user]  + [@user_too_old]).collect(&:email)
 
       expect(@output[plan]).not_to include(*other_emails)
       expect(@output[plan]).to include(user.email)

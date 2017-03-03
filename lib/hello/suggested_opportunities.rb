@@ -163,7 +163,7 @@ module Hello
         end_date = Time.now
         start_date = end_date-60*24*60*60
         # Get the segments by week
-        segments_as_hash = Hello::DynamoDB.get_segments_by_week(site_elements.collect{|s| s.id}, start_date, end_date, SUGGESTION_SEGMENT_KEYS)
+        segments_as_hash = Hello::DynamoDB.get_segments_by_week(site_elements.collect(&:id), start_date, end_date, SUGGESTION_SEGMENT_KEYS)
         segments = []
         # Convert to array
         segments_as_hash.each do |segment, data|

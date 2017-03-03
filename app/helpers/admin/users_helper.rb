@@ -4,7 +4,7 @@ module Admin::UsersHelper
     site.bills.select do |b|
       b.subscription.nil? ||
         !b.subscription.instance_of?(Subscription::Free)
-    end.sort_by { |x| x.bill_at }.reverse.each do |bill|
+    end.sort_by(&:bill_at).reverse.each do |bill|
       if bill.instance_of?(Bill::Refund)
         bills[bill.refunded_billing_attempt.bill] << bill
       else

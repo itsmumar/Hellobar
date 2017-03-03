@@ -25,7 +25,7 @@ class Admin < ActiveRecord::Base
     end
 
     def make!(email, initial_password)
-      make(email, initial_password).tap{|a| a.save!}
+      make(email, initial_password).tap(&:save!)
     end
 
     def validate_session(access_token, token)
@@ -66,7 +66,7 @@ class Admin < ActiveRecord::Base
 
     # Locks all admins
     def lockdown!
-      Admin.all.each{|a| a.lock!}
+      Admin.all.each(&:lock!)
     end
 
     def unlock_all!
@@ -136,7 +136,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
       # First build an array of access tokens with a sortable field
       updated_access_tokens.each do |access_token, timestamps|
-        most_recent_timestamp = timestamps.collect{|t| t.to_i}.max
+        most_recent_timestamp = timestamps.collect(&:to_i).max
         access_token_list << [access_token, most_recent_timestamp, timestamps]
       end
 
@@ -201,7 +201,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
     now = Time.now.to_i
     update_attributes(
       :login_attempts => 0,
-      :session_token => Digest::SHA256.hexdigest([now, rand(10_000), access_token, self.email, rand(10_000)].collect{|t| t.to_s}.join("")),
+      :session_token => Digest::SHA256.hexdigest([now, rand(10_000), access_token, self.email, rand(10_000)].collect(&:to_s).join("")),
       :session_access_token => access_token
     )
     set_valid_access_token(access_token, now)
