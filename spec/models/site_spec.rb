@@ -498,7 +498,7 @@ describe Site do
   end
 
   describe '#set_branding_on_site_elements' do
-    let(:subscription) { fail('subscription must be overridden') }
+    let(:subscription) { raise('subscription must be overridden') }
 
     let(:site) { subscription.site }
     let(:se) { site_elements(:zombo_traffic) }

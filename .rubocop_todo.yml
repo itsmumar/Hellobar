@@ -1161,16 +1161,6 @@ Style/Semicolon:
     - 'lib/color.rb'
     - 'spec/helpers/admin/users_helper_spec.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: only_raise, only_fail, semantic
-Style/SignalException:
-  Exclude:
-    - 'app/models/identity.rb'
-    - 'lib/synchronizer.rb'
-    - 'spec/models/site_spec.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase

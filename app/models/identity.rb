@@ -78,7 +78,7 @@ class Identity < ActiveRecord::Base
   # Deprecated
   # TODO -Remove once the `embed_code` column is removed from Identities
   def embed_code=(embed_code)
-    fail NoMethodError
+    raise NoMethodError
   end
 
   private
