@@ -84,7 +84,7 @@ module Hello
         # Used by other methods
         def generate_path(base_path, site_id, item_ids)
           item_ids = [item_ids] unless item_ids.is_a?(Array)
-          return "/#{base_path}/#{ObfuscatedID.generate(site_id)}/#{item_ids.collect{|e| ObfuscatedID.generate(e)}.join(",")}"
+          return "/#{base_path}/#{ObfuscatedID.generate(site_id)}/#{item_ids.collect{|e| ObfuscatedID.generate(e)}.join(',')}"
         end
 
         def sign_path_and_params(path, params, read_key)

@@ -18,7 +18,7 @@ feature "Payment modal interaction", :js do
       basic_plan = find(".package-block.basic")
       basic_plan.find(".button").click
 
-      expect(page).to have_content "until #{end_date.strftime("%-m-%-d-%Y")}"
+      expect(page).to have_content "until #{end_date.strftime('%-m-%-d-%Y')}"
     end
   end
 

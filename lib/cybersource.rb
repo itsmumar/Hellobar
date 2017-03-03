@@ -44,7 +44,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   validates_with CyberSourceCreditCardValidator
 
   def name
-    "#{brand ? brand.capitalize : "Credit Card"} ending in #{card.number ? card.number[-4..-1] : "???"}"
+    "#{brand ? brand.capitalize : 'Credit Card'} ending in #{card.number ? card.number[-4..-1] : '???'}"
   end
 
   def grace_period
@@ -174,7 +174,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def order_id
     # The order_id is fairly irrelevant
-    "#{self.payment_method ? self.payment_method.id : "NA"}-#{Time.now.to_i}"
+    "#{self.payment_method ? self.payment_method.id : 'NA'}-#{Time.now.to_i}"
   end
 
   def save_to_cybersource
@@ -196,7 +196,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     response = nil
     # Note: we don't want to give CyberSource our customer's email addresses,
     # which is why we use the generic userXXX@hellobar.com format
-    email = "user#{user ? user.id : "NA"}@hellobar.com"
+    email = "user#{user ? user.id : 'NA'}@hellobar.com"
     params = {:order_id=>order_id, :email => email, :address=>address.to_h}
     # Set the brand
     data["brand"] = card.brand
@@ -221,7 +221,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
           if field == "c:cardType"
             raise "Invalid credit card"
           else
-            raise "Invalid #{field.gsub(/^c:/,"").underscore.humanize.downcase}"
+            raise "Invalid #{field.gsub(/^c:/,'').underscore.humanize.downcase}"
           end
         end
         raise response.message

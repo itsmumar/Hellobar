@@ -1327,23 +1327,6 @@ Style/SpecialGlobalVars:
 Style/StringLiterals:
   Enabled: false
 
-# Offense count: 21
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiteralsInInterpolation:
-  Exclude:
-    - 'app/controllers/user_controller.rb'
-    - 'app/helpers/contact_lists_helper.rb'
-    - 'app/models/billing/bill.rb'
-    - 'app/models/billing/billing_log.rb'
-    - 'lib/cybersource.rb'
-    - 'lib/hello/data_api_helper.rb'
-    - 'lib/legacy_migrator.rb'
-    - 'lib/script_generator.rb'
-    - 'spec/bin/queue_worker_mock_spec.rb'
-    - 'spec/features/payment_modal_spec.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase

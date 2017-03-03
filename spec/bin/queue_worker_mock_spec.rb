@@ -11,7 +11,7 @@ class QueueWorkerMock
 
   instance_eval <<-EOS
     def parse_message_from_executable(message)
-      #{body.join("; ")}
+      #{body.join('; ')}
     end
   EOS
 

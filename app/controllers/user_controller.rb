@@ -46,9 +46,9 @@ class UserController < ApplicationController
 
       error_message =
         if active_before_update
-          "There was a problem updating your settings#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
+          "There was a problem updating your settings#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : '.'}"
         else
-          "There was a problem creating your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
+          "There was a problem creating your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : '.'}"
         end
 
       respond_to do |format|
@@ -81,7 +81,7 @@ class UserController < ApplicationController
     else
       respond_to do |format|
         format.html do
-          flash.now[:error] = "There was a problem deleting your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
+          flash.now[:error] = "There was a problem deleting your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : '.'}"
           render :action => :edit
         end
         format.json { render json: @user.errors, status: :unprocessable_entity }

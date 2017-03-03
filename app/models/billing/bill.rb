@@ -165,7 +165,7 @@ class Bill < ActiveRecord::Base
       new_bill = Bill::Recurring.new(
         subscription: self.subscription,
         amount: self.subscription.amount,
-        description: "#{self.subscription.monthly? ? "Monthly" : "Yearly"} Renewal",
+        description: "#{self.subscription.monthly? ? 'Monthly' : 'Yearly'} Renewal",
         grace_period_allowed: true,
         bill_at: self.end_date,
         start_date: new_start_date,
