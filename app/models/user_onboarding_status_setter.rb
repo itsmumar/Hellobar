@@ -51,7 +51,7 @@ class UserOnboardingStatusSetter
   end
 
   def can_enter_status?(new_status, ab_test = nil)
-    return false if ab_test.present? && (!in_campaign_ab_test?(ab_test))
+    return false if ab_test.present? && !in_campaign_ab_test?(ab_test)
     return false unless active_for_onboarding_campaigns? || new_status == :new
 
     case new_status
@@ -70,7 +70,7 @@ class UserOnboardingStatusSetter
 
     when :installed_script
       status_is_progressing?(new_status) &&
-      (!is_paying)
+      !is_paying
 
     when :bought_subscription
       status_is_progressing?(new_status) &&

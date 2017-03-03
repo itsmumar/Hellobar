@@ -387,11 +387,9 @@ class Site < ActiveRecord::Base
   end
 
   def get_settings
-    begin
       JSON.parse(settings)
-    rescue
+  rescue
       return {}
-    end
   end
 
   def update_content_upgrade_styles!(style_params)
@@ -402,11 +400,9 @@ class Site < ActiveRecord::Base
   end
 
   def get_content_upgrade_styles
-   begin
      return JSON.parse(settings)['content_upgrade']
-   rescue
+  rescue
      return {}
-   end
   end
 
   private

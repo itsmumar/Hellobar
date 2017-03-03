@@ -511,7 +511,7 @@ describe Site do
       success.should be_true
       bill.should be_paid
       # Only going to apply 75% of pro payment since we used up 25% (1/4) of it
-      bill.amount.should == (@enterprise.amount - @pro.amount * (0.75)).to_i
+      bill.amount.should == (@enterprise.amount - @pro.amount * 0.75).to_i
       @site.current_subscription.should == @enterprise
       @site.capabilities(true).class.should == Subscription::Enterprise::Capabilities
     end

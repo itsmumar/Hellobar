@@ -37,20 +37,18 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
   private
 
   def handle_error(retries = 2)
-    begin
-      yield
-    rescue CreateSend::ExpiredOAuthToken => e
-      if @client
-        identity.credentials['token'], identity.credentials['expires_at'], identity.credentials['refresh_token'] = @client.refresh_token
-        identity.save
-        retry unless (retries -= 1).zero?
-      end
-      identity.destroy_and_notify_user if identity != nil
-      raise e
-    rescue CreateSend::RevokedOAuthToken => e
-      identity.destroy_and_notify_user if identity != nil
-      raise e
+    yield
+  rescue CreateSend::ExpiredOAuthToken => e
+    if @client
+      identity.credentials['token'], identity.credentials['expires_at'], identity.credentials['refresh_token'] = @client.refresh_token
+      identity.save
+      retry unless (retries -= 1).zero?
     end
+    identity.destroy_and_notify_user if identity != nil
+    raise e
+  rescue CreateSend::RevokedOAuthToken => e
+    identity.destroy_and_notify_user if identity != nil
+    raise e
   end
 
   def initialize_client(identity)

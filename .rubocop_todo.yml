@@ -1089,21 +1089,6 @@ Style/RaiseArgs:
     - 'app/models/site.rb'
     - 'spec/controllers/application_controller_spec.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/RedundantBegin:
-  Exclude:
-    - 'app/interactions/site_elements/update.rb'
-    - 'app/models/site.rb'
-    - 'lib/service_providers/campaign_monitor.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/RedundantParentheses:
-  Exclude:
-    - 'app/models/user_onboarding_status_setter.rb'
-    - 'spec/models/billing/subscription_spec.rb'
-
 # Offense count: 56
 # Cop supports --auto-correct.
 # Configuration parameters: AllowMultipleReturnValues.
