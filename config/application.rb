@@ -12,7 +12,7 @@ module Hellobar
     require File.join(Rails.root, 'config/initializers', 'settings.rb')
 
     # We'll handle our own errors
-    config.exceptions_app = self.routes
+    config.exceptions_app = routes
 
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '**/')]
     config.autoload_paths += %W(#{config.root}/lib/queue_worker/)

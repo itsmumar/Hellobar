@@ -105,11 +105,11 @@ class User < ActiveRecord::Base
   end
 
   def most_viewed_site_element
-    self.site_elements.sort_by(&:total_views).last
+    site_elements.sort_by(&:total_views).last
   end
 
   def most_viewed_site_element_subtype
-    subtype = self.most_viewed_site_element.try(:element_subtype)
+    subtype = most_viewed_site_element.try(:element_subtype)
     subtype = 'social' if subtype && subtype.include?('social')
     subtype
   end
@@ -122,7 +122,7 @@ class User < ActiveRecord::Base
     return false unless current_onboarding_status
 
     [:new, :selected_goal].include?(current_onboarding_status.status_name) &&
-      self.sites.script_not_installed_db.any?
+      sites.script_not_installed_db.any?
   end
 
   def active?
@@ -150,7 +150,7 @@ class User < ActiveRecord::Base
       config.api_url = Hellobar::Settings[:hb_infusionsoft_url]
       config.api_key = Hellobar::Settings[:hb_infusionsoft_key]
     end
-    data = { :FirstName => self.first_name, :LastName => self.last_name, :Email => self.email }
+    data = { :FirstName => first_name, :LastName => last_name, :Email => email }
     contact_id = Infusionsoft.contact_add_with_dup_check(data, :Email)
     Infusionsoft.contact_add_to_group(contact_id, Hellobar::Settings[:hb_infusionsoft_default_group])
   end
@@ -184,7 +184,7 @@ class User < ActiveRecord::Base
 
   def track_temporary_status_change
     if @was_temporary and !temporary?
-      Analytics.track(:user, self.id, 'Completed Signup', { email: self.email })
+      Analytics.track(:user, id, 'Completed Signup', { email: email })
       @was_temporary = false
     end
   end
@@ -305,7 +305,7 @@ class User < ActiveRecord::Base
   end
 
   def was_referred?
-    self.received_referral.present?
+    received_referral.present?
   end
 
   private

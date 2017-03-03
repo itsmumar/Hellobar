@@ -8,7 +8,7 @@ class PaymentMethod < ActiveRecord::Base
   include BillingAuditTrail
 
   def current_details
-    self.details.last
+    details.last
   end
 
   def name

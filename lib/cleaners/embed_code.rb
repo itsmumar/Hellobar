@@ -12,7 +12,7 @@ module Cleaners::EmbedCode
   # embed_code, method_to_call1, method_to_call2, etc.
   def clean(*args)
     args.inject do |cleaned, method|
-      self.send(method, cleaned) # On first run thru block, cleaned = embed_code
+      send(method, cleaned) # On first run thru block, cleaned = embed_code
     end
   end
 

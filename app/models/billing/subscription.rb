@@ -23,7 +23,7 @@ class Subscription < ActiveRecord::Base
     def values_for(site)
       # Just return the defaults for now, in the future we can
       # offer per-site discounts, etc
-      return self.defaults
+      return defaults
     end
 
     def defaults
@@ -31,7 +31,7 @@ class Subscription < ActiveRecord::Base
     end
 
     def estimated_price(user, schedule)
-      dummy_sub = self.new(schedule: schedule)
+      dummy_sub = new(schedule: schedule)
       discount = DiscountCalculator.new(dummy_sub, user).current_discount
       dummy_sub.amount - discount
     end
@@ -47,20 +47,20 @@ class Subscription < ActiveRecord::Base
   end
 
   def pending_bills(reload = false)
-    self.bills(reload).reject { |b| b.status != :pending }
+    bills(reload).reject { |b| b.status != :pending }
   end
 
   def paid_bills(reload = false)
-    self.bills(reload).reject { |b| b.status != :paid }
+    bills(reload).reject { |b| b.status != :paid }
   end
 
   def active_bills(reload = false, date = nil)
     date ||= Time.now
-    self.bills(reload).reject { |b| !b.active_during(date) }
+    bills(reload).reject { |b| !b.active_during(date) }
   end
 
   def active_until
-    self.bills.paid.maximum(:end_date).try(:localtime)
+    bills.paid.maximum(:end_date).try(:localtime)
   end
 
   def capabilities(reload = false)
@@ -69,15 +69,15 @@ class Subscription < ActiveRecord::Base
       # capabilities, otherwise we return the default capabilities
       active_bills(reload).each do |bill|
         payment_method = nil
-        if self.site and self.site.current_subscription and self.site.current_subscription.payment_method
-          payment_method = self.site.current_subscription.payment_method
+        if site and site.current_subscription and site.current_subscription.payment_method
+          payment_method = site.current_subscription.payment_method
         end
         if bill.problem_with_payment?(payment_method)
-          @capabilities = ProblemWithPayment::Capabilities.new(self, self.site)
+          @capabilities = ProblemWithPayment::Capabilities.new(self, site)
           return @capabilities
         end
       end
-      @capabilities = self.class::Capabilities.new(self, self.site)
+      @capabilities = self.class::Capabilities.new(self, site)
     end
     @capabilities
   end
@@ -87,9 +87,9 @@ class Subscription < ActiveRecord::Base
   end
 
   def set_initial_values
-    unless self.persisted?
-      values = self.class.values_for(self.site)
-      self.amount ||= self.monthly? ? values[:monthly_amount] : values[:yearly_amount]
+    unless persisted?
+      values = self.class.values_for(site)
+      self.amount ||= monthly? ? values[:monthly_amount] : values[:yearly_amount]
       self.visit_overage ||= values[:visit_overage]
       self.visit_overage_unit ||= values[:visit_overage_unit]
       self.visit_overage_amount ||= values[:visit_overage_amount]

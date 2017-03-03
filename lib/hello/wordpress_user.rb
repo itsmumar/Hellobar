@@ -48,7 +48,7 @@ class Hello::WordpressUser < Hello::WordpressModel
 
   def convert_to_user
     User.new(
-      email: self.email,
+      email: email,
       encrypted_password: user_pass,
       wordpress_user_id: id
     ).tap { |u| u.save(validate: false) }
@@ -60,7 +60,7 @@ class Hello::WordpressUser < Hello::WordpressModel
 
   def force_convert
     # Get all the old bars
-    old_bars = self.bars
+    old_bars = bars
     # Convert self to user
     user = convert_to_user
     # Create a temporary site (since we don't know their actual URL)

@@ -21,23 +21,23 @@ class BillingAttempt < ActiveRecord::Base
 
   # Can optionally specify a partial amount or description
   def refund!(description = nil, amount = nil)
-    raise InvalidRefund.new('Can not refund unsuccessful billing attempt') unless self.success?
-    amount ||= self.bill.amount
+    raise InvalidRefund.new('Can not refund unsuccessful billing attempt') unless success?
+    amount ||= bill.amount
     amount = amount.abs * -1 # Refunds are always negative
 
     # Check that we're not refunding more than they paid
-    previous_refunds = self.bill.subscription.bills.select { |x| x.is_a?(Bill::Refund) && x.refunded_billing_attempt_id == id }.map(&:amount).sum
-    raise InvalidRefund.new('Cannot refund more than than the amount paid') if self.bill.amount + (amount + previous_refunds) < 0
+    previous_refunds = bill.subscription.bills.select { |x| x.is_a?(Bill::Refund) && x.refunded_billing_attempt_id == id }.map(&:amount).sum
+    raise InvalidRefund.new('Cannot refund more than than the amount paid') if bill.amount + (amount + previous_refunds) < 0
 
     description ||= 'Refund due to customer service request'
     now = Time.now
     refund_bill = Bill::Refund.new(
-      subscription: self.bill.subscription,
+      subscription: bill.subscription,
       amount: amount,
       description: description,
       bill_at: now,
       start_date: now,
-      end_date: self.bill.end_date,
+      end_date: bill.end_date,
       refunded_billing_attempt: self
     )
     refund_attempt = refund_bill.attempt_billing!
@@ -57,7 +57,7 @@ class BillingAttempt < ActiveRecord::Base
     end
     self.status = success ? :success : :failed
     self.response = response
-    self.save!
+    save!
     if success?
       audit << "Attempt was successful, marking Bill[#{bill.id}] as paid with response #{response.inspect}"
       bill.paid!

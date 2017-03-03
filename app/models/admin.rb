@@ -91,8 +91,8 @@ class Admin < ActiveRecord::Base
   def send_validate_access_token_email!(access_token)
     timestamp = Time.now.to_i
 
-    validate_url = admin_validate_access_token_url(email: self.email, key: access_token_key(access_token, timestamp), timestamp: timestamp, host: Hellobar::Settings[:host])
-    lockdown_url = admin_lockdown_url(email: self.email, key: Admin.lockdown_key(email, timestamp), timestamp: timestamp, host: Hellobar::Settings[:host])
+    validate_url = admin_validate_access_token_url(email: email, key: access_token_key(access_token, timestamp), timestamp: timestamp, host: Hellobar::Settings[:host])
+    lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp), timestamp: timestamp, host: Hellobar::Settings[:host])
 
     Pony.mail({
         :to => email,
@@ -201,7 +201,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
     now = Time.now.to_i
     update_attributes(
       :login_attempts => 0,
-      :session_token => Digest::SHA256.hexdigest([now, rand(10_000), access_token, self.email, rand(10_000)].collect(&:to_s).join('')),
+      :session_token => Digest::SHA256.hexdigest([now, rand(10_000), access_token, email, rand(10_000)].collect(&:to_s).join('')),
       :session_access_token => access_token
     )
     set_valid_access_token(access_token, now)
@@ -266,10 +266,10 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
   def generate_rotp_secret_base!
     # each admin will have a separate key base, stored as encrypted string.
-    if self.rotp_secret_base.blank?
+    if rotp_secret_base.blank?
       self.rotp_secret_base = active_support_encryptor.encrypt_and_sign(ROTP::Base32.random_base32)
       save!
     end
-    self.rotp_secret_base
+    rotp_secret_base
   end
 end

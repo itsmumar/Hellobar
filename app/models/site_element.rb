@@ -139,7 +139,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def related_site_elements
-    self.site.site_elements.where.not(:id => self.id).where(SiteElement.arel_table[:element_subtype].matches("%#{self.short_subtype}%"))
+    site.site_elements.where.not(:id => id).where(SiteElement.arel_table[:element_subtype].matches("%#{short_subtype}%"))
   end
 
   def has_activity_message?
@@ -182,15 +182,15 @@ class SiteElement < ActiveRecord::Base
   end
 
   def analytics_track_site_element_creation!
-    Analytics.track(:site, self.site_id, 'Created Site Element',
-                    { site_element_id: self.id,
-                      type: self.element_subtype,
-                      style: self.type.to_s.downcase
+    Analytics.track(:site, site_id, 'Created Site Element',
+                    { site_element_id: id,
+                      type: element_subtype,
+                      style: type.to_s.downcase
                     })
   end
 
   def onboarding_track_site_element_creation!
-    self.site.owners.each do |user|
+    site.owners.each do |user|
       user.onboarding_status_setter.created_element!
     end
   end
@@ -249,30 +249,30 @@ class SiteElement < ActiveRecord::Base
   end
 
   def content_upgrade_key
-    "#{Site.id_to_script_hash(site.id)}/#{self.id}.pdf"
+    "#{Site.id_to_script_hash(site.id)}/#{id}.pdf"
   end
 
   def content_upgrade_download_link
-  "https://s3.amazonaws.com/#{Hellobar::Settings[:s3_content_upgrades_bucket]}/#{Site.id_to_script_hash(site.id)}/#{self.id}.pdf"
+  "https://s3.amazonaws.com/#{Hellobar::Settings[:s3_content_upgrades_bucket]}/#{Site.id_to_script_hash(site.id)}/#{id}.pdf"
   end
 
   def content_upgrade_script_tag
-    '<script id="hb-cu-' + self.id.to_s + '">window.onload = function() {HB.showContentUpgrade(' + self.id.to_s + ')};</script>'
+    '<script id="hb-cu-' + id.to_s + '">window.onload = function() {HB.showContentUpgrade(' + id.to_s + ')};</script>'
   end
 
   def content_upgrade_wp_shortcode
-    '[hellobar_content_upgrade id="' + self.id.to_s + '"]'
+    '[hellobar_content_upgrade id="' + id.to_s + '"]'
   end
 
   private
 
   def update_s3_content
     #don't do this unless you need to
-    return if self.type != 'ContentUpgrade'
-    return if self.content.blank?
-    return unless self.content_changed?
+    return if type != 'ContentUpgrade'
+    return if content.blank?
+    return unless content_changed?
 
-    pdf = WickedPdf.new.pdf_from_string(self.content)
+    pdf = WickedPdf.new.pdf_from_string(content)
 
     # create a connection
     connection = Fog::Storage.new({

@@ -174,13 +174,13 @@ class Condition < ActiveRecord::Base
   end
 
   def normalize_url_condition
-    return if self.segment != 'UrlCondition' && self.segment != 'UrlPathCondition'
+    return if segment != 'UrlCondition' && segment != 'UrlPathCondition'
 
-    if self.value.kind_of?(String)
-      self.value = normalize_url(self.value)
-    elsif self.value.kind_of?(Array)
-      self.value.each_with_index do |val, i|
-        self.value[i] = normalize_url(val)
+    if value.kind_of?(String)
+      self.value = normalize_url(value)
+    elsif value.kind_of?(Array)
+      value.each_with_index do |val, i|
+        value[i] = normalize_url(val)
       end
     end
   end
@@ -197,11 +197,11 @@ class Condition < ActiveRecord::Base
   end
 
   def format_string_values
-    if self.value.kind_of?(String)
-      self.value = self.value.strip
-    elsif self.value.kind_of?(Array)
-      self.value.each_with_index do |val, i|
-        self.value[i] = val.strip if val.kind_of?(String)
+    if value.kind_of?(String)
+      self.value = value.strip
+    elsif value.kind_of?(Array)
+      value.each_with_index do |val, i|
+        value[i] = val.strip if val.kind_of?(String)
       end
     end
   end

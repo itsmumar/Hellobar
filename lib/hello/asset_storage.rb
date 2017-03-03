@@ -24,7 +24,7 @@ module Hello
 
       @directory = directory || self.class.connection.directories.get(Hellobar::Settings[:s3_bucket])
 
-      @directory ||= self.connection.directories.create(:key => 'test')
+      @directory ||= connection.directories.create(:key => 'test')
     end
 
     def create_or_update_file_with_contents(filename, contents)

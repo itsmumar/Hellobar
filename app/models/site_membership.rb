@@ -23,7 +23,7 @@ class SiteMembership < ActiveRecord::Base
 
   def updater_permission
     if updated_by && updated_by.role_for_site(site) == :admin
-      self.errors.add(:owner, 'can only be set by other owners') if role == 'owner'
+      errors.add(:owner, 'can only be set by other owners') if role == 'owner'
     end
   end
 
@@ -44,13 +44,13 @@ class SiteMembership < ActiveRecord::Base
                                 first
 
     if existing_membership || duplicate_membership
-      self.errors.add(:user, "already has a membership to #{site.url}")
+      errors.add(:user, "already has a membership to #{site.url}")
     end
   end
 
   def at_least_one_owner_per_site
-    unless self.role == 'owner' || SiteMembership.where(site_id: site.id, role: 'owner').where.not(id: id).exists?
-      self.errors.add :site, 'must have at least one owner'
+    unless role == 'owner' || SiteMembership.where(site_id: site.id, role: 'owner').where.not(id: id).exists?
+      errors.add :site, 'must have at least one owner'
     end
   end
 end

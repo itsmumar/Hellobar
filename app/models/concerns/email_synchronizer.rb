@@ -23,7 +23,7 @@ module EmailSynchronizer
   def sync_all!
     return unless syncable?
 
-    Rails.logger.info "Syncing all emails for contact_list #{self.id}"
+    Rails.logger.info "Syncing all emails for contact_list #{id}"
 
     perform_sync do
       contacts = Hello::DataAPI.get_contacts(self) || []

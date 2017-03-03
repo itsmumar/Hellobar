@@ -21,25 +21,25 @@ class Bill < ActiveRecord::Base
   before_validation :set_base_amount, :check_amount
 
   def during_trial_subscription?
-    self.subscription.amount != 0 && self.subscription.payment_method.nil? && \
-    self.amount == 0 && self.paid?
+    subscription.amount != 0 && subscription.payment_method.nil? && \
+    amount == 0 && paid?
   end
 
   def set_base_amount
-    self.base_amount ||= self.amount
+    self.base_amount ||= amount
   end
 
   def check_amount
-    raise InvalidBillingAmount.new("Amount was: #{self.amount.inspect}") if !self.amount or self.amount < 0
+    raise InvalidBillingAmount.new("Amount was: #{amount.inspect}") if !amount or amount < 0
   end
 
   alias :void! :voided!
   def status=(value)
     value = value.to_sym
-    return if self.status == value
-    raise StatusAlreadySet.new("Can not change status once set. Was #{self.status.inspect} trying to set to #{value.inspect}") unless self.status == :pending || value == :voided
+    return if status == value
+    raise StatusAlreadySet.new("Can not change status once set. Was #{status.inspect} trying to set to #{value.inspect}") unless status == :pending || value == :voided
 
-    audit << "Changed Bill[#{self.id}] status from #{self.status.inspect} to #{value.inspect}"
+    audit << "Changed Bill[#{id}] status from #{status.inspect} to #{value.inspect}"
     status_value = Bill.statuses[value.to_sym]
     raise InvalidStatus.new("Invalid status: #{value.inspect}") unless status_value
     write_attribute(:status, status_value)
@@ -56,15 +56,15 @@ class Bill < ActiveRecord::Base
     set_final_amount!
 
     now = Time.now
-    raise BillingEarly.new("Attempted to bill on #{now} but bill[#{self.id}] has a bill_at date of #{self.bill_at}") if !allow_early and now < self.bill_at
-    if self.amount == 0 # Note: less than 0 is a valid value for refunds
+    raise BillingEarly.new("Attempted to bill on #{now} but bill[#{id}] has a bill_at date of #{bill_at}") if !allow_early and now < bill_at
+    if amount == 0 # Note: less than 0 is a valid value for refunds
       audit << 'Marking bill as paid because no payment required'
       # Mark as paid
-      self.paid!
+      paid!
       return true
     else
-      raise MissingPaymentMethod.new unless self.subscription.payment_method
-      return self.subscription.payment_method.pay(self)
+      raise MissingPaymentMethod.new unless subscription.payment_method
+      return subscription.payment_method.pay(self)
     end
   end
 
@@ -81,11 +81,11 @@ class Bill < ActiveRecord::Base
   end
 
   def due_at(payment_method = nil)
-    if self.grace_period_allowed and payment_method and payment_method.current_details and payment_method.current_details.grace_period
-      return self.bill_at + payment_method.current_details.grace_period
+    if grace_period_allowed and payment_method and payment_method.current_details and payment_method.current_details.grace_period
+      return bill_at + payment_method.current_details.grace_period
     end
     # Otherwise it is due now
-    return self.bill_at
+    return bill_at
   end
 
   def past_due?(payment_method = nil)
@@ -93,14 +93,14 @@ class Bill < ActiveRecord::Base
   end
 
   def should_bill?
-    return (self.pending? and Time.now >= self.bill_at)
+    return (pending? and Time.now >= bill_at)
   end
 
   def problem_with_payment?(payment_method = nil)
-    return false if paid? || voided? || self.amount == 0
+    return false if paid? || voided? || amount == 0
     # If pending see if we are past due and we have
     # tried billing them at least once
-    return true if past_due?(payment_method) and (payment_method.nil? || !self.billing_attempts.empty?)
+    return true if past_due?(payment_method) and (payment_method.nil? || !billing_attempts.empty?)
     # False otherwise
     return false
   end
@@ -132,8 +132,8 @@ class Bill < ActiveRecord::Base
   def set_final_amount!
     return if paid? || base_amount.nil?
 
-    self.discount = self.is_a?(Refund) ? 0 : calculate_discount
-    self.amount = [self.base_amount - self.discount, 0].max
+    self.discount = is_a?(Refund) ? 0 : calculate_discount
+    self.amount = [self.base_amount - discount, 0].max
     CouponUses::ApplyFromReferrals.run(bill: self)
   end
 
@@ -154,20 +154,20 @@ class Bill < ActiveRecord::Base
 
     def renewal_date
       raise 'can not calculate renewal date without start_date' unless start_date
-      self.subscription.monthly? ? self.class.next_month(start_date) : self.class.next_year(start_date)
+      subscription.monthly? ? self.class.next_month(start_date) : self.class.next_year(start_date)
     end
 
     def on_paid
       super
       # Create the next bill
-      next_method = self.subscription.monthly? ? :next_month : :next_year
-      new_start_date = self.end_date
+      next_method = subscription.monthly? ? :next_month : :next_year
+      new_start_date = end_date
       new_bill = Bill::Recurring.new(
-        subscription: self.subscription,
-        amount: self.subscription.amount,
-        description: "#{self.subscription.monthly? ? 'Monthly' : 'Yearly'} Renewal",
+        subscription: subscription,
+        amount: subscription.amount,
+        description: "#{subscription.monthly? ? 'Monthly' : 'Yearly'} Renewal",
         grace_period_allowed: true,
-        bill_at: self.end_date,
+        bill_at: end_date,
         start_date: new_start_date,
         end_date: Bill::Recurring.send(next_method, new_start_date)
       )
@@ -183,7 +183,7 @@ class Bill < ActiveRecord::Base
   class Refund < Bill
     # Refunds must be a negative amount
     def check_amount
-      raise InvalidBillingAmount.new("Amount must be negative. It was #{self.amount.to_f}") if self.amount > 0
+      raise InvalidBillingAmount.new("Amount must be negative. It was #{amount.to_f}") if amount > 0
     end
 
     # Refunds are never considered "active"
@@ -193,15 +193,15 @@ class Bill < ActiveRecord::Base
 
     def refunded_billing_attempt
       unless @refunded_billing_attempt
-        if self.refunded_billing_attempt_id
-          @refunded_billing_attempt = BillingAttempt.find(self.refunded_billing_attempt_id)
+        if refunded_billing_attempt_id
+          @refunded_billing_attempt = BillingAttempt.find(refunded_billing_attempt_id)
         end
       end
       @refunded_billing_attempt
     end
 
     def refunded_billing_attempt_id
-      return self.metadata['refunded_billing_attempt_id'] if self.metadata
+      return metadata['refunded_billing_attempt_id'] if metadata
     end
 
     def refunded_billing_attempt=(billing_attempt)
@@ -209,10 +209,10 @@ class Bill < ActiveRecord::Base
     end
 
     def refunded_billing_attempt_id=(id)
-      if !self.metadata
+      if !metadata
         self.metadata = {}
       end
-      self.metadata['refunded_billing_attempt_id'] = id
+      metadata['refunded_billing_attempt_id'] = id
       @refunded_billing_attempt = nil
     end
   end

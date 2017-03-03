@@ -174,18 +174,18 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def order_id
     # The order_id is fairly irrelevant
-    "#{self.payment_method ? self.payment_method.id : 'NA'}-#{Time.now.to_i}"
+    "#{payment_method ? payment_method.id : 'NA'}-#{Time.now.to_i}"
   end
 
   def save_to_cybersource
     user = nil
-    if self.payment_method and self.payment_method.user
-      user = self.payment_method.user
+    if payment_method and payment_method.user
+      user = payment_method.user
     end
     # See if there is a previous token
     previous_token = nil
-    if self.payment_method
-      self.payment_method.details(true).each do |details|
+    if payment_method
+      payment_method.details(true).each do |details|
         if details.is_a?(CyberSourceCreditCard)
           if details.data['token']
             previous_token = details.data['token']

@@ -68,11 +68,11 @@ class Identity < ActiveRecord::Base
       MailerGateway.send_email('Integration Sync Error', user.email, { integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host]) })
     end
 
-    self.destroy
+    destroy
   end
 
   def contact_lists_updated
-    self.destroy if contact_lists.count == 0
+    destroy if contact_lists.count == 0
   end
 
   # Deprecated

@@ -79,7 +79,7 @@ class Site < ActiveRecord::Base
   # to collect more data so that hopefully I can find the source of the
   # problem and then implement an appropriate fix.
   def debug_install(type)
-    lines = ["[#{Time.now}] #{type} - Site[#{self.id}] script_installed_at: #{self.script_installed_at.inspect}, script_uninstalled_at: #{self.script_uninstalled_at.inspect}, lifetime_totals: #{@lifetime_totals.inspect}"]
+    lines = ["[#{Time.now}] #{type} - Site[#{id}] script_installed_at: #{script_installed_at.inspect}, script_uninstalled_at: #{script_uninstalled_at.inspect}, lifetime_totals: #{@lifetime_totals.inspect}"]
     caller[0..4].each do |line|
       lines << "\t#{line}"
     end
@@ -104,7 +104,7 @@ class Site < ActiveRecord::Base
     debug_install('INSTALLED')
     update(script_installed_at: Time.current)
     Referrals::RedeemForRecipient.run(site: self)
-    Analytics.track(:site, self.id, 'Installed')
+    Analytics.track(:site, id, 'Installed')
     onboarding_track_script_installation!
   end
 
@@ -117,7 +117,7 @@ class Site < ActiveRecord::Base
   def store_script_uninstallation!
     debug_install('UNINSTALLED')
     update(script_uninstalled_at: Time.current)
-    Analytics.track(:site, self.id, 'Uninstalled')
+    Analytics.track(:site, id, 'Uninstalled')
     onboarding_track_script_uninstallation!
   end
 
@@ -148,7 +148,7 @@ class Site < ActiveRecord::Base
   end
 
   def script_installed_on_homepage?
-    response = HTTParty.get(self.url, timeout: 5)
+    response = HTTParty.get(url, timeout: 5)
     if response =~ /#{script_name}/
       true
     elsif (had_wordpress_bars? && response =~ /hellobar.js/)
@@ -246,19 +246,19 @@ class Site < ActiveRecord::Base
   def url_exists?(user = nil)
     if user
       Site.joins(:users)
-      .merge(Site.protocol_ignored_url(self.url))
+      .merge(Site.protocol_ignored_url(url))
       .where(users: { id: user.id })
       .where.not(id: id)
       .any?
     else
-      Site.where.not(id: id).merge(Site.protocol_ignored_url(self.url)).any?
+      Site.where.not(id: id).merge(Site.protocol_ignored_url(url)).any?
     end
   end
 
   def url_is_unique?
     if users.
       joins(:sites).
-      merge(Site.protocol_ignored_url(self.url)).
+      merge(Site.protocol_ignored_url(url)).
       where.not(sites: { id: id }).
       any?
 
@@ -280,8 +280,8 @@ class Site < ActiveRecord::Base
   end
 
   def requires_payment_method?
-    return false unless self.current_subscription
-    return false if self.current_subscription.amount == 0
+    return false unless current_subscription
+    return false if current_subscription.amount == 0
     return true
   end
 
@@ -398,7 +398,7 @@ class Site < ActiveRecord::Base
     site_settings = get_settings
     site_settings['content_upgrade'] = style_params
 
-    self.update_attribute(:settings, site_settings.to_json)
+    update_attribute(:settings, site_settings.to_json)
   end
 
   def get_content_upgrade_styles
@@ -540,15 +540,15 @@ class Site < ActiveRecord::Base
   end
 
   def standardize_url
-    return if self.url.blank?
-    normalized_url = self.class.normalize_url(self.url)
+    return if url.blank?
+    normalized_url = self.class.normalize_url(url)
     self.url = "#{normalized_url.scheme}://#{normalized_url.normalized_host}"
   rescue Addressable::URI::InvalidURIError
   end
 
   def generate_read_write_keys
-    self.read_key = SecureRandom.uuid if self.read_key.blank?
-    self.write_key = SecureRandom.uuid if self.write_key.blank?
+    self.read_key = SecureRandom.uuid if read_key.blank?
+    self.write_key = SecureRandom.uuid if write_key.blank?
   end
 
   def set_branding_on_site_elements
