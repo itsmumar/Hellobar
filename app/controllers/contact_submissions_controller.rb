@@ -34,7 +34,7 @@ class ContactSubmissionsController < ApplicationController
       :preview => (params[:message] || '')[0, 50]
     }
 
-    email_params.merge!(:website => @site.url) if @site
+    email_params[:website] = @site.url if @site
 
     MailerGateway.send_email('Contact Form', 'support@hellobar.com', email_params)
     flash[:success] = 'Your message has been sent!'

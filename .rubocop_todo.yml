@@ -137,51 +137,6 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 18
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Performance/Casecmp:
-  Exclude:
-    - 'app/helpers/site_elements_helper.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Performance/CompareWithBlock:
-  Exclude:
-    - 'app/helpers/sites_helper.rb'
-
-# Offense count: 7
-# Cop supports --auto-correct.
-Performance/RedundantBlockCall:
-  Exclude:
-    - 'lib/service_provider.rb'
-    - 'spec/spec_helper.rb'
-    - 'spec/support/ab_test_config.rb'
-
-# Offense count: 6
-# Cop supports --auto-correct.
-Performance/RedundantMatch:
-  Exclude:
-    - 'app/controllers/application_controller.rb'
-    - 'app/helpers/user_helper.rb'
-    - 'app/models/condition.rb'
-    - 'lib/google_analytics.rb'
-    - 'lib/missing_spec_generator.rb'
-    - 'lib/service_providers/embed_code_provider.rb'
-
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: MaxKeyValuePairs.
-Performance/RedundantMerge:
-  Exclude:
-    - 'app/controllers/contact_submissions_controller.rb'
-    - 'app/controllers/identities_controller.rb'
-    - 'lib/service_providers/convert_kit.rb'
-    - 'lib/service_providers/drip.rb'
-    - 'lib/service_providers/embed_code_provider.rb'
-    - 'lib/user_state_cloner.rb'
-    - 'spec/interactions/site_elements/update_spec.rb'
-    - 'spec/lib/service_providers/convert_kit_spec.rb'
-
 # Offense count: 6
 # Cop supports --auto-correct.
 Performance/StringReplacement:

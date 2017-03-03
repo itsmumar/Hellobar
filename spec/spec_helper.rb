@@ -151,23 +151,23 @@ def random_uniq_url
   'http://url.net'.split('.').insert(1, "-#{(0...8).map { 65.+(rand(26)).chr }.join.downcase}").insert(2, '.').join
 end
 
-def stub_out_get_ab_variations(*variations, &result)
+def stub_out_get_ab_variations(*variations)
   variation_matcher = Regexp.new(variations.join('|'))
 
   allow_any_instance_of(ApplicationController).
     to receive(:get_ab_variation).
     with(variation_matcher).
-    and_return(result.call)
+    and_return(yield)
 
   allow_any_instance_of(ApplicationController).
     to receive(:get_ab_variation).
     with(variation_matcher, anything).
-    and_return(result.call)
+    and_return(yield)
 
   allow_any_instance_of(ApplicationController).
     to receive(:get_ab_variation_or_nil).
     with(variation_matcher).
-    and_return(result.call)
+    and_return(yield)
 end
 
 Hellobar::Settings[:host] = 'http://hellobar.com'

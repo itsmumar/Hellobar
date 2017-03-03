@@ -111,7 +111,7 @@ describe SiteElements::Update do
 
       context 'when update succeeds but disabling fails' do
         it "doesn't create new element" do
-          @valid_params.merge!(element_subtype: 'traffic')
+          @valid_params[:element_subtype] = 'traffic'
           allow(@element).to receive(:save!).and_raise(ActiveRecord::ActiveRecordError)
           update(params: @valid_params)
 

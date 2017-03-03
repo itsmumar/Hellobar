@@ -40,7 +40,7 @@ class UserStateCloner
   end
 
   def build_user(user_json)
-    user_json.merge! password: 'password'
+    user_json[:password] = 'password'
     user_json.delete(:state)
 
     user = User.find_or_initialize_by(id: user_json[:id])

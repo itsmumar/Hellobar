@@ -33,7 +33,7 @@ class IdentitiesController < ApplicationController
       #TODO sanitze me?
       identity.api_key = params[:api_key]
       env['omniauth.params'] ||= {}
-      env['omniauth.params'].merge!({ 'redirect_to' => request.referrer })
+      env['omniauth.params']['redirect_to'] = request.referrer
     end
 
     if identity.save

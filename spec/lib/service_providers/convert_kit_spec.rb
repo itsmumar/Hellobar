@@ -35,13 +35,14 @@ describe ServiceProviders::ConvertKit do
       end
 
       it 'with first name only' do
-        @data.merge!(first_name: 'R')
+        @data[:first_name] = 'R'
         expect(client).to receive(:post).with(@uri, @data)
         service_provider.subscribe(@form_id, @email, 'R')
       end
 
       it 'with first name & last name' do
-        @data.merge!(first_name: 'R', fields: { last_name: 'K' })
+        @data[:first_name] = 'R'
+        @data[:fields] = { last_name: 'K' }
         expect(client).to receive(:post).with(@uri, @data)
         service_provider.subscribe(@form_id, @email, 'R K')
       end

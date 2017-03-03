@@ -137,7 +137,7 @@ module SiteElementsHelper
   end
 
   def style_icon_class_for_element(element)
-    element.type.downcase == 'bar' ? 'icon-bar' : 'icon-modal'
+    element.type.casecmp('bar').zero? ? 'icon-bar' : 'icon-modal'
   end
 
   def site_element_subtypes_for_site(site)

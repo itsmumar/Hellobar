@@ -46,7 +46,7 @@ class ServiceProviders::Drip < ServiceProviders::Email
 
     retry_on_timeout do
       if campaign_id
-        opts.merge!(double_optin: double_optin)
+        opts[:double_optin] = double_optin
         @client.subscribe(email, campaign_id, opts)
       else
         # Add subscriber to global account list

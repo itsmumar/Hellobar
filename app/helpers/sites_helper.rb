@@ -8,7 +8,7 @@ module SitesHelper
   end
 
   def payment_issue_date(site)
-    site_has_payment_issue?(site) ? site.bills_with_payment_issues.sort { |a, b| a.bill_at <=> b.bill_at }.first.bill_at : nil
+    site_has_payment_issue?(site) ? site.bills_with_payment_issues.sort_by(&:bill_at).first.bill_at : nil
   end
 
   def show_whats_new_prompt?

@@ -66,8 +66,8 @@ module ServiceProviders
         split = name.split(' ', 2)
         lname = split[1]
 
-        body.merge!(first_name: split[0])
-        body.merge!({ fields: { last_name: lname } }) if lname
+        body[:first_name] = split[0]
+        body[:fields] = { last_name: lname } if lname
       end
 
       begin

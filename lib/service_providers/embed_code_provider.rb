@@ -104,7 +104,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     end
 
     required_params.tap do |params|
-      params.merge!(email_param => email)
+      params[email_param] = email
       params.merge!(name_hash)
     end
   end
@@ -163,7 +163,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
 
     return nil unless url
 
-    url = 'http:' + url if url.match %r{^//}
+    url = 'http:' + url if url =~ %r{^//}
     url
   end
 end
