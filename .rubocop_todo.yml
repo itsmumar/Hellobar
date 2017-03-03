@@ -384,13 +384,6 @@ Style/MultilineBlockChain:
 Style/MutableConstant:
   Enabled: false
 
-# Offense count: 36
-# Cop supports --auto-correct.
-# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Enabled: false
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: AllowSafeAssignment.

@@ -63,3 +63,8 @@ Style/IndentHash:
 # SupportedOctalStyles: zero_with_o, zero_only
 Style/NumericLiteralPrefix:
   EnforcedOctalStyle: zero_only
+
+# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
+# SupportedStyles: predicate, comparison
+Style/NumericPredicate:
+  Enabled: false
