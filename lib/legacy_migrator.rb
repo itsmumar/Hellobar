@@ -467,7 +467,7 @@ class LegacyMigrator
       timezone[12..-1] # timezone is in a standardized format "(GMT+HH:MM) "
     end
 
-  private
+    private
 
     def create_user_and_membership(legacy_site_id: legacy_site_id, account_id: account_id)
       legacy_account = @legacy_accounts[account_id]

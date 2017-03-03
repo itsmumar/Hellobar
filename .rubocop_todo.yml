@@ -303,16 +303,6 @@ Security/YAMLLoad:
   Exclude:
     - 'lib/hello/internal_analytics.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: outdent, indent
-Style/AccessModifierIndentation:
-  Exclude:
-    - 'app/controllers/errors_controller.rb'
-    - 'app/controllers/users/forgot_emails_controller.rb'
-    - 'lib/legacy_migrator.rb'
-
 # Offense count: 9
 Style/AccessorMethodName:
   Exclude:
