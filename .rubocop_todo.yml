@@ -1171,16 +1171,6 @@ Style/SignalException:
     - 'lib/synchronizer.rb'
     - 'spec/models/site_spec.rb'
 
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: AllowIfMethodIsEmpty.
-Style/SingleLineMethods:
-  Exclude:
-    - 'app/models/billing/subscription.rb'
-    - 'lib/legacy_migrator/legacy_goal.rb'
-    - 'spec/controllers/application_controller_spec.rb'
-    - 'spec/models/bill_spec.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase

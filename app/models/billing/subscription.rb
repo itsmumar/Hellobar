@@ -26,7 +26,9 @@ class Subscription < ActiveRecord::Base
       return self.defaults
     end
 
-    def defaults; {}; end
+    def defaults
+      {}
+    end
 
     def estimated_price(user, schedule)
       dummy_sub = self.new(schedule: schedule)

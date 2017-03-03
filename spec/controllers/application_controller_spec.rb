@@ -52,7 +52,9 @@ describe ApplicationController, '#require_admin' do
   controller do
     before_action :require_admin
 
-    def index; render nothing: true; end
+    def index
+      render nothing: true
+    end
   end
 
   it 'redirects the user to the admin login path when there is no current_admin' do
@@ -90,7 +92,9 @@ describe ApplicationController, '#require_no_user' do
   controller do
     before_action :require_no_user
 
-    def index; render nothing: true; end
+    def index
+      render nothing: true
+    end
   end
 
   it 'redirects a logged in user to the dashboard of their most recent site' do
@@ -154,7 +158,9 @@ describe ApplicationController, 'rescue_from errors' do
   fixtures :all
 
   controller do
-    def index; render nothing: true; end
+    def index
+      render nothing: true
+    end
   end
 
   context 'Google::Apis::AuthorizationError' do

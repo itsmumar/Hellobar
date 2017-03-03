@@ -9,6 +9,8 @@ class LegacyMigrator
 
     serialize :data_json, JSON
 
-    def priority; 1; end
+    def priority
+      1
+    end
   end
 end
