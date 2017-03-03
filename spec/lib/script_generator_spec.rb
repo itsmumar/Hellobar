@@ -167,7 +167,7 @@ describe ScriptGenerator do
         rule = Rule.new
         site.stub rules: [rule]
 
-        expected_string = Regexp.new /HB.umatch(.*)/
+        expected_string = /HB.umatch(.*)/
 
         generator.render.should_not match(expected_string)
       end
@@ -187,7 +187,7 @@ describe ScriptGenerator do
         rule = Rule.new
         generator.stub rules: [rule]
 
-        expected_string = Regexp.new /HB.umatch(.*)/
+        expected_string = /HB.umatch(.*)/
 
         generator.render.should_not match(expected_string)
       end
