@@ -671,34 +671,6 @@ Style/EmptyElse:
     - 'lib/service_providers/embed_code_provider.rb'
     - 'lib/site_detector.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs.
-Style/EmptyLineBetweenDefs:
-  Exclude:
-    - 'spec/models/bill_spec.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/EmptyLinesAroundMethodBody:
-  Exclude:
-    - 'app/controllers/content_upgrades_controller.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines
-Style/EmptyLinesAroundModuleBody:
-  Exclude:
-    - 'app/controllers/concerns/subscribable.rb'
-    - 'lib/deserialize_with_errors.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/EmptyLiteral:
-  Exclude:
-    - 'lib/service_providers/embed_code_provider.rb'
-
 # Offense count: 9
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

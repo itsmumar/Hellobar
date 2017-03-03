@@ -20,7 +20,6 @@ class ContentUpgradesController < ApplicationController
     @content_upgrade.link_text = "Download Now"
     @content_upgrade.headline = "Enter your email to download this free guide right now."
     @content_upgrade.caption = "Almost there! Please complete this form and click the button below to gain instant access."
-
   end
 
   def edit
@@ -116,6 +115,5 @@ class ContentUpgradesController < ApplicationController
     if @content_upgrade.rule.site_id != @site.id
       render :json => { error: "forbidden" }, :status => :forbidden
     end
-
   end
 end

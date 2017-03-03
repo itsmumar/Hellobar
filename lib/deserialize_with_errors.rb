@@ -12,7 +12,6 @@
 # end
 
 module DeserializeWithErrors
-
   module ClassMethods
     def serialize column, as_type
       
@@ -36,5 +35,4 @@ module DeserializeWithErrors
   def self.included active_record_class
     active_record_class.extend ClassMethods
   end
-
 end

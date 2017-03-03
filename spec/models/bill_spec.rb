@@ -3,9 +3,13 @@ require 'payment_method_details'
 
 module BillSpecDates
   def june; Time.parse("2014-06-10"); end
+
   def bill_at; Time.parse("2014-06-11"); end
+
   def july; Time.parse("2014-07-10"); end
+
   def aug; Time.parse("2014-08-10"); end
+
   def sep; Time.parse("2014-09-10"); end
 end
 
