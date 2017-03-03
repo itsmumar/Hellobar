@@ -316,19 +316,6 @@ Style/ClassVars:
     - 'lib/hello/suggested_opportunities.rb'
     - 'lib/hello/wordpress_model.rb'
 
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, SingleLineConditionsOnly, IncludeTernaryExpressions.
-# SupportedStyles: assign_to_condition, assign_inside_condition
-Style/ConditionalAssignment:
-  Exclude:
-    - 'app/controllers/users/sessions_controller.rb'
-    - 'app/helpers/site_elements_helper.rb'
-    - 'app/helpers/user_helper.rb'
-    - 'app/models/billing/subscription.rb'
-    - 'lib/obfuscated_id.rb'
-    - 'lib/service_providers/embed_code_provider.rb'
-
 # Offense count: 3
 Style/ConstantName:
   Exclude:

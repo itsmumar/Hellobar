@@ -92,14 +92,15 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     if name_params.size >= 1
       first_name, last_name = name.split(' ')
       name_params.each do |name_field|
-        case name_field
-        when /first|fname/
-          name_hash[name_field] = first_name || ''
-        when /last|lname/
-          name_hash[name_field] = last_name || ''
-        else
-          name_hash[name_field] = name
-        end
+        name_hash[name_field] =
+          case name_field
+          when /first|fname/
+            first_name || ''
+          when /last|lname/
+            last_name || ''
+          else
+            name
+          end
       end
     end
 

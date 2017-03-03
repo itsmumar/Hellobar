@@ -13,11 +13,12 @@ class Users::SessionsController < Devise::SessionsController
   def find_email
     email = params[:user].try(:[], :email)
 
-    if TEMP_MIGRATION_USERS.include?(email)
-      @user = User.new(email: email)
-    else
-      @user = User.search_all_versions_for_email(email)
-    end
+    @user =
+      if TEMP_MIGRATION_USERS.include?(email)
+        User.new(email: email)
+      else
+        User.search_all_versions_for_email(email)
+      end
 
     if @user
       if @user.is_a?(Hello::WordpressUser)

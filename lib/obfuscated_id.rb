@@ -24,11 +24,12 @@ class ObfuscatedID
         input = input.to_i
         unless input == 0
           loop do
-            if input > ENCODE.length
-              val = rand(ENCODE.length) + 1
-            else
-              val = rand(input) + 1
-            end
+            val =
+              if input > ENCODE.length
+                rand(ENCODE.length) + 1
+              else
+                rand(input) + 1
+              end
             output += ENCODE[(val - 1)..(val - 1)]
             input -= val
             break if input <= 0

@@ -18,10 +18,11 @@ module UserHelper
 
     # avatar gem doesn't support adding a non-url string to the d/default param
     # This param changes the default gravatar image to "mystery man"
-    if url =~ /\?/ # already has a query param
-      url += '&d=mm'
-    else
-      url += '?d=mm'
-    end
+    url +=
+      if url =~ /\?/ # already has a query param
+        '&d=mm'
+      else
+        '?d=mm'
+      end
   end
 end
