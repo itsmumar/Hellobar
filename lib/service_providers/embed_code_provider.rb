@@ -123,7 +123,12 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
 
     return @html = html if url.nil? || (!embed_code.match(URL_REGEX) && reference_object.nil?)
 
-    remote_html = HTTParty.get(url) rescue ''
+    remote_html =
+      begin
+        HTTParty.get(url)
+      rescue => _
+        ''
+      end
 
     # Pull from scripts and run
     if reference_object.try(:name) == 'script'

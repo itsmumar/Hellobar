@@ -15,7 +15,9 @@ class ServiceProviders::AWeber < ServiceProviders::Email
   end
 
   def lists
-    @client.account.lists.map { |_, v| { 'id' => v.id, 'name' => v.name } } rescue []
+    @client.account.lists.map { |_, v| { 'id' => v.id, 'name' => v.name } }
+  rescue => _
+    []
   end
 
   def subscribe(list_id, email, name = nil, _double_optin = true)

@@ -402,15 +402,6 @@ Style/PredicateName:
     - 'app/serializers/subscription_serializer.rb'
     - 'lib/hello/wordpress_user.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/RescueModifier:
-  Exclude:
-    - 'lib/legacy_migrator.rb'
-    - 'lib/service_providers/a_weber.rb'
-    - 'lib/service_providers/embed_code_provider.rb'
-    - 'spec/models/identity_spec.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase

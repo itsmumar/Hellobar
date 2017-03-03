@@ -430,9 +430,10 @@ class LegacyMigrator
     # Returns a timezone if applicable. Returns nil for "visitor" and "false"
     # "(GMT-06:00) Central Time (US & Canada)" => "Central Time (US & Canada)"
     def timezone_for_goal(goal)
-      timezone = goal.data_json['dates_timezone'] rescue nil
+      return unless goal.try(:data_json)
+      timezone = goal.data_json['dates_timezone']
 
-      return nil if timezone == 'visitor' || timezone == 'false' || timezone.nil?
+      return if timezone == 'visitor' || timezone == 'false' || timezone.nil?
 
       timezone[12..-1] # timezone is in a standardized format "(GMT+HH:MM) "
     end
