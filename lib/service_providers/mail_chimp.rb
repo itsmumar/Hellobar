@@ -106,7 +106,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       if result['errors']
         non_already_subscribed_errors = result['errors'].select { |e| e['code'] != 214 }
         error_count = non_already_subscribed_errors.count
-        message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " +
+        message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " \
                   "#{error_count} errors that weren't just existing subscribers."
       end
 

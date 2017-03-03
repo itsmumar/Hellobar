@@ -107,9 +107,9 @@ describe Hello::DataAPI do
         .with(site_id, id, read_key, limit, nil)
         .and_return(['/e/GIHiEM2QmS/qvpJXYvS6',
                      { 'l' => 5, 'd' => 1481207259, 't' => 1482071362,
-                       's' => '2981a1d7a8745e492943f561d4a6aef30de' +
-                             '889af48cd4c32e6c0a4b56abf400e30f4f8' +
-                             '115fb091130f2e5925106a6e50485f67e73' +
+                       's' => '2981a1d7a8745e492943f561d4a6aef30de' \
+                             '889af48cd4c32e6c0a4b56abf400e30f4f8' \
+                             '115fb091130f2e5925106a6e50485f67e73' \
                              'a3ffe9f0260cd1cd80c1c2c' }])
     end
 

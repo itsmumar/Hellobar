@@ -368,13 +368,6 @@ Style/IfInsideElse:
     - 'app/helpers/email_digest_helper.rb'
     - 'lib/script_generator.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/LineEndConcatenation:
-  Exclude:
-    - 'lib/service_providers/mail_chimp.rb'
-    - 'spec/lib/hello/data_api_spec.rb'
-
 # Offense count: 12
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
