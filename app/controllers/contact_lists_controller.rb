@@ -6,7 +6,7 @@ class ContactListsController < ApplicationController
   before_action :load_contact_list, only: [:show, :update, :destroy]
 
   def index
-    @site ||= current_site #Necessary here in case this is a redirect from failed oauth
+    @site ||= current_site # Necessary here in case this is a redirect from failed oauth
     flash[:error] = omniauth_error_message if omniauth_error?
 
     @contact_lists = @site.contact_lists

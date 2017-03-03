@@ -141,7 +141,7 @@ describe User do
   describe '#new?' do
     it 'returns true if the user is logging in for the first time and does not have any bars' do
       user = create(:user)
-      #normaly devise would set it
+      # normaly devise would set it
       user.sign_in_count = 1
       user.save
       expect(user.new?).to be_true
@@ -152,14 +152,14 @@ describe User do
       site = user.sites.create(url: random_uniq_url)
       rule = site.rules.create(name: 'test rule', match: 'all')
       site_element = create(:site_element, rule: rule)
-      #normaly devise would set it
+      # normaly devise would set it
       user.sign_in_count = 1
       expect(user.new?).to be_false
     end
 
     it 'returns false if the user is not logging in for the first time' do
       user = create(:user)
-      #normaly devise would set it
+      # normaly devise would set it
       user.sign_in_count = 2
       user.save
       expect(user.new?).to be_false

@@ -368,22 +368,6 @@ Style/IfInsideElse:
     - 'app/helpers/email_digest_helper.rb'
     - 'lib/script_generator.rb'
 
-# Offense count: 15
-# Cop supports --auto-correct.
-Style/LeadingCommentSpace:
-  Exclude:
-    - 'app/controllers/contact_lists_controller.rb'
-    - 'app/controllers/content_upgrades_controller.rb'
-    - 'app/controllers/identities_controller.rb'
-    - 'app/models/site_element.rb'
-    - 'app/serializers/site_element_serializer.rb'
-    - 'config/environments/development.rb'
-    - 'config/environments/test.rb'
-    - 'config/initializers/settings.rb'
-    - 'lib/service_providers/mail_chimp.rb'
-    - 'spec/models/site_membership_spec.rb'
-    - 'spec/models/user_spec.rb'
-
 # Offense count: 4
 # Cop supports --auto-correct.
 Style/LineEndConcatenation:

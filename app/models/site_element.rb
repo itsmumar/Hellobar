@@ -268,7 +268,7 @@ class SiteElement < ActiveRecord::Base
   private
 
   def update_s3_content
-    #don't do this unless you need to
+    # don't do this unless you need to
     return if type != 'ContentUpgrade'
     return if content.blank?
     return unless content_changed?

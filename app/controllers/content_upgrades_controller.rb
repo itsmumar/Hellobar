@@ -13,7 +13,7 @@ class ContentUpgradesController < ApplicationController
   def new
     @content_upgrade = SiteElement.new
     @styles = @site.get_content_upgrade_styles
-    #Some Defualts
+    # Some Defualts
     @content_upgrade.name_placeholder = 'First Name'
     @content_upgrade.email_placeholder = 'Your Email'
     @content_upgrade.disclaimer = 'We hate SPAM and promise to keep your email address safe.'

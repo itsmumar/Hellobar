@@ -37,7 +37,7 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  #paperclip configuration for s3
+  # paperclip configuration for s3
   settings = YAML.load_file('config/settings.yml')
   if settings['s3_bucket'] && settings['aws_access_key_id'] && settings['aws_secret_access_key']
     config.paperclip_defaults = {
