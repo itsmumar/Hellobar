@@ -11,7 +11,7 @@ describe ContactListsController, type: :controller do
     user = stub_current_user(site.owners.first)
     site.contact_lists = [contact_list]
 
-    allow_any_instance_of(Identity).to receive(:credentials).and_return(token:  'test')
+    allow_any_instance_of(Identity).to receive(:credentials).and_return(token: 'test')
     allow_any_instance_of(Identity).to receive(:extra).
       and_return('metadata' => { 'api_endpoint' => 'test' })
 

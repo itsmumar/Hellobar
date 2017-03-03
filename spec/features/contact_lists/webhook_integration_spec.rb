@@ -9,7 +9,7 @@ feature 'Webhook Integration' do
   let(:service_provider) { identity.service_provider(contact_list: contact_list) }
 
   context 'GET request webhook' do
-    let(:contact_list)     { build(:contact_list, data: { 'webhook_url' => url, 'webhook_method' => 'get' }) }
+    let(:contact_list) { build(:contact_list, data: { 'webhook_url' => url, 'webhook_method' => 'get' }) }
 
     it 'sends parameters in the URL' do
       expect(a_request(:get, /.*hellobar.com.*/).
@@ -19,7 +19,7 @@ feature 'Webhook Integration' do
   end
 
   context 'POST request webhook' do
-    let(:contact_list)     { build(:contact_list, data: { 'webhook_url' => url, 'webhook_method' => 'post' }) }
+    let(:contact_list) { build(:contact_list, data: { 'webhook_url' => url, 'webhook_method' => 'post' }) }
 
     it 'sends parameters in the post payload' do
       expect(a_request(:post, /.*hellobar.com.*/).

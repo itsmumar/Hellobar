@@ -10,7 +10,7 @@ feature 'One User In all onboarding Campaigns' do
 
   let(:start)      { Time.zone.now }
   let(:start_date) { start.to_date }
-  let!(:user)       { login }
+  let!(:user) { login }
 
   def transition_user_through_onboarding(operating_user)
     repeatedly_time_travel_and_run_onboarding_campaigns(2)

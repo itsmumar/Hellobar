@@ -94,7 +94,7 @@ class ScriptGenerator < Mustache
         email_placeholder: cu.email_placeholder,
         name_placeholder: cu.name_placeholder,
         contact_list_id: cu.contact_list_id,
-        download_link: cu.content_upgrade_download_link      }
+        download_link: cu.content_upgrade_download_link }
       cu_json[cu.id] = content
     end
     cu_json.to_json

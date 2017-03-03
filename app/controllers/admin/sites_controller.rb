@@ -25,7 +25,7 @@ class Admin::SitesController < ApplicationController
 
     begin
       site.generate_script(immediately: true)
-      render json: {  message: 'Site regenerated' }, status: 200
+      render json: { message: 'Site regenerated' }, status: 200
     rescue RuntimeError
       render json: { message: "Site's script failed to generate" }, status: 500
     end

@@ -198,7 +198,7 @@ describe SiteElementsHelper do
   end
 
   describe 'ab_test_icon' do
-    it 'returns the A/B icon for paused bars'  do
+    it 'returns the A/B icon for paused bars' do
       se = create(:site_element, :traffic)
       se.update_attribute(:paused, true)
 

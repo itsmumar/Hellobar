@@ -177,7 +177,7 @@ describe SiteElementsController do
   end
 
   describe 'POST update' do
-    let(:element) {  site_elements(:zombo_traffic) }
+    let(:element) { site_elements(:zombo_traffic) }
 
     before do
       stub_current_user(element.site.owners.first)

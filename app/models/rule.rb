@@ -27,7 +27,7 @@ class Rule < ActiveRecord::Base
     mobile =   Rule.new(name: 'Mobile Visitors',   match: MATCH_ON[:all], editable: false)
     homepage = Rule.new(name: 'Homepage Visitors', match: MATCH_ON[:all], editable: false)
 
-    mobile.conditions.build segment: 'DeviceCondition',  operand: :is, value: 'mobile'
+    mobile.conditions.build segment: 'DeviceCondition', operand: :is, value: 'mobile'
     homepage.conditions.build segment: 'UrlPathCondition', operand: :is, value: ['/']
 
     [everyone, mobile, homepage]
