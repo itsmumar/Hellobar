@@ -30,7 +30,7 @@ class IdentitiesController < ApplicationController
     add_account_details(identity)
 
     if params[:api_key]
-      #TODO sanitze me?
+      #TODO: sanitze me?
       identity.api_key = params[:api_key]
       env['omniauth.params'] ||= {}
       env['omniauth.params']['redirect_to'] = request.referrer
