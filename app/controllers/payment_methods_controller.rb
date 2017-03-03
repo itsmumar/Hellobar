@@ -28,7 +28,8 @@ class PaymentMethodsController < ApplicationController
     unless Permissions.view_bills?(current_user, @site)
       respond_to do |format|
         format.json { render json: { errors: ['Contact the account owner to upgrade this site.'] }, status: :unprocessable_entity }
-      end and return
+      end
+      return
     end
 
     old_subscription = @site.current_subscription

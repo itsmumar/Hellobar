@@ -35,7 +35,7 @@ module BillingAuditTrail
             class_name = name.gsub(/_id$/, '').classify + (name =~ /s_id$/ ? 's' : '')
             klass = nil
             begin; klass = Kernel.const_get(class_name); rescue; end
-            if klass and @source.is_a?(klass)
+            if klass && @source.is_a?(klass)
               log.send(:"#{name}=", @source.id)
             end
           end

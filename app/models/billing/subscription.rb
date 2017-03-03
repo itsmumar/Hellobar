@@ -69,7 +69,7 @@ class Subscription < ActiveRecord::Base
       # capabilities, otherwise we return the default capabilities
       active_bills(reload).each do |bill|
         payment_method = nil
-        if site and site.current_subscription and site.current_subscription.payment_method
+        if site && site.current_subscription && site.current_subscription.payment_method
           payment_method = site.current_subscription.payment_method
         end
         if bill.problem_with_payment?(payment_method)
@@ -389,7 +389,7 @@ class Subscription < ActiveRecord::Base
         from_index = index if from_subscription.is_a?(plan)
         to_index = index if to_subscription.is_a?(plan)
       end
-      raise "Could not find plans (from_subscription: #{from_subscription.inspect} and to_subscription: #{to_subscription.inspect}, got #{from_index.inspect} and #{to_index.inspect}" unless from_index and to_index
+      raise "Could not find plans (from_subscription: #{from_subscription.inspect} and to_subscription: #{to_subscription.inspect}, got #{from_index.inspect} and #{to_index.inspect}" unless from_index && to_index
       if from_index == to_index
         @direction = 0
       elsif from_index > to_index

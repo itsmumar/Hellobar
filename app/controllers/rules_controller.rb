@@ -48,7 +48,7 @@ class RulesController < ApplicationController
   def load_site
     super
   rescue ActiveRecord::RecordNotFound
-    if request.get? or request.delete?
+    if request.get? || request.delete?
       head :not_found
     else
       head :forbidden

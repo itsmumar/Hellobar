@@ -181,7 +181,7 @@ class User < ActiveRecord::Base
   end
 
   def track_temporary_status_change
-    if @was_temporary and !temporary?
+    if @was_temporary && !temporary?
       Analytics.track(:user, id, 'Completed Signup', { email: email })
       @was_temporary = false
     end

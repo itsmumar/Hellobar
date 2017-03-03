@@ -49,7 +49,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def required_params
-    all_params.delete_if { |k, _| ([email_param] + name_params).include?(k) or k.nil? }
+    all_params.delete_if { |k, _| ([email_param] + name_params).include?(k) || k.nil? }
   end
 
   def all_params
@@ -119,7 +119,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     reference_object = get_reference_object(html)
     url = url_for_form(reference_object)
 
-    return @html = html if url.nil? or (!embed_code.match(URL_REGEX) and reference_object.nil?)
+    return @html = html if url.nil? || (!embed_code.match(URL_REGEX) && reference_object.nil?)
 
     remote_html = HTTParty.get(url) rescue ''
 

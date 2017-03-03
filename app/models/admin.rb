@@ -115,7 +115,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   # MAX_TIME_TO_VALIDATE_ACCESS_TOKEN then we validate the access_token and return true (otherwise false)
   # IF true, this will also add the access_token the list of valid access_token addresses
   def validate_access_token(access_token, key, timestamp)
-    if access_token_key(access_token, timestamp) == key and Time.now.to_i - timestamp < MAX_TIME_TO_VALIDATE_ACCESS_TOKEN
+    if (access_token_key(access_token, timestamp) == key) && Time.now.to_i - timestamp < MAX_TIME_TO_VALIDATE_ACCESS_TOKEN
       set_valid_access_token(access_token, nil)
       true
     else

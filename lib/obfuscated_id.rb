@@ -14,7 +14,7 @@ class ObfuscatedID
       raise 'Does not work with negative values' if int < 0
       id = int.to_s
       outputs = []
-      inputs = [id[0...3], id[3...6], id[6...9]].reject { |i| !i or i == '' }
+      inputs = [id[0...3], id[3...6], id[6...9]].reject { |i| !i || i.empty? }
       inputs.each do |input|
         output = ''
         input.split('').each do |c|

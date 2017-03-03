@@ -24,7 +24,7 @@ class ConditionsController < ApplicationController
     if rule.editable?
       rp = rule_params.permit!
       if rule.update_conditions(rp.delete('conditions_attributes')) && rule.update_attributes(rp)
-        render json: rule and return
+        return render(json: rule)
       end
     end
     render json: rule.errors, status: :unprocessable_entity

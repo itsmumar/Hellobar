@@ -73,7 +73,7 @@ module Hello
     def get_ab_test_value_index_from_cookie(cookie, index)
       return if cookie == nil
       value = cookie[index..index]
-      if value and value =~ /\d+/
+      if value && value =~ /\d+/
         return value.to_i
       end
       nil
@@ -91,7 +91,7 @@ module Hello
     end
 
     def set_ab_test_value_index_from_cookie(cookie, index, value_index)
-      raise "Value: #{value.inspect} is out of range" if value_index > MAX_VALUES_PER_TEST or value_index < 0
+      raise "Value: #{value.inspect} is out of range" if value_index > MAX_VALUES_PER_TEST || value_index < 0
       # Make sure there is enough values
       cookie = '' unless cookie
       num_chars_needed = ((index + 1) - cookie.length)
@@ -206,7 +206,7 @@ module Hello
       else
         # See if we can get a user id
         user_id = get_user_id_from_cookie
-        if user_id and user_id != USER_ID_NOT_SET_YET
+        if user_id && user_id != USER_ID_NOT_SET_YET
           return :user, user_id.to_i
         end
         # Return the visitor ID

@@ -20,7 +20,7 @@ class Admin::SitesController < ApplicationController
     site = Site.where(id: params[:id]).try(:first)
 
     if site.nil?
-      render json: { message: 'Site was not found' }, status: 404 and return
+      return render(json: { message: 'Site was not found' }, status: 404)
     end
 
     begin

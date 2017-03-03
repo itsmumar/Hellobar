@@ -324,7 +324,7 @@ class ScriptGenerator < Mustache
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
     views = conversions = conversion_rate = 0
 
-    if conversion_data and conversion_data[0]
+    if conversion_data && conversion_data[0]
       views = conversion_data[0][0]
       conversions = conversion_data[0][1]
       if views > 0

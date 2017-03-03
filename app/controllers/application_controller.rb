@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_admin
-    redirect_to admin_access_path and return unless current_admin
+    return redirect_to(admin_access_path) unless current_admin
 
     if current_admin.needs_to_set_new_password?
       redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path

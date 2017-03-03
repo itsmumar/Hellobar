@@ -17,7 +17,7 @@ files.each_with_index do |file, i|
   File.open(file, 'r') do |fp|
     loop do
       break unless line = fp.gets
-      if !pattern or line =~ pattern
+      if !pattern || line =~ pattern
         line.chomp!
         begin
           QueueWorker.send_sqs_message(line, Hellobar::Settings[:env_name], Hellobar::Settings[:low_priority_queue])

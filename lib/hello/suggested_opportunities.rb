@@ -41,8 +41,8 @@ module Hello
                     unless key == 'segment'
                       yday = key.to_i + year_offset
                       result[:total] += value.to_i
-                      result[:min_yday] = yday if !result[:min_yday] or yday < result[:min_yday]
-                      result[:max_yday] = yday if !result[:max_yday] or yday > result[:max_yday]
+                      result[:min_yday] = yday if !result[:min_yday] || yday < result[:min_yday]
+                      result[:max_yday] = yday if !result[:max_yday] || yday > result[:max_yday]
                     end
                   end
                 end

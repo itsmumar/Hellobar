@@ -30,7 +30,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   class CyberSourceCreditCardValidator < ActiveModel::Validator
     def validate(record)
       REQUIRED_FIELDS.each do |field|
-        if !record.data or record.data[field].blank?
+        if !record.data || record.data[field].blank?
           record.errors[field.to_sym] = 'can not be blank'
         end
       end
@@ -99,11 +99,11 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def charge(amount_in_dollars)
-    raise 'Can not charge money until saved' unless persisted? and token
+    raise 'Can not charge money until saved' unless persisted? && token
     if amount_in_dollars == 0
       return true, 'Amount was zero'
     end
-    if !amount_in_dollars or amount_in_dollars < 0
+    if !amount_in_dollars || amount_in_dollars < 0
       raise "Invalid amount: #{amount_in_dollars.inspect}"
     end
     begin
@@ -122,11 +122,11 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def refund(amount_in_dollars, original_transaction_id)
-    raise 'Can not refund money until saved' unless persisted? and token
+    raise 'Can not refund money until saved' unless persisted? && token
     if amount_in_dollars == 0
       return true, 'Amount was zero'
     end
-    if !amount_in_dollars or amount_in_dollars < 0
+    if !amount_in_dollars || amount_in_dollars < 0
       raise "Invalid amount: #{amount_in_dollars.inspect}"
     end
     if !original_transaction_id
@@ -179,7 +179,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def save_to_cybersource
     user = nil
-    if payment_method and payment_method.user
+    if payment_method && payment_method.user
       user = payment_method.user
     end
     # See if there is a previous token

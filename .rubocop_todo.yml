@@ -303,13 +303,6 @@ Style/AccessorMethodName:
     - 'lib/hello/internal_analytics.rb'
     - 'lib/script_generator.rb'
 
-# Offense count: 49
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: always, conditionals
-Style/AndOr:
-  Enabled: false
-
 # Offense count: 1
 Style/AsciiComments:
   Exclude:

@@ -101,7 +101,7 @@ class Condition < ActiveRecord::Base
 
   def multiple_condition_sentence
     # value might be not an array for old rules created before value type was changed
-    if !value.kind_of?(Array) or value.count == 1
+    if !value.kind_of?(Array) || (value.count == 1)
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value.kind_of?(Array) ? value.first : value}"
     else
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other#{value.count == 2 ? '' : 's'}"
@@ -120,7 +120,7 @@ class Condition < ActiveRecord::Base
   def value_is_valid
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
-    elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) or segment == 'TimeCondition' # time condition is also array, but not with multiple choice
+    elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) || (segment == 'TimeCondition') # time condition is also array, but not with multiple choice
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array)
     else
       errors.add(:value, 'is not a valid value') unless value.kind_of?(String)

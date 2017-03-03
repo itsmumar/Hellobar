@@ -22,7 +22,7 @@ class Identity < ActiveRecord::Base
   # When an activity is active, it is saved, credentials are present, and it is being used.
   # Sites should only allow one active identity at a time for each type.
   def active?
-    persisted? and filled_out?
+    persisted? && filled_out?
   end
 
   def filled_out?
