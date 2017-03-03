@@ -384,12 +384,6 @@ Style/MultilineBlockChain:
 Style/MutableConstant:
   Enabled: false
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/PerlBackrefs:
-  Exclude:
-    - 'support/get_failed_jobs'
-
 # Offense count: 20
 # Configuration parameters: NamePrefix, NamePrefixBlacklist, NameWhitelist.
 # NamePrefix: is_, has_, have_
