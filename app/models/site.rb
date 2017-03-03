@@ -159,7 +159,7 @@ class Site < ActiveRecord::Base
     response = HTTParty.get(url, timeout: 5)
     if response =~ /#{script_name}/
       true
-    elsif (had_wordpress_bars? && response =~ /hellobar.js/)
+    elsif had_wordpress_bars? && response =~ /hellobar.js/
       true
     else
       false
