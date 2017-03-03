@@ -9,7 +9,7 @@ class Font < ActiveHash::Base
       all_fonts = Font.all
 
       font_names.each do |font_name|
-        font = all_fonts.find { |font| font.same?(font_name.strip) }
+        font = all_fonts.find { |f| f.same?(font_name.strip) }
         return font if font.present?
       end
 
