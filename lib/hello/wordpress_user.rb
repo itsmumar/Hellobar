@@ -79,7 +79,7 @@ class Hello::WordpressUser < Hello::WordpressModel
       new_bars << bar.convert_to_site_element!(site.rules.first)
     end
     # Return the user
-    return user, site, new_bars
+    [user, site, new_bars]
   end
 
   def is_pro_user?

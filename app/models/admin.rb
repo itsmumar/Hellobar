@@ -39,7 +39,7 @@ class Admin < ActiveRecord::Base
         return nil if admin.locked?
       end
 
-      return admin
+      admin
     end
 
     def any_validated_access_token?(access_token)
@@ -117,9 +117,9 @@ If this is not you, this may be an attack and you should lock down the admin by 
   def validate_access_token(access_token, key, timestamp)
     if access_token_key(access_token, timestamp) == key and Time.now.to_i - timestamp < MAX_TIME_TO_VALIDATE_ACCESS_TOKEN
       set_valid_access_token(access_token, nil)
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
@@ -168,7 +168,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
                     !has_validated_access_token?(access_token)
 
     login!(access_token)
-    return true
+    true
   end
 
   def valid_authentication_otp?(otp)

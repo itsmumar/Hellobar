@@ -28,7 +28,7 @@ class GrandCentralApi
 
       data = File.read(request_log_path)
       return [] if data == ''
-      return Marshal.load(data)
+      Marshal.load(data)
     end
 
     def record_request(request)
@@ -124,7 +124,7 @@ class GrandCentralApi
     end
     # Check the status code
     raise APIError.new(response.code, response.body) unless response.code == '200'
-    return JSON.parse(response.body)
+    JSON.parse(response.body)
   end
 end
 

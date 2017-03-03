@@ -23,7 +23,7 @@ class Subscription < ActiveRecord::Base
     def values_for(site)
       # Just return the defaults for now, in the future we can
       # offer per-site discounts, etc
-      return defaults
+      defaults
     end
 
     def defaults
@@ -372,7 +372,7 @@ class Subscription < ActiveRecord::Base
 
   def <=>(other)
     if other.is_a?(Subscription)
-      return Comparison.new(self, other).direction
+      Comparison.new(self, other).direction
     else
       super(other)
     end

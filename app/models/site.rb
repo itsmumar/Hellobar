@@ -282,7 +282,7 @@ class Site < ActiveRecord::Base
   def requires_payment_method?
     return false unless current_subscription
     return false if current_subscription.amount == 0
-    return true
+    true
   end
 
   include BillingAuditTrail
@@ -322,9 +322,9 @@ class Site < ActiveRecord::Base
     bill = calculate_bill(subscription, false)
     # Make the bill read-only
     def bill.readonly?
-      return true
+      true
     end
-    return bill
+    bill
   end
 
   def bills_with_payment_issues(clear_cache = false)
@@ -339,7 +339,7 @@ class Site < ActiveRecord::Base
         end
       end
     end
-    return @bills_with_payment_issues
+    @bills_with_payment_issues
   end
 
   def set_install_type
@@ -480,7 +480,7 @@ class Site < ActiveRecord::Base
       bill.end_date = Time.now + trial_period
     end
 
-    return bill
+    bill
   end
 
   def do_generate_script_and_check_installation(options = {})

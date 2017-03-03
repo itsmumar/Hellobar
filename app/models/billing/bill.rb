@@ -77,7 +77,7 @@ class Bill < ActiveRecord::Base
     return false if voided?
     return false if start_date and start_date > date
     return false if end_date and end_date < date
-    return true
+    true
   end
 
   def due_at(payment_method = nil)
@@ -85,15 +85,15 @@ class Bill < ActiveRecord::Base
       return bill_at + payment_method.current_details.grace_period
     end
     # Otherwise it is due now
-    return bill_at
+    bill_at
   end
 
   def past_due?(payment_method = nil)
-    return Time.now > due_at(payment_method)
+    Time.now > due_at(payment_method)
   end
 
   def should_bill?
-    return (pending? and Time.now >= bill_at)
+    (pending? and Time.now >= bill_at)
   end
 
   def problem_with_payment?(payment_method = nil)
@@ -102,7 +102,7 @@ class Bill < ActiveRecord::Base
     # tried billing them at least once
     return true if past_due?(payment_method) and (payment_method.nil? || !billing_attempts.empty?)
     # False otherwise
-    return false
+    false
   end
 
   def on_paid
@@ -188,7 +188,7 @@ class Bill < ActiveRecord::Base
 
     # Refunds are never considered "active"
     def active_during(date)
-      return false
+      false
     end
 
     def refunded_billing_attempt

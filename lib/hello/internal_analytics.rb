@@ -87,7 +87,7 @@ module Hello
         return i if weight.include?(rand_value % 100)
       end
       # Return the index
-      return rand_value % ab_test[:values].length
+      rand_value % ab_test[:values].length
     end
 
     def set_ab_test_value_index_from_cookie(cookie, index, value_index)
@@ -99,7 +99,7 @@ module Hello
       # Set the value
       cookie[index] = value_index.to_s # Sets the char value to 0-9
 
-      return cookie
+      cookie
     end
 
     def set_ab_variation(test_name, value)
@@ -115,7 +115,7 @@ module Hello
     def get_ab_test(test_name)
       # First make sure we have registered this test
       raise "Could not find test: #{test_name.inspect}" unless ab_test = TESTS[test_name]
-      return ab_test
+      ab_test
     end
 
     def get_ab_variation_index_without_setting(test_name, user = nil)
@@ -128,7 +128,7 @@ module Hello
       end
       person_type, person_id = current_person_type_and_id(user)
       value_index = get_ab_test_value_index_from_id(ab_test, person_id)
-      return value_index, :new
+      [value_index, :new]
     end
 
     def get_ab_variation_without_setting(test_name, user = nil)
@@ -136,7 +136,7 @@ module Hello
       value_index, status = get_ab_variation_index_without_setting(test_name, user)
       return unless value_index
       value = ab_test[:values][value_index]
-      return value
+      value
     end
 
     def get_ab_variation_or_nil(test_name, user = nil)
@@ -170,7 +170,7 @@ module Hello
         value = ab_test[:values][value_index]
       end
 
-      return value
+      value
     end
 
     def visitor_id
@@ -181,7 +181,7 @@ module Hello
         Analytics.track(*current_person_type_and_id, 'First Visit', { ip: request.remote_ip })
       end
       # Return the first VISITOR_ID_LENGTH characters of the hash
-      return cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH]
+      cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH]
     end
 
     def get_user_id_from_cookie
@@ -189,7 +189,7 @@ module Hello
       visitor_id_cookie = cookies[VISITOR_ID_COOKIE]
       return unless visitor_id_cookie
       return unless visitor_id_cookie.length > VISITOR_ID_LENGTH
-      return visitor_id_cookie[VISITOR_ID_LENGTH..-1]
+      visitor_id_cookie[VISITOR_ID_LENGTH..-1]
     end
 
     def current_person_type_and_id(user = nil)

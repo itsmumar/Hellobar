@@ -11,7 +11,7 @@ class GitUtils
         end
       end
 
-      return @current_commit
+      @current_commit
     end
   end
 end

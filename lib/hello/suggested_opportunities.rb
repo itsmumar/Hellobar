@@ -65,7 +65,7 @@ module Hello
             end
           end
         end
-        return final_results
+        final_results
       end
 
       # For the given start date and end date returns a hash where the
@@ -81,7 +81,7 @@ module Hello
           date += day
           break if date > end_date
         end
-        return results
+        results
       end
 
       # Returns the actual table name based for the given key.
@@ -148,7 +148,7 @@ module Hello
           table.range_key = { segment: :string }
           @@tables[name] = table
         end
-        return @@tables[name]
+        @@tables[name]
       end
     end
   end
@@ -212,7 +212,7 @@ module Hello
         # Take the top of the bottom segments - these are your "low traffic, high conversion". Sort by highest conversions desc
         results['low traffic, high conversion'] = bottom_segments[0...num_values_to_return].sort(&sort_by_conversion)
         # Return the results
-        return results
+        results
       end
     end
   end

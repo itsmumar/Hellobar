@@ -144,7 +144,7 @@ def stub_current_user(user)
   request.env['warden'].stub :authenticate! => user
   controller.stub :current_user => user
 
-  return user
+  user
 end
 
 def random_uniq_url

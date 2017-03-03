@@ -34,11 +34,11 @@ end
 if Rails.env.test?
   class AlwaysSuccessfulPaymentMethodDetails < PaymentMethodDetails
     def charge(amount_in_dollars)
-      return true, "fake-txn-id-#{Time.now.to_i}"
+      [true, "fake-txn-id-#{Time.now.to_i}"]
     end
 
     def refund(amount_in_dollars, original_transaction_id)
-      return true, "fake-refund-id-#{Time.now.to_i} (original: #{original_transaction_id}"
+      [true, "fake-refund-id-#{Time.now.to_i} (original: #{original_transaction_id}"]
     end
 
     def data
@@ -48,11 +48,11 @@ if Rails.env.test?
 
   class AlwaysFailsPaymentMethodDetails < PaymentMethodDetails
     def charge(amount_in_dollars)
-      return false, 'There was some issue with your payment (fake)'
+      [false, 'There was some issue with your payment (fake)']
     end
 
     def refund(amount_in_dollars, original_transaction_id)
-      return false, 'There was some issue with your refund (fake)'
+      [false, 'There was some issue with your refund (fake)']
     end
   end
 end

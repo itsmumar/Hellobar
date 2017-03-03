@@ -37,7 +37,7 @@ class ObfuscatedID
         end
         outputs << output
       end
-      return outputs.join(SEP)
+      outputs.join(SEP)
     end
 
     def parse(string)
@@ -57,7 +57,7 @@ class ObfuscatedID
           outputs << value.to_s
         end
       end
-      return outputs.join('').to_i
+      outputs.join('').to_i
     end
   end
 end

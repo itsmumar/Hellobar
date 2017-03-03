@@ -139,9 +139,9 @@ class UserController < ApplicationController
     if @user.active? && params[:user] && params[:user][:password].blank?
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
-      return true
+      true
     else
-      return false
+      false
     end
   end
 

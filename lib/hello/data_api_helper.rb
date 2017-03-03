@@ -24,7 +24,7 @@ module Hello
         # }
         #
         def lifetime_totals(site_id, site_element_ids, read_key, number_of_days = nil, additional_params = {})
-          return *sign_path_and_params(generate_path('t', site_id, site_element_ids), { 'd' => number_of_days.to_i }.merge(additional_params), read_key)
+          sign_path_and_params(generate_path('t', site_id, site_element_ids), { 'd' => number_of_days.to_i }.merge(additional_params), read_key)
         end
 
         # Generates the path and params for getting the suggested improvements
@@ -42,7 +42,7 @@ module Hello
         # "high traffic, high conversion": [...]}
         #
         def suggested_opportunities(site_id, site_element_ids, read_key, additional_params = {})
-          return *sign_path_and_params(generate_path('i', site_id, site_element_ids), additional_params, read_key)
+          sign_path_and_params(generate_path('i', site_id, site_element_ids), additional_params, read_key)
         end
 
         # Generates the path and params for getting the contact list totals
@@ -53,7 +53,7 @@ module Hello
         # {list_id: x, list_id2: y, ...}
         #
         def contact_list_totals(site_id, contact_list_ids, read_key, additional_params = {})
-          return *sign_path_and_params(generate_path('et', site_id, contact_list_ids), additional_params, read_key)
+          sign_path_and_params(generate_path('et', site_id, contact_list_ids), additional_params, read_key)
         end
 
         # Generates the path and params for getting the contacts for a contact
@@ -75,7 +75,7 @@ module Hello
         # [[email, name, timestamp] [email, name, timestamp], ...]
         #
         def get_contacts(site_id, contact_list_id, read_key, limit = nil, start_timestamp = nil, additional_params = {})
-          return *sign_path_and_params(generate_path('e', site_id, contact_list_id), { 'l' => limit.to_i, 'd' => start_timestamp.to_i }.merge(additional_params), read_key)
+          sign_path_and_params(generate_path('e', site_id, contact_list_id), { 'l' => limit.to_i, 'd' => start_timestamp.to_i }.merge(additional_params), read_key)
         end
 
         protected
@@ -84,14 +84,14 @@ module Hello
         # Used by other methods
         def generate_path(base_path, site_id, item_ids)
           item_ids = [item_ids] unless item_ids.is_a?(Array)
-          return "/#{base_path}/#{ObfuscatedID.generate(site_id)}/#{item_ids.collect { |e| ObfuscatedID.generate(e) }.join(',')}"
+          "/#{base_path}/#{ObfuscatedID.generate(site_id)}/#{item_ids.collect { |e| ObfuscatedID.generate(e) }.join(',')}"
         end
 
         def sign_path_and_params(path, params, read_key)
           # Required params
           params['t'] = Time.now.to_i
           params['s'] = Hello::DataAPIHelper.generate_signature(read_key, path, params)
-          return path, params
+          [path, params]
         end
       end
     end
@@ -106,7 +106,7 @@ module Hello
         sorted_param_pairs = (params.keys - ['s']).sort.collect { |k| "#{k}=#{params[k]}" }
 
         signature = HMAC::SHA512.hexdigest(key, path + '?' + sorted_param_pairs.join('|'))
-        return signature
+        signature
       end
 
       # Convenience method that takes a string path and hash of params
@@ -123,7 +123,7 @@ module Hello
           first = false
           url += key + '=' + CGI::escape(value.to_s)
         end
-        return url
+        url
       end
     end
   end

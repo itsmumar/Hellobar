@@ -43,7 +43,7 @@ class BillingAttempt < ActiveRecord::Base
     refund_attempt = refund_bill.attempt_billing!
     refund_bill.save!
 
-    return refund_bill, refund_attempt
+    [refund_bill, refund_attempt]
   end
 
   def process!
@@ -64,7 +64,7 @@ class BillingAttempt < ActiveRecord::Base
     else
       audit << "Attempt was not successful (#{response.inspect}) - not changing Bill[#{bill.id}] status"
     end
-    return self
+    self
   end
 
   alias :orig_status :status

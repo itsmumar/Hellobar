@@ -18,7 +18,7 @@ class Font < ActiveHash::Base
           end
         end
       end
-      return nil
+      nil
     end
   end
 end

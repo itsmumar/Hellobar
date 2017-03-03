@@ -144,7 +144,7 @@ class LegacyMigrator
           results[object.send(key_method)] << object
         end
       end
-      return results
+      results
     end
 
     def preload_data
