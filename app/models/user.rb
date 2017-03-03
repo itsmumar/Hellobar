@@ -260,11 +260,13 @@ class User < ActiveRecord::Base
     end
 
     # update the authentication tokens & expires for this provider
-    user.authentications.detect { |x| x.provider == access_token["provider"]}.update(
-      refresh_token: access_token["credentials"].refresh_token,
-      access_token: access_token["credentials"].token,
-      expires_at: Time.at(access_token["credentials"].expires_at)
-    ) if access_token["credentials"] && user.persisted?
+    if access_token["credentials"] && user.persisted?
+      user.authentications.detect { |x| x.provider == access_token["provider"]}.update(
+        refresh_token: access_token["credentials"].refresh_token,
+        access_token: access_token["credentials"].token,
+        expires_at: Time.at(access_token["credentials"].expires_at)
+      )
+    end
 
     user
   end

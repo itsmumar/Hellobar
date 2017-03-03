@@ -894,11 +894,6 @@ Style/MultilineHashBraceLayout:
     - 'spec/controllers/identities_controller_spec.rb'
     - 'spec/controllers/rules_controller_spec.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/MultilineIfModifier:
-  Exclude:
-    - 'app/models/user.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.
