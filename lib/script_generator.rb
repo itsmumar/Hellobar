@@ -346,7 +346,7 @@ class ScriptGenerator < Mustache
       font: site_element.font.value,
       google_font: site_element.font.google_font,
       branding_url: "http://www.hellobar.com?sid=#{site_element.id}",
-      closable: (site_element.is_a?(Bar) || site_element.is_a?(Slider)) ? site_element.closable : false,
+      closable: site_element.is_a?(Bar) || site_element.is_a?(Slider) ? site_element.closable : false,
       contact_list_id: site_element.contact_list_id,
       conversion_rate: conversion_rate,
       conversions: conversions,
