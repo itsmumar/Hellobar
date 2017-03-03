@@ -5,8 +5,8 @@ describe PaymentMethodDetails do
   it 'should be read-only' do
     d = PaymentMethodDetails.create
     d.data = { foo: 'bar' }
-    lambda { d.save }.should raise_error(ActiveRecord::ReadOnlyRecord)
-    lambda { d.destroy }.should raise_error(ActiveRecord::ReadOnlyRecord)
+    expect { d.save }.to raise_error(ActiveRecord::ReadOnlyRecord)
+    expect { d.destroy }.to raise_error(ActiveRecord::ReadOnlyRecord)
   end
 end
 

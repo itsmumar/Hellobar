@@ -145,7 +145,7 @@ describe Subscription do
   end
 
   it 'should raise an exception for an invalid schedule' do
-    lambda { Subscription::Pro.new(schedule: 'fortnightly') }.should raise_error(ArgumentError)
+    expect { Subscription::Pro.new(schedule: 'fortnightly') }.to raise_error(ArgumentError)
   end
 
   it 'should set the amount based on the schedule unless overridden' do
@@ -392,7 +392,7 @@ describe Site do
       bill.should_not be_persisted
       bill.amount.should == @pro.amount
       bill.bill_at.should <= Time.now
-      lambda { bill.save! }.should raise_error(ActiveRecord::ReadOnlyRecord)
+      expect { bill.save! }.to raise_error(ActiveRecord::ReadOnlyRecord)
       bill.should_not be_persisted
       @site.current_subscription.should_not == @pro
       @site.capabilities.class.should == Subscription::Free::Capabilities

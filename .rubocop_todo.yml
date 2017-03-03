@@ -368,32 +368,6 @@ Style/IfInsideElse:
     - 'app/helpers/email_digest_helper.rb'
     - 'lib/script_generator.rb'
 
-# Offense count: 25
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: line_count_dependent, lambda, literal
-Style/Lambda:
-  Exclude:
-    - 'app/models/billing/subscription.rb'
-    - 'app/models/coupon.rb'
-    - 'app/models/referral.rb'
-    - 'app/models/site.rb'
-    - 'config/deploy.rb'
-    - 'spec/helpers/bills_helper_spec.rb'
-    - 'spec/models/bill_spec.rb'
-    - 'spec/models/billing/subscription_spec.rb'
-    - 'spec/models/billing_attempt_spec.rb'
-    - 'spec/models/billing_log_spec.rb'
-    - 'spec/models/payment_method_details_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: call, braces
-Style/LambdaCall:
-  Exclude:
-    - 'lib/queue_worker/queue_worker.rb'
-
 # Offense count: 15
 # Cop supports --auto-correct.
 Style/LeadingCommentSpace:

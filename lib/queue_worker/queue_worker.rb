@@ -11,7 +11,7 @@ class QueueWorker
       if Rails.env.development? || Rails.env.test?
         begin
           # Ensure private methods are called.
-          method(task_name).()
+          method(task_name).call
         rescue NoMethodError => e
           if e.message.include?("undefined method `#{task_name}'")
             raise "Not sure how to queue task '#{body}' because there is no method #{self.class}##{task_name}: #{$ERROR_INFO}"
