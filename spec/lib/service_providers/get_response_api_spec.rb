@@ -119,7 +119,7 @@ describe ServiceProviders::GetResponseApi do
         latest_contacts_successful_response =
           double :response,
             success?: true,
-            body: [ { contactId: contact_id, email: email } ].to_json
+            body: [{ contactId: contact_id, email: email }].to_json
 
         tags = contact_list.tags.map { |tag| { tagId: tag } }
 
