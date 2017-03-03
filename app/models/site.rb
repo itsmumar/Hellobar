@@ -387,9 +387,9 @@ class Site < ActiveRecord::Base
   end
 
   def get_settings
-      JSON.parse(settings)
+    JSON.parse(settings)
   rescue
-      return {}
+    return {}
   end
 
   def update_content_upgrade_styles!(style_params)
