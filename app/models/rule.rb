@@ -20,28 +20,28 @@ class Rule < ActiveRecord::Base
                          greater_than_or_equal_to: 1,
                          less_than_or_equal_to: 100
                        },
-                       if: "priority.present?"
+                       if: 'priority.present?'
 
   def self.defaults
-    everyone = Rule.new(name: "Everyone",          match: MATCH_ON[:all], editable: false)
-    mobile =   Rule.new(name: "Mobile Visitors",   match: MATCH_ON[:all], editable: false)
-    homepage = Rule.new(name: "Homepage Visitors", match: MATCH_ON[:all], editable: false)
+    everyone = Rule.new(name: 'Everyone',          match: MATCH_ON[:all], editable: false)
+    mobile =   Rule.new(name: 'Mobile Visitors',   match: MATCH_ON[:all], editable: false)
+    homepage = Rule.new(name: 'Homepage Visitors', match: MATCH_ON[:all], editable: false)
 
-    mobile.conditions.build segment: 'DeviceCondition',  operand: :is, value: "mobile"
-    homepage.conditions.build segment: 'UrlPathCondition', operand: :is, value: ["/"]
+    mobile.conditions.build segment: 'DeviceCondition',  operand: :is, value: 'mobile'
+    homepage.conditions.build segment: 'UrlPathCondition', operand: :is, value: ['/']
 
     [everyone, mobile, homepage]
   end
 
   def self.create_from_segment(site, segment)
-    segment, value = segment.split(":", 2)
+    segment, value = segment.split(':', 2)
     segment = Condition::SEGMENTS.find{|k, v| v == segment}[0]
     value = [value] if segment == 'UrlCondition'
 
     new(site: site).tap do |rule|
       condition = rule.conditions.new(
         segment: segment,
-        operand: "is",
+        operand: 'is',
         value: value
       )
 
@@ -53,7 +53,7 @@ class Rule < ActiveRecord::Base
 
   def to_sentence
     if conditions.empty?
-      "Show this to everyone"
+      'Show this to everyone'
     elsif conditions.size == 1
       conditions.first.to_sentence
     elsif conditions.size == 2
@@ -86,12 +86,12 @@ class Rule < ActiveRecord::Base
   def update_conditions(conditions_attributes)
     transaction do
       conditions_attributes.each do |index, attributes|
-        if attributes["id"]
-          c = conditions.detect { |x| x.id == attributes["id"].to_i}
-          if attributes["_destroy"] == "true"
+        if attributes['id']
+          c = conditions.detect { |x| x.id == attributes['id'].to_i}
+          if attributes['_destroy'] == 'true'
             c.destroy
           else
-            attributes.delete("_destroy")
+            attributes.delete('_destroy')
             c.assign_attributes(attributes)
             c = c.becomes(c.segment.constantize)
             c.save!

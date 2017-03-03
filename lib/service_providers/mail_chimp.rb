@@ -8,7 +8,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       identity = opts[:identity]
     elsif opts[:site]
       identity = opts[:site].identities.where(:provider => 'mailchimp').first
-      raise "Site does not have a stored MailChimp identity" unless identity
+      raise 'Site does not have a stored MailChimp identity' unless identity
     end
 
     @identity = identity
@@ -82,7 +82,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
     operations = bodies.map do |body|
                    {
-                     method: "POST",
+                     method: 'POST',
                      path: "lists/#{list_id}/members",
                      body: body.to_json
                    }
@@ -158,11 +158,11 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def hashify_options(email, name, double_optin)
     opts = { email_address: email }
-    opts[:status] = (double_optin ?  "pending" : "subscribed")
+    opts[:status] = (double_optin ?  'pending' : 'subscribed')
 
     if name.present?
       split = name.split(' ', 2)
-      opts[:merge_fields] = {:FNAME => split[0], :LNAME => split[1] || ""}
+      opts[:merge_fields] = {:FNAME => split[0], :LNAME => split[1] || ''}
     end
 
     opts
@@ -197,8 +197,8 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 <p>Hello Bar</p>
 EOS
 
-    MailerGateway.send_email("Custom", user.email,
-                              subject: "[Action Required] Your list cannot be synced to Mailchimp",
+    MailerGateway.send_email('Custom', user.email,
+                              subject: '[Action Required] Your list cannot be synced to Mailchimp',
                               html_body: html,
                               text_body: strip_tags(html))
 

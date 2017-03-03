@@ -6,10 +6,10 @@ require 'queue_worker/queue_worker'
 class Site < ActiveRecord::Base
   include QueueWorker::Delay
 
-  has_many :rules, -> { order("rules.editable ASC, rules.id ASC") }, dependent: :destroy, inverse_of: :site
+  has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
   has_many :site_memberships, dependent: :destroy
-  has_many :owners, -> { where(role: "owner") }, through: :site_memberships
+  has_many :owners, -> { where(role: 'owner') }, through: :site_memberships
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
   has_many :contact_lists, dependent: :destroy
@@ -21,7 +21,7 @@ class Site < ActiveRecord::Base
 
   scope :protocol_ignored_url, ->(url) {
     host = normalize_url(url).normalized_host if url.include?('http')
-    where("sites.url = ? OR sites.url = ?", "https://#{host}", "http://#{host}")
+    where('sites.url = ? OR sites.url = ?', "https://#{host}", "http://#{host}")
   }
 
   acts_as_paranoid
@@ -62,15 +62,15 @@ class Site < ActiveRecord::Base
   validate :url_is_unique?
 
   scope :script_installed_db, -> do
-    where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
+    where('script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)')
   end
 
   scope :script_not_installed_db, -> do
-    where.not("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
+    where.not('script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)')
   end
 
   scope :script_uninstalled_db, -> do
-    where("script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)")
+    where('script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)')
   end
 
   # We are getting bad analytics data regarding installs and uninstalls
@@ -84,7 +84,7 @@ class Site < ActiveRecord::Base
       lines << "\t#{line}"
     end
 
-    File.open(File.join(Rails.root, "log", "debug_install.log"), "a") do |file|
+    File.open(File.join(Rails.root, 'log', 'debug_install.log'), 'a') do |file|
       file.puts(lines.join("\n"))
     end
   end
@@ -101,10 +101,10 @@ class Site < ActiveRecord::Base
   end
 
   def store_script_installation!
-    debug_install("INSTALLED")
+    debug_install('INSTALLED')
     update(script_installed_at: Time.current)
     Referrals::RedeemForRecipient.run(site: self)
-    Analytics.track(:site, self.id, "Installed")
+    Analytics.track(:site, self.id, 'Installed')
     onboarding_track_script_installation!
   end
 
@@ -115,9 +115,9 @@ class Site < ActiveRecord::Base
   end
 
   def store_script_uninstallation!
-    debug_install("UNINSTALLED")
+    debug_install('UNINSTALLED')
     update(script_uninstalled_at: Time.current)
-    Analytics.track(:site, self.id, "Uninstalled")
+    Analytics.track(:site, self.id, 'Uninstalled')
     onboarding_track_script_uninstallation!
   end
 
@@ -171,7 +171,7 @@ class Site < ActiveRecord::Base
   end
 
   def script_name
-    raise "script_name requires ID" unless persisted?
+    raise 'script_name requires ID' unless persisted?
     "#{Site.id_to_script_hash(id)}.js"
   end
 
@@ -262,7 +262,7 @@ class Site < ActiveRecord::Base
       where.not(sites: {id: id}).
       any?
 
-      errors.add(:url, "is already in use")
+      errors.add(:url, 'is already in use')
     end
   end
 
@@ -371,7 +371,7 @@ class Site < ActiveRecord::Base
   end
 
   def self.find_by_script(script_embed)
-    target_hash = script_embed.gsub(/^.*\//, "").gsub(/\.js$/,"")
+    target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/,'')
 
     (Site.maximum(:id) || 1).downto(1) do |i|
       return Site.find_by_id(i) if id_to_script_hash(i) == target_hash
@@ -516,7 +516,7 @@ class Site < ActiveRecord::Base
       generated_script_content = options[:script_content] || script_content(true)
 
       if Hellobar::Settings[:store_site_scripts_locally]
-        File.open(File.join(Rails.root, "public/generated_scripts/", script_name), "w") { |f| f.puts(generated_script_content) }
+        File.open(File.join(Rails.root, 'public/generated_scripts/', script_name), 'w') { |f| f.puts(generated_script_content) }
       else
         Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
 
@@ -536,7 +536,7 @@ class Site < ActiveRecord::Base
   end
 
   def generate_blank_static_assets
-    generate_static_assets(:script_content => "")
+    generate_static_assets(:script_content => '')
   end
 
   def standardize_url

@@ -1,4 +1,4 @@
-require "./config/initializers/settings"
+require './config/initializers/settings'
 
 if Rails.env.production?
   Pony.options = {
@@ -11,7 +11,7 @@ if Rails.env.production?
       :user_name            => 'support@crazyegg.com',
       :password             => Hellobar::Settings[:sendgrid_password],
       :authentication       => :plain,
-      :domain               => "crazyegg.com"
+      :domain               => 'crazyegg.com'
     }
   }
 end

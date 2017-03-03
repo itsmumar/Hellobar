@@ -12,7 +12,7 @@ feature 'Site with a closable slider', :js do
     visit  site_path_to_url(path).to_s
 
     # force capybara to wait until iframe is loaded
-    expect(page).to have_selector "#random-container"
+    expect(page).to have_selector '#random-container'
 
     within_frame 'random-container-0' do
       expect(page).to have_content site_element.headline
@@ -23,11 +23,11 @@ feature 'Site with a closable slider', :js do
       find('.icon-close').trigger 'click'
     end
 
-    expect(page).to have_selector "#random-container", visible: false
+    expect(page).to have_selector '#random-container', visible: false
 
     # show the slider again
     find('#pull-down').trigger 'click'
 
-    expect(page).to have_selector "#random-container"
+    expect(page).to have_selector '#random-container'
   end
 end

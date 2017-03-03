@@ -19,14 +19,14 @@ describe Admin::SitesController do
 
   context 'PUT update site invoice_information' do
     it 'with the correct data' do
-      put :update, id: site.id, user_id: site.owners.first.id, site: { invoice_information: "12345 Main St" }
-      pending("revisiting this later")
-      expect(site.reload.invoice_information).to eq "12345 Main St"
+      put :update, id: site.id, user_id: site.owners.first.id, site: { invoice_information: '12345 Main St' }
+      pending('revisiting this later')
+      expect(site.reload.invoice_information).to eq '12345 Main St'
     end
   end
 
-  describe "POST #regenerate" do
-    context "when the site exists" do
+  describe 'POST #regenerate' do
+    context 'when the site exists' do
       let(:user) { site.owners.first }
 
       before do
@@ -38,38 +38,38 @@ describe Admin::SitesController do
         allow(site).to receive(:generate_script)
       end
 
-      it "generates the script for the site" do
+      it 'generates the script for the site' do
         post_regenerate
 
         expect(site).to have_received(:generate_script)
       end
 
-      it "returns 200" do
+      it 'returns 200' do
         post_regenerate
 
         expect(response).to be_success
       end
 
-      it "returns success message" do
+      it 'returns success message' do
         post_regenerate
 
         expect_json_response_to_include({
-          message: "Site regenerated"
+          message: 'Site regenerated'
         })
       end
 
-      context "when regenerating script fails" do
+      context 'when regenerating script fails' do
         before do
           allow(site).to receive(:generate_script).and_raise(RuntimeError)
         end
 
-        it "returns 500" do
+        it 'returns 500' do
           post_regenerate
 
           expect(response.status).to eq(500)
         end
 
-        it "returns error message" do
+        it 'returns error message' do
           post_regenerate
 
           expect_json_response_to_include({
@@ -82,17 +82,17 @@ describe Admin::SitesController do
     context "when the site doesn't exist" do
       let(:user) { users(:joey) }
 
-      it "returns a 404" do
+      it 'returns a 404' do
         post_regenerate(-1)
 
         expect(response.status).to eq(404)
       end
 
-      it "returns error message" do
+      it 'returns error message' do
         post_regenerate(-1)
 
         expect_json_response_to_include({
-          message: "Site was not found"
+          message: 'Site was not found'
         })
       end
     end

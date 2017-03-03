@@ -5,20 +5,20 @@
 # will not always be the same.
 #
 class ObfuscatedID
-  SEP = "-"
-  ZERO_ENCODE = "_"
-  ENCODE = "S6pjZ9FbD8RmIvT3rfzVWAloJKMqg7CcGe1OHULNuEkiQByns5d4Y0PhXw2xta"
+  SEP = '-'
+  ZERO_ENCODE = '_'
+  ENCODE = 'S6pjZ9FbD8RmIvT3rfzVWAloJKMqg7CcGe1OHULNuEkiQByns5d4Y0PhXw2xta'
 
   class << self
     def generate(int)
-      raise "Does not work with negative values" if int < 0
+      raise 'Does not work with negative values' if int < 0
       id = int.to_s
       outputs = []
-      inputs = [id[0...3], id[3...6], id[6...9]].reject{|i| !i or i == ""}
+      inputs = [id[0...3], id[3...6], id[6...9]].reject{|i| !i or i == ''}
       inputs.each do |input|
-        output = ""
-        input.split("").each do |c|
-          break if c != "0"
+        output = ''
+        input.split('').each do |c|
+          break if c != '0'
           output << ZERO_ENCODE
         end
         input = input.to_i
@@ -48,7 +48,7 @@ class ObfuscatedID
         data.length.times do |i|
           char = data[i..i]
           if char == ZERO_ENCODE
-            outputs << "0"
+            outputs << '0'
           else
             value += ENCODE.index(char)+1
           end
@@ -57,7 +57,7 @@ class ObfuscatedID
           outputs << value.to_s
         end
       end
-      return outputs.join("").to_i
+      return outputs.join('').to_i
     end
   end
 end

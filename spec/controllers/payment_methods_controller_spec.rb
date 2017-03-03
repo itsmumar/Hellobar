@@ -5,7 +5,7 @@ describe PaymentMethodsController, '#index' do
 
   before do
     stub_current_user(user)
-    request.env["HTTP_ACCEPT"] = 'application/json'
+    request.env['HTTP_ACCEPT'] = 'application/json'
   end
 
   let(:site) { sites(:zombo) }
@@ -23,7 +23,7 @@ describe PaymentMethodsController, '#index' do
   it 'returns an array of user payment methods' do
     get :index, site_id: site.id
 
-    payment_method_ids = JSON.parse(response.body)["payment_methods"].map{|method| method['id'] }
+    payment_method_ids = JSON.parse(response.body)['payment_methods'].map{|method| method['id'] }
 
     payment_method_ids.should == user.payment_methods.map(&:id)
   end
@@ -53,7 +53,7 @@ describe PaymentMethodsController, '#update' do
 
   before do
     stub_current_user users(:joey)
-    request.env["HTTP_ACCEPT"] = 'application/json'
+    request.env['HTTP_ACCEPT'] = 'application/json'
   end
 
   let(:site) { sites(:zombo) }

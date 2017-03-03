@@ -13,7 +13,7 @@ class Theme < ActiveHash::Base
   end
 
   def with_image?
-    image["default_url"].present?
+    image['default_url'].present?
   end
 
   def self.sorted

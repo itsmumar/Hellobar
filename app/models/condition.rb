@@ -63,12 +63,12 @@ class Condition < ActiveRecord::Base
   def to_sentence
     if MULTIPLE_CHOICE_SEGMENTS.include?(segment)
       multiple_condition_sentence
-    elsif segment == "EveryXSession"
+    elsif segment == 'EveryXSession'
       every_x_sessions_sentence
-    elsif segment == "TimeCondition"
+    elsif segment == 'TimeCondition'
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value[0]}:#{value[1]}"
     else
-      name = segment == "CustomCondition" ? custom_segment : segment_data[:name]
+      name = segment == 'CustomCondition' ? custom_segment : segment_data[:name]
       if operand.to_s == 'between'
         "#{name} is between #{value.first} and #{value.last}"
       else
@@ -109,9 +109,9 @@ class Condition < ActiveRecord::Base
   end
 
   def every_x_sessions_sentence
-    return "" unless segment == "EveryXSession"
+    return '' unless segment == 'EveryXSession'
     if value.to_i == 1
-      "Every session"
+      'Every session'
     else
       "Every #{value.to_i.ordinalize} session"
     end
@@ -120,7 +120,7 @@ class Condition < ActiveRecord::Base
   def value_is_valid
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
-    elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) or segment == "TimeCondition" # time condition is also array, but not with multiple choice
+    elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) or segment == 'TimeCondition' # time condition is also array, but not with multiple choice
       errors.add(:value, 'is not a valid value') unless value.kind_of?(Array)
     else
       errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
@@ -129,22 +129,22 @@ class Condition < ActiveRecord::Base
 
   def operand_is_valid
     @@operands ||= {
-      "DateCondition"             => %w{ is is_not before after between },
-      "DeviceCondition"           => %w{ is is_not },
-      "EveryXSession"             => %w{ every },
-      "LastVisitCondition"        => %w{ is is_not less_than greater_than between },
-      "LocationCityCondition"     => %w{ is is_not },
-      "LocationCountryCondition"  => %w{ is is_not },
-      "LocationRegionCondition"   => %w{ is is_not },
-      "NumberOfVisitsCondition"   => %w{ is is_not less_than greater_than between },
-      "PreviousPageURL"           => %w{ includes does_not_include },
-      "ReferrerCondition"         => %w{ is is_not includes does_not_include },
-      "ReferrerDomainCondition"   => %w{ is is_not includes does_not_include },
-      "SearchTermCondition"       => %w{ is is_not includes does_not_include },
-      "TimeCondition"             => %w{ before after },
-      "UrlCondition"              => %w{ is is_not includes does_not_include },
-      "UrlPathCondition"          => %w{ is is_not includes does_not_include },
-      "UtmCondition"              => %w{ is is_not includes does_not_include }
+      'DateCondition'             => %w{ is is_not before after between },
+      'DeviceCondition'           => %w{ is is_not },
+      'EveryXSession'             => %w{ every },
+      'LastVisitCondition'        => %w{ is is_not less_than greater_than between },
+      'LocationCityCondition'     => %w{ is is_not },
+      'LocationCountryCondition'  => %w{ is is_not },
+      'LocationRegionCondition'   => %w{ is is_not },
+      'NumberOfVisitsCondition'   => %w{ is is_not less_than greater_than between },
+      'PreviousPageURL'           => %w{ includes does_not_include },
+      'ReferrerCondition'         => %w{ is is_not includes does_not_include },
+      'ReferrerDomainCondition'   => %w{ is is_not includes does_not_include },
+      'SearchTermCondition'       => %w{ is is_not includes does_not_include },
+      'TimeCondition'             => %w{ before after },
+      'UrlCondition'              => %w{ is is_not includes does_not_include },
+      'UrlPathCondition'          => %w{ is is_not includes does_not_include },
+      'UtmCondition'              => %w{ is is_not includes does_not_include }
     }
 
     if @@operands[segment] && !@@operands[segment].include?(operand)
@@ -170,11 +170,11 @@ class Condition < ActiveRecord::Base
       value = end_date
     end
 
-    new(operand: operand, value: value, segment: "DateCondition")
+    new(operand: operand, value: value, segment: 'DateCondition')
   end
 
   def normalize_url_condition
-    return if self.segment != "UrlCondition" && self.segment != "UrlPathCondition"
+    return if self.segment != 'UrlCondition' && self.segment != 'UrlPathCondition'
 
     if self.value.kind_of?(String)
       self.value = normalize_url(self.value)

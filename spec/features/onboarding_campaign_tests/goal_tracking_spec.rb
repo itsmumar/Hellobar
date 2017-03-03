@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature "User onboarding statuses get updated as they select a goal for their first Hello Bar", :js do
+feature 'User onboarding statuses get updated as they select a goal for their first Hello Bar', :js do
   given!(:user) { login }
 
   given(:onboarding_status_setter) do

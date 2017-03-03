@@ -1,18 +1,18 @@
 class Admin::AccessController < ApplicationController
-  layout "admin"
+  layout 'admin'
 
   before_action :require_admin, :only => [:reset_password, :do_reset_password, :logout_admin]
   before_action :redirect_admin, :only => :step1
 
   def do_reset_password
     if current_admin.password_hashed != current_admin.encrypt_password(params[:existing_password])
-      @error = "Your existing password is incorrect"
+      @error = 'Your existing password is incorrect'
     elsif params[:new_password] != params[:new_password_again]
-      @error = "Your new passwords did not match each other"
+      @error = 'Your new passwords did not match each other'
     elsif !params[:new_password] or params[:new_password].length < Admin::MIN_PASSWORD_LENGTH
       @error = "New password must be at least #{Admin::MIN_PASSWORD_LENGTH} chars"
     elsif params[:new_password] == params[:existing_password]
-      @error = "New password must be different than existing password."
+      @error = 'New password must be different than existing password.'
     end
 
     if @error
@@ -27,7 +27,7 @@ class Admin::AccessController < ApplicationController
   def logout_admin
     current_admin.logout!
     session.delete(:admin_token)
-    flash[:success] = "You are now logged out."
+    flash[:success] = 'You are now logged out.'
 
     redirect_to admin_access_path
   end
@@ -66,7 +66,7 @@ class Admin::AccessController < ApplicationController
       session[:admin_token] = @admin.session_token
       redirect_to admin_path
     else
-      flash.now[:error] = "Invalid OTP or password or too many attempts"
+      flash.now[:error] = 'Invalid OTP or password or too many attempts'
       render :step2
     end
   end
@@ -74,9 +74,9 @@ class Admin::AccessController < ApplicationController
   def lockdown
     if Admin.validate_lockdown(params[:email], params[:key], params[:timestamp].to_i)
       Admin.lockdown!
-      render :text => "Admins have been successfully locked down"
+      render :text => 'Admins have been successfully locked down'
     else
-      render :text => "Admins could not be locked down"
+      render :text => 'Admins could not be locked down'
     end
   end
 

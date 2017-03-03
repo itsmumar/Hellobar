@@ -65,7 +65,7 @@ class Identity < ActiveRecord::Base
 
   def destroy_and_notify_user
     site.owners.each do |user|
-      MailerGateway.send_email("Integration Sync Error", user.email, {integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host])})
+      MailerGateway.send_email('Integration Sync Error', user.email, {integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host])})
     end
 
     self.destroy
@@ -86,7 +86,7 @@ class Identity < ActiveRecord::Base
   def service_provider_valid
     cached_provider = @service_provider # Don't cache the results of this
     if service_provider && !service_provider.valid?
-      errors.add(:provider, "could not be verified.")
+      errors.add(:provider, 'could not be verified.')
     end
     @service_provider = cached_provider
   end

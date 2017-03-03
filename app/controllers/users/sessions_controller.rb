@@ -2,8 +2,8 @@ class Users::SessionsController < Devise::SessionsController
   layout 'static'
 
   TEMP_MIGRATION_USERS = [
-    "sarangan2@gmail.com",
-    "oli@unbounce.com"
+    'sarangan2@gmail.com',
+    'oli@unbounce.com'
   ]
 
   def new
@@ -54,11 +54,11 @@ class Users::SessionsController < Devise::SessionsController
         else
           @user = User.new
 
-          flash.now[:alert] = "Invalid email or password."
+          flash.now[:alert] = 'Invalid email or password.'
           render action: :find_email
         end
       else
-        render "pages/redirect_login"
+        render 'pages/redirect_login'
       end
     elsif User.joins(:authentications).where(email: email).any?
       # The user used oauth to sign in so redirect them to that
@@ -72,11 +72,11 @@ class Users::SessionsController < Devise::SessionsController
 
         cookies.permanent[:login_email] = email
         # Record log in
-        Analytics.track(*current_person_type_and_id, "Logged In", {ip: request.remote_ip})
+        Analytics.track(*current_person_type_and_id, 'Logged In', {ip: request.remote_ip})
 
         redirect_to after_sign_in_path_for(@user)
       else
-        flash.now[:alert] = "Invalid password."
+        flash.now[:alert] = 'Invalid password.'
 
         render :find_email
       end

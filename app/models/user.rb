@@ -25,11 +25,11 @@ class User < ActiveRecord::Base
   has_many :site_elements, through: :sites
   has_many :subscriptions, through: :sites
   has_many :authentications, dependent: :destroy
-  has_many :sent_referrals, dependent: :destroy, class_name: "Referral", foreign_key: "sender_id"
-  has_one :received_referral, class_name: "Referral", foreign_key: "recipient_id"
+  has_many :sent_referrals, dependent: :destroy, class_name: 'Referral', foreign_key: 'sender_id'
+  has_one :received_referral, class_name: 'Referral', foreign_key: 'recipient_id'
 
-  has_many :onboarding_statuses, -> { order(created_at: :desc, id: :desc) }, class_name: "UserOnboardingStatus"
-  has_one :current_onboarding_status, -> { order "created_at DESC" }, class_name: "UserOnboardingStatus"
+  has_many :onboarding_statuses, -> { order(created_at: :desc, id: :desc) }, class_name: 'UserOnboardingStatus'
+  has_one :current_onboarding_status, -> { order 'created_at DESC' }, class_name: 'UserOnboardingStatus'
 
   scope :join_current_onboarding_status, lambda {
     joins(:onboarding_statuses).
@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
               (SELECT MAX(user_onboarding_statuses.created_at)
                       FROM user_onboarding_statuses
                       WHERE user_onboarding_statuses.user_id = users.id)").
-    group("users.id")
+    group('users.id')
   }
 
   scope :onboarding_sequence_before, lambda { |sequence_index|
@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable
   # devise :omniauthable, :omniauth_providers => [:google_oauth2]
-  delegate :url_helpers, to: "Rails.application.routes"
+  delegate :url_helpers, to: 'Rails.application.routes'
 
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: {scope: :deleted_at, unless: :deleted? }
@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
 
   def most_viewed_site_element_subtype
     subtype = self.most_viewed_site_element.try(:element_subtype)
-    subtype = "social" if subtype && subtype.include?("social")
+    subtype = 'social' if subtype && subtype.include?('social')
     subtype
   end
 
@@ -166,10 +166,10 @@ class User < ActiveRecord::Base
     when :reset_password_instructions
       if is_oauth_user?
         reset_link = "#{host}/auth/google_oauth2"
-        MailerGateway.send_email("Reset Password Oauth", email, {:email => email, :reset_link => reset_link})
+        MailerGateway.send_email('Reset Password Oauth', email, {:email => email, :reset_link => reset_link})
       else
         reset_link = url_helpers.edit_user_password_url(self, :reset_password_token => args[0], :host => host)
-        MailerGateway.send_email("Reset Password", email, {:email => email, :reset_link => reset_link})
+        MailerGateway.send_email('Reset Password', email, {:email => email, :reset_link => reset_link})
       end
     end
   end
@@ -184,7 +184,7 @@ class User < ActiveRecord::Base
 
   def track_temporary_status_change
     if @was_temporary and !temporary?
-      Analytics.track(:user, self.id, "Completed Signup", {email: self.email})
+      Analytics.track(:user, self.id, 'Completed Signup', {email: self.email})
       @was_temporary = false
     end
   end
@@ -230,41 +230,41 @@ class User < ActiveRecord::Base
   end
 
   def self.find_for_google_oauth2(access_token, original_email=nil, track_options={})
-    info = access_token["info"]
+    info = access_token['info']
 
-    if original_email.present? && info["email"] != original_email # the user is trying to login with a different Google account
+    if original_email.present? && info['email'] != original_email # the user is trying to login with a different Google account
       user = User.new
       user.errors.add(:base, "Please log in with your #{original_email} Google email")
-    elsif user = User.joins(:authentications).find_by(authentications: { uid: access_token["uid"], provider: access_token["provider"] })
-      user.first_name = info["first_name"] if info["first_name"].present?
-      user.last_name = info["last_name"] if info["last_name"].present?
+    elsif user = User.joins(:authentications).find_by(authentications: { uid: access_token['uid'], provider: access_token['provider'] })
+      user.first_name = info['first_name'] if info['first_name'].present?
+      user.last_name = info['last_name'] if info['last_name'].present?
 
       user.save
     else # create a new user
-      user = User.find_by(email: info["email"], status: TEMPORARY_STATUS) || User.new(email: info["email"])
+      user = User.find_by(email: info['email'], status: TEMPORARY_STATUS) || User.new(email: info['email'])
 
       password = Devise.friendly_token[9,20]
       user.password = password
       user.password_confirmation = password
 
-      user.first_name = info["first_name"]
-      user.last_name = info["last_name"]
+      user.first_name = info['first_name']
+      user.last_name = info['last_name']
 
-      user.authentications.build(provider: access_token["provider"], uid: access_token["uid"])
+      user.authentications.build(provider: access_token['provider'], uid: access_token['uid'])
       user.status = ACTIVE_STATUS
 
       if user.save
-        Analytics.track(:user, user.id, "Signed Up", track_options)
-        Analytics.track(:user, user.id, "Completed Signup", {email: user.email})
+        Analytics.track(:user, user.id, 'Signed Up', track_options)
+        Analytics.track(:user, user.id, 'Completed Signup', {email: user.email})
       end
     end
 
     # update the authentication tokens & expires for this provider
-    if access_token["credentials"] && user.persisted?
-      user.authentications.detect { |x| x.provider == access_token["provider"]}.update(
-        refresh_token: access_token["credentials"].refresh_token,
-        access_token: access_token["credentials"].token,
-        expires_at: Time.at(access_token["credentials"].expires_at)
+    if access_token['credentials'] && user.persisted?
+      user.authentications.detect { |x| x.provider == access_token['provider']}.update(
+        refresh_token: access_token['credentials'].refresh_token,
+        access_token: access_token['credentials'].token,
+        expires_at: Time.at(access_token['credentials'].expires_at)
       )
     end
 
@@ -292,7 +292,7 @@ class User < ActiveRecord::Base
     host = Site.normalize_url(url).host
     if host
       domain = PublicSuffix.parse(host).domain
-      User.joins(:sites).where("url like ?", "%#{domain}%")
+      User.joins(:sites).where('url like ?', "%#{domain}%")
     else
       User.none
     end
@@ -301,7 +301,7 @@ class User < ActiveRecord::Base
   end
 
   def self.search_by_username(username)
-    User.with_deleted.where("email like ?", "%#{username}%")
+    User.with_deleted.where('email like ?', "%#{username}%")
   end
 
   def was_referred?
@@ -317,14 +317,14 @@ class User < ActiveRecord::Base
   def send_team_invite_email(site)
     host = ActionMailer::Base.default_url_options[:host]
     login_link = is_oauth_user? ? "#{host}/auth/google_oauth2" : url_helpers.new_user_session_url(host: host)
-    MailerGateway.send_email("Team Invite", email, {site_url: site.url, login_url: login_link})
+    MailerGateway.send_email('Team Invite', email, {site_url: site.url, login_url: login_link})
   end
 
   def send_invite_token_email(site)
     host = ActionMailer::Base.default_url_options[:host]
     oauth_link = "#{host}/auth/google_oauth2"
     signup_link = url_helpers.invite_user_url(invite_token: invite_token, :host => host)
-    MailerGateway.send_email("Invitation", email, {site_url: site.url, oauth_link: oauth_link, signup_link: signup_link})
+    MailerGateway.send_email('Invitation', email, {site_url: site.url, oauth_link: oauth_link, signup_link: signup_link})
   end
 
   # Disconnect oauth logins if user sets their own password
@@ -348,12 +348,12 @@ class User < ActiveRecord::Base
 
   def oauth_email_change
     if !id_changed? && is_oauth_user? && email_changed? && !encrypted_password_changed?
-      errors.add(:email, "cannot be changed without a password.")
+      errors.add(:email, 'cannot be changed without a password.')
     end
   end
 
   def email_does_not_exist_in_wordpress
     return if legacy_migration # Don't check this
-    errors.add(:email, "has already been taken") if Hello::WordpressUser.email_exists?(email)
+    errors.add(:email, 'has already been taken') if Hello::WordpressUser.email_exists?(email)
   end
 end

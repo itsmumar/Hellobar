@@ -74,7 +74,7 @@ class SiteElementsController < ApplicationController
     respond_to do |format|
       format.js { head :ok }
       format.html do
-        flash[:success] = "Your bar was successfully deleted."
+        flash[:success] = 'Your bar was successfully deleted.'
         redirect_to site_site_elements_path(:site_id => @site)
       end
     end
@@ -92,8 +92,8 @@ class SiteElementsController < ApplicationController
   private
 
   def message_to_clear_cache
-    message = "It may take a few minutes for Hello Bar to show up on your site. "
-    message << "You’ll want to <a href=\"http://www.refreshyourcache.com/en/home\" target=\"_blank\" style=\"text-decoration: underline;\">clear your cache</a> to see your updates."
+    message = 'It may take a few minutes for Hello Bar to show up on your site. '
+    message << 'You’ll want to <a href="http://www.refreshyourcache.com/en/home" target="_blank" style="text-decoration: underline;">clear your cache</a> to see your updates.'
   end
 
   def load_site
@@ -102,7 +102,7 @@ class SiteElementsController < ApplicationController
   end
 
   def determine_layout
-    %w(new edit).include?(action_name) ? "ember" : "application"
+    %w(new edit).include?(action_name) ? 'ember' : 'application'
   end
 
   def force_trailing_slash

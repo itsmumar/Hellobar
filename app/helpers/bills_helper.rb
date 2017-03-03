@@ -17,10 +17,10 @@ module BillsHelper
 
   def bill_address_info(site, details)
     if site.invoice_information.present?
-      "<br>" + site.invoice_information.gsub("\r\n", "<br>")
+      '<br>' + site.invoice_information.gsub("\r\n", '<br>')
     elsif details.address.present?
-      "<br>" + details.address.address1 +
-      "<br>" + details.address.city + ' ' + details.address.state + ' ' + details.address.zip + ' ' + details.address.country
+      '<br>' + details.address.address1 +
+      '<br>' + details.address.city + ' ' + details.address.state + ' ' + details.address.zip + ' ' + details.address.country
     end
   end
 end

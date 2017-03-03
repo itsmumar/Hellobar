@@ -1,11 +1,11 @@
 module TargetedSegmentsHelper
-  SALT = "7f9d074257b1400c55d0b838d8e7f5bdd8330151"
+  SALT = '7f9d074257b1400c55d0b838d8e7f5bdd8330151'
 
   def create_targeted_content_link(site, targeted_segment)
-    segment, value = targeted_segment.split(":", 2)
+    segment, value = targeted_segment.split(':', 2)
     segment = Condition::SEGMENTS.find { |s| s[1] == segment }
 
-    return "" unless segment.present? # the API returned a segment key which we don't implement
+    return '' unless segment.present? # the API returned a segment key which we don't implement
 
     segment = segment[1]
     existing_rule = rule_for_segment_and_value(site, segment, value)
@@ -21,11 +21,11 @@ module TargetedSegmentsHelper
 
     link_options = {
       method: site.capabilities.at_site_element_limit? ? nil : method, # if method is set, browser will follow link despite our restriction-enforcing javascript
-      "data-prompt-upgrade" => site.capabilities.at_site_element_limit?,
-      "data-upgrade-benefit" => "create more bars"
+      'data-prompt-upgrade' => site.capabilities.at_site_element_limit?,
+      'data-upgrade-benefit' => 'create more bars'
     }
 
-    link_to "Create targeted content", path, {class: "button"}.merge(link_options)
+    link_to 'Create targeted content', path, {class: 'button'}.merge(link_options)
   end
 
   def rule_for_segment_and_value(site, segment, value)
@@ -44,7 +44,7 @@ module TargetedSegmentsHelper
   end
 
   def segment_description(segment_and_value)
-    segment, value = segment_and_value.split(":", 2)
+    segment, value = segment_and_value.split(':', 2)
     user_segment = Hello::Segments::User.find{ |d| d[:key] == segment }
     "#{user_segment[:name]} is #{value}"
   end

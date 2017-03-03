@@ -1,7 +1,7 @@
 require 'integration_helper'
 require 'service_provider_integration_helper'
 
-feature "ActiveCampaign Integration", :js do
+feature 'ActiveCampaign Integration', :js do
   let(:provider) { 'active_campaign' }
 
   before do
@@ -14,22 +14,22 @@ feature "ActiveCampaign Integration", :js do
     Hellobar::Settings[:fake_data_api] = @fake_data_api_original
   end
 
-  scenario "invalid form details" do
+  scenario 'invalid form details' do
     open_provider_form(@user, provider)
     fill_in 'contact_list[data][app_url]', with: 'hellobar.api-us1.com'
     fill_in 'contact_list[data][api_key]', with: 'invalid-key'
 
-    page.find(".button.ready").click
+    page.find('.button.ready').click
     expect(page).to have_content('There was a problem connecting your Active Campaign account')
   end
 
-  scenario "connecting to Active Campaign" do
+  scenario 'connecting to Active Campaign' do
     connect_active_campaign
 
     expect(page).to have_content('Choose a Active Campaign list to sync with')
   end
 
-  scenario "select list" do
+  scenario 'select list' do
     connect_active_campaign
     selector = 'select#contact_list_remote_list_id'
 
@@ -38,7 +38,7 @@ feature "ActiveCampaign Integration", :js do
 
     page.find('#edit-contact-list').click
 
-    expect(page).to have_content("HB List2")
+    expect(page).to have_content('HB List2')
   end
 
   private
@@ -49,6 +49,6 @@ feature "ActiveCampaign Integration", :js do
     fill_in 'contact_list[data][app_url]', with: 'hellobar.api-us1.com'
     fill_in 'contact_list[data][api_key]', with: 'valid-active-campaign-key'
 
-    page.find(".button.ready").click
+    page.find('.button.ready').click
   end
 end

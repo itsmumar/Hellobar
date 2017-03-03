@@ -3,11 +3,11 @@ class Users::OmniauthCallbacksController < ApplicationController
     track_options = {ip: request.remote_ip, url: session[:new_site_url]}
     register_flow = false
 
-    @user = User.find_by(email: request.env["omniauth.auth"]["info"]["email"])
+    @user = User.find_by(email: request.env['omniauth.auth']['info']['email'])
     register_flow = true unless @user.present?
 
     if !@user.present? || @user.is_oauth_user?
-      @user = User.find_for_google_oauth2(request.env["omniauth.auth"], cookies[:login_email], track_options)
+      @user = User.find_for_google_oauth2(request.env['omniauth.auth'], cookies[:login_email], track_options)
     end
 
     if @user.persisted?
@@ -26,9 +26,9 @@ class Users::OmniauthCallbacksController < ApplicationController
     else
       if @user.errors.any?
         cookies.delete(:login_email)
-        flash[:error] = @user.errors.full_messages.uniq.join(". ") << "."
+        flash[:error] = @user.errors.full_messages.uniq.join('. ') << '.'
       else
-        flash[:error] = "We could not authenticate with Google."
+        flash[:error] = 'We could not authenticate with Google.'
       end
       redirect_to root_path
     end
@@ -36,10 +36,10 @@ class Users::OmniauthCallbacksController < ApplicationController
 
   def failure
     if session[:new_site_url]
-      flash[:error] = "Sorry, we could not authenticate with Google. Please try again."
+      flash[:error] = 'Sorry, we could not authenticate with Google. Please try again.'
       redirect_to root_path
     else
-      flash[:error] = "Sorry, we could not authenticate with Google. Please try again."
+      flash[:error] = 'Sorry, we could not authenticate with Google. Please try again.'
       redirect_to new_user_session_path
     end
   end

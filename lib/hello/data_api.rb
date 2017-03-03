@@ -1,7 +1,7 @@
-require "./config/initializers/settings"
-require "./lib/hello/data_api_helper"
-require "./lib/hello/api_performance"
-require "thread/pool"
+require './config/initializers/settings'
+require './lib/hello/data_api_helper'
+require './lib/hello/api_performance'
+require 'thread/pool'
 
 module Hello::DataAPI
   # Include this many different IDs in one Data API request
@@ -174,9 +174,9 @@ module Hello::DataAPI
 
     def fake_suggested_opportunities(site, site_elements)
       {
-        "high traffic, low conversion" =>  [["co:USA", 100, 1], ["dv:Mobile", 200, 2], ["rf:http://zombo.com", 130, 4]],
-        "low traffic, high conversion" =>  [["co:Russia", 10, 9], ["dv:Desktop", 22, 20], ["pu:http://zombo.com/signup", 5, 4]],
-        "high traffic, high conversion" => [["co:China", 100, 30], ["ad_so:Google AdWords", 200, 55], ["co:Canada", 430, 120]]
+        'high traffic, low conversion' =>  [['co:USA', 100, 1], ['dv:Mobile', 200, 2], ['rf:http://zombo.com', 130, 4]],
+        'low traffic, high conversion' =>  [['co:Russia', 10, 9], ['dv:Desktop', 22, 20], ['pu:http://zombo.com/signup', 5, 4]],
+        'high traffic, high conversion' => [['co:China', 100, 30], ['ad_so:Google AdWords', 200, 55], ['co:Canada', 430, 120]]
       }
     end
 
@@ -197,7 +197,7 @@ module Hello::DataAPI
     end
 
     def fake_get_contacts(contact_list)
-      [["dmitriy+person100@polymathic.me", "First Last", 1388534400], ["dmitriy+person99@polymathic.me", "Dr Pepper", 1388534399]]
+      [['dmitriy+person100@polymathic.me', 'First Last', 1388534400], ['dmitriy+person99@polymathic.me', 'Dr Pepper', 1388534399]]
     end
 
     def get(path, params)
@@ -229,7 +229,7 @@ module Hello::DataAPI
         lines << "\t#{line}"
       end
       # Write everything to the log
-      File.open(File.join(Rails.root, "log", "data_api_error.log"), "a") do |file|
+      File.open(File.join(Rails.root, 'log', 'data_api_error.log'), 'a') do |file|
         file.puts(lines.join("\n"))
       end
       # Re-raise the error

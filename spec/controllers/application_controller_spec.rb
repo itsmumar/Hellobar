@@ -3,8 +3,8 @@ require 'spec_helper'
 describe ApplicationController do
   fixtures :all
 
-  describe "current_site" do
-    it "returns nil if no current_user" do
+  describe 'current_site' do
+    it 'returns nil if no current_user' do
       stub_current_user(nil)
       controller.current_site.should be_nil
     end
@@ -14,7 +14,7 @@ describe ApplicationController do
       controller.current_site.should == user.sites.first
     end
 
-    it "returns site stored in session if available" do
+    it 'returns site stored in session if available' do
       user = stub_current_user(users(:joey))
       site = user.sites.last
       session[:current_site] = site.id
@@ -29,17 +29,17 @@ describe ApplicationController do
       controller.current_site.should == user.sites.first
     end
 
-    it "returns nil if user has no sites" do
+    it 'returns nil if user has no sites' do
       stub_current_user(users(:wootie))
       controller.current_site.should be_nil
     end
   end
 
-  describe "record_tracking_param" do
-    it "records the tracking param" do
-      controller.stub(:params => {:trk => "asdf"})
+  describe 'record_tracking_param' do
+    it 'records the tracking param' do
+      controller.stub(:params => {:trk => 'asdf'})
 
-      Hello::TrackingParam.should_receive(:track).with("asdf")
+      Hello::TrackingParam.should_receive(:track).with('asdf')
 
       controller.record_tracking_param
     end
@@ -157,11 +157,11 @@ describe ApplicationController, 'rescue_from errors' do
     def index; render nothing: true; end
   end
 
-  context "Google::Apis::AuthorizationError" do
+  context 'Google::Apis::AuthorizationError' do
     it 'logs the current user out' do
       allow(controller).to receive(:index) { raise Google::Apis::AuthorizationError.new('Unauthorized') }
 
-      expect(get :index).to redirect_to("/auth/google_oauth2")
+      expect(get :index).to redirect_to('/auth/google_oauth2')
     end
 
     it 'redirects the user to log in again to refresh the access token' do

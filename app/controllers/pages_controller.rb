@@ -5,7 +5,7 @@ class PagesController < ApplicationController
   end
 
   def terms_of_use
-    Analytics.track(*current_person_type_and_id, "Viewed Terms of Use")
+    Analytics.track(*current_person_type_and_id, 'Viewed Terms of Use')
   end
 
   def privacy_policy

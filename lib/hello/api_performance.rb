@@ -1,5 +1,5 @@
-require "./config/initializers/settings"
-require "./lib/hello/data_api_helper"
+require './config/initializers/settings'
+require './lib/hello/data_api_helper'
 
 module Hello::DataAPI
   class Performance

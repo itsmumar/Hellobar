@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature "Visit click to call on desktop browser", js: true do
+feature 'Visit click to call on desktop browser', js: true do
   scenario "doesn't show the site element" do
     element = create(:modal_element, element_subtype: 'call', phone_number: '(555)-555-5555')
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
@@ -12,8 +12,8 @@ feature "Visit click to call on desktop browser", js: true do
   end
 end
 
-feature "Visit click to call on mobile browser", js: true do
-  scenario "shows the click to call site element" do
+feature 'Visit click to call on mobile browser', js: true do
+  scenario 'shows the click to call site element' do
     element = create(:modal_element, element_subtype: 'call', phone_number: '(555)-555-5555')
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
     path = generate_file_and_return_path(element.site.id)

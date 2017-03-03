@@ -19,7 +19,7 @@ module Cleaners::EmbedCode
   private
 
   def standard_quotes(str)
-    str.tr("“”‘’", %{""''})
+    str.tr('“”‘’', %{""''})
   end
 
   def ascii_only(str)

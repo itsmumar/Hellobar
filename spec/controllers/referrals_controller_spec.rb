@@ -4,16 +4,16 @@ describe ReferralsController do
   fixtures :all
 
   before do
-    stub_out_get_ab_variations('Email Integration UI 2016-06-22') {"original"}
+    stub_out_get_ab_variations('Email Integration UI 2016-06-22') {'original'}
   end
 
-  describe "GET :new" do
+  describe 'GET :new' do
     render_views
     before(:each) do
       @user = stub_current_user(users(:joey))
     end
 
-    it "works" do
+    it 'works' do
       get :new
 
       expect(response).to be_success
@@ -27,12 +27,12 @@ describe ReferralsController do
     end
   end
 
-  describe "GET :index" do
+  describe 'GET :index' do
     before(:each) do
       @user = stub_current_user(users(:joey))
     end
 
-    it "works" do
+    it 'works' do
       2.times { create(:referral, sender: @user) }
       get :index
 
@@ -41,26 +41,26 @@ describe ReferralsController do
     end
   end
 
-  describe "POST :create" do
+  describe 'POST :create' do
     before(:each) do
       @user = stub_current_user(users(:joey))
     end
 
-    it "creates when an email is set" do
-      post :create, {referral: {email: "kaitlen@hellobar.com"}}
+    it 'creates when an email is set' do
+      post :create, {referral: {email: 'kaitlen@hellobar.com'}}
 
       expect(assigns(:referral).persisted?).to be_true
     end
 
-    it "does not create when an email is not set" do
-      post :create, {referral: {email: ""}}
+    it 'does not create when an email is not set' do
+      post :create, {referral: {email: ''}}
 
       expect(assigns(:referral).persisted?).to be_false
     end
   end
 
-  describe "GET :accept" do
-    it "sets the session variable when given a valid token" do
+  describe 'GET :accept' do
+    it 'sets the session variable when given a valid token' do
       get :accept, token: referral_tokens(:joey).token
 
       expect(response.status).to redirect_to(root_path)
@@ -68,8 +68,8 @@ describe ReferralsController do
       expect(session[:referral_token]).to be(referral_tokens(:joey).token)
     end
 
-    it "does not set the session variable when given an ivalid token" do
-      get :accept, token: "wrong"
+    it 'does not set the session variable when given an ivalid token' do
+      get :accept, token: 'wrong'
 
       expect(response.status).to redirect_to(root_path)
       expect(session[:referral_token]).to be_nil

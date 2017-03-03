@@ -48,10 +48,10 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def preset_rule_name
-    return "" unless object.rule
+    return '' unless object.rule
 
     if rule.editable
-      "Saved"
+      'Saved'
     else
       rule.name
     end
@@ -66,15 +66,15 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site_preview_image
-    object.site ? proxied_url2png("?url=#{ERB::Util.url_encode(object.site.url)}") : ""
+    object.site ? proxied_url2png("?url=#{ERB::Util.url_encode(object.site.url)}") : ''
   end
 
   def site_preview_image_mobile
-    object.site ? proxied_url2png("?url=#{ERB::Util.url_encode(object.site.url)}&viewport=320x568") : ""
+    object.site ? proxied_url2png("?url=#{ERB::Util.url_encode(object.site.url)}&viewport=320x568") : ''
   end
 
   def proxied_url2png(params)
-    "/proxy/https/" + url2png(params).sub(/^https:\/\//, '')
+    '/proxy/https/' + url2png(params).sub(/^https:\/\//, '')
   end
 
   def url2png(params)
@@ -99,17 +99,17 @@ class SiteElementSerializer < ActiveModel::Serializer
       errors = object.errors[attribute]
 
       if attribute == :element_subtype && errors.include?("can't be blank")
-        messages << "You must select your goal in the \"goals\" section"
+        messages << 'You must select your goal in the "goals" section'
         next
       end
 
       if attribute == :rule && errors.include?("can't be blank")
-        messages << "You must select who will see this in the \"targeting\" section"
+        messages << 'You must select who will see this in the "targeting" section'
         next
       end
 
       if attribute == :contact_list && errors.include?("can't be blank")
-        messages << "You must select a contact list to sync with in the \"goals\" section"
+        messages << 'You must select a contact list to sync with in the "goals" section'
         next
       end
 

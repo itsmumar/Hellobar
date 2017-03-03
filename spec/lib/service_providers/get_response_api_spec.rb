@@ -61,7 +61,7 @@ describe ServiceProviders::GetResponseApi do
       end
     end
 
-    context "#tags" do
+    context '#tags' do
       it 'returns hash array of hashes of ids and names' do
         allow(client).to receive(:get).and_return(tags_success_response)
         expect(get_respone_api.tags).to eq([{'id' => tag_id, 'name' => tag_name}])
@@ -129,10 +129,10 @@ describe ServiceProviders::GetResponseApi do
         tags = contact_list.tags.map { |tag| { tagId: tag } }
 
         expect(contact_list).to receive(:subscribers).
-          and_return([{ :name => "Bob Lob", :email => "bobloblaw@lawblog.com" },
-                      { :name => "Lob Bob", :email => "blob@lawblog.com" }])
+          and_return([{ :name => 'Bob Lob', :email => 'bobloblaw@lawblog.com' },
+                      { :name => 'Lob Bob', :email => 'blob@lawblog.com' }])
         expect(api).to receive(:find_union).
-          and_return([{ "contactId" => "contactId", "email" => "bobloblaw@lawblog.com" }])
+          and_return([{ 'contactId' => 'contactId', 'email' => 'bobloblaw@lawblog.com' }])
         expect(client).to receive(:post).with('contacts', request_body).
           and_return successful_response
         expect(client).to receive(:get).
@@ -158,7 +158,7 @@ describe ServiceProviders::GetResponseApi do
 
         expect(get_respone_api).
           to receive(:log).
-          with("sync timed out")
+          with('sync timed out')
 
         get_respone_api.subscribe(campaign_id, email)
       end

@@ -27,7 +27,7 @@ class ContactLists::Destroy < Less::Interaction
     unless valid_site_elements_action?
       @contact_list.errors.add(
         :base,
-        "Must specify an action for existing bars, modals, sliders, and takeovers"
+        'Must specify an action for existing bars, modals, sliders, and takeovers'
       )
       return false
     end

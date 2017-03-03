@@ -5,15 +5,15 @@ module ServiceProviders
         identity = opts[:identity]
       elsif opts[:site]
         identity = opts[:site].identities.find_by_provider!('get_response_api')
-        raise "Site does not have a stored GetResponse identity" unless identity
+        raise 'Site does not have a stored GetResponse identity' unless identity
       else
-        raise "Must provide an identity through the arguments"
+        raise 'Must provide an identity through the arguments'
       end
 
       @contact_list = opts[:contact_list]
 
       @api_key = identity.api_key
-      raise "Identity does not have a stored GetResponse API key" unless api_key
+      raise 'Identity does not have a stored GetResponse API key' unless api_key
     end
 
     def lists
@@ -62,7 +62,7 @@ module ServiceProviders
             subscribers = @contact_list.subscribers(10)
 
             find_union(contacts, subscribers, 2).each do |contact|
-              assign_tags contact_id: contact["contactId"], tags: tags
+              assign_tags contact_id: contact['contactId'], tags: tags
             end
           else
             response
@@ -73,7 +73,7 @@ module ServiceProviders
         end
 
       rescue Faraday::TimeoutError
-        log "sync timed out"
+        log 'sync timed out'
       rescue => error
         log "sync raised #{error}"
       end
@@ -118,7 +118,7 @@ module ServiceProviders
 
       contacts.each do |contact|
         subscribers.map do |subscriber|
-          found_contacts << contact if subscriber[:email] == contact["email"]
+          found_contacts << contact if subscriber[:email] == contact['email']
         end
 
         break if found_contacts.count >= count

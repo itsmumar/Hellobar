@@ -11,12 +11,12 @@ class UserMigrationController < ApplicationController
     password = params[:password]
 
     if User.where(email: email).exists?
-      redirect_to login_path, notice: "This email has already been upgraded.  Please log in."
+      redirect_to login_path, notice: 'This email has already been upgraded.  Please log in.'
     elsif wordpress_user = Hello::WordpressUser.authenticate(email, password, !!current_admin)
       session[:wordpress_user_id] = wordpress_user.id
       redirect_to new_user_migration_path
     else
-      flash.now[:error] = "Invalid email or password"
+      flash.now[:error] = 'Invalid email or password'
       render action: :upgrade
     end
   end
@@ -42,7 +42,7 @@ class UserMigrationController < ApplicationController
 
           SiteMembership.create!(site: site, user: user)
 
-          subscription = Subscription::Pro.new(schedule: "monthly")
+          subscription = Subscription::Pro.new(schedule: 'monthly')
           site.change_subscription(subscription, nil, Hello::WordpressUser::PRO_TRIAL_PERIOD)
 
           site_hash[:bar_ids].each do |id|
@@ -57,7 +57,7 @@ class UserMigrationController < ApplicationController
     end
 
     session[:wordpress_user_id] = nil
-    url = current_user.sites.any? ? site_site_elements_path(current_user.sites.first, anchor: "migration-complete") : new_site_path
+    url = current_user.sites.any? ? site_site_elements_path(current_user.sites.first, anchor: 'migration-complete') : new_site_path
     current_user.sites.each(&:generate_script)
 
     respond_to do |format|

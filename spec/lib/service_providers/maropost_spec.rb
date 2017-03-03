@@ -17,7 +17,7 @@ describe ServiceProviders::Maropost do
       Identity.new site_id: 1,
                    provider: 'maropost',
                    api_key: 'my_cool_api_key',
-                   credentials: {"username" => 'a_user_id_actually'}
+                   credentials: {'username' => 'a_user_id_actually'}
     }
 
     let(:maropost) {ServiceProviders::Maropost.new(identity: identity)}
@@ -65,7 +65,7 @@ describe ServiceProviders::Maropost do
         allow(client).to receive(:get).and_raise(Faraday::TimeoutError)
         expect(maropost).
           to receive(:log).
-          with("getting lists timed out")
+          with('getting lists timed out')
         maropost.lists
       end
 
@@ -82,9 +82,9 @@ describe ServiceProviders::Maropost do
       it 'sends name, email and Maropost options' do
         double_request = double(:request, url: true)
 
-        contact = {first_name: "Bob",
-                   last_name: "Blah Loblaw",
-                   email: "bobloblaw@lawblog.com",
+        contact = {first_name: 'Bob',
+                   last_name: 'Blah Loblaw',
+                   email: 'bobloblaw@lawblog.com',
                    subscribe: true,
                    remove_from_dnm: true}
 
@@ -112,7 +112,7 @@ describe ServiceProviders::Maropost do
 
         expect(double_request).
           to receive(:body=) do |body|
-            expect(body[:contact]).to include(first_name: "bobloblaw@lawblog.com")
+            expect(body[:contact]).to include(first_name: 'bobloblaw@lawblog.com')
           end
 
         allow(client).to receive(:post).and_yield(double_request)
@@ -131,7 +131,7 @@ describe ServiceProviders::Maropost do
         allow(client).to receive(:post).and_raise(Faraday::TimeoutError)
         expect(maropost).
           to receive(:log).
-          with("sync timed out")
+          with('sync timed out')
         maropost.subscribe(1122, 'bobloblaw@lawblog.com')
       end
     end

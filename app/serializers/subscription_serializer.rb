@@ -31,7 +31,7 @@ class SubscriptionSerializer < ActiveModel::Serializer
 
   def payment_method_number
     if object.payment_method.try(:current_details)
-      (object.payment_method.current_details.data.try(:[], "number") || "")[-4..-1]
+      (object.payment_method.current_details.data.try(:[], 'number') || '')[-4..-1]
     else
       nil
     end
@@ -48,7 +48,7 @@ class SubscriptionSerializer < ActiveModel::Serializer
   private
 
   def amount_to_string(amount)
-    return "" if amount.nil?
-    ('%.2f' % amount).to_s.chomp(".00")
+    return '' if amount.nil?
+    ('%.2f' % amount).to_s.chomp('.00')
   end
 end

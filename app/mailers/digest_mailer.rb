@@ -3,7 +3,7 @@ class DigestMailer < ActionMailer::Base
   include EmailDigestHelper
   include Hello::InternalAnalytics
   add_template_helper(EmailDigestHelper)
-  default from: "from@example.com"
+  default from: 'from@example.com'
 
   before_filter :set_weekly_dates
 
@@ -27,7 +27,7 @@ class DigestMailer < ActionMailer::Base
     @conversion_header = conversion_header(@sorted_elements)
 
     roadie_mail(
-      to: "", # Doesn't matter, we're sending the results through Grand Central
+      to: '', # Doesn't matter, we're sending the results through Grand Central
       subject: 'Your Weekly Hello Bar Digest'
     )
   end
@@ -37,7 +37,7 @@ class DigestMailer < ActionMailer::Base
     @user = user
 
     roadie_mail(
-      to: "", # Doesn't matter, we're sending the results through Grand Central
+      to: '', # Doesn't matter, we're sending the results through Grand Central
       subject: 'One final step and your Hello Bar is live!'
     )
   end
@@ -45,7 +45,7 @@ class DigestMailer < ActionMailer::Base
   private
 
   def set_weekly_dates
-    @end_date = EmailDigestHelper.date_of_previous("Sunday")
+    @end_date = EmailDigestHelper.date_of_previous('Sunday')
     @date_ranges = [@end_date - 13, @end_date - 7, @end_date - 6, @end_date]
   end
 end

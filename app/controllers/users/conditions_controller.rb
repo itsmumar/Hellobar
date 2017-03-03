@@ -23,7 +23,7 @@ class ConditionsController < ApplicationController
 
     if rule.editable?
       rp = rule_params.permit!
-      if rule.update_conditions(rp.delete("conditions_attributes")) && rule.update_attributes(rp)
+      if rule.update_conditions(rp.delete('conditions_attributes')) && rule.update_attributes(rp)
         render :json => rule and return
       end
     end
@@ -51,7 +51,7 @@ class ConditionsController < ApplicationController
 
   def verify_capability
     unless @site && @site.capabilities.custom_targeted_bars?
-      render :json => { error: "forbidden" }, :status => :forbidden
+      render :json => { error: 'forbidden' }, :status => :forbidden
     end
   end
 end

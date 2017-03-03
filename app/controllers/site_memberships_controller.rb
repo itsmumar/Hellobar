@@ -35,15 +35,15 @@ class SiteMembershipsController < ApplicationController
     user = User.find_or_invite_by_email(params[:email], @site)
     notice = nil
     if user.valid?
-      @site_membership = @site.site_memberships.create(user: user, role: "admin")
+      @site_membership = @site.site_memberships.create(user: user, role: 'admin')
       if @site_membership.valid?
         @site_membership.user.send_invitation_email(@site_membership.site)
         notice = "#{user.email} has been invited to #{@site.url}."
       else
-        notice = @site_membership.errors.full_messages.join(". ")
+        notice = @site_membership.errors.full_messages.join('. ')
       end
     else
-      notice = user.errors.full_messages.join(". ")
+      notice = user.errors.full_messages.join('. ')
     end
 
     redirect_to site_team_path(@site), notice: notice

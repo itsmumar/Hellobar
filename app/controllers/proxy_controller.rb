@@ -4,7 +4,7 @@ class ProxyController < ApplicationController
       result = Net::HTTP.get_response(proxy_url)
       send_data result.body, disposition: :inline, type: 'image/png', filename: 'image.png'
     else
-      render text: "ok"
+      render text: 'ok'
     end
   end
 

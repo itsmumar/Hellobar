@@ -1,6 +1,6 @@
 require 'digest/sha1'
-require "hmac-sha1"
-require "hmac-sha2"
+require 'hmac-sha1'
+require 'hmac-sha2'
 
 class ScriptGenerator < Mustache
   class << self
@@ -42,7 +42,7 @@ class ScriptGenerator < Mustache
     if Rails.env.test?
       true
     else
-      "HB.scriptIsInstalledProperly()"
+      'HB.scriptIsInstalledProperly()'
     end
   end
 
@@ -73,7 +73,7 @@ class ScriptGenerator < Mustache
 
   def get_branding_variation
     # Options are ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"]
-    "animated"
+    'animated'
   end
 
   def capabilities_json
@@ -152,7 +152,7 @@ class ScriptGenerator < Mustache
 
   def hellobar_container_css
     css = read_css_files(container_css_files)
-    css = css.gsub("hellobar-container", "#{pro_secret}-container")
+    css = css.gsub('hellobar-container', "#{pro_secret}-container")
 
     CSSMin.minify(css).to_json
   end
@@ -168,7 +168,7 @@ class ScriptGenerator < Mustache
         ActiveSupport.escape_html_entities_in_json = false
         content = File.read(f).to_json
         ActiveSupport.escape_html_entities_in_json = true
-        r << {name: f.split(".html").first.split("/").last, markup: content}
+        r << {name: f.split('.html').first.split('/').last, markup: content}
       end
     end
   end
@@ -179,7 +179,7 @@ class ScriptGenerator < Mustache
       ActiveSupport.escape_html_entities_in_json = false
       content = File.read(f).to_json
       ActiveSupport.escape_html_entities_in_json = true
-      r << {name: f.split(".html").first.split("/").last, markup: content}
+      r << {name: f.split('.html').first.split('/').last, markup: content}
     end
   end
 
@@ -190,7 +190,7 @@ class ScriptGenerator < Mustache
       templates = Theme.where(type: 'template').collect(&:name)
 
       options[:templates].each { |t|
-        temp_name = t.split("_", 2)
+        temp_name = t.split('_', 2)
         category  = :generic
         category  = :template if templates.include?(temp_name[1].titleize)
         template_names << (temp_name << category)
@@ -365,10 +365,10 @@ class ScriptGenerator < Mustache
       secondary_color: site_element.secondary_color,
       settings: site_element.settings,
       subtype: site_element.short_subtype,
-      tab_side: "right",
+      tab_side: 'right',
       target: site_element.target_segment,
       template_name: "#{site_element.class.name.downcase}_#{site_element.element_subtype}",
-      thank_you_text: SiteElement.sanitize(site_element.display_thank_you_text).gsub(/"/, "&quot;"),
+      thank_you_text: SiteElement.sanitize(site_element.display_thank_you_text).gsub(/"/, '&quot;'),
       views: views,
       updated_at: site_element.updated_at.to_f * 1000,
       use_free_email_default_msg: site_element.show_default_email_message? && site_element.site.is_free?,
@@ -424,7 +424,7 @@ class ScriptGenerator < Mustache
     css = files.map do |file|
       next unless File.exist?(file)
       raw_css = File.read(file)
-      if file.include?(".scss")
+      if file.include?('.scss')
         raw_css = Sass::Engine.new(raw_css, syntax: :scss).render
       end
 

@@ -8,7 +8,7 @@ describe ScriptGenerator do
     Hello::DataAPI.stub(:lifetime_totals => nil)
   end
 
-  describe "#render" do
+  describe '#render' do
     let(:site) { sites(:zombo) }
     let(:generator) { ScriptGenerator.new(site) }
 
@@ -20,8 +20,8 @@ describe ScriptGenerator do
 
     it 'renders the backend host variable' do
       original_setting = Hellobar::Settings[:tracking_host]
-      Hellobar::Settings[:tracking_host] = "hi-there.hellobar.com"
-      expected_string = "HB_BACKEND_HOST = \"hi-there.hellobar.com\";"
+      Hellobar::Settings[:tracking_host] = 'hi-there.hellobar.com'
+      expected_string = 'HB_BACKEND_HOST = "hi-there.hellobar.com";'
 
       generator.render.should include(expected_string)
       Hellobar::Settings[:tracking_host] = original_setting
@@ -63,7 +63,7 @@ describe ScriptGenerator do
     end
 
     it 'renders the initialization of the hellobar queue object' do
-      hbq_initialization = "_hbq = new HBQ();"
+      hbq_initialization = '_hbq = new HBQ();'
 
       generator.render.should include(hbq_initialization)
     end
@@ -75,7 +75,7 @@ describe ScriptGenerator do
         generator.stub(:hellobar_container_css)
         generator.stub(:hellobar_element_css)
 
-        expected_string = "HB.setTemplate(\"yey name\", yey markup);"
+        expected_string = 'HB.setTemplate("yey name", yey markup);'
 
         generator.render.should include(expected_string)
       end
@@ -103,7 +103,7 @@ describe ScriptGenerator do
     context 'when rules are present' do
       it 'has a start date constraint when present' do
         rule = Rule.new
-        condition = Condition.new value: { 'start_date' => Date.new(2000, 01, 01) }, operand: Condition::OPERANDS[:after], segment: "DateCondition"
+        condition = Condition.new value: { 'start_date' => Date.new(2000, 01, 01) }, operand: Condition::OPERANDS[:after], segment: 'DateCondition'
         rule.stub conditions: [condition]
         site.stub rules: [rule]
 
@@ -123,7 +123,7 @@ describe ScriptGenerator do
 
       it 'has an end date constraint when present' do
         rule = Rule.new
-        condition = Condition.new value: { 'end_date' => Date.new(2015, 01, 01) }, operand: Condition::OPERANDS[:before], segment: "DateCondition"
+        condition = Condition.new value: { 'end_date' => Date.new(2015, 01, 01) }, operand: Condition::OPERANDS[:before], segment: 'DateCondition'
         rule.stub conditions: [condition]
         site.stub rules: [rule]
 
@@ -143,7 +143,7 @@ describe ScriptGenerator do
 
       it 'adds an exlusion constraint for all blacklisted URLs' do
         rule = Rule.new
-        conditions = [Condition.new(value: '/signup', operand: :does_not_include, segment: "UrlCondition" )]
+        conditions = [Condition.new(value: '/signup', operand: :does_not_include, segment: 'UrlCondition' )]
         rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
         site.stub rules: [rule]
 
@@ -154,7 +154,7 @@ describe ScriptGenerator do
 
       it 'converts does_not_include urls to paths' do
         rule = Rule.new
-        conditions = [Condition.new(value: 'http://soamazing.com/signup', operand: :does_not_include, segment: "UrlCondition" )]
+        conditions = [Condition.new(value: 'http://soamazing.com/signup', operand: :does_not_include, segment: 'UrlCondition' )]
         rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
         site.stub rules: [rule]
 
@@ -174,7 +174,7 @@ describe ScriptGenerator do
 
       it 'adds an inclusion constraint for all whitelisted URLs' do
         rule = Rule.new
-        conditions = [Condition.new(value: '/signup', operand: Condition::OPERANDS[:includes], segment: "UrlCondition" )]
+        conditions = [Condition.new(value: '/signup', operand: Condition::OPERANDS[:includes], segment: 'UrlCondition' )]
         rule.stub conditions: conditions
         site.stub rules: [rule]
 
@@ -193,36 +193,36 @@ describe ScriptGenerator do
       end
     end
 
-    context "site element has a theme" do
+    context 'site element has a theme' do
       use_theme_fixtures
       before do
         create(:site_element, rule: site.rules.last, theme_id: 'beige-test')
       end
 
       it 'includes the container theme css' do
-        expected_string = "#beige-container{border:1px}"
+        expected_string = '#beige-container{border:1px}'
 
         expect(generator.render).to include(expected_string)
       end
 
       it 'includes the element theme css' do
-        expected_string = "#beige-element{border:1px}"
+        expected_string = '#beige-element{border:1px}'
 
         expect(generator.render).to include(expected_string)
       end
     end
 
-    context "site element does not have a theme" do
+    context 'site element does not have a theme' do
       use_theme_fixtures
 
       it 'does not includes the container theme css' do
-        expected_string = "#beige-container{border:1px}"
+        expected_string = '#beige-container{border:1px}'
 
         expect(generator.render).to_not include(expected_string)
       end
 
       it 'does not include the element theme css' do
-        expected_string = "#beige-element{border:1px}"
+        expected_string = '#beige-element{border:1px}'
         expect(generator.render).to_not include(expected_string)
       end
     end
@@ -305,7 +305,7 @@ describe ScriptGenerator do
     describe '#pro_secret' do
       it 'returns a random string (not hellobar)' do
         generator = ScriptGenerator.new(create(:site))
-        expect(generator.pro_secret).to_not eq("hellobar")
+        expect(generator.pro_secret).to_not eq('hellobar')
       end
     end
 
@@ -333,11 +333,11 @@ describe ScriptGenerator do
     end
   end
 
-  describe "#condition_settings" do
+  describe '#condition_settings' do
     let(:condition) { create(:condition) }
     let(:generator) { ScriptGenerator.new(condition.rule.site) }
 
-    it "turns a condition into a hash" do
+    it 'turns a condition into a hash' do
       expect(generator.send(:condition_settings, condition)).to eq({
         segment: condition.segment_key,
         operand: condition.operand,
@@ -345,7 +345,7 @@ describe ScriptGenerator do
       })
     end
 
-    it "uses the custom segment for CustomConditions" do
+    it 'uses the custom segment for CustomConditions' do
       condition.segment = 'CustomCondition'
       condition.custom_segment = 'ABC'
       expect(generator.send(:condition_settings, condition)).to eq({
@@ -355,8 +355,8 @@ describe ScriptGenerator do
       })
     end
 
-    it "adds the timezone offset when present for TimeConditions" do
-      allow(condition).to receive(:timezone_offset) { "9999" }
+    it 'adds the timezone offset when present for TimeConditions' do
+      allow(condition).to receive(:timezone_offset) { '9999' }
 
       condition.segment = 'CustomCondition'
       condition.custom_segment = 'ABC'

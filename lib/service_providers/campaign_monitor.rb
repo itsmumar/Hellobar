@@ -4,7 +4,7 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
       identity = opts[:identity]
     elsif opts[:site]
       identity = opts[:site].identities.where(:provider => 'createsend').first
-      raise "Site does not have a stored Campaign Monitor identity" unless identity
+      raise 'Site does not have a stored Campaign Monitor identity' unless identity
     end
 
     @identity = identity

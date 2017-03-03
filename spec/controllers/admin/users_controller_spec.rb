@@ -7,26 +7,26 @@ describe Admin::UsersController do
     @admin = admins(:joey)
   end
 
-  describe "GET #index" do
+  describe 'GET #index' do
     before(:each) do
       stub_current_admin(@admin)
     end
 
-    it "allows admins to search users by site URL" do
-      get :index, :q => "zombo.com"
+    it 'allows admins to search users by site URL' do
+      get :index, :q => 'zombo.com'
 
       expect(assigns(:users).include?(sites(:zombo).owners.first)).to be_true
     end
 
-    it "finds deleted users" do
-      user = User.create email: "test@test.com", password: 'supers3cr37'
+    it 'finds deleted users' do
+      user = User.create email: 'test@test.com', password: 'supers3cr37'
       user.destroy
-      get :index, :q => "test"
+      get :index, :q => 'test'
 
       expect(assigns(:users).include?(user)).to be_true
     end
 
-    it "finds users by script" do
+    it 'finds users by script' do
       user = create(:user)
       site = create(:site)
       user.sites << site
@@ -36,20 +36,20 @@ describe Admin::UsersController do
     end
   end
 
-  describe "GET #show" do
+  describe 'GET #show' do
     before do
       stub_current_admin(@admin)
     end
 
-    it "shows the specified user" do
+    it 'shows the specified user' do
       user = users(:joey)
       get :show, :id => user.id
 
       expect(assigns(:user)).to eq(user)
     end
 
-    it "shows a deleted users" do
-      user = User.create email: "test@test.com", password: 'supers3cr37'
+    it 'shows a deleted users' do
+      user = User.create email: 'test@test.com', password: 'supers3cr37'
       user.destroy
       get :show, :id => user.id
 
@@ -57,8 +57,8 @@ describe Admin::UsersController do
     end
   end
 
-  describe "POST #impersonate" do
-    it "allows the admin to impersonate a user" do
+  describe 'POST #impersonate' do
+    it 'allows the admin to impersonate a user' do
       stub_current_admin(@admin)
 
       post :impersonate, :id => users(:joey)
@@ -67,8 +67,8 @@ describe Admin::UsersController do
     end
   end
 
-  describe "DELETE #unimpersonate" do
-    it "allows the admin to stop impersonating a user" do
+  describe 'DELETE #unimpersonate' do
+    it 'allows the admin to stop impersonating a user' do
       stub_current_admin(@admin)
 
       post :impersonate, :id => users(:joey)
@@ -81,8 +81,8 @@ describe Admin::UsersController do
     end
   end
 
-  describe "DELETE #destroy" do
-    it "allows the admin to (soft) destroy a user" do
+  describe 'DELETE #destroy' do
+    it 'allows the admin to (soft) destroy a user' do
       stub_current_admin(@admin)
       user = users(:wootie)
 

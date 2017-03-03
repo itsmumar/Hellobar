@@ -13,16 +13,16 @@ require 'spec_helper'
 describe Admin::UsersHelper do
   fixtures :bills, :sites, :subscriptions
 
-  describe "#bills_for" do
+  describe '#bills_for' do
     let(:site) { sites(:zombo) }
 
-    it "returns hash with bills to display" do
+    it 'returns hash with bills to display' do
       expected_hash = site.bills.inject({}) { |r,e| r[e] = []; r }
       expect(helper.bills_for(site)).to include(expected_hash)
     end
   end
 
-  describe "#bill_duration" do
+  describe '#bill_duration' do
     it "returns the bill's date in the correct format" do
       bill = bills(:paid_bill)
       bill.start_date = '2015-07-01'
@@ -30,7 +30,7 @@ describe Admin::UsersHelper do
 
       duration = helper.bill_duration(bill)
 
-      expect(duration).to eq("7/1/15-7/31/15")
+      expect(duration).to eq('7/1/15-7/31/15')
     end
   end
 end

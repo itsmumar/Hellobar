@@ -21,7 +21,7 @@ class Analytics
       props[:id] = props[:id].to_i if props[:id] =~ /^\d+$/
 
       # Set the table name
-      table_name = (target_type.to_s + " " + event_name.to_s.underscore).downcase.gsub(/[^a-z0-9]+/," ").strip.gsub(/\s/,"_")
+      table_name = (target_type.to_s + ' ' + event_name.to_s.underscore).downcase.gsub(/[^a-z0-9]+/,' ').strip.gsub(/\s/,'_')
 
       # Set the data
       data = {table_name => props}

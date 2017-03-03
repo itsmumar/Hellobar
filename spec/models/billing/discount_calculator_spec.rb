@@ -19,22 +19,22 @@ describe DiscountCalculator do
     subscription
   end
 
-  describe "#current_discount" do
-    context "there is only one Subscription" do
-      it "returns the first amount" do
+  describe '#current_discount' do
+    context 'there is only one Subscription' do
+      it 'returns the first amount' do
         subscription = create_sub_for_user(user)
         calculator = DiscountCalculator.new(subscription)
         expect(calculator.current_discount).to eq(1)
       end
     end
 
-    context "the first tier has been filled" do
+    context 'the first tier has been filled' do
       before do
         create_sub_for_user(user)
         create_sub_for_user(user)
       end
 
-      it "returns the amount for the second tier" do
+      it 'returns the amount for the second tier' do
         subscription = create_sub_for_user(user)
         calculator = DiscountCalculator.new(subscription)
         expect(calculator.current_discount).to eq(2)
@@ -47,7 +47,7 @@ describe DiscountCalculator do
       end
     end
 
-    context "all tiers have been filled" do
+    context 'all tiers have been filled' do
       before do
         create_sub_for_user(user)
         create_sub_for_user(user)
@@ -55,7 +55,7 @@ describe DiscountCalculator do
         create_sub_for_user(user)
       end
 
-      it "returns the last amount" do
+      it 'returns the last amount' do
         subscription = create_sub_for_user(user)
         calculator = DiscountCalculator.new(subscription)
         expect(calculator.current_discount).to eq(3)

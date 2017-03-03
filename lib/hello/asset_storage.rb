@@ -1,5 +1,5 @@
-require "zlib"
-require "stringio"
+require 'zlib'
+require 'stringio'
 
 module Hello
   class AssetStorage
@@ -9,9 +9,9 @@ module Hello
     cattr_accessor :connection
 
     self.connection = Fog::Storage.new({
-      provider:               "AWS",
-      aws_access_key_id:      Hellobar::Settings[:aws_access_key_id] || "fake_access_key_id",
-      aws_secret_access_key:  Hellobar::Settings[:aws_secret_access_key] || "fake_secret_access_key",
+      provider:               'AWS',
+      aws_access_key_id:      Hellobar::Settings[:aws_access_key_id] || 'fake_access_key_id',
+      aws_secret_access_key:  Hellobar::Settings[:aws_secret_access_key] || 'fake_secret_access_key',
       path_style: true
     })
 
@@ -24,11 +24,11 @@ module Hello
 
       @directory = directory || self.class.connection.directories.get(Hellobar::Settings[:s3_bucket])
 
-      @directory ||= self.connection.directories.create(:key => "test")
+      @directory ||= self.connection.directories.create(:key => 'test')
     end
 
     def create_or_update_file_with_contents(filename, contents)
-      compressed = StringIO.new("", "w")
+      compressed = StringIO.new('', 'w')
       gz = Zlib::GzipWriter.new(compressed)
       gz.write(contents)
       gz.close
@@ -39,16 +39,16 @@ module Hello
       if file
         file.body = contents
         file.public = true
-        file.content_type = "text/javascript"
-        file.content_encoding = "gzip"
+        file.content_type = 'text/javascript'
+        file.content_encoding = 'gzip'
         file.metadata = cache_header
       else
         file = directory.files.new({
           :key => filename,
           :body => contents,
           :public => true,
-          :content_type => "text/javascript",
-          :content_encoding => "gzip",
+          :content_type => 'text/javascript',
+          :content_encoding => 'gzip',
           :metadata => cache_header
         })
       end
@@ -58,7 +58,7 @@ module Hello
     end
 
     def cache_header
-      {"Cache-Control" => "max-age=#{MAXAGE},s-maxage=#{S_MAXAGE}"}
+      {'Cache-Control' => "max-age=#{MAXAGE},s-maxage=#{S_MAXAGE}"}
     end
   end
 end

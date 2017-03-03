@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature "Payment modal interaction", :js do
+feature 'Payment modal interaction', :js do
   given(:user) { login }
   given(:site) { user.sites.first }
   given(:payment_method) { create(:payment_method, user: user) }
@@ -13,10 +13,10 @@ feature "Payment modal interaction", :js do
 
       visit edit_site_path(site)
 
-      click_link("Change plan or billing schedule")
-      find(".different-plan").click
-      basic_plan = find(".package-block.basic")
-      basic_plan.find(".button").click
+      click_link('Change plan or billing schedule')
+      find('.different-plan').click
+      basic_plan = find('.package-block.basic')
+      basic_plan.find('.button').click
 
       expect(page).to have_content "until #{end_date.strftime('%-m-%-d-%Y')}"
     end
@@ -37,16 +37,16 @@ feature "Payment modal interaction", :js do
         to receive(:get_ab_variation).and_return('original')
     end
 
-    scenario "upgrade to pro from free" do
+    scenario 'upgrade to pro from free' do
       visit edit_site_path(site)
 
       page.find('footer .show-upgrade-modal').click
-      pro_plan = page.find(".package-block.pro")
-      pro_plan.find(".button").click
+      pro_plan = page.find('.package-block.pro')
+      pro_plan.find('.button').click
 
       page.find('.submit').click
-      page.find('a', text: "OK").click
-      expect(page).to have_content "is on the Pro plan"
+      page.find('a', text: 'OK').click
+      expect(page).to have_content 'is on the Pro plan'
     end
 
     scenario 'trying to remove branding triggers the Pro Upgrade popup' do

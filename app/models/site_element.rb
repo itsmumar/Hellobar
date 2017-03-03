@@ -5,7 +5,7 @@ class SiteElement < ActiveRecord::Base
 
   TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade]
 
-  DEFAULT_EMAIL_THANK_YOU = "Thank you for signing up!"
+  DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'
   DEFAULT_FREE_EMAIL_THANK_YOU = "#{DEFAULT_EMAIL_THANK_YOU} If you would like this sort of bar on your site..."
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,
@@ -19,22 +19,22 @@ class SiteElement < ActiveRecord::Base
   # valid bar types and their conversion units
   BAR_TYPES = {
     # themes type `generic`
-    "call"                            => "Calls",
-    "traffic"                         => "Clicks",
-    "email"                           => "Emails",
-    "announcement"                    => "Conversions",
-    "social/tweet_on_twitter"         => "Tweets",
-    "social/follow_on_twitter"        => "Follows",
-    "social/like_on_facebook"         => "Likes",
-    "social/plus_one_on_google_plus"  => "+1's",
-    "social/pin_on_pinterest"         => "Pins",
-    "social/follow_on_pinterest"      => "Follows",
-    "social/share_on_buffer"          => "Shares",
-    "social/share_on_linkedin"        => "Shares",
-    "question"                        => "Question",
+    'call'                            => 'Calls',
+    'traffic'                         => 'Clicks',
+    'email'                           => 'Emails',
+    'announcement'                    => 'Conversions',
+    'social/tweet_on_twitter'         => 'Tweets',
+    'social/follow_on_twitter'        => 'Follows',
+    'social/like_on_facebook'         => 'Likes',
+    'social/plus_one_on_google_plus'  => "+1's",
+    'social/pin_on_pinterest'         => 'Pins',
+    'social/follow_on_pinterest'      => 'Follows',
+    'social/share_on_buffer'          => 'Shares',
+    'social/share_on_linkedin'        => 'Shares',
+    'question'                        => 'Question',
 
     # themes type `template`
-    "traffic_growth"                  => "Emails"
+    'traffic_growth'                  => 'Emails'
   }
 
   TEMPLATE_NAMES = %w(traffic_growth)
@@ -42,7 +42,7 @@ class SiteElement < ActiveRecord::Base
 
   belongs_to :rule, touch: true
   belongs_to :contact_list
-  belongs_to :active_image, class_name: "ImageUpload"
+  belongs_to :active_image, class_name: 'ImageUpload'
   belongs_to :theme
   belongs_to :font
 
@@ -61,17 +61,17 @@ class SiteElement < ActiveRecord::Base
   scope :active, -> { where("paused = false and type != 'ContentUpgrade'") }
   scope :paused_content_upgrades, -> { where("paused = true and type = 'ContentUpgrade'") }
   scope :active_content_upgrades, -> { where("paused = false and type = 'ContentUpgrade'") }
-  scope :has_performance, -> { where("element_subtype != ?", "announcement") }
-  scope :bars, -> { where(type: "Bar") }
-  scope :sliders, -> { where(type: "Slider") }
-  scope :custom_elements, -> { where(type: "Custom") }
+  scope :has_performance, -> { where('element_subtype != ?', 'announcement') }
+  scope :bars, -> { where(type: 'Bar') }
+  scope :sliders, -> { where(type: 'Slider') }
+  scope :custom_elements, -> { where(type: 'Custom') }
   scope :modals_and_takeovers, -> { where(type: %w(Modal Takeover)) }
-  scope :email_subtype, -> { where(element_subtype: "email") }
+  scope :email_subtype, -> { where(element_subtype: 'email') }
   scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }
-  scope :traffic_subtype, -> { where(element_subtype: "traffic") }
-  scope :call_subtype, -> { where(element_subtype: "call") }
-  scope :announcement_subtype, -> { where(element_subtype: "announcement") }
-  scope :recent, -> (limit) { where("site_elements.created_at > ?", 2.weeks.ago).order("created_at DESC").limit(limit).select { |se| se.is_announcement? || se.has_converted? } }
+  scope :traffic_subtype, -> { where(element_subtype: 'traffic') }
+  scope :call_subtype, -> { where(element_subtype: 'call') }
+  scope :announcement_subtype, -> { where(element_subtype: 'announcement') }
+  scope :recent, -> (limit) { where('site_elements.created_at > ?', 2.weeks.ago).order('created_at DESC').limit(limit).select { |se| se.is_announcement? || se.has_converted? } }
   scope :matching_content, lambda {|*query|
     matching(:content, *query)
   }
@@ -98,13 +98,13 @@ class SiteElement < ActiveRecord::Base
   ]
 
   QUESTION_DEFAULTS = {
-    question: "First time here?",
-    answer1: "Yes",
-    answer2: "No",
-    answer1response: "Welcome! Let’s get started...",
-    answer2response: "Welcome back! Check out our new sale.",
-    answer1link_text: "Take the tour",
-    answer2link_text: "Shop now"
+    question: 'First time here?',
+    answer1: 'Yes',
+    answer2: 'No',
+    answer1response: 'Welcome! Let’s get started...',
+    answer2response: 'Welcome back! Check out our new sale.',
+    answer1link_text: 'Take the tour',
+    answer2link_text: 'Shop now'
   }
 
   QUESTION_DEFAULTS.keys.each do |attr_name|
@@ -182,7 +182,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def analytics_track_site_element_creation!
-    Analytics.track(:site, self.site_id, "Created Site Element",
+    Analytics.track(:site, self.site_id, 'Created Site Element',
                     { site_element_id: self.id,
                       type: self.element_subtype,
                       style: self.type.to_s.downcase
@@ -237,11 +237,11 @@ class SiteElement < ActiveRecord::Base
   end
 
   def after_email_submit_action
-    AFTER_EMAIL_ACTION_MAP[settings["after_email_submit_action"]]
+    AFTER_EMAIL_ACTION_MAP[settings['after_email_submit_action']]
   end
 
   def is_announcement?
-    element_subtype == "announcement"
+    element_subtype == 'announcement'
   end
 
   def show_default_email_message?
@@ -276,9 +276,9 @@ class SiteElement < ActiveRecord::Base
 
     # create a connection
     connection = Fog::Storage.new({
-      provider:               "AWS",
-      aws_access_key_id:      Hellobar::Settings[:aws_access_key_id] || "fake_access_key_id",
-      aws_secret_access_key:  Hellobar::Settings[:aws_secret_access_key] || "fake_secret_access_key",
+      provider:               'AWS',
+      aws_access_key_id:      Hellobar::Settings[:aws_access_key_id] || 'fake_access_key_id',
+      aws_secret_access_key:  Hellobar::Settings[:aws_secret_access_key] || 'fake_secret_access_key',
       path_style: true
     })
 
@@ -295,12 +295,12 @@ class SiteElement < ActiveRecord::Base
 
   def remove_unreferenced_images
     # Done through SQL to ensure references are up to date
-    image_uploads.joins("LEFT JOIN site_elements ON site_elements.active_image_id = image_uploads.id")\
-      .where("site_elements.id IS NULL").destroy_all
+    image_uploads.joins('LEFT JOIN site_elements ON site_elements.active_image_id = image_uploads.id')\
+      .where('site_elements.id IS NULL').destroy_all
   end
 
   def is_email?
-    element_subtype == "email"
+    element_subtype == 'email'
   end
 
   def lifetime_totals(opts = {})
@@ -318,7 +318,7 @@ class SiteElement < ActiveRecord::Base
     if after_email_submit_action == :redirect
       if !site.capabilities.after_submit_redirect?
         errors.add('settings.redirect_url', 'is a pro feature')
-      elsif !settings["redirect_url"].present?
+      elsif !settings['redirect_url'].present?
         errors.add('settings.redirect_url', 'cannot be blank')
       end
     end

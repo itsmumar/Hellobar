@@ -24,8 +24,8 @@ module Hello
         encoded_hash = {}
 
         hash.each do |k, v|
-          k = k.is_a?(String) ? k.dup.force_encoding("utf-8") : k
-          v = v.is_a?(String) ? v.dup.force_encoding("utf-8") : v
+          k = k.is_a?(String) ? k.dup.force_encoding('utf-8') : k
+          v = v.is_a?(String) ? v.dup.force_encoding('utf-8') : v
 
           encoded_hash[k] = v
         end
@@ -36,7 +36,7 @@ module Hello
   end
 end
 
-require_relative "./wordpress_bar"
-require_relative "./wordpress_bar_meta"
-require_relative "./wordpress_user"
-require_relative "./wordpress_user_meta"
+require_relative './wordpress_bar'
+require_relative './wordpress_bar_meta'
+require_relative './wordpress_user'
+require_relative './wordpress_user_meta'

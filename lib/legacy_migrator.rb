@@ -4,8 +4,8 @@ class LegacyMigrator
   class << self
     def migrate
       ActiveRecord::Base.record_timestamps = false
-      ActiveRecord::Base.connection.execute("SET unique_checks=0")
-      ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
+      ActiveRecord::Base.connection.execute('SET unique_checks=0')
+      ActiveRecord::Base.connection.execute('SET foreign_key_checks=0')
 
       # propagate any exceptions raised in a thread
       Thread::abort_on_exception = true
@@ -122,7 +122,7 @@ class LegacyMigrator
 
     def load_wp_emails
       @wp_emails = {}
-      File.read(File.join(Rails.root,"db", "wp_logins.csv")).split("\n").each_with_index do |line, i|
+      File.read(File.join(Rails.root,'db', 'wp_logins.csv')).split("\n").each_with_index do |line, i|
         if i > 0
           e1, e2 = *line.split("\t")
           @wp_emails[e1] = true
@@ -184,7 +184,7 @@ class LegacyMigrator
                             updated_at: legacy_site.updated_at.utc,
                             read_key: SecureRandom.uuid,
                             write_key: SecureRandom.uuid,
-                            opted_in_to_email_digest: legacy_site.settings_json["email_digest"] == "1"
+                            opted_in_to_email_digest: legacy_site.settings_json['email_digest'] == '1'
 
           create_user_and_membership legacy_site_id: site.id,
                                      account_id: legacy_site.account_id
@@ -246,7 +246,7 @@ class LegacyMigrator
           end
 
         else # site has no rules so give them a default rule
-          rule = Rule.new(:name => "Everyone",
+          rule = Rule.new(:name => 'Everyone',
                           :match => Rule::MATCH_ON[:all],
                           :site => site)
 
@@ -354,7 +354,7 @@ class LegacyMigrator
       @migrated_contact_lists = {}
       @migrated_contact_lists_by_site = {}
       @legacy_goals.each do |id, legacy_goal|
-        next unless legacy_goal.type == "Goals::CollectEmail"
+        next unless legacy_goal.type == 'Goals::CollectEmail'
 
         unless @migrated_sites[legacy_goal.site_id]
           Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal: #{legacy_goal.id}"
@@ -377,7 +377,7 @@ class LegacyMigrator
           params.merge!(
             identity_id: legacy_id_int.identity_id,
             data: legacy_id_int.data.merge(embed_code: identity.embed_code),
-            name: legacy_id_int.data["remote_name"],
+            name: legacy_id_int.data['remote_name'],
             created_at: legacy_id_int.created_at,
             updated_at: legacy_id_int.updated_at
           )
@@ -395,7 +395,7 @@ class LegacyMigrator
       @migrated_contact_lists.each do |id, list|
         if list.name.nil?
           index = @migrated_contact_lists_by_site[list.site_id].index(list)
-          list.name = index == 0 ? "My Contacts" : "My Contacts #{index + 1}"
+          list.name = index == 0 ? 'My Contacts' : "My Contacts #{index + 1}"
         end
       end
     end
@@ -437,7 +437,7 @@ class LegacyMigrator
           session_last_active: legacy_admin.session_last_active,
           mobile_codes_sent: legacy_admin.mobile_codes_sent,
           login_attempts: legacy_admin.login_attempts,
-          valid_access_tokens: JSON.parse(legacy_admin.valid_access_tokens_json || "{}"),
+          valid_access_tokens: JSON.parse(legacy_admin.valid_access_tokens_json || '{}'),
           locked: legacy_admin.locked
         )
 
@@ -507,7 +507,7 @@ class LegacyMigrator
 
           @migrated_users[legacy_user.id_to_migrate.to_i] = migrated_user
         end
-        @migrated_memberships[migrated_user.id.to_s+"-"+legacy_site_id.to_s] = ::SiteMembership.new user_id: migrated_user.id,
+        @migrated_memberships[migrated_user.id.to_s+'-'+legacy_site_id.to_s] = ::SiteMembership.new user_id: migrated_user.id,
                                  site_id: legacy_site_id
       end
     end
@@ -542,11 +542,11 @@ class LegacyMigrator
 
     def determine_element_subtype(legacy_goal)
       case legacy_goal.type
-      when "Goals::DirectTraffic"
-        "traffic"
-      when "Goals::CollectEmail"
-        "email"
-      when "Goals::SocialMedia"
+      when 'Goals::DirectTraffic'
+        'traffic'
+      when 'Goals::CollectEmail'
+        'email'
+      when 'Goals::SocialMedia'
         "social/#{legacy_goal.data_json['interaction']}"
       end
     end

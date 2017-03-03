@@ -7,7 +7,7 @@ describe Referrals::Create do
     @user = users(:joey)
   end
 
-  it "gets created with a site id selected if the user has one site" do
+  it 'gets created with a site id selected if the user has one site' do
     ownership = create(:site_ownership)
 
     ref = Referrals::Create.run(
@@ -23,7 +23,7 @@ describe Referrals::Create do
     expect(MailerGateway).to receive :send_email do |name, email, params|
       expect(name).to eq 'Referral Invite Initial'
       expect(email).to eq 'tj@hellobar.com'
-      expect(params[:referral_link]).to match Regexp.new("http://hellobar.com/referrals/accept")
+      expect(params[:referral_link]).to match Regexp.new('http://hellobar.com/referrals/accept')
       expect(params[:referral_sender]).to eq @user.name
       expect(params[:referral_body]).to eq 'test body'
     end

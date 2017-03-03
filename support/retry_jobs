@@ -1,20 +1,20 @@
 #!/usr/bin/env ruby
-puts "Loading Rails..."
+puts 'Loading Rails...'
 begin
-  load File.expand_path("../spring", __FILE__)
+  load File.expand_path('../spring', __FILE__)
 rescue LoadError
 end
 require_relative '../config/boot'
 require_relative '../config/environment'
 
 filter, *files = *ARGV
-pattern = filter == "all" ? nil : /#{filter}/
+pattern = filter == 'all' ? nil : /#{filter}/
 
 num_jobs = 0
 total_jobs = 0
 files.each_with_index do |file, i|
   puts "Reading file #{(i+1)} of #{files.length} #{file.inspect} ..."
-  File.open(file, "r") do |fp|
+  File.open(file, 'r') do |fp|
     loop do
       break unless line = fp.gets
       if !pattern or line =~ pattern

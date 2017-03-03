@@ -29,7 +29,7 @@ module ServiceProviders
         end
 
       rescue Faraday::TimeoutError
-        log "getting lists timed out"
+        log 'getting lists timed out'
       rescue => error
         log "getting lists raised #{error}"
       end
@@ -39,8 +39,8 @@ module ServiceProviders
 
     def subscribe(list_id, email, name = nil, double_optin = true)
       if name
-        first_name = name.split(" ")[0]
-        last_name = name.split(" ")[1..-1].join(" ")
+        first_name = name.split(' ')[0]
+        last_name = name.split(' ')[1..-1].join(' ')
       else
         first_name = email
       end
@@ -64,7 +64,7 @@ module ServiceProviders
       end
 
     rescue Faraday::TimeoutError
-      log "sync timed out"
+      log 'sync timed out'
     rescue => error
       log "sync raised #{error}"
     end
@@ -78,19 +78,19 @@ module ServiceProviders
     private
 
     def load_identity(options)
-      raise "Must provide an identity" unless options[:identity] || options[:site]
+      raise 'Must provide an identity' unless options[:identity] || options[:site]
       return options[:identity] if options[:identity]
 
       identity = options[:site].identities.find_by_provider!('maropost')
       return identity if identity
 
-      raise "Site does not have a stored Maropost identity"
+      raise 'Site does not have a stored Maropost identity'
     end
 
     def load_credentials_from_identity
-      credentials = [identity.credentials && identity.credentials["username"], identity.api_key]
+      credentials = [identity.credentials && identity.credentials['username'], identity.api_key]
 
-      raise "Identity does not have a stored Maropost API key and AccountID" unless credentials.all?
+      raise 'Identity does not have a stored Maropost API key and AccountID' unless credentials.all?
 
       credentials
     end

@@ -1,7 +1,7 @@
 require 'integration_helper'
 
-feature "Takeover with image", js: true do
-  scenario "shows the image" do
+feature 'Takeover with image', js: true do
+  scenario 'shows the image' do
     element = create(:takeover_element, image_placement: 'bottom')
     image = create(:image_upload, :with_valid_image, site: element.site)
     element.update(active_image: image)

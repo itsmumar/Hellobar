@@ -8,15 +8,15 @@ rescue LoadError
   # howver if you attempt to use this API it will error out
 end
 
-require "net/http"
-require "uri"
+require 'net/http'
+require 'uri'
 require 'cgi'
 require 'fileutils'
 
 class GrandCentralApi
   class << self
     def request_log_path
-      File.join(Rails.root,"log","grand-central-api_#{ Rails.env }.log")
+      File.join(Rails.root,'log',"grand-central-api_#{ Rails.env }.log")
     end
 
     def digest
@@ -27,7 +27,7 @@ class GrandCentralApi
       return [] unless File.exist?(request_log_path)
 
       data = File.read(request_log_path)
-      return [] if data == ""
+      return [] if data == ''
       return Marshal.load(data)
     end
 
@@ -35,7 +35,7 @@ class GrandCentralApi
       requests = self.requests
       requests << request
       FileUtils.mkdir_p(File.dirname(request_log_path))
-      File.open(request_log_path, "w"){|f| f.write(Marshal.dump(requests))}
+      File.open(request_log_path, 'w'){|f| f.write(Marshal.dump(requests))}
     end
 
     def reset_requests
@@ -57,7 +57,7 @@ class GrandCentralApi
   # - api_key: the API key for the site (available from Grand Central)
   # - secret: the secret for the site (available from Grand Central)
   def initialize(endpoint, api_key, secret)
-    @endpoint = endpoint.gsub(/\/$/, "") # Remove trailing slash from endpoint
+    @endpoint = endpoint.gsub(/\/$/, '') # Remove trailing slash from endpoint
     @api_key, @secret = api_key, secret
   end
 
@@ -88,7 +88,7 @@ class GrandCentralApi
   protected
 
   def sign(timestamp, path, data)
-    OpenSSL::HMAC.hexdigest( self.class.digest, @secret, [@api_key, timestamp, path, data].join("|"))
+    OpenSSL::HMAC.hexdigest( self.class.digest, @secret, [@api_key, timestamp, path, data].join('|'))
   end
 
   # Issues the actual request
@@ -105,16 +105,16 @@ class GrandCentralApi
     timestamp = Time.current.to_i
 
     # Path must start with a "/"
-    path = "/"+path unless path =~ /^\//
+    path = '/'+path unless path =~ /^\//
 
     # Parse the URL
     url = URI.parse(@endpoint + path)
 
     # Create the request and add the headers
     request = Net::HTTP::Post.new(url.path)
-    request.add_field("API-key", @api_key)
-    request.add_field("API-timestamp", timestamp)
-    request.add_field("API-sig", sign(timestamp, path, data))
+    request.add_field('API-key', @api_key)
+    request.add_field('API-timestamp', timestamp)
+    request.add_field('API-sig', sign(timestamp, path, data))
     # Set the body to the data being sent
     request.body = data
 
@@ -123,7 +123,7 @@ class GrandCentralApi
       http.request(request)
     end
     # Check the status code
-    raise APIError.new(response.code, response.body) unless response.code == "200"
+    raise APIError.new(response.code, response.body) unless response.code == '200'
     return JSON.parse(response.body)
   end
 end

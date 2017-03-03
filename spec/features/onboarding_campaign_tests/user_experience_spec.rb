@@ -1,7 +1,7 @@
 require 'integration_helper'
 require 'email_integration_helper'
 
-feature "One User In all onboarding Campaigns" do
+feature 'One User In all onboarding Campaigns' do
   before(:each) {Timecop.freeze(start)}
   after(:each)  {Timecop.return}
 
@@ -40,34 +40,34 @@ feature "One User In all onboarding Campaigns" do
     the_onboarding_campaigns_run
   end
 
-  feature "users excluded from the onboarding campaign a/b tests" do
+  feature 'users excluded from the onboarding campaign a/b tests' do
     let(:excluded_user) do
       UserOnboardingStatusSetter.any_instance.stub(:in_campaign_ab_test?).and_return(false)
       login
     end
 
-    scenario "do not receive email from the campaigns" do
+    scenario 'do not receive email from the campaigns' do
       transition_user_through_onboarding(excluded_user)
       expect_no_email(excluded_user)
     end
   end
 
-  feature "with a/b testing including the user in all campaigns" do
+  feature 'with a/b testing including the user in all campaigns' do
     before {transition_user_through_onboarding(user)}
 
     scenario "the user receives the 'Create a bar' on day 0" do
-      expect(email_received_a_number_of_days_after(user, start_date)).to eq(["Drip Campaign: Create a bar"])
+      expect(email_received_a_number_of_days_after(user, start_date)).to eq(['Drip Campaign: Create a bar'])
     end
 
-    scenario "the user does not receive email on day 1" do
+    scenario 'the user does not receive email on day 1' do
       expect(email_received_a_number_of_days_after(user, start_date)).to eq([])
     end
 
     scenario "the user receives the 'Configure your bar' on day 2" do
-      expect(email_received_a_number_of_days_after(user, start_date)).to eq(["Drip Campaign: Configure your bar"])
+      expect(email_received_a_number_of_days_after(user, start_date)).to eq(['Drip Campaign: Configure your bar'])
     end
 
-    scenario "the user does not receive email on day 3" do
+    scenario 'the user does not receive email on day 3' do
       expect(email_received_a_number_of_days_after(user, start_date)).to eq([])
     end
   end

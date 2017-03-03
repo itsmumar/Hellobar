@@ -21,8 +21,8 @@ class Referral < ActiveRecord::Base
     sent.where(created_at: (FOLLOWUP_INTERVAL.ago .. (FOLLOWUP_INTERVAL - 1.day).ago))
   end
 
-  belongs_to :sender, class_name: "User"
-  belongs_to :recipient, class_name: "User"
+  belongs_to :sender, class_name: 'User'
+  belongs_to :recipient, class_name: 'User'
   belongs_to :site
 
   has_one :referral_token, as: :tokenizable
@@ -32,7 +32,7 @@ class Referral < ActiveRecord::Base
   validate :ensure_email_available, on: :create
 
   def set_standard_body
-    self.body = I18n.t("referral.standard_body", name: sender.name)
+    self.body = I18n.t('referral.standard_body', name: sender.name)
   end
 
   def set_site_if_only_one
@@ -43,7 +43,7 @@ class Referral < ActiveRecord::Base
   end
 
   def url
-    return "" if referral_token.blank?
+    return '' if referral_token.blank?
 
     Rails.application.routes.url_helpers.accept_referrals_url(
       token: referral_token.token,
@@ -53,7 +53,7 @@ class Referral < ActiveRecord::Base
 
   def expiration_date_string
     expiration_date = (created_at + FOLLOWUP_INTERVAL)
-    expiration_date_string = expiration_date.strftime("%B ") + expiration_date.day.ordinalize
+    expiration_date_string = expiration_date.strftime('%B ') + expiration_date.day.ordinalize
   end
 
   def accepted?

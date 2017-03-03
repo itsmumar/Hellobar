@@ -4,7 +4,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
       identity = opts[:identity]
     elsif opts[:site]
       identity = opts[:site].identities.where(:provider => 'verticalresponse').first
-      raise "Site does not have a stored Vertical Response identity" unless identity
+      raise 'Site does not have a stored Vertical Response identity' unless identity
     end
 
     @client = VerticalResponse::API::OAuth.new identity.credentials['token']
@@ -51,7 +51,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
   def handle_errors
     yield
   rescue VerticalResponse::API::Error => e
-    if e.message == "Contact already exists."
+    if e.message == 'Contact already exists.'
       # Do nothing, this is raised when the email already exists or email is invalid
     else
       log "Vertical Response error '#{e.message}'"
@@ -62,7 +62,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
     if name
       name.split(' ', 2)
     else
-      ["", ""]
+      ['', '']
     end
   end
 end

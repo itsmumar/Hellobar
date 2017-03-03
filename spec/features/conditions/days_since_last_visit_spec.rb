@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature "Days since last visit condition", js: true do
+feature 'Days since last visit condition', js: true do
   def set_lv_cookie(page, days)
     page.execute_script("
       var d = new Date();
@@ -34,62 +34,62 @@ feature "Days since last visit condition", js: true do
     end
   end
 
-  context "condition is days since last visit < 5" do
+  context 'condition is days since last visit < 5' do
     before(:each) do
-      @element.rule.conditions << create(:condition, operand: "less_than", segment: "LastVisitCondition", value: "5")
+      @element.rule.conditions << create(:condition, operand: 'less_than', segment: 'LastVisitCondition', value: '5')
       @path = generate_file_and_return_path(@element.site.id)
     end
 
-    it "does not shows if last visit was greater than 5 days ago" do
+    it 'does not shows if last visit was greater than 5 days ago' do
       @test_doesnt_exist.call(6)
     end
 
-    it "shows if last visit was less than 5 days ago" do
+    it 'shows if last visit was less than 5 days ago' do
       @test_does_exist.call(4)
     end
   end
 
-  context "condition is days since last visit > 5" do
+  context 'condition is days since last visit > 5' do
     before(:each) do
-      @element.rule.conditions << create(:condition, operand: "greater_than", segment: "LastVisitCondition", value: "5")
+      @element.rule.conditions << create(:condition, operand: 'greater_than', segment: 'LastVisitCondition', value: '5')
       @path = generate_file_and_return_path(@element.site.id)
     end
 
-    it "does not shows if last visit was less than 5 days ago" do
+    it 'does not shows if last visit was less than 5 days ago' do
       @test_doesnt_exist.call(4)
     end
 
-    it "shows if last visit was greater than 5 days ago" do
+    it 'shows if last visit was greater than 5 days ago' do
       @test_does_exist.call(6)
     end
   end
 
-  context "condition is days since last visit = 5" do
+  context 'condition is days since last visit = 5' do
     before(:each) do
-      @element.rule.conditions << create(:condition, operand: "is", segment: "LastVisitCondition", value: "5")
+      @element.rule.conditions << create(:condition, operand: 'is', segment: 'LastVisitCondition', value: '5')
       @path = generate_file_and_return_path(@element.site.id)
     end
 
-    it "does not shows if last visit was not 5 days ago" do
+    it 'does not shows if last visit was not 5 days ago' do
       @test_doesnt_exist.call(4)
     end
 
-    it "shows if last visit was 5 days ago" do
+    it 'shows if last visit was 5 days ago' do
       @test_does_exist.call(5)
     end
   end
 
-  context "condition is days since last visit between 5 and 7 days ago" do
+  context 'condition is days since last visit between 5 and 7 days ago' do
     before(:each) do
-      @element.rule.conditions << create(:condition, operand: "between", segment: "LastVisitCondition", value: %w(5 7))
+      @element.rule.conditions << create(:condition, operand: 'between', segment: 'LastVisitCondition', value: %w(5 7))
       @path = generate_file_and_return_path(@element.site.id)
     end
 
-    it "does not shows if last visit was not between 5 and 7 days ago" do
+    it 'does not shows if last visit was not between 5 and 7 days ago' do
       @test_doesnt_exist.call(4)
     end
 
-    it "shows if last visit was 6 days ago" do
+    it 'shows if last visit was 6 days ago' do
       @test_does_exist.call(6)
     end
   end

@@ -1,6 +1,6 @@
 class Admin::SitesController < ApplicationController
   include Subscribable
-  layout "admin"
+  layout 'admin'
 
   before_action :require_admin
 
@@ -8,7 +8,7 @@ class Admin::SitesController < ApplicationController
     begin
       site.update_attributes(site_params) if params.has_key?(:site)
       update_subscription(site, nil, subscription_params) if params.has_key?(:subscription)
-      flash[:success] = "Site and/or subscription has been updated."
+      flash[:success] = 'Site and/or subscription has been updated.'
     rescue => e
       flash[:error] = "There was an error trying to update the subscription: #{e.message}"
     end
@@ -20,12 +20,12 @@ class Admin::SitesController < ApplicationController
     site = Site.where(id: params[:id]).try(:first)
 
     if site.nil?
-      render json: { message: "Site was not found" }, status: 404 and return
+      render json: { message: 'Site was not found' }, status: 404 and return
     end
 
     begin
       site.generate_script(immediately: true)
-      render json: {  message: "Site regenerated" }, status: 200
+      render json: {  message: 'Site regenerated' }, status: 200
     rescue RuntimeError
       render json: {
         message: "Site's script failed to generate"

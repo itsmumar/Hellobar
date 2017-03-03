@@ -1320,13 +1320,6 @@ Style/SpaceInsideStringInterpolation:
 Style/SpecialGlobalVars:
   EnforcedStyle: use_perl_names
 
-# Offense count: 4242
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, ConsistentQuotesInMultiline.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiterals:
-  Enabled: false
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase

@@ -7,33 +7,33 @@ describe Referral do
     @referral = @user.sent_referrals.build
   end
 
-  it "has no body set by default" do
+  it 'has no body set by default' do
     @referral.body.should be_nil
   end
 
-  it "has a standard body that can be set explicitly" do
+  it 'has a standard body that can be set explicitly' do
     @referral.set_standard_body
 
     expect(@referral.body).to include(@user.name)
   end
 
-  it "has no site by default" do
+  it 'has no site by default' do
     @referral.site.should be_nil
   end
 
-  it "has a site if the referral sender only has one site" do
+  it 'has a site if the referral sender only has one site' do
     @referral.sender = users(:pro)
     @referral.set_site_if_only_one
     @referral.site.should_not be_nil
   end
 
-  it "is invalid if the email belongs to an existing user" do
+  it 'is invalid if the email belongs to an existing user' do
     @referral.email = users(:wootie).email
     @referral.state = 'sent'
     @referral.should_not be_valid
   end
 
-  it "has a URL once it gets saved and has a token" do
+  it 'has a URL once it gets saved and has a token' do
     expect(@referral.url).to be_empty
     @referral.email = 'referral@hellobar.com'
     @referral.state = 'sent'
@@ -42,24 +42,24 @@ describe Referral do
     expect(@referral.url).to match(@referral.referral_token.token)
   end
 
-  it "has a formatted expiration date string" do
+  it 'has a formatted expiration date string' do
     @referral.stub(created_at: Date.new(2016,1,15).to_time)
     expect(@referral.expiration_date_string).to eq('January 20th')
   end
 
-  it "is accepted if the state is not sent" do
+  it 'is accepted if the state is not sent' do
     @referral.state = 'signed_up'
 
     expect(@referral.accepted?).to be_true
   end
 
-  it "is not accepted if the state is sent" do
+  it 'is not accepted if the state is sent' do
     @referral.state = 'sent'
 
     expect(@referral.accepted?).to be_false
   end
 
-  describe "to be followed up" do
+  describe 'to be followed up' do
     before :each do
       @referral.email = 'referral@hellobar.com'
       @referral.state = 'sent'
@@ -104,14 +104,14 @@ describe Referral do
     end
   end
 
-  describe "redeemable_for_site" do
+  describe 'redeemable_for_site' do
     before :each do
       @referral.sender = @user
       @referral.email = 'referral@hellobar.com'
       @referral.state = 'installed'
     end
 
-    it "shows up as the only available one for the site" do
+    it 'shows up as the only available one for the site' do
       ownership = create(:site_ownership)
       @referral.recipient = ownership.user
       @referral.save!
@@ -119,7 +119,7 @@ describe Referral do
       expect(Referral.redeemable_for_site(ownership.site).count).to eq(1)
     end
 
-    it "shows up as one of many available one for the site" do
+    it 'shows up as one of many available one for the site' do
       ownership = create(:site_ownership)
       @referral.available_to_sender = true
       @referral.site = ownership.site
@@ -131,7 +131,7 @@ describe Referral do
       expect(Referral.redeemable_for_site(ownership.site).count).to eq(2)
     end
 
-    it "does not show up if there is no owner" do
+    it 'does not show up if there is no owner' do
       ownership = create(:site_ownership)
       ownership.site.owners.delete_all
       @referral.recipient = ownership.user

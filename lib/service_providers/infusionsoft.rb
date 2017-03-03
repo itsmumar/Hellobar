@@ -8,7 +8,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
       identity = opts[:identity]
     elsif opts[:site]
       identity = opts[:site].identities.where(:provider => 'infusionsoft').first
-      raise "Site does not have a stored Infusionsoft identity" unless identity
+      raise 'Site does not have a stored Infusionsoft identity' unless identity
     end
 
     @identity = identity

@@ -3,7 +3,7 @@ class LegacyMigrator
     self.table_name = 'goals'
     self.inheritance_column = nil
 
-    belongs_to :site, class_name: "LegacySite"
+    belongs_to :site, class_name: 'LegacySite'
 
     has_many :bars, class_name: 'LegacyMigrator::LegacyBar', foreign_key: 'goal_id'
 

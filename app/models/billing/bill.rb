@@ -58,7 +58,7 @@ class Bill < ActiveRecord::Base
     now = Time.now
     raise BillingEarly.new("Attempted to bill on #{now} but bill[#{self.id}] has a bill_at date of #{self.bill_at}") if !allow_early and now < self.bill_at
     if self.amount == 0 # Note: less than 0 is a valid value for refunds
-      audit << "Marking bill as paid because no payment required"
+      audit << 'Marking bill as paid because no payment required'
       # Mark as paid
       self.paid!
       return true
@@ -153,7 +153,7 @@ class Bill < ActiveRecord::Base
     end
 
     def renewal_date
-      raise "can not calculate renewal date without start_date" unless start_date
+      raise 'can not calculate renewal date without start_date' unless start_date
       self.subscription.monthly? ? self.class.next_month(start_date) : self.class.next_year(start_date)
     end
 
@@ -201,7 +201,7 @@ class Bill < ActiveRecord::Base
     end
 
     def refunded_billing_attempt_id
-      return self.metadata["refunded_billing_attempt_id"] if self.metadata
+      return self.metadata['refunded_billing_attempt_id'] if self.metadata
     end
 
     def refunded_billing_attempt=(billing_attempt)
@@ -212,7 +212,7 @@ class Bill < ActiveRecord::Base
       if !self.metadata
         self.metadata = {}
       end
-      self.metadata["refunded_billing_attempt_id"] = id
+      self.metadata['refunded_billing_attempt_id'] = id
       @refunded_billing_attempt = nil
     end
   end

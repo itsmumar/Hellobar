@@ -4,7 +4,7 @@ describe Cleaners::EmbedCode do
   fixtures :all
 
   subject { contact_lists(:embed_code) }
-  let(:embed_code) { "Here I am" }
+  let(:embed_code) { 'Here I am' }
 
   before do
     subject.provider = 'mad_mimi_form'
@@ -15,7 +15,7 @@ describe Cleaners::EmbedCode do
 
   context 'curly quotes' do
     let(:embed_code) {
-      "<html><body><iframe><form>“I want to go to the gym”, he said.</form></iframe></body></html>"
+      '<html><body><iframe><form>“I want to go to the gym”, he said.</form></iframe></body></html>'
     }
 
     its(:data) { should == { 'embed_code' => embed_code.tr!('“”', '"') } }

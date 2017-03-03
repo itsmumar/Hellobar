@@ -19,13 +19,13 @@ describe Subscribable, '#subscription_bill_and_status' do
 
   it 'returns errors and an unprocessable_entity status when NOT successful' do
     bill = Bill.new
-    bill.errors.add(:status, "oops")
+    bill.errors.add(:status, 'oops')
     controller.stub update_subscription: [false, bill]
 
     controller.subscription_bill_and_status('site', 'payment_method', 'billing_params', nil).should == { errors: bill.errors.full_messages, status: :unprocessable_entity }
   end
 
-  it "tracks changes to subscription" do
+  it 'tracks changes to subscription' do
     bill = double 'bill'
     controller.stub update_subscription: [true, bill]
     site = sites(:horsebike)
@@ -82,7 +82,7 @@ describe Subscribable, '#update_subscription' do
     include Subscribable
   end
 
-  describe "recovering from a failed payment" do
+  describe 'recovering from a failed payment' do
     let(:site) { sites(:horsebike) }
     let(:billing_params) { { plan: 'pro', schedule: 'yearly', trial_period: '60' } }
     let(:pro) { Subscription::Pro.new(user: users(:joey), site: site) }
@@ -98,7 +98,7 @@ describe Subscribable, '#update_subscription' do
     end
   end
 
-  context "trial_period" do
+  context 'trial_period' do
     it 'translates the trial_period to days' do
       billing_params = { plan: 'pro', schedule: 'yearly', trial_period: '60'}
       site = sites(:horsebike)

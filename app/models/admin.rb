@@ -6,8 +6,8 @@ class Admin < ActiveRecord::Base
   MAX_TIME_BEFORE_NEEDS_NEW_PASSWORD = 90.days
   MAX_TIME_TO_VALIDATE_ACCESS_TOKEN = 15.minutes
   MIN_PASSWORD_LENGTH = 8
-  SALT = "thisismyawesomesaltgoducks"
-  ISSUER = "HelloBar"
+  SALT = 'thisismyawesomesaltgoducks'
+  ISSUER = 'HelloBar'
 
   include Rails.application.routes.url_helpers
 
@@ -61,7 +61,7 @@ class Admin < ActiveRecord::Base
     end
 
     def lockdown_key(email, timestamp)
-      Digest::SHA256.hexdigest(["lockdown", email, timestamp, "lockitnow"].join(""))
+      Digest::SHA256.hexdigest(['lockdown', email, timestamp, 'lockitnow'].join(''))
     end
 
     # Locks all admins
@@ -75,7 +75,7 @@ class Admin < ActiveRecord::Base
   end
 
   def logout!
-    update_attribute(:session_token, "")
+    update_attribute(:session_token, '')
   end
 
   def needs_otp_code?
@@ -96,7 +96,7 @@ class Admin < ActiveRecord::Base
 
     Pony.mail({
         :to => email,
-        :subject => "Admin login attempt",
+        :subject => 'Admin login attempt',
         :body => "Someone is attempting to log into your admin account from an unrecognized computer.
 
 If this is you, click this link to continue logging in:
@@ -184,7 +184,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
     Pony.mail({
         :to => email,
-        :subject => "Your password has been reset",
+        :subject => 'Your password has been reset',
         :body => "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
 
         Not me, lock it down -> #{lockdown_url}
@@ -201,7 +201,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
     now = Time.now.to_i
     update_attributes(
       :login_attempts => 0,
-      :session_token => Digest::SHA256.hexdigest([now, rand(10_000), access_token, self.email, rand(10_000)].collect(&:to_s).join("")),
+      :session_token => Digest::SHA256.hexdigest([now, rand(10_000), access_token, self.email, rand(10_000)].collect(&:to_s).join('')),
       :session_access_token => access_token
     )
     set_valid_access_token(access_token, now)
@@ -213,7 +213,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def lock!
-    update_attributes(:locked => true, :session_token => "")
+    update_attributes(:locked => true, :session_token => '')
   end
 
   def unlock!
@@ -242,7 +242,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def access_token_key(token, timestamp)
-    Digest::SHA256.hexdigest(["validate_access_token", email, token, timestamp, "a6b3b"].join)
+    Digest::SHA256.hexdigest(['validate_access_token', email, token, timestamp, 'a6b3b'].join)
   end
 
   def decrypted_rotp_secret_base

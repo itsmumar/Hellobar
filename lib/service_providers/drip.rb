@@ -8,7 +8,7 @@ class ServiceProviders::Drip < ServiceProviders::Email
       identity = opts[:identity]
     elsif opts[:site]
       identity = opts[:site].identities.where(:provider => 'drip').first
-      raise "Site does not have a stored Drip identity" unless identity
+      raise 'Site does not have a stored Drip identity' unless identity
     end
 
     @identity = identity
@@ -41,7 +41,7 @@ class ServiceProviders::Drip < ServiceProviders::Email
 
     if name.present?
       split = name.split(' ', 2)
-      opts[:custom_fields] = {"name" => name, "fname" => split[0], "lname" => split[1]}
+      opts[:custom_fields] = {'name' => name, 'fname' => split[0], 'lname' => split[1]}
     end
 
     retry_on_timeout do

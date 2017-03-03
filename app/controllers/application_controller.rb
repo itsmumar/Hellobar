@@ -18,18 +18,18 @@ class ApplicationController < ActionController::Base
     else
       if exception.to_s.match(/Unauthorized/)
         sign_out current_user             # kill cookies
-        redirect_to "/auth/google_oauth2" # log in again to refresh token
+        redirect_to '/auth/google_oauth2' # log in again to refresh token
       end
     end
   end
 
   def access_token
-    @access_token ||= Digest::SHA256.hexdigest(["hellobar", remote_ip, user_agent, access_cookie, "a776b"].join)
+    @access_token ||= Digest::SHA256.hexdigest(['hellobar', remote_ip, user_agent, access_cookie, 'a776b'].join)
   end
 
   def access_cookie
     cookies[:adxs] ||= {
-      :value => Digest::SHA256.hexdigest(["a", rand(10_000), Time.now.to_f, user_agent, "d753d"].collect(&:to_s).join),
+      :value => Digest::SHA256.hexdigest(['a', rand(10_000), Time.now.to_f, user_agent, 'd753d'].collect(&:to_s).join),
       :expires => 90.days.from_now,
       :httponly => true
     }
@@ -130,7 +130,7 @@ class ApplicationController < ActionController::Base
           track_params[:site_id] = site_element.site.id if site_element.site
         end
       end
-      Analytics.track(*current_person_type_and_id, "H Visit", track_params)
+      Analytics.track(*current_person_type_and_id, 'H Visit', track_params)
     end
   end
 

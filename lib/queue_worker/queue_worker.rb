@@ -1,7 +1,7 @@
 class QueueWorker
   STAGES = %w(edge staging production designqa)
   VIEW_ATTRIBUTES = %w(ApproximateNumberOfMessages ApproximateNumberOfMessagesDelayed DelaySeconds)
-  LOG_FILE = File.join(Rails.root, "log", "queue_worker.log")
+  LOG_FILE = File.join(Rails.root, 'log', 'queue_worker.log')
 
   module Delay
     def delay(task_name, options={})
@@ -37,7 +37,7 @@ class QueueWorker
   end
 
   def self.filtered_queues(sqs_interface, queue_name_filter)
-    raise "requires an instance of AWS::SQS" unless sqs_interface.is_a?(AWS::SQS)
+    raise 'requires an instance of AWS::SQS' unless sqs_interface.is_a?(AWS::SQS)
 
     sqs_interface.queues.select do |queue|
       queue.url.split('/').last.include?(queue_name_filter)
@@ -49,8 +49,8 @@ class QueueWorker
     stage ||= Hellobar::Settings[:env_name]
 
     raise ArgumentError, "Stage is required to be one of #{STAGES}" unless STAGES.include?(stage)
-    raise ArgumentError, "Message must be defined" unless message && !message.empty?
-    raise ArgumentError, "Queue name must be defined" unless queue_name
+    raise ArgumentError, 'Message must be defined' unless message && !message.empty?
+    raise ArgumentError, 'Queue name must be defined' unless queue_name
 
     @sqs ||= AWS::SQS.new(access_key_id: Hellobar::Settings[:aws_access_key_id], secret_access_key: Hellobar::Settings[:aws_secret_access_key])
     @queue ||= @sqs.queues.find do |q|

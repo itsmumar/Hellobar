@@ -7,7 +7,7 @@ class ReferralsController < ApplicationController
   end
 
   def index
-    @referrals = current_user.sent_referrals.order("updated_at DESC").page(params[:page])
+    @referrals = current_user.sent_referrals.order('updated_at DESC').page(params[:page])
   end
 
   def create
@@ -20,7 +20,7 @@ class ReferralsController < ApplicationController
       flash[:success] = I18n.t('referral.flash.created')
       redirect_to referrals_path
     else
-      flash[:error] = I18n.t("referral.flash.not_created", error: @referral.errors.full_messages.join(","))
+      flash[:error] = I18n.t('referral.flash.not_created', error: @referral.errors.full_messages.join(','))
       render action: :new
     end
   end

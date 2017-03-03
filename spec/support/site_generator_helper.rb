@@ -1,5 +1,5 @@
 module SiteGeneratorHelper
-  INTEGRATION_SITE_DIRECTORY = "integration"
+  INTEGRATION_SITE_DIRECTORY = 'integration'
 
   def setup_site_generator
     dir = site_generator_directory
@@ -8,7 +8,7 @@ module SiteGeneratorHelper
 
   def generate_file_and_return_path(site_id)
     allow_any_instance_of(Site).
-      to receive(:lifetime_totals).and_return({"1" => [[1,0]]})
+      to receive(:lifetime_totals).and_return({'1' => [[1,0]]})
     generator = SiteGenerator.new(site_id, directory: site_generator_directory)
 
     generator.generate_file
@@ -23,6 +23,6 @@ module SiteGeneratorHelper
   private
 
   def site_generator_directory
-    Rails.root.join("public", INTEGRATION_SITE_DIRECTORY)
+    Rails.root.join('public', INTEGRATION_SITE_DIRECTORY)
   end
 end

@@ -5,15 +5,15 @@ class WelcomeController < ApplicationController
 
   def index
     @last_logged_in_user = User.find_by(email: cookies[:login_email])
-    Analytics.track(*current_person_type_and_id, "Homepage")
+    Analytics.track(*current_person_type_and_id, 'Homepage')
     set_site_url
   end
 
   def email_quickstart
     @signup_type = :email
-    Analytics.track(*current_person_type_and_id, "Homepage - Email Signup")
+    Analytics.track(*current_person_type_and_id, 'Homepage - Email Signup')
     set_site_url
-    render action: "index"
+    render action: 'index'
   end
 
   private

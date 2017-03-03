@@ -10,7 +10,7 @@ class UserOnboardingStatusSetter
   end
 
   def in_campaign_ab_test?(test_name)
-    get_ab_variation_or_nil(test_name, user) == "campaign"
+    get_ab_variation_or_nil(test_name, user) == 'campaign'
   end
 
   def new_user!
@@ -18,11 +18,11 @@ class UserOnboardingStatusSetter
   end
 
   def created_site!
-    create_status_if_able!(:created_site, "Configure Your Bar Reminder New Users Only 2016-03-28")
+    create_status_if_able!(:created_site, 'Configure Your Bar Reminder New Users Only 2016-03-28')
   end
 
   def selected_goal!
-    create_status_if_able!(:selected_goal, "Configure Your Bar Reminder New Users Only 2016-03-28")
+    create_status_if_able!(:selected_goal, 'Configure Your Bar Reminder New Users Only 2016-03-28')
   end
 
   def created_element!

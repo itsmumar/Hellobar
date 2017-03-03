@@ -11,7 +11,7 @@ describe Referrals::RedeemForRecipient do
     @site.change_subscription(build(:free_subscription))
   end
 
-  it "subscribes to Pro with a 0.00 bill when referred and signed_up" do
+  it 'subscribes to Pro with a 0.00 bill when referred and signed_up' do
     referral = create(:referral, recipient: @user, state: :signed_up)
     Referrals::RedeemForRecipient.run(site: @site)
     bill = @site.current_subscription.active_bills.last
@@ -26,7 +26,7 @@ describe Referrals::RedeemForRecipient do
     expect(bill.discount).to eq(Coupon::REFERRAL_AMOUNT)
   end
 
-  it "subscribes the sender to Pro too" do
+  it 'subscribes the sender to Pro too' do
     sender_ownership = create(:site_ownership)
     sender_user = sender_ownership.user
     sender_site = sender_ownership.site
@@ -37,7 +37,7 @@ describe Referrals::RedeemForRecipient do
     expect(sender_site.reload.current_subscription).to be_a(Subscription::Pro)
   end
 
-  it "subscribes to Pro with a 0.00 bill but only once" do
+  it 'subscribes to Pro with a 0.00 bill but only once' do
     referral = create(:referral, recipient: @user, state: :signed_up)
     Referrals::RedeemForRecipient.run(site: @site)
 
@@ -46,7 +46,7 @@ describe Referrals::RedeemForRecipient do
     expect(@site).not_to have_received(:change_subscription)
   end
 
-  it "sends out an email to the referral sender when referred" do
+  it 'sends out an email to the referral sender when referred' do
     referral = create(:referral, recipient: @user, state: :signed_up)
 
     expect(MailerGateway).to receive(:send_email) do |name, email, params|
@@ -59,14 +59,14 @@ describe Referrals::RedeemForRecipient do
     Referrals::RedeemForRecipient.run(site: @site)
   end
 
-  it "raises an exception which is captured in Sentry when referred and merely sent" do
+  it 'raises an exception which is captured in Sentry when referred and merely sent' do
     create(:referral, recipient: @user, state: :sent)
     expect(Raven).to receive(:capture_exception)
 
     Referrals::RedeemForRecipient.run(site: @site)
   end
 
-  it "raises nothing when no referral exists" do
+  it 'raises nothing when no referral exists' do
     expect(lambda do
       Referrals::RedeemForRecipient.run(site: @site)
     end).not_to raise_error

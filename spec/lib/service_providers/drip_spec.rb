@@ -1,11 +1,11 @@
-require "integration_helper"
+require 'integration_helper'
 
 describe ServiceProviders::Drip do
   let(:identity) { Identity.new(provider: 'drip', credentials: { 'token' => 'fake_key', 'expires' => false}, extra: {'account_id' => '4773344', 'account_name' => 'www.nutritionsecrets.com'}) }
   let(:contact_list) { ContactList.new }
   let(:service_provider) { identity.service_provider}
   let(:client) { service_provider.instance_variable_get(:@client) }
-  let(:drip_endpoint) { "https://api.getdrip.com/v2" }
+  let(:drip_endpoint) { 'https://api.getdrip.com/v2' }
 
   describe '#accounts' do
     it 'should return list of accounts' do
@@ -58,16 +58,16 @@ describe ServiceProviders::Drip do
 
         WebMock.should have_requested(:post, subscribe_url).with { |req|
           JSON.parse(req.body) == {
-            "subscribers" => [{
-              "new_email" => "raj.kumar+9@crossover.com",
-              "tags" => %w(TestTag1 TestTag2),
-              "custom_fields" => {
-                "name" => "Test Mname User",
-                "fname" => "Test",
-                "lname" => "Mname User"
+            'subscribers' => [{
+              'new_email' => 'raj.kumar+9@crossover.com',
+              'tags' => %w(TestTag1 TestTag2),
+              'custom_fields' => {
+                'name' => 'Test Mname User',
+                'fname' => 'Test',
+                'lname' => 'Mname User'
               },
-              "double_optin" => false,
-              "email" => "raj.kumar+9@crossover.com"
+              'double_optin' => false,
+              'email' => 'raj.kumar+9@crossover.com'
             }]
           }
         }

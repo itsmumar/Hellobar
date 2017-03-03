@@ -4,6 +4,6 @@ class Bar < SiteElement
   end
 
   def placement
-    read_attribute(:placement) || "bar-top"
+    read_attribute(:placement) || 'bar-top'
   end
 end

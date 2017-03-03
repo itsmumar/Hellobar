@@ -4,7 +4,7 @@ class ServiceProviders::AWeber < ServiceProviders::Email
       identity = opts[:identity]
     elsif opts[:site]
       identity = opts[:site].identities.where(:provider => 'createsend').first
-      raise "Site does not have a stored AWeber identity" unless identity
+      raise 'Site does not have a stored AWeber identity' unless identity
     end
 
     oauth = ::AWeber::OAuth.new(Hellobar::Settings[:identity_providers][:aweber][:consumer_key], Hellobar::Settings[:identity_providers][:aweber][:consumer_secret])

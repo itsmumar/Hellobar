@@ -23,7 +23,7 @@ feature 'Forgot password', :js do
   end
 
   scenario 'invalid token' do
-    visit @reset_password_path + "invalid-characters"
+    visit @reset_password_path + 'invalid-characters'
     fill_form
 
     expect(page).to have_content('Reset password token is invalid')

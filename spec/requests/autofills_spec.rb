@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-describe "Autofills requests" do
+describe 'Autofills requests' do
   context 'when unauthenticated' do
     describe 'GET :index' do
       it 'responds with a redirect to the login page' do

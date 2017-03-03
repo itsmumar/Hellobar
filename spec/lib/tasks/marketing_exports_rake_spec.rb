@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'rake'
 load 'lib/tasks/marketing.rake'
 
-describe "marketing:export_recent_logins_with_plan" do
+describe 'marketing:export_recent_logins_with_plan' do
   include_context 'rake'
 
   before do
@@ -19,7 +19,7 @@ describe "marketing:export_recent_logins_with_plan" do
 
     @user_too_old = create(:user, current_sign_in_at: Time.zone.now - 60.days)
 
-    @output = {free: "", pro: "", enterprise: ""}
+    @output = {free: '', pro: '', enterprise: ''}
   end
 
   let(:files) {{free: @user_free_plan, pro: @user_pro_plan, enterprise: @user_enterprise_plan}}
@@ -45,7 +45,7 @@ describe "marketing:export_recent_logins_with_plan" do
   end
 end
 
-describe "marketing:export_recent_signups_with_script_install_data" do
+describe 'marketing:export_recent_signups_with_script_install_data' do
   include_context 'rake'
 
   before do
@@ -56,7 +56,7 @@ describe "marketing:export_recent_signups_with_script_install_data" do
 
     @user_too_old = create(:user, created_at: Time.zone.now - 60.days)
 
-    @output = {no_script: "", installed_script: ""}
+    @output = {no_script: '', installed_script: ''}
   end
 
   it 'should write emails to files' do
@@ -66,7 +66,7 @@ describe "marketing:export_recent_signups_with_script_install_data" do
 
       expect(filename).to match(/user_signups_\d*_days/)
 
-      if filename.include?("1_or_more_installed_scripts")
+      if filename.include?('1_or_more_installed_scripts')
         @output[:installed_script] << content
       else
         @output[:no_script] << content

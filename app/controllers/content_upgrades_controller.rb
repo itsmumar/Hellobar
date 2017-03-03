@@ -17,9 +17,9 @@ class ContentUpgradesController < ApplicationController
     @content_upgrade.name_placeholder = 'First Name'
     @content_upgrade.email_placeholder = 'Your Email'
     @content_upgrade.disclaimer = 'We hate SPAM and promise to keep your email address safe.'
-    @content_upgrade.link_text = "Download Now"
-    @content_upgrade.headline = "Enter your email to download this free guide right now."
-    @content_upgrade.caption = "Almost there! Please complete this form and click the button below to gain instant access."
+    @content_upgrade.link_text = 'Download Now'
+    @content_upgrade.headline = 'Enter your email to download this free guide right now.'
+    @content_upgrade.caption = 'Almost there! Please complete this form and click the button below to gain instant access.'
   end
 
   def edit
@@ -38,14 +38,14 @@ class ContentUpgradesController < ApplicationController
   def create
     @content_upgrade = SiteElement.create!(content_upgrade_params)
 
-    flash[:success] = "Your content upgrade has been saved."
+    flash[:success] = 'Your content upgrade has been saved.'
     redirect_to site_content_upgrades_path(@site.id)
   end
 
   def update
     @content_upgrade.update_attributes!(content_upgrade_params)
 
-    flash[:success] = "Your content upgrade has been saved."
+    flash[:success] = 'Your content upgrade has been saved.'
     redirect_to site_content_upgrades_path(@site.id)
   end
 
@@ -70,7 +70,7 @@ class ContentUpgradesController < ApplicationController
 
     @site.update_content_upgrade_styles!(style_params)
 
-    flash[:success] = "Content Upgrade styles have been saved."
+    flash[:success] = 'Content Upgrade styles have been saved.'
     redirect_to site_content_upgrades_path(@site.id)
   end
 
@@ -106,14 +106,14 @@ class ContentUpgradesController < ApplicationController
 
   def verify_capability
     unless @site && @site.capabilities.content_upgrades?
-      render :json => { error: "forbidden" }, :status => :forbidden
+      render :json => { error: 'forbidden' }, :status => :forbidden
     end
   end
 
   def load_content_upgrade
     @content_upgrade = @site.site_elements.find(params[:id])
     if @content_upgrade.rule.site_id != @site.id
-      render :json => { error: "forbidden" }, :status => :forbidden
+      render :json => { error: 'forbidden' }, :status => :forbidden
     end
   end
 end

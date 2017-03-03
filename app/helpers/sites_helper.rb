@@ -13,22 +13,22 @@ module SitesHelper
 
   def show_whats_new_prompt?
     current_user &&
-      current_user.created_at < Date.parse("2014-11-11") && # user was created before 3.0 launch
-      Date.today < Date.parse("2014-11-18") &&              # it's within a week of 3.0 launch
-      params["controller"] == "sites" &&                    # user is on the site summary page
-      params["action"] == "show"
+      current_user.created_at < Date.parse('2014-11-11') && # user was created before 3.0 launch
+      Date.today < Date.parse('2014-11-18') &&              # it's within a week of 3.0 launch
+      params['controller'] == 'sites' &&                    # user is on the site summary page
+      params['action'] == 'show'
   end
 
   def install_help_data(site)
     case site.install_type
-    when "weebly"
-      ["Weebly", "http://support.hellobar.com/how-do-i-install-hello-bar-on-weebly/"]
-    when "squarespace"
-      ["Squarespace", "http://support.hellobar.com/how-do-i-install-hello-bar-on-squarespace/"]
-    when "shopify"
-      ["Shopify", "http://support.hellobar.com/how-do-i-install-hello-bar-on-shopify/"]
-    when "blogspot"
-      ["Blogger", "http://support.hellobar.com/how-do-i-istall-hello-bar-on-bloggerblogspot/"]
+    when 'weebly'
+      ['Weebly', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-weebly/']
+    when 'squarespace'
+      ['Squarespace', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-squarespace/']
+    when 'shopify'
+      ['Shopify', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-shopify/']
+    when 'blogspot'
+      ['Blogger', 'http://support.hellobar.com/how-do-i-istall-hello-bar-on-bloggerblogspot/']
     else
       nil
     end
@@ -43,7 +43,7 @@ module SitesHelper
   end
 
   def bill_due_at(bill)
-    bill.due_at.strftime("%-m-%-d-%Y")
+    bill.due_at.strftime('%-m-%-d-%Y')
   end
 
   def bill_estimated_amount(bill)

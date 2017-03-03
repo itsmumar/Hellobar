@@ -1,6 +1,6 @@
 class Admin::AdminsController < ApplicationController
   before_filter :load_admin, only: [:unlock]
-  layout "admin"
+  layout 'admin'
 
   before_action :require_admin
 

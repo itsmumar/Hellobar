@@ -1,4 +1,4 @@
-require "avatar/view/action_view_support"
+require 'avatar/view/action_view_support'
 
 module ApplicationHelper
   include Avatar::View::ActionViewSupport
@@ -13,8 +13,8 @@ module ApplicationHelper
 
   def show_account_prompt?
     current_user && current_user.temporary? &&
-      !(params[:controller] == "user" && params[:action] == "edit") &&
-      !(params[:controller] == "user" && params[:action] == "update")
+      !(params[:controller] == 'user' && params[:action] == 'edit') &&
+      !(params[:controller] == 'user' && params[:action] == 'update')
   end
 
   def subscription_cost(subscription, schedule)

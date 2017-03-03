@@ -1,5 +1,5 @@
 class Hello::WordpressUser < Hello::WordpressModel
-  self.table_name = "hbwp_users"
+  self.table_name = 'hbwp_users'
   PRO_TRIAL_PERIOD = 14.days
 
   attr_reader :password # to conform with User so we can reuse forms
@@ -11,7 +11,7 @@ class Hello::WordpressUser < Hello::WordpressModel
   def self.find_by_email(email)
     @@connected ? where(['user_email = ? or user_login = ?', email, email]).first : nil
   rescue ActiveRecord::NoDatabaseError
-    Rails.logger.error("Wordpress database configured in database.yml does not exist")
+    Rails.logger.error('Wordpress database configured in database.yml does not exist')
     nil
   end
 
@@ -32,14 +32,14 @@ class Hello::WordpressUser < Hello::WordpressModel
 
   def bars
     unless @bars
-      all_bars = Hello::WordpressBar.where(post_author: id, post_type: "hellobar")
+      all_bars = Hello::WordpressBar.where(post_author: id, post_type: 'hellobar')
 
       @bars = all_bars.select do |bar|
         if bar.post_parent.present? && bar.post_parent != 0
           parent = all_bars.find{|b| b.id == bar.post_parent}
-          parent && parent.post_status != "trash" && bar.post_status != "trash"
+          parent && parent.post_status != 'trash' && bar.post_status != 'trash'
         else
-          bar.post_status != "trash"
+          bar.post_status != 'trash'
         end
       end
     end
@@ -64,14 +64,14 @@ class Hello::WordpressUser < Hello::WordpressModel
     # Convert self to user
     user = convert_to_user
     # Create a temporary site (since we don't know their actual URL)
-    site = Site.new(url: "mysite.com")
+    site = Site.new(url: 'mysite.com')
     site.save!
     # Create the default URLs
     site.create_default_rules
     # Associate the site to the user
     SiteMembership.create!(site: site, user: user)
     # Create a free trial subscription
-    subscription = Subscription::Pro.new(schedule: "monthly")
+    subscription = Subscription::Pro.new(schedule: 'monthly')
     site.change_subscription(subscription, nil, Hello::WordpressUser::PRO_TRIAL_PERIOD)
     # Add all the bars
     new_bars = []
@@ -83,7 +83,7 @@ class Hello::WordpressUser < Hello::WordpressModel
   end
 
   def is_pro_user?
-    Hello::WordpressUserMeta.where(user_id: id, meta_key: "hellobar_vip_user").first.try(:meta_value) == "1" || \
-    Hello::WordpressUserMeta.where(user_id: id, meta_key: "hbwp_s2member_subscr_id").first.try(:meta_value) != nil
+    Hello::WordpressUserMeta.where(user_id: id, meta_key: 'hellobar_vip_user').first.try(:meta_value) == '1' || \
+    Hello::WordpressUserMeta.where(user_id: id, meta_key: 'hbwp_s2member_subscr_id').first.try(:meta_value) != nil
   end
 end

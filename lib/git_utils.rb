@@ -5,9 +5,9 @@ class GitUtils
       # Get the current commit
       unless @current_commit
         begin
-          @current_commit = File.read(File.join(Rails.root, ".git", File.read(File.join(Rails.root, ".git", "HEAD")).split("ref: ").last.chomp)).chomp
+          @current_commit = File.read(File.join(Rails.root, '.git', File.read(File.join(Rails.root, '.git', 'HEAD')).split('ref: ').last.chomp)).chomp
         rescue
-          @current_commit = "???"
+          @current_commit = '???'
         end
       end
 

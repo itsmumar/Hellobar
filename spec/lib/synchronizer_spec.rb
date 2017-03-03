@@ -13,6 +13,6 @@ describe Synchronizer do
   end
 
   it 'should raise an error in #sync_one!' do
-    expect { subject.sync_one!({}, "name") }.to raise_error(NoMethodError, /You must require a specific/)
+    expect { subject.sync_one!({}, 'name') }.to raise_error(NoMethodError, /You must require a specific/)
   end
 end

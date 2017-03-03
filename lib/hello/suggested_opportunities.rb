@@ -25,7 +25,7 @@ module Hello
           results_for_site_element = Hash.new{|h, k| h[k] = {total: 0, min_yday: nil, max_yday: nil}}
           # We need to query every table for the given start date and end date
           ydays_by_year_month(start_date, end_date).each do |year_month, ydays|
-            year_offset = (year_month.split("_").first.to_i-2000)*365
+            year_offset = (year_month.split('_').first.to_i-2000)*365
             # Get the table
             table = get_segments_table_for_year_month(year_month)
             begin
@@ -35,10 +35,10 @@ module Hello
                   range_begins_with: segment_key,
                   select: [:segment]+ydays
                 ).each do |item|
-                  segment = item.attributes["segment"]
+                  segment = item.attributes['segment']
                   result = results_for_site_element[segment]
                   item.attributes.each do |key, value|
-                    unless key == "segment"
+                    unless key == 'segment'
                       yday = key.to_i + year_offset
                       result[:total] += value.to_i
                       result[:min_yday] = yday if !result[:min_yday] or yday < result[:min_yday]
@@ -206,11 +206,11 @@ module Hello
         top_segments.sort!(&sort_by_conversion)
         results = {}
         # Find top X - these are your "high traffic, high conversion". Sort by highest conversions desc
-        results["high traffic, high conversion"] = top_segments[0...num_values_to_return].sort(&sort_by_conversion)
+        results['high traffic, high conversion'] = top_segments[0...num_values_to_return].sort(&sort_by_conversion)
         # Find bottom X - these are your "high traffic, low conversion". Sort by lowest conversions
-        results["high traffic, low conversion"] = top_segments[-num_values_to_return..-1].sort(&sort_by_conversion).reverse
+        results['high traffic, low conversion'] = top_segments[-num_values_to_return..-1].sort(&sort_by_conversion).reverse
         # Take the top of the bottom segments - these are your "low traffic, high conversion". Sort by highest conversions desc
-        results["low traffic, high conversion"] = bottom_segments[0...num_values_to_return].sort(&sort_by_conversion)
+        results['low traffic, high conversion'] = bottom_segments[0...num_values_to_return].sort(&sort_by_conversion)
         # Return the results
         return results
       end

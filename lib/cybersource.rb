@@ -23,7 +23,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   CC_FIELDS = %w{number month year first_name last_name brand verification_value}
   ADDRESS_FIELDS = %w{city state zip address1 country}
   # Note: any fields not included here will be stripped out when setting
-  FIELDS = CC_FIELDS+ADDRESS_FIELDS+["token"]
+  FIELDS = CC_FIELDS+ADDRESS_FIELDS+['token']
   # These are the required fields to be set
   REQUIRED_FIELDS = FIELDS-%w{brand token state}
 
@@ -31,7 +31,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     def validate(record)
       REQUIRED_FIELDS.each do |field|
         if !record.data or record.data[field].blank?
-          record.errors[field.to_sym] = "can not be blank"
+          record.errors[field.to_sym] = 'can not be blank'
         end
       end
       begin
@@ -52,7 +52,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def brand
-    card.brand || data["brand"]
+    card.brand || data['brand']
   end
 
   def card
@@ -99,9 +99,9 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def charge(amount_in_dollars)
-    raise "Can not charge money until saved" unless persisted? and token
+    raise 'Can not charge money until saved' unless persisted? and token
     if amount_in_dollars == 0
-      return true, "Amount was zero"
+      return true, 'Amount was zero'
     end
     if !amount_in_dollars or amount_in_dollars < 0
       raise "Invalid amount: #{amount_in_dollars.inspect}"
@@ -122,15 +122,15 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def refund(amount_in_dollars, original_transaction_id)
-    raise "Can not refund money until saved" unless persisted? and token
+    raise 'Can not refund money until saved' unless persisted? and token
     if amount_in_dollars == 0
-      return true, "Amount was zero"
+      return true, 'Amount was zero'
     end
     if !amount_in_dollars or amount_in_dollars < 0
       raise "Invalid amount: #{amount_in_dollars.inspect}"
     end
     if !original_transaction_id
-      raise "Can not refund without original transaction ID"
+      raise 'Can not refund without original transaction ID'
     end
     begin
       response = HB::CyberSource.gateway.refund(amount_in_dollars*100, original_transaction_id)
@@ -158,7 +158,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def token
-    data["token"]
+    data['token']
   end
 
   protected
@@ -187,8 +187,8 @@ class CyberSourceCreditCard < PaymentMethodDetails
     if self.payment_method
       self.payment_method.details(true).each do |details|
         if details.is_a?(CyberSourceCreditCard)
-          if details.data["token"]
-            previous_token = details.data["token"]
+          if details.data['token']
+            previous_token = details.data['token']
           end
         end
       end
@@ -199,12 +199,12 @@ class CyberSourceCreditCard < PaymentMethodDetails
     email = "user#{user ? user.id : 'NA'}@hellobar.com"
     params = {:order_id=>order_id, :email => email, :address=>address.to_h}
     # Set the brand
-    data["brand"] = card.brand
+    data['brand'] = card.brand
 
-    data["sanitized_number"] = "XXXX-XXXX-XXXX-"+data["number"][-4..-1]
+    data['sanitized_number'] = 'XXXX-XXXX-XXXX-'+data['number'][-4..-1]
     sanitized_data = data.clone
-    sanitized_data.delete("number")
-    sanitized_data.delete("verification_value")
+    sanitized_data.delete('number')
+    sanitized_data.delete('verification_value')
 
     begin
       if previous_token
@@ -217,9 +217,9 @@ class CyberSourceCreditCard < PaymentMethodDetails
         audit << "Create new token with #{sanitized_data.inspect} response: #{response.inspect}"
       end
       unless response.success?
-        if field = response.params["invalidField"]
-          if field == "c:cardType"
-            raise "Invalid credit card"
+        if field = response.params['invalidField']
+          if field == 'c:cardType'
+            raise 'Invalid credit card'
           else
             raise "Invalid #{field.gsub(/^c:/,'').underscore.humanize.downcase}"
           end
@@ -230,9 +230,9 @@ class CyberSourceCreditCard < PaymentMethodDetails
       audit << "Error tokenizing with #{sanitized_data.inspect} response: #{response.inspect} error: #{e.message}"
       raise
     end
-    data["number"] = data.delete("sanitized_number")
-    data.delete("verification_value")
-    data["token"] = response.params["subscriptionID"]
+    data['number'] = data.delete('sanitized_number')
+    data.delete('verification_value')
+    data['token'] = response.params['subscriptionID']
     # Clear the card attribute so it clears the cache of the number
     @card = nil
   end

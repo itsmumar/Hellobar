@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature "Every x number of sessions condition", js: true do
+feature 'Every x number of sessions condition', js: true do
   def set_ns_cookie(page, sessions)
     page.execute_script("
       var d = new Date();
@@ -34,13 +34,13 @@ feature "Every x number of sessions condition", js: true do
     end
   end
 
-  context "condition is every 4 sessions" do
+  context 'condition is every 4 sessions' do
     before(:each) do
-      @element.rule.conditions << create(:condition, operand: "every", segment: "EveryXSession", value: "4")
+      @element.rule.conditions << create(:condition, operand: 'every', segment: 'EveryXSession', value: '4')
       @path = generate_file_and_return_path(@element.site.id)
     end
 
-    it "shows if the number of sessions is divisible by 4" do
+    it 'shows if the number of sessions is divisible by 4' do
       @test_does_exist.call(0)
       @test_does_exist.call(4)
       @test_does_exist.call(8)

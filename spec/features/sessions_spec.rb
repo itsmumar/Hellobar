@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature "User can sign up", :js do
+feature 'User can sign up', :js do
   given(:email) { 'bob@lawblog.com' }
   given(:user) { create :user, email: email }
 
@@ -9,11 +9,11 @@ feature "User can sign up", :js do
       to receive(:proxied_url2png).and_return('')
     allow_any_instance_of(ApplicationController).
       to receive(:get_ab_variation).
-      with("Sign Up Button 2016-03-17").
+      with('Sign Up Button 2016-03-17').
       and_return('original')
   end
 
-  scenario "through oauth" do
+  scenario 'through oauth' do
     OmniAuth.config.add_mock(:google_oauth2, { uid: '12345', info: { email: user.email } })
     visit root_path
 
@@ -29,8 +29,8 @@ feature "User can sign up", :js do
   end
 end
 
-feature "User can sign in", js: true do
-  scenario "through email and password" do
+feature 'User can sign in', js: true do
+  scenario 'through email and password' do
     user = create(:user)
     site = user.sites.create(url: random_uniq_url)
 
@@ -42,15 +42,15 @@ feature "User can sign in", js: true do
     fill_in 'Password', with: user.password
     click_button 'Continue'
 
-    expect(page).to have_content("SELECT YOUR GOAL")
+    expect(page).to have_content('SELECT YOUR GOAL')
   end
 
-  scenario "through oauth" do
+  scenario 'through oauth' do
     user = create(:user)
     site = user.sites.create(url: random_uniq_url)
     auth = user.authentications.create({
-      provider: "google_oauth2",
-      uid: "12345"
+      provider: 'google_oauth2',
+      uid: '12345'
     })
 
     OmniAuth.config.add_mock(:google_oauth2, {:uid => '12345'})
@@ -59,12 +59,12 @@ feature "User can sign in", js: true do
     fill_in 'Your Email', with: user.email
     click_button 'Continue'
 
-    expect(page).to have_content("SELECT YOUR GOAL")
+    expect(page).to have_content('SELECT YOUR GOAL')
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end
 
-  scenario "and sign out" do
+  scenario 'and sign out' do
     login
 
     find('.header-user-wrapper .dropdown-wrapper').click
@@ -73,7 +73,7 @@ feature "User can sign in", js: true do
     expect(page).to have_content('Signed out successfully')
   end
 
-  scenario "user with no sites can sign out" do
+  scenario 'user with no sites can sign out' do
     user = create :user
 
     login_as user, scope: :user, run_callbacks: false

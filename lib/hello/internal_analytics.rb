@@ -11,7 +11,7 @@ module Hello
     TESTS = {}
     VISITOR_ID_COOKIE = :vid
     VISITOR_ID_LENGTH = 40
-    USER_ID_NOT_SET_YET = "x"
+    USER_ID_NOT_SET_YET = 'x'
     AB_TEST_COOKIE = :hb3ab
 
     class << self
@@ -45,13 +45,13 @@ module Hello
       end
 
       def load_ab_tests
-        hash = YAML.load(File.read("lib/hello/ab_tests.yml"))
+        hash = YAML.load(File.read('lib/hello/ab_tests.yml'))
         hash.each do |registered_test|
-          name            = registered_test["name"]
-          values          = registered_test["values"]
-          index           = registered_test["index"]
-          weights         = registered_test["weights"].present? ? registered_test["weights"] : []
-          user_start_date = registered_test["user_start_date"]
+          name            = registered_test['name']
+          values          = registered_test['values']
+          index           = registered_test['index']
+          weights         = registered_test['weights'].present? ? registered_test['weights'] : []
+          user_start_date = registered_test['user_start_date']
           register_test(name, values, index, weights, user_start_date)
         end
       end
@@ -67,7 +67,7 @@ module Hello
     end
 
     def ab_test_cookie_domain
-      Hellobar::Settings[:host] == "localhost" ? nil : Hellobar::Settings[:host]
+      Hellobar::Settings[:host] == 'localhost' ? nil : Hellobar::Settings[:host]
     end
 
     def get_ab_test_value_index_from_cookie(cookie, index)
@@ -80,7 +80,7 @@ module Hello
     end
 
     def get_ab_test_value_index_from_id(ab_test, id)
-      rand_value = Digest::SHA1.hexdigest([ab_test[:name], id].join("|")).chars.inject(0){|s,o| s+o.ord}
+      rand_value = Digest::SHA1.hexdigest([ab_test[:name], id].join('|')).chars.inject(0){|s,o| s+o.ord}
 
       # See if the test is weighted
       ab_test[:weights].each_with_index do |weight, i|
@@ -93,9 +93,9 @@ module Hello
     def set_ab_test_value_index_from_cookie(cookie, index, value_index)
       raise "Value: #{value.inspect} is out of range" if value_index > MAX_VALUES_PER_TEST or value_index < 0
       # Make sure there is enough values
-      cookie = "" unless cookie
+      cookie = '' unless cookie
       num_chars_needed = ((index+1)-cookie.length)
-      cookie += "x"*num_chars_needed if num_chars_needed > 0
+      cookie += 'x'*num_chars_needed if num_chars_needed > 0
       # Set the value
       cookie[index] = value_index.to_s # Sets the char value to 0-9
 
@@ -157,7 +157,7 @@ module Hello
           cookie_value = set_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index], value_index)
           cookies.permanent[ab_test_cookie_name.to_sym] = cookie_value
         elsif user.blank?
-          raise "Cookies or user must be present for A/B test"
+          raise 'Cookies or user must be present for A/B test'
         end
 
         # Get the value
@@ -178,7 +178,7 @@ module Hello
 
       unless cookies[VISITOR_ID_COOKIE]
         cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{Time.now.to_f}_#{request.remote_ip}_#{request.env['HTTP_USER_AGENT']}_#{rand(1000)}_id")+USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
-        Analytics.track(*current_person_type_and_id, "First Visit", {ip: request.remote_ip})
+        Analytics.track(*current_person_type_and_id, 'First Visit', {ip: request.remote_ip})
       end
       # Return the first VISITOR_ID_LENGTH characters of the hash
       return cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH]

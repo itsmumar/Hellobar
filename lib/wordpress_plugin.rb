@@ -11,7 +11,7 @@ class WordpressPlugin
 
   def content
     set_render_anywhere_helpers(SitesHelper)
-    render :template => "wordpress_plugin/show", :layout => false, :locals => {:site => site}
+    render :template => 'wordpress_plugin/show', :layout => false, :locals => {:site => site}
   end
 
   def cleanup
@@ -21,7 +21,7 @@ class WordpressPlugin
 
   def to_zip
     Zip::ZipOutputStream.open(file.path) do |zip|
-      zip.put_next_entry("hellobar_wp_plugin.php")
+      zip.put_next_entry('hellobar_wp_plugin.php')
       zip.print(content)
     end
 

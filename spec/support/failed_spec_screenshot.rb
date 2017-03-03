@@ -4,7 +4,7 @@ RSpec.configure do |config|
     if example.exception
       meta = example.metadata
       description = example.description.gsub(/[ (),]/, '_')
-      timestamp = Time.current.strftime("%Y%m%d-%H%M%S")
+      timestamp = Time.current.strftime('%Y%m%d-%H%M%S')
       filename = "js_failure_#{ timestamp }-#{ description }"
 
       path = "#{ ENV.fetch('CIRCLE_ARTIFACTS', Rails.root.join('tmp')) }/#{ filename }"

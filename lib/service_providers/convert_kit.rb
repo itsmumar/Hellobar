@@ -5,16 +5,16 @@ module ServiceProviders
         identity = opts[:identity]
       elsif opts[:site]
         identity = opts[:site].identities.find_by_provider!('convert_kit')
-        raise "Site does not have a stored ConvertKit identity" unless identity
+        raise 'Site does not have a stored ConvertKit identity' unless identity
       else
-        raise "Must provide an identity through the arguments"
+        raise 'Must provide an identity through the arguments'
       end
 
       @contact_list = opts[:contact_list]
       @identity = identity
 
       api_key = @identity.api_key
-      raise "Identity does not have a stored ConvertKit API secret key" unless api_key
+      raise 'Identity does not have a stored ConvertKit API secret key' unless api_key
 
       client_settings = {
         url: 'https://api.convertkit.com/v3/'
@@ -81,7 +81,7 @@ module ServiceProviders
         end
 
       rescue Faraday::TimeoutError
-        log "sync timed out"
+        log 'sync timed out'
       rescue => error
         log "sync raised #{error}"
       end

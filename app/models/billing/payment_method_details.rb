@@ -48,11 +48,11 @@ if Rails.env.test?
 
   class AlwaysFailsPaymentMethodDetails < PaymentMethodDetails
     def charge(amount_in_dollars)
-      return false, "There was some issue with your payment (fake)"
+      return false, 'There was some issue with your payment (fake)'
     end
 
     def refund(amount_in_dollars, original_transaction_id)
-      return false, "There was some issue with your refund (fake)"
+      return false, 'There was some issue with your refund (fake)'
     end
   end
 end

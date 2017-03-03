@@ -7,13 +7,13 @@ class Subscription < ActiveRecord::Base
   belongs_to :site, touch: true
   belongs_to :payment_method
   enum schedule: [:monthly, :yearly]
-  has_many :bills, -> {order "id"}, inverse_of: :subscription
+  has_many :bills, -> {order 'id'}, inverse_of: :subscription
 
   scope :active, -> do
     joins(:bills).where(
-      "bills.status = ? AND bills.start_date < ? AND bills.end_date > ?",
-      Bill.statuses["paid"], Time.now, Time.now).
-      where("bills.type != ?", Bill::Refund.to_s)
+      'bills.status = ? AND bills.start_date < ? AND bills.end_date > ?',
+      Bill.statuses['paid'], Time.now, Time.now).
+      where('bills.type != ?', Bill::Refund.to_s)
   end
 
   after_initialize :set_initial_values
@@ -191,7 +191,7 @@ class Subscription < ActiveRecord::Base
     class << self
       def defaults
         {
-          name: "Free",
+          name: 'Free',
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: 25_000, # after this many visits in a month
@@ -212,7 +212,7 @@ class Subscription < ActiveRecord::Base
     class << self
       def defaults
         {
-          name: "Free Plus",
+          name: 'Free Plus',
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: 25_000, # after this many visits in a month
@@ -288,7 +288,7 @@ class Subscription < ActiveRecord::Base
     class << self
       def defaults
         {
-          name: "Pro",
+          name: 'Pro',
           monthly_amount: 15.0,
           yearly_amount: 149.0,
           visit_overage: 250_000, # after this many visits in a month
@@ -310,7 +310,7 @@ class Subscription < ActiveRecord::Base
     class << self
       def defaults
         {
-          name: "Pro Comped",
+          name: 'Pro Comped',
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: 250_000, # after this many visits in a month
@@ -339,7 +339,7 @@ class Subscription < ActiveRecord::Base
     class << self
       def defaults
         {
-          name: "Pro Managed",
+          name: 'Pro Managed',
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: nil, # after this many visits in a month
@@ -357,7 +357,7 @@ class Subscription < ActiveRecord::Base
     class << self
       def defaults
         {
-          name: "Enterprise",
+          name: 'Enterprise',
           monthly_amount: 99.0,
           yearly_amount: 999.0,
           visit_overage: nil, # unlimited

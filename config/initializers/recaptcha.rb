@@ -1,4 +1,4 @@
-require "./config/initializers/settings"
+require './config/initializers/settings'
 
 Recaptcha.configure do |config|
   config.public_key  = Hellobar::Settings[:recaptcha_public_key]

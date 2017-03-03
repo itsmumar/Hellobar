@@ -16,7 +16,7 @@ class ContactSubmissionsController < ApplicationController
       }
       developer_email = params[:developer_email].is_a?(Array) ? params[:developer_email].first : params[:developer_email]
 
-      MailerGateway.send_email("Contact Developer 2", developer_email, email_params)
+      MailerGateway.send_email('Contact Developer 2', developer_email, email_params)
       flash[:success] = "We've sent the installation instructions to your developer!"
     end
 
@@ -31,13 +31,13 @@ class ContactSubmissionsController < ApplicationController
       :last_name => current_user.last_name,
       :email => current_user.email,
       :message => params[:message],
-      :preview => (params[:message] || "")[0, 50]
+      :preview => (params[:message] || '')[0, 50]
     }
 
     email_params.merge!(:website => @site.url) if @site
 
-    MailerGateway.send_email("Contact Form", "support@hellobar.com", email_params)
-    flash[:success] = "Your message has been sent!"
+    MailerGateway.send_email('Contact Form', 'support@hellobar.com', email_params)
+    flash[:success] = 'Your message has been sent!'
 
     redirect_to params[:return_to]
   end
@@ -51,8 +51,8 @@ class ContactSubmissionsController < ApplicationController
 
     email_params = params.require(:contact_submission).permit(:name, :email, :message)
 
-    MailerGateway.send_email("Contact Form 2", "support@hellobar.com", email_params)
-    flash[:success] = "Your message has been sent!"
+    MailerGateway.send_email('Contact Form 2', 'support@hellobar.com', email_params)
+    flash[:success] = 'Your message has been sent!'
 
     redirect_to new_contact_submission_path
   end

@@ -15,7 +15,7 @@ class SiteSerializer < ActiveModel::Serializer
     cache_options = { expires_in: 7.days }
 
     Rails.cache.fetch(cache_key, cache_options) do
-      google = scope.authentications.find{|auth| auth.provider == "google_oauth2" }
+      google = scope.authentications.find{|auth| auth.provider == 'google_oauth2' }
 
       if google
         analytics = GoogleAnalytics.new(google.access_token)

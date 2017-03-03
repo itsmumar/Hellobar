@@ -86,7 +86,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def subscribe_params(email, name, double_optin = true)
-    name ||= ""
+    name ||= ''
     name_hash = {}
 
     if name_params.size >= 1
@@ -94,9 +94,9 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
       name_params.each do |name_field|
         case name_field
         when /first|fname/
-          name_hash[name_field] = first_name || ""
+          name_hash[name_field] = first_name || ''
         when /last|lname/
-          name_hash[name_field] = last_name || ""
+          name_hash[name_field] = last_name || ''
         else
           name_hash[name_field] = name
         end
@@ -148,9 +148,9 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   def url_from_reference_object reference_object
     return nil unless reference_object
     case reference_object.name
-    when "script", "iframe"
+    when 'script', 'iframe'
       reference_object.attr('src')
-    when "a"
+    when 'a'
       reference_object.attr('href')
     else
       nil
@@ -163,7 +163,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
 
     return nil unless url
 
-    url = "http:" + url if url.match /^\/\//
+    url = 'http:' + url if url.match /^\/\//
     url
   end
 end

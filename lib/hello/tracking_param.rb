@@ -1,6 +1,6 @@
 module Hello
   class TrackingParam
-    SALT = "imasaltydogyarrr"
+    SALT = 'imasaltydogyarrr'
 
     def self.encode_tracker(user_id, event, props)
       props = [props].to_json
@@ -10,12 +10,12 @@ module Hello
 
     def self.decode_tracker(tracker)
       tracker = CGI.unescape(tracker)
-      user_id, event, props, sig = Base64.urlsafe_decode64(tracker).split("///")
+      user_id, event, props, sig = Base64.urlsafe_decode64(tracker).split('///')
 
       if sig == Digest::SHA1.hexdigest("#{user_id}#{event}#{props}#{SALT}")[0,8]
         return [user_id, event, JSON.parse(props).first]
       else
-        raise "Cannot decode tracker: signature does not match"
+        raise 'Cannot decode tracker: signature does not match'
       end
     end
 

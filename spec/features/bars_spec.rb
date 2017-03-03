@@ -67,14 +67,14 @@ feature 'Adding and editing bars', :js do
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end
 
-  scenario "A user can create a site element without seeing an interstitial" do
+  scenario 'A user can create a site element without seeing an interstitial' do
     user = login(create(:site_membership, :with_site_rule).user)
     {
-      emails:       "Collect Email",
-      click:        "Click Link",
-      call:         "Talk to Visitors",
-      social:       "Social",
-      announcement: "Announcement"
+      emails:       'Collect Email',
+      click:        'Click Link',
+      call:         'Talk to Visitors',
+      social:       'Social',
+      announcement: 'Announcement'
     }.each do |anchor, header|
       visit new_site_site_element_path(user.sites.first) + "/#/settings/#{anchor}?skip_interstitial=true"
       expect(page).to have_content(header)
@@ -149,7 +149,7 @@ feature 'Adding and editing bars', :js do
 
     scenario 'custom field' do
       find('.step-style').click
-      find('h6', text: "Modal").click
+      find('h6', text: 'Modal').click
       find('.step-settings').click
 
       find('div.item-block.add', text: 'Add field').click

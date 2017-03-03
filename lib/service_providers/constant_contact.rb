@@ -4,7 +4,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
       identity = opts[:identity]
     elsif opts[:site]
       identity = opts[:site].identities.where(:provider => 'constant_contact').first
-      raise "Site does not have a stored Constant Contact identity" unless identity
+      raise 'Site does not have a stored Constant Contact identity' unless identity
     end
 
     @token = identity.credentials['token']
@@ -78,7 +78,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     end
 
     lists = [list_id]
-    columns = ["E-Mail", "First Name", "Last Name"]
+    columns = ['E-Mail', 'First Name', 'Last Name']
     activity = ConstantContact::Components::AddContacts.new(contacts, lists, columns)
 
     @client.add_create_contacts_activity(@token, activity)

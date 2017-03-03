@@ -5,7 +5,7 @@ class ContactList < ActiveRecord::Base
   include DeserializeWithErrors
   include EmailSynchronizer
 
-  EMPTY_PROVIDER_VALUES = [ nil, "", 0, "0" ]
+  EMPTY_PROVIDER_VALUES = [ nil, '', 0, '0' ]
 
   attr_accessor :provider
 
@@ -38,13 +38,13 @@ class ContactList < ActiveRecord::Base
     return false unless identity && data && Hellobar::Settings[:syncable]
 
     if oauth?
-      data["remote_name"] && data["remote_id"]
+      data['remote_name'] && data['remote_id']
     elsif embed_code?
-      data["embed_code"].present?
+      data['embed_code'].present?
     elsif api_key? && app_url?
       identity.api_key? && identity.extra['app_url'].present?
     elsif api_key?
-      identity.api_key? && data["remote_name"] && data["remote_id"]
+      identity.api_key? && data['remote_name'] && data['remote_id']
     elsif webhook?
       true
     end
@@ -105,7 +105,7 @@ class ContactList < ActiveRecord::Base
 
     self.identity = if !provider_set? || service_provider_class.nil?
       nil # Don't create an invalid provider
-    elsif embed_code? || (provider == "webhooks")
+    elsif embed_code? || (provider == 'webhooks')
       site.identities.find_or_create_by(provider: provider)
     else
       site.identities.find_by(provider: provider)
@@ -144,11 +144,11 @@ class ContactList < ActiveRecord::Base
   end
 
   def webhook?
-    data["webhook_url"].present?
+    data['webhook_url'].present?
   end
 
   def tags
-    data["tags"] || []
+    data['tags'] || []
   end
 
   private
@@ -159,11 +159,11 @@ class ContactList < ActiveRecord::Base
   end
 
   def provider_valid
-    errors.add(:provider, "is not valid") unless provider_set? && identity.try(:provider)
+    errors.add(:provider, 'is not valid') unless provider_set? && identity.try(:provider)
   end
 
   def provider_credentials_exist
-    errors.add(:provider, "credentials have not been set yet") unless identity && identity.provider == provider
+    errors.add(:provider, 'credentials have not been set yet') unless identity && identity.provider == provider
   end
 
   def clean_embed_code
@@ -177,12 +177,12 @@ class ContactList < ActiveRecord::Base
   end
 
   def embed_code_exists?
-    errors.add(:base, "Embed code cannot be blank") unless data['embed_code'].present?
+    errors.add(:base, 'Embed code cannot be blank') unless data['embed_code'].present?
   end
 
   def embed_code_valid?
     if service_provider && !service_provider.embed_code_valid?
-      errors.add(:base, "Embed code is invalid")
+      errors.add(:base, 'Embed code is invalid')
     end
   end
 
@@ -195,10 +195,10 @@ class ContactList < ActiveRecord::Base
   end
 
   def webhook_url_valid?
-    uri = Addressable::URI.parse(data["webhook_url"])
+    uri = Addressable::URI.parse(data['webhook_url'])
 
     if !%w{http https}.include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ %r((^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix)
-      errors.add(:base, "webhook URL is invalid")
+      errors.add(:base, 'webhook URL is invalid')
     end
   end
 end

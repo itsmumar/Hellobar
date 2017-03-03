@@ -8,7 +8,7 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
       identity = opts[:identity]
     elsif opts[:site]
       identity = opts[:site].identities.where(:provider => 'active_campaign').first
-      raise "Site does not have a stored ActiveCampaign identity" unless identity
+      raise 'Site does not have a stored ActiveCampaign identity' unless identity
     end
 
     @identity = identity

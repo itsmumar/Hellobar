@@ -7,7 +7,7 @@ module ServiceProviders
     end
 
     def client
-      @client ||= Faraday.new(url: contact_list.data["webhook_url"]) do |faraday|
+      @client ||= Faraday.new(url: contact_list.data['webhook_url']) do |faraday|
         faraday.request :url_encoded
         faraday.response :logger unless Rails.env.test?
         faraday.adapter Faraday.default_adapter
@@ -15,7 +15,7 @@ module ServiceProviders
     end
 
     def subscribe(_, email, name = nil, double_optin = true)
-      method = contact_list.data["webhook_method"].downcase.to_sym
+      method = contact_list.data['webhook_method'].downcase.to_sym
 
       client.public_send(method) do |request|
         if method == :get
