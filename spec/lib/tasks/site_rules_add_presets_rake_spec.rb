@@ -39,4 +39,3 @@ describe "site:rules:add_presets" do
     @site_without_presets.reload
   end
 end
-

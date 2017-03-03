@@ -237,4 +237,3 @@ class CyberSourceCreditCard < PaymentMethodDetails
     @card = nil
   end
 end
-
