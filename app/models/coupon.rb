@@ -7,6 +7,6 @@ class Coupon < ActiveRecord::Base
   has_many :coupon_uses
 
   def self.for_referrals
-    internal.where(label: REFERRAL_LABEL).first
+    internal.find_by(label: REFERRAL_LABEL)
   end
 end

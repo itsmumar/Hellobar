@@ -173,7 +173,7 @@ class User < ActiveRecord::Base
   end
 
   def role_for_site(site)
-    if membership = site_memberships.where(site: site).first
+    if membership = site_memberships.find_by(site: site)
       membership.role.to_sym
     end
   end
@@ -268,7 +268,7 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_invite_by_email(email, _site)
-    user = User.where(email: email).first
+    user = User.find_by(email: email)
 
     if user.nil?
       user = User.new(email: email)

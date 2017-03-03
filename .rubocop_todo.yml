@@ -154,18 +154,6 @@ Rails/Date:
 Rails/FilePath:
   Enabled: false
 
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/FindBy:
-  Exclude:
-    - 'app/models/admin.rb'
-    - 'app/models/contact_list.rb'
-    - 'app/models/coupon.rb'
-    - 'app/models/site_element.rb'
-    - 'app/models/user.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: Include.
