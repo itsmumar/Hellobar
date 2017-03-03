@@ -137,15 +137,6 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 18
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, Include.
-# SupportedStyles: action, filter
-# Include: app/controllers/**/*.rb
-Rails/ActionFilter:
-  Exclude:
-    - 'app/controllers/admin/admins_controller.rb'
-    - 'app/controllers/user_migration_controller.rb'
 
 # Offense count: 24
 # Configuration parameters: EnforcedStyle, SupportedStyles.
