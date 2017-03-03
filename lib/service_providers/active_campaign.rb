@@ -14,8 +14,9 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
     @identity = identity
 
     @client = ::ActiveCampaign::Client.new(
-                api_endpoint: 'https://' + @identity.extra['app_url'] + '/admin/api.php',
-                api_key: @identity.api_key)
+      api_endpoint: 'https://' + @identity.extra['app_url'] + '/admin/api.php',
+      api_key: @identity.api_key
+    )
   end
 
   def lists

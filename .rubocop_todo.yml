@@ -341,15 +341,6 @@ Style/DoubleNegation:
     - 'lib/service_providers/mad_mimi_api.rb'
     - 'lib/service_providers/mail_chimp.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: consistent, special_for_inner_method_call, special_for_inner_method_call_in_parentheses
-Style/FirstParameterIndentation:
-  Exclude:
-    - 'lib/service_providers/active_campaign.rb'
-    - 'spec/lib/service_providers/convert_kit_spec.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: format, sprintf, percent
