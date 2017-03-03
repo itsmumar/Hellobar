@@ -325,7 +325,7 @@ class LegacyMigrator
       rule_one_conditions = rule_one.conditions
       rule_two_conditions = rule_two.conditions
 
-      if rule_one_conditions.size == 0 && rule_two_conditions.size == 0
+      if rule_one_conditions.empty? && rule_two_conditions.empty?
         true
       elsif rule_one_conditions.size != rule_two_conditions.size
         false

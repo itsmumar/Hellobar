@@ -59,7 +59,7 @@ module Hello::DataAPI
 
     def data_for(date, type)
       date = date.to_date
-      return 0 if data.length == 0
+      return 0 if data.empty?
       index = date_to_index(date)
       return 0 unless index
       return data[index][type]

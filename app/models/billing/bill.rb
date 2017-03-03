@@ -100,7 +100,7 @@ class Bill < ActiveRecord::Base
     return false if paid? || voided? || self.amount == 0
     # If pending see if we are past due and we have
     # tried billing them at least once
-    return true if past_due?(payment_method) and (payment_method.nil? || self.billing_attempts.size > 0)
+    return true if past_due?(payment_method) and (payment_method.nil? || !self.billing_attempts.empty?)
     # False otherwise
     return false
   end

@@ -207,7 +207,7 @@ class User < ActiveRecord::Base
   end
 
   def is_oauth_user?
-     authentications.size > 0
+     !authentications.empty?
   end
 
   def invite_token_expired?

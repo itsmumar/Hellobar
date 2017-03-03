@@ -49,7 +49,7 @@ class QueueWorker
     stage ||= Hellobar::Settings[:env_name]
 
     raise ArgumentError, "Stage is required to be one of #{STAGES}" unless STAGES.include?(stage)
-    raise ArgumentError, "Message must be defined" unless message && message.length > 0
+    raise ArgumentError, "Message must be defined" unless message && !message.empty?
     raise ArgumentError, "Queue name must be defined" unless queue_name
 
     @sqs ||= AWS::SQS.new(access_key_id: Hellobar::Settings[:aws_access_key_id], secret_access_key: Hellobar::Settings[:aws_secret_access_key])
