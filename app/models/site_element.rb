@@ -254,7 +254,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def content_upgrade_download_link
-  "https://s3.amazonaws.com/#{Hellobar::Settings[:s3_content_upgrades_bucket]}/#{Site.id_to_script_hash(site.id)}/#{id}.pdf"
+    "https://s3.amazonaws.com/#{Hellobar::Settings[:s3_content_upgrades_bucket]}/#{Site.id_to_script_hash(site.id)}/#{id}.pdf"
   end
 
   def content_upgrade_script_tag

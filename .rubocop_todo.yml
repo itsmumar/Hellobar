@@ -368,38 +368,6 @@ Style/IfInsideElse:
     - 'app/helpers/email_digest_helper.rb'
     - 'lib/script_generator.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: SupportedStyles, IndentationWidth.
-# SupportedStyles: special_inside_parentheses, consistent, align_brackets
-Style/IndentArray:
-  EnforcedStyle: consistent
-
-# Offense count: 90
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: special_inside_parentheses, consistent, align_braces
-Style/IndentHash:
-  Enabled: false
-
-# Offense count: 14
-# Cop supports --auto-correct.
-# Configuration parameters: Width.
-Style/IndentationWidth:
-  Exclude:
-    - 'app/controllers/concerns/subscribable.rb'
-    - 'app/controllers/user_migration_controller.rb'
-    - 'app/helpers/user_helper.rb'
-    - 'app/models/autofill.rb'
-    - 'app/models/contact_list.rb'
-    - 'app/models/site.rb'
-    - 'app/models/site_element.rb'
-    - 'app/models/user.rb'
-    - 'lib/grand_central_api.rb'
-    - 'lib/script_generator.rb'
-    - 'lib/service_providers/embed_code_provider.rb'
-    - 'spec/controllers/contact_lists_controller_spec.rb'
-
 # Offense count: 25
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

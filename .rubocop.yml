@@ -48,3 +48,13 @@ Style/AlignParameters:
 Security/MarshalLoad:
   Exclude:
     - 'lib/grand_central_api.rb'
+
+# Configuration parameters: SupportedStyles, IndentationWidth.
+# SupportedStyles: special_inside_parentheses, consistent, align_brackets
+Style/IndentArray:
+  EnforcedStyle: consistent
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: special_inside_parentheses, consistent, align_braces
+Style/IndentHash:
+  EnforcedStyle: consistent

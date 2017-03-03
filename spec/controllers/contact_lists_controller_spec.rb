@@ -177,10 +177,10 @@ describe ContactListsController, type: :controller do
       end
 
       it 'clean-ups the embed code' do
-          post :create, site_id: site, contact_list: contact_list_params
+        post :create, site_id: site, contact_list: contact_list_params
 
-          new_contact_list = ContactList.last
-          expect(new_contact_list.data['embed_code']).to be_nil
+        new_contact_list = ContactList.last
+        expect(new_contact_list.data['embed_code']).to be_nil
       end
 
       context 'when the embed code is blank' do

@@ -208,10 +208,10 @@ class ScriptGenerator < Mustache
     end
 
     template_names.map do |name|
-        {
-          name: name.first(2).join('_'),
-          markup: content_template(name[0], name[1], name[2])
-        }
+      {
+        name: name.first(2).join('_'),
+        markup: content_template(name[0], name[1], name[2])
+      }
     end
   end
 

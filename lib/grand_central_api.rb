@@ -1,8 +1,5 @@
 begin
-#  require 'hmac-sha1'
-#  require 'hmac-sha2'
-require 'openssl'
-
+  require 'openssl'
 rescue LoadError
   # If they don't have this we don't want to kill everything with a load error
   # howver if you attempt to use this API it will error out

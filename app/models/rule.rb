@@ -16,10 +16,10 @@ class Rule < ActiveRecord::Base
   validates :site, association_exists: true
   validates_associated :conditions
   validates :priority, numericality: {
-                         only_integer: true,
-                         greater_than_or_equal_to: 1,
-                         less_than_or_equal_to: 100
-                       },
+    only_integer: true,
+    greater_than_or_equal_to: 1,
+    less_than_or_equal_to: 100
+  },
                        if: 'priority.present?'
 
   def self.defaults
