@@ -123,7 +123,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     if !amount_in_dollars || amount_in_dollars < 0
       raise "Invalid amount: #{amount_in_dollars.inspect}"
     end
-    if !original_transaction_id
+    unless original_transaction_id
       raise 'Can not refund without original transaction ID'
     end
     begin

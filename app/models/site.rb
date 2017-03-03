@@ -78,7 +78,7 @@ class Site < ActiveRecord::Base
   end
 
   def regenerate_script
-    @needs_script_regeneration = true if !destroyed?
+    @needs_script_regeneration = true unless destroyed?
   end
 
   # We are getting bad analytics data regarding installs and uninstalls

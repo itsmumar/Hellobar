@@ -384,14 +384,6 @@ Style/MultilineBlockChain:
 Style/MutableConstant:
   Enabled: false
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/NegatedIf:
-  Exclude:
-    - 'app/models/billing/bill.rb'
-    - 'app/models/site.rb'
-    - 'lib/cybersource.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/NestedParenthesizedCalls:
