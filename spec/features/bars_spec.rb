@@ -13,7 +13,7 @@ feature 'Adding and editing bars', :js do
   end
 
   scenario 'new user can create a site element' do
-    OmniAuth.config.add_mock(:google_oauth2, { uid: '12345', info: { email: user.email } })
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
 
     visit root_path
 
@@ -39,14 +39,11 @@ feature 'Adding and editing bars', :js do
   end
 
   scenario 'existing user can create a site element' do
-    OmniAuth.config.add_mock(:google_oauth2, { uid: '12345' })
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345')
     user = create(:user)
     site = user.sites.create(url: random_uniq_url)
     create(:rule, site: site)
-    auth = user.authentications.create({
-      provider: 'google_oauth2',
-      uid: '12345'
-    })
+    auth = user.authentications.create(provider: 'google_oauth2', uid: '12345')
 
     visit new_user_session_path
     fill_in 'Your Email', with: user.email
@@ -198,7 +195,7 @@ feature 'Adding and editing bars', :js do
   scenario 'User can modify the color settings for a bar' do
     color = 'AABBCC'
 
-    OmniAuth.config.add_mock(:google_oauth2, { uid: '12345', info: { email: 'bob@lawblog.com' } })
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: 'bob@lawblog.com' })
     visit root_path
 
     fill_in 'site[url]', with: 'mewgle.com'

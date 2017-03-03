@@ -308,13 +308,6 @@ Style/AsciiComments:
   Exclude:
     - 'lib/service_providers/get_response_api.rb'
 
-# Offense count: 124
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Enabled: false
-
 # Offense count: 14
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

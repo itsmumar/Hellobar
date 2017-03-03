@@ -124,8 +124,8 @@ module Hello
       def load_tables
         # Load the table schemas
         @@tables = {}
-        load_table(:contacts, { lid: :number }, { email: :string })
-        load_table(:over_time, { sid: :number }, { date: :number })
+        load_table(:contacts, { lid: :number }, email: :string)
+        load_table(:over_time, { sid: :number }, date: :number)
       end
 
       def load_table(name, hash_key, range_key)

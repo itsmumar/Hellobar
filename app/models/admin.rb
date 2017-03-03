@@ -94,10 +94,10 @@ class Admin < ActiveRecord::Base
     validate_url = admin_validate_access_token_url(email: email, key: access_token_key(access_token, timestamp), timestamp: timestamp, host: Hellobar::Settings[:host])
     lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp), timestamp: timestamp, host: Hellobar::Settings[:host])
 
-    Pony.mail({
-        to: email,
-        subject: 'Admin login attempt',
-        body: "Someone is attempting to log into your admin account from an unrecognized computer.
+    Pony.mail(
+      to: email,
+      subject: 'Admin login attempt',
+      body: "Someone is attempting to log into your admin account from an unrecognized computer.
 
 If this is you, click this link to continue logging in:
 
@@ -108,7 +108,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
         Not me, lock it down -> #{lockdown_url}
 
 "
-    })
+    )
   end
 
   # If they key is valid for the access_token, email and timestamp and the timestamp is within
@@ -182,15 +182,15 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
     lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp.to_i), timestamp: timestamp.to_i, host: Hellobar::Settings[:host])
 
-    Pony.mail({
-        to: email,
-        subject: 'Your password has been reset',
-        body: "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
+    Pony.mail(
+      to: email,
+      subject: 'Your password has been reset',
+      body: "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
 
         Not me, lock it down -> #{lockdown_url}
 
 "
-    })
+    )
   end
 
   # Reset login_attempts, and set session_access_token, session_token,

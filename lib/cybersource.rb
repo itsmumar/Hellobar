@@ -91,7 +91,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   # Shouldn't really need to get this directly
   def cybersource_profile
     unless @cybersource_profile
-      response = HB::CyberSource.gateway.retrieve(formatted_token, { order_id: order_id })
+      response = HB::CyberSource.gateway.retrieve(formatted_token, order_id: order_id)
       raise response.message unless response.success?
       @cybersource_profile = response.params
     end
@@ -107,7 +107,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
       raise "Invalid amount: #{amount_in_dollars.inspect}"
     end
     begin
-      response = HB::CyberSource.gateway.purchase(amount_in_dollars * 100, formatted_token, { order_id: order_id })
+      response = HB::CyberSource.gateway.purchase(amount_in_dollars * 100, formatted_token, order_id: order_id)
 
       audit << "Charging #{amount_in_dollars.inspect}, got response: #{response.inspect}"
       if response.success?

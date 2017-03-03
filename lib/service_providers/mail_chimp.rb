@@ -12,10 +12,11 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
 
     @identity = identity
-    @client = Gibbon::Request.new({
-                api_key: identity.credentials['token'],
-                api_endpoint: identity.extra['metadata']['api_endpoint']
-              })
+    @client =
+      Gibbon::Request.new(
+        api_key: identity.credentials['token'],
+        api_endpoint: identity.extra['metadata']['api_endpoint']
+      )
   end
 
   def lists

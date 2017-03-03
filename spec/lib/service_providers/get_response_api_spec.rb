@@ -114,17 +114,12 @@ describe ServiceProviders::GetResponseApi do
       end
 
       it 'assign selected tags to the recently/previously added and confirmed contact' do
-        api = ServiceProviders::GetResponseApi.new({ identity: identity, contact_list: contact_list })
+        api = ServiceProviders::GetResponseApi.new(identity: identity, contact_list: contact_list)
 
-        latest_contacts_successful_response = double :response, {
-          success?: true,
-          body: [
-            {
-              contactId: contact_id,
-              email: email
-            }
-          ].to_json
-        }
+        latest_contacts_successful_response =
+          double :response,
+            success?: true,
+            body: [ { contactId: contact_id, email: email } ].to_json
 
         tags = contact_list.tags.map { |tag| { tagId: tag } }
 
@@ -137,7 +132,7 @@ describe ServiceProviders::GetResponseApi do
           and_return successful_response
         expect(client).to receive(:get).
           and_return latest_contacts_successful_response
-        expect(client).to receive(:post).with("contacts/#{contact_id}", { tags: tags }).
+        expect(client).to receive(:post).with("contacts/#{contact_id}", tags: tags).
           and_return latest_contacts_successful_response
 
         api.subscribe(campaign_id, email, name)

@@ -12,9 +12,7 @@ describe ContactList do
   before do
     if identity.provider == 'email'
       identity.stub(:service_provider_class).and_return(ServiceProviders::Email)
-      ServiceProviders::Email.stub(:settings).and_return({
-        oauth: false
-      })
+      ServiceProviders::Email.stub(:settings).and_return(oauth: false)
       contact_list.stub(syncable?: true)
       expect(service_provider).to be_a(ServiceProviders::Email)
       service_provider.stub(:batch_subscribe).and_return(nil)

@@ -70,11 +70,11 @@ describe SiteElementsController do
 
       get :show, site_id: element.site, id: element, format: :json
 
-      expect_json_response_to_include({
+      expect_json_response_to_include(
         id: element.id,
         headline: element.headline,
         background_color: element.background_color
-      })
+      )
     end
   end
 
@@ -97,7 +97,7 @@ describe SiteElementsController do
                                                        rule_id: 0,
                                                        settings: settings }
 
-      expect_json_response_to_include({ settings: settings })
+      expect_json_response_to_include(settings: settings)
     end
 
     it 'accepts whitelisted fields only' do
@@ -105,7 +105,7 @@ describe SiteElementsController do
                                                        rule_id: 0,
                                                        settings: manipulated_settings }
 
-      expect_json_response_to_include({ settings: settings })
+      expect_json_response_to_include(settings: settings)
     end
 
     it 'accepts custom fields' do
@@ -113,7 +113,7 @@ describe SiteElementsController do
                                                        rule_id: 0,
                                                        settings: settings_custom_fields }
 
-      expect_json_response_to_include({ settings: settings_custom_fields })
+      expect_json_response_to_include(settings: settings_custom_fields)
     end
 
     it 'sets the success flash message on create' do
@@ -132,7 +132,7 @@ describe SiteElementsController do
       get :new, site_id: membership.site.id, format: :json
 
       default_font_id = SiteElement.columns_hash['font_id'].default
-      expect_json_response_to_include({ font_id: default_font_id })
+      expect_json_response_to_include(font_id: default_font_id)
     end
 
     context('pro subscription') do
@@ -142,7 +142,7 @@ describe SiteElementsController do
 
         get :new, site_id: subscription.site.id, format: :json
 
-        expect_json_response_to_include({ show_branding: false })
+        expect_json_response_to_include(show_branding: false)
       end
     end
 
@@ -154,7 +154,7 @@ describe SiteElementsController do
         get :new, site_id: subscription.site.id, format: :json
 
         json = JSON.parse(response.body)
-        expect_json_response_to_include({ show_branding: true })
+        expect_json_response_to_include(show_branding: true)
       end
 
       it 'sets the theme id to the default theme id' do
@@ -162,7 +162,7 @@ describe SiteElementsController do
 
         json = JSON.parse(response.body)
         default_theme = Theme.where(default_theme: true).first
-        expect_json_response_to_include({ theme_id: default_theme.id })
+        expect_json_response_to_include(theme_id: default_theme.id)
       end
 
       it "doesn't push an unsaved element into the site.site_elements association" do
@@ -184,7 +184,7 @@ describe SiteElementsController do
 
       allow_any_instance_of(Site).to receive(:generate_script)
       allow_any_instance_of(Site).
-        to receive(:lifetime_totals).and_return({ '1' => [[1, 0]] })
+        to receive(:lifetime_totals).and_return('1' => [[1, 0]])
     end
 
     it 'creates an updater' do
@@ -218,10 +218,7 @@ describe SiteElementsController do
       it 'sends json of the updated attributes' do
         post :update, valid_params(element)
 
-        expect_json_response_to_include({
-          id: element.id,
-          closable: true
-        })
+        expect_json_response_to_include(id: element.id, closable: true)
       end
 
       it 'sends json of new element if type was changed' do
@@ -245,21 +242,21 @@ describe SiteElementsController do
           post :update, @params
 
           expect(response).to be_success
-          expect_json_response_to_include({ settings: settings })
+          expect_json_response_to_include(settings: settings)
         end
 
         it 'with whitelisted attrs only and ignore the others' do
           @params[:site_element][:settings] = manipulated_settings
           post :update, @params
 
-          expect_json_response_to_include({ 'settings' => settings })
+          expect_json_response_to_include('settings' => settings)
         end
 
         it 'with cutom fields too' do
           @params[:site_element][:settings] = settings_custom_fields
           post :update, @params
 
-          expect_json_response_to_include({ 'settings' => settings_custom_fields })
+          expect_json_response_to_include('settings' => settings_custom_fields)
         end
       end
     end

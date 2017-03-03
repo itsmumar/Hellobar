@@ -18,10 +18,9 @@ set :ember_app_path, lambda { "#{release_path}/editor" }
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-set :slackistrano, {
- channel: '#deploys',
- webhook: 'https://hooks.slack.com/services/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'
-}
+set :slackistrano,
+  channel: '#deploys',
+  webhook: 'https://hooks.slack.com/services/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'
 
 namespace :deploy do
   desc 'Restart application'

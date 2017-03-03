@@ -94,7 +94,7 @@ class GrandCentralApi
   # Issues the actual request
   def request(path, data)
     if Rails.env.test?
-      self.class.record_request({ path: path, data: data })
+      self.class.record_request(path: path, data: data)
       return
     end
 

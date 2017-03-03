@@ -5,7 +5,7 @@ feature 'Manage Bars', js: true do
     @user = login
     @site = @user.sites.first
     @rule = @site.create_default_rules
-    allow_any_instance_of(Site).to receive(:lifetime_totals).and_return({ '1' => [[1, 0]] })
+    allow_any_instance_of(Site).to receive(:lifetime_totals).and_return('1' => [[1, 0]])
   end
 
   context 'script is not installed' do

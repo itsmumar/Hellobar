@@ -8,12 +8,12 @@ module Hello
 
     cattr_accessor :connection
 
-    self.connection = Fog::Storage.new({
+    self.connection = Fog::Storage.new(
       provider:               'AWS',
       aws_access_key_id:      Hellobar::Settings[:aws_access_key_id] || 'fake_access_key_id',
       aws_secret_access_key:  Hellobar::Settings[:aws_secret_access_key] || 'fake_secret_access_key',
       path_style: true
-    })
+    )
 
     attr_accessor :directory
 
@@ -43,14 +43,14 @@ module Hello
         file.content_encoding = 'gzip'
         file.metadata = cache_header
       else
-        file = directory.files.new({
+        file = directory.files.new(
           key: filename,
           body: contents,
           public: true,
           content_type: 'text/javascript',
           content_encoding: 'gzip',
           metadata: cache_header
-        })
+        )
       end
 
       file.save

@@ -24,8 +24,8 @@ describe Hello::TrackingParam do
 
   describe '::track' do
     it 'decodes and records a tracking parameters' do
-      tracker = Hello::TrackingParam.encode_tracker('1', 'Clicked', { url: 'some url' })
-      Analytics.should_receive(:track).with(:user, '1', 'Clicked', { 'url' => 'some url' })
+      tracker = Hello::TrackingParam.encode_tracker('1', 'Clicked', url: 'some url')
+      Analytics.should_receive(:track).with(:user, '1', 'Clicked', 'url' => 'some url')
       Hello::TrackingParam.track(tracker)
     end
   end

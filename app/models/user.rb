@@ -164,10 +164,10 @@ class User < ActiveRecord::Base
     when :reset_password_instructions
       if is_oauth_user?
         reset_link = "#{host}/auth/google_oauth2"
-        MailerGateway.send_email('Reset Password Oauth', email, { email: email, reset_link: reset_link })
+        MailerGateway.send_email('Reset Password Oauth', email, email: email, reset_link: reset_link)
       else
         reset_link = url_helpers.edit_user_password_url(self, reset_password_token: args[0], host: host)
-        MailerGateway.send_email('Reset Password', email, { email: email, reset_link: reset_link })
+        MailerGateway.send_email('Reset Password', email, email: email, reset_link: reset_link)
       end
     end
   end
@@ -182,7 +182,7 @@ class User < ActiveRecord::Base
 
   def track_temporary_status_change
     if @was_temporary && !temporary?
-      Analytics.track(:user, id, 'Completed Signup', { email: email })
+      Analytics.track(:user, id, 'Completed Signup', email: email)
       @was_temporary = false
     end
   end
@@ -253,7 +253,7 @@ class User < ActiveRecord::Base
 
       if user.save
         Analytics.track(:user, user.id, 'Signed Up', track_options)
-        Analytics.track(:user, user.id, 'Completed Signup', { email: user.email })
+        Analytics.track(:user, user.id, 'Completed Signup', email: user.email)
       end
     end
 
@@ -315,14 +315,14 @@ class User < ActiveRecord::Base
   def send_team_invite_email(site)
     host = ActionMailer::Base.default_url_options[:host]
     login_link = is_oauth_user? ? "#{host}/auth/google_oauth2" : url_helpers.new_user_session_url(host: host)
-    MailerGateway.send_email('Team Invite', email, { site_url: site.url, login_url: login_link })
+    MailerGateway.send_email('Team Invite', email, site_url: site.url, login_url: login_link)
   end
 
   def send_invite_token_email(site)
     host = ActionMailer::Base.default_url_options[:host]
     oauth_link = "#{host}/auth/google_oauth2"
     signup_link = url_helpers.invite_user_url(invite_token: invite_token, host: host)
-    MailerGateway.send_email('Invitation', email, { site_url: site.url, oauth_link: oauth_link, signup_link: signup_link })
+    MailerGateway.send_email('Invitation', email, site_url: site.url, oauth_link: oauth_link, signup_link: signup_link)
   end
 
   # Disconnect oauth logins if user sets their own password

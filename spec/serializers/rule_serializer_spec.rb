@@ -11,7 +11,7 @@ describe RuleSerializer do
 
     serializer = RuleSerializer.new(rule)
 
-    expect(serializer.as_json).to eq({
+    expect(serializer.as_json).to eq(
       id: rule.id,
       site_id: rule.site_id,
       name: rule.name,
@@ -29,6 +29,6 @@ describe RuleSerializer do
         custom_segment: nil,
         data_type: nil
       }]
-    })
+    )
   end
 end

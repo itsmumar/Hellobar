@@ -264,7 +264,7 @@ describe ContactListsController, type: :controller do
     it 'responds with contact list id' do
       delete :destroy, valid_params
 
-      expect_json_response_to_include({ id: contact_list.id })
+      expect_json_response_to_include(id: contact_list.id)
     end
 
     it 'creates a ContactLists::Destroy object' do
@@ -301,10 +301,7 @@ describe ContactListsController, type: :controller do
       it 'returns the contact list' do
         delete :destroy, invalid_params
 
-        expect_json_response_to_include({
-          id: contact_list.id,
-          site_id: contact_list.site_id
-        })
+        expect_json_response_to_include(id: contact_list.id, site_id: contact_list.site_id)
       end
 
       it 'returns error status' do

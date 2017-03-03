@@ -14,7 +14,7 @@ describe ContactSubmissionsController do
 
   describe 'POST :create' do
     it "raises an error when the spam catcher field 'blank' is not blank" do
-      expect { post :create, { blank: 'not blank', contact_submission: { email: 'kaitlen@hellobar.com', name: 'Kaitlen', message: 'Hi Kaitlen' } } }.to raise_error(ActionController::RoutingError)
+      expect { post :create, blank: 'not blank', contact_submission: { email: 'kaitlen@hellobar.com', name: 'Kaitlen', message: 'Hi Kaitlen' } }.to raise_error(ActionController::RoutingError)
     end
   end
 

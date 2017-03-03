@@ -22,11 +22,9 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
     first_name, last_name = split_name(name)
     handle_errors do
       @client.find_list(list_id).create_contact(
-        {
-          email: email,
-          first_name: first_name,
-          last_name: last_name
-        }
+        email: email,
+        first_name: first_name,
+        last_name: last_name
       )
     end
   end

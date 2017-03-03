@@ -145,10 +145,10 @@ class SitesController < ApplicationController
     if @site.save
       generate_temporary_logged_in_user
       Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
-      Analytics.track(*current_person_type_and_id, 'Signed Up', { ip: request.remote_ip, url: @site.url, site_id: @site.id })
+      Analytics.track(*current_person_type_and_id, 'Signed Up', ip: request.remote_ip, url: @site.url, site_id: @site.id)
 
       SiteMembership.create!(site: @site, user: current_user)
-      Analytics.track(*current_person_type_and_id, 'Created Site', { site_id: @site.id })
+      Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rules
@@ -168,7 +168,7 @@ class SitesController < ApplicationController
     elsif @site.save
       Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
       SiteMembership.create!(site: @site, user: current_user)
-      Analytics.track(*current_person_type_and_id, 'Created Site', { site_id: @site.id })
+      Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rules

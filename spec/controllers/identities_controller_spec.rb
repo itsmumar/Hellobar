@@ -53,7 +53,7 @@ describe IdentitiesController do
 
     it 'should call create method when api_key param is present' do
       stub_current_user @identity.site.users.first
-      allow_any_instance_of(Identity).to receive(:provider_config).and_return({ name: 'get_response_api' })
+      allow_any_instance_of(Identity).to receive(:provider_config).and_return(name: 'get_response_api')
       expect(controller).to receive(:create).and_call_original
 
       get :new, provider: 'my_cool_provider', site_id: @identity.site.id, api_key: 'my_cool_api_key'
@@ -65,7 +65,7 @@ describe IdentitiesController do
       api_key = 'my_cool_api_key'
       stub_current_user @identity.site.users.first
       identity = Identity.create! site_id: @identity.site.id, provider: 'get_response_api', api_key: api_key
-      allow_any_instance_of(Identity).to receive(:provider_config).and_return({ name: 'get_response_api' })
+      allow_any_instance_of(Identity).to receive(:provider_config).and_return(name: 'get_response_api')
       post :create, site_id: @identity.site.id, provider: 'get_response_api', api_key: api_key
       expect(response).to redirect_to('http://test.host/sites/483182012/contact_lists')
     end
@@ -98,15 +98,14 @@ describe IdentitiesController do
         user = User.last
         @site = user.sites.first
         stub_current_user user
-        allow_any_instance_of(Identity).to receive(:provider_config).and_return({ name: 'mailchimp' })
+        allow_any_instance_of(Identity).to receive(:provider_config).and_return(name: 'mailchimp')
         allow_any_instance_of(Identity).to receive(:service_provider).and_return(nil)
       end
 
       it 'saves credentials on the identity object' do
         allow(controller).to receive(:env).
-          and_return({
-          'omniauth.auth'   => { 'credentials' => 'my_cool_creds' },
-          'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/site_elements/12312/new' } })
+          and_return('omniauth.auth' => { 'credentials' => 'my_cool_creds' },
+                     'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/site_elements/12312/new' })
         post :create, site_id: @site.id, provider: 'mailchimp'
         expect(Identity.last.credentials).to eq('my_cool_creds')
       end
@@ -114,18 +113,16 @@ describe IdentitiesController do
       context 'redirects' do
         it 'to email setting page' do
           allow(controller).to receive(:env).
-            and_return({
-            'omniauth.auth'   => { 'credentials' => 'my_cool_creds' },
-            'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/site_elements/12312/new' } })
+            and_return('omniauth.auth' => { 'credentials' => 'my_cool_creds' },
+                       'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/site_elements/12312/new' })
           post :create, site_id: @site.id, provider: 'mailchimp'
           expect(response).to redirect_to(controller.env['omniauth.params']['redirect_to'] + '#/settings/emails')
         end
 
         it 'to referrer' do
           allow(controller).to receive(:env).
-            and_return({
-            'omniauth.auth'   => { 'credentials' => 'my_cool_creds' },
-            'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/contact_lists' } })
+            and_return('omniauth.auth' => { 'credentials' => 'my_cool_creds' },
+                       'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/contact_lists' })
           post :create, site_id: @site.id, provider: 'mailchimp'
           expect(response).to redirect_to(controller.env['omniauth.params']['redirect_to'])
         end

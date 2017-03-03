@@ -77,7 +77,7 @@ describe Hello::InternalAnalytics do
 
     describe 'get_ab_variation_index_without_setting' do
       it 'gets the index from cookies if no user is available' do
-        @object.stub(:cookies).and_return({ @object.ab_test_cookie_name => '1'.rjust(@test_index + 1, 'x') })
+        @object.stub(:cookies).and_return(@object.ab_test_cookie_name => '1'.rjust(@test_index + 1, 'x'))
         @object.get_ab_variation_index_without_setting('Example Test').should == [1, :existing]
       end
 

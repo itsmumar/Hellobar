@@ -182,11 +182,12 @@ class SiteElement < ActiveRecord::Base
   end
 
   def analytics_track_site_element_creation!
-    Analytics.track(:site, site_id, 'Created Site Element',
-      { site_element_id: id,
-        type: element_subtype,
-        style: type.to_s.downcase
-      })
+    Analytics.track(
+      :site, site_id, 'Created Site Element',
+      site_element_id: id,
+      type: element_subtype,
+      style: type.to_s.downcase
+    )
   end
 
   def onboarding_track_site_element_creation!
@@ -275,12 +276,12 @@ class SiteElement < ActiveRecord::Base
     pdf = WickedPdf.new.pdf_from_string(content)
 
     # create a connection
-    connection = Fog::Storage.new({
-      provider:               'AWS',
-      aws_access_key_id:      Hellobar::Settings[:aws_access_key_id] || 'fake_access_key_id',
-      aws_secret_access_key:  Hellobar::Settings[:aws_secret_access_key] || 'fake_secret_access_key',
+    connection = Fog::Storage.new(
+      provider: 'AWS',
+      aws_access_key_id: Hellobar::Settings[:aws_access_key_id] || 'fake_access_key_id',
+      aws_secret_access_key: Hellobar::Settings[:aws_secret_access_key] || 'fake_secret_access_key',
       path_style: true
-    })
+    )
 
     directory = connection.directories.get(Hellobar::Settings[:s3_content_upgrades_bucket])
 

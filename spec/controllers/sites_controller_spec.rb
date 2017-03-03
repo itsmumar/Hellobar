@@ -67,7 +67,7 @@ describe SitesController do
         user.stub(temporary?: true)
         User.stub(generate_temporary_user: user)
 
-        expect { post(:create, { site: { url: 'temporary-site.com' } }, { referral_token: referral_tokens(:joey).token }) }
+        expect { post(:create, { site: { url: 'temporary-site.com' } }, referral_token: referral_tokens(:joey).token) }
           .to change(Referral, :count).by(1)
 
         ref = Referral.last
@@ -80,7 +80,7 @@ describe SitesController do
         ref = create(:referral, state: :sent)
         User.stub(generate_temporary_user: user)
 
-        expect { post(:create, { site: { url: 'temporary-site.com' } }, { referral_token: ref.referral_token.token }) }
+        expect { post(:create, { site: { url: 'temporary-site.com' } }, referral_token: ref.referral_token.token) }
           .not_to change(Referral, :count)
 
         ref.reload

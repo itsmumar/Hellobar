@@ -71,7 +71,7 @@ module ServiceProviders
       end
 
       begin
-        response = make_api_call('post', "forms/#{form_id}/subscribe", { body: body })
+        response = make_api_call('post', "forms/#{form_id}/subscribe", body: body)
 
         if response.success?
           response

@@ -65,7 +65,7 @@ class Identity < ActiveRecord::Base
 
   def destroy_and_notify_user
     site.owners.each do |user|
-      MailerGateway.send_email('Integration Sync Error', user.email, { integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host]) })
+      MailerGateway.send_email('Integration Sync Error', user.email, integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host]))
     end
 
     destroy

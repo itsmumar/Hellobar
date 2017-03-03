@@ -15,7 +15,7 @@ describe ServiceProviders::ActiveCampaign do
   describe '#lists' do
     it 'should call `list_list`' do
       VCR.use_cassette(cassette_base + '/lists') do
-        expect(client).to receive(:list_list).and_return({ 'result_code' => 1 })
+        expect(client).to receive(:list_list).and_return('result_code' => 1)
         service_provider.lists
       end
     end
@@ -31,7 +31,7 @@ describe ServiceProviders::ActiveCampaign do
     context 'NOT having `list_id`' do
       it 'should call contact_sync' do
         email = 'test@test.com'
-        expect(client).to receive(:contact_sync).with({ email: email })
+        expect(client).to receive(:contact_sync).with(email: email)
 
         VCR.use_cassette(cassette_base + '/contact_sync') do
           service_provider.subscribe(nil, email)

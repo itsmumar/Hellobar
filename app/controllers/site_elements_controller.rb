@@ -23,14 +23,14 @@ class SiteElementsController < ApplicationController
     end
 
     @rules = @site.rules.all
-    @site_element = SiteElement.new({
+    @site_element = SiteElement.new(
       font_id: SiteElement.columns_hash['font_id'].default,
       rule: @site.rules.first,
       theme: Theme.where(default_theme: true).first,
       show_branding: !@site.capabilities(true).remove_branding?,
       closable: false,
       settings: { url: @site.url, url_to_like: @site.url }
-    })
+    )
 
     respond_to do |format|
       format.html
@@ -169,7 +169,7 @@ class SiteElementsController < ApplicationController
       :custom_css,
       :custom_js,
       { settings: settings_keys },
-      { blocks: blocks_keys }
+      blocks: blocks_keys
     )
   end
 

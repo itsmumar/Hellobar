@@ -332,7 +332,7 @@ class ScriptGenerator < Mustache
       end
     end
 
-    site_element.attributes.select { |key, _| settings.include?(key) }.merge({
+    site_element.attributes.select { |key, _| settings.include?(key) }.merge(
       answer1: site_element.answer1,
       answer1response: site_element.answer1response,
       answer1caption: site_element.answer1caption,
@@ -375,7 +375,7 @@ class ScriptGenerator < Mustache
       wiggle_wait: 0,
       blocks: site_element.blocks,
       theme: site_element.theme.attributes
-    }).select { |_, value| !value.nil? || !value == '' }
+    ).select { |_, value| !value.nil? || !value == '' }
   end
 
   def site_elements_for_rule(rule, hashify = true)
