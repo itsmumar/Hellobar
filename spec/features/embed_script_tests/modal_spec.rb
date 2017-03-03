@@ -9,7 +9,7 @@ feature "Site with a modal", :js do
   end
 
   scenario "removes iframe when modal is closed" do
-    visit "#{site_path_to_url(path)}"
+    visit site_path_to_url(path).to_s
 
     # force capybara to wait until iframe is loaded
     expect(page).to have_selector "#random-container"

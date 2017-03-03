@@ -9,7 +9,7 @@ feature 'Site with a closable slider', :js do
   end
 
   scenario 'shows headline and allows the bar to be hidden and shown again' do
-    visit "#{ site_path_to_url(path) }"
+    visit  site_path_to_url(path).to_s
 
     # force capybara to wait until iframe is loaded
     expect(page).to have_selector "#random-container"

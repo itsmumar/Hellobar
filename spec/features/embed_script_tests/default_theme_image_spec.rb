@@ -15,7 +15,7 @@ feature "Theme with default image", js: true do
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
     path = generate_file_and_return_path(element.site.id)
 
-    visit "#{site_path_to_url(path)}"
+    visit site_path_to_url(path).to_s
 
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')
@@ -40,7 +40,7 @@ feature "Theme with default image", js: true do
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
     path = generate_file_and_return_path(element.site.id)
 
-    visit "#{site_path_to_url(path)}"
+    visit site_path_to_url(path).to_s
 
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')

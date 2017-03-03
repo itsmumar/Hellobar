@@ -14,17 +14,17 @@ feature "Every x number of sessions condition", js: true do
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
 
     @test_doesnt_exist = Proc.new do |day|
-      visit "#{site_path_to_url(@path)}"
+      visit site_path_to_url(@path).to_s
       set_ns_cookie(page, day)
-      visit "#{site_path_to_url(@path)}" # Reload the page
+      visit site_path_to_url(@path).to_s # Reload the page
       sleep(1) # Give time for JS to execute
       expect(page).to_not have_xpath('.//iframe[@id="random-container"]')
     end
 
     @test_does_exist = Proc.new do |day|
-      visit "#{site_path_to_url(@path)}"
+      visit site_path_to_url(@path).to_s
       set_ns_cookie(page, day)
-      visit "#{site_path_to_url(@path)}"
+      visit site_path_to_url(@path).to_s
 
       # force capybara to wait until iframe is loaded
       page.has_xpath?('.//iframe[@id="random-container"]')

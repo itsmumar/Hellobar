@@ -1372,22 +1372,6 @@ Style/TernaryParentheses:
   Exclude:
     - 'lib/script_generator.rb'
 
-# Offense count: 20
-# Cop supports --auto-correct.
-Style/UnneededInterpolation:
-  Exclude:
-    - 'app/serializers/subscription_serializer.rb'
-    - 'spec/features/conditions/days_since_last_visit_spec.rb'
-    - 'spec/features/conditions/every_x_sessions_spec.rb'
-    - 'spec/features/embed_script_tests/announcement_bar_spec.rb'
-    - 'spec/features/embed_script_tests/click_to_call_spec.rb'
-    - 'spec/features/embed_script_tests/closable_slider_spec.rb'
-    - 'spec/features/embed_script_tests/default_theme_image_spec.rb'
-    - 'spec/features/embed_script_tests/exit_intent_spec.rb'
-    - 'spec/features/embed_script_tests/modal_spec.rb'
-    - 'spec/features/embed_script_tests/question_spec.rb'
-    - 'spec/features/embed_script_tests/takeover_with_image_spec.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase
