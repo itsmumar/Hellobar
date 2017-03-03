@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Rule do
-
   it_behaves_like 'a model triggering script regeneration'
 
   describe ".defaults" do
@@ -213,5 +212,4 @@ describe Rule do
       expect(rule.name).to eq("Device is mobile")
     end
   end
-
 end

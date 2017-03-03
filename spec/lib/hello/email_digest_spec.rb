@@ -46,5 +46,4 @@ describe Hello::EmailDigest do
       Hello::EmailDigest.send(site)
     end
   end
-
 end

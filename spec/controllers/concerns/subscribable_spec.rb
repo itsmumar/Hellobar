@@ -113,5 +113,4 @@ describe Subscribable, '#update_subscription' do
       controller.update_subscription(site, nil, billing_params)
     end
   end
-
 end

@@ -2,7 +2,6 @@ require 'integration_helper'
 require 'email_integration_helper'
 
 feature "One User In all onboarding Campaigns" do
-
   before(:each) {Timecop.freeze(start)}
   after(:each)  {Timecop.return}
 

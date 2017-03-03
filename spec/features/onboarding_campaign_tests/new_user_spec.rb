@@ -34,5 +34,4 @@ feature "New User Onboarding email campaigns" do
     expect_user_to_only_recieve(user, "Drip Campaign: Create a bar")
     expect_no_email(invitee)
   end
-
 end

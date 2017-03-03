@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe ConditionSerializer do
-
   fixtures :all
 
   let(:condition) { conditions(:date_between) }

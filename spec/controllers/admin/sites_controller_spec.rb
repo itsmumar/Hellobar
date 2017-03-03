@@ -76,7 +76,6 @@ describe Admin::SitesController do
             message: "Site's script failed to generate"
           })
         end
-
       end
     end
 

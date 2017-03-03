@@ -60,5 +60,4 @@ feature "Manage Bars", js: true do
       expect(page).to_not have_content("Where did all my views and conversions go")
     end
   end
-
 end

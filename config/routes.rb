@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   resources :referrals do
     collection do
       get :accept

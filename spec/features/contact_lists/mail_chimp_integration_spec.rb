@@ -30,5 +30,4 @@ feature "MailChimp Integration" do
             ).to have_been_made.once
     end
   end
-
 end

@@ -26,5 +26,4 @@ describe UserCampaignController, '#update_exit_intent' do
 
     expect(response).to be_success
   end
-
 end

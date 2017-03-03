@@ -93,7 +93,6 @@ describe SiteElementsController do
     end
 
     it "sets `fields_to_collect` under `settings` and return back" do
-
       post :create, :site_id => @site.id, :site_element => { :element_subtype => "traffic",
                                                              :rule_id => 0,
                                                              :settings => settings }

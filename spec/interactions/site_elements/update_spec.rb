@@ -95,7 +95,6 @@ describe SiteElements::Update do
     end
 
     context "when type is changed" do
-
       before do
         @invalid_params.merge!(element_subtype: "traffic")
       end

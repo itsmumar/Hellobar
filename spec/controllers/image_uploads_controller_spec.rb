@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe ImageUploadsController do
-
   before do
     @user = create(:user)
     stub_current_user(@user)

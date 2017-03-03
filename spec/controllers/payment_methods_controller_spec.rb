@@ -77,6 +77,5 @@ describe PaymentMethodsController, '#update' do
                             and_return(PaymentMethodDetails.new)
       put :update, put_params
     end
-
   end
 end

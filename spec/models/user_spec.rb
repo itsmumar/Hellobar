@@ -326,7 +326,6 @@ describe User do
           found = User.find_for_google_oauth2(token)
 
           expect(found.reload.last_name).to eq(last_name)
-
         end
       end
 

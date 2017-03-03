@@ -7,7 +7,6 @@ describe PaymentMethodDetails do
     d.data = {foo: "bar"}
     lambda{d.save}.should raise_error(ActiveRecord::ReadOnlyRecord)
     lambda{d.destroy}.should raise_error(ActiveRecord::ReadOnlyRecord)
-
   end
 end
 

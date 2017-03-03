@@ -1,7 +1,6 @@
 require "integration_helper"
 
 describe ServiceProviders::Drip do
-
   let(:identity) { Identity.new(provider: 'drip', credentials: { 'token' => 'fake_key', 'expires' => false}, extra: {'account_id' => '4773344', 'account_name' => 'www.nutritionsecrets.com'}) }
   let(:contact_list) { ContactList.new }
   let(:service_provider) { identity.service_provider}

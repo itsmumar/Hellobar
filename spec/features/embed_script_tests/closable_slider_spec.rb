@@ -1,7 +1,6 @@
 require 'integration_helper'
 
 feature 'Site with a closable slider', :js do
-
   given(:site_element) { create :site_element, :slider, :closable }
   given(:path) { generate_file_and_return_path(site_element.site.id) }
 

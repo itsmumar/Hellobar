@@ -1,7 +1,6 @@
 require 'integration_helper'
 
 feature 'Contact Submission' do
-
   before do
     @sent_email = []
     MailerGateway.stub(:send_email) do |type, recipient, params|
@@ -33,5 +32,4 @@ feature 'Contact Submission' do
 
     expect(@sent_email.last[:params][:email]).to eq("bart@simpson.com")
   end
-
 end

@@ -429,7 +429,6 @@ describe Site do
       pro_bill.end_date -= 2.years
       pro_bill.save!
       @site.capabilities(true).class.should == Subscription::Free::Capabilities
-
     end
 
     it "should prorate if you are upgrading and were on a paid plan" do

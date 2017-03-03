@@ -9,5 +9,4 @@ feature "Install Instructions", js: true do
     find(".reveal-title", :text => "I can install code myself").click
     expect(page).to have_content(site.script_url)
   end
-
 end

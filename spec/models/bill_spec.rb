@@ -425,6 +425,5 @@ describe PaymentMethod do
       billing_attempt = payment_methods(:always_fails).pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
       lambda{billing_attempt.refund!}.should raise_error(BillingAttempt::InvalidRefund)
     end
-
   end
 end

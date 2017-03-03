@@ -347,5 +347,4 @@ describe SiteElement do
       end
     end
   end
-
 end
