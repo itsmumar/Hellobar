@@ -282,7 +282,7 @@ class SiteElement < ActiveRecord::Base
       path_style: true
     })
 
-   directory = connection.directories.get(Hellobar::Settings[:s3_content_upgrades_bucket])
+    directory = connection.directories.get(Hellobar::Settings[:s3_content_upgrades_bucket])
 
     file = directory.files.create(
       :key    => content_upgrade_key,

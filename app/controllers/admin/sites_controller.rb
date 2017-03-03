@@ -33,15 +33,15 @@ class Admin::SitesController < ApplicationController
 
   private
 
-    def subscription_params
-      params.require(:subscription).permit(:plan, :schedule, :trial_period)
-    end
+  def subscription_params
+    params.require(:subscription).permit(:plan, :schedule, :trial_period)
+  end
 
-    def site_params
-      params.require(:site).permit(:id, :url, :opted_in_to_email_digest, :timezone, :invoice_information)
-    end
+  def site_params
+    params.require(:site).permit(:id, :url, :opted_in_to_email_digest, :timezone, :invoice_information)
+  end
 
-    def site
-      @site ||= Site.find(params[:id])
-    end
+  def site
+    @site ||= Site.find(params[:id])
+  end
 end
