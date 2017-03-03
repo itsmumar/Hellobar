@@ -129,7 +129,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
       if match_data.nil?
         raise 'Cannot parse remote html'
       else
-        remote_html = match_data[1].gsub('\n', '').gsub('\\', '')
+        remote_html = match_data[1].gsub('\n', '').delete('\\')
       end
     end
 

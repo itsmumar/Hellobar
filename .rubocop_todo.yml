@@ -137,15 +137,6 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 18
 
-# Offense count: 6
-# Cop supports --auto-correct.
-Performance/StringReplacement:
-  Exclude:
-    - 'app/models/site_element.rb'
-    - 'lib/hello/wordpress_bar.rb'
-    - 'lib/script_generator.rb'
-    - 'lib/service_providers/embed_code_provider.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, Include.

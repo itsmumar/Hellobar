@@ -275,10 +275,10 @@ class ScriptGenerator < Mustache
 
     if category == :generic
       base = "#{Rails.root}/lib/script_generator"
-      fname = "#{base}/#{element_class}/#{type.gsub('/', '_').underscore}.html"
-      fname = "#{base}/#{type.gsub('/', '_').underscore}.html" unless File.exist?(fname)
+      fname = "#{base}/#{element_class}/#{type.tr('/', '_').underscore}.html"
+      fname = "#{base}/#{type.tr('/', '_').underscore}.html" unless File.exist?(fname)
     else
-      base = "#{Rails.root}/lib/themes/#{category.to_s.pluralize}/#{type.gsub('_', '-')}"
+      base = "#{Rails.root}/lib/themes/#{category.to_s.pluralize}/#{type.tr('_', '-')}"
       fname = "#{base}/#{element_class}.html"
       fname = "#{base}/element.html" unless File.exist?(fname)
     end

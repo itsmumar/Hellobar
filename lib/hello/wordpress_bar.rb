@@ -85,7 +85,7 @@ class Hello::WordpressBar < Hello::WordpressModel
   end
 
   def standardize_color(color)
-    color = color.gsub('#', '')
+    color = color.delete('#')
     if color.length == 3
       color.scan(/\w/).map { |x| x * 2 }.join
     else

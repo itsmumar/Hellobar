@@ -200,7 +200,7 @@ class SiteElement < ActiveRecord::Base
       TYPES.each do |type|
         BAR_TYPES.keys.each do |subtype|
           if TEMPLATE_NAMES.include?(subtype)
-            types = Theme.where(id: subtype.gsub('_', '-')).first.element_types
+            types = Theme.where(id: subtype.tr('_', '-')).first.element_types
             if types.include?(type.to_s)
               templates << "#{type.name.downcase}_#{subtype}"
             end
