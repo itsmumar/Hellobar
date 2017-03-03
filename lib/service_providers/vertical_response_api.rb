@@ -3,7 +3,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'verticalresponse').first
+      identity = opts[:site].identities.where(provider: 'verticalresponse').first
       raise 'Site does not have a stored Vertical Response identity' unless identity
     end
 

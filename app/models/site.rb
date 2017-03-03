@@ -176,7 +176,7 @@ class Site < ActiveRecord::Base
   end
 
   def script_content(compress = true)
-    ScriptGenerator.new(self, :compress => compress).generate_script
+    ScriptGenerator.new(self, compress: compress).generate_script
   end
 
   def generate_script(options = {})
@@ -513,7 +513,7 @@ class Site < ActiveRecord::Base
   end
 
   def generate_blank_static_assets
-    generate_static_assets(:script_content => '')
+    generate_static_assets(script_content: '')
   end
 
   def standardize_url

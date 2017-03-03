@@ -29,9 +29,9 @@ class ApplicationController < ActionController::Base
 
   def access_cookie
     cookies[:adxs] ||= {
-      :value => Digest::SHA256.hexdigest(['a', rand(10_000), Time.now.to_f, user_agent, 'd753d'].collect(&:to_s).join),
-      :expires => 90.days.from_now,
-      :httponly => true
+      value: Digest::SHA256.hexdigest(['a', rand(10_000), Time.now.to_f, user_agent, 'd753d'].collect(&:to_s).join),
+      expires: 90.days.from_now,
+      httponly: true
     }
   end
 
@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
   def current_site
     @current_site ||= begin
       if current_user && session[:current_site]
-        current_user.sites.where(:id => session[:current_site]).first || current_user.sites.first
+        current_user.sites.where(id: session[:current_site]).first || current_user.sites.first
       elsif current_user
         current_user.sites.first
       else

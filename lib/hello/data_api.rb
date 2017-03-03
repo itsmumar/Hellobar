@@ -76,8 +76,8 @@ module Hello::DataAPI
     #
     def lifetime_totals_by_type(site, site_elements, num_days = 30, cache_options = {})
       data = Hello::DataAPI.lifetime_totals(site, site_elements, num_days, cache_options) || {}
-      totals = { :total => [], :email => [], :social => [], :traffic => [], :call => [] }
-      elements = site.site_elements.where(:id => data.keys)
+      totals = { total: [], email: [], social: [], traffic: [], call: [] }
+      elements = site.site_elements.where(id: data.keys)
       ids = {}
 
       # collect the ids of each subtype

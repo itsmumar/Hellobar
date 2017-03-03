@@ -36,7 +36,7 @@ describe Bill do
   end
 
   it 'should not let create a negative bill' do
-    lambda { Bill.create(:amount => -1) }.should raise_error(Bill::InvalidBillingAmount)
+    lambda { Bill.create(amount: -1) }.should raise_error(Bill::InvalidBillingAmount)
   end
 
   it 'should not let you change the status once set' do

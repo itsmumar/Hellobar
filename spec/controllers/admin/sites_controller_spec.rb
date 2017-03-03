@@ -30,7 +30,7 @@ describe Admin::SitesController do
       let(:user) { site.owners.first }
 
       before do
-        Hello::DataAPI.stub(:lifetime_totals => nil)
+        Hello::DataAPI.stub(lifetime_totals: nil)
 
         allow(User).to receive(:find).and_return(user)
         allow(Site).to receive(:where).and_return([site])

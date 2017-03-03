@@ -11,7 +11,7 @@ module SiteElementsHelper
   end
 
   def activity_message_append_number_of_units(site_element, message)
-    number_of_units = site_element_activity_units([site_element], :plural => site_element.total_conversions > 1, :verb => true)
+    number_of_units = site_element_activity_units([site_element], plural: site_element.total_conversions > 1, verb: true)
     message << " has already resulted in #{number_with_delimiter(site_element.total_conversions)} #{number_of_units}."
     message
   end
@@ -28,11 +28,11 @@ module SiteElementsHelper
     message << ' Currently this bar is converting'
     if conversion_rate > group_conversion_rate
       lift = (conversion_rate - group_conversion_rate) / group_conversion_rate
-      message << " #{number_to_percentage(lift * 100, :precision => 1)}" unless lift.infinite?
+      message << " #{number_to_percentage(lift * 100, precision: 1)}" unless lift.infinite?
       message << ' better than'
     elsif group_conversion_rate > conversion_rate
       lift = (group_conversion_rate - conversion_rate) / conversion_rate
-      message << " #{number_to_percentage(lift * 100, :precision => 1)}" unless lift.infinite?
+      message << " #{number_to_percentage(lift * 100, precision: 1)}" unless lift.infinite?
       message << ' worse than'
     else
       message << ' exactly as well as'
@@ -74,27 +74,27 @@ module SiteElementsHelper
     units = [*elements].map do |element|
       case element.element_subtype
       when 'traffic'
-        { :unit => 'click' }
+        { unit: 'click' }
       when 'email'
-        { :unit => 'email', :verb => 'collected' }
+        { unit: 'email', verb: 'collected' }
       when 'call'
-        { :unit => 'call' }
+        { unit: 'call' }
       when 'announcement'
-        { :unit => 'view' }
+        { unit: 'view' }
       when 'social/tweet_on_twitter'
-        { :unit => 'tweet' }
+        { unit: 'tweet' }
       when 'social/follow_on_twitter'
-        { :unit => 'follower', :verb => 'gained' }
+        { unit: 'follower', verb: 'gained' }
       when 'social/like_on_facebook'
-        { :unit => 'like' }
+        { unit: 'like' }
       when 'social/share_on_linkedin', 'social/share_on_buffer'
-        { :unit => 'share' }
+        { unit: 'share' }
       when 'social/plus_one_on_google_plus'
-        { :unit => 'plus one' }
+        { unit: 'plus one' }
       when 'social/pin_on_pinterest'
-        { :unit => 'pin' }
+        { unit: 'pin' }
       when 'social/follow_on_pinterest'
-        { :unit => 'follower', :verb => 'gained' }
+        { unit: 'follower', verb: 'gained' }
       else
         raise "#{element.element_subtype} not configured in this helper"
       end
@@ -164,8 +164,8 @@ module SiteElementsHelper
     values = {}
     elements.each_with_index do |element, _|
       values[element.id] = {
-        :views => element.total_views,
-        :conversions => element.total_conversions
+        views: element.total_views,
+        conversions: element.total_conversions
       }
     end
     ABAnalyzer::ABTest.new(values).different?

@@ -77,17 +77,17 @@ describe PaymentForm do
 
   it 'returns the proper hash' do
     payment_form.to_hash.should == {
-      :number => '12345',
-      :month => 8,
-      :year => 2016,
-      :first_name => 'Bill',
-      :last_name => 'Middle Namerson',
-      :verification_value => '123',
-      :city => 'Chicago',
-      :state => 'IL',
-      :zip => '60647',
-      :address1 => '2423 W. North Ave',
-      :country => 'USA'
+      number: '12345',
+      month: 8,
+      year: 2016,
+      first_name: 'Bill',
+      last_name: 'Middle Namerson',
+      verification_value: '123',
+      city: 'Chicago',
+      state: 'IL',
+      zip: '60647',
+      address1: '2423 W. North Ave',
+      country: 'USA'
     }
   end
 end

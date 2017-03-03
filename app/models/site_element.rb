@@ -139,7 +139,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def related_site_elements
-    site.site_elements.where.not(:id => id).where(SiteElement.arel_table[:element_subtype].matches("%#{short_subtype}%"))
+    site.site_elements.where.not(id: id).where(SiteElement.arel_table[:element_subtype].matches("%#{short_subtype}%"))
   end
 
   def has_activity_message?
@@ -285,9 +285,9 @@ class SiteElement < ActiveRecord::Base
     directory = connection.directories.get(Hellobar::Settings[:s3_content_upgrades_bucket])
 
     file = directory.files.create(
-      :key    => content_upgrade_key,
-      :body   => pdf,
-      :public => true
+      key: content_upgrade_key,
+      body: pdf,
+      public: true
     )
 
     file.save

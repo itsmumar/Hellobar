@@ -131,9 +131,9 @@ describe Admin do
 
   it 'login! logs the admin in' do
     @admin.update_attributes(
-      :login_attempts => 2,
-      :session_token => '',
-      :session_access_token => ''
+      login_attempts: 2,
+      session_token: '',
+      session_access_token: ''
     )
 
     @admin.should_receive(:set_valid_access_token)

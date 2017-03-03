@@ -2,7 +2,7 @@ require 'billing_log'
 class PaymentMethod < ActiveRecord::Base
   class MissingPaymentDetails < RuntimeError; end
   belongs_to :user
-  has_many :details, -> { order 'id' }, :class_name => 'PaymentMethodDetails'
+  has_many :details, -> { order 'id' }, class_name: 'PaymentMethodDetails'
   has_many :subscriptions
   acts_as_paranoid
   include BillingAuditTrail

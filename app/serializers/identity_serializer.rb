@@ -39,7 +39,7 @@ class IdentitySerializer < ActiveModel::Serializer
   private
 
   def filter_keys(arr)
-    arr.map { |a| { :name => a['name'], :id => a['id'] } }
+    arr.map { |a| { name: a['name'], id: a['id'] } }
   end
 
   def log_exception(error)

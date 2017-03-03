@@ -21,7 +21,7 @@ class Admin < ActiveRecord::Base
 
   class << self
     def make(email, initial_password)
-      Admin.new(:email => email, :initial_password => initial_password)
+      Admin.new(email: email, initial_password: initial_password)
     end
 
     def make!(email, initial_password)
@@ -29,7 +29,7 @@ class Admin < ActiveRecord::Base
     end
 
     def validate_session(access_token, token)
-      if admin = Admin.where(:session_access_token => access_token, :session_token => token).first
+      if admin = Admin.where(session_access_token: access_token, session_token: token).first
         if Time.now - admin.session_last_active > MAX_SESSION_TIME
           return nil
         else
@@ -48,11 +48,11 @@ class Admin < ActiveRecord::Base
 
     def record_login_attempt(email, ip, user_agent, access_cookie)
       AdminLoginAttempt.create!(
-        :email => email,
-        :ip_address => ip,
-        :user_agent => user_agent,
-        :access_cookie => access_cookie,
-        :attempted_at => Time.current
+        email: email,
+        ip_address: ip,
+        user_agent: user_agent,
+        access_cookie: access_cookie,
+        attempted_at: Time.current
       )
     end
 
@@ -95,9 +95,9 @@ class Admin < ActiveRecord::Base
     lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp), timestamp: timestamp, host: Hellobar::Settings[:host])
 
     Pony.mail({
-        :to => email,
-        :subject => 'Admin login attempt',
-        :body => "Someone is attempting to log into your admin account from an unrecognized computer.
+        to: email,
+        subject: 'Admin login attempt',
+        body: "Someone is attempting to log into your admin account from an unrecognized computer.
 
 If this is you, click this link to continue logging in:
 
@@ -180,12 +180,12 @@ If this is not you, this may be an attack and you should lock down the admin by 
     update_attribute(:password_last_reset, timestamp)
     set_password!(unencrypted_password)
 
-    lockdown_url = admin_lockdown_url(:email => email, :key => Admin.lockdown_key(email, timestamp.to_i), :timestamp => timestamp.to_i, :host => Hellobar::Settings[:host])
+    lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp.to_i), timestamp: timestamp.to_i, host: Hellobar::Settings[:host])
 
     Pony.mail({
-        :to => email,
-        :subject => 'Your password has been reset',
-        :body => "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
+        to: email,
+        subject: 'Your password has been reset',
+        body: "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
 
         Not me, lock it down -> #{lockdown_url}
 
@@ -200,9 +200,9 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
     now = Time.now.to_i
     update_attributes(
-      :login_attempts => 0,
-      :session_token => Digest::SHA256.hexdigest([now, rand(10_000), access_token, email, rand(10_000)].collect(&:to_s).join('')),
-      :session_access_token => access_token
+      login_attempts: 0,
+      session_token: Digest::SHA256.hexdigest([now, rand(10_000), access_token, email, rand(10_000)].collect(&:to_s).join('')),
+      session_access_token: access_token
     )
     set_valid_access_token(access_token, now)
     session_heartbeat!
@@ -213,7 +213,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def lock!
-    update_attributes(:locked => true, :session_token => '')
+    update_attributes(locked: true, session_token: '')
   end
 
   def unlock!

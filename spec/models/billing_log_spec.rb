@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe BillingLog do
   it 'should not let you edit a BillingLog' do
-    log = BillingLog.create(:message => 'test')
+    log = BillingLog.create(message: 'test')
     log.message = 'test2'
     lambda { log.save! }.should raise_error(ActiveRecord::ReadOnlyRecord)
   end
@@ -47,8 +47,8 @@ describe BillingAuditTrail do
 
   it 'should set additional lookup ids' do
     user = users(:joey)
-    payment_method = PaymentMethod.create!(:user => user)
-    payment_method_details = PaymentMethodDetails.create!(:payment_method => payment_method)
+    payment_method = PaymentMethod.create!(user: user)
+    payment_method_details = PaymentMethodDetails.create!(payment_method: payment_method)
 
     payment_method_details.audit << 'Hello'
     BillingLog.count.should == 1

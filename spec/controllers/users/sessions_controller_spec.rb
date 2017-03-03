@@ -69,13 +69,13 @@ describe Users::SessionsController do
   describe 'POST create' do
     it 'logs in a user with valid params' do
       controller.current_user.should be_nil
-      post :create, :user => { :email => 'joey@polymathic.me', :password => 'password' }
+      post :create, user: { email: 'joey@polymathic.me', password: 'password' }
       controller.current_user.should == users(:joey)
     end
 
     it 'redirects oauth users to their respective oauth path' do
       users(:joey).authentications.create(provider: 'google_oauth2', uid: '123')
-      post :create, :user => { :email => 'joey@polymathic.me', :password => 'some incorrect pass' }
+      post :create, user: { email: 'joey@polymathic.me', password: 'some incorrect pass' }
       response.should redirect_to('/auth/google_oauth2')
     end
 
@@ -87,7 +87,7 @@ describe Users::SessionsController do
       Hello::WordpressUser.should_receive(:email_exists?).with(email).and_return(true)
       Hello::WordpressUser.should_receive(:authenticate).with(email, password).and_return(@wordpress_user)
 
-      post :create, :user => { :email => email, :password => password }
+      post :create, user: { email: email, password: password }
 
       response.should redirect_to(new_user_migration_path)
     end
@@ -100,7 +100,7 @@ describe Users::SessionsController do
       Hello::WordpressUser.should_receive(:email_exists?).with(email).and_return(true)
       Hello::WordpressUser.should_receive(:authenticate).with(email, password).and_return(nil)
 
-      post :create, :user => { :email => email, :password => password }
+      post :create, user: { email: email, password: password }
 
       flash.now[:alert].should =~ /Invalid/
       response.should render_template('users/sessions/new')

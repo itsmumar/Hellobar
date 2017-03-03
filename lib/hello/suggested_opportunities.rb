@@ -112,8 +112,8 @@ module Hello
 
       def connect
         AWS.config(
-          :access_key_id => Hellobar::Settings[:aws_access_key_id],
-          :secret_access_key => Hellobar::Settings[:aws_secret_access_key]
+          access_key_id: Hellobar::Settings[:aws_access_key_id],
+          secret_access_key: Hellobar::Settings[:aws_secret_access_key]
         )
         # We use both the "friendly" interface (@@dynamo_db) and the
         # direct interface (@@client)

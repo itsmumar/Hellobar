@@ -40,7 +40,7 @@ feature 'Infusionsoft Integration', js: true do
 
     page.find('#edit-contact-list').click
 
-    page.assert_selector(selector, :count => 2)
+    page.assert_selector(selector, count: 2)
   end
 
   private

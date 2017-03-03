@@ -68,7 +68,7 @@ describe SiteElementsController do
       stub_current_user(element.site.owners.first)
       Site.any_instance.stub(has_script_installed?: true)
 
-      get :show, :site_id => element.site, :id => element, :format => :json
+      get :show, site_id: element.site, id: element, format: :json
 
       expect_json_response_to_include({
         id: element.id,
@@ -85,33 +85,33 @@ describe SiteElementsController do
     end
 
     it 'sets the correct error if a rule is not provided' do
-      Site.any_instance.stub(:generate_script => true)
+      Site.any_instance.stub(generate_script: true)
 
-      post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic', :rule_id => 0 }
+      post :create, site_id: @site.id, site_element: { element_subtype: 'traffic', rule_id: 0 }
 
       expect_json_to_have_error(:rule, "can't be blank")
     end
 
     it 'sets `fields_to_collect` under `settings` and return back' do
-      post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic',
-                                                             :rule_id => 0,
-                                                             :settings => settings }
+      post :create, site_id: @site.id, site_element: { element_subtype: 'traffic',
+                                                       rule_id: 0,
+                                                       settings: settings }
 
       expect_json_response_to_include({ settings: settings })
     end
 
     it 'accepts whitelisted fields only' do
-      post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic',
-                                                             :rule_id => 0,
-                                                             :settings => manipulated_settings }
+      post :create, site_id: @site.id, site_element: { element_subtype: 'traffic',
+                                                       rule_id: 0,
+                                                       settings: manipulated_settings }
 
       expect_json_response_to_include({ settings: settings })
     end
 
     it 'accepts custom fields' do
-      post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic',
-                                                             :rule_id => 0,
-                                                             :settings => settings_custom_fields }
+      post :create, site_id: @site.id, site_element: { element_subtype: 'traffic',
+                                                       rule_id: 0,
+                                                       settings: settings_custom_fields }
 
       expect_json_response_to_include({ settings: settings_custom_fields })
     end
@@ -119,7 +119,7 @@ describe SiteElementsController do
     it 'sets the success flash message on create' do
       SiteElement.any_instance.stub(valid?: true, save!: true)
 
-      expect { post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic', :rule_id => 0 } }
+      expect { post :create, site_id: @site.id, site_element: { element_subtype: 'traffic', rule_id: 0 } }
         .to change { flash[:success] }.from(nil)
     end
   end
@@ -140,7 +140,7 @@ describe SiteElementsController do
         subscription = subscriptions(:pro_subscription)
         stub_current_user(subscription.site.owners.first)
 
-        get :new, :site_id => subscription.site.id, :format => :json
+        get :new, site_id: subscription.site.id, format: :json
 
         expect_json_response_to_include({ show_branding: false })
       end
@@ -151,14 +151,14 @@ describe SiteElementsController do
       before { stub_current_user(subscription.site.owners.first) }
 
       it 'defaults branding to true if free user' do
-        get :new, :site_id => subscription.site.id, :format => :json
+        get :new, site_id: subscription.site.id, format: :json
 
         json = JSON.parse(response.body)
         expect_json_response_to_include({ show_branding: true })
       end
 
       it 'sets the theme id to the default theme id' do
-        get :new, :site_id => subscription.site.id, :format => :json
+        get :new, site_id: subscription.site.id, format: :json
 
         json = JSON.parse(response.body)
         default_theme = Theme.where(default_theme: true).first

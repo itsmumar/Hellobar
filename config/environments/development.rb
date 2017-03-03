@@ -41,24 +41,24 @@ Rails.application.configure do
   settings = YAML.load_file('config/settings.yml')
   if settings['s3_bucket'] && settings['aws_access_key_id'] && settings['aws_secret_access_key']
     config.paperclip_defaults = {
-      :storage => :s3,
-      :s3_protocol => :https,
-      :s3_credentials => {
-        :bucket => settings['s3_bucket'],
-        :access_key_id => settings['aws_access_key_id'],
-        :secret_access_key => settings['aws_secret_access_key']
+      storage: :s3,
+      s3_protocol: :https,
+      s3_credentials: {
+        bucket: settings['s3_bucket'],
+        access_key_id: settings['aws_access_key_id'],
+        secret_access_key: settings['aws_secret_access_key']
       }
     }
   end
 
   Pony.options = {
-    :from => 'Localhost: Hello Bar Support <support@localhost.com>',
-    :via => :smtp,
-    :via_options => {
-      :address              => '127.0.0.1',
-      :port                 => 1025,
-      :authentication       => :plain,
-      :domain               => 'localhost'
+    from: 'Localhost: Hello Bar Support <support@localhost.com>',
+    via: :smtp,
+    via_options: {
+      address: '127.0.0.1',
+      port: 1025,
+      authentication: :plain,
+      domain: 'localhost'
     }
   }
 end

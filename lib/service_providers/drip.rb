@@ -7,7 +7,7 @@ class ServiceProviders::Drip < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'drip').first
+      identity = opts[:site].identities.where(provider: 'drip').first
       raise 'Site does not have a stored Drip identity' unless identity
     end
 

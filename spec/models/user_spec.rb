@@ -5,7 +5,7 @@ describe User do
     it 'cannot have the same email as someone in the wordpress database' do
       expect(Hello::WordpressUser).to receive(:email_exists?).with('foo@bar.com').and_return(true)
 
-      user = User.create(:email => 'foo@bar.com')
+      user = User.create(email: 'foo@bar.com')
 
       expect(user.errors.messages[:email]).to include('has already been taken')
     end

@@ -33,13 +33,13 @@ describe SitesController do
 
   describe 'POST create' do
     before do
-      mock_storage = double('asset_storage', :create_or_update_file_with_contents => true)
-      Hello::AssetStorage.stub(:new => mock_storage)
+      mock_storage = double('asset_storage', create_or_update_file_with_contents: true)
+      Hello::AssetStorage.stub(new: mock_storage)
     end
 
     context 'when no user is logged-in' do
       it 'creates a new temporary user and logs them in' do
-        expect { post :create, :site => { url: 'temporary-site.com' } }
+        expect { post :create, site: { url: 'temporary-site.com' } }
           .to change(User, :count).by(1)
 
         temp_user = User.last
@@ -48,7 +48,7 @@ describe SitesController do
       end
 
       it 'redirects to oauth login if oauth is set' do
-        post :create, :site => { url: 'temporary-sitee.com' }, :oauth => true
+        post :create, site: { url: 'temporary-sitee.com' }, oauth: true
         response.should redirect_to('/auth/google_oauth2')
       end
 
@@ -56,7 +56,7 @@ describe SitesController do
         temp_user = User.new
         User.stub(generate_temporary_user: temp_user)
 
-        expect { post :create, :site => { url: 'temporary-site.com' } }
+        expect { post :create, site: { url: 'temporary-site.com' } }
           .to change(Site, :count).by(1)
 
         temp_user.sites.should include(Site.last)
@@ -89,20 +89,20 @@ describe SitesController do
       end
 
       it 'redirects to the editor after creation' do
-        post :create, :site => { url: 'temporary-site.com' }
+        post :create, site: { url: 'temporary-site.com' }
 
         response.should redirect_to new_site_site_element_path(Site.last)
       end
 
       it 'redirects to the landing page with an error if site is not valid' do
-        post :create, :site => { url: 'not a url lol' }
+        post :create, site: { url: 'not a url lol' }
 
         response.should redirect_to root_path
         flash[:error].should =~ /not valid/
       end
 
       it 'redirects to the landing page with an error if site is an email address' do
-        post :create, :site => { url: 'asdf@mail.com' }
+        post :create, site: { url: 'asdf@mail.com' }
 
         response.should redirect_to root_path
         flash[:error].should =~ /not valid/
@@ -130,7 +130,7 @@ describe SitesController do
       before { stub_current_user(@user) }
 
       it 'can create a new site and is set as the owner' do
-        expect { post :create, :site => { :url => 'newzombo.com' } }
+        expect { post :create, site: { url: 'newzombo.com' } }
           .to change(@user.sites, :count).by(1)
 
         site = @user.sites.last
@@ -140,14 +140,14 @@ describe SitesController do
       end
 
       it 'creates a site with a rule set' do
-        post :create, :site => { :url => 'newzombo.com' }
+        post :create, site: { url: 'newzombo.com' }
 
         site = @user.sites.last
         site.rules.size.should == 3
       end
 
       it 'redirects to the editor' do
-        post :create, :site => { url: 'temporary-site.com' }
+        post :create, site: { url: 'temporary-site.com' }
 
         response.should redirect_to new_site_site_element_path(Site.last)
       end
@@ -155,7 +155,7 @@ describe SitesController do
       it 'redirects to the site when using existing url' do
         site = create(:site, url: 'www.test.com')
         site.users << @user
-        post :create, :site => { url: 'www.test.com' }
+        post :create, site: { url: 'www.test.com' }
 
         expect(response).to redirect_to(site_path(site))
         expect(flash[:error]).to eq('Url is already in use.')
@@ -193,11 +193,11 @@ describe SitesController do
 
   describe 'GET show' do
     it 'sets current_site session value' do
-      Hello::DataAPI.stub(:lifetime_totals => nil)
+      Hello::DataAPI.stub(lifetime_totals: nil)
       stub_current_user(@user)
       site = @user.sites.last
 
-      get :show, :id => site
+      get :show, id: site
 
       session[:current_site].should == site.id
     end
@@ -208,7 +208,7 @@ describe SitesController do
       stub_current_user(@user)
       site = @user.sites.last
 
-      get :preview_script, :id => site
+      get :preview_script, id: site
 
       response.should be_success
 

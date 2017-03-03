@@ -36,7 +36,7 @@ describe RulesController do
 
   describe 'POST :create' do
     before do
-      Site.any_instance.stub(:generate_script => true)
+      Site.any_instance.stub(generate_script: true)
     end
 
     it 'should fail when not logged in' do
@@ -83,7 +83,7 @@ describe RulesController do
 
   describe 'DELETE :destroy' do
     before do
-      Site.any_instance.stub(:generate_script => true)
+      Site.any_instance.stub(generate_script: true)
     end
 
     it 'should fail when not logged in' do
@@ -123,7 +123,7 @@ describe RulesController do
 
   describe 'PUT :update' do
     before do
-      Site.any_instance.stub(:generate_script => true)
+      Site.any_instance.stub(generate_script: true)
     end
 
     it 'should fail when not logged in' do

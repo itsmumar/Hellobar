@@ -11,7 +11,7 @@ module HB
       def gateway
         unless @gateway
           ActiveMerchant::Billing::Base.mode = Hellobar::Settings[:cybersource_environment].try(:to_sym) || :test
-          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(:login => Hellobar::Settings[:cybersource_login], :password => Hellobar::Settings[:cybersource_password], :ignore_avs => true)
+          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(login: Hellobar::Settings[:cybersource_login], password: Hellobar::Settings[:cybersource_password], ignore_avs: true)
         end
         @gateway
       end
@@ -197,7 +197,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     # Note: we don't want to give CyberSource our customer's email addresses,
     # which is why we use the generic userXXX@hellobar.com format
     email = "user#{user ? user.id : 'NA'}@hellobar.com"
-    params = { :order_id => order_id, :email => email, :address => address.to_h }
+    params = { order_id: order_id, email: email, address: address.to_h }
     # Set the brand
     data['brand'] = card.brand
 

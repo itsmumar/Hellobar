@@ -106,14 +106,14 @@ class ContentUpgradesController < ApplicationController
 
   def verify_capability
     unless @site && @site.capabilities.content_upgrades?
-      render :json => { error: 'forbidden' }, :status => :forbidden
+      render json: { error: 'forbidden' }, status: :forbidden
     end
   end
 
   def load_content_upgrade
     @content_upgrade = @site.site_elements.find(params[:id])
     if @content_upgrade.rule.site_id != @site.id
-      render :json => { error: 'forbidden' }, :status => :forbidden
+      render json: { error: 'forbidden' }, status: :forbidden
     end
   end
 end

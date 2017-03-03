@@ -10,9 +10,9 @@ class ContactSubmissionsController < ApplicationController
       flash[:error] = "Please enter your developer's email address."
     else
       email_params = {
-        :site_url => @site.normalized_url,
-        :script_url => @site.script_url,
-        :user_email => current_user.email
+        site_url: @site.normalized_url,
+        script_url: @site.script_url,
+        user_email: current_user.email
       }
       developer_email = params[:developer_email].is_a?(Array) ? params[:developer_email].first : params[:developer_email]
 
@@ -27,11 +27,11 @@ class ContactSubmissionsController < ApplicationController
     @site = current_user.sites.find_by_id(params[:site_id])
 
     email_params = {
-      :first_name => current_user.first_name,
-      :last_name => current_user.last_name,
-      :email => current_user.email,
-      :message => params[:message],
-      :preview => (params[:message] || '')[0, 50]
+      first_name: current_user.first_name,
+      last_name: current_user.last_name,
+      email: current_user.email,
+      message: params[:message],
+      preview: (params[:message] || '')[0, 50]
     }
 
     email_params[:website] = @site.url if @site

@@ -3,9 +3,9 @@ require 'spec_helper'
 describe ServiceProviders::ActiveCampaign do
   let(:identity) do
     Identity.new(
-      :provider => 'active_campaign',
-      :api_key => 'valid-active-campaign-key',
-      :extra => { 'app_url' => 'hellobar.api-us1.com' }
+      provider: 'active_campaign',
+      api_key: 'valid-active-campaign-key',
+      extra: { 'app_url' => 'hellobar.api-us1.com' }
     )
   end
   let(:service_provider) { identity.service_provider }

@@ -125,7 +125,7 @@ describe Subscription do
   end
 
   it 'should not override values set with defaults' do
-    Subscription::Pro.create(:visit_overage => 3).visit_overage.should == 3
+    Subscription::Pro.create(visit_overage: 3).visit_overage.should == 3
   end
 
   it 'should default to monthly schedule' do
@@ -154,11 +154,11 @@ describe Subscription do
     subscription.yearly?.should be_false
     subscription.amount.should == Subscription::Pro.defaults[:monthly_amount]
 
-    subscription = Subscription::Pro.create(:schedule => :yearly)
+    subscription = Subscription::Pro.create(schedule: :yearly)
     subscription.yearly?.should be_true
     subscription.amount.should == Subscription::Pro.defaults[:yearly_amount]
 
-    subscription = Subscription::Pro.create(:schedule => :yearly, :amount => 2)
+    subscription = Subscription::Pro.create(schedule: :yearly, amount: 2)
     subscription.yearly?.should be_true
     subscription.amount.should == 2
   end

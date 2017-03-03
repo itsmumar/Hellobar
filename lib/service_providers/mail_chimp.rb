@@ -7,7 +7,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'mailchimp').first
+      identity = opts[:site].identities.where(provider: 'mailchimp').first
       raise 'Site does not have a stored MailChimp identity' unless identity
     end
 
@@ -162,7 +162,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
     if name.present?
       split = name.split(' ', 2)
-      opts[:merge_fields] = { :FNAME => split[0], :LNAME => split[1] || '' }
+      opts[:merge_fields] = { FNAME: split[0], LNAME: split[1] || '' }
     end
 
     opts

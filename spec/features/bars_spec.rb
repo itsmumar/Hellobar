@@ -39,7 +39,7 @@ feature 'Adding and editing bars', :js do
   end
 
   scenario 'existing user can create a site element' do
-    OmniAuth.config.add_mock(:google_oauth2, { :uid => '12345' })
+    OmniAuth.config.add_mock(:google_oauth2, { uid: '12345' })
     user = create(:user)
     site = user.sites.create(url: random_uniq_url)
     create(:rule, site: site)

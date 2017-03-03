@@ -7,7 +7,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'infusionsoft').first
+      identity = opts[:site].identities.where(provider: 'infusionsoft').first
       raise 'Site does not have a stored Infusionsoft identity' unless identity
     end
 
@@ -26,7 +26,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
   end
 
   def subscribe(_, email, name = nil, _double_optin = false)
-    data = { :Email => email }
+    data = { Email: email }
 
     if name
       fname, lname = name.split

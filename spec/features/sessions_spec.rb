@@ -53,7 +53,7 @@ feature 'User can sign in', js: true do
       uid: '12345'
     })
 
-    OmniAuth.config.add_mock(:google_oauth2, { :uid => '12345' })
+    OmniAuth.config.add_mock(:google_oauth2, { uid: '12345' })
     visit new_user_session_path
 
     fill_in 'Your Email', with: user.email

@@ -5,7 +5,7 @@ describe ContactList do
 
   let(:site) { sites(:zombo) }
   let(:provider) { 'email' }
-  let(:identity) { Identity.new(:site => site, :provider => provider) }
+  let(:identity) { Identity.new(site: site, provider: provider) }
   let(:contact_list) { contact_lists(:zombo_contacts).tap { |c| c.identity = identity } }
   let(:service_provider) { contact_list.service_provider }
 
@@ -15,7 +15,7 @@ describe ContactList do
       ServiceProviders::Email.stub(:settings).and_return({
         oauth: false
       })
-      contact_list.stub(:syncable? => true)
+      contact_list.stub(syncable?: true)
       expect(service_provider).to be_a(ServiceProviders::Email)
       service_provider.stub(:batch_subscribe).and_return(nil)
     end
@@ -39,9 +39,9 @@ describe ContactList do
   describe 'associated identity' do
     it 'should use #provider on creation to find the correct identity' do
       list = ContactList.create!(
-        :site => sites(:zombo),
-        :name => 'my list',
-        :provider => 'mailchimp'
+        site: sites(:zombo),
+        name: 'my list',
+        provider: 'mailchimp'
       )
 
       list.identity.should == identities(:mailchimp)
@@ -69,7 +69,7 @@ describe ContactList do
       list = contact_lists(:zombo_contacts)
       list.identity.should_not be_blank
 
-      list.update_attributes(:provider => '0')
+      list.update_attributes(provider: '0')
       list.identity.should be_blank
     end
 
@@ -104,7 +104,7 @@ describe ContactList do
     before do
       allow_any_instance_of(Identity).to receive(:service_provider_valid).and_return(true)
       contact_list.save!
-      contact_list.stub(:syncable? => true)
+      contact_list.stub(syncable?: true)
     end
 
     context 'oauth provider' do
@@ -186,8 +186,8 @@ describe ContactList do
   describe 'email syncing errors' do
     before do
       Hello::DataAPI.stub(:get_contacts).and_return([:foo, :bar])
-      contact_list.stub(:syncable? => true)
-      contact_list.stub(:oauth? => true)
+      contact_list.stub(syncable?: true)
+      contact_list.stub(oauth?: true)
     end
 
     after { contact_list.sync! }
@@ -219,7 +219,7 @@ describe ContactList do
       end
 
       it 'if someone has revoked our access, delete the identity and notify them' do
-        contact_list.should_receive(:batch_subscribe).and_raise(CreateSend::RevokedOAuthToken.new(Hashie::Mash.new(:Code => 122, :Message => 'Revoked OAuth Token')))
+        contact_list.should_receive(:batch_subscribe).and_raise(CreateSend::RevokedOAuthToken.new(Hashie::Mash.new(Code: 122, Message: 'Revoked OAuth Token')))
         contact_list.identity.should_receive :destroy_and_notify_user
       end
     end
@@ -246,7 +246,7 @@ describe ContactList do
       end
 
       it 'if someone has an invalid list stored, delete the identity and notify them' do
-        response = OpenStruct.new(:code => 404, :body => '404 Resource Not Found')
+        response = OpenStruct.new(code: 404, body: '404 Resource Not Found')
         contact_list.should_receive(:batch_subscribe).and_raise(RestClient::ResourceNotFound.new(response))
         contact_list.identity.should_receive :destroy_and_notify_user
       end
@@ -265,12 +265,12 @@ describe ContactList do
 
   describe '#subscribers' do
     it 'gets subscribers from the data API' do
-      Hello::DataAPI.stub(:get_contacts => [['person@gmail.com', 'Per Son', 123456789]])
-      contact_list.subscribers.should == [{ :email => 'person@gmail.com', :name => 'Per Son', :subscribed_at => Time.at(123456789) }]
+      Hello::DataAPI.stub(get_contacts: [['person@gmail.com', 'Per Son', 123456789]])
+      contact_list.subscribers.should == [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.at(123456789) }]
     end
 
     it 'defaults to [] if data API returns nil' do
-      Hello::DataAPI.stub(:get_contacts => nil)
+      Hello::DataAPI.stub(get_contacts: nil)
       contact_list.subscribers.should == []
     end
 
@@ -297,12 +297,12 @@ describe ContactList do
 
   describe '#num_subscribers' do
     it 'gets number of subscribers from the data API' do
-      Hello::DataAPI.stub(:contact_list_totals => { contact_list.id.to_s => 5 })
+      Hello::DataAPI.stub(contact_list_totals: { contact_list.id.to_s => 5 })
       contact_list.num_subscribers.should == 5
     end
 
     it 'defaults to 0 if data API returns nil' do
-      Hello::DataAPI.stub(:contact_list_totals => nil)
+      Hello::DataAPI.stub(contact_list_totals: nil)
       contact_list.num_subscribers.should == 0
     end
   end

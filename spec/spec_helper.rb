@@ -54,7 +54,7 @@ VCR.configure do |c|
   c.ignore_localhost = true
   c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :webmock
-  c.default_cassette_options = { :record => :none } # *TEMPORARILY* set to :new_episodes or :once if you add a spec that makes a network request
+  c.default_cassette_options = { record: :none } # *TEMPORARILY* set to :new_episodes or :once if you add a spec that makes a network request
 end
 
 # Use Webkit as js driver
@@ -137,12 +137,12 @@ RSpec.configure do |config|
 end
 
 def stub_current_admin(admin)
-  controller.stub :current_admin => admin
+  controller.stub current_admin: admin
 end
 
 def stub_current_user(user)
-  request.env['warden'].stub :authenticate! => user
-  controller.stub :current_user => user
+  request.env['warden'].stub authenticate!: user
+  controller.stub current_user: user
 
   user
 end

@@ -1,7 +1,7 @@
 class UserController < ApplicationController
   layout 'static', only: [:new, :create]
   before_action :authenticate_user!, except: [:new, :create]
-  before_action :load_user, :only => [:edit, :update, :destroy]
+  before_action :load_user, only: [:edit, :update, :destroy]
 
   def new
     load_user_from_invitation
@@ -28,8 +28,8 @@ class UserController < ApplicationController
   def update
     active_before_update = @user.active?
 
-    if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(:status => User::ACTIVE_STATUS))
-      sign_in @user, :bypass => true
+    if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(status: User::ACTIVE_STATUS))
+      sign_in @user, bypass: true
 
       set_timezones_on_sites(@user)
 
@@ -55,7 +55,7 @@ class UserController < ApplicationController
         format.html do
           if active_before_update
             flash.now[:error] = error_message
-            render :action => :edit
+            render action: :edit
           else
             flash[:error] = error_message
             redirect_to request.referrer || after_sign_in_path_for(@user)
@@ -82,7 +82,7 @@ class UserController < ApplicationController
       respond_to do |format|
         format.html do
           flash.now[:error] = "There was a problem deleting your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : '.'}"
-          render :action => :edit
+          render action: :edit
         end
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end

@@ -3,7 +3,7 @@ class ServiceProviders::AWeber < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'createsend').first
+      identity = opts[:site].identities.where(provider: 'createsend').first
       raise 'Site does not have a stored AWeber identity' unless identity
     end
 

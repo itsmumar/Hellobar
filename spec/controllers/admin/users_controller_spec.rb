@@ -13,7 +13,7 @@ describe Admin::UsersController do
     end
 
     it 'allows admins to search users by site URL' do
-      get :index, :q => 'zombo.com'
+      get :index, q: 'zombo.com'
 
       expect(assigns(:users).include?(sites(:zombo).owners.first)).to be_true
     end
@@ -21,7 +21,7 @@ describe Admin::UsersController do
     it 'finds deleted users' do
       user = User.create email: 'test@test.com', password: 'supers3cr37'
       user.destroy
-      get :index, :q => 'test'
+      get :index, q: 'test'
 
       expect(assigns(:users).include?(user)).to be_true
     end
@@ -30,7 +30,7 @@ describe Admin::UsersController do
       user = create(:user)
       site = create(:site)
       user.sites << site
-      get :index, :q => site.script_name
+      get :index, q: site.script_name
 
       expect(assigns(:users).include?(user)).to be_true
     end
@@ -43,7 +43,7 @@ describe Admin::UsersController do
 
     it 'shows the specified user' do
       user = users(:joey)
-      get :show, :id => user.id
+      get :show, id: user.id
 
       expect(assigns(:user)).to eq(user)
     end
@@ -51,7 +51,7 @@ describe Admin::UsersController do
     it 'shows a deleted users' do
       user = User.create email: 'test@test.com', password: 'supers3cr37'
       user.destroy
-      get :show, :id => user.id
+      get :show, id: user.id
 
       expect(assigns(:user)).to eq(user)
     end
@@ -61,7 +61,7 @@ describe Admin::UsersController do
     it 'allows the admin to impersonate a user' do
       stub_current_admin(@admin)
 
-      post :impersonate, :id => users(:joey)
+      post :impersonate, id: users(:joey)
 
       expect(controller.current_user).to eq(users(:joey))
     end
@@ -71,7 +71,7 @@ describe Admin::UsersController do
     it 'allows the admin to stop impersonating a user' do
       stub_current_admin(@admin)
 
-      post :impersonate, :id => users(:joey)
+      post :impersonate, id: users(:joey)
 
       expect(controller.current_user).to eq(users(:joey))
 
@@ -86,7 +86,7 @@ describe Admin::UsersController do
       stub_current_admin(@admin)
       user = users(:wootie)
 
-      delete :destroy, :id => user
+      delete :destroy, id: user
 
       expect(User.only_deleted).to include(user)
     end

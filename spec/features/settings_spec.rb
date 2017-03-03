@@ -17,7 +17,7 @@ feature 'Manage Settings', :js do
   scenario 'it allows adding new custom invoice address' do
     page.find('a', text: 'Add custom invoice address').click
 
-    fill_in 'site_invoice_information', :with => 'my cool address'
+    fill_in 'site_invoice_information', with: 'my cool address'
 
     click_button('Save & Update')
 

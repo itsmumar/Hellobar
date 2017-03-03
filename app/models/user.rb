@@ -148,7 +148,7 @@ class User < ActiveRecord::Base
       config.api_url = Hellobar::Settings[:hb_infusionsoft_url]
       config.api_key = Hellobar::Settings[:hb_infusionsoft_key]
     end
-    data = { :FirstName => first_name, :LastName => last_name, :Email => email }
+    data = { FirstName: first_name, LastName: last_name, Email: email }
     contact_id = Infusionsoft.contact_add_with_dup_check(data, :Email)
     Infusionsoft.contact_add_to_group(contact_id, Hellobar::Settings[:hb_infusionsoft_default_group])
   end
@@ -164,16 +164,16 @@ class User < ActiveRecord::Base
     when :reset_password_instructions
       if is_oauth_user?
         reset_link = "#{host}/auth/google_oauth2"
-        MailerGateway.send_email('Reset Password Oauth', email, { :email => email, :reset_link => reset_link })
+        MailerGateway.send_email('Reset Password Oauth', email, { email: email, reset_link: reset_link })
       else
-        reset_link = url_helpers.edit_user_password_url(self, :reset_password_token => args[0], :host => host)
-        MailerGateway.send_email('Reset Password', email, { :email => email, :reset_link => reset_link })
+        reset_link = url_helpers.edit_user_password_url(self, reset_password_token: args[0], host: host)
+        MailerGateway.send_email('Reset Password', email, { email: email, reset_link: reset_link })
       end
     end
   end
 
   def role_for_site(site)
-    if membership = site_memberships.where(:site => site).first
+    if membership = site_memberships.where(site: site).first
       membership.role.to_sym
     else
       nil
@@ -321,7 +321,7 @@ class User < ActiveRecord::Base
   def send_invite_token_email(site)
     host = ActionMailer::Base.default_url_options[:host]
     oauth_link = "#{host}/auth/google_oauth2"
-    signup_link = url_helpers.invite_user_url(invite_token: invite_token, :host => host)
+    signup_link = url_helpers.invite_user_url(invite_token: invite_token, host: host)
     MailerGateway.send_email('Invitation', email, { site_url: site.url, oauth_link: oauth_link, signup_link: signup_link })
   end
 

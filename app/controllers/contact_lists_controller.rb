@@ -3,7 +3,7 @@ class ContactListsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_site
-  before_action :load_contact_list, :only => [:show, :update, :destroy]
+  before_action :load_contact_list, only: [:show, :update, :destroy]
 
   def index
     @site ||= current_site #Necessary here in case this is a redirect from failed oauth
@@ -22,7 +22,7 @@ class ContactListsController < ApplicationController
   end
 
   def show
-    @other_lists = @site.contact_lists.where.not(:id => @contact_list.id)
+    @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
     @subscribers = @contact_list.subscribers(100)
     @total_subscribers = Hello::DataAPI.contact_list_totals(@site, [@contact_list])[@contact_list.id.to_s]
     @statuses = @contact_list.subscriber_statuses(@subscribers)
@@ -56,7 +56,7 @@ class ContactListsController < ApplicationController
   private
 
   def contact_list_params
-    params.require(:contact_list).permit(:name, :provider, { :data => [:remote_id, :remote_name, :embed_code, :api_key, :app_url, :webhook_url, :webhook_method, :cycle_day, tags: []] }, :double_optin)
+    params.require(:contact_list).permit(:name, :provider, { data: [:remote_id, :remote_name, :embed_code, :api_key, :app_url, :webhook_url, :webhook_method, :cycle_day, tags: []] }, :double_optin)
   end
 
   def delete_site_elements_action

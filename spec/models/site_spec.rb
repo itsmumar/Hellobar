@@ -15,7 +15,7 @@ describe Site do
 
   describe '#owners_and_admins' do
     it "should return site's owners & admins" do
-      create(:site_membership, :admin, :site => @site)
+      create(:site_membership, :admin, site: @site)
       %w(owner admin).each do |role|
         expect(@site.owners_and_admins.where(site_memberships: { role: role }).count).to eq(1)
       end
@@ -139,17 +139,17 @@ describe Site do
 
   describe 'url formatting' do
     it 'adds the protocol if not present' do
-      site = Site.new(:url => 'zombo.com')
+      site = Site.new(url: 'zombo.com')
       site.valid?
       expect(site.url).to eq('http://zombo.com')
     end
 
     it 'keeps original protocol' do
-      site = Site.new(:url => 'https://zombo.com')
+      site = Site.new(url: 'https://zombo.com')
       site.valid?
       expect(site.url).to eq('https://zombo.com')
 
-      site = Site.new(:url => 'http://zombo.com')
+      site = Site.new(url: 'http://zombo.com')
       site.valid?
       expect(site.url).to eq('http://zombo.com')
     end
@@ -162,7 +162,7 @@ describe Site do
       )
 
       urls.each do |url|
-        site = Site.new(:url => url)
+        site = Site.new(url: url)
         site.valid?
         expect(site.url).to eq('http://zombo.com')
       end
@@ -178,32 +178,32 @@ describe Site do
       )
 
       urls.each do |url|
-        site = Site.new(:url => url)
+        site = Site.new(url: url)
         site.valid?
         expect(site.errors[:url]).to be_empty
       end
     end
 
     it 'is invalid without a properly-formatted url' do
-      site = Site.new(:url => 'my great website dot com')
+      site = Site.new(url: 'my great website dot com')
       expect(site).not_to be_valid
       expect(site.errors[:url]).not_to be_empty
     end
 
     it 'is invalid with an email' do
-      site = Site.new(:url => 'my@website.com')
+      site = Site.new(url: 'my@website.com')
       expect(site).not_to be_valid
       expect(site.errors[:url]).not_to be_empty
     end
 
     it 'is invalid without a url' do
-      site = Site.new(:url => '')
+      site = Site.new(url: '')
       expect(site).not_to be_valid
       expect(site.errors[:url]).not_to be_empty
     end
 
     it "doesn't try to format a blank URL" do
-      site = Site.new(:url => '')
+      site = Site.new(url: '')
       expect(site).not_to be_valid
       expect(site.url).to be_blank
     end
@@ -211,7 +211,7 @@ describe Site do
 
   describe '#script_content' do
     it 'generates the contents of the script for a site' do
-      Hello::DataAPI.stub(:lifetime_totals => nil)
+      Hello::DataAPI.stub(lifetime_totals: nil)
       script = @site.script_content(false)
 
       expect(script).to match(/HB_SITE_ID/)
@@ -219,7 +219,7 @@ describe Site do
     end
 
     it 'generates the compressed contents of the script for a site' do
-      Hello::DataAPI.stub(:lifetime_totals => nil)
+      Hello::DataAPI.stub(lifetime_totals: nil)
       script = @site.script_content
 
       expect(script).to match(/HB_SITE_ID/)
@@ -263,14 +263,14 @@ describe Site do
     end
 
     it 'generates and uploads the script content for a site' do
-      ScriptGenerator.any_instance.stub(:pro_secret => 'asdf')
-      Hello::DataAPI.stub(:lifetime_totals => nil)
+      ScriptGenerator.any_instance.stub(pro_secret: 'asdf')
+      Hello::DataAPI.stub(lifetime_totals: nil)
       script_content = @site.script_content(true)
       script_name = @site.script_name
 
       mock_storage = double('asset_storage')
       expect(mock_storage).to receive(:create_or_update_file_with_contents).with(script_name, script_content)
-      Hello::AssetStorage.stub(:new => mock_storage)
+      Hello::AssetStorage.stub(new: mock_storage)
 
       @site.generate_script
     end
@@ -294,7 +294,7 @@ describe Site do
   it 'blanks-out the site script when destroyed' do
     mock_storage = double('asset_storage')
     expect(mock_storage).to receive(:create_or_update_file_with_contents).with(@site.script_name, '')
-    Hello::AssetStorage.stub(:new => mock_storage)
+    Hello::AssetStorage.stub(new: mock_storage)
 
     @site.destroy
   end

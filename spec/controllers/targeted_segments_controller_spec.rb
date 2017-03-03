@@ -27,11 +27,11 @@ describe TargetedSegmentsController do
 
       post :create, site_id: site, targeted_segment: { token: @token, segment: @segment }
 
-      response.should redirect_to(new_site_site_element_path(site, :anchor => "/settings?rule_id=#{@mock_rule.id}"))
+      response.should redirect_to(new_site_site_element_path(site, anchor: "/settings?rule_id=#{@mock_rule.id}"))
     end
 
     it "redirects to sites#improve if the rule couldn't be created for some reason" do
-      Rule.should_receive(:create_from_segment).with(site, @segment).and_return(double('rule', :valid? => false))
+      Rule.should_receive(:create_from_segment).with(site, @segment).and_return(double('rule', valid?: false))
 
       post :create, site_id: site, targeted_segment: { token: @token, segment: @segment }
 

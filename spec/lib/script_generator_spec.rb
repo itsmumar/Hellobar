@@ -5,7 +5,7 @@ describe ScriptGenerator do
   extend ThemeMacros
 
   before do
-    Hello::DataAPI.stub(:lifetime_totals => nil)
+    Hello::DataAPI.stub(lifetime_totals: nil)
   end
 
   describe '#render' do
@@ -312,7 +312,7 @@ describe ScriptGenerator do
     describe '#generate_script' do
       it 'does not compress the template if the compress option is not set' do
         generator = ScriptGenerator.new('site')
-        generator.stub :render => 'template'
+        generator.stub render: 'template'
 
         Uglifier.should_not_receive(:new)
         generator.should_receive(:render)
@@ -322,7 +322,7 @@ describe ScriptGenerator do
 
       it 'compresses the template when the compress option is true' do
         generator = ScriptGenerator.new('site', { compress: true })
-        generator.stub :render => 'template'
+        generator.stub render: 'template'
 
         uglifier = Uglifier.new
         Uglifier.should_receive(:new).and_return(uglifier)

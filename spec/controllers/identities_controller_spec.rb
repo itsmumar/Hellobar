@@ -16,7 +16,7 @@ describe IdentitiesController do
   describe 'GET :show' do
     it 'should return the identity' do
       stub_current_user @identity.site.users.first
-      Gibbon::Request.stubs(:new => double('gibbon'))
+      Gibbon::Request.stubs(new: double('gibbon'))
       ServiceProviders::MailChimp.any_instance.stub(:lists).and_return([])
       get :show, site_id: @identity.site.id, id: 'mailchimp'
       json = JSON.parse(response.body)

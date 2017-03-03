@@ -8,7 +8,7 @@ describe SiteElementsHelper do
 
     context 'none' do
       before do
-        site.stub(:site_elements => [])
+        site.stub(site_elements: [])
       end
 
       it 'returns valid types' do
@@ -18,7 +18,7 @@ describe SiteElementsHelper do
 
     context 'traffic' do
       before do
-        site.stub(:site_elements => [create(:site_element, :traffic)])
+        site.stub(site_elements: [create(:site_element, :traffic)])
       end
 
       it 'returns valid types' do
@@ -28,7 +28,7 @@ describe SiteElementsHelper do
 
     context 'email' do
       before do
-        site.stub(:site_elements => [create(:site_element, :email)])
+        site.stub(site_elements: [create(:site_element, :email)])
       end
 
       it 'returns valid types' do
@@ -38,7 +38,7 @@ describe SiteElementsHelper do
 
     context 'multiple' do
       before do
-        site.stub(:site_elements => [create(:site_element, :traffic), create(:site_element, :email)])
+        site.stub(site_elements: [create(:site_element, :traffic), create(:site_element, :email)])
       end
 
       it 'returns valid types' do
@@ -50,34 +50,34 @@ describe SiteElementsHelper do
   describe '#helper.activity_message' do
     it "doesn't pluralize when there was only one conversion" do
       element = create(:site_element, :email)
-      element.stub(:total_conversions => 1, :total_views => 1)
+      element.stub(total_conversions: 1, total_views: 1)
       helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /resulted in 1 email collected/
     end
 
     context 'with multiple conversions' do
       it 'returns the correct message for traffic elements' do
         element = create(:site_element, :traffic)
-        element.stub(:total_conversions => 5, :total_views => 5)
+        element.stub(total_conversions: 5, total_views: 5)
         helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /resulted in 5 clicks/
       end
 
       it 'returns the correct message for email elements' do
         element = create(:site_element, :email)
-        element.stub(:total_conversions => 5, :total_views => 5)
+        element.stub(total_conversions: 5, total_views: 5)
         helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /resulted in 5 emails collected/
       end
 
       it 'returns the correct message for twitter elements' do
-        Hello::DataAPI.stub(:lifetime_totals => {})
+        Hello::DataAPI.stub(lifetime_totals: {})
         element = create(:site_element, :twitter)
-        element.stub(:total_conversions => 5, :total_views => 5)
+        element.stub(total_conversions: 5, total_views: 5)
         helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /resulted in 5 tweets/
       end
 
       it 'returns the correct message for facebook elements' do
-        Hello::DataAPI.stub(:lifetime_totals => {})
+        Hello::DataAPI.stub(lifetime_totals: {})
         element = create(:site_element, :facebook)
-        element.stub(:total_conversions => 5, :total_views => 5)
+        element.stub(total_conversions: 5, total_views: 5)
         helper.activity_message_for_conversion(element, element.related_site_elements).should =~ /resulted in 5 likes/
       end
     end
@@ -85,7 +85,7 @@ describe SiteElementsHelper do
     it 'shows the conversion rate relative to other elements of the same type' do
       rule = create(:rule)
       element = create(:site_element, :twitter, rule: rule)
-      Hello::DataAPI.stub(:lifetime_totals => {
+      Hello::DataAPI.stub(lifetime_totals: {
         element.id.to_s => Hello::DataAPI::Performance.new([[10, 5]]),
         create(:site_element, :twitter, rule: rule).id.to_s => Hello::DataAPI::Performance.new([[10, 1]])
       })
@@ -96,7 +96,7 @@ describe SiteElementsHelper do
     it "doesn't show a percentage when comparing against other bars with no conversions" do
       rule = create(:rule)
       element = create(:site_element, :twitter, rule: rule)
-      Hello::DataAPI.stub(:lifetime_totals => {
+      Hello::DataAPI.stub(lifetime_totals: {
         element.id.to_s => Hello::DataAPI::Performance.new([[10, 5]]),
         create(:site_element, :twitter, rule: rule).id.to_s => Hello::DataAPI::Performance.new([[10, 0]])
       })
@@ -106,7 +106,7 @@ describe SiteElementsHelper do
 
     it 'doesnt return the conversion rate when it is Infinite' do
       element = create(:site_element, :twitter)
-      Hello::DataAPI.stub(:lifetime_totals => {
+      Hello::DataAPI.stub(lifetime_totals: {
         element.id.to_s => Hello::DataAPI::Performance.new([[0, 5]]),
         create(:site_element, :facebook).id.to_s => Hello::DataAPI::Performance.new([[10, 1]])
       })
@@ -118,17 +118,17 @@ describe SiteElementsHelper do
   describe 'site_element_activity_units' do
     before(:each) do
       @bars = {
-        :traffic =>                 SiteElement.new(:element_subtype => 'traffic'),
-        :email =>                   SiteElement.new(:element_subtype => 'email'),
-        :announcement =>            SiteElement.new(:element_subtype => 'announcement'),
-        :tweet_on_twitter =>        SiteElement.new(:element_subtype => 'social/tweet_on_twitter'),
-        :follow_on_twitter =>       SiteElement.new(:element_subtype => 'social/follow_on_twitter'),
-        :like_on_facebook =>        SiteElement.new(:element_subtype => 'social/like_on_facebook'),
-        :share_on_linkedin =>       SiteElement.new(:element_subtype => 'social/share_on_linkedin'),
-        :plus_one_on_google_plus => SiteElement.new(:element_subtype => 'social/plus_one_on_google_plus'),
-        :pin_on_pinterest =>        SiteElement.new(:element_subtype => 'social/pin_on_pinterest'),
-        :follow_on_pinterest =>     SiteElement.new(:element_subtype => 'social/follow_on_pinterest'),
-        :share_on_buffer =>         SiteElement.new(:element_subtype => 'social/share_on_buffer')
+        traffic: SiteElement.new(element_subtype: 'traffic'),
+        email: SiteElement.new(element_subtype: 'email'),
+        announcement: SiteElement.new(element_subtype: 'announcement'),
+        tweet_on_twitter: SiteElement.new(element_subtype: 'social/tweet_on_twitter'),
+        follow_on_twitter: SiteElement.new(element_subtype: 'social/follow_on_twitter'),
+        like_on_facebook: SiteElement.new(element_subtype: 'social/like_on_facebook'),
+        share_on_linkedin: SiteElement.new(element_subtype: 'social/share_on_linkedin'),
+        plus_one_on_google_plus: SiteElement.new(element_subtype: 'social/plus_one_on_google_plus'),
+        pin_on_pinterest: SiteElement.new(element_subtype: 'social/pin_on_pinterest'),
+        follow_on_pinterest: SiteElement.new(element_subtype: 'social/follow_on_pinterest'),
+        share_on_buffer: SiteElement.new(element_subtype: 'social/share_on_buffer')
       }
     end
 
@@ -147,51 +147,51 @@ describe SiteElementsHelper do
     end
 
     it 'optionally adds an appropriate verb' do
-      site_element_activity_units(@bars[:traffic], :verb => true).should == 'click'
-      site_element_activity_units(@bars[:email], :verb => true).should == 'email collected'
-      site_element_activity_units(@bars[:announcement], :verb => true).should == 'view'
-      site_element_activity_units(@bars[:tweet_on_twitter], :verb => true).should == 'tweet'
-      site_element_activity_units(@bars[:follow_on_twitter], :verb => true).should == 'follower gained'
-      site_element_activity_units(@bars[:like_on_facebook], :verb => true).should == 'like'
-      site_element_activity_units(@bars[:share_on_linkedin], :verb => true).should == 'share'
-      site_element_activity_units(@bars[:plus_one_on_google_plus], :verb => true).should == 'plus one'
-      site_element_activity_units(@bars[:pin_on_pinterest], :verb => true).should == 'pin'
-      site_element_activity_units(@bars[:follow_on_pinterest], :verb => true).should == 'follower gained'
-      site_element_activity_units(@bars[:share_on_buffer], :verb => true).should == 'share'
-      site_element_activity_units([@bars[:traffic], @bars[:email]], :verb => true).should == 'conversion'
+      site_element_activity_units(@bars[:traffic], verb: true).should == 'click'
+      site_element_activity_units(@bars[:email], verb: true).should == 'email collected'
+      site_element_activity_units(@bars[:announcement], verb: true).should == 'view'
+      site_element_activity_units(@bars[:tweet_on_twitter], verb: true).should == 'tweet'
+      site_element_activity_units(@bars[:follow_on_twitter], verb: true).should == 'follower gained'
+      site_element_activity_units(@bars[:like_on_facebook], verb: true).should == 'like'
+      site_element_activity_units(@bars[:share_on_linkedin], verb: true).should == 'share'
+      site_element_activity_units(@bars[:plus_one_on_google_plus], verb: true).should == 'plus one'
+      site_element_activity_units(@bars[:pin_on_pinterest], verb: true).should == 'pin'
+      site_element_activity_units(@bars[:follow_on_pinterest], verb: true).should == 'follower gained'
+      site_element_activity_units(@bars[:share_on_buffer], verb: true).should == 'share'
+      site_element_activity_units([@bars[:traffic], @bars[:email]], verb: true).should == 'conversion'
     end
 
     it 'pluralizes correctly with verb' do
-      site_element_activity_units(@bars[:traffic], :plural => true, :verb => true).should == 'clicks'
-      site_element_activity_units(@bars[:email], :plural => true, :verb => true).should == 'emails collected'
-      site_element_activity_units(@bars[:announcement], :plural => true, :verb => true).should == 'views'
-      site_element_activity_units(@bars[:tweet_on_twitter], :plural => true, :verb => true).should == 'tweets'
-      site_element_activity_units(@bars[:follow_on_twitter], :plural => true, :verb => true).should == 'followers gained'
-      site_element_activity_units(@bars[:like_on_facebook], :plural => true, :verb => true).should == 'likes'
-      site_element_activity_units(@bars[:share_on_linkedin], :plural => true, :verb => true).should == 'shares'
-      site_element_activity_units(@bars[:plus_one_on_google_plus], :plural => true, :verb => true).should == 'plus ones'
-      site_element_activity_units(@bars[:pin_on_pinterest], :plural => true, :verb => true).should == 'pins'
-      site_element_activity_units(@bars[:follow_on_pinterest], :plural => true, :verb => true).should == 'followers gained'
-      site_element_activity_units(@bars[:share_on_buffer], :plural => true, :verb => true).should == 'shares'
-      site_element_activity_units([@bars[:traffic], @bars[:email]], :plural => true, :verb => true).should == 'conversions'
+      site_element_activity_units(@bars[:traffic], plural: true, verb: true).should == 'clicks'
+      site_element_activity_units(@bars[:email], plural: true, verb: true).should == 'emails collected'
+      site_element_activity_units(@bars[:announcement], plural: true, verb: true).should == 'views'
+      site_element_activity_units(@bars[:tweet_on_twitter], plural: true, verb: true).should == 'tweets'
+      site_element_activity_units(@bars[:follow_on_twitter], plural: true, verb: true).should == 'followers gained'
+      site_element_activity_units(@bars[:like_on_facebook], plural: true, verb: true).should == 'likes'
+      site_element_activity_units(@bars[:share_on_linkedin], plural: true, verb: true).should == 'shares'
+      site_element_activity_units(@bars[:plus_one_on_google_plus], plural: true, verb: true).should == 'plus ones'
+      site_element_activity_units(@bars[:pin_on_pinterest], plural: true, verb: true).should == 'pins'
+      site_element_activity_units(@bars[:follow_on_pinterest], plural: true, verb: true).should == 'followers gained'
+      site_element_activity_units(@bars[:share_on_buffer], plural: true, verb: true).should == 'shares'
+      site_element_activity_units([@bars[:traffic], @bars[:email]], plural: true, verb: true).should == 'conversions'
     end
 
     it 'optionally pluralizes the units' do
-      site_element_activity_units(@bars[:traffic], :plural => true).should == 'clicks'
-      site_element_activity_units(@bars[:email], :plural => true).should == 'emails'
-      site_element_activity_units(@bars[:announcement], :plural => true).should == 'views'
-      site_element_activity_units(@bars[:tweet_on_twitter], :plural => true).should == 'tweets'
-      site_element_activity_units(@bars[:follow_on_twitter], :plural => true).should == 'followers'
-      site_element_activity_units(@bars[:like_on_facebook], :plural => true).should == 'likes'
-      site_element_activity_units(@bars[:share_on_linkedin], :plural => true).should == 'shares'
-      site_element_activity_units(@bars[:plus_one_on_google_plus], :plural => true).should == 'plus ones'
-      site_element_activity_units(@bars[:pin_on_pinterest], :plural => true).should == 'pins'
-      site_element_activity_units(@bars[:follow_on_pinterest], :plural => true).should == 'followers'
-      site_element_activity_units(@bars[:share_on_buffer], :plural => true).should == 'shares'
+      site_element_activity_units(@bars[:traffic], plural: true).should == 'clicks'
+      site_element_activity_units(@bars[:email], plural: true).should == 'emails'
+      site_element_activity_units(@bars[:announcement], plural: true).should == 'views'
+      site_element_activity_units(@bars[:tweet_on_twitter], plural: true).should == 'tweets'
+      site_element_activity_units(@bars[:follow_on_twitter], plural: true).should == 'followers'
+      site_element_activity_units(@bars[:like_on_facebook], plural: true).should == 'likes'
+      site_element_activity_units(@bars[:share_on_linkedin], plural: true).should == 'shares'
+      site_element_activity_units(@bars[:plus_one_on_google_plus], plural: true).should == 'plus ones'
+      site_element_activity_units(@bars[:pin_on_pinterest], plural: true).should == 'pins'
+      site_element_activity_units(@bars[:follow_on_pinterest], plural: true).should == 'followers'
+      site_element_activity_units(@bars[:share_on_buffer], plural: true).should == 'shares'
     end
 
     it 'consolidates multiple bar types into a unit that makes sense for all' do
-      other_traffic_bar = SiteElement.new(:element_subtype => 'traffic')
+      other_traffic_bar = SiteElement.new(element_subtype: 'traffic')
       site_element_activity_units([other_traffic_bar, @bars[:traffic]]).should == 'click'
       site_element_activity_units([other_traffic_bar, @bars[:traffic], @bars[:email]]).should == 'conversion'
     end

@@ -41,7 +41,7 @@ module Hello
         end
 
         @@expected_index += 1
-        TESTS[name] = { :values => values, :index => index, :weights => weights, :name => name, :user_start_date => user_start_date }
+        TESTS[name] = { values: values, index: index, weights: weights, name: name, user_start_date: user_start_date }
       end
 
       def load_ab_tests

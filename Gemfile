@@ -6,7 +6,7 @@ gem 'active_campaign',           '~> 0.1.14'
 gem 'active_hash'
 gem 'active_link_to',            '~> 1.0.2'
 gem 'active_model_serializers'
-gem 'addressable',               '~> 2.3.6', :require => 'addressable/uri'
+gem 'addressable',               '~> 2.3.6', require: 'addressable/uri'
 gem 'avatar',                    '~> 0.2.0'
 gem 'aweber',                    '~> 1.6.1'
 gem 'aws-sdk',                   '~> 1.66.0'
@@ -47,8 +47,8 @@ gem 'omniauth-mailchimp',        github: 'floomoon/omniauth-mailchimp', ref: '23
 gem 'omniauth-verticalresponse', '~> 1.0.0'
 gem 'paperclip',                 '~> 4.3'
 gem 'paranoia',                  '~> 2.0'
-gem 'php-serialize',                         :require => 'php_serialize'
-gem 'phpass-ruby',                           :require => 'phpass'
+gem 'php-serialize',                         require: 'php_serialize'
+gem 'phpass-ruby',                           require: 'phpass'
 gem 'pony',                      '~> 1.8'
 gem 'psych',                     '~> 2.0.5'
 gem 'public_suffix',             '~> 1.5.1'
@@ -61,7 +61,7 @@ gem 'rake', '10.3.2'
 
 gem 'rake_running',              github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc4112ec25c6b0a9595123c3c3'
 gem 'rb-readline',               '~> 0.5.1'
-gem 'recaptcha',                 '~> 0.3.6', :require => 'recaptcha/rails'
+gem 'recaptcha',                 '~> 0.3.6', require: 'recaptcha/rails'
 gem 'render_anywhere',           '~> 0.0.9'
 gem 'roadie-rails'
 gem 'ruby-hmac'
@@ -95,7 +95,7 @@ gem 'handlebars_assets'
 group :development do
   gem 'better_errors', '~> 1.1'
   gem 'binding_of_caller'
-  gem 'brakeman', :require => false
+  gem 'brakeman', require: false
   gem 'hound-tools', '~> 0.0.4', require: false
   gem 'rubocop', require: false
   gem 'sinatra'

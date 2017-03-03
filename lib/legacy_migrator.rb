@@ -218,9 +218,9 @@ class LegacyMigrator
           end
 
         else # site has no rules so give them a default rule
-          rule = Rule.new(:name => 'Everyone',
-                          :match => Rule::MATCH_ON[:all],
-                          :site => site)
+          rule = Rule.new(name: 'Everyone',
+                          match: Rule::MATCH_ON[:all],
+                          site: site)
 
           @rules_to_migrate_later[site.id] ||= []
           @rules_to_migrate_later[site.id] << rule

@@ -3,7 +3,7 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'createsend').first
+      identity = opts[:site].identities.where(provider: 'createsend').first
       raise 'Site does not have a stored Campaign Monitor identity' unless identity
     end
 
@@ -54,8 +54,8 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
   def initialize_client(identity)
     handle_error do
       @auth = {
-        :access_token => identity.credentials['token'],
-        :refresh_token => identity.credentials['refresh_token']
+        access_token: identity.credentials['token'],
+        refresh_token: identity.credentials['refresh_token']
       }
 
       @client = CreateSend::CreateSend.new(@auth)

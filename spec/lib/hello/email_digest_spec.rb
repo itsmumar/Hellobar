@@ -35,7 +35,7 @@ describe Hello::EmailDigest do
 
     it 'should attempt to send digest email to admins and owners' do
       site = sites(:zombo)
-      create(:site_membership, :admin, :site => site)
+      create(:site_membership, :admin, site: site)
       site.stub(has_script_installed?: true)
 
       mail = Mail.new

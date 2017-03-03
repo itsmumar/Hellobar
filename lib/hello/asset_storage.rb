@@ -24,7 +24,7 @@ module Hello
 
       @directory = directory || self.class.connection.directories.get(Hellobar::Settings[:s3_bucket])
 
-      @directory ||= connection.directories.create(:key => 'test')
+      @directory ||= connection.directories.create(key: 'test')
     end
 
     def create_or_update_file_with_contents(filename, contents)
@@ -44,12 +44,12 @@ module Hello
         file.metadata = cache_header
       else
         file = directory.files.new({
-          :key => filename,
-          :body => contents,
-          :public => true,
-          :content_type => 'text/javascript',
-          :content_encoding => 'gzip',
-          :metadata => cache_header
+          key: filename,
+          body: contents,
+          public: true,
+          content_type: 'text/javascript',
+          content_encoding: 'gzip',
+          metadata: cache_header
         })
       end
 

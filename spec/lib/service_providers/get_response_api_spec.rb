@@ -129,8 +129,8 @@ describe ServiceProviders::GetResponseApi do
         tags = contact_list.tags.map { |tag| { tagId: tag } }
 
         expect(contact_list).to receive(:subscribers).
-          and_return([{ :name => 'Bob Lob', :email => 'bobloblaw@lawblog.com' },
-                      { :name => 'Lob Bob', :email => 'blob@lawblog.com' }])
+          and_return([{ name: 'Bob Lob', email: 'bobloblaw@lawblog.com' },
+                      { name: 'Lob Bob', email: 'blob@lawblog.com' }])
         expect(api).to receive(:find_union).
           and_return([{ 'contactId' => 'contactId', 'email' => 'bobloblaw@lawblog.com' }])
         expect(client).to receive(:post).with('contacts', request_body).

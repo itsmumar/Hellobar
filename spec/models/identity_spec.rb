@@ -24,20 +24,20 @@ describe Identity do
     end
 
     it 'uses the provider name to get the API client class' do
-      Gibbon::Request.stubs(:new => double('gibbon'))
+      Gibbon::Request.stubs(new: double('gibbon'))
 
-      identity = Identity.new(:provider => 'mailchimp', :extra => { 'metadata' => {} }, :credentials => {})
+      identity = Identity.new(provider: 'mailchimp', extra: { 'metadata' => {} }, credentials: {})
       identity.service_provider.should be_an_instance_of ServiceProviders::MailChimp
 
-      identity = Identity.new(:provider => 'aweber', :credentials => {})
+      identity = Identity.new(provider: 'aweber', credentials: {})
       identity.service_provider.should be_an_instance_of ServiceProviders::AWeber
     end
 
     describe 'service provider' do
       it 'should call destroy_and_notify_user when it encounters an error' do
-        Gibbon::Request.stubs(:new => double('gibbon'))
+        Gibbon::Request.stubs(new: double('gibbon'))
 
-        identity = Identity.new(:provider => 'mailchimp', :extra => { 'metadata' => {} }, :credentials => {})
+        identity = Identity.new(provider: 'mailchimp', extra: { 'metadata' => {} }, credentials: {})
         ServiceProviders::MailChimp.should_receive(:new).and_raise(Gibbon::MailChimpError)
         identity.should_receive(:destroy_and_notify_user)
         identity.service_provider.should be_nil
@@ -69,7 +69,7 @@ describe Identity do
 
     context 'has no referencing contact lists' do
       it 'should do nothing' do
-        identity = Identity.create(:provider => 'aweber', :credentials => {}, :site => sites(:zombo))
+        identity = Identity.create(provider: 'aweber', credentials: {}, site: sites(:zombo))
         identity.contact_lists_updated
         identity.destroyed?.should be_true
       end
