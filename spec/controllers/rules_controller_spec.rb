@@ -70,7 +70,8 @@ describe RulesController do
         match: 'all',
         conditions_attributes: {
           '1' => {
-            'segment' => 'CountryCondition', 'operand' => 'is', 'value' => 'USA' }
+            'segment' => 'CountryCondition', 'operand' => 'is', 'value' => 'USA'
+          }
         }
       }
 

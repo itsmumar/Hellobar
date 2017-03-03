@@ -47,13 +47,16 @@ module ServiceProviders
 
       response = @client.post do |request|
         request.url "accounts/#{@account_id}/lists/#{list_id}/contacts.json"
-        request.body = { auth_token: @api_key,
-                         contact: { first_name: first_name,
-                                    last_name: last_name,
-                                    email: email,
-                                    subscribe: true,
-                                    remove_from_dnm: true }
-                        }
+        request.body = {
+          auth_token: @api_key,
+          contact: {
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            subscribe: true,
+            remove_from_dnm: true
+          }
+        }
       end
 
       if response.success?

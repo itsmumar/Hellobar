@@ -373,39 +373,11 @@ Style/MethodMissing:
   Exclude:
     - 'lib/hello/api_performance.rb'
 
-# Offense count: 1
-# Configuration parameters: SupportedStyles.
-# SupportedStyles: snake_case, camelCase
-Style/MethodName:
-  EnforcedStyle: snake_case
-
 # Offense count: 2
 Style/MultilineBlockChain:
   Exclude:
     - 'app/helpers/admin/users_helper.rb'
     - 'app/mailers/digest_mailer.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/MultilineBlockLayout:
-  Exclude:
-    - 'spec/lib/service_providers/a_weber_spec.rb'
-    - 'spec/lib/service_providers/active_campaign_spec.rb'
-    - 'spec/lib/service_providers/convert_kit_spec.rb'
-    - 'spec/models/image_upload_spec.rb'
-
-# Offense count: 7
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: symmetrical, new_line, same_line
-Style/MultilineHashBraceLayout:
-  Exclude:
-    - 'app/models/site_element.rb'
-    - 'lib/script_generator.rb'
-    - 'lib/service_providers/maropost.rb'
-    - 'spec/controllers/identities_controller_spec.rb'
-    - 'spec/controllers/rules_controller_spec.rb'
-
 
 # Offense count: 7
 # Cop supports --auto-correct.
