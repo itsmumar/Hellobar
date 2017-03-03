@@ -264,6 +264,10 @@ class SiteElement < ActiveRecord::Base
     '[hellobar_content_upgrade id="'+self.id.to_s+'"]'
   end
 
+  def pushes_page_down
+    false
+  end
+
   private
 
   def update_s3_content
