@@ -85,7 +85,7 @@ module Hello
       # Returns the actual table name based for the given key.
       def table_name(key)
         key = key.to_s
-        if %w{contacts over_time segments}.include?(key)
+        if %w(contacts over_time segments).include?(key)
           return key
         else
           raise "Unknown table name key #{key.inspect}"
@@ -152,7 +152,7 @@ module Hello
   end
 
   class SuggestedOpportunities
-    SUGGESTION_SEGMENT_KEYS = %w{dv st rd pu}
+    SUGGESTION_SEGMENT_KEYS = %w(dv st rd pu)
 
     class << self
       def generate(_site, site_elements)

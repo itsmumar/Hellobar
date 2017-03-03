@@ -38,7 +38,7 @@ class SiteElement < ActiveRecord::Base
   }
 
   TEMPLATE_NAMES = %w(traffic_growth)
-  SHORT_SUBTYPES = %w{traffic email call social announcement}
+  SHORT_SUBTYPES = %w(traffic email call social announcement)
 
   belongs_to :rule, touch: true
   belongs_to :contact_list

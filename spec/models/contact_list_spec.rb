@@ -405,8 +405,8 @@ describe ContactList, '#tags' do
   end
 
   it 'returns the tags that have been already saved' do
-    contact_list = ContactList.new data: { 'tags' => %w{1 2 3} }
+    contact_list = ContactList.new data: { 'tags' => %w(1 2 3) }
 
-    expect(contact_list.tags).to eql(%w{1 2 3})
+    expect(contact_list.tags).to eql(%w(1 2 3))
   end
 end

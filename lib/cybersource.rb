@@ -20,12 +20,12 @@ module HB
 end
 
 class CyberSourceCreditCard < PaymentMethodDetails
-  CC_FIELDS = %w{number month year first_name last_name brand verification_value}
-  ADDRESS_FIELDS = %w{city state zip address1 country}
+  CC_FIELDS = %w(number month year first_name last_name brand verification_value)
+  ADDRESS_FIELDS = %w(city state zip address1 country)
   # Note: any fields not included here will be stripped out when setting
   FIELDS = CC_FIELDS + ADDRESS_FIELDS + ['token']
   # These are the required fields to be set
-  REQUIRED_FIELDS = FIELDS - %w{brand token state}
+  REQUIRED_FIELDS = FIELDS - %w(brand token state)
 
   class CyberSourceCreditCardValidator < ActiveModel::Validator
     def validate(record)

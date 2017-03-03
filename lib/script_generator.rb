@@ -292,7 +292,7 @@ class ScriptGenerator < Mustache
   end
 
   def site_element_settings(site_element)
-    settings = %w{
+    settings = %w(
       animated
       background_color
       border_color
@@ -318,7 +318,7 @@ class ScriptGenerator < Mustache
       wiggle_button
       wordpress_bar_id
       blocks
-    }
+    )
     settings << 'caption' unless site_element.use_question?
 
     lifetime_totals = @site.lifetime_totals

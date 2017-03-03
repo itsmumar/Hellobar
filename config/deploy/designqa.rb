@@ -1,4 +1,4 @@
-server 'designqa.hellobar.com', user: 'hellobar', roles: %w{web db cron worker} # web1
+server 'designqa.hellobar.com', user: 'hellobar', roles: %w(web db cron worker) # web1
 
 set :ssh_options, forward_agent: true
 

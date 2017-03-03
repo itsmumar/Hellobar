@@ -28,9 +28,9 @@ describe Hello::InternalAnalytics do
       @object.extend(Hello::InternalAnalytics)
 
       @test_index = Hello::InternalAnalytics.class_variable_get('@@expected_index')
-      Hello::InternalAnalytics.register_test('Example Test', %w{experiment control}, @test_index)
-      Hello::InternalAnalytics.register_test('Weighted Test', %w{experiment control}, @test_index + 1, [10, 90])
-      Hello::InternalAnalytics.register_test('Time Constraint Test', %w{experiment control}, @test_index + 2, [], '2016-05-11'.to_datetime)
+      Hello::InternalAnalytics.register_test('Example Test', %w(experiment control), @test_index)
+      Hello::InternalAnalytics.register_test('Weighted Test', %w(experiment control), @test_index + 1, [10, 90])
+      Hello::InternalAnalytics.register_test('Time Constraint Test', %w(experiment control), @test_index + 2, [], '2016-05-11'.to_datetime)
 
       @cookies = ActionDispatch::Cookies::CookieJar.new('key_generator')
       @user = users(:joey)
