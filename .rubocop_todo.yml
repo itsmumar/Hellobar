@@ -1152,15 +1152,6 @@ Style/SelfAssignment:
     - 'lib/color.rb'
     - 'lib/service_providers/convert_kit.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAsExpressionSeparator.
-Style/Semicolon:
-  Exclude:
-    - 'app/models/billing/billing_log.rb'
-    - 'lib/color.rb'
-    - 'spec/helpers/admin/users_helper_spec.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase

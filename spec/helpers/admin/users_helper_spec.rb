@@ -17,7 +17,7 @@ describe Admin::UsersHelper do
     let(:site) { sites(:zombo) }
 
     it 'returns hash with bills to display' do
-      expected_hash = site.bills.inject({}) { |r, e| r[e] = []; r }
+      expected_hash = site.bills.inject({}) { |r, e| r.update e => [] }
       expect(helper.bills_for(site)).to include(expected_hash)
     end
   end

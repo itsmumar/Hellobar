@@ -13,7 +13,7 @@ class Color
 
     # http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
     def luminance(r, g, b)
-      rgb = [r, g, b];
+      rgb = [r, g, b]
 
       rgb.map! do |component|
         component = component / 255.0
