@@ -26,29 +26,29 @@ describe Bill do
   end
 
   it 'should not let create a negative bill' do
-    lambda{Bill.create(:amount=>-1)}.should raise_error(Bill::InvalidBillingAmount)
+    lambda { Bill.create(:amount => -1) }.should raise_error(Bill::InvalidBillingAmount)
   end
 
   it 'should not let you change the status once set' do
     bill = bills(:future_bill)
-    bill.status.should  == :pending
+    bill.status.should == :pending
     bill.voided!
-    bill.status.should  == :voided
+    bill.status.should == :voided
     bill = Bill.find(bill.id)
-    bill.status.should  == :voided
-    lambda{bill.pending!}.should raise_error(Bill::StatusAlreadySet)
-    lambda{bill.paid!}.should raise_error(Bill::StatusAlreadySet)
-    lambda{bill.status = :pending}.should raise_error(Bill::StatusAlreadySet)
+    bill.status.should == :voided
+    lambda { bill.pending! }.should raise_error(Bill::StatusAlreadySet)
+    lambda { bill.paid! }.should raise_error(Bill::StatusAlreadySet)
+    lambda { bill.status = :pending }.should raise_error(Bill::StatusAlreadySet)
   end
 
   it 'should raise an error if you try to change the status to an invalid value' do
     bill = bills(:future_bill)
-    lambda{bill.status = 'foo'}.should raise_error(Bill::InvalidStatus)
+    lambda { bill.status = 'foo' }.should raise_error(Bill::InvalidStatus)
   end
 
   it 'should record when the status was set' do
     bill = bills(:future_bill)
-    bill.status.should  == :pending
+    bill.status.should == :pending
     bill.status_set_at.should be_nil
     bill.paid!
     bill.status_set_at.should be_within(2).of(Time.now)
@@ -64,7 +64,7 @@ describe Bill do
     payment_method_details = CyberSourceCreditCard.new
     payment_method.details << payment_method_details
     payment_method_details.grace_period.should > 5.minutes
-    bill.due_at(payment_method).should == bill.bill_at+payment_method_details.grace_period
+    bill.due_at(payment_method).should == bill.bill_at + payment_method_details.grace_period
     bill.grace_period_allowed = false
     bill.due_at(payment_method).should == bill.bill_at
   end
@@ -323,16 +323,16 @@ describe Subscription do
     Bill.delete_all
     subscription.active_bills(true).length.should == 0
     # Add a bill after
-    Bill.create!(subscription: subscription, start_date: now+15.days, end_date: now+45.days, amount: 1)
+    Bill.create!(subscription: subscription, start_date: now + 15.days, end_date: now + 45.days, amount: 1)
     subscription.active_bills(true).length.should == 0
     # Add a bill before
-    Bill.create!(subscription: subscription, start_date: now-45.days, end_date: now-15.days, amount: 1)
+    Bill.create!(subscription: subscription, start_date: now - 45.days, end_date: now - 15.days, amount: 1)
     subscription.active_bills(true).length.should == 0
     # Add a bill during time, but voided
-    Bill.create!(subscription: subscription, start_date: now, end_date: now+30.days, status: :voided, amount: 1)
+    Bill.create!(subscription: subscription, start_date: now, end_date: now + 30.days, status: :voided, amount: 1)
     subscription.active_bills(true).length.should == 0
     # Add an active bill
-    Bill.create!(subscription: subscription, start_date: now, end_date: now+30.days, amount: 1)
+    Bill.create!(subscription: subscription, start_date: now, end_date: now + 30.days, amount: 1)
     subscription.active_bills(true).length.should == 1
   end
 end
@@ -380,7 +380,7 @@ describe PaymentMethod do
     end
 
     it 'should raise an error if no payment_method_details' do
-      lambda{PaymentMethod.new.pay(bills(:now_bill))}.should raise_error(PaymentMethod::MissingPaymentDetails)
+      lambda { PaymentMethod.new.pay(bills(:now_bill)) }.should raise_error(PaymentMethod::MissingPaymentDetails)
     end
   end
 
@@ -427,7 +427,7 @@ describe PaymentMethod do
     it 'should not let you refund an unsuccessful billing attempt' do
       subscription = subscriptions(:zombo_subscription)
       billing_attempt = payment_methods(:always_fails).pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
-      lambda{billing_attempt.refund!}.should raise_error(BillingAttempt::InvalidRefund)
+      lambda { billing_attempt.refund! }.should raise_error(BillingAttempt::InvalidRefund)
     end
   end
 end

@@ -11,7 +11,7 @@ describe ServiceProviders::ActiveCampaign do
   describe '#lists' do
     it 'should call `list_list`' do
       VCR.use_cassette(cassette_base + '/lists') do
-        expect(client).to receive(:list_list).and_return({'result_code' => 1})
+        expect(client).to receive(:list_list).and_return({ 'result_code' => 1 })
         service_provider.lists
       end
     end
@@ -64,8 +64,8 @@ describe ServiceProviders::ActiveCampaign do
       expect(client).to receive(:contact_sync).exactly(2).times
 
       VCR.use_cassette(cassette_base + '/contact_sync_with_name') do
-        subscribers = [{email: 'raj.kumar+99@crossover.com', name: 'R K'},
-                       {email: 'raj.kumar+98@crossover.com', name: 'RK'}]
+        subscribers = [{ email: 'raj.kumar+99@crossover.com', name: 'R K' },
+                       { email: 'raj.kumar+98@crossover.com', name: 'RK' }]
         service_provider.batch_subscribe(nil, subscribers)
       end
     end

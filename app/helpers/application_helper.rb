@@ -28,7 +28,7 @@ module ApplicationHelper
   end
 
   def time_zone_options
-    filtered_timezone_list.map{|tz| [tz.to_s, tz.tzinfo.identifier] }
+    filtered_timezone_list.map { |tz| [tz.to_s, tz.tzinfo.identifier] }
   end
 
   def filtered_timezone_list

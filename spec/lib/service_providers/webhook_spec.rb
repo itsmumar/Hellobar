@@ -54,9 +54,9 @@ describe ServiceProviders::Webhook, 'batch_subscribe' do
   it 'subscribes in batches' do
     webhook = ServiceProviders::Webhook.new(contact_list: contact_list)
     subscribers = [
-      {email: 'email1@email.com'},
-      {email: 'email2@email.com'},
-      {email: 'email3@email.com'}
+      { email: 'email1@email.com' },
+      { email: 'email2@email.com' },
+      { email: 'email3@email.com' }
     ]
 
     expect(webhook).to receive(:subscribe).exactly(3).times

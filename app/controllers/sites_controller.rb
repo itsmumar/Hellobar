@@ -93,7 +93,7 @@ class SitesController < ApplicationController
 
   def chart_data
     raw_data = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data).try(:[], params[:type].to_sym) || []
-    series = raw_data.map{|d| d[params[:type] == 'total' ? 0 : 1]}
+    series = raw_data.map { |d| d[params[:type] == 'total' ? 0 : 1] }
     days_limits = [series.size]
     days_limits << params[:days].to_i unless params[:days].blank?
     days = days_limits.min
@@ -145,10 +145,10 @@ class SitesController < ApplicationController
     if @site.save
       generate_temporary_logged_in_user
       Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
-      Analytics.track(*current_person_type_and_id, 'Signed Up', {ip: request.remote_ip, url: @site.url, site_id: @site.id})
+      Analytics.track(*current_person_type_and_id, 'Signed Up', { ip: request.remote_ip, url: @site.url, site_id: @site.id })
 
       SiteMembership.create!(:site => @site, :user => current_user)
-      Analytics.track(*current_person_type_and_id, 'Created Site', {site_id: @site.id})
+      Analytics.track(*current_person_type_and_id, 'Created Site', { site_id: @site.id })
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rules
@@ -168,7 +168,7 @@ class SitesController < ApplicationController
     elsif @site.save
       Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
       SiteMembership.create!(:site => @site, :user => current_user)
-      Analytics.track(*current_person_type_and_id, 'Created Site', {site_id: @site.id})
+      Analytics.track(*current_person_type_and_id, 'Created Site', { site_id: @site.id })
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rules
@@ -182,7 +182,7 @@ class SitesController < ApplicationController
 
   def get_top_performers
     @top_performers = {}
-    all_elements = @site.site_elements.sort_by{|e| -1 * e.conversion_percentage}
+    all_elements = @site.site_elements.sort_by { |e| -1 * e.conversion_percentage }
 
     %w(all social email traffic call).each do |name|
       elements =
@@ -192,12 +192,12 @@ class SitesController < ApplicationController
           all_elements.select { |e| e.short_subtype == name }
         end
 
-      @top_performers[name] = elements[0,6]
+      @top_performers[name] = elements[0, 6]
     end
   end
 
   def load_bills
-    @bills = @site.bills.includes(:subscription).select{|bill| bill.status == :paid && bill.amount != 0}.sort_by(&:bill_at).reverse
-    @next_bill = @site.bills.includes(:subscription).find{|bill| bill.status == :pending}
+    @bills = @site.bills.includes(:subscription).select { |bill| bill.status == :paid && bill.amount != 0 }.sort_by(&:bill_at).reverse
+    @next_bill = @site.bills.includes(:subscription).find { |bill| bill.status == :pending }
   end
 end

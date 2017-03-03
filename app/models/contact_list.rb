@@ -5,7 +5,7 @@ class ContactList < ActiveRecord::Base
   include DeserializeWithErrors
   include EmailSynchronizer
 
-  EMPTY_PROVIDER_VALUES = [ nil, '', 0, '0' ]
+  EMPTY_PROVIDER_VALUES = [nil, '', 0, '0']
 
   attr_accessor :provider
 
@@ -71,11 +71,11 @@ class ContactList < ActiveRecord::Base
     sync(immediate: true)
   end
 
-  def subscribers(limit=nil)
+  def subscribers(limit = nil)
     return @subscribers if @subscribers
 
     data = Hello::DataAPI.get_contacts(self, limit) || []
-    @subscribers = data.map{|d| {:email => d[0], :name => d[1], :subscribed_at => d[2].is_a?(Integer) ? Time.at(d[2]) : nil}}
+    @subscribers = data.map { |d| { :email => d[0], :name => d[1], :subscribed_at => d[2].is_a?(Integer) ? Time.at(d[2]) : nil } }
   end
 
   def subscriber_statuses(_subscribers, force = false)
@@ -173,7 +173,7 @@ class ContactList < ActiveRecord::Base
 
   def reject_empty_data_values
     return unless data
-    self.data = data.delete_if { |k,v| v.blank? }
+    self.data = data.delete_if { |k, v| v.blank? }
   end
 
   def embed_code_exists?

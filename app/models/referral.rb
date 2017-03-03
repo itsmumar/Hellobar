@@ -5,7 +5,7 @@ class Referral < ActiveRecord::Base
 
   enum state: [:sent, :signed_up, :installed]
 
-  scope :redeemable_for_site, -> (site) do
+  scope :redeemable_for_site, ->(site) do
     possible_recipient_ids = site.owners.pluck(:id)
     installed.where("
       (redeemed_by_recipient_at IS NULL AND recipient_id IN (?))
@@ -18,7 +18,7 @@ class Referral < ActiveRecord::Base
   end
 
   scope :to_be_followed_up, -> do
-    sent.where(created_at: (FOLLOWUP_INTERVAL.ago .. (FOLLOWUP_INTERVAL - 1.day).ago))
+    sent.where(created_at: (FOLLOWUP_INTERVAL.ago..(FOLLOWUP_INTERVAL - 1.day).ago))
   end
 
   belongs_to :sender, class_name: 'User'

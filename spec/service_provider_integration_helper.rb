@@ -12,8 +12,8 @@ shared_context 'service provider request setup' do
 
   let(:identity) {
     Identity.new(provider: provider,
-                 extra: {'metadata' => {}},
-                 credentials: {'token' => 'foobar-token'},
+                 extra: { 'metadata' => {} },
+                 credentials: { 'token' => 'foobar-token' },
                  site: site)
   }
 

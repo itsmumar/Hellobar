@@ -4,7 +4,7 @@ describe ReferralsController do
   fixtures :all
 
   before do
-    stub_out_get_ab_variations('Email Integration UI 2016-06-22') {'original'}
+    stub_out_get_ab_variations('Email Integration UI 2016-06-22') { 'original' }
   end
 
   describe 'GET :new' do
@@ -47,13 +47,13 @@ describe ReferralsController do
     end
 
     it 'creates when an email is set' do
-      post :create, {referral: {email: 'kaitlen@hellobar.com'}}
+      post :create, { referral: { email: 'kaitlen@hellobar.com' } }
 
       expect(assigns(:referral).persisted?).to be_true
     end
 
     it 'does not create when an email is not set' do
-      post :create, {referral: {email: ''}}
+      post :create, { referral: { email: '' } }
 
       expect(assigns(:referral).persisted?).to be_false
     end
@@ -83,7 +83,7 @@ describe ReferralsController do
     end
 
     it 'changes the site id and uses up the referral' do
-      put :update, id: @referral.id, referral: {site_id: sites(:zombo).id}
+      put :update, id: @referral.id, referral: { site_id: sites(:zombo).id }
       @referral.reload
 
       expect(@referral.site_id).to eq(sites(:zombo).id)
@@ -93,7 +93,7 @@ describe ReferralsController do
 
     it 'still counts towards sites that have since been deleted' do
       sites(:zombo).update(deleted_at: Time.now) # simulate delete
-      put :update, id: @referral.id, referral: {site_id: sites(:zombo).id}
+      put :update, id: @referral.id, referral: { site_id: sites(:zombo).id }
       @referral.reload
 
       expect(@referral.site_id).to eq(sites(:zombo).id)
@@ -102,7 +102,7 @@ describe ReferralsController do
     end
 
     it 'does not change the state' do
-      put :update, id: @referral.id, referral: {state: 0}
+      put :update, id: @referral.id, referral: { state: 0 }
       expect(@referral.reload.state).to eq('installed')
     end
   end

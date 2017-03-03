@@ -74,27 +74,27 @@ module SiteElementsHelper
     units = [*elements].map do |element|
       case element.element_subtype
       when 'traffic'
-        {:unit => 'click'}
+        { :unit => 'click' }
       when 'email'
-        {:unit => 'email', :verb => 'collected'}
+        { :unit => 'email', :verb => 'collected' }
       when 'call'
-        {:unit => 'call'}
+        { :unit => 'call' }
       when 'announcement'
-        {:unit => 'view'}
+        { :unit => 'view' }
       when 'social/tweet_on_twitter'
-        {:unit => 'tweet'}
+        { :unit => 'tweet' }
       when 'social/follow_on_twitter'
-        {:unit => 'follower', :verb => 'gained'}
+        { :unit => 'follower', :verb => 'gained' }
       when 'social/like_on_facebook'
-        {:unit => 'like'}
+        { :unit => 'like' }
       when 'social/share_on_linkedin', 'social/share_on_buffer'
-        {:unit => 'share'}
+        { :unit => 'share' }
       when 'social/plus_one_on_google_plus'
-        {:unit => 'plus one'}
+        { :unit => 'plus one' }
       when 'social/pin_on_pinterest'
-        {:unit => 'pin'}
+        { :unit => 'pin' }
       when 'social/follow_on_pinterest'
-        {:unit => 'follower', :verb => 'gained'}
+        { :unit => 'follower', :verb => 'gained' }
       else
         raise "#{element.element_subtype} not configured in this helper"
       end
@@ -146,7 +146,7 @@ module SiteElementsHelper
   end
 
   def ab_test_icon(site_element)
-    elements_in_group = site_element.rule.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && se.type == site_element.type}
+    elements_in_group = site_element.rule.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
     elements_in_group.sort! { |a, b| a.created_at <=> b.created_at }
     index = elements_in_group.index(site_element)
     # site element is paused, its the only site element in the group, or something wacky is going on

@@ -129,22 +129,22 @@ class Condition < ActiveRecord::Base
 
   def operand_is_valid
     @@operands ||= {
-      'DateCondition'             => %w{ is is_not before after between },
-      'DeviceCondition'           => %w{ is is_not },
-      'EveryXSession'             => %w{ every },
-      'LastVisitCondition'        => %w{ is is_not less_than greater_than between },
-      'LocationCityCondition'     => %w{ is is_not },
-      'LocationCountryCondition'  => %w{ is is_not },
-      'LocationRegionCondition'   => %w{ is is_not },
-      'NumberOfVisitsCondition'   => %w{ is is_not less_than greater_than between },
-      'PreviousPageURL'           => %w{ includes does_not_include },
-      'ReferrerCondition'         => %w{ is is_not includes does_not_include },
-      'ReferrerDomainCondition'   => %w{ is is_not includes does_not_include },
-      'SearchTermCondition'       => %w{ is is_not includes does_not_include },
-      'TimeCondition'             => %w{ before after },
-      'UrlCondition'              => %w{ is is_not includes does_not_include },
-      'UrlPathCondition'          => %w{ is is_not includes does_not_include },
-      'UtmCondition'              => %w{ is is_not includes does_not_include }
+      'DateCondition'             => %w{is is_not before after between},
+      'DeviceCondition'           => %w{is is_not},
+      'EveryXSession'             => %w{every},
+      'LastVisitCondition'        => %w{is is_not less_than greater_than between},
+      'LocationCityCondition'     => %w{is is_not},
+      'LocationCountryCondition'  => %w{is is_not},
+      'LocationRegionCondition'   => %w{is is_not},
+      'NumberOfVisitsCondition'   => %w{is is_not less_than greater_than between},
+      'PreviousPageURL'           => %w{includes does_not_include},
+      'ReferrerCondition'         => %w{is is_not includes does_not_include},
+      'ReferrerDomainCondition'   => %w{is is_not includes does_not_include},
+      'SearchTermCondition'       => %w{is is_not includes does_not_include},
+      'TimeCondition'             => %w{before after},
+      'UrlCondition'              => %w{is is_not includes does_not_include},
+      'UrlPathCondition'          => %w{is is_not includes does_not_include},
+      'UtmCondition'              => %w{is is_not includes does_not_include}
     }
 
     if @@operands[segment] && !@@operands[segment].include?(operand)
@@ -153,7 +153,7 @@ class Condition < ActiveRecord::Base
   end
 
   def clear_blank_values
-    self.value = value.select{|v| !v.blank?}.uniq if value.kind_of?(Array)
+    self.value = value.select { |v| !v.blank? }.uniq if value.kind_of?(Array)
   end
 
   def self.date_condition_from_params(start_date, end_date)

@@ -9,13 +9,13 @@ describe ContactListsController, type: :controller do
 
   before do
     user = stub_current_user(site.owners.first)
-    site.contact_lists = [ contact_list ]
+    site.contact_lists = [contact_list]
 
     allow_any_instance_of(Identity).to receive(:credentials).and_return(token:  'test')
     allow_any_instance_of(Identity).to receive(:extra).
-      and_return('metadata' => { 'api_endpoint' =>  'test' })
+      and_return('metadata' => { 'api_endpoint' => 'test' })
 
-    stub_out_get_ab_variations('Email Integration UI 2016-06-22') {'original'}
+    stub_out_get_ab_variations('Email Integration UI 2016-06-22') { 'original' }
 
     allow(Hello::DataAPI).to receive(:get_contacts).and_return([])
   end
@@ -45,7 +45,7 @@ describe ContactListsController, type: :controller do
     end
 
     it 'makes a single API call to get num_subscribers for each list' do
-      site.contact_lists = [ contact_list, contact_list.dup ]
+      site.contact_lists = [contact_list, contact_list.dup]
       expect(Hello::DataAPI).to receive(:contact_list_totals).once
 
       get :index, site_id: site
@@ -55,7 +55,7 @@ describe ContactListsController, type: :controller do
   describe 'GET #show' do
     before do
       Hello::DataAPI.stub(lifetime_totals: nil)
-      Hello::DataAPI.stub(contact_list_totals: {'1' => 20})
+      Hello::DataAPI.stub(contact_list_totals: { '1' => 20 })
     end
 
     it 'gets contacts from the api at least once' do
@@ -78,7 +78,7 @@ describe ContactListsController, type: :controller do
       {
         name: 'My Contacts',
         provider: '0',
-        data: {remote_name: ''},
+        data: { remote_name: '' },
         double_optin: '0'
       }
     end

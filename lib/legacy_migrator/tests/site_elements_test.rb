@@ -8,7 +8,7 @@ describe 'migration of bars to site elements' do
 
     it 'creates a rule for migrated mobile bars' do
       site = Site.find(@bar.goal.site.id)
-      condition = site.rules.map(&:conditions).flatten.find{|c| c.value == 'mobile'}
+      condition = site.rules.map(&:conditions).flatten.find { |c| c.value == 'mobile' }
 
       assert_equal 'dv:mobile', @bar.settings_json['target']
       assert_equal 'mobile', condition.value
@@ -25,7 +25,7 @@ describe 'migration of bars to site elements' do
   end
 
   it 'creates a site_element for each legacy bar with a goal and a site' do
-    count = LegacyMigrator::LegacyBar.all.select{|b| b.goal.present? && b.goal.site.present?}.count
+    count = LegacyMigrator::LegacyBar.all.select { |b| b.goal.present? && b.goal.site.present? }.count
     assert_equal count, SiteElement.count
   end
 

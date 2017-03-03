@@ -13,9 +13,9 @@ class Site < ActiveRecord::Base
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
   has_many :contact_lists, dependent: :destroy
-  has_many :subscriptions, -> {order 'id'}
+  has_many :subscriptions, -> { order 'id' }
   accepts_nested_attributes_for :subscriptions
-  has_many :bills, -> {order 'id'}, through: :subscriptions
+  has_many :bills, -> { order 'id' }, through: :subscriptions
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
 
@@ -138,7 +138,7 @@ class Site < ActiveRecord::Base
     return false unless data.present?
 
     has_new_views = data.values.any? do |values|
-      days_with_views = values.select{|v| v[0] > 0}.count
+      days_with_views = values.select { |v| v[0] > 0 }.count
 
       (days_with_views < days && days_with_views > 0) ||            # site element was installed in the last n days
         (values.count >= days && values[-days][0] < values.last[0]) # site element received views in the last n days
@@ -243,11 +243,11 @@ class Site < ActiveRecord::Base
     subscriptions.any? { |s| s.class == Subscription::ProManaged }
   end
 
-  def url_exists?(user=nil)
+  def url_exists?(user = nil)
     if user
       Site.joins(:users)
       .merge(Site.protocol_ignored_url(self.url))
-      .where(users: {id: user.id})
+      .where(users: { id: user.id })
       .where.not(id: id)
       .any?
     else
@@ -259,7 +259,7 @@ class Site < ActiveRecord::Base
     if users.
       joins(:sites).
       merge(Site.protocol_ignored_url(self.url)).
-      where.not(sites: {id: id}).
+      where.not(sites: { id: id }).
       any?
 
       errors.add(:url, 'is already in use')
@@ -272,7 +272,7 @@ class Site < ActiveRecord::Base
       Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
   end
 
-  def capabilities(clear_cache=false)
+  def capabilities(clear_cache = false)
     @capabilities = nil if clear_cache
     @capabilities ||= highest_tier_active_subscription.try(:capabilities)
     @capabilities ||= subscriptions.last.try(:capabilities)
@@ -288,7 +288,7 @@ class Site < ActiveRecord::Base
   include BillingAuditTrail
   class MissingPaymentMethod < StandardError; end
   class MissingSubscription < StandardError; end
-  def change_subscription(subscription, payment_method=nil, trial_period=nil)
+  def change_subscription(subscription, payment_method = nil, trial_period = nil)
     raise MissingSubscription.new unless subscription
     transaction do
       subscription.site = self
@@ -327,7 +327,7 @@ class Site < ActiveRecord::Base
     return bill
   end
 
-  def bills_with_payment_issues(clear_cache=false)
+  def bills_with_payment_issues(clear_cache = false)
     if clear_cache || !@bills_with_payment_issues
       now = Time.now
       @bills_with_payment_issues = []
@@ -355,7 +355,7 @@ class Site < ActiveRecord::Base
   end
 
   def owners
-    users.where(site_memberships: { role: Permissions::OWNER } )
+    users.where(site_memberships: { role: Permissions::OWNER })
   end
 
   def owners_and_admins
@@ -371,7 +371,7 @@ class Site < ActiveRecord::Base
   end
 
   def self.find_by_script(script_embed)
-    target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/,'')
+    target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
 
     (Site.maximum(:id) || 1).downto(1) do |i|
       return Site.find_by_id(i) if id_to_script_hash(i) == target_hash
@@ -413,7 +413,7 @@ class Site < ActiveRecord::Base
 
   # Calculates a bill, but does not save or pay the bill. Used by
   # change_subscription and preview_change_subscription
-  def calculate_bill(subscription, actually_change, trial_period=nil)
+  def calculate_bill(subscription, actually_change, trial_period = nil)
     raise MissingSubscription.new unless subscription
     now = Time.now
     # First we need to void any pending recurring bills
@@ -451,17 +451,17 @@ class Site < ActiveRecord::Base
         bill.grace_period_allowed = false
         # Figure out percentage of their subscription they've used
         # rounded to the day
-        num_days_used = (now-active_paid_bills.last.start_date)/1.day
-        total_days_of_last_subcription = (active_paid_bills.last.end_date-active_paid_bills.last.start_date)/1.day
-        percentage_used = num_days_used.to_f/total_days_of_last_subcription
-        percentage_unused = 1.0-percentage_used
+        num_days_used = (now - active_paid_bills.last.start_date) / 1.day
+        total_days_of_last_subcription = (active_paid_bills.last.end_date - active_paid_bills.last.start_date) / 1.day
+        percentage_used = num_days_used.to_f / total_days_of_last_subcription
+        percentage_unused = 1.0 - percentage_used
         if actually_change
           audit << "now: #{now}, start_date: #{active_paid_bills.last.start_date}, end_date: #{active_paid_bills.last.end_date}, total_days_of_last_subscription: #{total_days_of_last_subcription.inspect}, num_days_used: #{num_days_used}, percentage_unused: #{percentage_unused}"
         end
 
-        unused_paid_amount = last_subscription.amount*percentage_unused
+        unused_paid_amount = last_subscription.amount * percentage_unused
         # Subtract the unused paid amount from the price and round it
-        bill.amount = (subscription.amount-unused_paid_amount).to_i
+        bill.amount = (subscription.amount - unused_paid_amount).to_i
         if actually_change
           audit << "Upgrade from active bill: #{active_paid_bills.last.inspect} changing from subscription #{active_paid_bills.last.subscription.inspect}, prorating amount now: #{bill.inspect}"
         end

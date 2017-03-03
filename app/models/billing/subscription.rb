@@ -7,7 +7,7 @@ class Subscription < ActiveRecord::Base
   belongs_to :site, touch: true
   belongs_to :payment_method
   enum schedule: [:monthly, :yearly]
-  has_many :bills, -> {order 'id'}, inverse_of: :subscription
+  has_many :bills, -> { order 'id' }, inverse_of: :subscription
 
   scope :active, -> do
     joins(:bills).where(
@@ -44,24 +44,24 @@ class Subscription < ActiveRecord::Base
     self.class.values_for(site).merge(schedule: schedule)
   end
 
-  def pending_bills(reload=false)
-    self.bills(reload).reject{|b| b.status != :pending}
+  def pending_bills(reload = false)
+    self.bills(reload).reject { |b| b.status != :pending }
   end
 
-  def paid_bills(reload=false)
-    self.bills(reload).reject{|b| b.status != :paid}
+  def paid_bills(reload = false)
+    self.bills(reload).reject { |b| b.status != :paid }
   end
 
-  def active_bills(reload=false, date=nil)
+  def active_bills(reload = false, date = nil)
     date ||= Time.now
-    self.bills(reload).reject{|b| !b.active_during(date)}
+    self.bills(reload).reject { |b| !b.active_during(date) }
   end
 
   def active_until
     self.bills.paid.maximum(:end_date).try(:localtime)
   end
 
-  def capabilities(reload=false)
+  def capabilities(reload = false)
     if reload || !@capabilities
       # If we are in good standing we just return our normal
       # capabilities, otherwise we return the default capabilities

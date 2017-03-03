@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe ServiceProviders::AWeber do
-  let(:identity) { Identity.new(:provider => 'aweber', :extra => {'metadata' => {}},
-                                  :credentials => {'token'=>'test-token', 'secret'=>'test-secret'}) }
+  let(:identity) { Identity.new(:provider => 'aweber', :extra => { 'metadata' => {} },
+                                  :credentials => { 'token' => 'test-token', 'secret' => 'test-secret' }) }
   let(:contact_list) { ContactList.new(identity: identity, data: { 'tags' => ['test-tag1', 'test-tag2'] }) }
   let(:service_provider) { identity.service_provider(contact_list: contact_list) }
   let(:client) { service_provider.instance_variable_get(:@client) }

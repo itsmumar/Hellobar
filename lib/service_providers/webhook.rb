@@ -22,7 +22,7 @@ module ServiceProviders
           request.params[:email] = email
           request.params[:name] = name
         else
-          request.body = {name: name, email: email}
+          request.body = { name: name, email: email }
         end
       end
     end

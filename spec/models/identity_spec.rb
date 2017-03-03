@@ -26,7 +26,7 @@ describe Identity do
     it 'uses the provider name to get the API client class' do
       Gibbon::Request.stubs(:new => double('gibbon'))
 
-      identity = Identity.new(:provider => 'mailchimp', :extra => {'metadata' => {}}, :credentials => {})
+      identity = Identity.new(:provider => 'mailchimp', :extra => { 'metadata' => {} }, :credentials => {})
       identity.service_provider.should be_an_instance_of ServiceProviders::MailChimp
 
       identity = Identity.new(:provider => 'aweber', :credentials => {})
@@ -37,7 +37,7 @@ describe Identity do
       it 'should call destroy_and_notify_user when it encounters an error' do
         Gibbon::Request.stubs(:new => double('gibbon'))
 
-        identity = Identity.new(:provider => 'mailchimp', :extra => {'metadata' => {}}, :credentials => {})
+        identity = Identity.new(:provider => 'mailchimp', :extra => { 'metadata' => {} }, :credentials => {})
         ServiceProviders::MailChimp.should_receive(:new).and_raise(Gibbon::MailChimpError)
         identity.should_receive(:destroy_and_notify_user)
         identity.service_provider.should be_nil
@@ -78,7 +78,7 @@ describe Identity do
 
   describe 'embed code service provider' do
     let(:contact_list) do
-      contact_lists(:embed_code).tap {|c| c.identity = nil }
+      contact_lists(:embed_code).tap { |c| c.identity = nil }
     end
     let(:file_name) { (file rescue provider) }
 
@@ -96,7 +96,7 @@ describe Identity do
         service_provider.action_url.should == 'https://madmimi.com/signups/subscribe/103242'
         service_provider.list_id.should == '103242'
 
-        service_provider.params.any? {|item| item[:name] == 'signup[email]' }.should == true
+        service_provider.params.any? { |item| item[:name] == 'signup[email]' }.should == true
         service_provider.email_param.should == 'signup[email]'
         service_provider.name_params.should be_empty
         service_provider.required_params.should be_empty
@@ -155,7 +155,7 @@ describe Identity do
           'doubleopt' => '0',
           'Submit' => 'Submit'
         }
-        -> { service_provider.name_param}.should raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
+        -> { service_provider.name_param }.should raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
       end
     end
 
@@ -180,7 +180,7 @@ describe Identity do
           'doubleopt' => '0',
           'Submit' => 'Submit'
         }
-        -> { service_provider.name_param}.should raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
+        -> { service_provider.name_param }.should raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
       end
     end
 

@@ -22,7 +22,7 @@ def expect_user_to_only_recieve(user, email_type)
   expect(@email_history.first).to include(user.email => [email_type])
 end
 
-def email_received_a_number_of_days_after(user, start_date, date_index=day_from_current_spec_description)
+def email_received_a_number_of_days_after(user, start_date, date_index = day_from_current_spec_description)
   date = start_date + date_index
   ((@email_history[date] ||= {})[user.email] ||= [])
 end

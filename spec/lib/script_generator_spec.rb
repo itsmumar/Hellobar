@@ -82,7 +82,7 @@ describe ScriptGenerator do
 
       it 'renders only the setTemplate definition and 1 call per bar type' do
         bar = Bar.new(element_subtype: 'traffic', theme_id: 'classic')
-        site.stub(site_elements: double('site_elements', active: [bar, bar], active_content_upgrades: [], none?: true ))
+        site.stub(site_elements: double('site_elements', active: [bar, bar], active_content_upgrades: [], none?: true))
 
         generator = ScriptGenerator.new site
 
@@ -143,7 +143,7 @@ describe ScriptGenerator do
 
       it 'adds an exlusion constraint for all blacklisted URLs' do
         rule = Rule.new
-        conditions = [Condition.new(value: '/signup', operand: :does_not_include, segment: 'UrlCondition' )]
+        conditions = [Condition.new(value: '/signup', operand: :does_not_include, segment: 'UrlCondition')]
         rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
         site.stub rules: [rule]
 
@@ -154,7 +154,7 @@ describe ScriptGenerator do
 
       it 'converts does_not_include urls to paths' do
         rule = Rule.new
-        conditions = [Condition.new(value: 'http://soamazing.com/signup', operand: :does_not_include, segment: 'UrlCondition' )]
+        conditions = [Condition.new(value: 'http://soamazing.com/signup', operand: :does_not_include, segment: 'UrlCondition')]
         rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
         site.stub rules: [rule]
 
@@ -174,7 +174,7 @@ describe ScriptGenerator do
 
       it 'adds an inclusion constraint for all whitelisted URLs' do
         rule = Rule.new
-        conditions = [Condition.new(value: '/signup', operand: Condition::OPERANDS[:includes], segment: 'UrlCondition' )]
+        conditions = [Condition.new(value: '/signup', operand: Condition::OPERANDS[:includes], segment: 'UrlCondition')]
         rule.stub conditions: conditions
         site.stub rules: [rule]
 
@@ -253,7 +253,7 @@ describe ScriptGenerator do
       options = { bar_id: bar.id }
 
       generator = ScriptGenerator.new(site, options)
-      generator.stub site_element_settings: {id: bar.id, template_name: bar.element_subtype}
+      generator.stub site_element_settings: { id: bar.id, template_name: bar.element_subtype }
 
       site.stub rules: [rule]
 
@@ -271,14 +271,14 @@ describe ScriptGenerator do
       bar = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       options = { render_paused_site_elements: true }
       generator = ScriptGenerator.new(site, options)
-      generator.stub site_element_settings: { id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' }}
+      generator.stub site_element_settings: { id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' } }
 
       site.stub rules: [rule]
 
       expected_hash = {
         match: nil,
         conditions: [].to_json,
-        site_elements: [{ id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' }}].to_json
+        site_elements: [{ id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' } }].to_json
       }
 
       generator.rules.should == [expected_hash]

@@ -34,7 +34,7 @@ describe Rule do
     end
 
     describe 'mobile rule' do
-      let(:mobile_condition) { mobile.conditions[0]}
+      let(:mobile_condition) { mobile.conditions[0] }
 
       it 'sets conditions' do
         expect(mobile.conditions.size).to eq(1)
@@ -48,7 +48,7 @@ describe Rule do
     end
 
     describe 'homepage rule' do
-      let(:homepage_condition) { homepage.conditions[0]}
+      let(:homepage_condition) { homepage.conditions[0] }
 
       it 'sets conditions' do
         expect(homepage.conditions.size).to eq(1)

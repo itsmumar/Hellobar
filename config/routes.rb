@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     resources :user_state, only: :show
   end
 
-  devise_for :users, :controllers => {:sessions => 'users/sessions', :passwords => 'users/passwords'}
+  devise_for :users, :controllers => { :sessions => 'users/sessions', :passwords => 'users/passwords' }
 
   devise_scope :user do
     post '/users/find_email', to: 'users/sessions#find_email', as: :find_email
@@ -123,8 +123,8 @@ Rails.application.routes.draw do
       end
     end
 
-    get 'lockdown/:email/:key/:timestamp', :to => 'access#lockdown', :constraints => {:email => /[^\/]+/}, :as => :lockdown
-    get 'validate_access_token/:email/:key/:timestamp', :to => 'access#validate_access_token', :constraints => {:email => /[^\/]+/}, :as => :validate_access_token
+    get 'lockdown/:email/:key/:timestamp', :to => 'access#lockdown', :constraints => { :email => /[^\/]+/ }, :as => :lockdown
+    get 'validate_access_token/:email/:key/:timestamp', :to => 'access#validate_access_token', :constraints => { :email => /[^\/]+/ }, :as => :validate_access_token
     get 'logout', :to => 'access#logout_admin', :as => :logout
     get 'reset_password', :to => 'access#reset_password'
     post 'reset_password', :to => 'access#do_reset_password'
@@ -156,7 +156,7 @@ Rails.application.routes.draw do
   post '/start_migration', to: 'user_migration#start', as: :start_user_migration
   post '/user_migration', to: 'user_migration#create', as: :user_migration
 
-  %w( 404 422 500 ).each do |code|
+  %w(404 422 500).each do |code|
     get code, :to => 'errors#show', :code => code
   end
 

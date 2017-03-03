@@ -100,7 +100,7 @@ describe Subscribable, '#update_subscription' do
 
   context 'trial_period' do
     it 'translates the trial_period to days' do
-      billing_params = { plan: 'pro', schedule: 'yearly', trial_period: '60'}
+      billing_params = { plan: 'pro', schedule: 'yearly', trial_period: '60' }
       site = sites(:horsebike)
       site.should_receive(:change_subscription).with(anything, nil, 60.day)
       controller.update_subscription(site, nil, billing_params)

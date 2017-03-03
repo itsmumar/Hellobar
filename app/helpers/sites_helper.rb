@@ -4,11 +4,11 @@ module SitesHelper
   end
 
   def payment_issue_amount(site)
-    site_has_payment_issue?(site) ? site.bills_with_payment_issues.inject(0){|sum,b| sum+=b.amount} : 0
+    site_has_payment_issue?(site) ? site.bills_with_payment_issues.inject(0) { |sum, b| sum += b.amount } : 0
   end
 
   def payment_issue_date(site)
-    site_has_payment_issue?(site) ? site.bills_with_payment_issues.sort{|a,b| a.bill_at <=> b.bill_at}.first.bill_at : nil
+    site_has_payment_issue?(site) ? site.bills_with_payment_issues.sort { |a, b| a.bill_at <=> b.bill_at }.first.bill_at : nil
   end
 
   def show_whats_new_prompt?
@@ -39,7 +39,7 @@ module SitesHelper
   end
 
   def sites_for_team_view
-    current_user.sites.sort_by { |site| [site == current_site ? 0 : 1, site.url.downcase]}
+    current_user.sites.sort_by { |site| [site == current_site ? 0 : 1, site.url.downcase] }
   end
 
   def bill_due_at(bill)

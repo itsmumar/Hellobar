@@ -8,7 +8,7 @@ class Bill < ActiveRecord::Base
   class MissingPaymentMethod < StandardError; end
   serialize :metadata, JSON
   belongs_to :subscription, inverse_of: :bills
-  has_many :billing_attempts, -> {order 'id'}
+  has_many :billing_attempts, -> { order 'id' }
   has_many :coupon_uses
   validates_presence_of :subscription
   include BillingAuditTrail
@@ -52,7 +52,7 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  def attempt_billing!(allow_early=false)
+  def attempt_billing!(allow_early = false)
     set_final_amount!
 
     now = Time.now
@@ -80,15 +80,15 @@ class Bill < ActiveRecord::Base
     return true
   end
 
-  def due_at(payment_method=nil)
+  def due_at(payment_method = nil)
     if self.grace_period_allowed and payment_method and payment_method.current_details and payment_method.current_details.grace_period
-      return self.bill_at+payment_method.current_details.grace_period
+      return self.bill_at + payment_method.current_details.grace_period
     end
     # Otherwise it is due now
     return self.bill_at
   end
 
-  def past_due?(payment_method=nil)
+  def past_due?(payment_method = nil)
     return Time.now > due_at(payment_method)
   end
 
@@ -96,7 +96,7 @@ class Bill < ActiveRecord::Base
     return (self.pending? and Time.now >= self.bill_at)
   end
 
-  def problem_with_payment?(payment_method=nil)
+  def problem_with_payment?(payment_method = nil)
     return false if paid? || voided? || self.amount == 0
     # If pending see if we are past due and we have
     # tried billing them at least once
@@ -120,7 +120,7 @@ class Bill < ActiveRecord::Base
   end
 
   # Can optionally specify a partial amount or description
-  def refund!(description = nil, amount=nil)
+  def refund!(description = nil, amount = nil)
     successful_billing_attempt.refund!(description, amount)
   end
 
@@ -144,11 +144,11 @@ class Bill < ActiveRecord::Base
   class Recurring < Bill
     class << self
       def next_month(date)
-        date+1.month
+        date + 1.month
       end
 
       def next_year(date)
-        date+1.year
+        date + 1.year
       end
     end
 

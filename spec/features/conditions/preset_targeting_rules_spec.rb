@@ -15,7 +15,7 @@ feature 'Users can use site element targeting rule presets', :js do
     allow_any_instance_of(SiteElementSerializer).
       to receive(:proxied_url2png).and_return('')
 
-    stub_out_get_ab_variations('Targeting UI Variation 2016-06-13') {'variant'}
+    stub_out_get_ab_variations('Targeting UI Variation 2016-06-13') { 'variant' }
   end
 
   feature 'Free subscription sites' do
@@ -88,7 +88,7 @@ feature 'Users can use site element targeting rule presets', :js do
     end
 
     feature 'Editing existing site elements' do
-      given(:preset_rule) { site.rules.find{|r| r.name == 'Mobile Visitors'} }
+      given(:preset_rule) { site.rules.find { |r| r.name == 'Mobile Visitors' } }
 
       scenario 'With a preset rule' do
         element = create(:site_element, rule: preset_rule)

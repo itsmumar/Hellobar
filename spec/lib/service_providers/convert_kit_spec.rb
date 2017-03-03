@@ -51,7 +51,7 @@ describe ServiceProviders::ConvertKit do
       end
 
       it 'with tags' do
-        tags = { 'tags' => %w{ 1 2 3 } }
+        tags = { 'tags' => %w{1 2 3} }
         contact_list.data = tags
         service_provider.instance_variable_set(:@contact_list, contact_list)
         @data[:tags] = '1,2,3'
@@ -62,9 +62,9 @@ describe ServiceProviders::ConvertKit do
 
     describe '#batch_subscribe' do
       it 'should POST data multiple times' do
-        subscribers = [{email: 'test@test.com', name: 'R K'},
-                       {email: 'test1@test.com', name: 'Raj K'},
-                       {email: 'test2@test.com', name: 'RK'}]
+        subscribers = [{ email: 'test@test.com', name: 'R K' },
+                       { email: 'test1@test.com', name: 'Raj K' },
+                       { email: 'test2@test.com', name: 'RK' }]
         expect(client).to receive(:post).exactly(3).times { nil }
 
         service_provider.batch_subscribe(@form_id, subscribers)

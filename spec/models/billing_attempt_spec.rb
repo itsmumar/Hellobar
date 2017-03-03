@@ -4,8 +4,8 @@ describe BillingAttempt do
   it 'should be read-only' do
     b = BillingAttempt.create
     b.response = 'different'
-    lambda{b.save}.should raise_error(ActiveRecord::ReadOnlyRecord)
-    lambda{b.destroy}.should raise_error(ActiveRecord::ReadOnlyRecord)
+    lambda { b.save }.should raise_error(ActiveRecord::ReadOnlyRecord)
+    lambda { b.destroy }.should raise_error(ActiveRecord::ReadOnlyRecord)
   end
 
   context '#refund!' do
@@ -27,7 +27,7 @@ describe BillingAttempt do
     it 'should not try to refund more than paid' do
       payment_method_details(:always_successful_details)
       ba = billing_attempts(:success)
-      expect{ba.refund!(nil, (ba.bill.amount * -1) - 1)}.to raise_error(BillingAttempt::InvalidRefund)
+      expect { ba.refund!(nil, (ba.bill.amount * -1) - 1) }.to raise_error(BillingAttempt::InvalidRefund)
     end
   end
 end

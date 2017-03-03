@@ -20,7 +20,7 @@ class Color
         if component < 0.03928
           component / 12.92
         else
-          ((component + 0.055) / 1.055) ** 2.4
+          ((component + 0.055) / 1.055)**2.4
         end
       end
 

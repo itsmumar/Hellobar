@@ -43,7 +43,7 @@ class Admin < ActiveRecord::Base
     end
 
     def any_validated_access_token?(access_token)
-      Admin.all.any?{|a| a.has_validated_access_token?(access_token)}
+      Admin.all.any? { |a| a.has_validated_access_token?(access_token) }
     end
 
     def record_login_attempt(email, ip, user_agent, access_cookie)
@@ -142,7 +142,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
       # Only store the most recent access tokens
       updated_access_tokens = {}
-      access_token_list.sort{|a, b| b[1] <=> a[1]}[0..MAX_ACCESS_TOKENS].each do |data|
+      access_token_list.sort { |a, b| b[1] <=> a[1] }[0..MAX_ACCESS_TOKENS].each do |data|
         updated_access_tokens[data[0]] = data[2]
       end
     end

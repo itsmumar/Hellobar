@@ -15,7 +15,7 @@ module TargetedSegmentsHelper
       method = :get
     else
       token = generate_segment_token(targeted_segment)
-      path = site_targeted_segments_path(site, targeted_segment: {token: token, segment: targeted_segment})
+      path = site_targeted_segments_path(site, targeted_segment: { token: token, segment: targeted_segment })
       method = :post
     end
 
@@ -25,7 +25,7 @@ module TargetedSegmentsHelper
       'data-upgrade-benefit' => 'create more bars'
     }
 
-    link_to 'Create targeted content', path, {class: 'button'}.merge(link_options)
+    link_to 'Create targeted content', path, { class: 'button' }.merge(link_options)
   end
 
   def rule_for_segment_and_value(site, segment, value)
@@ -45,7 +45,7 @@ module TargetedSegmentsHelper
 
   def segment_description(segment_and_value)
     segment, value = segment_and_value.split(':', 2)
-    user_segment = Hello::Segments::User.find{ |d| d[:key] == segment }
+    user_segment = Hello::Segments::User.find { |d| d[:key] == segment }
     "#{user_segment[:name]} is #{value}"
   end
 end

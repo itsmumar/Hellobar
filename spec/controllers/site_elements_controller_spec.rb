@@ -87,7 +87,7 @@ describe SiteElementsController do
     it 'sets the correct error if a rule is not provided' do
       Site.any_instance.stub(:generate_script => true)
 
-      post :create, :site_id => @site.id, :site_element => {:element_subtype => 'traffic', :rule_id => 0}
+      post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic', :rule_id => 0 }
 
       expect_json_to_have_error(:rule, "can't be blank")
     end
@@ -120,8 +120,8 @@ describe SiteElementsController do
       SiteElement.any_instance.stub(valid?: true, save!: true)
 
       expect {
-        post :create, :site_id => @site.id, :site_element => {:element_subtype => 'traffic', :rule_id => 0}
-      }.to change{flash[:success]}.from(nil)
+        post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic', :rule_id => 0 }
+      }.to change { flash[:success] }.from(nil)
     end
   end
 
@@ -185,7 +185,7 @@ describe SiteElementsController do
 
       allow_any_instance_of(Site).to receive(:generate_script)
       allow_any_instance_of(Site).
-        to receive(:lifetime_totals).and_return({'1' => [[1,0]]})
+        to receive(:lifetime_totals).and_return({ '1' => [[1, 0]] })
     end
 
     it 'creates an updater' do
@@ -214,7 +214,7 @@ describe SiteElementsController do
       it 'sets the success flash' do
         expect {
           post :update, valid_params(element)
-        }.to change{flash[:success]}.from(nil)
+        }.to change { flash[:success] }.from(nil)
       end
 
       it 'sends json of the updated attributes' do

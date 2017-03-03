@@ -22,9 +22,9 @@ module Subscribable
       response
     else
       if bill.errors.empty?
-        {errors:
+        { errors:
           ['There was an error processing your payment.  Please contact your credit card company or try using a different credit card.'],
-          status: :unprocessable_entity}
+          status: :unprocessable_entity }
       else
         { errors: bill.errors.full_messages, status: :unprocessable_entity }
       end

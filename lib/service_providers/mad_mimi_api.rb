@@ -32,7 +32,7 @@ module ServiceProviders
 
     def batch_subscribe(list_id, subscribers, double_optin = true)
       @client.add_users(
-        subscribers.map { |s| {email: s[:email], name: s[:name], add_list: list_id } }
+        subscribers.map { |s| { email: s[:email], name: s[:name], add_list: list_id } }
       )
     end
 

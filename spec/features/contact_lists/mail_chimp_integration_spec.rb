@@ -19,7 +19,7 @@ feature 'MailChimp Integration' do
   end
 
   context 'double-optin false' do
-    let(:optin) {false}
+    let(:optin) { false }
 
     it 'sends double-optin' do
       expect(a_request(:post, /.*api.mailchimp.com.*/).

@@ -1,7 +1,7 @@
 class GoogleAnalytics
   attr_reader :analytics
 
-  def initialize(access_token=nil)
+  def initialize(access_token = nil)
     client = Signet::OAuth2::Client.new(
       authorization_uri: 'https://accounts.google.com/o/oauth2/auth',
       token_credential_uri: 'https://www.googleapis.com/oauth2/v3/token',
@@ -25,7 +25,7 @@ class GoogleAnalytics
     analytics.list_account_summaries.items.find do |item|
       web_properties = item.web_properties
       next if web_properties.blank?
-      urls = web_properties.map(&:website_url).compact.map{|web_url| self.class.normalize_url(web_url) }
+      urls = web_properties.map(&:website_url).compact.map { |web_url| self.class.normalize_url(web_url) }
 
       urls.include?(self.class.normalize_url(url))
     end

@@ -19,17 +19,17 @@ describe ServiceProviders::GetResponseApi do
     let(:email) { 'bobloblaw@lawblog.com' }
     let(:tag_id) { 'tagId' }
     let(:tag_name) { 'new_lead' }
-    let(:identity) {Identity.new site_id: 1, provider: 'get_response_api', api_key: 'my_cool_api_key'}
-    let(:get_respone_api) {ServiceProviders::GetResponseApi.new(identity: identity)}
-    let(:client) {Faraday.new}
+    let(:identity) { Identity.new site_id: 1, provider: 'get_response_api', api_key: 'my_cool_api_key' }
+    let(:get_respone_api) { ServiceProviders::GetResponseApi.new(identity: identity) }
+    let(:client) { Faraday.new }
     let(:success_body) {}
-    let(:success_response) {double :response, success?: true, body: [{campaignId: campaign_id, name: 'myCoolList'}].to_json}
-    let(:tags_success_response) {double :response, success?: true, body: [{ tagId: tag_id, name: tag_name }].to_json}
+    let(:success_response) { double :response, success?: true, body: [{ campaignId: campaign_id, name: 'myCoolList' }].to_json }
+    let(:tags_success_response) { double :response, success?: true, body: [{ tagId: tag_id, name: tag_name }].to_json }
     let(:failure_response) {
       double :response,
       success?: false,
       status: 500,
-      body: {codeDescription: 'things went really bad'}.to_json
+      body: { codeDescription: 'things went really bad' }.to_json
     }
 
     before do
@@ -39,7 +39,7 @@ describe ServiceProviders::GetResponseApi do
     context '#lists' do
       it 'returns hash array of hashes of ids and names' do
         allow(client).to receive(:get).and_return(success_response)
-        expect(get_respone_api.lists).to eq([{'id' => campaign_id, 'name' => 'myCoolList'}])
+        expect(get_respone_api.lists).to eq([{ 'id' => campaign_id, 'name' => 'myCoolList' }])
       end
 
       it 'raise exception when time out' do
@@ -64,7 +64,7 @@ describe ServiceProviders::GetResponseApi do
     context '#tags' do
       it 'returns hash array of hashes of ids and names' do
         allow(client).to receive(:get).and_return(tags_success_response)
-        expect(get_respone_api.tags).to eq([{'id' => tag_id, 'name' => tag_name}])
+        expect(get_respone_api.tags).to eq([{ 'id' => tag_id, 'name' => tag_name }])
       end
 
       it 'raise exception when time out' do

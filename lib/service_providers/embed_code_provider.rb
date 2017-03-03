@@ -49,7 +49,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def required_params
-    all_params.delete_if {|k,v| ([ email_param] + name_params).include?(k) or k.nil? }
+    all_params.delete_if { |k, v| ([email_param] + name_params).include?(k) or k.nil? }
   end
 
   def all_params
@@ -68,7 +68,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def email_param
-    params.find {|i| i[:name].include? 'email' }[:name]
+    params.find { |i| i[:name].include? 'email' }[:name]
   end
 
   def name_param
@@ -129,7 +129,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
       if match_data.nil?
         raise 'Cannot parse remote html'
       else
-        remote_html = match_data[1].gsub('\n','').gsub('\\','')
+        remote_html = match_data[1].gsub('\n', '').gsub('\\', '')
       end
     end
 

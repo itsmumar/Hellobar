@@ -36,7 +36,7 @@ feature 'Connect to api ESP', js: true do
   #----------  MadMimi - Variant  ----------#
 
   scenario 'connect to MadMimi - variant email integration UI' do
-    stub_out_get_ab_variations('Email Integration UI 2016-06-22') {'variant'}
+    stub_out_get_ab_variations('Email Integration UI 2016-06-22') { 'variant' }
 
     fake_data_api_original = Hellobar::Settings[:fake_data_api]
     Hellobar::Settings[:fake_data_api] = true
@@ -98,7 +98,7 @@ feature 'Connect to api ESP', js: true do
   #----------  Webhooks - Variant  ----------#
 
   scenario 'updating an existing contact list to be a webhook' do
-    stub_out_get_ab_variations('Email Integration UI 2016-06-22') {'variant'}
+    stub_out_get_ab_variations('Email Integration UI 2016-06-22') { 'variant' }
 
     fake_data_api_original = Hellobar::Settings[:fake_data_api]
     Hellobar::Settings[:fake_data_api] = true

@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   after_create :add_to_onboarding_campaign
   after_create :add_to_infusionsoft_in_background
 
-  before_destroy    :destroy_orphan_sites_before_active_record_association_callbacks
+  before_destroy :destroy_orphan_sites_before_active_record_association_callbacks
   # rubocop:enable Style/SingleSpaceBeforeFirstArg
 
   has_many :payment_methods
@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
   delegate :url_helpers, to: 'Rails.application.routes'
 
   validate :email_does_not_exist_in_wordpress, on: :create
-  validates :email, uniqueness: {scope: :deleted_at, unless: :deleted? }
+  validates :email, uniqueness: { scope: :deleted_at, unless: :deleted? }
   validate :oauth_email_change, if: :is_oauth_user?
 
   attr_accessor :legacy_migration, :timezone, :is_impersonated
@@ -82,7 +82,7 @@ class User < ActiveRecord::Base
 
   def self.find_and_create_by_referral(email)
     if Referral.find_by(email: email)
-      password = Devise.friendly_token[9,20]
+      password = Devise.friendly_token[9, 20]
 
       User.create email: email,
                   status: TEMPORARY_STATUS,
@@ -138,7 +138,7 @@ class User < ActiveRecord::Base
   end
 
   def has_paying_subscription?
-    subscriptions.active.any?{|subscription| subscription.capabilities.acts_as_paid_subscription? }
+    subscriptions.active.any? { |subscription| subscription.capabilities.acts_as_paid_subscription? }
   end
 
   def add_to_infusionsoft_in_background
@@ -150,7 +150,7 @@ class User < ActiveRecord::Base
       config.api_url = Hellobar::Settings[:hb_infusionsoft_url]
       config.api_key = Hellobar::Settings[:hb_infusionsoft_key]
     end
-    data = {:FirstName => self.first_name, :LastName => self.last_name, :Email => self.email}
+    data = { :FirstName => self.first_name, :LastName => self.last_name, :Email => self.email }
     contact_id = Infusionsoft.contact_add_with_dup_check(data, :Email)
     Infusionsoft.contact_add_to_group(contact_id, Hellobar::Settings[:hb_infusionsoft_default_group])
   end
@@ -166,10 +166,10 @@ class User < ActiveRecord::Base
     when :reset_password_instructions
       if is_oauth_user?
         reset_link = "#{host}/auth/google_oauth2"
-        MailerGateway.send_email('Reset Password Oauth', email, {:email => email, :reset_link => reset_link})
+        MailerGateway.send_email('Reset Password Oauth', email, { :email => email, :reset_link => reset_link })
       else
         reset_link = url_helpers.edit_user_password_url(self, :reset_password_token => args[0], :host => host)
-        MailerGateway.send_email('Reset Password', email, {:email => email, :reset_link => reset_link})
+        MailerGateway.send_email('Reset Password', email, { :email => email, :reset_link => reset_link })
       end
     end
   end
@@ -184,7 +184,7 @@ class User < ActiveRecord::Base
 
   def track_temporary_status_change
     if @was_temporary and !temporary?
-      Analytics.track(:user, self.id, 'Completed Signup', {email: self.email})
+      Analytics.track(:user, self.id, 'Completed Signup', { email: self.email })
       @was_temporary = false
     end
   end
@@ -229,7 +229,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.find_for_google_oauth2(access_token, original_email=nil, track_options={})
+  def self.find_for_google_oauth2(access_token, original_email = nil, track_options = {})
     info = access_token['info']
 
     if original_email.present? && info['email'] != original_email # the user is trying to login with a different Google account
@@ -243,7 +243,7 @@ class User < ActiveRecord::Base
     else # create a new user
       user = User.find_by(email: info['email'], status: TEMPORARY_STATUS) || User.new(email: info['email'])
 
-      password = Devise.friendly_token[9,20]
+      password = Devise.friendly_token[9, 20]
       user.password = password
       user.password_confirmation = password
 
@@ -255,13 +255,13 @@ class User < ActiveRecord::Base
 
       if user.save
         Analytics.track(:user, user.id, 'Signed Up', track_options)
-        Analytics.track(:user, user.id, 'Completed Signup', {email: user.email})
+        Analytics.track(:user, user.id, 'Completed Signup', { email: user.email })
       end
     end
 
     # update the authentication tokens & expires for this provider
     if access_token['credentials'] && user.persisted?
-      user.authentications.detect { |x| x.provider == access_token['provider']}.update(
+      user.authentications.detect { |x| x.provider == access_token['provider'] }.update(
         refresh_token: access_token['credentials'].refresh_token,
         access_token: access_token['credentials'].token,
         expires_at: Time.at(access_token['credentials'].expires_at)
@@ -276,7 +276,7 @@ class User < ActiveRecord::Base
 
     if user.nil?
       user = User.new(email: email)
-      password = Devise.friendly_token[9,20]
+      password = Devise.friendly_token[9, 20]
       user.password = password
       user.password_confirmation = password
       user.invite_token = Devise.friendly_token
@@ -317,14 +317,14 @@ class User < ActiveRecord::Base
   def send_team_invite_email(site)
     host = ActionMailer::Base.default_url_options[:host]
     login_link = is_oauth_user? ? "#{host}/auth/google_oauth2" : url_helpers.new_user_session_url(host: host)
-    MailerGateway.send_email('Team Invite', email, {site_url: site.url, login_url: login_link})
+    MailerGateway.send_email('Team Invite', email, { site_url: site.url, login_url: login_link })
   end
 
   def send_invite_token_email(site)
     host = ActionMailer::Base.default_url_options[:host]
     oauth_link = "#{host}/auth/google_oauth2"
     signup_link = url_helpers.invite_user_url(invite_token: invite_token, :host => host)
-    MailerGateway.send_email('Invitation', email, {site_url: site.url, oauth_link: oauth_link, signup_link: signup_link})
+    MailerGateway.send_email('Invitation', email, { site_url: site.url, oauth_link: oauth_link, signup_link: signup_link })
   end
 
   # Disconnect oauth logins if user sets their own password

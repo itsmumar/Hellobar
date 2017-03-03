@@ -49,7 +49,7 @@ describe SitesController do
       end
 
       it 'redirects to oauth login if oauth is set' do
-        post :create, :site => { url: 'temporary-sitee.com'}, :oauth => true
+        post :create, :site => { url: 'temporary-sitee.com' }, :oauth => true
         response.should redirect_to('/auth/google_oauth2')
       end
 
@@ -72,8 +72,8 @@ describe SitesController do
         expect(lambda {
           post(
             :create,
-            {site: { url: 'temporary-site.com' }},
-            {referral_token: referral_tokens(:joey).token}
+            { site: { url: 'temporary-site.com' } },
+            { referral_token: referral_tokens(:joey).token }
           )
         }).to change(Referral, :count).by(1)
 
@@ -90,8 +90,8 @@ describe SitesController do
         expect(lambda {
           post(
             :create,
-            {site: { url: 'temporary-site.com' }},
-            {referral_token: ref.referral_token.token}
+            { site: { url: 'temporary-site.com' } },
+            { referral_token: ref.referral_token.token }
           )
         }).not_to change(Referral, :count)
 
@@ -143,7 +143,7 @@ describe SitesController do
 
       it 'can create a new site and is set as the owner' do
         lambda {
-          post :create, :site => {:url => 'newzombo.com'}
+          post :create, :site => { :url => 'newzombo.com' }
         }.should change(@user.sites, :count).by(1)
 
         site = @user.sites.last
@@ -153,7 +153,7 @@ describe SitesController do
       end
 
       it 'creates a site with a rule set' do
-        post :create, :site => {:url => 'newzombo.com'}
+        post :create, :site => { :url => 'newzombo.com' }
 
         site = @user.sites.last
         site.rules.size.should == 3
@@ -184,21 +184,21 @@ describe SitesController do
     before { stub_current_user(user) }
 
     it 'allows updating the url' do
-      put :update, id: site.id, site: {url: 'http://updatedurl.com'}
+      put :update, id: site.id, site: { url: 'http://updatedurl.com' }
 
       expect(site.reload.url).to eq('http://updatedurl.com')
     end
 
     it 'does not allow updating to existing urls' do
       new_membership = create(:site_membership, user: user)
-      put :update, id: new_membership.site.id, site: {url: site.url}
+      put :update, id: new_membership.site.id, site: { url: site.url }
 
       expect(flash[:error]).to include('URL is already in use')
     end
 
     it 'renders the edit template if the change was rejected' do
       allow_any_instance_of(Site).to receive(:update_attributes).and_return false
-      put :update, id: site.id, site: {url: 'abc'}
+      put :update, id: site.id, site: { url: 'abc' }
 
       expect(subject).to render_template(:edit)
     end
@@ -237,7 +237,7 @@ describe SitesController do
 
     before do
       stub_current_user(user)
-      Hello::DataAPI.stub(lifetime_totals: {total: [[10, 1], [12, 1], [18, 2]]})
+      Hello::DataAPI.stub(lifetime_totals: { total: [[10, 1], [12, 1], [18, 2]] })
     end
 
     it 'should return the latest lifeteime totals' do

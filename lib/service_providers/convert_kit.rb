@@ -32,7 +32,7 @@ module ServiceProviders
 
       if response.success?
         response_hash = JSON.parse response.body
-        response_hash['forms'].map { |form| {'id' => form['id'], 'name' => form['name']}}
+        response_hash['forms'].map { |form| { 'id' => form['id'], 'name' => form['name'] } }
       else
         error_message = JSON.parse(response.body)['error']
         log "getting forms returned '#{error_message}' with the code #{response.status}"
@@ -45,7 +45,7 @@ module ServiceProviders
 
       if response.success?
         response_hash = JSON.parse response.body
-        response_hash['tags'].map { |tag| {'id' => tag['id'], 'name' => tag['name']}}
+        response_hash['tags'].map { |tag| { 'id' => tag['id'], 'name' => tag['name'] } }
       else
         error_message = JSON.parse(response.body)['error']
         log "getting tags returned '#{error_message}' with the code #{response.status}"

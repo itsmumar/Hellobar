@@ -96,7 +96,7 @@ describe 'migration of legacy rules to goals' do
 
   it 'merges goals when the conditions are the same' do
     legacy_site = LegacyMigrator::LegacySite.find(2154)
-    goal_conditions = legacy_site.goals.map{|g| g.data_json.slice('include_urls', 'exclude_urls', 'start_date', 'end_date')}
+    goal_conditions = legacy_site.goals.map { |g| g.data_json.slice('include_urls', 'exclude_urls', 'start_date', 'end_date') }
 
     assert_equal 2, legacy_site.goals.count
     assert_equal goal_conditions[0], goal_conditions[1]

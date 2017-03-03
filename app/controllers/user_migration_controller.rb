@@ -23,7 +23,7 @@ class UserMigrationController < ApplicationController
 
   def create
     site_hashes = if params[:sites].present?
-      params[:sites].map{ |k, v| v }
+      params[:sites].map { |k, v| v }
     elsif params[:site].present?
       [{
         url: params[:site][:url],

@@ -79,7 +79,7 @@ describe Admin do
 
   describe 'validate_login' do
     before(:each) do
-      @admin.valid_access_tokens = {'token' => [Time.now.to_i, Time.now.to_i]}
+      @admin.valid_access_tokens = { 'token' => [Time.now.to_i, Time.now.to_i] }
     end
 
     it 'locks the admin if attempting to log in too many times' do

@@ -19,7 +19,7 @@ class DigestMailer < ActionMailer::Base
       [views.to_i, site_element]
       # Next we reject any elements without any views, sort by the views, and then
       # distill the results back to just the site elements
-    end.reject{|d| d[0] == 0}.sort_by{|d| d[0]}.reverse!.collect{|d| d[1]}
+    end.reject { |d| d[0] == 0 }.sort_by { |d| d[0] }.reverse!.collect { |d| d[1] }
     # Bail if we don't have any elements with data
     return nil if @sorted_elements.empty?
     # Get the totals for the elements with views

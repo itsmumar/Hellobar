@@ -4,10 +4,10 @@ class QueueWorker
   LOG_FILE = File.join(Rails.root, 'log', 'queue_worker.log')
 
   module Delay
-    def delay(task_name, options={})
+    def delay(task_name, options = {})
       queue = options.delete(:queue_name)
       namespace = options.delete(:namespace) || self.class.name
-      body = "#{namespace.underscore.downcase}:#{task_name}[#{id}]".gsub(/^:/,'')
+      body = "#{namespace.underscore.downcase}:#{task_name}[#{id}]".gsub(/^:/, '')
       if Rails.env.development? || Rails.env.test?
         begin
           # Ensure private methods are called.
@@ -25,7 +25,7 @@ class QueueWorker
     end
   end
 
-  def self.queue_attributes(queue_name_filter=nil)
+  def self.queue_attributes(queue_name_filter = nil)
     sqs = AWS::SQS.new(access_key_id: Hellobar::Settings[:aws_access_key_id], secret_access_key: Hellobar::Settings[:aws_secret_access_key])
 
     queue_name_filter ||= Hellobar::Settings[:main_queue]
@@ -44,7 +44,7 @@ class QueueWorker
     end
   end
 
-  def self.send_sqs_message(message, stage=nil, queue_name=nil)
+  def self.send_sqs_message(message, stage = nil, queue_name = nil)
     queue_name ||= Hellobar::Settings[:main_queue] || 'test_queue'
     stage ||= Hellobar::Settings[:env_name]
 

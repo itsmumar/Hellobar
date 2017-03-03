@@ -4,7 +4,7 @@ feature 'Contact Submission' do
   before do
     @sent_email = []
     MailerGateway.stub(:send_email) do |type, recipient, params|
-      @sent_email << {recipient: recipient, type: type, params: params}
+      @sent_email << { recipient: recipient, type: type, params: params }
     end
   end
 

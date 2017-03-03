@@ -22,14 +22,14 @@ describe 'migration of legacy sites' do
   end
 
   it 'leaves the timezone blank if no legacy goal had a timezone' do
-    assert !@legacy_site.goals.any?{|g| g.data_json['dates_timezone'].present?}
+    assert !@legacy_site.goals.any? { |g| g.data_json['dates_timezone'].present? }
     assert @site.timezone.nil?
   end
 
   it 'uses the timezone from legacy site if present' do
     site = Site.find(1980)
     legacy_site = LegacyMigrator::LegacySite.find(site.id)
-    timezone = legacy_site.goals.find{|g| g.data_json['dates_timezone'].present?}.data_json['dates_timezone']
+    timezone = legacy_site.goals.find { |g| g.data_json['dates_timezone'].present? }.data_json['dates_timezone']
 
     assert timezone.include?(site.timezone)
   end

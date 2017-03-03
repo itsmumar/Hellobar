@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe BillingLog do
   it 'should not let you edit a BillingLog' do
-    log = BillingLog.create(:message=>'test')
+    log = BillingLog.create(:message => 'test')
     log.message = 'test2'
-    lambda{log.save!}.should raise_error(ActiveRecord::ReadOnlyRecord)
+    lambda { log.save! }.should raise_error(ActiveRecord::ReadOnlyRecord)
   end
 end
 
@@ -47,8 +47,8 @@ describe BillingAuditTrail do
 
   it 'should set additional lookup ids' do
     user = users(:joey)
-    payment_method = PaymentMethod.create!(:user=>user)
-    payment_method_details = PaymentMethodDetails.create!(:payment_method=>payment_method)
+    payment_method = PaymentMethod.create!(:user => user)
+    payment_method_details = PaymentMethodDetails.create!(:payment_method => payment_method)
 
     payment_method_details.audit << 'Hello'
     BillingLog.count.should == 1
@@ -69,6 +69,6 @@ describe BillingAuditTrail do
     # value of GitUtils.current_commit will be "???" or something else that will potentially mess up the regex
     current_commit = GitUtils.current_commit.gsub(/.{1}/) { |m| m =~ /[a-z0-9]/ ? m : "\\#{m}" }
 
-    log.source_file.should =~ /#{current_commit} @ .*?billing_log_spec\.rb:#{__LINE__-8}/
+    log.source_file.should =~ /#{current_commit} @ .*?billing_log_spec\.rb:#{__LINE__ - 8}/
   end
 end

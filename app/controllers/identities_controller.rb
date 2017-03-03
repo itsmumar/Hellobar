@@ -33,7 +33,7 @@ class IdentitiesController < ApplicationController
       #TODO sanitze me?
       identity.api_key = params[:api_key]
       env['omniauth.params'] ||= {}
-      env['omniauth.params'].merge!({'redirect_to' => request.referrer})
+      env['omniauth.params'].merge!({ 'redirect_to' => request.referrer })
     end
 
     if identity.save
@@ -55,7 +55,7 @@ class IdentitiesController < ApplicationController
 
   def credentials_from_request
     if params[:api_key] && params[:username].present?
-      {'username' => params[:username]}
+      { 'username' => params[:username] }
     else
       env['omniauth.auth'] && env['omniauth.auth']['credentials']
     end
@@ -63,7 +63,7 @@ class IdentitiesController < ApplicationController
 
   def extra_from_request
     if params[:app_url].present?
-      {'app_url' => sanitize_app_url(params[:app_url])}
+      { 'app_url' => sanitize_app_url(params[:app_url]) }
     else
       env['omniauth.auth'] && env['omniauth.auth']['extra']
     end

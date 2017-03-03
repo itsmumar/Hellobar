@@ -11,7 +11,7 @@ module HB
       def gateway
         unless @gateway
           ActiveMerchant::Billing::Base.mode = Hellobar::Settings[:cybersource_environment].try(:to_sym) || :test
-          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(:login=>Hellobar::Settings[:cybersource_login], :password=>Hellobar::Settings[:cybersource_password], :ignore_avs=>true)
+          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(:login => Hellobar::Settings[:cybersource_login], :password => Hellobar::Settings[:cybersource_password], :ignore_avs => true)
         end
         @gateway
       end
@@ -23,9 +23,9 @@ class CyberSourceCreditCard < PaymentMethodDetails
   CC_FIELDS = %w{number month year first_name last_name brand verification_value}
   ADDRESS_FIELDS = %w{city state zip address1 country}
   # Note: any fields not included here will be stripped out when setting
-  FIELDS = CC_FIELDS+ADDRESS_FIELDS+['token']
+  FIELDS = CC_FIELDS + ADDRESS_FIELDS + ['token']
   # These are the required fields to be set
-  REQUIRED_FIELDS = FIELDS-%w{brand token state}
+  REQUIRED_FIELDS = FIELDS - %w{brand token state}
 
   class CyberSourceCreditCardValidator < ActiveModel::Validator
     def validate(record)
@@ -91,7 +91,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   # Shouldn't really need to get this directly
   def cybersource_profile
     unless @cybersource_profile
-      response = HB::CyberSource.gateway.retrieve(formatted_token, {order_id: order_id})
+      response = HB::CyberSource.gateway.retrieve(formatted_token, { order_id: order_id })
       raise response.message unless response.success?
       @cybersource_profile = response.params
     end
@@ -107,7 +107,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
       raise "Invalid amount: #{amount_in_dollars.inspect}"
     end
     begin
-      response = HB::CyberSource.gateway.purchase(amount_in_dollars*100, formatted_token, {order_id: order_id})
+      response = HB::CyberSource.gateway.purchase(amount_in_dollars * 100, formatted_token, { order_id: order_id })
 
       audit << "Charging #{amount_in_dollars.inspect}, got response: #{response.inspect}"
       if response.success?
@@ -133,7 +133,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
       raise 'Can not refund without original transaction ID'
     end
     begin
-      response = HB::CyberSource.gateway.refund(amount_in_dollars*100, original_transaction_id)
+      response = HB::CyberSource.gateway.refund(amount_in_dollars * 100, original_transaction_id)
 
       audit << "Refunding #{amount_in_dollars.inspect} to #{original_transaction_id.inspect}, got response: #{response.inspect}"
       if response.success?
@@ -197,11 +197,11 @@ class CyberSourceCreditCard < PaymentMethodDetails
     # Note: we don't want to give CyberSource our customer's email addresses,
     # which is why we use the generic userXXX@hellobar.com format
     email = "user#{user ? user.id : 'NA'}@hellobar.com"
-    params = {:order_id=>order_id, :email => email, :address=>address.to_h}
+    params = { :order_id => order_id, :email => email, :address => address.to_h }
     # Set the brand
     data['brand'] = card.brand
 
-    data['sanitized_number'] = 'XXXX-XXXX-XXXX-'+data['number'][-4..-1]
+    data['sanitized_number'] = 'XXXX-XXXX-XXXX-' + data['number'][-4..-1]
     sanitized_data = data.clone
     sanitized_data.delete('number')
     sanitized_data.delete('verification_value')
@@ -221,7 +221,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
           if field == 'c:cardType'
             raise 'Invalid credit card'
           else
-            raise "Invalid #{field.gsub(/^c:/,'').underscore.humanize.downcase}"
+            raise "Invalid #{field.gsub(/^c:/, '').underscore.humanize.downcase}"
           end
         end
         raise response.message

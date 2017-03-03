@@ -125,7 +125,7 @@ describe Subscription do
   end
 
   it 'should not override values set with defaults' do
-    Subscription::Pro.create(:visit_overage=>3).visit_overage.should == 3
+    Subscription::Pro.create(:visit_overage => 3).visit_overage.should == 3
   end
 
   it 'should default to monthly schedule' do
@@ -145,7 +145,7 @@ describe Subscription do
   end
 
   it 'should raise an exception for an invalid schedule' do
-    lambda{Subscription::Pro.new(schedule: 'fortnightly')}.should raise_error(ArgumentError)
+    lambda { Subscription::Pro.new(schedule: 'fortnightly') }.should raise_error(ArgumentError)
   end
 
   it 'should set the amount based on the schedule unless overridden' do
@@ -154,11 +154,11 @@ describe Subscription do
     subscription.yearly?.should be_false
     subscription.amount.should == Subscription::Pro.defaults[:monthly_amount]
 
-    subscription = Subscription::Pro.create(:schedule=>:yearly)
+    subscription = Subscription::Pro.create(:schedule => :yearly)
     subscription.yearly?.should be_true
     subscription.amount.should == Subscription::Pro.defaults[:yearly_amount]
 
-    subscription = Subscription::Pro.create(:schedule=>:yearly, :amount=>2)
+    subscription = Subscription::Pro.create(:schedule => :yearly, :amount => 2)
     subscription.yearly?.should be_true
     subscription.amount.should == 2
   end
@@ -240,7 +240,7 @@ describe Subscription do
       # Should still have pro cabalities
       @site.capabilities(true).class.should == Subscription::Pro::Capabilities
       # Should have a pending bill for pro
-      pending = @site.bills(true).reject{|b| !b.pending?}
+      pending = @site.bills(true).reject { |b| !b.pending? }
       pending.should have(1).bill
       pending.first.subscription.should be_a(Subscription::Pro)
 
@@ -250,7 +250,7 @@ describe Subscription do
       # Should still have pro capabilities
       @site.capabilities(true).class.should == Subscription::Pro::Capabilities
       # Should have a pending bill for free
-      pending = @site.bills(true).reject{|b| !b.pending?}
+      pending = @site.bills(true).reject { |b| !b.pending? }
       pending.should have(1).bill
       pending.first.subscription.should be_a(Subscription::Free)
 
@@ -259,7 +259,7 @@ describe Subscription do
       # Should not have pro capabilities
       @site.capabilities(true).class.should == Subscription::Free::Capabilities
       # Should still have a pending bill for free
-      pending = @site.bills(true).reject{|b| !b.pending?}
+      pending = @site.bills(true).reject { |b| !b.pending? }
       pending.should have(1).bill
       pending.first.subscription.should be_a(Subscription::Free)
     end
@@ -392,7 +392,7 @@ describe Site do
       bill.should_not be_persisted
       bill.amount.should == @pro.amount
       bill.bill_at.should <= Time.now
-      lambda{bill.save!}.should raise_error(ActiveRecord::ReadOnlyRecord)
+      lambda { bill.save! }.should raise_error(ActiveRecord::ReadOnlyRecord)
       bill.should_not be_persisted
       @site.current_subscription.should_not == @pro
       @site.capabilities.class.should == Subscription::Free::Capabilities
@@ -438,7 +438,7 @@ describe Site do
       success, bill = @site.change_subscription(@enterprise, @payment_method)
       success.should be_true
       bill.should be_paid
-      bill.amount.should == @enterprise.amount-@pro.amount
+      bill.amount.should == @enterprise.amount - @pro.amount
       @site.current_subscription.should == @enterprise
       @site.capabilities(true).should be_a(Subscription::Enterprise::Capabilities)
     end
@@ -451,7 +451,7 @@ describe Site do
       success, bill2 = @site.change_subscription(@enterprise, @payment_method)
       success.should be_true
       bill2.should be_paid
-      bill2.amount.should == @enterprise.amount-@pro.amount
+      bill2.amount.should == @enterprise.amount - @pro.amount
       @site.current_subscription.should == @enterprise
       @site.capabilities(true).should be_a(Subscription::Enterprise::Capabilities)
     end
@@ -473,7 +473,7 @@ describe Site do
       success, enterprise_bill = @site.change_subscription(@enterprise, @payment_method)
       success.should be_true
       # Should still prorate
-      enterprise_bill.amount.should == @enterprise.amount-@pro.amount
+      enterprise_bill.amount.should == @enterprise.amount - @pro.amount
     end
 
     it 'should affect prorating if you refund and switch plan' do
@@ -502,7 +502,7 @@ describe Site do
       success, bill = @site.change_subscription(@pro, @payment_method)
       success.should be_true
       # Have used up 1/4 of bill
-      one_fourth_time = (bill.end_date-bill.start_date)/4
+      one_fourth_time = (bill.end_date - bill.start_date) / 4
       bill.start_date -= one_fourth_time
       bill.end_date -= one_fourth_time
       bill.save!
@@ -511,7 +511,7 @@ describe Site do
       success.should be_true
       bill.should be_paid
       # Only going to apply 75% of pro payment since we used up 25% (1/4) of it
-      bill.amount.should == (@enterprise.amount-@pro.amount*(0.75)).to_i
+      bill.amount.should == (@enterprise.amount - @pro.amount * (0.75)).to_i
       @site.current_subscription.should == @enterprise
       @site.capabilities(true).class.should == Subscription::Enterprise::Capabilities
     end
@@ -535,8 +535,8 @@ describe Site do
       success, bill = @site.change_subscription(@pro, @payment_method)
       success.should be_true
       @site.current_subscription.should == @pro
-      bill.start_date = Time.now-2.years
-      bill.end_date = Time.now-1.year
+      bill.start_date = Time.now - 2.years
+      bill.end_date = Time.now - 1.year
       bill.save!
       success, bill = @site.change_subscription(@enterprise, @payment_method)
       success.should be_true
@@ -596,7 +596,7 @@ describe Site do
       # Bill should be full amount
       bill2.amount.should == pro_monthly.amount
       # Bill should be due at end of yearly subscription
-      bill2.due_at.should be_within(2.hour).of(bill.due_at+1.year)
+      bill2.due_at.should be_within(2.hour).of(bill.due_at + 1.year)
       # Bill should be pending
       bill2.should be_pending
     end
@@ -622,7 +622,7 @@ describe Site do
       success.should be_false
       bill.should be_pending
       # Make it due later
-      bill.bill_at = Time.now+7.days
+      bill.bill_at = Time.now + 7.days
       bill.save!
       @site.bills_with_payment_issues(true).should == []
     end

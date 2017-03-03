@@ -17,7 +17,7 @@ describe Site do
     it "should return site's owners & admins" do
       create(:site_membership, :admin, :site => @site)
       %w(owner admin).each do |role|
-        expect(@site.owners_and_admins.where(site_memberships: { role: role}).count).to eq(1)
+        expect(@site.owners_and_admins.where(site_memberships: { role: role }).count).to eq(1)
       end
     end
   end
@@ -360,12 +360,12 @@ describe Site do
 
   describe '#script_installed_api?' do
     it 'is true if there is only one day of data' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({'1' => [[1,0]]})
+      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({ '1' => [[1, 0]] })
       expect(@site.script_installed_api?).to be_true
     end
 
     it 'is true if there are multiple days of data' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({'1' => [[1,0], [2,0]]})
+      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({ '1' => [[1, 0], [2, 0]] })
       expect(@site.script_installed_api?).to be_true
     end
 
@@ -381,8 +381,8 @@ describe Site do
 
     it 'is true if one element has views but others do not' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({
-        '1' => [[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0]],
-        '2' => [[1, 0],[1, 0],[2, 0],[2, 0],[2, 0],[2, 0],[2, 0],[2, 0]]
+        '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
+        '2' => [[1, 0], [1, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0]]
       })
 
       expect(@site.script_installed_api?).to be_true
@@ -390,8 +390,8 @@ describe Site do
 
     it 'is true if any of the elements have been installed in the last 7 days' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({
-        '1' => [[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0]],
-        '2' => [[1, 0],[1, 0]]
+        '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
+        '2' => [[1, 0], [1, 0]]
       })
 
       expect(@site.script_installed_api?).to be_true
@@ -399,7 +399,7 @@ describe Site do
 
     it 'is false if there have been no views in the last 10 days' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({
-        '1' => [[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0],[1, 0]],
+        '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
         '2' => [[0, 0]]
       })
 

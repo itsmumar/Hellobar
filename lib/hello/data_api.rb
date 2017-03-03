@@ -42,7 +42,7 @@ module Hello::DataAPI
         results
       end
 
-      Hash[api_results.map{|k,v| [k, Performance.new(v)] } ]
+      Hash[api_results.map { |k, v| [k, Performance.new(v)] }]
     end
 
     def fake_lifetime_totals(site, site_elements, num_days = 1)
@@ -76,13 +76,13 @@ module Hello::DataAPI
     #
     def lifetime_totals_by_type(site, site_elements, num_days = 30, cache_options = {})
       data = Hello::DataAPI.lifetime_totals(site, site_elements, num_days, cache_options) || {}
-      totals = {:total => [], :email => [], :social => [], :traffic => [], :call => []}
+      totals = { :total => [], :email => [], :social => [], :traffic => [], :call => [] }
       elements = site.site_elements.where(:id => data.keys)
       ids = {}
 
       # collect the ids of each subtype
       [:traffic, :email, :social, :call].each do |key|
-        ids[key] = elements.select{|e| e.short_subtype == key.to_s}.map{|e| e.id.to_s}
+        ids[key] = elements.select { |e| e.short_subtype == key.to_s }.map { |e| e.id.to_s }
       end
 
       # what is the most amount of data (in days) we have for any site element?
@@ -102,7 +102,7 @@ module Hello::DataAPI
 
         # do the same for each subset of data, grouped by element subtype
         [:email, :traffic, :social, :call].each do |key|
-          type_data = data.select{|k, v| ids[key].include?(k)}
+          type_data = data.select { |k, v| ids[key].include?(k) }
           totals[key] << type_data.inject([0, 0]) do |sum, data_row|
             day_i_data = data_row[1][i]
             [sum[0] + day_i_data[0], sum[1] + day_i_data[1]]
@@ -185,7 +185,7 @@ module Hello::DataAPI
     # get_contacts(contact_list)
     # => [["person100@gmail.com", "person name", 1388534400], ["person99@gmail.com", "person name", 1388534399]]
     #
-    def get_contacts(contact_list, limit=nil, from_timestamp = nil, cache_options = {})
+    def get_contacts(contact_list, limit = nil, from_timestamp = nil, cache_options = {})
       return fake_get_contacts(contact_list) if Hellobar::Settings[:fake_data_api]
       cache_key = "hello:data-api:#{contact_list.site_id}:contact_list-#{contact_list.id}:from#{from_timestamp}:limit#{limit}"
       cache_options[:expires_in] = 10.minutes
@@ -201,7 +201,7 @@ module Hello::DataAPI
     end
 
     def get(path, params)
-      timeouts = [3,3,5,5,8] # Determines the length and number of attempts
+      timeouts = [3, 3, 5, 5, 8] # Determines the length and number of attempts
       timeout_index = 0
       begin
         begin_time = Time.now.to_f

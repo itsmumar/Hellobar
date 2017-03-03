@@ -20,12 +20,12 @@ module Hello
       # }
       def get_segments_by_week(site_element_ids, start_date, end_date, segment_keys)
         # Query every site element id
-        final_results = Hash.new{|h, k| h[k]= [0,0]}
+        final_results = Hash.new { |h, k| h[k] = [0, 0] }
         site_element_ids.each do |site_element_id|
-          results_for_site_element = Hash.new{|h, k| h[k] = {total: 0, min_yday: nil, max_yday: nil}}
+          results_for_site_element = Hash.new { |h, k| h[k] = { total: 0, min_yday: nil, max_yday: nil } }
           # We need to query every table for the given start date and end date
           ydays_by_year_month(start_date, end_date).each do |year_month, ydays|
-            year_offset = (year_month.split('_').first.to_i-2000)*365
+            year_offset = (year_month.split('_').first.to_i - 2000) * 365
             # Get the table
             table = get_segments_table_for_year_month(year_month)
             begin
@@ -33,7 +33,7 @@ module Hello
                 table.items.query(
                   hash_value: site_element_id,
                   range_begins_with: segment_key,
-                  select: [:segment]+ydays
+                  select: [:segment] + ydays
                 ).each do |item|
                   segment = item.attributes['segment']
                   result = results_for_site_element[segment]
@@ -55,11 +55,11 @@ module Hello
           results_for_site_element.each do |segment, data|
             total = data[:total]
             if total > 0
-              conversions = (total/CONVERSION_SCALE)
-              views = total-(conversions*CONVERSION_SCALE)
-              num_weeks = (((data[:max_yday]-data[:min_yday]).to_f+1)/7)
-              conversions = (conversions/num_weeks).round
-              views = (views/num_weeks).round
+              conversions = (total / CONVERSION_SCALE)
+              views = total - (conversions * CONVERSION_SCALE)
+              num_weeks = (((data[:max_yday] - data[:min_yday]).to_f + 1) / 7)
+              conversions = (conversions / num_weeks).round
+              views = (views / num_weeks).round
               final_results[segment][0] += views
               final_results[segment][1] += conversions
             end
@@ -74,8 +74,8 @@ module Hello
       # is used by get_segments
       def ydays_by_year_month(start_date, end_date)
         date = start_date
-        day = 24*60*60
-        results = Hash.new{|h,k| h[k] = []}
+        day = 24 * 60 * 60
+        results = Hash.new { |h, k| h[k] = [] }
         loop do
           results["#{date.year}_#{date.month}"] << date.yday
           date += day
@@ -105,7 +105,7 @@ module Hello
 
       # Returns the segment table name for the given year and month (e.g. "2014_9")
       def segment_table_name_for_year_month(year_month)
-        table_name(:segments)+"_#{year_month}"
+        table_name(:segments) + "_#{year_month}"
       end
 
       protected
@@ -124,8 +124,8 @@ module Hello
       def load_tables
         # Load the table schemas
         @@tables = {}
-        load_table(:contacts, {lid: :number}, {email: :string})
-        load_table(:over_time, {sid: :number}, {date: :number})
+        load_table(:contacts, { lid: :number }, { email: :string })
+        load_table(:over_time, { sid: :number }, { date: :number })
       end
 
       def load_table(name, hash_key, range_key)
@@ -144,8 +144,8 @@ module Hello
         name = segment_table_name_for_year_month(year_month)
         unless @@tables[name]
           table = @@dynamo_db.tables[name]
-          table.hash_key = {sid: :number}
-          table.range_key = {segment: :string}
+          table.hash_key = { sid: :number }
+          table.range_key = { segment: :string }
           @@tables[name] = table
         end
         return @@tables[name]
@@ -161,7 +161,7 @@ module Hello
         # Get all the segments for the last 60 days for all the site
         # elements
         end_date = Time.now
-        start_date = end_date-60*24*60*60
+        start_date = end_date - 60 * 24 * 60 * 60
         # Get the segments by week
         segments_as_hash = Hello::DynamoDB.get_segments_by_week(site_elements.collect(&:id), start_date, end_date, SUGGESTION_SEGMENT_KEYS)
         segments = []
@@ -170,33 +170,33 @@ module Hello
           segments << [segment, data[0], data[1]]
         end
         # We return 10 values or 25% of the items, whichever is smaller
-        num_values_to_return = [10, (segments.length.to_f/4).round].min
+        num_values_to_return = [10, (segments.length.to_f / 4).round].min
         # Sort the segment-values by total visits desc (most visits is at top)
-        segments.sort!{|a, b| b[1] <=> a[1]}
+        segments.sort! { |a, b| b[1] <=> a[1] }
         # Take the top 25% of segments. If less than 80 item take top 50%
         top_segments = nil
         bottom_segments = nil
         if segments.length < 80
           # Top 50%
-          top_segments = segments[0...segments.length/2]
+          top_segments = segments[0...segments.length / 2]
           # Bottom 50%
-          bottom_segments = segments[segments.length/2..-1]
+          bottom_segments = segments[segments.length / 2..-1]
         else
           # Top 25%
-          top_segments = segments[0...segments.length/4]
+          top_segments = segments[0...segments.length / 4]
           # Bottom 50%
-          bottom_segments = segments[segments.length/2..-1]
+          bottom_segments = segments[segments.length / 2..-1]
         end
         # Define sort methods
-        sort_by_conversion_rate = lambda do |a,b|
-          conv_a = a[1] == 0 ? 0 : a[2].to_f/a[1]
-          conv_b = b[1] == 0 ? 0 : b[2].to_f/b[1]
+        sort_by_conversion_rate = lambda do |a, b|
+          conv_a = a[1] == 0 ? 0 : a[2].to_f / a[1]
+          conv_b = b[1] == 0 ? 0 : b[2].to_f / b[1]
           conv_b <=> conv_a
         end
-        sort_by_conversion = lambda do |a,b|
+        sort_by_conversion = lambda do |a, b|
           if b[2] == a[2]
-            conv_a = a[1] == 0 ? 0 : a[2].to_f/a[1]
-            conv_b = b[1] == 0 ? 0 : b[2].to_f/b[1]
+            conv_a = a[1] == 0 ? 0 : a[2].to_f / a[1]
+            conv_b = b[1] == 0 ? 0 : b[2].to_f / b[1]
             conv_b <=> conv_a
           else
             b[2] <=> a[2]

@@ -9,23 +9,23 @@ module Hello::DataAPI
       @data = data
     end
 
-    def views(date=Date.today)
+    def views(date = Date.today)
       data_for(date, 0)
     end
 
-    def conversions(date=Date.today)
+    def conversions(date = Date.today)
       data_for(date, 1)
     end
 
-    def views_between(d1, d2=Date.today)
+    def views_between(d1, d2 = Date.today)
       data_for(d2, 0) - data_for(d1, 0)
     end
 
-    def conversions_between(d1, d2=Date.today)
+    def conversions_between(d1, d2 = Date.today)
       data_for(d2, 1) - data_for(d1, 1)
     end
 
-    def conversion_percent_between(d1, d2=Date.today)
+    def conversion_percent_between(d1, d2 = Date.today)
       v = views_between(d1, d2)
       return 0 if v == 0
       conversions_between(d1, d2) / v.to_f
@@ -39,7 +39,7 @@ module Hello::DataAPI
       d == 0 ? nil : ((n / d.to_f) - 1) * 100
     end
 
-    def respond_to?(sym, include_private=false)
+    def respond_to?(sym, include_private = false)
       super(sym, include_private) || data.respond_to?(sym, include_private)
     end
 
@@ -53,7 +53,7 @@ module Hello::DataAPI
     def date_to_index(date)
       index = data.length - 1 - (Date.today - date).to_i
       return nil if index < 0
-      return data.length-1 if  index >= data.length
+      return data.length - 1 if  index >= data.length
       return index
     end
 

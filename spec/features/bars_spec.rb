@@ -39,7 +39,7 @@ feature 'Adding and editing bars', :js do
   end
 
   scenario 'existing user can create a site element' do
-    OmniAuth.config.add_mock(:google_oauth2, {:uid => '12345'})
+    OmniAuth.config.add_mock(:google_oauth2, { :uid => '12345' })
     user = create(:user)
     site = user.sites.create(url: random_uniq_url)
     create(:rule, site: site)
@@ -141,7 +141,7 @@ feature 'Adding and editing bars', :js do
       click_button 'Save & Publish'
       expect(page).to have_content('Summary')
       se = SiteElement.last
-      se_settings = se.settings['fields_to_collect'].map{|a| [a['type'],a['is_enabled']]}.to_h
+      se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
       expect(se_settings['builtin-phone']).to eq(true)
       expect(se_settings['builtin-name']).to eq(true)
       expect(se_settings['builtin-email']).to eq(true)
@@ -198,7 +198,7 @@ feature 'Adding and editing bars', :js do
   scenario 'User can modify the color settings for a bar' do
     color = 'AABBCC'
 
-    OmniAuth.config.add_mock(:google_oauth2, {uid: '12345', info: {email: 'bob@lawblog.com'}})
+    OmniAuth.config.add_mock(:google_oauth2, { uid: '12345', info: { email: 'bob@lawblog.com' } })
     visit root_path
 
     fill_in 'site[url]', with: 'mewgle.com'

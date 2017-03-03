@@ -1,6 +1,6 @@
 module ContactListsHelper
   def options_for_provider_select
-    providers = Hellobar::Settings[:identity_providers].select{|k, v| v[:hidden] != true}
+    providers = Hellobar::Settings[:identity_providers].select { |k, v| v[:hidden] != true }
     providers_array = providers.map do |provider_name, provider_attributes|
       [
         provider_attributes[:name],

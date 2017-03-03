@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ServiceProviders::Infusionsoft do
-  let(:identity) { Identity.new(:provider => 'infusionsoft', :api_key => 'test-api-key', :extra => {app_url: 'test1.infusionsoft.com'}) }
+  let(:identity) { Identity.new(:provider => 'infusionsoft', :api_key => 'test-api-key', :extra => { app_url: 'test1.infusionsoft.com' }) }
   let(:service_provider) { identity.service_provider }
   let(:contact_list) { ContactList.new }
 
@@ -25,7 +25,7 @@ describe ServiceProviders::Infusionsoft do
     end
 
     it 'should tag the user with all of the tags when present' do
-      contact_list.data = { 'tags' => %w{ 1 2 3 } }
+      contact_list.data = { 'tags' => %w{1 2 3} }
       service_provider.instance_variable_set(:@contact_list, contact_list)
 
       expect(Infusionsoft).to receive(:contact_add_to_group).exactly(3).times { nil }

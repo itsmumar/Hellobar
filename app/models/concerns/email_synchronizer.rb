@@ -29,7 +29,7 @@ module EmailSynchronizer
       contacts = Hello::DataAPI.get_contacts(self) || []
       contacts.in_groups_of(1000, false).each do |group|
         if oauth? || api_key? || webhook?
-          group = group.map{ |g| {:email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2]} }
+          group = group.map { |g| { :email => g[0], :name => g[1].blank? ? nil : g[1], :created_at => g[2] } }
           batch_subscribe(data['remote_id'], group, double_optin)
         else
           group.each do |g|
@@ -44,7 +44,7 @@ module EmailSynchronizer
   delegate :batch_subscribe, to: :service_provider
 
   # Extracted from embed_code_provider#subscribe!
-  def sync_one!(email, name, options={})
+  def sync_one!(email, name, options = {})
     log_entry = contact_list_logs.create(email: email, name: name)
     return unless syncable?
 
@@ -71,7 +71,7 @@ module EmailSynchronizer
 
   private
 
-  def perform_sync(log_entry=nil)
+  def perform_sync(log_entry = nil)
     # run something immediately before sync
     yield
     # run something immediately after sync
@@ -81,7 +81,7 @@ module EmailSynchronizer
       log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
     end
 
-    if ESP_NONTRANSIENT_ERRORS.any?{|message| e.to_s.include?(message)}
+    if ESP_NONTRANSIENT_ERRORS.any? { |message| e.to_s.include?(message) }
       Raven.capture_exception(e)
       if oauth?
         # Clear identity on failure

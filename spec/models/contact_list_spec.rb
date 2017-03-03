@@ -6,7 +6,7 @@ describe ContactList do
   let(:site) { sites(:zombo) }
   let(:provider) { 'email' }
   let(:identity) { Identity.new(:site => site, :provider => provider) }
-  let(:contact_list) { contact_lists(:zombo_contacts).tap{|c| c.identity = identity} }
+  let(:contact_list) { contact_lists(:zombo_contacts).tap { |c| c.identity = identity } }
   let(:service_provider) { contact_list.service_provider }
 
   before do
@@ -126,7 +126,7 @@ describe ContactList do
 
     context 'webhook' do
       it 'syncs' do
-        allow(contact_list).to receive(:data) { {'webhook_url' => 'http://url.com/webhooks'} }
+        allow(contact_list).to receive(:data) { { 'webhook_url' => 'http://url.com/webhooks' } }
         expect(service_provider).to receive(:subscribe).with(nil, 'email@email.com', 'Name Mcnamerson', true)
 
         contact_list.sync_one!('email@email.com', 'Name Mcnamerson')
@@ -135,7 +135,7 @@ describe ContactList do
 
     context 'embed code provider' do
       let(:provider) { 'mad_mimi_form' }
-      let(:contact_list) { contact_lists(:embed_code).tap{|c| c.identity = identity} }
+      let(:contact_list) { contact_lists(:embed_code).tap { |c| c.identity = identity } }
       let(:service_provider) { contact_list.service_provider }
       let(:double_optin) { ContactList.new.double_optin }
 
@@ -151,22 +151,22 @@ describe ContactList do
       allow(contact_list).to receive(:oauth?) { true }
       allow(service_provider).to receive(:subscribe)
 
-      expect{
+      expect {
         contact_list.sync_one! 'email@email.com', 'Test Testerson'
-      }.to change{ContactListLog.count}.by(1)
+      }.to change { ContactListLog.count }.by(1)
     end
 
     it 'saves the error in a log entry' do
       allow(contact_list).to receive(:oauth?) { true }
       allow(service_provider).to receive(:subscribe).and_raise('this error')
-      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson'}.to raise_error
+      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }.to raise_error
       expect(contact_list.contact_list_logs.last.error).to include('this error')
     end
 
     it 'saves the stacktrace in a log entry' do
       allow(contact_list).to receive(:oauth?) { true }
       allow(service_provider).to receive(:subscribe).and_raise('this error')
-      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson'}.to raise_error
+      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }.to raise_error
       expect(contact_list.contact_list_logs.last.stacktrace).to_not be_blank
     end
 
@@ -174,9 +174,9 @@ describe ContactList do
       allow(contact_list).to receive(:oauth?) { true }
       allow(service_provider).to receive(:subscribe)
 
-      expect{
+      expect {
         contact_list.sync_one! 'email@email.com', 'Test Testerson'
-      }.to change{ContactListLog.where(completed: true).count}.by(1)
+      }.to change { ContactListLog.where(completed: true).count }.by(1)
     end
   end
 
@@ -273,7 +273,7 @@ describe ContactList do
   describe '#subscribers' do
     it 'gets subscribers from the data API' do
       Hello::DataAPI.stub(:get_contacts => [['person@gmail.com', 'Per Son', 123456789]])
-      contact_list.subscribers.should == [{:email => 'person@gmail.com', :name => 'Per Son', :subscribed_at => Time.at(123456789)}]
+      contact_list.subscribers.should == [{ :email => 'person@gmail.com', :name => 'Per Son', :subscribed_at => Time.at(123456789) }]
     end
 
     it 'defaults to [] if data API returns nil' do
@@ -290,11 +290,11 @@ describe ContactList do
   describe '#subscriber_statuses' do
     it 'returns empty hash if service provider does not retreive statuses' do
       service_provider.stub(:respond_to?).with(:subscriber_statuses).and_return false
-      contact_list.subscriber_statuses([{email: 'test'}]).should == {}
+      contact_list.subscriber_statuses([{ email: 'test' }]).should == {}
     end
 
     it 'returns a hash with the status as returned by the service provider' do
-      subscribers = [{email: 'test@test.com'}, {email: 'test2@test.com'}]
+      subscribers = [{ email: 'test@test.com' }, { email: 'test2@test.com' }]
       result = { 'test@test.com' => 'pending', 'test2@test.com' => 'subscribed' }
       service_provider.should_receive(:subscriber_statuses)\
         .with(contact_list, ['test@test.com', 'test2@test.com']).and_return(result)
@@ -316,7 +316,7 @@ describe ContactList do
 
   describe '#data' do
     it 'drops nil values in data' do
-      contact_list.data = { 'remote_name' => '', 'remote_id' => 1}
+      contact_list.data = { 'remote_name' => '', 'remote_id' => 1 }
       contact_list.identity = nil
       contact_list.stub(:sync_all!).and_return(true)
       contact_list.save
@@ -413,8 +413,8 @@ describe ContactList, '#tags' do
   end
 
   it 'returns the tags that have been already saved' do
-    contact_list = ContactList.new data: { 'tags' => %w{ 1 2 3 } }
+    contact_list = ContactList.new data: { 'tags' => %w{1 2 3} }
 
-    expect(contact_list.tags).to eql(%w{ 1 2 3 })
+    expect(contact_list.tags).to eql(%w{1 2 3})
   end
 end

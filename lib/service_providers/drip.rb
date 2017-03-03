@@ -41,7 +41,7 @@ class ServiceProviders::Drip < ServiceProviders::Email
 
     if name.present?
       split = name.split(' ', 2)
-      opts[:custom_fields] = {'name' => name, 'fname' => split[0], 'lname' => split[1]}
+      opts[:custom_fields] = { 'name' => name, 'fname' => split[0], 'lname' => split[1] }
     end
 
     retry_on_timeout do

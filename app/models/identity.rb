@@ -10,13 +10,13 @@ class Identity < ActiveRecord::Base
   serialize :extra, JSON
 
   validates :provider, :presence => true,
-                       :uniqueness => {:scope => :site_id},
-                       :inclusion => {:in => Hellobar::Settings[:identity_providers].keys.map(&:to_s)}
+                       :uniqueness => { :scope => :site_id },
+                       :inclusion => { :in => Hellobar::Settings[:identity_providers].keys.map(&:to_s) }
 
   validates :site, :association_exists => true
   validate :service_provider_valid
 
-  scope :by_type, ->(type) {where(:provider => Hellobar::Settings[:identity_providers].select{|k, v| v[:type] == type}.map{|k, v| k.to_s})}
+  scope :by_type, ->(type) { where(:provider => Hellobar::Settings[:identity_providers].select { |k, v| v[:type] == type }.map { |k, v| k.to_s }) }
   scope :active, -> { where('credentials IS NOT NULL') }
 
   # When an activity is active, it is saved, credentials are present, and it is being used.
@@ -43,12 +43,12 @@ class Identity < ActiveRecord::Base
   alias :provider_config :provider_settings
 
   def as_json(options = nil)
-    extra['raw_info'].select! {|k,v| %w(user_id username).include? k } if extra['raw_info']
-    extra['lists'] = extra['lists'].try(:collect) {|h| h.select {|k,v| %w(id web_id name).include? k } }
+    extra['raw_info'].select! { |k, v| %w(user_id username).include? k } if extra['raw_info']
+    extra['lists'] = extra['lists'].try(:collect) { |h| h.select { |k, v| %w(id web_id name).include? k } }
     super
   end
 
-  def service_provider(options={})
+  def service_provider(options = {})
     return nil if service_provider_class.nil?
     @service_provider ||= service_provider_class.new(identity: self, contact_list: options[:contact_list])
   rescue *EmailSynchronizer::ESP_ERROR_CLASSES => e
@@ -65,7 +65,7 @@ class Identity < ActiveRecord::Base
 
   def destroy_and_notify_user
     site.owners.each do |user|
-      MailerGateway.send_email('Integration Sync Error', user.email, {integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host])})
+      MailerGateway.send_email('Integration Sync Error', user.email, { integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host]) })
     end
 
     self.destroy

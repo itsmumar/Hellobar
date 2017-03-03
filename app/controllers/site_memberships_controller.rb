@@ -23,7 +23,7 @@ class SiteMembershipsController < ApplicationController
 
   def destroy
     if @site_membership.user == current_user
-      render json: {site_memberships: ["Can't remove permissions from yourself."]}, :status => :unprocessable_entity
+      render json: { site_memberships: ["Can't remove permissions from yourself."] }, :status => :unprocessable_entity
     elsif @site_membership.can_destroy? && @site_membership.destroy
       render json: @site_membership
     else

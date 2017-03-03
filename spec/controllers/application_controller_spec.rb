@@ -37,7 +37,7 @@ describe ApplicationController do
 
   describe 'record_tracking_param' do
     it 'records the tracking param' do
-      controller.stub(:params => {:trk => 'asdf'})
+      controller.stub(:params => { :trk => 'asdf' })
 
       Hello::TrackingParam.should_receive(:track).with('asdf')
 

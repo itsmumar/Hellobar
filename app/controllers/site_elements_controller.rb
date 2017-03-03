@@ -29,7 +29,7 @@ class SiteElementsController < ApplicationController
       theme: Theme.where(default_theme: true).first,
       show_branding: !@site.capabilities(true).remove_branding?,
       closable: false,
-      settings: {url: @site.url, url_to_like: @site.url }
+      settings: { url: @site.url, url_to_like: @site.url }
     })
 
     respond_to do |format|
@@ -168,19 +168,19 @@ class SiteElementsController < ApplicationController
       :custom_html,
       :custom_css,
       :custom_js,
-      {settings: settings_keys},
-      {blocks: blocks_keys}
+      { settings: settings_keys },
+      { blocks: blocks_keys }
     )
   end
 
   def blocks_keys
     [
       :id,
-      {content: [:text, :href]},
+      { content: [:text, :href] },
       themes: [
         :id,
         :css_classes,
-        {styles: [:background_color, :border_color]}
+        { styles: [:background_color, :border_color] }
       ]
     ]
   end

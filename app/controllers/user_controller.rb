@@ -39,7 +39,7 @@ class UserController < ApplicationController
           redirect_to current_site ? site_path(current_site) : new_site_path
         end
 
-        format.json { render json: {user: @user, redirect_to: (current_site ? site_path(current_site) : new_site_path)}, status: :ok }
+        format.json { render json: { user: @user, redirect_to: (current_site ? site_path(current_site) : new_site_path) }, status: :ok }
       end
     else
       @user.reload # Don't persist any changes
@@ -62,7 +62,7 @@ class UserController < ApplicationController
           end
         end
 
-        format.json { render json: {error_message: error_message}, status: :unprocessable_entity }
+        format.json { render json: { error_message: error_message }, status: :unprocessable_entity }
       end
     end
   end
@@ -76,7 +76,7 @@ class UserController < ApplicationController
           sign_out @user
           redirect_to root_path
         end
-        format.json { render json: {success: true}, status: :ok }
+        format.json { render json: { success: true }, status: :ok }
       end
     else
       respond_to do |format|

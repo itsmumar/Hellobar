@@ -43,7 +43,7 @@ describe Referral do
   end
 
   it 'has a formatted expiration date string' do
-    @referral.stub(created_at: Date.new(2016,1,15).to_time)
+    @referral.stub(created_at: Date.new(2016, 1, 15).to_time)
     expect(@referral.expiration_date_string).to eq('January 20th')
   end
 

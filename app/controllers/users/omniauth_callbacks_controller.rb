@@ -1,6 +1,6 @@
 class Users::OmniauthCallbacksController < ApplicationController
   def google_oauth2
-    track_options = {ip: request.remote_ip, url: session[:new_site_url]}
+    track_options = { ip: request.remote_ip, url: session[:new_site_url] }
     register_flow = false
 
     @user = User.find_by(email: request.env['omniauth.auth']['info']['email'])

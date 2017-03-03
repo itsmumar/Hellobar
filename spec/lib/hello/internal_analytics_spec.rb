@@ -71,13 +71,13 @@ describe Hello::InternalAnalytics do
       it 'raises an error if cookies, current_user, or user are not present' do
         allow(@object).to receive(:current_user) { nil }
 
-        expect{@object.get_ab_variation('Example Test')}.to raise_error('Cookies or user must be present for A/B test')
+        expect { @object.get_ab_variation('Example Test') }.to raise_error('Cookies or user must be present for A/B test')
       end
     end
 
     describe 'get_ab_variation_index_without_setting' do
       it 'gets the index from cookies if no user is available' do
-        @object.stub(:cookies).and_return({@object.ab_test_cookie_name => '1'.rjust(@test_index + 1, 'x')})
+        @object.stub(:cookies).and_return({ @object.ab_test_cookie_name => '1'.rjust(@test_index + 1, 'x') })
         @object.get_ab_variation_index_without_setting('Example Test').should == [1, :existing]
       end
 

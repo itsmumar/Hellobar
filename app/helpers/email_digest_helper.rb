@@ -1,5 +1,5 @@
 module EmailDigestHelper
-  def formatted_percent(percent, include_sign=true)
+  def formatted_percent(percent, include_sign = true)
     precision = 3
     precision = 2 if percent.abs >= 1 && percent.abs < 100
     number_to_human(percent, format: include_sign && percent > 0 ? '+%n%' : '%n%', precision: precision)
@@ -14,7 +14,7 @@ module EmailDigestHelper
     precision = 3
     precision = 2 if num >= 1_000 && num < 100_000
 
-    number_to_human(num, :units => {:thousand => 'k', :million => 'm', :billion => 'b'}, format: '%n%u', precision: precision)
+    number_to_human(num, :units => { :thousand => 'k', :million => 'm', :billion => 'b' }, format: '%n%u', precision: precision)
   end
 
   def self.date_of_previous(day)

@@ -13,7 +13,7 @@ class ScriptGenerator < Mustache
 
   attr_reader :site, :options
 
-  def initialize(site, options={})
+  def initialize(site, options = {})
     @site = site
     @options = options
   end
@@ -86,7 +86,7 @@ class ScriptGenerator < Mustache
       content = {
         id: cu.id,
         type: 'ContentUpgrade',
-        offer_headline: cu.offer_headline.to_s.gsub('{{','<a href="#">').gsub('}}','</a>'),
+        offer_headline: cu.offer_headline.to_s.gsub('{{', '<a href="#">').gsub('}}', '</a>'),
         caption: cu.caption,
         headline: cu.headline,
         disclaimer: cu.disclaimer,
@@ -168,7 +168,7 @@ class ScriptGenerator < Mustache
         ActiveSupport.escape_html_entities_in_json = false
         content = File.read(f).to_json
         ActiveSupport.escape_html_entities_in_json = true
-        r << {name: f.split('.html').first.split('/').last, markup: content}
+        r << { name: f.split('.html').first.split('/').last, markup: content }
       end
     end
   end
@@ -179,7 +179,7 @@ class ScriptGenerator < Mustache
       ActiveSupport.escape_html_entities_in_json = false
       content = File.read(f).to_json
       ActiveSupport.escape_html_entities_in_json = true
-      r << {name: f.split('.html').first.split('/').last, markup: content}
+      r << { name: f.split('.html').first.split('/').last, markup: content }
     end
   end
 
@@ -230,7 +230,7 @@ class ScriptGenerator < Mustache
   end
 
   def conditions_for_rule(rule)
-    rule.conditions.map{|c| condition_settings(c)}
+    rule.conditions.map { |c| condition_settings(c) }
   end
 
   def condition_settings(condition)
@@ -328,11 +328,11 @@ class ScriptGenerator < Mustache
       views = conversion_data[0][0]
       conversions = conversion_data[0][1]
       if views > 0
-        conversion_rate = ((conversions.to_f/views)*1000).floor.to_f/1000
+        conversion_rate = ((conversions.to_f / views) * 1000).floor.to_f / 1000
       end
     end
 
-    site_element.attributes.select{|key,val| settings.include?(key) }.merge({
+    site_element.attributes.select { |key, val| settings.include?(key) }.merge({
       answer1: site_element.answer1,
       answer1response: site_element.answer1response,
       answer1caption: site_element.answer1caption,
@@ -375,10 +375,10 @@ class ScriptGenerator < Mustache
       wiggle_wait: 0,
       blocks: site_element.blocks,
       theme: site_element.theme.attributes
-    }).select{|key, value| !value.nil? || !value == '' }
+    }).select { |key, value| !value.nil? || !value == '' }
   end
 
-  def site_elements_for_rule(rule, hashify=true)
+  def site_elements_for_rule(rule, hashify = true)
     site_elements = if options[:bar_id]
       [rule.site_elements.find(options[:bar_id])]
     else
@@ -389,7 +389,7 @@ class ScriptGenerator < Mustache
       end
     end
 
-    hashify ? site_elements.map{|element| site_element_settings(element) } : site_elements
+    hashify ? site_elements.map { |element| site_element_settings(element) } : site_elements
   end
 
   def all_site_elements

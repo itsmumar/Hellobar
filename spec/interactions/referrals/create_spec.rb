@@ -12,7 +12,7 @@ describe Referrals::Create do
 
     ref = Referrals::Create.run(
       sender: ownership.user.reload,
-      params: {email: 'tj@hellobar.com', body: 'test body'},
+      params: { email: 'tj@hellobar.com', body: 'test body' },
       send_emails: true
     )
 
@@ -30,7 +30,7 @@ describe Referrals::Create do
 
     Referrals::Create.run(
       sender: @user,
-      params: {email: 'tj@hellobar.com', body: 'test body'},
+      params: { email: 'tj@hellobar.com', body: 'test body' },
       send_emails: true
     )
   end
@@ -39,7 +39,7 @@ describe Referrals::Create do
     expect(MailerGateway).not_to receive :send_email
     Referrals::Create.run(
       sender: @user,
-      params: {email: 'tj@hellobar.com', body: 'test body'},
+      params: { email: 'tj@hellobar.com', body: 'test body' },
       send_emails: false
     )
   end

@@ -22,7 +22,7 @@ module ServiceProviders
 
         if response.success?
           response_hash = JSON.parse response.body
-          found_lists = response_hash.collect{|list| {'id' => list['id'], 'name' => list['name']} }
+          found_lists = response_hash.collect { |list| { 'id' => list['id'], 'name' => list['name'] } }
         else
           error_message = response.body
           log "getting lists returned '#{error_message}' with the code #{response.status}"
@@ -47,12 +47,12 @@ module ServiceProviders
 
       response = @client.post do |request|
         request.url "accounts/#{@account_id}/lists/#{list_id}/contacts.json"
-        request.body = {auth_token: @api_key,
-                        contact: {first_name: first_name,
-                                  last_name: last_name,
-                                  email: email,
-                                  subscribe: true,
-                                  remove_from_dnm: true}
+        request.body = { auth_token: @api_key,
+                         contact: { first_name: first_name,
+                                    last_name: last_name,
+                                    email: email,
+                                    subscribe: true,
+                                    remove_from_dnm: true }
                         }
       end
 

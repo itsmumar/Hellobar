@@ -74,7 +74,7 @@ class LegacyMigrator
     end
 
     def save_to_db(items)
-      klass =  items[items.keys.first].class
+      klass = items[items.keys.first].class
       count = 0
       optimize_inserts do
         items.each do |key, item|
@@ -82,7 +82,7 @@ class LegacyMigrator
             klass = item.first.class
             count += 1
             puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 5000 == 0
-            item.each{|i| i.save(validate: false)}
+            item.each { |i| i.save(validate: false) }
           else
             count += 1
             puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 5000 == 0
@@ -122,7 +122,7 @@ class LegacyMigrator
 
     def load_wp_emails
       @wp_emails = {}
-      File.read(File.join(Rails.root,'db', 'wp_logins.csv')).split("\n").each_with_index do |line, i|
+      File.read(File.join(Rails.root, 'db', 'wp_logins.csv')).split("\n").each_with_index do |line, i|
         if i > 0
           e1, e2 = *line.split("\t")
           @wp_emails[e1] = true
@@ -131,7 +131,7 @@ class LegacyMigrator
       end
     end
 
-    def preload(klass, key_method=:id, type=:single)
+    def preload(klass, key_method = :id, type = :single)
       puts "[#{Time.now}] Loading #{klass}..."
       if type == :single
         results = {}
@@ -139,7 +139,7 @@ class LegacyMigrator
           results[object.send(key_method)] = object
         end
       else
-        results = Hash.new{|h,k| h[k] = []}
+        results = Hash.new { |h, k| h[k] = [] }
         klass.all.each do |object|
           results[object.send(key_method)] << object
         end
@@ -207,7 +207,7 @@ class LegacyMigrator
           @legacy_goals_by_site_id[site.id].each do |legacy_goal|
             # legacy bars are keyed off goal ID
 
-            mobile_bars, non_mobile_bars = @legacy_bars[legacy_goal.id].partition{|bar| bar_is_mobile?(bar) }
+            mobile_bars, non_mobile_bars = @legacy_bars[legacy_goal.id].partition { |bar| bar_is_mobile?(bar) }
 
             if non_mobile_bars.present?
               rule = ::Rule.new(id: legacy_goal.id, site_id: site.id, name: 'Everyone', priority: legacy_goal.priority, match: Rule::MATCH_ON[:all], created_at: legacy_goal.created_at.utc, updated_at: legacy_goal.updated_at.utc)
@@ -277,7 +277,7 @@ class LegacyMigrator
             if rule.conditions.any?
               site_rules = (@migrated_rules[site_id] || []) + (@rules_to_migrate_later[site_id] || [])
               segment_name = rule.conditions.first.segment_data[:name]
-              index = site_rules.select{|r| r.conditions.any? && r.conditions.first.segment_data[:name] == segment_name}.index(rule) + 1
+              index = site_rules.select { |r| r.conditions.any? && r.conditions.first.segment_data[:name] == segment_name }.index(rule) + 1
 
               rule.name = "#{segment_name} Rule ##{index}"
             end
@@ -289,7 +289,7 @@ class LegacyMigrator
     def create_site_elements(rule, legacy_bars, legacy_goal)
       legacy_bars.each do |legacy_bar|
         setting_keys = %w(buffer_message buffer_url fields_to_collect link_url message_to_tweet pinterest_description pinterest_full_name pinterest_image_url pinterest_url pinterest_user_url twitter_handle url url_to_like url_to_plus_one url_to_share url_to_tweet use_location_for_url url)
-        settings_to_migrate = legacy_goal.data_json.select{|key, value| setting_keys.include?(key) && value.present? }
+        settings_to_migrate = legacy_goal.data_json.select { |key, value| setting_keys.include?(key) && value.present? }
 
         rule.site_elements.build id: legacy_bar.legacy_bar_id || legacy_bar.id,
                                  paused: !legacy_bar.active?,
@@ -448,7 +448,7 @@ class LegacyMigrator
     def migrate_site_timezones
       @legacy_sites.each do |site_id, legacy_site|
         next unless legacy_goals = @legacy_goals_by_site_id[site_id]
-        timezones = legacy_goals.map{|goal| timezone_for_goal(goal)}.compact.uniq
+        timezones = legacy_goals.map { |goal| timezone_for_goal(goal) }.compact.uniq
 
         # update the new Site with the first timezone
         if timezones.length >= 1
@@ -507,7 +507,7 @@ class LegacyMigrator
 
           @migrated_users[legacy_user.id_to_migrate.to_i] = migrated_user
         end
-        @migrated_memberships[migrated_user.id.to_s+'-'+legacy_site_id.to_s] = ::SiteMembership.new user_id: migrated_user.id,
+        @migrated_memberships[migrated_user.id.to_s + '-' + legacy_site_id.to_s] = ::SiteMembership.new user_id: migrated_user.id,
                                  site_id: legacy_site_id
       end
     end

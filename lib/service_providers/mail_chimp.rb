@@ -158,11 +158,11 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def hashify_options(email, name, double_optin)
     opts = { email_address: email }
-    opts[:status] = (double_optin ?  'pending' : 'subscribed')
+    opts[:status] = (double_optin ? 'pending' : 'subscribed')
 
     if name.present?
       split = name.split(' ', 2)
-      opts[:merge_fields] = {:FNAME => split[0], :LNAME => split[1] || ''}
+      opts[:merge_fields] = { :FNAME => split[0], :LNAME => split[1] || '' }
     end
 
     opts

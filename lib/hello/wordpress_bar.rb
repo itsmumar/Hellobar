@@ -51,7 +51,7 @@ class Hello::WordpressBar < Hello::WordpressModel
     return @hellobar_meta if @hellobar_meta
 
     value = Hello::WordpressBarMeta.where(post_id: id, meta_key: '_hellobar_meta').first.try(:meta_value) || nil
-    @hellobar_meta = value ? Hello::WordpressModel.deserialize(value) : {'meta' => {}}
+    @hellobar_meta = value ? Hello::WordpressModel.deserialize(value) : { 'meta' => {} }
   end
 
   def background_color
@@ -87,7 +87,7 @@ class Hello::WordpressBar < Hello::WordpressModel
   def standardize_color(color)
     color = color.gsub('#', '')
     if color.length == 3
-      color.scan(/\w/).map{ |x| x * 2 }.join
+      color.scan(/\w/).map { |x| x * 2 }.join
     else
       color
     end

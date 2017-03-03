@@ -1,5 +1,5 @@
 Rails.application.configure do
-  config.roadie.url_options = {host: 'localhost', scheme: 'http', port: '3000'}
+  config.roadie.url_options = { host: 'localhost', scheme: 'http', port: '3000' }
 
   # Settings specified here will take precedence over those in config/application.rb.
 

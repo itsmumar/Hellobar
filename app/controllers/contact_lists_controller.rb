@@ -56,7 +56,7 @@ class ContactListsController < ApplicationController
   private
 
   def contact_list_params
-    params.require(:contact_list).permit(:name, :provider, {:data => [:remote_id, :remote_name, :embed_code, :api_key, :app_url, :webhook_url, :webhook_method, :cycle_day, tags: []]}, :double_optin)
+    params.require(:contact_list).permit(:name, :provider, { :data => [:remote_id, :remote_name, :embed_code, :api_key, :app_url, :webhook_url, :webhook_method, :cycle_day, tags: []] }, :double_optin)
   end
 
   def delete_site_elements_action
@@ -68,7 +68,7 @@ class ContactListsController < ApplicationController
   end
 
   def contact_list_csv_url(list)
-    path, params = Hello::DataAPIHelper::RequestParts.get_contacts(list.site_id, list.id, list.site.read_key, nil, nil, {'f' => 'c'})
+    path, params = Hello::DataAPIHelper::RequestParts.get_contacts(list.site_id, list.id, list.site.read_key, nil, nil, { 'f' => 'c' })
     path_with_params = Hello::DataAPIHelper.url_for(path, params)
     URI.join(Hellobar::Settings[:data_api_url], path_with_params).to_s
   end

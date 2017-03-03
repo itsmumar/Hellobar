@@ -34,7 +34,7 @@ describe Hello::DataAPI::Performance do
 
     it 'should calculate from the latest if you ask for data for a date too far in the future' do
       d = Hello::DataAPI::Performance.new([[10, 5], [20, 10], [30, 15], [35, 20]])
-      d.views_between(Date.today - 2, Date.today+10).should == 15
+      d.views_between(Date.today - 2, Date.today + 10).should == 15
     end
   end
 

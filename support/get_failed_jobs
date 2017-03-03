@@ -9,9 +9,9 @@ require_relative '../config/environment'
 require 'fileutils'
 
 date = ARGV.first
-input_log = File.join(Rails.root,'log', 'queue_worker.log')
-output_log = File.join(Rails.root,'log', "failed_jobs.#{date}.log")
-tmp_log = File.join(Rails.root,'log', "failed_jobs.#{date}.tmp")
+input_log = File.join(Rails.root, 'log', 'queue_worker.log')
+output_log = File.join(Rails.root, 'log', "failed_jobs.#{date}.log")
+tmp_log = File.join(Rails.root, 'log', "failed_jobs.#{date}.tmp")
 
 # Get just the entries relative to the input date
 puts "Searching #{input_log} for #{date}..."
@@ -35,7 +35,7 @@ File.open(tmp_log, 'r') do |fp|
   end
 end
 puts "Found #{jobs.length} failed jobs for #{date}..."
-File.open(output_log,'w') do |fp|
+File.open(output_log, 'w') do |fp|
   jobs.each do |message_id, job|
     fp.puts(job.split('\"').join('"'))
   end

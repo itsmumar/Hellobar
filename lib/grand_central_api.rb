@@ -16,7 +16,7 @@ require 'fileutils'
 class GrandCentralApi
   class << self
     def request_log_path
-      File.join(Rails.root,'log',"grand-central-api_#{Rails.env}.log")
+      File.join(Rails.root, 'log', "grand-central-api_#{Rails.env}.log")
     end
 
     def digest
@@ -35,7 +35,7 @@ class GrandCentralApi
       requests = self.requests
       requests << request
       FileUtils.mkdir_p(File.dirname(request_log_path))
-      File.open(request_log_path, 'w'){|f| f.write(Marshal.dump(requests))}
+      File.open(request_log_path, 'w') { |f| f.write(Marshal.dump(requests)) }
     end
 
     def reset_requests
@@ -88,13 +88,13 @@ class GrandCentralApi
   protected
 
   def sign(timestamp, path, data)
-    OpenSSL::HMAC.hexdigest( self.class.digest, @secret, [@api_key, timestamp, path, data].join('|'))
+    OpenSSL::HMAC.hexdigest(self.class.digest, @secret, [@api_key, timestamp, path, data].join('|'))
   end
 
   # Issues the actual request
   def request(path, data)
     if Rails.env.test?
-      self.class.record_request({:path=>path, :data=>data})
+      self.class.record_request({ :path => path, :data => data })
       return
     end
 
@@ -105,7 +105,7 @@ class GrandCentralApi
     timestamp = Time.current.to_i
 
     # Path must start with a "/"
-    path = '/'+path unless path =~ /^\//
+    path = '/' + path unless path =~ /^\//
 
     # Parse the URL
     url = URI.parse(@endpoint + path)

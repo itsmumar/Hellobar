@@ -23,7 +23,7 @@ describe PaymentMethodsController, '#index' do
   it 'returns an array of user payment methods' do
     get :index, site_id: site.id
 
-    payment_method_ids = JSON.parse(response.body)['payment_methods'].map{|method| method['id'] }
+    payment_method_ids = JSON.parse(response.body)['payment_methods'].map { |method| method['id'] }
 
     payment_method_ids.should == user.payment_methods.map(&:id)
   end
@@ -41,7 +41,7 @@ describe PaymentMethodsController, '#index' do
 
     get :index, site_id: site.id
 
-    current_payment_method = JSON.parse(response.body)['payment_methods'].select{|method| method['current_site_payment_method'] }
+    current_payment_method = JSON.parse(response.body)['payment_methods'].select { |method| method['current_site_payment_method'] }
 
     current_payment_method.size.should == 1
     current_payment_method.first['id'].should == user.payment_methods.first.id

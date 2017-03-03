@@ -12,7 +12,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
   end
 
   def lists
-    @client.get_lists(@token).map{|l| {'id' => l.id, 'name' => l.name}}
+    @client.get_lists(@token).map { |l| { 'id' => l.id, 'name' => l.name } }
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)

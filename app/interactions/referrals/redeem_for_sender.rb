@@ -9,7 +9,7 @@
 # This is a no-op for non-free users with no billing issues. Their next
 # billing cycle will get the discounts by the mechanism described above.
 
-class Referrals::NoAvailableReferrals < StandardError ; end
+class Referrals::NoAvailableReferrals < StandardError; end
 class Referrals::RedeemForSender < Less::Interaction
   include Referrals::ProSubscription
   expects :site

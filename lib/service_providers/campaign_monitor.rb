@@ -15,7 +15,7 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
     handle_error do
       @client.clients.map do |cl|
         client = CreateSend::Client.new(@auth, cl.ClientID)
-        client.lists.map{|l| {'id' => l['ListID'], 'name' => l['Name']}}
+        client.lists.map { |l| { 'id' => l['ListID'], 'name' => l['Name'] } }
       end.flatten
     end
   end
@@ -29,14 +29,14 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
   def batch_subscribe(list_id, subscribers, double_optin = true)
     handle_error do
-      subscribers = subscribers.map{|s| {'EmailAddress' => s[:email], 'Name' => s[:name]}}
+      subscribers = subscribers.map { |s| { 'EmailAddress' => s[:email], 'Name' => s[:name] } }
       CreateSend::Subscriber.import(@auth, list_id, subscribers, true, true)
     end
   end
 
   private
 
-  def handle_error(retries=2)
+  def handle_error(retries = 2)
     begin
       yield
     rescue CreateSend::ExpiredOAuthToken => e

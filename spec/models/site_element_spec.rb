@@ -232,7 +232,7 @@ describe SiteElement do
     let(:element) { site_elements(:zombo_traffic) }
 
     it 'returns total views as reported by the data API' do
-      Hello::DataAPI.stub(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]) })
+      Hello::DataAPI.stub(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({ element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]) })
       element.total_views.should == 12
     end
 
@@ -252,7 +252,7 @@ describe SiteElement do
     let(:element) { site_elements(:zombo_traffic) }
 
     it 'returns total views as reported by the data API' do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]])})
+      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({ element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]) })
       element.total_conversions.should == 6
     end
 
@@ -277,7 +277,7 @@ describe SiteElement do
     end
 
     it 'is true when there are conversions', aggregate_failures: true do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]])})
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({ element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]) })
       expect(element).to have_converted
     end
   end

@@ -6,7 +6,7 @@ module OmniauthErrors
   end
 
   def omniauth_error_message
-    message = request.env['omniauth.error'].try(:message) ||  request.env['omniauth.error.type']
+    message = request.env['omniauth.error'].try(:message) || request.env['omniauth.error.type']
     return nil if message.nil?
     message.to_s.split('|').last.try(:strip) || ''
   end

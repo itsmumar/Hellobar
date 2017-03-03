@@ -6,7 +6,7 @@ describe SiteGenerator do
   let(:site) { sites(:zombo) }
 
   before do
-    allow_any_instance_of(Site).to receive(:lifetime_totals).and_return({'1' => [[1,0]]})
+    allow_any_instance_of(Site).to receive(:lifetime_totals).and_return({ '1' => [[1, 0]] })
   end
 
   describe '#initialize' do

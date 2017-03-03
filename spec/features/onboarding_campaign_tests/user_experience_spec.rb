@@ -2,15 +2,15 @@ require 'integration_helper'
 require 'email_integration_helper'
 
 feature 'One User In all onboarding Campaigns' do
-  before(:each) {Timecop.freeze(start)}
-  after(:each)  {Timecop.return}
+  before(:each) { Timecop.freeze(start) }
+  after(:each)  { Timecop.return }
 
-  before {UserOnboardingStatusSetter.any_instance.stub(:in_campaign_ab_test?).and_return(true)}
-  before {record_mailer_gateway_request_history!}
+  before { UserOnboardingStatusSetter.any_instance.stub(:in_campaign_ab_test?).and_return(true) }
+  before { record_mailer_gateway_request_history! }
 
-  let(:start)      {Time.zone.now}
-  let(:start_date) {start.to_date}
-  let!(:user)       {login}
+  let(:start)      { Time.zone.now }
+  let(:start_date) { start.to_date }
+  let!(:user)       { login }
 
   def transition_user_through_onboarding(operating_user)
     repeatedly_time_travel_and_run_onboarding_campaigns(2)
@@ -53,7 +53,7 @@ feature 'One User In all onboarding Campaigns' do
   end
 
   feature 'with a/b testing including the user in all campaigns' do
-    before {transition_user_through_onboarding(user)}
+    before { transition_user_through_onboarding(user) }
 
     scenario "the user receives the 'Create a bar' on day 0" do
       expect(email_received_a_number_of_days_after(user, start_date)).to eq(['Drip Campaign: Create a bar'])

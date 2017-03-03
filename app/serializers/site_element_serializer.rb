@@ -82,7 +82,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     # Include CSS to hide any Hello Bar already there
     params += "&custom_css_url=#{ERB::Util.url_encode(css_url)}"
     # Cache for 7 days
-    params += "&ttl=#{7*24*60*60}"
+    params += "&ttl=#{7 * 24 * 60 * 60}"
     # Calculate the token
     token = Digest::MD5.hexdigest("#{params}SC10DF8C7E0FE8")
     "https://api.url2png.com/v6/P52EBC321291EF/#{token}/png/#{params}"

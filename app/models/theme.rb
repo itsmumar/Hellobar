@@ -17,6 +17,6 @@ class Theme < ActiveHash::Base
   end
 
   def self.sorted
-    all.sort_by{ |t| [t.default_theme ? 0 : 1, t.name] }
+    all.sort_by { |t| [t.default_theme ? 0 : 1, t.name] }
   end
 end

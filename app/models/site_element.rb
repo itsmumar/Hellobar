@@ -71,8 +71,8 @@ class SiteElement < ActiveRecord::Base
   scope :traffic_subtype, -> { where(element_subtype: 'traffic') }
   scope :call_subtype, -> { where(element_subtype: 'call') }
   scope :announcement_subtype, -> { where(element_subtype: 'announcement') }
-  scope :recent, -> (limit) { where('site_elements.created_at > ?', 2.weeks.ago).order('created_at DESC').limit(limit).select { |se| se.is_announcement? || se.has_converted? } }
-  scope :matching_content, lambda {|*query|
+  scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order('created_at DESC').limit(limit).select { |se| se.is_announcement? || se.has_converted? } }
+  scope :matching_content, lambda { |*query|
     matching(:content, *query)
   }
 
@@ -147,7 +147,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def cloneable_attributes
-    attributes.reject { |k,v| NOT_CLONEABLE_ATTRIBUTES.include?(k.to_sym) }
+    attributes.reject { |k, v| NOT_CLONEABLE_ATTRIBUTES.include?(k.to_sym) }
   end
 
   def total_views(opts = {})
@@ -257,11 +257,11 @@ class SiteElement < ActiveRecord::Base
   end
 
   def content_upgrade_script_tag
-    '<script id="hb-cu-'+self.id.to_s+'">window.onload = function() {HB.showContentUpgrade('+self.id.to_s+')};</script>'
+    '<script id="hb-cu-' + self.id.to_s + '">window.onload = function() {HB.showContentUpgrade(' + self.id.to_s + ')};</script>'
   end
 
   def content_upgrade_wp_shortcode
-    '[hellobar_content_upgrade id="'+self.id.to_s+'"]'
+    '[hellobar_content_upgrade id="' + self.id.to_s + '"]'
   end
 
   private

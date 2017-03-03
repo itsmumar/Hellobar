@@ -35,7 +35,7 @@ class Rule < ActiveRecord::Base
 
   def self.create_from_segment(site, segment)
     segment, value = segment.split(':', 2)
-    segment = Condition::SEGMENTS.find{|k, v| v == segment}[0]
+    segment = Condition::SEGMENTS.find { |k, v| v == segment }[0]
     value = [value] if segment == 'UrlCondition'
 
     new(site: site).tap do |rule|
@@ -87,7 +87,7 @@ class Rule < ActiveRecord::Base
     transaction do
       conditions_attributes.each do |index, attributes|
         if attributes['id']
-          c = conditions.detect { |x| x.id == attributes['id'].to_i}
+          c = conditions.detect { |x| x.id == attributes['id'].to_i }
           if attributes['_destroy'] == 'true'
             c.destroy
           else

@@ -4,9 +4,9 @@ describe PaymentMethodDetails do
   fixtures :all
   it 'should be read-only' do
     d = PaymentMethodDetails.create
-    d.data = {foo: 'bar'}
-    lambda{d.save}.should raise_error(ActiveRecord::ReadOnlyRecord)
-    lambda{d.destroy}.should raise_error(ActiveRecord::ReadOnlyRecord)
+    d.data = { foo: 'bar' }
+    lambda { d.save }.should raise_error(ActiveRecord::ReadOnlyRecord)
+    lambda { d.destroy }.should raise_error(ActiveRecord::ReadOnlyRecord)
   end
 end
 

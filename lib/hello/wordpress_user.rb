@@ -36,7 +36,7 @@ class Hello::WordpressUser < Hello::WordpressModel
 
       @bars = all_bars.select do |bar|
         if bar.post_parent.present? && bar.post_parent != 0
-          parent = all_bars.find{|b| b.id == bar.post_parent}
+          parent = all_bars.find { |b| b.id == bar.post_parent }
           parent && parent.post_status != 'trash' && bar.post_status != 'trash'
         else
           bar.post_status != 'trash'
@@ -51,7 +51,7 @@ class Hello::WordpressUser < Hello::WordpressModel
       email: self.email,
       encrypted_password: user_pass,
       wordpress_user_id: id
-    ).tap{ |u| u.save(validate: false) }
+    ).tap { |u| u.save(validate: false) }
   end
 
   def converted?

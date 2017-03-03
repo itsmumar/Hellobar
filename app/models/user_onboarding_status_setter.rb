@@ -43,14 +43,14 @@ class UserOnboardingStatusSetter
 
   private
 
-  def create_status_if_able!(new_status, ab_test=nil, sequence_delivered_last=nil)
+  def create_status_if_able!(new_status, ab_test = nil, sequence_delivered_last = nil)
     if can_enter_status?(new_status, ab_test)
       user.onboarding_statuses.create!(status_id: UserOnboardingStatus::STATUSES[new_status],
                                        sequence_delivered_last: sequence_delivered_last)
     end
   end
 
-  def can_enter_status?(new_status, ab_test=nil)
+  def can_enter_status?(new_status, ab_test = nil)
     return false if ab_test.present? && (!in_campaign_ab_test?(ab_test))
     return false unless active_for_onboarding_campaigns? || new_status == :new
 

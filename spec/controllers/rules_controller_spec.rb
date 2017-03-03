@@ -74,7 +74,7 @@ describe RulesController do
         match: 'all',
         conditions_attributes: {
           '1' => {
-            'segment'=>'CountryCondition', 'operand'=>'is', 'value'=>'USA'}
+            'segment' => 'CountryCondition', 'operand' => 'is', 'value' => 'USA' }
         }
       }
 
@@ -222,7 +222,7 @@ describe RulesController do
         }
 
         JSON.parse(response.body).tap do |rule_obj|
-          segments = rule_obj['conditions'].collect {|c| c['segment'] }
+          segments = rule_obj['conditions'].collect { |c| c['segment'] }
           expect(segments).to match_array %w(DateCondition UrlCondition)
         end
       end
@@ -248,6 +248,6 @@ describe RulesController do
   private
 
   def condition_hash(key)
-    conditions(key).attributes.tap {|h| h.delete('id') }
+    conditions(key).attributes.tap { |h| h.delete('id') }
   end
 end

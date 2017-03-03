@@ -33,45 +33,45 @@ describe QueueWorkerMock, 'queue worker spec' do
     context 'body has bang' do
       context 'with one argument' do
         let(:body) { 'contact_list:sync_all![12345]' }
-        it { should eq [ 'contact_list', 'sync_all!', id ] }
+        it { should eq ['contact_list', 'sync_all!', id] }
       end
       context 'with two arguments' do
         let(:body) { 'contact_list:sync_one![12345,test@test.com]' }
-        it { should eq [ 'contact_list', 'sync_one!', id, email ] }
+        it { should eq ['contact_list', 'sync_one!', id, email] }
       end
       context 'with no arguments' do
         let(:body) { 'contact_list:sync_one!' }
-        it { should eq [ 'contact_list', 'sync_one!' ] }
+        it { should eq ['contact_list', 'sync_one!'] }
       end
     end
 
     context 'body has question mark' do
       context 'with one argument' do
         let(:body) { 'contact_list:sync?[12345]' }
-        it { should eq [ 'contact_list', 'sync?', id ] }
+        it { should eq ['contact_list', 'sync?', id] }
       end
       context 'with two arguments' do
         let(:body) { 'contact_list:sync?[12345,test@test.com]' }
-        it { should eq [ 'contact_list', 'sync?', id, email ] }
+        it { should eq ['contact_list', 'sync?', id, email] }
       end
       context 'with no arguments' do
         let(:body) { 'contact_list:sync?' }
-        it { should eq [ 'contact_list', 'sync?' ] }
+        it { should eq ['contact_list', 'sync?'] }
       end
     end
 
     context 'body has special class' do
       context 'with one argument' do
         let(:body) { 'hellobar::contact_list:sync![12345]' }
-        it { should eq [ 'hellobar::contact_list', 'sync!', id ] }
+        it { should eq ['hellobar::contact_list', 'sync!', id] }
       end
       context 'with two arguments' do
         let(:body) { 'hellobar::contact_list:sync_one![12345,test@test.com]' }
-        it { should eq [ 'hellobar::contact_list', 'sync_one!', id, email ] }
+        it { should eq ['hellobar::contact_list', 'sync_one!', id, email] }
       end
       context 'with no arguments' do
         let(:body) { 'hellobar::contact_list:sync' }
-        it { should eq [ 'hellobar::contact_list', 'sync' ] }
+        it { should eq ['hellobar::contact_list', 'sync'] }
       end
     end
   end
