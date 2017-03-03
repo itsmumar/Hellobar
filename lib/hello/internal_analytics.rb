@@ -71,7 +71,7 @@ module Hello
     end
 
     def get_ab_test_value_index_from_cookie(cookie, index)
-      return if cookie == nil
+      return if cookie.nil?
       value = cookie[index..index]
       return value.to_i if value && value =~ /\d+/
       nil

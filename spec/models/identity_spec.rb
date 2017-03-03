@@ -14,7 +14,7 @@ describe Identity do
 
       identity.site_id.should == @site.id
       identity.provider.should == 'aweber'
-      identity.id.should == nil
+      identity.id.should be_nil
     end
 
     it 'loads an existing identity if one exists for a site and provider combination' do
@@ -140,7 +140,7 @@ describe Identity do
       it 'works' do
         service_provider.class.should == ServiceProviders::IContact
 
-        service_provider.list_url.should == nil
+        service_provider.list_url.should be_nil
         service_provider.action_url.should == 'http://app.icontact.com/icp/signup.php'
         service_provider.email_param.should == 'fields_email'
         service_provider.name_params.should == %w(fields_fname fields_lname)
@@ -165,7 +165,7 @@ describe Identity do
       it 'works' do
         service_provider.class.should == ServiceProviders::IContact
 
-        service_provider.list_url.should == nil
+        service_provider.list_url.should be_nil
         service_provider.action_url.should == 'https://app.icontact.com/icp/signup.php'
         service_provider.email_param.should == 'fields_email'
         service_provider.name_params.should == %w(fields_fname fields_lname)
