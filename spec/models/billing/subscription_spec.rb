@@ -573,7 +573,6 @@ describe Site do
       pending_bill.should be_pending
     end
 
-
     it "should return false if payment fails" do
       success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
       success.should be_false

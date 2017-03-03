@@ -41,7 +41,6 @@ class UserOnboardingStatusSetter
     create_status_if_able!(:bought_subscription)
   end
 
-
   private
 
   def create_status_if_able!(new_status, ab_test=nil, sequence_delivered_last=nil)

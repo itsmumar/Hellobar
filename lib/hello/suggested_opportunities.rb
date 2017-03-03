@@ -127,7 +127,6 @@ module Hello
         load_table(:over_time, {sid: :number}, {date: :number})
       end
 
-
       def load_table(name, hash_key, range_key)
         table = @@dynamo_db.tables[table_name(name)]
         table.hash_key = hash_key

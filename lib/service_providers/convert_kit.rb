@@ -44,7 +44,6 @@ module ServiceProviders
     def tags
       response = make_api_call('get', 'tags')
 
-
       if response.success?
         response_hash = JSON.parse response.body
         response_hash['tags'].map { |tag| {'id' => tag['id'], 'name' => tag['name']}}

@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe PaymentMethodDetails do
   fixtures :all
   it "should be read-only" do

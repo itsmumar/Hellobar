@@ -557,5 +557,4 @@ class Site < ActiveRecord::Base
     site_elements.update_all(show_branding: !capabilities(true).remove_branding?)
   end
 
-
 end

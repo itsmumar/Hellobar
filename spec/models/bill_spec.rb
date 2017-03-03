@@ -25,7 +25,6 @@ describe Bill do
     lambda{Bill.create(:amount=>-1)}.should raise_error(Bill::InvalidBillingAmount)
   end
 
-
   it "should not let you change the status once set" do
     bill = bills(:future_bill)
     bill.status.should  == :pending

@@ -678,26 +678,6 @@ Style/EmptyLineBetweenDefs:
   Exclude:
     - 'spec/models/bill_spec.rb'
 
-# Offense count: 17
-# Cop supports --auto-correct.
-Style/EmptyLines:
-  Exclude:
-    - 'app/models/admin.rb'
-    - 'app/models/site.rb'
-    - 'app/models/user.rb'
-    - 'app/models/user_onboarding_status_setter.rb'
-    - 'config/routes.rb'
-    - 'lib/cybersource.rb'
-    - 'lib/hello/suggested_opportunities.rb'
-    - 'lib/service_providers/campaign_monitor.rb'
-    - 'lib/service_providers/convert_kit.rb'
-    - 'spec/controllers/contact_lists_controller_spec.rb'
-    - 'spec/lib/script_generator_spec.rb'
-    - 'spec/models/bill_spec.rb'
-    - 'spec/models/billing/subscription_spec.rb'
-    - 'spec/models/identity_spec.rb'
-    - 'spec/models/payment_method_details_spec.rb'
-
 # Offense count: 12
 # Cop supports --auto-correct.
 Style/EmptyLinesAroundAccessModifier:

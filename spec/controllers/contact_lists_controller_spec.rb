@@ -108,7 +108,6 @@ describe ContactListsController, type: :controller do
       expect(new_contact_list.name).to eq("My Contacts")
     end
 
-
     context "when email service provider (esp) uses oauth" do
       let(:contact_list_params) do
         {

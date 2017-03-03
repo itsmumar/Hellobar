@@ -34,7 +34,6 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
     end
   end
 
-
   private
 
   def handle_error(retries=2)

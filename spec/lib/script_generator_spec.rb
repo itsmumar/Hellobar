@@ -333,7 +333,6 @@ describe ScriptGenerator do
     end
   end
 
-
   describe "#condition_settings" do
     let(:condition) { create(:condition) }
     let(:generator) { ScriptGenerator.new(condition.rule.site) }

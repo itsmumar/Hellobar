@@ -10,7 +10,6 @@ Rails.application.routes.draw do
     resources :user_state, only: :show
   end
 
-
   devise_for :users, :controllers => {:sessions => "users/sessions", :passwords => "users/passwords"}
 
   devise_scope :user do
@@ -35,7 +34,6 @@ Rails.application.routes.draw do
     end
 
     get "team"
-
 
     post :track_selected_goal, to: "tracking#track_selected_goal"
 

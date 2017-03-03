@@ -19,7 +19,6 @@ module HB
   end
 end
 
-
 class CyberSourceCreditCard < PaymentMethodDetails
   CC_FIELDS = %w{number month year first_name last_name brand verification_value}
   ADDRESS_FIELDS = %w{city state zip address1 country}

@@ -15,7 +15,6 @@ class User < ActiveRecord::Base
   after_create :add_to_onboarding_campaign
   after_create :add_to_infusionsoft_in_background
 
-
   before_destroy    :destroy_orphan_sites_before_active_record_association_callbacks
   # rubocop:enable Style/SingleSpaceBeforeFirstArg
 
@@ -45,7 +44,6 @@ class User < ActiveRecord::Base
     where("user_onboarding_statuses.sequence_delivered_last < #{sequence_index} OR
            user_onboarding_statuses.sequence_delivered_last IS NULL")
   }
-
 
   acts_as_paranoid
 

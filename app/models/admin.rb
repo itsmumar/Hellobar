@@ -167,7 +167,6 @@ If this is not you, this may be an attack and you should lock down the admin by 
                     password_hashed != encrypt_password(password) ||
                     !has_validated_access_token?(access_token)
 
-
     login!(access_token)
     return true
   end
