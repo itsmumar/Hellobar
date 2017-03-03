@@ -19,8 +19,8 @@ describe ContactList do
     end
 
     Hello::DataAPI.stub(:get_contacts).and_return([
-      ['test1@hellobar.com', '', 1384807897],
-      ['test2@hellobar.com', '', 1384807898]
+      ['test1@hellobar.com', '', 1_384_807_897],
+      ['test2@hellobar.com', '', 1_384_807_898]
     ])
   end
 
@@ -263,8 +263,8 @@ describe ContactList do
 
   describe '#subscribers' do
     it 'gets subscribers from the data API' do
-      Hello::DataAPI.stub(get_contacts: [['person@gmail.com', 'Per Son', 123456789]])
-      contact_list.subscribers.should == [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.at(123456789) }]
+      Hello::DataAPI.stub(get_contacts: [['person@gmail.com', 'Per Son', 123_456_789]])
+      contact_list.subscribers.should == [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.at(123_456_789) }]
     end
 
     it 'defaults to [] if data API returns nil' do

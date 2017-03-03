@@ -197,7 +197,7 @@ module Hello::DataAPI
     end
 
     def fake_get_contacts(_contact_list)
-      [['dmitriy+person100@polymathic.me', 'First Last', 1388534400], ['dmitriy+person99@polymathic.me', 'Dr Pepper', 1388534399]]
+      [['dmitriy+person100@polymathic.me', 'First Last', 1_388_534_400], ['dmitriy+person99@polymathic.me', 'Dr Pepper', 1_388_534_399]]
     end
 
     def get(path, params)

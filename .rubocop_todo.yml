@@ -384,19 +384,6 @@ Style/MultilineBlockChain:
 Style/MutableConstant:
   Enabled: false
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedOctalStyle, SupportedOctalStyles.
-# SupportedOctalStyles: zero_with_o, zero_only
-Style/NumericLiteralPrefix:
-  Exclude:
-    - 'spec/lib/script_generator_spec.rb'
-
-# Offense count: 12
-# Cop supports --auto-correct.
-Style/NumericLiterals:
-  MinDigits: 11
-
 # Offense count: 36
 # Cop supports --auto-correct.
 # Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.

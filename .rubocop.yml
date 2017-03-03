@@ -58,3 +58,8 @@ Style/IndentArray:
 # SupportedStyles: special_inside_parentheses, consistent, align_braces
 Style/IndentHash:
   EnforcedStyle: consistent
+
+# Configuration parameters: EnforcedOctalStyle, SupportedOctalStyles.
+# SupportedOctalStyles: zero_with_o, zero_only
+Style/NumericLiteralPrefix:
+  EnforcedOctalStyle: zero_only
