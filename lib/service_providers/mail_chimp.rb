@@ -81,12 +81,12 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     end
 
     operations = bodies.map do |body|
-                   {
-                     method: 'POST',
-                     path: "lists/#{list_id}/members",
-                     body: body.to_json
-                   }
-                 end
+      {
+        method: 'POST',
+        path: "lists/#{list_id}/members",
+        body: body.to_json
+      }
+    end
 
     retry_on_timeout do
       # It will enqueue batch operation job to mailchimp and will process

@@ -1,11 +1,7 @@
 require 'spec_helper'
 
 describe ServiceProviders::ConvertKit do
-  let(:identity) { Identity.new(
-                                :provider => 'convert_kit',
-                                :api_key => 'valid-convertkit-key'
-                                )
-                 }
+  let(:identity) { Identity.new(provider: 'convert_kit', api_key: 'valid-convertkit-key') }
   let(:service_provider) { identity.service_provider }
   let(:contact_list) { ContactList.new }
   let(:client) { service_provider.instance_variable_get(:@client) }

@@ -111,7 +111,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
 
   private
 
-   def html
+  def html
     return @html if @html.present?
 
     html = Nokogiri::HTML embed_code

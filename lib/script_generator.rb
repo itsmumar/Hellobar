@@ -379,15 +379,16 @@ class ScriptGenerator < Mustache
   end
 
   def site_elements_for_rule(rule, hashify = true)
-    site_elements = if options[:bar_id]
-      [rule.site_elements.find(options[:bar_id])]
-    else
-      if options[:render_paused_site_elements]
-        rule.site_elements
+    site_elements =
+      if options[:bar_id]
+        [rule.site_elements.find(options[:bar_id])]
       else
-        rule.site_elements.active
+        if options[:render_paused_site_elements]
+          rule.site_elements
+        else
+          rule.site_elements.active
+        end
       end
-    end
 
     hashify ? site_elements.map { |element| site_element_settings(element) } : site_elements
   end

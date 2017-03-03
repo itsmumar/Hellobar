@@ -8,11 +8,12 @@ module Subscribable
 
       track_subscription_change(site, old_subscription)
 
-      is_upgrade = if old_subscription
-        Subscription::Comparison.new(old_subscription, site.current_subscription).upgrade?
-      else
-       true
-      end
+      is_upgrade =
+        if old_subscription
+          Subscription::Comparison.new(old_subscription, site.current_subscription).upgrade?
+        else
+          true
+        end
 
       track_upgrade if is_upgrade
 

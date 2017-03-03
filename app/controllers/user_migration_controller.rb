@@ -22,15 +22,16 @@ class UserMigrationController < ApplicationController
   end
 
   def create
-    site_hashes = if params[:sites].present?
-      params[:sites].map { |k, v| v }
-    elsif params[:site].present?
-      [{
-        url: params[:site][:url],
-        timezone: params[:site][:timezone],
-        bar_ids: [params[:bar_id]]
-      }]
-    end
+    site_hashes =
+      if params[:sites].present?
+        params[:sites].map { |k, v| v }
+      elsif params[:site].present?
+        [{
+          url: params[:site][:url],
+          timezone: params[:site][:timezone],
+          bar_ids: [params[:bar_id]]
+        }]
+      end
 
     ActiveRecord::Base.transaction do
       user = current_wordpress_user.convert_to_user
