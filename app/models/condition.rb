@@ -188,7 +188,7 @@ class Condition < ActiveRecord::Base
   def normalize_url(url)
     return url if url.blank?
     # Don't do anything if it starts with '/' or "http(s)://"
-    return url if url.match(/^(https?:\/\/|\/)/i)
+    return url if url.match(%r{^(https?://|/)}i)
     if PublicSuffix.valid?(url.split('/').first)
       "http://#{url}"
     else

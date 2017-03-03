@@ -371,7 +371,7 @@ class Site < ActiveRecord::Base
   end
 
   def self.find_by_script(script_embed)
-    target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
+    target_hash = script_embed.gsub(%r{^.*/}, '').gsub(/\.js$/, '')
 
     (Site.maximum(:id) || 1).downto(1) do |i|
       return Site.find_by_id(i) if id_to_script_hash(i) == target_hash

@@ -1115,26 +1115,6 @@ Style/RedundantReturn:
 Style/RedundantSelf:
   Enabled: false
 
-# Offense count: 16
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
-# SupportedStyles: slashes, percent_r, mixed
-Style/RegexpLiteral:
-  Exclude:
-    - 'app/controllers/site_elements_controller.rb'
-    - 'app/helpers/site_elements_helper.rb'
-    - 'app/models/condition.rb'
-    - 'app/models/image_upload.rb'
-    - 'app/models/site.rb'
-    - 'app/models/validators/url_validator.rb'
-    - 'app/serializers/site_element_serializer.rb'
-    - 'config/routes.rb'
-    - 'lib/grand_central_api.rb'
-    - 'lib/service_providers/embed_code_provider.rb'
-    - 'lib/site_detector.rb'
-    - 'spec/models/identity_spec.rb'
-    - 'spec/spec_helper.rb'
-
 # Offense count: 4
 # Cop supports --auto-correct.
 Style/RescueModifier:

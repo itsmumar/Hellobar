@@ -19,7 +19,7 @@ class SiteDetector
       :weebly
     when /wp-content/
       :wordpress
-    when /https:\/\/www.blogger.com/
+    when %r{https://www.blogger.com}
       :blogspot
     else
       nil

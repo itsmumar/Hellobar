@@ -120,7 +120,7 @@ describe Identity do
         service_provider.class.should == ServiceProviders::GetResponse
 
         service_provider.list_url.should == 'https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=2350002'
-        service_provider.action_url.should match /https?:\/\/app\.getresponse\.com\/add_contact_webform\.html\?u=G91K/ # same for getresponse
+        service_provider.action_url.should match %r{https?://app\.getresponse\.com/add_contact_webform\.html\?u=G91K} # same for getresponse
         service_provider.email_param.should == 'email'
         service_provider.name_param.should == 'name'
       end
