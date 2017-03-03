@@ -81,9 +81,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     sanitized_data = {}
     new_data.each do |key, value|
       key = key.to_s
-      if FIELDS.include?(key)
-        sanitized_data[key] = value
-      end
+      sanitized_data[key] = value if FIELDS.include?(key)
     end
     write_attribute(:data, sanitized_data)
   end
@@ -100,9 +98,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def charge(amount_in_dollars)
     raise 'Can not charge money until saved' unless persisted? && token
-    if amount_in_dollars == 0
-      return true, 'Amount was zero'
-    end
+    return true, 'Amount was zero' if amount_in_dollars == 0
     if !amount_in_dollars || amount_in_dollars < 0
       raise "Invalid amount: #{amount_in_dollars.inspect}"
     end
@@ -123,9 +119,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def refund(amount_in_dollars, original_transaction_id)
     raise 'Can not refund money until saved' unless persisted? && token
-    if amount_in_dollars == 0
-      return true, 'Amount was zero'
-    end
+    return true, 'Amount was zero' if amount_in_dollars == 0
     if !amount_in_dollars || amount_in_dollars < 0
       raise "Invalid amount: #{amount_in_dollars.inspect}"
     end
@@ -179,17 +173,13 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def save_to_cybersource
     user = nil
-    if payment_method && payment_method.user
-      user = payment_method.user
-    end
+    user = payment_method.user if payment_method && payment_method.user
     # See if there is a previous token
     previous_token = nil
     if payment_method
       payment_method.details(true).each do |details|
         if details.is_a?(CyberSourceCreditCard)
-          if details.data['token']
-            previous_token = details.data['token']
-          end
+          previous_token = details.data['token'] if details.data['token']
         end
       end
     end

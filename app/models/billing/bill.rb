@@ -207,9 +207,7 @@ class Bill < ActiveRecord::Base
     end
 
     def refunded_billing_attempt_id=(id)
-      if !metadata
-        self.metadata = {}
-      end
+      self.metadata = {} if !metadata
       metadata['refunded_billing_attempt_id'] = id
       @refunded_billing_attempt = nil
     end

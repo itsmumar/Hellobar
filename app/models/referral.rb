@@ -37,9 +37,7 @@ class Referral < ActiveRecord::Base
 
   def set_site_if_only_one
     return if site_id.present?
-    if sender.sites.count == 1
-      self.site = sender.sites.first
-    end
+    self.site = sender.sites.first if sender.sites.count == 1
   end
 
   def url

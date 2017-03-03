@@ -54,9 +54,7 @@ class ObfuscatedID
             value += ENCODE.index(char) + 1
           end
         end
-        unless value == 0
-          outputs << value.to_s
-        end
+        outputs << value.to_s unless value == 0
       end
       outputs.join('').to_i
     end

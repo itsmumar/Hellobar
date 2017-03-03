@@ -5,17 +5,13 @@ class IdentitySerializer < ActiveModel::Serializer
   delegate :service_provider, to: :object
 
   def lists
-    if service_provider.respond_to? :lists
-      filter_keys(service_provider.lists)
-    end
+    filter_keys(service_provider.lists) if service_provider.respond_to? :lists
   rescue => error
     log_exception(error)
   end
 
   def tags
-    if service_provider.respond_to? :tags
-      filter_keys(service_provider.tags)
-    end
+    filter_keys(service_provider.tags) if service_provider.respond_to? :tags
   rescue => error
     log_exception(error)
   end

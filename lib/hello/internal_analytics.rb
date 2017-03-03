@@ -73,9 +73,7 @@ module Hello
     def get_ab_test_value_index_from_cookie(cookie, index)
       return if cookie == nil
       value = cookie[index..index]
-      if value && value =~ /\d+/
-        return value.to_i
-      end
+      return value.to_i if value && value =~ /\d+/
       nil
     end
 
@@ -206,9 +204,7 @@ module Hello
       else
         # See if we can get a user id
         user_id = get_user_id_from_cookie
-        if user_id && user_id != USER_ID_NOT_SET_YET
-          return :user, user_id.to_i
-        end
+        return :user, user_id.to_i if user_id && user_id != USER_ID_NOT_SET_YET
         # Return the visitor ID
         return :visitor, visitor_id
       end

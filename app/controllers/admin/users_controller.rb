@@ -11,9 +11,7 @@ class Admin::UsersController < ApplicationController
 
       if params[:q] =~ /\.js$/
         site = Site.find_by_script(params[:q])
-        if site
-          users += site.owners
-        end
+        users += site.owners if site
       else
         users += User.search_by_url(params[:q].strip).includes(:authentications)
       end

@@ -7,9 +7,7 @@ class ContactListsController < ApplicationController
 
   def index
     @site ||= current_site #Necessary here in case this is a redirect from failed oauth
-    if omniauth_error?
-      flash[:error] = omniauth_error_message
-    end
+    flash[:error] = omniauth_error_message if omniauth_error?
 
     @contact_lists = @site.contact_lists
     @contact_list_totals =

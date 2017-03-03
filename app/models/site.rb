@@ -50,9 +50,7 @@ class Site < ActiveRecord::Base
   end
 
   def regenerate_script
-    if !destroyed?
-      @needs_script_regeneration = true
-    end
+    @needs_script_regeneration = true if !destroyed?
   end
 
   validates :url, url: true
@@ -414,9 +412,7 @@ class Site < ActiveRecord::Base
         if bill.pending?
           bill.void! if actually_change
         elsif bill.paid?
-          if bill.active_during(now)
-            active_paid_bills << bill
-          end
+          active_paid_bills << bill if bill.active_during(now)
         end
       end
     end

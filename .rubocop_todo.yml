@@ -368,25 +368,6 @@ Style/IfInsideElse:
     - 'app/helpers/email_digest_helper.rb'
     - 'lib/script_generator.rb'
 
-# Offense count: 19
-# Cop supports --auto-correct.
-# Configuration parameters: MaxLineLength.
-Style/IfUnlessModifier:
-  Exclude:
-    - 'app/controllers/admin/users_controller.rb'
-    - 'app/controllers/contact_lists_controller.rb'
-    - 'app/interactions/referrals/create.rb'
-    - 'app/models/billing/bill.rb'
-    - 'app/models/billing/billing_log.rb'
-    - 'app/models/referral.rb'
-    - 'app/models/site.rb'
-    - 'app/models/user.rb'
-    - 'app/serializers/identity_serializer.rb'
-    - 'lib/analytics.rb'
-    - 'lib/cybersource.rb'
-    - 'lib/hello/internal_analytics.rb'
-    - 'lib/obfuscated_id.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles, IndentationWidth.

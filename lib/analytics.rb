@@ -9,9 +9,7 @@ class Analytics
       # Default :at to now
       props[:at] ||= Time.now
       # If :at is a timestamp convert to a Time object
-      if props[:at].is_a?(Numeric)
-        props[:at] = Time.at(props[:at])
-      end
+      props[:at] = Time.at(props[:at]) if props[:at].is_a?(Numeric)
       # Format :at
       props[:at] = props[:at].to_s
 

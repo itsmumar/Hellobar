@@ -7,9 +7,7 @@ class Referrals::Create < Less::Interaction
     @referral = sender.sent_referrals.build(params)
     @referral.set_site_if_only_one
 
-    if @referral.save && send_emails
-      send_initial_email
-    end
+    send_initial_email if @referral.save && send_emails
 
     @referral
   end

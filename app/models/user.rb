@@ -331,9 +331,7 @@ class User < ActiveRecord::Base
   end
 
   def clear_invite_token
-    if active? && invite_token
-      self.invite_token = nil
-    end
+    self.invite_token = nil if active? && invite_token
   end
 
   def destroy_orphan_sites_before_active_record_association_callbacks
