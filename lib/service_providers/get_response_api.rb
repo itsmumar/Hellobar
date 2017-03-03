@@ -24,7 +24,7 @@ module ServiceProviders
       fetch_resource('tag')
     end
 
-    def subscribe(list_id, email, name = nil, double_optin = true)
+    def subscribe(list_id, email, name = nil, _double_optin = true)
       name ||= email
       tags = []
 
@@ -79,7 +79,7 @@ module ServiceProviders
       end
     end
 
-    def batch_subscribe(list_id, subscribers, double_optin = true)
+    def batch_subscribe(list_id, subscribers, _double_optin = true)
       subscribers.each do |subscriber|
         subscribe(list_id, subscriber[:email], subscriber[:name])
       end

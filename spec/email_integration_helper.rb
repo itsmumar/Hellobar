@@ -1,7 +1,7 @@
 def record_mailer_gateway_request_history!
   @email_history = {}
 
-  MailerGateway.stub(:send_email) do |type, recipient, params|
+  MailerGateway.stub(:send_email) do |type, recipient, _params|
     date = Time.zone.today
     ((@email_history[date] ||= {})[recipient] ||= []) << type
   end.and_return(true)
@@ -12,7 +12,7 @@ def day_from_current_spec_description
 end
 
 def expect_no_email(user)
-  @email_history.each do |date, messages|
+  @email_history.each do |_date, messages|
     expect(messages).not_to include(user.email)
   end
 end

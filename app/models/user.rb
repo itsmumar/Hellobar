@@ -5,8 +5,6 @@ class User < ActiveRecord::Base
   include UserValidator
   include ReferralTokenizable
   include QueueWorker::Delay
-
-  # rubocop:disable Style/SingleSpaceBeforeFirstArg
   after_initialize  :check_if_temporary
   before_save       :clear_invite_token
   after_save        :disconnect_oauth, if: :is_oauth_user?
@@ -271,7 +269,7 @@ class User < ActiveRecord::Base
     user
   end
 
-  def self.find_or_invite_by_email(email, site)
+  def self.find_or_invite_by_email(email, _site)
     user = User.where(email: email).first
 
     if user.nil?

@@ -49,7 +49,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def required_params
-    all_params.delete_if { |k, v| ([email_param] + name_params).include?(k) or k.nil? }
+    all_params.delete_if { |k, _| ([email_param] + name_params).include?(k) or k.nil? }
   end
 
   def all_params
@@ -85,7 +85,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     end.compact || []
   end
 
-  def subscribe_params(email, name, double_optin = true)
+  def subscribe_params(email, name, _double_optin = true)
     name ||= ''
     name_hash = {}
 

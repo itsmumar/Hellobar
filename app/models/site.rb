@@ -205,7 +205,7 @@ class Site < ActiveRecord::Base
     delay :send_digest_email, options
   end
 
-  def send_digest_email(options = {})
+  def send_digest_email(_options = {})
     Hello::EmailDigest.send(self)
   end
 
@@ -488,7 +488,7 @@ class Site < ActiveRecord::Base
     has_script_installed?
   end
 
-  def do_check_installation(options = {})
+  def do_check_installation(_options = {})
     has_script_installed?
   end
 

@@ -36,7 +36,7 @@ File.open(tmp_log, 'r') do |fp|
 end
 puts "Found #{jobs.length} failed jobs for #{date}..."
 File.open(output_log, 'w') do |fp|
-  jobs.each do |message_id, job|
+  jobs.each do |_message_id, job|
     fp.puts(job.split('\"').join('"'))
   end
 end

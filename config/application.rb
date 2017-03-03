@@ -31,7 +31,7 @@ module Hellobar
     config.assets.paths << Rails.root.join('vendor', 'assets')
 
     config.to_prepare do
-      Devise::SessionsController.layout proc { |controller| action_name == 'new' ? 'static' : 'application' }
+      Devise::SessionsController.layout proc { |_| action_name == 'new' ? 'static' : 'application' }
     end
 
     config.generators do |g|

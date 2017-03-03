@@ -16,7 +16,7 @@ class Identity < ActiveRecord::Base
   validates :site, :association_exists => true
   validate :service_provider_valid
 
-  scope :by_type, ->(type) { where(:provider => Hellobar::Settings[:identity_providers].select { |k, v| v[:type] == type }.map { |k, v| k.to_s }) }
+  scope :by_type, ->(type) { where(:provider => Hellobar::Settings[:identity_providers].select { |_, v| v[:type] == type }.map { |k, _| k.to_s }) }
   scope :active, -> { where('credentials IS NOT NULL') }
 
   # When an activity is active, it is saved, credentials are present, and it is being used.
@@ -43,8 +43,8 @@ class Identity < ActiveRecord::Base
   alias :provider_config :provider_settings
 
   def as_json(options = nil)
-    extra['raw_info'].select! { |k, v| %w(user_id username).include? k } if extra['raw_info']
-    extra['lists'] = extra['lists'].try(:collect) { |h| h.select { |k, v| %w(id web_id name).include? k } }
+    extra['raw_info'].select! { |k, _| %w(user_id username).include? k } if extra['raw_info']
+    extra['lists'] = extra['lists'].try(:collect) { |h| h.select { |k, _| %w(id web_id name).include? k } }
     super
   end
 
@@ -77,7 +77,7 @@ class Identity < ActiveRecord::Base
 
   # Deprecated
   # TODO -Remove once the `embed_code` column is removed from Identities
-  def embed_code=(embed_code)
+  def embed_code=(_embed_code)
     raise NoMethodError
   end
 

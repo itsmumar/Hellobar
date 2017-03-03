@@ -95,7 +95,7 @@ describe ContactList do
     let(:num) { 3 }
 
     it 'runs the number of site_elements_count' do
-      num.times { |n| contact_list.site_elements << site_elements(:zombo_email).dup }
+      num.times { |_| contact_list.site_elements << site_elements(:zombo_email).dup }
       expect(contact_list.site_elements_count).to eq(3)
     end
   end

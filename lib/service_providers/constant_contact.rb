@@ -66,7 +66,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
-  def batch_subscribe(list_id, subscribers, double_optin = true)
+  def batch_subscribe(list_id, subscribers, _double_optin = true)
     contacts = subscribers.map do |subscriber|
       first, last = (subscriber[:name] || '').split(' ')
 

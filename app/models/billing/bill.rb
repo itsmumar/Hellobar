@@ -187,7 +187,7 @@ class Bill < ActiveRecord::Base
     end
 
     # Refunds are never considered "active"
-    def active_during(date)
+    def active_during(_date)
       false
     end
 

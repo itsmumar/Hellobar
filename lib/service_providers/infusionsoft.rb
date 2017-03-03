@@ -25,7 +25,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
       sort_by { |result| result['name'] }
   end
 
-  def subscribe(_, email, name = nil, double_optin = false)
+  def subscribe(_, email, name = nil, _double_optin = false)
     data = { :Email => email }
 
     if name
@@ -41,7 +41,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
     end
   end
 
-  def batch_subscribe(_, subscribers, double_optin = false)
+  def batch_subscribe(_, subscribers, _double_optin = false)
     subscribers.each do |subscriber|
       subscribe(nil, subscriber[:email], subscriber[:name])
     end

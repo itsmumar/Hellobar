@@ -25,7 +25,7 @@ describe 'marketing:export_recent_logins_with_plan' do
   let(:files) { { free: @user_free_plan, pro: @user_pro_plan, enterprise: @user_enterprise_plan } }
 
   it 'should write emails to files' do
-    File.stub(:write) do |*args, &block|
+    File.stub(:write) do |*args|
       filename = args[0]
       content = args[1]
 
@@ -60,7 +60,7 @@ describe 'marketing:export_recent_signups_with_script_install_data' do
   end
 
   it 'should write emails to files' do
-    File.stub(:write) do |*args, &block|
+    File.stub(:write) do |*args|
       filename = args[0]
       content = args[1]
 

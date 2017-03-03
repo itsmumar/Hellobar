@@ -22,7 +22,7 @@ module ServiceProviders
       client.lists['lists']['list']
     end
 
-    def subscribe(list_id, email, name = nil, double_optin = true)
+    def subscribe(list_id, email, name = nil, _double_optin = true)
       name ||= email
 
       @client.add_to_list(email, list_id, {
@@ -30,7 +30,7 @@ module ServiceProviders
       })
     end
 
-    def batch_subscribe(list_id, subscribers, double_optin = true)
+    def batch_subscribe(list_id, subscribers, _double_optin = true)
       @client.add_users(
         subscribers.map { |s| { email: s[:email], name: s[:name], add_list: list_id } }
       )

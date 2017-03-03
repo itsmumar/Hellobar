@@ -53,7 +53,7 @@ class LegacyMigrator
       subscription_id = 0
       optimize_inserts do
         puts "[#{Time.now}] Done writing, changing subscription..."
-        @migrated_sites.each do |key, site|
+        @migrated_sites.each do |_, site|
           # Direct inserts
           ActiveRecord::Base.connection.execute("INSERT INTO #{Subscription.table_name} VALUES (NULL, NULL, #{site.id}, 'Subscription::FreePlus', 0, 0.00, 25000, NULL, NULL, #{escaped_now}, NULL)")
           subscription_id += 1
@@ -77,7 +77,7 @@ class LegacyMigrator
       klass = items[items.keys.first].class
       count = 0
       optimize_inserts do
-        items.each do |key, item|
+        items.each do |_, item|
           if item.kind_of?(Array)
             klass = item.first.class
             count += 1
@@ -158,7 +158,7 @@ class LegacyMigrator
 
       # keyed off site_id for faster lookup
       @legacy_goals_by_site_id = {}
-      @legacy_goals.each do |key, legacy_goal|
+      @legacy_goals.each do |_, legacy_goal|
         @legacy_goals_by_site_id[legacy_goal.site_id] ||= []
         @legacy_goals_by_site_id[legacy_goal.site_id] << legacy_goal
       end
@@ -173,7 +173,7 @@ class LegacyMigrator
       count = 0
       puts "[#{Time.now}] migrate_sites_and_users_and_memberships.."
 
-      @legacy_sites.each do |id, legacy_site|
+      @legacy_sites.each do |_, legacy_site|
         begin
           site = ::Site.new id: legacy_site.legacy_site_id || legacy_site.id,
                             url: legacy_site.base_url,
@@ -201,7 +201,7 @@ class LegacyMigrator
     def migrate_goals_to_rules
       goal_count = 0
 
-      @migrated_sites.each do |key, site|
+      @migrated_sites.each do |_, site|
         if @legacy_goals_by_site_id[site.id].present?
           # create rules, conditions, and site elements
           @legacy_goals_by_site_id[site.id].each do |legacy_goal|
@@ -256,7 +256,7 @@ class LegacyMigrator
       end
 
       # check for duplicate rules
-      @migrated_rules.each do |site_id, rules|
+      @migrated_rules.each do |_, rules|
         rules.each do |rule|
           next unless @migrated_rules[rule.site_id].include?(rule)
 
@@ -353,7 +353,7 @@ class LegacyMigrator
 
       @migrated_contact_lists = {}
       @migrated_contact_lists_by_site = {}
-      @legacy_goals.each do |id, legacy_goal|
+      @legacy_goals.each do |_, legacy_goal|
         next unless legacy_goal.type == 'Goals::CollectEmail'
 
         unless @migrated_sites[legacy_goal.site_id]
@@ -392,7 +392,7 @@ class LegacyMigrator
         puts "[#{Time.now}] Migrated #{count} contact lists" if count % 100 == 0
       end
 
-      @migrated_contact_lists.each do |id, list|
+      @migrated_contact_lists.each do |_, list|
         if list.name.nil?
           index = @migrated_contact_lists_by_site[list.site_id].index(list)
           list.name = index == 0 ? 'My Contacts' : "My Contacts #{index + 1}"
@@ -404,7 +404,7 @@ class LegacyMigrator
       count = 0
       @migrated_identities = {}
       @legacy_identities = preload(LegacyMigrator::LegacyIdentity)
-      @legacy_identities.each do |id, legacy_id|
+      @legacy_identities.each do |_, legacy_id|
         if site = @legacy_sites[legacy_id.site_id]
           identity = ::Identity.new id: legacy_id.id,
                              site_id: legacy_id.site_id,
@@ -446,7 +446,7 @@ class LegacyMigrator
     end
 
     def migrate_site_timezones
-      @legacy_sites.each do |site_id, legacy_site|
+      @legacy_sites.each do |site_id, _|
         next unless legacy_goals = @legacy_goals_by_site_id[site_id]
         timezones = legacy_goals.map { |goal| timezone_for_goal(goal) }.compact.uniq
 

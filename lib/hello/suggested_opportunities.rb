@@ -157,7 +157,7 @@ module Hello
     SUGGESTION_SEGMENT_KEYS = %w{dv st rd pu}
 
     class << self
-      def generate(site, site_elements)
+      def generate(_site, site_elements)
         # Get all the segments for the last 60 days for all the site
         # elements
         end_date = Time.now

@@ -81,24 +81,6 @@ Lint/UnderscorePrefixedVariableName:
   Exclude:
     - 'app/models/contact_list.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/UnneededDisable:
-  Exclude:
-    - 'app/models/user.rb'
-
-# Offense count: 34
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
-Lint/UnusedBlockArgument:
-  Enabled: false
-
-# Offense count: 47
-# Cop supports --auto-correct.
-# Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods.
-Lint/UnusedMethodArgument:
-  Enabled: false
-
 # Offense count: 56
 Lint/UselessAssignment:
   Enabled: false

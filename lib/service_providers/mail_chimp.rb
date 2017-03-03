@@ -168,7 +168,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     opts
   end
 
-  def catch_required_merge_var_error!(error)
+  def catch_required_merge_var_error!(_error)
     # pause identity by deleting it
     user = @identity.site.users.first
     if user.has_temporary_email?

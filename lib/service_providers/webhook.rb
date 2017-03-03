@@ -14,7 +14,7 @@ module ServiceProviders
       end
     end
 
-    def subscribe(_, email, name = nil, double_optin = true)
+    def subscribe(_, email, name = nil, _double_optin = true)
       method = contact_list.data['webhook_method'].downcase.to_sym
 
       client.public_send(method) do |request|
@@ -27,7 +27,7 @@ module ServiceProviders
       end
     end
 
-    def batch_subscribe(_, subscribers, double_optin = true)
+    def batch_subscribe(_, subscribers, _double_optin = true)
       subscribers.each do |subscriber|
         subscribe(nil, subscriber[:email], subscriber[:name])
       end

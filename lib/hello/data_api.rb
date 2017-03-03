@@ -45,7 +45,7 @@ module Hello::DataAPI
       Hash[api_results.map { |k, v| [k, Performance.new(v)] }]
     end
 
-    def fake_lifetime_totals(site, site_elements, num_days = 1)
+    def fake_lifetime_totals(_site, site_elements, num_days = 1)
       {}.tap do |hash|
         site_elements.each do |el|
           rng = Random.new(el.id)
@@ -102,7 +102,7 @@ module Hello::DataAPI
 
         # do the same for each subset of data, grouped by element subtype
         [:email, :traffic, :social, :call].each do |key|
-          type_data = data.select { |k, v| ids[key].include?(k) }
+          type_data = data.select { |k, _| ids[key].include?(k) }
           totals[key] << type_data.inject([0, 0]) do |sum, data_row|
             day_i_data = data_row[1][i]
             [sum[0] + day_i_data[0], sum[1] + day_i_data[1]]
@@ -172,7 +172,7 @@ module Hello::DataAPI
       end
     end
 
-    def fake_suggested_opportunities(site, site_elements)
+    def fake_suggested_opportunities(_site, _site_elements)
       {
         'high traffic, low conversion' =>  [['co:USA', 100, 1], ['dv:Mobile', 200, 2], ['rf:http://zombo.com', 130, 4]],
         'low traffic, high conversion' =>  [['co:Russia', 10, 9], ['dv:Desktop', 22, 20], ['pu:http://zombo.com/signup', 5, 4]],
@@ -196,7 +196,7 @@ module Hello::DataAPI
       end
     end
 
-    def fake_get_contacts(contact_list)
+    def fake_get_contacts(_contact_list)
       [['dmitriy+person100@polymathic.me', 'First Last', 1388534400], ['dmitriy+person99@polymathic.me', 'Dr Pepper', 1388534399]]
     end
 

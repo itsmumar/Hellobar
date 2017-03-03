@@ -28,7 +28,7 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
     end
   end
 
-  def subscribe(list_id, email, name = nil, double_optin = false)
+  def subscribe(list_id, email, name = nil, _double_optin = false)
     contact = {}
     contact[:email] = email
     contact["p[#{list_id}]"] = list_id if list_id
@@ -42,7 +42,7 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
     @client.contact_sync(contact)
   end
 
-  def batch_subscribe(list_id, subscribers, double_optin = false)
+  def batch_subscribe(list_id, subscribers, _double_optin = false)
     subscribers.each do |subscriber|
       subscribe(list_id, subscriber[:email], subscriber[:name])
     end

@@ -55,7 +55,7 @@ module ServiceProviders
 
     # NOTE: `double_optin` depends on the ConvertKit account form settings.
     # No effect of `double_optin` from API
-    def subscribe(form_id, email, name = nil, double_optin = false)
+    def subscribe(form_id, email, name = nil, _double_optin = false)
       body = {
         api_key: @identity.api_key,
         email: email,
@@ -89,7 +89,7 @@ module ServiceProviders
 
     # NOTE: `double_optin` depends on the ConvertKit account form settings.
     # No effect of `double_optin` from API
-    def batch_subscribe(form_id, subscribers, double_optin = false)
+    def batch_subscribe(form_id, subscribers, _double_optin = false)
       subscribers.each do |subscriber|
         subscribe(form_id, subscriber[:email], subscriber[:name])
       end

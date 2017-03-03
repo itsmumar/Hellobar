@@ -20,7 +20,7 @@ class Subscription < ActiveRecord::Base
   after_create :mark_user_onboarding_as_bought_subscription!
 
   class << self
-    def values_for(site)
+    def values_for(_site)
       # Just return the defaults for now, in the future we can
       # offer per-site discounts, etc
       defaults

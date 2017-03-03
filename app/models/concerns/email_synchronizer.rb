@@ -44,7 +44,7 @@ module EmailSynchronizer
   delegate :batch_subscribe, to: :service_provider
 
   # Extracted from embed_code_provider#subscribe!
-  def sync_one!(email, name, options = {})
+  def sync_one!(email, name, _options = {})
     log_entry = contact_list_logs.create(email: email, name: name)
     return unless syncable?
 

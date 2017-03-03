@@ -78,11 +78,11 @@ class ContactList < ActiveRecord::Base
     @subscribers = data.map { |d| { :email => d[0], :name => d[1], :subscribed_at => d[2].is_a?(Integer) ? Time.at(d[2]) : nil } }
   end
 
-  def subscriber_statuses(_subscribers, force = false)
+  def subscriber_statuses(subscribers, force = false)
     return @statuses if @statuses && !force
     @statuses = begin
-      if !_subscribers.blank? && service_provider.respond_to?(:subscriber_statuses)
-        service_provider.subscriber_statuses(self, _subscribers.map { |x| x[:email] })
+      if !subscribers.blank? && service_provider.respond_to?(:subscriber_statuses)
+        service_provider.subscriber_statuses(self, subscribers.map { |x| x[:email] })
       else
         {}
       end
@@ -174,7 +174,7 @@ class ContactList < ActiveRecord::Base
 
   def reject_empty_data_values
     return unless data
-    self.data = data.delete_if { |k, v| v.blank? }
+    self.data = data.delete_if { |_, v| v.blank? }
   end
 
   def embed_code_exists?

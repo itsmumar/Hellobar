@@ -20,14 +20,14 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
     end
   end
 
-  def subscribe(list_id, email, name = nil, double_optin = true)
+  def subscribe(list_id, email, name = nil, _double_optin = true)
     handle_error do
       CreateSend::Subscriber.add(@auth, list_id, email, name, [], true, true)
     end
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
-  def batch_subscribe(list_id, subscribers, double_optin = true)
+  def batch_subscribe(list_id, subscribers, _double_optin = true)
     handle_error do
       subscribers = subscribers.map { |s| { 'EmailAddress' => s[:email], 'Name' => s[:name] } }
       CreateSend::Subscriber.import(@auth, list_id, subscribers, true, true)

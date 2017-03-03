@@ -15,10 +15,10 @@ class ServiceProviders::AWeber < ServiceProviders::Email
   end
 
   def lists
-    @client.account.lists.map { |k, v| { 'id' => v.id, 'name' => v.name } } rescue []
+    @client.account.lists.map { |_, v| { 'id' => v.id, 'name' => v.name } } rescue []
   end
 
-  def subscribe(list_id, email, name = nil, double_optin = true)
+  def subscribe(list_id, email, name = nil, _double_optin = true)
     handle_errors do
       # AWeber will always force double-optin: https://help.aweber.com/entries/22883171-Why-Was-a-Confirmation-Message-Sent-When-Confirmation-Was-Disabled-
       @client.account.lists[list_id.to_i].subscribers.create({ 'name' => name,
@@ -28,7 +28,7 @@ class ServiceProviders::AWeber < ServiceProviders::Email
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
-  def batch_subscribe(list_id, subscribers, double_optin = true)
+  def batch_subscribe(list_id, subscribers, _double_optin = true)
     # AWeber does not provider a batch subscribe operation, so we have do this one-by-one
     subscribers.each do |subscriber|
       handle_errors do

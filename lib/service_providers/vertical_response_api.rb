@@ -18,7 +18,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
     end
   end
 
-  def subscribe(list_id, email, name = nil, double_optin = true)
+  def subscribe(list_id, email, name = nil, _double_optin = true)
     first_name, last_name = split_name(name)
     handle_errors do
       @client.find_list(list_id).create_contact(
@@ -31,7 +31,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
     end
   end
 
-  def batch_subscribe(list_id, subscribers, double_optin = true)
+  def batch_subscribe(list_id, subscribers, _double_optin = true)
     handle_errors do
       @client.find_list(list_id).create_contacts(
         subscribers.map do |subscriber|

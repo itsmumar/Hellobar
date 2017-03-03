@@ -5,7 +5,7 @@ module Synchronizer
     raise NoMethodError, NoMethodMessage + '#sync_all!'
   end
 
-  def sync_one!(item, name, options = {})
+  def sync_one!(_item, _name, _options = {})
     raise NoMethodError, NoMethodMessage + '#sync_one!'
   end
 end

@@ -162,7 +162,7 @@ module SiteElementsHelper
 
   def difference_is_significant?(elements)
     values = {}
-    elements.each_with_index do |element, i|
+    elements.each_with_index do |element, _|
       values[element.id] = {
         :views => element.total_views,
         :conversions => element.total_conversions

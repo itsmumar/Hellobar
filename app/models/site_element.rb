@@ -147,7 +147,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def cloneable_attributes
-    attributes.reject { |k, v| NOT_CLONEABLE_ATTRIBUTES.include?(k.to_sym) }
+    attributes.reject { |k, _| NOT_CLONEABLE_ATTRIBUTES.include?(k.to_sym) }
   end
 
   def total_views(opts = {})
