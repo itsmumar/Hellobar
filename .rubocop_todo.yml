@@ -678,13 +678,6 @@ Style/EmptyLineBetweenDefs:
   Exclude:
     - 'spec/models/bill_spec.rb'
 
-# Offense count: 23
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines
-Style/EmptyLinesAroundClassBody:
-  Enabled: false
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Style/EmptyLinesAroundMethodBody:

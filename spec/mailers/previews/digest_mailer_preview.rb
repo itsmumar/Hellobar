@@ -1,5 +1,4 @@
 class DigestMailerPreview < ActionMailer::Preview
-
   def weekly_digest
     s = Site.last
     DigestMailer.weekly_digest(s, User.last)

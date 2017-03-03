@@ -1,6 +1,5 @@
 module ServiceProviders
   class MyEmma < EmbedCodeProvider
-
     def email_param
       field = list_form.css('input[type="email"], input[type="text"]').find do |f|
         f[:name].include? 'email'
@@ -27,6 +26,5 @@ module ServiceProviders
         item
       end
     end
-
   end
 end

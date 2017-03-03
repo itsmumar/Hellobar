@@ -1,5 +1,4 @@
 class ProxyController < ApplicationController
-
   def proxy
     if Rails.env.production? || Rails.env.development?
       result = Net::HTTP.get_response(proxy_url)
@@ -14,5 +13,4 @@ class ProxyController < ApplicationController
   def proxy_url
     URI.parse(params[:scheme] + '://' + params[:url] + '/?' + request.env['QUERY_STRING'])
   end
-
 end

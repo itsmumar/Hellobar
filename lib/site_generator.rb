@@ -70,5 +70,4 @@ class SiteGenerator
     directory = Pathname.new(directory) unless directory.respond_to?(:join)
     @full_path = directory.join("#{SecureRandom.hex}.html")
   end
-
 end

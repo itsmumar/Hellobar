@@ -556,5 +556,4 @@ class Site < ActiveRecord::Base
   def set_branding_on_site_elements
     site_elements.update_all(show_branding: !capabilities(true).remove_branding?)
   end
-
 end

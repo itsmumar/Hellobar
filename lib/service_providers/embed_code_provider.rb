@@ -1,5 +1,4 @@
 class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
-
   class FirstAndLastNameRequired < StandardError; end
 
   URL_REGEX = /^(?:https?:\/\/|\/\/)/

@@ -215,6 +215,5 @@ class Bill < ActiveRecord::Base
       self.metadata["refunded_billing_attempt_id"] = id
       @refunded_billing_attempt = nil
     end
-
   end
 end

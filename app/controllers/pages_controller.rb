@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-
   layout 'static'
 
   def use_cases
