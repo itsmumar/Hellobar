@@ -58,7 +58,7 @@ class Referral < ActiveRecord::Base
   end
 
   def redeemed_by_sender?
-    state == 'installed' && available_to_sender == false && redeemed_by_sender_at != nil
+    state == 'installed' && available_to_sender == false && !redeemed_by_sender_at.nil?
   end
 
   def email_already_registered?

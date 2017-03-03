@@ -128,7 +128,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     when 250
       catch_required_merge_var_error!(error)
     when 104, 200, 101 # Invalid_ApiKey, Invalid List, Deactivated Account
-      identity.destroy_and_notify_user if identity != nil
+      identity.destroy_and_notify_user unless identity.nil?
       raise error
     when 214
       # Email already existed in list, don't do anything
