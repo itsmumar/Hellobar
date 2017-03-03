@@ -13,7 +13,7 @@ module Cleaners::EmbedCode
   def clean(*args)
     args.inject do |cleaned, method|
       self.send(method, cleaned) # On first run thru block, cleaned = embed_code
-    end 
+    end
   end
 
   private

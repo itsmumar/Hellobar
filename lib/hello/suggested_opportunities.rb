@@ -118,7 +118,7 @@ module Hello
         # We use both the "friendly" interface (@@dynamo_db) and the
         # direct interface (@@client)
         @@dynamo_db = AWS::DynamoDB.new
-        @@client = AWS::DynamoDB::Client.new(api_version: '2012-08-10') 
+        @@client = AWS::DynamoDB::Client.new(api_version: '2012-08-10')
       end
 
       def load_tables
@@ -158,7 +158,7 @@ module Hello
 
     class << self
       def generate(site, site_elements)
-        # Get all the segments for the last 60 days for all the site 
+        # Get all the segments for the last 60 days for all the site
         # elements
         end_date = Time.now
         start_date = end_date-60*24*60*60
@@ -209,7 +209,7 @@ module Hello
         results["high traffic, high conversion"] = top_segments[0...num_values_to_return].sort(&sort_by_conversion)
         # Find bottom X - these are your "high traffic, low conversion". Sort by lowest conversions
         results["high traffic, low conversion"] = top_segments[-num_values_to_return..-1].sort(&sort_by_conversion).reverse
-        # Take the top of the bottom segments - these are your "low traffic, high conversion". Sort by highest conversions desc 
+        # Take the top of the bottom segments - these are your "low traffic, high conversion". Sort by highest conversions desc
         results["low traffic, high conversion"] = bottom_segments[0...num_values_to_return].sort(&sort_by_conversion)
         # Return the results
         return results

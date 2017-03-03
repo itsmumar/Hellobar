@@ -118,7 +118,7 @@ describe CyberSourceCreditCard do
     cc = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: payment_methods(:joeys))
     cc.errors.messages.should == {}
     cc.should be_valid
-    
+
     CyberSourceCreditCard.new(payment_method: payment_methods(:joeys)).should_not be_valid
     missing = VALID_DATA.merge({})
     missing.delete(:first_name)

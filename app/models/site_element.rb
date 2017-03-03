@@ -104,7 +104,7 @@ class SiteElement < ActiveRecord::Base
     answer1response: "Welcome! Let’s get started...",
     answer2response: "Welcome back! Check out our new sale.",
     answer1link_text: "Take the tour",
-    answer2link_text: "Shop now",
+    answer2link_text: "Shop now"
   }
 
   QUESTION_DEFAULTS.keys.each do |attr_name|

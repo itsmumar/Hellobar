@@ -296,7 +296,7 @@ describe ScriptGenerator do
       expected_hash = {
         match: nil,
         conditions: [].to_json,
-        site_elements: [{ id: active_bar.id, template_name: active_bar.element_subtype }].to_json,
+        site_elements: [{ id: active_bar.id, template_name: active_bar.element_subtype }].to_json
       }
 
       generator.rules.should == [expected_hash]

@@ -14,7 +14,6 @@
 module DeserializeWithErrors
   module ClassMethods
     def serialize column, as_type
-      
       # Call the parent to install this serializer
       super column, as_type
 

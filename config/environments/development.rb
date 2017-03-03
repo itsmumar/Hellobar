@@ -46,7 +46,7 @@ Rails.application.configure do
       :s3_credentials => {
         :bucket => settings['s3_bucket'],
         :access_key_id => settings['aws_access_key_id'],
-        :secret_access_key => settings['aws_secret_access_key'],
+        :secret_access_key => settings['aws_secret_access_key']
       }
     }
   end

@@ -1377,43 +1377,6 @@ Style/TernaryParentheses:
   Exclude:
     - 'lib/script_generator.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStylesForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInArguments:
-  Exclude:
-    - 'app/serializers/contact_list_serializer.rb'
-    - 'spec/features/embed_script_tests/question_spec.rb'
-
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStylesForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInLiteral:
-  Exclude:
-    - 'app/controllers/content_upgrades_controller.rb'
-    - 'app/interactions/referrals/redeem_for_recipient.rb'
-    - 'app/models/site_element.rb'
-    - 'config/environments/development.rb'
-    - 'config/environments/production.rb'
-    - 'lib/service_providers/vertical_response_api.rb'
-    - 'spec/controllers/contact_submissions_controller_spec.rb'
-    - 'spec/controllers/rules_controller_spec.rb'
-    - 'spec/lib/script_generator_spec.rb'
-
-# Offense count: 9
-# Cop supports --auto-correct.
-Style/TrailingWhitespace:
-  Exclude:
-    - 'lib/analytics.rb'
-    - 'lib/cleaners/embed_code.rb'
-    - 'lib/deserialize_with_errors.rb'
-    - 'lib/hello/suggested_opportunities.rb'
-    - 'lib/service_providers/get_response.rb'
-    - 'spec/bin/queue_worker_mock_spec.rb'
-    - 'spec/models/payment_method_details_spec.rb'
-
 # Offense count: 20
 # Cop supports --auto-correct.
 Style/UnneededInterpolation:

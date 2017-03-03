@@ -21,7 +21,7 @@ module ServiceProviders
     def list_url
       list_url = super
       list_url.gsub(/https?/, 'https')
-              .gsub('add_contact_webform.html', "site/#{campaign_id}/webform.html") + "&wid=#{webform_id}" 
+              .gsub('add_contact_webform.html', "site/#{campaign_id}/webform.html") + "&wid=#{webform_id}"
     end
 
     def subscribe_params(email, name, double_optin = true)

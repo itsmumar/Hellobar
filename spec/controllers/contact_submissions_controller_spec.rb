@@ -76,7 +76,7 @@ describe ContactSubmissionsController do
       :last_name => user.last_name,
       :email => user.email,
       :message => message,
-      :preview => message[0, 50],
+      :preview => message[0, 50]
     }
 
     MailerGateway.should_receive(:send_email).with("Contact Form", "support@hellobar.com", email_params)

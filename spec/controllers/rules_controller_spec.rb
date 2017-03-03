@@ -75,7 +75,7 @@ describe RulesController do
         conditions_attributes: {
           "1" => {
             "segment"=>"CountryCondition", "operand"=>"is", "value"=>"USA"}
-        },
+        }
       }
 
       rule = Rule.last

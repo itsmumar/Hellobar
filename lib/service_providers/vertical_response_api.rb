@@ -25,7 +25,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
         {
           email: email,
           first_name: first_name,
-          last_name: last_name,
+          last_name: last_name
         }
       )
     end
@@ -39,7 +39,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
           {
             email: subscriber[:email],
             first_name: first_name,
-            last_name: last_name,
+            last_name: last_name
           }
         end
       )

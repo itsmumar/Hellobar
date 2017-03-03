@@ -25,7 +25,7 @@ class Analytics
 
       # Set the data
       data = {table_name => props}
-      
+
       tried_creating_missing_file = false
       begin
         File.open(LOG_FILE, (File::WRONLY | File::APPEND)){|fp| fp.puts(data.to_json)}

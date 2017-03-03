@@ -12,7 +12,7 @@ feature "Site with a question modal", :js do
       answer1link_text: "Great!",
       answer2response: "Incorrect!",
       answer2caption: "Incorrect Caption!",
-      answer2link_text: "Boo!",
+      answer2link_text: "Boo!"
     )
 
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')

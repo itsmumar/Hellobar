@@ -27,7 +27,7 @@ describe QueueWorkerMock, 'queue worker spec' do
     let(:message) { double(:message, body: body) }
     let(:id) { 12345.to_s }
     let(:email) { 'test@test.com' }
-    
+
     subject { described_class.parse_message(message) }
 
     context 'body has bang' do

@@ -65,7 +65,7 @@ class ContentUpgradesController < ApplicationController
        offer_border_width: params[:offer_border_width],
        offer_border_style: params[:offer_border_style],
        offer_border_radius: params[:offer_border_radius],
-       modal_button_color: params[:modal_button_color],
+       modal_button_color: params[:modal_button_color]
      }
 
     @site.update_content_upgrade_styles!(style_params)
