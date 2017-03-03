@@ -2,22 +2,18 @@ class Font < ActiveHash::Base
   include ActiveModel::Serialization
 
   class << self
-    def guess(input)
-      return unless input.present?
+    # @param [String] font_names; e.g. "Helvetica,sans-serif"
+    def guess(font_names)
+      return unless font_names.present?
 
-      font_names = input.to_s
       all_fonts = Font.all
-      # The font_name might be "Helvetica,sans-serif"
-      font_names.split(',').each do |font_name|
-        font_name = font_name.gsub(/^\s+/, '').gsub(/\s+$/, '')
-        # Try to find the font
-        possible_fonts = all_fonts.each do |font|
-          if font.value.downcase.include?(font_name.downcase)
-            # Return the first found font
-            return font
-          end
-        end
+      font_names.to_s.split(',').find do |font_name|
+        all_fonts.find { |font| font.same?(font_name.strip) }
       end
     end
+  end
+
+  def same?(font_name)
+    value.downcase.include?(font_name.downcase)
   end
 end

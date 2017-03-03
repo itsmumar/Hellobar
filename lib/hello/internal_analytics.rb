@@ -45,7 +45,7 @@ module Hello
       end
 
       def load_ab_tests
-        hash = YAML.safe_load(File.read('lib/hello/ab_tests.yml'))
+        hash = YAML.safe_load(File.read('lib/hello/ab_tests.yml'), [Date])
         hash.each do |registered_test|
           name            = registered_test['name']
           values          = registered_test['values']
