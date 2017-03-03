@@ -12,6 +12,7 @@ class ScriptGenerator < Mustache
   load_templates
 
   attr_reader :site, :options
+  delegate :id, :url, :write_key, to: :site, prefix: true
 
   def initialize(site, options = {})
     @site = site
@@ -28,14 +29,6 @@ class ScriptGenerator < Mustache
     else
       render
     end
-  end
-
-  def site_id
-    site.id
-  end
-
-  def site_url
-    site.url
   end
 
   def script_is_installed_properly
@@ -103,10 +96,6 @@ class ScriptGenerator < Mustache
 
   def content_upgrades_styles_json
     site.get_content_upgrade_styles.to_json
-  end
-
-  def site_write_key
-    site.write_key
   end
 
   def hb_backend_host

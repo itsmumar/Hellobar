@@ -150,13 +150,6 @@ Rails/Date:
     - 'spec/lib/hello/api_performance_spec.rb'
     - 'spec/models/referral_spec.rb'
 
-# Offense count: 5
-# Cop supports --auto-correct.
-Rails/Delegate:
-  Exclude:
-    - 'app/controllers/application_controller.rb'
-    - 'lib/script_generator.rb'
-
 # Offense count: 17
 # Cop supports --auto-correct.
 # Configuration parameters: Whitelist.

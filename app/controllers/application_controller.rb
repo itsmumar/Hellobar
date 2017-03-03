@@ -35,13 +35,9 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  def user_agent
-    request.user_agent
-  end
+  delegate :user_agent, to: :request
 
-  def remote_ip
-    request.remote_ip
-  end
+  delegate :remote_ip, to: :request
 
   def current_admin
     return nil if @current_admin == false
