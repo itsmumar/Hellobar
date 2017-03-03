@@ -10,7 +10,7 @@ class Bill < ActiveRecord::Base
   belongs_to :subscription, inverse_of: :bills
   has_many :billing_attempts, -> { order 'id' }
   has_many :coupon_uses
-  validates_presence_of :subscription
+  validates :subscription, presence: true
   include BillingAuditTrail
   delegate :site, to: :subscription
   delegate :site_id, to: :subscription

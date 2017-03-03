@@ -190,15 +190,6 @@ Rails/SkipsModelValidations:
 Rails/TimeZone:
   Enabled: false
 
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/Validation:
-  Exclude:
-    - 'app/models/billing/bill.rb'
-    - 'app/models/validators/user_validator.rb'
-
 # Offense count: 9
 Style/AccessorMethodName:
   Exclude:
