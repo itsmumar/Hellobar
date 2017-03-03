@@ -384,20 +384,6 @@ Style/MultilineBlockChain:
 Style/MutableConstant:
   Enabled: false
 
-# Offense count: 9
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.
-# SupportedStyles: skip_modifier_ifs, always
-Style/Next:
-  Exclude:
-    - 'app/models/billing/billing_log.rb'
-    - 'app/models/site.rb'
-    - 'lib/cybersource.rb'
-    - 'lib/hello/suggested_opportunities.rb'
-    - 'lib/legacy_migrator.rb'
-    - 'support/get_failed_jobs'
-    - 'support/retry_jobs'
-
 # Offense count: 11
 # Cop supports --auto-correct.
 Style/NilComparison:

@@ -38,12 +38,11 @@ module Hello
                   segment = item.attributes['segment']
                   result = results_for_site_element[segment]
                   item.attributes.each do |key, value|
-                    unless key == 'segment'
-                      yday = key.to_i + year_offset
-                      result[:total] += value.to_i
-                      result[:min_yday] = yday if !result[:min_yday] || yday < result[:min_yday]
-                      result[:max_yday] = yday if !result[:max_yday] || yday > result[:max_yday]
-                    end
+                    next if key == 'segment'
+                    yday = key.to_i + year_offset
+                    result[:total] += value.to_i
+                    result[:min_yday] = yday if !result[:min_yday] || yday < result[:min_yday]
+                    result[:max_yday] = yday if !result[:max_yday] || yday > result[:max_yday]
                   end
                 end
               end
@@ -54,15 +53,14 @@ module Hello
           # Now we need to calculate the average value for each and add it to the final results
           results_for_site_element.each do |segment, data|
             total = data[:total]
-            if total > 0
-              conversions = (total / CONVERSION_SCALE)
-              views = total - (conversions * CONVERSION_SCALE)
-              num_weeks = (((data[:max_yday] - data[:min_yday]).to_f + 1) / 7)
-              conversions = (conversions / num_weeks).round
-              views = (views / num_weeks).round
-              final_results[segment][0] += views
-              final_results[segment][1] += conversions
-            end
+            next unless total > 0
+            conversions = (total / CONVERSION_SCALE)
+            views = total - (conversions * CONVERSION_SCALE)
+            num_weeks = (((data[:max_yday] - data[:min_yday]).to_f + 1) / 7)
+            conversions = (conversions / num_weeks).round
+            views = (views / num_weeks).round
+            final_results[segment][0] += views
+            final_results[segment][1] += conversions
           end
         end
         final_results

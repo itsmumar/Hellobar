@@ -26,17 +26,14 @@ module BillingAuditTrail
       if @source.is_a?(ActiveRecord::Base)
         # See if the source has any other id attributes we can set
         BillingLog.column_names.each do |name|
-          if name =~ /_id$/
-            # See if it has the id column
-            if @source.respond_to?(name)
-              log.send(:"#{name}=", @source.send(name))
-            end
-            # See if this is the source
-            class_name = name.gsub(/_id$/, '').classify + (name =~ /s_id$/ ? 's' : '')
-            klass = nil
-            begin; klass = Kernel.const_get(class_name); rescue; end
-            log.send(:"#{name}=", @source.id) if klass && @source.is_a?(klass)
-          end
+          next unless name =~ /_id$/
+          # See if it has the id column
+          log.send(:"#{name}=", @source.send(name)) if @source.respond_to?(name)
+          # See if this is the source
+          class_name = name.gsub(/_id$/, '').classify + (name =~ /s_id$/ ? 's' : '')
+          klass = nil
+          begin; klass = Kernel.const_get(class_name); rescue; end
+          log.send(:"#{name}=", @source.id) if klass && @source.is_a?(klass)
         end
       end
       # Save it

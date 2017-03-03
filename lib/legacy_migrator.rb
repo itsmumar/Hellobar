@@ -95,11 +95,10 @@ class LegacyMigrator
     def load_wp_emails
       @wp_emails = {}
       File.read(File.join(Rails.root, 'db', 'wp_logins.csv')).split("\n").each_with_index do |line, i|
-        if i > 0
-          e1, e2 = *line.split("\t")
-          @wp_emails[e1] = true
-          @wp_emails[e2] = true
-        end
+        next unless i > 0
+        e1, e2 = *line.split("\t")
+        @wp_emails[e1] = true
+        @wp_emails[e2] = true
       end
     end
 
@@ -246,13 +245,12 @@ class LegacyMigrator
       [@migrated_rules, @rules_to_migrate_later].each do |rule_group|
         rule_group.each do |site_id, rules|
           rules.each do |rule|
-            if rule.conditions.any?
-              site_rules = (@migrated_rules[site_id] || []) + (@rules_to_migrate_later[site_id] || [])
-              segment_name = rule.conditions.first.segment_data[:name]
-              index = site_rules.select { |r| r.conditions.any? && r.conditions.first.segment_data[:name] == segment_name }.index(rule) + 1
+            next unless rule.conditions.any?
+            site_rules = (@migrated_rules[site_id] || []) + (@rules_to_migrate_later[site_id] || [])
+            segment_name = rule.conditions.first.segment_data[:name]
+            index = site_rules.select { |r| r.conditions.any? && r.conditions.first.segment_data[:name] == segment_name }.index(rule) + 1
 
-              rule.name = "#{segment_name} Rule ##{index}"
-            end
+            rule.name = "#{segment_name} Rule ##{index}"
           end
         end
       end

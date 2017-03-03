@@ -21,16 +21,15 @@ jobs = {}
 File.open(tmp_log, 'r') do |fp|
   loop do
     break unless line = fp.gets
-    if line =~ /(Received|Processed) message\[(.*?)\]: "(.*)"/
-      type, message_id, job = $1, $2, $3
-      if type == 'Received'
-        # If we received a job add it to the queue
-        jobs[message_id] = job
-      else
-        # if we processed it delete it
-        # any not processed will be left in the jobs hash
-        jobs.delete(message_id)
-      end
+    next unless line =~ /(Received|Processed) message\[(.*?)\]: "(.*)"/
+    type, message_id, job = $1, $2, $3
+    if type == 'Received'
+      # If we received a job add it to the queue
+      jobs[message_id] = job
+    else
+      # if we processed it delete it
+      # any not processed will be left in the jobs hash
+      jobs.delete(message_id)
     end
   end
 end
