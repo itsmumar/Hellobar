@@ -79,7 +79,7 @@ describe IdentitiesController do
         api_key = 'valid-active-campaign-key'
         stub_current_user @identity.site.users.first
         post :create, site_id: @identity.site.id, provider: 'active_campaign',
-                        api_key: api_key, app_url: 'crossover.api-us1.com'
+                      api_key: api_key, app_url: 'crossover.api-us1.com'
 
         expect(Identity.last.api_key).to eq(api_key)
       end
