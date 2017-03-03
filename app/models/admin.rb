@@ -66,7 +66,7 @@ class Admin < ActiveRecord::Base
 
     # Locks all admins
     def lockdown!
-      Admin.all.each(&:lock!)
+      Admin.all.find_each(&:lock!)
     end
 
     def unlock_all!
