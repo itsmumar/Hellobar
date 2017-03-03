@@ -1,5 +1,33 @@
 inherit_from: .rubocop_todo.yml
 
-# Rails cops (so we don't need to run with -R option)
+Rails:
+  Enabled: true
+
 AllCops:
-  RunRailsCops: true
+  TargetRubyVersion: 2.1
+  DisplayCopNames: true
+  Include:
+    - Rakefile
+    - Gemfile
+    - Capfile
+    - config.ru
+  Exclude:
+    - 'db/schema.rb'
+    - 'bin/*'
+    - 'db/**/*'
+    - 'vendor/bundle/**/*'
+    - 'editor/**/*'
+    - 'backend-mock/**/*'
+
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+#Metrics/LineLength:
+#  Max: 130
+#
+#Metrics/AbcSize:
+#  Max: 16
