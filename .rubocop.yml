@@ -68,3 +68,9 @@ Style/NumericLiteralPrefix:
 # SupportedStyles: predicate, comparison
 Style/NumericPredicate:
   Enabled: false
+
+# TODO: enable after updating rails/rspec
+# Configuration parameters: Include.
+# Include: spec/**/*, test/**/*
+Rails/HttpPositionalArguments:
+  Enabled: false

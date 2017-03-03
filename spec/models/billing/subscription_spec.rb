@@ -53,14 +53,14 @@ describe Subscription do
     end
 
     it 'does not include bills in a different period' do
-      bill = create(:recurring_bill, subscription: pro_subscription, start_date: 2.week.ago, end_date: 1.week.ago, status: :pending)
+      bill = create(:recurring_bill, subscription: pro_subscription, start_date: 2.weeks.ago, end_date: 1.week.ago, status: :pending)
       expect(Subscription.active).to_not include(bill.subscription)
     end
   end
 
   describe '.active_until' do
     it 'gets the max date that the subscription is paid till' do
-      end_date = 4.week.from_now
+      end_date = 4.weeks.from_now
       first_bill = create(:bill, status: :paid, start_date: 1.week.ago, end_date: 1.week.from_now)
       create(:bill, status: :paid, start_date: 1.week.ago, end_date: end_date, subscription: first_bill.subscription)
       first_bill.subscription.active_until.should be_within(1.second).of(end_date)
@@ -284,7 +284,7 @@ describe Subscription do
       successful, bill = @site.change_subscription(@pro, @payment_method)
       bill.update_attribute(:end_date, 1.year.from_now)
       expect(@site.capabilities(true)).to be_a(Subscription::Pro::Capabilities)
-      travel_to 2.year.from_now do
+      travel_to 2.years.from_now do
         expect(@site.capabilities(true)).to be_a(Subscription::Free::Capabilities)
       end
     end
@@ -524,7 +524,7 @@ describe Site do
       success.should be_true
       bill.should be_pending
       bill.amount.should == @pro.amount
-      bill.start_date.should be_within(2.hour).of(enterprise_bill.end_date)
+      bill.start_date.should be_within(2.hours).of(enterprise_bill.end_date)
       bill.grace_period_allowed.should be_true
       # Should still have enterprise abilities
       @site.current_subscription.should == @pro
@@ -596,7 +596,7 @@ describe Site do
       # Bill should be full amount
       bill2.amount.should == pro_monthly.amount
       # Bill should be due at end of yearly subscription
-      bill2.due_at.should be_within(2.hour).of(bill.due_at + 1.year)
+      bill2.due_at.should be_within(2.hours).of(bill.due_at + 1.year)
       # Bill should be pending
       bill2.should be_pending
     end

@@ -305,7 +305,7 @@ describe SiteElement do
     context 'when it is a pro site' do
       before do
         subscription = Subscription::Pro.new(schedule: 'monthly')
-        element.site.change_subscription(subscription, nil, 90.day)
+        element.site.change_subscription(subscription, nil, 90.days)
       end
 
       context 'when after_email_submit_action is :show_default_message' do

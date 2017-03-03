@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
 
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
-  INVITE_EXPIRE_RATE = 2.week
+  INVITE_EXPIRE_RATE = 2.weeks
 
   # returns a user with a random email and password
   def self.generate_temporary_user

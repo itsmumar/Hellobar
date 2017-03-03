@@ -110,7 +110,7 @@ describe Site do
     it 'returns only active subscriptions' do
       @site.change_subscription(Subscription::Free.new(schedule: 'yearly'), @payment_method)
       @site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), @payment_method)
-      travel_to 2.month.from_now do
+      travel_to 2.months.from_now do
         expect(@site.highest_tier_active_subscription).to be_a(Subscription::Free)
       end
     end
@@ -437,15 +437,15 @@ describe Site do
     context 'trial_period is specified' do
       it 'should set the bill amount to 0' do
         sub = subscriptions(:zombo_subscription)
-        bill = sub.site.send(:calculate_bill, sub, true, 20.day)
+        bill = sub.site.send(:calculate_bill, sub, true, 20.days)
         expect(bill.amount).to eq(0)
       end
 
       it 'should set the end_at of the bill to the current time + the trial period' do
         sub = subscriptions(:zombo_subscription)
         travel_to Time.now do
-          bill = sub.site.send(:calculate_bill, sub, true, 20.day)
-          expect(bill.end_date).to eq(Time.now + 20.day)
+          bill = sub.site.send(:calculate_bill, sub, true, 20.days)
+          expect(bill.end_date).to eq(Time.now + 20.days)
         end
       end
     end
