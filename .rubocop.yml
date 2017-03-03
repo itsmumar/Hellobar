@@ -44,3 +44,7 @@ Style/RegexpLiteral:
 # SupportedStyles: with_first_parameter, with_fixed_indentation
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
+
+Security/MarshalLoad:
+  Exclude:
+    - 'lib/grand_central_api.rb'

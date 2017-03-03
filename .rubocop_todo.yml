@@ -292,17 +292,6 @@ Rails/Validation:
     - 'app/models/billing/bill.rb'
     - 'app/models/validators/user_validator.rb'
 
-# Offense count: 1
-Security/MarshalLoad:
-  Exclude:
-    - 'lib/grand_central_api.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Security/YAMLLoad:
-  Exclude:
-    - 'lib/hello/internal_analytics.rb'
-
 # Offense count: 9
 Style/AccessorMethodName:
   Exclude:
