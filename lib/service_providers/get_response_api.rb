@@ -108,7 +108,7 @@ module ServiceProviders
       @client_settings ||= {
         url: Hellobar::Settings[:get_response_api_url],
         headers: {
-          'X-Auth-Token' => "api-key #{ api_key }"
+          'X-Auth-Token' => "api-key #{api_key}"
         }
       }
     end
@@ -135,7 +135,7 @@ module ServiceProviders
         response_hash.map { |entity| { 'id' => entity["#{resource}Id"], 'name' => entity['name'] } }
       else
         error_message = JSON.parse(response.body)['codeDescription']
-        log "getting lists returned '#{ error_message }' with the code #{ response.status }"
+        log "getting lists returned '#{error_message}' with the code #{response.status}"
         raise error_message
       end
     end
@@ -156,19 +156,19 @@ module ServiceProviders
         JSON.parse response.body
       else
         error_message = JSON.parse(response.body)['codeDescription']
-        log "fetching contact returned '#{ error_message }' with the code #{ response.status }"
+        log "fetching contact returned '#{error_message}' with the code #{response.status}"
         raise error_message
       end
     end
 
     def assign_tags contact_id:, tags:
-      response = client.post "contacts/#{ contact_id }", { tags: tags }
+      response = client.post "contacts/#{contact_id}", { tags: tags }
 
       if response.success?
         JSON.parse response.body
       else
         error_message = JSON.parse(response.body)['codeDescription']
-        log "assign tags returned '#{ error_message }' with the code #{ response.status }"
+        log "assign tags returned '#{error_message}' with the code #{response.status}"
         raise error_message
       end
     end

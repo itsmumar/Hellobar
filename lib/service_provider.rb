@@ -72,7 +72,7 @@ class ServiceProvider
   end
 
   def log(message)
-    entry = "#{ Time.current } [#{ self.class.name }] #{ message }"
+    entry = "#{Time.current} [#{self.class.name}] #{message}"
 
     if defined? Rails
       Rails.logger.warn entry

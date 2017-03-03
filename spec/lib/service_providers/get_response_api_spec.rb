@@ -137,7 +137,7 @@ describe ServiceProviders::GetResponseApi do
           and_return successful_response
         expect(client).to receive(:get).
           and_return latest_contacts_successful_response
-        expect(client).to receive(:post).with("contacts/#{ contact_id }", { tags: tags }).
+        expect(client).to receive(:post).with("contacts/#{contact_id}", { tags: tags }).
           and_return latest_contacts_successful_response
 
         api.subscribe(campaign_id, email, name)
@@ -148,7 +148,7 @@ describe ServiceProviders::GetResponseApi do
 
         expect(get_respone_api).
           to receive(:log).
-          with("sync error #{ email } sync returned 'things went really bad' with the code 500")
+          with("sync error #{email} sync returned 'things went really bad' with the code 500")
 
         get_respone_api.subscribe(campaign_id, email)
       end

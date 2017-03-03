@@ -1291,28 +1291,6 @@ Style/SpaceInsideRangeLiteral:
   Exclude:
     - 'app/models/referral.rb'
 
-# Offense count: 35
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: space, no_space
-Style/SpaceInsideStringInterpolation:
-  Exclude:
-    - 'config/deploy.rb'
-    - 'lib/grand_central_api.rb'
-    - 'lib/service_provider.rb'
-    - 'lib/service_providers/get_response_api.rb'
-    - 'lib/site_generator.rb'
-    - 'spec/factories/admins.rb'
-    - 'spec/factories/referrals.rb'
-    - 'spec/factories/users.rb'
-    - 'spec/features/embed_script_tests/announcement_bar_spec.rb'
-    - 'spec/features/embed_script_tests/closable_slider_spec.rb'
-    - 'spec/features/payment_modal_spec.rb'
-    - 'spec/features/themes_spec.rb'
-    - 'spec/lib/service_providers/get_response_api_spec.rb'
-    - 'spec/spec_helper.rb'
-    - 'spec/support/failed_spec_screenshot.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase
