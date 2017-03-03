@@ -29,13 +29,13 @@ module Hello::DataAPI
         semaphore = Mutex.new
 
         site_element_ids.each_slice(API_MAX_SLICE) do |ids|
-          pool.process {
+          pool.process do
             path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, ids, site.read_key, num_days)
             slice_results = get(path, params)
-            semaphore.synchronize {
+            semaphore.synchronize do
               results.merge!(slice_results) if slice_results
-            }
-          }
+            end
+          end
         end
 
         pool.shutdown

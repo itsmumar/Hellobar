@@ -8,9 +8,7 @@ describe ServiceProviders::VerticalResponseApi do
   describe 'subscribe' do
     it 'catches VR errors' do
       allow(client).to receive(:find_list).and_raise(VerticalResponse::API::Error)
-      expect {
-        service_provider.subscribe('123', 'abc')
-      }.not_to raise_error
+      expect { service_provider.subscribe('123', 'abc') }.not_to raise_error
     end
 
     it 'does not log duplicate email errors' do

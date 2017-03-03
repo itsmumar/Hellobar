@@ -68,9 +68,7 @@ describe User do
 
   describe '.generate_temporary_user' do
     it 'creates a user with a random email and password' do
-      expect {
-        User.generate_temporary_user
-      }.to change(User, :count).by(1)
+      expect { User.generate_temporary_user }.to change(User, :count).by(1)
 
       expect(User.last.status).to eq(User::TEMPORARY_STATUS)
     end

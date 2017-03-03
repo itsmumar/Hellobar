@@ -53,10 +53,8 @@ describe SiteElement do
         image = create(:image_upload, site: element.site)
         create(:image_upload, site: element.site)
 
-        expect {
-          element.active_image = image
-          element.save
-        }.to change { ImageUpload.count }.by(-1)
+        element.active_image = image
+        expect { element.save }.to change { ImageUpload.count }.by(-1)
       end
 
       it 'does not remove image uploads that are still active' do
@@ -64,10 +62,8 @@ describe SiteElement do
         image = create(:image_upload, site: element.site)
         element.update(active_image: image)
 
-        expect {
-          element.headline = 'dsfadsf' # trigger save
-          element.save
-        }.to change { ImageUpload.count }.by(0)
+        element.headline = 'dsfadsf' # trigger save
+        expect { element.save }.to change { ImageUpload.count }.by(0)
       end
 
       it 'does not remove image uploads that are active for other elements' do
@@ -75,10 +71,8 @@ describe SiteElement do
         image = create(:image_upload, site: element.site)
         elementTwo = create(:site_element, active_image_id: image.id, rule: create(:rule, site: element.site))
 
-        expect {
-          element.headline = 'a new headline'
-          element.save
-        }.to change { ImageUpload.count }.by(0)
+        element.headline = 'a new headline'
+        expect { element.save }.to change { ImageUpload.count }.by(0)
       end
     end
 
@@ -213,17 +207,13 @@ describe SiteElement do
     let(:site_element) { site_elements(:zombo_traffic) }
 
     it 'toggles an element from paused to unpaused' do
-      expect {
-        site_element.toggle_paused!
-      }.to change(site_element, :paused?).from(false).to(true)
+      expect { site_element.toggle_paused! }.to change(site_element, :paused?).from(false).to(true)
     end
 
     it 'toggles an element from unpaused to paused' do
       site_element.update_attribute :paused, true
 
-      expect {
-        site_element.toggle_paused!
-      }.to change(site_element, :paused?).from(true).to(false)
+      expect { site_element.toggle_paused! }.to change(site_element, :paused?).from(true).to(false)
     end
   end
 

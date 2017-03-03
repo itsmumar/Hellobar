@@ -13,12 +13,12 @@ describe ServiceProviders::Maropost do
   end
 
   context 'remote requests' do
-    let(:identity) {
+    let(:identity) do
       Identity.new site_id: 1,
                    provider: 'maropost',
                    api_key: 'my_cool_api_key',
                    credentials: { 'username' => 'a_user_id_actually' }
-    }
+    end
 
     let(:maropost) { ServiceProviders::Maropost.new(identity: identity) }
     let(:client) { Faraday.new }
@@ -26,12 +26,12 @@ describe ServiceProviders::Maropost do
     let(:success_body) {}
     let(:success_response) { double :response, success?: true, body: [{ id: 1122, name: 'myCoolList' }].to_json }
 
-    let(:failure_response) {
+    let(:failure_response) do
       double :response,
         success?: false,
         status: 500,
         body: 'things went really bad'
-    }
+    end
 
     before do
       allow(Faraday).to receive(:new).and_return(client)

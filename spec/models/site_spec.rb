@@ -26,9 +26,7 @@ describe Site do
     it 'creates rules for the site' do
       site = sites(:horsebike)
 
-      expect {
-        site.create_default_rules
-      }.to change { site.rules.count }.by(3)
+      expect { site.create_default_rules }.to change { site.rules.count }.by(3)
     end
   end
 
@@ -313,9 +311,7 @@ describe Site do
         allow(@site).to receive(:script_installed_db?) { false }
         allow(@site).to receive(:script_installed_api?) { true }
 
-        expect {
-          @site.has_script_installed?
-        }.to change(@site, :script_installed_at)
+        expect { @site.has_script_installed? }.to change(@site, :script_installed_at)
       end
 
       it 'redeems referrals' do
@@ -342,9 +338,7 @@ describe Site do
         allow(@site).to receive(:script_installed_db?) { true }
         allow(@site).to receive(:script_installed_api?) { false }
 
-        expect {
-          @site.has_script_installed?
-        }.to change(@site, :script_uninstalled_at)
+        expect { @site.has_script_installed? }.to change(@site, :script_uninstalled_at)
       end
 
       it 'tracks the uninstall event' do

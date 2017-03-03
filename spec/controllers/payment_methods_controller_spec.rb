@@ -61,9 +61,14 @@ describe PaymentMethodsController, '#update' do
   context 'updating a payment detail' do
     let(:payment_method) { payment_methods(:always_successful) }
     let(:data) { PaymentForm.new({}).to_hash }
-    let(:put_params) {
-      { id: payment_method.id, payment_method_details: {}, billing: { plan: 'pro', schedule: 'monthly' }, site_id: site.id }
-    }
+    let(:put_params) do
+      {
+        id: payment_method.id,
+        payment_method_details: {},
+        billing: { plan: 'pro', schedule: 'monthly' },
+        site_id: site.id
+      }
+    end
     before do
       Site.any_instance.stub(has_script_installed?: true)
       allow(CyberSourceCreditCard).to receive(:new).

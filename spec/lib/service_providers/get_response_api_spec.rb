@@ -25,12 +25,12 @@ describe ServiceProviders::GetResponseApi do
     let(:success_body) {}
     let(:success_response) { double :response, success?: true, body: [{ campaignId: campaign_id, name: 'myCoolList' }].to_json }
     let(:tags_success_response) { double :response, success?: true, body: [{ tagId: tag_id, name: tag_name }].to_json }
-    let(:failure_response) {
+    let(:failure_response) do
       double :response,
         success?: false,
         status: 500,
         body: { codeDescription: 'things went really bad' }.to_json
-    }
+    end
 
     before do
       allow(Faraday).to receive(:new).and_return(client)

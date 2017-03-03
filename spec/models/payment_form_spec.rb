@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe PaymentForm do
-  let(:data) {
+  let(:data) do
     {
       name: 'Bill Middle Namerson',
       expiration: '08/2016',
@@ -13,7 +13,7 @@ describe PaymentForm do
       address: '2423 W. North Ave',
       country: 'USA'
     }
-  }
+  end
 
   let(:payment_form) { PaymentForm.new(data) }
 

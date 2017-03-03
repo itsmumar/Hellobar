@@ -14,9 +14,9 @@ describe Cleaners::EmbedCode do
   end
 
   context 'curly quotes' do
-    let(:embed_code) {
+    let(:embed_code) do
       '<html><body><iframe><form>“I want to go to the gym”, he said.</form></iframe></body></html>'
-    }
+    end
 
     its(:data) { should == { 'embed_code' => embed_code.tr!('“”', '"') } }
   end

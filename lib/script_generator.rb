@@ -189,12 +189,12 @@ class ScriptGenerator < Mustache
     if options[:templates]
       templates = Theme.where(type: 'template').collect(&:name)
 
-      options[:templates].each { |t|
+      options[:templates].each do |t|
         temp_name = t.split('_', 2)
         category  = :generic
         category  = :template if templates.include?(temp_name[1].titleize)
         template_names << (temp_name << category)
-      }
+      end
     else
       site.site_elements.active.each do |se|
         theme_id      = se.theme_id

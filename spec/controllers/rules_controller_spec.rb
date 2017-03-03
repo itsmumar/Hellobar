@@ -47,12 +47,8 @@ describe RulesController do
     it 'should succeed when not logged in' do
       stub_current_user(site.owners.first)
 
-      expect {
-        post :create, site_id: site, rule: {
-          name: 'rule name',
-          priority: 1
-        }
-      }.to change(Rule, :count).by(1)
+      expect { post :create, site_id: site, rule: { name: 'rule name', priority: 1 } }
+        .to change(Rule, :count).by(1)
 
       expect(response).to be_success
 

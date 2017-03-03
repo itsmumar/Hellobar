@@ -67,9 +67,7 @@ describe 'Autofills requests' do
 
     describe 'POST :create' do
       it 'creates a new autofill when params are correct' do
-        expect {
-          post site_autofills_path(site), autofill: autofill_params
-        }.to change { Autofill.count }.by 1
+        expect { post site_autofills_path(site), autofill: autofill_params }.to change { Autofill.count }.by 1
 
         expect(response).to be_a_redirect
       end
@@ -77,9 +75,7 @@ describe 'Autofills requests' do
       it 'does not create a new autofill when some params are missing' do
         params = Hash[autofill: autofill_params.merge(name: '')]
 
-        expect {
-          post site_autofills_path(site), params
-        }.not_to change { Autofill.count }
+        expect { post site_autofills_path(site), params }.not_to change { Autofill.count }
 
         expect(response).to be_successful
       end
@@ -101,9 +97,8 @@ describe 'Autofills requests' do
       it 'updates data of an existing autofill when params are correct' do
         params = Hash[autofill: autofill_params]
 
-        expect {
-          patch site_autofill_path(site, autofill), params
-        }.to change { autofill.reload.name }.to autofill_params[:name]
+        expect { patch site_autofill_path(site, autofill), params }
+          .to change { autofill.reload.name }.to autofill_params[:name]
 
         expect(response).to be_a_redirect
       end
@@ -111,9 +106,8 @@ describe 'Autofills requests' do
       it 'does not update an autofill when some params are missing' do
         params = Hash[autofill: autofill_params.merge(name: '')]
 
-        expect {
-          patch site_autofill_path(site, autofill), params
-        }.not_to change { autofill.reload.name }.to autofill_params[:name]
+        expect { patch site_autofill_path(site, autofill), params }
+          .not_to change { autofill.reload.name }.to autofill_params[:name]
 
         expect(response).to be_successful
       end
@@ -123,9 +117,7 @@ describe 'Autofills requests' do
       let!(:autofill) { create :autofill, site: site }
 
       it 'destroys an existing autofill' do
-        expect {
-          delete site_autofill_path(site, autofill)
-        }.to change { Autofill.count }.by(-1)
+        expect { delete site_autofill_path(site, autofill) }.to change { Autofill.count }.by(-1)
 
         expect(response).to be_a_redirect
       end

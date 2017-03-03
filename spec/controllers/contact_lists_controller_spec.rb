@@ -90,9 +90,7 @@ describe ContactListsController, type: :controller do
     end
 
     it 'creates a contact list' do
-      expect {
-        post :create, site_id: site, contact_list: contact_list_params
-      }.to change(ContactList, :count).by(1)
+      expect { post :create, site_id: site, contact_list: contact_list_params }.to change(ContactList, :count).by(1)
     end
 
     it 'is not the last contact list' do
@@ -163,9 +161,8 @@ describe ContactListsController, type: :controller do
         end
 
         it 'returns 400 status' do
-          expect {
-            post :create, site_id: site, contact_list: contact_list_params
-          }.to change { ContactList.count }.by(0)
+          expect { post :create, site_id: site, contact_list: contact_list_params }
+            .to change { ContactList.count }.by(0)
         end
       end
     end
@@ -198,9 +195,8 @@ describe ContactListsController, type: :controller do
         end
 
         it "doesn't create a new contact list" do
-          expect {
-            post :create, site_id: site, contact_list: contact_list_params
-          }.to change { ContactList.count }.by(0)
+          expect { post :create, site_id: site, contact_list: contact_list_params }
+            .to change { ContactList.count }.by(0)
         end
       end
     end
