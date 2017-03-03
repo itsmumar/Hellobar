@@ -74,8 +74,8 @@ class User < ActiveRecord::Base
     return if email.blank?
 
     find_by(email: email) ||
-    find_and_create_by_referral(email) ||
-    Hello::WordpressUser.find_by_email(email)
+      find_and_create_by_referral(email) ||
+      Hello::WordpressUser.find_by_email(email)
   end
 
   def self.find_and_create_by_referral(email)

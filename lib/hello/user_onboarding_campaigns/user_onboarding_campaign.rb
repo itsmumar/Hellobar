@@ -11,8 +11,8 @@ class UserOnboardingCampaign
         campaign = campaign_class.new(user, user.current_onboarding_status)
 
         campaign.current_campaign_sequence &&
-        campaign.deliver_campaign_email! &&
-        campaign.mark_sequence_delivered!
+          campaign.deliver_campaign_email! &&
+          campaign.mark_sequence_delivered!
       end
     end
   end

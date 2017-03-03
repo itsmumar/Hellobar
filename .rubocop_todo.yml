@@ -379,20 +379,6 @@ Style/MultilineBlockChain:
     - 'app/helpers/admin/users_helper.rb'
     - 'app/mailers/digest_mailer.rb'
 
-# Offense count: 11
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: aligned, indented
-Style/MultilineOperationIndentation:
-  Exclude:
-    - 'app/helpers/bills_helper.rb'
-    - 'app/models/billing/bill.rb'
-    - 'app/models/billing/subscription.rb'
-    - 'app/models/user.rb'
-    - 'app/models/user_onboarding_status_setter.rb'
-    - 'lib/hello/user_onboarding_campaigns/user_onboarding_campaign.rb'
-    - 'lib/hello/wordpress_user.rb'
-
 # Offense count: 54
 # Cop supports --auto-correct.
 Style/MutableConstant:

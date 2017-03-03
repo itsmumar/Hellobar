@@ -21,8 +21,7 @@ class Bill < ActiveRecord::Base
   before_validation :set_base_amount, :check_amount
 
   def during_trial_subscription?
-    subscription.amount != 0 && subscription.payment_method.nil? && \
-    amount == 0 && paid?
+    subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
   end
 
   def set_base_amount

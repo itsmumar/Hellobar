@@ -20,7 +20,7 @@ module BillsHelper
       '<br>' + site.invoice_information.gsub("\r\n", '<br>')
     elsif details.address.present?
       '<br>' + details.address.address1 +
-      '<br>' + details.address.city + ' ' + details.address.state + ' ' + details.address.zip + ' ' + details.address.country
+        '<br>' + details.address.city + ' ' + details.address.state + ' ' + details.address.zip + ' ' + details.address.country
     end
   end
 end
