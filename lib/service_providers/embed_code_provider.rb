@@ -55,7 +55,8 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   def all_params
     {}.tap do |hash|
       params.each do |input|
-        name, value = input[:name], input[:value]
+        name = input[:name]
+        value = input[:value]
         hash[name] = value
       end
     end

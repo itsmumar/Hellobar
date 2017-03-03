@@ -44,7 +44,8 @@ class GrandCentralApi
   class APIError < RuntimeError
     attr_reader :code, :body
     def initialize(code, body)
-      @code, @body = code, body
+      @code = code
+      @body = body
       super("#{@code} error - #{@body}")
     end
   end
@@ -55,7 +56,8 @@ class GrandCentralApi
   # - secret: the secret for the site (available from Grand Central)
   def initialize(endpoint, api_key, secret)
     @endpoint = endpoint.gsub(/\/$/, '') # Remove trailing slash from endpoint
-    @api_key, @secret = api_key, secret
+    @api_key = api_key
+    @secret = secret
   end
 
   # This sends the mail specified by mail (e.g. "Welcome")

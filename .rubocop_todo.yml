@@ -391,17 +391,6 @@ Style/MutableConstant:
 Style/NumericPredicate:
   Enabled: false
 
-# Offense count: 8
-# Cop supports --auto-correct.
-Style/ParallelAssignment:
-  Exclude:
-    - 'app/models/billing/subscription.rb'
-    - 'lib/grand_central_api.rb'
-    - 'lib/service_providers/embed_code_provider.rb'
-    - 'spec/controllers/users/sessions_controller_spec.rb'
-    - 'spec/lib/service_providers/convert_kit_spec.rb'
-    - 'support/get_failed_jobs'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: AllowSafeAssignment.

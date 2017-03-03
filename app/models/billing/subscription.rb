@@ -384,7 +384,8 @@ class Subscription < ActiveRecord::Base
   class Comparison
     attr_reader :from_subscription, :to_subscription, :direction
     def initialize(from_subscription, to_subscription)
-      @from_subscription, @to_subscription = from_subscription, to_subscription
+      @from_subscription = from_subscription
+      @to_subscription = to_subscription
       from_index = to_index = nil
       PLANS.each_with_index do |plan, index|
         from_index = index if from_subscription.is_a?(plan)

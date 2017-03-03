@@ -22,7 +22,9 @@ File.open(tmp_log, 'r') do |fp|
   loop do
     break unless line = fp.gets
     next unless line =~ /(Received|Processed) message\[(.*?)\]: "(.*)"/
-    type, message_id, job = $1, $2, $3
+    type = $1
+    message_id = $2
+    job = $3
     if type == 'Received'
       # If we received a job add it to the queue
       jobs[message_id] = job

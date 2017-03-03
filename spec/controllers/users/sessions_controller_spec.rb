@@ -82,7 +82,8 @@ describe Users::SessionsController do
     it 'redirects 1.0 users to migration wizard if the correct password is used' do
       pending 'until migration wizard is made available to all users'
 
-      email, password = 'user@website.com', 'asdfasdf'
+      email = 'user@website.com'
+      password = 'asdfasdf'
 
       Hello::WordpressUser.should_receive(:email_exists?).with(email).and_return(true)
       Hello::WordpressUser.should_receive(:authenticate).with(email, password).and_return(@wordpress_user)
@@ -95,7 +96,8 @@ describe Users::SessionsController do
     it 'asks 1.0 users to reauthenticate if their password is wrong' do
       pending 'until migration wizard is made available to all users'
 
-      email, password = 'user@website.com', 'asdfasdf'
+      email = 'user@website.com'
+      password = 'asdfasdf'
 
       Hello::WordpressUser.should_receive(:email_exists?).with(email).and_return(true)
       Hello::WordpressUser.should_receive(:authenticate).with(email, password).and_return(nil)
