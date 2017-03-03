@@ -96,7 +96,7 @@ group :development do
   gem "better_errors", "~> 1.1"
   gem "binding_of_caller"
   gem "hound-tools", "~> 0.0.4", require: false
-  gem "rubocop", "~> 0.34.2", require: false
+  gem "rubocop", require: false
   gem "sinatra"
   gem 'brakeman', :require => false
 
