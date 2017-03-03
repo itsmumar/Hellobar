@@ -1144,14 +1144,6 @@ Style/RescueModifier:
     - 'lib/service_providers/embed_code_provider.rb'
     - 'spec/models/identity_spec.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/SelfAssignment:
-  Exclude:
-    - 'app/helpers/application_helper.rb'
-    - 'lib/color.rb'
-    - 'lib/service_providers/convert_kit.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase

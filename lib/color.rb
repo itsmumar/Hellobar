@@ -16,7 +16,7 @@ class Color
       rgb = [r, g, b]
 
       rgb.map! do |component|
-        component = component / 255.0
+        component /= 255.0
         if component < 0.03928
           component / 12.92
         else

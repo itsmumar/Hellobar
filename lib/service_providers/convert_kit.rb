@@ -105,7 +105,7 @@ module ServiceProviders
     private
 
     def make_api_call(method, path, options = {})
-      path = path + "?api_secret=#{@identity.api_key}"
+      path += "?api_secret=#{@identity.api_key}"
 
       case method
       when 'get'
