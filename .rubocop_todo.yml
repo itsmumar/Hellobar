@@ -1070,13 +1070,6 @@ Style/PreferredHashMethods:
 
 # Offense count: 4
 # Cop supports --auto-correct.
-Style/Proc:
-  Exclude:
-    - 'spec/features/conditions/days_since_last_visit_spec.rb'
-    - 'spec/features/conditions/every_x_sessions_spec.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
 Style/RescueModifier:
   Exclude:
     - 'lib/legacy_migrator.rb'
