@@ -92,34 +92,6 @@ class LegacyMigrator
       end
     end
 
-=begin
-    The following method yielded a 2x improvement, but skipped callbacks
-    and probably has other issues. Keeping for posterity's sake
-    def save_to_db_via_csv(items)
-      klass =  items[items.keys.first].class
-      count = 0
-
-      columns = klass.column_names
-      csv_file = File.join(Rails.root, "#{klass.name.underscore}.csv")
-      CSV.open(csv_file, "w") do |csv|
-        items.each do |key, item|
-          count += 1
-          puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 500 == 0
-          # item.save(validate: false)
-          csv << columns.collect{|c| klass.sanitize(item.send(c)).gsub(/^'(.*)'$/,"\\1")}
-        end
-      end
-      `chmod 777 #{csv_file}`
-      `sudo mv #{csv_file} /var/lib/mysql/hellobar/`
-      ActiveRecord::Base.transaction do
-        optimize_inserts do
-          ActiveRecord::Base.connection.execute(%{LOAD DATA INFILE '#{File.basename(csv_file)}' INTO TABLE #{klass.table_name} FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n'})
-        end
-      end
-      # `sudo rm /var/lib/mysql/hellobar/#{File.basename(csv_file}`
-    end
-=end
-
     def load_wp_emails
       @wp_emails = {}
       File.read(File.join(Rails.root, 'db', 'wp_logins.csv')).split("\n").each_with_index do |line, i|

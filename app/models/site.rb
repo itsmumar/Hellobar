@@ -195,12 +195,6 @@ class Site < ActiveRecord::Base
     delay :do_check_installation, options
   end
 
-=begin
-  def recheck_installation(options = {})
-    delay :do_recheck_installation, options
-  end
-=end
-
   def queue_digest_email(options = {})
     delay :send_digest_email, options
   end
@@ -491,19 +485,6 @@ class Site < ActiveRecord::Base
   def do_check_installation(_options = {})
     has_script_installed?
   end
-
-=begin
-  def do_recheck_installation(options = {})
-    # Check the script installation
-    if self.has_script_installed?
-      Analytics.track(:site, self.id, "Installed", at: self.script_installed_at)
-    else
-      if self.script_uninstalled_at
-        Analytics.track(:site, self.id, "Uninstalled", at: self.script_uninstalled_at)
-      end
-    end
-  end
-=end
 
   def generate_static_assets(options = {})
     update_column(:script_attempted_to_generate_at, Time.now)

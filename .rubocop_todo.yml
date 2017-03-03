@@ -326,13 +326,6 @@ Style/AsciiComments:
   Exclude:
     - 'lib/service_providers/get_response_api.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/BlockComments:
-  Exclude:
-    - 'app/models/site.rb'
-    - 'lib/legacy_migrator.rb'
-
 # Offense count: 60
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, ProceduralMethods, FunctionalMethods, IgnoredMethods.
