@@ -29,8 +29,6 @@ module SitesHelper
       ['Shopify', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-shopify/']
     when 'blogspot'
       ['Blogger', 'http://support.hellobar.com/how-do-i-istall-hello-bar-on-bloggerblogspot/']
-    else
-      nil
     end
   end
 

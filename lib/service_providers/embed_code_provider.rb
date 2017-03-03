@@ -153,8 +153,6 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
       reference_object.attr('src')
     when 'a'
       reference_object.attr('href')
-    else
-      nil
     end
   end
 

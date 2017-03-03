@@ -175,8 +175,6 @@ class User < ActiveRecord::Base
   def role_for_site(site)
     if membership = site_memberships.where(site: site).first
       membership.role.to_sym
-    else
-      nil
     end
   end
 

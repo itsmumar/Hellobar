@@ -341,38 +341,6 @@ Style/DoubleNegation:
     - 'lib/service_providers/mad_mimi_api.rb'
     - 'lib/service_providers/mail_chimp.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/EachWithObject:
-  Exclude:
-    - 'spec/helpers/admin/users_helper_spec.rb'
-
-# Offense count: 7
-# Cop supports --auto-correct.
-Style/ElseAlignment:
-  Exclude:
-    - 'app/controllers/concerns/subscribable.rb'
-    - 'app/controllers/user_migration_controller.rb'
-    - 'app/helpers/user_helper.rb'
-    - 'app/models/contact_list.rb'
-    - 'lib/script_generator.rb'
-
-# Offense count: 11
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty, nil, both
-Style/EmptyElse:
-  Exclude:
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/referrals_controller.rb'
-    - 'app/helpers/sites_helper.rb'
-    - 'app/models/user.rb'
-    - 'app/serializers/subscription_serializer.rb'
-    - 'lib/hello/email_digest.rb'
-    - 'lib/hello/wordpress_bar.rb'
-    - 'lib/service_providers/embed_code_provider.rb'
-    - 'lib/site_detector.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.

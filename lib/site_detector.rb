@@ -21,8 +21,6 @@ class SiteDetector
       :wordpress
     when /https:\/\/www.blogger.com/
       :blogspot
-    else
-      nil
     end
   rescue
     nil # Couldn't connect to their site, so assume nil

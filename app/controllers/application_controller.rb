@@ -99,8 +99,6 @@ class ApplicationController < ActionController::Base
       impersonated_user = User.find_by_id(session[:impersonated_user])
       impersonated_user.is_impersonated = true
       impersonated_user
-    else
-      nil
     end
   end
 
@@ -110,8 +108,6 @@ class ApplicationController < ActionController::Base
         current_user.sites.where(id: session[:current_site]).first || current_user.sites.first
       elsif current_user
         current_user.sites.first
-      else
-        nil
       end
     end
   end

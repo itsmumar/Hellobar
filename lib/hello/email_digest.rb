@@ -29,8 +29,6 @@ module Hello::EmailDigest
         if site.script_installed_at.nil? # Only send if the site never had it installed in the first place
           return DigestMailer.not_installed(site, user)
         end
-      else
-        nil
       end
     end
   end
