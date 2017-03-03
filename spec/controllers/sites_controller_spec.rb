@@ -114,7 +114,7 @@ describe SitesController do
         site = Site.last
 
         site.current_subscription.should be_present
-        site.current_subscription.kind_of?(Subscription::Free).should be_true
+        site.current_subscription.is_a?(Subscription::Free).should be_true
       end
 
       it 'redirects to login page if base URL has already been taken' do

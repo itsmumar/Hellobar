@@ -78,7 +78,7 @@ class LegacyMigrator
       count = 0
       optimize_inserts do
         items.each do |_, item|
-          if item.kind_of?(Array)
+          if item.is_a?(Array)
             klass = item.first.class
             count += 1
             puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 5000 == 0

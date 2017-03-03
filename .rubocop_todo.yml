@@ -308,17 +308,6 @@ Style/AsciiComments:
   Exclude:
     - 'lib/service_providers/get_response_api.rb'
 
-# Offense count: 14
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: is_a?, kind_of?
-Style/ClassCheck:
-  Exclude:
-    - 'app/controllers/users/sessions_controller.rb'
-    - 'app/models/condition.rb'
-    - 'lib/legacy_migrator.rb'
-    - 'spec/controllers/sites_controller_spec.rb'
-
 # Offense count: 8
 Style/ClassVars:
   Exclude:

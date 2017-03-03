@@ -101,8 +101,8 @@ class Condition < ActiveRecord::Base
 
   def multiple_condition_sentence
     # value might be not an array for old rules created before value type was changed
-    if !value.kind_of?(Array) || (value.count == 1)
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.kind_of?(Array) ? value.first : value}"
+    if !value.is_a?(Array) || (value.count == 1)
+      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.is_a?(Array) ? value.first : value}"
     else
       "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other#{value.count == 2 ? '' : 's'}"
     end
@@ -119,11 +119,11 @@ class Condition < ActiveRecord::Base
 
   def value_is_valid
     if operand == 'between'
-      errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
+      errors.add(:value, 'is not a valid value') unless value.is_a?(Array) && value.length == 2 && value.all?(&:present?)
     elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) || (segment == 'TimeCondition') # time condition is also array, but not with multiple choice
-      errors.add(:value, 'is not a valid value') unless value.kind_of?(Array)
+      errors.add(:value, 'is not a valid value') unless value.is_a?(Array)
     else
-      errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
+      errors.add(:value, 'is not a valid value') unless value.is_a?(String)
     end
   end
 
@@ -153,7 +153,7 @@ class Condition < ActiveRecord::Base
   end
 
   def clear_blank_values
-    self.value = value.select { |v| !v.blank? }.uniq if value.kind_of?(Array)
+    self.value = value.select { |v| !v.blank? }.uniq if value.is_a?(Array)
   end
 
   def self.date_condition_from_params(start_date, end_date)
@@ -176,9 +176,9 @@ class Condition < ActiveRecord::Base
   def normalize_url_condition
     return if segment != 'UrlCondition' && segment != 'UrlPathCondition'
 
-    if value.kind_of?(String)
+    if value.is_a?(String)
       self.value = normalize_url(value)
-    elsif value.kind_of?(Array)
+    elsif value.is_a?(Array)
       value.each_with_index do |val, i|
         value[i] = normalize_url(val)
       end
@@ -197,11 +197,11 @@ class Condition < ActiveRecord::Base
   end
 
   def format_string_values
-    if value.kind_of?(String)
+    if value.is_a?(String)
       self.value = value.strip
-    elsif value.kind_of?(Array)
+    elsif value.is_a?(Array)
       value.each_with_index do |val, i|
-        value[i] = val.strip if val.kind_of?(String)
+        value[i] = val.strip if val.is_a?(String)
       end
     end
   end

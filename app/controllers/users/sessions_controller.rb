@@ -20,7 +20,7 @@ class Users::SessionsController < Devise::SessionsController
     end
 
     if @user
-      if @user.kind_of?(Hello::WordpressUser)
+      if @user.is_a?(Hello::WordpressUser)
         # render find_email
       elsif @user.status == User::TEMPORARY_STATUS
         sign_in(@user)
