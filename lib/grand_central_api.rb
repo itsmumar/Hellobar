@@ -44,7 +44,7 @@ class GrandCentralApi
   end
 
   # Generic error class
-  class APIError < Exception
+  class APIError < RuntimeError
     attr_reader :code, :body
     def initialize(code, body)
       @code, @body = code, body

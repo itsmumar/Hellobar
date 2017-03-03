@@ -1,7 +1,7 @@
 require 'billing_log'
 
 class BillingAttempt < ActiveRecord::Base
-  class InvalidRefund < Exception; end
+  class InvalidRefund < RuntimeError; end
   belongs_to :bill
   belongs_to :payment_method_details
   enum status: [:success, :failed]

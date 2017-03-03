@@ -1,6 +1,6 @@
 require 'billing_log'
 class PaymentMethod < ActiveRecord::Base
-  class MissingPaymentDetails < Exception; end
+  class MissingPaymentDetails < RuntimeError; end
   belongs_to :user
   has_many :details, -> { order 'id' }, :class_name => 'PaymentMethodDetails'
   has_many :subscriptions

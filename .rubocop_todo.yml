@@ -54,16 +54,6 @@ Lint/IneffectiveAccessModifier:
   Exclude:
     - 'app/models/condition.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: runtime_error, standard_error
-Lint/InheritException:
-  Exclude:
-    - 'app/models/billing/billing_attempt.rb'
-    - 'app/models/billing/payment_method.rb'
-    - 'lib/grand_central_api.rb'
-
 # Offense count: 1
 Lint/NonLocalExitFromIterator:
   Exclude:
