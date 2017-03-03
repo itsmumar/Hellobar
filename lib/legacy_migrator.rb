@@ -288,7 +288,7 @@ class LegacyMigrator
 
     def create_site_elements(rule, legacy_bars, legacy_goal)
       legacy_bars.each do |legacy_bar|
-        setting_keys = ["buffer_message", "buffer_url", "fields_to_collect", "link_url", "message_to_tweet", "pinterest_description", "pinterest_full_name", "pinterest_image_url", "pinterest_url", "pinterest_user_url", "twitter_handle", "url", "url_to_like", "url_to_plus_one", "url_to_share", "url_to_tweet", "use_location_for_url", "url"]
+        setting_keys = %w(buffer_message buffer_url fields_to_collect link_url message_to_tweet pinterest_description pinterest_full_name pinterest_image_url pinterest_url pinterest_user_url twitter_handle url url_to_like url_to_plus_one url_to_share url_to_tweet use_location_for_url url)
         settings_to_migrate = legacy_goal.data_json.select{|key, value| setting_keys.include?(key) && value.present? }
 
         rule.site_elements.build id: legacy_bar.legacy_bar_id || legacy_bar.id,

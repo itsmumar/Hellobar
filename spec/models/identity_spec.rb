@@ -130,7 +130,7 @@ describe Identity do
       let(:provider) { "vertical_response" }
       it "works" do
         service_provider.email_param.should == 'email_address'
-        service_provider.name_params.should == ['first_name', 'last_name']
+        service_provider.name_params.should == %w(first_name last_name)
         service_provider.required_params.should be_empty
       end
     end
@@ -143,7 +143,7 @@ describe Identity do
         service_provider.list_url.should == nil
         service_provider.action_url.should == 'http://app.icontact.com/icp/signup.php'
         service_provider.email_param.should == 'fields_email'
-        service_provider.name_params.should == ['fields_fname', 'fields_lname']
+        service_provider.name_params.should == %w(fields_fname fields_lname)
         service_provider.required_params.should == {
           'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
           'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',
@@ -168,7 +168,7 @@ describe Identity do
         service_provider.list_url.should == nil
         service_provider.action_url.should == 'https://app.icontact.com/icp/signup.php'
         service_provider.email_param.should == 'fields_email'
-        service_provider.name_params.should == ['fields_fname', 'fields_lname']
+        service_provider.name_params.should == %w(fields_fname fields_lname)
         service_provider.required_params.should == {
           'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
           'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',

@@ -81,7 +81,7 @@ feature "Days since last visit condition", js: true do
 
   context "condition is days since last visit between 5 and 7 days ago" do
     before(:each) do
-      @element.rule.conditions << create(:condition, operand: "between", segment: "LastVisitCondition", value: ["5", "7"])
+      @element.rule.conditions << create(:condition, operand: "between", segment: "LastVisitCondition", value: %w(5 7))
       @path = generate_file_and_return_path(@element.site.id)
     end
 

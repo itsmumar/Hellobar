@@ -42,7 +42,7 @@ describe SiteElementsHelper do
       end
 
       it "returns valid types" do
-        expect(helper.site_element_subtypes_for_site(site)).to match_array(["traffic", "email"])
+        expect(helper.site_element_subtypes_for_site(site)).to match_array(%w(traffic email))
       end
     end
   end
