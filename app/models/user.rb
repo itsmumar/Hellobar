@@ -67,9 +67,7 @@ class User < ActiveRecord::Base
 
     new_user = User.create email: "hello-#{timestamp}-#{rand(timestamp)}@hellobar.com", password: Digest::SHA1.hexdigest("hello-#{timestamp}-me"), status: TEMPORARY_STATUS
 
-    until new_user.valid?
-      generate_temporary_user
-    end
+    generate_temporary_user until new_user.valid?
 
     new_user
   end

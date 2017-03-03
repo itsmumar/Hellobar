@@ -1406,10 +1406,3 @@ Style/VariableName:
 Style/VariableNumber:
   Exclude:
     - 'spec/helpers/site_elements_helper_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: MaxLineLength.
-Style/WhileUntilModifier:
-  Exclude:
-    - 'app/models/user.rb'
