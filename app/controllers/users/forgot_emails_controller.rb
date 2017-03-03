@@ -1,8 +1,7 @@
 class Users::ForgotEmailsController < ApplicationController
   layout 'static'
 
-  def new
-  end
+  def new; end
 
   def create
     MailerGateway.send_email('Forgot Email', 'support@hellobar.com', forgot_email_params)

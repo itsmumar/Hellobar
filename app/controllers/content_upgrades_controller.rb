@@ -49,8 +49,7 @@ class ContentUpgradesController < ApplicationController
     redirect_to site_content_upgrades_path(@site.id)
   end
 
-  def destroy
-  end
+  def destroy; end
 
   def style_editor
     @styles = @site.get_content_upgrade_styles

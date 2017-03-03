@@ -458,18 +458,6 @@ Style/EmptyElse:
     - 'lib/service_providers/embed_code_provider.rb'
     - 'lib/site_detector.rb'
 
-# Offense count: 9
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: compact, expanded
-Style/EmptyMethod:
-  Exclude:
-    - 'app/controllers/autofills_controller.rb'
-    - 'app/controllers/content_upgrades_controller.rb'
-    - 'app/controllers/pages_controller.rb'
-    - 'app/controllers/users/forgot_emails_controller.rb'
-    - 'app/models/billing/bill.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
