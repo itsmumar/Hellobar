@@ -44,11 +44,12 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     contact_list_logs = contact_list.contact_list_logs.select(:email).where(conditions).pluck(:email)
 
     emails.each do |email|
-      if contact_list_logs.include?(email) || contact_list_logs.include?("\"#{email}\"")
-        result[email] = 'Sent'
-      else
-        result[email] = 'Not sent'
-      end
+      result[email] =
+        if contact_list_logs.include?(email) || contact_list_logs.include?("\"#{email}\"")
+          'Sent'
+        else
+          'Not sent'
+        end
     end
 
     result
