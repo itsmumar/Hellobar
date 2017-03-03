@@ -74,7 +74,7 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def proxied_url2png(params)
-    '/proxy/https/' + url2png(params).sub(%r{^https://}, '')
+    '/proxy/https/' + url2png(params).sub(/^https:\/\//, '')
   end
 
   def url2png(params)

@@ -112,7 +112,7 @@ class SiteElementsController < ApplicationController
             request.original_url
           end
 
-    redirect_to url + '/' if request.format.html? && !request.original_url.match(%r{/\z})
+    redirect_to url + '/' if request.format.html? && !request.original_url.match(/\/\z/)
   end
 
   def load_site_element

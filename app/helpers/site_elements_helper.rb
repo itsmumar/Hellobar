@@ -127,7 +127,7 @@ module SiteElementsHelper
       'icon-contacts'
     when 'announcement'
       'icon-megaphone'
-    when %r{social/}
+    when /social\//
       'icon-social'
     when 'traffic'
       'icon-clicks'

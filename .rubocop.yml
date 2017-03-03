@@ -31,3 +31,11 @@ Style/ClassAndModuleChildren:
 #
 #Metrics/AbcSize:
 #  Max: 16
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
+# SupportedStyles: slashes, percent_r, mixed
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+  Exclude:
+    - spec/teaspoon_env.rb

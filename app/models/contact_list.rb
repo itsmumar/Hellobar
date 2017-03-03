@@ -198,7 +198,7 @@ class ContactList < ActiveRecord::Base
   def webhook_url_valid?
     uri = Addressable::URI.parse(data['webhook_url'])
 
-    if !%w{http https}.include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ %r((^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix)
+    if !%w{http https}.include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
       errors.add(:base, 'webhook URL is invalid')
     end
   end

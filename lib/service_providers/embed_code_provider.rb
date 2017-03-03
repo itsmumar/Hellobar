@@ -1,7 +1,7 @@
 class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   class FirstAndLastNameRequired < StandardError; end
 
-  URL_REGEX = %r{^(?:https?://|//)}
+  URL_REGEX = /^(?:https?:\/\/|\/\/)/
 
   attr_reader :identity, :contact_list
 
@@ -163,7 +163,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
 
     return nil unless url
 
-    url = 'http:' + url if url =~ %r{^//}
+    url = 'http:' + url if url =~ /^\/\//
     url
   end
 end

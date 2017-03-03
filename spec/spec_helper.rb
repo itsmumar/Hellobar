@@ -89,7 +89,7 @@ RSpec.configure do |config|
 
   # ## VCR
   config.around(:each) do |example|
-    name = example.metadata[:full_description].split(/\s+/, 2).join('/').underscore.gsub(%r{[^\w/]+}, '_')
+    name = example.metadata[:full_description].split(/\s+/, 2).join('/').underscore.gsub(/[^\w\/]+/, '_')
 
     # Don't run VCR in a dockerized environment
     next if ENV['DOCKER']

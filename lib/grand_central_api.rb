@@ -57,7 +57,7 @@ class GrandCentralApi
   # - api_key: the API key for the site (available from Grand Central)
   # - secret: the secret for the site (available from Grand Central)
   def initialize(endpoint, api_key, secret)
-    @endpoint = endpoint.gsub(%r{/$}, '') # Remove trailing slash from endpoint
+    @endpoint = endpoint.gsub(/\/$/, '') # Remove trailing slash from endpoint
     @api_key, @secret = api_key, secret
   end
 
@@ -105,7 +105,7 @@ class GrandCentralApi
     timestamp = Time.current.to_i
 
     # Path must start with a "/"
-    path = '/' + path unless path =~ %r{^/}
+    path = '/' + path unless path =~ /^\//
 
     # Parse the URL
     url = URI.parse(@endpoint + path)
