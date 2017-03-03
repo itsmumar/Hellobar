@@ -104,6 +104,7 @@ module ServiceProviders
     end
 
     private
+
     def make_api_call(method, path, options = {})
       path = path + "?api_secret=#{@identity.api_key}"
 

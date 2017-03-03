@@ -14,6 +14,7 @@ class Admin::AdminsController < ApplicationController
   end
 
   private
+
   def load_admin
     @admin = Admin.find(params[:id])
   end

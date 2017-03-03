@@ -109,6 +109,7 @@ module Hello
       end
 
       protected
+
       def connect
         AWS.config(
           :access_key_id => Hellobar::Settings[:aws_access_key_id],

@@ -16,6 +16,7 @@ class DiscountCalculator
   end
 
   private
+
   def discount_for_index(index)
     return nil if index.nil?
 

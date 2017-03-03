@@ -86,6 +86,7 @@ class GrandCentralApi
   end
 
   protected
+
   def sign(timestamp, path, data)
     OpenSSL::HMAC.hexdigest( self.class.digest, @secret, [@api_key, timestamp, path, data].join("|"))
   end

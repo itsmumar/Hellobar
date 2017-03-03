@@ -678,23 +678,6 @@ Style/EmptyLineBetweenDefs:
   Exclude:
     - 'spec/models/bill_spec.rb'
 
-# Offense count: 12
-# Cop supports --auto-correct.
-Style/EmptyLinesAroundAccessModifier:
-  Exclude:
-    - 'app/controllers/admin/admins_controller.rb'
-    - 'app/controllers/tracking_controller.rb'
-    - 'app/models/billing/discount_calculator.rb'
-    - 'app/models/identity.rb'
-    - 'app/serializers/identity_serializer.rb'
-    - 'app/serializers/subscription_serializer.rb'
-    - 'lib/cybersource.rb'
-    - 'lib/grand_central_api.rb'
-    - 'lib/hello/api_performance.rb'
-    - 'lib/hello/data_api_helper.rb'
-    - 'lib/hello/suggested_opportunities.rb'
-    - 'lib/service_providers/convert_kit.rb'
-
 # Offense count: 43
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

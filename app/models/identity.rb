@@ -82,6 +82,7 @@ class Identity < ActiveRecord::Base
   end
 
   private
+
   def service_provider_valid
     cached_provider = @service_provider # Don't cache the results of this
     if service_provider && !service_provider.valid?

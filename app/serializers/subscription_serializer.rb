@@ -46,6 +46,7 @@ class SubscriptionSerializer < ActiveModel::Serializer
   end
 
   private
+
   def amount_to_string(amount)
     return "" if amount.nil?
     "#{'%.2f' % amount}".chomp(".00")

@@ -79,6 +79,7 @@ module Hello
         end
 
         protected
+
         # Generates a path for the given site and site element ids
         # Used by other methods
         def generate_path(base_path, site_id, item_ids)

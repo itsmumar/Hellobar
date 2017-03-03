@@ -23,6 +23,7 @@ class TrackingController < ApplicationController
   end
 
   protected
+
   def get_props
     return nil unless params[:props]
     begin

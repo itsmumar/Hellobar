@@ -49,6 +49,7 @@ module Hello::DataAPI
     end
 
     private
+
     def date_to_index(date)
       index = data.length - 1 - (Date.today - date).to_i
       return nil if index < 0

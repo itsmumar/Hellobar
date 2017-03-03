@@ -162,6 +162,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   protected
+
   # ActiveMerchant requires the token in this form
   def formatted_token
     format_token(token)
