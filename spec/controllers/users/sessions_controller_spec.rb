@@ -48,7 +48,7 @@ describe Users::SessionsController do
       end
 
       it 'renders the find_email template if a v1 Wordpress user' do
-        user = double('wordpress user', kind_of?: true, email: 'email@email.com', password: nil)
+        user = double('wordpress user', wordpress_user?: true, email: 'email@email.com', password: nil)
         allow(User).to receive(:search_all_versions_for_email) { user }
 
         post :find_email, user: { email: 'hello@email.com' }

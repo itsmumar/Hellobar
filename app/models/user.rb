@@ -304,6 +304,10 @@ class User < ActiveRecord::Base
     received_referral.present?
   end
 
+  def wordpress_user?
+    is_a?(Hello::WordpressUser)
+  end
+
   private
 
   def user_upgrade_policy
