@@ -1,6 +1,6 @@
 unless defined?(Hellobar::Settings)
   settings_file = File.join(Rails.root, 'config/settings.yml')
-  yaml = File.exists?(settings_file) ? YAML.load_file(settings_file) : {}
+  yaml = File.exist?(settings_file) ? YAML.load_file(settings_file) : {}
   config = {}
 
   keys = %w(

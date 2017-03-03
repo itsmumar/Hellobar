@@ -28,14 +28,6 @@ Lint/CircularArgumentReference:
   Exclude:
     - 'lib/legacy_migrator.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Lint/DeprecatedClassMethods:
-  Exclude:
-    - 'config/initializers/settings.rb'
-    - 'config/schedule.rb'
-    - 'spec/lib/site_generator_spec.rb'
-
 # Offense count: 1
 Lint/DuplicateMethods:
   Exclude:

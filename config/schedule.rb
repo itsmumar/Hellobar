@@ -6,7 +6,7 @@ set :output, { standard: PREFIX + 'cron.log', error: PREFIX + 'cron.error.log' }
 env :PATH, ENV['PATH']
 
 settings_file = 'config/settings.yml'
-settings_yaml = File.exists?(settings_file) ? YAML.load_file(settings_file) : {}
+settings_yaml = File.exist?(settings_file) ? YAML.load_file(settings_file) : {}
 env = settings_yaml['env_name'] || 'edge'
 
 if env == 'production'
