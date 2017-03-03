@@ -209,7 +209,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     begin
       if previous_token
         # Update the profile
-        response = HB::CyberSource::gateway.update(format_token(previous_token), card, params)
+        response = HB::CyberSource.gateway.update(format_token(previous_token), card, params)
         audit << "Updated previous_token: #{previous_token.inspect} with #{sanitized_data.inspect} response: #{response.inspect}"
       else
         # Create a new profile

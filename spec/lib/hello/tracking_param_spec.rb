@@ -10,7 +10,7 @@ describe Hello::TrackingParam do
     tracker = Hello::TrackingParam.encode_tracker(user_id, action, props)
 
     Hello::TrackingParam.decode_tracker(tracker).should == [user_id, action, props]
-    URI::escape(tracker).should == tracker
+    URI.escape(tracker).should == tracker
   end
 
   it 'can handle cgi-escaped params' do
@@ -18,7 +18,7 @@ describe Hello::TrackingParam do
     action = 'click'
     props = { 'url' => 'some url' }
     tracker = Hello::TrackingParam.encode_tracker(user_id, action, props)
-    tracker = CGI::escape(tracker)
+    tracker = CGI.escape(tracker)
     Hello::TrackingParam.decode_tracker(tracker).should == [user_id, action, props]
   end
 

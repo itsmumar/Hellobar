@@ -489,7 +489,7 @@ class Site < ActiveRecord::Base
   def generate_static_assets(options = {})
     update_column(:script_attempted_to_generate_at, Time.now)
 
-    Timeout::timeout(20) do
+    Timeout.timeout(20) do
       generated_script_content = options[:script_content] || script_content(true)
 
       if Hellobar::Settings[:store_site_scripts_locally]

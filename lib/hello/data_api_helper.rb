@@ -121,7 +121,7 @@ module Hello
         params.each do |key, value|
           url += '&' unless first
           first = false
-          url += key + '=' + CGI::escape(value.to_s)
+          url += key + '=' + CGI.escape(value.to_s)
         end
         url
       end

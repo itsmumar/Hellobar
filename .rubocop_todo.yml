@@ -318,26 +318,6 @@ Style/ClassVars:
 
 # Offense count: 2
 # Cop supports --auto-correct.
-Style/ClosingParenthesisIndentation:
-  Exclude:
-    - 'spec/features/embed_script_tests/question_spec.rb'
-    - 'spec/lib/service_providers/convert_kit_spec.rb'
-
-# Offense count: 11
-# Cop supports --auto-correct.
-Style/ColonMethodCall:
-  Exclude:
-    - 'app/models/site.rb'
-    - 'lib/cybersource.rb'
-    - 'lib/grand_central_api.rb'
-    - 'lib/hello/data_api.rb'
-    - 'lib/hello/data_api_helper.rb'
-    - 'lib/legacy_migrator.rb'
-    - 'lib/service_providers/get_response.rb'
-    - 'spec/lib/hello/tracking_param_spec.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
 # Configuration parameters: Keywords.
 # Keywords: TODO, FIXME, OPTIMIZE, HACK, REVIEW
 Style/CommentAnnotation:

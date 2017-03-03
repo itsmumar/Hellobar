@@ -207,7 +207,7 @@ module Hello::DataAPI
         begin_time = Time.now.to_f
         url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
         response = nil
-        Timeout::timeout(timeouts[timeout_index]) do
+        Timeout.timeout(timeouts[timeout_index]) do
           response = Net::HTTP.get(URI.parse(url))
         end
         results = JSON.parse(response)
