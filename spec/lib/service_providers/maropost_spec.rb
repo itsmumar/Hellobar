@@ -28,9 +28,9 @@ describe ServiceProviders::Maropost do
 
     let(:failure_response) {
       double :response,
-             success?: false,
-             status: 500,
-             body: 'things went really bad'
+        success?: false,
+        status: 500,
+        body: 'things went really bad'
     }
 
     before do

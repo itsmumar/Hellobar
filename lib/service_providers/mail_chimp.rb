@@ -198,9 +198,9 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 EOS
 
     MailerGateway.send_email('Custom', user.email,
-                              subject: '[Action Required] Your list cannot be synced to Mailchimp',
-                              html_body: html,
-                              text_body: strip_tags(html))
+      subject: '[Action Required] Your list cannot be synced to Mailchimp',
+      html_body: html,
+      text_body: strip_tags(html))
 
     @identity.delete
   end

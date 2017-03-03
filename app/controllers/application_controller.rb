@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id, :get_ab_variation,
-                :get_ab_variation_or_nil
+    :get_ab_variation_or_nil
 
   before_action :record_tracking_param
   before_action :track_h_visit

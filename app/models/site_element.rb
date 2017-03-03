@@ -183,10 +183,10 @@ class SiteElement < ActiveRecord::Base
 
   def analytics_track_site_element_creation!
     Analytics.track(:site, site_id, 'Created Site Element',
-                    { site_element_id: id,
-                      type: element_subtype,
-                      style: type.to_s.downcase
-                    })
+      { site_element_id: id,
+        type: element_subtype,
+        style: type.to_s.downcase
+      })
   end
 
   def onboarding_track_site_element_creation!

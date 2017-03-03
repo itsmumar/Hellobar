@@ -17,8 +17,8 @@ module ServiceProviders
       found_lists = []
       begin
         response = @client.get "accounts/#{@account_id}/lists.json",
-                               auth_token: @api_key,
-                               no_counts: true
+          auth_token: @api_key,
+          no_counts: true
 
         if response.success?
           response_hash = JSON.parse response.body

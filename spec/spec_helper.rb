@@ -76,9 +76,9 @@ RSpec.configure do |config|
 
     Capybara.register_driver :remote_firefox do |app|
       Capybara::Selenium::Driver.new(app,
-                                     browser: :remote,
-                                     url: 'http://selenium-firefox:4444/wd/hub',
-                                     desired_capabilities: :firefox)
+        browser: :remote,
+        url: 'http://selenium-firefox:4444/wd/hub',
+        desired_capabilities: :firefox)
     end
 
     Capybara.default_driver = :remote_firefox

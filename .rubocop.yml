@@ -39,3 +39,8 @@ Style/RegexpLiteral:
   AllowInnerSlashes: true
   Exclude:
     - spec/teaspoon_env.rb
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: with_first_parameter, with_fixed_indentation
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation

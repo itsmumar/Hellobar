@@ -14,7 +14,7 @@ feature 'MailChimp Integration' do
                  params = JSON.parse req.body
                  params['status'] == 'pending'
                end
-            ).to have_been_made.once
+      ).to have_been_made.once
     end
   end
 
@@ -27,7 +27,7 @@ feature 'MailChimp Integration' do
                  params = JSON.parse req.body
                  params['status'] == 'subscribed'
                end
-            ).to have_been_made.once
+      ).to have_been_made.once
     end
   end
 end

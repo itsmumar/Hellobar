@@ -27,9 +27,9 @@ describe ServiceProviders::GetResponseApi do
     let(:tags_success_response) { double :response, success?: true, body: [{ tagId: tag_id, name: tag_name }].to_json }
     let(:failure_response) {
       double :response,
-      success?: false,
-      status: 500,
-      body: { codeDescription: 'things went really bad' }.to_json
+        success?: false,
+        status: 500,
+        body: { codeDescription: 'things went really bad' }.to_json
     }
 
     before do

@@ -314,17 +314,6 @@ Style/AccessorMethodName:
     - 'lib/hello/internal_analytics.rb'
     - 'lib/script_generator.rb'
 
-# Offense count: 16
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: with_first_parameter, with_fixed_indentation
-Style/AlignParameters:
-  Exclude:
-    - 'app/serializers/site_element_serializer.rb'
-    - 'lib/service_providers/mail_chimp.rb'
-    - 'spec/features/embed_script_tests/question_spec.rb'
-    - 'spec/lib/service_providers/get_response_api_spec.rb'
-
 # Offense count: 49
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

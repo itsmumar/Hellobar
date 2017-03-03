@@ -14,7 +14,7 @@ feature 'Webhook Integration' do
     it 'sends parameters in the URL' do
       expect(a_request(:get, /.*hellobar.com.*/).
                with(query: hash_including(name: name, email: email))
-            ).to have_been_made.once
+      ).to have_been_made.once
     end
   end
 
@@ -24,7 +24,7 @@ feature 'Webhook Integration' do
     it 'sends parameters in the post payload' do
       expect(a_request(:post, /.*hellobar.com.*/).
                with(body: hash_including(name: name, email: email))
-            ).to have_been_made.once
+      ).to have_been_made.once
     end
   end
 end
