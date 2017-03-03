@@ -9,7 +9,7 @@ describe ServiceProviders::Maropost do
     identity = Identity.new site_id: 1, provider: 'maropost'
 
     expect { ServiceProviders::Maropost.new(identity: identity) }
-          .to raise_error('Identity does not have a stored Maropost API key and AccountID')
+      .to raise_error('Identity does not have a stored Maropost API key and AccountID')
   end
 
   context 'remote requests' do

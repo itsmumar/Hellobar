@@ -33,15 +33,15 @@ class SiteMembership < ActiveRecord::Base
     return unless site && user
 
     existing_membership  = user.site_memberships
-                                .where(site_id: site.id)
-                                .where.not(id: id)
-                                .first
+                               .where(site_id: site.id)
+                               .where.not(id: id)
+                               .first
 
     duplicate_membership = user.site_memberships
-                                .joins(:site)
-                                .where('sites.url' => site.url)
-                                .where.not('site_memberships.id' => id)
-                                .first
+                               .joins(:site)
+                               .where('sites.url' => site.url)
+                               .where.not('site_memberships.id' => id)
+                               .first
 
     if existing_membership || duplicate_membership
       errors.add(:user, "already has a membership to #{site.url}")

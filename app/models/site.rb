@@ -248,10 +248,10 @@ class Site < ActiveRecord::Base
   def url_exists?(user = nil)
     if user
       Site.joins(:users)
-      .merge(Site.protocol_ignored_url(url))
-      .where(users: { id: user.id })
-      .where.not(id: id)
-      .any?
+          .merge(Site.protocol_ignored_url(url))
+          .where(users: { id: user.id })
+          .where.not(id: id)
+          .any?
     else
       Site.where.not(id: id).merge(Site.protocol_ignored_url(url)).any?
     end
@@ -259,10 +259,10 @@ class Site < ActiveRecord::Base
 
   def url_is_unique?
     if users
-      .joins(:sites)
-      .merge(Site.protocol_ignored_url(url))
-      .where.not(sites: { id: id })
-      .any?
+       .joins(:sites)
+       .merge(Site.protocol_ignored_url(url))
+       .where.not(sites: { id: id })
+       .any?
 
       errors.add(:url, 'is already in use')
     end

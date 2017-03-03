@@ -296,7 +296,8 @@ class SiteElement < ActiveRecord::Base
 
   def remove_unreferenced_images
     # Done through SQL to ensure references are up to date
-    image_uploads.joins('LEFT JOIN site_elements ON site_elements.active_image_id = image_uploads.id')\
+    image_uploads
+      .joins('LEFT JOIN site_elements ON site_elements.active_image_id = image_uploads.id')
       .where('site_elements.id IS NULL').destroy_all
   end
 

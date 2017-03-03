@@ -287,7 +287,8 @@ describe ContactList do
     it 'returns a hash with the status as returned by the service provider' do
       subscribers = [{ email: 'test@test.com' }, { email: 'test2@test.com' }]
       result = { 'test@test.com' => 'pending', 'test2@test.com' => 'subscribed' }
-      service_provider.should_receive(:subscriber_statuses)\
+      service_provider
+        .should_receive(:subscriber_statuses)
         .with(contact_list, ['test@test.com', 'test2@test.com']).and_return(result)
       contact_list.subscriber_statuses(subscribers).should == result
     end

@@ -19,8 +19,8 @@ class UserOnboardingCampaign
 
   def self.users
     User.join_current_onboarding_status
-         .onboarding_sequence_before(final_sequence_index)
-         .where('user_onboarding_statuses.status_id = ?', users_status_key)
+        .onboarding_sequence_before(final_sequence_index)
+        .where('user_onboarding_statuses.status_id = ?', users_status_key)
   end
 
   def initialize(user, onboarding_status)

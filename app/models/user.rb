@@ -31,11 +31,11 @@ class User < ActiveRecord::Base
 
   scope :join_current_onboarding_status, lambda {
     joins(:onboarding_statuses)
-    .where("user_onboarding_statuses.created_at =
+      .where("user_onboarding_statuses.created_at =
               (SELECT MAX(user_onboarding_statuses.created_at)
                       FROM user_onboarding_statuses
                       WHERE user_onboarding_statuses.user_id = users.id)")
-    .group('users.id')
+      .group('users.id')
   }
 
   scope :onboarding_sequence_before, lambda { |sequence_index|
