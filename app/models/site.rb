@@ -289,7 +289,7 @@ class Site < ActiveRecord::Base
   class MissingPaymentMethod < StandardError; end
   class MissingSubscription < StandardError; end
   def change_subscription(subscription, payment_method = nil, trial_period = nil)
-    raise MissingSubscription.new unless subscription
+    raise MissingSubscription unless subscription
     transaction do
       subscription.site = self
       subscription.payment_method = payment_method
@@ -410,7 +410,7 @@ class Site < ActiveRecord::Base
   # Calculates a bill, but does not save or pay the bill. Used by
   # change_subscription and preview_change_subscription
   def calculate_bill(subscription, actually_change, trial_period = nil)
-    raise MissingSubscription.new unless subscription
+    raise MissingSubscription unless subscription
     now = Time.now
     # First we need to void any pending recurring bills
     # and keep any active paid bills

@@ -16,7 +16,7 @@ class Referrals::RedeemForSender < Less::Interaction
 
   def run
     return unless subscription.present?
-    raise Referrals::NoAvailableReferrals.new unless has_available_referrals?
+    raise Referrals::NoAvailableReferrals unless has_available_referrals?
 
     if subscription.is_a?(Subscription::Free)
       site.change_subscription(new_pro_subscription)

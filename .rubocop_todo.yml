@@ -1075,20 +1075,6 @@ Style/Proc:
     - 'spec/features/conditions/days_since_last_visit_spec.rb'
     - 'spec/features/conditions/every_x_sessions_spec.rb'
 
-# Offense count: 15
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: compact, exploded
-Style/RaiseArgs:
-  Exclude:
-    - 'app/controllers/contact_submissions_controller.rb'
-    - 'app/interactions/referrals/redeem_for_sender.rb'
-    - 'app/models/billing/bill.rb'
-    - 'app/models/billing/billing_attempt.rb'
-    - 'app/models/billing/payment_method.rb'
-    - 'app/models/site.rb'
-    - 'spec/controllers/application_controller_spec.rb'
-
 # Offense count: 56
 # Cop supports --auto-correct.
 # Configuration parameters: AllowMultipleReturnValues.

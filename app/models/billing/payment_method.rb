@@ -16,7 +16,7 @@ class PaymentMethod < ActiveRecord::Base
   end
 
   def pay(bill)
-    raise MissingPaymentDetails.new('Can not pay bill without payment method details') unless current_details
+    raise MissingPaymentDetails, 'Can not pay bill without payment method details' unless current_details
     # HACK:
     # setting payment_method_details_id instead of the object to avoid
     # ActiveRecord::AssociationTypeMismatch error from being raised

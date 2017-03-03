@@ -30,18 +30,18 @@ class Bill < ActiveRecord::Base
   end
 
   def check_amount
-    raise InvalidBillingAmount.new("Amount was: #{amount.inspect}") if !amount or amount < 0
+    raise InvalidBillingAmount, "Amount was: #{amount.inspect}" if !amount or amount < 0
   end
 
   alias :void! :voided!
   def status=(value)
     value = value.to_sym
     return if status == value
-    raise StatusAlreadySet.new("Can not change status once set. Was #{status.inspect} trying to set to #{value.inspect}") unless status == :pending || value == :voided
+    raise StatusAlreadySet, "Can not change status once set. Was #{status.inspect} trying to set to #{value.inspect}" unless status == :pending || value == :voided
 
     audit << "Changed Bill[#{id}] status from #{status.inspect} to #{value.inspect}"
     status_value = Bill.statuses[value.to_sym]
-    raise InvalidStatus.new("Invalid status: #{value.inspect}") unless status_value
+    raise InvalidStatus, "Invalid status: #{value.inspect}" unless status_value
     write_attribute(:status, status_value)
     self.status_set_at = Time.now
 
@@ -56,14 +56,14 @@ class Bill < ActiveRecord::Base
     set_final_amount!
 
     now = Time.now
-    raise BillingEarly.new("Attempted to bill on #{now} but bill[#{id}] has a bill_at date of #{bill_at}") if !allow_early and now < bill_at
+    raise BillingEarly, "Attempted to bill on #{now} but bill[#{id}] has a bill_at date of #{bill_at}" if !allow_early and now < bill_at
     if amount == 0 # Note: less than 0 is a valid value for refunds
       audit << 'Marking bill as paid because no payment required'
       # Mark as paid
       paid!
       return true
     else
-      raise MissingPaymentMethod.new unless subscription.payment_method
+      raise MissingPaymentMethod unless subscription.payment_method
       return subscription.payment_method.pay(self)
     end
   end
@@ -183,7 +183,7 @@ class Bill < ActiveRecord::Base
   class Refund < Bill
     # Refunds must be a negative amount
     def check_amount
-      raise InvalidBillingAmount.new("Amount must be negative. It was #{amount.to_f}") if amount > 0
+      raise InvalidBillingAmount, "Amount must be negative. It was #{amount.to_f}" if amount > 0
     end
 
     # Refunds are never considered "active"

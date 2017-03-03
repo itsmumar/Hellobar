@@ -47,7 +47,7 @@ class ContactSubmissionsController < ApplicationController
   end
 
   def create
-    raise ActionController::RoutingError.new('Not Found') unless params[:blank].blank? # Spam catcher
+    raise ActionController::RoutingError, 'Not Found' unless params[:blank].blank? # Spam catcher
 
     email_params = params.require(:contact_submission).permit(:name, :email, :message)
 
