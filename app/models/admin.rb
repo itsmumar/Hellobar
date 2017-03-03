@@ -221,7 +221,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def has_validated_access_token?(access_token)
-    valid_access_tokens.has_key?(access_token)
+    valid_access_tokens.key?(access_token)
   end
 
   def session_heartbeat!
