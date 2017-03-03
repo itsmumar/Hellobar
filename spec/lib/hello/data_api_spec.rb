@@ -81,8 +81,8 @@ describe Hello::DataAPI do
       stats_request_two = Hash[contact_lists.last.id => 6]
       stats = stats_request_one.merge stats_request_two
 
-      allow(Hello::DataAPI).to receive(:get).
-        and_return stats_request_one, stats_request_two
+      allow(Hello::DataAPI).to receive(:get)
+        .and_return stats_request_one, stats_request_two
 
       result = Hello::DataAPI.contact_list_totals site, contact_lists
 

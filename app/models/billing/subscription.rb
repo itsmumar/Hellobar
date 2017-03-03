@@ -10,10 +10,11 @@ class Subscription < ActiveRecord::Base
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
 
   scope :active, -> do
-    joins(:bills).where(
-      'bills.status = ? AND bills.start_date < ? AND bills.end_date > ?',
-      Bill.statuses['paid'], Time.now, Time.now).
-      where('bills.type != ?', Bill::Refund.to_s)
+    joins(:bills)
+      .where(
+        'bills.status = ? AND bills.start_date < ? AND bills.end_date > ?',
+        Bill.statuses['paid'], Time.now, Time.now)
+      .where('bills.type != ?', Bill::Refund.to_s)
   end
 
   after_initialize :set_initial_values

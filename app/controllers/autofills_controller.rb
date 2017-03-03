@@ -49,9 +49,9 @@ class AutofillsController < ApplicationController
   end
 
   def autofill_params
-    params.
-      require(:autofill).
-      permit(:name, :listen_selector, :populate_selector).
-      merge site_id: @site.id
+    params
+      .require(:autofill)
+      .permit(:name, :listen_selector, :populate_selector)
+      .merge site_id: @site.id
   end
 end

@@ -12,8 +12,8 @@ feature 'Webhook Integration' do
     let(:contact_list) { build(:contact_list, data: { 'webhook_url' => url, 'webhook_method' => 'get' }) }
 
     it 'sends parameters in the URL' do
-      expect(a_request(:get, /.*hellobar.com.*/).
-               with(query: hash_including(name: name, email: email))
+      expect(a_request(:get, /.*hellobar.com.*/)
+               .with(query: hash_including(name: name, email: email))
       ).to have_been_made.once
     end
   end
@@ -22,8 +22,8 @@ feature 'Webhook Integration' do
     let(:contact_list) { build(:contact_list, data: { 'webhook_url' => url, 'webhook_method' => 'post' }) }
 
     it 'sends parameters in the post payload' do
-      expect(a_request(:post, /.*hellobar.com.*/).
-               with(body: hash_including(name: name, email: email))
+      expect(a_request(:post, /.*hellobar.com.*/)
+               .with(body: hash_including(name: name, email: email))
       ).to have_been_made.once
     end
   end

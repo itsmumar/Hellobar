@@ -20,9 +20,9 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
   end
 
   def tags
-    Infusionsoft.data_query('ContactGroup', 1_000, 0, {}, %w{GroupName Id}).
-      map { |result| { 'name' => result['GroupName'], 'id' => result['Id'] } }.
-      sort_by { |result| result['name'] }
+    Infusionsoft.data_query('ContactGroup', 1_000, 0, {}, %w{GroupName Id})
+                .map { |result| { 'name' => result['GroupName'], 'id' => result['Id'] } }
+                .sort_by { |result| result['name'] }
   end
 
   def subscribe(_, email, name = nil, _double_optin = false)

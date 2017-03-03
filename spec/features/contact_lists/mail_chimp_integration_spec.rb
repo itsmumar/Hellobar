@@ -9,8 +9,8 @@ feature 'MailChimp Integration' do
 
   context 'un-specified double-optin parameter' do
     it 'sends double-optin' do
-      expect(a_request(:post, /.*api.mailchimp.com.*/).
-               with do |req|
+      expect(a_request(:post, /.*api.mailchimp.com.*/)
+               .with do |req|
                  params = JSON.parse req.body
                  params['status'] == 'pending'
                end
@@ -22,8 +22,8 @@ feature 'MailChimp Integration' do
     let(:optin) { false }
 
     it 'sends double-optin' do
-      expect(a_request(:post, /.*api.mailchimp.com.*/).
-               with do |req|
+      expect(a_request(:post, /.*api.mailchimp.com.*/)
+               .with do |req|
                  params = JSON.parse req.body
                  params['status'] == 'subscribed'
                end

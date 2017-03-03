@@ -103,26 +103,26 @@ describe IdentitiesController do
       end
 
       it 'saves credentials on the identity object' do
-        allow(controller).to receive(:env).
-          and_return('omniauth.auth' => { 'credentials' => 'my_cool_creds' },
-                     'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/site_elements/12312/new' })
+        allow(controller).to receive(:env)
+          .and_return('omniauth.auth' => { 'credentials' => 'my_cool_creds' },
+                      'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/site_elements/12312/new' })
         post :create, site_id: @site.id, provider: 'mailchimp'
         expect(Identity.last.credentials).to eq('my_cool_creds')
       end
 
       context 'redirects' do
         it 'to email setting page' do
-          allow(controller).to receive(:env).
-            and_return('omniauth.auth' => { 'credentials' => 'my_cool_creds' },
-                       'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/site_elements/12312/new' })
+          allow(controller).to receive(:env)
+            .and_return('omniauth.auth' => { 'credentials' => 'my_cool_creds' },
+                        'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/site_elements/12312/new' })
           post :create, site_id: @site.id, provider: 'mailchimp'
           expect(response).to redirect_to(controller.env['omniauth.params']['redirect_to'] + '#/settings/emails')
         end
 
         it 'to referrer' do
-          allow(controller).to receive(:env).
-            and_return('omniauth.auth' => { 'credentials' => 'my_cool_creds' },
-                       'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/contact_lists' })
+          allow(controller).to receive(:env)
+            .and_return('omniauth.auth' => { 'credentials' => 'my_cool_creds' },
+                        'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/contact_lists' })
           post :create, site_id: @site.id, provider: 'mailchimp'
           expect(response).to redirect_to(controller.env['omniauth.params']['redirect_to'])
         end

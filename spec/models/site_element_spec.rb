@@ -86,8 +86,7 @@ describe SiteElement do
 
           element.save
 
-          element.errors['settings.redirect_url'].
-            should include('is a pro feature')
+          element.errors['settings.redirect_url'].should include('is a pro feature')
         end
 
         it 'requires a redirect url if after_email_submit_action is :redirect' do
@@ -96,8 +95,7 @@ describe SiteElement do
 
           element.save
 
-          element.errors['settings.redirect_url'].
-            should include('cannot be blank')
+          element.errors['settings.redirect_url'].should include('cannot be blank')
         end
 
         it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
@@ -139,8 +137,7 @@ describe SiteElement do
 
         element.save
 
-        element.errors['settings.redirect_url'].
-          should include('is a pro feature')
+        element.errors['settings.redirect_url'].should include('is a pro feature')
       end
 
       it 'requires a redirect url if after_email_submit_action is :redirect' do
@@ -149,8 +146,7 @@ describe SiteElement do
 
         element.save
 
-        element.errors['settings.redirect_url'].
-          should include('cannot be blank')
+        element.errors['settings.redirect_url'].should include('cannot be blank')
       end
 
       it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
@@ -181,8 +177,7 @@ describe SiteElement do
 
         element.save
 
-        element.errors['custom_thank_you_text'].
-          should include('is a pro feature')
+        element.errors['custom_thank_you_text'].should include('is a pro feature')
       end
 
       it 'requires thank you text if after_email_submit_action is :custom_thank_you_text' do
@@ -191,8 +186,7 @@ describe SiteElement do
 
         element.save
 
-        element.errors['custom_thank_you_text'].
-          should include('cannot be blank')
+        element.errors['custom_thank_you_text'].should include('cannot be blank')
       end
 
       it "doesn't require thank you text if after_email_submit_action is not :custom_thank_you_text" do

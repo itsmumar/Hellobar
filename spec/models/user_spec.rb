@@ -387,27 +387,27 @@ describe User do
 
     context 'with invalid host string' do
       it 'should return empty array when arg is email address' do
-        expect(User.search_by_url('dude@brah.bro')).
-          to eq([])
+        expect(User.search_by_url('dude@brah.bro'))
+          .to eq([])
       end
 
       it 'should return empty array when arg is not url' do
-        expect(User.search_by_url('how can mirrors be real')).
-          to eq([])
+        expect(User.search_by_url('how can mirrors be real'))
+          .to eq([])
       end
     end
 
     context 'with subdomain' do
       it 'should search with correct domain' do
-        expect(User.search_by_url('www.google.com')).
-          to include(@user)
+        expect(User.search_by_url('www.google.com'))
+          .to include(@user)
       end
     end
 
     context 'without subdomain' do
       it 'should search with correct domain' do
-        expect(User.search_by_url('google.com')).
-          to include(@user)
+        expect(User.search_by_url('google.com'))
+          .to include(@user)
       end
     end
   end

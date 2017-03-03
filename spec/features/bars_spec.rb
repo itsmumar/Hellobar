@@ -6,10 +6,10 @@ feature 'Adding and editing bars', :js do
   given(:user) { create :user, email: email }
 
   before do
-    allow_any_instance_of(SiteElementSerializer).
-      to receive(:proxied_url2png).and_return('')
-    allow_any_instance_of(ApplicationController).
-      to receive(:get_ab_variation).and_return('original')
+    allow_any_instance_of(SiteElementSerializer)
+      .to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(ApplicationController)
+      .to receive(:get_ab_variation).and_return('original')
   end
 
   scenario 'new user can create a site element' do
@@ -80,8 +80,8 @@ feature 'Adding and editing bars', :js do
 
   context 'Collect Email goal' do
     before do
-      allow_any_instance_of(ApplicationController).
-        to receive(:get_ab_variation).and_return('variant')
+      allow_any_instance_of(ApplicationController)
+        .to receive(:get_ab_variation).and_return('variant')
 
       membership = create(:site_membership, :with_site_rule)
       user = membership.user

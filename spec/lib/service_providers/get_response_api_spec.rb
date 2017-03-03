@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe ServiceProviders::GetResponseApi do
   it 'raises an error if no identity is provided' do
-    expect { ServiceProviders::GetResponseApi.new }.
-      to raise_error 'Must provide an identity through the arguments'
+    expect { ServiceProviders::GetResponseApi.new }
+      .to raise_error 'Must provide an identity through the arguments'
   end
 
   it 'raises error if identity is missing api key' do
     identity = Identity.new site_id: 1, provider: 'get_response_api'
-    expect { ServiceProviders::GetResponseApi.new(identity: identity) }.
-      to raise_error 'Identity does not have a stored GetResponse API key'
+    expect { ServiceProviders::GetResponseApi.new(identity: identity) }
+      .to raise_error 'Identity does not have a stored GetResponse API key'
   end
 
   context 'remote requests', :skip do
@@ -54,9 +54,9 @@ describe ServiceProviders::GetResponseApi do
 
       it 'logs parsed error message in the event of failed request' do
         allow(client).to receive(:get).and_return(failure_response)
-        expect(get_respone_api).
-          to receive(:log).
-          with("getting lists returned 'things went really bad' with the code 500")
+        expect(get_respone_api)
+          .to receive(:log)
+          .with("getting lists returned 'things went really bad' with the code 500")
         expect { get_respone_api.lists }.to raise_error(RuntimeError)
       end
     end
@@ -79,9 +79,9 @@ describe ServiceProviders::GetResponseApi do
 
       it 'logs parsed error message in the event of failed request' do
         allow(client).to receive(:get).and_return(failure_response)
-        expect(get_respone_api).
-          to receive(:log).
-          with("getting lists returned 'things went really bad' with the code 500")
+        expect(get_respone_api)
+          .to receive(:log)
+          .with("getting lists returned 'things went really bad' with the code 500")
         expect { get_respone_api.tags }.to raise_error(RuntimeError)
       end
     end
@@ -100,15 +100,15 @@ describe ServiceProviders::GetResponseApi do
       let(:contact_list) { create :contact_list, :with_tags }
 
       it 'submits name and email address if both are present' do
-        allow(client).to receive(:post).with('contacts', request_body).
-          and_return successful_response
+        allow(client).to receive(:post).with('contacts', request_body)
+          .and_return successful_response
 
         get_respone_api.subscribe(campaign_id, email, name)
       end
 
       it 'submits email address as name if no name is present' do
-        allow(client).to receive(:post).with('contacts', request_body.merge(name: email)).
-          and_return successful_response
+        allow(client).to receive(:post).with('contacts', request_body.merge(name: email))
+          .and_return successful_response
 
         get_respone_api.subscribe(campaign_id, email)
       end
@@ -123,17 +123,17 @@ describe ServiceProviders::GetResponseApi do
 
         tags = contact_list.tags.map { |tag| { tagId: tag } }
 
-        expect(contact_list).to receive(:subscribers).
-          and_return([{ name: 'Bob Lob', email: 'bobloblaw@lawblog.com' },
-                      { name: 'Lob Bob', email: 'blob@lawblog.com' }])
-        expect(api).to receive(:find_union).
-          and_return([{ 'contactId' => 'contactId', 'email' => 'bobloblaw@lawblog.com' }])
-        expect(client).to receive(:post).with('contacts', request_body).
-          and_return successful_response
-        expect(client).to receive(:get).
-          and_return latest_contacts_successful_response
-        expect(client).to receive(:post).with("contacts/#{contact_id}", tags: tags).
-          and_return latest_contacts_successful_response
+        expect(contact_list).to receive(:subscribers)
+          .and_return([{ name: 'Bob Lob', email: 'bobloblaw@lawblog.com' },
+                       { name: 'Lob Bob', email: 'blob@lawblog.com' }])
+        expect(api).to receive(:find_union)
+          .and_return([{ 'contactId' => 'contactId', 'email' => 'bobloblaw@lawblog.com' }])
+        expect(client).to receive(:post).with('contacts', request_body)
+          .and_return successful_response
+        expect(client).to receive(:get)
+          .and_return latest_contacts_successful_response
+        expect(client).to receive(:post).with("contacts/#{contact_id}", tags: tags)
+          .and_return latest_contacts_successful_response
 
         api.subscribe(campaign_id, email, name)
       end
@@ -141,9 +141,9 @@ describe ServiceProviders::GetResponseApi do
       it 'logs parsed error message in the event of failed request' do
         allow(client).to receive(:post).and_return(failure_response)
 
-        expect(get_respone_api).
-          to receive(:log).
-          with("sync error #{email} sync returned 'things went really bad' with the code 500")
+        expect(get_respone_api)
+          .to receive(:log)
+          .with("sync error #{email} sync returned 'things went really bad' with the code 500")
 
         get_respone_api.subscribe(campaign_id, email)
       end
@@ -151,9 +151,9 @@ describe ServiceProviders::GetResponseApi do
       it 'handles time out' do
         allow(client).to receive(:post).and_raise(Faraday::TimeoutError)
 
-        expect(get_respone_api).
-          to receive(:log).
-          with('sync timed out')
+        expect(get_respone_api)
+          .to receive(:log)
+          .with('sync timed out')
 
         get_respone_api.subscribe(campaign_id, email)
       end

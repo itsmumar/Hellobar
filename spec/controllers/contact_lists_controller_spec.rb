@@ -12,8 +12,8 @@ describe ContactListsController, type: :controller do
     site.contact_lists = [contact_list]
 
     allow_any_instance_of(Identity).to receive(:credentials).and_return(token: 'test')
-    allow_any_instance_of(Identity).to receive(:extra).
-      and_return('metadata' => { 'api_endpoint' => 'test' })
+    allow_any_instance_of(Identity).to receive(:extra)
+      .and_return('metadata' => { 'api_endpoint' => 'test' })
 
     stub_out_get_ab_variations('Email Integration UI 2016-06-22') { 'original' }
 
@@ -294,8 +294,8 @@ describe ContactListsController, type: :controller do
       end
 
       before do
-        allow_any_instance_of(ContactList).
-          to receive(:site_elements_count).and_return(2)
+        allow_any_instance_of(ContactList)
+          .to receive(:site_elements_count).and_return(2)
       end
 
       it 'returns the contact list' do
