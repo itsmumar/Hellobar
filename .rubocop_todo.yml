@@ -379,18 +379,6 @@ Style/MultilineBlockChain:
     - 'app/helpers/admin/users_helper.rb'
     - 'app/mailers/digest_mailer.rb'
 
-# Offense count: 7
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: symmetrical, new_line, same_line
-Style/MultilineMethodCallBraceLayout:
-  Exclude:
-    - 'app/models/billing/subscription.rb'
-    - 'lib/service_providers/active_campaign.rb'
-    - 'spec/features/contact_lists/mail_chimp_integration_spec.rb'
-    - 'spec/features/contact_lists/webhook_integration_spec.rb'
-    - 'spec/features/embed_script_tests/question_spec.rb'
-
 # Offense count: 29
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
