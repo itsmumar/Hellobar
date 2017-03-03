@@ -3,7 +3,7 @@ class IdentitiesController < ApplicationController
 
   def new
     if params[:api_key].blank?
-      redirect_to "/auth/#{params[:provider]}/?site_id=#{@site.id}&redirect_to=#{request.referrer}"
+      redirect_to "/auth/#{params[:provider]}/?site_id=#{@site.id}&redirect_to=#{request.referer}"
     else
       create
     end
@@ -33,7 +33,7 @@ class IdentitiesController < ApplicationController
       # TODO: sanitze me?
       identity.api_key = params[:api_key]
       env['omniauth.params'] ||= {}
-      env['omniauth.params']['redirect_to'] = request.referrer
+      env['omniauth.params']['redirect_to'] = request.referer
     end
 
     if identity.save

@@ -178,15 +178,6 @@ Rails/OutputSafety:
     - 'app/helpers/contact_lists_helper.rb'
     - 'app/helpers/site_elements_helper.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: referer, referrer
-Rails/RequestReferer:
-  Exclude:
-    - 'app/controllers/identities_controller.rb'
-    - 'app/controllers/user_controller.rb'
-
 # Offense count: 36
 # Configuration parameters: Blacklist.
 # Blacklist: decrement!, decrement_counter, increment!, increment_counter, toggle!, touch, update_all, update_attribute, update_column, update_columns, update_counters
