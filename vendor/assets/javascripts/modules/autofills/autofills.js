@@ -1,6 +1,4 @@
-hellobar.defineModule('autofills', ['base.storage'], function (storage) {
-
-  // TODO reuse forAllDocuments and runOnDocumentReady from base.dom module
+hellobar.defineModule('autofills', ['base.storage', 'base.dom'], function (storage, dom) {
 
   var subscriptions = [];
 
@@ -16,7 +14,7 @@ hellobar.defineModule('autofills', ['base.storage'], function (storage) {
     };
 
     this.restore = function (autofill) {
-      storage.getValue(autofillToKey(autofill));
+      return storage.getValue(autofillToKey(autofill));
     };
 
   }
@@ -32,16 +30,6 @@ hellobar.defineModule('autofills', ['base.storage'], function (storage) {
     autofills.forEach(function (autofill) {
       callback && callback(autofill);
     });
-  }
-
-  function forAllDocuments(callback) {
-    if (callback) {
-      callback(document);
-      var iframes = document.getElementsByTagName('iframe') || [];
-      Array.prototype.forEach.call(iframes, function (iframe) {
-        callback(iframe.contentDocument);
-      });
-    }
   }
 
   function initializeValueCollection() {
@@ -66,7 +54,7 @@ hellobar.defineModule('autofills', ['base.storage'], function (storage) {
       });
     }
 
-    forAllDocuments(function (doc) {
+    dom.forAllDocuments(function (doc) {
       initializeValueCollectionForDocument(doc);
     });
   }
@@ -81,7 +69,7 @@ hellobar.defineModule('autofills', ['base.storage'], function (storage) {
   function populateValues() {
     forAllAutofills(function (autofill) {
       var value = autofillStorage.restore(autofill);
-      value && forAllDocuments(function (doc) {
+      value && dom.forAllDocuments(function (doc) {
         var elements = getElements(doc, autofill.populate_selector);
         Array.prototype.forEach.call(elements, function (element) {
           element.value = value;
@@ -109,13 +97,15 @@ hellobar.defineModule('autofills', ['base.storage'], function (storage) {
       return configuration;
     },
 
-    initialize: function () {
+    initialize: function (configurator) {
       function doLoad() {
         populateValues();
         initializeValueCollection();
       }
 
-      document.body ? setTimeout(doLoad, 0) : document.addEventListener('DOMContentLoaded', function (evt) {
+      configurator && configurator(configuration);
+
+      dom.runOnDocumentReady(function() {
         doLoad();
       });
     },
