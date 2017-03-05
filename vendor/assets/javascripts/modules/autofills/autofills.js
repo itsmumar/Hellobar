@@ -1,54 +1,27 @@
-(function () {
+hellobar.defineModule('autofills', ['base.storage'], function (storage) {
+
+  // TODO reuse forAllDocuments and runOnDocumentReady from base.dom module
 
   var subscriptions = [];
 
-  /**
-   * @class ValueStorage
-   * Abstracts out the way of storing input values (currently localStorage is used).
-   */
-  function ValueStorage() {
+  function AutofillStorage() {
     var expirationDays = 30;
 
     function autofillToKey(autofill) {
       return 'HB-autofill-' + autofill.id;
     }
 
-    function dateToTimestamp(date) {
-      return date.toISOString();
-    }
-
-    function currentTimestamp() {
-      return dateToTimestamp(new Date());
-    }
-
-    function expirationTimestamp() {
-      var date = new Date();
-      date.setDate(date.getDate() + expirationDays);
-      return dateToTimestamp(date);
-    }
-
     this.save = function (autofill, value) {
-      localStorage.setItem(autofillToKey(autofill), JSON.stringify({
-        value: value,
-        expiration: expirationTimestamp()
-      }));
+      storage.setValue(autofillToKey(autofill), value, expirationDays);
     };
+
     this.restore = function (autofill) {
-      var key = autofillToKey(autofill);
-      var storedObjectAsString = localStorage.getItem(key);
-      if (storedObjectAsString) {
-        var storedObject = JSON.parse(storedObjectAsString);
-        if (storedObject.expiration > currentTimestamp()) {
-          return storedObject.value;
-        } else {
-          localStorage.removeItem(key);
-        }
-      }
-      return undefined;
+      storage.getValue(autofillToKey(autofill));
     };
+
   }
 
-  var valueStorage = new ValueStorage();
+  var autofillStorage = new AutofillStorage();
 
   function getElements(doc, selector) {
     return doc.querySelectorAll(selector) || [];
@@ -75,11 +48,11 @@
     function initializeValueCollectionForDocument(doc) {
       forAllAutofills(function (autofill) {
         var elementsToTrack = getElements(doc, autofill.listen_selector);
-        Array.prototype.forEach.call(elementsToTrack, function(elementToTrack) {
+        Array.prototype.forEach.call(elementsToTrack, function (elementToTrack) {
           var blurHandler = function (evt) {
             if (evt && evt.target) {
               var value = evt.target.value;
-              valueStorage.save(autofill, value);
+              autofillStorage.save(autofill, value);
             }
           };
           var eventType = 'blur';
@@ -107,7 +80,7 @@
 
   function populateValues() {
     forAllAutofills(function (autofill) {
-      var value = valueStorage.restore(autofill);
+      var value = autofillStorage.restore(autofill);
       value && forAllDocuments(function (doc) {
         var elements = getElements(doc, autofill.populate_selector);
         Array.prototype.forEach.call(elements, function (element) {
@@ -136,7 +109,7 @@
       return configuration;
     },
 
-    load: function () {
+    initialize: function () {
       function doLoad() {
         populateValues();
         initializeValueCollection();
@@ -147,9 +120,9 @@
       });
     },
 
-    unload: function () {
+    finalize: function () {
       finalizeValueCollection();
     }
   };
 
-})();
+});

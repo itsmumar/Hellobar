@@ -794,8 +794,8 @@ var HB = {
       return null;
     }
 
-    if (key.indexOf('gl_') != -1) {
-      return HB.getGeolocationData(key);
+    if (key.indexOf('gl_') !== -1) {
+      return hellobar('geolocation').getGeolocationData(key);
     }
     else {
       return HB.cookies.visitor[key];
@@ -835,78 +835,18 @@ var HB = {
     HB.saveCookies();
   },
 
-  // gets data from local storage
-  getLocalStorageData: function (name) {
-    //read the data(json string)
-    localData = window.localStorage.getItem(name);
-    if (localData != null) {
-      //parse the json string and extract expiration date
-      parsedData = JSON.parse(localData);
-
-      expDate = new Date(parsedData.expiration);
-      today = new Date;
-      if (today > expDate) {
-        //remove expired data
-        window.localStorage.removeItem(name);
-        return null;
-      } else {
-        //return valid data
-        return parsedData.value;
-      }
-    } else {
-      return null;
-    }
-  },
 
   // Gets a cookie
-  gc: function (name) {
-    localValue = HB.getLocalStorageData(name);
-    // return local storage data first
-    if (localValue != null) {
-      return unescape(localValue);
-    } else {
-      //instantiate few vars, and split all cookies into one of them
-      var i, x, y, c = document.cookie.split(';');
-      for (i = 0; i < c.length; i++) {
-        //get the key
-        x = c[i].substr(0, c[i].indexOf('='));
-        //get the value
-        y = c[i].substr(c[i].indexOf('=') + 1);
-        //strip whitespace
-        x = x.replace(/^\s+|\s+$/g, '');
-        //if value exists in cookies
-        if (x == name) {
-          //expire the cookie
-          document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-          //save value in localstorage
-          HB.sc(name, y)
-          //return value
-          return unescape(y);
-        }
-      }
-    }
+  // ADAPTER
+  gc: function (key) {
+    hellobar('base.storage').getValue(key);
   },
 
   // Sets a cookie
   // exdays can be number of days or a date object
-  sc: function (name, value, exdays, path) {
-    //no idea what HB_NC is
-    if (typeof(HB_NC) != 'undefined') {
-      return;
-    } else {
-      //set date to today?? if number of days to expiration has not been passed
-      var exdate = typeof exdays === 'object' ? exdays : new Date();
-      if (typeof exdays === 'number') {
-        //conver days to expiration to date
-        exdate.setDate(exdate.getDate() + exdays);
-      }
-
-      var dataToSave = {};
-      dataToSave.value = value;
-      dataToSave.expiration = exdate;
-      //save data and expiration date as a string
-      window.localStorage.setItem(name, JSON.stringify(dataToSave));
-    }
+  // ADAPTER
+  sc: function (key, value, exdays) {
+    hellobar('base.storage').setValue(key, value, exdays);
   },
 
   // Returns the visitor's unique ID which should be a random value
@@ -2272,64 +2212,6 @@ var HB = {
       return 'tablet';
     else
       return 'computer';
-  },
-
-  setGeolocationData: function (locationData) {
-    locationCookie = {
-      'gl_cty': locationData.city,
-      'gl_ctr': locationData.countryCode,
-      'gl_rgn': locationData.region
-    }
-
-    // Don't let any cookies get set without a site ID
-    if (typeof(HB_SITE_ID) != 'undefined') {
-      //refresh geolocation every month on not mobile
-      var expirationDays = 30;
-      //refresh geolocation every day on mobile
-      if (HB.getVisitorData('dv') === 'mobile')
-        expirationDays = 1;
-      HB.sc('hbglc_' + HB_SITE_ID, HB.serializeCookieValues(locationCookie), expirationDays);
-      HB.loadCookies();
-    }
-
-    return locationCookie;
-  },
-
-  /**
-   * Try getting geolocation data.
-   * If it's already saved in HB.cookies, then retrieve it.
-   * Otherwise send a request and save response to HB.cookies.location and HB.tmpLocationData variables.
-   * We need the latter for cases when setting cookies/localStorage data is disabled on current browser for some reason
-   * (otherwise we'd have an infinite loop from HB.showSiteElements() to HB.getGeolocationData() and back)
-   * @param key
-   * @returns {*}
-   */
-  getGeolocationData: function (key) {
-    var cachedLocation = HB.cookies.location[key];
-    if (cachedLocation)
-      return cachedLocation;
-    else if (HB.tmpLocationData && HB.tmpLocationData[key])
-      return HB.tmpLocationData[key];
-
-    var xhr = new XMLHttpRequest();
-    if (HB.geoRequestInProgress == false) {
-      xhr.open('GET', HB_GL_URL);
-      xhr.send(null);
-      HB.geoRequestInProgress = true;
-    }
-
-    xhr.onreadystatechange = function () {
-      var DONE = 4; // readyState 4 means the request is done.
-      var OK = 200; // status 200 is a successful return.
-      if (xhr.readyState === DONE) {
-        if (xhr.status === OK) {
-          var response = JSON.parse(xhr.responseText);
-          HB.tmpLocationData = HB.setGeolocationData(response); //store location data in memory (until the page is not reloaded)
-          HB.geoRequestInProgress = false;
-          HB.showSiteElements();
-        }
-      }
-    };
   },
 
   isIpAddress: function (ipaddress) {

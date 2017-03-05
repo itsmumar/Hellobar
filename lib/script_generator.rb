@@ -134,8 +134,36 @@ class ScriptGenerator < Mustache
     site.autofills.to_json
   end
 
+  def core_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/modules/core.js")
+  end
+
+  def base_ajax_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.ajax.js")
+  end
+
+  def base_dom_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.dom.js")
+  end
+
+  def base_site_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.site.js")
+  end
+
+  def base_storage_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.storage.js")
+  end
+
+  def geolocation_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/modules/geolocation/geolocation.js")
+  end
+
+  def geolocation_dom_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/modules/geolocation/geolocation.dom.js")
+  end
+
   def autofills_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/autofills/autofills.js")
+    File.read("#{Rails.root}/vendor/assets/javascripts/modules/autofills/autofills.js")
   end
 
   def ie_shims_js
