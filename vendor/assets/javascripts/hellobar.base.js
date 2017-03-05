@@ -186,7 +186,7 @@ var HB = {
   },
 
   isExternalURL: function (url) {
-    var regex = /https?:\/\/((?:[\w\d]+\.)+[\w\d]{2,})/i;
+    var regex = /^https?:\/\/([^\/]+)/i;
     return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1];
   },
 
