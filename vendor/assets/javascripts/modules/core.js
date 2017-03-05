@@ -16,7 +16,14 @@
     };
   }
 
-  function getModuleSafe(moduleName, configurator) {
+  function verifiedToBeNonEmpty(value, errorMessage) {
+    if (!value) {
+      throw new HellobarException(errorMessage || 'Required value is empty');
+    }
+    return value;
+  }
+
+  function getModuleSafe(moduleName, configurator, dependencies) {
     var moduleWrapper = moduleWrappers[moduleName];
     if (!moduleWrapper) {
       throw new HellobarException('Cannot find HelloBar module ' + moduleName +
@@ -26,13 +33,15 @@
     function loadDependencies() {
       var dependencyNames = moduleWrapper.dependencyNames || [];
       return dependencyNames.map(function (dependencyName) {
-        return getModuleSafe(dependencyName);
+        return dependencies ?
+          verifiedToBeNonEmpty(dependencies[dependencyName], 'Dependency ' + dependencyName + ' is not specified') :
+          getModuleSafe(dependencyName);
       });
     }
 
     if (!moduleWrapper.module) {
-      var dependencies = loadDependencies();
-      moduleWrapper.module = moduleWrapper.moduleFactory.apply(hellobar, dependencies);
+      var loadedDependencies = loadDependencies();
+      moduleWrapper.module = moduleWrapper.moduleFactory.apply(hellobar, loadedDependencies);
     }
     if (!moduleWrapper.initialized) {
       if (moduleWrapper.module.initialize) {
@@ -52,7 +61,8 @@
    */
   hellobar.module = function (moduleName, options) {
     var configurator = (options && options.configurator) || null;
-    return getModuleSafe(moduleName, configurator);
+    var dependencies = (options && options.dependencies) || null;
+    return getModuleSafe(moduleName, configurator, dependencies);
   };
 
   hellobar.finalize = function () {
