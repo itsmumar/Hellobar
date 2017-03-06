@@ -698,50 +698,16 @@ var HB = {
 
   // Takes a hash (either visitor or siteElement) and
   // serializes it into a string
+  // ADAPTER
   serializeCookieValues: function (hash) {
-    if (!hash)
-      return '';
-    var pairs = [];
-    for (var key in hash) {
-      var value = hash[key];
-      if (typeof(value) != 'function' && typeof(value) != 'object') {
-        // Key can not contain ':', but value can
-        pairs.push(HB.sanitizeCookieValue(key).replace(/:/g, '-') + ':' + HB.sanitizeCookieValue(value));
-      }
-    }
-    return pairs.join('|');
-  },
-
-  // Replaces all chars used within the serialization schema with a space
-  sanitizeCookieValue: function (value) {
-    return (value + '').replace(/[\^\|\,\;\n\r]/g, ' ');
+    return hellobar('base.serialization').serialize(hash);
   },
 
   // Called by parseCookies. Takes a string (either visitor or siteElement) and
   // parses it into a hash
+  // ADAPTER
   parseCookieValues: function (string) {
-    if (!string)
-      return {};
-    var pairs = string.split('|');
-    var results = {};
-    for (var i = 0; i < pairs.length; i++) {
-      var data = pairs[i].split(':');
-      var key = data[0];
-      var value = data.slice(1, data.length).join(':');
-
-      results[key] = HB.parseValue(value);
-    }
-    return results;
-  },
-
-  // Convert value to a number if it makes sense
-  parseValue: function (value) {
-    if (parseInt(value, 10) == value) {
-      value = parseInt(value, 10);
-    } else if (parseFloat(value) == value) {
-      value = parseFloat(value);
-    }
-    return value;
+    return hellobar('base.serialization').deserialize(string);
   },
 
   // Loads the cookies from the browser cookies into global hash HB.cookies
@@ -795,7 +761,12 @@ var HB = {
     }
 
     if (key.indexOf('gl_') !== -1) {
-      return hellobar('geolocation').getGeolocationData(key);
+      return hellobar('geolocation').getGeolocationData(key, function(data, isCached) {
+        if (isCached === false) {
+          HB.loadCookies();
+          HB.showSiteElements();
+        }
+      });
     }
     else {
       return HB.cookies.visitor[key];
