@@ -71,3 +71,6 @@ Style/NumericPredicate:
 
 Style/EmptyMethod:
   EnforcedStyle: expanded
+
+Style/MethodDefParentheses:
+  Enabled: false
