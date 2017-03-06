@@ -74,3 +74,7 @@ Style/NumericPredicate:
 # Include: spec/**/*, test/**/*
 Rails/HttpPositionalArguments:
   Enabled: false
+
+# SupportedStyles: referer, referrer
+Rails/RequestReferer:
+  EnforcedStyle: referrer

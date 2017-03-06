@@ -58,7 +58,7 @@ class UserController < ApplicationController
             render action: :edit
           else
             flash[:error] = error_message
-            redirect_to request.referer || after_sign_in_path_for(@user)
+            redirect_to request.referrer || after_sign_in_path_for(@user)
           end
         end
 
