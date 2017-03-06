@@ -23,6 +23,7 @@ class ScriptGenerator < Mustache
       # Re-read the template
       ScriptGenerator.load_templates
     end
+
     if options[:compress]
       Uglifier.new.compress(render)
     else

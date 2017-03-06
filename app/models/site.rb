@@ -515,9 +515,12 @@ class Site < ActiveRecord::Base
     update_column(:script_attempted_to_generate_at, Time.now)
 
     Timeout::timeout(20) do
-      generated_script_content = options[:script_content] || script_content(true)
+      store_site_scripts_locally = Hellobar::Settings[:store_site_scripts_locally]
+      compress_script = !store_site_scripts_locally
 
-      if Hellobar::Settings[:store_site_scripts_locally]
+      generated_script_content = options[:script_content] || script_content(compress_script)
+
+      if store_site_scripts_locally
         File.open(File.join(Rails.root, "public/generated_scripts/", script_name), "w") { |f| f.puts(generated_script_content) }
       else
         Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
@@ -534,6 +537,7 @@ class Site < ActiveRecord::Base
         end
       end
     end
+
     update_column(:script_generated_at, Time.now)
   end
 
@@ -556,6 +560,5 @@ class Site < ActiveRecord::Base
   def set_branding_on_site_elements
     site_elements.update_all(show_branding: !capabilities(true).remove_branding?)
   end
-
 
 end
