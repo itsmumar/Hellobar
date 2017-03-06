@@ -26,7 +26,7 @@ describe ServiceProviders::ConvertKit do
       @email = 'test@test.com'
       service_provider.instance_variable_set(:@contact_list, contact_list)
       @data = { api_key: identity.api_key, email: @email, tags: '' }
-      @uri = "forms/#{@form_id}/subscribe?api_secret=#{identity.api_key}"
+      @uri = "forms/#{ @form_id }/subscribe?api_secret=#{ identity.api_key }"
     end
 
     describe '#subscribe' do

@@ -20,7 +20,7 @@ module Hello::DataAPI
 
       site_element_ids = site_elements.map(&:id).sort
 
-      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.sort.join('-')}:lifetime_totals:#{num_days}days:#{site.script_installed_at.to_i}"
+      cache_key = "hello:data-api:#{ site.id }:#{ site_element_ids.sort.join('-') }:lifetime_totals:#{ num_days }days:#{ site.script_installed_at.to_i }"
       cache_options[:expires_in] = 10.minutes
 
       api_results = Rails.cache.fetch cache_key, cache_options do
@@ -128,7 +128,7 @@ module Hello::DataAPI
       return {} if contact_lists.empty?
       contact_list_ids = contact_lists.map(&:id).sort
 
-      cache_key = "hello:data-api:#{site.id}:#{contact_list_ids.sort.join('-')}:contact_list_totals:#{site.script_installed_at.to_i}"
+      cache_key = "hello:data-api:#{ site.id }:#{ contact_list_ids.sort.join('-') }:contact_list_totals:#{ site.script_installed_at.to_i }"
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
@@ -164,7 +164,7 @@ module Hello::DataAPI
 
       site_element_ids = site_elements.map(&:id).sort
 
-      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.sort.join('-')}:suggested_opportunities"
+      cache_key = "hello:data-api:#{ site.id }:#{ site_element_ids.sort.join('-') }:suggested_opportunities"
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
@@ -187,7 +187,7 @@ module Hello::DataAPI
     #
     def get_contacts(contact_list, limit = nil, from_timestamp = nil, cache_options = {})
       return fake_get_contacts(contact_list) if Hellobar::Settings[:fake_data_api]
-      cache_key = "hello:data-api:#{contact_list.site_id}:contact_list-#{contact_list.id}:from#{from_timestamp}:limit#{limit}"
+      cache_key = "hello:data-api:#{ contact_list.site_id }:contact_list-#{ contact_list.id }:from#{ from_timestamp }:limit#{ limit }"
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
@@ -223,10 +223,10 @@ module Hello::DataAPI
       now = Time.now
       duration = now.to_f - begin_time
       # Log the error
-      lines = ["[#{now}] Data API Error::#{e.class} (#{duration}s) - #{e.message.inspect} => #{url.inspect}"]
-      lines << "Response: #{response.inspect}" if response
+      lines = ["[#{ now }] Data API Error::#{ e.class } (#{ duration }s) - #{ e.message.inspect } => #{ url.inspect }"]
+      lines << "Response: #{ response.inspect }" if response
       caller[0..4].each do |line|
-        lines << "\t#{line}"
+        lines << "\t#{ line }"
       end
       # Write everything to the log
       File.open(File.join(Rails.root, 'log', 'data_api_error.log'), 'a') do |file|

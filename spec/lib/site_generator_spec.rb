@@ -87,7 +87,7 @@ describe SiteGenerator do
     def generate_path
       dir = Rails.root.join('spec/tmp')
       Dir.mkdir(dir) unless File.directory?(dir)
-      dir.join("#{SecureRandom.hex}.html")
+      dir.join("#{ SecureRandom.hex }.html")
     end
   end
 end

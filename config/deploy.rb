@@ -13,7 +13,7 @@ set :whenever_roles, %w(app db web)
 set :keep_releases, 50
 
 # Using `lambda` for lazy assigment. http://stackoverflow.com/a/25850619/1047207
-set :ember_app_path, -> { "#{release_path}/editor" }
+set :ember_app_path, -> { "#{ release_path }/editor" }
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -47,7 +47,7 @@ namespace :deploy do
     on roles(:web) do
       as :hellobar do
         execute 'mkdir -p /mnt/deploy/shared/sockets'
-        execute "cd #{release_path} && ./bin/load_env -- bundle exec thin restart -C config/thin/www.yml"
+        execute "cd #{ release_path } && ./bin/load_env -- bundle exec thin restart -C config/thin/www.yml"
       end
     end
   end
@@ -56,7 +56,7 @@ namespace :deploy do
     on roles(:web) do
       as :hellobar do
         execute 'mkdir -p /mnt/deploy/shared/sockets'
-        execute "cd #{release_path} && ./bin/load_env -- bundle exec thin stop -C config/thin/www.yml"
+        execute "cd #{ release_path } && ./bin/load_env -- bundle exec thin stop -C config/thin/www.yml"
       end
     end
   end
@@ -65,7 +65,7 @@ namespace :deploy do
     on roles(:web) do
       as :hellobar do
         execute 'mkdir -p /mnt/deploy/shared/sockets'
-        execute "cd #{release_path} && ./bin/load_env -- bundle exec thin start -C config/thin/www.yml"
+        execute "cd #{ release_path } && ./bin/load_env -- bundle exec thin start -C config/thin/www.yml"
       end
     end
   end
@@ -73,7 +73,7 @@ namespace :deploy do
   task :restart_queue_workers do
     on roles(:web) do
       as :hellobar do
-        execute "cd #{release_path} && RAILS_ENV=production bundle exec rake queue_worker:restart"
+        execute "cd #{ release_path } && RAILS_ENV=production bundle exec rake queue_worker:restart"
       end
     end
   end
@@ -81,7 +81,7 @@ namespace :deploy do
   task :stop_queue_workers do
     on roles(:web) do
       as :hellobar do
-        execute "cd #{release_path} && RAILS_ENV=production bundle exec rake queue_worker:stop"
+        execute "cd #{ release_path } && RAILS_ENV=production bundle exec rake queue_worker:stop"
       end
     end
   end
@@ -89,7 +89,7 @@ namespace :deploy do
   task :start_queue_workers do
     on roles(:web) do
       as :hellobar do
-        execute "cd #{release_path} && RAILS_ENV=production bundle exec rake queue_worker:start"
+        execute "cd #{ release_path } && RAILS_ENV=production bundle exec rake queue_worker:start"
       end
     end
   end
@@ -98,7 +98,7 @@ namespace :deploy do
     on roles(:web) do
       execute 'sudo service monit stop || sudo apt-get install monit'
       execute 'sudo rm /etc/monit/monitrc || true'
-      execute "sudo cp /mnt/deploy/current/config/deploy/monitrc/#{fetch(:stage)}.monitrc /etc/monit/monitrc"
+      execute "sudo cp /mnt/deploy/current/config/deploy/monitrc/#{ fetch(:stage) }.monitrc /etc/monit/monitrc"
       execute 'sudo chown root /etc/monit/monitrc'
       execute 'sudo service monit start'
       execute 'sudo monit restart all'
@@ -109,7 +109,7 @@ namespace :deploy do
 
   task :copy_additional_logrotate_files do
     on roles(:web) do
-      execute "sudo cp #{release_path}/config/deploy/logrotate.d/* /etc/logrotate.d/"
+      execute "sudo cp #{ release_path }/config/deploy/logrotate.d/* /etc/logrotate.d/"
     end
   end
 
@@ -167,8 +167,8 @@ namespace :deploy do
       current_revision = fetch :current_revision
 
       strategy.git 'remote update'
-      strategy.git "branch -f #{stage} #{current_revision}"
-      strategy.git "push -f origin #{stage}"
+      strategy.git "branch -f #{ stage } #{ current_revision }"
+      strategy.git "push -f origin #{ stage }"
     end
   end
 end

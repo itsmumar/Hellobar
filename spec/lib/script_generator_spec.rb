@@ -13,7 +13,7 @@ describe ScriptGenerator do
     let(:generator) { ScriptGenerator.new(site) }
 
     it 'renders the site id variable' do
-      expected_string = "HB_SITE_ID = #{site.id};"
+      expected_string = "HB_SITE_ID = #{ site.id };"
 
       generator.render.should include(expected_string)
     end
@@ -30,15 +30,15 @@ describe ScriptGenerator do
     it 'renders the HB_TZ timezone variable' do
       site.stub timezone: 'America/Chicago'
       Time.zone = 'America/Chicago'
-      expected_string = "HB_TZ = \"#{Time.zone.now.formatted_offset}\";"
+      expected_string = "HB_TZ = \"#{ Time.zone.now.formatted_offset }\";"
 
       generator.render.should include(expected_string)
     end
 
     it 'includes the minified hellobar css' do
       generator.stub :hellobar_container_css
-      hellobar_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/common.css")
-      element_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/bar/element.css")
+      hellobar_css = File.read("#{ Rails.root }/vendor/assets/stylesheets/site_elements/common.css")
+      element_css = File.read("#{ Rails.root }/vendor/assets/stylesheets/site_elements/bar/element.css")
 
       CSSMin.stub(:minify) { |x| x }
       result = generator.render
@@ -50,9 +50,9 @@ describe ScriptGenerator do
     it 'includes the hellobar container css' do
       generator.stub :hellobar_element_css
       allow(generator).to receive(:pro_secret) { 'random' }
-      container_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/container_common.css")
+      container_css = File.read("#{ Rails.root }/vendor/assets/stylesheets/site_elements/container_common.css")
       container_css.gsub!('hellobar-container', 'random-container')
-      element_container_css = File.read("#{Rails.root}/vendor/assets/stylesheets/site_elements/bar/container.css")
+      element_container_css = File.read("#{ Rails.root }/vendor/assets/stylesheets/site_elements/bar/container.css")
       element_container_css.gsub!('hellobar-container', 'random-container')
 
       CSSMin.stub(:minify) { |x| x }

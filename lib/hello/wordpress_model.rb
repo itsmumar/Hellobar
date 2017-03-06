@@ -3,10 +3,10 @@ module Hello
     self.abstract_class = true
 
     begin
-      establish_connection "wordpress_#{Rails.env}".to_sym
+      establish_connection "wordpress_#{ Rails.env }".to_sym
       @@connected = true
     rescue ActiveRecord::AdapterNotSpecified
-      Rails.logger.warn "database wordpress_#{Rails.env} does not exist"
+      Rails.logger.warn "database wordpress_#{ Rails.env } does not exist"
       @@connected = false
     end
 

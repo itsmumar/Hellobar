@@ -6,8 +6,8 @@ module BillsHelper
   end
 
   def coupon_label(coupon, uses)
-    label = "Coupon: #{coupon.label} (#{number_to_currency(coupon.amount)} each)"
-    label += " &times; #{uses}" if uses > 1
+    label = "Coupon: #{ coupon.label } (#{ number_to_currency(coupon.amount) } each)"
+    label += " &times; #{ uses }" if uses > 1
     label
   end
 

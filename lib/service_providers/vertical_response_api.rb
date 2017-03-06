@@ -51,7 +51,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
     if e.message == 'Contact already exists.'
       # Do nothing, this is raised when the email already exists or email is invalid
     else
-      log "Vertical Response error '#{e.message}'"
+      log "Vertical Response error '#{ e.message }'"
     end
   end
 

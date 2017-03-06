@@ -3,7 +3,7 @@ class IdentitiesController < ApplicationController
 
   def new
     if params[:api_key].blank?
-      redirect_to "/auth/#{params[:provider]}/?site_id=#{@site.id}&redirect_to=#{request.referrer}"
+      redirect_to "/auth/#{ params[:provider] }/?site_id=#{ @site.id }&redirect_to=#{ request.referrer }"
     else
       create
     end
@@ -20,7 +20,7 @@ class IdentitiesController < ApplicationController
     identity = Identity.where(site_id: @site.id, provider: params[:provider]).first_or_initialize
 
     if @site && identity.persisted?
-      flash[:error] = "Please disconnect your #{identity.provider_config[:name]} before adding a new one."
+      flash[:error] = "Please disconnect your #{ identity.provider_config[:name] } before adding a new one."
       return redirect_to site_contact_lists_path(@site)
     end
 
@@ -37,9 +37,9 @@ class IdentitiesController < ApplicationController
     end
 
     if identity.save
-      flash[:success] = "We've successfully connected your #{identity.provider_config[:name]} account."
+      flash[:success] = "We've successfully connected your #{ identity.provider_config[:name] } account."
     else
-      flash[:error] = "There was a problem connecting your #{identity.provider_config[:name]} account. Please try again later."
+      flash[:error] = "There was a problem connecting your #{ identity.provider_config[:name] } account. Please try again later."
     end
 
     redirect_to after_auth_redirect_url

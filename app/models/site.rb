@@ -49,7 +49,7 @@ class Site < ActiveRecord::Base
 
   def self.protocol_ignored_url(url)
     host = normalize_url(url).normalized_host if url.include?('http')
-    where('sites.url = ? OR sites.url = ?', "https://#{host}", "http://#{host}")
+    where('sites.url = ? OR sites.url = ?', "https://#{ host }", "http://#{ host }")
   end
 
   def self.script_installed_db
@@ -87,9 +87,9 @@ class Site < ActiveRecord::Base
   # to collect more data so that hopefully I can find the source of the
   # problem and then implement an appropriate fix.
   def debug_install(type)
-    lines = ["[#{Time.now}] #{type} - Site[#{id}] script_installed_at: #{script_installed_at.inspect}, script_uninstalled_at: #{script_uninstalled_at.inspect}, lifetime_totals: #{@lifetime_totals.inspect}"]
+    lines = ["[#{ Time.now }] #{ type } - Site[#{ id }] script_installed_at: #{ script_installed_at.inspect }, script_uninstalled_at: #{ script_uninstalled_at.inspect }, lifetime_totals: #{ @lifetime_totals.inspect }"]
     caller[0..4].each do |line|
-      lines << "\t#{line}"
+      lines << "\t#{ line }"
     end
 
     File.open(File.join(Rails.root, 'log', 'debug_install.log'), 'a') do |file|
@@ -170,17 +170,17 @@ class Site < ActiveRecord::Base
 
   def script_url
     if Hellobar::Settings[:store_site_scripts_locally]
-      "generated_scripts/#{script_name}"
+      "generated_scripts/#{ script_name }"
     elsif Hellobar::Settings[:script_cdn_url].present?
-      "#{Hellobar::Settings[:script_cdn_url]}/#{script_name}"
+      "#{ Hellobar::Settings[:script_cdn_url] }/#{ script_name }"
     else
-      "#{Hellobar::Settings[:s3_bucket]}.s3.amazonaws.com/#{script_name}"
+      "#{ Hellobar::Settings[:s3_bucket] }.s3.amazonaws.com/#{ script_name }"
     end
   end
 
   def script_name
     raise 'script_name requires ID' unless persisted?
-    "#{Site.id_to_script_hash(id)}.js"
+    "#{ Site.id_to_script_hash(id) }.js"
   end
 
   def script_content(compress = true)
@@ -301,17 +301,17 @@ class Site < ActiveRecord::Base
       subscription.save!
 
       if bill.due_at(payment_method) <= Time.now
-        audit << "Change plan, bill is due now: #{bill.inspect}"
+        audit << "Change plan, bill is due now: #{ bill.inspect }"
         result = bill.attempt_billing!
         if result.is_a?(BillingAttempt)
           success = result.success?
         elsif result.is_a?(TrueClass) || result.is_a?(FalseClass)
           success = result
         else
-          raise "Unexpected result: #{result.inspect}"
+          raise "Unexpected result: #{ result.inspect }"
         end
       else
-        audit << "Change plan, bill is due later: #{bill.inspect}"
+        audit << "Change plan, bill is due later: #{ bill.inspect }"
       end
 
       set_branding_on_site_elements
@@ -369,7 +369,7 @@ class Site < ActiveRecord::Base
   end
 
   def self.id_to_script_hash(id)
-    Digest::SHA1.hexdigest("bar#{id}cat")
+    Digest::SHA1.hexdigest("bar#{ id }cat")
   end
 
   def self.find_by_script(script_embed)
@@ -427,7 +427,7 @@ class Site < ActiveRecord::Base
       end
     end
     if actually_change
-      audit << "Changing subscription to #{subscription.inspect}"
+      audit << "Changing subscription to #{ subscription.inspect }"
     end
     bill = Bill::Recurring.new(subscription: subscription)
     if active_paid_bills.empty?
@@ -436,7 +436,7 @@ class Site < ActiveRecord::Base
       bill.grace_period_allowed = false
       bill.bill_at = now
       if actually_change
-        audit << "No active paid bills, charging full amount now: #{bill.inspect}"
+        audit << "No active paid bills, charging full amount now: #{ bill.inspect }"
       end
     else
       last_subscription = active_paid_bills.last.subscription
@@ -452,14 +452,14 @@ class Site < ActiveRecord::Base
         percentage_used = num_days_used.to_f / total_days_of_last_subcription
         percentage_unused = 1.0 - percentage_used
         if actually_change
-          audit << "now: #{now}, start_date: #{active_paid_bills.last.start_date}, end_date: #{active_paid_bills.last.end_date}, total_days_of_last_subscription: #{total_days_of_last_subcription.inspect}, num_days_used: #{num_days_used}, percentage_unused: #{percentage_unused}"
+          audit << "now: #{ now }, start_date: #{ active_paid_bills.last.start_date }, end_date: #{ active_paid_bills.last.end_date }, total_days_of_last_subscription: #{ total_days_of_last_subcription.inspect }, num_days_used: #{ num_days_used }, percentage_unused: #{ percentage_unused }"
         end
 
         unused_paid_amount = last_subscription.amount * percentage_unused
         # Subtract the unused paid amount from the price and round it
         bill.amount = (subscription.amount - unused_paid_amount).to_i
         if actually_change
-          audit << "Upgrade from active bill: #{active_paid_bills.last.inspect} changing from subscription #{active_paid_bills.last.subscription.inspect}, prorating amount now: #{bill.inspect}"
+          audit << "Upgrade from active bill: #{ active_paid_bills.last.inspect } changing from subscription #{ active_paid_bills.last.subscription.inspect }, prorating amount now: #{ bill.inspect }"
         end
       else
         # We are downgrading or staying the same, so just set the bill to start
@@ -468,7 +468,7 @@ class Site < ActiveRecord::Base
         bill.amount = subscription.amount
         bill.grace_period_allowed = true
         if actually_change
-          audit << "Downgrade from active bill: #{active_paid_bills.last.inspect} changing from subscription #{active_paid_bills.last.subscription.inspect}, charging full amount later: #{bill.inspect}"
+          audit << "Downgrade from active bill: #{ active_paid_bills.last.inspect } changing from subscription #{ active_paid_bills.last.subscription.inspect }, charging full amount later: #{ bill.inspect }"
         end
       end
     end
@@ -507,7 +507,7 @@ class Site < ActiveRecord::Base
           next unless site_element.wordpress_bar_id
           users.each do |user|
             if user.wordpress_user_id
-              name = "#{user.wordpress_user_id}_#{site_element.wordpress_bar_id}.js"
+              name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"
               Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
             end
           end
@@ -524,7 +524,7 @@ class Site < ActiveRecord::Base
   def standardize_url
     return if url.blank?
     normalized_url = self.class.normalize_url(url)
-    self.url = "#{normalized_url.scheme}://#{normalized_url.normalized_host}"
+    self.url = "#{ normalized_url.scheme }://#{ normalized_url.normalized_host }"
   rescue Addressable::URI::InvalidURIError
   end
 

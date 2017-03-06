@@ -34,7 +34,7 @@ class ObfuscatedID
             input -= val
             break if input <= 0
           end
-          raise "Error: #{output.inspect} with #{input.inspect}" if input != 0
+          raise "Error: #{ output.inspect } with #{ input.inspect }" if input != 0
         end
         outputs << output
       end

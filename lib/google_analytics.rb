@@ -18,7 +18,7 @@ class GoogleAnalytics
   def self.normalize_url(url)
     normalized_url = Site.normalize_url(url)
 
-    "#{normalized_url.scheme}://#{normalized_url.normalized_host}"
+    "#{ normalized_url.scheme }://#{ normalized_url.normalized_host }"
   end
 
   def find_account_by_url(url)
@@ -55,7 +55,7 @@ class GoogleAnalytics
         self.class.normalize_url(property.website_url) == self.class.normalize_url(url)
       }.profiles.first
 
-      ids = "ga:#{profile.id}"
+      ids = "ga:#{ profile.id }"
       start_date = '30daysAgo'
       end_date = 'today'
       metrics = 'ga:pageviews'

@@ -391,7 +391,7 @@ class Subscription < ActiveRecord::Base
         from_index = index if from_subscription.is_a?(plan)
         to_index = index if to_subscription.is_a?(plan)
       end
-      raise "Could not find plans (from_subscription: #{from_subscription.inspect} and to_subscription: #{to_subscription.inspect}, got #{from_index.inspect} and #{to_index.inspect}" unless from_index && to_index
+      raise "Could not find plans (from_subscription: #{ from_subscription.inspect } and to_subscription: #{ to_subscription.inspect }, got #{ from_index.inspect } and #{ to_index.inspect }" unless from_index && to_index
       @direction =
         if from_index == to_index
           0

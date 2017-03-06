@@ -58,21 +58,21 @@ class ServiceProvider
   def retry_on_timeout(max: 1)
     original_max = max
     loop do
-      raise "Timed out too many times (#{original_max})" if max == 0
+      raise "Timed out too many times (#{ original_max })" if max == 0
       max -= 1
 
       begin
         yield(self)
         break # will not break if exception is raised
       rescue Net::OpenTimeout => e
-        puts "Caught #{e}, retrying after 5 seconds"
+        puts "Caught #{ e }, retrying after 5 seconds"
         sleep 5
       end
     end
   end
 
   def log(message)
-    entry = "#{Time.current} [#{self.class.name}] #{message}"
+    entry = "#{ Time.current } [#{ self.class.name }] #{ message }"
 
     if defined? Rails
       Rails.logger.warn entry

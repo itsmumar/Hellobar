@@ -4,7 +4,7 @@ feature 'Days since last visit condition', js: true do
   def set_lv_cookie(page, days)
     page.execute_script("
       var d = new Date();
-      d.setDate(d.getDate() - (#{days}));
+      d.setDate(d.getDate() - (#{ days }));
       HB.setVisitorData('lv', (d.getTime())/1000);
     ")
   end

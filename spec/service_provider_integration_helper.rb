@@ -2,7 +2,7 @@ shared_context 'service provider request setup' do
   before do
     VCR.eject_cassette
 
-    stub_request(:any, Regexp.new(".*#{api_domain}.*"))
+    stub_request(:any, Regexp.new(".*#{ api_domain }.*"))
       .to_return(status: 200, body: %({"status":"200"}), headers: {})
 
     VCR.turned_off do
@@ -17,7 +17,7 @@ shared_context 'service provider request setup' do
                  site: site)
   end
 
-  let(:url)              { "http://#{api_domain}" }
+  let(:url)              { "http://#{ api_domain }" }
   let(:email)            { 'email@example.com' }
   let(:name)             { 'JohnDoe' }
   let(:optin)            { true }
@@ -33,5 +33,5 @@ def open_provider_form(user, pname)
 
   page.find('#edit-contact-list').click
   page.find('a', text: 'Nevermind, I want to view all tools').click
-  page.find(".#{pname}-provider").click
+  page.find(".#{ pname }-provider").click
 end

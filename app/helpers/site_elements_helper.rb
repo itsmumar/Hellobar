@@ -12,7 +12,7 @@ module SiteElementsHelper
 
   def activity_message_append_number_of_units(site_element, message)
     number_of_units = site_element_activity_units([site_element], plural: site_element.total_conversions > 1, verb: true)
-    message << " has already resulted in #{number_with_delimiter(site_element.total_conversions)} #{number_of_units}."
+    message << " has already resulted in #{ number_with_delimiter(site_element.total_conversions) } #{ number_of_units }."
     message
   end
 
@@ -28,16 +28,16 @@ module SiteElementsHelper
     message << ' Currently this bar is converting'
     if conversion_rate > group_conversion_rate
       lift = (conversion_rate - group_conversion_rate) / group_conversion_rate
-      message << " #{number_to_percentage(lift * 100, precision: 1)}" unless lift.infinite?
+      message << " #{ number_to_percentage(lift * 100, precision: 1) }" unless lift.infinite?
       message << ' better than'
     elsif group_conversion_rate > conversion_rate
       lift = (group_conversion_rate - conversion_rate) / conversion_rate
-      message << " #{number_to_percentage(lift * 100, precision: 1)}" unless lift.infinite?
+      message << " #{ number_to_percentage(lift * 100, precision: 1) }" unless lift.infinite?
       message << ' worse than'
     else
       message << ' exactly as well as'
     end
-    message << " your other #{site_element.short_subtype} bars."
+    message << " your other #{ site_element.short_subtype } bars."
     message
   end
 
@@ -97,13 +97,13 @@ module SiteElementsHelper
       when 'social/follow_on_pinterest'
         { unit: 'follower', verb: 'gained' }
       else
-        raise "#{element.element_subtype} not configured in this helper"
+        raise "#{ element.element_subtype } not configured in this helper"
       end
     end
     unit = units.uniq.size == 1 ? units.first[:unit] : 'conversion'
     verb = units.uniq.size == 1 ? units.first[:verb] : nil
     pluralized_unit = unit.pluralize(opts[:plural] ? 2 : 1)
-    verb && opts[:verb] ? "#{pluralized_unit} #{verb}" : pluralized_unit
+    verb && opts[:verb] ? "#{ pluralized_unit } #{ verb }" : pluralized_unit
   end
 
   def site_element_age(site_element)
@@ -120,7 +120,7 @@ module SiteElementsHelper
       else
         [(age / 1.year).to_i, 'year']
       end
-    "#{units[0]} <small>#{units[1].pluralize(units[0])} old</small>".html_safe
+    "#{ units[0] } <small>#{ units[1].pluralize(units[0]) } old</small>".html_safe
   end
 
   def type_icon_class_for_element(element)
@@ -156,9 +156,9 @@ module SiteElementsHelper
     letter = (index + A_OFFSET).chr
     winner = elements_in_group.max_by(&:conversion_percentage)
     if difference_is_significant?(elements_in_group) && site_element == winner
-      "<i class='testing-icon icon-tip #{site_element.short_subtype}'><span class='numbers'>#{letter}</span></i>".html_safe
+      "<i class='testing-icon icon-tip #{ site_element.short_subtype }'><span class='numbers'>#{ letter }</span></i>".html_safe
     else
-      "<i class='testing-icon icon-circle #{site_element.short_subtype}'><span class='numbers'>#{letter}</span></i>".html_safe
+      "<i class='testing-icon icon-circle #{ site_element.short_subtype }'><span class='numbers'>#{ letter }</span></i>".html_safe
     end
   end
 
@@ -204,7 +204,7 @@ module SiteElementsHelper
     headline = if site_element.blocks.present?
                  h = ''
                  site_element.blocks.each do |block|
-                   h += "#{block['content']['text']} " if block['id'].include?('headline')
+                   h += "#{ block['content']['text'] } " if block['id'].include?('headline')
                  end
                  h
                else

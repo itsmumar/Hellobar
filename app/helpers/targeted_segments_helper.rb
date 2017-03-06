@@ -11,7 +11,7 @@ module TargetedSegmentsHelper
     existing_rule = rule_for_segment_and_value(site, segment, value)
 
     if existing_rule
-      path = new_site_site_element_path(site, anchor: "/settings?rule_id=#{existing_rule.id}")
+      path = new_site_site_element_path(site, anchor: "/settings?rule_id=#{ existing_rule.id }")
       method = :get
     else
       token = generate_segment_token(targeted_segment)
@@ -40,12 +40,12 @@ module TargetedSegmentsHelper
   end
 
   def generate_segment_token(segment)
-    Digest::SHA1.hexdigest("#{SALT}#{segment}")
+    Digest::SHA1.hexdigest("#{ SALT }#{ segment }")
   end
 
   def segment_description(segment_and_value)
     segment, value = segment_and_value.split(':', 2)
     user_segment = Hello::Segments::User.find { |d| d[:key] == segment }
-    "#{user_segment[:name]} is #{value}"
+    "#{ user_segment[:name] } is #{ value }"
   end
 end

@@ -14,7 +14,7 @@ class SitesController < ApplicationController
   def new
     @site = Site.new(url: params[:url])
 
-    flash.now[:notice] = "Are you sure you want to add the site #{@site.url}?" if params[:url]
+    flash.now[:notice] = "Are you sure you want to add the site #{ @site.url }?" if params[:url]
   end
 
   def create

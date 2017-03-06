@@ -44,7 +44,7 @@ class SiteMembership < ActiveRecord::Base
                                .first
 
     if existing_membership || duplicate_membership
-      errors.add(:user, "already has a membership to #{site.url}")
+      errors.add(:user, "already has a membership to #{ site.url }")
     end
   end
 

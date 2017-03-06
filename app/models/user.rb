@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
   }
 
   scope :onboarding_sequence_before, lambda { |sequence_index|
-    where("user_onboarding_statuses.sequence_delivered_last < #{sequence_index} OR
+    where("user_onboarding_statuses.sequence_delivered_last < #{ sequence_index } OR
            user_onboarding_statuses.sequence_delivered_last IS NULL")
   }
 
@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
   def self.generate_temporary_user
     timestamp = Time.now.to_i
 
-    new_user = User.create email: "hello-#{timestamp}-#{rand(timestamp)}@hellobar.com", password: Digest::SHA1.hexdigest("hello-#{timestamp}-me"), status: TEMPORARY_STATUS
+    new_user = User.create email: "hello-#{ timestamp }-#{ rand(timestamp) }@hellobar.com", password: Digest::SHA1.hexdigest("hello-#{ timestamp }-me"), status: TEMPORARY_STATUS
 
     generate_temporary_user until new_user.valid?
 
@@ -163,7 +163,7 @@ class User < ActiveRecord::Base
     case notification
     when :reset_password_instructions
       if is_oauth_user?
-        reset_link = "#{host}/auth/google_oauth2"
+        reset_link = "#{ host }/auth/google_oauth2"
         MailerGateway.send_email('Reset Password Oauth', email, email: email, reset_link: reset_link)
       else
         reset_link = url_helpers.edit_user_password_url(self, reset_password_token: args[0], host: host)
@@ -214,7 +214,7 @@ class User < ActiveRecord::Base
   end
 
   def name
-    first_name || last_name ? "#{first_name} #{last_name}".strip : nil
+    first_name || last_name ? "#{ first_name } #{ last_name }".strip : nil
   end
 
   def send_invitation_email(site)
@@ -230,7 +230,7 @@ class User < ActiveRecord::Base
 
     if original_email.present? && info['email'] != original_email # the user is trying to login with a different Google account
       user = User.new
-      user.errors.add(:base, "Please log in with your #{original_email} Google email")
+      user.errors.add(:base, "Please log in with your #{ original_email } Google email")
     elsif user = User.joins(:authentications).find_by(authentications: { uid: access_token['uid'], provider: access_token['provider'] })
       user.first_name = info['first_name'] if info['first_name'].present?
       user.last_name = info['last_name'] if info['last_name'].present?
@@ -288,7 +288,7 @@ class User < ActiveRecord::Base
     host = Site.normalize_url(url).host
     if host
       domain = PublicSuffix.parse(host).domain
-      User.joins(:sites).where('url like ?', "%#{domain}%")
+      User.joins(:sites).where('url like ?', "%#{ domain }%")
     else
       User.none
     end
@@ -297,7 +297,7 @@ class User < ActiveRecord::Base
   end
 
   def self.search_by_username(username)
-    User.with_deleted.where('email like ?', "%#{username}%")
+    User.with_deleted.where('email like ?', "%#{ username }%")
   end
 
   def was_referred?
@@ -316,13 +316,13 @@ class User < ActiveRecord::Base
 
   def send_team_invite_email(site)
     host = ActionMailer::Base.default_url_options[:host]
-    login_link = is_oauth_user? ? "#{host}/auth/google_oauth2" : url_helpers.new_user_session_url(host: host)
+    login_link = is_oauth_user? ? "#{ host }/auth/google_oauth2" : url_helpers.new_user_session_url(host: host)
     MailerGateway.send_email('Team Invite', email, site_url: site.url, login_url: login_link)
   end
 
   def send_invite_token_email(site)
     host = ActionMailer::Base.default_url_options[:host]
-    oauth_link = "#{host}/auth/google_oauth2"
+    oauth_link = "#{ host }/auth/google_oauth2"
     signup_link = url_helpers.invite_user_url(invite_token: invite_token, host: host)
     MailerGateway.send_email('Invitation', email, site_url: site.url, oauth_link: oauth_link, signup_link: signup_link)
   end

@@ -84,7 +84,7 @@ module Hello
         # Used by other methods
         def generate_path(base_path, site_id, item_ids)
           item_ids = [item_ids] unless item_ids.is_a?(Array)
-          "/#{base_path}/#{ObfuscatedID.generate(site_id)}/#{item_ids.collect { |e| ObfuscatedID.generate(e) }.join(',')}"
+          "/#{ base_path }/#{ ObfuscatedID.generate(site_id) }/#{ item_ids.collect { |e| ObfuscatedID.generate(e) }.join(',') }"
         end
 
         def sign_path_and_params(path, params, read_key)
@@ -103,7 +103,7 @@ module Hello
         # NOTE: This is using the unencoded values for the params because
         # we don't want to get different signatures if one library encodes a
         # space as "+" and another as "%20" for example
-        sorted_param_pairs = (params.keys - ['s']).sort.collect { |k| "#{k}=#{params[k]}" }
+        sorted_param_pairs = (params.keys - ['s']).sort.collect { |k| "#{ k }=#{ params[k] }" }
 
         signature = HMAC::SHA512.hexdigest(key, path + '?' + sorted_param_pairs.join('|'))
         signature

@@ -45,7 +45,7 @@ module FeatureHelper
   private
 
   def scroll_and_click(link_label, scroll_class)
-    page.execute_script("var step = $('.#{scroll_class}'); step.scrollTop(step.height())")
+    page.execute_script("var step = $('.#{ scroll_class }'); step.scrollTop(step.height())")
     page.find('a', text: link_label).click
   end
 end

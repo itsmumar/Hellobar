@@ -5,7 +5,7 @@ feature 'Every x number of sessions condition', js: true do
     page.execute_script("
       var d = new Date();
       HB.setVisitorData('lv', (d.getTime())/1000);
-      HB.setVisitorData('ns', #{sessions});
+      HB.setVisitorData('ns', #{ sessions });
     ")
   end
 

@@ -5,11 +5,11 @@ class Theme < ActiveHash::Base
   ELEMENT_CSS_FILENAME   = 'element'
 
   def container_css_path
-    Dir["#{directory}/*"].detect { |f| f.include?(CONTAINER_CSS_FILENAME) }
+    Dir["#{ directory }/*"].detect { |f| f.include?(CONTAINER_CSS_FILENAME) }
   end
 
   def element_css_path
-    Dir["#{directory}/*"].detect { |f| f.include?(ELEMENT_CSS_FILENAME) }
+    Dir["#{ directory }/*"].detect { |f| f.include?(ELEMENT_CSS_FILENAME) }
   end
 
   def with_image?

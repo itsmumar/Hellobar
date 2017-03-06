@@ -35,7 +35,7 @@ module ServiceProviders
         response_hash['forms'].map { |form| { 'id' => form['id'], 'name' => form['name'] } }
       else
         error_message = JSON.parse(response.body)['error']
-        log "getting forms returned '#{error_message}' with the code #{response.status}"
+        log "getting forms returned '#{ error_message }' with the code #{ response.status }"
         raise error_message
       end
     end
@@ -48,7 +48,7 @@ module ServiceProviders
         response_hash['tags'].map { |tag| { 'id' => tag['id'], 'name' => tag['name'] } }
       else
         error_message = JSON.parse(response.body)['error']
-        log "getting tags returned '#{error_message}' with the code #{response.status}"
+        log "getting tags returned '#{ error_message }' with the code #{ response.status }"
         raise error_message
       end
     end
@@ -71,19 +71,19 @@ module ServiceProviders
       end
 
       begin
-        response = make_api_call('post', "forms/#{form_id}/subscribe", body: body)
+        response = make_api_call('post', "forms/#{ form_id }/subscribe", body: body)
 
         if response.success?
           response
         else
           error_message = JSON.parse(response.body)['error']
-          log "sync error #{email} sync returned '#{error_message}' with the code #{response.status}"
+          log "sync error #{ email } sync returned '#{ error_message }' with the code #{ response.status }"
         end
 
       rescue Faraday::TimeoutError
         log 'sync timed out'
       rescue => error
-        log "sync raised #{error}"
+        log "sync raised #{ error }"
       end
     end
 
@@ -98,14 +98,14 @@ module ServiceProviders
     def valid?
       !!lists
     rescue => error
-      log "getting tags raised #{error}"
+      log "getting tags raised #{ error }"
       false
     end
 
     private
 
     def make_api_call(method, path, options = {})
-      path += "?api_secret=#{@identity.api_key}"
+      path += "?api_secret=#{ @identity.api_key }"
 
       case method
       when 'get'

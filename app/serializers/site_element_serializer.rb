@@ -33,7 +33,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :open_in_new_window, :placement, :default_email_thank_you_text
 
   SiteElement::QUESTION_DEFAULTS.keys.each do |attr_name|
-    define_method "#{attr_name}_placeholder" do
+    define_method "#{ attr_name }_placeholder" do
       SiteElement::QUESTION_DEFAULTS[attr_name]
     end
   end
@@ -66,11 +66,11 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site_preview_image
-    object.site ? proxied_url2png("?url=#{ERB::Util.url_encode(object.site.url)}") : ''
+    object.site ? proxied_url2png("?url=#{ ERB::Util.url_encode(object.site.url) }") : ''
   end
 
   def site_preview_image_mobile
-    object.site ? proxied_url2png("?url=#{ERB::Util.url_encode(object.site.url)}&viewport=320x568") : ''
+    object.site ? proxied_url2png("?url=#{ ERB::Util.url_encode(object.site.url) }&viewport=320x568") : ''
   end
 
   def proxied_url2png(params)
@@ -78,14 +78,14 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def url2png(params)
-    css_url = "http://#{Hellobar::Settings[:host]}/stylesheets/hide_bar.css"
+    css_url = "http://#{ Hellobar::Settings[:host] }/stylesheets/hide_bar.css"
     # Include CSS to hide any Hello Bar already there
-    params += "&custom_css_url=#{ERB::Util.url_encode(css_url)}"
+    params += "&custom_css_url=#{ ERB::Util.url_encode(css_url) }"
     # Cache for 7 days
-    params += "&ttl=#{7 * 24 * 60 * 60}"
+    params += "&ttl=#{ 7 * 24 * 60 * 60 }"
     # Calculate the token
-    token = Digest::MD5.hexdigest("#{params}SC10DF8C7E0FE8")
-    "https://api.url2png.com/v6/P52EBC321291EF/#{token}/png/#{params}"
+    token = Digest::MD5.hexdigest("#{ params }SC10DF8C7E0FE8")
+    "https://api.url2png.com/v6/P52EBC321291EF/#{ token }/png/#{ params }"
   end
 
   def errors

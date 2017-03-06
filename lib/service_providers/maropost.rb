@@ -16,7 +16,7 @@ module ServiceProviders
     def lists
       found_lists = []
       begin
-        response = @client.get "accounts/#{@account_id}/lists.json",
+        response = @client.get "accounts/#{ @account_id }/lists.json",
           auth_token: @api_key,
           no_counts: true
 
@@ -25,13 +25,13 @@ module ServiceProviders
           found_lists = response_hash.collect { |list| { 'id' => list['id'], 'name' => list['name'] } }
         else
           error_message = response.body
-          log "getting lists returned '#{error_message}' with the code #{response.status}"
+          log "getting lists returned '#{ error_message }' with the code #{ response.status }"
         end
 
       rescue Faraday::TimeoutError
         log 'getting lists timed out'
       rescue => error
-        log "getting lists raised #{error}"
+        log "getting lists raised #{ error }"
       end
 
       found_lists
@@ -46,7 +46,7 @@ module ServiceProviders
       end
 
       response = @client.post do |request|
-        request.url "accounts/#{@account_id}/lists/#{list_id}/contacts.json"
+        request.url "accounts/#{ @account_id }/lists/#{ list_id }/contacts.json"
         request.body = {
           auth_token: @api_key,
           contact: {
@@ -63,13 +63,13 @@ module ServiceProviders
         response
       else
         error_message = response.body
-        log "sync error #{email} sync returned '#{error_message}' with the code #{response.status}"
+        log "sync error #{ email } sync returned '#{ error_message }' with the code #{ response.status }"
       end
 
     rescue Faraday::TimeoutError
       log 'sync timed out'
     rescue => error
-      log "sync raised #{error}"
+      log "sync raised #{ error }"
     end
 
     def batch_subscribe(list_id, subscribers, _double_optin = true)

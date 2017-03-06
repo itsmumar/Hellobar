@@ -13,7 +13,7 @@ require 'fileutils'
 class GrandCentralApi
   class << self
     def request_log_path
-      File.join(Rails.root, 'log', "grand-central-api_#{Rails.env}.log")
+      File.join(Rails.root, 'log', "grand-central-api_#{ Rails.env }.log")
     end
 
     def digest
@@ -46,7 +46,7 @@ class GrandCentralApi
     def initialize(code, body)
       @code = code
       @body = body
-      super("#{@code} error - #{@body}")
+      super("#{ @code } error - #{ @body }")
     end
   end
 
@@ -70,7 +70,7 @@ class GrandCentralApi
   # is a status indicating if the mail was already sent, if there
   # was an error or if the it queued up to be sent
   def send_mail(mail, data)
-    request("/api/send/#{CGI.escape(mail)}", data)
+    request("/api/send/#{ CGI.escape(mail) }", data)
   end
 
   # This checks if the mail specified by mail (e.g. "Welcome")
@@ -81,7 +81,7 @@ class GrandCentralApi
   # is a status indicating if the mail was already sent, if there
   # was an error or if the it queued up to be sent
   def sent_mail(mail, data)
-    request("/api/sent/#{CGI.escape(mail)}", data)
+    request("/api/sent/#{ CGI.escape(mail) }", data)
   end
 
   protected

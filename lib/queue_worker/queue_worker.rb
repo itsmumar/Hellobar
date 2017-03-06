@@ -7,14 +7,14 @@ class QueueWorker
     def delay(task_name, options = {})
       queue = options.delete(:queue_name)
       namespace = options.delete(:namespace) || self.class.name
-      body = "#{namespace.underscore.downcase}:#{task_name}[#{id}]".gsub(/^:/, '')
+      body = "#{ namespace.underscore.downcase }:#{ task_name }[#{ id }]".gsub(/^:/, '')
       if Rails.env.development? || Rails.env.test?
         begin
           # Ensure private methods are called.
           method(task_name).call
         rescue NoMethodError => e
-          if e.message.include?("undefined method `#{task_name}'")
-            raise "Not sure how to queue task '#{body}' because there is no method #{self.class}##{task_name}: #{$ERROR_INFO}"
+          if e.message.include?("undefined method `#{ task_name }'")
+            raise "Not sure how to queue task '#{ body }' because there is no method #{ self.class }##{ task_name }: #{ $ERROR_INFO }"
           else
             raise e
           end
@@ -48,7 +48,7 @@ class QueueWorker
     queue_name ||= Hellobar::Settings[:main_queue] || 'test_queue'
     stage ||= Hellobar::Settings[:env_name]
 
-    raise ArgumentError, "Stage is required to be one of #{STAGES}" unless STAGES.include?(stage)
+    raise ArgumentError, "Stage is required to be one of #{ STAGES }" unless STAGES.include?(stage)
     raise ArgumentError, 'Message must be defined' unless message && !message.empty?
     raise ArgumentError, 'Queue name must be defined' unless queue_name
 
@@ -57,7 +57,7 @@ class QueueWorker
       q.url.split('/').last == queue_name
     end
 
-    Rails.logger.info "[#{Time.now}] Sending #{message} to #{@queue.url}"
+    Rails.logger.info "[#{ Time.now }] Sending #{ message } to #{ @queue.url }"
     receipt = @queue.send_message(message)
     Rails.logger.info receipt.to_s
   end

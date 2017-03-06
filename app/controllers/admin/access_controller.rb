@@ -10,7 +10,7 @@ class Admin::AccessController < ApplicationController
     elsif params[:new_password] != params[:new_password_again]
       @error = 'Your new passwords did not match each other'
     elsif !params[:new_password] || params[:new_password].length < Admin::MIN_PASSWORD_LENGTH
-      @error = "New password must be at least #{Admin::MIN_PASSWORD_LENGTH} chars"
+      @error = "New password must be at least #{ Admin::MIN_PASSWORD_LENGTH } chars"
     elsif params[:new_password] == params[:existing_password]
       @error = 'New password must be different than existing password.'
     end

@@ -44,7 +44,7 @@ describe IdentitiesController do
 
     it 'should redirect to auth path when api_key param is not present' do
       stub_current_user @identity.site.users.first
-      redirect_path = "/auth/my_cool_provider/?site_id=#{@identity.site.id}&redirect_to=my_cool_referrer"
+      redirect_path = "/auth/my_cool_provider/?site_id=#{ @identity.site.id }&redirect_to=my_cool_referrer"
 
       get :new, provider: 'my_cool_provider', site_id: @identity.site.id
 

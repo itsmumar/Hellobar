@@ -76,7 +76,7 @@ unless defined?(Hellobar::Settings)
   config[:dynamo_tables] = {}
 
   dynamo_tables.each do |table|
-    config[:dynamo_tables][table.to_sym] = yaml['dynamo_tables'].try(:[], table) || "test_#{table}"
+    config[:dynamo_tables][table.to_sym] = yaml['dynamo_tables'].try(:[], table) || "test_#{ table }"
   end
 
   config[:identity_providers] = {

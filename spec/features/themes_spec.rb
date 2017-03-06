@@ -18,7 +18,7 @@ feature 'Users can select a design theme for SiteElements', :js do
     expect(page).to have_content 'Themes'
 
     # select the theme
-    within "div[data-theme-id='#{theme_id}']" do
+    within "div[data-theme-id='#{ theme_id }']" do
       find('a', visible: false).trigger 'click'
     end
 

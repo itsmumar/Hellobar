@@ -13,7 +13,7 @@ pattern = filter == 'all' ? nil : /#{filter}/
 num_jobs = 0
 total_jobs = 0
 files.each_with_index do |file, i|
-  puts "Reading file #{(i + 1)} of #{files.length} #{file.inspect} ..."
+  puts "Reading file #{ (i + 1) } of #{ files.length } #{ file.inspect } ..."
   File.open(file, 'r') do |fp|
     loop do
       line = fp.gets
@@ -25,12 +25,12 @@ files.each_with_index do |file, i|
         QueueWorker.send_sqs_message(line, Hellobar::Settings[:env_name], Hellobar::Settings[:low_priority_queue])
         num_jobs += 1
       rescue Exception => e
-        puts "Failed on #{line.inspect}"
+        puts "Failed on #{ line.inspect }"
         raise
       end
     end
   end
-  puts "\tAdded #{num_jobs} matching #{filter.inspect} from #{file.inspect}..."
+  puts "\tAdded #{ num_jobs } matching #{ filter.inspect } from #{ file.inspect }..."
   total_jobs += num_jobs
 end
-puts "Added #{total_jobs} jobs total"
+puts "Added #{ total_jobs } jobs total"

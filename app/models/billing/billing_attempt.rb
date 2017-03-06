@@ -59,10 +59,10 @@ class BillingAttempt < ActiveRecord::Base
     self.response = response
     save!
     if success?
-      audit << "Attempt was successful, marking Bill[#{bill.id}] as paid with response #{response.inspect}"
+      audit << "Attempt was successful, marking Bill[#{ bill.id }] as paid with response #{ response.inspect }"
       bill.paid!
     else
-      audit << "Attempt was not successful (#{response.inspect}) - not changing Bill[#{bill.id}] status"
+      audit << "Attempt was not successful (#{ response.inspect }) - not changing Bill[#{ bill.id }] status"
     end
     self
   end

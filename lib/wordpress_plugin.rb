@@ -6,7 +6,7 @@ class WordpressPlugin
 
   def initialize(site)
     @site = site
-    @file = Tempfile.new("hellobar_wp_plugin-#{Time.current.to_i}.zip")
+    @file = Tempfile.new("hellobar_wp_plugin-#{ Time.current.to_i }.zip")
   end
 
   def content

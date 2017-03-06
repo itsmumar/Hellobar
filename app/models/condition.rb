@@ -66,13 +66,13 @@ class Condition < ActiveRecord::Base
     elsif segment == 'EveryXSession'
       every_x_sessions_sentence
     elsif segment == 'TimeCondition'
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value[0]}:#{value[1]}"
+      "#{ segment_data[:name] } #{ OPERANDS[operand] } #{ value[0] }:#{ value[1] }"
     else
       name = segment == 'CustomCondition' ? custom_segment : segment_data[:name]
       if operand.to_s == 'between'
-        "#{name} is between #{value.first} and #{value.last}"
+        "#{ name } is between #{ value.first } and #{ value.last }"
       else
-        "#{name} #{OPERANDS[operand]} #{value}"
+        "#{ name } #{ OPERANDS[operand] } #{ value }"
       end
     end
   end
@@ -102,9 +102,9 @@ class Condition < ActiveRecord::Base
   def multiple_condition_sentence
     # value might be not an array for old rules created before value type was changed
     if !value.is_a?(Array) || (value.count == 1)
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.is_a?(Array) ? value.first : value}"
+      "#{ segment_data[:name] } #{ OPERANDS[operand] } #{ value.is_a?(Array) ? value.first : value }"
     else
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other#{value.count == 2 ? '' : 's'}"
+      "#{ segment_data[:name] } #{ OPERANDS[operand] } #{ value.first } or #{ value.count - 1 } other#{ value.count == 2 ? '' : 's' }"
     end
   end
 
@@ -113,7 +113,7 @@ class Condition < ActiveRecord::Base
     if value.to_i == 1
       'Every session'
     else
-      "Every #{value.to_i.ordinalize} session"
+      "Every #{ value.to_i.ordinalize } session"
     end
   end
 
@@ -190,9 +190,9 @@ class Condition < ActiveRecord::Base
     # Don't do anything if it starts with '/' or "http(s)://"
     return url if url =~ /^(https?:\/\/|\/)/i
     if PublicSuffix.valid?(url.split('/').first)
-      "http://#{url}"
+      "http://#{ url }"
     else
-      "/#{url}"
+      "/#{ url }"
     end
   end
 

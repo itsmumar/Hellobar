@@ -17,7 +17,7 @@ class Admin::UsersController < ApplicationController
       end
 
       if params[:q].strip =~ /\d{4}/
-        users += PaymentMethodDetails.where('data like ?', "%-#{params[:q].strip}%").map(&:user).compact
+        users += PaymentMethodDetails.where('data like ?', "%-#{ params[:q].strip }%").map(&:user).compact
       end
 
       @users = Kaminari.paginate_array(users.uniq).page(params[:page]).per(24)
@@ -31,7 +31,7 @@ class Admin::UsersController < ApplicationController
   def destroy
     @user = User.find(params[:id])
     if @user.destroy
-      flash[:success] = "Deleted user #{@user.id} (#{@user.email})"
+      flash[:success] = "Deleted user #{ @user.id } (#{ @user.email })"
       redirect_to admin_users_path
     else
       flash[:error] = 'Failed to delete user.'

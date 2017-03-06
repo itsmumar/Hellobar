@@ -105,3 +105,6 @@ Style/WordArray:
   # smaller than a certain size.  The rule is only applied to arrays
   # whose element count is greater than or equal to `MinSize`.
   MinSize: 3
+
+Style/SpaceInsideStringInterpolation:
+  EnforcedStyle: space

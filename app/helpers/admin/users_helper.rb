@@ -20,7 +20,7 @@ module Admin::UsersHelper
   end
 
   def bill_duration(bill)
-    "#{us_short_datetime(bill.start_date)}-#{us_short_datetime(bill.end_date)}"
+    "#{ us_short_datetime(bill.start_date) }-#{ us_short_datetime(bill.end_date) }"
   end
 
   def site_info_or_form(site)

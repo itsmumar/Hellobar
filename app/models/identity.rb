@@ -53,7 +53,7 @@ class Identity < ActiveRecord::Base
     @service_provider ||= service_provider_class.new(identity: self, contact_list: options[:contact_list])
   rescue *EmailSynchronizer::ESP_ERROR_CLASSES => e
     if service_provider_class.oauth?
-      Rails.logger.warn "Removing identity #{id}\n#{e.message}"
+      Rails.logger.warn "Removing identity #{ id }\n#{ e.message }"
       destroy_and_notify_user
     end
     nil

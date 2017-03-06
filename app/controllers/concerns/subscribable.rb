@@ -41,7 +41,7 @@ module Subscribable
   end
 
   def build_subscription_instance(billing_params)
-    "Subscription::#{billing_params[:plan].camelize}".constantize.new schedule: billing_params[:schedule]
+    "Subscription::#{ billing_params[:plan].camelize }".constantize.new schedule: billing_params[:schedule]
   end
 
   def track_subscription_change(site, old_subscription)

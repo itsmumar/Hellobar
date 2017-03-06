@@ -38,7 +38,7 @@ class SiteMembershipsController < ApplicationController
       @site_membership = @site.site_memberships.create(user: user, role: 'admin')
       if @site_membership.valid?
         @site_membership.user.send_invitation_email(@site_membership.site)
-        notice = "#{user.email} has been invited to #{@site.url}."
+        notice = "#{ user.email } has been invited to #{ @site.url }."
       else
         notice = @site_membership.errors.full_messages.join('. ')
       end

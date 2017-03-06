@@ -635,7 +635,7 @@ describe Site do
       # Delete the attempt
       # We have to do this monkey business to get around the fact that
       # BillingAttmps are read only
-      BillingAttempt.connection.execute("TRUNCATE #{BillingAttempt.table_name}")
+      BillingAttempt.connection.execute("TRUNCATE #{ BillingAttempt.table_name }")
       @site.bills_with_payment_issues(true).should == []
     end
   end

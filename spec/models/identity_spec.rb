@@ -191,7 +191,7 @@ describe Identity do
 
       %w(my_emma my_emma_js my_emma_iframe my_emma_popup).each do |file|
         let(:file) { file }
-        it "works with My Emma #{file}".strip do
+        it "works with My Emma #{ file }".strip do
           service_provider.list_url.should == 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a'
           service_provider.action_url.should == service_provider.list_url # same for my emma
           service_provider.email_param.should == 'email'

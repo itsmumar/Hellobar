@@ -18,7 +18,7 @@ feature 'Payment modal interaction', :js do
       basic_plan = find('.package-block.basic')
       basic_plan.find('.button').click
 
-      expect(page).to have_content "until #{end_date.strftime('%-m-%-d-%Y')}"
+      expect(page).to have_content "until #{ end_date.strftime('%-m-%-d-%Y') }"
     end
   end
 
@@ -66,7 +66,7 @@ feature 'Payment modal interaction', :js do
 
       find('.toggle-showing-branding .toggle-off').click
 
-      expect(page).to have_content "Upgrade #{site.normalized_url} to remove branding"
+      expect(page).to have_content "Upgrade #{ site.normalized_url } to remove branding"
     end
 
     scenario 'trying to enable bar hiding triggers the Pro Upgrade popup' do
@@ -86,7 +86,7 @@ feature 'Payment modal interaction', :js do
 
       find('.toggle-hiding .toggle-on').click
 
-      expect(page).to have_content "Upgrade #{site.normalized_url} to allow hiding a bar"
+      expect(page).to have_content "Upgrade #{ site.normalized_url } to allow hiding a bar"
     end
   end
 end

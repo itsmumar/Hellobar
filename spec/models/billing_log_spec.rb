@@ -11,7 +11,7 @@ end
 describe BillingAuditTrail do
   fixtures :all
   before do
-    BillingLog.connection.execute("DELETE FROM #{BillingLog.table_name}")
+    BillingLog.connection.execute("DELETE FROM #{ BillingLog.table_name }")
   end
 
   it 'should allow us to call audit on an object' do
@@ -67,7 +67,7 @@ describe BillingAuditTrail do
 
     # we have to escape everything in this string because sometimes - if you're in a detached head state, for instance - the
     # value of GitUtils.current_commit will be "???" or something else that will potentially mess up the regex
-    current_commit = GitUtils.current_commit.gsub(/.{1}/) { |m| m =~ /[a-z0-9]/ ? m : "\\#{m}" }
+    current_commit = GitUtils.current_commit.gsub(/.{1}/) { |m| m =~ /[a-z0-9]/ ? m : "\\#{ m }" }
 
     log.source_file.should =~ /#{current_commit} @ .*?billing_log_spec\.rb:#{__LINE__ - 8}/
   end

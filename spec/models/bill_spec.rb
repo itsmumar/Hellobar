@@ -294,7 +294,7 @@ describe Bill do
       bill = bills(:past_due_bill)
       pm = payment_methods(:joeys)
       # Get around destroying read-only records
-      BillingAttempt.connection.execute("DELETE FROM #{BillingAttempt.table_name}")
+      BillingAttempt.connection.execute("DELETE FROM #{ BillingAttempt.table_name }")
       bill.should_bill?.should == true
       bill.past_due?.should == true
       bill.problem_with_payment?(pm).should == false

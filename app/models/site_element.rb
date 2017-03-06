@@ -6,7 +6,7 @@ class SiteElement < ActiveRecord::Base
   TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade]
 
   DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'
-  DEFAULT_FREE_EMAIL_THANK_YOU = "#{DEFAULT_EMAIL_THANK_YOU} If you would like this sort of bar on your site..."
+  DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site..."
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,
     1 => :custom_thank_you_text,
@@ -137,7 +137,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def related_site_elements
-    site.site_elements.where.not(id: id).where(SiteElement.arel_table[:element_subtype].matches("%#{short_subtype}%"))
+    site.site_elements.where.not(id: id).where(SiteElement.arel_table[:element_subtype].matches("%#{ short_subtype }%"))
   end
 
   def has_activity_message?
@@ -201,10 +201,10 @@ class SiteElement < ActiveRecord::Base
           if TEMPLATE_NAMES.include?(subtype)
             types = Theme.find_by(id: subtype.tr('_', '-')).element_types
             if types.include?(type.to_s)
-              templates << "#{type.name.downcase}_#{subtype}"
+              templates << "#{ type.name.downcase }_#{ subtype }"
             end
           else
-            templates << "#{type.name.downcase}_#{subtype}"
+            templates << "#{ type.name.downcase }_#{ subtype }"
           end
         end
       end
@@ -248,11 +248,11 @@ class SiteElement < ActiveRecord::Base
   end
 
   def content_upgrade_key
-    "#{Site.id_to_script_hash(site.id)}/#{id}.pdf"
+    "#{ Site.id_to_script_hash(site.id) }/#{ id }.pdf"
   end
 
   def content_upgrade_download_link
-    "https://s3.amazonaws.com/#{Hellobar::Settings[:s3_content_upgrades_bucket]}/#{Site.id_to_script_hash(site.id)}/#{id}.pdf"
+    "https://s3.amazonaws.com/#{ Hellobar::Settings[:s3_content_upgrades_bucket] }/#{ Site.id_to_script_hash(site.id) }/#{ id }.pdf"
   end
 
   def content_upgrade_script_tag

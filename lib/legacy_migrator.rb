@@ -11,7 +11,7 @@ class LegacyMigrator
       Thread.abort_on_exception = true
 
       @migrated_memberships = {}
-      puts "[#{Time.now}] Start"
+      puts "[#{ Time.now }] Start"
       load_wp_emails
       preload_data
       migrate_sites_and_users_and_memberships
@@ -21,7 +21,7 @@ class LegacyMigrator
       migrate_site_timezones
       migrate_admins
 
-      puts "[#{Time.now}] Done reading, writing..."
+      puts "[#{ Time.now }] Done reading, writing..."
       threads = []
       threads << set_subscriptions
       threads << save_to_db(@migrated_memberships)
@@ -32,7 +32,7 @@ class LegacyMigrator
       threads << save_to_db(@migrated_rules)
       threads.each(&:join)
       save_to_db(@rules_to_migrate_later) # must happen after initial rules are created to prevent ID collision
-      puts "[#{Time.now}] Done writing"
+      puts "[#{ Time.now }] Done writing"
       # Probably a good idea to load the subscriptions into the site object for
       # checking capabbilities, etc
 
@@ -52,18 +52,18 @@ class LegacyMigrator
       escaped_two_months_from_now = ActiveRecord::Base.sanitize(two_months_from_now)
       subscription_id = 0
       optimize_inserts do
-        puts "[#{Time.now}] Done writing, changing subscription..."
+        puts "[#{ Time.now }] Done writing, changing subscription..."
         @migrated_sites.each do |_, site|
           # Direct inserts
-          ActiveRecord::Base.connection.execute("INSERT INTO #{Subscription.table_name} VALUES (NULL, NULL, #{site.id}, 'Subscription::FreePlus', 0, 0.00, 25000, NULL, NULL, #{escaped_now}, NULL)")
+          ActiveRecord::Base.connection.execute("INSERT INTO #{ Subscription.table_name } VALUES (NULL, NULL, #{ site.id }, 'Subscription::FreePlus', 0, 0.00, 25000, NULL, NULL, #{ escaped_now }, NULL)")
           subscription_id += 1
           # This bill and next bill
-          ActiveRecord::Base.connection.execute("INSERT INTO #{Bill.table_name} VALUES
-          (NULL, #{subscription_id}, 1, 'Bill::Recurring', 0.00, NULL, NULL, 0, #{escaped_now}, #{escaped_now}, #{escaped_one_month_from_now}, #{escaped_now}, #{escaped_now}),
-          (NULL, #{subscription_id}, 0, 'Bill::Recurring', 0.00, 'Monthly Renewal', NULL, 1, #{escaped_one_month_from_now}, #{escaped_one_month_from_now}, #{escaped_two_months_from_now}, NULL, #{escaped_now})")
-          puts "[#{Time.now}] Changing subscription #{subscription_id}..." if subscription_id % 5000 == 0
+          ActiveRecord::Base.connection.execute("INSERT INTO #{ Bill.table_name } VALUES
+          (NULL, #{ subscription_id }, 1, 'Bill::Recurring', 0.00, NULL, NULL, 0, #{ escaped_now }, #{ escaped_now }, #{ escaped_one_month_from_now }, #{ escaped_now }, #{ escaped_now }),
+          (NULL, #{ subscription_id }, 0, 'Bill::Recurring', 0.00, 'Monthly Renewal', NULL, 1, #{ escaped_one_month_from_now }, #{ escaped_one_month_from_now }, #{ escaped_two_months_from_now }, NULL, #{ escaped_now })")
+          puts "[#{ Time.now }] Changing subscription #{ subscription_id }..." if subscription_id % 5000 == 0
         end
-        puts "[#{Time.now}] Done inserting subscriptions"
+        puts "[#{ Time.now }] Done inserting subscriptions"
       end
     end
 
@@ -81,11 +81,11 @@ class LegacyMigrator
           if item.is_a?(Array)
             klass = item.first.class
             count += 1
-            puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 5000 == 0
+            puts "[#{ Time.now }] Saving #{ count } #{ klass }..." if count % 5000 == 0
             item.each { |i| i.save(validate: false) }
           else
             count += 1
-            puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 5000 == 0
+            puts "[#{ Time.now }] Saving #{ count } #{ klass }..." if count % 5000 == 0
             item.save(validate: false)
           end
         end
@@ -103,7 +103,7 @@ class LegacyMigrator
     end
 
     def preload(klass, key_method = :id, type = :single)
-      puts "[#{Time.now}] Loading #{klass}..."
+      puts "[#{ Time.now }] Loading #{ klass }..."
       if type == :single
         results = {}
         klass.all.each do |object|
@@ -142,7 +142,7 @@ class LegacyMigrator
 
     def migrate_sites_and_users_and_memberships
       count = 0
-      puts "[#{Time.now}] migrate_sites_and_users_and_memberships.."
+      puts "[#{ Time.now }] migrate_sites_and_users_and_memberships.."
 
       @legacy_sites.each do |_, legacy_site|
         begin
@@ -162,7 +162,7 @@ class LegacyMigrator
 
           @migrated_sites[site.id] = site
           count += 1
-          puts "[#{Time.now}] Migrated #{count} sites" if count % 5000 == 0
+          puts "[#{ Time.now }] Migrated #{ count } sites" if count % 5000 == 0
         rescue ActiveRecord::RecordInvalid => e
           raise e.inspect
         end
@@ -208,10 +208,10 @@ class LegacyMigrator
             end
 
             goal_count += 1
-            puts "[#{Time.now}] Migrated #{goal_count} goals to rules" if goal_count % 100 == 0
+            puts "[#{ Time.now }] Migrated #{ goal_count } goals to rules" if goal_count % 100 == 0
 
             if non_mobile_bars.empty? && mobile_bars.empty?
-              Rails.logger.info "WTF: Legacy Goal #{legacy_goal.id} has no bars!"
+              Rails.logger.info "WTF: Legacy Goal #{ legacy_goal.id } has no bars!"
               next
             end
           end
@@ -250,7 +250,7 @@ class LegacyMigrator
             segment_name = rule.conditions.first.segment_data[:name]
             index = site_rules.select { |r| r.conditions.any? && r.conditions.first.segment_data[:name] == segment_name }.index(rule) + 1
 
-            rule.name = "#{segment_name} Rule ##{index}"
+            rule.name = "#{ segment_name } Rule ##{ index }"
           end
         end
       end
@@ -327,7 +327,7 @@ class LegacyMigrator
         next unless legacy_goal.type == 'Goals::CollectEmail'
 
         unless @migrated_sites[legacy_goal.site_id]
-          Rails.logger.info "WTF:Legacy Site: #{legacy_goal.site_id} doesnt exist for Goal: #{legacy_goal.id}"
+          Rails.logger.info "WTF:Legacy Site: #{ legacy_goal.site_id } doesnt exist for Goal: #{ legacy_goal.id }"
           next
         end
 
@@ -340,7 +340,7 @@ class LegacyMigrator
 
         if legacy_id_int = @legacy_identity_integrations[legacy_goal.id]
           unless identity = @migrated_identities[legacy_id_int.identity_id]
-            Rails.logger.info "WTF:Identity: #{legacy_id_int.identity_id} doesnt exist for Goal: #{legacy_goal.id}"
+            Rails.logger.info "WTF:Identity: #{ legacy_id_int.identity_id } doesnt exist for Goal: #{ legacy_goal.id }"
             next
           end
 
@@ -359,13 +359,13 @@ class LegacyMigrator
         @migrated_contact_lists_by_site[contact_list.site_id] << contact_list
 
         count += 1
-        puts "[#{Time.now}] Migrated #{count} contact lists" if count % 100 == 0
+        puts "[#{ Time.now }] Migrated #{ count } contact lists" if count % 100 == 0
       end
 
       @migrated_contact_lists.each do |_, list|
         if list.name.nil?
           index = @migrated_contact_lists_by_site[list.site_id].index(list)
-          list.name = index == 0 ? 'My Contacts' : "My Contacts #{index + 1}"
+          list.name = index == 0 ? 'My Contacts' : "My Contacts #{ index + 1 }"
         end
       end
     end
@@ -386,9 +386,9 @@ class LegacyMigrator
 
           count += 1
           @migrated_identities[identity.id] = identity
-          puts "[#{Time.now}] Migrated #{count} identities" if count % 100 == 0
+          puts "[#{ Time.now }] Migrated #{ count } identities" if count % 100 == 0
         else
-          Rails.logger.info "WTF:Legacy Site: #{legacy_id.site_id} doesnt exist for Identity: #{legacy_id.id}"
+          Rails.logger.info "WTF:Legacy Site: #{ legacy_id.site_id } doesnt exist for Identity: #{ legacy_id.id }"
         end
       end
     end
@@ -445,13 +445,13 @@ class LegacyMigrator
       legacy_memberships = @legacy_memberships[legacy_account.id]
 
       if legacy_memberships.size != 1
-        Rails.logger.info "WTF:Legacy Membership has #{legacy_memberships.size} memberships for Account:#{account_id}" if legacy_memberships.size != 1
+        Rails.logger.info "WTF:Legacy Membership has #{ legacy_memberships.size } memberships for Account:#{ account_id }" if legacy_memberships.size != 1
       else
         legacy_membership = legacy_memberships.first
         legacy_user = @legacy_users[legacy_membership.user_id]
 
         unless legacy_user
-          Rails.logger.info "WTF:Legacy Membership: #{legacy_membership.id} has no users!"
+          Rails.logger.info "WTF:Legacy Membership: #{ legacy_membership.id } has no users!"
           return
         end
 
@@ -517,7 +517,7 @@ class LegacyMigrator
       when 'Goals::CollectEmail'
         'email'
       when 'Goals::SocialMedia'
-        "social/#{legacy_goal.data_json['interaction']}"
+        "social/#{ legacy_goal.data_json['interaction'] }"
       end
     end
   end

@@ -13,7 +13,7 @@ class Admin::BillsController < ApplicationController
   def void
     bill = Bill.find(params[:bill_id])
     bill.void!
-    flash[:success] = "Voided bill due on #{bill.due_at.strftime('%D')} for #{bill.amount}."
+    flash[:success] = "Voided bill due on #{ bill.due_at.strftime('%D') } for #{ bill.amount }."
     redirect_to admin_user_path(params[:user_id])
   end
 
@@ -22,9 +22,9 @@ class Admin::BillsController < ApplicationController
     begin
       amount = params[:bill_recurring][:amount].to_f
       bill.refund!(nil, amount)
-      flash[:success] = "Refund successful: Refunded #{amount} of #{bill.amount}."
+      flash[:success] = "Refund successful: Refunded #{ amount } of #{ bill.amount }."
     rescue BillingAttempt::InvalidRefund, Bill::InvalidBillingAmount => e
-      flash[:error] = "Refund error: #{e.message}"
+      flash[:error] = "Refund error: #{ e.message }"
     end
 
     redirect_to admin_user_path(params[:user_id])

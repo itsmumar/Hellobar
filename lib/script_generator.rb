@@ -5,8 +5,8 @@ require 'hmac-sha2'
 class ScriptGenerator < Mustache
   class << self
     def load_templates
-      self.template_path = "#{Rails.root}/lib/script_generator/"
-      self.template_file = "#{Rails.root}/lib/script_generator/template.js.mustache"
+      self.template_path = "#{ Rails.root }/lib/script_generator/"
+      self.template_file = "#{ Rails.root }/lib/script_generator/template.js.mustache"
     end
   end
   load_templates
@@ -51,7 +51,7 @@ class ScriptGenerator < Mustache
   def pro_secret
     @pro_secret ||= begin
       random_string = ('a'..'z').to_a[rand(26)]
-      random_string << Digest::SHA1.hexdigest("#{rand(1_000_000)}#{site.url.to_s.upcase}#{site.id}#{Time.now.to_f}#{rand(1_000_000)}")
+      random_string << Digest::SHA1.hexdigest("#{ rand(1_000_000) }#{ site.url.to_s.upcase }#{ site.id }#{ Time.now.to_f }#{ rand(1_000_000) }")
       random_string
     end
   end
@@ -107,17 +107,17 @@ class ScriptGenerator < Mustache
   end
 
   def site_element_classes_js
-    js = File.read("#{Rails.root}/vendor/assets/javascripts/site_elements/site_element.js")
+    js = File.read("#{ Rails.root }/vendor/assets/javascripts/site_elements/site_element.js")
 
     klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
     klasses.each do |klass|
-      js << "\n" << File.read("#{Rails.root}/vendor/assets/javascripts/site_elements/#{klass.name.downcase}.js")
+      js << "\n" << File.read("#{ Rails.root }/vendor/assets/javascripts/site_elements/#{ klass.name.downcase }.js")
     end
     js
   end
 
   def hellobar_base_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/hellobar.base.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/hellobar.base.js")
   end
 
   def autofills_json
@@ -125,24 +125,24 @@ class ScriptGenerator < Mustache
   end
 
   def autofills_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/autofills/autofills.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/autofills/autofills.js")
   end
 
   def ie_shims_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/hellobar_script/ie_shims.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/hellobar_script/ie_shims.js")
   end
 
   def crypto_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/hellobar_script/crypto.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/hellobar_script/crypto.js")
   end
 
   def jquery_lib
-    File.read("#{Rails.root}/vendor/assets/javascripts/jquery-2.2.4.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/jquery-2.2.4.js")
   end
 
   def hellobar_container_css
     css = read_css_files(container_css_files)
-    css = css.gsub('hellobar-container', "#{pro_secret}-container")
+    css = css.gsub('hellobar-container', "#{ pro_secret }-container")
 
     CSSMin.minify(css).to_json
   end
@@ -154,7 +154,7 @@ class ScriptGenerator < Mustache
 
   def branding_templates
     [].tap do |r|
-      Dir.glob("#{Rails.root}/lib/script_generator/branding/*.html") do |f|
+      Dir.glob("#{ Rails.root }/lib/script_generator/branding/*.html") do |f|
         ActiveSupport.escape_html_entities_in_json = false
         content = File.read(f).to_json
         ActiveSupport.escape_html_entities_in_json = true
@@ -165,7 +165,7 @@ class ScriptGenerator < Mustache
 
   def content_upgrade_template
     [].tap do |r|
-      f = "#{Rails.root}/lib/script_generator/contentupgrade/contentupgrade.html"
+      f = "#{ Rails.root }/lib/script_generator/contentupgrade/contentupgrade.html"
       ActiveSupport.escape_html_entities_in_json = false
       content = File.read(f).to_json
       ActiveSupport.escape_html_entities_in_json = true
@@ -256,7 +256,7 @@ class ScriptGenerator < Mustache
   end
 
   def content_header(element_class)
-    File.read("#{Rails.root}/lib/script_generator/#{element_class}/header.html")
+    File.read("#{ Rails.root }/lib/script_generator/#{ element_class }/header.html")
   end
 
   def content_markup(element_class, type, category = :generic)
@@ -264,20 +264,20 @@ class ScriptGenerator < Mustache
     fname = ''
 
     if category == :generic
-      base = "#{Rails.root}/lib/script_generator"
-      fname = "#{base}/#{element_class}/#{type.tr('/', '_').underscore}.html"
-      fname = "#{base}/#{type.tr('/', '_').underscore}.html" unless File.exist?(fname)
+      base = "#{ Rails.root }/lib/script_generator"
+      fname = "#{ base }/#{ element_class }/#{ type.tr('/', '_').underscore }.html"
+      fname = "#{ base }/#{ type.tr('/', '_').underscore }.html" unless File.exist?(fname)
     else
-      base = "#{Rails.root}/lib/themes/#{category.to_s.pluralize}/#{type.tr('_', '-')}"
-      fname = "#{base}/#{element_class}.html"
-      fname = "#{base}/element.html" unless File.exist?(fname)
+      base = "#{ Rails.root }/lib/themes/#{ category.to_s.pluralize }/#{ type.tr('_', '-') }"
+      fname = "#{ base }/#{ element_class }.html"
+      fname = "#{ base }/element.html" unless File.exist?(fname)
     end
 
     File.read(fname)
   end
 
   def content_footer(element_class)
-    File.read("#{Rails.root}/lib/script_generator/#{element_class}/footer.html")
+    File.read("#{ Rails.root }/lib/script_generator/#{ element_class }/footer.html")
   end
 
   def site_element_settings(site_element)
@@ -335,7 +335,7 @@ class ScriptGenerator < Mustache
       question: site_element.question,
       font: site_element.font.value,
       google_font: site_element.font.google_font,
-      branding_url: "http://www.hellobar.com?sid=#{site_element.id}",
+      branding_url: "http://www.hellobar.com?sid=#{ site_element.id }",
       closable: site_element.is_a?(Bar) || site_element.is_a?(Slider) ? site_element.closable : false,
       contact_list_id: site_element.contact_list_id,
       conversion_rate: conversion_rate,
@@ -357,7 +357,7 @@ class ScriptGenerator < Mustache
       subtype: site_element.short_subtype,
       tab_side: 'right',
       target: site_element.target_segment,
-      template_name: "#{site_element.class.name.downcase}_#{site_element.element_subtype}",
+      template_name: "#{ site_element.class.name.downcase }_#{ site_element.element_subtype }",
       thank_you_text: SiteElement.sanitize(site_element.display_thank_you_text).gsub(/"/, '&quot;'),
       views: views,
       updated_at: site_element.updated_at.to_f * 1000,
@@ -396,18 +396,18 @@ class ScriptGenerator < Mustache
   end
 
   def container_css_files
-    vendor_root = "#{Rails.root}/vendor/assets/stylesheets/site_elements"
-    files = ["#{vendor_root}/container_common.css"]
+    vendor_root = "#{ Rails.root }/vendor/assets/stylesheets/site_elements"
+    files = ["#{ vendor_root }/container_common.css"]
 
-    files += element_classes.map { |klass| "#{vendor_root}/#{klass.name.downcase}/container.css" }
+    files += element_classes.map { |klass| "#{ vendor_root }/#{ klass.name.downcase }/container.css" }
     files += element_themes.map(&:container_css_path)
   end
 
   def element_css_files
-    vendor_root = "#{Rails.root}/vendor/assets/stylesheets/site_elements"
-    files = ["#{vendor_root}/common.css"]
+    vendor_root = "#{ Rails.root }/vendor/assets/stylesheets/site_elements"
+    files = ["#{ vendor_root }/common.css"]
 
-    files += element_classes.map { |klass| "#{vendor_root}/#{klass.name.downcase}/element.css" }
+    files += element_classes.map { |klass| "#{ vendor_root }/#{ klass.name.downcase }/element.css" }
     files += element_themes.map(&:element_css_path)
   end
 

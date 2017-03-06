@@ -41,12 +41,12 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   def subscriber_statuses(contact_list, emails)
     result = {}
 
-    conditions = emails.map { |email| "email LIKE '%#{email}%'" }.join(' OR ')
+    conditions = emails.map { |email| "email LIKE '%#{ email }%'" }.join(' OR ')
     contact_list_logs = contact_list.contact_list_logs.select(:email).where(conditions).pluck(:email)
 
     emails.each do |email|
       result[email] =
-        if contact_list_logs.include?(email) || contact_list_logs.include?("\"#{email}\"")
+        if contact_list_logs.include?(email) || contact_list_logs.include?("\"#{ email }\"")
           'Sent'
         else
           'Not sent'
@@ -55,7 +55,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
     result
   rescue => e
-    Rails.logger.warn("#{contact_list.site.url} - #{e.message}")
+    Rails.logger.warn("#{ contact_list.site.url } - #{ e.message }")
     {}
   end
 
@@ -75,7 +75,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
   def batch_subscribe(list_id, subscribers, double_optin = true)
-    log "Queuing #{subscribers.size} emails to remote service."
+    log "Queuing #{ subscribers.size } emails to remote service."
 
     bodies = subscribers.map do |subscriber|
       hashify_options(subscriber[:email], subscriber[:name], double_optin)
@@ -84,7 +84,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     operations = bodies.map do |body|
       {
         method: 'POST',
-        path: "lists/#{list_id}/members",
+        path: "lists/#{ list_id }/members",
         body: body.to_json
       }
     end
@@ -99,22 +99,22 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def log(message)
     if message.is_a? String
-      Rails.logger.info("#{site.url} - #{message}")
+      Rails.logger.info("#{ site.url } - #{ message }")
     else
       result = message
       error_count = 0
       if result['errors']
         non_already_subscribed_errors = result['errors'].select { |e| e['code'] != 214 }
         error_count = non_already_subscribed_errors.count
-        message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " \
-                  "#{error_count} errors that weren't just existing subscribers."
+        message = "Added #{ result['add_count'] } emails, updated #{ result['update_count'] } emails. " \
+                  "#{ error_count } errors that weren't just existing subscribers."
       end
 
       if error_count > 0
-        message += "\nA sample of those errors:\n#{non_already_subscribed_errors[0...20].join("\n")}"
-        Rails.logger.error("#{site.url} - #{message}")
+        message += "\nA sample of those errors:\n#{ non_already_subscribed_errors[0...20].join("\n") }"
+        Rails.logger.error("#{ site.url } - #{ message }")
       else
-        Rails.logger.info("#{site.url} - #{message}")
+        Rails.logger.info("#{ site.url } - #{ message }")
       end
 
       return super message.inspect
@@ -173,11 +173,11 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     # pause identity by deleting it
     user = @identity.site.users.first
     if user.has_temporary_email?
-      Rails.logger.warn "Cannot catch required_merge_var error for Identity #{@identity.id} -- user has not yet added their email address."
+      Rails.logger.warn "Cannot catch required_merge_var error for Identity #{ @identity.id } -- user has not yet added their email address."
       return
     end
 
-    Rails.logger.info "required_merge_var_error for Contact List #{@identity.id}. Deleting identity and sending email to #{user.email}."
+    Rails.logger.info "required_merge_var_error for Contact List #{ @identity.id }. Deleting identity and sending email to #{ user.email }."
 
     contact_list_url = Router.new.site_contact_list_url(site, @contact_list, host: Hellobar::Settings[:host])
 
@@ -189,7 +189,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 <p>To fix this, please follow these two steps:</p>
 
 <p>1. Log into your MailChimp account, select your list, then choose Settings > List fields and Merge tags. Once there, deselect "required" for all fields. Alternately, you may choose a different list to sync with Hellobar.</p>
-<p>2. Follow this link to resume syncing your Hello Bar contacts to Mailchimp: <a href="#{contact_list_url}">#{contact_list_url}</a></p>
+<p>2. Follow this link to resume syncing your Hello Bar contacts to Mailchimp: <a href="#{ contact_list_url }">#{ contact_list_url }</a></p>
 
 <p>We understand why you might want to require fields on some forms. In such cases, please consider using a separate MailChimp list for those forms. </p>
 

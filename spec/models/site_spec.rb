@@ -288,7 +288,7 @@ describe Site do
 
       # First, generate for site, then for the site element
       expect(@mock_storage).to receive(:create_or_update_file_with_contents).with(anything, anything).ordered
-      expect(@mock_storage).to receive(:create_or_update_file_with_contents).with("#{user.wordpress_user_id}_#{site_element.wordpress_bar_id}.js", anything).ordered
+      expect(@mock_storage).to receive(:create_or_update_file_with_contents).with("#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js", anything).ordered
       site.send(:generate_static_assets)
     end
   end
@@ -599,7 +599,7 @@ describe Site do
     it 'returns true when the script is installed at the url' do
       site_element = create(:site_element)
       site = site_element.site
-      allow(HTTParty).to receive(:get).and_return("<html><script src='#{site_element.site.script_url}'></html>")
+      allow(HTTParty).to receive(:get).and_return("<html><script src='#{ site_element.site.script_url }'></html>")
       expect(site.script_installed_on_homepage?).to be(true)
     end
 

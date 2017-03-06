@@ -17,7 +17,7 @@ module SiteGeneratorHelper
   end
 
   def site_path_to_url(path)
-    "/#{INTEGRATION_SITE_DIRECTORY}/#{path.basename}"
+    "/#{ INTEGRATION_SITE_DIRECTORY }/#{ path.basename }"
   end
 
   private

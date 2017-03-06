@@ -23,7 +23,7 @@ module EmailSynchronizer
   def sync_all!
     return unless syncable?
 
-    Rails.logger.info "Syncing all emails for contact_list #{id}"
+    Rails.logger.info "Syncing all emails for contact_list #{ id }"
 
     perform_sync do
       contacts = Hello::DataAPI.get_contacts(self) || []
@@ -85,7 +85,7 @@ module EmailSynchronizer
       Raven.capture_exception(e)
       if oauth?
         # Clear identity on failure
-        Rails.logger.warn "Removing identity #{identity.try(:id)}\n#{e.message}"
+        Rails.logger.warn "Removing identity #{ identity.try(:id) }\n#{ e.message }"
         identity.try(:destroy_and_notify_user)
       end
     else

@@ -101,11 +101,11 @@ class Admin < ActiveRecord::Base
 
 If this is you, click this link to continue logging in:
 
-        It's me let me in -> #{validate_url}
+        It's me let me in -> #{ validate_url }
 
 If this is not you, this may be an attack and you should lock down the admin by clicking this link:
 
-        Not me, lock it down -> #{lockdown_url}
+        Not me, lock it down -> #{ lockdown_url }
 
 "
     )
@@ -187,7 +187,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
       subject: 'Your password has been reset',
       body: "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
 
-        Not me, lock it down -> #{lockdown_url}
+        Not me, lock it down -> #{ lockdown_url }
 
 "
     )
@@ -238,7 +238,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def encrypt_password(plaintext)
-    Digest::SHA256.hexdigest("#{SALT}#{plaintext}#{email}#{initial_password}")
+    Digest::SHA256.hexdigest("#{ SALT }#{ plaintext }#{ email }#{ initial_password }")
   end
 
   def access_token_key(token, timestamp)
@@ -256,7 +256,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def active_support_encryptor
-    key_to_encrypt = Digest::SHA256.hexdigest("#{SALT}#{email}#{initial_password}")
+    key_to_encrypt = Digest::SHA256.hexdigest("#{ SALT }#{ email }#{ initial_password }")
     @encryptor ||= ActiveSupport::MessageEncryptor.new(key_to_encrypt)
   end
 

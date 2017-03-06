@@ -44,7 +44,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   validates_with CyberSourceCreditCardValidator
 
   def name
-    "#{brand ? brand.capitalize : 'Credit Card'} ending in #{card.number ? card.number[-4..-1] : '???'}"
+    "#{ brand ? brand.capitalize : 'Credit Card' } ending in #{ card.number ? card.number[-4..-1] : '???' }"
   end
 
   def grace_period
@@ -100,19 +100,19 @@ class CyberSourceCreditCard < PaymentMethodDetails
     raise 'Can not charge money until saved' unless persisted? && token
     return true, 'Amount was zero' if amount_in_dollars == 0
     if !amount_in_dollars || amount_in_dollars < 0
-      raise "Invalid amount: #{amount_in_dollars.inspect}"
+      raise "Invalid amount: #{ amount_in_dollars.inspect }"
     end
     begin
       response = HB::CyberSource.gateway.purchase(amount_in_dollars * 100, formatted_token, order_id: order_id)
 
-      audit << "Charging #{amount_in_dollars.inspect}, got response: #{response.inspect}"
+      audit << "Charging #{ amount_in_dollars.inspect }, got response: #{ response.inspect }"
       if response.success?
         return true, response.authorization
       else
         return false, response.message
       end
     rescue Exception => e
-      audit << "Error charging #{amount_in_dollars.inspect}: #{e.message}"
+      audit << "Error charging #{ amount_in_dollars.inspect }: #{ e.message }"
       raise
     end
   end
@@ -121,7 +121,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     raise 'Can not refund money until saved' unless persisted? && token
     return true, 'Amount was zero' if amount_in_dollars == 0
     if !amount_in_dollars || amount_in_dollars < 0
-      raise "Invalid amount: #{amount_in_dollars.inspect}"
+      raise "Invalid amount: #{ amount_in_dollars.inspect }"
     end
     unless original_transaction_id
       raise 'Can not refund without original transaction ID'
@@ -129,14 +129,14 @@ class CyberSourceCreditCard < PaymentMethodDetails
     begin
       response = HB::CyberSource.gateway.refund(amount_in_dollars * 100, original_transaction_id)
 
-      audit << "Refunding #{amount_in_dollars.inspect} to #{original_transaction_id.inspect}, got response: #{response.inspect}"
+      audit << "Refunding #{ amount_in_dollars.inspect } to #{ original_transaction_id.inspect }, got response: #{ response.inspect }"
       if response.success?
         return true, response.authorization
       else
         return false, response.message
       end
     rescue Exception => e
-      audit << "Error refunding #{amount_in_dollars.inspect} to #{original_transaction_id.inspect}: #{e.message}"
+      audit << "Error refunding #{ amount_in_dollars.inspect } to #{ original_transaction_id.inspect }: #{ e.message }"
       raise
     end
   end
@@ -163,12 +163,12 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def format_token(token)
-    ";#{token};"
+    ";#{ token };"
   end
 
   def order_id
     # The order_id is fairly irrelevant
-    "#{payment_method ? payment_method.id : 'NA'}-#{Time.now.to_i}"
+    "#{ payment_method ? payment_method.id : 'NA' }-#{ Time.now.to_i }"
   end
 
   def save_to_cybersource
@@ -186,7 +186,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     response = nil
     # Note: we don't want to give CyberSource our customer's email addresses,
     # which is why we use the generic userXXX@hellobar.com format
-    email = "user#{user ? user.id : 'NA'}@hellobar.com"
+    email = "user#{ user ? user.id : 'NA' }@hellobar.com"
     params = { order_id: order_id, email: email, address: address.to_h }
     # Set the brand
     data['brand'] = card.brand
@@ -200,24 +200,24 @@ class CyberSourceCreditCard < PaymentMethodDetails
       if previous_token
         # Update the profile
         response = HB::CyberSource.gateway.update(format_token(previous_token), card, params)
-        audit << "Updated previous_token: #{previous_token.inspect} with #{sanitized_data.inspect} response: #{response.inspect}"
+        audit << "Updated previous_token: #{ previous_token.inspect } with #{ sanitized_data.inspect } response: #{ response.inspect }"
       else
         # Create a new profile
         response = HB::CyberSource.gateway.store(card, params)
-        audit << "Create new token with #{sanitized_data.inspect} response: #{response.inspect}"
+        audit << "Create new token with #{ sanitized_data.inspect } response: #{ response.inspect }"
       end
       unless response.success?
         if field = response.params['invalidField']
           if field == 'c:cardType'
             raise 'Invalid credit card'
           else
-            raise "Invalid #{field.gsub(/^c:/, '').underscore.humanize.downcase}"
+            raise "Invalid #{ field.gsub(/^c:/, '').underscore.humanize.downcase }"
           end
         end
         raise response.message
       end
     rescue Exception => e
-      audit << "Error tokenizing with #{sanitized_data.inspect} response: #{response.inspect} error: #{e.message}"
+      audit << "Error tokenizing with #{ sanitized_data.inspect } response: #{ response.inspect } error: #{ e.message }"
       raise
     end
     data['number'] = data.delete('sanitized_number')

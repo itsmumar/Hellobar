@@ -39,7 +39,7 @@ describe ServiceProviders::Drip do
   describe '#subscribe' do
     it 'should subscribe to the campaign' do
       service_provider.instance_variable_set(:@contact_list, contact_list)
-      subscribe_url = "#{drip_endpoint}/#{identity.extra['account_id']}/campaigns/81207609/subscribers"
+      subscribe_url = "#{ drip_endpoint }/#{ identity.extra['account_id'] }/campaigns/81207609/subscribers"
 
       VCR.use_cassette('service_providers/drip/subscribe_cpn_id') do
         service_provider.subscribe('81207609', 'raj.kumar+7@crossover.com', 'Test Mname User', false)
@@ -51,7 +51,7 @@ describe ServiceProviders::Drip do
       tags = ['TestTag1', 'TestTag2']
       contact_list.data['tags'] = tags
       service_provider.instance_variable_set(:@contact_list, contact_list)
-      subscribe_url = "#{drip_endpoint}/#{identity.extra['account_id']}/campaigns/98654057/subscribers"
+      subscribe_url = "#{ drip_endpoint }/#{ identity.extra['account_id'] }/campaigns/98654057/subscribers"
 
       VCR.use_cassette('service_providers/drip/subscribe_with_tags') do
         service_provider.subscribe('98654057', 'raj.kumar+9@crossover.com', 'Test Mname User', false)
@@ -76,7 +76,7 @@ describe ServiceProviders::Drip do
 
     it 'should subscribe to the parent account' do
       service_provider.instance_variable_set(:@contact_list, contact_list)
-      subscribe_url = "#{drip_endpoint}/#{identity.extra['account_id']}/subscribers"
+      subscribe_url = "#{ drip_endpoint }/#{ identity.extra['account_id'] }/subscribers"
 
       VCR.use_cassette('service_providers/drip/subscribe_account') do
         service_provider.subscribe(nil, 'raj.kumar+6@crossover.com', 'Test Mname User', false)

@@ -29,7 +29,7 @@ class PaymentForm
   def year
     y = data[:expiration].split('/')[1]
     if y.length == 2
-      "20#{y}".to_i
+      "20#{ y }".to_i
     elsif y.length == 4
       y.to_i
     else

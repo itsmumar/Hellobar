@@ -57,9 +57,9 @@ class Rule < ActiveRecord::Base
     elsif conditions.size == 1
       conditions.first.to_sentence
     elsif conditions.size == 2
-      "#{conditions.first.to_sentence} and 1 other condition"
+      "#{ conditions.first.to_sentence } and 1 other condition"
     else
-      "#{conditions.first.to_sentence} and #{conditions.size - 1} other conditions"
+      "#{ conditions.first.to_sentence } and #{ conditions.size - 1 } other conditions"
     end
   end
 

@@ -17,8 +17,8 @@ module Hello
     class << self
       @@expected_index = 0
       def register_test(name, values, index, weights = [], user_start_date = nil)
-        raise "Expected index: #{@@expected_index.inspect}, but got index: #{index.inspect}. You either changed the order of the tests, removed a test, added a test out of order, or did not set the index of a test correctly. Please fix and try again" unless index == @@expected_index
-        raise "#{name.inspect} has #{values.length} values, but max is #{MAX_VALUES_PER_TEST}" if values.length > MAX_VALUES_PER_TEST
+        raise "Expected index: #{ @@expected_index.inspect }, but got index: #{ index.inspect }. You either changed the order of the tests, removed a test, added a test out of order, or did not set the index of a test correctly. Please fix and try again" unless index == @@expected_index
+        raise "#{ name.inspect } has #{ values.length } values, but max is #{ MAX_VALUES_PER_TEST }" if values.length > MAX_VALUES_PER_TEST
         sum = weights.inject(0) { |result, w| result += w }
         if weights.length < values.length
           remainder = 100 - sum
@@ -30,7 +30,7 @@ module Hello
           weights << 100 - sum
           sum = weights.inject(0) { |result, w| result += w }
         end
-        raise "Weighting added up #{sum}, expected 100: #{weights.inspect} for test #{name.inspect}" unless sum == 100
+        raise "Weighting added up #{ sum }, expected 100: #{ weights.inspect } for test #{ name.inspect }" unless sum == 100
         # Now create ranges out of the weights
         c = 0
         weights.collect! do |weight|
@@ -89,7 +89,7 @@ module Hello
     end
 
     def set_ab_test_value_index_from_cookie(cookie, index, value_index)
-      raise "Value: #{value.inspect} is out of range" if value_index > MAX_VALUES_PER_TEST || value_index < 0
+      raise "Value: #{ value.inspect } is out of range" if value_index > MAX_VALUES_PER_TEST || value_index < 0
       # Make sure there is enough values
       cookie = '' unless cookie
       num_chars_needed = ((index + 1) - cookie.length)
@@ -102,17 +102,17 @@ module Hello
 
     def set_ab_variation(test_name, value)
       # First make sure we have registered this test
-      raise "Could not find test: #{test_name.inspect}" unless ab_test = TESTS[test_name]
+      raise "Could not find test: #{ test_name.inspect }" unless ab_test = TESTS[test_name]
       # Now make sure the value is a valid value
       value_index = ab_test[:values].index(value)
-      raise "Could not find value: #{value.inspect} in test #{test_name.inspect} => #{ab_test.inspect}" unless value_index
+      raise "Could not find value: #{ value.inspect } in test #{ test_name.inspect } => #{ ab_test.inspect }" unless value_index
       cookie_value = set_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index], value_index)
       cookies.permanent[ab_test_cookie_name.to_sym] = cookie_value
     end
 
     def get_ab_test(test_name)
       # First make sure we have registered this test
-      raise "Could not find test: #{test_name.inspect}" unless ab_test = TESTS[test_name]
+      raise "Could not find test: #{ test_name.inspect }" unless ab_test = TESTS[test_name]
       ab_test
     end
 
@@ -175,7 +175,7 @@ module Hello
       return unless defined?(cookies)
 
       unless cookies[VISITOR_ID_COOKIE]
-        cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{Time.now.to_f}_#{request.remote_ip}_#{request.env['HTTP_USER_AGENT']}_#{rand(1000)}_id") + USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
+        cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{ Time.now.to_f }_#{ request.remote_ip }_#{ request.env['HTTP_USER_AGENT'] }_#{ rand(1000) }_id") + USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
         Analytics.track(*current_person_type_and_id, 'First Visit', ip: request.remote_ip)
       end
       # Return the first VISITOR_ID_LENGTH characters of the hash

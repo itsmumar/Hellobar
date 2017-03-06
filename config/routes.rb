@@ -90,7 +90,7 @@ Rails.application.routes.draw do
   get '/contact', to: 'contact_submissions#new', as: :new_contact_submission
 
   %w(email_developer generic_message).each do |sub|
-    post "/contact_submissions/#{sub}", to: "contact_submissions##{sub}", as: "#{sub}_contact_submission"
+    post "/contact_submissions/#{ sub }", to: "contact_submissions##{ sub }", as: "#{ sub }_contact_submission"
   end
 
   get '/admin', to: 'admin/users#index', as: :admin

@@ -16,7 +16,7 @@ describe SiteMembership do
     it 'catches duplicate site urls' do
       expect(duplicate_site_membership.valid?).to eq(false)
       expect(duplicate_site_membership.errors.full_messages).to(
-        include("User already has a membership to #{duplicate_site.url}")
+        include("User already has a membership to #{ duplicate_site.url }")
       )
     end
   end

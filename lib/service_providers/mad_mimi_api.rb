@@ -37,7 +37,7 @@ module ServiceProviders
     def valid?
       !!lists
     rescue => error
-      log "Getting lists raised #{error}"
+      log "Getting lists raised #{ error }"
       false
     end
   end

@@ -30,7 +30,7 @@ class ContentUpgradesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "content_upgrade_#{id}" # Excluding ".pdf" extension.
+        render pdf: "content_upgrade_#{ id }" # Excluding ".pdf" extension.
       end
     end
   end

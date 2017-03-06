@@ -11,7 +11,7 @@ class SiteSerializer < ActiveModel::Serializer
   def monthly_pageviews
     return unless scope # we require a logged in user
 
-    cache_key = "google:analytics:pageviews:#{object.id}:#{scope.id}"
+    cache_key = "google:analytics:pageviews:#{ object.id }:#{ scope.id }"
     cache_options = { expires_in: 7.days }
 
     Rails.cache.fetch(cache_key, cache_options) do

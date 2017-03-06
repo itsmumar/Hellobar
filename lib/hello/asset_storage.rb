@@ -58,7 +58,7 @@ module Hello
     end
 
     def cache_header
-      { 'Cache-Control' => "max-age=#{MAXAGE},s-maxage=#{S_MAXAGE}" }
+      { 'Cache-Control' => "max-age=#{ MAXAGE },s-maxage=#{ S_MAXAGE }" }
     end
   end
 end

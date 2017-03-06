@@ -73,7 +73,7 @@ feature 'Adding and editing bars', :js do
       social:       'Social',
       announcement: 'Announcement'
     }.each do |anchor, header|
-      visit new_site_site_element_path(user.sites.first) + "/#/settings/#{anchor}?skip_interstitial=true"
+      visit new_site_site_element_path(user.sites.first) + "/#/settings/#{ anchor }?skip_interstitial=true"
       expect(page).to have_content(header)
     end
   end

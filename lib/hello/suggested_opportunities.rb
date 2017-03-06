@@ -75,7 +75,7 @@ module Hello
         day = 24 * 60 * 60
         results = Hash.new { |h, k| h[k] = [] }
         loop do
-          results["#{date.year}_#{date.month}"] << date.yday
+          results["#{ date.year }_#{ date.month }"] << date.yday
           date += day
           break if date > end_date
         end
@@ -88,7 +88,7 @@ module Hello
         if %w(contacts over_time segments).include?(key)
           return key
         else
-          raise "Unknown table name key #{key.inspect}"
+          raise "Unknown table name key #{ key.inspect }"
         end
       end
 
@@ -98,12 +98,12 @@ module Hello
 
       # Returns the segment table name for the given date
       def segment_table_name(date)
-        segment_table_name_for_year_month("#{date.year}_#{date.month}")
+        segment_table_name_for_year_month("#{ date.year }_#{ date.month }")
       end
 
       # Returns the segment table name for the given year and month (e.g. "2014_9")
       def segment_table_name_for_year_month(year_month)
-        table_name(:segments) + "_#{year_month}"
+        table_name(:segments) + "_#{ year_month }"
       end
 
       protected
@@ -134,7 +134,7 @@ module Hello
       end
 
       def get_segments_table(date)
-        get_segments_table_for_year_month("#{date.year}_#{date.month}")
+        get_segments_table_for_year_month("#{ date.year }_#{ date.month }")
       end
 
       def get_segments_table_for_year_month(year_month)

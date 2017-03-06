@@ -132,7 +132,7 @@ describe SitesController do
       it 'redirects to login page if base URL has already been taken' do
         site = sites(:zombo)
 
-        post :create, site: { url: "#{site.url}/path" }, source: 'landing'
+        post :create, site: { url: "#{ site.url }/path" }, source: 'landing'
 
         response.should redirect_to(new_user_session_path(existing_url: site.url))
       end
@@ -226,7 +226,7 @@ describe SitesController do
       response.should be_success
 
       SiteElement.all_templates.each do |template|
-        response.body.should include("HB.setTemplate(\"#{template}\"")
+        response.body.should include("HB.setTemplate(\"#{ template }\"")
       end
     end
   end

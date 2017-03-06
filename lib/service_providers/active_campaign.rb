@@ -32,7 +32,7 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
   def subscribe(list_id, email, name = nil, _double_optin = false)
     contact = {}
     contact[:email] = email
-    contact["p[#{list_id}]"] = list_id if list_id
+    contact["p[#{ list_id }]"] = list_id if list_id
 
     if name
       fname, lname = name.split
@@ -52,7 +52,7 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
   def valid?
     !!lists
   rescue => error
-    log "Getting lists raised #{error}"
+    log "Getting lists raised #{ error }"
     false
   end
 end

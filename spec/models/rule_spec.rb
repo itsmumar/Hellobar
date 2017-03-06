@@ -96,7 +96,7 @@ describe Rule do
       tomorrow = Date.tomorrow.strftime('%Y-%m-%d')
 
       expect(condition.value).to eq tomorrow
-      expect(condition.to_sentence).to eq "Date is before #{tomorrow}"
+      expect(condition.to_sentence).to eq "Date is before #{ tomorrow }"
     end
 
     it 'builds out an "after" date condition properly' do
@@ -104,7 +104,7 @@ describe Rule do
       yesterday = Date.yesterday.strftime('%Y-%m-%d')
 
       expect(condition.value).to eq yesterday
-      expect(condition.to_sentence).to eq "Date is after #{yesterday}"
+      expect(condition.to_sentence).to eq "Date is after #{ yesterday }"
     end
 
     it 'builds out a "between" date condition properly' do

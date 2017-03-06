@@ -11,7 +11,7 @@ feature 'Contact list modal', js: true do
       bar.update_attributes(rule_id: site.rules.first.id)
       site.contact_lists.create(name: 'My List')
       Hello::DataAPI.stub(contact_list_totals: {})
-      visit "/sites/#{site.id}/contact_lists"
+      visit "/sites/#{ site.id }/contact_lists"
       find('#new-contact-list').click
     end
 

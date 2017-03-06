@@ -15,14 +15,14 @@ module Hellobar
     config.exceptions_app = routes
 
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '**/')]
-    config.autoload_paths += %W(#{config.root}/lib/queue_worker/)
+    config.autoload_paths += %W(#{ config.root }/lib/queue_worker/)
     # We'd prefer to use initializers to load the files from the /lib
     # directory that we need. This way we have more control over load
     # order and have a convenient place to put other initialization
     # code (config, etc.)
     # config.autoload_paths += %W(#{config.root}/lib)
 
-    config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
+    config.action_mailer.preview_path = "#{ Rails.root }/spec/mailers/previews"
 
     config.sass.preferred_syntax = :sass
     config.action_mailer.default_url_options = { host: Hellobar::Settings[:host] }

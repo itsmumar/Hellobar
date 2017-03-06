@@ -111,7 +111,7 @@ RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_path = "#{ ::Rails.root }/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -148,7 +148,7 @@ def stub_current_user(user)
 end
 
 def random_uniq_url
-  'http://url.net'.split('.').insert(1, "-#{(0...8).map { 65.+(rand(26)).chr }.join.downcase}").insert(2, '.').join
+  'http://url.net'.split('.').insert(1, "-#{ (0...8).map { 65.+(rand(26)).chr }.join.downcase }").insert(2, '.').join
 end
 
 def stub_out_get_ab_variations(*variations)
