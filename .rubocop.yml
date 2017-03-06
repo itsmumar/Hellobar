@@ -78,3 +78,9 @@ Rails/HttpPositionalArguments:
 # SupportedStyles: referer, referrer
 Rails/RequestReferer:
   EnforcedStyle: referrer
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/MethodDefParentheses:
+  Enabled: false

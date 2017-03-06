@@ -140,7 +140,7 @@ module ServiceProviders
       end
     end
 
-    def fetch_latest_contacts(count = 2)
+    def fetch_latest_contacts count = 2
       query = {
         fields: 'contactId,email',
         sort: {
@@ -161,7 +161,7 @@ module ServiceProviders
       end
     end
 
-    def assign_tags(contact_id:, tags:)
+    def assign_tags contact_id:, tags:
       response = client.post "contacts/#{contact_id}", tags: tags
 
       if response.success?

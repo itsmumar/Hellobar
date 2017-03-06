@@ -1,6 +1,6 @@
 module ServiceProviders
   class GetResponse < EmbedCodeProvider
-    def extract_html_from_script(html)
+    def extract_html_from_script html
       html.match(/unescape\('(<(?:body|div).+>)'\)/)
     end
 

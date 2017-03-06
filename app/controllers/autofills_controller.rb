@@ -24,7 +24,8 @@ class AutofillsController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+  end
 
   def update
     if @autofill.update autofill_params

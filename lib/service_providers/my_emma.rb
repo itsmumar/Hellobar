@@ -18,7 +18,7 @@ module ServiceProviders
       end
     end
 
-    def get_reference_object(html)
+    def get_reference_object html
       item = super
       if !item || !item.attr('src') || item.attr('src').include?('tts_signup')
         html.css('a').first
