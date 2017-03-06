@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe UserStateCloner, '#save' do
-  let(:json) { File.read("#{Rails.root}/spec/fixtures/user_state.json") }
+  let(:json) { File.read("#{ Rails.root }/spec/fixtures/user_state.json") }
 
   before(:each) do
     allow_any_instance_of(User).to receive(:add_to_infusionsoft)
@@ -30,7 +30,7 @@ describe UserStateCloner, '#save' do
 
     expect {
       cloner.save
-    }.to change{Site.exists?(site.id)}.from(false).to(true)
+    }.to change { Site.exists?(site.id) }.from(false).to(true)
   end
 
   it 'creates the site memberships' do

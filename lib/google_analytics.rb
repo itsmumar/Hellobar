@@ -1,7 +1,7 @@
 class GoogleAnalytics
   attr_reader :analytics
 
-  def initialize(access_token=nil)
+  def initialize(access_token = nil)
     client = Signet::OAuth2::Client.new(
       authorization_uri: 'https://accounts.google.com/o/oauth2/auth',
       token_credential_uri: 'https://www.googleapis.com/oauth2/v3/token',
@@ -18,19 +18,19 @@ class GoogleAnalytics
   def self.normalize_url(url)
     normalized_url = Site.normalize_url(url)
 
-    "#{normalized_url.scheme}://#{normalized_url.normalized_host}"
+    "#{ normalized_url.scheme }://#{ normalized_url.normalized_host }"
   end
 
   def find_account_by_url(url)
     analytics.list_account_summaries.items.find do |item|
       web_properties = item.web_properties
       next if web_properties.blank?
-      urls = web_properties.map(&:website_url).compact.map{|web_url| self.class.normalize_url(web_url) }
+      urls = web_properties.map(&:website_url).compact.map { |web_url| self.class.normalize_url(web_url) }
 
       urls.include?(self.class.normalize_url(url))
     end
   rescue Google::Apis::ClientError => error
-    if error.to_s.match(/insufficientPermissions/)
+    if error.to_s =~ /insufficientPermissions/
       nil # handle for when a user doesn't have a Google Analytics account
     else
       raise error
@@ -49,13 +49,13 @@ class GoogleAnalytics
 
     if account
       # what if you have multiple profiles?
-      profile = account.web_properties.find do |property|
+      profile = account.web_properties.find { |property|
         next unless property.website_url.present?
 
         self.class.normalize_url(property.website_url) == self.class.normalize_url(url)
-      end.profiles.first
+      }.profiles.first
 
-      ids = "ga:#{profile.id}"
+      ids = "ga:#{ profile.id }"
       start_date = '30daysAgo'
       end_date = 'today'
       metrics = 'ga:pageviews'

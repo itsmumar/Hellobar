@@ -3,7 +3,7 @@ require 'spec_helper'
 require 'rake'
 load 'lib/tasks/site.rake'
 
-describe "site:rules:add_presets" do
+describe 'site:rules:add_presets' do
   fixtures :all
   include_context 'rake'
 
@@ -39,4 +39,3 @@ describe "site:rules:add_presets" do
     @site_without_presets.reload
   end
 end
-

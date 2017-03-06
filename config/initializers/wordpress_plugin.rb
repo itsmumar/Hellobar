@@ -1,1 +1,1 @@
-require "./lib/wordpress_plugin"
+require './lib/wordpress_plugin'

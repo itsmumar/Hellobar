@@ -22,23 +22,23 @@ class PaymentMethodDetails < ActiveRecord::Base
     raise NotImplementedError
   end
 
-  def charge(amount_in_dollars)
+  def charge(_amount_in_dollars)
     raise NotImplementedError
   end
 
-  def refund(amount_in_dollars, original_transaction_id)
+  def refund(_amount_in_dollars, _original_transaction_id)
     raise NotImplementedError
   end
 end
 
 if Rails.env.test?
   class AlwaysSuccessfulPaymentMethodDetails < PaymentMethodDetails
-    def charge(amount_in_dollars)
-      return true, "fake-txn-id-#{Time.now.to_i}"
+    def charge(_amount_in_dollars)
+      [true, "fake-txn-id-#{ Time.now.to_i }"]
     end
 
-    def refund(amount_in_dollars, original_transaction_id)
-      return true, "fake-refund-id-#{Time.now.to_i} (original: #{original_transaction_id}"
+    def refund(_amount_in_dollars, original_transaction_id)
+      [true, "fake-refund-id-#{ Time.now.to_i } (original: #{ original_transaction_id }"]
     end
 
     def data
@@ -47,12 +47,12 @@ if Rails.env.test?
   end
 
   class AlwaysFailsPaymentMethodDetails < PaymentMethodDetails
-    def charge(amount_in_dollars)
-      return false, "There was some issue with your payment (fake)"
+    def charge(_amount_in_dollars)
+      [false, 'There was some issue with your payment (fake)']
     end
 
-    def refund(amount_in_dollars, original_transaction_id)
-      return false, "There was some issue with your refund (fake)"
+    def refund(_amount_in_dollars, _original_transaction_id)
+      [false, 'There was some issue with your refund (fake)']
     end
   end
 end

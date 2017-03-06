@@ -4,30 +4,30 @@ require 'erb'
 class MissingSpecGenerator
   def spec_file(spec_path, file_name, spec_template, namespace)
     spec_name = file_name.gsub('.rb', '') + '_spec.rb'
-    if File.exist?("#{spec_path}/#{spec_name}")
-      logger.info "#{spec_path}/#{spec_name} exists"
+    if File.exist?("#{ spec_path }/#{ spec_name }")
+      logger.info "#{ spec_path }/#{ spec_name } exists"
     else
-      logger.info "#{spec_path}/#{spec_name} missing"
+      logger.info "#{ spec_path }/#{ spec_name } missing"
       logger.info "\n"
       spec_file = ERB.new(spec_template)
-      class_name = "#{namespace}#{file_name.gsub('.rb', '').camelcase}"
+      class_name = "#{ namespace }#{ file_name.gsub('.rb', '').camelcase }"
       spec = spec_file.result(binding)
       logger.info spec
       FileUtils.mkdir_p(spec_path) unless File.exist?(spec_path)
-      File.open("#{spec_path}/#{spec_name}", 'w') { |f| f.write(spec) }
+      File.open("#{ spec_path }/#{ spec_name }", 'w') { |f| f.write(spec) }
     end
   end
 
   def traverse_specs(path, spec_template, namespace = '')
     Dir.open(Rails.root + 'app/' + path).each do |file_name|
-      next if file_name.match(/^\./) # skip hidden folders (.svn)
+      next if file_name =~ /^\./ # skip hidden folders (.svn)
       if File.directory?(Rails.root + 'app/' + path + '/' + file_name)
-        traverse_specs("#{path}/#{file_name}", spec_template,
-                       "#{namespace}#{file_name.camelcase}::")
+        traverse_specs("#{ path }/#{ file_name }", spec_template,
+          "#{ namespace }#{ file_name.camelcase }::")
         next
       end
-      spec_file("#{Rails.root}/spec/#{path}",
-                file_name, spec_template, namespace)
+      spec_file("#{ Rails.root }/spec/#{ path }",
+        file_name, spec_template, namespace)
     end
   end
 

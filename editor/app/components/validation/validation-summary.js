@@ -25,9 +25,7 @@ export default Ember.Component.extend({
   }.property('validationMessages'),
 
   summaryText: function() {
-    const text = (this.get('validationMessages') || []).join(' ');
-    console.log('summary text', text, this.get('validationMessages'));
-    return text;
+    return (this.get('validationMessages') || []).join(' ');
   }.property('validationMessages')
 
 });

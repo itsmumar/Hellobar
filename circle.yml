@@ -30,14 +30,14 @@ database:
 test:
   pre:
     - cp config/settings.yml.example config/settings.yml
-    # - bundle exec rubocop
-    - bundle exec brakeman
     - npm install -g ember-cli
     - cd editor && npm install
     - cd editor && bower install
     - cd editor && ember build --environment=production
 
   override:
+    - bundle exec brakeman
+    - bundle exec rubocop
     -
       RAILS_ENV=test bundle exec rspec -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml:
         parallel: true

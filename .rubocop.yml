@@ -1,5 +1,116 @@
 inherit_from: .rubocop_todo.yml
 
-# Rails cops (so we don't need to run with -R option)
+Rails:
+  Enabled: true
+
 AllCops:
-  RunRailsCops: true
+  TargetRubyVersion: 2.1
+  DisplayCopNames: true
+  Include:
+    - Rakefile
+    - Gemfile
+    - Capfile
+    - config.ru
+  Exclude:
+    - 'db/schema.rb'
+    - 'bin/*'
+    - 'db/**/*'
+    - 'vendor/bundle/**/*'
+    - 'editor/**/*'
+    - 'backend-mock/**/*'
+
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+#Metrics/LineLength:
+#  Max: 130
+#
+#Metrics/AbcSize:
+#  Max: 16
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
+# SupportedStyles: slashes, percent_r, mixed
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+  Exclude:
+    - spec/teaspoon_env.rb
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: with_first_parameter, with_fixed_indentation
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Security/MarshalLoad:
+  Exclude:
+    - 'lib/grand_central_api.rb'
+
+# Configuration parameters: SupportedStyles, IndentationWidth.
+# SupportedStyles: special_inside_parentheses, consistent, align_brackets
+Style/IndentArray:
+  EnforcedStyle: consistent
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: special_inside_parentheses, consistent, align_braces
+Style/IndentHash:
+  EnforcedStyle: consistent
+
+# Configuration parameters: EnforcedOctalStyle, SupportedOctalStyles.
+# SupportedOctalStyles: zero_with_o, zero_only
+Style/NumericLiteralPrefix:
+  EnforcedOctalStyle: zero_only
+
+# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
+# SupportedStyles: predicate, comparison
+Style/NumericPredicate:
+  Enabled: false
+
+# TODO: enable after updating rails/rspec
+# Configuration parameters: Include.
+# Include: spec/**/*, test/**/*
+Rails/HttpPositionalArguments:
+  Enabled: false
+
+# SupportedStyles: referer, referrer
+Rails/RequestReferer:
+  EnforcedStyle: referrer
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/MethodDefParentheses:
+  Enabled: false
+
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/ConstantName:
+  Exclude:
+    - lib/hello/segments.rb
+    - config/initializers/settings.rb
+
+Style/WordArray:
+  # The `MinSize` option causes the `WordArray` rule to be ignored for arrays
+  # smaller than a certain size.  The rule is only applied to arrays
+  # whose element count is greater than or equal to `MinSize`.
+  MinSize: 3
+
+Style/SpaceInsideStringInterpolation:
+  EnforcedStyle: space
+
+Rails/DynamicFindBy:
+  Whitelist:
+    - find_by_sql
+    - find_by_email
+    - find_by_script

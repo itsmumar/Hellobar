@@ -3,15 +3,13 @@ class SiteElements::Update < Less::Interaction
   expects :params
 
   def run
-    begin
-      SiteElement.transaction do
-        change_type! if type_should_change?
-        element.update_attributes!(params)
-      end
-      true
-    rescue ActiveRecord::ActiveRecordError
-      false
+    SiteElement.transaction do
+      change_type! if type_should_change?
+      element.update_attributes!(params)
     end
+    true
+  rescue ActiveRecord::ActiveRecordError
+    false
   end
 
   private

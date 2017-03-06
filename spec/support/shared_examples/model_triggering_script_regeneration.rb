@@ -1,5 +1,4 @@
 RSpec.shared_examples 'a model triggering script regeneration' do
-
   let(:model) { create described_class.table_name.singularize }
 
   it 'triggers static script regeneration when changed' do
@@ -12,5 +11,4 @@ RSpec.shared_examples 'a model triggering script regeneration' do
 
     expect(site.needs_script_regeneration?).to be_true
   end
-
 end

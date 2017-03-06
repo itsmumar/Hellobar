@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe PaymentForm do
-  let(:data) {
+  let(:data) do
     {
       name: 'Bill Middle Namerson',
       expiration: '08/2016',
@@ -13,7 +13,7 @@ describe PaymentForm do
       address: '2423 W. North Ave',
       country: 'USA'
     }
-  }
+  end
 
   let(:payment_form) { PaymentForm.new(data) }
 
@@ -77,17 +77,17 @@ describe PaymentForm do
 
   it 'returns the proper hash' do
     payment_form.to_hash.should == {
-      :number => '12345',
-      :month => 8,
-      :year => 2016,
-      :first_name => 'Bill',
-      :last_name => 'Middle Namerson',
-      :verification_value => '123',
-      :city => 'Chicago',
-      :state => 'IL',
-      :zip => '60647',
-      :address1 => '2423 W. North Ave',
-      :country => 'USA'
+      number: '12345',
+      month: 8,
+      year: 2016,
+      first_name: 'Bill',
+      last_name: 'Middle Namerson',
+      verification_value: '123',
+      city: 'Chicago',
+      state: 'IL',
+      zip: '60647',
+      address1: '2423 W. North Ave',
+      country: 'USA'
     }
   end
 end

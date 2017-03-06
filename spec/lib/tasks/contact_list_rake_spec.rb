@@ -5,12 +5,12 @@ CY_MAD_MIMI_EMBED_CODE = '<html><body><iframe><form>Here I am</form></iframe></b
 require 'rake'
 load 'lib/tasks/contact_list.rake'
 
-describe "contact_list:sync_one" do
+describe 'contact_list:sync_one' do
   fixtures :all
   include_context 'rake'
 
   let(:embed_code) { CY_MAD_MIMI_EMBED_CODE }
-  let(:user) { { email: "test.testerson@example.com", name: "Test Testerson" } }
+  let(:user) { { email: 'test.testerson@example.com', name: 'Test Testerson' } }
   let(:contact_list) do
     contact_lists(:embed_code).tap do |l|
       l.data['embed_code'] = embed_code
@@ -19,14 +19,14 @@ describe "contact_list:sync_one" do
   end
 
   it 'should call sync_one!' do
-    expect_any_instance_of(ContactList).to receive(:sync_one!).with("test.testerson@example.com", "Test Testerson")
+    expect_any_instance_of(ContactList).to receive(:sync_one!).with('test.testerson@example.com', 'Test Testerson')
     perform!
   end
 
   it 'should require an email' do
     expect_any_instance_of(ContactList).not_to receive(:sync_one!)
     user[:email] = nil
-    expect { perform! }.to raise_error, "Cannot sync without email present"
+    expect { perform! }.to raise_error, 'Cannot sync without email present'
   end
 
   it 'should require a contact_list_id' do
@@ -35,7 +35,7 @@ describe "contact_list:sync_one" do
   end
 
   it 'should not require a name' do
-    expect_any_instance_of(ContactList).to receive(:sync_one!).with("test.testerson@example.com", nil)
+    expect_any_instance_of(ContactList).to receive(:sync_one!).with('test.testerson@example.com', nil)
     user[:name] = nil
     perform!
   end
@@ -48,7 +48,7 @@ describe "contact_list:sync_one" do
   end
 end
 
-describe "contact_list:sync_all!" do
+describe 'contact_list:sync_all!' do
   fixtures :all
   include_context 'rake'
 

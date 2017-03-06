@@ -1,5 +1,4 @@
 class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
-
   class FirstAndLastNameRequired < StandardError; end
 
   URL_REGEX = /^(?:https?:\/\/|\/\/)/
@@ -50,13 +49,14 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def required_params
-    all_params.delete_if {|k,v| ([ email_param] + name_params).include?(k) or k.nil? }
+    all_params.delete_if { |k, _| ([email_param] + name_params).include?(k) || k.nil? }
   end
 
   def all_params
-    Hash.new.tap do |hash|
+    {}.tap do |hash|
       params.each do |input|
-        name, value = input[:name], input[:value]
+        name = input[:name]
+        value = input[:value]
         hash[name] = value
       end
     end
@@ -69,7 +69,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def email_param
-    params.find {|i| i[:name].include? 'email' }[:name]
+    params.find { |i| i[:name].include? 'email' }[:name]
   end
 
   def name_param
@@ -81,38 +81,39 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def name_params
-    params.collect do |i|
+    params.collect { |i|
       i[:name] if i[:name].try :include?, 'name'
-    end.compact || []
+    }.compact || []
   end
 
-  def subscribe_params(email, name, double_optin = true)
-    name ||= ""
+  def subscribe_params(email, name, _double_optin = true)
+    name ||= ''
     name_hash = {}
 
     if name_params.size >= 1
       first_name, last_name = name.split(' ')
       name_params.each do |name_field|
-        case name_field
-        when /first|fname/
-          name_hash[name_field] = first_name || ""
-        when /last|lname/
-          name_hash[name_field] = last_name || ""
-        else
-          name_hash[name_field] = name
-        end
+        name_hash[name_field] =
+          case name_field
+          when /first|fname/
+            first_name || ''
+          when /last|lname/
+            last_name || ''
+          else
+            name
+          end
       end
     end
 
     required_params.tap do |params|
-      params.merge!(email_param => email)
+      params[email_param] = email
       params.merge!(name_hash)
     end
   end
 
   private
 
-   def html
+  def html
     return @html if @html.present?
 
     html = Nokogiri::HTML embed_code
@@ -120,9 +121,14 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     reference_object = get_reference_object(html)
     url = url_for_form(reference_object)
 
-    return @html = html if url.nil? or (!embed_code.match(URL_REGEX) and reference_object.nil?)
+    return @html = html if url.nil? || (!embed_code.match(URL_REGEX) && reference_object.nil?)
 
-    remote_html = HTTParty.get(url) rescue ''
+    remote_html =
+      begin
+        HTTParty.get(url)
+      rescue => _
+        ''
+      end
 
     # Pull from scripts and run
     if reference_object.try(:name) == 'script'
@@ -130,7 +136,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
       if match_data.nil?
         raise 'Cannot parse remote html'
       else
-        remote_html = match_data[1].gsub('\n','').gsub('\\','')
+        remote_html = match_data[1].gsub('\n', '').delete('\\')
       end
     end
 
@@ -149,12 +155,10 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   def url_from_reference_object reference_object
     return nil unless reference_object
     case reference_object.name
-    when "script", "iframe"
+    when 'script', 'iframe'
       reference_object.attr('src')
-    when "a"
+    when 'a'
       reference_object.attr('href')
-    else
-      nil
     end
   end
 
@@ -164,7 +168,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
 
     return nil unless url
 
-    url = "http:" + url if url.match /^\/\//
+    url = 'http:' + url if url =~ /^\/\//
     url
   end
 end

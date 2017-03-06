@@ -11,5 +11,10 @@ describe("HB", function() {
       spyOn(HB, "currentURL").and.returnValue("http://hellobar.com/path/to/asset")
       expect(HB.isExternalURL("http://hellobar.com/path/to/other/asset")).toEqual(false)
     });
+
+    it("works with localhost", function () {
+      spyOn(HB, "currentURL").and.returnValue("http://localhost:3000/path/to/asset")
+      expect(HB.isExternalURL("http://hellobar.com/path/to/other/asset")).toEqual(true)
+    });
   });
 });

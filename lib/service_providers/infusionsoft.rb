@@ -7,8 +7,8 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'infusionsoft').first
-      raise "Site does not have a stored Infusionsoft identity" unless identity
+      identity = opts[:site].identities.where(provider: 'infusionsoft').first
+      raise 'Site does not have a stored Infusionsoft identity' unless identity
     end
 
     @identity = identity
@@ -20,13 +20,14 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
   end
 
   def tags
-    Infusionsoft.data_query('ContactGroup', 1_000, 0, {}, %w{ GroupName Id }).
-      map { |result| { 'name' => result['GroupName'], 'id' => result['Id'] } }.
-      sort_by { |result| result['name'] }
+    Infusionsoft
+      .data_query('ContactGroup', 1_000, 0, {}, %w(GroupName Id))
+      .map { |result| { 'name' => result['GroupName'], 'id' => result['Id'] } }
+      .sort_by { |result| result['name'] }
   end
 
-  def subscribe(_, email, name = nil, double_optin = false)
-    data = { :Email => email }
+  def subscribe(_, email, name = nil, _double_optin = false)
+    data = { Email: email }
 
     if name
       fname, lname = name.split
@@ -41,7 +42,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
     end
   end
 
-  def batch_subscribe(_, subscribers, double_optin = false)
+  def batch_subscribe(_, subscribers, _double_optin = false)
     subscribers.each do |subscriber|
       subscribe(nil, subscriber[:email], subscriber[:name])
     end
@@ -50,7 +51,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
   def valid?
     !!tags
   rescue => error
-    log "Getting lists raised #{error}"
+    log "Getting lists raised #{ error }"
     false
   end
 end

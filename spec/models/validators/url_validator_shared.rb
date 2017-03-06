@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-shared_examples "an object with a valid url" do
+shared_examples 'an object with a valid url' do
   class WebClass
     include ActiveModel::Validations
 
@@ -12,13 +12,13 @@ shared_examples "an object with a valid url" do
   let(:webby) { WebClass.new }
 
   it 'requires the url field' do
-    webby.url = ""
+    webby.url = ''
 
     webby.should_not be_valid
     webby.errors[:url].should include("can't be blank")
   end
 
-  it "requires a url with a valid format" do
+  it 'requires a url with a valid format' do
     urls = %w(
       lololol
       1234
@@ -31,11 +31,11 @@ shared_examples "an object with a valid url" do
       test_case.url = url
 
       test_case.should_not be_valid
-      test_case.errors[:url].should include("is invalid")
+      test_case.errors[:url].should include('is invalid')
     end
   end
 
-  it "accepts valid inputs" do
+  it 'accepts valid inputs' do
     urls = %w(
       http://zombo.com
       http://horse.bike
