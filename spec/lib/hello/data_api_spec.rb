@@ -106,7 +106,7 @@ describe Hello::DataAPI do
       allow(Hello::DataAPIHelper::RequestParts).to receive(:get_contacts)
         .with(site_id, id, read_key, limit, nil)
         .and_return(['/e/GIHiEM2QmS/qvpJXYvS6',
-                     { 'l' => 5, 'd' => 1_481_207_259, 't' => 1_482_071_362,
+                     { 'l' => 5, 'd' => 1481207259, 't' => 1482071362,
                        's' => '2981a1d7a8745e492943f561d4a6aef30de' \
                              '889af48cd4c32e6c0a4b56abf400e30f4f8' \
                              '115fb091130f2e5925106a6e50485f67e73' \

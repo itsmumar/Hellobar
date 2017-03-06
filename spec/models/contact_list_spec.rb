@@ -19,8 +19,8 @@ describe ContactList do
     end
 
     Hello::DataAPI.stub(:get_contacts).and_return([
-      ['test1@hellobar.com', '', 1_384_807_897],
-      ['test2@hellobar.com', '', 1_384_807_898]
+      ['test1@hellobar.com', '', 1384807897],
+      ['test2@hellobar.com', '', 1384807898]
     ])
   end
 

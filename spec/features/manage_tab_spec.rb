@@ -49,7 +49,7 @@ feature 'Manage Bars', js: true do
     before { create(:site_element, rule: @rule) }
 
     it 'show update to old users' do
-      @user.update_attributes(wordpress_user_id: 12_345)
+      @user.update_attributes(wordpress_user_id: 12345)
       visit site_site_elements_path(@site)
       expect(page).to have_content('Where did all my views and conversions go')
     end
