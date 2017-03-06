@@ -14,6 +14,9 @@ hellobar.defineModule('base.site', [], function () {
 
   var configuration = new ModuleConfiguration();
 
+  /**
+   * @module base.site {object} This module is for general site-scope operations.
+   */
   return {
     configuration: function () {
       return configuration;

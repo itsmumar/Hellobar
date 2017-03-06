@@ -32,6 +32,9 @@ hellobar.defineModule('base.dom', [], function () {
     }
   }
 
+  /**
+   * @module base.dom {object} Performs DOM-related operations (traversing, modifying etc)
+   */
   return {
 
     /**

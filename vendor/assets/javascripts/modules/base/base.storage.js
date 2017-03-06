@@ -55,11 +55,26 @@ hellobar.defineModule('base.storage', [], function () {
 
   var valueStorage = new ValueStorage();
 
-
+  /**
+   * @module base.storage {object} Module that supports client-side data storing.
+   */
   return {
+    /**
+     * Stores data in client-side storage
+     * @param key {string} Unique key
+     * @param value {object|string|number|boolean} Value to store
+     * @param expiration {number|Date} Expiration period, can be specified with explicit time moment (Date instance)
+     * or by specifying number of days until data is considered to be expired.
+     */
     setValue: function (key, value, expiration) {
       valueStorage.setValue(key, value, expiration);
     },
+
+    /**
+     * Gets data from client-side storage
+     * @param key {string} Unique key to get value by
+     * @returns {object|string|number|boolean}
+     */
     getValue: function (key) {
       return valueStorage.getValue(key);
     }

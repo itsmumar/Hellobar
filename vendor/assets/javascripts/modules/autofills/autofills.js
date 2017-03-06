@@ -2,6 +2,11 @@ hellobar.defineModule('autofills', ['base.storage', 'base.dom'], function (stora
 
   var subscriptions = [];
 
+  /**
+   * Wrapper class that encapsulates saving/restoring logic for autofills.
+   * It's based on base.storage module.
+   * @constructor
+   */
   function AutofillStorage() {
     var expirationDays = 30;
 
@@ -91,7 +96,9 @@ hellobar.defineModule('autofills', ['base.storage', 'base.dom'], function (stora
 
   var configuration = new ModuleConfiguration();
 
-  // Return module object
+  /**
+   * @module autofills {object} Implements input autofilling logic in DOM.
+   */
   return {
     configuration: function () {
       return configuration;

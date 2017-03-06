@@ -23,6 +23,15 @@ hellobar.defineModule('geolocation.dom', ['base.dom', 'geolocation'], function (
 
   var configuration = new ModuleConfiguration();
 
+  /**
+   * @module {object} Performs geolocation data injection into DOM.
+   * We can search through the DOM and find 'span' elements with marker attribute data-hb-geolocation -
+   * those spans will be processed automatically, corresponding geolocation name will be retrieved
+   * from 'geolocation' module and inserted in the span as text content.
+   * Attribute data-hb-geolocation supports three values: 'city', 'region', 'country'.
+   * Also data-hb-deolocation-default can be specified -
+   * its value will be used if geolocation module fails to get the required exact geolocation name.
+   */
   var module = {
 
     initialize: function (configurator) {
@@ -50,6 +59,10 @@ hellobar.defineModule('geolocation.dom', ['base.dom', 'geolocation'], function (
       });
     },
 
+    /**
+     * In the context of all available DOM documents, it searches for spans with attribute data-hb-geolocation
+     * and puts corresponding geolocation name there.
+     */
     processAllDocuments: function () {
       dom.runOnDocumentReady(function () {
         dom.forAllDocuments(function (doc) {

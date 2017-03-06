@@ -81,23 +81,59 @@ hellobar.defineModule('geolocation',
 
     var configuration = new ModuleConfiguration();
 
+    /**
+     * @module geolocation {object} Performs geolocation data storing and querying it from the remote server.
+     */
     return {
       configuration: function () {
         return configuration;
       },
 
+      /**
+       * Gets all geolocation data (or just single specified value).
+       * Operation can execute in sync or async way:
+       * if we have cached geolocation data, then cached data is returned synchronously from the method
+       * (and also passed to onSuccess callback if the callback is specified)
+       * otherwise false boolean is returned,
+       * then AJAX request to service is done to server and the result is returned asynchronously via onSuccess callback.
+       * @param key {string} If specified then only this value will be returned,
+       * otherwise all values will be returned as an object.
+       * Currently we support keys:
+       * countryName, regionName, cityName - new keys
+       * gl_cty, gl_ctr, gl_rgn - lagacy keys
+       * @param [onSuccess] {function}
+       * @returns {string|object|boolean}
+       */
       getGeolocationData: function (key, onSuccess) {
         return syncAsyncGetData(key, onSuccess);
       },
 
+      /**
+       * Gets region name.
+       * The method works in both sync/async ways (see getGeolocationData docs for details).
+       * @param [onSuccess] {function}
+       * @returns {string|boolean}
+       */
       regionName: function (onSuccess) {
         return syncAsyncGetData('regionName', onSuccess);
       },
 
+      /**
+       * Gets city name.
+       * The method works in both sync/async ways (see getGeolocationData docs for details).
+       * @param [onSuccess] {function}
+       * @returns {string|boolean}
+       */
       cityName: function (onSuccess) {
         return syncAsyncGetData('cityName', onSuccess);
       },
 
+      /**
+       * Gets country name.
+       * The method works in both sync/async ways (see getGeolocationData docs for details).
+       * @param [onSuccess] {function}
+       * @returns {string|boolean}
+       */
       countryName: function (onSuccess) {
         return syncAsyncGetData('countryName', onSuccess);
       }

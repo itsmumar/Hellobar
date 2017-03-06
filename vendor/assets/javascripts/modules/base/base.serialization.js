@@ -17,7 +17,11 @@ hellobar.defineModule('base.serialization', [], function () {
     return value;
   }
 
+  /**
+   * @module base.serialization {object} Performs custom (cookie-like) serialization.
+   */
   return {
+
     serialize: function (hash) {
       if (!hash) {
         return '';
@@ -32,6 +36,7 @@ hellobar.defineModule('base.serialization', [], function () {
       }
       return pairs.join('|');
     },
+
     deserialize: function (string) {
       if (!string) {
         return {};
@@ -47,5 +52,6 @@ hellobar.defineModule('base.serialization', [], function () {
       }
       return results;
     }
+
   };
 });

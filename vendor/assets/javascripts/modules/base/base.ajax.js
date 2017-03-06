@@ -17,8 +17,17 @@ hellobar.defineModule('base.ajax', [], function () {
     };
   }
 
+  /**
+   * @module base.ajax {function} Performs AJAX calls
+   */
   var module = ajax;
 
+  /**
+   * Performs HTTP GET request
+   * @param url {string}
+   * @param [success] {function} success handler (optional)
+   * @param [error] {function} error handler (optional)
+   */
   module.get = function (url, success, error) {
     return ajax({
       url: url,
