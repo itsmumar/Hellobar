@@ -90,6 +90,10 @@ GEM
     aws-sdk-v1 (1.66.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
+    babel-source (5.8.35)
+    babel-transpiler (0.7.0)
+      babel-source (>= 4.0, < 6)
+      execjs (~> 2.0)
     bcrypt (3.1.7)
     better_errors (1.1.0)
       coderay (>= 1.0.0)
@@ -644,6 +648,7 @@ DEPENDENCIES
   avatar (~> 0.2.0)
   aweber (~> 1.6.1)
   aws-sdk (~> 1.66.0)
+  babel-transpiler
   better_errors (~> 1.1)
   binding_of_caller
   bootstrap-sass (~> 3.1.1)

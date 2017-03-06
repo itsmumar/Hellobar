@@ -107,17 +107,17 @@ class ScriptGenerator < Mustache
   end
 
   def site_element_classes_js
-    js = File.read("#{ Rails.root }/vendor/assets/javascripts/site_elements/site_element.js")
+    js = render_js('site_elements/site_element.js')
 
     klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
     klasses.each do |klass|
-      js << "\n" << File.read("#{ Rails.root }/vendor/assets/javascripts/site_elements/#{ klass.name.downcase }.js")
+      js << "\n" << render_js("site_elements/#{klass.name.downcase}.js")
     end
     js
   end
 
   def hellobar_base_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/hellobar.base.js")
+    render_js('hellobar.base.js')
   end
 
   def autofills_json
@@ -125,19 +125,19 @@ class ScriptGenerator < Mustache
   end
 
   def autofills_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/autofills/autofills.js")
+    render_js('autofills/autofills.js')
   end
 
   def ie_shims_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/hellobar_script/ie_shims.js")
+    render_js('hellobar_script/ie_shims.js')
   end
 
   def crypto_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/hellobar_script/crypto.js")
+    render_js('hellobar_script/crypto.js')
   end
 
   def jquery_lib
-    File.read("#{ Rails.root }/vendor/assets/javascripts/jquery-2.2.4.js")
+    render_js('jquery-2.2.4.js')
   end
 
   def hellobar_container_css
@@ -384,7 +384,7 @@ class ScriptGenerator < Mustache
   end
 
   def all_site_elements
-    site.rules.map { |r| site_elements_for_rule(r, false) }.flatten
+    site.rules.map { |rule| site_elements_for_rule(rule, false) }.flatten
   end
 
   def element_classes
@@ -397,18 +397,17 @@ class ScriptGenerator < Mustache
 
   def container_css_files
     vendor_root = "#{ Rails.root }/vendor/assets/stylesheets/site_elements"
-    files = ["#{ vendor_root }/container_common.css"]
-
-    files += element_classes.map { |klass| "#{ vendor_root }/#{ klass.name.downcase }/container.css" }
-    files += element_themes.map(&:container_css_path)
+    ["#{ vendor_root }/container_common.css"] +
+      element_classes.map { |klass| "#{ vendor_root }/#{ klass.name.downcase }/container.css" } +
+      element_themes.map(&:container_css_path)
   end
 
   def element_css_files
     vendor_root = "#{ Rails.root }/vendor/assets/stylesheets/site_elements"
-    files = ["#{ vendor_root }/common.css"]
 
-    files += element_classes.map { |klass| "#{ vendor_root }/#{ klass.name.downcase }/element.css" }
-    files += element_themes.map(&:element_css_path)
+    ["#{ vendor_root }/common.css"] +
+      element_classes.map { |klass| "#{ vendor_root }/#{ klass.name.downcase }/element.css" } +
+      element_themes.map(&:element_css_path)
   end
 
   def read_css_files(files)
@@ -423,5 +422,12 @@ class ScriptGenerator < Mustache
     end
 
     css.compact.join("\n")
+  end
+
+  def render_js(path)
+    js_content = Rails.root.join('vendor/assets/javascripts/', path).read
+    return js_content unless path =~ /\.es6$/
+
+    Babel::Transpiler.transform(js_content).fetch('code')
   end
 end
