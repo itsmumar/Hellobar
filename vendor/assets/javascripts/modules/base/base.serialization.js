@@ -1,5 +1,7 @@
 hellobar.defineModule('base.serialization', [], function () {
 
+  // TODO think if we can eliminate this kind of serialization and remove the module
+
   // Replaces all chars used within the serialization schema with a space
   function sanitizeCookieValue(value) {
     return (value + '').replace(/[\^\|\,\;\n\r]/g, ' ');
