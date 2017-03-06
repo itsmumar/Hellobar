@@ -73,7 +73,7 @@ class User < ActiveRecord::Base
   def self.search_all_versions_for_email(email)
     return if email.blank?
 
-    find_by(email: email) ||
+    find_by_email(email) ||
       find_and_create_by_referral(email) ||
       Hello::WordpressUser.find_by(email: email)
   end

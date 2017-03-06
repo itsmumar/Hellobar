@@ -436,6 +436,8 @@ class LegacyMigrator
       return if timezone == 'visitor' || timezone == 'false' || timezone.nil?
 
       timezone[12..-1] # timezone is in a standardized format "(GMT+HH:MM) "
+    rescue => _
+      nil
     end
 
     private

@@ -108,3 +108,9 @@ Style/WordArray:
 
 Style/SpaceInsideStringInterpolation:
   EnforcedStyle: space
+
+Rails/DynamicFindBy:
+  Whitelist:
+    - find_by_sql
+    - find_by_email
+    - find_by_script
