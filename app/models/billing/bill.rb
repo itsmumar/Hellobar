@@ -104,9 +104,11 @@ class Bill < ActiveRecord::Base
     false
   end
 
-  def on_paid; end
+  def on_paid
+  end
 
-  def on_voided; end
+  def on_voided
+  end
 
   def paid_with_payment_method_detail
     successful_billing_attempt.try(:payment_method_details)

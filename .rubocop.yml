@@ -68,3 +68,6 @@ Style/NumericLiteralPrefix:
 # SupportedStyles: predicate, comparison
 Style/NumericPredicate:
   Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
