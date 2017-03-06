@@ -810,7 +810,7 @@ var HB = {
   // Gets a cookie
   // ADAPTER
   gc: function (key) {
-    hellobar('base.storage').getValue(key);
+    return hellobar('base.storage').getValue(key);
   },
 
   // Sets a cookie
