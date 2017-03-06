@@ -16,16 +16,17 @@ files.each_with_index do |file, i|
   puts "Reading file #{(i + 1)} of #{files.length} #{file.inspect} ..."
   File.open(file, 'r') do |fp|
     loop do
-      break unless line = fp.gets
-      if !pattern or line =~ pattern
-        line.chomp!
-        begin
-          QueueWorker.send_sqs_message(line, Hellobar::Settings[:env_name], Hellobar::Settings[:low_priority_queue])
-          num_jobs += 1
-        rescue Exception => e
-          puts "Failed on #{line.inspect}"
-          raise
-        end
+      line = fp.gets
+      break unless line
+      next if pattern && line !~ pattern
+
+      line.chomp!
+      begin
+        QueueWorker.send_sqs_message(line, Hellobar::Settings[:env_name], Hellobar::Settings[:low_priority_queue])
+        num_jobs += 1
+      rescue Exception => e
+        puts "Failed on #{line.inspect}"
+        raise
       end
     end
   end

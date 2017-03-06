@@ -15,14 +15,10 @@ class Site < ActiveRecord::Base
   has_many :contact_lists, dependent: :destroy
   has_many :subscriptions, -> { order 'id' }
   accepts_nested_attributes_for :subscriptions
+
   has_many :bills, -> { order 'id' }, through: :subscriptions
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
-
-  scope :protocol_ignored_url, ->(url) {
-    host = normalize_url(url).normalized_host if url.include?('http')
-    where('sites.url = ? OR sites.url = ?', "https://#{host}", "http://#{host}")
-  }
 
   acts_as_paranoid
 
@@ -45,32 +41,44 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def needs_script_regeneration?
-    !!@needs_script_regeneration
-  end
-
-  def regenerate_script
-    if !destroyed?
-      @needs_script_regeneration = true
-    end
-  end
-
   validates :url, url: true
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
 
   validate :url_is_unique?
 
-  scope :script_installed_db, -> do
-    where('script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)')
+  def self.protocol_ignored_url(url)
+    host = normalize_url(url).normalized_host if url.include?('http')
+    where('sites.url = ? OR sites.url = ?', "https://#{host}", "http://#{host}")
   end
 
-  scope :script_not_installed_db, -> do
-    where.not('script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)')
+  def self.script_installed_db
+    where(
+      'script_installed_at IS NOT NULL
+      AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
+    )
   end
 
-  scope :script_uninstalled_db, -> do
-    where('script_installed_at IS NOT NULL AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)')
+  def self.script_not_installed_db
+    where.not(
+      'script_installed_at IS NOT NULL
+      AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
+    )
+  end
+
+  def self.script_uninstalled_db
+    where(
+      'script_installed_at IS NOT NULL
+      AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
+    )
+  end
+
+  def needs_script_regeneration?
+    !!@needs_script_regeneration
+  end
+
+  def regenerate_script
+    @needs_script_regeneration = true unless destroyed?
   end
 
   # We are getting bad analytics data regarding installs and uninstalls
@@ -151,7 +159,7 @@ class Site < ActiveRecord::Base
     response = HTTParty.get(url, timeout: 5)
     if response =~ /#{script_name}/
       true
-    elsif (had_wordpress_bars? && response =~ /hellobar.js/)
+    elsif had_wordpress_bars? && response =~ /hellobar.js/
       true
     else
       false
@@ -176,7 +184,7 @@ class Site < ActiveRecord::Base
   end
 
   def script_content(compress = true)
-    ScriptGenerator.new(self, :compress => compress).generate_script
+    ScriptGenerator.new(self, compress: compress).generate_script
   end
 
   def generate_script(options = {})
@@ -194,12 +202,6 @@ class Site < ActiveRecord::Base
   def check_installation(options = {})
     delay :do_check_installation, options
   end
-
-=begin
-  def recheck_installation(options = {})
-    delay :do_recheck_installation, options
-  end
-=end
 
   def queue_digest_email(options = {})
     delay :send_digest_email, options
@@ -246,21 +248,21 @@ class Site < ActiveRecord::Base
   def url_exists?(user = nil)
     if user
       Site.joins(:users)
-      .merge(Site.protocol_ignored_url(url))
-      .where(users: { id: user.id })
-      .where.not(id: id)
-      .any?
+          .merge(Site.protocol_ignored_url(url))
+          .where(users: { id: user.id })
+          .where.not(id: id)
+          .any?
     else
       Site.where.not(id: id).merge(Site.protocol_ignored_url(url)).any?
     end
   end
 
   def url_is_unique?
-    if users.
-      joins(:sites).
-      merge(Site.protocol_ignored_url(url)).
-      where.not(sites: { id: id }).
-      any?
+    if users
+       .joins(:sites)
+       .merge(Site.protocol_ignored_url(url))
+       .where.not(sites: { id: id })
+       .any?
 
       errors.add(:url, 'is already in use')
     end
@@ -334,7 +336,7 @@ class Site < ActiveRecord::Base
       bills(true).each do |bill|
         # Find bills that are due now and we've tried to bill
         # at least once
-        if bill.pending? and bill.amount > 0 and now >= bill.bill_at and !bill.billing_attempts.empty?
+        if bill.pending? && bill.amount > 0 && (now >= bill.bill_at) && !bill.billing_attempts.empty?
           @bills_with_payment_issues << bill
         end
       end
@@ -374,7 +376,7 @@ class Site < ActiveRecord::Base
     target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
 
     (Site.maximum(:id) || 1).downto(1) do |i|
-      return Site.find_by_id(i) if id_to_script_hash(i) == target_hash
+      return Site.find_by(id: i) if id_to_script_hash(i) == target_hash
     end
 
     nil
@@ -400,9 +402,9 @@ class Site < ActiveRecord::Base
   end
 
   def get_content_upgrade_styles
-     return JSON.parse(settings)['content_upgrade']
+    return JSON.parse(settings)['content_upgrade']
   rescue
-     return {}
+    return {}
   end
 
   private
@@ -420,9 +422,7 @@ class Site < ActiveRecord::Base
         if bill.pending?
           bill.void! if actually_change
         elsif bill.paid?
-          if bill.active_during(now)
-            active_paid_bills << bill
-          end
+          active_paid_bills << bill if bill.active_during(now)
         end
       end
     end
@@ -492,23 +492,10 @@ class Site < ActiveRecord::Base
     has_script_installed?
   end
 
-=begin
-  def do_recheck_installation(options = {})
-    # Check the script installation
-    if self.has_script_installed?
-      Analytics.track(:site, self.id, "Installed", at: self.script_installed_at)
-    else
-      if self.script_uninstalled_at
-        Analytics.track(:site, self.id, "Uninstalled", at: self.script_uninstalled_at)
-      end
-    end
-  end
-=end
-
   def generate_static_assets(options = {})
     update_column(:script_attempted_to_generate_at, Time.now)
 
-    Timeout::timeout(20) do
+    Timeout.timeout(20) do
       generated_script_content = options[:script_content] || script_content(true)
 
       if Hellobar::Settings[:store_site_scripts_locally]
@@ -517,12 +504,11 @@ class Site < ActiveRecord::Base
         Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
 
         site_elements.each do |site_element|
-          if site_element.wordpress_bar_id
-            users.each do |user|
-              if user.wordpress_user_id
-                name = "#{user.wordpress_user_id}_#{site_element.wordpress_bar_id}.js"
-                Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
-              end
+          next unless site_element.wordpress_bar_id
+          users.each do |user|
+            if user.wordpress_user_id
+              name = "#{user.wordpress_user_id}_#{site_element.wordpress_bar_id}.js"
+              Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
             end
           end
         end
@@ -532,7 +518,7 @@ class Site < ActiveRecord::Base
   end
 
   def generate_blank_static_assets
-    generate_static_assets(:script_content => '')
+    generate_static_assets(script_content: '')
   end
 
   def standardize_url

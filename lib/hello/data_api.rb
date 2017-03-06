@@ -29,13 +29,13 @@ module Hello::DataAPI
         semaphore = Mutex.new
 
         site_element_ids.each_slice(API_MAX_SLICE) do |ids|
-          pool.process {
+          pool.process do
             path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, ids, site.read_key, num_days)
             slice_results = get(path, params)
-            semaphore.synchronize {
+            semaphore.synchronize do
               results.merge!(slice_results) if slice_results
-            }
-          }
+            end
+          end
         end
 
         pool.shutdown
@@ -76,8 +76,8 @@ module Hello::DataAPI
     #
     def lifetime_totals_by_type(site, site_elements, num_days = 30, cache_options = {})
       data = Hello::DataAPI.lifetime_totals(site, site_elements, num_days, cache_options) || {}
-      totals = { :total => [], :email => [], :social => [], :traffic => [], :call => [] }
-      elements = site.site_elements.where(:id => data.keys)
+      totals = { total: [], email: [], social: [], traffic: [], call: [] }
+      elements = site.site_elements.where(id: data.keys)
       ids = {}
 
       # collect the ids of each subtype
@@ -197,7 +197,7 @@ module Hello::DataAPI
     end
 
     def fake_get_contacts(_contact_list)
-      [['dmitriy+person100@polymathic.me', 'First Last', 1388534400], ['dmitriy+person99@polymathic.me', 'Dr Pepper', 1388534399]]
+      [['dmitriy+person100@polymathic.me', 'First Last', 1_388_534_400], ['dmitriy+person99@polymathic.me', 'Dr Pepper', 1_388_534_399]]
     end
 
     def get(path, params)
@@ -207,7 +207,7 @@ module Hello::DataAPI
         begin_time = Time.now.to_f
         url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
         response = nil
-        Timeout::timeout(timeouts[timeout_index]) do
+        Timeout.timeout(timeouts[timeout_index]) do
           response = Net::HTTP.get(URI.parse(url))
         end
         results = JSON.parse(response)

@@ -13,14 +13,15 @@ class Users::SessionsController < Devise::SessionsController
   def find_email
     email = params[:user].try(:[], :email)
 
-    if TEMP_MIGRATION_USERS.include?(email)
-      @user = User.new(email: email)
-    else
-      @user = User.search_all_versions_for_email(email)
-    end
+    @user =
+      if TEMP_MIGRATION_USERS.include?(email)
+        User.new(email: email)
+      else
+        User.search_all_versions_for_email(email)
+      end
 
     if @user
-      if @user.kind_of?(Hello::WordpressUser)
+      if @user.wordpress_user?
         # render find_email
       elsif @user.status == User::TEMPORARY_STATUS
         sign_in(@user)
@@ -72,7 +73,7 @@ class Users::SessionsController < Devise::SessionsController
 
         cookies.permanent[:login_email] = email
         # Record log in
-        Analytics.track(*current_person_type_and_id, 'Logged In', { ip: request.remote_ip })
+        Analytics.track(*current_person_type_and_id, 'Logged In', ip: request.remote_ip)
 
         redirect_to after_sign_in_path_for(@user)
       else

@@ -8,17 +8,17 @@ describe ServiceProviders::Maropost do
   it 'raises error if identity is missing api key' do
     identity = Identity.new site_id: 1, provider: 'maropost'
 
-    expect { ServiceProviders::Maropost.new(identity: identity) }.
-          to raise_error('Identity does not have a stored Maropost API key and AccountID')
+    expect { ServiceProviders::Maropost.new(identity: identity) }
+      .to raise_error('Identity does not have a stored Maropost API key and AccountID')
   end
 
   context 'remote requests' do
-    let(:identity) {
+    let(:identity) do
       Identity.new site_id: 1,
                    provider: 'maropost',
                    api_key: 'my_cool_api_key',
                    credentials: { 'username' => 'a_user_id_actually' }
-    }
+    end
 
     let(:maropost) { ServiceProviders::Maropost.new(identity: identity) }
     let(:client) { Faraday.new }
@@ -26,12 +26,12 @@ describe ServiceProviders::Maropost do
     let(:success_body) {}
     let(:success_response) { double :response, success?: true, body: [{ id: 1122, name: 'myCoolList' }].to_json }
 
-    let(:failure_response) {
+    let(:failure_response) do
       double :response,
-             success?: false,
-             status: 500,
-             body: 'things went really bad'
-    }
+        success?: false,
+        status: 500,
+        body: 'things went really bad'
+    end
 
     before do
       allow(Faraday).to receive(:new).and_return(client)
@@ -39,9 +39,10 @@ describe ServiceProviders::Maropost do
 
     context '#lists' do
       it 'includes auth_token in api requests' do
-        expect(client).to receive(:get).
-                          with(anything, hash_including(auth_token: 'my_cool_api_key')).
-                          and_return(success_response)
+        expect(client)
+          .to receive(:get)
+          .with(anything, hash_including(auth_token: 'my_cool_api_key'))
+          .and_return(success_response)
 
         expect(maropost.lists).to eq([{ 'id' => 1122, 'name' => 'myCoolList' }])
       end
@@ -63,17 +64,17 @@ describe ServiceProviders::Maropost do
 
       it 'handles time out' do
         allow(client).to receive(:get).and_raise(Faraday::TimeoutError)
-        expect(maropost).
-          to receive(:log).
-          with('getting lists timed out')
+        expect(maropost)
+          .to receive(:log)
+          .with('getting lists timed out')
         maropost.lists
       end
 
       it 'logs parsed error message in the event of failed request' do
         allow(client).to receive(:get).and_return(failure_response)
-        expect(maropost).
-          to receive(:log).
-          with("getting lists returned 'things went really bad' with the code 500")
+        expect(maropost)
+          .to receive(:log)
+          .with("getting lists returned 'things went really bad' with the code 500")
         maropost.lists
       end
     end
@@ -88,9 +89,9 @@ describe ServiceProviders::Maropost do
                     subscribe: true,
                     remove_from_dnm: true }
 
-        expect(double_request).
-          to receive(:body=).
-          with(hash_including(contact: contact))
+        expect(double_request)
+          .to receive(:body=)
+          .with(hash_including(contact: contact))
 
         allow(client).to receive(:post).and_yield(double_request)
         maropost.subscribe(1122, 'bobloblaw@lawblog.com', 'Bob Blah Loblaw')
@@ -99,9 +100,9 @@ describe ServiceProviders::Maropost do
       it 'includes auth_token in api requests' do
         double_request = double(:request, url: true)
 
-        expect(double_request).
-          to receive(:body=).
-          with(hash_including(auth_token: 'my_cool_api_key'))
+        expect(double_request)
+          .to receive(:body=)
+          .with(hash_including(auth_token: 'my_cool_api_key'))
 
         allow(client).to receive(:post).and_yield(double_request)
         maropost.subscribe(1122, 'bobloblaw@lawblog.com', 'Bob')
@@ -110,8 +111,8 @@ describe ServiceProviders::Maropost do
       it 'submits email address as name if name is not present' do
         double_request = double(:request, url: true)
 
-        expect(double_request).
-          to receive(:body=) do |body|
+        expect(double_request)
+          .to receive(:body=) do |body|
             expect(body[:contact]).to include(first_name: 'bobloblaw@lawblog.com')
           end
 
@@ -121,17 +122,17 @@ describe ServiceProviders::Maropost do
 
       it 'logs parsed error message in the event of failed request' do
         allow(client).to receive(:post).and_return(failure_response)
-        expect(maropost).
-          to receive(:log).
-          with("sync error bobloblaw@lawblog.com sync returned 'things went really bad' with the code 500")
+        expect(maropost)
+          .to receive(:log)
+          .with("sync error bobloblaw@lawblog.com sync returned 'things went really bad' with the code 500")
         maropost.subscribe(1122, 'bobloblaw@lawblog.com')
       end
 
       it 'handles time out' do
         allow(client).to receive(:post).and_raise(Faraday::TimeoutError)
-        expect(maropost).
-          to receive(:log).
-          with('sync timed out')
+        expect(maropost)
+          .to receive(:log)
+          .with('sync timed out')
         maropost.subscribe(1122, 'bobloblaw@lawblog.com')
       end
     end

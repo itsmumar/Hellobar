@@ -183,7 +183,7 @@ unless defined?(Hellobar::Settings)
       name: 'MyEmma',
       requires_embed_code: true
     },
-    #silly name to support oauth strategy gem
+    # silly name to support oauth strategy gem
     verticalresponse: {
       type: :email,
       name: 'Vertical Response',

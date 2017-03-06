@@ -9,7 +9,7 @@ module ServiceProviders
       if span
         url = span.try(:attr, 'name')
         url = URI.decode(url)
-        query_params = CGI::parse URI::parse(url).query
+        query_params = CGI.parse URI.parse(url).query
         query_params['campaign_name'][0]
       end
     end

@@ -37,7 +37,7 @@ describe ApplicationController do
 
   describe 'record_tracking_param' do
     it 'records the tracking param' do
-      controller.stub(:params => { :trk => 'asdf' })
+      controller.stub(params: { trk: 'asdf' })
 
       Hello::TrackingParam.should_receive(:track).with('asdf')
 
@@ -167,7 +167,7 @@ describe ApplicationController, 'rescue_from errors' do
     it 'logs the current user out' do
       allow(controller).to receive(:index) { raise Google::Apis::AuthorizationError, 'Unauthorized' }
 
-      expect(get :index).to redirect_to('/auth/google_oauth2')
+      expect(get(:index)).to redirect_to('/auth/google_oauth2')
     end
 
     it 'redirects the user to log in again to refresh the access token' do

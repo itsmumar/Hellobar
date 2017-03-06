@@ -30,7 +30,7 @@ describe Admin::SitesController do
       let(:user) { site.owners.first }
 
       before do
-        Hello::DataAPI.stub(:lifetime_totals => nil)
+        Hello::DataAPI.stub(lifetime_totals: nil)
 
         allow(User).to receive(:find).and_return(user)
         allow(Site).to receive(:where).and_return([site])
@@ -53,9 +53,7 @@ describe Admin::SitesController do
       it 'returns success message' do
         post_regenerate
 
-        expect_json_response_to_include({
-          message: 'Site regenerated'
-        })
+        expect_json_response_to_include(message: 'Site regenerated')
       end
 
       context 'when regenerating script fails' do
@@ -72,9 +70,7 @@ describe Admin::SitesController do
         it 'returns error message' do
           post_regenerate
 
-          expect_json_response_to_include({
-            message: "Site's script failed to generate"
-          })
+          expect_json_response_to_include(message: "Site's script failed to generate")
         end
       end
     end
@@ -91,14 +87,12 @@ describe Admin::SitesController do
       it 'returns error message' do
         post_regenerate(-1)
 
-        expect_json_response_to_include({
-          message: 'Site was not found'
-        })
+        expect_json_response_to_include(message: 'Site was not found')
       end
     end
 
     def post_regenerate(site_id = site.id)
-      post :regenerate, { user_id: user.id, id: site_id }
+      post :regenerate, user_id: user.id, id: site_id
     end
   end
 end

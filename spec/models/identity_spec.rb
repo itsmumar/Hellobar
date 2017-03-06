@@ -14,7 +14,7 @@ describe Identity do
 
       identity.site_id.should == @site.id
       identity.provider.should == 'aweber'
-      identity.id.should == nil
+      identity.id.should be_nil
     end
 
     it 'loads an existing identity if one exists for a site and provider combination' do
@@ -24,20 +24,20 @@ describe Identity do
     end
 
     it 'uses the provider name to get the API client class' do
-      Gibbon::Request.stubs(:new => double('gibbon'))
+      Gibbon::Request.stubs(new: double('gibbon'))
 
-      identity = Identity.new(:provider => 'mailchimp', :extra => { 'metadata' => {} }, :credentials => {})
+      identity = Identity.new(provider: 'mailchimp', extra: { 'metadata' => {} }, credentials: {})
       identity.service_provider.should be_an_instance_of ServiceProviders::MailChimp
 
-      identity = Identity.new(:provider => 'aweber', :credentials => {})
+      identity = Identity.new(provider: 'aweber', credentials: {})
       identity.service_provider.should be_an_instance_of ServiceProviders::AWeber
     end
 
     describe 'service provider' do
       it 'should call destroy_and_notify_user when it encounters an error' do
-        Gibbon::Request.stubs(:new => double('gibbon'))
+        Gibbon::Request.stubs(new: double('gibbon'))
 
-        identity = Identity.new(:provider => 'mailchimp', :extra => { 'metadata' => {} }, :credentials => {})
+        identity = Identity.new(provider: 'mailchimp', extra: { 'metadata' => {} }, credentials: {})
         ServiceProviders::MailChimp.should_receive(:new).and_raise(Gibbon::MailChimpError)
         identity.should_receive(:destroy_and_notify_user)
         identity.service_provider.should be_nil
@@ -69,7 +69,7 @@ describe Identity do
 
     context 'has no referencing contact lists' do
       it 'should do nothing' do
-        identity = Identity.create(:provider => 'aweber', :credentials => {}, :site => sites(:zombo))
+        identity = Identity.create(provider: 'aweber', credentials: {}, site: sites(:zombo))
         identity.contact_lists_updated
         identity.destroyed?.should be_true
       end
@@ -80,7 +80,9 @@ describe Identity do
     let(:contact_list) do
       contact_lists(:embed_code).tap { |c| c.identity = nil }
     end
-    let(:file_name) { (file rescue provider) }
+    let(:file) {}
+    let(:provider) {}
+    let(:file_name) { file || provider }
 
     let(:service_provider) do
       contact_list.provider = provider
@@ -140,7 +142,7 @@ describe Identity do
       it 'works' do
         service_provider.class.should == ServiceProviders::IContact
 
-        service_provider.list_url.should == nil
+        service_provider.list_url.should be_nil
         service_provider.action_url.should == 'http://app.icontact.com/icp/signup.php'
         service_provider.email_param.should == 'fields_email'
         service_provider.name_params.should == %w(fields_fname fields_lname)
@@ -165,7 +167,7 @@ describe Identity do
       it 'works' do
         service_provider.class.should == ServiceProviders::IContact
 
-        service_provider.list_url.should == nil
+        service_provider.list_url.should be_nil
         service_provider.action_url.should == 'https://app.icontact.com/icp/signup.php'
         service_provider.email_param.should == 'fields_email'
         service_provider.name_params.should == %w(fields_fname fields_lname)

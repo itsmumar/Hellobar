@@ -5,7 +5,7 @@ describe User do
     it 'cannot have the same email as someone in the wordpress database' do
       expect(Hello::WordpressUser).to receive(:email_exists?).with('foo@bar.com').and_return(true)
 
-      user = User.create(:email => 'foo@bar.com')
+      user = User.create(email: 'foo@bar.com')
 
       expect(user.errors.messages[:email]).to include('has already been taken')
     end
@@ -143,7 +143,7 @@ describe User do
   describe '#new?' do
     it 'returns true if the user is logging in for the first time and does not have any bars' do
       user = create(:user)
-      #normaly devise would set it
+      # normaly devise would set it
       user.sign_in_count = 1
       user.save
       expect(user.new?).to be_true
@@ -154,14 +154,14 @@ describe User do
       site = user.sites.create(url: random_uniq_url)
       rule = site.rules.create(name: 'test rule', match: 'all')
       site_element = create(:site_element, rule: rule)
-      #normaly devise would set it
+      # normaly devise would set it
       user.sign_in_count = 1
       expect(user.new?).to be_false
     end
 
     it 'returns false if the user is not logging in for the first time' do
       user = create(:user)
-      #normaly devise would set it
+      # normaly devise would set it
       user.sign_in_count = 2
       user.save
       expect(user.new?).to be_false
@@ -389,27 +389,27 @@ describe User do
 
     context 'with invalid host string' do
       it 'should return empty array when arg is email address' do
-        expect(User.search_by_url('dude@brah.bro')).
-          to eq([])
+        expect(User.search_by_url('dude@brah.bro'))
+          .to eq([])
       end
 
       it 'should return empty array when arg is not url' do
-        expect(User.search_by_url('how can mirrors be real')).
-          to eq([])
+        expect(User.search_by_url('how can mirrors be real'))
+          .to eq([])
       end
     end
 
     context 'with subdomain' do
       it 'should search with correct domain' do
-        expect(User.search_by_url('www.google.com')).
-          to include(@user)
+        expect(User.search_by_url('www.google.com'))
+          .to include(@user)
       end
     end
 
     context 'without subdomain' do
       it 'should search with correct domain' do
-        expect(User.search_by_url('google.com')).
-          to include(@user)
+        expect(User.search_by_url('google.com'))
+          .to include(@user)
       end
     end
   end

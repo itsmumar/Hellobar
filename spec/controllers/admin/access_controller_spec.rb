@@ -12,7 +12,7 @@ describe Admin::AccessController do
       stub_current_admin(@admin)
       @admin.should_receive(:reset_password!).with('newpass123')
 
-      post :do_reset_password, :existing_password => 'password', :new_password => 'newpass123', :new_password_again => 'newpass123'
+      post :do_reset_password, existing_password: 'password', new_password: 'newpass123', new_password_again: 'newpass123'
 
       response.should redirect_to(admin_path)
     end
@@ -21,7 +21,7 @@ describe Admin::AccessController do
       stub_current_admin(@admin)
       @admin.should_receive(:reset_password!).never
 
-      post :do_reset_password, :existing_password => 'iforgetmypassword', :new_password => 'newpass123', :new_password_again => 'newpass123'
+      post :do_reset_password, existing_password: 'iforgetmypassword', new_password: 'newpass123', new_password_again: 'newpass123'
 
       response.should render_template('reset_password')
     end
@@ -50,7 +50,7 @@ describe Admin::AccessController do
 
       @admin.should_receive(:send_validate_access_token_email!)
 
-      post :process_step1, :login_email => @admin.email
+      post :process_step1, login_email: @admin.email
     end
   end
 
@@ -62,7 +62,7 @@ describe Admin::AccessController do
 
       @admin.should_receive(:validate_login).and_return(true)
 
-      post :process_step2, :admin_access_email => @admin.email
+      post :process_step2, admin_access_email: @admin.email
 
       session[:admin_token].should == @admin.session_token
       response.should redirect_to(admin_path)
@@ -75,7 +75,7 @@ describe Admin::AccessController do
 
       @admin.should_receive(:validate_login).and_return(false)
 
-      post :process_step2, :admin_access_email => @admin.email
+      post :process_step2, admin_access_email: @admin.email
 
       session[:admin_token].should_not == @admin.session_token
       response.should render_template('step2')
@@ -90,7 +90,7 @@ describe Admin::AccessController do
 
       @admin.should_receive(:validate_access_token).and_return(true)
 
-      get :validate_access_token, :email => @admin.email, :key => 'key', :timestamp => 1
+      get :validate_access_token, email: @admin.email, key: 'key', timestamp: 1
 
       response.should render_template('step2')
     end

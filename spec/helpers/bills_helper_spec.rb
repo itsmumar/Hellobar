@@ -5,7 +5,7 @@ describe BillsHelper do
     coupon = create(:referral_coupon)
     bill = create(:pro_bill)
     3.times { bill.coupon_uses.create(coupon: coupon) }
-    run_coupon = lambda { |b| helper.coupons_and_uses(bill, &b) }
+    run_coupon = ->(b) { helper.coupons_and_uses(bill, &b) }
 
     expect(run_coupon).to yield_with_args(coupon, 3)
     expect(run_coupon).to yield_control.once

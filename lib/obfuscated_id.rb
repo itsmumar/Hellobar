@@ -14,7 +14,7 @@ class ObfuscatedID
       raise 'Does not work with negative values' if int < 0
       id = int.to_s
       outputs = []
-      inputs = [id[0...3], id[3...6], id[6...9]].reject { |i| !i or i == '' }
+      inputs = [id[0...3], id[3...6], id[6...9]].reject { |i| !i || i.empty? }
       inputs.each do |input|
         output = ''
         input.split('').each do |c|
@@ -24,11 +24,12 @@ class ObfuscatedID
         input = input.to_i
         unless input == 0
           loop do
-            if input > ENCODE.length
-              val = rand(ENCODE.length) + 1
-            else
-              val = rand(input) + 1
-            end
+            val =
+              if input > ENCODE.length
+                rand(ENCODE.length) + 1
+              else
+                rand(input) + 1
+              end
             output += ENCODE[(val - 1)..(val - 1)]
             input -= val
             break if input <= 0
@@ -53,9 +54,7 @@ class ObfuscatedID
             value += ENCODE.index(char) + 1
           end
         end
-        unless value == 0
-          outputs << value.to_s
-        end
+        outputs << value.to_s unless value == 0
       end
       outputs.join('').to_i
     end

@@ -42,7 +42,8 @@ class ReferralsController < ApplicationController
     if current_user.blank? && token.present?
       session[:referral_token] = params[:token]
       flash[:success] = I18n.t('referral.flash.accepted')
-    else
+
+      # else
       # Either they're already in the app, in which case the referral doesn't apply,
       # or the token is wrong. In both cases, just redirect them.
     end

@@ -4,7 +4,7 @@ module ServiceProviders
       if opts[:identity]
         identity = opts[:identity]
       elsif opts[:site]
-        identity = opts[:site].identities.find_by_provider!('mad_mimi_api')
+        identity = opts[:site].identities.find_by!(provider: 'mad_mimi_api')
         raise 'Site does not have a stored MadMimi identity' unless identity
       else
         raise 'Must provide an identity through the arguments'
@@ -15,7 +15,7 @@ module ServiceProviders
       raise 'Identity does not have a stored MadMimi email' unless api_email
       raise 'Identity does not have a stored MadMimi API key' unless api_key
 
-      @client = MadMimi.new(api_email, api_key, { raise_exceptions: true })
+      @client = MadMimi.new(api_email, api_key, raise_exceptions: true)
     end
 
     def lists
@@ -25,9 +25,7 @@ module ServiceProviders
     def subscribe(list_id, email, name = nil, _double_optin = true)
       name ||= email
 
-      @client.add_to_list(email, list_id, {
-        name: name
-      })
+      @client.add_to_list(email, list_id, name: name)
     end
 
     def batch_subscribe(list_id, subscribers, _double_optin = true)

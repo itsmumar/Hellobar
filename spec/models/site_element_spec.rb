@@ -92,8 +92,7 @@ describe SiteElement do
 
           element.save
 
-          element.errors['settings.redirect_url'].
-            should include('is a pro feature')
+          element.errors['settings.redirect_url'].should include('is a pro feature')
         end
 
         it 'requires a redirect url if after_email_submit_action is :redirect' do
@@ -102,8 +101,7 @@ describe SiteElement do
 
           element.save
 
-          element.errors['settings.redirect_url'].
-            should include('cannot be blank')
+          element.errors['settings.redirect_url'].should include('cannot be blank')
         end
 
         it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
@@ -145,8 +143,7 @@ describe SiteElement do
 
         element.save
 
-        element.errors['settings.redirect_url'].
-          should include('is a pro feature')
+        element.errors['settings.redirect_url'].should include('is a pro feature')
       end
 
       it 'requires a redirect url if after_email_submit_action is :redirect' do
@@ -155,8 +152,7 @@ describe SiteElement do
 
         element.save
 
-        element.errors['settings.redirect_url'].
-          should include('cannot be blank')
+        element.errors['settings.redirect_url'].should include('cannot be blank')
       end
 
       it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
@@ -187,8 +183,7 @@ describe SiteElement do
 
         element.save
 
-        element.errors['custom_thank_you_text'].
-          should include('is a pro feature')
+        element.errors['custom_thank_you_text'].should include('is a pro feature')
       end
 
       it 'requires thank you text if after_email_submit_action is :custom_thank_you_text' do
@@ -197,8 +192,7 @@ describe SiteElement do
 
         element.save
 
-        element.errors['custom_thank_you_text'].
-          should include('cannot be blank')
+        element.errors['custom_thank_you_text'].should include('cannot be blank')
       end
 
       it "doesn't require thank you text if after_email_submit_action is not :custom_thank_you_text" do
@@ -232,7 +226,7 @@ describe SiteElement do
     let(:element) { site_elements(:zombo_traffic) }
 
     it 'returns total views as reported by the data API' do
-      Hello::DataAPI.stub(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({ element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]) })
+      Hello::DataAPI.stub(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
       element.total_views.should == 12
     end
 
@@ -252,7 +246,7 @@ describe SiteElement do
     let(:element) { site_elements(:zombo_traffic) }
 
     it 'returns total views as reported by the data API' do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({ element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]) })
+      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
       element.total_conversions.should == 6
     end
 
@@ -277,7 +271,7 @@ describe SiteElement do
     end
 
     it 'is true when there are conversions', aggregate_failures: true do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({ element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]) })
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
       expect(element).to have_converted
     end
   end
@@ -321,7 +315,7 @@ describe SiteElement do
     context 'when it is a pro site' do
       before do
         subscription = Subscription::Pro.new(schedule: 'monthly')
-        element.site.change_subscription(subscription, nil, 90.day)
+        element.site.change_subscription(subscription, nil, 90.days)
       end
 
       context 'when after_email_submit_action is :show_default_message' do

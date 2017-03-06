@@ -30,12 +30,12 @@ class User < ActiveRecord::Base
   has_one :current_onboarding_status, -> { order 'created_at DESC' }, class_name: 'UserOnboardingStatus'
 
   scope :join_current_onboarding_status, lambda {
-    joins(:onboarding_statuses).
-    where("user_onboarding_statuses.created_at =
+    joins(:onboarding_statuses)
+      .where("user_onboarding_statuses.created_at =
               (SELECT MAX(user_onboarding_statuses.created_at)
                       FROM user_onboarding_statuses
-                      WHERE user_onboarding_statuses.user_id = users.id)").
-    group('users.id')
+                      WHERE user_onboarding_statuses.user_id = users.id)")
+      .group('users.id')
   }
 
   scope :onboarding_sequence_before, lambda { |sequence_index|
@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
 
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
-  INVITE_EXPIRE_RATE = 2.week
+  INVITE_EXPIRE_RATE = 2.weeks
 
   # returns a user with a random email and password
   def self.generate_temporary_user
@@ -74,8 +74,8 @@ class User < ActiveRecord::Base
     return if email.blank?
 
     find_by(email: email) ||
-    find_and_create_by_referral(email) ||
-    Hello::WordpressUser.find_by_email(email)
+      find_and_create_by_referral(email) ||
+      Hello::WordpressUser.find_by(email: email)
   end
 
   def self.find_and_create_by_referral(email)
@@ -148,7 +148,7 @@ class User < ActiveRecord::Base
       config.api_url = Hellobar::Settings[:hb_infusionsoft_url]
       config.api_key = Hellobar::Settings[:hb_infusionsoft_key]
     end
-    data = { :FirstName => first_name, :LastName => last_name, :Email => email }
+    data = { FirstName: first_name, LastName: last_name, Email: email }
     contact_id = Infusionsoft.contact_add_with_dup_check(data, :Email)
     Infusionsoft.contact_add_to_group(contact_id, Hellobar::Settings[:hb_infusionsoft_default_group])
   end
@@ -164,25 +164,23 @@ class User < ActiveRecord::Base
     when :reset_password_instructions
       if is_oauth_user?
         reset_link = "#{host}/auth/google_oauth2"
-        MailerGateway.send_email('Reset Password Oauth', email, { :email => email, :reset_link => reset_link })
+        MailerGateway.send_email('Reset Password Oauth', email, email: email, reset_link: reset_link)
       else
-        reset_link = url_helpers.edit_user_password_url(self, :reset_password_token => args[0], :host => host)
-        MailerGateway.send_email('Reset Password', email, { :email => email, :reset_link => reset_link })
+        reset_link = url_helpers.edit_user_password_url(self, reset_password_token: args[0], host: host)
+        MailerGateway.send_email('Reset Password', email, email: email, reset_link: reset_link)
       end
     end
   end
 
   def role_for_site(site)
-    if membership = site_memberships.where(:site => site).first
+    if membership = site_memberships.find_by(site: site)
       membership.role.to_sym
-    else
-      nil
     end
   end
 
   def track_temporary_status_change
-    if @was_temporary and !temporary?
-      Analytics.track(:user, id, 'Completed Signup', { email: email })
+    if @was_temporary && !temporary?
+      Analytics.track(:user, id, 'Completed Signup', email: email)
       @was_temporary = false
     end
   end
@@ -203,7 +201,7 @@ class User < ActiveRecord::Base
   end
 
   def is_oauth_user?
-     !authentications.empty?
+    !authentications.empty?
   end
 
   def invite_token_expired?
@@ -253,7 +251,7 @@ class User < ActiveRecord::Base
 
       if user.save
         Analytics.track(:user, user.id, 'Signed Up', track_options)
-        Analytics.track(:user, user.id, 'Completed Signup', { email: user.email })
+        Analytics.track(:user, user.id, 'Completed Signup', email: user.email)
       end
     end
 
@@ -270,7 +268,7 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_invite_by_email(email, _site)
-    user = User.where(email: email).first
+    user = User.find_by(email: email)
 
     if user.nil?
       user = User.new(email: email)
@@ -306,6 +304,10 @@ class User < ActiveRecord::Base
     received_referral.present?
   end
 
+  def wordpress_user?
+    is_a?(Hello::WordpressUser)
+  end
+
   private
 
   def user_upgrade_policy
@@ -315,14 +317,14 @@ class User < ActiveRecord::Base
   def send_team_invite_email(site)
     host = ActionMailer::Base.default_url_options[:host]
     login_link = is_oauth_user? ? "#{host}/auth/google_oauth2" : url_helpers.new_user_session_url(host: host)
-    MailerGateway.send_email('Team Invite', email, { site_url: site.url, login_url: login_link })
+    MailerGateway.send_email('Team Invite', email, site_url: site.url, login_url: login_link)
   end
 
   def send_invite_token_email(site)
     host = ActionMailer::Base.default_url_options[:host]
     oauth_link = "#{host}/auth/google_oauth2"
-    signup_link = url_helpers.invite_user_url(invite_token: invite_token, :host => host)
-    MailerGateway.send_email('Invitation', email, { site_url: site.url, oauth_link: oauth_link, signup_link: signup_link })
+    signup_link = url_helpers.invite_user_url(invite_token: invite_token, host: host)
+    MailerGateway.send_email('Invitation', email, site_url: site.url, oauth_link: oauth_link, signup_link: signup_link)
   end
 
   # Disconnect oauth logins if user sets their own password
@@ -333,9 +335,7 @@ class User < ActiveRecord::Base
   end
 
   def clear_invite_token
-    if active? && invite_token
-      self.invite_token = nil
-    end
+    self.invite_token = nil if active? && invite_token
   end
 
   def destroy_orphan_sites_before_active_record_association_callbacks

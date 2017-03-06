@@ -1,7 +1,7 @@
 class SiteMembershipsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
-  before_action :load_site_membership, :only => [:show, :edit, :update, :destroy]
+  before_action :load_site_membership, only: [:show, :edit, :update, :destroy]
 
   def create
     @site_membership = @site.site_memberships.create(site_membership_params)
@@ -9,7 +9,7 @@ class SiteMembershipsController < ApplicationController
       @site_membership.user.send_invitation_email(@site_membership.site)
       render json: @site_membership
     else
-      render json: @site_membership.errors.full_messages, :status => :unprocessable_entity
+      render json: @site_membership.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -17,17 +17,17 @@ class SiteMembershipsController < ApplicationController
     if @site_membership.update(site_membership_params)
       render json: @site_membership
     else
-      render json: @site_membership.errors.full_messages, :status => :unprocessable_entity
+      render json: @site_membership.errors.full_messages, status: :unprocessable_entity
     end
   end
 
   def destroy
     if @site_membership.user == current_user
-      render json: { site_memberships: ["Can't remove permissions from yourself."] }, :status => :unprocessable_entity
+      render json: { site_memberships: ["Can't remove permissions from yourself."] }, status: :unprocessable_entity
     elsif @site_membership.can_destroy? && @site_membership.destroy
       render json: @site_membership
     else
-      render json: @site_membership.errors.full_messages, :status => :unprocessable_entity
+      render json: @site_membership.errors.full_messages, status: :unprocessable_entity
     end
   end
 

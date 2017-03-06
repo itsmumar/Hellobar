@@ -54,7 +54,7 @@ VCR.configure do |c|
   c.ignore_localhost = true
   c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :webmock
-  c.default_cassette_options = { :record => :none } # *TEMPORARILY* set to :new_episodes or :once if you add a spec that makes a network request
+  c.default_cassette_options = { record: :none } # *TEMPORARILY* set to :new_episodes or :once if you add a spec that makes a network request
 end
 
 # Use Webkit as js driver
@@ -76,9 +76,9 @@ RSpec.configure do |config|
 
     Capybara.register_driver :remote_firefox do |app|
       Capybara::Selenium::Driver.new(app,
-                                     browser: :remote,
-                                     url: 'http://selenium-firefox:4444/wd/hub',
-                                     desired_capabilities: :firefox)
+        browser: :remote,
+        url: 'http://selenium-firefox:4444/wd/hub',
+        desired_capabilities: :firefox)
     end
 
     Capybara.default_driver = :remote_firefox
@@ -137,12 +137,12 @@ RSpec.configure do |config|
 end
 
 def stub_current_admin(admin)
-  controller.stub :current_admin => admin
+  controller.stub current_admin: admin
 end
 
 def stub_current_user(user)
-  request.env['warden'].stub :authenticate! => user
-  controller.stub :current_user => user
+  request.env['warden'].stub authenticate!: user
+  controller.stub current_user: user
 
   user
 end
@@ -154,20 +154,20 @@ end
 def stub_out_get_ab_variations(*variations)
   variation_matcher = Regexp.new(variations.join('|'))
 
-  allow_any_instance_of(ApplicationController).
-    to receive(:get_ab_variation).
-    with(variation_matcher).
-    and_return(yield)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:get_ab_variation)
+    .with(variation_matcher)
+    .and_return(yield)
 
-  allow_any_instance_of(ApplicationController).
-    to receive(:get_ab_variation).
-    with(variation_matcher, anything).
-    and_return(yield)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:get_ab_variation)
+    .with(variation_matcher, anything)
+    .and_return(yield)
 
-  allow_any_instance_of(ApplicationController).
-    to receive(:get_ab_variation_or_nil).
-    with(variation_matcher).
-    and_return(yield)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:get_ab_variation_or_nil)
+    .with(variation_matcher)
+    .and_return(yield)
 end
 
 Hellobar::Settings[:host] = 'http://hellobar.com'

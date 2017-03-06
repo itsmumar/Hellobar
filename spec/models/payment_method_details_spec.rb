@@ -5,8 +5,8 @@ describe PaymentMethodDetails do
   it 'should be read-only' do
     d = PaymentMethodDetails.create
     d.data = { foo: 'bar' }
-    lambda { d.save }.should raise_error(ActiveRecord::ReadOnlyRecord)
-    lambda { d.destroy }.should raise_error(ActiveRecord::ReadOnlyRecord)
+    expect { d.save }.to raise_error(ActiveRecord::ReadOnlyRecord)
+    expect { d.destroy }.to raise_error(ActiveRecord::ReadOnlyRecord)
   end
 end
 
@@ -61,9 +61,9 @@ describe CyberSourceCreditCard do
     cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
     cc.data = VALID_DATA
     cc.save!
-    cc.data['verification_value'].should == nil
+    cc.data['verification_value'].should be_nil
     cc = CyberSourceCreditCard.find(cc.id)
-    cc.data['verification_value'].should == nil
+    cc.data['verification_value'].should be_nil
   end
 
   it 'should store the cybersource_token' do

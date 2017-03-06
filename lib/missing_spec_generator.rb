@@ -23,11 +23,11 @@ class MissingSpecGenerator
       next if file_name =~ /^\./ # skip hidden folders (.svn)
       if File.directory?(Rails.root + 'app/' + path + '/' + file_name)
         traverse_specs("#{path}/#{file_name}", spec_template,
-                       "#{namespace}#{file_name.camelcase}::")
+          "#{namespace}#{file_name.camelcase}::")
         next
       end
       spec_file("#{Rails.root}/spec/#{path}",
-                file_name, spec_template, namespace)
+        file_name, spec_template, namespace)
     end
   end
 

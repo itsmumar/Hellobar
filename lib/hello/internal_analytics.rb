@@ -41,11 +41,11 @@ module Hello
         end
 
         @@expected_index += 1
-        TESTS[name] = { :values => values, :index => index, :weights => weights, :name => name, :user_start_date => user_start_date }
+        TESTS[name] = { values: values, index: index, weights: weights, name: name, user_start_date: user_start_date }
       end
 
       def load_ab_tests
-        hash = YAML.load(File.read('lib/hello/ab_tests.yml'))
+        hash = YAML.safe_load(File.read('lib/hello/ab_tests.yml'), [Date])
         hash.each do |registered_test|
           name            = registered_test['name']
           values          = registered_test['values']
@@ -71,11 +71,9 @@ module Hello
     end
 
     def get_ab_test_value_index_from_cookie(cookie, index)
-      return if cookie == nil
+      return if cookie.nil?
       value = cookie[index..index]
-      if value and value =~ /\d+/
-        return value.to_i
-      end
+      return value.to_i if value && value =~ /\d+/
       nil
     end
 
@@ -91,7 +89,7 @@ module Hello
     end
 
     def set_ab_test_value_index_from_cookie(cookie, index, value_index)
-      raise "Value: #{value.inspect} is out of range" if value_index > MAX_VALUES_PER_TEST or value_index < 0
+      raise "Value: #{value.inspect} is out of range" if value_index > MAX_VALUES_PER_TEST || value_index < 0
       # Make sure there is enough values
       cookie = '' unless cookie
       num_chars_needed = ((index + 1) - cookie.length)
@@ -164,7 +162,7 @@ module Hello
         value = ab_test[:values][value_index]
 
         # Track it
-        Analytics.track(*current_person_type_and_id(user), test_name, { value: value })
+        Analytics.track(*current_person_type_and_id(user), test_name, value: value)
       else
         # Just get the value
         value = ab_test[:values][value_index]
@@ -178,7 +176,7 @@ module Hello
 
       unless cookies[VISITOR_ID_COOKIE]
         cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{Time.now.to_f}_#{request.remote_ip}_#{request.env['HTTP_USER_AGENT']}_#{rand(1000)}_id") + USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
-        Analytics.track(*current_person_type_and_id, 'First Visit', { ip: request.remote_ip })
+        Analytics.track(*current_person_type_and_id, 'First Visit', ip: request.remote_ip)
       end
       # Return the first VISITOR_ID_LENGTH characters of the hash
       cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH]
@@ -206,9 +204,7 @@ module Hello
       else
         # See if we can get a user id
         user_id = get_user_id_from_cookie
-        if user_id and user_id != USER_ID_NOT_SET_YET
-          return :user, user_id.to_i
-        end
+        return :user, user_id.to_i if user_id && user_id != USER_ID_NOT_SET_YET
         # Return the visitor ID
         return :visitor, visitor_id
       end

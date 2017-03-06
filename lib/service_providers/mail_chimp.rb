@@ -7,15 +7,16 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'mailchimp').first
+      identity = opts[:site].identities.where(provider: 'mailchimp').first
       raise 'Site does not have a stored MailChimp identity' unless identity
     end
 
     @identity = identity
-    @client = Gibbon::Request.new({
-                api_key: identity.credentials['token'],
-                api_endpoint: identity.extra['metadata']['api_endpoint']
-              })
+    @client =
+      Gibbon::Request.new(
+        api_key: identity.credentials['token'],
+        api_endpoint: identity.extra['metadata']['api_endpoint']
+      )
   end
 
   def lists
@@ -105,7 +106,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       if result['errors']
         non_already_subscribed_errors = result['errors'].select { |e| e['code'] != 214 }
         error_count = non_already_subscribed_errors.count
-        message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " +
+        message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " \
                   "#{error_count} errors that weren't just existing subscribers."
       end
 
@@ -126,8 +127,8 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     case error.status_code
     when 250
       catch_required_merge_var_error!(error)
-    when 104, 200, 101 #Invalid_ApiKey, Invalid List, Deactivated Account
-      identity.destroy_and_notify_user if identity != nil
+    when 104, 200, 101 # Invalid_ApiKey, Invalid List, Deactivated Account
+      identity.destroy_and_notify_user unless identity.nil?
       raise error
     when 214
       # Email already existed in list, don't do anything
@@ -162,7 +163,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
     if name.present?
       split = name.split(' ', 2)
-      opts[:merge_fields] = { :FNAME => split[0], :LNAME => split[1] || '' }
+      opts[:merge_fields] = { FNAME: split[0], LNAME: split[1] || '' }
     end
 
     opts
@@ -198,9 +199,9 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 EOS
 
     MailerGateway.send_email('Custom', user.email,
-                              subject: '[Action Required] Your list cannot be synced to Mailchimp',
-                              html_body: html,
-                              text_body: strip_tags(html))
+      subject: '[Action Required] Your list cannot be synced to Mailchimp',
+      html_body: html,
+      text_body: strip_tags(html))
 
     @identity.delete
   end

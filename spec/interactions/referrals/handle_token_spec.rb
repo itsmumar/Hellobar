@@ -22,9 +22,9 @@ describe Referrals::HandleToken do
     sender = users(:joey)
     recipient = create(:user)
 
-    expect do
+    expect {
       Referrals::HandleToken.run(user: recipient, token: sender.referral_token.token)
-    end.to change { Referral.count }.by(1)
+    }.to change { Referral.count }.by(1)
   end
 
   it 'updates an existing referral if its token is passed in' do

@@ -4,7 +4,7 @@ module ServiceProviders
       if opts[:identity]
         identity = opts[:identity]
       elsif opts[:site]
-        identity = opts[:site].identities.find_by_provider!('get_response_api')
+        identity = opts[:site].identities.find_by!(provider: 'get_response_api')
         raise 'Site does not have a stored GetResponse identity' unless identity
       else
         raise 'Must provide an identity through the arguments'
@@ -43,7 +43,7 @@ module ServiceProviders
           }
         }
 
-        request_body.merge({ dayOfCycle: cycle_day }) if cycle_day
+        request_body.merge(dayOfCycle: cycle_day) if cycle_day
 
         response = client.post 'contacts', request_body
 
@@ -128,7 +128,7 @@ module ServiceProviders
     end
 
     def fetch_resource(resource)
-      response = client.get resource.pluralize, { perPage: 500 }
+      response = client.get resource.pluralize, perPage: 500
 
       if response.success?
         response_hash = JSON.parse response.body
@@ -162,7 +162,7 @@ module ServiceProviders
     end
 
     def assign_tags contact_id:, tags:
-      response = client.post "contacts/#{contact_id}", { tags: tags }
+      response = client.post "contacts/#{contact_id}", tags: tags
 
       if response.success?
         JSON.parse response.body

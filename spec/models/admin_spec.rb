@@ -18,7 +18,7 @@ describe Admin do
     end
 
     it 'returns nil if admin not found' do
-      Admin.validate_session('gibber', 'ish').should == nil
+      Admin.validate_session('gibber', 'ish').should be_nil
     end
 
     it 'returns nil if the session is too old' do
@@ -26,7 +26,7 @@ describe Admin do
       Admin.should_receive(:where).and_return([@admin])
 
       result = Admin.validate_session('foo', 'bar')
-      result.should == nil
+      result.should be_nil
     end
 
     it 'returns nil if the admin is locked' do
@@ -34,7 +34,7 @@ describe Admin do
       Admin.should_receive(:where).and_return([@admin])
 
       result = Admin.validate_session('foo', 'bar')
-      result.should == nil
+      result.should be_nil
     end
 
     it 'returns nil if session is old AND admin is locked' do
@@ -43,7 +43,7 @@ describe Admin do
       Admin.should_receive(:where).and_return([@admin])
 
       result = Admin.validate_session('foo', 'bar')
-      result.should == nil
+      result.should be_nil
     end
 
     it 'bumps session_last_active is session is still good' do
@@ -131,9 +131,9 @@ describe Admin do
 
   it 'login! logs the admin in' do
     @admin.update_attributes(
-      :login_attempts => 2,
-      :session_token => '',
-      :session_access_token => ''
+      login_attempts: 2,
+      session_token: '',
+      session_access_token: ''
     )
 
     @admin.should_receive(:set_valid_access_token)

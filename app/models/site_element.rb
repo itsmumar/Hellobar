@@ -38,7 +38,7 @@ class SiteElement < ActiveRecord::Base
   }
 
   TEMPLATE_NAMES = %w(traffic_growth)
-  SHORT_SUBTYPES = %w{traffic email call social announcement}
+  SHORT_SUBTYPES = %w(traffic email call social announcement)
 
   belongs_to :rule, touch: true
   belongs_to :contact_list
@@ -109,29 +109,27 @@ class SiteElement < ActiveRecord::Base
 
   QUESTION_DEFAULTS.keys.each do |attr_name|
     define_method attr_name do
-      if use_question?
-        read_attribute(attr_name).presence || QUESTION_DEFAULTS[attr_name]
-      end
+      self[attr_name].presence || QUESTION_DEFAULTS[attr_name] if use_question?
     end
   end
 
   def caption=(c_value)
     white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
     c_value = white_list_sanitizer.sanitize(c_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    write_attribute(:caption, c_value)
+    self[:caption] = c_value
   end
 
   def headline=(h_value)
     white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
     h_value = white_list_sanitizer.sanitize(h_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
     h_value = 'Hello. Add your message here.' if h_value.blank?
-    write_attribute(:headline, h_value)
+    self[:headline] = h_value
   end
 
   def link_text=(lt_value)
     white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
     lt_value = white_list_sanitizer.sanitize(lt_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    write_attribute(:link_text, lt_value)
+    self[:link_text] = lt_value
   end
 
   def conversion_rate
@@ -139,7 +137,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def related_site_elements
-    site.site_elements.where.not(:id => id).where(SiteElement.arel_table[:element_subtype].matches("%#{short_subtype}%"))
+    site.site_elements.where.not(id: id).where(SiteElement.arel_table[:element_subtype].matches("%#{short_subtype}%"))
   end
 
   def has_activity_message?
@@ -182,11 +180,12 @@ class SiteElement < ActiveRecord::Base
   end
 
   def analytics_track_site_element_creation!
-    Analytics.track(:site, site_id, 'Created Site Element',
-                    { site_element_id: id,
-                      type: element_subtype,
-                      style: type.to_s.downcase
-                    })
+    Analytics.track(
+      :site, site_id, 'Created Site Element',
+      site_element_id: id,
+      type: element_subtype,
+      style: type.to_s.downcase
+    )
   end
 
   def onboarding_track_site_element_creation!
@@ -200,7 +199,7 @@ class SiteElement < ActiveRecord::Base
       TYPES.each do |type|
         BAR_TYPES.keys.each do |subtype|
           if TEMPLATE_NAMES.include?(subtype)
-            types = Theme.where(id: subtype.tr('_', '-')).first.element_types
+            types = Theme.find_by(id: subtype.tr('_', '-')).element_types
             if types.include?(type.to_s)
               templates << "#{type.name.downcase}_#{subtype}"
             end
@@ -224,7 +223,7 @@ class SiteElement < ActiveRecord::Base
     if show_default_email_message?
       default_email_thank_you_text
     else
-      read_attribute(:thank_you_text).presence || default_email_thank_you_text
+      self[:thank_you_text].presence || default_email_thank_you_text
     end
   end
 
@@ -253,7 +252,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def content_upgrade_download_link
-  "https://s3.amazonaws.com/#{Hellobar::Settings[:s3_content_upgrades_bucket]}/#{Site.id_to_script_hash(site.id)}/#{id}.pdf"
+    "https://s3.amazonaws.com/#{Hellobar::Settings[:s3_content_upgrades_bucket]}/#{Site.id_to_script_hash(site.id)}/#{id}.pdf"
   end
 
   def content_upgrade_script_tag
@@ -267,7 +266,7 @@ class SiteElement < ActiveRecord::Base
   private
 
   def update_s3_content
-    #don't do this unless you need to
+    # don't do this unless you need to
     return if type != 'ContentUpgrade'
     return if content.blank?
     return unless content_changed?
@@ -275,19 +274,19 @@ class SiteElement < ActiveRecord::Base
     pdf = WickedPdf.new.pdf_from_string(content)
 
     # create a connection
-    connection = Fog::Storage.new({
-      provider:               'AWS',
-      aws_access_key_id:      Hellobar::Settings[:aws_access_key_id] || 'fake_access_key_id',
-      aws_secret_access_key:  Hellobar::Settings[:aws_secret_access_key] || 'fake_secret_access_key',
+    connection = Fog::Storage.new(
+      provider: 'AWS',
+      aws_access_key_id: Hellobar::Settings[:aws_access_key_id] || 'fake_access_key_id',
+      aws_secret_access_key: Hellobar::Settings[:aws_secret_access_key] || 'fake_secret_access_key',
       path_style: true
-    })
+    )
 
-   directory = connection.directories.get(Hellobar::Settings[:s3_content_upgrades_bucket])
+    directory = connection.directories.get(Hellobar::Settings[:s3_content_upgrades_bucket])
 
     file = directory.files.create(
-      :key    => content_upgrade_key,
-      :body   => pdf,
-      :public => true
+      key: content_upgrade_key,
+      body: pdf,
+      public: true
     )
 
     file.save
@@ -295,7 +294,8 @@ class SiteElement < ActiveRecord::Base
 
   def remove_unreferenced_images
     # Done through SQL to ensure references are up to date
-    image_uploads.joins('LEFT JOIN site_elements ON site_elements.active_image_id = image_uploads.id')\
+    image_uploads
+      .joins('LEFT JOIN site_elements ON site_elements.active_image_id = image_uploads.id')
       .where('site_elements.id IS NULL').destroy_all
   end
 
@@ -328,7 +328,7 @@ class SiteElement < ActiveRecord::Base
     if after_email_submit_action == :custom_thank_you_text
       if !site.capabilities.custom_thank_you_text?
         errors.add('custom_thank_you_text', 'is a pro feature')
-      elsif read_attribute(:thank_you_text).blank?
+      elsif self[:thank_you_text].blank?
         errors.add('custom_thank_you_text', 'cannot be blank')
       end
     end

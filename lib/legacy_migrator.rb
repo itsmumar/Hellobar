@@ -8,7 +8,7 @@ class LegacyMigrator
       ActiveRecord::Base.connection.execute('SET foreign_key_checks=0')
 
       # propagate any exceptions raised in a thread
-      Thread::abort_on_exception = true
+      Thread.abort_on_exception = true
 
       @migrated_memberships = {}
       puts "[#{Time.now}] Start"
@@ -78,7 +78,7 @@ class LegacyMigrator
       count = 0
       optimize_inserts do
         items.each do |_, item|
-          if item.kind_of?(Array)
+          if item.is_a?(Array)
             klass = item.first.class
             count += 1
             puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 5000 == 0
@@ -92,42 +92,13 @@ class LegacyMigrator
       end
     end
 
-=begin
-    The following method yielded a 2x improvement, but skipped callbacks
-    and probably has other issues. Keeping for posterity's sake
-    def save_to_db_via_csv(items)
-      klass =  items[items.keys.first].class
-      count = 0
-
-      columns = klass.column_names
-      csv_file = File.join(Rails.root, "#{klass.name.underscore}.csv")
-      CSV.open(csv_file, "w") do |csv|
-        items.each do |key, item|
-          count += 1
-          puts "[#{Time.now}] Saving #{count} #{klass}..." if count % 500 == 0
-          # item.save(validate: false)
-          csv << columns.collect{|c| klass.sanitize(item.send(c)).gsub(/^'(.*)'$/,"\\1")}
-        end
-      end
-      `chmod 777 #{csv_file}`
-      `sudo mv #{csv_file} /var/lib/mysql/hellobar/`
-      ActiveRecord::Base.transaction do
-        optimize_inserts do
-          ActiveRecord::Base.connection.execute(%{LOAD DATA INFILE '#{File.basename(csv_file)}' INTO TABLE #{klass.table_name} FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n'})
-        end
-      end
-      # `sudo rm /var/lib/mysql/hellobar/#{File.basename(csv_file}`
-    end
-=end
-
     def load_wp_emails
       @wp_emails = {}
       File.read(File.join(Rails.root, 'db', 'wp_logins.csv')).split("\n").each_with_index do |line, i|
-        if i > 0
-          e1, e2 = *line.split("\t")
-          @wp_emails[e1] = true
-          @wp_emails[e2] = true
-        end
+        next unless i > 0
+        e1, e2 = *line.split("\t")
+        @wp_emails[e1] = true
+        @wp_emails[e2] = true
       end
     end
 
@@ -246,9 +217,9 @@ class LegacyMigrator
           end
 
         else # site has no rules so give them a default rule
-          rule = Rule.new(:name => 'Everyone',
-                          :match => Rule::MATCH_ON[:all],
-                          :site => site)
+          rule = Rule.new(name: 'Everyone',
+                          match: Rule::MATCH_ON[:all],
+                          site: site)
 
           @rules_to_migrate_later[site.id] ||= []
           @rules_to_migrate_later[site.id] << rule
@@ -274,13 +245,12 @@ class LegacyMigrator
       [@migrated_rules, @rules_to_migrate_later].each do |rule_group|
         rule_group.each do |site_id, rules|
           rules.each do |rule|
-            if rule.conditions.any?
-              site_rules = (@migrated_rules[site_id] || []) + (@rules_to_migrate_later[site_id] || [])
-              segment_name = rule.conditions.first.segment_data[:name]
-              index = site_rules.select { |r| r.conditions.any? && r.conditions.first.segment_data[:name] == segment_name }.index(rule) + 1
+            next unless rule.conditions.any?
+            site_rules = (@migrated_rules[site_id] || []) + (@rules_to_migrate_later[site_id] || [])
+            segment_name = rule.conditions.first.segment_data[:name]
+            index = site_rules.select { |r| r.conditions.any? && r.conditions.first.segment_data[:name] == segment_name }.index(rule) + 1
 
-              rule.name = "#{segment_name} Rule ##{index}"
-            end
+            rule.name = "#{segment_name} Rule ##{index}"
           end
         end
       end
@@ -407,12 +377,12 @@ class LegacyMigrator
       @legacy_identities.each do |_, legacy_id|
         if site = @legacy_sites[legacy_id.site_id]
           identity = ::Identity.new id: legacy_id.id,
-                             site_id: legacy_id.site_id,
-                             provider: legacy_id.provider,
-                             credentials: legacy_id.credentials,
-                             extra: legacy_id.extra,
-                             created_at: legacy_id.created_at,
-                             updated_at: legacy_id.updated_at
+                                    site_id: legacy_id.site_id,
+                                    provider: legacy_id.provider,
+                                    credentials: legacy_id.credentials,
+                                    extra: legacy_id.extra,
+                                    created_at: legacy_id.created_at,
+                                    updated_at: legacy_id.updated_at
 
           count += 1
           @migrated_identities[identity.id] = identity
@@ -460,9 +430,10 @@ class LegacyMigrator
     # Returns a timezone if applicable. Returns nil for "visitor" and "false"
     # "(GMT-06:00) Central Time (US & Canada)" => "Central Time (US & Canada)"
     def timezone_for_goal(goal)
-      timezone = goal.data_json['dates_timezone'] rescue nil
+      return unless goal.try(:data_json)
+      timezone = goal.data_json['dates_timezone']
 
-      return nil if timezone == 'visitor' || timezone == 'false' || timezone.nil?
+      return if timezone == 'visitor' || timezone == 'false' || timezone.nil?
 
       timezone[12..-1] # timezone is in a standardized format "(GMT+HH:MM) "
     end
@@ -490,25 +461,24 @@ class LegacyMigrator
         migrated_user = @migrated_users[legacy_user.id_to_migrate.to_i]
         unless migrated_user
           migrated_user ||= ::User.new id: legacy_user.id_to_migrate,
-                                           email: legacy_user.email,
-                                           encrypted_password: legacy_user.encrypted_password,
-                                           reset_password_token: legacy_user.reset_password_token,
-                                           reset_password_sent_at: legacy_user.reset_password_sent_at,
-                                           remember_created_at: legacy_user.remember_created_at,
-                                           sign_in_count: legacy_user.sign_in_count,
-                                           status: ::User::ACTIVE_STATUS,
-                                           legacy_migration: true,
-                                           current_sign_in_at: legacy_user.current_sign_in_at,
-                                           last_sign_in_at: legacy_user.last_sign_in_at,
-                                           current_sign_in_ip: legacy_user.current_sign_in_ip,
-                                           last_sign_in_ip: legacy_user.last_sign_in_ip,
-                                           created_at: legacy_user.original_created_at || legacy_user.created_at,
-                                           updated_at: legacy_user.updated_at
+                                       email: legacy_user.email,
+                                       encrypted_password: legacy_user.encrypted_password,
+                                       reset_password_token: legacy_user.reset_password_token,
+                                       reset_password_sent_at: legacy_user.reset_password_sent_at,
+                                       remember_created_at: legacy_user.remember_created_at,
+                                       sign_in_count: legacy_user.sign_in_count,
+                                       status: ::User::ACTIVE_STATUS,
+                                       legacy_migration: true,
+                                       current_sign_in_at: legacy_user.current_sign_in_at,
+                                       last_sign_in_at: legacy_user.last_sign_in_at,
+                                       current_sign_in_ip: legacy_user.current_sign_in_ip,
+                                       last_sign_in_ip: legacy_user.last_sign_in_ip,
+                                       created_at: legacy_user.original_created_at || legacy_user.created_at,
+                                       updated_at: legacy_user.updated_at
 
           @migrated_users[legacy_user.id_to_migrate.to_i] = migrated_user
         end
-        @migrated_memberships[migrated_user.id.to_s + '-' + legacy_site_id.to_s] = ::SiteMembership.new user_id: migrated_user.id,
-                                 site_id: legacy_site_id
+        @migrated_memberships[migrated_user.id.to_s + '-' + legacy_site_id.to_s] = ::SiteMembership.new user_id: migrated_user.id, site_id: legacy_site_id
       end
     end
 

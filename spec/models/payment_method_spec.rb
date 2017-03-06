@@ -21,8 +21,8 @@ describe PaymentMethod do
     p = PaymentMethod.create
     p.details << PaymentMethodDetails.new(data: { 'foo' => 'bar1' })
     p.details << PaymentMethodDetails.new(data: { 'foo' => 'bar2' })
-    p.details.collect { |d| d.data['foo'] }.should == %w{bar1 bar2}
+    p.details.collect { |d| d.data['foo'] }.should == %w(bar1 bar2)
     p = PaymentMethod.find(p.id)
-    p.details.collect { |d| d.data['foo'] }.should == %w{bar1 bar2}
+    p.details.collect { |d| d.data['foo'] }.should == %w(bar1 bar2)
   end
 end

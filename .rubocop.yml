@@ -39,3 +39,63 @@ Style/RegexpLiteral:
   AllowInnerSlashes: true
   Exclude:
     - spec/teaspoon_env.rb
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: with_first_parameter, with_fixed_indentation
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Security/MarshalLoad:
+  Exclude:
+    - 'lib/grand_central_api.rb'
+
+# Configuration parameters: SupportedStyles, IndentationWidth.
+# SupportedStyles: special_inside_parentheses, consistent, align_brackets
+Style/IndentArray:
+  EnforcedStyle: consistent
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: special_inside_parentheses, consistent, align_braces
+Style/IndentHash:
+  EnforcedStyle: consistent
+
+# Configuration parameters: EnforcedOctalStyle, SupportedOctalStyles.
+# SupportedOctalStyles: zero_with_o, zero_only
+Style/NumericLiteralPrefix:
+  EnforcedOctalStyle: zero_only
+
+# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
+# SupportedStyles: predicate, comparison
+Style/NumericPredicate:
+  Enabled: false
+
+# TODO: enable after updating rails/rspec
+# Configuration parameters: Include.
+# Include: spec/**/*, test/**/*
+Rails/HttpPositionalArguments:
+  Enabled: false
+
+# SupportedStyles: referer, referrer
+Rails/RequestReferer:
+  EnforcedStyle: referrer
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/MethodDefParentheses:
+  Enabled: false
+
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/ConstantName:
+  Exclude:
+    - lib/hello/segments.rb
+    - config/initializers/settings.rb

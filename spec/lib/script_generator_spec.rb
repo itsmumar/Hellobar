@@ -5,7 +5,7 @@ describe ScriptGenerator do
   extend ThemeMacros
 
   before do
-    Hello::DataAPI.stub(:lifetime_totals => nil)
+    Hello::DataAPI.stub(lifetime_totals: nil)
   end
 
   describe '#render' do
@@ -312,7 +312,7 @@ describe ScriptGenerator do
     describe '#generate_script' do
       it 'does not compress the template if the compress option is not set' do
         generator = ScriptGenerator.new('site')
-        generator.stub :render => 'template'
+        generator.stub render: 'template'
 
         Uglifier.should_not_receive(:new)
         generator.should_receive(:render)
@@ -321,8 +321,8 @@ describe ScriptGenerator do
       end
 
       it 'compresses the template when the compress option is true' do
-        generator = ScriptGenerator.new('site', { compress: true })
-        generator.stub :render => 'template'
+        generator = ScriptGenerator.new('site', compress: true)
+        generator.stub render: 'template'
 
         uglifier = Uglifier.new
         Uglifier.should_receive(:new).and_return(uglifier)
@@ -338,21 +338,15 @@ describe ScriptGenerator do
     let(:generator) { ScriptGenerator.new(condition.rule.site) }
 
     it 'turns a condition into a hash' do
-      expect(generator.send(:condition_settings, condition)).to eq({
-        segment: condition.segment_key,
-        operand: condition.operand,
-        value: condition.value
-      })
+      expect(generator.send(:condition_settings, condition))
+        .to eq(segment: condition.segment_key, operand: condition.operand, value: condition.value)
     end
 
     it 'uses the custom segment for CustomConditions' do
       condition.segment = 'CustomCondition'
       condition.custom_segment = 'ABC'
-      expect(generator.send(:condition_settings, condition)).to eq({
-        segment: 'ABC',
-        operand: condition.operand,
-        value: condition.value
-      })
+      expect(generator.send(:condition_settings, condition))
+        .to eq(segment: 'ABC', operand: condition.operand, value: condition.value)
     end
 
     it 'adds the timezone offset when present for TimeConditions' do
@@ -360,12 +354,13 @@ describe ScriptGenerator do
 
       condition.segment = 'CustomCondition'
       condition.custom_segment = 'ABC'
-      expect(generator.send(:condition_settings, condition)).to eq({
-        segment: 'ABC',
-        operand: condition.operand,
-        value: condition.value,
-        timezone_offset: condition.timezone_offset
-      })
+      expect(generator.send(:condition_settings, condition))
+        .to eq(
+          segment: 'ABC',
+          operand: condition.operand,
+          value: condition.value,
+          timezone_offset: condition.timezone_offset
+        )
     end
   end
 end

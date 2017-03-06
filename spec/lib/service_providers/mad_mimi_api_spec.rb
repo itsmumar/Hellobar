@@ -39,7 +39,7 @@ describe ServiceProviders::MadMimiApi do
         list_id = '123'
 
         expect(service_provider.instance_variable_get(:@client))
-          .to receive(:add_to_list).with(email, list_id, { name: name })
+          .to receive(:add_to_list).with(email, list_id, name: name)
         service_provider.subscribe(list_id, email, name)
       end
     end

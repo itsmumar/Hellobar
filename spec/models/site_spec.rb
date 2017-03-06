@@ -15,7 +15,7 @@ describe Site do
 
   describe '#owners_and_admins' do
     it "should return site's owners & admins" do
-      create(:site_membership, :admin, :site => @site)
+      create(:site_membership, :admin, site: @site)
       %w(owner admin).each do |role|
         expect(@site.owners_and_admins.where(site_memberships: { role: role }).count).to eq(1)
       end
@@ -112,7 +112,7 @@ describe Site do
     it 'returns only active subscriptions' do
       @site.change_subscription(Subscription::Free.new(schedule: 'yearly'), @payment_method)
       @site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), @payment_method)
-      travel_to 2.month.from_now do
+      travel_to 2.months.from_now do
         expect(@site.highest_tier_active_subscription).to be_a(Subscription::Free)
       end
     end
@@ -141,17 +141,17 @@ describe Site do
 
   describe 'url formatting' do
     it 'adds the protocol if not present' do
-      site = Site.new(:url => 'zombo.com')
+      site = Site.new(url: 'zombo.com')
       site.valid?
       expect(site.url).to eq('http://zombo.com')
     end
 
     it 'keeps original protocol' do
-      site = Site.new(:url => 'https://zombo.com')
+      site = Site.new(url: 'https://zombo.com')
       site.valid?
       expect(site.url).to eq('https://zombo.com')
 
-      site = Site.new(:url => 'http://zombo.com')
+      site = Site.new(url: 'http://zombo.com')
       site.valid?
       expect(site.url).to eq('http://zombo.com')
     end
@@ -164,7 +164,7 @@ describe Site do
       )
 
       urls.each do |url|
-        site = Site.new(:url => url)
+        site = Site.new(url: url)
         site.valid?
         expect(site.url).to eq('http://zombo.com')
       end
@@ -180,32 +180,32 @@ describe Site do
       )
 
       urls.each do |url|
-        site = Site.new(:url => url)
+        site = Site.new(url: url)
         site.valid?
         expect(site.errors[:url]).to be_empty
       end
     end
 
     it 'is invalid without a properly-formatted url' do
-      site = Site.new(:url => 'my great website dot com')
+      site = Site.new(url: 'my great website dot com')
       expect(site).not_to be_valid
       expect(site.errors[:url]).not_to be_empty
     end
 
     it 'is invalid with an email' do
-      site = Site.new(:url => 'my@website.com')
+      site = Site.new(url: 'my@website.com')
       expect(site).not_to be_valid
       expect(site.errors[:url]).not_to be_empty
     end
 
     it 'is invalid without a url' do
-      site = Site.new(:url => '')
+      site = Site.new(url: '')
       expect(site).not_to be_valid
       expect(site.errors[:url]).not_to be_empty
     end
 
     it "doesn't try to format a blank URL" do
-      site = Site.new(:url => '')
+      site = Site.new(url: '')
       expect(site).not_to be_valid
       expect(site.url).to be_blank
     end
@@ -213,7 +213,7 @@ describe Site do
 
   describe '#script_content' do
     it 'generates the contents of the script for a site' do
-      Hello::DataAPI.stub(:lifetime_totals => nil)
+      Hello::DataAPI.stub(lifetime_totals: nil)
       script = @site.script_content(false)
 
       expect(script).to match(/HB_SITE_ID/)
@@ -221,7 +221,7 @@ describe Site do
     end
 
     it 'generates the compressed contents of the script for a site' do
-      Hello::DataAPI.stub(:lifetime_totals => nil)
+      Hello::DataAPI.stub(lifetime_totals: nil)
       script = @site.script_content
 
       expect(script).to match(/HB_SITE_ID/)
@@ -265,14 +265,14 @@ describe Site do
     end
 
     it 'generates and uploads the script content for a site' do
-      ScriptGenerator.any_instance.stub(:pro_secret => 'asdf')
-      Hello::DataAPI.stub(:lifetime_totals => nil)
+      ScriptGenerator.any_instance.stub(pro_secret: 'asdf')
+      Hello::DataAPI.stub(lifetime_totals: nil)
       script_content = @site.script_content(true)
       script_name = @site.script_name
 
       mock_storage = double('asset_storage')
       expect(mock_storage).to receive(:create_or_update_file_with_contents).with(script_name, script_content)
-      Hello::AssetStorage.stub(:new => mock_storage)
+      Hello::AssetStorage.stub(new: mock_storage)
 
       @site.generate_script
     end
@@ -296,7 +296,7 @@ describe Site do
   it 'blanks-out the site script when destroyed' do
     mock_storage = double('asset_storage')
     expect(mock_storage).to receive(:create_or_update_file_with_contents).with(@site.script_name, '')
-    Hello::AssetStorage.stub(:new => mock_storage)
+    Hello::AssetStorage.stub(new: mock_storage)
 
     @site.destroy
   end
@@ -360,12 +360,12 @@ describe Site do
 
   describe '#script_installed_api?' do
     it 'is true if there is only one day of data' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({ '1' => [[1, 0]] })
+      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return('1' => [[1, 0]])
       expect(@site.script_installed_api?).to be_true
     end
 
     it 'is true if there are multiple days of data' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({ '1' => [[1, 0], [2, 0]] })
+      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return('1' => [[1, 0], [2, 0]])
       expect(@site.script_installed_api?).to be_true
     end
 
@@ -380,28 +380,34 @@ describe Site do
     end
 
     it 'is true if one element has views but others do not' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({
-        '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
-        '2' => [[1, 0], [1, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0]]
-      })
+      expect(Hello::DataAPI)
+        .to receive(:lifetime_totals)
+        .and_return(
+          '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
+          '2' => [[1, 0], [1, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0]]
+        )
 
       expect(@site.script_installed_api?).to be_true
     end
 
     it 'is true if any of the elements have been installed in the last 7 days' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({
-        '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
-        '2' => [[1, 0], [1, 0]]
-      })
+      expect(Hello::DataAPI)
+        .to receive(:lifetime_totals)
+        .and_return(
+          '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
+          '2' => [[1, 0], [1, 0]]
+        )
 
       expect(@site.script_installed_api?).to be_true
     end
 
     it 'is false if there have been no views in the last 10 days' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({
-        '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
-        '2' => [[0, 0]]
-      })
+      expect(Hello::DataAPI)
+        .to receive(:lifetime_totals)
+        .and_return(
+          '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
+          '2' => [[0, 0]]
+        )
 
       expect(@site.script_installed_api?).to be_false
     end
@@ -437,15 +443,15 @@ describe Site do
     context 'trial_period is specified' do
       it 'should set the bill amount to 0' do
         sub = subscriptions(:zombo_subscription)
-        bill = sub.site.send(:calculate_bill, sub, true, 20.day)
+        bill = sub.site.send(:calculate_bill, sub, true, 20.days)
         expect(bill.amount).to eq(0)
       end
 
       it 'should set the end_at of the bill to the current time + the trial period' do
         sub = subscriptions(:zombo_subscription)
         travel_to Time.now do
-          bill = sub.site.send(:calculate_bill, sub, true, 20.day)
-          expect(bill.end_date).to eq(Time.now + 20.day)
+          bill = sub.site.send(:calculate_bill, sub, true, 20.days)
+          expect(bill.end_date).to eq(Time.now + 20.days)
         end
       end
     end
@@ -531,12 +537,12 @@ describe Site do
   describe '#find_by_script' do
     it 'should return the site if the script name matches' do
       site = create(:site)
-      expect(Site.find_by_script(site.script_name)).to eq(site)
+      expect(Site.find_by(script: site.script_name)).to eq(site)
     end
 
     it 'should return nil if no site exists with that script' do
       allow(Site).to receive(:maximum).and_return(10) # so that it doesn't run forever
-      expect(Site.find_by_script('foo')).to be_nil
+      expect(Site.find_by(script: 'foo')).to be_nil
     end
   end
 
@@ -590,21 +596,21 @@ describe Site do
   end
 
   describe '#script_installed_on_homepage?' do
-    it 'returns true when the script is installed at the url'  do
+    it 'returns true when the script is installed at the url' do
       site_element = create(:site_element)
       site = site_element.site
       allow(HTTParty).to receive(:get).and_return("<html><script src='#{site_element.site.script_url}'></html>")
       expect(site.script_installed_on_homepage?).to be(true)
     end
 
-    it 'returns true when the site had wordpress bars and has the old script'  do
+    it 'returns true when the site had wordpress bars and has the old script' do
       site_element = create(:site_element, wordpress_bar_id: 123)
       site = site_element.site
       allow(HTTParty).to receive(:get).and_return("<html><script src='hellobar.js'></html>")
       expect(site.script_installed_on_homepage?).to be(true)
     end
 
-    it 'returns false when the site does not have the script'  do
+    it 'returns false when the site does not have the script' do
       site_element = create(:site_element)
       site = site_element.site
       allow(HTTParty).to receive(:get).and_return("<html><script src='foobar.js'></html>")

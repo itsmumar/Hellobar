@@ -10,10 +10,10 @@ class IdentitiesController < ApplicationController
   end
 
   def show
-    @identity = @site.identities.where(:provider => params[:id]).first
+    @identity = @site.identities.where(provider: params[:id]).first
     # If service provider is not valid, dont render the identity
     @identity = nil if @identity && @identity.service_provider.nil?
-    render :json => @identity
+    render json: @identity
   end
 
   def create
@@ -30,7 +30,7 @@ class IdentitiesController < ApplicationController
     add_account_details(identity)
 
     if params[:api_key]
-      #TODO sanitze me?
+      # TODO: sanitze me?
       identity.api_key = params[:api_key]
       env['omniauth.params'] ||= {}
       env['omniauth.params']['redirect_to'] = request.referrer
@@ -48,7 +48,7 @@ class IdentitiesController < ApplicationController
   def destroy
     @identity = @site.identities.find(params[:id])
     @identity.destroy
-    render :json => @identity
+    render json: @identity
   end
 
   private

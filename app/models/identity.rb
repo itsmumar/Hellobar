@@ -9,20 +9,20 @@ class Identity < ActiveRecord::Base
   serialize :credentials, JSON
   serialize :extra, JSON
 
-  validates :provider, :presence => true,
-                       :uniqueness => { :scope => :site_id },
-                       :inclusion => { :in => Hellobar::Settings[:identity_providers].keys.map(&:to_s) }
+  validates :provider, presence: true,
+                       uniqueness: { scope: :site_id },
+                       inclusion: { in: Hellobar::Settings[:identity_providers].keys.map(&:to_s) }
 
-  validates :site, :association_exists => true
+  validates :site, association_exists: true
   validate :service_provider_valid
 
-  scope :by_type, ->(type) { where(:provider => Hellobar::Settings[:identity_providers].select { |_, v| v[:type] == type }.map { |k, _| k.to_s }) }
+  scope :by_type, ->(type) { where(provider: Hellobar::Settings[:identity_providers].select { |_, v| v[:type] == type }.map { |k, _| k.to_s }) }
   scope :active, -> { where('credentials IS NOT NULL') }
 
   # When an activity is active, it is saved, credentials are present, and it is being used.
   # Sites should only allow one active identity at a time for each type.
   def active?
-    persisted? and filled_out?
+    persisted? && filled_out?
   end
 
   def filled_out?
@@ -40,7 +40,7 @@ class Identity < ActiveRecord::Base
   def provider_settings
     service_provider_class.settings
   end
-  alias :provider_config :provider_settings
+  alias provider_config provider_settings
 
   def as_json(options = nil)
     extra['raw_info'].select! { |k, _| %w(user_id username).include? k } if extra['raw_info']
@@ -65,7 +65,7 @@ class Identity < ActiveRecord::Base
 
   def destroy_and_notify_user
     site.owners.each do |user|
-      MailerGateway.send_email('Integration Sync Error', user.email, { integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host]) })
+      MailerGateway.send_email('Integration Sync Error', user.email, integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host]))
     end
 
     destroy

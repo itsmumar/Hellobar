@@ -21,15 +21,15 @@ class ContactList < ActiveRecord::Base
 
   before_validation :set_identity, :reject_empty_data_values, :clean_embed_code
 
-  validates :name, :presence => true
-  validates :site, :association_exists => true
-  validate :provider_valid, :if => :provider_set?
-  validate :provider_credentials_exist, :if => :provider_set?
-  validate :embed_code_exists?, :if => :embed_code?
-  validate :embed_code_valid?, :if => :embed_code?
-  validate :webhook_url_valid?, :if => :webhook?
+  validates :name, presence: true
+  validates :site, association_exists: true
+  validate :provider_valid, if: :provider_set?
+  validate :provider_credentials_exist, if: :provider_set?
+  validate :embed_code_exists?, if: :embed_code?
+  validate :embed_code_valid?, if: :embed_code?
+  validate :webhook_url_valid?, if: :webhook?
 
-  after_save :notify_identity, :if => :identity_id_changed?
+  after_save :notify_identity, if: :identity_id_changed?
   after_destroy :notify_identity
 
   delegate :count, to: :site_elements, prefix: true
@@ -75,7 +75,7 @@ class ContactList < ActiveRecord::Base
     return @subscribers if @subscribers
 
     data = Hello::DataAPI.get_contacts(self, limit) || []
-    @subscribers = data.map { |d| { :email => d[0], :name => d[1], :subscribed_at => d[2].is_a?(Integer) ? Time.at(d[2]) : nil } }
+    @subscribers = data.map { |d| { email: d[0], name: d[1], subscribed_at: d[2].is_a?(Integer) ? Time.at(d[2]) : nil } }
   end
 
   def subscriber_statuses(subscribers, force = false)
@@ -156,7 +156,7 @@ class ContactList < ActiveRecord::Base
 
   def notify_identity
     old_identity_id = destroyed? ? identity_id : changes[:identity_id].try(:first)
-    Identity.where(id: old_identity_id).first.try(:contact_lists_updated) if old_identity_id
+    Identity.find_by(id: old_identity_id).try(:contact_lists_updated) if old_identity_id
   end
 
   def provider_valid
@@ -198,7 +198,7 @@ class ContactList < ActiveRecord::Base
   def webhook_url_valid?
     uri = Addressable::URI.parse(data['webhook_url'])
 
-    if !%w{http https}.include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
+    if !%w(http https).include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
       errors.add(:base, 'webhook URL is invalid')
     end
   end

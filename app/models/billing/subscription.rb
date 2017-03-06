@@ -9,17 +9,19 @@ class Subscription < ActiveRecord::Base
   enum schedule: [:monthly, :yearly]
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
 
-  scope :active, -> do
-    joins(:bills).where(
-      'bills.status = ? AND bills.start_date < ? AND bills.end_date > ?',
-      Bill.statuses['paid'], Time.now, Time.now).
-      where('bills.type != ?', Bill::Refund.to_s)
-  end
-
   after_initialize :set_initial_values
   after_create :mark_user_onboarding_as_bought_subscription!
 
   class << self
+    def active
+      joins(:bills)
+        .where(
+          'bills.status = ? AND bills.start_date < ? AND bills.end_date > ?',
+          Bill.statuses['paid'], Time.now, Time.now
+        )
+        .where('bills.type != ?', Bill::Refund.to_s)
+    end
+
     def values_for(_site)
       # Just return the defaults for now, in the future we can
       # offer per-site discounts, etc
@@ -38,8 +40,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def currently_on_trial?
-    amount != 0 && payment_method.nil? && \
-    active_bills.any? { |b| b.amount == 0 && b.paid? }
+    amount != 0 && payment_method.nil? && active_bills.any? { |b| b.amount == 0 && b.paid? }
   end
 
   def values
@@ -69,7 +70,7 @@ class Subscription < ActiveRecord::Base
       # capabilities, otherwise we return the default capabilities
       active_bills(reload).each do |bill|
         payment_method = nil
-        if site and site.current_subscription and site.current_subscription.payment_method
+        if site && site.current_subscription && site.current_subscription.payment_method
           payment_method = site.current_subscription.payment_method
         end
         if bill.problem_with_payment?(payment_method)
@@ -383,20 +384,22 @@ class Subscription < ActiveRecord::Base
   class Comparison
     attr_reader :from_subscription, :to_subscription, :direction
     def initialize(from_subscription, to_subscription)
-      @from_subscription, @to_subscription = from_subscription, to_subscription
+      @from_subscription = from_subscription
+      @to_subscription = to_subscription
       from_index = to_index = nil
       PLANS.each_with_index do |plan, index|
         from_index = index if from_subscription.is_a?(plan)
         to_index = index if to_subscription.is_a?(plan)
       end
-      raise "Could not find plans (from_subscription: #{from_subscription.inspect} and to_subscription: #{to_subscription.inspect}, got #{from_index.inspect} and #{to_index.inspect}" unless from_index and to_index
-      if from_index == to_index
-        @direction = 0
-      elsif from_index > to_index
-        @direction = -1
-      else
-        @direction = 1
-      end
+      raise "Could not find plans (from_subscription: #{from_subscription.inspect} and to_subscription: #{to_subscription.inspect}, got #{from_index.inspect} and #{to_index.inspect}" unless from_index && to_index
+      @direction =
+        if from_index == to_index
+          0
+        elsif from_index > to_index
+          -1
+        else
+          1
+        end
     end
 
     def upgrade?

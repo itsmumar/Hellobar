@@ -7,7 +7,7 @@ class ServiceProviders::Drip < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'drip').first
+      identity = opts[:site].identities.where(provider: 'drip').first
       raise 'Site does not have a stored Drip identity' unless identity
     end
 
@@ -29,7 +29,7 @@ class ServiceProviders::Drip < ServiceProviders::Email
     response = @client.campaigns(status: 'active')
     @campaigns ||= response.campaigns.map(&:raw_attributes)
   end
-  alias_method :lists, :campaigns
+  alias lists campaigns
 
   def tags
     response = @client.tags

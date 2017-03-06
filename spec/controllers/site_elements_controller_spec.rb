@@ -68,13 +68,13 @@ describe SiteElementsController do
       stub_current_user(element.site.owners.first)
       Site.any_instance.stub(has_script_installed?: true)
 
-      get :show, :site_id => element.site, :id => element, :format => :json
+      get :show, site_id: element.site, id: element, format: :json
 
-      expect_json_response_to_include({
+      expect_json_response_to_include(
         id: element.id,
         headline: element.headline,
         background_color: element.background_color
-      })
+      )
     end
   end
 
@@ -85,42 +85,42 @@ describe SiteElementsController do
     end
 
     it 'sets the correct error if a rule is not provided' do
-      Site.any_instance.stub(:generate_script => true)
+      Site.any_instance.stub(generate_script: true)
 
-      post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic', :rule_id => 0 }
+      post :create, site_id: @site.id, site_element: { element_subtype: 'traffic', rule_id: 0 }
 
       expect_json_to_have_error(:rule, "can't be blank")
     end
 
     it 'sets `fields_to_collect` under `settings` and return back' do
-      post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic',
-                                                             :rule_id => 0,
-                                                             :settings => settings }
+      post :create, site_id: @site.id, site_element: { element_subtype: 'traffic',
+                                                       rule_id: 0,
+                                                       settings: settings }
 
-      expect_json_response_to_include({ settings: settings })
+      expect_json_response_to_include(settings: settings)
     end
 
     it 'accepts whitelisted fields only' do
-      post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic',
-                                                             :rule_id => 0,
-                                                             :settings => manipulated_settings }
+      post :create, site_id: @site.id, site_element: { element_subtype: 'traffic',
+                                                       rule_id: 0,
+                                                       settings: manipulated_settings }
 
-      expect_json_response_to_include({ settings: settings })
+      expect_json_response_to_include(settings: settings)
     end
 
     it 'accepts custom fields' do
-      post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic',
-                                                             :rule_id => 0,
-                                                             :settings => settings_custom_fields }
+      post :create, site_id: @site.id, site_element: { element_subtype: 'traffic',
+                                                       rule_id: 0,
+                                                       settings: settings_custom_fields }
 
-      expect_json_response_to_include({ settings: settings_custom_fields })
+      expect_json_response_to_include(settings: settings_custom_fields)
     end
 
     it 'sets the success flash message on create' do
       SiteElement.any_instance.stub(valid?: true, save!: true)
 
       expect {
-        post :create, :site_id => @site.id, :site_element => { :element_subtype => 'traffic', :rule_id => 0 }
+        post :create, site_id: @site.id, site_element: { element_subtype: 'traffic', rule_id: 0 }
       }.to change { flash[:success] }.from(nil)
     end
   end
@@ -133,7 +133,7 @@ describe SiteElementsController do
       get :new, site_id: membership.site.id, format: :json
 
       default_font_id = SiteElement.columns_hash['font_id'].default
-      expect_json_response_to_include({ font_id: default_font_id })
+      expect_json_response_to_include(font_id: default_font_id)
     end
 
     context('pro subscription') do
@@ -141,9 +141,9 @@ describe SiteElementsController do
         subscription = subscriptions(:pro_subscription)
         stub_current_user(subscription.site.owners.first)
 
-        get :new, :site_id => subscription.site.id, :format => :json
+        get :new, site_id: subscription.site.id, format: :json
 
-        expect_json_response_to_include({ show_branding: false })
+        expect_json_response_to_include(show_branding: false)
       end
     end
 
@@ -152,18 +152,18 @@ describe SiteElementsController do
       before { stub_current_user(subscription.site.owners.first) }
 
       it 'defaults branding to true if free user' do
-        get :new, :site_id => subscription.site.id, :format => :json
+        get :new, site_id: subscription.site.id, format: :json
 
         json = JSON.parse(response.body)
-        expect_json_response_to_include({ show_branding: true })
+        expect_json_response_to_include(show_branding: true)
       end
 
       it 'sets the theme id to the default theme id' do
-        get :new, :site_id => subscription.site.id, :format => :json
+        get :new, site_id: subscription.site.id, format: :json
 
         json = JSON.parse(response.body)
         default_theme = Theme.where(default_theme: true).first
-        expect_json_response_to_include({ theme_id: default_theme.id })
+        expect_json_response_to_include(theme_id: default_theme.id)
       end
 
       it "doesn't push an unsaved element into the site.site_elements association" do
@@ -178,14 +178,14 @@ describe SiteElementsController do
   end
 
   describe 'POST update' do
-    let(:element) {  site_elements(:zombo_traffic) }
+    let(:element) { site_elements(:zombo_traffic) }
 
     before do
       stub_current_user(element.site.owners.first)
 
       allow_any_instance_of(Site).to receive(:generate_script)
-      allow_any_instance_of(Site).
-        to receive(:lifetime_totals).and_return({ '1' => [[1, 0]] })
+      allow_any_instance_of(Site)
+        .to receive(:lifetime_totals).and_return('1' => [[1, 0]])
     end
 
     it 'creates an updater' do
@@ -220,10 +220,7 @@ describe SiteElementsController do
       it 'sends json of the updated attributes' do
         post :update, valid_params(element)
 
-        expect_json_response_to_include({
-          id: element.id,
-          closable: true
-        })
+        expect_json_response_to_include(id: element.id, closable: true)
       end
 
       it 'sends json of new element if type was changed' do
@@ -247,21 +244,21 @@ describe SiteElementsController do
           post :update, @params
 
           expect(response).to be_success
-          expect_json_response_to_include({ settings: settings })
+          expect_json_response_to_include(settings: settings)
         end
 
         it 'with whitelisted attrs only and ignore the others' do
           @params[:site_element][:settings] = manipulated_settings
           post :update, @params
 
-          expect_json_response_to_include({ 'settings' => settings })
+          expect_json_response_to_include('settings' => settings)
         end
 
         it 'with cutom fields too' do
           @params[:site_element][:settings] = settings_custom_fields
           post :update, @params
 
-          expect_json_response_to_include({ 'settings' => settings_custom_fields })
+          expect_json_response_to_include('settings' => settings_custom_fields)
         end
       end
     end

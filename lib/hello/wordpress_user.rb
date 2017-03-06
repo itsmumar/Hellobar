@@ -5,7 +5,7 @@ class Hello::WordpressUser < Hello::WordpressModel
   attr_reader :password # to conform with User so we can reuse forms
 
   def self.email_exists?(email)
-    find_by_email(email).present?
+    find_by(email: email).present?
   end
 
   def self.find_by_email(email)
@@ -83,7 +83,7 @@ class Hello::WordpressUser < Hello::WordpressModel
   end
 
   def is_pro_user?
-    Hello::WordpressUserMeta.where(user_id: id, meta_key: 'hellobar_vip_user').first.try(:meta_value) == '1' || \
-    Hello::WordpressUserMeta.where(user_id: id, meta_key: 'hbwp_s2member_subscr_id').first.try(:meta_value) != nil
+    Hello::WordpressUserMeta.where(user_id: id, meta_key: 'hellobar_vip_user').first.try(:meta_value) == '1' ||
+      !Hello::WordpressUserMeta.where(user_id: id, meta_key: 'hbwp_s2member_subscr_id').first.try(:meta_value).nil?
   end
 end

@@ -10,7 +10,7 @@ module ServiceProviders
 
     def html
       super.try :tap do |html|
-        if html and a = html.css('body > a[onclick]').first
+        if html && (a = html.css('body > a[onclick]').first)
           # we're looking at the popup one
           remote_html = HTTParty.get a.attr('href')
           break @html = html = Nokogiri::HTML(remote_html)
@@ -20,7 +20,7 @@ module ServiceProviders
 
     def get_reference_object html
       item = super
-      if !item or !item.attr('src') or item.attr('src').include?('tts_signup')
+      if !item || !item.attr('src') || item.attr('src').include?('tts_signup')
         html.css('a').first
       else
         item

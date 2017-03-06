@@ -12,6 +12,7 @@ class ScriptGenerator < Mustache
   load_templates
 
   attr_reader :site, :options
+  delegate :id, :url, :write_key, to: :site, prefix: true
 
   def initialize(site, options = {})
     @site = site
@@ -28,14 +29,6 @@ class ScriptGenerator < Mustache
     else
       render
     end
-  end
-
-  def site_id
-    site.id
-  end
-
-  def site_url
-    site.url
   end
 
   def script_is_installed_properly
@@ -94,7 +87,8 @@ class ScriptGenerator < Mustache
         email_placeholder: cu.email_placeholder,
         name_placeholder: cu.name_placeholder,
         contact_list_id: cu.contact_list_id,
-        download_link: cu.content_upgrade_download_link      }
+        download_link: cu.content_upgrade_download_link
+      }
       cu_json[cu.id] = content
     end
     cu_json.to_json
@@ -102,10 +96,6 @@ class ScriptGenerator < Mustache
 
   def content_upgrades_styles_json
     site.get_content_upgrade_styles.to_json
-  end
-
-  def site_write_key
-    site.write_key
   end
 
   def hb_backend_host
@@ -189,12 +179,12 @@ class ScriptGenerator < Mustache
     if options[:templates]
       templates = Theme.where(type: 'template').collect(&:name)
 
-      options[:templates].each { |t|
+      options[:templates].each do |t|
         temp_name = t.split('_', 2)
         category  = :generic
         category  = :template if templates.include?(temp_name[1].titleize)
         template_names << (temp_name << category)
-      }
+      end
     else
       site.site_elements.active.each do |se|
         theme_id      = se.theme_id
@@ -208,10 +198,10 @@ class ScriptGenerator < Mustache
     end
 
     template_names.map do |name|
-        {
-          name: name.first(2).join('_'),
-          markup: content_template(name[0], name[1], name[2])
-        }
+      {
+        name: name.first(2).join('_'),
+        markup: content_template(name[0], name[1], name[2])
+      }
     end
   end
 
@@ -291,7 +281,7 @@ class ScriptGenerator < Mustache
   end
 
   def site_element_settings(site_element)
-    settings = %w{
+    settings = %w(
       animated
       background_color
       border_color
@@ -317,14 +307,14 @@ class ScriptGenerator < Mustache
       wiggle_button
       wordpress_bar_id
       blocks
-    }
+    )
     settings << 'caption' unless site_element.use_question?
 
     lifetime_totals = @site.lifetime_totals
     conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
     views = conversions = conversion_rate = 0
 
-    if conversion_data and conversion_data[0]
+    if conversion_data && conversion_data[0]
       views = conversion_data[0][0]
       conversions = conversion_data[0][1]
       if views > 0
@@ -332,7 +322,7 @@ class ScriptGenerator < Mustache
       end
     end
 
-    site_element.attributes.select { |key, _| settings.include?(key) }.merge({
+    site_element.attributes.select { |key, _| settings.include?(key) }.merge(
       answer1: site_element.answer1,
       answer1response: site_element.answer1response,
       answer1caption: site_element.answer1caption,
@@ -375,7 +365,7 @@ class ScriptGenerator < Mustache
       wiggle_wait: 0,
       blocks: site_element.blocks,
       theme: site_element.theme.attributes
-    }).select { |_, value| !value.nil? || !value == '' }
+    ).select { |_, value| !value.nil? || !value == '' }
   end
 
   def site_elements_for_rule(rule, hashify = true)

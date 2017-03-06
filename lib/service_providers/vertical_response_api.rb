@@ -3,7 +3,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'verticalresponse').first
+      identity = opts[:site].identities.where(provider: 'verticalresponse').first
       raise 'Site does not have a stored Vertical Response identity' unless identity
     end
 
@@ -22,27 +22,24 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
     first_name, last_name = split_name(name)
     handle_errors do
       @client.find_list(list_id).create_contact(
-        {
-          email: email,
-          first_name: first_name,
-          last_name: last_name
-        }
+        email: email,
+        first_name: first_name,
+        last_name: last_name
       )
     end
   end
 
   def batch_subscribe(list_id, subscribers, _double_optin = true)
     handle_errors do
-      @client.find_list(list_id).create_contacts(
-        subscribers.map do |subscriber|
-          first_name, last_name = split_name(subscriber[:name])
-          {
-            email: subscriber[:email],
-            first_name: first_name,
-            last_name: last_name
-          }
-        end
-      )
+      contacts = subscribers.map do |subscriber|
+        first_name, last_name = split_name(subscriber[:name])
+        {
+          email: subscriber[:email],
+          first_name: first_name,
+          last_name: last_name
+        }
+      end
+      @client.find_list(list_id).create_contacts(contacts)
     end
   end
 

@@ -37,9 +37,9 @@ class SiteSerializer < ActiveModel::Serializer
       identity = list.identity_id && Identity.find_by(id: list.identity_id)
       provider_name = identity && identity.provider.titlecase || 'Hello Bar'
       {
-        :id => list.id,
-        :name => list.name,
-        :provider => provider_name
+        id: list.id,
+        name: list.name,
+        provider: provider_name
       }
     end
   end

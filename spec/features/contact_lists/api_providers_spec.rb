@@ -22,7 +22,7 @@ feature 'Connect to api ESP', js: true do
     fill_in 'contact_list[data][api_key]', with: '12225410b3e4b656e09ce7760bfaa240'
 
     find('.button.ready').click
-    select 'TEST LIST', :from => 'Choose a MadMimi list to sync with'
+    select 'TEST LIST', from: 'Choose a MadMimi list to sync with'
     find('.button.submit').click
 
     expect(page).to have_content('MadMimi list "TEST LIST"')
@@ -54,7 +54,7 @@ feature 'Connect to api ESP', js: true do
     fill_in 'contact_list[data][api_key]', with: '12225410b3e4b656e09ce7760bfaa240'
 
     find('.button.ready').click
-    select 'TEST LIST', :from => 'Choose a MadMimi list to sync with'
+    select 'TEST LIST', from: 'Choose a MadMimi list to sync with'
     find('.button.submit').click
 
     expect(page).to have_content('MadMimi list "TEST LIST"')

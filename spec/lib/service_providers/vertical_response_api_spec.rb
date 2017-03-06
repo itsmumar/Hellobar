@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ServiceProviders::VerticalResponseApi do
-  let(:identity) { Identity.new(:provider => 'verticalresponse', :extra => { 'metadata' => {} }, :credentials => {}) }
+  let(:identity) { Identity.new(provider: 'verticalresponse', extra: { 'metadata' => {} }, credentials: {}) }
   let(:service_provider) { identity.service_provider }
   let(:client) { service_provider.instance_variable_get(:@client) }
 
@@ -30,16 +30,16 @@ describe ServiceProviders::VerticalResponseApi do
     it 'uses correct params when email is present' do
       mock_list = double :list
       allow(client).to receive(:find_list).and_return(mock_list)
-      expect(mock_list).to receive(:create_contact).
-        with({ email: 'bobloblaw@lawblog.co', first_name: 'Bob', last_name: 'Loblaw' })
+      expect(mock_list).to receive(:create_contact)
+        .with(email: 'bobloblaw@lawblog.co', first_name: 'Bob', last_name: 'Loblaw')
       service_provider.subscribe('123', 'bobloblaw@lawblog.co', 'Bob Loblaw')
     end
 
     it 'uses blank name if it is absent' do
       mock_list = double :list
       allow(client).to receive(:find_list).and_return(mock_list)
-      expect(mock_list).to receive(:create_contact).
-        with({ email: 'bobloblaw@lawblog.co', first_name: '', last_name: '' })
+      expect(mock_list).to receive(:create_contact)
+        .with(email: 'bobloblaw@lawblog.co', first_name: '', last_name: '')
       service_provider.subscribe('123', 'bobloblaw@lawblog.co')
     end
   end

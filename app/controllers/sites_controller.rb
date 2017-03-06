@@ -7,7 +7,7 @@ class SitesController < ApplicationController
   before_action :get_top_performers, only: :improve
   before_action :load_bills, only: :edit
 
-  skip_before_action :verify_authenticity_token, :only => [:preview_script, :script]
+  skip_before_action :verify_authenticity_token, only: [:preview_script, :script]
 
   layout :determine_layout
 
@@ -51,15 +51,15 @@ class SitesController < ApplicationController
         flash[:success] = 'Script successfully installed.' if params[:installed]
         session[:current_site] = @site.id
 
-        @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, :force => is_page_refresh?)
+        @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: is_page_refresh?)
         @recent_elements = @site.site_elements.recent(5)
       end
-      format.json { render :json => @site }
+      format.json { render json: @site }
     end
   end
 
   def improve
-    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, :force => is_page_refresh?)
+    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: is_page_refresh?)
   end
 
   def update
@@ -69,7 +69,7 @@ class SitesController < ApplicationController
     else
       load_bills
       flash.now[:error] = @site.errors.full_messages
-      render :action => :edit
+      render action: :edit
     end
   end
 
@@ -82,13 +82,13 @@ class SitesController < ApplicationController
 
   # a version of the site's script with all templates, no elements and no rules, for use in the editor live preview
   def preview_script
-    generator = ScriptGenerator.new(@site, :templates => SiteElement.all_templates, :rules => [], :preview => true)
-    render :js => generator.generate_script
+    generator = ScriptGenerator.new(@site, templates: SiteElement.all_templates, rules: [], preview: true)
+    render js: generator.generate_script
   end
 
   # Returns the site's script
   def script
-    render :js => @site.script_content(params[:compress].to_i == 1)
+    render js: @site.script_content(params[:compress].to_i == 1)
   end
 
   def chart_data
@@ -100,12 +100,12 @@ class SitesController < ApplicationController
 
     series_with_dates = (days - 1).downto(0).map do |i|
       {
-        :date => (Date.today - i).strftime('%-m/%d'),
-        :value => series[(series.size - i) - 1]
+        date: (Date.today - i).strftime('%-m/%d'),
+        value: series[(series.size - i) - 1]
       }
     end
 
-    render :json => series_with_dates, :root => false
+    render json: series_with_dates, root: false
   end
 
   def downgrade
@@ -145,10 +145,10 @@ class SitesController < ApplicationController
     if @site.save
       generate_temporary_logged_in_user
       Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
-      Analytics.track(*current_person_type_and_id, 'Signed Up', { ip: request.remote_ip, url: @site.url, site_id: @site.id })
+      Analytics.track(*current_person_type_and_id, 'Signed Up', ip: request.remote_ip, url: @site.url, site_id: @site.id)
 
-      SiteMembership.create!(:site => @site, :user => current_user)
-      Analytics.track(*current_person_type_and_id, 'Created Site', { site_id: @site.id })
+      SiteMembership.create!(site: @site, user: current_user)
+      Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rules
@@ -167,8 +167,8 @@ class SitesController < ApplicationController
       redirect_to site_path(sites.first)
     elsif @site.save
       Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
-      SiteMembership.create!(:site => @site, :user => current_user)
-      Analytics.track(*current_person_type_and_id, 'Created Site', { site_id: @site.id })
+      SiteMembership.create!(site: @site, user: current_user)
+      Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
       @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
 
       @site.create_default_rules
@@ -176,7 +176,7 @@ class SitesController < ApplicationController
       redirect_to new_site_site_element_path(@site)
     else
       flash.now[:error] = @site.errors.full_messages
-      render :action => :new
+      render action: :new
     end
   end
 

@@ -57,7 +57,7 @@ class UserOnboardingStatusSetter
     case new_status
     when :new
       onboarding_statuses.empty? && # don't re-add users to the new status
-      independant_user?             # don't onboard users who were invited to the site by another user
+        independant_user? # don't onboard users who were invited to the site by another user
 
     when :created_site, :selected_goal
       status_is_progressing?(new_status)
@@ -70,11 +70,11 @@ class UserOnboardingStatusSetter
 
     when :installed_script
       status_is_progressing?(new_status) &&
-      !is_paying
+        !is_paying
 
     when :bought_subscription
       status_is_progressing?(new_status) &&
-      is_paying
+        is_paying
 
     else
       false

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id, :get_ab_variation,
-                :get_ab_variation_or_nil
+    :get_ab_variation_or_nil
 
   before_action :record_tracking_param
   before_action :track_h_visit
@@ -29,19 +29,15 @@ class ApplicationController < ActionController::Base
 
   def access_cookie
     cookies[:adxs] ||= {
-      :value => Digest::SHA256.hexdigest(['a', rand(10_000), Time.now.to_f, user_agent, 'd753d'].collect(&:to_s).join),
-      :expires => 90.days.from_now,
-      :httponly => true
+      value: Digest::SHA256.hexdigest(['a', rand(10_000), Time.now.to_f, user_agent, 'd753d'].collect(&:to_s).join),
+      expires: 90.days.from_now,
+      httponly: true
     }
   end
 
-  def user_agent
-    request.user_agent
-  end
+  delegate :user_agent, to: :request
 
-  def remote_ip
-    request.remote_ip
-  end
+  delegate :remote_ip, to: :request
 
   def current_admin
     return nil if @current_admin == false
@@ -49,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_admin
-    redirect_to admin_access_path and return unless current_admin
+    return redirect_to(admin_access_path) unless current_admin
 
     if current_admin.needs_to_set_new_password?
       redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path
@@ -96,22 +92,18 @@ class ApplicationController < ActionController::Base
 
   def impersonated_user
     if current_admin && session[:impersonated_user]
-      impersonated_user = User.find_by_id(session[:impersonated_user])
+      impersonated_user = User.find_by(id: session[:impersonated_user])
       impersonated_user.is_impersonated = true
       impersonated_user
-    else
-      nil
     end
   end
 
   def current_site
     @current_site ||= begin
       if current_user && session[:current_site]
-        current_user.sites.where(:id => session[:current_site]).first || current_user.sites.first
+        current_user.sites.where(id: session[:current_site]).first || current_user.sites.first
       elsif current_user
         current_user.sites.first
-      else
-        nil
       end
     end
   end

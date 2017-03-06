@@ -17,8 +17,8 @@ module ServiceProviders
       found_lists = []
       begin
         response = @client.get "accounts/#{@account_id}/lists.json",
-                               auth_token: @api_key,
-                               no_counts: true
+          auth_token: @api_key,
+          no_counts: true
 
         if response.success?
           response_hash = JSON.parse response.body
@@ -47,13 +47,16 @@ module ServiceProviders
 
       response = @client.post do |request|
         request.url "accounts/#{@account_id}/lists/#{list_id}/contacts.json"
-        request.body = { auth_token: @api_key,
-                         contact: { first_name: first_name,
-                                    last_name: last_name,
-                                    email: email,
-                                    subscribe: true,
-                                    remove_from_dnm: true }
-                        }
+        request.body = {
+          auth_token: @api_key,
+          contact: {
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            subscribe: true,
+            remove_from_dnm: true
+          }
+        }
       end
 
       if response.success?
@@ -81,7 +84,7 @@ module ServiceProviders
       raise 'Must provide an identity' unless options[:identity] || options[:site]
       return options[:identity] if options[:identity]
 
-      identity = options[:site].identities.find_by_provider!('maropost')
+      identity = options[:site].identities.find_by!(provider: 'maropost')
       return identity if identity
 
       raise 'Site does not have a stored Maropost identity'

@@ -22,7 +22,8 @@ describe ServiceProviders::ConvertKit do
 
   context 'should POST data to API' do
     before(:each) do
-      @form_id, @email = '1234', 'test@test.com'
+      @form_id = '1234'
+      @email = 'test@test.com'
       service_provider.instance_variable_set(:@contact_list, contact_list)
       @data = { api_key: identity.api_key, email: @email, tags: '' }
       @uri = "forms/#{@form_id}/subscribe?api_secret=#{identity.api_key}"
@@ -48,7 +49,7 @@ describe ServiceProviders::ConvertKit do
       end
 
       it 'with tags' do
-        tags = { 'tags' => %w{1 2 3} }
+        tags = { 'tags' => %w(1 2 3) }
         contact_list.data = tags
         service_provider.instance_variable_set(:@contact_list, contact_list)
         @data[:tags] = '1,2,3'

@@ -15,7 +15,7 @@ module Hello::EmailDigest
                     site_url: site.url,
                     date: start_date.strftime('%b %-d') + ' - ' + end_date.strftime(end_date.month == start_date.month ? '%-d, %Y' : '%b %-d, %Y') }
 
-        Analytics.track(:user, recipient.id, 'Sent Email', { 'Email Template' => EmailDigestHelper.template_name(site) })
+        Analytics.track(:user, recipient.id, 'Sent Email', 'Email Template' => EmailDigestHelper.template_name(site))
         MailerGateway.send_email(EmailDigestHelper.template_name(site), recipient.email, options)
       end
     end
@@ -29,8 +29,6 @@ module Hello::EmailDigest
         if site.script_installed_at.nil? # Only send if the site never had it installed in the first place
           return DigestMailer.not_installed(site, user)
         end
-      else
-        nil
       end
     end
   end

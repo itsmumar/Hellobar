@@ -41,17 +41,17 @@ class PaymentForm
 
   def to_hash
     {
-      :number => data[:number],
-      :month => month,
-      :year => year,
-      :first_name => first_name,
-      :last_name => last_name,
-      :verification_value => data[:verification_value],
-      :city => data[:city],
-      :state => data[:state],
-      :zip => data[:zip],
-      :address1 => data[:address],
-      :country => data[:country]
+      number: data[:number],
+      month: month,
+      year: year,
+      first_name: first_name,
+      last_name: last_name,
+      verification_value: data[:verification_value],
+      city: data[:city],
+      state: data[:state],
+      zip: data[:zip],
+      address1: data[:address],
+      country: data[:country]
     }
   end
 end

@@ -4,7 +4,7 @@ module ServiceProviders
       if opts[:identity]
         identity = opts[:identity]
       elsif opts[:site]
-        identity = opts[:site].identities.find_by_provider!('convert_kit')
+        identity = opts[:site].identities.find_by!(provider: 'convert_kit')
         raise 'Site does not have a stored ConvertKit identity' unless identity
       else
         raise 'Must provide an identity through the arguments'
@@ -71,7 +71,7 @@ module ServiceProviders
       end
 
       begin
-        response = make_api_call('post', "forms/#{form_id}/subscribe", { body: body })
+        response = make_api_call('post', "forms/#{form_id}/subscribe", body: body)
 
         if response.success?
           response

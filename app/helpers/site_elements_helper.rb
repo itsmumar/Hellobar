@@ -11,7 +11,7 @@ module SiteElementsHelper
   end
 
   def activity_message_append_number_of_units(site_element, message)
-    number_of_units = site_element_activity_units([site_element], :plural => site_element.total_conversions > 1, :verb => true)
+    number_of_units = site_element_activity_units([site_element], plural: site_element.total_conversions > 1, verb: true)
     message << " has already resulted in #{number_with_delimiter(site_element.total_conversions)} #{number_of_units}."
     message
   end
@@ -28,11 +28,11 @@ module SiteElementsHelper
     message << ' Currently this bar is converting'
     if conversion_rate > group_conversion_rate
       lift = (conversion_rate - group_conversion_rate) / group_conversion_rate
-      message << " #{number_to_percentage(lift * 100, :precision => 1)}" unless lift.infinite?
+      message << " #{number_to_percentage(lift * 100, precision: 1)}" unless lift.infinite?
       message << ' better than'
     elsif group_conversion_rate > conversion_rate
       lift = (group_conversion_rate - conversion_rate) / conversion_rate
-      message << " #{number_to_percentage(lift * 100, :precision => 1)}" unless lift.infinite?
+      message << " #{number_to_percentage(lift * 100, precision: 1)}" unless lift.infinite?
       message << ' worse than'
     else
       message << ' exactly as well as'
@@ -42,11 +42,12 @@ module SiteElementsHelper
   end
 
   def activity_message_append_significance_text(site_element, related_site_elements, message)
-    if difference_is_significant?([site_element] + related_site_elements)
-      message << ' This result is statistically significant.'
-    else
-      message << " We don't have enough data yet to know if this is significant."
-    end
+    message <<
+      if difference_is_significant?([site_element] + related_site_elements)
+        ' This result is statistically significant.'
+      else
+        " We don't have enough data yet to know if this is significant."
+      end
     message
   end
 
@@ -74,27 +75,27 @@ module SiteElementsHelper
     units = [*elements].map do |element|
       case element.element_subtype
       when 'traffic'
-        { :unit => 'click' }
+        { unit: 'click' }
       when 'email'
-        { :unit => 'email', :verb => 'collected' }
+        { unit: 'email', verb: 'collected' }
       when 'call'
-        { :unit => 'call' }
+        { unit: 'call' }
       when 'announcement'
-        { :unit => 'view' }
+        { unit: 'view' }
       when 'social/tweet_on_twitter'
-        { :unit => 'tweet' }
+        { unit: 'tweet' }
       when 'social/follow_on_twitter'
-        { :unit => 'follower', :verb => 'gained' }
+        { unit: 'follower', verb: 'gained' }
       when 'social/like_on_facebook'
-        { :unit => 'like' }
+        { unit: 'like' }
       when 'social/share_on_linkedin', 'social/share_on_buffer'
-        { :unit => 'share' }
+        { unit: 'share' }
       when 'social/plus_one_on_google_plus'
-        { :unit => 'plus one' }
+        { unit: 'plus one' }
       when 'social/pin_on_pinterest'
-        { :unit => 'pin' }
+        { unit: 'pin' }
       when 'social/follow_on_pinterest'
-        { :unit => 'follower', :verb => 'gained' }
+        { unit: 'follower', verb: 'gained' }
       else
         raise "#{element.element_subtype} not configured in this helper"
       end
@@ -107,17 +108,18 @@ module SiteElementsHelper
 
   def site_element_age(site_element)
     age = Time.now - site_element.created_at
-    if age < 1.minute
-      units = [(age / 1.second).to_i, 'second']
-    elsif age < 1.hour
-      units = [(age / 1.minute).to_i, 'minute']
-    elsif age < 1.day
-      units = [(age / 1.hour).to_i, 'hour']
-    elsif age < 1.year
-      units = [(age / 1.day).to_i, 'day']
-    else
-      units = [(age / 1.year).to_i, 'year']
-    end
+    units =
+      if age < 1.minute
+        [(age / 1.second).to_i, 'second']
+      elsif age < 1.hour
+        [(age / 1.minute).to_i, 'minute']
+      elsif age < 1.day
+        [(age / 1.hour).to_i, 'hour']
+      elsif age < 1.year
+        [(age / 1.day).to_i, 'day']
+      else
+        [(age / 1.year).to_i, 'year']
+      end
     "#{units[0]} <small>#{units[1].pluralize(units[0])} old</small>".html_safe
   end
 
@@ -164,8 +166,8 @@ module SiteElementsHelper
     values = {}
     elements.each_with_index do |element, _|
       values[element.id] = {
-        :views => element.total_views,
-        :conversions => element.total_conversions
+        views: element.total_views,
+        conversions: element.total_conversions
       }
     end
     ABAnalyzer::ABTest.new(values).different?

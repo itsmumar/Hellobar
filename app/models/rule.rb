@@ -16,10 +16,10 @@ class Rule < ActiveRecord::Base
   validates :site, association_exists: true
   validates_associated :conditions
   validates :priority, numericality: {
-                         only_integer: true,
-                         greater_than_or_equal_to: 1,
-                         less_than_or_equal_to: 100
-                       },
+    only_integer: true,
+    greater_than_or_equal_to: 1,
+    less_than_or_equal_to: 100
+  },
                        if: 'priority.present?'
 
   def self.defaults
@@ -27,7 +27,7 @@ class Rule < ActiveRecord::Base
     mobile =   Rule.new(name: 'Mobile Visitors',   match: MATCH_ON[:all], editable: false)
     homepage = Rule.new(name: 'Homepage Visitors', match: MATCH_ON[:all], editable: false)
 
-    mobile.conditions.build segment: 'DeviceCondition',  operand: :is, value: 'mobile'
+    mobile.conditions.build segment: 'DeviceCondition', operand: :is, value: 'mobile'
     homepage.conditions.build segment: 'UrlPathCondition', operand: :is, value: ['/']
 
     [everyone, mobile, homepage]

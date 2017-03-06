@@ -1,8 +1,5 @@
 begin
-#  require 'hmac-sha1'
-#  require 'hmac-sha2'
-require 'openssl'
-
+  require 'openssl'
 rescue LoadError
   # If they don't have this we don't want to kill everything with a load error
   # howver if you attempt to use this API it will error out
@@ -47,7 +44,8 @@ class GrandCentralApi
   class APIError < RuntimeError
     attr_reader :code, :body
     def initialize(code, body)
-      @code, @body = code, body
+      @code = code
+      @body = body
       super("#{@code} error - #{@body}")
     end
   end
@@ -58,7 +56,8 @@ class GrandCentralApi
   # - secret: the secret for the site (available from Grand Central)
   def initialize(endpoint, api_key, secret)
     @endpoint = endpoint.gsub(/\/$/, '') # Remove trailing slash from endpoint
-    @api_key, @secret = api_key, secret
+    @api_key = api_key
+    @secret = secret
   end
 
   # This sends the mail specified by mail (e.g. "Welcome")
@@ -71,7 +70,7 @@ class GrandCentralApi
   # is a status indicating if the mail was already sent, if there
   # was an error or if the it queued up to be sent
   def send_mail(mail, data)
-    request("/api/send/#{CGI::escape(mail)}", data)
+    request("/api/send/#{CGI.escape(mail)}", data)
   end
 
   # This checks if the mail specified by mail (e.g. "Welcome")
@@ -82,7 +81,7 @@ class GrandCentralApi
   # is a status indicating if the mail was already sent, if there
   # was an error or if the it queued up to be sent
   def sent_mail(mail, data)
-    request("/api/sent/#{CGI::escape(mail)}", data)
+    request("/api/sent/#{CGI.escape(mail)}", data)
   end
 
   protected
@@ -94,7 +93,7 @@ class GrandCentralApi
   # Issues the actual request
   def request(path, data)
     if Rails.env.test?
-      self.class.record_request({ :path => path, :data => data })
+      self.class.record_request(path: path, data: data)
       return
     end
 

@@ -25,7 +25,7 @@ require 'csv'
 describe QueueWorkerMock, 'queue worker spec' do
   context '#parse_message' do
     let(:message) { double(:message, body: body) }
-    let(:id) { 12345.to_s }
+    let(:id) { '12345' }
     let(:email) { 'test@test.com' }
 
     subject { described_class.parse_message(message) }

@@ -3,7 +3,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'constant_contact').first
+      identity = opts[:site].identities.where(provider: 'constant_contact').first
       raise 'Site does not have a stored Constant Contact identity' unless identity
     end
 

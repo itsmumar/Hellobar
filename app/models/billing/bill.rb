@@ -10,7 +10,7 @@ class Bill < ActiveRecord::Base
   belongs_to :subscription, inverse_of: :bills
   has_many :billing_attempts, -> { order 'id' }
   has_many :coupon_uses
-  validates_presence_of :subscription
+  validates :subscription, presence: true
   include BillingAuditTrail
   delegate :site, to: :subscription
   delegate :site_id, to: :subscription
@@ -21,8 +21,7 @@ class Bill < ActiveRecord::Base
   before_validation :set_base_amount, :check_amount
 
   def during_trial_subscription?
-    subscription.amount != 0 && subscription.payment_method.nil? && \
-    amount == 0 && paid?
+    subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
   end
 
   def set_base_amount
@@ -30,10 +29,10 @@ class Bill < ActiveRecord::Base
   end
 
   def check_amount
-    raise InvalidBillingAmount, "Amount was: #{amount.inspect}" if !amount or amount < 0
+    raise InvalidBillingAmount, "Amount was: #{amount.inspect}" if !amount || amount < 0
   end
 
-  alias :void! :voided!
+  alias void! voided!
   def status=(value)
     value = value.to_sym
     return if status == value
@@ -42,7 +41,7 @@ class Bill < ActiveRecord::Base
     audit << "Changed Bill[#{id}] status from #{status.inspect} to #{value.inspect}"
     status_value = Bill.statuses[value.to_sym]
     raise InvalidStatus, "Invalid status: #{value.inspect}" unless status_value
-    write_attribute(:status, status_value)
+    self[:status] = status_value
     self.status_set_at = Time.now
 
     if status == :paid
@@ -56,7 +55,7 @@ class Bill < ActiveRecord::Base
     set_final_amount!
 
     now = Time.now
-    raise BillingEarly, "Attempted to bill on #{now} but bill[#{id}] has a bill_at date of #{bill_at}" if !allow_early and now < bill_at
+    raise BillingEarly, "Attempted to bill on #{now} but bill[#{id}] has a bill_at date of #{bill_at}" if !allow_early && now < bill_at
     if amount == 0 # Note: less than 0 is a valid value for refunds
       audit << 'Marking bill as paid because no payment required'
       # Mark as paid
@@ -68,20 +67,20 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  alias :orig_status :status
+  alias orig_status status
   def status
     orig_status.to_sym
   end
 
   def active_during(date)
     return false if voided?
-    return false if start_date and start_date > date
-    return false if end_date and end_date < date
+    return false if start_date && start_date > date
+    return false if end_date && end_date < date
     true
   end
 
   def due_at(payment_method = nil)
-    if grace_period_allowed and payment_method and payment_method.current_details and payment_method.current_details.grace_period
+    if grace_period_allowed && payment_method && payment_method.current_details && payment_method.current_details.grace_period
       return bill_at + payment_method.current_details.grace_period
     end
     # Otherwise it is due now
@@ -93,14 +92,14 @@ class Bill < ActiveRecord::Base
   end
 
   def should_bill?
-    (pending? and Time.now >= bill_at)
+    pending? && Time.now >= bill_at
   end
 
   def problem_with_payment?(payment_method = nil)
     return false if paid? || voided? || amount == 0
     # If pending see if we are past due and we have
     # tried billing them at least once
-    return true if past_due?(payment_method) and (payment_method.nil? || !billing_attempts.empty?)
+    return true if past_due?(payment_method) && (payment_method.nil? || !billing_attempts.empty?)
     # False otherwise
     false
   end
@@ -209,9 +208,7 @@ class Bill < ActiveRecord::Base
     end
 
     def refunded_billing_attempt_id=(id)
-      if !metadata
-        self.metadata = {}
-      end
+      self.metadata = {} unless metadata
       metadata['refunded_billing_attempt_id'] = id
       @refunded_billing_attempt = nil
     end

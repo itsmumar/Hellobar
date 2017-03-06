@@ -1,9 +1,13 @@
 require 'spec_helper'
 
 describe ServiceProviders::ActiveCampaign do
-  let(:identity) { Identity.new(:provider => 'active_campaign',
-                                :api_key => 'valid-active-campaign-key',
-                                :extra => { 'app_url' => 'hellobar.api-us1.com' }) }
+  let(:identity) do
+    Identity.new(
+      provider: 'active_campaign',
+      api_key: 'valid-active-campaign-key',
+      extra: { 'app_url' => 'hellobar.api-us1.com' }
+    )
+  end
   let(:service_provider) { identity.service_provider }
   let(:cassette_base) { 'service_providers/active_campaign' }
   let(:client) { service_provider.instance_variable_get(:@client) }
@@ -11,7 +15,7 @@ describe ServiceProviders::ActiveCampaign do
   describe '#lists' do
     it 'should call `list_list`' do
       VCR.use_cassette(cassette_base + '/lists') do
-        expect(client).to receive(:list_list).and_return({ 'result_code' => 1 })
+        expect(client).to receive(:list_list).and_return('result_code' => 1)
         service_provider.lists
       end
     end
@@ -27,7 +31,7 @@ describe ServiceProviders::ActiveCampaign do
     context 'NOT having `list_id`' do
       it 'should call contact_sync' do
         email = 'test@test.com'
-        expect(client).to receive(:contact_sync).with({ email: email })
+        expect(client).to receive(:contact_sync).with(email: email)
 
         VCR.use_cassette(cassette_base + '/contact_sync') do
           service_provider.subscribe(nil, email)

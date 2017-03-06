@@ -36,7 +36,7 @@ describe RulesController do
 
   describe 'POST :create' do
     before do
-      Site.any_instance.stub(:generate_script => true)
+      Site.any_instance.stub(generate_script: true)
     end
 
     it 'should fail when not logged in' do
@@ -74,7 +74,8 @@ describe RulesController do
         match: 'all',
         conditions_attributes: {
           '1' => {
-            'segment' => 'CountryCondition', 'operand' => 'is', 'value' => 'USA' }
+            'segment' => 'CountryCondition', 'operand' => 'is', 'value' => 'USA'
+          }
         }
       }
 
@@ -87,7 +88,7 @@ describe RulesController do
 
   describe 'DELETE :destroy' do
     before do
-      Site.any_instance.stub(:generate_script => true)
+      Site.any_instance.stub(generate_script: true)
     end
 
     it 'should fail when not logged in' do
@@ -104,9 +105,9 @@ describe RulesController do
 
     it 'should succeed when owner' do
       stub_current_user users(:pro)
-      expect do
+      expect {
         delete :destroy, site_id: site, id: rule
-      end.to change { Rule.count }.by(-1)
+      }.to change { Rule.count }.by(-1)
       expect(response).to be_success
     end
 
@@ -117,9 +118,9 @@ describe RulesController do
 
       site.rules.count.should == 1
 
-      expect do
+      expect {
         delete :destroy, site_id: site, id: rule
-      end.to_not change { Rule.count }
+      }.to_not change { Rule.count }
 
       expect(response.status).to eq(422)
     end
@@ -127,7 +128,7 @@ describe RulesController do
 
   describe 'PUT :update' do
     before do
-      Site.any_instance.stub(:generate_script => true)
+      Site.any_instance.stub(generate_script: true)
     end
 
     it 'should fail when not logged in' do
@@ -149,14 +150,14 @@ describe RulesController do
       it 'should update a rule with new conditions' do
         stub_current_user(site.owners.first)
 
-        expect do
+        expect {
           put :update, site_id: site, id: rule, rule: {
             name: 'new rule name',
             conditions_attributes: {
               :"0" => condition_hash(:date_between)
             }
           }
-        end.to change { Condition.count }.by(1)
+        }.to change { Condition.count }.by(1)
 
         expect(response).to be_success
 

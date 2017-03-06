@@ -19,8 +19,8 @@ describe Users::ForgotEmailsController, '#create' do
   end
 
   it 'delivers the forgot email with the correct parameters' do
-    expect(MailerGateway).to receive(:send_email).
-                             with('Forgot Email', 'support@hellobar.com', params)
+    expect(MailerGateway)
+      .to receive(:send_email).with('Forgot Email', 'support@hellobar.com', params)
 
     post :create, params
   end

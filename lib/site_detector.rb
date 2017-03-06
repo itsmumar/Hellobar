@@ -9,7 +9,7 @@ class SiteDetector
   end
 
   def site_type
-    @response ||= HTTParty.get(url, timeout: 10, :headers => { 'User-Agent' => USER_AGENT })
+    @response ||= HTTParty.get(url, timeout: 10, headers: { 'User-Agent' => USER_AGENT })
     case @response
     when /static.squarespace.com/
       :squarespace
@@ -21,8 +21,6 @@ class SiteDetector
       :wordpress
     when /https:\/\/www.blogger.com/
       :blogspot
-    else
-      nil
     end
   rescue
     nil # Couldn't connect to their site, so assume nil

@@ -3,7 +3,7 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'createsend').first
+      identity = opts[:site].identities.where(provider: 'createsend').first
       raise 'Site does not have a stored Campaign Monitor identity' unless identity
     end
 
@@ -13,10 +13,10 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
 
   def lists
     handle_error do
-      @client.clients.map do |cl|
+      @client.clients.map { |cl|
         client = CreateSend::Client.new(@auth, cl.ClientID)
         client.lists.map { |l| { 'id' => l['ListID'], 'name' => l['Name'] } }
-      end.flatten
+      }.flatten
     end
   end
 
@@ -44,18 +44,18 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
       identity.save
       retry unless (retries -= 1).zero?
     end
-    identity.destroy_and_notify_user if identity != nil
+    identity.destroy_and_notify_user unless identity.nil?
     raise e
   rescue CreateSend::RevokedOAuthToken => e
-    identity.destroy_and_notify_user if identity != nil
+    identity.destroy_and_notify_user unless identity.nil?
     raise e
   end
 
   def initialize_client(identity)
     handle_error do
       @auth = {
-        :access_token => identity.credentials['token'],
-        :refresh_token => identity.credentials['refresh_token']
+        access_token: identity.credentials['token'],
+        refresh_token: identity.credentials['refresh_token']
       }
 
       @client = CreateSend::CreateSend.new(@auth)

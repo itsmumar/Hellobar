@@ -11,7 +11,7 @@ module HB
       def gateway
         unless @gateway
           ActiveMerchant::Billing::Base.mode = Hellobar::Settings[:cybersource_environment].try(:to_sym) || :test
-          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(:login => Hellobar::Settings[:cybersource_login], :password => Hellobar::Settings[:cybersource_password], :ignore_avs => true)
+          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(login: Hellobar::Settings[:cybersource_login], password: Hellobar::Settings[:cybersource_password], ignore_avs: true)
         end
         @gateway
       end
@@ -20,17 +20,17 @@ module HB
 end
 
 class CyberSourceCreditCard < PaymentMethodDetails
-  CC_FIELDS = %w{number month year first_name last_name brand verification_value}
-  ADDRESS_FIELDS = %w{city state zip address1 country}
+  CC_FIELDS = %w(number month year first_name last_name brand verification_value)
+  ADDRESS_FIELDS = %w(city state zip address1 country)
   # Note: any fields not included here will be stripped out when setting
   FIELDS = CC_FIELDS + ADDRESS_FIELDS + ['token']
   # These are the required fields to be set
-  REQUIRED_FIELDS = FIELDS - %w{brand token state}
+  REQUIRED_FIELDS = FIELDS - %w(brand token state)
 
   class CyberSourceCreditCardValidator < ActiveModel::Validator
     def validate(record)
       REQUIRED_FIELDS.each do |field|
-        if !record.data or record.data[field].blank?
+        if !record.data || record.data[field].blank?
           record.errors[field.to_sym] = 'can not be blank'
         end
       end
@@ -81,9 +81,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     sanitized_data = {}
     new_data.each do |key, value|
       key = key.to_s
-      if FIELDS.include?(key)
-        sanitized_data[key] = value
-      end
+      sanitized_data[key] = value if FIELDS.include?(key)
     end
     write_attribute(:data, sanitized_data)
   end
@@ -91,7 +89,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   # Shouldn't really need to get this directly
   def cybersource_profile
     unless @cybersource_profile
-      response = HB::CyberSource.gateway.retrieve(formatted_token, { order_id: order_id })
+      response = HB::CyberSource.gateway.retrieve(formatted_token, order_id: order_id)
       raise response.message unless response.success?
       @cybersource_profile = response.params
     end
@@ -99,15 +97,13 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def charge(amount_in_dollars)
-    raise 'Can not charge money until saved' unless persisted? and token
-    if amount_in_dollars == 0
-      return true, 'Amount was zero'
-    end
-    if !amount_in_dollars or amount_in_dollars < 0
+    raise 'Can not charge money until saved' unless persisted? && token
+    return true, 'Amount was zero' if amount_in_dollars == 0
+    if !amount_in_dollars || amount_in_dollars < 0
       raise "Invalid amount: #{amount_in_dollars.inspect}"
     end
     begin
-      response = HB::CyberSource.gateway.purchase(amount_in_dollars * 100, formatted_token, { order_id: order_id })
+      response = HB::CyberSource.gateway.purchase(amount_in_dollars * 100, formatted_token, order_id: order_id)
 
       audit << "Charging #{amount_in_dollars.inspect}, got response: #{response.inspect}"
       if response.success?
@@ -122,14 +118,12 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def refund(amount_in_dollars, original_transaction_id)
-    raise 'Can not refund money until saved' unless persisted? and token
-    if amount_in_dollars == 0
-      return true, 'Amount was zero'
-    end
-    if !amount_in_dollars or amount_in_dollars < 0
+    raise 'Can not refund money until saved' unless persisted? && token
+    return true, 'Amount was zero' if amount_in_dollars == 0
+    if !amount_in_dollars || amount_in_dollars < 0
       raise "Invalid amount: #{amount_in_dollars.inspect}"
     end
-    if !original_transaction_id
+    unless original_transaction_id
       raise 'Can not refund without original transaction ID'
     end
     begin
@@ -179,17 +173,13 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def save_to_cybersource
     user = nil
-    if payment_method and payment_method.user
-      user = payment_method.user
-    end
+    user = payment_method.user if payment_method && payment_method.user
     # See if there is a previous token
     previous_token = nil
     if payment_method
       payment_method.details(true).each do |details|
         if details.is_a?(CyberSourceCreditCard)
-          if details.data['token']
-            previous_token = details.data['token']
-          end
+          previous_token = details.data['token'] if details.data['token']
         end
       end
     end
@@ -197,7 +187,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     # Note: we don't want to give CyberSource our customer's email addresses,
     # which is why we use the generic userXXX@hellobar.com format
     email = "user#{user ? user.id : 'NA'}@hellobar.com"
-    params = { :order_id => order_id, :email => email, :address => address.to_h }
+    params = { order_id: order_id, email: email, address: address.to_h }
     # Set the brand
     data['brand'] = card.brand
 
@@ -209,7 +199,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     begin
       if previous_token
         # Update the profile
-        response = HB::CyberSource::gateway.update(format_token(previous_token), card, params)
+        response = HB::CyberSource.gateway.update(format_token(previous_token), card, params)
         audit << "Updated previous_token: #{previous_token.inspect} with #{sanitized_data.inspect} response: #{response.inspect}"
       else
         # Create a new profile

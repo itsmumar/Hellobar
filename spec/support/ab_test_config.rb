@@ -4,8 +4,8 @@ RSpec.configure do |config|
     # let the rest of the calls pass through to ApplicationController untouched
     allow_any_instance_of(ApplicationController).to receive(:get_ab_variation).and_call_original
 
-    allow_any_instance_of(SiteSerializer).
-      to receive(:monthly_pageviews).and_return(nil)
+    allow_any_instance_of(SiteSerializer)
+      .to receive(:monthly_pageviews).and_return(nil)
 
     stub_out_get_ab_variations('Targeting UI Variation 2016-06-13') { 'original' }
     stub_out_get_ab_variations('Exit Intent Pop-up Based on Bar Goals 2016-06-08') { 'original' }
@@ -18,18 +18,18 @@ end
 def stub_out_get_ab_variations(*variations)
   variation_matcher = Regexp.new(variations.join('|'))
 
-  allow_any_instance_of(ApplicationController).
-    to receive(:get_ab_variation).
-    with(variation_matcher).
-    and_return(yield)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:get_ab_variation)
+    .with(variation_matcher)
+    .and_return(yield)
 
-  allow_any_instance_of(ApplicationController).
-    to receive(:get_ab_variation).
-    with(variation_matcher, anything).
-    and_return(yield)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:get_ab_variation)
+    .with(variation_matcher, anything)
+    .and_return(yield)
 
-  allow_any_instance_of(ApplicationController).
-    to receive(:get_ab_variation_or_nil).
-    with(variation_matcher).
-    and_return(yield)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:get_ab_variation_or_nil)
+    .with(variation_matcher)
+    .and_return(yield)
 end

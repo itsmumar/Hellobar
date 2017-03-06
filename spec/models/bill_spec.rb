@@ -36,7 +36,7 @@ describe Bill do
   end
 
   it 'should not let create a negative bill' do
-    lambda { Bill.create(:amount => -1) }.should raise_error(Bill::InvalidBillingAmount)
+    expect { Bill.create(amount: -1) }.to raise_error(Bill::InvalidBillingAmount)
   end
 
   it 'should not let you change the status once set' do
@@ -46,14 +46,14 @@ describe Bill do
     bill.status.should == :voided
     bill = Bill.find(bill.id)
     bill.status.should == :voided
-    lambda { bill.pending! }.should raise_error(Bill::StatusAlreadySet)
-    lambda { bill.paid! }.should raise_error(Bill::StatusAlreadySet)
-    lambda { bill.status = :pending }.should raise_error(Bill::StatusAlreadySet)
+    expect { bill.pending! }.to raise_error(Bill::StatusAlreadySet)
+    expect { bill.paid! }.to raise_error(Bill::StatusAlreadySet)
+    expect { bill.status = :pending }.to raise_error(Bill::StatusAlreadySet)
   end
 
   it 'should raise an error if you try to change the status to an invalid value' do
     bill = bills(:future_bill)
-    lambda { bill.status = 'foo' }.should raise_error(Bill::InvalidStatus)
+    expect { bill.status = 'foo' }.to raise_error(Bill::InvalidStatus)
   end
 
   it 'should record when the status was set' do
@@ -201,9 +201,9 @@ describe Bill do
       create(:referral_coupon)
       @bill.stub(:calculate_discount).and_return(2.0)
 
-      expect do
+      expect {
         @bill.attempt_billing!
-      end.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
+      }.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
 
       expect(@bill.amount).to eq(0.0)
       expect(@bill.discount).to eq(15.0)
@@ -213,9 +213,9 @@ describe Bill do
       create(:referral_coupon)
       @bill.stub(:calculate_discount).and_return(0.0)
 
-      expect do
+      expect {
         @bill.attempt_billing!
-      end.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
+      }.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
 
       expect(@bill.amount).to eq(0.0)
       expect(@bill.discount).to eq(15.0)
@@ -390,7 +390,7 @@ describe PaymentMethod do
     end
 
     it 'should raise an error if no payment_method_details' do
-      lambda { PaymentMethod.new.pay(bills(:now_bill)) }.should raise_error(PaymentMethod::MissingPaymentDetails)
+      expect { PaymentMethod.new.pay(bills(:now_bill)) }.to raise_error(PaymentMethod::MissingPaymentDetails)
     end
   end
 
@@ -437,7 +437,7 @@ describe PaymentMethod do
     it 'should not let you refund an unsuccessful billing attempt' do
       subscription = subscriptions(:zombo_subscription)
       billing_attempt = payment_methods(:always_fails).pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
-      lambda { billing_attempt.refund! }.should raise_error(BillingAttempt::InvalidRefund)
+      expect { billing_attempt.refund! }.to raise_error(BillingAttempt::InvalidRefund)
     end
   end
 end

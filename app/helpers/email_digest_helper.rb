@@ -14,7 +14,7 @@ module EmailDigestHelper
     precision = 3
     precision = 2 if num >= 1_000 && num < 100_000
 
-    number_to_human(num, :units => { :thousand => 'k', :million => 'm', :billion => 'b' }, format: '%n%u', precision: precision)
+    number_to_human(num, units: { thousand: 'k', million: 'm', billion: 'b' }, format: '%n%u', precision: precision)
   end
 
   def self.date_of_previous(day)

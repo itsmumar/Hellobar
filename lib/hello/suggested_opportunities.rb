@@ -38,12 +38,11 @@ module Hello
                   segment = item.attributes['segment']
                   result = results_for_site_element[segment]
                   item.attributes.each do |key, value|
-                    unless key == 'segment'
-                      yday = key.to_i + year_offset
-                      result[:total] += value.to_i
-                      result[:min_yday] = yday if !result[:min_yday] or yday < result[:min_yday]
-                      result[:max_yday] = yday if !result[:max_yday] or yday > result[:max_yday]
-                    end
+                    next if key == 'segment'
+                    yday = key.to_i + year_offset
+                    result[:total] += value.to_i
+                    result[:min_yday] = yday if !result[:min_yday] || yday < result[:min_yday]
+                    result[:max_yday] = yday if !result[:max_yday] || yday > result[:max_yday]
                   end
                 end
               end
@@ -54,15 +53,14 @@ module Hello
           # Now we need to calculate the average value for each and add it to the final results
           results_for_site_element.each do |segment, data|
             total = data[:total]
-            if total > 0
-              conversions = (total / CONVERSION_SCALE)
-              views = total - (conversions * CONVERSION_SCALE)
-              num_weeks = (((data[:max_yday] - data[:min_yday]).to_f + 1) / 7)
-              conversions = (conversions / num_weeks).round
-              views = (views / num_weeks).round
-              final_results[segment][0] += views
-              final_results[segment][1] += conversions
-            end
+            next unless total > 0
+            conversions = (total / CONVERSION_SCALE)
+            views = total - (conversions * CONVERSION_SCALE)
+            num_weeks = (((data[:max_yday] - data[:min_yday]).to_f + 1) / 7)
+            conversions = (conversions / num_weeks).round
+            views = (views / num_weeks).round
+            final_results[segment][0] += views
+            final_results[segment][1] += conversions
           end
         end
         final_results
@@ -87,7 +85,7 @@ module Hello
       # Returns the actual table name based for the given key.
       def table_name(key)
         key = key.to_s
-        if %w{contacts over_time segments}.include?(key)
+        if %w(contacts over_time segments).include?(key)
           return key
         else
           raise "Unknown table name key #{key.inspect}"
@@ -112,8 +110,8 @@ module Hello
 
       def connect
         AWS.config(
-          :access_key_id => Hellobar::Settings[:aws_access_key_id],
-          :secret_access_key => Hellobar::Settings[:aws_secret_access_key]
+          access_key_id: Hellobar::Settings[:aws_access_key_id],
+          secret_access_key: Hellobar::Settings[:aws_secret_access_key]
         )
         # We use both the "friendly" interface (@@dynamo_db) and the
         # direct interface (@@client)
@@ -124,8 +122,8 @@ module Hello
       def load_tables
         # Load the table schemas
         @@tables = {}
-        load_table(:contacts, { lid: :number }, { email: :string })
-        load_table(:over_time, { sid: :number }, { date: :number })
+        load_table(:contacts, { lid: :number }, email: :string)
+        load_table(:over_time, { sid: :number }, date: :number)
       end
 
       def load_table(name, hash_key, range_key)
@@ -154,7 +152,7 @@ module Hello
   end
 
   class SuggestedOpportunities
-    SUGGESTION_SEGMENT_KEYS = %w{dv st rd pu}
+    SUGGESTION_SEGMENT_KEYS = %w(dv st rd pu)
 
     class << self
       def generate(_site, site_elements)
