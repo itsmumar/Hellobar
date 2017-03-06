@@ -8,11 +8,11 @@ describe Referrals::SendSecondEmail do
     @referral = create(:referral, sender: @user, state: :sent, email: @email)
   end
 
-  it "will send the email under normal circumstances" do
+  it 'will send the email under normal circumstances' do
     expect(MailerGateway).to receive :send_email do |name, email, params|
       expect(name).to eq 'Referal Invite Second'
       expect(email).to eq @email
-      expect(params[:referral_link]).to include("http://hellobar.com/referrals/accept")
+      expect(params[:referral_link]).to include('http://hellobar.com/referrals/accept')
       expect(params[:referral_sender]).to eq @user.name
     end
 
@@ -21,7 +21,7 @@ describe Referrals::SendSecondEmail do
 
   it "will not send the email for a referral that's been accepted" do
     expect(MailerGateway).not_to receive :send_email
-    @referral.state = "signed_up"
+    @referral.state = 'signed_up'
 
     Referrals::SendSecondEmail.run(referral: @referral)
   end

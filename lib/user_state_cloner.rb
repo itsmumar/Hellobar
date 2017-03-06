@@ -26,7 +26,7 @@ class UserStateCloner
     payment_methods.each(&:save)
     ActiveRecord::Base.record_timestamps = true # generate timestamps
   rescue ActiveRecord::RecordNotUnique
-    Rails.logger.info "Rubocop is annoying and makes me do this."
+    Rails.logger.info 'Rubocop is annoying and makes me do this.'
   end
 
   def upgrade_sites_to_pro(sites)
@@ -40,7 +40,7 @@ class UserStateCloner
   end
 
   def build_user(user_json)
-    user_json.merge! password: 'password'
+    user_json[:password] = 'password'
     user_json.delete(:state)
 
     user = User.find_or_initialize_by(id: user_json[:id])

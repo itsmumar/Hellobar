@@ -9,7 +9,7 @@ module ServiceProviders
       if span
         url = span.try(:attr, 'name')
         url = URI.decode(url)
-        query_params = CGI::parse URI::parse(url).query
+        query_params = CGI.parse URI.parse(url).query
         query_params['campaign_name'][0]
       end
     end
@@ -21,7 +21,7 @@ module ServiceProviders
     def list_url
       list_url = super
       list_url.gsub(/https?/, 'https')
-              .gsub('add_contact_webform.html', "site/#{campaign_id}/webform.html") + "&wid=#{webform_id}" 
+              .gsub('add_contact_webform.html', "site/#{ campaign_id }/webform.html") + "&wid=#{ webform_id }"
     end
 
     def subscribe_params(email, name, double_optin = true)

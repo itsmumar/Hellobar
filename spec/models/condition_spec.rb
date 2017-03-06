@@ -1,22 +1,21 @@
 require 'spec_helper'
 
 RSpec.describe Condition, type: :model do
-
   it_behaves_like 'a model triggering script regeneration'
 
   describe '#validating the value format' do
     fixtures :all
 
-    it "clears empty values during validation" do
+    it 'clears empty values during validation' do
       condition = Condition.new(
         rule: rules(:zombo_rule),
-        operand: "is",
-        value: ["/foo", "/bar", ""],
-        segment: "UrlCondition"
+        operand: 'is',
+        value: ['/foo', '/bar', ''],
+        segment: 'UrlCondition'
       )
 
       condition.should be_valid
-      condition.value.should == ["/foo", "/bar"]
+      condition.value.should == ['/foo', '/bar']
     end
 
     context 'the operand is NOT "between"' do
@@ -88,152 +87,152 @@ RSpec.describe Condition, type: :model do
   end
 
   describe '#to_sentence' do
-    context "is a UrlCondition" do
-      it "calls #url_condition_sentence" do
-        condition = create(:condition, operand: "is", segment: "UrlCondition", value: ["http://www.wee.com"])
+    context 'is a UrlCondition' do
+      it 'calls #url_condition_sentence' do
+        condition = create(:condition, operand: 'is', segment: 'UrlCondition', value: ['http://www.wee.com'])
 
         expect(condition).to receive(:multiple_condition_sentence) { 'right' }
         expect(condition.to_sentence).to eql('right')
       end
     end
 
-    context "is a UrlPathCondition" do
-      it "calls #url_condition_sentence" do
-        condition = create(:condition, operand: "is", segment: "UrlPathCondition", value: ["/path/to/page"])
+    context 'is a UrlPathCondition' do
+      it 'calls #url_condition_sentence' do
+        condition = create(:condition, operand: 'is', segment: 'UrlPathCondition', value: ['/path/to/page'])
 
         expect(condition).to receive(:multiple_condition_sentence) { 'right' }
         expect(condition.to_sentence).to eql('right')
       end
     end
-    context "is a DateCondition" do
+    context 'is a DateCondition' do
       it "converts 'is between' conditions to sentences" do
-        Condition.date_condition_from_params('7/6', '7/13').to_sentence.should == "Date is between 7/6 and 7/13"
+        Condition.date_condition_from_params('7/6', '7/13').to_sentence.should == 'Date is between 7/6 and 7/13'
       end
 
       it "converts 'is before' conditions to sentences" do
-        Condition.date_condition_from_params('', '7/13').to_sentence.should == "Date is before 7/13"
+        Condition.date_condition_from_params('', '7/13').to_sentence.should == 'Date is before 7/13'
       end
 
       it "converts 'is after' conditions to sentences" do
-        Condition.date_condition_from_params('7/6', '').to_sentence.should == "Date is after 7/6"
+        Condition.date_condition_from_params('7/6', '').to_sentence.should == 'Date is after 7/6'
       end
     end
 
-    context "is a EveryXSession" do
-      it "ordinalizes the value" do
-        condition = create(:condition, operand: "every", segment: "EveryXSession", value: "5")
-        expect(condition.to_sentence).to eq("Every 5th session")
+    context 'is a EveryXSession' do
+      it 'ordinalizes the value' do
+        condition = create(:condition, operand: 'every', segment: 'EveryXSession', value: '5')
+        expect(condition.to_sentence).to eq('Every 5th session')
       end
     end
 
-    context "is a CustomCondition" do
+    context 'is a CustomCondition' do
       it "converts 'is between' conditions to sentences" do
-        condition = create(:condition, operand: "between", segment: "CustomCondition", custom_segment: "ABC", value: ["7/6", "7/13"])
-        expect(condition.to_sentence).to eq("ABC is between 7/6 and 7/13")
+        condition = create(:condition, operand: 'between', segment: 'CustomCondition', custom_segment: 'ABC', value: ['7/6', '7/13'])
+        expect(condition.to_sentence).to eq('ABC is between 7/6 and 7/13')
       end
 
-      it "displays the name, operand and value" do
-        condition = create(:condition, operand: "is_not", segment: "CustomCondition", custom_segment: "ABC", value: "4")
-        expect(condition.to_sentence).to eq("ABC is not 4")
-      end
-    end
-  end
-
-  describe "#normalize_url_condition" do
-    context "is not a UrlCondition" do
-      it "should do nothing to the value" do
-        condition = build(:condition, segment: "ReferrerCondition", value: "google.com")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("google.com")
-      end
-    end
-
-    context "is a UrlCondition" do
-      it "should do nothing if url is already absolute (http)" do
-        condition = build(:condition, segment: "UrlCondition", value: "http://google.com")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("http://google.com")
-      end
-
-      it "should do nothing if url is already absolute (https)" do
-        condition = build(:condition, segment: "UrlCondition", value: "https://google.com")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("https://google.com")
-      end
-
-      it "should do nothing if url is already relative" do
-        condition = build(:condition, segment: "UrlCondition", value: "/about")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("/about")
-      end
-
-      it "should prepend a / if url is relative" do
-        condition = build(:condition, segment: "UrlCondition", value: "about")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("/about")
-      end
-
-      it "should prepend a / if url is relative and has an extension" do
-        condition = build(:condition, segment: "UrlCondition", value: "about.html")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("/about.html")
-      end
-
-      it "should prepend http if url is absolute" do
-        condition = build(:condition, segment: "UrlCondition", value: "about.com")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("http://about.com")
-      end
-
-      it "should prepend http if url is absolute" do
-        condition = build(:condition, segment: "UrlCondition", value: "hey.hellobar.com")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("http://hey.hellobar.com")
-      end
-
-      it "should normalize values in an array" do
-        condition = build(:condition, segment: "UrlCondition", value: ["hey.hellobar.com", "about.html"])
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq(["http://hey.hellobar.com", "/about.html"])
-      end
-    end
-
-    context "is a UrlPathCondition" do
-      it "should do nothing if url is already relative" do
-        condition = build(:condition, segment: "UrlPathCondition", value: "/about")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("/about")
-      end
-
-      it "should prepend a / if url is relative" do
-        condition = build(:condition, segment: "UrlPathCondition", value: "about")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("/about")
-      end
-
-      it "should prepend a / if url is relative and has an extension" do
-        condition = build(:condition, segment: "UrlPathCondition", value: "about.html")
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq("/about.html")
+      it 'displays the name, operand and value' do
+        condition = create(:condition, operand: 'is_not', segment: 'CustomCondition', custom_segment: 'ABC', value: '4')
+        expect(condition.to_sentence).to eq('ABC is not 4')
       end
     end
   end
 
-  describe "#format_string_values" do
-    it "it strips whitespace from string values" do
-      condition = build(:condition, segment: "ReferrerCondition", value: "  abc  ")
-      condition.send(:format_string_values)
-      expect(condition.value).to eq("abc")
+  describe '#normalize_url_condition' do
+    context 'is not a UrlCondition' do
+      it 'should do nothing to the value' do
+        condition = build(:condition, segment: 'ReferrerCondition', value: 'google.com')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('google.com')
+      end
     end
 
-    it "it strips whitespace from strings in the value array" do
-      condition = build(:condition, segment: "ReferrerCondition", value: ["  abc  "])
-      condition.send(:format_string_values)
-      expect(condition.value[0]).to eq("abc")
+    context 'is a UrlCondition' do
+      it 'should do nothing if url is already absolute (http)' do
+        condition = build(:condition, segment: 'UrlCondition', value: 'http://google.com')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('http://google.com')
+      end
+
+      it 'should do nothing if url is already absolute (https)' do
+        condition = build(:condition, segment: 'UrlCondition', value: 'https://google.com')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('https://google.com')
+      end
+
+      it 'should do nothing if url is already relative' do
+        condition = build(:condition, segment: 'UrlCondition', value: '/about')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('/about')
+      end
+
+      it 'should prepend a / if url is relative' do
+        condition = build(:condition, segment: 'UrlCondition', value: 'about')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('/about')
+      end
+
+      it 'should prepend a / if url is relative and has an extension' do
+        condition = build(:condition, segment: 'UrlCondition', value: 'about.html')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('/about.html')
+      end
+
+      it 'should prepend http if url is absolute' do
+        condition = build(:condition, segment: 'UrlCondition', value: 'about.com')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('http://about.com')
+      end
+
+      it 'should prepend http if url is absolute' do
+        condition = build(:condition, segment: 'UrlCondition', value: 'hey.hellobar.com')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('http://hey.hellobar.com')
+      end
+
+      it 'should normalize values in an array' do
+        condition = build(:condition, segment: 'UrlCondition', value: ['hey.hellobar.com', 'about.html'])
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq(['http://hey.hellobar.com', '/about.html'])
+      end
     end
 
-    it "does nothing when value is not a string or array" do
-      condition = build(:condition, segment: "ReferrerCondition", value: 1)
+    context 'is a UrlPathCondition' do
+      it 'should do nothing if url is already relative' do
+        condition = build(:condition, segment: 'UrlPathCondition', value: '/about')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('/about')
+      end
+
+      it 'should prepend a / if url is relative' do
+        condition = build(:condition, segment: 'UrlPathCondition', value: 'about')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('/about')
+      end
+
+      it 'should prepend a / if url is relative and has an extension' do
+        condition = build(:condition, segment: 'UrlPathCondition', value: 'about.html')
+        condition.send(:normalize_url_condition)
+        expect(condition.value).to eq('/about.html')
+      end
+    end
+  end
+
+  describe '#format_string_values' do
+    it 'it strips whitespace from string values' do
+      condition = build(:condition, segment: 'ReferrerCondition', value: '  abc  ')
+      condition.send(:format_string_values)
+      expect(condition.value).to eq('abc')
+    end
+
+    it 'it strips whitespace from strings in the value array' do
+      condition = build(:condition, segment: 'ReferrerCondition', value: ['  abc  '])
+      condition.send(:format_string_values)
+      expect(condition.value[0]).to eq('abc')
+    end
+
+    it 'does nothing when value is not a string or array' do
+      condition = build(:condition, segment: 'ReferrerCondition', value: 1)
       condition.send(:format_string_values)
       expect(condition.value).to eq(1)
     end

@@ -1,7 +1,6 @@
 require 'integration_helper'
 
-describe "Autofills requests" do
-
+describe 'Autofills requests' do
   context 'when unauthenticated' do
     describe 'GET :index' do
       it 'responds with a redirect to the login page' do
@@ -126,11 +125,10 @@ describe "Autofills requests" do
       it 'destroys an existing autofill' do
         expect {
           delete site_autofill_path(site, autofill)
-        }.to change { Autofill.count }.by -1
+        }.to change { Autofill.count }.by(-1)
 
         expect(response).to be_a_redirect
       end
     end
   end
-
 end

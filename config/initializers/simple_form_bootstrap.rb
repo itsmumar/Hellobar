@@ -21,7 +21,7 @@ SimpleForm.setup do |config|
 
     b.wrapper tag: 'span' do |ba|
       ba.use :input
-      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+      ba.use :hint, wrap_with: { tag: 'p', class: 'help-block' }
     end
   end
 
@@ -33,14 +33,14 @@ SimpleForm.setup do |config|
       ba.use :label_input
     end
 
-    b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    b.use :hint, wrap_with: { tag: 'p', class: 'help-block' }
   end
 
   config.wrappers :vertical_radio_and_checkboxes, tag: 'span', class: 'form-group', error_class: 'has-error' do |b|
     b.use :html5
     b.use :placeholder
     b.use :label_input
-    b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    b.use :hint, wrap_with: { tag: 'p', class: 'help-block' }
   end
 
   config.wrappers :horizontal_form, tag: 'span', class: 'form-group', error_class: 'has-error' do |b|
@@ -61,7 +61,7 @@ SimpleForm.setup do |config|
 
     b.wrapper tag: 'span', class: 'col-sm-9' do |ba|
       ba.use :input
-      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+      ba.use :hint, wrap_with: { tag: 'p', class: 'help-block' }
     end
   end
 
@@ -74,7 +74,7 @@ SimpleForm.setup do |config|
         ba.use :label_input, class: 'col-sm-9'
       end
 
-      wr.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+      wr.use :hint, wrap_with: { tag: 'p', class: 'help-block' }
     end
   end
 
@@ -86,7 +86,7 @@ SimpleForm.setup do |config|
 
     b.wrapper tag: 'span', class: 'col-sm-9' do |ba|
       ba.use :input
-      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+      ba.use :hint, wrap_with: { tag: 'p', class: 'help-block' }
     end
   end
 

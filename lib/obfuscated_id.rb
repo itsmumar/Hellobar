@@ -5,39 +5,40 @@
 # will not always be the same.
 #
 class ObfuscatedID
-  SEP = "-"
-  ZERO_ENCODE = "_"
-  ENCODE = "S6pjZ9FbD8RmIvT3rfzVWAloJKMqg7CcGe1OHULNuEkiQByns5d4Y0PhXw2xta"
+  SEP = '-'
+  ZERO_ENCODE = '_'
+  ENCODE = 'S6pjZ9FbD8RmIvT3rfzVWAloJKMqg7CcGe1OHULNuEkiQByns5d4Y0PhXw2xta'
 
   class << self
     def generate(int)
-      raise "Does not work with negative values" if int < 0
+      raise 'Does not work with negative values' if int < 0
       id = int.to_s
       outputs = []
-      inputs = [id[0...3], id[3...6], id[6...9]].reject{|i| !i or i == ""}
+      inputs = [id[0...3], id[3...6], id[6...9]].reject { |i| !i || i.empty? }
       inputs.each do |input|
-        output = ""
-        input.split("").each do |c|
-          break if c != "0"
+        output = ''
+        input.split('').each do |c|
+          break if c != '0'
           output << ZERO_ENCODE
         end
         input = input.to_i
         unless input == 0
           loop do
-            if input > ENCODE.length
-              val = rand(ENCODE.length)+1
-            else
-              val = rand(input)+1
-            end
-            output += ENCODE[(val-1)..(val-1)]
+            val =
+              if input > ENCODE.length
+                rand(ENCODE.length) + 1
+              else
+                rand(input) + 1
+              end
+            output += ENCODE[(val - 1)..(val - 1)]
             input -= val
             break if input <= 0
           end
-          raise "Error: #{output.inspect} with #{input.inspect}" if input != 0
+          raise "Error: #{ output.inspect } with #{ input.inspect }" if input != 0
         end
         outputs << output
       end
-      return outputs.join(SEP)
+      outputs.join(SEP)
     end
 
     def parse(string)
@@ -48,16 +49,14 @@ class ObfuscatedID
         data.length.times do |i|
           char = data[i..i]
           if char == ZERO_ENCODE
-            outputs << "0"
+            outputs << '0'
           else
-            value += ENCODE.index(char)+1
+            value += ENCODE.index(char) + 1
           end
         end
-        unless value == 0
-          outputs << value.to_s
-        end
+        outputs << value.to_s unless value == 0
       end
-      return outputs.join("").to_i
+      outputs.join('').to_i
     end
   end
 end

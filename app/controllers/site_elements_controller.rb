@@ -1,13 +1,13 @@
 class SiteElementsController < ApplicationController
   before_action :authenticate_user!
-  before_action :force_trailing_slash, :only => [:new, :edit]
+  before_action :force_trailing_slash, only: [:new, :edit]
   before_action :load_site
-  before_action :load_site_element, :only => [:show, :edit, :update, :destroy, :toggle_paused]
+  before_action :load_site_element, only: [:show, :edit, :update, :destroy, :toggle_paused]
 
   layout :determine_layout
 
   def show
-    render :json => @site_element, serializer: SiteElementSerializer
+    render json: @site_element, serializer: SiteElementSerializer
   end
 
   def index
@@ -23,18 +23,18 @@ class SiteElementsController < ApplicationController
     end
 
     @rules = @site.rules.all
-    @site_element = SiteElement.new({
+    @site_element = SiteElement.new(
       font_id: SiteElement.columns_hash['font_id'].default,
       rule: @site.rules.first,
       theme: Theme.where(default_theme: true).first,
       show_branding: !@site.capabilities(true).remove_branding?,
       closable: false,
-      settings: {url: @site.url, url_to_like: @site.url }
-    })
+      settings: { url: @site.url, url_to_like: @site.url }
+    )
 
     respond_to do |format|
       format.html
-      format.json { render :json => @site_element, serializer: SiteElementSerializer }
+      format.json { render json: @site_element, serializer: SiteElementSerializer }
     end
   end
 
@@ -49,9 +49,9 @@ class SiteElementsController < ApplicationController
       @site_element.save!
       flash[:success] = message_to_clear_cache
 
-      render :json => @site_element, serializer: SiteElementSerializer
+      render json: @site_element, serializer: SiteElementSerializer
     else
-      render :json => @site_element, :status => :unprocessable_entity, serializer: SiteElementSerializer
+      render json: @site_element, status: :unprocessable_entity, serializer: SiteElementSerializer
     end
   end
 
@@ -62,9 +62,9 @@ class SiteElementsController < ApplicationController
     if updated
       flash[:success] = message_to_clear_cache
 
-      render :json => updater.element, serializer: SiteElementSerializer
+      render json: updater.element, serializer: SiteElementSerializer
     else
-      render :json => @site_element, :status => :unprocessable_entity, serializer: SiteElementSerializer
+      render json: @site_element, status: :unprocessable_entity, serializer: SiteElementSerializer
     end
   end
 
@@ -74,8 +74,8 @@ class SiteElementsController < ApplicationController
     respond_to do |format|
       format.js { head :ok }
       format.html do
-        flash[:success] = "Your bar was successfully deleted."
-        redirect_to site_site_elements_path(:site_id => @site)
+        flash[:success] = 'Your bar was successfully deleted.'
+        redirect_to site_site_elements_path(site_id: @site)
       end
     end
   end
@@ -85,15 +85,15 @@ class SiteElementsController < ApplicationController
 
     respond_to do |format|
       format.js { head :ok }
-      format.html { redirect_to site_site_elements_path(:site_id => @site) }
+      format.html { redirect_to site_site_elements_path(site_id: @site) }
     end
   end
 
   private
 
   def message_to_clear_cache
-    message = "It may take a few minutes for Hello Bar to show up on your site. "
-    message << "You’ll want to <a href=\"http://www.refreshyourcache.com/en/home\" target=\"_blank\" style=\"text-decoration: underline;\">clear your cache</a> to see your updates."
+    message = 'It may take a few minutes for Hello Bar to show up on your site. '
+    message << 'You’ll want to <a href="http://www.refreshyourcache.com/en/home" target="_blank" style="text-decoration: underline;">clear your cache</a> to see your updates.'
   end
 
   def load_site
@@ -102,7 +102,7 @@ class SiteElementsController < ApplicationController
   end
 
   def determine_layout
-    %w(new edit).include?(action_name) ? "ember" : "application"
+    ['new', 'edit'].include?(action_name) ? 'ember' : 'application'
   end
 
   def force_trailing_slash
@@ -168,19 +168,19 @@ class SiteElementsController < ApplicationController
       :custom_html,
       :custom_css,
       :custom_js,
-      {settings: settings_keys},
-      {blocks: blocks_keys}
+      { settings: settings_keys },
+      blocks: blocks_keys
     )
   end
 
   def blocks_keys
     [
       :id,
-      {content: [:text, :href]},
+      { content: [:text, :href] },
       themes: [
         :id,
         :css_classes,
-        {styles: [:background_color, :border_color]}
+        { styles: [:background_color, :border_color] }
       ]
     ]
   end

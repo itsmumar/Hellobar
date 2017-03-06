@@ -3,13 +3,11 @@ class ContactListsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_site
-  before_action :load_contact_list, :only => [:show, :update, :destroy]
+  before_action :load_contact_list, only: [:show, :update, :destroy]
 
   def index
-    @site ||= current_site #Necessary here in case this is a redirect from failed oauth
-    if omniauth_error?
-      flash[:error] = omniauth_error_message
-    end
+    @site ||= current_site # Necessary here in case this is a redirect from failed oauth
+    flash[:error] = omniauth_error_message if omniauth_error?
 
     @contact_lists = @site.contact_lists
     @contact_list_totals =
@@ -22,7 +20,7 @@ class ContactListsController < ApplicationController
   end
 
   def show
-    @other_lists = @site.contact_lists.where.not(:id => @contact_list.id)
+    @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
     @subscribers = @contact_list.subscribers(100)
     @total_subscribers = Hello::DataAPI.contact_list_totals(@site, [@contact_list])[@contact_list.id.to_s]
     @statuses = @contact_list.subscriber_statuses(@subscribers)
@@ -56,7 +54,7 @@ class ContactListsController < ApplicationController
   private
 
   def contact_list_params
-    params.require(:contact_list).permit(:name, :provider, {:data => [:remote_id, :remote_name, :embed_code, :api_key, :app_url, :webhook_url, :webhook_method, :cycle_day, tags: []]}, :double_optin)
+    params.require(:contact_list).permit(:name, :provider, { data: [:remote_id, :remote_name, :embed_code, :api_key, :app_url, :webhook_url, :webhook_method, :cycle_day, tags: []] }, :double_optin)
   end
 
   def delete_site_elements_action
@@ -68,7 +66,7 @@ class ContactListsController < ApplicationController
   end
 
   def contact_list_csv_url(list)
-    path, params = Hello::DataAPIHelper::RequestParts.get_contacts(list.site_id, list.id, list.site.read_key, nil, nil, {"f" => "c"})
+    path, params = Hello::DataAPIHelper::RequestParts.get_contacts(list.site_id, list.id, list.site.read_key, nil, nil, 'f' => 'c')
     path_with_params = Hello::DataAPIHelper.url_for(path, params)
     URI.join(Hellobar::Settings[:data_api_url], path_with_params).to_s
   end

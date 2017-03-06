@@ -1,1 +1,1 @@
-require "#{Rails.root}/lib/git_utils"
+require "#{ Rails.root }/lib/git_utils"

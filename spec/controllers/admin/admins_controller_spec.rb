@@ -6,8 +6,8 @@ describe Admin::AdminsController do
     stub_current_admin(@admin)
   end
 
-  describe "GET #index" do
-    it "allows admins to see all admins" do
+  describe 'GET #index' do
+    it 'allows admins to see all admins' do
       create(:admin)
       get :index
 
@@ -15,8 +15,8 @@ describe Admin::AdminsController do
     end
   end
 
-  describe "PUT #unlock" do
-    it "unlocks the admin" do
+  describe 'PUT #unlock' do
+    it 'unlocks the admin' do
       admin = create(:admin, locked: true)
       put :unlock, id: admin.id
 
