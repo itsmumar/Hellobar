@@ -20,6 +20,7 @@ constantcontact_app_secret: contantcontact-app-secret
 mailchimp_client_id: mailchimp-client-id
 mailchimp_secret: mailchimp-secret
 get_response_api_url: https://api.getresponse.com/v3
+syncable: true
 dynamo_tables:
   email: "env_emails"
   bar_current: "env_current"
@@ -35,6 +36,7 @@ sentry_dsn: sentry-dsn-endpoint
 support_location: "http://support.hellobar.com/"
 maropost_url: "http://api.maropost.com/"
 fake_data_api: true
+store_site_scripts_locally: true
 hb_infusionsoft_key: 7428f50b4c59218cdff564229dfa541b
 hb_infusionsoft_url: xl349.infusionsoft.com
 hb_infusionsoft_default_group: 103
