@@ -66,7 +66,16 @@
       callback(document);
       var iframes = document.getElementsByTagName('iframe') || [];
       Array.prototype.forEach.call(iframes, function (iframe) {
-        callback(iframe.contentDocument);
+        try {
+          var iframeDocument = iframe.contentDocument;
+          callback(iframeDocument);
+        } catch (e) {
+          // We're fully ignoring iframe cross-origin restriction exception (it's represented with DOMException)
+          // and print warning for anything else
+          if (!(e instanceof DOMException)) {
+            console.warn(e);
+          }
+        }
       });
     }
   }
@@ -75,7 +84,7 @@
     function initializeValueCollectionForDocument(doc) {
       forAllAutofills(function (autofill) {
         var elementsToTrack = getElements(doc, autofill.listen_selector);
-        Array.prototype.forEach.call(elementsToTrack, function(elementToTrack) {
+        Array.prototype.forEach.call(elementsToTrack, function (elementToTrack) {
           var blurHandler = function (evt) {
             if (evt && evt.target) {
               var value = evt.target.value;
@@ -125,7 +134,11 @@
     var _autofills = [];
     this.autofills = function (autofills) {
       return autofills ? (_autofills = autofills) : _autofills;
-    }
+    };
+
+    this.hasAutofills = function () {
+      return _autofills && _autofills.length > 0;
+    };
   }
 
   var configuration = new ModuleConfiguration();
@@ -138,8 +151,10 @@
 
     load: function () {
       function doLoad() {
-        populateValues();
-        initializeValueCollection();
+        if (configuration.hasAutofills()) {
+          populateValues();
+          initializeValueCollection();
+        }
       }
 
       document.body ? setTimeout(doLoad, 0) : document.addEventListener('DOMContentLoaded', function (evt) {
