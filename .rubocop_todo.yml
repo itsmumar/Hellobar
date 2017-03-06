@@ -199,11 +199,6 @@ Style/ClassVars:
     - 'lib/hello/suggested_opportunities.rb'
     - 'lib/hello/wordpress_model.rb'
 
-# Offense count: 1
-Style/ConstantName:
-  Exclude:
-    - 'config/initializers/settings.rb'
-
 # Offense count: 228
 Style/Documentation:
   Enabled: false

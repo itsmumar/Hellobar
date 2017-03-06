@@ -86,4 +86,8 @@ class Hello::WordpressUser < Hello::WordpressModel
     Hello::WordpressUserMeta.where(user_id: id, meta_key: 'hellobar_vip_user').first.try(:meta_value) == '1' ||
       !Hello::WordpressUserMeta.where(user_id: id, meta_key: 'hbwp_s2member_subscr_id').first.try(:meta_value).nil?
   end
+
+  def wordpress_user?
+    true
+  end
 end

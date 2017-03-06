@@ -305,7 +305,7 @@ class User < ActiveRecord::Base
   end
 
   def wordpress_user?
-    is_a?(Hello::WordpressUser)
+    false
   end
 
   private
