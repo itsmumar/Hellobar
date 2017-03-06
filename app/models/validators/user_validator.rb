@@ -6,12 +6,12 @@ module UserValidator
     base.extend ClassMethods
 
     base.class_eval do
-      validates_presence_of   :email, if: :email_required?
-      validates_format_of     :email, with: email_regexp, allow_blank: true, if: :email_changed?
+      validates :email, presence: { if: :email_required? }
+      validates :email, format: { with: email_regexp, allow_blank: true, if: :email_changed? }
 
-      validates_presence_of     :password, if: :password_required?
-      validates_confirmation_of :password, if: :password_required?
-      validates_length_of       :password, within: password_length, allow_blank: true
+      validates :password, presence: { if: :password_required? }
+      validates :password, confirmation: { if: :password_required? }
+      validates :password, length: { within: password_length, allow_blank: true }
     end
   end
 

@@ -69,6 +69,16 @@ Style/NumericLiteralPrefix:
 Style/NumericPredicate:
   Enabled: false
 
+# TODO: enable after updating rails/rspec
+# Configuration parameters: Include.
+# Include: spec/**/*, test/**/*
+Rails/HttpPositionalArguments:
+  Enabled: false
+
+# SupportedStyles: referer, referrer
+Rails/RequestReferer:
+  EnforcedStyle: referrer
+
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
@@ -81,3 +91,11 @@ Style/BlockDelimiters:
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/ConstantName:
+  Exclude:
+    - lib/hello/segments.rb
+    - config/initializers/settings.rb

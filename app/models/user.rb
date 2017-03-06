@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
 
   ACTIVE_STATUS = 'active'
   TEMPORARY_STATUS = 'temporary'
-  INVITE_EXPIRE_RATE = 2.week
+  INVITE_EXPIRE_RATE = 2.weeks
 
   # returns a user with a random email and password
   def self.generate_temporary_user
@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
 
     find_by(email: email) ||
       find_and_create_by_referral(email) ||
-      Hello::WordpressUser.find_by_email(email)
+      Hello::WordpressUser.find_by(email: email)
   end
 
   def self.find_and_create_by_referral(email)
@@ -173,7 +173,7 @@ class User < ActiveRecord::Base
   end
 
   def role_for_site(site)
-    if membership = site_memberships.where(site: site).first
+    if membership = site_memberships.find_by(site: site)
       membership.role.to_sym
     end
   end
@@ -268,7 +268,7 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_invite_by_email(email, _site)
-    user = User.where(email: email).first
+    user = User.find_by(email: email)
 
     if user.nil?
       user = User.new(email: email)

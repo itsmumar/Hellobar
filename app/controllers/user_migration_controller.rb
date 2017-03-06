@@ -1,6 +1,6 @@
 class UserMigrationController < ApplicationController
   layout 'static'
-  before_filter :verify_wordpress_user, except: [:upgrade, :start]
+  before_action :verify_wordpress_user, except: [:upgrade, :start]
 
   def new
     @bars = current_wordpress_user.bars

@@ -4,7 +4,7 @@ module ServiceProviders
       if opts[:identity]
         identity = opts[:identity]
       elsif opts[:site]
-        identity = opts[:site].identities.find_by_provider!('get_response_api')
+        identity = opts[:site].identities.find_by!(provider: 'get_response_api')
         raise 'Site does not have a stored GetResponse identity' unless identity
       else
         raise 'Must provide an identity through the arguments'

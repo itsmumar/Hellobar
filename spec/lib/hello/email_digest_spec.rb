@@ -15,7 +15,7 @@ describe Hello::EmailDigest do
     it 'should return nil if script not installed and has no site elements created in the last 10 days' do
       site = sites(:zombo)
       site.stub(has_script_installed?: false)
-      site.site_elements.each { |x| x.update_column(:created_at, 11.day.ago) }
+      site.site_elements.each { |x| x.update_column(:created_at, 11.days.ago) }
       Hello::EmailDigest.mailer_for_site(site, site.users.first).should be_nil
     end
 

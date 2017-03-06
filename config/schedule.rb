@@ -35,7 +35,7 @@ every 2.hours, roles: [:cron] do
   rake 'onboarding_campaigns:deliver'
 end
 
-every 1.hours, roles: [:cron] do
+every 1.hour, roles: [:cron] do
   rake 'backend:adjust_dynamo_db_capacity[recent_throttled_only]'
   rake 'cloudwatch_metrics:create_alarms'
 end

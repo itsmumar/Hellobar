@@ -24,7 +24,7 @@ class ContactSubmissionsController < ApplicationController
   end
 
   def generic_message
-    @site = current_user.sites.find_by_id(params[:site_id])
+    @site = current_user.sites.find_by(id: params[:site_id])
 
     email_params = {
       first_name: current_user.first_name,

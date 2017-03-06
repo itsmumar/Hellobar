@@ -7,7 +7,7 @@ describe Hello::WordpressModel do
     hash = Hello::WordpressModel.deserialize(string)
 
     assert hash.is_a?(Hash)
-    assert_equal 63_390, hash['ID']
+    assert_equal 63390, hash['ID']
   end
 
   it 'should deserialize strings that have weird padding' do
@@ -16,6 +16,6 @@ describe Hello::WordpressModel do
     hash = Hello::WordpressModel.deserialize(string)
 
     assert hash.is_a?(Hash)
-    assert_equal 63_390, hash['ID']
+    assert_equal 63390, hash['ID']
   end
 end

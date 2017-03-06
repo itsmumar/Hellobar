@@ -50,7 +50,7 @@ describe 'marketing:export_recent_signups_with_script_install_data' do
 
   before do
     @user_with_installed_script = create(:site_membership).user
-    @user_with_installed_script.sites.first.update_attribute(:script_installed_at, Time.zone.now - 1.days)
+    @user_with_installed_script.sites.first.update_attribute(:script_installed_at, Time.zone.now - 1.day)
 
     @user_without_installed_script = create(:site_membership).user
 

@@ -29,7 +29,7 @@ class Admin < ActiveRecord::Base
     end
 
     def validate_session(access_token, token)
-      if admin = Admin.where(session_access_token: access_token, session_token: token).first
+      if admin = Admin.find_by(session_access_token: access_token, session_token: token)
         if Time.now - admin.session_last_active > MAX_SESSION_TIME
           return nil
         else
@@ -66,7 +66,7 @@ class Admin < ActiveRecord::Base
 
     # Locks all admins
     def lockdown!
-      Admin.all.each(&:lock!)
+      Admin.all.find_each(&:lock!)
     end
 
     def unlock_all!
