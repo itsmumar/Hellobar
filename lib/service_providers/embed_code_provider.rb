@@ -143,16 +143,16 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     @html = Nokogiri::HTML(remote_html)
   end
 
-  def extract_html_from_script(remote_html)
+  def extract_html_from_script remote_html
     remote_html.match(/^document.write\("(.+)"\)/)
   end
 
-  def get_reference_object(html)
+  def get_reference_object html
     html.css('body > iframe').first || html.css('head > script').first
   end
 
   # subclass to override reference
-  def url_from_reference_object(reference_object)
+  def url_from_reference_object reference_object
     return nil unless reference_object
     case reference_object.name
     when 'script', 'iframe'
@@ -162,7 +162,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     end
   end
 
-  def url_for_form(reference_object)
+  def url_for_form reference_object
     url = embed_code if embed_code.match URL_REGEX
     url ||= url_from_reference_object(reference_object) if reference_object
 

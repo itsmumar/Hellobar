@@ -368,6 +368,20 @@ Style/IfInsideElse:
     - 'app/helpers/email_digest_helper.rb'
     - 'lib/script_generator.rb'
 
+# Offense count: 12
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: require_parentheses, require_no_parentheses, require_no_parentheses_except_multiline
+Style/MethodDefParentheses:
+  Exclude:
+    - 'config/initializers/numeric.rb'
+    - 'lib/deserialize_with_errors.rb'
+    - 'lib/service_providers/embed_code_provider.rb'
+    - 'lib/service_providers/get_response.rb'
+    - 'lib/service_providers/get_response_api.rb'
+    - 'lib/service_providers/my_emma.rb'
+    - 'spec/support/embed_code_file_helper.rb'
+
 # Offense count: 1
 Style/MethodMissing:
   Exclude:
