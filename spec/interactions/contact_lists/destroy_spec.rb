@@ -21,7 +21,9 @@ describe ContactLists::Destroy do
     it 'destroys the contact list' do
       @contact_list.site_elements = []
 
-      expect { destroy(action: :delete) }.to change { ContactList.count }.by(-1)
+      expect {
+        destroy(action: :delete)
+      }.to change { ContactList.count }.by(-1)
     end
   end
 
@@ -55,7 +57,9 @@ describe ContactLists::Destroy do
     end
 
     it 'keeps the site elements' do
-      expect { destroy(action: :keep) }.not_to change { SiteElement.where('deleted_at is not null').count }
+      expect {
+        destroy(action: :keep)
+      }.not_to change { SiteElement.where('deleted_at is not null').count }
     end
 
     it 'sets all site elements to new list' do
@@ -67,17 +71,23 @@ describe ContactLists::Destroy do
 
   context 'when action is a string' do
     it 'destroys current contact list and creates a new one' do
-      expect { destroy(action: ContactLists::SITE_ELEMENTS_ACTIONS[:keep].to_s) }.not_to change { ContactList.count }
+      expect {
+        destroy(action: ContactLists::SITE_ELEMENTS_ACTIONS[:keep].to_s)
+      }.not_to change { ContactList.count }
     end
   end
 
   context 'when user specifies deleting elements' do
     it 'destroys the contact list' do
-      expect { destroy(action: :delete) }.to change { ContactList.count }.by(-1)
+      expect {
+        destroy(action: :delete)
+      }.to change { ContactList.count }.by(-1)
     end
 
     it 'destroys all the site elements' do
-      expect { destroy(action: :delete) }.to change { SiteElement.deleted.count }.by(1)
+      expect {
+        destroy(action: :delete)
+      }.to change { SiteElement.deleted.count }.by(1)
     end
   end
 end

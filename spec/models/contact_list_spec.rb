@@ -149,7 +149,9 @@ describe ContactList do
       allow(contact_list).to receive(:oauth?) { true }
       allow(service_provider).to receive(:subscribe)
 
-      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }.to change { ContactListLog.count }.by(1)
+      expect {
+        contact_list.sync_one! 'email@email.com', 'Test Testerson'
+      }.to change { ContactListLog.count }.by(1)
     end
 
     it 'saves the error in a log entry' do
@@ -170,8 +172,9 @@ describe ContactList do
       allow(contact_list).to receive(:oauth?) { true }
       allow(service_provider).to receive(:subscribe)
 
-      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }
-        .to change { ContactListLog.where(completed: true).count }.by(1)
+      expect {
+        contact_list.sync_one! 'email@email.com', 'Test Testerson'
+      }.to change { ContactListLog.where(completed: true).count }.by(1)
     end
   end
 
@@ -253,11 +256,15 @@ describe ContactList do
 
   describe '#destroy' do
     it 'deletes contact list from default scope' do
-      expect { contact_list.destroy }.to change { ContactList.count }.by(-1)
+      expect {
+        contact_list.destroy
+      }.to change { ContactList.count }.by(-1)
     end
 
     it 'soft deletes a contact list' do
-      expect { contact_list.destroy }.to change { ContactList.only_deleted.count }
+      expect {
+        contact_list.destroy
+      }.to change { ContactList.only_deleted.count }
     end
   end
 

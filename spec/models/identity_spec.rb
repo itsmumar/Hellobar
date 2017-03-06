@@ -80,8 +80,8 @@ describe Identity do
     let(:contact_list) do
       contact_lists(:embed_code).tap { |c| c.identity = nil }
     end
-    let(:file) { }
-    let(:provider) { }
+    let(:file) {}
+    let(:provider) {}
     let(:file_name) { file || provider }
 
     let(:service_provider) do

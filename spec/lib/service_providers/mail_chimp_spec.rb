@@ -9,13 +9,17 @@ describe ServiceProviders::MailChimp do
     it 'catches -100 errors (email invalid)' do
       error = Gibbon::MailChimpError.new('', status_code: -100)
       allow(client).to receive(:lists).and_raise(error)
-      expect { service_provider.subscribe('123', 'abc') }.not_to raise_error
+      expect {
+        service_provider.subscribe('123', 'abc')
+      }.not_to raise_error
     end
 
     it 'catches 214 errors (email already exists)' do
       error = Gibbon::MailChimpError.new('', status_code: 214)
       allow(client).to receive(:lists).and_raise(error)
-      expect { service_provider.subscribe('123', 'abc') }.not_to raise_error
+      expect {
+        service_provider.subscribe('123', 'abc')
+      }.not_to raise_error
     end
   end
 end

@@ -201,9 +201,9 @@ describe Bill do
       create(:referral_coupon)
       @bill.stub(:calculate_discount).and_return(2.0)
 
-      expect do
+      expect {
         @bill.attempt_billing!
-      end.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
+      }.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
 
       expect(@bill.amount).to eq(0.0)
       expect(@bill.discount).to eq(15.0)
@@ -213,9 +213,9 @@ describe Bill do
       create(:referral_coupon)
       @bill.stub(:calculate_discount).and_return(0.0)
 
-      expect do
+      expect {
         @bill.attempt_billing!
-      end.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
+      }.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
 
       expect(@bill.amount).to eq(0.0)
       expect(@bill.discount).to eq(15.0)

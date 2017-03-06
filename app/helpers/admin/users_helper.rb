@@ -1,10 +1,11 @@
 module Admin::UsersHelper
   def bills_for(site)
     bills = Hash.new { |h, k| h[k] = [] } # Bill => [Refunds]
-    site.bills.select do |b|
-      b.subscription.nil? ||
-        !b.subscription.instance_of?(Subscription::Free)
-    end.sort_by(&:bill_at).reverse.each do |bill|
+    bills_for_non_free_subscription = site.bills.select do |b|
+      b.subscription.nil? || !b.subscription.instance_of?(Subscription::Free)
+    end
+
+    bills_for_non_free_subscription.sort_by(&:bill_at).reverse.each do |bill|
       if bill.instance_of?(Bill::Refund)
         bills[bill.refunded_billing_attempt.bill] << bill
       else

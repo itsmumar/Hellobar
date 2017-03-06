@@ -47,8 +47,12 @@ describe RulesController do
     it 'should succeed when not logged in' do
       stub_current_user(site.owners.first)
 
-      expect { post :create, site_id: site, rule: { name: 'rule name', priority: 1 } }
-        .to change(Rule, :count).by(1)
+      expect {
+        post :create, site_id: site, rule: {
+          name: 'rule name',
+          priority: 1
+        }
+      }.to change(Rule, :count).by(1)
 
       expect(response).to be_success
 
@@ -101,9 +105,9 @@ describe RulesController do
 
     it 'should succeed when owner' do
       stub_current_user users(:pro)
-      expect do
+      expect {
         delete :destroy, site_id: site, id: rule
-      end.to change { Rule.count }.by(-1)
+      }.to change { Rule.count }.by(-1)
       expect(response).to be_success
     end
 
@@ -114,9 +118,9 @@ describe RulesController do
 
       site.rules.count.should == 1
 
-      expect do
+      expect {
         delete :destroy, site_id: site, id: rule
-      end.to_not change { Rule.count }
+      }.to_not change { Rule.count }
 
       expect(response.status).to eq(422)
     end
@@ -146,14 +150,14 @@ describe RulesController do
       it 'should update a rule with new conditions' do
         stub_current_user(site.owners.first)
 
-        expect do
+        expect {
           put :update, site_id: site, id: rule, rule: {
             name: 'new rule name',
             conditions_attributes: {
               :"0" => condition_hash(:date_between)
             }
           }
-        end.to change { Condition.count }.by(1)
+        }.to change { Condition.count }.by(1)
 
         expect(response).to be_success
 

@@ -31,16 +31,15 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
 
   def batch_subscribe(list_id, subscribers, _double_optin = true)
     handle_errors do
-      @client.find_list(list_id).create_contacts(
-        subscribers.map do |subscriber|
-          first_name, last_name = split_name(subscriber[:name])
-          {
-            email: subscriber[:email],
-            first_name: first_name,
-            last_name: last_name
-          }
-        end
-      )
+      contacts = subscribers.map do |subscriber|
+        first_name, last_name = split_name(subscriber[:name])
+        {
+          email: subscriber[:email],
+          first_name: first_name,
+          last_name: last_name
+        }
+      end
+      @client.find_list(list_id).create_contacts(contacts)
     end
   end
 

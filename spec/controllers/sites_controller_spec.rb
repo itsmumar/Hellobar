@@ -39,8 +39,9 @@ describe SitesController do
 
     context 'when no user is logged-in' do
       it 'creates a new temporary user and logs them in' do
-        expect { post :create, site: { url: 'temporary-site.com' } }
-          .to change(User, :count).by(1)
+        expect {
+          post :create, site: { url: 'temporary-site.com' }
+        }.to change(User, :count).by(1)
 
         temp_user = User.last
         temp_user.status.should == User::TEMPORARY_STATUS
@@ -56,8 +57,9 @@ describe SitesController do
         temp_user = User.new
         User.stub(generate_temporary_user: temp_user)
 
-        expect { post :create, site: { url: 'temporary-site.com' } }
-          .to change(Site, :count).by(1)
+        expect {
+          post :create, site: { url: 'temporary-site.com' }
+        }.to change(Site, :count).by(1)
 
         temp_user.sites.should include(Site.last)
       end
@@ -67,8 +69,13 @@ describe SitesController do
         user.stub(temporary?: true)
         User.stub(generate_temporary_user: user)
 
-        expect { post(:create, { site: { url: 'temporary-site.com' } }, referral_token: referral_tokens(:joey).token) }
-          .to change(Referral, :count).by(1)
+        expect {
+          post(
+            :create,
+            { site: { url: 'temporary-site.com' } },
+            referral_token: referral_tokens(:joey).token
+          )
+        }.to change(Referral, :count).by(1)
 
         ref = Referral.last
         expect(ref.state).to eq('signed_up')
@@ -80,8 +87,13 @@ describe SitesController do
         ref = create(:referral, state: :sent)
         User.stub(generate_temporary_user: user)
 
-        expect { post(:create, { site: { url: 'temporary-site.com' } }, referral_token: ref.referral_token.token) }
-          .not_to change(Referral, :count)
+        expect {
+          post(
+            :create,
+            { site: { url: 'temporary-site.com' } },
+            referral_token: ref.referral_token.token
+          )
+        }.not_to change(Referral, :count)
 
         ref.reload
         expect(ref.state).to eq('signed_up')
@@ -130,8 +142,9 @@ describe SitesController do
       before { stub_current_user(@user) }
 
       it 'can create a new site and is set as the owner' do
-        expect { post :create, site: { url: 'newzombo.com' } }
-          .to change(@user.sites, :count).by(1)
+        expect {
+          post :create, site: { url: 'newzombo.com' }
+        }.to change(@user.sites, :count).by(1)
 
         site = @user.sites.last
 
