@@ -1,7 +1,7 @@
 require 'integration_helper'
 require 'service_provider_integration_helper'
 
-feature "Infusionsoft Integration", js: true do
+feature 'Infusionsoft Integration', js: true do
   let(:provider) { 'infusionsoft' }
 
   before do
@@ -14,22 +14,22 @@ feature "Infusionsoft Integration", js: true do
     Hellobar::Settings[:fake_data_api] = @fake_data_api_original
   end
 
-  scenario "invalid form details" do
+  scenario 'invalid form details' do
     open_provider_form(@user, provider)
     fill_in 'contact_list[data][app_url]', with: 'ft319.infusionsoft.com'
     fill_in 'contact_list[data][api_key]', with: 'invalid-key'
 
-    page.find(".button.ready").click
+    page.find('.button.ready').click
     expect(page).to have_content('There was a problem connecting your Infusionsoft account')
   end
 
-  scenario "connecting to Infusionsoft" do
+  scenario 'connecting to Infusionsoft' do
     connect_infusionsoft
 
     expect(page).to have_content('Apply Tags (Optional)')
   end
 
-  scenario "adding tags" do
+  scenario 'adding tags' do
     connect_infusionsoft
     selector = 'select.contact-list-tag'
 
@@ -40,7 +40,7 @@ feature "Infusionsoft Integration", js: true do
 
     page.find('#edit-contact-list').click
 
-    page.assert_selector(selector, :count => 2)
+    page.assert_selector(selector, count: 2)
   end
 
   private
@@ -51,6 +51,6 @@ feature "Infusionsoft Integration", js: true do
     fill_in 'contact_list[data][app_url]', with: 'ft319.infusionsoft.com'
     fill_in 'contact_list[data][api_key]', with: 'valid-infusionsoft-key'
 
-    page.find(".button.ready").click
+    page.find('.button.ready').click
   end
 end

@@ -12,7 +12,7 @@ describe Admin::PaymentMethodDetailsController do
 
   context 'PUT remove_cc_info' do
     before do
-      cscc = CyberSourceCreditCard.new data: { 'token' => 'my_cool_token'}
+      cscc = CyberSourceCreditCard.new data: { 'token' => 'my_cool_token' }
       cscc.save(validate: false)
       CyberSourceCreditCard.stub(:find).and_return(cscc)
     end

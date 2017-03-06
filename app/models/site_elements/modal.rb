@@ -1,5 +1,5 @@
 class Modal < SiteElement
   def placement
-    read_attribute(:placement) || "middle"
+    self[:placement] || 'middle'
   end
 end

@@ -1,5 +1,5 @@
 Rails.application.configure do
-  config.roadie.url_options = {host: "localhost", scheme: "http", port: "3000"}
+  config.roadie.url_options = { host: 'localhost', scheme: 'http', port: '3000' }
 
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -37,28 +37,28 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  #paperclip configuration for s3
+  # paperclip configuration for s3
   settings = YAML.load_file('config/settings.yml')
   if settings['s3_bucket'] && settings['aws_access_key_id'] && settings['aws_secret_access_key']
     config.paperclip_defaults = {
-      :storage => :s3,
-      :s3_protocol => :https,
-      :s3_credentials => {
-        :bucket => settings['s3_bucket'],
-        :access_key_id => settings['aws_access_key_id'],
-        :secret_access_key => settings['aws_secret_access_key'],
+      storage: :s3,
+      s3_protocol: :https,
+      s3_credentials: {
+        bucket: settings['s3_bucket'],
+        access_key_id: settings['aws_access_key_id'],
+        secret_access_key: settings['aws_secret_access_key']
       }
     }
   end
 
   Pony.options = {
-    :from => 'Localhost: Hello Bar Support <support@localhost.com>',
-    :via => :smtp,
-    :via_options => {
-      :address              => '127.0.0.1',
-      :port                 => 1025,
-      :authentication       => :plain,
-      :domain               => "localhost"
+    from: 'Localhost: Hello Bar Support <support@localhost.com>',
+    via: :smtp,
+    via_options: {
+      address: '127.0.0.1',
+      port: 1025,
+      authentication: :plain,
+      domain: 'localhost'
     }
   }
 end

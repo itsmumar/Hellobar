@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id, :get_ab_variation,
-                :get_ab_variation_or_nil
+    :get_ab_variation_or_nil
 
   before_action :record_tracking_param
   before_action :track_h_visit
@@ -16,32 +16,28 @@ class ApplicationController < ActionController::Base
     if impersonated_user
       raise exception # we can't authenticate for impersonated users
     else
-      if exception.to_s.match(/Unauthorized/)
+      if exception.to_s =~ /Unauthorized/
         sign_out current_user             # kill cookies
-        redirect_to "/auth/google_oauth2" # log in again to refresh token
+        redirect_to '/auth/google_oauth2' # log in again to refresh token
       end
     end
   end
 
   def access_token
-    @access_token ||= Digest::SHA256.hexdigest(["hellobar", remote_ip, user_agent, access_cookie, "a776b"].join)
+    @access_token ||= Digest::SHA256.hexdigest(['hellobar', remote_ip, user_agent, access_cookie, 'a776b'].join)
   end
 
   def access_cookie
     cookies[:adxs] ||= {
-      :value => Digest::SHA256.hexdigest(["a", rand(10_000), Time.now.to_f, user_agent, "d753d"].collect{|s| s.to_s}.join),
-      :expires => 90.days.from_now,
-      :httponly => true
+      value: Digest::SHA256.hexdigest(['a', rand(10_000), Time.now.to_f, user_agent, 'd753d'].collect(&:to_s).join),
+      expires: 90.days.from_now,
+      httponly: true
     }
   end
 
-  def user_agent
-    request.user_agent
-  end
+  delegate :user_agent, to: :request
 
-  def remote_ip
-    request.remote_ip
-  end
+  delegate :remote_ip, to: :request
 
   def current_admin
     return nil if @current_admin == false
@@ -49,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_admin
-    redirect_to admin_access_path and return unless current_admin
+    return redirect_to(admin_access_path) unless current_admin
 
     if current_admin.needs_to_set_new_password?
       redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path
@@ -96,22 +92,18 @@ class ApplicationController < ActionController::Base
 
   def impersonated_user
     if current_admin && session[:impersonated_user]
-      impersonated_user = User.find_by_id(session[:impersonated_user])
+      impersonated_user = User.find_by(id: session[:impersonated_user])
       impersonated_user.is_impersonated = true
       impersonated_user
-    else
-      nil
     end
   end
 
   def current_site
     @current_site ||= begin
       if current_user && session[:current_site]
-        current_user.sites.where(:id => session[:current_site]).first || current_user.sites.first
+        current_user.sites.where(id: session[:current_site]).first || current_user.sites.first
       elsif current_user
         current_user.sites.first
-      else
-        nil
       end
     end
   end
@@ -122,7 +114,7 @@ class ApplicationController < ActionController::Base
 
   def track_h_visit
     if params[:hbt]
-      track_params = {h_type: params[:hbt]}
+      track_params = { h_type: params[:hbt] }
       if params[:sid] # If site element is given, attach the site element id and site id
         site_element = SiteElement.where(id: params[:sid]).first
         if site_element
@@ -130,7 +122,7 @@ class ApplicationController < ActionController::Base
           track_params[:site_id] = site_element.site.id if site_element.site
         end
       end
-      Analytics.track(*current_person_type_and_id, "H Visit", track_params)
+      Analytics.track(*current_person_type_and_id, 'H Visit', track_params)
     end
   end
 
@@ -148,7 +140,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Overwriting the sign_out redirect path method
-  def after_sign_out_path_for(resource_or_scope)
+  def after_sign_out_path_for(_resource_or_scope)
     logout_confirmation_path
   end
 end

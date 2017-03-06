@@ -1,5 +1,6 @@
 class ModalsController < ApplicationController
   layout false
 
-  def registration; end
+  def registration
+  end
 end

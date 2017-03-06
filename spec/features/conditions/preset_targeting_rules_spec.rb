@@ -1,10 +1,10 @@
 require 'integration_helper'
 
-feature "Users can use site element targeting rule presets", :js do
-  given(:free_options)   { ["Everyone"] }
-  given(:paid_options)   { ["Mobile Visitors", "Homepage Visitors"] }
-  given(:custom_option)  { "Custom Rule" }
-  given(:saved_option)   { "Show to a saved targeting rule" }
+feature 'Users can use site element targeting rule presets', :js do
+  given(:free_options)   { ['Everyone'] }
+  given(:paid_options)   { ['Mobile Visitors', 'Homepage Visitors'] }
+  given(:custom_option)  { 'Custom Rule' }
+  given(:saved_option)   { 'Show to a saved targeting rule' }
   given(:site)           { @user.sites.first }
 
   before do
@@ -12,23 +12,23 @@ feature "Users can use site element targeting rule presets", :js do
 
     site.create_default_rules
 
-    allow_any_instance_of(SiteElementSerializer).
-      to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(SiteElementSerializer)
+      .to receive(:proxied_url2png).and_return('')
 
-    stub_out_get_ab_variations("Targeting UI Variation 2016-06-13") {"variant"}
+    stub_out_get_ab_variations('Targeting UI Variation 2016-06-13') { 'variant' }
   end
 
-  feature "Free subscription sites" do
+  feature 'Free subscription sites' do
     before do
-      visit new_site_site_element_path(site) + "/#/targeting?skip_interstitial=true"
+      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
     end
 
-    scenario "The user can select free options" do
+    scenario 'The user can select free options' do
       find('a', text: free_options.first).click
       expect(page).to have_content 'CHANGE TARGET AUDIENCE'
     end
 
-    scenario "The user is prompted to upgrade when clicking rule presets" do
+    scenario 'The user is prompted to upgrade when clicking rule presets' do
       find('a', text: 'CHANGE TARGET AUDIENCE').click
 
       (paid_options << custom_option).each do |text|
@@ -41,10 +41,10 @@ feature "Users can use site element targeting rule presets", :js do
     end
   end
 
-  feature "Pro subscription sites" do
+  feature 'Pro subscription sites' do
     given(:custom_rule)        { create(:rule) }
-    given(:first_select_input) { first("select")["id"] }
-    given(:default_option)     { "Choose a saved rule..." }
+    given(:first_select_input) { first('select')['id'] }
+    given(:default_option)     { 'Choose a saved rule...' }
 
     before do
       payment_method = create(:payment_method, user: @user)
@@ -54,8 +54,8 @@ feature "Users can use site element targeting rule presets", :js do
       site.rules << custom_rule
     end
 
-    scenario "The user can select any rule preset" do
-      visit new_site_site_element_path(@user.sites.first) + "/#/targeting?skip_interstitial=true"
+    scenario 'The user can select any rule preset' do
+      visit new_site_site_element_path(@user.sites.first) + '/#/targeting?skip_interstitial=true'
 
       (free_options + paid_options).each do |text|
         find('a', text: text).click
@@ -72,34 +72,34 @@ feature "Users can use site element targeting rule presets", :js do
       find('a', text: 'Cancel').click
     end
 
-    scenario "Custom rule presets are editable as saved rules" do
-      visit new_site_site_element_path(@user.sites.first) + "/#/targeting?skip_interstitial=true"
+    scenario 'Custom rule presets are editable as saved rules' do
+      visit new_site_site_element_path(@user.sites.first) + '/#/targeting?skip_interstitial=true'
       find('a', text: 'CHANGE TARGET AUDIENCE').click
       find('a', text: custom_option).click
       find('a', text: '+').click
-      fill_in "rule_name", with: "New Custom Rule"
+      fill_in 'rule_name', with: 'New Custom Rule'
       find('a', text: 'Save').click
 
       find('a', text: 'Edit.').click
-      fill_in "rule_name", with: "Edited Custom Rule"
+      fill_in 'rule_name', with: 'Edited Custom Rule'
       find('a', text: 'Save').click
 
-      expect(page).to have_content "Edited Custom Rule"
+      expect(page).to have_content 'Edited Custom Rule'
     end
 
-    feature "Editing existing site elements" do
-      given(:preset_rule) { site.rules.find{|r| r.name == "Mobile Visitors"} }
+    feature 'Editing existing site elements' do
+      given(:preset_rule) { site.rules.find { |r| r.name == 'Mobile Visitors' } }
 
-      scenario "With a preset rule" do
+      scenario 'With a preset rule' do
         element = create(:site_element, rule: preset_rule)
-        visit edit_site_site_element_path(site, element.id) + "/#/targeting?skip_interstitial=true"
+        visit edit_site_site_element_path(site, element.id) + '/#/targeting?skip_interstitial=true'
 
         expect(page).to have_content preset_rule.name
       end
 
-      scenario "With a custom rule" do
+      scenario 'With a custom rule' do
         element = create(:site_element, rule: custom_rule)
-        visit edit_site_site_element_path(site, element.id) + "/#/targeting?skip_interstitial=true"
+        visit edit_site_site_element_path(site, element.id) + '/#/targeting?skip_interstitial=true'
 
         expect(page).to have_content custom_rule.name
 

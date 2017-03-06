@@ -1,5 +1,5 @@
 class Admin::UsersController < ApplicationController
-  layout "admin"
+  layout 'admin'
 
   before_action :require_admin
 
@@ -11,15 +11,13 @@ class Admin::UsersController < ApplicationController
 
       if params[:q] =~ /\.js$/
         site = Site.find_by_script(params[:q])
-        if site
-          users += site.owners
-        end
+        users += site.owners if site
       else
         users += User.search_by_url(params[:q].strip).includes(:authentications)
       end
 
       if params[:q].strip =~ /\d{4}/
-        users += PaymentMethodDetails.where("data like ?", "%-#{params[:q].strip}%").map(&:user).compact
+        users += PaymentMethodDetails.where('data like ?', "%-#{ params[:q].strip }%").map(&:user).compact
       end
 
       @users = Kaminari.paginate_array(users.uniq).page(params[:page]).per(24)
@@ -33,10 +31,10 @@ class Admin::UsersController < ApplicationController
   def destroy
     @user = User.find(params[:id])
     if @user.destroy
-      flash[:success] = "Deleted user #{@user.id} (#{@user.email})"
+      flash[:success] = "Deleted user #{ @user.id } (#{ @user.email })"
       redirect_to admin_users_path
     else
-      flash[:error] = "Failed to delete user."
+      flash[:error] = 'Failed to delete user.'
       redirect_to admin_user_path(@user)
     end
   end

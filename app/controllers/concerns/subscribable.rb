@@ -1,5 +1,4 @@
 module Subscribable
-
   # returns object to render and status code
   def subscription_bill_and_status(site, payment_method, billing_params, old_subscription)
     success, bill = update_subscription(site, payment_method, billing_params)
@@ -9,11 +8,12 @@ module Subscribable
 
       track_subscription_change(site, old_subscription)
 
-      is_upgrade = if old_subscription
-        Subscription::Comparison.new(old_subscription, site.current_subscription).upgrade?
-      else
-       true
-      end
+      is_upgrade =
+        if old_subscription
+          Subscription::Comparison.new(old_subscription, site.current_subscription).upgrade?
+        else
+          true
+        end
 
       track_upgrade if is_upgrade
 
@@ -23,9 +23,9 @@ module Subscribable
       response
     else
       if bill.errors.empty?
-        {errors:
-          ["There was an error processing your payment.  Please contact your credit card company or try using a different credit card."],
-          status: :unprocessable_entity}
+        { errors:
+          ['There was an error processing your payment.  Please contact your credit card company or try using a different credit card.'],
+          status: :unprocessable_entity }
       else
         { errors: bill.errors.full_messages, status: :unprocessable_entity }
       end
@@ -41,7 +41,7 @@ module Subscribable
   end
 
   def build_subscription_instance(billing_params)
-    "Subscription::#{billing_params[:plan].camelize}".constantize.new schedule: billing_params[:schedule]
+    "Subscription::#{ billing_params[:plan].camelize }".constantize.new schedule: billing_params[:schedule]
   end
 
   def track_subscription_change(site, old_subscription)
@@ -61,6 +61,6 @@ module Subscribable
   end
 
   def track_upgrade
-    Analytics.track(*current_person_type_and_id, "Upgraded")
+    Analytics.track(*current_person_type_and_id, 'Upgraded')
   end
 end

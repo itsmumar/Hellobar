@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature "Payment modal interaction", :js do
+feature 'Payment modal interaction', :js do
   given(:user) { login }
   given(:site) { user.sites.first }
   given(:payment_method) { create(:payment_method, user: user) }
@@ -13,40 +13,40 @@ feature "Payment modal interaction", :js do
 
       visit edit_site_path(site)
 
-      click_link("Change plan or billing schedule")
-      find(".different-plan").click
-      basic_plan = find(".package-block.basic")
-      basic_plan.find(".button").click
+      click_link('Change plan or billing schedule')
+      find('.different-plan').click
+      basic_plan = find('.package-block.basic')
+      basic_plan.find('.button').click
 
-      expect(page).to have_content "until #{end_date.strftime("%-m-%-d-%Y")}"
+      expect(page).to have_content "until #{ end_date.strftime('%-m-%-d-%Y') }"
     end
   end
 
   context 'free subscription' do
     before do
-      allow_any_instance_of(CyberSourceCreditCard::CyberSourceCreditCardValidator).
-        to receive(:validate).and_return(true)
+      allow_any_instance_of(CyberSourceCreditCard::CyberSourceCreditCardValidator)
+        .to receive(:validate).and_return(true)
       allow_any_instance_of(PaymentMethod).to receive(:pay).and_return(true)
 
       create :rule, site: site
       subscription = create(:free_subscription, site: site, payment_method: payment_method)
 
-      allow_any_instance_of(SiteElementSerializer).
-        to receive(:proxied_url2png).and_return('')
-      allow_any_instance_of(ApplicationController).
-        to receive(:get_ab_variation).and_return('original')
+      allow_any_instance_of(SiteElementSerializer)
+        .to receive(:proxied_url2png).and_return('')
+      allow_any_instance_of(ApplicationController)
+        .to receive(:get_ab_variation).and_return('original')
     end
 
-    scenario "upgrade to pro from free" do
+    scenario 'upgrade to pro from free' do
       visit edit_site_path(site)
 
       page.find('footer .show-upgrade-modal').click
-      pro_plan = page.find(".package-block.pro")
-      pro_plan.find(".button").click
+      pro_plan = page.find('.package-block.pro')
+      pro_plan.find('.button').click
 
       page.find('.submit').click
-      page.find('a', text: "OK").click
-      expect(page).to have_content "is on the Pro plan"
+      page.find('a', text: 'OK').click
+      expect(page).to have_content 'is on the Pro plan'
     end
 
     scenario 'trying to remove branding triggers the Pro Upgrade popup' do

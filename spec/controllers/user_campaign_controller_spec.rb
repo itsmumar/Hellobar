@@ -9,8 +9,8 @@ describe UserCampaignController, '#update_exit_intent' do
 
     post :update_exit_intent, user_id: user.id
 
-    expect(user.reload.exit_intent_modal_last_shown_at).
-      to be_within(2.seconds).of Time.current
+    expect(user.reload.exit_intent_modal_last_shown_at)
+      .to be_within(2.seconds).of Time.current
 
     expect(response).to be_success
   end
@@ -21,10 +21,9 @@ describe UserCampaignController, '#update_exit_intent' do
 
     post :update_upgrade_suggest, user_id: user.id
 
-    expect(user.reload.upgrade_suggest_modal_last_shown_at).
-      to be_within(2.seconds).of Time.current
+    expect(user.reload.upgrade_suggest_modal_last_shown_at)
+      .to be_within(2.seconds).of Time.current
 
     expect(response).to be_success
   end
-
 end

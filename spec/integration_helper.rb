@@ -18,7 +18,7 @@ RSpec.configure do |config|
       DatabaseCleaner.start
       FactoryGirl.lint
 
-      Rake.application.rake_require "tasks/onboarding_campaigns"
+      Rake.application.rake_require 'tasks/onboarding_campaigns'
       Rake::Task.define_task(:environment)
     ensure
       DatabaseCleaner.clean

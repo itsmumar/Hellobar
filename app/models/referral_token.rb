@@ -4,7 +4,7 @@ class ReferralToken < ActiveRecord::Base
   validates :token, uniqueness: true
 
   def belongs_to_a?(klass)
-    self.tokenizable.is_a?(klass)
+    tokenizable.is_a?(klass)
   end
 
   private
