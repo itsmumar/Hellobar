@@ -11,7 +11,7 @@ feature 'Site with a closable slider', :js do
   scenario 'shows headline and allows the bar to be hidden and shown again' do
     visit site_path_to_url(path)
 
-    expect(page).to have_selector "#random-container"
+    expect(page).to have_selector '#random-container'
     expect(page).to have_selector 'iframe.hb-animateIn'
 
     within_frame 'random-container-0' do
@@ -27,14 +27,14 @@ feature 'Site with a closable slider', :js do
     page.find('body').click
 
     # iframe is hidden
-    expect(page).to have_selector "#random-container", visible: false
+    expect(page).to have_selector '#random-container', visible: false
     expect(page).to have_selector 'iframe.hb-animateOut'
     expect(page).to have_selector '#pull-down .hellobar-arrow'
 
     # show the slider again
     find('#pull-down .hellobar-arrow').trigger 'click'
 
-    expect(page).to have_selector "#random-container"
+    expect(page).to have_selector '#random-container'
     expect(page).to have_selector 'iframe.hb-animateIn'
   end
 end
