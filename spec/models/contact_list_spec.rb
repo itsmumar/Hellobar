@@ -75,7 +75,7 @@ describe ContactList do
       cl = contact_lists(:zombo_contacts2)
       old_identity = cl.identity
       old_identity.should_receive(:contact_lists_updated)
-      Identity.stub_chain(:where, :first).and_return(old_identity)
+      Identity.stub(:find_by).and_return(old_identity)
       cl.identity = identities(:constantcontact)
       cl.save
     end
@@ -84,7 +84,7 @@ describe ContactList do
       cl = contact_lists(:zombo_contacts2)
       old_identity = cl.identity
       old_identity.should_receive(:contact_lists_updated)
-      Identity.stub_chain(:where, :first).and_return(old_identity)
+      Identity.stub(:find_by).and_return(old_identity)
       cl.destroy
     end
   end

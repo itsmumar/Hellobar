@@ -23,7 +23,7 @@ describe Admin do
 
     it 'returns nil if the session is too old' do
       @admin.should_receive(:session_last_active).and_return(Time.now - Admin::MAX_SESSION_TIME - 1.hour)
-      Admin.should_receive(:where).and_return([@admin])
+      Admin.should_receive(:find_by).with(session_access_token: 'foo', session_token: 'bar').and_return(@admin)
 
       result = Admin.validate_session('foo', 'bar')
       result.should be_nil
@@ -31,7 +31,7 @@ describe Admin do
 
     it 'returns nil if the admin is locked' do
       @admin.should_receive(:locked?).and_return(true)
-      Admin.should_receive(:where).and_return([@admin])
+      Admin.should_receive(:find_by).with(session_access_token: 'foo', session_token: 'bar').and_return(@admin)
 
       result = Admin.validate_session('foo', 'bar')
       result.should be_nil
@@ -40,7 +40,7 @@ describe Admin do
     it 'returns nil if session is old AND admin is locked' do
       @admin.stub(:locked?).and_return(true)
       @admin.stub(:session_last_active).and_return(Time.now - Admin::MAX_SESSION_TIME - 1.hour)
-      Admin.should_receive(:where).and_return([@admin])
+      Admin.should_receive(:find_by).with(session_access_token: 'foo', session_token: 'bar').and_return(@admin)
 
       result = Admin.validate_session('foo', 'bar')
       result.should be_nil
@@ -48,7 +48,7 @@ describe Admin do
 
     it 'bumps session_last_active is session is still good' do
       @admin.should_receive(:session_heartbeat!)
-      Admin.should_receive(:where).and_return([@admin])
+      Admin.should_receive(:find_by).with(session_access_token: 'foo', session_token: 'bar').and_return(@admin)
 
       Admin.validate_session('foo', 'bar')
     end

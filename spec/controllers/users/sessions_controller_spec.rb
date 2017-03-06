@@ -39,7 +39,7 @@ describe Users::SessionsController do
 
       it 'redirects users to login via OAuth if they have a Google account' do
         google_auth = double('authentication', provider: 'google')
-        user = double('user', status: 'active', authentications: [google_auth])
+        user = double('user', status: 'active', wordpress_user?: false, authentications: [google_auth])
         allow(User).to receive(:search_all_versions_for_email) { user }
 
         post :find_email, user: { email: 'hello@email.com' }
