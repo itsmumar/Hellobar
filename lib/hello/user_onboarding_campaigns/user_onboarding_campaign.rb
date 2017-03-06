@@ -11,20 +11,20 @@ class UserOnboardingCampaign
         campaign = campaign_class.new(user, user.current_onboarding_status)
 
         campaign.current_campaign_sequence &&
-        campaign.deliver_campaign_email! &&
-        campaign.mark_sequence_delivered!
+          campaign.deliver_campaign_email! &&
+          campaign.mark_sequence_delivered!
       end
     end
   end
 
   def self.users
-    User.join_current_onboarding_status.
-         onboarding_sequence_before(final_sequence_index).
-         where("user_onboarding_statuses.status_id = ?", users_status_key)
+    User.join_current_onboarding_status
+        .onboarding_sequence_before(final_sequence_index)
+        .where('user_onboarding_statuses.status_id = ?', users_status_key)
   end
 
   def initialize(user, onboarding_status)
-    raise "onboarding status required" unless onboarding_status.is_a?(UserOnboardingStatus)
+    raise 'onboarding status required' unless onboarding_status.is_a?(UserOnboardingStatus)
 
     @user = user
     @sites = user.sites

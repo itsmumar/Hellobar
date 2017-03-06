@@ -9,14 +9,14 @@
 # This is a no-op for non-free users with no billing issues. Their next
 # billing cycle will get the discounts by the mechanism described above.
 
-class Referrals::NoAvailableReferrals < StandardError ; end
+class Referrals::NoAvailableReferrals < StandardError; end
 class Referrals::RedeemForSender < Less::Interaction
   include Referrals::ProSubscription
   expects :site
 
   def run
     return unless subscription.present?
-    raise Referrals::NoAvailableReferrals.new unless has_available_referrals?
+    raise Referrals::NoAvailableReferrals unless has_available_referrals?
 
     if subscription.is_a?(Subscription::Free)
       site.change_subscription(new_pro_subscription)

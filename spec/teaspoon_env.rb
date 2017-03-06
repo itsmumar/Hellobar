@@ -1,10 +1,10 @@
 # Read more about Teaspoon configuration: https://github.com/modeset/teaspoon/wiki/Teaspoon-Configuration
 
 Teaspoon.configure do |config|
-  config.mount_at = "/teaspoon"
+  config.mount_at = '/teaspoon'
   config.root = nil
-  config.asset_paths = ["spec/javascripts", "spec/javascripts/stylesheets"]
-  config.fixture_paths = ["spec/javascripts/fixtures"]
+  config.asset_paths = ['spec/javascripts', 'spec/javascripts/stylesheets']
+  config.fixture_paths = ['spec/javascripts/fixtures']
 
   # SUITES
   #
@@ -16,19 +16,19 @@ Teaspoon.configure do |config|
   # Default suite
   config.suite do |suite|
     suite.use_framework :jasmine
-    suite.helper = "spec_helper"
-    suite.boot_partial = "boot"
-    suite.body_partial = "body"
+    suite.helper = 'spec_helper'
+    suite.boot_partial = 'boot'
+    suite.body_partial = 'body'
   end
 
   # Generator suite includes everything related to generated hellobar used by end-users
   config.suite :generator do |suite|
-    suite.matcher = "spec/javascripts/hellobar_generator/**/*_spec.{js,js.coffee,coffee}"
+    suite.matcher = 'spec/javascripts/hellobar_generator/**/*_spec.{js,js.coffee,coffee}'
   end
 
   # Project suite includes everything related to hellobar.com project, except for scripts generation
   config.suite :project do |suite|
-    suite.matcher = "spec/javascripts/hellobar_project/**/*_spec.{js,js.coffee,coffee}"
+    suite.matcher = 'spec/javascripts/hellobar_project/**/*_spec.{js,js.coffee,coffee}'
   end
 
   # CONSOLE RUNNER SPECIFIC
@@ -53,8 +53,8 @@ Teaspoon.configure do |config|
   # files in `vendor/assets/javascripts/` directory
   config.coverage :generator do |coverage|
     # Available: text-summary, text, html, lcov, lcovonly, cobertura, teamcity
-    coverage.reports = ["text-summary", "html"]
-    coverage.output_path = "tmp/teaspoon"
+    coverage.reports = ['text-summary', 'html']
+    coverage.output_path = 'tmp/teaspoon'
 
     coverage.ignore = [
       %r{/lib/ruby/gems/},
@@ -69,8 +69,8 @@ Teaspoon.configure do |config|
   # coverage of the "Project" segment; includes `assets/javascripts/` files
   config.coverage :project do |coverage|
     # Available: text-summary, text, html, lcov, lcovonly, cobertura, teamcity
-    coverage.reports = ["text-summary", "html"]
-    coverage.output_path = "tmp/teaspoon"
+    coverage.reports = ['text-summary', 'html']
+    coverage.output_path = 'tmp/teaspoon'
 
     coverage.ignore = [
       %r{/lib/ruby/gems/},

@@ -19,7 +19,7 @@ class Referrals::HandleToken < Less::Interaction
   def create_from_user_token(user_token)
     Referrals::Create.run(
       sender: user_token.tokenizable,
-      params: {email: user.email, recipient: user, state: 'signed_up'},
+      params: { email: user.email, recipient: user, state: 'signed_up' },
       send_emails: false
     )
   end

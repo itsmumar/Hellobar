@@ -1,13 +1,13 @@
 class UserController < ApplicationController
-  layout "static", only: [:new, :create]
+  layout 'static', only: [:new, :create]
   before_action :authenticate_user!, except: [:new, :create]
-  before_action :load_user, :only => [:edit, :update, :destroy]
+  before_action :load_user, only: [:edit, :update, :destroy]
 
   def new
     load_user_from_invitation
 
     if @user.nil? || @user.invite_token_expired?
-      flash[:error] = "This invitation token has expired.  Please request the owner to issue you a new invitation."
+      flash[:error] = 'This invitation token has expired.  Please request the owner to issue you a new invitation.'
       redirect_to root_path
     end
   end
@@ -20,49 +20,49 @@ class UserController < ApplicationController
       sign_in @user, event: :authentication
       redirect_to after_sign_in_path_for(@user)
     else
-      flash[:error] = @user.errors.full_messages.uniq.join(". ") << "."
-      render "new"
+      flash[:error] = @user.errors.full_messages.uniq.join('. ') << '.'
+      render 'new'
     end
   end
 
   def update
     active_before_update = @user.active?
 
-    if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(:status => User::ACTIVE_STATUS))
-      sign_in @user, :bypass => true
+    if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(status: User::ACTIVE_STATUS))
+      sign_in @user, bypass: true
 
       set_timezones_on_sites(@user)
 
       respond_to do |format|
         format.html do
-          flash[:success] = active_before_update ? "Your settings have been updated." : "Your account has been created."
+          flash[:success] = active_before_update ? 'Your settings have been updated.' : 'Your account has been created.'
           redirect_to current_site ? site_path(current_site) : new_site_path
         end
 
-        format.json { render json: {user: @user, redirect_to: (current_site ? site_path(current_site) : new_site_path)}, status: :ok }
+        format.json { render json: { user: @user, redirect_to: (current_site ? site_path(current_site) : new_site_path) }, status: :ok }
       end
     else
       @user.reload # Don't persist any changes
 
       error_message =
         if active_before_update
-          "There was a problem updating your settings#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
+          "There was a problem updating your settings#{ @user.errors.any? ? ": #{ @user.errors.full_messages.first.downcase }." : '.' }"
         else
-          "There was a problem creating your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
+          "There was a problem creating your account#{ @user.errors.any? ? ": #{ @user.errors.full_messages.first.downcase }." : '.' }"
         end
 
       respond_to do |format|
         format.html do
           if active_before_update
             flash.now[:error] = error_message
-            render :action => :edit
+            render action: :edit
           else
             flash[:error] = error_message
             redirect_to request.referrer || after_sign_in_path_for(@user)
           end
         end
 
-        format.json { render json: {error_message: error_message}, status: :unprocessable_entity }
+        format.json { render json: { error_message: error_message }, status: :unprocessable_entity }
       end
     end
   end
@@ -72,17 +72,17 @@ class UserController < ApplicationController
     if @user.destroyed?
       respond_to do |format|
         format.html do
-          flash[:success] = "Account successfully deleted."
+          flash[:success] = 'Account successfully deleted.'
           sign_out @user
           redirect_to root_path
         end
-        format.json { render json: {success: true}, status: :ok }
+        format.json { render json: { success: true }, status: :ok }
       end
     else
       respond_to do |format|
         format.html do
-          flash.now[:error] = "There was a problem deleting your account#{@user.errors.any? ? ": #{@user.errors.full_messages.first.downcase}." : "."}"
-          render :action => :edit
+          flash.now[:error] = "There was a problem deleting your account#{ @user.errors.any? ? ": #{ @user.errors.full_messages.first.downcase }." : '.' }"
+          render action: :edit
         end
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
@@ -114,12 +114,12 @@ class UserController < ApplicationController
     if user.active?
       if !user.is_oauth_user? && user_params[:password].present?
         unless user.valid_password?(params[:user][:current_password])
-          user.errors.add(:current_password, "is incorrect")
+          user.errors.add(:current_password, 'is incorrect')
           return false
         end
         # forbid setting new password equal to the old one
         if params[:user][:current_password] == params[:user][:password]
-          user.errors.add(:new_password, "should not match the old one")
+          user.errors.add(:new_password, 'should not match the old one')
           return false
         end
       end
@@ -139,9 +139,9 @@ class UserController < ApplicationController
     if @user.active? && params[:user] && params[:user][:password].blank?
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
-      return true
+      true
     else
-      return false
+      false
     end
   end
 

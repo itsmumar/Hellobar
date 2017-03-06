@@ -8,7 +8,7 @@ class ConfigureYourBarCampaign < UserOnboardingCampaign
   end
 
   def email_template_name
-    "configure_your_bar"
+    'configure_your_bar'
   end
 
   def sequence_index

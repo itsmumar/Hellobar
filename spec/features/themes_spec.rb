@@ -26,7 +26,7 @@ feature 'Users can select a design theme for SiteElements', :js do
 
     expect(page).to have_content 'DESIGN & CONTENT'
 
-    background_color = theme.defaults[subtype]["background_color"]
+    background_color = theme.defaults[subtype]['background_color']
 
     # verify the `background_color`
     expect(first('.color-select-block input').value).to match(/#{ background_color }/i)

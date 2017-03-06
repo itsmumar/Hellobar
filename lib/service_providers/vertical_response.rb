@@ -1,6 +1,5 @@
 module ServiceProviders
   class VerticalResponse < EmbedCodeProvider
-
     def first_name_param
       'first_name'
     end

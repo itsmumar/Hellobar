@@ -3,9 +3,9 @@ class LegacyMigrator
     self.abstract_class = true
 
     begin
-      establish_connection "legacy_#{Rails.env}".to_sym
+      establish_connection "legacy_#{ Rails.env }".to_sym
     rescue ActiveRecord::AdapterNotSpecified
-      Rails.logger.warn "database legacy_#{Rails.env} does not exist"
+      Rails.logger.warn "database legacy_#{ Rails.env } does not exist"
     end
   end
 end

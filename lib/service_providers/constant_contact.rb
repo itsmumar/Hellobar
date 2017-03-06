@@ -3,8 +3,8 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'constant_contact').first
-      raise "Site does not have a stored Constant Contact identity" unless identity
+      identity = opts[:site].identities.where(provider: 'constant_contact').first
+      raise 'Site does not have a stored Constant Contact identity' unless identity
     end
 
     @token = identity.credentials['token']
@@ -12,7 +12,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
   end
 
   def lists
-    @client.get_lists(@token).map{|l| {'id' => l.id, 'name' => l.name}}
+    @client.get_lists(@token).map { |l| { 'id' => l.id, 'name' => l.name } }
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
@@ -66,7 +66,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
-  def batch_subscribe(list_id, subscribers, double_optin = true)
+  def batch_subscribe(list_id, subscribers, _double_optin = true)
     contacts = subscribers.map do |subscriber|
       first, last = (subscriber[:name] || '').split(' ')
 
@@ -78,7 +78,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     end
 
     lists = [list_id]
-    columns = ["E-Mail", "First Name", "Last Name"]
+    columns = ['E-Mail', 'First Name', 'Last Name']
     activity = ConstantContact::Components::AddContacts.new(contacts, lists, columns)
 
     @client.add_create_contacts_activity(@token, activity)

@@ -26,7 +26,7 @@ class Condition < ActiveRecord::Base
     'UrlQuery' => 'pq'
   }
 
-  MULTIPLE_CHOICE_SEGMENTS = %w{UrlCondition UrlPathCondition LocationCountryCondition}
+  MULTIPLE_CHOICE_SEGMENTS = %w(UrlCondition UrlPathCondition LocationCountryCondition)
 
   # stored value: displayed value
   OPERANDS = {
@@ -55,7 +55,7 @@ class Condition < ActiveRecord::Base
   delegate :site, to: :rule
 
   def operand
-    value = read_attribute(:operand)
+    value = self[:operand]
 
     value.to_s if value
   end
@@ -63,16 +63,16 @@ class Condition < ActiveRecord::Base
   def to_sentence
     if MULTIPLE_CHOICE_SEGMENTS.include?(segment)
       multiple_condition_sentence
-    elsif segment == "EveryXSession"
+    elsif segment == 'EveryXSession'
       every_x_sessions_sentence
-    elsif segment == "TimeCondition"
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value[0]}:#{value[1]}"
+    elsif segment == 'TimeCondition'
+      "#{ segment_data[:name] } #{ OPERANDS[operand] } #{ value[0] }:#{ value[1] }"
     else
-      name = segment == "CustomCondition" ? custom_segment : segment_data[:name]
+      name = segment == 'CustomCondition' ? custom_segment : segment_data[:name]
       if operand.to_s == 'between'
-        "#{name} is between #{value.first} and #{value.last}"
+        "#{ name } is between #{ value.first } and #{ value.last }"
       else
-        "#{name} #{OPERANDS[operand]} #{value}"
+        "#{ name } #{ OPERANDS[operand] } #{ value }"
       end
     end
   end
@@ -101,50 +101,50 @@ class Condition < ActiveRecord::Base
 
   def multiple_condition_sentence
     # value might be not an array for old rules created before value type was changed
-    if !value.kind_of?(Array) or value.count == 1
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.kind_of?(Array) ? value.first : value}"
+    if !value.is_a?(Array) || (value.count == 1)
+      "#{ segment_data[:name] } #{ OPERANDS[operand] } #{ value.is_a?(Array) ? value.first : value }"
     else
-      "#{segment_data[:name]} #{OPERANDS[operand]} #{value.first} or #{value.count - 1} other#{value.count == 2 ? '' : 's'}"
+      "#{ segment_data[:name] } #{ OPERANDS[operand] } #{ value.first } or #{ value.count - 1 } other#{ value.count == 2 ? '' : 's' }"
     end
   end
 
   def every_x_sessions_sentence
-    return "" unless segment == "EveryXSession"
+    return '' unless segment == 'EveryXSession'
     if value.to_i == 1
-      "Every session"
+      'Every session'
     else
-      "Every #{value.to_i.ordinalize} session"
+      "Every #{ value.to_i.ordinalize } session"
     end
   end
 
   def value_is_valid
     if operand == 'between'
-      errors.add(:value, 'is not a valid value') unless value.kind_of?(Array) && value.length == 2 && value.all?(&:present?)
-    elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) or segment == "TimeCondition" # time condition is also array, but not with multiple choice
-      errors.add(:value, 'is not a valid value') unless value.kind_of?(Array)
+      errors.add(:value, 'is not a valid value') unless value.is_a?(Array) && value.length == 2 && value.all?(&:present?)
+    elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) || (segment == 'TimeCondition') # time condition is also array, but not with multiple choice
+      errors.add(:value, 'is not a valid value') unless value.is_a?(Array)
     else
-      errors.add(:value, 'is not a valid value') unless value.kind_of?(String)
+      errors.add(:value, 'is not a valid value') unless value.is_a?(String)
     end
   end
 
   def operand_is_valid
     @@operands ||= {
-      "DateCondition"             => %w{ is is_not before after between },
-      "DeviceCondition"           => %w{ is is_not },
-      "EveryXSession"             => %w{ every },
-      "LastVisitCondition"        => %w{ is is_not less_than greater_than between },
-      "LocationCityCondition"     => %w{ is is_not },
-      "LocationCountryCondition"  => %w{ is is_not },
-      "LocationRegionCondition"   => %w{ is is_not },
-      "NumberOfVisitsCondition"   => %w{ is is_not less_than greater_than between },
-      "PreviousPageURL"           => %w{ includes does_not_include },
-      "ReferrerCondition"         => %w{ is is_not includes does_not_include },
-      "ReferrerDomainCondition"   => %w{ is is_not includes does_not_include },
-      "SearchTermCondition"       => %w{ is is_not includes does_not_include },
-      "TimeCondition"             => %w{ before after },
-      "UrlCondition"              => %w{ is is_not includes does_not_include },
-      "UrlPathCondition"          => %w{ is is_not includes does_not_include },
-      "UtmCondition"              => %w{ is is_not includes does_not_include }
+      'DateCondition'             => %w(is is_not before after between),
+      'DeviceCondition'           => %w(is is_not),
+      'EveryXSession'             => %w(every),
+      'LastVisitCondition'        => %w(is is_not less_than greater_than between),
+      'LocationCityCondition'     => %w(is is_not),
+      'LocationCountryCondition'  => %w(is is_not),
+      'LocationRegionCondition'   => %w(is is_not),
+      'NumberOfVisitsCondition'   => %w(is is_not less_than greater_than between),
+      'PreviousPageURL'           => %w(includes does_not_include),
+      'ReferrerCondition'         => %w(is is_not includes does_not_include),
+      'ReferrerDomainCondition'   => %w(is is_not includes does_not_include),
+      'SearchTermCondition'       => %w(is is_not includes does_not_include),
+      'TimeCondition'             => %w(before after),
+      'UrlCondition'              => %w(is is_not includes does_not_include),
+      'UrlPathCondition'          => %w(is is_not includes does_not_include),
+      'UtmCondition'              => %w(is is_not includes does_not_include)
     }
 
     if @@operands[segment] && !@@operands[segment].include?(operand)
@@ -153,7 +153,7 @@ class Condition < ActiveRecord::Base
   end
 
   def clear_blank_values
-    self.value = value.select{|v| !v.blank?}.uniq if value.kind_of?(Array)
+    self.value = value.select { |v| !v.blank? }.uniq if value.is_a?(Array)
   end
 
   def self.date_condition_from_params(start_date, end_date)
@@ -170,17 +170,17 @@ class Condition < ActiveRecord::Base
       value = end_date
     end
 
-    new(operand: operand, value: value, segment: "DateCondition")
+    new(operand: operand, value: value, segment: 'DateCondition')
   end
 
   def normalize_url_condition
-    return if self.segment != "UrlCondition" && self.segment != "UrlPathCondition"
+    return if segment != 'UrlCondition' && segment != 'UrlPathCondition'
 
-    if self.value.kind_of?(String)
-      self.value = normalize_url(self.value)
-    elsif self.value.kind_of?(Array)
-      self.value.each_with_index do |val, i|
-        self.value[i] = normalize_url(val)
+    if value.is_a?(String)
+      self.value = normalize_url(value)
+    elsif value.is_a?(Array)
+      value.each_with_index do |val, i|
+        value[i] = normalize_url(val)
       end
     end
   end
@@ -188,20 +188,20 @@ class Condition < ActiveRecord::Base
   def normalize_url(url)
     return url if url.blank?
     # Don't do anything if it starts with '/' or "http(s)://"
-    return url if url.match(/^(https?:\/\/|\/)/i)
+    return url if url =~ /^(https?:\/\/|\/)/i
     if PublicSuffix.valid?(url.split('/').first)
-      "http://#{url}"
+      "http://#{ url }"
     else
-      "/#{url}"
+      "/#{ url }"
     end
   end
 
   def format_string_values
-    if self.value.kind_of?(String)
-      self.value = self.value.strip
-    elsif self.value.kind_of?(Array)
-      self.value.each_with_index do |val, i|
-        self.value[i] = val.strip if val.kind_of?(String)
+    if value.is_a?(String)
+      self.value = value.strip
+    elsif value.is_a?(Array)
+      value.each_with_index do |val, i|
+        value[i] = val.strip if val.is_a?(String)
       end
     end
   end

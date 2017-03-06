@@ -1,10 +1,11 @@
 def record_mailer_gateway_request_history!
   @email_history = {}
 
-  MailerGateway.stub(:send_email) do |type, recipient, params|
+  stub = MailerGateway.stub(:send_email) do |type, recipient, _params|
     date = Time.zone.today
     ((@email_history[date] ||= {})[recipient] ||= []) << type
-  end.and_return(true)
+  end
+  stub.and_return(true)
 end
 
 def day_from_current_spec_description
@@ -12,7 +13,7 @@ def day_from_current_spec_description
 end
 
 def expect_no_email(user)
-  @email_history.each do |date, messages|
+  @email_history.each do |_date, messages|
     expect(messages).not_to include(user.email)
   end
 end
@@ -22,7 +23,7 @@ def expect_user_to_only_recieve(user, email_type)
   expect(@email_history.first).to include(user.email => [email_type])
 end
 
-def email_received_a_number_of_days_after(user, start_date, date_index=day_from_current_spec_description)
+def email_received_a_number_of_days_after(user, start_date, date_index = day_from_current_spec_description)
   date = start_date + date_index
   ((@email_history[date] ||= {})[user.email] ||= [])
 end
