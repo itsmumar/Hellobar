@@ -6,9 +6,9 @@ feature 'Visit click to call on desktop browser', js: true do
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
     path = generate_file_and_return_path(element.site.id)
 
-    visit site_path_to_url(path).to_s
+    visit site_path_to_url(path)
 
-    expect(page).to_not have_xpath('.//iframe[@id="random-container"]')
+    expect(page).not_to have_xpath('.//iframe[@id="random-container"]')
   end
 end
 
@@ -20,7 +20,7 @@ feature 'Visit click to call on mobile browser', js: true do
 
     Capybara.current_session.driver.header('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1')
 
-    visit site_path_to_url(path).to_s
+    visit site_path_to_url(path)
 
     expect(page).to have_xpath('.//iframe[@id="random-container"]')
   end

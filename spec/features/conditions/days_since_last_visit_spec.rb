@@ -14,17 +14,17 @@ feature 'Days since last visit condition', js: true do
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
 
     @test_doesnt_exist = proc do |day|
-      visit site_path_to_url(@path).to_s
+      visit site_path_to_url(@path)
       set_lv_cookie(page, day)
-      visit site_path_to_url(@path).to_s # Reload the page
+      visit site_path_to_url(@path) # Reload the page
       sleep(1) # Give time for JS to execute
       expect(page).to_not have_xpath('.//iframe[@id="random-container"]')
     end
 
     @test_does_exist = proc do |day|
-      visit site_path_to_url(@path).to_s
+      visit site_path_to_url(@path)
       set_lv_cookie(page, day)
-      visit site_path_to_url(@path).to_s
+      visit site_path_to_url(@path)
 
       # force capybara to wait until iframe is loaded
       page.has_xpath?('.//iframe[@id="random-container"]')

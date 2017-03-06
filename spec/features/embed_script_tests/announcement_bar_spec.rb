@@ -9,7 +9,7 @@ feature 'Site with a closable announcement topbar', :js do
   end
 
   scenario 'shows headline and allows the bar to be hidden an shown again' do
-    visit  site_path_to_url(path).to_s
+    visit site_path_to_url(path)
 
     # force capybara to wait until iframe is loaded
     expect(page).to have_selector '#random-container'

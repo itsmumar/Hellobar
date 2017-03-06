@@ -19,7 +19,7 @@ feature 'Site with a question modal', :js do
   end
 
   scenario 'displays the question modal' do
-    visit site_path_to_url(@path).to_s
+    visit site_path_to_url(@path)
 
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')

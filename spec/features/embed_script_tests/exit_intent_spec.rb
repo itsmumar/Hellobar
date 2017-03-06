@@ -10,7 +10,7 @@ feature 'element with exit intent', js: true do
   scenario 'shows when document is blurred' do
     path = generate_file_and_return_path(element.site.id)
 
-    visit site_path_to_url(path).to_s
+    visit site_path_to_url(path)
 
     # iframe should not be showing yet
     page.has_selector?('#random-container')
@@ -24,7 +24,7 @@ feature 'element with exit intent', js: true do
   scenario 'shows when mouseenter and mouseleave have been triggered' do
     path = generate_file_and_return_path(element.site.id)
 
-    visit site_path_to_url(path).to_s
+    visit site_path_to_url(path)
 
     # iframe should not be showing yet
     page.has_selector?('#random-container')
