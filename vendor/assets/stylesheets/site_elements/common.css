@@ -533,6 +533,39 @@ form {
 
 /*-----------  Inline Editing -----------*/
 
+.preview-mode [data-hb-geolocation="city"]:after {
+  content: 'City';
+  display: inline-block;
+  position: relative;
+  padding: 2px 8px;
+  margin: 0 2px;
+  background-color: #454545;
+  color: white;
+  border-radius: 4px
+}
+
+.preview-mode [data-hb-geolocation="region"]:after {
+  content: 'Region';
+  display: inline-block;
+  position: relative;
+  padding: 2px 8px;
+  margin: 0 2px;
+  background-color: #454545;
+  color: white;
+  border-radius: 4px
+}
+
+.preview-mode [data-hb-geolocation="country"]:after {
+  content: 'Country';
+  display: inline-block;
+  position: relative;
+  padding: 2px 8px;
+  margin: 0 2px;
+  background-color: #454545;
+  color: white;
+  border-radius: 4px
+}
+
 .hb-editable-block > .fr-wrapper {
   min-width: 100px;
 }

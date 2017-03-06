@@ -54,7 +54,7 @@ class SimpleModelAdapter {
   }
 
   handleImageRemoval() {
-     this.modelHandler.setProperties({
+    this.modelHandler.setProperties({
       'model.active_image_id': null,
       'model.image_placement': this.modelHandler.get('model.image_placement'),
       'model.image_type': 'custom',
@@ -261,7 +261,7 @@ export default Ember.Service.extend({
       }
     });
     $.FroalaEditor.DefineIcon('imageRemoveCustom', {NAME: 'trash'});
-    return $.FroalaEditor.RegisterCommand('imageRemoveCustom', {
+    $.FroalaEditor.RegisterCommand('imageRemoveCustom', {
       title: 'Remove image',
       icon: 'imageRemoveCustom',
       undo: false,
@@ -269,6 +269,27 @@ export default Ember.Service.extend({
       refreshAfterCallback: false,
       callback() {
         that.simpleModelAdapter.handleImageRemoval();
+      }
+    });
+    $.FroalaEditor.DefineIcon('geolocationDropdown', {NAME: 'map-marker'});
+    $.FroalaEditor.RegisterCommand('geolocationDropdown', {
+      title: 'Insert geolocation name',
+      icon: 'geolocationDropdown',
+      type: 'dropdown',
+      focus: false,
+      undo: false,
+      refreshAfterCallback: true,
+      options: {
+        'country': 'Country',
+        'region': 'Region',
+        'city': 'City'
+      },
+      callback(cmd, val) {
+        const span = ` <span data-hb-geolocation="${val}"></span> `;
+        this.html.insert(span);
+        setTimeout(() => {
+          this.toolbar.hide();
+        }, 200);
       }
     });
   },
@@ -303,7 +324,7 @@ export default Ember.Service.extend({
               // NOTE So far we don't use InlineImageManagementPane, we need to make final desicion later
               //@instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage)
               this.instantiateFroala($iframe, $iframeBody, elementType);
-              return this.initializeInputEditing($iframe, $iframeBody);
+              this.initializeInputEditing($iframe, $iframeBody);
             }
           );
         }
@@ -332,22 +353,22 @@ export default Ember.Service.extend({
       const toolbarButtons = {
         'simple': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
           'fontFamily', 'fontSize', 'color', 'insertLink', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll'
+          'undo', 'redo', 'clearFormatting', 'selectAll', 'geolocationDropdown'
         ],
         'simple-no-link': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
           'fontFamily', 'fontSize', 'color', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll'
+          'undo', 'redo', 'clearFormatting', 'selectAll', 'geolocationDropdown'
         ],
         'full': [
           'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
           'fontFamily', 'fontSize', 'color', '-',
           'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
           'insertHR', 'insertLink', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll'
+          'undo', 'redo', 'clearFormatting', 'selectAll', 'geolocationDropdown'
         ],
         'limited': [
           'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'color', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll'
+          'undo', 'redo', 'clearFormatting', 'selectAll', 'geolocationDropdown'
         ]
       };
       const htmlAllowedTags = {
@@ -373,6 +394,7 @@ export default Ember.Service.extend({
         toolbarVisibleWithoutSelection: true,
         toolbarButtons: toolbarButtons[mode],
         htmlAllowedTags: htmlAllowedTags[mode],
+        htmlAllowedEmptyTags: ['span'],
         enter: $.FroalaEditor.ENTER_P,
         multiLine: mode === 'full',
         initOnClick: false,
@@ -443,7 +465,7 @@ export default Ember.Service.extend({
 
   initializeInputEditing($iframe, $iframeBody){
     this.cleanupInputs();
-    return $('.hb-editable-block-input input', $iframeBody).blur(evt => {
+    $('.hb-editable-block-input input', $iframeBody).blur(evt => {
         const $target = $(evt.currentTarget);
         const blockId = $target.closest('[data-hb-editable-block]').attr('data-hb-editable-block');
         const content = $target.val();
