@@ -2,7 +2,7 @@
 # key) is what is used in the backend storage and in the Javascript.
 module Hello
   module Segments
-    User = [ # rubocop:disable Style/ConstantName
+    User = [
       { key: 'fv', name: 'First Visit', type: :timestamp },
       { key: 'lv', name: 'Last Visit', type: :timestamp },
       { key: 'nv', name: 'Number of Visits', type: :number, units: 'visit' },
