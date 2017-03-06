@@ -1,5 +1,3 @@
-twilio_user: twilio-user
-twilio_password: twilio-password
 host: host
 recaptcha_public_key: recaptcha-public-key
 recaptcha_private_key: recaptcha-private-key
