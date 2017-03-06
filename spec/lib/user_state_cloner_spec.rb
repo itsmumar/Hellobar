@@ -10,7 +10,9 @@ describe UserStateCloner, '#save' do
   it 'creates the user' do
     cloner = UserStateCloner.new(json)
 
-    expect { cloner.save }.to change(User, :count).by(1)
+    expect {
+      cloner.save
+    }.to change(User, :count).by(1)
   end
 
   it 'resets the user password' do
@@ -26,7 +28,9 @@ describe UserStateCloner, '#save' do
     cloner = UserStateCloner.new(json)
     site = cloner.sites.first
 
-    expect { cloner.save }.to change { Site.exists?(site.id) }.from(false).to(true)
+    expect {
+      cloner.save
+    }.to change { Site.exists?(site.id) }.from(false).to(true)
   end
 
   it 'creates the site memberships' do
@@ -40,22 +44,32 @@ describe UserStateCloner, '#save' do
   end
 
   it 'creates the rules' do
-    expect { UserStateCloner.new(json).save }.to change(Rule, :count).by(7)
+    expect {
+      UserStateCloner.new(json).save
+    }.to change(Rule, :count).by(7)
   end
 
   it 'creates the site elements' do
-    expect { UserStateCloner.new(json).save }.to change(SiteElement, :count).by(11)
+    expect {
+      UserStateCloner.new(json).save
+    }.to change(SiteElement, :count).by(11)
   end
 
   it 'creates the payment methods' do
-    expect { UserStateCloner.new(json).save }.to change(PaymentMethod, :count).by(1)
+    expect {
+      UserStateCloner.new(json).save
+    }.to change(PaymentMethod, :count).by(1)
   end
 
   it 'upgrades the site to pro' do
-    expect { UserStateCloner.new(json).save }.to change(Subscription::Pro, :count).by(2)
+    expect {
+      UserStateCloner.new(json).save
+    }.to change(Subscription::Pro, :count).by(2)
   end
 
   it 'creates conditions properly' do
-    expect { UserStateCloner.new(json).save }.to change(Condition, :count)
+    expect {
+      UserStateCloner.new(json).save
+    }.to change(Condition, :count)
   end
 end

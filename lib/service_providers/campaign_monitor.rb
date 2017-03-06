@@ -13,10 +13,10 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
 
   def lists
     handle_error do
-      @client.clients.map do |cl|
+      @client.clients.map { |cl|
         client = CreateSend::Client.new(@auth, cl.ClientID)
         client.lists.map { |l| { 'id' => l['ListID'], 'name' => l['Name'] } }
-      end.flatten
+      }.flatten
     end
   end
 

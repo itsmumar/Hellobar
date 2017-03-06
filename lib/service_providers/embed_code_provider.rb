@@ -81,9 +81,9 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def name_params
-    params.collect do |i|
+    params.collect { |i|
       i[:name] if i[:name].try :include?, 'name'
-    end.compact || []
+    }.compact || []
   end
 
   def subscribe_params(email, name, _double_optin = true)

@@ -119,8 +119,9 @@ describe SiteElementsController do
     it 'sets the success flash message on create' do
       SiteElement.any_instance.stub(valid?: true, save!: true)
 
-      expect { post :create, site_id: @site.id, site_element: { element_subtype: 'traffic', rule_id: 0 } }
-        .to change { flash[:success] }.from(nil)
+      expect {
+        post :create, site_id: @site.id, site_element: { element_subtype: 'traffic', rule_id: 0 }
+      }.to change { flash[:success] }.from(nil)
     end
   end
 
@@ -211,8 +212,9 @@ describe SiteElementsController do
       end
 
       it 'sets the success flash' do
-        expect { post :update, valid_params(element) }
-          .to change { flash[:success] }.from(nil)
+        expect {
+          post :update, valid_params(element)
+        }.to change { flash[:success] }.from(nil)
       end
 
       it 'sends json of the updated attributes' do

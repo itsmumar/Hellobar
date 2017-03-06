@@ -23,7 +23,9 @@ describe ServiceProviders::AWeber do
   describe 'subscribe' do
     it 'catches AWeber::CreationError errors' do
       allow(client).to receive(:account).and_raise(AWeber::CreationError)
-      expect { service_provider.subscribe('123', 'abc') }.not_to raise_error
+      expect {
+        service_provider.subscribe('123', 'abc')
+      }.not_to raise_error
     end
 
     it 'a contact with tags' do

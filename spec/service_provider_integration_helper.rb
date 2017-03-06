@@ -11,12 +11,10 @@ shared_context 'service provider request setup' do
   end
 
   let(:identity) do
-    Identity.new(
-      provider: provider,
-      extra: { 'metadata' => {} },
-      credentials: { 'token' => 'foobar-token' },
-      site: site
-    )
+    Identity.new(provider: provider,
+                 extra: { 'metadata' => {} },
+                 credentials: { 'token' => 'foobar-token' },
+                 site: site)
   end
 
   let(:url)              { "http://#{api_domain}" }

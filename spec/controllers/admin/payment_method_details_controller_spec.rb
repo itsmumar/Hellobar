@@ -18,8 +18,9 @@ describe Admin::PaymentMethodDetailsController do
     end
 
     it 'removes the payment method' do
-      expect { put :remove_cc_info, payment_method_detail_id: user.payment_methods.first.id, user_id: user.id }
-        .to change(user.payment_methods, :count).by(-1)
+      expect {
+        put :remove_cc_info, payment_method_detail_id: user.payment_methods.first.id, user_id: user.id
+      }.to change(user.payment_methods, :count).by(-1)
     end
 
     it 'removes the cscc token' do

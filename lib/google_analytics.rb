@@ -49,11 +49,11 @@ class GoogleAnalytics
 
     if account
       # what if you have multiple profiles?
-      profile = account.web_properties.find do |property|
+      profile = account.web_properties.find { |property|
         next unless property.website_url.present?
 
         self.class.normalize_url(property.website_url) == self.class.normalize_url(url)
-      end.profiles.first
+      }.profiles.first
 
       ids = "ga:#{profile.id}"
       start_date = '30daysAgo'
