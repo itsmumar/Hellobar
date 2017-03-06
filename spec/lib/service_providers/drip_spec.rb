@@ -48,7 +48,7 @@ describe ServiceProviders::Drip do
     end
 
     it 'should subscribe to the campaign with tags' do
-      tags = %w(TestTag1 TestTag2)
+      tags = ['TestTag1', 'TestTag2']
       contact_list.data['tags'] = tags
       service_provider.instance_variable_set(:@contact_list, contact_list)
       subscribe_url = "#{drip_endpoint}/#{identity.extra['account_id']}/campaigns/98654057/subscribers"
@@ -60,7 +60,7 @@ describe ServiceProviders::Drip do
           JSON.parse(req.body) == {
             'subscribers' => [{
               'new_email' => 'raj.kumar+9@crossover.com',
-              'tags' => %w(TestTag1 TestTag2),
+              'tags' => ['TestTag1', 'TestTag2'],
               'custom_fields' => {
                 'name' => 'Test Mname User',
                 'fname' => 'Test',

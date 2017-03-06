@@ -102,7 +102,7 @@ class SiteElementsController < ApplicationController
   end
 
   def determine_layout
-    %w(new edit).include?(action_name) ? 'ember' : 'application'
+    ['new', 'edit'].include?(action_name) ? 'ember' : 'application'
   end
 
   def force_trailing_slash

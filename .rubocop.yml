@@ -99,3 +99,9 @@ Style/ConstantName:
   Exclude:
     - lib/hello/segments.rb
     - config/initializers/settings.rb
+
+Style/WordArray:
+  # The `MinSize` option causes the `WordArray` rule to be ignored for arrays
+  # smaller than a certain size.  The rule is only applied to arrays
+  # whose element count is greater than or equal to `MinSize`.
+  MinSize: 3

@@ -52,7 +52,7 @@ RSpec.describe Condition, type: :model do
       end
 
       it 'is valid when the value is an Array with 2 elements' do
-        condition = Condition.new operand: 'between', value: %w(one two), rule: Rule.new
+        condition = Condition.new operand: 'between', value: ['one', 'two'], rule: Rule.new
 
         condition.should be_valid
       end
@@ -64,7 +64,7 @@ RSpec.describe Condition, type: :model do
       condition = Condition.date_condition_from_params('start', 'end')
 
       condition.operand.should == 'between'
-      condition.value.should == %w(start end)
+      condition.value.should == ['start', 'end']
     end
 
     it 'creates a start_date condition when only start_date is present' do

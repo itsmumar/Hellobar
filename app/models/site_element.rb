@@ -65,7 +65,7 @@ class SiteElement < ActiveRecord::Base
   scope :bars, -> { where(type: 'Bar') }
   scope :sliders, -> { where(type: 'Slider') }
   scope :custom_elements, -> { where(type: 'Custom') }
-  scope :modals_and_takeovers, -> { where(type: %w(Modal Takeover)) }
+  scope :modals_and_takeovers, -> { where(type: ['Modal', 'Takeover']) }
   scope :email_subtype, -> { where(element_subtype: 'email') }
   scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }
   scope :traffic_subtype, -> { where(element_subtype: 'traffic') }
