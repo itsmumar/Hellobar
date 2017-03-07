@@ -10,11 +10,6 @@ HB.SliderElement = HB.createClass({
 
   minimize: function () {
     HB.animateOut(this.w, this.onHidden());
-
-    if (HB.p) {
-      HB.p.style.display = 'none';
-    }
-
     HB.animateIn(this.pullDown);
   },
 

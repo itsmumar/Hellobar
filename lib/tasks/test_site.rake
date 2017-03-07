@@ -11,15 +11,19 @@ class HbTestSite
     Site.last.id
   end
 
+  def self.default_path
+    path(DEFAULT_FILE)
+  end
+
   def self.generate(site_id, full_path)
+    raise 'site id is empty' unless site_id.present?
     generator = SiteGenerator.new(site_id, full_path: full_path)
     generator.generate_file
   end
 
   def self.generate_default(site_id = nil)
     site_id ||= default_site_id
-    full_path = path(DEFAULT_FILE)
-    generate(site_id, full_path)
+    generate(site_id, default_path)
   end
 
   def self.run_file
@@ -35,17 +39,20 @@ namespace :test_site do
 
   desc "Creates a test.html file in the test_site sinatra folder\n rake test_site:generate[95]\nDefaults to last site if not passed"
   task :generate, [:site_id] => :environment do |t, args|
+    puts "Generating #{HbTestSite.default_path} for site ##{args[:site_id]}..."
     HbTestSite.generate_default(args[:site_id])
   end
 
   desc "Runs the sinatra server for the test site"
   task :run do
-    ruby "#{HbTestSite.run_file}"
+    begin
+      ruby "#{HbTestSite.run_file}"
+    rescue Interrupt => e
+      sleep 1 # wait for sinatra shutdown
+      puts 'Good bye! :)'
+    end
   end
 
   desc "Runs the test site generation and a Sinatra server"
-  task :run_fresh do
-    Rake::Task["test_site:generate"].invoke
-    Rake::Task["test_site:run"].invoke
-  end
+  task :run_fresh, [:site_id] => [:generate, :run]
 end
