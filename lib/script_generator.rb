@@ -162,8 +162,8 @@ class ScriptGenerator < Mustache
     File.read("#{Rails.root}/vendor/assets/javascripts/modules/geolocation/geolocation.js")
   end
 
-  def geolocation_dom_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/geolocation/geolocation.dom.js")
+  def geolocation_injection_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/modules/geolocation/geolocation.injection.js")
   end
 
   def autofills_js

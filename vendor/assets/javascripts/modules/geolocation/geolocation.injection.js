@@ -1,4 +1,4 @@
-hellobar.defineModule('geolocation.dom', ['base.dom', 'geolocation'], function (dom, geolocation) {
+hellobar.defineModule('geolocation.injection', ['base.dom', 'geolocation'], function (dom, geolocation) {
 
   var geolocationAttributeName = 'data-hb-geolocation';
   var geolocationDefaultAttributeName = 'data-hb-geolocation-default';
