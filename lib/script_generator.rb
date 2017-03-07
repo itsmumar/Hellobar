@@ -20,10 +20,9 @@ class ScriptGenerator < Mustache
   end
 
   def generate_script
-    if Rails.env.development?
-      # Re-read the template
-      ScriptGenerator.load_templates
-    end
+    # Re-read the template
+    ScriptGenerator.load_templates if Rails.env.development?
+
     if options[:compress]
       Uglifier.new.compress(render)
     else
@@ -32,11 +31,8 @@ class ScriptGenerator < Mustache
   end
 
   def script_is_installed_properly
-    if Rails.env.test?
-      true
-    else
-      'HB.scriptIsInstalledProperly()'
-    end
+    return true if Rails.env.test?
+    'HB.scriptIsInstalledProperly()'
   end
 
   # returns the sites tz offset as "+/-HH:MM"
@@ -74,8 +70,7 @@ class ScriptGenerator < Mustache
   end
 
   def content_upgrades_json
-    cu_json = {}
-    site.site_elements.active_content_upgrades.each do |cu|
+    site.site_elements.active_content_upgrades.inject({}) { |cu_json, cu|
       content = {
         id: cu.id,
         type: 'ContentUpgrade',
@@ -89,9 +84,8 @@ class ScriptGenerator < Mustache
         contact_list_id: cu.contact_list_id,
         download_link: cu.content_upgrade_download_link
       }
-      cu_json[cu.id] = content
-    end
-    cu_json.to_json
+      cu_json.update cu.id => content
+    }.to_json
   end
 
   def content_upgrades_styles_json
@@ -153,24 +147,18 @@ class ScriptGenerator < Mustache
   end
 
   def branding_templates
-    [].tap do |r|
-      Dir.glob(Rails.root.join('lib/script_generator/branding/*.html')) do |f|
-        ActiveSupport.escape_html_entities_in_json = false
+    without_escaping_html_in_json do
+      Dir.glob(Rails.root.join('lib/script_generator/branding/*.html')).map do |f|
         content = File.read(f).to_json
-        ActiveSupport.escape_html_entities_in_json = true
-        r << { name: f.split('.html').first.split('/').last, markup: content }
+        { name: f.split('.html').first.split('/').last, markup: content }
       end
     end
   end
 
   def content_upgrade_template
-    [].tap do |r|
-      f = Rails.root.join('lib/script_generator/contentupgrade/contentupgrade.html')
-      ActiveSupport.escape_html_entities_in_json = false
-      content = f.read.to_json
-      ActiveSupport.escape_html_entities_in_json = true
-      r << { name: f.to_s.split('.html').first.split('/').last, markup: content }
-    end
+    f = Rails.root.join('lib/script_generator/contentupgrade/contentupgrade.html')
+    content = without_escaping_html_in_json { f.read.to_json }
+    [{ name: f.to_s.split('.html').first.split('/').last, markup: content }]
   end
 
   def templates
@@ -240,19 +228,15 @@ class ScriptGenerator < Mustache
   end
 
   def content_template(element_class, type, category = :generic)
-    ActiveSupport.escape_html_entities_in_json = false
-
-    content = if category == :generic
-                (content_header(element_class) +
-                  content_markup(element_class, type, category) +
-                  content_footer(element_class)).to_json
-              else
-                content_markup(element_class, type, category).to_json
-              end
-
-    ActiveSupport.escape_html_entities_in_json = true
-
-    content
+    without_escaping_html_in_json do
+      if category == :generic
+        (content_header(element_class) +
+          content_markup(element_class, type, category) +
+          content_footer(element_class)).to_json
+      else
+        content_markup(element_class, type, category).to_json
+      end
+    end
   end
 
   def content_header(element_class)
@@ -427,5 +411,12 @@ class ScriptGenerator < Mustache
     return js_content unless path.include?('.es6')
 
     Babel::Transpiler.transform(js_content).fetch('code')
+  end
+
+  def without_escaping_html_in_json
+    ActiveSupport.escape_html_entities_in_json = false
+    result = yield
+    ActiveSupport.escape_html_entities_in_json = true
+    result
   end
 end
