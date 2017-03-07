@@ -495,14 +495,14 @@ class Site < ActiveRecord::Base
   def generate_static_assets(options = {})
     update_column(:script_attempted_to_generate_at, Time.now)
 
-    Timeout::timeout(20) do
+    Timeout.timeout(20) do
       store_site_scripts_locally = Hellobar::Settings[:store_site_scripts_locally]
       compress_script = !store_site_scripts_locally
 
       generated_script_content = options[:script_content] || script_content(compress_script)
 
       if store_site_scripts_locally
-        File.open(File.join(Rails.root, "public/generated_scripts/", script_name), "w") { |f| f.puts(generated_script_content) }
+        File.open(File.join(Rails.root, 'public/generated_scripts/', script_name), 'w') { |f| f.puts(generated_script_content) }
       else
         Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
 
