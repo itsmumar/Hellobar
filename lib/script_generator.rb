@@ -5,8 +5,8 @@ require 'hmac-sha2'
 class ScriptGenerator < Mustache
   class << self
     def load_templates
-      self.template_path = "#{ Rails.root }/lib/script_generator/"
-      self.template_file = "#{ Rails.root }/lib/script_generator/template.js.mustache"
+      self.template_path = Rails.root.join('lib/script_generator/')
+      self.template_file = Rails.root.join('lib/script_generator/template.js.mustache')
     end
   end
   load_templates
@@ -154,7 +154,7 @@ class ScriptGenerator < Mustache
 
   def branding_templates
     [].tap do |r|
-      Dir.glob("#{ Rails.root }/lib/script_generator/branding/*.html") do |f|
+      Dir.glob(Rails.root.join('lib/script_generator/branding/*.html')) do |f|
         ActiveSupport.escape_html_entities_in_json = false
         content = File.read(f).to_json
         ActiveSupport.escape_html_entities_in_json = true
@@ -165,11 +165,11 @@ class ScriptGenerator < Mustache
 
   def content_upgrade_template
     [].tap do |r|
-      f = "#{ Rails.root }/lib/script_generator/contentupgrade/contentupgrade.html"
+      f = Rails.root.join('lib/script_generator/contentupgrade/contentupgrade.html')
       ActiveSupport.escape_html_entities_in_json = false
-      content = File.read(f).to_json
+      content = f.read.to_json
       ActiveSupport.escape_html_entities_in_json = true
-      r << { name: f.split('.html').first.split('/').last, markup: content }
+      r << { name: f.to_s.split('.html').first.split('/').last, markup: content }
     end
   end
 
@@ -256,28 +256,27 @@ class ScriptGenerator < Mustache
   end
 
   def content_header(element_class)
-    File.read("#{ Rails.root }/lib/script_generator/#{ element_class }/header.html")
+    Rails.root.join('lib/script_generator', element_class, 'header.html').read
   end
 
   def content_markup(element_class, type, category = :generic)
     return '' if element_class == 'custom'
-    fname = ''
 
     if category == :generic
-      base = "#{ Rails.root }/lib/script_generator"
-      fname = "#{ base }/#{ element_class }/#{ type.tr('/', '_').underscore }.html"
-      fname = "#{ base }/#{ type.tr('/', '_').underscore }.html" unless File.exist?(fname)
+      base = Rails.root.join('lib/script_generator')
+      file = base.join(element_class, "#{ type.tr('/', '_').underscore }.html")
+      file = base.join("#{ type.tr('/', '_').underscore }.html") unless file.exist?
     else
-      base = "#{ Rails.root }/lib/themes/#{ category.to_s.pluralize }/#{ type.tr('_', '-') }"
-      fname = "#{ base }/#{ element_class }.html"
-      fname = "#{ base }/element.html" unless File.exist?(fname)
+      base = Rails.root.join('lib/themes', category.to_s.pluralize, type.tr('_', '-'))
+      file = base.join("#{ element_class }.html")
+      file = base.join('element.html') unless file.exist?
     end
 
-    File.read(fname)
+    file.read
   end
 
   def content_footer(element_class)
-    File.read("#{ Rails.root }/lib/script_generator/#{ element_class }/footer.html")
+    Rails.root.join('lib/script_generator', element_class, 'footer.html').read
   end
 
   def site_element_settings(site_element)
@@ -396,17 +395,16 @@ class ScriptGenerator < Mustache
   end
 
   def container_css_files
-    vendor_root = "#{ Rails.root }/vendor/assets/stylesheets/site_elements"
-    ["#{ vendor_root }/container_common.css"] +
-      element_classes.map { |klass| "#{ vendor_root }/#{ klass.name.downcase }/container.css" } +
+    vendor_root = Rails.root.join('vendor/assets/stylesheets/site_elements')
+    [vendor_root.join('container_common.css')] +
+      element_classes.map { |klass| vendor_root.join(klass.name.downcase, 'container.css') } +
       element_themes.map(&:container_css_path)
   end
 
   def element_css_files
-    vendor_root = "#{ Rails.root }/vendor/assets/stylesheets/site_elements"
-
-    ["#{ vendor_root }/common.css"] +
-      element_classes.map { |klass| "#{ vendor_root }/#{ klass.name.downcase }/element.css" } +
+    vendor_root = Rails.root.join('vendor/assets/stylesheets/site_elements')
+    [vendor_root.join('common.css')] +
+      element_classes.map { |klass| vendor_root.join(klass.name.downcase, 'element.css') } +
       element_themes.map(&:element_css_path)
   end
 
@@ -414,7 +412,7 @@ class ScriptGenerator < Mustache
     css = files.map do |file|
       next unless File.exist?(file)
       raw_css = File.read(file)
-      if file.include?('.scss')
+      if file.to_s.include?('.scss')
         raw_css = Sass::Engine.new(raw_css, syntax: :scss).render
       end
 
@@ -426,7 +424,7 @@ class ScriptGenerator < Mustache
 
   def render_js(path)
     js_content = Rails.root.join('vendor/assets/javascripts/', path).read
-    return js_content unless path =~ /\.es6$/
+    return js_content unless path.include?('.es6')
 
     Babel::Transpiler.transform(js_content).fetch('code')
   end
