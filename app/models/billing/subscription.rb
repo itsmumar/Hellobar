@@ -174,6 +174,10 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def geolocation_tags?
+      false
+    end
+
     protected
 
     def parent_class
@@ -332,6 +336,10 @@ class Subscription < ActiveRecord::Base
       end
 
       def autofills?
+        true
+      end
+
+      def geolocation_tags?
         true
       end
     end
