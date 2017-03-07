@@ -105,12 +105,7 @@ class ScriptGenerator < Mustache
   end
 
   def site_element_classes_js
-    js = render_asset('site_elements/site_element.js')
-
-    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
-    klasses.inject(js) do |memo, klass|
-      memo << "\n" << render_asset('site_elements', klass.name.downcase)
-    end
+    render_asset('site_elements.js')
   end
 
   def hellobar_base_js
