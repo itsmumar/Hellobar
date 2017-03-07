@@ -3,10 +3,13 @@ require 'hmac-sha1'
 require 'hmac-sha2'
 
 class ScriptGenerator < Mustache
+  cattr_accessor :file_cache
+
   class << self
     def load_templates
       self.template_path = Rails.root.join('lib/script_generator/')
-      self.template_file = Rails.root.join('lib/script_generator/template.js.mustache')
+      self.template_name = 'template.js'
+      self.file_cache = {}
     end
   end
   load_templates
@@ -149,7 +152,7 @@ class ScriptGenerator < Mustache
   def branding_templates
     without_escaping_html_in_json do
       Dir.glob(Rails.root.join('lib/script_generator/branding/*.html')).map do |f|
-        content = File.read(f).to_json
+        content = cache(f) { File.read(f).to_json }
         { name: f.split('.html').first.split('/').last, markup: content }
       end
     end
@@ -157,7 +160,7 @@ class ScriptGenerator < Mustache
 
   def content_upgrade_template
     f = Rails.root.join('lib/script_generator/contentupgrade/contentupgrade.html')
-    content = without_escaping_html_in_json { f.read.to_json }
+    content = without_escaping_html_in_json { cache(f) { f.read.to_json } }
     [{ name: f.to_s.split('.html').first.split('/').last, markup: content }]
   end
 
@@ -169,16 +172,16 @@ class ScriptGenerator < Mustache
 
       options[:templates].each do |t|
         temp_name = t.split('_', 2)
-        category  = :generic
-        category  = :template if templates.include?(temp_name[1].titleize)
+        category = :generic
+        category = :template if templates.include?(temp_name[1].titleize)
         template_names << (temp_name << category)
       end
     else
       site.site_elements.active.each do |se|
-        theme_id      = se.theme_id
-        theme         = Theme.where(id: theme_id).first
-        category      = theme.type.to_sym
-        subtype       = (category == :template ? theme_id.underscore : se.element_subtype)
+        theme_id = se.theme_id
+        theme = Theme.where(id: theme_id).first
+        category = theme.type.to_sym
+        subtype = (category == :template ? theme_id.underscore : se.element_subtype)
 
         template_names << [se.class.name.downcase, subtype, category]
         template_names << [se.class.name.downcase, 'question', category] if se.use_question?
@@ -256,7 +259,7 @@ class ScriptGenerator < Mustache
       file = base.join('element.html') unless file.exist?
     end
 
-    file.read
+    cache(file.to_s) { file.read }
   end
 
   def content_footer(element_class)
@@ -395,22 +398,27 @@ class ScriptGenerator < Mustache
   def read_css_files(files)
     css = files.map do |file|
       next unless File.exist?(file)
-      raw_css = File.read(file)
-      if file.to_s.include?('.scss')
-        raw_css = Sass::Engine.new(raw_css, syntax: :scss).render
+      cache(file) do
+        raw_css = File.read(file.to_s)
+        if file.to_s.include?('.scss')
+          raw_css = Sass::Engine.new(raw_css, syntax: :scss).render
+        end
+        raw_css
       end
-
-      raw_css
     end
 
     css.compact.join("\n")
   end
 
   def render_js(path)
-    js_content = Rails.root.join('vendor/assets/javascripts/', path).read
-    return js_content unless path.include?('.es6')
+    file = Rails.root.join('vendor/assets/javascripts/', path)
 
-    Babel::Transpiler.transform(js_content).fetch('code')
+    cache(file) do
+      js_content = file.read
+      return js_content unless options[:es6] && path.include?('.es6')
+
+      Babel::Transpiler.transform(js_content).fetch('code')
+    end
   end
 
   def without_escaping_html_in_json
@@ -418,5 +426,16 @@ class ScriptGenerator < Mustache
     result = yield
     ActiveSupport.escape_html_entities_in_json = true
     result
+  end
+
+  def cache(path)
+    return yield unless options[:cache]
+    key = path.to_s
+
+    if file_cache.key?(key)
+      file_cache[key]
+    else
+      file_cache[key] = yield
+    end
   end
 end
