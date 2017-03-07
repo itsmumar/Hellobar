@@ -101,17 +101,17 @@ class ScriptGenerator < Mustache
   end
 
   def site_element_classes_js
-    js = render_js('site_elements/site_element.js')
+    js = render_js('site_elements/site_element.js.es6')
 
     klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
     klasses.each do |klass|
-      js << "\n" << render_js("site_elements/#{ klass.name.downcase }.js")
+      js << "\n" << render_js("site_elements/#{ klass.name.downcase }.js.es6")
     end
     js
   end
 
   def hellobar_base_js
-    render_js('hellobar.base.js')
+    render_js('hellobar.base.js.es6')
   end
 
   def autofills_json
@@ -119,7 +119,7 @@ class ScriptGenerator < Mustache
   end
 
   def autofills_js
-    render_js('autofills/autofills.js')
+    render_js('autofills/autofills.js.es6')
   end
 
   def ie_shims_js
