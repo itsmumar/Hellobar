@@ -111,7 +111,7 @@ class ScriptGenerator < Mustache
 
     klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
     klasses.each do |klass|
-      js << "\n" << render_js("site_elements/#{klass.name.downcase}.js")
+      js << "\n" << render_js("site_elements/#{ klass.name.downcase }.js")
     end
     js
   end
