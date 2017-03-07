@@ -174,7 +174,7 @@ class Subscription < ActiveRecord::Base
       false
     end
 
-    def geolocation_tags?
+    def geolocation_injection?
       false
     end
 
@@ -339,7 +339,7 @@ class Subscription < ActiveRecord::Base
         true
       end
 
-      def geolocation_tags?
+      def geolocation_injection?
         true
       end
     end
