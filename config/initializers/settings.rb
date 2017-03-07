@@ -43,8 +43,6 @@ unless defined?(Hellobar::Settings)
     syncable
     test_cloning
     tracking_host
-    twilio_password
-    twilio_user
     support_location
     google_auth_id
     google_auth_secret

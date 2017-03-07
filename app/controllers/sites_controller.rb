@@ -82,7 +82,7 @@ class SitesController < ApplicationController
 
   # a version of the site's script with all templates, no elements and no rules, for use in the editor live preview
   def preview_script
-    generator = ScriptGenerator.new(@site, templates: SiteElement.all_templates, rules: [], preview: true)
+    generator = ScriptGenerator.new(@site, templates: SiteElement.all_templates, rules: [], preview: true, compress: false)
     render js: generator.generate_script
   end
 
