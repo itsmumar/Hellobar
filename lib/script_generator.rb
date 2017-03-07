@@ -3,13 +3,10 @@ require 'hmac-sha1'
 require 'hmac-sha2'
 
 class ScriptGenerator < Mustache
-  cattr_accessor :file_cache
-
   class << self
     def load_templates
       self.template_path = Rails.root.join('lib/script_generator/')
       self.template_name = 'template.js'
-      self.file_cache = {}
     end
   end
   load_templates
@@ -31,6 +28,10 @@ class ScriptGenerator < Mustache
     else
       render
     end
+  end
+
+  def render
+    with_css_compressor { super }
   end
 
   def script_is_installed_properly
@@ -104,17 +105,16 @@ class ScriptGenerator < Mustache
   end
 
   def site_element_classes_js
-    js = render_js('site_elements/site_element.js.es6')
+    js = render_asset('site_elements/site_element.js')
 
     klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
-    klasses.each do |klass|
-      js << "\n" << render_js("site_elements/#{ klass.name.downcase }.js.es6")
+    klasses.inject(js) do |memo, klass|
+      memo << "\n" << render_asset('site_elements', klass.name.downcase)
     end
-    js
   end
 
   def hellobar_base_js
-    render_js('hellobar.base.js')
+    render_asset('hellobar.base.js')
   end
 
   def autofills_json
@@ -122,46 +122,55 @@ class ScriptGenerator < Mustache
   end
 
   def autofills_js
-    render_js('autofills/autofills.js.es6')
+    render_asset('autofills/autofills.js')
   end
 
   def ie_shims_js
-    render_js('hellobar_script/ie_shims.js')
+    render_asset('hellobar_script/ie_shims.js')
   end
 
   def crypto_js
-    render_js('hellobar_script/crypto.js')
+    render_asset('hellobar_script/crypto.js')
   end
 
   def jquery_lib
-    render_js('jquery-2.2.4.js')
+    render_asset('jquery-2.2.4.js')
   end
 
   def hellobar_container_css
-    css = read_css_files(container_css_files)
-    css = css.gsub('hellobar-container', "#{ pro_secret }-container")
+    css = [
+      render_asset('site_elements/container_common.css'),
+      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'container.css') },
+      element_themes.map { |theme| render_asset(theme.container_css_path.sub('lib/themes/', '')) }
+    ]
 
-    CSSMin.minify(css).to_json
+    css.flatten.join("\n").gsub('hellobar-container', "#{ pro_secret }-container").to_json
   end
 
   def hellobar_element_css
-    css = read_css_files(element_css_files)
-    CSSMin.minify(css).to_json
+    css = [
+      render_asset('site_elements/common.css'),
+      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'element.css') },
+      element_themes.map { |theme| render_asset(theme.element_css_path.sub('lib/themes/', '')) }
+    ]
+
+    css.flatten.join("\n").to_json
   end
 
   def branding_templates
+    base = Rails.root.join('lib/script_generator/')
     without_escaping_html_in_json do
-      Dir.glob(Rails.root.join('lib/script_generator/branding/*.html')).map do |f|
-        content = cache(f) { File.read(f).to_json }
-        { name: f.split('.html').first.split('/').last, markup: content }
+      Dir.glob(base.join('branding/*.html')).map do |f|
+        path = Pathname.new(f)
+        content = render_asset(path.relative_path_from(base)).to_json
+        { name: path.basename.sub_ext('').to_s, markup: content }
       end
     end
   end
 
   def content_upgrade_template
-    f = Rails.root.join('lib/script_generator/contentupgrade/contentupgrade.html')
-    content = without_escaping_html_in_json { cache(f) { f.read.to_json } }
-    [{ name: f.to_s.split('.html').first.split('/').last, markup: content }]
+    content = without_escaping_html_in_json { render_asset('contentupgrade/contentupgrade.html').to_json }
+    [{ name: 'contentupgrade', markup: content }]
   end
 
   def templates
@@ -243,27 +252,27 @@ class ScriptGenerator < Mustache
   end
 
   def content_header(element_class)
-    Rails.root.join('lib/script_generator', element_class, 'header.html').read
+    render_asset(element_class, 'header.html')
   end
 
   def content_markup(element_class, type, category = :generic)
     return '' if element_class == 'custom'
 
     if category == :generic
-      base = Rails.root.join('lib/script_generator')
-      file = base.join(element_class, "#{ type.tr('/', '_').underscore }.html")
-      file = base.join("#{ type.tr('/', '_').underscore }.html") unless file.exist?
+      render_asset(element_class, "#{ type.tr('/', '_').underscore }.html") do
+        render_asset("#{ type.tr('/', '_').underscore }.html")
+      end
     else
-      base = Rails.root.join('lib/themes', category.to_s.pluralize, type.tr('_', '-'))
-      file = base.join("#{ element_class }.html")
-      file = base.join('element.html') unless file.exist?
-    end
+      path = [category.to_s.pluralize, type.tr('_', '-')]
 
-    cache(file.to_s) { file.read }
+      render_asset(*path, "#{ element_class }.html") do
+        render_asset(*path, base.join('element.html'))
+      end
+    end
   end
 
   def content_footer(element_class)
-    Rails.root.join('lib/script_generator', element_class, 'footer.html').read
+    render_asset(element_class, 'footer.html')
   end
 
   def site_element_settings(site_element)
@@ -381,44 +390,18 @@ class ScriptGenerator < Mustache
     @options[:preview] ? Theme.all : all_site_elements.map(&:theme).compact.uniq
   end
 
-  def container_css_files
-    vendor_root = Rails.root.join('vendor/assets/stylesheets/site_elements')
-    [vendor_root.join('container_common.css')] +
-      element_classes.map { |klass| vendor_root.join(klass.name.downcase, 'container.css') } +
-      element_themes.map(&:container_css_path)
-  end
-
-  def element_css_files
-    vendor_root = Rails.root.join('vendor/assets/stylesheets/site_elements')
-    [vendor_root.join('common.css')] +
-      element_classes.map { |klass| vendor_root.join(klass.name.downcase, 'element.css') } +
-      element_themes.map(&:element_css_path)
-  end
-
-  def read_css_files(files)
-    css = files.map do |file|
-      next unless File.exist?(file)
-      cache(file) do
-        raw_css = File.read(file.to_s)
-        if file.to_s.include?('.scss')
-          raw_css = Sass::Engine.new(raw_css, syntax: :scss).render
-        end
-        raw_css
-      end
-    end
-
-    css.compact.join("\n")
-  end
-
-  def render_js(path)
-    file = Rails.root.join('vendor/assets/javascripts/', path)
-
-    cache(file) do
-      js_content = file.read
-      return js_content unless options[:es6] && path.include?('.es6')
-
-      Babel::Transpiler.transform(js_content).fetch('code')
-    end
+  # try to render asset from app's assets
+  # if an asset is not found either
+  # calls given block or raises StandardError
+  def render_asset(*path)
+    file = File.join(*path)
+    asset = assets[file]
+    return asset.source if asset
+    return yield if block_given?
+    raise Sprockets::FileNotFound, "couldn't find file '#{file}'"
+  rescue Sass::SyntaxError => e
+    puts path.join('/')
+    raise e
   end
 
   def without_escaping_html_in_json
@@ -428,14 +411,15 @@ class ScriptGenerator < Mustache
     result
   end
 
-  def cache(path)
-    return yield unless options[:cache]
-    key = path.to_s
+  def with_css_compressor
+    compressor = assets.css_compressor
+    assets.css_compressor = :scss
+    result = yield
+    assets.css_compressor = compressor
+    result
+  end
 
-    if file_cache.key?(key)
-      file_cache[key]
-    else
-      file_cache[key] = yield
-    end
+  def assets
+    Rails.application.assets
   end
 end
