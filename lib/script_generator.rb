@@ -114,7 +114,7 @@ class ScriptGenerator < Mustache
   end
 
   def hellobar_base_js
-    render_js('hellobar.base.js.es6')
+    render_js('hellobar.base.js')
   end
 
   def autofills_json
