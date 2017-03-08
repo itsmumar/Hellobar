@@ -311,6 +311,10 @@ export default Ember.Service.extend({
     this.customHtmlChangeListeners.push(listener);
   },
 
+  preconfigure(capabilities) {
+    this._capabilities = capabilities;
+  },
+
   initializeInlineEditing(elementType) {
     this.cleanup();
     this.simpleModelAdapter && this.simpleModelAdapter.trackElementTypeChange(elementType);
@@ -339,6 +343,8 @@ export default Ember.Service.extend({
   instantiateFroala($iframe, $iframeBody, elementType){
     this.cleanupFroala();
 
+    const isGeolocationInjectionAllowed = () => this._capabilities && this._capabilities['geolocation_injection'];
+
     const textFroala = (requestedMode) => {
       const mode = (elementType === 'Bar' && requestedMode === 'full') ? 'simple' : requestedMode;
       const linkStyles = {
@@ -353,22 +359,22 @@ export default Ember.Service.extend({
       const toolbarButtons = {
         'simple': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
           'fontFamily', 'fontSize', 'color', 'insertLink', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll', 'geolocationDropdown'
+          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ],
         'simple-no-link': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
           'fontFamily', 'fontSize', 'color', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll', 'geolocationDropdown'
+          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ],
         'full': [
           'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
           'fontFamily', 'fontSize', 'color', '-',
           'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
           'insertHR', 'insertLink', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll', 'geolocationDropdown'
+          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ],
         'limited': [
           'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'color', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll', 'geolocationDropdown'
+          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ]
       };
       const htmlAllowedTags = {
