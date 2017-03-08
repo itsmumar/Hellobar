@@ -64,11 +64,14 @@ class ScriptGenerator < Mustache
   end
 
   def capabilities
+    # TODO This is temporary solution. We need to refactor capabilities injection:
+    # 1) Get rid of no_b, b_variation, preview
+    # 2) Don't use SiteSerializer here, the code should be moved to model
     {
       no_b: @site.capabilities.remove_branding? || @options[:preview],
       b_variation: get_branding_variation,
       preview: @options[:preview]
-    }
+    }.merge(SiteSerializer.new(@site).capabilities)
   end
 
   def get_branding_variation
