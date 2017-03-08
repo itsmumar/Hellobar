@@ -18,8 +18,7 @@ describe('Module base.dom', function () {
     document.body.innerHTML = '';
   });
 
-  // TODO fix this (this doesn't work because async tests don't seem to work with Teaspoon)
-  /*it('calls a callback when DOM is ready', function (done) {
+  it('calls a callback when DOM is ready', function (done) {
     var spy = jasmine.createSpy('spy');
     module.runOnDocumentReady(function () {
       spy();
@@ -30,6 +29,6 @@ describe('Module base.dom', function () {
       done();
     }, 1);
 
-  });*/
+  });
 
 });
