@@ -13,11 +13,28 @@
     (function() {
       // Loading core for module management
       var hellobar = {{{core_js}}}
+
+      // A few helper functions
+      function hasCapability(capability) {
+        return hellobar('base.capabilities').has(capability);
+      }
+
+      function isPreviewMode() {
+        return hasCapability('preview');
+      }
+
       // Loading base modules
       {{{base_storage_js}}}
       {{{base_ajax_js}}}
       {{{base_dom_js}}}
       {{{base_serialization_js}}}
+
+      {{{base_capabilities_js}}}
+      hellobar('base.capabilities', {
+        configurator: function(configuration) {
+          configuration.capabilities({{{capabilities_json}}});
+        }
+      });
 
       {{{base_site_js}}}
       hellobar('base.site', {
@@ -34,7 +51,7 @@
         }
       });
       {{{geolocation_injection_js}}}
-      hellobar('geolocation.injection', {
+      !isPreviewMode() && hasCapability('geolocation_injection') && hellobar('geolocation.injection', {
         configurator: function(configuration) {
           configuration.autoRun(true);
         }
@@ -45,8 +62,7 @@
 
       // Loading autofills
       {{{autofills_js}}}
-      // TODO turn this module on only for preview
-      hellobar('autofills', {
+      !isPreviewMode() && hellobar('autofills', {
         configurator: function(configuration) {
           var autofills = {{{autofills_json}}};
           configuration.autofills(autofills);

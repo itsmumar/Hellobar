@@ -142,6 +142,10 @@ class ScriptGenerator < Mustache
     File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.ajax.js")
   end
 
+  def base_capabilities_js
+    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.capabilities.js")
+  end
+
   def base_dom_js
     File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.dom.js")
   end
