@@ -2,7 +2,8 @@ class SiteElementSerializer < ActiveModel::Serializer
   attributes :id, :site, :rule_id, :rule, :contact_list_id, :errors, :full_error_messages,
 
     # settings
-    :type, :element_subtype, :settings, :view_condition, :phone_number, :phone_country_code, :blocks,
+    :type, :element_subtype, :settings, :view_condition, :phone_number,
+    :phone_country_code, :blocks, :email_redirect,
 
     # text
     :headline, :caption, :link_text, :font_id, :thank_you_text, :email_placeholder, :name_placeholder,
@@ -36,6 +37,10 @@ class SiteElementSerializer < ActiveModel::Serializer
     define_method "#{ attr_name }_placeholder" do
       SiteElement::QUESTION_DEFAULTS[attr_name]
     end
+  end
+
+  def email_redirect
+    object.email_redirect?
   end
 
   def caption
