@@ -62,7 +62,7 @@
 
       // Loading autofills
       {{{autofills_js}}}
-      !isPreviewMode() && hellobar('autofills', {
+      !isPreviewMode() && hasCapability('autofills') && hellobar('autofills', {
         configurator: function(configuration) {
           var autofills = {{{autofills_json}}};
           configuration.autofills(autofills);
