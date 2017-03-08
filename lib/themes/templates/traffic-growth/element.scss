@@ -102,13 +102,12 @@ $ctaColor: $headlineColor;
 }
 
 #hellobar-template.traffic-growth.modal {
-
   left: 50%;
   width: 735px;
   height: 520px;
   padding: 50px 60px 0 60px;
   //background-image: url(../assets/modal-background.jpeg);
-  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/modal-background.jpeg);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/modal-arrow-background.png), url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/background.jpeg);
 
   .button-close {
     width: 16px;
@@ -128,7 +127,6 @@ $ctaColor: $headlineColor;
     line-height: 100px;
     max-height: 140px;
     margin-bottom: 30px;
-
   }
 
   .headline-third {
@@ -639,7 +637,7 @@ $ctaColor: $headlineColor;
 }
 
 #hellobar-template.traffic-growth.modal.thank-you {
-  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/background-thank-you.jpeg);
+  background-image: url(https://s3.amazonaws.com/assets.hellobar.com/themes/templates/traffic-growth/background.jpeg);
 }
 
 #hellobar-template.traffic-growth.thank-you {
