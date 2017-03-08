@@ -67,7 +67,7 @@ gem 'render_anywhere',           '~> 0.0.9'
 gem 'roadie-rails'
 gem 'ruby-hmac'
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
-gem 'sass-rails',                '~> 5.0.6'
+gem 'sassc-rails',               '~> 1.3'
 gem 'sentry-raven',              '~> 0.9'
 gem 'signet',                    '~> 0.7.0'
 gem 'simple_form',               '3.1.0.rc1'
