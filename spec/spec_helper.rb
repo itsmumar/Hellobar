@@ -1,6 +1,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
+ENV['RAILS_ENV'] ||= 'test'
+require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'simplecov'
@@ -25,13 +25,13 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 SimpleCov.coverage_dir('tmp/metric_fu/coverage/')
 
 SimpleCov.start do
-  add_group "Models", "app/models"
-  add_group "Controllers", "app/controllers"
-  add_group "Helpers", "app/helpers"
-  add_group "Interactions", "app/interactions"
-  add_group "Mailers", "app/mailers"
-  add_group "Serializers", "app/serializers"
-  add_group "lib", "lib"
+  add_group 'Models', 'app/models'
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Helpers', 'app/helpers'
+  add_group 'Interactions', 'app/interactions'
+  add_group 'Mailers', 'app/mailers'
+  add_group 'Serializers', 'app/serializers'
+  add_group 'lib', 'lib'
   add_filter '/spec/'
   add_filter '/config/'
   add_filter '/vendor/'
@@ -39,9 +39,9 @@ end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
-Dir[Rails.root.join("spec/models/concerns/**/*.rb")].each { |f| require f }
-Dir[Rails.root.join("spec/models/validators/**/*.rb")].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/models/concerns/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/models/validators/**/*.rb')].each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -52,9 +52,9 @@ ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 VCR.configure do |c|
   c.ignore_localhost = true
-  c.cassette_library_dir = "spec/cassettes"
+  c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :webmock
-  c.default_cassette_options = { :record => :none } # *TEMPORARILY* set to :new_episodes or :once if you add a spec that makes a network request
+  c.default_cassette_options = { record: :none } # *TEMPORARILY* set to :new_episodes or :once if you add a spec that makes a network request
 end
 
 # Use Webkit as js driver
@@ -76,20 +76,20 @@ RSpec.configure do |config|
 
     Capybara.register_driver :remote_firefox do |app|
       Capybara::Selenium::Driver.new(app,
-                                     browser: :remote,
-                                     url: "http://selenium-firefox:4444/wd/hub",
-                                     desired_capabilities: :firefox)
+        browser: :remote,
+        url: 'http://selenium-firefox:4444/wd/hub',
+        desired_capabilities: :firefox)
     end
 
     Capybara.default_driver = :remote_firefox
     Capybara.javascript_driver = :remote_firefox
-    Capybara.app_host = "http://web"
+    Capybara.app_host = 'http://web'
     Capybara.run_server = false
   end
 
   # ## VCR
   config.around(:each) do |example|
-    name = example.metadata[:full_description].split(/\s+/, 2).join("/").underscore.gsub(/[^\w\/]+/, "_")
+    name = example.metadata[:full_description].split(/\s+/, 2).join('/').underscore.gsub(/[^\w\/]+/, '_')
 
     # Don't run VCR in a dockerized environment
     next if ENV['DOCKER']
@@ -111,7 +111,7 @@ RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_path = "#{ ::Rails.root }/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -127,10 +127,9 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  config.order = "random"
+  config.order = 'random'
 
   config.include Devise::TestHelpers, type: :controller
-  config.include FactoryGirl::Syntax::Methods
   config.include EmbedCodeFileHelper
   config.include Paperclip::Shoulda::Matchers
   config.include ActiveSupport::Testing::TimeHelpers
@@ -138,45 +137,45 @@ RSpec.configure do |config|
 end
 
 def stub_current_admin(admin)
-  controller.stub :current_admin => admin
+  controller.stub current_admin: admin
 end
 
 def stub_current_user(user)
-  request.env['warden'].stub :authenticate! => user
-  controller.stub :current_user => user
+  request.env['warden'].stub authenticate!: user
+  controller.stub current_user: user
 
-  return user
+  user
 end
 
 def random_uniq_url
-  Faker::Internet.url.split(".").insert(1, "-#{(0...8).map{65.+(rand(26)).chr}.join.downcase}").insert(2, ".").join
+  'http://url.net'.split('.').insert(1, "-#{ (0...8).map { 65.+(rand(26)).chr }.join.downcase }").insert(2, '.').join
 end
 
-def stub_out_get_ab_variations(*variations, &result)
-  variation_matcher = Regexp.new(variations.join("|"))
+def stub_out_get_ab_variations(*variations)
+  variation_matcher = Regexp.new(variations.join('|'))
 
-  allow_any_instance_of(ApplicationController).
-    to receive(:get_ab_variation).
-    with(variation_matcher).
-    and_return(result.call)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:get_ab_variation)
+    .with(variation_matcher)
+    .and_return(yield)
 
-  allow_any_instance_of(ApplicationController).
-    to receive(:get_ab_variation).
-    with(variation_matcher, anything).
-    and_return(result.call)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:get_ab_variation)
+    .with(variation_matcher, anything)
+    .and_return(yield)
 
-  allow_any_instance_of(ApplicationController).
-    to receive(:get_ab_variation_or_nil).
-    with(variation_matcher).
-    and_return(result.call)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:get_ab_variation_or_nil)
+    .with(variation_matcher)
+    .and_return(yield)
 end
 
-Hellobar::Settings[:host] = "http://hellobar.com"
+Hellobar::Settings[:host] = 'http://hellobar.com'
 Hellobar::Settings[:store_site_scripts_locally] = false
 Hellobar::Settings[:fake_data_api] = false
 Hellobar::Settings[:cybersource_environment] = :test
 Hellobar::Settings[:syncable] = true
-Hellobar::Settings[:support_location] = "http://support.hellobar.com/"
+Hellobar::Settings[:support_location] = 'http://support.hellobar.com/'
 
 Fog.mock!
 

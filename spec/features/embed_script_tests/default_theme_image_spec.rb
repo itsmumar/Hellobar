@@ -1,25 +1,21 @@
 require 'integration_helper'
 
-feature "Theme with default image", js: true do
-  scenario "shows the default image" do
-    theme_yaml = YAML.load_file("spec/support/themes.yml")
-    theme = Theme.new(theme_yaml["with_default_image"])
+feature 'Theme with default image', js: true do
+  scenario 'shows the default image' do
+    theme_yaml = YAML.load_file('spec/support/themes.yml')
+    theme = Theme.new(theme_yaml['with_default_image'])
     image = ImageUpload.create(
       theme_id: theme.id,
-      preuploaded_url: theme.image["default_url"],
-      image_file_name: "french-rose-default.jpg"
+      preuploaded_url: theme.image['default_url'],
+      image_file_name: 'french-rose-default.jpg'
     )
-    element = FactoryGirl.create(
-      :modal_element,
-      theme_id: theme.id,
-      use_default_image: true
-    )
+    element = create :modal_element, theme_id: theme.id, use_default_image: true
     element.update(active_image: image)
 
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
     path = generate_file_and_return_path(element.site.id)
 
-    visit "#{site_path_to_url(path)}"
+    visit site_path_to_url(path)
 
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')
@@ -29,10 +25,10 @@ feature "Theme with default image", js: true do
     end
   end
 
-  scenario "shows uploaded image" do
-    theme_yaml = YAML.load_file("spec/support/themes.yml")
-    theme = Theme.new(theme_yaml["with_default_image"])
-    element = FactoryGirl.create(
+  scenario 'shows uploaded image' do
+    theme_yaml = YAML.load_file('spec/support/themes.yml')
+    theme = Theme.new(theme_yaml['with_default_image'])
+    element = create(
       :modal_element,
       image_placement: 'bottom',
       theme_id: theme.id,
@@ -44,7 +40,7 @@ feature "Theme with default image", js: true do
     allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
     path = generate_file_and_return_path(element.site.id)
 
-    visit "#{site_path_to_url(path)}"
+    visit site_path_to_url(path)
 
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')

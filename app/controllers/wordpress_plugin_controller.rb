@@ -6,7 +6,7 @@ class WordpressPluginController < ApplicationController
 
   def show
     plugin = WordpressPlugin.new(@site)
-    send_data(plugin.to_zip, :type => Mime::ZIP, :filename => "hellobar_wp_plugin.zip")
+    send_data(plugin.to_zip, type: Mime::ZIP, filename: 'hellobar_wp_plugin.zip')
   ensure
     plugin.cleanup
   end

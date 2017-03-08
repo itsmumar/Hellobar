@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe ImageUploadsController do
-
   before do
     @user = create(:user)
     stub_current_user(@user)
@@ -11,7 +10,7 @@ describe ImageUploadsController do
 
   context 'POST create' do
     context 'with valid image' do
-      let (:image) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'images', 'coupon.png'), 'image/png')}
+      let (:image) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'images', 'coupon.png'), 'image/png') }
 
       it 'returns success' do
         post :create, file: image, format: :json, site_id: @site_element.site.id, site_element_id: @site_element.id

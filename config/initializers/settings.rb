@@ -1,6 +1,6 @@
 unless defined?(Hellobar::Settings)
-  settings_file = File.join(Rails.root, "config/settings.yml")
-  yaml = File.exists?(settings_file) ? YAML.load_file(settings_file) : {}
+  settings_file = File.join(Rails.root, 'config/settings.yml')
+  yaml = File.exist?(settings_file) ? YAML.load_file(settings_file) : {}
   config = {}
 
   keys = %w(
@@ -43,8 +43,6 @@ unless defined?(Hellobar::Settings)
     syncable
     test_cloning
     tracking_host
-    twilio_password
-    twilio_user
     support_location
     google_auth_id
     google_auth_secret
@@ -64,7 +62,7 @@ unless defined?(Hellobar::Settings)
     config[key.to_sym] = yaml[key] || ENV[key.upcase]
   end
 
-  config[:data_api_url] ||= "http://mock-hi.hellobar.com"
+  config[:data_api_url] ||= 'http://mock-hi.hellobar.com'
 
   dynamo_tables = %w(
     email
@@ -76,16 +74,16 @@ unless defined?(Hellobar::Settings)
   config[:dynamo_tables] = {}
 
   dynamo_tables.each do |table|
-    config[:dynamo_tables][table.to_sym] = yaml["dynamo_tables"].try(:[], table) || "test_#{table}"
+    config[:dynamo_tables][table.to_sym] = yaml['dynamo_tables'].try(:[], table) || "test_#{ table }"
   end
 
   config[:identity_providers] = {
     active_campaign: {
       type: :email,
-      name: "Active Campaign",
+      name: 'Active Campaign',
       requires_api_key: true,
       requires_app_url: true,
-      service_provider_class: "ActiveCampaign"
+      service_provider_class: 'ActiveCampaign'
     },
     aweber: {
       type: :email,
@@ -97,7 +95,7 @@ unless defined?(Hellobar::Settings)
     },
     createsend: {
       type: :email,
-      service_provider_class: "CampaignMonitor",
+      service_provider_class: 'CampaignMonitor',
       name: 'Campaign Monitor',
       client_id: config[:createsend_client_id],
       secret: config[:createsend_secret],
@@ -105,7 +103,7 @@ unless defined?(Hellobar::Settings)
     },
     constantcontact: {
       type: :email,
-      service_provider_class: "ConstantContact",
+      service_provider_class: 'ConstantContact',
       name: 'Constant Contact',
       app_key: config[:constantcontact_app_key],
       app_secret: config[:constantcontact_app_secret],
@@ -113,8 +111,8 @@ unless defined?(Hellobar::Settings)
     },
     convert_kit: {
       type: :email,
-      name: "ConvertKit",
-      service_provider_class: "ConvertKit",
+      name: 'ConvertKit',
+      service_provider_class: 'ConvertKit',
       requires_api_key: true
     },
     drip: {
@@ -127,39 +125,39 @@ unless defined?(Hellobar::Settings)
     },
     get_response: {
       type: :email,
-      name: "GetResponse",
+      name: 'GetResponse',
       requires_embed_code: true,
       hidden: true
     },
     get_response_api: {
       type: :email,
-      name: "GetResponse",
-      service_provider_class: "GetResponseApi",
+      name: 'GetResponse',
+      service_provider_class: 'GetResponseApi',
       requires_api_key: true
     },
     icontact: {
       type: :email,
-      service_provider_class: "IContact",
-      name: "iContact",
+      service_provider_class: 'IContact',
+      name: 'iContact',
       requires_embed_code: true
     },
     infusionsoft: {
       type: :email,
-      name: "Infusionsoft",
+      name: 'Infusionsoft',
       requires_api_key: true,
       requires_app_url: true
     },
     mad_mimi_form: {
       type: :email,
-      service_provider_class: "MadMimiForm",
-      name: "MadMimi",
+      service_provider_class: 'MadMimiForm',
+      name: 'MadMimi',
       requires_embed_code: true,
       hidden: true
     },
     mad_mimi_api: {
       type: :email,
-      service_provider_class: "MadMimiApi",
-      name: "MadMimi",
+      service_provider_class: 'MadMimiApi',
+      name: 'MadMimi',
       requires_api_key: true,
       requires_username: true
     },
@@ -173,43 +171,43 @@ unless defined?(Hellobar::Settings)
     },
     maropost: {
       type: :email,
-      service_provider_class: "Maropost",
-      name: "Maropost",
+      service_provider_class: 'Maropost',
+      name: 'Maropost',
       requires_account_id: true,
       requires_api_key: true
     },
     my_emma: {
       type: :email,
-      name: "MyEmma",
+      name: 'MyEmma',
       requires_embed_code: true
     },
-    #silly name to support oauth strategy gem
+    # silly name to support oauth strategy gem
     verticalresponse: {
       type: :email,
       name: 'Vertical Response',
       client_id: config[:vr_client_id],
       secret: config[:vr_secret],
-      service_provider_class: "VerticalResponseApi",
+      service_provider_class: 'VerticalResponseApi',
       supports_double_optin: false,
       oauth: true
     },
     webhooks: {
       type: :email,
-      name: "Webhooks",
-      service_provider_class: "Webhook",
+      name: 'Webhooks',
+      service_provider_class: 'Webhook',
       requires_webhook_url: true
     },
     vertical_response: {
       type: :email,
-      name: "VerticalResponse",
+      name: 'VerticalResponse',
       requires_embed_code: true,
       hidden: true
     }
   }
-  config[:analytics_log_file] ||= File.join(Rails.root, "log", "analytics.log")
+  config[:analytics_log_file] ||= File.join(Rails.root, 'log', 'analytics.log')
 
   config[:permissions] = {
-    "owner" => [:billing, :edit_owner]
+    'owner' => [:billing, :edit_owner]
   }
 
   Hellobar::Settings = config

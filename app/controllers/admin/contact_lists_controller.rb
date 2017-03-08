@@ -1,5 +1,5 @@
 class Admin::ContactListsController < ApplicationController
-  layout "admin"
+  layout 'admin'
   before_action :require_admin, :load_site
 
   def index

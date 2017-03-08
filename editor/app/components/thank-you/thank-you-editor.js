@@ -61,11 +61,18 @@ export default Ember.Component.extend({
         component.set('afterSubmitOptionSelected', selection);
         component.set('model.settings.after_email_submit_action', selection.value);
       }
+      function chooseUpgradeBenefit() {
+        let map = {
+          'redirect': 'redirect to a custom url',
+          'custom_message': 'customize your thank you text'
+        }
+        return map[selection.key] || ''
+      }
       if (selection.isPro) {
         let left;
         new UpgradeAccountModal({
           site: this.get('model.site'),
-          upgradeBenefit: (left = selection.key === 'redirect') != null ? left : {'redirect to a custom url': 'customize your thank you text'},
+          upgradeBenefit: chooseUpgradeBenefit(),
           successCallback() {
             component.set('model.site.capabilities', this.site.capabilities);
             setValue();

@@ -38,7 +38,7 @@ class SiteGenerator
         </ul>
 
         <p>
-          Autofill: <input type="email" class="email" style="font-size: 14px; width: 300px; padding: 5px 6px" />
+          Autofill: <input type="email" name="email" class="email" style="font-size: 14px; width: 300px; padding: 5px 6px" />
         </p>
       </div>
       <div style="height:500px; background-color: #eee;">Content</div>
@@ -68,7 +68,6 @@ class SiteGenerator
     return nil if directory.nil?
 
     directory = Pathname.new(directory) unless directory.respond_to?(:join)
-    @full_path = directory.join("#{SecureRandom.hex}.html")
+    @full_path = directory.join("#{ SecureRandom.hex }.html")
   end
-
 end

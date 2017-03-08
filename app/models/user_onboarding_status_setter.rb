@@ -10,7 +10,7 @@ class UserOnboardingStatusSetter
   end
 
   def in_campaign_ab_test?(test_name)
-    get_ab_variation_or_nil(test_name, user) == "campaign"
+    get_ab_variation_or_nil(test_name, user) == 'campaign'
   end
 
   def new_user!
@@ -18,11 +18,11 @@ class UserOnboardingStatusSetter
   end
 
   def created_site!
-    create_status_if_able!(:created_site, "Configure Your Bar Reminder New Users Only 2016-03-28")
+    create_status_if_able!(:created_site, 'Configure Your Bar Reminder New Users Only 2016-03-28')
   end
 
   def selected_goal!
-    create_status_if_able!(:selected_goal, "Configure Your Bar Reminder New Users Only 2016-03-28")
+    create_status_if_able!(:selected_goal, 'Configure Your Bar Reminder New Users Only 2016-03-28')
   end
 
   def created_element!
@@ -41,24 +41,23 @@ class UserOnboardingStatusSetter
     create_status_if_able!(:bought_subscription)
   end
 
-
   private
 
-  def create_status_if_able!(new_status, ab_test=nil, sequence_delivered_last=nil)
+  def create_status_if_able!(new_status, ab_test = nil, sequence_delivered_last = nil)
     if can_enter_status?(new_status, ab_test)
       user.onboarding_statuses.create!(status_id: UserOnboardingStatus::STATUSES[new_status],
                                        sequence_delivered_last: sequence_delivered_last)
     end
   end
 
-  def can_enter_status?(new_status, ab_test=nil)
-    return false if ab_test.present? && (!in_campaign_ab_test?(ab_test))
+  def can_enter_status?(new_status, ab_test = nil)
+    return false if ab_test.present? && !in_campaign_ab_test?(ab_test)
     return false unless active_for_onboarding_campaigns? || new_status == :new
 
     case new_status
     when :new
       onboarding_statuses.empty? && # don't re-add users to the new status
-      independant_user?             # don't onboard users who were invited to the site by another user
+        independant_user? # don't onboard users who were invited to the site by another user
 
     when :created_site, :selected_goal
       status_is_progressing?(new_status)
@@ -71,11 +70,11 @@ class UserOnboardingStatusSetter
 
     when :installed_script
       status_is_progressing?(new_status) &&
-      (!is_paying)
+        !is_paying
 
     when :bought_subscription
       status_is_progressing?(new_status) &&
-      is_paying
+        is_paying
 
     else
       false

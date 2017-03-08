@@ -1,3 +1,2 @@
 class Takeover < SiteElement
-
 end

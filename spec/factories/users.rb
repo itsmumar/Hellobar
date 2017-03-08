@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :user do
-    email { Faker::Internet.email }
-    password { Faker::Internet.password }
+    sequence(:email) { |i| "user#{ i }@hellobar.com" }
+    password 'password'
 
     after(:build) do |user|
       user.class.skip_callback(:create, :after, :add_to_infusionsoft_in_background)

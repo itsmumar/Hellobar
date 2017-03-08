@@ -1,7 +1,7 @@
-require "./config/initializers/settings"
+require './config/initializers/settings'
 
 Rails.application.configure do
-  config.roadie.url_options = {host: "www.hellobar.com", scheme: "https"}
+  config.roadie.url_options = { host: 'www.hellobar.com', scheme: 'https' }
 
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -58,7 +58,7 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-  config.cache_store = :dalli_store, Hellobar::Settings[:memcached_server], {namespace: "hb_", compress: true}
+  config.cache_store = :dalli_store, Hellobar::Settings[:memcached_server], { namespace: 'hb_', compress: true }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
@@ -92,12 +92,12 @@ Rails.application.configure do
   settings = YAML.load_file('config/settings.yml')
   if settings['s3_bucket'] && settings['aws_access_key_id'] && settings['aws_secret_access_key']
     config.paperclip_defaults = {
-      :storage => :s3,
-      :s3_protocol => :https,
-      :s3_credentials => {
-        :bucket => settings['s3_bucket'],
-        :access_key_id => settings['aws_access_key_id'],
-        :secret_access_key => settings['aws_secret_access_key'],
+      storage: :s3,
+      s3_protocol: :https,
+      s3_credentials: {
+        bucket: settings['s3_bucket'],
+        access_key_id: settings['aws_access_key_id'],
+        secret_access_key: settings['aws_secret_access_key']
       }
     }
   end

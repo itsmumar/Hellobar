@@ -1,5 +1,4 @@
 class AutofillsController < ApplicationController
-
   before_action :authenticate_user!
   before_action :require_pro_managed_subscription
   before_action :load_site
@@ -51,9 +50,9 @@ class AutofillsController < ApplicationController
   end
 
   def autofill_params
-    params.
-      require(:autofill).
-      permit(:name, :listen_selector, :populate_selector).
-      merge site_id: @site.id
+    params
+      .require(:autofill)
+      .permit(:name, :listen_selector, :populate_selector)
+      .merge site_id: @site.id
   end
 end

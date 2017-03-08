@@ -32,7 +32,7 @@ html
     = render "shared/modals/payment_modal"
     = render "shared/modals/delay_tooltip"
     = render "shared/modals/payment_confirmation"
-    = render "shared/gtm"
+    = render "shared/google_analytics"
     = render "shared/crazy_egg"
 
     javascript:
@@ -50,6 +50,8 @@ html
 
     - if current_user
       = render "shared/modals/account_prompt"
+
+    #popup-container
 
     = yield
 

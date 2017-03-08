@@ -106,13 +106,12 @@ form {
   right: 10px;
   width: 15px;
   height: 15px;
-  opacity: 0.2;
+  opacity: 0.6;
   color: #000000;
   cursor: pointer;
   position: absolute;
   text-align: center;
   line-height: 15px;
-  z-index: 1000;
 
   transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
   -o-transition: opacity 0.25s ease, visibility 0.1s ease 0.25s;
