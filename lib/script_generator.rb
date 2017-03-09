@@ -153,7 +153,7 @@ class ScriptGenerator < Mustache
   def hellobar_container_css
     css = [
       render_asset('site_elements/container_common.css'),
-      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'container.css', skip: true) },
+      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'container.css') },
       element_themes.map { |theme| render_asset(theme.container_css_path.sub('lib/themes/', '')) }
     ]
 
@@ -163,7 +163,7 @@ class ScriptGenerator < Mustache
   def hellobar_element_css
     css = [
       render_asset('site_elements/common.css'),
-      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'element.css', skip: true) },
+      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'element.css') },
       element_themes.map { |theme| render_asset(theme.element_css_path.sub('lib/themes/', '')) }
     ]
 
@@ -406,12 +406,12 @@ class ScriptGenerator < Mustache
   # try to render asset from app's assets
   # if an asset is not found either
   # calls given block or raises StandardError
-  def render_asset(*path, skip: false)
+  def render_asset(*path)
     file = File.join(*path)
     asset = assets[file]
     return asset.source if asset
     return yield if block_given?
-    raise Sprockets::FileNotFound, "couldn't find file '#{ file }'" unless skip
+    raise Sprockets::FileNotFound, "couldn't find file '#{ file }'"
   rescue Sass::SyntaxError => e
     e.sass_template ||= path.join('/')
     raise e
