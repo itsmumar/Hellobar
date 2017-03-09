@@ -41,6 +41,23 @@ FactoryGirl.define do
       contact_list
     end
 
+    trait :email_with_redirect do
+      element_subtype 'email'
+      settings do
+        {
+          fields_to_collect: [
+            {
+              type: 'builtin-email',
+              is_enabled: true
+            }
+          ],
+          after_email_submit_action: SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
+        }
+      end
+
+      contact_list
+    end
+
     trait :twitter do
       element_subtype 'social/tweet_on_twitter'
     end

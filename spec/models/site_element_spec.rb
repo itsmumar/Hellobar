@@ -341,4 +341,33 @@ describe SiteElement do
       end
     end
   end
+
+  describe '#email_redirect?' do
+    it 'is false for showing default message submit action' do
+      action_id = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
+      settings = { 'after_email_submit_action' => action_id }
+
+      site_element = SiteElement.new settings: settings
+
+      expect(site_element).not_to be_email_redirect
+    end
+
+    it 'is false for custom thank you text submit action' do
+      action_id = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
+      settings = { 'after_email_submit_action' => action_id }
+
+      site_element = SiteElement.new settings: settings
+
+      expect(site_element).not_to be_email_redirect
+    end
+
+    it 'is true for redirect submit action' do
+      action_id = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
+      settings = { 'after_email_submit_action' => action_id }
+
+      site_element = SiteElement.new settings: settings
+
+      expect(site_element).to be_email_redirect
+    end
+  end
 end

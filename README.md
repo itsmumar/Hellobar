@@ -177,19 +177,9 @@ teaspoon --suite=project --coverage=project
 
 
 
-## Workflow
+## Development Workflow
 
-To add a new feature, make a branch off of **master**. Your branch name should start
-with the JIRA issue number, like this:
-
-```
-git checkout -b XOHB-1083-switch-to-https-ruby-gem-sources
-```
-
-
-Next open a new pull request at GitHub with your changes. Be sure to include a link
-to the JIRA card in the description and place the JIRA card number as a prefix in
-your pull request name, like this: `[XOHB-1083] Switch to https Ruby gem sources`.
+https://crossover.atlassian.net/wiki/display/XOHB/Development+workflow
 
 
 
