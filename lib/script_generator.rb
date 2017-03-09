@@ -3,10 +3,22 @@ require 'hmac-sha1'
 require 'hmac-sha2'
 
 class ScriptGenerator < Mustache
+  self.raise_on_context_miss = true
+  cattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
+
   class << self
     def load_templates
       self.template_path = Rails.root.join('lib/script_generator/')
       self.template_name = 'template.js'
+    end
+
+    def assets
+      @assets ||= Sprockets::Environment.new(Rails.root) do |env|
+        env.initialize_configuration Rails.application.assets
+        env.version = Rails.application.assets.version
+        env.css_compressor = :scss
+        env.cache = ActiveSupport::Cache::MemoryStore.new
+      end
     end
   end
   load_templates
@@ -24,14 +36,10 @@ class ScriptGenerator < Mustache
     ScriptGenerator.load_templates if Rails.env.development?
 
     if options[:compress]
-      Uglifier.new.compress(render)
+      uglifier.compress(render)
     else
       render
     end
-  end
-
-  def render
-    with_css_compressor { super }
   end
 
   def script_is_installed_properly
@@ -105,7 +113,13 @@ class ScriptGenerator < Mustache
   end
 
   def site_element_classes_js
-    render_asset('site_elements.js')
+    # render_asset('site_elements.js')
+    js = render_asset('site_elements/site_element.js')
+
+    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
+    klasses.inject(js) do |memo, klass|
+      memo << "\n" << render_asset('site_elements', klass.name.downcase)
+    end
   end
 
   def hellobar_base_js
@@ -129,13 +143,17 @@ class ScriptGenerator < Mustache
   end
 
   def jquery_lib
-    render_asset('jquery-2.2.4.js')
+    if options[:compress]
+      render_asset('jquery-2.2.4.min.js')
+    else
+      render_asset('jquery-2.2.4.js')
+    end
   end
 
   def hellobar_container_css
     css = [
       render_asset('site_elements/container_common.css'),
-      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'container.css') },
+      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'container.css', skip: true) },
       element_themes.map { |theme| render_asset(theme.container_css_path.sub('lib/themes/', '')) }
     ]
 
@@ -145,7 +163,7 @@ class ScriptGenerator < Mustache
   def hellobar_element_css
     css = [
       render_asset('site_elements/common.css'),
-      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'element.css') },
+      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'element.css', skip: true) },
       element_themes.map { |theme| render_asset(theme.element_css_path.sub('lib/themes/', '')) }
     ]
 
@@ -388,14 +406,14 @@ class ScriptGenerator < Mustache
   # try to render asset from app's assets
   # if an asset is not found either
   # calls given block or raises StandardError
-  def render_asset(*path)
+  def render_asset(*path, skip: false)
     file = File.join(*path)
     asset = assets[file]
     return asset.source if asset
     return yield if block_given?
-    raise Sprockets::FileNotFound, "couldn't find file '#{file}'"
+    raise Sprockets::FileNotFound, "couldn't find file '#{ file }'" unless skip
   rescue Sass::SyntaxError => e
-    puts path.join('/')
+    e.sass_template ||= path.join('/')
     raise e
   end
 
@@ -406,15 +424,7 @@ class ScriptGenerator < Mustache
     result
   end
 
-  def with_css_compressor
-    compressor = assets.css_compressor
-    assets.css_compressor = :scss
-    result = yield
-    assets.css_compressor = compressor
-    result
-  end
-
   def assets
-    Rails.application.assets
+    self.class.assets
   end
 end
