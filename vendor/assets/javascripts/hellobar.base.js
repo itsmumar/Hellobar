@@ -111,10 +111,6 @@ var HB = {
     for (var i = 0; i < siteElements.length; i++) {
       HB.addToPage(HB.createSiteElement(siteElements[i]));
     }
-    setTimeout(function () {
-      var autofills = hellobar('autofills', {allowUndefined: true});
-      autofills && autofills.run();
-    }, 1);
   },
 
   //

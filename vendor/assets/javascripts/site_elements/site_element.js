@@ -325,6 +325,12 @@ HB.SiteElement = HB.createClass({
       if (this.w.className.indexOf("hb-animated") > -1) {
         HB.animateIn(this.w)
       }
+
+      // TODO Refactor this (it's a temporary solution). Finally we shouldn't run autofills from bar show method
+      setTimeout(function () {
+        var autofills = hellobar('autofills', {allowUndefined: true});
+        autofills && autofills.run();
+      }, 1);
     }.bind(this);
 
     var showMinimizedBar = function () {
