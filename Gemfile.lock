@@ -202,7 +202,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.2.0.1)
     excon (0.36.0)
-    execjs (2.0.2)
+    execjs (2.7.0)
     factory_girl (4.8.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.8.0)
@@ -300,6 +300,7 @@ GEM
     launchy (2.4.2)
       addressable (~> 2.3)
     less_interactions (0.0.15)
+    libv8 (5.3.332.38.5)
     listen (2.10.1)
       celluloid (~> 0.16.0)
       rb-fsevent (>= 0.9.3)
@@ -344,6 +345,8 @@ GEM
     mime-types (1.25.1)
     mimemagic (0.3.0)
     mini_portile2 (2.1.0)
+    mini_racer (0.1.8)
+      libv8 (~> 5.3)
     minitest (5.10.1)
     money (6.3.0)
       i18n (>= 0.6.4, <= 0.7.0.dev)
@@ -615,9 +618,8 @@ GEM
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uber (0.0.15)
-    uglifier (2.0.1)
-      execjs (>= 0.3.0)
-      multi_json (~> 1.0, >= 1.0.2)
+    uglifier (3.1.5)
+      execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.6)
@@ -656,7 +658,6 @@ DEPENDENCIES
   avatar (~> 0.2.0)
   aweber (~> 1.6.1)
   aws-sdk (~> 1.66.0)
-  babel-transpiler
   better_errors (~> 1.1)
   binding_of_caller
   bootstrap-sass (~> 3.1.1)
@@ -697,6 +698,7 @@ DEPENDENCIES
   logglier
   madmimi
   metric_fu
+  mini_racer
   minitest
   mustache (~> 0.99.5)
   mysql2 (~> 0.3.18)
@@ -753,7 +755,7 @@ DEPENDENCIES
   timecop
   twilio-ruby (~> 3.11.5)
   tzinfo-data
-  uglifier (= 2.0.1)
+  uglifier (~> 3.1)
   unf (~> 0.1.4)
   vcr
   verticalresponse (~> 0.1.6)
