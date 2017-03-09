@@ -291,6 +291,21 @@ describe Site do
       expect(@mock_storage).to receive(:create_or_update_file_with_contents).with("#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js", anything).ordered
       site.send(:generate_static_assets)
     end
+
+    it 'does not compress a locally stored script' do
+      script_generator = double ScriptGenerator, generate_script: ''
+
+      allow(Hellobar::Settings)
+        .to receive(:[])
+        .with(:store_site_scripts_locally)
+        .and_return true
+
+      expect(ScriptGenerator).to receive(:new).and_return script_generator
+
+      expect(File).to receive(:open)
+
+      @site.generate_script
+    end
   end
 
   it 'blanks-out the site script when destroyed' do

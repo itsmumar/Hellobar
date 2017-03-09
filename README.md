@@ -5,33 +5,35 @@ Made with love.
 [![CircleCI](https://circleci.com/gh/Hello-bar/hellobar_new.svg?style=svg&circle-token=a40215cbc1e8ef0718fced860063731f53206e73)](https://circleci.com/gh/Hello-bar/hellobar_new)
 
 
-## Environment Setup
-
-### Mac OS
+## Installation
 
 HelloBar runs on Ruby version 2.1.9, so it is recommended to install the exact same version locally.
 
 
-Install dependancies (fontforge and ttfautohint support local compilation of font files)
+### Back-end
 
-`brew install fontforge ttfautohint eot-utils`
+If you are running Bundler 1.* it is required to configure https sources for the gems when bundling locally:
 
+```
+echo 'BUNDLE_GITHUB__HTTPS: "true"' >> ~/.bundle/config
+```
 
-Bundle install all the gems
+Install all the gems:
 
 `bundle install`
 
-Setup your database.yml file
+
+Setup your `database.yml` file:
 
 `cp config/database.yml.example config/database.yml`
 
-Setup the settings.yml file
+
+Setup the `settings.yml` file:
 
 `cp config/settings.yml.example config/settings.yml`
 
-You'll need to manually add oauth related account keys to settings.yml to be able to run the site locally
 
-Let rake setup and migrate all your databases
+Let rake setup and migrate your database:
 
 `rake db:setup`
 
@@ -40,12 +42,12 @@ It is advised to run the application locally using the `local.hellobar.com` doma
 so that it resolves into `127.0.0.1`.
 
 You need to visit https://console.developers.google.com/apis/credentials?project=hellobar-oauth
-and setup or use existing Google OAuth credentials to be able to log in.
+and add new or use existing Google OAuth credentials to be able to log in.
 
-You need to add `google_auth_id` and `google_auth_secret` into `config/settings.yml`.
+`google_auth_id` and `google_auth_secret` entrie should be added into `config/settings.yml`.
 
 
-#### Front-end
+### Front-end
 
 Install `node.js` together with `npm`:
 
@@ -74,15 +76,17 @@ Then build the Ember application:
 ember build --environment=production
 ```
 
-The above command will build the js/css files for the Ember part of the application.
-It will store it in `editor/dist/assets`.
-This directory is then being included by Rails in the assets pipeline.
+The above command will build the js/css files for the Ember part of the application. It will store
+them in the `editor/dist/assets` directory. This directory is then being included in the Rails
+Assets Pipeline.
 
 In development, it is recommended to use the `--watch` option, like this:
 
 ```
 ember build --environment=production --watch
 ```
+
+So that your Ember app is being recompiled on every changed.
 
 (in OS X it also helps to install watchman in this case: `brew install watchman`).
 
@@ -95,29 +99,33 @@ See [wiki](https://github.com/CrazyEggInc/hellobar_new/wiki/Windows-Environment-
 
 See [wiki](https://github.com/Hello-bar/hellobar_new/wiki/Application-Setup-on-Ubuntu-(Linux))
 
-### Icon font
 
-NOTE: install fontforge locally first with `brew install fontforge ttfautohint`
 
-To add a new icon to the custom icon font file - add the icon svg file to app/assets/icons and run
+## Icons
+
+Install all dependencies to support local font compilation:
+
+`brew install fontforge ttfautohint eot-utils`
+
+To add a new icon to the custom icon font file add the SVG file to `app/assets/icons` and run:
 
 ```
-rake icon:compile
+rake icons:compile
 ```
 
 
 ## Running specs
 
-To run specs locally you need to have QT 5.5+ installed locally. Installation instructions can be found here:
+To run specs locally you need to have QT version 5.5+ installed locally. Installation instructions can be found here:
 
 https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit
 
 
 ### Rails specs
 
-Integration tests run in the `spec/features` directory.  They use the
-`lib/SiteGenerator` to create an html file in `public/integration`.  The
-file name is a random hex.
+Integration tests run in the `spec/features` directory. They use the
+`lib/site_generator.rb` to create an html file in the `public/integration` directory.
+The filename is a random hex.
 
 Capybara navigates to the public html file in order to test interactions.
 
@@ -137,9 +145,9 @@ bundle exec rspec spec
 ```
 
 
-## Javaccript specs
+## Javascript specs
 
-Teaspoon runs the *_spec.js files in spec/javascripts/
+Teaspoon runs the `*_spec.js` files in `spec/javascripts/`.
 
 The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
 
@@ -171,20 +179,29 @@ teaspoon --suite=project --coverage=project
 
 ## Workflow
 
-To add a new feature, make a branch off of **master** and open a new pull request at GitHub with your changes.
-Be sure to include a link to the JIRA card in the description and place the JIRA card number as a prefix in
+To add a new feature, make a branch off of **master**. Your branch name should start
+with the JIRA issue number, like this:
+
+```
+git checkout -b XOHB-1083-switch-to-https-ruby-gem-sources
+```
+
+
+Next open a new pull request at GitHub with your changes. Be sure to include a link
+to the JIRA card in the description and place the JIRA card number as a prefix in
 your pull request name, like this: `[XOHB-1083] Switch to https Ruby gem sources`.
+
 
 
 ## Deployments
 
-To do a production deploy:
+To do a production deploy from **master**:
 
 ```
-cap production deploy BRANCH=master
+cap production deploy
 ```
 
-To do a staging deploy:
+To do a staging deploy from a branch called `some-branch`:
 
 ```
 cap staging deploy BRANCH=some-branch
@@ -236,6 +253,7 @@ server 'new-ip-address', user: 'hellobar', roles: %w{web}
 ...
 ```
 
+
 ## Testing generated scripts
 
 ### Manually in Development
@@ -243,11 +261,12 @@ server 'new-ip-address', user: 'hellobar', roles: %w{web}
 There is a sinatra app in `test_site`.
 
 #### Defaults
+
 Run `rake test_site:generate` to generate `test_site/public/test.html`
 using the last site created.
 
 Run `rake test_site:run` to start the Sinatra server and navigate to
-`localhost:4567`
+`http://localhost:4567`
 
 By default this will use the last site created to generate the js.
 
@@ -263,12 +282,12 @@ rake test_site:generate[2]
 To generate a site html file at an arbitrary location:
 
 ```
-rake test_site:file[2,'/Users/hb/index.html']
+rake test_site:file[2, '/Users/hb/index.html']
 ```
 
 The above method is used by the capybara integration tests.
 
-All of these rake tasks use the `lib/SiteGenerator.rb` class as well as
+All of these rake tasks use the `lib/site_generator.rb` class as well as
 an `HbTestSite` class defined within the rake task itself.
 
 
@@ -297,9 +316,11 @@ site: teampolymathic.github.com
 
 
 ## Generate Reports
+
 ### 1. Generate Application Security Vulnerabilities Report
 
-From the terminal, go to your root of the app and run following command
+From the terminal, go to your root of the app and run following command:
+
 ```
 brakeman
 ```
@@ -360,7 +381,7 @@ In the above example, `hellobarnew_web_1` is the name of the web container.
 In order for the Google OAuth to work properly, you'll need to update your `/etc/hosts` file to map `local.hellobar.com` to your VM's IP address. For example, if your VM IP is `192.168.99.100`, you'll add the following line to `/etc/hosts`
 
 ```
-192.168.99.100  local.hellobar.com
+192.168.99.100 local.hellobar.com
 ```
 
 Navigating to [local.hellobar.com](http://local.hellobar.com) will then point to your local dockerized copy of Hello Bar

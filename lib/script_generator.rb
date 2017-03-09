@@ -33,7 +33,7 @@ class ScriptGenerator < Mustache
 
   def generate_script
     # Re-read the template
-    ScriptGenerator.load_templates if Rails.env.development?
+    self.class.load_templates if Rails.env.development?
 
     if options[:compress]
       uglifier.compress(render)
