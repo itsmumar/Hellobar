@@ -37,11 +37,21 @@ hellobar.defineModule('autofills', ['base.storage', 'base.dom'], function (stora
     });
   }
 
+  function isElementAlreadyTracked(element) {
+    return subscriptions.filter(function (subscription) {
+        return subscription.element === element;
+      }).length > 0;
+  }
+
   function initializeValueCollection() {
     function initializeValueCollectionForDocument(doc) {
       forAllAutofills(function (autofill) {
         var elementsToTrack = getElements(doc, autofill.listen_selector);
         Array.prototype.forEach.call(elementsToTrack, function (elementToTrack) {
+          if (isElementAlreadyTracked(elementToTrack)) {
+            // Avoid redundant tracking
+            return;
+          }
           var blurHandler = function (evt) {
             if (evt && evt.target) {
               var value = evt.target.value;
@@ -83,15 +93,29 @@ hellobar.defineModule('autofills', ['base.storage', 'base.dom'], function (stora
     });
   }
 
+  function run() {
+    populateValues();
+    initializeValueCollection();
+  }
+
   /**
    * @class ModuleConfiguration
    * Encapsulates current module's configuration.
    */
   function ModuleConfiguration() {
     var _autofills = [];
+    var _autoRun = false;
     this.autofills = function (autofills) {
-      return autofills ? (_autofills = autofills) : _autofills;
-    }
+      return autofills ? (_autofills = autofills) && this : _autofills;
+    };
+    this.autoRun = function (autoRun) {
+      if (typeof autoRun === 'boolean') {
+        _autoRun = autoRun;
+        return this;
+      } else {
+        return _autoRun;
+      }
+    };
   }
 
   var configuration = new ModuleConfiguration();
@@ -105,16 +129,15 @@ hellobar.defineModule('autofills', ['base.storage', 'base.dom'], function (stora
     },
 
     initialize: function (configurator) {
-      function doLoad() {
-        populateValues();
-        initializeValueCollection();
-      }
-
       configurator && configurator(configuration);
 
-      dom.runOnDocumentReady(function() {
-        doLoad();
+      configuration.autoRun() && dom.runOnDocumentReady(function () {
+        run();
       });
+    },
+
+    run: function () {
+      run();
     },
 
     finalize: function () {

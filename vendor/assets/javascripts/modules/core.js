@@ -37,11 +37,15 @@
     return value;
   }
 
-  function getModuleSafe(moduleName, configurator, dependencies) {
+  function getModuleSafe(moduleName, configurator, dependencies, allowUndefined) {
     var moduleWrapper = moduleWrappers[moduleName];
     if (!moduleWrapper) {
-      throw new HellobarException('Cannot find HelloBar module ' + moduleName +
-        '. Please define the module with hellobar.defineModule call');
+      if (allowUndefined) {
+        return undefined;
+      } else {
+        throw new HellobarException('Cannot find HelloBar module ' + moduleName +
+          '. Please define the module with hellobar.defineModule call');
+      }
     }
 
     function loadDependencies() {
@@ -81,7 +85,8 @@
   hellobar.module = function (moduleName, options) {
     var configurator = (options && options.configurator) || null;
     var dependencies = (options && options.dependencies) || null;
-    return getModuleSafe(moduleName, configurator, dependencies);
+    var allowUndefined = (options && options.dependencies) || false;
+    return getModuleSafe(moduleName, configurator, dependencies, allowUndefined);
   };
 
   /**

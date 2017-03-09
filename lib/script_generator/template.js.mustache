@@ -65,7 +65,7 @@
       !isPreviewMode() && hasCapability('autofills') && hellobar('autofills', {
         configurator: function(configuration) {
           var autofills = {{{autofills_json}}};
-          configuration.autofills(autofills);
+          configuration.autofills(autofills).autoRun(true);
         }
       });
     })();
