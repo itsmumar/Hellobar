@@ -5,11 +5,11 @@ class Theme < ActiveHash::Base
   ELEMENT_CSS_FILENAME   = 'element'
 
   def container_css_path
-    Pathname.new(directory).split.last.join("#{CONTAINER_CSS_FILENAME}.css").to_s
+    Pathname.new(directory).split.last.join("#{ CONTAINER_CSS_FILENAME }.css").to_s
   end
 
   def element_css_path
-    Pathname.new(directory).split.last.join("#{ELEMENT_CSS_FILENAME}.css").to_s
+    Pathname.new(directory).split.last.join("#{ ELEMENT_CSS_FILENAME }.css").to_s
   end
 
   def with_image?
