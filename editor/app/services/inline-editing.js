@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 import defaultBlocks from './inline-editing.blocks';
+import geolocationHelper from './inline-editing.geolocation-helper';
 
 // Froala Editor license key
 const froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
@@ -465,6 +466,8 @@ export default Ember.Service.extend({
       .add(textFroala('limited'))
       .add(imageFroala());
 
+    geolocationHelper.bindEvents($allFroala);
+
     this.$currentFroalaInstances = this.$currentFroalaInstances || $();
     this.$currentFroalaInstances = this.$currentFroalaInstances.add($allFroala);
   },
@@ -488,6 +491,7 @@ export default Ember.Service.extend({
 
   cleanupFroala() {
     if (this.$currentFroalaInstances && this.$currentFroalaInstances.length > 0) {
+      geolocationHelper.unbindEvents(this.$currentFroalaInstances);
       this.$currentFroalaInstances.off('froalaEditor.contentChanged');
       this.$currentFroalaInstances.off('froalaEditor.blur');
       this.$currentFroalaInstances.off('froalaEditor.image.uploaded');
