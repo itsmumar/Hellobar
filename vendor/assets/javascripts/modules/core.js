@@ -6,8 +6,10 @@
    * 'hellobar' is HelloBar JS API Core.
    * 'hellobar' function is the shorthand for 'hellobar.module' - i.e.
    * @example
+   * <pre>
    * hellobar.module('myFavoriteModule') // long syntax
    * hellobar('myFavoriteModule') // short syntax, does the same as above
+   * </pre>
    * @returns {Function|Object}
    */
   function hellobar() {
@@ -181,6 +183,7 @@
    * @param settings
    * @returns {ModuleConfiguration} instance of module configuration
    * @example
+   * <pre>
    * var configuration = hellobar.createModuleConfiguration({
    *   autoRun: 'boolean', // boolean setting
    *   limit: 'number', // number setting
@@ -193,6 +196,7 @@
    *     defaultValue: 'Click me'
    *   }
    * });
+   * </pre>
    */
   hellobar.createModuleConfiguration = function (settings) {
     return new ModuleConfiguration(settings);
