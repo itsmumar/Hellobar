@@ -4,6 +4,7 @@ class SiteGenerator
   def initialize(site_id, opts = {})
     @site = Site.find(site_id)
     @full_path = opts[:full_path] || generate_full_path(opts)
+    ScriptGenerator.compile
   end
 
   def generate_file

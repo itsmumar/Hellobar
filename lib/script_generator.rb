@@ -7,6 +7,10 @@ class ScriptGenerator < Mustache
   cattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
 
   class << self
+    def compile
+      manifest(true).compile(%w(*))
+    end
+
     def load_templates
       self.template_path = Rails.root.join('lib/script_generator/')
       self.template_name = 'template.js'
@@ -27,10 +31,15 @@ class ScriptGenerator < Mustache
         env.cache = ActiveSupport::Cache::MemoryStore.new
       end
     end
+
+    def manifest(fresh = false)
+      fresh ||= Rails.env.test?
+      Sprockets::Manifest.new(fresh ? assets.index : nil, 'tmp/script')
+    end
   end
   load_templates
 
-  attr_reader :site, :options
+  attr_reader :site, :options, :manifest
   delegate :id, :url, :write_key, to: :site, prefix: true
 
   def initialize(site, options = {})
@@ -43,8 +52,10 @@ class ScriptGenerator < Mustache
     self.class.load_templates if Rails.env.development?
 
     if options[:compress]
+      self.class.assets.js_compressor = uglifier
       uglifier.compress(render)
     else
+      self.class.assets.js_compressor = nil
       render
     end
   end
@@ -393,8 +404,8 @@ class ScriptGenerator < Mustache
   # calls given block or raises StandardError
   def render_asset(*path)
     file = File.join(*path)
-    asset = assets[file]
-    return asset.source if asset
+    asset = asset(file)
+    return asset.toutf8 if asset
     return yield if block_given?
     raise Sprockets::FileNotFound, "couldn't find file '#{ file }'"
   rescue Sass::SyntaxError => e
@@ -409,7 +420,12 @@ class ScriptGenerator < Mustache
     result
   end
 
-  def assets
-    self.class.assets
+  def asset(file)
+    return unless manifest.assets[file]
+    manifest.find_sources(file).first
+  end
+
+  def manifest(fresh = false)
+    @manifest ||= self.class.manifest(fresh || options[:preview])
   end
 end

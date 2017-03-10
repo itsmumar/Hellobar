@@ -1,4 +1,8 @@
 namespace :site do
+  task precompile: :environment do
+    ScriptGenerator.compile
+  end
+
   namespace :scripts do
     desc 'Schedule a re-generation of ALL site scripts'
     task :regenerate_all => :environment do |t, args|
