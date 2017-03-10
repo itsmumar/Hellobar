@@ -239,6 +239,10 @@ class SiteElement < ActiveRecord::Base
     AFTER_EMAIL_ACTION_MAP[settings['after_email_submit_action']]
   end
 
+  def email_redirect?
+    after_email_submit_action == :redirect
+  end
+
   def is_announcement?
     element_subtype == 'announcement'
   end

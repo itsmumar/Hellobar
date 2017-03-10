@@ -19,4 +19,12 @@ describe SiteElementSerializer do
     expect(SiteSerializer).to receive(:new).with(element.site, scope: user)
     serializer.as_json
   end
+
+  it 'serializes :email_redirect' do
+    site_element = build_stubbed :site_element, :email_with_redirect
+
+    serialized_site_element = SiteElementSerializer.new site_element
+
+    expect(serialized_site_element.serializable_hash).to have_key :email_redirect
+  end
 end

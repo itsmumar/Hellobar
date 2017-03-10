@@ -347,7 +347,7 @@ class ScriptGenerator < Mustache
       custom_html: site_element.custom_html,
       custom_css: site_element.custom_css,
       custom_js: site_element.custom_js,
-      email_redirect: site_element.after_email_submit_action == :redirect,
+      email_redirect: site_element.email_redirect?,
       hide_destination: true,
       id: site_element.id,
       image_url: site_element.image_url,
