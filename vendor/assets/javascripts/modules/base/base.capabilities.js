@@ -1,13 +1,8 @@
-hellobar.defineModule('base.capabilities', [], function () {
+hellobar.defineModule('base.capabilities', ['hellobar'], function (hellobar) {
 
-  function ModuleConfiguration() {
-    var _capabilities;
-    this.capabilities = function (capabilities) {
-      return capabilities ? (_capabilities = capabilities) : _capabilities;
-    };
-  }
-
-  var configuration = new ModuleConfiguration();
+  var configuration = hellobar.createModuleConfiguration({
+    capabilities: Array
+  });
 
   /**
    * @module {object} Provides information about capabilities of the HelloBar application.
