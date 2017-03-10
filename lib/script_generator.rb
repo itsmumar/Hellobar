@@ -150,7 +150,7 @@ class ScriptGenerator < Mustache
     css = [
       render_asset('container_common.css'),
       element_classes.map { |klass| render_asset(klass.name.downcase, 'container.css') },
-      element_themes.map { |theme| render_asset(theme.container_css_path.sub('lib/themes/', '')) }
+      element_themes.map { |theme| render_asset(theme.container_css_path) }
     ]
 
     css.flatten.join("\n").gsub('hellobar-container', "#{ pro_secret }-container").to_json
@@ -160,7 +160,7 @@ class ScriptGenerator < Mustache
     css = [
       render_asset('common.css'),
       element_classes.map { |klass| render_asset(klass.name.downcase, 'element.css') },
-      element_themes.map { |theme| render_asset(theme.element_css_path.sub('lib/themes/', '').sub('.scss', '.css')) }
+      element_themes.map { |theme| render_asset(theme.element_css_path) }
     ]
 
     css.flatten.join("\n").to_json
