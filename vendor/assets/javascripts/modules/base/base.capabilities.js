@@ -1,7 +1,7 @@
 hellobar.defineModule('base.capabilities', ['hellobar'], function (hellobar) {
 
   var configuration = hellobar.createModuleConfiguration({
-    capabilities: Array
+    capabilities: 'object'
   });
 
   /**
