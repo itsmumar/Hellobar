@@ -8,7 +8,7 @@ class ScriptGenerator < Mustache
 
   class << self
     def compile
-      manifest(true).compile(%w(*))
+      manifest(true).compile('*.js', '*.css', '*.html')
     end
 
     def load_templates
