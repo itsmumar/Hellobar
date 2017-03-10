@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-EMBED_DATA = { "embed_code" => "asdf" }
+EMBED_DATA = { 'embed_code' => 'asdf' }
 
 describe ContactListsHelper, type: :helper do
   fixtures :all
@@ -9,20 +9,20 @@ describe ContactListsHelper, type: :helper do
   let(:contact_list) { contact_lists(:zombo_contacts) }
 
   before do
-    allow_any_instance_of(Identity).to receive(:credentials).and_return("token" => "test")
-    allow_any_instance_of(Identity).to receive(:extra).and_return("metadata" => { "api_endpoint" => "test" })
+    allow_any_instance_of(Identity).to receive(:credentials).and_return('token' => 'test')
+    allow_any_instance_of(Identity).to receive(:extra).and_return('metadata' => { 'api_endpoint' => 'test' })
   end
 
   context 'MailChimp' do
     it 'has valid results' do
-      expect(helper.contact_list_provider_name(contact_list)).to eq "MailChimp"
-      expect(helper.contact_list_image(contact_list)).to eq "providers/mailchimp.png"
+      expect(helper.contact_list_provider_name(contact_list)).to eq 'MailChimp'
+      expect(helper.contact_list_image(contact_list)).to eq 'providers/mailchimp.png'
     end
   end
 
   context 'embed code ESPs' do
     let(:contact_list) do
-      ContactList.new(name: "asdf", site: site, data: EMBED_DATA)
+      ContactList.new(name: 'asdf', site: site, data: EMBED_DATA)
     end
 
     context 'MadMimi' do
@@ -31,8 +31,8 @@ describe ContactListsHelper, type: :helper do
       end
 
       it 'has valid results' do
-        expect(helper.contact_list_provider_name(contact_list)).to eq "MadMimi"
-        expect(helper.contact_list_image(contact_list)).to eq "providers/mad_mimi_form.png"
+        expect(helper.contact_list_provider_name(contact_list)).to eq 'MadMimi'
+        expect(helper.contact_list_image(contact_list)).to eq 'providers/mad_mimi_form.png'
       end
     end
   end
@@ -43,8 +43,8 @@ describe ContactListsHelper, type: :helper do
     end
 
     it 'has valid results' do
-      expect(helper.contact_list_provider_name(contact_list)).to eq "Hello Bar"
-      expect(helper.contact_list_image(contact_list)).to eq "providers/hellobar.png"
+      expect(helper.contact_list_provider_name(contact_list)).to eq 'Hello Bar'
+      expect(helper.contact_list_image(contact_list)).to eq 'providers/hellobar.png'
     end
   end
 end

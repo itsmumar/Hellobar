@@ -19,13 +19,13 @@ describe Subscribable, '#subscription_bill_and_status' do
 
   it 'returns errors and an unprocessable_entity status when NOT successful' do
     bill = Bill.new
-    bill.errors.add(:status, "oops")
+    bill.errors.add(:status, 'oops')
     controller.stub update_subscription: [false, bill]
 
     controller.subscription_bill_and_status('site', 'payment_method', 'billing_params', nil).should == { errors: bill.errors.full_messages, status: :unprocessable_entity }
   end
 
-  it "tracks changes to subscription" do
+  it 'tracks changes to subscription' do
     bill = double 'bill'
     controller.stub update_subscription: [true, bill]
     site = sites(:horsebike)
@@ -82,7 +82,7 @@ describe Subscribable, '#update_subscription' do
     include Subscribable
   end
 
-  describe "recovering from a failed payment" do
+  describe 'recovering from a failed payment' do
     let(:site) { sites(:horsebike) }
     let(:billing_params) { { plan: 'pro', schedule: 'yearly', trial_period: '60' } }
     let(:pro) { Subscription::Pro.new(user: users(:joey), site: site) }
@@ -90,19 +90,19 @@ describe Subscribable, '#update_subscription' do
     it 'removes the branding from pro subscriptions' do
       site.change_subscription(pro, payment_methods(:always_fails))
       expect(site.capabilities(true).remove_branding?).to be(false)
-      expect(site.site_elements.all? { |se| se.show_branding }).to be(true)
+      expect(site.site_elements.all?(&:show_branding)).to be(true)
 
       controller.update_subscription(site, payment_methods(:always_successful), billing_params)
       expect(site.capabilities(true).remove_branding?).to be(true)
-      expect(site.site_elements.none? { |se| se.show_branding }).to be(true)
+      expect(site.site_elements.none?(&:show_branding)).to be(true)
     end
   end
 
-  context "trial_period" do
+  context 'trial_period' do
     it 'translates the trial_period to days' do
-      billing_params = { plan: 'pro', schedule: 'yearly', trial_period: '60'}
+      billing_params = { plan: 'pro', schedule: 'yearly', trial_period: '60' }
       site = sites(:horsebike)
-      site.should_receive(:change_subscription).with(anything, nil, 60.day)
+      site.should_receive(:change_subscription).with(anything, nil, 60.days)
       controller.update_subscription(site, nil, billing_params)
     end
 
@@ -113,5 +113,4 @@ describe Subscribable, '#update_subscription' do
       controller.update_subscription(site, nil, billing_params)
     end
   end
-
 end

@@ -8,7 +8,7 @@ describe SiteElements::Update do
     @valid_params = {
       closable: true,
       show_border: true,
-      headline: "We are Polymathic!"
+      headline: 'We are Polymathic!'
     }
     allow_any_instance_of(Site).to receive(:regenerate_script)
   end
@@ -25,51 +25,51 @@ describe SiteElements::Update do
     @interaction.element
   end
 
-  context "when update is successful" do
-    it "returns true" do
+  context 'when update is successful' do
+    it 'returns true' do
       result = update(params: @valid_params)
 
       expect(result).to be_true
     end
 
-    it "regenerates the script" do
+    it 'regenerates the script' do
       update(params: @valid_params)
 
       expect(@element.site).to have_received(:regenerate_script)
     end
 
-    it "updates the attributes" do
+    it 'updates the attributes' do
       update(params: @valid_params)
 
       expect(new_element.closable).to be_true
       expect(new_element.show_border).to be_true
-      expect(new_element.headline).to eq("We are Polymathic!")
+      expect(new_element.headline).to eq('We are Polymathic!')
     end
 
-    context "when type is not changed" do
-      it "sets element to the same object" do
+    context 'when type is not changed' do
+      it 'sets element to the same object' do
         update(params: @valid_params)
 
         expect(new_element.id).to eq(@element.id)
       end
     end
 
-    context "when type is changed" do
+    context 'when type is changed' do
       before do
-        @new_type_params = @valid_params.merge(element_subtype: "traffic")
+        @new_type_params = @valid_params.merge(element_subtype: 'traffic')
       end
 
-      it "creates a new element" do
+      it 'creates a new element' do
         expect { update(params: @new_type_params) }.to change { SiteElement.count }.by(1)
       end
 
-      it "sets element to the new element" do
+      it 'sets element to the new element' do
         expect { update(params: @new_type_params) }.to change { SiteElement.count }.by(1)
 
         expect(new_element.id).not_to eq(@element.id)
       end
 
-      it "disables the original element" do
+      it 'disables the original element' do
         update(params: @new_type_params)
 
         expect(@element.reload.paused).to be_true
@@ -77,12 +77,12 @@ describe SiteElements::Update do
     end
   end
 
-  context "when update is unsuccessful" do
+  context 'when update is unsuccessful' do
     before :each do
-      @invalid_params = { background_color: "" }
+      @invalid_params = { background_color: '' }
     end
 
-    it "returns false" do
+    it 'returns false' do
       result = update(params: @invalid_params)
 
       expect(result).to be_false
@@ -94,10 +94,9 @@ describe SiteElements::Update do
       expect(@element.site).not_to have_received(:generate_script)
     end
 
-    context "when type is changed" do
-
+    context 'when type is changed' do
       before do
-        @invalid_params.merge!(element_subtype: "traffic")
+        @invalid_params.merge!(element_subtype: 'traffic')
       end
 
       it "doesn't create a new element" do
@@ -110,9 +109,9 @@ describe SiteElements::Update do
         expect(@element.reload.paused).to be_false
       end
 
-      context "when update succeeds but disabling fails" do
+      context 'when update succeeds but disabling fails' do
         it "doesn't create new element" do
-          @valid_params.merge!(element_subtype: "traffic")
+          @valid_params[:element_subtype] = 'traffic'
           allow(@element).to receive(:save!).and_raise(ActiveRecord::ActiveRecordError)
           update(params: @valid_params)
 

@@ -7,15 +7,16 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'mailchimp').first
-      raise "Site does not have a stored MailChimp identity" unless identity
+      identity = opts[:site].identities.where(provider: 'mailchimp').first
+      raise 'Site does not have a stored MailChimp identity' unless identity
     end
 
     @identity = identity
-    @client = Gibbon::Request.new({
-                api_key: identity.credentials['token'],
-                api_endpoint: identity.extra['metadata']['api_endpoint']
-              })
+    @client =
+      Gibbon::Request.new(
+        api_key: identity.credentials['token'],
+        api_endpoint: identity.extra['metadata']['api_endpoint']
+      )
   end
 
   def lists
@@ -40,20 +41,21 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   def subscriber_statuses(contact_list, emails)
     result = {}
 
-    conditions = emails.map { |email| "email LIKE '%#{email}%'" }.join(' OR ')
+    conditions = emails.map { |email| "email LIKE '%#{ email }%'" }.join(' OR ')
     contact_list_logs = contact_list.contact_list_logs.select(:email).where(conditions).pluck(:email)
 
     emails.each do |email|
-      if contact_list_logs.include?(email) || contact_list_logs.include?("\"#{email}\"")
-        result[email] = 'Sent'
-      else
-        result[email] = 'Not sent'
-      end
+      result[email] =
+        if contact_list_logs.include?(email) || contact_list_logs.include?("\"#{ email }\"")
+          'Sent'
+        else
+          'Not sent'
+        end
     end
 
     result
   rescue => e
-    Rails.logger.warn("#{contact_list.site.url} - #{e.message}")
+    Rails.logger.warn("#{ contact_list.site.url } - #{ e.message }")
     {}
   end
 
@@ -73,19 +75,19 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
   def batch_subscribe(list_id, subscribers, double_optin = true)
-    log "Queuing #{subscribers.size} emails to remote service."
+    log "Queuing #{ subscribers.size } emails to remote service."
 
     bodies = subscribers.map do |subscriber|
       hashify_options(subscriber[:email], subscriber[:name], double_optin)
     end
 
     operations = bodies.map do |body|
-                   {
-                     method: "POST",
-                     path: "lists/#{list_id}/members",
-                     body: body.to_json
-                   }
-                 end
+      {
+        method: 'POST',
+        path: "lists/#{ list_id }/members",
+        body: body.to_json
+      }
+    end
 
     retry_on_timeout do
       # It will enqueue batch operation job to mailchimp and will process
@@ -97,22 +99,22 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def log(message)
     if message.is_a? String
-      Rails.logger.info("#{site.url} - #{message}")
+      Rails.logger.info("#{ site.url } - #{ message }")
     else
       result = message
       error_count = 0
       if result['errors']
         non_already_subscribed_errors = result['errors'].select { |e| e['code'] != 214 }
         error_count = non_already_subscribed_errors.count
-        message = "Added #{result['add_count']} emails, updated #{result['update_count']} emails. " +
-                  "#{error_count} errors that weren't just existing subscribers."
+        message = "Added #{ result['add_count'] } emails, updated #{ result['update_count'] } emails. " \
+                  "#{ error_count } errors that weren't just existing subscribers."
       end
 
       if error_count > 0
-        message += "\nA sample of those errors:\n#{non_already_subscribed_errors[0...20].join("\n")}"
-        Rails.logger.error("#{site.url} - #{message}")
+        message += "\nA sample of those errors:\n#{ non_already_subscribed_errors[0...20].join("\n") }"
+        Rails.logger.error("#{ site.url } - #{ message }")
       else
-        Rails.logger.info("#{site.url} - #{message}")
+        Rails.logger.info("#{ site.url } - #{ message }")
       end
 
       return super message.inspect
@@ -125,8 +127,8 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     case error.status_code
     when 250
       catch_required_merge_var_error!(error)
-    when 104, 200, 101 #Invalid_ApiKey, Invalid List, Deactivated Account
-      identity.destroy_and_notify_user if identity != nil
+    when 104, 200, 101 # Invalid_ApiKey, Invalid List, Deactivated Account
+      identity.destroy_and_notify_user unless identity.nil?
       raise error
     when 214
       # Email already existed in list, don't do anything
@@ -157,25 +159,25 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def hashify_options(email, name, double_optin)
     opts = { email_address: email }
-    opts[:status] = (double_optin ?  "pending" : "subscribed")
+    opts[:status] = (double_optin ? 'pending' : 'subscribed')
 
     if name.present?
       split = name.split(' ', 2)
-      opts[:merge_fields] = {:FNAME => split[0], :LNAME => split[1] || ""}
+      opts[:merge_fields] = { FNAME: split[0], LNAME: split[1] || '' }
     end
 
     opts
   end
 
-  def catch_required_merge_var_error!(error)
+  def catch_required_merge_var_error!(_error)
     # pause identity by deleting it
     user = @identity.site.users.first
     if user.has_temporary_email?
-      Rails.logger.warn "Cannot catch required_merge_var error for Identity #{@identity.id} -- user has not yet added their email address."
+      Rails.logger.warn "Cannot catch required_merge_var error for Identity #{ @identity.id } -- user has not yet added their email address."
       return
     end
 
-    Rails.logger.info "required_merge_var_error for Contact List #{@identity.id}. Deleting identity and sending email to #{user.email}."
+    Rails.logger.info "required_merge_var_error for Contact List #{ @identity.id }. Deleting identity and sending email to #{ user.email }."
 
     contact_list_url = Router.new.site_contact_list_url(site, @contact_list, host: Hellobar::Settings[:host])
 
@@ -187,7 +189,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 <p>To fix this, please follow these two steps:</p>
 
 <p>1. Log into your MailChimp account, select your list, then choose Settings > List fields and Merge tags. Once there, deselect "required" for all fields. Alternately, you may choose a different list to sync with Hellobar.</p>
-<p>2. Follow this link to resume syncing your Hello Bar contacts to Mailchimp: <a href="#{contact_list_url}">#{contact_list_url}</a></p>
+<p>2. Follow this link to resume syncing your Hello Bar contacts to Mailchimp: <a href="#{ contact_list_url }">#{ contact_list_url }</a></p>
 
 <p>We understand why you might want to require fields on some forms. In such cases, please consider using a separate MailChimp list for those forms. </p>
 
@@ -196,10 +198,10 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 <p>Hello Bar</p>
 EOS
 
-    MailerGateway.send_email("Custom", user.email,
-                              subject: "[Action Required] Your list cannot be synced to Mailchimp",
-                              html_body: html,
-                              text_body: strip_tags(html))
+    MailerGateway.send_email('Custom', user.email,
+      subject: '[Action Required] Your list cannot be synced to Mailchimp',
+      html_body: html,
+      text_body: strip_tags(html))
 
     @identity.delete
   end

@@ -1,1 +1,1 @@
-require "./lib/grand_central_api"
+require './lib/grand_central_api'

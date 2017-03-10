@@ -13,14 +13,13 @@ class ContentUpgradesController < ApplicationController
   def new
     @content_upgrade = SiteElement.new
     @styles = @site.get_content_upgrade_styles
-    #Some Defualts
+    # Some Defualts
     @content_upgrade.name_placeholder = 'First Name'
     @content_upgrade.email_placeholder = 'Your Email'
     @content_upgrade.disclaimer = 'We hate SPAM and promise to keep your email address safe.'
-    @content_upgrade.link_text = "Download Now"
-    @content_upgrade.headline = "Enter your email to download this free guide right now."
-    @content_upgrade.caption = "Almost there! Please complete this form and click the button below to gain instant access."
-
+    @content_upgrade.link_text = 'Download Now'
+    @content_upgrade.headline = 'Enter your email to download this free guide right now.'
+    @content_upgrade.caption = 'Almost there! Please complete this form and click the button below to gain instant access.'
   end
 
   def edit
@@ -31,7 +30,7 @@ class ContentUpgradesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "content_upgrade_#{id}"   # Excluding ".pdf" extension.
+        render pdf: "content_upgrade_#{ id }" # Excluding ".pdf" extension.
       end
     end
   end
@@ -39,14 +38,14 @@ class ContentUpgradesController < ApplicationController
   def create
     @content_upgrade = SiteElement.create!(content_upgrade_params)
 
-    flash[:success] = "Your content upgrade has been saved."
+    flash[:success] = 'Your content upgrade has been saved.'
     redirect_to site_content_upgrades_path(@site.id)
   end
 
   def update
     @content_upgrade.update_attributes!(content_upgrade_params)
 
-    flash[:success] = "Your content upgrade has been saved."
+    flash[:success] = 'Your content upgrade has been saved.'
     redirect_to site_content_upgrades_path(@site.id)
   end
 
@@ -59,19 +58,19 @@ class ContentUpgradesController < ApplicationController
 
   def update_styles
     style_params = {
-       offer_bg_color: params[:offer_bg_color],
-       offer_text_color: params[:offer_text_color],
-       offer_link_color: params[:offer_link_color],
-       offer_border_color: params[:offer_border_color],
-       offer_border_width: params[:offer_border_width],
-       offer_border_style: params[:offer_border_style],
-       offer_border_radius: params[:offer_border_radius],
-       modal_button_color: params[:modal_button_color],
-     }
+      offer_bg_color: params[:offer_bg_color],
+      offer_text_color: params[:offer_text_color],
+      offer_link_color: params[:offer_link_color],
+      offer_border_color: params[:offer_border_color],
+      offer_border_width: params[:offer_border_width],
+      offer_border_style: params[:offer_border_style],
+      offer_border_radius: params[:offer_border_radius],
+      modal_button_color: params[:modal_button_color]
+    }
 
     @site.update_content_upgrade_styles!(style_params)
 
-    flash[:success] = "Content Upgrade styles have been saved."
+    flash[:success] = 'Content Upgrade styles have been saved.'
     redirect_to site_content_upgrades_path(@site.id)
   end
 
@@ -98,7 +97,7 @@ class ContentUpgradesController < ApplicationController
   def load_site
     super
   rescue ActiveRecord::RecordNotFound
-    if request.get? or request.delete?
+    if request.get? || request.delete?
       head :not_found
     else
       head :forbidden
@@ -107,15 +106,14 @@ class ContentUpgradesController < ApplicationController
 
   def verify_capability
     unless @site && @site.capabilities.content_upgrades?
-      render :json => { error: "forbidden" }, :status => :forbidden
+      render json: { error: 'forbidden' }, status: :forbidden
     end
   end
 
   def load_content_upgrade
     @content_upgrade = @site.site_elements.find(params[:id])
     if @content_upgrade.rule.site_id != @site.id
-      render :json => { error: "forbidden" }, :status => :forbidden
+      render json: { error: 'forbidden' }, status: :forbidden
     end
-
   end
 end

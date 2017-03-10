@@ -43,6 +43,7 @@ export default Ember.Controller.extend({
   isCustom: Ember.computed.equal('model.type', 'Custom'),
   currentTheme: Ember.computed.alias('applicationController.currentTheme'),
   currentThemeName: Ember.computed.alias('applicationController.currentThemeName'),
+  isEditing: Ember.computed.bool('model.id'),
 
 
 
@@ -146,15 +147,14 @@ export default Ember.Controller.extend({
 
   onElementTypeChanged: (function () {
     let elementType = this.get('model.type');
-    if (elementType == 'Custom') {
+    if (elementType == 'Custom' || this.get('isEditing')) {
       this.get('bus').trigger('hellobar.core.rightPane.hide');
     } else {
       this.get('bus').trigger('hellobar.core.rightPane.show', {
         componentName: 'theming/theme-tile-grid',
         componentOptions: { elementType }
       });
-
-     }
+    }
     this.get('inlineEditing').initializeInlineEditing(elementType);
   }).observes('model.type'),
 

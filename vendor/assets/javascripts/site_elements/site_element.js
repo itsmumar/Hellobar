@@ -502,7 +502,7 @@ HB.SiteElement = HB.createClass({
         HB.sc(cookieName, JSON.stringify({}), new Date().toString());
 
         // if the pusher exists, unhide it since it should be hidden at this point
-        if (HB.p) {
+        if (this.pushes_page_down && HB.p) {
           HB.showElement(HB.p, '');
         }
       }.bind(this);

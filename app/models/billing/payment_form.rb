@@ -29,7 +29,7 @@ class PaymentForm
   def year
     y = data[:expiration].split('/')[1]
     if y.length == 2
-      "20#{y}".to_i
+      "20#{ y }".to_i
     elsif y.length == 4
       y.to_i
     else
@@ -41,17 +41,17 @@ class PaymentForm
 
   def to_hash
     {
-      :number => data[:number],
-      :month => month,
-      :year => year,
-      :first_name => first_name,
-      :last_name => last_name,
-      :verification_value => data[:verification_value],
-      :city => data[:city],
-      :state => data[:state],
-      :zip => data[:zip],
-      :address1 => data[:address],
-      :country => data[:country]
+      number: data[:number],
+      month: month,
+      year: year,
+      first_name: first_name,
+      last_name: last_name,
+      verification_value: data[:verification_value],
+      city: data[:city],
+      state: data[:state],
+      zip: data[:zip],
+      address1: data[:address],
+      country: data[:country]
     }
   end
 end

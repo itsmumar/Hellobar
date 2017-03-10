@@ -6,16 +6,16 @@ class HeartbeatController < ApplicationController
     string = '<h1>Request Headers</h1>'
 
     request.headers.each do |header|
-      string << "<p>"
+      string << '<p>'
       string << header.to_s
-      string << "</p>"
+      string << '</p>'
     end
 
     string << '<h1>Response Headers</h1>'
     response.headers.each do |header|
-      string << "<p>"
+      string << '<p>'
       string << header.to_s
-      string << "</p>"
+      string << '</p>'
     end
 
     render text: string

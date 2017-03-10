@@ -1,7 +1,7 @@
-require "./config/initializers/settings"
-require "./lib/hello/data_api_helper"
-require "./lib/hello/api_performance"
-require "thread/pool"
+require './config/initializers/settings'
+require './lib/hello/data_api_helper'
+require './lib/hello/api_performance'
+require 'thread/pool'
 
 module Hello::DataAPI
   # Include this many different IDs in one Data API request
@@ -20,7 +20,7 @@ module Hello::DataAPI
 
       site_element_ids = site_elements.map(&:id).sort
 
-      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.sort.join('-')}:lifetime_totals:#{num_days}days:#{site.script_installed_at.to_i}"
+      cache_key = "hello:data-api:#{ site.id }:#{ site_element_ids.sort.join('-') }:lifetime_totals:#{ num_days }days:#{ site.script_installed_at.to_i }"
       cache_options[:expires_in] = 10.minutes
 
       api_results = Rails.cache.fetch cache_key, cache_options do
@@ -29,23 +29,23 @@ module Hello::DataAPI
         semaphore = Mutex.new
 
         site_element_ids.each_slice(API_MAX_SLICE) do |ids|
-          pool.process {
+          pool.process do
             path, params = Hello::DataAPIHelper::RequestParts.lifetime_totals(site.id, ids, site.read_key, num_days)
             slice_results = get(path, params)
-            semaphore.synchronize {
+            semaphore.synchronize do
               results.merge!(slice_results) if slice_results
-            }
-          }
+            end
+          end
         end
 
         pool.shutdown
         results
       end
 
-      Hash[api_results.map{|k,v| [k, Performance.new(v)] } ]
+      Hash[api_results.map { |k, v| [k, Performance.new(v)] }]
     end
 
-    def fake_lifetime_totals(site, site_elements, num_days = 1)
+    def fake_lifetime_totals(_site, site_elements, num_days = 1)
       {}.tap do |hash|
         site_elements.each do |el|
           rng = Random.new(el.id)
@@ -76,13 +76,13 @@ module Hello::DataAPI
     #
     def lifetime_totals_by_type(site, site_elements, num_days = 30, cache_options = {})
       data = Hello::DataAPI.lifetime_totals(site, site_elements, num_days, cache_options) || {}
-      totals = {:total => [], :email => [], :social => [], :traffic => [], :call => []}
-      elements = site.site_elements.where(:id => data.keys)
+      totals = { total: [], email: [], social: [], traffic: [], call: [] }
+      elements = site.site_elements.where(id: data.keys)
       ids = {}
 
       # collect the ids of each subtype
       [:traffic, :email, :social, :call].each do |key|
-        ids[key] = elements.select{|e| e.short_subtype == key.to_s}.map{|e| e.id.to_s}
+        ids[key] = elements.select { |e| e.short_subtype == key.to_s }.map { |e| e.id.to_s }
       end
 
       # what is the most amount of data (in days) we have for any site element?
@@ -102,7 +102,7 @@ module Hello::DataAPI
 
         # do the same for each subset of data, grouped by element subtype
         [:email, :traffic, :social, :call].each do |key|
-          type_data = data.select{|k, v| ids[key].include?(k)}
+          type_data = data.select { |k, _| ids[key].include?(k) }
           totals[key] << type_data.inject([0, 0]) do |sum, data_row|
             day_i_data = data_row[1][i]
             [sum[0] + day_i_data[0], sum[1] + day_i_data[1]]
@@ -128,7 +128,7 @@ module Hello::DataAPI
       return {} if contact_lists.empty?
       contact_list_ids = contact_lists.map(&:id).sort
 
-      cache_key = "hello:data-api:#{site.id}:#{contact_list_ids.sort.join('-')}:contact_list_totals:#{site.script_installed_at.to_i}"
+      cache_key = "hello:data-api:#{ site.id }:#{ contact_list_ids.sort.join('-') }:contact_list_totals:#{ site.script_installed_at.to_i }"
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
@@ -164,7 +164,7 @@ module Hello::DataAPI
 
       site_element_ids = site_elements.map(&:id).sort
 
-      cache_key = "hello:data-api:#{site.id}:#{site_element_ids.sort.join('-')}:suggested_opportunities"
+      cache_key = "hello:data-api:#{ site.id }:#{ site_element_ids.sort.join('-') }:suggested_opportunities"
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
@@ -172,11 +172,11 @@ module Hello::DataAPI
       end
     end
 
-    def fake_suggested_opportunities(site, site_elements)
+    def fake_suggested_opportunities(_site, _site_elements)
       {
-        "high traffic, low conversion" =>  [["co:USA", 100, 1], ["dv:Mobile", 200, 2], ["rf:http://zombo.com", 130, 4]],
-        "low traffic, high conversion" =>  [["co:Russia", 10, 9], ["dv:Desktop", 22, 20], ["pu:http://zombo.com/signup", 5, 4]],
-        "high traffic, high conversion" => [["co:China", 100, 30], ["ad_so:Google AdWords", 200, 55], ["co:Canada", 430, 120]]
+        'high traffic, low conversion' =>  [['co:USA', 100, 1], ['dv:Mobile', 200, 2], ['rf:http://zombo.com', 130, 4]],
+        'low traffic, high conversion' =>  [['co:Russia', 10, 9], ['dv:Desktop', 22, 20], ['pu:http://zombo.com/signup', 5, 4]],
+        'high traffic, high conversion' => [['co:China', 100, 30], ['ad_so:Google AdWords', 200, 55], ['co:Canada', 430, 120]]
       }
     end
 
@@ -185,9 +185,9 @@ module Hello::DataAPI
     # get_contacts(contact_list)
     # => [["person100@gmail.com", "person name", 1388534400], ["person99@gmail.com", "person name", 1388534399]]
     #
-    def get_contacts(contact_list, limit=nil, from_timestamp = nil, cache_options = {})
+    def get_contacts(contact_list, limit = nil, from_timestamp = nil, cache_options = {})
       return fake_get_contacts(contact_list) if Hellobar::Settings[:fake_data_api]
-      cache_key = "hello:data-api:#{contact_list.site_id}:contact_list-#{contact_list.id}:from#{from_timestamp}:limit#{limit}"
+      cache_key = "hello:data-api:#{ contact_list.site_id }:contact_list-#{ contact_list.id }:from#{ from_timestamp }:limit#{ limit }"
       cache_options[:expires_in] = 10.minutes
 
       Rails.cache.fetch cache_key, cache_options do
@@ -196,18 +196,18 @@ module Hello::DataAPI
       end
     end
 
-    def fake_get_contacts(contact_list)
-      [["dmitriy+person100@polymathic.me", "First Last", 1388534400], ["dmitriy+person99@polymathic.me", "Dr Pepper", 1388534399]]
+    def fake_get_contacts(_contact_list)
+      [['dmitriy+person100@polymathic.me', 'First Last', 1_388_534_400], ['dmitriy+person99@polymathic.me', 'Dr Pepper', 1_388_534_399]]
     end
 
     def get(path, params)
-      timeouts = [3,3,5,5,8] # Determines the length and number of attempts
+      timeouts = [3, 3, 5, 5, 8] # Determines the length and number of attempts
       timeout_index = 0
       begin
         begin_time = Time.now.to_f
         url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
         response = nil
-        Timeout::timeout(timeouts[timeout_index]) do
+        Timeout.timeout(timeouts[timeout_index]) do
           response = Net::HTTP.get(URI.parse(url))
         end
         results = JSON.parse(response)
@@ -223,13 +223,13 @@ module Hello::DataAPI
       now = Time.now
       duration = now.to_f - begin_time
       # Log the error
-      lines = ["[#{now}] Data API Error::#{e.class} (#{duration}s) - #{e.message.inspect} => #{url.inspect}"]
-      lines << "Response: #{response.inspect}" if response
+      lines = ["[#{ now }] Data API Error::#{ e.class } (#{ duration }s) - #{ e.message.inspect } => #{ url.inspect }"]
+      lines << "Response: #{ response.inspect }" if response
       caller[0..4].each do |line|
-        lines << "\t#{line}"
+        lines << "\t#{ line }"
       end
       # Write everything to the log
-      File.open(File.join(Rails.root, "log", "data_api_error.log"), "a") do |file|
+      File.open(File.join(Rails.root, 'log', 'data_api_error.log'), 'a') do |file|
         file.puts(lines.join("\n"))
       end
       # Re-raise the error

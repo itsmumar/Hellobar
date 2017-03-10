@@ -6,14 +6,14 @@ feature 'Adding and editing bars', :js do
   given(:user) { create :user, email: email }
 
   before do
-    allow_any_instance_of(SiteElementSerializer).
-      to receive(:proxied_url2png).and_return('')
-    allow_any_instance_of(ApplicationController).
-      to receive(:get_ab_variation).and_return('original')
+    allow_any_instance_of(SiteElementSerializer)
+      .to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(ApplicationController)
+      .to receive(:get_ab_variation).and_return('original')
   end
 
   scenario 'new user can create a site element' do
-    OmniAuth.config.add_mock(:google_oauth2, { uid: '12345', info: { email: user.email } })
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
 
     visit root_path
 
@@ -39,14 +39,11 @@ feature 'Adding and editing bars', :js do
   end
 
   scenario 'existing user can create a site element' do
-    OmniAuth.config.add_mock(:google_oauth2, {:uid => '12345'})
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345')
     user = create(:user)
     site = user.sites.create(url: random_uniq_url)
     create(:rule, site: site)
-    auth = user.authentications.create({
-      provider: 'google_oauth2',
-      uid: '12345'
-    })
+    auth = user.authentications.create(provider: 'google_oauth2', uid: '12345')
 
     visit new_user_session_path
     fill_in 'Your Email', with: user.email
@@ -67,24 +64,24 @@ feature 'Adding and editing bars', :js do
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end
 
-  scenario "A user can create a site element without seeing an interstitial" do
+  scenario 'A user can create a site element without seeing an interstitial' do
     user = login(create(:site_membership, :with_site_rule).user)
     {
-      emails:       "Collect Email",
-      click:        "Click Link",
-      call:         "Talk to Visitors",
-      social:       "Social",
-      announcement: "Announcement"
+      emails:       'Collect Email',
+      click:        'Click Link',
+      call:         'Talk to Visitors',
+      social:       'Social',
+      announcement: 'Announcement'
     }.each do |anchor, header|
-      visit new_site_site_element_path(user.sites.first) + "/#/settings/#{anchor}?skip_interstitial=true"
+      visit new_site_site_element_path(user.sites.first) + "/#/settings/#{ anchor }?skip_interstitial=true"
       expect(page).to have_content(header)
     end
   end
 
   context 'Collect Email goal' do
     before do
-      allow_any_instance_of(ApplicationController).
-        to receive(:get_ab_variation).and_return('variant')
+      allow_any_instance_of(ApplicationController)
+        .to receive(:get_ab_variation).and_return('variant')
 
       membership = create(:site_membership, :with_site_rule)
       user = membership.user
@@ -141,7 +138,7 @@ feature 'Adding and editing bars', :js do
       click_button 'Save & Publish'
       expect(page).to have_content('Summary')
       se = SiteElement.last
-      se_settings = se.settings['fields_to_collect'].map{|a| [a['type'],a['is_enabled']]}.to_h
+      se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
       expect(se_settings['builtin-phone']).to eq(true)
       expect(se_settings['builtin-name']).to eq(true)
       expect(se_settings['builtin-email']).to eq(true)
@@ -149,7 +146,7 @@ feature 'Adding and editing bars', :js do
 
     scenario 'custom field' do
       find('.step-style').click
-      find('h6', text: "Modal").click
+      find('h6', text: 'Modal').click
       find('.step-settings').click
 
       find('div.item-block.add', text: 'Add field').click
@@ -198,7 +195,7 @@ feature 'Adding and editing bars', :js do
   scenario 'User can modify the color settings for a bar' do
     color = 'AABBCC'
 
-    OmniAuth.config.add_mock(:google_oauth2, {uid: '12345', info: {email: 'bob@lawblog.com'}})
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: 'bob@lawblog.com' })
     visit root_path
 
     fill_in 'site[url]', with: 'mewgle.com'

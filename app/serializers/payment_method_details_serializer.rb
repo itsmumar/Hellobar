@@ -22,10 +22,10 @@ class PaymentMethodDetailsSerializer < ActiveModel::Serializer
   end
 
   def expiration
-    "#{object.data['month']}/#{object.data['year']}"
+    "#{ object.data['month'] }/#{ object.data['year'] }"
   end
 
   def name
-    "#{object.data['first_name']} #{object.data['last_name']}"
+    "#{ object.data['first_name'] } #{ object.data['last_name'] }"
   end
 end

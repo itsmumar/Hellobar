@@ -4,11 +4,11 @@ class URLValidator < ActiveModel::EachValidator
 
     uri = Addressable::URI.parse(value)
 
-    if !%w{http https}.include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
-      record.errors.add(attribute, "is invalid")
+    if !%w(http https).include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
+      record.errors.add(attribute, 'is invalid')
     end
   rescue Addressable::URI::InvalidURIError
-    record.errors.add(attribute, "is invalid")
+    record.errors.add(attribute, 'is invalid')
   end
 end
 

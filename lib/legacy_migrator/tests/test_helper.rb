@@ -1,6 +1,6 @@
-require File.expand_path("../../../../config/environment", __FILE__)
+require File.expand_path('../../../../config/environment', __FILE__)
 
-require "rails/test_help"
+require 'rails/test_help'
 
-require "minitest/spec"
-require "minitest/autorun"
+require 'minitest/spec'
+require 'minitest/autorun'

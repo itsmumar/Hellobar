@@ -1,18 +1,18 @@
 require 'integration_helper'
 
-feature "Render the country select for the Rule modal", :js do
+feature 'Render the country select for the Rule modal', :js do
   extend FeatureHelper
 
   before(:each) do
     @user = login
 
-    allow_any_instance_of(SiteElementSerializer).
-      to receive(:proxied_url2png).and_return('')
+    allow_any_instance_of(SiteElementSerializer)
+      .to receive(:proxied_url2png).and_return('')
 
-    stub_out_get_ab_variations("Targeting UI Variation 2016-06-13") {"variant"}
+    stub_out_get_ab_variations('Targeting UI Variation 2016-06-13') { 'variant' }
   end
 
-  it "sets the United States as the default country" do
+  it 'sets the United States as the default country' do
     site = @user.sites.first
     payment_method = create(:payment_method, user: @user)
     site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
@@ -33,7 +33,7 @@ feature "Render the country select for the Rule modal", :js do
     expect(value).to eql('US')
   end
 
-  it "properly sets the value when the condition has been set previously" do
+  it 'properly sets the value when the condition has been set previously' do
     site = @user.sites.first
     payment_method = create(:payment_method, user: @user)
     site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)

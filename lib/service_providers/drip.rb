@@ -7,8 +7,8 @@ class ServiceProviders::Drip < ServiceProviders::Email
     if opts[:identity]
       identity = opts[:identity]
     elsif opts[:site]
-      identity = opts[:site].identities.where(:provider => 'drip').first
-      raise "Site does not have a stored Drip identity" unless identity
+      identity = opts[:site].identities.where(provider: 'drip').first
+      raise 'Site does not have a stored Drip identity' unless identity
     end
 
     @identity = identity
@@ -29,7 +29,7 @@ class ServiceProviders::Drip < ServiceProviders::Email
     response = @client.campaigns(status: 'active')
     @campaigns ||= response.campaigns.map(&:raw_attributes)
   end
-  alias_method :lists, :campaigns
+  alias lists campaigns
 
   def tags
     response = @client.tags
@@ -41,12 +41,12 @@ class ServiceProviders::Drip < ServiceProviders::Email
 
     if name.present?
       split = name.split(' ', 2)
-      opts[:custom_fields] = {"name" => name, "fname" => split[0], "lname" => split[1]}
+      opts[:custom_fields] = { 'name' => name, 'fname' => split[0], 'lname' => split[1] }
     end
 
     retry_on_timeout do
       if campaign_id
-        opts.merge!(double_optin: double_optin)
+        opts[:double_optin] = double_optin
         @client.subscribe(email, campaign_id, opts)
       else
         # Add subscriber to global account list

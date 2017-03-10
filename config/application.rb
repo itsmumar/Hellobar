@@ -12,17 +12,17 @@ module Hellobar
     require File.join(Rails.root, 'config/initializers', 'settings.rb')
 
     # We'll handle our own errors
-    config.exceptions_app = self.routes
+    config.exceptions_app = routes
 
-    config.autoload_paths += Dir[ Rails.root.join('app', 'models', '**/') ]
-    config.autoload_paths += %W(#{config.root}/lib/queue_worker/)
+    config.autoload_paths += Dir[Rails.root.join('app', 'models', '**/')]
+    config.autoload_paths += %W(#{ config.root }/lib/queue_worker/)
     # We'd prefer to use initializers to load the files from the /lib
     # directory that we need. This way we have more control over load
     # order and have a convenient place to put other initialization
     # code (config, etc.)
     # config.autoload_paths += %W(#{config.root}/lib)
 
-    config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
+    config.action_mailer.preview_path = "#{ Rails.root }/spec/mailers/previews"
 
     config.sass.preferred_syntax = :sass
     config.action_mailer.default_url_options = { host: Hellobar::Settings[:host] }
@@ -31,7 +31,7 @@ module Hellobar
     config.assets.paths << Rails.root.join('vendor', 'assets')
 
     config.to_prepare do
-      Devise::SessionsController.layout proc{ |controller| action_name == 'new' ? 'static' : 'application' }
+      Devise::SessionsController.layout proc { |_| action_name == 'new' ? 'static' : 'application' }
     end
 
     config.generators do |g|

@@ -7,7 +7,7 @@ class ContactListSerializer < ActiveModel::Serializer
     :name,
     :provider,
     :site_elements_count,
-    :site_id,
+    :site_id
   )
 
   def errors

@@ -19,11 +19,11 @@ feature 'Forgot password', :js do
     expect(page).to have_content('you will receive a password recovery link at your email address')
     @reset_password_link = @sent_emails.last[:params][:reset_link]
     uri = URI.parse(@reset_password_link)
-    @reset_password_path = "#{uri.path}?#{uri.query}"
+    @reset_password_path = "#{ uri.path }?#{ uri.query }"
   end
 
   scenario 'invalid token' do
-    visit @reset_password_path + "invalid-characters"
+    visit @reset_password_path + 'invalid-characters'
     fill_form
 
     expect(page).to have_content('Reset password token is invalid')

@@ -2,7 +2,8 @@ class SiteElementSerializer < ActiveModel::Serializer
   attributes :id, :site, :rule_id, :rule, :contact_list_id, :errors, :full_error_messages,
 
     # settings
-    :type, :element_subtype, :settings, :view_condition, :phone_number, :phone_country_code, :blocks,
+    :type, :element_subtype, :settings, :view_condition, :phone_number,
+    :phone_country_code, :blocks, :email_redirect,
 
     # text
     :headline, :caption, :link_text, :font_id, :thank_you_text, :email_placeholder, :name_placeholder,
@@ -25,7 +26,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,
     :question_placeholder, :answer1_placeholder, :answer2_placeholder, :answer1response_placeholder, :answer2response_placeholder, :answer1link_text_placeholder, :answer2link_text_placeholder,
 
-    #custom
+    # custom
     :custom_html, :custom_css, :custom_js,
 
     # other
@@ -33,9 +34,13 @@ class SiteElementSerializer < ActiveModel::Serializer
     :open_in_new_window, :placement, :default_email_thank_you_text
 
   SiteElement::QUESTION_DEFAULTS.keys.each do |attr_name|
-    define_method "#{attr_name}_placeholder" do
+    define_method "#{ attr_name }_placeholder" do
       SiteElement::QUESTION_DEFAULTS[attr_name]
     end
+  end
+
+  def email_redirect
+    object.email_redirect?
   end
 
   def caption
@@ -48,10 +53,10 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def preset_rule_name
-    return "" unless object.rule
+    return '' unless object.rule
 
     if rule.editable
-      "Saved"
+      'Saved'
     else
       rule.name
     end
@@ -66,26 +71,26 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site_preview_image
-    object.site ? proxied_url2png("?url=#{ERB::Util.url_encode(object.site.url)}") : ""
+    object.site ? proxied_url2png("?url=#{ ERB::Util.url_encode(object.site.url) }") : ''
   end
 
   def site_preview_image_mobile
-    object.site ? proxied_url2png("?url=#{ERB::Util.url_encode(object.site.url)}&viewport=320x568") : ""
+    object.site ? proxied_url2png("?url=#{ ERB::Util.url_encode(object.site.url) }&viewport=320x568") : ''
   end
 
   def proxied_url2png(params)
-    "/proxy/https/" + url2png(params).sub(/^https:\/\//, '')
+    '/proxy/https/' + url2png(params).sub(/^https:\/\//, '')
   end
 
   def url2png(params)
-    css_url = "http://#{Hellobar::Settings[:host]}/stylesheets/hide_bar.css"
+    css_url = "http://#{ Hellobar::Settings[:host] }/stylesheets/hide_bar.css"
     # Include CSS to hide any Hello Bar already there
-    params += "&custom_css_url=#{ERB::Util.url_encode(css_url)}"
+    params += "&custom_css_url=#{ ERB::Util.url_encode(css_url) }"
     # Cache for 7 days
-    params += "&ttl=#{7*24*60*60}"
+    params += "&ttl=#{ 7 * 24 * 60 * 60 }"
     # Calculate the token
-    token = Digest::MD5.hexdigest("#{params}SC10DF8C7E0FE8")
-    "https://api.url2png.com/v6/P52EBC321291EF/#{token}/png/#{params}"
+    token = Digest::MD5.hexdigest("#{ params }SC10DF8C7E0FE8")
+    "https://api.url2png.com/v6/P52EBC321291EF/#{ token }/png/#{ params }"
   end
 
   def errors
@@ -99,17 +104,17 @@ class SiteElementSerializer < ActiveModel::Serializer
       errors = object.errors[attribute]
 
       if attribute == :element_subtype && errors.include?("can't be blank")
-        messages << "You must select your goal in the \"goals\" section"
+        messages << 'You must select your goal in the "goals" section'
         next
       end
 
       if attribute == :rule && errors.include?("can't be blank")
-        messages << "You must select who will see this in the \"targeting\" section"
+        messages << 'You must select who will see this in the "targeting" section'
         next
       end
 
       if attribute == :contact_list && errors.include?("can't be blank")
-        messages << "You must select a contact list to sync with in the \"goals\" section"
+        messages << 'You must select a contact list to sync with in the "goals" section'
         next
       end
 
