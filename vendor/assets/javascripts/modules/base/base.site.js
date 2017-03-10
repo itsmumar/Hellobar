@@ -1,18 +1,9 @@
-hellobar.defineModule('base.site', [], function () {
+hellobar.defineModule('base.site', ['hellobar'], function (hellobar) {
 
-  function ModuleConfiguration() {
-    var _siteId;
-    var _siteUrl;
-
-    this.siteId = function (siteId) {
-      return siteId ? (_siteId = siteId) && this : _siteId;
-    };
-    this.siteUrl = function (siteUrl) {
-      return siteUrl ? (_siteUrl = siteUrl) && this : _siteUrl;
-    };
-  }
-
-  var configuration = new ModuleConfiguration();
+  var configuration = hellobar.createModuleConfiguration({
+    siteId: 'number',
+    siteUrl: 'string'
+  });
 
   /**
    * @module base.site {object} This module is for general site-scope operations.
