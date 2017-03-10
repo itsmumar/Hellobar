@@ -1,4 +1,4 @@
-hellobar.defineModule('autofills', ['base.storage', 'base.dom'], function (storage, dom) {
+hellobar.defineModule('autofills', ['hellobar', 'base.storage', 'base.dom'], function (hellobar, storage, dom) {s
 
   var subscriptions = [];
 
@@ -98,27 +98,16 @@ hellobar.defineModule('autofills', ['base.storage', 'base.dom'], function (stora
     initializeValueCollection();
   }
 
-  /**
-   * @class ModuleConfiguration
-   * Encapsulates current module's configuration.
-   */
-  function ModuleConfiguration() {
-    var _autofills = [];
-    var _autoRun = false;
-    this.autofills = function (autofills) {
-      return autofills ? (_autofills = autofills) && this : _autofills;
-    };
-    this.autoRun = function (autoRun) {
-      if (typeof autoRun === 'boolean') {
-        _autoRun = autoRun;
-        return this;
-      } else {
-        return _autoRun;
-      }
-    };
-  }
-
-  var configuration = new ModuleConfiguration();
+  var configuration = hellobar.createModuleConfiguration({
+    autoRun: {
+      type: 'boolean',
+      defaultValue: true
+    },
+    autofills: {
+      type: Array,
+      defaultValue: []
+    }
+  });
 
   /**
    * @module autofills {object} Implements input autofilling logic in DOM.

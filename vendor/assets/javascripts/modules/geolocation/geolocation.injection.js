@@ -1,4 +1,4 @@
-hellobar.defineModule('geolocation.injection', ['base.dom', 'geolocation'], function (dom, geolocation) {
+hellobar.defineModule('geolocation.injection', ['hellobar', 'base.dom', 'geolocation'], function (hellobar, dom, geolocation) {
 
   var geolocationAttributeName = 'data-hb-geolocation';
   var geolocationDefaultAttributeName = 'data-hb-geolocation-default';
@@ -14,14 +14,12 @@ hellobar.defineModule('geolocation.injection', ['base.dom', 'geolocation'], func
     });
   }
 
-  function ModuleConfiguration() {
-    var _autoRun = false;
-    this.autoRun = function (autoRun) {
-      return typeof autoRun === 'boolean' ? (_autoRun = autoRun) : _autoRun;
+  var configuration = hellobar.createModuleConfiguration({
+    autoRun: {
+      type: 'boolean',
+      defaultValue: false
     }
-  }
-
-  var configuration = new ModuleConfiguration();
+  });
 
   /**
    * @module {object} Performs geolocation data injection into DOM.

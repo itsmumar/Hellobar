@@ -1,6 +1,6 @@
 hellobar.defineModule('geolocation',
-  ['base.storage', 'base.ajax', 'base.site', 'base.serialization'],
-  function (storage, ajax, site, serialization) {
+  ['hellobar', 'base.storage', 'base.ajax', 'base.site', 'base.serialization'],
+  function (hellobar, storage, ajax, site, serialization) {
 
     function storageKey() {
       // TODO ideally we should standardize localStorage naming (i.e. HB-something-NNNNN)
@@ -72,14 +72,9 @@ hellobar.defineModule('geolocation',
       }
     }
 
-    function ModuleConfiguration() {
-      var _geolocationUrl;
-      this.geolocationUrl = function (geolocationUrl) {
-        return geolocationUrl ? (_geolocationUrl = geolocationUrl) : _geolocationUrl;
-      };
-    }
-
-    var configuration = new ModuleConfiguration();
+    var configuration = new hellobar.createModuleConfiguration({
+      geolocationUrl: 'string'
+    });
 
     /**
      * @module geolocation {object} Performs geolocation data storing and querying it from the remote server.

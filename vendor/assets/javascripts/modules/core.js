@@ -51,6 +51,9 @@
     function loadDependencies() {
       var dependencyNames = moduleWrapper.dependencyNames || [];
       return dependencyNames.map(function (dependencyName) {
+        if (dependencyName === 'hellobar') {
+          return hellobar;
+        }
         return dependencies ?
           verifiedToBeNonEmpty(dependencies[dependencyName], 'Dependency ' + dependencyName + ' is not specified') :
           getModuleSafe(dependencyName);
@@ -85,7 +88,7 @@
   hellobar.module = function (moduleName, options) {
     var configurator = (options && options.configurator) || null;
     var dependencies = (options && options.dependencies) || null;
-    var allowUndefined = (options && options.dependencies) || false;
+    var allowUndefined = (options && options.allowUndefined) || false;
     return getModuleSafe(moduleName, configurator, dependencies, allowUndefined);
   };
 
@@ -122,6 +125,77 @@
     } else {
       console.warn('HelloBar: Module ' + moduleName + ' has been already defined');
     }
+  };
+
+  /**
+   * Generic class for HelloBar module configuration.
+   * It supports setters/setters for any given settings (with optional type checking).
+   * @param settings {object} Key name is parameter name, value is just type or type with defaultValue
+   * @constructor
+   */
+  function ModuleConfiguration(settings) {
+    var that = this;
+
+    function checkTypeIsCorrect(value, type) {
+      if (typeof type === 'string') {
+        if (typeof value !== type) {
+          throw new HellobarException('Wrong value type. Type ' + type + ' expected, but ' + typeof value + ' is given');
+        }
+      } else if (typeof type === 'function') {
+        if (!(value instanceof type)) {
+          throw new HellobarException('Wrong value type. Value does not match the required constructor');
+        }
+      }
+    }
+
+    function addSetting(name, type, defaultValue) {
+      var _value = defaultValue;
+      that[name] = function (value) {
+        if (typeof value === 'undefined') {
+          return _value;
+        } else {
+          type && checkTypeIsCorrect(value, type);
+          _value = value;
+          return that;
+        }
+      };
+    }
+
+    if (settings) {
+      for (var name in settings) {
+        if (settings.hasOwnProperty(name)) {
+          var setting = settings[name];
+          if (typeof setting === 'string' || typeof setting === 'function') {
+            addSetting(name, setting);
+          } else if (typeof setting === 'object') {
+            addSetting(name, setting.type, setting.defaultValue);
+          }
+
+        }
+      }
+    }
+  }
+
+  /**
+   * Creates an instance of module configuration by given settings definition.
+   * @param settings
+   * @returns {ModuleConfiguration} instance of module configuration
+   * @example
+   * var configuration = hellobar.createModuleConfiguration({
+   *   autoRun: 'boolean', // boolean setting
+   *   limit: 'number', // number setting
+   *   caption: 'string', // string setting
+   *   itemRenderer: ItemRenderer, // setting specified with custom class
+   *   items: Array, // array
+   *   attachment: null, // setting with no type checking
+   *   buttonText: { // setting with explicit defaultValue
+   *     type: 'string',
+   *     defaultValue: 'Click me'
+   *   }
+   * });
+   */
+  hellobar.createModuleConfiguration = function (settings) {
+    return new ModuleConfiguration(settings);
   };
 
   window.hellobar = window.hellobar || hellobar;
