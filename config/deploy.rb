@@ -118,6 +118,7 @@ namespace :deploy do
   before 'assets:precompile', 'node:bower_install'
   before 'assets:precompile', 'ember:build'
   after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
+  after 'assets:precompile', 'script:precompile'
 
   after :publishing, :tag_release
   after :publishing, :restart
@@ -169,7 +170,7 @@ namespace :deploy do
       strategy.git 'remote update'
       strategy.git "branch -f #{ stage } #{ current_revision }"
       strategy.git "push -f origin #{ stage }"
-    end
+    end unless dry_run?
   end
 end
 

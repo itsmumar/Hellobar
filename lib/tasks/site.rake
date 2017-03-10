@@ -1,9 +1,10 @@
 namespace :site do
-  task precompile: :environment do
-    ScriptGenerator.compile
-  end
-
   namespace :scripts do
+    desc 'Precompile assets (js, css, html) which are used in site script'
+    task precompile: :environment do
+      ScriptGenerator.compile
+    end
+
     desc 'Schedule a re-generation of ALL site scripts'
     task :regenerate_all => :environment do |t, args|
       Site.find_each do |site|
