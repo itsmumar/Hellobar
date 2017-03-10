@@ -24,6 +24,7 @@ class ScriptGenerator < Mustache
 
         env.append_path 'vendor/assets/stylesheets/site_elements'
         env.append_path 'lib/themes'
+        env.append_path 'lib/themes/templates'
         env.append_path 'lib/script_generator'
 
         env.version = '1.0'
@@ -55,7 +56,7 @@ class ScriptGenerator < Mustache
       self.class.assets.js_compressor = uglifier
       uglifier.compress(render)
     else
-      self.class.assets.js_compressor = nil
+      manifest.environment.js_compressor = nil if manifest.environment
       render
     end
   end
@@ -421,8 +422,9 @@ class ScriptGenerator < Mustache
   end
 
   def asset(file)
-    return unless manifest.assets[file]
     manifest.find_sources(file).first
+  rescue TypeError
+    nil
   end
 
   def manifest(fresh = false)

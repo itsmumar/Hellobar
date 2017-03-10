@@ -134,8 +134,6 @@ RSpec.configure do |config|
   config.include Paperclip::Shoulda::Matchers
   config.include ActiveSupport::Testing::TimeHelpers
   config.include ControllerSpecHelper, type: :controller
-
-  config.filter_run_excluding benchmark: true
 end
 
 def stub_current_admin(admin)
