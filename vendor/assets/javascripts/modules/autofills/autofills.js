@@ -1,4 +1,4 @@
-hellobar.defineModule('autofills', ['hellobar', 'base.storage', 'base.dom'], function (hellobar, storage, dom) {s
+hellobar.defineModule('autofills', ['hellobar', 'base.storage', 'base.dom'], function (hellobar, storage, dom) {
 
   var subscriptions = [];
 
