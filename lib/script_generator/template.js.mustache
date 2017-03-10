@@ -9,18 +9,9 @@
     HB_PS = "{{pro_secret}}";
     HB_GL_URL = "{{geolocation_url}}"
 
-    {{{ie_shims_js}}}
-    {{{jquery_lib}}}
-    var jQuerySaved = window.jQuery;
-    window.jQuery.noConflict(true);
-    var jQuery = jQuerySaved;
-    var $ = jQuerySaved;
+    {{{libs_js}}}
 
     (function($) {
-
-      {{{hellobar_base_js}}}
-      {{{crypto_js}}}
-      {{{site_element_classes_js}}}
 
       HBInit = function () {
         if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
@@ -70,11 +61,10 @@
     // Autofills
     !HB.CAP.preview && (function () {
       var autofills = {{{autofills_json}}};
-      var module = {{{autofills_js}}};
+      var moduleConstructor = {{{autofills_js}}}
+      var module = moduleConstructor();
       module.configuration().autofills(autofills);
       module.load();
     })();
-
   }
-
 })();

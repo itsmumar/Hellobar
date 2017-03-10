@@ -1,4 +1,4 @@
-(function () {
+function autofills() {
 
   var subscriptions = [];
 
@@ -167,4 +167,4 @@
     }
   };
 
-})();
+}

@@ -14,8 +14,15 @@ class ScriptGenerator < Mustache
 
     def assets
       @assets ||= Sprockets::Environment.new(Rails.root) do |env|
-        env.initialize_configuration Rails.application.assets
-        env.version = Rails.application.assets.version
+        env.append_path 'vendor/assets/javascripts/hellobar_script'
+        env.append_path 'vendor/assets/javascripts/autofills'
+        env.append_path 'vendor/assets/javascripts/site_elements'
+
+        env.append_path 'vendor/assets/stylesheets/site_elements'
+        env.append_path 'lib/themes'
+        env.append_path 'lib/script_generator'
+
+        env.version = '1.0'
         env.css_compressor = :scss
         env.cache = ActiveSupport::Cache::MemoryStore.new
       end
@@ -113,17 +120,11 @@ class ScriptGenerator < Mustache
   end
 
   def site_element_classes_js
-    # render_asset('site_elements.js')
-    js = render_asset('site_elements/site_element.js')
-
-    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
-    klasses.inject(js) do |memo, klass|
-      memo << "\n" << render_asset('site_elements', klass.name.downcase)
-    end
+    render_asset('site_elements.js')
   end
 
-  def hellobar_base_js
-    render_asset('hellobar.base.js')
+  def libs_js
+    render_asset('libs.js')
   end
 
   def autofills_json
@@ -131,29 +132,13 @@ class ScriptGenerator < Mustache
   end
 
   def autofills_js
-    render_asset('autofills/autofills.js')
-  end
-
-  def ie_shims_js
-    render_asset('hellobar_script/ie_shims.js')
-  end
-
-  def crypto_js
-    render_asset('hellobar_script/crypto.js')
-  end
-
-  def jquery_lib
-    if options[:compress]
-      render_asset('jquery-2.2.4.min.js')
-    else
-      render_asset('jquery-2.2.4.js')
-    end
+    render_asset('autofills.js')
   end
 
   def hellobar_container_css
     css = [
-      render_asset('site_elements/container_common.css'),
-      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'container.css') },
+      render_asset('container_common.css'),
+      element_classes.map { |klass| render_asset(klass.name.downcase, 'container.css') },
       element_themes.map { |theme| render_asset(theme.container_css_path.sub('lib/themes/', '')) }
     ]
 
@@ -162,9 +147,9 @@ class ScriptGenerator < Mustache
 
   def hellobar_element_css
     css = [
-      render_asset('site_elements/common.css'),
-      element_classes.map { |klass| render_asset('site_elements', klass.name.downcase, 'element.css') },
-      element_themes.map { |theme| render_asset(theme.element_css_path.sub('lib/themes/', '')) }
+      render_asset('common.css'),
+      element_classes.map { |klass| render_asset(klass.name.downcase, 'element.css') },
+      element_themes.map { |theme| render_asset(theme.element_css_path.sub('lib/themes/', '').sub('.scss', '.css')) }
     ]
 
     css.flatten.join("\n").to_json
