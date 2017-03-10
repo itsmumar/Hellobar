@@ -58,7 +58,7 @@ class ScriptGenerator < Mustache
   end
 
   def capabilities
-    # TODO This is temporary solution. We need to refactor capabilities injection:
+    # TODO: This is temporary solution. We need to refactor capabilities injection:
     # 1) Get rid of no_b, b_variation, preview
     # 2) Don't use SiteSerializer here, the code should be moved to model
     {
@@ -129,43 +129,43 @@ class ScriptGenerator < Mustache
   end
 
   def core_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/core.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/core.js")
   end
 
   def base_ajax_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.ajax.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.ajax.js")
   end
 
   def base_capabilities_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.capabilities.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.capabilities.js")
   end
 
   def base_dom_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.dom.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.dom.js")
   end
 
   def base_serialization_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.serialization.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.serialization.js")
   end
 
   def base_site_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.site.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.site.js")
   end
 
   def base_storage_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/base/base.storage.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.storage.js")
   end
 
   def geolocation_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/geolocation/geolocation.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/geolocation/geolocation.js")
   end
 
   def geolocation_injection_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/geolocation/geolocation.injection.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/geolocation/geolocation.injection.js")
   end
 
   def autofills_js
-    File.read("#{Rails.root}/vendor/assets/javascripts/modules/autofills/autofills.js")
+    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/autofills/autofills.js")
   end
 
   def ie_shims_js
