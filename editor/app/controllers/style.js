@@ -53,9 +53,7 @@ export default Ember.Controller.extend({
       && !this.get('elementTypeSelectionInProgress');
   },
 
-  canUseCustomHtml:  function () {
-    return this.get('model.site.capabilities.custom_html') === true;
-  }.property('model.site.capabilities.custom_html'),
+  canUseCustomHtml: Ember.computed.alias('model.site.capabilities.custom_html'),
 
   shouldShowBarThemeInfo: function() {
     return this._shouldShowThemeInfoForElementType('Bar');

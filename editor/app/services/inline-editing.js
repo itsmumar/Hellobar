@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 import defaultBlocks from './inline-editing.blocks';
+import geolocationHelper from './inline-editing.geolocation-helper';
 
 // Froala Editor license key
 const froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
@@ -54,7 +55,7 @@ class SimpleModelAdapter {
   }
 
   handleImageRemoval() {
-     this.modelHandler.setProperties({
+    this.modelHandler.setProperties({
       'model.active_image_id': null,
       'model.image_placement': this.modelHandler.get('model.image_placement'),
       'model.image_type': 'custom',
@@ -261,7 +262,7 @@ export default Ember.Service.extend({
       }
     });
     $.FroalaEditor.DefineIcon('imageRemoveCustom', {NAME: 'trash'});
-    return $.FroalaEditor.RegisterCommand('imageRemoveCustom', {
+    $.FroalaEditor.RegisterCommand('imageRemoveCustom', {
       title: 'Remove image',
       icon: 'imageRemoveCustom',
       undo: false,
@@ -269,6 +270,27 @@ export default Ember.Service.extend({
       refreshAfterCallback: false,
       callback() {
         that.simpleModelAdapter.handleImageRemoval();
+      }
+    });
+    $.FroalaEditor.DefineIcon('geolocationDropdown', {NAME: 'map-marker'});
+    $.FroalaEditor.RegisterCommand('geolocationDropdown', {
+      title: 'Insert geolocation name',
+      icon: 'geolocationDropdown',
+      type: 'dropdown',
+      focus: false,
+      undo: false,
+      refreshAfterCallback: true,
+      options: {
+        'country': 'Country',
+        'region': 'Region',
+        'city': 'City'
+      },
+      callback(cmd, val) {
+        const span = ` <span data-hb-geolocation="${val}"></span> `;
+        this.html.insert(span);
+        setTimeout(() => {
+          this.toolbar.hide();
+        }, 200);
       }
     });
   },
@@ -290,6 +312,10 @@ export default Ember.Service.extend({
     this.customHtmlChangeListeners.push(listener);
   },
 
+  preconfigure(capabilities) {
+    this._capabilities = capabilities;
+  },
+
   initializeInlineEditing(elementType) {
     this.cleanup();
     this.simpleModelAdapter && this.simpleModelAdapter.trackElementTypeChange(elementType);
@@ -303,7 +329,7 @@ export default Ember.Service.extend({
               // NOTE So far we don't use InlineImageManagementPane, we need to make final desicion later
               //@instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage)
               this.instantiateFroala($iframe, $iframeBody, elementType);
-              return this.initializeInputEditing($iframe, $iframeBody);
+              this.initializeInputEditing($iframe, $iframeBody);
             }
           );
         }
@@ -317,6 +343,8 @@ export default Ember.Service.extend({
 
   instantiateFroala($iframe, $iframeBody, elementType){
     this.cleanupFroala();
+
+    const isGeolocationInjectionAllowed = () => this._capabilities && this._capabilities['geolocation_injection'];
 
     const textFroala = (requestedMode) => {
       const mode = (elementType === 'Bar' && requestedMode === 'full') ? 'simple' : requestedMode;
@@ -332,22 +360,22 @@ export default Ember.Service.extend({
       const toolbarButtons = {
         'simple': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
           'fontFamily', 'fontSize', 'color', 'insertLink', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll'
+          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ],
         'simple-no-link': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
           'fontFamily', 'fontSize', 'color', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll'
+          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ],
         'full': [
           'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
           'fontFamily', 'fontSize', 'color', '-',
           'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
           'insertHR', 'insertLink', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll'
+          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ],
         'limited': [
           'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'color', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll'
+          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ]
       };
       const htmlAllowedTags = {
@@ -373,6 +401,7 @@ export default Ember.Service.extend({
         toolbarVisibleWithoutSelection: true,
         toolbarButtons: toolbarButtons[mode],
         htmlAllowedTags: htmlAllowedTags[mode],
+        htmlAllowedEmptyTags: ['span'],
         enter: $.FroalaEditor.ENTER_P,
         multiLine: mode === 'full',
         initOnClick: false,
@@ -437,13 +466,15 @@ export default Ember.Service.extend({
       .add(textFroala('limited'))
       .add(imageFroala());
 
+    geolocationHelper.bindEvents($allFroala);
+
     this.$currentFroalaInstances = this.$currentFroalaInstances || $();
     this.$currentFroalaInstances = this.$currentFroalaInstances.add($allFroala);
   },
 
   initializeInputEditing($iframe, $iframeBody){
     this.cleanupInputs();
-    return $('.hb-editable-block-input input', $iframeBody).blur(evt => {
+    $('.hb-editable-block-input input', $iframeBody).blur(evt => {
         const $target = $(evt.currentTarget);
         const blockId = $target.closest('[data-hb-editable-block]').attr('data-hb-editable-block');
         const content = $target.val();
@@ -460,6 +491,7 @@ export default Ember.Service.extend({
 
   cleanupFroala() {
     if (this.$currentFroalaInstances && this.$currentFroalaInstances.length > 0) {
+      geolocationHelper.unbindEvents(this.$currentFroalaInstances);
       this.$currentFroalaInstances.off('froalaEditor.contentChanged');
       this.$currentFroalaInstances.off('froalaEditor.blur');
       this.$currentFroalaInstances.off('froalaEditor.image.uploaded');

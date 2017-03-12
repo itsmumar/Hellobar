@@ -7,7 +7,68 @@
     HB_WK = "{{site_write_key}}"; // The site's write key
     HB_TZ = "{{site_timezone}}"; // The site's timezone offset in the format "+/-HH:MM"
     HB_PS = "{{pro_secret}}";
-    HB_GL_URL = "{{geolocation_url}}"
+    HB_GL_URL = "{{geolocation_url}}";
+
+    // HelloBar JS Modules
+    (function() {
+      // Loading core for module management
+      var hellobar = {{{core_js}}}
+
+      // A few helper functions
+      function hasCapability(capability) {
+        return hellobar('base.capabilities').has(capability);
+      }
+
+      function isPreviewMode() {
+        return hasCapability('preview');
+      }
+
+      // Loading base modules
+      {{{base_storage_js}}}
+      {{{base_ajax_js}}}
+      {{{base_dom_js}}}
+      {{{base_serialization_js}}}
+
+      {{{base_capabilities_js}}}
+      hellobar('base.capabilities', {
+        configurator: function(configuration) {
+          configuration.capabilities({{{capabilities_json}}});
+        }
+      });
+
+      {{{base_site_js}}}
+      hellobar('base.site', {
+        configurator: function(configuration) {
+          configuration.siteId({{site_id}}).siteUrl('{{site_url}}');
+        }
+      });
+
+      // Loading geolocation
+      {{{geolocation_js}}}
+      hellobar('geolocation', {
+        configurator: function(configuration) {
+          configuration.geolocationUrl('{{geolocation_url}}');
+        }
+      });
+      {{{geolocation_injection_js}}}
+      !isPreviewMode() && hasCapability('geolocation_injection') && hellobar('geolocation.injection', {
+        configurator: function(configuration) {
+          configuration.autoRun(true);
+        }
+      });
+
+      // Loading bar modules
+      // TODO
+
+      // Loading autofills
+      {{{autofills_js}}}
+      !isPreviewMode() && hasCapability('autofills') && hellobar('autofills', {
+        configurator: function(configuration) {
+          var autofills = {{{autofills_json}}};
+          configuration.autofills(autofills).autoRun(true);
+        }
+      });
+    })();
 
     {{{ie_shims_js}}}
     {{{jquery_lib}}}
@@ -66,14 +127,6 @@
       }
 
     })(jQuery);
-
-    // Autofills
-    !HB.CAP.preview && (function () {
-      var autofills = {{{autofills_json}}};
-      var module = {{{autofills_js}}};
-      module.configuration().autofills(autofills);
-      module.load();
-    })();
 
   }
 

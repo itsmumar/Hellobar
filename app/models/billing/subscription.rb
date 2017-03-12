@@ -177,6 +177,10 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def geolocation_injection?
+      false
+    end
+
     protected
 
     def parent_class
@@ -335,6 +339,10 @@ class Subscription < ActiveRecord::Base
       end
 
       def autofills?
+        true
+      end
+
+      def geolocation_injection?
         true
       end
     end

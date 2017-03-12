@@ -14,7 +14,7 @@ class SiteElement < ActiveRecord::Base
   }
 
   WHITELISTED_TAGS = %w(p strong em u a s sub sup img span ul ol li br hr table tbody tr th td blockquote)
-  WHITELISTED_ATTRS = %w(style class href target alt src)
+  WHITELISTED_ATTRS = %w(style class href target alt src data-hb-geolocation)
 
   # valid bar types and their conversion units
   BAR_TYPES = {
