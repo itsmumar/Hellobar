@@ -1,14 +1,11 @@
 require 'spec_helper'
 
 describe Admin::AdminsController do
-  before(:each) do
-    @admin = create(:admin)
-    stub_current_admin(@admin)
-  end
+  let!(:admin) { create(:admin) }
+  before(:each) { stub_current_admin(admin) }
 
   describe 'GET #index' do
     it 'allows admins to see all admins' do
-      create(:admin)
       get :index
 
       expect(assigns(:admins)).to eq(Admin.all)

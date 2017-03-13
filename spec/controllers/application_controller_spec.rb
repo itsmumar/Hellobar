@@ -1,21 +1,21 @@
 require 'spec_helper'
 
 describe ApplicationController do
-  fixtures :all
-
   describe 'current_site' do
+    let!(:current_user) { create :user, :with_site }
+
     it 'returns nil if no current_user' do
       stub_current_user(nil)
       controller.current_site.should be_nil
     end
 
     it "returns current_user's first site if nothing is set in session" do
-      user = stub_current_user(users(:joey))
+      user = stub_current_user(current_user)
       controller.current_site.should == user.sites.first
     end
 
     it 'returns site stored in session if available' do
-      user = stub_current_user(users(:joey))
+      user = stub_current_user(current_user)
       site = user.sites.last
       session[:current_site] = site.id
 
@@ -23,15 +23,19 @@ describe ApplicationController do
     end
 
     it "returns user's first site if site stored in session is not available or doesn't belong to user" do
-      user = stub_current_user(users(:joey))
-      session[:current_site] = sites(:polymathic).id
+      user = stub_current_user(current_user)
+      session[:current_site] = create(:site).id
 
       controller.current_site.should == user.sites.first
     end
 
-    it 'returns nil if user has no sites' do
-      stub_current_user(users(:wootie))
-      controller.current_site.should be_nil
+    context 'when user has no sites' do
+      let!(:current_user) { create :user }
+
+      it 'returns nil' do
+        stub_current_user(current_user)
+        controller.current_site.should be_nil
+      end
     end
   end
 
@@ -47,8 +51,6 @@ describe ApplicationController do
 end
 
 describe ApplicationController, '#require_admin' do
-  fixtures :all
-
   controller do
     before_action :require_admin
 
@@ -57,6 +59,8 @@ describe ApplicationController, '#require_admin' do
     end
   end
 
+  let(:admin) { create :admin }
+
   it 'redirects the user to the admin login path when there is no current_admin' do
     get :index
 
@@ -64,7 +68,6 @@ describe ApplicationController, '#require_admin' do
   end
 
   it 'redirects the user to the reset password path if they need to set a new password' do
-    admin = admins(:joey)
     admin.stub needs_to_set_new_password?: true
     controller.stub current_admin: admin
     controller.stub url_for: 'http://google.com'
@@ -75,7 +78,6 @@ describe ApplicationController, '#require_admin' do
   end
 
   it 'does not redirect if the user needs to reset their password and is currently on the page' do
-    admin = admins(:joey)
     admin.stub needs_to_set_new_password?: true
     controller.stub current_admin: admin
     controller.stub url_for: admin_reset_password_path
@@ -87,8 +89,6 @@ describe ApplicationController, '#require_admin' do
 end
 
 describe ApplicationController, '#require_no_user' do
-  fixtures :all
-
   controller do
     before_action :require_no_user
 
@@ -97,8 +97,9 @@ describe ApplicationController, '#require_no_user' do
     end
   end
 
+  let(:user) { create :user, :with_site }
+
   it 'redirects a logged in user to the dashboard of their most recent site' do
-    user = users(:joey)
     controller.stub current_user: user
     dashboard_path = site_path(user.sites.first)
 
@@ -155,8 +156,6 @@ describe ApplicationController, '#require_pro_managed_subscription' do
 end
 
 describe ApplicationController, 'rescue_from errors' do
-  fixtures :all
-
   controller do
     def index
       render nothing: true

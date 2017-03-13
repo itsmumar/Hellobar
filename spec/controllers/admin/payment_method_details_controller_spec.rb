@@ -1,14 +1,9 @@
 require 'spec_helper'
 
 describe Admin::PaymentMethodDetailsController do
-  fixtures :all
-
-  before(:each) do
-    @admin = admins(:joey)
-    stub_current_admin(@admin)
-  end
-
-  let!(:user) { users(:joey) }
+  let!(:admin) { create(:admin) }
+  let!(:user) { create(:user, :with_payment_method) }
+  before(:each) { stub_current_admin(admin) }
 
   context 'PUT remove_cc_info' do
     before do

@@ -1,26 +1,21 @@
 require 'spec_helper'
 
 describe Admin::UsersController do
-  fixtures :all
-
   before do
     allow(Infusionsoft).to receive(:contact_add_with_dup_check)
     allow(Infusionsoft).to receive(:contact_add_to_group)
   end
 
-  before(:each) do
-    @admin = admins(:joey)
-  end
+  let!(:admin) { create(:admin) }
+  let(:site) { create(:site, :with_user) }
 
   describe 'GET #index' do
-    before(:each) do
-      stub_current_admin(@admin)
-    end
+    before(:each) { stub_current_admin(admin) }
 
     it 'allows admins to search users by site URL' do
-      get :index, q: 'zombo.com'
+      get :index, q: site.url
 
-      expect(assigns(:users).include?(sites(:zombo).owners.first)).to be_true
+      expect(assigns(:users).include?(site.owners.first)).to be_true
     end
 
     it 'finds deleted users' do
@@ -43,11 +38,11 @@ describe Admin::UsersController do
 
   describe 'GET #show' do
     before do
-      stub_current_admin(@admin)
+      stub_current_admin(admin)
     end
 
     it 'shows the specified user' do
-      user = users(:joey)
+      user = create(:user)
       get :show, id: user.id
 
       expect(assigns(:user)).to eq(user)
@@ -63,22 +58,26 @@ describe Admin::UsersController do
   end
 
   describe 'POST #impersonate' do
+    let(:user) { create(:user) }
+
     it 'allows the admin to impersonate a user' do
-      stub_current_admin(@admin)
+      stub_current_admin(admin)
 
-      post :impersonate, id: users(:joey)
+      post :impersonate, id: user
 
-      expect(controller.current_user).to eq(users(:joey))
+      expect(controller.current_user).to eql user
     end
   end
 
   describe 'DELETE #unimpersonate' do
+    let(:user) { create(:user) }
+
     it 'allows the admin to stop impersonating a user' do
-      stub_current_admin(@admin)
+      stub_current_admin(admin)
 
-      post :impersonate, id: users(:joey)
+      post :impersonate, id: user
 
-      expect(controller.current_user).to eq(users(:joey))
+      expect(controller.current_user).to eql user
 
       delete :unimpersonate
 
@@ -87,12 +86,11 @@ describe Admin::UsersController do
   end
 
   describe 'DELETE #destroy' do
+    let(:user) { create(:user) }
+
     it 'allows the admin to (soft) destroy a user' do
-      stub_current_admin(@admin)
-      user = users(:wootie)
-
+      stub_current_admin(admin)
       delete :destroy, id: user
-
       expect(User.only_deleted).to include(user)
     end
   end

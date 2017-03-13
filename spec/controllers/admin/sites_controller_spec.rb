@@ -1,14 +1,10 @@
 require 'spec_helper'
 
 describe Admin::SitesController do
-  fixtures :all
-
-  before(:each) do
-    @admin = admins(:joey)
-    stub_current_admin(@admin)
-  end
-
-  let(:site) { sites(:zombo) }
+  let!(:admin) { create(:admin) }
+  let(:site) { create(:site, :with_user) }
+  let!(:user) { site.owners.first }
+  before(:each) { stub_current_admin(admin) }
 
   context 'PUT update' do
     it 'changes the subscription with the correct payment method and detail' do
@@ -27,8 +23,6 @@ describe Admin::SitesController do
 
   describe 'POST #regenerate' do
     context 'when the site exists' do
-      let(:user) { site.owners.first }
-
       before do
         Hello::DataAPI.stub(lifetime_totals: nil)
 
@@ -76,7 +70,7 @@ describe Admin::SitesController do
     end
 
     context "when the site doesn't exist" do
-      let(:user) { users(:joey) }
+      let(:user) { create :user }
 
       it 'returns a 404' do
         post_regenerate(-1)
