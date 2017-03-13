@@ -30,6 +30,7 @@ class ScriptGenerator < Mustache
 
         env.version = '1.0'
         env.css_compressor = :scss
+        env.js_compressor = nil
         env.cache = ActiveSupport::Cache::MemoryStore.new
       end
     end
@@ -54,10 +55,8 @@ class ScriptGenerator < Mustache
     self.class.load_templates if Rails.env.development?
 
     if options[:compress]
-      self.class.assets.js_compressor = uglifier
       uglifier.compress(render)
     else
-      manifest.environment.js_compressor = nil if manifest.environment
       render
     end
   end
