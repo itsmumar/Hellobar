@@ -133,6 +133,25 @@ describe SiteElement do
     end
   end
 
+  describe 'HTML tags and attributes whitelisting' do
+    it 'strips the <section> element' do
+      text = 'Text'
+      headline = "<section>#{ text }</section>"
+
+      site_element = SiteElement.new headline: headline
+
+      expect(site_element.headline).to eq text
+    end
+
+    it 'allows data-hb-geolocation attribute' do
+      headline = '<span data-hb-geolocation="country">Country</span>'
+
+      site_element = SiteElement.new headline: headline
+
+      expect(site_element.headline).to eq headline
+    end
+  end
+
   describe '#redirect_has_url' do
     let(:element) { site_elements(:zombo_email) }
 

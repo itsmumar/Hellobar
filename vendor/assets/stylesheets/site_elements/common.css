@@ -533,6 +533,59 @@ form {
 
 /*-----------  Inline Editing -----------*/
 
+.preview-mode [data-hb-geolocation="city"]:after {
+  content: 'City';
+  display: inline-block;
+  position: relative;
+  padding: 2px 8px;
+  margin: 0 2px;
+  background-color: #454545;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.preview-mode [data-hb-geolocation="region"]:after {
+  content: 'Region';
+  display: inline-block;
+  position: relative;
+  padding: 2px 8px;
+  margin: 0 2px;
+  background-color: #454545;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.preview-mode [data-hb-geolocation="country"]:after {
+  content: 'Country';
+  display: inline-block;
+  position: relative;
+  padding: 2px 8px;
+  margin: 0 2px;
+  background-color: #454545;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.default-geolocation-editor {
+  display: block;
+  position: fixed;
+  padding: 8px;
+  background-color: #454545;
+}
+
+.default-geolocation-editor label {
+  display: block;
+  margin-bottom: 4px;
+  color: #a3a3a3;
+}
+
+.default-geolocation-editor input {
+  padding: 4px;
+}
+
 .hb-editable-block > .fr-wrapper {
   min-width: 100px;
 }

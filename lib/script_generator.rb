@@ -18,6 +18,7 @@ class ScriptGenerator < Mustache
 
     def assets
       @assets ||= Sprockets::Environment.new(Rails.root) do |env|
+        env.append_path 'vendor/assets/javascripts/modules'
         env.append_path 'vendor/assets/javascripts/hellobar_script'
         env.append_path 'vendor/assets/javascripts/autofills'
         env.append_path 'vendor/assets/javascripts/site_elements'
@@ -84,11 +85,14 @@ class ScriptGenerator < Mustache
   end
 
   def capabilities
+    # TODO: This is temporary solution. We need to refactor capabilities injection:
+    # 1) Get rid of no_b, b_variation, preview
+    # 2) Don't use SiteSerializer here, the code should be moved to model
     {
       no_b: @site.capabilities.remove_branding? || @options[:preview],
       b_variation: get_branding_variation,
       preview: @options[:preview]
-    }
+    }.merge(SiteSerializer.new(@site).capabilities)
   end
 
   def get_branding_variation
@@ -143,8 +147,8 @@ class ScriptGenerator < Mustache
     site.autofills.to_json
   end
 
-  def autofills_js
-    render_asset('autofills.js')
+  def modules_js
+    render_asset('modules.js')
   end
 
   def hellobar_container_css

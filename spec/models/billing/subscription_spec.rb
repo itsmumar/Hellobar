@@ -297,6 +297,7 @@ describe Subscription do
         expect(capabilities.custom_html?).to be_false
         expect(capabilities.content_upgrades?).to be_false
         expect(capabilities.autofills?).to be_false
+        expect(capabilities.geolocation_injection?).to be_false
       end
 
       specify 'ProManaged plan has certain custom capabilities' do
@@ -306,6 +307,7 @@ describe Subscription do
         expect(capabilities.custom_html?).to be_true
         expect(capabilities.content_upgrades?).to be_true
         expect(capabilities.autofills?).to be_true
+        expect(capabilities.geolocation_injection?).to be_true
       end
     end
 

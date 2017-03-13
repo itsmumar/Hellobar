@@ -7,7 +7,58 @@
     HB_WK = "{{site_write_key}}"; // The site's write key
     HB_TZ = "{{site_timezone}}"; // The site's timezone offset in the format "+/-HH:MM"
     HB_PS = "{{pro_secret}}";
-    HB_GL_URL = "{{geolocation_url}}"
+    HB_GL_URL = "{{geolocation_url}}";
+
+    // HelloBar JS Modules
+    (function() {
+      // Loading all modules
+      {{{modules_js}}}
+
+      // A few helper functions
+      function hasCapability(capability) {
+        return hellobar('base.capabilities').has(capability);
+      }
+
+      function isPreviewMode() {
+        return hasCapability('preview');
+      }
+
+      // Configure modules
+
+      hellobar('base.capabilities', {
+        configurator: function(configuration) {
+          configuration.capabilities({{{capabilities_json}}});
+        }
+      });
+
+      hellobar('base.site', {
+        configurator: function(configuration) {
+          configuration.siteId({{site_id}}).siteUrl('{{site_url}}');
+        }
+      });
+
+      hellobar('geolocation', {
+        configurator: function(configuration) {
+          configuration.geolocationUrl('{{geolocation_url}}');
+        }
+      });
+
+      !isPreviewMode() && hasCapability('geolocation_injection') && hellobar('geolocation.injection', {
+        configurator: function(configuration) {
+          configuration.autoRun(true);
+        }
+      });
+
+      // Loading bar modules
+      // TODO
+
+      !isPreviewMode() && hasCapability('autofills') && hellobar('autofills', {
+        configurator: function(configuration) {
+          var autofills = {{{autofills_json}}};
+          configuration.autofills(autofills).autoRun(true);
+        }
+      });
+    })();
 
     {{{libs_js}}}
 
@@ -55,16 +106,6 @@
       if(!HB.isIEXOrLess(8) && {{script_is_installed_properly}}) {
         _hbq = new HBQ();
       }
-
     })(jQuery);
-
-    // Autofills
-    !HB.CAP.preview && (function () {
-      var autofills = {{{autofills_json}}};
-      var moduleConstructor = {{{autofills_js}}}
-      var module = moduleConstructor();
-      module.configuration().autofills(autofills);
-      module.load();
-    })();
   }
 })();
