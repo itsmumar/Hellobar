@@ -101,7 +101,7 @@ HB.SiteElement = HB.createClass({
         this.setPullDown();
 
         // Monitor zoom scale events
-        this.hideOnZoom();
+        !(this.type === 'Custom') && this.hideOnZoom();
 
         // Set wiggle listeners
         if (this.wiggle_button.length > 0)
