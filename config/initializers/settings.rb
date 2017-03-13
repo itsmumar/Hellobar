@@ -20,10 +20,19 @@ unless defined?(Hellobar::Settings)
     data_api_url
     deliver_email_digests
     deliver_emails
+    drip_client_id
+    drip_secret
     env_name
     fake_data_api
+    geolocation_url
+    get_response_api_url
+    google_auth_id
+    google_auth_secret
     grand_central_api_key
     grand_central_api_secret
+    hb_infusionsoft_default_group
+    hb_infusionsoft_key
+    hb_infusionsoft_url
     host
     loggly_url
     low_priority_queue
@@ -34,28 +43,19 @@ unless defined?(Hellobar::Settings)
     memcached_server
     recaptcha_private_key
     recaptcha_public_key
+    rotp_secret_key_base
     s3_bucket
     s3_content_upgrades_bucket
     script_cdn_url
     sendgrid_password
     sentry_dsn
     store_site_scripts_locally
+    support_location
     syncable
     test_cloning
     tracking_host
-    support_location
-    google_auth_id
-    google_auth_secret
-    drip_client_id
-    drip_secret
-    get_response_api_url
     vr_client_id
     vr_secret
-    geolocation_url
-    rotp_secret_key_base
-    hb_infusionsoft_url
-    hb_infusionsoft_key
-    hb_infusionsoft_default_group
   )
 
   keys.each do |key|
@@ -63,19 +63,6 @@ unless defined?(Hellobar::Settings)
   end
 
   config[:data_api_url] ||= 'http://mock-hi.hellobar.com'
-
-  dynamo_tables = %w(
-    email
-    bar_current
-    bar_prev
-    bar_over_time
-  )
-
-  config[:dynamo_tables] = {}
-
-  dynamo_tables.each do |table|
-    config[:dynamo_tables][table.to_sym] = yaml['dynamo_tables'].try(:[], table) || "test_#{ table }"
-  end
 
   config[:identity_providers] = {
     active_campaign: {
