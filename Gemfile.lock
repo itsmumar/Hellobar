@@ -564,6 +564,9 @@ GEM
       slim (~> 2.0)
     slop (3.5.0)
     socksify (1.7.0)
+    spring (1.7.2)
+    spring-commands-rspec (1.0.4)
+      spring (>= 0.9.1)
     sprockets (2.8.0)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -728,6 +731,8 @@ DEPENDENCIES
   sinatra
   slackistrano
   slim-rails (~> 2.1.4)
+  spring
+  spring-commands-rspec
   teaspoon-jasmine
   thin (~> 1.6.4)
   thread (~> 0.2.2)
