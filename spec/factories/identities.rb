@@ -1,5 +1,7 @@
 FactoryGirl.define do
   factory :identity do
+    site
+    provider 'mailchimp'
     credentials { { token: 'test' }.to_json }
     extra { { metadata: { api_endpoint: 'test' } }.to_json }
 
