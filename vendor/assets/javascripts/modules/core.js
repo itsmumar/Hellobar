@@ -1,4 +1,4 @@
-var hellobar = (function () {
+(function () {
 
   var moduleWrappers = {};
 

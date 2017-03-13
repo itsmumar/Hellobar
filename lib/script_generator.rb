@@ -150,6 +150,10 @@ class ScriptGenerator < Mustache
     render_asset('modules.js')
   end
 
+  def core_js
+    render_asset('core.js')
+  end
+
   def hellobar_container_css
     css = [
       render_asset('container_common.css'),
