@@ -120,9 +120,9 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.14'
   gem 'selenium-webdriver', '~> 2.53.4' # Ubuntu firefox compatible version: 47.0.1
   gem 'simplecov', '~> 0.7.1'
-  gem 'teaspoon-jasmine'
   gem 'spring'
   gem 'spring-commands-rspec'
+  gem 'teaspoon-jasmine'
 end
 
 group :test do

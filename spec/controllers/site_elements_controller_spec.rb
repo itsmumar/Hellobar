@@ -99,24 +99,24 @@ describe SiteElementsController do
 
     it 'sets `fields_to_collect` under `settings` and return back' do
       post :create, site_id: site.id, site_element: { element_subtype: 'traffic',
-                                                       rule_id: 0,
-                                                       settings: settings }
+                                                      rule_id: 0,
+                                                      settings: settings }
 
       expect_json_response_to_include(settings: settings)
     end
 
     it 'accepts whitelisted fields only' do
       post :create, site_id: site.id, site_element: { element_subtype: 'traffic',
-                                                       rule_id: 0,
-                                                       settings: manipulated_settings }
+                                                      rule_id: 0,
+                                                      settings: manipulated_settings }
 
       expect_json_response_to_include(settings: settings)
     end
 
     it 'accepts custom fields' do
       post :create, site_id: site.id, site_element: { element_subtype: 'traffic',
-                                                       rule_id: 0,
-                                                       settings: settings_custom_fields }
+                                                      rule_id: 0,
+                                                      settings: settings_custom_fields }
 
       expect_json_response_to_include(settings: settings_custom_fields)
     end

@@ -80,7 +80,8 @@ describe PaymentMethodsController, '#update' do
     end
 
     it 'changes the subscription with the correct payment method and detail' do
-      CyberSourceCreditCard.should_receive(:new)
+      CyberSourceCreditCard
+        .should_receive(:new)
         .with(payment_method: payment_method, data: data)
         .and_return(PaymentMethodDetails.new)
       put :update, put_params
