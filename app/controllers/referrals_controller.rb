@@ -38,7 +38,8 @@ class ReferralsController < ApplicationController
   end
 
   def accept
-    token = ReferralToken.where(token: params[:token]).first
+    token = ReferralToken.find_by(token: params[:token])
+
     if current_user.blank? && token.present?
       session[:referral_token] = params[:token]
       flash[:success] = I18n.t('referral.flash.accepted')
