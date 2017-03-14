@@ -8,7 +8,7 @@ class ScriptGenerator < Mustache
 
   class << self
     def compile
-      Rails.root.join('tmp/script').rmtree
+      FileUtils.rm_r Rails.root.join('tmp/script'), force: true
       manifest(true).compile('*.js', '*.css', '*.html')
     end
 
