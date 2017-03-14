@@ -173,7 +173,7 @@ describe SitesController do
   end
 
   describe 'put update' do
-    let(:membership) { create(:site_ownership) }
+    let(:membership) { create(:site_membership) }
     let(:user) { membership.user }
     let(:site) { membership.site }
 

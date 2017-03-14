@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :site_membership, aliases: [:site_ownership] do
+  factory :site_membership do
     role 'owner'
     site
     user

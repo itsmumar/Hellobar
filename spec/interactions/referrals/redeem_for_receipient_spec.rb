@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Referrals::RedeemForRecipient do
-  let(:ownership) { create(:site_ownership) }
+  let(:ownership) { create(:site_membership) }
   let(:site) { ownership.site }
   let(:user) { ownership.user }
 
@@ -26,7 +26,7 @@ describe Referrals::RedeemForRecipient do
   end
 
   it 'subscribes the sender to Pro too' do
-    sender_ownership = create(:site_ownership)
+    sender_ownership = create(:site_membership)
     sender_user = sender_ownership.user
     sender_site = sender_ownership.site
     sender_site.change_subscription(build(:free_subscription))

@@ -109,7 +109,7 @@ describe Referral do
     end
 
     it 'shows up as the only available one for the site' do
-      ownership = create(:site_ownership)
+      ownership = create(:site_membership)
       referral.recipient = ownership.user
       referral.save!
 
@@ -117,7 +117,7 @@ describe Referral do
     end
 
     it 'shows up as one of many available one for the site' do
-      ownership = create(:site_ownership)
+      ownership = create(:site_membership)
       referral.available_to_sender = true
       referral.site = ownership.site
       second = referral.dup
@@ -129,7 +129,7 @@ describe Referral do
     end
 
     it 'does not show up if there is no owner' do
-      ownership = create(:site_ownership)
+      ownership = create(:site_membership)
       ownership.site.owners.delete_all
       referral.recipient = ownership.user
       referral.save!

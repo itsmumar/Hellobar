@@ -85,7 +85,7 @@ describe Site do
 
   describe '#highest_tier_active_subscription' do
     let(:payment_method) { create(:payment_method) }
-    let(:ownership) { create(:site_ownership, user: payment_method.user) }
+    let(:ownership) { create(:site_membership, user: payment_method.user) }
     let(:site) { ownership.site }
 
     it 'returns nil when there are no active subscriptions' do

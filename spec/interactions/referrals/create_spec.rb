@@ -4,7 +4,7 @@ describe Referrals::Create do
   let(:user) { create(:user) }
 
   it 'gets created with a site id selected if the user has one site' do
-    ownership = create(:site_ownership)
+    ownership = create(:site_membership)
 
     ref = Referrals::Create.run(
       sender: ownership.user.reload,

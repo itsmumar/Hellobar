@@ -174,7 +174,7 @@ describe SiteElementsController do
       end
 
       it "doesn't push an unsaved element into the site.site_elements association" do
-        membership = create(:site_ownership)
+        membership = create(:site_membership)
         create(:rule, site: membership.site)
         stub_current_user(membership.user)
 

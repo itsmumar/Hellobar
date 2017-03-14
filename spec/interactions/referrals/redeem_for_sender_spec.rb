@@ -10,7 +10,7 @@ describe Referrals::RedeemForSender do
   end
 
   describe 'redeeming a referral for a site with billing problems' do
-    let(:ownership) { create(:site_ownership, site: past_due_site) }
+    let(:ownership) { create(:site_membership, site: past_due_site) }
     let(:user) { ownership.user }
     let(:site) { ownership.site }
 
