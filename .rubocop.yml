@@ -11,6 +11,7 @@ AllCops:
     - Gemfile
     - Capfile
     - config.ru
+    - '**/*.rake'
   Exclude:
     - 'db/schema.rb'
     - 'bin/*'
