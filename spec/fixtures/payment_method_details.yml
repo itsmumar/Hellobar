@@ -1,6 +1,0 @@
-always_successful_details:
-  payment_method_id: <%= ActiveRecord::FixtureSet.identify :always_successful %>
-  type: "AlwaysSuccessfulPaymentMethodDetails"
-always_fails_details:
-  payment_method_id: <%= ActiveRecord::FixtureSet.identify :always_fails %>
-  type: "AlwaysFailsPaymentMethodDetails"
