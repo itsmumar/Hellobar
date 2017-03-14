@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe SiteElementEditorHelper do
-  fixtures :all
-
   describe 'render_interstitial?' do
     before do
       helper.stub(:params).and_return(params)

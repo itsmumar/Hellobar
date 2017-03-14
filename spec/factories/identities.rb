@@ -10,7 +10,7 @@ FactoryGirl.define do
       extra { Hash['metadata' => { 'api_endpoint' => 'https://us3.api.mailchimp.com' }] }
     end
 
-    trait :mad_mini do
+    trait :mad_mimi do
       provider 'mad_mimi_form'
       credentials { Hash['token' => 'key'] }
     end

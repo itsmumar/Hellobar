@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe ReferralsHelper do
-  fixtures :all
+  let(:user) { create(:user) }
+
   it 'Returns a URL' do
-    user = users(:joey)
     url = helper.referral_url_for_user(user)
 
     expect(url).to be_a(String)

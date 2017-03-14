@@ -3,10 +3,8 @@ require 'spec_helper'
 EMBED_DATA = { 'embed_code' => 'asdf' }
 
 describe ContactListsHelper, type: :helper do
-  fixtures :all
-
-  let(:site) { sites(:zombo) }
-  let(:contact_list) { contact_lists(:zombo_contacts) }
+  let(:site) { create(:site) }
+  let(:contact_list) { create(:contact_list, :mailchimp, site: site) }
 
   before do
     allow_any_instance_of(Identity).to receive(:credentials).and_return('token' => 'test')
@@ -27,7 +25,7 @@ describe ContactListsHelper, type: :helper do
 
     context 'MadMimi' do
       before do
-        contact_list.identity = identities(:mad_mimi)
+        contact_list.identity = create(:identity, :mad_mimi)
       end
 
       it 'has valid results' do

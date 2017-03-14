@@ -34,5 +34,11 @@ FactoryGirl.define do
       operand 'after'
       value { Date.yesterday.strftime('%Y-%m-%d') }
     end
+
+    trait :mobile do
+      segment 'DeviceCondition'
+      operand 'is'
+      value 'mobile'
+    end
   end
 end

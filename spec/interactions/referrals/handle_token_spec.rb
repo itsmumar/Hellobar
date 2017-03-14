@@ -1,15 +1,13 @@
 require 'spec_helper'
 
 describe Referrals::HandleToken do
-  fixtures :all
-
   it 'does nothing if no token is passed in' do
     expect_any_instance_of(Referral).not_to receive(:save)
     Referrals::HandleToken.run(user: build(:user), token: nil)
   end
 
   it 'does nothing if a user with more than one site is passed in' do
-    user = users(:joey)
+    user = create(:user, :with_sites, count: 2)
     referral = create(:referral, state: :sent)
 
     expect(user.sites.count > 1).to be_true
@@ -19,7 +17,7 @@ describe Referrals::HandleToken do
   end
 
   it 'creates a new referral if a user token is passed in' do
-    sender = users(:joey)
+    sender = create(:user)
     recipient = create(:user)
 
     expect {

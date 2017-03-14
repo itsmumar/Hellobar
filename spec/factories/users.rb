@@ -42,5 +42,15 @@ FactoryGirl.define do
         create :site, users: [user]
       end
     end
+
+    trait :with_sites do
+      transient do
+        count 1
+      end
+
+      after(:create) do |user, evaluator|
+        create_list :site, evaluator.count, users: [user]
+      end
+    end
   end
 end

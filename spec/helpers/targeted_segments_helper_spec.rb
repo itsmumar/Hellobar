@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 describe TargetedSegmentsHelper do
-  fixtures :all
+  let(:site) { create(:site, :with_rule) }
+
+  before do
+    create(:condition, :mobile, rule: site.rules.first)
+  end
 
   describe 'segment_description' do
     it 'correctly expands short segment strings into humanized descriptions' do
@@ -16,12 +20,12 @@ describe TargetedSegmentsHelper do
 
   describe 'create_targeted_content_link' do
     it 'uses an existing rule if one already matches' do
-      link = create_targeted_content_link(sites(:zombo), 'dv:mobile')
-      link.should =~ /rule_id=#{rules(:zombo_mobile).id}/
+      link = create_targeted_content_link(site, 'dv:mobile')
+      link.should =~ /rule_id=#{site.rules.first.id}/
     end
 
     it 'links to targeted segments controller if no matching rule exists' do
-      link = create_targeted_content_link(sites(:zombo), 'dv:desktop')
+      link = create_targeted_content_link(site, 'dv:desktop')
       link.should =~ /targeted_segments/
       link.should =~ /dv%3Adesktop/
     end
@@ -29,8 +33,8 @@ describe TargetedSegmentsHelper do
 
   describe 'rule_for_segment_and_value' do
     it "returns a rule if it has a single condition of 'segment is value'" do
-      rule = rule_for_segment_and_value(sites(:zombo), 'dv', 'mobile')
-      rule.should == rules(:zombo_mobile)
+      rule = rule_for_segment_and_value(site, 'dv', 'mobile')
+      rule.should == site.rules.first
     end
   end
 end

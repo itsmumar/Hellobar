@@ -1,6 +1,18 @@
 FactoryGirl.define do
   factory :site do
+    transient do
+      elements []
+    end
+
     url { random_uniq_url }
+
+    after :create do |site, evaluator|
+      create(:rule, site: site) if evaluator.elements.present?
+
+      evaluator.elements.each do |element|
+        create(:site_element, element, site: site)
+      end
+    end
 
     trait :with_rule do
       after(:create) do |site|
@@ -23,6 +35,13 @@ FactoryGirl.define do
     trait :pro do
       after(:create) do |site|
         create(:pro_subscription, site: site, user: site.users.first)
+      end
+    end
+
+    trait :past_due_site do
+      after(:create) do |site|
+        subscription = create(:pro_subscription, site: site, user: site.users.first)
+        create(:past_due_bill, subscription: subscription)
       end
     end
   end
