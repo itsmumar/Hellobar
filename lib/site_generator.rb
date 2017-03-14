@@ -4,6 +4,8 @@ class SiteGenerator
   def initialize(site_id, opts = {})
     @site = Site.find(site_id)
     @full_path = opts[:full_path] || generate_full_path(opts)
+    @compress = opts.fetch(:compress, false)
+    ScriptGenerator.compile
   end
 
   def generate_file
@@ -55,7 +57,7 @@ class SiteGenerator
       <script>
     EOS
 
-    str += @site.script_content(false)
+    str += @site.script_content(@compress)
     str += "</script><p>Generated on #{ Time.current }</p></body></html>"
     str
   end

@@ -36,29 +36,33 @@ describe ScriptGenerator do
 
     it 'includes the minified hellobar css' do
       generator.stub :hellobar_container_css
-      hellobar_css = File.read("#{ Rails.root }/vendor/assets/stylesheets/site_elements/common.css")
-      element_css = File.read("#{ Rails.root }/vendor/assets/stylesheets/site_elements/bar/element.css")
+      hellobar_css = ScriptGenerator.assets['common.css'].to_s
+      element_css = ScriptGenerator.assets['bar/element.css'].to_s
 
       CSSMin.stub(:minify) { |x| x }
       result = generator.render
 
-      result.should include(hellobar_css.to_json[1..-2])
-      result.should include(element_css.to_json[1..-2])
+      expect(hellobar_css).not_to be_empty
+      expect(element_css).not_to be_empty
+      expect(result).to include hellobar_css.to_json[1..-2]
+      expect(result).to include element_css.to_json[1..-2]
     end
 
     it 'includes the hellobar container css' do
       generator.stub :hellobar_element_css
       allow(generator).to receive(:pro_secret) { 'random' }
-      container_css = File.read("#{ Rails.root }/vendor/assets/stylesheets/site_elements/container_common.css")
+      container_css = ScriptGenerator.assets['container_common.css'].to_s
       container_css.gsub!('hellobar-container', 'random-container')
-      element_container_css = File.read("#{ Rails.root }/vendor/assets/stylesheets/site_elements/bar/container.css")
+      element_container_css = ScriptGenerator.assets['bar/container.css'].to_s
       element_container_css.gsub!('hellobar-container', 'random-container')
 
       CSSMin.stub(:minify) { |x| x }
       result = generator.render
 
-      result.should include(container_css.to_json[1..-2])
-      result.should include(element_container_css.to_json[1..-2])
+      expect(container_css).not_to be_empty
+      expect(element_container_css).not_to be_empty
+      expect(result).to include container_css.to_json[1..-2]
+      expect(result).to include element_container_css.to_json[1..-2]
     end
 
     it 'renders the initialization of the hellobar queue object' do
@@ -321,9 +325,7 @@ describe ScriptGenerator do
         generator = ScriptGenerator.new('site', compress: true)
         generator.stub render: 'template'
 
-        uglifier = Uglifier.new
-        Uglifier.should_receive(:new).and_return(uglifier)
-        uglifier.should_receive(:compress).with('template')
+        expect(ScriptGenerator.uglifier).to receive(:compress).with('template')
 
         generator.generate_script
       end
