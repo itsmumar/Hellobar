@@ -26,10 +26,3 @@ if (!Function.prototype.bind) {
     return fBound;
   };
 }
-
-if (typeof Element.prototype.addEventListener !== 'function') {
-  Element.prototype.addEventListener = function (e, callback) {
-    e = 'on' + e;
-    return this.attachEvent(e, callback);
-  };
-}

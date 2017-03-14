@@ -1821,14 +1821,15 @@ var HB = {
   // Delays & restarts wiggle animation before & after mousing over bar
   wiggleEventListeners: function (context) {
     var element = context.querySelector('#hellobar');
+    var cta = element.querySelector('.hellobar-cta');
 
     element.addEventListener('mouseenter', function () {
-      element.querySelector('.hellobar-cta').removeClass('wiggle');
-    })
+      HB.removeClass(cta, 'wiggle');
+    });
 
-    element.on('mouseleave', function () {
+    element.addEventListener('mouseleave', function () {
       setTimeout(function () {
-        element.querySelector('.hellobar-cta').addClass('wiggle');
+        HB.addClass(cta, 'wiggle');
       }, 2500);
     });
   },
