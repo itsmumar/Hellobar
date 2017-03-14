@@ -75,9 +75,7 @@ FactoryGirl.define do
     end
 
     after :create do |element, evaluator|
-      if evaluator.site
-        element.rule.update site: evaluator.site
-      end
+      element.rule.update site: evaluator.site if evaluator.site
     end
   end
 end

@@ -385,7 +385,7 @@ describe User do
 
     before do
       loblaw_url = 'http://www.google.com/'
-      user.sites << create(:site,  url: loblaw_url)
+      user.sites << create(:site, url: loblaw_url)
     end
 
     context 'with invalid host string' do
