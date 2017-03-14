@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Site do
-  let(:site) { create(:site, :with_user) }
+  let(:site) { create(:site, :with_user, :with_rule) }
   let(:pro_site) { create(:site, :pro) }
 
   it_behaves_like 'an object with a valid url'
