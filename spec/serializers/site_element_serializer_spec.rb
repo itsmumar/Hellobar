@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe SiteElementSerializer do
-  fixtures :all
-
-  let(:element) { site_elements(:zombo_traffic) }
+  let(:element) { create(:site_element, :traffic) }
 
   it 'should translate missing element subtype error into something more readable' do
     element.element_subtype = nil

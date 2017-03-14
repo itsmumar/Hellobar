@@ -1,10 +1,8 @@
 require 'spec_helper'
 
 describe DigestMailer do
-  fixtures :all
-
   describe 'weekly_digest' do
-    let(:site) { sites(:zombo) }
+    let(:site) { create(:site, :with_user, elements: [:email]) }
     let(:user) { site.owners.first }
     let(:mail) { DigestMailer.weekly_digest(site, user) }
 

@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe Cleaners::EmbedCode do
-  fixtures :all
-
-  subject { contact_lists(:embed_code) }
+  subject { create(:contact_list, :embed_code) }
   let(:embed_code) { 'Here I am' }
 
   before do

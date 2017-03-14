@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe ServiceProviders::EmbedCodeProvider do
-  fixtures :all
-
-  let(:contact_list) { contact_lists(:embed_code) }
+  let(:contact_list) { create(:contact_list, :embed_code) }
 
   let(:service_provider) do
     ServiceProviders::EmbedCodeProvider.new(contact_list: contact_list)

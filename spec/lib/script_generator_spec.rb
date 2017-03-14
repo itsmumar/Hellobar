@@ -1,15 +1,15 @@
 require 'spec_helper'
 
 describe ScriptGenerator do
-  fixtures :all
   extend ThemeMacros
 
   before do
     Hello::DataAPI.stub(lifetime_totals: nil)
   end
 
+
   describe '#render' do
-    let(:site) { sites(:zombo) }
+    let(:site) { create(:site, :with_user, :pro, elements: %i(traffic email facebook twitter)) }
     let(:generator) { ScriptGenerator.new(site) }
 
     it 'renders the site id variable' do
@@ -229,9 +229,10 @@ describe ScriptGenerator do
   end
 
   describe '#rules' do
-    let(:site) { sites(:zombo) }
-    let(:contact_list) { contact_lists(:zombo_contacts) }
+    let(:site) { create(:site, :with_user, :pro) }
+    let(:contact_list) { create(:contact_list, site: site) }
     let(:generator) { ScriptGenerator.new(site) }
+    let(:rule) { create(:rule, match: nil) }
 
     it 'returns the proper array of hashes for a sites rules' do
       rule = Rule.new id: 1
@@ -248,7 +249,6 @@ describe ScriptGenerator do
     end
 
     it 'returns the proper hash when a single bar_id is passed as an option' do
-      rule = rules(:horsebike)
       bar = SiteElement.create! element_subtype: 'email', rule: rule, contact_list: contact_list
       options = { bar_id: bar.id }
 
@@ -267,7 +267,6 @@ describe ScriptGenerator do
     end
 
     it 'renders all bar json when the render_paused_site_elements is true' do
-      rule = rules(:horsebike)
       bar = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       options = { render_paused_site_elements: true }
       generator = ScriptGenerator.new(site, options)
@@ -285,7 +284,6 @@ describe ScriptGenerator do
     end
 
     it 'renders only active bar json by default' do
-      rule = rules(:horsebike)
       paused = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       active_bar = SiteElement.create! element_subtype: 'traffic', rule: rule, paused: false
       generator = ScriptGenerator.new(site)
