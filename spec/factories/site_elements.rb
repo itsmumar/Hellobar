@@ -12,10 +12,8 @@ FactoryGirl.define do
 
     rule
 
-    factory :bar, class: Bar
-    factory :slider, class: Bar, traits: [:slider]
-
     trait :bar
+
     trait :slider do
       type 'Slider'
       placement 'top-left'

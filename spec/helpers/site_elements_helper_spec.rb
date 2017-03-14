@@ -204,7 +204,7 @@ describe SiteElementsHelper do
     end
 
     it 'returns the bars indexed by letter' do
-      se1 = create(:bar, :traffic)
+      se1 = create(:site_element, :bar, :traffic)
       se2 = se1.dup
       se2.created_at = se1.created_at + 1.minute
       se2.save
@@ -233,7 +233,7 @@ describe SiteElementsHelper do
     end
 
     it 'does not group elements that are in different rules' do
-      variation_1 = create(:bar, :traffic)
+      variation_1 = create(:site_element, :bar, :traffic)
       variation_2 = variation_1.dup
       variation_3 = variation_1.dup
 
@@ -265,9 +265,9 @@ describe SiteElementsHelper do
 
     it 'only groups elements with the same type' do
       site = create(:site, :with_rule)
-      variation_1 = create(:bar, :traffic, site: site)
-      variation_2 = create(:bar, :traffic, site: site)
-      variation_3 = create(:slider, :traffic, site: site)
+      variation_1 = create(:site_element, :bar, :traffic, site: site)
+      variation_2 = create(:site_element, :bar, :traffic, site: site)
+      variation_3 = create(:site_element, :slider, :traffic, site: site)
 
       icon_1 = helper.ab_test_icon(variation_1)
       icon_2 = helper.ab_test_icon(variation_2)
