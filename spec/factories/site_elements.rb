@@ -15,6 +15,7 @@ FactoryGirl.define do
     factory :bar, class: Bar
     factory :slider, class: Bar, traits: [:slider]
 
+    trait :bar
     trait :slider do
       type 'Slider'
       placement 'top-left'
@@ -81,7 +82,7 @@ FactoryGirl.define do
     end
 
     after :create do |element, evaluator|
-      element.update rule: evaluator.site.rules.first if evaluator.site
+      element.update! rule: evaluator.site.rules.first! if evaluator.site
     end
   end
 end

@@ -232,7 +232,7 @@ describe SitesController do
   end
 
   describe 'GET chart_data' do
-    let(:site) { create(:site, :with_user) }
+    let(:site) { create(:site, :with_user, :with_rule) }
     let(:site_element) { create(:site_element, :traffic, site: site) }
     let(:user) { site.owners.first }
 

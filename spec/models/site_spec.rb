@@ -508,30 +508,24 @@ describe Site do
   end
 
   describe '#set_branding_on_site_elements' do
-    let(:site) { subscription.site }
-    let(:element) { create(:site_element, :traffic, site: site) }
-
-    before do
-      element.rule = site.rules.first
-      element.show_branding = true
-      element.save
-      site.send(:set_branding_on_site_elements)
-      element.reload
-    end
+    let!(:site) { create(:site, :with_rule) }
+    let!(:element) { create(:site_element, :traffic, rule: site.rules.first!, show_branding: true) }
 
     context 'when subscription is pro' do
-      let!(:subscription) { create(:pro_subscription) }
+      let!(:subscription) { create(:pro_subscription, site: site) }
 
       it 'does not show branding' do
-        expect(element.show_branding).to be_false
+        site.send(:set_branding_on_site_elements)
+        expect(element.reload.show_branding).to be_false
       end
     end
 
     context 'when subscription is free' do
-      let!(:subscription) { create(:free_subscription) }
+      let!(:subscription) { create(:free_subscription, site: site) }
 
       it 'shows branding' do
-        expect(element.show_branding).to be_true
+        site.send(:set_branding_on_site_elements)
+        expect(element.reload.show_branding).to be_true
       end
     end
   end
