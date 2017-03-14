@@ -206,7 +206,7 @@ describe Bill do
       }.to change { user.sent_referrals.redeemable_for_site(bill.site).count }.by(-1)
 
       expect(bill.amount).to eq(0.0)
-      expect(bill.discount).to eq(10.0)
+      expect(bill.discount).to eq(15.0)
     end
 
     it "sets the final amount to 0 and uses up one available referral if there's no discount" do
@@ -218,7 +218,7 @@ describe Bill do
       }.to change { user.sent_referrals.redeemable_for_site(bill.site).count }.by(-1)
 
       expect(bill.amount).to eq(0.0)
-      expect(bill.discount).to eq(10.0)
+      expect(bill.discount).to eq(15.0)
     end
   end
 
