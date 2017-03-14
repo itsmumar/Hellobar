@@ -234,11 +234,11 @@ class Site < ActiveRecord::Base
   end
 
   def current_subscription
-    subscriptions.last
+    highest_tier_active_subscription || subscriptions.last
   end
 
   def highest_tier_active_subscription
-    subscriptions.active.to_a.sort.first
+    subscriptions.active.sort.first
   end
 
   def has_pro_managed_subscription?
@@ -271,7 +271,8 @@ class Site < ActiveRecord::Base
   def is_free?
     current_subscription.nil? ||
       current_subscription.type.blank? ||
-      Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
+      current_subscription == Subscription::Free.new
+      # Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
   end
 
   def capabilities(clear_cache = false)
@@ -440,7 +441,9 @@ class Site < ActiveRecord::Base
       end
     else
       last_subscription = active_paid_bills.last.subscription
-      if Subscription::Comparison.new(last_subscription, subscription).upgrade?
+
+      # if Subscription::Comparison.new(last_subscription, subscription).upgrade?
+      if subscription > last_subscription
         # We are upgrading, gotta pay now, but we prorate it
 
         bill.bill_at = now
@@ -472,6 +475,7 @@ class Site < ActiveRecord::Base
         end
       end
     end
+
     bill.start_date = bill.bill_at - 1.hour
     bill.end_date = bill.renewal_date
 

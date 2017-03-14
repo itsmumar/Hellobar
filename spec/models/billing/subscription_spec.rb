@@ -19,6 +19,15 @@ end
 describe Subscription do
   include SubscriptionHelper
 
+  describe 'comparable interface' do
+    specify 'a ProManaged subscription has higher significance than Enterprise' do
+      pro_managed = Subscription::ProManaged.new
+      enterprise = Subscription::Enterprise.new
+
+      expect(pro_managed > enterprise).to be_true
+    end
+  end
+
   describe '.estimated_price' do
     it 'returns the subscriptions monthly amount - calculated discounts' do
       allow_any_instance_of(DiscountCalculator).to receive(:current_discount).and_return(12)

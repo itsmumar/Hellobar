@@ -3,13 +3,19 @@ require 'discount_calculator'
 
 class Subscription < ActiveRecord::Base
   include BillingAuditTrail
+  include Comparable
+
   belongs_to :user
   belongs_to :site, touch: true
   belongs_to :payment_method
-  enum schedule: [:monthly, :yearly]
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
 
+  enum schedule: [:monthly, :yearly]
+
+  attr_reader :significance
+
   after_initialize :set_initial_values
+  after_initialize :set_significance
   after_create :mark_user_onboarding_as_bought_subscription!
 
   class << self
@@ -95,6 +101,41 @@ class Subscription < ActiveRecord::Base
       self.visit_overage_unit ||= values[:visit_overage_unit]
       self.visit_overage_amount ||= values[:visit_overage_amount]
     end
+  end
+
+  # @significance is used for sorting and comparing subscriptions:
+  #   Base               -   0 (not used in real subscriptions)
+  #   Free               -   1
+  #   ProblemWithPayment -   5
+  #   FreePlus           -  10
+  #   Pro                -  20
+  #   ProComped          -  20
+  #   Enterprise         -  50
+  #   ProManaged         - 100
+  def set_significance
+    # puts "#set_significance EXEC; class: #{ self.class }"
+
+    @significance =
+      case self
+      when Subscription::ProManaged
+        100
+      when Subscription::Enterprise
+        50
+      when Subscription::ProComped
+        20
+      when Subscription::Pro
+        20
+      when Subscription::FreePlus
+        10
+      when Subscription::ProblemWithPayment
+        5
+      when Subscription::Free
+        1
+      else
+        # puts self.class == Subscription::ProManaged
+        0
+      end
+    # @significance = 0
   end
 
   def mark_user_onboarding_as_bought_subscription!
@@ -209,6 +250,25 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  # These are the capabilities of a user who has an issue with payment
+  # They are basically the same as Free, but we don't let the subscription
+  # override the visit_overage features
+  class ProblemWithPayment < Free
+    class Capabilities < Free::Capabilities
+      def visit_overage
+        parent_class.values_for(@site)[:visit_overage]
+      end
+
+      def visit_overage_unit
+        parent_class.values_for(@site)[:visit_overage_unit]
+      end
+
+      def visit_overage_amount
+        parent_class.values_for(@site)[:visit_overage_amount]
+      end
+    end
+  end
+
   class FreePlus < Free
     class Capabilities < Free::Capabilities
       def max_site_elements
@@ -226,25 +286,6 @@ class Subscription < ActiveRecord::Base
           # visit_overage_amount: 10, # every X visitors
           visit_overage_amount: nil # ads
         }
-      end
-    end
-  end
-
-  # These are the capabilities of a user who has an issue with payment
-  # They are basically the same as Free, but we don't let the subscription
-  # override the visit_overage features
-  class ProblemWithPayment < Free
-    class Capabilities < Free::Capabilities
-      def visit_overage
-        parent_class.values_for(@site)[:visit_overage]
-      end
-
-      def visit_overage_unit
-        parent_class.values_for(@site)[:visit_overage_unit]
-      end
-
-      def visit_overage_amount
-        parent_class.values_for(@site)[:visit_overage_amount]
       end
     end
   end
@@ -328,6 +369,24 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  class Enterprise < Base
+    class Capabilities < Pro::Capabilities
+    end
+
+    class << self
+      def defaults
+        {
+          name: 'Enterprise',
+          monthly_amount: 99.0,
+          yearly_amount: 999.0,
+          visit_overage: nil, # unlimited
+          # visit_overage_amount: nil, # unlimited
+          visit_overage_amount: nil # unlimited
+        }
+      end
+    end
+  end
+
   class ProManaged < Pro
     class Capabilities < Pro::Capabilities
       def custom_html?
@@ -361,65 +420,48 @@ class Subscription < ActiveRecord::Base
     end
   end
 
-  class Enterprise < Base
-    class Capabilities < Pro::Capabilities
-    end
-
-    class << self
-      def defaults
-        {
-          name: 'Enterprise',
-          monthly_amount: 99.0,
-          yearly_amount: 999.0,
-          visit_overage: nil, # unlimited
-          # visit_overage_amount: nil, # unlimited
-          visit_overage_amount: nil # unlimited
-        }
-      end
-    end
-  end
-
-  def <=>(other)
-    if other.is_a?(Subscription)
-      Comparison.new(self, other).direction
+  def <=> other
+    if other.is_a? Subscription
+      significance <=> other.significance
+      # Comparison.new(self, other).direction
     else
-      super(other)
+      super other
     end
   end
 
   # These need to be in the order of least expensive to most expensive
-  PLANS = [Free, ProblemWithPayment, Pro, Enterprise]
-  class Comparison
-    attr_reader :from_subscription, :to_subscription, :direction
-    def initialize(from_subscription, to_subscription)
-      @from_subscription = from_subscription
-      @to_subscription = to_subscription
-      from_index = to_index = nil
-      PLANS.each_with_index do |plan, index|
-        from_index = index if from_subscription.is_a?(plan)
-        to_index = index if to_subscription.is_a?(plan)
-      end
-      raise "Could not find plans (from_subscription: #{ from_subscription.inspect } and to_subscription: #{ to_subscription.inspect }, got #{ from_index.inspect } and #{ to_index.inspect }" unless from_index && to_index
-      @direction =
-        if from_index == to_index
-          0
-        elsif from_index > to_index
-          -1
-        else
-          1
-        end
-    end
-
-    def upgrade?
-      @direction > 0
-    end
-
-    def downgrade?
-      !upgrade?
-    end
-
-    def same_plan?
-      @direction == 0
-    end
-  end
+  # PLANS = [Free, ProblemWithPayment, Pro, Enterprise]
+  # class Comparison
+  #   attr_reader :from_subscription, :to_subscription, :direction
+  #   def initialize(from_subscription, to_subscription)
+  #     @from_subscription = from_subscription
+  #     @to_subscription = to_subscription
+  #     from_index = to_index = nil
+  #     PLANS.each_with_index do |plan, index|
+  #       from_index = index if from_subscription.is_a?(plan)
+  #       to_index = index if to_subscription.is_a?(plan)
+  #     end
+  #     raise "Could not find plans (from_subscription: #{ from_subscription.inspect } and to_subscription: #{ to_subscription.inspect }, got #{ from_index.inspect } and #{ to_index.inspect }" unless from_index && to_index
+  #     @direction =
+  #       if from_index == to_index
+  #         0
+  #       elsif from_index > to_index
+  #         -1
+  #       else
+  #         1
+  #       end
+  #   end
+  #
+  #   def upgrade?
+  #     @direction > 0
+  #   end
+  #
+  #   def downgrade?
+  #     !upgrade?
+  #   end
+  #
+  #   def same_plan?
+  #     @direction == 0
+  #   end
+  # end
 end
