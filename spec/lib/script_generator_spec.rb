@@ -7,7 +7,6 @@ describe ScriptGenerator do
     Hello::DataAPI.stub(lifetime_totals: nil)
   end
 
-
   describe '#render' do
     let(:site) { create(:site, :with_user, :pro, elements: %i(traffic email facebook twitter)) }
     let(:generator) { ScriptGenerator.new(site) }
