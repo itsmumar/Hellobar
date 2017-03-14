@@ -10,7 +10,7 @@ set :linked_dirs, %w(log tmp/pids)
 set :rails_env, 'production'
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || 'master'
 set :whenever_roles, %w(app db web)
-set :keep_releases, 50
+set :keep_releases, 15
 
 # Using `lambda` for lazy assigment. http://stackoverflow.com/a/25850619/1047207
 set :ember_app_path, -> { "#{ release_path }/editor" }
