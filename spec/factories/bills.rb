@@ -5,7 +5,6 @@ FactoryGirl.define do
     bill_at Time.now
 
     factory :pro_bill do
-      base_amount 10
       amount Subscription::Pro.defaults[:monthly_amount]
       subscription { create :pro_subscription }
     end
@@ -16,7 +15,6 @@ FactoryGirl.define do
     end
 
     factory :past_due_bill do
-      base_amount 10
       amount 10
       bill_at { '2014-09-01'.to_date }
       subscription { create :pro_subscription }

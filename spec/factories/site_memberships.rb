@@ -1,12 +1,8 @@
 FactoryGirl.define do
-  factory :site_membership do
+  factory :site_membership, aliases: [:site_ownership] do
     role 'owner'
     site
     user
-
-    factory :site_ownership do
-      role 'owner'
-    end
 
     trait :admin do
       user

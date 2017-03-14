@@ -5,6 +5,8 @@ FactoryGirl.define do
     segment 'UrlCondition'
     value ['http://test.com']
 
+    trait :url_is
+
     trait :url_includes do
       operand 'includes'
       segment 'UrlCondition'
