@@ -65,7 +65,7 @@ describe Bill do
 
   it 'should take the payment_method grace period into account when grace_period_allowed' do
     now = Time.now
-    bill = create(:pro_bill)
+    bill = create(:pro_bill, bill_at: now)
     bill.grace_period_allowed?.should == true
     bill.bill_at.should be_within(5.minutes).of(now)
     bill.due_at.should == bill.bill_at

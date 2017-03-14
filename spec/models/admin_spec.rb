@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Admin do
-  let!(:admin) { create :admin }
+  let!(:admin) { create :admin, session_last_active: Time.now }
 
   it 'can create a new record from email and initial password' do
     admin = Admin.make!('newadmin@polymathic.me', '5553211234')
