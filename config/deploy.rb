@@ -124,7 +124,7 @@ namespace :deploy do
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
 
-  desc 'Precompile static assets for site'
+  desc 'Precompile static assets to be used for static site scripts recompilation'
   task :precompile_static_assets do
     on roles(:web, :worker) do
       within release_path do
