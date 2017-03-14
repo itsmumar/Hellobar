@@ -1,4 +1,4 @@
-//= require hellobar.base
+//= require hellobar_script/hellobar.base
 //= require site_elements/site_element
 
 var context = describe;

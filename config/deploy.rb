@@ -118,10 +118,22 @@ namespace :deploy do
   before 'assets:precompile', 'node:bower_install'
   before 'assets:precompile', 'ember:build'
   after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
+  after 'assets:precompile', 'precompile_static_assets'
 
   after :publishing, :tag_release
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
+
+  desc 'Precompile static assets to be used for static site scripts recompilation'
+  task :precompile_static_assets do
+    on roles(:web, :worker) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'site:scripts:precompile_static_assets'
+        end
+      end
+    end
+  end
 
   desc 'Starts maintenance mode'
   task :start_maintenance do
@@ -162,6 +174,8 @@ namespace :deploy do
   end
 
   task :tag_release do
+    return if dry_run?
+
     run_locally do
       stage = fetch :stage
       current_revision = fetch :current_revision

@@ -3,15 +3,46 @@ require 'hmac-sha1'
 require 'hmac-sha2'
 
 class ScriptGenerator < Mustache
+  self.raise_on_context_miss = true
+  cattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
+
   class << self
+    def compile
+      FileUtils.rm_r Rails.root.join('tmp/script'), force: true
+      manifest(true).compile('*.js', '*.css', '*.html')
+    end
+
     def load_templates
-      self.template_path = "#{ Rails.root }/lib/script_generator/"
-      self.template_file = "#{ Rails.root }/lib/script_generator/template.js.mustache"
+      self.template_path = Rails.root.join('lib/script_generator/')
+      self.template_name = 'template.js'
+    end
+
+    def assets
+      @assets ||= Sprockets::Environment.new(Rails.root) do |env|
+        env.append_path 'vendor/assets/javascripts/modules'
+        env.append_path 'vendor/assets/javascripts/hellobar_script'
+        env.append_path 'vendor/assets/javascripts/site_elements'
+
+        env.append_path 'vendor/assets/stylesheets/site_elements'
+        env.append_path 'lib/themes'
+        env.append_path 'lib/themes/templates'
+        env.append_path 'lib/script_generator'
+
+        env.version = '1.0'
+        env.css_compressor = :scss
+        env.js_compressor = nil
+        env.cache = Rails.cache
+      end
+    end
+
+    def manifest(fresh = false)
+      fresh ||= Rails.env.test?
+      Sprockets::Manifest.new(fresh ? assets.index : nil, 'tmp/script')
     end
   end
   load_templates
 
-  attr_reader :site, :options
+  attr_reader :site, :options, :manifest
   delegate :id, :url, :write_key, to: :site, prefix: true
 
   def initialize(site, options = {})
@@ -20,24 +51,19 @@ class ScriptGenerator < Mustache
   end
 
   def generate_script
-    if Rails.env.development?
-      # Re-read the template
-      ScriptGenerator.load_templates
-    end
+    # Re-read the template
+    self.class.load_templates if Rails.env.development?
 
     if options[:compress]
-      Uglifier.new.compress(render)
+      uglifier.compress(render)
     else
       render
     end
   end
 
   def script_is_installed_properly
-    if Rails.env.test?
-      true
-    else
-      'HB.scriptIsInstalledProperly()'
-    end
+    return true if Rails.env.test?
+    'HB.scriptIsInstalledProperly()'
   end
 
   # returns the sites tz offset as "+/-HH:MM"
@@ -78,8 +104,7 @@ class ScriptGenerator < Mustache
   end
 
   def content_upgrades_json
-    cu_json = {}
-    site.site_elements.active_content_upgrades.each do |cu|
+    site.site_elements.active_content_upgrades.inject({}) { |cu_json, cu|
       content = {
         id: cu.id,
         type: 'ContentUpgrade',
@@ -93,9 +118,8 @@ class ScriptGenerator < Mustache
         contact_list_id: cu.contact_list_id,
         download_link: cu.content_upgrade_download_link
       }
-      cu_json[cu.id] = content
-    end
-    cu_json.to_json
+      cu_json.update cu.id => content
+    }.to_json
   end
 
   def content_upgrades_styles_json
@@ -111,106 +135,59 @@ class ScriptGenerator < Mustache
   end
 
   def site_element_classes_js
-    js = File.read("#{ Rails.root }/vendor/assets/javascripts/site_elements/site_element.js")
-
-    klasses = @options[:preview] ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
-    klasses.each do |klass|
-      js << "\n" << File.read("#{ Rails.root }/vendor/assets/javascripts/site_elements/#{ klass.name.downcase }.js")
-    end
-    js
+    render_asset('site_elements.js')
   end
 
-  def hellobar_base_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/hellobar.base.js")
+  def libs_js
+    render_asset('libs.js')
   end
 
   def autofills_json
     site.autofills.to_json
   end
 
+  def modules_js
+    render_asset('modules.js')
+  end
+
   def core_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/core.js")
-  end
-
-  def base_ajax_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.ajax.js")
-  end
-
-  def base_capabilities_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.capabilities.js")
-  end
-
-  def base_dom_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.dom.js")
-  end
-
-  def base_serialization_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.serialization.js")
-  end
-
-  def base_site_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.site.js")
-  end
-
-  def base_storage_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/base/base.storage.js")
-  end
-
-  def geolocation_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/geolocation/geolocation.js")
-  end
-
-  def geolocation_injection_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/geolocation/geolocation.injection.js")
-  end
-
-  def autofills_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/modules/autofills/autofills.js")
-  end
-
-  def ie_shims_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/hellobar_script/ie_shims.js")
-  end
-
-  def crypto_js
-    File.read("#{ Rails.root }/vendor/assets/javascripts/hellobar_script/crypto.js")
-  end
-
-  def jquery_lib
-    File.read("#{ Rails.root }/vendor/assets/javascripts/jquery-2.2.4.js")
+    render_asset('core.js')
   end
 
   def hellobar_container_css
-    css = read_css_files(container_css_files)
-    css = css.gsub('hellobar-container', "#{ pro_secret }-container")
+    css = [
+      render_asset('container_common.css'),
+      element_classes.map { |klass| render_asset(klass.name.downcase, 'container.css') },
+      element_themes.map { |theme| render_asset(theme.container_css_path) }
+    ]
 
-    CSSMin.minify(css).to_json
+    css.flatten.join("\n").gsub('hellobar-container', "#{ pro_secret }-container").to_json
   end
 
   def hellobar_element_css
-    css = read_css_files(element_css_files)
-    CSSMin.minify(css).to_json
+    css = [
+      render_asset('common.css'),
+      element_classes.map { |klass| render_asset(klass.name.downcase, 'element.css') },
+      element_themes.map { |theme| render_asset(theme.element_css_path) }
+    ]
+
+    css.flatten.join("\n").to_json
   end
 
   def branding_templates
-    [].tap do |r|
-      Dir.glob("#{ Rails.root }/lib/script_generator/branding/*.html") do |f|
-        ActiveSupport.escape_html_entities_in_json = false
-        content = File.read(f).to_json
-        ActiveSupport.escape_html_entities_in_json = true
-        r << { name: f.split('.html').first.split('/').last, markup: content }
+    base = Rails.root.join('lib/script_generator/')
+    without_escaping_html_in_json do
+      Dir.glob(base.join('branding/*.html')).map do |f|
+        path = Pathname.new(f)
+        content = render_asset(path.relative_path_from(base)).to_json
+        { name: path.basename.sub_ext('').to_s, markup: content }
       end
     end
   end
 
   def content_upgrade_template
-    [].tap do |r|
-      f = "#{ Rails.root }/lib/script_generator/contentupgrade/contentupgrade.html"
-      ActiveSupport.escape_html_entities_in_json = false
-      content = File.read(f).to_json
-      ActiveSupport.escape_html_entities_in_json = true
-      r << { name: f.split('.html').first.split('/').last, markup: content }
-    end
+    content = without_escaping_html_in_json { render_asset('contentupgrade/contentupgrade.html').to_json }
+    [{ name: 'contentupgrade', markup: content }]
   end
 
   def templates
@@ -221,16 +198,16 @@ class ScriptGenerator < Mustache
 
       options[:templates].each do |t|
         temp_name = t.split('_', 2)
-        category  = :generic
-        category  = :template if templates.include?(temp_name[1].titleize)
+        category = :generic
+        category = :template if templates.include?(temp_name[1].titleize)
         template_names << (temp_name << category)
       end
     else
       site.site_elements.active.each do |se|
-        theme_id      = se.theme_id
-        theme         = Theme.where(id: theme_id).first
-        category      = theme.type.to_sym
-        subtype       = (category == :template ? theme_id.underscore : se.element_subtype)
+        theme_id = se.theme_id
+        theme = Theme.where(id: theme_id).first
+        category = theme.type.to_sym
+        subtype = (category == :template ? theme_id.underscore : se.element_subtype)
 
         template_names << [se.class.name.downcase, subtype, category]
         template_names << [se.class.name.downcase, 'question', category] if se.use_question?
@@ -280,44 +257,39 @@ class ScriptGenerator < Mustache
   end
 
   def content_template(element_class, type, category = :generic)
-    ActiveSupport.escape_html_entities_in_json = false
-
-    content = if category == :generic
-                (content_header(element_class) +
-                  content_markup(element_class, type, category) +
-                  content_footer(element_class)).to_json
-              else
-                content_markup(element_class, type, category).to_json
-              end
-
-    ActiveSupport.escape_html_entities_in_json = true
-
-    content
+    without_escaping_html_in_json do
+      if category == :generic
+        (content_header(element_class) +
+          content_markup(element_class, type, category) +
+          content_footer(element_class)).to_json
+      else
+        content_markup(element_class, type, category).to_json
+      end
+    end
   end
 
   def content_header(element_class)
-    File.read("#{ Rails.root }/lib/script_generator/#{ element_class }/header.html")
+    render_asset(element_class, 'header.html')
   end
 
   def content_markup(element_class, type, category = :generic)
     return '' if element_class == 'custom'
-    fname = ''
 
     if category == :generic
-      base = "#{ Rails.root }/lib/script_generator"
-      fname = "#{ base }/#{ element_class }/#{ type.tr('/', '_').underscore }.html"
-      fname = "#{ base }/#{ type.tr('/', '_').underscore }.html" unless File.exist?(fname)
+      render_asset(element_class, "#{ type.tr('/', '_').underscore }.html") do
+        render_asset("#{ type.tr('/', '_').underscore }.html")
+      end
     else
-      base = "#{ Rails.root }/lib/themes/#{ category.to_s.pluralize }/#{ type.tr('_', '-') }"
-      fname = "#{ base }/#{ element_class }.html"
-      fname = "#{ base }/element.html" unless File.exist?(fname)
-    end
+      path = [category.to_s.pluralize, type.tr('_', '-')]
 
-    File.read(fname)
+      render_asset(*path, "#{ element_class }.html") do
+        render_asset(*path, base.join('element.html'))
+      end
+    end
   end
 
   def content_footer(element_class)
-    File.read("#{ Rails.root }/lib/script_generator/#{ element_class }/footer.html")
+    render_asset(element_class, 'footer.html')
   end
 
   def site_element_settings(site_element)
@@ -424,7 +396,7 @@ class ScriptGenerator < Mustache
   end
 
   def all_site_elements
-    site.rules.map { |r| site_elements_for_rule(r, false) }.flatten
+    site.rules.map { |rule| site_elements_for_rule(rule, false) }.flatten
   end
 
   def element_classes
@@ -435,33 +407,34 @@ class ScriptGenerator < Mustache
     @options[:preview] ? Theme.all : all_site_elements.map(&:theme).compact.uniq
   end
 
-  def container_css_files
-    vendor_root = "#{ Rails.root }/vendor/assets/stylesheets/site_elements"
-    files = ["#{ vendor_root }/container_common.css"]
-
-    files += element_classes.map { |klass| "#{ vendor_root }/#{ klass.name.downcase }/container.css" }
-    files += element_themes.map(&:container_css_path)
+  # try to render asset from app's assets
+  # if an asset is not found either
+  # calls given block or raises StandardError
+  def render_asset(*path)
+    file = File.join(*path)
+    asset = asset(file)
+    return asset.toutf8 if asset
+    return yield if block_given?
+    raise Sprockets::FileNotFound, "couldn't find file '#{ file }'"
+  rescue Sass::SyntaxError => e
+    e.sass_template ||= path.join('/')
+    raise e
   end
 
-  def element_css_files
-    vendor_root = "#{ Rails.root }/vendor/assets/stylesheets/site_elements"
-    files = ["#{ vendor_root }/common.css"]
-
-    files += element_classes.map { |klass| "#{ vendor_root }/#{ klass.name.downcase }/element.css" }
-    files += element_themes.map(&:element_css_path)
+  def without_escaping_html_in_json
+    ActiveSupport.escape_html_entities_in_json = false
+    result = yield
+    ActiveSupport.escape_html_entities_in_json = true
+    result
   end
 
-  def read_css_files(files)
-    css = files.map do |file|
-      next unless File.exist?(file)
-      raw_css = File.read(file)
-      if file.include?('.scss')
-        raw_css = Sass::Engine.new(raw_css, syntax: :scss).render
-      end
+  def asset(file)
+    manifest.find_sources(file).first
+  rescue TypeError
+    nil
+  end
 
-      raw_css
-    end
-
-    css.compact.join("\n")
+  def manifest(fresh = false)
+    @manifest ||= self.class.manifest(fresh || options[:preview])
   end
 end

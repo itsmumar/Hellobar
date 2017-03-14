@@ -39,7 +39,7 @@ HB.SiteElement = HB.createClass({
     function imageSrc() {
       return that.image_url ? that.image_url : options.defaultImgSrc;
     }
-    locationIndex = location.indexOf(this.image_placement);
+    var locationIndex = location.indexOf(this.image_placement);
     if (!options.defaultImgSrc && (!this.image_url || locationIndex === undefined || locationIndex === -1)) {
       return '';
     }

@@ -1819,16 +1819,19 @@ var HB = {
   },
 
   // Delays & restarts wiggle animation before & after mousing over bar
-  wiggleEventListeners: function (element) {
-    $(element)
-      .on('mouseenter', '#hellobar', function () {
-        $('#hellobar').find('.hellobar-cta').removeClass('wiggle');
-      })
-      .on('mouseleave', '#hellobar', function () {
-        setTimeout(function () {
-          $('#hellobar').find('.hellobar-cta').addClass('wiggle');
-        }, 2500);
-      });
+  wiggleEventListeners: function (context) {
+    var element = context.querySelector('#hellobar');
+    var cta = element.querySelector('.hellobar-cta');
+
+    element.addEventListener('mouseenter', function () {
+      HB.removeClass(cta, 'wiggle');
+    });
+
+    element.addEventListener('mouseleave', function () {
+      setTimeout(function () {
+        HB.addClass(cta, 'wiggle');
+      }, 2500);
+    });
   },
 
   // Parses the zone and returns the offset in seconds. If it can

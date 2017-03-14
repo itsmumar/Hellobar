@@ -14,6 +14,9 @@
       // Loading core for module management
       var hellobar = {{{core_js}}}
 
+      // Loading all modules
+      {{{modules_js}}}
+
       // A few helper functions
       function hasCapability(capability) {
         return hellobar('base.capabilities').has(capability);
@@ -23,34 +26,26 @@
         return hasCapability('preview');
       }
 
-      // Loading base modules
-      {{{base_storage_js}}}
-      {{{base_ajax_js}}}
-      {{{base_dom_js}}}
-      {{{base_serialization_js}}}
+      // Configure modules
 
-      {{{base_capabilities_js}}}
       hellobar('base.capabilities', {
         configurator: function(configuration) {
           configuration.capabilities({{{capabilities_json}}});
         }
       });
 
-      {{{base_site_js}}}
       hellobar('base.site', {
         configurator: function(configuration) {
           configuration.siteId({{site_id}}).siteUrl('{{site_url}}');
         }
       });
 
-      // Loading geolocation
-      {{{geolocation_js}}}
       hellobar('geolocation', {
         configurator: function(configuration) {
           configuration.geolocationUrl('{{geolocation_url}}');
         }
       });
-      {{{geolocation_injection_js}}}
+
       !isPreviewMode() && hasCapability('geolocation_injection') && hellobar('geolocation.injection', {
         configurator: function(configuration) {
           configuration.autoRun(true);
@@ -60,8 +55,6 @@
       // Loading bar modules
       // TODO
 
-      // Loading autofills
-      {{{autofills_js}}}
       !isPreviewMode() && hasCapability('autofills') && hellobar('autofills', {
         configurator: function(configuration) {
           var autofills = {{{autofills_json}}};
@@ -70,18 +63,9 @@
       });
     })();
 
-    {{{ie_shims_js}}}
-    {{{jquery_lib}}}
-    var jQuerySaved = window.jQuery;
-    window.jQuery.noConflict(true);
-    var jQuery = jQuerySaved;
-    var $ = jQuerySaved;
+    {{{libs_js}}}
 
-    (function($) {
-
-      {{{hellobar_base_js}}}
-      {{{crypto_js}}}
-      {{{site_element_classes_js}}}
+    (function() {
 
       HBInit = function () {
         if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
@@ -125,9 +109,6 @@
       if(!HB.isIEXOrLess(8) && {{script_is_installed_properly}}) {
         _hbq = new HBQ();
       }
-
-    })(jQuery);
-
+    })();
   }
-
 })();

@@ -1,4 +1,4 @@
-//= require hellobar.base
+//= require hellobar_script/hellobar.base
 var context = describe;
 
 describe("HB", function() {
