@@ -11,16 +11,28 @@ FactoryGirl.define do
       value ['/asdf']
     end
 
+    trait :url_does_not_include do
+      operand 'does_not_include'
+      segment 'UrlCondition'
+      value ['/asdf']
+    end
+
     trait :date_between do
       segment 'DateCondition'
       operand 'between'
-      value ['2017-03-12', '2017-03-14']
+      value { [Date.yesterday.strftime('%Y-%m-%d'), Date.tomorrow.strftime('%Y-%m-%d')] }
     end
 
     trait :date_before do
       segment 'DateCondition'
-      operand 'between'
-      value ['2017-03-12', '2017-03-14']
+      operand 'before'
+      value { Date.tomorrow.strftime('%Y-%m-%d') }
+    end
+
+    trait :date_after do
+      segment 'DateCondition'
+      operand 'after'
+      value { Date.yesterday.strftime('%Y-%m-%d') }
     end
   end
 end

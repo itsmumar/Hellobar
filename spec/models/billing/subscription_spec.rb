@@ -2,9 +2,9 @@ require 'spec_helper'
 
 module SubscriptionHelper
   def setup_subscriptions
-    @user = users(:joey)
-    @site = sites(:horsebike)
-    @payment_method = payment_methods(:always_successful)
+    @user = create(:user)
+    @site = create(:site)
+    @payment_method = create(:payment_method)
     @free = Subscription::Free.new(user: @user, site: @site)
     @pro = Subscription::Pro.new(user: @user, site: @site)
     @enterprise = Subscription::Enterprise.new(user: @user, site: @site)
@@ -17,7 +17,6 @@ module SubscriptionHelper
 end
 
 describe Subscription do
-  fixtures :all
   include SubscriptionHelper
 
   describe '.estimated_price' do
@@ -87,34 +86,36 @@ describe Subscription do
   end
 
   describe '#currently_on_trial?' do
+    let(:bill) { create(:pro_bill, :paid) }
+
     it 'should be true if subscription amount is not 0 and has a paid bill but no payment method' do
-      bill = bills(:paid_bill)
       bill.update_attribute(:amount, 0)
       bill.subscription.payment_method = nil
       bill.subscription.currently_on_trial?.should be_true
     end
 
     it 'should be false if subscription amount is not 0 and paid bill is not 0' do
-      bill = bills(:paid_bill)
       bill.subscription.currently_on_trial?.should be_false
     end
 
     it 'should be false when there are no paid bills' do
-      subscriptions(:zombo_subscription).currently_on_trial?.should be_false
+      create(:subscription).currently_on_trial?.should be_false
     end
   end
 
   describe 'problem_with_payment?' do
     context 'bill is past due' do
+      let!(:bill) { create(:past_due_bill) }
+
       it 'returns true' do
-        bill = bills(:past_due_bill)
         expect(bill.subscription.problem_with_payment?).to be(true)
       end
     end
 
     context 'all bills are paid' do
+      let!(:bill) { create(:pro_bill, :paid) }
+
       it 'returns false' do
-        bill = bills(:paid_bill)
         expect(bill.subscription.problem_with_payment?).to be(false)
       end
     end
@@ -164,7 +165,7 @@ describe Subscription do
   end
 
   it 'should return its site-specific values' do
-    site = sites(:horsebike)
+    site = create(:site)
     pro = Subscription::Pro.new site: site
     expected_values = Subscription::Pro.values_for(site).merge(schedule: 'monthly')
 
@@ -172,8 +173,6 @@ describe Subscription do
   end
 
   describe Subscription::Capabilities do
-    fixtures :all
-
     before do
       setup_subscriptions
     end
@@ -190,19 +189,19 @@ describe Subscription do
     end
 
     it 'should return ProblemWithPayment capabilities if on a paid plan and payment has not been made' do
-      @site.change_subscription(@pro, payment_methods(:always_fails))
+      @site.change_subscription(@pro, create(:payment_method, :fails))
       @site.capabilities(true).class.should == Subscription::ProblemWithPayment::Capabilities
     end
 
     it 'should return the right capabilities if a payment issue has been resolved' do
-      @site.change_subscription(@pro, payment_methods(:always_fails))
+      @site.change_subscription(@pro, create(:payment_method, :fails))
 
       expect(@site.capabilities(true).remove_branding?).to be_false
       expect(@site.capabilities(true).closable?).to be_false
       expect(@site.site_elements.all?(&:show_branding)).to be_true
       expect(@site.site_elements.all?(&:closable)).to be_true
 
-      @site.change_subscription(@pro, payment_methods(:always_successful))
+      @site.change_subscription(@pro, create(:payment_method))
 
       expect(@site.capabilities(true).remove_branding?).to be_true
       expect(@site.capabilities(true).closable?).to be_true
@@ -211,7 +210,7 @@ describe Subscription do
     end
 
     it 'should return the right capabilities if payment is not due yet' do
-      success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
+      success, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
 
       @site.capabilities(true).class.should == Subscription::ProblemWithPayment::Capabilities
       # Make the bill not due until later
@@ -353,8 +352,6 @@ describe Site do
   end
 
   describe 'change_subscription' do
-    fixtures :all
-
     before do
       setup_subscriptions
     end
@@ -575,7 +572,7 @@ describe Site do
     end
 
     it 'should return false if payment fails' do
-      success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
+      success, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
       success.should be_false
       bill.should be_pending
       bill.amount.should == @pro.amount
@@ -605,14 +602,13 @@ describe Site do
   end
 
   describe 'bills_with_payment_issues' do
-    fixtures :all
     before do
       setup_subscriptions
     end
 
     it 'should return bills that are due' do
       @site.bills_with_payment_issues(true).should == []
-      success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
+      success, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
       success.should be_false
       bill.should be_pending
       @site.bills_with_payment_issues(true).should == [bill]
@@ -620,7 +616,7 @@ describe Site do
 
     it 'should not return bills not due' do
       @site.bills_with_payment_issues(true).should == []
-      success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
+      success, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
       success.should be_false
       bill.should be_pending
       # Make it due later
@@ -631,7 +627,7 @@ describe Site do
 
     it "should not return bills that we haven't attempted to charge at least once" do
       @site.bills_with_payment_issues(true).should == []
-      success, bill = @site.change_subscription(@pro, payment_methods(:always_fails))
+      success, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
       success.should be_false
       bill.should be_pending
       # Delete the attempt

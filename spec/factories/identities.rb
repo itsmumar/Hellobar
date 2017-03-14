@@ -14,5 +14,10 @@ FactoryGirl.define do
       provider 'mad_mimi_form'
       credentials { Hash['token' => 'key'] }
     end
+
+    trait :constantcontact do
+      provider 'constantcontact'
+      credentials { Hash['token' => 'key'] }
+    end
   end
 end

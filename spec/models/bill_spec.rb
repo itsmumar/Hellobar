@@ -26,7 +26,6 @@ end
 describe Bill do
   include BillSpecDates
 
-  fixtures :all
   set_fixture_class payment_method_details: PaymentMethodDetails # pluralized class screws up naming convention
 
   describe 'callbacks' do
@@ -40,7 +39,7 @@ describe Bill do
   end
 
   it 'should not let you change the status once set' do
-    bill = bills(:future_bill)
+    bill = create(:pro_bill)
     bill.status.should == :pending
     bill.voided!
     bill.status.should == :voided
@@ -52,12 +51,12 @@ describe Bill do
   end
 
   it 'should raise an error if you try to change the status to an invalid value' do
-    bill = bills(:future_bill)
+    bill = create(:pro_bill)
     expect { bill.status = 'foo' }.to raise_error(Bill::InvalidStatus)
   end
 
   it 'should record when the status was set' do
-    bill = bills(:future_bill)
+    bill = create(:pro_bill)
     bill.status.should == :pending
     bill.status_set_at.should be_nil
     bill.paid!
@@ -66,7 +65,7 @@ describe Bill do
 
   it 'should take the payment_method grace period into account when grace_period_allowed' do
     now = Time.now
-    bill = bills(:now_bill)
+    bill = create(:pro_bill)
     bill.grace_period_allowed?.should == true
     bill.bill_at.should be_within(5.minutes).of(now)
     bill.due_at.should == bill.bill_at
@@ -80,20 +79,18 @@ describe Bill do
   end
 
   it 'should return the payment details of the successful billing attempt' do
-    bill = bills(:pro_bill)
-    details = payment_method_details(:always_successful_details)
-
-    bill.paid_with_payment_method_detail.should == details
+    bill = create(:pro_bill, :paid)
+    expect(bill.paid_with_payment_method_detail).to be_a AlwaysSuccessfulPaymentMethodDetails
   end
 
   describe '#during_trial_subscription?' do
     it 'should not be on trial subscription' do
-      bill = bills(:paid_bill)
+      bill = create(:pro_bill, :paid)
       bill.during_trial_subscription?.should be_false
     end
 
     it 'should be on trial subscription' do
-      bill = bills(:paid_bill)
+      bill = create(:pro_bill, :paid)
       bill.update_attribute(:amount, 0)
       bill.subscription.payment_method = nil
       bill.during_trial_subscription?.should be_true
@@ -102,7 +99,7 @@ describe Bill do
 
   describe Bill::Recurring do
     it 'should create the next bill once paid' do
-      subscription = subscriptions(:zombo_subscription)
+      subscription = create(:pro_subscription)
       Bill.destroy_all
       subscription.bills(true).length.should == 0
       subscription.should be_monthly
@@ -129,7 +126,7 @@ describe Bill do
     end
 
     it 'should not be affected by a refund' do
-      subscription = subscriptions(:always_successful_subscription)
+      subscription = create(:pro_subscription)
       Bill.destroy_all
       subscription.bills(true).length.should == 0
       subscription.should be_monthly
@@ -167,58 +164,61 @@ describe Bill do
     end
 
     it 'should call payment_method.pay if the bill.amount > 0' do
-      bill = bills(:now_bill)
-      bill.subscription.payment_method = payment_methods(:always_successful)
+      bill = create(:bill)
+      bill.subscription.payment_method = create(:payment_method)
       PaymentMethod.any_instance.should_receive(:pay).with(bill)
       bill.attempt_billing!
     end
 
     it 'should mark it as paid if the bill amount is 0' do
-      bill = bills(:free_bill)
+      bill = create(:free_bill)
       PaymentMethod.any_instance.should_not_receive(:pay).with(bill)
       bill.attempt_billing!
     end
   end
 
   describe 'set_final_amount' do
-    before :each do
-      @bill = create(:pro_bill)
-      @user = users(:joey)
-      @bill.site.owners << @user
-      @refs = (1..3).map do
-        create(:referral, sender: @user, site: @bill.site, state: 'installed', available_to_sender: true)
+    let!(:bill) { create(:pro_bill) }
+    let!(:user) { create(:user) }
+    let!(:refs) do
+      (1..3).map do
+        create(:referral, sender: user, site: bill.site, state: 'installed', available_to_sender: true)
       end
     end
 
+    before do
+      bill.site.owners << user
+    end
+
     it "sets the final amount to 0 if there's a discount for 15.0" do
-      @bill.stub(:calculate_discount).and_return(15.0)
-      @bill.attempt_billing!
-      expect(@bill.amount).to eq(0.0)
-      expect(@bill.discount).to eq(15.0)
+      bill.stub(:calculate_discount).and_return(15.0)
+      bill.attempt_billing!
+      expect(bill.amount).to eq(0.0)
+      expect(bill.discount).to eq(15.0)
     end
 
     it "sets the final amount to 0 and uses up one available referral if there's a discount for 2.0" do
       create(:referral_coupon)
-      @bill.stub(:calculate_discount).and_return(2.0)
+      bill.stub(:calculate_discount).and_return(2.0)
 
       expect {
-        @bill.attempt_billing!
-      }.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
+        bill.attempt_billing!
+      }.to change { user.sent_referrals.redeemable_for_site(bill.site).count }.by(-1)
 
-      expect(@bill.amount).to eq(0.0)
-      expect(@bill.discount).to eq(15.0)
+      expect(bill.amount).to eq(0.0)
+      expect(bill.discount).to eq(10.0)
     end
 
     it "sets the final amount to 0 and uses up one available referral if there's no discount" do
       create(:referral_coupon)
-      @bill.stub(:calculate_discount).and_return(0.0)
+      bill.stub(:calculate_discount).and_return(0.0)
 
       expect {
-        @bill.attempt_billing!
-      }.to change { @user.sent_referrals.redeemable_for_site(@bill.site).count }.by(-1)
+        bill.attempt_billing!
+      }.to change { user.sent_referrals.redeemable_for_site(bill.site).count }.by(-1)
 
-      expect(@bill.amount).to eq(0.0)
-      expect(@bill.discount).to eq(15.0)
+      expect(bill.amount).to eq(0.0)
+      expect(bill.discount).to eq(10.0)
     end
   end
 
@@ -270,29 +270,29 @@ describe Bill do
 
   describe 'problem_with_payment' do
     it 'should return false if paid' do
-      bills(:paid_bill).problem_with_payment?.should == false
+      create(:pro_bill, :paid).problem_with_payment?.should == false
     end
 
     it 'should return false if voided' do
-      bills(:voided_bill).problem_with_payment?.should == false
+      create(:bill, :voided).problem_with_payment?.should == false
     end
 
     it 'should return false if amount is zero' do
-      bill = bills(:free_bill)
+      bill = create(:free_bill)
       bill.should_bill?.should == true
       bill.problem_with_payment?.should == false
     end
 
     it 'should return true if pending and past due' do
-      bill = bills(:past_due_bill)
+      bill = create(:past_due_bill)
       bill.should_bill?.should == true
       bill.past_due?.should == true
       bill.problem_with_payment?.should == true
     end
 
     it "should return false if due, but haven't tried billing yet" do
-      bill = bills(:past_due_bill)
-      pm = payment_methods(:joeys)
+      bill = create(:past_due_bill)
+      pm = create(:payment_method)
       # Get around destroying read-only records
       BillingAttempt.connection.execute("DELETE FROM #{ BillingAttempt.table_name }")
       bill.should_bill?.should == true
@@ -301,7 +301,7 @@ describe Bill do
     end
 
     it 'should return true if past due and there is no payment method' do
-      bill = bills(:past_due_bill)
+      bill = create(:past_due_bill)
       bill.billing_attempts.delete_all
       bill.problem_with_payment?.should == true
     end
@@ -309,27 +309,25 @@ describe Bill do
 end
 
 describe Subscription do
-  fixtures :all
-
   it 'should return all pending bills' do
-    subscription = subscriptions(:zombo_subscription)
-    subscription.bills.length.should == 2
-    subscription.pending_bills.length.should == 2
+    subscription = create(:subscription, :with_bills)
+    subscription.bills.count.should == 2
+    subscription.pending_bills(true).count.should == 2
     subscription.bills.first.voided!
-    subscription.pending_bills(true).length.should == 1
+    subscription.pending_bills(true).count.should == 1
   end
 
   it 'should return all paid bills' do
-    subscription = subscriptions(:zombo_subscription)
-    subscription.bills.length.should == 2
-    subscription.paid_bills.length.should == 0
+    subscription = create(:subscription, :with_bills)
+    subscription.bills.count.should == 2
+    subscription.paid_bills(true).count.should == 0
     subscription.bills.first.paid!
     subscription.paid_bills(true).length.should == 1
   end
 
   it 'should return all bills active for time period' do
     now = Time.now
-    subscription = subscriptions(:zombo_subscription)
+    subscription = create(:subscription, :with_bills)
     Bill.delete_all
     subscription.active_bills(true).length.should == 0
     # Add a bill after
@@ -349,30 +347,30 @@ end
 
 describe PaymentMethod do
   include BillSpecDates
-  fixtures :all
 
   describe 'pay' do
     it 'should attempt to charge the bill with the payment method' do
-      payment_method = payment_methods(:always_successful)
-      bill = bills(:now_bill)
+      payment_method = create(:payment_method)
+      bill = create(:bill)
       AlwaysSuccessfulPaymentMethodDetails.any_instance.should_receive(:charge).with(bill.amount)
       payment_method.pay(bill)
     end
 
     it 'should mark the bill as paid if successul' do
-      bill = bills(:now_bill)
-      payment_methods(:always_successful).pay(bill).should be_success
+      bill = create(:bill)
+      create(:payment_method).pay(bill).should be_success
       bill.should be_paid
     end
 
     it 'should not mark the bill as paid if failed' do
-      bill = bills(:now_bill)
-      payment_methods(:always_fails).pay(bill).should_not be_success
+      bill = create(:bill)
+      payment_method = create(:payment_method, :fails)
+      payment_method.pay(bill).should_not be_success
       bill.should_not be_paid
     end
 
     it 'should create a BillingAttempt either way' do
-      billing_attempt = payment_methods(:always_successful).pay(bills(:now_bill))
+      billing_attempt = create(:payment_method).pay(create(:bill))
       billing_attempt.should_not be_nil
       billing_attempt.should be_persisted
       billing_attempt.payment_method_details.should_not be_nil
@@ -380,7 +378,7 @@ describe PaymentMethod do
       billing_attempt.response.should_not be_nil
       billing_attempt.should be_success
       # failure
-      billing_attempt = payment_methods(:always_fails).pay(bills(:now_bill))
+      billing_attempt = create(:payment_method, :fails).pay(create(:bill))
       billing_attempt.should_not be_nil
       billing_attempt.should be_persisted
       billing_attempt.payment_method_details.should_not be_nil
@@ -390,13 +388,13 @@ describe PaymentMethod do
     end
 
     it 'should raise an error if no payment_method_details' do
-      expect { PaymentMethod.new.pay(bills(:now_bill)) }.to raise_error(PaymentMethod::MissingPaymentDetails)
+      expect { PaymentMethod.new.pay(create(:bill)) }.to raise_error(PaymentMethod::MissingPaymentDetails)
     end
   end
 
   describe 'refund' do
     it 'should successfully refund the billing attempt' do
-      subscription = subscriptions(:always_successful_subscription)
+      subscription = create(:pro_subscription)
       bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10)
       billing_attempt = subscription.payment_method.pay(bill)
       # AlwaysSuccessfulPaymentMethodDetails.any_instance.should_receive(:refund).with(bill.amount, billing_attempt.response) -- enabling this will cause a later method to fail - not sure why
@@ -414,29 +412,29 @@ describe PaymentMethod do
     end
 
     it 'should let you do a partial refund' do
-      subscription = subscriptions(:always_successful_subscription)
+      subscription = create(:pro_subscription)
       billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
       refund_bill, refund_attempt = billing_attempt.refund!(nil, -5)
       refund_bill.amount.should == -5
     end
 
     it 'should allow a positive number and treat it as negative' do
-      subscription = subscriptions(:always_successful_subscription)
+      subscription = create(:pro_subscription)
       billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
       refund_bill, refund_attempt = billing_attempt.refund!(nil, 5)
       refund_bill.amount.should == -5
     end
 
     it 'should let you specify description' do
-      subscription = subscriptions(:always_successful_subscription)
+      subscription = create(:pro_subscription)
       billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
       refund_bill, refund_attempt = billing_attempt.refund!('custom description')
       refund_bill.description.should == 'custom description'
     end
 
     it 'should not let you refund an unsuccessful billing attempt' do
-      subscription = subscriptions(:zombo_subscription)
-      billing_attempt = payment_methods(:always_fails).pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
+      subscription = create(:subscription)
+      billing_attempt = create(:payment_method, :fails).pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
       expect { billing_attempt.refund! }.to raise_error(BillingAttempt::InvalidRefund)
     end
   end

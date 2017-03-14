@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe PaymentMethodDetails do
-  fixtures :all
   it 'should be read-only' do
     d = PaymentMethodDetails.create
     d.data = { foo: 'bar' }
@@ -11,7 +10,6 @@ describe PaymentMethodDetails do
 end
 
 describe CyberSourceCreditCard do
-  fixtures :all
   VALID_DATA = {
     number: '4111111111111111',
     month: '8',
@@ -39,8 +37,10 @@ describe CyberSourceCreditCard do
     country: 'United Kingdom'
   }.freeze
 
+  let(:payment_method) { create(:payment_method) }
+
   it 'should remove all non-standard fields from data' do
-    cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
+    cc = CyberSourceCreditCard.new(payment_method: payment_method)
 
     cc.data = VALID_DATA.merge('foo' => 'bar')
     cc.save!
@@ -49,7 +49,7 @@ describe CyberSourceCreditCard do
   end
 
   it 'should not store the full credit card number' do
-    cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
+    cc = CyberSourceCreditCard.new(payment_method: payment_method)
     cc.data = VALID_DATA
     cc.save!
     cc.data['number'].should == 'XXXX-XXXX-XXXX-1111'
@@ -58,7 +58,7 @@ describe CyberSourceCreditCard do
   end
 
   it 'should not store the cvv' do
-    cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
+    cc = CyberSourceCreditCard.new(payment_method: payment_method)
     cc.data = VALID_DATA
     cc.save!
     cc.data['verification_value'].should be_nil
@@ -67,7 +67,7 @@ describe CyberSourceCreditCard do
   end
 
   it 'should store the cybersource_token' do
-    cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
+    cc = CyberSourceCreditCard.new(payment_method: payment_method)
     cc.data = VALID_DATA
     cc.data['token'].should be_nil
     cc.save!
@@ -77,7 +77,7 @@ describe CyberSourceCreditCard do
   end
 
   it 'should provide a good name' do
-    cc = CyberSourceCreditCard.new(payment_method: payment_methods(:joeys))
+    cc = CyberSourceCreditCard.new(payment_method: payment_method)
     cc.data = VALID_DATA
     cc.name.should == 'Visa ending in 1111'
     cc.save!
@@ -86,7 +86,7 @@ describe CyberSourceCreditCard do
   end
 
   it 'should re-use an existing token if set on the same payment_method' do
-    p = payment_methods(:joeys)
+    p = payment_method
     cc1 = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: p)
     cc1.save!
     cc1 = CyberSourceCreditCard.find(cc1.id)
@@ -107,7 +107,7 @@ describe CyberSourceCreditCard do
   end
 
   it 'should let you charge the card and return the transaction ID' do
-    success, response = CyberSourceCreditCard.create!(data: VALID_DATA, payment_method: payment_methods(:joeys)).charge(100)
+    success, response = CyberSourceCreditCard.create!(data: VALID_DATA, payment_method: payment_method).charge(100)
     success.should be_true
     response.should_not be_nil
     response.should match(/^.*?;.*?;.*$/)
@@ -115,27 +115,27 @@ describe CyberSourceCreditCard do
 
   it 'should validate the data' do
     # Should be valid
-    cc = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: payment_methods(:joeys))
+    cc = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: payment_method)
     cc.errors.messages.should == {}
     cc.should be_valid
 
-    CyberSourceCreditCard.new(payment_method: payment_methods(:joeys)).should_not be_valid
+    CyberSourceCreditCard.new(payment_method: payment_method).should_not be_valid
     missing = VALID_DATA.merge({})
     missing.delete(:first_name)
-    CyberSourceCreditCard.new(data: missing, payment_method: payment_methods(:joeys)).should_not be_valid
-    cc = CyberSourceCreditCard.new(data: INVALID_DATA, payment_method: payment_methods(:joeys))
+    CyberSourceCreditCard.new(data: missing, payment_method: payment_method).should_not be_valid
+    cc = CyberSourceCreditCard.new(data: INVALID_DATA, payment_method: payment_method)
     cc.should_not be_valid
   end
 
   it 'should not require the state field for foreign addresses' do
     # Should be valid
-    cc = CyberSourceCreditCard.new(data: FOREIGN_DATA, payment_method: payment_methods(:joeys))
+    cc = CyberSourceCreditCard.new(data: FOREIGN_DATA, payment_method: payment_method)
     cc.errors.messages.should == {}
     cc.should be_valid
   end
 
   it 'should let you refund a payment' do
-    credit_card = CyberSourceCreditCard.create!(data: VALID_DATA, payment_method: payment_methods(:joeys))
+    credit_card = CyberSourceCreditCard.create!(data: VALID_DATA, payment_method: payment_method)
     charge_success, charge_response = credit_card.charge(100)
     charge_success.should be_true
     charge_response.should_not be_nil

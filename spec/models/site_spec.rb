@@ -1,31 +1,26 @@
 require 'spec_helper'
 
 describe Site do
-  fixtures :all
-
-  before(:each) do
-    @site = sites(:zombo)
-  end
+  let(:site) { create(:site, :with_user) }
+  let(:pro_site) { create(:site, :pro) }
 
   it_behaves_like 'an object with a valid url'
 
   it 'is able to access its owner' do
-    expect(@site.owners.first).to eq(users(:joey))
+    expect(site.owners.first).not_to be_nil
   end
 
   describe '#owners_and_admins' do
     it "should return site's owners & admins" do
-      create(:site_membership, :admin, site: @site)
+      create(:site_membership, :admin, site: site)
       %w(owner admin).each do |role|
-        expect(@site.owners_and_admins.where(site_memberships: { role: role }).count).to eq(1)
+        expect(site.owners_and_admins.where(site_memberships: { role: role }).count).to eq(1)
       end
     end
   end
 
   describe '#create_default_rules' do
     it 'creates rules for the site' do
-      site = sites(:horsebike)
-
       expect {
         site.create_default_rules
       }.to change { site.rules.count }.by(3)
@@ -39,21 +34,19 @@ describe Site do
     end
 
     it 'is true for sites with a free-level subscriptions' do
-      expect(sites(:horsebike).is_free?).to be_true
+      expect(site.is_free?).to be_true
     end
 
     it 'is true for sites with a free-plus-level subscriptions' do
-      site = sites(:horsebike)
       site.change_subscription(Subscription::FreePlus.new(schedule: 'monthly'))
       expect(site.is_free?).to be_true
     end
 
     it 'is false for pro sites' do
-      expect(sites(:pro_site).is_free?).to be_false
+      expect(pro_site.is_free?).to be_false
     end
 
     it 'is false for pro comped sites' do
-      site = sites(:horsebike)
       site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
       expect(site.is_free?).to be_false
     end
@@ -61,13 +54,11 @@ describe Site do
 
   describe '#change_subscription' do
     it 'runs set_branding_on_site_elements after changing subscription' do
-      site = sites(:horsebike)
       expect(site).to receive(:set_branding_on_site_elements)
       site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
     end
 
     it 'regenerates the script' do
-      site = sites(:horsebike)
       site.update_attribute(:script_generated_at, 1.day.ago)
       site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
       expect(site.needs_script_regeneration?).to be(true)
@@ -93,27 +84,25 @@ describe Site do
   end
 
   describe '#highest_tier_active_subscription' do
-    before do
-      @payment_method = create(:payment_method)
-      ownership = create(:site_ownership, user: @payment_method.user)
-      @site = ownership.site
-    end
+    let(:payment_method) { create(:payment_method) }
+    let(:ownership) { create(:site_ownership, user: payment_method.user) }
+    let(:site) { ownership.site }
 
     it 'returns nil when there are no active subscriptions' do
-      expect(@site.highest_tier_active_subscription).to be(nil)
+      expect(site.highest_tier_active_subscription).to be(nil)
     end
 
     it 'returns the highest tier active subscription' do
-      @site.change_subscription(Subscription::Free.new(schedule: 'monthly', user: @payment_method.user), @payment_method)
-      @site.change_subscription(Subscription::Pro.new(schedule: 'monthly', user: @payment_method.user), @payment_method)
-      expect(@site.highest_tier_active_subscription).to be_a(Subscription::Pro)
+      site.change_subscription(Subscription::Free.new(schedule: 'monthly', user: payment_method.user), payment_method)
+      site.change_subscription(Subscription::Pro.new(schedule: 'monthly', user: payment_method.user), payment_method)
+      expect(site.highest_tier_active_subscription).to be_a(Subscription::Pro)
     end
 
     it 'returns only active subscriptions' do
-      @site.change_subscription(Subscription::Free.new(schedule: 'yearly'), @payment_method)
-      @site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), @payment_method)
+      site.change_subscription(Subscription::Free.new(schedule: 'yearly'), payment_method)
+      site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
       travel_to 2.months.from_now do
-        expect(@site.highest_tier_active_subscription).to be_a(Subscription::Free)
+        expect(site.highest_tier_active_subscription).to be_a(Subscription::Free)
       end
     end
   end
@@ -176,7 +165,7 @@ describe Site do
         http://zombo.com/
         http://zombo.com/welcome
         http://zombo2.com/welcome
-        horse.bike
+        horelement.bike
       )
 
       urls.each do |url|
@@ -212,20 +201,22 @@ describe Site do
   end
 
   describe '#script_content' do
+    let!(:element) { create(:site_element, site: site) }
+
     it 'generates the contents of the script for a site' do
       Hello::DataAPI.stub(lifetime_totals: nil)
-      script = @site.script_content(false)
+      script = site.script_content(false)
 
       expect(script).to match(/HB_SITE_ID/)
-      expect(script).to include(@site.site_elements.first.id.to_s)
+      expect(script).to include(element.id.to_s)
     end
 
     it 'generates the compressed contents of the script for a site' do
       Hello::DataAPI.stub(lifetime_totals: nil)
-      script = @site.script_content
+      script = site.script_content
 
       expect(script).to match(/HB_SITE_ID/)
-      expect(script).to include(@site.site_elements.first.id.to_s)
+      expect(script).to include(element.id.to_s)
     end
   end
 
@@ -248,13 +239,13 @@ describe Site do
 
   describe '#generate_script' do
     it 'delegates :generate_static_assets to delay' do
-      expect(@site).to receive(:delay).with(:generate_static_assets, anything)
-      @site.generate_script
+      expect(site).to receive(:delay).with(:generate_static_assets, anything)
+      site.generate_script
     end
 
     it 'calls generate_static_assets if immediately option is specified' do
-      expect(@site).to receive(:generate_static_assets)
-      @site.generate_script(immediately: true)
+      expect(site).to receive(:generate_static_assets)
+      site.generate_script(immediately: true)
     end
   end
 
@@ -267,14 +258,14 @@ describe Site do
     it 'generates and uploads the script content for a site' do
       ScriptGenerator.any_instance.stub(pro_secret: 'asdf')
       Hello::DataAPI.stub(lifetime_totals: nil)
-      script_content = @site.script_content(true)
-      script_name = @site.script_name
+      script_content = site.script_content(true)
+      script_name = site.script_name
 
       mock_storage = double('asset_storage')
       expect(mock_storage).to receive(:create_or_update_file_with_contents).with(script_name, script_content)
       Hello::AssetStorage.stub(new: mock_storage)
 
-      @site.generate_script
+      site.generate_script
     end
 
     it 'generates scripts for each wordpress bar' do
@@ -304,71 +295,71 @@ describe Site do
 
       expect(File).to receive(:open)
 
-      @site.generate_script
+      site.generate_script
     end
   end
 
   it 'blanks-out the site script when destroyed' do
     mock_storage = double('asset_storage')
-    expect(mock_storage).to receive(:create_or_update_file_with_contents).with(@site.script_name, '')
+    expect(mock_storage).to receive(:create_or_update_file_with_contents).with(site.script_name, '')
     Hello::AssetStorage.stub(new: mock_storage)
 
-    @site.destroy
+    site.destroy
   end
 
   it 'should soft-delete' do
-    allow(@site).to receive(:generate_static_assets)
-    @site.destroy
-    expect(Site.only_deleted).to include(@site)
+    allow(site).to receive(:generate_static_assets)
+    site.destroy
+    expect(Site.only_deleted).to include(site)
   end
 
   describe '#has_script_installed?' do
     context 'when installed' do
       it 'updates the script_installed_at' do
-        allow(@site).to receive(:script_installed_db?) { false }
-        allow(@site).to receive(:script_installed_api?) { true }
+        allow(site).to receive(:script_installed_db?) { false }
+        allow(site).to receive(:script_installed_api?) { true }
 
         expect {
-          @site.has_script_installed?
-        }.to change(@site, :script_installed_at)
+          site.has_script_installed?
+        }.to change(site, :script_installed_at)
       end
 
       it 'redeems referrals' do
-        allow(@site).to receive(:script_installed_db?) { false }
-        allow(@site).to receive(:script_installed_api?) { true }
+        allow(site).to receive(:script_installed_db?) { false }
+        allow(site).to receive(:script_installed_api?) { true }
 
-        expect(Referrals::RedeemForRecipient).to receive(:run).with(site: @site)
+        expect(Referrals::RedeemForRecipient).to receive(:run).with(site: site)
 
-        @site.has_script_installed?
+        site.has_script_installed?
       end
 
       it 'tracks the install event' do
-        allow(@site).to receive(:script_installed_db?) { false }
-        allow(@site).to receive(:script_installed_api?) { true }
+        allow(site).to receive(:script_installed_db?) { false }
+        allow(site).to receive(:script_installed_api?) { true }
 
-        expect(Analytics).to receive(:track).with(:site, @site.id, 'Installed')
+        expect(Analytics).to receive(:track).with(:site, site.id, 'Installed')
 
-        @site.has_script_installed?
+        site.has_script_installed?
       end
     end
 
     context 'when uninstalled' do
       it 'updates the script_uninstalled_at' do
-        allow(@site).to receive(:script_installed_db?) { true }
-        allow(@site).to receive(:script_installed_api?) { false }
+        allow(site).to receive(:script_installed_db?) { true }
+        allow(site).to receive(:script_installed_api?) { false }
 
         expect {
-          @site.has_script_installed?
-        }.to change(@site, :script_uninstalled_at)
+          site.has_script_installed?
+        }.to change(site, :script_uninstalled_at)
       end
 
       it 'tracks the uninstall event' do
-        allow(@site).to receive(:script_installed_db?) { true }
-        allow(@site).to receive(:script_installed_api?) { false }
+        allow(site).to receive(:script_installed_db?) { true }
+        allow(site).to receive(:script_installed_api?) { false }
 
-        expect(Analytics).to receive(:track).with(:site, @site.id, 'Uninstalled')
+        expect(Analytics).to receive(:track).with(:site, site.id, 'Uninstalled')
 
-        @site.has_script_installed?
+        site.has_script_installed?
       end
     end
   end
@@ -376,22 +367,22 @@ describe Site do
   describe '#script_installed_api?' do
     it 'is true if there is only one day of data' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return('1' => [[1, 0]])
-      expect(@site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_true
     end
 
     it 'is true if there are multiple days of data' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return('1' => [[1, 0], [2, 0]])
-      expect(@site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_true
     end
 
     it 'is false if the api returns nil' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      expect(@site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_false
     end
 
     it 'is false if the api returns an empty hash' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
-      expect(@site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_false
     end
 
     it 'is true if one element has views but others do not' do
@@ -402,7 +393,7 @@ describe Site do
           '2' => [[1, 0], [1, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0]]
         )
 
-      expect(@site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_true
     end
 
     it 'is true if any of the elements have been installed in the last 7 days' do
@@ -413,7 +404,7 @@ describe Site do
           '2' => [[1, 0], [1, 0]]
         )
 
-      expect(@site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_true
     end
 
     it 'is false if there have been no views in the last 10 days' do
@@ -424,65 +415,63 @@ describe Site do
           '2' => [[0, 0]]
         )
 
-      expect(@site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_false
     end
   end
 
   describe '#script_installed_db?' do
     before do
-      @site.script_installed_at = nil
-      @site.script_uninstalled_at = nil
+      site.script_installed_at = nil
+      site.script_uninstalled_at = nil
     end
 
     it 'is true if installed_at is set' do
-      @site.script_installed_at = 1.week.ago
-      expect(@site.script_installed_db?).to be_true
+      site.script_installed_at = 1.week.ago
+      expect(site.script_installed_db?).to be_true
     end
 
     it 'is true if installed_at is more recent than uninstalled_at' do
-      @site.script_installed_at = 1.day.ago
-      @site.script_uninstalled_at = 1.week.ago
+      site.script_installed_at = 1.day.ago
+      site.script_uninstalled_at = 1.week.ago
 
-      expect(@site.script_installed_db?).to be_true
+      expect(site.script_installed_db?).to be_true
     end
 
     it 'is false if uninstalled_at is more recent than installed_at' do
-      @site.script_installed_at = 1.week.ago
-      @site.script_uninstalled_at = 1.day.ago
+      site.script_installed_at = 1.week.ago
+      site.script_uninstalled_at = 1.day.ago
 
-      expect(@site.script_installed_db?).to be_false
+      expect(site.script_installed_db?).to be_false
     end
   end
 
   describe 'calculate_bill' do
+    let(:subscription) { create(:subscription) }
+
+    def bill(trial: nil)
+      subscription.site.send(:calculate_bill, subscription, true, trial)
+    end
+
     context 'trial_period is specified' do
       it 'should set the bill amount to 0' do
-        sub = subscriptions(:zombo_subscription)
-        bill = sub.site.send(:calculate_bill, sub, true, 20.days)
-        expect(bill.amount).to eq(0)
+        expect(bill(trial: 20.days).amount).to eq(0)
       end
 
       it 'should set the end_at of the bill to the current time + the trial period' do
-        sub = subscriptions(:zombo_subscription)
         travel_to Time.now do
-          bill = sub.site.send(:calculate_bill, sub, true, 20.days)
-          expect(bill.end_date).to eq(Time.now + 20.days)
+          expect(bill(trial: 20.days).end_date).to eql(Time.now + 20.days)
         end
       end
     end
 
     context 'trial_period is not specified' do
       it 'should set the bill amount to subscription.amount' do
-        sub = subscriptions(:zombo_subscription)
-        bill = sub.site.send(:calculate_bill, sub, true)
-        expect(bill.amount).to eq(sub.amount)
+        expect(bill.amount).to eql subscription.amount
       end
 
       it 'should set the bill end_date to ' do
-        sub = subscriptions(:zombo_subscription)
         travel_to Time.current do
-          bill = sub.site.send(:calculate_bill, sub, true)
-          expect(bill.end_date).to eq(Bill::Recurring.next_month(Time.current) - 1.hour)
+          expect(bill.end_date).to eql(Bill::Recurring.next_month(Time.current) - 1.hour)
         end
       end
     end
@@ -504,47 +493,45 @@ describe Site do
     end
 
     it 'should scope to user if user is given' do
-      u1 = users(:joey)
+      u1 = create(:user, :with_site)
       u1.sites.create(url: 'http://abc.com')
-      u2 = users(:wootie)
+      u2 = create(:user, :with_site)
       expect(u2.sites.build(url: 'http://abc.com').url_exists?(u2)).to be_false
     end
 
     it 'should ignore protocol if user scoped call' do
-      u1 = users(:joey)
+      u1 = create(:user, :with_site)
       u1.sites.create(url: 'http://abc.com')
-      u2 = users(:wootie)
+      u2 = create(:user, :with_site)
       expect(u2.sites.build(url: 'https://abc.com').url_exists?(u2)).to be_false
     end
   end
 
   describe '#set_branding_on_site_elements' do
-    let(:subscription) { raise('subscription must be overridden') }
-
     let(:site) { subscription.site }
-    let(:se) { site_elements(:zombo_traffic) }
+    let(:element) { create(:site_element, :traffic, site: site) }
 
     before do
-      se.rule = site.rules.first
-      se.show_branding = true
-      se.save
+      element.rule = site.rules.first
+      element.show_branding = true
+      element.save
       site.send(:set_branding_on_site_elements)
-      se.reload
+      element.reload
     end
 
     context 'when subscription is pro' do
-      let(:subscription) { subscriptions(:pro_subscription) }
+      let!(:subscription) { create(:pro_subscription) }
 
       it 'does not show branding' do
-        expect(se.show_branding).to be_false
+        expect(element.show_branding).to be_false
       end
     end
 
     context 'when subscription is free' do
-      let(:subscription) { subscriptions(:free_subscription) }
+      let!(:subscription) { create(:free_subscription) }
 
       it 'shows branding' do
-        expect(se.show_branding).to be_true
+        expect(element.show_branding).to be_true
       end
     end
   end
@@ -587,8 +574,8 @@ describe Site do
       site = Site.new(url: 'http://www.asdf.com')
       expect(site.normalized_url).to eq('www.asdf.com')
 
-      site = Site.new(url: 'http://cs.horse.bike')
-      expect(site.normalized_url).to eq('cs.horse.bike')
+      site = Site.new(url: 'http://cs.horelement.bike')
+      expect(site.normalized_url).to eq('cs.horelement.bike')
     end
 
     it 'returns the site URL if normalized_url returns nil' do

@@ -14,8 +14,12 @@ FactoryGirl.define do
 
     trait :embed_code do
       identity { create :identity, :mad_mini, site: site }
-      # data { Hash['embed_code' => '<iframe src="https://madmimi.com/signups/103242/iframe" scrolling="no" frameborder="0" height="405" width="400"></iframe>'] }
       data { Hash['embed_code' => '<html><body><iframe><form>Here I am</form></iframe></body></html>'] }
+    end
+
+    trait :embed_iframe do
+      identity { create :identity, :mad_mini, site: site }
+      data { Hash['embed_code' => '<iframe src="https://madmimi.com/signups/103242/iframe" scrolling="no" frameborder="0" height="405" width="400"></iframe>'] }
     end
   end
 end

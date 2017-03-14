@@ -1,12 +1,10 @@
 require 'spec_helper'
 
 describe ContactList do
-  fixtures :all
-
-  let(:site) { sites(:zombo) }
+  let(:site) { create(:site) }
   let(:provider) { 'email' }
   let(:identity) { Identity.new(site: site, provider: provider) }
-  let(:contact_list) { contact_lists(:zombo_contacts).tap { |c| c.identity = identity } }
+  let(:contact_list) { create(:contact_list).tap { |c| c.identity = identity } }
   let(:service_provider) { contact_list.service_provider }
 
   before do
@@ -36,26 +34,22 @@ describe ContactList do
 
   describe 'associated identity' do
     it 'should use #provider on creation to find the correct identity' do
-      list = ContactList.create!(
-        site: sites(:zombo),
-        name: 'my list',
-        provider: 'mailchimp'
-      )
+      identity = create(:identity)
+      list = build(:contact_list, site: identity.site, provider: 'mailchimp')
 
-      list.identity.should == identities(:mailchimp)
+      expect { list.valid? }.to change { list.identity }.from(nil).to(identity)
     end
 
     it 'should use #provider on edit to find the correct identity' do
-      list = contact_lists(:zombo_contacts)
-      list.update_attribute(:identity, identities(:mailchimp))
-
+      constantcontact = create(:identity, :constantcontact)
+      list = create(:contact_list, :mailchimp, site: constantcontact.site)
       list.provider = 'constantcontact'
       list.save
-      list.identity.should == identities(:constantcontact)
+      expect(list.identity).to eql constantcontact
     end
 
     it 'should not be valid if #provider does not match an existing identity' do
-      list = contact_lists(:zombo_contacts)
+      list = create(:contact_list)
       list.provider = 'notanesp'
       list.identity = nil
 
@@ -64,7 +58,7 @@ describe ContactList do
     end
 
     it 'should clear the identity if provider is "0"' do
-      list = contact_lists(:zombo_contacts)
+      list = create(:contact_list, :mailchimp)
       list.identity.should_not be_blank
 
       list.update_attributes(provider: '0')
@@ -72,20 +66,20 @@ describe ContactList do
     end
 
     it 'should notify the old identity when the identity is updated' do
-      cl = contact_lists(:zombo_contacts2)
-      old_identity = cl.identity
+      list = create(:contact_list, :mailchimp)
+      old_identity = list.identity
       old_identity.should_receive(:contact_lists_updated)
       Identity.stub(:find_by).and_return(old_identity)
-      cl.identity = identities(:constantcontact)
-      cl.save
+      list.identity = create(:identity, :constantcontact)
+      list.save
     end
 
     it 'should message the identity when the contact list is destroyed' do
-      cl = contact_lists(:zombo_contacts2)
-      old_identity = cl.identity
+      list = create(:contact_list, :mailchimp)
+      old_identity = list.identity
       old_identity.should_receive(:contact_lists_updated)
       Identity.stub(:find_by).and_return(old_identity)
-      cl.destroy
+      list.destroy
     end
   end
 
@@ -93,7 +87,7 @@ describe ContactList do
     let(:num) { 3 }
 
     it 'runs the number of site_elements_count' do
-      num.times { |_| contact_list.site_elements << site_elements(:zombo_email).dup }
+      num.times { |_| contact_list.site_elements << create(:site_element) }
       expect(contact_list.site_elements_count).to eq(3)
     end
   end
@@ -133,7 +127,7 @@ describe ContactList do
 
     context 'embed code provider' do
       let(:provider) { 'mad_mimi_form' }
-      let(:contact_list) { contact_lists(:embed_code).tap { |c| c.identity = identity } }
+      let(:contact_list) { create(:contact_list, :embed_iframe).tap { |c| c.identity = identity } }
       let(:service_provider) { contact_list.service_provider }
       let(:double_optin) { ContactList.new.double_optin }
 
@@ -325,14 +319,13 @@ describe ContactList do
 end
 
 describe ContactList, 'embed code' do
-  fixtures :all
-
-  subject { contact_lists(:embed_code) }
+  subject { create(:contact_list, :embed_code) }
 
   before { subject.data['embed_code'] = embed_code }
 
   context 'invalid' do
     let(:embed_code) { 'asdf' }
+    before { subject.data['embed_code'] = embed_code }
     its(:data) { should == { 'embed_code' => 'asdf' } }
     it { expect(subject.valid?).to be false }
   end

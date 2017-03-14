@@ -4,11 +4,9 @@ RSpec.describe Condition, type: :model do
   it_behaves_like 'a model triggering script regeneration'
 
   describe '#validating the value format' do
-    fixtures :all
-
     it 'clears empty values during validation' do
       condition = Condition.new(
-        rule: rules(:zombo_rule),
+        rule: create(:rule),
         operand: 'is',
         value: ['/foo', '/bar', ''],
         segment: 'UrlCondition'

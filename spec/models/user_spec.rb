@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe User do
+  before do
+    allow(Infusionsoft).to receive(:contact_add_with_dup_check)
+    allow(Infusionsoft).to receive(:contact_add_to_group)
+  end
+
   describe 'validations' do
     it 'cannot have the same email as someone in the wordpress database' do
       expect(Hello::WordpressUser).to receive(:email_exists?).with('foo@bar.com').and_return(true)
@@ -77,8 +82,6 @@ describe User do
   end
 
   describe '.find_and_create_by_referral' do
-    fixtures :users
-
     it 'returns nil if there are no referrals for the email' do
       no_user = User.find_and_create_by_referral('asd')
 
@@ -86,7 +89,7 @@ describe User do
     end
 
     it 'returns a temporary user with the email that was found' do
-      user = users(:wootie)
+      user = create(:user)
       email_to_invite = 'hello@email.com'
 
       Referrals::Create.run(
@@ -128,15 +131,15 @@ describe User do
     let!(:site) { create(:site, :with_rule) }
     let!(:site_membership) { create(:site_membership, site: site, user: user) }
     let!(:site_element) { create(:site_element, rule: site.rules.first) }
+    let(:site_element_w_more_views) { create(:site_element, rule: site.rules.first) }
 
     before do
       site_element.stub(total_views: 5)
-      @site_element_w_more_views = create(:site_element, rule: site.rules.first)
-      @site_element_w_more_views.stub(total_views: 10)
+      site_element_w_more_views.stub(total_views: 10)
     end
 
     it 'returns the site element that has the most views' do
-      expect(user.most_viewed_site_element.id).to eq(@site_element_w_more_views.id)
+      expect(user.most_viewed_site_element.id).to eq(site_element_w_more_views.id)
     end
   end
 
@@ -185,8 +188,7 @@ describe User do
   end
 
   describe '#destroy' do
-    fixtures :all
-    let(:site_member) { site_memberships(:zombo) }
+    let(:site_member) { create(:site_membership) }
 
     before do
       allow_any_instance_of(Site).to receive(:generate_static_assets)
@@ -201,15 +203,13 @@ describe User do
     end
 
     it 'should soft-delete' do
-      user = users(:joey)
+      user = create(:user)
       user.destroy
       expect(User.only_deleted).to include(user)
     end
   end
 
   describe '#valid_password?' do
-    fixtures :all
-
     it 'is true for valid devise-stored password' do
       user = User.create!(
         email: 'newuser@asdf.com',
@@ -381,10 +381,11 @@ describe User do
   end
 
   context '.search_by_url' do
+    let(:user) { create :user }
+
     before do
       loblaw_url = 'http://www.google.com/'
-      @user = create :user
-      @user.sites << create(:site,  url: loblaw_url)
+      user.sites << create(:site,  url: loblaw_url)
     end
 
     context 'with invalid host string' do
@@ -402,14 +403,14 @@ describe User do
     context 'with subdomain' do
       it 'should search with correct domain' do
         expect(User.search_by_url('www.google.com'))
-          .to include(@user)
+          .to include(user)
       end
     end
 
     context 'without subdomain' do
       it 'should search with correct domain' do
         expect(User.search_by_url('google.com'))
-          .to include(@user)
+          .to include(user)
       end
     end
   end

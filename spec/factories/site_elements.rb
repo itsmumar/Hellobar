@@ -1,5 +1,9 @@
 FactoryGirl.define do
   factory :site_element do
+    transient do
+      site nil
+    end
+
     type 'Bar'
     theme_id 'classic'
     element_subtype 'announcement'
@@ -68,6 +72,12 @@ FactoryGirl.define do
 
     trait :closable do
       closable true
+    end
+
+    after :create do |element, evaluator|
+      if evaluator.site
+        element.rule.update site: evaluator.site
+      end
     end
   end
 end
