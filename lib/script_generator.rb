@@ -31,7 +31,7 @@ class ScriptGenerator < Mustache
         env.version = '1.0'
         env.css_compressor = :scss
         env.js_compressor = nil
-        env.cache = ActiveSupport::Cache::MemoryStore.new
+        env.cache = Rails.cache
       end
     end
 
