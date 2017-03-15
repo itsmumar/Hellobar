@@ -47,7 +47,7 @@ module Hello
                 end
               end
             rescue AWS::DynamoDB::Errors::ResourceNotFoundException => e
-              # Table doesn't exist - just ignore
+              nil # Table doesn't exist - just ignore
             end
           end
           # Now we need to calculate the average value for each and add it to the final results
@@ -217,5 +217,6 @@ module Hello
 end
 begin
   Hello::DynamoDB.setup
-rescue Exception => e
+rescue => e
+  Raven.capture_exception(e)
 end

@@ -32,7 +32,11 @@ module BillingAuditTrail
           # See if this is the source
           class_name = name.gsub(/_id$/, '').classify + (name =~ /s_id$/ ? 's' : '')
           klass = nil
-          begin; klass = Kernel.const_get(class_name); rescue; end
+          begin
+            klass = Kernel.const_get(class_name)
+          rescue => e
+            Raven.capture_exception(e)
+          end
           log.send(:"#{name}=", @source.id) if klass && @source.is_a?(klass)
         end
       end

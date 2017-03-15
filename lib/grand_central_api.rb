@@ -1,10 +1,4 @@
-begin
-  require 'openssl'
-rescue LoadError
-  # If they don't have this we don't want to kill everything with a load error
-  # howver if you attempt to use this API it will error out
-end
-
+require 'openssl'
 require 'net/http'
 require 'uri'
 require 'cgi'

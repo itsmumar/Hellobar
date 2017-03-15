@@ -5,7 +5,7 @@ module Hello::EmailDigest
     def send(site)
       site.owners_and_admins.each do |recipient|
         mailer = mailer_for_site(site, recipient)
-        return if mailer.nil? || mailer.is_a?(ActionMailer::Base::NullMail) || mailer.html_part.nil?
+        next if mailer.nil? || mailer.is_a?(ActionMailer::Base::NullMail) || mailer.html_part.nil?
 
         end_date = EmailDigestHelper.date_of_previous('Sunday')
         start_date = end_date - 6

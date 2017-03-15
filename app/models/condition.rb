@@ -54,6 +54,23 @@ class Condition < ActiveRecord::Base
 
   delegate :site, to: :rule
 
+  def self.date_condition_from_params(start_date, end_date)
+    return unless [start_date, end_date].any?(&:present?)
+
+    if [start_date, end_date].all?(&:present?)
+      operand = 'between'
+      value = [start_date, end_date]
+    elsif start_date.present?
+      operand = 'after'
+      value = start_date
+    elsif end_date.present?
+      operand = 'before'
+      value = end_date
+    end
+
+    new(operand: operand, value: value, segment: 'DateCondition')
+  end
+
   def operand
     value = self[:operand]
 
@@ -154,23 +171,6 @@ class Condition < ActiveRecord::Base
 
   def clear_blank_values
     self.value = value.select { |v| !v.blank? }.uniq if value.is_a?(Array)
-  end
-
-  def self.date_condition_from_params(start_date, end_date)
-    return unless [start_date, end_date].any?(&:present?)
-
-    if [start_date, end_date].all?(&:present?)
-      operand = 'between'
-      value = [start_date, end_date]
-    elsif start_date.present?
-      operand = 'after'
-      value = start_date
-    elsif end_date.present?
-      operand = 'before'
-      value = end_date
-    end
-
-    new(operand: operand, value: value, segment: 'DateCondition')
   end
 
   def normalize_url_condition

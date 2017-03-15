@@ -6,49 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 2
-Lint/EmptyWhen:
-  Exclude:
-    - 'lib/service_providers/mail_chimp.rb'
-
-# Offense count: 8
-Lint/HandleExceptions:
-  Exclude:
-    - 'app/models/billing/billing_log.rb'
-    - 'app/models/site.rb'
-    - 'lib/grand_central_api.rb'
-    - 'lib/hello/suggested_opportunities.rb'
-    - 'lib/service_providers/a_weber.rb'
-    - 'support/get_failed_jobs'
-    - 'support/retry_jobs'
-
-# Offense count: 1
-Lint/IneffectiveAccessModifier:
-  Exclude:
-    - 'app/models/condition.rb'
-
-# Offense count: 1
-Lint/NonLocalExitFromIterator:
-  Exclude:
-    - 'lib/hello/email_digest.rb'
-
-# Offense count: 2
-Lint/ParenthesesAsGroupedExpression:
-  Exclude:
-    - 'spec/controllers/image_uploads_controller_spec.rb'
-
-# Offense count: 6
-Lint/RescueException:
-  Exclude:
-    - 'lib/cybersource.rb'
-    - 'lib/hello/suggested_opportunities.rb'
-    - 'support/retry_jobs'
-
-# Offense count: 1
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'app/models/admin.rb'
-
 # Offense count: 54
 Lint/UselessAssignment:
   Enabled: false

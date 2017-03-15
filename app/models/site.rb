@@ -530,6 +530,7 @@ class Site < ActiveRecord::Base
     normalized_url = self.class.normalize_url(url)
     self.url = "#{ normalized_url.scheme }://#{ normalized_url.normalized_host }"
   rescue Addressable::URI::InvalidURIError
+    nil
   end
 
   def generate_read_write_keys

@@ -135,9 +135,9 @@ If this is not you, this may be an attack and you should lock down the admin by 
       access_token_list = []
 
       # First build an array of access tokens with a sortable field
-      updated_access_tokens.each do |access_token, timestamps|
+      updated_access_tokens.each do |token, timestamps|
         most_recent_timestamp = timestamps.collect(&:to_i).max
-        access_token_list << [access_token, most_recent_timestamp, timestamps]
+        access_token_list << [token, most_recent_timestamp, timestamps]
       end
 
       # Only store the most recent access tokens

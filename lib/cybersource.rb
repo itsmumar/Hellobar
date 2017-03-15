@@ -36,7 +36,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
       end
       begin
         record.send(:save_to_cybersource)
-      rescue Exception => e
+      rescue => e
         record.errors[:base] = e.message
       end
     end
@@ -111,7 +111,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
       else
         return false, response.message
       end
-    rescue Exception => e
+    rescue => e
       audit << "Error charging #{ amount_in_dollars.inspect }: #{ e.message }"
       raise
     end
@@ -135,7 +135,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
       else
         return false, response.message
       end
-    rescue Exception => e
+    rescue => e
       audit << "Error refunding #{ amount_in_dollars.inspect } to #{ original_transaction_id.inspect }: #{ e.message }"
       raise
     end
@@ -216,7 +216,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
         end
         raise response.message
       end
-    rescue Exception => e
+    rescue => e
       audit << "Error tokenizing with #{ sanitized_data.inspect } response: #{ response.inspect } error: #{ e.message }"
       raise
     end

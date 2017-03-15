@@ -115,3 +115,6 @@ Rails/DynamicFindBy:
     - find_by_sql
     - find_by_email
     - find_by_script
+
+Lint/EmptyWhen:
+  Enabled: false
