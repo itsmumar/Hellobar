@@ -27,17 +27,17 @@ describe Referrals::RedeemForRecipient do
 
   it 'subscribes the sender to Pro too' do
     sender_ownership = create(:site_membership)
-    sender_user = sender_ownership.user
     sender_site = sender_ownership.site
     sender_site.change_subscription(build(:free_subscription))
-    referral = create(:referral, recipient: user, state: :signed_up, site: sender_site)
+
+    create(:referral, recipient: user, state: :signed_up, site: sender_site)
     Referrals::RedeemForRecipient.run(site: site)
 
     expect(sender_site.reload.current_subscription).to be_a(Subscription::Pro)
   end
 
   it 'subscribes to Pro with a 0.00 bill but only once' do
-    referral = create(:referral, recipient: user, state: :signed_up)
+    create(:referral, recipient: user, state: :signed_up)
     Referrals::RedeemForRecipient.run(site: site)
 
     site.stub(:change_subscription)

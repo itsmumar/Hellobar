@@ -31,8 +31,7 @@ end
 
 feature 'User can sign in', js: true do
   scenario 'through email and password' do
-    user = create(:user)
-    site = user.sites.create(url: random_uniq_url)
+    user = create(:user, :with_site)
 
     visit new_user_session_path
 
@@ -46,9 +45,8 @@ feature 'User can sign in', js: true do
   end
 
   scenario 'through oauth' do
-    user = create(:user)
-    site = user.sites.create(url: random_uniq_url)
-    auth = user.authentications.create(provider: 'google_oauth2', uid: '12345')
+    user = create(:user, :with_site)
+    user.authentications.create(provider: 'google_oauth2', uid: '12345')
 
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345')
     visit new_user_session_path

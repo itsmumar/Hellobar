@@ -62,19 +62,6 @@ namespace :cloudwatch_metrics do
     )
 
     ########################################
-    #### Gather existing alarms
-    ########################################
-    alarm_options = {
-      namespace: namespace, # required
-      dimensions: [
-        {
-          name: 'InstanceId', # required
-          value: instance_id, # required
-        }
-      ]
-    }
-
-    ########################################
     #### DISK SPACE Alarm Creation
     ########################################
     cloudwatch.put_metric_alarm(

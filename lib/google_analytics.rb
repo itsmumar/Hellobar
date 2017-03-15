@@ -35,7 +35,7 @@ class GoogleAnalytics
     else
       raise error
     end
-  rescue ActionView::Template::Error => error
+  rescue ActionView::Template::Error => _
     nil # handle for timeouts
   rescue => e
     Rails.logger.warn e.inspect

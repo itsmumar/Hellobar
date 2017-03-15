@@ -46,7 +46,7 @@ module Hello
                   end
                 end
               end
-            rescue AWS::DynamoDB::Errors::ResourceNotFoundException => e
+            rescue AWS::DynamoDB::Errors::ResourceNotFoundException => _
               nil # Table doesn't exist - just ignore
             end
           end
@@ -186,11 +186,6 @@ module Hello
           bottom_segments = segments[segments.length / 2..-1]
         end
         # Define sort methods
-        sort_by_conversion_rate = lambda do |a, b|
-          conv_a = a[1] == 0 ? 0 : a[2].to_f / a[1]
-          conv_b = b[1] == 0 ? 0 : b[2].to_f / b[1]
-          conv_b <=> conv_a
-        end
         sort_by_conversion = lambda do |a, b|
           if b[2] == a[2]
             conv_a = a[1] == 0 ? 0 : a[2].to_f / a[1]

@@ -47,7 +47,7 @@ namespace :test_site do
   task :run do
     begin
       ruby  HbTestSite.run_file.to_s
-    rescue Interrupt => e
+    rescue Interrupt => _
       sleep 1 # wait for sinatra shutdown
       puts 'Good bye! :)'
     end

@@ -6,7 +6,7 @@ describe ContactListsController, type: :controller do
   let(:subscribers) { [] }
 
   before do
-    user = stub_current_user(site.owners.first)
+    stub_current_user(site.owners.first)
 
     allow_any_instance_of(Identity).to receive(:credentials).and_return(token: 'test')
     allow_any_instance_of(Identity).to receive(:extra)

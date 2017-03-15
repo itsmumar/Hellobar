@@ -212,7 +212,7 @@ module Hello::DataAPI
         end
         results = JSON.parse(response)
         return results
-      rescue Timeout::Error => e
+      rescue Timeout::Error => _
         # If it's just a timeout, keep retrying while we can
         timeout_index += 1
         retry if timeouts[timeout_index]

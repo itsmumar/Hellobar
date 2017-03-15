@@ -14,7 +14,6 @@ class UserController < ApplicationController
 
   def create
     load_user_from_invitation
-    attr_hash = user_params.delete(:email)
     attr_hash = user_params.merge!(status: User::ACTIVE_STATUS)
     if @user.update(attr_hash)
       sign_in @user, event: :authentication

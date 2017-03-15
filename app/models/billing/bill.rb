@@ -124,8 +124,7 @@ class Bill < ActiveRecord::Base
   end
 
   def calculate_discount
-    calculator = DiscountCalculator.new(subscription)
-    calculated_discount = calculator.current_discount
+    DiscountCalculator.new(subscription).current_discount
   end
 
   def set_final_amount!

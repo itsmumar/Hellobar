@@ -161,14 +161,12 @@ describe SiteElementsController do
       it 'defaults branding to true if free user' do
         get :new, site_id: subscription.site.id, format: :json
 
-        json = JSON.parse(response.body)
         expect_json_response_to_include(show_branding: true)
       end
 
       it 'sets the theme id to the default theme id' do
         get :new, site_id: subscription.site.id, format: :json
 
-        json = JSON.parse(response.body)
         default_theme = Theme.where(default_theme: true).first
         expect_json_response_to_include(theme_id: default_theme.id)
       end

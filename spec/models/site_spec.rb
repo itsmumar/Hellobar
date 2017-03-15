@@ -66,7 +66,6 @@ describe Site do
 
     it 'applies the discount when changing subscription to pro and it belongs to a discount tier' do
       user = create(:user)
-      bills = []
 
       zero_discount_subs = Subscription::Pro.defaults[:discounts].detect { |x| x.tier == 0 }.slots
       zero_discount_subs.times do

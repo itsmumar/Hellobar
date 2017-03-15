@@ -19,7 +19,7 @@ describe BillingAttempt do
 
     it 'should create a refund' do
       billing_attempt = paid_bill.billing_attempts.last
-      refund_bill, refund_attempt = billing_attempt.refund!
+      refund_bill, = billing_attempt.refund!
       refund_bill.amount.should == billing_attempt.bill.amount * -1
       refund_bill.paid?.should be_true
     end

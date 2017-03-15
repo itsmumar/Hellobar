@@ -156,7 +156,7 @@ describe User do
       user = create(:user)
       site = user.sites.create(url: random_uniq_url)
       rule = site.rules.create(name: 'test rule', match: 'all')
-      site_element = create(:site_element, rule: rule)
+      create(:site_element, rule: rule)
       # normaly devise would set it
       user.sign_in_count = 1
       expect(user.new?).to be_false

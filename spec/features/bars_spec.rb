@@ -40,10 +40,9 @@ feature 'Adding and editing bars', :js do
 
   scenario 'existing user can create a site element' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345')
-    user = create(:user)
-    site = user.sites.create(url: random_uniq_url)
-    create(:rule, site: site)
-    auth = user.authentications.create(provider: 'google_oauth2', uid: '12345')
+    site = create(:site, :with_rule, :with_user)
+    user = site.owners.last
+    user.authentications.create(provider: 'google_oauth2', uid: '12345')
 
     visit new_user_session_path
     fill_in 'Your Email', with: user.email

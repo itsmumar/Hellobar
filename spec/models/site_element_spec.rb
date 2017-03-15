@@ -63,7 +63,7 @@ describe SiteElement do
 
       it 'does not remove image uploads that are active for other elements' do
         image = create(:image_upload, site: element.site)
-        elementTwo = create(:site_element, active_image_id: image.id, rule: create(:rule, site: element.site))
+        create(:site_element, active_image_id: image.id, rule: create(:rule, site: element.site))
 
         expect {
           element.headline = 'a new headline'

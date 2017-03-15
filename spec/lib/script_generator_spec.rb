@@ -299,7 +299,7 @@ describe ScriptGenerator do
     end
 
     it 'renders only active bar json by default' do
-      paused = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
+      SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       active_bar = SiteElement.create! element_subtype: 'traffic', rule: rule, paused: false
       generator = ScriptGenerator.new(site)
       generator.stub site_element_settings: { id: active_bar.id, template_name: active_bar.element_subtype }

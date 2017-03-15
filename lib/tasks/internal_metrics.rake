@@ -5,7 +5,6 @@ namespace :internal_metrics do
     two_weeks_ago = last_week - 1.week
     sites = Site.where('created_at >= ? and created_at <= ?', two_weeks_ago, last_week).all
     installed_sites = sites.reject { |s| !s.has_script_installed? }
-    pro_sites = sites.reject(&:is_free?)
     revenue = Bill.where('created_at >= ? and created_at <= ? and status=1 and amount > 0', two_weeks_ago, last_week)
     sum = revenue.sum(:amount)
     pro = revenue.reject { |b| b.subscription.type !~ /Pro/ }
@@ -25,10 +24,10 @@ Created sites: #{ number_with_delimiter(sites.length) }
 Installed sites: #{ number_with_delimiter(installed_sites.length) } (#{ number_to_percentage((installed_sites.length.to_f / sites.length) * 100, precision: 1) } conversion)
 
 Revenue: #{ number_to_currency(sum) }
-- Pro (Monthly): #{ number_with_delimiter(pro_monthly.length) } (#{ number_to_currency(pro_monthly.inject(0) { |s, b| s += b.amount }) })
-- Pro (Yearly): #{ number_with_delimiter(pro_yearly.length) } (#{ number_to_currency(pro_yearly.inject(0) { |s, b| s += b.amount }) })
-- Enterprise (Monthly): #{ number_with_delimiter(enterprise_monthly.length) } (#{ number_to_currency(enterprise_monthly.inject(0) { |s, b| s += b.amount }) })
-- Enterprise (Yearly): #{ number_with_delimiter(enterprise_yearly.length) } (#{ number_to_currency(enterprise_yearly.inject(0) { |s, b| s += b.amount }) })
+- Pro (Monthly): #{ number_with_delimiter(pro_monthly.length) } (#{ number_to_currency(pro_monthly.inject(0) { |s, b| s + b.amount }) })
+- Pro (Yearly): #{ number_with_delimiter(pro_yearly.length) } (#{ number_to_currency(pro_yearly.inject(0) { |s, b| s + b.amount }) })
+- Enterprise (Monthly): #{ number_with_delimiter(enterprise_monthly.length) } (#{ number_to_currency(enterprise_monthly.inject(0) { |s, b| s + b.amount }) })
+- Enterprise (Yearly): #{ number_with_delimiter(enterprise_yearly.length) } (#{ number_to_currency(enterprise_yearly.inject(0) { |s, b| s + b.amount }) })
 ")
   end
 

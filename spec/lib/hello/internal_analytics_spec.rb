@@ -107,7 +107,7 @@ describe Hello::InternalAnalytics do
 
       it 'does not pass if user_start_date time constraint is after the user was created' do
         user.update_attributes(created_at: object.get_ab_test('Time Constraint Test')[:user_start_date] - 10.days)
-        ab_test = object.get_ab_test('Time Constraint Test')
+        object.get_ab_test('Time Constraint Test')
         allow_any_instance_of(ModuleTestingClass).to receive(:current_user) { user }
         expect(object.ab_test_passes_time_constraints?('Time Constraint Test')).to eq(false)
       end

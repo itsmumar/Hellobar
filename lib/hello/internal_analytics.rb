@@ -19,16 +19,16 @@ module Hello
       def register_test(name, values, index, weights = [], user_start_date = nil)
         raise "Expected index: #{ @@expected_index.inspect }, but got index: #{ index.inspect }. You either changed the order of the tests, removed a test, added a test out of order, or did not set the index of a test correctly. Please fix and try again" unless index == @@expected_index
         raise "#{ name.inspect } has #{ values.length } values, but max is #{ MAX_VALUES_PER_TEST }" if values.length > MAX_VALUES_PER_TEST
-        sum = weights.inject(0) { |result, w| result += w }
+        sum = weights.inject(0) { |result, w| result + w }
         if weights.length < values.length
           remainder = 100 - sum
           num_weights_needed = values.length - weights.length
           # We inject n-1 weights this allows the last weight to round up or down as needed
           weights += [(remainder / num_weights_needed)] * (num_weights_needed - 1)
           # Determine last weight and add it
-          sum = weights.inject(0) { |result, w| result += w }
+          sum = weights.inject(0) { |result, w| result + w }
           weights << 100 - sum
-          sum = weights.inject(0) { |result, w| result += w }
+          sum = weights.inject(0) { |result, w| result + w }
         end
         raise "Weighting added up #{ sum }, expected 100: #{ weights.inspect } for test #{ name.inspect }" unless sum == 100
         # Now create ranges out of the weights
@@ -123,14 +123,14 @@ module Hello
           return index, :existing
         end
       end
-      person_type, person_id = current_person_type_and_id(user)
+      _, person_id = current_person_type_and_id(user)
       value_index = get_ab_test_value_index_from_id(ab_test, person_id)
       [value_index, :new]
     end
 
     def get_ab_variation_without_setting(test_name, user = nil)
       ab_test = get_ab_test(test_name)
-      value_index, status = get_ab_variation_index_without_setting(test_name, user)
+      value_index, = get_ab_variation_index_without_setting(test_name, user)
       return unless value_index
       value = ab_test[:values][value_index]
       value

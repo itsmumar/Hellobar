@@ -375,7 +375,7 @@ class LegacyMigrator
       @migrated_identities = {}
       @legacy_identities = preload(LegacyMigrator::LegacyIdentity)
       @legacy_identities.each do |_, legacy_id|
-        if (site = @legacy_sites[legacy_id.site_id])
+        if @legacy_sites[legacy_id.site_id]
           identity = ::Identity.new id: legacy_id.id,
                                     site_id: legacy_id.site_id,
                                     provider: legacy_id.provider,

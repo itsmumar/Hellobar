@@ -49,7 +49,7 @@ class ServiceProvider
     end
 
     def current_provider?(array)
-      key, value = *array
+      _, value = *array
       klass = name.demodulize
       value[:service_provider_class] == klass || value[:name] == klass
     end

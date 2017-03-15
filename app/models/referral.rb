@@ -46,7 +46,7 @@ class Referral < ActiveRecord::Base
 
   def expiration_date_string
     expiration_date = (created_at + FOLLOWUP_INTERVAL)
-    expiration_date_string = expiration_date.strftime('%B ') + expiration_date.day.ordinalize
+    expiration_date.strftime('%B ') + expiration_date.day.ordinalize
   end
 
   def accepted?

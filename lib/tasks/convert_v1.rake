@@ -22,7 +22,7 @@ namespace :convert_v1 do
         next
       end
       begin
-        new_user, new_site, new_bars = user.force_convert
+        _new_user, _new_site, new_bars = user.force_convert
         puts "imported #{ new_bars.length } bars"
         c += 1
       rescue StandardError => e
