@@ -24,8 +24,8 @@ class ScriptGenerator < Mustache
         env.append_path 'vendor/assets/javascripts/site_elements'
 
         env.append_path 'vendor/assets/stylesheets/site_elements'
-        env.append_path 'lib/themes'
         env.append_path 'lib/themes/templates'
+        env.append_path 'lib/themes'
         env.append_path 'lib/script_generator'
 
         env.version = '1.0'
@@ -280,10 +280,10 @@ class ScriptGenerator < Mustache
         render_asset("#{ type.tr('/', '_').underscore }.html")
       end
     else
-      path = [category.to_s.pluralize, type.tr('_', '-')]
+      path = [type.tr('_', '-')]
 
       render_asset(*path, "#{ element_class }.html") do
-        render_asset(*path, base.join('element.html'))
+        render_asset(*path, 'element.html')
       end
     end
   end

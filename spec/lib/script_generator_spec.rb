@@ -230,6 +230,18 @@ describe ScriptGenerator do
         expect(generator.render).to_not include(expected_string)
       end
     end
+
+    context 'modal with traffic-growth template' do
+      use_theme_fixtures
+
+      before do
+        site.rules.last.site_elements << create(:modal_element, theme_id: 'traffic-growth')
+      end
+
+      it 'renders successfully' do
+        expect(generator.render).to include('traffic-growth')
+      end
+    end
   end
 
   describe '#rules' do

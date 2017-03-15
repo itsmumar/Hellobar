@@ -5,11 +5,11 @@ class Theme < ActiveHash::Base
   ELEMENT_CSS_FILENAME   = 'element'
 
   def container_css_path
-    Pathname.new(directory).split.last.join("#{ CONTAINER_CSS_FILENAME }.css").to_s
+    base_directory.join("#{ CONTAINER_CSS_FILENAME }.css").to_s
   end
 
   def element_css_path
-    Pathname.new(directory).split.last.join("#{ ELEMENT_CSS_FILENAME }.css").to_s
+    base_directory.join("#{ ELEMENT_CSS_FILENAME }.css").to_s
   end
 
   def with_image?
@@ -18,5 +18,11 @@ class Theme < ActiveHash::Base
 
   def self.sorted
     all.sort_by { |t| [t.default_theme ? 0 : 1, t.name] }
+  end
+
+  private
+
+  def base_directory
+    Pathname.new(directory).split.last
   end
 end
