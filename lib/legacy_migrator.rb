@@ -442,7 +442,7 @@ class LegacyMigrator
 
     private
 
-    def create_user_and_membership(legacy_site_id: legacy_site_id, account_id: account_id)
+    def create_user_and_membership(legacy_site_id:, account_id:)
       legacy_account = @legacy_accounts[account_id]
       legacy_memberships = @legacy_memberships[legacy_account.id]
 
