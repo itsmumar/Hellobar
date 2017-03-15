@@ -284,16 +284,16 @@ describe Site do
     end
 
     it 'does not compress a locally stored script' do
-      script_generator = double ScriptGenerator, generate_script: ''
+      script_generator = ScriptGenerator.new(site)
+      allow(script_generator).to receive(:render).and_return('')
+      expect(ScriptGenerator).to receive(:new).and_return script_generator
 
       allow(Hellobar::Settings)
         .to receive(:[])
         .with(:store_site_scripts_locally)
         .and_return true
 
-      expect(ScriptGenerator).to receive(:new).and_return script_generator
-
-      expect(File).to receive(:open)
+      expect(ScriptGenerator.uglifier).not_to receive(:compile)
 
       site.generate_script
     end
