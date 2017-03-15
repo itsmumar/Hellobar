@@ -1,24 +1,28 @@
 require 'billing_log'
 
 class Bill < ActiveRecord::Base
+  include BillingAuditTrail
+
   class StatusAlreadySet < StandardError; end
   class InvalidStatus < StandardError; end
   class BillingEarly < StandardError; end
   class InvalidBillingAmount < StandardError; end
   class MissingPaymentMethod < StandardError; end
+
   serialize :metadata, JSON
+
   belongs_to :subscription, inverse_of: :bills
   has_many :billing_attempts, -> { order 'id' }
   has_many :coupon_uses
+
   validates :subscription, presence: true
-  include BillingAuditTrail
   delegate :site, to: :subscription
   delegate :site_id, to: :subscription
 
-  enum status: [:pending, :paid, :voided]
-
   before_save :check_amount
   before_validation :set_base_amount, :check_amount
+
+  enum status: [:pending, :paid, :voided]
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?

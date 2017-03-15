@@ -234,11 +234,11 @@ class Site < ActiveRecord::Base
   end
 
   def current_subscription
-    highest_tier_active_subscription || subscriptions.last
+    subscriptions.last
   end
 
   def highest_tier_active_subscription
-    subscriptions.active.sort.first
+    subscriptions.active.sort_by(&:significance).last
   end
 
   def has_pro_managed_subscription?
@@ -271,8 +271,7 @@ class Site < ActiveRecord::Base
   def free?
     current_subscription.nil? ||
       current_subscription.type.blank? ||
-      current_subscription == Subscription::Free.new
-      # Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
+      Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
   end
 
   def capabilities(clear_cache = false)
@@ -289,8 +288,10 @@ class Site < ActiveRecord::Base
   end
 
   include BillingAuditTrail
+
   class MissingPaymentMethod < StandardError; end
   class MissingSubscription < StandardError; end
+
   def change_subscription(subscription, payment_method = nil, trial_period = nil)
     raise MissingSubscription unless subscription
     transaction do
@@ -442,8 +443,7 @@ class Site < ActiveRecord::Base
     else
       last_subscription = active_paid_bills.last.subscription
 
-      # if Subscription::Comparison.new(last_subscription, subscription).upgrade?
-      if subscription > last_subscription
+      if Subscription::Comparison.new(last_subscription, subscription).upgrade?
         # We are upgrading, gotta pay now, but we prorate it
 
         bill.bill_at = now

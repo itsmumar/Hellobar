@@ -28,8 +28,11 @@ class DiscountCalculator
   end
 
   def discount_index
-    subs = active_subscriptions.sort_by! { |x| x.site.created_at }
-    subs.index(@subscription) || subs.count
+    subscriptions = active_subscriptions.sort_by! do |x|
+      x.site.created_at
+    end
+
+    subscriptions.index(@subscription) || subscriptions.count
   end
 
   def active_subscriptions

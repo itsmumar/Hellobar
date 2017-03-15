@@ -10,8 +10,7 @@ module Subscribable
 
       is_upgrade =
         if old_subscription
-          site.current_subscription > old_subscription
-          # Subscription::Comparison.new(old_subscription, site.current_subscription).upgrade?
+          Subscription::Comparison.new(old_subscription, site.current_subscription).upgrade?
         else
           true
         end

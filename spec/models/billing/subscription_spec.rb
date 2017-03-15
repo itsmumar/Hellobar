@@ -4,7 +4,7 @@ module SubscriptionHelper
   def setup_subscriptions
     @user = create(:user)
     @site = create(:site)
-    @payment_method = create(:payment_method)
+    @payment_method = create(:payment_method, user: @user)
     @free = Subscription::Free.new(user: @user, site: @site)
     @pro = Subscription::Pro.new(user: @user, site: @site)
     @enterprise = Subscription::Enterprise.new(user: @user, site: @site)
@@ -18,15 +18,6 @@ end
 
 describe Subscription do
   include SubscriptionHelper
-
-  describe 'comparable interface' do
-    specify 'a ProManaged subscription has higher significance than Enterprise' do
-      pro_managed = Subscription::ProManaged.new
-      enterprise = Subscription::Enterprise.new
-
-      expect(pro_managed > enterprise).to be_true
-    end
-  end
 
   describe '.estimated_price' do
     it 'returns the subscriptions monthly amount - calculated discounts' do
