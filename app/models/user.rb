@@ -173,7 +173,7 @@ class User < ActiveRecord::Base
   end
 
   def role_for_site(site)
-    if membership = site_memberships.find_by(site: site)
+    if (membership = site_memberships.find_by(site: site))
       membership.role.to_sym
     end
   end
@@ -231,7 +231,7 @@ class User < ActiveRecord::Base
     if original_email.present? && info['email'] != original_email # the user is trying to login with a different Google account
       user = User.new
       user.errors.add(:base, "Please log in with your #{ original_email } Google email")
-    elsif user = User.joins(:authentications).find_by(authentications: { uid: access_token['uid'], provider: access_token['provider'] })
+    elsif (user = User.joins(:authentications).find_by(authentications: { uid: access_token['uid'], provider: access_token['provider'] }))
       user.first_name = info['first_name'] if info['first_name'].present?
       user.last_name = info['last_name'] if info['last_name'].present?
 

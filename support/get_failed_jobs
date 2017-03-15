@@ -20,7 +20,7 @@ puts 'Parsing jobs...'
 jobs = {}
 File.open(tmp_log, 'r') do |fp|
   loop do
-    break unless line = fp.gets
+    break unless (line = fp.gets)
     next unless line =~ /(Received|Processed) message\[(.*?)\]: "(.*)"/
     type = Regexp.last_match(1)
     message_id = Regexp.last_match(2)

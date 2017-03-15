@@ -102,7 +102,7 @@ module Hello
 
     def set_ab_variation(test_name, value)
       # First make sure we have registered this test
-      raise "Could not find test: #{ test_name.inspect }" unless ab_test = TESTS[test_name]
+      TESTS.fetch(test_name) { raise "Could not find test: #{ test_name.inspect }" }
       # Now make sure the value is a valid value
       value_index = ab_test[:values].index(value)
       raise "Could not find value: #{ value.inspect } in test #{ test_name.inspect } => #{ ab_test.inspect }" unless value_index
@@ -112,15 +112,14 @@ module Hello
 
     def get_ab_test(test_name)
       # First make sure we have registered this test
-      raise "Could not find test: #{ test_name.inspect }" unless ab_test = TESTS[test_name]
-      ab_test
+      TESTS.fetch(test_name) { raise "Could not find test: #{ test_name.inspect }" }
     end
 
     def get_ab_variation_index_without_setting(test_name, user = nil)
       ab_test = get_ab_test(test_name)
       # Now we need to see if we have a value for the index
       if defined?(cookies)
-        if index = get_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index])
+        if (index = get_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index]))
           return index, :existing
         end
       end

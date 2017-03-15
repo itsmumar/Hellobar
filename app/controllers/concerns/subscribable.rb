@@ -52,7 +52,7 @@ module Subscribable
       props[:from_schedule] = old_subscription.schedule
     end
 
-    if new_subscription = site.current_subscription
+    if (new_subscription = site.current_subscription)
       props[:to_plan] = new_subscription.values[:name]
       props[:to_schedule] = new_subscription.schedule
     end

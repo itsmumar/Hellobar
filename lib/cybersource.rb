@@ -207,7 +207,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
         audit << "Create new token with #{ sanitized_data.inspect } response: #{ response.inspect }"
       end
       unless response.success?
-        if field = response.params['invalidField']
+        if (field = response.params['invalidField'])
           if field == 'c:cardType'
             raise 'Invalid credit card'
           else

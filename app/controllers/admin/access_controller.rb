@@ -33,7 +33,7 @@ class Admin::AccessController < ApplicationController
   end
 
   def process_step1
-    return redirect_to(admin_access_path) unless email = params[:login_email]
+    return redirect_to(admin_access_path) unless (email = params[:login_email])
 
     session[:admin_access_email] = email
 
@@ -43,7 +43,7 @@ class Admin::AccessController < ApplicationController
 
     Admin.record_login_attempt(email, remote_ip, user_agent, access_cookie)
 
-    if @admin = Admin.where(email: email).first
+    if (@admin = Admin.find_by(email: email))
       process_login(@admin)
     else
       # Always render step2 - this way attackers don't know if the login
@@ -53,7 +53,7 @@ class Admin::AccessController < ApplicationController
   end
 
   def process_step2
-    return redirect_to(admin_access_path) unless email = session[:admin_access_email]
+    return redirect_to(admin_access_path) unless (email = session[:admin_access_email])
 
     @admin = Admin.where(email: email).first
 
@@ -81,7 +81,7 @@ class Admin::AccessController < ApplicationController
   end
 
   def validate_access_token
-    return redirect_to(admin_access_path) unless email = params[:email]
+    return redirect_to(admin_access_path) unless (email = params[:email])
 
     admin = Admin.where(email: email).first
 

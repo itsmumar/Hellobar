@@ -338,8 +338,8 @@ class LegacyMigrator
           updated_at: legacy_goal.updated_at.utc
         }
 
-        if legacy_id_int = @legacy_identity_integrations[legacy_goal.id]
-          unless identity = @migrated_identities[legacy_id_int.identity_id]
+        if (legacy_id_int = @legacy_identity_integrations[legacy_goal.id])
+          unless (identity = @migrated_identities[legacy_id_int.identity_id])
             Rails.logger.info "WTF:Identity: #{ legacy_id_int.identity_id } doesnt exist for Goal: #{ legacy_goal.id }"
             next
           end
@@ -375,7 +375,7 @@ class LegacyMigrator
       @migrated_identities = {}
       @legacy_identities = preload(LegacyMigrator::LegacyIdentity)
       @legacy_identities.each do |_, legacy_id|
-        if site = @legacy_sites[legacy_id.site_id]
+        if (site = @legacy_sites[legacy_id.site_id])
           identity = ::Identity.new id: legacy_id.id,
                                     site_id: legacy_id.site_id,
                                     provider: legacy_id.provider,
@@ -417,7 +417,7 @@ class LegacyMigrator
 
     def migrate_site_timezones
       @legacy_sites.each do |site_id, _|
-        next unless legacy_goals = @legacy_goals_by_site_id[site_id]
+        next unless (legacy_goals = @legacy_goals_by_site_id[site_id])
         timezones = legacy_goals.map { |goal| timezone_for_goal(goal) }.compact.uniq
 
         # update the new Site with the first timezone

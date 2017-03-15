@@ -29,7 +29,7 @@ class Admin < ActiveRecord::Base
     end
 
     def validate_session(access_token, token)
-      if admin = Admin.find_by(session_access_token: access_token, session_token: token)
+      if (admin = Admin.find_by(session_access_token: access_token, session_token: token))
         if Time.now - admin.session_last_active > MAX_SESSION_TIME
           return nil
         else

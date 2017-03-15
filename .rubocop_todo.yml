@@ -6,21 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 22
-# Configuration parameters: AllowSafeAssignment.
-Lint/AssignmentInCondition:
-  Exclude:
-    - 'app/controllers/admin/access_controller.rb'
-    - 'app/controllers/concerns/subscribable.rb'
-    - 'app/controllers/user_migration_controller.rb'
-    - 'app/controllers/users/sessions_controller.rb'
-    - 'app/models/admin.rb'
-    - 'app/models/user.rb'
-    - 'lib/cybersource.rb'
-    - 'lib/hello/internal_analytics.rb'
-    - 'lib/legacy_migrator.rb'
-    - 'support/get_failed_jobs'
-
 # Offense count: 2
 Lint/CircularArgumentReference:
   Exclude:

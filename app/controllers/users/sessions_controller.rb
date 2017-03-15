@@ -27,7 +27,7 @@ class Users::SessionsController < Devise::SessionsController
         sign_in(@user)
 
         render 'users/forgot_emails/set_password'
-      elsif auth = @user.authentications.first
+      elsif (auth = @user.authentications.first)
         redirect_to "/auth/#{ auth.provider }"
       end
     else
@@ -49,7 +49,7 @@ class Users::SessionsController < Devise::SessionsController
       if current_admin || TEMP_MIGRATION_USERS.include?(email)
         password = params[:user].try(:[], :password)
 
-        if wordpress_user = Hello::WordpressUser.authenticate(email, password, !!current_admin)
+        if (wordpress_user = Hello::WordpressUser.authenticate(email, password, !!current_admin))
           session[:wordpress_user_id] = wordpress_user.id
           redirect_to new_user_migration_path
         else
