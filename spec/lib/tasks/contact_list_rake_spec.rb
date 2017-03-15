@@ -6,13 +6,12 @@ require 'rake'
 load 'lib/tasks/contact_list.rake'
 
 describe 'contact_list:sync_one' do
-  fixtures :all
   include_context 'rake'
 
   let(:embed_code) { CY_MAD_MIMI_EMBED_CODE }
   let(:user) { { email: 'test.testerson@example.com', name: 'Test Testerson' } }
   let(:contact_list) do
-    contact_lists(:embed_code).tap do |l|
+    create(:contact_list, :embed_code).tap do |l|
       l.data['embed_code'] = embed_code
       l.save!
     end
@@ -49,12 +48,11 @@ describe 'contact_list:sync_one' do
 end
 
 describe 'contact_list:sync_all!' do
-  fixtures :all
   include_context 'rake'
 
   let(:embed_code) { CY_MAD_MIMI_EMBED_CODE }
   let(:contact_list) do
-    contact_lists(:embed_code).tap do |l|
+    create(:contact_list, :embed_code).tap do |l|
       l.data['embed_code'] = embed_code
       l.save!
     end

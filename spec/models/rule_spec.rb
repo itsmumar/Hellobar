@@ -81,10 +81,8 @@ describe Rule do
   end
 
   describe 'accepting nested condition attributes' do
-    fixtures :all
-
-    let(:rule) { rules(:zombo_rule) }
-    let(:site) { sites(:zombo) }
+    let(:rule) { create(:rule) }
+    let(:site) { create(:site) }
 
     before do
       expect(rule).to be_present
@@ -92,7 +90,7 @@ describe Rule do
     end
 
     it 'builds out a "before" date condition properly' do
-      condition = conditions(:date_before)
+      condition = create(:condition, :date_before)
       tomorrow = Date.tomorrow.strftime('%Y-%m-%d')
 
       expect(condition.value).to eq tomorrow
@@ -100,7 +98,7 @@ describe Rule do
     end
 
     it 'builds out an "after" date condition properly' do
-      condition = conditions(:date_after)
+      condition = create(:condition, :date_after)
       yesterday = Date.yesterday.strftime('%Y-%m-%d')
 
       expect(condition.value).to eq yesterday
@@ -108,7 +106,7 @@ describe Rule do
     end
 
     it 'builds out a "between" date condition properly' do
-      condition = conditions(:date_between)
+      condition = create(:condition, :date_between)
       yesterday = Date.yesterday.strftime('%Y-%m-%d')
       tomorrow = Date.tomorrow.strftime('%Y-%m-%d')
 
@@ -116,38 +114,38 @@ describe Rule do
     end
 
     it 'builds out a URL condition with an include URLs' do
-      condition = conditions(:url_includes)
+      condition = create(:condition, :url_includes)
       expect(condition.value.class).to eq(Array)
       expect(condition.value).to eq(['/asdf'])
       expect(condition.to_sentence).to eq 'Page URL includes /asdf'
     end
 
     it 'builds out a URL condition with a "does not include" URL' do
-      condition = conditions(:url_does_not_include)
+      condition = create(:condition, :url_does_not_include)
       expect(condition.value.class).to eq(Array)
       expect(condition.value).to eq(['/asdf'])
       expect(condition.to_sentence).to eq 'Page URL does not include /asdf'
     end
 
     it 'builds out a URL condition with 2 URLs' do
-      condition = conditions(:url_includes)
+      condition = create(:condition, :url_includes)
       condition.value = ['/foo', '/bar']
       expect(condition.to_sentence).to eq 'Page URL includes /foo or 1 other'
     end
 
     it 'builds out a URL condition with > 2 URLs' do
-      condition = conditions(:url_includes)
+      condition = create(:condition, :url_includes)
       condition.value = ['/foo', '/bar', '/baz']
       expect(condition.to_sentence).to eq 'Page URL includes /foo or 2 others'
     end
   end
 
   describe '#same_as?' do
-    fixtures :all
-
-    let(:rule) { rules(:zombo_rule) }
-    let(:other_rule) { rules(:zombo_rule).clone }
-    let(:site) { sites(:zombo) }
+    let(:rule) { create(:rule) }
+    let(:other_rule) { create(:rule) }
+    let(:site) { create(:site) }
+    let(:date_between) { create(:condition, :date_between) }
+    let(:date_after) { create(:condition, :date_after) }
 
     it 'returns true if neither rule has conditions' do
       expect(rule.conditions.any?).to be_false
@@ -157,31 +155,29 @@ describe Rule do
     end
 
     it 'returns true if both rules have the same conditions' do
-      rule.stub(conditions: [conditions(:date_between)])
-      other_rule.stub(conditions: [conditions(:date_between)])
+      rule.stub(conditions: [date_between])
+      other_rule.stub(conditions: [date_between])
 
       expect(rule).to be_same_as(other_rule)
     end
 
-    it "returns true if the rules' \"match\" values are different, but there is only one rule" do
-      rule.stub(match: 'any', conditions: [conditions(:date_between)])
-      other_rule.stub(match: 'all', conditions: [conditions(:date_between)])
+    it 'returns true if the rules "match" values are different, but there is only one rule' do
+      rule.stub(match: 'any', conditions: [date_between])
+      other_rule.stub(match: 'all', conditions: [date_between])
 
       expect(rule).to be_same_as(other_rule)
     end
 
-    it "returns false if the rules' \"match\" values are different and there is more than one rule" do
-      rule.stub(match: 'any', conditions: [conditions(:date_between), conditions(:date_after)])
-      other_rule.stub(match: 'all', conditions: [conditions(:date_between), conditions(:date_after)])
+    it 'returns false if the rules "match" values are different and there is more than one rule' do
+      rule.stub(match: 'any', conditions: [date_between, date_after])
+      other_rule.stub(match: 'all', conditions: [date_between, date_after])
 
       expect(rule).not_to be_same_as(other_rule)
     end
   end
 
   describe '.create_from_segment' do
-    fixtures :all
-
-    let(:site) { sites(:zombo) }
+    let(:site) { create(:site) }
 
     it 'creates a rule with the correct conditions' do
       rule = Rule.create_from_segment(site, 'dv:mobile')

@@ -1,15 +1,12 @@
 require 'spec_helper'
 
 describe ContactListsController, type: :controller do
-  fixtures :all
-
-  let(:site) { sites(:zombo) }
-  let(:contact_list) { contact_lists(:zombo_contacts) }
+  let(:site) { create :site, :with_user }
+  let(:contact_list) { create(:contact_list, :mailchimp, site: site) }
   let(:subscribers) { [] }
 
   before do
     user = stub_current_user(site.owners.first)
-    site.contact_lists = [contact_list]
 
     allow_any_instance_of(Identity).to receive(:credentials).and_return(token: 'test')
     allow_any_instance_of(Identity).to receive(:extra)
@@ -74,6 +71,8 @@ describe ContactListsController, type: :controller do
   end
 
   describe 'POST #create' do
+    let!(:mailchimp) { create :identity, :mailchimp, site: site }
+
     let(:contact_list_params) do
       {
         name: 'My Contacts',
@@ -93,12 +92,6 @@ describe ContactListsController, type: :controller do
       expect {
         post :create, site_id: site, contact_list: contact_list_params
       }.to change(ContactList, :count).by(1)
-    end
-
-    it 'is not the last contact list' do
-      post :create, site_id: site, contact_list: contact_list_params
-
-      expect(ContactList.last).not_to eq(contact_list)
     end
 
     it 'sets the name correctly' do
@@ -181,9 +174,8 @@ describe ContactListsController, type: :controller do
 
       it 'clean-ups the embed code' do
         post :create, site_id: site, contact_list: contact_list_params
-
-        new_contact_list = ContactList.last
-        expect(new_contact_list.data['embed_code']).to be_nil
+        expect(response).not_to be_success
+        expect_json_response_to_include('errors' => ['Embed code is invalid'])
       end
 
       context 'when the embed code is blank' do
@@ -197,7 +189,7 @@ describe ContactListsController, type: :controller do
           expect(response.status).to eq(400)
         end
 
-        it "doesn't create a new contact list" do
+        it 'doesn\'t create a new contact list' do
           expect {
             post :create, site_id: site, contact_list: contact_list_params
           }.to change { ContactList.count }.by(0)
@@ -230,7 +222,7 @@ describe ContactListsController, type: :controller do
     end
 
     context 'when esp has embed_code' do
-      let(:contact_list) { contact_lists(:embed_code) }
+      let(:contact_list) { create(:contact_list, :embed_code, site: site) }
       let(:embed_code) { '<html><body><iframe><form>Here I am</form></iframe></body></html>' }
       let(:contact_list_params) { { data: { embed_code: embed_code } } }
 

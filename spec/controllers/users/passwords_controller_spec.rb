@@ -1,15 +1,13 @@
 require 'spec_helper'
 
 describe Users::PasswordsController do
-  fixtures :all
-
   before(:each) do
-    @request.env['devise.mapping'] = Devise.mappings[:user]
+    request.env['devise.mapping'] = Devise.mappings[:user]
   end
 
   describe 'POST create' do
     it 'sends a password reset with valid params' do
-      user = users(:joey)
+      user = create(:user)
 
       MailerGateway.should_receive(:send_email).with('Reset Password', user.email, anything)
 

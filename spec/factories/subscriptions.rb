@@ -14,6 +14,12 @@ FactoryGirl.define do
     trait :pro_managed do
       initialize_with { Subscription::ProManaged.new }
     end
+
+    trait :with_bills do
+      after :create do |subscription|
+        create_list :bill, 2, subscription: subscription
+      end
+    end
   end
 
   factory :free_subscription, parent: :subscription, class: 'Subscription::Free' do

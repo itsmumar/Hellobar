@@ -7,10 +7,10 @@ describe RulesController do
     request.env['HTTP_ACCEPT'] = 'application/json'
   end
 
-  fixtures :all
-
-  let(:rule) { rules(:pro) }
-  let(:site) { sites(:pro_site) }
+  let(:user) { create(:user) }
+  let(:site) { create(:site, :pro, :with_user) }
+  let(:owner) { site.owners.first }
+  let!(:rule) { create(:rule, site: site) }
 
   describe 'GET :show' do
     it 'should fail when not logged in' do
@@ -19,13 +19,13 @@ describe RulesController do
     end
 
     it 'should fail when not owner' do
-      stub_current_user users(:wootie)
+      stub_current_user user
       get :show, site_id: 1, id: rule
       expect(response).to be_not_found
     end
 
     it 'should succeed when owner' do
-      stub_current_user(site.owners.first)
+      stub_current_user owner
       get :show, site_id: site, id: rule
       expect(response).to be_success
 
@@ -45,7 +45,7 @@ describe RulesController do
     end
 
     it 'should succeed when not logged in' do
-      stub_current_user(site.owners.first)
+      stub_current_user owner
 
       expect {
         post :create, site_id: site, rule: {
@@ -64,7 +64,7 @@ describe RulesController do
     end
 
     it 'should be able to create rules with conditions' do
-      stub_current_user(site.owners.first)
+      stub_current_user owner
 
       rule_name = 'accepting rule and conditions from create'
 
@@ -91,38 +91,39 @@ describe RulesController do
       Site.any_instance.stub(generate_script: true)
     end
 
+    let!(:second_rule) { create(:rule, site: site) }
+
     it 'should fail when not logged in' do
       delete :destroy, site_id: site, id: rule
       expect(response.code).to eq UNAUTHORIZED
     end
 
     it 'should fail when not site owner' do
-      expect(site.owners.first).to eq users(:pro)
-      stub_current_user users(:wootie)
+      stub_current_user user
       delete :destroy, site_id: site, id: rule
       expect(response).to be_not_found
     end
 
     it 'should succeed when owner' do
-      stub_current_user users(:pro)
+      stub_current_user owner
       expect {
         delete :destroy, site_id: site, id: rule
-      }.to change { Rule.count }.by(-1)
+      }.to change(Rule, :count).by(-1)
+
       expect(response).to be_success
     end
 
-    it 'should fail when user only has one rule for their site' do
-      site = sites(:horsebike)
-      rule = site.rules.first
-      stub_current_user(site.owners.first)
+    context 'when user only has one rule for their site' do
+      let(:second_rule) { nil }
 
-      site.rules.count.should == 1
+      it 'fails' do
+        stub_current_user owner
+        expect {
+          delete :destroy, site_id: site.id, id: rule
+        }.not_to change { Rule.count }
 
-      expect {
-        delete :destroy, site_id: site, id: rule
-      }.to_not change { Rule.count }
-
-      expect(response.status).to eq(422)
+        expect(response.status).to eq(422)
+      end
     end
   end
 
@@ -138,9 +139,7 @@ describe RulesController do
     end
 
     it 'should fail when not site owner' do
-      expect(site.owners.first).to eq users(:pro)
-
-      stub_current_user users(:wootie)
+      stub_current_user user
       put :update, site_id: site, id: rule, rule: {}
 
       expect(response).to be_forbidden
@@ -148,7 +147,7 @@ describe RulesController do
 
     describe 'succeed as owner' do
       it 'should update a rule with new conditions' do
-        stub_current_user(site.owners.first)
+        stub_current_user owner
 
         expect {
           put :update, site_id: site, id: rule, rule: {
@@ -179,7 +178,7 @@ describe RulesController do
       end
 
       it 'should properly update the rule when condition attributes are not passed' do
-        stub_current_user(site.owners.first)
+        stub_current_user owner
 
         put :update, site_id: site, id: rule.id, rule: { name: 'NO CONDITIONS!' }
         rule.reload
@@ -188,7 +187,7 @@ describe RulesController do
       end
 
       it 'should add a new rule with url condition' do
-        stub_current_user(site.owners.first)
+        stub_current_user owner
 
         put :update, site_id: site, id: rule, rule: {
           name: 'new rule name',
@@ -212,7 +211,7 @@ describe RulesController do
       end
 
       it 'should two rules at once' do
-        stub_current_user(site.owners.first)
+        stub_current_user owner
 
         put :update, site_id: site, id: rule, rule: {
           name: 'new rule name',
@@ -229,10 +228,10 @@ describe RulesController do
       end
 
       it 'should be able to destroy individual conditions with destroyable' do
-        stub_current_user(site.owners.first)
+        stub_current_user owner
 
         # add a rule to remove
-        rule.conditions << conditions(:url_includes)
+        rule.conditions << create(:condition, :url_includes)
         condition = rule.reload.conditions.first
 
         # remove it
@@ -249,6 +248,6 @@ describe RulesController do
   private
 
   def condition_hash(key)
-    conditions(key).attributes.tap { |h| h.delete('id') }
+    attributes_for(:condition, key)
   end
 end

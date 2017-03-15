@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe SiteGenerator do
-  fixtures :all
-
-  let(:site) { sites(:zombo) }
+  let(:site) { create(:site) }
 
   before do
     allow_any_instance_of(Site).to receive(:lifetime_totals).and_return('1' => [[1, 0]])

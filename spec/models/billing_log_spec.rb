@@ -9,14 +9,14 @@ describe BillingLog do
 end
 
 describe BillingAuditTrail do
-  fixtures :all
   before do
     BillingLog.connection.execute("DELETE FROM #{ BillingLog.table_name }")
   end
 
+  let(:user) { create(:user) }
+
   it 'should allow us to call audit on an object' do
     BillingLog.count.should == 0
-    user = users(:joey)
     message = 'Hello Audit'
     user.audit << message
     BillingLog.count.should == 1
@@ -27,7 +27,6 @@ describe BillingAuditTrail do
 
   it 'should allow us to call audit on an object and set the source ID correctly' do
     BillingLog.count.should == 0
-    user = users(:joey)
     user.audit << 'Hello Audit'
     BillingLog.count.should == 1
     log = BillingLog.all.first
@@ -37,7 +36,6 @@ describe BillingAuditTrail do
 
   it 'should set the source ID correctly' do
     BillingLog.count.should == 0
-    user = users(:joey)
     user.audit << 'Hello Audit'
     BillingLog.count.should == 1
     log = BillingLog.all.first
@@ -46,7 +44,6 @@ describe BillingAuditTrail do
   end
 
   it 'should set additional lookup ids' do
-    user = users(:joey)
     payment_method = PaymentMethod.create!(user: user)
     payment_method_details = PaymentMethodDetails.create!(payment_method: payment_method)
 

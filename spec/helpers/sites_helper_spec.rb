@@ -1,11 +1,10 @@
 require 'spec_helper'
 
 describe SitesHelper do
-  fixtures :all
+  let(:user) { create(:user, :with_site) }
 
   describe 'sites_for_team_view' do
     it 'should rank by current site followed by alphabetical sorting' do
-      user = users(:joey)
       user.sites.destroy_all
       s1 = user.sites.create(url: 'http://asdf.com')
       s2 = user.sites.create(url: 'http://bsdf.com')

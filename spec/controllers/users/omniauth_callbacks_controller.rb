@@ -1,15 +1,18 @@
 require 'spec_helper'
 
 describe Users::OmniauthCallbacksController do
-  fixtures :all
+  before do
+    allow(Infusionsoft).to receive(:contact_add_with_dup_check)
+    allow(Infusionsoft).to receive(:contact_add_to_group)
+  end
 
   before(:each) do
-    @request.env['devise.mapping'] = Devise.mappings[:user]
+    request.env['devise.mapping'] = Devise.mappings[:user]
   end
 
   describe 'POST google_oauth2' do
     it 'redirects to new_site_path with a URL param if the user exists' do
-      user = users(:wootie)
+      user = create(:user)
 
       request.env['omniauth.auth'] = { 'info' => { 'email' => user.email }, 'uid' => 'abc123',
                                        'provider' => 'google_oauth2' }

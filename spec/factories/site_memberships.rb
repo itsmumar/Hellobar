@@ -4,10 +4,6 @@ FactoryGirl.define do
     site
     user
 
-    factory :site_ownership do
-      role 'owner'
-    end
-
     trait :admin do
       user
       role 'admin'

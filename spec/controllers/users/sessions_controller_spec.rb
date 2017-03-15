@@ -1,12 +1,16 @@
 require 'spec_helper'
 
 describe Users::SessionsController do
-  fixtures :all
+  before do
+    allow(Infusionsoft).to receive(:contact_add_with_dup_check)
+    allow(Infusionsoft).to receive(:contact_add_to_group)
+  end
 
   before(:each) do
-    @request.env['devise.mapping'] = Devise.mappings[:user]
-    @wordpress_user = OpenStruct.new(id: 123)
+    request.env['devise.mapping'] = Devise.mappings[:user]
   end
+
+  let(:wordpress_user) { OpenStruct.new(id: 123) }
 
   describe 'POST find_email' do
     render_views
@@ -67,15 +71,17 @@ describe Users::SessionsController do
   end
 
   describe 'POST create' do
+    let!(:user) { create(:user, password: 'password') }
+
     it 'logs in a user with valid params' do
       controller.current_user.should be_nil
-      post :create, user: { email: 'joey@polymathic.me', password: 'password' }
-      controller.current_user.should == users(:joey)
+      post :create, user: { email: user.email, password: 'password' }
+      controller.current_user.should == user
     end
 
     it 'redirects oauth users to their respective oauth path' do
-      users(:joey).authentications.create(provider: 'google_oauth2', uid: '123')
-      post :create, user: { email: 'joey@polymathic.me', password: 'some incorrect pass' }
+      user.authentications.create(provider: 'google_oauth2', uid: '123')
+      post :create, user: { email: user.email, password: 'some incorrect pass' }
       response.should redirect_to('/auth/google_oauth2')
     end
 
@@ -86,7 +92,7 @@ describe Users::SessionsController do
       password = 'asdfasdf'
 
       Hello::WordpressUser.should_receive(:email_exists?).with(email).and_return(true)
-      Hello::WordpressUser.should_receive(:authenticate).with(email, password).and_return(@wordpress_user)
+      Hello::WordpressUser.should_receive(:authenticate).with(email, password).and_return(wordpress_user)
 
       post :create, user: { email: email, password: password }
 

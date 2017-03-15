@@ -1,5 +1,9 @@
 FactoryGirl.define do
-  factory :site_element do
+  factory :site_element, class: SiteElement do
+    transient do
+      site nil
+    end
+
     type 'Bar'
     theme_id 'classic'
     element_subtype 'announcement'
@@ -26,6 +30,11 @@ FactoryGirl.define do
     end
 
     trait :click_to_call do
+      element_subtype 'call'
+      phone_number '1-367-399-4120'
+    end
+
+    trait :call do
       element_subtype 'call'
       phone_number '1-367-399-4120'
     end
@@ -68,6 +77,10 @@ FactoryGirl.define do
 
     trait :closable do
       closable true
+    end
+
+    after :create do |element, evaluator|
+      element.update! rule: evaluator.site.rules.first! if evaluator.site
     end
   end
 end

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe Hello::DataAPI do
-  fixtures :all
-
   def for_comparison(results)
     {}.tap do |r|
       results.each { |k, v| r[k] = v.to_a }
@@ -10,16 +8,16 @@ describe Hello::DataAPI do
   end
 
   describe '.lifetime_totals_by_type' do
-    let(:site) { sites(:zombo) }
+    let(:site) { create(:site, :with_rule) }
     let(:call_element) { create(:site_element, :click_to_call, rule: site.rules.last) }
 
     it 'rolls up lifetime totals by site element type' do
       allow(Hello::DataAPI).to receive(:lifetime_totals)
         .and_return(
-          site_elements(:zombo_traffic).id.to_s => [[2, 1]],
-          site_elements(:zombo_email).id.to_s => [[4, 3]],
-          site_elements(:zombo_twitter).id.to_s => [[6, 5]],
-          site_elements(:zombo_facebook).id.to_s => [[8, 7]],
+          create(:site_element, :traffic, site: site).id.to_s => [[2, 1]],
+          create(:site_element, :email, site: site).id.to_s => [[4, 3]],
+          create(:site_element, :twitter, site: site).id.to_s => [[6, 5]],
+          create(:site_element, :facebook, site: site).id.to_s => [[8, 7]],
           call_element.id.to_s => [[5, 2]]
         )
 
@@ -38,10 +36,10 @@ describe Hello::DataAPI do
     it 'when site elements have different amounts of data, use all of it' do
       allow(Hello::DataAPI).to receive(:lifetime_totals)
         .and_return(
-          site_elements(:zombo_traffic).id.to_s => [[2, 1]],
-          site_elements(:zombo_email).id.to_s => [[4, 3]],
-          site_elements(:zombo_twitter).id.to_s => [[3, 1], [6, 5]],
-          site_elements(:zombo_facebook).id.to_s => [[8, 7]],
+          create(:site_element, :traffic, site: site).id.to_s => [[2, 1]],
+          create(:site_element, :email, site: site).id.to_s => [[4, 3]],
+          create(:site_element, :twitter, site: site).id.to_s => [[3, 1], [6, 5]],
+          create(:site_element, :facebook, site: site).id.to_s => [[8, 7]],
           call_element.id.to_s => [[2, 1], [5, 2]]
         )
 

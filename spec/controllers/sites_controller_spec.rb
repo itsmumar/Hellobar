@@ -1,16 +1,11 @@
 require 'spec_helper'
 
 describe SitesController do
-  fixtures :all
-
-  before(:each) do
-    @user = users(:joey)
-  end
+  let(:user) { create(:user) }
+  let(:site) { create(:site) }
 
   describe 'GET new' do
-    before do
-      stub_current_user(@user)
-    end
+    before { stub_current_user(user) }
 
     it 'sets the site instance variable' do
       get :new
@@ -38,6 +33,11 @@ describe SitesController do
     end
 
     context 'when no user is logged-in' do
+      before do
+        allow(Infusionsoft).to receive(:contact_add_with_dup_check)
+        allow(Infusionsoft).to receive(:contact_add_to_group)
+      end
+
       it 'creates a new temporary user and logs them in' do
         expect {
           post :create, site: { url: 'temporary-site.com' }
@@ -73,7 +73,7 @@ describe SitesController do
           post(
             :create,
             { site: { url: 'temporary-site.com' } },
-            referral_token: referral_tokens(:joey).token
+            referral_token: create(:referral_token).token
           )
         }.to change(Referral, :count).by(1)
 
@@ -83,7 +83,6 @@ describe SitesController do
       end
 
       it 'updates an existing referral if its token is given' do
-        user = User.last
         ref = create(:referral, state: :sent)
         User.stub(generate_temporary_user: user)
 
@@ -130,8 +129,6 @@ describe SitesController do
       end
 
       it 'redirects to login page if base URL has already been taken' do
-        site = sites(:zombo)
-
         post :create, site: { url: "#{ site.url }/path" }, source: 'landing'
 
         response.should redirect_to(new_user_session_path(existing_url: site.url))
@@ -139,23 +136,22 @@ describe SitesController do
     end
 
     context 'existing user' do
-      before { stub_current_user(@user) }
+      let(:user) { create(:user, :with_site) }
+      let(:site) { user.sites.last }
+
+      before { stub_current_user(user) }
 
       it 'can create a new site and is set as the owner' do
         expect {
           post :create, site: { url: 'newzombo.com' }
-        }.to change(@user.sites, :count).by(1)
-
-        site = @user.sites.last
+        }.to change(user.sites, :count).by(1)
 
         site.url.should == 'http://newzombo.com'
-        @user.role_for_site(site).should == :owner
+        user.role_for_site(site).should == :owner
       end
 
       it 'creates a site with a rule set' do
         post :create, site: { url: 'newzombo.com' }
-
-        site = @user.sites.last
         site.rules.size.should == 3
       end
 
@@ -167,7 +163,7 @@ describe SitesController do
 
       it 'redirects to the site when using existing url' do
         site = create(:site, url: 'www.test.com')
-        site.users << @user
+        site.users << user
         post :create, site: { url: 'www.test.com' }
 
         expect(response).to redirect_to(site_path(site))
@@ -177,7 +173,7 @@ describe SitesController do
   end
 
   describe 'put update' do
-    let(:membership) { create(:site_ownership) }
+    let(:membership) { create(:site_membership) }
     let(:user) { membership.user }
     let(:site) { membership.site }
 
@@ -205,10 +201,12 @@ describe SitesController do
   end
 
   describe 'GET show' do
+    let(:user) { create(:user, :with_site) }
+    let(:site) { user.sites.last }
+
     it 'sets current_site session value' do
       Hello::DataAPI.stub(lifetime_totals: nil)
-      stub_current_user(@user)
-      site = @user.sites.last
+      stub_current_user(user)
 
       get :show, id: site
 
@@ -217,9 +215,11 @@ describe SitesController do
   end
 
   describe 'GET preview_script' do
+    let(:user) { create(:user, :with_site) }
+    let(:site) { user.sites.last }
+
     it 'returns a version of the site script for use in the editor live preview' do
-      stub_current_user(@user)
-      site = @user.sites.last
+      stub_current_user(user)
 
       get :preview_script, id: site
 
@@ -232,8 +232,9 @@ describe SitesController do
   end
 
   describe 'GET chart_data' do
-    let(:site_element) { site_elements(:zombo_traffic) }
-    let(:user) { site_element.site.owners.first }
+    let(:site) { create(:site, :with_user, :with_rule) }
+    let(:site_element) { create(:site_element, :traffic, site: site) }
+    let(:user) { site.owners.first }
 
     before do
       stub_current_user(user)
@@ -258,7 +259,7 @@ describe SitesController do
   end
 
   describe 'GET improve' do
-    let(:site) { sites(:zombo) }
+    let(:site) { create(:site, :with_user) }
     let(:user) { site.owners.first }
 
     before do
@@ -268,9 +269,11 @@ describe SitesController do
   end
 
   describe 'PUT downgrade' do
+    let(:site) { create(:site, :with_user) }
+    let(:user) { site.owners.first }
+
     it 'downgrades a site to free' do
-      stub_current_user(@user)
-      site = @user.sites.last
+      stub_current_user(user)
       create(:pro_subscription, site: site)
 
       put :downgrade, id: site.id
@@ -280,9 +283,11 @@ describe SitesController do
   end
 
   describe 'GET install_redirect' do
+    let(:site) { create(:site, :with_user) }
+    let(:user) { site.owners.first }
+
     it 'redirects to the current sites install page' do
-      stub_current_user(@user)
-      site = @user.sites.last
+      stub_current_user(user)
       session[:current_site] = site.id
 
       get :install_redirect

@@ -114,8 +114,8 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   private
 
   def html
-    return @html if @html.present?
-
+    return @html if @html.present? && @cached_embed_code.eql?(embed_code)
+    @cached_embed_code = embed_code
     html = Nokogiri::HTML embed_code
 
     reference_object = get_reference_object(html)

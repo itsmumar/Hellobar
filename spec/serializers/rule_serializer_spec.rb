@@ -1,14 +1,10 @@
 require 'spec_helper'
 
 describe RuleSerializer do
-  fixtures :all
-
-  let(:rule) { rules(:zombo_rule) }
+  let!(:condition) { create(:condition, :date_between) }
+  let!(:rule) { condition.rule.reload }
 
   it 'should include segment' do
-    condition = conditions(:date_between)
-    rule.conditions << condition
-
     serializer = RuleSerializer.new(rule)
 
     expect(serializer.as_json).to eq(

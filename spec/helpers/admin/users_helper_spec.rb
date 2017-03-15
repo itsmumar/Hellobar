@@ -11,10 +11,8 @@ require 'spec_helper'
 #   end
 # end
 describe Admin::UsersHelper do
-  fixtures :bills, :sites, :subscriptions
-
   describe '#bills_for' do
-    let(:site) { sites(:zombo) }
+    let(:site) { create(:site) }
 
     it 'returns hash with bills to display' do
       expected_hash = site.bills.inject({}) { |r, e| r.update e => [] }
@@ -24,7 +22,7 @@ describe Admin::UsersHelper do
 
   describe '#bill_duration' do
     it "returns the bill's date in the correct format" do
-      bill = bills(:paid_bill)
+      bill = create(:pro_bill, :paid)
       bill.start_date = '2015-07-01'
       bill.end_date = '2015-07-31'
 

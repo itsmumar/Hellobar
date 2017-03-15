@@ -1,26 +1,22 @@
 require 'spec_helper'
 
 describe Identity do
-  fixtures :all
-
-  before do
-    @site = sites(:zombo)
-    @identity = identities(:mailchimp)
-  end
+  let(:site) { create(:site, :with_user) }
+  let(:identity) { create(:identity, :mailchimp, site: site) }
 
   describe 'initialization' do
     it 'initializes a new identity if none exists for a site and provider combination' do
-      identity = Identity.where(site_id: @site.id, provider: 'aweber').first_or_initialize
+      identity = Identity.where(site_id: site.id, provider: 'aweber').first_or_initialize
 
-      identity.site_id.should == @site.id
+      identity.site_id.should == site.id
       identity.provider.should == 'aweber'
       identity.id.should be_nil
     end
 
     it 'loads an existing identity if one exists for a site and provider combination' do
-      returned_identity = Identity.where(site_id: @identity.site_id, provider: @identity.provider).first_or_initialize
+      returned_identity = Identity.where(site_id: identity.site_id, provider: identity.provider).first_or_initialize
 
-      returned_identity.should == @identity
+      returned_identity.should == identity
     end
 
     it 'uses the provider name to get the API client class' do
@@ -48,12 +44,12 @@ describe Identity do
       it 'should email the user that there was a problem syncing their identity' do
         MailerGateway.should_receive(:send_email) do |*args|
           args[0].should == 'Integration Sync Error'
-          args[1].should == @identity.site.owners.first.email
-          args[2][:link].should =~ /http\S+sites\S+#{@identity.site_id}/
+          args[1].should == identity.site.owners.first.email
+          args[2][:link].should =~ /http\S+sites\S+#{identity.site_id}/
           args[2][:integration_name].should == 'MailChimp'
         end
 
-        @identity.destroy_and_notify_user
+        identity.destroy_and_notify_user
       end
     end
   end
@@ -61,7 +57,7 @@ describe Identity do
   describe 'contact lists updated' do
     context 'still has referencing contact lists' do
       it 'should do nothing' do
-        identity = contact_lists(:zombo_contacts).identity
+        identity = create(:contact_list, :mailchimp).identity
         identity.contact_lists_updated
         identity.destroyed?.should be_false
       end
@@ -69,7 +65,7 @@ describe Identity do
 
     context 'has no referencing contact lists' do
       it 'should do nothing' do
-        identity = Identity.create(provider: 'aweber', credentials: {}, site: sites(:zombo))
+        identity = Identity.create(provider: 'aweber', credentials: {}, site: site)
         identity.contact_lists_updated
         identity.destroyed?.should be_true
       end
@@ -77,9 +73,7 @@ describe Identity do
   end
 
   describe 'embed code service provider' do
-    let(:contact_list) do
-      contact_lists(:embed_code).tap { |c| c.identity = nil }
-    end
+    let(:contact_list) { create(:contact_list, :embed_code, identity: nil) }
     let(:file) {}
     let(:provider) {}
     let(:file_name) { file || provider }
@@ -203,7 +197,7 @@ describe Identity do
 
   describe '#embed_code=' do
     it 'should raise error' do
-      expect { @identity.embed_code = 'asdf' }.to raise_error NoMethodError
+      expect { identity.embed_code = 'asdf' }.to raise_error NoMethodError
     end
   end
 end

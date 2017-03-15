@@ -1,39 +1,33 @@
 require 'spec_helper'
 
 describe ReferralsController do
-  fixtures :all
+  let!(:user) { create :user }
 
   before do
     stub_out_get_ab_variations('Email Integration UI 2016-06-22') { 'original' }
+    stub_current_user(user)
   end
 
   describe 'GET :new' do
     render_views
-    before(:each) do
-      @user = stub_current_user(users(:joey))
-    end
 
     it 'works' do
       get :new
 
       expect(response).to be_success
-      expect(response.body).to include(@user.first_name)
+      expect(response.body).to include(user.first_name)
     end
 
     it "shows a link that includes the user's token" do
       get :new
 
-      expect(response.body).to include(@user.referral_token.token)
+      expect(response.body).to include(user.referral_token.token)
     end
   end
 
   describe 'GET :index' do
-    before(:each) do
-      @user = stub_current_user(users(:joey))
-    end
-
     it 'works' do
-      2.times { create(:referral, sender: @user) }
+      2.times { create(:referral, sender: user) }
       get :index
 
       expect(response).to be_success
@@ -42,10 +36,6 @@ describe ReferralsController do
   end
 
   describe 'POST :create' do
-    before(:each) do
-      @user = stub_current_user(users(:joey))
-    end
-
     it 'creates when an email is set' do
       post :create, referral: { email: 'kaitlen@hellobar.com' }
 
@@ -60,12 +50,15 @@ describe ReferralsController do
   end
 
   describe 'GET :accept' do
+    let(:user) { nil }
+    let(:token) { create(:referral_token).token }
+
     it 'sets the session variable when given a valid token' do
-      get :accept, token: referral_tokens(:joey).token
+      get :accept, token: token
 
       expect(response.status).to redirect_to(root_path)
       expect(session[:referral_token]).not_to be_nil
-      expect(session[:referral_token]).to be(referral_tokens(:joey).token)
+      expect(session[:referral_token]).to eql(token)
     end
 
     it 'does not set the session variable when given an ivalid token' do
@@ -77,33 +70,31 @@ describe ReferralsController do
   end
 
   describe 'PUT :update' do
-    before(:each) do
-      @user = stub_current_user(users(:joey))
-      @referral = create(:referral, state: :installed, available_to_sender: true, sender: @user)
-    end
+    let!(:site) { create :site, :free_subscription, users: [user] }
+    let!(:referral) { create(:referral, state: :installed, available_to_sender: true, sender: user) }
 
     it 'changes the site id and uses up the referral' do
-      put :update, id: @referral.id, referral: { site_id: sites(:zombo).id }
-      @referral.reload
+      put :update, id: referral.id, referral: { site_id: site.id }
+      referral.reload
 
-      expect(@referral.site_id).to eq(sites(:zombo).id)
-      expect(@referral.available_to_sender).to be_false
-      expect(@referral.redeemed_by_sender_at).not_to be_nil
+      expect(referral.site_id).to eq site.id
+      expect(referral.available_to_sender).to be_false
+      expect(referral.redeemed_by_sender_at).not_to be_nil
     end
 
     it 'still counts towards sites that have since been deleted' do
-      sites(:zombo).update(deleted_at: Time.now) # simulate delete
-      put :update, id: @referral.id, referral: { site_id: sites(:zombo).id }
-      @referral.reload
+      site.update(deleted_at: Time.now) # simulate delete
+      put :update, id: referral.id, referral: { site_id: site.id }
+      referral.reload
 
-      expect(@referral.site_id).to eq(sites(:zombo).id)
-      expect(@referral.available_to_sender).to be_false
-      expect(@referral.redeemed_by_sender_at).not_to be_nil
+      expect(referral.site_id).to eq site.id
+      expect(referral.available_to_sender).to be_false
+      expect(referral.redeemed_by_sender_at).not_to be_nil
     end
 
     it 'does not change the state' do
-      put :update, id: @referral.id, referral: { state: 0 }
-      expect(@referral.reload.state).to eq('installed')
+      put :update, id: referral.id, referral: { state: 0 }
+      expect(referral.reload.state).to eq('installed')
     end
   end
 end

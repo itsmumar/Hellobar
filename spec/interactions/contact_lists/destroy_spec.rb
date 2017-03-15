@@ -1,25 +1,24 @@
 require 'spec_helper'
 
 describe ContactLists::Destroy do
-  fixtures :all
-
   def destroy(action:)
     action = ContactLists::SITE_ELEMENTS_ACTIONS[action] if action.is_a?(Symbol)
     ContactLists::Destroy.run(
-      contact_list: @contact_list,
+      contact_list: contact_list,
       site_elements_action: action
     )
   end
 
+  let(:contact_list) { create(:contact_list) }
+  let(:site_element) { create(:site_element) }
+
   before :each do
-    @contact_list = contact_lists(:zombo_contacts)
-    @site_element = site_elements(:zombo_email)
-    @contact_list.site_elements << @site_element
+    contact_list.site_elements << site_element
   end
 
   context 'when list has no site elements' do
     it 'destroys the contact list' do
-      @contact_list.site_elements = []
+      contact_list.site_elements = []
 
       expect {
         destroy(action: :delete)
@@ -35,7 +34,7 @@ describe ContactLists::Destroy do
     it 'has an error' do
       destroy(action: -1)
 
-      expect(@contact_list.errors[:base]).to include(
+      expect(contact_list.errors[:base]).to include(
         'Must specify an action for existing bars, modals, sliders, and takeovers'
       )
     end
@@ -45,7 +44,7 @@ describe ContactLists::Destroy do
     it 'destroys the contact list' do
       destroy(action: :keep)
 
-      expect(ContactList.where(id: @contact_list.id)).to be_empty
+      expect(ContactList.where(id: contact_list.id)).to be_empty
     end
 
     it 'creates a new list' do
@@ -65,7 +64,7 @@ describe ContactLists::Destroy do
     it 'sets all site elements to new list' do
       destroy(action: :keep)
 
-      expect(@site_element.reload.contact_list_id).not_to eq(@contact_list.id)
+      expect(site_element.reload.contact_list_id).not_to eq(contact_list.id)
     end
   end
 

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe Hello::TrackingParam do
-  fixtures :all
-
   it 'encodes and decodes a tracker' do
     user_id = '1'
     action = 'click'

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe ContactSubmissionsController do
-  fixtures :all
-
   describe 'GET :new' do
     render_views
     it 'works' do
@@ -19,11 +17,11 @@ describe ContactSubmissionsController do
   end
 
   describe 'email_developer' do
-    let!(:site) { sites(:zombo) }
+    let!(:site) { create(:site, :with_user) }
     let!(:user) { stub_current_user(site.owners.first) }
     before do
       @email_params = {
-        site_url: 'zombo.com',
+        site_url: site.normalized_url,
         script_url: site.script_url,
         user_email: user.email
       }
@@ -45,7 +43,7 @@ describe ContactSubmissionsController do
   end
 
   it 'sends a generic message' do
-    site = sites(:zombo)
+    site = create(:site, :with_user)
     user = stub_current_user(site.owners.first)
     message = 'HELP ME'
     return_to = root_path
@@ -67,7 +65,7 @@ describe ContactSubmissionsController do
   end
 
   it 'generic message works without a site' do
-    user = stub_current_user(users(:joey))
+    user = stub_current_user(create(:user))
     message = 'HELP ME'
     return_to = root_path
 

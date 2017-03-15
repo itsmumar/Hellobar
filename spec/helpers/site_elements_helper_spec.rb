@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe SiteElementsHelper do
-  fixtures :all
-
   describe 'site_element_subtypes_for_site' do
     let(:site) { create(:site) }
 
@@ -206,7 +204,7 @@ describe SiteElementsHelper do
     end
 
     it 'returns the bars indexed by letter' do
-      se1 = site_elements(:zombo_traffic)
+      se1 = create(:site_element, :bar, :traffic)
       se2 = se1.dup
       se2.created_at = se1.created_at + 1.minute
       se2.save
@@ -235,7 +233,7 @@ describe SiteElementsHelper do
     end
 
     it 'does not group elements that are in different rules' do
-      variation_1 = site_elements(:zombo_traffic)
+      variation_1 = create(:site_element, :bar, :traffic)
       variation_2 = variation_1.dup
       variation_3 = variation_1.dup
 
@@ -266,14 +264,10 @@ describe SiteElementsHelper do
     end
 
     it 'only groups elements with the same type' do
-      variation_1 = site_elements(:zombo_traffic)
-      variation_2 = variation_1.dup
-      variation_3 = variation_1.dup
-
-      variation_2.save
-
-      variation_3.type = 'Slider'
-      variation_3.save
+      site = create(:site, :with_rule)
+      variation_1 = create(:site_element, :bar, :traffic, site: site)
+      variation_2 = create(:site_element, :bar, :traffic, site: site)
+      variation_3 = create(:site_element, :slider, :traffic, site: site)
 
       icon_1 = helper.ab_test_icon(variation_1)
       icon_2 = helper.ab_test_icon(variation_2)
@@ -286,7 +280,7 @@ describe SiteElementsHelper do
   end
 
   describe 'elements_grouped_by_type' do
-    let(:site) { sites(:zombo) }
+    let(:site) { create(:site, elements: %i(traffic email twitter facebook)) }
 
     it 'should group elements by type' do
       grouped_elements = helper.elements_grouped_by_type(site.site_elements)
@@ -298,10 +292,10 @@ describe SiteElementsHelper do
   end
 
   describe 'elements_grouped_by_subtype' do
-    let(:site) { sites(:zombo) }
+    let(:site) { create(:site, elements: %i(traffic email twitter facebook)) }
 
     it 'should group elements by subtype' do
-      create(:site_element, rule: site.rules.last, element_subtype: 'call')
+      create(:site_element, :call, site: site)
       grouped_elements = helper.elements_grouped_by_subtype(site.site_elements)
 
       expect(grouped_elements.count).to eq 4

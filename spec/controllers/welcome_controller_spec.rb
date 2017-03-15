@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 describe WelcomeController, '#index' do
-  fixtures :all
-
   it 'redirects a logged in user to their dashboard' do
-    user = users(:joey)
-    site = user.sites.first
+    site = create(:site, :with_user)
+    user = site.owners.first
 
     controller.stub current_user: user
 
