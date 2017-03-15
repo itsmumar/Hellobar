@@ -41,7 +41,7 @@ describe Admin::AccessController do
 
   describe 'POST process_step1' do
     it 'sends a "validate access code" email to admin if they need one' do
-      Admin.stub(:where).and_return([admin])
+      Admin.stub(:find_by).with(email: admin.email).and_return(admin)
       admin.stub(:has_validated_access_token?).and_return(false)
 
       admin.should_receive(:send_validate_access_token_email!)
