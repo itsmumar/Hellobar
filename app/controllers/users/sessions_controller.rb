@@ -6,10 +6,6 @@ class Users::SessionsController < Devise::SessionsController
     'oli@unbounce.com'
   ]
 
-  def new
-    super
-  end
-
   def find_email
     email = params[:user].try(:[], :email)
 
@@ -34,10 +30,6 @@ class Users::SessionsController < Devise::SessionsController
       cookies.delete(:login_email)
       redirect_to new_user_session_path, alert: "Email doesn't exist."
     end
-  end
-
-  def new
-    super
   end
 
   def create
