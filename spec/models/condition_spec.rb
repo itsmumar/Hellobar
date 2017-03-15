@@ -12,21 +12,21 @@ RSpec.describe Condition, type: :model do
         segment: 'UrlCondition'
       )
 
-      condition.should be_valid
-      condition.value.should == ['/foo', '/bar']
+      expect(condition).to be_valid
+      expect(condition.value).to eq(['/foo', '/bar'])
     end
 
     context 'the operand is NOT "between"' do
       it 'is NOT valid when the value is a non-String object' do
         condition = Condition.new operand: 'is', value: ['array'], rule: Rule.new
 
-        condition.should_not be_valid
+        expect(condition).not_to be_valid
       end
 
       it 'is valid when the value is a String' do
         condition = Condition.new operand: 'is', value: 'string', rule: Rule.new
 
-        condition.should be_valid
+        expect(condition).to be_valid
       end
     end
 
@@ -34,25 +34,25 @@ RSpec.describe Condition, type: :model do
       it 'is NOT valid when the value is a non-Array object' do
         condition = Condition.new operand: 'between', value: 'string value', rule: Rule.new
 
-        condition.should_not be_valid
+        expect(condition).not_to be_valid
       end
 
       it 'is NOT valid when the value is an Array with 1 element' do
         condition = Condition.new operand: 'between', value: ['one'], rule: Rule.new
 
-        condition.should_not be_valid
+        expect(condition).not_to be_valid
       end
 
       it 'is NOT valid when the value is an array with 2 empty values' do
         condition = Condition.new operand: 'between', value: ['', ''], rule: Rule.new
 
-        condition.should_not be_valid
+        expect(condition).not_to be_valid
       end
 
       it 'is valid when the value is an Array with 2 elements' do
         condition = Condition.new operand: 'between', value: ['one', 'two'], rule: Rule.new
 
-        condition.should be_valid
+        expect(condition).to be_valid
       end
     end
   end
@@ -61,26 +61,26 @@ RSpec.describe Condition, type: :model do
     it 'creates a between condition when both start_date and end_date are present' do
       condition = Condition.date_condition_from_params('start', 'end')
 
-      condition.operand.should == 'between'
-      condition.value.should == ['start', 'end']
+      expect(condition.operand).to eq('between')
+      expect(condition.value).to eq(['start', 'end'])
     end
 
     it 'creates a start_date condition when only start_date is present' do
       condition = Condition.date_condition_from_params('start', '')
 
-      condition.operand.should == 'after'
-      condition.value.should == 'start'
+      expect(condition.operand).to eq('after')
+      expect(condition.value).to eq('start')
     end
 
     it 'creates a end_date condition when only end_date is present' do
       condition = Condition.date_condition_from_params('', 'end')
 
-      condition.operand.should == 'before'
-      condition.value.should == 'end'
+      expect(condition.operand).to eq('before')
+      expect(condition.value).to eq('end')
     end
 
     it 'does nothing when neither start nor end date are present' do
-      Condition.date_condition_from_params('', '').should be_nil
+      expect(Condition.date_condition_from_params('', '')).to be_nil
     end
   end
 
@@ -104,15 +104,15 @@ RSpec.describe Condition, type: :model do
     end
     context 'is a DateCondition' do
       it "converts 'is between' conditions to sentences" do
-        Condition.date_condition_from_params('7/6', '7/13').to_sentence.should == 'Date is between 7/6 and 7/13'
+        expect(Condition.date_condition_from_params('7/6', '7/13').to_sentence).to eq('Date is between 7/6 and 7/13')
       end
 
       it "converts 'is before' conditions to sentences" do
-        Condition.date_condition_from_params('', '7/13').to_sentence.should == 'Date is before 7/13'
+        expect(Condition.date_condition_from_params('', '7/13').to_sentence).to eq('Date is before 7/13')
       end
 
       it "converts 'is after' conditions to sentences" do
-        Condition.date_condition_from_params('7/6', '').to_sentence.should == 'Date is after 7/6'
+        expect(Condition.date_condition_from_params('7/6', '').to_sentence).to eq('Date is after 7/6')
       end
     end
 

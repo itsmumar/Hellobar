@@ -16,6 +16,9 @@ describe Cleaners::EmbedCode do
       '<html><body><iframe><form>“I want to go to the gym”, he said.</form></iframe></body></html>'
     end
 
-    its(:data) { should == { 'embed_code' => embed_code.tr!('“”', '"') } }
+    describe '#data' do
+      subject { super().data }
+      it { should == { 'embed_code' => embed_code.tr!('“”', '"') } }
+    end
   end
 end

@@ -44,7 +44,7 @@ describe Hello::InternalAnalytics do
         cookies[:vid] = 'visitor_id'
         allow(object).to receive(:cookies) { cookies }
 
-        Analytics.should_receive(:track).with(:visitor, 'visitor_id', 'Example Test', anything)
+        expect(Analytics).to receive(:track).with(:visitor, 'visitor_id', 'Example Test', anything)
 
         object.get_ab_variation('Example Test')
       end
@@ -52,7 +52,7 @@ describe Hello::InternalAnalytics do
       it 'uses current_user if available and no explicit user is passed' do
         allow(object).to receive(:current_user) { user }
 
-        Analytics.should_receive(:track).with(:user, user.id, 'Example Test', anything)
+        expect(Analytics).to receive(:track).with(:user, user.id, 'Example Test', anything)
         object.get_ab_variation('Example Test')
       end
 
@@ -75,8 +75,8 @@ describe Hello::InternalAnalytics do
 
     describe 'get_ab_variation_index_without_setting' do
       it 'gets the index from cookies if no user is available' do
-        object.stub(:cookies).and_return(object.ab_test_cookie_name => '1'.rjust(test_index + 1, 'x'))
-        object.get_ab_variation_index_without_setting('Example Test').should == [1, :existing]
+        allow(object).to receive(:cookies).and_return(object.ab_test_cookie_name => '1'.rjust(test_index + 1, 'x'))
+        expect(object.get_ab_variation_index_without_setting('Example Test')).to eq([1, :existing])
       end
 
       it 'uses current_user if available and no explicit user is passed' do
@@ -86,7 +86,7 @@ describe Hello::InternalAnalytics do
       end
 
       it 'returns current visitor ID if there is no user and no cookies' do
-        object.get_ab_variation_index_without_setting('Example Test').should == [0, :new]
+        expect(object.get_ab_variation_index_without_setting('Example Test')).to eq([0, :new])
       end
     end
 

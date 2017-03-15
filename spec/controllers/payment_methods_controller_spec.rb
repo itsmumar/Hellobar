@@ -16,7 +16,7 @@ describe PaymentMethodsController, '#index' do
     it 'returns an empty array' do
       get :index, site_id: site.id
 
-      response.body.should == { payment_methods: [] }.to_json
+      expect(response.body).to eq({ payment_methods: [] }.to_json)
     end
   end
 
@@ -26,14 +26,14 @@ describe PaymentMethodsController, '#index' do
 
       payment_method_ids = JSON.parse(response.body)['payment_methods'].map { |method| method['id'] }
 
-      payment_method_ids.should == user.payment_methods.map(&:id)
+      expect(payment_method_ids).to eq(user.payment_methods.map(&:id))
     end
 
     context 'without a site_id as a parameter' do
       it 'returns an array of user payment methods' do
         get :index
 
-        response.should be_success
+        expect(response).to be_success
       end
     end
 
@@ -46,8 +46,8 @@ describe PaymentMethodsController, '#index' do
 
       current_payment_method = JSON.parse(response.body)['payment_methods'].select { |method| method['current_site_payment_method'] }
 
-      current_payment_method.size.should == 1
-      current_payment_method.first['id'].should == user.payment_methods.first.id
+      expect(current_payment_method.size).to eq(1)
+      expect(current_payment_method.first['id']).to eq(user.payment_methods.first.id)
     end
   end
 end
@@ -80,8 +80,8 @@ describe PaymentMethodsController, '#update' do
     end
 
     it 'changes the subscription with the correct payment method and detail' do
-      CyberSourceCreditCard
-        .should_receive(:new)
+      expect(CyberSourceCreditCard)
+        .to receive(:new)
         .with(payment_method: payment_method, data: data)
         .and_return(PaymentMethodDetails.new)
       put :update, put_params

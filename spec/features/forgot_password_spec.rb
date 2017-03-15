@@ -6,7 +6,7 @@ feature 'Forgot password', :js do
 
   before do
     @sent_emails = []
-    MailerGateway.stub(:send_email) do |type, recipient, params|
+    allow(MailerGateway).to receive(:send_email) do |type, recipient, params|
       @sent_emails << { recipient: recipient, type: type, params: params }
     end
 

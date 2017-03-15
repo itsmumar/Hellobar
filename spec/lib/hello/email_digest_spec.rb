@@ -7,25 +7,25 @@ describe Hello::EmailDigest do
     it "should use the 'not installed' mailer if script not installed and has site elements" do
       site.script_installed_at = nil
       site.stub(has_script_installed?: false)
-      DigestMailer.should_receive(:not_installed).and_return(nil)
+      expect(DigestMailer).to receive(:not_installed).and_return(nil)
       Hello::EmailDigest.mailer_for_site(site, site.users.first)
     end
 
     it 'should return nil if script not installed and has no site elements created in the last 10 days' do
       site.stub(has_script_installed?: false)
       site.site_elements.each { |x| x.update_column(:created_at, 11.days.ago) }
-      Hello::EmailDigest.mailer_for_site(site, site.users.first).should be_nil
+      expect(Hello::EmailDigest.mailer_for_site(site, site.users.first)).to be_nil
     end
 
     it 'should return nil if there no site elements' do
       site.stub(has_script_installed?: true)
       site.site_elements.each(&:destroy)
-      Hello::EmailDigest.mailer_for_site(site, site.users.first).should be_nil
+      expect(Hello::EmailDigest.mailer_for_site(site, site.users.first)).to be_nil
     end
 
     it 'should return weekly digest mailer for sites that have installed the script' do
       site.stub(has_script_installed?: true)
-      DigestMailer.should_receive(:weekly_digest).and_return(nil)
+      expect(DigestMailer).to receive(:weekly_digest).and_return(nil)
       Hello::EmailDigest.mailer_for_site(site, site.users.first)
     end
 

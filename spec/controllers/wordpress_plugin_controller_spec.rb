@@ -7,7 +7,7 @@ describe WordpressPluginController do
 
     get :show, site_id: site.to_param
 
-    response.should be_success
-    response.header['Content-Type'].should == 'application/zip'
+    expect(response).to be_success
+    expect(response.header['Content-Type']).to eq('application/zip')
   end
 end
