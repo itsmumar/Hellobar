@@ -27,28 +27,30 @@ describe Site do
     end
   end
 
-  describe '#is_free?' do
-    it 'is true initially' do
+  describe '#free?' do
+    it 'is true when there is no subscription' do
       site = Site.new
-      expect(site.is_free?).to be_true
+
+      expect(site).to be_free
     end
 
     it 'is true for sites with a free-level subscriptions' do
-      expect(site.is_free?).to be_true
+      expect(site).to be_free
     end
 
     it 'is true for sites with a free-plus-level subscriptions' do
       site.change_subscription(Subscription::FreePlus.new(schedule: 'monthly'))
-      expect(site.is_free?).to be_true
+
+      expect(site).to be_free
     end
 
     it 'is false for pro sites' do
-      expect(pro_site.is_free?).to be_false
+      expect(pro_site).not_to be_free
     end
 
     it 'is false for pro comped sites' do
       site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
-      expect(site.is_free?).to be_false
+      expect(site).not_to be_free
     end
   end
 

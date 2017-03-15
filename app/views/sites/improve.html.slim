@@ -5,10 +5,10 @@
   = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: nil}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: nil}
 
-- if current_site.is_free?
+- if current_site.free?
   .charting-cta
     p
-      | Want to see beyond the last 30 days? 
+      | Want to see beyond the last 30 days?
       a.show-upgrade-modal data={ source: "More Chart Data" }
         | Click here to upgrade this site!
 

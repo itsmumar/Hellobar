@@ -373,7 +373,7 @@ class ScriptGenerator < Mustache
       thank_you_text: SiteElement.sanitize(site_element.display_thank_you_text).gsub(/"/, '&quot;'),
       views: views,
       updated_at: site_element.updated_at.to_f * 1000,
-      use_free_email_default_msg: site_element.show_default_email_message? && site_element.site.is_free?,
+      use_free_email_default_msg: site_element.show_default_email_message? && site_element.site.free?,
       wiggle_wait: 0,
       blocks: site_element.blocks,
       theme: site_element.theme.attributes

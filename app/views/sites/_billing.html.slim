@@ -83,7 +83,7 @@ section
         '  for a
         = @next_bill.subscription.schedule
         |  subscription.
-- elsif @site.is_free?
+- elsif @site.free?
   ul
     li
       .button-wrapper.promo-label.large

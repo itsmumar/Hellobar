@@ -268,7 +268,7 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def is_free?
+  def free?
     current_subscription.nil? ||
       current_subscription.type.blank? ||
       current_subscription == Subscription::Free.new
@@ -362,7 +362,7 @@ class Site < ActiveRecord::Base
   end
 
   def owners_and_admins
-    users.where("site_memberships.role = 'admin' OR site_memberships.role = 'owner'")
+    users.where("site_memberships.role = '#{ Permissions::OWNER }' OR site_memberships.role = '#{ Permissions::ADMIN }'")
   end
 
   def had_wordpress_bars?
