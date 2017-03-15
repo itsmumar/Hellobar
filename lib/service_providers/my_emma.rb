@@ -9,13 +9,12 @@ module ServiceProviders
     end
 
     def html
-      super.try :tap do |html|
-        if html && (a = html.css('body > a[onclick]').first)
-          # we're looking at the popup one
-          remote_html = HTTParty.get a.attr('href')
-          break @html = html = Nokogiri::HTML(remote_html)
-        end
-      end
+      html = super
+      return html unless html && (a = html.css('body > a[onclick]').first)
+
+      # we're looking at the popup one
+      remote_html = HTTParty.get a.attr('href')
+      @html = Nokogiri::HTML(remote_html)
     end
 
     def get_reference_object html
