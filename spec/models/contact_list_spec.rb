@@ -328,9 +328,9 @@ describe ContactList, 'embed code' do
     before { subject.data['embed_code'] = embed_code }
 
     describe '#data' do
-      subject { super().data }
-      it { should == { 'embed_code' => 'asdf' } }
+      it { expect(subject.data).to eql 'embed_code' => 'asdf' }
     end
+
     it { expect(subject.valid?).to be false }
   end
 

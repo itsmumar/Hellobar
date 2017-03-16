@@ -17,8 +17,7 @@ describe Cleaners::EmbedCode do
     end
 
     describe '#data' do
-      subject { super().data }
-      it { should == { 'embed_code' => embed_code.tr!('“”', '"') } }
+      it { expect(subject.data).to eql 'embed_code' => embed_code.tr!('“”', '"') }
     end
   end
 end
