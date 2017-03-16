@@ -7,13 +7,11 @@ describe 'service providers' do
     subject { described_class.new(identity: identity) }
 
     describe '#name' do
-      subject { super().name }
-      it { should == 'AWeber' }
+      it { expect(subject.name).to eql 'AWeber' }
     end
 
     describe '#key' do
-      subject { super().key }
-      it { should == :aweber }
+      it { expect(subject.key).to eql :aweber }
     end
   end
 
@@ -23,13 +21,11 @@ describe 'service providers' do
     subject { described_class.new(identity: identity) }
 
     describe '#name' do
-      subject { super().name }
-      it { should == 'Campaign Monitor' }
+      it { expect(subject.name).to eql 'Campaign Monitor' }
     end
 
     describe '#key' do
-      subject { super().key }
-      it { should == :createsend }
+      it { expect(subject.key).to eql :createsend }
     end
   end
 
@@ -40,13 +36,11 @@ describe 'service providers' do
     subject { described_class.new(identity: identity) }
 
     describe '#name' do
-      subject { super().name }
-      it { should == 'Constant Contact' }
+      it { expect(subject.name).to eql 'Constant Contact' }
     end
 
     describe '#key' do
-      subject { super().key }
-      it { should == :constantcontact }
+      it { expect(subject.key).to eql :constantcontact }
     end
   end
 
@@ -54,13 +48,11 @@ describe 'service providers' do
     subject { described_class.new(identity: identity) }
 
     describe '#name' do
-      subject { super().name }
-      it { should == 'GetResponse' }
+      it { expect(subject.name).to eql 'GetResponse' }
     end
 
     describe '#key' do
-      subject { super().key }
-      it { should == :get_response }
+      it { expect(subject.key).to eql :get_response }
     end
   end
 
@@ -68,13 +60,11 @@ describe 'service providers' do
     subject { described_class.new(identity: identity) }
 
     describe '#name' do
-      subject { super().name }
-      it { should == 'iContact' }
+      it { expect(subject.name).to eql 'iContact' }
     end
 
     describe '#key' do
-      subject { super().key }
-      it { should == :icontact }
+      it { expect(subject.key).to eql :icontact }
     end
   end
 
@@ -82,13 +72,11 @@ describe 'service providers' do
     subject { described_class.new(identity: identity) }
 
     describe '#name' do
-      subject { super().name }
-      it { should == 'MadMimi' }
+      it { expect(subject.name).to eql 'MadMimi' }
     end
 
     describe '#key' do
-      subject { super().key }
-      it { should == :mad_mimi_form }
+      it { expect(subject.key).to eql :mad_mimi_form }
     end
   end
 
@@ -96,13 +84,11 @@ describe 'service providers' do
     subject { described_class.new(identity: identity) }
 
     describe '#name' do
-      subject { super().name }
-      it { should == 'MailChimp' }
+      it { expect(subject.name).to eql 'MailChimp' }
     end
 
     describe '#key' do
-      subject { super().key }
-      it { should == :mailchimp }
+      it { expect(subject.key).to eql :mailchimp }
     end
   end
 
@@ -110,13 +96,11 @@ describe 'service providers' do
     subject { described_class.new(identity: identity) }
 
     describe '#name' do
-      subject { super().name }
-      it { should == 'MyEmma' }
+      it { expect(subject.name).to eql 'MyEmma' }
     end
 
     describe '#key' do
-      subject { super().key }
-      it { should == :my_emma }
+      it { expect(subject.key).to eql :my_emma }
     end
   end
 
@@ -124,13 +108,11 @@ describe 'service providers' do
     subject { described_class.new(identity: identity) }
 
     describe '#name' do
-      subject { super().name }
-      it { should == 'VerticalResponse' }
+      it { expect(subject.name).to eql 'VerticalResponse' }
     end
 
     describe '#key' do
-      subject { super().key }
-      it { should == :vertical_response }
+      it { expect(subject.key).to eql :vertical_response }
     end
   end
 end
