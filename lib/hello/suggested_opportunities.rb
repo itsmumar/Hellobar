@@ -6,6 +6,8 @@ module Hello
     CONVERSION_SCALE = 10_000_000
 
     class << self
+      attr_reader :tables
+
       def setup
         connect
         load_tables
@@ -92,10 +94,6 @@ module Hello
         end
       end
 
-      def tables
-        @@tables
-      end
-
       # Returns the segment table name for the given date
       def segment_table_name(date)
         segment_table_name_for_year_month("#{ date.year }_#{ date.month }")
@@ -113,24 +111,24 @@ module Hello
           access_key_id: Hellobar::Settings[:aws_access_key_id],
           secret_access_key: Hellobar::Settings[:aws_secret_access_key]
         )
-        # We use both the "friendly" interface (@@dynamo_db) and the
-        # direct interface (@@client)
-        @@dynamo_db = AWS::DynamoDB.new
-        @@client = AWS::DynamoDB::Client.new(api_version: '2012-08-10')
+        # We use both the "friendly" interface (@dynamo_db) and the
+        # direct interface (@client)
+        @dynamo_db = AWS::DynamoDB.new
+        @client = AWS::DynamoDB::Client.new(api_version: '2012-08-10')
       end
 
       def load_tables
         # Load the table schemas
-        @@tables = {}
+        @tables = {}
         load_table(:contacts, { lid: :number }, email: :string)
         load_table(:over_time, { sid: :number }, date: :number)
       end
 
       def load_table(name, hash_key, range_key)
-        table = @@dynamo_db.tables[table_name(name)]
+        table = @dynamo_db.tables[table_name(name)]
         table.hash_key = hash_key
         table.range_key = range_key
-        @@tables[name] = table
+        @tables[name] = table
       end
 
       def get_segments_table(date)
@@ -140,13 +138,13 @@ module Hello
       def get_segments_table_for_year_month(year_month)
         # Segment tables are broken up by year and month
         name = segment_table_name_for_year_month(year_month)
-        unless @@tables[name]
-          table = @@dynamo_db.tables[name]
+        unless @tables[name]
+          table = @dynamo_db.tables[name]
           table.hash_key = { sid: :number }
           table.range_key = { segment: :string }
-          @@tables[name] = table
+          @tables[name] = table
         end
-        @@tables[name]
+        @tables[name]
       end
     end
   end
@@ -171,20 +169,20 @@ module Hello
         num_values_to_return = [10, (segments.length.to_f / 4).round].min
         # Sort the segment-values by total visits desc (most visits is at top)
         segments.sort! { |a, b| b[1] <=> a[1] }
-        # Take the top 25% of segments. If less than 80 item take top 50%
-        top_segments = nil
-        bottom_segments = nil
-        if segments.length < 80
-          # Top 50%
-          top_segments = segments[0...segments.length / 2]
-          # Bottom 50%
-          bottom_segments = segments[segments.length / 2..-1]
-        else
-          # Top 25%
-          top_segments = segments[0...segments.length / 4]
-          # Bottom 50%
-          bottom_segments = segments[segments.length / 2..-1]
-        end
+
+        # Take the top 25% of segments if less than 80 item take top 50%
+        top_segments =
+          if segments.length < 80
+            # Top 50%
+            segments[0...segments.length / 2]
+          else
+            # Top 25%
+            segments[0...segments.length / 4]
+          end
+
+        # Bottom 50%
+        bottom_segments = segments[segments.length / 2..-1]
+
         # Define sort methods
         sort_by_conversion = lambda do |a, b|
           if b[2] == a[2]

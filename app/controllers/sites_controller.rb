@@ -23,20 +23,16 @@ class SitesController < ApplicationController
 
     if current_user
       create_for_logged_in_user
+    elsif !@site.valid?
+      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
+      redirect_to root_path
+    elsif params[:source] == 'landing' && @site.url_exists?
+      redirect_to new_user_session_path(existing_url: @site.url, oauth: params[:oauth])
+    elsif params[:oauth]
+      session[:new_site_url] = @site.url
+      redirect_to '/auth/google_oauth2'
     else
-      if !@site.valid?
-        flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
-        redirect_to root_path
-      else
-        if params[:source] == 'landing' && @site.url_exists?
-          redirect_to new_user_session_path(existing_url: @site.url, oauth: params[:oauth])
-        elsif params[:oauth]
-          session[:new_site_url] = @site.url
-          redirect_to '/auth/google_oauth2'
-        else
-          create_for_temporary_user
-        end
-      end
+      create_for_temporary_user
     end
   end
 

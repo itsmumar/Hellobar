@@ -4,10 +4,10 @@ module Hello
 
     begin
       establish_connection "wordpress_#{ Rails.env }".to_sym
-      @@connected = true
+      @connected = true
     rescue ActiveRecord::AdapterNotSpecified
       Rails.logger.warn "database wordpress_#{ Rails.env } does not exist"
-      @@connected = false
+      @connected = false
     end
 
     def self.deserialize(string)

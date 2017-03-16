@@ -9,7 +9,7 @@ class Hello::WordpressUser < Hello::WordpressModel
   end
 
   def self.find_by_email(email)
-    @@connected ? where(['user_email = ? or user_login = ?', email, email]).first : nil
+    @connected ? where(['user_email = ? or user_login = ?', email, email]).first : nil
   rescue ActiveRecord::NoDatabaseError
     Rails.logger.error('Wordpress database configured in database.yml does not exist')
     nil

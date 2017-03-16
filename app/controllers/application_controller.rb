@@ -15,11 +15,9 @@ class ApplicationController < ActionController::Base
   rescue_from ::Google::Apis::AuthorizationError do |exception|
     if impersonated_user
       raise exception # we can't authenticate for impersonated users
-    else
-      if exception.to_s =~ /Unauthorized/
-        sign_out current_user             # kill cookies
-        redirect_to '/auth/google_oauth2' # log in again to refresh token
-      end
+    elsif exception.to_s =~ /Unauthorized/
+      sign_out current_user             # kill cookies
+      redirect_to '/auth/google_oauth2' # log in again to refresh token
     end
   end
 
