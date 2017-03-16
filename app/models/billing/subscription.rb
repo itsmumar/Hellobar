@@ -10,12 +10,9 @@ class Subscription < ActiveRecord::Base
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
 
   after_initialize :set_initial_values
-  after_initialize :set_significance
   after_create :mark_user_onboarding_as_bought_subscription!
 
   enum schedule: [:monthly, :yearly]
-
-  attr_reader :significance
 
   class << self
     def active
@@ -42,6 +39,11 @@ class Subscription < ActiveRecord::Base
       discount = DiscountCalculator.new(dummy_sub, user).current_discount
       dummy_sub.amount - discount
     end
+  end
+
+  # we use significance to sort subscriptions
+  def significance
+    0
   end
 
   def currently_on_trial?
@@ -100,29 +102,6 @@ class Subscription < ActiveRecord::Base
       self.visit_overage_unit ||= values[:visit_overage_unit]
       self.visit_overage_amount ||= values[:visit_overage_amount]
     end
-  end
-
-  # we can use @significance to sort subscriptions
-  def set_significance
-    @significance =
-      case self
-      when Subscription::ProManaged
-        100
-      when Subscription::Enterprise
-        50
-      when Subscription::ProComped
-        20
-      when Subscription::Pro
-        20
-      when Subscription::ProblemWithPayment
-        5
-      when Subscription::FreePlus
-        1
-      when Subscription::Free
-        1
-      else
-        0
-      end
   end
 
   def mark_user_onboarding_as_bought_subscription!
@@ -220,6 +199,10 @@ class Subscription < ActiveRecord::Base
   end
 
   class Free < Base
+    def significance
+      1
+    end
+
     class Capabilities < Subscription::Capabilities
     end
 
@@ -237,26 +220,11 @@ class Subscription < ActiveRecord::Base
     end
   end
 
-  # These are the capabilities of a user who has an issue with payment
-  # They are basically the same as Free, but we don't let the subscription
-  # override the visit_overage features
-  class ProblemWithPayment < Free
-    class Capabilities < Free::Capabilities
-      def visit_overage
-        parent_class.values_for(@site)[:visit_overage]
-      end
-
-      def visit_overage_unit
-        parent_class.values_for(@site)[:visit_overage_unit]
-      end
-
-      def visit_overage_amount
-        parent_class.values_for(@site)[:visit_overage_amount]
-      end
-    end
-  end
-
   class FreePlus < Free
+    def significance
+      1
+    end
+
     class Capabilities < Free::Capabilities
       def max_site_elements
         Float::INFINITY
@@ -277,7 +245,34 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  # These are the capabilities of a user who has an issue with payment
+  # They are basically the same as Free, but we don't let the subscription
+  # override the visit_overage features
+  class ProblemWithPayment < Free
+    def significance
+      5
+    end
+
+    class Capabilities < Free::Capabilities
+      def visit_overage
+        parent_class.values_for(@site)[:visit_overage]
+      end
+
+      def visit_overage_unit
+        parent_class.values_for(@site)[:visit_overage_unit]
+      end
+
+      def visit_overage_amount
+        parent_class.values_for(@site)[:visit_overage_amount]
+      end
+    end
+  end
+
   class Pro < Base
+    def significance
+      20
+    end
+
     class Capabilities < Free::Capabilities
       def acts_as_paid_subscription?
         true
@@ -342,6 +337,10 @@ class Subscription < ActiveRecord::Base
   end
 
   class ProComped < Pro
+    def significance
+      20
+    end
+
     class << self
       def defaults
         {
@@ -357,6 +356,10 @@ class Subscription < ActiveRecord::Base
   end
 
   class Enterprise < Base
+    def significance
+      50
+    end
+
     class Capabilities < Pro::Capabilities
     end
 
@@ -375,6 +378,10 @@ class Subscription < ActiveRecord::Base
   end
 
   class ProManaged < Pro
+    def significance
+      100
+    end
+
     class Capabilities < Pro::Capabilities
       def custom_html?
         true

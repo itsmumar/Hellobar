@@ -19,6 +19,18 @@ end
 describe Subscription do
   include SubscriptionHelper
 
+  describe '#significance' do
+    specify 'each subscription type has significance' do
+      %i(Free FreePlus ProblemWithPayment Pro ProComped
+         Enterprise ProManaged).each do |type|
+        klass = "Subscription::#{ type }".constantize
+
+        expect(klass.new.significance).to be_an Integer
+        expect(klass.new.significance).to be > 0
+      end
+    end
+  end
+
   describe '.estimated_price' do
     it 'returns the subscriptions monthly amount - calculated discounts' do
       allow_any_instance_of(DiscountCalculator).to receive(:current_discount).and_return(12)
