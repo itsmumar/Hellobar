@@ -228,7 +228,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def default_email_thank_you_text
-    if site && site.is_free?
+    if site && site.free?
       DEFAULT_FREE_EMAIL_THANK_YOU
     else
       DEFAULT_EMAIL_THANK_YOU

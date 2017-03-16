@@ -27,28 +27,30 @@ describe Site do
     end
   end
 
-  describe '#is_free?' do
-    it 'is true initially' do
+  describe '#free?' do
+    it 'is true when there is no subscription' do
       site = Site.new
-      expect(site.is_free?).to be_true
+
+      expect(site).to be_free
     end
 
     it 'is true for sites with a free-level subscriptions' do
-      expect(site.is_free?).to be_true
+      expect(site).to be_free
     end
 
     it 'is true for sites with a free-plus-level subscriptions' do
       site.change_subscription(Subscription::FreePlus.new(schedule: 'monthly'))
-      expect(site.is_free?).to be_true
+
+      expect(site).to be_free
     end
 
     it 'is false for pro sites' do
-      expect(pro_site.is_free?).to be_false
+      expect(pro_site).not_to be_free
     end
 
     it 'is false for pro comped sites' do
       site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
-      expect(site.is_free?).to be_false
+      expect(site).not_to be_free
     end
   end
 
@@ -68,8 +70,8 @@ describe Site do
       user = create(:user)
       bills = []
 
-      zero_discount_subs = Subscription::Pro.defaults[:discounts].detect { |x| x.tier == 0 }.slots
-      zero_discount_subs.times do
+      zero_discount_slots = Subscription::Pro.defaults[:discounts].detect { |x| x.tier == 0 }.slots
+      zero_discount_slots.times do
         bill = create(:pro_bill, status: :paid)
         bill.site.users << user
         user.reload
@@ -79,6 +81,7 @@ describe Site do
 
       site = user.sites.create(url: random_uniq_url)
       site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), user.payment_methods.first)
+
       expect(site.bills.paid.first.discount > 0).to be(true)
     end
   end
@@ -92,15 +95,33 @@ describe Site do
       expect(site.highest_tier_active_subscription).to be(nil)
     end
 
-    it 'returns the highest tier active subscription' do
+    it 'returns the highest tier active subscription among Free and Pro' do
       site.change_subscription(Subscription::Free.new(schedule: 'monthly', user: payment_method.user), payment_method)
       site.change_subscription(Subscription::Pro.new(schedule: 'monthly', user: payment_method.user), payment_method)
+
       expect(site.highest_tier_active_subscription).to be_a(Subscription::Pro)
+    end
+
+    it 'returns the highest tier active subscription among Pro and Enterprise' do
+      site.change_subscription(Subscription::Pro.new(schedule: 'monthly', user: payment_method.user), payment_method)
+      site.change_subscription(Subscription::Enterprise.new(schedule: 'monthly', user: payment_method.user), payment_method)
+
+      expect(site.highest_tier_active_subscription).to be_a(Subscription::Enterprise)
+    end
+
+    it 'returns the highest tier active subscription among Pro and ProManaged' do
+      site.change_subscription(Subscription::Free.new(schedule: 'monthly', user: payment_method.user), payment_method)
+      site.change_subscription(Subscription::Pro.new(schedule: 'monthly', user: payment_method.user), payment_method)
+
+      site.subscriptions.first.update type: Subscription::ProManaged
+
+      expect(site.highest_tier_active_subscription).to be_a(Subscription::ProManaged)
     end
 
     it 'returns only active subscriptions' do
       site.change_subscription(Subscription::Free.new(schedule: 'yearly'), payment_method)
       site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
+
       travel_to 2.months.from_now do
         expect(site.highest_tier_active_subscription).to be_a(Subscription::Free)
       end

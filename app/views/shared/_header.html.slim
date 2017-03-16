@@ -15,14 +15,14 @@
         = image_tag('caret-down.svg')
       .dropdown-block
         = active_link_to 'Site Settings', (current_user ? edit_site_path(current_site) : root_path)
-        - if current_site.is_free?
+        - if current_site.free?
           = content_tag 'a', 'Hello Bar PRO', class: "show-upgrade-modal", data: { source: 'Hello Bar PRO' }
         h6= current_user.sites.count <= 1 ? "Sites" : "Switch Sites"
 
         ul
           - current_user.sites.sort_by(&:normalized_url).each do |site|
             li.padded
-              - unless site.is_free?
+              - unless site.free?
                 div.pill class=site.current_subscription.values[:name]
                   = site.current_subscription.values[:name][0..2]
 
@@ -33,7 +33,7 @@
   .header-user-wrapper
     .ctas
       - unless current_user.temporary?
-        - if current_site.is_free?
+        - if current_site.free?
           a.button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
             | Want More Power?
 
@@ -48,7 +48,7 @@
         = image_tag('caret-down.svg')
       .dropdown-block
         = active_link_to 'User Settings', profile_path()
-        - if current_site.is_free?
+        - if current_site.free?
           = content_tag 'a', 'Upgrade Plan', class: "show-upgrade-modal", data: { source: "Header Drop-down" }
         - else
           = content_tag 'a', 'Payment Info', class: "show-payment-modal"
