@@ -80,13 +80,6 @@ Rails/Output:
     - 'lib/legacy_migrator.rb'
     - 'lib/service_provider.rb'
 
-# Offense count: 9
-Rails/OutputSafety:
-  Exclude:
-    - 'app/helpers/admin/users_helper.rb'
-    - 'app/helpers/contact_lists_helper.rb'
-    - 'app/helpers/site_elements_helper.rb'
-
 # Offense count: 228
 Style/Documentation:
   Enabled: false

@@ -18,6 +18,7 @@ module ContactListsHelper
     [['In Hello Bar only', 0]] + providers_array
   end
 
+  # rubocop: disable Rails/OutputSafety
   def contact_list_sync_details(contact_list)
     if contact_list.data['remote_name'].present? && contact_list.service_provider.present?
       "<small>Syncing contacts with</small><span>#{ contact_list.service_provider.name } list \"#{ contact_list.data['remote_name'] }\"</span>".html_safe
@@ -27,6 +28,7 @@ module ContactListsHelper
       '<small>Storing contacts in</small><span>Hello Bar</span>'.html_safe
     end
   end
+  # rubocop: enable Rails/OutputSafety
 
   def contact_list_provider_name(contact_list)
     contact_list.service_provider.try(:name) || 'Hello Bar'
