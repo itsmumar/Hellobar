@@ -5,11 +5,10 @@ class UserController < ApplicationController
 
   def new
     load_user_from_invitation
+    return unless @user.nil? || @user.invite_token_expired?
 
-    if @user.nil? || @user.invite_token_expired?
-      flash[:error] = 'This invitation token has expired.  Please request the owner to issue you a new invitation.'
-      redirect_to root_path
-    end
+    flash[:error] = 'This invitation token has expired.  Please request the owner to issue you a new invitation.'
+    redirect_to root_path
   end
 
   def create
@@ -98,12 +97,11 @@ class UserController < ApplicationController
   end
 
   def update_timezones_on_sites(user)
-    if params[:user] && params[:user][:timezone]
-      timezone = params[:user][:timezone]
+    return unless params[:user] && params[:user][:timezone]
+    timezone = params[:user][:timezone]
 
-      user.sites.each do |site|
-        site.update_attribute :timezone, timezone unless site.timezone
-      end
+    user.sites.each do |site|
+      site.update_attribute :timezone, timezone unless site.timezone
     end
   end
 

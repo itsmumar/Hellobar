@@ -124,7 +124,9 @@ Style/DoubleNegation:
 # Offense count: 58
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:
-  Enabled: false
+  Exclude:
+    - 'lib/legacy_migrator.rb'
+
 
 # Offense count: 54
 # Cop supports --auto-correct.

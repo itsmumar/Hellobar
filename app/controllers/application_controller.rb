@@ -13,12 +13,11 @@ class ApplicationController < ActionController::Base
   after_action :store_last_requested_path
 
   rescue_from ::Google::Apis::AuthorizationError do |exception|
-    if impersonated_user
-      raise exception # we can't authenticate for impersonated users
-    elsif exception.to_s =~ /Unauthorized/
-      sign_out current_user             # kill cookies
-      redirect_to '/auth/google_oauth2' # log in again to refresh token
-    end
+    raise exception if impersonated_user # we can't authenticate for impersonated users
+    return unless exception.to_s =~ /Unauthorized/
+
+    sign_out current_user             # kill cookies
+    redirect_to '/auth/google_oauth2' # log in again to refresh token
   end
 
   def access_token
@@ -44,10 +43,9 @@ class ApplicationController < ActionController::Base
 
   def require_admin
     return redirect_to(admin_access_path) unless current_admin
+    return unless current_admin.needs_to_set_new_password?
 
-    if current_admin.needs_to_set_new_password?
-      redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path
-    end
+    redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path
   end
 
   def require_pro_managed_subscription
@@ -55,14 +53,14 @@ class ApplicationController < ActionController::Base
   end
 
   def require_no_user
-    if current_user
-      if current_user.sites.empty?
-        redirect_to new_site_path
-      elsif current_user.temporary? && current_user.sites.none? { |s| s.site_elements.any? }
-        redirect_to new_site_site_element_path(current_site)
-      else
-        redirect_to site_path(current_site)
-      end
+    return unless current_user
+
+    if current_user.sites.empty?
+      redirect_to new_site_path
+    elsif current_user.temporary? && current_user.sites.none? { |s| s.site_elements.any? }
+      redirect_to new_site_site_element_path(current_site)
+    else
+      redirect_to site_path(current_site)
     end
   end
 
@@ -89,11 +87,11 @@ class ApplicationController < ActionController::Base
   end
 
   def impersonated_user
-    if current_admin && session[:impersonated_user]
-      impersonated_user = User.find_by(id: session[:impersonated_user])
-      impersonated_user.is_impersonated = true
-      impersonated_user
-    end
+    return unless current_admin && session[:impersonated_user]
+
+    impersonated_user = User.find_by(id: session[:impersonated_user])
+    impersonated_user.is_impersonated = true
+    impersonated_user
   end
 
   def current_site
@@ -111,17 +109,17 @@ class ApplicationController < ActionController::Base
   end
 
   def track_h_visit
-    if params[:hbt]
-      track_params = { h_type: params[:hbt] }
-      if params[:sid] # If site element is given, attach the site element id and site id
-        site_element = SiteElement.where(id: params[:sid]).first
-        if site_element
-          track_params[:site_element_id] = site_element.id
-          track_params[:site_id] = site_element.site.id if site_element.site
-        end
+    return unless params[:hbt]
+
+    track_params = { h_type: params[:hbt] }
+    if params[:sid] # If site element is given, attach the site element id and site id
+      site_element = SiteElement.where(id: params[:sid]).first
+      if site_element
+        track_params[:site_element_id] = site_element.id
+        track_params[:site_id] = site_element.site.id if site_element.site
       end
-      Analytics.track(*current_person_type_and_id, 'H Visit', track_params)
     end
+    Analytics.track(*current_person_type_and_id, 'H Visit', track_params)
   end
 
   def load_site

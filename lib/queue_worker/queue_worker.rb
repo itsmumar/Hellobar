@@ -13,11 +13,8 @@ class QueueWorker
           # Ensure private methods are called.
           method(task_name).call
         rescue NoMethodError => e
-          if e.message.include?("undefined method `#{ task_name }'")
-            raise "Not sure how to queue task '#{ body }' because there is no method #{ self.class }##{ task_name }: #{ $ERROR_INFO }"
-          else
-            raise e
-          end
+          raise e unless e.message.include?("undefined method `#{ task_name }'")
+          raise "Not sure how to queue task '#{ body }' because there is no method #{ self.class }##{ task_name }: #{ $ERROR_INFO }"
         end
       else
         QueueWorker.send_sqs_message(body, nil, queue)

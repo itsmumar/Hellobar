@@ -9,12 +9,9 @@ namespace :clone do
     end
 
     response = client.get
+    raise 'Bad api token or user id' unless response.status == 200
 
-    if response.status == 200
-      UserStateCloner.new(response.body).save
-    else
-      raise 'Bad api token or user id'
-    end
+    UserStateCloner.new(response.body).save
   end
 
   desc 'Backfill API tokens for admin accounts'

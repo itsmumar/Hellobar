@@ -79,13 +79,12 @@ class User < ActiveRecord::Base
   end
 
   def self.find_and_create_by_referral(email)
-    if Referral.find_by(email: email)
-      password = Devise.friendly_token[9, 20]
+    return unless Referral.find_by(email: email)
+    password = Devise.friendly_token[9, 20]
 
-      User.create email: email,
-                  status: TEMPORARY_STATUS,
-                  password: password, password_confirmation: password
-    end
+    User.create email: email,
+                status: TEMPORARY_STATUS,
+                password: password, password_confirmation: password
   end
 
   # dont require the password virtual attribute to be present
@@ -173,16 +172,14 @@ class User < ActiveRecord::Base
   end
 
   def role_for_site(site)
-    if (membership = site_memberships.find_by(site: site))
-      membership.role.to_sym
-    end
+    return unless (membership = site_memberships.find_by(site: site))
+    membership.role.to_sym
   end
 
   def track_temporary_status_change
-    if @was_temporary && !temporary?
-      Analytics.track(:user, id, 'Completed Signup', email: email)
-      @was_temporary = false
-    end
+    return unless @was_temporary && !temporary?
+    Analytics.track(:user, id, 'Completed Signup', email: email)
+    @was_temporary = false
   end
 
   def check_if_temporary
@@ -330,9 +327,8 @@ class User < ActiveRecord::Base
 
   # Disconnect oauth logins if user sets their own password
   def disconnect_oauth
-    if !id_changed? && encrypted_password_changed? && oauth_user?
-      authentications.destroy_all
-    end
+    return unless !id_changed? && encrypted_password_changed? && oauth_user?
+    authentications.destroy_all
   end
 
   def clear_invite_token
@@ -346,9 +342,8 @@ class User < ActiveRecord::Base
   end
 
   def oauth_email_change
-    if !id_changed? && oauth_user? && email_changed? && !encrypted_password_changed?
-      errors.add(:email, 'cannot be changed without a password.')
-    end
+    return unless !id_changed? && oauth_user? && email_changed? && !encrypted_password_changed?
+    errors.add(:email, 'cannot be changed without a password.')
   end
 
   def email_does_not_exist_in_wordpress

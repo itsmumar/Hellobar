@@ -22,15 +22,13 @@ class SubscriptionSerializer < ActiveModel::Serializer
   end
 
   def payment_method_details_id
-    if object.payment_method.try(:current_details)
-      object.payment_method.current_details.id
-    end
+    return unless object.payment_method.try(:current_details)
+    object.payment_method.current_details.id
   end
 
   def payment_method_number
-    if object.payment_method.try(:current_details)
-      (object.payment_method.current_details.data.try(:[], 'number') || '')[-4..-1]
-    end
+    return unless object.payment_method.try(:current_details)
+    (object.payment_method.current_details.data.try(:[], 'number') || '')[-4..-1]
   end
 
   def trial

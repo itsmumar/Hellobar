@@ -104,13 +104,10 @@ class CyberSourceCreditCard < PaymentMethodDetails
     end
     begin
       response = HB::CyberSource.gateway.purchase(amount_in_dollars * 100, formatted_token, order_id: order_id)
-
       audit << "Charging #{ amount_in_dollars.inspect }, got response: #{ response.inspect }"
-      if response.success?
-        return true, response.authorization
-      else
-        return false, response.message
-      end
+      return false, response.message unless response.success?
+
+      [true, response.authorization]
     rescue => e
       audit << "Error charging #{ amount_in_dollars.inspect }: #{ e.message }"
       raise
@@ -128,13 +125,10 @@ class CyberSourceCreditCard < PaymentMethodDetails
     end
     begin
       response = HB::CyberSource.gateway.refund(amount_in_dollars * 100, original_transaction_id)
-
       audit << "Refunding #{ amount_in_dollars.inspect } to #{ original_transaction_id.inspect }, got response: #{ response.inspect }"
-      if response.success?
-        return true, response.authorization
-      else
-        return false, response.message
-      end
+      return false, response.message unless response.success?
+
+      [true, response.authorization]
     rescue => e
       audit << "Error refunding #{ amount_in_dollars.inspect } to #{ original_transaction_id.inspect }: #{ e.message }"
       raise
@@ -208,11 +202,9 @@ class CyberSourceCreditCard < PaymentMethodDetails
       end
       unless response.success?
         if (field = response.params['invalidField'])
-          if field == 'c:cardType'
-            raise 'Invalid credit card'
-          else
-            raise "Invalid #{ field.gsub(/^c:/, '').underscore.humanize.downcase }"
-          end
+          raise 'Invalid credit card' if field == 'c:cardType'
+
+          raise "Invalid #{ field.gsub(/^c:/, '').underscore.humanize.downcase }"
         end
         raise response.message
       end

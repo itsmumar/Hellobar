@@ -22,11 +22,8 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
   def lists
     response = @client.list_list ids: 'all'
 
-    if response['result_code'] == 1
-      response['results']
-    else
-      raise response['result_message']
-    end
+    raise response['result_message'] unless response['result_code'] == 1
+    response['results']
   end
 
   def subscribe(list_id, email, name = nil, _double_optin = false)

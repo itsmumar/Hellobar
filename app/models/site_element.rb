@@ -317,28 +317,27 @@ class SiteElement < ActiveRecord::Base
   end
 
   def site_is_capable_of_creating_element
-    if site && site.capabilities.at_site_element_limit?
-      errors.add(:site, 'is currently at its limit to create site elements')
-    end
+    return unless site && site.capabilities.at_site_element_limit?
+    errors.add(:site, 'is currently at its limit to create site elements')
   end
 
   def redirect_has_url
-    if after_email_submit_action == :redirect
-      if !site.capabilities.after_submit_redirect?
-        errors.add('settings.redirect_url', 'is a pro feature')
-      elsif !settings['redirect_url'].present?
-        errors.add('settings.redirect_url', 'cannot be blank')
-      end
+    return unless after_email_submit_action == :redirect
+
+    if !site.capabilities.after_submit_redirect?
+      errors.add('settings.redirect_url', 'is a pro feature')
+    elsif !settings['redirect_url'].present?
+      errors.add('settings.redirect_url', 'cannot be blank')
     end
   end
 
   def thank_you_text
-    if after_email_submit_action == :custom_thank_you_text
-      if !site.capabilities.custom_thank_you_text?
-        errors.add('custom_thank_you_text', 'is a pro feature')
-      elsif self[:thank_you_text].blank?
-        errors.add('custom_thank_you_text', 'cannot be blank')
-      end
+    return unless after_email_submit_action == :custom_thank_you_text
+
+    if !site.capabilities.custom_thank_you_text?
+      errors.add('custom_thank_you_text', 'is a pro feature')
+    elsif self[:thank_you_text].blank?
+      errors.add('custom_thank_you_text', 'cannot be blank')
     end
   end
 
@@ -347,8 +346,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def subscription_for_custom_targeting
-    if custom_targeting? && !site.capabilities.custom_targeted_bars?
-      errors.add(:site, 'subscription does not support custom targeting. Upgrade subscription.')
-    end
+    return unless custom_targeting? && !site.capabilities.custom_targeted_bars?
+    errors.add(:site, 'subscription does not support custom targeting. Upgrade subscription.')
   end
 end

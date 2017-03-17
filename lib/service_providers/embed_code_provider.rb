@@ -73,11 +73,8 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def name_param
-    if name_params.length == 1
-      name_params.first
-    else
-      raise FirstAndLastNameRequired
-    end
+    raise FirstAndLastNameRequired unless name_params.length == 1
+    name_params.first
   end
 
   def name_params
@@ -133,11 +130,8 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     # Pull from scripts and run
     if reference_object.try(:name) == 'script'
       match_data = extract_html_from_script(remote_html)
-      if match_data.nil?
-        raise 'Cannot parse remote html'
-      else
-        remote_html = match_data[1].gsub('\n', '').delete('\\')
-      end
+      raise 'Cannot parse remote html' if match_data.nil?
+      remote_html = match_data[1].gsub('\n', '').delete('\\')
     end
 
     @html = Nokogiri::HTML(remote_html)
