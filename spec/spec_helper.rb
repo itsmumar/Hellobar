@@ -148,7 +148,7 @@ def random_uniq_url
   'http://url.net'.split('.').insert(1, "-#{ (0...8).map { 65.+(rand(26)).chr }.join.downcase }").insert(2, '.').join
 end
 
-def stub_out_get_ab_variations(*variations)
+def stub_out_ab_variations(*variations)
   variation_matcher = Regexp.new(variations.join('|'))
 
   allow_any_instance_of(ApplicationController)
