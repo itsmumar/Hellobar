@@ -74,7 +74,7 @@ class Site < ActiveRecord::Base
   end
 
   def needs_script_regeneration?
-    !@needs_script_regeneration.nil?
+    @needs_script_regeneration.present?
   end
 
   def regenerate_script

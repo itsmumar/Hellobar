@@ -21,7 +21,7 @@ module UserValidator
   # Passwords are always required if it's a new record, or if the password
   # or confirmation are being set somewhere.
   def password_required?
-    !persisted? || !password.nil? || !password_confirmation.nil?
+    !persisted? || password.present? || password_confirmation.present?
   end
 
   def email_required?

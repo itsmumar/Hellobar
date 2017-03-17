@@ -27,7 +27,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def email_exists?(list_id, email)
     member_id = Digest::MD5.hexdigest(email)
-    !@client.lists(list_id).members(member_id).retrieve.nil?
+    @client.lists(list_id).members(member_id).retrieve.present?
   rescue Gibbon::MailChimpError => error
     if error.status_code == 404
       false

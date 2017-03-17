@@ -5,13 +5,13 @@ module ContactListsHelper
       [
         provider_attributes[:name],
         provider_name,
-        requires_app_url:     !provider_attributes[:requires_app_url].nil?,
-        requires_embed_code:  !provider_attributes[:requires_embed_code].nil?,
-        requires_account_id:  !provider_attributes[:requires_account_id].nil?,
-        requires_api_key:     !provider_attributes[:requires_api_key].nil?,
-        requires_username:    !provider_attributes[:requires_username].nil?,
-        requires_webhook_url: !provider_attributes[:requires_webhook_url].nil?,
-        oauth:                !provider_attributes[:oauth].nil?
+        requires_app_url:     provider_attributes[:requires_app_url].present?,
+        requires_embed_code:  provider_attributes[:requires_embed_code].present?,
+        requires_account_id:  provider_attributes[:requires_account_id].present?,
+        requires_api_key:     provider_attributes[:requires_api_key].present?,
+        requires_username:    provider_attributes[:requires_username].present?,
+        requires_webhook_url: provider_attributes[:requires_webhook_url].present?,
+        oauth:                provider_attributes[:oauth].present?
       ]
     end
 

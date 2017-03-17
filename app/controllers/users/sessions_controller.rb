@@ -41,7 +41,7 @@ class Users::SessionsController < Devise::SessionsController
       if current_admin || TEMP_MIGRATION_USERS.include?(email)
         password = params[:user].try(:[], :password)
 
-        if (wordpress_user = Hello::WordpressUser.authenticate(email, password, !current_admin.nil?))
+        if (wordpress_user = Hello::WordpressUser.authenticate(email, password, current_admin.present?))
           session[:wordpress_user_id] = wordpress_user.id
           redirect_to new_user_migration_path
         else
