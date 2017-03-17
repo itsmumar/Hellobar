@@ -177,8 +177,9 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
   def reset_password!(unencrypted_password)
     timestamp = Time.now
-    update_attribute(:password_last_reset, timestamp)
-    set_password!(unencrypted_password)
+    self.password_last_reset = timestamp
+    self.password = unencrypted_password
+    save!
 
     lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp.to_i), timestamp: timestamp.to_i, host: Hellobar::Settings[:host])
 
@@ -228,13 +229,8 @@ If this is not you, this may be an attack and you should lock down the admin by 
     update_attribute(:session_last_active, Time.now)
   end
 
-  def set_password(plaintext)
+  def password=(plaintext)
     self.password_hashed = encrypt_password(plaintext)
-  end
-
-  def set_password!(plaintext)
-    set_password(plaintext)
-    save!
   end
 
   def encrypt_password(plaintext)

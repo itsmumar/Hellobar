@@ -30,7 +30,7 @@ class UserController < ApplicationController
     if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(status: User::ACTIVE_STATUS))
       sign_in @user, bypass: true
 
-      set_timezones_on_sites(@user)
+      update_timezones_on_sites(@user)
 
       respond_to do |format|
         format.html do
@@ -97,7 +97,7 @@ class UserController < ApplicationController
     @user = User.where(invite_token: token, status: User::TEMPORARY_STATUS).first
   end
 
-  def set_timezones_on_sites(user)
+  def update_timezones_on_sites(user)
     if params[:user] && params[:user][:timezone]
       timezone = params[:user][:timezone]
 

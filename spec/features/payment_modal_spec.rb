@@ -34,7 +34,7 @@ feature 'Payment modal interaction', :js do
       allow_any_instance_of(SiteElementSerializer)
         .to receive(:proxied_url2png).and_return('')
       allow_any_instance_of(ApplicationController)
-        .to receive(:get_ab_variation).and_return('original')
+        .to receive(:ab_variation).and_return('original')
     end
 
     scenario 'upgrade to pro from free' do

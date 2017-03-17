@@ -20,7 +20,7 @@ module Hello
       #   segment2 => [num_views_week, num_conversions_week],
       #   ...
       # }
-      def get_segments_by_week(site_element_ids, start_date, end_date, segment_keys)
+      def segments_by_week(site_element_ids, start_date, end_date, segment_keys)
         # Query every site element id
         final_results = Hash.new { |h, k| h[k] = [0, 0] }
         site_element_ids.each do |site_element_id|
@@ -29,7 +29,7 @@ module Hello
           ydays_by_year_month(start_date, end_date).each do |year_month, ydays|
             year_offset = (year_month.split('_').first.to_i - 2000) * 365
             # Get the table
-            table = get_segments_table_for_year_month(year_month)
+            table = segments_table_for_year_month(year_month)
             begin
               segment_keys.each do |segment_key|
                 table.items.query(
@@ -71,7 +71,7 @@ module Hello
       # For the given start date and end date returns a hash where the
       # key is the year month (e.g. "2014_9") and the value is an array
       # of ydays that fall in that month (e.g. [245,246,...]). This
-      # is used by get_segments
+      # is used by segments
       def ydays_by_year_month(start_date, end_date)
         date = start_date
         day = 24 * 60 * 60
@@ -131,11 +131,11 @@ module Hello
         @tables[name] = table
       end
 
-      def get_segments_table(date)
-        get_segments_table_for_year_month("#{ date.year }_#{ date.month }")
+      def segments_table(date)
+        segments_table_for_year_month("#{ date.year }_#{ date.month }")
       end
 
-      def get_segments_table_for_year_month(year_month)
+      def segments_table_for_year_month(year_month)
         # Segment tables are broken up by year and month
         name = segment_table_name_for_year_month(year_month)
         unless @tables[name]
@@ -159,7 +159,7 @@ module Hello
         end_date = Time.now
         start_date = end_date - 60 * 24 * 60 * 60
         # Get the segments by week
-        segments_as_hash = Hello::DynamoDB.get_segments_by_week(site_elements.collect(&:id), start_date, end_date, SUGGESTION_SEGMENT_KEYS)
+        segments_as_hash = Hello::DynamoDB.segments_by_week(site_elements.collect(&:id), start_date, end_date, SUGGESTION_SEGMENT_KEYS)
         segments = []
         # Convert to array
         segments_as_hash.each do |segment, data|

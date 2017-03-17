@@ -103,17 +103,6 @@ Rails/SkipsModelValidations:
 Rails/TimeZone:
   Enabled: false
 
-# Offense count: 9
-Style/AccessorMethodName:
-  Exclude:
-    - 'app/controllers/sites_controller.rb'
-    - 'app/controllers/tracking_controller.rb'
-    - 'app/controllers/user_controller.rb'
-    - 'app/models/admin.rb'
-    - 'app/models/site.rb'
-    - 'lib/hello/internal_analytics.rb'
-    - 'lib/script_generator.rb'
-
 # Offense count: 228
 Style/Documentation:
   Enabled: false

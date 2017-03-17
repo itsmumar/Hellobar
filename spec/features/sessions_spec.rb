@@ -8,7 +8,7 @@ feature 'User can sign up', :js do
     allow_any_instance_of(SiteElementSerializer)
       .to receive(:proxied_url2png).and_return('')
     allow_any_instance_of(ApplicationController)
-      .to receive(:get_ab_variation)
+      .to receive(:ab_variation)
       .with('Sign Up Button 2016-03-17')
       .and_return('original')
   end

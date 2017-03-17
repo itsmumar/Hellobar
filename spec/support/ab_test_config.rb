@@ -1,8 +1,8 @@
 RSpec.configure do |config|
   config.before(:each) do
-    # allow us to register which get_ab_variation calls we stubbing,
+    # allow us to register which ab_variation calls we stubbing,
     # let the rest of the calls pass through to ApplicationController untouched
-    allow_any_instance_of(ApplicationController).to receive(:get_ab_variation).and_call_original
+    allow_any_instance_of(ApplicationController).to receive(:ab_variation).and_call_original
 
     allow_any_instance_of(SiteSerializer)
       .to receive(:monthly_pageviews).and_return(nil)
@@ -19,17 +19,17 @@ def stub_out_get_ab_variations(*variations)
   variation_matcher = Regexp.new(variations.join('|'))
 
   allow_any_instance_of(ApplicationController)
-    .to receive(:get_ab_variation)
+    .to receive(:ab_variation)
     .with(variation_matcher)
     .and_return(yield)
 
   allow_any_instance_of(ApplicationController)
-    .to receive(:get_ab_variation)
+    .to receive(:ab_variation)
     .with(variation_matcher, anything)
     .and_return(yield)
 
   allow_any_instance_of(ApplicationController)
-    .to receive(:get_ab_variation_or_nil)
+    .to receive(:ab_variation_or_nil)
     .with(variation_matcher)
     .and_return(yield)
 end

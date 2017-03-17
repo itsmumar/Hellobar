@@ -17,7 +17,7 @@ module ServiceProviders
       @html = Nokogiri::HTML(remote_html)
     end
 
-    def get_reference_object html
+    def reference_object html
       item = super
       if !item || !item.attr('src') || item.attr('src').include?('tts_signup')
         html.css('a').first

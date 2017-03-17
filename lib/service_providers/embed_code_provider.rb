@@ -28,7 +28,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
 
   def embed_url
     html = Nokogiri::HTML embed_code
-    reference_object = get_reference_object(html)
+    reference_object = reference_object(html)
     url_for_form(reference_object)
   end
 
@@ -118,7 +118,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     @cached_embed_code = embed_code
     html = Nokogiri::HTML embed_code
 
-    reference_object = get_reference_object(html)
+    reference_object = reference_object(html)
     url = url_for_form(reference_object)
 
     return @html = html if url.nil? || (!embed_code.match(URL_REGEX) && reference_object.nil?)
@@ -147,7 +147,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     remote_html.match(/^document.write\("(.+)"\)/)
   end
 
-  def get_reference_object html
+  def reference_object html
     html.css('body > iframe').first || html.css('head > script').first
   end
 

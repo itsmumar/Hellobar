@@ -4,7 +4,7 @@ class SitesController < ApplicationController
 
   before_action :authenticate_user!, except: :create
   before_action :load_site, except: [:index, :new, :create]
-  before_action :get_top_performers, only: :improve
+  before_action :load_top_performers, only: :improve
   before_action :load_bills, only: :edit
 
   skip_before_action :verify_authenticity_token, only: [:preview_script, :script]
@@ -176,7 +176,7 @@ class SitesController < ApplicationController
     end
   end
 
-  def get_top_performers
+  def load_top_performers
     @top_performers = {}
     all_elements = @site.site_elements.sort_by { |e| -1 * e.conversion_percentage }
 

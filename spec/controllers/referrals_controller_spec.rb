@@ -4,7 +4,7 @@ describe ReferralsController do
   let!(:user) { create :user }
 
   before do
-    stub_out_get_ab_variations('Email Integration UI 2016-06-22') { 'original' }
+    stub_out_ab_variations('Email Integration UI 2016-06-22') { 'original' }
     stub_current_user(user)
   end
 

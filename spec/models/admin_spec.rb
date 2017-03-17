@@ -118,7 +118,7 @@ describe Admin do
     admin.password_last_reset.should be < 1.minute.ago
 
     Pony.should_receive(:mail)
-    admin.should_receive(:set_password!).with('new_password')
+    admin.should_receive(:password=).with('new_password')
 
     admin.reset_password!('new_password')
 

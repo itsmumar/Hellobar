@@ -88,20 +88,20 @@ describe Hello::DataAPI do
     end
   end
 
-  describe '.get_contacts' do
+  describe '.contacts' do
     let(:contact_list) { create :contact_list }
     let(:id) { contact_list.id }
     let(:site_id) { contact_list.site_id }
     let(:read_key) { contact_list.site.read_key }
     let(:limit) { 5 }
-    let(:get_contacts) do
+    let(:contacts) do
       VCR.use_cassette('contact_list/get_contacts') do
-        Hello::DataAPI.get_contacts(contact_list, limit)
+        Hello::DataAPI.contacts(contact_list, limit)
       end
     end
 
     before(:each) do
-      allow(Hello::DataAPIHelper::RequestParts).to receive(:get_contacts)
+      allow(Hello::DataAPIHelper::RequestParts).to receive(:contacts)
         .with(site_id, id, read_key, limit, nil)
         .and_return(['/e/GIHiEM2QmS/qvpJXYvS6',
                      { 'l' => 5, 'd' => 1481207259, 't' => 1482071362,
@@ -111,15 +111,15 @@ describe Hello::DataAPI do
                              'a3ffe9f0260cd1cd80c1c2c' }])
     end
 
-    it 'should cache `Hello::DataAPIHelper::RequestParts.get_contacts`' do
-      expect(Hello::DataAPIHelper::RequestParts).to receive(:get_contacts)
+    it 'should cache `Hello::DataAPIHelper::RequestParts.contacts`' do
+      expect(Hello::DataAPIHelper::RequestParts).to receive(:contacts)
         .with(site_id, id, read_key, limit, nil).once
 
-      2.times { get_contacts }
+      2.times { contacts }
     end
 
     it 'should return 5 contact records' do
-      expect(get_contacts.count).to eq(limit)
+      expect(contacts.count).to eq(limit)
     end
   end
 end
