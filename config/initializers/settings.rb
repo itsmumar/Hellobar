@@ -1,5 +1,5 @@
 unless defined?(Hellobar::Settings)
-  settings_file = File.join(Rails.root, 'config/settings.yml')
+  settings_file = Rails.root.join('config', 'settings.yml')
   yaml = File.exist?(settings_file) ? YAML.load_file(settings_file) : {}
   config = {}
 
@@ -204,7 +204,7 @@ unless defined?(Hellobar::Settings)
       hidden: true
     }
   }
-  config[:analytics_log_file] ||= File.join(Rails.root, 'log', 'analytics.log')
+  config[:analytics_log_file] ||= Rails.root.join('log', 'analytics.log')
 
   config[:permissions] = {
     'owner' => [:billing, :edit_owner]

@@ -1,1 +1,1 @@
-require "#{ Rails.root }/lib/legacy_migrator"
+require Rails.root.join('lib', 'legacy_migrator')

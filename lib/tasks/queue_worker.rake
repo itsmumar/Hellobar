@@ -3,7 +3,8 @@ namespace :queue_worker do
 
   desc 'Starts all the queue workers'
   task :start do
-    require File.join(Rails.root, 'config', 'initializers', 'settings.rb')
+    require Rails.root.join('config', 'initializers', 'settings.rb')
+    root = Rails.root
 
     {
       Hellobar::Settings[:main_queue] => [2],
@@ -12,7 +13,7 @@ namespace :queue_worker do
       num_workers = options[0]
       additional_options = options[1] || ''
       puts "Starting #{ num_workers } workers for #{ queue.inspect }"
-      cmd = "cd #{ Rails.root } && RAILS_ENV=#{ Rails.env } bundle exec bin/queue_worker -- -q #{ queue } -n #{ num_workers } #{ additional_options }"
+      cmd = "cd #{ root } && RAILS_ENV=#{ Rails.env } bundle exec bin/queue_worker -- -q #{ queue } -n #{ num_workers } #{ additional_options }"
       puts cmd
       `#{cmd}`
     end
@@ -38,7 +39,8 @@ namespace :queue_worker do
 
   desc 'Restarts only workers that are not currently running'
   task :resurrect do
-    require File.join(Rails.root, 'config', 'initializers', 'settings.rb')
+    root = Rails.root
+    require Rails.root.join('config', 'initializers', 'settings.rb')
 
     processes = `ps aux`.split("\n").reject { |l| l !~ WORKER_PATTERN }
     {
@@ -57,7 +59,7 @@ namespace :queue_worker do
       num_workers_needed = num_workers - num_workers_found
       puts "Found #{ num_workers_found }. Starting #{ num_workers_needed }..."
       next unless num_workers_needed > 0
-      cmd = "cd #{ Rails.root } && RAILS_ENV=#{ Rails.env } bundle exec bin/queue_worker -- -q #{ queue } -n #{ num_workers_needed } #{ additional_options }"
+      cmd = "cd #{ root } && RAILS_ENV=#{ Rails.env } bundle exec bin/queue_worker -- -q #{ queue } -n #{ num_workers_needed } #{ additional_options }"
       puts cmd
       `#{cmd}`
     end
@@ -124,7 +126,7 @@ namespace :queue_worker do
     end
 
     # Send the data to Cloudwatch
-    require File.join(Rails.root, 'config/initializers/settings.rb')
+    require Rails.root.join('config', 'initializers', 'settings.rb')
     stage = Hellobar::Settings[:env_name]
     data = {
       namespace: "HB/#{ stage }",

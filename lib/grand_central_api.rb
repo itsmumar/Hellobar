@@ -7,7 +7,7 @@ require 'fileutils'
 class GrandCentralApi
   class << self
     def request_log_path
-      File.join(Rails.root, 'log', "grand-central-api_#{ Rails.env }.log")
+      Rails.root.join('log', "grand-central-api_#{ Rails.env }.log")
     end
 
     def digest

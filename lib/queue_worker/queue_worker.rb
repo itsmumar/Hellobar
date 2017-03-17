@@ -1,7 +1,7 @@
 class QueueWorker
   STAGES = %w(edge staging production designqa)
   VIEW_ATTRIBUTES = %w(ApproximateNumberOfMessages ApproximateNumberOfMessagesDelayed DelaySeconds)
-  LOG_FILE = File.join(Rails.root, 'log', 'queue_worker.log')
+  LOG_FILE = Rails.root.join('log', 'queue_worker.log')
 
   module Delay
     def delay(task_name, options = {})

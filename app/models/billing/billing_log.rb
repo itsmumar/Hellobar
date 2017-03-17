@@ -21,7 +21,8 @@ module BillingAuditTrail
       log = BillingLog.new
       log.message = message
       # Record the current commit and line number and file
-      log.source_file = "#{ GitUtils.current_commit } @ #{ caller[0..20].collect { |l| l.split(':in').first.gsub(Rails.root.to_s, '') }.join("\n") }"
+      root = Rails.root.to_s
+      log.source_file = "#{ GitUtils.current_commit } @ #{ caller[0..20].collect { |l| l.split(':in').first.gsub(root, '') }.join("\n") }"
       # See if we can set the @source_id
       if @source.is_a?(ActiveRecord::Base)
         # See if the source has any other id attributes we can set

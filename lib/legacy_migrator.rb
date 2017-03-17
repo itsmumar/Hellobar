@@ -94,7 +94,7 @@ class LegacyMigrator
 
     def load_wp_emails
       @wp_emails = {}
-      File.read(File.join(Rails.root, 'db', 'wp_logins.csv')).split("\n").each_with_index do |line, i|
+      Rails.root.join('db', 'wp_logins.csv').read.split("\n").each_with_index do |line, i|
         next unless i > 0
         e1, e2 = *line.split("\t")
         @wp_emails[e1] = true

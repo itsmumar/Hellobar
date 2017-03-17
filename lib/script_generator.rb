@@ -8,12 +8,12 @@ class ScriptGenerator < Mustache
 
   class << self
     def compile
-      FileUtils.rm_r Rails.root.join('tmp/script'), force: true
+      FileUtils.rm_r Rails.root.join('tmp', 'script'), force: true
       manifest(true).compile('*.js', '*.css', '*.html')
     end
 
     def load_templates
-      self.template_path = Rails.root.join('lib/script_generator/')
+      self.template_path = Rails.root.join('lib', 'script_generator')
       self.template_name = 'template.js'
     end
 
@@ -175,9 +175,9 @@ class ScriptGenerator < Mustache
   end
 
   def branding_templates
-    base = Rails.root.join('lib/script_generator/')
+    base = Rails.root.join('lib', 'script_generator')
     without_escaping_html_in_json do
-      Dir.glob(base.join('branding/*.html')).map do |f|
+      Dir.glob(base.join('branding', '*.html')).map do |f|
         path = Pathname.new(f)
         content = render_asset(path.relative_path_from(base)).to_json
         { name: path.basename.sub_ext('').to_s, markup: content }

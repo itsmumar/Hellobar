@@ -7,7 +7,7 @@ RSpec.configure do |config|
       timestamp = Time.current.strftime('%Y%m%d-%H%M%S')
       filename = "js_failure_#{ timestamp }-#{ description }"
 
-      path = "#{ ENV.fetch('CIRCLE_ARTIFACTS', Rails.root.join('tmp')) }/#{ filename }"
+      path = Pathname.new(ENV.fetch('CIRCLE_ARTIFACTS', Rails.root.join('tmp'))).join(filename)
 
       png_path = "#{ path }.png"
       html_path = "#{ path }.html"
