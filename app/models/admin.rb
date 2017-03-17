@@ -257,7 +257,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def set_default_password
-    set_password(initial_password) if new_record? && password_hashed.blank?
+    self.password = initial_password if new_record? && password_hashed.blank?
   end
 
   def generate_rotp_secret_base!
