@@ -127,14 +127,14 @@ module Hello
           return index, :existing
         end
       end
-      _, person_id = current_person_type_and_id(user)
+      _person_type, person_id = current_person_type_and_id(user)
       value_index = ab_test_value_index_from_id(ab_test, person_id)
       [value_index, :new]
     end
 
     def ab_variation_without_setting(test_name, user = nil)
       ab_test = ab_test(test_name)
-      value_index, = ab_variation_index_without_setting(test_name, user)
+      value_index, _status = ab_variation_index_without_setting(test_name, user)
       return unless value_index
       value = ab_test[:values][value_index]
       value

@@ -210,7 +210,7 @@ describe Subscription do
     end
 
     it 'should return the right capabilities if payment is not due yet' do
-      _, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
+      _success, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
 
       expect(@site.capabilities(true).class).to eq(Subscription::ProblemWithPayment::Capabilities)
       # Make the bill not due until later
@@ -244,7 +244,7 @@ describe Subscription do
       expect(pending.first.subscription).to be_a(Subscription::Pro)
 
       # Switch to Free
-      success, = @site.change_subscription(@free, @payment_method)
+      success, _bill = @site.change_subscription(@free, @payment_method)
       expect(success).to be_true
       # Should still have pro capabilities
       expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
@@ -280,7 +280,7 @@ describe Subscription do
     end
 
     it 'stays at pro capabilities until bill period is over' do
-      _, bill = @site.change_subscription(@pro, @payment_method)
+      _success, bill = @site.change_subscription(@pro, @payment_method)
       bill.update_attribute(:end_date, 1.year.from_now)
       expect(@site.capabilities(true)).to be_a(Subscription::Pro::Capabilities)
       travel_to 2.years.from_now do
@@ -398,7 +398,7 @@ describe Site do
     end
 
     it 'should charge full amount if you were on a Free plan' do
-      success, = @site.change_subscription(@free, @payment_method)
+      success, _bill = @site.change_subscription(@free, @payment_method)
       expect(success).to be_true
       expect(@site.current_subscription).to eq(@free)
       success, bill = @site.change_subscription(@pro, @payment_method)
@@ -431,7 +431,7 @@ describe Site do
     end
 
     it 'should prorate if you are upgrading and were on a paid plan' do
-      success, = @site.change_subscription(@pro, @payment_method)
+      success, _bill = @site.change_subscription(@pro, @payment_method)
       expect(success).to be_true
       expect(@site.current_subscription).to eq(@pro)
       success, bill = @site.change_subscription(@enterprise, @payment_method)
@@ -465,7 +465,7 @@ describe Site do
       expect(refund_attempt).to be_successful
 
       # Switch to Free
-      success, = @site.change_subscription(@free, @payment_method)
+      success, _bill = @site.change_subscription(@free, @payment_method)
       expect(success).to be_true
 
       # Switch to enterprise
@@ -485,7 +485,7 @@ describe Site do
       expect(refund_attempt).to be_successful
 
       # Switch to Free
-      success, = @site.change_subscription(@free, @payment_method)
+      success, _bill = @site.change_subscription(@free, @payment_method)
       expect(success).to be_true
       # Void the pro bill
       pro_bill.void!
