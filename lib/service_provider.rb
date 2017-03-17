@@ -65,7 +65,7 @@ class ServiceProvider
         yield(self)
         break # will not break if exception is raised
       rescue Net::OpenTimeout => e
-        puts "Caught #{ e }, retrying after 5 seconds"
+        Rails.logger.error "Caught #{ e }, retrying after 5 seconds"
         sleep 5
       end
     end

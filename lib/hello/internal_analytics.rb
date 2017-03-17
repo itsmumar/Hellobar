@@ -15,8 +15,9 @@ module Hello
     AB_TEST_COOKIE = :hb3ab
 
     class << self
-      @expected_index = 0
       def register_test(name, values, index, weights = [], user_start_date = nil)
+        @expected_index ||= 0
+
         raise "Expected index: #{ @expected_index.inspect }, but got index: #{ index.inspect }. You either changed the order of the tests, removed a test, added a test out of order, or did not set the index of a test correctly. Please fix and try again" unless index == @expected_index
         raise "#{ name.inspect } has #{ values.length } values, but max is #{ MAX_VALUES_PER_TEST }" if values.length > MAX_VALUES_PER_TEST
         sum = weights.inject(0) { |result, w| result + w }

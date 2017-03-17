@@ -42,19 +42,19 @@ module BillingAuditTrail
       end
       # Save it
       if @debug
-        puts '=' * 80
-        puts log.source_file
-        puts '-' * 80
-        puts log.message
-        puts '-' * 80
+        Rails.logger.debug '=' * 80
+        Rails.logger.debug log.source_file
+        Rails.logger.debug '-' * 80
+        Rails.logger.debug log.message
+        Rails.logger.debug '-' * 80
         log.attribute_names.sort.each do |n|
           unless [:message, :source_file, :created_at, :id].include?(n.to_sym)
-            puts "\t#{ n } => #{ log.send(n) }"
+            Rails.logger.debug "\t#{ n } => #{ log.send(n) }"
           end
         end
-        puts '=' * 80
+        Rails.logger.debug '=' * 80
+        Rails.logger.debug log.inspect
       end
-      puts(log.inspect) if @debug
       log.save!
     end
   end

@@ -8,7 +8,7 @@
 
 # Offense count: 167
 Metrics/AbcSize:
-  Max: 100
+  Max: 101
 
 # Offense count: 226
 # Configuration parameters: CountComments, ExcludedMethods.
@@ -70,15 +70,6 @@ Rails/Date:
 Rails/FilePath:
   Enabled: false
 
-# Offense count: 24
-# Configuration parameters: Include.
-# Include: app/**/*.rb, config/**/*.rb, db/**/*.rb, lib/**/*.rb
-Rails/Output:
-  Exclude:
-    - 'app/models/billing/billing_log.rb'
-    - 'config/initializers/loggly.rb'
-    - 'lib/legacy_migrator.rb'
-    - 'lib/service_provider.rb'
 
 # Offense count: 228
 Style/Documentation:
