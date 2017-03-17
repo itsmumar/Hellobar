@@ -30,7 +30,7 @@ describe SiteGenerator do
 
     context 'when directory is set' do
       it 'generates a full path in that directory' do
-        directory = Rails.root.join('spec/tmp')
+        directory = Rails.root.join('spec', 'tmp')
 
         generator = described_class.new(site.id, directory: directory)
 
@@ -38,7 +38,7 @@ describe SiteGenerator do
       end
 
       it 'generates an html file' do
-        directory = Rails.root.join('spec/tmp')
+        directory = Rails.root.join('spec', 'tmp')
 
         generator = described_class.new(site.id, directory: directory)
 
@@ -83,7 +83,7 @@ describe SiteGenerator do
     end
 
     def generate_path
-      dir = Rails.root.join('spec/tmp')
+      dir = Rails.root.join('spec', 'tmp')
       Dir.mkdir(dir) unless File.directory?(dir)
       dir.join("#{ SecureRandom.hex }.html")
     end

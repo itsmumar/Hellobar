@@ -5,17 +5,16 @@ end
 
 describe Hello::InternalAnalytics do
   before(:each) do
-    Hello::InternalAnalytics.send(:remove_const, 'TESTS')
-    Hello::InternalAnalytics::TESTS = {}
+    Hello::InternalAnalytics.tests = {}
     Hello::InternalAnalytics.instance_variable_set(:@expected_index, 0)
   end
 
   context 'class methods' do
     describe 'load_ab_tests' do
       it 'has tests present' do
-        expect(Hello::InternalAnalytics::TESTS.size).to eq(0)
+        expect(Hello::InternalAnalytics.tests.size).to eq(0)
         Hello::InternalAnalytics.load_ab_tests
-        expect(Hello::InternalAnalytics::TESTS.size).not_to eq(0)
+        expect(Hello::InternalAnalytics.tests.size).not_to eq(0)
       end
     end
   end

@@ -148,7 +148,7 @@ module Hello
   end
 
   class SuggestedOpportunities
-    SUGGESTION_SEGMENT_KEYS = %w(dv st rd pu)
+    SUGGESTION_SEGMENT_KEYS = %w(dv st rd pu).freeze
 
     class << self
       def generate(_site, site_elements)

@@ -5,7 +5,7 @@ class ContactList < ActiveRecord::Base
   include DeserializeWithErrors
   include EmailSynchronizer
 
-  EMPTY_PROVIDER_VALUES = [nil, '', 0, '0']
+  EMPTY_PROVIDER_VALUES = [nil, '', 0, '0'].freeze
 
   attr_accessor :provider
 

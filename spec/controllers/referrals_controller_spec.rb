@@ -83,7 +83,7 @@ describe ReferralsController do
     end
 
     it 'still counts towards sites that have since been deleted' do
-      site.update(deleted_at: Time.now) # simulate delete
+      site.update(deleted_at: Time.current) # simulate delete
       put :update, id: referral.id, referral: { site_id: site.id }
       referral.reload
 

@@ -23,6 +23,7 @@ module Admin::UsersHelper
     "#{ us_short_datetime(bill.start_date) }-#{ us_short_datetime(bill.end_date) }"
   end
 
+  # rubocop: disable Rails/OutputSafety
   def site_info_or_form(site)
     if site.invoice_information.present?
       site.invoice_information.gsub("\r\n", '<br>').html_safe
@@ -30,6 +31,7 @@ module Admin::UsersHelper
       render 'sites/form', site: site
     end
   end
+  # rubocop: enable Rails/OutputSafety
 
   def add_or_clear_site_info(site)
     if site.invoice_information.present?

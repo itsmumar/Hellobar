@@ -37,7 +37,7 @@ namespace :cloudwatch_metrics do
     end
 
     # Send the data to Cloudwatch
-    require File.join(Rails.root, 'config/initializers/settings.rb')
+    require Rails.root.join('config', 'initializers', 'settings.rb')
     stage = Hellobar::Settings[:env_name]
     cloudwatch = AWS::CloudWatch::Client.new(
       access_key_id: Hellobar::Settings[:aws_access_key_id],
@@ -49,7 +49,7 @@ namespace :cloudwatch_metrics do
 
   desc 'Creates alarms for disk space and memory'
   task :create_alarms do
-    require File.join(Rails.root, 'config/initializers/settings.rb')
+    require Rails.root.join('config', 'initializers', 'settings.rb')
 
     instance_id = `ec2metadata --instance-id`
     instance_id.strip!

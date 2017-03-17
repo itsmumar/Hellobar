@@ -5,7 +5,7 @@ describe PaymentMethod do
     p = PaymentMethod.create
     expect(p.deleted_at).to be_nil
     p.destroy
-    expect(p.deleted_at).to be_within(2).of(Time.now)
+    expect(p.deleted_at).to be_within(2).of(Time.current)
   end
 
   it 'should provide the current_payment_details if available' do

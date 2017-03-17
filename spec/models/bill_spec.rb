@@ -3,23 +3,23 @@ require 'payment_method_details'
 
 module BillSpecDates
   def june
-    Time.parse('2014-06-10')
+    Time.zone.parse('2014-06-10')
   end
 
   def bill_at
-    Time.parse('2014-06-11')
+    Time.zone.parse('2014-06-11')
   end
 
   def july
-    Time.parse('2014-07-10')
+    Time.zone.parse('2014-07-10')
   end
 
   def aug
-    Time.parse('2014-08-10')
+    Time.zone.parse('2014-08-10')
   end
 
   def sep
-    Time.parse('2014-09-10')
+    Time.zone.parse('2014-09-10')
   end
 end
 
@@ -60,11 +60,11 @@ describe Bill do
     expect(bill.status).to eq(:pending)
     expect(bill.status_set_at).to be_nil
     bill.paid!
-    expect(bill.status_set_at).to be_within(2).of(Time.now)
+    expect(bill.status_set_at).to be_within(2).of(Time.current)
   end
 
   it 'should take the payment_method grace period into account when grace_period_allowed' do
-    now = Time.now
+    now = Time.current
     bill = create(:pro_bill, bill_at: now)
     expect(bill.grace_period_allowed?).to eq(true)
     expect(bill.bill_at).to be_within(5.minutes).of(now)
@@ -119,10 +119,10 @@ describe Bill do
     end
 
     it 'should return the correct date for next_month' do
-      expect(Bill::Recurring.next_month(Time.parse('2014-12-30')).strftime('%Y-%m-%d')).to eq('2015-01-30')
-      expect(Bill::Recurring.next_month(Time.parse('2015-01-30')).strftime('%Y-%m-%d')).to eq('2015-02-28')
-      expect(Bill::Recurring.next_year(Time.parse('2014-12-30')).strftime('%Y-%m-%d')).to eq('2015-12-30')
-      expect(Bill::Recurring.next_year(Time.parse('2016-02-29')).strftime('%Y-%m-%d')).to eq('2017-02-28')
+      expect(Bill::Recurring.next_month(Time.zone.parse('2014-12-30')).strftime('%Y-%m-%d')).to eq('2015-01-30')
+      expect(Bill::Recurring.next_month(Time.zone.parse('2015-01-30')).strftime('%Y-%m-%d')).to eq('2015-02-28')
+      expect(Bill::Recurring.next_year(Time.zone.parse('2014-12-30')).strftime('%Y-%m-%d')).to eq('2015-12-30')
+      expect(Bill::Recurring.next_year(Time.zone.parse('2016-02-29')).strftime('%Y-%m-%d')).to eq('2017-02-28')
     end
 
     it 'should not be affected by a refund' do
@@ -326,7 +326,7 @@ describe Subscription do
   end
 
   it 'should return all bills active for time period' do
-    now = Time.now
+    now = Time.current
     subscription = create(:subscription, :with_bills)
     Bill.delete_all
     expect(subscription.active_bills(true).length).to eq(0)
@@ -403,8 +403,8 @@ describe PaymentMethod do
       expect(refund_bill.refunded_billing_attempt).to eq(billing_attempt)
       expect(refund_bill).not_to be_nil
       expect(refund_bill.subscription).to eq(subscription)
-      expect(refund_bill.start_date).to be_within(5).of(Time.now)
-      expect(refund_bill.bill_at).to be_within(5).of(Time.now)
+      expect(refund_bill.start_date).to be_within(5).of(Time.current)
+      expect(refund_bill.bill_at).to be_within(5).of(Time.current)
       expect(refund_bill.end_date).to eq(july)
       expect(refund_attempt).to be_successful
       expect(refund_attempt.bill).to eq(refund_bill)

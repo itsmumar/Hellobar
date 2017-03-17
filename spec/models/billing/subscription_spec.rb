@@ -380,7 +380,7 @@ describe Site do
       expect(bill).to be_paid
       expect(bill).to be_persisted
       expect(bill.amount).to eq(@pro.amount)
-      expect(bill.bill_at).to be <= Time.now
+      expect(bill.bill_at).to be <= Time.current
       expect(@site.current_subscription).to eq(@pro)
       expect(@site.capabilities.class).to eq(Subscription::Pro::Capabilities)
     end
@@ -390,7 +390,7 @@ describe Site do
       expect(bill).not_to be_paid
       expect(bill).not_to be_persisted
       expect(bill.amount).to eq(@pro.amount)
-      expect(bill.bill_at).to be <= Time.now
+      expect(bill.bill_at).to be <= Time.current
       expect { bill.save! }.to raise_error(ActiveRecord::ReadOnlyRecord)
       expect(bill).not_to be_persisted
       expect(@site.current_subscription).not_to eq(@pro)
@@ -534,8 +534,8 @@ describe Site do
       success, bill = @site.change_subscription(@pro, @payment_method)
       expect(success).to be_true
       expect(@site.current_subscription).to eq(@pro)
-      bill.start_date = Time.now - 2.years
-      bill.end_date = Time.now - 1.year
+      bill.start_date = 2.years.from_now
+      bill.end_date = 1.year.from_now
       bill.save!
       success, bill = @site.change_subscription(@enterprise, @payment_method)
       expect(success).to be_true
@@ -620,7 +620,7 @@ describe Site do
       expect(success).to be_false
       expect(bill).to be_pending
       # Make it due later
-      bill.bill_at = Time.now + 7.days
+      bill.bill_at = Time.current + 7.days
       bill.save!
       expect(@site.bills_with_payment_issues(true)).to eq([])
     end

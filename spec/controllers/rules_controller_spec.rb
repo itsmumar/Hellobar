@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-UNAUTHORIZED = '401'
+UNAUTHORIZED = '401'.freeze
 
 describe RulesController do
   before do

@@ -1,6 +1,6 @@
 require 'yaml'
 
-PREFIX = '/mnt/deploy/current/log/'
+PREFIX = '/mnt/deploy/current/log/'.freeze
 set :output, standard: PREFIX + 'cron.log', error: PREFIX + 'cron.error.log'
 
 env :PATH, ENV['PATH']

@@ -229,7 +229,7 @@ module Hello::DataAPI
         lines << "\t#{ line }"
       end
       # Write everything to the log
-      File.open(File.join(Rails.root, 'log', 'data_api_error.log'), 'a') do |file|
+      File.open(Rails.root.join('log', 'data_api_error.log'), 'a') do |file|
         file.puts(lines.join("\n"))
       end
       # Re-raise the error

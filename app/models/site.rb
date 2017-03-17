@@ -74,7 +74,7 @@ class Site < ActiveRecord::Base
   end
 
   def needs_script_regeneration?
-    !@needs_script_regeneration.nil?
+    @needs_script_regeneration.present?
   end
 
   def regenerate_script
@@ -92,7 +92,7 @@ class Site < ActiveRecord::Base
       lines << "\t#{ line }"
     end
 
-    File.open(File.join(Rails.root, 'log', 'debug_install.log'), 'a') do |file|
+    File.open(Rails.root.join('log', 'debug_install.log'), 'a') do |file|
       file.puts(lines.join("\n"))
     end
   end
@@ -501,7 +501,7 @@ class Site < ActiveRecord::Base
     generated_script_content = options[:script_content] || script_content(compress_script)
 
     if store_site_scripts_locally
-      File.open(File.join(Rails.root, 'public/generated_scripts/', script_name), 'w') { |f| f.puts(generated_script_content) }
+      File.open(Rails.root.join('public', 'generated_scripts', script_name), 'w') { |f| f.puts(generated_script_content) }
     else
       Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
 

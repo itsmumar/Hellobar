@@ -16,14 +16,14 @@ namespace :billing do
     def billing_report(msg)
       return unless msg
       @billing_report_log << msg
-      File.open(File.join(Rails.root, 'log', 'billing.log'), 'a') { |f| f.puts(msg) }
+      File.open(Rails.root.join('log', 'billing.log'), 'a') { |f| f.puts(msg) }
       puts msg
     end
 
     msg = nil
 
     begin
-      lock_file_path = File.join(Rails.root, 'tmp', 'billing.lock')
+      lock_file_path = Rails.root.join('tmp', 'billing.lock')
       lock_file = File.open(lock_file_path, File::RDWR | File::CREAT, 0644)
       result = lock_file.flock(File::LOCK_EX | File::LOCK_NB)
       if result == false

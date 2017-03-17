@@ -24,9 +24,9 @@ class Condition < ActiveRecord::Base
     'UrlCondition' => 'pu',
     'UrlPathCondition' => 'pup',
     'UrlQuery' => 'pq'
-  }
+  }.freeze
 
-  MULTIPLE_CHOICE_SEGMENTS = %w(UrlCondition UrlPathCondition LocationCountryCondition)
+  MULTIPLE_CHOICE_SEGMENTS = %w(UrlCondition UrlPathCondition LocationCountryCondition).freeze
 
   # stored value: displayed value
   OPERANDS = {
@@ -39,7 +39,7 @@ class Condition < ActiveRecord::Base
     is: 'is',
     is_not: 'is not',
     less_than: 'is less than'
-  }.with_indifferent_access
+  }.with_indifferent_access.freeze
 
   belongs_to :rule, inverse_of: :conditions, touch: true
 

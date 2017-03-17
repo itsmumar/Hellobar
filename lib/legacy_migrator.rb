@@ -11,7 +11,7 @@ class LegacyMigrator
       Thread.abort_on_exception = true
 
       @migrated_memberships = {}
-      puts "[#{ Time.now }] Start"
+      Rails.logger.info "[#{ Time.now }] Start"
       load_wp_emails
       preload_data
       migrate_sites_and_users_and_memberships
@@ -21,7 +21,7 @@ class LegacyMigrator
       migrate_site_timezones
       migrate_admins
 
-      puts "[#{ Time.now }] Done reading, writing..."
+      Rails.logger.info "[#{ Time.now }] Done reading, writing..."
       threads = []
       threads << set_subscriptions
       threads << save_to_db(@migrated_memberships)
@@ -32,7 +32,7 @@ class LegacyMigrator
       threads << save_to_db(@migrated_rules)
       threads.each(&:join)
       save_to_db(@rules_to_migrate_later) # must happen after initial rules are created to prevent ID collision
-      puts "[#{ Time.now }] Done writing"
+      Rails.logger.info "[#{ Time.now }] Done writing"
       # Probably a good idea to load the subscriptions into the site object for
       # checking capabbilities, etc
 
@@ -52,7 +52,7 @@ class LegacyMigrator
       escaped_two_months_from_now = ActiveRecord::Base.sanitize(two_months_from_now)
       subscription_id = 0
       optimize_inserts do
-        puts "[#{ Time.now }] Done writing, changing subscription..."
+        Rails.logger.info "[#{ Time.now }] Done writing, changing subscription..."
         @migrated_sites.each do |_, site|
           # Direct inserts
           ActiveRecord::Base.connection.execute("INSERT INTO #{ Subscription.table_name } VALUES (NULL, NULL, #{ site.id }, 'Subscription::FreePlus', 0, 0.00, 25000, NULL, NULL, #{ escaped_now }, NULL)")
@@ -61,9 +61,9 @@ class LegacyMigrator
           ActiveRecord::Base.connection.execute("INSERT INTO #{ Bill.table_name } VALUES
           (NULL, #{ subscription_id }, 1, 'Bill::Recurring', 0.00, NULL, NULL, 0, #{ escaped_now }, #{ escaped_now }, #{ escaped_one_month_from_now }, #{ escaped_now }, #{ escaped_now }),
           (NULL, #{ subscription_id }, 0, 'Bill::Recurring', 0.00, 'Monthly Renewal', NULL, 1, #{ escaped_one_month_from_now }, #{ escaped_one_month_from_now }, #{ escaped_two_months_from_now }, NULL, #{ escaped_now })")
-          puts "[#{ Time.now }] Changing subscription #{ subscription_id }..." if subscription_id % 5000 == 0
+          Rails.logger.info "[#{ Time.now }] Changing subscription #{ subscription_id }..." if subscription_id % 5000 == 0
         end
-        puts "[#{ Time.now }] Done inserting subscriptions"
+        Rails.logger.info "[#{ Time.now }] Done inserting subscriptions"
       end
     end
 
@@ -81,11 +81,11 @@ class LegacyMigrator
           if item.is_a?(Array)
             klass = item.first.class
             count += 1
-            puts "[#{ Time.now }] Saving #{ count } #{ klass }..." if count % 5000 == 0
+            Rails.logger.info "[#{ Time.now }] Saving #{ count } #{ klass }..." if count % 5000 == 0
             item.each { |i| i.save(validate: false) }
           else
             count += 1
-            puts "[#{ Time.now }] Saving #{ count } #{ klass }..." if count % 5000 == 0
+            Rails.logger.info "[#{ Time.now }] Saving #{ count } #{ klass }..." if count % 5000 == 0
             item.save(validate: false)
           end
         end
@@ -94,7 +94,7 @@ class LegacyMigrator
 
     def load_wp_emails
       @wp_emails = {}
-      File.read(File.join(Rails.root, 'db', 'wp_logins.csv')).split("\n").each_with_index do |line, i|
+      Rails.root.join('db', 'wp_logins.csv').read.split("\n").each_with_index do |line, i|
         next unless i > 0
         e1, e2 = *line.split("\t")
         @wp_emails[e1] = true
@@ -103,7 +103,7 @@ class LegacyMigrator
     end
 
     def preload(klass, key_method = :id, type = :single)
-      puts "[#{ Time.now }] Loading #{ klass }..."
+      Rails.logger.info "[#{ Time.now }] Loading #{ klass }..."
       if type == :single
         results = {}
         klass.all.each do |object|
@@ -142,7 +142,7 @@ class LegacyMigrator
 
     def migrate_sites_and_users_and_memberships
       count = 0
-      puts "[#{ Time.now }] migrate_sites_and_users_and_memberships.."
+      Rails.logger.info "[#{ Time.now }] migrate_sites_and_users_and_memberships.."
 
       @legacy_sites.each do |_, legacy_site|
         begin
@@ -162,7 +162,7 @@ class LegacyMigrator
 
           @migrated_sites[site.id] = site
           count += 1
-          puts "[#{ Time.now }] Migrated #{ count } sites" if count % 5000 == 0
+          Rails.logger.info "[#{ Time.now }] Migrated #{ count } sites" if count % 5000 == 0
         rescue ActiveRecord::RecordInvalid => e
           raise e.inspect
         end
@@ -208,7 +208,7 @@ class LegacyMigrator
             end
 
             goal_count += 1
-            puts "[#{ Time.now }] Migrated #{ goal_count } goals to rules" if goal_count % 100 == 0
+            Rails.logger.info "[#{ Time.now }] Migrated #{ goal_count } goals to rules" if goal_count % 100 == 0
 
             if non_mobile_bars.empty? && mobile_bars.empty?
               Rails.logger.info "WTF: Legacy Goal #{ legacy_goal.id } has no bars!"
@@ -359,7 +359,7 @@ class LegacyMigrator
         @migrated_contact_lists_by_site[contact_list.site_id] << contact_list
 
         count += 1
-        puts "[#{ Time.now }] Migrated #{ count } contact lists" if count % 100 == 0
+        Rails.logger.info "[#{ Time.now }] Migrated #{ count } contact lists" if count % 100 == 0
       end
 
       @migrated_contact_lists.each do |_, list|
@@ -386,7 +386,7 @@ class LegacyMigrator
 
           count += 1
           @migrated_identities[identity.id] = identity
-          puts "[#{ Time.now }] Migrated #{ count } identities" if count % 100 == 0
+          Rails.logger.info "[#{ Time.now }] Migrated #{ count } identities" if count % 100 == 0
         else
           Rails.logger.info "WTF:Legacy Site: #{ legacy_id.site_id } doesnt exist for Identity: #{ legacy_id.id }"
         end
@@ -493,23 +493,10 @@ class LegacyMigrator
       date_condition = Condition.date_condition_from_params(start_date, end_date)
 
       # add conditionto in-memory rule
-      if date_condition
-        rule.conditions.build operand: date_condition.operand,
-                              value: date_condition.value,
-                              segment: 'DateCondition'
-      end
 
-      if include_urls.present?
-        rule.conditions.build operand: :is,
-                              value: include_urls,
-                              segment: 'UrlCondition'
-      end
-
-      if does_not_include_urls.present?
-        rule.conditions.build operand: :is_not,
-                              value: does_not_include_urls,
-                              segment: 'UrlCondition'
-      end
+      add_condition rule, date_condition.operand, date_condition.value, 'DateCondition' if date_condition
+      add_condition rule, :is, include_urls, 'UrlCondition' if include_urls.present?
+      add_condition rule, :is_not, does_not_include_urls, 'UrlCondition' if does_not_include_urls.present?
     end
 
     def determine_element_subtype(legacy_goal)
@@ -521,6 +508,10 @@ class LegacyMigrator
       when 'Goals::SocialMedia'
         "social/#{ legacy_goal.data_json['interaction'] }"
       end
+    end
+
+    def add_condition(rule, operand, value, segment)
+      rule.conditions.build operand: operand, value: value, segment: segment
     end
   end
 end

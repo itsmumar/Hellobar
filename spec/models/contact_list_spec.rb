@@ -264,8 +264,8 @@ describe ContactList do
 
   describe '#subscribers' do
     it 'gets subscribers from the data API' do
-      allow(Hello::DataAPI).to receive(:contacts).and_return([['person@gmail.com', 'Per Son', 123_456_789]])
-      expect(contact_list.subscribers).to eql [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.at(123_456_789) }]
+      allow(Hello::DataAPI).to receive(:contacts).and_return([['person@gmail.com', 'Per Son', 123456789]])
+      expect(contact_list.subscribers).to eql [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.zone.at(123456789) }]
     end
 
     it 'defaults to [] if data API returns nil' do

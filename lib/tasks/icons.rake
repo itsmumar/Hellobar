@@ -8,7 +8,7 @@ namespace :icons do
     puts `fontcustom compile`
 
     puts 'removing generated font-face definitions, font file linking will not work without asset-pipeline digests'
-    icons_stylesheet = "#{ Rails.root }/app/assets/stylesheets/settings/_hellobar-icons.scss"
+    icons_stylesheet = Rails.root.join('app', 'assets', 'stylesheets', 'settings', '_hellobar-icons.scss')
     no_font_face = Tempfile.new('no_font_face')
 
     begin

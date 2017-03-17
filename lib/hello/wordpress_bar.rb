@@ -3,12 +3,12 @@ require 'color'
 class Hello::WordpressBar < Hello::WordpressModel
   self.table_name = 'hbwp_posts'
 
-  DEFAULT_FONT = 'arial'
+  DEFAULT_FONT = 'arial'.freeze
 
   BUTTON_COLORS = {
     'dark' => '2d2c29',
     'light' => 'e8e7e9'
-  }
+  }.freeze
 
   def convert_to_site_element!(rule)
     params = {

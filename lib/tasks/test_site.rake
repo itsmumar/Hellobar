@@ -1,7 +1,7 @@
 class HbTestSite
-  ROOT = 'test_site'
-  DEFAULT_FILE = 'public/test.html'
-  SINATRA_FILE = 'test_site.rb'
+  ROOT = 'test_site'.freeze
+  DEFAULT_FILE = 'public/test.html'.freeze
+  SINATRA_FILE = 'test_site.rb'.freeze
 
   def self.path(relative_path = '')
     Rails.root.join(ROOT, relative_path)

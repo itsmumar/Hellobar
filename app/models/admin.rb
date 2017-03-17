@@ -6,8 +6,8 @@ class Admin < ActiveRecord::Base
   MAX_TIME_BEFORE_NEEDS_NEW_PASSWORD = 90.days
   MAX_TIME_TO_VALIDATE_ACCESS_TOKEN = 15.minutes
   MIN_PASSWORD_LENGTH = 8
-  SALT = 'thisismyawesomesaltgoducks'
-  ISSUER = 'HelloBar'
+  SALT = 'thisismyawesomesaltgoducks'.freeze
+  ISSUER = 'HelloBar'.freeze
 
   include Rails.application.routes.url_helpers
 
