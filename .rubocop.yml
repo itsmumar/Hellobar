@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 Rails:
   Enabled: true
 
@@ -29,12 +27,6 @@ Style/FrozenStringLiteralComment:
 
 Style/ClassAndModuleChildren:
   Enabled: false
-
-#Metrics/LineLength:
-#  Max: 130
-#
-#Metrics/AbcSize:
-#  Max: 16
 
 # Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
 # SupportedStyles: slashes, percent_r, mixed
@@ -159,3 +151,48 @@ Rails/Date:
     - 'app/helpers/sites_helper.rb'
     - 'lib/hello/api_performance.rb'
     - 'spec/lib/hello/api_performance_spec.rb'
+
+Metrics/AbcSize:
+  Max: 101 # should be 16
+
+# Configuration parameters: CountComments, ExcludedMethods.
+Metrics/BlockLength:
+  Max: 508 # should be 25
+
+# Configuration parameters: CountBlocks.
+Metrics/BlockNesting:
+  Max: 4
+
+# Offense count: 18
+# Configuration parameters: CountComments.
+Metrics/ClassLength:
+  Max: 427
+
+# Offense count: 40
+Metrics/CyclomaticComplexity:
+  Max: 17
+
+# Offense count: 1724
+# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
+# URISchemes: http, https
+Metrics/LineLength:
+  Max: 1246
+
+# Offense count: 167
+# Configuration parameters: CountComments.
+Metrics/MethodLength:
+  Max: 82
+
+# Offense count: 3
+# Configuration parameters: CountComments.
+Metrics/ModuleLength:
+  Max: 190
+
+# Offense count: 1
+# Configuration parameters: CountKeywordArgs.
+Metrics/ParameterLists:
+  Max: 6
+
+# Offense count: 41
+Metrics/PerceivedComplexity:
+  Max: 18
