@@ -8,25 +8,25 @@ describe Identity do
     it 'initializes a new identity if none exists for a site and provider combination' do
       identity = Identity.where(site_id: site.id, provider: 'aweber').first_or_initialize
 
-      identity.site_id.should == site.id
-      identity.provider.should == 'aweber'
-      identity.id.should be_nil
+      expect(identity.site_id).to eq(site.id)
+      expect(identity.provider).to eq('aweber')
+      expect(identity.id).to be_nil
     end
 
     it 'loads an existing identity if one exists for a site and provider combination' do
       returned_identity = Identity.where(site_id: identity.site_id, provider: identity.provider).first_or_initialize
 
-      returned_identity.should == identity
+      expect(returned_identity).to eq(identity)
     end
 
     it 'uses the provider name to get the API client class' do
       Gibbon::Request.stubs(new: double('gibbon'))
 
       identity = Identity.new(provider: 'mailchimp', extra: { 'metadata' => {} }, credentials: {})
-      identity.service_provider.should be_an_instance_of ServiceProviders::MailChimp
+      expect(identity.service_provider).to be_an_instance_of ServiceProviders::MailChimp
 
       identity = Identity.new(provider: 'aweber', credentials: {})
-      identity.service_provider.should be_an_instance_of ServiceProviders::AWeber
+      expect(identity.service_provider).to be_an_instance_of ServiceProviders::AWeber
     end
 
     describe 'service provider' do
@@ -34,19 +34,19 @@ describe Identity do
         Gibbon::Request.stubs(new: double('gibbon'))
 
         identity = Identity.new(provider: 'mailchimp', extra: { 'metadata' => {} }, credentials: {})
-        ServiceProviders::MailChimp.should_receive(:new).and_raise(Gibbon::MailChimpError)
-        identity.should_receive(:destroy_and_notify_user)
-        identity.service_provider.should be_nil
+        expect(ServiceProviders::MailChimp).to receive(:new).and_raise(Gibbon::MailChimpError)
+        expect(identity).to receive(:destroy_and_notify_user)
+        expect(identity.service_provider).to be_nil
       end
     end
 
     describe 'destroy_and_notify_user' do
       it 'should email the user that there was a problem syncing their identity' do
-        MailerGateway.should_receive(:send_email) do |*args|
-          args[0].should == 'Integration Sync Error'
-          args[1].should == identity.site.owners.first.email
-          args[2][:link].should =~ /http\S+sites\S+#{identity.site_id}/
-          args[2][:integration_name].should == 'MailChimp'
+        expect(MailerGateway).to receive(:send_email) do |*args|
+          expect(args[0]).to eq('Integration Sync Error')
+          expect(args[1]).to eq(identity.site.owners.first.email)
+          expect(args[2][:link]).to match(/http\S+sites\S+#{identity.site_id}/)
+          expect(args[2][:integration_name]).to eq('MailChimp')
         end
 
         identity.destroy_and_notify_user
@@ -59,7 +59,7 @@ describe Identity do
       it 'should do nothing' do
         identity = create(:contact_list, :mailchimp).identity
         identity.contact_lists_updated
-        identity.destroyed?.should be_false
+        expect(identity.destroyed?).to be_false
       end
     end
 
@@ -67,7 +67,7 @@ describe Identity do
       it 'should do nothing' do
         identity = Identity.create(provider: 'aweber', credentials: {}, site: site)
         identity.contact_lists_updated
-        identity.destroyed?.should be_true
+        expect(identity.destroyed?).to be_true
       end
     end
   end
@@ -88,24 +88,24 @@ describe Identity do
     context 'madmimi form' do
       let(:provider) { 'mad_mimi_form' }
       it 'works' do
-        service_provider.list_url.should == 'https://madmimi.com/signups/join/103242'
-        service_provider.action_url.should == 'https://madmimi.com/signups/subscribe/103242'
-        service_provider.list_id.should == '103242'
+        expect(service_provider.list_url).to eq('https://madmimi.com/signups/join/103242')
+        expect(service_provider.action_url).to eq('https://madmimi.com/signups/subscribe/103242')
+        expect(service_provider.list_id).to eq('103242')
 
-        service_provider.params.any? { |item| item[:name] == 'signup[email]' }.should == true
-        service_provider.email_param.should == 'signup[email]'
-        service_provider.name_params.should be_empty
-        service_provider.required_params.should be_empty
+        expect(service_provider.params.any? { |item| item[:name] == 'signup[email]' }).to eq(true)
+        expect(service_provider.email_param).to eq('signup[email]')
+        expect(service_provider.name_params).to be_empty
+        expect(service_provider.required_params).to be_empty
       end
     end
 
     context 'getresponse html mode' do
       let(:provider) { 'get_response' }
       it 'works' do
-        service_provider.list_url.should == 'https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=1324102'
-        service_provider.action_url.should == 'https://app.getresponse.com/add_contact_webform.html?u=G91K' # same for getresponse
-        service_provider.email_param.should == 'email'
-        service_provider.name_param.should == 'name'
+        expect(service_provider.list_url).to eq('https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=1324102')
+        expect(service_provider.action_url).to eq('https://app.getresponse.com/add_contact_webform.html?u=G91K') # same for getresponse
+        expect(service_provider.email_param).to eq('email')
+        expect(service_provider.name_param).to eq('name')
       end
     end
 
@@ -113,34 +113,34 @@ describe Identity do
       let(:provider) { 'get_response' }
       let(:file) { 'get_response_js' }
       it 'works' do
-        service_provider.class.should == ServiceProviders::GetResponse
+        expect(service_provider.class).to eq(ServiceProviders::GetResponse)
 
-        service_provider.list_url.should == 'https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=2350002'
-        service_provider.action_url.should match(/https?:\/\/app\.getresponse\.com\/add_contact_webform\.html\?u=G91K/) # same for getresponse
-        service_provider.email_param.should == 'email'
-        service_provider.name_param.should == 'name'
+        expect(service_provider.list_url).to eq('https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=2350002')
+        expect(service_provider.action_url).to match(/https?:\/\/app\.getresponse\.com\/add_contact_webform\.html\?u=G91K/) # same for getresponse
+        expect(service_provider.email_param).to eq('email')
+        expect(service_provider.name_param).to eq('name')
       end
     end
 
     context 'VerticalResponse' do
       let(:provider) { 'vertical_response' }
       it 'works' do
-        service_provider.email_param.should == 'email_address'
-        service_provider.name_params.should == ['first_name', 'last_name']
-        service_provider.required_params.should be_empty
+        expect(service_provider.email_param).to eq('email_address')
+        expect(service_provider.name_params).to eq(['first_name', 'last_name'])
+        expect(service_provider.required_params).to be_empty
       end
     end
 
     context 'iContact automatic' do
       let(:provider) { 'icontact' }
       it 'works' do
-        service_provider.class.should == ServiceProviders::IContact
+        expect(service_provider.class).to eq(ServiceProviders::IContact)
 
-        service_provider.list_url.should be_nil
-        service_provider.action_url.should == 'http://app.icontact.com/icp/signup.php'
-        service_provider.email_param.should == 'fields_email'
-        service_provider.name_params.should == ['fields_fname', 'fields_lname']
-        service_provider.required_params.should == {
+        expect(service_provider.list_url).to be_nil
+        expect(service_provider.action_url).to eq('http://app.icontact.com/icp/signup.php')
+        expect(service_provider.email_param).to eq('fields_email')
+        expect(service_provider.name_params).to eq(['fields_fname', 'fields_lname'])
+        expect(service_provider.required_params).to eq(
           'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
           'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',
           'listid' => '10108',
@@ -150,8 +150,8 @@ describe Identity do
           'reallistid' => '1',
           'doubleopt' => '0',
           'Submit' => 'Submit'
-        }
-        -> { service_provider.name_param }.should raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
+        )
+        expect { service_provider.name_param }.to raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
       end
     end
 
@@ -159,13 +159,13 @@ describe Identity do
       let(:provider) { 'icontact' }
       let(:file) { 'icontact_manual' }
       it 'works' do
-        service_provider.class.should == ServiceProviders::IContact
+        expect(service_provider.class).to eq(ServiceProviders::IContact)
 
-        service_provider.list_url.should be_nil
-        service_provider.action_url.should == 'https://app.icontact.com/icp/signup.php'
-        service_provider.email_param.should == 'fields_email'
-        service_provider.name_params.should == ['fields_fname', 'fields_lname']
-        service_provider.required_params.should == {
+        expect(service_provider.list_url).to be_nil
+        expect(service_provider.action_url).to eq('https://app.icontact.com/icp/signup.php')
+        expect(service_provider.email_param).to eq('fields_email')
+        expect(service_provider.name_params).to eq(['fields_fname', 'fields_lname'])
+        expect(service_provider.required_params).to eq(
           'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
           'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',
           'listid' => '10108',
@@ -175,8 +175,8 @@ describe Identity do
           'reallistid' => '1',
           'doubleopt' => '0',
           'Submit' => 'Submit'
-        }
-        -> { service_provider.name_param }.should raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
+        )
+        expect { service_provider.name_param }.to raise_error ServiceProviders::EmbedCodeProvider::FirstAndLastNameRequired
       end
     end
 
@@ -186,10 +186,10 @@ describe Identity do
       %w(my_emma my_emma_js my_emma_iframe my_emma_popup).each do |file|
         let(:file) { file }
         it "works with My Emma #{ file }".strip do
-          service_provider.list_url.should == 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a'
-          service_provider.action_url.should == service_provider.list_url # same for my emma
-          service_provider.email_param.should == 'email'
-          service_provider.required_params.keys.should include 'prev_member_email'
+          expect(service_provider.list_url).to eq('https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a')
+          expect(service_provider.action_url).to eq(service_provider.list_url) # same for my emma
+          expect(service_provider.email_param).to eq('email')
+          expect(service_provider.required_params.keys).to include 'prev_member_email'
         end
       end
     end

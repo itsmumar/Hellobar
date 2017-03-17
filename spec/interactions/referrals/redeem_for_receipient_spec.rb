@@ -40,7 +40,7 @@ describe Referrals::RedeemForRecipient do
     create(:referral, recipient: user, state: :signed_up)
     Referrals::RedeemForRecipient.run(site: site)
 
-    site.stub(:change_subscription)
+    allow(site).to receive(:change_subscription)
     Referrals::RedeemForRecipient.run(site: site)
     expect(site).not_to have_received(:change_subscription)
   end

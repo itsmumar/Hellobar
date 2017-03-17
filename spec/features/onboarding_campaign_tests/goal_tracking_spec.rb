@@ -8,7 +8,7 @@ feature 'User onboarding statuses get updated as they select a goal for their fi
   end
 
   before do
-    User.any_instance.stub(:onboarding_status_setter).and_return onboarding_status_setter
+    allow_any_instance_of(User).to receive(:onboarding_status_setter).and_return onboarding_status_setter
   end
 
   scenario 'Goal click is tracked' do

@@ -5,7 +5,7 @@ describe Referral do
   let(:referral) { user.sent_referrals.build }
 
   it 'has no body set by default' do
-    referral.body.should be_nil
+    expect(referral.body).to be_nil
   end
 
   it 'has a standard body that can be set explicitly' do
@@ -15,19 +15,19 @@ describe Referral do
   end
 
   it 'has no site by default' do
-    referral.site.should be_nil
+    expect(referral.site).to be_nil
   end
 
   it 'has a site if the referral sender only has one site' do
     referral.sender = create(:user, :with_site)
     referral.set_site_if_only_one
-    referral.site.should_not be_nil
+    expect(referral.site).not_to be_nil
   end
 
   it 'is invalid if the email belongs to an existing user' do
     referral.email = create(:user).email
     referral.state = 'sent'
-    referral.should_not be_valid
+    expect(referral).not_to be_valid
   end
 
   it 'has a URL once it gets saved and has a token' do

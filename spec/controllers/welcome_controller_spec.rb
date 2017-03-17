@@ -9,12 +9,12 @@ describe WelcomeController, '#index' do
 
     get :index
 
-    response.should redirect_to(site_path(site))
+    expect(response).to redirect_to(site_path(site))
   end
 
   it 'does not redirect a new user' do
     get :index
 
-    response.should be_success
+    expect(response).to be_success
   end
 end

@@ -81,8 +81,8 @@ describe RulesController do
 
       rule = Rule.last
 
-      rule.name.should == rule_name
-      rule.conditions.size.should == 1
+      expect(rule.name).to eq(rule_name)
+      expect(rule.conditions.size).to eq(1)
     end
   end
 
@@ -183,7 +183,7 @@ describe RulesController do
         put :update, site_id: site, id: rule.id, rule: { name: 'NO CONDITIONS!' }
         rule.reload
 
-        rule.name.should == 'NO CONDITIONS!'
+        expect(rule.name).to eq('NO CONDITIONS!')
       end
 
       it 'should add a new rule with url condition' do

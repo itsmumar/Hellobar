@@ -69,7 +69,7 @@ describe Hello::DataAPI do
     let(:contact_lists) { create_list :contact_list, list_size, site: site }
 
     it 'slices up contact lists ids into multiple requests based on API_MAX_SLICE' do
-      expect(Hello::DataAPI).to receive(:get).exactly(:twice).and_return {}
+      expect(Hello::DataAPI).to receive(:get).exactly(:twice) {}
 
       Hello::DataAPI.contact_list_totals site, contact_lists
     end

@@ -9,14 +9,14 @@ describe ContactList do
 
   before do
     if identity.provider == 'email'
-      identity.stub(:service_provider_class).and_return(ServiceProviders::Email)
-      ServiceProviders::Email.stub(:settings).and_return(oauth: false)
+      allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::Email)
+      allow(ServiceProviders::Email).to receive(:settings).and_return(oauth: false)
       contact_list.stub(syncable?: true)
       expect(service_provider).to be_a(ServiceProviders::Email)
-      service_provider.stub(:batch_subscribe).and_return(nil)
+      allow(service_provider).to receive(:batch_subscribe).and_return(nil)
     end
 
-    Hello::DataAPI.stub(:contacts).and_return([
+    allow(Hello::DataAPI).to receive(:contacts).and_return([
       ['test1@hellobar.com', '', 1384807897],
       ['test2@hellobar.com', '', 1384807898]
     ])
@@ -53,23 +53,23 @@ describe ContactList do
       list.provider = 'notanesp'
       list.identity = nil
 
-      list.should_not be_valid
-      list.errors.messages[:provider].should include('is not valid')
+      expect(list).not_to be_valid
+      expect(list.errors.messages[:provider]).to include('is not valid')
     end
 
     it 'should clear the identity if provider is "0"' do
       list = create(:contact_list, :mailchimp)
-      list.identity.should_not be_blank
+      expect(list.identity).not_to be_blank
 
       list.update_attributes(provider: '0')
-      list.identity.should be_blank
+      expect(list.identity).to be_blank
     end
 
     it 'should notify the old identity when the identity is updated' do
       list = create(:contact_list, :mailchimp)
       old_identity = list.identity
-      old_identity.should_receive(:contact_lists_updated)
-      Identity.stub(:find_by).and_return(old_identity)
+      expect(old_identity).to receive(:contact_lists_updated)
+      allow(Identity).to receive(:find_by).and_return(old_identity)
       list.identity = create(:identity, :constantcontact)
       list.save
     end
@@ -77,8 +77,8 @@ describe ContactList do
     it 'should message the identity when the contact list is destroyed' do
       list = create(:contact_list, :mailchimp)
       old_identity = list.identity
-      old_identity.should_receive(:contact_lists_updated)
-      Identity.stub(:find_by).and_return(old_identity)
+      expect(old_identity).to receive(:contact_lists_updated)
+      allow(Identity).to receive(:find_by).and_return(old_identity)
       list.destroy
     end
   end
@@ -175,12 +175,12 @@ describe ContactList do
   it 'should handle invalid JSON correctly' do
     contact_list.update_column :data, '{"url":"http://yoursite.com/goal",does_not_include":[",'
 
-    -> { contact_list.reload.data }.should raise_error
+    expect { contact_list.reload.data }.to raise_error
   end
 
   describe 'email syncing errors' do
     before do
-      Hello::DataAPI.stub(:contacts).and_return([:foo, :bar])
+      allow(Hello::DataAPI).to receive(:contacts).and_return([:foo, :bar])
       contact_list.stub(syncable?: true)
       contact_list.stub(oauth?: true)
     end
@@ -193,18 +193,18 @@ describe ContactList do
       end
 
       it 'if someone has an invalid list stored, delete the identity and notify them' do
-        contact_list.should_receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: Invalid MailChimp List ID'))
-        contact_list.identity.should_receive :destroy_and_notify_user
+        expect(contact_list).to receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: Invalid MailChimp List ID'))
+        expect(contact_list.identity).to receive :destroy_and_notify_user
       end
 
       it "if someone's token is no longer valid, delete the identity and notify them" do
-        contact_list.should_receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: Invalid Mailchimp API Key'))
-        contact_list.identity.should_receive :destroy_and_notify_user
+        expect(contact_list).to receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: Invalid Mailchimp API Key'))
+        expect(contact_list.identity).to receive :destroy_and_notify_user
       end
 
       it 'if someone has deleted their account, delete the identity and notify them' do
-        contact_list.should_receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: This account has been deactivated'))
-        contact_list.identity.should_receive :destroy_and_notify_user
+        expect(contact_list).to receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: This account has been deactivated'))
+        expect(contact_list.identity).to receive :destroy_and_notify_user
       end
     end
 
@@ -214,8 +214,8 @@ describe ContactList do
       end
 
       it 'if someone has revoked our access, delete the identity and notify them' do
-        contact_list.should_receive(:batch_subscribe).and_raise(CreateSend::RevokedOAuthToken.new(Hashie::Mash.new(Code: 122, Message: 'Revoked OAuth Token')))
-        contact_list.identity.should_receive :destroy_and_notify_user
+        expect(contact_list).to receive(:batch_subscribe).and_raise(CreateSend::RevokedOAuthToken.new(Hashie::Mash.new(Code: 122, Message: 'Revoked OAuth Token')))
+        expect(contact_list.identity).to receive :destroy_and_notify_user
       end
     end
 
@@ -225,13 +225,13 @@ describe ContactList do
       end
 
       it 'if someone has an invalid list stored, delete the identity and notify them' do
-        contact_list.should_receive(:batch_subscribe).and_raise(URI::InvalidURIError.new('404 Resource Not Found'))
-        contact_list.identity.should_receive :destroy_and_notify_user
+        expect(contact_list).to receive(:batch_subscribe).and_raise(URI::InvalidURIError.new('404 Resource Not Found'))
+        expect(contact_list.identity).to receive :destroy_and_notify_user
       end
 
       it "if someone's token is no longer valid, or they have deleted their account, delete the identity and notify them" do
-        contact_list.should_receive(:batch_subscribe).and_raise(ArgumentError.new('This account has been deactivated'))
-        contact_list.identity.should_receive :destroy_and_notify_user
+        expect(contact_list).to receive(:batch_subscribe).and_raise(ArgumentError.new('This account has been deactivated'))
+        expect(contact_list.identity).to receive :destroy_and_notify_user
       end
     end
 
@@ -242,8 +242,8 @@ describe ContactList do
 
       it 'if someone has an invalid list stored, delete the identity and notify them' do
         response = OpenStruct.new(code: 404, body: '404 Resource Not Found')
-        contact_list.should_receive(:batch_subscribe).and_raise(RestClient::ResourceNotFound.new(response))
-        contact_list.identity.should_receive :destroy_and_notify_user
+        expect(contact_list).to receive(:batch_subscribe).and_raise(RestClient::ResourceNotFound.new(response))
+        expect(contact_list.identity).to receive :destroy_and_notify_user
       end
     end
   end
@@ -264,13 +264,13 @@ describe ContactList do
 
   describe '#subscribers' do
     it 'gets subscribers from the data API' do
-      Hello::DataAPI.stub(contacts: [['person@gmail.com', 'Per Son', 123_456_789]])
-      contact_list.subscribers.should == [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.at(123_456_789) }]
+      allow(Hello::DataAPI).to receive(:contacts).and_return([['person@gmail.com', 'Per Son', 123_456_789]])
+      expect(contact_list.subscribers).to eql [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.at(123_456_789) }]
     end
 
     it 'defaults to [] if data API returns nil' do
-      Hello::DataAPI.stub(contacts: nil)
-      contact_list.subscribers.should == []
+      allow(Hello::DataAPI).to receive(:contacts).and_return(nil)
+      expect(contact_list.subscribers).to be_empty
     end
 
     it 'sends a limit to the data api if specified' do
@@ -281,29 +281,29 @@ describe ContactList do
 
   describe '#subscriber_statuses' do
     it 'returns empty hash if service provider does not retreive statuses' do
-      service_provider.stub(:respond_to?).with(:subscriber_statuses).and_return false
-      contact_list.subscriber_statuses([{ email: 'test' }]).should == {}
+      allow(service_provider).to receive(:respond_to?).with(:subscriber_statuses).and_return false
+      expect(contact_list.subscriber_statuses([{ email: 'test' }])).to eq({})
     end
 
     it 'returns a hash with the status as returned by the service provider' do
       subscribers = [{ email: 'test@test.com' }, { email: 'test2@test.com' }]
       result = { 'test@test.com' => 'pending', 'test2@test.com' => 'subscribed' }
-      service_provider
-        .should_receive(:subscriber_statuses)
+      expect(service_provider)
+        .to receive(:subscriber_statuses)
         .with(contact_list, ['test@test.com', 'test2@test.com']).and_return(result)
-      contact_list.subscriber_statuses(subscribers).should == result
+      expect(contact_list.subscriber_statuses(subscribers)).to eq(result)
     end
   end
 
   describe '#num_subscribers' do
     it 'gets number of subscribers from the data API' do
       Hello::DataAPI.stub(contact_list_totals: { contact_list.id.to_s => 5 })
-      contact_list.num_subscribers.should == 5
+      expect(contact_list.num_subscribers).to eq(5)
     end
 
     it 'defaults to 0 if data API returns nil' do
       Hello::DataAPI.stub(contact_list_totals: nil)
-      contact_list.num_subscribers.should == 0
+      expect(contact_list.num_subscribers).to eq(0)
     end
   end
 
@@ -311,9 +311,9 @@ describe ContactList do
     it 'drops nil values in data' do
       contact_list.data = { 'remote_name' => '', 'remote_id' => 1 }
       contact_list.identity = nil
-      contact_list.stub(:sync_all!).and_return(true)
+      allow(contact_list).to receive(:sync_all!).and_return(true)
       contact_list.save
-      contact_list.data['remote_name'].should be_nil
+      expect(contact_list.data['remote_name']).to be_nil
     end
   end
 end
@@ -326,7 +326,11 @@ describe ContactList, 'embed code' do
   context 'invalid' do
     let(:embed_code) { 'asdf' }
     before { subject.data['embed_code'] = embed_code }
-    its(:data) { should == { 'embed_code' => 'asdf' } }
+
+    describe '#data' do
+      it { expect(subject.data).to eql 'embed_code' => 'asdf' }
+    end
+
     it { expect(subject.valid?).to be false }
   end
 
