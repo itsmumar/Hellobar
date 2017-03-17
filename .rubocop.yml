@@ -116,5 +116,10 @@ Rails/DynamicFindBy:
     - find_by_email
     - find_by_script
 
+# Configuration parameters: Blacklist.
+# Blacklist: decrement!, decrement_counter, increment!, increment_counter, toggle!, touch, update_all, update_attribute, update_column, update_columns, update_counters
+Rails/SkipsModelValidations:
+  Enabled: false
+
 Lint/EmptyWhen:
   Enabled: false
