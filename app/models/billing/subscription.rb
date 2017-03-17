@@ -188,6 +188,10 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def external_events?
+      false
+    end
+
     protected
 
     def parent_class
@@ -396,6 +400,10 @@ class Subscription < ActiveRecord::Base
       end
 
       def geolocation_injection?
+        true
+      end
+
+      def external_events?
         true
       end
     end

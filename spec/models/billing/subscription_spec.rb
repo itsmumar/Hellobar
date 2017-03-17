@@ -301,7 +301,7 @@ describe Subscription do
     end
 
     context 'Subscription::ProManaged capabilities' do
-      specify 'Subscription::Free does not have ProManaged capabilities' do
+      specify 'Subscription::Free does not have the ProManaged capabilities' do
         subscription = build_stubbed :subscription, :free
         capabilities = subscription.capabilities
 
@@ -309,6 +309,7 @@ describe Subscription do
         expect(capabilities.content_upgrades?).to be_false
         expect(capabilities.autofills?).to be_false
         expect(capabilities.geolocation_injection?).to be_false
+        expect(capabilities.external_events?).to be_false
       end
 
       specify 'ProManaged plan has certain custom capabilities' do
@@ -319,6 +320,7 @@ describe Subscription do
         expect(capabilities.content_upgrades?).to be_true
         expect(capabilities.autofills?).to be_true
         expect(capabilities.geolocation_injection?).to be_true
+        expect(capabilities.external_events?).to be_true
       end
     end
 
