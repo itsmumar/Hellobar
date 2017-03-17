@@ -8,11 +8,14 @@ module Hello
   module InternalAnalytics
     MAX_TESTS = 4000
     MAX_VALUES_PER_TEST = 10
-    TESTS = {}
     VISITOR_ID_COOKIE = :vid
     VISITOR_ID_LENGTH = 40
-    USER_ID_NOT_SET_YET = 'x'
+    USER_ID_NOT_SET_YET = 'x'.freeze
     AB_TEST_COOKIE = :hb3ab
+
+    cattr_accessor :tests do
+      {}
+    end
 
     class << self
       def register_test(name, values, index, weights = [], user_start_date = nil)
@@ -42,7 +45,7 @@ module Hello
         end
 
         @expected_index += 1
-        TESTS[name] = { values: values, index: index, weights: weights, name: name, user_start_date: user_start_date }
+        tests[name] = { values: values, index: index, weights: weights, name: name, user_start_date: user_start_date }
       end
 
       def load_ab_tests
@@ -103,7 +106,7 @@ module Hello
 
     def set_ab_variation(test_name, value)
       # First make sure we have registered this test
-      TESTS.fetch(test_name) { raise "Could not find test: #{ test_name.inspect }" }
+      tests.fetch(test_name) { raise "Could not find test: #{ test_name.inspect }" }
       # Now make sure the value is a valid value
       value_index = ab_test[:values].index(value)
       raise "Could not find value: #{ value.inspect } in test #{ test_name.inspect } => #{ ab_test.inspect }" unless value_index
@@ -113,7 +116,7 @@ module Hello
 
     def ab_test(test_name)
       # First make sure we have registered this test
-      TESTS.fetch(test_name) { raise "Could not find test: #{ test_name.inspect }" }
+      tests.fetch(test_name) { raise "Could not find test: #{ test_name.inspect }" }
     end
 
     def ab_variation_index_without_setting(test_name, user = nil)
@@ -138,7 +141,7 @@ module Hello
     end
 
     def ab_variation_or_nil(test_name, user = nil)
-      return unless TESTS[test_name]
+      return unless tests[test_name]
       ab_variation(test_name, user)
     end
 

@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-EMBED_DATA = { 'embed_code' => 'asdf' }
-
 describe ContactListsHelper, type: :helper do
   let(:site) { create(:site) }
   let(:contact_list) { create(:contact_list, :mailchimp, site: site) }
@@ -20,7 +18,7 @@ describe ContactListsHelper, type: :helper do
 
   context 'embed code ESPs' do
     let(:contact_list) do
-      ContactList.new(name: 'asdf', site: site, data: EMBED_DATA)
+      ContactList.new(name: 'asdf', site: site, data: { 'embed_code' => 'asdf' })
     end
 
     context 'MadMimi' do

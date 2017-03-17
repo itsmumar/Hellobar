@@ -387,7 +387,7 @@ class Subscription < ActiveRecord::Base
   end
 
   # These need to be in the order of least expensive to most expensive
-  PLANS = [Free, ProblemWithPayment, Pro, Enterprise]
+  PLANS = [Free, ProblemWithPayment, Pro, Enterprise].freeze
   class Comparison
     attr_reader :from_subscription, :to_subscription, :direction
     def initialize(from_subscription, to_subscription)

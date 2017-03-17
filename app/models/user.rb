@@ -55,8 +55,8 @@ class User < ActiveRecord::Base
 
   attr_accessor :legacy_migration, :timezone, :is_impersonated
 
-  ACTIVE_STATUS = 'active'
-  TEMPORARY_STATUS = 'temporary'
+  ACTIVE_STATUS = 'active'.freeze
+  TEMPORARY_STATUS = 'temporary'.freeze
   INVITE_EXPIRE_RATE = 2.weeks
 
   # returns a user with a random email and password

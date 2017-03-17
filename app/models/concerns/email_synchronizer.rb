@@ -9,7 +9,7 @@ module EmailSynchronizer
     URI::InvalidURIError,
     ArgumentError,
     RestClient::ResourceNotFound
-  ]
+  ].freeze
 
   ESP_NONTRANSIENT_ERRORS = [
     'Invalid MailChimp List ID',
@@ -17,7 +17,7 @@ module EmailSynchronizer
     'This account has been deactivated',
     '122: Revoked OAuth Token',
     '404 Resource Not Found'
-  ]
+  ].freeze
 
   # Extracted from contact_list#subscribe_all_emails_to_list!
   def sync_all!

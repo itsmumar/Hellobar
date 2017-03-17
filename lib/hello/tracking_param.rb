@@ -1,6 +1,6 @@
 module Hello
   class TrackingParam
-    SALT = 'imasaltydogyarrr'
+    SALT = 'imasaltydogyarrr'.freeze
 
     def self.encode_tracker(user_id, event, props)
       props = [props].to_json

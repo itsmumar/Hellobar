@@ -2,7 +2,7 @@ class Rule < ActiveRecord::Base
   MATCH_ON = {
     all: 'all',
     any: 'any'
-  }
+  }.freeze
 
   belongs_to :site, touch: true, inverse_of: :rules
   has_many :site_elements, dependent: :destroy

@@ -3,18 +3,18 @@ require 'fog'
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
 
-  TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade]
+  TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade].freeze
 
-  DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'
-  DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site..."
+  DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'.freeze
+  DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,
     1 => :custom_thank_you_text,
     2 => :redirect
-  }
+  }.freeze
 
-  WHITELISTED_TAGS = %w(p strong em u a s sub sup img span ul ol li br hr table tbody tr th td blockquote)
-  WHITELISTED_ATTRS = %w(style class href target alt src data-hb-geolocation)
+  WHITELISTED_TAGS = %w(p strong em u a s sub sup img span ul ol li br hr table tbody tr th td blockquote).freeze
+  WHITELISTED_ATTRS = %w(style class href target alt src data-hb-geolocation).freeze
 
   # valid bar types and their conversion units
   BAR_TYPES = {
@@ -35,10 +35,10 @@ class SiteElement < ActiveRecord::Base
 
     # themes type `template`
     'traffic_growth'                  => 'Emails'
-  }
+  }.freeze
 
-  TEMPLATE_NAMES = %w(traffic_growth)
-  SHORT_SUBTYPES = %w(traffic email call social announcement)
+  TEMPLATE_NAMES = %w(traffic_growth).freeze
+  SHORT_SUBTYPES = %w(traffic email call social announcement).freeze
 
   belongs_to :rule, touch: true
   belongs_to :contact_list
@@ -95,7 +95,7 @@ class SiteElement < ActiveRecord::Base
     :updated_at,
     :deleted_at,
     :paused
-  ]
+  ].freeze
 
   QUESTION_DEFAULTS = {
     question: 'First time here?',
@@ -105,7 +105,7 @@ class SiteElement < ActiveRecord::Base
     answer2response: 'Welcome back! Check out our new sale.',
     answer1link_text: 'Take the tour',
     answer2link_text: 'Shop now'
-  }
+  }.freeze
 
   QUESTION_DEFAULTS.keys.each do |attr_name|
     define_method attr_name do

@@ -1,7 +1,7 @@
 Rails.application.config.to_prepare do
-  THEME_DIRECTORY      = 'lib/themes'
-  TEMPLATE_DIRECTORY   = "#{ THEME_DIRECTORY }/templates"
-  METADATA_FILENAME    = 'metadata.json'
+  THEME_DIRECTORY      = 'lib/themes'.freeze
+  TEMPLATE_DIRECTORY   = "#{ THEME_DIRECTORY }/templates".freeze
+  METADATA_FILENAME    = 'metadata.json'.freeze
 
   themes = []
 

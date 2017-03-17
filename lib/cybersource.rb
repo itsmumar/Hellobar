@@ -20,8 +20,8 @@ module HB
 end
 
 class CyberSourceCreditCard < PaymentMethodDetails
-  CC_FIELDS = %w(number month year first_name last_name brand verification_value)
-  ADDRESS_FIELDS = %w(city state zip address1 country)
+  CC_FIELDS = %w(number month year first_name last_name brand verification_value).freeze
+  ADDRESS_FIELDS = %w(city state zip address1 country).freeze
   # Note: any fields not included here will be stripped out when setting
   FIELDS = CC_FIELDS + ADDRESS_FIELDS + ['token']
   # These are the required fields to be set

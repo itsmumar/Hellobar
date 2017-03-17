@@ -4,7 +4,7 @@ class Users::SessionsController < Devise::SessionsController
   TEMP_MIGRATION_USERS = [
     'sarangan2@gmail.com',
     'oli@unbounce.com'
-  ]
+  ].freeze
 
   def find_email
     email = params[:user].try(:[], :email)

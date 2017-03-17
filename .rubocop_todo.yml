@@ -54,17 +54,8 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 18
 
-# Offense count: 228
-Style/Documentation:
-  Enabled: false
-
 # Offense count: 58
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:
   Exclude:
     - 'lib/legacy_migrator.rb'
-
-# Offense count: 54
-# Cop supports --auto-correct.
-Style/MutableConstant:
-  Enabled: false

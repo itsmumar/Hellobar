@@ -1,5 +1,5 @@
 class Coupon < ActiveRecord::Base
-  REFERRAL_LABEL = 'for_referrals'
+  REFERRAL_LABEL = 'for_referrals'.freeze
   REFERRAL_AMOUNT = Subscription::Pro.defaults[:monthly_amount]
 
   scope :internal, -> { where(public: false) }
