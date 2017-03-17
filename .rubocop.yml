@@ -155,3 +155,4 @@ Rails/Date:
     - 'app/helpers/email_digest_helper.rb'
     - 'app/helpers/sites_helper.rb'
     - 'lib/hello/api_performance.rb'
+    - 'spec/lib/hello/api_performance_spec.rb'
