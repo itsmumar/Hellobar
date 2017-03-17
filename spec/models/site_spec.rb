@@ -113,7 +113,7 @@ describe Site do
 
       expect(site).to receive(:subscriptions).and_return [subscription]
 
-      expect(site).to have_pro_managed_subscription
+      expect(site).to be_pro_managed_subscription
     end
 
     it 'returns false if the site does not have a ProManaged subscription' do
@@ -123,7 +123,7 @@ describe Site do
 
       expect(site).to receive(:subscriptions).and_return [free, pro]
 
-      expect(site).not_to have_pro_managed_subscription
+      expect(site).not_to be_pro_managed_subscription
     end
   end
 
