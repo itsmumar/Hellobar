@@ -388,20 +388,20 @@ class Site < ActiveRecord::Base
     url
   end
 
-  def get_settings
-    JSON.parse(settings)
+  def settings
+    JSON.parse(self[:settings])
   rescue
     return {}
   end
 
   def update_content_upgrade_styles!(style_params)
-    site_settings = get_settings
+    site_settings = settings
     site_settings['content_upgrade'] = style_params
 
     update_attribute(:settings, site_settings.to_json)
   end
 
-  def get_content_upgrade_styles
+  def content_upgrade_styles
     return JSON.parse(settings)['content_upgrade']
   rescue
     return {}
@@ -495,24 +495,22 @@ class Site < ActiveRecord::Base
   def generate_static_assets(options = {})
     update_column(:script_attempted_to_generate_at, Time.now)
 
-    Timeout.timeout(20) do
-      store_site_scripts_locally = Hellobar::Settings[:store_site_scripts_locally]
-      compress_script = !store_site_scripts_locally
+    store_site_scripts_locally = Hellobar::Settings[:store_site_scripts_locally]
+    compress_script = !store_site_scripts_locally
 
-      generated_script_content = options[:script_content] || script_content(compress_script)
+    generated_script_content = options[:script_content] || script_content(compress_script)
 
-      if store_site_scripts_locally
-        File.open(File.join(Rails.root, 'public/generated_scripts/', script_name), 'w') { |f| f.puts(generated_script_content) }
-      else
-        Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
+    if store_site_scripts_locally
+      File.open(File.join(Rails.root, 'public/generated_scripts/', script_name), 'w') { |f| f.puts(generated_script_content) }
+    else
+      Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
 
-        site_elements.each do |site_element|
-          next unless site_element.wordpress_bar_id
-          users.each do |user|
-            if user.wordpress_user_id
-              name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"
-              Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
-            end
+      site_elements.each do |site_element|
+        next unless site_element.wordpress_bar_id
+        users.each do |user|
+          if user.wordpress_user_id
+            name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"
+            Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
           end
         end
       end

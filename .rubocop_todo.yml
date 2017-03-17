@@ -99,30 +99,6 @@ Rails/SkipsModelValidations:
 Rails/TimeZone:
   Enabled: false
 
-# Offense count: 9
-Style/AccessorMethodName:
-  Exclude:
-    - 'app/controllers/sites_controller.rb'
-    - 'app/controllers/tracking_controller.rb'
-    - 'app/controllers/user_controller.rb'
-    - 'app/models/admin.rb'
-    - 'app/models/site.rb'
-    - 'lib/hello/internal_analytics.rb'
-    - 'lib/script_generator.rb'
-
-# Offense count: 1
-Style/AsciiComments:
-  Exclude:
-    - 'lib/service_providers/get_response_api.rb'
-
-# Offense count: 8
-Style/ClassVars:
-  Exclude:
-    - 'app/models/condition.rb'
-    - 'lib/hello/internal_analytics.rb'
-    - 'lib/hello/suggested_opportunities.rb'
-    - 'lib/hello/wordpress_model.rb'
-
 # Offense count: 228
 Style/Documentation:
   Enabled: false
@@ -141,43 +117,10 @@ Style/DoubleNegation:
     - 'lib/service_providers/mad_mimi_api.rb'
     - 'lib/service_providers/mail_chimp.rb'
 
-# Offense count: 1
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: format, sprintf, percent
-Style/FormatString:
-  Exclude:
-    - 'app/serializers/subscription_serializer.rb'
-
 # Offense count: 58
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:
   Enabled: false
-
-# Offense count: 4
-Style/IdenticalConditionalBranches:
-  Exclude:
-    - 'app/controllers/users/omniauth_callbacks_controller.rb'
-    - 'lib/hello/suggested_opportunities.rb'
-
-# Offense count: 6
-Style/IfInsideElse:
-  Exclude:
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/concerns/subscribable.rb'
-    - 'app/controllers/sites_controller.rb'
-    - 'app/helpers/email_digest_helper.rb'
-    - 'lib/script_generator.rb'
-
-# Offense count: 1
-Style/MethodMissing:
-  Exclude:
-    - 'lib/hello/api_performance.rb'
-
-# Offense count: 2
-Style/MultilineBlockChain:
-  Exclude:
-    - 'app/helpers/admin/users_helper.rb'
-    - 'app/mailers/digest_mailer.rb'
 
 # Offense count: 54
 # Cop supports --auto-correct.
@@ -201,17 +144,3 @@ Style/PredicateName:
     - 'app/models/user.rb'
     - 'app/serializers/subscription_serializer.rb'
     - 'lib/hello/wordpress_user.rb'
-
-# Offense count: 1
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: snake_case, camelCase
-Style/VariableName:
-  Exclude:
-    - 'spec/models/site_element_spec.rb'
-
-# Offense count: 12
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: snake_case, normalcase, non_integer
-Style/VariableNumber:
-  Exclude:
-    - 'spec/helpers/site_elements_helper_spec.rb'

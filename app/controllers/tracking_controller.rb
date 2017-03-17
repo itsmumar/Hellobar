@@ -1,11 +1,11 @@
 class TrackingController < ApplicationController
   def track
-    Analytics.track(params[:type], params[:id], params[:event], get_props)
+    Analytics.track(params[:type], params[:id], params[:event], props)
     render text: 'ok'
   end
 
   def track_current_person
-    Analytics.track(*current_person_type_and_id, params[:event], get_props)
+    Analytics.track(*current_person_type_and_id, params[:event], props)
     render text: params.inspect
   end
 
@@ -24,7 +24,7 @@ class TrackingController < ApplicationController
 
   protected
 
-  def get_props
+  def props
     return nil unless params[:props]
     begin
       return JSON.parse(params[:props])

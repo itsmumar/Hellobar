@@ -32,7 +32,7 @@ class QueueWorker
     queues = filtered_queues(sqs, queue_name_filter)
 
     queues.collect do |queue|
-      sqs.client.get_queue_attributes(queue_url: queue.url, attribute_names: VIEW_ATTRIBUTES)
+      sqs.client.queue_attributes(queue_url: queue.url, attribute_names: VIEW_ATTRIBUTES)
     end
   end
 

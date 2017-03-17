@@ -233,49 +233,49 @@ describe SiteElementsHelper do
     end
 
     it 'does not group elements that are in different rules' do
-      variation_1 = create(:site_element, :bar, :traffic)
-      variation_2 = variation_1.dup
-      variation_3 = variation_1.dup
+      variation1 = create(:site_element, :bar, :traffic)
+      variation2 = variation1.dup
+      variation3 = variation1.dup
 
-      variation_2.save
-      other_rule = create(:rule, site: variation_1.site)
-      variation_3.rule = other_rule
-      variation_3.save
+      variation2.save
+      other_rule = create(:rule, site: variation1.site)
+      variation3.rule = other_rule
+      variation3.save
 
-      allow(variation_3).to receive(:rule_id) { 0 }
+      allow(variation3).to receive(:rule_id) { 0 }
 
-      allow(variation_1).to receive(:total_views) { 250 }
-      allow(variation_2).to receive(:total_views) { 250 }
-      allow(variation_3).to receive(:total_views) { 250 }
+      allow(variation1).to receive(:total_views) { 250 }
+      allow(variation2).to receive(:total_views) { 250 }
+      allow(variation3).to receive(:total_views) { 250 }
 
-      allow(variation_1).to receive(:total_conversions) { 250 }
-      allow(variation_2).to receive(:total_conversions) { 250 }
-      allow(variation_3).to receive(:total_conversions) { 250 }
+      allow(variation1).to receive(:total_conversions) { 250 }
+      allow(variation2).to receive(:total_conversions) { 250 }
+      allow(variation3).to receive(:total_conversions) { 250 }
 
-      allow_any_instance_of(Site).to receive(:site_elements).and_return([variation_1, variation_2, variation_3])
+      allow_any_instance_of(Site).to receive(:site_elements).and_return([variation1, variation2, variation3])
 
-      icon_1 = helper.ab_test_icon(variation_1)
-      icon_2 = helper.ab_test_icon(variation_2)
-      icon_3 = helper.ab_test_icon(variation_3)
+      icon = helper.ab_test_icon(variation1)
+      icon2 = helper.ab_test_icon(variation2)
+      icon3 = helper.ab_test_icon(variation3)
 
-      expect(icon_1).to include('icon-circle')
-      expect(icon_2).to include('icon-circle')
-      expect(icon_3).to include('icon-abtest')
+      expect(icon).to include('icon-circle')
+      expect(icon2).to include('icon-circle')
+      expect(icon3).to include('icon-abtest')
     end
 
     it 'only groups elements with the same type' do
       site = create(:site, :with_rule)
-      variation_1 = create(:site_element, :bar, :traffic, site: site)
-      variation_2 = create(:site_element, :bar, :traffic, site: site)
-      variation_3 = create(:site_element, :slider, :traffic, site: site)
+      variation1 = create(:site_element, :bar, :traffic, site: site)
+      variation2 = create(:site_element, :bar, :traffic, site: site)
+      variation3 = create(:site_element, :slider, :traffic, site: site)
 
-      icon_1 = helper.ab_test_icon(variation_1)
-      icon_2 = helper.ab_test_icon(variation_2)
-      icon_3 = helper.ab_test_icon(variation_3)
+      icon1 = helper.ab_test_icon(variation1)
+      icon2 = helper.ab_test_icon(variation2)
+      icon3 = helper.ab_test_icon(variation3)
 
-      expect(icon_1).to include('icon-circle')
-      expect(icon_2).to include('icon-circle')
-      expect(icon_3).to include('icon-abtest')
+      expect(icon1).to include('icon-circle')
+      expect(icon2).to include('icon-circle')
+      expect(icon3).to include('icon-abtest')
     end
   end
 

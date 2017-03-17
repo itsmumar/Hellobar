@@ -145,7 +145,7 @@ class Condition < ActiveRecord::Base
   end
 
   def operand_is_valid
-    @@operands ||= {
+    @operands ||= {
       'DateCondition'             => %w(is is_not before after between),
       'DeviceCondition'           => %w(is is_not),
       'EveryXSession'             => %w(every),
@@ -164,7 +164,7 @@ class Condition < ActiveRecord::Base
       'UtmCondition'              => %w(is is_not includes does_not_include)
     }
 
-    if @@operands[segment] && !@@operands[segment].include?(operand)
+    if @operands[segment] && !@operands[segment].include?(operand)
       errors.add(:operand, 'is not valid')
     end
   end

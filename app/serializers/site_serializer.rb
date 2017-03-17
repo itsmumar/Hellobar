@@ -19,7 +19,7 @@ class SiteSerializer < ActiveModel::Serializer
 
       if google
         analytics = GoogleAnalytics.new(google.access_token)
-        analytics.get_latest_pageviews(object.url)
+        analytics.latest_pageviews(object.url)
       end
     end
 

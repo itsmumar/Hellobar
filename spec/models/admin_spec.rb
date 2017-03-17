@@ -118,7 +118,7 @@ describe Admin do
     expect(admin.password_last_reset).to be < 1.minute.ago
 
     expect(Pony).to receive(:mail)
-    expect(admin).to receive(:set_password!).with('new_password')
+    expect(admin).to receive(:password=).with('new_password')
 
     admin.reset_password!('new_password')
 

@@ -6,6 +6,8 @@ module Hello
     CONVERSION_SCALE = 10_000_000
 
     class << self
+      attr_reader :tables
+
       def setup
         connect
         load_tables
@@ -18,7 +20,7 @@ module Hello
       #   segment2 => [num_views_week, num_conversions_week],
       #   ...
       # }
-      def get_segments_by_week(site_element_ids, start_date, end_date, segment_keys)
+      def segments_by_week(site_element_ids, start_date, end_date, segment_keys)
         # Query every site element id
         final_results = Hash.new { |h, k| h[k] = [0, 0] }
         site_element_ids.each do |site_element_id|
@@ -27,7 +29,7 @@ module Hello
           ydays_by_year_month(start_date, end_date).each do |year_month, ydays|
             year_offset = (year_month.split('_').first.to_i - 2000) * 365
             # Get the table
-            table = get_segments_table_for_year_month(year_month)
+            table = segments_table_for_year_month(year_month)
             begin
               segment_keys.each do |segment_key|
                 table.items.query(
@@ -69,7 +71,7 @@ module Hello
       # For the given start date and end date returns a hash where the
       # key is the year month (e.g. "2014_9") and the value is an array
       # of ydays that fall in that month (e.g. [245,246,...]). This
-      # is used by get_segments
+      # is used by segments
       def ydays_by_year_month(start_date, end_date)
         date = start_date
         day = 24 * 60 * 60
@@ -92,10 +94,6 @@ module Hello
         end
       end
 
-      def tables
-        @@tables
-      end
-
       # Returns the segment table name for the given date
       def segment_table_name(date)
         segment_table_name_for_year_month("#{ date.year }_#{ date.month }")
@@ -113,40 +111,40 @@ module Hello
           access_key_id: Hellobar::Settings[:aws_access_key_id],
           secret_access_key: Hellobar::Settings[:aws_secret_access_key]
         )
-        # We use both the "friendly" interface (@@dynamo_db) and the
-        # direct interface (@@client)
-        @@dynamo_db = AWS::DynamoDB.new
-        @@client = AWS::DynamoDB::Client.new(api_version: '2012-08-10')
+        # We use both the "friendly" interface (@dynamo_db) and the
+        # direct interface (@client)
+        @dynamo_db = AWS::DynamoDB.new
+        @client = AWS::DynamoDB::Client.new(api_version: '2012-08-10')
       end
 
       def load_tables
         # Load the table schemas
-        @@tables = {}
+        @tables = {}
         load_table(:contacts, { lid: :number }, email: :string)
         load_table(:over_time, { sid: :number }, date: :number)
       end
 
       def load_table(name, hash_key, range_key)
-        table = @@dynamo_db.tables[table_name(name)]
+        table = @dynamo_db.tables[table_name(name)]
         table.hash_key = hash_key
         table.range_key = range_key
-        @@tables[name] = table
+        @tables[name] = table
       end
 
-      def get_segments_table(date)
-        get_segments_table_for_year_month("#{ date.year }_#{ date.month }")
+      def segments_table(date)
+        segments_table_for_year_month("#{ date.year }_#{ date.month }")
       end
 
-      def get_segments_table_for_year_month(year_month)
+      def segments_table_for_year_month(year_month)
         # Segment tables are broken up by year and month
         name = segment_table_name_for_year_month(year_month)
-        unless @@tables[name]
-          table = @@dynamo_db.tables[name]
+        unless @tables[name]
+          table = @dynamo_db.tables[name]
           table.hash_key = { sid: :number }
           table.range_key = { segment: :string }
-          @@tables[name] = table
+          @tables[name] = table
         end
-        @@tables[name]
+        @tables[name]
       end
     end
   end
@@ -161,7 +159,7 @@ module Hello
         end_date = Time.now
         start_date = end_date - 60 * 24 * 60 * 60
         # Get the segments by week
-        segments_as_hash = Hello::DynamoDB.get_segments_by_week(site_elements.collect(&:id), start_date, end_date, SUGGESTION_SEGMENT_KEYS)
+        segments_as_hash = Hello::DynamoDB.segments_by_week(site_elements.collect(&:id), start_date, end_date, SUGGESTION_SEGMENT_KEYS)
         segments = []
         # Convert to array
         segments_as_hash.each do |segment, data|
@@ -171,20 +169,20 @@ module Hello
         num_values_to_return = [10, (segments.length.to_f / 4).round].min
         # Sort the segment-values by total visits desc (most visits is at top)
         segments.sort! { |a, b| b[1] <=> a[1] }
-        # Take the top 25% of segments. If less than 80 item take top 50%
-        top_segments = nil
-        bottom_segments = nil
-        if segments.length < 80
-          # Top 50%
-          top_segments = segments[0...segments.length / 2]
-          # Bottom 50%
-          bottom_segments = segments[segments.length / 2..-1]
-        else
-          # Top 25%
-          top_segments = segments[0...segments.length / 4]
-          # Bottom 50%
-          bottom_segments = segments[segments.length / 2..-1]
-        end
+
+        # Take the top 25% of segments if less than 80 item take top 50%
+        top_segments =
+          if segments.length < 80
+            # Top 50%
+            segments[0...segments.length / 2]
+          else
+            # Top 25%
+            segments[0...segments.length / 4]
+          end
+
+        # Bottom 50%
+        bottom_segments = segments[segments.length / 2..-1]
+
         # Define sort methods
         sort_by_conversion = lambda do |a, b|
           if b[2] == a[2]

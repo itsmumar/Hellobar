@@ -12,9 +12,9 @@ describe ContactListsController, type: :controller do
     allow_any_instance_of(Identity).to receive(:extra)
       .and_return('metadata' => { 'api_endpoint' => 'test' })
 
-    stub_out_get_ab_variations('Email Integration UI 2016-06-22') { 'original' }
+    stub_out_ab_variations('Email Integration UI 2016-06-22') { 'original' }
 
-    allow(Hello::DataAPI).to receive(:get_contacts).and_return([])
+    allow(Hello::DataAPI).to receive(:contacts).and_return([])
   end
 
   describe 'GET #index' do
@@ -56,7 +56,7 @@ describe ContactListsController, type: :controller do
     end
 
     it 'gets contacts from the api at least once' do
-      expect(Hello::DataAPI).to receive(:get_contacts) {
+      expect(Hello::DataAPI).to receive(:contacts) {
         { contact_list.id => 1 }
       }.at_least(1).times
 

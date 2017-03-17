@@ -10,7 +10,7 @@ class UserOnboardingStatusSetter
   end
 
   def in_campaign_ab_test?(test_name)
-    get_ab_variation_or_nil(test_name, user) == 'campaign'
+    ab_variation_or_nil(test_name, user) == 'campaign'
   end
 
   def new_user!

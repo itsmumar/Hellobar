@@ -5,8 +5,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id, :get_ab_variation,
-    :get_ab_variation_or_nil
+  helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id, :ab_variation,
+    :ab_variation_or_nil
 
   before_action :record_tracking_param
   before_action :track_h_visit
@@ -15,11 +15,9 @@ class ApplicationController < ActionController::Base
   rescue_from ::Google::Apis::AuthorizationError do |exception|
     if impersonated_user
       raise exception # we can't authenticate for impersonated users
-    else
-      if exception.to_s =~ /Unauthorized/
-        sign_out current_user             # kill cookies
-        redirect_to '/auth/google_oauth2' # log in again to refresh token
-      end
+    elsif exception.to_s =~ /Unauthorized/
+      sign_out current_user             # kill cookies
+      redirect_to '/auth/google_oauth2' # log in again to refresh token
     end
   end
 

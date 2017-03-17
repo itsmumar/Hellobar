@@ -15,9 +15,9 @@ module Hello
     AB_TEST_COOKIE = :hb3ab
 
     class << self
-      @@expected_index = 0
+      @expected_index = 0
       def register_test(name, values, index, weights = [], user_start_date = nil)
-        raise "Expected index: #{ @@expected_index.inspect }, but got index: #{ index.inspect }. You either changed the order of the tests, removed a test, added a test out of order, or did not set the index of a test correctly. Please fix and try again" unless index == @@expected_index
+        raise "Expected index: #{ @expected_index.inspect }, but got index: #{ index.inspect }. You either changed the order of the tests, removed a test, added a test out of order, or did not set the index of a test correctly. Please fix and try again" unless index == @expected_index
         raise "#{ name.inspect } has #{ values.length } values, but max is #{ MAX_VALUES_PER_TEST }" if values.length > MAX_VALUES_PER_TEST
         sum = weights.inject(0) { |result, w| result + w }
         if weights.length < values.length
@@ -40,7 +40,7 @@ module Hello
           (start_range...end_range)
         end
 
-        @@expected_index += 1
+        @expected_index += 1
         TESTS[name] = { values: values, index: index, weights: weights, name: name, user_start_date: user_start_date }
       end
 
@@ -70,14 +70,14 @@ module Hello
       Hellobar::Settings[:host] == 'localhost' ? nil : Hellobar::Settings[:host]
     end
 
-    def get_ab_test_value_index_from_cookie(cookie, index)
+    def ab_test_value_index_from_cookie(cookie, index)
       return if cookie.nil?
       value = cookie[index..index]
       return value.to_i if value && value =~ /\d+/
       nil
     end
 
-    def get_ab_test_value_index_from_id(ab_test, id)
+    def ab_test_value_index_from_id(ab_test, id)
       rand_value = Digest::SHA1.hexdigest([ab_test[:name], id].join('|')).chars.inject(0) { |s, o| s + o.ord }
 
       # See if the test is weighted
@@ -110,41 +110,41 @@ module Hello
       cookies.permanent[ab_test_cookie_name.to_sym] = cookie_value
     end
 
-    def get_ab_test(test_name)
+    def ab_test(test_name)
       # First make sure we have registered this test
       TESTS.fetch(test_name) { raise "Could not find test: #{ test_name.inspect }" }
     end
 
-    def get_ab_variation_index_without_setting(test_name, user = nil)
-      ab_test = get_ab_test(test_name)
+    def ab_variation_index_without_setting(test_name, user = nil)
+      ab_test = ab_test(test_name)
       # Now we need to see if we have a value for the index
       if defined?(cookies)
-        if (index = get_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index]))
+        if (index = ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index]))
           return index, :existing
         end
       end
       _, person_id = current_person_type_and_id(user)
-      value_index = get_ab_test_value_index_from_id(ab_test, person_id)
+      value_index = ab_test_value_index_from_id(ab_test, person_id)
       [value_index, :new]
     end
 
-    def get_ab_variation_without_setting(test_name, user = nil)
-      ab_test = get_ab_test(test_name)
-      value_index, = get_ab_variation_index_without_setting(test_name, user)
+    def ab_variation_without_setting(test_name, user = nil)
+      ab_test = ab_test(test_name)
+      value_index, = ab_variation_index_without_setting(test_name, user)
       return unless value_index
       value = ab_test[:values][value_index]
       value
     end
 
-    def get_ab_variation_or_nil(test_name, user = nil)
+    def ab_variation_or_nil(test_name, user = nil)
       return unless TESTS[test_name]
-      get_ab_variation(test_name, user)
+      ab_variation(test_name, user)
     end
 
-    def get_ab_variation(test_name, user = nil)
+    def ab_variation(test_name, user = nil)
       return nil unless ab_test_passes_time_constraints?(test_name)
-      ab_test = get_ab_test(test_name)
-      value_index, status = get_ab_variation_index_without_setting(test_name, user)
+      ab_test = ab_test(test_name)
+      value_index, status = ab_variation_index_without_setting(test_name, user)
       value = nil
 
       user ||= current_user if defined?(current_user)
@@ -181,7 +181,7 @@ module Hello
       cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH]
     end
 
-    def get_user_id_from_cookie
+    def user_id_from_cookie
       return unless defined?(cookies)
       visitor_id_cookie = cookies[VISITOR_ID_COOKIE]
       return unless visitor_id_cookie
@@ -193,7 +193,7 @@ module Hello
       user ||= current_user if defined?(current_user)
       if user
         # See if a we have an unassociated visitor ID
-        if get_user_id_from_cookie == USER_ID_NOT_SET_YET
+        if user_id_from_cookie == USER_ID_NOT_SET_YET
           # Associate it with the visitor
           Analytics.track(:visitor, visitor_id, :user_id, value: user.id)
           # Mark it as associated
@@ -202,14 +202,14 @@ module Hello
         return :user, user.id
       else
         # See if we can get a user id
-        user_id = get_user_id_from_cookie
+        user_id = user_id_from_cookie
         return :user, user_id.to_i if user_id && user_id != USER_ID_NOT_SET_YET
         # Return the visitor ID
         return :visitor, visitor_id
       end
     end
 
-    def get_weighted_value_index(ab_test)
+    def weighted_value_index(ab_test)
       rand_value = rand(100)
 
       ab_test[:weights].each_with_index do |weight, i|
@@ -220,11 +220,11 @@ module Hello
     end
 
     def ab_test_has_user_start_date_constraint?(test_name)
-      get_ab_test(test_name)[:user_start_date].present?
+      ab_test(test_name)[:user_start_date].present?
     end
 
     def ab_test_passes_user_start_date_constraint?(test_name)
-      current_user.present? && (current_user.created_at > get_ab_test(test_name)[:user_start_date])
+      current_user.present? && (current_user.created_at > ab_test(test_name)[:user_start_date])
     end
 
     def ab_test_passes_time_constraints?(test_name)

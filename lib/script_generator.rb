@@ -89,12 +89,12 @@ class ScriptGenerator < Mustache
     # 2) Don't use SiteSerializer here, the code should be moved to model
     {
       no_b: @site.capabilities.remove_branding? || @options[:preview],
-      b_variation: get_branding_variation,
+      b_variation: branding_variation,
       preview: @options[:preview]
     }.merge(SiteSerializer.new(@site).capabilities)
   end
 
-  def get_branding_variation
+  def branding_variation
     # Options are ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"]
     'animated'
   end
@@ -123,7 +123,7 @@ class ScriptGenerator < Mustache
   end
 
   def content_upgrades_styles_json
-    site.get_content_upgrade_styles.to_json
+    site.content_upgrade_styles.to_json
   end
 
   def hb_backend_host
@@ -384,12 +384,10 @@ class ScriptGenerator < Mustache
     site_elements =
       if options[:bar_id]
         [rule.site_elements.find(options[:bar_id])]
+      elsif options[:render_paused_site_elements]
+        rule.site_elements
       else
-        if options[:render_paused_site_elements]
-          rule.site_elements
-        else
-          rule.site_elements.active
-        end
+        rule.site_elements.active
       end
 
     hashify ? site_elements.map { |element| site_element_settings(element) } : site_elements

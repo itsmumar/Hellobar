@@ -44,7 +44,7 @@ class GoogleAnalytics
   end
 
   # what if we don't have an exact url match?
-  def get_latest_pageviews(url)
+  def latest_pageviews(url)
     account = find_account_by_url(url)
 
     if account
@@ -60,7 +60,7 @@ class GoogleAnalytics
       end_date = 'today'
       metrics = 'ga:pageviews'
 
-      analytics.get_ga_data(ids, start_date, end_date, metrics).rows.try(:first).try(:first).to_i
+      analytics.ga_data(ids, start_date, end_date, metrics).rows.try(:first).try(:first).to_i
     end
   end
 end

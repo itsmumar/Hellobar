@@ -16,7 +16,7 @@ describe ContactList do
       allow(service_provider).to receive(:batch_subscribe).and_return(nil)
     end
 
-    allow(Hello::DataAPI).to receive(:get_contacts).and_return([
+    allow(Hello::DataAPI).to receive(:contacts).and_return([
       ['test1@hellobar.com', '', 1384807897],
       ['test2@hellobar.com', '', 1384807898]
     ])
@@ -180,7 +180,7 @@ describe ContactList do
 
   describe 'email syncing errors' do
     before do
-      allow(Hello::DataAPI).to receive(:get_contacts).and_return([:foo, :bar])
+      allow(Hello::DataAPI).to receive(:contacts).and_return([:foo, :bar])
       contact_list.stub(syncable?: true)
       contact_list.stub(oauth?: true)
     end
@@ -264,17 +264,17 @@ describe ContactList do
 
   describe '#subscribers' do
     it 'gets subscribers from the data API' do
-      Hello::DataAPI.stub(get_contacts: [['person@gmail.com', 'Per Son', 123_456_789]])
-      expect(contact_list.subscribers).to eq([{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.at(123_456_789) }])
+      allow(Hello::DataAPI).to receive(:contacts).and_return([['person@gmail.com', 'Per Son', 123_456_789]])
+      expect(contact_list.subscribers).to eql [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.at(123_456_789) }]
     end
 
     it 'defaults to [] if data API returns nil' do
-      Hello::DataAPI.stub(get_contacts: nil)
-      expect(contact_list.subscribers).to eq([])
+      allow(Hello::DataAPI).to receive(:contacts).and_return(nil)
+      expect(contact_list.subscribers).to be_empty
     end
 
     it 'sends a limit to the data api if specified' do
-      expect(Hello::DataAPI).to receive(:get_contacts).with(contact_list, 100)
+      expect(Hello::DataAPI).to receive(:contacts).with(contact_list, 100)
       contact_list.subscribers(100)
     end
   end
