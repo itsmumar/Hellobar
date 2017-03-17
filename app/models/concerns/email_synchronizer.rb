@@ -81,7 +81,7 @@ module EmailSynchronizer
       log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
     end
 
-    return unless ESP_NONTRANSIENT_ERRORS.any? { |message| e.to_s.include?(message) }
+    raise e unless ESP_NONTRANSIENT_ERRORS.any? { |message| e.to_s.include?(message) }
     Raven.capture_exception(e)
 
     if oauth?
@@ -90,7 +90,6 @@ module EmailSynchronizer
       identity.try(:destroy_and_notify_user)
     end
 
-    raise e
   rescue => e
     log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n")) if log_entry
     raise e
