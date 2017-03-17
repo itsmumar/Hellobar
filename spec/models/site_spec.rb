@@ -27,28 +27,28 @@ describe Site do
     end
   end
 
-  describe '#is_free?' do
+  describe '#free?' do
     it 'is true initially' do
       site = Site.new
-      expect(site.is_free?).to be_true
+      expect(site).to be_free
     end
 
     it 'is true for sites with a free-level subscriptions' do
-      expect(site.is_free?).to be_true
+      expect(site).to be_free
     end
 
     it 'is true for sites with a free-plus-level subscriptions' do
       site.change_subscription(Subscription::FreePlus.new(schedule: 'monthly'))
-      expect(site.is_free?).to be_true
+      expect(site).to be_free
     end
 
     it 'is false for pro sites' do
-      expect(pro_site.is_free?).to be_false
+      expect(pro_site).not_to be_free
     end
 
     it 'is false for pro comped sites' do
       site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
-      expect(site.is_free?).to be_false
+      expect(site).not_to be_free
     end
   end
 
@@ -106,7 +106,7 @@ describe Site do
     end
   end
 
-  describe '#has_pro_managed_subscription?' do
+  describe '#pro_managed_subscription?' do
     it 'returns true if the site has a ProManaged subscription' do
       site = build_stubbed :site
       subscription = build_stubbed :subscription, :pro_managed
@@ -312,14 +312,14 @@ describe Site do
     expect(Site.only_deleted).to include(site)
   end
 
-  describe '#has_script_installed?' do
+  describe '#script_installed?' do
     context 'when installed' do
       it 'updates the script_installed_at' do
         allow(site).to receive(:script_installed_db?) { false }
         allow(site).to receive(:script_installed_api?) { true }
 
         expect {
-          site.has_script_installed?
+          site.script_installed?
         }.to change(site, :script_installed_at)
       end
 
@@ -329,7 +329,7 @@ describe Site do
 
         expect(Referrals::RedeemForRecipient).to receive(:run).with(site: site)
 
-        site.has_script_installed?
+        site.script_installed?
       end
 
       it 'tracks the install event' do
@@ -338,7 +338,7 @@ describe Site do
 
         expect(Analytics).to receive(:track).with(:site, site.id, 'Installed')
 
-        site.has_script_installed?
+        site.script_installed?
       end
     end
 
@@ -348,7 +348,7 @@ describe Site do
         allow(site).to receive(:script_installed_api?) { false }
 
         expect {
-          site.has_script_installed?
+          site.script_installed?
         }.to change(site, :script_uninstalled_at)
       end
 
@@ -358,7 +358,7 @@ describe Site do
 
         expect(Analytics).to receive(:track).with(:site, site.id, 'Uninstalled')
 
-        site.has_script_installed?
+        site.script_installed?
       end
     end
   end

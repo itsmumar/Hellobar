@@ -43,7 +43,7 @@ class Admin < ActiveRecord::Base
     end
 
     def any_validated_access_token?(access_token)
-      Admin.all.any? { |a| a.has_validated_access_token?(access_token) }
+      Admin.all.any? { |a| a.validated_access_token?(access_token) }
     end
 
     def record_login_attempt(email, ip, user_agent, access_cookie)
@@ -165,7 +165,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
     return false if locked? ||
                     !valid_authentication_otp?(entered_otp) ||
                     password_hashed != encrypt_password(password) ||
-                    !has_validated_access_token?(access_token)
+                    !validated_access_token?(access_token)
 
     login!(access_token)
     true
@@ -221,7 +221,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
     update_attributes(locked: false, login_attempts: 0)
   end
 
-  def has_validated_access_token?(access_token)
+  def validated_access_token?(access_token)
     valid_access_tokens.key?(access_token)
   end
 

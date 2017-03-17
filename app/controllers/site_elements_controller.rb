@@ -12,7 +12,7 @@ class SiteElementsController < ApplicationController
 
   def index
     # force cache miss if user is refreshing the page to check if their script is installed and working
-    @site.lifetime_totals(force: true) if is_page_refresh?
+    @site.lifetime_totals(force: true) if page_refresh?
 
     @rules = @site.rules.includes([:site_elements, :conditions])
   end

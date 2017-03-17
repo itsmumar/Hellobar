@@ -130,21 +130,3 @@ Style/GuardClause:
 # Cop supports --auto-correct.
 Style/MutableConstant:
   Enabled: false
-
-# Offense count: 20
-# Configuration parameters: NamePrefix, NamePrefixBlacklist, NameWhitelist.
-# NamePrefix: is_, has_, have_
-# NamePrefixBlacklist: is_, has_, have_
-# NameWhitelist: is_a?
-Style/PredicateName:
-  Exclude:
-    - 'spec/**/*'
-    - 'app/controllers/application_controller.rb'
-    - 'app/interactions/contact_lists/destroy.rb'
-    - 'app/interactions/referrals/redeem_for_sender.rb'
-    - 'app/models/admin.rb'
-    - 'app/models/site.rb'
-    - 'app/models/site_element.rb'
-    - 'app/models/user.rb'
-    - 'app/serializers/subscription_serializer.rb'
-    - 'lib/hello/wordpress_user.rb'

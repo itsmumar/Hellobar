@@ -73,7 +73,7 @@ describe PaymentMethodsController, '#update' do
       }
     end
     before do
-      Site.any_instance.stub(has_script_installed?: true)
+      Site.any_instance.stub(script_installed?: true)
       allow(CyberSourceCreditCard).to receive(:new)
         .with(payment_method: payment_method, data: data)
         .and_return(PaymentMethodDetails.new)

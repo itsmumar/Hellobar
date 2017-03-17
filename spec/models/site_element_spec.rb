@@ -289,7 +289,7 @@ describe SiteElement do
 
     context 'when it is a free account' do
       before do
-        allow(element.site).to receive(:is_free?) { true }
+        allow(element.site).to receive(:free?) { true }
       end
 
       context 'and after_email_submit_action is :show_default_message' do

@@ -42,7 +42,7 @@ describe Admin::AccessController do
   describe 'POST process_step1' do
     it 'sends a "validate access code" email to admin if they need one' do
       Admin.stub(:find_by).with(email: admin.email).and_return(admin)
-      admin.stub(:has_validated_access_token?).and_return(false)
+      admin.stub(:validated_access_token?).and_return(false)
 
       admin.should_receive(:send_validate_access_token_email!)
 
@@ -54,7 +54,7 @@ describe Admin::AccessController do
     it 'logs in the admin with valid params' do
       session[:admin_access_email] = admin.email
       Admin.stub(:where).and_return([admin])
-      admin.stub(:has_validated_access_token?).and_return(true)
+      admin.stub(:validated_access_token?).and_return(true)
 
       admin.should_receive(:validate_login).and_return(true)
 
@@ -67,7 +67,7 @@ describe Admin::AccessController do
     it 'renders step 2 if login cannot be validated' do
       session[:admin_access_email] = admin.email
       Admin.stub(:where).and_return([admin])
-      admin.stub(:has_validated_access_token?).and_return(true)
+      admin.stub(:validated_access_token?).and_return(true)
 
       admin.should_receive(:validate_login).and_return(false)
 
@@ -81,7 +81,7 @@ describe Admin::AccessController do
   describe 'GET validate_access_token' do
     it 'moves on to step two if valid params are passed' do
       Admin.stub(:where).and_return([admin])
-      admin.stub(:has_validated_access_token?).and_return(true)
+      admin.stub(:validated_access_token?).and_return(true)
       admin.stub(:needs_otp_code?).and_return(false)
 
       admin.should_receive(:validate_access_token).and_return(true)

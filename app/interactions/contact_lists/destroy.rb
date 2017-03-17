@@ -9,9 +9,7 @@ class ContactLists::Destroy < Less::Interaction
   def run
     return false unless validate!
 
-    if has_site_elements? && keep_site_elements?
-      reset_site_elements_contact_list
-    end
+    reset_site_elements_contact_list if reset_contact_lists?
 
     destroy_contact_list
     true
@@ -35,7 +33,11 @@ class ContactLists::Destroy < Less::Interaction
     true
   end
 
-  def has_site_elements?
+  def reset_contact_lists?
+    site_elements? && keep_site_elements?
+  end
+
+  def site_elements?
     contact_list.site_elements_count > 0
   end
 
@@ -44,7 +46,7 @@ class ContactLists::Destroy < Less::Interaction
   end
 
   def valid_site_elements_action?
-    !has_site_elements? ||
+    !site_elements? ||
       ContactLists::SITE_ELEMENTS_ACTIONS.values.include?(site_elements_action.to_i)
   end
 

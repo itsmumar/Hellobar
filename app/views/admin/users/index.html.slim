@@ -35,7 +35,7 @@ div.row
                     = link_to site.normalized_url.html_safe, site.url, target: "_blank"
                     - if site.deleted?
                       '  (Deleted)
-                    - elsif !site.is_free?
+                    - elsif !site.free?
                       '  (#{site.current_subscription.values[:name]})
                     - if site.users.count > 1
                       ' (shared)

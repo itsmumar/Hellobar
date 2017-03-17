@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_pro_managed_subscription
-    redirect_to root_path unless current_site.has_pro_managed_subscription?
+    redirect_to root_path unless current_site.pro_managed_subscription?
   end
 
   def require_no_user
@@ -133,7 +133,7 @@ class ApplicationController < ActionController::Base
     session[:last_requested_path] = request.path if request.format == :html
   end
 
-  def is_page_refresh?
+  def page_refresh?
     request.path == session[:last_requested_path]
   end
 

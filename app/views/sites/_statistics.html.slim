@@ -4,7 +4,7 @@
   h5 Recent Activity
   table.activity-wrapper
     - @recent_elements.each do |element|
-      - if element.has_activity_message?
+      - if element.activity_message?
         = render "site_elements/activity_messages/activity_message", element: element
 
 - else

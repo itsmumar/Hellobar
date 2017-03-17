@@ -1,6 +1,6 @@
 class SubscriptionSerializer < ActiveModel::Serializer
   attributes :schedule, :type, :yearly_amount, :monthly_amount
-  attributes :is_trial, :payment_method_details_id, :payment_method_number
+  attributes :trial, :payment_method_details_id, :payment_method_number
   attributes :payment_valid
 
   def schedule
@@ -33,7 +33,7 @@ class SubscriptionSerializer < ActiveModel::Serializer
     end
   end
 
-  def is_trial
+  def trial
     object.currently_on_trial?
   end
 

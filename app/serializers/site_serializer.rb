@@ -2,7 +2,7 @@ class SiteSerializer < ActiveModel::Serializer
   include SitesHelper
 
   attributes :id, :url, :contact_lists, :capabilities, :display_name
-  attributes :current_subscription, :has_script_installed?, :num_site_elements
+  attributes :current_subscription, :script_installed, :num_site_elements
   attributes :view_billing, :timezone
   attributes :monthly_pageviews
 
@@ -76,5 +76,9 @@ class SiteSerializer < ActiveModel::Serializer
 
   def view_billing
     scope && Permissions.view_bills?(scope, object)
+  end
+
+  def script_installed
+    object.script_installed?
   end
 end
