@@ -121,5 +121,11 @@ Rails/DynamicFindBy:
 Rails/SkipsModelValidations:
   Enabled: false
 
+# TODO: issue XOHB-1599
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: strict, flexible
+Rails/TimeZone:
+  Enabled: false
+
 Lint/EmptyWhen:
   Enabled: false

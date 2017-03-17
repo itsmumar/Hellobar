@@ -87,12 +87,6 @@ Rails/OutputSafety:
     - 'app/helpers/contact_lists_helper.rb'
     - 'app/helpers/site_elements_helper.rb'
 
-# Offense count: 77
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: strict, flexible
-Rails/TimeZone:
-  Enabled: false
-
 # Offense count: 228
 Style/Documentation:
   Enabled: false
