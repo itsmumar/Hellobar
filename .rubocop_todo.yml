@@ -103,20 +103,6 @@ Rails/TimeZone:
 Style/Documentation:
   Enabled: false
 
-# Offense count: 16
-Style/DoubleNegation:
-  Exclude:
-    - 'app/controllers/user_migration_controller.rb'
-    - 'app/controllers/users/sessions_controller.rb'
-    - 'app/helpers/contact_lists_helper.rb'
-    - 'app/models/site.rb'
-    - 'lib/service_providers/active_campaign.rb'
-    - 'lib/service_providers/convert_kit.rb'
-    - 'lib/service_providers/get_response_api.rb'
-    - 'lib/service_providers/infusionsoft.rb'
-    - 'lib/service_providers/mad_mimi_api.rb'
-    - 'lib/service_providers/mail_chimp.rb'
-
 # Offense count: 58
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:

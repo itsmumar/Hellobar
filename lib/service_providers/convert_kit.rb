@@ -96,7 +96,7 @@ module ServiceProviders
     end
 
     def valid?
-      !!lists
+      !lists.nil?
     rescue => error
       log "getting tags raised #{ error }"
       false

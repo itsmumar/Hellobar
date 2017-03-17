@@ -12,7 +12,7 @@ class UserMigrationController < ApplicationController
 
     if User.where(email: email).exists?
       redirect_to login_path, notice: 'This email has already been upgraded.  Please log in.'
-    elsif (wordpress_user = Hello::WordpressUser.authenticate(email, password, !!current_admin))
+    elsif (wordpress_user = Hello::WordpressUser.authenticate(email, password, !current_admin.nil?))
       session[:wordpress_user_id] = wordpress_user.id
       redirect_to new_user_migration_path
     else

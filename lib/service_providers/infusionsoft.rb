@@ -49,7 +49,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
   end
 
   def valid?
-    !!tags
+    !tags.nil?
   rescue => error
     log "Getting lists raised #{ error }"
     false

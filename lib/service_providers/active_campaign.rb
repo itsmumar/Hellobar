@@ -47,7 +47,7 @@ class ServiceProviders::ActiveCampaign < ServiceProviders::Email
   end
 
   def valid?
-    !!lists
+    !lists.nil?
   rescue => error
     log "Getting lists raised #{ error }"
     false
