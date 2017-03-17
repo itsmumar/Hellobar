@@ -493,23 +493,10 @@ class LegacyMigrator
       date_condition = Condition.date_condition_from_params(start_date, end_date)
 
       # add conditionto in-memory rule
-      if date_condition
-        rule.conditions.build operand: date_condition.operand,
-                              value: date_condition.value,
-                              segment: 'DateCondition'
-      end
 
-      if include_urls.present?
-        rule.conditions.build operand: :is,
-                              value: include_urls,
-                              segment: 'UrlCondition'
-      end
-
-      if does_not_include_urls.present?
-        rule.conditions.build operand: :is_not,
-                              value: does_not_include_urls,
-                              segment: 'UrlCondition'
-      end
+      add_condition rule, date_condition.operand, date_condition.value, 'DateCondition' if date_condition
+      add_condition rule, :is, include_urls, 'UrlCondition' if include_urls.present?
+      add_condition rule, :is_not, does_not_include_urls, 'UrlCondition' if does_not_include_urls.present?
     end
 
     def determine_element_subtype(legacy_goal)
@@ -521,6 +508,10 @@ class LegacyMigrator
       when 'Goals::SocialMedia'
         "social/#{ legacy_goal.data_json['interaction'] }"
       end
+    end
+
+    def add_condition(rule, operand, value, segment)
+      rule.conditions.build operand: operand, value: value, segment: segment
     end
   end
 end

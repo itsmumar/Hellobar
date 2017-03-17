@@ -53,9 +53,3 @@ Metrics/ParameterLists:
 # Offense count: 41
 Metrics/PerceivedComplexity:
   Max: 18
-
-# Offense count: 58
-# Configuration parameters: MinBodyLength.
-Style/GuardClause:
-  Exclude:
-    - 'lib/legacy_migrator.rb'
