@@ -2,7 +2,7 @@ class SiteSerializer < ActiveModel::Serializer
   include SitesHelper
 
   attributes :id, :url, :contact_lists, :capabilities, :display_name
-  attributes :current_subscription, :has_script_installed?, :num_site_elements
+  attributes :current_subscription, :script_installed, :num_site_elements
   attributes :view_billing, :timezone
   attributes :monthly_pageviews
 
@@ -24,11 +24,8 @@ class SiteSerializer < ActiveModel::Serializer
     end
 
   rescue Google::Apis::AuthorizationError => error # user has not authenticated with the needed permissions
-    if scope.is_impersonated
-      nil # while impersonating we can't authenticate
-    else
-      raise error # the error needs to bubble up to the controller to cause the user to re-authenticate
-    end
+    return unless scope.is_impersonated
+    raise error # the error needs to bubble up to the controller to cause the user to re-authenticate
   end
 
   def contact_lists
@@ -76,5 +73,9 @@ class SiteSerializer < ActiveModel::Serializer
 
   def view_billing
     scope && Permissions.view_bills?(scope, object)
+  end
+
+  def script_installed
+    object.script_installed?
   end
 end

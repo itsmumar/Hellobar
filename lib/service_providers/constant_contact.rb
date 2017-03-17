@@ -40,29 +40,24 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     # this can still fail a second time if CC isn't happy with how the data matches. for some reason.
     return true
   rescue RestClient::BadRequest => e
-    if e.inspect =~ /not be opted in using/
-      # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
-      # if that happens, try adding contact again WITH double opt-in
-      @client.update_contact(@token, contact, true)
-    else
-      raise e
-    end
+    # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
+    # if that happens, try adding contact again WITH double opt-in
+    raise e unless e.inspect =~ /not be opted in using/
+
+    @client.update_contact(@token, contact, true)
   end
 
   def add_contact(contact, double_optin)
     @client.add_contact(@token, contact, double_optin)
   rescue RestClient::BadRequest => e
-    if e.inspect =~ /not a valid email address/
-      # if the email is not valid, CC will raise an exception and we end up here
-      # when this happens, just return true and continue
-      return true
-    elsif e.inspect =~ /not be opted in using/
-      # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
-      # if that happens, try adding contact again WITH double opt-in
-      @client.add_contact(@token, contact, true)
-    else
-      raise e
-    end
+    # if the email is not valid, CC will raise an exception and we end up here
+    # when this happens, just return true and continue
+    return true if e.inspect =~ /not a valid email address/
+    raise e unless e.inspect =~ /not be opted in using/
+
+    # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
+    # if that happens, try adding contact again WITH double opt-in
+    @client.add_contact(@token, contact, true)
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
@@ -89,11 +84,9 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     pattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/
     valid_subscribers = subscribers.select { |s| s[:email] =~ pattern }
 
-    if valid_subscribers.count < subscribers.count
-      # to prevent an infinite loop, only retry if we were able to pare the subscribers array down
-      batch_subscribe(list_id, valid_subscribers)
-    else
-      return true
-    end
+    return true unless valid_subscribers.count < subscribers.count
+
+    # to prevent an infinite loop, only retry if we were able to pare the subscribers array down
+    batch_subscribe(list_id, valid_subscribers)
   end
 end

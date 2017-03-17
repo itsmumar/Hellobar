@@ -40,9 +40,9 @@ class Hello::WordpressBar < Hello::WordpressModel
   end
 
   def parent
-    if post_parent.present? && post_parent != 0
-      Hello::WordpressBar.where(post_author: post_author, id: post_parent).first
-    end
+    return unless post_parent.present? && post_parent != 0
+
+    Hello::WordpressBar.where(post_author: post_author, id: post_parent).first
   end
 
   def hellobar_meta

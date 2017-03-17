@@ -164,9 +164,8 @@ class Condition < ActiveRecord::Base
       'UtmCondition'              => %w(is is_not includes does_not_include)
     }
 
-    if @operands[segment] && !@operands[segment].include?(operand)
-      errors.add(:operand, 'is not valid')
-    end
+    return unless @operands[segment] && !@operands[segment].include?(operand)
+    errors.add(:operand, 'is not valid')
   end
 
   def clear_blank_values

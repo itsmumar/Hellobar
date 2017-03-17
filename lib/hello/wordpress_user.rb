@@ -82,7 +82,7 @@ class Hello::WordpressUser < Hello::WordpressModel
     [user, site, new_bars]
   end
 
-  def is_pro_user?
+  def pro_user?
     Hello::WordpressUserMeta.where(user_id: id, meta_key: 'hellobar_vip_user').first.try(:meta_value) == '1' ||
       !Hello::WordpressUserMeta.where(user_id: id, meta_key: 'hbwp_s2member_subscr_id').first.try(:meta_value).nil?
   end

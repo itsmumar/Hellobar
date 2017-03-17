@@ -4,7 +4,7 @@ namespace :internal_metrics do
     last_week = Date.commercial(Date.current.year, Date.current.cweek, 2)
     two_weeks_ago = last_week - 1.week
     sites = Site.where('created_at >= ? and created_at <= ?', two_weeks_ago, last_week).all
-    installed_sites = sites.reject { |s| !s.has_script_installed? }
+    installed_sites = sites.reject { |s| !s.script_installed? }
     revenue = Bill.where('created_at >= ? and created_at <= ? and status=1 and amount > 0', two_weeks_ago, last_week)
     sum = revenue.sum(:amount)
     pro = revenue.reject { |b| b.subscription.type !~ /Pro/ }

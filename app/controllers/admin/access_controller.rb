@@ -59,7 +59,7 @@ class Admin::AccessController < ApplicationController
 
     return render(:step2) unless @admin
     return redirect_to(admin_locked_path) if @admin.locked?
-    return render(:validate_access_token) unless @admin.has_validated_access_token?(access_token)
+    return render(:validate_access_token) unless @admin.validated_access_token?(access_token)
 
     if @admin.validate_login(access_token, params[:admin_password], params[:otp])
       # Successful login
@@ -102,7 +102,7 @@ class Admin::AccessController < ApplicationController
 
     # If they have validated the access token then we
     # can render step 2
-    unless admin.has_validated_access_token?(access_token)
+    unless admin.validated_access_token?(access_token)
       admin.send_validate_access_token_email!(access_token)
       return render(:validate_access_token)
     end

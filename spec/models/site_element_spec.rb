@@ -267,18 +267,18 @@ describe SiteElement do
     end
   end
 
-  describe '#has_converted?' do
+  describe '#converted?' do
     let(:element) { create(:site_element, :traffic) }
     let(:site) { element.site }
 
     it 'is false when there are no conversions', aggregate_failures: true do
       expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
-      expect(element).not_to have_converted
+      expect(element).not_to be_converted
     end
 
     it 'is true when there are conversions', aggregate_failures: true do
       expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
-      expect(element).to have_converted
+      expect(element).to be_converted
     end
   end
 
@@ -289,7 +289,7 @@ describe SiteElement do
 
     context 'when it is a free account' do
       before do
-        allow(element.site).to receive(:is_free?) { true }
+        allow(element.site).to receive(:free?) { true }
       end
 
       context 'and after_email_submit_action is :show_default_message' do

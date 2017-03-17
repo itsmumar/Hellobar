@@ -69,7 +69,7 @@ describe SiteElementsController do
 
     it 'serializes a site_element to json' do
       stub_current_user(user)
-      Site.any_instance.stub(has_script_installed?: true)
+      Site.any_instance.stub(script_installed?: true)
 
       get :show, site_id: element.site, id: element, format: :json
 

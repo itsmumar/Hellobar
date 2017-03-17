@@ -87,11 +87,9 @@ module Hello
       # Returns the actual table name based for the given key.
       def table_name(key)
         key = key.to_s
-        if %w(contacts over_time segments).include?(key)
-          return key
-        else
-          raise "Unknown table name key #{ key.inspect }"
-        end
+        return key if %w(contacts over_time segments).include?(key)
+
+        raise "Unknown table name key #{ key.inspect }"
       end
 
       # Returns the segment table name for the given date

@@ -42,7 +42,7 @@ describe Admin::AccessController do
   describe 'POST process_step1' do
     it 'sends a "validate access code" email to admin if they need one' do
       allow(Admin).to receive(:find_by).with(email: admin.email).and_return(admin)
-      allow(admin).to receive(:has_validated_access_token?).and_return(false)
+      allow(admin).to receive(:validated_access_token?).and_return(false)
 
       expect(admin).to receive(:send_validate_access_token_email!)
 
@@ -54,7 +54,7 @@ describe Admin::AccessController do
     it 'logs in the admin with valid params' do
       session[:admin_access_email] = admin.email
       allow(Admin).to receive(:where).and_return([admin])
-      allow(admin).to receive(:has_validated_access_token?).and_return(true)
+      allow(admin).to receive(:validated_access_token?).and_return(true)
 
       expect(admin).to receive(:validate_login).and_return(true)
 
@@ -67,7 +67,7 @@ describe Admin::AccessController do
     it 'renders step 2 if login cannot be validated' do
       session[:admin_access_email] = admin.email
       allow(Admin).to receive(:where).and_return([admin])
-      allow(admin).to receive(:has_validated_access_token?).and_return(true)
+      allow(admin).to receive(:validated_access_token?).and_return(true)
 
       expect(admin).to receive(:validate_login).and_return(false)
 
@@ -81,7 +81,7 @@ describe Admin::AccessController do
   describe 'GET validate_access_token' do
     it 'moves on to step two if valid params are passed' do
       allow(Admin).to receive(:where).and_return([admin])
-      allow(admin).to receive(:has_validated_access_token?).and_return(true)
+      allow(admin).to receive(:validated_access_token?).and_return(true)
       allow(admin).to receive(:needs_otp_code?).and_return(false)
 
       expect(admin).to receive(:validate_access_token).and_return(true)

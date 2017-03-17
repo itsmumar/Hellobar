@@ -98,7 +98,7 @@ class Site < ActiveRecord::Base
   end
 
   # check and report whether script is installed, recording timestamp and tracking event if status has changed
-  def has_script_installed?
+  def script_installed?
     if !script_installed_db? && (script_installed_api? || script_installed_on_homepage?)
       store_script_installation!
     elsif script_installed_db? && !(script_installed_api? || script_installed_on_homepage?)
@@ -229,7 +229,7 @@ class Site < ActiveRecord::Base
     default_rules.first
   end
 
-  def has_custom_rules?
+  def custom_rules?
     rules.map(&:editable).any?
   end
 
@@ -241,7 +241,7 @@ class Site < ActiveRecord::Base
     subscriptions.active.to_a.sort.first
   end
 
-  def has_pro_managed_subscription?
+  def pro_managed_subscription?
     subscriptions.any? { |s| s.class == Subscription::ProManaged }
   end
 
@@ -268,7 +268,7 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def is_free?
+  def free?
     current_subscription.nil? ||
       current_subscription.type.blank? ||
       Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
@@ -485,11 +485,11 @@ class Site < ActiveRecord::Base
 
   def do_generate_script_and_check_installation(options = {})
     generate_static_assets(options)
-    has_script_installed?
+    script_installed?
   end
 
   def do_check_installation(_options = {})
-    has_script_installed?
+    script_installed?
   end
 
   def generate_static_assets(options = {})

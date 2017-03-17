@@ -5,11 +5,10 @@ class UserController < ApplicationController
 
   def new
     load_user_from_invitation
+    return unless @user.nil? || @user.invite_token_expired?
 
-    if @user.nil? || @user.invite_token_expired?
-      flash[:error] = 'This invitation token has expired.  Please request the owner to issue you a new invitation.'
-      redirect_to root_path
-    end
+    flash[:error] = 'This invitation token has expired.  Please request the owner to issue you a new invitation.'
+    redirect_to root_path
   end
 
   def create
@@ -98,12 +97,11 @@ class UserController < ApplicationController
   end
 
   def update_timezones_on_sites(user)
-    if params[:user] && params[:user][:timezone]
-      timezone = params[:user][:timezone]
+    return unless params[:user] && params[:user][:timezone]
+    timezone = params[:user][:timezone]
 
-      user.sites.each do |site|
-        site.update_attribute :timezone, timezone unless site.timezone
-      end
+    user.sites.each do |site|
+      site.update_attribute :timezone, timezone unless site.timezone
     end
   end
 
@@ -111,7 +109,7 @@ class UserController < ApplicationController
     # If the user is active then they must supply a current_password
     # to update the password.
     if user.active?
-      if !user.is_oauth_user? && user_params[:password].present?
+      if !user.oauth_user? && user_params[:password].present?
         unless user.valid_password?(params[:user][:current_password])
           user.errors.add(:current_password, 'is incorrect')
           return false

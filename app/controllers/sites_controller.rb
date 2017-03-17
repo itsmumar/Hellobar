@@ -42,12 +42,12 @@ class SitesController < ApplicationController
 
     respond_to do |format|
       format.html do
-        redirect_to(action: 'install') unless @site.has_script_installed?
+        redirect_to(action: 'install') unless @site.script_installed?
 
         flash[:success] = 'Script successfully installed.' if params[:installed]
         session[:current_site] = @site.id
 
-        @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: is_page_refresh?)
+        @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: page_refresh?)
         @recent_elements = @site.site_elements.recent(5)
       end
       format.json { render json: @site }
@@ -55,7 +55,7 @@ class SitesController < ApplicationController
   end
 
   def improve
-    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: is_page_refresh?)
+    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: page_refresh?)
   end
 
   def update

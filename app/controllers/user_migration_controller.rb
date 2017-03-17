@@ -75,10 +75,9 @@ class UserMigrationController < ApplicationController
 
   def current_wordpress_user
     return @wordpress_user if @wordpress_user
+    return unless session[:wordpress_user_id] && (@wordpress_user = Hello::WordpressUser.find_by(id: session[:wordpress_user_id]))
 
-    if session[:wordpress_user_id] && (@wordpress_user = Hello::WordpressUser.find_by(id: session[:wordpress_user_id]))
-      return @wordpress_user
-    end
+    @wordpress_user
   end
 
   def load_wordpress_bar(id)

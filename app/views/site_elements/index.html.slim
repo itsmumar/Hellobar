@@ -66,7 +66,7 @@ table.rules-wrapper
                   "data-upgrade-benefit" => "create more bars",
                   "data-display-when" => "empty"
 
-          - if !@site.has_custom_rules? && !@site.has_script_installed?
+          - if !@site.custom_rules? && !@site.script_installed?
             .icon-wrapper data-display-when="any"
               i.icon-alert
             div data-display-when="any"
