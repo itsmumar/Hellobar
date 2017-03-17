@@ -40,7 +40,7 @@ describe Referral do
   end
 
   it 'has a formatted expiration date string' do
-    referral.stub(created_at: Date.new(2016, 1, 15).to_time)
+    referral.stub(created_at: Time.zone.local(2016, 1, 15))
     expect(referral.expiration_date_string).to eq('January 20th')
   end
 
@@ -155,7 +155,7 @@ describe Referral do
     it 'is redeemed when installed and already used' do
       referral.state = 'installed'
       referral.available_to_sender = false
-      referral.redeemed_by_sender_at = Time.now
+      referral.redeemed_by_sender_at = Time.current
 
       expect(referral.redeemable_by_sender?).to be_false
       expect(referral.redeemed_by_sender?).to be_true

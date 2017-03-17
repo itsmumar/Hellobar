@@ -18,7 +18,7 @@ describe SitesHelper do
   describe 'bill_due_at' do
     it 'formats the due date of the bill' do
       bill = build(:bill)
-      allow(bill).to receive(:due_at).and_return(DateTime.new(2001, 2, 3, 4, 5, 6))
+      allow(bill).to receive(:due_at).and_return(Time.zone.new(2001, 2, 3, 4, 5, 6))
       expect(helper.bill_due_at(bill)).to eq('2-3-2001')
     end
   end

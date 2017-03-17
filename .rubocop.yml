@@ -125,7 +125,33 @@ Rails/SkipsModelValidations:
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: strict, flexible
 Rails/TimeZone:
-  Enabled: false
+  Exclude:
+    - 'app/models/user.rb'
+    - 'app/models/site.rb'
+    - 'app/models/admin.rb'
+    - 'app/models/contact_list.rb'
+    - 'app/models/billing/subscription.rb'
+    - 'app/models/billing/billing_attempt.rb'
+    - 'app/models/billing/bill.rb'
+    - 'app/interactions/coupon_uses/apply_from_referrals.rb'
+    - 'app/helpers/site_elements_helper.rb'
+    - 'lib/tasks/site.rake'
+    - 'lib/tasks/queue_worker.rake'
+    - 'lib/tasks/marketing.rake'
+    - 'lib/tasks/billing.rake'
+    - 'lib/tasks/backend.rake'
+    - 'lib/queue_worker/queue_worker.rb'
+    - 'lib/legacy_migrator.rb'
+    - 'lib/hello/suggested_opportunities.rb'
+    - 'lib/hello/data_api.rb'
+    - 'lib/analytics.rb'
 
-Lint/EmptyWhen:
-  Enabled: false
+# Offense count: 24
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: strict, flexible
+Rails/Date:
+  Exclude:
+    - 'app/controllers/sites_controller.rb'
+    - 'app/helpers/email_digest_helper.rb'
+    - 'app/helpers/sites_helper.rb'
+    - 'lib/hello/api_performance.rb'

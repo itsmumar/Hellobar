@@ -22,7 +22,7 @@ describe BillingAuditTrail do
     expect(BillingLog.count).to eq(1)
     log = BillingLog.all.first
     expect(log.message).to eq(message)
-    expect(log.created_at).to be_within(2).of(Time.now)
+    expect(log.created_at).to be_within(2).of(Time.current)
   end
 
   it 'should allow us to call audit on an object and set the source ID correctly' do

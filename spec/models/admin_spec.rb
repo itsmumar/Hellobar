@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Admin do
-  let!(:admin) { create :admin, session_last_active: Time.now }
+  let!(:admin) { create :admin, session_last_active: Time.current }
 
   it 'can create a new record from email and initial password' do
     admin = Admin.make!('newadmin@polymathic.me', '5553211234')
@@ -18,7 +18,7 @@ describe Admin do
     end
 
     it 'returns nil if the session is too old' do
-      expect(admin).to receive(:session_last_active).and_return(Time.now - Admin::MAX_SESSION_TIME - 1.hour)
+      expect(admin).to receive(:session_last_active).and_return(Time.current - Admin::MAX_SESSION_TIME - 1.hour)
       expect(Admin).to receive(:find_by).with(session_access_token: 'foo', session_token: 'bar').and_return(admin)
 
       result = Admin.validate_session('foo', 'bar')
@@ -35,7 +35,7 @@ describe Admin do
 
     it 'returns nil if session is old AND admin is locked' do
       allow(admin).to receive(:locked?).and_return(true)
-      allow(admin).to receive(:session_last_active).and_return(Time.now - Admin::MAX_SESSION_TIME - 1.hour)
+      allow(admin).to receive(:session_last_active).and_return(Time.current - Admin::MAX_SESSION_TIME - 1.hour)
       expect(Admin).to receive(:find_by).with(session_access_token: 'foo', session_token: 'bar').and_return(admin)
 
       result = Admin.validate_session('foo', 'bar')
@@ -75,7 +75,7 @@ describe Admin do
 
   describe 'validate_login' do
     before(:each) do
-      admin.valid_access_tokens = { 'token' => [Time.now.to_i, Time.now.to_i] }
+      admin.valid_access_tokens = { 'token' => [Time.current.to_i, Time.current.to_i] }
     end
 
     it 'locks the admin if attempting to log in too many times' do

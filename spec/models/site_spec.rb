@@ -457,8 +457,8 @@ describe Site do
       end
 
       it 'should set the end_at of the bill to the current time + the trial period' do
-        travel_to Time.now do
-          expect(bill(trial: 20.days).end_date).to eql(Time.now + 20.days)
+        travel_to Time.current do
+          expect(bill(trial: 20.days).end_date).to eql(20.days.from_now)
         end
       end
     end

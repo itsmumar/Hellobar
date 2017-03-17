@@ -123,6 +123,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     super message
   end
 
+  # rubocop: disable Lint/EmptyWhen
   def handle_error(error)
     case error.status_code
     when 250
@@ -139,6 +140,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       raise error
     end
   end
+  # rubocop: enable Lint/EmptyWhen
 
   def handle_result(result)
     if result['errors']

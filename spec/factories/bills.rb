@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :bill do
     amount 10
     subscription
-    bill_at Time.now
+    bill_at Time.current
 
     factory :pro_bill do
       amount Subscription::Pro.defaults[:monthly_amount]

@@ -23,7 +23,7 @@ describe Referrals::RedeemForSender do
 
     it 'should redeem and make the referral unavailable' do
       expect(referral.available_to_sender).to be_false
-      expect(referral.redeemed_by_sender_at).to be_within(2.seconds).of(Time.now)
+      expect(referral.redeemed_by_sender_at).to be_within(2.seconds).of(Time.current)
     end
 
     it 'should mark the latest unpaid bill as paid' do
@@ -51,7 +51,7 @@ describe Referrals::RedeemForSender do
 
     it 'should redeem and make the referral unavailable' do
       expect(referral.available_to_sender).to be_false
-      expect(referral.redeemed_by_sender_at).to be_within(2.seconds).of(Time.now)
+      expect(referral.redeemed_by_sender_at).to be_within(2.seconds).of(Time.current)
     end
 
     it 'sets the site to a Pro subscription' do

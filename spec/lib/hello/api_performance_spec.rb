@@ -24,41 +24,41 @@ describe Hello::DataAPI::Performance do
   describe '#views_between' do
     it 'should compute views between two dates' do
       d = Hello::DataAPI::Performance.new([[0, 0], [10, 5], [20, 10], [30, 15], [35, 20]])
-      expect(d.views_between(Date.today - 3, Date.today)).to eq(25)
+      expect(d.views_between(Date.current - 3, Date.current)).to eq(25)
     end
 
     it 'should calculate from 0 if you ask for data for a date too far in the past' do
       d = Hello::DataAPI::Performance.new([[10, 5], [20, 10], [30, 15], [35, 20]])
-      expect(d.views_between(Date.today - 10, Date.today)).to eq(35)
+      expect(d.views_between(Date.current - 10, Date.current)).to eq(35)
     end
 
     it 'should calculate from the latest if you ask for data for a date too far in the future' do
       d = Hello::DataAPI::Performance.new([[10, 5], [20, 10], [30, 15], [35, 20]])
-      expect(d.views_between(Date.today - 2, Date.today + 10)).to eq(15)
+      expect(d.views_between(Date.current - 2, Date.current + 10)).to eq(15)
     end
   end
 
   describe '#conversions_between' do
     it 'should compute conversions between two dates' do
       d = Hello::DataAPI::Performance.new([[0, 0], [10, 5], [20, 10], [30, 15], [35, 20]])
-      expect(d.conversions_between(Date.today - 3, Date.today)).to eq(15)
+      expect(d.conversions_between(Date.current - 3, Date.current)).to eq(15)
     end
 
     it 'should calculate from 0 if not enough data' do
       d = Hello::DataAPI::Performance.new([[10, 5], [20, 10], [30, 15], [35, 20]])
-      expect(d.conversions_between(Date.today - 10, Date.today)).to eq(20)
+      expect(d.conversions_between(Date.current - 10, Date.current)).to eq(20)
     end
   end
 
   describe '#conversion_percent_between' do
     it 'should compute conversions between two dates' do
       d = Hello::DataAPI::Performance.new([[0, 0], [10, 5], [20, 10], [30, 15], [35, 20]])
-      expect(d.conversion_percent_between(Date.today - 3, Date.today)).to eq(15 / 25.0)
+      expect(d.conversion_percent_between(Date.current - 3, Date.current)).to eq(15 / 25.0)
     end
 
     it 'should calculate the total if not enough data' do
       d = Hello::DataAPI::Performance.new([[10, 5], [20, 10], [30, 15], [35, 20]])
-      expect(d.conversion_percent_between(Date.today - 10, Date.today)).to eq(20.0 / 35.0)
+      expect(d.conversion_percent_between(Date.current - 10, Date.current)).to eq(20.0 / 35.0)
     end
   end
 end
