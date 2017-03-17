@@ -18,6 +18,7 @@ AllCops:
     - 'editor/**/*'
     - 'backend-mock/**/*'
 
+#### BEGIN STYLES
 
 Style/Documentation:
   Enabled: false
@@ -28,13 +29,16 @@ Style/FrozenStringLiteralComment:
 Style/ClassAndModuleChildren:
   Enabled: false
 
-# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
-# SupportedStyles: slashes, percent_r, mixed
-Style/RegexpLiteral:
-  EnforcedStyle: slashes
-  AllowInnerSlashes: true
-  Exclude:
-    - spec/teaspoon_env.rb
+Style/MethodDefParentheses:
+  Enabled: false
+
+# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
+# SupportedStyles: predicate, comparison
+Style/NumericPredicate:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
 
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
 # SupportedStyles: with_first_parameter, with_fixed_indentation
@@ -60,41 +64,23 @@ Style/IndentHash:
 Style/NumericLiteralPrefix:
   EnforcedOctalStyle: zero_only
 
-# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Enabled: false
-
-# TODO: enable after updating rails/rspec
-# Configuration parameters: Include.
-# Include: spec/**/*, test/**/*
-Rails/HttpPositionalArguments:
-  Enabled: false
-
-# SupportedStyles: referer, referrer
-Rails/RequestReferer:
-  EnforcedStyle: referrer
+# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
+# SupportedStyles: slashes, percent_r, mixed
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+  Exclude:
+    - spec/teaspoon_env.rb
 
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
-Style/MethodDefParentheses:
-  Enabled: false
-
 Style/BlockDelimiters:
   EnforcedStyle: braces_for_chaining
 
-Metrics/BlockLength:
-  Exclude:
-    - spec/**/*
-
-Style/NumericLiterals:
-  Enabled: false
-
 Style/ConstantName:
   Exclude:
-    - lib/hello/segments.rb
-    - config/initializers/settings.rb
+    - 'config/initializers/settings.rb'
 
 Style/WordArray:
   # The `MinSize` option causes the `WordArray` rule to be ignored for arrays
@@ -105,16 +91,28 @@ Style/WordArray:
 Style/SpaceInsideStringInterpolation:
   EnforcedStyle: space
 
-Rails/DynamicFindBy:
-  Whitelist:
-    - find_by_sql
-    - find_by_email
-    - find_by_script
+#### END STYLES
+
+#### BEGIN RAILS
+
+# TODO: enable after updating rails/rspec
+Rails/HttpPositionalArguments:
+  Enabled: false
 
 # Configuration parameters: Blacklist.
 # Blacklist: decrement!, decrement_counter, increment!, increment_counter, toggle!, touch, update_all, update_attribute, update_column, update_columns, update_counters
 Rails/SkipsModelValidations:
   Enabled: false
+
+# SupportedStyles: referer, referrer
+Rails/RequestReferer:
+  EnforcedStyle: referrer
+
+Rails/DynamicFindBy:
+  Whitelist:
+    - find_by_sql
+    - find_by_email
+    - find_by_script
 
 # TODO: issue XOHB-1599
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -141,7 +139,7 @@ Rails/TimeZone:
     - 'lib/hello/data_api.rb'
     - 'lib/analytics.rb'
 
-# Offense count: 24
+# TODO: issue XOHB-1599
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: strict, flexible
 Rails/Date:
@@ -152,43 +150,50 @@ Rails/Date:
     - 'lib/hello/api_performance.rb'
     - 'spec/lib/hello/api_performance_spec.rb'
 
+#### END RAILS
+
+
+#### BEGIN METRICS
+
 Metrics/AbcSize:
-  Max: 101 # should be 16
+  Max: 101 # ideally 16
 
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/BlockLength:
-  Max: 508 # should be 25
+  Max: 508 # ideally 25
 
-# Offense count: 18
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 427
+  Max: 185 # ideally 100
+  Exclude:
+    - 'app/models/site.rb'
+    - 'app/models/site_element.rb'
+    - 'lib/legacy_migrator.rb'
+    - 'lib/script_generator.rb'
+    - 'app/models/user.rb'
 
-# Offense count: 40
 Metrics/CyclomaticComplexity:
-  Max: 17
+  Max: 17 # ideally 6
 
-# Offense count: 1724
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 1246
+  Max: 1246 # ideally 120
+  IgnoreCopDirectives: true
 
-# Offense count: 167
-# Configuration parameters: CountComments.
 Metrics/MethodLength:
-  Max: 82
+  Max: 82 # ideally 10
+  CountComments: false
 
-# Offense count: 3
-# Configuration parameters: CountComments.
 Metrics/ModuleLength:
-  Max: 190
+  Max: 186 # ideally 10
+  CountComments: false
 
-# Offense count: 1
-# Configuration parameters: CountKeywordArgs.
 Metrics/ParameterLists:
-  Max: 6
+  Exclude:
+    - 'lib/hello/data_api_helper.rb'
 
-# Offense count: 41
 Metrics/PerceivedComplexity:
-  Max: 18
+  Max: 18 # ideally 7
+
+#### END METRICS
