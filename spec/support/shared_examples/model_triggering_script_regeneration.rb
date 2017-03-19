@@ -5,7 +5,7 @@ RSpec.shared_examples 'a model triggering script regeneration' do
     site = model.site
     site.instance_variable_set :@needs_script_regeneration, false
 
-    expect(site.needs_script_regeneration?).to be_false
+    expect(site.needs_script_regeneration?).to be_falsey
 
     model.touch
 

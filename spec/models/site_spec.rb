@@ -226,7 +226,7 @@ describe Site do
       s2 = membership.user.sites.create(url: 'different.com')
       s2.url = membership.site.url
 
-      expect(s2.valid?).to be_false
+      expect(s2.valid?).to be_falsey
     end
 
     it 'returns true if the url is unqiue to the user' do
@@ -376,12 +376,12 @@ describe Site do
 
     it 'is false if the api returns nil' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      expect(site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_falsey
     end
 
     it 'is false if the api returns an empty hash' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
-      expect(site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_falsey
     end
 
     it 'is true if one element has views but others do not' do
@@ -414,7 +414,7 @@ describe Site do
           '2' => [[0, 0]]
         )
 
-      expect(site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_falsey
     end
   end
 
@@ -440,7 +440,7 @@ describe Site do
       site.script_installed_at = 1.week.ago
       site.script_uninstalled_at = 1.day.ago
 
-      expect(site.script_installed_db?).to be_false
+      expect(site.script_installed_db?).to be_falsey
     end
   end
 
@@ -478,7 +478,7 @@ describe Site do
 
   describe '#url_exists?' do
     it 'should return false if no other site exists with the url' do
-      expect(Site.create(url: 'http://abc.com').url_exists?).to be_false
+      expect(Site.create(url: 'http://abc.com').url_exists?).to be_falsey
     end
 
     it 'should return true if another site exists with the url' do
@@ -495,14 +495,14 @@ describe Site do
       u1 = create(:user, :with_site)
       u1.sites.create(url: 'http://abc.com')
       u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'http://abc.com').url_exists?(u2)).to be_false
+      expect(u2.sites.build(url: 'http://abc.com').url_exists?(u2)).to be_falsey
     end
 
     it 'should ignore protocol if user scoped call' do
       u1 = create(:user, :with_site)
       u1.sites.create(url: 'http://abc.com')
       u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'https://abc.com').url_exists?(u2)).to be_false
+      expect(u2.sites.build(url: 'https://abc.com').url_exists?(u2)).to be_falsey
     end
   end
 
@@ -515,7 +515,7 @@ describe Site do
 
       it 'does not show branding' do
         site.send(:set_branding_on_site_elements)
-        expect(element.reload.show_branding).to be_false
+        expect(element.reload.show_branding).to be_falsey
       end
     end
 

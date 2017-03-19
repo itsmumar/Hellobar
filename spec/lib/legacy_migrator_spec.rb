@@ -46,6 +46,6 @@ describe LegacyMigrator, '#bar_is_mobile?' do
   it 'returns false if both legacy bar#target_segment and no mobile json setting is set' do
     legacy_bar = double 'legacy_bar', target_segment: nil, settings_json: {}
 
-    expect(LegacyMigrator.bar_is_mobile?(legacy_bar)).to be_false
+    expect(LegacyMigrator.bar_is_mobile?(legacy_bar)).to be_falsey
   end
 end

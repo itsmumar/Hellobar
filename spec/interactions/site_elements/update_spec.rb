@@ -76,7 +76,7 @@ describe SiteElements::Update do
     let(:params) { { background_color: '' } }
 
     it 'returns false' do
-      expect(interaction.run).to be_false
+      expect(interaction.run).to be_falsey
     end
 
     xit "doesn't regenerate the script" do
@@ -95,7 +95,7 @@ describe SiteElements::Update do
       it "doesn't disable original element" do
         run_interaction
 
-        expect(element.reload.paused).to be_false
+        expect(element.reload.paused).to be_falsey
       end
 
       context 'when update succeeds but disabling fails' do
@@ -105,7 +105,7 @@ describe SiteElements::Update do
           allow(element).to receive(:save!).and_raise(ActiveRecord::ActiveRecordError)
           run_interaction
 
-          expect(element.reload.paused).to be_false
+          expect(element.reload.paused).to be_falsey
         end
       end
     end

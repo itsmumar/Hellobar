@@ -95,11 +95,11 @@ describe Subscription do
     end
 
     it 'should be false if subscription amount is not 0 and paid bill is not 0' do
-      expect(bill.subscription.currently_on_trial?).to be_false
+      expect(bill.subscription.currently_on_trial?).to be_falsey
     end
 
     it 'should be false when there are no paid bills' do
-      expect(create(:subscription).currently_on_trial?).to be_false
+      expect(create(:subscription).currently_on_trial?).to be_falsey
     end
   end
 
@@ -152,7 +152,7 @@ describe Subscription do
   it 'should set the amount based on the schedule unless overridden' do
     subscription = Subscription::Pro.create
     expect(subscription.monthly?).to be_true
-    expect(subscription.yearly?).to be_false
+    expect(subscription.yearly?).to be_falsey
     expect(subscription.amount).to eq(Subscription::Pro.defaults[:monthly_amount])
 
     subscription = Subscription::Pro.create(schedule: :yearly)
@@ -181,7 +181,7 @@ describe Subscription do
       capabilities = @site.capabilities(true)
 
       expect(capabilities).to be_a Subscription::Free::Capabilities
-      expect(capabilities.closable?).to be_false
+      expect(capabilities.closable?).to be_falsey
 
       @site.change_subscription(@pro, @payment_method)
 
@@ -196,8 +196,8 @@ describe Subscription do
     it 'should return the right capabilities if a payment issue has been resolved' do
       @site.change_subscription(@pro, create(:payment_method, :fails))
 
-      expect(@site.capabilities(true).remove_branding?).to be_false
-      expect(@site.capabilities(true).closable?).to be_false
+      expect(@site.capabilities(true).remove_branding?).to be_falsey
+      expect(@site.capabilities(true).closable?).to be_falsey
       expect(@site.site_elements.all?(&:show_branding)).to be_true
       expect(@site.site_elements.all?(&:closable)).to be_true
 
@@ -293,10 +293,10 @@ describe Subscription do
         subscription = build_stubbed :subscription, :free
         capabilities = subscription.capabilities
 
-        expect(capabilities.custom_html?).to be_false
-        expect(capabilities.content_upgrades?).to be_false
-        expect(capabilities.autofills?).to be_false
-        expect(capabilities.geolocation_injection?).to be_false
+        expect(capabilities.custom_html?).to be_falsey
+        expect(capabilities.content_upgrades?).to be_falsey
+        expect(capabilities.autofills?).to be_falsey
+        expect(capabilities.geolocation_injection?).to be_falsey
       end
 
       specify 'ProManaged plan has certain custom capabilities' do
@@ -312,7 +312,7 @@ describe Subscription do
 
     context '#at_site_element_limit?' do
       it 'returns true when it has as many site elements as it can have' do
-        expect(@site.capabilities.at_site_element_limit?).to be_false
+        expect(@site.capabilities.at_site_element_limit?).to be_falsey
       end
 
       it 'returns false when it can still add site elements' do
@@ -573,7 +573,7 @@ describe Site do
 
     it 'should return false if payment fails' do
       success, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
-      expect(success).to be_false
+      expect(success).to be_falsey
       expect(bill).to be_pending
       expect(bill.amount).to eq(@pro.amount)
       expect(@site.current_subscription).to eq(@pro)
@@ -609,7 +609,7 @@ describe Site do
     it 'should return bills that are due' do
       expect(@site.bills_with_payment_issues(true)).to eq([])
       success, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
-      expect(success).to be_false
+      expect(success).to be_falsey
       expect(bill).to be_pending
       expect(@site.bills_with_payment_issues(true)).to eq([bill])
     end
@@ -617,7 +617,7 @@ describe Site do
     it 'should not return bills not due' do
       expect(@site.bills_with_payment_issues(true)).to eq([])
       success, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
-      expect(success).to be_false
+      expect(success).to be_falsey
       expect(bill).to be_pending
       # Make it due later
       bill.bill_at = Time.current + 7.days
@@ -628,7 +628,7 @@ describe Site do
     it "should not return bills that we haven't attempted to charge at least once" do
       expect(@site.bills_with_payment_issues(true)).to eq([])
       success, bill = @site.change_subscription(@pro, create(:payment_method, :fails))
-      expect(success).to be_false
+      expect(success).to be_falsey
       expect(bill).to be_pending
       # Delete the attempt
       # We have to do this monkey business to get around the fact that

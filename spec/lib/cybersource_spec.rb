@@ -10,11 +10,11 @@ describe CyberSourceCreditCard do
     end
     it 'returns false when data is present, and token is not present' do
       cscc = CyberSourceCreditCard.new data: {}
-      expect(cscc.token_present?).to be_false
+      expect(cscc.token_present?).to be_falsey
     end
     it 'returns false when data is not present' do
       cscc = CyberSourceCreditCard.new
-      expect(cscc.token_present?).to be_false
+      expect(cscc.token_present?).to be_falsey
     end
   end
 

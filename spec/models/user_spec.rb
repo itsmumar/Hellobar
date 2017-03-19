@@ -159,7 +159,7 @@ describe User do
       create(:site_element, rule: rule)
       # normaly devise would set it
       user.sign_in_count = 1
-      expect(user.new?).to be_false
+      expect(user.new?).to be_falsey
     end
 
     it 'returns false if the user is not logging in for the first time' do
@@ -167,7 +167,7 @@ describe User do
       # normaly devise would set it
       user.sign_in_count = 2
       user.save
-      expect(user.new?).to be_false
+      expect(user.new?).to be_falsey
     end
   end
 
