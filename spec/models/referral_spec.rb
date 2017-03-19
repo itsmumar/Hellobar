@@ -47,7 +47,7 @@ describe Referral do
   it 'is accepted if the state is not sent' do
     referral.state = 'signed_up'
 
-    expect(referral.accepted?).to be_true
+    expect(referral.accepted?).to be_truthy
   end
 
   it 'is not accepted if the state is sent' do
@@ -148,7 +148,7 @@ describe Referral do
       referral.available_to_sender = true
       referral.redeemed_by_sender_at = nil
 
-      expect(referral.redeemable_by_sender?).to be_true
+      expect(referral.redeemable_by_sender?).to be_truthy
       expect(referral.redeemed_by_sender?).to be_falsey
     end
 
@@ -158,7 +158,7 @@ describe Referral do
       referral.redeemed_by_sender_at = Time.current
 
       expect(referral.redeemable_by_sender?).to be_falsey
-      expect(referral.redeemed_by_sender?).to be_true
+      expect(referral.redeemed_by_sender?).to be_truthy
     end
   end
 end

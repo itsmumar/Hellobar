@@ -93,7 +93,7 @@ describe Bill do
       bill = create(:pro_bill, :paid)
       bill.update_attribute(:amount, 0)
       bill.subscription.payment_method = nil
-      expect(bill.during_trial_subscription?).to be_true
+      expect(bill.during_trial_subscription?).to be_truthy
     end
   end
 

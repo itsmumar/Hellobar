@@ -6,7 +6,7 @@ describe CyberSourceCreditCard do
   describe '#token_present?' do
     it 'returns true when data is present, and token is present' do
       cscc = CyberSourceCreditCard.new data: { 'token' => 'my_cool_token' }
-      expect(cscc.token_present?).to be_true
+      expect(cscc.token_present?).to be_truthy
     end
     it 'returns false when data is present, and token is not present' do
       cscc = CyberSourceCreditCard.new data: {}

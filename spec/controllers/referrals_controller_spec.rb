@@ -39,7 +39,7 @@ describe ReferralsController do
     it 'creates when an email is set' do
       post :create, referral: { email: 'kaitlen@hellobar.com' }
 
-      expect(assigns(:referral).persisted?).to be_true
+      expect(assigns(:referral).persisted?).to be_truthy
     end
 
     it 'does not create when an email is not set' do

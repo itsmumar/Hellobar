@@ -65,7 +65,7 @@ describe SiteGenerator do
 
       generator.generate_file
 
-      expect(File.exist?(path)).to be_true
+      expect(File.exist?(path)).to be_truthy
 
       File.delete(path)
     end

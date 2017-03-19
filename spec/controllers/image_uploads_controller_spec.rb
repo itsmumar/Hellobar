@@ -33,7 +33,7 @@ describe ImageUploadsController do
 
         expect(response.status).to eq(500)
         response_body = JSON.parse(response.body)
-        expect(response_body['error'].include?('Image content type is invalid')).to be_true
+        expect(response_body['error'].include?('Image content type is invalid')).to be_truthy
       end
     end
   end

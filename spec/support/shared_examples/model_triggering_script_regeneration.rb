@@ -9,6 +9,6 @@ RSpec.shared_examples 'a model triggering script regeneration' do
 
     model.touch
 
-    expect(site.needs_script_regeneration?).to be_true
+    expect(site.needs_script_regeneration?).to be_truthy
   end
 end

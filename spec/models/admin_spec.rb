@@ -59,12 +59,12 @@ describe Admin do
 
     it "returns true if don't have rotp_secret_base added" do
       allow(admin).to receive(:rotp_secret_base).and_return(nil)
-      expect(admin.needs_otp_code?).to be_true
+      expect(admin.needs_otp_code?).to be_truthy
     end
 
     it "returns true if we don't have authentication_code added" do
       allow(admin).to receive(:authentication_code).and_return(nil)
-      expect(admin.needs_otp_code?).to be_true
+      expect(admin.needs_otp_code?).to be_truthy
     end
   end
 
@@ -110,7 +110,7 @@ describe Admin do
       allow(admin).to receive(:needs_otp_code?).and_return(true)
       allow(admin).to receive(:valid_authentication_otp?).with('123').and_return(true)
       expect(admin).to receive(:login!)
-      expect(admin.validate_login('token', 'password', '123')).to be_true
+      expect(admin.validate_login('token', 'password', '123')).to be_truthy
     end
   end
 

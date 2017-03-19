@@ -67,7 +67,7 @@ describe Identity do
       it 'should do nothing' do
         identity = Identity.create(provider: 'aweber', credentials: {}, site: site)
         identity.contact_lists_updated
-        expect(identity.destroyed?).to be_true
+        expect(identity.destroyed?).to be_truthy
       end
     end
   end

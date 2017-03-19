@@ -34,13 +34,13 @@ describe LegacyMigrator, '#bar_is_mobile?' do
   it 'returns true if legacy bar#target_segment equals the mobile code' do
     legacy_bar = double 'legacy_bar', target_segment: 'dv:mobile'
 
-    expect(LegacyMigrator.bar_is_mobile?(legacy_bar)).to be_true
+    expect(LegacyMigrator.bar_is_mobile?(legacy_bar)).to be_truthy
   end
 
   it 'returns true if legacy bar has a mobile json setting' do
     legacy_bar = double 'legacy_bar', target_segment: nil, settings_json: { 'target' => 'dv:mobile' }
 
-    expect(LegacyMigrator.bar_is_mobile?(legacy_bar)).to be_true
+    expect(LegacyMigrator.bar_is_mobile?(legacy_bar)).to be_truthy
   end
 
   it 'returns false if both legacy bar#target_segment and no mobile json setting is set' do

@@ -29,7 +29,7 @@ describe SiteMembership do
       site = create(:site, :with_user)
       create(:site_membership, site: site)
       ownership = create(:site_membership, site: site)
-      expect(ownership.can_destroy?).to be_true
+      expect(ownership.can_destroy?).to be_truthy
     end
   end
 

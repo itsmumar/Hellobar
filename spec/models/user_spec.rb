@@ -149,7 +149,7 @@ describe User do
       # normaly devise would set it
       user.sign_in_count = 1
       user.save
-      expect(user.new?).to be_true
+      expect(user.new?).to be_truthy
     end
 
     it 'returns false if the user logging in for the first time and does have bars' do
@@ -198,8 +198,8 @@ describe User do
       user = site_member.user
       site = site_member.site
       user.destroy
-      expect(user.destroyed?).to be_true
-      expect(site.reload.destroyed?).to be_true
+      expect(user.destroyed?).to be_truthy
+      expect(site.reload.destroyed?).to be_truthy
     end
 
     it 'should soft-delete' do
@@ -216,14 +216,14 @@ describe User do
         password: 'asdfasdf'
       )
 
-      expect(user.valid_password?('asdfasdf')).to be_true
+      expect(user.valid_password?('asdfasdf')).to be_truthy
     end
 
     it 'is true for valid wordpress passwords' do
       user = User.create!(email: 'newuser@asdf.com', password: 'asdfasdf')
       user.update(encrypted_password: '$P$Brhelf0cSqkZABYCgR08YB8kVp1EFa/')
 
-      expect(user.valid_password?('thisisold')).to be_true
+      expect(user.valid_password?('thisisold')).to be_truthy
     end
   end
 

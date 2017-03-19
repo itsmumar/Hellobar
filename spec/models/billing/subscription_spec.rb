@@ -91,7 +91,7 @@ describe Subscription do
     it 'should be true if subscription amount is not 0 and has a paid bill but no payment method' do
       bill.update_attribute(:amount, 0)
       bill.subscription.payment_method = nil
-      expect(bill.subscription.currently_on_trial?).to be_true
+      expect(bill.subscription.currently_on_trial?).to be_truthy
     end
 
     it 'should be false if subscription amount is not 0 and paid bill is not 0' do
@@ -131,17 +131,17 @@ describe Subscription do
 
   it 'should default to monthly schedule' do
     subscription = Subscription::Pro.new
-    expect(subscription.monthly?).to be_true
+    expect(subscription.monthly?).to be_truthy
     expect(subscription.amount).to eq(Subscription::Pro.defaults[:monthly_amount])
   end
 
   it 'should let you set yearly' do
     subscription = Subscription::Pro.new(schedule: 'yearly')
-    expect(subscription.yearly?).to be_true
+    expect(subscription.yearly?).to be_truthy
     expect(subscription.amount).to eq(Subscription::Pro.defaults[:yearly_amount])
     # Test with symbol
     subscription = Subscription::Pro.new(schedule: :yearly)
-    expect(subscription.yearly?).to be_true
+    expect(subscription.yearly?).to be_truthy
     expect(subscription.amount).to eq(Subscription::Pro.defaults[:yearly_amount])
   end
 
@@ -151,16 +151,16 @@ describe Subscription do
 
   it 'should set the amount based on the schedule unless overridden' do
     subscription = Subscription::Pro.create
-    expect(subscription.monthly?).to be_true
+    expect(subscription.monthly?).to be_truthy
     expect(subscription.yearly?).to be_falsey
     expect(subscription.amount).to eq(Subscription::Pro.defaults[:monthly_amount])
 
     subscription = Subscription::Pro.create(schedule: :yearly)
-    expect(subscription.yearly?).to be_true
+    expect(subscription.yearly?).to be_truthy
     expect(subscription.amount).to eq(Subscription::Pro.defaults[:yearly_amount])
 
     subscription = Subscription::Pro.create(schedule: :yearly, amount: 2)
-    expect(subscription.yearly?).to be_true
+    expect(subscription.yearly?).to be_truthy
     expect(subscription.amount).to eq(2)
   end
 
@@ -198,15 +198,15 @@ describe Subscription do
 
       expect(@site.capabilities(true).remove_branding?).to be_falsey
       expect(@site.capabilities(true).closable?).to be_falsey
-      expect(@site.site_elements.all?(&:show_branding)).to be_true
-      expect(@site.site_elements.all?(&:closable)).to be_true
+      expect(@site.site_elements.all?(&:show_branding)).to be_truthy
+      expect(@site.site_elements.all?(&:closable)).to be_truthy
 
       @site.change_subscription(@pro, create(:payment_method))
 
-      expect(@site.capabilities(true).remove_branding?).to be_true
-      expect(@site.capabilities(true).closable?).to be_true
-      expect(@site.site_elements.none?(&:show_branding)).to be_true
-      expect(@site.site_elements.none?(&:closable)).to be_true
+      expect(@site.capabilities(true).remove_branding?).to be_truthy
+      expect(@site.capabilities(true).closable?).to be_truthy
+      expect(@site.site_elements.none?(&:show_branding)).to be_truthy
+      expect(@site.site_elements.none?(&:closable)).to be_truthy
     end
 
     it 'should return the right capabilities if payment is not due yet' do
@@ -229,7 +229,7 @@ describe Subscription do
 
     it 'should handle refund, switch, and void' do
       success, pro_bill = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
 
       # Refund
@@ -245,7 +245,7 @@ describe Subscription do
 
       # Switch to Free
       success, = @site.change_subscription(@free, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       # Should still have pro capabilities
       expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
       # Should have a pending bill for free
@@ -303,10 +303,10 @@ describe Subscription do
         subscription = build_stubbed :subscription, :pro_managed
         capabilities = subscription.capabilities
 
-        expect(capabilities.custom_html?).to be_true
-        expect(capabilities.content_upgrades?).to be_true
-        expect(capabilities.autofills?).to be_true
-        expect(capabilities.geolocation_injection?).to be_true
+        expect(capabilities.custom_html?).to be_truthy
+        expect(capabilities.content_upgrades?).to be_truthy
+        expect(capabilities.autofills?).to be_truthy
+        expect(capabilities.geolocation_injection?).to be_truthy
       end
     end
 
@@ -320,7 +320,7 @@ describe Subscription do
         elements = ['element'] * max_elements
         @site.stub site_elements: elements
 
-        expect(@site.capabilities.at_site_element_limit?).to be_true
+        expect(@site.capabilities.at_site_element_limit?).to be_truthy
       end
     end
 
@@ -358,7 +358,7 @@ describe Site do
 
     it 'should work with starting on a Free plan with no payment_method' do
       success, bill = @site.change_subscription(@free)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_paid
       expect(bill.amount).to eq(0)
       expect(@site.current_subscription).to eq(@free)
@@ -367,7 +367,7 @@ describe Site do
 
     it 'should work with starting out on a Free plan' do
       success, bill = @site.change_subscription(@free, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_paid
       expect(bill.amount).to eq(0)
       expect(@site.current_subscription).to eq(@free)
@@ -376,7 +376,7 @@ describe Site do
 
     it 'should charge a full amount for starting out a new plan for the first time' do
       success, bill = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_paid
       expect(bill).to be_persisted
       expect(bill.amount).to eq(@pro.amount)
@@ -399,10 +399,10 @@ describe Site do
 
     it 'should charge full amount if you were on a Free plan' do
       success, = @site.change_subscription(@free, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(@site.current_subscription).to eq(@free)
       success, bill = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_paid
       expect(bill.amount).to eq(@pro.amount)
       expect(@site.current_subscription).to eq(@pro)
@@ -411,13 +411,13 @@ describe Site do
 
     it 'should work to downgrade to a free plan' do
       success, pro_bill = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(pro_bill).to be_paid
       expect(pro_bill.amount).to eq(@pro.amount)
       expect(@site.current_subscription).to eq(@pro)
       expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
       success, bill = @site.change_subscription(@free, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_pending
       expect(bill.amount).to eq(0)
       expect(@site.current_subscription).to eq(@free)
@@ -432,10 +432,10 @@ describe Site do
 
     it 'should prorate if you are upgrading and were on a paid plan' do
       success, = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(@site.current_subscription).to eq(@pro)
       success, bill = @site.change_subscription(@enterprise, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_paid
       expect(bill.amount).to eq(@enterprise.amount - @pro.amount)
       expect(@site.current_subscription).to eq(@enterprise)
@@ -444,11 +444,11 @@ describe Site do
 
     it 'should not have prorating affected by refund' do
       success, bill1 = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(@site.current_subscription).to eq(@pro)
       bill1.refund!
       success, bill2 = @site.change_subscription(@enterprise, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill2).to be_paid
       expect(bill2.amount).to eq(@enterprise.amount - @pro.amount)
       expect(@site.current_subscription).to eq(@enterprise)
@@ -457,7 +457,7 @@ describe Site do
 
     it 'should affect prorating if you refund and switch plan' do
       success, pro_bill = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
 
       # Refund
       refund_bill, refund_attempt = pro_bill.refund!
@@ -466,18 +466,18 @@ describe Site do
 
       # Switch to Free
       success, = @site.change_subscription(@free, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
 
       # Switch to enterprise
       success, enterprise_bill = @site.change_subscription(@enterprise, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       # Should still prorate
       expect(enterprise_bill.amount).to eq(@enterprise.amount - @pro.amount)
     end
 
     it 'should affect prorating if you refund and switch plan' do
       success, pro_bill = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
 
       # Refund
       refund_bill, refund_attempt = pro_bill.refund!
@@ -486,20 +486,20 @@ describe Site do
 
       # Switch to Free
       success, = @site.change_subscription(@free, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       # Void the pro bill
       pro_bill.void!
 
       # Switch to enterprise
       success, enterprise_bill = @site.change_subscription(@enterprise, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       # NO prorating
       expect(enterprise_bill.amount).to eq(@enterprise.amount)
     end
 
     it 'should prorate based on amount of time used from a paid plan' do
       success, bill = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       # Have used up 1/4 of bill
       one_fourth_time = (bill.end_date - bill.start_date) / 4
       bill.start_date -= one_fourth_time
@@ -507,7 +507,7 @@ describe Site do
       bill.save!
       expect(@site.current_subscription).to eq(@pro)
       success, bill = @site.change_subscription(@enterprise, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_paid
       # Only going to apply 75% of pro payment since we used up 25% (1/4) of it
       expect(bill.amount).to eq((@enterprise.amount - @pro.amount * 0.75).to_i)
@@ -517,14 +517,14 @@ describe Site do
 
     it 'should start your new plan after your current plan if you are downgrading' do
       success, enterprise_bill = @site.change_subscription(@enterprise, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(@site.current_subscription).to eq(@enterprise)
       success, bill = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_pending
       expect(bill.amount).to eq(@pro.amount)
       expect(bill.start_date).to be_within(2.hours).of(enterprise_bill.end_date)
-      expect(bill.grace_period_allowed).to be_true
+      expect(bill.grace_period_allowed).to be_truthy
       # Should still have enterprise abilities
       expect(@site.current_subscription).to eq(@pro)
       expect(@site.capabilities.class).to eq(Subscription::Enterprise::Capabilities)
@@ -532,13 +532,13 @@ describe Site do
 
     it 'should charge full amount if you used to be on a paid plan but are no longer on one' do
       success, bill = @site.change_subscription(@pro, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(@site.current_subscription).to eq(@pro)
       bill.start_date = 2.years.from_now
       bill.end_date = 1.year.from_now
       bill.save!
       success, bill = @site.change_subscription(@enterprise, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_paid
       expect(bill.amount).to eq(@enterprise.amount)
       expect(@site.current_subscription).to eq(@enterprise)
@@ -549,7 +549,7 @@ describe Site do
       pending_bill = Bill::Recurring.create(subscription: @pro, status: :pending, amount: 25)
       expect(pending_bill).to be_pending
       success, bill = @site.change_subscription(@enterprise, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_paid
       expect(bill.amount).to eq(@enterprise.amount)
       expect(@site.current_subscription).to eq(@enterprise)
@@ -562,7 +562,7 @@ describe Site do
       pending_bill = Bill::Overage.create(subscription: @pro, status: :pending, amount: 25)
       expect(pending_bill).to be_pending
       success, bill = @site.change_subscription(@enterprise, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill).to be_paid
       expect(bill.amount).to eq(@enterprise.amount)
       expect(@site.current_subscription).to eq(@enterprise)
@@ -585,12 +585,12 @@ describe Site do
       pro_monthly = Subscription::Pro.new(user: @user, site: @site, schedule: 'monthly')
 
       success, bill = @site.change_subscription(pro_yearly, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill.amount).to eq(pro_yearly.amount)
       expect(bill).to be_paid
 
       success, bill2 = @site.change_subscription(pro_monthly, @payment_method)
-      expect(success).to be_true
+      expect(success).to be_truthy
       expect(bill2.amount).to be > 0
       # Bill should be full amount
       expect(bill2.amount).to eq(pro_monthly.amount)

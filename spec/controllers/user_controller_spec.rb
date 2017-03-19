@@ -12,7 +12,7 @@ describe UserController do
       it 'rejects password change when incorrect current_password' do
         put :update, user: { password: 'asdfffff', password_confirmation: 'asdfffff', current_password: 'oops' }
 
-        expect(user.reload.valid_password?(current_password)).to be_true
+        expect(user.reload.valid_password?(current_password)).to be_truthy
       end
 
       it 'allows the user to change their password with correct current_password' do
@@ -20,7 +20,7 @@ describe UserController do
         update_params = { password: new_password, password_confirmation: new_password, current_password: current_password }
         put :update, user: update_params
 
-        expect(user.reload.valid_password?(new_password)).to be_true
+        expect(user.reload.valid_password?(new_password)).to be_truthy
       end
 
       it 'allows the user to change other settings with blank password params' do
