@@ -3,14 +3,16 @@ require 'discount_calculator'
 
 class Subscription < ActiveRecord::Base
   include BillingAuditTrail
-  belongs_to :user
-  belongs_to :site, touch: true
+
   belongs_to :payment_method
-  enum schedule: [:monthly, :yearly]
+  belongs_to :site, touch: true
+  belongs_to :user
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
 
   after_initialize :set_initial_values
   after_create :mark_user_onboarding_as_bought_subscription!
+
+  enum schedule: [:monthly, :yearly]
 
   class << self
     def active
@@ -37,6 +39,11 @@ class Subscription < ActiveRecord::Base
       discount = DiscountCalculator.new(dummy_sub, user).current_discount
       dummy_sub.amount - discount
     end
+  end
+
+  # we use significance to sort subscriptions
+  def significance
+    0
   end
 
   def currently_on_trial?
@@ -191,6 +198,10 @@ class Subscription < ActiveRecord::Base
   end
 
   class Free < Base
+    def significance
+      1
+    end
+
     class Capabilities < Subscription::Capabilities
     end
 
@@ -209,6 +220,10 @@ class Subscription < ActiveRecord::Base
   end
 
   class FreePlus < Free
+    def significance
+      1
+    end
+
     class Capabilities < Free::Capabilities
       def max_site_elements
         Float::INFINITY
@@ -233,6 +248,10 @@ class Subscription < ActiveRecord::Base
   # They are basically the same as Free, but we don't let the subscription
   # override the visit_overage features
   class ProblemWithPayment < Free
+    def significance
+      5
+    end
+
     class Capabilities < Free::Capabilities
       def visit_overage
         parent_class.values_for(@site)[:visit_overage]
@@ -249,6 +268,10 @@ class Subscription < ActiveRecord::Base
   end
 
   class Pro < Base
+    def significance
+      20
+    end
+
     class Capabilities < Free::Capabilities
       def acts_as_paid_subscription?
         true
@@ -313,6 +336,10 @@ class Subscription < ActiveRecord::Base
   end
 
   class ProComped < Pro
+    def significance
+      20
+    end
+
     class << self
       def defaults
         {
@@ -327,7 +354,33 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  class Enterprise < Base
+    def significance
+      50
+    end
+
+    class Capabilities < Pro::Capabilities
+    end
+
+    class << self
+      def defaults
+        {
+          name: 'Enterprise',
+          monthly_amount: 99.0,
+          yearly_amount: 999.0,
+          visit_overage: nil, # unlimited
+          # visit_overage_amount: nil, # unlimited
+          visit_overage_amount: nil # unlimited
+        }
+      end
+    end
+  end
+
   class ProManaged < Pro
+    def significance
+      100
+    end
+
     class Capabilities < Pro::Capabilities
       def custom_html?
         true
@@ -360,29 +413,11 @@ class Subscription < ActiveRecord::Base
     end
   end
 
-  class Enterprise < Base
-    class Capabilities < Pro::Capabilities
-    end
-
-    class << self
-      def defaults
-        {
-          name: 'Enterprise',
-          monthly_amount: 99.0,
-          yearly_amount: 999.0,
-          visit_overage: nil, # unlimited
-          # visit_overage_amount: nil, # unlimited
-          visit_overage_amount: nil # unlimited
-        }
-      end
-    end
-  end
-
-  def <=>(other)
-    if other.is_a?(Subscription)
+  def <=> other
+    if other.is_a? Subscription
       Comparison.new(self, other).direction
     else
-      super(other)
+      super
     end
   end
 
@@ -390,15 +425,19 @@ class Subscription < ActiveRecord::Base
   PLANS = [Free, ProblemWithPayment, Pro, Enterprise].freeze
   class Comparison
     attr_reader :from_subscription, :to_subscription, :direction
+
     def initialize(from_subscription, to_subscription)
       @from_subscription = from_subscription
       @to_subscription = to_subscription
       from_index = to_index = nil
+
       PLANS.each_with_index do |plan, index|
         from_index = index if from_subscription.is_a?(plan)
         to_index = index if to_subscription.is_a?(plan)
       end
+
       raise "Could not find plans (from_subscription: #{ from_subscription.inspect } and to_subscription: #{ to_subscription.inspect }, got #{ from_index.inspect } and #{ to_index.inspect }" unless from_index && to_index
+
       @direction =
         if from_index == to_index
           0

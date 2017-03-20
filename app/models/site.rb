@@ -238,7 +238,7 @@ class Site < ActiveRecord::Base
   end
 
   def highest_tier_active_subscription
-    subscriptions.active.to_a.sort.first
+    subscriptions.active.sort_by(&:significance).last
   end
 
   def pro_managed_subscription?
@@ -288,8 +288,10 @@ class Site < ActiveRecord::Base
   end
 
   include BillingAuditTrail
+
   class MissingPaymentMethod < StandardError; end
   class MissingSubscription < StandardError; end
+
   def change_subscription(subscription, payment_method = nil, trial_period = nil)
     raise MissingSubscription unless subscription
     transaction do
@@ -361,7 +363,7 @@ class Site < ActiveRecord::Base
   end
 
   def owners_and_admins
-    users.where("site_memberships.role = 'admin' OR site_memberships.role = 'owner'")
+    users.where("site_memberships.role = '#{ Permissions::OWNER }' OR site_memberships.role = '#{ Permissions::ADMIN }'")
   end
 
   def had_wordpress_bars?
@@ -440,6 +442,7 @@ class Site < ActiveRecord::Base
       end
     else
       last_subscription = active_paid_bills.last.subscription
+
       if Subscription::Comparison.new(last_subscription, subscription).upgrade?
         # We are upgrading, gotta pay now, but we prorate it
 
@@ -472,6 +475,7 @@ class Site < ActiveRecord::Base
         end
       end
     end
+
     bill.start_date = bill.bill_at - 1.hour
     bill.end_date = bill.renewal_date
 

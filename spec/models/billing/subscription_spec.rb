@@ -4,7 +4,7 @@ module SubscriptionHelper
   def setup_subscriptions
     @user = create(:user)
     @site = create(:site)
-    @payment_method = create(:payment_method)
+    @payment_method = create(:payment_method, user: @user)
     @free = Subscription::Free.new(user: @user, site: @site)
     @pro = Subscription::Pro.new(user: @user, site: @site)
     @enterprise = Subscription::Enterprise.new(user: @user, site: @site)
@@ -18,6 +18,18 @@ end
 
 describe Subscription do
   include SubscriptionHelper
+
+  describe '#significance' do
+    specify 'each subscription type has significance' do
+      %i(Free FreePlus ProblemWithPayment Pro ProComped
+         Enterprise ProManaged).each do |type|
+        klass = "Subscription::#{ type }".constantize
+
+        expect(klass.new.significance).to be_an Integer
+        expect(klass.new.significance).to be > 0
+      end
+    end
+  end
 
   describe '.estimated_price' do
     it 'returns the subscriptions monthly amount - calculated discounts' do
